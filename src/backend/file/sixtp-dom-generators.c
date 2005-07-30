@@ -206,9 +206,10 @@ double_to_string(double value)
 {
     gchar *numstr;
 #ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
-    numstr = gh_scm2newstr(scm_call_1(scm_c_eval_string("number->string"),
-				      scm_make_real(value)),
-                           NULL);
+    SCM value;
+    value = scm_call_1(scm_c_eval_string("number->string"),
+		       scm_make_real(value));
+    numstr = g_strdup(SCM_STRING_CHARS(value));
 
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
     /*

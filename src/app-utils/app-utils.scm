@@ -127,7 +127,7 @@
 (export gnc:get-credit-string)
 (export gnc:*options-entries*)
 (export gnc:config-file-format-version)
-(export gnc:*save-options-hook*)
+(re-export gnc:*save-options-hook*)
 
 ;; date-utilities.scm
 
@@ -225,26 +225,19 @@
 (export gnc:reldate-initialize)
 
 ;; hooks 
-(export gnc:hook-define)
-(export gnc:hook-danglers-get)
-(export gnc:hook-danglers-set!)
-(export gnc:hook-danglers->list)
-(export gnc:hook-replace-danglers)
-(export gnc:hook-run-danglers)
-(export gnc:hook-lookup)
-(export gnc:hook-add-dangler)
-(export gnc:hook-remove-dangler)
-(export gnc:hook-description-get)
-(export gnc:hook-name-get)
-(export gnc:*startup-hook*)
-(export gnc:*shutdown-hook*)
-(export gnc:*ui-startup-hook*)
-(export gnc:*ui-post-startup-hook*)
-(export gnc:*ui-shutdown-hook*)
-(export gnc:*book-opened-hook*)
-(export gnc:*new-book-hook*)
-(export gnc:*book-closed-hook*)
-(export gnc:*report-hook*)
+(re-export gnc:hook-define)
+(export gnc:hook-run-danglers)		;; from hooks.scm
+(re-export gnc:hook-add-dangler)
+(re-export gnc:hook-remove-dangler)
+(re-export gnc:*startup-hook*)
+(re-export gnc:*shutdown-hook*)
+(re-export gnc:*ui-startup-hook*)
+(re-export gnc:*ui-post-startup-hook*)
+(re-export gnc:*ui-shutdown-hook*)
+(re-export gnc:*book-opened-hook*)
+(re-export gnc:*new-book-hook*)
+(re-export gnc:*book-closed-hook*)
+(re-export gnc:*report-hook*)
 
 ;; simple-obj
 (export make-simple-class)

@@ -77,7 +77,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
 
     while (SCM_LISTP(alist) && !SCM_NULLP(alist))
       {
-        char *name;
+        const gchar *name;
         SCM assoc;
         SCM val_scm;
         gnc_numeric value;
@@ -89,7 +89,7 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
         if (!SCM_CONSP (assoc))
           continue;
 
-        name = gh_scm2newstr (SCM_CAR (assoc), NULL);
+        name = SCM_STRING_CHARS (SCM_CAR (assoc));
         if (name == NULL)
           continue;
 
@@ -107,24 +107,20 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
           }
         else if (SCM_STRINGP (val_scm))
           {
-            char *s;
+            const gchar *s;
             gboolean err;
 
-            s = gh_scm2newstr (val_scm, NULL);
+            s = SCM_STRING_CHARS (val_scm);
 
             err = string_to_gnc_numeric (s, &value);
             if (err == FALSE)
               good = FALSE;
-
-            free (s);
           }
         else
           good = FALSE;
 
         if (good)
           gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
-
-        free (name);
       }
   }
 }

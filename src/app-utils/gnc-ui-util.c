@@ -402,9 +402,7 @@ gnc_ui_account_get_tax_info_string (Account *account)
   const char *code;
   SCM category;
   SCM code_scm;
-  char *result;
-  char *form;
-  char *desc;
+  const gchar *form, *desc;
   SCM scm;
 
   if (get_form == SCM_UNDEFINED)
@@ -459,30 +457,19 @@ gnc_ui_account_get_tax_info_string (Account *account)
   if (!SCM_STRINGP (scm))
     return NULL;
 
-  form = gh_scm2newstr (scm, NULL);
+  form = SCM_STRING_CHARS (scm);
   if (!form)
     return NULL;
 
   scm = scm_call_2 (get_desc, category, code_scm);
   if (!SCM_STRINGP (scm))
-  {
-    free (form);
     return NULL;
-  }
 
-  desc = gh_scm2newstr (scm, NULL);
+  desc = SCM_STRING_CHARS (scm);
   if (!desc)
-  {
-    free (form);
     return NULL;
-  }
 
-  result = g_strdup_printf ("%s %s", form, desc);
-
-  free (form);
-  free (desc);
-
-  return result;
+  return g_strdup_printf ("%s %s", form, desc);
 }
 
 

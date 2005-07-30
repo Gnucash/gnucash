@@ -23,9 +23,11 @@ test_query (Query *q)
   if (!xaccQueryEqual (q, q2))
   {
     failure ("queries don't match");
-    gh_display (scm_q); gh_newline ();
+    scm_display (scm_q, SCM_UNDEFINED);
+    scm_newline (SCM_UNDEFINED);
     scm_q = gnc_query2scm (q2);
-    gh_display (scm_q); gh_newline ();
+    scm_display (scm_q, SCM_UNDEFINED);
+    scm_newline (SCM_UNDEFINED);
     exit (1);
   }
   else

@@ -425,7 +425,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
 
   const char * path_to_load;
-  char * default_acctname = NULL;
+  const gchar * default_acctname = NULL;
 
   GList * format_strings;
   GList * listit;
@@ -495,11 +495,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
      * exception. */
     if(SCM_LISTP(load_return) &&
        (SCM_CAR(load_return) == SCM_BOOL_T)) {
-      char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
+      const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_warning_dialog(GTK_WIDGET(wind->window),
 			 _("QIF file load warning:\n%s"),
 			 warn_str ? warn_str : "(null)");
-      free (warn_str);
     }
 
     /* check success of the file load */
@@ -511,11 +510,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     else if ((load_return != SCM_BOOL_T) &&
              (!SCM_LISTP(load_return) || 
               (SCM_CAR(load_return) != SCM_BOOL_T))) {
-      char *warn_str = gh_scm2newstr(SCM_CADR(load_return), NULL);
+      const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_error_dialog(wind->window,
 		       _("QIF file load failed:\n%s"),
 		       warn_str ? warn_str : "(null)");
-      free (warn_str);
 
       imported_files = 
         scm_call_2(unload_qif_file, scm_qiffile, imported_files);
@@ -544,12 +542,12 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
 
 	if ((date_formats = scm_call_2(qif_file_parse_results,
 				       SCM_CDR(parse_return),
-				       gh_symbol2scm("date"))) != SCM_BOOL_F) {
+				       scm_str2symbol("date"))) != SCM_BOOL_F) {
 	  format_strings = NULL;
 	  while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
 	    format_strings = 
 	      g_list_append(format_strings, 
-			    gh_symbol2newstr(gh_car(date_formats), NULL));
+			    g_strdup(SCM_SYMBOL_CHARS(SCM_CAR(date_formats))));
 	    date_formats = SCM_CDR(date_formats);
 	  }
 	  gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
@@ -580,11 +578,10 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       else if((parse_return != SCM_BOOL_T) &&
          (!SCM_LISTP(parse_return) ||
           (SCM_CAR(parse_return) != SCM_BOOL_T))) {
-        char *warn_str = gh_scm2newstr(SCM_CDADR(parse_return), NULL);
+        const gchar *warn_str = SCM_STRING_CHARS(SCM_CDADR(parse_return));
         gnc_error_dialog(wind->window,
 			 _("QIF file parse failed:\n%s"),
 			 warn_str ? warn_str : "(null)");
-        free(warn_str);
 
         imported_files = 
           scm_call_2(unload_qif_file, scm_qiffile, imported_files);
@@ -606,12 +603,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     }
     else if(scm_call_1(check_from_acct, SCM_CAR(imported_files)) != SCM_BOOL_T) {
       /* skip to the "ask account name" page */
-      default_acctname = gh_scm2newstr(scm_call_1(default_acct, 
-                                                SCM_CAR(imported_files)),
-                                       NULL);
+      default_acctname =
+	SCM_STRING_CHARS(scm_call_1(default_acct, SCM_CAR(imported_files)));
       gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
-      
-      if(default_acctname) free(default_acctname);
       
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "account_name_page"));
@@ -644,14 +638,11 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
   
   if(scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
     SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
-    char * default_acctname;
+    const gchar * default_acctname;
 
-    default_acctname = gh_scm2newstr(scm_call_1(default_acct,
-						wind->selected_file),
-				     NULL);
+    default_acctname = SCM_STRING_CHARS(scm_call_1(default_acct,
+						wind->selected_file));
     gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
-
-    if(default_acctname) free(default_acctname);
 
     return FALSE;
   }
@@ -782,11 +773,10 @@ update_file_page(QIFImportWindow * wind)
   
   while(!SCM_NULLP(loaded_file_list)) {  
     scm_qiffile = SCM_CAR(loaded_file_list);
-    row_text    = gh_scm2newstr(scm_call_1(qif_file_path, scm_qiffile), NULL);
+    row_text    = SCM_STRING_CHARS(scm_call_1(qif_file_path, scm_qiffile));
 
     row = gtk_clist_append(GTK_CLIST(wind->selected_file_list),
                            &row_text);
-    free (row_text);
 
     if(scm_qiffile == wind->selected_file) {
       sel_item = row;
@@ -916,10 +906,8 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
   row_text[2] = "";
 
   while(!SCM_NULLP(accts_left)) {
-    row_text[0] = gh_scm2newstr(scm_call_1(get_qif_name, SCM_CAR(accts_left)),
-                                NULL);
-    row_text[1] = gh_scm2newstr(scm_call_1(get_gnc_name, SCM_CAR(accts_left)),
-                                NULL);
+    row_text[0] = SCM_STRING_CHARS(scm_call_1(get_qif_name, SCM_CAR(accts_left)));
+    row_text[1] = SCM_STRING_CHARS(scm_call_1(get_gnc_name, SCM_CAR(accts_left)));
     
     row = gtk_clist_append(GTK_CLIST(list), row_text);
 
@@ -927,9 +915,6 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
                          scm_call_1(get_new, SCM_CAR(accts_left)) == SCM_BOOL_T);
 
     accts_left = SCM_CDR(accts_left);
-
-    free(row_text[0]);
-    free(row_text[1]);
   }
 
   gtk_clist_thaw(GTK_CLIST(list));

@@ -332,7 +332,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	
 	/* get the options and the window ID */ 
 	priv->options = SCM_BOOL_F;
-	scm_protect_object(priv->options);
+	scm_gc_protect_object(priv->options);
 	priv->editor_dialog = NULL;
 
 	if(!url) {
@@ -353,9 +353,9 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	    temp = scm_call_1(find_options, scm_int2num(options_id));
 
 	    if(temp != SCM_BOOL_F) {
-	      scm_unprotect_object(priv->options);
+	      scm_gc_unprotect_object(priv->options);
 	      priv->options = temp;
-	      scm_protect_object(priv->options);
+	      scm_gc_protect_object(priv->options);
 	      priv->options_id = options_id;
 	    } else {
 	      gnc_plugin_page_acct_tree_options_new(priv);
@@ -380,7 +380,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 						 priv, 
 						 N_("Account Tree"),
 						 N_("Name of account view"));
-	scm_protect_object(priv->name_change_callback_id);
+	scm_gc_protect_object(priv->name_change_callback_id);
 
 	LEAVE("page %p, priv %p, action group %p",
 	      plugin_page, plugin_page->priv, plugin_page->priv->action_group);
@@ -413,7 +413,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	scm_call_1(free_tree, scm_int2num(priv->options_id));
 	priv->options_id = 0;
 
-	scm_unprotect_object(priv->options);
+	scm_gc_unprotect_object(priv->options);
 
 	g_free (priv);
 
@@ -917,11 +917,11 @@ gnc_plugin_page_acct_tree_options_new (GncPluginPageAccountTreePrivate *priv)
 {
   SCM func, opts_and_id;
 
-  scm_unprotect_object(priv->options);
+  scm_gc_unprotect_object(priv->options);
   func = scm_c_eval_string("gnc:make-new-acct-tree-window");
   opts_and_id = scm_call_0(func);
   priv->options = SCM_CAR(opts_and_id);
-  scm_protect_object(priv->options);
+  scm_gc_protect_object(priv->options);
   priv->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
 }
 

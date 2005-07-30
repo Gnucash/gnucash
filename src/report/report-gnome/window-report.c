@@ -132,7 +132,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
   SCM get_title  = scm_c_eval_string("gnc:report-type");
   SCM ptr;
   
-  char *title = NULL;
+  const gchar *title = NULL;
 
   ptr = scm_call_1(get_editor, report);
   if(ptr != SCM_BOOL_F) {
@@ -149,16 +149,12 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
     prm->db          = gnc_option_db_new(prm->scm_options);
 
     ptr = scm_call_1(get_title, report);
-    if (ptr != SCM_BOOL_F) {
-      title = gh_scm2newstr(ptr, NULL);
+    if (SCM_STRINGP(ptr)) {
+      title = SCM_STRING_CHARS(ptr);
     }
     /* Don't forget to translate the window title */
     prm->win         = gnc_options_dialog_new(_(title));
     
-    if (title) {
-      free(title);
-    }
-
     scm_gc_protect_object(prm->scm_options);
     scm_gc_protect_object(prm->cur_report);
     

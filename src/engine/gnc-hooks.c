@@ -166,7 +166,7 @@ static void
 delete_scm_hook (gpointer data)
 {
   GncScmDangler *scm = data;
-  scm_unprotect_object(scm->proc);
+  scm_gc_unprotect_object(scm->proc);
   g_free(scm);
 }
 
@@ -208,7 +208,7 @@ gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
   gnc_hook = gnc_hook_lookup(name);
   g_return_if_fail(gnc_hook != NULL);
   scm = g_new0(GncScmDangler, 1);
-  scm_protect_object(proc);
+  scm_gc_protect_object(proc);
   scm->proc = proc;
   hook = g_hook_alloc(gnc_hook->scm_danglers);
   hook->func = call_scm_hook;

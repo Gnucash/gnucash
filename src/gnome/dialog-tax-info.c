@@ -168,17 +168,16 @@ load_txf_info (gboolean income)
   {
     TXFInfo *txf_info;
     SCM code_scm;
-    char *str;
+    const gchar *str;
     SCM scm;
 
     code_scm  = SCM_CAR (codes);
     codes     = SCM_CDR (codes);
 
     scm = scm_call_2 (getters.payer_name_source, category, code_scm);
-    str = gh_symbol2newstr (scm, NULL);
+    str = SCM_SYMBOL_CHARS (scm);
     if (safe_strcmp (str, "not-impl") == 0)
     {
-      free (str);
       continue;
     }
 
@@ -188,26 +187,21 @@ load_txf_info (gboolean income)
       txf_info->payer_name_source = NULL;
     else
       txf_info->payer_name_source = g_strdup (str);
-    free (str);
 
-    str = gh_symbol2newstr (code_scm, NULL);
+    str = SCM_SYMBOLP(code_scm) ? SCM_SYMBOL_CHARS(code_scm) : "";
     txf_info->code = g_strdup (str);
-    free (str);
 
     scm = scm_call_2 (getters.form, category, code_scm);
-    str = gh_scm2newstr (scm, NULL);
+    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
     txf_info->form = g_strdup (str);
-    free (str);
 
     scm = scm_call_2 (getters.description, category, code_scm);
-    str = gh_scm2newstr (scm, NULL);
+    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
     txf_info->description = g_strdup (str);
-    free (str);
 
     scm = scm_call_2 (getters.help, category, code_scm);
-    str = gh_scm2newstr (scm, NULL);
+    str = SCM_STRINGP(scm) ? SCM_STRING_CHARS(scm) : "";
     txf_info->help = g_strdup (str);
-    free (str);
 
     infos = g_list_prepend (infos, txf_info);
   }

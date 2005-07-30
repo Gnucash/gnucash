@@ -89,7 +89,7 @@ gnc_style_sheet_options_close_cb(GNCOptionWin * propertybox,
   gtk_tree_row_reference_free (ssi->row_ref);
   gnc_option_db_destroy(ssi->odb);
   gnc_options_dialog_destroy(ssi->odialog);
-  scm_unprotect_object(ssi->stylesheet);
+  scm_gc_unprotect_object(ssi->stylesheet);
   g_free(ssi);
 }
 
@@ -143,7 +143,6 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
   GtkWidget        * name_entry;
   GtkWidget        * template_combo;
   GList            * strings=NULL;
-  GList            * lptr;
   gint             dialog_retval;
   const char       * template_str = NULL;
   const char       * name_str = NULL;
@@ -159,16 +158,12 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
   /* put in the list of style sheet type names */
   for(; !SCM_NULLP(templates); templates=SCM_CDR(templates)) {
     SCM t = SCM_CAR(templates);
-    strings = g_list_append(strings, gh_scm2newstr(scm_call_1(t_name, t), 
-                                                   NULL));
+    strings = g_list_append(strings, SCM_STRING_CHARS(scm_call_1(t_name, t)));
   }
   
   gtk_combo_set_popdown_strings(GTK_COMBO(template_combo), strings);
   
-  /* free the strings list */
-  for(lptr = strings; lptr; lptr = lptr->next) {
-    free(lptr->data);
-  }
+  /* The strings on the list are const.  Just free the list. */
   g_list_free(strings);
 
   /* get the name */
@@ -199,24 +194,23 @@ gnc_style_sheet_select_dialog_add_one(StyleSheetDialog * ss,
 				      gboolean select)
 {
   SCM get_name, scm_name;
-  gchar *c_name;
+  const gchar *c_name;
   GtkTreeSelection *selection;
   GtkTreeIter iter;
 
   get_name = scm_c_eval_string("gnc:html-style-sheet-name");
   scm_name = scm_call_1(get_name, sheet_info);
-  c_name = gh_scm2newstr(scm_name, NULL);
+  c_name = SCM_STRING_CHARS(scm_name);
   if (!c_name)
     return;
 
   /* add the column name */
-  scm_protect_object(sheet_info);
+  scm_gc_protect_object(sheet_info);
   gtk_list_store_append (ss->list_store, &iter);
   gtk_list_store_set (ss->list_store, &iter,
 		      COLUMN_NAME, c_name,
 		      COLUMN_STYLESHEET, sheet_info,
 		      -1);
-  g_free(c_name);
 
   if (select) {
     selection = gtk_tree_view_get_selection (ss->list_view);
@@ -292,7 +286,7 @@ gnc_style_sheet_select_dialog_response_cb (GtkDialog *unused,
 	gnc_style_sheet_options_close_cb(NULL, ssinfo);
       remover = scm_c_eval_string("gnc:html-style-sheet-remove");
       scm_call_1(remover, sheet_info);
-      scm_unprotect_object(sheet_info);
+      scm_gc_unprotect_object(sheet_info);
     }
     break;
 

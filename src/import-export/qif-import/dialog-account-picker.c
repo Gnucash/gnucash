@@ -26,7 +26,6 @@
 #include <gnome.h>
 #include <stdio.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "dialog-account-picker.h"
 #include "dialog-utils.h"
@@ -70,7 +69,10 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
       continue;
     }
 
-    acctinfo[0] = gh_scm2newstr(SCM_CAR(current), NULL);
+    if (SCM_STRINGP(SCM_CAR(current)))
+      acctinfo[0] = g_strdup(SCM_STRING_CHARS(SCM_CAR(current)));
+    else
+      acctinfo[0] = g_strdup("");
 
     if(!SCM_NULLP(SCM_CADDR(current))) {
       leafnode = FALSE;
@@ -244,7 +246,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
   SCM init_pick    = scm_c_eval_string("qif-map-entry:gnc-name");
   SCM saved_entry  = scm_call_1(save_entry, map_entry);
   int response;
-  char * scmname;
+  const gchar * scmname;
   GladeXML *xml;
   GtkWidget *button;
 
@@ -262,9 +264,8 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   wind->map_entry  = map_entry;
   
-  scmname = gh_scm2newstr(scm_call_1(init_pick, map_entry), NULL);
+  scmname = SCM_STRING_CHARS(scm_call_1(init_pick, map_entry));
   wind->selected_name = g_strdup(scmname);
-  free(scmname);
 
   scm_gc_protect_object(wind->map_entry);
 

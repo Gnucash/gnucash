@@ -106,7 +106,7 @@ char *
 gnc_network_get_uid(void) {
   SCM val = gnc_lookup_option("__gnc_network", "uid", scm_makfrom0str("0"));
   if(val != SCM_BOOL_F) {
-    return gh_scm2newstr(val, NULL);
+    return g_strdup(SCM_STRING_CHARS(val));
   }
   else {
     return strdup("");
@@ -538,7 +538,7 @@ gnc_network_send_info_handler(gnc_html * html,
                               const char * method, const char * action, 
                               GHashTable * form_data) {
   char * new_action = NULL;
-  char * version_string = NULL;
+  const gchar * version_string = NULL;
   char * feature_string = NULL;
   
   if(!g_hash_table_lookup(form_data, "submit")) {
@@ -551,7 +551,7 @@ gnc_network_send_info_handler(gnc_html * html,
     return FALSE;
   }
   
-  version_string  = gh_scm2newstr(scm_c_eval_string("gnc:version"), NULL);  
+  version_string  = SCM_STRING_CHARS(scm_c_eval_string("gnc:version"));  
 
   feature_string = 
     g_strjoin(",",
@@ -569,7 +569,6 @@ gnc_network_send_info_handler(gnc_html * html,
                       g_strdup(version_string));
   g_hash_table_insert(form_data, g_strdup("gnc_features"), 
                       feature_string);
-  free(version_string);
 
   new_action = gnc_network_build_url("gnc-network-get.php");
   

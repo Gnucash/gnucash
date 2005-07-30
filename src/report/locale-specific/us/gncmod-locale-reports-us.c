@@ -8,7 +8,6 @@
 #include "config.h"
 #include <stdio.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <glib.h>
 #include <locale.h>
 #include <string.h>
@@ -86,7 +85,7 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
   }
 
   /* Load the module scheme code */
-  if(gh_eval_str(report_locale) 
+  if(scm_c_eval_string(report_locale) 
      == SCM_BOOL_F) {
     return FALSE;
   }

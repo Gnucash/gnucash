@@ -99,8 +99,7 @@ gnc_scm2printinfo(SCM info_scm)
 int
 gnc_printinfo_p(SCM info_scm)
 {
-  char *symbol;
-  int retval;
+  const gchar *symbol;
 
   if (!SCM_LISTP(info_scm) || SCM_NULLP(info_scm))
     return 0;
@@ -109,15 +108,11 @@ gnc_printinfo_p(SCM info_scm)
   if (!SCM_SYMBOLP (info_scm))
     return 0;
 
-  symbol = gh_symbol2newstr (info_scm, NULL);
+  symbol = SCM_SYMBOL_CHARS (info_scm);
   if (symbol == NULL)
     return 0;
 
-  retval = strcmp (symbol, "print-info") == 0;
-
-  free (symbol);
-
-  return retval;
+  return (strcmp (symbol, "print-info") == 0);
 }
 
 /* This is a scaled down version of the routine that would be needed

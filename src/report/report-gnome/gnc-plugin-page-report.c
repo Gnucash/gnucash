@@ -356,9 +356,9 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         report->edited_reports    = SCM_EOL;
         report->name_change_cb_id = SCM_BOOL_F;
 
-        scm_protect_object(report->cur_report);
-        scm_protect_object(report->initial_report);
-        scm_protect_object(report->edited_reports);
+        scm_gc_protect_object(report->cur_report);
+        scm_gc_protect_object(report->initial_report);
+        scm_gc_protect_object(report->edited_reports);
 
         g_object_get( ppage, "report_id", &report_id, NULL );
         
@@ -370,9 +370,9 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         }
         
         if (report->initial_report == SCM_BOOL_F) {
-                scm_unprotect_object(report->initial_report);
+                scm_gc_unprotect_object(report->initial_report);
                 report->initial_report = inst_report;
-                scm_protect_object(report->initial_report);
+                scm_gc_protect_object(report->initial_report);
         }
 }
 
@@ -430,9 +430,9 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         }
         
         if (win->initial_report == SCM_BOOL_F) {    
-                scm_unprotect_object(win->initial_report);
+                scm_gc_unprotect_object(win->initial_report);
                 win->initial_report = inst_report;
-                scm_protect_object(win->initial_report);
+                scm_gc_protect_object(win->initial_report);
                 
                 scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
                 
@@ -452,9 +452,9 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         }
         
         if (win->cur_report != SCM_BOOL_F)
-                scm_unprotect_object(win->cur_report);
+                scm_gc_unprotect_object(win->cur_report);
         win->cur_report = inst_report;
-        scm_protect_object(win->cur_report);
+        scm_gc_protect_object(win->cur_report);
         
         win->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
         win->option_change_cb_id = 
@@ -600,8 +600,8 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
         win->container     = NULL;
         win->html          = NULL;
   
-        scm_unprotect_object(win->cur_report);
-        scm_unprotect_object(win->edited_reports);
+        scm_gc_unprotect_object(win->cur_report);
+        scm_gc_unprotect_object(win->edited_reports);
   
         g_free(win);
 }
@@ -733,18 +733,18 @@ void
 gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win, SCM report)
 { 
         SCM new_edited = scm_delete(win->edited_reports, report);
-        scm_unprotect_object(win->edited_reports);
+        scm_gc_unprotect_object(win->edited_reports);
         win->edited_reports = new_edited;
-        scm_protect_object(win->edited_reports);
+        scm_gc_protect_object(win->edited_reports);
 }
 
 void
 gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win, SCM report)
 {
         SCM new_edited = scm_cons(report, win->edited_reports);
-        scm_unprotect_object(win->edited_reports);
+        scm_gc_unprotect_object(win->edited_reports);
         win->edited_reports = new_edited;
-        scm_protect_object(win->edited_reports);
+        scm_gc_protect_object(win->edited_reports);
 }
 
 void
@@ -864,7 +864,7 @@ gnc_get_export_type_choice (SCM export_types)
         for (tail = export_types; !SCM_NULLP (tail); tail = SCM_CDR (tail))
         {
                 SCM pair = SCM_CAR (tail);
-                char * name;
+                const gchar * name;
                 SCM scm;
 
                 if (!SCM_CONSP (pair))
@@ -882,9 +882,8 @@ gnc_get_export_type_choice (SCM export_types)
                         break;
                 }
 
-                name = gh_scm2newstr (scm, NULL);
+                name = SCM_STRING_CHARS (scm);
                 choices = g_list_prepend (choices, g_strdup (name));
-                if (name) free (name);
         }
 
         if (!bad)
@@ -923,16 +922,14 @@ gnc_get_export_filename (SCM choice)
         char * filepath;
         struct stat statbuf;
         char * title;
-        char * type;
+        const gchar * type;
         int rc;
 
         if (choice == SCM_BOOL_T)
-                type = g_strdup (_("HTML"));
+                type = _("HTML");
         else
         {
-                char * s = gh_scm2newstr (SCM_CAR (choice), NULL);
-                type = g_strdup (s);
-                if (s) free (s);
+                type = SCM_STRING_CHARS(SCM_CAR (choice));
         }
 
         /* %s is the type of what is about to be saved, e.g. "HTML". */
@@ -941,7 +938,6 @@ gnc_get_export_filename (SCM choice)
         filepath = gnc_file_dialog (title, NULL, NULL);
 
         g_free (title);
-        g_free (type);
 
         if (!filepath)
                 return NULL;

@@ -16,7 +16,7 @@
 (export gnc:make-menu)
 (export gnc:make-separator)
 (export gnc:new-menu-namer)
-(export gnc:*add-extension-hook*)
+(re-export gnc:*add-extension-hook*)
 
 (export gnc:kvp-option-dialog)
 
