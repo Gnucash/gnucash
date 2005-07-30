@@ -1,5 +1,7 @@
 2005-07-30  David Hampton  <hampton@employees.org>
 
+	* Lots 'o files: Remove unnecessary includes.
+
 	* Lots 'o files: Guile 1.6 is now required for gnucash.  Finish
 	removal of all functions deprecated in that version.  Don't enable
 	warnings as g-wrap 1.3 still uses some deprecated functions.

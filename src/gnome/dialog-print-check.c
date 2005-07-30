@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <gnome.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-date.h"
 #include "messages.h"

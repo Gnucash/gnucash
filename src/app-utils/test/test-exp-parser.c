@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-exp-parser.h"
 #include "gnc-numeric.h"

@@ -14,7 +14,6 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "guile-mappings.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_tax_us_LTX_gnc_module_system_interface = 0;

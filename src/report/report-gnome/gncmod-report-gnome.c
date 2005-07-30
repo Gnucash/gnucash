@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 #include <glib.h>
 
 #include "gnc-module.h"

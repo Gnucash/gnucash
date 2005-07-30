@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "bar-gwrap.h"
 #include "gnc-module-api.h"

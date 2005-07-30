@@ -37,7 +37,6 @@
 #include "business-options-gnome.h"
 #include "business-gnome-utils.h"
 #include "dialog-invoice.h"
-#include "guile-mappings.h"
 
 static GtkWidget *
 create_owner_widget (GNCOption *option, GncOwnerType type, GtkWidget *hbox)
