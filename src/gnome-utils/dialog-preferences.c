@@ -61,11 +61,13 @@
 
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-trace.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
 
+#define GLADE_FILENAME			"preferences.glade"
 #define DIALOG_PREFERENCES_CM_CLASS	"dialog-newpreferences"
 #define GCONF_SECTION			"dialogs/preferences"
 #define PREFIX_LEN			sizeof("gconf/") - 1
@@ -412,6 +414,18 @@ gnc_preferences_build_page (gpointer data,
 
   /* Add to the list of interesting widgets */
   gnc_prefs_build_widget_table(xml, dialog);
+
+  /* Clean up the xml data structure when the dialog is destroyed */
+  g_object_set_data_full(G_OBJECT(dialog), add_in->filename,
+			 xml, g_object_unref);
+
+  /* Connect the signals in this glade file. The dialog is passed in
+   * so the the callback can find "interesting" widgets from other
+   * glade files if necessary (via the WIDGET_HASH hash
+   * table). Widgets from the same glade file can be found with the
+   * usual gnc_glade_lookup_widget() function. */
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+				    dialog);
 
   /* Prepare for recursion */
   notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
@@ -898,11 +912,15 @@ gnc_preferences_dialog_create(void)
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
-  xml = gnc_glade_xml_new("preferences.glade", "New Gnucash Preferences");
+  xml = gnc_glade_xml_new(GLADE_FILENAME, "New Gnucash Preferences");
   dialog = glade_xml_get_widget(xml, "New Gnucash Preferences");
   DEBUG("autoconnect");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
+
+  /* Clean up the xml data structure when the dialog is destroyed */
+  g_object_set_data_full(G_OBJECT(dialog), GLADE_FILENAME,
+			 xml, g_object_unref);
   DEBUG("done");
 
   notebook = glade_xml_get_widget(xml, "notebook1");
@@ -1121,6 +1139,7 @@ gnc_preferences_dialog (void)
   dialog = gnc_preferences_dialog_create();
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+  gtk_widget_show(dialog);
 
   gnc_gconf_add_notification(G_OBJECT(dialog), NULL,
 			     gnc_preferences_gconf_changed);
