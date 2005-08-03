@@ -575,6 +575,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageRegister *page;
 	GncPluginPageRegisterPrivate *priv;
+	GncWindow *gnc_window;
 	guint numRows;
 	GtkWidget *gsr;
 	SplitRegister *sr;
@@ -597,8 +598,10 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	  numRows = priv->lines_default;
 	}
 
+	numRows = max(numRows, 50);
+	gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 	gsr = gnc_split_reg_new(priv->ledger,
-				GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+				gnc_window_get_gtk_window(gnc_window),
 				numRows, 0, priv->disallowCaps);
 	priv->gsr = (GNCSplitReg *)gsr;
 	gtk_widget_show (gsr);
@@ -673,7 +676,8 @@ gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
 
 	page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
-	page->priv->gsr->window = window;
+	page->priv->gsr->window = 
+	  GTK_WIDGET(gnc_window_get_gtk_window(GNC_WINDOW(window)));
 }
 	
 static void
