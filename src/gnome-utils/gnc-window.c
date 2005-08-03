@@ -63,6 +63,17 @@ gnc_window_get_type (void)
  *                Interface access functions                *
  ************************************************************/
 
+GtkWindow *
+gnc_window_get_gtk_window (GncWindow *window)
+{
+  g_return_val_if_fail(GNC_WINDOW (window), NULL);
+
+  /* mandatory */
+  g_return_val_if_fail(GNC_WINDOW_GET_IFACE (window)->get_gtk_window, NULL);
+
+  return GNC_WINDOW_GET_IFACE (window)->get_gtk_window (window);
+}
+
 static GtkWidget *
 gnc_window_get_statusbar (GncWindow *window)
 {

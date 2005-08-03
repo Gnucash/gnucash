@@ -61,12 +61,15 @@ typedef struct {
 	GTypeInterface parent;
 
 	/* Virtual Table */
+	GtkWindow * (* get_gtk_window) (GncWindow *window);
 	GtkWidget * (* get_statusbar) (GncWindow *window);
 	GtkWidget * (* get_progressbar) (GncWindow *window);
 } GncWindowIface;
 
 /* function prototypes */
 GType          gnc_window_get_type (void);
+
+GtkWindow     *gnc_window_get_gtk_window (GncWindow *window);
 
 void           gnc_window_update_status (GncWindow *window, GncPluginPage *page);
 void           gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *message);

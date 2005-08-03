@@ -294,6 +294,8 @@ gnc_embedded_window_new (const gchar *action_group_name,
   /* Determine the full pathname of the ui file */
   ui_fullname = gnc_gnome_locate_ui_file(ui_filename);
 
+  priv->parent_window = enclosing_win;
+
   /* Create menu and toolbar information */
   priv->action_group = gtk_action_group_new (action_group_name);
   gtk_action_group_add_actions (priv->action_group, action_entries,
@@ -324,6 +326,17 @@ gnc_embedded_window_new (const gchar *action_group_name,
   return window;
 }
 
+static GtkWindow *
+gnc_embedded_window_get_gtk_window (GncWindow *window_in)
+{
+  GncEmbeddedWindow *window;
+
+  g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW (window_in), NULL);
+
+  window = GNC_EMBEDDED_WINDOW(window_in);
+  return GTK_WINDOW(window->priv->parent_window);
+}
+
 static GtkWidget *
 gnc_embedded_window_get_statusbar (GncWindow *window_in)
 {
@@ -340,5 +353,6 @@ gnc_embedded_window_get_statusbar (GncWindow *window_in)
 static void
 gnc_window_embedded_window_init (GncWindowIface *iface)
 {
+	iface->get_gtk_window = gnc_embedded_window_get_gtk_window;
 	iface->get_statusbar = gnc_embedded_window_get_statusbar;
 }

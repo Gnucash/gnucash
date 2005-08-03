@@ -1906,6 +1906,13 @@ gnc_ui_get_toplevel (void)
   return NULL;
 }
 
+static GtkWindow *
+gnc_main_window_get_gtk_window (GncWindow *window)
+{
+  g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), NULL);
+  return GTK_WINDOW(window);
+}
+
 static GtkWidget *
 gnc_main_window_get_statusbar (GncWindow *window_in)
 {
@@ -1935,6 +1942,7 @@ gnc_main_window_get_progressbar (GncWindow *window_in)
 static void
 gnc_window_main_window_init (GncWindowIface *iface)
 {
+	iface->get_gtk_window  = gnc_main_window_get_gtk_window;
 	iface->get_statusbar   = gnc_main_window_get_statusbar;
 	iface->get_progressbar = gnc_main_window_get_progressbar;
 }
