@@ -70,6 +70,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-exp-parser.h"
 #include "gnc-embedded-window.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-numeric.h"
 #include "gnc-plugin-page.h"
@@ -416,9 +417,13 @@ static guint gnc_sxsld_menu_n_entries = G_N_ELEMENTS (gnc_sxsld_menu_entries);
  * Used to wrap for the book-open hook, where the book filename is given.
  **/
 void
-gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
+gnc_sx_sxsincelast_book_opened (void)
 {
   gint ret;
+
+  if (!gnc_gconf_get_bool(GCONF_SECTION, "show_at_file_open", NULL))
+    return;
+
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret < 0 ) {
     gnc_info_dialog
@@ -432,6 +437,7 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
        -(ret));
   }
 }
+
 
 static gboolean
 show_handler (const char *class, gint component_id,

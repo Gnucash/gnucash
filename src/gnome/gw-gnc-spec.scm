@@ -233,16 +233,4 @@ sensitive and the dialog closes after the user clicks it.")
 order to destroy the dialog. The dialog will not be destroyed
 by the user closing the window.")
 
-  (gw:wrap-function
-   ws
-   'gnc:sx-editor
-   '<gw:void>
-   "gnc_ui_scheduled_xaction_dialog_create" '()
-   "Open the Scheduled Transaction Editor" )
-
-  (gw:wrap-function
-   ws
-   'gnc:sx-since-last-run-wrapper
-   '<gw:void>
-   "gnc_ui_sxsincelast_guile_wrapper" '(((<gw:mchars> caller-owned) bookfile))
-   "Wrapper to open the since-last-run dialog from a book-open hook." ))
+)

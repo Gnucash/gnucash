@@ -282,66 +282,6 @@ to enter a credit card payment")
 ;;  "www.gnucash.org"))
 
 
-;; Scheduled|Recurring Transactions
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Scheduled Transactions")
-  (N_ "Run on GnuCash start")
-  "a" (N_ "Should the Since-Last-Run window appear on GnuCash startup?")
-  #t ))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Scheduled Transactions")
-  (N_ "Auto-Create new Scheduled Transactions by default")
-  "b" (N_ "Should new Scheduled Transactions have the 'Auto Create' flag set by default?")
-  #f ))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Scheduled Transactions")
-  (N_ "Notify on new, auto-created Scheduled Transactions")
-  "c" (N_ "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?")
-  #t ))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "Scheduled Transactions")
-  (N_ "Default number of days in advance to create")
-  "d" (N_ "Default number of days in advance to create new Scheduled Transactions.")
-  0 ; default
-  0 ; min
-  99999 ; max
-  0 ; num decimals
-  1 ; step size
-  ))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "Scheduled Transactions")
-  (N_ "Default number of days in advance to remind")
-  "e" (N_ "Default number of days in advance to remind on new Scheduled Transactions.")
-  0 ; default
-  0 ; min
-  99999 ; max
-  0 ; num-decimals
-  1 ; step size
-  ))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "Scheduled Transactions")
-  (N_ "Template Register Lines")
-  "f" (N_ "How many lines in the template register?")
-  6  ; default
-  1  ; min
-  50 ; max
-  0  ; num-decimals
-  1  ; step size
-  ))
-
-
 ;;; Advanced Options
 
 (gnc:register-configuration-option

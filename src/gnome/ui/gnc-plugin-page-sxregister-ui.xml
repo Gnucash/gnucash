@@ -1,15 +1,13 @@
 <ui>
   <menubar>
-    <menu name="Edit" action="EditAction">
-      <placeholder name="EditSelectedPlaceholder">
-        <separator name="EditSep22"/>
-        <menuitem name="EditCutTransaction"     action="EditCutTransactionAction"/>
-        <menuitem name="EditCopyTransaction"    action="EditCopyTransactionAction"/>
-        <menuitem name="EditPasteTransaction"   action="EditPasteTransactionAction"/>
-        <menuitem name="EditVoidTransaction"    action="EditVoidTransactionAction"/>
-        <menuitem name="EditUnvoidTransaction"  action="EditUnvoidTransactionAction"/>
-        <menuitem name="EditReverseTransaction" action="EditReverseTransactionAction"/>
-      </placeholder>
+    <menu name="Transaction" action="TransactionAction">
+      <menuitem name="CutTransaction"     	action="CutTransactionAction"/>
+      <menuitem name="CopyTransaction"    	action="CopyTransactionAction"/>
+      <menuitem name="PasteTransaction"   	action="PasteTransactionAction"/>
+      <separator name="TransactionSep2"/>
+      <menuitem name="VoidTransaction"    	action="VoidTransactionAction"/>
+      <menuitem name="UnvoidTransaction"  	action="UnvoidTransactionAction"/>
+      <menuitem name="ReverseTransaction" 	action="ReverseTransactionAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">

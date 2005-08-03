@@ -31,6 +31,7 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
+#include "dialog-preferences.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
 #include "gnc-book.h"
@@ -41,7 +42,9 @@
 #include "gnc-embedded-window.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-hooks.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
 #include "gnc-plugin-page-register.h"
@@ -68,9 +71,7 @@ static short module = MOD_SX;
 #define SX_LIST "sched_xact_list"
 #define SX_LIST_UPCOMING_FRAME "upcoming_cal_frame"
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
-#define SX_OPT_STR "Scheduled Transactions"
 
-#define SXED_GCONF_SECTION "dialogs/scheduled_trans/transaction_editor"
 #define SXED_WIN_PREFIX "sx_editor_win"
 #define SXED_NAME_ENTRY "sxe_name"
 #define SXED_LAST_OCCUR_LABEL "last_occur_label"
@@ -83,6 +84,8 @@ static short module = MOD_SX;
 #define END_DATE_BOX "end_date_hbox"
 #define END_ENTRY "end_nentry"
 #define REMAIN_ENTRY "remain_nentry"
+
+#define SX_GLADE_FILE "sched-xact.glade"
 
 #define END_NEVER_OPTION 0
 #define END_DATE_OPTION  1
@@ -238,7 +241,9 @@ static GtkActionEntry gnc_sxed_menu_entries [] =
 	/* Toplevel */
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
+	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
 
 	/* Edit menu */
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
@@ -1206,7 +1211,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxd = g_new0( SchedXactionDialog, 1 );
 
-        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", SX_LIST_GLADE_NAME );
+        sxd->gxml = gnc_glade_xml_new( SX_GLADE_FILE, SX_LIST_GLADE_NAME );
         sxd->dialog = glade_xml_get_widget( sxd->gxml, SX_LIST_GLADE_NAME );
 
         sxd->sxData = g_hash_table_new( NULL, NULL );
@@ -1420,7 +1425,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         }
 
         sxed         = g_new0( SchedXactionEditorDialog, 1 );
-        sxed->gxml   = gnc_glade_xml_new( "sched-xact.glade",
+        sxed->gxml   = gnc_glade_xml_new( SX_GLADE_FILE,
                                         SX_EDITOR_GLADE_NAME );
         sxed->dialog = glade_xml_get_widget( sxed->gxml, SX_EDITOR_GLADE_NAME );
 
@@ -1585,8 +1590,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 	gnc_plugin_page_register_set_ui_description (sxed->plugin_page,
 						     "gnc-plugin-page-sxregister-ui.xml");
 	gnc_plugin_page_register_set_options (sxed->plugin_page,
-					      SX_OPT_STR,
-					      "Template Register Lines",
+					      SXED_GCONF_SECTION,
+					      KEY_NUMBER_OF_ROWS,
 					      NUM_LEDGER_LINES_DEFAULT,
 					      (CAP_JUMP | CAP_SCHEDULE) );
 	gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);
@@ -1666,13 +1671,9 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do auto-create/notify setup */
         if ( sxed->newsxP ) {
                 autoCreateState =
-                        gnc_lookup_boolean_option( SX_OPT_STR,
-                                                   "Auto-Create new Scheduled "
-                                                   "Transactions by default", FALSE );
+		  gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL );
                 notifyState =
-                        gnc_lookup_boolean_option( SX_OPT_STR,
-                                                   "Notify on new, auto-created "
-                                                   "Scheduled Transactions", FALSE );
+		  gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_NOTIFY, NULL );
         } else {
                 xaccSchedXactionGetAutoCreate( sxed->sx,
                                                &autoCreateState,
@@ -1688,9 +1689,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do days-in-advance-to-create widget[s] setup. */
         if ( sxed->newsxP ) {
                 daysInAdvance =
-                        (int)gnc_lookup_number_option( SX_OPT_STR,
-                                                       "Default number of days in "
-                                                       "advance to create", 0 );
+		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
         } else {
                 daysInAdvance =
                         xaccSchedXactionGetAdvanceCreation( sxed->sx );
@@ -1704,9 +1703,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do days-in-advance-to-remind widget[s] setup. */
         if ( sxed->newsxP ) {
                 daysInAdvance =
-                        (int)gnc_lookup_number_option( SX_OPT_STR,
-                                                       "Default number of days in "
-                                                       "advance to remind", 0 );
+		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_NOTIFY_DAYS, NULL );
         } else {
                 daysInAdvance =
                         xaccSchedXactionGetAdvanceReminder( sxed->sx );
@@ -2457,4 +2454,46 @@ gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed)
 static void
 gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
+}
+
+
+void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);
+
+void
+on_sx_check_toggled (GtkWidget *togglebutton,
+		     gpointer user_data)
+{
+  GtkWidget *widget;
+  gboolean create, notify;
+
+  /* The gnc_glade_lookup_widget() function works because all of these
+   * widgets come from the same glade file. */
+  widget = gnc_glade_lookup_widget(togglebutton,
+	"gconf/dialogs/scheduled_trans/transaction_editor/create_auto");
+  create = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+  widget = gnc_glade_lookup_widget(togglebutton,
+	"gconf/dialogs/scheduled_trans/transaction_editor/notify");
+  gtk_widget_set_sensitive(widget, create);
+  notify = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+  widget = gnc_glade_lookup_widget(togglebutton, "create_days_label");
+  gtk_widget_set_sensitive(widget, create);
+  widget = gnc_glade_lookup_widget(togglebutton, "create_days_hbox");
+  gtk_widget_set_sensitive(widget, create);
+
+  widget = gnc_glade_lookup_widget(togglebutton, "notify_days_label");
+  gtk_widget_set_sensitive(widget, create && notify);
+  widget = gnc_glade_lookup_widget(togglebutton, "notify_days_hbox");
+  gtk_widget_set_sensitive(widget, create && notify);
+}
+
+
+void
+gnc_ui_sx_initialize (void)
+{
+  gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+		       (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
+  gnc_preferences_add_page (SX_GLADE_FILE,
+			    "sx_prefs",
+			    "Scheduled Transactions");
 }

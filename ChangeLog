@@ -1,3 +1,39 @@
+2005-08-02  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm:
+	* src/gnome/dialog-scheduledxaction.[ch]:
+	* src/gnome/dialog-sx-from-trans.c:
+	* src/gnome/dialog-sxsincelast.[ch]:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/top-level.c:
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas:
+	* src/gnome/ui/gnc-plugin-page-sxregister-ui.xml:
+	* src/gnome/ui/gnc-sxed-window-ui.xml:
+	* src/scm/main.scm: Convert scheduled transactions over to the new
+	preferences dialog and gconf storage.  Fix register menu problems
+	when in embedded windows.  Use C side hooks to set up the "since
+	last run" dialog.
+
+	* src/gnome/gnc-plugin-page-register.c: Properly set the window
+	field in the gnc_split_register data structure when installing the
+	page into a GncEmbeddedWindow.
+
+	* src/core-utils/gnc-gobject-utils.c: Enhance object tracking to
+	catch the deletion of an object that hasn't been removed from the
+	tracking list.
+
+	* src/gnome-utils/gnc-embedded-window.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-window.[ch]: Add method for retrieving the
+	GtkWindow associated with a GncWindow.
+
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/preferences.glade: Clean up xml data structures
+	when the dialog is destroyed.  Connect signals in all add-in
+	preference pages.  Don't show the dialog until completely built
+	and moved to the remembered position.
+
 2005-07-30  David Hampton  <hampton@employees.org>
 
 	* Lots 'o files: Remove unnecessary includes.

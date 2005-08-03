@@ -38,6 +38,7 @@
 #include "gnc-book.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-dense-cal.h"
@@ -58,8 +59,6 @@
 #define SXFTD_START_DATE_EDIT "start_date_edit"
 #define SXFTD_EX_CAL_FRAME "ex_cal_frame"
 #define SXFTD_END_DATE_BOX "end_date_hbox"
-
-#define SX_OPT_STR "Scheduled Transactions"
 
 #define SXFTD_ERRNO_UNBALANCED_XACTION 3
 #define SXFTD_ERRNO_OPEN_XACTION -3
@@ -515,27 +514,19 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     gint daysInAdvance;
 
     autoCreateState =
-      gnc_lookup_boolean_option( SX_OPT_STR,
-                                 "Auto-Create new Scheduled "
-                                 "Transactions by default", FALSE );
+      gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL );
     notifyState =
-      gnc_lookup_boolean_option( SX_OPT_STR,
-                                 "Notify on new, auto-created "
-                                 "Scheduled Transactions", FALSE );
+      gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_NOTIFY, NULL );
     xaccSchedXactionSetAutoCreate( sx,
                                    autoCreateState,
                                    (autoCreateState & notifyState) );
     
     daysInAdvance =
-      (int)gnc_lookup_number_option( SX_OPT_STR,
-                                     "Default number of days in "
-                                     "advance to create", 0 );
+      gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
     xaccSchedXactionSetAdvanceCreation( sx, daysInAdvance );
 
     daysInAdvance =
-      (int)gnc_lookup_number_option( SX_OPT_STR,
-                                     "Default number of days in "
-                                     "advance to remind", 0 );
+      gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_NOTIFY_DAYS, NULL );
     xaccSchedXactionSetAdvanceReminder( sx, daysInAdvance );
   }
 

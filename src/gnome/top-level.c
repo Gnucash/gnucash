@@ -36,6 +36,7 @@
 #include "dialog-account.h"
 #include "dialog-commodity.h"
 #include "dialog-options.h"
+#include "dialog-scheduledxaction.h"
 #include "dialog-transfer.h"
 #include "dialog-totd.h"
 #include "dialog-utils.h"
@@ -309,6 +310,7 @@ gnc_gui_init (SCM command_line)
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
     gnc_totd_dialog(NULL, TRUE);
+    gnc_ui_sx_initialize();
 
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));

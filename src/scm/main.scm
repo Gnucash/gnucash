@@ -459,15 +459,6 @@ string and 'directories' must be a list of strings."
 
     (set-current-module original-module))
 
-  (gnc:hook-add-dangler gnc:*book-opened-hook*
-                        (lambda (session)
-                          (if ((gnc:option-getter
-                                (gnc:lookup-global-option
-                                 "Scheduled Transactions"
-                                 "Run on GnuCash start" )))
-                              (gnc:sx-since-last-run-wrapper
-			       (gnc:session-get-url session)))))
-
   ;; Load the system configs
   (gnc:update-splash-screen (_ "Loading configs..."))
   (if (not (gnc:load-system-config-if-needed))
