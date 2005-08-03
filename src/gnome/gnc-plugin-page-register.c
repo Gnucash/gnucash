@@ -598,7 +598,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	  numRows = priv->lines_default;
 	}
 
-	numRows = max(numRows, 50);
+	numRows = MAX(numRows, 50);
 	gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 	gsr = gnc_split_reg_new(priv->ledger,
 				gnc_window_get_gtk_window(gnc_window),
