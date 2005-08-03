@@ -30,6 +30,8 @@
 			// a g_source attached to the main glib context.
 
 
+static void gnc_gobject_weak_cb (gpointer user_data, GObject *object);
+
 /************************************************************/
 /*                      Gconf Utilities                     */
 /************************************************************/
@@ -145,7 +147,46 @@ gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
 
   list = g_list_append(list, object);
   g_hash_table_insert(table, g_strdup(name), list);
+
+  g_object_weak_ref(object, gnc_gobject_weak_cb, NULL);
   //printf("Leave %s:\n", __FUNCTION__);
+}
+
+
+static gboolean
+gnc_gobject_tracking_forget_internal (GObject *object)
+{
+  GHashTable *table;
+  GList *list, *item;
+  const gchar *name;
+
+  g_return_val_if_fail(G_IS_OBJECT(object), FALSE);
+
+  name = G_OBJECT_TYPE_NAME(object);
+  //printf("Enter %s: object %p of type %s\n", __FUNCTION__, object, name);
+  table = gnc_gobject_tracking_table();
+  list = g_hash_table_lookup(table, name);
+  if (!list) {
+    //printf("Leave %s: list for %s objects not found.\n", __FUNCTION__, name);
+    return FALSE;
+  }
+
+  item = g_list_find(list, object);
+  if (!item) {
+    //printf("Leave %s: object %p not in %s object list.\n", __FUNCTION__,
+    //       object, name);
+    return FALSE;
+  }
+
+  list = g_list_remove_link(list, item);
+  if (list) {
+    g_hash_table_replace(table, g_strdup(name), list);
+    //printf("Leave %s: object removed.\n", __FUNCTION__);
+  } else {
+    g_hash_table_remove(table, name);
+    //printf("Leave %s: object and list removed.\n", __FUNCTION__);
+  }
+  return TRUE;
 }
 
 
@@ -154,28 +195,24 @@ gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
 void
 gnc_gobject_tracking_forget (GObject *object)
 {
-  GHashTable *table;
-  GList *list;
-  const gchar *name;
+  if (gnc_gobject_tracking_forget_internal(object))
+    g_object_weak_unref(object, gnc_gobject_weak_cb, NULL);
+}
 
-  g_return_if_fail(G_IS_OBJECT(object));
 
-  name = G_OBJECT_TYPE_NAME(object);
-  //printf("Enter %s: object %p of type %s\n", __FUNCTION__, object, name);
-  table = gnc_gobject_tracking_table();
-  list = g_hash_table_lookup(table, name);
-  if (!list) {
-    //printf("Leave %s: list for %s objects not found.\n", __FUNCTION__, name);
-    return;
-  }
-  list = g_list_remove(list, object);
-  if (list) {
-    g_hash_table_replace(table, g_strdup(name), list);
-    //printf("Leave %s: object removed.\n", __FUNCTION__);
-  } else {
-    g_hash_table_remove(table, name);
-    //printf("Leave %s: object and list removed.\n", __FUNCTION__);
-  }
+/** This callback function is called when a remembered object is
+ *  destroyed.  It is used to catch the destruction an object when the
+ *  caller didn't first tell this code to forget that object.  No need
+ *  for an error message, just forget the object.
+ *
+ *  @internal
+ *
+ *  @param object The object being destroyed.
+ */
+static void
+gnc_gobject_weak_cb (gpointer user_data, GObject *object)
+{
+  gnc_gobject_tracking_forget_internal(object);
 }
 
 
