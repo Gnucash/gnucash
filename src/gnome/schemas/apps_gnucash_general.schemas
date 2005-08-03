@@ -312,7 +312,7 @@
       <locale name="C">
         <short>The number of rows in an invoice.</short>
         <long>
-	  This field sets the number of rows to show in an invoice.
+	  This field sets the number of rows to show in a register.
 	  It does not actually affect the display of the contents of
 	  the window.  It is only used to set the size of the window
 	  when first opened.
