@@ -1,3 +1,39 @@
+2005-08-12  Neil Williams <linux@codehelp.co.uk>
+
+	* src/backend/file/gnc-account-xml-v2.c: Cast fixes
+	* src/backend/file/gnc-backend-file.c: Remove unnecessary headers
+	and provide a duplicate backend loader suitable for QOF which will
+	replace the gnc-backend module to allow CashUtil to work with the
+	current XML backend and ease spin-out of QOF. The new loader is
+	not executed as yet.
+	* src/backend/file/gnc-backend-file.h: Put a copy of price_lookup
+	and export into FileBackend ready to replace the versions currently
+	retained in QOF on a conditional build.
+	* src/backend/file/gnc-book-xml-v2.c: To be reviewed.
+	* src/backend/file/gnc-commodity-xml-v2.c:
+	* src/backend/file/gnc-pricedb-xml-v2.c:
+	* src/backend/file/gnc-schedxaction-xml-v2.c:
+	* src/backend/file/gnc-transaction-xml-v2.c: Cast fixes
+	* src/backend/file/gnc-xml.h: Stop use of gncbook.h, GNCBook.
+	* src/backend/file/io-gncbin-r.c: Unnecessary header, not available in QOF.
+	* src/backend/file/io-gncxml-v1.c: Cast fixes
+	* src/backend/file/io-gncxml-v2.c: Stop use of gnc- prefix, remove
+	unnecessary header and cast fixes.
+	* src/backend/file/sixtp-dom-generators.c: 
+	* src/backend/file/sixtp-dom-parsers.c:
+	* src/backend/file/sixtp-to-dom-parser.c: Cast fixes
+	* src/backend/file/sixtp-utils.c: Other files in this backend already use <time.h>, 
+	no need to provide a duplicate here.
+	* src/backend/file/sixtp.c:
+	* src/backend/file/test/test-dom-converters1.c:
+	* src/backend/file/test/test-file-stuff.c:
+	* src/backend/file/test/test-xml-account.c:
+	* src/backend/file/test/test-xml-commodity.c:
+	* src/backend/file/test/test-xml-transaction.c: Cast fixes
+	* src/engine/Makefile.am: Add qofchoice files.
+	* src/engine/qofchoice.c: QOF_TYPE_CHOICE handlers.
+	* src/engine/qofchoice.h: 
+	
 2005-08-02  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/prefs.scm:

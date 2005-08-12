@@ -30,7 +30,6 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "gncObject.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "Scrub.h"
@@ -41,7 +40,6 @@
 #include "TransLog.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
@@ -354,7 +352,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
-    type = xmlGetProp(tree, BAD_CAST "cd:type");
+    type = (char*)xmlGetProp(tree, BAD_CAST "cd:type");
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
     {
@@ -393,7 +391,7 @@ gnc_counter_end_handler(gpointer data_for_children,
       be_data.ok = FALSE;
       be_data.tag = type;
 
-      gncObjectForeachBackend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
+      qof_object_foreach_backend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
 
       if (be_data.ok == FALSE)
       {
@@ -534,7 +532,7 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
       be_data.gd = gd;
       be_data.data = data;
 
-      gncObjectForeachBackend (GNC_FILE_BACKEND, add_item_cb, &be_data);
+      qof_object_foreach_backend (GNC_FILE_BACKEND, add_item_cb, &be_data);
 
       if (be_data.ok == FALSE)
       {
@@ -687,7 +685,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
 
     be_data.ok = TRUE;
     be_data.parser = book_parser;
-    gncObjectForeachBackend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
     if (be_data.ok == FALSE)
       goto bail;
 
@@ -717,7 +715,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
     /* Call individual scrub functions */
     memset(&be_data, 0, sizeof(be_data));
     be_data.book = book;
-    gncObjectForeachBackend (GNC_FILE_BACKEND, scrub_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* fix price quote sources */
     grp = gnc_book_get_group(book);
@@ -766,8 +764,8 @@ write_counts(FILE* out, ...)
             val = g_strdup_printf("%d", amount);
 
             node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
-            xmlSetProp(node, BAD_CAST "cd:type", type);
-            xmlNodeAddContent(node, val);
+            xmlSetProp(node, BAD_CAST "cd:type", BAD_CAST type);
+            xmlNodeAddContent(node, BAD_CAST val);
 
             xmlElemDump(out, NULL, node);
             fprintf(out, "\n");
@@ -883,7 +881,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  g_list_length( gnc_book_get_schedxactions(book) ),
                  NULL);
 
-    gncObjectForeachBackend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
+	qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
     write_commodities(out, book, gd);
     write_pricedb(out, book, gd);
@@ -892,7 +890,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     write_template_transaction_data(out, book, gd);
     write_schedXactions(out, book, gd);
 
-    gncObjectForeachBackend (GNC_FILE_BACKEND, write_data_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
 
     if(fprintf( out, "</%s>\n", BOOK_TAG ) < 0) {
 		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);

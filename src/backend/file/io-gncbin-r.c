@@ -105,7 +105,6 @@
 #include "TransLog.h"
 #include "qofbackend.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"

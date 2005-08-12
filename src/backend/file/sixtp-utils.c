@@ -35,20 +35,20 @@
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
-#include "core-utils.h"
-
+#include <time.h>
+#include <errno.h>
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "guid.h"
-
+/*
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
-
+*/
 static short module = MOD_IO;
 
 gboolean

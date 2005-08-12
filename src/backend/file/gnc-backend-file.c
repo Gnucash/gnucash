@@ -57,7 +57,7 @@
 #include "gnc-backend-file.h"
 
 #include "qofbackend-p.h"
-#include "qofbook-p.h"
+#include "qofbook.h"
 #include "qofsession.h"
 #include "qsf-xml.h"
 
@@ -934,6 +934,80 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     fbe->primary_book = NULL;
 
     return be;
+}
+
+QofBackend*
+gnc_backend_new(void)
+{
+	FileBackend *gnc_be;
+	QofBackend *be;
+
+	gnc_be = g_new0(FileBackend, 1);
+	be = (QofBackend*) gnc_be;
+	qof_backend_init(be);
+
+	be->session_begin = file_session_begin;
+	be->session_end = file_session_end;
+	be->destroy_backend = file_destroy_backend;
+
+	be->load = gnc_file_be_load_from_file;
+	be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
+
+	/* The file backend treats accounting periods transactionally. */
+	be->begin = file_begin_edit;
+	be->commit = file_commit_edit;
+	be->rollback = file_rollback_edit;
+
+	/* The file backend always loads all data ... */
+	be->compile_query = NULL;
+	be->free_query = NULL;
+	be->run_query = NULL;
+
+	be->counter = NULL;
+
+	/* The file backend will never be multi-user... */
+	be->events_pending = NULL;
+	be->process_events = NULL;
+
+	be->sync = file_sync_all;
+/* export and price_lookup have been moved but this
+	section is not used yet - it is in preparation for
+	CashUtil and an external QOF library. */
+	gnc_be->export = gnc_file_be_write_accounts_to_file;
+	gnc_be->price_lookup = NULL;
+	gnc_be->dirname = NULL;
+	gnc_be->fullpath = NULL;
+	gnc_be->lockfile = NULL;
+	gnc_be->linkfile = NULL;
+	gnc_be->lockfd = -1;
+
+	gnc_be->primary_book = NULL;
+	return be;
+}
+
+
+static void
+gnc_provider_free (QofBackendProvider *prov)
+{
+        prov->provider_name = NULL;
+        prov->access_method = NULL;
+        g_free (prov);
+}
+
+/* temporary definition*/
+void gnc_provider_init(void);
+
+void
+gnc_provider_init(void)
+{
+        QofBackendProvider *prov;
+        prov = g_new0 (QofBackendProvider, 1);
+        prov->provider_name = "GnuCash File Backend Version 2";
+        prov->access_method = "file";
+        prov->partial_book_supported = FALSE;
+        prov->backend_new = gnc_backend_new;
+        prov->provider_free = gnc_provider_free;
+        qof_backend_register_provider (prov);
 }
 
 /* ========================== END OF FILE ===================== */

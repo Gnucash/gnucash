@@ -70,7 +70,7 @@ test_dom_tree_to_text(void)
         test_node = xmlNewNode(NULL, BAD_CAST "test-node");
         test_string1 = get_random_string();
 
-        xmlNodeAddContent(test_node, test_string1);
+        xmlNodeAddContent(test_node, BAD_CAST test_string1);
 
         test_string2 = dom_tree_to_text(test_node);
 

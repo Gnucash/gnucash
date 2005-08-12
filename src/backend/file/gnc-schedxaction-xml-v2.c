@@ -163,7 +163,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                  guid_to_dom_tree(SX_ID,
                                   xaccSchedXactionGetGUID(sx)) );
 
-    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, xaccSchedXactionGetName(sx) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
 
     xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE,
                      BAD_CAST ( sx->autoCreateOption ? "y" : "n" ) );

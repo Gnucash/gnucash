@@ -126,28 +126,28 @@ struct com_char_handler com_handlers[] = {
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if(safe_strcmp(node->name, cmdty_fraction) == 0)
+    if(safe_strcmp((char*) node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char *string;
 
-        string = xmlNodeGetContent (node->xmlChildrenNode);
+        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
         if(string_to_gint64(string, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
         xmlFree (string);
     }
-    else if(safe_strcmp(node->name, cmdty_get_quotes) == 0)
+    else if(safe_strcmp((char*)node->name, cmdty_get_quotes) == 0)
     {
 	gnc_commodity_set_quote_flag(com, TRUE);
     }
-    else if(safe_strcmp(node->name, cmdty_quote_source) == 0)
+    else if(safe_strcmp((char*)node->name, cmdty_quote_source) == 0)
     {
         gnc_quote_source *source;
         char *string;
 
-        string = xmlNodeGetContent (node->xmlChildrenNode);
+        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
 	source = gnc_quote_source_lookup_by_internal(string);
 	if (!source)
 	  source = gnc_quote_source_add_new(string, FALSE);
@@ -160,7 +160,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 
         for(mark = com_handlers; mark->tag; mark++)
         {
-            if(safe_strcmp(mark->tag, node->name) == 0)
+            if(safe_strcmp(mark->tag, (char*)node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
                 g_strstrip(val);

@@ -431,11 +431,11 @@ sixtp_sax_start_handler(void *user_data,
                                           pdata->global_data,
                                           &(current_frame->frame_data),
                                           current_frame->tag,
-                                          name);
+                                          (gchar*) name);
   }
 
   /* now allocate the new stack frame and shift to it */
-  new_frame = sixtp_stack_frame_new(next_parser, g_strdup(name));
+  new_frame = sixtp_stack_frame_new( next_parser, g_strdup((char*) name));
 
   new_frame->line = getLineNumber( pdata->saxParserCtxt );
   new_frame->col  = getColumnNumber( pdata->saxParserCtxt );
@@ -450,7 +450,7 @@ sixtp_sax_start_handler(void *user_data,
                                  pdata->global_data,
                                  &new_frame->data_for_children,
                                  &new_frame->frame_data,
-                                 name,
+                                 (gchar*) name,
                                  (gchar**)attrs);
   }
 }
@@ -471,7 +471,7 @@ sixtp_sax_characters_handler(void *user_data, const xmlChar *text, int len)
                                         frame->data_for_children,
                                         pdata->global_data,
                                         &result,
-                                        text,
+                                        (gchar*) text,
                                         len);
     if(pdata->parsing_ok && result)
     {
@@ -504,13 +504,13 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
 
   /* time to make sure we got the right closing tag.  Is this really
      necessary? */
-  if(safe_strcmp(current_frame->tag, name) != 0) 
+  if(safe_strcmp(current_frame->tag, (gchar*) name) != 0) 
   {
     PWARN ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
     pdata->parsing_ok = FALSE;
 
     /* See if we're just off by one and try to recover */
-    if(safe_strcmp(parent_frame->tag, name) == 0) {
+    if(safe_strcmp(parent_frame->tag, (gchar*) name) == 0) {
       pdata->stack = sixtp_pop_and_destroy_frame(pdata->stack);
       current_frame = (sixtp_stack_frame *) pdata->stack->data;
       parent_frame = (sixtp_stack_frame *) pdata->stack->next->data;

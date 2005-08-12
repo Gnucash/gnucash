@@ -141,14 +141,14 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 
 	    source = gnc_commodity_get_quote_source(com);
 	    val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value",
-				       gnc_quote_source_get_old_internal_name(source));
+				       BAD_CAST gnc_quote_source_get_old_internal_name(source));
 	    xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
 
 	    tz = gnc_commodity_get_quote_tz(com);
 	    if (tz) {
 	      slot_node = xmlNewChild(kvpnode, NULL, BAD_CAST "slot", NULL);
 	      xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", BAD_CAST "old-quote-tz");
-	      val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value", tz);
+	      val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value", BAD_CAST tz);
 	      xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
 	    }
 	  }
@@ -234,7 +234,7 @@ account_type_handler (xmlNodePtr node, gpointer act_pdata)
     int type;
     char *string;
 
-    string = xmlNodeGetContent (node->xmlChildrenNode);
+    string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
     xaccAccountStringToType(string, &type);
     xmlFree (string);
 
@@ -392,7 +392,7 @@ account_lots_handler(xmlNodePtr node, gpointer act_pdata)
     {
         GNCLot *lot;
         
-        if(safe_strcmp("text", mark->name) == 0)
+        if(safe_strcmp("text", (char*) mark->name) == 0)
           continue;
 
         lot = dom_tree_to_lot(mark, pdata->book);

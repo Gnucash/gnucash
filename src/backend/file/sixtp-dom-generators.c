@@ -46,9 +46,9 @@ text_to_dom_tree(const char *tag, const char *str)
 
   g_return_val_if_fail(tag, NULL);
   g_return_val_if_fail(str, NULL);
-  result = xmlNewNode(NULL, tag);
+  result = xmlNewNode(NULL, BAD_CAST tag);
   g_return_val_if_fail(result, NULL);
-  xmlNodeAddContent(result, str);
+  xmlNodeAddContent(result, BAD_CAST str);
   return result;
 }
 
@@ -70,7 +70,7 @@ guid_to_dom_tree(const char *tag, const GUID* gid)
     char guid_str[GUID_ENCODING_LENGTH + 1];
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
     xmlSetProp(ret, BAD_CAST "type", BAD_CAST "guid");
 
@@ -80,7 +80,7 @@ guid_to_dom_tree(const char *tag, const GUID* gid)
         return NULL;
     }
 
-    xmlNodeAddContent(ret, guid_str);
+    xmlNodeAddContent(ret, BAD_CAST guid_str);
 
     return ret;
 }
@@ -92,15 +92,15 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
 
     g_return_val_if_fail(c, NULL);
     
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
     if(!gnc_commodity_get_namespace(c) || !gnc_commodity_get_mnemonic(c))
     {
         return NULL;
     }
     
-    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", gnc_commodity_get_namespace(c));
-    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", gnc_commodity_get_mnemonic(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", BAD_CAST gnc_commodity_get_namespace(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", BAD_CAST gnc_commodity_get_mnemonic(c));
 
     return ret;
 }
@@ -142,14 +142,14 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
 		return NULL;
 	}
     
-	ret = xmlNewNode(NULL, tag);
+	ret = xmlNewNode(NULL, BAD_CAST tag);
     
-	xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", BAD_CAST date_str);
 
 	if(spec->tv_nsec > 0){
 		ns_str = timespec_nsec_to_string(spec);
 		if(ns_str){
-			xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", ns_str);
+			xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", BAD_CAST ns_str);
 		}
 	}
 
@@ -172,9 +172,9 @@ gdate_to_dom_tree(const char *tag, GDate *date)
 
 	g_date_strftime( date_str, 512, "%Y-%m-%d", date );
 
-	ret = xmlNewNode(NULL, tag);
+	ret = xmlNewNode(NULL, BAD_CAST tag);
 
-	xmlNewTextChild(ret, NULL, BAD_CAST "gdate", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "gdate", BAD_CAST date_str);
 
 	g_free(date_str);
 
@@ -192,9 +192,9 @@ gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num)
     numstr = gnc_numeric_to_string(*num);
     g_return_val_if_fail(numstr, NULL);
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    xmlNodeAddContent(ret, numstr);
+    xmlNodeAddContent(ret, BAD_CAST numstr);
 
     g_free(numstr);
 
@@ -206,10 +206,9 @@ double_to_string(double value)
 {
     gchar *numstr;
 #ifdef USE_GUILE_FOR_DOUBLE_CONVERSION 
-    SCM value;
-    value = scm_call_1(scm_c_eval_string("number->string"),
-		       scm_make_real(value));
-    numstr = g_strdup(SCM_STRING_CHARS(value));
+    numstr = gh_scm2newstr(scm_call_1(scm_c_eval_string("number->string"),
+				      scm_make_real(value)),
+                           NULL);
 
 #else /* don't USE_GUILE_FOR_DOUBLE_CONVERSION */
     /*
@@ -235,8 +234,8 @@ double_to_string(double value)
 static void
 add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
 {
-    xmlSetProp(node, BAD_CAST "type", type);
-    xmlNodeSetContent(node, val);
+    xmlSetProp(node, BAD_CAST "type", BAD_CAST type);
+    xmlNodeSetContent(node, BAD_CAST val);
     g_free(val);
 }
 
@@ -246,7 +245,7 @@ static void
 add_kvp_slot(gpointer key, gpointer value, gpointer data);
 
 static void
-add_kvp_value_node(xmlNodePtr node, const xmlChar *tag, kvp_value* val)
+add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
 {
     xmlNodePtr val_node;
     gchar *tmp_str1;
@@ -255,11 +254,11 @@ add_kvp_value_node(xmlNodePtr node, const xmlChar *tag, kvp_value* val)
     kvp_type = kvp_value_get_type(val);
 
     if (kvp_type == KVP_TYPE_STRING)
-      val_node = xmlNewTextChild(node, NULL, tag, kvp_value_get_string(val));
+      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, BAD_CAST kvp_value_get_string(val));
     else if (kvp_type == KVP_TYPE_TIMESPEC)
       val_node = NULL;
     else
-      val_node = xmlNewTextChild(node, NULL, tag, NULL);
+      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
 
     switch(kvp_value_get_type(val))
     {
@@ -300,7 +299,7 @@ add_kvp_value_node(xmlNodePtr node, const xmlChar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "binary");
         g_return_if_fail(binary_data);
         tmp_str1 = binary_to_string(binary_data, size);
-        xmlNodeSetContent(val_node, tmp_str1);
+        xmlNodeSetContent(val_node, BAD_CAST tmp_str1);
         g_free(tmp_str1);
     }
     break;
@@ -312,7 +311,7 @@ add_kvp_value_node(xmlNodePtr node, const xmlChar *tag, kvp_value* val)
         for(cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
-            add_kvp_value_node(val_node, BAD_CAST "slot:value", val);
+            add_kvp_value_node(val_node, "slot:value", val);
         }
     }
     
@@ -345,9 +344,9 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
 
     slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
 
-    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", (gchar*)key);
+    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", (xmlChar*)key);
 
-    add_kvp_value_node(slot_node, BAD_CAST "slot:value", (kvp_value*)value);
+    add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
 }
     
 xmlNodePtr
@@ -370,7 +369,7 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
         return NULL;
     }
     
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
     
     g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
     
@@ -385,9 +384,9 @@ xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int)
     numstr = g_strdup_printf( "%u", an_int );
     g_return_val_if_fail(numstr, NULL);
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    xmlNodeAddContent(ret, numstr);
+    xmlNodeAddContent(ret, BAD_CAST numstr);
 
     g_free(numstr);
 

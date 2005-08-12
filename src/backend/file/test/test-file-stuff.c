@@ -97,7 +97,7 @@ check_dom_tree_version(xmlNodePtr node, gchar *verstr)
     g_return_val_if_fail(node->properties->xmlAttrPropertyValue->content,
                          FALSE);
 
-    verteststr = node->properties->xmlAttrPropertyValue->content;
+    verteststr = (char*) node->properties->xmlAttrPropertyValue->content;
     if(safe_strcmp(verstr, verteststr) == 0)
     {
         return TRUE;

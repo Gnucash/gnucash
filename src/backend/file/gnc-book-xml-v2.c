@@ -46,7 +46,7 @@
 #include "sixtp-dom-parsers.h"
 #include "gnc-engine-util.h"
 #include "Group.h"
-#include "qofbook.h"
+// used to set the GUID of the book
 #include "qofbook-p.h"
 
 /* non-static because it's used in io-gncxml-v2.c */

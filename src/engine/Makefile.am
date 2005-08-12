@@ -1,5 +1,3 @@
-qof_book_merge_lo_INCLUDES = -DG_LOG_DOMAIN=\"qof-book-merge\"
-
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
@@ -54,6 +52,7 @@ libgncmod_engine_la_SOURCES = \
   qofbackend.c \
   qof_book_merge.c \
   qofbook.c \
+  qofchoice.c \
   qofclass.c \
   qofid.c \
   qofinstance.c \
@@ -118,6 +117,7 @@ gncinclude_HEADERS = \
   qofbook.h \
   qof_book_merge.h \
   qofclass.h \
+  qofchoice.h \
   qofid.h \
   qofinstance.h \
   qofmath128.c \

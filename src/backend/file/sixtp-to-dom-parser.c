@@ -45,7 +45,7 @@ static gboolean dom_start_handler(
 
     if(parent_data == NULL)
     {
-        thing = xmlNewNode(global_namespace, tag);
+        thing = xmlNewNode(global_namespace, BAD_CAST tag);
         /* only publish the result if we're the parent */
         *result = thing;
     }
@@ -53,7 +53,7 @@ static gboolean dom_start_handler(
     {
         thing = xmlNewChild((xmlNodePtr) parent_data,
                             global_namespace,
-                            tag,
+                            BAD_CAST tag,
                             NULL);
         *result = NULL;
     }
@@ -63,7 +63,7 @@ static gboolean dom_start_handler(
     {
         while(*atptr != 0)
         {
-            xmlSetProp(thing, atptr[0], atptr[1]);
+            xmlSetProp(thing, BAD_CAST atptr[0], BAD_CAST atptr[1]);
             atptr += 2;
         }
     }
@@ -88,7 +88,7 @@ static gboolean dom_chars_handler(
 {
     if(length > 0)
     {
-        xmlNodeAddContentLen((xmlNodePtr)parent_data, text, length);
+        xmlNodeAddContentLen((xmlNodePtr)parent_data, BAD_CAST text, length);
     }
     return TRUE;
 }
