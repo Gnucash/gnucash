@@ -42,7 +42,6 @@
 
 /* FIXME GNOME2 Port
  *	- ButtonEvents are not delegated to GtkEntry. 
- *	- Cursor isn't drawn.
  */
 
 /* The arguments we take */
@@ -288,8 +287,12 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			 info.text_rect.y + 1,
 			 info.layout);
 
-	gdk_draw_line (drawable, item_edit->gc, info.cursor->x, info.cursor->y,
-		       info.cursor->x, info.cursor->y + info.cursor->height);
+        gdk_draw_line (drawable,
+                       item_edit->gc,
+                       PANGO_PIXELS (info.cursor->x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor->y),
+                       PANGO_PIXELS (info.cursor->x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor->y + info.cursor->height));                       
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 

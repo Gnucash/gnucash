@@ -1,3 +1,8 @@
+2005-08-15  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c: Scott Oonk's fix
+	to make the cursor visible in the register.
+
 2005-08-12  Neil Williams <linux@codehelp.co.uk>
 
 	* src/backend/file/gnc-account-xml-v2.c: Cast fixes
