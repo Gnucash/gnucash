@@ -1,3 +1,9 @@
+2005-08-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm:  need to
+	  properly recurse in gnc:owner-get-owner-id.  there is no
+	  gnc:owner-get-id API.
+
 2005-07-10  David Hampton  <hampton@employees.org>
 
 	* src/engine/iso-4217-currencies.scm: Add the new Romanian Leu.
