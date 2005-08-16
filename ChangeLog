@@ -1,3 +1,8 @@
+2005-08-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c (inputBoxCB): Aaarg,
+	fix extremely stupid bug that occasionally crashes the PIN entry.
+
 2005-08-15  David Hampton  <hampton@employees.org>
 
 	* src/engine/Query.c: Todd T. Fries patch for compilation on
