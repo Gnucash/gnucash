@@ -547,12 +547,15 @@ xaccQueryGetEarliestDateFound(Query * q)
 {
   GList * spl;
   Split * sp;
-  time_t earliest = LONG_MAX;
+  time_t earliest;
 
   if (!q) return 0;
   spl = qof_query_last_run (q);
   if (!spl) return 0;
 
+   /* Safe until 2038 on archs where time_t is 32bit */ 
+   sp = spl->data; 
+   earliest = (time_t) sp->parent->date_posted.tv_sec; 
   for(; spl; spl=spl->next) {
     sp = spl->data;
     if(sp->parent->date_posted.tv_sec < earliest) {
