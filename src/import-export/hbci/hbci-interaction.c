@@ -350,8 +350,22 @@ static int inputBoxCB(AB_BANKING *ab,
       if (!retval)
 	break;
     }
+    else if (strlen(passwd) >= (unsigned int)maxLen) {
+      gboolean retval;
+      char *msg = 
+	g_strdup_printf (  _("You entered %d characters, but the PIN must \n"
+			     "be no longer than %d characters. \n"
+			     "Do you want to try again?"),
+			   strlen(passwd), maxLen);
+      retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
+					   TRUE,
+					   msg);
+      g_free (msg);
+      if (!retval)
+	break;
+    }
     else {
-      g_assert (maxLen > strlen(passwd));
+      g_assert (maxLen > strlen(passwd)); /* assertion was queried above */
       strcpy(resultbuffer, passwd);
       g_free (memset (passwd, 0, strlen (passwd)));
       g_free(title);
@@ -417,8 +431,22 @@ static int getTanCB(AB_BANKING *ab,
       if (!retval)
 	break;
     }
+    else if (strlen(passwd) >= (unsigned int)maxLen) {
+      gboolean retval;
+      char *msg = 
+	g_strdup_printf (  _("You entered %d characters, but the TAN must \n"
+			     "be no longer than %d characters. \n"
+			     "Do you want to try again?"),
+			   strlen(passwd), maxLen);
+      retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
+					   TRUE,
+					   msg);
+      g_free (msg);
+      if (!retval)
+	break;
+    }
     else {
-      g_assert (maxLen > strlen(passwd));
+      g_assert (maxLen > strlen(passwd)); /* assertion was queried above */
       strcpy(resultbuffer, passwd);
 
       g_free (memset (passwd, 0, strlen (passwd)));
