@@ -162,7 +162,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
    gnc_commodity *currency,
-   long long guess,
+   gint64 guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
@@ -185,10 +185,10 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
                                 gnc_commodity *currency)
 {
    GNCLot *lot;
-   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
+   ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   10000000LL * ((long long) LONG_MAX), earliest_pred);
+                   G_GINT64_CONSTANT(2^31) * G_GINT64_CONSTANT(2^31), earliest_pred);
    LEAVE ("found lot=%p %s baln=%s", lot, gnc_lot_get_title (lot),
                gnc_num_dbg_to_string(gnc_lot_get_balance(lot)));
    return lot;
@@ -199,10 +199,12 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
                               gnc_commodity *currency)
 {
    GNCLot *lot;
-   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
+   ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+	  sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   -10000000LL * ((long long) LONG_MAX), latest_pred);
+                   G_GINT64_CONSTANT(-2^31) * G_GINT64_CONSTANT(2^31),
+		   latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
@@ -569,7 +571,7 @@ MakeDefaultLot (Account *acc)
 
    /* Provide a reasonable title for the new lot */
    id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-   snprintf (buff, 200, _("Lot %lld"), id);
+   snprintf (buff, 200, _("Lot %" G_GINT64_FORMAT), id);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
    id ++;
    kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);

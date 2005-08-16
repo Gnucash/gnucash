@@ -364,7 +364,8 @@ gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
   action_list = gtk_action_group_list_actions(action_group);
   // Use the following line for gtk2.6
   // g_list_foreach(action_list, (GFunc)gtk_action_set_visible, (gpointer)visible);
-  g_list_foreach(action_list, (GFunc)our_gtk_action_set_visible, (gpointer)visible);
+  g_list_foreach(action_list, (GFunc)our_gtk_action_set_visible,
+		 GINT_TO_POINTER(visible));
   g_list_free(action_list);
 
   LEAVE(" ");

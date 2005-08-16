@@ -135,7 +135,8 @@ static void add_period_column(gpointer data, gpointer user_data)
     renderer = gtk_cell_renderer_text_new ();
     g_signal_connect (renderer, "edited",
 		    G_CALLBACK (cell_edited), bench);
-    g_object_set_data (G_OBJECT (renderer), "column", (gint *)colnum);
+    g_object_set_data (G_OBJECT (renderer), "column",
+		       (gint *)GINT_TO_POINTER(colnum));
     column = gtk_tree_view_column_new_with_attributes (buffer,
 						     renderer,
 						     "text", colnum,

@@ -658,7 +658,7 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
   gint32 count = GPOINTER_TO_INT(value);
 
   if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
-    PWARN("Fixing refcount on billterm %s (%lld -> %d)\n",
+    PWARN("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
 	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
 	  gncBillTermGetRefcount(term), count)
       gncBillTermSetRefcount(term, count);

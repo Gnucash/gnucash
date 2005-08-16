@@ -341,7 +341,8 @@ qof_book_set_partial(QofBook *book)
 {
 	gboolean partial;
 
-	partial = (gboolean)qof_book_get_data(book, PARTIAL_QOFBOOK);
+	partial =
+	  (gboolean)GPOINTER_TO_INT(qof_book_get_data(book, PARTIAL_QOFBOOK));
 	if(!partial) {
 		qof_book_set_data(book, PARTIAL_QOFBOOK, (gboolean*)TRUE);
 	}
@@ -1240,7 +1241,7 @@ qof_session_save (QofSession *session,
 		 session, session->book_id ? session->book_id : "(null)");
 	/* Partial book handling. */
 	book = qof_session_get_book(session);
-	partial = (gboolean)qof_book_get_data(book, PARTIAL_QOFBOOK);
+	partial = (gboolean)GPOINTER_TO_INT(qof_book_get_data(book, PARTIAL_QOFBOOK));
 	change_backend = FALSE;
 	msg = g_strdup_printf(" ");
 	book_id = g_strdup(session->book_id);

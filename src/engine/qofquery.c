@@ -1740,7 +1740,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
   {
     query_int64_t pdata = (query_int64_t) pd;
-    g_string_sprintfa (gs, " int64: %lld", pdata->val);
+    g_string_sprintfa (gs, " int64: %" G_GINT64_FORMAT, pdata->val);
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))

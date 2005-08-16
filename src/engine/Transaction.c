@@ -749,8 +749,9 @@ void
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("(split=%p) old amt=%lld/%lld new amt=%lld/%lld", s,
-        s->amount.num, s->amount.denom, amt.num, amt.denom);
+  ENTER ("(split=%p) old amt=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT
+	 " new amt=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
+	 s->amount.num, s->amount.denom, amt.num, amt.denom);
 
   check_open (s->parent);
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_HOW_RND_ROUND);
@@ -764,8 +765,9 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("(split=%p) old val=%lld/%lld new val=%lld/%lld", s,
-        s->value.num, s->value.denom, amt.num, amt.denom);
+  ENTER ("(split=%p) old val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT
+	 " new val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
+	 s->value.num, s->value.denom, amt.num, amt.denom);
 
   check_open (s->parent);
   s->value = gnc_numeric_convert(amt, get_currency_denom(s), GNC_HOW_RND_ROUND);
@@ -1372,7 +1374,8 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                 gnc_commodity_get_fraction (base_currency),
                                 GNC_HOW_RND_ROUND);
 
-  LEAVE (" total=%lld/%lld", value.num, value.denom);
+  LEAVE (" total=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+	 value.num, value.denom);
   return value;
 }
 
@@ -2866,7 +2869,8 @@ xaccSplitGetSharePrice (const Split * split)
    */
   if (gnc_numeric_check(price)) 
   {
-    PERR("Computing share price failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
+    PERR("Computing share price failed (%d): [ %" G_GINT64_FORMAT " / %"
+	 G_GINT64_FORMAT " ] / [ %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT " ]",
 	 gnc_numeric_check(price), val.num, val.denom, amt.num, amt.denom);
     return gnc_numeric_create(0,1);
   }

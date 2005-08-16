@@ -1,5 +1,19 @@
 2005-08-15  David Hampton  <hampton@employees.org>
 
+	* src/backend/file/test/test-xml-transaction.c:
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	* src/engine/Account.c:
+	* src/engine/Transaction.c:
+	* src/engine/cap-gains.c:
+	* src/engine/qof_book_merge.c:
+	* src/engine/qofquery.c:
+	* src/engine/qofsession.c:
+	* src/gnome/dialog-budget-workbench.c:
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome-utils/gnc-plugin-menu-additions.c: Frederic Leroy's
+	update to Dan Widyono's patch to compile cleanly on 64 bit systems.
+
 	* src/register/register-gnome/gnucash-item-edit.c: Scott Oonk's fix
 	to make the cursor visible in the register.
 

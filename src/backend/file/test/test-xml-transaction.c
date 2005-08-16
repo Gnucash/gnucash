@@ -128,7 +128,9 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
             if(!gnc_numeric_equal(*num, val))
             {
                 g_free(num);
-                return g_strdup_printf ("values differ: %lld/%lld v %lld/%lld",
+                return g_strdup_printf ("values differ: %" G_GINT64_FORMAT "/%"
+					G_GINT64_FORMAT " v %" G_GINT64_FORMAT
+					"/%" G_GINT64_FORMAT,
                                         (*num).num, (*num).denom,
                                         val.num, val.denom);
             }
@@ -140,14 +142,19 @@ equals_node_val_vs_split_internal(xmlNodePtr node, Split* spl)
             gnc_numeric val = xaccSplitGetAmount(spl);
 
             if (!gnc_numeric_equal(*num, val)) {
-              return g_strdup_printf( "quantities differ under _equal: %lld/%lld v %lld/%lld",
+              return g_strdup_printf( "quantities differ under _equal: %"
+				      G_GINT64_FORMAT "/%" G_GINT64_FORMAT
+				      " v %" G_GINT64_FORMAT "/%"
+				      G_GINT64_FORMAT,
                                       (*num).num, (*num).denom,
                                       val.num, val.denom );
             }
             if(!gnc_numeric_equal(*num, val))
             {
                 g_free(num);
-                return g_strdup_printf ("quantities differ: %lld/%lld v %lld/%lld",
+                return g_strdup_printf ("quantities differ: %" G_GINT64_FORMAT
+					"/%" G_GINT64_FORMAT " v %"
+					G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
                                         (*num).num, (*num).denom,
                                         val.num, val.denom);
             }

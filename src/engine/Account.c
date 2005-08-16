@@ -998,8 +998,8 @@ xaccAccountRecomputeBalance (Account * acc)
   cleared_balance    = acc->starting_cleared_balance;
   reconciled_balance = acc->starting_reconciled_balance;
 
-  PINFO ("acct=%s starting baln=%lld/%lld", acc->accountName, 
-         balance.num, balance.denom);
+  PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
+	 acc->accountName, balance.num, balance.denom);
   for(lp = acc->splits; lp; lp = lp->next) 
   {
     Split *split = (Split *) lp->data;
@@ -1902,7 +1902,7 @@ xaccAccountGetBalanceInCurrency (Account *account,
   rc = xaccAccountGetXxxBalanceInCurrencyRecursive (account, 
                    xaccAccountGetBalance,
 						 report_commodity, include_children);
-  PINFO (" baln=%lld/%lld", rc.num, rc.denom);
+  PINFO (" baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, rc.num, rc.denom);
   return rc;
 }
 

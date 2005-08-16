@@ -620,7 +620,7 @@ taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
   gint32 count = GPOINTER_TO_INT(value);
 
   if (count != gncTaxTableGetRefcount(table) && !gncTaxTableGetInvisible(table)) {
-    PWARN("Fixing refcount on taxtable %s (%lld -> %d)\n",
+    PWARN("Fixing refcount on taxtable %s (%" G_GINT64_FORMAT " -> %d)\n",
 	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(table))),
 	  gncTaxTableGetRefcount(table), count)
       gncTaxTableSetRefcount(table, count);

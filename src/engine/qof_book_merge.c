@@ -919,7 +919,7 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 		if(safe_strcmp(paramType, QOF_TYPE_INT64) == 0) { 
 			int64_getter = (gint64 (*)(QofEntity*, QofParam*)) qtparam->param_getfcn;
 			param_i64 = int64_getter(qtEnt, qtparam);
-			param_string = g_strdup_printf("%lld", param_i64);
+			param_string = g_strdup_printf("%" G_GINT64_FORMAT, param_i64);
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_DOUBLE) == 0) { 

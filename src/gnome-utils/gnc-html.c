@@ -1351,7 +1351,7 @@ gnc_html_export(gnc_html * html, const char *filepath)
   if (!fh)
     return FALSE;
 
-  gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
+  gtk_html_save (GTK_HTML(html->html), GINT_TO_POINTER(raw_html_receiver), fh);
 
   fclose (fh);
 
