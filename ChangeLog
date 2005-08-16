@@ -1,3 +1,8 @@
+2005-08-15  David Hampton  <hampton@employees.org>
+
+	* src/engine/Query.c: Todd T. Fries patch for compilation on
+	OpenBSD 64bit architectures.
+
 2005-08-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/business-core.scm:  need to
