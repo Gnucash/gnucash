@@ -418,7 +418,7 @@ static int getTanCB(AB_BANKING *ab,
 	break;
     }
     else {
-      g_assert (maxLen > strlen(resultbuffer));
+      g_assert (maxLen > strlen(passwd));
       strcpy(resultbuffer, passwd);
 
       g_free (memset (passwd, 0, strlen (passwd)));
