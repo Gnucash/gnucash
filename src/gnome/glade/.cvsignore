@@ -1,3 +1,5 @@
 Makefile
 Makefile.in
 *.gladep
+.DS_Store
+

@@ -54,3 +54,8 @@ tags
 autom4te.cache
 ltmain.sh
 mkinstalldirs
+.DS_Store
+*.prj
+*.pws
+.tm_project.cache
+

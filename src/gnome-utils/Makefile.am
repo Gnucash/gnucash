@@ -1,7 +1,7 @@
 SUBDIRS = schemas . test ui
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
+lib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 AM_CFLAGS = \
@@ -19,15 +19,16 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/goffice/split \
   -I${top_srcdir}/lib \
   -I${top_srcdir}/src \
-  ${GUILE_INCS} \
   ${LIBGUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
+  ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GSF_CFLAGS}
+
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -176,11 +177,11 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/lib/goffice/libgoffice.la \
-  ${GUILE_LIBS} \
   ${LIBGUPPI_LIBS} \
   ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
+  ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \

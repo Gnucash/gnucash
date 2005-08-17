@@ -1,3 +1,160 @@
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	* .cvsignore :
+	* configure.in : Mac changes.
+	* rpm/.cvsignore :
+	* src/.cvsignore : All .cvsignore changes in this
+	commit are for the Mac.
+	* src/app-utils/Makefile.am : Mac build fix.
+	* src/app-utils/test/Makefile.am : Mac build fix.
+	* src/app-utils/test/test-exp-parser.c :  Mac build fix.
+	* src/backend/.cvsignore :
+	* src/backend/file/gnc-xml.h : Remove temporary fix.
+	* src/backend/file/sixtp.c : Tweak
+	* src/backend/file/test/.cvsignore :
+	* src/backend/file/test/test-xml-pricedb.c : Improve failure
+	reporting.
+	* src/backend/file/test/test-xml-transaction.c : Improve
+	failure reporting.
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	QOF Sync.
+	* src/backend/qsf/.cvsignore :
+	* src/backend/qsf/Makefile.am : Tweaked
+	* src/backend/qsf/pilot-qsf-GnuCashInvoice.xml : QOF_TYPE_CHOICE
+	* src/backend/qsf/qof-backend-qsf.h : Tweak
+	* src/backend/qsf/qsf-backend.c : QOF_TYPE_CHOICE
+	* src/backend/qsf/qsf-object.xsd.xml : QOF_TYPE_CHOICE
+	* src/backend/qsf/qsf-xml-map.c : map conversion, v1
+	* src/backend/qsf/qsf-xml.c : Cast changes and bug fix.
+	* src/backend/qsf/qsf-xml.h : KVP, COLLECT and CHOICE
+	* src/business/.cvsignore :
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	Business-core/file/: cast changes and removal of private headers.
+	Also removed GNCBook references. CashUtil Sync.
+	* src/business/business-core/.cvsignore :
+	* src/business/business-core/file/.cvsignore :
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c :
+	* src/business/business-core/file/gnc-customer-xml-v2.c :
+	* src/business/business-core/file/gnc-employee-xml-v2.c :
+	* src/business/business-core/file/gnc-entry-xml-v2.c :
+	* src/business/business-core/file/gnc-invoice-xml-v2.c :
+	* src/business/business-core/file/gnc-job-xml-v2.c :
+	* src/business/business-core/file/gnc-lot-xml-v2.c :
+	* src/business/business-core/file/gnc-order-xml-v2.c :
+	* src/business/business-core/file/gnc-owner-xml-v2.c :
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c :
+	* src/business/business-core/file/gnc-vendor-xml-v2.c :
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	CashUtil Sync
+	* src/business/business-core/gncAddress.c : Removal of private headers
+	* src/business/business-core/gncBillTerm.c : Using a string as the
+	QOF billterm type parameter.
+	* src/business/business-core/gncBillTerm.h :
+	* src/business/business-core/gncCustomer.c : Removal of private headers
+	and cast fixes. Fixed printable.
+	* src/business/business-core/gncEntry.c : Removal of private headers
+	* src/business/business-core/gncInvoice.c : Removal of private headers
+	and cast fixes. Change functions ready for a later change to use
+	QOF_TYPE_CHOICE - not implemented here yet.
+	* src/business/business-core/gncJob.c : Removal of private headers
+	and cast fixes. Change functions ready for a later change to use
+	QOF_TYPE_CHOICE - not implemented here yet.
+	* src/business/business-core/gncOrder.c : Removal of private headers
+	and cast fixes.
+	* src/business/business-core/gncOwner.c : Removal of private headers
+	and cast fixes.
+	* src/business/business-core/gncTaxTable.c : Removal of private headers.
+	* src/business/business-core/test/test-customer.c : Make sure customer
+	object is registered before trying to use a QofObject call.
+	* src/business/business-core/test/test-employee.c : Tweak
+	* src/business/business-core/test/test-job.c : Tweak
+	* src/business/business-core/test/test-vendor.c : Tweak
+	* src/business/business-gnome/.cvsignore :
+	* src/business/business-utils/.cvsignore :
+	* src/doc/.cvsignore :
+	* src/doc/design/.cvsignore :
+	* src/doc/xml/.cvsignore :
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	CashUtil Sync.
+	* src/engine/.cvsignore :
+	* src/engine/Account.c : Removal of private headers.
+	* src/engine/FreqSpec.c : Removal of private headers
+	and cast fixes.
+	* src/engine/Group.c : Removal of private headers.
+	* src/engine/Makefile.am : Taking qofmath128.c out of
+	the include list - replace with qofmath128.h
+	* src/engine/SX-book.c : Removal of private headers.
+	* src/engine/SchedXaction.c : Removal of private headers.
+	* src/engine/Scrub2.c : Cast fixes.
+	* src/engine/Transaction.c : Removal of private headers
+	and cast fixes. QOF QofSetterFunc changes to ensure the
+	transaction is open before editing.
+	* src/engine/gnc-commodity.c : Removal of private headers.
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	QOF Sync
+	* src/engine/gnc-engine-util.h : Enhanced enumas string macro
+	* src/engine/gnc-event-p.h : Move gen_event into the API.
+	* src/engine/gnc-event.h : gnc_engine_gen_event
+	* src/engine/gnc-lot-p.h : Remove unneeded header.
+	* src/engine/gnc-lot.c : Remove unneeded header.
+	* src/engine/gnc-numeric.c : qofmath128 change.
+	* src/engine/gnc-numeric.h : Doxygen fix.
+	* src/engine/gnc-pricedb.c : Remove private headers and outline the
+	areas of FileBackend / QofBackend that need modification to work with
+	CashUtil.
+	* src/engine/qof-be-utils.h : Begin to map the macros to functions
+	to allow routines to be used when QOF is external.
+	* src/engine/qof.h : qofchoice
+	* src/engine/qof_book_merge.c : QOF_TYPE_CHOICE
+	* src/engine/qof_book_merge.h : header tweak
+	* src/engine/qofbackend-p.h : header tweak
+	* src/engine/qofbackend.c : Definition of qof-be-utils functions.
+	* src/engine/qofbackend.h : Move qof_book_get_backend
+	* src/engine/qofbook.h : Remove qof_book_get_backend
+	* src/engine/qofclass.c : Downgrade warning for CashUtil.
+	* src/engine/qofclass.h : Tweak.
+	* src/engine/qofgobj.c : Cast fix.
+	* src/engine/qofid.h : QOF_TYPE_COLLECT & QOF_TYPE_CHOICE
+	* src/engine/qofinstance.c : Dirty instance handling
+	* src/engine/qofinstance.h : Dirty instance API
+	* src/engine/qofobject.h : Doxygen tweak.
+	* src/engine/qofquery.c : typo
+	* src/engine/qofquery.h : tweak
+	* src/engine/qofquerycore-p.h : QOF_TYPE_CHOICE
+	* src/engine/qofquerycore.c : QOF_TYPE_CHOICE
+	* src/engine/qofquerycore.h : QOF_TYPE_CHOICE
+	* src/engine/qofsession-p.h : Tweak.
+	* src/engine/qofsession.c : Ensure objects are open for
+	editing before trying to commit data.
+	* src/engine/qofsession.h : QOF_TYPE_CHOICE
+	* src/engine/qofsql.c : Cast fixes.
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
+	Mac changes.
+	* src/engine/test-core/Makefile.am :
+	* src/engine/test-core/test-engine-stuff.c : Improved
+	failure reporting.
+	* src/gnc-module/test/misc-mods/Makefile.am : The linking
+	order is important for Mac OSX because of a bug in the gtkhtml
+	implementation.
+	* src/gnome-utils/Makefile.am :
+	* src/gnome/.cvsignore :
+	* src/gnome/glade/.cvsignore :
+	* src/gnome/schemas/.cvsignore :
+	* src/gnome/ui/.cvsignore :
+	* src/test-core/Makefile.am :
+
 2005-08-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c (inputBoxCB): Aaarg,

@@ -153,8 +153,9 @@ AC_SUBST(DL_LIB)
 ### MacOS 10.x requires some special handling...
 
 # Some systems (MacOS) require -lintl
-AC_SEARCH_LIBS(gettext, intl, ,[
-	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
+# not true for darwin 10.3 - halts the build.
+#AC_SEARCH_LIBS(gettext, intl, ,[
+#	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
 
 AC_MSG_CHECKING(for darwin)
 case $host_os in
@@ -164,6 +165,16 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
+     dnl Use fink under MacOS X to find popt
+     AC_MSG_CHECKING(for fink support)
+     if test -d "/sw/lib" -a -d "/sw/include"; then
+        AM_CFLAGS="$AM_CFLAGS -I/sw/include"
+        LDFLAGS="$LDFLAGS -L/sw/lib"
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+    AC_CHECK_HEADERS(popt.h)
 		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
 		mv libtool libtool.old
 		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
@@ -871,7 +882,7 @@ LIBS="$LIBS -lm"
 
 ### --------------------------------------------------------------------------
 ### popt
-
+AC_CHECK_HEADERS(popt.h)
 AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 
   popt 1.5 or newer is required to build gnucash. You can download
@@ -959,6 +970,14 @@ then
         fi
     fi
     AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+dnl if Mac OSX, also scrub /sw/include
+dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
+case $host_os in
+	darwin*)
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include/gtkhtml ;;" | sed -e "s;-I/sw/includ/gtkhtmle$;;")
+		;;
+esac
     AC_SUBST(GTKHTML_CFLAGS)
     AC_SUBST(GTKHTML_LIBS)
 
