@@ -351,6 +351,12 @@ test_transaction(void)
         int fd;
 
         ran_trn = get_random_transaction(book);
+        if(!ran_trn)
+        {
+            failure_args("transaction_xml", __FILE__, __LINE__,
+                         "get_random_transaction returned NULL");
+            return;
+       }
 
         {
           /* xaccAccountInsertSplit can reorder the splits. */

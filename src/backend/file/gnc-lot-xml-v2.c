@@ -41,7 +41,7 @@
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
-
+#include "qofid-p.h"
 #include "sixtp-dom-parsers.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"

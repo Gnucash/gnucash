@@ -111,7 +111,11 @@ test_generation (void)
     GNCPriceDB *db;
 
     db = get_random_pricedb (qof_session_get_book (session));
-
+    if (!db) {
+      failure_args ("gnc_random_price_db returned NULL",
+                    __FILE__, __LINE__, "%d", i);
+      return;
+    }
     if (gnc_pricedb_get_num_prices (db))
       test_db (i, db);
 

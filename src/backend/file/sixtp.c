@@ -801,8 +801,9 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   g_return_val_if_fail(first_tag, FALSE);
   
   f = fopen(filename, "r");
-  if (f == NULL)
+  if (f == NULL) {
     return FALSE;
+  }
 
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   fclose(f);

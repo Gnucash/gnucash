@@ -17,3 +17,4 @@ Makefile.in
 *.la
 *.lo
 test_file_*
+translog.*.log
