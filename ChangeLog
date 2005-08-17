@@ -1,5 +1,10 @@
 2005-08-17  Neil Williams <linux@codehelp.co.uk>
 
+	*  src/import-export/hbci/hbci-interaction.c:
+	Replacing an inadvertent change.
+
+2005-08-17  Neil Williams <linux@codehelp.co.uk>
+
 	* .cvsignore :
 	* configure.in : Mac changes.
 	* rpm/.cvsignore :
