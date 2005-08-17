@@ -221,7 +221,7 @@ entry_dom_tree_create (GncEntry *entry)
 struct entry_pdata
 {
   GncEntry *entry;
-  GNCBook *book;
+  QofBook *book;
   Account *acc;
 };
 
@@ -708,7 +708,7 @@ static struct dom_tree_handler entry_handlers_v2[] = {
 };
 
 static GncEntry*
-dom_tree_to_entry (xmlNodePtr node, GNCBook *book)
+dom_tree_to_entry (xmlNodePtr node, QofBook *book)
 {
     struct entry_pdata entry_pdata;
     gboolean successful;
@@ -749,7 +749,7 @@ gnc_entry_end_handler(gpointer data_for_children,
     GncEntry *entry;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -792,7 +792,7 @@ do_count (QofEntity * entry_p, gpointer count_p)
 }
 
 static int
-entry_get_count (GNCBook *book)
+entry_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -818,7 +818,7 @@ xml_add_entry (QofEntity * entry_p, gpointer out_p)
 }
 
 static void
-entry_write (FILE *out, GNCBook *book)
+entry_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
 }

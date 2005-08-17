@@ -140,7 +140,7 @@ billterm_dom_tree_create (GncBillTerm *term)
 struct billterm_pdata
 {
   GncBillTerm *term;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -416,7 +416,7 @@ static struct dom_tree_handler billterm_handlers_v2[] = {
 };
 
 static GncBillTerm*
-dom_tree_to_billterm (xmlNodePtr node, GNCBook *book)
+dom_tree_to_billterm (xmlNodePtr node, QofBook *book)
 {
   struct billterm_pdata billterm_pdata;
   gboolean successful;
@@ -449,7 +449,7 @@ gnc_billterm_end_handler(gpointer data_for_children,
     GncBillTerm *term;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -492,7 +492,7 @@ do_count (QofEntity *term_p, gpointer count_p)
 }
 
 static int
-billterm_get_count (GNCBook *book)
+billterm_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -513,7 +513,7 @@ xml_add_billterm (QofEntity *term_p, gpointer out_p)
 }
 
 static void
-billterm_write (FILE *out, GNCBook *book)
+billterm_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
@@ -666,7 +666,7 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
 }
 
 static void
-billterm_scrub (GNCBook *book)
+billterm_scrub (QofBook *book)
 {
   GList *list = NULL;
   GList *node;

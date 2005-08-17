@@ -85,7 +85,7 @@ job_dom_tree_create (GncJob *job)
     maybe_add_string (ret, job_reference_string, gncJobGetReference (job));
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (job_owner_string,
-					    gncJobGetOwner (job)));
+					    (GncOwner*)gncJobGetOwner (job)));
 
     xmlAddChild(ret, int_to_dom_tree(job_active_string,
 				     gncJobGetActive (job)));
@@ -98,7 +98,7 @@ job_dom_tree_create (GncJob *job)
 struct job_pdata
 {
   GncJob *job;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -208,7 +208,7 @@ static struct dom_tree_handler job_handlers_v2[] = {
 };
 
 static GncJob*
-dom_tree_to_job (xmlNodePtr node, GNCBook *book)
+dom_tree_to_job (xmlNodePtr node, QofBook *book)
 {
     struct job_pdata job_pdata;
     gboolean successful;
@@ -242,7 +242,7 @@ gnc_job_end_handler(gpointer data_for_children,
     GncJob *job;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -299,7 +299,7 @@ do_count (QofEntity * job_p, gpointer count_p)
 }
 
 static int
-job_get_count (GNCBook *book)
+job_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -323,7 +323,7 @@ xml_add_job (QofEntity * job_p, gpointer out_p)
 }
 
 static void
-job_write (FILE *out, GNCBook *book)
+job_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_job, (gpointer) out);
 }

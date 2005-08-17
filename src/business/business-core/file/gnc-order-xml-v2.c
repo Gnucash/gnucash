@@ -46,8 +46,6 @@
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
 
-#include "gncObject.h"
-
 #define _GNC_MOD_NAME	GNC_ID_ORDER
 
 static short module = MOD_IO;
@@ -89,7 +87,7 @@ order_dom_tree_create (GncOrder *order)
                                       gncOrderGetID (order)));
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (order_owner_string,
-					    gncOrderGetOwner (order)));
+					    (GncOwner*)gncOrderGetOwner (order)));
 
     ts = gncOrderGetDateOpened (order);
     xmlAddChild(ret, timespec_to_dom_tree (order_opened_string, &ts));
@@ -112,7 +110,7 @@ order_dom_tree_create (GncOrder *order)
 struct order_pdata
 {
   GncOrder *order;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static inline gboolean
@@ -250,7 +248,7 @@ static struct dom_tree_handler order_handlers_v2[] = {
 };
 
 static GncOrder*
-dom_tree_to_order (xmlNodePtr node, GNCBook *book)
+dom_tree_to_order (xmlNodePtr node, QofBook *book)
 {
     struct order_pdata order_pdata;
     gboolean successful;
@@ -284,7 +282,7 @@ gnc_order_end_handler(gpointer data_for_children,
     GncOrder *order;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -341,10 +339,10 @@ do_count (QofEntity * order_p, gpointer count_p)
 }
 
 static int
-order_get_count (GNCBook *book)
+order_get_count (QofBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -365,9 +363,9 @@ xml_add_order (QofEntity * order_p, gpointer out_p)
 }
 
 static void
-order_write (FILE *out, GNCBook *book)
+order_write (FILE *out, QofBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
 }
 
 void
@@ -383,7 +381,7 @@ gnc_order_xml_initialize (void)
     NULL,			/* scrub */
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

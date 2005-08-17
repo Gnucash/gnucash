@@ -98,7 +98,7 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 struct owner_pdata
 {
   GncOwner *owner;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -193,7 +193,7 @@ static struct dom_tree_handler owner_handlers_v2[] = {
 };
 
 gboolean
-gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, GNCBook *book)
+gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
 {
     struct owner_pdata owner_pdata;
     gboolean successful;

@@ -126,11 +126,11 @@ customer_dom_tree_create (GncCustomer *cust)
     xmlAddChild
       (ret,
        commodity_ref_to_dom_tree(cust_currency_string,
-				 gncCustomerGetCurrency (cust)));
+				 (gnc_commodity*)gncCustomerGetCurrency (cust)));
 
     xmlAddChild (ret, int_to_dom_tree (cust_taxtableoverride_string,
 				       gncCustomerGetTaxTableOverride (cust)));
-    taxtable = gncCustomerGetTaxTable (cust);
+    taxtable = (GncTaxTable*)gncCustomerGetTaxTable (cust);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
 					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));
@@ -147,7 +147,7 @@ customer_dom_tree_create (GncCustomer *cust)
 struct customer_pdata
 {
   GncCustomer *customer;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -397,7 +397,7 @@ static struct dom_tree_handler customer_handlers_v2[] = {
 };
 
 static GncCustomer*
-dom_tree_to_customer (xmlNodePtr node, GNCBook *book)
+dom_tree_to_customer (xmlNodePtr node, QofBook *book)
 {
     struct customer_pdata cust_pdata;
     gboolean successful;
@@ -431,7 +431,7 @@ gnc_customer_end_handler(gpointer data_for_children,
     GncCustomer *cust;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -488,7 +488,7 @@ do_count (QofEntity * cust_p, gpointer count_p)
 }
 
 static int
-customer_get_count (GNCBook *book)
+customer_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -512,7 +512,7 @@ xml_add_customer (QofEntity * cust_p, gpointer out_p)
 }
 
 static void
-customer_write (FILE *out, GNCBook *book)
+customer_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
 }

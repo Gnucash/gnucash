@@ -141,7 +141,7 @@ taxtable_dom_tree_create (GncTaxTable *table)
 struct ttentry_pdata
 {
   GncTaxTableEntry *ttentry;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -201,7 +201,7 @@ static struct dom_tree_handler ttentry_handlers_v2[] = {
 };
 
 static GncTaxTableEntry*
-dom_tree_to_ttentry (xmlNodePtr node, GNCBook *book)
+dom_tree_to_ttentry (xmlNodePtr node, QofBook *book)
 {
   struct ttentry_pdata ttentry_pdata;
   gboolean successful;
@@ -226,7 +226,7 @@ dom_tree_to_ttentry (xmlNodePtr node, GNCBook *book)
 struct taxtable_pdata
 {
   GncTaxTable *table;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -343,10 +343,10 @@ taxtable_entries_handler (xmlNodePtr node, gpointer taxtable_pdata)
   for (mark = node->xmlChildrenNode; mark; mark = mark->next) {
     GncTaxTableEntry *entry;
         
-    if (safe_strcmp ("text", mark->name) == 0)
+    if (safe_strcmp ("text", (char*)mark->name) == 0)
       continue;
 
-    if (safe_strcmp (gnc_taxtableentry_string, mark->name))
+    if (safe_strcmp (gnc_taxtableentry_string, (char*)mark->name))
       return FALSE;
 
     entry = dom_tree_to_ttentry (mark, pdata->book);
@@ -379,7 +379,7 @@ static struct dom_tree_handler taxtable_handlers_v2[] = {
 };
 
 static GncTaxTable*
-dom_tree_to_taxtable (xmlNodePtr node, GNCBook *book)
+dom_tree_to_taxtable (xmlNodePtr node, QofBook *book)
 {
   struct taxtable_pdata taxtable_pdata;
   gboolean successful;
@@ -413,7 +413,7 @@ gnc_taxtable_end_handler(gpointer data_for_children,
     GncTaxTable *table;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -456,7 +456,7 @@ do_count (QofEntity * table_p, gpointer count_p)
 }
 
 static int
-taxtable_get_count (GNCBook *book)
+taxtable_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -477,7 +477,7 @@ xml_add_taxtable (QofEntity * table_p, gpointer out_p)
 }
 
 static void
-taxtable_write (FILE *out, GNCBook *book)
+taxtable_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
 }
@@ -589,7 +589,7 @@ taxtable_scrub_cust (QofEntity * cust_p, gpointer ht_p)
   GncTaxTable *table;
   gint32 count;
   
-  table = gncCustomerGetTaxTable(cust);
+  table = (GncTaxTable*)gncCustomerGetTaxTable(cust);
   if (table) {
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
     count++;
@@ -605,7 +605,7 @@ taxtable_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
   GncTaxTable *table;
   gint32 count;
 
-  table = gncVendorGetTaxTable(vendor);
+  table = (GncTaxTable*)gncVendorGetTaxTable(vendor);
   if (table) {
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
     count++;
@@ -628,7 +628,7 @@ taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
 }
 
 static void
-taxtable_scrub (GNCBook *book)
+taxtable_scrub (QofBook *book)
 {
   GList *list = NULL;
   GList *node;

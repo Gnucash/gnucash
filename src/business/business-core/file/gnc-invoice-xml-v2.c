@@ -167,7 +167,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
 struct invoice_pdata
 {
   GncInvoice *invoice;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static inline gboolean
@@ -428,7 +428,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
 };
 
 static GncInvoice*
-dom_tree_to_invoice (xmlNodePtr node, GNCBook *book)
+dom_tree_to_invoice (xmlNodePtr node, QofBook *book)
 {
     struct invoice_pdata invoice_pdata;
     gboolean successful;
@@ -462,7 +462,7 @@ gnc_invoice_end_handler(gpointer data_for_children,
     GncInvoice *invoice;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -519,7 +519,7 @@ do_count (QofEntity * invoice_p, gpointer count_p)
 }
 
 static int
-invoice_get_count (GNCBook *book)
+invoice_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -543,7 +543,7 @@ xml_add_invoice (QofEntity * invoice_p, gpointer out_p)
 }
 
 static void
-invoice_write (FILE *out, GNCBook *book)
+invoice_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
 }

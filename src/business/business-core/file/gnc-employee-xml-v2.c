@@ -115,7 +115,7 @@ employee_dom_tree_create (GncEmployee *employee)
     xmlAddChild
       (ret,
        commodity_ref_to_dom_tree(employee_currency_string,
-				 gncEmployeeGetCurrency (employee)));
+				 (gnc_commodity*)gncEmployeeGetCurrency (employee)));
 
     ccard_acc = gncEmployeeGetCCard (employee);
     if (ccard_acc)
@@ -130,7 +130,7 @@ employee_dom_tree_create (GncEmployee *employee)
 struct employee_pdata
 {
   GncEmployee *employee;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -311,7 +311,7 @@ static struct dom_tree_handler employee_handlers_v2[] = {
 };
 
 static GncEmployee*
-dom_tree_to_employee (xmlNodePtr node, GNCBook *book)
+dom_tree_to_employee (xmlNodePtr node, QofBook *book)
 {
     struct employee_pdata employee_pdata;
     gboolean successful;
@@ -344,7 +344,7 @@ gnc_employee_end_handler(gpointer data_for_children,
     GncEmployee *employee;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -401,7 +401,7 @@ do_count (QofEntity * employee_p, gpointer count_p)
 }
 
 static int
-employee_get_count (GNCBook *book)
+employee_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -425,7 +425,7 @@ xml_add_employee (QofEntity * employee_p, gpointer out_p)
 }
 
 static void
-employee_write (FILE *out, GNCBook *book)
+employee_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
 }

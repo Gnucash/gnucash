@@ -72,7 +72,7 @@ gnc_address_to_dom_tree (const char *tag, GncAddress *addr)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST address_version_string);
 
     maybe_add_string (ret, addr_name_string, gncAddressGetName (addr));
