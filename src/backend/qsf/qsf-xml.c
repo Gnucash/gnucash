@@ -26,9 +26,6 @@
 #include <libxml/xmlversion.h>
 #include "qsf-dir.h"
 #include "qsf-xml.h"
-#include "qofbook-p.h"
-#include "gnc-trace.h"
-static short int module = MOD_BACKEND;
 
 void qsf_free_params(qsf_param *params)
 {
@@ -39,7 +36,6 @@ void qsf_free_params(qsf_param *params)
 	}
 	g_slist_free(params->supported_types);
 	xmlFreeDoc(params->output_doc);
-	xmlFreeNs(params->qsf_ns);
 	xmlFreeNs(params->map_ns);
 }
 
@@ -136,8 +132,11 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 			object_declaration = xmlGetProp(cur_node, BAD_CAST QSF_OBJECT_TYPE);
 			count = g_hash_table_size(valid->validation_table);
 			g_hash_table_insert(valid->validation_table, object_declaration, xmlNodeGetContent(cur_node));
-			if((g_hash_table_size(valid->validation_table) > count) &&
-				(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration)))
+			if(g_hash_table_size(valid->validation_table) > count)
+			{
+				valid->valid_object_count++;
+			}
+			if(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration))
 			{
 				valid->qof_registered_count++;
 			}
@@ -154,28 +153,18 @@ gboolean is_our_qsf_object(const char *path)
 	gint table_count;
 
 	g_return_val_if_fail((path != NULL),FALSE);
-	ENTER (" ");
 	if(path == NULL) { return FALSE; }
 	doc = xmlParseFile(path);
 	if(doc == NULL)  { return FALSE; }
-	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) 
-	{
-		return FALSE;
-	}
+	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { return FALSE; }
 	object_root = xmlDocGetRootElement(doc);
 	valid.validation_table = g_hash_table_new(g_str_hash, g_str_equal);
 	valid.qof_registered_count = 0;
 	iter.ns = object_root->ns;
 	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
 	table_count = g_hash_table_size(valid.validation_table);
-	if(table_count == valid.qof_registered_count)
-	{
 		g_hash_table_destroy(valid.validation_table);
-		LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
-		return TRUE;
-	}
-	g_hash_table_destroy(valid.validation_table);
-	LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
+	if(table_count == valid.qof_registered_count) { return TRUE; }
 	return FALSE;
 }
 
@@ -188,10 +177,8 @@ gboolean is_qsf_object(const char *path)
 	doc = xmlParseFile(path);
 	if(doc == NULL) { return FALSE; }
 	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { return FALSE; }
-	ENTER (" implement a way of finding more than one map");
 	/** \todo implement a way of finding more than one map */
-	/** \todo set the map xmlDocPtr in params for later processing. */
-	return TRUE;
+	return is_qsf_object_with_map(path, "pilot-qsf-GnuCashInvoice.xml");
 }
 
 gboolean is_our_qsf_object_be(qsf_param *params)
@@ -204,15 +191,12 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	char *path;
 
 	g_return_val_if_fail((params != NULL),FALSE);
-	ENTER (" ");
 	path = g_strdup(params->filepath);
 	if(path == NULL) {
 		qof_backend_set_error(params->be, ERR_FILEIO_FILE_NOT_FOUND);
 		return FALSE;
 	}
-	if(params->file_type != QSF_UNDEF) { 
-		return FALSE; 
-	}
+	if(params->file_type != QSF_UNDEF) { return FALSE; }
 	doc = xmlParseFile(path);
 	if(doc == NULL)  {
 		qof_backend_set_error(params->be, ERR_FILEIO_PARSE_ERROR);
@@ -234,12 +218,10 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	{
 		g_hash_table_destroy(valid.validation_table);
 		qof_backend_set_error(params->be, ERR_BACKEND_NO_ERR);
-		LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 		return TRUE;
 	}
 	g_hash_table_destroy(valid.validation_table);
 	qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
-	LEAVE (" table_count=%i\tvalid_count=%i", table_count, valid.qof_registered_count);
 	return FALSE;
 }
 
@@ -270,7 +252,6 @@ gboolean is_qsf_object_be(qsf_param *params)
 		}
 	}
 	/** \todo implement a way of finding more than one map */
-	/** \todo set the map xmlDocPtr in params for later processing. */
 	return is_qsf_object_with_map_be("pilot-qsf-GnuCashInvoice.xml", params);
 }
 
@@ -292,15 +273,13 @@ qsf_supported_data_types(gpointer type, gpointer user_data)
 static void
 qsf_parameter_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 {
-
 	params->param_node = child;
 	g_slist_foreach(params->supported_types, qsf_supported_data_types, params);
 }
 
-
 /* Despite the name, this function handles the QSF object book tag
 AND the object tags. */
-static void
+void
 qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 {
 	struct qsf_node_iterate iter;
@@ -316,8 +295,8 @@ qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 		object_set = g_new(qsf_objects, 1);
 		params->object_set = object_set;
 		object_set->parameters = g_hash_table_new(g_str_hash, g_str_equal);
-		object_set->object_type = g_strdup(xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE));
-		object_count_s = g_strdup(xmlGetProp(child, BAD_CAST QSF_OBJECT_COUNT));
+		object_set->object_type = g_strdup((char*)xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE));
+		object_count_s = g_strdup((char*)xmlGetProp(child, BAD_CAST QSF_OBJECT_COUNT));
 		c = (int)strtol(object_count_s, &tail, 0);
 		g_free(object_count_s);
 		params->qsf_object_list = g_list_prepend(params->qsf_object_list, object_set);
@@ -338,7 +317,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 	GUID book_guid;
 
 	if(qsf_is_element(child, ns, QSF_BOOK_TAG)) {
-		book_count_s = xmlGetProp(child,BAD_CAST QSF_BOOK_COUNT);
+		book_count_s = (char*)xmlGetProp(child, BAD_CAST QSF_BOOK_COUNT);
 		if(book_count_s) {
 			book_count = (int)strtol(book_count_s, &tail, 0);
 			/* More than one book not currently supported. */
@@ -351,7 +330,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 		child_node = child_node->next)
 		{
 		if(qsf_is_element(child_node, ns, QSF_BOOK_GUID)) {
-			buffer = g_strdup(xmlNodeGetContent(child_node));
+			buffer = g_strdup((char*)xmlNodeGetContent(child_node));
 			g_return_if_fail(TRUE == string_to_guid(buffer, &book_guid));
 			qof_entity_set_guid((QofEntity*)params->book, &book_guid);
 			g_free(buffer);

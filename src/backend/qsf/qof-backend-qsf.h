@@ -124,6 +124,7 @@ QSF is in three sections:
 #define _QOF_BACKEND_QSF_H
 
 #include "qofbackend.h"
+#include "qof-be-utils.h"
 
 #ifdef __cplusplus
 extern "C"

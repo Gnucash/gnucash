@@ -15,9 +15,6 @@ libqof_backend_qsf_la_SOURCES = \
 	qsf-xml-map.c \
         qsf-xml.c
 
-noinst_HEADERS = \
-  qsf-xml.h
-
 LIBADD = \
    ${GLIB_LIBS} \
    ${LIBXML2_LIBS}
@@ -30,7 +27,9 @@ qsfschema_DATA = \
 
 EXTRA_DIST = \
 	$(qsfschema_DATA) \
-	qsf-dir.h.in
+	qsf-dir.h.in      \
+	qof-backend-qsf.h \
+	qsf-xml.h
 
 qsf-dir.h: qsf-dir.h.in
 	rm -f $@.tmp
@@ -40,3 +39,4 @@ qsf-dir.h: qsf-dir.h.in
 
 BUILT_SOURCES = qsf-dir.h
 
+CONFIG_CLEAN_FILES = qsf-dir.h

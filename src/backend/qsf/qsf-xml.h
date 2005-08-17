@@ -525,6 +525,8 @@ otherwise FALSE.
 */
 gboolean is_qsf_object_with_map_be(char *map_path, qsf_param *params);
 
+gboolean is_qsf_object_with_map(const char *path, char *map_file);
+
 /**	\brief QOF processing routine.
 
 Called by ::qof_session_load if a map is required.
@@ -608,7 +610,9 @@ Filters the parameter list to set each type in this order:
 - QOF_TYPE_INT64
 - QOF_TYPE_DOUBLE
 - QOF_TYPE_CHAR
-- QOF_TYPE_KVP (pending.)
+- QOF_TYPE_KVP
+- QOF_TYPE_COLLECT
+- QOF_TYPE_CHOICE
 
 */
 void qsf_param_init(qsf_param *params);
@@ -751,6 +755,26 @@ qof_session_load_our_qsf_object(QofSession *first_session, const char *path);
 */
 QofBackendError 
 qof_session_load_qsf_object(QofSession *first_session, const char *path);
+
+/** \brief Convert between QSF objects
+
+This is the main workhorse of the conversion between QSF objects using
+maps.
+
+@param mapDoc The map document, parsed by libxml2.
+@param qsf_root The top node of the QSF object to be converted using the map.
+@param params The QSF backend parameters.
+
+Each calculation in the map is performed over the child nodes of the 
+object tree. A new xmlDoc is created and this is made available to QOF to
+be loaded into the book.
+
+*/
+xmlDocPtr
+qsf_object_convert(xmlDocPtr mapDoc, xmlNodePtr qsf_root, qsf_param *params);
+
+void
+qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params);
 
 /** \brief Backend routine to write a file or stdout.
 

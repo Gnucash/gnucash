@@ -5,9 +5,9 @@
 <qsf-map
 xmlns="http://qof.sourceforge.net/">
 <definition qof_version="3">
-  <define e_type="qof-expenses">Pilot-link QOF expenses</define>
-  <define e_type="qof-datebook">Pilot-link QOF datebook</define>
-  <define e_type="qof-address">Pilot-link QOF address</define>
+  <define e_type="pilot_expenses">Pilot-link QOF expenses</define>
+  <define e_type="pilot_datebook">Pilot-link QOF datebook</define>
+  <define e_type="pilot_address">Pilot-link QOF address</define>
   <define e_type="gncInvoice">Invoice</define>
   <define e_type="Trans">Transaction</define>
   <define e_type="gncEntry">Order/Invoice/Bill Entry</define>

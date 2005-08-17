@@ -128,12 +128,22 @@ attributeFormDefault="unqualified">
      </xsd:simpleContent>
      </xsd:complexType>
    </xsd:element>
-   <xsd:element name="collect" minOccurs="0" maxOccurs="unbounded">
+   <xsd:element name="collection" minOccurs="0" maxOccurs="unbounded">
    <xsd:complexType>
    <xsd:simpleContent>
      <xsd:extension base="xsd:hexBinary">
        <xsd:attribute name="type" type="xsd:string" use="required"/>
      </xsd:extension>
+  </xsd:simpleContent>
+  </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="choice" minOccurs="0" maxOccurs="unbounded">
+  <xsd:complexType>
+  <xsd:simpleContent>
+   <xsd:extension base="xsd:hexBinary">
+     <xsd:attribute name="type" type="xsd:string" use="required"/>
+     <xsd:attribute name="name" type="xsd:string" use="required"/>
+   </xsd:extension>
   </xsd:simpleContent>
   </xsd:complexType>
   </xsd:element>

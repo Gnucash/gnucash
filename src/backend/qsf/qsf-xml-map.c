@@ -42,10 +42,11 @@ qsf_date_default_handler(const char *default_name, GHashTable *qsf_default_hash,
 
 	output_parent = xmlAddChild(parent_tag, xmlNewNode(ns,
 		xmlGetProp(import_node, BAD_CAST QSF_OBJECT_TYPE)));
-	xmlNewProp(output_parent, BAD_CAST QSF_OBJECT_TYPE, xmlGetProp(import_node, BAD_CAST MAP_VALUE_ATTR));
+	xmlNewProp(output_parent, BAD_CAST QSF_OBJECT_TYPE,
+		xmlGetProp(import_node, BAD_CAST MAP_VALUE_ATTR));
 	qsf_time = (time_t*)g_hash_table_lookup(qsf_default_hash, default_name);
 	strftime(date_as_string, QSF_DATE_LENGTH, QSF_XSD_TIME, gmtime(qsf_time));
-	xmlNodeAddContent(output_parent, date_as_string);
+	xmlNodeAddContent(output_parent, BAD_CAST date_as_string);
 }
 
 static void
@@ -57,7 +58,8 @@ qsf_string_default_handler(const char *default_name, GHashTable *qsf_default_has
 
 	node = xmlAddChild(parent_tag,
 		xmlNewNode(ns, xmlGetProp(import_node, BAD_CAST QSF_OBJECT_TYPE)));
-	xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, xmlGetProp(import_node, BAD_CAST MAP_VALUE_ATTR));
+	xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE,
+		xmlGetProp(import_node, BAD_CAST MAP_VALUE_ATTR));
 	output = (xmlChar *)g_hash_table_lookup(qsf_default_hash, default_name);
 	xmlNodeAddContent(node, output);
 }
@@ -65,16 +67,15 @@ qsf_string_default_handler(const char *default_name, GHashTable *qsf_default_has
 void
 qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid)
 {
-	gchar *qof_version;
+	xmlChar *qof_version, *match;
 	GString *buff;
 	xmlNodePtr child_node;
-	xmlChar *match;
 
 	if (qsf_is_element(child, ns, MAP_DEFINITION_TAG)) {
 		qof_version = xmlGetProp(child, BAD_CAST MAP_QOF_VERSION);
 		buff = g_string_new(" ");
 		g_string_printf(buff, "%i", QSF_QOF_VERSION);
-		if(xmlStrcmp(qof_version, buff->str) != 0)
+		if(xmlStrcmp(qof_version, BAD_CAST buff->str) != 0)
 		{
 			valid->error_state = ERR_QSF_BAD_QOF_VERSION;
 			return;
@@ -91,7 +92,7 @@ qsf_map_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *valid)
 	}
 	if(qsf_is_element(child, ns, MAP_OBJECT_TAG)) {
 		match = NULL;
-		match = (xmlChar*) g_hash_table_lookup( valid->validation_table,
+		match = BAD_CAST  g_hash_table_lookup( valid->validation_table,
 			xmlGetProp(child, BAD_CAST MAP_TYPE_ATTR));
 		if(match) {
 			valid->map_calculated_count++;
@@ -144,12 +145,13 @@ gboolean is_qsf_object_with_map_be(char *map_file, qsf_param *params)
 	map_root = xmlDocGetRootElement(map_doc);
 	valid.map_calculated_count = 0;
 	valid.valid_object_count = 0;
+	valid.qof_registered_count = 0;
 	valid.error_state = ERR_BACKEND_NO_ERR;
 	map_ns = map_root->ns;
-	iter.ns = map_ns;
-	qsf_valid_foreach(map_root, qsf_map_validation_handler, &iter, &valid);
 	iter.ns = object_root->ns;
 	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
+	iter.ns = map_ns;
+	qsf_valid_foreach(map_root, qsf_map_validation_handler, &iter, &valid);
 	if (valid.error_state != ERR_BACKEND_NO_ERR) {
 		qof_backend_set_error(params->be, valid.error_state);
 		g_hash_table_destroy(valid.validation_table);
@@ -164,6 +166,63 @@ gboolean is_qsf_object_with_map_be(char *map_file, qsf_param *params)
 		return TRUE;
 	}
 	qof_backend_set_error(params->be, ERR_QSF_WRONG_MAP);
+	/* the object is OK, only the map is wrong. */
+	return TRUE;
+}
+
+gboolean is_qsf_object_with_map(const char *path, char *map_file)
+{
+	xmlDocPtr doc, map_doc;
+	int valid_count;
+	struct qsf_node_iterate iter;
+	xmlNodePtr map_root, object_root;
+	xmlNsPtr map_ns;
+	qsf_validator valid;
+	gchar *map_path;
+
+	map_path = g_strdup_printf("%s/%s", QSF_SCHEMA_DIR, map_file);
+	if(path == NULL) {
+		return FALSE;
+	}
+	doc = xmlParseFile(path);
+	if(doc == NULL) {
+		return FALSE;
+	}
+	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) {
+		return FALSE;
+	}
+	object_root = xmlDocGetRootElement(doc);
+	if(map_path == NULL) {
+		return FALSE;
+	}
+	valid.validation_table = g_hash_table_new(g_str_hash, g_str_equal);
+	map_doc = xmlParseFile(map_path);
+	if(map_doc == NULL) {
+		return FALSE;
+	}
+	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_MAP_SCHEMA, map_doc)) {
+		return FALSE;
+	}
+	map_root = xmlDocGetRootElement(map_doc);
+	valid.map_calculated_count = 0;
+	valid.valid_object_count = 0;
+	valid.error_state = ERR_BACKEND_NO_ERR;
+	map_ns = map_root->ns;
+	iter.ns = map_ns;
+	qsf_valid_foreach(map_root, qsf_map_validation_handler, &iter, &valid);
+	iter.ns = object_root->ns;
+	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
+	if (valid.error_state != ERR_BACKEND_NO_ERR) {
+		g_hash_table_destroy(valid.validation_table);
+		return FALSE;
+	}
+	valid_count = 0 - g_hash_table_size(valid.validation_table);
+	valid_count += valid.map_calculated_count;
+	valid_count += valid.valid_object_count;
+	g_hash_table_destroy(valid.validation_table);
+	if(valid_count == 0) {
+		return TRUE;
+	}
 	return FALSE;
 }
 
@@ -284,7 +343,7 @@ qsf_map_default_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params )
 			}
 			else
 /*					if(0 != xmlHashAddEntry(params->default_map,
-				xmlGetProp(child_node, BAD_CAST MAP_NAME_ATTR), child_node))*/
+				xmlGetProp(child_node, MAP_NAME_ATTR), child_node))*/
 			{
 				qof_backend_set_error(params->be, ERR_QSF_BAD_MAP);
 				return;
@@ -296,10 +355,8 @@ qsf_map_default_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params )
 void
 qsf_map_top_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 {
-	gchar *qof_version;
+	xmlChar	*qof_version;
 	GString *buff;
-/*	xmlChar *qsf_enum;
-	xmlNodePtr child_node;*/
 	struct qsf_node_iterate iter;
 
 	if(!params->qsf_define_hash) return;
@@ -308,7 +365,7 @@ qsf_map_top_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 		qof_version = xmlGetProp(child, BAD_CAST MAP_QOF_VERSION);
 		buff = g_string_new(" ");
 		g_string_printf(buff, "%i", QSF_QOF_VERSION);
-		if(xmlStrcmp(qof_version, buff->str) != 0) {
+		if(xmlStrcmp(qof_version, BAD_CAST buff->str) != 0) {
 			qof_backend_set_error(params->be, ERR_QSF_BAD_QOF_VERSION);
 			return;
 		}
@@ -317,9 +374,9 @@ qsf_map_top_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 	}
 }
 
-static xmlChar*
+static char*
 qsf_else_set_value(xmlNodePtr parent, GHashTable *default_hash,
-                   xmlChar *content, xmlNsPtr map_ns)
+		char *content, xmlNsPtr map_ns)
 {
 	xmlNodePtr cur_node;
 
@@ -327,7 +384,7 @@ qsf_else_set_value(xmlNodePtr parent, GHashTable *default_hash,
 	for(cur_node = parent->children; cur_node != NULL; cur_node = cur_node->next)
 	{
 		if(qsf_is_element(cur_node, map_ns, QSF_CONDITIONAL_SET)) {
-			content = xmlNodeGetContent(cur_node);
+			content = (char*)xmlNodeGetContent(cur_node);
 			return content;
 		}
 	}
@@ -349,12 +406,12 @@ qsf_set_handler(xmlNodePtr parent, GHashTable *default_hash,
 	{
 		if(qsf_is_element(cur_node, params->map_ns, QSF_CONDITIONAL_SET)) 
 		{
-			content = xmlGetProp(cur_node, BAD_CAST QSF_OPTION);
+			content = (char*)xmlGetProp(cur_node, BAD_CAST QSF_OPTION);
 			if(qsf_strings_equal(xmlGetProp(cur_node, BAD_CAST QSF_OPTION), "qsf_lookup_string")) 
 			{
 				lookup_node = (xmlNodePtr) g_hash_table_lookup(default_hash, 
 					xmlNodeGetContent(cur_node));
-				content = xmlGetProp(lookup_node, BAD_CAST MAP_VALUE_ATTR);
+				content = (char*)xmlGetProp(lookup_node, BAD_CAST MAP_VALUE_ATTR);
 				/** \todo FIXME: do the lookup. type is defined by output object. */
 				/* Find by name, get GUID, return GUID as string. */
 				g_message("Lookup %s in the receiving application\n", content );
@@ -364,16 +421,16 @@ qsf_set_handler(xmlNodePtr parent, GHashTable *default_hash,
 			{
 				lookup_node = (xmlNodePtr) g_hash_table_lookup(default_hash, 
 					xmlNodeGetContent(cur_node));
-				content = xmlGetProp(lookup_node, BAD_CAST "value");
+				content = (char*)xmlGetProp(lookup_node, BAD_CAST "value");
 				return content;
 			}
-			content = xmlGetProp(parent, BAD_CAST "boolean");
+			content = (char*)xmlGetProp(parent, BAD_CAST "boolean");
 			if(!content) {
 				/** \todo Check qsf_parameter_hash arguments */
 				lookup_node = (xmlNodePtr) g_hash_table_lookup(params->qsf_parameter_hash,
 					xmlGetProp(parent->parent, BAD_CAST MAP_TYPE_ATTR));
-				if(lookup_node) { return xmlNodeGetContent(lookup_node); }
-				return xmlNodeGetContent(cur_node);
+				if(lookup_node) { return (char*)xmlNodeGetContent(lookup_node); }
+				return (char*)xmlNodeGetContent(cur_node);
 			}
 		}
 	}
@@ -389,13 +446,13 @@ qsf_calculate_else(xmlNodePtr param_node, xmlNodePtr child, qsf_param *params)
 	if(qsf_is_element(param_node, params->map_ns, QSF_CONDITIONAL_ELSE)) {
 		if(params->boolean_calculation_done == 0) {
 			output_content = object_data = NULL;
-			output_content = qsf_set_handler(param_node,
-				params->qsf_default_hash, output_content, params);
+			output_content = BAD_CAST qsf_set_handler(param_node,
+				params->qsf_default_hash, (char*)output_content, params);
 			if(output_content == NULL) {
 				output_content = xmlGetProp(param_node, BAD_CAST MAP_TYPE_ATTR);
-				object_data = qsf_else_set_value(param_node, params->qsf_default_hash,
-					output_content, params->map_ns);
-				output_content = xmlGetProp( (xmlNodePtr) g_hash_table_lookup(
+				object_data = BAD_CAST qsf_else_set_value(param_node, params->qsf_default_hash,
+					(char*)output_content, params->map_ns);
+				output_content = BAD_CAST xmlGetProp( (xmlNodePtr) g_hash_table_lookup(
 					params->qsf_default_hash, object_data), BAD_CAST MAP_VALUE_ATTR);
 			}
 			if(object_data != NULL) {
@@ -446,7 +503,7 @@ qsf_set_format_value(xmlChar *format, char *qsf_time_now_as_string,
 			return;
 		}
 		/** Read the object value as a dateTime  */
-		strptime(xmlNodeGetContent(kl), QSF_XSD_TIME, tmp);
+		strptime((char*)xmlNodeGetContent(kl), QSF_XSD_TIME, tmp);
 		if(!tmp) {
 			printf("empty date field in QSF object.\n");
 			return;
@@ -455,12 +512,12 @@ qsf_set_format_value(xmlChar *format, char *qsf_time_now_as_string,
 		output = &tester;
 	}
 	result = regcomp(&reg, "%[a-zA-Z]", REG_EXTENDED|REG_NOSUB);
-	result = regexec(&reg, format,(size_t)0,NULL,0);
-	if(result == REG_NOMATCH) { format = "%F"; }
+	result = regexec(&reg, (char*)format,(size_t)0,NULL,0);
+	if(result == REG_NOMATCH) { format = BAD_CAST "%F"; }
 	regfree(&reg);
 	/** QSF_DATE_LENGTH preset for all internal and QSF_XSD_TIME string formats.
 	 */
-	strftime(qsf_time_now_as_string, QSF_DATE_LENGTH, format, gmtime(output));
+	strftime(qsf_time_now_as_string, QSF_DATE_LENGTH, (char*)format, gmtime(output));
 }
 
 static void
@@ -490,18 +547,19 @@ qsf_calculate_conditional(xmlNodePtr param_node, xmlNodePtr child, qsf_param *pa
 		printf("param_node=%s\n", param_node->name);
 		if(params->boolean_calculation_done == 0) {
 		/* set handler */
-		output_content = qsf_set_handler(param_node, params->qsf_default_hash, output_content, params);
+		output_content = BAD_CAST qsf_set_handler(param_node, params->qsf_default_hash,
+				(char*)output_content, params);
 		/* If the 'if' contains a boolean that has a default value */
 		if(output_content == NULL) {
 			if(NULL != xmlGetProp(param_node, BAD_CAST QSF_BOOLEAN_DEFAULT)) {
 			output_content = xmlGetProp( (xmlNodePtr) g_hash_table_lookup(
-				params->qsf_default_hash, xmlGetProp(param_node, BAD_CAST QSF_BOOLEAN_DEFAULT) ),
-					BAD_CAST MAP_VALUE_ATTR);
+				params->qsf_default_hash, xmlGetProp(param_node,
+				BAD_CAST QSF_BOOLEAN_DEFAULT) ), BAD_CAST MAP_VALUE_ATTR);
 			}
 			/* Is the default set to true? */
 			if( 0 == qsf_compare_tag_strings(output_content, QSF_XML_BOOLEAN_TEST)) 
 			{
-				qsf_boolean_set_value(param_node, params, output_content, params->map_ns);
+				qsf_boolean_set_value(param_node, params, (char*)output_content, params->map_ns);
 				export_node = xmlAddChild(params->lister, xmlNewNode(params->qsf_ns,
 					xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE)));
 				xmlNewProp(export_node, BAD_CAST QSF_OBJECT_TYPE,
@@ -613,4 +671,40 @@ qsf_map_object_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 		is_qsf_object_with_map(path, map_path);
 */
 	}
+}
+xmlDocPtr
+qsf_object_convert(xmlDocPtr mapDoc, xmlNodePtr qsf_root, qsf_param *params)
+{
+	struct qsf_node_iterate iter;
+	xmlDocPtr output_doc;
+	xmlNode *cur_node;
+	xmlNode *map_root, *output_root, *output_node;
+
+	output_doc = xmlNewDoc(BAD_CAST QSF_XML_VERSION);
+	output_root = xmlDocCopyNode(qsf_root,output_doc,2);
+	xmlSetNs(output_root, params->qsf_ns);
+	output_node = NULL;
+
+	qsf_node_foreach(qsf_root, qsf_object_node_handler, &iter, params);
+	map_root = xmlDocGetRootElement(mapDoc);
+
+	iter.ns = params->map_ns;
+	qsf_node_foreach(map_root, qsf_map_top_node_handler, &iter, params);
+
+//	iter.ns = qsf_ns;
+//	qsf_node_foreach(qsf_root, qsf_map_object_handler, &iter, params);
+	for(cur_node = map_root->children; cur_node != NULL; cur_node = cur_node->next)
+	{
+		params->cur_node = cur_node;
+		params->count = 0;
+		if(qsf_is_element(cur_node, params->map_ns, MAP_OBJECT_TAG))
+		{
+			params->lister = NULL;
+			params->count++;
+			iter.ns = params->map_ns;
+			qsf_node_foreach(cur_node, qsf_map_object_handler, &iter, params);
+		}
+	}
+	params->file_type = OUR_QSF_OBJ;
+	return output_doc;
 }
