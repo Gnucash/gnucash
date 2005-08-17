@@ -31,7 +31,7 @@
 #include "gnc-engine-util.h"
 #include "qofinstance.h"
 #include "qofobject.h"
-
+#include "qofbackend.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 #include "test-stuff.h"

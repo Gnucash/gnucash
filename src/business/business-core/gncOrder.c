@@ -37,17 +37,14 @@
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
-#include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
+#include "gnc-event.h"
 
-#include "gnc-event-p.h"
-
-#include "gncBusiness.h"
+//#include "gncBusiness.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"
@@ -271,7 +268,7 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 
   if (!order || !entry) return;
 
-  old = gncEntryGetOrder (entry);
+  old = (GncOrder*)gncEntryGetOrder (entry);
   if (old == order) return;			/* I already own it */
   if (old) gncOrderRemoveEntry (old, entry);
 
@@ -356,7 +353,7 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  QOF_BEGIN_EDIT (&order->inst);
+  qof_begin_edit(&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)

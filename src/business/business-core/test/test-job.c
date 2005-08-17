@@ -30,7 +30,7 @@
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
 #include "qofobject.h"
-
+#include "qofbackend.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 #include "test-stuff.h"

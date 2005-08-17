@@ -34,11 +34,10 @@
 #include "qofclass.h"
 #include "qofinstance-p.h"
 #include "guid.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "qofquery.h"
 #include "gncAddress.h"
 #include "gncAddressP.h"
-#include "gncOwner.h"
 
 struct _gncAddress 
 {

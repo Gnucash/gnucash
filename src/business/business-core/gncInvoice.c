@@ -34,9 +34,7 @@
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
-#include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquerycore.h"
@@ -49,10 +47,10 @@
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
 
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-lot.h"
 
-#include "gncBusiness.h"
+//#include "gncBusiness.h"
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -188,7 +186,7 @@ gncCloneInvoice (GncInvoice *from, QofBook *book)
 
   invoice->billto = gncCloneOwner (&from->billto, book);
   invoice->owner = gncCloneOwner (&from->owner, book);
-  invoice->job = gncJobObtainTwin (from->job, book);
+  invoice->job = (GncJob*)gncJobObtainTwin (from->job, book);
   invoice->terms = gncBillTermObtainTwin (from->terms, book);
   gncBillTermIncRef (invoice->terms);
 
@@ -259,41 +257,21 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
 }
 
 static void
-qofInvoiceOwnerCB (QofEntity *ent, gpointer user_data)
+qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent)
 {
-	GncInvoice *invoice;
-
-	invoice = (GncInvoice*)user_data;
-	qofOwnerSetEntity(&invoice->owner, ent);
-}
-
-static void
-qofInvoiceSetOwner (GncInvoice *invoice, QofCollection *coll)
-{
-	if(!invoice || !coll) { return; }
-	g_return_if_fail(qof_collection_count(coll) == 1);
+	if(!invoice || !ent) { return; }
 	gncInvoiceBeginEdit (invoice);
-	qof_collection_foreach(coll, qofInvoiceOwnerCB, invoice);
+	qofOwnerSetEntity(&invoice->owner, ent);
 	mark_invoice (invoice);
 	gncInvoiceCommitEdit (invoice);
 }
 
 static void
-qofInvoiceBillToCB (QofEntity *ent, gpointer user_data)
+qofInvoiceSetBillTo (GncInvoice *invoice, QofEntity *ent)
 {
-	GncInvoice *invoice;
-
-	invoice = (GncInvoice*)user_data;
-	qofOwnerSetEntity(&invoice->billto, ent);
-}
-
-static void
-qofInvoiceSetBillTo (GncInvoice *invoice, QofCollection *coll)
-{
-	if(!invoice || !coll) { return; }
-	g_return_if_fail(qof_collection_count(coll) == 1);
+	if(!invoice || !ent) { return; }
 	gncInvoiceBeginEdit (invoice);
-	qof_collection_foreach(coll, qofInvoiceBillToCB, invoice);
+	qofOwnerSetEntity(&invoice->billto, ent);
 	mark_invoice (invoice);
 	gncInvoiceCommitEdit (invoice);
 }
@@ -489,26 +467,18 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
   return &invoice->owner;
 }
 
-static QofCollection*
+static QofEntity*
 qofInvoiceGetOwner (GncInvoice *invoice)
 {
-	QofCollection *owner_coll;
-
 	if(!invoice) { return NULL; }
-	owner_coll = qof_collection_new(qofOwnerGetType(&invoice->owner));
-	qof_collection_add_entity(owner_coll, qofOwnerGetOwner(&invoice->owner));
-	return owner_coll;
+	return (QofEntity*)&invoice->owner;
 }
 
-static QofCollection*
+static QofEntity*
 qofInvoiceGetBillTo (GncInvoice *invoice)
 {
-	QofCollection *bill_coll;
-
 	if(!invoice) { return NULL; }
-	bill_coll = qof_collection_new(qofOwnerGetType(&invoice->billto));
-	qof_collection_add_entity(bill_coll, qofOwnerGetOwner(&invoice->billto));
-	return bill_coll;
+	return (QofEntity*)&invoice->billto;
 }
 
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
@@ -530,7 +500,7 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
   Transaction *txn;
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!invoice) return ts;
-  txn = gncInvoiceGetPostedTxn (invoice);
+  txn = (Transaction*)gncInvoiceGetPostedTxn (invoice);
   if (!txn) return ts;
   return xaccTransRetDateDueTS (txn);
 }
@@ -893,7 +863,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Figure out if we need to separate out "credit-card" items */
   owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
   if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)
-    ccard_acct = gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
+    ccard_acct = (Account*)gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
 
   /* Find an existing payment-lot for this owner */
   {
@@ -972,7 +942,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncEntryGetValue (entry, reverse, &value, NULL, &tax, &taxes);
 
     /* add the value for the account split */
-    this_acc = (reverse ? gncEntryGetInvAccount (entry) :
+    this_acc = (reverse ? (Account*)gncEntryGetInvAccount (entry) :
 		gncEntryGetBillAccount (entry));
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
@@ -1581,7 +1551,7 @@ gboolean gncInvoiceRegister (void)
     qofInvoiceSetBillTo(NULL, NULL);
     qofInvoiceGetBillTo(NULL);
   }
-
+  if(!qof_choice_create(GNC_ID_INVOICE)) { return FALSE;}
   return qof_object_register (&gncInvoiceDesc);
 }
 

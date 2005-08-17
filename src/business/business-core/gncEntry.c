@@ -32,7 +32,7 @@
 #include "messages.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-numeric.h"
 
 #include "qof-be-utils.h"
@@ -40,7 +40,6 @@
 #include "qofclass.h"
 #include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"

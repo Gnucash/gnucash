@@ -38,6 +38,8 @@ typedef struct _gncBillTerm GncBillTerm;
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofinstance.h"
+#include "gnc-engine-util.h"
+
 #include "gncBusiness.h"
 
 #define GNC_ID_BILLTERM       "gncBillTerm"
@@ -61,11 +63,17 @@ typedef struct _gncBillTerm GncBillTerm;
  * You can interpret it as a VALUE or a PERCENT.
  * ??? huh?
  */
-typedef enum {
+#define ENUM_TERMS_TYPE(_)  \
+ _(GNC_TERM_TYPE_DAYS,) \
+ _(GNC_TERM_TYPE_PROXIMO,)
+
+DEFINE_ENUM(GncBillTermType, ENUM_TERMS_TYPE)
+
+/*typedef enum {
   GNC_TERM_TYPE_DAYS = 1,
   GNC_TERM_TYPE_PROXIMO,
 } GncBillTermType;
-
+*/
 /** @name Create/Destroy Functions 
  @{ */
 GncBillTerm * gncBillTermCreate (QofBook *book);

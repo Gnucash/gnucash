@@ -35,7 +35,7 @@
 #include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 
 #include "qof-be-utils.h"
 #include "qofbook.h"
@@ -48,7 +48,8 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 
-#include "gncBusiness.h"
+//#include "gncBusiness.h"
+#include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 #include "gncOwnerP.h"
@@ -268,24 +269,15 @@ void gncJobSetActive (GncJob *job, gboolean active)
   mark_job (job);
   gncJobCommitEdit (job);
 }
-static void
-qofJobOwnerCB (QofEntity *ent, gpointer user_data)
-{
-	GncJob *job;
 
-	job = (GncJob*)user_data;
+static void
+qofJobSetOwner (GncJob *job, QofEntity *ent)
+{
+	if(!job || !ent) { return; }
+	qof_begin_edit(&job->inst);
 	qofOwnerSetEntity(&job->owner, ent);
-}
-
-static void
-qofJobSetOwner (GncJob *job, QofCollection *coll)
-{
-	if(!job || !coll) { return; }
-	g_return_if_fail(qof_collection_count(coll) == 1);
-	gncJobBeginEdit (job);
-	qof_collection_foreach(coll, qofJobOwnerCB, job);
 	mark_job (job);
-	gncJobCommitEdit (job);
+	qof_commit_edit(&job->inst);
 }
 
 void gncJobBeginEdit (GncJob *job)
@@ -346,15 +338,11 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
-static QofCollection*
+static QofEntity*
 qofJobGetOwner (GncJob *job)
 {
-	QofCollection *job_coll;
-
 	if(!job) { return NULL; }
-	job_coll = qof_collection_new(GNC_ID_JOB);
-	qof_collection_add_entity(job_coll, qofOwnerGetOwner(&job->owner));
-	return job_coll;
+	return (QofEntity*)qofOwnerGetOwner(&job->owner);
 }
 
 /* Other functions */
@@ -400,14 +388,18 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
+/*    { JOB_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },*/
     { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
-    { Q_JOB_OWNER, QOF_TYPE_COLLECT, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
+  if(!qof_choice_create(GNC_ID_JOB)) { return FALSE; }
+  if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_JOB, INVOICE_OWNER)) { return FALSE; }
+  qofJobGetOwner(NULL);
+  qofJobSetOwner(NULL, NULL);
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
 
   return qof_object_register (&gncJobDesc);

@@ -35,14 +35,12 @@
 #include "gnc-engine-util.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid-p.h"
-#include "qofid.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquerycore.h"
@@ -50,7 +48,8 @@
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
-#include "gncBusiness.h"
+#include "gncInvoice.h"
+//#include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -162,7 +161,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   for (node=g_list_last(cust->jobs); node; node=node->next)
   {
     GncJob *job = node->data;
-    job = gncJobObtainTwin (job, book);
+    job = (GncJob*)gncJobObtainTwin (job, book);
     cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
@@ -194,8 +193,9 @@ static void gncCustomerFree (GncCustomer *cust)
 
   if (cust->terms)
     gncBillTermDecRef (cust->terms);
-  if (cust->taxtable)
+  if (cust->taxtable) {
     gncTaxTableDecRef (cust->taxtable);
+  }
 
   qof_instance_release (&cust->inst);
   g_free (cust);
@@ -377,7 +377,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  QOF_BEGIN_EDIT (&cust->inst);
+  qof_begin_edit (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -534,7 +534,7 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
-  return (cust->inst.dirty ||
+  return (qof_instance_is_dirty(&cust->inst) ||
           gncAddressIsDirty (cust->addr) ||
           gncAddressIsDirty (cust->shipaddr));
 }
@@ -554,9 +554,9 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
 {
-  GncCustomer *c = item;
-  if (!item) return NULL;
-  return c->name;
+//  GncCustomer *c = item;
+  if (!item) return "failed";
+  return gncCustomerGetName((GncCustomer*)item);
 }
 
 static QofObject gncCustomerDesc =
@@ -570,7 +570,7 @@ static QofObject gncCustomerDesc =
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
-  printable:          _gncCustomerPrintable,
+  printable:          (const char* (*)(gpointer))gncCustomerGetName,
   version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
@@ -596,8 +596,11 @@ gboolean gncCustomerRegister (void)
     { NULL },
   };
 
+  if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_CUSTOMER, INVOICE_OWNER)) { return FALSE; }
+  if(!qof_choice_add_class(GNC_ID_JOB, GNC_ID_CUSTOMER, JOB_OWNER)) { return FALSE; }
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
-
+  /* temp */
+  _gncCustomerPrintable(NULL);
   return qof_object_register (&gncCustomerDesc);
 }
 

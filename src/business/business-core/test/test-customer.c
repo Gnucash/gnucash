@@ -25,7 +25,7 @@
 
 #include <glib.h>
 #include <libguile.h>
-
+#include "qofbackend.h"
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
@@ -132,8 +132,16 @@ test_customer (void)
     const char *str = get_random_string();
     const char *res;
 
+    gncCustomerBeginEdit(customer);
+    do_test (gncCustomerRegister() == TRUE, "Try to register the customer object");
+    do_test (qof_class_is_registered(GNC_ID_CUSTOMER) == TRUE, "registration failed");
     gncCustomerSetName (customer, str);
-    res = gncObjectPrintable (GNC_ID_CUSTOMER, customer);
+    gncCustomerCommitEdit(customer);
+    res = NULL;
+    res = qof_object_printable (GNC_ID_CUSTOMER, customer);
+    do_test (res != NULL, "Printable NULL?");
+    do_test (safe_strcmp (str, res) == 0, "Printable equals");
+    res = gncCustomerGetName(customer);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
@@ -235,8 +243,15 @@ static void
 main_helper (void *closure, int argc, char **argv)
 {
   gnc_module_load("gnucash/business-core", 0);
+  gnc_engine_get_string_cache ();
+  guid_init ();
+  qof_object_initialize ();
+  qof_book_register ();
   test_customer();
   print_test_results();
+  guid_shutdown();
+  gnc_engine_string_cache_destroy();
+			
   exit(get_rv());
 }
 
