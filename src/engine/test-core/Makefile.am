@@ -24,4 +24,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS}
+

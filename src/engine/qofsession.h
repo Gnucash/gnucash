@@ -412,9 +412,10 @@ Creates a GList stored in the Book hashtable to contain
 repeated references for a single entity.
 */
 typedef struct qof_entity_reference {
+	QofIdType       choice_type;/**< When the reference is a different type.*/
 	QofIdType        type;       /**< The type of entity */
 	GUID             *ref_guid;  /**< The GUID of the REFERENCE entity */
-	const QofParam  *param;      /**< The parameter used to get/set this reference. */
+	const QofParam  *param;      /**< The parameter name and type. */
 	const GUID      *ent_guid;   /**< The GUID of the original entity. */
 }QofEntityReference;
 

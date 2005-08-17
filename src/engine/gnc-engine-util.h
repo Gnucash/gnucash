@@ -33,7 +33,7 @@
 
 #include <glib.h>
 #include <stddef.h>
-
+#include "config.h"
 #include "gnc-trace.h"  // XXX eliminate me eventually
 
 /** Macros *****************************************************/
@@ -63,34 +63,81 @@
 #define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
 #define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 
+/** \name typedef enum as string macros
+@{
+*/
 #define ENUM_BODY(name, value)           \
     name value,
+
 #define AS_STRING_CASE(name, value)      \
-    case name: return #name;
+    case name: { return #name; }
+
 #define FROM_STRING_CASE(name, value)    \
     if (strcmp(str, #name) == 0) {       \
-        return name;                     \
-    }
+        return name;  }
+
 #define DEFINE_ENUM(name, list)          \
     typedef enum {                       \
         list(ENUM_BODY)                  \
     }name;
+
 #define AS_STRING_DEC(name, list)        \
     const char* name##asString(name n);
+
 #define AS_STRING_FUNC(name, list)       \
     const char* name##asString(name n) {       \
         switch (n) {                     \
             list(AS_STRING_CASE)         \
-            default: return "";          \
-        }                                \
-    }
+            default: return "";  } }
+
 #define FROM_STRING_DEC(name, list)      \
-    name name##fromString(const char* str);
+    name name##fromString                \
+    (const char* str);
+
 #define FROM_STRING_FUNC(name, list)     \
-    name name##fromString(const char* str) {   \
+    name name##fromString                \
+    (const char* str) {                  \
+    if(str == NULL) { return 0; }        \
         list(FROM_STRING_CASE)           \
-        return 0;                        \
-    }
+        return 0;  }
+
+/** @} */
+
+/** \name enum as string with no typedef
+@{
+
+  Similar but used when the enum is NOT a typedef
+ note the LACK of a define_enum macro - don't use one!
+
+ ENUM_BODY is used in both types.
+ */
+
+#define FROM_STRING_DEC_NON_TYPEDEF(name, list)   \
+   void name##fromString                          \
+   (const char* str, enum name *type);
+
+#define FROM_STRING_CASE_NON_TYPEDEF(name, value) \
+   if (strcmp(str, #name) == 0) { *type = name; }
+
+#define FROM_STRING_FUNC_NON_TYPEDEF(name, list)  \
+   void name##fromString                          \
+   (const char* str, enum name *type) {           \
+   if(str == NULL) { return; }                    \
+    list(FROM_STRING_CASE_NON_TYPEDEF) }
+
+#define AS_STRING_DEC_NON_TYPEDEF(name, list)     \
+   const char* name##asString(enum name n);
+
+#define AS_STRING_FUNC_NON_TYPEDEF(name, list)    \
+   const char* name##asString(enum name n) {     \
+       switch (n) {                              \
+           list(AS_STRING_CASE_NON_TYPEDEF)      \
+           default: return ""; } }
+
+#define AS_STRING_CASE_NON_TYPEDEF(name, value)   \
+   case name: { return #name; }
+
+/** @} */
 
 /* Define the long long int conversion for scanf */
 #if HAVE_SCANF_LLD
@@ -179,7 +226,6 @@ void gnc_string_cache_remove(gpointer key);
 /* You can use this function with g_hash_table_insert(), or the key
    (or value), as long as you use the destroy notifier above. */
 gpointer gnc_string_cache_insert(gpointer key);
-
 
 #endif /* QOF_UTIL_H */
 /** @} */

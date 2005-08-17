@@ -43,7 +43,7 @@
 #include <glib.h>
 
 #include "qofid.h"
-#include "qofbackend.h"
+//#include "qofbackend.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset
@@ -129,11 +129,6 @@ void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBo
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);
-
-/** DOCUMENT ME! */
-QofBackend *qof_book_get_backend (QofBook *book);
-
-void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (QofBook *book);

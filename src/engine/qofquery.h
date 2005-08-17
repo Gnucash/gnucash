@@ -85,6 +85,7 @@ search if there's no chance of them having splits that match.
 #include "guid.h"
 #include "qofbook.h"
 #include "qofquerycore.h"
+#include "qofchoice.h"
 
 /** A Query */
 typedef struct _QofQuery QofQuery;

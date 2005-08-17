@@ -47,7 +47,6 @@
 #include "SX-book-p.h"
 
 #include "qofbook.h"
-#include "qofbook-p.h"
 #include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"

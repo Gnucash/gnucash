@@ -31,7 +31,6 @@
 
 #include "qofbook.h"
 #include "qofsession.h"
-#include "qofid.h"
 
 struct _QofSession
 {
@@ -41,8 +40,8 @@ struct _QofSession
    */
   QofEntity entity;
 
-  /* A book holds pointers to the various types of datasets used
-   * by GnuCash.  A session may have open multiple books.  */
+  /* A book holds pointers to the various types of datasets.
+   * A session may have multiple books. */
   GList *books;
 
   /* The requested book id, in the form or a URI, such as
@@ -75,4 +74,3 @@ void qof_session_push_error (QofSession *session, QofBackendError err,
 QofBackend* gncBackendInit_file(const char *book_id, void *data);
 
 #endif
-

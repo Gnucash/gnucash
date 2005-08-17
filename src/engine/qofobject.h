@@ -30,6 +30,11 @@
 
     QOF Objects are also used by the query system .... 
     
+    To work with your own QOF Objects, you can use the QOF
+    Generator to create sample objects and a mini-application
+    with the SQL-type query interface.
+    http://qof-gen.sourceforge.net/
+
     XXX todo, we should split out the storage aspects of this 
     thing from the 'foreach' that query depends on.  These are
     kinda unrelated concepts.
@@ -45,6 +50,7 @@
 
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofchoice.h"
 
 /** Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version

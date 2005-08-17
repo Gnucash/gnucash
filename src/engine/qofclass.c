@@ -126,7 +126,7 @@ qof_class_get_parameter (QofIdTypeConst obj_name,
   ht = g_hash_table_lookup (classTable, obj_name);
   if (!ht)
   {
-    PERR ("no object of type %s", obj_name);
+    PWARN ("no object of type %s", obj_name);
     return NULL;
   }
 

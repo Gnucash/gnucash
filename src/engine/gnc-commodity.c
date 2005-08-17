@@ -36,7 +36,7 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-trace.h"
 #include "guid.h"
 #include "messages.h"

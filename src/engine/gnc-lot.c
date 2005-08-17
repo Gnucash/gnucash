@@ -41,16 +41,14 @@
 #include "Account.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
-#include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
 #include "qofclass.h"
-#include "qofid-p.h"
+#include "qofid.h"
 #include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

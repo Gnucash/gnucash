@@ -42,10 +42,10 @@
 #define QOF_BACKEND_P_H
 
 #include "config.h"
-
+#include "qof-be-utils.h"
 #include "qofbackend.h"
 #include "qofbook.h"
-#include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofquery.h"
 #include "qofsession.h"
 

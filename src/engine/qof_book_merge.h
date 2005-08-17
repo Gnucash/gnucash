@@ -77,7 +77,7 @@ make sure this is non-NULL to know that the Init has been successful.
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofobject.h"
-#include "qofinstance-p.h"
+#include "qofinstance.h"
 #include "gnc-trace.h"
 
 /** \brief Results of collisions and user resolution.
@@ -459,4 +459,3 @@ qof_book_merge_abort(qof_book_mergeData *mergeData);
 /** @} */
 /** @} */
 #endif // QOFBOOKMERGE_H
-

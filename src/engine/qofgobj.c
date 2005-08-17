@@ -221,7 +221,7 @@ qof_gobject_register (QofType e_type, GObjectClass *obclass)
   QofParam *qof_param_list, *qpar;
   QofObject *class_def;
   GParamSpec **prop_list, *gparam;
-  int n_props;
+  guint n_props;
 
   /* Get the GObject properties, convert to QOF properties */
   prop_list = g_object_class_list_properties (obclass, &n_props);
@@ -240,7 +240,7 @@ qof_gobject_register (QofType e_type, GObjectClass *obclass)
           i, gparam->name, G_PARAM_SPEC_TYPE_NAME(gparam));
 
     qpar->param_name = g_param_spec_get_name (gparam);
-    qpar->param_getfcn = qof_gobject_getter;
+    qpar->param_getfcn = (QofAccessFunc)qof_gobject_getter;
     qpar->param_setfcn = NULL;
     qpar->param_userdata = gparam;
     if ((G_IS_PARAM_SPEC_INT(gparam))  ||

@@ -52,6 +52,11 @@
   The QOF Query subsystem depends on QOF classes having been
   declared; the Query uses the getters to get values associated
   with particular instances.
+  
+  A QofAccessFunc or QofSetterFunc do not need to be public 
+  functions, if you need to add functions to an object with an
+  established API, define the additional QOF routines as static.
+  Only the register routine needs to be public.
 @{ */
 
 /** @file qofclass.h

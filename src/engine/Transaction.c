@@ -42,7 +42,7 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
 #include "gnc-trace.h"
@@ -51,7 +51,7 @@
 #include "qofbackend-p.h"
 #include "qof-be-utils.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
+#include "qofquery.h"
 #include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject.h"
@@ -661,6 +661,7 @@ xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
   }
 
   s->kvp_data = frm;
+  qof_commit_edit(&s->parent->inst);
 }
 
 /********************************************************************\
@@ -1620,7 +1621,7 @@ xaccTransCommitEdit (Transaction *trans)
         errcode = qof_backend_get_error (be);
       } while (ERR_BACKEND_NO_ERR != errcode);
 
-      (be->commit) (be, &(trans->inst));
+      qof_backend_run_commit(be, &(trans->inst));
 
       errcode = qof_backend_get_error (be);
       if (ERR_BACKEND_NO_ERR != errcode)
@@ -1850,6 +1851,8 @@ xaccTransRollbackEdit (Transaction *trans)
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
    be = qof_book_get_backend (trans->inst.book);
+   /** \todo Fix transrollbackedit in QOF so that rollback
+   is exposed via the API. */
    if (be && be->rollback) 
    {
       QofBackendError errcode;
@@ -2392,8 +2395,10 @@ qofTransSetDatePosted (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
 	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
+	qof_begin_edit(&trans->inst);
 	xaccTransSetDateInternal(trans, &trans->date_posted, ts);
 	set_gains_date_dirty(trans);
+	qof_commit_edit(&trans->inst);
 }
 
 void
@@ -2409,7 +2414,9 @@ qofTransSetDateEntered (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
 	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
+	qof_begin_edit(&trans->inst);
 	xaccTransSetDateInternal(trans, &trans->date_entered, ts);
+	qof_commit_edit(&trans->inst);
 }
 
 void
@@ -2436,6 +2443,14 @@ xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
    kvp_frame_set_timespec (trans->inst.kvp_data, TRANS_DATE_DUE_KVP, *ts);
 }
 
+static void
+qofTransSetTxnType (Transaction *trans, char type)
+{
+	qof_begin_edit(&trans->inst);
+	xaccTransSetTxnType(trans, type);
+	qof_commit_edit(&trans->inst);
+}
+
 void
 xaccTransSetTxnType (Transaction *trans, char type)
 {
@@ -2460,6 +2475,14 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
 /********************************************************************\
 \********************************************************************/
 
+static void
+qofTransSetNum (Transaction *trans, const char *xnum)
+{
+	qof_begin_edit(&trans->inst);
+	xaccTransSetNum(trans, xnum);
+	qof_commit_edit(&trans->inst);
+}
+
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
@@ -2472,6 +2495,14 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    trans->num = tmp;
 }
 
+static void
+qofTransSetDescription (Transaction *trans, const char *desc)
+{
+	qof_begin_edit(&trans->inst);
+	xaccTransSetDescription(trans, desc);
+	qof_commit_edit(&trans->inst);
+}
+
 void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
@@ -2482,6 +2513,14 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) desc);
    g_cache_remove(gnc_engine_get_string_cache(), trans->description);
    trans->description = tmp;
+}
+
+static void
+qofTransSetNotes (Transaction *trans, const char *notes)
+{
+	qof_begin_edit(&trans->inst);
+	xaccTransSetNotes(trans, notes);
+	qof_commit_edit(&trans->inst);
 }
 
 void
@@ -3366,15 +3405,15 @@ trans_is_balanced_p (const Transaction *txn)
 gboolean xaccTransRegister (void)
 {
   static QofParam params[] = {
-    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
-    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
+    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum, (QofSetterFunc)qofTransSetNum },
+    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)qofTransSetDescription },
     { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)qofTransSetDateEntered },
     { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)qofTransSetDatePosted },
     { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS, NULL },
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
-    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)xaccTransSetNotes },
+    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)qofTransSetNotes },
     { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p, NULL },
-    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)xaccTransSetTxnType },
+    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)qofTransSetTxnType },
     { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus,NULL },
     { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason,NULL },
     { TRANS_VOID_TIME, QOF_TYPE_DATE,    (QofAccessFunc)xaccTransGetVoidTime,   NULL },

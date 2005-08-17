@@ -33,12 +33,11 @@
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-numeric.h"
 #include "gnc-trace.h"
 #include "qofbackend.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
 #include "qofid-p.h"
 #include "qofobject.h"
 
@@ -1234,7 +1233,7 @@ xaccGroupGetBackend (AccountGroup *grp)
 {
   grp = xaccGroupGetRoot (grp);
   if (!grp || !grp->book) return NULL;
-  return grp->book->backend;
+  return qof_book_get_backend(grp->book);
 }
 
 /* ============================================================== */

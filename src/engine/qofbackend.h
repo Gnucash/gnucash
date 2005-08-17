@@ -21,6 +21,7 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Backend
+
     The QOF Backend is a pseudo-object providing an interface between the
     engine and a persistant data store (e.g. a server, a database, or
     a file).   Backends are not meant to be used directly by an
@@ -39,6 +40,8 @@
 
 #ifndef QOF_BACKEND_H
 #define QOF_BACKEND_H
+
+#include "qofinstance.h"
 
 /** \brief The errors that can be reported to the GUI & other front-end users
  *  \warning (GnuCash) If you modify QofBackendError, please update 
@@ -148,6 +151,29 @@ typedef struct QofBackend_s QofBackend;
 
 /** \brief DOCUMENT ME! */
 typedef void (*QofBePercentageFunc) (const char *message, double percent);
+
+/** \name Allow access to the begin routine for this backend.
+
+QOF_BEGIN_EDIT and QOF_COMMIT_EDIT_PART1 and part2 rely on 
+calling QofBackend *be->begin and be->commit. This means the
+QofBackend struct becomes part of the public API.
+These function replaces those calls to allow the macros to be
+used when QOF is built as a library.
+@{
+*/
+void qof_backend_run_begin(QofBackend *be, QofInstance *inst);
+
+gboolean qof_backend_begin_exists(QofBackend *be);
+
+void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
+
+gboolean qof_backend_commit_exists(QofBackend *be);
+
+/** @} */
+/** \brief Retrieve the backend used by this book */
+QofBackend* qof_book_get_backend (QofBook *book);
+
+void qof_book_set_backend (QofBook *book, QofBackend *);
 
 #endif /* QOF_BACKEND_H */
 /**@}*/

@@ -41,7 +41,6 @@
 #include "kvp_frame.h"
 #include "qofbook.h"
 #include "qofid.h"
-#include "qofid-p.h"
 
 struct gnc_lot_struct
 {
@@ -75,4 +74,3 @@ struct gnc_lot_struct
 void gnc_lot_register (void);
 
 #endif /* GNC_LOT_P_H */
-

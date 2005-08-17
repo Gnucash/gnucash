@@ -49,6 +49,9 @@
     @addtogroup Object Object: Dynamic Object Class Framework
     @ingroup QOF
 */
+/** @addtogroup Choice Choice and collect : One to many links.
+	@ingroup QOF
+*/
 /**
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
@@ -79,5 +82,6 @@
 #include "qofquerycore.h"
 #include "qofsession.h"
 #include "qofsql.h"
+#include "qofchoice.h"
 
 #endif /* QOF_H_ */

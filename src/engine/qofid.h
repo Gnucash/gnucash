@@ -191,15 +191,24 @@ void qof_collection_set_data (QofCollection *col, gpointer user_data);
 /** Return value of 'dirty' flag on collection */
 gboolean qof_collection_is_dirty (QofCollection *col);
 
-/** \brief Add an entity to a QOF_TYPE_COLLECT.
+/** @name QOF_TYPE_COLLECT: Linking one entity to many of one type
 
 \note These are \b NOT the same as the main collections in the book.
 
 QOF_TYPE_COLLECT is a secondary collection, used to select entities
-as references of another entity. Entities can be freely added and merged
-across these secondary collections, they will not be removed from the
-original collection as they would by using ::qof_entity_insert_entity
-or ::qof_entity_remove_entity. 
+of one object type as references of another entity.
+\sa QOF_TYPE_CHOICE.
+
+@{
+*/
+/** \brief Add an entity to a QOF_TYPE_COLLECT.
+
+\note These are \b NOT the same as the main collections in the book.
+
+Entities can be
+freely added and merged across these secondary collections, they
+will not be removed from the original collection as they would
+by using ::qof_entity_insert_entity or ::qof_entity_remove_entity. 
 
 */
 gboolean
@@ -245,6 +254,7 @@ qof_collection_compare (QofCollection *target, QofCollection *merge);
 QofCollection*
 qof_collection_from_glist (QofIdType type, GList *glist);
 
+/** @} */
 /** @} */
 
 #endif /* QOF_ID_H */

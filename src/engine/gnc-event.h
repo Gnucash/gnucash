@@ -71,6 +71,22 @@ gint gnc_engine_register_event_handler (GNCEngineEventHandler handler,
  */
 void gnc_engine_unregister_event_handler (gint handler_id);
 
+/* gnc_engine_generate_event
+ *   Invoke all registered event handlers using the given arguments.
+ *
+ *   GNC_EVENT_CREATE events should be generated after the object
+ *     has been created and registered in the engine entity table.
+ *   GNC_EVENT_MODIFY events should be generated whenever any data
+ *     member or submember (i.e., splits) is changed.
+ *   GNC_EVENT_DESTROY events should be called before the object
+ *     has been destroyed or removed from the entity table.
+ *
+ * entity:     the GUID of the entity generating the event
+ * event_type: the type of event -- this should be one of the
+ *             single-bit GNCEngineEventType values, not a combination.
+ */
+void gnc_engine_gen_event (QofEntity *entity,
+                                GNCEngineEventType event_type);
 /* gnc_engine_suspend_events
  *   Suspend all engine events. This function may be
  *   called multiple times. To resume event generation,

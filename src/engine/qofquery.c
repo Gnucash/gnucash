@@ -1646,7 +1646,7 @@ qof_query_printPredData (QofQueryPredData *pd)
   gs = g_string_new ("    Pred Data:\n      ");
   g_string_append (gs, (gchar *) pd->type_name);
 
-  /* Char Predicate and GUID predicate dosn't use the 'how' field. */
+  /* Char Predicate and GUID predicate don't use the 'how' field. */
   if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
       safe_strcmp (pd->type_name, QOF_TYPE_GUID))
   {
@@ -1777,6 +1777,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");
     return;
   }
+  /** \todo QOF_TYPE_COLLECT */
   return;
 }                               /* qof_query_printValueForParam */
 

@@ -671,8 +671,20 @@ get_random_price(QofBook *book)
   GNCPrice *p;
 
   p = gnc_price_create (book);
+  if(!p)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "get_random_price failed");
+      return NULL;
+  }
 
   make_random_changes_to_price (book, p);
+  if(!p)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "make_random_changes_to_price failed");
+      return NULL;
+  }
 
   return p;
 }
@@ -683,12 +695,24 @@ make_random_pricedb (QofBook *book, GNCPriceDB *db)
   int num_prices;
 
   num_prices = get_random_int_in_range (0, 40);
+  if(num_prices < 1)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "get_random_int_in_range failed");
+      return;
+  }
 
   while (num_prices-- > 0)
   {
     GNCPrice *p;
 
     p = get_random_price (book);
+    if(!p)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_price failed");
+        return;
+    }
 
     gnc_pricedb_add_price (db, p);
 
@@ -701,8 +725,14 @@ get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
-  // db = gnc_pricedb_create (book);
+  //db = gnc_pricedb_create (book);
   db = gnc_pricedb_get_db (book);
+  if(!db)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "gnc_pricedb_get_db failed");
+      return NULL;
+  }
   make_random_pricedb (book, db);
 
   return db;
@@ -1334,6 +1364,7 @@ get_random_transaction_with_currency(QofBook *book,
     ret = xaccMallocTransaction(book);
 
     xaccTransBeginEdit(ret);
+
     xaccTransSetCurrency (ret,
                           currency ? currency :
                           get_random_commodity (book));
@@ -1356,13 +1387,30 @@ get_random_transaction_with_currency(QofBook *book,
     }
 
     xaccTransCommitEdit(ret);
+    if(!ret)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_transaction_with_currency failed");
+        return NULL;
+    }
+
     return ret;
 }
 
 Transaction*
 get_random_transaction (QofBook *book)
 {
-  return get_random_transaction_with_currency (book, NULL, NULL);
+	Transaction *ret;
+
+	g_return_val_if_fail(book, NULL);
+	ret = get_random_transaction_with_currency (book, NULL, NULL);
+    if(!ret)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_transaction failed");
+        return NULL;
+    }
+	return ret;
 }
 
 void

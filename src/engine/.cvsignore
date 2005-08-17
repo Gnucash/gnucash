@@ -19,3 +19,5 @@ gw-kvp.h
 gw-kvp.html
 iso-4217-currencies.c
 test-link
+.DS_Store
+

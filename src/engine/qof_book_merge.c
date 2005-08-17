@@ -22,6 +22,8 @@
  ********************************************************************/
 
 #include "qof_book_merge.h"
+#include "qofinstance-p.h"
+#include "qofchoice.h"
 #include "qofid-p.h"
 static short module = MOD_ENGINE;
 
@@ -44,48 +46,6 @@ struct qof_book_mergeRuleIterate {
 #define QOF_STRING_WEIGHT       3
 #define QOF_DATE_STRING_LENGTH  MAX_DATE_LENGTH
 
-/** \brief Makes the decisions about how matches and conflicts are tagged.
-
-Paramater Type Weighting is used via the gint argument. This is used to give
-priority to string matches over boolean or numerical matches. Higher values
-of weight decrease the likelihood of that entity being the best match.
-
-New rules start at:
-	- ::MERGE_ABSOLUTE\n 
-		(GUID's match; first parameter matches) OR
-	- ::MERGE_DUPLICATE\n
-		(GUID's do NOT match; first parameter DOES match) OR
-	- ::MERGE_NEW\n
-	(GUID's do NOT match; first parameters does NOT match).
-	
-If subsequent parameters in the same object FAIL a match:
-	- \a MERGE_ABSOLUTE fallsback to ::MERGE_UPDATE \n
-		(GUID matches but some parameters differ)\n
-		(guidTarget will be updated with mergeEnt)
-	- \a MERGE_DUPLICATE fallsback to ::MERGE_REPORT\n
-		(GUID does not match and some parameters do NOT match)
-	- \a MERGE_NEW fallsback to \a MERGE_REPORT
-		(GUID does not match and some parameters now DO match)
-
-<b>Comparisons without a GUID match.</b>
-	Only sets a failed match if ALL parameters fail to match.
-	When absolute is FALSE, all suitable target objects are compared.
-
-	Identifies the closest match using a difference rank. This avoids 
-	using non-generic tests for object similarities. The
-	value closest to zero is used.
-	
-	qof_book_merge use sa high value of weight to make a good match
-	more important and make it more likely that the chosen target will
-	have matching values for the types with the highest weight.
-
-@param	currentRule - the ::qof_book_mergeRule to update.
-@param	mergeMatch	- whether the two entities match or not
-@param	weight		- Parameter Type Weighting.
-
-@return 	returns the qof_book_mergeRule.
-
-*/
 static qof_book_mergeRule*
 qof_book_mergeUpdateRule(qof_book_mergeRule *currentRule, gboolean match, gint weight)
 {
@@ -263,6 +223,12 @@ qof_book_mergeCompare( qof_book_mergeData *mergeData )
 			currentRule = qof_book_mergeUpdateRule(currentRule, mergeMatch, DEFAULT_MERGE_WEIGHT);
 			knowntype = TRUE;
 		}
+		if(safe_strcmp(mergeType, QOF_TYPE_CHOICE) ==0) {
+			referenceEnt = qtparam->param_getfcn(mergeEnt, qtparam);
+			currentRule->linkedEntList = g_slist_prepend(currentRule->linkedEntList, referenceEnt);
+			if(referenceEnt == qtparam->param_getfcn(targetEnt, qtparam)) { mergeMatch = TRUE; }
+			knowntype = TRUE;
+		}
 		if(knowntype == FALSE) {
 			referenceEnt = qtparam->param_getfcn(mergeEnt, qtparam);
 			if((referenceEnt != NULL)
@@ -324,7 +290,7 @@ qof_book_mergeCommitForeach (
 	g_list_foreach (subList, qof_book_mergeCommitForeachCB, &iter);
 }
 
-/** \brief build the table of target comparisons
+/* build the table of target comparisons
 
 This can get confusing, so bear with me. (!)
 
@@ -596,43 +562,6 @@ qof_book_mergeRuleCB(gpointer rule, gpointer arg)
 	iter->remainder--;
 }
 
-static QofEntity*
-qof_book_mergeLocateReference( QofEntity *ent, qof_book_mergeData *mergeData)
-{
-	GList *all_rules;
-	qof_book_mergeRule *rule;
-	QofEntity *referenceEnt;
-
-	/* locates the rule referring to this import entity */
-	if(!ent) { return NULL; }
-	g_return_val_if_fail((mergeData != NULL), NULL);
-	all_rules = NULL;
-	referenceEnt = NULL;
-	all_rules = g_list_copy(mergeData->mergeList);
-	while(all_rules != NULL) {
-		rule = all_rules->data;
-		if(rule->importEnt == ent) { referenceEnt = rule->targetEnt; }
-		all_rules = g_list_next(all_rules);
-	}
-	return referenceEnt;
-}
-
-/** \brief Commit the data from the import to the target QofBook.
-
-	Called by ::qof_book_mergeCommit to commit data from each rule in turn.
-	Uses QofParam->param_getfcn - ::QofAccessFunc to query the import book
-	and param_setfcn - ::QofSetterFunc to update the target book.
-\n	
-	Note: Not all param_getfcn can have a matching param_setfcn.
-	Getting the balance of an account is obviously necessary to other routines
-	but is pointless in a comparison for a merge - the balance is calculated from
-	transactions, it cannot be set by the account. A discrepancy in the calculated
-	figures for an account object should not cause a MERGE_REPORT.
-\n
- 	Limits the comparison routines to only calling param_getfcn if 
-	param_setfcn is not NULL. 
-	
-*/
 static void 
 qof_book_mergeCommitRuleLoop(
 						qof_book_mergeData *mergeData,
@@ -642,7 +571,6 @@ qof_book_mergeCommitRuleLoop(
 	QofInstance *inst;
 	gboolean    registered_type;
 	QofEntity   *referenceEnt;
-	GSList      *linkage;
 	/* cm_ prefix used for variables that hold the data to commit */
 	QofCollection *cm_coll;
 	QofParam    *cm_param;
@@ -767,23 +695,23 @@ qof_book_mergeCommitRuleLoop(
 			if(collection_setter != NULL) { collection_setter(rule->targetEnt, cm_coll); }
 			registered_type = TRUE;
 		}
-		if(registered_type == FALSE) {
-			linkage = g_slist_copy(rule->linkedEntList);
-			referenceEnt = NULL;
-			reference_setter = (void(*)(QofEntity*, QofEntity*))cm_param->param_setfcn;
-			if((linkage == NULL)&&(rule->mergeResult == MERGE_NEW)) {
+		if(safe_strcmp(rule->mergeType, QOF_TYPE_CHOICE) == 0) {
 				referenceEnt = cm_param->param_getfcn(rule->importEnt, cm_param);
-				reference_setter(rule->targetEnt, qof_book_mergeLocateReference(referenceEnt, mergeData));
+			reference_setter = (void(*)(QofEntity*, QofEntity*))cm_param->param_setfcn;
+			if(reference_setter != NULL) 
+			{ 
+				reference_setter(rule->targetEnt, referenceEnt); 
 			}
-			while(linkage != NULL) {
-				referenceEnt = linkage->data;
-				if((referenceEnt)
-					&&(referenceEnt->e_type)
-					&&(safe_strcmp(referenceEnt->e_type, rule->mergeType) == 0)) {
-					/* The function behind reference_setter must create objects for any non-QOF references */
-					reference_setter(rule->targetEnt, qof_book_mergeLocateReference(referenceEnt, mergeData));
+			registered_type = TRUE;
+		}
+		if(registered_type == FALSE) {
+			referenceEnt = cm_param->param_getfcn(rule->importEnt, cm_param);
+			if(referenceEnt) {
+				reference_setter = (void(*)(QofEntity*, QofEntity*))cm_param->param_setfcn;
+				if(reference_setter != NULL) 
+				{ 
+					reference_setter(rule->targetEnt, referenceEnt); 
 				}
-				linkage = g_slist_next(linkage);
 			}
 		}
 		rule->mergeParam = g_slist_next(rule->mergeParam);

@@ -36,12 +36,11 @@
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 #include "gnc-trace.h"
 #include "guid.h"
 #include "messages.h"
 #include "qofbook.h"
-#include "qofbook-p.h"
 #include "qofid-p.h"
 
 static short module = MOD_SX;
