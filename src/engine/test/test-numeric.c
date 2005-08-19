@@ -23,15 +23,15 @@ gnc_numeric_print(gnc_numeric in)
   char * retval;
   if(gnc_numeric_check(in)) 
   {
-    retval = g_strdup_printf("<ERROR> [%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("<ERROR> [%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   else 
   {
-    retval = g_strdup_printf("[%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("[%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   return retval;
 }

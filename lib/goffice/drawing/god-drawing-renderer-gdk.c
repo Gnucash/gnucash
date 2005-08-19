@@ -354,8 +354,8 @@ draw_text (GodTextModel *text,
 	g_print ("space before: %f\n", space_before);
 	g_print ("space after: %f\n", space_after);
 	g_print ("indent: %f\n", indent);
-	g_print ("x_units: %lld\n", draw_context->renderer->priv->x_units_per_pixel);
-	g_print ("y_units: %lld\n", draw_context->renderer->priv->y_units_per_pixel);
+	g_print ("x_units: %" GO_UNIT_T_FORMAT "\n", draw_context->renderer->priv->x_units_per_pixel);
+	g_print ("y_units: %" GO_UNIT_T_FORMAT "\n", draw_context->renderer->priv->y_units_per_pixel);
 #endif
 }
 

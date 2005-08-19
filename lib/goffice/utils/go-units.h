@@ -65,6 +65,7 @@ G_BEGIN_DECLS
 #define GO_EMU_TO_CM(emu)	((emu)*CM_PER_IN/EMU_PER_IN/100)
 
 typedef gint64 go_unit_t;
+#define GO_UNIT_T_FORMAT G_GINT64_FORMAT 
 
 typedef struct {
 	go_unit_t x;

@@ -468,7 +468,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    DEBUGCMD({
       char buf[80];
       gnc_timespec_to_iso8601_buff (chk.date_start, buf);
-      PINFO("%s balance to %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", 
+      PINFO("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
         xaccAccountGetDescription (acc), buf,
         b, deno, cl_b, deno, rec_b, deno);
       })
@@ -490,7 +490,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    DEBUGCMD ({
       char buf[80];
       gnc_timespec_to_iso8601_buff (as_of_date, buf);
-      LEAVE("be=%p %s %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
+      LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
         xaccAccountGetDescription (acc), buf,
         b, deno, cl_b, deno, rec_b, deno);
       })

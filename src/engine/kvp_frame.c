@@ -1648,7 +1648,7 @@ kvp_value_to_bare_string(const KvpValue *val)
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
-        return g_strdup_printf("%lld",(long long int) kvp_value_get_gint64(val));
+        return g_strdup_printf("%" G_GINT64_FORMAT, kvp_value_get_gint64(val));
         break;
 
     case KVP_TYPE_DOUBLE:
@@ -1723,8 +1723,8 @@ kvp_value_to_string(const KvpValue *val)
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
-        return g_strdup_printf("KVP_VALUE_GINT64(%lld)",
-                               (long long int) kvp_value_get_gint64(val));
+        return g_strdup_printf("KVP_VALUE_GINT64(%" G_GINT64_FORMAT ")",
+                               kvp_value_get_gint64(val));
         break;
 
     case KVP_TYPE_DOUBLE:

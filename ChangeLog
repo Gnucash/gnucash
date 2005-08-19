@@ -1,3 +1,59 @@
+2005-08-18  Derek Atkins  <derek@ihtfp.com>
+
+	Frederic Leroy's patch to fix more %lld issues without casts.
+	Fixes bug #313741.
+	* src/app-utils/gnc-ui-util.c
+	* src/backend/file/sixtp-dom-generators.c
+	* src/backend/file/test/test-string-converters.c
+	* src/backend/postgres/builder.c
+	* src/backend/postgres/gncquery.c
+	* src/backend/postgres/kvp-sql.c
+	* src/backend/postgres/checkpoint.c
+	* src/engine/kvp_frame.c
+	* src/engine/test/test-numeric.c
+	* src/engine/qofsql.c
+	* src/engine/TransLog.c
+	  all vars are gint64
+	  ->replaced %lld by G_GINT64_FORMAT and removed unnecessary
+	  long long int' cast
+
+	* src/backend/file/test/test-date-converting.c
+	* src/backend/file/test/test-dom-converters1.c
+	* src/engine/test/test-date.c
+	  %lld for casted tv_sec vars
+	  ->No change
+
+	* src/backend/postgres/putil.h
+	  #define COMP_INT64(sqlname,fun,ndiffs)
+	  Macro using %lld, but not used
+	  ->No change, dead code
+
+	* src/engine/gnc-numeric.c
+	  use long long int for local variable instead gint64
+	  ->replaced longlongint by gint64 and lld by G_GINT64_FORMAT
+	  and replaced GNC_SCANF_LLD by G_GINT64_FORMAT
+	  /!\ should we remove GNC_SCANF_LLD ??
+
+	* src/engine/qofquerycore.c
+	  type incoherency
+	  -> replaced GNC_SCANF_LLD by G_GINT64_FORMAT
+
+	* src/import-export/log-replay/gnc-log-replay.c
+	  dead code commented
+	  -> no change
+
+	* src/engine/qofmath128.c
+	  some lld used instead of llu
+	  -> replacement of lld/llu along vars type
+	  I didn't check but I think there is mixed (un)signed
+
+	* src/engine/qofquery-serialize.c
+	  in macro PUT_INT64 : replaced %lld by G_GINT64_FORMAT
+
+	* lib/goffice/drawing/god-drawing-renderer-gdk.c
+	  -> defined format for go_unit_t
+	  silly change because lines containing %lld are commented
+
 2005-08-17  Neil Williams <linux@codehelp.co.uk>
 
 	*  src/import-export/hbci/hbci-interaction.c:

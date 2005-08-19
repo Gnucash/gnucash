@@ -877,7 +877,7 @@ int64_to_string (gpointer object, QofParam *getter)
 {
   gint64 num = ((query_int64_getter)getter->param_getfcn)(object, getter);
 
-  return g_strdup_printf (GNC_SCANF_LLD, (long long int) num);
+  return g_strdup_printf ("%" G_GINT64_FORMAT, num);
 }
 
 /* ================================================================ */

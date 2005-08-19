@@ -53,7 +53,7 @@
 #define PUT_INT64(TOK,VAL) {                         \
    xmlNodePtr node;                                  \
    char buff[80];                                    \
-   g_snprintf (buff, sizeof(buff), "%lld", (VAL));   \
+   g_snprintf (buff, sizeof(buff), "%" G_GINT64_FORMAT, (VAL));   \
    node = xmlNewNode (NULL, TOK);                    \
    xmlNodeAddContent(node, buff);                    \
    xmlAddChild (topnode, node);                      \

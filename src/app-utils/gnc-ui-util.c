@@ -1154,7 +1154,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* print the integer part without separators */
-  sprintf(temp_buf, "%lld", (long long int) whole.num);
+  sprintf(temp_buf, "%" G_GINT64_FORMAT, whole.num);
   num_whole_digits = strlen (temp_buf);
 
   if (!info->use_separators)
@@ -1228,9 +1228,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
       val = gnc_numeric_reduce (val);
 
-      sprintf (temp_buf, " + %lld / %lld",
-               (long long int) val.num,
-               (long long int) val.denom);
+      sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
+               val.num,
+               val.denom);
 
       strcat (buf, temp_buf);
     }

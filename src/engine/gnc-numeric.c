@@ -1183,10 +1183,10 @@ gchar *
 gnc_numeric_to_string(gnc_numeric n) 
 {
   gchar *result;
-  long long int tmpnum = n.num;
-  long long int tmpdenom = n.denom;
+  gint64 tmpnum = n.num;
+  gint64 tmpdenom = n.denom;
 
-  result = g_strdup_printf("%lld/%lld", tmpnum, tmpdenom);
+  result = g_strdup_printf("%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, tmpnum, tmpdenom);
 
   return result;
 }
@@ -1196,13 +1196,13 @@ gnc_num_dbg_to_string(gnc_numeric n)
 {
   static char buff[1000];
   static char *p = buff;
-  long long int tmpnum = n.num;
-  long long int tmpdenom = n.denom;
+  gint64 tmpnum = n.num;
+  gint64 tmpdenom = n.denom;
 
   p+= 100;
   if (p-buff >= 1000) p = buff;
    
-  sprintf(p, "%lld/%lld", tmpnum, tmpdenom);
+  sprintf(p, "%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, tmpnum, tmpdenom);
 
   return p;
 }
@@ -1211,8 +1211,8 @@ gboolean
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) 
 {
   size_t num_read;
-  long long int tmpnum;
-  long long int tmpdenom;
+  gint64 tmpnum;
+  gint64 tmpdenom;
     
   if(!str) return FALSE;
 
@@ -1245,14 +1245,14 @@ gnc_numeric_print(gnc_numeric in)
 {
   char * retval;
   if(gnc_numeric_check(in)) {
-    retval = g_strdup_printf("<ERROR> [%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("<ERROR> [%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   else {
-    retval = g_strdup_printf("[%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("[%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   return retval;
 }

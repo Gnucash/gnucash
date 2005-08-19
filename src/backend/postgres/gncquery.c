@@ -519,8 +519,8 @@ kvp_left_operand(KvpValue * value)
 
         case KVP_TYPE_NUMERIC:{
             gnc_numeric n = kvp_value_get_numeric(value);
-            return g_strdup_printf("(%lld::int8 * %s.num::int8)",
-                                   (long long int)n.denom, kvptable);
+            return g_strdup_printf("(%" G_GINT64_FORMAT "::int8 * %s.num::int8)",
+                                   n.denom, kvptable);
         }
 
         default:
@@ -542,8 +542,7 @@ kvp_right_operand(sqlQuery * sq, KvpValue * value)
 
     switch (value_t) {
         case KVP_TYPE_GINT64:
-            return g_strdup_printf("%lld",
-                                   (long long int)
+            return g_strdup_printf("%" G_GINT64_FORMAT,
                                    kvp_value_get_gint64(value));
 
         case KVP_TYPE_DOUBLE:
@@ -569,8 +568,8 @@ kvp_right_operand(sqlQuery * sq, KvpValue * value)
 
         case KVP_TYPE_NUMERIC:{
             gnc_numeric n = kvp_value_get_numeric(value);
-            return g_strdup_printf("(%lld::int8 * %s.denom::int8)",
-                                   (long long int)n.num, kvptable);
+            return g_strdup_printf("(%" G_GINT64_FORMAT "::int8 * %s.denom::int8)",
+                                   n.num, kvptable);
         }
 
         default:

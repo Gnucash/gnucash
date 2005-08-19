@@ -58,7 +58,7 @@ int_to_dom_tree(const char *tag, gint64 val)
     gchar *text;
     xmlNodePtr result;
 
-    text = g_strdup_printf("%lld", (long long int) val);
+    text = g_strdup_printf("%" G_GINT64_FORMAT, val);
     result = text_to_dom_tree(tag, text);
     g_free(text);
     return result;
@@ -264,8 +264,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
     case KVP_TYPE_GINT64:
         add_text_to_node(val_node, "integer",
-                         g_strdup_printf("%lld",
-                                         (long long int)
+                         g_strdup_printf("%" G_GINT64_FORMAT,
                                          kvp_value_get_gint64(val)));
         break;
     case KVP_TYPE_DOUBLE:

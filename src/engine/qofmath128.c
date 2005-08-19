@@ -334,7 +334,7 @@ add128 (qofint128 a, qofint128 b)
 static void pr (gint64 a, gint64 b)
 {
    qofint128 prod = mult128 (a,b);
-   printf ("%lld * %lld = %lld %llu (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " (0x%llx %llx) %hd\n",
 	   a, b, prod.hi, prod.lo, prod.hi, prod.lo, prod.isbig);
 }
 
@@ -343,7 +343,7 @@ static void prd (gint64 a, gint64 b, gint64 c)
    qofint128 prod = mult128 (a,b);
    qofint128 quot = div128 (prod, c);
    gint64 rem = rem128 (prod, c);
-   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx) %hd\n",
+   printf ("%" G_GINT64_FORMAT " * %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT " = %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " + %" G_GINT64_FORMAT " (0x%llx %llx) %hd\n",
 	   a, b, c, quot.hi, quot.lo, rem, quot.hi, quot.lo, quot.isbig);
 }
 
