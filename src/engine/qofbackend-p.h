@@ -27,8 +27,7 @@
 /** @name  Backend_Private
    Pseudo-object defining how the engine can interact with different
    back-ends (which may be SQL databases, or network interfaces to 
-   remote GnuCash servers.  In theory, file-io should be a type of 
-   backend).
+   remote GnuCash servers. File-io is just one type of backend).
    
    The callbacks will be called at the appropriate times during 
    a book session to allow the backend to store the data as needed.
@@ -36,6 +35,7 @@
    @file qofbackend-p.h
    @brief private api for data storage backend
    @author Copyright (c) 2000,2001,2004 Linas Vepstas <linas@linas.org> 
+   @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 @{ */
 
 #ifndef QOF_BACKEND_P_H
@@ -231,6 +231,16 @@
  *    a mass transfer of transactions between books without having
  *    to actually move much (or any) data to the engine.
  *
+ *
+ * To support configuration options from the frontend, the backend
+ *    can be passed a GHashTable - according to the allowed options
+ *    for that backend, using load_config(). Configuration can be
+ *    updated at any point - it is up to the frontend to load the
+ *    data in time for whatever the backend needs to do. e.g. an
+ *    option to save a new book in a compressed format need not be
+ *    loaded until the backend is about to save. If the configuration
+ *    is updated by the user, the frontend should call load_config
+ *    again to update the backend.
  */
 
 struct QofBackendProvider_s
@@ -254,6 +264,21 @@ struct QofBackendProvider_s
   /** Return a new, initialized backend backend. */
   QofBackend * (*backend_new) (void);
 
+  /** \brief Name of the QofBackendProvider XML Configuration file
+	
+	This is to be generated from a Perl script to utilise gettext
+	translations and includes translated strings that describe
+	what each configuration option achieves. 
+	
+	The file itself can be located in the QSF_SCHEMA_DIR or
+	in any directory accessible to the frontend program.
+	
+	The filename should include the name of the backend as
+	specified in provider_name and the version of the backend 
+	that can use the file: myname-backend-v1.xml
+  */
+  const char* provider_config;
+  
   /** Free this structure, unregister this backend handler. */
   void (*provider_free) (QofBackendProvider *);
 };
@@ -279,7 +304,8 @@ struct QofBackend_s
   void (*run_query) (QofBackend *, gpointer);
 
   void (*sync) (QofBackend *, QofBook *);
-
+  void (*load_config) (QofBackend *, KvpFrame *);
+  KvpFrame* (*get_config) (QofBackend *);
   gint64 (*counter) (QofBackend *, const char *counter_name);
 
   gboolean (*events_pending) (QofBackend *);
@@ -295,11 +321,26 @@ struct QofBackend_s
   QofBackendError last_err;
   char * error_msg;
 
-  /** XXX the file backend resolves the if to a fully-qualified file
-   *  path.  This holds the filepath and communicates it to the GUI.
-   *  This is temprary scaffolding and should be removed.  Deprecated.
+  KvpFrame* backend_configuration;
+  /** Each backend resolves a fully-qualified file path.
+   * This holds the filepath and communicates it to the frontends.
    */
   char * fullpath;
+
+  /** \brief Distinguish two providers with same access method.
+  
+  When more than 1 backend is registered under the same access_method,
+  each one is passed the path to the data (usually a file) and
+  should return TRUE only if the backend recognises the type 
+  as one that it can load and write.
+  
+  \note If the backend can cope with more than one type, the backend
+  should not try to store or cache the sub-type for this data.
+  It is sufficient only to return TRUE if any ONE of the supported
+  types match the incoming data. The backend should not assume that
+  returning TRUE will mean that the data will naturally follow.
+  */
+  gboolean (*check_data_type) (QofBackend *, const char*);
 
 #ifdef GNUCASH_MAJOR_VERSION
   /** XXX price_lookup should be removed during the redesign

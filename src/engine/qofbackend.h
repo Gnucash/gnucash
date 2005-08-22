@@ -161,6 +161,21 @@ These function replaces those calls to allow the macros to be
 used when QOF is built as a library.
 @{
 */
+
+/** \brief Load configuration options specific to this backend.
+
+@param be The backend to configure.
+@param config A hash table with specific keys that this backend
+will recognise. Each backend needs to document their own config
+keys and acceptable values.
+
+The hash table remains the property of the caller and should
+be freed / destroyed once loaded in the backend.
+*/
+void qof_backend_load_config (QofBackend *be, KvpFrame *config);
+
+KvpFrame* qof_backend_get_config(QofBackend *be);
+
 void qof_backend_run_begin(QofBackend *be, QofInstance *inst);
 
 gboolean qof_backend_begin_exists(QofBackend *be);
@@ -168,6 +183,9 @@ gboolean qof_backend_begin_exists(QofBackend *be);
 void qof_backend_run_commit(QofBackend *be, QofInstance *inst);
 
 gboolean qof_backend_commit_exists(QofBackend *be);
+
+gboolean
+qof_load_backend_library (const char* filename, const char* init_fcn);
 
 /** @} */
 /** \brief Retrieve the backend used by this book */
