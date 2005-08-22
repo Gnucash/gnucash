@@ -1,15 +1,33 @@
-#include <glib.h>
-#include <libguile.h>
+/***************************************************************************
+ *            test-commodities.c
+ *
+ *  Mon Aug 22 09:08:32 2005
+ *  Original authors: Derek Atkins, Linas Vepstas.
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
-#include "gnc-engine-util.h"
+#include <glib.h>
 
 #include "gnc-commodity.h"
-#include "gnc-engine.h"
-#include "gnc-module.h"
-#include "qofbook.h"
+#include "qof.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-
 
 static void
 test_commodity(void)
@@ -158,18 +176,20 @@ test_commodity(void)
     
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/engine", 0);
-  test_commodity();
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	gnc_engine_get_string_cache ();
+	guid_init ();
+	qof_object_initialize ();
+	qof_query_init ();
+	qof_book_register ();
+	gnc_commodity_table_register();
+	test_commodity();
+	print_test_results();
+	qof_query_shutdown();
+	guid_shutdown();
+	qof_object_shutdown ();
+	gnc_engine_string_cache_destroy();
   return 0;
 }

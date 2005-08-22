@@ -1,20 +1,32 @@
-
 /*
  * Testing routine added by Ben Stanley bds02@uow.edu.au 20010320
  * Try to test Joshua Sled's FreqSpec module.
  *
  */
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
 #include "config.h"
-
 #include <stdlib.h>
 #include <glib.h>
-#include <libguile.h>
-
+#include <qof.h>
+#include "cashobjects.h"
 #include "test-stuff.h"
 #include "FreqSpec.h"
 #include "gnc-engine.h"
-#include "gnc-module.h"
 #include "qofbook.h"
 
 static QofBook *book;
@@ -522,41 +534,24 @@ test_composite (void)
    xaccFreqSpecFree(fs);
 }
 
-static void
-guile_main ( void *closure, int argc, char* argv[] )
-{
-   gnc_module_load("gnucash/engine", 0);
-
-   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-
-#if 0
-   set_success_print(TRUE);
-#endif
-
-   book = qof_book_new ();
-
-   test_once();
-
-   test_daily();
-
-   test_weekly();
-
-   test_monthly();
-
-   test_month_relative();
-
-   test_composite();
-
-   qof_book_destroy (book);
-
-   print_test_results();
-   exit (get_rv());
-}
-
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, guile_main, NULL);
+	QofSession *session;
+
+	qof_init();
+	g_return_val_if_fail(cashobjects_register(), -1);
+	session = qof_session_new ();
+	book = qof_session_get_book(session);
+	qof_session_begin(session, QOF_STDOUT, TRUE, FALSE);
+   test_once();
+   test_daily();
+   test_weekly();
+   test_monthly();
+   test_month_relative();
+   test_composite();
+   print_test_results();
+	qof_session_end(session);
+	qof_close();
   return 0;
 }
