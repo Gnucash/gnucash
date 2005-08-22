@@ -1039,30 +1039,48 @@ write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
     } while ( (schedXactions = schedXactions->next) );
 }
 
-#if 0
-static void
-write_namespace_decl (FILE *out, const char *namespace)
+void
+gnc_xml2_write_namespace_decl (FILE *out, const char *namespace)
 {
   g_return_if_fail (namespace);
-  fprintf(out, " xmlns:%s=\"\"", namespace);
+  fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
+          namespace, namespace);
 }
-#endif
+
+static void
+do_write_namespace_cb (const char *type, gpointer data_p, gpointer file_p)
+{
+  GncXmlDataType_t *data = data_p;
+  FILE *out = file_p;
+
+  g_return_if_fail (type && data && out);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->ns)
+    (data->ns)(out);
+}
 
 static void
 write_v2_header (FILE *out)
 {
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_V2_STRING);
-    /*
-    write_namespace_decl (out, "cd");
-    write_namespace_decl (out, "gnc");
-    write_namespace_decl (out, "act");
-    write_namespace_decl (out, "cmdty");
-    write_namespace_decl (out, "trn");
-    write_namespace_decl (out, "ts");
-    write_namespace_decl (out, "split");
-    write_namespace_decl (out, "sx");
-    */
+    
+    gnc_xml2_write_namespace_decl (out, "gnc");
+    gnc_xml2_write_namespace_decl (out, "act");
+    gnc_xml2_write_namespace_decl (out, "book");
+    gnc_xml2_write_namespace_decl (out, "cd");
+    gnc_xml2_write_namespace_decl (out, "cmdty");
+    gnc_xml2_write_namespace_decl (out, "price");
+    gnc_xml2_write_namespace_decl (out, "slot");
+    gnc_xml2_write_namespace_decl (out, "split");
+    gnc_xml2_write_namespace_decl (out, "sx");
+    gnc_xml2_write_namespace_decl (out, "trn");
+    gnc_xml2_write_namespace_decl (out, "ts");
+
+    /* now cope with the plugins */
+    qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
+
     fprintf(out, ">\n");
 }
 

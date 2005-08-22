@@ -91,6 +91,9 @@ struct sixtp_gdv2
  *
  * The scrub() method will take a completed, parsed QofBook* and post process
  *   the data, allowing you to 'scrub' the data.
+ *
+ * The ns() method will output XML namespace information for the selected
+ *   plug-in object.
  */
 #define GNC_FILE_BACKEND	"gnc:file:2"
 #define GNC_FILE_BACKEND_VERS	2
@@ -104,6 +107,7 @@ typedef struct
   int	      (*get_count) (QofBook *);
   void		(*write) (FILE*, QofBook*);
   void		(*scrub) (QofBook *);
+  void		(*ns) (FILE*);
 } GncXmlDataType_t;
 
 /**
@@ -138,5 +142,10 @@ gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
  * chars of the file look like gnc-xml data.
  */
 gboolean gnc_is_xml_data_file_v2(const gchar *name);
+
+/* Write a name-space declaration for the provided namespace data type
+ * within the GNC XML namespace at http://www.gnucash.org/XML.
+ */
+void gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
 
 #endif /* __IO_GNCXML_V2_H__ */

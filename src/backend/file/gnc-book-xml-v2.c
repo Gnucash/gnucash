@@ -46,8 +46,8 @@
 #include "sixtp-dom-parsers.h"
 #include "gnc-engine-util.h"
 #include "Group.h"
-// used to set the GUID of the book
-#include "qofbook-p.h"
+#include "qofbook.h"
+#include "qofid-p.h"
 
 /* non-static because it's used in io-gncxml-v2.c */
 const gchar *gnc_v2_book_version_string = "2.0.0";
@@ -188,8 +188,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    qof_book_set_guid(book, guid);
-
+    qof_entity_set_guid(QOF_ENTITY(book), guid);
     g_free(guid);
     
     return TRUE;
