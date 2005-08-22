@@ -381,6 +381,32 @@ LIBS="$oLIBS"
 
 ### --------------------------------------------------------------------------
 ### for GOG/goffice...
+
+dnl If libgoffice-1 >= 0.0.3-2 and libgsf >= 1.12.0-1 are found, 
+dnl we need to omit lib/goffice and use the external library
+dnl because lib/goffice will not build with newer versions of libgsf.
+
+GOFFICE_REQUIRED=0.0.3
+GSF_REQUIRED=1.12.0
+AC_MSG_CHECKING([for GOffice and GSF])
+LIBGOFFICE_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgoffice >= GOFFICE_REQUIRED"`
+LIBGOFFICE_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice >= GOFFICE_REQUIRED"`
+LIBGSF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgsf >= GSF_REQUIRED"`
+LIBGSF_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice >= GSF_REQUIRED"`
+AC_SUBST(LIBGOFFICE_CFLAGS)
+AC_SUBST(LIBGOFFICE_LIBS)
+
+if test "x$LIBGOFFICE_LIBS" = x; then
+  AC_MSG_RESULT([No, GOffice not found, will build using internal goffice library.])
+else
+  AC_MSG_RESULT([Yes, using GOffice])
+  AC_DEFINE(HAVE_GOFFICE,,[We have found an external GOffice])
+  HAVE_GOFFICE="use_external"
+fi
+AM_CONDITIONAL(USE_LIBGOFFICE, [test x$HAVE_GOFFICE != x])
+AM_CONDITIONAL(USE_LIBGOFFICE, [test $HAVE_GOFFICE = "use_external"])
+AC_SUBST(USE_LIBGOFFICE)
+
 ###
 ### GSF
 PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.8.0
