@@ -1,3 +1,91 @@
+2005-08-22  Neil Williams <linux@codehelp.co.uk>
+
+	* configure.in: Provisional building of libgoffice.
+	* make-gnucash-potfiles.in: Support for perl in gettext.
+	* src/backend/file/gnc-backend-file.c: New backend
+	configuration support using translatable XML and KVP.
+	* src/backend/file/gnc-book-xml-v2.c: Avoid private headers.
+
+	Patch to fix bug #88078 -  Incorrect namespace definition in XML file.
+	* src/backend/file/io-gncxml-v2.c:
+	* src/backend/file/io-gncxml-v2.h:
+	* src/business/business-core/file/gnc-address-xml-v2.c:
+	* src/business/business-core/file/gnc-address-xml-v2.h:
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	* src/business/business-core/file/gnc-customer-xml-v2.c:
+	* src/business/business-core/file/gnc-employee-xml-v2.c:
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	* src/business/business-core/file/gnc-invoice-xml-v2.c:
+	* src/business/business-core/file/gnc-job-xml-v2.c:
+	* src/business/business-core/file/gnc-order-xml-v2.c:
+	* src/business/business-core/file/gnc-owner-xml-v2.c:
+	* src/business/business-core/file/gnc-owner-xml-v2.h:
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	* src/business/business-core/file/gnc-vendor-xml-v2.c:
+	* src/business/business-core/file/gncmod-business-backend-file.c:
+
+	* src/backend/file/sixtp-utils.c: Avoid building core-utils functions
+	in the backend - not portable to CashUtil. FIXME.
+	* src/backend/qsf/qsf-backend.c: Beginning to isolate file type
+	determination from the GnuCash backend to build separately.
+	* src/backend/qsf/qsf-object.xsd.xml: Language tweak.
+	* src/business/business-core/gncAddress.c: QOF_TYPE_CHOICE
+	* src/business/business-core/gncBillTerm.c: CashUtil sync.
+	* src/business/business-core/gncBillTerm.h:
+	* src/business/business-core/gncCustomer.c: undo bad casts.
+	* src/business/business-core/gncEmployee.c: CashUtil sync.
+	* src/business/business-core/gncEmployeeP.h:
+	* src/business/business-core/gncEntry.c: CashUtil sync.
+	* src/business/business-core/gncEntry.h: CashUtil sync.
+	* src/business/business-core/gncInvoice.c: undo bad casts
+	* src/business/business-core/gncJob.c: CashUtil sync.
+	* src/business/business-core/gncOrder.c: CashUtil sync.
+	* src/business/business-core/gncOwner.c: undo bad casts.
+	* src/business/business-core/gncTaxTable.c: CashUtil sync.
+	* src/business/business-core/gncTaxTable.h: CashUtil sync.
+	* src/business/business-core/gncVendor.c: CashUtil sync.
+
+	Removal of guile code from test cases - tests pass but report
+	a redundant gnucash-backend interface failure.
+	* src/business/business-core/test/test-address.c:
+	* src/business/business-core/test/test-customer.c:
+	* src/business/business-core/test/test-employee.c:
+	* src/business/business-core/test/test-job.c:
+	* src/business/business-core/test/test-vendor.c:
+
+	* src/engine/.cvsignore:
+	* src/engine/FreqSpec.c: undo bad casts.
+	* src/engine/Makefile.am: CashUtil sync.
+	* src/engine/Transaction.c: Fix test reports.
+	* src/engine/cashobjects.c: Convenience wrapper from CashUtil.
+	* src/engine/cashobjects.h:
+	* src/engine/gnc-engine-util.c: Convenience functions for QOF.
+	* src/engine/gnc-engine-util.h:
+	* src/engine/gnc-numeric.c: inline fix.
+	* src/engine/kvp-util-p.h: Doxygen tweaks.
+	* src/engine/kvp-util.h: Doxygen tweaks.
+	* src/engine/kvp_frame.h: Doxygen tweaks.
+	* src/engine/qof.h: Convenience wrapper.
+
+	Backend configuration support and new method for dlopen(),
+	DO NOT PASS *.so anymore, pass the *.la instead for
+	portability reasons.
+	* src/engine/qofbackend-p.h:
+	* src/engine/qofbackend.c:
+	* src/engine/qofbackend.h:
+	* src/engine/qofbook.c: CashUtil sync.
+	* src/engine/qofla-dir.h.in: New file to locate the .la files.
+	* src/engine/qofsession.c: Deprecating current_session handler and
+	converting QSF to pass the .la for loading.
+	* src/engine/qofsession.h: Marking deprecated code.
+	* src/engine/qofsql.c: CashUtil/QOF Sync where libgda can be used
+	externally.
+	* src/engine/test/test-commodities.c: Removing Guile.
+	* src/engine/test/test-freq-spec.c: Removing Guile.
+	* src/engine/test/test-numeric.c: Removing Guile.
+	* src/engine/test/test-transaction-reversal.c: Removing Guile.
+	* src/engine/test/test-transaction-voiding.c: Removing Guile.
+
 2005-08-18  Derek Atkins  <derek@ihtfp.com>
 
 	Frederic Leroy's patch to fix more %lld issues without casts.
