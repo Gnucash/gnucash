@@ -33,7 +33,7 @@
 #include <string.h>
 
 #include "gnc-numeric.h"
-#include "qofmath128.h"
+#include "qofmath128.c"
 
 /* static short module = MOD_ENGINE; */
 

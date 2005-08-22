@@ -31,7 +31,12 @@
 #include <stdlib.h>   /* for working atoll */
 #include <errno.h>
 #include "glib.h"
-#include <sql_parser.h>
+#include "config.h"
+#ifdef HAVE_GDA
+#include <sql/sql_parser.h>
+#else
+#include "sql_parser.h"
+#endif
 #include <time.h>
 #include "kvp_frame.h"
 #include "gnc-date.h"

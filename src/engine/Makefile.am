@@ -7,6 +7,7 @@ AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src \
 	-I${top_srcdir}/src/gnc-module \
+	-I${top_srcdir}/src/business/business-core/ \
 	${GNUCASH_ENGINE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
@@ -24,6 +25,7 @@ libgncmod_engine_la_SOURCES = \
   TransLog.c \
   Transaction.c \
   cap-gains.c \
+  cashobjects.c \
   gnc-associate-account.c \
   gnc-budget-book.c \
   gnc-budget-cat.c \
@@ -56,7 +58,6 @@ libgncmod_engine_la_SOURCES = \
   qofclass.c \
   qofid.c \
   qofinstance.c \
-  qofmath128.c \
   qofobject.c \
   qofquery.c \
   qofquerycore.c \
@@ -203,10 +204,21 @@ EXTRA_DIST = \
   extensions.txt \
   iso-4217-currencies.scm \
   iso-currencies-to-c \
+  qofla-dir.h.in \
   kvp_doc.txt \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
   ${gwmod_DATA}
+
+QOFLIBdir = $(libdir)
+
+CONFIG_CLEAN_FILES = qofla-dir.h
+
+qofla-dir.h: qofla-dir.h.in
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+                -e 's:@-libdir-@:${QOFLIBdir}:g'
+	mv $@.tmp $@
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
@@ -248,6 +260,7 @@ gw-kvp.scm gw-kvp.c gw-kvp.h: \
 	 (gw:generate-wrapset \"gw-kvp\")"
 
 BUILT_SOURCES = \
+  qofla-dir.h \
   iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h 

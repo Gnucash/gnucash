@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-engine-util.c -- GnuCash engine utility functions            *
+ * gnc-engine-util.c -- QOF utility functions                       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2001,2004 Linas Vepstas <linas@linas.org>     *
  *                                                                  *
@@ -30,7 +30,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <qof.h>
 #include "gnc-engine-util.h"
 
 
@@ -251,6 +251,26 @@ gpointer gnc_string_cache_insert(gpointer key)
 {
   return g_cache_insert(gnc_engine_get_string_cache(), key);
 }
+
+void
+qof_init (void)
+{
+	gnc_engine_get_string_cache ();
+	guid_init ();
+	qof_object_initialize ();
+	qof_query_init ();
+	qof_book_register ();
+}
+
+void
+qof_close(void)
+{
+	qof_query_shutdown ();
+	qof_object_shutdown ();
+	guid_shutdown ();
+	gnc_engine_string_cache_destroy ();
+}
+
 
 /************************* END OF FILE ******************************\
 \********************************************************************/

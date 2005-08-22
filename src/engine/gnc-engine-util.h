@@ -146,6 +146,17 @@
 # define GNC_SCANF_LLD "%qd"
 #endif
 
+/** @name Convenience wrappers
+   @{
+*/
+   
+/** \brief Initialise the Query Object Framework */
+void qof_init (void);
+
+/** \brief Safely close down the Query Object Framework */
+void qof_close (void);
+
+/** @} */
 
 /** Prototypes *************************************************/
 

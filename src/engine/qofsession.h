@@ -99,7 +99,15 @@ typedef struct _QofSession    QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
+
+/** \deprecated Use a local context, not this static!
+
+Applications must not use 'current_session' in new code.
+
+Use a local context and store your session data there.
+*/
 QofSession * qof_session_get_current_session (void);
+/** \deprecated do not use! */
 void	       qof_session_set_current_session (QofSession *session);
 
 /** The qof_session_swap_data () method swaps the book of
@@ -196,11 +204,12 @@ void qof_session_add_book (QofSession *session, QofBook *book);
 
 QofBook * qof_session_get_book (QofSession *session);
 
-/** The qof_session_get_file_path() routine returns the fully-qualified file
+/**
+ *    The qof_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename
  *    was for the session, then it had to have been fully resolved to
  *    open the session. This routine returns the result of this resolution.
- *    The path is always guarenteed to reside in the local file system, 
+ *    The path is always guaranteed to reside in the local file system, 
  *    even if the session itself was opened as a URL.  (currently, the
  *    filepath is derived from the url by substituting commas for
  *    slashes).
@@ -210,6 +219,7 @@ QofBook * qof_session_get_book (QofSession *session);
  *    file:/some/where/some/file.gml
  */
 const char * qof_session_get_file_path (QofSession *session);
+
 const char * qof_session_get_url (QofSession *session);
 
 /**

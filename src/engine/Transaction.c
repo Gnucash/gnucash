@@ -1466,7 +1466,8 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-   QOF_BEGIN_EDIT(&trans->inst)
+       if(!trans) { return; }
+    qof_begin_edit(&trans->inst);
 
    if (qof_book_shutting_down(trans->inst.book))
      return;

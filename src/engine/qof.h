@@ -70,11 +70,11 @@
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "gnc-event.h"
-#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp_frame.h"
 #include "qofbackend.h"
-#include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance-p.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofobject.h"
@@ -83,5 +83,7 @@
 #include "qofsession.h"
 #include "qofsql.h"
 #include "qofchoice.h"
+#include "qof_book_merge.h"
+#include "qof-be-utils.h"
 
 #endif /* QOF_H_ */

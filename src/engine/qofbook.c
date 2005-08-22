@@ -55,13 +55,13 @@
 
 static short module = MOD_ENGINE;
 
+/* ====================================================================== */
+/* constructor / destructor */
+
 static void coll_destroy(gpointer col)
 {
   qof_collection_destroy((QofCollection *) col);
 }
-
-/* ====================================================================== */
-/* constructor / destructor */
 
 static void
 qof_book_init (QofBook *book)

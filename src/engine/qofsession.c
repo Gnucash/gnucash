@@ -50,7 +50,7 @@
 #include <unistd.h>
 
 #include <glib.h>
-
+#include "qofla-dir.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-trace.h"
@@ -67,7 +67,9 @@
 #include "gnc-module.h"
 #endif /* GNUCASH */
 
+/** \deprecated current_session should not be static */
 static QofSession * current_session = NULL;
+
 static GHookList * session_closed_hooks = NULL;
 static short module = MOD_BACKEND;
 static GSList *provider_list = NULL;
@@ -226,6 +228,8 @@ qof_session_new (void)
   return session;
 }
 
+/** \deprecated  Use a local context to store
+your current session, NOT a static in the library. */
 QofSession *
 qof_session_get_current_session (void)
 {
@@ -239,6 +243,7 @@ qof_session_get_current_session (void)
   return current_session;
 }
 
+/** \deprecated */
 void
 qof_session_set_current_session (QofSession *session)
 {
@@ -333,7 +338,6 @@ qof_book_set_partial(QofBook *book)
 
 	partial =
 	  (gboolean)GPOINTER_TO_INT(qof_book_get_data(book, PARTIAL_QOFBOOK));
-
 	if(!partial) {
 		qof_book_set_data(book, PARTIAL_QOFBOOK, (gboolean*)TRUE);
 	}
@@ -1250,6 +1254,8 @@ qof_session_save (QofSession *session,
 #else
 			load_backend_library ("libqof-backend-qsf.so", "qsf_provider_init" );
 #endif
+			qof_load_backend_library (QOF_LIB_DIR "libqof-backend-qsf.la",
+				"qsf_provider_init");
 		}
 		p = g_slist_copy(provider_list);
 		while(p != NULL)

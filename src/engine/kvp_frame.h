@@ -105,8 +105,6 @@ do \b not use these in new code.
 #define kvp_value KvpValue
 #define kvp_value_t KvpValueType
   
-
-/* -------------------------------------------------------- */
 /** @name KvpFrame Constructors
  @{
 */
@@ -130,7 +128,6 @@ gboolean     kvp_frame_is_empty(KvpFrame * frame);
 
 /** @} */
 
-/* -------------------------------------------------------- */
 /** @name KvpFrame Basic Value Storing
 @{
 */
@@ -317,7 +314,6 @@ KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue 
 
 /** @} */
 
-/* -------------------------------------------------------- */
 /** @name KvpFrame Value Fetching
 
   Value accessors.  These all take a unix-style slash-separated 
@@ -414,7 +410,6 @@ KvpFrame    * kvp_frame_get_frame_slash (KvpFrame *frame,
                                           const char *path);
 
 /** @} */
-/* -------------------------------------------------------- */
 /** @name KvpFrame KvpValue low-level storing routines.
 
 You probably shouldn't be using these low-level routines
@@ -479,7 +474,6 @@ void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
 
 /** @} */
 
-
 /** @name KvpFrame KvpValue Low-Level Retrieval Routines
 
   You probably shouldn't be using these low-level routines
@@ -510,13 +504,11 @@ KvpValue   * kvp_frame_get_slot_path_gslist (KvpFrame *frame,
 
 /**
  * Similar returns as strcmp.
- **/
+ */
 gint          kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb);
-/** @} */
-
 
 gint          double_compare(double v1, double v2);
-
+/** @} */
 /** @name KvpValue List Convenience Functions
 
   You probably shouldn't be using these low-level routines 
@@ -696,5 +688,5 @@ gchar* binary_to_string(const void *data, guint32 size);
 gchar* kvp_value_glist_to_string(const GList *list);
 GHashTable* kvp_frame_get_hash(const KvpFrame *frame);
 
-#endif
 /** @} */
+#endif
