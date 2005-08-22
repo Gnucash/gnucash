@@ -211,3 +211,29 @@ gnc_dom_tree_to_address (xmlNodePtr node, GncAddress *address)
 
     return successful;
 }
+
+static void
+address_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "addr");
+}
+
+void
+gnc_address_xml_initialize (void)
+{
+  static GncXmlDataType_t be_data = {
+    GNC_FILE_BACKEND_VERS,
+    "gnc:Address",
+    NULL,			/* parser_create */
+    NULL,			/* add_item */
+    NULL,			/* get_count */
+    NULL,			/* write */
+    NULL,			/* scrub */
+    address_ns,
+  };
+
+  qof_object_register_backend ("gnc:Address",
+			    GNC_FILE_BACKEND,
+			    &be_data);
+}

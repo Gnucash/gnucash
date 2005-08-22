@@ -517,6 +517,13 @@ customer_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_customer, (gpointer) out);
 }
 
+static void
+customer_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "cust");
+}
+
 void
 gnc_customer_xml_initialize (void)
 {
@@ -528,6 +535,7 @@ gnc_customer_xml_initialize (void)
     customer_get_count,
     customer_write,
     NULL,			/* scrub */
+    customer_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

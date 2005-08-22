@@ -823,6 +823,13 @@ entry_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_entry, (gpointer) out);
 }
 
+static void
+entry_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "entry");
+}
+
 void
 gnc_entry_xml_initialize (void)
 {
@@ -834,6 +841,7 @@ gnc_entry_xml_initialize (void)
     entry_get_count,
     entry_write,
     NULL,			/* scrub */
+    entry_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

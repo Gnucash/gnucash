@@ -455,6 +455,13 @@ vendor_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
 }
 
+static void
+vendor_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "vendor");
+}
+
 void
 gnc_vendor_xml_initialize (void)
 {
@@ -466,6 +473,7 @@ gnc_vendor_xml_initialize (void)
     vendor_get_count,
     vendor_write,
     NULL,			/* scrub */
+    vendor_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

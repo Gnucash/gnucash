@@ -548,6 +548,13 @@ invoice_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_invoice, (gpointer) out);
 }
 
+static void
+invoice_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "invoice");
+}
+
 void
 gnc_invoice_xml_initialize (void)
 {
@@ -559,6 +566,7 @@ gnc_invoice_xml_initialize (void)
     invoice_get_count,
     invoice_write,
     NULL,			/* scrub */
+    invoice_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

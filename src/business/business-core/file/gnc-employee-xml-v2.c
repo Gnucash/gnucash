@@ -430,6 +430,13 @@ employee_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
 }
 
+static void
+employee_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "employee");
+}
+
 void
 gnc_employee_xml_initialize (void)
 {
@@ -441,6 +448,7 @@ gnc_employee_xml_initialize (void)
     employee_get_count,
     employee_write,
     NULL,			/* scrub */
+    employee_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

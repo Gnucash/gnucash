@@ -701,6 +701,15 @@ billterm_scrub (QofBook *book)
   g_hash_table_destroy(ht);
 }
 
+static void
+billterm_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "billterm");
+  gnc_xml2_write_namespace_decl(out, "bt-days");
+  gnc_xml2_write_namespace_decl(out, "bt-prox");
+}
+
 void
 gnc_billterm_xml_initialize (void)
 {
@@ -712,6 +721,7 @@ gnc_billterm_xml_initialize (void)
     billterm_get_count,
     billterm_write,
     billterm_scrub,
+    billterm_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

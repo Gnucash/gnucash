@@ -42,6 +42,7 @@
 #include "io-gncxml-v2.h"
 
 #include "gncOrderP.h"
+
 #include "gnc-order-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
 #include "gnc-engine-util.h"
@@ -368,6 +369,13 @@ order_write (FILE *out, QofBook *book)
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
 }
 
+static void
+order_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "order");
+}
+
 void
 gnc_order_xml_initialize (void)
 {
@@ -379,6 +387,7 @@ gnc_order_xml_initialize (void)
     order_get_count,
     order_write,
     NULL,			/* scrub */
+    order_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

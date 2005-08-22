@@ -663,6 +663,14 @@ taxtable_scrub (QofBook *book)
   g_hash_table_destroy(ht);
 }
 
+static void
+taxtable_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "taxtable");
+  gnc_xml2_write_namespace_decl(out, "tte");
+}
+
 void
 gnc_taxtable_xml_initialize (void)
 {
@@ -674,6 +682,7 @@ gnc_taxtable_xml_initialize (void)
     taxtable_get_count,
     taxtable_write,
     taxtable_scrub,
+    taxtable_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

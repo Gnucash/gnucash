@@ -211,3 +211,29 @@ gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
 
     return successful;
 }
+
+static void
+owner_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "owner");
+}
+
+void
+gnc_owner_xml_initialize (void)
+{
+  static GncXmlDataType_t be_data = {
+    GNC_FILE_BACKEND_VERS,
+    "gnc:Owner",
+    NULL,			/* parser_create */
+    NULL,			/* add_item */
+    NULL,			/* get_count */
+    NULL,			/* write */
+    NULL,			/* scrub */
+    owner_ns,
+  };
+
+  qof_object_register_backend ("gnc:Owner",
+			    GNC_FILE_BACKEND,
+			    &be_data);
+}
