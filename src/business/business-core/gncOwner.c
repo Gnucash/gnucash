@@ -247,13 +247,13 @@ gnc_commodity * gncOwnerGetCurrency (GncOwner *owner)
   default:
     return NULL;
   case GNC_OWNER_CUSTOMER:
-    return (gnc_commodity*)gncCustomerGetCurrency (owner->owner.customer);
+    return gncCustomerGetCurrency (owner->owner.customer);
   case GNC_OWNER_VENDOR:
-    return (gnc_commodity*)gncVendorGetCurrency (owner->owner.vendor);
+    return gncVendorGetCurrency (owner->owner.vendor);
   case GNC_OWNER_EMPLOYEE:
-    return (gnc_commodity*)gncEmployeeGetCurrency (owner->owner.employee);
+    return gncEmployeeGetCurrency (owner->owner.employee);
   case GNC_OWNER_JOB:
-    return (gnc_commodity*)gncOwnerGetCurrency ((GncOwner*)gncJobGetOwner (owner->owner.job));
+    return gncOwnerGetCurrency (gncJobGetOwner (owner->owner.job));
   }
 }
 
@@ -281,7 +281,7 @@ gncCloneOwner (const GncOwner *from, QofBook *book)
       owner.owner.customer = gncCustomerObtainTwin (from->owner.customer, book);
       return owner;
     case GNC_OWNER_JOB:
-      owner.owner.job = (GncJob*)gncJobObtainTwin (from->owner.job, book);
+      owner.owner.job = gncJobObtainTwin (from->owner.job, book);
       return owner;
     case GNC_OWNER_VENDOR:
       owner.owner.vendor = gncVendorObtainTwin (from->owner.vendor, book);
@@ -361,7 +361,7 @@ GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
   case GNC_OWNER_EMPLOYEE:
     return owner;
   case GNC_OWNER_JOB:
-    return (GncOwner*)gncJobGetOwner (owner->owner.job);
+    return gncJobGetOwner (owner->owner.job);
   }
 }
 

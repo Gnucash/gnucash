@@ -43,8 +43,9 @@
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
-
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 #include "gncTaxTableP.h"
 
 

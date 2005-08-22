@@ -41,14 +41,16 @@
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
-#include "qofid.h"
+
 #include "qofid-p.h"
-#include "qofinstance.h"
+
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 /** \todo remove gncBusiness.h to make the object logic library. */
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 #include "gncBillTermP.h"
 
 struct _gncBillTerm 

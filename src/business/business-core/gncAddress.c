@@ -38,6 +38,7 @@
 #include "qofquery.h"
 #include "gncAddress.h"
 #include "gncAddressP.h"
+#include "gncCustomerP.h"
 
 struct _gncAddress 
 {
@@ -122,34 +123,18 @@ qofAddressCreate (QofBook *book)
 }
 
 static void
-qofAddressOwnerCB (QofEntity *ent, gpointer user_data)
+qofAddressSetOwner(GncAddress *addr, QofEntity *ent)
 {
-	GncAddress *addr;
-
-	addr = (GncAddress*)user_data;
-	if(!ent || !addr) { return; }
+	if(!addr || !ent) { return; }
 	if(addr->parent == NULL) { addr->parent = ent; }
 }
 
-static void
-qofAddressSetOwner(GncAddress *addr, QofCollection *col)
-{
-	if(!addr || !col) { return; }
-	if(qof_collection_count(col) != 1) { return; }
-	qof_collection_foreach(col, qofAddressOwnerCB, addr);
-}
-
-static QofCollection*
+static QofEntity*
 qofAddressGetOwner(GncAddress *addr)
 {
-	QofCollection *col;
-	QofEntity *parent;
 
 	if(!addr) { return NULL; }
-	parent = addr->parent;
-	col = qof_collection_new(parent->e_type);
-	qof_collection_add_entity(col, addr->parent);
-	return col;
+	return addr->parent;
 }
 
 GncAddress * 
@@ -348,8 +333,8 @@ static QofObject GncAddressDesc =
 	create:             (gpointer)qofAddressCreate,
 	book_begin:         NULL,
 	book_end:           NULL,
-	is_dirty:           NULL,
-	mark_clean:         NULL,
+	is_dirty:           qof_collection_is_dirty,
+	mark_clean:         qof_collection_mark_clean,
 	foreach:            qof_collection_foreach,
 	printable:          NULL,
 	version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
@@ -367,13 +352,14 @@ gboolean gncAddressRegister (void)
     { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
     { ADDRESS_FAX,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax,   (QofSetterFunc)gncAddressSetFax },
     { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
-    { ADDRESS_OWNER, QOF_TYPE_COLLECT,(QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
+    { ADDRESS_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
     { QOF_PARAM_BOOK, QOF_ID_BOOK,   (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
   qof_class_register (GNC_ID_ADDRESS, (QofSortFunc)gncAddressCompare, params);
+  if(!qof_choice_add_class(GNC_ID_CUSTOMER, GNC_ID_ADDRESS, ADDRESS_OWNER)) { return FALSE; }
 
   return qof_object_register(&GncAddressDesc);
 }

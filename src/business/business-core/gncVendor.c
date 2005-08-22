@@ -35,9 +35,7 @@
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
-#include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
@@ -46,11 +44,15 @@
 #include "messages.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
+#include "gncInvoice.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
+
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 #include "gncVendor.h"
@@ -546,6 +548,9 @@ gboolean gncVendorRegister (void)
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncVendorGetActive, NULL },
     { NULL },
   };
+
+  if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_VENDOR, INVOICE_OWNER)) { return FALSE; }
+  if(!qof_choice_add_class(GNC_ID_JOB, GNC_ID_VENDOR, JOB_OWNER)) { return FALSE; }
 
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 

@@ -47,8 +47,10 @@
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
-
-//#include "gncBusiness.h"
+#include "qofbackend-p.h"
+#ifdef GNUCASH_MAJOR_VERSION
+#include "gncBusiness.h"
+#endif
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"
@@ -388,8 +390,11 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
-/*    { JOB_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },*/
+#ifdef GNUCASH_MAJOR_VERSION
     { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
+#else
+    { JOB_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },
+#endif
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
@@ -398,10 +403,12 @@ gboolean gncJobRegister (void)
 
   if(!qof_choice_create(GNC_ID_JOB)) { return FALSE; }
   if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_JOB, INVOICE_OWNER)) { return FALSE; }
+
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
+#ifdef GNUCASH_MAJOR_VERSION
   qofJobGetOwner(NULL);
   qofJobSetOwner(NULL, NULL);
-  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
-
+#endif
   return qof_object_register (&gncJobDesc);
 }
 

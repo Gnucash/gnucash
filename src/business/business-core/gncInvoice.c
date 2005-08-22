@@ -49,8 +49,10 @@
 
 #include "gnc-event.h"
 #include "gnc-lot.h"
+#ifdef GNUCASH_MAJOR_VERSION
+#include "gncBusiness.h"
+#endif
 
-//#include "gncBusiness.h"
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -500,7 +502,7 @@ Timespec gncInvoiceGetDateDue (GncInvoice *invoice)
   Transaction *txn;
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!invoice) return ts;
-  txn = (Transaction*)gncInvoiceGetPostedTxn (invoice);
+  txn = gncInvoiceGetPostedTxn (invoice);
   if (!txn) return ts;
   return xaccTransRetDateDueTS (txn);
 }
@@ -863,7 +865,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Figure out if we need to separate out "credit-card" items */
   owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
   if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)
-    ccard_acct = (Account*)gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
+    ccard_acct = gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
 
   /* Find an existing payment-lot for this owner */
   {
@@ -942,7 +944,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     gncEntryGetValue (entry, reverse, &value, NULL, &tax, &taxes);
 
     /* add the value for the account split */
-    this_acc = (reverse ? (Account*)gncEntryGetInvAccount (entry) :
+    this_acc = (reverse ? gncEntryGetInvAccount (entry) :
 		gncEntryGetBillAccount (entry));
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {

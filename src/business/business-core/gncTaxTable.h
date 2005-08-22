@@ -69,7 +69,9 @@ typedef struct _gncAccountValue GncAccountValue;
 
 #include "qofbook.h"
 #include "qofinstance.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 
 #define GNC_ID_TAXTABLE       "gncTaxTable"
 #define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))

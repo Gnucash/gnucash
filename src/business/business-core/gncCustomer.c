@@ -49,7 +49,10 @@
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
-//#include "gncBusiness.h"
+#ifdef GNUCASH_MAJOR_VERSION
+#include "gncBusiness.h"
+#endif
+
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -161,7 +164,7 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   for (node=g_list_last(cust->jobs); node; node=node->next)
   {
     GncJob *job = node->data;
-    job = (GncJob*)gncJobObtainTwin (job, book);
+    job = gncJobObtainTwin (job, book);
     cust->jobs = g_list_prepend(cust->jobs, job);
   }
 
@@ -599,6 +602,7 @@ gboolean gncCustomerRegister (void)
   if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_CUSTOMER, INVOICE_OWNER)) { return FALSE; }
   if(!qof_choice_add_class(GNC_ID_JOB, GNC_ID_CUSTOMER, JOB_OWNER)) { return FALSE; }
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
+  if(!qof_choice_create(GNC_ID_CUSTOMER)) { return FALSE;}
   /* temp */
   _gncCustomerPrintable(NULL);
   return qof_object_register (&gncCustomerDesc);

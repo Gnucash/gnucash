@@ -44,8 +44,10 @@
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
-
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
+
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncInvoice.h"

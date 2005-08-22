@@ -48,10 +48,13 @@ typedef enum {
 #include "qofinstance.h"
 
 #include "gnc-date.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 #include "gncInvoice.h"
 #include "gncOrder.h"
 #include "gncTaxTable.h"
+#include "gncOwner.h"
 
 #define GNC_ID_ENTRY "gncEntry"
 #define GNC_IS_ENTRY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ENTRY))

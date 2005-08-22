@@ -43,8 +43,10 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "gnc-event.h"
+#ifdef GNUCASH_MAJOR_VERSION
+#include "gncBusiness.h"
+#endif
 
-//#include "gncBusiness.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"
@@ -268,7 +270,7 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
 
   if (!order || !entry) return;
 
-  old = (GncOrder*)gncEntryGetOrder (entry);
+  old = gncEntryGetOrder (entry);
   if (old == order) return;			/* I already own it */
   if (old) gncOrderRemoveEntry (old, entry);
 

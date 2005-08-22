@@ -35,9 +35,8 @@
 #include "qof-be-utils.h"
 #include "qofbook.h"
 #include "qofclass.h"
-#include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
+#include "qofbackend-p.h"
 #include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
@@ -47,10 +46,12 @@
 #include "messages.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "gnc-event.h"
 
 #include "gncAddressP.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 
