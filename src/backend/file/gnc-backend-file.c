@@ -1036,6 +1036,7 @@ gnc_backend_new(void)
 }
 
 
+#if 0
 static void
 gnc_provider_free (QofBackendProvider *prov)
 {
@@ -1057,6 +1058,7 @@ gnc_provider_init(void)
 	    prov->provider_config = "gnucash-file-backend-v2.xml";
         qof_backend_register_provider (prov);
 }
+#endif
 
 
 /* ========================== END OF FILE ===================== */
