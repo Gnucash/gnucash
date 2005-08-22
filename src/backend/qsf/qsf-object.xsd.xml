@@ -2,7 +2,7 @@
 targetNamespace="http://qof.sourceforge.net/"
 xmlns:qof-qsf="http://qof.sourceforge.net/"
 elementFormDefault="qualified"
-attributeFormDefault="unqualified">
+attributeFormDefault="unqualified" xml:lang="en-GB">
  <xsd:annotation>
     <xsd:documentation xml:lang="en">
 	Query Object Framework Serialization Format (QSF)

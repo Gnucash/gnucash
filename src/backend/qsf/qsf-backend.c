@@ -93,6 +93,15 @@ qsf_param_init(qsf_param *params)
 	g_hash_table_insert(params->qsf_default_hash, "qsf_time_string", qsf_time_string);
 }
 
+static gboolean 
+qsf_determine_file_type(QofBackend *be, const char *path)
+{
+	if(is_our_qsf_object(path))  { return TRUE; }
+	else if(is_qsf_object(path)) { return TRUE; }
+    else if(is_qsf_map(path))    { return TRUE; }
+	return FALSE;
+}
+
 /* GnuCash does LOTS of filesystem work, QSF is going to leave most of it to libxml2. :-)
 Just strip the file: from the start of the book_path URL. Locks and file
 creation are not implemented.
@@ -1071,6 +1080,11 @@ qsf_backend_new(void)
 	be->process_events = NULL;
 	
 	be->sync = qsf_write_file;
+	/* use for maps, later. */
+	be->load_config = NULL;
+	be->get_config = NULL;
+	be->check_data_type = qsf_determine_file_type;
+
 	qsf_be->fullpath = NULL;
 	return be;
 }
@@ -1097,6 +1111,7 @@ qsf_provider_init(void)
 	prov->access_method = "file";
 	prov->partial_book_supported = TRUE;
 	prov->backend_new = qsf_backend_new;
+	prov->provider_config = "qsf-backend-v0.1.xml";
 	prov->provider_free = qsf_provider_free;
 	qof_backend_register_provider (prov);
 }
