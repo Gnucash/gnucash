@@ -545,7 +545,7 @@ gnm_conf_init_essential (void)
 	prefs.active_plugins = go_conf_load_str_list (PLUGIN_GCONF_ACTIVE);
 	prefs.activate_new_plugins = go_conf_load_bool (
 		PLUGIN_GCONF_ACTIVATE_NEW, TRUE);
-	printf( "prefs.activate_new_plugins: %d\n", prefs.activate_new_plugins );
+	//printf( "prefs.activate_new_plugins: %d\n", prefs.activate_new_plugins );
 
 	prefs.horizontal_dpi = go_conf_load_double (
 		GNM_CONF_GUI_RES_H, 10., 1000., 96.);
