@@ -551,7 +551,9 @@ bubble_draw_circle (GogView *view, double x, double y, double radius)
 	path[0].x = path[MAX_ARC_SEGMENTS].x = x + radius;
 	path[0].y = path[MAX_ARC_SEGMENTS].y = y;
 	path[0].code = ART_MOVETO;
+#ifdef GOG_WARN_TODO
 #warning what about small bubbles. With a very small radius, libart emits lot of warnings.
+#endif
 	if (radius < 1.) radius = 1.;
 	for (i = 1, theta = dt; i < MAX_ARC_SEGMENTS; i++, theta += dt) {
 		path[i].x = x + radius * cos (theta);

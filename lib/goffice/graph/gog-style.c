@@ -626,7 +626,9 @@ cb_image_file_select (GtkWidget *cc, StylePrefState *state)
 		g_warning ("Sorry -- cannot handle URIs here right now.");
 		return;
 	}
+#ifdef GOG_WARN_TODO
 #warning "Handle URIs here."
+#endif
 
 	gog_style_set_fill_image_filename (style, filename);
 
@@ -841,6 +843,7 @@ marker_init (StylePrefState *state, gboolean enable)
 
 /************************************************************************/
 
+#if 0 //unused
 static void
 cb_font_changed (FontSelector *fs, G_GNUC_UNUSED gpointer mstyle,
 		 StylePrefState *state)
@@ -853,12 +856,13 @@ cb_font_changed (FontSelector *fs, G_GNUC_UNUSED gpointer mstyle,
 	gog_style_set_font (style, new_font);
 	set_style (state);
 }
+#endif // 0 -- unused
 
 static void
 font_init (StylePrefState *state, guint32 enable, gpointer optional_notebook)
 {
 	GogStyle *style = state->style;
-	GtkWidget *w, *box;
+	GtkWidget *box;
 
 	if (!enable)
 		return;
@@ -1714,7 +1718,9 @@ gog_style_is_different_size (GogStyle const *a, GogStyle const *b)
 gboolean
 gog_style_is_marker_visible (GogStyle const *style)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO : make this smarter
+#endif
 	return (style->interesting_fields & GOG_STYLE_MARKER) &&
 		go_marker_get_shape (style->marker.mark) != GO_MARKER_NONE;
 }
@@ -1722,7 +1728,9 @@ gog_style_is_marker_visible (GogStyle const *style)
 gboolean
 gog_style_is_outline_visible (GogStyle const *style)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO : make this smarter
+#endif
 	return UINT_RGBA_A (style->outline.color) > 0 && 
 		style->outline.dash_type != GO_LINE_NONE;
 }
@@ -1730,7 +1738,10 @@ gog_style_is_outline_visible (GogStyle const *style)
 gboolean
 gog_style_is_line_visible (GogStyle const *style)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO : make this smarter
+#endif
+
 	return UINT_RGBA_A (style->line.color) > 0 && 
 		style->line.dash_type != GO_LINE_NONE;
 }

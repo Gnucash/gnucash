@@ -1371,6 +1371,7 @@ value_set_fmt (GnmValue *v, GnmFormat const *fmt)
 
 /****************************************************************************/
 
+#if 0
 static gboolean
 criteria_test_equal (GnmValue const *x, GnmValue const *y)
 {
@@ -1443,6 +1444,7 @@ criteria_test_greater_or_equal (GnmValue const *x, GnmValue const *y)
 	else
 	        return FALSE;
 }
+#endif // 0 - unused, jsled
 
 #if 0
 --jsled

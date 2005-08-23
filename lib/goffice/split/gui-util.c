@@ -101,6 +101,7 @@ gnumeric_notice_nonmodal (GtkWindow *parent, GtkWidget **ref, GtkMessageType typ
 	return;
 }
 
+#if 0
 static void
 fsel_response_cb (GtkFileChooser *dialog,
 		  gint response_id,
@@ -126,6 +127,7 @@ gu_delete_handler (GtkDialog *dialog,
 	gtk_dialog_response (dialog, GTK_RESPONSE_CANCEL);
 	return TRUE; /* Do not destroy */
 }
+#endif // 0 - unused, jsled
 
 #if 0
 gboolean
@@ -358,6 +360,7 @@ typedef struct {
 	gboolean freed;
 } KeyedDialogContext;
 
+#if 0
 static void
 cb_free_keyed_dialog_context (KeyedDialogContext *ctxt)
 {
@@ -384,6 +387,7 @@ cb_keyed_dialog_keypress (GtkWidget *dialog, GdkEventKey *event,
 	}
 	return FALSE;
 }
+#endif // 0 - unused, jsled
 
 #if 0
 /**

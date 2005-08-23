@@ -201,7 +201,9 @@ validation_eval (WorkbookControl *wbc, GnmStyle const *mstyle,
 		}
 
 		case VALIDATION_TYPE_IN_LIST :
+#ifdef GOG_WARN_TODO
 #warning TODO
+#endif
 			return VALIDATION_STATUS_VALID;
 
 		case VALIDATION_TYPE_TEXT_LENGTH :

@@ -32,6 +32,7 @@
 
 static GHashTable *services = NULL;
 
+#if 0
 static FileFormatLevel
 parse_format_level_str (gchar const *format_level_str, FileFormatLevel def)
 {
@@ -73,6 +74,7 @@ get_plugin_file_savers_hash (GnmPlugin *plugin)
 
 	return hash;
 }
+#endif // 0 -- unused, jsled
 
 
 static void

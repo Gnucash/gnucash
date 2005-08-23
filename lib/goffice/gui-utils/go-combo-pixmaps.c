@@ -185,7 +185,9 @@ swatch_activated (GOComboPixmaps *combo, GtkWidget *button)
 static gboolean
 cb_swatch_release_event (GtkWidget *button, GdkEventButton *event, GOComboPixmaps *combo)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO do I want to check for which button ?
+#endif
 	return swatch_activated (combo, button);
 }
 static gboolean

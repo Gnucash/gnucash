@@ -46,9 +46,11 @@ static void gnm_plugin_loader_module_load_base (GnmPluginLoader *loader, ErrorIn
 static void gnm_plugin_loader_module_unload_base (GnmPluginLoader *loader, ErrorInfo **ret_error);
 
 static void gnm_plugin_loader_module_load_service_general (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
+#if 0
 static void gnm_plugin_loader_module_load_service_file_opener (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
 static void gnm_plugin_loader_module_load_service_file_saver (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
 static void gnm_plugin_loader_module_load_service_function_group (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
+#endif // 0 -- unused, jsled
 static void gnm_plugin_loader_module_load_service_plugin_loader (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
 static void gnm_plugin_loader_module_load_service_ui (GnmPluginLoader *loader, GnmPluginService *service, ErrorInfo **ret_error);
 

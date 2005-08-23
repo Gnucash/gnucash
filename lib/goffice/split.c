@@ -72,6 +72,7 @@ value_area_get_x_y (GnmValue const *v, int x, int y, GnmEvalPos const *ep)
 	return NULL;
 }
 
+#if 0
 char const *
 range_name(GnmRange const *src)
 {
@@ -83,6 +84,7 @@ global_range_name(Sheet *sheet, GnmRange const *r)
 {
   return "unimplemented";
 }
+#endif // 0
 
 double
 gnm_app_display_dpi_get (gboolean horizontal)

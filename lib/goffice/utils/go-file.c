@@ -169,7 +169,7 @@ go_basename_from_uri (const char *uri)
 char *
 go_dirname_from_uri (const char *uri, gboolean brief)
 {
-	char *dirname_utf8, *dirname;
+	char *dirname_utf8 = NULL, *dirname = NULL;
 
 #ifdef WITH_GNOME
 	char *raw_uri = gnome_vfs_unescape_string (uri, G_DIR_SEPARATOR_S);

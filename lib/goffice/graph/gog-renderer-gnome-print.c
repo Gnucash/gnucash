@@ -490,8 +490,10 @@ gog_renderer_gnome_print_draw_text (GogRenderer *rend, char const *text,
 		}
 		if (y <= 0)
 			y = 0;
-		
+	
+#ifdef GOG_WARN_TODO	
 #warning "add clipping"
+#endif
 
 #ifdef HAVE_GNOME_PRINT_PANGO_CREATE_LAYOUT
 		gnome_print_moveto (prend->gp_context,x, -y);

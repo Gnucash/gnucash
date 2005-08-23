@@ -148,7 +148,10 @@ gog_theme_find_element (GogTheme *theme, GogObject *obj)
 	g_return_val_if_fail (theme != NULL, NULL);
 
 	if (theme->load_from_file != NULL) {
+#ifdef GOG_WARN_TODO
 #warning TODO parse some xml
+#endif
+
 	}
 
 	/* 1) have we seen this specific role before */
@@ -236,7 +239,10 @@ gog_theme_fillin_style (GogTheme *theme, GogStyle *style,
 	else
 		gog_style_apply_theme (style, elem->style);
 
+#ifdef GOG_WARN_TODO
 #warning we should handle the applicability here not in the map
+#endif
+
 	if (ind >= 0 && elem->map)
 		(elem->map) (style, ind);
 }

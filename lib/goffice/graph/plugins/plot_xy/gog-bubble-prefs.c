@@ -106,7 +106,9 @@ gog_bubble_plot_pref (GogBubblePlot *bubble, GnmCmdContext *cc)
 	g_signal_connect (G_OBJECT (w),
 		"toggled",
 		G_CALLBACK (cb_3d_changed), bubble);
+#ifdef GOG_WARN_TODO
 #warning "Hide 3d button while not supported"
+#endif
 	gtk_widget_hide (w);
 
 	w = glade_xml_get_widget (gui, "scale");

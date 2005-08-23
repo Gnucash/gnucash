@@ -1,3 +1,9 @@
+2005-08-22  Josh Sled <jsled@asynchronous.org>
+	* lib/goffice/: Conditionallize #warnings used as TODO tracking
+	from "goffice" import.  Fix compiler warnings.  lib/goffice/
+	should now build with -Werror.  As such, remove -Werror removal
+	from .mk files.
+	
 2005-08-22  Neil Williams <linux@codehelp.co.uk>
 
 	* configure.in: Provisional building of libgoffice.

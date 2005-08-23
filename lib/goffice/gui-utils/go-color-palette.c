@@ -325,7 +325,9 @@ swatch_activated (GOColorPalette *pal, GtkBin *button)
 static gboolean
 cb_swatch_release_event (GtkBin *button, GdkEventButton *event, GOColorPalette *pal)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO do I want to check for which button ?
+#endif
 	swatch_activated (pal, button);
 	return TRUE;
 }

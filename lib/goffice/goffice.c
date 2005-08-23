@@ -73,9 +73,9 @@ libgoffice_init (void)
 	gog_themes_init	();
 	// -libgoffice_init
 
-	gnm_string_init();
-	mstyle_init();
-	gnm_conf_init( FALSE );
+	//gnm_string_init();
+	//mstyle_init();
+	//gnm_conf_init( FALSE );
 
 	ctx = cmd_context_stderr_new();
 	plugins_init( ctx );

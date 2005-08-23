@@ -1759,7 +1759,7 @@ gnm_float pgamma(gnm_float x, gnm_float alph, gnm_float scale, gboolean lower_ta
 
 /* NaNs propagated correctly */
 
-
+#if 0
 static int chebyshev_init(gnm_float *dos, int nos, gnm_float eta)
 {
     int i, ii;
@@ -1779,6 +1779,7 @@ static int chebyshev_init(gnm_float *dos, int nos, gnm_float eta)
     }
     return i;
 }
+#endif // 0 -- jsled, unused
 
 
 static gnm_float chebyshev_eval(gnm_float x, const gnm_float *a, const int n)

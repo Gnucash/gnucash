@@ -243,7 +243,9 @@ go_action_combo_color_new (char const  *action_name,
 void
 go_action_combo_color_set_group (GOActionComboColor *action, gpointer group_key)
 {
+#ifdef GOG_WARN_TODO
 #warning TODO
+#endif
 }
 
 GOColor
