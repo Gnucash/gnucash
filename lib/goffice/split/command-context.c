@@ -77,6 +77,13 @@ gnm_cmd_context_error_calc (GnmCmdContext *context, char const *msg)
 	g_error_free (err);
 }
 
+char const *
+range_name(GnmRange const *src)
+{
+  return "undefined";
+}
+
+
 void
 gnm_cmd_context_error_splits_array (GnmCmdContext *context,
 			     G_GNUC_UNUSED char const *cmd,

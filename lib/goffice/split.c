@@ -73,11 +73,6 @@ value_area_get_x_y (GnmValue const *v, int x, int y, GnmEvalPos const *ep)
 }
 
 #if 0
-char const *
-range_name(GnmRange const *src)
-{
-  return "undefined";
-}
 
 char *
 global_range_name(Sheet *sheet, GnmRange const *r)
