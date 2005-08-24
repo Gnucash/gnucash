@@ -130,11 +130,12 @@ Resources
   - Graphing still unsupported; [jsled] in periodic contact with Jody
     Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be factored
     out of gnumeric into libgoffice.
-    GOG integrated but not completely working - warlord - 2005-04-23.
+
+    - GOG integrated but not completely working - warlord - 2005-04-23.
+
+    - Known issue with height/width bug in libgtkhtml 3.?.? on FC3.
 
   - Save/restore in unknown state; believed to crash on re-start.
-
-  - First report sets report name text for tab but no other report can change it.
 
 - Importing
 

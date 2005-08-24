@@ -64,8 +64,11 @@ enum {
 
 static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
 static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
+static GObject *gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties);
 static void gnc_plugin_page_report_finalize (GObject *object);
 static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
+
+static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId);
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
@@ -218,6 +221,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+        object_class->constructor = gnc_plugin_page_report_constructor;
 	object_class->finalize = gnc_plugin_page_report_finalize;
 
         object_class->set_property = gnc_plugin_page_report_set_property;
@@ -235,10 +239,10 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
         // create the "reportId" property
         g_object_class_install_property( object_class,
                                          PROP_REPORT_ID,
-                                         g_param_spec_int( "report_id",
+                                         g_param_spec_int( "report-id",
                                                            _("The numeric ID of the report."),
                                                            _("The numeric ID of the report."),
-                                                           -1, G_MAXINT, -1, G_PARAM_READWRITE ) );
+                                                           -1, G_MAXINT, -1, G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE ) );
 
 /* JSLED: report-selected?
 	plugin_page_signals[ACCOUNT_SELECTED] =
@@ -360,7 +364,9 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         scm_gc_protect_object(report->initial_report);
         scm_gc_protect_object(report->edited_reports);
 
-        g_object_get( ppage, "report_id", &report_id, NULL );
+        g_object_get( ppage, "report-id", &report_id, NULL );
+
+        DEBUG("report-id: %d\n", report_id);
         
         /* get the inst-report from the Scheme-side hash, and get its
          * options and editor thunk */
@@ -673,47 +679,74 @@ static action_short_labels short_labels[] = {
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
-	GtkActionGroup *action_group;
-	GncPluginPageReportPrivate *priv;
-	GncPluginPage *parent;
+        plugin_page->priv = g_new0( GncPluginPageReportPrivate, 1 );
+}
+
+static GObject*
+gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties)
+{
+        GObject *obj;
+        GncPluginPageReportClass *our_class;
+        GObjectClass *parent_class;
+        gint reportId = -42;
+        int i = 0;
+
+        our_class = GNC_PLUGIN_PAGE_REPORT_CLASS (g_type_class_peek (GNC_TYPE_PLUGIN_PAGE_REPORT));
+        parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (our_class));
+        obj = parent_class->constructor(this_type, n_properties, properties);
+
+        for (; i < n_properties; i++)
+        {
+                GObjectConstructParam prop = properties[i];
+                if (strcmp(prop.pspec->name,"report-id") == 0)
+                {
+                        reportId = g_value_get_int(prop.value);
+                }
+        }
+  
+        gnc_plugin_page_report_constr_init(GNC_PLUGIN_PAGE_REPORT(obj), reportId);
+
+        return obj;
+}
+
+static void
+gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId)
+{
+        GtkActionGroup *action_group;
+        GncPluginPage *parent;
         GString *tmpStr;
-        gint reportId;
-	gboolean use_new;
+        gboolean use_new;
 
-	priv = plugin_page->priv = g_new0( GncPluginPageReportPrivate, 1 );
-
-        reportId = -42;
-        g_object_get( plugin_page, "report_id", &reportId, NULL );
         DEBUG( "property reportId=%d", reportId );
+        plugin_page->priv->reportId = reportId;
 
         gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page) );
 
-	/* Init parent declared variables */
-	parent = GNC_PLUGIN_PAGE(plugin_page);
+        /* Init parent declared variables */
+        parent = GNC_PLUGIN_PAGE(plugin_page);
         tmpStr = g_string_sized_new( 32 );
         g_string_sprintf( tmpStr, "%s: %s", _("Report"),
-                          gnc_report_name( priv->initial_report ) );
-	gnc_plugin_page_set_title(parent, tmpStr->str);
-	gnc_plugin_page_set_tab_name(parent, tmpStr->str);
-	gnc_plugin_page_set_uri(parent, "default:");
+                          gnc_report_name( plugin_page->priv->initial_report ) );
+        gnc_plugin_page_set_title(parent, tmpStr->str);
+        gnc_plugin_page_set_tab_name(parent, tmpStr->str);
+        gnc_plugin_page_set_uri(parent, "default:");
 
-	use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
-	gnc_plugin_page_set_use_new_window(parent, use_new);
+        use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
+        gnc_plugin_page_set_use_new_window(parent, use_new);
 
-	/* change me when the system supports multiple books */
-	gnc_plugin_page_add_book(parent, gnc_get_current_book());
+        /* change me when the system supports multiple books */
+        gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
-	/* Create menu and toolbar information. */
+        /* Create menu and toolbar information. */
         /* Note that we're not actually doing the merge, here ... just setup
          * the UI objects.  See gnc_plugin_page_report_[un]merge_actions(...) */
-
-	action_group = gtk_action_group_new ("GncPluginPageReportActions");
-	priv->action_group = action_group;
-	gtk_action_group_add_actions( action_group,
-				      report_actions,
-				      num_report_actions,
-				      plugin_page );
-	gnc_plugin_init_short_names (action_group, short_labels);
+        action_group = gtk_action_group_new ("GncPluginPageReportActions");
+        plugin_page->priv->action_group = action_group;
+        gtk_action_group_add_actions( action_group,
+                                      report_actions,
+                                      num_report_actions,
+                                      plugin_page );
+        gnc_plugin_init_short_names (action_group, short_labels);
 }
 
 GncPluginPage*
@@ -722,8 +755,8 @@ gnc_plugin_page_report_new( int reportId )
 	GncPluginPageReport *plugin_page;
 
         DEBUG( "report id = %d", reportId );
-	plugin_page = g_object_new( GNC_TYPE_PLUGIN_PAGE_REPORT,
-                                    "report_id", reportId, NULL );
+        plugin_page = g_object_new( GNC_TYPE_PLUGIN_PAGE_REPORT,
+                                    "report-id", reportId, NULL );
         DEBUG( "plugin_page: %p", plugin_page );
         DEBUG( "set %d on page %p", reportId, plugin_page );
 	return GNC_PLUGIN_PAGE( plugin_page );
@@ -1066,25 +1099,25 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 void
 gnc_main_window_open_report(int report_id, GncMainWindow *window)
 {
-  GncPluginPage *reportPage;
+        GncPluginPage *reportPage;
 
-  if (window)
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+        if (window)
+                g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
-  reportPage = gnc_plugin_page_report_new( report_id );
-  gnc_main_window_open_page( window, reportPage );
+        reportPage = gnc_plugin_page_report_new( report_id );
+        gnc_main_window_open_page( window, reportPage );
 }
 
 void
 gnc_main_window_open_report_url(const char * url, GncMainWindow *window)
 {
-  GncPluginPage *reportPage;
+        GncPluginPage *reportPage;
 
-  printf( "report url: [%s]\n", url );
+        DEBUG( "report url: [%s]\n", url );
 
-  if (window)
-    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+        if (window)
+                g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
-  reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
-  gnc_main_window_open_page( window, reportPage );
+        reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
+        gnc_main_window_open_page( window, reportPage );
 }

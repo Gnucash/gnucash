@@ -1,3 +1,13 @@
+2005-08-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_constr_init): Since we want to pass the
+	reportId in at page-construction time, appropriately define a
+	gobject constructor, &c. to get the property.  As a result, the
+	report page now understands which report (by id) it's actually
+	for.
+	* GNOME2_STATUS: update
+
 2005-08-23  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/goffice/split/gnumeric-gconf.c: we don't need this
