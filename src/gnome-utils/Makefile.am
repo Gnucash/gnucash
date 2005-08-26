@@ -1,7 +1,7 @@
 SUBDIRS = schemas . test ui
 PWD := $(shell pwd)
 
-lib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
+pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 AM_CFLAGS = \

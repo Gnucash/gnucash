@@ -1,3 +1,9 @@
+2005-08-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:  move the module back into
+	  pkglibdir so that gnucash actually runs properly instead
+	  of dying at runtime.
+
 2005-08-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c
