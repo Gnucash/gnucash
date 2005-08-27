@@ -10,9 +10,13 @@ LIBTOOL=${LIBTOOL:-libtool}
 
 if [ -n "$GNOME2_PATH" ]; then
 	for dir in `echo $GNOME2_PATH | sed 's/:/ /g'`; do
-	    ACLOCAL_FLAGS="-I $dir/share/aclocal $ACLOCAL_FLAGS"
+	    if test -d "${dir}/share/aclocal"; then
+		ACLOCAL_FLAGS="${ACLOCAL_FLAGS} -I ${dir}/share/aclocal"
+	    fi;
+	    if test -d "${dir}/bin"; then
+		PATH="${PATH}:${dir}/bin"
+	    fi;
 	done;
-	PATH="$GNOME2_PATH/bin:$PATH"
 	export PATH
 fi
 
