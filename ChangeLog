@@ -1,3 +1,13 @@
+2005-08-28  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/autogen.sh: Make build system up to date: Remove
+	acinclude.m4 and remove the 3 last remaining legacy macros into
+	macros/legacy_macros.m4; have ltmain.sh created by libtoolizes
+	instead of having it in CVS; remove old macros/acx_pthread.m4
+	which hasn't been used since 2003; remove AM_ACLOCAL_INCLUDE macro
+	from configure.in because that's no longer a supported autoconf
+	macro.
+
 2005-08-27  Neil Williams <linux@codehelp.co.uk>
 
 	* src/business/business-core/businessmod-core.c: Loading

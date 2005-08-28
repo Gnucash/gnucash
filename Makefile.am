@@ -34,7 +34,6 @@ m4data_DATA = gnucash.m4
 # CVS dirs.
 
 EXTRA_DIST = config.rpath  \
-  .cvsignore \
   ChangeLog.1 \
   HACKING \
   README.patches \
@@ -48,7 +47,7 @@ EXTRA_DIST = config.rpath  \
   macros/autogen.sh \
   macros/compiler-flags.m4 \
   macros/gnome-guile-checks.m4 \
-  po/.cvsignore \
+  macros/legacy_macros.m4 \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \

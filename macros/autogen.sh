@@ -126,37 +126,37 @@ case $gettext_version in
 	INTL="--intl --no-changelog";;
 esac
 
-#(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
-#  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
-#    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
+    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
-#grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
-#  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
-#  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
-#    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
+    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
-#grep "^AM_GNOME_GETTEXT" $srcdir/configure.in >/dev/null && {
-#  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
-#  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
-#    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+grep "^AM_GNOME_GETTEXT" $srcdir/configure.in >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
+    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
 (${AUTOMAKE} --version) < /dev/null > /dev/null 2>&1 || {
   echo
@@ -274,12 +274,12 @@ do
       fi
       if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
         echo "Running intltoolize ..."
-        intltoolize --copy
+        intltoolize --force --copy
       fi
-#      if grep "^A[CM]_PROG_LIBTOOL" configure.in >/dev/null; then
-#        echo "Running libtoolize..."
-#        libtoolize --force --copy
-#      fi
+      if grep "^A[CM]_PROG_LIBTOOL" configure.in >/dev/null; then
+        echo "Running libtoolize..."
+        libtoolize --force --copy
+      fi
       echo "Running $ACLOCAL $aclocalinclude ..."
       $ACLOCAL $aclocalinclude
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
