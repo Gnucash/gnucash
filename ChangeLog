@@ -1,3 +1,8 @@
+2005-08-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/date.[ch]: fix for bug #170444 -- pass a better
+	  tm value to strftime.
+
 2005-08-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c (inputBoxCB): Aaarg,

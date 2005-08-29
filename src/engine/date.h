@@ -58,7 +58,7 @@ typedef enum
 #define DATE_FORMAT_LAST  DATE_FORMAT_LOCALE
 
 /** The maximum length of a string created by the date printers */
-#define MAX_DATE_LENGTH 11
+#define MAX_DATE_LENGTH 31
 
 
 /** Datatypes *******************************************************/

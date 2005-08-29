@@ -361,12 +361,11 @@ printDate (char * buff, int day, int month, int year)
     case DATE_FORMAT_CE:
       sprintf (buff, "%2d.%2d.%-4d", day, month, year);
       break;
-    case DATE_FORMAT_ISO:
-      sprintf (buff, "%04d-%02d-%02d", year, month, day);
-      break;
     case DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
+	time_t t;
+	int n;
 
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
@@ -374,10 +373,16 @@ printDate (char * buff, int day, int month, int year)
                                        * says, it's not a Y2K thing */
 
 	gnc_tm_set_day_start (&tm_str);
-        strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm_str);
+	t = mktime (&tm_str);
+	localtime_r (&t, &tm_str);
+        n = strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm_str);
+	if (n != 0)
+	  break;
       }
+      /* FALLTHROUGH */
+    case DATE_FORMAT_ISO:
+      sprintf (buff, "%04d-%02d-%02d", year, month, day);
       break;
-
     case DATE_FORMAT_US:
     default:
       sprintf (buff, "%2d/%2d/%-4d", month, day, year);
