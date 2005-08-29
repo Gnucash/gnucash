@@ -1,3 +1,8 @@
+2005-08-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-date.c: fix bug #170444 by making sure we
+	  pass a full tm to strftime()
+
 2005-08-28  Christian Stimming  <stimming@tuhh.de>
 
 	* macros/autogen.sh: Make build system up to date: Remove

@@ -463,10 +463,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
     case QOF_DATE_FORMAT_CE:
       flen = g_snprintf (buff, len, "%2d.%2d.%-4d", day, month, year);
       break;
-    case QOF_DATE_FORMAT_ISO:
-      flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
-      break;
+ /*
     case QOF_DATE_FORMAT_UTC:
+    // Is there any reason to go through strftime() here when we're using
+    // the same format as with ISO?  The output is the same either way.
 	{
 		struct tm tm_str;
 
@@ -477,9 +477,11 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 		flen = strftime(buff, MAX_DATE_LENGTH, "%Y-%m-%d", &tm_str);
 		break;
 	}
+ */
     case QOF_DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
+	time_t t;
 
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
@@ -487,10 +489,17 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
                                        * says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
+	t = mktime (&tm_str);
+	localtime_r (&t, &tm_str);
         flen = strftime (buff, len, GNC_D_FMT, &tm_str);
+	if (flen != 0)
+	  break;
       }
+      /* FALLTHROUGH */
+    case QOF_DATE_FORMAT_ISO:
+    case QOF_DATE_FORMAT_UTC:
+      flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
       break;
-
     case QOF_DATE_FORMAT_US:
     default:
       flen = g_snprintf (buff, len, "%2d/%2d/%-4d", month, day, year);
