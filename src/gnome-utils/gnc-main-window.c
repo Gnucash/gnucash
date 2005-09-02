@@ -69,10 +69,12 @@ enum {
 };
 
 
-#define PLUGIN_PAGE_IMMUTABLE "page-immutable"
+#define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
+#define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
 #define KEY_TOOLBAR_STYLE	"toolbar_style"
+#define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
@@ -761,6 +763,87 @@ gnc_main_window_update_all_menu_items (void)
   LEAVE(" ");
 }
 
+
+/** Show/hide the close box on the tab of a notebook page.  This
+ *  function first checks to see if the specified page has a close
+ *  box, and if so, sets its isibility to the requested state.
+ *
+ *  @internal
+ *
+ *  @param page The GncPluginPage whose notebook tab should be updated.
+ *
+ *  @param new_value A pointer to the boolean that indicates whether
+ *  or not the close button should be visible.
+ */
+static void
+gnc_main_window_update_tabs_one_page (GncPluginPage *page,
+				      gboolean *new_value)
+{
+  GtkWidget * close_button;
+
+  ENTER("page %p, visible %d", page, *new_value);
+  close_button = g_object_get_data(G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON);
+  if (!close_button) {
+    LEAVE("no close button");
+    return;
+  }
+
+  if (*new_value)
+    gtk_widget_show (close_button);
+  else
+    gtk_widget_hide (close_button);
+  LEAVE(" ");
+}
+
+
+/** Show/hide the close box on all pages in a given window.  This
+ *  function calls the gnc_main_window_update_tabs_one_page() for each
+ *  page in the window.
+ *
+ *  @internal
+ *
+ *  @param window The GncMainWindow whose notebook tabs should be
+ *  updated.
+ *
+ *  @param new_value A pointer to the boolean that indicates whether
+ *  or not the close button should be visible.
+ */
+static void
+gnc_main_window_update_tabs_one_window (GncMainWindow *window, gboolean *new_value)
+{
+  ENTER("window %p, visible %d", window, *new_value);
+  g_list_foreach(window->priv->installed_pages,
+		 (GFunc)gnc_main_window_update_tabs_one_page,
+		 new_value);
+  LEAVE(" ");
+}
+
+
+/** Show/hide the close box on all pages in all windows.  This
+ *  function calls the gnc_main_window_update_tabs_one_window() for
+ *  each open window in the application.
+ *
+ *  @internal
+ *
+ *  @param entry A pointer to the GConfEntry which describes the new
+ *  state of whether close buttons should be visible on notebook tabs.
+ *
+ *  @param user_data Unused.
+ */
+static void
+gnc_main_window_update_tabs (GConfEntry *entry, gpointer user_data)
+{
+  gboolean new_value;
+
+  ENTER(" ");
+  new_value = gconf_value_get_bool(entry->value);
+  g_list_foreach(active_windows,
+		 (GFunc)gnc_main_window_update_tabs_one_window,
+		 &new_value);
+  LEAVE(" ");
+}
+
+
 /************************************************************
  *                   Widget Implementation                  *
  ************************************************************/
@@ -869,6 +952,10 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 			G_TYPE_OBJECT);
 
 	qof_session_add_close_hook(gnc_main_window_shutdown, NULL);
+
+	gnc_gconf_general_register_cb (KEY_SHOW_CLOSE_BUTTON,
+				       gnc_main_window_update_tabs,
+				       NULL);
 }
 
 
@@ -1122,6 +1209,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label;
 	const gchar *icon;
 	GtkWidget *image;
+	gboolean immutable = FALSE;
 
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -1143,6 +1231,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	/* Is this the first page in the first window? */
 	if ((window == active_windows->data) &&
 	    (window->priv->installed_pages == NULL)) {
+	  immutable = TRUE;
 	  g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
 			     GINT_TO_POINTER(1));
 	}
@@ -1156,16 +1245,37 @@ gnc_main_window_open_page (GncMainWindow *window,
 	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
 	gtk_widget_show (label);
 
+	label_box = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (label_box);
+
 	if (icon != NULL) {
-		/* FIXME */
-		label_box = gtk_hbox_new (FALSE, 6);
-		gtk_widget_show (label_box);
 		image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
 		gtk_widget_show (image);
 		gtk_box_pack_start (GTK_BOX (label_box), image, FALSE, FALSE, 0);
-		gtk_box_pack_start (GTK_BOX (label_box), label, TRUE, TRUE, 0);
-	} else {
-		label_box = label;
+	} 
+
+	gtk_box_pack_start (GTK_BOX (label_box), label, TRUE, TRUE, 0);
+  
+	/* Add close button - Not for immutable pages */
+	if (!immutable) {
+	  GtkWidget *close_image, *close_button;
+	  
+	  close_button = gtk_button_new();
+	  gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
+	  close_image=gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+	  gtk_widget_show(close_image);
+	  gtk_container_add(GTK_CONTAINER(close_button), close_image);
+	  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SHOW_CLOSE_BUTTON, NULL))
+	    gtk_widget_show (close_button);
+	  else
+	    gtk_widget_hide (close_button);
+     
+	  g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
+                      G_CALLBACK(gnc_main_window_close_page), page);
+
+	  gtk_box_pack_start (GTK_BOX (label_box), close_button, FALSE, FALSE, 0);
+
+	  g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
 	}
 	
 	gnc_main_window_connect(window, page, label_box);

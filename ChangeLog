@@ -1,3 +1,11 @@
+2005-09-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/gnome-utils/gnc-main-window.c: 
+	* src/gnome-utils/preferences.glade: Frederic Leroy's patch
+	(#314512) to add a close box to each notebook tab.  Enhanced to
+	make the tab visibility a user preference.
+
 2005-08-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-date.c: fix bug #170444 by making sure we

@@ -158,6 +158,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/tab_close_buttons</key>
+      <applyto>/apps/gnucash/general/tab_close_buttons</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Show close buttons on notebook tabs.</short>
+        <long>
+	  Setting this value to TRUE tells Gnucash to show a "close"
+	  button on any notebook tab that may be closed.  If FALSE,
+	  pages must be closed via the "close" menu item or the
+	  "close" button on toolbar.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
       <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
       <owner>gnucash</owner>
