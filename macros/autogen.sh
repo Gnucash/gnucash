@@ -287,8 +287,6 @@ do
 	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
       fi
       echo "Running $AUTOMAKE --gnu $am_opt ..."
-      echo "*** You should ignore any complaints about files in lib/goffice"
-      echo "    overriding the CFLAGS variable."
       $AUTOMAKE --add-missing --gnu $am_opt
       echo "Running autoconf ..."
       autoconf
