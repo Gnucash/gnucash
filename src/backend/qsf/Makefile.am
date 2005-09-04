@@ -6,6 +6,7 @@ AM_CFLAGS = \
   -I.. -I../.. \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
+  -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/gnc-module \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS}

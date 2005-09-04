@@ -26,6 +26,7 @@
 #include <libxml/xmlversion.h>
 #include "qsf-dir.h"
 #include "qsf-xml.h"
+static int module = MOD_BACKEND;
 
 void qsf_free_params(qsf_param *params)
 {
@@ -78,7 +79,7 @@ qsf_is_valid(const char *schema_dir, const char* schema_filename, xmlDocPtr doc)
 	gchar *schema_path;
 	gint result;
 
-	if(doc == NULL) return FALSE;
+	g_return_val_if_fail(doc || schema_filename, FALSE);
 	schema_path = g_strdup_printf("%s/%s", schema_dir, schema_filename);
 	qsf_schema_file = xmlSchemaNewParserCtxt(schema_path);
 	qsf_schema = xmlSchemaParse(qsf_schema_file);
@@ -135,12 +136,12 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 			if(g_hash_table_size(valid->validation_table) > count)
 			{
 				valid->valid_object_count++;
-			}
 			if(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration))
 			{
 				valid->qof_registered_count++;
 			}
 		}
+	}
 	}
 }
 
@@ -153,13 +154,17 @@ gboolean is_our_qsf_object(const char *path)
 	gint table_count;
 
 	g_return_val_if_fail((path != NULL),FALSE);
-	if(path == NULL) { return FALSE; }
 	doc = xmlParseFile(path);
 	if(doc == NULL)  { return FALSE; }
-	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { return FALSE; }
+	if(TRUE != qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, doc)) { 
+		PINFO (" validation failed %s %s %s", QSF_SCHEMA_DIR, 
+			QSF_OBJECT_SCHEMA, path);
+		return FALSE; 
+	}
 	object_root = xmlDocGetRootElement(doc);
 	valid.validation_table = g_hash_table_new(g_str_hash, g_str_equal);
 	valid.qof_registered_count = 0;
+	valid.valid_object_count = 0;
 	iter.ns = object_root->ns;
 	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
 	table_count = g_hash_table_size(valid.validation_table);
