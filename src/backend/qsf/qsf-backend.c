@@ -1134,13 +1134,13 @@ QofBackendProvider strings are translatable. */
 void
 qsf_provider_init(void)
 {
+	QofBackendProvider *prov;
 	#ifdef ENABLE_NLS
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 	#endif
-	QofBackendProvider *prov;
 	prov = g_new0 (QofBackendProvider, 1);
 	prov->provider_name = "QSF Backend Version 0.1";
 	prov->access_method = "file";

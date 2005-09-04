@@ -464,6 +464,7 @@ gnc_file_be_determine_file_type(const char *path)
 	return GNC_BOOK_NOT_OURS;
 }
 
+#ifndef GNUCASH_MAJOR_VERSION
 static gboolean
 gnc_determine_file_type (const char *path)
 {
@@ -486,6 +487,7 @@ gnc_determine_file_type (const char *path)
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
+#endif
 
 static gboolean
 gnc_file_be_backup_file(FileBackend *be)
