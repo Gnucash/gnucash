@@ -1,7 +1,47 @@
+2005-09-04  Neil Williams <linux@codehelp.co.uk>
+
+	* src/backend/file/gnc-backend-file.c: Backend Configuration handler,
+	handling binary file type and adding gettext support.
+	* src/backend/file/gnc-backend-file.h: Provider init.
+	* src/backend/file/io-gncbin-r.c: Binary file determination.
+	* src/backend/file/io-gncbin.h: Binary file determination and Doxygen.
+	* src/backend/file/io-gncxml-v2.h: Doxygen
+	* src/backend/file/io-gncxml.h: Doxygen.
+	* src/backend/file/sixtp-utils.c: CashUtil sync.
+	* src/backend/qsf/Makefile.am: Gettext support.
+	* src/backend/qsf/qsf-backend.c: Backend configuration, handling new
+	files and gettext support.
+	* src/backend/qsf/qsf-dir.h.in: Licence fix.
+	* src/backend/qsf/qsf-xml.c: Validation fix.
+	* src/backend/qsf/qsf-xml.h: Gettext support.
+	* src/business/business-core/file/gnc-customer-xml-v2.c:
+	* src/business/business-core/file/gnc-employee-xml-v2.c:
+	* src/business/business-core/file/gnc-job-xml-v2.c:
+	* src/business/business-core/file/gnc-order-xml-v2.c:
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	Overdue removal of bad casts.
+	* src/engine/cashobjects.c: Extra objects for libcashobjects.la
+	* src/engine/gnc-date.c: Resolving query on previous bug fix.
+	* src/engine/gnc-event.h: Adding to Doxygen.
+	* src/engine/qof-be-utils.h: Adding to Doxygen.
+	* src/engine/qof.h: Doxygen handling.
+	* src/engine/qof_book_merge.h: Doxygen handling.
+	* src/engine/qofbackend-p.h: Move check type into
+	QofBackendProvider.
+	* src/engine/qofbackend.c: Backend configuration.
+	* src/engine/qofbackend.h: Doxygen.
+	* src/engine/qofchoice.h: Licence fix and Doxygen
+	* src/engine/qofid.h: Doxygen fix.
+	* src/engine/qofquery-deserial.h: Remove from Doxygen.
+	* src/engine/qofquery-serialize.h: Remove from Doxygen.
+	(query-serialise may be removed from QOF later.)
+	* src/engine/qofsession.c: Backend discrimination.
+	* src/engine/qofsession.h: check_data_type.
+
 2005-09-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome/schemas/apps_gnucash_general.schemas:
-	* src/gnome-utils/gnc-main-window.c: 
+	* src/gnome-utils/gnc-main-window.c:
 	* src/gnome-utils/preferences.glade: Frederic Leroy's patch
 	(#314512) to add a close box to each notebook tab.  Enhanced to
 	make the tab visibility a user preference.
@@ -54,7 +94,7 @@
 	from "goffice" import.  Fix compiler warnings.  lib/goffice/
 	should now build with -Werror.  As such, remove -Werror removal
 	from .mk files.
-	
+
 2005-08-22  Neil Williams <linux@codehelp.co.uk>
 
 	* configure.in: Provisional building of libgoffice.
@@ -406,10 +446,10 @@
 	* src/backend/file/io-gncxml-v1.c: Cast fixes
 	* src/backend/file/io-gncxml-v2.c: Stop use of gnc- prefix, remove
 	unnecessary header and cast fixes.
-	* src/backend/file/sixtp-dom-generators.c: 
+	* src/backend/file/sixtp-dom-generators.c:
 	* src/backend/file/sixtp-dom-parsers.c:
 	* src/backend/file/sixtp-to-dom-parser.c: Cast fixes
-	* src/backend/file/sixtp-utils.c: Other files in this backend already use <time.h>, 
+	* src/backend/file/sixtp-utils.c: Other files in this backend already use <time.h>,
 	no need to provide a duplicate here.
 	* src/backend/file/sixtp.c:
 	* src/backend/file/test/test-dom-converters1.c:
@@ -419,8 +459,8 @@
 	* src/backend/file/test/test-xml-transaction.c: Cast fixes
 	* src/engine/Makefile.am: Add qofchoice files.
 	* src/engine/qofchoice.c: QOF_TYPE_CHOICE handlers.
-	* src/engine/qofchoice.h: 
-	
+	* src/engine/qofchoice.h:
+
 2005-08-02  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/prefs.scm:
@@ -551,7 +591,7 @@
 	* various src/backend and src/business/business-core: Add gchar*
 	to xmlChar* casting of string constants to eliminate some gcc4
 	warnings.
-	
+
 	* src/gnome-utils/print-session.c: Some gchar* to guchar* casting
 	to make gcc4 happy.
 
@@ -661,7 +701,7 @@
 	* src/gnome-utils/gnc-main-window.c: Spruce up the delete window
 	dialog to make it more HIG compliant.
 
-	* src/engine/qofbook.h: 
+	* src/engine/qofbook.h:
 	* src/engine/qofbook-p.h: Expose the qof_book_mark_saved()
 	function.
 
@@ -694,7 +734,7 @@
 	top level menu that collects all the menu items from Edit and
 	Actions that modify transactions.  This menu parallels the HIG
 	definition of an "Edit" menu as much as possible.
-	
+
 	* src/gnome/ui/gnc-plugin-basic-commands-ui.xml: Move a couple
 	menu items within the Actions menu.
 
@@ -752,7 +792,7 @@
 	existence of gconf keys.  New functions to add/remove gconf
 	notifications for use by code that doesn't have a GObject
 	available.
-	
+
 	* src/bin/Makefile.am:
 	* src/bin/update-gnucash-gconf.in: New script to install all of
 	Gnucash's gconf schemas into the users ~/.gconf directory.
@@ -812,7 +852,7 @@
 	is in large part a wrapper around the original dialog code, since
 	the same logic was actually used to drive two different dialogs.
 
-	* src/business/business-gnome/business-gnome.scm: 
+	* src/business/business-gnome/business-gnome.scm:
 	* src/business/business-gnome/businessmod-gnome.c:
 	* src/business/business-gnome/gnc-plugin-business.[ch]:
 	* src/business/business-gnome/gw-business-gnome-spec.scm: Move the
@@ -822,7 +862,7 @@
 
 	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
 	Add a couple of placeholders.
-	
+
 	* src/gnome-utils/gnc-main-window.c: Catch the window manager
 	delete signal and query the user before allowing the last window
 	to be deleted.
@@ -833,7 +873,7 @@
 	* src/import-export/binary-import/binary-import.scm (removed):
 	* src/import-export/binary-import/gw-binary-import-spec.scm (removed):
 	Rewrite this module's book-opened-hook into C.
-	
+
 	* src/enginc/gnc-hooks.[ch]:
 	* src/engine/gw-engine-spec.scm: Explicitly state the number of
 	arguments a hook callback should have.  Scheme gets very unhappy
@@ -841,7 +881,7 @@
 
 	* src/app-file/gw-app-file-spec.scm: Eliminate double free of
 	memory.
-	
+
 2005-07-06  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c: The register uses a
@@ -853,8 +893,8 @@
 	* src/app-file/gnc-file.c:
 	* src/gnome/dialog-new-user.c:
 	* src/gnome/top-level.c: Eliminate double call of some hooks.
-	
-	* src/gnome/top_level.c: 
+
+	* src/gnome/top_level.c:
 	* src/gnome-utils/gnc-main-window.c: A new GncMainWindow should
 	show itself instead of requiring the caller to call
 	gtk_widget_show.
@@ -868,7 +908,7 @@
 	the fields in a GncPluginPage from the public to the private data
 	structures.
 
-	* src/gnome-utils/dialog-query-list.c: 
+	* src/gnome-utils/dialog-query-list.c:
 
 	Look for the window manager deletion signal and clean up the
 	dialog.
@@ -908,7 +948,7 @@
 
 	* src/business/business-core/gncEmployee.h: Add #define for
 	deprecated function.
-		
+
 2005-07-01  David Hampton  <hampton@employees.org>
 
 	* src/business/business-core/gncEmployee.h: Add #define for
@@ -923,18 +963,18 @@
 	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
 	* src/gnome/ui/gnc-plugin-page-sxregister-ui.xml: Restore missing
 	commands.
-	
+
 	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
 	* src/gnome-utils/ui/gnc-main-window-ui.xml: Tweak menu locations.
 
 	* src/gnome/dialog-scheduledxaction.c: Destroy the dialog when the
 	user dismisses it. Releases resources instead of losing them.
-	
+
 	* src/gnome/glade/register.glade: Tweak the "Void Transaction"
 	dialog.
-	
+
 	* src/gnome-utils/gnc-embedded-window.c: Add object tracking.
-	
+
 	* src/gnome-utils/gnc-main-window.c: Add object tracking.
 	Cut/Copy/Paste are only placeholders that must be overridden.
 	Remove function stubs and make the actions insensitive.
@@ -943,14 +983,14 @@
 
 	* src/gnome-utils/gnc-plugin-page.[ch]: Add a utility function to
 	retrieve the page title.
-	
+
 	* src/gnome-utils/gnc-date-edit.[ch]: Reconnect the
 	focus_out_event signal.  Add a function so this widget can be
 	generated from a glade file.
 
 	* src/gnome/gnc-split-reg.[ch]: Enable translation of the
 	SortType enumeration to/from a string.
-	
+
 	* src/gnome/gnc-plugin-file-history.c:
 	* src/gnome/ui/gnc-plugin-file-history-ui.xml: Promote file
 	history information to the 'File' menu per Gnome HIG 2.0.
@@ -1044,7 +1084,7 @@
 	* src/engine/design.txt
 	* src/engine/extensions.txt
 	* src/engine/kvp_doc.txt
-	* src/scm/startup-design.txt: Folding text files 
+	* src/scm/startup-design.txt: Folding text files
 	into Doxygen output.
 
 	* src/doc/gnc-commodity.txt: Removed: empty.
@@ -1162,7 +1202,7 @@
 2005-06-06  David Hampton  <hampton@employees.org>
 
 	* gnucash/src/backend/qsf/qsf-backend.c: Couple of bug fixes.
-	
+
 	* src/gnome/gnc-plugin-basic-commands.c: Forgot to change the
 	callback data provided to these commands now that they're provided
 	by a plugin.
@@ -1173,7 +1213,7 @@
 	first page of the druid is shown.
 
 	Restructure the code.
-	
+
 	* src/gnome/gnc-embedded-window.[ch]:
 	* src/gnome/gnc-plugin-basic-commands.[ch]:
 	* src/gnome/gnc-plugin-manager.[ch]:
@@ -1199,7 +1239,7 @@
 	* src/report/stylesheets/Makefile.am: Revert temporary workaround.
 
 	(Now removed) Temporary workaround.
-	
+
 	* gnucash/src/gnc-ui.h:
 	* gnucash/src/gnome/gnc-main-window.h:
 	* gnucash/src/gnome/gnc-window.h:
@@ -1220,7 +1260,7 @@
 	* src/gnome/gnc-plugin-menu-additions.[ch]: New files for
 	installing the report menu items into the main window(s).
 
-	* src/gnome-utils/gnc-menu-extensions.[ch]: 
+	* src/gnome-utils/gnc-menu-extensions.[ch]:
 	* src/gnome-utils/gnc-menu-extensions.scm: Build data structures
 	that are easier to use with the new menu installation code. Code
 	cleanup.
@@ -1233,10 +1273,10 @@
 	* src/report/report-system/report.scm:
 	* src/scm/main.scm: Reports are now opened in the window where the
 	menu was selected. Other updates for recent changes.
-	
+
 	* src/gnome-utils/gw-gnome-utils-spec.scm:
 	* src/report/report-gnome/window-report.[ch]: Removal of old code.
-	
+
 	* src/gnome/gnc-main-window.[ch]:
 	* src/gnome/ui/gnc-main-window-ui.xml:
 	* src/gnome/gnc-plugin-page-account-tree.c: Include the Reports
@@ -1255,7 +1295,7 @@
 
 2005-06-04  David Hampton  <hampton@employees.org>
 
-	* src/gnome/gnc-plugin.[ch]: 
+	* src/gnome/gnc-plugin.[ch]:
 	* src/gnome-utils/gnc-gnome-utils.[ch}: Migrate a couple of
 	functions to gnc-plugins.c.
 
@@ -1306,25 +1346,25 @@
 	* src/gnome-utils/dialog-utils.c (gnc_save_window_size): Protect
 	against being called after window destruction has started.
 
-	* src/gnome/glade/lots.glade: 
+	* src/gnome/glade/lots.glade:
 	* src/gnome/lot-viewer.c: Make the dialog more HIG compliate.
 	Install the callbacks via glade instead of by hand.  Rework some
 	of the callback logic.  The buttons that require a lot be selected
 	now cannot be clicked unless a lot is selected.  Rememver window
 	and divider information in gconf.
-	
+
 2005-05-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/lots.glade: Geert Jan Janssens'
 	<janssens.geert@advalvas.be> changes to add scrollbars to 'lot
 	clist'.  Add a default window size for easier use.  Add start
 	position for vpane divider to show both panes on startup.
-	
+
 	* All glade files: Run through the FC3 version of glade (2.6.0).
 	Additional properties added and minor reordering of properties.
 
 	* src/gnome/glade/merge.glade: Major indentation changes.
-	
+
 	* src/gnome-utils/Makefile.am:
 	* src/gnome-utils/gnc-tree-view-common.[ch]:
 	* src/gnome-utils/gnc-tree-view.[ch]: Convert common functions
@@ -1332,7 +1372,7 @@
 	gconf for tracking sizes and visibilities of columns within a
 	view.  Add a new popup menu for selecting column visibilities.
 	Make it easier to add new columns after a view has been created.
-	
+
 	* src/gnome-utils/gnc-tree-view-*: Base these views on the new
 	common gnc-tree-view class.
 
@@ -1369,7 +1409,7 @@
 	code" to "cusip code".  The former seems like it is referring to
 	NASDAQ, NYSE, etc, not a code that is unique to a specific
 	security.  The latter is by definition security specific.
-	
+
 2005-05-15  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.[ch]:
@@ -1423,18 +1463,18 @@
 	* src/backend/qsf/qsf-backend.c: Omitting kvp tag when
 	frame is empty.
 	* src/backend/qsf/qsf-object.xsd.xml: Typo.
-	* src/business/business-core/gncBillTerm.h: 
-	* src/business/business-core/gncEmployee.h: 
-	* src/business/business-core/gncEntry.h: 
+	* src/business/business-core/gncBillTerm.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncEntry.h:
 	* src/business/business-core/gncTaxTable.h:
 	* src/core-utils/gnc-gconf-utils.h:
-	* src/engine/Account.h: 
+	* src/engine/Account.h:
 	* src/engine/Group.h: Doxygen fixes.
 	* src/engine/Transaction.c: Replacement Timespec calls
 	because QOF needs to pass Timespec, not Timespec*
 	* src/engine/Transaction.h: qofTransSetDatePosted
 	and qofTransSetDateEntered new functions and Doxygen fixes.
-	* src/engine/gnc-commodity.h: 
+	* src/engine/gnc-commodity.h:
 	* src/gnome-utils/dialog-account.h:
 	* src/gnome-utils/dialog-commodity.c:
 	* src/gnome-utils/dialog-commodity.h:
@@ -1472,17 +1512,17 @@
 	* src/gnome/gnc-main-window.c:
 	* src/gnome/ui/gnc-main-window-ui.xml: Add the (debug) extensions
 	menu back.
-	
+
 	* src/business/business-gnome/business-gnome.scm:
 	* src/business/business-gnome/gnc-plugin-business.c:
 	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
 	* src/scm/main.scm: Migrate the business "test" menu to a
 	GtkAction based menu.
-	
+
 	* src/gnome-search/Makefile.am:
 	* src/gnome-search/gnome-search.scm:
 	* src/gnome-search/gw-gnome-search-spec.scm: Remove unused code.
-	
+
 2005-04-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-html-graph-gog.c: chris' patch
@@ -4985,7 +5025,7 @@
 
 2005-04-14  David Hampton  <hampton@employees.org>
 
-	* src/engine/iso-4217-currencies.scm: 
+	* src/engine/iso-4217-currencies.scm:
 	* src/engine/gnc-commodity.c: Update the Bulgarian Lev and add the
 	Malagasy Ariary.
 
