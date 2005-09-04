@@ -2,6 +2,7 @@
 
 	* src/backend/qsf/qsf-backend.c: more a declaration to the top
 	  of a function because ISO C90 forbids mixed declarations.
+	* src/backend/file/gnc-backend-file.c: comment out unused function.
 
 2005-09-04  Neil Williams <linux@codehelp.co.uk>
 
