@@ -42,8 +42,7 @@
 
 /** begin_edit helper
  *
- * @args:
- *        inst: an instance of QofInstance
+ * @param  inst: an instance of QofInstance
  *
  * The caller should use this macro first and then perform any other operations.
 
@@ -92,8 +91,7 @@ void qof_begin_edit(QofInstance *inst);
 /**
  * part1 -- deal with the editlevel
  * 
- * @args:
- *        inst: an instance of QofInstance
+ * @param inst: an instance of QofInstance
  */
 
 #define QOF_COMMIT_EDIT_PART1(inst) {                            \
@@ -133,15 +131,14 @@ void qof_commit_edit(QofInstance *inst);
 /**
  * part2 -- deal with the backend
  * 
- * @args:
- *        inst: an instance of QofInstance
- *        on_error: a function called if there is a backend error.
+ * @param inst: an instance of QofInstance
+ * @param on_error: a function called if there is a backend error.
  *                void (*on_error)(inst, QofBackendError)
- *        on_done: a function called after the commit is complete 
+ * @param on_done: a function called after the commit is complete 
  *                but before the instect is freed. Perform any other 
  *                operations after the commit.
  *                void (*on_done)(inst)
- *        on_free: a function called if inst->do_free is TRUE. 
+ * @param on_free: a function called if inst->do_free is TRUE. 
  *                void (*on_free)(inst)
  */
 #define QOF_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \

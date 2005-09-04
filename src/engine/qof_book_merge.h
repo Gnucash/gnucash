@@ -25,9 +25,7 @@
 #ifndef QOFBOOKMERGE_H
 #define QOFBOOKMERGE_H
 
-/** @addtogroup QOF
-	@{ */
-/** @addtogroup BookMerge Merging QofBook structures.
+/** @addtogroup BookMerge
 
 <b>Collision handling principles.</b>\n
 \n
@@ -66,7 +64,8 @@ any error values to the calling process. ::qof_book_mergeInit returns a
 pointer to the ::qof_book_mergeData struct - the calling process needs to
 make sure this is non-NULL to know that the Init has been successful.
 
- @{ */
+ @{
+*/
 /** @file  qof_book_merge.h
     @brief API for merging two \c QofBook structures with collision handling
     @author Copyright (c) 2004-2005 Neil Williams <linux@codehelp.co.uk>
@@ -135,7 +134,7 @@ All rules are stored in the GList qof_book_mergeData::mergeList.
 If the ::GUID matches it's the always same semantic object,
 regardless of whether other data fields are changed.
 \n	
-The boolean value mergeAbsolute defaults to \c FALSE\n
+The boolean value mergeAbsolute defaults to \c FALSE
 
 NOTE 1: if mergeAbsolute == \c TRUE, ::qof_book_mergeResult will still be set to 
 ::MERGE_UPDATE if parameters within this entity have been modified.
@@ -310,9 +309,9 @@ the qof_book_mergeRule::importEnt and again the qof_book_mergeRule::targetEnt to
 return the two specific entities.
 
 */
-void qof_book_mergeRuleForeach( qof_book_mergeData*,
-                                qof_book_mergeRuleForeachCB, 
-                                qof_book_mergeResult );
+void qof_book_mergeRuleForeach( qof_book_mergeData* mergeData,
+                                qof_book_mergeRuleForeachCB callback , 
+                                qof_book_mergeResult mergeResult);
 
 /** \brief provides easy string access to parameter data for dialog use
 
@@ -401,7 +400,6 @@ The calling process must check the return value and call
 ::qof_book_merge_abort(mergeData) if non-zero.
 
 @param	mergeData	the merge context, ::qof_book_mergeData*
-@param	resolved	the current rule, ::qof_book_mergeRule*
 @param	tag			the result to attempt to set, ::qof_book_mergeResult
 
 \return -1 if supplied parameters are invalid or NULL, 0 on success.
@@ -454,8 +452,6 @@ a new merge is required.
 void
 qof_book_merge_abort(qof_book_mergeData *mergeData);
 
-/** @} */
-
-/** @} */
-/** @} */
 #endif // QOFBOOKMERGE_H
+/** @} */
+/** @} */

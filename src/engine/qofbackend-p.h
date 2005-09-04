@@ -279,6 +279,22 @@ struct QofBackendProvider_s
   */
   const char* provider_config;
   
+/** \brief Distinguish two providers with same access method.
+  
+  More than 1 backend can be registered under the same access_method,
+  so each one is passed the path to the data (e.g. a file) and
+  should return TRUE only:
+-# if the backend recognises the type as one that it can load and write or 
+-#if the path contains no data but can be used (e.g. a new session).
+  
+  \note If the backend can cope with more than one type, the backend
+  should not try to store or cache the sub-type for this data.
+  It is sufficient only to return TRUE if any ONE of the supported
+  types match the incoming data. The backend should not assume that
+  returning TRUE will mean that the data will naturally follow.
+  */
+  gboolean (*check_data_type) (const char*);
+  
   /** Free this structure, unregister this backend handler. */
   void (*provider_free) (QofBackendProvider *);
 };
@@ -322,25 +338,11 @@ struct QofBackend_s
   char * error_msg;
 
   KvpFrame* backend_configuration;
+  gint config_count;
   /** Each backend resolves a fully-qualified file path.
    * This holds the filepath and communicates it to the frontends.
    */
   char * fullpath;
-
-  /** \brief Distinguish two providers with same access method.
-  
-  When more than 1 backend is registered under the same access_method,
-  each one is passed the path to the data (usually a file) and
-  should return TRUE only if the backend recognises the type 
-  as one that it can load and write.
-  
-  \note If the backend can cope with more than one type, the backend
-  should not try to store or cache the sub-type for this data.
-  It is sufficient only to return TRUE if any ONE of the supported
-  types match the incoming data. The backend should not assume that
-  returning TRUE will mean that the data will naturally follow.
-  */
-  gboolean (*check_data_type) (QofBackend *, const char*);
 
 #ifdef GNUCASH_MAJOR_VERSION
   /** XXX price_lookup should be removed during the redesign

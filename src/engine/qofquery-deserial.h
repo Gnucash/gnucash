@@ -20,11 +20,10 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Query
-    @{ */
-/** @file qofquery-deserial.h
-    @brief Convert Qof-Query XML to QofQuery 
-    @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
+/* 
+ qofquery-deserial.h
+ Convert Qof-Query XML to QofQuery 
+author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef QOF_QUERY_DESERIAL_H
@@ -33,18 +32,16 @@
 #include "qofquery.h"
 #include <libxml/tree.h>
 
-/** @addtogroup XML 
+/*
     Qof Queries can be converted to and from XML so that they
     can be sent from here to there. This file implements the
     routine needed to convert the XML back into a C struct.
 
-    \b Unfinished. XXX Why is this easier than reading a text/sql
+    Unfinished. XXX Why is this easier than reading a text/sql
     file? 
 
- @{ */
-/** Given an XML tree, reconstruct and return the equivalent query. */
+ */
+/* Given an XML tree, reconstruct and return the equivalent query. */
 QofQuery *qof_query_from_xml (xmlNodePtr);
-/* @} */
 
 #endif /* QOF_QUERY_DESERIAL_H */
-/* @} */

@@ -388,34 +388,26 @@ static time_t
 gnc_timegm (struct tm *tm)
 {
   time_t result;
-#ifdef GNUCASH_MAJOR_VERSION
-  char *put_str;
-#endif
   char *old_tz;
 
   old_tz = getenv ("TZ");
-#ifdef GNUCASH_MAJOR_VERSION
-/** \todo Implement a separate method of configuration handling. */
   /* FIXME: there's no way to report this error to the caller. */
-  if(gnc_setenv("TZ", "UTC", 1) != 0)
+  if(setenv("TZ", "UTC", 1) != 0)
     PERR ("couldn't switch the TZ.");
-#endif
   result = mktime (tm);
-#ifdef GNUCASH_MAJOR_VERSION
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(gnc_setenv("TZ", old_tz, 1) != 0)
+    if(setenv("TZ", old_tz, 1) != 0)
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    gnc_unsetenv("TZ");
+    unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }
-#endif
   return result;
 }
 #endif

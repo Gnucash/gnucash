@@ -75,7 +75,15 @@
  * make that assumption, in order to store the different accounting
  * periods in a clump so that one can be found, given another.
  *
- *  @{ 
+
+   The session now calls QofBackendProvider->check_data_type
+   to check that the incoming path contains data that the
+   backend provider can open. The backend provider should
+   also check if it can contact it's storage media (disk,
+   network, server, etc.) and abort if it can't.  Malformed
+   file URL's would be handled the same way.
+  
+ @{ 
  */
 
 /** @file qofsession.h
@@ -99,15 +107,7 @@ typedef struct _QofSession    QofSession;
 
 QofSession * qof_session_new (void);
 void         qof_session_destroy (QofSession *session);
-
-/** \deprecated Use a local context, not this static!
-
-Applications must not use 'current_session' in new code.
-
-Use a local context and store your session data there.
-*/
 QofSession * qof_session_get_current_session (void);
-/** \deprecated do not use! */
 void	       qof_session_set_current_session (QofSession *session);
 
 /** The qof_session_swap_data () method swaps the book of
@@ -191,13 +191,13 @@ const char * qof_session_get_error_message(QofSession *session);
  *    See qofbackend.h for a listing of returned errors.
  */
 QofBackendError qof_session_pop_error (QofSession *session);
-/* @} */
+/** @} */
 
 /** The qof_session_add_book() allows additional books to be added to
  *    a session. 
  * XXX Under construction, clarify the following when done:
  * XXX There must already be an open book in the session already!?
- * XXX Only one open bok at a time per session is alowed!?
+ * XXX Only one open book at a time per session is allowed!?
  * XXX each book gets its own unique backend ???
  */
 void qof_session_add_book (QofSession *session, QofBook *book);
@@ -356,7 +356,7 @@ entities in the top level collection. It can take some time.
 @param coll A QofCollection of entities that may or may not have 
 references.
 
-@param session The QofSession to receive the copied entities.
+@param new_session The QofSession to receive the copied entities.
 
 @return TRUE on success; if any individual copy fails, returns FALSE.
 <b>Note</b> : Some entities may have been copied successfully even if
@@ -379,7 +379,7 @@ the top level entity has no references, this is identical to
 
 @param ent A single entity that may or may not have references.
 
-@param session The QofSession to receive the copied entities.
+@param new_session The QofSession to receive the copied entities.
 
 @return TRUE on success; if any individual copy fails, returns FALSE.
 <b>Note</b> : Some entities may have been copied successfully even if
@@ -521,7 +521,7 @@ gboolean qof_session_events_pending (QofSession *session);
  *    engine was modified while engine events were suspended.
  */
 gboolean qof_session_process_events (QofSession *session);
-/* @} */
+/** @} */
 
 #ifdef GNUCASH_MAJOR_VERSION
 /** Run the RPC Server 

@@ -33,7 +33,10 @@
 #include <errno.h>
 #include "qofbackend-p.h"
 
-/* static short module = MOD_BACKEND; */
+static short module = MOD_BACKEND;
+
+#define QOF_CONFIG_DESC    "desc"
+#define QOF_CONFIG_TIP     "tip"
 
 /********************************************************************\
  * error handling                                                   *
@@ -148,7 +151,7 @@ qof_backend_init(QofBackend *be)
 void
 qof_backend_run_begin(QofBackend *be, QofInstance *inst)
 {
-	if(!be | !inst) { return; }
+	if(!be || !inst) { return; }
 	if(!be->begin) { return; }
 	(be->begin) (be, inst);
 }
@@ -163,15 +166,176 @@ qof_backend_begin_exists(QofBackend *be)
 void
 qof_backend_run_commit(QofBackend *be, QofInstance *inst)
 {
-	if(!be | !inst) { return; }
+	if(!be || !inst) { return; }
 	if(!be->commit) { return; }
 	(be->commit) (be, inst);
+}
+
+/* =========== Backend Configuration ================ */
+
+void qof_backend_prepare_frame(QofBackend *be)
+{
+	g_return_if_fail(be);
+	if(!kvp_frame_is_empty(be->backend_configuration)) {
+		kvp_frame_delete(be->backend_configuration);
+		be->backend_configuration = kvp_frame_new();
+	}
+	be->config_count = 0;
+}
+
+void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
+{
+	KvpValue *value;
+	gchar *temp;
+	gint count;
+
+	g_return_if_fail(be || option);
+	count = be->config_count;
+	count++;
+	value = NULL;
+	ENTER (" %d", count);
+	switch (option->type)
+	{
+		case KVP_TYPE_GINT64   : {
+			value = kvp_value_new_gint64(*(gint64*)option->value);
+			break; 
+		}
+		case KVP_TYPE_DOUBLE   : { 
+			value = kvp_value_new_double(*(double*)option->value);
+			break; 
+		}
+		case KVP_TYPE_NUMERIC  : {
+			value = kvp_value_new_numeric(*(gnc_numeric*)option->value);
+			break; 
+		}
+		case KVP_TYPE_STRING   : {
+			value = kvp_value_new_string((const char*)option->value);
+			break;
+		}
+		case KVP_TYPE_GUID     : { break; } /* unsupported */
+		case KVP_TYPE_TIMESPEC : {
+			value = kvp_value_new_timespec(*(Timespec*)option->value);
+			break;
+		}
+		case KVP_TYPE_BINARY   : { break; } /* unsupported */
+		case KVP_TYPE_GLIST    : { break; } /* unsupported */
+		case KVP_TYPE_FRAME    : { break; } /* unsupported */
+	}
+	if(value) {
+		temp = g_strdup_printf("/%s", option->option_name);
+		kvp_frame_set_value(be->backend_configuration, temp, value);
+		PINFO (" setting value at %s", temp);
+		g_free(temp);
+		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_DESC, option->option_name);
+		PINFO (" setting description %s at %s", option->description, temp);
+		kvp_frame_set_string(be->backend_configuration, temp, option->description);
+		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
+		g_free(temp);
+		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_TIP, option->option_name);
+		PINFO (" setting tooltip %s at %s", option->tooltip, temp);
+		kvp_frame_set_string(be->backend_configuration, temp, option->tooltip);
+		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
+		g_free(temp);
+		/* only increment the counter if successful */
+		be->config_count = count;
+	}
+	LEAVE (" ");
+}
+
+KvpFrame* qof_backend_complete_frame(QofBackend *be)
+{
+	g_return_val_if_fail(be, NULL);
+	be->config_count = 0;
+	return be->backend_configuration;
+}
+
+struct config_iterate {
+	QofBackendOptionCB fcn;
+	gpointer           data;
+	gint               count;
+	KvpFrame          *recursive;
+};
+
+static void
+config_foreach_cb (const char *key, KvpValue *value, gpointer data)
+{
+	QofBackendOption option;
+	gint64 int64;
+	double db;
+	gnc_numeric num;
+	Timespec ts;
+	gchar *parent;
+	struct config_iterate *helper;
+
+	g_return_if_fail(key || value || data);
+	helper = (struct config_iterate*)data;
+	if(!helper->recursive) { PERR (" no parent frame"); return;	}
+	// skip the presets.
+	if(0 == safe_strcmp(key, QOF_CONFIG_DESC)) { return; }
+	if(0 == safe_strcmp(key, QOF_CONFIG_TIP)) { return; }
+	ENTER (" key=%s", key);
+	option.option_name = key;
+	option.type = kvp_value_get_type(value);
+	if(!option.type) { return; }
+	switch (option.type)
+	{
+		case KVP_TYPE_GINT64   : {
+			int64 = kvp_value_get_gint64(value);
+			option.value = (gpointer)&int64;
+			break; 
+		}
+		case KVP_TYPE_DOUBLE   : {
+			db = kvp_value_get_double(value);
+			option.value = (gpointer)&db;
+			break; 
+		}
+		case KVP_TYPE_NUMERIC  : {
+			num = kvp_value_get_numeric(value);
+			option.value = (gpointer)&num;
+			break; 
+		}
+		case KVP_TYPE_STRING   : {
+			option.value = (gpointer)kvp_value_get_string(value);
+			break;
+		}
+		case KVP_TYPE_GUID     : { break; } /* unsupported */
+		case KVP_TYPE_TIMESPEC : {
+			ts = kvp_value_get_timespec(value);
+			option.value = (gpointer)&ts;
+			break;
+		}
+		case KVP_TYPE_BINARY   : { break; } /* unsupported */
+		case KVP_TYPE_GLIST    : { break; } /* unsupported */
+		case KVP_TYPE_FRAME    : { break; } /* unsupported */
+	}
+	parent = g_strdup_printf("/%s/%s", QOF_CONFIG_DESC, key);
+	option.description = kvp_frame_get_string(helper->recursive, parent);
+	g_free(parent);
+	parent = g_strdup_printf("/%s/%s", QOF_CONFIG_TIP, key);
+	option.tooltip = kvp_frame_get_string(helper->recursive, parent);
+	helper->count++;
+	helper->fcn (&option, helper->data);
+	LEAVE (" desc=%s tip=%s", option.description, option.tooltip);
+}
+
+void qof_backend_option_foreach(KvpFrame *config, QofBackendOptionCB cb, gpointer data)
+{
+	struct config_iterate helper;
+
+	if(!config || !cb) { return; }
+	ENTER (" ");
+	helper.fcn = cb;
+	helper.count = 1;
+	helper.data = data;
+	helper.recursive = config;
+	kvp_frame_for_each_slot(config, config_foreach_cb, &helper);
+	LEAVE (" ");
 }
 
 void
 qof_backend_load_config(QofBackend *be, KvpFrame *config)
 {
-	if(!be | !config) { return; }
+	if(!be || !config) { return; }
 	if(!be->load_config) { return; }
 	(be->load_config) (be, config);
 }
@@ -191,16 +355,6 @@ qof_backend_commit_exists(QofBackend *be)
 	if(be->commit) { return TRUE; }
 	else { return FALSE; }
 }
-
-#if 0
-gboolean
-qof_backend_check_type (QofBackend *be, const char *path)
-{
-	if(!be) { return FALSE; }
-	if(!be->check_data_type) { return FALSE; }
-	return (gboolean)(be->check_data_type) (be, path);
-}
-#endif
 
 void 
 qof_begin_edit(QofInstance *inst)
@@ -239,7 +393,8 @@ void qof_commit_edit(QofInstance *inst)
 #define STR_LIBDIR     "libdir="
 
 gboolean
-qof_load_backend_library (const char* filename, const char* init_fcn)
+qof_load_backend_library (const char *directory, 
+				const char* filename, const char* init_fcn)
 {
 	FILE *filehandle;
 	void (*initfn) (void);
@@ -260,10 +415,20 @@ qof_load_backend_library (const char* filename, const char* init_fcn)
 	tempstr = NULL;
 	libdirpath = NULL;
 	g_return_val_if_fail((filename || init_fcn), FALSE); 
+  if(directory)
+	{
+		if(!g_str_has_suffix(directory, "/")) {
+			tempstr = g_strconcat(directory, "/", filename, NULL);
+		}
+		else {
+			tempstr = g_strconcat(directory, filename, NULL);
+		}
+		filename = tempstr;
+	}
 	g_return_val_if_fail(g_str_has_suffix (filename, ".la"), FALSE);
 	/* now we have a filename ending in .la, see if we can open it. */
 	n = (guint)strlen(STR_DLNAME);
-	g_return_val_if_fail((stat(filename, &sbuf) <0), FALSE);
+	g_return_val_if_fail((stat(filename, &sbuf) == 0), FALSE);
 	filehandle = fopen(filename, "r");
 	g_return_val_if_fail((filehandle), FALSE);
 #ifndef HAVE_GETLINE
@@ -273,6 +438,7 @@ qof_load_backend_library (const char* filename, const char* init_fcn)
 	while (0 < getline(&lineptr, &n, filehandle))
 #endif
 	{
+		n = (guint)strlen(STR_DLNAME);
 		if (strncmp (lineptr, STR_DLNAME, n - 1) == 0)
 		{
 			/* obtain substring from dlname='.*'\n
@@ -301,7 +467,6 @@ qof_load_backend_library (const char* filename, const char* init_fcn)
 				tempstr = g_strndup(libdirpath, end - 1);
 				libdirpath = tempstr;
 			}
-			break;
 		}
 	}
 	fclose(filehandle);

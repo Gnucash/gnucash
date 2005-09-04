@@ -20,7 +20,7 @@
  *                                                                  *
  ********************************************************************
  * @file io-gncbin-r.c
- * @breif read (old X-Accountant format) binary datafile 
+ * @brief read (old X-Accountant format) binary datafile 
  * @author Copyright (C) 1997 Robin D. Clark
  * @author Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>
  * @author Copyright (C) 1999-2000 Rob Browning
@@ -407,6 +407,26 @@ gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
 /********************************************************************\
  ********************** LOAD DATA ***********************************
 \********************************************************************/
+
+gboolean gnc_is_bin_file (const gchar *name)
+{
+  int  fd, err, token;
+
+  err = 0;
+  token = 0;
+  fd = open( name, RFLAGS, 0 );
+
+  /* check for valid file descriptor */
+  if( 0 > fd ) { return FALSE; }
+
+  /* Read in the file format token */
+  err = read( fd, &token, sizeof(int) );
+  if( sizeof(int) != err ) { return FALSE; }
+  XACC_FLIP_INT (token);
+  close(fd);
+  if(token == VERSION ) { return TRUE; }
+  return FALSE;
+}
 
 /********************************************************************\
  *   reads in the data from file descriptor                         *

@@ -19,25 +19,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-/*
- * FILE:
- * qofsession.c
- *
- * FUNCTION:
- * Encapsulate a connection to a storage backend.
+/**
+ * @file qofsession.c
+ * @brief Encapsulate a connection to a storage backend.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
- * Copyright (c) 2000 Dave Peticolas
- * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
- */
 
-  /* TODO: XXX we should probably move this resolve function to the
-   * file backend.  I think the idea would be to open the backend
-   * and then ask it if it can contact it's storage media (disk,
-   * network, server, etc.) and abort if it can't.  Mal-formed
-   * file URL's would be handled the same way!
+ @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
+ @author Copyright (c) 2000 Dave Peticolas
+ @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
    */
 
 #include "config.h"
@@ -67,9 +58,8 @@
 #include "gnc-module.h"
 #endif /* GNUCASH */
 
-/** \deprecated current_session should not be static */
+/** \deprecated should not be static */
 static QofSession * current_session = NULL;
-
 static GHookList * session_closed_hooks = NULL;
 static short module = MOD_BACKEND;
 static GSList *provider_list = NULL;
@@ -228,8 +218,8 @@ qof_session_new (void)
   return session;
 }
 
-/** \deprecated  Use a local context to store
-your current session, NOT a static in the library. */
+/** \deprecated Each application should keep
+their \b own session context. */
 QofSession *
 qof_session_get_current_session (void)
 {
@@ -243,7 +233,6 @@ qof_session_get_current_session (void)
   return current_session;
 }
 
-/** \deprecated */
 void
 qof_session_set_current_session (QofSession *session)
 {
@@ -429,9 +418,7 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	
 	g_return_if_fail(user_data != NULL);
 	context = (QofEntityCopyData*) user_data;
-	/* in case of any error, let the process know. */
-	if(context->error == TRUE) { return; }
-	context->error = TRUE;
+	ENTER (" ");
 	cm_date.tv_nsec = 0;
 	cm_date.tv_sec =  0;
 	importEnt = context->from;
@@ -514,6 +501,7 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 			qof_session_update_reference_list(context->new_session, reference);
 		}
 	}
+	LEAVE (" ");
 }
 
 static gboolean
@@ -561,10 +549,10 @@ qof_entity_list_foreach(gpointer data, gpointer user_data)
 		g_slist_free(qecd->param_list);
 		qecd->param_list = NULL;
 	}
-	qof_begin_edit(inst);
 	qof_class_param_foreach(original->e_type, qof_entity_param_cb, qecd);
-	qof_commit_edit(inst);
+	qof_begin_edit(inst);
 	g_slist_foreach(qecd->param_list, qof_entity_foreach_copy, qecd);
+	qof_commit_edit(inst);
 }
 
 static void
@@ -638,6 +626,8 @@ gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
 {
 	QofEntityCopyData *qecd;
 
+	if(!new_session || !entity_list) { return FALSE; }
+	ENTER (" list=%d", g_list_length(entity_list));
 	qecd = g_new0(QofEntityCopyData, 1);
 	gnc_engine_suspend_events();
 	qecd->param_list = NULL;
@@ -646,6 +636,7 @@ gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
 	g_list_foreach(entity_list, qof_entity_list_foreach, qecd);
 	gnc_engine_resume_events();
 	g_free(qecd);
+	LEAVE (" ");
 	return TRUE;
 }
 
@@ -801,36 +792,29 @@ gboolean qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent)
 }
 
 
-
 /* ====================================================================== */
 
-/* Specify a library, and a function name. Load the library, 
- * call the function name in the library.  */
-/* Use duplicate calls to cover 
- * the name of the shared library that is .so on
- * GNU/Linux but .dylib on Mac OSX etc. */
-static void
-load_backend_library (const char * libso, const char * loadfn)
+/* Programs that use their own backends also need to call
+the default QOF ones. The backends specified here are
+loaded only by applications that do not have their own. */
+struct backend_providers
 {
-	void (*initfn) (void);
-	void *dl_hand = dlopen (libso, RTLD_LAZY);
-	if (NULL == dl_hand)
-	{
-		const char * err_str = dlerror();
-		PERR("Can't load %s backend, %s\n", libso, err_str);
-		return;
-	}
-	initfn = dlsym (dl_hand, loadfn);
-	if (initfn)
-	{
-		 (*initfn)();
-	}
-	else
-	{
-		const char * err_str = dlerror();
-		PERR("Can't find %s:%s, %s\n", libso, loadfn, err_str);
-	}
-}
+	const char *libdir;
+	const char *filename;
+	const char *init_fcn;
+};
+
+/* All available QOF backends need to be described here
+and the last entry must be three NULL's.
+Remember: Use the libdir from the current build environment
+and use the .la NOT the .so - .so is not portable! */
+struct backend_providers backend_list[] = {
+	{ QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init" },
+#ifdef HAVE_DWI
+	{ QOF_LIB_DIR, "libqof_backend_dwi.la", "dwiend_provider_init" },
+#endif
+	{ NULL, NULL, NULL }
+};
 
 #ifdef GNUCASH_MAJOR_VERSION 
 
@@ -847,7 +831,7 @@ qof_session_int_backend_load_error(QofSession *session,
 }
 
 /* Gnucash uses its module system to load a backend; other users
- * use traditional dlopen calls.
+ * use traditional dlopen calls. This will change with CashUtil.
  */
 static void
 qof_session_load_backend(QofSession * session, char * backend_name)
@@ -863,15 +847,6 @@ qof_session_load_backend(QofSession * session, char * backend_name)
 	mod	= 0;
 	mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 	msg = g_strdup_printf(" ");
-	/* FIXME : reinstate better error messages with gnc_module errors */
-	ENTER (" ");
-	/* FIXME: this needs to be smarter with version numbers. */
-	/* FIXME: this should use dlopen(), instead of guile/scheme, 
-	*    to load the modules.  Right now, this requires the engine to
-	*    link to scheme, which is an obvious architecture flaw. 
-	*    XXX this is fixed below, in the non-gnucash version. Cut
-	*    over at some point.
-	*/
 	mod = gnc_module_load(mod_name, 0);
 	if (mod) 
 	{
@@ -917,7 +892,6 @@ qof_session_load_backend(QofSession * session, char * backend_name)
 	qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, msg);
   }
   g_free(mod_name);
-  LEAVE (" ");
 }
 
 #else /* GNUCASH */
@@ -930,21 +904,23 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	QofBackendProvider *prov;
 	QofBook *book;
 	char *msg;
+	gint num;
+	gboolean prov_type;
+	gboolean (*type_check) (const char*);
 	
-	ENTER (" ");
-	/* If the provider list is null, try to register the 'well-known'
-	 *  backends. Right now, there's only two. */
+	ENTER (" list=%d", g_slist_length(provider_list));
+	prov_type = FALSE;
 	if (NULL == provider_list)
 	{
-		/* hack alert: If you change this, change qof_session_save as well. */
-#ifdef HAVE_DWI
-		load_backend_library ("libqof_backend_dwi.so", "dwiend_provider_init");
-#endif
-#ifdef DARWIN 
-		load_backend_library ("libqof-backend-qsf.dylib", "qsf_provider_init" );
-#else
-		load_backend_library ("libqof-backend-qsf.so", "qsf_provider_init" );
-#endif 
+		for (num = 0; backend_list[num].filename != NULL; num++) {
+			if(!qof_load_backend_library(backend_list[num].libdir,
+				backend_list[num].filename, backend_list[num].init_fcn))
+			{
+				PWARN (" failed to load %s from %s using %s",
+				backend_list[num].filename, backend_list[num].libdir,
+				backend_list[num].init_fcn);
+			}
+		}
 	}
 	p = g_slist_copy(provider_list);
 	while(p != NULL)
@@ -953,7 +929,22 @@ qof_session_load_backend(QofSession * session, char * access_method)
 		/* Does this provider handle the desired access method? */
 		if (0 == strcasecmp (access_method, prov->access_method))
 		{
-			if (NULL == prov->backend_new) continue;
+			/* More than one backend could provide this
+			access method, check file type compatibility. */
+			type_check = (gboolean (*)(const char*)) prov->check_data_type;
+			prov_type = (type_check)(session->book_id);
+			if(!prov_type)
+			{
+				PINFO(" %s not usable", prov->provider_name);
+				p = p->next;
+				continue;
+			}
+			PINFO (" selected %s", prov->provider_name);
+			if (NULL == prov->backend_new) 
+			{
+				p = p->next;
+				continue;
+			}
 			/* Use the providers creation callback */
       	    session->backend = (*(prov->backend_new))();
 			session->backend->provider = prov;
@@ -1219,6 +1210,7 @@ qof_session_save (QofSession *session,
 	GSList *p;
 	QofBook *book, *abook;
 	int err;
+	gint num;
 	char *msg, *book_id;
 	
 	if (!session) return;
@@ -1249,13 +1241,10 @@ qof_session_save (QofSession *session,
 		qof_session_destroy_backend(session);
 		if (NULL == provider_list)
 		{
-#ifdef DARWIN
-			load_backend_library ("libqsf-backend-file.dylib", "qsf_provider_init" );
-#else
-			load_backend_library ("libqof-backend-qsf.so", "qsf_provider_init" );
-#endif
-			qof_load_backend_library (QOF_LIB_DIR "libqof-backend-qsf.la",
-				"qsf_provider_init");
+			for (num = 0; backend_list[num].filename != NULL; num++) {
+				qof_load_backend_library(backend_list[num].libdir,
+					backend_list[num].filename, backend_list[num].init_fcn);
+			}
 		}
 		p = g_slist_copy(provider_list);
 		while(p != NULL)

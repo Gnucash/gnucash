@@ -19,7 +19,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-backend-file.h
- *  @breif load and save data to files 
+ *  @brief load and save data to files 
  *  @author Copyright (c) 2000 Gnumatic Inc.
  *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
@@ -76,5 +76,7 @@ typedef enum
 } QofBookFileType;
 
 QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
+void gnc_provider_init(void);
 
 #endif /* GNC_BACKEND_FILE_H_ */

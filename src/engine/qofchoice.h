@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
@@ -116,7 +116,7 @@ gboolean  qof_choice_create(char* type);
 
 @param choice The choice object.
 @param add  The object to be added as an option.
-@param param The parameter that will be used to get or set options.
+@param param_name The parameter that will be used to get or set options.
 
 @return FALSE if object is not a choice object or on error
 	otherwise TRUE.
@@ -126,7 +126,7 @@ gboolean qof_choice_add_class(char* choice, char* add, char* param_name);
 /** \brief Return the list of all object types usable with this parameter.
 
 @param type The choice object type.
-@param param_name The name of the parameter that will be used to
+@param param The name of the parameter that will be used to
 	get or set options.
 
 @return NULL on error or if no options exist for this parameter,

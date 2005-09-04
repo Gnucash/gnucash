@@ -22,7 +22,8 @@
 #ifndef QOF_H_
 #define QOF_H_
 /** @defgroup QOF Query Object Framework 
- @{ */
+ @{
+*/
 
 /**
     @addtogroup Date Date:  Date and Time Printing, Parsing and Manipulation
@@ -59,6 +60,12 @@
 /**
     @addtogroup Trace Trace: Error Reporting and Debugging
     @ingroup QOF
+*/
+/** @addtogroup BookMerge Merging QofBook structures
+	@ingroup QOF
+*/
+/** @addtogroup Event Event: QOF event handlers.
+	@ingroup QOF
 */
 /**
     @addtogroup Utilities Misc Utilities

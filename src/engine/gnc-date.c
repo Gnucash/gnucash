@@ -463,21 +463,6 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
     case QOF_DATE_FORMAT_CE:
       flen = g_snprintf (buff, len, "%2d.%2d.%-4d", day, month, year);
       break;
- /*
-    case QOF_DATE_FORMAT_UTC:
-    // Is there any reason to go through strftime() here when we're using
-    // the same format as with ISO?  The output is the same either way.
-	{
-		struct tm tm_str;
-
-		tm_str.tm_mday = day;
-		tm_str.tm_mon = month - 1;
-		tm_str.tm_year = year - 1900;
-
-		flen = strftime(buff, MAX_DATE_LENGTH, "%Y-%m-%d", &tm_str);
-		break;
-	}
- */
     case QOF_DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
