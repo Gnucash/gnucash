@@ -589,7 +589,7 @@ taxtable_scrub_cust (QofEntity * cust_p, gpointer ht_p)
   GncTaxTable *table;
   gint32 count;
   
-  table = (GncTaxTable*)gncCustomerGetTaxTable(cust);
+  table = gncCustomerGetTaxTable(cust);
   if (table) {
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
     count++;
@@ -605,7 +605,7 @@ taxtable_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
   GncTaxTable *table;
   gint32 count;
 
-  table = (GncTaxTable*)gncVendorGetTaxTable(vendor);
+  table = gncVendorGetTaxTable(vendor);
   if (table) {
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
     count++;

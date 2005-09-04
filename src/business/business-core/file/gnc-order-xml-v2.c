@@ -88,7 +88,7 @@ order_dom_tree_create (GncOrder *order)
                                       gncOrderGetID (order)));
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (order_owner_string,
-					    (GncOwner*)gncOrderGetOwner (order)));
+					    gncOrderGetOwner (order)));
 
     ts = gncOrderGetDateOpened (order);
     xmlAddChild(ret, timespec_to_dom_tree (order_opened_string, &ts));

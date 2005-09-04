@@ -126,11 +126,11 @@ customer_dom_tree_create (GncCustomer *cust)
     xmlAddChild
       (ret,
        commodity_ref_to_dom_tree(cust_currency_string,
-				 (gnc_commodity*)gncCustomerGetCurrency (cust)));
+				 gncCustomerGetCurrency (cust)));
 
     xmlAddChild (ret, int_to_dom_tree (cust_taxtableoverride_string,
 				       gncCustomerGetTaxTableOverride (cust)));
-    taxtable = (GncTaxTable*)gncCustomerGetTaxTable (cust);
+    taxtable = gncCustomerGetTaxTable (cust);
     if (taxtable)
       xmlAddChild (ret, guid_to_dom_tree (cust_taxtable_string,
 					  qof_instance_get_guid(QOF_INSTANCE(taxtable))));

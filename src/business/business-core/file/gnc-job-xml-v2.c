@@ -85,7 +85,7 @@ job_dom_tree_create (GncJob *job)
     maybe_add_string (ret, job_reference_string, gncJobGetReference (job));
 
     xmlAddChild(ret, gnc_owner_to_dom_tree (job_owner_string,
-					    (GncOwner*)gncJobGetOwner (job)));
+					    gncJobGetOwner (job)));
 
     xmlAddChild(ret, int_to_dom_tree(job_active_string,
 				     gncJobGetActive (job)));

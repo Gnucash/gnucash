@@ -115,7 +115,7 @@ employee_dom_tree_create (GncEmployee *employee)
     xmlAddChild
       (ret,
        commodity_ref_to_dom_tree(employee_currency_string,
-				 (gnc_commodity*)gncEmployeeGetCurrency (employee)));
+				 gncEmployeeGetCurrency (employee)));
 
     ccard_acc = gncEmployeeGetCCard (employee);
     if (ccard_acc)
