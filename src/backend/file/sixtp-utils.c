@@ -392,19 +392,19 @@ gnc_timegm (struct tm *tm)
 
   old_tz = getenv ("TZ");
   /* FIXME: there's no way to report this error to the caller. */
-  if(setenv("TZ", "UTC", 1) != 0)
+  if(gnc_setenv("TZ", "UTC", 1) != 0)
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(setenv("TZ", old_tz, 1) != 0)
+    if(gnc_setenv("TZ", old_tz, 1) != 0)
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    unsetenv("TZ");
+    gnc_unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }

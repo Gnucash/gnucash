@@ -1,3 +1,8 @@
+2005-09-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/sixtp-utils.c:  Revert change.. Make sure
+	  we still use gnc_setenv and gnc_unsetenv.
+	
 2005-09-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/qsf/qsf-backend.c: more a declaration to the top
