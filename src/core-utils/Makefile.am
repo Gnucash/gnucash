@@ -2,7 +2,6 @@
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
 libcore_utils_la_SOURCES = \
-  core-utils.c \
   gnc-gconf-utils.c \
   gnc-gobject-utils.c
 
@@ -22,7 +21,6 @@ libgw_core_utils_la_LIBADD = \
   ${GUILE_LIBS}
 
 noinst_HEADERS = \
-  core-utils.h \
   gnc-gconf-utils.h \
   gnc-gobject-utils.h \
   gw-core-utils.h

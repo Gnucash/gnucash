@@ -24,7 +24,6 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
-      "#include <core-utils.h>\n"
       "#include <gnc-gconf-utils.h>\n")))
 
   (gw:wrap-function

@@ -41,14 +41,15 @@
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "guid.h"
-/*
+#ifndef HAVE_SETENV
+#include "setenv.h"
+#endif
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
-*/
 static short module = MOD_IO;
 
 gboolean
@@ -392,19 +393,19 @@ gnc_timegm (struct tm *tm)
 
   old_tz = getenv ("TZ");
   /* FIXME: there's no way to report this error to the caller. */
-  if(gnc_setenv("TZ", "UTC", 1) != 0)
+  if(setenv("TZ", "UTC", 1) != 0)
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(gnc_setenv("TZ", old_tz, 1) != 0)
+    if(setenv("TZ", old_tz, 1) != 0)
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    gnc_unsetenv("TZ");
+    unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }

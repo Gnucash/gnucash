@@ -57,9 +57,11 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
         ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
-        ./libgnc-test-file-stuff.la 
+        ./libgnc-test-file-stuff.la \
+        ${top_builddir}/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/libc \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \

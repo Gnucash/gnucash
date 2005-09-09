@@ -1,5 +1,6 @@
 /********************************************************************\
- * File: core-utils.c
+ * File: setenv.c
+ * Renamed from: core-utils.c
  *
  * Copyright (C) 2001 Linux Developers Group
  *
@@ -20,20 +21,27 @@
 \********************************************************************/
 
 #include <glib.h>
-
-#include "core-utils.h"
-
 #include <stdlib.h>
 #include <string.h>
 
-/********************************************************************\
- * see header for info.
-\********************************************************************/
+/* This setenv() papers over the brokenness of of systems that only
+ * have putenv() which takes ownership of the pointer you give it,
+ * making it *very* difficult, if not impossible to avoid memory
+ * leaks.  Note that right now, on systems that have setenv, this is
+ * just setenv, and on other systems, we just leave the memory leak.
+ * Later, we may try to make things a little better by keeping track
+ * of the pointers we call putenv on in a hash table and if someone
+ * calls gnc_setenv on an envt var that we've previously set, then
+ * we'll free it after the change.  However, given the sloppy
+ * semantics (or docs) for putenv, it's not even clear that this is
+ * OK, since it's not clear that people aren't allowed to keep the
+ * pointer from getenv around, as long as they don't try to modify
+ * it... <shrug> */
 
 #ifndef HAVE_SETENV
 
 int
-gnc_setenv(const char *name, const char *value, int overwrite)
+setenv(const char *name, const char *value, int overwrite)
 {
   const char *old_value = getenv(name);
   int result = 0;
@@ -60,7 +68,7 @@ gnc_setenv(const char *name, const char *value, int overwrite)
 }
 
 int
-gnc_unsetenv(const char *name)
+unsetenv(const char *name)
 {
   int result = 0;
   char *putenv_str;

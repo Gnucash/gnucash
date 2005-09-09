@@ -1,3 +1,24 @@
+2005-09-08  David Hampton  <hampton@employees.org>
+
+	* lib/libc/Makefile.am:
+	* lib/libc/setenv.[ch]:
+	* src/core-utils/Makefile.am:
+	* src/core-utils/core-utils.[ch]: Move the gnucash
+	gnc_setenv/gnc_unsetenv functions to the library directory and
+	rename them to setenv/unsetenv.  These functions are only compiled
+	if not provided by the system libc library.
+
+	* configure.in: Enforce check for one of setenv() or putenv()
+	during configure, not compilation.
+
+	* src/backend/file/sixtp-utils.c:
+	* src/backend/file/test/Makefile.am:
+	* src/backend/file/test/test-save-in-lang.c:
+	* src/core-utils/gw-core-utils-spec.scm:
+	* src/gnc-module/Makefile.am:
+	* src/gnc-module/gnc-module.c: Cleanup for the rename of
+	setenv/unsetenv.
+
 2005-09-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/sixtp-utils.c:  Revert change.. Make sure

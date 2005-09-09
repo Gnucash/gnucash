@@ -11,7 +11,9 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#include "core-utils.h"
+#ifndef HAVE_SETENV
+#include "setenv.h"
+#endif
 #include "qofbook.h"
 #include "gnc-engine.h"
 #include "TransLog.h"
@@ -93,8 +95,8 @@ test_file(const char *filename)
             return g_strdup_printf("qof_session_load errorid %d", err);
         }
 
-        if(gnc_setenv("LANG", possible_envs[i], 1) != 0)
-          return g_strdup_printf("gnc_setenv for LANG");
+        if(setenv("LANG", possible_envs[i], 1) != 0)
+          return g_strdup_printf("setenv for LANG");
 
         new_session = qof_session_new();
         
@@ -165,10 +167,10 @@ main(int argc, char **argv)
                 break;
             }
 
-            if(gnc_setenv("LANG", base_env, 1) != 0)
+            if(setenv("LANG", base_env, 1) != 0)
             {
-              failure_args("gnc_setenv", __FILE__, __LINE__,
-                           "gnc_setenv of LANG failed");
+              failure_args("setenv", __FILE__, __LINE__,
+                           "setenv of LANG failed");
               g_free(filename);
               break;
             }

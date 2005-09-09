@@ -95,7 +95,12 @@ AC_PROG_MAKE_SET
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
-AC_CHECK_FUNCS(stpcpy memcpy timegm towupper setenv putenv)
+AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
+AC_CHECK_FUNCS(setenv,,[
+  AC_CHECK_FUNCS(putenv,,[
+    AC_MSG_ERROR([Must have one of the setenv or putenv functions.])
+  ])
+])
 
 ## +jsled
 # copied from gnumeric
