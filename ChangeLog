@@ -1,3 +1,10 @@
+2005-09-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.[hc]: Add support for
+	"internal bank transfers" as supported by latest aqbanking. If
+	aqbanking >= 1.6.1 is available, it will automatically be compiled
+	in, otherwise ifdef'd out.
+
 2005-08-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/date.[ch]: fix for bug #170444 -- pass a better

@@ -51,6 +51,11 @@ void
 gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget, 
 				     gpointer data);
 
+/* Callback from register window to invoke Internal Transaction invocation. */
+void
+gnc_hbci_register_menu_makeinttrans_cb (GtkWidget * widget, 
+					gpointer data);
+
 /* Callback from register window to invoke Debit Note invocation. */
 void
 gnc_hbci_register_menu_makedebnote_cb (GtkWidget * widget, 

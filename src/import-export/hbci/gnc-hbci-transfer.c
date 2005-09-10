@@ -229,6 +229,8 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Direct Debit Note"));
+  case SINGLE_INTERNAL_TRANSFER:
+    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Bank-Internal Transfer"));
   case SINGLE_TRANSFER:
   default:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Transaction"));

@@ -108,6 +108,17 @@ gnc_hbci_addmenus(void)
 			 N_("Issue a new transaction online through HBCI"),
 			 gnc_hbci_register_menu_maketrans_cb, 
 			 GNOME_APP_PIXMAP_NONE),
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+      GNOMEUIINFO_ITEM ( N_("HBCI Issue Internal Transaction"),
+			 N_("Issue a new bank-internal transaction online through HBCI"),
+			 gnc_hbci_register_menu_makeinttrans_cb, 
+			 GNOME_APP_PIXMAP_NONE),
+#endif
       GNOMEUIINFO_ITEM ( N_("HBCI Issue Direct Debit"),
 			 N_("Issue a new direct debit note online through HBCI"),
 			 gnc_hbci_register_menu_makedebnote_cb, 

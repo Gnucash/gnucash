@@ -31,6 +31,14 @@
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
 #include <aqbanking/jobsingledebitnote.h>
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+# include <aqbanking/jobinternaltransfer.h>
+#endif
 #include <iconv.h>
 
 #include "dialog-utils.h"
@@ -326,6 +334,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
        the labels accordingly. */
     switch (trans_type) {
     case SINGLE_TRANSFER:
+    case SINGLE_INTERNAL_TRANSFER:
       /* all labels are already set */
       break;
     case SINGLE_DEBITNOTE:
@@ -689,6 +698,16 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
   case SINGLE_DEBITNOTE:
     job = AB_JobSingleDebitNote_new(h_acc);
     break;
+  case SINGLE_INTERNAL_TRANSFER:
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+    job = AB_JobInternalTransfer_new(h_acc);
+    break;
+#endif
   default:
   case SINGLE_TRANSFER:
     job = AB_JobSingleTransfer_new(h_acc);
@@ -702,6 +721,16 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
   case SINGLE_DEBITNOTE:
     AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
     break;
+  case SINGLE_INTERNAL_TRANSFER:
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+    AB_JobInternalTransfer_SetTransaction(job, td->hbci_trans);
+    break;
+#endif
   default:
   case SINGLE_TRANSFER:
     AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
