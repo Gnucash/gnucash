@@ -64,6 +64,14 @@ static void gnc_plugin_hbci_cmd_setup (GtkAction *action, GncMainWindowActionDat
 static void gnc_plugin_hbci_cmd_get_balance (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_hbci_cmd_get_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_plugin_hbci_cmd_issue_transaction (GtkAction *action, GncMainWindowActionData *data);
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+static void gnc_plugin_hbci_cmd_issue_inttransaction (GtkAction *action, GncMainWindowActionData *data);
+#endif
 static void gnc_plugin_hbci_cmd_issue_direct_debit (GtkAction *action, GncMainWindowActionData *data);
 
 
@@ -84,9 +92,19 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "HbciGetTransAction", NULL, N_("HBCI Get _Transactions"), NULL,
     N_("Get the transactions online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
-  { "HbciIssueTransAction", NULL, N_("HBCI _Issue Transactions"), NULL,
+  { "HbciIssueTransAction", NULL, N_("HBCI _Issue Transaction"), NULL,
     N_("Issue a new transaction online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+  { "HbciIssueIntTransAction", NULL, N_("HBCI Issue Internal Transaction"), NULL,
+    N_("Issue a new bank-internal transaction online through HBCI"),
+    G_CALLBACK (gnc_plugin_hbci_cmd_issue_inttransaction) },
+#endif
   { "HbciIssueDirectDebitAction", NULL, N_("HBCI Issue _Direct Debit"), NULL,
     N_("Issue a new direct debit note online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
@@ -432,6 +450,30 @@ gnc_plugin_hbci_cmd_issue_transaction (GtkAction *action,
   gnc_hbci_maketrans(GTK_WIDGET(data->window), account, SINGLE_TRANSFER);
   LEAVE(" ");
 }
+
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+static void
+gnc_plugin_hbci_cmd_issue_inttransaction (GtkAction *action,
+					GncMainWindowActionData *data)
+{
+  Account *account;
+
+  ENTER("action %p, main window data %p", action, data);
+  account = main_window_to_account(data->window);
+  if (account == NULL) {
+    LEAVE("no account");
+    return;
+  }
+
+  gnc_hbci_maketrans(GTK_WIDGET(data->window), account, SINGLE_INTERNAL_TRANSFER);
+  LEAVE(" ");
+}
+#endif
 
 static void
 gnc_plugin_hbci_cmd_issue_direct_debit (GtkAction *action,
