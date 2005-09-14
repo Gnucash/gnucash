@@ -48,7 +48,9 @@ enum {
 };
 
 struct _GNCDateFormatPriv {
-  GtkWidget*	format_omenu;
+  GtkWidget*	format_combobox;
+
+  GtkWidget*    label;
 
   GtkWidget*	months_label;
   GtkWidget*	months_number;
@@ -62,9 +64,6 @@ struct _GNCDateFormatPriv {
   GtkWidget*	custom_entry;
 
   GtkWidget*	sample_label;
-
-  GtkWidget*	table;
-  GtkWidget*	label_box;
 };
 
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
@@ -73,7 +72,6 @@ static guint date_format_signals [LAST_SIGNAL] = { 0 };
 static void gnc_date_format_init         (GNCDateFormat      *gdf);
 static void gnc_date_format_class_init   (GNCDateFormatClass *class);
 static void gnc_date_format_finalize     (GObject            *object);
-static void gnc_date_format_dispose      (GObject            *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 /* Used by glade_xml_signal_autoconnect_full */
@@ -128,26 +126,21 @@ gnc_date_format_class_init (GNCDateFormatClass *klass)
 		  G_STRUCT_OFFSET (GNCDateFormatClass, format_changed),
 		  NULL,
 		  NULL,
-		  g_cclosure_marshal_VOID__POINTER,
+		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
 
-  gobject_class->dispose = gnc_date_format_dispose;
   gobject_class->finalize = gnc_date_format_finalize;
-
-  /* GtkObjectClass class->format_changed = NULL; */
 }
 
 static void
 gnc_date_format_init (GNCDateFormat *gdf)
 {
   GladeXML *xml;
-  GtkWidget *dialog;
+  GtkWidget *dialog, *table;
 
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
-
-  gdf->disposed = FALSE;
 
   gdf->priv = g_new0(GNCDateFormatPriv, 1);
 
@@ -156,8 +149,8 @@ gnc_date_format_init (GNCDateFormat *gdf)
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, gdf);
 
   /* pull in all the child widgets */
-  gdf->label = glade_xml_get_widget(xml, "widget_label");
-  gdf->priv->format_omenu = glade_xml_get_widget(xml, "format_omenu");
+  gdf->priv->label = glade_xml_get_widget(xml, "widget_label");
+  gdf->priv->format_combobox = glade_xml_get_widget(xml, "format_combobox");
 
   gdf->priv->months_label = glade_xml_get_widget(xml, "months_label");
   gdf->priv->months_number = glade_xml_get_widget(xml, "month_number_button");
@@ -172,47 +165,20 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
   gdf->priv->sample_label = glade_xml_get_widget(xml, "sample_label");
 
-  gdf->priv->table = glade_xml_get_widget(xml, "date_format_table");
-  gdf->priv->label_box = glade_xml_get_widget(xml, "label_box");
-
-  /* Initialize the format menu */
-  gnc_option_menu_init_w_signal(gdf->priv->format_omenu,
-				GTK_SIGNAL_FUNC(gnc_ui_date_format_changed_cb), gdf);
-
   /* Set initial format to gnucash default */
   gnc_date_format_set_format(gdf, qof_date_format_get());
 
   /* pull in the dialog and table widgets and play the reconnect game */
   dialog = glade_xml_get_widget(xml, "GNC Date Format");
 
-  g_object_ref(G_OBJECT(gdf->priv->table));
-  gtk_container_remove(GTK_CONTAINER(dialog), gdf->priv->table);
-  gtk_container_add(GTK_CONTAINER(gdf), gdf->priv->table);
-  /* XXX: do I need to unref the table? 
-     SAE: I think so, see gnc_data_format_dispose
-   */
+  table = glade_xml_get_widget(xml, "date_format_table");
+  g_object_ref(G_OBJECT(table));
+  gtk_container_remove(GTK_CONTAINER(dialog), table);
+  gtk_container_add(GTK_CONTAINER(gdf), table);
+  g_object_unref(G_OBJECT(table));
+
+  /* Destroy the now empty window */
   gtk_widget_destroy(dialog);
-}
-
-static void
-gnc_date_format_dispose (GObject *object)
-{
-  GNCDateFormat *gdf;
-
-  g_return_if_fail(object != NULL);
-  g_return_if_fail(GNC_IS_DATE_FORMAT(object));
-
-  gdf = GNC_DATE_FORMAT(object);
-
-  if(gdf->disposed)
-    return;
-
-  gdf->disposed = TRUE;
-
-  g_object_unref(G_OBJECT(gdf->priv->table));
-
-  if (G_OBJECT_CLASS(parent_class)->dispose)
-    (* G_OBJECT_CLASS(parent_class)->dispose) (object);
 }
 
 static void
@@ -246,15 +212,14 @@ gnc_date_format_new (void)
   return gnc_date_format_new_with_label (NULL);
 }
 
-GtkWidget
-*gnc_date_format_new_without_label (void)
+GtkWidget *
+gnc_date_format_new_without_label (void)
 {
   GtkWidget *widget = gnc_date_format_new_with_label(NULL);
   GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
 
-  gtk_container_remove(GTK_CONTAINER(gdf->priv->table), gdf->priv->label_box);
-  gdf->label = NULL;
-  gtk_widget_queue_resize(gdf->priv->table);
+  gtk_widget_destroy(gdf->priv->label);
+  gdf->priv->label = NULL;
 
   return widget;
 }
@@ -276,7 +241,7 @@ gnc_date_format_new_with_label (const char *label)
   gdf = g_object_new(GNC_TYPE_DATE_FORMAT, NULL);
 
   if (label)
-    gtk_label_set_text(GTK_LABEL(gdf->label), label);
+    gtk_label_set_text(GTK_LABEL(gdf->priv->label), label);
 
   gnc_date_format_compute_format(gdf);
   return GTK_WIDGET(gdf);
@@ -288,7 +253,7 @@ gnc_date_format_set_format (GNCDateFormat *gdf, QofDateFormat format)
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
-  gtk_option_menu_set_history(GTK_OPTION_MENU(gdf->priv->format_omenu), format);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(gdf->priv->format_combobox), format);
   gnc_date_format_compute_format(gdf);
 }
 
@@ -298,7 +263,7 @@ gnc_date_format_get_format (GNCDateFormat *gdf)
   g_return_val_if_fail (gdf, QOF_DATE_FORMAT_LOCALE);
   g_return_val_if_fail (GNC_IS_DATE_FORMAT(gdf), QOF_DATE_FORMAT_LOCALE);
 
-  return gnc_option_menu_get_active(gdf->priv->format_omenu);
+  return gtk_combo_box_get_active(GTK_COMBO_BOX(gdf->priv->format_combobox));
 }
 
 void
@@ -452,7 +417,8 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
 
-  sel_option = gnc_option_menu_get_active(gdf->priv->format_omenu);
+  sel_option =
+    gtk_combo_box_get_active(GTK_COMBO_BOX(gdf->priv->format_combobox));
 
   switch (sel_option) {
    case QOF_DATE_FORMAT_CUSTOM:
@@ -462,7 +428,8 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
     break;
 
    case QOF_DATE_FORMAT_LOCALE:
-    format = g_strdup(qof_date_format_get_string(QOF_DATE_FORMAT_LOCALE));
+   case QOF_DATE_FORMAT_UTC:
+    format = g_strdup(qof_date_format_get_string(sel_option));
     enable_year = enable_month = check_modifiers = enable_custom = FALSE;
     break;
 
@@ -488,7 +455,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gdf->priv->months_number))) {
       format = g_strdup(qof_date_format_get_string(sel_option));
     } else {
-      format = g_strdup(qof_date_format_get_string(sel_option));
+      format = g_strdup(qof_date_text_format_get_string(sel_option));
       if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gdf->priv->months_name))) {
 	c = strchr(format, 'b');
 	if (c)

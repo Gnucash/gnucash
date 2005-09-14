@@ -44,16 +44,11 @@ typedef struct _GNCDateFormatPriv GNCDateFormatPriv;
  **/
 typedef struct {
 	GtkHBox hbox;
-
-	GtkWidget *label;
-
 	GNCDateFormatPriv *priv;
-
-	int disposed;
 } GNCDateFormat;
 
 typedef struct {
-	GtkHBoxClass parent_class;
+	GtkHBoxClass hbox_class;
 	void (*format_changed) (GNCDateFormat *gdf);
 } GNCDateFormatClass;
 
