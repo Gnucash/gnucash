@@ -408,7 +408,7 @@ return string
 
 Globals: dateFormat
 */
-const gchar *qof_date_format_get_format(QofDateFormat df)
+const gchar *qof_date_text_format_get_string(QofDateFormat df)
 {
   switch(df) {
    case QOF_DATE_FORMAT_US:

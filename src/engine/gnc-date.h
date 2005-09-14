@@ -283,10 +283,25 @@ QofDateFormat qof_date_format_get(void);
  */
 void qof_date_format_set(QofDateFormat df);
 
-/** DOCUMENT ME! */
+/** This function returns a strftime formatting string for printing an
+ *  all numeric date (e.g. 2005-09-14).  The string returned is based
+ *  upon the location specified.
+ *
+ *  @param df The date style (us, uk, iso, etc) that should be provided.
+ *
+ *  @return A formatting string that will print a date in the
+ *  requested style  */
 const gchar *qof_date_format_get_string(QofDateFormat df);
-/** DOCUMENT ME! */
-const gchar *qof_date_format_get_format(QofDateFormat df);
+
+/** This function returns a strftime formatting string for printing a
+ *  date using words and numbers (e.g. 2005-September-14).  The string
+ *  returned is based upon the location specified.
+ *
+ *  @param df The date style (us, uk, iso, etc) that should be provided.
+ *
+ *  @return A formatting string that will print a date in the
+ *  requested style  */
+const gchar *qof_date_text_format_get_string(QofDateFormat df);
 // @}
 
 /** dateSeparator
