@@ -42,14 +42,6 @@ Stock Split Dialog
     +------------
 
 ========================================
-          MISSING MENU ITEMS
-========================================
-
-- Register Window
-  - `Actions`
-    - `Check and Repair (all)`
-
-========================================
             General Notes
 ========================================
 
@@ -91,7 +83,9 @@ Resources
 
 - Register Core - mostly functional
 
-  - Insertion point not shown. (fix gnucash-item-edit.c)
+  - Competion has problems.  It does complete when a character is typed but it fails to select the
+  inserted text.  This means that the next character typed is inserted
+  instead of continuing to test for completion
 
   - The first time it is used, the account popup immediately selects the
     first account.  After that it functions normally.

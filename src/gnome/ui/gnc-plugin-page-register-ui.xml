@@ -43,14 +43,18 @@
 	<menuitem name="ActionsReconcile"        action="ActionsReconcileAction"/>
 	<menuitem name="ActionsStockSplit"       action="ActionsStockSplitAction"/>
 	<menuitem name="ActionLots"              action="ActionsLotsAction"/>
-        <separator name="ActionsSep3"/>
         <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
         <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
         <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
         <menuitem name="ScheduleTransaction"     action="ScheduleTransactionAction"/>
         <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
+	<separator name="ActionsSep5"/>
       </placeholder>
+      <menu name="ScrubMenu" action="ScrubMenuAction">
+	<menuitem name="ScrubAll" action="ScrubAllAction"/>
+	<menuitem name="ScrubCurrent" action="ScrubCurrentAction"/>
+      </menu>
     </menu>
 
     <menu name="Reports" action="ReportsAction">

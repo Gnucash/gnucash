@@ -39,25 +39,27 @@
   </menubar>
 
   <popup name="AccountPopup" action="FakeToplevel">
-    <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
-    <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
-    <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
-    <separator name="AccountSep1"/>
-    <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
-    <menuitem name="AccountTransfer" action="ActionsTransferAction"/>
-    <menuitem name="AccountStockSplit" action="ActionsStockSplitAction"/>
-    <menuitem name="AccountLots" action="ActionsLotsAction"/>
-    <separator name="AccountSep2"/>
-    <menuitem name="AccountNewAccount" action="FileNewAccountAction"/>
-    <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>
-    <separator name="AccountSep3"/>
-    <menu name="ScrubMenu" action="ScrubMenuAction">
-      <menuitem name="Scrub" action="ScrubAction"/>
-      <menuitem name="ScrubSub" action="ScrubSubAction"/>
-      <menuitem name="ScrubAll" action="ScrubAllAction"/>
-    </menu>
-    <separator name="AccountSep4"/>
-    <menuitem name="AccountViewOptions" action="EditAccountViewOptionsAction"/>
+    <placeholder name="ActionsMiddlePlaceholder">
+      <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
+      <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+      <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
+      <separator name="AccountSep1"/>
+      <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
+      <menuitem name="AccountTransfer" action="ActionsTransferAction"/>
+      <menuitem name="AccountStockSplit" action="ActionsStockSplitAction"/>
+      <menuitem name="AccountLots" action="ActionsLotsAction"/>
+      <separator name="AccountSep2"/>
+      <menuitem name="AccountNewAccount" action="FileNewAccountAction"/>
+      <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>
+      <separator name="AccountSep3"/>
+    </placeholder>
+    <placeholder name="ActionsBottomPlaceholder">
+      <menu name="ScrubMenu" action="ScrubMenuAction">
+        <menuitem name="Scrub" action="ScrubAction"/>
+        <menuitem name="ScrubSub" action="ScrubSubAction"/>
+        <menuitem name="ScrubAll" action="ScrubAllAction"/>
+      </menu>
+    </placeholder>
   </popup>
 
   <toolbar name="DefaultToolbar">

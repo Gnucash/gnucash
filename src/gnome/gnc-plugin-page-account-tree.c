@@ -159,7 +159,6 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
-	{ "ScrubMenuAction", NULL, N_("_Check & Repair"), NULL, NULL, NULL },
 	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },

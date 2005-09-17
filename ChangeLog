@@ -1,5 +1,14 @@
 2005-09-16  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Move the "Check &
+	Repair" menu definition to a common location.  Restore the
+	register window "Check & Repair" menu items.
+
 	* src/app-utils/prefs.scm:
 	* src/gnome/schemas/apps_gnucash_dialog_common.schemas: Finish
 	conversion of the hidden "first startup" preference.
@@ -23,7 +32,7 @@
 
 	* src/gnome-utils/gnc-date-format.[ch]:
 	* src/gnome-utils/gnc-date-format.glade: Use a GtkComboBox in
-	place of the deprecated GtkOptionMenu.  Add aa choice in the combo
+	place of the deprecated GtkOptionMenu.  Add a choice in the combo
 	box for the UTC time format to match the new addition to the
 	QofDateFormat enum.  Clean up the code slightly.
 

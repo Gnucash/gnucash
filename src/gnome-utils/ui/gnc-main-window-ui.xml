@@ -73,7 +73,15 @@
 
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder"/>
-      <separator name="ActionSep1"/>
+      <separator name="ActionSepA"/>
+      <placeholder name="ActionsTopPlaceholder"/>
+      <separator name="ActionSepB"/>
+      <placeholder name="ActionsMiddlePlaceholder"/>
+      <separator name="ActionSepC"/>
+      <placeholder name="ActionsBottomPlaceholder"/>
+      <separator name="ActionSepD"/>
+      <menu name="ScrubMenu" action="ScrubMenuAction"/>
+      <separator name="ActionSepE"/>
       <menuitem name="ActionsForgetWarnings" action="ActionsForgetWarningsAction"/>
     </menu>
   

@@ -52,6 +52,7 @@
 #include "gnc-window.h"
 #include "gnucash-sheet.h"
 #include "lot-viewer.h"
+#include "Scrub.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
 #include "window-report.h"
@@ -128,6 +129,8 @@ static void gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *ac
 static void gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_jump (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_schedule (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_scrub_all (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_scrub_current (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_account_report (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, GncPluginPageRegister *plugin_page);
 
@@ -223,6 +226,10 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
 	  N_("Edit scheduled transactions"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
+	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
+	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current) },
 
 	/* Reports menu */
 
@@ -2166,6 +2173,80 @@ gnc_plugin_page_register_cmd_schedule (GtkAction *action,
 
   priv = plugin_page->priv;
   gsr_default_schedule_handler(priv->gsr, NULL);
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_scrub_current (GtkAction *action,
+					    GncPluginPageRegister *plugin_page)
+{
+  GncPluginPageRegisterPrivate *priv;
+  Query *query;
+  AccountGroup *root;
+  Transaction *trans;
+  SplitRegister *reg;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+  ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+  priv = plugin_page->priv;
+  query = gnc_ledger_display_get_query( priv->ledger );
+  if (query == NULL) {
+    LEAVE("no query found");
+    return;
+  }
+
+  reg = gnc_ledger_display_get_split_register(priv->ledger);
+  trans = gnc_split_register_get_current_trans(reg);
+  if (trans == NULL) {
+    LEAVE("no trans found");
+    return;
+  }
+
+  gnc_suspend_gui_refresh();
+  root = gnc_get_current_group();
+  xaccTransScrubOrphans(trans);
+  xaccTransScrubImbalance(trans, root, NULL);
+  gnc_resume_gui_refresh();
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_scrub_all (GtkAction *action,
+					GncPluginPageRegister *plugin_page)
+{
+  GncPluginPageRegisterPrivate *priv;
+  Query *query;
+  AccountGroup *root;
+  Transaction *trans;
+  Split *split;
+  GList *node;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+  ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+  priv = plugin_page->priv;
+  query = gnc_ledger_display_get_query( priv->ledger );
+  if (!query) {
+    LEAVE("no query found");
+    return;
+  }
+
+  gnc_suspend_gui_refresh();
+  root = gnc_get_current_group();
+
+  for (node = xaccQueryGetSplits(query); node; node = node->next)
+  {
+    split = node->data;
+    trans = xaccSplitGetParent(split);
+
+    xaccTransScrubOrphans(trans);
+    xaccTransScrubImbalance(trans, root, NULL);
+  }
+
+  gnc_resume_gui_refresh();
   LEAVE(" ");
 }
 
