@@ -157,18 +157,7 @@ gnc_history_add_file (const char *newfile)
 char *
 gnc_history_get_last (void)
 {
-  static char *filename = NULL;
-  char *key;
-
-  /* The static string supports the current signature of this
-   * function.  At some point this should be changed to pass the
-   * allocated string up to the caller and make them responsible for
-   * freeing irt, but that change percolates up into the scheme code
-   * and requires changing that as well. */
-  if (filename) {
-    g_free(filename);
-    filename = NULL;
-  }
+  char *filename, *key;
 
   key = g_strdup_printf(HISTORY_STRING_FILE_N, 0);
   filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);

@@ -661,12 +661,16 @@ gboolean
 gnc_file_open (void)
 {
   const char * newfile;
+  char *lastfile;
   gboolean result;
 
   if (!gnc_file_query_save ())
     return FALSE;
 
-  newfile = gnc_file_dialog (_("Open"), NULL, gnc_history_get_last());
+  lastfile = gnc_history_get_last();
+  newfile = gnc_file_dialog (_("Open"), NULL, lastfile);
+  if (lastfile)
+    g_free(lastfile);
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -834,7 +838,7 @@ gnc_file_save_as (void)
   QofSession *session;
   const char *filename;
   char *default_dir = NULL;        /* Default to last open */
-  const char *last;
+  char *last;
   char *newfile;
   const char *oldfile;
   QofBackendError io_err = ERR_BACKEND_NO_ERR;
@@ -842,10 +846,12 @@ gnc_file_save_as (void)
   ENTER(" ");
 
   last = gnc_history_get_last();
-  if (last)
+  if (last) {
     gnc_extract_directory(&default_dir, last);
-  else
+    g_free(last);
+  } else {
     gnc_init_default_directory(&default_dir);
+  }
   filename = gnc_file_dialog (_("Save"), "*.gnc", default_dir);
   if (default_dir)
     free(default_dir);
