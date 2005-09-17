@@ -1,3 +1,10 @@
+2005-09-17  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-price-editor.c:
+	* src/gnome-utils/gnc-currency-edit.[ch]: Convert from the
+	deprecated GtkCombo widget to a GtkComboBox widget.  Add some
+	documentation.
+
 2005-09-16  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-account-tree.c:

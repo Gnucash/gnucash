@@ -373,9 +373,8 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   pedit_dialog->currency_edit = w;
   gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
   gtk_widget_show (w);
-  g_signal_connect (G_OBJECT (GTK_COMBO(w)->entry), "changed",
+  g_signal_connect (G_OBJECT (GTK_COMBO_BOX(w)), "changed",
                     G_CALLBACK (currency_changed_cb), pedit_dialog);
-  gtk_entry_set_activates_default(GTK_ENTRY(GTK_COMBO(w)->entry), TRUE);
 
   box = glade_xml_get_widget (xml, "date_box");
   w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
