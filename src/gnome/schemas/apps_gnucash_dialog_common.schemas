@@ -119,6 +119,19 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/new_user/first_startup</key>
+      <applyto>/apps/gnucash/dialogs/new_user/first_startup</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show the new user dialog.</short>
+        <long>
+	 Show the new user dialog.
+	</long>
+      </locale>
+    </schema>
 
     <schema>
       <key>/schemas/apps/gnucash/dialogs/new_hierarchy/show_on_new_file</key>

@@ -305,8 +305,4 @@ to enter a credit card payment")
 
 (gnc:register-configuration-option
  (gnc:make-internal-option
-  "__new_user" "first_startup" #t))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
   "__gnc_network" "uid" ""))

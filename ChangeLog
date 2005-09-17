@@ -1,3 +1,21 @@
+2005-09-16  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm:
+	* src/gnome/schemas/apps_gnucash_dialog_common.schemas: Finish
+	conversion of the hidden "first startup" preference.
+
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome-utils/gnc-plugin-file-history.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Clean up handling of
+	the return value from gnc_history_get_last().
+	
+	* src/core-utils/gnc-gconf-utils.c: Handle this undocumented case
+	where gconf_client_set_string() can return FALSE without setting
+	the error variable.  Also modify this function to return NULL if
+	gconf returns an empty string.  This is more in line with what all
+	the rest of GnuCash code expects.  Centralize error handling in
+	this file.
+
 2005-09-14  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-date.[ch]: Fix function name.  Document
