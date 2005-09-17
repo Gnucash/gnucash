@@ -331,6 +331,70 @@ gnc_gconf_make_schema_key (const gchar *section, const gchar *name)
 }
 
 
+/** Either propagate an error between data structures, or display the
+ *  error to the user.  This is a helper function called by all of the
+ *  load functions in this file.  It checks to see if the function
+ *  that called in to this file wants to handle the error, or if this
+ *  function should display a default error message.
+ *
+ *  @internal
+ *
+ *  @param key The name of the key that failed to load.
+ *
+ *  @param caller_error A pointer to where the caller of this file
+ *  would like the error stored.  If NULL, then the caller doesn't
+ *  want to handle the error.
+ *
+ *  @param error A pointer to the error that this file received from
+ *  gconf.
+ */
+static void
+gnc_gconf_load_error (const gchar *key,
+		      GError **caller_error,
+		      GError *error)
+{
+  if (caller_error) {
+    g_propagate_error(caller_error, error);
+  } else {
+    printf("Failed to load key %s: %s", key, error->message);
+    g_error_free(error);
+  }
+}
+
+
+/** Either propagate an error between data structures, or display the
+ *  error to the user.  This is a helper function called by all of the
+ *  save functions in this file.  It checks to see if the function
+ *  that called in to this file wants to handle the error, or if this
+ *  function should display a default error message.
+ *
+ *  @internal
+ *
+ *  @param key The name of the key that failed to load.
+ *
+ *  @param caller_error A pointer to where the caller of this file
+ *  would like the error stored.  If NULL, then the caller doesn't
+ *  want to handle the error.
+ *
+ *  @param error A pointer to the error that this file received from
+ *  gconf.
+ */
+static void
+gnc_gconf_save_error (const gchar *key,
+		      GError **caller_error,
+		      GError *error)
+{
+  if (caller_error) {
+    g_propagate_error(caller_error, error);
+  } else if (error) {
+    printf("Failed to save key %s: %s", key, error->message);
+    g_error_free(error);
+  } else {
+    printf("Failed to save key %s: %s", key, "Unknown error");
+  }
+}
+
+
 gboolean
 gnc_gconf_get_bool (const gchar *section,
 		    const gchar *name,
@@ -346,12 +410,7 @@ gnc_gconf_get_bool (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_bool(our_client, key, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
   return value;
@@ -379,12 +438,7 @@ gnc_gconf_set_bool (const gchar *section,
   /* Remember whether the column width */
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_bool(our_client, key, value, &error)) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to save key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_save_error(key, caller_error, error);
   }
   g_free(key);
 }
@@ -404,12 +458,7 @@ gnc_gconf_get_int (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_int(our_client, key, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
   return value;
@@ -430,12 +479,7 @@ gnc_gconf_set_int (const gchar *section,
   /* Remember whether the column width */
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_int(our_client, key, value, &error)) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to save key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_save_error(key, caller_error, error);
   }
   g_free(key);
 }
@@ -455,12 +499,7 @@ gnc_gconf_get_float (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_float(our_client, key, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
   return value;
@@ -481,12 +520,7 @@ gnc_gconf_set_float (const gchar *section,
   /* Remember whether the column width */
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_float(our_client, key, value, &error)) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to save key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_save_error(key, caller_error, error);
   }
   g_free(key);
 }
@@ -506,14 +540,14 @@ gnc_gconf_get_string (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_string(our_client, key, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
+
+  if (strlen(value) == 0) {
+    g_free(value);
+    return NULL;
+  }
   return value;
 }
 
@@ -531,12 +565,7 @@ gnc_gconf_set_string (const gchar *section,
 
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_string(our_client, key, value, &error)) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to save key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_save_error(key, caller_error, error);
   }
   g_free(key);
 }
@@ -557,12 +586,7 @@ gnc_gconf_get_list (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_list(our_client, key, list_type, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
   return value;
@@ -583,12 +607,7 @@ gnc_gconf_set_list (const gchar *section,
 
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_list(our_client, key, list_type, value, &error)) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to save key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_save_error(key, caller_error, error);
   }
   g_free(key);
 }
@@ -608,12 +627,7 @@ gnc_gconf_get_schema (const gchar *section,
   key = gnc_gconf_make_key(section, name);
   value = gconf_client_get_schema(our_client, key, &error);
   if (error) {
-    if (caller_error) {
-      g_propagate_error(caller_error, error);
-    } else {
-      printf("Failed to load key %s: %s", key, error->message);
-      g_error_free(error);
-    }
+    gnc_gconf_load_error(key, caller_error, error);
   }
   g_free(key);
   return value;
