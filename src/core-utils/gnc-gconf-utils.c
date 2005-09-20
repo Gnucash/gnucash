@@ -544,7 +544,7 @@ gnc_gconf_get_string (const gchar *section,
   }
   g_free(key);
 
-  if (strlen(value) == 0) {
+  if (value && strlen(value) == 0) {
     g_free(value);
     return NULL;
   }
