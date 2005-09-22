@@ -26,6 +26,7 @@
 #include "gnc-plugin-qif-import.h"
 #include "gnc-plugin-manager.h"
 
+#include "dialog-preferences.h"
 #include "druid-qif-import.h"
 #include "messages.h"
 
@@ -164,4 +165,6 @@ gnc_plugin_qif_import_create_plugin (void)
 	GncPlugin *plugin = gnc_plugin_qif_import_new ();
 
 	gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
+	gnc_preferences_add_to_page ("qif.glade", "prefs_table",
+				     "Online Banking");
 }

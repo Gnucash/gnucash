@@ -1955,9 +1955,7 @@ gnc_ui_qif_import_druid_make(void)
   retval->commodity_pages = NULL;
 
   retval->show_doc_pages = 
-    gnc_lookup_boolean_option("Online Banking & Importing",
-                              "QIF Verbose documentation",
-                              TRUE);
+    gnc_gconf_get_bool("dialogs/import/qif", "show_doc", NULL);
 
   for(i=0; i < NUM_PRE_PAGES; i++) {
     retval->pre_comm_pages = 

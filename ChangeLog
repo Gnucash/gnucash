@@ -1,3 +1,30 @@
+2005-09-21  David Hampton  <hampton@employees.org>
+
+	* configure.in:
+	* src/app-utils/prefs.scm:
+	* src/import-export/Makefile.am:
+	* src/import-export/generic-import.glade:
+	* src/import-export/generic-import.scm:
+	* src/import-export/gncmod-generic-import.c:
+	* src/import-export/import-settings.c:
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/qif-import/gnc-plugin-qif-import.c:
+	* src/import-export/qif-import/qif.glade:
+	* src/import-export/schemas/.cvsignore:
+	* src/import-export/schemas/Makefile.am:
+	* src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas:
+	Migrate QIF and 'Generic Matcher' preferences over to gconf.
+
+	* src/import-export/qif-import/qif.glade: Remove non-standard
+	background color declarations.
+	
+	* src/gnome-utils/dialog-preferences.c: Do a better job spacing
+	preferences pages that are merged together.
+
+	* src/import-export/qif-import/druid-qif-import.c: Remove
+	double-free of memory.  Remove access of GDK window data
+	structure.
+
 2005-09-17  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-price-editor.c:

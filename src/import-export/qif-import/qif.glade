@@ -215,13 +215,8 @@ The import process has several steps. Your GnuCash
 accounts will not be changed until you click &quot;Finish&quot;
 at the end of the process. 
 
-Click &quot;Next&quot; to start loading your QIF data, or &quot;Cancel&quot;
+Click &quot;Forward&quot; to start loading your QIF data, or &quot;Cancel&quot;
 to abort the process. </property>
-	  <property name="title_color">#ffffffffffff</property>
-	  <property name="text_color">#000000000000</property>
-	  <property name="background_color">#9999bfbf9999</property>
-	  <property name="logo_background_color">#ffffffffffff</property>
-	  <property name="textbox_color">#ffffffffffff</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	</widget>
       </child>
@@ -230,9 +225,7 @@ to abort the process. </property>
 	<widget class="GnomeDruidPageStandard" id="load_file_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Select a QIF file to load</property>
-	  <property name="title_foreground">#5b50082ddd38</property>
-	  <property name="background">#6800082de9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_load_file_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_load_file_back_cb"/>
 
@@ -246,7 +239,7 @@ to abort the process. </property>
 	      <child>
 		<widget class="GtkLabel" id="label822">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Please select a file to load. When you click &quot;Next&quot;, the file will be loaded
+		  <property name="label" translatable="yes">Please select a file to load. When you click &quot;Forward&quot;, the file will be loaded
 and analyzed. You may need to answer some questions about the account(s)
 in the file.
 
@@ -350,9 +343,7 @@ worry if your data is in multiple files.
 	<widget class="GnomeDruidPageStandard" id="date_format_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Set a date format for this QIF file</property>
-	  <property name="title_foreground">#a2d8082ddd38</property>
-	  <property name="background">#b2d8082de9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_date_format_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
@@ -482,9 +473,7 @@ US QIF files are likely to be &quot;m-d-y&quot; or month-year-day.
 	<widget class="GnomeDruidPageStandard" id="account_name_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Set the default QIF account name</property>
-	  <property name="title_foreground">#1170082edd38</property>
-	  <property name="background">#2398082ee9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_default_acct_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_default_acct_back_cb"/>
 
@@ -605,9 +594,7 @@ in that program.
 	<widget class="GnomeDruidPageStandard" id="loaded_files_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">QIF files you have loaded</property>
-	  <property name="title_foreground">#3f68082edd38</property>
-	  <property name="background">#4a50082ee9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_loaded_files_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -696,7 +683,7 @@ in that program.
 		  <property name="label" translatable="yes">Click &quot;Load another file&quot; if you have more data to import at this time.
 Do this if you have saved your accounts to separate QIF files.
 
-Click &quot;Next&quot; to finish loading files and move to the next step 
+Click &quot;Forward&quot; to finish loading files and move to the next step 
 of the QIF import process. </property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -770,9 +757,7 @@ of the QIF import process. </property>
 	<widget class="GnomeDruidPageStandard" id="account_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Accounts and stock holdings</property>
-	  <property name="title_foreground">#a410082edd38</property>
-	  <property name="background">#a9a8082ee9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -825,9 +810,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<widget class="GnomeDruidPageStandard" id="account_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF accounts with GnuCash accounts</property>
-	  <property name="title_foreground">#b648082edd38</property>
-	  <property name="background">#e3a8082ee9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_accounts_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -915,7 +898,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	      <child>
 		<widget class="GtkLabel" id="label828">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Next&quot; to check matchings for QIF categories. </property>
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to check matchings for QIF categories. </property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -941,9 +924,7 @@ page so you can change them if you want to, but it is safe to leave them alone.
 	<widget class="GnomeDruidPageStandard" id="category_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Income and Expense categories</property>
-	  <property name="title_foreground">#20e8082fdd38</property>
-	  <property name="background">#33a8082fe9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -992,9 +973,7 @@ within GnuCash.</property>
 	<widget class="GnomeDruidPageStandard" id="category_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match QIF categories with GnuCash accounts</property>
-	  <property name="title_foreground">#47f0082fdd38</property>
-	  <property name="background">#5938082fe9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_categories_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -1082,7 +1061,7 @@ within GnuCash.</property>
 	      <child>
 		<widget class="GtkLabel" id="label829">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Next&quot; to enter information about the currency used in your QIF files.</property>
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about the currency used in your QIF files.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -1108,9 +1087,7 @@ within GnuCash.</property>
 	<widget class="GnomeDruidPageStandard" id="memo_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Payees and memos</property>
-	  <property name="title_foreground">#8b78082fdd38</property>
-	  <property name="background">#9d38082fe9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1158,9 +1135,7 @@ files. </property>
 	<widget class="GnomeDruidPageStandard" id="memo_match_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match payees/memos to GnuCash accounts</property>
-	  <property name="title_foreground">#9ff8082fdd38</property>
-	  <property name="background">#bd98082fe9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_memo_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 	  <signal name="prepare" handler="gnc_ui_qif_import_memo_prepare_cb"/>
@@ -1253,9 +1228,7 @@ files. </property>
 	<widget class="GnomeDruidPageStandard" id="currency_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Enter the currency used for new accounts</property>
-	  <property name="title_foreground">#eee8082fdd38</property>
-	  <property name="background">#f7f8082fe9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_currency_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1354,7 +1327,7 @@ Select the currency to use for transactions imported from your QIF files:
 	      <child>
 		<widget class="GtkLabel" id="label832">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Click &quot;Next&quot; to enter information about stocks and
+		  <property name="label" translatable="yes">Click &quot;Forward&quot; to enter information about stocks and
 mutual funds in the imported data.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -1382,9 +1355,7 @@ mutual funds in the imported data.</property>
 	<widget class="GnomeDruidPageStandard" id="commodity_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Tradable commodities</property>
-	  <property name="title_foreground">#3fe80830dd38</property>
-	  <property name="background">#47800830e9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="prepare" handler="gnc_ui_qif_import_commodity_prepare_cb"/>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
@@ -1437,9 +1408,7 @@ or listing for its type.</property>
 	<widget class="GnomeDruidPageStandard" id="match_doc_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Match duplicate transactions</property>
-	  <property name="title_foreground">#52180830dd38</property>
-	  <property name="background">#35a80830e9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1468,7 +1437,7 @@ correct one by clicking in the &quot;Dup?&quot; column of the correct transactio
 You can control the rules used by GnuCash to find duplicate transactions 
 in the &quot;QIF Import&quot; section of the GnuCash Preferences dialog.
 
-Click &quot;Next&quot; to find duplicate transactions. </property>
+Click &quot;Forward&quot; to find duplicate transactions. </property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1494,9 +1463,7 @@ Click &quot;Next&quot; to find duplicate transactions. </property>
 	<widget class="GnomeDruidPageStandard" id="match_duplicates_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Select possible duplicates</property>
-	  <property name="title_foreground">#76180830dd38</property>
-	  <property name="background">#a8400830e9eb</property>
-	  <property name="logo_background">#1e40081d0001</property>
+	  <property name="title_foreground">#f5f5f5f5f5f5</property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 
@@ -1756,14 +1723,83 @@ to change currency and security settings for new accounts,
 or to add more files to the staging area.
 
 Click &quot;Cancel&quot; to abort the QIF import process.</property>
-	  <property name="title_color">#ffffffffffff</property>
-	  <property name="text_color">#010101010101</property>
-	  <property name="background_color">#9a9abfbf9a9a</property>
-	  <property name="logo_background_color">#ffffffffffff</property>
-	  <property name="textbox_color">#ffffffffffff</property>
 	  <signal name="finish" handler="gnc_ui_qif_import_finish_cb"/>
 	  <signal name="back" handler="gnc_ui_qif_import_generic_back_cb"/>
 	</widget>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkWindow" id="Preferences">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Preferences</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+
+  <child>
+    <widget class="GtkTable" id="prefs_table">
+      <property name="visible">True</property>
+      <property name="n_rows">2</property>
+      <property name="n_columns">4</property>
+      <property name="homogeneous">False</property>
+      <property name="row_spacing">0</property>
+      <property name="column_spacing">0</property>
+
+      <child>
+	<widget class="GtkLabel" id="label847718">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">&lt;b&gt;QIF Import&lt;/b&gt;</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">True</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">0</property>
+	  <property name="bottom_attach">1</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/qif/show_doc">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Show some documentation-only pages in QIF Import druid.</property>
+	  <property name="can_focus">True</property>
+	  <property name="label" translatable="yes">Show documentation</property>
+	  <property name="use_underline">True</property>
+	  <property name="relief">GTK_RELIEF_NORMAL</property>
+	  <property name="focus_on_click">True</property>
+	  <property name="active">False</property>
+	  <property name="inconsistent">False</property>
+	  <property name="draw_indicator">True</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">4</property>
+	  <property name="top_attach">1</property>
+	  <property name="bottom_attach">2</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
       </child>
     </widget>
   </child>

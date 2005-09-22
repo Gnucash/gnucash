@@ -247,15 +247,6 @@ to enter a credit card payment")
   (N_ "General") (N_ "Show Advanced Settings")
   "a" (N_ "Allow modification of less commonly used settings.") #f))
 
-;; QIF Import options. 
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Online Banking & Importing") (N_ "QIF Verbose documentation")
-  "a" (N_ "Show some documentation-only pages in QIF Import druid")
-  #t))
-
-
 ;; Network/security options 
 ;;(gnc:register-configuration-option
 ;; (gnc:make-simple-boolean-option

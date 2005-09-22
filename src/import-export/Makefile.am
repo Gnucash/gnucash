@@ -1,4 +1,4 @@
-SUBDIRS = .  binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
+SUBDIRS = . schemas binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
 DIST_SUBDIRS = binary-import qif qif-import qif-io-core ofx hbci mt940 log-replay test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
@@ -44,13 +44,9 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLADE_LIBS} \
   ${GLIB_LIBS}
-
-gncscmdir = ${GNC_SCM_INSTALL_DIR}/generic-import
-
-gncscm_DATA = \
-	generic-import.scm
 
 gladedir = ${GNC_GLADE_DIR}
 glade_DATA = \
@@ -59,6 +55,7 @@ glade_DATA = \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
@@ -74,7 +71,6 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   $(glade_DATA) \
-  ${gncscm_DATA} \
   .cvsignore \
   generic-import-design.txt
 
