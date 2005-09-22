@@ -445,9 +445,19 @@ gnc_preferences_build_page (gpointer data,
   }
 
   /* Copied tables must match the size of the main table */
-  g_assert(GTK_IS_TABLE(new_content));
+  if (!GTK_IS_TABLE(new_content)) {
+    g_critical("The object name %s in file %s is not a GtkTable.  It cannot "
+	       "be added to the preferences dialog.",
+	       add_in->widgetname, add_in->filename);
+    return;
+  }
   g_object_get(G_OBJECT(new_content), "n-columns", &cols, NULL);
-  g_assert(cols == 4);
+  if (cols != 4) {
+    g_critical("The table %s in file %s does not have four columns.  It cannot "
+	       "be added to the preferences dialog.",
+	       add_in->widgetname, add_in->filename);
+    return;
+  }
 
   /* Does the page exist or must we create it */
   location.exact = TRUE;
@@ -456,6 +466,7 @@ gnc_preferences_build_page (gpointer data,
   if (location.index == -1) {
     /* No existing content with this name.  Create a blank page */
     location.exact = FALSE;
+    rows = 0;
     existing_content = gtk_table_new(0, 4, FALSE);
     gtk_container_foreach(GTK_CONTAINER(notebook), gnc_prefs_find_page,
 			  &location);
@@ -466,13 +477,19 @@ gnc_preferences_build_page (gpointer data,
     DEBUG("created new page %s at index %d", add_in->tabname, location.index);
   } else {
     existing_content = gtk_notebook_get_nth_page(notebook, location.index);
+    g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
     DEBUG("found existing page %s at index %d", add_in->tabname, location.index);
   }
 
   /* Maybe add a spacer row */
-  g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
-  if (rows > 0)
+  DEBUG("rows is %d", rows);
+  if (rows > 0) {
+    label = gtk_label_new("");
+    gtk_widget_show(label);
+    gtk_table_attach(GTK_TABLE(existing_content), label, 0, 1, rows, rows+1,
+		     GTK_FILL, GTK_FILL, 0, 0);
     rows++;
+  }
 
   /* Now copy all the entries in the table */
   copydata.table_from = GTK_TABLE(new_content);
