@@ -971,7 +971,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   gint num_options;
   const char *name;
   gint i, page_count, name_offset;
-  gboolean advanced, show_advanced;
+  gboolean advanced;
 
   name = gnc_option_section_name(section);
   if (!name)
@@ -980,8 +980,6 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   if (strncmp(name, "__", 2) == 0)
     return -1;
   advanced = (strncmp(name, "_+", 2) == 0);
-  show_advanced = gnc_lookup_boolean_option("General",
-					    "Show Advanced Settings", FALSE);
   name_offset = (advanced) ? 2 : 0;
   page_label = gtk_label_new(_(name) + name_offset);
   gtk_widget_show(page_label);
@@ -1045,11 +1043,6 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
       gtk_object_set_data(GTK_OBJECT(notebook_page), "listitem", listitem);
       gtk_object_set_data(GTK_OBJECT(notebook_page), "advanced",
 			  GINT_TO_POINTER(advanced));
-
-      if (!show_advanced) {
-	gtk_widget_hide(notebook_page);
-	gtk_widget_hide(listitem);
-      }
     }
   }
 
