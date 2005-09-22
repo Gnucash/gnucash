@@ -360,7 +360,6 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", default_dir);
-  g_free(default_dir);
 
   /* Insure valid data, and something that can be freed. */
   if (new_file_name == NULL) {
@@ -380,9 +379,6 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
   g_free(default_dir);
   g_free(file_name);
-
-  /* Now raise the window to be sure it's visible */
-  gdk_window_raise(wind->window->window);
 }
 
 
