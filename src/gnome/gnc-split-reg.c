@@ -708,9 +708,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     return;
 
   leader = gnc_ledger_display_leader( gsr->ledger );
-  euro = gnc_lookup_boolean_option( "International",
-                                    "Enable EURO support",
-                                    FALSE );
+  euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
 
   commodity = xaccAccountGetCommodity( leader );
 

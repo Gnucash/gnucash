@@ -1,5 +1,23 @@
 2005-09-21  David Hampton  <hampton@employees.org>
 
+	* doc/What_is_Euro_support:
+	* src/app-utils/prefs.scm:
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/gnome-utils/preferences.glade:
+	Convert the "EURO support" preference over to gconf.
+
+	* src/app-utils/prefs.scm:
+	* src/gnome/reconcile-list.c:
+	* src/gnome/reconcile-list.h:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/schemas/Makefile.am:
+	* src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas:
+	* src/gnome-utils/preferences.glade:
+	Convert the reconcile window preferences over to gconf.
+
 	* configure.in:
 	* src/app-utils/prefs.scm:
 	* src/import-export/Makefile.am:

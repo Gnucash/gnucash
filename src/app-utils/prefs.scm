@@ -172,12 +172,6 @@
   "c" (N_ "Use a 24 hour (instead of a 12 hour) time format.") #f))
 
 (gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "International") (N_ "Enable EURO support")
-  "d" (N_ "Enables support for the European Union EURO currency") 
-  (gnc:is-euro-currency-code (gnc:locale-default-iso-currency-code))))
-
-(gnc:register-configuration-option
  (gnc:make-dateformat-option
   (N_ "International") (N_ "Fancy Date Format")
   "e" (N_ "The default date format used for fancy printed dates") #f))
@@ -202,30 +196,6 @@
  (N_ "Start date") (N_ "Start date for profit/loss calculation")
  (N_ "End date") (N_ "End date for profit/loss and date for net assets calculation")
  "c")
-
-;;; Reconcile Options
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Reconcile") (N_ "Automatic interest transfer")
-  "a" (N_ "Prior to reconciling an account which charges or pays interest, \
-prompt the user to enter a transaction for the interest charge or payment.
-Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts.")
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Reconcile") (N_ "Automatic credit card payments")
-  "b" (N_ "After reconciling a credit card statement, prompt the user \
-to enter a credit card payment")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Reconcile") (N_ "Check off cleared transactions")
-  "c" (N_ "Automatically check off cleared transactions when reconciling")
-  #t))
-
 
 ;;; User Info Options
 

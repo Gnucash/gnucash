@@ -59,6 +59,19 @@
     </schema>
 
     <schema>
+
+      <key>/schemas/apps/gnucash/general/enable_euro</key>
+      <applyto>/apps/gnucash/general/enable_euro</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Enables support for the European Union EURO currency.</short>
+        <long>Enables support for the European Union EURO currency.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/auto_decimal_point</key>
       <applyto>/apps/gnucash/general/auto_decimal_point</applyto>
       <owner>gnucash</owner>

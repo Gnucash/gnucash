@@ -201,7 +201,6 @@ struct GncPluginPageAccountTreePrivate
 	GtkWidget *widget;
 	GtkTreeView *tree_view;
 
-	SCM         euro_change_callback_id;
 	SCM         name_change_callback_id;
 
 	GNCOptionDB * odb;
@@ -284,13 +283,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 }
 
 static void
-gnc_euro_change (gpointer data)
-{
-  /* gnc_acct_tree_window_configure (data); */
-  gnc_gui_refresh_all ();
-}
-
-static void
 gnc_plugin_page_acct_tree_view_refresh (gpointer data)
 {
 }
@@ -369,10 +361,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	priv->odb     = gnc_option_db_new(priv->options);
 
-	priv->euro_change_callback_id =
-	  gnc_register_option_change_callback(gnc_euro_change, priv,
-					      "International",
-					      "Enable EURO support");
 	priv->name_change_callback_id = 
 	  gnc_option_db_register_change_callback(priv->odb, 
 						 gnc_plugin_page_acct_tree_view_refresh,
@@ -397,9 +385,6 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
 	priv = page->priv;
 	g_return_if_fail (priv != NULL);
-
-	/* Options stuff */
-	gnc_unregister_option_change_callback_id(priv->euro_change_callback_id);
 
 	if (priv->editor_dialog) {
 	  gnc_options_dialog_destroy(priv->editor_dialog);
