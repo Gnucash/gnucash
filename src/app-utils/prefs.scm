@@ -212,11 +212,6 @@
 
 ;;; General Options
 
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Show Advanced Settings")
-  "a" (N_ "Allow modification of less commonly used settings.") #f))
-
 ;; Network/security options 
 ;;(gnc:register-configuration-option
 ;; (gnc:make-simple-boolean-option
@@ -241,20 +236,6 @@
 ;;  (N_ "Network") (N_ "GnuCash Network server") 
 ;;  "d" (N_ "Host to connect to for user registration and support services")
 ;;  "www.gnucash.org"))
-
-
-;;; Advanced Options
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "_+Advanced") (N_ "New Search Limit")
-  "j" (N_ "Default to 'new search' if fewer than this number of items is returned.")
-    1.0 ;; default
-    1.0 ;; lower bound
-  100.0 ;; upper bound
-    0.0 ;; number of decimals
-    1.0 ;; step size
-  ))
 
 
 ;;; Internal options -- Section names that start with "__" are not

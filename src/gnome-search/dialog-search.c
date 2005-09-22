@@ -292,7 +292,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
   gnc_query_list_reset_query (GNC_QUERY_LIST(sw->result_list), sw->q);
 
   /* set 'new search' if fewer than max_count items is returned. */
-  max_count = gnc_lookup_number_option ("_+Advanced", "New Search Limit", 0.0);
+  max_count = gnc_gconf_get_float("dialogs/search", "new_search_limit", NULL);
   if (gnc_query_list_get_num_entries(GNC_QUERY_LIST(sw->result_list)) < max_count)
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 }

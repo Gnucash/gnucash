@@ -147,5 +147,17 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/search/new_search_limit</key>
+      <applyto>/apps/gnucash/dialogs/search/new_search_limit</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>1.0</default>
+      <locale name="C">
+        <short>Default to 'new search' if fewer than this number of items is returned.</short>
+        <long>Default to 'new search' if fewer than this number of items is returned.</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

@@ -1,5 +1,18 @@
 2005-09-21  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/prefs.scm:
+	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
+	* src/gnome-search/dialog-search.c:
+	* src/gnome-utils/preferences.glade: Convert the "search limit"
+	preference over to gconf.
+
+	* src/gnome-utils/dialog-transfer.c: Fix warning message when
+	opening reconciliation window.
+	
+	* src/gnome-utils/transfer.glade: Fix crash when clicking the "no
+	automatic transfer" button in the automatic interest transfer
+	dialog.
+
 	* doc/What_is_Euro_support:
 	* src/app-utils/prefs.scm:
 	* src/core-utils/gnc-gconf-utils.h:
