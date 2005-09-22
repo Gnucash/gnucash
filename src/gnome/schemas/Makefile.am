@@ -3,6 +3,7 @@ schema_DATA = \
   apps_gnucash_dialog_common.schemas \
   apps_gnucash_dialog_commodities.schemas \
   apps_gnucash_dialog_prices.schemas \
+  apps_gnucash_dialog_reconcile.schemas \
   apps_gnucash_dialog_totd.schemas \
   apps_gnucash_general.schemas \
   apps_gnucash_warnings.schemas \

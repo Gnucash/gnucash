@@ -360,10 +360,11 @@ gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data)
 static gboolean
 gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
 {
-  return( xaccAccountGetAutoInterestXfer( account,
-               gnc_lookup_boolean_option( "Reconcile",
-                                          "Automatic interest transfer",
-                                          FALSE ) ) );
+  gboolean auto_xfer;
+
+  auto_xfer = gnc_gconf_get_bool(GCONF_RECONCILE_SECTION,
+				 "auto_interest_transfer", NULL);
+  return xaccAccountGetAutoInterestXfer( account, auto_xfer );
 }
 
 /********************************************************************\
@@ -2030,9 +2031,8 @@ recnFinishCB (GtkWidget *w, gpointer data)
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->credit), date);
   gnc_reconcile_list_commit(GNC_RECONCILE_LIST(recnData->debit), date);
 
-  auto_payment = gnc_lookup_boolean_option ("Reconcile",
-                                            "Automatic credit card payments",
-                                            TRUE);
+  auto_payment = gnc_gconf_get_bool(GCONF_RECONCILE_SECTION,
+				    "auto_cc_payment", NULL);
 
   account = recn_get_account (recnData);
 

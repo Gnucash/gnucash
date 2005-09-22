@@ -63,6 +63,8 @@ typedef struct {
 			      Split            *split);
 } GNCReconcileListClass;
 
+#define GCONF_RECONCILE_SECTION "dialogs/reconcile"
+
 /***********************************************************
  *                public functions                         *
  ***********************************************************/

@@ -34,6 +34,7 @@
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "messages.h"
 #include "reconcile-list.h"
 #include "search-param.h"
@@ -171,9 +172,8 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   gnc_reconcile_list_construct (list, query);
 
   /* find the list of splits to auto-reconcile */
-  auto_check = gnc_lookup_boolean_option ("Reconcile",
-                                          "Check off cleared transactions",
-                                          TRUE);
+  auto_check = gnc_gconf_get_bool(GCONF_RECONCILE_SECTION,
+				  "check_cleared", NULL);
 
   if (auto_check) {
     for (splits = xaccQueryGetSplits(query); splits; splits = splits->next) {
@@ -638,9 +638,8 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   GList *splits;
   Split *split;
 
-  auto_check = gnc_lookup_boolean_option ("Reconcile",
-                                          "Check off cleared transactions",
-                                          TRUE);
+  auto_check = gnc_gconf_get_bool(GCONF_RECONCILE_SECTION,
+				  "check_cleared", NULL);
 
   strings[5] = NULL;
 
