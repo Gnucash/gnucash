@@ -1889,7 +1889,7 @@ gnc_xfer_dialog_close( XferDialog *xferData )
 {
   if( xferData ) {
     DEBUG("close component");
-    gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
+    gtk_dialog_response( GTK_DIALOG(xferData->dialog), GTK_RESPONSE_NONE );
   }
 }
 
