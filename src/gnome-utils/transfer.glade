@@ -68,7 +68,7 @@
       </child>
 
       <child>
-	<widget class="GtkVBox" id="vbox">
+	<widget class="GtkVBox" id="transfermain-vbox">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
