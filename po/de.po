@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-09-23 21:43+0200\n"
-"PO-Revision-Date: 2005-09-23 21:44+0200\n"
+"PO-Revision-Date: 2005-09-23 22:08+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7333,7 +7333,7 @@ msgstr ""
 "\n"
 "Dieses soll normalerweise vom aqbanking-Paket installiert werden, so\n"
 "daﬂ dann ein Programm namens \"%s-qt3-wizard\" installiert ist. Bitte\n"
-"kontrollieren Sie Ihre Installation der Bibliothek aqbanking.\n"
+"kontrollieren Sie Ihre Installation der Bibliothek aqbanking."
 
 #: src/import-export/hbci/druid-hbci-utils.c:171
 #, c-format
