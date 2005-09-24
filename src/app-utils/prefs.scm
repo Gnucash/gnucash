@@ -135,18 +135,6 @@
 
 ;; International options
 (gnc:register-configuration-option
- (gnc:make-currency-option
-  (N_ "International") (N_ "New Account Default Currency")
-  "b1" (N_ "Default currency for new accounts")
-  (gnc:locale-default-iso-currency-code)))
-
-(gnc:register-configuration-option
- (gnc:make-currency-option
-  (N_ "International") (N_ "Default Report Currency")
-  "b2" (N_ "Default currency for reports")
-  (gnc:locale-default-iso-currency-code)))
-
-(gnc:register-configuration-option
  (gnc:make-dateformat-option
   (N_ "International") (N_ "Fancy Date Format")
   "e" (N_ "The default date format used for fancy printed dates") #f))

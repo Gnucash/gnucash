@@ -60,10 +60,12 @@
 #include <glade/glade.h>
 
 #include "dialog-utils.h"
+#include "gnc-currency-edit.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-trace.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
 #include "dialog-preferences.h"
 
@@ -834,6 +836,114 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 }
 
 
+/**********/
+
+
+/** The user changed a currency_edit.  Update gconf.  Currency_edit
+ *  choices are stored as an int.
+ *
+ *  @internal
+ *
+ *  @param gce A pointer to the currency_edit that was changed.
+ *  
+ *  @param user_data Unused.
+ */
+static void
+gnc_prefs_currency_edit_user_cb (GNCCurrencyEdit *gce,
+				 gpointer user_data)
+{
+  const gchar *name, *mnemonic;
+  gnc_commodity *currency;
+
+  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+  name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+  currency = gnc_currency_edit_get_currency(gce);
+  mnemonic = gnc_commodity_get_mnemonic(currency);
+
+  DEBUG("currency_edit %s set to %s", name, mnemonic);
+  gnc_gconf_set_string(name, NULL, mnemonic, NULL);
+}
+
+
+/** A currency_edit choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param gce A pointer to the currency_edit that changed.
+ *
+ *  @param value The new value of the currency_edit.
+ */
+static void
+gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
+				  GConfEntry *entry)
+{
+  const gchar *mnemonic;
+  gnc_commodity *currency;
+
+  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+  ENTER("gce %p, entry %p", gce, entry);
+
+  mnemonic = gconf_value_get_string(entry->value);
+  DEBUG("gce %p, mnemonic %s", gce, mnemonic);
+  currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					GNC_COMMODITY_NS_ISO, mnemonic);
+
+  /* If there isn't any such commodity, get the default */
+  if (!currency) {
+    currency = gnc_locale_default_currency();
+    DEBUG("gce %p, default currency mnemonic %s",
+	  gce, gnc_commodity_get_mnemonic(currency));
+  }
+
+  g_signal_handlers_block_by_func(G_OBJECT(gce),
+				 G_CALLBACK(gnc_prefs_currency_edit_user_cb),
+				 NULL);
+  gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
+  g_signal_handlers_unblock_by_func(G_OBJECT(gce),
+			   G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+  LEAVE(" ");
+}
+
+
+/** Connect a currency_edit widget to the user callback function.  Set
+ *  the starting state of the gce from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param gce A pointer to the currency_edit that should be connected.
+ */
+static void
+gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
+{
+  gnc_commodity *currency;
+  const gchar *name;
+  gchar *mnemonic;
+
+  g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
+
+  /* Lookup commodity based upon gconf setting */
+  name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
+  mnemonic = gnc_gconf_get_string(name, NULL, NULL);
+  currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					GNC_COMMODITY_NS_ISO, mnemonic);
+  g_free(mnemonic);
+
+  /* If there isn't any such commodity, get the default */
+  if (!currency)
+    currency = gnc_locale_default_currency();
+
+  gnc_currency_edit_set_currency(GNC_CURRENCY_EDIT(gce), currency);
+  DEBUG(" currency_edit %s set to %s", name,
+	gnc_commodity_get_mnemonic(currency));
+
+  g_signal_connect(G_OBJECT(gce), "changed",
+		   G_CALLBACK(gnc_prefs_currency_edit_user_cb), NULL);
+
+  gtk_widget_show_all(GTK_WIDGET(gce));
+}
+
+
 /********************/
 /*    Callbacks     */
 /********************/
@@ -890,7 +1000,12 @@ gnc_prefs_connect_one (const gchar *name,
 		       GtkWidget *widget,
 		       gpointer user_data)
 {
-  if (GTK_IS_RADIO_BUTTON(widget)) {
+  /* These tests must be ordered from more specific widget to less
+   * specific widget.  Test custom widgets first */
+  if (GNC_IS_CURRENCY_EDIT(widget)) { /* must be tested before combo_box */
+    DEBUG("  %s - currency_edit", name);
+    gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget));
+  } else if (GTK_IS_RADIO_BUTTON(widget)) {
     DEBUG("  %s - radio button", name);
     gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
   } else if (GTK_IS_CHECK_BUTTON(widget)) {
@@ -928,6 +1043,8 @@ gnc_preferences_dialog_create(void)
   GHashTable *table;
   GDate* gdate;
   gchar buf[128];
+  gnc_commodity *locale_currency;
+  const gchar *currency_name;
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
@@ -963,6 +1080,13 @@ gnc_preferences_dialog_create(void)
   label = glade_xml_get_widget(xml, "locale_date_sample");
   gtk_label_set_text(GTK_LABEL(label), buf);
   g_date_free(gdate);
+
+  locale_currency = gnc_locale_default_currency ();
+  currency_name = gnc_commodity_get_printname(locale_currency);
+  label = glade_xml_get_widget(xml, "locale_currency");
+  gtk_label_set_label(GTK_LABEL(label), currency_name);
+  label = glade_xml_get_widget(xml, "locale_currency2");
+  gtk_label_set_label(GTK_LABEL(label), currency_name);
 
   LEAVE("dialog %p", dialog);
   return dialog;
@@ -1073,13 +1197,18 @@ gnc_preferences_gconf_changed (GConfClient *client,
     g_free(group_name);
   }
   if (widget != NULL) {
-    if (GTK_IS_RADIO_BUTTON(widget)) {
+    /* These tests must be ordered from more specific widget to less
+     * specific widget.  Test custom widgets first */
+    if (GNC_IS_CURRENCY_EDIT(widget)) { /* must come before combo box */
+      DEBUG("widget %p - currency_edit", widget);
+      gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget), entry);
+    } else if (GTK_IS_RADIO_BUTTON(widget)) {
       DEBUG("widget %p - radio button", widget);
       gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));
     } else if (GTK_IS_CHECK_BUTTON(widget)) {
       DEBUG("widget %p - check button", widget);
       gnc_prefs_check_button_gconf_cb(GTK_CHECK_BUTTON(widget),
-					    gconf_value_get_bool(entry->value));
+				      gconf_value_get_bool(entry->value));
     } else if (GTK_IS_SPIN_BUTTON(widget)) {
       DEBUG("widget %p - spin button", widget);
       gnc_prefs_spin_button_gconf_cb(GTK_SPIN_BUTTON(widget),

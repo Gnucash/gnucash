@@ -25,6 +25,7 @@
 #include "global-options.h"
 #include "option-util.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 
 
@@ -33,6 +34,9 @@ static short module = MOD_GUI;
 
 static GNCOptionDB *global_options = NULL;
 
+
+#define KEY_CURRENCY_CHOICE "currency_choice"
+#define KEY_CURRENCY_OTHER  "currency_other"
 
 /********************************************************************\
  * gnc_options_init                                                 *
@@ -388,11 +392,20 @@ gnc_commodity *
 gnc_default_currency (void)
 {
   gnc_commodity *currency;
+  gchar *choice, *mnemonic;
 
-  currency = gnc_lookup_currency_option ("International",
-                                         "New Account Default Currency", NULL);
-  if (currency)
-    return currency;
+  choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
+  if (strcmp(choice, "other") == 0) {
+    mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					  GNC_COMMODITY_NS_ISO, mnemonic);
+    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    g_free(mnemonic);
+    g_free(choice);
+
+    if (currency)
+      return currency;
+  }
 
   return gnc_locale_default_currency ();
 }
@@ -401,11 +414,22 @@ gnc_commodity *
 gnc_default_report_currency (void)
 {
   gnc_commodity *currency;
+  gchar *choice, *mnemonic;
 
-  currency = gnc_lookup_currency_option ("International",
-                                         "Default Report Currency", NULL);
-  if (currency)
-    return currency;
+  choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
+				KEY_CURRENCY_CHOICE, NULL);
+  if (strcmp(choice, "other") == 0) {
+    mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
+				    KEY_CURRENCY_OTHER, NULL);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					  GNC_COMMODITY_NS_ISO, mnemonic);
+    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    g_free(mnemonic);
+    g_free(choice);
+
+    if (currency)
+      return currency;
+  }
 
   return gnc_locale_default_currency ();
 }

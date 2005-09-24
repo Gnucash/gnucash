@@ -1,5 +1,26 @@
+2005-09-24  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/global-options.c:
+	* src/app-utils/prefs.scm:
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/preferences.glade: Convert the default currency
+	preferences over to gconf.
+
+	* src/app-utils/prefs.scm:
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/gnome/top-level.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/preferences.glade: Convert the date and time
+	preferences (except 'fancy date') over to gconf.
+
 2005-09-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-options.c: Remove remnants of the old
+	"Advanced Preferences" page.
+	
 	* src/app-utils/prefs.scm:
 	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
 	* src/gnome-search/dialog-search.c:

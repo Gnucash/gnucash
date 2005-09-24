@@ -188,6 +188,40 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/currency_choice</key>
+      <applyto>/apps/gnucash/general/currency_choice</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Use system currency.</short>
+        <long>
+	  This setting controls the default currency used for new
+	  accounts.  If set to "locale" then GnuCash will retrieve the
+	  default currency from the user's locale setting.  If set to
+	  "other", Gnucash will use the setting specified by the
+	  currency_other key.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/currency_other</key>
+      <applyto>/apps/gnucash/general/currency_other</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <locale name="C">
+        <short>Default currency.</short>
+        <long>
+	  This setting controls the default currency used for new
+	  accounts if the currency_choice key is set to "other".  This
+	  field should contain the three letter ISO 4217 code for a
+	  currency (e.g. USD, GBP, RUB).
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/24hour_clock</key>
       <applyto>/apps/gnucash/general/24hour_clock</applyto>
       <owner>gnucash</owner>
@@ -196,6 +230,24 @@
       <locale name="C">
         <short>Use a 24 hour (instead of a 12 hour) time format.</short>
         <long>Use a 24 hour (instead of a 12 hour) time format.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/date_format</key>
+      <applyto>/apps/gnucash/general/date_format</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Set the format used to display dates.</short>
+        <long>
+	  This setting controls the way dates are displayed in
+	  GnuCash.  Legal values for this setting are "locale" to use
+	  the system locale setting, "ce" for Continental Europe style
+	  dates, "iso" for ISO 8601 standard dates , "uk" for United
+	  Kingdom style dates, and "us" for United States style dates.
+	</long>
       </locale>
     </schema>
 
@@ -374,6 +426,40 @@
 	  Set this value to TRUE to have gnucash open each new
 	  report in its own window.  Set to FALSE to have gnucash
 	  open new registers as tabs in the front window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/currency_choice</key>
+      <applyto>/apps/gnucash/general/report/currency_choice</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>locale</default>
+      <locale name="C">
+        <short>Use system currency.</short>
+        <long>
+	  This setting controls the default currency used for
+	  reports. If set to "locale" then GnuCash will retrieve the
+	  default currency from the user's locale setting.  If set to
+	  "other", Gnucash will use the setting specified by the
+	  currency_other key.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/currency_other</key>
+      <applyto>/apps/gnucash/general/report/currency_other</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <locale name="C">
+        <short>Default currency.</short>
+        <long>
+	  This setting controls the default currency used for reports
+	  if the currency_choice key is set to "other".  This field
+	  should contain the three letter ISO 4217 code for a currency
+	  (e.g. USD, GBP, RUB).
 	</long>
       </locale>
     </schema>
