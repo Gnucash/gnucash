@@ -160,47 +160,6 @@
  (N_ "End date") (N_ "End date for profit/loss and date for net assets calculation")
  "c")
 
-;;; User Info Options
-
-;(gnc:register-configuration-option
-; (gnc:make-string-option
-;  (N_ "User Info") (N_ "User Name")
-;  "b" (N_ "The name of the user. This is used in some reports.") ""))
-
-;(gnc:register-configuration-option
-; (gnc:make-text-option
-;  (N_ "User Info") (N_ "User Address")
-;  "c" (N_ "The address of the user. This is used in some reports.") ""))
-
-
-;;; General Options
-
-;; Network/security options 
-;;(gnc:register-configuration-option
-;; (gnc:make-simple-boolean-option
-;;  (N_ "Network") (N_ "Allow http network access")
-;;  "a" (N_ "Enable GnuCash's HTTP client support.")
-;;  #t))
-;;
-;;(gnc:register-configuration-option
-;; (gnc:make-simple-boolean-option
-;;  (N_ "Network") (N_ "Allow https connections using OpenSSL")
-;;  "b" (N_ "Enable secure HTTP connections using OpenSSL")
-;;  #t))
-;;
-;;(gnc:register-configuration-option
-;; (gnc:make-simple-boolean-option
-;;  (N_ "Network") (N_ "Enable GnuCash Network")
-;;  "c" (N_ "The GnuCash Network server provides support and other services")
-;;  #t))
-;;
-;;(gnc:register-configuration-option 
-;; (gnc:make-string-option
-;;  (N_ "Network") (N_ "GnuCash Network server") 
-;;  "d" (N_ "Host to connect to for user registration and support services")
-;;  "www.gnucash.org"))
-
-
 ;;; Internal options -- Section names that start with "__" are not
 ;;; displayed in option dialogs.
 
