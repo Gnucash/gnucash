@@ -80,7 +80,6 @@
 
 
 /** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
 
 
@@ -92,8 +91,6 @@ static int gnome_is_running = FALSE;
 static int splash_is_initialized = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
-
-static SCM date_callback_id = SCM_UNDEFINED;
 
 
 gboolean
@@ -286,12 +283,10 @@ gnc_gui_init (SCM command_line)
     // gnc_network_init();
 
     gnc_ui_util_init();
-    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
-
     gnc_configure_date_format();
-    date_callback_id =
-      gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
-                                          "International", "Date Format");
+    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
+				  (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -362,8 +357,6 @@ gnc_gui_destroy (void)
 {
   if (!gnome_is_initialized)
     return;
-
-  gnc_unregister_option_change_callback_id(date_callback_id);
 
   gnc_extensions_shutdown ();
 }
@@ -447,21 +440,6 @@ gnc_ui_start_event_loop (void)
 
 /* ============================================================== */
 
-/* gnc_configure_date_format_cb
- *    Callback called when options change - sets dateFormat to the current
- *    value on the scheme side and refreshes register windows
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_date_format_cb (gpointer data)
-{
-  gnc_configure_date_format ();
-  gnc_gui_refresh_all ();
-}
-
-
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
  *
@@ -471,11 +449,16 @@ gnc_configure_date_format_cb (gpointer data)
 static void 
 gnc_configure_date_format (void)
 {
-  char *format_code = gnc_lookup_multichoice_option("International", 
-                                                    "Date Format",
-                                                    "locale");
+  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, KEY_DATE_FORMAT, NULL);
 
   QofDateFormat df;
+
+  if (format_code == NULL)
+    format_code = g_strdup("locale");
+  if (*format_code == '\0') {
+    g_free(format_code);
+    format_code = g_strdup("locale");
+  }
 
   if (gnc_date_string_to_dateformat(format_code, &df))
   {

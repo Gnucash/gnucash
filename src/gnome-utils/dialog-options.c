@@ -38,6 +38,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
@@ -404,8 +405,7 @@ gnc_option_create_date_widget (GNCOption *option)
 
   type = gnc_option_date_option_get_subtype(option);
   show_time = gnc_option_show_time(option);
-  use24 = gnc_lookup_boolean_option("International", 
-				    "Use 24-hour time format", FALSE);
+  use24 = gnc_gconf_get_bool(GCONF_GENERAL, "24hour_time", FALSE);
 
   if (safe_strcmp(type, "relative") != 0)
   {

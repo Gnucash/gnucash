@@ -924,8 +924,10 @@ static GtkWidget *
 gnc_preferences_dialog_create(void)
 {
   GladeXML *xml;
-  GtkWidget *dialog, *notebook;
+  GtkWidget *dialog, *notebook, *label;
   GHashTable *table;
+  GDate* gdate;
+  gchar buf[128];
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
@@ -954,6 +956,13 @@ gnc_preferences_dialog_create(void)
   DEBUG("We have the following interesting widgets:");
   g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
   DEBUG("Done with interesting widgets.");
+
+  /* Other stuff */
+  gdate = g_date_new_dmy(31, G_DATE_DECEMBER, 2004);
+  g_date_strftime(buf, sizeof(buf), "%x", gdate);
+  label = glade_xml_get_widget(xml, "locale_date_sample");
+  gtk_label_set_text(GTK_LABEL(label), buf);
+  g_date_free(gdate);
 
   LEAVE("dialog %p", dialog);
   return dialog;

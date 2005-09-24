@@ -188,6 +188,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/24hour_clock</key>
+      <applyto>/apps/gnucash/general/24hour_clock</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use a 24 hour (instead of a 12 hour) time format.</short>
+        <long>Use a 24 hour (instead of a 12 hour) time format.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
       <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
       <owner>gnucash</owner>

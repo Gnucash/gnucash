@@ -135,26 +135,6 @@
 
 ;; International options
 (gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "International") (N_ "Date Format")
-  "a" (N_ "Date Format Display") 'locale
-  (list (list->vector (list 'us
-                            (N_ "US (12/31/2001)")
-                            (N_ "US-style: mm/dd/yyyy")))
-        (list->vector (list 'uk
-                            (N_ "UK (31/12/2001)")
-                            (N_ "UK-style dd/mm/yyyy")))
-        (list->vector (list 'ce
-                            (N_ "Europe (31.12.2001)")
-                            (N_ "Continental Europe: dd.mm.yyyy")))
-        (list->vector (list 'iso
-                            (N_ "ISO (2001-12-31)")
-                            (N_ "ISO Standard: yyyy-mm-dd")))
-        (list->vector (list 'locale
-                            (N_ "Locale")
-                            (N_ "Default system locale format"))))))
-
-(gnc:register-configuration-option
  (gnc:make-currency-option
   (N_ "International") (N_ "New Account Default Currency")
   "b1" (N_ "Default currency for new accounts")
@@ -165,11 +145,6 @@
   (N_ "International") (N_ "Default Report Currency")
   "b2" (N_ "Default currency for reports")
   (gnc:locale-default-iso-currency-code)))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "International") (N_ "Use 24-hour time format")
-  "c" (N_ "Use a 24 hour (instead of a 12 hour) time format.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-dateformat-option

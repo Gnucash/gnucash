@@ -63,6 +63,7 @@
 #define KEY_NEGATIVE_IN_RED	"negative_in_red"
 #define KEY_NUMBER_OF_ROWS	"number_of_rows"
 #define KEY_ENABLE_EURO		"enable_euro"
+#define KEY_DATE_FORMAT 	"date_format"
 
 typedef void (*GncGconfGeneralCb)    (GConfEntry *entry, gpointer user_data);
 typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
