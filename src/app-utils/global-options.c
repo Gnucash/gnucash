@@ -395,7 +395,7 @@ gnc_default_currency (void)
   gchar *choice, *mnemonic;
 
   choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
-  if (strcmp(choice, "other") == 0) {
+  if (choice && strcmp(choice, "other") == 0) {
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_ISO, mnemonic);
@@ -418,7 +418,7 @@ gnc_default_report_currency (void)
 
   choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				KEY_CURRENCY_CHOICE, NULL);
-  if (strcmp(choice, "other") == 0) {
+  if (choice && strcmp(choice, "other") == 0) {
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				    KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),

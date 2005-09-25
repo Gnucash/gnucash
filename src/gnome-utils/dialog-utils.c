@@ -163,10 +163,11 @@ gnc_get_toolbar_style(void)
 					KEY_TOOLBAR_STYLE, NULL);
   }
 
+  if (style_string == NULL)
+    return GTK_TOOLBAR_BOTH;
   tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
 			       GTK_TOOLBAR_BOTH);
-  if (style_string != NULL)
-    free(style_string);
+  free(style_string);
 
   return tbstyle;
 }

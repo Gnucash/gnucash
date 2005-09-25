@@ -927,7 +927,8 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
   mnemonic = gnc_gconf_get_string(name, NULL, NULL);
   currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					GNC_COMMODITY_NS_ISO, mnemonic);
-  g_free(mnemonic);
+  if (mnemonic)
+    g_free(mnemonic);
 
   /* If there isn't any such commodity, get the default */
   if (!currency)

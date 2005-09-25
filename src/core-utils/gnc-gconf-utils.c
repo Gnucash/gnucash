@@ -70,6 +70,9 @@ gnc_enum_from_nick(GType type,
   GEnumValue   *enum_value;
   gchar        *alt_name, *ptr;
 
+  if (name == NULL)
+    return default_value;
+
   /* Lookup the enum class in the glib type system */
   enum_class = g_type_class_ref (type);
   if (!enum_class) {

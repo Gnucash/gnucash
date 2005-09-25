@@ -1,4 +1,17 @@
+2005-09-25  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/global-options.c:
+	* src/core-utils/gnc-gconf-utils.c:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/dialog-utils.c: Add some extra checks for null
+	strings.
+
 2005-09-24  David Hampton  <hampton@employees.org>
+
+	* src/report/standard-reports/register.scm: Update commented out
+	code to reflect the use of gconf.
+	
+	* src/app-utils/prefs.scm: Remove unused options.
 
 	* src/app-utils/global-options.c:
 	* src/app-utils/prefs.scm:
