@@ -35,8 +35,6 @@
 #include "global-options.h"
 
 
-static short module = MOD_SX;
-
 /* Type converters for GNCPrintAmountInfo */
 SCM
 gnc_printinfo2scm(GNCPrintAmountInfo info)
@@ -180,26 +178,4 @@ gnc_parse_amount_helper (const char * string, gboolean monetary)
     return SCM_BOOL_F;
 
   return gnc_numeric_to_scm (result);
-}
-
-gint
-g_date_equals( gconstpointer gda, gconstpointer gdb )
-{
-  if ( !g_date_valid( (GDate*)gda )
-       || !g_date_valid( (GDate*)gdb ) ) {
-    DEBUG( "invalid: %p(%s), %p(%s)",
-           gda, ( g_date_valid((GDate*)gda) ? "" : "*" ),
-           gdb, ( g_date_valid((GDate*)gdb) ? "" : "*" ) );
-  }
-  return ( g_date_compare( (GDate*)gda, (GDate*)gdb )
-           == 0 ? TRUE : FALSE );
-}
-
-guint
-g_date_hash( gconstpointer gd )
-{
-  gint val = (g_date_year( (GDate*)gd ) * 10000)
-    + (g_date_month( (GDate*)gd ) * 100)
-    + g_date_day( (GDate*)gd );
-  return g_int_hash( &val );
 }

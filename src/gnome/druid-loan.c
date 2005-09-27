@@ -49,7 +49,7 @@
 #include "Account.h"
 #include "FreqSpec.h"
 #include "gnc-ui.h"
-#include "gnc-helpers.h"
+#include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"

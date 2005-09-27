@@ -1321,6 +1321,8 @@ gnc_timet_get_day_end (time_t time_val)
   return mktime(&tm);
 }
 
+
+#ifndef GNUCASH_MAJOR_VERSION
 time_t
 gnc_timet_get_day_start_gdate (GDate *date)
 {
@@ -1352,6 +1354,7 @@ gnc_timet_get_day_end_gdate (GDate *date)
   secs = mktime (&stm);
   return secs;
 }
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /* ======================================================== */
 

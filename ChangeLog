@@ -1,3 +1,13 @@
+2005-09-26  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-helpers.[ch]:
+	* src/core-utils/Makefile.am:
+	* src/core-utils/gnc-gdate-utils.[ch]:
+	* src/engine/gnc-date.[ch]:
+	* src/gnome/druid-acct-period.c:
+	* src/gnome/druid-loan.c: Collect gdate related functions into a
+	common file.  Add a bunch of gdate modification functions.
+
 2005-09-25  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/global-options.c:

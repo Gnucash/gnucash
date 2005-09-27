@@ -42,6 +42,7 @@
 #include "gnc-date.h"
 #include "gnc-file.h"
 #include "gnc-frequency.h"
+#include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-trace.h"
 #include "gnc-ui-util.h"
