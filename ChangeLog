@@ -1,5 +1,8 @@
 2005-09-26  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-plugin-page.c: Use the right data structure
+	offsets when defining signals.
+
 	* src/app-utils/gnc-helpers.[ch]:
 	* src/core-utils/Makefile.am:
 	* src/core-utils/gnc-gdate-utils.[ch]:
