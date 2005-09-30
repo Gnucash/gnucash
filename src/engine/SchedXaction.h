@@ -104,11 +104,12 @@ gint xaccSchedXactionGetRemOccur( SchedXaction *sx );
 void xaccSchedXactionSetRemOccur( SchedXaction *sx, gint numRemain );
 
 /** \brief Set the instance count.
-
+ *
  *   This is incremented by one for every created
  * instance of the SX.  Returns the instance num of the SX unless stateData
  * is non-null, in which case it returns the instance num from the state
  * data.
+ * @param sx The instance whose state should be retrieved.
  * @param stateData may be NULL.
 */
 gint gnc_sx_get_instance_count( SchedXaction *sx, void *stateData );

@@ -76,7 +76,7 @@ PrintSession * gnc_print_session_create(gboolean hand_built_pages);
 
 /** Destroy a print 'session' without producing any output.
  *
- *  @ps A pointer to the session to be destroyed.
+ *  @param ps A pointer to the session to be destroyed.
  */
 void gnc_print_session_destroy(PrintSession * ps);
 
@@ -84,14 +84,7 @@ void gnc_print_session_destroy(PrintSession * ps);
 /** Finish a print 'session'.  The output from this session will be
  *  printed to the device selected when the session was created.
  *
- *  If the hand_built_pages argument was set to TRUE in the call to
- *  #gnc_print_session_create, this function will perform the
- *  additional setp of calling the gnome show page function before
- *  doing anything else.
- *
- *  @param hand_built_pages If TRUE, this funciton will perform extra setup.
- *
- *  @return A pointer to the data structure describing this print session.
+ *  @param ps A pointer to the session to be closed.
  */
 void gnc_print_session_done(PrintSession * ps);
 

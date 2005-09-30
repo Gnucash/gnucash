@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup ContentPluginBase Common object and functions
     @{ */
-/** @file gnc-plugin-page.h
+/** @file gnc-plugin-page.c
     @brief Functions for adding plugins to a Gnucash window.
     @author Copyright (C) 2003 Jan Arne Petersen
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>

@@ -152,3 +152,4 @@ void gnc_shutdown (int exit_status);
 
 #endif
 /** @} */
+/** @} */

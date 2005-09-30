@@ -101,3 +101,4 @@ void gnc_preferences_dialog (void);
 
 #endif
 /** @} */
+/** @} */

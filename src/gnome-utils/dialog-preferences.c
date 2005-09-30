@@ -1305,3 +1305,4 @@ gnc_preferences_dialog (void)
 }
 
 /** @} */
+/** @} */

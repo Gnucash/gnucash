@@ -285,7 +285,7 @@ struct QofBackendProvider_s
   so each one is passed the path to the data (e.g. a file) and
   should return TRUE only:
 -# if the backend recognises the type as one that it can load and write or 
--#if the path contains no data but can be used (e.g. a new session).
+-# if the path contains no data but can be used (e.g. a new session).
   
   \note If the backend can cope with more than one type, the backend
   should not try to store or cache the sub-type for this data.

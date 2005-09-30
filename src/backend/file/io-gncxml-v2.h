@@ -23,7 +23,7 @@
 \********************************************************************/
 
 /**
- * @file io-gncxml.h
+ * @file io-gncxml-v2.h
  * @brief api for GnuCash version 2 XML-based file format
  * @author Initial code by James LewisMoss, 2001
  */

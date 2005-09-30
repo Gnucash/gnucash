@@ -22,7 +22,7 @@
 
 /**
  * @file combocell.h
- * @breif The ComboCell object implements a cell handler with a 
+ * @brief The ComboCell object implements a cell handler with a 
  *        "combination-box" pull-down menu in it.  
  * 
  * On output, the currently selected menu item is displayed.

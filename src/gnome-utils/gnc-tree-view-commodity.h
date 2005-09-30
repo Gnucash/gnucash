@@ -69,8 +69,8 @@ typedef struct {
 
 
 
-/* Standard g_object type */
-GType         gnc_tree_view_commodity_get_type              (void);
+/* Get the GType for an GncTreeViewCommodity object. */
+GType gnc_tree_view_commodity_get_type (void);
 
 
 /** @name Commodity Tree View Constructors 
@@ -90,9 +90,9 @@ GType         gnc_tree_view_commodity_get_type              (void);
  *
  *  @return A pointer to a new commodity tree view.
  */
-GtkTreeView  *gnc_tree_view_commodity_new (QofBook *book,
-					   const gchar *first_property_name,
-					   ...);
+GtkTreeView *gnc_tree_view_commodity_new (QofBook *book,
+					  const gchar *first_property_name,
+					  ...);
 /** @} */
 
 
@@ -104,12 +104,12 @@ GtkTreeView  *gnc_tree_view_commodity_new (QofBook *book,
  *  avalible list of columns can be found in the file
  *  gnc-tree-view-commodity.c
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @param column_names A list of column names to make visible.
  */
-void          gnc_tree_view_commodity_configure_columns     (GncTreeViewCommodity *commodity_view,
-							     GSList *column_names);
+void gnc_tree_view_commodity_configure_columns (GncTreeViewCommodity *view,
+						GSList *column_names);
 
 #ifdef OLD
 /** Add a new column to the set of columns in an commodity tree view.
@@ -123,15 +123,18 @@ void          gnc_tree_view_commodity_configure_columns     (GncTreeViewCommodit
  *  commodity KVP structures. The value associated with this key is what
  *  will be displayed in the column.
  */
-void          gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view,
-						      const gchar *column_title,
-						      const gchar *kvp_key);
+void gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view,
+					     const gchar *column_title,
+					     const gchar *kvp_key);
 #endif
 /** @} */
 
 
 /** @name Commodity Tree View Filtering 
  @{ */
+
+typedef gboolean (*gnc_tree_view_commodity_ns_filter_func)(gnc_commodity_namespace*, gpointer data);
+typedef gboolean (*gnc_tree_view_commodity_cm_filter_func)(gnc_commodity*, gpointer data);
 
 /** This function attaches a filter function to the given commodity
  *  tree.  This function will be called for each commodity that the view
@@ -140,11 +143,16 @@ void          gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view
  *  not.  (I.E. Check type, placeholder status, etc.)  If the filter
  *  returns TRUE then the commodity wil be displayed.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
- *  @param func A filtration function that is called on individual
- *  elements in the tree.  If this function returns TRUE, the commodity
- *  will be displayed.
+ *  @param ns_func A filtration function that is called on individual
+ *  tree elements that represent a namespace.  If this function
+ *  returns TRUE, the namespace (and commodities under it) will be
+ *  displayed.
+ *
+ *  @param cm_func A filtration function that is called on individual
+ *  tree elements that represent a commodity.  If this function
+ *  returns TRUE, the commodity will be displayed.
  *
  *  @param data A data block passed into each instance of the function.
  *
@@ -152,8 +160,6 @@ void          gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view
  *  function will be called when the filter is destroyed.  may be
  *  NULL.
  */
-typedef gboolean (*gnc_tree_view_commodity_ns_filter_func)(gnc_commodity_namespace*, gpointer data);
-typedef gboolean (*gnc_tree_view_commodity_cm_filter_func)(gnc_commodity*, gpointer data);
 void gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
 					 gnc_tree_view_commodity_ns_filter_func ns_func,
 					 gnc_tree_view_commodity_cm_filter_func cm_func,
@@ -169,9 +175,9 @@ void gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
  *  @note This calls a function in gtk that is annotated in the
  *  sources as being slow.  You have been warned.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  */
-void          gnc_tree_view_commodity_refilter              (GncTreeViewCommodity *view);
+void gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view);
 /** @} */
 
 
@@ -181,18 +187,30 @@ void          gnc_tree_view_commodity_refilter              (GncTreeViewCommodit
 /** This function determines if an commodity in the commodity tree view
  *  has any visible children.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @param commodity A pointer to the commodity to check.
  *
  *  @return The number of children of the specified commodity. Returns 0
  *  on error.
  */
-gint          gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
-						      gnc_commodity *commodity);
+gint gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
+					     gnc_commodity *commodity);
 
 
 
+/** This function retrieves a pointer to a commodity based upon the
+ *  model and iter passed into it.  It should only be used by callback
+ *  functions that have had the model/iter passed to them.
+ *
+ *  @param column A pointer to a tree view column from a commodity view.
+ *
+ *  @param f_model A pointer to the filter model for the view.
+ *
+ *  @param f_iter A pointer to the iter for a particular row in the view.
+ *
+ *  @return The commodity associated with the spcified row in the view.
+ */
 gnc_commodity * gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewColumn *column,
 								   GtkTreeModel *f_model,
 								   GtkTreeIter  *f_iter);
@@ -203,7 +221,7 @@ gnc_commodity * gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewCo
  *  path.  This function is useful in selection callbacks on an
  *  commodity tree widget.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @param path A path specifying a node in the commodity tree.
  *
@@ -217,7 +235,7 @@ gnc_commodity * gnc_tree_view_commodity_get_commodity_from_path (GncTreeViewComm
  *  current location of the cursor. (The outline frame. Usually is
  *  selected and therefore filled in, but not always.)
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @return The commodity at the cursor.
  */
@@ -231,7 +249,7 @@ gnc_commodity * gnc_tree_view_commodity_get_cursor_commodity (GncTreeViewCommodi
  *  tree is set to select a single item.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @return The selected commodity, or NULL if no commodity was selected.
  */
@@ -249,12 +267,12 @@ gnc_commodity * gnc_tree_view_commodity_get_selected_commodity  (GncTreeViewComm
  *  tree is set to select a single item.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @param commodity A pointer to the commodity to select.
  */
-void          gnc_tree_view_commodity_set_selected_commodity  (GncTreeViewCommodity *view,
-							       gnc_commodity *commodity);
+void gnc_tree_view_commodity_set_selected_commodity (GncTreeViewCommodity *view,
+						     gnc_commodity *commodity);
 
 
 /** This function returns a list of the commodities associated with the
@@ -264,11 +282,11 @@ void          gnc_tree_view_commodity_set_selected_commodity  (GncTreeViewCommod
  *  tree is set to select multiple items.  There is a different
  *  function to use when the tree supports single selection.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @return A list of commodities, or NULL if no commodity was selected.
  */
-GList       * gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommodity *view);
+GList * gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommodity *view);
 
 
 /** This function selects a set of commodities in the commodity tree view.
@@ -285,16 +303,16 @@ GList       * gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommo
  *  @note It is the responsibility of the caller to free the returned
  *  list.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
- *  @param commodity A pointer to the commodity to select.
+ *  @param commodity_list A list of commodities to select.
  *
  *  @param show_last Force the window to scroll to the last commodity
  *  selected.
  */
-void          gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *view,
-							       GList *commodity_list,
-							       gboolean show_last);
+void gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *view,
+						       GList *commodity_list,
+						       gboolean show_last);
 
 
 /** This function selects all sub-commodities of an commodity in the
@@ -304,13 +322,13 @@ void          gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommo
  *  tree is set to select multiple items.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param commodity_view A pointer to an commodity tree view.
+ *  @param view A pointer to an commodity tree view.
  *
  *  @param commodity A pointer to the commodity whose children should be
  *  selected.
  */
-void          gnc_tree_view_commodity_select_subcommodities (GncTreeViewCommodity *view,
-							     gnc_commodity *commodity);
+void gnc_tree_view_commodity_select_subcommodities (GncTreeViewCommodity *view,
+						    gnc_commodity *commodity);
 
 /** @} */
 

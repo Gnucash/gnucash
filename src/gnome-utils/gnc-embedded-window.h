@@ -67,14 +67,6 @@ typedef struct {
 	GtkVBoxClass parent;
 } GncEmbeddedWindowClass;
 
-typedef struct gnc_embedded_window {
-	GtkUIManager   	 *ui_merge;
-	GtkActionGroup 	 *action_group;
-	GtkWidget        *main_vbox;
-	GtkWidget      	 *menu_dock;
-        GtkWidget      	 *toolbar_dock;
-} gnc_embedded_window;
-
 /* function prototypes */
 GType               gnc_embedded_window_get_type (void);
 

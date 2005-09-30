@@ -247,7 +247,7 @@ gboolean gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
  *
  *  @param model A pointer to the price tree model.
  *
- *  @param commodity A pointer to the gnucash commodity namespace.
+ *  @param namespace A pointer to the gnucash commodity namespace.
  *
  *  @return A pointer to a GtkTreePath describing the location of this
  *  namespace.  This pointer must be freed by the caller when no
@@ -273,7 +273,7 @@ GtkTreePath * gnc_tree_model_price_get_path_from_commodity (GncTreeModelPrice *m
  *
  *  @param model A pointer to the price tree model.
  *
- *  @param commodity A pointer to the gnucash commodity.
+ *  @param price A pointer to the commodity price.
  *
  *  @return A pointer to a GtkTreePath describing the location of this
  *  price.  This pointer must be freed by the caller when no longer

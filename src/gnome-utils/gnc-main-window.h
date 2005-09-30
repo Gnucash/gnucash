@@ -226,7 +226,7 @@ void gnc_main_window_unmerge_actions (GncMainWindow *window,
  *  @param window A pointer to the window whose user interface should
  *  be updated.
  *
- *  @comment Is this function still needed?
+ *  @attention Is this function still needed?
  */
 void gnc_main_window_actions_updated (GncMainWindow *window);
 

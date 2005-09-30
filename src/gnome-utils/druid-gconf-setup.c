@@ -564,7 +564,7 @@ gnc_gnome_install_gconf_schemas (void)
 }
 
 
-/** This routine checks to see if GnuCash's gconf schemas are visible
+/*  This routine checks to see if GnuCash's gconf schemas are visible
  *  to the user.  The schemas typically should be visible, as rpm and
  *  deb installs will put the schemas in the default system location.
  *  For things like network installs or developers, this function will
@@ -617,4 +617,5 @@ druid_gconf_install_check_schemas (void)
   gtk_widget_destroy(dialog);
 }
 
+/** @} */
 /** @} */

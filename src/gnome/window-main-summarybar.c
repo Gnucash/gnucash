@@ -60,7 +60,7 @@ typedef struct {
  * kept around for the duration of the calculation. There may, in fact
  * be better ways to do this, but none occurred.
  *
- * @fixme This structure and the non-GUI code that computes it's values
+ * @todo This structure and the non-GUI code that computes it's values
  * should move into the engine.
  **/
 typedef struct {

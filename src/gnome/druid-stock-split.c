@@ -96,7 +96,7 @@ void     gnc_stock_split_druid_finish            (GnomeDruidPage *druidpage,
 void     gnc_stock_split_druid_cancel_druid      (GnomeDruid *druid,
 						  gpointer user_data);
 
-/** implementations ****************************************************/
+/******* implementations ***********************************************/
 void
 gnc_stock_split_druid_window_destroy_cb (GtkObject *object, gpointer data)
 {

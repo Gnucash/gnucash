@@ -25,7 +25,7 @@
     @{ */
 /** @addtogroup InvoicePlugin Business Invoice Page
     @{ */
-/** @file gnc-plugin-register-tree.h 
+/** @file gnc-plugin-page-invoice.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
@@ -66,27 +66,43 @@ typedef struct {
 
 /* function prototypes */
 
-/** Retrieve the type number for an "account tree" plugin page.
+/** Retrieve the type number for an "invoice" plugin page.
  *
  *  @return The type number.
  */
 GType gnc_plugin_page_invoice_get_type (void);
 
 
-/** Create a new "register" plugin page, given a pointer to an
- *  account.
+/** Create a new "invoice" plugin page, given a pointer to an
+ *  InvoiceWindow data structure.  This structure is used to describe
+ *  both the "invoice entry" page in a window, and also to describe
+ *  the New Invoice dialog.
  *
- *  @param account The pointer to the account to embed in the
- *  register.
- *
- *  @param subaccounts TRUE if all the sub-accounts of the specified
- *  account should be included in the register.
+ *  @param iw A pointer to the invoice to be embedded into a main window.
  *
  *  @return The newly created plugin page.
  */
 GncPluginPage *gnc_plugin_page_invoice_new (InvoiceWindow *iw);
 
+
+/** Update the menu items associated with this invoice page.  This
+ *  function should be called whenever the posted state of an invoice
+ *  is changed.
+ *
+ *  @param page A pointer invoice page.
+ *
+ *  @param is_posted Set this to TRUE if the invoice has been posted.
+ *
+ *  @param can_unpost Set this to TRUE if the invoice can be un-posted.
+ */
 void gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost);
+
+
+/** Update the title associated with this invoice page.  This function
+ *  should be called whenever the name on an invoice is changed.
+ *
+ *  @param page A pointer invoice page.
+ */
 void gnc_plugin_page_invoice_update_title (GncPluginPage *page);
 
 G_END_DECLS

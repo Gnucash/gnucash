@@ -27,7 +27,7 @@
     @{ */
 /** @addtogroup GncMainWindow Main Window functions.
     @{ */
-/** @file gnc-main-window.h
+/** @file gnc-main-window.c
     @brief Functions for adding content to a window.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
@@ -913,8 +913,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
 	/**
 	 * GncMainWindow::page_added:
-	 * @window: the #GncMainWindow
-	 * @page: the #GncPluginPage
+	 * @param window: the #GncMainWindow
+	 * @param page: the #GncPluginPage
 	 *
 	 * The "page_added" signal is emitted when a new page is added
 	 * to the notebook of a GncMainWindow.  This can be used to
@@ -934,8 +934,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
 	/**
 	 * GncMainWindow::page_changed:
-	 * @window: the #GncMainWindow
-	 * @page: the #GncPluginPage
+	 * @param window: the #GncMainWindow
+	 * @param page: the #GncPluginPage
 	 *
 	 * The "page_changed" signal is emitted when a new page is
 	 * selected in the notebook of a GncMainWindow.  This can be

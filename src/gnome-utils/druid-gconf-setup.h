@@ -47,3 +47,4 @@ void druid_gconf_install_check_schemas(void);
 #endif
 
 /** @} */
+/** @} */

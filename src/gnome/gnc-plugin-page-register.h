@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup RegisterPlugin Register Page
     @{ */
-/** @file gnc-plugin-register-tree.h 
+/** @file gnc-plugin-page-register.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -119,7 +119,7 @@ GncPluginPage *gnc_plugin_page_register_new_gl (void);
  *  @param lines_opt_name The name of the options (within the page
  *  specified above) containing the number of lines per register.
  *
- *  @param default_lines The number of lines to use if the specified
+ *  @param lines_default The number of lines to use if the specified
  *  options cannot be found or has never been set.
  *
  *  @param disallowCaps Capabilities to disable on this register.
@@ -158,7 +158,7 @@ GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
 /** Get the Account associated with this register page.
  *
- *  @param plugin_page A "register" page.
+ *  @param page A "register" page.
  *
  *  @return The account if the register contsins only a single
  *  account, or an account and its sub-accounts.  NULL otherwise.

@@ -46,11 +46,13 @@ typedef enum {
 #define GNC_IS_DATE_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_edit_get_type ())
 
 /**
+ *  \verbatim
  *  * 2001.05.13T1647 [PDT], #gnucash:
  * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
  *         on _why_ such a thing was done... any help?
  * <dave_p> jsled: gnome date edit isn't i18n'd properly. also, we
  *          added the register date hotkeys.
+ *  \endverbatim
  **/
 typedef struct {
 	GtkHBox hbox;

@@ -53,14 +53,23 @@ G_BEGIN_DECLS
 typedef struct GncPluginPagePrivate GncPluginPagePrivate;
 
 typedef struct GncPluginPage {
-	GObject parent;
-	GncPluginPagePrivate *priv;
+	GObject parent;			/**< The parent object data. */
+	GncPluginPagePrivate *priv;	/**< Object private data. */
 
-	/** These fields are semi-private.  They should only be access by
-	 *  the gnucash window management code. */
-	GtkWidget *window;
-	GtkWidget *notebook_page;
-	GtkWidget *summarybar;
+	GtkWidget *window;		/**< The window that contains the
+					 *   display widget for this plugin.
+					 *   This field is private to the
+					 *   gnucash window management
+					 *   code.  */
+	GtkWidget *notebook_page;	/**< The display widget for this
+					 *   plugin.  This field is private to
+					 *   the gnucash window management
+					 *   code.  */
+	GtkWidget *summarybar;		/**< The summary bar widget (if any)
+					 *   that is associated with this
+					 *   plugin.  This field is private to
+					 *   the gnucash window management
+					 *   code.  */
 } GncPluginPage;
 
 typedef struct {

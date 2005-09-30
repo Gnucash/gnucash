@@ -234,11 +234,11 @@ void          xaccTransDump (Transaction *trans, const char *tag);
 
 /** Set the  Transaction Type
  *
- * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
+ * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 void	      xaccTransSetTxnType (Transaction *trans, char type);
 /** Returns the  Transaction Type
  *
- * See #define TXN_TYPE_NONE, TXN_TYPE_INVOICE and TXN_TYPE_PAYMENT */
+ * See #TXN_TYPE_NONE, #TXN_TYPE_INVOICE and #TXN_TYPE_PAYMENT */
 char	      xaccTransGetTxnType (const Transaction *trans);
 
 
@@ -868,7 +868,7 @@ gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
 /** Returns the time that a transaction was voided.
  *
- *  @param split The transaction in question.
+ *  @param tr The transaction in question.
  *
  *  @return A Timespec containing the time that this transaction was
  *  voided. Returns a time of zero upon error.

@@ -179,7 +179,7 @@ gnc_commodity *gnc_tree_model_commodity_get_commodity   (GncTreeModelCommodity *
  *
  *  @param model A pointer to the commodity tree model.
  *
- *  @param commodity A pointer to the gnucash commodity namespace.
+ *  @param namespace A pointer to the gnucash commodity namespace.
  *
  *  @param iter A pointer to a GtkTreeIter.  This iter will be filled
  *  in to point where the namespace appears in the commodity tree.
@@ -193,7 +193,7 @@ gboolean gnc_tree_model_commodity_get_iter_from_namespace (GncTreeModelCommodity
  *
  *  @param model A pointer to the commodity tree model.
  *
- *  @param namespace A pointer to the gnucash commodity.
+ *  @param commodity A pointer to the gnucash commodity.
  *
  *  @param iter A pointer to a GtkTreeIter.  This iter will be filled
  *  in to point where the commodity appears in the commodity tree.
@@ -207,7 +207,7 @@ gboolean gnc_tree_model_commodity_get_iter_from_commodity (GncTreeModelCommodity
  *
  *  @param model A pointer to the commodity tree model.
  *
- *  @param commodity A pointer to the gnucash commodity namespace.
+ *  @param namespace A pointer to the gnucash commodity namespace.
  *
  *  @return A pointer to a GtkTreePath describing the location of this
  *  namespace.  This pointer must be freed by the caller when no

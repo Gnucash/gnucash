@@ -26,7 +26,7 @@
     @{ */
 /** @addtogroup MenuPluginBase Common object and functions
     @{ */
-/** @file gnc-plugin.h
+/** @file gnc-plugin.c
     @brief Functions for adding plugins to a Gnucash window.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
@@ -413,3 +413,6 @@ gnc_plugin_base_init (gpointer klass)
 	}
 }
 #endif
+
+/** @} */
+/** @} */

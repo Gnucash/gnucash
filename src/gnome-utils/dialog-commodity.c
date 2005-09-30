@@ -281,7 +281,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
  *  Commodity Selection dialog.  It should not be used outside of the
  *  dialog-commodity.c file.
  *
- *  @param entry A pointer to the "new" button widget in the dialog.
+ *  @param button A pointer to the "new" button widget in the dialog.
  *
  *  @param user_data A pointer to the data structure describing the
  *  current state of the commodity picker.
@@ -1132,4 +1132,5 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
   return TRUE;
 }
 
+/** @} */
 /** @} */

@@ -370,3 +370,6 @@ gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
 
   LEAVE(" ");
 }
+
+/** @} */
+/** @} */

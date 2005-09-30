@@ -48,7 +48,8 @@
 
 /** Disply a window for editing the attributes of an existing account.
  *
- *  @param group This parameter is not used.
+ *  @param account This parameter specifies the account whose data
+ *  will be edited.
  */
 void gnc_ui_edit_account_window (Account *account);
 
@@ -76,7 +77,7 @@ void gnc_ui_new_account_window_with_default (AccountGroup *group,
 /** Disply a window for creating a new account.  This function will
  *  restrict the available account type values to the list specified by the caller.
  *
- *  @param group This parameter is not used.
+ *  @param unused This parameter is not used.
  *
  *  @param valid_types A GList of GNCAccountType gints [as pointers]
  *  which are allowed to be created.  The calling function is
@@ -93,7 +94,8 @@ void gnc_ui_new_account_with_types (AccountGroup *unused,
 
 /** Disply a modal window for creating a new account
  *
- *  @param group This parameter is not used.
+ *  @param name The account name/path to be created.  This parameter
+ *  is not used for determining the initially selected parent account.
  */
 Account * gnc_ui_new_accounts_from_name_window (const char *name);
 

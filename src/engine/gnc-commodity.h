@@ -158,7 +158,7 @@ gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name
  *  @return A pointer to the price quote source that has the specified
  *  type/index.
  */
-gnc_quote_source *gnc_quote_source_lookup_by_ti(QuoteSourceType type, gint i);
+gnc_quote_source *gnc_quote_source_lookup_by_ti(QuoteSourceType type, gint index);
 
 /** Given a gnc_quote_source data structure, return the flag that
  *  indicates whether this particular quote source is supported by
@@ -234,6 +234,8 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *
  *  @note This function does not check to see if the commodity exists
  *  before adding a new commodity.
+ *
+ *  @param book The book that the new commodity will belong to.
  *
  *  @param fullname The complete name of this commodity. E.G. "Acme
  *  Systems, Inc."
@@ -410,8 +412,6 @@ gboolean    gnc_commodity_get_quote_flag(const gnc_commodity *cm);
  *  @param cm A pointer to a commodity data structure.
  *
  *  @return A pointer to the price quote source for this commodity.
- *  This string is owned by the engine and should not be freed by the
- *  caller.
  */
 gnc_quote_source* gnc_commodity_get_quote_source(const gnc_commodity *cm);
 gnc_quote_source* gnc_commodity_get_default_quote_source(const gnc_commodity *cm);
@@ -517,9 +517,7 @@ void  gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag);
  *
  *  @param cm A pointer to a commodity data structure.
  *
- *  @return A pointer to the price quote source for this commodity.
- *  This string belongs to the caller and will be duplicated by the
- *  engine.
+ *  @param src A pointer to the price quote source for this commodity.
  */
 void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
 
@@ -530,7 +528,7 @@ void  gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src);
  *
  *  @param cm A pointer to a commodity data structure.
  *
- *  @return A pointer to the price quote timezone for this commodity.
+ *  @param tz A pointer to the price quote timezone for this commodity.
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
  */
@@ -566,7 +564,7 @@ gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
 /** Checks to see if the specified commodity namespace is the
  *  namespace for ISO 4217 currencies.
  *
- *  @param cm The string to check.
+ *  @param namespace The string to check.
  *
  *  @return TRUE if the string indicates an ISO currency, FALSE otherwise. */
 gboolean gnc_commodity_namespace_is_iso(const char *namespace);
@@ -655,7 +653,9 @@ void gnc_commodity_table_remove(gnc_commodity_table * table,
  *  etc.  It also adds all of the ISO 4217 currencies to the commodity
  *  table.
  *
- *  @param table A pointer to the commodity table */
+ *  @param table A pointer to the commodity table.
+ *
+ *  @param book Unused. */
 gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book);
 
 /** @} */
@@ -697,7 +697,7 @@ guint gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl);
  *
  *  @return 1 if the namespace exists. 0 if it doesn't exist, or the
  *  routine was passed a bad argument. */
-int gnc_commodity_table_has_namespace(const gnc_commodity_table * t,
+int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 				      const char * namespace);
 
 /** Return a list of all namespaces in the commodity table.  This
@@ -749,7 +749,7 @@ gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity
  *
  *  @note This routine will destroy any commodities that exist as part
  *  of this namespace.  Use it carefully. */
-void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
+void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                                const char * namespace);
 /** @} */
 /* ---------------------------------------------------------- */
@@ -759,7 +759,7 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
 
 /** Returns the number of commodities in the commodity table.
  *
- *  @param table A pointer to the commodity table 
+ *  @param tbl A pointer to the commodity table 
  *
  *  @return The number of commodities in the table. 0 if there are no
  *  commodities, or the routine was passed a bad argument. */
@@ -768,6 +768,8 @@ guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
 /** Return a list of all commodities in the commodity table that are
  *  in the given namespace.
  *
+ *  @param table A pointer to the commodity table 
+ *
  *  @param namespace A string indicating which commodities should be
  *  returned. It is a required argument.
  *
@@ -775,7 +777,7 @@ guint gnc_commodity_table_get_size(gnc_commodity_table* tbl);
  *  argument was supplied, or the namespace could not be found.
  *
  *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
+GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 					    const char * namespace);
 
 /** This function returns a list of commodities for which price quotes

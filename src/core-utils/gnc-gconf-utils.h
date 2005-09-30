@@ -94,9 +94,9 @@ const gchar * gnc_enum_to_nick(GType type, gint value);
  *  @param name The textual name for one of the items in the enum.
  *  For example, "ascending".
  *
- *  @param value A value contained in the enum.  This value will be
- *  returned if the supplied nickname is invalid.  For example,
- *  GTK_SORT_ASCENDING.
+ *  @param default_value A value contained in the enum.  This value
+ *  will be returned if the supplied nickname is invalid.  For
+ *  example, GTK_SORT_ASCENDING.
  *
  *  @return A pointer to the textual "nickname" for this enum.
  */
@@ -112,8 +112,9 @@ gint gnc_enum_from_nick(GType type,
  *  qualified (i.e. begins with a '/' character), this routine does
  *  not change the key.
  *
- *  @param A partial gconf key or section name.  This name is added to
- *  the standard prefix to produce a fully qualified key name.
+ *  @param name A partial gconf key or section name.  This name is
+ *  added to the standard prefix to produce a fully qualified key
+ *  name.
  *
  *  @return This function returns a string pointer to the fully
  *  qualified path name of the gconf key.  It is the caller's
@@ -130,9 +131,9 @@ char *gnc_gconf_section_name (const char *name);
  *  key is already fully qualified (i.e. begins with the string
  *  "/schemas), this routine does not change the key.
  *
- *  @param A partial gconf schema key or section name.  This name is
- *  added to the standard schema prefix to produce a fully qualified
- *  schema key name.
+ *  @param name A partial gconf schema key or section name.  This name
+ *  is added to the standard schema prefix to produce a fully
+ *  qualified schema key name.
  *
  *  @return This function returns a string pointer to the fully
  *  qualified path name of the gconf schema key.  It is the caller's
@@ -219,10 +220,7 @@ void gnc_gconf_general_register_any_cb (GncGconfGeneralAnyCb func,
  *  func and user_data arguments are used to match up the callback to
  *  remove.
  *
- *  @param key This value contains the name of the key within the
- *  "general" section to watch.
- *
- *  @param func This is a pointer to the function to call when the key
+ *  @param func This is a pointer to the function to call when a key
  *  changes.
  *
  *  @param user_data This pointer will be passed to the callback
@@ -483,10 +481,11 @@ GSList *gnc_gconf_get_list (const gchar *section,
  *  @param name This string is the name of the particular key within
  *  the named section of gconf.
  *
- *  @param error An optional pointer to a GError structure.  If NULL,
- *  this function will check for any errors returned by GConf and will
- *  display an error message via stdout.  If present, this function
- *  will pass any error back to the calling function for it to handle.
+ *  @param caller_error An optional pointer to a GError structure.  If
+ *  NULL, this function will check for any errors returned by GConf
+ *  and will display an error message via stdout.  If present, this
+ *  function will pass any error back to the calling function for it
+ *  to handle.
  *
  *  @return This function returns the schema stored at the requested
  *  key in the gconf database.  If there is an error in processing,
@@ -495,7 +494,7 @@ GSList *gnc_gconf_get_list (const gchar *section,
  *  calling the gconf_schema_free() function.
  */
 GConfSchema *gnc_gconf_get_schema (const gchar *section,
-				    const gchar *name,
+				   const gchar *name,
 				   GError **caller_error);
 
 /** @} */
@@ -810,6 +809,11 @@ guint gnc_gconf_add_anon_notification (const gchar *section,
  *  gnc_gconf_add_notification function.  The section name must be the
  *  same string provided when the callback function was added.  This
  *  name is used to find/remove the callback.
+ *
+ *  @param object This is a pointer to a GObject derivative.  This
+ *  must be the same object originally passed to the
+ *  gnc_gconf_add_notification() function, as that function attached
+ *  several values to the object that are needed by this function.
  *
  *  @param section This string is used to find the correct
  *  notification function to remove from GConf.

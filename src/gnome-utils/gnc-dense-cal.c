@@ -144,7 +144,7 @@ static inline int num_weeks( GncDenseCal *dcal );
  **/
 static int num_weeks_per_col( GncDenseCal *dcal );
 
-/** hotspot calculation **/
+/* hotspot calculation */
 static gint wheres_this( GncDenseCal *dcal, int x, int y );
 
 static void recompute_x_y_scales( GncDenseCal *dcal );

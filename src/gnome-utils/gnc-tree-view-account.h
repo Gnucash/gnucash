@@ -76,8 +76,8 @@ typedef struct {
 
 
 
-/* Standard g_object type */
-GType         gnc_tree_view_account_get_type              (void);
+/* Get the GType for an GncTreeViewAccount object. */
+GType gnc_tree_view_account_get_type (void);
 
 
 /** @name Account Tree View Constructors 
@@ -89,13 +89,29 @@ GType         gnc_tree_view_account_get_type              (void);
  *  but this code provides one so that it can be used with all parts
  *  of the gnucash gui.
  *
+ *  @param group A list of the accounts to use as the first level of
+ *  accounts in the created tree.  This list may not be NULL.
+ *
  *  @param show_root Show the pseudo top-level account in this view.
  *
  *  @return A pointer to a new account tree view.
  */
 GtkTreeView *gnc_tree_view_account_new_with_group (AccountGroup *group, 
                                                    gboolean show_root);
+
+/** Create a new account tree view.  This view may or may not show a
+ *  pseudo top-level account.  The gnucash engine does not have a
+ *  single top level account (it has a list of top level accounts),
+ *  but this code provides one so that it can be used with all parts
+ *  of the gnucash gui.  The first level of accounts in the created
+ *  tree will be the top level of accounts in the current book.
+ *
+ *  @param show_root Show the pseudo top-level account in this view.
+ *
+ *  @return A pointer to a new account tree view.
+ */
 GtkTreeView *gnc_tree_view_account_new (gboolean show_root);
+
 /** @} */
 
 
@@ -111,9 +127,24 @@ typedef void (*GncTreeViewAccountColumnTextEdited) (Account *account,
                                                     const gchar *new_text);
 
 
-/* The TreeView owns the TreeViewColumn, but caller may set properties. */
+/** Add a new custom column to the set of columns in an account tree
+ *  view.  This column will be visible as soon as it is added and will
+ *  query the provided functions to determine what data to display.
+ *  The TreeView will own the resulting TreeViewColumn, but caller may
+ *  set any additional properties they wish.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ *  @param column_title The title for this new column.
+ *
+ *  @param source_cb A callback function that is expected to provide
+ *  the data to be displayed.
+ *
+ *  @param edited_cb A callback function that will be called if the
+ *  user edits the displayed data.
+ */
 GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
-    GncTreeViewAccount *account_view, const gchar *column_title,
+    GncTreeViewAccount *view, const gchar *column_title,
     GncTreeViewAccountColumnSource source_cb, 
     GncTreeViewAccountColumnTextEdited edited_cb);
 
@@ -131,9 +162,9 @@ GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
  *  account KVP structures. The value associated with this key is what
  *  will be displayed in the column.
  */
-void          gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
-						    const gchar *column_title,
-						    const gchar *kvp_key);
+void gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+					   const gchar *column_title,
+					   const gchar *kvp_key);
 /** @} */
 
 
@@ -168,6 +199,17 @@ void gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
                                           AccountViewInfo *avi);
 
 
+/** This is the description of a filter function used by the account tree. 
+ *
+ *  @param account The account to be tested.
+ *
+ *  @param data The data provided when the filter function was added.
+ *
+ *  @return TRUE if the account should be displayed.
+ */
+typedef gboolean (*gnc_tree_view_account_filter_func)(Account *account, gpointer data);
+
+
 /** This function attaches a filter function to the given account
  *  tree.  This function will be called for each account that the view
  *  thinks should possibly show.  The filter may perform any actions
@@ -187,7 +229,6 @@ void gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
  *  function will be called when the filter is destroyed.  may be
  *  NULL.
  */
-typedef gboolean (*gnc_tree_view_account_filter_func)(Account*, gpointer data);
 void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view, 
 				       gnc_tree_view_account_filter_func func,
 				       gpointer data,
@@ -213,6 +254,7 @@ void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
 gboolean gnc_tree_view_account_filter_by_type_selection(
     Account* acct, gpointer data);
 
+
 /** This function forces the account tree filter to be evaluated.  It
  *  may be necessary to call this function if the initial state of the
  *  view is incorrect.  This appears to only be necessary if the
@@ -221,7 +263,7 @@ gboolean gnc_tree_view_account_filter_by_type_selection(
  *  @note This calls a function in gtk that is annotated in the
  *  sources as being slow.  You have been warned.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  */
 void gnc_tree_view_account_refilter (GncTreeViewAccount *view);
 /** @} */
@@ -233,15 +275,15 @@ void gnc_tree_view_account_refilter (GncTreeViewAccount *view);
 /** This function determines if an account in the account tree view
  *  has any visible children.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @param account A pointer to the account to check.
  *
  *  @return The number of children of the specified account. Returns 0
  *  on error.
  */
-gint          gnc_tree_view_account_count_children (GncTreeViewAccount *view,
-						    Account *account);
+gint gnc_tree_view_account_count_children (GncTreeViewAccount *view,
+					   Account *account);
 
 
 
@@ -256,25 +298,25 @@ gint          gnc_tree_view_account_count_children (GncTreeViewAccount *view,
  *  the time this was written, only the "New/Edit Account" dialog does
  *  that.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @return The top-level pseudo-account.
  */
-Account     * gnc_tree_view_account_get_top_level         (GncTreeViewAccount *view);
+Account * gnc_tree_view_account_get_top_level (GncTreeViewAccount *view);
 
 
 /** This function returns the account associated with the specified
  *  path.  This function is useful in selection callbacks on an
  *  account tree widget.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @param path A path specifying a node in the account tree.
  *
  *  @return The account associated with this path.
  */
-Account     * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
-							   GtkTreePath *path);
+Account * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
+						       GtkTreePath *path);
 
 
 /** This function returns the account associated with the specified
@@ -287,19 +329,19 @@ Account     * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *v
  *
  *  @return The account associated with this iter.
  */
-Account     * gnc_tree_view_account_get_account_from_iter (GtkTreeModel *model,
-							   GtkTreeIter  *iter);
+Account * gnc_tree_view_account_get_account_from_iter (GtkTreeModel *model,
+						       GtkTreeIter  *iter);
 
 
 /** This function returns the account in the account tree view at the
  *  current location of the cursor. (The outline frame. Usually is
  *  selected and therefore filled in, but not always.)
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @return The account at the cursor.
  */
-Account *     gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view);
+Account * gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view);
 
 
 /** This function returns the account associated with the selected
@@ -309,11 +351,11 @@ Account *     gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view
  *  tree is set to select a single item.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @return The selected account, or NULL if no account was selected.
  */
-Account     * gnc_tree_view_account_get_selected_account  (GncTreeViewAccount *view);
+Account * gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view);
 
 
 /** This function selects an account in the account tree view.  All
@@ -327,12 +369,12 @@ Account     * gnc_tree_view_account_get_selected_account  (GncTreeViewAccount *v
  *  tree is set to select a single item.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @param account A pointer to the account to select.
  */
-void          gnc_tree_view_account_set_selected_account  (GncTreeViewAccount *view,
-							   Account *account);
+void gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
+						 Account *account);
 
 
 /** This function returns a list of the accounts associated with the
@@ -342,11 +384,11 @@ void          gnc_tree_view_account_set_selected_account  (GncTreeViewAccount *v
  *  tree is set to select multiple items.  There is a different
  *  function to use when the tree supports single selection.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @return A list of accounts, or NULL if no account was selected.
  */
-GList       * gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view);
+GList * gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view);
 
 
 /** This function selects a set of accounts in the account tree view.
@@ -363,16 +405,16 @@ GList       * gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *v
  *  @note It is the responsibility of the caller to free the returned
  *  list.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
- *  @param account A pointer to the account to select.
+ *  @param account_list A list of accounts to select.
  *
  *  @param show_last Force the window to scroll to the last account
  *  selected.
  */
-void          gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
-							   GList *account_list,
-							   gboolean show_last);
+void gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
+						  GList *account_list,
+						  gboolean show_last);
 
 
 /** This function selects all sub-accounts of an account in the
@@ -382,13 +424,13 @@ void          gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *v
  *  tree is set to select multiple items.  There is a different
  *  function to use when the tree supports multiple selections.
  *
- *  @param account_view A pointer to an account tree view.
+ *  @param view A pointer to an account tree view.
  *
  *  @param account A pointer to the account whose children should be
  *  selected.
  */
-void          gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
-							Account *account);
+void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
+					       Account *account);
 
 /** @} */
 

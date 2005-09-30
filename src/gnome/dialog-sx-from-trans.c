@@ -70,8 +70,6 @@
 
 static short module = MOD_SX;
 
-/** start_date_edit, end_date_edit, param_table, end_date_hbox */
-
 static void sxftd_freq_option_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
 

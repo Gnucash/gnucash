@@ -69,7 +69,7 @@ Only ::qof_book_mergeInit, ::qof_book_mergeUpdateResult and ::qof_book_mergeComm
 any error values to the calling process. 
 
 	@{ */
-/** @file  druid_merge.h
+/** @file  druid-merge.h
 	@brief API for merging two \c QofBook* structures with collision handling
 	@author Copyright (c) 2004 Neil Williams <linux@codehelp.co.uk>
 */

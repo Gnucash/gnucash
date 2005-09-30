@@ -89,7 +89,7 @@ enum {
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-/** Declarations *********************************************************/
+/**** Declarations ******************************************************/
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
 static void gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass);
 static void gnc_tree_view_finalize (GObject *object);

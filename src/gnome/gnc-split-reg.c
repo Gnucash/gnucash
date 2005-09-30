@@ -84,7 +84,7 @@ static short module = MOD_SX;
  **/
 
 
-/** PROTOTYPES ******************************************************/
+/***** PROTOTYPES ***************************************************/
 void gnc_split_reg_raise( GNCSplitReg *gsr );
 
 static GtkWidget* add_summary_label( GtkWidget *summarybar,

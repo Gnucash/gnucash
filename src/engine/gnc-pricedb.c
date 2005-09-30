@@ -991,7 +991,7 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
 
 /* ==================================================================== */
 /* lookup/query functions */
-/** \todo Fix the backend lookup that relies on a #define */
+/** \todo Fix the backend lookup that relies on a \#define */
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,
                           gnc_commodity *commodity,

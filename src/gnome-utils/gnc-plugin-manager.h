@@ -149,6 +149,8 @@ GList *gnc_plugin_manager_get_plugins (GncPluginManager *manager);
  *  @param manager A pointer to the plugin manager.  Retrieve this by
  *  calling gnc_plugin_manager_get().
  *
+ *  @param name The name of the plugin to find.
+ *
  *  @return A pointer to the requested plugin, or NULL if the plugin
  *  couldn't be found.
  */
