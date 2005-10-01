@@ -29,22 +29,16 @@
 
 #include <glib.h>
 
-#include "gnc-engine-util.h"	/* safe_strcmp */
-#include "qofquerycore.h"
-#include "qofclass.h"
-#include "qofinstance-p.h"
-#include "guid.h"
-#include "gnc-event.h"
-#include "qofquery.h"
 #include "gncAddress.h"
 #include "gncAddressP.h"
 #include "gncCustomerP.h"
 
 struct _gncAddress 
 {
+  QofInstance inst;
+
   QofBook *	book;
   QofEntity * parent;
-  QofInstance inst;
   gboolean	dirty;
   char *	name;
   char *	addr1;
