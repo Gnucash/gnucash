@@ -266,7 +266,7 @@ gnc_quickfill_insert (QuickFill *qf, const char *text, QuickFillSort sort)
   if (NULL == text) return;
 
 
-  normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_DEFAULT);
+  normalized_str = g_utf8_normalize (text, -1, G_NORMALIZE_NFC);
   quickfill_insert_recursive (qf, normalized_str, 0, sort);
   g_free (normalized_str);
 }
