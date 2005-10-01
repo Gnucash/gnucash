@@ -22,7 +22,6 @@
 #include "config.h"
 #include <stdlib.h>
 #include <glib.h>
-#include <qof.h>
 #include "cashobjects.h"
 #include "test-stuff.h"
 #include "FreqSpec.h"
@@ -53,7 +52,8 @@ test_once (void)
             "once off" );
       }
    }
-
+   fprintf (stdout, " FreqSpec: Single test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -101,7 +101,8 @@ test_daily (void)
             interval, j );
       }
    }
-
+   fprintf(stdout, " FreqSpec: Daily test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -161,7 +162,8 @@ test_weekly (void)
             interval, j );
       }
    }
-
+   fprintf(stdout, " FreqSpec: Weekly test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -234,7 +236,8 @@ test_monthly (void)
          }
       }
    }
-
+   fprintf(stdout, " FreqSpec: Monthly test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -349,7 +352,8 @@ test_month_relative (void)
    g_date_set_dmy( &date1, 31, 3, 2002 );
    do_test( g_date_compare( &next_date, &date1 ) == 0, "find five-sunday months" );
    date2 = next_date;
-   
+   fprintf(stdout, " FreqSpec: Relative months test OK, continuing . . . \r");
+   fflush(stdout);   
    xaccFreqSpecFree(fs);
 }
 
@@ -530,7 +534,8 @@ test_composite (void)
    xaccFreqSpecGetNextInstance( fs, &date0, &date1 );
    g_date_set_dmy( &date2, 21, 4, 2001 );
    do_test( g_date_compare( &date1, &date2 ) == 0, "sixth date in sequence" );
-
+   fprintf(stdout, " FreqSpec: Composite months test OK, cleaning up\n");
+   fflush(stdout);   
    xaccFreqSpecFree(fs);
 }
 
@@ -543,7 +548,6 @@ main (int argc, char **argv)
 	g_return_val_if_fail(cashobjects_register(), -1);
 	session = qof_session_new ();
 	book = qof_session_get_book(session);
-	qof_session_begin(session, QOF_STDOUT, TRUE, FALSE);
    test_once();
    test_daily();
    test_weekly();
