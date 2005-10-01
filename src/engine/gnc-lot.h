@@ -59,11 +59,8 @@
 #ifndef GNC_LOT_H
 #define GNC_LOT_H
 
-#include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofobject.h"
+#include "qof.h"
+#include "gnc-lot-p.h"
 
 GNCLot * gnc_lot_new (QofBook *);
 void gnc_lot_destroy (GNCLot *);

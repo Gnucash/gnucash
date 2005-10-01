@@ -56,16 +56,10 @@ taxincluded, active and jobs are identical to ::GncVendor.
 */
 typedef struct _gncCustomer GncCustomer;
 
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
-
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
 
 #define GNC_ID_CUSTOMER       "gncCustomer"
 #define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))

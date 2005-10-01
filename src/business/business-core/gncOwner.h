@@ -36,13 +36,12 @@ typedef struct gnc_owner_s GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
 
-#include "qofinstance-p.h"
+#include "qof.h"
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gnc-lot.h" 
-#include "gnc-engine-util.h"
 
 typedef enum { 
 	GNC_OWNER_NONE , 

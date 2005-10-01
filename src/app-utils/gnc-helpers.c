@@ -28,7 +28,7 @@
 #include <string.h>
 #include <g-wrap-wct.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "engine-helpers.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"

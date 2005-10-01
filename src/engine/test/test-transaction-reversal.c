@@ -23,7 +23,6 @@
  
 #include <glib.h>
 #include <string.h>
-#include <qof.h>
 #include "cashobjects.h"
 #include "Transaction.h"
 #include "Account.h"

@@ -45,14 +45,8 @@
 
 #ifndef XACC_ACCOUNT_H
 #define XACC_ACCOUNT_H
-
+#include "qof.h"
 #include "gnc-engine.h"
-#include "guid.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
-
 
 typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (Account *account,

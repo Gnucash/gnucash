@@ -29,7 +29,6 @@
 #define GNC_VENDORP_H_
 
 #include "gncVendor.h"
-#include "qofid-p.h"
 
 gboolean gncVendorRegister (void);
 gint64 gncVendorNextID (QofBook *book);

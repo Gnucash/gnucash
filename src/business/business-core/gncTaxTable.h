@@ -64,11 +64,7 @@ typedef struct _gncTaxTableEntry GncTaxTableEntry;
 typedef struct _gncAccountValue GncAccountValue;
 
 #include "Account.h"
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-
-#include "qofbook.h"
-#include "qofinstance.h"
+#include "qof.h"
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif

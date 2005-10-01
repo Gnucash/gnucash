@@ -32,7 +32,7 @@
 #include "gnucash-style.h"
 #include "messages.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */

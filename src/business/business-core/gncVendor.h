@@ -37,9 +37,6 @@ typedef struct _gncVendor GncVendor;
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 #include "gncJob.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 
 #define GNC_ID_VENDOR       "gncVendor"
 #define GNC_IS_VENDOR(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_VENDOR))

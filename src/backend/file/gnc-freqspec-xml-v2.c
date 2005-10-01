@@ -29,7 +29,7 @@
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "sixtp.h"
 #include "sixtp-utils.h"

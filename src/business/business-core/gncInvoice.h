@@ -44,9 +44,6 @@ typedef struct _gncInvoice GncInvoice;
 #include "gncOwner.h"
 #include "gnc-lot.h"
 
-#include "qofid.h"
-#include "qofinstance.h"
-
 #define GNC_ID_INVOICE    "gncInvoice"
 #define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
 #define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))

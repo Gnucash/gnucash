@@ -36,12 +36,8 @@
 #define XACC_ACCOUNT_GROUP_H
 
 #include <glib.h>
-
+#include "qof.h"
 #include "Account.h"
-#include "gnc-engine.h"
-#include "guid.h"
-#include "qofbook.h"
-
 
 /* PROTOTYPES ******************************************************/
 /** @name Constructors, Destructors 

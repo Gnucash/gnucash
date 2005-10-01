@@ -28,7 +28,7 @@
 #include <stdarg.h>
 #include <gnome.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "GNCId.h"
 #include "QueryCore.h"
 #include "QueryObject.h"

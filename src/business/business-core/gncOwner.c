@@ -32,11 +32,6 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
 #include "gncJobP.h"

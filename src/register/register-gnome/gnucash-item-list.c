@@ -28,7 +28,7 @@
 
 #include <gnome.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnucash-item-list.h"
 #include "gnucash-scrolled-window.h"
 

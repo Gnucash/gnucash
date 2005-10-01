@@ -31,7 +31,7 @@
 #include "gnc-dense-cal.h"
 
 /* For PERR, only... */
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /**
  * Todo:
@@ -96,7 +96,7 @@ enum gnc_dense_cal_signal_enum {
 
 static guint gnc_dense_cal_signals[LAST_SIGNAL] = { 0 };
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 static void gnc_dense_cal_class_init (GncDenseCalClass *class);
 static void gnc_dense_cal_init (GncDenseCal *dcal);

@@ -34,7 +34,6 @@ Currently the only files which include this file are:
 #define XACC_FREQSPECP_H
 
 #include "FreqSpec.h"
-#include "qofid.h"
 
 struct gncp_freq_spec 
 {

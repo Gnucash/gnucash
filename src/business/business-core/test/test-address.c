@@ -25,7 +25,6 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <qof.h>
 #include "cashobjects.h"
 #include "gncAddressP.h"
 #include "test-stuff.h"

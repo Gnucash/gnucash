@@ -60,16 +60,9 @@
 #define XACC_FREQSPEC_H
 
 #include "config.h"
-
+#include "gnc-engine.h"
 #include <glib.h>
-
-#include "qofid.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofobject.h"
-#include "qofclass.h"
-#include "qofquery.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #define ENUM_LIST_TYPE(_) \
         _(INVALID,) \

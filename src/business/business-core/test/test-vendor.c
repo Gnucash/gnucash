@@ -25,7 +25,6 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <qof.h>
 #include "gncInvoiceP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"

@@ -37,10 +37,8 @@
 #ifndef GNC_LOT_P_H
 #define GNC_LOT_P_H
 
-#include "gnc-engine.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "gnc-lot.h"
+#include "Account.h"
 
 struct gnc_lot_struct
 {

@@ -10,7 +10,7 @@
 #include "test-file-stuff.h"
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "sixtp.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"

@@ -33,8 +33,6 @@
 
 typedef struct _gncJob GncJob;
 
-#include "qofid.h"
-#include "qofinstance.h"
 #include "gncAddress.h"
 #include "gncOwner.h"
 

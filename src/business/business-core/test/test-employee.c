@@ -25,12 +25,7 @@
  *********************************************************************/
 
 #include <glib.h>
-#include "guid.h"
-#include "gnc-engine-util.h"
-#include "qofinstance.h"
-#include "qofobject.h"
-#include "qofsession.h"
-#include "qofquery.h"
+#include "qof.h"
 #include "gncEmployeeP.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"

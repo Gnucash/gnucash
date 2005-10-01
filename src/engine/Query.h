@@ -27,14 +27,8 @@
 #include <sys/types.h>
 #include <time.h>
 #include <glib.h>
-
-#include "gnc-date.h" 
-#include "gnc-engine.h" 
-#include "guid.h" 
-#include "kvp_frame.h" 
-
-#include "qofquery.h"
-#include "qofquerycore.h"
+#include "qof.h"
+#include "Account.h"
 
 /*
  * This function defines a compatibility API from the old Query API to

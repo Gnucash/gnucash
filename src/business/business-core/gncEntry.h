@@ -44,10 +44,6 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
-#include "qofbook.h"
-#include "qofinstance.h"
-
-#include "gnc-date.h"
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif

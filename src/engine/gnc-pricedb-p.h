@@ -26,15 +26,9 @@
 #define GNC_PRICEDB_P_H
 
 #include <glib.h>
-
+#include "qof.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
 
 struct gnc_price_s
 {

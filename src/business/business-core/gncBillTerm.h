@@ -33,12 +33,7 @@
 
 typedef struct _gncBillTerm GncBillTerm;
 
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
 #endif

@@ -34,7 +34,6 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "gnc-date.h"
 #include "gnc-engine-util.h"
 
 /* 
