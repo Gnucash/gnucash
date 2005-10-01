@@ -264,21 +264,6 @@ struct QofBackendProvider_s
   /** Return a new, initialized backend backend. */
   QofBackend * (*backend_new) (void);
 
-  /** \brief Name of the QofBackendProvider XML Configuration file
-	
-	This is to be generated from a Perl script to utilise gettext
-	translations and includes translated strings that describe
-	what each configuration option achieves. 
-	
-	The file itself can be located in the QSF_SCHEMA_DIR or
-	in any directory accessible to the frontend program.
-	
-	The filename should include the name of the backend as
-	specified in provider_name and the version of the backend 
-	that can use the file: myname-backend-v1.xml
-  */
-  const char* provider_config;
-  
 /** \brief Distinguish two providers with same access method.
   
   More than 1 backend can be registered under the same access_method,

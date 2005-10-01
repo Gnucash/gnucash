@@ -31,8 +31,7 @@
 #ifndef GNC_BACKEND_FILE_H_
 #define GNC_BACKEND_FILE_H_
 
-#include "qofbackend.h"
-#include "qofbackend-p.h"
+#include "qof.h"
 
 struct FileBackend_struct
 {
@@ -43,7 +42,8 @@ struct FileBackend_struct
     char *lockfile;
     char *linkfile;
     int lockfd;
-   /** XXX price_lookup should be removed during the redesign
+   /** \deprecated 
+	XXX price_lookup should be removed during the redesign
    * of the SQL backend... prices can now be queried using
    * the generic query mechanism.
    *

@@ -22,7 +22,8 @@
     @{ */
 /** @addtogroup Period Accounting Periods
     The architecture of the Accounting Period design is discussed
-    in greater detail in the file "src/doc/books.txt"
+    in greater detail under \ref bookperiods and also in the 
+    file "src/doc/books.txt" in the source.
     @{ */
 /** @file Period.h
  *  @brief Implement accounting periods, as per design in src/doc/books.txt

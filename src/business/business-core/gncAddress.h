@@ -54,27 +54,27 @@ up to you to pass a suitable entity.
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
 
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofobject.h"
-#include "qofinstance.h"
-#include "qofid-p.h"
+#include "qof.h"
+#ifdef GNUCASH_MAJOR_VERSION
+#include "gncBusiness.h"
+#endif
 
 #define GNC_ADDRESS_MODULE_NAME        "gncAddress"
 #define GNC_ID_ADDRESS GNC_ADDRESS_MODULE_NAME
 /** \struct GncAddress
 
-@param	QofBook *	book;
-@param	QofEntity * parent;
-@param	gboolean	dirty;
-@param	char *	name;
-@param	char *	addr1;
-@param	char *	addr2;
-@param	char *	addr3;
-@param	char *	addr4;
-@param	char *	phone;
-@param	char *	fax;
-@param	char *	email;
+@param  QofInstance The address instance.
+@param	QofBook*	  Copy of the book pointer.
+@param	QofEntity* parent entity.
+@param	gboolean	dirty flag
+@param	char*	name of addressee
+@param	char*	first line of address
+@param	char*	second line of address
+@param	char*	third line of address
+@param	char*	fourth line of address
+@param	char*	phone number
+@param	char*	fax number
+@param	char*	email address
 */
 typedef struct _gncAddress GncAddress;
 
