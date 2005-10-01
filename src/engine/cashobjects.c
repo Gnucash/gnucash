@@ -40,7 +40,7 @@
 #include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "SX-book-p.h"
-
+#include "gnc-pricedb-p.h"
 
 gboolean
 cashobjects_register(void)
@@ -56,8 +56,8 @@ cashobjects_register(void)
 	g_return_val_if_fail (gncVendorRegister (), FALSE);
 	g_return_val_if_fail(gncTaxTableRegister(), FALSE);
 	g_return_val_if_fail ( gncOrderRegister (), FALSE);
-	g_return_val_if_fail(gnc_commodity_table_register(), FALSE);
 #endif
+	g_return_val_if_fail(gnc_commodity_table_register(), FALSE);
 	g_return_val_if_fail(xaccAccountRegister(), FALSE);
 	g_return_val_if_fail ( xaccTransRegister(), FALSE);
 	g_return_val_if_fail ( xaccSplitRegister(), FALSE);
@@ -65,5 +65,6 @@ cashobjects_register(void)
 	g_return_val_if_fail ( FreqSpecRegister(),  FALSE);
 	g_return_val_if_fail ( SXRegister (),       FALSE);
 	g_return_val_if_fail ( gnc_sxtt_register(), FALSE);
+	g_return_val_if_fail(gnc_pricedb_register(),FALSE);
 	return TRUE;
 }

@@ -43,9 +43,7 @@
 
 #include "TransLog.h"
 #include "gnc-engine.h"
-#include "gnc-date.h"
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
+
 #include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
@@ -55,24 +53,6 @@
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 
-#ifndef GNUCASH_MAJOR_VERSION
-#include "gnc-address-xml-v2.h"
-#include "gnc-bill-term-xml-v2.h"
-#include "gnc-customer-xml-v2.h"
-#include "gnc-employee-xml-v2.h"
-#include "gnc-entry-xml-v2.h"
-#include "gnc-invoice-xml-v2.h"
-#include "gnc-job-xml-v2.h"
-#include "gnc-order-xml-v2.h"
-#include "gnc-owner-xml-v2.h"
-#include "gnc-tax-table-xml-v2.h"
-#include "gnc-vendor-xml-v2.h"
-#endif
-
-#include "qofbackend-p.h"
-#include "qofbook.h"
-#include "qofsession.h"
-
 #ifdef GNUCASH_MAJOR_VERSION
 #include "qsf-xml.h"
 #endif
@@ -80,7 +60,7 @@
 #define GNC_BE_DAYS "file_retention_days"
 #define GNC_BE_ZIP  "file_compression"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 static gint file_retention_days = 0;
 static gboolean file_compression = FALSE;
@@ -1016,6 +996,7 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
+    fbe->price_lookup = NULL;
     fbe->lockfd = -1;
 
     fbe->primary_book = NULL;
@@ -1061,7 +1042,6 @@ gnc_backend_new(void)
 	be->get_config = gnc_file_be_get_config;
 
 	gnc_be->export = gnc_file_be_write_accounts_to_file;
-	gnc_be->price_lookup = NULL;
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
 	gnc_be->lockfile = NULL;
@@ -1069,19 +1049,6 @@ gnc_backend_new(void)
 	gnc_be->lockfd = -1;
 
 	gnc_be->primary_book = NULL;
-#ifndef GNUCASH_MAJOR_VERSION
-	gnc_address_xml_initialize ();
-	gnc_billterm_xml_initialize ();
-	gnc_customer_xml_initialize ();
-	gnc_employee_xml_initialize ();
-	gnc_entry_xml_initialize ();
-	gnc_invoice_xml_initialize ();
-	gnc_job_xml_initialize ();
-	gnc_order_xml_initialize ();
-	gnc_owner_xml_initialize ();
-	gnc_taxtable_xml_initialize ();
-	gnc_vendor_xml_initialize ();
-#endif
 	return be;
 }
 
@@ -1097,13 +1064,13 @@ gnc_provider_free (QofBackendProvider *prov)
 void
 gnc_provider_init(void)
 {
+	QofBackendProvider *prov;
 #ifdef ENABLE_NLS
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 #endif
-        QofBackendProvider *prov;
         prov = g_new0 (QofBackendProvider, 1);
         prov->provider_name = "GnuCash File Backend Version 2";
         prov->access_method = "file";
@@ -1111,7 +1078,6 @@ gnc_provider_init(void)
         prov->backend_new = gnc_backend_new;
         prov->provider_free = gnc_provider_free;
 	prov->check_data_type = gnc_determine_file_type;
-	    prov->provider_config = "gnucash-file-backend-v2.xml";
         qof_backend_register_provider (prov);
 }
 #endif
