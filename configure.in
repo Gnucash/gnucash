@@ -1160,6 +1160,10 @@ then
      if test `echo ${GCC_VERSION} | cut -d. -f2` -ge 4; then
 	# This is gcc >= 3.4.x
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+     else if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 4; then
+	# This is gcc == 4.x.x
+	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+	fi
      fi
   fi
 
