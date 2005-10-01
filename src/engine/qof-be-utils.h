@@ -35,6 +35,7 @@
 #ifndef QOF_BE_UTILS_H
 #define QOF_BE_UTILS_H
 
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"

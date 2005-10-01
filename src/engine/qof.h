@@ -73,12 +73,16 @@
 */
 /** @} */
 
+#include "qofid.h"
+#include "gnc-trace.h"
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "gnc-event.h"
+#include "gnc-engine-util.h"
 #include "guid.h"
 #include "kvp_frame.h"
+#include "kvp-util.h"
+#include "kvp-util-p.h"
 #include "qofbackend.h"
 #include "qofid-p.h"
 #include "qofinstance-p.h"

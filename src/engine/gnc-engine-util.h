@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-engine-util.h -- GnuCash engine utility functions            *
+ * gnc-engine-util.h -- QOF utility functions                       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -22,7 +22,7 @@
 /** @addtogroup Utilities
     @{ */
 /** @file gnc-engine-util.h 
-    @brief GnuCash engine utility functions 
+    @brief QOF utility functions
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
     @author Copyright (C) 1997-2002,2004 Linas Vepstas <linas@linas.org>
@@ -34,7 +34,7 @@
 #include <glib.h>
 #include <stddef.h>
 #include "config.h"
-#include "gnc-trace.h"  // XXX eliminate me eventually
+#include "qof.h"
 
 /** Macros *****************************************************/
 
@@ -150,10 +150,16 @@
    @{
 */
    
-/** \brief Initialise the Query Object Framework */
+/** \brief Initialise the Query Object Framework 
+
+Used for non-Guile applications or test routines.
+*/
 void qof_init (void);
 
-/** \brief Safely close down the Query Object Framework */
+/** \brief Safely close down the Query Object Framework 
+
+Used for non-Guile applications or test routines.
+*/
 void qof_close (void);
 
 /** @} */
@@ -223,12 +229,12 @@ int qof_util_bool_to_int (const char * val);
  * cached the strings are just plain C strings.
  */
 
-/** Get the gnc_string_cache.  Create it if it doesn't exist already */
+/** Get the gnc_string_cache.  Create it if it doesn't exist already
+
+\todo hide the gcache as a static */
 GCache* gnc_engine_get_string_cache(void);
 
 void gnc_engine_string_cache_destroy (void);
-
-/* TODO: hide the gcache as a static */
 
 /* You can use this function as a destroy notifier for a GHashTable
    that uses common strings as keys (or values, for that matter.) */

@@ -29,6 +29,7 @@
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
+#include "qof-backend-qsf.h"
 #include "qsf-xml.h"
 #include "qsf-dir.h"
 

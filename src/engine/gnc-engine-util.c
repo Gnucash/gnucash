@@ -30,7 +30,7 @@
 #include <glib.h>
 #include <stdlib.h>
 #include <string.h>
-#include <qof.h>
+#include "qof.h"
 #include "gnc-engine-util.h"
 
 
