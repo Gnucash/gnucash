@@ -36,7 +36,7 @@
 
 #include "putil.h"
 
-static short module = MOD_BACKEND; 
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ============================================================= */
 

@@ -21,7 +21,7 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 
-static short module = MOD_TEST;
+static QofLogModule log_module = GNC_MOD_TEST;
 
 struct _dbinfo {
     char *host;
@@ -494,7 +494,7 @@ test_raw_query(QofSession * session, Query * q)
 
     be = (PGBackend *) qof_session_get_backend(session);
 
-    if (gnc_should_log(module, GNC_LOG_DETAIL))
+    if (gnc_should_log(log_module, GNC_LOG_DETAIL))
         qof_query_print(qn);
 
     sq = sqlQuery_new();

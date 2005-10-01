@@ -37,6 +37,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "guid.h"
@@ -52,7 +53,7 @@
 
 #include "putil.h"
 
-static short module = MOD_TXN;
+static QofLogModule log_module = GNC_MOD_TXN;
 
 /* ============================================================= */
 

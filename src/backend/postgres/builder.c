@@ -45,9 +45,10 @@
 #include "gnc-date.h"
 #include "escape.h"
 #include "builder.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND; 
 
 /* ================================================ */
 

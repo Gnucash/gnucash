@@ -1,5 +1,7 @@
 2005-10-01  David Hampton  <hampton@employees.org>
 
+	* src/backend/postgres/*:
+	* src/engine/gnc-trace.h:
 	* src/gnome-utils/gnc-html-graph-gog.c:
 	* src/gnome-utils/gnc-plugin.c:
 	* src/import-export/hbci/gnc-plugin-hbci.c: Fix compilation

@@ -51,7 +51,7 @@
 #include "PostgresBackend.h"
 #include "price.h"
 
-static short module = MOD_BACKEND; 
+static QofLogModule log_module = GNC_MOD_BACKEND; 
 
 #include "putil.h"
 

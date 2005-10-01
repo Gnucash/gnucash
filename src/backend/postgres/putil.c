@@ -41,7 +41,7 @@
 #include "gnc-engine-util.h" 
 #include "PostgresBackend.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 #include "putil.h"
 

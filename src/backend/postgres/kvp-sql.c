@@ -38,12 +38,13 @@
 #include <string.h>
 
 #include "escape.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
 #include "putil.h"
 
-static short module = MOD_KVP; 
+static QofLogModule log_module = QOF_MOD_KVP;
 
 /* =========================================================== */
 /* get a unique iguid index */

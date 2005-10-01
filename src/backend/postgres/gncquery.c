@@ -55,7 +55,7 @@
 #include "builder.h"
 #include "escape.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 
 struct _gnc_query {

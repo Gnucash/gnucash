@@ -29,6 +29,7 @@
 #include <stdlib.h>  
 
 #include "events.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
@@ -43,7 +44,7 @@
 #include "putil.h"
 #include "txn.h"
 
-static short module = MOD_EVENT; 
+static QofLogModule log_module = "gnucash-postgres-event";
 
 
 /* ============================================================= */

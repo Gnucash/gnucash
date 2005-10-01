@@ -235,21 +235,21 @@ void gnc_report_clock_total (int clockno,
 /** start a particular timer */
 #define START_CLOCK(clockno,format, args...) {              \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
-    gnc_start_clock (clockno, module, GNC_LOG_INFO,         \
+    gnc_start_clock (clockno, log_module, GNC_LOG_INFO,         \
              __FUNCTION__, format , ## args);               \
 }
 
 /** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) {             \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
-    gnc_report_clock (clockno, module, GNC_LOG_INFO,        \
+    gnc_report_clock (clockno, log_module, GNC_LOG_INFO,        \
              __FUNCTION__, format , ## args);               \
 }
 
 /** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
-    gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
+    gnc_report_clock_total (clockno, log_module, GNC_LOG_INFO,  \
              __FUNCTION__, format , ## args);               \
 }
 

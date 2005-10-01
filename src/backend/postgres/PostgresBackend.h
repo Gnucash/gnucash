@@ -44,6 +44,8 @@
 #include "qofbackend-p.h"
 #include "qofbook.h"
 
+#define GNC_MOD_TXN    "gnucash-postgres-transaction"
+
 typedef struct _pgend PGBackend;
 
 typedef enum {
