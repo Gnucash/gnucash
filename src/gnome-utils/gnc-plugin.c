@@ -36,13 +36,14 @@
 
 #include "gnc-plugin.h"
 #include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "messages.h"
 
 static gpointer parent_class = NULL;
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
 static void gnc_plugin_init       (GncPlugin *plugin_page,

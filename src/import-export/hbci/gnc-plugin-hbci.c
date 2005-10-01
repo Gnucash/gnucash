@@ -34,10 +34,11 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_HBCI;
+static QofLogModule log_module = "gnucash-hbci";
 
 static void gnc_plugin_hbci_class_init (GncPluginHbciClass *klass);
 static void gnc_plugin_hbci_init (GncPluginHbci *plugin);

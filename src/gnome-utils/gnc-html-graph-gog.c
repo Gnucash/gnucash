@@ -8,6 +8,7 @@
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
 #include "gnc-trace.h"
+#include "gnc-engine.h"
 
 #include "goffice.h"
 #include "graph/gog-graph.h"
@@ -25,7 +26,7 @@
 #include <gsf/gsf.h>
 #include <gsf/gsf-output-memory.h>
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
