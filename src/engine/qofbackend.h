@@ -35,12 +35,15 @@
 /** @file qofbackend.h
     @brief API for data storage Backend
     @author Copyright (C) 2000-2001 Linas Vepstas <linas@linas.org>
+    @author Copyright 2004-2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef QOF_BACKEND_H
 #define QOF_BACKEND_H
 
 #include "qofinstance.h"
+
+#define QOF_MOD_BACKEND "qof-backend"
 
 /** \brief The errors that can be reported to the GUI & other front-end users
  *  \warning (GnuCash) If you modify QofBackendError, please update 

@@ -101,6 +101,8 @@
 #include "qofclass.h"
 #include "qofobject.h"
 
+#define QOF_MOD_SESSION "qof-session"
+
 /* PROTOTYPES ******************************************************/
 
 typedef struct _QofSession    QofSession;

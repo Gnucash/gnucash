@@ -71,6 +71,8 @@
 
 #include "qofid.h"
 
+#define QOF_MOD_CLASS "qof-class"
+
 /** \name Core types
 
 Core data types for objects that can be used in parameters.

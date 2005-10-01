@@ -75,6 +75,8 @@
 typedef const char * QofIdType;
 /** QofIdTypeConst declaration */
 typedef const char * QofIdTypeConst;
+/** QofLogModule declaration */
+typedef const gchar* QofLogModule;
 
 #define QOF_ID_NONE           NULL
 #define QOF_ID_NULL           "null"
