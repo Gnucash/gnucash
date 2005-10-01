@@ -1,3 +1,155 @@
+2005-10-01  Neil Williams <linux@codehelp.co.uk>
+
+	* configure.in: Detect GCC 4.0 or later and add
+	-Wdeclaration-after-statement
+	* src/backend/file/gnc-backend-file.c: CashUtil sync.
+	remove ifdefs, move one declaration (spotted using the
+	change in configure.in) and remove reference to XML file.
+	* src/backend/qsf/qsf-backend.c: Add QofBackendOption 
+	to compress QSF files via libxml2. Also fix QSF XML output
+	to always specify UTF-8.
+	* src/business/business-core/gncAddress.c: Fix ability to
+	cast from QofEntity to gncAddress and vice-versa.
+	* src/engine/Account.c: Fix test-lots and test-period,
+	trace subsystem changes and qof.h fixes.
+	* src/engine/Period.c: Fix test-period, include
+	trace subsystem changes and qof.h fixes.
+	* src/engine/cap-gains.c: Fix curious translation bug
+	from cashutil. Fix trace subsystem changes and qof.h
+	* src/engine/cashobjects.c: Cashutil sync.
+	* src/engine/gnc-engine.c: Initialise the new trace
+	subsystem on startup, shutdown logging cleanly and
+	fix qof.h headers.
+	* src/engine/gnc-engine.h: The new QofLogModule
+	identifiers for core modules. Others can be added
+	ad-hoc throughout the source tree and set to be
+	logged locally.
+	* src/engine/gnc-pricedb.c: Use public API calls
+	to remove private headers and use new trace 
+	subsystem.
+	* src/engine/gnc-trace.h
+	* src/engine/gnc-trace.c: New trace subsystem based
+	on string identifiers and accessible to all QOF
+	applications.
+	* src/engine/qofbook.h
+	* src/engine/qofbook.c: New trace subsystem, qof.h
+	fixes and test-period fixes. Balance ENTER and LEAVE
+	in log output.
+	* src/engine/qofquery.c: Balance ENTER and LEAVE.
+	* src/engine/qofsession.c: Balance ENTER and LEAVE
+	and new trace subsystem changes.
+	* src/engine/test/Makefile.am
+	* src/engine/test-core/test-engine-stuff.c: Fix
+	int-out-of-range error.
+	* src/engine/test/test-freq-spec.c: Provide feedback
+	on test progress.
+	* src/engine/test/test-lots.c: Fix segmentation fault.
+	* src/engine/test/test-period.c: Fix segmentation 
+	fault, fix headers and cashutil sync (remove guile).
+	
+
+	Remove guile - cashutil sync.
+	* src/engine/test/test-group-vs-book.c
+	* src/engine/test/test-guid.c
+	* src/engine/test/test-load-engine.c
+	* src/engine/test/test-object.c
+	* src/engine/test/test-query.c
+	* src/engine/test/test-querynew.c
+	* src/engine/test/test-resolve-file-path.c
+	* src/engine/test/test-split-vs-account.c
+	
+
+2005-10-01  Neil Williams <linux@codehelp.co.uk>
+
+	Remove references to internal QOF headers and replace 
+	with qof.h
+	* src/app-utils/gnc-helpers.c
+	* src/backend/file/gnc-freqspec-xml-v2.c
+	* src/backend/file/gnc-transaction-xml-v2.c
+	* src/backend/file/io-utils.c
+	* src/backend/file/test/test-dom-converters1.c
+	* src/backend/file/test/test-file-stuff.c
+	* src/backend/file/test/test-load-example-account.c
+	* src/business/business-core/gncAddressP.h
+	* src/business/business-core/gncBillTerm.h
+	* src/business/business-core/gncBillTermP.h
+	* src/business/business-core/gncCustomer.h
+	* src/business/business-core/gncCustomerP.h
+	* src/business/business-core/gncEmployee.h
+	* src/business/business-core/gncEntry.h
+	* src/business/business-core/gncEntryP.h
+	* src/business/business-core/gncInvoice.h
+	* src/business/business-core/gncInvoiceP.h
+	* src/business/business-core/gncJob.h
+	* src/business/business-core/gncJobP.h
+	* src/business/business-core/gncOrder.h
+	* src/business/business-core/gncOrderP.h
+	* src/business/business-core/gncOwner.c
+	* src/business/business-core/gncOwner.h
+	* src/business/business-core/gncOwnerP.h
+	* src/business/business-core/gncTaxTable.h
+	* src/business/business-core/gncTaxTableP.h
+	* src/business/business-core/gncVendor.h
+	* src/business/business-core/gncVendorP.h
+	* src/business/business-core/test/test-address.c
+	* src/business/business-core/test/test-business.c
+	* src/business/business-core/test/test-employee.c
+	* src/business/business-core/test/test-job.c
+	* src/business/business-core/test/test-vendor.c
+	* src/engine/Account.h
+	* src/engine/AccountP.h
+	* src/engine/FreqSpec.h
+	* src/engine/FreqSpecP.h
+	* src/engine/Group.h
+	* src/engine/GroupP.h
+	* src/engine/Query.h
+	* src/engine/SX-book.h
+	* src/engine/SX-ttinfo.h
+	* src/engine/SchedXaction.h
+	* src/engine/SchedXactionP.h
+	* src/engine/TransLog.c
+	* src/engine/gnc-lot-p.h
+	* src/engine/gnc-lot.h
+	* src/engine/gnc-pricedb-p.h
+	* src/engine/test/test-numeric.c
+	* src/engine/test/test-transaction-reversal.c
+	* src/engine/test/test-transaction-voiding.c
+	* src/gnome-utils/gnc-dense-cal.c
+	* src/gnome-utils/search-param.c
+	* src/register/register-gnome/gnucash-item-list.c
+	* src/register/register-gnome/gnucash-style.c
+
+	Change from short int module to QofLogModule log_module
+	and use new log_module identifiers.
+	* Various.
+
+	Adjust QOF internal headers to fix qof.h.
+	* src/backend/qsf/qsf-xml-map.c
+	* src/engine/gnc-engine-util.h
+	* src/engine/gnc-engine-util.c
+	* src/engine/qof-be-utils.h
+	* src/engine/qof.h
+	* src/engine/qof_book_merge.c:
+	
+	QOF default trace modules.
+	* src/engine/kvp_frame.h
+	* src/engine/qof_book_merge.h
+	* src/engine/qofbackend.h
+	* src/engine/qofclass.h
+	* src/engine/qofid.h
+	* src/engine/qofobject.h
+	* src/engine/qofquery.h
+	* src/engine/qofsession.h
+	
+
+2005-10-01  Neil Williams <linux@codehelp.co.uk>
+
+	Doxygen tweaks
+	* src/backend/file/gnc-backend-file.h
+	* src/business/business-core/gncAddress.h
+	* src/engine/Period.h
+	* src/engine/qofbackend-p.h
+
 2005-09-29  David Hampton  <hampton@employees.org>
 
 	* various: Fix a bunch of warnings generated by doxygen.
