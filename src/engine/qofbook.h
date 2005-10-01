@@ -41,9 +41,7 @@
 #define QOF_BOOK_H
 
 #include <glib.h>
-
 #include "qofid.h"
-//#include "qofbackend.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset
@@ -80,6 +78,13 @@ QofBook * qof_book_new (void);
 /** End any editing sessions associated with book, and free all memory 
     associated with it. */
 void      qof_book_destroy (QofBook *book);
+
+/** Close a book to editing.
+
+It is up to the application to check this flag,
+and once marked closed, books cannnot be marked as open.
+*/
+void qof_book_mark_closed (QofBook *book);
 
 /** \return The table of entities of the given type.  
  *

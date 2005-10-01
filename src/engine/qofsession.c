@@ -42,9 +42,9 @@
 
 #include <glib.h>
 #include "qofla-dir.h"
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
-#include "gnc-trace.h"
 #include "qofsession.h"
 #include "qofbackend-p.h"
 #include "qof-be-utils.h"
@@ -61,7 +61,7 @@
 /** \deprecated should not be static */
 static QofSession * current_session = NULL;
 static GHookList * session_closed_hooks = NULL;
-static short module = MOD_BACKEND;
+static QofLogModule log_module = QOF_MOD_SESSION;
 static GSList *provider_list = NULL;
 
 /* ====================================================================== */
@@ -418,7 +418,6 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	
 	g_return_if_fail(user_data != NULL);
 	context = (QofEntityCopyData*) user_data;
-	ENTER (" ");
 	cm_date.tv_nsec = 0;
 	cm_date.tv_sec =  0;
 	importEnt = context->from;
@@ -501,7 +500,6 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 			qof_session_update_reference_list(context->new_session, reference);
 		}
 	}
-	LEAVE (" ");
 }
 
 static gboolean
@@ -954,6 +952,7 @@ qof_session_load_backend(QofSession * session, char * access_method)
 				book = node->data;
 				qof_book_set_backend (book, session->backend);
 			}
+			LEAVE (" ");
 			return;
 		}
 		p = p->next;
@@ -1224,7 +1223,7 @@ qof_session_save (QofSession *session,
 	book_id = g_strdup(session->book_id);
 	if(partial == TRUE)
 	{
-		if(session->backend->provider) {
+		if(session->backend && session->backend->provider) {
 			prov = session->backend->provider;
 			if(TRUE == prov->partial_book_supported)
 			{

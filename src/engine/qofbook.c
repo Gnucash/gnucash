@@ -53,7 +53,7 @@
 
 #include "guid.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /* ====================================================================== */
 /* constructor / destructor */
@@ -191,6 +191,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
   if (!book) return;
   ENTER ("book=%p be=%p", book, be);
   book->backend = be;
+  LEAVE (" ");
 }
 
 void qof_book_kvp_changed (QofBook *book)
@@ -278,6 +279,12 @@ qof_book_foreach_collection (QofBook *book,
 }
 
 /* ====================================================================== */
+
+void qof_book_mark_closed (QofBook *book)
+{
+	if(!book) { return; }
+	book->book_open = 'n';
+}
 
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)

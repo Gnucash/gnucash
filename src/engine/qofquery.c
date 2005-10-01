@@ -29,8 +29,8 @@
 #include <regex.h>
 #include <string.h>
 
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
+#include "gnc-engine-util.h"
 
 #include "qofbackend-p.h"
 #include "qofbook.h"
@@ -43,7 +43,7 @@
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = QOF_MOD_QUERY;
 
 struct _QofQueryTerm 
 {
@@ -409,6 +409,7 @@ check_object (QofQuery *q, gpointer object)
     }
     if (and_terms_ok) 
     {
+      LEAVE (" (terms are OK)");
       return 1;
     }
   }
@@ -418,8 +419,8 @@ check_object (QofQuery *q, gpointer object)
    * may want to get all objects, but in a particular sorted 
    * order.
    */
+  LEAVE (" ");
   if (NULL == q->terms) return 1;
-
   return 0;
 }
 
@@ -477,7 +478,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
   sort->obj_cmp = NULL;
 
   /* An empty param_list implies "no sort" */
-  if (!sort->param_list) return;
+  if (!sort->param_list) { LEAVE (" "); return; }
 
   /* Walk the parameter list of obtain the parameter functions */
   sort->param_fcns = compile_params (sort->param_list, obj, &resObj);
@@ -702,10 +703,10 @@ GList * qof_query_run (QofQuery *q)
   GList *node;
   int        object_count = 0;
 
-  ENTER (" q=%p", q);
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
   g_return_val_if_fail (q->books, NULL);
+  ENTER (" q=%p", q);
 
   /* XXX: Prioritize the query terms? */
 
@@ -717,7 +718,7 @@ GList * qof_query_run (QofQuery *q)
   }
 
   /* Maybe log this sucker */
-  if (gnc_should_log (module, GNC_LOG_DETAIL)) qof_query_print (q);
+  if (gnc_should_log (log_module, GNC_LOG_DETAIL)) qof_query_print (q);
 
   /* Now run the query over all the objects and save the results */
   {

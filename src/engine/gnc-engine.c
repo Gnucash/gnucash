@@ -38,13 +38,7 @@
 #include "SchedXactionP.h"
 #include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofid.h"
-#include "qofobject.h"
-#include "qofobject-p.h"
-#include "qofquery.h" 
-#include "qofquery-p.h" 
+#include "qof.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -82,8 +76,14 @@ gnc_engine_init(int argc, char ** argv)
   if (1 == engine_is_initialized) return;
   engine_is_initialized = 1;
 
-  gnc_log_init();
-
+  /* initialize logging to our file. */
+  qof_log_init_filename("/tmp/gnucash.trace");
+  /* Only set the core log_modules here
+	the rest can be set locally.  */
+  gnc_set_log_level(GNC_MOD_ENGINE, GNC_LOG_WARNING);
+  gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
+  gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
+  qof_log_set_default(GNC_LOG_WARNING);
   /* initialize the string cache */
   gnc_engine_get_string_cache();
   
@@ -127,6 +127,7 @@ gnc_engine_shutdown (void)
   qof_object_shutdown ();
   guid_shutdown();
   gnc_engine_string_cache_destroy ();
+  qof_log_shutdown();
 }
 
 /********************************************************************

@@ -37,7 +37,32 @@
 #define GNC_ENGINE_H
 
 #include <glib.h>
-#include "qofid.h"
+#include "qof.h"
+
+/** \name QofLogModule identifiers */
+// @{
+#define GNC_MOD_ENGINE    "gnucash-engine-objects"
+#define GNC_MOD_ACCOUNT   "gnucash-account"
+#define GNC_MOD_SX        "gnucash-schedX"
+#define GNC_MOD_QUERY     "gnucash-query"
+#define GNC_MOD_SCRUB     "gnucash-scrub"
+#define GNC_MOD_LOT       "gnucash-lots"
+#define GNC_MOD_COMMODITY "gnucash-commodity"
+#define GNC_MOD_BACKEND   "gnucash-backend-general"
+#define GNC_MOD_PRICE     "gnucash-pricedb"
+#define GNC_MOD_BUSINESS  "gnucash-business"
+#define GNC_MOD_IO        "gnucash-inputoutput"
+#define GNC_MOD_BOOK      "gnucash-book-period"
+#define GNC_MOD_GUI       "gnucash-gui"
+#define GNC_MOD_GUILE     "gnucash-guile"
+#define GNC_MOD_LEDGER    "gnucash-ledger"
+#define GNC_MOD_REGISTER  "gnucash-register"
+#define GNC_MOD_HTML      "gnucash-html"
+#define GNC_MOD_PREFS     "gnucash-preferences"
+#define GNC_MOD_IMPORT    "gnucash-import-export"
+#define GNC_MOD_DRUID     "gnucash-druids"
+#define GNC_MOD_TEST      "gnucash-tests"
+//@}
 
 /** @brief IDENTIFIERS
  *  GUID Identifiers can be used to reference Accounts, Transactions, 
@@ -187,11 +212,13 @@ unsigned int gnucash_minor_version (void);
 /** GnuCash version number infomation. */
 unsigned int gnucash_micro_version (void);
 
-/** gnc_engine_init MUST be called before gnc engine functions can 
- * be used. */
+/** gnc_engine_init should be called before gnc engine
+ * functions can be used - see also ::qof_init for a
+ * method that does not require Guile. */
 void gnc_engine_init(int argc, char ** argv);
 
-/** Called to shutdown the engine */
+/** Called to shutdown the engine, see also ::qof_close
+ * for use without Guile. */
 void gnc_engine_shutdown (void);
 
 /** Pass a function pointer to gnc_engine_add_init_hook and 
