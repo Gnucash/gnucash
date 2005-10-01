@@ -36,7 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-price.h"
 #include "gnc-ui.h"
@@ -50,7 +50,7 @@
 #define GCONF_SECTION "dialogs/edit_prices"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 void gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data);

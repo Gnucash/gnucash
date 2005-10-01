@@ -44,7 +44,7 @@
 #include "Transaction.h"
 #include "global-options.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
@@ -54,7 +54,7 @@
 
 #define GCONF_SECTION "dialogs/import/mt940"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 static void *trans_importer_cb (const HBCI_Transaction *h_trans, 
 			    void *user_data);

@@ -25,8 +25,6 @@
 
 #include <string.h>
 
-#include "gnc-engine-util.h"
-
 #include "gnc-xml.h"
 #include "sixtp.h"
 #include "sixtp-utils.h"
@@ -39,7 +37,7 @@
 #include "gnc-pricedb-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* Read and Write the pricedb as XML -- something like this:
 

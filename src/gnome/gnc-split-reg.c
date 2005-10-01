@@ -41,10 +41,9 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "global-options.h"
-#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-err-popup.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
@@ -58,10 +57,9 @@
 #include "table-allgui.h"
 
 #include <libguile.h>
-#include "gnc-engine-util.h"
 #include "dialog-utils.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * TODO list:
@@ -651,7 +649,7 @@ gsr_update_summary_label( GtkWidget *label,
 static GNCPrice *
 account_latest_price (Account *account)
 {
-  GNCBook *book;
+  QofBook *book;
   GNCPriceDB *pdb;
   gnc_commodity *commodity;
   gnc_commodity *currency;
@@ -669,7 +667,7 @@ account_latest_price (Account *account)
 static GNCPrice *
 account_latest_price_any_currency (Account *account)
 {
-  GNCBook *book;
+  QofBook *book;
   GNCPriceDB *pdb;
   gnc_commodity *commodity;
   GList *price_list;

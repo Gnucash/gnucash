@@ -40,10 +40,10 @@
 
 #include "basiccell.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /* Debugging module */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 gboolean
 gnc_cell_name_equal (const char * cell_name_1,

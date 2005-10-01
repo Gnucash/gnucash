@@ -30,20 +30,18 @@
 #include "gnc-embedded-window.h"
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-dir.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
-#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
 #include "messages.h"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);

@@ -31,28 +31,11 @@
 #include <glib.h>
 #include <string.h>
 
-#include "guid.h"
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-
 #include "messages.h"
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
-
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 #include "gncVendor.h"
@@ -75,7 +58,7 @@ struct _gncVendor
   GList *         jobs;
 };
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_VENDOR
 

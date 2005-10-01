@@ -45,11 +45,10 @@
 
 #include "gnc-order-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
-#include "gnc-engine-util.h"
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *order_version_string = "2.0.0";
 

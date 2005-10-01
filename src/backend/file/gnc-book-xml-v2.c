@@ -46,8 +46,6 @@
 #include "sixtp-dom-parsers.h"
 #include "gnc-engine-util.h"
 #include "Group.h"
-#include "qofbook.h"
-#include "qofid-p.h"
 
 /* non-static because it's used in io-gncxml-v2.c */
 const gchar *gnc_v2_book_version_string = "2.0.0";
@@ -57,7 +55,7 @@ const gchar *gnc_v2_book_version_string = "2.0.0";
 #define book_id_string "book:id"
 #define book_slots_string "book:slots"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* ================================================================ */
 
@@ -331,4 +329,3 @@ gnc_book_slots_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_book_slots_end_handler, NULL, NULL);
 }
-

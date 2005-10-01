@@ -31,12 +31,9 @@
 #include "AccountP.h"
 #include "gnc-associate-account.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-trace.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* Maps GNCTrackingIncomeCategory to string keys.  If this enum
    changes, update */

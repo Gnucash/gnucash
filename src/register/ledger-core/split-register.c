@@ -37,7 +37,7 @@
 #include "datecell.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
@@ -61,7 +61,7 @@
 /** static variables ******************************************************/
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* The copied split or transaction, if any */
 static CursorClass copied_class = CURSOR_CLASS_NONE;

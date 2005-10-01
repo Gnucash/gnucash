@@ -39,8 +39,7 @@
 #include <string.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 #include "basiccell.h"

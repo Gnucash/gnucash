@@ -24,13 +24,11 @@
 #include "config.h"
 #include "account-quickfill.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
 

@@ -42,7 +42,7 @@
 #include <g-wrap-wct.h>
 
 #include "guile-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
@@ -68,7 +68,7 @@ static void gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *w
 /* Command callbacks */
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"

@@ -47,7 +47,7 @@
 #include "dialog-utils.h"
 #include "print-session.h"
 #include "global-options.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gpg.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
@@ -86,7 +86,7 @@ struct gnc_html_struct {
 
 
 /* indicates the debugging module that this .o belongs to.  */
-static short module = MOD_HTML;
+static QofLogModule log_module = GNC_MOD_HTML;
 
 /* hashes for URLType -> protocol and protocol -> URLType */
 static GHashTable * gnc_html_type_to_proto_hash = NULL;

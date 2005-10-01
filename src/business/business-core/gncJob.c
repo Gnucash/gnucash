@@ -31,26 +31,7 @@
 #include <glib.h>
 #include <string.h>
 
-#include "guid.h"
 #include "messages.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
-#include "gnc-event.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-#include "qofbackend-p.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"
@@ -66,7 +47,7 @@ struct _gncJob
   gboolean      active;
 };
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_JOB
 

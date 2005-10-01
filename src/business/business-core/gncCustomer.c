@@ -32,19 +32,7 @@
 #include <string.h>
 
 #include "messages.h"
-#include "gnc-engine-util.h"
 #include "gnc-commodity.h"
-#include "gnc-numeric.h"
-#include "gnc-event.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
@@ -81,7 +69,7 @@ struct _gncCustomer
   GncAddress *    shipaddr;
 };
 
-static short module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_CUSTOMER
 

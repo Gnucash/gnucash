@@ -35,17 +35,9 @@
 #include <regex.h>
 
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-trace.h"
-#include "guid.h"
 #include "messages.h"
-#include "qofbook.h"
-#include "qofobject.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
 
-static short module = MOD_COMMODITY; 
+static QofLogModule log_module = GNC_MOD_COMMODITY; 
 
 /* Parts per unit is nominal, i.e. number of 'partname' units in
  * a 'unitname' unit.  fraction is transactional, i.e. how many

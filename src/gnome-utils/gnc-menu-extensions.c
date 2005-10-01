@@ -26,7 +26,7 @@
 #include <gnome.h>
 
 #include "guile-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 
@@ -41,7 +41,7 @@ struct _Getters
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GSList *extension_list = NULL;
 static Getters getters = {0, 0, 0, 0, 0};

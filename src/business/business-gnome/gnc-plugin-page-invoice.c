@@ -38,7 +38,7 @@
 #include "gnc-window.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass);
 static void gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page);

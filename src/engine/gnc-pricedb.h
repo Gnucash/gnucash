@@ -24,15 +24,9 @@
 #define GNC_PRICEDB_H
 
 #include <stdio.h>
-
+#include "qof.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 
 /** @addtogroup PriceDB
     @{ */

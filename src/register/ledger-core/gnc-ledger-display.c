@@ -36,7 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-book.h"
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
@@ -73,7 +73,7 @@ struct gnc_ledger_display
 
 
 /** GLOBALS *********************************************************/
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 /** Declarations ****************************************************/

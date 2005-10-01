@@ -30,7 +30,6 @@
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-
 #include "sixtp.h"
 #include "sixtp-utils.h"
 #include "sixtp-parsers.h"
@@ -45,10 +44,9 @@
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
-#include "gnc-engine-util.h"
 #include "Group.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *account_version_string = "2.0.0";
 

@@ -33,7 +33,7 @@
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gconf-utils.h"
@@ -58,7 +58,7 @@ typedef enum
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 struct _xferDialog
 {

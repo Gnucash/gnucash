@@ -36,7 +36,6 @@
 #include "dialog-transfer.h"
 #include "druid-merge.h"
 #include "global-options.h"
-#include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
@@ -53,10 +52,10 @@
 #include "window-main-summarybar.h"
 
 #include "messages.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 #define GCONF_SECTION "window/pages/account_tree"

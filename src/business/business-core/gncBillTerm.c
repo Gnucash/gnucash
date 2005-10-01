@@ -31,26 +31,7 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "qofquerycore.h"
-#include "gnc-event.h"
-#include "kvp_frame.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-
-#include "qofid-p.h"
-
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-/** \todo remove gncBusiness.h to make the object logic library. */
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
 #include "gncBillTermP.h"
 
 struct _gncBillTerm 
@@ -80,7 +61,8 @@ struct _book_info
 {
   GList *         terms;        /* visible terms */
 };
-static short        module = MOD_BUSINESS;
+
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_BILLTERM
 

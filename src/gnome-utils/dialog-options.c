@@ -51,7 +51,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /*
  * Point where preferences switch control method from a set of

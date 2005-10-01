@@ -28,7 +28,7 @@
 #include "Group.h"
 #include "datecell.h"
 #include "global-options.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-err-popup.h"
 #include "gnc-ui.h"
@@ -54,7 +54,7 @@ static SplitRegisterColors reg_colors =
 };
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 /* Flag for determining colorization of negative amounts. */
 static gboolean use_red_for_negative = TRUE;

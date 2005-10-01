@@ -24,13 +24,13 @@
 
 #include "global-options.h"
 #include "option-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GNCOptionDB *global_options = NULL;
 

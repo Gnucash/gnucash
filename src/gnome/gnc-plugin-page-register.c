@@ -58,10 +58,10 @@
 #include "window-report.h"
 
 #include "messages.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 #define DEFAULT_LINES_OPTION_SECTION GCONF_GENERAL_REGISTER
 #define DEFAULT_LINES_OPTION_NAME    KEY_NUMBER_OF_ROWS

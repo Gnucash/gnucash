@@ -40,7 +40,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
 #include "gnc-embedded-window.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-frequency.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
@@ -63,7 +63,7 @@
 #include <langinfo.h>
 #endif
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 #define SX_LIST_GCONF_SECTION "dialogs/scheduled_trans/transaction_list"
 #define SX_LIST_WIN_PREFIX "sx_list_win"

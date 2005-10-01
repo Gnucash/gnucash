@@ -33,18 +33,16 @@
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "gnc-trace.h"
 #include "guile-mappings.h"
-#include "qofbook.h"
-#include "qofquery.h"
+#include "qof.h"
+/** \todo Private query headers 
+qofquery-p.h and qofquerycore-p.h
+are not exported from QOF */
 #include "qofquery-p.h"
-#include "qofquerycore.h"
 #include "qofquerycore-p.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 Timespec
 gnc_transaction_get_date_posted(Transaction *t) 

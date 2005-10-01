@@ -35,19 +35,16 @@
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb-p.h"
-#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 struct _commoditydruid {
   GtkWidget  * window; 
@@ -514,6 +511,6 @@ void gnc_import_commodities(QofSession *session, gpointer unused)
 {
   const gchar *book_url;
 
-  book_url = gnc_session_get_url(session);
+  book_url = qof_session_get_url(session);
   gnc_import_legacy_commodities(book_url);
 }

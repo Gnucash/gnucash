@@ -38,7 +38,6 @@
 #include "gnc-commodity.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
@@ -105,7 +104,7 @@ typedef struct _AccountWindow
 
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static int last_used_account_type = BANK;
 

@@ -40,7 +40,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-window.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "messages.h"
 #include "gnc-gconf-utils.h"
 
@@ -55,7 +55,7 @@ static void gnc_plugin_file_history_finalize (GObject *object);
 static void gnc_plugin_file_history_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_file_history_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /* Command callbacks */
 static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWindowActionData *data);

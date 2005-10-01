@@ -63,7 +63,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gobject-utils.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
@@ -77,7 +77,7 @@
 #define NOTEBOOK			"notebook"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_PREFS;
+static QofLogModule log_module = GNC_MOD_PREFS;
 
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
 void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);

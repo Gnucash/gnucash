@@ -48,12 +48,12 @@
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
 #include "messages.h"
-#include "qofbook.h"
+#include "qof.h"
 
 
 #define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"
 
-static short module = MOD_DRUID;
+static QofLogModule log_module = GNC_MOD_DRUID;
 
 /** structures *********************************************************/
 typedef struct

@@ -30,7 +30,6 @@
 #define GNC_TAXTABLEP_H_
 
 #include "gncTaxTable.h"
-#include "qofid-p.h"
 
 gboolean gncTaxTableRegister (void);
 

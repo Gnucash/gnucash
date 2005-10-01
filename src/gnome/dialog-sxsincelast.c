@@ -64,10 +64,9 @@
 #include "SX-book-p.h"
 #include "dialog-utils.h"
 #include "finvar.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-exp-parser.h"
 #include "gnc-embedded-window.h"
 #include "gnc-gconf-utils.h"
@@ -139,7 +138,7 @@
 #define READY_TEXT          "Ready to create"
 #define NEEDS_BINDINGS_TEXT "Needs values for variables"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * Directions for {forward,back}-page determining.

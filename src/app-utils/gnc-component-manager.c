@@ -23,7 +23,7 @@
 
 #include "Group.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 
 
@@ -72,7 +72,7 @@ static ComponentEventInfo changes_backup = { NULL, NULL, FALSE };
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes ******************************************************/

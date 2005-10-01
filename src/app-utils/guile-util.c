@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "global-options.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-gconf-utils.h"
@@ -35,7 +35,7 @@
 #include "guile-mappings.h"
 
 /* This static indicates the debugging module this .o belongs to.  */
-static short module = MOD_GUILE;
+static QofLogModule log_module = GNC_MOD_GUILE;
 
 
 struct _setters
@@ -1153,5 +1153,3 @@ gnc_get_credit_string(GNCAccountType account_type)
     return g_strdup(string);
   return NULL;
 }
-
-

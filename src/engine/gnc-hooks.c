@@ -29,9 +29,9 @@
 #include <g-wrap-wct.h>
 #include "gnc-hooks.h"
 #include "gnc-hooks-scm.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 
-static short module = MOD_ENGINE; 
+static QofLogModule log_module = GNC_MOD_ENGINE; 
 
 static GHashTable* gnc_hooks_list = NULL;
 static gboolean gnc_hooks_initialized = FALSE;

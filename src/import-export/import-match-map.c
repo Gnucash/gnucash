@@ -33,13 +33,13 @@
 #include "kvp_frame.h"
 #include "Group.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 struct _GncImportMatchMap {

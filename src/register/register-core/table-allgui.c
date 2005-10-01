@@ -43,7 +43,7 @@
 #include "table-allgui.h"
 #include "cellblock.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 
 /** Static Globals *****************************************************/
@@ -51,7 +51,7 @@
 static TableGUIHandlers default_gui_handlers;
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 
 /** Prototypes *********************************************************/

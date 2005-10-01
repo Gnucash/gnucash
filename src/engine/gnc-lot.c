@@ -39,20 +39,13 @@
  */
 
 #include "Account.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================= */
 

@@ -38,13 +38,13 @@
 #include "messages.h"
 #include "Group.h"
 #include "gnc-dir.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 #define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define WINDOW_POSITION		"window_position"

@@ -45,9 +45,6 @@
 #include "TransLog.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "gnc-engine-util.h"
-#include "qofbook.h"
-
 #include "io-gncxml.h"
 
 #include "sixtp.h"
@@ -134,7 +131,7 @@ typedef struct {
 
 */
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* ================================================================= */
 /* <version> (lineage <gnc>)

@@ -24,9 +24,11 @@
 #define _GNU_SOURCE
 
 #include <libxml/xmlversion.h>
+#include "qof-backend-qsf.h"
 #include "qsf-dir.h"
 #include "qsf-xml.h"
-static int module = MOD_BACKEND;
+
+static QofLogModule log_module = QOF_MOD_QSF;
 
 void qsf_free_params(qsf_param *params)
 {

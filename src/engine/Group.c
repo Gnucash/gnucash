@@ -32,16 +32,8 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-numeric.h"
-#include "gnc-trace.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofid-p.h"
-#include "qofobject.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *

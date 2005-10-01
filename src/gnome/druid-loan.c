@@ -53,7 +53,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-frequency.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #define DIALOG_LOAN_DRUID_CM_CLASS "druid-loan-setup"
 
@@ -107,7 +107,7 @@ typedef enum {
         CUSTOM
 } REV_RANGE_OPTS;
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * TODO/fixme:

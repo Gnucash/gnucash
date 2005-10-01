@@ -27,10 +27,10 @@
 #include "gnc-plugin-manager.h"
 
 #include "messages.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-hooks.h"
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_manager_class_init (GncPluginManagerClass *klass);
 static void gnc_plugin_manager_init (GncPluginManager *plugin);

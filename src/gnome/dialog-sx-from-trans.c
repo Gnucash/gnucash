@@ -26,6 +26,7 @@
 
 #include <gnome.h>
 
+#include "gnc-engine.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "SX-ttinfo.h"
@@ -35,7 +36,6 @@
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "global-options.h"
-#include "gnc-book.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"
@@ -68,7 +68,7 @@
 
 #define SXFTD_RESPONSE_ADVANCED 100 /* 'Advanced' button response code */
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 static void sxftd_freq_option_changed( GtkWidget *w, gpointer user_data );
 static void gnc_sx_trans_window_response_cb(GtkDialog *dialog, gint response, gpointer data);
@@ -549,7 +549,7 @@ sxftd_close(SXFromTransInfo *sxfti, gboolean delete_sx)
 static void
 sxftd_ok_clicked(SXFromTransInfo *sxfti)
 {
-  GNCBook *book;
+  QofBook *book;
   GList *sx_list;
   guint sx_error = sxftd_compute_sx(sxfti);
 
@@ -817,4 +817,3 @@ gnc_sx_create_from_trans( Transaction *trans )
 
   gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
 }
-

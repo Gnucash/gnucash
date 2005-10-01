@@ -36,7 +36,7 @@
 #include "druid-acct-period.h"
 #include "druid-loan.h"
 #include "druid-merge.h"
-#include "gnc-event.h"
+#include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
@@ -44,7 +44,7 @@
 #include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass);
 static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);

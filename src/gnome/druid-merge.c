@@ -34,12 +34,11 @@
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-gui-query.h"
-#include "qof_book_merge.h"
+#include "qof.h"
 #include "druid-hierarchy.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
 #include "global-options.h"
-#include "gnc-trace.h"
 #include "Group.h"
 
 static GtkWidget			*qof_book_merge_window = NULL;
@@ -53,7 +52,7 @@ QofBook				*mergeBook = NULL;
 QofBook				*targetBook = NULL;
 gchar 				*buffer = "";
 
-static short int module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 void collision_rule_loop ( qof_book_mergeData*, qof_book_mergeRule*, guint );
 

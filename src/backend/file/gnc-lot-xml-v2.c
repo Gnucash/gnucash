@@ -41,13 +41,11 @@
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
-#include "qofid-p.h"
 #include "sixtp-dom-parsers.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-engine-util.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *lot_version_string = "2.0.0";
 

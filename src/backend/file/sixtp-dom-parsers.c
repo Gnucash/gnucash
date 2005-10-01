@@ -27,15 +27,11 @@
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
-#include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "qofid.h"
-
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 GUID*
 dom_tree_to_guid(xmlNodePtr node)

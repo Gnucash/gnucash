@@ -37,10 +37,8 @@
 #include "sixtp-utils.h"
 #include <time.h>
 #include <errno.h>
-#include "gnc-date.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
-#include "guid.h"
+
+#ifdef GNUCASH_MAJOR_VERSION
 #ifndef HAVE_SETENV
 #include "setenv.h"
 #endif
@@ -50,7 +48,9 @@
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
-static short module = MOD_IO;
+#endif
+
+static QofLogModule log_module = GNC_MOD_IO;
 
 gboolean
 isspace_str(const gchar *str, int nomorethan)

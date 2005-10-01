@@ -33,17 +33,10 @@
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-trace.h"
-#include "guid.h"
 #include "messages.h"
-#include "qofbook.h"
-#include "qofid-p.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /* Local Prototypes *****/
 

@@ -37,10 +37,6 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-lot.h"
-#include "gnc-numeric.h"
-#include "gnc-trace.h"
-#include "kvp_frame.h"
-#include "kvp-util-p.h"
 #include "policy-p.h"
 #include "Account.h"
 #include "AccountP.h"
@@ -50,7 +46,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ================================================================= */
 /** Cap gains are possible only if the lot commodity is not the same

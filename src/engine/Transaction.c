@@ -39,22 +39,10 @@
 #include "TransLog.h"
 #include "cap-gains.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-#include "gnc-event.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
-#include "gnc-trace.h"
 #include "messages.h"
-
-#include "qofbackend-p.h"
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofquery.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofobject.h"
 
 /*
  * Design notes on event-generation: transaction-modified-events 
@@ -87,7 +75,7 @@ const char *void_former_notes_str = "void-former-notes";
 #define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 G_INLINE_FUNC void check_open (Transaction *trans);
 G_INLINE_FUNC void

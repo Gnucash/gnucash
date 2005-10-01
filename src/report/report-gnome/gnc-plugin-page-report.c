@@ -35,7 +35,7 @@
 #include <sys/stat.h>
 
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html-history.h"
@@ -52,7 +52,12 @@
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
-static short module = MOD_GUI; // MOD_GUI; // MOD_REPORT;?
+// MOD_GUI; // MOD_REPORT;?
+/* NW: you can add GNC_MOD_REPORT to gnc-engine.h
+or simply define it locally. Any unique string with
+a gnucash- prefix will do. Then just set a log level 
+with gnc_set_log_level().*/
+static QofLogModule log_module = GNC_MOD_GUI; 
 
 static GObjectClass *parent_class = NULL;
 

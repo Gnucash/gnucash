@@ -26,12 +26,12 @@
 #include <string.h>
 
 #include "global-options.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "pricecell.h"
 #include "split-register-p.h"
 
 
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 /* The routines below create, access, and destroy the SRInfo structure

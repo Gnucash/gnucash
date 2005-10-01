@@ -30,7 +30,7 @@
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "messages.h"
 
 
@@ -51,7 +51,7 @@ static gint tip_count = -1;
 static gint current_tip_number = -1;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /*********************/

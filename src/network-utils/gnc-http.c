@@ -54,7 +54,7 @@
 #endif
 
 #include "gnc-http.h"
-#include "gnc-engine-util.h"  /* To allow PERR messages             */ 
+#include "gnc-engine.h"  /* To allow PERR messages             */ 
 
 /* ***Warning*** Find a gnome2 replacement for ghttp  ***************/
 #if 0
@@ -287,7 +287,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
 }
 
 #else
-unsigned short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* ***Warning*** Find a gnome2 replacement for ghttp  ***************/
 

@@ -35,7 +35,6 @@
 #include "sixtp.h"
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-xml.h"
 #include "io-example-account.h"
 #include "io-gncxml-gen.h"
@@ -48,7 +47,7 @@
 #include "Scrub.h"
 #include "TransLog.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 #define GNC_ACCOUNT_STRING "gnc-account-example"
 #define GNC_ACCOUNT_SHORT "gnc-act:short-description"

@@ -30,7 +30,6 @@
 #include "global-options.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
 #include "gnc-file.h"
@@ -43,9 +42,7 @@
 #include "gnc-window.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-plugin-file-history.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofsession.h"
+#include "qof.h"
 #include "messages.h"
 #include "TransLog.h"
 
@@ -53,7 +50,7 @@
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
 static GNCShutdownCB shutdown_cb = NULL;

@@ -30,7 +30,7 @@
 #include "QuickFill.h"
 #include "dialog-utils.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 
@@ -47,7 +47,7 @@ static void quickfill_insert_recursive (QuickFill *qf, const char *text,
                                         int depth, QuickFillSort sort);
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 /* A cache for quickfill strings */
 static GCache * qf_string_cache = NULL;

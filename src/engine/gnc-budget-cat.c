@@ -40,12 +40,11 @@
 #include <time.h>
 
 #include "gnc-budget-cat-p.h"
-#include "qofid-p.h"
-#include "gnc-trace.h"
+#include "qof.h"
 #include "gnc-budget-period-value.h"
 #include "gnc-budget-period.h"
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 GncBudgetCategory *gnc_budget_category_new(QofBook* book, GncBudget* budget)
 {

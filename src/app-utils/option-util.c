@@ -30,7 +30,7 @@
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "guile-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-err-popup.h"
 #include "guile-mappings.h"
 #include "messages.h"
@@ -116,7 +116,7 @@ static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0,
                           0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* This static indicates the debugging module this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GHashTable *option_dbs = NULL;
 static int last_db_handle = 0;

@@ -38,7 +38,7 @@
 #include <string.h>
 
 #include "gnc-tree-view.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -87,7 +87,7 @@ enum {
 /** Static Globals *******************************************************/
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /**** Declarations ******************************************************/
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);

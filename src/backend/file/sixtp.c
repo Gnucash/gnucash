@@ -33,10 +33,7 @@
 #include "sixtp-parsers.h"
 #include "sixtp-stack.h"
 
-#include "gnc-engine-util.h"
-
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /************************************************************************/
 gboolean

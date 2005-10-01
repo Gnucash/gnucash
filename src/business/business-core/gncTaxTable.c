@@ -31,23 +31,7 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
 #include "gncTaxTableP.h"
-
 
 struct _gncTaxTable 
 {
@@ -80,7 +64,7 @@ struct _book_info
 
 static GncTaxTableEntry * CloneTaxEntry (GncTaxTableEntry*, QofBook *);
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 /* =============================================================== */
 /* You must edit the functions in this block in tandem.  KEEP THEM IN

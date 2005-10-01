@@ -59,7 +59,7 @@ struct GncPluginRegisterPrivate
 };
 
 static GObjectClass *parent_class = NULL;
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /************************************************************
  *                     Other Functions                      *

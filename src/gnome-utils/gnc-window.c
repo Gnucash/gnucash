@@ -29,8 +29,9 @@
 #include "gnc-trace.h"
 #include "gnc-plugin-page.h"
 #include "gnc-window.h"
+#include "gnc-engine.h"
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 GType
 gnc_window_get_type (void)
@@ -186,4 +187,3 @@ gnc_window_show_progress (const char *message, double percentage)
   while (gtk_events_pending ())
     gtk_main_iteration ();
 }
-

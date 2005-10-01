@@ -93,7 +93,6 @@
 
 #include "config.h"
 
-#include "kvp_frame.h"
 #include "Account.h"
 #include "AccountP.h"
 #include "io-gncbin.h"
@@ -103,12 +102,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 
@@ -125,7 +119,7 @@
  */
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /** GLOBALS *********************************************************/
 

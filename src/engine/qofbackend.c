@@ -33,7 +33,7 @@
 #include <errno.h>
 #include "qofbackend-p.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = QOF_MOD_BACKEND;
 
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"

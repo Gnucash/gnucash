@@ -20,11 +20,10 @@
  *                                                                  *
 \********************************************************************/
 
-#include "gnc-trace.h"
 #include "qof.h"
 #include "qofgobj.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = QOF_MOD_QUERY;
 
 static gboolean initialized = FALSE;
 static GSList *paramList = NULL;

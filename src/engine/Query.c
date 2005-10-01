@@ -33,16 +33,13 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
 #include "gnc-lot.h"
-#include "gnc-trace.h"
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = GNC_MOD_QUERY;
 
 static GSList *
 build_param_list_internal (const char *first, va_list rest)

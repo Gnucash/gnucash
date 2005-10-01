@@ -21,13 +21,13 @@
 
 #include "config.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 #include "basiccell.h"
 #include "formulacell.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 static void gnc_formula_cell_init( FormulaCell *fc );
 

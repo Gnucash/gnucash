@@ -31,28 +31,9 @@
 
 #include <glib.h>
 
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-
 #include "Transaction.h"
 #include "Account.h"
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "gnc-engine-util.h"
-
-#include "gnc-event.h"
-#include "gnc-lot.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
-
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -88,7 +69,7 @@ struct _gncInvoice
   GNCLot      *posted_lot;
 };
 
-static short	module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
 

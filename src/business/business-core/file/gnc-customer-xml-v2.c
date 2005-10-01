@@ -46,16 +46,12 @@
 #include "gncTaxTableP.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-address-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofobject.h"
-#include "qofinstance.h"
 
 #include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_ID_CUSTOMER
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *customer_version_string = "2.0.0";
 

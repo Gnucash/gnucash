@@ -41,6 +41,7 @@
 
 #include "guid.h"
 #include "md5.h"
+#include "qofid.h"
 #include "gnc-trace.h"
 
 # ifndef P_tmpdir
@@ -59,7 +60,7 @@ static struct md5_ctx guid_context;
 static GMemChunk *guid_memchunk = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /** Memory management routines ***************************************/
 static void

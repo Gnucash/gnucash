@@ -36,7 +36,7 @@
 #include "gnc-tree-model-commodity.h"
 
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-trace.h"
 #include "gnc-ui-util.h"
@@ -45,7 +45,7 @@
 #define ITER_IS_COMMODITY GINT_TO_POINTER(2)
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass);

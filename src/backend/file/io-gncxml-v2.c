@@ -28,7 +28,6 @@
 #include <zlib.h>
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -38,9 +37,6 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "qofbackend-p.h"
-#include "qofbook.h"
-
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
 #include "io-gncxml-gen.h"
@@ -51,8 +47,7 @@
 #include "gnc-xml.h"
 #include "io-utils.h"
 
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* Callback structure */
 struct file_backend {

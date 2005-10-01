@@ -25,13 +25,13 @@
 
 #include <glib.h>
 
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
+#include "gnc-engine-util.h"
 #include "qofclass.h"
 #include "qofclass-p.h"
 #include "qofquery.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = QOF_MOD_CLASS;
 
 static GHashTable *classTable = NULL;
 static GHashTable *sortTable = NULL;

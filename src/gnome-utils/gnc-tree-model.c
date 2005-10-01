@@ -30,11 +30,11 @@
 #include "gnc-tree-model.h"
 
 #include "gnc-gobject-utils.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "messages.h"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_class_init (GncTreeModelClass *klass);

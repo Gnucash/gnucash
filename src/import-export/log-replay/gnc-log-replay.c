@@ -51,8 +51,11 @@
 
 #define GCONF_SECTION "dialogs/log_replay"
 
-/*static short module = MOD_IMPORT;*/
-static short module = MOD_TEST;
+/* NW: If you want a new log_module, just define
+a unique string either in gnc-engine.h or
+locally.*/
+/*static QofLogModule log_module = GNC_MOD_IMPORT;*/
+static QofLogModule log_module = GNC_MOD_TEST;
 
 /* fprintf (trans_log, "mod	guid	time_now	" \
    "date_entered	date_posted	" \
@@ -502,7 +505,7 @@ void gnc_file_log_replay (void)
   char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
 
-  gnc_set_log_level(MOD_IMPORT, GNC_LOG_DEBUG);
+  gnc_set_log_level(GNC_MOD_IMPORT, GNC_LOG_DEBUG);
   ENTER(" ");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

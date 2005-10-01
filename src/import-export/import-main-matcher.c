@@ -34,7 +34,7 @@
 #include "gnc-ui.h"
 #include "global-options.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-trace.h"
 #include "import-settings.h"
 #include "import-match-map.h"
@@ -67,7 +67,7 @@ struct _main_matcher_info
 #define DOWNLOADED_CLIST_ACTION_CLEAR 6
 #define DOWNLOADED_CLIST_ACTION_EDIT 7
 #define DOWNLOADED_CLIST_ACTION_INFO 8
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* Local prototypes */
 static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist, int starting_row);

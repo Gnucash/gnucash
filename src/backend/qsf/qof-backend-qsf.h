@@ -123,13 +123,11 @@ QSF is in three sections:
 #ifndef _QOF_BACKEND_QSF_H
 #define _QOF_BACKEND_QSF_H
 
+#include "gnc-trace.h"
 #include "qofbackend.h"
 #include "qof-be-utils.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#define QOF_MOD_QSF "qof-backend-qsf"
 
 /** \brief Describe this backend to the application. 
 
@@ -145,10 +143,6 @@ void qsf_provider_init(void);
 	functions that will load and save the data.
 */
 QofBackend* qsf_backend_new(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 /** @} */
 /** @} */

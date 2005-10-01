@@ -35,7 +35,7 @@
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "messages.h"
 
@@ -89,7 +89,7 @@ static unsigned int periods[] =
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /** Prototypes **********************************************************/

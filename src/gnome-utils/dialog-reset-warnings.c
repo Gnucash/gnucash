@@ -27,13 +27,13 @@
 
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
 #include "dialog-reset-warnings.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_PREFS;
+static QofLogModule log_module = GNC_MOD_PREFS;
 
 #define GCONF_SECTION			"dialogs/reset_warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS	"reset-warnings"

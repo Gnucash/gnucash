@@ -31,22 +31,6 @@
 
 #include "messages.h"
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-numeric.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
 
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -113,7 +97,7 @@ struct _gncEntry
   Timespec	b_taxtable_modtime;
 };
 
-static short	module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 /* You must edit the functions in this block in tandem.  KEEP THEM IN
    SYNC! */

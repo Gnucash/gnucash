@@ -31,7 +31,7 @@
 #include <gnome.h>
 #include <locale.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
@@ -39,7 +39,7 @@
 #include "formulacell.h"
 #include "formulacell-gnome.h"
 
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static
 gboolean

@@ -37,7 +37,6 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-xml.h"
-#include "gnc-engine-util.h"
 #include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
@@ -45,7 +44,7 @@
 #include "Account.h"
 #include "Group.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *commodity_version_string = "2.0.0";
 

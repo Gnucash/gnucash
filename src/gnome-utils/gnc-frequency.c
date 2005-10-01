@@ -31,11 +31,11 @@
 #include "FreqSpec.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /** Private Defs ********************/
 

@@ -37,15 +37,13 @@
 // Includes
 #include "config.h"
 #include <string.h>
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 
 #include "gnc-budget-list-tree-model.h"
 #include "gnc-budget-book.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Initialize and clean-up functions. */
 static void gnc_budget_list_tree_model_class_init (GncBudgetListTreeModelClass *klass);

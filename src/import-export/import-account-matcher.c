@@ -33,12 +33,12 @@
 #include "dialog-utils.h"
 
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /*-******************************************************************\
  *   Structs   *

@@ -34,7 +34,7 @@
 #include <gtk/gtkmain.h>
 
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-model-price.h"
@@ -63,7 +63,7 @@
 #undef RACE_CONDITION_SOLVED
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass);

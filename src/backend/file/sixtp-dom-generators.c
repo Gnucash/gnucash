@@ -33,11 +33,7 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
 
-#include "gnc-engine-util.h"
-#include "kvp_frame.h"
-#include "qofid.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 xmlNodePtr
 text_to_dom_tree(const char *tag, const char *str)
@@ -391,4 +387,3 @@ xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int)
 
     return ret;
 }
-

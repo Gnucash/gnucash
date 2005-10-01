@@ -35,7 +35,7 @@
 #include "Group.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
 #include "global-options.h"
@@ -47,7 +47,7 @@
 /** Static Globals *******************************************************/
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);

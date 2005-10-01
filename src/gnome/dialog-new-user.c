@@ -29,7 +29,7 @@
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
 #include "global-options.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-ui.h"
@@ -38,7 +38,7 @@
 #define FIRST_STARTUP "first_startup"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /* function to open a qif import druid */
 static void (*qifImportDruidFcn)(void) = NULL;

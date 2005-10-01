@@ -34,7 +34,7 @@
 #include "Group.h"
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
@@ -42,7 +42,7 @@
 #define TREE_MODEL_ACCOUNT_CM_CLASS "tree-model-account"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);

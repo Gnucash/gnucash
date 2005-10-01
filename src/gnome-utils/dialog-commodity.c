@@ -38,13 +38,13 @@
 
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 struct select_commodity_window {
   GtkWidget * dialog;

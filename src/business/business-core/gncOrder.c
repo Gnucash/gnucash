@@ -30,23 +30,6 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "gnc-engine-util.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-#include "gnc-event.h"
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gncBusiness.h"
-#endif
-
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"
@@ -70,7 +53,7 @@ struct _gncOrder
   Timespec 	closed;
 };
 
-static short	module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
 

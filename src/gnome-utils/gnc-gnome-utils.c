@@ -39,13 +39,13 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-ui.h"
 
 #include <libgnomeui/gnome-window-icon.h>
 #include <gnc-dir.h>
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
 
 static char**

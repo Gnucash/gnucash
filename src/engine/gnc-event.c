@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
 
@@ -45,7 +44,7 @@ static gint   next_handler_id = 1;
 static GList *handlers = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 
 /** Implementations *************************************************/

@@ -32,9 +32,9 @@
 #include <math.h>
 
 #include "gnc-date.h"
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "gnc-trace.h"
 #include "guid.h"
 #include "kvp_frame.h"
 
@@ -72,7 +72,7 @@ struct _KvpValue
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_KVP;
+static QofLogModule log_module = QOF_MOD_KVP;
 
 /********************************************************************
  * KvpFrame functions

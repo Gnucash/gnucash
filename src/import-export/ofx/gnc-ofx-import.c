@@ -47,7 +47,7 @@
 #include "gnc-associate-account.h"
 #include "gnc-ofx-import.h"
 #include "gnc-file.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
@@ -56,7 +56,7 @@
 
 #define GCONF_SECTION "dialogs/import/ofx"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /********************************************************************\
  * gnc_file_ofx_import
@@ -616,7 +616,7 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  gnc_should_log(GNC_MOD_IMPORT, GNC_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

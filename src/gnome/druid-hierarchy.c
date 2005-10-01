@@ -40,7 +40,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-component-manager.h"
-#include "gnc-event-p.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-model-example-account.h"
@@ -50,10 +49,9 @@
 #include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
-#include "qofbook.h"
 
-#include "gnc-trace.h"
-static short module = MOD_IMPORT; 
+#include "gnc-engine.h"
+static QofLogModule log_module = GNC_MOD_IMPORT; 
 
 #define GCONF_SECTION "dialogs/new_hierarchy"
 
@@ -219,8 +217,8 @@ update_account_balance (Account *account,
       balance = gnc_numeric_neg (balance);
 
     set_final_balance (data->balance_hash, account, balance);
-    gnc_engine_generate_event (xaccAccountGetGUID(account),
-			       GNC_ID_ACCOUNT, GNC_EVENT_MODIFY);
+    gnc_engine_gen_event ((QofEntity*)account,
+			       GNC_EVENT_MODIFY);
   }
 }
 

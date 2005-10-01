@@ -44,15 +44,12 @@
 #include "ScrubP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
-#include "kvp-util-p.h"
 #include "messages.h"
 #include "policy-p.h"
 
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================== */
 /** Loop over all splits, and make sure that every split

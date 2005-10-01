@@ -43,9 +43,7 @@
 
 #include "gnc-address-xml-v2.h"
 
-#include "gnc-engine-util.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *address_version_string = "2.0.0";
 

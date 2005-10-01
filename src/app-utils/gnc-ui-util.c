@@ -39,12 +39,11 @@
 #include "Account.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-module.h"
-#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
 #include "messages.h"
@@ -52,7 +51,7 @@
 #include "guile-mappings.h"
 
 
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */

@@ -48,7 +48,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
@@ -77,7 +77,7 @@ enum {
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 static GList *active_windows = NULL;
 
 /** Declarations *********************************************************/

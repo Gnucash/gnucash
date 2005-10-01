@@ -35,12 +35,12 @@
 #include <sys/types.h>
 #include <regex.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 #include "import-parse.h"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* numeric regular expressions */
 static regex_t decimal_radix_regex;

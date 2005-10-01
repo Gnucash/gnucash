@@ -30,6 +30,7 @@
 #include <stdarg.h>
 
 #include "gnc-xml-helper.h"
+#include "gnc-engine.h"
 
 typedef struct _sixtp_child_result sixtp_child_result;
 

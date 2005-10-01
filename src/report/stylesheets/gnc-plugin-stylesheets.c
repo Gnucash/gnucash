@@ -28,11 +28,11 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-stylesheets.h"
 #include "gnc-plugin-manager.h"
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static void gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass);
 static void gnc_plugin_stylesheets_init (GncPluginStylesheets *plugin);

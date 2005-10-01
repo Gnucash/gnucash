@@ -41,17 +41,13 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
-#include "qofinstance.h"
-
 #include "gnc-owner-xml-v2.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncVendorP.h"
 #include "gncEmployeeP.h"
 
-#include "gnc-engine-util.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *owner_version_string = "2.0.0";
 

@@ -38,7 +38,7 @@
 #include <string.h>
 
 #include "numcell.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */

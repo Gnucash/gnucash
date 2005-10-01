@@ -44,8 +44,7 @@
 #include "file-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
@@ -72,8 +71,6 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
-#include "qofbook.h"
-#include "qofsession.h"
 #include "messages.h"
 #include "top-level.h"
 #include "window-report.h"
@@ -85,7 +82,7 @@ static void gnc_configure_date_format(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static int gnome_is_running = FALSE;
 static int splash_is_initialized = FALSE;

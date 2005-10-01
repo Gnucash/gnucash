@@ -31,7 +31,6 @@
 #include "SX-book.h"
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
@@ -47,7 +46,7 @@
 
 #include "sixtp-dom-parsers.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * The XML output should look something like:

@@ -41,7 +41,7 @@
 #include "global-options.h"
 #include "Query.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "gnc-ui-util.h"
 
@@ -52,7 +52,7 @@
  *   Constants   *
 \********************************************************************/
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /********************************************************************\
  *   Constants, should idealy be defined a user preference dialog    *

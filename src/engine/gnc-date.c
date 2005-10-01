@@ -42,7 +42,6 @@
 #include <glib.h>
 
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
 
 #ifndef HAVE_STRPTIME
@@ -70,7 +69,7 @@ static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
 static QofDateFormat prevQofDateFormat = QOF_DATE_FORMAT_LOCALE;
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /********************************************************************\
 \********************************************************************/
