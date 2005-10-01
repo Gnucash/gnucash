@@ -1,24 +1,42 @@
-
+/***************************************************************************
+ *            test-lots.c
+ *
+ *  Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 /** 
  * @file test-lots.c
  * @brief Minimal test to see if automatic lot scrubbing works.
- * @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
- * License: GPL
+ * @author Linas Vepstas <linas@linas.org>
  */
 
 #include <ctype.h>
 #include <glib.h>
-
+#include "qof.h"
 #include "Account.h"
 #include "Group.h"
 #include "Scrub3.h"
-#include "gnc-engine-util.h"
-#include "gnc-module.h"
+#include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "Transaction.h"
 
-
+static gint transaction_num = 720;
+static gint	max_iterate = 30;
 
 static void
 run_test (void)
@@ -34,7 +52,7 @@ run_test (void)
   book = qof_session_get_book (sess);
   do_test ((NULL != book), "create random data");
 
-  add_random_transactions_to_book (book, 720);
+  add_random_transactions_to_book (book, transaction_num);
 
   grp = xaccGetAccountGroup (book);
   xaccGroupScrubLots (grp);
@@ -46,39 +64,35 @@ run_test (void)
    * XXX not implemented 
    */
   success ("automatic lot scrubbing lightly tested and seem to work");
-  qof_session_destroy (sess);
+  qof_session_end (sess);
 
-}
-
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  int i;
-
-  /* Any tests that cause an error or warning to be printed
-   * automatically fail! */
-  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-
-  //set_success_print (TRUE);
-
-  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "load engine");
-
-  /* Set up a reproducible test-case */
-  srand(0);
-
-  /* Iterate the test a number of times */
-  for (i=0; i< 100; i++)
-  {
-    run_test ();
-  }
-
-  print_test_results();
-  exit(get_rv());
 }
 
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile(argc, argv, main_helper, NULL);
+	gint i;
+
+	qof_init();
+	if(cashobjects_register()) {
+  /* Any tests that cause an error or warning to be printed
+   * automatically fail! */
+  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+  /* Set up a reproducible test-case */
+  srand(0);
+  /* Iterate the test a number of times */
+		for (i=0; i< max_iterate; i++)
+  {
+			fprintf(stdout, " Lots: %d of %d paired tests . . . \r",
+				(i + 1)*2, max_iterate * 2);
+			fflush(stdout);
+    run_test ();
+  }
+		/* 'erase' the recurring tag line with dummy spaces. */
+		fprintf(stdout, "Lots: Test series complete.         \n");
+		fflush(stdout);
+  print_test_results();
+	}
+	qof_close();
   return 0;
 }

@@ -67,17 +67,13 @@ ToDo:
 #include "TransactionP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
-#include "kvp-util-p.h"
 #include "messages.h"
 #include "policy.h"
 #include "policy-p.h"
-#include "qofid-p.h"
 
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 
 /* ============================================================== */
@@ -571,7 +567,7 @@ MakeDefaultLot (Account *acc)
 
    /* Provide a reasonable title for the new lot */
    id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-   snprintf (buff, 200, _("Lot %" G_GINT64_FORMAT), id);
+   snprintf (buff, 200, ("%s %" G_GINT64_FORMAT), _("Lot"), id);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
    id ++;
    kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);

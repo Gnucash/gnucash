@@ -32,30 +32,13 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-date.h"
-#include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
-#include "gnc-trace.h"
-#include "kvp_frame.h"
-#include "kvp-util.h"
 #include "messages.h"
 #include "policy.h"
 
-#include "qofbackend.h"
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofquery.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-
-static short module = MOD_ACCOUNT; 
-
+static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -318,7 +301,8 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  QOF_BEGIN_EDIT (&acc->inst);
+	g_return_if_fail(acc);
+	qof_begin_edit(&acc->inst);
 }
 
 static inline void noop(QofInstance *inst) {}
@@ -338,7 +322,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  QOF_COMMIT_EDIT_PART1 (&acc->inst);
+	qof_commit_edit(&acc->inst);
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -831,7 +815,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
       }
    }
    xaccAccountCommitEdit(acc);
-   xaccAccountCommitEdit(old_acc);
+   if(old_acc) { xaccAccountCommitEdit(old_acc); }
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 

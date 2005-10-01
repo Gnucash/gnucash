@@ -694,8 +694,8 @@ make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
   int num_prices;
 
-  num_prices = get_random_int_in_range (0, 40);
-  if(num_prices < 1)
+  num_prices = get_random_int_in_range (1, 41);
+  if(num_prices < 1) /* should be impossible */
   {
       failure_args("engine-stuff", __FILE__, __LINE__,
                    "get_random_int_in_range failed");
