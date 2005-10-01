@@ -1,7 +1,6 @@
-# may need to use ln -s ./ qof in src/engine
-# INCLUDES = -DG_LOG_DOMAIN=\"qof_book_merge\"
 
 AM_CFLAGS = \
+  -I${top_srcdir} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
