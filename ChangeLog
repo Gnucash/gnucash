@@ -1,5 +1,23 @@
 2005-10-02  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/prefs.scm:
+	* src/gnome/window-main-summarybar.c:
+	* src/gnome/schemas/Makefile.am:
+	* src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/preferences.glade:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Convert the account
+	tree summary bar over to using GConf preferences.
+
+	* src/gnome-utils/dialog-preferences.[ch]: Add support for a
+	GncDateEdit widget and the new GncPeriodSelect widget.
+
+	* src/app-utils/Makefile.am:
+	* src/app-utils/gnc-accounting-period.[ch]:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-period-select.[ch]: Add a selection widget
+	and non-gui supporting functions for choosing accounting periods.
+
 	* src/engine/Account.c: Revert change to xaccAccountCommitEdit()
 	that causes gnucash to crash at exit.
 	
@@ -163,6 +181,12 @@
 	* src/business/business-core/gncAddress.h
 	* src/engine/Period.h
 	* src/engine/qofbackend-p.h
+
+2005-10-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/QuickFill.c: Improve quickfill behavior when
+	presenting accented characters.  Patch from Didier Vidal
+	<didier-devel@9online.fr>.
 
 2005-09-29  David Hampton  <hampton@employees.org>
 

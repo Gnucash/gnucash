@@ -42,7 +42,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-main-window.h"
 
-#include "dialog-options.h"
 #include "dialog-preferences.h"
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
@@ -100,7 +99,6 @@ static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindo
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_edit_preferences2 (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
@@ -184,9 +182,6 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
-	{ "EditPreferences2Action", GTK_STOCK_PREFERENCES, N_("Pr_eferences (New)"), NULL,
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_preferences2) },
 
 	/* View menu */
 
@@ -1818,12 +1813,6 @@ gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 
 static void
 gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
-{
-	gnc_show_options_dialog ();
-}
-
-static void
-gnc_main_window_cmd_edit_preferences2 (GtkAction *action, GncMainWindow *window)
 {
 	gnc_preferences_dialog ();
 }

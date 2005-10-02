@@ -32,13 +32,16 @@
 #include "Group.h"
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "option-util.h"
+#include "qofbook.h"
 #include "top-level.h"
 #include "window-main-summarybar.h"
 
@@ -48,9 +51,20 @@ typedef struct {
   GtkListStore *datamodel;
   int       component_id;
   SCM       callback_id;
+  int       cnxn_id;
 } GNCMainSummary;
 
 #define WINDOW_SUMMARYBAR_CM_CLASS "summary-bar"
+
+#define GCONF_SECTION    "window/pages/account_tree/summary"
+#define KEY_GRAND_TOTAL  "grand_total"
+#define KEY_NON_CURRENCY "non_currency"
+#define KEY_START_CHOICE "start_choice"
+#define KEY_START_DATE   "start_date"
+#define KEY_START_PERIOD "start_period"
+#define KEY_END_CHOICE 	 "end_choice"
+#define KEY_END_DATE   	 "end_date"
+#define KEY_END_PERIOD 	 "end_period"
 
 /**
  * An accumulator for a given currency.
@@ -331,6 +345,52 @@ enum {
   N_COLUMNS,
 };
 
+static time_t
+lookup_start_date_option(const gchar *section,
+			 const gchar *key_choice,
+			 const gchar *key_absolute,
+			 const gchar *key_relative,
+			 GDate *fy_end)
+{
+  const gchar *choice;
+  time_t time;
+  int which;
+
+  choice = gnc_gconf_get_string(section, key_choice, NULL);
+  if (choice && strcmp(choice, "absolute") == 0) {
+    time = gnc_gconf_get_int(section, key_absolute, NULL);
+  } else {
+    which = gnc_gconf_get_int(section, key_relative, NULL);
+    time = gnc_accounting_period_start_timet(which, fy_end, NULL);
+  }
+  return time;
+}
+
+
+static time_t
+lookup_end_date_option(const gchar *section,
+		       const gchar *key_choice,
+		       const gchar *key_absolute,
+		       const gchar *key_relative,
+		       GDate *fy_end)
+{
+  const gchar *choice;
+  time_t time;
+  int which;
+
+  choice = gnc_gconf_get_string(section, key_choice, NULL);
+  if (choice && strcmp(choice, "absolute") == 0) {
+    time = gnc_gconf_get_int(section, key_absolute, NULL);
+  } else {
+    which = gnc_gconf_get_int(section, key_relative, NULL);
+    time = gnc_accounting_period_end_timet(which, fy_end, NULL);
+  }
+  if (time == 0)
+    time == -1;
+  return time;
+}
+
+
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
  * and 'assets'. The total assets equal the sum of all of the
@@ -358,25 +418,35 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   GList *currency_list;
   GList *current;
   GNCSummarybarOptions options;
+  QofBook *book;
+  KvpFrame *book_frame;
+  gint64 month, day;
+  GDate *fy_end = NULL;
+
+  book = gnc_get_current_book();
+  book_frame = qof_book_get_slots(book);
+  month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+  day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+  if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
+    fy_end = g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
 
   options.default_currency = gnc_default_report_currency ();
 
-  options.euro = gnc_lookup_boolean_option("International",
-					   "Enable EURO support",
-					   FALSE);
-  options.grand_total = gnc_lookup_boolean_option("Summarybar",
-						  "Show grand total",
-						  TRUE);
-  options.non_currency = gnc_lookup_boolean_option("Summarybar",
-						   "Show non currency commodities",
-
-						   TRUE);
+  options.euro = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ENABLE_EURO, NULL);
+  options.grand_total =
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
+  options.non_currency =
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_NON_CURRENCY, NULL);
   /* we will need the balance of the last transaction before the start
      date, so subtract 1 from start date */
-  options.start_date = gnc_lookup_date_option("Summarybar", "Start date", NULL,
-					      NULL, NULL, NULL) - 1;
-  options.end_date = gnc_lookup_date_option("Summarybar", "End date", NULL,
-					    NULL, NULL, NULL);
+  options.start_date =
+    lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
+			     KEY_START_DATE, KEY_START_PERIOD, fy_end);
+  options.end_date =
+    lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
+			   KEY_END_DATE, KEY_END_PERIOD, fy_end);
+  if (fy_end)
+    g_date_free(fy_end);
 
   currency_list = NULL;
 
@@ -441,6 +511,7 @@ static void
 gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data)
 {
   GNCMainSummary * summary = data;
+  gnc_gconf_remove_anon_notification(GCONF_SECTION, summary->cnxn_id);
   gnc_unregister_option_change_callback_id(summary->callback_id);
   gnc_unregister_gui_component(summary->component_id);
   g_free(summary);
@@ -455,6 +526,16 @@ summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
 
 static void
 summarybar_option_change_handler(gpointer user_data)
+{
+  GNCMainSummary * summary = user_data;
+  gnc_main_window_summary_refresh(summary);
+}
+
+static void
+gconf_client_notify_cb (GConfClient *client,
+			guint cnxn_id,
+			GConfEntry *entry,
+			gpointer user_data)
 {
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
@@ -507,6 +588,10 @@ gnc_main_window_summary_new (void)
                    G_CALLBACK(gnc_main_window_summary_destroy_cb), retval);
 
   gnc_main_window_summary_refresh(retval);
+
+  retval->cnxn_id =  gnc_gconf_add_anon_notification(GCONF_SECTION,
+						     gconf_client_notify_cb,
+						     retval);
 
   return retval->hbox;
 }
