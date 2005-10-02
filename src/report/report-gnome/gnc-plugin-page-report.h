@@ -62,11 +62,6 @@ typedef struct {
         GncPluginPageClass parent;
 
 	/* callbacks */
-  /*
-    void (*account_selected) (GncPluginPage	 *page,
-    Account	 *account);
-  */
-
 } GncPluginPageReportClass;
 
 /* function prototypes */
