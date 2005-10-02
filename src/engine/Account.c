@@ -322,7 +322,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-	qof_commit_edit(&acc->inst);
+  QOF_COMMIT_EDIT_PART1 (&acc->inst);
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */

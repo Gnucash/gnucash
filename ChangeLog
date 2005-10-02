@@ -1,3 +1,8 @@
+2005-10-02  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c: Revert change to xaccAccountCommitEdit()
+	that causes gnucash to crash at exit.
+	
 2005-10-01  David Hampton  <hampton@employees.org>
 
 	* src/backend/postgres/*:
