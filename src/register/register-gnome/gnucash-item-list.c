@@ -132,7 +132,7 @@ gnc_item_list_select (GncItemList *item_list, const char *string)
         {
                 GtkTreeIter iter;
                 gchar *sel_path = gtk_tree_model_get_string_from_iter(GTK_TREE_MODEL(item_list->list_store), to_find_data->found_iter);
-                gboolean converted = gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(item_list->list_store), &iter, sel_path);
+                gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(item_list->list_store), &iter, sel_path);
                 gtk_tree_selection_select_iter(tree_sel, &iter);
 
                 gnc_item_list_show_selected(item_list);
