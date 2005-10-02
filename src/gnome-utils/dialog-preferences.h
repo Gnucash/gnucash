@@ -43,9 +43,11 @@
     of widget this code knows how to handle, then the callback signals
     will be automatically wired up for the widget.  The only fields
     that is required to be set in the glade file is the widget name.
-    This code currently know about radio buttons, check buttons, spin
-    boxes, an combo boxes.  (Combo boxes should not be used for less
-    than six choices.  Use a radio button group instead.)
+    This code currently knows about radio buttons, check buttons, spin
+    boxes, combo boxes, gnucash currency select widgets, gnucash
+    accounting period widgets, and a gnucash date edit widget.  (Combo
+    boxes should not be used for less than six choices.  Use a radio
+    button group instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is

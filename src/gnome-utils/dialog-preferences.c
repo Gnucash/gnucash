@@ -43,9 +43,11 @@
     of widget this code knows how to handle, then the callback signals
     will be automatically wired up for the widget.  The only fields
     that is required to be set in the glade file is the widget name.
-    This code currently know about radio buttons, check buttons, spin
-    boxes, an combo boxes.  (Combo boxes should not be used for less
-    than six choices.  Use a radio button group instead.)
+    This code currently knows about radio buttons, check buttons, spin
+    boxes, combo boxes, gnucash currency select widgets, gnucash
+    accounting period widgets, and a gnucash date edit widget.  (Combo
+    boxes should not be used for less than six choices.  Use a radio
+    button group instead.)
 
     The argument *is* a glade file, so if your code has special
     requirements (e.g. make one widget insensitive until another is
@@ -61,8 +63,10 @@
 
 #include "dialog-utils.h"
 #include "gnc-currency-edit.h"
+#include "gnc-date-edit.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-period-select.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -945,6 +949,182 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
 }
 
 
+/**********/
+
+
+/** The user changed a GncPeriodSelect widget.  Update gconf.
+ *  GncPeriodSelect choices are stored as an int.
+ *
+ *  @internal
+ *
+ *  @param period A pointer to the GncPeriodSelect that was changed.
+ *  
+ *  @param user_data Unused.
+ */
+static void
+gnc_prefs_period_select_user_cb (GncPeriodSelect *period,
+				 gpointer user_data)
+{
+  const gchar *name;
+  gint active;
+
+  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+  name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+  active = gnc_period_select_get_active(period);
+  DEBUG("Period select %s set to item %d", name, active);
+  gnc_gconf_set_int(name, NULL, active, NULL);
+}
+
+
+/** A GncPeriodSelect choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param period A pointer to the GncPeriodSelect that needs updating.
+ *
+ *  @param value The new value of the GncPeriodSelect.
+ */
+static void
+gnc_prefs_period_select_gconf_cb (GncPeriodSelect *period,
+				  gint value)
+{
+  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+  ENTER("period %p, value %d", period, value);
+  g_signal_handlers_block_by_func(G_OBJECT(period),
+				 G_CALLBACK(gnc_prefs_period_select_user_cb),
+				 NULL);
+  gnc_period_select_set_active(period, value);
+  g_signal_handlers_unblock_by_func(G_OBJECT(period),
+			   G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+  LEAVE(" ");
+}
+
+
+/** Connect a GncPeriodSelect widget to the user callback function.  Set
+ *  the starting state of the period from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param period A pointer to the GncPeriodSelect that should be connected.
+ */
+static void
+gnc_prefs_connect_period_select (GncPeriodSelect *period)
+{
+  const gchar *name;
+  gint active;
+  QofBook *book;
+  KvpFrame *book_frame;
+  gint64 month, day;
+  GDate fy_end;
+
+  g_return_if_fail(GNC_IS_PERIOD_SELECT(period));
+  book = gnc_get_current_book();
+  book_frame = qof_book_get_slots(book);
+  month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+  day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+  if (g_date_valid_dmy(day, month, 2005 /* not leap year */)) {
+    g_date_clear(&fy_end, 1);
+    g_date_set_dmy(&fy_end, day, month, G_DATE_BAD_YEAR);
+    gnc_period_select_set_fy_end(period, &fy_end);
+  }
+
+  name = gtk_widget_get_name(GTK_WIDGET(period)) + PREFIX_LEN;
+  active = gnc_gconf_get_int(name, NULL, NULL);
+  gnc_period_select_set_active(period, active);
+  DEBUG(" Period select %s set to item %d", name, active);
+  g_signal_connect(G_OBJECT(period), "changed",
+		   G_CALLBACK(gnc_prefs_period_select_user_cb), NULL);
+}
+
+
+/**********/
+
+
+/** The user changed a date_edit.  Update gconf.  Date_edit
+ *  choices are stored as an int.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the date_edit that was changed.
+ *  
+ *  @param user_data Unused.
+ */
+static void
+gnc_prefs_date_edit_user_cb (GNCDateEdit *gde,
+			     gpointer user_data)
+{
+  const gchar *name;
+  time_t time;
+
+  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+  name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+  time = gnc_date_edit_get_date(gde);
+
+  DEBUG("date_edit %s set", name);
+  gnc_gconf_set_int(name, NULL, time, NULL);
+}
+
+
+/** A date_edit choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the date_edit that changed.
+ *
+ *  @param value The new value of the date_edit.
+ */
+static void
+gnc_prefs_date_edit_gconf_cb (GNCDateEdit *gde,
+			      GConfEntry *entry)
+{
+  time_t time;
+
+  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+  ENTER("gde %p, entry %p", gde, entry);
+
+  time = gconf_value_get_int(entry->value);
+
+  g_signal_handlers_block_by_func(G_OBJECT(gde),
+				  G_CALLBACK(gnc_prefs_date_edit_user_cb),
+				  NULL);
+  gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
+  g_signal_handlers_unblock_by_func(G_OBJECT(gde),
+				    G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+  LEAVE(" ");
+}
+
+
+/** Connect a date_edit widget to the user callback function.  Set
+ *  the starting state of the gde from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param gde A pointer to the date_edit that should be connected.
+ */
+static void
+gnc_prefs_connect_date_edit (GNCDateEdit *gde)
+{
+  const gchar *name;
+  time_t time;
+
+  g_return_if_fail(GNC_IS_DATE_EDIT(gde));
+
+  /* Lookup commodity based upon gconf setting */
+  name = gtk_widget_get_name(GTK_WIDGET(gde)) + PREFIX_LEN;
+  time = gnc_gconf_get_int(name, NULL, NULL);
+
+  gnc_date_edit_set_time(GNC_DATE_EDIT(gde), time);
+  DEBUG(" date_edit %s set", name);
+
+  g_signal_connect(G_OBJECT(gde), "date_changed",
+		   G_CALLBACK(gnc_prefs_date_edit_user_cb), NULL);
+
+  gtk_widget_show_all(GTK_WIDGET(gde));
+}
+
+
 /********************/
 /*    Callbacks     */
 /********************/
@@ -1006,6 +1186,12 @@ gnc_prefs_connect_one (const gchar *name,
   if (GNC_IS_CURRENCY_EDIT(widget)) { /* must be tested before combo_box */
     DEBUG("  %s - currency_edit", name);
     gnc_prefs_connect_currency_edit(GNC_CURRENCY_EDIT(widget));
+  } else if (GNC_IS_PERIOD_SELECT(widget)) {
+    DEBUG("  %s - period_Select", name);
+    gnc_prefs_connect_period_select(GNC_PERIOD_SELECT(widget));
+  } else if (GNC_IS_DATE_EDIT(widget)) {
+    DEBUG("  %s - date_edit", name);
+    gnc_prefs_connect_date_edit(GNC_DATE_EDIT(widget));
   } else if (GTK_IS_RADIO_BUTTON(widget)) {
     DEBUG("  %s - radio button", name);
     gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
@@ -1203,6 +1389,13 @@ gnc_preferences_gconf_changed (GConfClient *client,
     if (GNC_IS_CURRENCY_EDIT(widget)) { /* must come before combo box */
       DEBUG("widget %p - currency_edit", widget);
       gnc_prefs_currency_edit_gconf_cb(GNC_CURRENCY_EDIT(widget), entry);
+    } else if (GNC_IS_PERIOD_SELECT(widget)) {
+      DEBUG("widget %p - period_select", widget);
+      gnc_prefs_period_select_gconf_cb(GNC_PERIOD_SELECT(widget),
+				      gconf_value_get_int(entry->value));
+    } else if (GNC_IS_DATE_EDIT(widget)) {
+      DEBUG("widget %p - date_edit", widget);
+      gnc_prefs_date_edit_gconf_cb(GNC_DATE_EDIT(widget), entry);
     } else if (GTK_IS_RADIO_BUTTON(widget)) {
       DEBUG("widget %p - radio button", widget);
       gnc_prefs_radio_button_gconf_cb(GTK_RADIO_BUTTON(widget));
