@@ -386,7 +386,7 @@ lookup_end_date_option(const gchar *section,
     time = gnc_accounting_period_end_timet(which, fy_end, NULL);
   }
   if (time == 0)
-    time == -1;
+    time = -1;
   return time;
 }
 
