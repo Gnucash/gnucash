@@ -254,7 +254,7 @@
            (if cb
                (cb r))))
        options))
-    
+
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
@@ -326,12 +326,13 @@
 
 (define (gnc:report-remove-by-id id)
   (let ((r (hash-ref *gnc:_reports_* id)))
-    (for-each 
-     (lambda (child)
-       (gnc:report-remove-by-id child))
-     (gnc:report-children r))
+    ;; 2005.10.02, jsled: gnc:report-children doesn't appear defined anywhere?
+    ;; (for-each 
+     ;; (lambda (child)
+     ;;   (gnc:report-remove-by-id child))
+     ;; (gnc:report-children r))
     (hash-remove! *gnc:_reports_* id)))
-
+ 
 (define (gnc:find-report id)
   (hash-ref *gnc:_reports_* id))
 
