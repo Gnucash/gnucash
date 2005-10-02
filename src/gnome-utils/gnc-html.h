@@ -42,7 +42,6 @@ typedef char * URLType;
 #define URL_TYPE_SCHEME	"scheme"     /* for scheme code evaluation */
 #define URL_TYPE_HELP	"help"       /* for a gnucash help window */
 #define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
-#define URL_TYPE_ACTION	"action"     /* for special SUBMIT actions */ 
 #define URL_TYPE_PRICE	"price"      /* for price editor popups */
 #define URL_TYPE_OTHER	"other"
 

@@ -58,7 +58,6 @@
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
 #include "gnc-icons.h" /* FIXME Remove this line*/
-#include "gnc-network.h"
 #include "gnc-splash.h"
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
@@ -275,9 +274,6 @@ gnc_gui_init (SCM command_line)
       ret = gnc_gui_init_splash (ret);
 
     gnome_is_initialized = TRUE;
-
-    /* load default HTML action handlers */ 
-    // gnc_network_init();
 
     gnc_ui_util_init();
     gnc_configure_date_format();

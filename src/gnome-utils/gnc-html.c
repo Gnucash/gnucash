@@ -376,7 +376,6 @@ gnc_html_initialize (void)
     { URL_TYPE_SCHEME, "gnc-scm" },
     { URL_TYPE_HELP, "gnc-help" },
     { URL_TYPE_XMLDATA, "gnc-xml" },
-    { URL_TYPE_ACTION, "gnc-action" },
     { URL_TYPE_PRICE, "gnc-price" },
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
@@ -417,24 +416,12 @@ static gboolean
 http_allowed()
 {
   return TRUE;
-//return gnc_lookup_boolean_option("Network", "Allow http network access", 
-//                                 TRUE);
 }
 
 static gboolean
 https_allowed()
 {
   return TRUE;
-//return gnc_lookup_boolean_option("Network", "Allow https network access using OpenSSL", 
-//                                 TRUE);
-}
-
-static gboolean
-gnc_network_allowed()
-{
-  return FALSE;
-//return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
-//                                 TRUE);
 }
 
 
@@ -906,50 +893,18 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   char     * location = NULL;
   char     * new_loc = NULL;
   char     * label = NULL;
-  char     ** action_parts;
   GHashTable * form_data;
   URLType  type;
-  GncHTMLActionCB cb;
 
   DEBUG(" ");
   form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
-  if(!safe_strcmp (type, URL_TYPE_ACTION)) {
-    if(gnc_network_allowed()) {
-      if(gnc_html_action_handlers) {
-        action_parts = g_strsplit(location, "?", 2);
-        if(action_parts && action_parts[0]) {
-          gnc_html_merge_form_data(form_data, action_parts[1]);
-          cb = g_hash_table_lookup(gnc_html_action_handlers, action_parts[0]);
-          if(cb) {
-            cb(gnchtml, method, action_parts[0], form_data);
-          }
-          else {
-            PWARN ("no handler for gnc-network action '%s'\n",
-                   action ? action : "(null)");
-          }
-        }
-        else {
-          PWARN ("tried to split on ? but failed...\n");
-        }
-      }
-    }
-    else {
-      gnc_error_dialog( gnchtml->window,
-                        _("GnuCash Network is disabled and the link "
-                          "you have clicked requires it.\n"
-                          "You can enable it in the Network section\n"
-                          "of the Preferences dialog."));
-    }
+  if(!strcasecmp(method, "get")) {
+    gnc_html_generic_get_submit(gnchtml, action, form_data);
   }
-  else {
-    if(!strcasecmp(method, "get")) {
-      gnc_html_generic_get_submit(gnchtml, action, form_data);
-    }
-    else if(!strcasecmp(method, "post")) {
-      gnc_html_generic_post_submit(gnchtml, action, form_data);
-    }
+  else if(!strcasecmp(method, "post")) {
+    gnc_html_generic_post_submit(gnchtml, action, form_data);
   }
   
   g_free(location);
@@ -1141,13 +1096,6 @@ gnc_html_show_url(gnc_html * html, URLType type,
       gnc_html_load_to_stream(html, handle, type, location, label);
 
     } while (FALSE);
-
-  } else if (!safe_strcmp (type, URL_TYPE_ACTION)) {
-    gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, location, label));
-    gnc_html_submit_cb(GTK_HTML(html->html), "get", 
-                       gnc_build_url(type, location, label), NULL,
-                       (gpointer)html);
 
   } else {
     PERR ("URLType %s not supported.", type);

@@ -91,7 +91,6 @@
   (gw:wrap-value ws 'gnc:url-type-scheme '<gnc:url-type> "URL_TYPE_SCHEME")
   (gw:wrap-value ws 'gnc:url-type-help '<gnc:url-type> "URL_TYPE_HELP")
   (gw:wrap-value ws 'gnc:url-type-xmldata '<gnc:url-type> "URL_TYPE_XMLDATA")
-  (gw:wrap-value ws 'gnc:url-type-action '<gnc:url-type> "URL_TYPE_ACTION")
   (gw:wrap-value ws 'gnc:url-type-price '<gnc:url-type> "URL_TYPE_PRICE")
   (gw:wrap-value ws 'gnc:url-type-other '<gnc:url-type> "URL_TYPE_OTHER")
 

@@ -146,7 +146,3 @@
 (gnc:register-configuration-option
  (gnc:make-internal-option
   "__exp_parser" "defined_variables" '()))
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gnc_network" "uid" ""))

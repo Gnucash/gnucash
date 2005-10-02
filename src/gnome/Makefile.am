@@ -93,7 +93,6 @@ noinst_HEADERS = \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-register.h \
-  gnc-network.h \
   gnc-split-reg.h \
   gw-gnc.h \
   lot-viewer.h \
@@ -108,7 +107,6 @@ EXTRA_DIST = \
   gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime \
-  gnc-network.c \
   ${gwmod_DATA}
 
 

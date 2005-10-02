@@ -1,3 +1,17 @@
+2005-10-02  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm:
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-network.[ch]:
+	* src/gnome/top-level.c:
+	* src/gnome-utils/gnc-html.[ch]:
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Finish pulling all
+	references to the old "gnucash network" code.
+
+	* src/engine/Transaction.c: Temporary fix to remove ISO C90
+	warning.  Real fix should occur when converted back to
+	qof_begin_edit function.
+
 2005-10-02  Joshua Sled  <jsled@asynchronous.org>
 
 	Patches from Didier Vidal <didier-devel@9online.fr>:
