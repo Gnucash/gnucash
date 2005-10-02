@@ -52,6 +52,11 @@ Resources
     - Introduction to GConf -- http://developer.gnome.org/feature/archive/gconf/gconf.html
 
 - General
+
+  - Printing
+
+    - Main window: totally not hooked up
+
   - Startup CRITICAL errors...
 
     [jsled@phoenix:~/stuff/proj/gnucash/src-g2/gnucash]$ /opt/gnc-g2-unstable/bin/gnucash
@@ -83,23 +88,35 @@ Resources
 
 - Register Core - mostly functional
 
-  - Competion has problems.  It does complete when a character is typed but it fails to select the
-  inserted text.  This means that the next character typed is inserted
-  instead of continuing to test for completion
+  - Completion has problems.  It does complete when a character is typed but
+    it fails to select the inserted text.  This means that the next character
+    typed is inserted instead of continuing to test for completion
 
-  - The first time it is used, the account popup immediately selects the
-    first account.  After that it functions normally.
-
-  - selection of the date for the datecell seems to also select the
-    transaction underneath the calendar, leading to the "this transaction has
-    changed, do you want to save" dialog.
+  - The first time it is used, the combocell popups (account-list,
+    split-action) immediately closes (before user notices).  After that it
+    functions normally.
+    
+    - (jsled) This is due to the "changed" signal on the tree-view-selection
+      getting fired, causing the popup to naturally close.  I *believe*
+      "changed" is emitted because the popup window gets
+      gtk_widget_grab_focus()ed, but I'm not 100% sure.
 
   - selection events on the combo-cells aren't working.
 
     (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
     signal "key-press-event" to stop for instance `0x855a240'
 
+  - selection of the date for the datecell seems to also select the
+    transaction underneath the calendar, leading to the "this transaction has
+    changed, do you want to save" dialog.
+
+    - (jsled) cannot reproduce as of 02 Oct 2005.
+
   - doesn't remember custom check formats.
+
+  - typing into an in-progress auto-completion field appends (in the middle
+    of the string) rather than replaces the selection portion, at least in
+    the account cells of the SX template.
 
 - Reconcile
 
@@ -129,7 +146,11 @@ Resources
 
     - Known issue with height/width bug in libgtkhtml 3.?.? on FC3.
 
-  - Save/restore in unknown state; believed to crash on re-start.
+  - When rendering, progress bar always says "Rendering 'Untitled' report...".
+
+    - warlord reports this was true in 1.8 as well.
+
+  - Removing a report page should remove the report from the runtime.
 
 - Importing
 
@@ -158,6 +179,8 @@ Resources
 - Preferences
 
   - Being converted over from a scheme file backend to gconf.  (In progress - DRH)
+
+  - Weird initialization and per-checkbox behavior in New Prefs f/ Scheduled Transactions.
 
 - Hierarchy Merge - BROKEN
 

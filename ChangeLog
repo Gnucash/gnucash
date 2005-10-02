@@ -1,3 +1,11 @@
+2005-10-02  Joshua Sled  <jsled@asynchronous.org>
+
+	* GNOME2_STATUS: updates for status
+
+	* src/register/register-gnome/gnucash-item-list.c
+	(gnc_item_list_select): re-implement to get register combocells
+	working better.
+
 2005-10-02  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/prefs.scm:

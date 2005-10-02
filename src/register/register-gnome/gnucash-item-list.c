@@ -46,6 +46,8 @@ enum {
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
+gboolean _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
+
 
 void
 gnc_item_list_clear (GncItemList *item_list)
@@ -79,44 +81,77 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 }
 
 
+typedef struct _findSelectionData
+{
+        GncItemList *item_list;
+        const char *string_to_find;
+        GtkTreeIter *found_iter;
+} FindSelectionData;
+
+gboolean
+_gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data)
+{
+        FindSelectionData *to_find = (FindSelectionData*)data;
+        gchar *iterStr;
+
+        gtk_tree_model_get(model, iter, 0, &iterStr, -1);
+        if (safe_strcmp(to_find->string_to_find, iterStr) == 0)
+        {
+                to_find->found_iter = gtk_tree_iter_copy(iter);
+                return TRUE;
+        }
+        return FALSE;
+}
+
 void
 gnc_item_list_select (GncItemList *item_list, const char *string)
 {
-#if 0
-	gint row = 0;
-	gchar *text;
+        GtkTreeSelection *tree_sel = NULL;
+        FindSelectionData *to_find_data;
 
-	g_return_if_fail(item_list != NULL);
-	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+        g_return_if_fail(item_list != NULL);
+        g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 
-	if (string == NULL) {
-		gtk_clist_unselect_all(item_list->clist);
-		return;
-	}
+        tree_sel = gtk_tree_view_get_selection(item_list->tree_view);
 
-	while (gtk_clist_get_text(item_list->clist, row, 0, &text)) {
+        if (string == NULL)
+        {
+                gtk_tree_selection_unselect_all(tree_sel);
+                return;
+        }
 
-		if (safe_strcmp(string, text) != 0) {
-			row++;
-			continue;
-		}
+        to_find_data = (FindSelectionData*)g_new0(FindSelectionData, 1);
+        to_find_data->item_list = item_list;
+        to_find_data->string_to_find = string;
 
-                gtk_clist_freeze(item_list->clist);
-                item_list->clist->focus_row = row;
-		gtk_clist_select_row(item_list->clist, row, 0);
-                gtk_clist_thaw(item_list->clist);
+        gtk_tree_model_foreach(GTK_TREE_MODEL(item_list->list_store),
+                               _gnc_item_find_selection,
+                               to_find_data);
+
+        if (to_find_data->found_iter != NULL)
+        {
+                GtkTreeIter iter;
+                gchar *sel_path = gtk_tree_model_get_string_from_iter(GTK_TREE_MODEL(item_list->list_store), to_find_data->found_iter);
+                gboolean converted = gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(item_list->list_store), &iter, sel_path);
+                gtk_tree_selection_select_iter(tree_sel, &iter);
 
                 gnc_item_list_show_selected(item_list);
+                g_free(sel_path);
+        }
 
-		return;
-	}
-#endif
+        if (to_find_data->found_iter != NULL)
+        {
+                gtk_tree_iter_free(to_find_data->found_iter);
+        }
+        g_free(to_find_data);
 }
 
 
 void
 gnc_item_list_show_selected (GncItemList *item_list)
 {
+        //gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(...), path, column, ...)
+
 #if 0
 	GtkVisibility visibility;
         gint row;
