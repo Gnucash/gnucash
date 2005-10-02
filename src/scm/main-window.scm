@@ -112,6 +112,8 @@ the account instead of opening a register.") #f))
          (save-file? #f)
          (book-path #f))
 
+    (gnc:msg (simple-format #f "saving ~S reports" (vector-length *gnc:_reports_*)))
+
     ;; make sure ~/.gnucash/books is there
     (set! save-file? (and (gnc:make-dir dotgnucash-dir)
                          (gnc:make-dir file-dir)))
@@ -139,21 +141,21 @@ the account instead of opening a register.") #f))
 	  ))))
 
 (define (gnc:main-window-book-close-handler session)
-    (gnc:main-window-save-state session)
+  (gnc:main-window-save-state session)
 
-    (let ((dead-reports '()))
-      ;; get a list of the reports we'll be needing to nuke     
-      (hash-fold 
-       (lambda (k v p)
-         (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
+  (let ((dead-reports '()))
+    ;; get a list of the reports we'll be needing to nuke     
+    (hash-fold 
+     (lambda (k v p)
+       (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
 
-      ;; actually remove them (if they're being displayed, the
-      ;; window's reference will keep the report alive until the
-      ;; window is destroyed, but find-report will fail)
-      (for-each 
-       (lambda (dr) 
-         (hash-remove! *gnc:_reports_* dr))
-       dead-reports)))
+    ;; actually remove them (if they're being displayed, the
+    ;; window's reference will keep the report alive until the
+    ;; window is destroyed, but find-report will fail)
+    (for-each 
+     (lambda (dr) 
+       (hash-remove! *gnc:_reports_* dr))
+     dead-reports)))
 
 (define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
@@ -171,6 +173,13 @@ the account instead of opening a register.") #f))
     (if conf-file-name 
         (try-load conf-file-name))
     (gnc:new-account-tree #f)
+
+    ;; the reports have only been created at this point; create their ui component.
+    (hash-fold (lambda (key val prior-result)
+                (gnc:main-window-open-report (gnc:report-id val)
+                                             #f ;; window = nil: open in first window.
+                                             ))
+               #t *gnc:_reports_*)
     ))
 
 (define (gnc:main-window-properties-cb)
