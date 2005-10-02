@@ -133,13 +133,6 @@
 (define (gnc:get-credit-string type)
   (_ (assoc-ref gnc:*credit-strings* type)))
 
-;; International options
-(gnc:register-configuration-option
- (gnc:make-dateformat-option
-  (N_ "International") (N_ "Fancy Date Format")
-  "e" (N_ "The default date format used for fancy printed dates") #f))
-
-
 ;;; Internal options -- Section names that start with "__" are not
 ;;; displayed in option dialogs.
 
