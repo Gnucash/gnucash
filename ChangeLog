@@ -1,5 +1,15 @@
 2005-10-02  Joshua Sled  <jsled@asynchronous.org>
 
+	Patches from Didier Vidal <didier-devel@9online.fr>:
+	
+	* src/register/register-gnome/gnucash-item-edit.c: Fixes to show
+	pango cursor in register edit cells.
+	* src/engine/Transaction.c (xaccTransBeginEdit): runtime crash
+	when committing partially-editing transaction.
+	
+
+2005-10-02  Joshua Sled  <jsled@asynchronous.org>
+
 	* GNOME2_STATUS: updates for status
 
 	* src/register/register-gnome/gnucash-item-list.c

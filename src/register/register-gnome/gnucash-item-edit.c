@@ -80,7 +80,7 @@ struct _TextDrawInfo
 
         gboolean hatching;
 
-	PangoRectangle *cursor;
+        PangoRectangle cursor;
 };
 
 
@@ -226,7 +226,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 	}
 
 	pango_layout_get_cursor_pos (info->layout, cursor_pos, NULL, &strong_pos);
-	info->cursor = &strong_pos;
+        info->cursor = strong_pos;
 
         if (info->hatching)
         {
@@ -289,10 +289,10 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_draw_line (drawable,
                        item_edit->gc,
-                       PANGO_PIXELS (info.cursor->x) + CELL_HPADDING,
-                       PANGO_PIXELS (info.cursor->y),
-                       PANGO_PIXELS (info.cursor->x) + CELL_HPADDING,
-                       PANGO_PIXELS (info.cursor->y + info.cursor->height));                       
+                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor.y),
+                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor.y + info.cursor.height));
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 

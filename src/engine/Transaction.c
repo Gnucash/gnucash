@@ -1455,7 +1455,8 @@ void
 xaccTransBeginEdit (Transaction *trans)
 {
        if(!trans) { return; }
-    qof_begin_edit(&trans->inst);
+
+    QOF_BEGIN_EDIT(&trans->inst);
 
    if (qof_book_shutting_down(trans->inst.book))
      return;
