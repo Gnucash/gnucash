@@ -18,6 +18,7 @@ libgncmod_app_utils_la_SOURCES = \
   file-utils.c \
   gfec.c \
   global-options.c \
+  gnc-accounting-period.c \
   gnc-component-manager.c \
   gnc-druid.c \
   gnc-druid-cb.c \
@@ -43,6 +44,7 @@ gncinclude_HEADERS = \
   gfec.h \
   global-options.h \
   gnc-basic-gobject.h \
+  gnc-accounting-period.h \
   gnc-component-manager.h \
   gnc-druid.h \
   gnc-druid-cb.h \

@@ -77,6 +77,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-plugin-menu-additions.c \
   gnc-plugin-page.c \
   gnc-plugin.c \
+  gnc-period-select.c \
   gnc-query-list.c \
   gnc-splash.c \
   gnc-tree-model.c \
@@ -139,6 +140,7 @@ gncinclude_HEADERS = \
   gnc-plugin-menu-additions.h \
   gnc-plugin-page.h \
   gnc-plugin.h \
+  gnc-period-select.h \
   gnc-query-list.h \
   gnc-splash.h \
   gnc-tree-model.h \
