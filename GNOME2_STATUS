@@ -55,7 +55,7 @@ Resources
 
   - Printing
 
-    - Main window: totally not hooked up
+    - Tested? Reporting?  Accounts?
 
   - Startup CRITICAL errors...
 
@@ -179,8 +179,6 @@ Resources
 - Preferences
 
   - Being converted over from a scheme file backend to gconf.  (In progress - DRH)
-
-  - Weird initialization and per-checkbox behavior in New Prefs f/ Scheduled Transactions.
 
 - Hierarchy Merge - BROKEN
 
