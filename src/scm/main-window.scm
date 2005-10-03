@@ -112,7 +112,7 @@ the account instead of opening a register.") #f))
          (save-file? #f)
          (book-path #f))
 
-    (gnc:msg (simple-format #f "saving ~S reports" (vector-length *gnc:_reports_*)))
+    ;;(gnc:msg (simple-format #f "saving ~S reports" (vector-length *gnc:_reports_*)))
 
     ;; make sure ~/.gnucash/books is there
     (set! save-file? (and (gnc:make-dir dotgnucash-dir)
