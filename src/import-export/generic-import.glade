@@ -1239,7 +1239,7 @@ click &quot;Ok&quot;.</property>
       <property name="column_spacing">0</property>
 
       <child>
-	<widget class="GtkCheckButton" id="checkbutton1">
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_skip">
 	  <property name="tooltip" translatable="yes">Enable the SKIP action in the transaction matcher.  If enabled, a transaction whose best match's score is in the yellow zone (above the Auto-ADD threshold but below the Auto-CLEAR threshold) will be SKIPed by default.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">Enable SKIP transaction action</property>
@@ -1262,7 +1262,7 @@ click &quot;Ok&quot;.</property>
       </child>
 
       <child>
-	<widget class="GtkCheckButton" id="checkbutton2">
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/enable_edit">
 	  <property name="tooltip" translatable="yes">Enable the EDIT action in the transaction matcher.  NOT YET SUPPORTED</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">Enable EDIT match action</property>
@@ -1278,108 +1278,6 @@ click &quot;Ok&quot;.</property>
 	  <property name="right_attach">4</property>
 	  <property name="top_attach">2</property>
 	  <property name="bottom_attach">3</property>
-	  <property name="x_padding">12</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="label847787">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Auto-_ADD threshold</property>
-	  <property name="use_underline">True</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_LEFT</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	  <property name="mnemonic_widget">spinbutton2</property>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">1</property>
-	  <property name="top_attach">4</property>
-	  <property name="bottom_attach">5</property>
-	  <property name="x_padding">12</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="label847788">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Auto-CLEAR threshold</property>
-	  <property name="use_underline">False</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_LEFT</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">1</property>
-	  <property name="top_attach">5</property>
-	  <property name="bottom_attach">6</property>
-	  <property name="x_padding">12</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="label847789">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Commercial ATM fees threshold</property>
-	  <property name="use_underline">False</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_LEFT</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">1</property>
-	  <property name="top_attach">6</property>
-	  <property name="bottom_attach">7</property>
-	  <property name="x_padding">12</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="label847786">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Match _display threshold</property>
-	  <property name="use_underline">True</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_LEFT</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	  <property name="mnemonic_widget">spinbutton1</property>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">1</property>
-	  <property name="top_attach">3</property>
-	  <property name="bottom_attach">4</property>
 	  <property name="x_padding">12</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options"></property>
@@ -1411,7 +1309,7 @@ click &quot;Ok&quot;.</property>
       </child>
 
       <child>
-	<widget class="GtkSpinButton" id="spinbutton4">
+	<widget class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/atm_fee_threshold">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match.</property>
 	  <property name="can_focus">True</property>
@@ -1426,15 +1324,15 @@ click &quot;Ok&quot;.</property>
 	<packing>
 	  <property name="left_attach">1</property>
 	  <property name="right_attach">2</property>
-	  <property name="top_attach">6</property>
-	  <property name="bottom_attach">7</property>
+	  <property name="top_attach">7</property>
+	  <property name="bottom_attach">8</property>
 	  <property name="x_options"></property>
 	  <property name="y_options"></property>
 	</packing>
       </child>
 
       <child>
-	<widget class="GtkSpinButton" id="spinbutton3">
+	<widget class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/auto_clear_threshold">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default.</property>
 	  <property name="can_focus">True</property>
@@ -1449,15 +1347,15 @@ click &quot;Ok&quot;.</property>
 	<packing>
 	  <property name="left_attach">1</property>
 	  <property name="right_attach">2</property>
-	  <property name="top_attach">5</property>
-	  <property name="bottom_attach">6</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options"></property>
 	</packing>
       </child>
 
       <child>
-	<widget class="GtkSpinButton" id="spinbutton2">
+	<widget class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/auto_add_threshold">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default.</property>
 	  <property name="can_focus">True</property>
@@ -1472,15 +1370,15 @@ click &quot;Ok&quot;.</property>
 	<packing>
 	  <property name="left_attach">1</property>
 	  <property name="right_attach">2</property>
-	  <property name="top_attach">4</property>
-	  <property name="bottom_attach">5</property>
+	  <property name="top_attach">5</property>
+	  <property name="bottom_attach">6</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options"></property>
 	</packing>
       </child>
 
       <child>
-	<widget class="GtkSpinButton" id="spinbutton1">
+	<widget class="GtkSpinButton" id="gconf/dialogs/import/generic_matcher/match_threshold">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">The minimum score a potential match must have to be displayed in the match list.</property>
 	  <property name="can_focus">True</property>
@@ -1495,8 +1393,131 @@ click &quot;Ok&quot;.</property>
 	<packing>
 	  <property name="left_attach">1</property>
 	  <property name="right_attach">2</property>
+	  <property name="top_attach">4</property>
+	  <property name="bottom_attach">5</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="label847789">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Commercial ATM fees threshold</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">7</property>
+	  <property name="bottom_attach">8</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="label847788">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Auto-CLEAR threshold</property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="label847787">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Auto-_ADD threshold</property>
+	  <property name="use_underline">True</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">5</property>
+	  <property name="bottom_attach">6</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="label847786">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Match _display threshold</property>
+	  <property name="use_underline">True</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">0</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">4</property>
+	  <property name="bottom_attach">5</property>
+	  <property name="x_padding">12</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/generic_matcher/use_bayes">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="label" translatable="yes">Use bayesian matching</property>
+	  <property name="use_underline">True</property>
+	  <property name="relief">GTK_RELIEF_NORMAL</property>
+	  <property name="focus_on_click">True</property>
+	  <property name="active">False</property>
+	  <property name="inconsistent">False</property>
+	  <property name="draw_indicator">True</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">4</property>
 	  <property name="top_attach">3</property>
 	  <property name="bottom_attach">4</property>
+	  <property name="x_padding">12</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options"></property>
 	</packing>
