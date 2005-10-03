@@ -34,6 +34,7 @@
 
 #include <stdlib.h> 
 #include <math.h>
+#include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
@@ -45,8 +46,8 @@
 
 #include "gnc-ui-util.h"
 
-#define IMPORT_PAGE	"Online Banking & Importing" /* from app-utils/prefs.scm */
-#define BAYES_OPTION	"Use Bayesian Matching?"
+#define GCONF_SECTION "dialogs/import/generic_matcher"
+#define BAYES_OPTION  "use_bayes"
 
 /********************************************************************\
  *   Constants   *
@@ -461,7 +462,7 @@ matchmap_find_destination (GncImportMatchMap *matchmap, GNCImportTransInfo *info
 	     (xaccSplitGetAccount
 	      (gnc_import_TransInfo_get_fsplit (info))));
 
-  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
   if(useBayes)
     {
       /* get the tokens for this transaction* */
@@ -530,7 +531,7 @@ matchmap_store_destination (GncImportMatchMap *matchmap,
 		   (gnc_import_TransInfo_get_fsplit (trans_info))));
 
   /* see what matching system we are currently using */
-  useBayes = gnc_lookup_boolean_option(IMPORT_PAGE, BAYES_OPTION, TRUE);
+  useBayes = gnc_gconf_get_bool(GCONF_SECTION, BAYES_OPTION, NULL);
   if(useBayes)
     {
       /* tokenize this transaction */

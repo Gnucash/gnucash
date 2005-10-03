@@ -35,6 +35,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/use_bayes</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/use_bayes</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use bayesian matching.</short>
+        <long>Use bayesian matching.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/match_threshold</key>
       <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_threshold</applyto>
       <owner>gnucash</owner>

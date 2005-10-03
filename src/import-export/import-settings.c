@@ -41,22 +41,6 @@
 \********************************************************************/
 #define GCONF_SECTION "dialogs/import/generic_matcher"
 
-/** Transaction who's best match probability is equal or higher than
-   this will reconcile their best match by default */
-#define DEFAULT_CLEAR_THRESHOLD 6
-/** Transaction who's best match probability is below or equal to 
-   this will be added as new by default */
-#define DEFAULT_ADD_THRESHOLD 3
-/** Transaction's match probability must be at least this much to be
-   displayed in the match list.  Dont set this to 0 except for 
-   debugging purposes, otherwise all transactions of every accounts 
-   will be shown in the list */
-#define DEFAULT_DISPLAY_THRESHOLD 1
-
-#define DEFAULT_ATM_FEE_THRESHOLD 2.00
-
-static const int DEFAULT_ACTION_SKIP_ENABLED = TRUE;
-static const int DEFAULT_ACTION_EDIT_ENABLED = FALSE;
 static const int DEFAULT_ACTION_ADD_ENABLED = TRUE;
 static const int DEFAULT_ACTION_CLEAR_ENABLED = TRUE;
 
