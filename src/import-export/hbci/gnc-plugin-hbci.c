@@ -112,11 +112,24 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
+#if ((AQBANKING_VERSION_MAJOR > 1) || \
+     ((AQBANKING_VERSION_MAJOR == 1) && \
+      ((AQBANKING_VERSION_MINOR > 6) || \
+       ((AQBANKING_VERSION_MINOR == 6) && \
+        ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
+	 (AQBANKING_VERSION_BUILD > 2))))))
+# define INTTRANSACTION "HbciIssueIntTransAction",
+#else
+# define INTTRANSACTION
+#endif
 
 static const gchar *account_tree_actions[] = {
   "HbciSetupAction",
   "HbciGetBalanceAction",
   "HbciGetTransAction",
+  "HbciIssueTransAction",
+  INTTRANSACTION
+  "HbciIssueDirectDebitAction",
   NULL
 };
 
@@ -124,6 +137,7 @@ static const gchar *register_actions[] = {
   "HbciGetBalanceAction",
   "HbciGetTransAction",
   "HbciIssueTransAction",
+  INTTRANSACTION
   "HbciIssueDirectDebitAction",
   NULL
 };
@@ -132,6 +146,7 @@ static const gchar *need_account_actions[] = {
   "HbciGetBalanceAction",
   "HbciGetTransAction",
   "HbciIssueTransAction",
+  INTTRANSACTION
   "HbciIssueDirectDebitAction",
   NULL
 };
