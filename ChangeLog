@@ -1,3 +1,9 @@
+2005-10-06  David Hampton  <hampton@employees.org>
+
+	* configure.in:
+	* graph/plugins/plot_radar/gog-radar.c: Conditionally compile the
+	fmin() function.
+
 2005-10-06  Joshua Sled  <jsled@asynchronous.org>
 
 	Patch from Didier Vidal <didier-devel@9online.fr>:

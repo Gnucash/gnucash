@@ -294,11 +294,13 @@ GSF_CLASS (GogRadarAreaPlot, gog_radar_area_plot,
 typedef GogPlotView		GogRadarView;
 typedef GogPlotViewClass	GogRadarViewClass;
 
+#ifndef HAVE_FMIN
 static double
 fmin (double a, double b)
 {
 	return (a < b) ? a : b;
 }
+#endif
 
 static void
 gog_radar_view_render (GogView *view, GogViewAllocation const *bbox)

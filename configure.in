@@ -109,6 +109,9 @@ dnl Check for some functions
 AC_CHECK_FUNCS(random drand48 finite memmove mkdtemp uname times sysconf)
 ## --jsled
 
+## for lib/goffice
+AC_CHECK_FUNCS(fmin)
+
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 if test $am_cv_scanf_lld = "no"; then
