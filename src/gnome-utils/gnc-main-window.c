@@ -1095,7 +1095,8 @@ gnc_main_window_new (void)
 static void
 gnc_main_window_connect (GncMainWindow *window,
 			 GncPluginPage *page,
-			 GtkWidget *tab_widget)
+			 GtkWidget *tab_hbox,
+			 GtkWidget *menu_label)
 {
 	GtkNotebook *notebook;
 
@@ -1103,7 +1104,8 @@ gnc_main_window_connect (GncMainWindow *window,
 	notebook = GTK_NOTEBOOK (window->priv->notebook);
 	window->priv->installed_pages =
 	  g_list_append (window->priv->installed_pages, page);
-	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
+	gtk_notebook_append_page_menu (notebook, page->notebook_page,
+				       tab_hbox, menu_label);
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
 	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
@@ -1201,7 +1203,7 @@ void
 gnc_main_window_open_page (GncMainWindow *window,
 			   GncPluginPage *page)
 {
-	GtkWidget *label_box;
+	GtkWidget *tab_hbox;
 	GtkWidget *label;
 	const gchar *icon;
 	GtkWidget *image;
@@ -1237,20 +1239,23 @@ gnc_main_window_open_page (GncMainWindow *window,
 	g_object_set_data (G_OBJECT (page->notebook_page),
 			   PLUGIN_PAGE_LABEL, page);
 
+	/*
+	 * The page tab.
+	 */
 	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
 	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
 	gtk_widget_show (label);
 
-	label_box = gtk_hbox_new (FALSE, 6);
-	gtk_widget_show (label_box);
+	tab_hbox = gtk_hbox_new (FALSE, 6);
+	gtk_widget_show (tab_hbox);
 
 	if (icon != NULL) {
 		image = gtk_image_new_from_stock (icon, GTK_ICON_SIZE_MENU);
 		gtk_widget_show (image);
-		gtk_box_pack_start (GTK_BOX (label_box), image, FALSE, FALSE, 0);
+		gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
 	} 
 
-	gtk_box_pack_start (GTK_BOX (label_box), label, TRUE, TRUE, 0);
+	gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
   
 	/* Add close button - Not for immutable pages */
 	if (!immutable) {
@@ -1269,12 +1274,20 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
                       G_CALLBACK(gnc_main_window_close_page), page);
 
-	  gtk_box_pack_start (GTK_BOX (label_box), close_button, FALSE, FALSE, 0);
+	  gtk_box_pack_start (GTK_BOX (tab_hbox), close_button, FALSE, FALSE, 0);
 
 	  g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
 	}
-	
-	gnc_main_window_connect(window, page, label_box);
+
+	/*
+	 * The popup menu
+	 */
+	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
+
+	/*
+	 * Now install it all in the window.
+	 */
+	gnc_main_window_connect(window, page, tab_hbox, label);
 }
 
 
@@ -1555,6 +1568,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 			    FALSE, TRUE, 0);
 
 	priv->notebook = gtk_notebook_new ();
+	g_object_set(G_OBJECT(priv->notebook),
+			      "scrollable", TRUE,
+			      "enable-popup", TRUE,
+			      NULL);
 	gtk_widget_show (priv->notebook);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
@@ -1877,7 +1894,7 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 	GncMainWindow *new_window;
 	GncPluginPage *page;
 	GtkNotebook *notebook;
-	GtkWidget *tab_widget;
+	GtkWidget *tab_widget, *menu_widget;
 
 	/* Setup */
 	priv = window->priv;
@@ -1886,10 +1903,12 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 	notebook = GTK_NOTEBOOK (priv->notebook);
 	page = priv->current_page;
 	tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
+	menu_widget = gtk_notebook_get_menu_label (notebook, page->notebook_page);
 
 	/* Ref the page components, then remove it from its old window */
 	g_object_ref(page);
 	g_object_ref(tab_widget);
+	g_object_ref(menu_widget);
 	g_object_ref(page->notebook_page);
 	gnc_main_window_disconnect(window, page);
 
@@ -1898,10 +1917,11 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 	gtk_widget_show(GTK_WIDGET(new_window));
 
 	/* Now add the page to the new window */
-	gnc_main_window_connect (new_window, page, tab_widget);
+	gnc_main_window_connect (new_window, page, tab_widget, menu_widget);
 
 	/* Unref the page components now that we're done */
 	g_object_unref(page->notebook_page);
+	g_object_unref(menu_widget);
 	g_object_unref(tab_widget);
 	g_object_unref(page);
 

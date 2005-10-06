@@ -1,5 +1,8 @@
 2005-10-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Make the gtk notebook pages
+	scrollable, and enable right-click menu selection of pages.
+
 	* configure.in:
 	* graph/plugins/plot_radar/gog-radar.c: Conditionally compile the
 	fmin() function.
