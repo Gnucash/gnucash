@@ -645,22 +645,7 @@ gnucash_sheet_create (Table *table)
 static gint
 compute_optimal_width (GnucashSheet *sheet)
 {
-        SheetBlockStyle *style;
-
-        if (!sheet)
-                return DEFAULT_REGISTER_WIDTH;
-
-        style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
-        if (!style)
-                return DEFAULT_REGISTER_WIDTH;
-
-	if (sheet->window_width >= 0)
-	  return sheet->window_width;
-
-        if (!style->dimensions)
-                return DEFAULT_REGISTER_WIDTH;
-
-        return style->dimensions->width;
+        return DEFAULT_REGISTER_WIDTH;
 }
 
 

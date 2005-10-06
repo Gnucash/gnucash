@@ -1,3 +1,9 @@
+2005-10-06  Joshua Sled  <jsled@asynchronous.org>
+
+	Patch from Didier Vidal <didier-devel@9online.fr>:
+	* src/register/register-gnome/gnucash-sheet.c
+	(compute_optimal_width): Fix to allow register resize.
+
 2005-10-03  David Hampton  <hampton@employees.org>
 
 	* src/gnome/top-level.c: Remove duplicate function.
