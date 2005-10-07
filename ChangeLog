@@ -1,3 +1,19 @@
+2005-10-07  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/Makefile.am:
+	* src/app-utils/gnc-exp-parser.c: Convert the expression parser
+	over from saving persistent data as a scheme fragments to saving
+	it in a glib key/value file.
+	
+	* src/core-utils/Makefile.am:
+	* src/core-utils/gnc-gkeyfile-utils.[ch]: Add some helper
+	functions for reading/writing glib key/value data structures.
+
+	* configure.in:
+	* lib/Makefile.am:
+	* lib/glib26: Add glib key-value support for systems running
+	glib24.
+
 2005-10-07  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-sheet.c
