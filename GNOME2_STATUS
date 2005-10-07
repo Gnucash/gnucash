@@ -190,6 +190,25 @@ Resources
 
   - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
 
+- Backend
+
+  - The qof_begin_edit()/qof_commit_edit() functions do not correctly
+    mimic the behavior of the macros they replaced.  Specifically, a
+    return call from the macro exits the calling function.  A return
+    in one of these functions only exits the function, not the caller.
+    The caller then executes code that was not executed prior to the
+    macro->function change.  THIS MUST BE FIXED PRIOR TO A G2 RELEASE.
+
+  - Many places have had a qof_begin_edit()/qof_commit_edit() pair of
+    function calls wrapped around existing code.  In this case the control
+    flow through the pre-exiting code is the same as before.  I.E. It always
+    occurs.  My concern is whether or not this is the proper control flow.
+    If qof_begin_edit() bails out because the object is already being
+    edited, should any other code be executed or should the calling function
+    exit immediately?  I believe the calling function should exit
+    immediately (i.e. don't modify an object that is being modified
+    elsewhere).
+
 ========================================
               ENHANCEMENTS
 ========================================
