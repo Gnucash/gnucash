@@ -1,5 +1,11 @@
 2005-10-07  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/register-gnome/gnucash-sheet.c
+	(GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL): Use
+	autocompletion-selection workaround for	gtk 2.(<6).*
+
+2005-10-07  Joshua Sled  <jsled@asynchronous.org>
+
 	Patch from Edward J. Huff <ejhuff@huff20may77.us>:
 	* src/report/standard-reports/transaction.scm: 
 	* src/app-utils/date-utilities.scm: 

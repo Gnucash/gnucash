@@ -88,9 +88,15 @@ Resources
 
 - Register Core - mostly functional
 
-  - Completion has problems.  It does complete when a character is typed but
-    it fails to select the inserted text.  This means that the next character
-    typed is inserted instead of continuing to test for completion
+  - (fixed, notes) Completion has problems.  It does complete when a
+    character is typed but it fails to select the inserted text.  This means
+    that the next character typed is inserted instead of continuing to test
+    for completion
+
+    - This is better, but by hacking around GTK... it appears that both
+      2.4(.14) and 2.6(.8) disallow the editable's selection to be set in the
+      char-insert callback/handler.  Instead, we register a one-shot
+      immediate callback for the idle loop to do the selection.
 
   - The first time it is used, the combocell popups (account-list,
     split-action) immediately closes (before user notices).  After that it

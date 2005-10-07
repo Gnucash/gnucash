@@ -45,8 +45,9 @@
 #define DEFAULT_REGISTER_WIDTH  630
 
 
-/* FIXME: seems like this is ok in gtk2... */
-#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL 1
+/* FIXME: at least broken on gtk 2.4.14 */
+/* jsled: and 2.6.8 */
+#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION > 6)
 
 static guint gnucash_register_initial_rows = 15;
 
