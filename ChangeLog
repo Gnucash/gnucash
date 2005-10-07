@@ -1,3 +1,10 @@
+2005-10-06  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/date-utilities.scm: Patch from Yves-Eric Martin
+	<yem_lists.gnucash.org@filter.yve.net> to make it easier for users
+	to change the financial year end date.  They still have to edit a
+	scheme file though.
+
 2005-09-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
