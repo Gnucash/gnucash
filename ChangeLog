@@ -1,3 +1,18 @@
+2005-10-07  Joshua Sled  <jsled@asynchronous.org>
+
+	Patch from Edward J. Huff <ejhuff@huff20may77.us>:
+	* src/report/standard-reports/transaction.scm: 
+	* src/app-utils/date-utilities.scm: 
+	* src/app-utils/app-utils.scm: 
+	Add "Quarterly" option to transaction report. Add support
+	functions to app-utils.scm and date-utilities.scm to support
+	finding the quarter of a given date, and to format it as Q1, Q2,
+	Q3, or Q4.  Fix a bug in the as-yet-unused function
+	gnc:timepair-get-month-day.  Make use of the existing support
+	functions instead of re-inventing them in transaction.scm.
+	Move all uses of strftime from transaction.scm to
+	date-utilities.scm. 
+
 2005-10-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-options.c: Convert the multiple choice
