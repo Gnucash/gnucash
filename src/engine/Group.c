@@ -385,7 +385,7 @@ xaccGroupGetNumSubAccounts (AccountGroup *grp)
 }
 
 /********************************************************************\
- * Get all of the accounts, including subaccounts                   *
+ * Recursively get all of the accounts, including subaccounts       *
 \********************************************************************/
 
 static void
@@ -756,7 +756,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           *
           * Note also, we need to reparent the children to the new book as well.
           */
-         PWARN ("reparenting accounts accross books is not correctly supported\n");
+         PWARN ("reparenting accounts across books is not correctly supported\n");
 
          gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
          col = qof_book_get_collection (grp->book, GNC_ID_ACCOUNT);
@@ -1008,7 +1008,6 @@ xaccGroupGetDepth (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
-
 void
 xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 {

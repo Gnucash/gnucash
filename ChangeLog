@@ -1,3 +1,12 @@
+2005-10-07  Joshua Sled  <jsled@asynchronous.org>
+
+	Patch from Chris Shoemaker <c.shoemaker@cox.net>:
+	* src/engine/Account.[ch]: Refactoring of
+	account-*-balance(as-of-date) code.
+	* src/engine/Account.[ch], src/engine/Group.[ch]:
+	Tyop/misspelling correction, formatting cleanup, notes and
+	comments.
+
 2005-10-07  David Hampton  <hampton@employees.org>
 
 	* src/report/report-system/html-style-sheet.scm:

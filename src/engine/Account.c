@@ -616,6 +616,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
 static gint
 split_sort_func(gconstpointer a, gconstpointer b) {
   /* don't coerce xaccSplitDateOrder so we'll catch changes */
+  /* huh?  what changes? */
   Split *sa = (Split *) a;
   Split *sb = (Split *) b;
   return(xaccSplitDateOrder(sa, sb));
@@ -1045,7 +1046,9 @@ xaccAccountSetStartingBalance(Account *acc,
  *                                                                  *
  * Return: int -- non-zero if out of order                          *
 \********************************************************************/
-
+/* CAS: Umm, we say we're checking the split, but we're actually
+   resorting all the splits.  Why not just leave the split out of
+   it? */
 void
 xaccAccountFixSplitDateOrder (Account * acc, Split *split) 
 {
@@ -1667,6 +1670,14 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   /* Since transaction post times are stored as a Timespec,
    * convert date into a Timespec as well rather than converting
    * each transaction's Timespec into a time_t.
+   *
+   * FIXME: CAS: I think this comment is a bogus justification for
+   * using xaccTransGetDatePostedTS.  There's no benefit to using
+   * Timespec when the input argument is time_t, and it's hard to
+   * imagine that casting long long to long and comparing two longs is
+   * worse than comparing two long longs every time.  IMO,
+   * xaccAccountGetPresentBalance gets this right, and its algorithm
+   * should be used here.
    */
   ts.tv_sec = date;
   ts.tv_nsec = 0;
@@ -1676,7 +1687,7 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
   {
     xaccTransGetDatePostedTS( xaccSplitGetParent( (Split *)lp->data ),
                               &trans_ts );
-    if( timespec_cmp( &trans_ts, &ts ) > 0 )
+    if( timespec_cmp( &trans_ts, &ts ) >= 0 )
       found = TRUE;
     else
       lp = lp->next;
@@ -1716,8 +1727,7 @@ xaccAccountGetPresentBalance (Account *account)
   GList *node;
   time_t today;
 
-  if (!account)
-    return gnc_numeric_zero ();
+  g_return_val_if_fail(account, gnc_numeric_zero());
 
   today = gnc_timet_get_today_end();
   for (node = g_list_last (account->splits); node; node = node->prev)
@@ -1757,7 +1767,8 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
   book = xaccGroupGetBook (xaccAccountGetRoot (account));
   pdb = gnc_pricedb_get_db (book);
 
-  balance = gnc_pricedb_convert_balance_latest_price(pdb, balance, balance_currency, new_currency);
+  balance = gnc_pricedb_convert_balance_latest_price(
+      pdb, balance, balance_currency, new_currency);
 
   return balance;
 }
@@ -1787,7 +1798,8 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for book */
   ts.tv_sec = date;
   ts.tv_nsec = 0;
 
-  balance = gnc_pricedb_convert_balance_nearest_price(pdb, balance, balance_currency, new_currency, ts);
+  balance = gnc_pricedb_convert_balance_nearest_price(
+      pdb, balance, balance_currency, new_currency, ts);
 
   return balance;
 }
@@ -1807,9 +1819,20 @@ xaccAccountGetXxxBalanceInCurrency (Account *account,
   if (!account || !fn || !report_currency) return gnc_numeric_zero ();
   balance = fn(account);
   balance = xaccAccountConvertBalanceToCurrency(account, balance,
-					     account->commodity,
-					     report_currency);
+                                                account->commodity,
+                                                report_currency);
   return balance;
+}
+
+static gnc_numeric
+xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *account, time_t date,
+                                           xaccGetBalanceAsOfDateFn fn,
+                                           gnc_commodity *report_commodity)
+{
+    g_return_val_if_fail(account && fn && report_commodity,
+                         gnc_numeric_zero());
+    return xaccAccountConvertBalanceToCurrency(
+        account, fn(account, date), account->commodity, report_commodity);
 }
 
 /*
@@ -1820,6 +1843,8 @@ typedef struct
   gnc_commodity *currency;
   gnc_numeric balance;
   xaccGetBalanceFn fn;
+  xaccGetBalanceAsOfDateFn asOfDateFn;
+  time_t date;
 } CurrencyBalance;
 
 
@@ -1842,13 +1867,33 @@ xaccAccountBalanceHelper (Account *account, gpointer data)
                                  GNC_HOW_RND_ROUND);
   return NULL;
 }
+static gpointer
+xaccAccountBalanceAsOfDateHelper (Account *account, gpointer data)
+{
+    CurrencyBalance *cb = data;
+    gnc_numeric balance;
+
+    g_return_val_if_fail (cb->asOfDateFn && cb->currency, NULL);
+
+    balance = xaccAccountGetXxxBalanceAsOfDateInCurrency (
+        account, cb->date, cb->asOfDateFn, cb->currency);
+    cb->balance = gnc_numeric_add (cb->balance, balance,
+                                   gnc_commodity_get_fraction (cb->currency),
+                                   GNC_HOW_RND_ROUND);
+    return NULL;
+}
+
+
 
 /*
  * Common function that iterates recursively over all accounts below
- * the specified account.  It uses the previous routine to sum up the
- * balances of all its children, and uses the specified function for
- * extracting the balance.  This function may extract the current
- * value, the reconciled value, etc.
+ * the specified account.  It uses xaccAccountBalanceHelper to sum up
+ * the balances of all its children, and uses the specified function
+ * 'fn' for extracting the balance.  This function may extract the
+ * current value, the reconciled value, etc.
+ *
+ * If 'report_commodity' is NULL, just use the account's commodity.
+ * If 'include_children' is FALSE, this function doesn't recurse at all.
  */
 static gnc_numeric
 xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
@@ -1862,14 +1907,44 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
     return gnc_numeric_zero ();
   if (!report_commodity)
     report_commodity = xaccAccountGetCommodity (account);
+
   balance = xaccAccountGetXxxBalanceInCurrency (account, fn, report_commodity);
 
-  /* If needed, sum up the children converting to *this* account's commodity. */
+  /* If needed, sum up the children converting to the *requested*
+     commodity. */
   if (include_children)
   {
-    CurrencyBalance cb = { report_commodity, balance, fn };
+    CurrencyBalance cb = { report_commodity, balance, fn, NULL, 0 };
 
-    xaccGroupForEachAccount (account->children, xaccAccountBalanceHelper, &cb, TRUE);
+    xaccGroupForEachAccount (account->children, xaccAccountBalanceHelper,
+                             &cb, TRUE);
+    balance = cb.balance;
+  }
+
+  return balance;
+}
+
+static gnc_numeric
+xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
+    Account *account, time_t date, xaccGetBalanceAsOfDateFn fn,
+    gnc_commodity *report_commodity, gboolean include_children)
+{
+  gnc_numeric balance;
+
+  g_return_val_if_fail(account, gnc_numeric_zero());
+  if (!report_commodity)
+      report_commodity = xaccAccountGetCommodity (account);
+
+  balance = xaccAccountGetXxxBalanceAsOfDateInCurrency(
+      account, date, fn, report_commodity);
+
+  /* If needed, sum up the children converting to the *requested*
+     commodity. */
+  if (include_children) {
+    CurrencyBalance cb = { report_commodity, balance, NULL, fn, date };
+
+    xaccGroupForEachAccount (account->children,
+                             xaccAccountBalanceAsOfDateHelper, &cb, TRUE);
     balance = cb.balance;
   }
 
@@ -1895,9 +1970,9 @@ xaccAccountGetClearedBalanceInCurrency (Account *account,
 					gnc_commodity *report_commodity,
 					gboolean include_children)
 {
-  return
-    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetClearedBalance,
-						 report_commodity, include_children);
+  return xaccAccountGetXxxBalanceInCurrencyRecursive (
+      account, xaccAccountGetClearedBalance, report_commodity,
+      include_children);
 }
 
 
@@ -1906,9 +1981,9 @@ xaccAccountGetReconciledBalanceInCurrency (Account *account,
 				 gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
-  return
-    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetReconciledBalance,
-						 report_commodity, include_children);
+  return xaccAccountGetXxxBalanceInCurrencyRecursive (
+      account, xaccAccountGetReconciledBalance, report_commodity,
+      include_children);
 }
 
 gnc_numeric
@@ -1916,19 +1991,29 @@ xaccAccountGetPresentBalanceInCurrency (Account *account,
 					gnc_commodity *report_commodity,
 					gboolean include_children)
 {
-  return
-    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetPresentBalance,
-						 report_commodity, include_children);
+  return xaccAccountGetXxxBalanceInCurrencyRecursive (
+      account, xaccAccountGetPresentBalance, report_commodity,
+      include_children);
 }
 
 gnc_numeric
-xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
-						 gnc_commodity *report_commodity,
-						 gboolean include_children)
+xaccAccountGetProjectedMinimumBalanceInCurrency (
+    Account *account, gnc_commodity *report_commodity,
+    gboolean include_children)
 {
-  return
-    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetProjectedMinimumBalance,
-						 report_commodity, include_children);
+  return xaccAccountGetXxxBalanceInCurrencyRecursive (
+      account, xaccAccountGetProjectedMinimumBalance, report_commodity,
+      include_children);
+}
+
+gnc_numeric
+xaccAccountGetBalanceAsOfDateInCurrency(
+    Account *account, time_t date, gnc_commodity *report_commodity,
+    gboolean include_children)
+{
+    return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
+        account, date, xaccAccountGetBalanceAsOfDate, report_commodity,
+        include_children);
 }
 
 /********************************************************************\

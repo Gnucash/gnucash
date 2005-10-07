@@ -269,19 +269,22 @@ typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
       you are done with it.
 */
 AccountList *xaccGroupMapAccounts(AccountGroup *grp,
-                             AccountCallback,
-                             gpointer data);
+                                  AccountCallback func,
+                                  gpointer data);
 
 /** The xaccGroupForEachAccount() method will traverse the AccountGroup
  *    tree, calling 'func' on each account.   Traversal will stop when
- *    func returns a non-null value, and the routine wil return with that 
- *    value.  If 'deeply' is FALSE, then only the immediate children of 
+ *    func returns a non-null value, and the routine will return with that
+ *    value.  Therefore, this function will return null iff func returns
+ *    null for every account.
+ *
+ *    If 'deeply' is FALSE, then only the immediate children of
  *    the account will be traversed.  If TRUE, then the whole tree will
  *    be traversed.
  */
 
 gpointer xaccGroupForEachAccount (AccountGroup *grp,
-                                  AccountCallback,
+                                  AccountCallback func,
                                   gpointer data,
                                   gboolean deeply);
 
@@ -386,7 +389,7 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          TransactionCallback,
+                                          TransactionCallback thunk,
                                           void *data);
 
 /** Traverse all of the transactions in the given account group.
@@ -412,12 +415,12 @@ int xaccAccountStagedTransactionTraversal(Account *a,
 
    Note that this routine is just a trivial wrapper for 
    
-   xaccGroupBeginStagedTransactionTraversals(grp);
-   xaccGroupStagedTransactionTraversal(grp, 42, cb, data);
+   xaccGroupBeginStagedTransactionTraversals(g);
+   xaccGroupStagedTransactionTraversal(g, 42, proc, data);
  */
 
 int xaccGroupForEachTransaction(AccountGroup *g, 
-                                TransactionCallback, void *data);
+                                TransactionCallback proc, void *data);
 
 /** @} */
 #endif /* XACC_ACCOUNT_GROUP_H */

@@ -49,9 +49,13 @@
 #include "gnc-engine.h"
 
 typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );
-typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (Account *account,
-						   gnc_commodity *report_commodity,
-						   gboolean include_children);
+
+typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
+    Account *account, gnc_commodity *report_commodity,
+    gboolean include_children);
+
+typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
+    Account *account, time_t date);
 
 #define GNC_IS_ACCOUNT(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_ACCOUNT))
 #define GNC_ACCOUNT(obj)     (QOF_CHECK_CAST((obj), GNC_ID_ACCOUNT, Account))
@@ -305,7 +309,7 @@ gnc_commodity * xaccAccountGetCommodity (Account *account);
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
 
 /** Return the SCU for the account.  If a non-standard SCU has been
- *   set for the account, that s returned; else the default SCU for 
+ *   set for the account, that is returned; else the default SCU for
  *   the account commodity is returned.
  */
 int  xaccAccountGetCommoditySCU (Account *account);
@@ -335,7 +339,7 @@ gboolean  xaccAccountGetNonStdSCU (Account *account);
 /** @name Account Balance
  @{
 */
-/** Get the current balance of the account */
+/** Get the current balance of the account, which may include future splits */
 gnc_numeric     xaccAccountGetBalance (Account *account);
 /** Get the current balance of the account, only including cleared transactions */
 gnc_numeric     xaccAccountGetClearedBalance (Account *account);
@@ -346,6 +350,15 @@ gnc_numeric     xaccAccountGetProjectedMinimumBalance (Account *account);
 /** Get the balance of the account as of the date specified */
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 
+/* These two functions convert a given balance from one commodity to
+   another.  The account argument is only used to get the Book, and
+   may have nothing to do with the supplied balance.  Likewise, the
+   date argument is only used for commodity conversion and may have
+   nothing to do with supplied balance.
+
+   Since they really have nothing to do with Accounts, there's
+   probably some better place for them, but where?  gnc-commodity.h?
+*/
 gnc_numeric xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 						gnc_numeric balance,
 						gnc_commodity *balance_currency,
@@ -356,6 +369,8 @@ gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for
 							gnc_commodity *new_currency,
 							time_t date);
 
+/* These functions get some type of balance in the desired commodity.
+   'report_commodity' may be NULL to use the account's commodity. */
 gnc_numeric xaccAccountGetBalanceInCurrency (Account *account,
 					     gnc_commodity *report_commodity,
 					     gboolean include_children);
@@ -371,6 +386,12 @@ gnc_numeric xaccAccountGetPresentBalanceInCurrency (Account *account,
 gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
 							     gnc_commodity *report_commodity,
 							     gboolean include_children);
+
+/* This function gets the balance as of the given date in the desired
+   commodity. */
+gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
+    Account *account, time_t date, gnc_commodity *report_commodity,
+    gboolean include_children);
 /** @} */
 
 /** @name Account Children and Parents. 
@@ -405,7 +426,7 @@ Account *      xaccAccountGetParentAccount (Account *account);
 
 /** This routine returns a flat list of all of the accounts
  * that are descendents of this account.  This includes not
- * only the the children, but the cheldren of the children, etc.
+ * only the the children, but the children of the children, etc.
  * This routine is equivalent to the nested calls
  * xaccGroupGetSubAccounts (xaccAccountGetChildren())
  *
@@ -640,7 +661,12 @@ gboolean        xaccAccountGetPlaceholder (Account *account);
 /** DOCUMENT ME! */
 void            xaccAccountSetPlaceholder (Account *account,
                                            gboolean option);
-/** DOCUMENT ME! */
+
+/** Returns PLACEHOLDER_NONE if account is NULL or neither account nor
+ *  any descendent of account is a placeholder.  If account is a
+ *  placeholder, returns PLACEHOLDER_THIS.  Otherwise, if any
+ *  descendant of account is a placeholder, return PLACEHOLDER_CHILD.
+ */
 GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 /** @} */
 
