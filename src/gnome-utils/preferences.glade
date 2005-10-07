@@ -137,8 +137,8 @@
   </child>
 </widget>
 
-<widget class="GtkDialog" id="New Gnucash Preferences">
-  <property name="title" translatable="yes">New Gnucash Preferences</property>
+<widget class="GtkDialog" id="Gnucash Preferences">
+  <property name="title" translatable="yes">Gnucash Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
