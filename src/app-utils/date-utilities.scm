@@ -1,6 +1,7 @@
 ;; date-utilities.scm -- date utility functions.
 ;; Bryan Larsen (blarsen@ada-works.com)
 ;; Revised by Christopher Browne
+;; Improvement to financial year support by Yves-Eric Martin
 ;;
 ;; This program is free software; you can redistribute it and/or    
 ;; modify it under the terms of the GNU General Public License as   
@@ -18,6 +19,14 @@
 ;; Free Software Foundation           Voice:  +1-617-542-5942
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+
+
+;; fin-year-start format: mm dd
+(define fin-year-start '(07 01))
+
+
+(define fin-year-start-month (- (car fin-year-start) 1)) ;; jan == 0
+(define fin-year-start-day (cadr fin-year-start))
 
 (define gnc:reldate-list '())
 
@@ -435,13 +444,13 @@
 ;; FIXME:: Replace with option when it becomes available
 (define (gnc:get-start-cur-fin-year)
   (let ((now (localtime (current-time))))
-    (if (< (tm:mon now) 6)
+    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
 	(begin
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
 	  (set-tm:hour now 0)
-	  (set-tm:mday now 1)
-	  (set-tm:mon now 6)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
 	  (set-tm:year now (- (tm:year now) 1))
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now))
@@ -449,20 +458,20 @@
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
 	  (set-tm:hour now 0)
-	  (set-tm:mday now 1)
-	  (set-tm:mon now 6)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now)))))
 
 (define (gnc:get-start-prev-fin-year)
   (let ((now (localtime (current-time))))
-    (if (< (tm:mon now) 6)
+    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
 	(begin
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
 	  (set-tm:hour now 0)
-	  (set-tm:mday now 1)
-	  (set-tm:mon now 6)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
 	  (set-tm:year now (- (tm:year now) 2))
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now))
@@ -470,53 +479,42 @@
 	  (set-tm:sec now 0)
 	  (set-tm:min now 0)
 	  (set-tm:hour now 0)
-	  (set-tm:mday now 1)
-	  (set-tm:mon now 6)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
 	  (set-tm:year now (- (tm:year now) 1))
+          (set-tm:isdst now -1)
+	  (gnc:date->timepair now)))))
+
+(define (gnc:get-start-next-fin-year)
+  (let ((now (localtime (current-time))))
+    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
+	(begin
+	  (set-tm:sec now 0)
+	  (set-tm:min now 0)
+	  (set-tm:hour now 0)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
+          (set-tm:isdst now -1)
+	  (gnc:date->timepair now))
+	(begin
+	  (set-tm:sec now 0)
+	  (set-tm:min now 0)
+	  (set-tm:hour now 0)
+	  (set-tm:mday now fin-year-start-day)
+	  (set-tm:mon now fin-year-start-month)
+	  (set-tm:year now (+ (tm:year now) 1))
           (set-tm:isdst now -1)
 	  (gnc:date->timepair now)))))
 
 (define (gnc:get-end-prev-fin-year)
-  (let ((now (localtime (current-time))))
-    (if (< (tm:mon now) 6)
-	(begin
-	  (set-tm:sec now 59)
-	  (set-tm:min now 59)
-	  (set-tm:hour now 23)
-	  (set-tm:mday now 30)
-	  (set-tm:mon now 5)
-	  (set-tm:year now (- (tm:year now) 1))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now))
-	(begin
-	  (set-tm:sec now 59)
-	  (set-tm:min now 59)
-	  (set-tm:hour now 23)
-	  (set-tm:mday now 30)
-	  (set-tm:mon now 5)
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now)))))
+  (let ((now (gnc:get-start-cur-fin-year)))
+      (gnc:secs->timepair (- (gnc:timepair->secs now) 1))
+      ))
 
 (define (gnc:get-end-cur-fin-year)
-  (let ((now (localtime (current-time))))
-    (if (< (tm:mon now) 6)
-	(begin
-	  (set-tm:sec now 59)
-	  (set-tm:min now 59)
-	  (set-tm:hour now 23)
-	  (set-tm:mday now 30)
-	  (set-tm:mon now 5)
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now))
-	(begin
-	  (set-tm:sec now 59)
-	  (set-tm:min now 59)
-	  (set-tm:hour now 23)
-	  (set-tm:mday now 30)
-	  (set-tm:mon now 5)
-	  (set-tm:year now (+ (tm:year now) 1))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now)))))
+  (let ((now (gnc:get-start-next-fin-year)))
+      (gnc:secs->timepair (- (gnc:timepair->secs now) 1))
+      ))
 
 (define (gnc:get-start-this-month)
   (let ((now (localtime (current-time))))
