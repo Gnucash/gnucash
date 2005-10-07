@@ -138,6 +138,18 @@ then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
+AC_MSG_CHECKING(for GLIB - version >= 2.6.0)
+if $PKG_CONFIG 'glib-2.0 >= 2.6.0'
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_GLIB26,1,[System has glib 2.6.0 or better])
+  HAVE_GLIB26=yes
+else
+  AC_MSG_RESULT(no)
+fi
+AC_MSG_WARN(test "x$HAVE_GLIB26" = "xyes" )
+AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
+
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 DL_LIB=
@@ -1218,6 +1230,7 @@ AC_OUTPUT( po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
+          lib/glib26/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
