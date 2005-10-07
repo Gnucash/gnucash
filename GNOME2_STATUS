@@ -152,11 +152,6 @@ Resources
 
   - Removing a report page should remove the report from the runtime.
 
-  - Options
-
-    - Drop-down lists have the correct number of elements, but no text for
-      each element (and thus no width).
-
 - Importing
 
   - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
