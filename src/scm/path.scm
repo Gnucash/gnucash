@@ -45,6 +45,9 @@
 (define gnc:current-saved-reports
   (build-path (getenv "HOME") ".gnucash" "saved-reports-2.0"))
 
+(define gnc:current-saved-stylesheets
+  (build-path (getenv "HOME") ".gnucash" "stylesheets-2.0"))
+
 (define gnc:load-user-config-if-needed
   (let ((user-config-loaded? #f))
 
@@ -81,6 +84,9 @@
 	    (gnc:debug "loading saved reports")
 	    (or-map try-load-no-set
 		    '("saved-reports-2.0" "saved-reports-1.8"))
+	    (gnc:debug "loading stylesheets")
+	    (or-map try-load-no-set
+		    '("stylesheets-2.0"))
 	    )))))
 
 ;; the system config should probably be loaded from some directory
