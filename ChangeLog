@@ -1,3 +1,19 @@
+2005-10-07  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-options.c: Convert the multiple choice
+	option from using the deprecated GtkOptionMenu widget to using a
+	GtkComboBox widget.  Fix some warnings when using a currency
+	option.  Make the account list option expand to fill available
+	space.
+
+	* src/app-utils/option-util.c: Correctly convert a scheme string
+	to a C string.
+
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/preferences.glade: Rename preference dialog
+	windows.
+	
 2005-10-06  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Make the gtk notebook pages
