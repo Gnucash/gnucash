@@ -170,7 +170,7 @@
 ( "Swiss Franc" "franc" "centime" "ISO4217" "CHF" "756" 100 100 )
 ( "Syrian Pound" "pound" "pence"  "ISO4217" "SYP" "760" 100 100 )
 ( "Taiwan Dollar" "dollar" "cent" "ISO4217" "TWD" "901" 100 100 )
-( "Tajikistan Somani" "somani" "dirams" "ISO4217" "TJS" "972" 100 100 ) ;; 2002-11-06 on
+( "Tajikistani Somoni" "somoni" "dirams" "ISO4217" "TJS" "972" 100 100 ) ;; 2002-11-06 on
 ( "Tajikistan Ruble" "ruble" "ruble" "ISO4217" "TJR" "762" 1 1 ) ;; until 2002-11-05
 ( "Tanzanian Shilling" "shilling" "cent"  "ISO4217" "TZS" "834" 100 100 )
 ( "Thai Baht" "baht" "stang" "ISO4217" "THB" "764" 100 100 )
