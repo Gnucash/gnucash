@@ -76,7 +76,8 @@ struct _RecnWindow
   GtkWidget *window;        /* The reconcile window                 */
 
   GtkWidget *toolbar;       /* Toolbar widget                       */
-  SCM toolbar_change_cb_id; /* id for toolbar preference change cb  */
+  gint toolbar_change_cb_id;  /* id for toolbar preference change cb  */
+  gint toolbar_change_cb_id2; /* id for toolbar preference change cb  */
 
   GtkWidget *starting;      /* The starting balance                 */
   GtkWidget *ending;        /* The ending balance                   */
@@ -1377,11 +1378,26 @@ gnc_recn_refresh_toolbar(RecnWindow *recnData)
 }
 
 static void
-gnc_toolbar_change_cb(void *data)
+gnc_toolbar_change_cb (GConfClient *client,
+		       guint cnxn_id,
+		       GConfEntry *entry,
+		       gpointer data)
 {
   RecnWindow *recnData = data;
+  GConfValue *value;
+  const gchar *key, *key_tail;
 
-  gnc_recn_refresh_toolbar(recnData);
+  key = gconf_entry_get_key(entry);
+  value = gconf_entry_get_value(entry);
+  if (!key || !value)
+    return;
+
+  key_tail = rindex(key, '/');
+  if (key_tail != NULL)
+    key_tail++;
+  if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {
+    gnc_recn_refresh_toolbar(recnData);
+  }
 }
 
 static GtkWidget *
@@ -1722,7 +1738,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     BonoboDockItemBehavior behavior;
     GtkWidget *dock_item;
     GtkWidget *toolbar;
-    SCM id;
 
     behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
     if (!gnc_gconf_toolbar_detachable())
@@ -1734,9 +1749,12 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
     gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
 
-    id = gnc_register_option_change_callback(gnc_toolbar_change_cb, recnData,
-                                             "General", "Toolbar Buttons");
-    recnData->toolbar_change_cb_id = id;
+    recnData->toolbar_change_cb_id =
+      gnc_gconf_add_anon_notification(GCONF_GENERAL,
+				      gnc_toolbar_change_cb, recnData);
+    recnData->toolbar_change_cb_id2 =
+      gnc_gconf_add_anon_notification(DESKTOP_GNOME_INTERFACE,
+				      gnc_toolbar_change_cb, recnData);
 
     bonobo_dock_add_item (BONOBO_DOCK(dock), BONOBO_DOCK_ITEM(dock_item),
                           BONOBO_DOCK_TOP, 1, 0, 0, TRUE);
@@ -1921,12 +1939,13 @@ static void
 recn_destroy_cb (GtkWidget *w, gpointer data)
 {
   RecnWindow *recnData = data;
-  SCM id;
 
   gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 
-  id = recnData->toolbar_change_cb_id;
-  gnc_unregister_option_change_callback_id (id);
+  gnc_gconf_remove_anon_notification(GCONF_GENERAL,
+				     recnData->toolbar_change_cb_id);
+  gnc_gconf_remove_anon_notification(DESKTOP_GNOME_INTERFACE,
+				     recnData->toolbar_change_cb_id2);
 
   if (recnData->delete_refresh)
     gnc_resume_gui_refresh ();
