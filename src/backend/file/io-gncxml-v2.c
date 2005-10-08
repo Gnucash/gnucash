@@ -1168,12 +1168,6 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
   if (!use_gzip)
     return fopen(filename, perms);
 
-//gboolean
-//gnc_lookup_boolean_option( const char *section,
-//                                    const char *name,
-//                                    gboolean default_value)
-//
-
   if (pipe(filedes) < 0) {
     PWARN("Pipe call failed. Opening uncompressed file.");
     return fopen(filename, perms);
