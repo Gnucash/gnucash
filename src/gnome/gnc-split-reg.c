@@ -88,9 +88,6 @@ void gnc_split_reg_raise( GNCSplitReg *gsr );
 static GtkWidget* add_summary_label( GtkWidget *summarybar,
                                      const char *label_str );
 
-#if 0
-static void gnc_toolbar_change_cb( void *data );
-#endif
 static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
@@ -491,11 +488,6 @@ gsr_create_toolbar( GNCSplitReg *gsr )
   gsr->toolbar = glade_xml_get_widget( xml, "toolbar" );
   gsr->split_button = glade_xml_get_widget( xml, "toolbar_split" );
 
-  id = gnc_register_option_change_callback( gnc_toolbar_change_cb, gsr,
-                                            "General", "Toolbar Buttons" );
-  gsr->toolbar_change_callback_id = id;
-
-
   if ( gsr->disallowedCaps & CAP_DELETE ) {
     widget = glade_xml_get_widget( xml, "toolbar_delete" );
     gtk_widget_set_sensitive( widget, FALSE );
@@ -584,11 +576,6 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 void
 gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data)
 {
-  GNCSplitReg *gsr = data;
-  SCM id;
-
-  id = gsr->toolbar_change_callback_id;
-  gnc_unregister_option_change_callback_id(id);
 }
 
 /**
@@ -2216,16 +2203,6 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
   gnc_split_register_set_read_only( reg, TRUE );
 
 }
-
-#if 0
-static
-void
-gnc_toolbar_change_cb (void *data)
-{
-  GNCSplitReg *gsr = data;
-  gnc_split_reg_refresh_toolbar( gsr );
-}
-#endif
 
 static
 gncUIWidget

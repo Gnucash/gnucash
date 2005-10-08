@@ -90,7 +90,6 @@ struct _GNCSplitReg {
   gint width;
   gint height;
 
-  SCM toolbar_change_callback_id;
   GtkWidget *toolbar;
   GtkWidget *summarybar; 
 
