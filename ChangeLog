@@ -1,3 +1,33 @@
+2005-10-08  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/global-options.[ch]:
+	* src/app-utils/gnc-ui-util.[ch]: Migrate a couple of functions
+	from one global-options to gnc-ui-utils.
+	
+	* src/gnome/window-reconcile.c: Track changes to user's toolbar
+	style preference using the new gconf method.
+
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/gnome-utils/dialog-utils.c:
+	* src/gnome-utils/gnc-main-window.c: Share a couple of gconf key
+	names between files.
+	
+	* src/register/register-gnome/table-gnome.c: Use new gconf key to
+	decide whether to save the column sizings.
+	
+	*src/gnome/window-main-summarybar.c: Remove obsolete code for
+	catching (scheme) option changes.  This file already has support
+	for catching gconf option changes.
+
+	* src/gnome/gnc-split-reg.[ch]: Split register no longer contains
+	the menus/toolbar/etc support so no need to track changes to the
+	toolbar settings.
+
+	* src/backend/file/io-gncxml-v2.c: Remove unused code fragment.
+	
+	* src/gnome-utils/gnc-main-window.c: Don't let the window manager
+	delete the last window.  Instead queue a shutdown call.
+
 2005-10-08  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/ledger-core/dialog-dup-trans.c
