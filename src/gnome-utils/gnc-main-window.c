@@ -434,7 +434,12 @@ gnc_main_window_delete_event (GtkWidget *window,
 
   session = qof_session_get_current_session();
   if (qof_book_not_saved(qof_session_get_book(session))) {
-    return gnc_main_window_prompt_for_save(GTK_WIDGET(window));
+    if (!gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
+      /* Tell gnucash to shutdown cleanly */
+      g_idle_add((GSourceFunc)gnc_shutdown, 0);
+    }
+    /* Cancel the window deletion. It'll happen on the just queued shutdown. */
+    return TRUE;
   }
 
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
@@ -455,7 +460,11 @@ gnc_main_window_delete_event (GtkWidget *window,
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
 
-  return (response != GTK_RESPONSE_OK);
+  if (response == GTK_RESPONSE_OK) {
+    /* Tell gnucash to shutdown cleanly */
+    g_idle_add((GSourceFunc)gnc_shutdown, 0);
+  }
+  return TRUE;
 }
 
 
