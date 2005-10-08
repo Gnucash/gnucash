@@ -1,5 +1,11 @@
 2005-10-07  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/register-gnome/gnucash-item-list.c
+	(tree_view_selection_changed): Condition handling; avoid a set of
+	setfaults in use of the auto-complete.
+
+2005-10-07  Joshua Sled  <jsled@asynchronous.org>
+
 	Patch from Chris Shoemaker <c.shoemaker@cox.net>:
 	* src/engine/Account.[ch]: Refactoring of
 	account-*-balance(as-of-date) code.

@@ -120,10 +120,6 @@ Resources
 
   - doesn't remember custom check formats.
 
-  - typing into an in-progress auto-completion field appends (in the middle
-    of the string) rather than replaces the selection portion, at least in
-    the account cells of the SX template.
-
 - Reconcile
 
   - Crash after initial value-prompting dialog:
