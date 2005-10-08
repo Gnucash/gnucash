@@ -46,7 +46,6 @@
 #include "Group.h"
 #include "dialog-utils.h"
 #include "print-session.h"
-#include "global-options.h"
 #include "gnc-engine.h"
 #include "gnc-gpg.h"
 #include "gnc-gui-query.h"

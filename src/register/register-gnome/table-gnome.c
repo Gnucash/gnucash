@@ -45,7 +45,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "table-allgui.h"

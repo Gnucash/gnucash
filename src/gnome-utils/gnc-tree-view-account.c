@@ -38,7 +38,6 @@
 #include "gnc-engine.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 #include "messages.h"
 
 

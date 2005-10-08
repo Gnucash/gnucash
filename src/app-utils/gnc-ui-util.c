@@ -34,7 +34,6 @@
 #include <string.h>
 
 #include "Transaction.h"
-#include "global-options.h"
 
 #include "Account.h"
 #include "gnc-book.h"

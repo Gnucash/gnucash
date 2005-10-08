@@ -35,7 +35,6 @@
 #include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "druid-merge.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"

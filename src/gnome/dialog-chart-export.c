@@ -31,7 +31,6 @@
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
-#include "global-options.h"
 #include "gnc-event.h"
 #include "gnc-file.h"
 

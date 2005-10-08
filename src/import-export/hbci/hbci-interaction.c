@@ -33,7 +33,6 @@
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "global-options.h"
 #include "gnc-gconf-utils.h"
 
 #include "dialog-pass.h"

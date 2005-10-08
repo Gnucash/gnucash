@@ -42,7 +42,6 @@
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
 #include "file-utils.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"

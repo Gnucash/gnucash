@@ -46,7 +46,6 @@
 #include "gnc-tree-model-selection.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
 

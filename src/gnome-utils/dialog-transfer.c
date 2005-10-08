@@ -28,7 +28,6 @@
 
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"

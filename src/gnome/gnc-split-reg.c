@@ -40,7 +40,6 @@
 #include "dialog-account.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"

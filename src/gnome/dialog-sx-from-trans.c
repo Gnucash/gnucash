@@ -35,7 +35,6 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"

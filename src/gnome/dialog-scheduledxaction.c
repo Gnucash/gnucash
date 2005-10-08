@@ -50,7 +50,6 @@
 #include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
 

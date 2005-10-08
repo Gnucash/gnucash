@@ -28,7 +28,6 @@
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
-#include "global-options.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"

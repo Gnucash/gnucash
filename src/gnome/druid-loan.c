@@ -44,7 +44,6 @@
 #include "gnc-date.h"
 #include "gnc-exp-parser.h"
 #include "gnc-component-manager.h"
-#include "global-options.h"
 #include "dialog-utils.h"
 #include "Account.h"
 #include "FreqSpec.h"

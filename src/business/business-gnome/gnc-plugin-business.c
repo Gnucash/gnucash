@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
+#include <libguile.h>
 
 #include "dialog-billterms.h"
 #include "dialog-customer.h"
@@ -43,7 +44,6 @@
 #include "gnc-date.h"
 #include "gnc-file.h"
 #include "guile-mappings.h"
-#include "global-options.h"
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);

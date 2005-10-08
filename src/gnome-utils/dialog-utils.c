@@ -33,7 +33,6 @@
 #include <dlfcn.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-commodity.h"
 #include "messages.h"
 #include "Group.h"

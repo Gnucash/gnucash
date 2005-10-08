@@ -39,7 +39,6 @@
 #include "import-utilities.h"
 #include "Account.h"
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "Query.h"
 
 #include "gnc-engine.h"

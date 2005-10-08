@@ -39,7 +39,6 @@
 #include "dialog-utils.h"
 #include "druid-qif-import.h"
 #include "druid-utils.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-file.h"

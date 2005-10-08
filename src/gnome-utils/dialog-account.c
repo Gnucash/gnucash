@@ -32,7 +32,6 @@
 #include "dialog-account.h"
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-commodity.h"

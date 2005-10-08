@@ -23,11 +23,11 @@
 
 #include <errno.h>
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <libguile.h>
 #include <string.h>
 #include <g-wrap-wct.h>
 
-#include "global-options.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"

@@ -32,7 +32,6 @@
 #include "QueryNew.h"
 #include "SX-book.h"
 #include "Transaction.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-book.h"
 #include "gnc-date.h"

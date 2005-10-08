@@ -42,7 +42,6 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "global-options.h"
 
 #include "gnc-engine.h"
 #include "gnc-file.h"

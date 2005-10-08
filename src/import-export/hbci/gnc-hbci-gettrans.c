@@ -29,9 +29,7 @@
 #include "Transaction.h"
 #include "gnc-engine-util.h" 
 
-/*#include "gnc-gen-transaction.h"*/
 #include "import-main-matcher.h"
-#include "global-options.h"
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"

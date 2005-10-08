@@ -22,7 +22,6 @@
 
 #include <string.h>
 
-#include "global-options.h"
 #include "qof.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"

@@ -37,7 +37,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "messages.h"
-#include "global-options.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"

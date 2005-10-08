@@ -26,7 +26,6 @@
 #include <gnome.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"

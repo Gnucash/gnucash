@@ -38,7 +38,6 @@
 #include "druid-hierarchy.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
-#include "global-options.h"
 #include "Group.h"
 
 static GtkWidget			*qof_book_merge_window = NULL;

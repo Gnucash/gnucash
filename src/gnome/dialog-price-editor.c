@@ -27,7 +27,6 @@
 #include <time.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-general-select.h"

@@ -30,7 +30,6 @@
 #include "dialog-utils.h"
 #include "finproto.h"
 #include "finvar.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"

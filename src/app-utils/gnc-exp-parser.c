@@ -29,7 +29,6 @@
 
 #include "finproto.h"
 #include "fin_spl_protos.h"
-#include "global-options.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"

@@ -43,7 +43,6 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "global-options.h"
 #include "gnc-associate-account.h"
 #include "gnc-ofx-import.h"
 #include "gnc-file.h"

@@ -38,7 +38,6 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "global-options.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
 #include "gnc-engine-util.h"

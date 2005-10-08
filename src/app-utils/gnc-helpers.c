@@ -32,7 +32,6 @@
 #include "engine-helpers.h"
 #include "gnc-helpers.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 
 
 /* Type converters for GNCPrintAmountInfo */

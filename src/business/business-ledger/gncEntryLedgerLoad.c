@@ -31,7 +31,6 @@
 #include "Account.h"
 #include "account-quickfill.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"

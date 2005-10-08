@@ -31,7 +31,6 @@
 #include "dialog-utils.h"
 #include "druid-stock-split.h"
 #include "druid-utils.h"
-#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
