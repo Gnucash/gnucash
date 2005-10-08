@@ -69,7 +69,7 @@ gnc_table_save_state (Table *table)
         if (table->ui_data == NULL)
                 return;
 
-        if (!gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
+	if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
 		return;
 
         sheet = GNUCASH_SHEET (table->ui_data);
@@ -162,7 +162,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         widths = gnc_header_widths_new ();
 
-        if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE)) {
+	if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL)) {
 		node = gnc_table_layout_get_cells (table->layout);
 		for (; node; node = node->next) {
 			BasicCell *cell = node->data;
