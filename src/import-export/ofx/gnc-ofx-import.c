@@ -359,6 +359,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								   NULL,
 								   NULL);
 		    g_free (investment_account_text);
+		    investment_account_text = NULL;
 		    if(investment_account!=NULL&&
 		       data.unitprice_valid==true&&
 		       data.units_valid==true&&
@@ -626,6 +627,7 @@ void gnc_file_ofx_import (void)
 				      NULL,
 				      default_dir);
   g_free(default_dir);
+  default_dir = NULL;
 
   if(selected_filename!=NULL)
     {
@@ -633,6 +635,7 @@ void gnc_file_ofx_import (void)
       gnc_extract_directory(&default_dir, selected_filename);
       gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
       g_free(default_dir);
+      default_dir = NULL;
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);

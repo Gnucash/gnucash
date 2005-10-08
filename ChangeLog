@@ -1,3 +1,8 @@
+2005-10-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/ofx/gnc-ofx-import.c: Fix errornerous
+	double-free at OFX import.
+
 2005-10-07  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-item-list.c
