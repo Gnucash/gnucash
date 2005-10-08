@@ -23,16 +23,13 @@
 #include "config.h"
 
 #include <glib.h>
-#include <time.h>
 
 #include "Group.h"
 #include "datecell.h"
-#include "global-options.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-err-popup.h"
 #include "gnc-ui.h"
-#include "gnc-ui-util.h"
 #include "messages.h"
 #include "pricecell.h"
 #include "recncell.h"
@@ -1857,9 +1854,9 @@ gnc_split_register_guid_malloc (void)
 {
   GUID *guid;
 
-  guid = xaccGUIDMalloc ();
+  guid = guid_malloc ();
 
-  *guid = *xaccGUIDNULL ();
+  *guid = *guid_null ();
 
   return guid;
 }
@@ -2047,7 +2044,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
 static void
 gnc_split_register_guid_free (gpointer guid)
 {
-  xaccGUIDFree (guid);
+  guid_free (guid);
 }
 
 static void
@@ -2059,7 +2056,7 @@ gnc_split_register_guid_copy (gpointer p_to, gconstpointer p_from)
   g_return_if_fail (to != NULL);
 
   if (from == NULL)
-    *to = *xaccGUIDNULL ();
+    *to = *guid_null ();
   else
     *to = *from;
 }

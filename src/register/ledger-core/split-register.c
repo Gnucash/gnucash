@@ -28,20 +28,13 @@
 
 #include <glib.h>
 #include <libguile.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
 
-#include "Account.h"
 #include "combocell.h"
 #include "datecell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
-#include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "messages.h"
@@ -592,7 +585,7 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
         gnc_split_register_save_to_scm (reg, SCM_UNDEFINED, new_item,
                                         use_cut_semantics);
 
-      copied_leader_guid = *xaccGUIDNULL();
+      copied_leader_guid = *guid_null();
     }
   }
   else
@@ -778,7 +771,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
     /* in pasting, the old split is deleted. */
     if (split == blank_split)
     {
-      info->blank_split_guid = *xaccGUIDNULL();
+      info->blank_split_guid = *guid_null();
       blank_split = NULL;
     }
 
@@ -863,7 +856,7 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
   /* Check pending transaction */
   if (trans == pending_trans)
   {
-    info->pending_trans_guid = *xaccGUIDNULL ();
+    info->pending_trans_guid = *guid_null ();
     pending_trans = NULL;
   }
 
@@ -903,7 +896,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
     /* Make sure we don't commit this later on */
     if (trans == pending_trans)
     {
-      info->pending_trans_guid = *xaccGUIDNULL();
+      info->pending_trans_guid = *guid_null();
       pending_trans = NULL;
     }
 
@@ -913,7 +906,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
     xaccTransDestroy (trans);
     xaccTransCommitEdit (trans);
 
-    info->blank_split_guid = *xaccGUIDNULL();
+    info->blank_split_guid = *guid_null();
     blank_split = NULL;
 
     gnc_resume_gui_refresh ();
@@ -937,7 +930,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   /* Check pending transaction */
   if (trans == pending_trans)
   {
-    info->pending_trans_guid = *xaccGUIDNULL();
+    info->pending_trans_guid = *guid_null();
     pending_trans = NULL;
   }
 
@@ -986,7 +979,7 @@ gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
   /* Check pending transaction */
   if (trans == pending_trans)
   {
-    info->pending_trans_guid = *xaccGUIDNULL();
+    info->pending_trans_guid = *guid_null();
     pending_trans = NULL;
   }
 
@@ -1035,7 +1028,7 @@ gnc_split_register_unvoid_current_trans (SplitRegister *reg)
   /* Check pending transaction */
   if (trans == pending_trans)
   {
-    info->pending_trans_guid = *xaccGUIDNULL();
+    info->pending_trans_guid = *guid_null();
     pending_trans = NULL;
   }
 
@@ -1128,7 +1121,7 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
 
   xaccTransRollbackEdit (pending_trans);
 
-  info->pending_trans_guid = *xaccGUIDNULL ();
+  info->pending_trans_guid = *guid_null ();
 
   gnc_resume_gui_refresh ();
 }
@@ -1368,7 +1361,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        if (xaccTransIsOpen(trans) || (info->blank_split_edited))
        {
          info->last_date_entered = xaccTransGetDate (trans);
-         info->blank_split_guid = *xaccGUIDNULL ();
+         info->blank_split_guid = *guid_null ();
          info->blank_split_edited = FALSE;
          blank_split = NULL;
        }
@@ -1384,7 +1377,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      if (pending_trans == trans)
      {
        pending_trans = NULL;
-       info->pending_trans_guid = *xaccGUIDNULL ();
+       info->pending_trans_guid = *guid_null ();
      }
 
      return TRUE;
@@ -1478,7 +1471,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    {
      if (do_commit)
      {
-       info->blank_split_guid = *xaccGUIDNULL ();
+       info->blank_split_guid = *guid_null ();
        blank_split = NULL;
        info->last_date_entered = xaccTransGetDate (trans);
      }
@@ -1494,7 +1487,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      if (pending_trans == trans)
      {
        pending_trans = NULL;
-       info->pending_trans_guid = *xaccGUIDNULL ();
+       info->pending_trans_guid = *guid_null ();
      }
    }
 
@@ -2387,7 +2380,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
       /* Make sure we don't commit this below */
       if (trans == pending_trans)
       {
-        info->pending_trans_guid = *xaccGUIDNULL ();
+        info->pending_trans_guid = *guid_null ();
         pending_trans = NULL;
       }
 
@@ -2395,7 +2388,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
 
-      info->blank_split_guid = *xaccGUIDNULL ();
+      info->blank_split_guid = *guid_null ();
       blank_split = NULL;
    }
 
@@ -2405,7 +2398,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
       if (xaccTransIsOpen (pending_trans))
         xaccTransCommitEdit (pending_trans);
 
-      info->pending_trans_guid = *xaccGUIDNULL ();
+      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
    }
 

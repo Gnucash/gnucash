@@ -22,15 +22,11 @@
 
 #include "config.h"
 
-#include "dialog-account.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine.h"
 #include "gnc-ui.h"
-#include "gnc-ui-util.h"
 #include "messages.h"
 #include "pricecell.h"
 #include "datecell.h"
@@ -336,7 +332,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
       if (xaccTransIsOpen (old_trans))
         xaccTransCommitEdit (old_trans);
 
-      info->pending_trans_guid = *xaccGUIDNULL ();
+      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
       saved = TRUE;
     }

@@ -27,7 +27,6 @@
 #include "Group.h"
 #include "account-quickfill.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
@@ -513,7 +512,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (xaccTransIsOpen (pending_trans))
       xaccTransCommitEdit (pending_trans);
 
-    info->pending_trans_guid = *xaccGUIDNULL ();
+    info->pending_trans_guid = *guid_null ();
     pending_trans = NULL;
   }
 
