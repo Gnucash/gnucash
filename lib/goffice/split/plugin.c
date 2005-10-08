@@ -1731,10 +1731,12 @@ plugins_init (GnmCmdContext *context)
 
 	/* get descriptors for new plugins */
 	if (gnm_app_prefs->activate_new_plugins)
+	{
 		g_hash_table_foreach (
 			plugin_file_state_dir_hash,
 			(GHFunc) ghf_collect_new_plugins,
 			&plugin_list);
+	}
 
 	plugin_list = g_slist_reverse (plugin_list);
 	plugin_db_activate_plugin_list (plugin_list, &error);

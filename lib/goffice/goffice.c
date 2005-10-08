@@ -40,6 +40,9 @@
 #include <goffice/utils/go-font.h>
 #include <goffice/utils/go-math.h>
 #include <gsf/gsf-utils.h>
+#include "gnumeric-gconf.h"
+#include "str.h"
+#include "mstyle.h"
 
 int goffice_graph_debug_level = 1;
 
@@ -73,9 +76,9 @@ libgoffice_init (void)
 	gog_themes_init	();
 	// -libgoffice_init
 
-	//gnm_string_init();
-	//mstyle_init();
-	//gnm_conf_init( FALSE );
+	gnm_string_init();
+	mstyle_init();
+	gnm_conf_init( FALSE );
 
 	ctx = cmd_context_stderr_new();
 	plugins_init( ctx );

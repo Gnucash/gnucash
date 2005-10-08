@@ -1,5 +1,11 @@
 2005-10-08  Joshua Sled  <jsled@asynchronous.org>
 
+	* goffice.c (libgoffice_init): fully initialize so plugins get
+	loaded at init-time, and thus displayed at run-time. :p
+	Other goffice/html/graphing code cleanups.
+
+2005-10-08  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/report/report-gnome/gnc-plugin-page-report.c
 	(gnc_plugin_page_report_destroy_widget): remove the report when
 	the page is destroyed so the report will be removed, &c. 

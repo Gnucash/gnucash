@@ -492,12 +492,15 @@ gog_renderer_pixbuf_get_pango_layout (GogRendererPixbuf *prend)
 	PangoAttrList  *attrs = NULL;
 	PangoFontDescription const *fd = prend->base.cur_style->font.font->desc;
 
+	// +jsled: testing font display issues.
+	if (0)
 	{
 		char *pfdStr;
 		pfdStr = pango_font_description_to_string( fd );
 		printf( "pfd=[%s]\n", pfdStr );
 		g_free( pfdStr );
 	}
+	// -jsled
 
 	if (prend->pango_layout != NULL)
 		return prend->pango_layout;

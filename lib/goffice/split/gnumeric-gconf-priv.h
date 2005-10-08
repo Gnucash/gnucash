@@ -4,35 +4,35 @@
 /*
  *  Note: This file must stay synchronized with the corresponding schema file!
  *
- *        This file should only be included into gnumeric-gconf.c  and
+ *        This file should only be included into gnucash-gconf.c  and
  *        dialogs/dialog-preferences.c
  */
 
 
 /*
- *  schemas/gnumeric-dialogs.schemas
+ *  schemas/gnucash-dialogs.schemas
  */
-#define FUNCTION_SELECT_GCONF_RECENT "/apps/gnumeric/functionselector/recentfunctions"
-#define FUNCTION_SELECT_GCONF_NUM_OF_RECENT "/apps/gnumeric/functionselector/num-of-recent"
+#define FUNCTION_SELECT_GCONF_RECENT "/apps/gnucash/functionselector/recentfunctions"
+#define FUNCTION_SELECT_GCONF_NUM_OF_RECENT "/apps/gnucash/functionselector/num-of-recent"
 
-#define CONF_DEFAULT_FONT_DIR	"/apps/gnumeric/core/defaultfont/"
+#define CONF_DEFAULT_FONT_DIR	"/apps/gnucash/core/defaultfont/"
 #define CONF_DEFAULT_FONT_NAME	  CONF_DEFAULT_FONT_DIR "name"
 #define CONF_DEFAULT_FONT_SIZE	  CONF_DEFAULT_FONT_DIR "size"
 #define CONF_DEFAULT_FONT_BOLD	  CONF_DEFAULT_FONT_DIR "bold"
 #define CONF_DEFAULT_FONT_ITALIC  CONF_DEFAULT_FONT_DIR "italic"
 
-#define PLUGIN_GCONF_DIRECTORY "/apps/gnumeric/plugins"
+#define PLUGIN_GCONF_DIRECTORY "/apps/gnucash/plugins"
 #define PLUGIN_GCONF_ACTIVATE_NEW PLUGIN_GCONF_DIRECTORY "/activate-new"
 #define PLUGIN_GCONF_ACTIVE PLUGIN_GCONF_DIRECTORY "/active"
 #define PLUGIN_GCONF_FILE_STATES PLUGIN_GCONF_DIRECTORY "/file-states"
 #define PLUGIN_GCONF_EXTRA_DIRS PLUGIN_GCONF_DIRECTORY "/extra-dirs"
 
-#define AUTOFORMAT_GCONF_DIRECTORY "/apps/gnumeric/autoformat"
+#define AUTOFORMAT_GCONF_DIRECTORY "/apps/gnucash/autoformat"
 #define AUTOFORMAT_GCONF_EXTRA_DIRS AUTOFORMAT_GCONF_DIRECTORY "/extra-dirs"
 #define AUTOFORMAT_GCONF_SYS_DIR AUTOFORMAT_GCONF_DIRECTORY "/sys-dir"
 #define AUTOFORMAT_GCONF_USR_DIR AUTOFORMAT_GCONF_DIRECTORY "/usr-dir"
 
-#define PRINTSETUP_GCONF_DIRECTORY "/apps/gnumeric/printsetup"
+#define PRINTSETUP_GCONF_DIRECTORY "/apps/gnucash/printsetup"
 #define PRINTSETUP_GCONF_ALL_SHEETS PRINTSETUP_GCONF_DIRECTORY "/all-sheets"
 #define PRINTSETUP_GCONF_PRINTER_CONFIG PRINTSETUP_GCONF_DIRECTORY "/printer-config"
 #define PRINTSETUP_GCONF_HEADER PRINTSETUP_GCONF_DIRECTORY "/header"
@@ -60,34 +60,34 @@
 #define PRINTSETUP_GCONF_HEADER_FORMAT_MIDDLE PRINTSETUP_GCONF_DIRECTORY "/hf-middle"
 #define PRINTSETUP_GCONF_HEADER_FORMAT_RIGHT PRINTSETUP_GCONF_DIRECTORY "/hf-right"
 
-#define DIALOGS_GCONF_DIRECTORY "/apps/gnumeric/dialogs"
+#define DIALOGS_GCONF_DIRECTORY "/apps/gnucash/dialogs"
 #define DIALOGS_GCONF_UNFOCUSED_RS DIALOGS_GCONF_DIRECTORY "/rs/unfocused"
 
 /*
- *  schemas/gnumeric-general.schemas
+ *  schemas/gnucash-general.schemas
  */
 
-#define GNM_CONF_UNDO_DIRECTORY "/apps/gnumeric/undo"
+#define GNM_CONF_UNDO_DIRECTORY "/apps/gnucash/undo"
 #define GNM_CONF_UNDO_SIZE GNM_CONF_UNDO_DIRECTORY "/size"
 #define GNM_CONF_UNDO_MAXNUM GNM_CONF_UNDO_DIRECTORY "/maxnum"
 #define GNM_CONF_UNDO_SHOW_SHEET_NAME GNM_CONF_UNDO_DIRECTORY "/show_sheet_name"
 #define GNM_CONF_UNDO_MAX_DESCRIPTOR_WIDTH GNM_CONF_UNDO_DIRECTORY "/max_descriptor_width"
 
-#define GNM_CONF_FONT_DIRECTORY "/apps/gnumeric/core/defaultfont"
+#define GNM_CONF_FONT_DIRECTORY "/apps/gnucash/core/defaultfont"
 #define GNM_CONF_FONT_NAME GNM_CONF_FONT_DIRECTORY "/name"
 #define GNM_CONF_FONT_SIZE GNM_CONF_FONT_DIRECTORY "/size"
 #define GNM_CONF_FONT_BOLD GNM_CONF_FONT_DIRECTORY "/bold"
 #define GNM_CONF_FONT_ITALIC GNM_CONF_FONT_DIRECTORY "/italic"
 
-#define GNM_CONF_FILE_DIRECTORY "/apps/gnumeric/core/file"
+#define GNM_CONF_FILE_DIRECTORY "/apps/gnucash/core/file"
 #define GNM_CONF_FILE_HISTORY_N GNM_CONF_FILE_DIRECTORY "/history/n"
 #define GNM_CONF_FILE_HISTORY_FILES GNM_CONF_FILE_DIRECTORY "/history/files"
 #define GNM_CONF_FILE_OVERWRITE_DEFAULT GNM_CONF_FILE_DIRECTORY "/save/def-overwrite"
 #define GNM_CONF_FILE_SINGLE_SHEET_SAVE GNM_CONF_FILE_DIRECTORY "/save/single_sheet"
 
-#define GNM_CONF_WORKBOOK_NSHEETS "/apps/gnumeric/core/workbook/n-sheet"
+#define GNM_CONF_WORKBOOK_NSHEETS "/apps/gnucash/core/workbook/n-sheet"
 
-#define GNM_CONF_GUI_DIRECTORY "/apps/gnumeric/core/gui"
+#define GNM_CONF_GUI_DIRECTORY "/apps/gnucash/core/gui"
 #define GNM_CONF_GUI_RES_H GNM_CONF_GUI_DIRECTORY "/screen/horizontaldpi"
 #define GNM_CONF_GUI_RES_V GNM_CONF_GUI_DIRECTORY "/screen/verticaldpi"
 #define GNM_CONF_GUI_ED_AUTOCOMPLETE GNM_CONF_GUI_DIRECTORY "/editing/autocomplete"
@@ -98,22 +98,22 @@
 #define GNM_CONF_GUI_WINDOW_Y GNM_CONF_GUI_DIRECTORY "/window/y"
 #define GNM_CONF_GUI_ZOOM GNM_CONF_GUI_DIRECTORY "/window/zoom"
 
-#define GNM_CONF_XML_COMPRESSION "/apps/gnumeric/core/xml/compression-level"
+#define GNM_CONF_XML_COMPRESSION "/apps/gnucash/core/xml/compression-level"
 
-#define GNM_CONF_SORT_DIRECTORY "/apps/gnumeric/core/sort"
+#define GNM_CONF_SORT_DIRECTORY "/apps/gnucash/core/sort"
 #define GNM_CONF_SORT_DEFAULT_BY_CASE GNM_CONF_SORT_DIRECTORY "/default/by-case"
 #define GNM_CONF_SORT_DEFAULT_RETAIN_FORM GNM_CONF_SORT_DIRECTORY "/default/retain-formats"
 #define GNM_CONF_SORT_DEFAULT_ASCENDING GNM_CONF_SORT_DIRECTORY "/default/ascending"
 #define GNM_CONF_SORT_DIALOG_MAX_INITIAL GNM_CONF_SORT_DIRECTORY "/dialog/max-initial-clauses"
 
-#define GNM_CONF_CUTANDPASTE_DIRECTORY "/apps/gnumeric/cut-and-paste"
+#define GNM_CONF_CUTANDPASTE_DIRECTORY "/apps/gnucash/cut-and-paste"
 #define GNM_CONF_CUTANDPASTE_PREFER_CLIPBOARD GNM_CONF_CUTANDPASTE_DIRECTORY "/prefer-clipboard"
 
 /*
- *  schemas/gnumeric-plugins.schemas
+ *  schemas/gnucash-plugins.schemas
  */
 
-#define PLUGIN_GCONF_LATEX "/apps/gnumeric/plugin/latex"
+#define PLUGIN_GCONF_LATEX "/apps/gnucash/plugin/latex"
 #define PLUGIN_GCONF_LATEX_USE_UTF8 PLUGIN_GCONF_LATEX "/use-utf8"
 
 #endif /* GNM_CONF_PRIV_H */

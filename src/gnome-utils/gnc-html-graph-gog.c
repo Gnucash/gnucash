@@ -214,8 +214,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     printf( "plugin not loaded" );
     return FALSE;
   }
-  g_object_set (G_OBJECT (plot),
-		NULL);
+  g_object_set(G_OBJECT (plot), NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
   series = gog_plot_new_series( plot );
   labelData = go_data_vector_str_new( (char const * const *)labels, datasize );

@@ -1,6 +1,6 @@
 SUBDIRS = app graph utils gui-utils drawing pixmaps split cut-n-paste 
 
-AM_CFLAGS = $(GLIB_CFLAGS) $(ART_CFLAGS) $(GNOME_CFLAGS) $(GSF_CFLAGS)
+AM_CFLAGS = $(GLIB_CFLAGS) $(ART_CFLAGS) $(GNOME_CFLAGS) $(GSF_CFLAGS) $(PRINT_CFLAGS)
 
 noinst_LTLIBRARIES = libgoffice.la
 
