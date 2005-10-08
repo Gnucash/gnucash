@@ -311,16 +311,16 @@ kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path)
  */
 
 static inline KvpFrame *
-get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
+get_trailer_make (KvpFrame * frame, const char * key_path, const char **end_key)
 {
-  char *last_key;
+  const char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = (char *) key_path;
+    last_key = key_path;
   }
   else if (last_key == key_path)
   {
@@ -353,16 +353,16 @@ get_trailer_make (KvpFrame * frame, const char * key_path, char **end_key)
  */
 
 static inline const KvpFrame *
-get_trailer_or_null (const KvpFrame * frame, const char * key_path, char **end_key)
+get_trailer_or_null (const KvpFrame * frame, const char * key_path, const char **end_key)
 {
-  char *last_key;
+  const char *last_key;
 
   if (!frame || !key_path || (0 == key_path[0])) return NULL;
 
   last_key = strrchr (key_path, '/');
   if (NULL == last_key)
   {
-    last_key = (char *) key_path;
+    last_key = key_path;
   }
   else if (last_key == key_path)
   {
@@ -468,7 +468,7 @@ KvpFrame *
 kvp_frame_set_value_nc (KvpFrame * frame, const char * key_path, 
                         KvpValue * value) 
 {
-  char *last_key;
+  const char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -481,7 +481,7 @@ kvp_frame_set_value (KvpFrame * frame, const char * key_path,
                      const KvpValue * value) 
 {
   KvpValue *new_value = NULL;
-  char *last_key;
+  const char *last_key;
 
   frame = get_trailer_make (frame, key_path, &last_key);
   if (!frame) return NULL;
@@ -496,7 +496,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
                             KvpValue * new_value) 
 {
   KvpValue * old_value;
-  char *last_key;
+  const char *last_key;
 
   last_key = NULL;
   if (new_value)
@@ -518,7 +518,7 @@ kvp_frame_replace_value_nc (KvpFrame * frame, const char * key_path,
 KvpFrame *
 kvp_frame_add_value_nc(KvpFrame * frame, const char * path, KvpValue *value) 
 {
-  char *key = NULL;
+  const char *key = NULL;
   KvpValue *oldvalue;
 
   frame = (KvpFrame *) get_trailer_or_null (frame, path, &key);
@@ -854,7 +854,7 @@ kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc)
 gint64
 kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_gint64(kvp_frame_get_slot (frame, key));
 }
@@ -862,7 +862,7 @@ kvp_frame_get_gint64(const KvpFrame *frame, const char *path)
 double      
 kvp_frame_get_double(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_double(kvp_frame_get_slot (frame, key));
 }
@@ -870,7 +870,7 @@ kvp_frame_get_double(const KvpFrame *frame, const char *path)
 gnc_numeric 
 kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_numeric(kvp_frame_get_slot (frame, key));
 }
@@ -878,7 +878,7 @@ kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
 char * 
 kvp_frame_get_string(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_string(kvp_frame_get_slot (frame, key));
 }
@@ -886,7 +886,7 @@ kvp_frame_get_string(const KvpFrame *frame, const char *path)
 GUID *
 kvp_frame_get_guid(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_guid(kvp_frame_get_slot (frame, key));
 }
@@ -895,7 +895,7 @@ void *
 kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_binary(kvp_frame_get_slot (frame, key), size_return);
 }
@@ -903,7 +903,7 @@ kvp_frame_get_binary(const KvpFrame *frame, const char *path,
 Timespec
 kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_timespec(kvp_frame_get_slot (frame, key));
 }
@@ -911,7 +911,7 @@ kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
 KvpFrame *
 kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_value_get_frame(kvp_frame_get_slot (frame, key));
 }
@@ -919,7 +919,7 @@ kvp_frame_get_frame(const KvpFrame *frame, const char *path)
 KvpValue *
 kvp_frame_get_value(const KvpFrame *frame, const char *path)
 {
-  char *key = NULL;
+  const char *key = NULL;
   frame = get_trailer_or_null (frame, path, &key);
   return kvp_frame_get_slot (frame, key);
 }
