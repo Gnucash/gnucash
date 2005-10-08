@@ -50,7 +50,6 @@ typedef struct {
   GtkWidget * totals_combo;
   GtkListStore *datamodel;
   int       component_id;
-  SCM       callback_id;
   int       cnxn_id;
 } GNCMainSummary;
 
@@ -512,20 +511,12 @@ gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data)
 {
   GNCMainSummary * summary = data;
   gnc_gconf_remove_anon_notification(GCONF_SECTION, summary->cnxn_id);
-  gnc_unregister_option_change_callback_id(summary->callback_id);
   gnc_unregister_gui_component(summary->component_id);
   g_free(summary);
 }
 
 static void
 summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
-{
-  GNCMainSummary * summary = user_data;
-  gnc_main_window_summary_refresh(summary);
-}
-
-static void
-summarybar_option_change_handler(gpointer user_data)
 {
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
@@ -564,10 +555,6 @@ gnc_main_window_summary_new (void)
   retval->component_id = gnc_register_gui_component(WINDOW_SUMMARYBAR_CM_CLASS,
                                                     summarybar_refresh_handler,
                                                     NULL, retval);
-  retval->callback_id  = gnc_register_option_change_callback(summarybar_option_change_handler,
-							     retval,
-							     "Summarybar",
-							     NULL);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
