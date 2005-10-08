@@ -1,5 +1,12 @@
 2005-10-08  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/ledger-core/dialog-dup-trans.c
+	(gnc_dup_trans_dialog): Cleanup the window after dialog returns.
+	(gnc_dup_trans_dialog_create): attach to existing signals; re-implement
+	spinbutton behavior workaround.
+
+2005-10-08  Joshua Sled  <jsled@asynchronous.org>
+
 	* goffice.c (libgoffice_init): fully initialize so plugins get
 	loaded at init-time, and thus displayed at run-time. :p
 	Other goffice/html/graphing code cleanups.

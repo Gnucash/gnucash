@@ -126,7 +126,7 @@ Resources
 
   - doesn't remember custom check formats.
 
-  - duplicate-transaction dialog cannot be Ok- or Cancel-ed.
+  - duplicate-transaction dialog is not initialized with transaction number
 
 - Reconcile
 
