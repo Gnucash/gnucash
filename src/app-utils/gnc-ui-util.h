@@ -47,7 +47,10 @@
 typedef QofSession * (*QofSessionCB) (void);
 
 
-/* User Settings ****************************************************/
+/** Returns the account separation character chosen by the user.
+ *
+ *  @return The character to use.
+ */
 char gnc_get_account_separator (void);
 
 gboolean gnc_reverse_balance(Account *account);
@@ -215,6 +218,25 @@ gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the default ISO currency string of the current locale. */
 const char * gnc_locale_default_iso_currency_code (void);
+
+
+/** Return the default currency set by the user.  If the user's
+ *  preference is invalid, then this routine will return the default
+ *  currency for the user's locale.
+ *
+ *  @return A pointer to a currency.
+ */
+gnc_commodity * gnc_default_currency (void);
+
+
+/** Return the default currency for use in reports, as set by the
+ *  user.  If the user's preference is invalid, then this routine will
+ *  return the default currency for the user's locale.
+ *
+ *  @return A pointer to a currency.
+ */
+gnc_commodity * gnc_default_report_currency (void);
+
 
 /* Returns the number of decimal place to print in the current locale */
 int gnc_locale_decimal_places (void);

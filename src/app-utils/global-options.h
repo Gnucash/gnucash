@@ -78,9 +78,6 @@ gnc_lookup_currency_option(const char *section,
                            const char *name,
                            gnc_commodity *default_value);
 
-gnc_commodity * gnc_default_currency (void);
-gnc_commodity * gnc_default_report_currency (void);
-
 void gnc_set_option_default(const char *section, const char *name);
 
 gboolean gnc_set_option(const char *section, const char *name, SCM value);

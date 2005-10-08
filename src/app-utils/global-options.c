@@ -35,9 +35,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static GNCOptionDB *global_options = NULL;
 
 
-#define KEY_CURRENCY_CHOICE "currency_choice"
-#define KEY_CURRENCY_OTHER  "currency_other"
-
 /********************************************************************\
  * gnc_options_init                                                 *
  *   initialize the options structures from the guile side          *
@@ -376,62 +373,6 @@ gnc_lookup_currency_option(const char *section,
 {
   return gnc_option_db_lookup_currency_option(global_options, section, name,
                                               default_value);
-}
-
-
-/********************************************************************\
- * gnc_default_currency                                             *
- *   Return the default currency set by the user.                   *
- *                                                                  *
- * Args: section   - section name of option                         *
- *       name      - name of option                                 *
- *       default_value - default value to return if problem         *
- * Return: currency object or NULL                                  *
-\********************************************************************/
-gnc_commodity *
-gnc_default_currency (void)
-{
-  gnc_commodity *currency;
-  gchar *choice, *mnemonic;
-
-  choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
-  if (choice && strcmp(choice, "other") == 0) {
-    mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
-    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
-    g_free(mnemonic);
-    g_free(choice);
-
-    if (currency)
-      return currency;
-  }
-
-  return gnc_locale_default_currency ();
-}
-
-gnc_commodity *
-gnc_default_report_currency (void)
-{
-  gnc_commodity *currency;
-  gchar *choice, *mnemonic;
-
-  choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
-				KEY_CURRENCY_CHOICE, NULL);
-  if (choice && strcmp(choice, "other") == 0) {
-    mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
-				    KEY_CURRENCY_OTHER, NULL);
-    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
-    DEBUG("mnemonic %s, result %p", mnemonic, currency);
-    g_free(mnemonic);
-    g_free(choice);
-
-    if (currency)
-      return currency;
-  }
-
-  return gnc_locale_default_currency ();
 }
 
 

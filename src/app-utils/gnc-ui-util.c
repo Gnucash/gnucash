@@ -51,6 +51,9 @@
 #include "guile-mappings.h"
 
 
+#define KEY_CURRENCY_CHOICE "currency_choice"
+#define KEY_CURRENCY_OTHER  "currency_other"
+
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static gboolean auto_decimal_enabled = FALSE;
@@ -805,6 +808,53 @@ gnc_locale_default_currency (void)
   return (currency ? currency :
 	  gnc_commodity_table_lookup (gnc_get_current_commodities (), 
 				      GNC_COMMODITY_NS_ISO, "USD"));
+}
+
+
+gnc_commodity *
+gnc_default_currency (void)
+{
+  gnc_commodity *currency;
+  gchar *choice, *mnemonic;
+
+  choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
+  if (choice && strcmp(choice, "other") == 0) {
+    mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					  GNC_COMMODITY_NS_ISO, mnemonic);
+    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    g_free(mnemonic);
+    g_free(choice);
+
+    if (currency)
+      return currency;
+  }
+
+  return gnc_locale_default_currency ();
+}
+
+gnc_commodity *
+gnc_default_report_currency (void)
+{
+  gnc_commodity *currency;
+  gchar *choice, *mnemonic;
+
+  choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
+				KEY_CURRENCY_CHOICE, NULL);
+  if (choice && strcmp(choice, "other") == 0) {
+    mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
+				    KEY_CURRENCY_OTHER, NULL);
+    currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
+					  GNC_COMMODITY_NS_ISO, mnemonic);
+    DEBUG("mnemonic %s, result %p", mnemonic, currency);
+    g_free(mnemonic);
+    g_free(choice);
+
+    if (currency)
+      return currency;
+  }
+
+  return gnc_locale_default_currency ();
 }
 
 
