@@ -114,6 +114,23 @@ To run gdb on an opt-style-install from your build tree:
    gdb> run -e main -s ../libexec/overrides/gnucash --g-fatal-warning
 
 
+-----
+It may be the case that running GDB from within emacs doesn't work for you,
+with the following error:
+
+[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-env gdb /usr/bin/guile...
+ ...in buffer *gud-gdb*:]
+
+/opt/gnucash-cvs/libexec/gnucash/overrides/gnucash-env: line 28: exec: -d: invalid option
+exec: usage: exec [-cl] [-a name] file [redirection ...]
+
+jsled needed to re-define a gud.el function as such:
+
+  (defun gud-gdb-massage-args (file args)
+    (let ((l (copy-list args)))
+      (nconc l (list "-cd" (expand-file-name default-directory) "-fullname"))))
+
+
 Using Electric Fence with GnuCash
 ---------------------------------
     % configure --enable-efence
