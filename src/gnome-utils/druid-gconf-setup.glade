@@ -345,7 +345,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 			  <property name="left_margin">0</property>
 			  <property name="right_margin">0</property>
 			  <property name="indent">0</property>
-			  <property name="text" translatable="yes">The configuration data is stored in a non-standard location.  There are two methods that can be used to make this data visible to GnuCash.  The first it so modify a system search path to include the data location.  The second is to copy the data into your home directory.</property>
+			  <property name="text" translatable="yes">The configuration data is stored in a non-standard location.  There are two methods that can be used to make this data visible to GnuCash.  The first is to modify a system search path to include the data location.  The second is to copy the data into your home directory.</property>
 			</widget>
 		      </child>
 		    </widget>
