@@ -46,7 +46,6 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-#define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define WINDOW_POSITION		"window_position"
 #define WINDOW_GEOMETRY		"window_geometry"
 

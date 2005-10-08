@@ -71,8 +71,6 @@ enum {
 #define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
-#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#define KEY_TOOLBAR_STYLE	"toolbar_style"
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
 
 /** Static Globals *******************************************************/

@@ -56,6 +56,9 @@
 #define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
+#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define KEY_TOOLBAR_STYLE	"toolbar_style"
+#define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define KEY_LAST_PATH		"last_path"
 #define KEY_USE_NEW   		"use_new_window"
 #define KEY_ACCOUNTING_LABELS	"use_accounting_labels"
