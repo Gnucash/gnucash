@@ -350,7 +350,11 @@ tree_view_selection_changed (GtkTreeSelection *selection,
 	GtkTreeIter iter;
 	char *string;
 
-	gtk_tree_selection_get_selected (selection, &model, &iter);
+        g_return_if_fail(data);
+        g_return_if_fail(selection);
+
+	if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+                return;
 
 	gtk_tree_model_get (model, &iter, 0, &string, -1);
 
