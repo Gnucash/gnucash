@@ -112,8 +112,6 @@ the account instead of opening a register.") #f))
          (save-file? #f)
          (book-path #f))
 
-    ;;(gnc:msg (simple-format #f "saving ~S reports" (vector-length *gnc:_reports_*)))
-
     ;; make sure ~/.gnucash/books is there
     (set! save-file? (and (gnc:make-dir dotgnucash-dir)
                          (gnc:make-dir file-dir)))
@@ -128,8 +126,7 @@ the account instead of opening a register.") #f))
               (hash-fold 
                (lambda (k v p)
                  (if (gnc:report-needs-save? v)
-                     (display 
-                      (gnc:report-generate-restore-forms v))))
+                     (display (gnc:report-generate-restore-forms v))))
                #t *gnc:_reports_*)
 
               (hash-fold 
@@ -153,7 +150,7 @@ the account instead of opening a register.") #f))
     ;; window's reference will keep the report alive until the
     ;; window is destroyed, but find-report will fail)
     (for-each 
-     (lambda (dr) 
+     (lambda (dr)
        (hash-remove! *gnc:_reports_* dr))
      dead-reports)))
 
@@ -177,7 +174,7 @@ the account instead of opening a register.") #f))
     ;; the reports have only been created at this point; create their ui component.
     (hash-fold (lambda (key val prior-result)
                 (gnc:main-window-open-report (gnc:report-id val)
-                                             #f ;; window = nil: open in first window.
+                                             #f ;; =window: #f/null => open in first window
                                              ))
                #t *gnc:_reports_*)
     ))

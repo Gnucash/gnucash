@@ -1,3 +1,12 @@
+2005-10-08  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_destroy_widget): remove the report when
+	the page is destroyed so the report will be removed, &c. 
+	(gnc_plugin_page_report_setup): gnc:report-set-needs-save?! on
+	report setup to indicate that the report needs to be written out
+	at book-state-save time.
+
 2005-10-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/ofx/gnc-ofx-import.c: Fix errornerous

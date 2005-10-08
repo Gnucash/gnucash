@@ -52,12 +52,11 @@
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
-// MOD_GUI; // MOD_REPORT;?
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with
 a gnucash- prefix will do. Then just set a log level 
 with gnc_set_log_level().*/
-static QofLogModule log_module = GNC_MOD_GUI; 
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GObjectClass *parent_class = NULL;
 
@@ -76,7 +75,6 @@ static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
 static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId);
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
-static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
 static void gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
@@ -357,6 +355,7 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(ppage);
         GncPluginPageReportPrivate *report = (GncPluginPageReportPrivate*)page->priv;
         SCM  find_report = scm_c_eval_string("gnc:find-report");
+        SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
         SCM  inst_report;
         int  report_id;
 
@@ -371,7 +370,7 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
 
         g_object_get( ppage, "report-id", &report_id, NULL );
 
-        DEBUG("report-id: %d\n", report_id);
+        PINFO("report-id: %d\n", report_id);
         
         /* get the inst-report from the Scheme-side hash, and get its
          * options and editor thunk */
@@ -385,6 +384,10 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
                 report->initial_report = inst_report;
                 scm_gc_protect_object(report->initial_report);
         }
+
+        // all reports need [to be] saved immediately after they're created.
+        PINFO("set needs save");
+        scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
 }
 
 /********************************************************************
@@ -439,12 +442,13 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 LEAVE( "error getting inst_report" );
                 return;
         }
-        
-        if (win->initial_report == SCM_BOOL_F) {    
+
+        if (win->initial_report == SCM_BOOL_F) {
                 scm_gc_unprotect_object(win->initial_report);
                 win->initial_report = inst_report;
                 scm_gc_protect_object(win->initial_report);
                 
+                DEBUG("calling set_needs_save for report with id=%d", report_id);
                 scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
                 
                 win->initial_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
@@ -517,13 +521,13 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         static SCM         remover = SCM_BOOL_F;
         int                report_id;
   
-        if(remover == SCM_BOOL_F) {
+        if (remover == SCM_BOOL_F) {
                 remover = scm_c_eval_string("gnc:report-remove-by-id");
         }
   
-        if(node && 
-           !safe_strcmp (node->type, URL_TYPE_REPORT) && 
-           !strncmp("id=", node->location, 3)) {
+        if (node
+            && !safe_strcmp (node->type, URL_TYPE_REPORT)\
+            && !strncmp("id=", node->location, 3)) {
                 sscanf(node->location+3, "%d", &report_id);
                 /*    printf("unreffing report %d and children\n", report_id);
                       scm_call_1(remover, scm_int2num(report_id)); */
@@ -543,7 +547,6 @@ gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
 
 	win = page->priv;
-        DEBUG( "drawin'" );
         ENTER( "report_draw" );
         if (!win->need_reload)
         {
@@ -560,7 +563,7 @@ gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused
 
 // @param data is actually GncPluginPageReportPrivate
 static void
-gnc_plugin_page_report_refresh (gpointer data)
+gnc_plugin_page_report_refresh(gpointer data)
 {
         // FIXME?
         DEBUG( "report-refresh called" );
@@ -568,11 +571,21 @@ gnc_plugin_page_report_refresh (gpointer data)
         return;
 }
 
-static
-void
-gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page )
+static void
+gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 {
-        // FIXME: cleanup resources.
+        // FIXME: cleanup other resources.
+        static SCM         remover = SCM_BOOL_F;
+        int                report_id;
+
+        PINFO("destroy widget");
+        if (remover == SCM_BOOL_F) {
+                remover = scm_c_eval_string("gnc:report-remove-by-id");
+        }
+
+        report_id = GNC_PLUGIN_PAGE_REPORT(plugin_page)->priv->reportId;
+        PINFO("unreffing report %d and children\n", report_id);
+        scm_call_1(remover, scm_int2num(report_id));
 }
 
 /********************************************************************
@@ -589,16 +602,16 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
         gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
 
         /* close any open editors */
-        for(edited = scm_list_copy(win->edited_reports); !SCM_NULLP(edited); 
-            edited = SCM_CDR(edited)) {
+        for (edited = scm_list_copy(win->edited_reports); !SCM_NULLP(edited);
+             edited = SCM_CDR(edited)) {
                 editor = scm_call_1(get_editor, SCM_CAR(edited));
                 scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
-                if(editor != SCM_BOOL_F) {
+                if (editor != SCM_BOOL_F) {
                         gtk_widget_destroy(GTK_WIDGET(gw_wcp_get_ptr(editor)));
                 }
         }
 
-        if(win->initial_odb) {
+        if (win->initial_odb) {
                 gnc_option_db_unregister_change_callback_id(win->initial_odb, 
                                                             win->name_change_cb_id);
     
@@ -617,8 +630,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
         g_free(win);
 }
 
-static
-void
+static void
 gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
                                       GtkUIManager *ui_merge )
 {
@@ -637,8 +649,7 @@ gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
         DEBUG( "done merging" );
 }
 
-static
-void
+static void
 gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
                                         GtkUIManager *ui_merge )
 {

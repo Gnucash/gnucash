@@ -152,8 +152,6 @@ Resources
 
     - warlord reports this was true in 1.8 as well.
 
-  - Removing a report page should remove the report from the runtime.
-
 - Importing
 
   - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
