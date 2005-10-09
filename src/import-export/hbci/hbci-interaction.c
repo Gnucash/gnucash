@@ -541,34 +541,39 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   b2text = gnc_hbci_utf8ToLatin1(data, b2);
   b3text = gnc_hbci_utf8ToLatin1(data, b3);
 
-  dialog = gnome_dialog_new (title, 
-			     b1 ? b1text : NULL,
-			     b2 ? b2text : NULL,
-			     b3 ? b3text : NULL,
-			     NULL);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
-  gnome_dialog_set_close (GNOME_DIALOG (dialog), TRUE);
+  dialog = gtk_dialog_new_with_buttons (title, 
+					GTK_WINDOW (data->parent),
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+					b1 ? b1text : NULL,
+					1,
+					b2 ? b2text : NULL,
+					2,
+					b3 ? b3text : NULL,
+					3,
+					NULL);
+  /* Ensure that the dialog box is destroyed when the user responds. */
+  g_signal_connect_swapped (dialog,
+			    "response", 
+			    G_CALLBACK (gtk_widget_destroy),
+			    dialog);
+  /* Add the label, and show everything we've added to the dialog. */
   label = gtk_label_new (text);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE, TRUE, 0);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox),
+		     label);
+  gtk_widget_show_all (dialog);
 
-  result = gnome_dialog_run (GNOME_DIALOG (dialog));
-  if (result<0 || result>2) {
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result<1 || result>3) {
     printf("messageBoxCB: Bad result %d", result);
-    g_free(title);
-    g_free(text);
-    g_free(b1text);
-    g_free(b2text);
-    g_free(b3text);
-    return 0;
+    result = 0;
   }
   g_free(title);
   g_free(text);
   g_free(b1text);
   g_free(b2text);
   g_free(b3text);
-  return result+1;
+  return result;
 }
 
 

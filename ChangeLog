@@ -1,3 +1,8 @@
+2005-10-09  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Further gnome2
+	porting of dialogs.
+
 2005-10-08  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/Makefile.am:
