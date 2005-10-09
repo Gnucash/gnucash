@@ -20,7 +20,6 @@ EXTRA_DIST = \
   backend-errors.txt \
   books.txt \
   currencies.txt \
-  gnc-commodity.txt \
   loans.txt \
   lots.txt \
   multicurrency-discussion.txt \
