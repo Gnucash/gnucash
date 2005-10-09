@@ -57,43 +57,8 @@
 ;;    eq?
 ;;    #f))
 
-(define gnc:*options-entries* (gnc:new-options))
 
-(define (gnc:register-configuration-option new-option)
-  (gnc:register-option gnc:*options-entries* new-option))
-
-(define (gnc:lookup-global-option section name)
-  (gnc:lookup-option gnc:*options-entries* section name))
-
-(define (gnc:send-global-options) gnc:*options-entries*)
-
-(define (gnc:global-options-clear-changes)
-  (gnc:options-clear-changes gnc:*options-entries*))
-
-;; save-all-options: this is the actual hook that gets called at
-;; shutdown.  right now, we put all the options in the same file so
-;; it's important to make sure it happens in this order.  later the
-;; hook should probably revert back to just save-global-options.
-(define (gnc:save-all-options)
-  (gnc:save-global-options)
-  (gnc:hook-run-danglers gnc:*save-options-hook*))
-
-(define (gnc:save-global-options)
-  (gnc:make-home-dir)
-  (gnc:save-options gnc:*options-entries*
-                    (symbol->string 'gnc:*options-entries*)
-                    gnc:current-config-auto
-                    (string-append
-                     "(gnc:config-file-format-version 1)\n\n"
-                     ";"
-                     (_ "GnuCash Configuration Options")
-                     "\n")
-                    #t))
-
-(define (gnc:config-file-format-version version) #t)
-
-
-;;;;;; Create default options and config vars
+;;;;;; Create config vars
 
 (define gnc:*debit-strings*
   (list (cons 'NO_TYPE   (N_ "Funds In"))
@@ -132,10 +97,3 @@
 
 (define (gnc:get-credit-string type)
   (_ (assoc-ref gnc:*credit-strings* type)))
-
-;;; Internal options -- Section names that start with "__" are not
-;;; displayed in option dialogs.
-
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__exp_parser" "defined_variables" '()))

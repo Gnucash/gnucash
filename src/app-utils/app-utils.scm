@@ -118,15 +118,10 @@
 (export gnc:config-var-value-is-default?)
 
 ;; prefs.scm
-(export gnc:register-configuration-option)
-(export gnc:lookup-global-option)
-(export gnc:send-global-options)
-(export gnc:global-options-clear-changes)
-(export gnc:save-all-options)
 (export gnc:get-debit-string)
 (export gnc:get-credit-string)
-(export gnc:*options-entries*)
-(export gnc:config-file-format-version)
+
+;; gw-engine-spec.scm
 (re-export gnc:*save-options-hook*)
 
 ;; date-utilities.scm
@@ -274,10 +269,6 @@
 (gnc:hook-add-dangler gnc:*startup-hook*
                       (lambda ()
                         (begin
-                          ;; Initialize the C side options code.
-                          ;; Must come after the scheme options are loaded.
-                          (gnc:c-options-init)
-
                           ;; Initialize the expression parser.
                           ;; Must come after the C side options initialization.
                           (gnc:exp-parser-init))))
@@ -289,13 +280,5 @@
                           ;; Shutdown the expression parser
                           (gnc:exp-parser-shutdown)
 
-                          ;; This saves global options plus (for the
-                          ;; moment) saved report and account tree
-                          ;; window parameters. Reports and parameters
-                          ;; should probably be in a separate file,
-                          ;; with the main data file, or something
-                          ;; else.
-                          (gnc:save-all-options)
-
-                          ;; Shut down the C side options code
-                          (gnc:c-options-shutdown))))
+                          ;; This saves options. E.G. Stylesheets.
+			  (gnc:hook-run-danglers gnc:*save-options-hook*))))

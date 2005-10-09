@@ -29,7 +29,6 @@
 #include "dialog-utils.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
-#include "global-options.h"
 #include "gnc-account-sel.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-commodity-edit.h"
@@ -1209,114 +1208,6 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
   g_free(win);
 }
 
-
-/* Global options dialog... this should house all of the config
- * options like where the docs reside, and whatever else is deemed
- * necessary */
-
-static void
-gnc_option_show_advanced_pages(GNCOptionWin * propertybox)
-{
-  GtkWidget *page, *listitem;
-  gboolean advanced, show_advanced;
-  gint i;
-
-  show_advanced = gnc_lookup_boolean_option("General",
-					    "Show Advanced Settings", FALSE);
-  i = 0;
-  while (TRUE) {
-    page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook), i++);
-    if (page == NULL)
-      break;
-    advanced =
-      GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(page), "advanced"));
-    if (advanced) {
-      listitem = gtk_object_get_data(GTK_OBJECT(page), "listitem");
-      if (show_advanced) {
-	gtk_widget_show(page);
-	gtk_widget_show(listitem);
-      } else {
-	gtk_widget_hide(page);
-	gtk_widget_hide(listitem);
-      }
-    }
-  };
-}
-
-static void
-gnc_options_dialog_apply_cb(GNCOptionWin *propertybox,
-                            gpointer user_data)
-{
-  GNCOptionDB *global_options = user_data;
-
-  gnc_option_db_commit(global_options);
-  gnc_option_show_advanced_pages(propertybox);
-}
-
-static void
-gnc_options_dialog_help_cb(GNCOptionWin *propertybox,
-			   gpointer user_data)
-{
-  if (global_help_cb)
-    global_help_cb (propertybox, global_help_cb_data);
-}
-
-static void
-gnc_options_dialog_close_cb(GNCOptionWin *propertybox,
-                            gpointer user_data)
-{
-  GNCOptionWin **options_dialog = user_data;
-
-  gnc_options_dialog_destroy(propertybox);
-
-  *options_dialog = NULL;
-}
-
-
-void
-gnc_show_options_dialog(void)
-{
-  static GNCOptionWin *options_dialog = NULL;
-  GNCOptionDB *global_options;
-
-  global_options = gnc_get_global_options();
-
-  if (gnc_option_db_num_sections(global_options) == 0)
-  {
-    gnc_warning_dialog(NULL, _("No options!"));
-    return;
-  }
-
-  if (gnc_option_db_dirty(global_options))
-  {
-    if (options_dialog != NULL)
-      gnc_options_dialog_destroy(options_dialog);
-
-    options_dialog = NULL;
-  }
-
-  if (options_dialog == NULL)
-  {
-    options_dialog = gnc_options_dialog_new(_("GnuCash Preferences"));
-
-    gnc_build_options_dialog_contents(options_dialog, global_options);
-    gnc_option_db_clean(global_options);
-
-    gnc_options_dialog_set_apply_cb(options_dialog, 
-                                    gnc_options_dialog_apply_cb,
-                                    global_options);
-
-    gnc_options_dialog_set_help_cb(options_dialog, 
-                                   gnc_options_dialog_help_cb,
-                                   global_options);
-
-    gnc_options_dialog_set_close_cb (options_dialog,
-                                     gnc_options_dialog_close_cb,
-                                     &options_dialog);
-  }
-
-  gtk_window_present(GTK_WINDOW(options_dialog->dialog));
-}
 
 /*****************************************************************/
 /* Option Registration                                           */

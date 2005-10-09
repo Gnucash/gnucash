@@ -468,9 +468,6 @@ string and 'directories' must be a list of strings."
   ;; Load the user configs
   (gnc:load-user-config-if-needed)
 
-  ;; Clear the change flags caused by loading the configs
-  (gnc:global-options-clear-changes)
-
   (gnc:report-menu-setup)
 
   ;; the Welcome to GnuCash "extravaganza" report

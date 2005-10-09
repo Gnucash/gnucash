@@ -1,5 +1,24 @@
 2005-10-08  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/Makefile.am:
+	* src/app-utils/app-utils.scm:
+	* src/app-utils/global-options.[ch]:
+	* src/app-utils/gw-app-utils-spec.scm:
+	* src/app-utils/prefs.scm:
+	* src/gnome-utils/dialog-options.[ch]:
+	* src/scm/main.scm: Remove unused global options code.  Global
+	options are now all stored in gconf.
+
+	* numerous: Remove include of global-options.h.
+
+	* src/register/ledger-core/split-register-control.c:
+	* src/register/ledger-core/split-register-load.c:
+	* src/register/ledger-core/split-register-model.c:
+	* src/register/ledger-core/split-register-util.c:
+	* src/register/ledger-core/split-register.c: Remove unneeded
+	include files.  Call function with their current name, not the
+	backward compatibility name.
+
 	* src/app-utils/global-options.[ch]:
 	* src/app-utils/gnc-ui-util.[ch]: Migrate a couple of functions
 	from one global-options to gnc-ui-utils.
