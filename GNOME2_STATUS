@@ -184,10 +184,6 @@ Resources
 
   - Probably more TODO but these are the main points.
 
-- Preferences
-
-  - Being converted over from a scheme file backend to gconf.  (In progress - DRH)
-
 - Hierarchy Merge - BROKEN
 
   - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
