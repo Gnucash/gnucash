@@ -364,12 +364,14 @@ draw_cell (GnucashGrid *grid,
 	PangoLayout *layout;
 	PangoContext *context;
 	PangoFontDescription *font;
+	PangoRectangle ink_rect;
         GdkColor *bg_color;
         GdkColor *fg_color;
 /*        gint x_offset, y_offset;*/
         GdkRectangle rect;
         gboolean hatching;
         guint32 argb, color_type;
+        int x_offset;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
@@ -454,7 +456,8 @@ draw_cell (GnucashGrid *grid,
         text = gnc_table_get_entry (table, virt_loc);
 
 	layout = gtk_widget_create_pango_layout (GTK_WIDGET (grid->sheet), text);
-	pango_layout_set_width (layout, (width - 2 * CELL_HPADDING) * PANGO_SCALE);
+	// We don't need word wrap or line wrap
+	pango_layout_set_width (layout, -1);
         context = pango_layout_get_context (layout);
 	font = pango_font_description_copy (pango_context_get_font_description (context));
 
@@ -485,21 +488,9 @@ draw_cell (GnucashGrid *grid,
                     (((font->ascent + font->descent) / 2) - font->descent));
         y_offset++;*/
 
-        switch (gnc_table_get_align (table, virt_loc))
-        {
-                default:
-                case CELL_ALIGN_LEFT:
-			pango_layout_set_alignment (layout, PANGO_ALIGN_LEFT);
-                        break;
-
-                case CELL_ALIGN_RIGHT:
-			pango_layout_set_alignment (layout, PANGO_ALIGN_RIGHT);
-                        break;
-
-                case CELL_ALIGN_CENTER:
-			pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
-                        break;
-                }
+	pango_layout_get_pixel_extents(layout,
+				       &ink_rect,
+				       NULL);
 
         rect.x      = x + CELL_HPADDING;
         rect.y      = y + CELL_VPADDING;
@@ -508,9 +499,32 @@ draw_cell (GnucashGrid *grid,
 
         gdk_gc_set_clip_rectangle (grid->gc, &rect);
 
+
+        switch (gnc_table_get_align (table, virt_loc))
+        {
+                default:
+                case CELL_ALIGN_LEFT:
+			x_offset = 0;
+                        break;
+
+                case CELL_ALIGN_RIGHT:
+			x_offset = width - 2 * CELL_HPADDING - ink_rect.width;
+                        break;
+
+                case CELL_ALIGN_CENTER:
+			if (ink_rect.width > width - 2 * CELL_HPADDING)
+				x_offset = 0;
+			else
+				x_offset = (width - 2 * CELL_HPADDING - 
+					    ink_rect.width) / 2;
+                        break;
+	}
+
+
+
         gdk_draw_layout (drawable,
                          grid->gc,
-                         x + CELL_HPADDING,
+                         x + CELL_HPADDING + x_offset,
                          y + 1,
                          layout);
 
