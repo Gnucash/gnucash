@@ -861,7 +861,7 @@ static void
 plugin_get_loader_if_needed (GnmPlugin *pinfo, ErrorInfo **ret_error)
 {
 	GType loader_type;
-	ErrorInfo *error;
+	ErrorInfo *error = NULL;
 
 	g_return_if_fail (IS_GNM_PLUGIN (pinfo));
 
@@ -1333,7 +1333,7 @@ plugin_info_list_read_for_subdirs_of_dir (const gchar *dir_name, ErrorInfo **ret
 
 	while ((d_name = g_dir_read_name (dir)) != NULL) {
 		gchar *full_entry_name;
-		ErrorInfo *error;
+		ErrorInfo *error = NULL;
 		GnmPlugin *pinfo;
 
 		if (strcmp (d_name, ".") == 0 || strcmp (d_name, "..") == 0)
@@ -1370,7 +1370,7 @@ plugin_info_list_read_for_subdirs_of_dir_list (GSList *dir_list, ErrorInfo **ret
 	GNM_INIT_RET_ERROR_INFO (ret_error);
 	for (dir_iterator = dir_list; dir_iterator != NULL; dir_iterator = dir_iterator->next) {
 		gchar *dir_name;
-		ErrorInfo *error;
+		ErrorInfo *error = NULL;
 		GSList *dir_plugin_info_list;
 
 		dir_name = (gchar *) dir_iterator->data;

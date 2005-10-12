@@ -419,7 +419,7 @@ gnm_float dnorm(gnm_float x, gnm_float mu, gnm_float sigma, gboolean give_log)
 
 gnm_float pnorm(gnm_float x, gnm_float mu, gnm_float sigma, gboolean lower_tail, gboolean log_p)
 {
-    gnm_float p, cp;
+    gnm_float p, cp = 0;
 
     /* Note: The structure of these checks has been carefully thought through.
      * For example, if x == mu and sigma == 0, we get the correct answer 1.
