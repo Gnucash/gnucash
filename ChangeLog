@@ -1,3 +1,10 @@
+2005-10-12  David Hampton  <hampton@employees.org>
+
+	* configure.in: Remove the stdc++ link requirement from the OFX
+	test.  Add the -Wno-pointer-sign flag when using GCC4.  With this
+	flag all of gnucash can be compiled with GCC4. (Without it
+	lib/goffice fails.)
+
 2005-10-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/register/register-gnome/gnucash-grid.c: Patch by Didier

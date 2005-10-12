@@ -706,7 +706,7 @@ then
 	  [ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
     fi
 
-    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx -lstdc++"
+    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
     AC_MSG_CHECKING(for libofx)
     save_LIBS="${LIBS}"
     LIBS="${LIBS} ${LIBOFX_LIBS}"
@@ -1177,7 +1177,7 @@ then
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
      else if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 4; then
 	# This is gcc == 4.x.x
-	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
 	fi
      fi
   fi
