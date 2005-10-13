@@ -5,19 +5,24 @@ noinst_LTLIBRARIES = libgoffice-split.la
 AM_CFLAGS = $(GLIB_CFLAGS) $(GSF_CFLAGS) $(PRINT_CFLAGS) $(GNOME_CFLAGS) $(GLADE_CFLAGS)
 
 libgoffice_split_la_SOURCES = \
+        application.h \
 	command-context.c \
 	command-context.h \
 	command-context-priv.h \
 	command-context-stderr.h \
 	command-context-stderr.c \
+	dependent.h \
 	error-info.c \
 	error-info.h \
+	file.h \
+	func.h \
 	value.c \
 	value.h \
 	str.h \
 	str.c \
 	mathfunc.h \
 	mathfunc.c \
+	numbers.h \
 	number-match.h \
 	number-match.c \
 	dates.h \
@@ -29,6 +34,7 @@ libgoffice_split_la_SOURCES = \
 	formats.c \
 	datetime.h \
 	datetime.c \
+        position.h \
 	ranges.h \
 	regutf8.h \
 	regutf8.c \
@@ -40,7 +46,9 @@ libgoffice_split_la_SOURCES = \
 	mstyle.c \
 	style.h \
 	style.c \
+	gnumeric.h \
 	gnumeric-gconf.h \
+	gnumeric-gconf-priv.h \
 	gnumeric-gconf.c \
 	global-gnome-font.h \
 	global-gnome-font.c \
@@ -55,10 +63,16 @@ libgoffice_split_la_SOURCES = \
 	plugin-loader.c \
 	plugin-loader-module.h \
 	plugin-loader-module.c \
+	module-plugin-defs.h \
 	io-context.h \
+	io-context-priv.h \
 	io-context.c \
+	gui-file.h \
 	gui-util.h \
 	gui-util.c \
-	xml-io.h
+	gui-gnumeric.h \
+	xml-io.h \
+	xml-io-version.h \
+	workbook-control-gui.h
 
 include $(srcdir)/../goffice.mk

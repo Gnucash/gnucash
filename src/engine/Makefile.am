@@ -85,6 +85,7 @@ gncinclude_HEADERS = \
   TransLog.h \
   Transaction.h \
   cap-gains.h \
+  cashobjects.h \
   engine-helpers.h \
   glib-helpers.h \
   gnc-associate-account.h \
@@ -127,7 +128,8 @@ gncinclude_HEADERS = \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \
-  qofsession.h
+  qofsession.h \
+  qofsql.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -206,6 +208,7 @@ EXTRA_DIST = \
   iso-currencies-to-c \
   qofla-dir.h.in \
   kvp_doc.txt \
+  SX-book-p.h \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
   ${gwmod_DATA}

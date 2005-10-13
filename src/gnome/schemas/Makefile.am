@@ -1,5 +1,5 @@
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
-schema_DATA = \
+dist_schema_DATA = \
   apps_gnucash_dialog_common.schemas \
   apps_gnucash_dialog_commodities.schemas \
   apps_gnucash_dialog_prices.schemas \
@@ -13,11 +13,11 @@ schema_DATA = \
 install-data-local:
 if GCONF_SCHEMAS_INSTALL
 	-mkdir -p $(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
-	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-install-rule $(srcdir)/$(schema_DATA)
+	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-install-rule $(srcdir)/$(dist_schema_DATA)
 endif
 
 uninstall-local:
 if GCONF_SCHEMAS_INSTALL
-	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-uninstall-rule $(srcdir)/$(schema_DATA)
+	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) gconftool-2 --makefile-uninstall-rule $(srcdir)/$(dist_schema_DATA)
 endif
 

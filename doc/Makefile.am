@@ -31,7 +31,8 @@ EXTRA_DIST = \
   generic_objects.txt \
   gnome-hackers.txt \
   gnc-prices.1.in \
-  gnucash.1.in
+  gnucash.1.in \
+  tip_of_the_day.list.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

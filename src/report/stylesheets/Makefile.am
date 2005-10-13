@@ -41,7 +41,7 @@ gncscmmod_DATA = \
   stylesheet-easy.scm
 
 uidir = $(GNC_UI_DIR)
-ui_DATA = \
+dist_ui_DATA = \
 	gnc-plugin-stylesheets-ui.xml
 
 EXTRA_DIST = ${gncscmmod_DATA}

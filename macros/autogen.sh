@@ -194,7 +194,7 @@ xlc )
   am_opt=--include-deps;;
 esac
 
-for coin in `find $srcdir -name configure.in -print`
+for coin in "$srcdir/configure.in"
 do 
   dr=`dirname $coin`
   if test -f $dr/NO-AUTO-GEN; then
@@ -203,7 +203,7 @@ do
     echo processing $dr
     macrodirs=`sed -n -e 's,AM_ACLOCAL_INCLUDE(\(.*\)),\1,gp' < $coin`
     ( cd $dr
-      macrodirs=`find . -name macros -print`
+      macrodirs="$dr/macros"
       for i in $macrodirs; do
 	if test -f $i/gnome-gettext.m4; then
 	  DELETEFILES="$DELETEFILES $i/gnome-gettext.m4"

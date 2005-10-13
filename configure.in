@@ -1209,7 +1209,6 @@ LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
 AC_OUTPUT( po/Makefile.in
-	  m4/Makefile
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -1251,7 +1250,6 @@ AC_OUTPUT( po/Makefile.in
           lib/goffice/pixmaps/Makefile
           lib/goffice/cut-n-paste/Makefile
           lib/goffice/cut-n-paste/pcre/Makefile
-          lib/goffice/cut-n-paste/egg-recent-files/Makefile
           rpm/Makefile
           src/Makefile
           src/app-utils/Makefile
@@ -1328,7 +1326,7 @@ AC_OUTPUT( po/Makefile.in
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
-          src/report/report-gnome/test/Makefile
+          dnl # src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile

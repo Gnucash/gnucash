@@ -73,6 +73,7 @@ noinst_HEADERS = \
   dialog-budget-category.h \
   dialog-budget-list.h \
   dialog-budget-workbench.h \
+  dialog-chart-export.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
@@ -88,6 +89,7 @@ noinst_HEADERS = \
   druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
+  gnc-budget-gui.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
   gnc-plugin-register.h \

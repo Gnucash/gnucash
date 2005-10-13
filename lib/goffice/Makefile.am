@@ -26,7 +26,7 @@ libgoffice_la_SOURCES = 	\
 	split.h			\
 	split.c
 
-EXTRA_DIST = goffice.mk goffice-plugins.mk
+EXTRA_DIST = goffice.mk goffice-plugins.mk paths.h.in
 
 paths.h: paths.h.in ${top_builddir}/config.status
 	rm -f $@.tmp

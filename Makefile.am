@@ -1,5 +1,5 @@
 
-SUBDIRS = m4 doc lib src intl-scm po rpm accounts
+SUBDIRS = doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -33,8 +33,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = config.rpath  \
-  ChangeLog.1 \
+EXTRA_DIST = ChangeLog.1 \
   HACKING \
   README.patches \
   gnucash.lsm \

@@ -60,6 +60,7 @@ noinst_HEADERS = \
   dialog-payment.h \
   dialog-vendor.h \
   gnc-plugin-business.h \
+  gnc-plugin-page-invoice.h \
   search-owner.h \
   gw-business-gnome.h
 

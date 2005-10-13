@@ -36,7 +36,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 uidir = $(GNC_UI_DIR)
-ui_DATA = \
+dist_ui_DATA = \
 	gnc-plugin-log-replay-ui.xml
 
 EXTRA_DIST = \

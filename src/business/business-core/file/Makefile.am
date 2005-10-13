@@ -37,7 +37,8 @@ noinst_HEADERS = \
   gnc-order-xml-v2.h \
   gnc-owner-xml-v2.h \
   gnc-tax-table-xml-v2.h \
-  gnc-vendor-xml-v2.h
+  gnc-vendor-xml-v2.h \
+  xml-helpers.h
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
 libgncmod_business_backend_file_la_LIBADD = \
