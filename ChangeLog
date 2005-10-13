@@ -3,6 +3,9 @@
 	* src/lib/glib26/Makefile.am:
 	  fix to properly include sources in the DIST.
 
+	* macros/autogen.sh: Revert the change that ignores libtool.
+	  we still need to check for libtool.
+
 2005-10-13  Neil Williams <linux@codehelp.co.uk>
 
 	* macros/autogen.sh: Mac OSX fix.
