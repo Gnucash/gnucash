@@ -1,6 +1,6 @@
 SUBDIRS = . 
 
-pkglib_LTLIBRARIES = libqof-backend-qsf.la
+lib_LTLIBRARIES = libqof-backend-qsf.la
 
 AM_CFLAGS = \
   -I.. -I../.. \

@@ -5,6 +5,7 @@ test-kvp-frames
 test-string-converters
 test-xml-account
 test-xml2-is-file
+test-load-backend
 test-load-xml2
 test-load-example-account
 test-xml-commodity

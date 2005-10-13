@@ -266,7 +266,6 @@ src/backend/file/test/test-xml-account.c
 src/backend/file/test/test-kvp-frames.c
 src/backend/file/io-utils.c
 src/backend/file/sixtp-dom-generators.c
-src/backend/file/gncmod-backend-file.c
 src/backend/file/gnc-commodity-xml-v2.c
 src/backend/file/gnc-lot-xml-v2.c
 src/backend/file/io-gncxml-gen.c
@@ -294,7 +293,6 @@ src/backend/postgres/gncquery.c
 src/backend/postgres/escape.c
 src/backend/postgres/PostgresBackend.c
 src/backend/postgres/txn.c
-src/backend/postgres/gncmod-backend-postgres.c
 src/backend/postgres/upgrade.c
 src/backend/postgres/book.c
 src/backend/postgres/account.c

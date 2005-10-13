@@ -1,21 +1,20 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-backend-file.la
+#Now a shared GModule, not a package library.
+lib_LTLIBRARIES = libgnc-backend-file.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
+  -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
-  -I${top_srcdir}/src/backend/qsf \
   ${XML_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}
 
-libgncmod_backend_file_la_SOURCES = \
-  gncmod-backend-file.c \
+libgnc_backend_file_la_SOURCES = \
   gnc-account-xml-v2.c \
   gnc-backend-file.c \
   gnc-book-xml-v2.c \
@@ -55,9 +54,7 @@ noinst_HEADERS = \
   sixtp-stack.h \
   sixtp-utils.h
 
-libgncmod_backend_file_la_LDFLAGS = -module
-libgncmod_backend_file_la_LIBADD = \
+libgnc_backend_file_la_LDFLAGS = -module
+libgnc_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${XML_LIBS} \
-   ${top_builddir}/src/engine/libgncmod-engine.la \
-   ${top_builddir}/src/backend/qsf/libqof-backend-qsf.la
-
+   ${top_builddir}/src/engine/libgncmod-engine.la

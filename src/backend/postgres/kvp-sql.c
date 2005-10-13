@@ -212,7 +212,7 @@ store_cb (const char *key, KvpValue *val, gpointer p)
    char *path_save;
 
    path_save = cb_data->path;
-   cb_data->path = g_strjoin ("/", path_save, key, 0);
+   cb_data->path = g_strjoin ("/", path_save, key, NULL);
 
    ipath = pgendGetPathCache (be, cb_data->path, cb_data->escape);
    cb_data->ipath = ipath;

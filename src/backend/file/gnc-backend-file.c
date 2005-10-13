@@ -53,10 +53,6 @@
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 
-#ifdef GNUCASH_MAJOR_VERSION
-#include "qsf-xml.h"
-#endif
-
 #define GNC_BE_DAYS "file_retention_days"
 #define GNC_BE_ZIP  "file_compression"
 
@@ -432,19 +428,9 @@ gnc_file_be_determine_file_type(const char *path)
         return GNC_BOOK_XML2_FILE;
 	}
 	else if(gnc_is_bin_file(path)) { return GNC_BOOK_BIN_FILE; }
-#ifdef GNUCASH_MAJOR_VERSION
-    else if(is_our_qsf_object(path)) {
-        return QSF_GNC_OBJECT;  /**< QSF object file using only GnuCash QOF objects */
-    } else if(is_qsf_object(path)) {
-		return QSF_OBJECT;   /**< QSF object file that needs a QSF map */
-    } else if(is_qsf_map(path)) {
-		return QSF_MAP;      /**< QSF map file */
-    }
-#endif
 	return GNC_BOOK_NOT_OURS;
 }
 
-#ifndef GNUCASH_MAJOR_VERSION
 static gboolean
 gnc_determine_file_type (const char *path)
 {
@@ -467,7 +453,6 @@ gnc_determine_file_type (const char *path)
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
-#endif
 
 static gboolean
 gnc_file_be_backup_file(FileBackend *be)
@@ -892,23 +877,6 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
-#ifdef GNUCASH_MAJOR_VERSION
-    case QSF_GNC_OBJECT:
-		error = qof_session_load_our_qsf_object(qof_session_get_current_session(), be->fullpath);
-		PINFO (" QSF_GNC_OBJECT error=%d", error);
-		break;
-
-    case QSF_OBJECT:
-		/* a QSF object file needs a QSF map to convert external objects */
-		error = qof_session_load_qsf_object(qof_session_get_current_session(), be->fullpath);
-		PINFO (" QSF_OBJECT error=%d", error);
-		break;
-
-    case QSF_MAP:
-		error = ERR_QSF_MAP_NOT_OBJ;
-		PINFO (" QSF_MAP error=%d", error);
-		break;
-#endif
     case GNC_BOOK_BIN_FILE:
         qof_session_load_from_binfile(book, be->fullpath);
         error = gnc_get_binfile_io_error();
@@ -953,44 +921,10 @@ gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 }
 
 /* ================================================================= */
-#ifdef GNUCASH_MAJOR_VERSION
+#if 0 //def GNUCASH_MAJOR_VERSION
 QofBackend *
 libgncmod_backend_file_LTX_gnc_backend_new(void)
 {
-    FileBackend *fbe;
-    QofBackend *be;
-    
-    fbe = g_new0(FileBackend, 1);
-    be = (QofBackend*)fbe;
-    qof_backend_init(be);
-    
-    be->session_begin = file_session_begin;
-    be->session_end = file_session_end;
-    be->destroy_backend = file_destroy_backend;
-
-    be->load = gnc_file_be_load_from_file;
-    be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
-
-    /* The file backend treats accounting periods transactionally. */
-    be->begin = file_begin_edit;
-    be->commit = file_commit_edit;
-    be->rollback = file_rollback_edit;
-
-    /* The file backend always loads all data ... */
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-    be->price_lookup = NULL;
-
-    be->counter = NULL;
-
-    /* The file backend will never be multi-user... */
-    be->events_pending = NULL;
-    be->process_events = NULL;
-
-    be->sync = file_sync_all;
-	be->load_config = gnc_file_be_set_config;
-    be->export = gnc_file_be_write_accounts_to_file;
 
     fbe->dirname = NULL;
     fbe->fullpath = NULL;
@@ -1052,7 +986,6 @@ gnc_backend_new(void)
 	return be;
 }
 
-#ifndef GNUCASH_MAJOR_VERSION
 static void
 gnc_provider_free (QofBackendProvider *prov)
 {
@@ -1080,6 +1013,5 @@ gnc_provider_init(void)
 	prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
 }
-#endif
 
 /* ========================== END OF FILE ===================== */

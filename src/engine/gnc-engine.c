@@ -26,7 +26,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "AccountP.h"
 #include "GroupP.h"
@@ -38,7 +38,11 @@
 #include "SchedXactionP.h"
 #include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
-#include "qof.h"
+
+/** gnc file backend library name */
+#define GNC_LIB_NAME "libgnc-backend-file.la"
+/** init_fcn for gnc file backend library. */
+#define GNC_LIB_INIT "gnc_provider_init"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
@@ -104,6 +108,11 @@ gnc_engine_init(int argc, char ** argv)
   gnc_pricedb_register ();
   gnc_commodity_table_register();
   gnc_lot_register ();
+
+  g_return_if_fail((qof_load_backend_library 
+		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")));
+  g_return_if_fail((qof_load_backend_library
+		(QOF_LIB_DIR, GNC_LIB_NAME, GNC_LIB_INIT)));
 
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)

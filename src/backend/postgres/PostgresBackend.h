@@ -41,8 +41,10 @@
 #include "Transaction.h"
 
 #include "builder.h"
-#include "qofbackend-p.h"
-#include "qofbook.h"
+#include "qof.h"
+/** \todo Remove the private header
+and use API functions instead. */
+#include "qofbook-p.h"
 
 #define GNC_MOD_TXN    "gnucash-postgres-transaction"
 
@@ -132,5 +134,7 @@ QofBook * pgendGetBook(PGBackend *pbe);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);
+
+void pgend_provider_init(void);
 
 #endif /* POSTGRES_BACKEND_H */

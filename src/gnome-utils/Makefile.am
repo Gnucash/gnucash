@@ -3,7 +3,33 @@ PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
+# Fix the goffice links to be conditional
+
 # Note that src/gnome-utils CANNOT depend on src/gnome!
+if USE_LIBGOFFICE
+AM_CFLAGS = \
+  -DPREFIX=\"${prefix}\" \
+  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
+  -DDATADIR=\"${GNC_SHAREDIR}\" \
+  -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -I${top_srcdir}/src/core-utils \
+  -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/backend/file \
+  -I${top_srcdir}/src/network-utils \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src \
+  ${LIBGUPPI_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
+  ${GNOME_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GSF_CFLAGS} \
+  ${LIBGOFFICE_CFLAGS}
+else
 AM_CFLAGS = \
   -DPREFIX=\"${prefix}\" \
   -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
@@ -28,7 +54,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GSF_CFLAGS}
-
+endif
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -171,6 +197,28 @@ noinst_HEADERS = \
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
+if USE_LIBGOFFICE
+libgncmod_gnome_utils_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
+  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${LIBGUPPI_LIBS} \
+  ${GNOME_LIBS} \
+  ${GNOME_PRINT_LIBS} \
+  ${GTKHTML_LIBS} \
+  ${GUILE_LIBS} \
+  ${GDK_PIXBUF_LIBS} \
+  ${GLADE_LIBS} \
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS} \
+  ${DB_LIBS} \
+  ${GSF_LIBS} \
+  ${LIBGOFFICE_LIBS} \
+  ${XML_LIBS}
+else
 libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
@@ -191,6 +239,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${DB_LIBS} \
   ${GSF_LIBS} \
   ${XML_LIBS}
+endif
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
 libgw_gnome_utils_la_LDFLAGS = -module

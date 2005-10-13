@@ -44,18 +44,8 @@
 #include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-event-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "guid.h"
-#include "qofbackend.h"
-#include "qofbackend-p.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
 #include "TransactionP.h"
 
 #include "account.h"
@@ -2545,6 +2535,28 @@ pgendNew (void)
 
    LEAVE(" ")
    return (QofBackend *) be;
+}
+
+static void
+pg_provider_free (QofBackendProvider *prov)
+{
+        prov->provider_name = NULL;
+        prov->access_method = NULL;
+        g_free (prov);
+}
+
+void pgend_provider_init(void)
+{
+	QofBackendProvider *prov;
+
+	prov = g_new0(QofBackendProvider, 1);
+	prov->provider_name = "The Postgres backend for Gnucash";
+	prov->access_method = "sql";
+	prov->partial_book_supported = FALSE;
+	prov->backend_new = pgendNew;
+	prov->provider_free = pg_provider_free;
+	prov->check_data_type = NULL;
+	qof_backend_register_provider (prov);
 }
 
 /* ======================== END OF FILE ======================== */

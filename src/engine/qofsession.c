@@ -53,11 +53,6 @@
 #include "qofobject.h"
 #include "qofsession-p.h"
 
-/* Some gnucash-specific code */
-#ifdef GNUCASH_MAJOR_VERSION
-#include "gnc-module.h"
-#endif /* GNUCASH */
-
 /** \deprecated should not be static */
 static QofSession * current_session = NULL;
 static GHookList * session_closed_hooks = NULL;
@@ -233,6 +228,8 @@ qof_session_get_current_session (void)
   return current_session;
 }
 
+/** \deprecated Each application should keep
+their \b own session context. */
 void
 qof_session_set_current_session (QofSession *session)
 {
@@ -814,86 +811,6 @@ struct backend_providers backend_list[] = {
 	{ NULL, NULL, NULL }
 };
 
-#ifdef GNUCASH_MAJOR_VERSION 
-
-static void
-qof_session_int_backend_load_error(QofSession *session,
-                                   char *message, char *dll_err)
-{
-    PWARN ("%s %s", message, dll_err ? dll_err : "");
-
-    g_free(session->book_id);
-    session->book_id = NULL;
-
-    qof_session_push_error (session, ERR_BACKEND_NO_BACKEND, NULL);
-}
-
-/* Gnucash uses its module system to load a backend; other users
- * use traditional dlopen calls. This will change with CashUtil.
- */
-static void
-qof_session_load_backend(QofSession * session, char * backend_name)
-{
-	GList     *node;
-	QofBook   *book;
-	GNCModule  mod;
-	GSList    *p;
-	char       *mod_name, *access_method, *msg;
-	QofBackend *(* be_new_func)(void);
-	QofBackendProvider *prov;
-
-	mod	= 0;
-	mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
-	msg = g_strdup_printf(" ");
-	mod = gnc_module_load(mod_name, 0);
-	if (mod) 
-	{
-		be_new_func = gnc_module_lookup(mod, "gnc_backend_new");
-		if(be_new_func) 
-		{
-			session->backend = be_new_func();
-			for (node=session->books; node; node=node->next)
-			{
-				book = node->data;
-				qof_book_set_backend (book, session->backend);
-			}
-		}
-		else { qof_session_int_backend_load_error(session, " can't find backend_new ",""); }
-	}
-	else
-	{
-	/* QSF is built for the QOF version, use that if no module is found.
-	  This allows the GnuCash version to be called with an access method,
-	  as it would be in QOF, instead of a resolved module name.
-	*/
-	access_method = g_strdup(backend_name);
-	for (p = provider_list; p; p=p->next)
-	{
-		prov = p->data;
-		/* Does this provider handle the desired access method? */
-		if (0 == strcasecmp (access_method, prov->access_method))
-		{
-			if (NULL == prov->backend_new) continue;
-			/* Use the providers creation callback */
-			session->backend = (*(prov->backend_new))();
-			session->backend->provider = prov;
-			/* Tell the books about the backend that they'll be using. */
-			for (node=session->books; node; node=node->next)
-			{
-				book = node->data;
-				qof_book_set_backend (book, session->backend);
-			}
-			return;
-		}
-	}
-	msg = g_strdup_printf("failed to load '%s' backend", backend_name);
-	qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, msg);
-  }
-  g_free(mod_name);
-}
-
-#else /* GNUCASH */
-
 static void
 qof_session_load_backend(QofSession * session, char * access_method)
 {
@@ -961,7 +878,6 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	qof_session_push_error (session, ERR_BACKEND_NO_HANDLER, msg);
 	LEAVE (" ");
 }
-#endif /* GNUCASH */
 
 /* ====================================================================== */
 
@@ -1261,11 +1177,13 @@ qof_session_save (QofSession *session,
 				session->backend->provider = prov;
 				if (session->backend->session_begin)
 				{
-					/* Call begin - what values to use for booleans? */
+					/* Call begin - backend has been changed,
+					   so make sure a file can be written,
+					   use ignore_lock and create_if_nonexistent */
 					g_free(session->book_id);
 					session->book_id = NULL;
 					(session->backend->session_begin)(session->backend, session,
-						book_id, TRUE, FALSE);
+						book_id, TRUE, TRUE);
 					PINFO("Done running session_begin on changed backend");
 					err = qof_backend_get_error(session->backend);
 					msg = qof_backend_get_message(session->backend);
