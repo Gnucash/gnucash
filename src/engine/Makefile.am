@@ -128,8 +128,7 @@ gncinclude_HEADERS = \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \
-  qofsession.h \
-  qofsql.h
+  qofsession.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -165,7 +164,8 @@ noinst_HEADERS = \
   qofobject-p.h \
   qofquery-p.h \
   qofquerycore-p.h \
-  qofsession-p.h
+  qofsession-p.h \
+  qofsql.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 

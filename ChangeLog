@@ -1,3 +1,85 @@
+2005-10-13  Neil Williams <linux@codehelp.co.uk>
+
+	* GNOME2_STATUS: Remove qof_begin_edit note (fixed)
+	Make a note of remaining pricedb issue.
+	* configure.in: Fix conditional external GOffice build.
+	* lib/Makefile.am: Conditional goffice.
+	* po/POTFILES.in: Remove files removed from CVS.
+	* src/backend/file/Makefile.am: Convert to a GModule.
+	* src/backend/file/gnc-backend-file.c: Remove QSF code.
+	* src/backend/file/test/.cvsignore: new file
+	* src/backend/file/test/Makefile.am: Cannot link against
+	the new loadable GModule, list the sources individually.
+	* src/backend/file/test/test-dom-converters1.c: fix test.
+
+	Update test data files to use G2 XML syntax.
+	* src/backend/file/test/test-files/xml2/Money95bank_fr.gml2
+	* src/backend/file/test/test-files/xml2/Money95invst.gml2
+	* src/backend/file/test/test-files/xml2/Money95mutual.gml2
+	* src/backend/file/test/test-files/xml2/Money95stocks.gml2
+	* src/backend/file/test/test-files/xml2/abc.gml2
+	* src/backend/file/test/test-files/xml2/abcall.gml2
+	* src/backend/file/test/test-files/xml2/carols-data-file.gml2
+	* src/backend/file/test/test-files/xml2/cbb-export.gml2
+	* src/backend/file/test/test-files/xml2/conrads-file.gml2
+	* src/backend/file/test/test-files/xml2/every.gml2
+	* src/backend/file/test/test-files/xml2/goonies-file.gml2
+	* src/backend/file/test/test-files/xml2/hierachical-data-file.gml2
+	* src/backend/file/test/test-files/xml2/ms-money.gml2
+	* src/backend/file/test/test-files/xml2/pricedb1.gml2
+
+	* src/backend/file/test/test-load-backend.c: Test the new GModule.
+	* src/backend/file/test/test-load-xml2.c: Load the new GModule and
+	correct the book test. (backend/file tests can no longer use Guile)
+	* src/backend/file/test/test-string-converters.c: QOF header changes
+	* src/backend/file/test/test-xml-account.c: Remove guile and fix test.
+	* src/backend/file/test/test-xml-pricedb.c: Fixed test. (problem was
+	in test-engine-stuff.c
+	* src/backend/file/test/test-xml-transaction.c: Remove guile and fix
+	test.
+	* src/backend/postgres/Makefile.am: Make into a GModule.
+	* src/backend/postgres/PostgresBackend.c: GModule (Other changes
+	will follow).
+	* src/backend/postgres/PostgresBackend.h: GModule
+	* src/backend/postgres/kvp-sql.c: typo
+	* src/backend/postgres/test/.cvsignore: new file.
+	* src/backend/postgres/test/Makefile.am: GModule changes, as with
+	backend/file - no guile and no linking against the GModule.
+	* src/backend/postgres/test/test-db.c: GModule and remove private 
+	QOF headers.
+	* src/backend/postgres/test/test-load-backend.c: GModule test.
+	* src/backend/postgres/test/test-period.c: Convert to GModule.
+	* src/backend/qsf/Makefile.am: GModule.
+	* src/backend/qsf/qsf-backend.c: QOF Sync
+	* src/backend/qsf/qsf-xml.c: QOF sync
+	* src/bin/test/test-version: fix test
+	* src/business/business-core/test/Makefile.am: GModule changes
+	* src/engine/Account.c: qof_begin_edit change
+	* src/engine/Makefile.am: qofsql.h is not a distributed header - 
+	GnuCash does not yet use SQL with QOF.
+	* src/engine/Period.h: Doxygen tweak.
+	* src/engine/Transaction.c: qof_begin_edit changes.
+	* src/engine/gnc-engine.c: Load the two default GModules.
+	* src/engine/gnc-pricedb.c: Pair up the ENTER and LEAVE calls.
+	* src/engine/gnc-trace.c: QOF sync.
+	* src/engine/gnc-trace.h: QOF Sync
+	* src/engine/qof-be-utils.h: qof_begin_edit changes.
+	* src/engine/qof.h: Locate the GModules.
+	* src/engine/qofbackend.c: Full use of GModule support.
+	* src/engine/qofsession.c: Remove gnc-module methods for backends.
+	* src/engine/test-core/test-engine-stuff.c: Splits outside
+	transactions where causing some tests to fail, also errors are now
+	reported back.
+	* src/engine/test-core/test-engine-stuff.h: Fix declarations.
+	* src/engine/test/test-split-vs-account.c: test fix.
+	* src/gnome-utils/Makefile.am: GOffice conditional build.
+	* src/gnome-utils/gnc-html-graph-gog.c:  GOffice conditional build.
+	* src/gnome-utils/gnc-plugin.c: GOffice conditional build.
+	* src/gnome/Makefile.am: GModule changes - cannot link against the
+	GModule.
+	* src/gnome/dialog-chart-export.c: Fix QOF headers.
+	* src/import-export/qif-import/test/Makefile.am: fix test.
+
 2005-10-13  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.c:
