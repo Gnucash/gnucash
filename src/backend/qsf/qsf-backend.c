@@ -418,10 +418,12 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 
 	params = (qsf_param*)data;
 	qof_param = params->qof_param;
-	g_return_if_fail(params != NULL);
+	g_return_if_fail(params && path && content);
+	ENTER (" path=%s", path);
 	switch(kvp_value_get_type(content))
 	{
 		case KVP_TYPE_STRING:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -429,7 +431,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_STRING);
 			break;
+		}
 		case KVP_TYPE_GUID:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -437,7 +441,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_GUID);
 			break;
+		}
 		case KVP_TYPE_BINARY:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -445,7 +451,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_BINARY);
 			break;
+		}
 		case KVP_TYPE_GLIST:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -453,7 +461,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_GLIST);
 			break;
+		}
 		case KVP_TYPE_FRAME:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -461,7 +471,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_FRAME);
 			break;
+		}
 		case KVP_TYPE_GINT64:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -469,7 +481,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_INT64);
 			break;
+		}
 		case KVP_TYPE_DOUBLE:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -477,7 +491,9 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_DOUBLE);
 			break;
+		}
 		case KVP_TYPE_NUMERIC:
+		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
@@ -485,9 +501,11 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_NUMERIC);
 			break;
+		}
 		default:
-		break;
+		{ break; }
 	}
+	LEAVE (" ");
 }
 
 static void
@@ -724,17 +742,14 @@ qsf_foreach_obj_type(QofObject *qsf_obj, gpointer data)
 =======================================================*/
 /*	QSF only uses one QofBook per file - count may be removed later. */
 static xmlDocPtr
-qofbook_to_qsf(QofBook *book)
+qofbook_to_qsf(QofBook *book, qsf_param *params)
 {
 	xmlNodePtr top_node, node;
 	xmlDocPtr doc;
 	gchar buffer[GUID_ENCODING_LENGTH + 1];
-	qsf_param *params;
 	const GUID *book_guid;
 	
 	g_return_val_if_fail(book != NULL, NULL);
-	params = g_new(qsf_param, 1);
-	qsf_param_init(params);
 	params->book = book;
 	params->referenceList = g_list_copy((GList*)qof_book_get_data(book, ENTITYREFERENCE));
 	doc = xmlNewDoc(BAD_CAST QSF_XML_VERSION);
@@ -755,14 +770,14 @@ qofbook_to_qsf(QofBook *book)
 }
 
 static void
-write_qsf_from_book(const char *path, QofBook *book)
+write_qsf_from_book(const char *path, QofBook *book, qsf_param *params)
 {
 	xmlDocPtr qsf_doc;
 	gint write_result;
 	QofBackend *be;
 
 	be = qof_book_get_backend(book);
-	qsf_doc = qofbook_to_qsf(book);
+	qsf_doc = qofbook_to_qsf(book, params);
 	write_result = 0;
 	if((use_gz_level > 0) && (use_gz_level <= 9)) 
 	{
@@ -779,11 +794,11 @@ write_qsf_from_book(const char *path, QofBook *book)
 }
 
 static void
-write_qsf_to_stdout(QofBook *book)
+write_qsf_to_stdout(QofBook *book, qsf_param *params)
 {
 	xmlDocPtr qsf_doc;
 
-	qsf_doc = qofbook_to_qsf(book);
+	qsf_doc = qofbook_to_qsf(book, params);
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
 	xmlSaveFormatFileEnc("-", qsf_doc, "UTF-8", 1);
 	fprintf(stdout, "\n");
@@ -795,16 +810,18 @@ void
 qsf_write_file(QofBackend *be, QofBook *book)
 {
 	QSFBackend *qsf_be;
+	qsf_param *params;
 	char *path;
 
 	qsf_be = (QSFBackend*)be;
+	params = qsf_be->params;
 	/* if fullpath is blank, book_id was set to QOF_STDOUT */
 	if (!qsf_be->fullpath || (*qsf_be->fullpath == '\0')) {
-		write_qsf_to_stdout(book);
+		write_qsf_to_stdout(book, params);
 		return;
 	}
 	path = strdup(qsf_be->fullpath);
-	write_qsf_from_book(path, book);
+	write_qsf_from_book(path, book, params);
 	g_free(path);
 }
 

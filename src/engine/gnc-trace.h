@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-trace.h -- GnuCash error logging and tracing fcility         *
+ * gnc-trace.h -- QOF error logging and tracing facility            *
  * Copyright (C) 1998-2003 Linas Vepstas <linas@linas.org>          *
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,7 +27,9 @@
     @{ */
 
 /** @file gnc-trace.h 
- *  @brief QOF error logging and tracing facility */
+ *  @brief QOF error logging and tracing facility
+ *  @author Neil Williams <linux@codehelp.co.uk>
+ */
 
 #ifndef GNC_TRACE_H
 #define GNC_TRACE_H
@@ -50,8 +53,18 @@
 
 DEFINE_ENUM (gncLogLevel, LOG_LEVEL_LIST)
 
+/** Convert gncLogLevel to a string.
+
+The macro correlates the enum value and an
+exact copy as a string, removing the need to
+keep two separate lists in sync.
+*/
 AS_STRING_DEC(gncLogLevel, LOG_LEVEL_LIST)
 
+/** Convert the log_string to a gncLogLevel
+
+Only for use as a partner to ::gncLogLevelasString
+*/
 FROM_STRING_DEC(gncLogLevel, LOG_LEVEL_LIST)
 
 #define GNC_TRACE_INDENT_WIDTH 4

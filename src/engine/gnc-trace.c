@@ -1,5 +1,5 @@
 /* *****************************************************************\
- * gnc-trace.c -- GnuCash error loging and tracing facility         *
+ * gnc-trace.c -- QOF error logging and tracing facility            *
  * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
  * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>          *
  *                                                                  *
@@ -24,6 +24,14 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
+/** @addtogroup Trace
+@{ */
+
+/** @file gnc-trace.c
+    @brief QOF error logging facility 
+		@author Neil Williams <linux@codehelp.co.uk>
+*/
+
 #include "config.h"
 
 #include <glib.h>
@@ -44,10 +52,11 @@ static gchar* filename = NULL;
 static const int MAX_TRACE_FILENAME = 100;
 static GHashTable *log_table = NULL;
 
-/* uses the enum_as_string macro from QOF
+AS_STRING_FUNC(gncLogLevel, LOG_LEVEL_LIST)  /**< enum_as_string function
+
+uses the enum_as_string macro from QOF
 but the From macro is not required. Lookups
 are done on the string. */
-AS_STRING_FUNC(gncLogLevel, LOG_LEVEL_LIST)
 
 FROM_STRING_FUNC(gncLogLevel, LOG_LEVEL_LIST)
 
@@ -354,6 +363,8 @@ gint qof_log_module_count(void)
 	if(!log_table) { return 0; }
 	return g_hash_table_size(log_table);
 }
+
+/** @} */
 
 /************************* END OF FILE ******************************\
 \********************************************************************/

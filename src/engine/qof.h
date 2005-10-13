@@ -96,5 +96,6 @@
 #include "qofchoice.h"
 #include "qof_book_merge.h"
 #include "qof-be-utils.h"
+#include "qofla-dir.h"
 
 #endif /* QOF_H_ */

@@ -23,15 +23,13 @@
  */
  
 #include <time.h>
-#include "qofsession.h"
+#include "qof.h"
 #include "AccountP.h"
 #include "Transaction.h"
-#include "qofobject.h"
 #include "dialog-chart-export.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
+#include "gnc-engine.h"
 #include "gnc-file.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")

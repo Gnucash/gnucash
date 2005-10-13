@@ -38,8 +38,7 @@ void qsf_free_params(qsf_param *params)
 		g_list_free(params->referenceList);
 	}
 	g_slist_free(params->supported_types);
-	xmlFreeDoc(params->output_doc);
-	xmlFreeNs(params->map_ns);
+	if(params->map_ns) { xmlFreeNs(params->map_ns); }
 }
 
 int
