@@ -21,7 +21,6 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (define <html-barchart>
   (make-record-type "<html-barchart>"
                     '(width 
@@ -37,9 +36,11 @@
                       row-labels-rotated?
 		      stacked?
                       data
-		      button-1-bar-urls button-2-bar-urls 
+		      button-1-bar-urls
+                      button-2-bar-urls 
 		      button-3-bar-urls
-		      button-1-legend-urls button-2-legend-urls 
+		      button-1-legend-urls
+                      button-2-legend-urls 
 		      button-3-legend-urls)))
 
 (define gnc:html-barchart? 
