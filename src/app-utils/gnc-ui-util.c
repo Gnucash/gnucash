@@ -1001,8 +1001,8 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 
 static GNCPrintAmountInfo
 gnc_account_print_info_helper(Account *account, gboolean use_symbol,
-                              gnc_commodity * (*efffunc)(Account *),
-                              int (*scufunc)(Account*))
+                              gnc_commodity * (*efffunc)(const Account *),
+                              int (*scufunc)(const Account*))
 {
   GNCPrintAmountInfo info;
   gboolean is_iso;

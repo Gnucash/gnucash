@@ -303,7 +303,7 @@ void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 #define DxaccAccountSetSecurity xaccAccountSetCommodity
 
 /** Get the account's commodity  */
-gnc_commodity * xaccAccountGetCommodity (Account *account);
+gnc_commodity * xaccAccountGetCommodity (const Account *account);
 
 /** @deprecated do not use */
 #define DxaccAccountGetSecurity xaccAccountGetCommodity
@@ -312,11 +312,11 @@ gnc_commodity * xaccAccountGetCommodity (Account *account);
  *   set for the account, that is returned; else the default SCU for
  *   the account commodity is returned.
  */
-int  xaccAccountGetCommoditySCU (Account *account);
+int  xaccAccountGetCommoditySCU (const Account *account);
 
 /** Return the 'internal' SCU setting.  This returns the over-ride
  *   SCU for the account (which might not be set, and might be zero).  */
-int  xaccAccountGetCommoditySCUi (Account *account);
+int  xaccAccountGetCommoditySCUi (const Account *account);
 
 /** Set the SCU for the account. Normally, this routine is not
  *   required, as the default SCU for an account is given by its
@@ -332,7 +332,7 @@ void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
 
 /** Return boolean, indicating whether this account uses a 
  *   non-standard SCU. */ 
-gboolean  xaccAccountGetNonStdSCU (Account *account);
+gboolean  xaccAccountGetNonStdSCU (const Account *account);
 /**@}*/
 
 
@@ -733,7 +733,7 @@ void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
  * it. */
-gnc_commodity * DxaccAccountGetCurrency (Account *account);
+gnc_commodity * DxaccAccountGetCurrency (const Account *account);
 
 /** Set the timezone to be used when interpreting the results from a
  *  given Finance::Quote backend.  Unfortunately, the upstream sources

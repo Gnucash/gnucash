@@ -75,9 +75,9 @@ run_callback(sixtp_gdv2 *data, const char *type)
 static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (Account *account),
+    gnc_commodity * (*getter) (const Account *account),
     void (*setter) (Account *account, gnc_commodity *comm),
-    int (*scu_getter) (Account *account),
+    int (*scu_getter) (const Account *account),
     void (*scu_setter) (Account *account, int scu))
 {
     gnc_commodity *gcom;

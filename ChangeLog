@@ -1,3 +1,36 @@
+2005-10-13  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/backend/file/io-example-account.c:
+	* src/backend/file/io-gncxml-v2.c:
+	* src/engine/Account.[ch]: Patch from Chris Shoemaker to add a
+	sprinkling of 'const' keywords to Account accessor function
+	arguments.
+
+	* src/valgrind-gdk.supp:
+	* src/valgrind-gnucash.supp:
+	* src/valgrind-x11.supp: Patch from Chris Shoemaker to add some
+	additional suppressions when invoking gnucash via valgrind.
+
+	* Makefile.TAGS: Patch from Chris Shoemaker to exclude emacs
+	temporary files from etags table.
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/business/business-core/gncAddress.c:
+	* src/business/business-core/gncCustomer.c:
+	* src/business/business-core/gncEmployee.c:
+	* src/business/business-core/gncEntry.c:
+	* src/business/business-core/gncJob.c:
+	* src/business/business-core/gncOrder.c:
+	* src/business/business-core/gncVendor.c:
+	* src/engine/Account.c:
+	* src/engine/Transaction.c:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-sheet.c: Patch from Chris
+	Shoemaker to remove the G_INLINE_FUNC macro from various function
+	definitions.  Fixes undefined symbol errors preventing him from
+	linking the program.
+
 2005-10-12  David Hampton  <hampton@employees.org>
 
 	* Makefile.am:

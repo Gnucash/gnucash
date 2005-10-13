@@ -91,7 +91,7 @@ gnc_destroy_example_account(GncExampleAccount *gea)
 static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (Account *account),
+    gnc_commodity * (*getter) (const Account *account),
     void (*setter) (Account *account, gnc_commodity *comm))
 {
     gnc_commodity *gcom;

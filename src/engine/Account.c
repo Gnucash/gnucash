@@ -1351,7 +1351,7 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
 }
 
 int
-xaccAccountGetCommoditySCUi (Account * acc) 
+xaccAccountGetCommoditySCUi (const Account * acc)
 {
   if (!acc) return 0;
 
@@ -1359,7 +1359,7 @@ xaccAccountGetCommoditySCUi (Account * acc)
 }
 
 int
-xaccAccountGetCommoditySCU (Account * acc) 
+xaccAccountGetCommoditySCU (const Account * acc)
 {
   if (!acc) return 0;
 
@@ -1383,7 +1383,7 @@ xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
 }
 
 gboolean
-xaccAccountGetNonStdSCU (Account * acc) 
+xaccAccountGetNonStdSCU (const Account * acc)
 {
   if (!acc) return 0;
 
@@ -1563,7 +1563,7 @@ xaccAccountGetNotes (Account *acc)
 }
 
 gnc_commodity * 
-DxaccAccountGetCurrency (Account *acc)
+DxaccAccountGetCurrency (const Account *acc)
 {
   KvpValue *v;
   const char *s;
@@ -1583,7 +1583,7 @@ DxaccAccountGetCurrency (Account *acc)
 }
 
 gnc_commodity * 
-xaccAccountGetCommodity (Account *acc)
+xaccAccountGetCommodity (const Account *acc)
 {
   if (!acc) return NULL;
 
