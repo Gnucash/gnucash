@@ -686,6 +686,16 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   mark_split (s);
 }
 
+static void
+qofSplitSetSharePrice (Split *split, gnc_numeric price)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	g_return_if_fail(qof_begin_edit(&split->parent->inst));
+	xaccSplitSetSharePrice (split, price);
+	qof_commit_edit(&split->parent->inst);
+}
+
 void 
 xaccSplitSetSharePrice (Split *s, gnc_numeric price) 
 {
@@ -732,6 +742,15 @@ DxaccSplitSetShareAmount (Split *s, double damt)
   mark_split (s);
 }
 
+static void
+qofSplitSetAmount (Split *split, gnc_numeric amt)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	g_return_if_fail(qof_begin_edit(&split->parent->inst));
+	xaccSplitSetAmount (split, amt);
+	qof_commit_edit(&split->parent->inst);
+}
 
 void 
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
@@ -748,6 +767,15 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
   mark_split (s);
 }
 
+static void
+qofSplitSetValue (Split *split, gnc_numeric amt)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	g_return_if_fail(qof_begin_edit(&split->parent->inst));
+	xaccSplitSetValue (split, amt);
+	qof_commit_edit(&split->parent->inst);
+}
 
 void 
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
@@ -1453,7 +1481,8 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 void
 xaccTransBeginEdit (Transaction *trans)
 {
-    QOF_BEGIN_EDIT(&trans->inst);
+   if(!trans) { return; }
+   if(!qof_begin_edit(&trans->inst)) { return; }
 
    if (qof_book_shutting_down(trans->inst.book))
      return;
@@ -2382,7 +2411,7 @@ qofTransSetDatePosted (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
 	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
-	qof_begin_edit(&trans->inst);
+	if(!qof_begin_edit(&trans->inst)) { return; }
 	xaccTransSetDateInternal(trans, &trans->date_posted, ts);
 	set_gains_date_dirty(trans);
 	qof_commit_edit(&trans->inst);
@@ -2401,7 +2430,7 @@ qofTransSetDateEntered (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
 	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
-	qof_begin_edit(&trans->inst);
+	if(!qof_begin_edit(&trans->inst)) { return; }
 	xaccTransSetDateInternal(trans, &trans->date_entered, ts);
 	qof_commit_edit(&trans->inst);
 }
@@ -2430,20 +2459,14 @@ xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
    kvp_frame_set_timespec (trans->inst.kvp_data, TRANS_DATE_DUE_KVP, *ts);
 }
 
-static void
-qofTransSetTxnType (Transaction *trans, char type)
-{
-	qof_begin_edit(&trans->inst);
-	xaccTransSetTxnType(trans, type);
-	qof_commit_edit(&trans->inst);
-}
-
 void
 xaccTransSetTxnType (Transaction *trans, char type)
 {
   char s[2] = {type, '\0'};
-  if (!trans) return;
+  g_return_if_fail(trans);
+  if(!qof_begin_edit(&trans->inst)) { return; }
   kvp_frame_set_str (trans->inst.kvp_data, TRANS_TXN_TYPE_KVP, s);
+  qof_commit_edit(&trans->inst);
 }
 
 void xaccTransClearReadOnly (Transaction *trans)
@@ -2462,10 +2485,12 @@ xaccTransSetReadOnly (Transaction *trans, const char *reason)
 /********************************************************************\
 \********************************************************************/
 
+/* QOF does not open the trans before setting a parameter,
+but the call uses check_open so we cannot use the call directly. */
 static void
 qofTransSetNum (Transaction *trans, const char *xnum)
 {
-	qof_begin_edit(&trans->inst);
+	if(!qof_begin_edit(&trans->inst)) { return; }
 	xaccTransSetNum(trans, xnum);
 	qof_commit_edit(&trans->inst);
 }
@@ -2485,7 +2510,7 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
 static void
 qofTransSetDescription (Transaction *trans, const char *desc)
 {
-	qof_begin_edit(&trans->inst);
+	if(!qof_begin_edit(&trans->inst)) { return; }
 	xaccTransSetDescription(trans, desc);
 	qof_commit_edit(&trans->inst);
 }
@@ -2505,7 +2530,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 static void
 qofTransSetNotes (Transaction *trans, const char *notes)
 {
-	qof_begin_edit(&trans->inst);
+	if(!qof_begin_edit(&trans->inst)) { return; }
 	xaccTransSetNotes(trans, notes);
 	qof_commit_edit(&trans->inst);
 }
@@ -2717,6 +2742,16 @@ xaccTransHasSplitsInState (const Transaction *trans, const char state)
 /********************************************************************\
 \********************************************************************/
 
+static void
+qofSplitSetMemo (Split *split, const char* memo)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	if(!qof_begin_edit(&split->parent->inst)) { return; }
+	xaccSplitSetMemo(split, memo);
+	qof_commit_edit(&split->parent->inst);
+}
+
 void
 xaccSplitSetMemo (Split *split, const char *memo)
 {
@@ -2729,6 +2764,16 @@ xaccSplitSetMemo (Split *split, const char *memo)
    split->memo = tmp;
 }
 
+static void
+qofSplitSetAction (Split *split, const char *actn)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	if(!qof_begin_edit(&split->parent->inst)) { return; }
+	xaccSplitSetAction (split, actn);
+	qof_commit_edit(&split->parent->inst);
+}
+
 void
 xaccSplitSetAction (Split *split, const char *actn)
 {
@@ -2739,6 +2784,16 @@ xaccSplitSetAction (Split *split, const char *actn)
    tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) actn);
    g_cache_remove(gnc_engine_get_string_cache(), split->action);
    split->action = tmp;
+}
+
+static void
+qofSplitSetReconcile (Split *split, char recn)
+{
+	g_return_if_fail(split);
+	g_return_if_fail(split->parent);
+	if(!qof_begin_edit(&split->parent->inst)) { return; }
+	xaccSplitSetReconcile(split, recn);
+	qof_commit_edit(&split->parent->inst);
 }
 
 void
@@ -3329,12 +3384,12 @@ gboolean xaccSplitRegister (void)
     { SPLIT_BALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetBalance, NULL },
     { SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,(QofAccessFunc)xaccSplitGetClearedBalance, NULL },
     { SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,(QofAccessFunc)xaccSplitGetReconciledBalance, NULL },
-    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo, (QofSetterFunc)xaccSplitSetMemo },
-    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction, (QofSetterFunc)xaccSplitSetAction },
-    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile, (QofSetterFunc)xaccSplitSetReconcile },
-    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount, (QofSetterFunc)xaccSplitSetAmount },
-    { SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,(QofAccessFunc)xaccSplitGetSharePrice, (QofSetterFunc)xaccSplitSetSharePrice },
-    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)xaccSplitSetValue },
+    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo, (QofSetterFunc)qofSplitSetMemo },
+    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction, (QofSetterFunc)qofSplitSetAction },
+    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile, (QofSetterFunc)qofSplitSetReconcile },
+    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount, (QofSetterFunc)qofSplitSetAmount },
+    { SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,(QofAccessFunc)xaccSplitGetSharePrice, (QofSetterFunc)qofSplitSetSharePrice },
+    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)qofSplitSetValue },
     { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
     { SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitVoidFormerAmount, NULL },
     { SPLIT_VOIDED_VALUE, QOF_TYPE_NUMERIC,  (QofAccessFunc)xaccSplitVoidFormerValue, NULL },
@@ -3347,7 +3402,7 @@ gboolean xaccSplitRegister (void)
     { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
     { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
     { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
-    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, (QofSetterFunc)xaccSplitSetSlots_nc },
+    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
@@ -3400,7 +3455,7 @@ gboolean xaccTransRegister (void)
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
     { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)qofTransSetNotes },
     { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p, NULL },
-    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)qofTransSetTxnType },
+    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)xaccTransSetTxnType },
     { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus,NULL },
     { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason,NULL },
     { TRANS_VOID_TIME, QOF_TYPE_DATE,    (QofAccessFunc)xaccTransGetVoidTime,   NULL },

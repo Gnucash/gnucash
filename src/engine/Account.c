@@ -322,7 +322,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  QOF_COMMIT_EDIT_PART1 (&acc->inst);
+  if(!qof_commit_edit(&acc->inst)) { return;}
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -840,7 +840,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   old_amt = xaccSplitGetAmount (split);
 
   xaccAccountBeginEdit(acc);
-  xaccTransBeginEdit(trans);
+  if(trans) { xaccTransBeginEdit(trans); }
 
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
@@ -876,12 +876,12 @@ xaccAccountInsertSplit (Account *acc, Split *split)
       mark_account (acc);
   }
 
-  /* Setting the amount casues a conversion to the new account's 
+  /* Setting the amount causes a conversion to the new account's
    * denominator AKA 'SCU Smallest Currency Unit'. */
   /* xaccSplitSetAmount(split, old_amt); */
   split->amount = gnc_numeric_convert (old_amt,
                 xaccAccountGetCommoditySCU(acc), GNC_HOW_RND_ROUND);
-  xaccTransCommitEdit(trans);
+  if(trans) { xaccTransCommitEdit(trans); }
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
 }
