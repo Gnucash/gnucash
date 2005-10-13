@@ -43,11 +43,11 @@ void set_max_group_depth (gint max_group_depth);
 void set_max_group_accounts (gint max_group_accounts);
 
 GNCPrice * get_random_price(QofBook *book);
-void make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
+gboolean make_random_pricedb (QofBook *book, GNCPriceDB *pdb);
 GNCPriceDB * get_random_pricedb(QofBook *book);
 AccountGroup * get_random_group(QofBook * book);
 Account* get_random_account(QofBook * book);
-Split* get_random_split(QofBook *book, Account *account);
+Split* get_random_split(QofBook *book, Account *account, Transaction *trn);
 Transaction* get_random_transaction(QofBook *book);
 Transaction* get_random_transaction_with_currency(QofBook *book,
                                                   gnc_commodity *currency,

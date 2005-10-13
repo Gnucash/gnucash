@@ -1,17 +1,37 @@
+/***************************************************************************
+ *            test-xml-account.c
+ *
+ *  Sun Oct  9 15:37:26 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include "config.h"
 
 #include <glib.h>
-#include <libguile.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "gnc-module.h"
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-
+#include "cashobjects.h"
 #include "sixtp-parsers.h"
 #include "sixtp-dom-parsers.h"
 
@@ -22,9 +42,8 @@
 #include "Account.h"
 #include "Group.h"
 #include "Scrub.h"
-#include "gnc-book.h"
 
-static GNCBook *book;
+static QofBook *sixbook;
 
 static gchar*
 node_and_account_equal(xmlNodePtr node, Account *act)
@@ -32,7 +51,9 @@ node_and_account_equal(xmlNodePtr node, Account *act)
     xmlNodePtr mark;
 
     while (safe_strcmp ((char*)node->name, "text") == 0)
+	{
       node = node->next;
+	}
 
     if(!check_dom_tree_version(node, "2.0.0"))
     {
@@ -173,16 +194,15 @@ test_add_account(const char *tag, gpointer globaldata, gpointer data)
 
     com = xaccAccountGetCommodity (account);
 
-    t = gnc_book_get_commodity_table (book);
+    t = gnc_book_get_commodity_table (sixbook);
 
     new_com = gnc_commodity_table_lookup (t,
                                           gnc_commodity_get_namespace (com),
                                           gnc_commodity_get_mnemonic (com));
 
-    if (new_com)
-      xaccAccountSetCommodity (account, new_com);
+    if (new_com) { xaccAccountSetCommodity (account, new_com); }
 
-    do_test_args(xaccAccountEqual((Account*)data, (Account*)(gdata->act),
+    do_test_args(xaccAccountEqual((Account*)account, (Account*)(gdata->act),
                                   TRUE),
                         "gnc_account_sixtp_parser_create", 
                  __FILE__, __LINE__, "%d", gdata->value );
@@ -240,7 +260,7 @@ test_account(int i, Account *test_act)
         parser = gnc_account_sixtp_parser_create();
             
         if(!gnc_xml_parse_file(parser, filename1, test_add_account,
-                               &data, book))
+                               &data, sixbook))
         {
             failure_args("gnc_xml_parse_file returned FALSE",
                          __FILE__, __LINE__, "%d", i);
@@ -257,7 +277,7 @@ test_account(int i, Account *test_act)
 }
 
 static void
-test_generation(void)
+test_generation()
 {
     int i;
 
@@ -265,7 +285,7 @@ test_generation(void)
     {
         Account *ran_act;
 
-        ran_act = get_random_account(book);
+        ran_act = get_random_account(sixbook);
 
         test_account(i, ran_act);
 
@@ -276,7 +296,7 @@ test_generation(void)
         /* empty some things. */
         Account *act;
 
-        act = get_random_account(book);
+        act = get_random_account(sixbook);
 
         xaccAccountSetCode(act, "");
         xaccAccountSetDescription(act, "");
@@ -313,7 +333,7 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
 
     if(!xaccAccountGetParent(act))
     {
-        xaccGroupInsertAccount(xaccGetAccountGroup(book), act);
+        xaccGroupInsertAccount(xaccGetAccountGroup(sixbook), act);
     }
 
     msg = node_and_account_equal((xmlNodePtr)global_data, act);
@@ -324,19 +344,20 @@ test_real_account(const char *tag, gpointer global_data, gpointer data)
     return TRUE;
 }
 
-static void
-guile_main (void *closure, int argc, char **argv)
+int
+main (int argc, char ** argv)
 {
-    gnc_module_system_init();
-    gnc_module_load("gnucash/engine", 0);
+    QofSession *session;
 
-    book = gnc_book_new ();
-
+    qof_init();
+    cashobjects_register();
+    session = qof_session_new();
+    sixbook = qof_session_get_book (session);
     if(argc > 1)
     {
         test_files_in_dir(argc, argv, test_real_account, 
                           gnc_account_sixtp_parser_create(),
-                          "gnc:account", book);
+                          "gnc:account", sixbook);
     }
     else
     {
@@ -344,12 +365,6 @@ guile_main (void *closure, int argc, char **argv)
     }
         
     print_test_results();
-    exit(get_rv());
-}
-
-int
-main (int argc, char ** argv)
-{
-  scm_boot_guile (argc, argv, guile_main, NULL);
+    qof_close();
   return 0;
 }

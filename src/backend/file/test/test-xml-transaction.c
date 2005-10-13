@@ -1,7 +1,29 @@
+/***************************************************************************
+ *            test-xml-transaction.c
+ *
+ *  Fri Oct  7 21:26:59 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include "config.h"
 
 #include <glib.h>
-#include <libguile.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -10,12 +32,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include "gnc-module.h"
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
-
+#include "cashobjects.h"
 #include "sixtp-parsers.h"
 
 #include "sixtp-dom-parsers.h"
@@ -344,12 +364,14 @@ test_transaction(void)
     for(i = 0; i < 50; i++)
     {
         Transaction *ran_trn;
+        AccountGroup *grp;
         xmlNodePtr test_node;
         gnc_commodity *com;
         gchar *compare_msg;
         gchar *filename1;
         int fd;
 
+        grp = get_random_group(book);
         ran_trn = get_random_transaction(book);
         if(!ran_trn)
         {
@@ -470,12 +492,11 @@ test_real_transaction(const char *tag, gpointer global_data, gpointer data)
     return TRUE;
 }
 
-static void
-guile_main (void *closure, int argc, char **argv)
+int
+main (int argc, char ** argv)
 {
-    gnc_module_system_init();
-    gnc_module_load("gnucash/engine", 0);
-
+    qof_init();
+    cashobjects_register();
     xaccLogDisable();
 
     gnc_transaction_xml_v2_testing = TRUE;
@@ -494,12 +515,6 @@ guile_main (void *closure, int argc, char **argv)
     }
 
     print_test_results();
-    exit(get_rv());
-}
-
-int
-main (int argc, char ** argv)
-{
-  scm_boot_guile (argc, argv, guile_main, NULL);
+    qof_close();
   return 0;
 }

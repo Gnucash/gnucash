@@ -57,7 +57,10 @@ run_test (void)
         return;
     }
 	success("act2 created");
-    spl = get_random_split(book, act1);
+	/* if we use a trans here, the scrub routines
+	 will add a pointer to a newly created Orphan-...
+	account. */
+    spl = get_random_split(book, act1, NULL);
     if(!spl)
     {
         failure("spl not created");

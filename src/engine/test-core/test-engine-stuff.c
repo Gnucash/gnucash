@@ -31,12 +31,9 @@
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofquerycore.h"
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -689,17 +686,18 @@ get_random_price(QofBook *book)
   return p;
 }
 
-void
+gboolean
 make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
   int num_prices;
+   gboolean check;
 
   num_prices = get_random_int_in_range (1, 41);
   if(num_prices < 1) /* should be impossible */
   {
       failure_args("engine-stuff", __FILE__, __LINE__,
                    "get_random_int_in_range failed");
-      return;
+        return FALSE;
   }
 
   while (num_prices-- > 0)
@@ -711,13 +709,15 @@ make_random_pricedb (QofBook *book, GNCPriceDB *db)
     {
         failure_args("engine-stuff", __FILE__, __LINE__,
                      "get_random_price failed");
-        return;
+                return FALSE;
     }
 
-    gnc_pricedb_add_price (db, p);
+        check = gnc_pricedb_add_price (db, p);
+        if(!check) { return check; }
 
     gnc_price_unref (p);
   }
+	return TRUE;
 }
 
 GNCPriceDB *
@@ -725,7 +725,6 @@ get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
-  //db = gnc_pricedb_create (book);
   db = gnc_pricedb_get_db (book);
   if(!db)
   {
@@ -733,7 +732,7 @@ get_random_pricedb(QofBook *book)
                    "gnc_pricedb_get_db failed");
       return NULL;
   }
-  make_random_pricedb (book, db);
+  if(!make_random_pricedb (book, db)) { return NULL; }
 
   return db;
 }
@@ -916,8 +915,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
 
     acc = get_random_list_element (account_list);
-    s = get_random_split(book, acc);
-    xaccTransAppendSplit(trn, s);
+    s = get_random_split(book, acc, trn);
     xaccSplitSetValue(s, num);
 
     /* If the currencies are the same, the split amount should equal
@@ -944,8 +942,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
       }
     }
 
-    s = get_random_split(book, bcc);
-    xaccTransAppendSplit(trn, s);
+    s = get_random_split(book, bcc, trn);
 
     /* Other split should have equal and opposite value */
     if (do_bork()) 
@@ -1267,7 +1264,7 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
-get_random_split(QofBook *book, Account *acct)
+get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
     gnc_numeric num;
@@ -1282,6 +1279,8 @@ get_random_split(QofBook *book, Account *acct)
     xaccSplitSetDateReconciledTS(ret, get_random_timespec());
 
     /* Split must be in an account before we can set an amount */
+    /* and in a transaction before it can be added to an account. */
+    xaccTransAppendSplit(trn, ret);
     xaccAccountInsertSplit (acct, ret);
     num = get_random_gnc_numeric ();
     xaccSplitSetAmount(ret, num);
@@ -1326,10 +1325,13 @@ set_tran_random_string(Transaction* trn,
                        void(*func)(Transaction *act, const gchar*str))
 {
     gchar *tmp_str = get_random_string();
+    if(!trn || !(&trn->inst)) { return; }
     if(tmp_str)
     {
+        xaccTransBeginEdit(trn);
         (func)(trn, tmp_str);
         g_free(tmp_str);
+        xaccTransCommitEdit(trn);
     }
 }
 

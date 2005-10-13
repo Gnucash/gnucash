@@ -5,15 +5,11 @@
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
-
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "guid.h"
 
 static void
 test_binary()
