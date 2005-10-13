@@ -146,15 +146,21 @@ Resources
         #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
         #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
 
-- Reporting [mostly functional]
+- Reporting / Graphing [mostly functional]
 
-  - Graphing still unsupported; [jsled] in periodic contact with Jody
-    Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be factored
-    out of gnumeric into libgoffice.
+  - Menus added in reverse order.
 
-    - GOG integrated but not completely working - warlord - 2005-04-23.
+     - Probably a detail of gtk-ui-manager merging; should be controllable in
+       gnc-menu-extensions.c.
 
-    - Known issue with height/width bug in libgtkhtml 3.?.? on FC3.
+  - Graphing working, with some known issue; see top
+    of src/gnome-utils/gnc-html-graph-gog.c for more detail.
+
+    - colors
+
+    - axis-label string rotation
+
+    - Known issue with height/width bug in libgtkhtml 3.3.2 (on FC3).
 
   - When rendering, progress bar always says "Rendering 'Untitled' report...".
 
@@ -184,9 +190,43 @@ Resources
 
   - Probably more TODO but these are the main points.
 
-- Hierarchy Merge - BROKEN
+- New Account Hierarchy - somewhat works
+
+  - Simply invoking, even if cancelled, trashes current book state?
+
+  - Sometimes crashes when loading account data.
+
+  - Main account selection layout is too (visually) compressed
+ 
+    - Should have two columns: left={category(80%) + detailed-description(20%)}, right={category-accounts(100%)}
+
+    - See 'relayout Hierarchy' in src/gnome/glade/account.glade.
+
+  - Account tree's only column (account name) is relatively thin, truncating
+    some titles.
+
+    - It seems that gnc_tree_view_add_text_column sets column-width based on
+      an example string, whereas in this use-case the best would be to set to
+      '0'(=autosize).
+
+- Account Hierarchy Merge - BROKEN
+
+  - Bad integration with Account Hierarchy druid
+
+  - Static variables used for process/window state.
+
+  - Misc errors with no apparent cause
+
+    - (gnucash:27485): Gtk-CRITICAL **: gtk_widget_event: assertion `WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
+
+    - (gnucash:27485): Gtk-CRITICAL **: gtk_widget_event: assertion `WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
 
   - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
+
+    - (jsled) actually, it just doesn't display the 1-conflict -> 0-conflict
+      transition in the UI correctly, but it does allow you to finish.
+
+  - conflict-resolution process/display issues.
 
 - Backend
 

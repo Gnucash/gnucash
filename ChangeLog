@@ -1,3 +1,9 @@
+2005-10-12  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-html-graph-gog.c: Cleanups and finishing:
+	get bar-chart data correctly hooked up; get scatter-plot hooked
+	up.  Generally refactor code for clarity.
+
 2005-10-12  David Hampton  <hampton@employees.org>
 
 	* configure.in: Remove the stdc++ link requirement from the OFX
