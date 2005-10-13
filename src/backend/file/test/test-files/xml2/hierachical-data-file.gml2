@@ -1,16 +1,41 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="account">8</gnc:count-data>
 <gnc:count-data cd:type="transaction">6</gnc:count-data>
 <gnc:account version="2.0.0">
   <act:name>Bank Accounts</act:name>
   <act:id type="guid">ec511fd83bdb2fb877d7b23042968c7e</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -22,11 +47,11 @@
   <act:name>Bank 1</act:name>
   <act:id type="guid">c8ceb48e3378ae638357508a041ca61a</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -39,11 +64,11 @@
   <act:name>Credit Card B</act:name>
   <act:id type="guid">f5423230f8cb39ef01fc0a2696627d5d</act:id>
   <act:type>CREDIT</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -55,11 +80,11 @@
   <act:name>Liabilities</act:name>
   <act:id type="guid">7241c921241f5ccb8f8fade580109f75</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -71,11 +96,11 @@
   <act:name>Credit card A</act:name>
   <act:id type="guid">9b2119ed0a2eb7449d0209137a2410de</act:id>
   <act:type>CREDIT</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -88,11 +113,11 @@
   <act:name>Liability 1</act:name>
   <act:id type="guid">37bdf5369928876a5f20900458bc84a8</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -105,11 +130,11 @@
   <act:name>Liability 2</act:name>
   <act:id type="guid">4178e5b449bdec62dd02ff69d45795ef</act:id>
   <act:type>LIABILITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
@@ -122,11 +147,11 @@
   <act:name>Equity</act:name>
   <act:id type="guid">7f7955a48b6a2436d8f4d0d31ca4f6c8</act:id>
   <act:type>EQUITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:slots>
     <slot>
       <slot:key>notes</slot:key>
