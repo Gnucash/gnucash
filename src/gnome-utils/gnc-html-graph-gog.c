@@ -32,7 +32,20 @@
 #include "gnc-html.h"
 #include "gnc-trace.h"
 #include "gnc-engine.h"
-
+#ifdef HAVE_GOFFICE
+#include <goffice/goffice.h>
+#include <goffice/graph/gog-graph.h>
+#include <goffice/graph/gog-object.h>
+#include <goffice/graph/gog-renderer-pixbuf.h>
+#include <goffice/graph/gog-style.h>
+#include <goffice/graph/gog-styled-object.h>
+#include <goffice/graph/gog-plot.h>
+#include <goffice/graph/gog-series.h>
+#include <goffice/utils/go-color.h>
+#include <goffice/graph/gog-data-set.h>
+#include <goffice/graph/gog-renderer-svg.h>
+#include <goffice/data/go-data-simple.h>
+#else
 #include "goffice.h"
 #include "graph/gog-graph.h"
 #include "graph/gog-object.h"
@@ -46,7 +59,7 @@
 #include "graph/gog-data-set.h"
 #include "graph/gog-styled-object.h"
 #include "graph/gog-style.h"
-
+#endif
 #include <gsf/gsf.h>
 #include <gsf/gsf-output-memory.h>
 
@@ -229,7 +242,9 @@ set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
   }
 
   tmp = gog_object_add_by_name(chart, "Title", NULL);
+#ifndef HAVE_GOFFICE
   gog_object_set_pos(tmp, GOG_POSITION_N | GOG_POSITION_ALIGN_START);
+#endif
   titleScalar = go_data_scalar_str_new(totalTitle->str, FALSE);
   gog_dataset_set_dim(GOG_DATASET(tmp), 0, titleScalar, NULL);
 
@@ -330,11 +345,19 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
 
   series = gog_plot_new_series(plot);
+#ifdef HAVE_GOFFICE
+  labelData = go_data_vector_str_new((char const * const *)labels, datasize, NULL);
+#else
   labelData = go_data_vector_str_new((char const * const *)labels, datasize);
+#endif
   gog_series_set_dim(series, 0, labelData, NULL);
   go_data_emit_changed(GO_DATA(labelData));
 
+#ifdef HAVE_GOFFICE
+  sliceData = go_data_vector_val_new(data, datasize, NULL);
+#else
   sliceData = go_data_vector_val_new(data, datasize);
+#endif
   gog_series_set_dim(series, 1, sliceData, NULL);
   go_data_emit_changed(GO_DATA(sliceData));
 
@@ -426,8 +449,11 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                 "type",                         barType,
                 "overlap_percentage",           barOverlap, 
 		NULL);
-
-  labelData = go_data_vector_str_new(  (char const * const *)row_labels, datarows );
+#ifdef HAVE_GOFFICE
+  labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols, NULL );
+#else
+  labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols );
+#endif
   {
     // foreach row:
     //   series = row
@@ -448,7 +474,11 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
       gog_series_set_dim( series, 0, labelData, NULL );
       go_data_emit_changed (GO_DATA (labelData));
 
+#ifdef HAVE_GOFFICE
+      sliceData = go_data_vector_val_new( data + (i*datarows), datarows, NULL );
+#else
       sliceData = go_data_vector_val_new( data + (i*datarows), datarows );
+#endif
       gog_series_set_dim( series, 1, sliceData, NULL );
       
       /*
@@ -509,11 +539,19 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 
   series = gog_plot_new_series( plot );
 
+#ifdef HAVE_GOFFICE
+  sliceData = go_data_vector_val_new( xData, datasize, NULL );
+#else
   sliceData = go_data_vector_val_new( xData, datasize );
+#endif
   gog_series_set_dim( series, 0, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
 
+#ifdef HAVE_GOFFICE
+  sliceData = go_data_vector_val_new( yData, datasize, NULL );
+#else
   sliceData = go_data_vector_val_new( yData, datasize );
+#endif
   gog_series_set_dim( series, 1, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
 

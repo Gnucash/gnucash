@@ -313,7 +313,11 @@ gnc_plugin_set_important_actions (GtkActionGroup *action_group,
 
   for (i = 0; name[i]; i++) {
     action = gtk_action_group_get_action (action_group, name[i]);
+#ifdef HAVE_GOFFICE
+    g_object_set (G_OBJECT(action), "is_important", TRUE, FALSE, NULL);
+#else
     g_object_set (G_OBJECT(action), "is_important", TRUE, FALSE);
+#endif
   }
 
   /* If this trips, you've got too many "important" actions.  That

@@ -409,14 +409,14 @@ dnl because lib/goffice will not build with newer versions of libgsf.
 GOFFICE_REQUIRED=0.0.3
 GSF_REQUIRED=1.12.0
 AC_MSG_CHECKING([for GOffice and GSF])
-LIBGOFFICE_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgoffice >= GOFFICE_REQUIRED"`
-LIBGOFFICE_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice >= GOFFICE_REQUIRED"`
-LIBGSF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgsf >= GSF_REQUIRED"`
-LIBGSF_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice >= GSF_REQUIRED"`
+LIBGOFFICE_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgoffice-1 >= $GOFFICE_REQUIRED"`
+LIBGOFFICE_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice-1 >= $GOFFICE_REQUIRED"`
+LIBGSF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgsf-1 >= $GSF_REQUIRED"`
+LIBGSF_LIBS=`$PKG_CONFIG --silence-errors --libs " libgsf-1 >= $GSF_REQUIRED"`
 AC_SUBST(LIBGOFFICE_CFLAGS)
 AC_SUBST(LIBGOFFICE_LIBS)
 
-if test "x$LIBGOFFICE_LIBS" = x; then
+if test x"$LIBGOFFICE_LIBS" = x; then
   AC_MSG_RESULT([No, GOffice not found, will build using internal goffice library.])
 else
   AC_MSG_RESULT([Yes, using GOffice])
@@ -1371,9 +1371,21 @@ AC_OUTPUT( po/Makefile.in
 if test x$RPC_DIR = xrpc ; then
        AC_MSG_WARN([
 
-       The RPC Backend is depricated.  You should not use it.
+       The RPC Backend is deprecated.  You should not use it.
        It may go away in the future.  If you need it, please
        contact gnucash-devel@gnucash.org and let the developers
        know.
        ])
 fi
+
+AC_MSG_RESULT([
+  Options detected/selected
+  -------------------------
+  gnucash version ...... : $VERSION
+  Build for host ....... : $host
+  Extra Warnings ....... : $warnFLAGS
+  CPPFLAGS ............. : $CPPFLAGS
+  CFLAGS ............... : $CFLAGS
+  LDFLAGS .............. : $LDFLAGS
+])
+
