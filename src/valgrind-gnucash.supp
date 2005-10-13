@@ -30,6 +30,7 @@
 #     Param Value1 Value2 Value4 Value8 Value16
 #     Free Addr1 Addr2 Addr4 Addr8 Addr16
 #     Cond (previously known as Value0)
+#     Leak
 #
 # and the optional extra info is:
 #     if Param: name of system call param
@@ -60,5 +61,222 @@
    fun:g_hash_table_insert
    fun:g_hash_table_lookup_extended
 }
+
+{
+   <insert a suppression name here>
+   Memcheck:Param
+   write(buf)
+   fun:__write_nocancel
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   fun:_X11TransWrite
+   obj:/usr/X11R6/lib/libX11.so.6.2
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   obj:/usr/lib/libORBit-2.so.0.0.0
+   fun:link_connection_writev
+   fun:giop_send_buffer_write
+}
+
+{
+   <insert a suppression name here>
+   core:PThread
+   fun:pthread_mutex_lock
+   fun:_IO_flockfile
+   fun:pango_read_line
+   fun:pango_find_map
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   obj:/usr/X11R6/lib/libX11.so.6.2
+   fun:_X11TransWritev
+   fun:_XSend
+}
+
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/libguile.so.12.3.0
+   obj:/usr/lib/libguile.so.12.3.0
+   obj:/usr/lib/libguile.so.12.3.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   fun:scm_make_port_type
+   fun:scm_init_vports
+   obj:/usr/lib/libguile.so.12.3.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/libguile.so.12.3.0
+   fun:scm_gc_for_newcell
+   fun:scm_acons
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:register_state
+   fun:create_cd_newstate
+   fun:re_compile_internal
+}
+
+
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:*
+   fun:poptGetContext
+   fun:gnome_program_preinit
+   obj:/usr/lib/libgnome-2.so.0.800.0
+}
+
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:IceAddConnectionWatch
+   fun:gnome_ice_init
+   obj:/usr/lib/libgnomeui-2.so.0.800.0
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:ORBit_alloc_string
+   fun:CORBA_string_dup
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__gconv_open
+   fun:iconv_open
+   obj:/usr/lib/libglib-2.0.so.0.400.8
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_dl_map_object_from_fd
+   fun:_dl_map_object
+   fun:openaux
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetCreate
+   fun:FcConfigBuildFonts
+   fun:FcInitLoadConfigAndFonts
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:*
+   obj:/usr/lib/libfontconfig.so.1.0.4
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FT_New_Memory
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XRenderFindDisplay
+   fun:XRenderQueryExtension
+   fun:_XftDisplayInfoGet
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/X11R6/lib/libXft.so.2.1.2
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/bin/esd
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/bin/esd
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libasound.so.2.0.0
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:esd_get_socket_dirname
+   fun:esd_get_socket_name
+   fun:esd_open_sound
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:snd_config_update_r
+   fun:snd_config_update
+   fun:snd_pcm_open
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   fun:snd_output_stdio_attach
+   fun:esd_audio_open
+   obj:/usr/bin/esd
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:esd_get_socket_name
+   fun:esd_open_sound
+   obj:/usr/lib/libgnome-2.so.0.800.0
+}
+
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/lib/libcrypto.so.0.9.7a
+}
+
 
 # ##----------------------------------------------------------------------##
