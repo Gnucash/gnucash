@@ -27,7 +27,7 @@
     )
 )
 
-(define (simple-bar-chart)
+(define (simple-bar-chart stacked?)
   (let ((chart (gnc:make-html-barchart))
         (text (gnc:make-html-text (gnc:html-markup-p "[bar goes here]"))))
     (gnc:html-barchart-set-title! chart "Bar Chart Title")
@@ -36,16 +36,18 @@
     (gnc:html-barchart-append-row! chart '(75 55 70))
     (gnc:html-barchart-set-width! chart 320)
     (gnc:html-barchart-set-height! chart 240)
-    (gnc:html-barchart-set-row-labels! chart '("row1" "row2"))
-    (gnc:html-barchart-set-col-labels! chart '("foo" "bar" "baz"))
+    (gnc:html-barchart-set-row-labels! chart '("date1" "date2"))
+    (gnc:html-barchart-set-col-labels! chart '("dataset1" "dataset2" "dataset3"))
     (gnc:html-barchart-set-col-colors! chart (gnc:assign-colors 3))
+    (gnc:html-barchart-set-stacked?! chart stacked?)
+    (gnc:html-barchart-set-y-axis-label! chart "A Y Axis")
     chart))
 
 (define (simple-scatter-chart)
   (let ((chart (gnc:make-html-scatter))
         (text (gnc:make-html-text (gnc:html-markup-p "[scatter goes here]"))))
     (gnc:html-scatter-set-title! chart "Scatter Title")
-    (gnc:html-scatter-set-subtitle! chart "Sctatter SubTitle")
+    (gnc:html-scatter-set-subtitle! chart "Scatter SubTitle")
     (gnc:html-scatter-add-datapoint! chart '(25 75))
     (gnc:html-scatter-add-datapoint! chart '(45 55))
     (gnc:html-scatter-add-datapoint! chart '(70 30))
@@ -92,8 +94,13 @@
 
     (gnc:html-document-add-object!
      document
-     (gnc:make-html-text (gnc:html-markup-p "Bar:")))
-    (gnc:html-document-add-object! document (simple-bar-chart))
+     (gnc:make-html-text (gnc:html-markup-p "Bar, normal:")))
+    (gnc:html-document-add-object! document (simple-bar-chart #f))
+
+    (gnc:html-document-add-object!
+     document
+     (gnc:make-html-text (gnc:html-markup-p "Bar, stacked:")))
+    (gnc:html-document-add-object! document (simple-bar-chart #t))
 
     (gnc:html-document-add-object!
      document
