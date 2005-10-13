@@ -10,7 +10,9 @@
 # The $(shell find . -type d) dependency seems to be pointless -- it
 # always fires.  It appears that someone's always touching something.
 etags.files: $(shell find . -type d)
-	find . -path './debian' -prune -o -path './.pc' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
+	find . -path './debian' -prune -o -path './.pc' -prune -o \
+		-path '*.#*' -prune -o -name '*.[ch]' -print -o \
+		-name '*.scm' -print | sort > etags.files.tmp
 	@if cmp --quiet etags.files etags.files.tmp; \
         then \
           echo "TAGS file list hasn't changed."; \
