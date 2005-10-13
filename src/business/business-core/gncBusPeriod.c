@@ -1,5 +1,5 @@
 
-
+/*
 XXX TODO:
 -- contemplate a per-colection (per type) edit/commmit-edit, 
    clone, dirty, etc. functions some more ...
@@ -38,7 +38,7 @@ XXX TODO:
    ditto jobs in the customer list ??
 
 -- closed orders can be removed from new book ?
-
+*/
 
 
 

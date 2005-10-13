@@ -1,3 +1,9 @@
+2005-10-13  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/gncBusPeriod.c: Patch from Chris
+	Shoemaker to prevents gettext from finding unintentional strings
+	in an undeclared comment block.
+
 2005-10-13  Neil Williams <linux@codehelp.co.uk>
 
 	* GNOME2_STATUS: Remove qof_begin_edit note (fixed)
