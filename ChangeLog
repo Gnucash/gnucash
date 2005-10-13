@@ -1,3 +1,15 @@
+2005-10-13  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Patch from Chris Shoemaker to
+	avoid trying to double-add plugins to plugin manager by delaying
+	signal connection until the plugins are already managed by the
+	plugin manager.
+
+	* src/gnome-utils/gnc-tree-view-account.c: Patch from Chris
+	Shoemaker to convert gnc-tree-view-account to a GObject base
+	instead of a GtkObject base. Also contains some line wrapping
+	fixes.
+
 2005-10-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/lib/glib26/Makefile.am:

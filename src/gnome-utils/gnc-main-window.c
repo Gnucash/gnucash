@@ -301,8 +301,9 @@ gnc_main_window_shutdown (gpointer session, gpointer user_data)
 }
 
 
-/** Look through the list of pages installed in this window and see if
- *  the specified page is there.
+/** See if the page already exists.  For each open window, look
+ *  through the list of pages installed in that window and see if the
+ *  specified page is there.
  *
  *  @internal
  *
@@ -507,12 +508,14 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	      entity, type, event_type, user_data);
 	window = GNC_MAIN_WINDOW(user_data);
 
+        /* This is not a typical list iteration.  We're removing while
+         * we iterate, so we have to cache the 'next' pointer before
+         * executing any code in the loop. */
 	for (item = window->priv->installed_pages; item; item = next) {
 	  next = g_list_next(item);
 	  page = GNC_PLUGIN_PAGE(item->data);
-	  if (!gnc_plugin_page_has_book (page, entity))
-	    continue;
-	  gnc_main_window_close_page (page);
+	  if (gnc_plugin_page_has_book (page, entity))
+              gnc_main_window_close_page (page);
 	}
 	LEAVE(" ");
 }
@@ -1662,12 +1665,13 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();
 	plugins = gnc_plugin_manager_get_plugins (manager);
+        g_list_foreach (plugins, gnc_main_window_add_plugin, window);
+        g_list_free (plugins);
+
 	g_signal_connect (G_OBJECT (manager), "plugin-added",
 			  G_CALLBACK (gnc_main_window_plugin_added), window);
 	g_signal_connect (G_OBJECT (manager), "plugin-removed",
 			  G_CALLBACK (gnc_main_window_plugin_removed), window);
-	g_list_foreach (plugins, gnc_main_window_add_plugin, window);
-	g_list_free (plugins);
 
 }
 
