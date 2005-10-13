@@ -5,7 +5,6 @@ pkglib_LTLIBRARIES = libgncmod-qifiocore.la
 AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} ${GLIB_CFLAGS}
 
 libgncmod_qifiocore_la_SOURCES = gncmod-qifiocore.c
-libgncmod_qifiocore_la_LDFLAGS = -module
 
 noinst_DATA = .scm-links
 

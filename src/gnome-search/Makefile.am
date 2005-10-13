@@ -49,8 +49,6 @@ noinst_HEADERS = \
   search-reconciled.h \
   search-string.h
 
-libgncmod_gnome_search_la_LDFLAGS = -module
-
 libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
@@ -67,6 +65,5 @@ glade_DATA = \
 
 EXTRA_DIST = \
   .cvsignore \
-  ${glade_DATA} \
-  ${gncmod_DATA} \
-  ${gwmod_DATA}
+  ${glade_DATA}
+

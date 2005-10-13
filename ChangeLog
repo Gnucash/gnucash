@@ -1,3 +1,48 @@
+2005-10-13  Neil Williams <linux@codehelp.co.uk>
+
+	* macros/autogen.sh: Mac OSX fix.
+	* src/business/business-core/gncBusPeriod.c: typos.
+
+	Removing non-portable -module setting - Mac OSX fix.
+	* src/app-utils/Makefile.am:
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am
+	* src/business/business-ledger/Makefile.am 
+	* src/business/business-utils/Makefile.am
+	* src/business/dialog-tax-table/Makefile.am
+	* src/calculation/Makefile.am 
+	* src/core-utils/Makefile.am 
+	* src/engine/Makefile.am 
+	* src/engine/test/Makefile.am 
+	* src/gnc-module/Makefile.am 
+	* src/gnc-module/test/misc-mods/Makefile.am 
+	* src/gnc-module/test/mod-bar/Makefile.am 
+	* src/gnc-module/test/mod-baz/Makefile.am
+	* src/gnc-module/test/mod-foo/Makefile.am
+	* src/gnome-search/Makefile.am 
+	* src/gnome-utils/Makefile.am 
+	* src/gnome/Makefile.am 
+	* src/import-export/Makefile.am 
+	* src/import-export/binary-import/Makefile.am
+	* src/import-export/hbci/Makefile.am 
+	* src/import-export/log-replay/Makefile.am 
+	* src/import-export/mt940/Makefile.am 
+	* src/import-export/ofx/Makefile.am 
+	* src/import-export/qif-import/Makefile.am 
+	* src/import-export/qif-io-core/Makefile.am 
+	* src/import-export/qif/Makefile.am 
+	* src/network-utils/Makefile.am 
+	* src/register/ledger-core/Makefile.am 
+	* src/register/register-core/Makefile.am 
+	* src/register/register-gnome/Makefile.am 
+	* src/register/register-gnome/test/Makefile.am 
+	* src/report/locale-specific/us/Makefile.am 
+	* src/report/report-gnome/Makefile.am 
+	* src/report/report-gnome/window-report.c 
+	* src/report/report-system/Makefile.am 
+	* src/report/standard-reports/Makefile.am 
+	* src/tax/us/Makefile.am: 
+
 2005-10-13  David Hampton  <hampton@employees.org>
 
 	* src/business/business-core/gncBusPeriod.c: Patch from Chris

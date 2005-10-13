@@ -18,8 +18,6 @@ noinst_HEADERS = \
   qif-objects-p.h \
   qif-parse.h
 
-libgncmod_qif_la_LDFLAGS = -module
-
 libgncmod_qif_la_LIBADD =
 
 AM_CFLAGS = \
@@ -28,4 +26,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS}
+

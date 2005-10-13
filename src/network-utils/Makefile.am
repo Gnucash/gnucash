@@ -23,8 +23,6 @@ gncinclude_HEADERS = \
   gnc-gpg.h \
   gnc-http.h
 
-libgncmod_network_utils_la_LDFLAGS = -module
-
 libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GNOME_LIBS}

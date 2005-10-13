@@ -55,8 +55,6 @@ noinst_HEADERS = \
   gncVendorP.h \
   gw-business-core.h
 
-libgncmod_business_core_la_LDFLAGS = -module
-
 libgncmod_business_core_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
@@ -65,7 +63,8 @@ libgncmod_business_core_la_LIBADD = \
 # business-core-helpers.c
 
 libgw_business_core_la_SOURCES = gw-business-core.c 
-libgw_business_core_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_business_core_la_LIBADD  = libgncmod-business-core.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash

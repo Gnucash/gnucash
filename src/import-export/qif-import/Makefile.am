@@ -15,8 +15,6 @@ noinst_HEADERS = \
   gnc-druid-test.h \
   gnc-plugin-qif-import.h
 
-libgncmod_qif_import_la_LDFLAGS = -module 
-
 libgncmod_qif_import_la_LIBADD = \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \

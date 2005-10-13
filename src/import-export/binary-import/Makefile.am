@@ -27,8 +27,6 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   druid-commodity.h
 
-libgncmod_binary_import_la_LDFLAGS = -module
-
 libgncmod_binary_import_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

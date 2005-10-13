@@ -13,7 +13,6 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
-  ../qof_book_merge.lo \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \

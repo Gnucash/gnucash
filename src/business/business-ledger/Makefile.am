@@ -17,7 +17,6 @@ noinst_HEADERS = \
   gncEntryLedgerLayout.h \
   gncEntryLedgerModel.h
 
-libgnc_business_ledger_la_LDFLAGS = -module
 libgnc_business_ledger_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \

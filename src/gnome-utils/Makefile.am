@@ -3,8 +3,6 @@ PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
-# Fix the goffice links to be conditional
-
 # Note that src/gnome-utils CANNOT depend on src/gnome!
 if USE_LIBGOFFICE
 AM_CFLAGS = \
@@ -46,12 +44,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib \
   -I${top_srcdir}/src \
   ${LIBGUPPI_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
-  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GSF_CFLAGS}
 endif
@@ -195,8 +193,6 @@ noinst_HEADERS = \
   gw-gnome-utils.h \
   search-param.h
 
-libgncmod_gnome_utils_la_LDFLAGS = -module
-
 if USE_LIBGOFFICE
 libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
@@ -242,7 +238,6 @@ libgncmod_gnome_utils_la_LIBADD = \
 endif
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
-libgw_gnome_utils_la_LDFLAGS = -module
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm

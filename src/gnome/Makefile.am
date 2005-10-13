@@ -6,7 +6,6 @@ gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 #nodist_gwmod_DATA = gw-gnc.scm
 
-libgncgnome_la_LDFLAGS = -module
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
@@ -16,7 +15,8 @@ libgncgnome_la_LIBADD = \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
-libgw_gnc_la_LDFLAGS = -module \
+
+libgw_gnc_la_LDFLAGS =  \
   ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
 libgw_gnc_la_LIBADD = libgncgnome.la
 

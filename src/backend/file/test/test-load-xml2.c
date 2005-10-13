@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
+ 
 /* @file test-load-xml2.c
  * @brief test the loading of a version-2 gnucash XML file
  */
@@ -154,6 +154,6 @@ main (int argc, char ** argv)
     closedir(xml2_dir);
 
     print_test_results();
-	qof_close();
-  return 0;
+    qof_close();
+    return 0;
 }

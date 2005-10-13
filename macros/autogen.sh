@@ -126,15 +126,15 @@ case $gettext_version in
 	INTL="--intl --no-changelog";;
 esac
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
-  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
-    echo
-    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
-    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
-    echo "(or a newer version if it is available)"
-    DIE=1
-  }
-}
+# (grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+#  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
+#    echo
+#    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
+#    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
+#    echo "(or a newer version if it is available)"
+#    DIE=1
+#  }
+#}
 
 grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
   grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \

@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libgncmodule.la
 pkglib_LTLIBRARIES = libgw-gnc-module.la
 
 libgncmodule_la_SOURCES = gnc-module.c
-libgncmodule_la_LDFLAGS = -module
+
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
@@ -19,7 +19,7 @@ libgncmodule_la_LIBADD = \
   -lltdl
 
 libgw_gnc_module_la_SOURCES = gw-gnc-module.c
-libgw_gnc_module_la_LDFLAGS = -module 
+
 libgw_gnc_module_la_LIBADD = libgncmodule.la \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \

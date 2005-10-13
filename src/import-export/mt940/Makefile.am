@@ -12,8 +12,6 @@ noinst_HEADERS = \
   gnc-mt940-import.h \
   gnc-plugin-mt940.h
 
-libgncmod_mt940_la_LDFLAGS = -module
-
 libgncmod_mt940_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

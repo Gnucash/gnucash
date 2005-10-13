@@ -64,8 +64,6 @@ noinst_HEADERS = \
   search-owner.h \
   gw-business-gnome.h
 
-libgncmod_business_gnome_la_LDFLAGS = -module
-
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
@@ -79,7 +77,8 @@ libgncmod_business_gnome_la_LIBADD = \
 
 
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
-libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_business_gnome_la_LIBADD  = libgncmod-business-gnome.la
 
 # For Business Reports

@@ -10,7 +10,6 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   gnc-report.h
 
-libgncmod_report_system_la_LDFLAGS = -module
 libgncmod_report_system_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \

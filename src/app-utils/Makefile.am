@@ -67,8 +67,6 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   gw-app-utils.h
 
-libgncmod_app_utils_la_LDFLAGS = -module
-
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -79,7 +77,6 @@ libgncmod_app_utils_la_LIBADD = \
   ${GLIB_LIBS}
 
 libgw_app_utils_la_SOURCES = gw-app-utils.c
-libgw_app_utils_la_LDFLAGS = -module
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = app-utils.scm 

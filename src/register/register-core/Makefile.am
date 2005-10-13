@@ -3,7 +3,6 @@ PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-register-core.la libgw-register-core.la
 
-libgncmod_register_core_la_LDFLAGS = -module
 libgncmod_register_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \

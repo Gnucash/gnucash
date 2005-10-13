@@ -169,7 +169,6 @@ noinst_HEADERS = \
 
 noinst_SCRIPTS = iso-currencies-to-c
 
-libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  libgw-engine.la \
  libgw-kvp.la \
@@ -177,10 +176,12 @@ libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  ../../lib/libc/libc-missing.la
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
-libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_kvp_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 
 libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c glib-helpers.c
-libgw_engine_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_engine_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = engine.scm 

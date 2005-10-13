@@ -7,8 +7,6 @@ libcore_utils_la_SOURCES = \
   gnc-gkeyfile-utils.c \
   gnc-gobject-utils.c
 
-libcore_utils_la_LDFLAGS = -module
-
 libcore_utils_la_LIBADD = \
   ${top_builddir}/lib/glib26/libgncglib.la \
   ${GLIB_LIBS} \
@@ -18,7 +16,7 @@ libcore_utils_la_LIBADD = \
 libgw_core_utils_la_SOURCES = \
   gw-core-utils.c
 
-libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_core_utils_la_LIBADD = \
   libcore-utils.la \
   ${GUILE_LIBS}

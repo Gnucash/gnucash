@@ -27,8 +27,6 @@ noinst_HEADERS = \
   dialog-tax-table.h \
   gw-dialog-tax-table.h
 
-libgncmod_dialog_tax_table_la_LDFLAGS = -module
-
 libgncmod_dialog_tax_table_la_LIBADD = \
   ../../gnc-module/libgncmodule.la \
   ../../core-utils/libcore-utils.la \
@@ -39,7 +37,8 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${EFENCE_LIBS}
 
 libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
-libgw_dialog_tax_table_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+
+libgw_dialog_tax_table_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \

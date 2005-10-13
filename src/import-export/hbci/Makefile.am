@@ -40,9 +40,6 @@ noinst_HEADERS = \
   hbci-interaction.h \
   hbci-interactionP.h
 
-
-libgncmod_hbci_la_LDFLAGS = -module
-
 libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
