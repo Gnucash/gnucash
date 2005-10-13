@@ -73,6 +73,7 @@ gnc_price_destroy (GNCPrice *p)
   qof_instance_release (&p->inst);
   memset(p, 0, sizeof(GNCPrice));
   g_free(p);
+  LEAVE (" ");
 }
 
 void
@@ -89,6 +90,7 @@ gnc_price_unref(GNCPrice *p)
   ENTER("pr=%p refcount=%d", p, p->refcount);
   if(p->refcount == 0) {
     PERR("refcount == 0 !!!!");
+    LEAVE (" ");
     return;
   }
 
@@ -100,6 +102,7 @@ gnc_price_unref(GNCPrice *p)
     }
     gnc_price_destroy (p);
   }
+  LEAVE (" ");
 }
 
 /* ==================================================================== */
@@ -110,14 +113,14 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
   /* the clone doesn't belong to a PriceDB */
   GNCPrice *new_p;
 
-  ENTER ("pr=%p", p);
-
   g_return_val_if_fail (book, NULL);
 
-  if(!p) return NULL;
+  ENTER ("pr=%p", p);
+
+  if(!p) { LEAVE (" "); return NULL; }
 
   new_p = gnc_price_create(book);
-  if(!new_p) return NULL;
+  if(!new_p) { LEAVE (" "); return NULL; }
 
   new_p->version = p->version;
 
@@ -130,7 +133,7 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
   gnc_price_set_value(new_p, gnc_price_get_value(p));
   gnc_price_set_currency(new_p, gnc_price_get_currency(p));
   gnc_price_commit_edit(new_p);
-
+  LEAVE (" ");
   return(new_p);
 }
 
@@ -595,7 +598,7 @@ gnc_pricedb_create(QofBook * book)
   result = g_new0(GNCPriceDB, 1);
   qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
 
-  /* This leaks result when the collection is destroyed.  When
+  /** \todo This leaks result when the collection is destroyed.  When
      qofcollection is fixed to allow a destroy notifier, we'll need to
      provide one here. */
   qof_collection_set_data (col, result);
@@ -641,7 +644,7 @@ void
 gnc_pricedb_destroy(GNCPriceDB *db)
 {
   if(!db) return;
-  if(!db->commodity_hash) {
+  if(db->commodity_hash) {
   g_hash_table_foreach (db->commodity_hash,
                         destroy_pricedb_commodity_hash_data,
                         NULL);
@@ -656,7 +659,14 @@ gnc_pricedb_destroy(GNCPriceDB *db)
 /* This is kind of weird, the way its done.  Each collection of prices
  * for a given commodity should get its own guid, be its own entity, etc.
  * We really shouldn't be using the collection data.  But, hey I guess its OK,
- * yeah?
+ * yeah? Umm, possibly not. (NW). See TODO below.
+*/
+/** \todo Collections of prices are not destroyed fully.
+
+gnc_pricedb_destroy does not clean up properly because
+gnc_pricedb_create reports an existing PriceDB after
+running gnc_pricedb_destroy. To change the pricedb, we need to
+destroy and recreate the book. Yuk.
  */
 
 GNCPriceDB *
@@ -785,20 +795,23 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   if (db->inst.book != p->inst.book)
   {
      PERR ("attempted to mix up prices across different books");
+	 LEAVE (" ");
      return FALSE;
   }
 
   commodity = gnc_price_get_commodity(p);
   if(!commodity) {
     PWARN("no commodity");
+	LEAVE (" ");
     return FALSE;
   }
   currency = gnc_price_get_currency(p);
   if(!currency) {
     PWARN("no currency");
+	LEAVE (" ");
     return FALSE;
   }
-  if(!db->commodity_hash) { return FALSE; }
+  if(!db->commodity_hash) { LEAVE ("no commodity hash found "); return FALSE; }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) {
@@ -807,8 +820,16 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!gnc_price_list_insert(&price_list, p)) return FALSE;
-  if(!price_list) return FALSE;
+  if(!gnc_price_list_insert(&price_list, p)) 
+  {
+	  LEAVE ("gnc_price_list_insert failed");
+	  return FALSE;
+  }
+  if(!price_list) 
+  {
+	LEAVE (" no price list");
+	return FALSE;
+  }
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
   gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_ADD);
@@ -831,7 +852,11 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   ENTER ("db=%p, pr=%p dirty=%d do-free=%d",
          db, p, p->inst.dirty, p->inst.do_free);
 
-  if (FALSE == add_price(db, p)) return FALSE;
+  if (FALSE == add_price(db, p)) 
+  {
+	  LEAVE (" failed to add price");
+	  return FALSE;
+  }
 
   /* If we haven't been able to call the backend before, call it now */
   if (TRUE == p->inst.dirty)
@@ -864,19 +889,24 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
          db, p, p->inst.dirty, p->inst.do_free);
 
   commodity = gnc_price_get_commodity(p);
-  if(!commodity) return FALSE;
+  if(!commodity) { LEAVE (" no commodity"); return FALSE; }
   currency = gnc_price_get_currency(p);
-  if(!currency) return FALSE;
-  if(!db->commodity_hash) return FALSE;
+  if(!currency) { LEAVE (" no currency"); return FALSE;}
+  if(!db->commodity_hash) 
+  {
+	  LEAVE (" no commodity hash");
+	  return FALSE;
+  }
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
-  if(!currency_hash) return FALSE;
+  if(!currency_hash) { LEAVE (" no currency hash"); return FALSE; }
 
   gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_REMOVE);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {
     gnc_price_unref(p);
+	LEAVE (" cannot remove price list");
     return FALSE;
   }
 
@@ -974,7 +1004,6 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
 /* ==================================================================== */
 /* lookup/query functions */
 
-/** \todo Fix the backend lookup that relies on a \#define */
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,
                           gnc_commodity *commodity,
@@ -986,8 +1015,8 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity || !currency) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1003,10 +1032,10 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
 #endif
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
+  if(!price_list) { LEAVE (" no price list"); return NULL; }
 
   /* This works magically because prices are inserted in date-sorted
    * order, and the latest date always comes first. So return the
@@ -1042,8 +1071,8 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
 
   result = NULL;
 
-  ENTER ("db=%p commodity=%p", db, commodity);
   if(!db || !commodity) return NULL;
+  ENTER ("db=%p commodity=%p", db, commodity);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1058,11 +1087,11 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   g_hash_table_foreach(currency_hash, lookup_latest, &result);
 
-  if(!result) return NULL;
+  if(!result) { LEAVE (" "); return NULL; }
 
   result = g_list_sort(result, compare_prices_by_date);
 
@@ -1089,8 +1118,8 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity) return FALSE;
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1138,8 +1167,8 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   if(!db || !commodity) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1154,11 +1183,11 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   if (currency) {
     price_list = g_hash_table_lookup(currency_hash, currency);
-    if(!price_list) return NULL;
+    if(!price_list) { LEAVE (" no price list"); return NULL; }
     result = g_list_copy (price_list);
   } else {
     result = NULL;
@@ -1185,8 +1214,8 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
   /* Convert to noon local time. */
@@ -1204,10 +1233,10 @@ gnc_pricedb_lookup_day(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
+  if(!price_list) { LEAVE (" no price list"); return NULL; }
 
   item = price_list;
   while(item) {
@@ -1256,8 +1285,8 @@ gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p", db, c);
   if(!db || !c) return NULL;
+  ENTER ("db=%p commodity=%p", db, c);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
   /* Convert to noon local time. */
@@ -1275,13 +1304,13 @@ gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE ("no currency hash"); return NULL; }
 
   lookup_helper.return_list = &result;
   lookup_helper.time = t;
   g_hash_table_foreach(currency_hash, lookup_day, &lookup_helper);
 
-  if(!result) return NULL;
+  if(!result) { LEAVE (" "); return NULL; }
 
   result = g_list_sort(result, compare_prices_by_date);
 
@@ -1303,8 +1332,8 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1320,10 +1349,10 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
+  if(!price_list) { LEAVE (" no price list"); return NULL; }
 
   item = price_list;
   while(item) {
@@ -1371,8 +1400,8 @@ gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p", db, c);
   if(!db || !c) return NULL;
+  ENTER ("db=%p commodity=%p", db, c);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1388,13 +1417,13 @@ gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   lookup_helper.return_list = &result;
   lookup_helper.time = t;
   g_hash_table_foreach(currency_hash, lookup_time, &lookup_helper);
 
-  if(!result) return NULL;
+  if(!result) { LEAVE (" "); return NULL; }
 
   result = g_list_sort(result, compare_prices_by_date);
 
@@ -1418,8 +1447,8 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   if(!db || !c || !currency) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1435,10 +1464,10 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE ("no currency hash"); return NULL; }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
+  if(!price_list) { LEAVE ("no price list"); return NULL; }
 
   item = price_list;
 
@@ -1546,8 +1575,8 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
   QofBook *book;
   QofBackend *be;
 
-  ENTER ("db=%p commodity=%p", db, c);
   if(!db || !c) return NULL;
+  ENTER ("db=%p commodity=%p", db, c);
   book = qof_instance_get_book(&db->inst);
   be = qof_book_get_backend(book);
 #ifdef GNUCASH_MAJOR_VERSION
@@ -1563,13 +1592,13 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
   }
 #endif
   currency_hash = g_hash_table_lookup(db->commodity_hash, c);
-  if(!currency_hash) return NULL;
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
 
   lookup_helper.return_list = &result;
   lookup_helper.time = t;
   g_hash_table_foreach(currency_hash, lookup_nearest, &lookup_helper);
 
-  if(!result) return NULL;
+  if(!result) { LEAVE (" "); return NULL; }
 
   result = g_list_sort(result, compare_prices_by_date);
 
@@ -1866,9 +1895,12 @@ gnc_pricedb_foreach_price(GNCPriceDB *db,
                           gboolean stable_order)
 {
   ENTER ("db=%p f=%p", db, f);
-  if(stable_order) return stable_price_traversal(db, f, user_data);
+  if(stable_order) {
+	  LEAVE (" stable order found");
+	  return stable_price_traversal(db, f, user_data);
+  }
+  LEAVE (" use unstable order");
   return unstable_price_traversal(db, f, user_data);
-  LEAVE (" ");
 }
 
 /* ==================================================================== */
