@@ -236,7 +236,7 @@ gnc_create_extension_info (SCM extension)
   ext_info->ae.accelerator = NULL;
   ext_info->ae.callback = NULL;
 
-  switch ( ext_info->type ) {
+  switch (ext_info->type) {
     case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;
     case GTK_UI_MANAGER_MENUITEM: typeStr = "menuitem"; break;
     default: typeStr = "unk"; break;
@@ -293,8 +293,8 @@ static void
 gnc_extensions_menu_setup_one (ExtensionInfo *ext_info,
 			       setup_data *data)
 {
-  DEBUG( "Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
-	 ext_info->ae.name, ext_info->typeStr );
+  DEBUG("Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
+        ext_info->ae.name, ext_info->typeStr);
 
   gtk_action_group_add_actions(data->group, &ext_info->ae, 1,
 			       ext_info->extension);
@@ -312,9 +312,9 @@ gnc_extensions_menu_setup (GtkUIManager *uiMerge )
   ENTER(" ");
 
   data.uiMerge = uiMerge;
-  data.group = gtk_action_group_new ("MainWindowActionsN" );
-  gtk_ui_manager_insert_action_group( uiMerge, data.group, 0 );
-  data.merge_id = gtk_ui_manager_new_merge_id( uiMerge );
+  data.group = gtk_action_group_new("MainWindowActionsN");
+  gtk_ui_manager_insert_action_group(uiMerge, data.group, 0);
+  data.merge_id = gtk_ui_manager_new_merge_id(uiMerge);
 
   g_slist_foreach(extension_list, (GFunc)gnc_extensions_menu_setup_one, &data);
   LEAVE(" ");
