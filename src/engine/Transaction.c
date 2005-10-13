@@ -78,8 +78,7 @@ const char *void_former_notes_str = "void-former-notes";
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
 G_INLINE_FUNC void check_open (Transaction *trans);
-G_INLINE_FUNC void
-check_open (Transaction *trans)
+void check_open (Transaction *trans)
 {
   if (trans && 0 >= trans->inst.editlevel)
   {
@@ -512,7 +511,7 @@ xaccSplitDetermineGainStatus (Split *split)
 #define SET_GAINS_VDIRTY(s)  SET_GAINS_DIRTY(s,GAINS_STATUS_VDIRTY);
 
 G_INLINE_FUNC void mark_split (Split *s);
-G_INLINE_FUNC void mark_split (Split *s)
+void mark_split (Split *s)
 {
   Account *account = s->acc;
 
@@ -528,7 +527,7 @@ G_INLINE_FUNC void mark_split (Split *s)
 
 
 G_INLINE_FUNC void mark_trans (Transaction *trans);
-G_INLINE_FUNC void mark_trans (Transaction *trans)
+void mark_trans (Transaction *trans)
 {
   GList *node;
 
@@ -539,7 +538,7 @@ G_INLINE_FUNC void mark_trans (Transaction *trans)
 }
 
 G_INLINE_FUNC void gen_event (Split *split);
-G_INLINE_FUNC void gen_event (Split *split)
+void gen_event (Split *split)
 {
   Account *account = split->acc;
   Transaction *trans = split->parent;
@@ -564,7 +563,7 @@ G_INLINE_FUNC void gen_event (Split *split)
 }
 
 G_INLINE_FUNC void gen_event_trans (Transaction *trans);
-G_INLINE_FUNC void gen_event_trans (Transaction *trans)
+void gen_event_trans (Transaction *trans)
 {
   GList *node;
 

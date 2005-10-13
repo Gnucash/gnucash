@@ -80,8 +80,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
-G_INLINE_FUNC void
-mark_customer (GncCustomer *customer)
+void mark_customer (GncCustomer *customer)
 {
   customer->inst.dirty = TRUE;
   qof_collection_mark_dirty (customer->inst.entity.collection);

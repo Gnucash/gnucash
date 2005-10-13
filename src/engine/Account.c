@@ -53,7 +53,7 @@ static void xaccAccountBringUpToDate (Account *);
 \********************************************************************/
 
 G_INLINE_FUNC void mark_account (Account *account);
-G_INLINE_FUNC void
+void
 mark_account (Account *account)
 {
   if (account->parent) account->parent->saved = FALSE;

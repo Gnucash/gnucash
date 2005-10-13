@@ -85,7 +85,7 @@ gnucash_register_set_initial_rows (guint num_rows)
 G_INLINE_FUNC gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc);
-G_INLINE_FUNC gboolean
+gboolean
 gnucash_sheet_virt_cell_out_of_bounds (GnucashSheet *sheet,
                                        VirtualCellLocation vcell_loc)
 {

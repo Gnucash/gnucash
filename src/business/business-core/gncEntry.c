@@ -170,8 +170,7 @@ gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type
 	}
 
 G_INLINE_FUNC void mark_entry (GncEntry *entry);
-G_INLINE_FUNC void
-mark_entry (GncEntry *entry)
+void mark_entry (GncEntry *entry)
 {
   entry->inst.dirty = TRUE;
   qof_collection_mark_dirty (entry->inst.entity.collection);

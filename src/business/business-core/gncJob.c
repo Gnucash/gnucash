@@ -58,8 +58,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 G_INLINE_FUNC void mark_job (GncJob *job);
-G_INLINE_FUNC void
-mark_job (GncJob *job)
+void mark_job (GncJob *job)
 {
   job->inst.dirty = TRUE;
   qof_collection_mark_dirty (job->inst.entity.collection);

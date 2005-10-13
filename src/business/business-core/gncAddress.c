@@ -56,8 +56,7 @@ struct _gncAddress
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 G_INLINE_FUNC void mark_address (GncAddress *address);
-G_INLINE_FUNC void
-mark_address (GncAddress *address)
+void mark_address (GncAddress *address)
 {
   address->dirty = TRUE;
 

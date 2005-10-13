@@ -1518,7 +1518,7 @@ typedef enum
 
 G_INLINE_FUNC long long int multiplier (int num_decimals);
 
-G_INLINE_FUNC long long int
+long long int
 multiplier (int num_decimals)
 {
   switch (num_decimals)

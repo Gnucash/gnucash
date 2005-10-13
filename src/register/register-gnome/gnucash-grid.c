@@ -256,7 +256,7 @@ draw_cell_line (GdkDrawable *drawable,
                 int x1, int y1, int x2, int y2,
                 PhysicalCellBorderLineStyle style);
 
-G_INLINE_FUNC void
+void
 draw_cell_line (GdkDrawable *drawable,
                 GdkGC *gc, GdkColor *bg_color,
                 int x1, int y1, int x2, int y2,
