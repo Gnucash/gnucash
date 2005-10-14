@@ -154,76 +154,80 @@ gint qof_log_module_count(void);
  */
 
 /** Log an fatal error */
-#define FATAL(format, args...) {                     \
+#define FATAL(format, args...) do {                  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
       "Fatal Error: %s(): " format, FUNK , ## args); \
-}
+} while (0)
 
 /** Log an serious error */
-#define PERR(format, args...) {                    \
-  if (gnc_should_log (log_module, GNC_LOG_ERROR)) {    \
+#define PERR(format, args...) do {                 \
+  if (gnc_should_log (log_module, GNC_LOG_ERROR)) {\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
       "Error: %s(): " format, FUNK , ## args);     \
   }                                                \
-}
+} while (0)
 
 /** Log an warning */
-#define PWARN(format, args...) {                   \
+#define PWARN(format, args...) do {                    \
   if (gnc_should_log (log_module, GNC_LOG_WARNING)) {  \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
-      "Warning: %s(): " format, FUNK , ## args);   \
-  }                                                \
-}
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,          \
+      "Warning: %s(): " format, FUNK , ## args);       \
+  }                                                    \
+} while (0)
 
 /** Print an informational note */
-#define PINFO(format, args...) {                   \
-  if (gnc_should_log (log_module, GNC_LOG_INFO)) {     \
+#define PINFO(format, args...) do {                \
+  if (gnc_should_log (log_module, GNC_LOG_INFO)) { \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
       "Info: %s(): " format,                       \
       FUNK , ## args);                             \
   }                                                \
-}
+} while (0)
 
 /** Print an debugging message */
-#define DEBUG(format, args...) {                   \
-  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {    \
+#define DEBUG(format, args...) do {                \
+  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Debug: %s(): " format,                      \
       FUNK , ## args);                             \
   }                                                \
-}
+} while (0)
 
 /** Print an function entry debugging message */
-#define ENTER(format, args...) {                   \
+#define ENTER(format, args...) do {                \
   extern gint gnc_trace_num_spaces;                \
-  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {    \
+  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Enter in %s: %s()" format, __FILE__,        \
       FUNK , ## args);                             \
     gnc_trace_num_spaces += GNC_TRACE_INDENT_WIDTH;\
   }                                                \
-}
+} while (0)
 
 /** Print an function exit debugging message */
-#define LEAVE(format, args...) {                   \
+#define LEAVE(format, args...) do {                \
   extern gint gnc_trace_num_spaces;                \
-  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {    \
+  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) {\
     gnc_trace_num_spaces -= GNC_TRACE_INDENT_WIDTH;\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Leave: %s()" format,                        \
       FUNK , ## args);                             \
   }                                                \
-}
+} while (0)
 
 /** Print an function trace debugging message */
-#define TRACE(format, args...) {                   \
-  if (gnc_should_log (log_module, GNC_LOG_TRACE)) {    \
+#define TRACE(format, args...) do {                \
+  if (gnc_should_log (log_module, GNC_LOG_TRACE)) {\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Trace: %s(): " format, FUNK , ## args);     \
   }                                                \
-}
+} while (0)
 
-#define DEBUGCMD(x) { if (gnc_should_log (log_module, GNC_LOG_DEBUG)) { (x); }}
+#define DEBUGCMD(x) do {                            \
+  if (gnc_should_log (log_module, GNC_LOG_DEBUG)) { \
+      (x);                                          \
+  }                                                 \
+} while (0)
 
 /* -------------------------------------------------------- */
 /** Infrastructure to make timing measurements for critical peices 
@@ -246,25 +250,25 @@ void gnc_report_clock_total (int clockno,
                              const char *format, ...);
 
 /** start a particular timer */
-#define START_CLOCK(clockno,format, args...) {              \
+#define START_CLOCK(clockno,format, args...) do {               \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
     gnc_start_clock (clockno, log_module, GNC_LOG_INFO,         \
              __FUNCTION__, format , ## args);               \
-}
+} while (0)
 
 /** report elapsed time since last report on a particular timer */
-#define REPORT_CLOCK(clockno,format, args...) {             \
+#define REPORT_CLOCK(clockno,format, args...) do {              \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
     gnc_report_clock (clockno, log_module, GNC_LOG_INFO,        \
              __FUNCTION__, format , ## args);               \
-}
+} while (0)
 
 /** report total elapsed time since timer started */
-#define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
+#define REPORT_CLOCK_TOTAL(clockno,format, args...) do {        \
   if (gnc_should_log (log_module, GNC_LOG_INFO))                \
     gnc_report_clock_total (clockno, log_module, GNC_LOG_INFO,  \
              __FUNCTION__, format , ## args);               \
-}
+} while (0)
 
 #endif /* GNC_TRACE_H */
 /* @} */
