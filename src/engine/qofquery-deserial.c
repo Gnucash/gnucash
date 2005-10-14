@@ -483,6 +483,7 @@ qof_query_param_path_from_xml (xmlNodePtr root)
 		if (0 == strcmp (node->name, "qofquery:param"))
 		{
 			const char *str = GET_TEXT (node);
+                        /* BUG? I can't find the matching cache removal. */
 			plist = g_slist_append (plist, CACHE_INSERT(str));
 		}
 	}
