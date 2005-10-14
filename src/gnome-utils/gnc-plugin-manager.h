@@ -78,8 +78,10 @@ typedef struct {
 	GObjectClass object;
 
 	/* Signals */
-	void (* plugin_added) (GncPluginManager *plugin_manager, GncPlugin *plugin);
-	void (* plugin_removed) (GncPluginManager *plugin_manager, GncPlugin *plugin);
+	void (* plugin_added)
+         (GncPluginManager *plugin_manager, GncPlugin *plugin);
+	void (* plugin_removed)
+         (GncPluginManager *plugin_manager, GncPlugin *plugin);
 } GncPluginManagerClass;
 
 /** Retrieve the GType value for the gnucash plugin manager.

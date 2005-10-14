@@ -78,6 +78,8 @@ gnc_tree_model_get_type (void)
     //  NULL
     //};
 
+    /* CAS: I think this should subclass GObject, not GtkObject. */
+
     gnc_tree_model_type = g_type_register_static (GTK_TYPE_OBJECT,
 						  GNC_TREE_MODEL_NAME,
 						  &our_info, 0);

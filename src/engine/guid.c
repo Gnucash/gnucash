@@ -108,6 +108,7 @@ guid_null(void)
     int i;
     char *tmp = "NULLGUID.EMPTY.";
 
+    /* 16th space for '\O' */
     for (i = 0; i < 16; i++)
       null_guid.data[i] = tmp[i];
 

@@ -2691,6 +2691,8 @@ create_transactions_on( SchedXaction *sx,
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         if ( ag && id ) {
+            /* This looks strange but it's right.  The account is
+               named after the guid string. */
                 acct = xaccGetAccountFromName( ag, id );
                 if ( acct ) {
                         createUD.tci = tci;
@@ -2738,6 +2740,7 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
 
                 ag = gnc_book_get_template_group( gnc_get_current_book () );
                 id = guid_to_string( xaccSchedXactionGetGUID(sx) );
+                /* Get account named after guid string. */
                 acct = xaccGetAccountFromName( ag, id );
                 splitList = xaccAccountGetSplitList( acct );
         }

@@ -68,7 +68,8 @@ gnc_book_get_template_group( QofBook *book )
 }
 
 void
-gnc_collection_set_template_group (QofCollection *col, AccountGroup *templateGroup)
+gnc_collection_set_template_group (QofCollection *col,
+                                   AccountGroup *templateGroup)
 {
   AccountGroup *old_grp;
   if (!col) return;

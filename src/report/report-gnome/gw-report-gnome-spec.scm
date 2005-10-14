@@ -64,6 +64,9 @@
    '((<gw:int> report-id) (<gnc:MainWindow*> window))
    "Show report window")
 
+
+;; This is the function that's responsible for creating and returning
+;; the editor widget for a report's options.
   (gw:wrap-function
    ws
    'gnc:default-options-editor

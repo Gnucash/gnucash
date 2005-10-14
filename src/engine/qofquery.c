@@ -1700,6 +1700,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        qof_query_printGuidMatch (pdata->options));
     for (node = pdata->guids; node; node = node->next)
     {
+        /* THREAD-UNSAFE */
       g_string_sprintfa (gs, ", guids: %s",
 			 guid_to_string ((GUID *) node->data));
     }

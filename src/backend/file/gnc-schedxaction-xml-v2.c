@@ -645,6 +645,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
                change re: storing template accounts. */
             /* Fix: get account with name of our GUID from the template
                accounts group.  Make that our template_acct pointer. */
+            /* THREAD-UNSAFE */
             id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
             ag = gnc_book_get_template_group(book);
             if ( ag == NULL )

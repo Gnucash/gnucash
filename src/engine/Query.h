@@ -70,7 +70,7 @@ typedef enum {
 
 /* After the query has been set up, call one of these to run the query. 
  *    XXX The routines below should be replaced by a query
- *    that explicitly asks for a list of the desied item.
+ *    that explicitly asks for a list of the desired item.
  *
  * The xaccQueryGetSplits() routine returns all splits matching the 
  *    query.  Any given split will appear at most once in the result;

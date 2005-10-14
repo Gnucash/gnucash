@@ -70,7 +70,7 @@ qof_class_register (QofIdTypeConst obj_name,
     g_hash_table_insert (classTable, (char *)obj_name, ht);
   }
 
-  /* At least right now, we allow dummy, paramterless objects, 
+  /* At least right now, we allow dummy, parameterless objects,
    * for testing purposes.  Although I suppose that should be 
    * an error..  */
   /* Now insert all the parameters */

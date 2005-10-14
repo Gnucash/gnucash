@@ -22,11 +22,15 @@
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)
 
+;; returns a function that takes a list: (options, report),
+;; and returns a widget
 (define (gnc:report-options-editor report) 
   (if (equal? (gnc:report-type report) "Multicolumn View")
       gnc:column-view-edit-options
       gnc:default-options-editor))
 
+;; do not rely on the return value of this function - it has none.
+;; instead, this function's side-effect is to set the report's editor widget.
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
@@ -104,7 +108,7 @@
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  (gnc:warn "report-menu-setup")
+  (gnc:warn "report-menu-setup") ;; why do we do this?
 
   ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)

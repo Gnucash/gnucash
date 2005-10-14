@@ -40,6 +40,7 @@
 #include "gnc-date-format.h"
 #include "dialog-utils.h"
 
+/* Perhaps it's better just to use MAX_DATE_LENGTH defined in gnc-date.h */
 #define MAX_DATE_LEN 80
 
 enum {

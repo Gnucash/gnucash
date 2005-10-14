@@ -118,7 +118,7 @@ typedef struct _gnc_numeric gnc_numeric;
 
     Valid values for denom are:
     GNC_DENOM_AUTO  -- compute denominator exactly
-    integer n       -- Force the denominator of teh result to be this integer
+    integer n       -- Force the denominator of the result to be this integer
     GNC_DENOM_RECIPROCAL -- Use 1/n as the denominator (???huh???)
 
     Valid values for 'how' are bitwise combinations of zero or one
@@ -264,7 +264,7 @@ typedef enum {
 
 /** Values that can be passed as the 'denom' argument.  
  *  The include a positive number n to be used as the 
- *  denominator of teh output value.  Other possibilities 
+ *  denominator of the output value.  Other possibilities
  *  include the list below:
  */
 

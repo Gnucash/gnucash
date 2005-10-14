@@ -77,8 +77,8 @@ option_menu_destroy_cb (GtkObject *obj, gpointer data)
 }
 
 /********************************************************************\
- * gnc_ui_create_option_button                                      *
- *   create an option button given the option structure             *
+ * gnc_build_option_menu:                                           *
+ *   create an GTK "option menu" given the option structure         *
  *                                                                  *
  * Args: option_info - the option structure to use                  *
  *       num_options - the number of options                        *
@@ -869,9 +869,17 @@ gnc_clist_columns_autosize (GtkCList *list)
   gtk_clist_columns_autosize (list);
 }
 
+/*   Glade Stuff
+ *
+ *
+ */
 
 static gboolean glade_inited = FALSE;
 
+/* gnc_glade_xml_new: a convenience wrapper for glade_xml_new
+ *   - takes care of glade initialization, if needed
+ *   - takes care of finding the directory for glade files
+ */
 GladeXML *
 gnc_glade_xml_new (const char *filename, const char *root)
 {
@@ -896,6 +904,9 @@ gnc_glade_xml_new (const char *filename, const char *root)
   return xml;
 }
 
+/* gnc_glade_lookup_widget:  Given a root (or at least ancestor) widget,
+ *   find the child widget with the given name.
+ */
 GtkWidget *
 gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 {

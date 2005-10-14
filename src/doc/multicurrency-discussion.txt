@@ -35,10 +35,6 @@ Definition of \a gnc-monetary is in src/scm/gnc-numeric.scm
 
 <goonie> OK, cool, I think I can figure it out.
 
-<cstim> goonie: You will need to use a commodity-collector from report-utilities.scm
-
-<goonie> OK, cool, I think I can figure it out.
-
 <cstim> If you want the total of only one commodity, you can use the 'getpair action of commodity-collector...
  but if you want to show (correctly) all of the currencies, you will have a lot of trouble.
  Basically, I have the "reference implementation" in html-utilities.scm .
@@ -193,8 +189,6 @@ the amount of the account-commodity involved.
 <cstim> :)
  We could \a gnc:split-get-share-amount => \a gnc:split-get-damount
  whatever. My point for the Beer is let's have some.
-
-<dres> beer doesn't need a point.  it just is.
 
 <cstim> oops. 
  I would expect that the transaction report uses \a gnc:split-get-share-amount

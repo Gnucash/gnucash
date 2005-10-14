@@ -549,6 +549,7 @@ kvp_right_operand(sqlQuery * sq, KvpValue * value)
             return g_strdup_printf(SQL_DBL_FMT, kvp_value_get_double(value));
 
         case KVP_TYPE_GUID:{
+            /* THREAD-UNSAFE */
             const char *guid = guid_to_string(kvp_value_get_guid(value));
             char *s = g_strdup_printf("'%s'", guid);
             return s;

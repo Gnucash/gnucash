@@ -120,7 +120,7 @@ auth_user (const char * name, const char *passwd)
   guid = g_new (GUID, 1);
   guid_new (guid);
   logged_in_users = g_list_prepend (logged_in_users, guid);
-  session_auth_string = guid_to_string (guid);
+  session_auth_string = guid_to_string (guid); /* THREAD UNSAFE */
   return session_auth_string;
 }
 

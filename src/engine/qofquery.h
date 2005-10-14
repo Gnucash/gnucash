@@ -155,10 +155,12 @@ void qof_query_destroy (QofQuery *q);
  */
 void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
-/** Set the book to be searched.  Books contain/identify collections 
+/** Set the book to be searched.  Books contain/identify collections
  *  of objects; the search will be performed over those books
- *  specified with this function.  If no books are set, no results 
- *  will be returned (since there is nothing to search over).
+ *  specified with this function.  If no books are set, no results
+ *  will be returned (since there is nothing to search over). (CAS:
+ *  Apparently, if no books are set, you'll actually get a critical
+ *  assertion failure.)
  *
  *  You can search multiple books.  To specify multiple books, call 
  *  this function multiple times with different arguments.  

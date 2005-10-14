@@ -1,4 +1,65 @@
+2005-10-14  David Hampton  <hampton@employees.org>
+
+	* GNOME2_STATUS:
+	* HACKING:
+	* src/app-utils/config-var.scm:
+	* src/app-utils/gnc-component-manager.h:
+	* src/backend/file/gnc-schedxaction-xml-v2.c:
+	* src/backend/postgres/gncquery.c:
+	* src/business/business-utils/business-options.scm:
+	* src/doc/multicurrency-discussion.txt:
+	* src/engine/Query.h:
+	* src/engine/SX-book.c:
+	* src/engine/SchedXaction.c:
+	* src/engine/TransactionP.h:
+	* src/engine/gnc-numeric.h:
+	* src/engine/guid.c:
+	* src/engine/qofbook.h:
+	* src/engine/qofclass.c:
+	* src/engine/qofclass.h:
+	* src/engine/qofquery.c:
+	* src/engine/qofquery.h:
+	* src/engine/qofsession.c:
+	* src/experimental/cgi-bin/gnc-server.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome-utils/dialog-utils.c:
+	* src/gnome-utils/gnc-amount-edit.c:
+	* src/gnome-utils/gnc-amount-edit.h:
+	* src/gnome-utils/gnc-date-format.c:
+	* src/gnome-utils/gnc-plugin-manager.h:
+	* src/gnome-utils/gnc-plugin.h:
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome-utils/gnc-tree-model.c:
+	* src/report/report-gnome/gw-report-gnome-spec.scm:
+	* src/report/report-gnome/report-gnome.scm:
+	* src/report/report-system/html-document.scm:
+	* src/report/report-system/html-table.scm:
+	* src/report/report-system/report-utilities.scm:
+	* src/report/report-system/report.scm: Patch from Chris Shoemaker
+	to make various spelling corrections and a couple of line wrap
+	fixes.  Adds comments to mark thread unsafe code.  Adds various
+	other documentation.
+
+	* src/doc/design/engine.texinfo: Patch from Chris Shoemaker to
+	silence a texinfo warning.
+
 2005-10-13  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-euro.c:
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/dialog-commodity.h:
+	* src/gnome-utils/gnc-currency-edit.c: Patch from Chris Shoemaker
+	to remove unneeded header files. Add a few comments.
+	
+	* src/backend/file/gnc-account-xml-v2.c:
+	* src/engine/qofbook.c:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Minor code
+	simplification from Chris Shoemaker.  Some line wrap fixes and
+	comments.
+
+	* src/gnc-module/gnc-module.c: Minor code factoring patch from
+	Chris Shoemaker.
 
 	* src/gnome-utils/gnc-main-window.c: Patch from Chris Shoemaker to
 	avoid trying to double-add plugins to plugin manager by delaying

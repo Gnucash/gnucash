@@ -65,7 +65,9 @@ xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 
    /* create a new template account for our splits */
    sx->template_acct = xaccMallocAccount(book);
-   xaccAccountSetName( sx->template_acct, guid_to_string( &sx->inst.entity.guid ));
+   /* THREAD-UNSAFE */
+   xaccAccountSetName( sx->template_acct,
+                       guid_to_string( &sx->inst.entity.guid ));
    xaccAccountSetCommodity
      (sx->template_acct,
       gnc_commodity_new( book,

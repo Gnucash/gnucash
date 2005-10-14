@@ -185,8 +185,8 @@ typedef int (*QofSortFunc)(gpointer, gpointer);
  *  controlling the object.   The getters are typically used by the
  *  query subsystem to query type specific data.   Note that there
  *  is no particular requirement for there to be a setter for every
- *  getter or even vice-versa, nor is there any requeirement for these
- *  to map 'cleanly' or orthogonaly to the underlying object.  The
+ *  getter or even vice-versa, nor is there any requirement for these
+ *  to map 'cleanly' or orthogonally to the underlying object.  The
  *  parameters are really just a set of value setting and getting 
  *  routines.
  *

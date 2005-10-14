@@ -3,7 +3,7 @@
 Intro
 -----
 
-This is a ad-hoc list of list of what works and doesn't work in the g2
+This is a ad-hoc list of what works and doesn't work in the g2
 port of gnucash.  The plan is to finish porting those parts of gnucash
 that have already been started (i.e. new windowing system, account
 tree, commodities tree, etc.), but not to port any additional features
@@ -79,6 +79,8 @@ Resources
 
     - The main windows do not yet support saving position/size
       information.  (On my list - DRH)
+
+  - Open pages are no longer open after reopening file.
 
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
     
@@ -171,24 +173,47 @@ Resources
   - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
     to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
 
+
+- Notebook tabs
+
+  - When opening multiple report tabs, all reports get tab title of
+    first report. [FIXED]
+
+  - Account Tree tab title is unaffected by "Name of Account View" option.
+
+  - Also, changing that option doesn't affect dirty status of options
+    dialog. [ FIXED ]
+
+
 - Budgeting
 
-  - Can create/modify budgets via the Budgeting workbench. (Actions->Budgeting Workbench)
+  - Budget Report
 
-  - Track budget tab still needs to be completed.  Should allow you to look
-    at predicted vs. actual information.
+    - the default account selection isn't very reasonable, Inc & Exp
+      would be better
 
-  - No save to file functionality.  Therefore budgets must currently be
-    created fresh each time gnucash is started.  First thing what I want to fix.
+    - sometimes negative numbers render on two lines in their table-cell
 
-  - Should the budgeting workbench fit into the new windowing scheme better?
-    Currently it is its own window but maybe each workbench should be a tab
-    in the new layout.  How would this work with the sub-tabs?  Have to think
-    about this some more.
+  - Budget GUI
 
-    - The druid for 'New' is created underneath the Budget-list window.
+    - default account filter doesn't take effect until options are
+      opened, should take effect as soon as view is opened
 
-  - Probably more TODO but these are the main points.
+    - it might be nice to disallow some of the more unusual recurrences
+
+    - better if budget list dialog allowed double click to open
+
+    - need help text
+
+    - should displaying zero values be optional?
+
+    - it'd be nice if there was a summary column at the far right
+
+  - Budget Engine
+
+    - Do budgets play nice with QSF?
+
+    - Still a lot of dead legacy code hanging around
 
 - New Account Hierarchy - somewhat works
 

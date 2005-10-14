@@ -178,8 +178,7 @@ gint gnc_register_gui_component_scm (const char * component_class,
  * component_id: id of component which is watching the entity
  * session:      the session this component is associated with
  */
-void
-gnc_gui_component_set_session (gint component_id, gpointer session);
+void gnc_gui_component_set_session (gint component_id, gpointer session);
 
 /* gnc_gui_component_watch_entity
  *   Add an entity to the list of those being watched by the component.

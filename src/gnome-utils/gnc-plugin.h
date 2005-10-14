@@ -102,10 +102,13 @@ typedef struct {
 	void (* gconf_notifications) (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
 	/* Virtual Table */
-	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+	void (* add_to_window)
+         (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+	void (* remove_from_window)
+         (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-	GncPluginPage *(* create_page) (GncPlugin *plugin, const gchar *uri);
+	GncPluginPage *(* create_page)
+         (GncPlugin *plugin, const gchar *uri);
 } GncPluginClass;
 
 /* function prototypes */

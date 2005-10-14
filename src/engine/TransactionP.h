@@ -76,7 +76,7 @@
  * accounts.  Thus, a single credit-card transaction might be split
  * between "dining", "tips" and "taxes" categories.
  *
- * A "split" is more commonly refered to as a "entry" in a "transaction".
+ * A "split" is more commonly referred to as an "entry" in a "transaction".
  */
 
 /* Flags for handling cap-gains status */
@@ -110,7 +110,7 @@ struct split_s
   char  * memo;
 
   /* The action field is an arbitrary user-assigned value.
-   * It is meant to be a very short (one to ten cahracter) string that
+   * It is meant to be a very short (one to ten character) string that
    * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
    * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
    * can be used to create custom reports or graphs of data.

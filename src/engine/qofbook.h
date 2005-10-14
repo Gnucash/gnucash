@@ -130,7 +130,8 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
  *  when the book is destroyed.  The argument to the callback will be 
  *  the book followed by the data pointer.
  */
-void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
+void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data,
+                            QofBookFinalCB);
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);

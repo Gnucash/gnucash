@@ -77,7 +77,7 @@ qof_session_add_close_hook (GFunc fn, gpointer data)
   GHook *hook;
 
   if (session_closed_hooks == NULL) {
-    session_closed_hooks = malloc(sizeof(GHookList));
+      session_closed_hooks = malloc(sizeof(GHookList)); /* LEAKED */
     g_hook_list_init (session_closed_hooks, sizeof(GHook));
   }
 
@@ -1083,6 +1083,7 @@ qof_session_load (QofSession *session,
 		qof_book_set_backend (ob, NULL);
 		qof_book_destroy (ob);
 	}
+        /* Um, I think we're leaking the oldbooks list. */
 	
 	LEAVE ("sess = %p, book_id=%s", session, session->book_id
          ? session->book_id : "(null)");
@@ -1340,7 +1341,7 @@ qof_session_destroy (QofSession *session)
   /* destroy the backend */
   qof_session_destroy_backend(session);
 
-  for (node=session->books; node; node=node->next)
+  for (node = session->books; node; node = node->next)
   {
     QofBook *book = node->data;
     qof_book_set_backend (book, NULL);

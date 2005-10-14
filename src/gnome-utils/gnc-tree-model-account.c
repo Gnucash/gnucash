@@ -1409,7 +1409,7 @@ gnc_tree_model_account_delete_event_helper (remove_data *data,
  *  has been deleted from the real model (which is the engine's
  *  account tree for us), but once the account has been deleted from
  *  the engine we have no way to determine the path to pass to
- *  row_deleted().  This is a PITA, but the only ither choice is to
+ *  row_deleted().  This is a PITA, but the only other choice is to
  *  have this model mirror the engine's accounts instead of
  *  referencing them directly.
  *
@@ -1419,7 +1419,7 @@ gnc_tree_model_account_delete_event_helper (remove_data *data,
  *  cares about items of type "account".
  *
  *  @param event type The type of the event. This function only cares
- *  about items of type ADD, REMOVE, and DESTROY.
+ *  about items of type ADD, REMOVE, MODIFY, and DESTROY.
  *
  *  @param user_data A pointer to the account tree model.
  */
@@ -1458,7 +1458,8 @@ gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add account %p (%s)", account, account_name);
-	  if (gnc_tree_model_account_get_iter_from_account (model, account, &iter)) {
+	  if (gnc_tree_model_account_get_iter_from_account (
+                  model, account, &iter)) {
 	    path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
 	    gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
 	    gnc_tree_model_account_path_changed (model, path);
