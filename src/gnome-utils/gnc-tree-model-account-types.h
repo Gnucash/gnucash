@@ -3,6 +3,7 @@
  *	to display account types in a GtkTreeView.
  *
  * Copyright (C) 2003 Jan Arne Petersen
+ * Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,7 +37,7 @@
 #ifndef __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 #define __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 
-#include <gtk/gtktreemodel.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -71,13 +72,56 @@ typedef struct {
 } GncTreeModelAccountTypesClass;
 
 /* function prototypes */
-GType           gnc_tree_model_account_types_get_type     (void);
+GType gnc_tree_model_account_types_get_type (void);
 
-GtkTreeModel   *gnc_tree_model_account_types_new          (guint32 selected);
+/* Choose one of two methods to use the GncTreeModelAccountTypes
+   objects defined here, depending on how you want to deal with
+   selection state.  Method 1 is simpler and light-weight, but Method
+   2 is more flexible.
 
-guint32		gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes *model);
-void		gnc_tree_model_account_types_set_selected (GncTreeModelAccountTypes *model,
-							   guint32 selected);
+   Method 1: If you just want to allow selection of a subset of all
+   account types while showing all account types, use
+   gnc_tree_model_account_types_master() to get the treemodel.
+   Connect it to your tree view and use
+   gnc_tree_view_account_types_{sg}et_selection() to convert between
+   bitmasks and GtkTreeView states.  No need to free the treemodel.
+
+   Method 2: If you must store selection state in the model for some
+   reason (maybe you want to use a checkbox column to indicate
+   selection?)  then you need your own instance from
+   gnc_tree_model_account_types_new().  Use
+   gnc_tree_model_account_types_{gs}et_selected() to get and set the
+   models "SELECTED" column values.  You must free the model when
+   you're done with it.
+
+*/
+
+/*************** Method 1 functions ***************/
+
+/* Get the static GtkTreeModel representing the list of all possible
+   account types.  You may not modify this model, but you can use if
+   for multiple views. */
+GtkTreeModel * gnc_tree_model_account_types_master(void);
+
+/* Return the bitmask of the account type enums reflecting the state
+   of the tree selection */
+guint32 gnc_tree_model_account_types_get_selection(GtkTreeView *view);
+
+/* Set the selection state of the tree selection to match the bitmask
+   of account-type enums in 'selected' */
+void gnc_tree_model_account_types_set_selection(GtkTreeView *view,
+                                                guint32 selected);
+
+
+/**************** Method 2 functions **************/
+
+GtkTreeModel *gnc_tree_model_account_types_new(guint32 selected);
+
+guint32 gnc_tree_model_account_types_get_selected(
+    GncTreeModelAccountTypes * model);
+
+void gnc_tree_model_account_types_set_selected(
+    GncTreeModelAccountTypes * model, guint32 selected);
 
 
 G_END_DECLS

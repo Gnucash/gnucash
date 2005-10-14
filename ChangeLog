@@ -1,5 +1,17 @@
 2005-10-14  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-model-account-types.[ch]: File rewrite
+	from Chris Shoemaker.  Adds an API for accessing a static shared
+	program-wide account-type tree model for simple tree usage.  Adds
+	convenience functions for mapping between the selection state of a
+	treeview using the static account-type tree model and a
+	account-type selection bitfield.
+
+	* src/engine/FreqSpec.c: Line wrapping fixes from Chris Shoemaker.
+	
+	* src/engine/test/test-freq-spec.c: Patch from Chris Shoemaker to
+	add a new negative test case.
+
 	* src/app-utils/gnc-component-manager.c:
 	* src/business/business-core/gncAddress.c:
 	* src/business/business-core/gncBillTerm.c:
