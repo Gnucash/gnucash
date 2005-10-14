@@ -1,5 +1,10 @@
 2005-10-14  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-item-edit.c: Didier Vidal's
+	patch to restore horizontal scrolling in the editable cells of the
+	register if the content is too wide. It also maintains the cell
+	alignment when you switch to edit mode.
+
 	* src/report/report-system/html-acct-table.scm: Patch from Chris
 	Shoemaker to fix one use of price source where exchange-fn was
 	needed.  Added lots of comments, clarify some explanations,

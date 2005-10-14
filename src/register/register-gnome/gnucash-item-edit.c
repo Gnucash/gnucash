@@ -247,6 +247,20 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
 }
 
 static void
+gnc_item_edit_update_scroll_offset(GncItemEdit *item_edit,
+				   TextDrawInfo *info) {
+	gint cursor_margin = CELL_HPADDING + 3;
+	if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
+	    > info->text_rect.width - cursor_margin) {
+		item_edit->x_offset = info->text_rect.width
+			- PANGO_PIXELS (info->cursor.x) - cursor_margin;
+	} else if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
+		   < 0) {
+		item_edit->x_offset = - PANGO_PIXELS (info->cursor.x);
+	}
+}
+
+static void
 gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                 int x, int y, int width, int height)
 {
@@ -281,17 +295,22 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_gc_set_foreground (item_edit->gc, info.fg_color);
 
+	gnc_item_edit_update_scroll_offset(item_edit, &info);
+
 	gdk_draw_layout (drawable,
 			 item_edit->gc,
-			 info.text_rect.x + CELL_HPADDING,
+			 info.text_rect.x + CELL_HPADDING + 
+			 item_edit->x_offset,
 			 info.text_rect.y + 1,
 			 info.layout);
 
         gdk_draw_line (drawable,
                        item_edit->gc,
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING 
+		       + item_edit->x_offset,
                        PANGO_PIXELS (info.cursor.y),
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING,
+                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING
+		       + item_edit->x_offset,
                        PANGO_PIXELS (info.cursor.y + info.cursor.height));
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
@@ -691,9 +710,6 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
 
         cd = gnucash_style_get_cell_dimensions (style, cell_row, cell_col);
 
-        o_x = cd->origin_x;
-        o_y = cd->origin_y;
-
         if (!virt_loc_equal (virt_loc, item_edit->virt_loc))
                 return FALSE;
 
@@ -705,14 +721,33 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
 
                 align = gnc_table_get_align (table, item_edit->virt_loc);
 
-                if (align == CELL_ALIGN_RIGHT)
+                if (align == CELL_ALIGN_RIGHT) {
+			PangoRectangle ink_rect;
+			PangoLayout *layout;
+
                         gtk_editable_set_position(editable, -1);
-                else
-                        gtk_editable_set_position(editable, 0);
+
+			layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->
+								 editor) );
+			pango_layout_get_pixel_extents(layout,
+						       &ink_rect,
+						       NULL);
+
+			item_edit->x_offset = 
+				cd->pixel_width - ink_rect.width -
+				2* CELL_HPADDING;
+		}
+                else {
+			gtk_editable_set_position(editable, 0);
+			item_edit->x_offset = 0;
+		}
 
                 if (item_edit->is_popup)
                         x -= item_edit->popup_toggle.toggle_offset;
         }
+
+        o_x = cd->origin_x + item_edit->x_offset;
+        o_y = cd->origin_y;
 
 
         // get the text index for the mouse position into pos
