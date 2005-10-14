@@ -52,9 +52,6 @@ struct _gncAddress
 
 #define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
 G_INLINE_FUNC void mark_address (GncAddress *address);
 void mark_address (GncAddress *address)
 {

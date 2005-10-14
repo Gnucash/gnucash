@@ -32,9 +32,6 @@
 #include "gnc-trace.h"
 #include "gnc-engine-util.h"
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str));
-
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
 struct QofCollection_s

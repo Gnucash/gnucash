@@ -101,8 +101,8 @@ xaccInitSplit(Split * split, QofBook *book)
   split->parent      = NULL;
   split->lot         = NULL;
 
-  split->action      = g_cache_insert(gnc_engine_get_string_cache(), "");
-  split->memo        = g_cache_insert(gnc_engine_get_string_cache(), "");
+  split->action      = gnc_string_cache_insert("");
+  split->memo        = gnc_string_cache_insert("");
   split->reconciled  = NREC;
   split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -168,8 +168,8 @@ xaccDupeSplit (Split *s)
   split->acc = s->acc;
   split->lot = s->lot;
 
-  split->memo = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
-  split->action = g_cache_insert (gnc_engine_get_string_cache(), s->action);
+  split->memo = gnc_string_cache_insert(s->memo);
+  split->action = gnc_string_cache_insert(s->action);
 
   split->kvp_data = kvp_frame_copy (s->kvp_data);
 
@@ -196,8 +196,8 @@ xaccSplitClone (Split *s)
 
   split->book                = s->book;
   split->parent              = NULL;
-  split->memo                = g_cache_insert(gnc_engine_get_string_cache(), s->memo);
-  split->action              = g_cache_insert(gnc_engine_get_string_cache(), s->action);
+  split->memo                = gnc_string_cache_insert(s->memo);
+  split->action              = gnc_string_cache_insert(s->action);
   split->kvp_data            = kvp_frame_copy(s->kvp_data);
   split->reconciled          = s->reconciled;
   split->date_reconciled     = s->date_reconciled;
@@ -260,8 +260,8 @@ xaccFreeSplit (Split *split)
     PERR ("double-free %p", split);
     return;
   }
-  g_cache_remove(gnc_engine_get_string_cache(), split->memo);
-  g_cache_remove(gnc_engine_get_string_cache(), split->action);
+  gnc_string_cache_remove(split->memo);
+  gnc_string_cache_remove(split->action);
 
   kvp_frame_delete (split->kvp_data);
   split->kvp_data    = NULL;
@@ -826,8 +826,8 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 {
   ENTER ("trans=%p", trans);
   /* Fill in some sane defaults */
-  trans->num         = g_cache_insert(gnc_engine_get_string_cache(), "");
-  trans->description = g_cache_insert(gnc_engine_get_string_cache(), "");
+  trans->num         = gnc_string_cache_insert("");
+  trans->description = gnc_string_cache_insert("");
 
   trans->common_currency = NULL;
   trans->splits = NULL;
@@ -939,8 +939,8 @@ xaccDupeTransaction (Transaction *t)
 
   trans = g_new0 (Transaction, 1);
 
-  trans->num         = g_cache_insert (gnc_engine_get_string_cache(), t->num);
-  trans->description = g_cache_insert (gnc_engine_get_string_cache(), t->description);
+  trans->num         = gnc_string_cache_insert (t->num);
+  trans->description = gnc_string_cache_insert (t->description);
 
   trans->splits = g_list_copy (t->splits);
   for (node = trans->splits; node; node = node->next)
@@ -987,8 +987,8 @@ xaccTransClone (Transaction *t)
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
-  trans->num             = g_cache_insert (gnc_engine_get_string_cache(), t->num);
-  trans->description     = g_cache_insert (gnc_engine_get_string_cache(), t->description);
+  trans->num             = gnc_string_cache_insert (t->num);
+  trans->description     = gnc_string_cache_insert (t->description);
   trans->common_currency = t->common_currency;
   trans->version         = t->version;
   trans->version_check   = t->version_check;
@@ -1038,8 +1038,8 @@ xaccFreeTransaction (Transaction *trans)
   trans->splits = NULL;
 
   /* free up transaction strings */
-  g_cache_remove(gnc_engine_get_string_cache(), trans->num);
-  g_cache_remove(gnc_engine_get_string_cache(), trans->description);
+  gnc_string_cache_remove(trans->num);
+  gnc_string_cache_remove(trans->description);
 
   /* Just in case someone looks up freed memory ... */
   trans->num         = (char *) 1;
@@ -1718,13 +1718,13 @@ xaccTransRollbackEdit (Transaction *trans)
 
    trans->common_currency = orig->common_currency;
 
-   g_cache_remove (gnc_engine_get_string_cache(), trans->num);
+   gnc_string_cache_remove (trans->num);
    trans->num = orig->num;
-   orig->num = g_cache_insert(gnc_engine_get_string_cache(), "");
+   orig->num = gnc_string_cache_insert("");
 
-   g_cache_remove (gnc_engine_get_string_cache(), trans->description);
+   gnc_string_cache_remove (trans->description);
    trans->description = orig->description;
-   orig->description = g_cache_insert(gnc_engine_get_string_cache(), "");
+   orig->description = gnc_string_cache_insert("");
 
    kvp_frame_delete (trans->inst.kvp_data);
    trans->inst.kvp_data = orig->inst.kvp_data;
@@ -1770,13 +1770,13 @@ xaccTransRollbackEdit (Transaction *trans)
            break;
          }
 
-         g_cache_remove (gnc_engine_get_string_cache(), s->action);
+         gnc_string_cache_remove (s->action);
          s->action = so->action;
-         so->action = g_cache_insert(gnc_engine_get_string_cache(), "");
+         so->action = gnc_string_cache_insert("");
 
-         g_cache_remove (gnc_engine_get_string_cache(), s->memo);
+         gnc_string_cache_remove (s->memo);
          s->memo = so->memo;
-         so->memo = g_cache_insert(gnc_engine_get_string_cache(), "");
+         so->memo = gnc_string_cache_insert("");
 
          kvp_frame_delete (s->kvp_data);
          s->kvp_data = so->kvp_data;
@@ -2502,8 +2502,8 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    if (!trans || !xnum) return;
    check_open (trans);
 
-   tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) xnum);
-   g_cache_remove(gnc_engine_get_string_cache(), trans->num);
+   tmp = gnc_string_cache_insert((gpointer) xnum);
+   gnc_string_cache_remove(trans->num);
    trans->num = tmp;
 }
 
@@ -2522,8 +2522,8 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    if (!trans || !desc) return;
    check_open (trans);
 
-   tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) desc);
-   g_cache_remove(gnc_engine_get_string_cache(), trans->description);
+   tmp = gnc_string_cache_insert((gpointer) desc);
+   gnc_string_cache_remove(trans->description);
    trans->description = tmp;
 }
 
@@ -2759,8 +2759,8 @@ xaccSplitSetMemo (Split *split, const char *memo)
    if (!split || !memo) return;
    check_open (split->parent);
 
-   tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) memo);
-   g_cache_remove(gnc_engine_get_string_cache(), split->memo);
+   tmp = gnc_string_cache_insert((gpointer) memo);
+   gnc_string_cache_remove(split->memo);
    split->memo = tmp;
 }
 
@@ -2781,8 +2781,8 @@ xaccSplitSetAction (Split *split, const char *actn)
    if (!split || !actn) return;
    check_open (split->parent);
 
-   tmp = g_cache_insert(gnc_engine_get_string_cache(), (gpointer) actn);
-   g_cache_remove(gnc_engine_get_string_cache(), split->action);
+   tmp = gnc_string_cache_insert((gpointer) actn);
+   gnc_string_cache_remove(split->action);
    split->action = tmp;
 }
 

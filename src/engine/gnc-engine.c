@@ -88,8 +88,6 @@ gnc_engine_init(int argc, char ** argv)
   gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
   gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
   qof_log_set_default(GNC_LOG_WARNING);
-  /* initialize the string cache */
-  gnc_engine_get_string_cache();
   
   guid_init ();
   qof_object_initialize ();

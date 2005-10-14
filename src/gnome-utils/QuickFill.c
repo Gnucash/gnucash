@@ -49,10 +49,6 @@ static void quickfill_insert_recursive (QuickFill *qf, const char *text,
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_REGISTER;
 
-/* A cache for quickfill strings */
-static GCache * qf_string_cache = NULL;
-
-
 /********************************************************************\
 \********************************************************************/
 
@@ -85,10 +81,6 @@ gnc_quickfill_new (void)
     return NULL;
   }
 
-  /* For now, use the engine cache. */
-  if (qf_string_cache == NULL)
-    qf_string_cache = gnc_engine_get_string_cache ();
-
   qf = g_new (QuickFill, 1);
 
   qf->text = NULL;
@@ -120,7 +112,7 @@ gnc_quickfill_destroy (QuickFill *qf)
   qf->matches = NULL;
 
   if (qf->text)
-    g_cache_remove (qf_string_cache, qf->text);
+    gnc_string_cache_remove(qf->text);
   qf->text = NULL;
   qf->len = 0;
 
@@ -136,7 +128,7 @@ gnc_quickfill_purge (QuickFill *qf)
   g_hash_table_foreach_remove (qf->matches, destroy_helper, NULL);
 
   if (qf->text)
-    g_cache_remove (qf_string_cache, qf->text);
+    gnc_string_cache_remove (qf->text);
   qf->text = NULL;
   qf->len = 0;
 }
@@ -318,7 +310,7 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
       /* If there's no string there already, just put the new one in. */
       if (old_text == NULL)
       {
-        match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
+        match_qf->text = gnc_string_cache_insert((gpointer) text);
         match_qf->len = len;
         break;
       }
@@ -328,8 +320,8 @@ quickfill_insert_recursive (QuickFill *qf, const char *text, int depth,
           (strncmp(text, old_text, strlen(old_text)) == 0))
         break;
 
-      g_cache_remove (qf_string_cache, old_text);
-      match_qf->text = g_cache_insert (qf_string_cache, (gpointer) text);
+      gnc_string_cache_remove(old_text);
+      match_qf->text = gnc_string_cache_insert((gpointer) text);
       match_qf->len = len;
       break;
   }

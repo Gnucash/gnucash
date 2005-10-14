@@ -65,9 +65,6 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 /* ============================================================ */
 /* Misc inline funcs */
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
 G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {

@@ -43,6 +43,8 @@
   * (gnc_string_cache), as it is very likely we will see the 
   * same keys over and over again  */
 
+/* TODO: set the cache handling functions with hash_table_new_full */
+
 struct _KvpFrame 
 {
   GHashTable  * hash;
@@ -113,7 +115,7 @@ kvp_frame_new(void)
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) 
 {
-  g_cache_remove(gnc_engine_get_string_cache(), key);
+  gnc_string_cache_remove(key);
   kvp_value_delete((KvpValue *)value);  
 }
 
@@ -148,7 +150,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
 {
   KvpFrame * dest = (KvpFrame *)user_data;
   g_hash_table_insert(dest->hash,
-                      (gpointer)g_cache_insert(gnc_engine_get_string_cache(), key), 
+                      gnc_string_cache_insert(key),
                       (gpointer)kvp_value_copy(value));
 }
 
@@ -189,7 +191,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(key_exists) 
   {
     g_hash_table_remove(frame->hash, slot);
-    g_cache_remove(gnc_engine_get_string_cache(), orig_key);
+    gnc_string_cache_remove(orig_key);
   }
   else
   {
@@ -199,8 +201,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(new_value) 
   {
     g_hash_table_insert(frame->hash,
-                        g_cache_insert(gnc_engine_get_string_cache(),
-                                       (gpointer) slot),
+                        gnc_string_cache_insert((gpointer) slot),
                         new_value);
   }
 
@@ -1745,6 +1746,7 @@ kvp_value_to_string(const KvpValue *val)
         break;
 
     case KVP_TYPE_GUID:
+        /* THREAD-UNSAFE */
         ctmp = guid_to_string(kvp_value_get_guid(val));
         tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", ctmp ? ctmp : "");
         return tmp2;

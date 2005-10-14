@@ -179,17 +179,15 @@ test_commodity(void)
 int
 main (int argc, char **argv)
 {
-	gnc_engine_get_string_cache ();
-	guid_init ();
-	qof_object_initialize ();
-	qof_query_init ();
-	qof_book_register ();
-	gnc_commodity_table_register();
-	test_commodity();
-	print_test_results();
-	qof_query_shutdown();
-	guid_shutdown();
-	qof_object_shutdown ();
-	gnc_engine_string_cache_destroy();
-  return 0;
+    guid_init ();
+    qof_object_initialize ();
+    qof_query_init ();
+    qof_book_register ();
+    gnc_commodity_table_register();
+    test_commodity();
+    print_test_results();
+    qof_query_shutdown();
+    guid_shutdown();
+    qof_object_shutdown ();
+    return 0;
 }

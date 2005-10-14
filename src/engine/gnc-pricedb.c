@@ -67,8 +67,8 @@ gnc_price_destroy (GNCPrice *p)
   ENTER(" ");
   gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_DESTROY);
 
-  if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
-  if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
+  if(p->type) gnc_string_cache_remove(p->type);
+  if(p->source) gnc_string_cache_remove(p->source);
 
   qof_instance_release (&p->inst);
   memset(p, 0, sizeof(GNCPrice));
@@ -246,13 +246,11 @@ gnc_price_set_source(GNCPrice *p, const char *s)
   if(!p) return;
   if(safe_strcmp(p->source, s) != 0)
   {
-    GCache *cache;
     char *tmp;
 
     gnc_price_begin_edit (p);
-    cache = gnc_engine_get_string_cache();
-    tmp = g_cache_insert(cache, (gpointer) s);
-    if(p->source) g_cache_remove(cache, p->source);
+    tmp = gnc_string_cache_insert((gpointer) s);
+    if(p->source) gnc_string_cache_remove(p->source);
     p->source = tmp;
     if(p->db) p->db->inst.dirty = TRUE;
     gnc_price_commit_edit (p);
@@ -265,13 +263,11 @@ gnc_price_set_type(GNCPrice *p, const char* type)
   if(!p) return;
   if(safe_strcmp(p->type, type) != 0)
   {
-    GCache *cache;
     gchar *tmp;
 
     gnc_price_begin_edit (p);
-    cache = gnc_engine_get_string_cache();
-    tmp = g_cache_insert(cache, (gpointer) type);
-    if(p->type) g_cache_remove(cache, p->type);
+    tmp = gnc_string_cache_insert((gpointer) type);
+    if(p->type) gnc_string_cache_remove(p->type);
     p->type = tmp;
     if(p->db) p->db->inst.dirty = TRUE;
     gnc_price_commit_edit (p);

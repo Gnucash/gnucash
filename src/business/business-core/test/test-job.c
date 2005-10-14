@@ -234,7 +234,6 @@ test_gint_fcn (QofBook *book, const char *message,
 int
 main (int argc, char **argv)
 {
-  gnc_engine_get_string_cache ();
   guid_init ();
   qof_query_init ();
   qof_object_initialize ();
@@ -247,7 +246,6 @@ main (int argc, char **argv)
   qof_query_shutdown();
   guid_shutdown();
   qof_object_shutdown ();
-  gnc_engine_string_cache_destroy();
   return 0;
 }
 

@@ -64,6 +64,7 @@ typedef struct
 
 /** Static Variables ************************************************/
 static guint  suspend_counter = 0;
+/* Some code foolishly uses 0 instead of NO_COMPONENT, so we start with 1. */
 static gint   next_component_id = 1;
 static GList *components = NULL;
 
@@ -127,9 +128,7 @@ clear_mask_hash (GHashTable *hash)
 static gboolean
 destroy_mask_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
-  GCache *gc = gnc_engine_get_string_cache ();
-
-  g_cache_remove (gc, key);
+  gnc_string_cache_remove (key);
   g_free (value);
 
   return TRUE;
@@ -246,8 +245,7 @@ add_event_type (ComponentEventInfo *cei, GNCIdTypeConst entity_type,
   mask = g_hash_table_lookup (cei->event_masks, entity_type);
   if (!mask)
   {
-    char * key = g_cache_insert (gnc_engine_get_string_cache (),
-                                 (gpointer) entity_type);
+    char * key = gnc_string_cache_insert ((gpointer) entity_type);
     mask = g_new0 (GNCEngineEventType, 1);
     g_hash_table_insert (cei->event_masks, key, mask);
   }
