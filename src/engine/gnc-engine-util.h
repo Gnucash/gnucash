@@ -211,38 +211,48 @@ const char * qof_util_whitespace_filter (const char * val);
  *  return that number. (Leading whitespace is ignored). */
 int qof_util_bool_to_int (const char * val);
 
-/** Many strings used throughout the engine are likely to be duplicated.
+
+/** Gnucash's String Cache:
+ *
+ * Many strings used throughout the engine are likely to be duplicated.
  * So we provide a reference counted cache system for the strings, which
  * shares strings whenever possible.
  *
- * Use g_cache_insert to insert a string into the cache (it will return a
- * pointer to the cached string).
- * Basically you should use this instead of g_strdup.
+ * Use gnc_string_cache_insert to insert a string into the cache (it
+ * will return a pointer to the cached string).  Basically you should
+ * use this instead of g_strdup.
  *
- * Use g_cache_remove (giving it a pointer to a cached string) if the string
- * is unused.  If this is the last reference to the string it will be
- * removed from the cache, otherwise it will just decrement the
- * reference count.
- * Basically you should use this instead of g_free.
+ * Use gnc_string_cache_remove (giving it a pointer to a cached
+ * string) if the string is unused.  If this is the last reference to
+ * the string it will be removed from the cache, otherwise it will
+ * just decrement the reference count.  Basically you should use this
+ * instead of g_free.
+ *
+ * Just in case it's not clear: The remove function must NOT be called
+ * for the string you passed INTO the insert function.  It must be
+ * called for the _cached_ string that is _returned_ by the insert
+ * function.
  *
  * Note that all the work is done when inserting or removing.  Once
  * cached the strings are just plain C strings.
- */
+ *
+ * The string cache is demand-created on first use.
+ *
+ **/
 
-/** Get the gnc_string_cache.  Create it if it doesn't exist already
-
-\todo hide the gcache as a static */
-GCache* gnc_engine_get_string_cache(void);
-
+/** Destroy the gnc_string_cache */
 void gnc_engine_string_cache_destroy (void);
 
 /* You can use this function as a destroy notifier for a GHashTable
    that uses common strings as keys (or values, for that matter.) */
-void gnc_string_cache_remove(gpointer key);
+void gnc_string_cache_remove(gconstpointer key);
 
 /* You can use this function with g_hash_table_insert(), or the key
    (or value), as long as you use the destroy notifier above. */
 gpointer gnc_string_cache_insert(gpointer key);
+
+#define CACHE_INSERT(str) gnc_string_cache_insert((gpointer)(str));
+#define CACHE_REMOVE(str) gnc_string_cache_remove((str));
 
 #endif /* QOF_UTIL_H */
 /** @} */
