@@ -89,7 +89,7 @@ test_daily (void)
    g_date_set_dmy( &date1, 25, 3, 2001 );
    for( interval = 1; interval < 20; ++interval ) {
       xaccFreqSpecSetDaily( fs, &date1, interval );
-      for( j = 0; j < 20; ++j ) {
+      for( j = 0; j < 20; ++j ) { /* j=0 passes by luck, but it's not valid */
          date2 = date1;
          for( i = 0; i < j; ++i ) {
             xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
@@ -357,6 +357,26 @@ test_month_relative (void)
    xaccFreqSpecFree(fs);
 }
 
+static void test_caseA()
+{
+   FreqSpec *fs;
+   GDate date0, date1, date2, date3;
+
+   fs = xaccFreqSpecMalloc(book);
+
+   g_date_set_dmy(&date0, 31, 12, 1); /* end of year */
+
+   xaccFreqSpecSetMonthly(fs, &date0, 3);  /* quarterly */
+
+   g_date_set_dmy(&date1, 13, 2, 1);  /* Feb 13th */
+   xaccFreqSpecGetNextInstance( fs, &date1, &date2 );
+
+   g_date_set_dmy( &date3, 31, 3, 1 ); /* Should get March 31st */
+   do_test( g_date_compare( &date2, &date3 ) == 0, "end of quarter" );
+
+   xaccFreqSpecFree(fs);
+}
+
 static void
 test_composite (void)
 {
@@ -549,6 +569,7 @@ main (int argc, char **argv)
 	session = qof_session_new ();
 	book = qof_session_get_book(session);
    test_once();
+   test_caseA();
    test_daily();
    test_weekly();
    test_monthly();
