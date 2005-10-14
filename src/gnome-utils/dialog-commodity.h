@@ -36,7 +36,6 @@
 #include <gnome.h>
 
 #include "gnc-commodity.h"
-#include "gnc-engine.h"
 
 /** The dialog commodity types are used to determine what commodity
  *  namespaces the currency dialog will present to a user.  These
@@ -187,8 +186,7 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
  */
 gnc_commodity * 
 gnc_ui_new_commodity_modal(const char * default_namespace, 
-                           GtkWidget * parent
-			   );
+                           GtkWidget * parent);
 
 /** Allow the user to edit the information about a commodity.  For
  *  currencies, only the price quote information may be changed.  For

@@ -62,7 +62,6 @@
 
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
-#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 

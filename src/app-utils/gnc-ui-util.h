@@ -38,7 +38,6 @@
 #include <locale.h>
 
 #include "Account.h"
-#include "gnc-engine.h"
 #include "Group.h"
 #include "qofbook.h"
 #include "qofsession.h"
