@@ -378,14 +378,15 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
       wday_of_1st = g_date_get_weekday( &date1 );
       /* This calculates the day of the month in the month which forms
        * the next month in the cycle after the given input date.
-       * However, this day may be larger than the number of days in that month... */
+       * However, this day may be larger than the number of days in
+       * that month... */
       day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
          ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
       while( day_of_repeat > g_date_days_in_month( month, year ) ) {
-         /* If the repeat occurs after the end of the month, then
-          * find the next month containing a day which satisfies the request.
-          * Each candiate month separated by interval_months is considered
-          * by this loop.*/
+         /* If the repeat occurs after the end of the month, then find
+          * the next month containing a day which satisfies the
+          * request.  Each candiate month separated by interval_months
+          * is considered by this loop.*/
          ++complete_intervals;
          next_repeat_months_from_epoch =
             fs->s.month_relative.offset_from_epoch +
