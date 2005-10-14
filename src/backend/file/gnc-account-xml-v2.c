@@ -327,14 +327,9 @@ static gboolean
 account_slots_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
-    gboolean success;
 
-    success = dom_tree_to_kvp_frame_given
-      (node, xaccAccountGetSlots (pdata->account));
-
-    g_return_val_if_fail(success, FALSE);
-    
-    return TRUE;
+    return dom_tree_to_kvp_frame_given
+        (node, xaccAccountGetSlots (pdata->account));
 }
 
 static gboolean

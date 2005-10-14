@@ -121,7 +121,9 @@ struct GncPluginPageReportPrivate
         SCM          initial_report; 
         GNCOptionDB  * initial_odb;
         SCM          name_change_cb_id;
-        
+
+        /* keep a list of edited reports so that we can destroy them when
+         * the window is closed. */
         SCM          edited_reports;
 
         /* This is set to mark the fact that we need to reload the html */
@@ -779,7 +781,8 @@ gnc_plugin_page_report_new( int reportId )
 }
 
 void
-gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win, SCM report)
+gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win,
+                                            SCM report)
 { 
         SCM new_edited = scm_delete(win->edited_reports, report);
         scm_gc_unprotect_object(win->edited_reports);
@@ -788,7 +791,8 @@ gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win, SC
 }
 
 void
-gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win, SCM report)
+gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win,
+                                         SCM report)
 {
         SCM new_edited = scm_cons(report, win->edited_reports);
         scm_gc_unprotect_object(win->edited_reports);
