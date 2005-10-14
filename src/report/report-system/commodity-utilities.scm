@@ -657,13 +657,17 @@
 ;; and the domestic currency are the same, return the foreign 
 ;; amount unchanged, otherwise return 0
 
+;; WARNING: many uses of exchange functions assume that the function
+;; will return a valid <gnc:monetary>.  However, this function returns
+;; #f if the commodities don't match.  Therefore, if you use this
+;; function in a mixed commodity context, stuff will probably crash.
 (define (gnc:exchange-if-same foreign domestic)
   (if (gnc:commodity-equiv? (gnc:gnc-monetary-commodity foreign) domestic)
       foreign
       #f))
 
 ;; This one returns the ready-to-use function for calculation of the
-;; exchange rates. The returned function takes a <gnc-monetary> and
+;; exchange rates.  The returned function takes a <gnc-monetary> and
 ;; the <gnc:commodity*> domestic-commodity, exchanges the amount into
 ;; the domestic currency and returns a <gnc-monetary>.
 (define (gnc:make-exchange-function exchange-alist)
@@ -866,29 +870,45 @@
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the
-;; exchange rates to the commodity <domestic>. Returns a
-;; <gnc-monetary> with the domestic commodity and its corresponding
-;; balance. If the foreign balance is #f, it returns #f.
+;; exchange rates to the commodity <domestic>.
+;;
+;; CAS: Previously, the exchange-fn was not optional -- we would crash
+;; if it was invalid.  I've changed this so that when exchange-fn is
+;; #f, #f is returned.  Since #f is already returned when foreign is
+;; #f, and since any previous dependance on some behavior for the case
+;; where exchange-fn was #f would've crashed, I think this change is
+;; safe.
+;;
+;; Returns a <gnc-monetary> with the domestic commodity and its
+;; corresponding balance. If the foreign balance is #f, it returns #f.
 (define (gnc:sum-collector-commodity foreign domestic exchange-fn)
-  (if foreign
-      (let ((balance (gnc:make-commodity-collector)))
-	(foreign
-	 'format 
-	 (lambda (curr val) 
-	   (if (gnc:commodity-equiv? domestic curr)
-	       (balance 'add domestic val)
-	       (balance 'add domestic 
-			(gnc:gnc-monetary-amount 
-			 (exchange-fn (gnc:make-gnc-monetary curr val) 
-				      domestic)))))
-	 #f)
-	(balance 'getmonetary domestic #f))
-      #f))
+  (cond ((and foreign exchange-fn)
+         (let ((balance (gnc:make-commodity-collector)))
+           (foreign
+            'format
+            (lambda (curr val)
+              (if (gnc:commodity-equiv? domestic curr)
+                  (balance 'add domestic val)
+                  (balance 'add domestic
+                           (gnc:gnc-monetary-amount
+                            ;; BUG?: this bombs if the exchange-fn
+                            ;; returns #f instead of an actual
+                            ;; <gnc:monetary>.  Better to just return #f.
+                            (exchange-fn (gnc:make-gnc-monetary curr val)
+                                         domestic))
+                           )
+                  )
+              )
+            #f)
+           (balance 'getmonetary domestic #f)))
+        (else #f)
+        )
+  )
 
 ;; As above, but adds only the commodities of other stocks and
-;; mutual-funds. Returns a commodity-collector which (still) may have
-;; several different commodities in it -- if there have been different
-;; *currencies*, not only stocks.
+;; mutual-funds. Returns a commodity-collector, (not a <gnc:monetary>)
+;; which (still) may have several different commodities in it -- if
+;; there have been different *currencies*, not only stocks.
 (define (gnc:sum-collector-stocks foreign domestic exchange-fn)
   (if foreign
       (let ((balance (gnc:make-commodity-collector)))
