@@ -1,5 +1,10 @@
 2005-10-14  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/html-acct-table.scm: Patch from Chris
+	Shoemaker to fix one use of price source where exchange-fn was
+	needed.  Added lots of comments, clarify some explanations,
+	documented some bugs.
+
 	* configure.in: Check for libgtkhtml 3.8.  Life would be so much
 	easier if the gtkhtml developers would fix stop renaming their
 	pkg-config script with every release.

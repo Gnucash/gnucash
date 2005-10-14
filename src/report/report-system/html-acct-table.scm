@@ -40,7 +40,28 @@
 ;; 
 ;;               add-accounts            add-account-balances
 ;;  account-list ------------> html-acct-table ----------> html-table
-;; 
+;;
+;;    Figure Key:
+;;
+;;       account-list: a list of accounts as would be returned from
+;;       looking up the value of a report option added with
+;;       gnc:options-add-account-selection!
+;;
+;;       add-accounts: any method that adds the account list to the
+;;       html-acct-table.  For example, this could be accomplished
+;;       with gnc:make-html-acct-table/env/acct or
+;;       gnc:html-acct-table-add-accounts!
+;;
+;;       html-acct-table: the utility object described in this file
+;;
+;;       add-account-balances: any function that maps the internal
+;;       data of the html-acct-table object into a html-table.  For
+;;       example, one such function is
+;;       gnc:html-table-add-account-balances.
+;;
+;;       html-table: an <html-table> scheme object representing an
+;;       HTML table block.  See html-table.scm.
+;;
 ;; This utility object was written because of some shortcomings
 ;; inherent in how the gnc:html-build-acct-table function was
 ;; designed.  Ultimately, the intent is to replace
@@ -63,20 +84,26 @@
 ;; The list of accounts which are to be placed in the
 ;; gnc:html-acct-table object can be controled with the
 ;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/env/accts,
-;; and gnc:html-table-add-accts! functions.  
+;; and gnc:html-table-add-accts!  functions.  But you should only use
+;; one of these methods to add accounts.
 ;; 
-;; The gnc:html-acct-table parameters, set with
-;; gnc:make-html-acct-table/env and gnc:make-html-acct-table/accts/env
-;; and fetched with gnc:html-acct-table-env; accept the following
-;; parameters:
+;; The gnc:html-acct-table parameters should be set BEFORE adding the
+;; account list.  They can be set with gnc:make-html-acct-table/env
+;; or gnc:make-html-acct-table/accts/env and fetched with
+;; gnc:html-acct-table-env; accept the following parameters:
 ;; 
-;;     display-tree-depth: integer 'unlimited 'all #f
+;;     display-tree-depth: integer 'unlimited ['all] #f
 ;; 
 ;;         the number of levels of accounts to display
 ;;         'unlimited, 'all, and #f impose no depth limit.
-;;         the default is 'all.
+;;         the default is 'all.  [CAS: ISTM, the default is actually #f,
+;;         and this case bombs at (< logi-depth depth-limit) anytime the
+;;         limit behavior is not 'flatten.  BUG?   Also, setting this
+;;         parameter to a large integer value has the strange side-effect
+;;         of pushing the balances column far right, even when the account
+;;         tree is relatively shallow.]
 ;; 
-;;     depth-limit-behavior: 'summarize 'flatten 'truncate
+;;     depth-limit-behavior: ['summarize] 'flatten 'truncate
 ;; 
 ;;         when the display tree reaches its depth limit, this option
 ;;         tells gnc:html-acct-table what to do.  'summarize tells it
@@ -117,22 +144,51 @@
 ;;         ocurr. note: i do not know if GnuCash, right now, supports
 ;;         transactions in the future. so be prepared for the
 ;;         possibility that this may match transactions which haven't
-;;         ocurred, yet.
+;;         ocurred, yet. [CAS: I don't think end-date of #f works.
+;;         It bombs.]
 ;; 
 ;;     report-commodity: commodity
 ;; 
 ;;         the commodity into which to convert any balances containing
 ;;         foreign currencies.  the balance will be converted using
-;;         the exchange function exchange-fn. the defalut is the
-;;         currency returned by (gnc:default-report-currency).
+;;         the exchange function exchange-fn. the default is the
+;;         currency returned by (gnc:default-report-currency).  [CAS:
+;;         what if I don't want the report to have a
+;;         "report-commodity"?  Say e.g. I want to show each account
+;;         balance in its native commodity?  I can see the benefit of
+;;         individual reports that have a report-commodity using
+;;         gnc:default-report-currency to set the default value for a
+;;         report-commodity option.  But, with the default sucked in
+;;         here, in what is supposed to be a more general api, means
+;;         reports can't specify NO report-commodity. ]
+;;
+;; CAS: Hypothetical design modification: Instead of specifying a
+;; single report commodity and exchange-fn for the whole acct-table,
+;; what if we were allowed to specify a *price-source* and an
+;; *optional* report-commodity.  Then, if the no report commodity is
+;; specified, then we can generate the exchange-fn on a per-account
+;; basis, using gnc:case-exchange-fn and the account's native
+;; commodity and the given price-source.  Otherwise (i.e. if there IS
+;; a report-commodity specified), we can use *that* commodity for each
+;; account's exchange-fn.
 ;;
 ;;     exchange-fn: commodity_exchange_function
 ;; 
 ;;         the commodity exchange function (you know, that weighted
 ;;         average, most recent, nearest in time fun stuff) used to
 ;;         convert balances which are not exclusively in the report
-;;         commodity into the report commodity.
-;; 
+;;         commodity into the report commodity.  [CAS: Right now,
+;;         exchange-fn is not optional.  If your accounts have
+;;         different commodities and you don't specify a valid
+;;         exchange function then simply adding the accounts to the
+;;         html-acct-table object will crash, even if you never want
+;;         to display any values at all.  This is bad.  UPDATE: As a
+;;         short-term fix, I've made this parameter optional.  If no
+;;         exchange-fn is given, you can at least add the accounts to
+;;         the html-acct-table object without crashing.  Just don't
+;;         count on meaningful report-comm-{account|recursive}-bal
+;;         values (they'll also be #f).]
+;;
 ;;     column-header: html-table-header-cell #f #t
 ;; 
 ;;          the table column header cell (TH tag) with which to head
@@ -268,7 +324,7 @@
 ;;         in the effective account tree.  this is the depth the
 ;;         account tree when ignoring unselected parent accounts.
 ;;         note that this may differ from account-depth when a
-;;         selected account has a deselected ancestor.
+;;         selected account has an unselected ancestor.
 ;; 
 ;;     display-depth: integer
 ;; 
@@ -284,7 +340,8 @@
 ;; 
 ;;         the depth at which the account in the current row resides
 ;;         in the indented display tree. also account-depth plus
-;;         indent.
+;;         indent.  CAS: I think *display-depth* plus indent would
+;;         make more sense.  Then it's like an absolute column index.
 ;; 
 ;;     logical-cols: integer
 ;; 
@@ -329,6 +386,9 @@
 ;;         including all balances in any *selected* subaccounts.  this
 ;;         is for convenience.
 ;; 
+;; CAS: I think these next two are wrong because they are really of
+;; type gnc:monetary, not commodity-collectors.
+;;
 ;;     report-comm-account-bal: commodity-collector
 ;; 
 ;;         the balance of the account in the current row, exclusive of
@@ -529,7 +589,7 @@
 	 (depth-limit (let ((lim (get-val env 'display-tree-depth)))
 			(if (or (equal? lim 'unlimited)
 				(equal? lim 'all))
-			    #f
+			    #f ;; BUG?  other code expects integer here
 			    lim)))
 	 (limit-behavior (or (get-val env 'depth-limit-behavior) 'summarize))
 	 (indent (or (get-val env 'initial-indent) 0))
@@ -540,8 +600,11 @@
 		       (cons 'absolute (cons (current-time) 0))))
 	 (report-commodity (or (get-val env 'report-commodity)
 			       (gnc:default-report-currency)))
+         ;; BUG: other code expects a real function here, maybe
+         ;; someone was thinking price-source?
 	 (exchange-fn (or (get-val env 'exchange-fn)
-			  'weighted-average))
+                          #f))
+         ;;'weighted-average))
 	 (column-header (let ((cell (get-val env 'column-header)))
 			  (if (equal? cell #t)
 			      (gnc:make-html-table-cell "Account name")
@@ -577,6 +640,7 @@
     (define (traverse-accounts! accts acct-depth logi-depth)
       
       (define (use-acct? acct)
+        ;; BUG?  when depth-limit is not integer but boolean?
 	(and (or (equal? limit-behavior 'flatten) (< logi-depth depth-limit))
 	     (member acct accounts)
 	     )
@@ -618,6 +682,7 @@
 		     (post-closing-bal 'minusmerge adjusting-amt #f)
 		     post-closing-bal)
 		   )
+              ;; error if we get here.
 	      )
 	  )
 	)
@@ -640,6 +705,7 @@
 		   (my-get-balance-nosub a start-date end-date)))
 	    (gnc:account-get-children account)))
 	  this-collector))
+
       
       (let ((disp-depth
 	     (if (integer? depth-limit)
@@ -649,8 +715,7 @@
 	
 	(for-each
 	 (lambda (acct)
-	   (let* ((subaccts
-		   (gnc:account-get-immediate-subaccounts acct))
+	   (let* ((subaccts (gnc:account-get-immediate-subaccounts acct))
 		  ;; assign output parameters
 		  (account acct)
 		  (account-name (gnc:account-get-name acct))
@@ -670,13 +735,15 @@
 		  (account-guid (gnc:account-get-guid acct))
 		  (account-description (gnc:account-get-description acct))
 		  (account-notes (gnc:account-get-notes acct))
+                  ;; These next two are commodity-collectors.
 		  (account-bal (my-get-balance-nosub
 				acct start-date end-date))
-		  (recursive-bal
-		   (my-get-balance acct start-date end-date))
+		  (recursive-bal (my-get-balance
+                                  acct start-date end-date))
+                  ;; These next two are of type <gnc:monetary>, right?
 		  (report-comm-account-bal
-		   (gnc:sum-collector-commodity
-		    account-bal report-commodity exchange-fn))
+                   (gnc:sum-collector-commodity
+                    account-bal report-commodity exchange-fn))
 		  (report-comm-recursive-bal
 		   (gnc:sum-collector-commodity
 		    recursive-bal report-commodity exchange-fn))
@@ -737,6 +804,7 @@
 		   (add-row row-env)
 		   )
 		 )
+             ;; Recurse:
 	     ;; Dive into an account even if it isnt selected!
 	     (traverse-accounts! subaccts
 				 (+ acct-depth 1)
@@ -744,6 +812,8 @@
 				     (+ logi-depth 1)
 				     logi-depth)
 				 )
+
+             ;; after the return from recursion: subtotals
 	     (or (not (use-acct? acct))
 		 (not subtotal-mode)
 		 ;; ditto that remark concerning zero recursive-bal...
@@ -773,12 +843,16 @@
 		   (add-row row-env)
 		   )
 		 )
-	     ))
-	 (if less-p
+	     )) ;; end of (lambda (acct) ...)
+	 ;; lambda is applied to each item in the (sorted) account list
+         (if less-p
 	     (sort accts less-p)
 	     accts)
-	 ))
-      )
+	 ) ;; end of for-each
+        )
+      ) ;; end of definition of traverse-accounts!
+
+    ;;(display (list "END-DATE: " end-date))
     
     ;; do it
     (traverse-accounts! toplvl-accts 0 0)
@@ -809,6 +883,7 @@
 		    (logical-cols (if depth-limit
 				      (min
 				       (+ logi-depth-reached 1)
+                                       ;; BUG?  when depth-limit is not integer?
 				       depth-limit)
 				      (+ logi-depth-reached 1)))
 		    (colspan (- label-cols display-depth))
@@ -899,7 +974,8 @@
 (define (gnc:html-acct-table-remove-last-row! acct-table)
   (gnc:html-table-remove-last-row! (gnc:_html-acct-table-matrix_ acct-table)))
 
-(define (gnc:identity i) i)
+;; don't think we need this.
+;;(define (gnc:identity i) i)
 
 (define (gnc:html-acct-table-render acct-table doc)
   ;; this will be used if we ever decide to let the utility object
@@ -916,17 +992,27 @@
 ;; use: "text-cell" "total-label-cell" "number-cell"
 ;; "total-number-cell".  Row styles include "normal-row",
 ;; "alternate-row", "primary-subheading", "secondary-subheading", and
-;; "grand-total". there really should also be a "first-number-cell"
+;; "grand-total".
+;; There really should also be a "first-number-cell"
 ;; and "last-number-cell" to put currency symbols and underlines,
 ;; respectively, on the numbers.
 
+;; Note: arguably, this procedure belongs in html-table.scm instead of here.
 (define (gnc:html-table-add-labeled-amount-line!
-	 html-table table-width row-markup total-rule?
-	 label label-depth label-colspan label-markup
-	 amount amount-depth amount-colspan amount-markup)
-  ;; function to add a label and/or amount (which we'll call a "line")
-  ;; to a gnc:html-table. all depths are zero-indexed.
-  ;; if total-rule?, an <hr> is placed in the cell previous to label
+         ;; function to add a label and/or amount (which we'll call a "line")
+         ;; to the end of a gnc:html-table. all depths are zero-indexed.
+	 html-table
+         table-width       ;; if #f defaults to (amount-depth + amount-colspan)
+         row-markup        ;; optional
+         total-rule?       ;; Place an <hr> in the cell previous to label?
+	 label             ;; the actual label text
+         label-depth       ;; defaults to zero
+         label-colspan     ;; defaults to one
+         label-markup      ;; optional
+	 amount            ;; a <gnc:monetary> or #f
+         amount-depth      ;; defaults to (label-depth + label-colspan)
+         amount-colspan    ;; defaults to one
+         amount-markup)    ;; optional
   (let* ((lbl-depth (or label-depth 0))
 	 (lbl-colspan (if gnc:colspans-are-working-right
 			  (or label-colspan 1)
@@ -938,33 +1024,35 @@
 	 (tbl-width (or table-width (+ amt-depth amt-colspan)))
 	 (row
 	  (append
-	   (gnc:html-make-empty-cells lbl-depth)
+	   (gnc:html-make-empty-cells lbl-depth)  ;; padding before label
 	   (list
-	    (if label-markup
+	    (if label-markup                      ;; the actual label
 		(gnc:make-html-table-cell/size/markup
 		 1 lbl-colspan label-markup label)
 		(gnc:make-html-table-cell/size
 		 1 lbl-colspan label))
 	    )
-	   (gnc:html-make-empty-cells
-		(+ (- amt-depth (+ lbl-depth lbl-colspan))
-		   (if total-rule? -1 0)
-		   ))
-	   (if total-rule?
+	   (gnc:html-make-empty-cells             ;; padding after label
+            (+ (- amt-depth (+ lbl-depth lbl-colspan))
+               (if total-rule? -1 0)
+               )
+            )
+	   (if total-rule?                        ;; include <hr>?
 	       (list (gnc:make-html-table-cell
 		      (gnc:make-html-text (gnc:html-markup-hr))))
 	       (list)
 	       )
 	   (list
-	    (if amount-markup
+	    (if amount-markup                     ;; the amount
 		(gnc:make-html-table-cell/size/markup
 		 1 amt-colspan amount-markup amount)
 		(gnc:make-html-table-cell/size
 		 1 amt-colspan amount))
 	    )
-	   (gnc:html-make-empty-cells
-	    (- table-width (+ amt-depth amt-colspan)))
-	   ))
+	   (gnc:html-make-empty-cells             ;; padding out to full width
+	    (- tbl-width (+ amt-depth amt-colspan)))
+	   )
+          ) ;; end of row
 	 )
     (if row-markup
 	(gnc:html-table-append-row/markup! html-table row-markup row)
@@ -1000,18 +1088,22 @@
 
 ;; 
 ;; This function adds all the lines from a gnc:html-acct-table to a
-;; gnc:html-table in "labeled amount" form.
+;; gnc:html-table in "labeled amount" form.  IOW, it uses
+;; gnc:html-table-add-labeled-amount-line!
 ;; 
-;; The resulting gnc:html-table is similar to what
+;; The returned gnc:html-table is similar to what
 ;; gnc:html-build-acct-table used to (and still should) produce.
 ;; 
 ;; this function accepts the following additional parameters:
 ;; parent-account-balance-mode: 'immediate-bal 'recursive-bal ['omit-bal/#f]
 ;; zero-balance-display-mode: ['show-balance] 'omit-balance
 ;; multicommodity-mode: [#f] 'table/#t
-;; rule-mode: #t [#f]
+;; rule-mode: #t [#f]  (not meant to affect subtotal rules)
 ;; 
-(define (gnc:html-table-add-account-balances html-table acct-table params)
+(define (gnc:html-table-add-account-balances
+         html-table  ;; can be #f to create a new table
+         acct-table
+         params)
   (let* ((num-rows (gnc:html-acct-table-num-rows acct-table))
 	 (rownum 0)
 	 (html-table (or html-table (gnc:make-html-table)))
@@ -1065,8 +1157,8 @@
 		       )
 		   )
 		  (comm-amt
-		   ;; this will be the immediate/recursize commodity
-		   ;; balance or #f
+		   ;; this will be the immediate/recursive commodity
+		   ;; balance (a commodity collector) or #f.
 		   (get-val env
 			    (car (or (assoc-ref
 				      '((immediate-bal account-bal)
@@ -1085,12 +1177,15 @@
 		  (native-comm?
 		   (lambda (amt)
 		     (gnc:uniform-commodity? amt report-commodity)))
+                  ;; amount is either a <gnc:monetary> or #f
 		  (amount (and comm-amt
 			       (if (and (equal? zero-mode 'omit-balance)
-				    (gnc:commodity-collector-allzero? comm-amt)
-				    )
+                                        (gnc:commodity-collector-allzero?
+                                         comm-amt)
+                                        )
 				   #f
-				   ;; otherwise
+				   ;; else:
+                                   ;; this let* block evals to a <gnc:monetary>
 				   (let*
 				       ((amt (gnc:make-commodity-collector)))
 				     (if reverse-balance
@@ -1102,38 +1197,58 @@
 					       report-commodity
 					       exchange-fn)
 					      )
-					 (if (and (equal?
-						   multicommodity-mode 'table)
-						  (equal?
-						   row-type 'account-row)
-						  )
-					     (gnc:commodity-table
-					      amt
-					      report-commodity 
-					      exchange-fn)
-					     (gnc:sum-collector-commodity
-					      amt
-					      report-commodity
-					      exchange-fn)
-					     )
+					 ((if (and (equal?
+                                                    multicommodity-mode 'table)
+                                                   (equal?
+                                                    row-type 'account-row)
+                                                   )
+                                              gnc:commodity-table
+                                              gnc:sum-collector-commodity
+                                              )
+                                          amt
+                                          report-commodity
+                                          exchange-fn
+                                          )  ;; factored from below
+; 					 (if (and (equal?
+; 						   multicommodity-mode 'table)
+; 						  (equal?
+; 						   row-type 'account-row)
+; 						  )
+; 					     (gnc:commodity-table
+; 					      amt
+; 					      report-commodity
+; 					      exchange-fn)
+; 					     (gnc:sum-collector-commodity
+; 					      amt
+; 					      report-commodity
+; 					      exchange-fn)
+; 					     )
+
 					 )
-				     )
-				   )
+				     ) ;; end of let*
+				   ) ;; end of if
 			       ))
 		  (indented-depth (get-val env 'indented-depth))
 		  (account-colspan (get-val env 'account-colspan))
 		  )
+
+             ;; for each row do:
+
 	     (gnc:html-table-add-labeled-amount-line!
 	      html-table
-	      (+ account-cols logical-cols)
-	      #f rule-mode
-	      label indented-depth account-colspan #f ;"label-cell"
+	      (+ account-cols logical-cols) ;; table-width
+	      #f                            ;; row-markup
+              rule-mode
+	      label
+              indented-depth
+              account-colspan               ;; label-colspan
+              #f                            ;; label-markup
 	      amount
 	      (+ account-cols (- 0 1)
 		 (- logical-cols display-depth)
 		 ;; account for 'immediate-bal parents displaying children
 		 ;; NOTE: before you go mucking with this, BE ABSOLUTELY
-		 ;; SURE you know what youre doing... i spent A LOT of
+		 ;; SURE you know what you're doing... i spent A LOT of
 		 ;; time trying to make sure this is right. i know, in
 		 ;; some reports, the output might look incorrect. but,
 		 ;; if you think long and hard about it, i think you'll
@@ -1144,14 +1259,18 @@
 			  1 0)
 		    )
 		 (if (equal? subtotal-mode 'canonically-tabbed) 1 0)
-		 )
-	      1 "number-cell")
-	     (set! rownum (+ rownum 1))
+		 )                          ;; amount-depth
+	      1                             ;; amount-colspan
+              "number-cell"                 ;; amount-markup
+              )
+
+	     (set! rownum (+ rownum 1)) ;; increment rownum
 	     )
-	   )
+	   ) ;; end of while
     html-table
     )
   )
+
 
 (define (gnc:second-html-build-acct-table
          start-date end-date
