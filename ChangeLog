@@ -1,5 +1,9 @@
 2005-10-14  David Hampton  <hampton@employees.org>
 
+	* configure.in: Check for libgtkhtml 3.8.  Life would be so much
+	easier if the gtkhtml developers would fix stop renaming their
+	pkg-config script with every release.
+
 	* src/gnome-utils/gnc-tree-model-account-types.[ch]: File rewrite
 	from Chris Shoemaker.  Adds an API for accessing a static shared
 	program-wide account-type tree model for simple tree usage.  Adds
