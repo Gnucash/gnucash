@@ -823,7 +823,7 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
   ENTER(" ");
 
   if (!group || !table) {
-    LEAVE("Oops")
+    LEAVE("Oops");
     return;
   }
 

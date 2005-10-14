@@ -122,7 +122,7 @@ pgendEventsPending (QofBackend *bend)
       } 
       else
       {
-         PERR ("unexpected notify %s", note->relname)
+         PERR ("unexpected notify %s", note->relname);
       }
 
       /* get the next one */

@@ -1,5 +1,19 @@
 2005-10-14  David Hampton  <hampton@employees.org>
 
+	* src/backend/postgres/PostgresBackend.c:
+	* src/backend/postgres/checkpoint.c:
+	* src/backend/postgres/events.c:
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	* src/business/business-core/file/gnc-tax-table-xml-v2.c:
+	* src/engine/Scrub.c:
+	* src/engine/gnc-hooks.c:
+	* src/import-export/import-backend.c:Patch from Chris Shoemaker to
+	add the missing semicolon to the end of some trace invocations to
+	make them look like normal C code.
+
+	* src/engine/gnc-trace.h: Patch from Chris Shoemaker to swallow
+	the semicolon on the end of the tracing macros.
+
 	* GNOME2_STATUS:
 	* HACKING:
 	* src/app-utils/config-var.scm:

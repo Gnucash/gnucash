@@ -471,7 +471,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
       PINFO("%s balance to %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, 
         xaccAccountGetDescription (acc), buf,
         b, deno, cl_b, deno, rec_b, deno);
-      })
+     });
 
    /* add up loose entries since the checkpoint */
    pgendAccountGetPartialBalance (be, &chk);
@@ -493,7 +493,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
       LEAVE("be=%p %s %s baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " clr=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT " rcn=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, be, 
         xaccAccountGetDescription (acc), buf,
         b, deno, cl_b, deno, rec_b, deno);
-      })
+     });
 }
 
 /* ============================================================= */

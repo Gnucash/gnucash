@@ -2533,7 +2533,7 @@ pgendNew (void)
    be = g_new0 (PGBackend, 1);
    pgendInit (be);
 
-   LEAVE(" ")
+   LEAVE(" ");
    return (QofBackend *) be;
 }
 

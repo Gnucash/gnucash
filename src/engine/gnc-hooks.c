@@ -56,7 +56,7 @@ gnc_hook_create (const gchar *name, gint num_args, const gchar *desc)
   g_return_val_if_fail(num_args <= 1, NULL);
   g_return_val_if_fail(desc != NULL, NULL);
 
-  ENTER("name %s", name)
+  ENTER("name %s", name);
   if (gnc_hooks_list == NULL) {
     gnc_hooks_list = g_hash_table_new(g_str_hash, g_str_equal);
 

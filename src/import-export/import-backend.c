@@ -898,7 +898,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	  if(gnc_import_MatchInfo_get_split 
 	     (gnc_import_TransInfo_get_selected_match (trans_info)) ==NULL)
 	    {
-	      PERR("The split I am trying to reconcile is NULL, shouldn't happen!")
+                PERR("The split I am trying to reconcile is NULL, shouldn't happen!");
 	    }
 	  else
 	    {
@@ -939,7 +939,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	    }
 	  break;
 	case GNCImport_EDIT:
-	    PERR("EDIT action is UNSUPPORTED!")
+	    PERR("EDIT action is UNSUPPORTED!");
 	  break;
 	default:
 	  DEBUG("Invalid GNCImportAction for this imported transaction.");

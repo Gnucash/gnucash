@@ -657,7 +657,7 @@ billterm_reset_refcount (gpointer key, gpointer value, gpointer notused)
   if (count != gncBillTermGetRefcount(term) && !gncBillTermGetInvisible(term)) {
     PWARN("Fixing refcount on billterm %s (%" G_GINT64_FORMAT " -> %d)\n",
 	  guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))),
-	  gncBillTermGetRefcount(term), count)
+	  gncBillTermGetRefcount(term), count);
       gncBillTermSetRefcount(term, count);
   }
 }
