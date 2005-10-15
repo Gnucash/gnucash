@@ -28,12 +28,13 @@ cairo [optional]
 libart-2
 gconf-2
 libglade-2
-
 guile
 gwrap
+libofx
+aqbanking
 
-Impliciations, 2005-10-15 
--------------------------
+Status, 2005-10-15
+------------------
 
 The major distributions, as defined by http://distrowatch.com/dwres.php?resource=major, are:
 
@@ -48,17 +49,17 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
   - *9.3  = 2005-04-15
 - Fedora Core
   - *FC4 = 2005-06-13
-    - glib-2.6.6
-    - pango-1.8.1
-    - libgnomeui-2.10.0
-    - libgnomeprint22-2.10.3
-    - libart_lgpl-2.3.17
-    - libxml2-2.6.20
-    - GConf2-2.10.0
-    - libglade2-2.5.1
-    - libgsf-1.11.1
-    - guile-1.6.7
     - g-wrap-1.3.4
+    - gconf2-2.10.0
+    - glib-2.6.6
+    - guile-1.6.7
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint22-2.10.3
+    - libgnomeui-2.10.0
+    - libgsf-1.11.1
+    - libxml2-2.6.20
+    - pango-1.8.1
   -  FC3 = 2004-11-08
 - Debian GNU/Linux
   - *3.1 sarge = 2005-06-06
@@ -70,18 +71,38 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
   - *3.3.1 = 2005-05-12
 - Gentoo
   -  2005.1 = 2005-08-08
-  - *2005.0 = 2005-03-28
+    [from http://distro.ibiblio.org/pub/linux/distributions/gentoo/releases/snapshots/2005.1/portage-20050709.tar.bz2]
+    - aqbanking-1.0.8
+    - cairo-0.4.0
+    - g-wrap-1.3.4
+    - gconf-2.10.0
+    - glib-2.6.5
+    - gtk+-2.6.8
+    - guile-1.6.7
+    - libart_lgpl-2.3.17
+    - libglade-2.5.1
+    - libgnomeprint-2.10.3
+    - libgnomeui-2.10.0
+    - libgsf-1.12.1
+    - libofx-0.7.0
+    - libxml2-2.6.19
+    - pango-1.8.1-r1
+  -  2005.0 = 2005-03-28
     [from http://gentoo.osuosl.org/releases/x86/2005.0/packagecd/CONTENTS
      and http://gentoo.osuosl.org/releases/snapshots/2005.0/portage-20050303.tar.bz2]
-    - glib-2.6.2
-    - pango-1.8.0
-    - libgnomeui-2.8.1-r1
-    - libgnomeprint-2.8.1
-    - libart_gpl-2.3.16
-    - libxml2-2.6.16
+    - aqbanking-1.0.4_beta, -0.9.9
+    - cairo-0.3.0-r1
+    - g-wrap-1.3.4-r1
     - gconf-2.8.1-r1
+    - glib-2.6.2
+    - guile-1.6.7
+    - libart_gpl-2.3.16
     - libglade-2.4.0
+    - libgnomeprint-2.8.1
+    - libgnomeui-2.8.1-r1
     - libgsf-1.10.0
+    - libxml2-2.6.16
+    - pango-1.8.0
 - Slackware
   -  10.2 = 2005-09-14
   - *10.1 = 2005-02-07
@@ -95,3 +116,12 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
   -  4.11 = 2005-01-25 - http://www.freebsd.org/releases/4.11R/announce.html
 - Fink/OSX
   - ??
+- RHEL
+  - *RHEL 4 = 2005-02-15
+  -  RHEL 3 = 2003-10-22
+- CentOS
+  -  4.2 = 2005-10-12
+  - *4.1 = 2005-06-12
+  -  3.6 = 2005-10-12
+  -  3.5 = 2005-06-10
+  -  2.0 = 2004-05-24
