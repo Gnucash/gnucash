@@ -1,0 +1,86 @@
+GnuCash Dependency Policy
+-------------------------
+
+GnuCash desires to only depend on library versions and packages that are
+practically available.  Specifically, we choose to depend only on versions
+that have been in the major distributions for 6 months. This is motivated in
+part by the 1.6 release, which required a large set of relatively-recent
+dependencies.  Specifically, as most user's (distributions) did not have the
+required versions packaged, it was exceedingly painful for end users to
+upgrade to the anticipated release, leading to a reputation that gnucash
+still has.
+
+This document serves to keep track of the major distributions, the date of
+their major release[s], and the relevant library versions as part of that
+release (or an official package-upgrade path)
+
+
+Libraries/Deps
+--------------
+glib[+gobject,module]-2
+gtk+-2
+libgnomeui-2
+libgnomeprint-2.2
+libxml-2
+libgsf-1
+pango
+cairo [optional]
+libart-2
+gconf-2
+libglade-2
+
+guile
+gwrap
+
+Impliciations, 2005-10-15 
+-------------------------
+
+The major distributions, as defined by http://distrowatch.com/dwres.php?resource=major, are:
+
+- Ubuntu - http://www.ubuntu.com/
+  -  5.10 = 2005-10-13 - http://www.ubuntu.com/newsitems/release510
+  - *5.04 = 2005-04-08 - http://www.ubuntu.com/504Released
+- Mandriva
+  -  2006 = 2005-10-06
+  - *2005 = 2005-04-14
+- SUSE
+  -  10.0 = 2005-10-06
+  - *9.3  = 2005-04-15
+- Fedora Core
+  - *FC4 = 2005-06-13
+  -  FC3 = 2004-11-08
+- Debian GNU/Linux
+  - *3.1 sarge = 2005-06-06
+- Knoppix
+  -  4.0.2 = 2005-09-24
+  - *3.9   = 2005-06-01
+  -  3.8.2 = 2005-05-12
+- MEPIS
+  - *3.3.1 = 2005-05-12
+- Gentoo
+  -  2005.1 = 2005-08-08
+  - *2005.0 = 2005-03-28
+    [from http://gentoo.osuosl.org/releases/x86/2005.0/packagecd/CONTENTS
+     and http://gentoo.osuosl.org/releases/snapshots/2005.0/portage-20050303.tar.bz2]
+    - glib-2.6.2
+    - pango-1.8.0
+    - libgnomeui-2.8.1-r1
+    - libgnomeprint-2.8.1
+    - libart_gpl-2.3.16
+    - libxml2-2.6.16
+    - gconf-2.8.1-r1
+    - libglade-2.4.0
+    - libgsf-1.10.0
+- Slackware
+  -  10.2 = 2005-09-14
+  - *10.1 = 2005-02-07
+  -  10.0 = 2004-06-21
+- Xandros Desktop
+  - *3.0 = 2004-12
+  -  2.5 = 2004-07
+  - ftp://ftp2.xandros.com/src/dists/
+- FreeBSD
+  - *5.4  = 2005-05-09 - http://www.freebsd.org/releases/5.4R/announce.html
+  -  4.11 = 2005-01-25 - http://www.freebsd.org/releases/4.11R/announce.html
+- Fink/OSX
+  - ??
