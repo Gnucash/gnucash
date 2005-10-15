@@ -17,21 +17,21 @@ release (or an official package-upgrade path)
 
 Libraries/Deps
 --------------
+aqbanking
+cairo
+gconf-2
 glib[+gobject,module]-2
 gtk+-2
-libgnomeui-2
-libgnomeprint-2.2
-libxml-2
-libgsf-1
-pango
-cairo [optional]
-libart-2
-gconf-2
-libglade-2
 guile
 gwrap
+libart-2
+libglade-2
+libgnomeprint-2.2
+libgnomeui-2
+libgsf-1
 libofx
-aqbanking
+libxml-2
+pango
 
 Status, 2005-10-15
 ------------------
