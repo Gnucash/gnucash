@@ -48,6 +48,17 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
   - *9.3  = 2005-04-15
 - Fedora Core
   - *FC4 = 2005-06-13
+    - glib-2.6.6
+    - pango-1.8.1
+    - libgnomeui-2.10.0
+    - libgnomeprint22-2.10.3
+    - libart_lgpl-2.3.17
+    - libxml2-2.6.20
+    - GConf2-2.10.0
+    - libglade2-2.5.1
+    - libgsf-1.11.1
+    - guile-1.6.7
+    - g-wrap-1.3.4
   -  FC3 = 2004-11-08
 - Debian GNU/Linux
   - *3.1 sarge = 2005-06-06
