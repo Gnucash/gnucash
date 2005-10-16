@@ -1,5 +1,7 @@
 2005-10-16  David Hampton  <hampton@employees.org>
 
+	* configure.in: Remove debug message.
+
 	* src/report/report-system/html-style-sheet.scm: Need to truncate
 	the file on write, now that stylesheets have their own file.
 

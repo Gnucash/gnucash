@@ -147,7 +147,6 @@ then
 else
   AC_MSG_RESULT(no)
 fi
-AC_MSG_WARN(test "x$HAVE_GLIB26" = "xyes" )
 AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
 
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
