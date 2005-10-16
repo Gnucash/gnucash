@@ -221,6 +221,9 @@ void gnc_engine_init(int argc, char ** argv);
  * for use without Guile. */
 void gnc_engine_shutdown (void);
 
+/** check the engine is fully initialized */
+gboolean gnc_engine_is_initialized(void);
+
 /** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);

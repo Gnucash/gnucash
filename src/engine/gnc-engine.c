@@ -27,7 +27,7 @@
 
 #include "gnc-engine.h"
 #include "qof.h"
-
+#include "cashobjects.h"
 #include "AccountP.h"
 #include "GroupP.h"
 #include "SX-book-p.h"
@@ -78,7 +78,6 @@ gnc_engine_init(int argc, char ** argv)
   GList                  * cur;
 
   if (1 == engine_is_initialized) return;
-  engine_is_initialized = 1;
 
   /* initialize logging to our file. */
   qof_log_init_filename("/tmp/gnucash.trace");
@@ -88,30 +87,18 @@ gnc_engine_init(int argc, char ** argv)
   gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
   gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
   qof_log_set_default(GNC_LOG_WARNING);
-  
-  guid_init ();
-  qof_object_initialize ();
-  qof_query_init ();
-  qof_book_register ();
+  /* initialize QOF */
+  qof_init();
 
   /* Now register our core types */
-  xaccSplitRegister ();
-  xaccTransRegister ();
-  xaccAccountRegister ();
-  xaccGroupRegister ();
-  gnc_sxtt_register ();
-  FreqSpecRegister ();
-  SXRegister ();
-  gnc_budget_register();
-  gnc_pricedb_register ();
-  gnc_commodity_table_register();
-  gnc_lot_register ();
+  cashobjects_register();
 
   g_return_if_fail((qof_load_backend_library 
 		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")));
   g_return_if_fail((qof_load_backend_library
 		(QOF_LIB_DIR, GNC_LIB_NAME, GNC_LIB_INIT)));
 
+  engine_is_initialized = 1;
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)
   {
@@ -135,6 +122,7 @@ gnc_engine_shutdown (void)
   guid_shutdown();
   gnc_engine_string_cache_destroy ();
   qof_log_shutdown();
+  engine_is_initialized = 0;
 }
 
 /********************************************************************
@@ -145,4 +133,13 @@ gnc_engine_shutdown (void)
 void
 gnc_engine_add_init_hook(gnc_engine_init_hook_t h) {
   engine_init_hooks = g_list_append(engine_init_hooks, (gpointer)h);
+}
+
+gboolean
+gnc_engine_is_initialized (void)
+{
+/*	if (engine_is_initialized == 1) return TRUE;
+	return FALSE;
+*/	
+	return (engine_is_initialized == 1) ? TRUE : FALSE;
 }

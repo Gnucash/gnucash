@@ -28,7 +28,7 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-
+#include "gnc-engine.h"
 #include "io-gncxml-v2.h"
 
 #include "gnc-address-xml-v2.h"
@@ -76,14 +76,10 @@ libgncmod_business_backend_file_LTX_gnc_module_description(void)
 int
 libgncmod_business_backend_file_LTX_gnc_module_init(int refcount) 
 {  
+  if(!gnc_engine_is_initialized()) { return FALSE; }
+
   bus_core = gnc_module_load("gnucash/business-core", 0);
   if(!bus_core) return FALSE;
-
-  file = gnc_module_load("gnucash/backend/file", 0);
-  if(!file) {
-    gnc_module_unload (bus_core);
-    return FALSE;
-  }
 
   if (refcount == 0) {
     /* Initialize our pointers into the backend subsystem */
@@ -110,9 +106,6 @@ libgncmod_business_backend_file_LTX_gnc_module_end(int refcount)
 
   if (bus_core)
     unload = gnc_module_unload(bus_core);
-
-  if (file)
-    unload = gnc_module_unload(file);
 
   if (refcount == 0) {
     bus_core = NULL;

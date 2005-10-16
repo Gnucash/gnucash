@@ -92,7 +92,8 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
   -  FC3 = 2004-11-08
 - Debian GNU/Linux
-  - *3.1 sarge = 2005-06-06
+  - unstable
+    (already includes goffice and will include libqof1)
 - Knoppix
   -  4.0.2 = 2005-09-24
   - *3.9   = 2005-06-01

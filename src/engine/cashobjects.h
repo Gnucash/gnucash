@@ -27,17 +27,8 @@
 #ifndef _CASHOBJECTS_H
 #define _CASHOBJECTS_H
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #include <glib.h>
 
 gboolean cashobjects_register(void);
-	
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _CASHOBJECTS_H */

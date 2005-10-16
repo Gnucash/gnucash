@@ -24,16 +24,6 @@
  
 #include "cashobjects.h"
 #include "gnc-engine.h"
-#include "gncAddressP.h"
-#include "gncBillTermP.h"
-#include "gncCustomerP.h"
-#include "gncEmployeeP.h"
-#include "gncEntryP.h"
-#include "gncInvoiceP.h"
-#include "gncJobP.h"
-#include "gncVendorP.h"
-#include "gncTaxTableP.h"
-#include "gncOrderP.h"
 #include "AccountP.h"
 #include "GroupP.h"
 #include "TransactionP.h"
@@ -41,22 +31,12 @@
 #include "SchedXaction.h"
 #include "SX-book-p.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-lot-p.h"
+#include "gnc-budget-book-p.h"
 
 gboolean
 cashobjects_register(void)
 {
-#ifndef GNUCASH_MAJOR_VERSION
-	g_return_val_if_fail(gncInvoiceRegister(), FALSE);
-	g_return_val_if_fail ( gncJobRegister (),  FALSE);
-	g_return_val_if_fail(gncBillTermRegister(), FALSE);
-	g_return_val_if_fail(gncCustomerRegister(), FALSE);
-	g_return_val_if_fail(gncAddressRegister(), FALSE);
-	g_return_val_if_fail(gncEmployeeRegister(), FALSE);
-	g_return_val_if_fail ( gncEntryRegister (), FALSE);
-	g_return_val_if_fail (gncVendorRegister (), FALSE);
-	g_return_val_if_fail(gncTaxTableRegister(), FALSE);
-	g_return_val_if_fail ( gncOrderRegister (), FALSE);
-#endif
 	g_return_val_if_fail(gnc_commodity_table_register(), FALSE);
 	g_return_val_if_fail(xaccAccountRegister(), FALSE);
 	g_return_val_if_fail ( xaccTransRegister(), FALSE);
@@ -66,5 +46,8 @@ cashobjects_register(void)
 	g_return_val_if_fail ( SXRegister (),       FALSE);
 	g_return_val_if_fail ( gnc_sxtt_register(), FALSE);
 	g_return_val_if_fail(gnc_pricedb_register(),FALSE);
+	g_return_val_if_fail (gnc_budget_register(),FALSE);
+	g_return_val_if_fail ( gnc_lot_register (), FALSE); 
 	return TRUE;
 }
+
