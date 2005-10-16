@@ -106,7 +106,7 @@ struct _matchinfo
 {
   Transaction * trans;
   Split * split;
-  //GNC_match_probability probability;
+  /*GNC_match_probability probability;*/
   gint probability;
 };
 
@@ -242,8 +242,8 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 {
   if (info) {
     g_list_free (info->match_list);
-    /*If the transaction is still open, it must be destroyed*/
-    if(xaccTransIsOpen(info->trans)==TRUE)
+    /*If the transaction exists and is still open, it must be destroyed*/
+    if(info->trans && xaccTransIsOpen(info->trans))
       {
 	xaccTransDestroy(info->trans);
 	xaccTransCommitEdit(info->trans);
@@ -936,6 +936,8 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      xaccTransDestroy(trans_info->trans);
 	      /*DEBUG("CommitEdit trans")*/
 	      xaccTransCommitEdit(trans_info->trans);
+	      /* Very important: Make sure the freed transaction is not freed again! */
+	      trans_info->trans = NULL;
 	    }
 	  break;
 	case GNCImport_EDIT:
@@ -983,7 +985,7 @@ static gboolean check_trans_online_id(Transaction *trans1, void *user_data)
     }
   else
     {
-      //printf("test_trans_online_id(): Duplicate found\n");
+      /*printf("test_trans_online_id(): Duplicate found\n");*/
       return FALSE;
     }
 }

@@ -1,3 +1,9 @@
+2005-10-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Woohoo! Tracked down and
+	fixed a nasty double-free error when the importer reconciled
+	existing transactions.
+
 2005-10-07  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/iso-4217-currencies.scm: Fix spelling of TJS
