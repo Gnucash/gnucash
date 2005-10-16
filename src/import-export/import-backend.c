@@ -130,7 +130,7 @@ gboolean
 gnc_import_TransInfo_is_balanced (const GNCImportTransInfo *info)
 {
  g_assert (info);
- if(gnc_numeric_equal(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info)),gnc_numeric_zero()))
+ if(gnc_numeric_zero_p(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info))))
    {
      return TRUE;
    }
@@ -282,6 +282,7 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
   gchar * red_color_str = g_strdup_printf("r c red");
   gchar * black_color_str = g_strdup_printf("b c black");
   gchar * xpm[2+num_colors+height];
+  gint add_threshold, clear_threshold;
 
   g_assert(settings);
   g_assert(widget);
@@ -302,7 +303,9 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
   xpm[3]=yellow_color_str;
   xpm[4]=red_color_str; 
   xpm[5]=black_color_str;
-  
+  add_threshold = gnc_import_Settings_get_add_threshold(settings);
+  clear_threshold = gnc_import_Settings_get_clear_threshold(settings);
+
   for(i=0;i<height;i++)
     {
       xpm[num_colors+1+i]= g_new0(char,(width_each_bar*score)+width_first_bar+1);
@@ -325,11 +328,11 @@ GdkPixmap* gen_probability_pixmap(gint score_original, GNCImportSettings *settin
 		{
 		  strcat(xpm[num_colors+1+i],black_first_bar);
 		}
-	      else if (j<=gnc_import_Settings_get_add_threshold(settings))
+	      else if (j <= add_threshold)
 		{
 		  strcat(xpm[num_colors+1+i],red_bar);
 		}
-	      else if (j>=gnc_import_Settings_get_clear_threshold(settings))
+	      else if (j >= clear_threshold)
 		{
 		  strcat(xpm[num_colors+1+i],green_bar);
 		}
@@ -586,6 +589,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       double downloaded_split_amount, match_split_amount;
       time_t match_time, download_time;
       int datediff_day;
+      Transaction *new_trans = gnc_import_TransInfo_get_trans (trans_info);
     
       /* Matching heuristics */
     
@@ -596,9 +600,11 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount = gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-      if(gnc_numeric_equal(xaccSplitGetAmount
-			   (gnc_import_TransInfo_get_fsplit (trans_info)),
-			   xaccSplitGetAmount(split)))
+      if(downloaded_split_amount == match_split_amount)
+	/*if (gnc_numeric_equal(xaccSplitGetAmount
+	  (gnc_import_TransInfo_get_fsplit (trans_info)),
+	  xaccSplitGetAmount(split))) 
+	  -- gnc_numeric_equal is an expensive function call */
 	{
 	  prob = prob+3;
 	  /*DEBUG("heuristics:  probability + 3 (amount)");*/
@@ -623,8 +629,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
       
       /* Date heuristics */
       match_time = xaccTransGetDate (xaccSplitGetParent (split));
-      download_time = 
-	xaccTransGetDate (gnc_import_TransInfo_get_trans (trans_info));
+      download_time = xaccTransGetDate (new_trans);
       datediff_day = abs(match_time - download_time)/86400;
       /* Sorry, there are not really functions around at all that
 	 provide for less hacky calculation of days of date
@@ -655,10 +660,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
       
       /* Check number heuristics */  
-      if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+      if(strlen(xaccTransGetNum(new_trans))!=0)
 	{     
-	  if((strcmp(xaccTransGetNum
-		     (gnc_import_TransInfo_get_trans (trans_info)),
+	  if((strcmp(xaccTransGetNum (new_trans),
 		     xaccTransGetNum(xaccSplitGetParent(split)))
 	      ==0))
 	    {	
@@ -666,7 +670,7 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	      prob = prob+4;
 	      /*DEBUG("heuristics:  probability + 5 (Check number)");*/
 	    }
-	  else if(strlen(xaccTransGetNum(gnc_import_TransInfo_get_trans (trans_info))) > 0 &&
+	  else if(strlen(xaccTransGetNum(new_trans)) > 0 &&
 		  strlen(xaccTransGetNum(xaccSplitGetParent(split))) > 0)
 	    {
 	      /* If both number are not empty yet do not match, add a little extre penality */
@@ -700,10 +704,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	}
 
       /* Description heuristics */  
-      if(strlen(xaccTransGetDescription(gnc_import_TransInfo_get_trans (trans_info)))!=0)
+      if(strlen(xaccTransGetDescription(new_trans))!=0)
 	{
-	  if((strcmp(xaccTransGetDescription
-		     (gnc_import_TransInfo_get_trans (trans_info)),
+	  if((strcmp(xaccTransGetDescription (new_trans),
 		     xaccTransGetDescription(xaccSplitGetParent(split)))
 	      ==0))
 	    {	
@@ -711,11 +714,9 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	      prob = prob+2;
 	      /*DEBUG("heuristics:  probability + 2 (description)");*/
 	    }
-	  else if((strncmp(xaccTransGetDescription
-			   (gnc_import_TransInfo_get_trans (trans_info)),
-			   xaccTransGetDescription(xaccSplitGetParent(split)),
-			   strlen(xaccTransGetDescription
-				  (gnc_import_TransInfo_get_trans (trans_info)))/2)
+	  else if((strncmp(xaccTransGetDescription (new_trans),
+			   xaccTransGetDescription (xaccSplitGetParent(split)),
+			   strlen(xaccTransGetDescription (new_trans))/2)
 		   ==0))
 	    {
 	      /* Very primitive fuzzy match worth +1.  This matches the
