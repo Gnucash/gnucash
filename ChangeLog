@@ -1,3 +1,23 @@
+2005-10-16  Neil Williams <linux@codehelp.co.uk>
+
+	* src/bin/generate-gnc-script: Reversing Didier Vidal's
+	1.8 patch to require and use UTF-8 if not found in the X locale.
+
+2005-10-16  Neil Williams <linux@codehelp.co.uk>
+
+	* README.dependencies: Fix Debian listing - unstable.
+	* src/business/business-core/file/gncmod-business-backend-file.c:
+	Remove call to non-existent backend-file gnc-module.
+	* src/engine/cashobjects.c: New objects.
+	* src/engine/cashobjects.h: Unused code removed.
+	* src/engine/gnc-engine.c: Initialising the backend GModules
+	as part of the engine. Allow for checking if the engine is 
+	initialised OK. (retain en_us spelling).
+	* src/engine/gnc-engine.h: Check engine initialised.
+	* src/engine/gnc-lot-p.h: Make register func return boolean
+	* src/engine/gnc-lot.c: Provide a fuller object description -
+	still commented out for now.
+
 2005-10-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/backend/file/io-gncxml-v2.c: Fix accessing a gnc_commodity
