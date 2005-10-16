@@ -39,10 +39,6 @@ doc: doxygen.cfg
 #	$(MAKE) -C latex/ 
 #	mv latex/refman.pdf ./refman.pdf
 
-dist-hook: doc
-	echo "dist-hook: " && pwd
-	cp -rp html ${distdir}
-
 distclean-local:
 	echo "distclean-local: " && pwd
 	rm -f doxygen.cfg doxygen.log
