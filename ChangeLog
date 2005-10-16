@@ -1,3 +1,8 @@
+2005-10-16  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/pl.po: Added polish glossary by A. Tokarski
+	<szczur@malinablue.punkt.pl>
+
 2005-10-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/Transaction.c: Remove misleading (char*) casts by
