@@ -1,5 +1,8 @@
 2005-10-16  Christian Stimming  <stimming@tuhh.de>
 
+	* po/*.po: Make a po-update. This also speeds up compilation time
+	significantly.
+
 	* src/import-export/import-backend.c: Woohoo! Tracked down and
 	fixed a nasty double-free error when the importer reconciled
 	existing transactions.
