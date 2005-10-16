@@ -109,10 +109,10 @@ clear_up_account_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         setter(act, gcom);
         if (old_scu != 0 && scu_setter)
           scu_setter(act, old_scu);
+        gnc_commodity_destroy(com);
     }
 }
 
@@ -145,10 +145,10 @@ clear_up_transaction_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         xaccTransBeginEdit(trans);
         setter(trans, gcom);
         xaccTransCommitEdit(trans);
+        gnc_commodity_destroy(com);
     }
 }
 

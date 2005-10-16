@@ -120,8 +120,8 @@ clear_up_account_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         setter(act, gcom);
+        gnc_commodity_destroy(com);
     }
 }
 

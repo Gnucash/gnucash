@@ -1,5 +1,9 @@
 2005-10-16  Christian Stimming  <stimming@tuhh.de>
 
+	* src/backend/file/io-gncxml-v2.c: Fix accessing a gnc_commodity
+	after it has been destroyed - xaccTransSetCurrency requires the
+	original currency still to exist.
+
 	* src/import-export/import-backend.c: Woohoo! Tracked down and
 	fixed a nasty double-free error when the importer reconciled
 	existing transactions.
