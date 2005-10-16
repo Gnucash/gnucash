@@ -92,7 +92,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
   -  FC3 = 2004-11-08
 - Debian GNU/Linux
-  - unstable
+  - unstable4
     (already includes goffice and will include libqof1)
 - Knoppix
   -  4.0.2 = 2005-09-24
@@ -149,6 +149,22 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
   - ??
 - RHEL
   - *RHEL 4 = 2005-02-15
+    [from http://ftp.redhat.com/pub/redhat/linux/enterprise/4/en/]
+    - aqbanking no
+    - cairo no
+    - gconf2-2.8.1-1
+    - glib[+gobject,module]-2-2.4.7-1
+    - gtk+-2.4.13-12
+    - guile-1.6.4-14
+    - gwrap no
+    - libart-2.3.16-3
+    - libglade-2-4.0-5
+    - libgnomeprint-2.2-2.8.0-3
+    - libgnomeui-2.8.0-1
+    - libgsf-1.10.1-1
+    - libofx no
+    - libxml-2-2.6.16-6
+    - pango-1.6.0-7
   -  RHEL 3 = 2003-10-22
 - CentOS
   -  4.2 = 2005-10-12
