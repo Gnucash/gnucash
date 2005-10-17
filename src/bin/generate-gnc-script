@@ -15,10 +15,6 @@ export PATH
 GUILE_WARN_DEPRECATED="no"
 export GUILE_WARN_DEPRECATED
 
-(echo \$LANG | grep -v UTF-8 > /dev/null ) && \
- LANG=\`echo \$LANG | sed s/$LANG/$LANG\.UTF-8/\` && \
-echo UTF-8 support is required. Setting LANG to \$LANG
-
 exec "${TARGET_SCRIPT}" "\$@"
 EOF
 

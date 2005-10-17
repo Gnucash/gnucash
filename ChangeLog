@@ -1,3 +1,10 @@
+2005-10-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/gnc-generate-script: revert Neils utf-8 change.
+	  Gnucash should accept and use non-utf8 locales, and
+	  instead use g_locale_to_utf8() to convert locale-specific
+	  strings to utf8 (e.g. currency symbol).
+
 2005-10-16  David Hampton  <hampton@employees.org>
 
 	* configure.in: Remove debug message.
