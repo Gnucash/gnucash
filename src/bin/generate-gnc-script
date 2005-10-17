@@ -15,6 +15,10 @@ export PATH
 GUILE_WARN_DEPRECATED="no"
 export GUILE_WARN_DEPRECATED
 
+## Uncomment the following line if gnucash 
+## shows weird characters in utf8-locales:
+#(echo \$LANG | grep  UTF-8 > /dev/null ) &&  LANG=\`echo \$LANG | sed s/\.UTF-8//\`
+
 exec "${TARGET_SCRIPT}" "\$@"
 EOF
 

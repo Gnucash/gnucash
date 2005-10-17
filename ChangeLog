@@ -1,3 +1,10 @@
+2005-10-17  Christian Stimming  <stimming@tuhh.de>
+
+	* src/bin/generate-gnc-script: Add a commented-out workaround for
+	UTF-8 problems, as proposed by Didier Vidal. To use this
+	workaround, uncomment the designated line in this file before
+	build.
+
 2005-10-16  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/pl.po: Added polish glossary by A. Tokarski
