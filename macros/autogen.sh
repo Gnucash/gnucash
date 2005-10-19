@@ -112,7 +112,7 @@ do
     echo processing $dr
     macrodirs=`sed -n -e 's,AM_ACLOCAL_INCLUDE(\(.*\)),\1,gp' < $coin`
     ( cd $dr
-      macrosdir=`find . -name macros -print`
+      macrodir=`find . -name macros -print`
       for i in $macrodirs; do
 	if test -f $i/gnome-gettext.m4; then
 	  DELETEFILES="$DELETEFILES $i/gnome-gettext.m4"
