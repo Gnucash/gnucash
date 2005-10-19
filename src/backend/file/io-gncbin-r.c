@@ -96,7 +96,6 @@
 #include "AccountP.h"
 #include "Backend.h"
 #include "date.h"
-#include "DateUtils.h"
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"
@@ -300,6 +299,16 @@ gnc_get_binfile_io_error(void)
 /*******************************************************/
 /* some endian stuff */
 
+/* if we are running on a little-endian system, we need to
+ * do some endian flipping, because the xacc/gnucash native data
+ * format is big-endian. In particular, Intel x86 is little-endian. */
+#if WORDS_BIGENDIAN
+  #define XACC_FLIP_DOUBLE(x)
+  #define XACC_FLIP_LONG_LONG(x) 
+  #define XACC_FLIP_INT(x) 
+  #define XACC_FLIP_SHORT(x) 
+#else
+
 /* flip endianness of int, short, etc */
 static int
 xaccFlipInt (int val) 
@@ -346,15 +355,6 @@ xaccFlipLongLong (gint64 val)
   return u.d;
 }
 
-/* if we are running on a little-endian system, we need to
- * do some endian flipping, because the xacc/gnucash native data
- * format is big-endian. In particular, Intel x86 is little-endian. */
-#if WORDS_BIGENDIAN
-  #define XACC_FLIP_DOUBLE(x)
-  #define XACC_FLIP_LONG_LONG(x) 
-  #define XACC_FLIP_INT(x) 
-  #define XACC_FLIP_SHORT(x) 
-#else
   #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
   #define XACC_FLIP_LONG_LONG(x) { (x) = xaccFlipLongLong (x); }
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
@@ -827,12 +827,12 @@ locateAccount (int acc_id, GNCBook *book)
 
    /* first, see if we've already created the account */
    acc = (Account *) g_hash_table_lookup(ids_to_finished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* next, see if its an unclaimed account */
    acc = (Account *) g_hash_table_lookup(ids_to_unfinished_accounts,
-                                         (gconstpointer) acc_id);
+                                         GINT_TO_POINTER(acc_id));
    if (acc) return acc;
 
    /* if neither, then it does not yet exist.  Create it.
@@ -840,7 +840,7 @@ locateAccount (int acc_id, GNCBook *book)
    acc = xaccMallocAccount (book);
    xaccAccountBeginEdit(acc);
    g_hash_table_insert(ids_to_unfinished_accounts,
-                       (gpointer) acc_id,
+                       GINT_TO_POINTER(acc_id),
                        (gpointer) acc);
    return acc;
 }

@@ -28,68 +28,16 @@
 ;; This is one single end-date of a report.
 (define (gnc:options-add-report-date!
 	 options pagename optname sort-tag)
-  (gnc:register-option 
-    options  
-    (gnc:make-date-option
-     pagename optname 
-     sort-tag (N_ "Select a date to report on")
-     (lambda () 
-       (cons 'relative 'today))
-     #f 'both 
-     '(
-       today 
-       end-this-month
-       end-prev-month 
-       end-current-quarter 
-       end-prev-quarter
-       end-cal-year 
-       end-prev-year 
-       end-cur-fin-year
-       end-prev-fin-year
-       ))))
-
+  (gnc:options-make-end-date! options pagename optname sort-tag
+			      (N_ "Select a date to report on")))
 
 ;; This is a date-interval for a report.
 (define (gnc:options-add-date-interval!
 	 options pagename name-from name-to sort-tag)
-  (gnc:register-option 
-   options  
-   (gnc:make-date-option
-    pagename name-from 
-    (string-append sort-tag "a")
-    (N_ "Start of reporting period")
-    (lambda () (cons 'relative 'start-cal-year))
-     #f 'both 
-     '(
-       today
-       start-this-month 
-       start-prev-month 
-       start-current-quarter
-       start-prev-quarter
-       start-cal-year 
-       start-prev-year
-       start-cur-fin-year 
-       start-prev-fin-year
-       )))
-  (gnc:register-option 
-   options  
-   (gnc:make-date-option
-    pagename name-to
-    (string-append sort-tag "b")
-    (N_ "End of reporting period")
-    (lambda () (cons 'relative 'today))
-    #f 'both 
-    '(
-      today
-      end-this-month
-      end-prev-month 
-      end-current-quarter 
-      end-prev-quarter
-      end-cal-year 
-      end-prev-year 
-      end-cur-fin-year
-      end-prev-fin-year
-      ))))
+  (gnc:options-make-date-interval! options pagename
+				   name-from (N_ "Start of reporting period")
+				   name-to (N_ "End of reporting period")
+				   sort-tag))
 
 ;; A date interval multichoice option.
 (define (gnc:options-add-interval-choice! 
@@ -101,7 +49,7 @@
     sort-tag (N_ "The amount of time between data points") default
     (list (vector 'DayDelta (N_ "Day") (N_ "Day"))
 	  (vector 'WeekDelta (N_ "Week") (N_ "Week"))
-	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Week"))
+	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Weeks"))
 	  (vector 'MonthDelta (N_ "Month") (N_ "Month"))
 	  (vector 'QuarterDelta (N_ "Quarter") (N_ "Quarter"))
 	  (vector 'HalfYearDelta (N_ "Half Year") (N_ "Half Year"))
@@ -266,12 +214,12 @@
     (N_ "Choose the marker for each data point.")
     default
     (list
-     (vector 'circle "circle" "circle")
-     (vector 'cross "cross" "cross")
-     (vector 'square "square" "square")
-     (vector 'asterisk "asterisk" "asterisk")
-     (vector 'filledcircle "filled circle" "filled circle")
-     (vector 'filledsquare "filled square" "filled square")))))
+     (vector 'circle (N_ "Circle") (N_ "Circle"))
+     (vector 'cross (N_ "Cross") (N_ "Cross"))
+     (vector 'square (N_ "Square") (N_ "Square"))
+     (vector 'asterisk (N_ "Asterisk") (N_ "Asterisk"))
+     (vector 'filledcircle (N_ "Filled circle") (N_ "Circle filled with color"))
+     (vector 'filledsquare (N_ "Filled square") (N_ "Square filled with color"))))))
 
 
 (define (gnc:options-add-sort-method!
@@ -284,7 +232,7 @@
     (N_ "Choose the method for sorting accounts.")
     default
     (list
-     (vector 'acct-code "Account Code" "Alphabetical by account code")
-     (vector 'alphabetical "Alphabetical" "Alphabetical by account name")
-     (vector 'amount "Amount" "By amount, largest to smallest")))))
+     (vector 'acct-code (N_ "Account Code") (N_ "Alphabetical by account code"))
+     (vector 'alphabetical (N_ "Alphabetical") (N_ "Alphabetical by account name"))
+     (vector 'amount (N_ "Amount") (N_ "By amount, largest to smallest"))))))
 

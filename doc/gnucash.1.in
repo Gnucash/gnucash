@@ -47,7 +47,7 @@ Set the search path for documentation files
 Evaluate the guile command
 .IP --load FILE
 Load the given .scm file
-.IP --add-price-quote FILE
+.IP --add-price-quotes FILE
 Add price quotes to the given data file
 .IP --load-user-config
 Load the user configuration

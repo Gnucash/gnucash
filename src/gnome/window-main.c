@@ -69,9 +69,6 @@
 #include "window-report.h"
 #include "messages.h"
 
-static gboolean gnc_show_status_bar = TRUE;
-static gboolean gnc_show_summary_bar = TRUE;
-
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
 static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
@@ -90,18 +87,43 @@ static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
 static GNCMDIChildInfo *
 gnc_main_window_get_mdi_child (void)
 {
+  GNCMDIChildInfo *child_info;
   GNCMDIInfo *main_info;
+  GnomeMDIChild *child;
   GnomeMDI *mdi;
+  GnomeApp *app;
+  GtkWidget *view;
 
   main_info = gnc_mdi_get_current ();
   if (!main_info)
     return(NULL);
 
   mdi = main_info->mdi;
-  if (!mdi || !mdi->active_child)
-    return(NULL);
+  if (!mdi)
+    return NULL;
 
-  return(gtk_object_get_user_data(GTK_OBJECT(mdi->active_child)));
+  child = gnome_mdi_get_active_child(mdi);
+  if (child) {
+    child_info = gtk_object_get_user_data(GTK_OBJECT(child));
+    return(child_info);
+  }
+
+  /* Grrr. There should have been an active child but the MDI code has
+   * some rough edges, to put it politely.  If we hit this case and
+   * the user has more than one child window, this code may or may not
+   * select the right child.  There's absolutely no way to tell from
+   * the available data which view is in front. */
+  app = gnome_mdi_get_active_window(mdi);
+  if (app) {
+    /* Force the MDI to have a valid view. */
+    view = gnome_mdi_get_view_from_window (mdi, app);
+    gnome_mdi_set_active_view (mdi, view);
+
+    child_info = gnc_mdi_child_find_by_app(app);
+    return(child_info);
+  }
+
+  return(NULL);
 }
 
 /********************************************************************
@@ -254,40 +276,11 @@ gnc_main_window_can_restore_cb (const char * filename)
 }
 
 /**
- * gnc_main_window_tweak_menus
- *
- * @mc: A pointer to the GNC MDI child associated with the Main
- * window.
- *
- * This routine tweaks the View window in the main window menubar so
- * that the menu checkboxes correctly show the state of the Toolbar,
- * Summarybar and Statusbar.  There is no way to have the checkboxes
- * start checked.  This will trigger each of the callbacks once, but
- * they are designed to ignore the first 'sync' callback.  This is a
- * suboptimal solution, but I can't find a better one at the moment.
- */
-static void
-gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
-{
-  GtkWidget *widget;
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Toolbar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/_Status Bar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  widget = gnc_mdi_child_find_menu_item(mc, "_View/S_ummary Bar");
-  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-
-  mc->gnc_mdi->menu_tweaking = NULL;
-}
-
-/**
  * gnc_main_window_flip_toolbar_cb
  *
  * @widget: A pointer to the menu item selected. (ignored)
- * @data: The user data for this menu item. (ignored)
+ * @data: The user data for this menu item. This is a pointer to a
+ * GNCMDIInfo data structure. (ignored)
  *
  * This routine flips the state of the toolbar, hiding it if currently
  * visible, and showing it if not.  This routine has to grovel through
@@ -300,17 +293,7 @@ static void
 gnc_main_window_flip_toolbar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  static gboolean in_sync = FALSE;
   gboolean toolbar_visibility = !gnc_mdi_get_toolbar_visibility();
-
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
-    return;
-  }
 
   mc = gnc_main_window_get_mdi_child();
   if (!mc)
@@ -336,29 +319,13 @@ static void
 gnc_main_window_flip_status_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  static gboolean in_sync = FALSE;
-
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
-    return;
-  }
-
-  gnc_show_status_bar = !gnc_show_status_bar;
+  gboolean statusbar_visibility = !gnc_mdi_get_statusbar_visibility();
 
   mc = gnc_main_window_get_mdi_child();
-  if (!mc || !mc->app)
+  if (!mc)
     return;
-
-  if (gnc_show_status_bar) {
-    gtk_widget_show(mc->app->statusbar);
-  } else {
-    gtk_widget_hide(mc->app->statusbar);
-    gtk_widget_queue_resize(mc->app->statusbar->parent);
-  }
+  gnc_mdi_set_statusbar_visibility(statusbar_visibility);
+  gnc_mdi_show_statusbar(mc);
 }
 
 /**
@@ -378,36 +345,13 @@ static void
 gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  GnomeDockItem *summarybar;
-  guint dc1, dc2, dc3, dc4;
-  static gboolean in_sync = FALSE;
-
-  if (!in_sync) {
-    /*
-     * Sync the hard way. Syncing by calling the xxx_set_active
-     * function causes an infinite recursion.
-     */
-    in_sync = TRUE;
-    return;
-  }
-
-  gnc_show_summary_bar = !gnc_show_summary_bar;
+  gboolean summarybar_visibility = !gnc_mdi_get_summarybar_visibility();
 
   mc = gnc_main_window_get_mdi_child();
-  if (!mc || !mc->app)
+  if (!mc)
     return;
-
-  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
-					   "Summary Bar",
-					   &dc1, &dc2, &dc3, &dc4);
-  if (!summarybar) return;
-
-  if (gnc_show_summary_bar) {
-    gtk_widget_show(GTK_WIDGET(summarybar));
-  } else {
-    gtk_widget_hide(GTK_WIDGET(summarybar));
-    gtk_widget_queue_resize(mc->app->dock);
-  }
+  gnc_mdi_set_summarybar_visibility(summarybar_visibility);
+  gnc_mdi_show_summarybar(mc);
 }
 
 /********************************************************************
@@ -444,9 +388,6 @@ gnc_main_window_new (void)
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
                      retval);
-
-  /* handle show/hide items in view menu */
-  retval->menu_tweaking = gnc_main_window_tweak_menus;
 
   return retval;
 }

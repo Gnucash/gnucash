@@ -5,6 +5,10 @@
 ;;  Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;
+; If you ever move the prefs from one page to another, DON'T forget to change MATCHER_PREF_PAGE in import-settings.c !!!!!!!
+;;
+
 ;; Register Preferences
 ;(gnc:register-configuration-option
 ; (gnc:make-simple-boolean-option

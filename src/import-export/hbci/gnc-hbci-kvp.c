@@ -21,13 +21,23 @@
 \********************************************************************/
 
 #include "gnc-hbci-kvp.h"
+#include <stdio.h>
 
 #define HBCI_KEY "hbci"
 #define HBCI_ACCOUNT_ID "account-id"
+#define HBCI_ACCOUNT_UID "account-uid"
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
-#define HBCI_CONFIGFILE "config-filename"
 #define HBCI_TRANS_RETRIEVAL "trans-retrieval"
+#define HBCI_ACCOUNTS "hbci-accounts"
+
+static void force_account_dirty(Account *acct)
+{
+  /* This is necessary because modifying the KvpFrames doesn't mark
+     accounts dirty, which means the changes wont be propagated to the
+     backend. */
+  xaccAccountSetSlots_nc(acct, xaccAccountGetSlots(acct));
+}
 
 /* Account */
 char *gnc_hbci_get_account_accountid (Account *a)
@@ -48,18 +58,13 @@ gint gnc_hbci_get_account_countrycode (Account *a)
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_COUNTRY_CODE);
   return kvp_value_get_gint64 (value);
 }
-Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
-{
-  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
-  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TRANS_RETRIEVAL);
-  return kvp_value_get_timespec (value);
-}
 void gnc_hbci_set_account_accountid (Account *a, const char *id)
 {
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_value_new_string (id);
   xaccAccountBeginEdit(a);
   kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_ID, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_bankcode (Account *a, const char *code)
@@ -68,6 +73,7 @@ void gnc_hbci_set_account_bankcode (Account *a, const char *code)
   kvp_value *value = kvp_value_new_string (code);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_BANK_CODE, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 void gnc_hbci_set_account_countrycode (Account *a, gint code)
@@ -76,7 +82,29 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
   kvp_value *value = kvp_value_new_gint64 (code);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
+}
+gint gnc_hbci_get_account_uid (Account *a)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNT_UID);
+  return kvp_value_get_gint64 (value);
+}
+void gnc_hbci_set_account_uid (Account *a, gint uid)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_value_new_gint64 (uid);
+  xaccAccountBeginEdit (a);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNT_UID, value);
+  force_account_dirty (a);
+  xaccAccountCommitEdit (a);
+}
+Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TRANS_RETRIEVAL);
+  return kvp_value_get_timespec (value);
 }
 void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
 {
@@ -84,12 +112,16 @@ void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
   kvp_value *value = kvp_value_new_timespec (time);
   xaccAccountBeginEdit (a);
   kvp_frame_set_slot_nc (frame, HBCI_TRANS_RETRIEVAL, value);
+  force_account_dirty (a);
   xaccAccountCommitEdit (a);
 }
 
 
 
 /* GNCBook */
+#define HBCI_CONFIGFILE "config-filename"
+#define HBCI_TEMPLATES "template-list"
+
 char *gnc_hbci_get_book_configfile (GNCBook *b)
 {
   kvp_frame *frame = gnc_hbci_get_book_kvp (b);
@@ -103,13 +135,49 @@ void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename)
   kvp_frame_set_slot_nc (frame, HBCI_CONFIGFILE, value);
   gnc_book_kvp_changed (b);
 }
+GList *gnc_hbci_get_book_template_list (GNCBook *b)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TEMPLATES);
+  return kvp_value_get_glist (value);
+}
+void gnc_hbci_set_book_template_list (GNCBook *b, GList *template_list)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_glist_nc (template_list);
+  kvp_frame_set_slot_nc (frame, HBCI_TEMPLATES, value);
+  gnc_book_kvp_changed (b);
+}
+
+#if 0
+GList *gnc_hbci_get_book_account_list (GNCBook *b)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_ACCOUNTS);
+  return kvp_value_get_glist (value);
+}
+void gnc_hbci_set_book_account_list (GNCBook *b, GList *account_list)
+{
+  kvp_frame *frame = gnc_hbci_get_book_kvp (b);
+  kvp_value *value = kvp_value_new_glist_nc (account_list);
+  kvp_frame_set_slot_nc (frame, HBCI_ACCOUNTS, value);
+  gnc_book_kvp_changed (b);
+}
+#endif
+
 
 /* lowlevel */
 /* getters  for kvp frame in book */
 kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 {
   kvp_frame *toplevel = gnc_book_get_slots (b);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  g_assert(result);
+  /*  if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+      } */
+  return result;
 }
 
 
@@ -118,5 +186,11 @@ kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b)
 kvp_frame *gnc_hbci_get_account_kvp (Account *a)
 {
   kvp_frame *toplevel = xaccAccountGetSlots (a);
-  return kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  kvp_frame *result = kvp_frame_get_frame (toplevel, HBCI_KEY, NULL);
+  g_assert(result);
+  /* if (!result) {
+      result = kvp_frame_new();
+      kvp_frame_add_frame_nc (toplevel, HBCI_KEY, result);
+      }*/
+  return result;
 }

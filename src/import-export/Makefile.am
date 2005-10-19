@@ -1,4 +1,5 @@
-SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test
+SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} log-replay test
+DIST_SUBDIRS = binary-import qif-import qif-io-core ofx hbci log-replay test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
@@ -18,7 +19,6 @@ gncinclude_HEADERS = \
   import-match-map.h
 
 noinst_HEADERS = \
-  gnc-gen-transaction.h \
   import-account-matcher.h \
   import-backend.h \
   import-commodity-matcher.h \
@@ -79,6 +79,3 @@ EXTRA_DIST = \
 #	ln -sf . g-wrapped
 #	touch .scm-links
 DISTCLEANFILES = gnucash g-wrapped .scm-links import-export
-
-# FIXME remove this when qif-io-core is finished
-DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci

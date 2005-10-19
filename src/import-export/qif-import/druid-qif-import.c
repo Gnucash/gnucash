@@ -376,6 +376,9 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   gnc_set_string_option("__paths", "Import QIF", default_dir);
   g_free(default_dir);
   g_free(file_name);
+
+  /* Now raise the window to be sure it's visible */
+  gdk_window_raise(wind->window->window);
 }
 
 
@@ -675,7 +678,7 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
   QIFImportWindow * wind = user_data;
 
   if(gh_list_p(wind->imported_files) && 
-     (gh_length(wind->imported_files) > row)) {
+     ((int)gh_length(wind->imported_files) > row)) {
     scm_unprotect_object(wind->selected_file);
     wind->selected_file = gh_list_ref(wind->imported_files,
                                       gh_int2scm(row));   
@@ -1578,7 +1581,7 @@ make_qif_druid_page(gnc_commodity * comm)
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),
-                                 TRUE, TRUE);
+                                 DIAG_COMM_ALL);
 
   info_label = 
     gtk_label_new(_("Enter the full name of the commodity, "

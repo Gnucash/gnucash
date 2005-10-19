@@ -682,7 +682,7 @@
   <act:parent type="guid">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ausgaben</act:name>
+  <act:name>Aufwendungen</act:name>
   <act:id type="guid">bc39f4d37eb75353f4f971e80b9d2818</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
@@ -690,7 +690,7 @@
     <cmdty:id>DEM</cmdty:id>
   </act:currency>
   <act:currency-scu>100</act:currency-scu>
-  <act:description>Ausgaben</act:description>
+  <act:description>Aufwendungen</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bildung</act:name>

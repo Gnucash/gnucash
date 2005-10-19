@@ -131,7 +131,7 @@ id_hash (gconstpointer key)
   else
   {
     guint hash = 0;
-    int i, j;
+    unsigned int i, j;
 
     for (i = 0, j = 0; i < sizeof(guint); i++, j++)
     {

@@ -4,6 +4,8 @@
 ;;;
 ;;;  Copyright 2000 Bill Gribble <grib@billgribble.com>
 ;;;  $Id$
+;;;  June 2004 - D. Reiser - added capability to print wallet checks
+;;;                          with left-side stubs
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash printing number-to-words))
@@ -61,16 +63,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*stock-check-formats*
-  '((quicken  . ((payee . (90.0 150.0))
-                 (amount-words . (90.0 120.0))
-                 (amount-number . (500.0 150.0))
-                 (date . (500.0 185.0))
-                 (memo . (50.0 40.0))))))
-
-(define gnc:*stock-check-positions*
-  '((top . 540.0)
-    (middle . 288.0)
-    (bottom . 36.0)))
+  '((deluxe  . ((payee . (126.0 147.0))
+		(amount-words . (90.0 125.0))
+		(amount-number . (395.0 147.0))
+		(date . (343.0 178.0))
+		(memo . (100.0 73.0))
+		(rotate . 90.0)
+		(translate . (232.0 300.0))
+		(offset . 0.0)))                ;;declaration of offset preempts top/middle/bottom dialog choice
+	 (quicken  . ((payee . (90.0 150.0))
+		 (amount-words . (90.0 120.0))
+		 (amount-number . (500.0 150.0))
+		 (date . (500.0 185.0))
+		 (memo . (50.0 40.0))
+		 (top . 540.0)
+		 (middle . 288.0)
+		 (bottom . 36.0)))
+    (wallet . ((payee . (231.0 140.0))  ;;these coord. for placement above amount-word line
+                                        ;;use 202.0 94.0 for placement in address area
+		 (amount-words . (195.0 125.0))
+		 (amount-number . (518.0 137.0))
+		 (date . (504.0 151.0))
+		 (memo . (216.0 37.0))
+		 (date-stub . (36.0 151.0))
+		 (payee-stub . (28.0 126.0))
+		 (amount-stub . (50.0 90.0))
+		 (memo-stub . (28.0 65.0))
+		 (top . 588.0)
+		 (middle . 384.0)
+		 (bottom . 180.0)))
+	(custom . ((top . 540.0)  ;;set default perforation location for custom print layout
+	     (middle . 288.0)
+	     (bottom . 36.0))) 
+    ))
 
 (define (gnc:print-check format-info payee amount date memo)
     (let* ((int-part (inexact->exact (truncate amount)))
@@ -80,20 +105,26 @@
            (ps (gnc:print-session-create #t))
            (format #f)
            (offset #f)
-           (date-string ""))
+           (date-string "")
+           (payee-stub-text "")
+           (memo-stub-text ""))
       (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
             (set! format (assq (print-check-format:format format-info) 
                                gnc:*stock-check-formats*))
             (if (pair? format)
-                (set! format (cdr format))))
+		(begin
+		  (set! format (cdr format))
+		  (let ((off (assq 'offset format)))
+		    (if off (set! offset (cdr off)))))))
           (set! format (print-check-format:custom-info format-info)))
       
-      (if (not (eq? (print-check-format:position format-info) 'custom))
+      (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
           (begin 
             (set! offset 
                   (cdr (assq (print-check-format:position format-info)
-                             gnc:*stock-check-positions*)))
+                          (cdr (assq (print-check-format:format format-info)
+                             gnc:*stock-check-formats*)))))
             (if (pair? offset)
                 (set! offset (cdr offset))))
           (set! offset
@@ -110,7 +141,15 @@
                     (strftime date-fmt (localtime date))))
             (begin 
               (set! date-string (strftime fmt (localtime date))))))            
-      
+
+      (let ((translate-pos (assq 'translate format)))
+	(if translate-pos
+	    (gnc:print-session-translate ps (cadr translate-pos)
+					 (caddr translate-pos))))
+
+      (let ((rotate-angle (assq 'rotate format)))
+	(if rotate-angle (gnc:print-session-rotate ps (cdr rotate-angle))))
+
       (let ((date-pos (assq 'date format)))
         (gnc:print-session-moveto ps (cadr date-pos) 
                                   (+ offset (caddr date-pos)))
@@ -135,6 +174,34 @@
         (gnc:print-session-moveto ps (cadr memo-pos) 
                                   (+ offset (caddr memo-pos)))
         (gnc:print-session-text ps memo))
+
+      (if (eq? (print-check-format:format format-info) 'wallet)
+        (begin
+           (let ((memostub-pos (assq 'memo-stub format)))
+                (gnc:print-session-moveto ps (cadr memostub-pos) 
+                                  (+ offset (caddr memostub-pos)))
+             (if (< (string-length memo) 22)
+	            (set! memo-stub-text memo)
+	            (set! memo-stub-text (substring memo 0 20)))
+             (gnc:print-session-text ps memo-stub-text))
+        
+           (let ((datestub-pos (assq 'date-stub format)))
+              (gnc:print-session-moveto ps (cadr datestub-pos) 
+                                  (+ offset (caddr datestub-pos)))
+             (gnc:print-session-text ps date-string))
+        
+           (let ((payeestub-pos (assq 'payee-stub format)))
+                (gnc:print-session-moveto ps (cadr payeestub-pos) 
+                                  (+ offset (caddr payeestub-pos)))
+              (if (< (string-length payee) 22)
+	            (set! payee-stub-text payee)
+	            (set! payee-stub-text (substring payee 0 20)))
+             (gnc:print-session-text ps payee-stub-text))
+        
+           (let ((amountstub-pos (assq 'amount-stub format)))
+             (gnc:print-session-moveto ps (cadr amountstub-pos) 
+                                  (+ offset (caddr amountstub-pos)))
+             (gnc:print-session-text ps (printable-value amount 100)))))
 
       (gnc:print-session-done ps #t)
       (gnc:print-session-print ps)))

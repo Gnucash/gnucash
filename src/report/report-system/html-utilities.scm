@@ -426,7 +426,7 @@
 	  (and show-subaccts? 
 	       (let ((parent (gnc:account-get-parent-account a)))
 		 (and parent
-		      (show-acct? parent))))))
+		      (use-acct? parent))))))
 
     ;; Show this account? Only if nonzero amount or appropriate
     ;; preference.

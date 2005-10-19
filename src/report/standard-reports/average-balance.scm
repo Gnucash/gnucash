@@ -420,7 +420,7 @@
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
-                             (map (lambda (row) (list-ref row 2)) data))
+			     number-data)
                             (set! col-labels 
                                   (append col-labels 
                                           (list (list-ref columns 2))))
@@ -436,7 +436,7 @@
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
-                             (map (lambda (row) (list-ref row 7)) data))
+			     number-data)
                             (set! col-labels 
                                   (append col-labels 
                                           (list (list-ref columns 7))))
@@ -446,11 +446,9 @@
 
                 (if (memq 'GLPlot plot-type)
                     (let ((debit-data 
-                           (map (lambda (row) list-ref row 5) data))
-			  (number-data
-			   (map (lambda (row) (list-ref row 7)) data))
+                           (map (lambda (row) (list-ref row 5)) data))
                           (credit-data
-                           (map (lambda (row) list-ref row 6) data)))
+                           (map (lambda (row) (list-ref row 6)) data)))
                       ;; debit column 
                       (if (not (and
                                 (list-all-zeros? debit-data)
@@ -458,7 +456,7 @@
                           (begin
                             (gnc:html-barchart-append-column! 
                              barchart
-                             number-data)
+                             debit-data)
                             (set! col-labels 
                                   (append col-labels 
                                           (list (list-ref columns 5))))
@@ -468,7 +466,7 @@
                             ;; credit
                             (gnc:html-barchart-append-column! 
                              barchart
-                             (map (lambda (row) (list-ref row 6)) data))
+                             credit-data)
                             (set! col-labels 
                                   (append col-labels 
                                           (list (list-ref columns 6))))

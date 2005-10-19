@@ -1,4 +1,5 @@
 SUBDIRS = . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-binary-import.la libgw-binary-import.la
 
@@ -46,6 +47,7 @@ libgncmod_binary_import_la_LIBADD = \
 
 libgw_binary_import_la_SOURCES = gw-binary-import.c
 libgw_binary_import_la_LDFLAGS = -module
+libgw_binary_import_la_LIBADD  = libgncmod-binary-import.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export
 gncmod_DATA = binary-import.scm 

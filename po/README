@@ -1,13 +1,12 @@
 Notes on I18n for GnuCash
 -------------------------
 
-Please send new and updated .po files to gnucash-patches@gnucash.org.
+A HOWTO for translators can be found in ../doc/TRANSLATION_HOWTO. Any
+instructions about what to do with .po files can be found there.
 
-To update the .pot file for GnuCash it is best to simply build the
-sources using 'make'. Don't run xgettext by hand, because many of the
-translatable strings in GnuCash are taken from scheme files and will
-be missed.
 
+Notes for this directory
+------------------------
 
 The subdirectory glossary/ contains a glossary of the financial terms
 used inside GnuCash. To achieve a decent consistency in terminology

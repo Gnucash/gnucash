@@ -39,6 +39,7 @@
 #include "Group.h"
 #include "guid.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 
 #include "builder.h"
 #include "BackendP.h"
@@ -126,6 +127,7 @@ Transaction * pgendTransLookup (PGBackend *be, const GUID *txn_guid);
 Split * pgendSplitLookup (PGBackend *be, const GUID *split_guid);
 GNCPrice * pgendPriceLookup (PGBackend *be, const GUID *price_guid);
 GNCIdType pgendGUIDType (PGBackend *be, const GUID *guid);
+GNCBook * pgendGetBook(PGBackend *pbe);
 
 void pgendDisable (PGBackend *be);
 void pgendEnable (PGBackend *be);

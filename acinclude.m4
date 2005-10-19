@@ -3374,7 +3374,7 @@ irix5* | irix6*)
 # This must be Linux ELF.
 linux-gnu*)
   case $host_cpu in
-  alpha* | hppa* | i*86 | powerpc* | sparc* | ia64* )
+  alpha* | hppa* | i*86 | mips | mipsel | powerpc* | sparc* | ia64* | arm* | m68k )
     lt_cv_deplibs_check_method=pass_all ;;
   *)
     # glibc up to 2.1.1 does not perform some relocations on ARM
@@ -3934,6 +3934,14 @@ AC_DEFUN(AC_GWRAP_CHECK_GUILE,
  dnl AC_MSG_WARN(guile is $GUILE)
  if test "${GUILE}" = "no" ; then
 	AC_MSG_ERROR(g-wrap couldn't find guile.)
+ fi
+ AC_MSG_CHECKING(if g-wrap works)
+ $GUILE -c "(set! %load-path (cons \"$1\" %load-path)) (use-modules (g-wrap))"
+ status=$?
+ if test $status != 0 ; then
+   AC_MSG_ERROR([g-wrap could not run.  Perhaps missing slib?])
+ else
+   AC_MSG_RESULT(yes)
  fi
 ])
 

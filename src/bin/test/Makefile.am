@@ -5,8 +5,7 @@ TESTS = test-version test-run-script test-guile-env-override
 # to make sure we're testing in a setup as close to the install
 # arrangement as possible.
 
-GNC_TEST_DEPS := \
-  --guile-load-dir ${top_srcdir}/lib \
+GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --guile-load-dir ${top_srcdir}/src/engine \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_srcdir}/src/app-utils \

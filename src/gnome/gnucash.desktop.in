@@ -1,6 +1,7 @@
 [Desktop Entry]
 _Name=GnuCash
-_Comment=GnuCash Personal Finance
+_GenericName=Money Management
+_Comment=Manage your finances, accounts, and investments
 TryExec=gnucash
 Exec=gnucash
 Icon=gnucash/gnucash-icon.png

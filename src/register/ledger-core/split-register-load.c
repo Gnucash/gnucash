@@ -1,5 +1,7 @@
 /********************************************************************\
  * split-register-load.c -- split register loading code             *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +25,7 @@
 #include "config.h"
 
 #include "Group.h"
+#include "account-quickfill.h"
 #include "combocell.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -174,7 +177,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   /* make sure we have a blank split */
   if (blank_split == NULL)
   {
-    Transaction *trans;
+    Transaction *new_trans;
     gnc_commodity * currency = NULL;
 
     /* Determine the proper currency to use for this transaction.
@@ -193,14 +196,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     gnc_suspend_gui_refresh ();
 
-    trans = xaccMallocTransaction (gnc_get_current_book ());
+    new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
-    xaccTransBeginEdit (trans);
-    xaccTransSetCurrency (trans, currency ? currency : gnc_default_currency ());
-    xaccTransSetDateSecs (trans, info->last_date_entered);
+    xaccTransBeginEdit (new_trans);
+    xaccTransSetCurrency (new_trans, currency ? currency : gnc_default_currency ());
+    xaccTransSetDateSecs (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
-    xaccTransAppendSplit (trans, blank_split);
-    xaccTransCommitEdit (trans);
+    xaccTransAppendSplit (new_trans, blank_split);
+    xaccTransCommitEdit (new_trans);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;
@@ -305,6 +308,27 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
         has_last_num = TRUE;
       }
     }
+
+    /* set the completion character for the xfer cells */
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       gnc_get_account_separator ());
+    
+    gnc_combo_cell_set_complete_char
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
+       gnc_get_account_separator ());
+    
+    /* set the confirmation callback for the reconcile cell */
+    gnc_recn_cell_set_confirm_cb
+      ((RecnCell *)
+       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
+       gnc_split_register_recn_cell_confirm, reg);
+    
+    gnc_split_register_load_xfer_cells (reg, default_account);
+    gnc_split_register_load_recn_cells (reg);
+    gnc_split_register_load_type_cells (reg);
   }
 
   table->model->dividing_row = -1;
@@ -390,6 +414,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
           gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
         gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
       }
+
     }
 
     if (trans == find_trans)
@@ -525,29 +550,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   gnc_split_register_show_trans (reg, table->current_cursor_loc.vcell_loc);
 
-  /* set the completion character for the xfer cells */
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-     gnc_get_account_separator ());
-
-  gnc_combo_cell_set_complete_char
-    ((ComboCell *)
-     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-     gnc_get_account_separator ());
-
-  /* set the confirmation callback for the reconcile cell */
-  gnc_recn_cell_set_confirm_cb
-    ((RecnCell *)
-     gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-     gnc_split_register_recn_cell_confirm, reg);
-
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
 
-  gnc_split_register_load_xfer_cells (reg, default_account);
-  gnc_split_register_load_recn_cells (reg);
-  gnc_split_register_load_type_cells (reg);
 }
 
 static void
@@ -585,11 +590,20 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
   LEAVE ("\n");
 }
 
+#define QKEY  "split_reg_shared_quickfill"
+
+static gboolean 
+skip_cb (Account *account, gpointer x)
+{
+  return xaccAccountGetPlaceholder (account);
+}
+ 
 void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
   ComboCell *cell;
+  QuickFill *qf;
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
@@ -598,13 +612,19 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
+  qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
+
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 }
+
+/* ====================== END OF FILE ================================== */

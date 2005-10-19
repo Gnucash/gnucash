@@ -141,6 +141,7 @@ get_wday_name(guint day)
 {
   static gchar wday_name[WDAY_BUF_WIDTH];
   struct tm t;
+  memset( &t, 0, sizeof( t ) );
   t.tm_wday = day;
   strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
   return wday_name;
@@ -163,6 +164,7 @@ get_abbrev_month_name(guint month)
 {
   static gchar month_name[WDAY_BUF_WIDTH];
   struct tm t;
+  memset( &t, 0, sizeof( t ) );
   t.tm_mon = month;
   strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
   return month_name;
@@ -245,7 +247,7 @@ xaccFreqSpecGetType( FreqSpec *fs )
 {
         g_return_val_if_fail( fs, INVALID );
         /* Is this really a fail? */
-        g_return_val_if_fail( fs->type != INVALID, INVALID );
+        //g_return_val_if_fail( fs->type != INVALID, INVALID );
         return fs->type;
 }
 
@@ -326,22 +328,26 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                 guint32 in_months_from_epoch, after_repeat_in_month_interval,
                         complete_intervals, next_repeat_months_from_epoch, month, year;
 
-                in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-                        g_date_month( CONST_HACK in_date ) - 1;
+                in_months_from_epoch
+                  = (g_date_year( CONST_HACK in_date )-1)
+                  * 12
+                  + g_date_month( CONST_HACK in_date )
+                  - 1;
                 complete_intervals =
-                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
-                        fs->s.monthly.interval_months;
-                after_repeat_in_month_interval =
-                        (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
-                         (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
-                         fs->s.monthly.interval_months > 0 ||
-                         g_date_day( CONST_HACK in_date ) >=
-                         g_date_days_in_month( g_date_month( CONST_HACK in_date ),
-                                               g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
+                        (in_months_from_epoch - fs->s.monthly.offset_from_epoch)
+                  / fs->s.monthly.interval_months;
+                after_repeat_in_month_interval = 
+                        (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month
+                         || ( (in_months_from_epoch - fs->s.monthly.offset_from_epoch)
+                              % fs->s.monthly.interval_months > 0 )
+                         || ( g_date_day( CONST_HACK in_date )
+                              >= g_date_days_in_month( g_date_month( CONST_HACK in_date ),
+                                                       g_date_year( CONST_HACK in_date ) ) )
+                         ? 1 : 0);
                 next_repeat_months_from_epoch =
-                        fs->s.monthly.offset_from_epoch +
-                        (complete_intervals + after_repeat_in_month_interval) *
-                        fs->s.monthly.interval_months;
+                         fs->s.monthly.offset_from_epoch
+                         + (complete_intervals + after_repeat_in_month_interval)
+                         * fs->s.monthly.interval_months;
                 /* Hmmm... what happens if the day of the month is greater than the
                  * number of days in this month?
                  * Here I have constrained the day of the month by the number
@@ -453,6 +459,14 @@ xaccFreqSpecIsValidDateRelaxed( FreqSpec *fs, time_t query )
         return "FIXME: not implemented yet!";
 }
 */
+
+void
+xaccFreqSpecSetNone( FreqSpec *fs )
+{
+        g_return_if_fail( fs );
+        xaccFreqSpecCleanUp( fs );
+        fs->type = INVALID;
+}
 
 void
 xaccFreqSpecSetOnceDate( FreqSpec *fs, const GDate* when )
@@ -712,6 +726,10 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         memset( freqStrBuf, 0, MAX_FREQ_STR_SIZE + 1 );
 
         switch( xaccFreqSpecGetUIType( fs ) ) {
+        case UIFREQ_NONE:
+                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("None") );
+                break;
+
         case UIFREQ_ONCE:
                 tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
                 /* this is now a GDate. */
@@ -781,6 +799,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         if ( xaccFreqSpecGetType(tmpFS) != WEEKLY ) {
                                 snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
                                           "error: UIFREQ_WEEKLY doesn't contain weekly children" );
+                                g_free( tmpStr );
                                 return;
                         }
                         if ( tmpInt == -1 ) {
@@ -788,7 +807,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         }
                         /* put the first letter of the weekday name in
                            the appropriate position. */
-                        dowIdx = tmpFS->s.weekly.offset_from_epoch;
+                        dowIdx = tmpFS->s.weekly.offset_from_epoch % 7;
                         tmpStr[dowIdx] = *(get_wday_name(dowIdx));
                 }
 

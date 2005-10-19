@@ -84,4 +84,7 @@ gboolean gnc_lot_is_closed (GNCLot *);
  * */
 kvp_frame * gnc_lot_get_slots (GNCLot *);
 
+#define LOT_IS_CLOSED	"is-closed?"
+#define LOT_BALANCE	"balance"
+
 #endif /* GNC_LOT_H */

@@ -3,7 +3,7 @@ SUBDIRS = . test
 pkglib_LTLIBRARIES = libgncmod-calculation.la
 
 libgncmod_calculation_la_LDFLAGS = -module
-libgncmod_calculation_la_LIBADD = ${GLIB_LIBS} 
+libgncmod_calculation_la_LIBADD = ${GLIB_LIBS} ${GUILE_LIBS}
 
 libgncmod_calculation_la_SOURCES = \
   expression_parser.c \
@@ -26,4 +26,4 @@ EXTRA_DIST = \
   numeric_ops.c \
   numeric_ops.h
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS}
+AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}

@@ -6,11 +6,11 @@ EXIT_VALUE=0
 # gdb .libs/test-db 
 
 rm -f test_file_*
-if ./db-control.sh create; then
-    ./db-control.sh start
+if ${srcdir}/db-control.sh create; then
+    ${srcdir}/db-control.sh start
     ./test-db localhost 7777 || EXIT_VALUE=1
-    ./db-control.sh stop
-    ./db-control.sh destroy
+    ${srcdir}/db-control.sh stop
+    ${srcdir}/db-control.sh destroy
 elif [ "${PGHOST}X" != "X" ]; then
 # This expects the logged in user to have authority
 # to create databases.

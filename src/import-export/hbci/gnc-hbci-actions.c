@@ -22,8 +22,8 @@
 
 #include "gnc-hbci-actions.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxaccjobs.h>
+#include <openhbci2/api.h>
+#include <openhbci2/outboxaccjobs.h>
 
 /* File intentionally left blank. */
 

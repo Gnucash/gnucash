@@ -32,7 +32,7 @@ gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 EXTRA_DIST = .cvsignore generate-gnc-script
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
-${gnc_common_scripts}: generate-gnc-script
+${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
 CLEANFILES = ${gnc_common_scripts}

@@ -17,7 +17,6 @@ void gncQueryNewShutdown (void);
 
 /* Functions to get Query information */
 int gncQueryGetMaxResults (QueryNew *q);
-GNCIdType gncQueryGetSearchFor (QueryNew *q);
 
 
 /* Functions to get and look at QueryTerms */

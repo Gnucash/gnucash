@@ -1702,3 +1702,9 @@ gncQueryPrintCharMatch (char_match_t c)
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* gncQueryPrintGuidMatch */
+
+GList * gncQueryGetBooks (QueryNew *q)
+{
+  if (!q) return NULL;
+  return q->books;
+}

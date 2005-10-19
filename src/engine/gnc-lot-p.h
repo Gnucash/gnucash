@@ -62,7 +62,7 @@ struct gnc_lot_struct
 
   /* handy cached value to indicate if lot is closed */
   /* if value is negative, then the cache is invalid */
-  char is_closed;
+  signed char is_closed;
 };
 
 void gnc_lot_set_guid(GNCLot *lot, GUID guid);

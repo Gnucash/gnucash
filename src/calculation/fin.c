@@ -2418,7 +2418,7 @@ Amortization_Schedule (amort_sched_ptr amortsched)
 
     for (jj = n, j = 0; jj > 0; jj -= yr_pmt, yr_pmt = PF, j++)
     {
-      if (jj <= PF)
+      if (jj <= (int)PF)
       {
 	yr_fv = fv;
 	yr_int = rnd (((jj - 1) * pmt) + hpv + final_pmt, prec);

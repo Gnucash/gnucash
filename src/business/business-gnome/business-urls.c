@@ -15,10 +15,12 @@
 
 #include "gncCustomer.h"
 #include "gncVendor.h"
+#include "gncEmployee.h"
 #include "gncInvoice.h"
 
 #include "business-urls.h"
 #include "dialog-customer.h"
+#include "dialog-employee.h"
 #include "dialog-vendor.h"
 #include "dialog-invoice.h"
 
@@ -123,6 +125,56 @@ vendorCB (const char *location, const char *label,
 }
 
 static gboolean
+employeeCB (const char *location, const char *label,
+	   gboolean new_window, GNCURLResult * result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="...:guid=<guid>" */
+  if (strncmp ("guid=", location, 5) == 0) {
+    GUID guid;
+    GNCIdType id_type;
+    GncEmployee *employee;
+
+    if (!string_to_guid (location + 5, &guid)) {
+      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+      return FALSE;
+    }
+
+    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
+    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
+    {
+      result->error_message = g_strdup_printf (_("No such entity: %s"),
+					       location);
+      return FALSE;
+    }
+    else if (!safe_strcmp (id_type, GNC_EMPLOYEE_MODULE_NAME))
+    {
+      employee = gncEmployeeLookup (gnc_get_current_book (), &guid);
+      gnc_ui_employee_edit (employee);
+    }
+    else
+    {
+      result->error_message =
+	g_strdup_printf (_("Entity type does not match Employee: %s"),
+			 location);
+      return FALSE;
+    }
+  }
+  else
+  {
+    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+                                             location);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+static gboolean
 invoiceCB (const char *location, const char *label,
 	   gboolean new_window, GNCURLResult * result)
 {
@@ -212,6 +264,9 @@ ownerreportCB (const char *location, const char *label,
   case 'v':
     type = GNC_OWNER_VENDOR;
     break;
+  case 'e':
+    type = GNC_OWNER_EMPLOYEE;
+    break;
   default:
     result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
     return FALSE;
@@ -244,6 +299,13 @@ ownerreportCB (const char *location, const char *label,
 			  gncVendorLookup (gnc_get_current_book (),
 					   &guid));
     etype = "Vendor";
+    break;
+  case GNC_OWNER_EMPLOYEE:
+    if (!safe_strcmp (id_type, GNC_EMPLOYEE_MODULE_NAME))
+      gncOwnerInitEmployee (&owner,
+			  gncEmployeeLookup (gnc_get_current_book (),
+					     &guid));
+    etype = "Employee";
     break;
   default:
     etype = "OTHER";
@@ -306,6 +368,7 @@ gnc_business_urls_initialize (void)
   } types[] = {
     { GNC_CUSTOMER_MODULE_NAME, GNC_CUSTOMER_MODULE_NAME, customerCB },
     { GNC_VENDOR_MODULE_NAME, GNC_VENDOR_MODULE_NAME, vendorCB },
+    { GNC_EMPLOYEE_MODULE_NAME, GNC_EMPLOYEE_MODULE_NAME, employeeCB },
     { GNC_INVOICE_MODULE_NAME, GNC_INVOICE_MODULE_NAME, invoiceCB },
     { URL_TYPE_OWNERREPORT, "gnc-ownerreport", ownerreportCB },
     { NULL, NULL }

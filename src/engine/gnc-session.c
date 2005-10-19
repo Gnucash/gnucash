@@ -46,7 +46,7 @@
 #include "BackendP.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"
-#include "DateUtils.h"
+#include "date.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
@@ -596,11 +596,16 @@ save_error_handler(Backend *be, GNCSession *session)
     {
         gnc_session_push_error (session, err, NULL);
       
-        /* we close the backend here ... isn't this a bit harsh ??? */
+        /* we close the backend here ... isn't this a bit harsh ??? 
+	 * Actually, yes, it is harsh, and causes bug #117657,
+	 * so let's NOT end the session just because it failed to save.
+	 */
+#if cause_crash_when_saves_fail
         if (be->session_end)
         {
             (be->session_end)(be);
         }
+#endif
         return TRUE;
     }
     return FALSE;
@@ -1088,13 +1093,18 @@ xaccResolveURL (const char * pathfrag)
 void
 gnc_run_rpc_server (void)
 {
-  char * dll_err;
+  const char * dll_err;
   void * dll_handle;
   int (*rpc_run)(short);
   int ret;
  
   /* open and resolve all symbols now (we don't want mystery 
    * failure later) */
+#ifndef RTLD_NOW
+# ifdef RTLD_LAZY
+#  define RTLD_NOW RTLD_LAZY
+# endif
+#endif
   dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
   if (! dll_handle) 
   {

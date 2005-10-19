@@ -52,7 +52,7 @@
 #include "engine-helpers.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "DateUtils.h"
+#include "date.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
@@ -81,6 +81,8 @@ gnc_book_init (GNCBook *book)
   book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create(book);
+  book->shared_quickfill = NULL;
+  book->shared_quickfill_destroy = NULL;
 
   book->sched_xactions = NULL;
   book->sx_notsaved = FALSE;
@@ -125,6 +127,12 @@ gnc_book_destroy (GNCBook *book)
   ENTER ("book=%p", book);
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
 
+  if (book->shared_quickfill_destroy)
+  {
+    (book->shared_quickfill_destroy) (book,
+                        book->shared_quickfill);
+  }
+
   gncObjectBookEnd (book);
 
   xaccAccountGroupBeginEdit (book->topgroup);
@@ -142,6 +150,8 @@ gnc_book_destroy (GNCBook *book)
   xaccRemoveEntity (book->entity_table, &book->guid);
   xaccEntityTableDestroy (book->entity_table);
   book->entity_table = NULL;
+
+  kvp_frame_delete (book->kvp_data);
 
   /* FIXME: Make sure the data_table is empty */
   g_hash_table_destroy (book->data_tables);
@@ -216,6 +226,22 @@ xaccGNCBookGetBackend (GNCBook *book)
 {
    if (!book) return NULL;
    return book->backend;
+}
+
+gpointer
+gnc_book_get_shared_quickfill_hack (GNCBook *book)
+{
+  if (!book) return NULL;
+  return book->shared_quickfill;
+}
+
+void
+gnc_book_set_shared_quickfill_hack (GNCBook *book, gpointer qf,
+                                void (*fn) (GNCBook *, gpointer))
+{
+  if (!book) return;
+  book->shared_quickfill = qf;
+  book->shared_quickfill_destroy = fn;
 }
 
 /* ====================================================================== */

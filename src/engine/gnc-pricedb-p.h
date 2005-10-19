@@ -87,6 +87,14 @@ struct gnc_price_lookup_s
   Timespec        date;
 };
 
+
+typedef struct gnc_price_lookup_helper_s
+{
+  GList    **return_list;
+  Timespec time;
+} GNCPriceLookupHelper;
+
+
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *old_c,

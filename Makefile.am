@@ -1,5 +1,5 @@
 
-SUBDIRS = intl  m4  macros debian doc lib src intl-scm po rpm accounts
+SUBDIRS = intl  m4  macros doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -160,7 +160,7 @@ distcleancheck_listfiles = \
 
 # ack this is stupid
 distcheck-hook:
-	: > "$(distdir)/=build/distcleancheck1.5-is-stupid"
+	: > "$(distdir)/_build/distcleancheck1.5-is-stupid"
 
 distclean-local:
 	-test -f distcleancheck1.5-is-stupid \

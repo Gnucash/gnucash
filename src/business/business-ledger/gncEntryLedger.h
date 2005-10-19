@@ -1,6 +1,6 @@
 /*
  * gncEntryLedger.h -- a ledger widget for manipulating GncEntry's
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -20,6 +20,8 @@ typedef enum {
   GNCENTRY_INVOICE_VIEWER,
   GNCENTRY_BILL_ENTRY,
   GNCENTRY_BILL_VIEWER,
+  GNCENTRY_EXPVOUCHER_ENTRY,
+  GNCENTRY_EXPVOUCHER_VIEWER,
   GNCENTRY_NUM_REGISTER_TYPES
 } GncEntryLedgerType;
 
@@ -52,6 +54,8 @@ typedef struct entry_ledger_colors
 #define ENTRY_INV_CELL		"invoiced?"
 #define ENTRY_VALUE_CELL	"line-value"
 #define ENTRY_TAXVAL_CELL	"line-tax-val"
+
+#define ENTRY_PAYMENT_CELL	"payment"
 
 typedef struct GncEntryLedger_s GncEntryLedger;
 

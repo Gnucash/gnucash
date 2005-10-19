@@ -337,11 +337,11 @@ while(<>) {
   if($quote_method_name =~ m/^currency$/) {
     my ($from_currency, $to_currency) = @$symbols;
 
-    last SWITCH unless $from_currency;
-    last SWITCH unless $to_currency;
+    last unless $from_currency;
+    last unless $to_currency;
 
     my $price = $quoter->currency($from_currency, $to_currency);
-    last SWITCH unless $price;
+    last unless $price;
 
     $quote_data{$from_currency, "success"} = 1;
     $quote_data{$from_currency, "symbol"} = $from_currency;

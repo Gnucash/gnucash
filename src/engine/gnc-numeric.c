@@ -1105,22 +1105,22 @@ gnc_numeric_to_string(gnc_numeric n) {
   return result;
 }
 
-const gchar *
+gboolean
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
   int num_read;
   long long int tmpnum;
   long long int tmpdenom;
     
-  if(!str) return NULL;
+  if(!str) return FALSE;
 
   /* must use "<" here because %n's effects aren't well defined */
   if(sscanf(str, " " GNC_SCANF_LLD "/" GNC_SCANF_LLD "%n",
             &tmpnum, &tmpdenom, &num_read) < 2) {
-    return(NULL);
+    return FALSE;
   }
   n->num = tmpnum;
   n->denom = tmpdenom;
-  return(str + num_read);
+  return TRUE;
 }
 
 #ifdef _GNC_NUMERIC_TEST

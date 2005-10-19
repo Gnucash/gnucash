@@ -123,7 +123,7 @@ test_commodity(void)
                 "insert test");
 
             do_test_args(
-                gnc_commodity_table_get_size(tbl) == i + 1,
+                (int)gnc_commodity_table_get_size(tbl) == i + 1,
                 "test next size table", __FILE__, __LINE__,
                 "should be %d and is %d", i + 1,
                 gnc_commodity_table_get_size(tbl));

@@ -529,7 +529,7 @@ pgendKVPFetch (PGBackend *be, guint32 iguid, kvp_frame *kf)
 {									\
    p = stpcpy (p, "INSERT INTO gncKVPValue" TYPE "Trail SELECT '");	\
    p = stpcpy (p, sess_str);						\
-   p = stpcpy (p, "' as sessionGuid, datetime('NOW') as date_changed, "	\
+   p = stpcpy (p, "' as sessionGuid, now() as date_changed, "	\
                   "'d' as change, 'k' as objtype, ");                   \
    p = stpcpy (p, "* from gncKVPValue" TYPE " WHERE iguid=");           \
    p = stpcpy (p, iguid_str);						\

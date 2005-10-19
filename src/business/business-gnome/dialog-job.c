@@ -347,7 +347,6 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
 					     bookp, owner);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
-    gtk_entry_set_editable (GTK_ENTRY (jw->id_entry), FALSE);
     gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
     gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),

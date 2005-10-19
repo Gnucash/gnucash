@@ -23,8 +23,7 @@
 #include "config.h"
 #include "gnc-hbci-getbalance.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxaccjobs.h>
+#include <aqbanking/banking.h>
 
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
@@ -33,189 +32,284 @@
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
-#include "dialog-hbcitrans.h"
+/* #include "dialog-hbcitrans.h" */
 
 
+void gnc_hbci_getbalance_debugprint(AB_JOB *balance_job,
+				    const AB_ACCOUNT *h_acc);
+
+#if 0
 static void 
 bal_print_debug(const char *name,
-		const HBCI_Value *val,
+		const AB_VALUE *val,
 		gboolean negative,
-		time_t tt)
+		const char *date_str,
+		const char *time_str)
 {
-  char *str = HBCI_Value_toReadableString (val);
-  printf("GetBalance: %s%s %s at date %s",
+  char *str = gnc_AB_VALUE_toReadableString (val);
+  printf("GetBalance: %s%s %s at date %s %s",
 	 (negative ? "-" : ""), str, 
-	 name, ctime(&tt));
+	 name, date_str, time_str);
   free (str);
 }
+#endif 
+
 
 void
 gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 {
-  HBCI_API *api = NULL;
-  const HBCI_Account *h_acc = NULL;
+  AB_BANKING *api = NULL;
+  const AB_ACCOUNT *h_acc = NULL;
   GNCInteractor *interactor = NULL;
-  const HBCI_Customer *customer = NULL;
   
   g_assert(parent);
   if (gnc_acc == NULL)
     return;
 
-  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  /* Get API */
+  api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
-    printf("gnc_hbci_getbalance: Couldn't get HBCI API.\n");
+    printf("gnc_hbci_getbalance: Couldn't get AB_BANKING API.\n");
     return;
   }
   g_assert (interactor);
-  
+
+  /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
     printf("gnc_hbci_getbalance: No HBCI account found.\n");
+    /* FIXME: free unneeded data */
     return;
   }
   /* printf("gnc_hbci_getbalance: HBCI account no. %s found.\n",
-     HBCI_Account_accountId (h_acc)); */
+     AB_ACCOUNT_accountId (h_acc)); */
   
   {
-    /* Get one customer. */
-    const list_HBCI_Customer *custlist;
-    list_HBCI_Customer_iter *iter;
-    
-    custlist = HBCI_Account_authorizedCustomers (h_acc);
-    g_assert (custlist);
-    switch (list_HBCI_Customer_size (custlist)) {
-    case 0:
-      printf("gnc_hbci_getbalance: No HBCI customer found.\n");
-      return;
-    case 1:
-      break;
-    default:
-      gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
-				  "Sorry, Choosing one out of several HBCI Customers not yet implemented.");
+    /* Execute a GetBalance job. */
+    AB_JOB *job;
+
+    job = AB_JobGetBalance_new((AB_ACCOUNT*)h_acc);
+    if (AB_Job_CheckAvailability(job)) {
+      printf("gnc_hbci_getbalance: JobGetBalance not avaiable for this account.\n");
+      /* FIXME: free unneeded data */
       return;
     }
-    iter = list_HBCI_Customer_begin (custlist);
-    customer = list_HBCI_Customer_iter_get (iter);
-    list_HBCI_Customer_iter_delete (iter);
-  }
-  g_assert (customer);
-  /* printf("gnc_hbci_getbalance: Customer id %s found.\n",
-     HBCI_Customer_custId ((HBCI_Customer *)customer)); */
-
-  {
-    /* Execute a GetBalance job. */
-    HBCI_OutboxJobGetBalance *balance_job;
-    HBCI_OutboxJob *job;
     
-    balance_job = 
-      HBCI_OutboxJobGetBalance_new (customer, (HBCI_Account *)h_acc);
-    job = HBCI_OutboxJobGetBalance_OutboxJob (balance_job);
-    g_assert (job);
-    HBCI_API_addJob (api, job);
+    /* Add job to API queue */
+    AB_Banking_EnqueueJob(api, job);
 
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
+    if (!gnc_AB_BANKING_execute (parent, api, job, interactor)) {
 
-      /* HBCI_API_executeOutbox failed. */
+      /* AB_BANKING_executeOutbox failed. */
+      gnc_hbci_cleanup_job(api, job);
+      /* FIXME: free unneeded data */
       return;
     }
 
+    /* gnc_hbci_getbalance_debugprint(balance_job, h_acc); */
+    
+    /* Finish this job. */
+    gnc_hbci_getbalance_finish (parent, 
+				gnc_acc,
+				job);
+
+    /* Clean up after ourselves. */
+    gnc_hbci_cleanup_job(api, job);
+    gnc_AB_BANKING_fini (api);
+    GNCInteractor_hide (interactor);
+  }
+}
+
+
+#if 0
+void gnc_hbci_getbalance_debugprint(AB_JOB *job,
+				    const AB_ACCOUNT *h_acc)
+{
+  GWEN_DB_NODE *response, *acc_bal;
+  GWEN_DB_NODE *noted_grp, *booked_grp;
+  AB_VALUE *booked_val, *noted_val;
+  /* time_t balance_tt, noted_tt, booked_tt; */
+	
+  response = HBCI_Job_responseData(AB_JOB_Job(job));
+  if (!response)
+    return;
+  acc_bal =GWEN_DB_GetGroup(response, 
+			    GWEN_PATH_FLAGS_NAMEMUSTEXIST, "balance");
+  if (!acc_bal) 
+    return;
+
+  noted_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "noted");
+  booked_grp = GWEN_DB_GetGroup(response, GWEN_PATH_FLAGS_NAMEMUSTEXIST, "booked");
+
+  booked_val = AB_VALUE_new(GWEN_DB_GetCharValue(booked_grp, "value", 0, "0"),
+			      GWEN_DB_GetCharValue(booked_grp, "currency", 0, "EUR"));
+  noted_val = AB_VALUE_new(GWEN_DB_GetCharValue(noted_grp, "value", 0, "0"),
+			     GWEN_DB_GetCharValue(noted_grp, "currency", 0, "EUR"));
+    
+  printf("GetBalance: Balances for account %s :\n",
+	 AB_ACCOUNT_accountId (h_acc));
+  bal_print_debug("Booked balance",
+		  booked_val,
+		  (strcasecmp(GWEN_DB_GetCharValue(booked_grp, "debitmark", 0, "C"),"D")==0),
+		  GWEN_DB_GetCharValue(booked_grp, "date", 0, ""),
+		  GWEN_DB_GetCharValue(booked_grp, "time", 0, ""));
+  bal_print_debug("Noted balance",
+		  noted_val,
+		  (strcasecmp(GWEN_DB_GetCharValue(noted_grp, "debitmark", 0, "C"),"D")==0),
+		  GWEN_DB_GetCharValue(noted_grp, "date", 0, ""),
+		  GWEN_DB_GetCharValue(noted_grp, "time", 0, ""));
+/*   bal_print_debug("Bank Line",  */
+/* 		  AB_ACCOUNTBalance_bankLine (acc_bal), FALSE, */
+/* 		  balance_tt); */
+/*   bal_print_debug("Disposable amount", */
+/* 		  AB_ACCOUNTBalance_disposable (acc_bal), FALSE, */
+/* 		  balance_tt); */
+/*   bal_print_debug("Already disposed", */
+/* 		  AB_ACCOUNTBalance_disposed (acc_bal), FALSE, */
+/* 		  balance_tt); */
+  AB_VALUE_delete(booked_val);
+  AB_VALUE_delete(noted_val);
+}
+#endif
+
+static gchar*
+bal_print_balance(const char *format,
+		  const AB_VALUE *val)
+{
+  char *str = gnc_AB_VALUE_toReadableString (val);
+  char *res = g_strdup_printf(format, 
+			      str);
+  free (str);
+  return res;
+}
+
+
+
+gboolean
+gnc_hbci_getbalance_finish (GtkWidget *parent, 
+			    Account *gnc_acc,
+			    const AB_JOB *job)
+{
+  const AB_ACCOUNT_STATUS *response;
+  const AB_BALANCE *noted_grp, *booked_grp;
+  const AB_VALUE *booked_val, *noted_val;
+  time_t booked_tt=0;
+  gboolean dialogres;
+  double booked_value, noted_value;
+  gnc_numeric value;
+
+  response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
+  if (!response) {
+    printf("gnc_hbci_getbalance_finish: Oops, response == NULL.\n");
+    return TRUE;
+  }
+
+  noted_grp = AB_AccountStatus_GetNotedBalance(response);
+  booked_grp = AB_AccountStatus_GetBookedBalance(response);
+
+  if (booked_grp) {
+    const GWEN_TIME *ti;
+
+    ti=AB_Balance_GetTime(booked_grp);
+    if (ti)
+      booked_tt = GWEN_Time_toTime_t (ti);
+    booked_val = AB_Balance_GetValue(booked_grp);
+    if (booked_val)
+      booked_value = AB_Value_GetValue (booked_val);
+    else {
+      printf("gnc_hbci_getbalance_finish: Warning: booked_val == NULL. Assuming 0.\n");
+      booked_value = 0.0;
+    }
+  } else {
+    printf("gnc_hbci_getbalance_finish: Warning: booked_grp == NULL. Assuming 0.\n");
+    booked_value = 0.0;
+    booked_val = NULL;
+    booked_tt = 0;
+  }
+
+  if (noted_grp) {
+    noted_val = AB_Balance_GetValue(noted_grp);
+    /* noted_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(noted_grp)); */
+    if (noted_val)
+      noted_value = AB_Value_GetValue (noted_val);
+    else {
+      printf("gnc_hbci_getbalance_finish: Warning: noted_val == NULL. Assuming 0.\n");
+      noted_value = 0.0;
+    }
+  } else {
+    printf("gnc_hbci_getbalance_finish: Warning: noted_grp == NULL. Assuming 0.\n");
+    noted_value = 0.0;
+    noted_val = NULL;
+  }
+
+  value = double_to_gnc_numeric (booked_value,
+				 xaccAccountGetCommoditySCU(gnc_acc),
+				 GNC_RND_ROUND);
+  if ((noted_value == 0.0) && (booked_value == 0.0))
     {
-      const HBCI_AccountBalance *acc_bal;
-      const HBCI_Balance *noted_bal, *booked_bal;
-      const HBCI_Value *booked_val; 
-      gboolean booked_debit;
-      time_t balance_tt, noted_tt, booked_tt;
-      gboolean dialogres;
-	    
-      acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
-      balance_tt = 
-	HBCI_DateTime_to_time_t (HBCI_AccountBalance_date (acc_bal), 
-				 HBCI_AccountBalance_time (acc_bal));
+      gnome_ok_dialog_parented 
+	/* Translators: Strings from this file are really only
+	 * needed inside Germany (HBCI is not supported anywhere
+	 * else). You may safely ignore strings from the
+	 * import-export/hbci subdirectory in other countries.
+	 */
+	(_("The downloaded HBCI Balance was zero.\n"
+	   "Either this is the correct balance, or your bank does not \n"
+	   "support Balance download in this HBCI version. In the latter \n"
+	   "case you should choose a higher HBCI version number in the HBCI \n"
+	   "Setup. After that, try again to download the HBCI Balance.\n"),
+	 GTK_WINDOW (parent));
+      dialogres = FALSE;
+    }
+  else
+    {
+      gnc_numeric reconc_balance = xaccAccountGetReconciledBalance (gnc_acc);
 
-      booked_bal = HBCI_AccountBalance_bookedBalance (acc_bal);
-      booked_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (booked_bal), 
-					   HBCI_Balance_time (booked_bal));
-      booked_val = HBCI_Balance_value (booked_bal);
-      booked_debit = HBCI_Balance_isDebit (booked_bal),
+      char *booked_str = gnc_AB_VALUE_toReadableString (booked_val);
+      char *message1 = g_strdup_printf
+	(
+	 _("Result of HBCI job: \n"
+	   "Account booked balance is %s\n"),
+	 booked_str);
+      char *message2 = 
+	((noted_value == 0.0) ?
+	 g_strdup_printf("%s", "") :
+	 bal_print_balance
+	 (_("For your information: This account also \n"
+	    "has a noted balance of %s\n"),
+	  noted_val));
 
-      noted_bal = HBCI_AccountBalance_notedBalance (acc_bal);
-      noted_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (noted_bal), 
-					  HBCI_Balance_time (noted_bal));
+      if (gnc_numeric_equal(value, reconc_balance)) {
+	const char *message3 = _("The booked balance is identical to the current \n"
+				 "reconciled balance of the account.");
+	char *msg = g_strdup_printf ("%s%s\n%s", message1, message2, message3);
+	gnome_ok_dialog_parented (msg, GTK_WINDOW (parent));
+	g_free (msg);
+	dialogres = FALSE;
 
-      printf("GetBalance: Balances for account %s :\n",
-	     HBCI_Account_accountId (h_acc));
-      bal_print_debug("Booked balance",
-		      booked_val,
-		      booked_debit,
-		      booked_tt);
-      bal_print_debug("Noted balance",
-		      HBCI_Balance_value (noted_bal),
-		      HBCI_Balance_isDebit (noted_bal),
-		      noted_tt);
-      bal_print_debug("Bank Line", 
-		      HBCI_AccountBalance_bankLine (acc_bal), FALSE,
-		      balance_tt);
-      bal_print_debug("Disposable amount",
-		      HBCI_AccountBalance_disposable (acc_bal), FALSE,
-		      balance_tt);
-      bal_print_debug("Already disposed",
-		      HBCI_AccountBalance_disposed (acc_bal), FALSE,
-		      balance_tt);
-
-      if ((HBCI_Value_getValue (HBCI_Balance_value (noted_bal)) == 0) &&
-	  (HBCI_Value_getValue (HBCI_Balance_value (booked_bal)) == 0))
-	{
-	  gnome_ok_dialog_parented 
-	    /* Translators: Strings from this file are really only
-	     * needed inside Germany (HBCI is not supported anywhere
-	     * else). You may safely ignore strings from the
-	     * import-export/hbci subdirectory in other countries.
-	     */
-	    (_("The downloaded HBCI Balance was zero.\n"
-	       "It seems as if your bank does not support Balance download \n"
-	       "in this HBCI version. You should choose a higher HBCI version \n"
-	       "number in the HBCI Setup. After that, try again to download \n"
-	       "the HBCI Balance.\n"),
-	     GTK_WINDOW (parent));
-	  dialogres = FALSE;
-	}
-      else
-      {
-	gboolean booked_debit = HBCI_Balance_isDebit (booked_bal);
-	char *booked_str = HBCI_Value_toReadableString (booked_val);
+      } else {
+	const char *message3 = _("Reconcile account now?");
 
 	dialogres = gnc_verify_dialog_parented
 	  (parent, 
 	   TRUE,
-	   /* Translators: %s is the amount. */
-	   _("Result of HBCI job: \n"
-	     "Account booked balance is %s%s\n"
-	     "Reconcile account now?"),
-	   (booked_debit ? "-" : ""),
-	   booked_str);
-
-	free (booked_str);
+	   "%s%s\n%s",
+	   message1, message2, message3);
       }
-
-      
-      GNCInteractor_hide (interactor);
-      if (dialogres) 
-	{
-	  gnc_numeric abs_value =
-	    double_to_gnc_numeric (HBCI_Value_getValue (booked_val),
-				   xaccAccountGetCommoditySCU(gnc_acc),
-				   GNC_RND_ROUND);
-	  recnWindowWithBalance (parent, 
-				 gnc_acc, 
-				 (booked_debit 
-				  ? gnc_numeric_neg (abs_value)
-				  : abs_value),
-				 booked_tt);
-	}
-      
-      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+      g_free (message1);
+      g_free (message2);
+      free (booked_str);
     }
-  }
-}
 
+      
+  if (dialogres) 
+    {
+      recnWindowWithBalance (parent, 
+			     gnc_acc, 
+			     value,
+			     booked_tt);
+    }
+      
+  return TRUE;
+}

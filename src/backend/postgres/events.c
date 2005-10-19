@@ -260,7 +260,7 @@ pgendProcessEvents (Backend *bend)
       GET_EVENTS (transGuid, gncTransactionTrail, be->last_transaction);
 
       /* gnc_cm_event_handler() doesn't really want to see any split guids */
-      // GET_EVENTS (entryGuid, gncEntryTrail, be->last_transaction);
+      // GET_EVENTS (splitGuid, gncSplitTrail, be->last_transaction);
    }
 
    /* Loop over each item, updating the engine, and dispatching events */

@@ -111,6 +111,11 @@ static void gncVendorFree (GncVendor *vendor)
 
   remObj (vendor);
 
+  if (vendor->terms)
+    gncBillTermDecRef (vendor->terms);
+  if (vendor->taxtable)
+    gncTaxTableDecRef (vendor->taxtable);
+
   g_free (vendor);
 }
 
@@ -175,7 +180,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
-    gncBillTermDecRef (vendor->terms);
+    gncBillTermIncRef (vendor->terms);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }

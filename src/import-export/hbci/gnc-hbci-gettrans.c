@@ -23,9 +23,6 @@
 #include "config.h"
 #include "gnc-hbci-gettrans.h"
 
-#include <openhbci/api.h>
-#include <openhbci/outboxaccjobs.h>
-
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
 #include "date.h"
@@ -44,219 +41,216 @@
 
 /* static short module = MOD_IMPORT; */
 
-/*static const gboolean DEFAULT_USE_GENERIC_MATCHER = FALSE;  */
 
-static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data);
+gboolean
+gettrans_dates(GtkWidget *parent, Account *gnc_acc, 
+	       GWEN_TIME **from_date, GWEN_TIME **to_date);
+
+static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *reportn, void *user_data);
 
 struct trans_list_data 
 {
   Account *gnc_acc;
-  /*GNCGenTransaction *importer;*/
   GNCImportMainMatcher *importer_generic;
-  /*gboolean use_generic_matcher;*/
 };
-
 
 
 void
 gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
 {
-  HBCI_API *api = NULL;
-  const HBCI_Account *h_acc = NULL;
+  AB_BANKING *api = NULL;
+  const AB_ACCOUNT *h_acc = NULL;
   GNCInteractor *interactor = NULL;
-  const HBCI_Customer *customer = NULL;
   
   g_assert(parent);
   g_assert(gnc_acc);
 
-  api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  /* Get the api */
+  api = gnc_AB_BANKING_new_currentbook (parent, &interactor);
   if (api == NULL) {
     printf("gnc_hbci_gettrans: Couldn't get HBCI API.\n");
     return;
   }
   g_assert (interactor);
-  
+
+  /* Get HBCI account */
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
-    printf("gnc_hbci_gettrans: No HBCI account found.\n");
+    printf("gnc_hbci_getbalance: No HBCI account found.\n");
+    /* FIXME: free unneeded data */
     return;
   }
-  /* printf("gnc_hbci_gettrans: HBCI account no. %s found.\n",
-     HBCI_Account_accountId (h_acc)); */
-  
-  {
-    /* Get one customer. */
-    const list_HBCI_Customer *custlist;
-    list_HBCI_Customer_iter *iter;
-    
-    custlist = HBCI_Account_authorizedCustomers (h_acc);
-    g_assert (custlist);
-    switch (list_HBCI_Customer_size (custlist)) {
-    case 0:
-      printf("gnc_hbci_gettrans: No HBCI customer found.\n");
-      return;
-    case 1:
-      break;
-    default:
-      gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
-				  "Sorry, Choosing one out of several HBCI Customers not yet implemented.");
-      return;
-    }
-    iter = list_HBCI_Customer_begin (custlist);
-    customer = list_HBCI_Customer_iter_get (iter);
-    list_HBCI_Customer_iter_delete (iter);
-  }
-  g_assert (customer);
-  /* printf("gnc_hbci_gettrans: Customer id %s found.\n",
-     HBCI_Customer_custId ((HBCI_Customer *)customer)); */
 
   {
     /* Execute a GetTransactions job. */
-    HBCI_OutboxJobGetTransactions *trans_job;
-    HBCI_OutboxJob *job;
-    Timespec last_timespec, until_timespec;
-    time_t now = time(NULL), time_convert;
-    struct tm tm;
-    HBCI_Date *from_date, *to_date;
-    gboolean use_last_date = TRUE, 
-      use_earliest_date = TRUE, use_until_now = TRUE;
+    AB_JOB *job;
+    Timespec until_timespec;
+    GWEN_TIME *from_date, *to_date;
 
-    /* Get time of last retrieval */
-    last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
-    if (last_timespec.tv_sec == 0) {
-      use_last_date = FALSE;
-      timespecFromTime_t (&last_timespec, now);
-    }
-    timespecFromTime_t (&until_timespec, now);
-
-    /* Let the user choose the date range of retrieval */
-    if (!gnc_hbci_enter_daterange (parent, NULL, 
-				   &last_timespec, 
-				   &use_last_date, &use_earliest_date,
-				   &until_timespec, &use_until_now))
+    /* Get the start and end dates for the Gettrans job.  */
+    if (!gettrans_dates(parent, gnc_acc, &from_date, &to_date))
       return;
-
-    /*printf("Retrieving transactions from date %s to date %s. \n",
-	   ctime(&()))*/
+    /* Use this as a local storage for the until_time below. */
+    timespecFromTime_t(&until_timespec, GWEN_Time_toTime_t(to_date));
     
-    /* Now calculate from date */
-    if (use_earliest_date)
-      from_date = HBCI_Date_new_blank();
-    else {
-      if (use_last_date)
-	last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
-      time_convert = timespecToTime_t(last_timespec);
-      from_date = HBCI_Date_new (localtime_r (&time_convert, &tm));
-    }
-
-    /* Now calculate to date */
-    if (use_until_now)
-      timespecFromTime_t (&until_timespec, now);
-    time_convert = timespecToTime_t (until_timespec);
-    to_date = HBCI_Date_new (localtime_r (&time_convert, &tm));
-
     /* Create OutboxJob */
-    trans_job = 
-      HBCI_OutboxJobGetTransactions_new (customer, 
-					 (HBCI_Account *)h_acc,
-					 from_date,
-					 to_date);
-    job = HBCI_OutboxJobGetTransactions_OutboxJob (trans_job);
-    g_assert (job);
-    HBCI_API_addJob (api, job);
+    job = AB_JobGetTransactions_new((AB_ACCOUNT*)h_acc);
+    if (AB_Job_CheckAvailability(job)) {
+      printf("gnc_hbci_gettrans: Oops, job not available. Aborting.\n");
+      /* FIXME: free unneeded data */
+      return;
+    }
+    AB_JobGetTransactions_SetFromTime(job, from_date);
+    AB_JobGetTransactions_SetToTime(job, to_date);
+
+    /* Add job to AB_BANKING queue. */
+    AB_Banking_EnqueueJob(api, job);
 
     /* Execute Outbox. */
-    if (!gnc_hbci_api_execute (parent, api, job, interactor)) {
-
-      /* HBCI_API_executeOutbox failed. */
-      HBCI_Date_delete (from_date);
-      HBCI_Date_delete (to_date);
+    if (!gnc_AB_BANKING_execute (parent, api, job, interactor) ||
+	(AB_Job_GetStatus(job) == AB_Job_StatusError) ||
+	GNCInteractor_hadErrors (interactor)) {
+      /* AB_BANKING_executeOutbox failed. */
+      gnc_hbci_cleanup_job(api, job);
       return;
     }
-
-    HBCI_Date_delete (from_date);
-    HBCI_Date_delete (to_date);
 
     /* Store the date of this retrieval */
     gnc_hbci_set_account_trans_retrieval (gnc_acc, until_timespec);
 
-    {
-      /* Now add the retrieved transactions to the gnucash account. */
-      const list_HBCI_Transaction *trans_list;
-      
-      trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
-      /*printf("gnc_hbci_gettrans: Got %d transactions.\n", 
-	list_HBCI_Transaction_size(trans_list));*/
-
-      if (list_HBCI_Transaction_size(trans_list) > 0) {
-	struct trans_list_data data;
-	/*GNCGenTransaction *importer_gui = NULL;*/
-	GNCImportMainMatcher *importer_generic_gui = NULL;
-
-	/*data.use_generic_matcher = 
-	  gnc_lookup_boolean_option("Online Banking & Importing",
-	  "HBCI Use generic import matcher",
-	  DEFAULT_USE_GENERIC_MATCHER);
-	  
-	  if(data.use_generic_matcher == TRUE)
-	  {*/
-	importer_generic_gui = gnc_gen_trans_list_new(NULL, NULL, TRUE);
-	data.importer_generic = importer_generic_gui;
-	/*  }
-	    else
-	    {
-	    importer_gui = gnc_gen_trans_new (NULL, NULL);
-	    gnc_gen_trans_freeze (importer_gui);
-	    gnc_gen_trans_set_fuzzy_amount (importer_gui, 0.0);
-	    data.importer = importer_gui;
-	    }*/
-	data.gnc_acc = gnc_acc;
-	
-	list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
-
-	/*if(data.use_generic_matcher == FALSE)
-	  gnc_gen_trans_thaw (importer_gui);*/
-
-	GNCInteractor_hide (interactor);
-	/*if(data.use_generic_matcher == TRUE)*/
-	gnc_gen_trans_list_run (importer_generic_gui);
-	/*else
-	  gnc_gen_trans_run (importer_gui);*/
-
-      }
-      else {
-	GNCInteractor_hide (interactor);
-	gnome_ok_dialog_parented 
-	  (_("The HBCI import returned no transactions for the selected time period."),
-	   GTK_WINDOW (parent));
-      }
-      
-    }
+    /* Now finish the job duties. */
+    gnc_hbci_gettrans_final(parent, gnc_acc, job, FALSE);
 
     /* Clean up behind ourself. */
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+    gnc_hbci_cleanup_job(api, job);
+    gnc_AB_BANKING_fini (api);
+    GNCInteractor_hide (interactor);
+    if (from_date) 
+      GWEN_Time_free (from_date);
+    GWEN_Time_free (to_date);
   }
 }
 
 
-/* list_HBCI_Transaction_foreach callback */
-static void *trans_list_cb (const HBCI_Transaction *h_trans, 
-			    void *user_data)
+/** Create and set the from_date and to_date objects, and return TRUE
+    if they have been set. If FALSE is returned, then from_date and
+    to_date are not pointing to valid objects and may not be
+    deleted. */
+gboolean
+gettrans_dates(GtkWidget *parent, Account *gnc_acc, 
+	       GWEN_TIME **from_date, GWEN_TIME **to_date)
 {
-  time_t current_time, tt1, tt2; 
+  Timespec last_timespec, until_timespec;
+  time_t now = time(NULL);
+  gboolean use_last_date = TRUE, 
+    use_earliest_date = TRUE, use_until_now = TRUE;
+
+  g_assert(from_date);
+  g_assert(to_date);
+  /* Get time of last retrieval */
+  last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
+  if (last_timespec.tv_sec == 0) {
+    use_last_date = FALSE;
+    timespecFromTime_t (&last_timespec, now);
+  }
+  timespecFromTime_t (&until_timespec, now);
+
+  /* Let the user choose the date range of retrieval */
+  if (!gnc_hbci_enter_daterange (parent, NULL, 
+				 &last_timespec, 
+				 &use_last_date, &use_earliest_date,
+				 &until_timespec, &use_until_now))
+    return FALSE;
+
+  /*printf("Retrieving transactions from date %s to date %s. \n",
+    ctime(&()))*/
+    
+  /* Now calculate from date */
+  if (use_earliest_date)
+    *from_date = NULL;
+  /* for an old version this was: from_date = GWEN_Time_fromSeconds(0); */
+  else {
+    if (use_last_date)
+      last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
+    *from_date = GWEN_Time_fromSeconds(timespecToTime_t(last_timespec));
+  }
+
+  /* Now calculate to date */
+  if (use_until_now)
+    timespecFromTime_t (&until_timespec, now);
+  *to_date = GWEN_Time_fromSeconds(timespecToTime_t (until_timespec));
+
+  return TRUE;
+}
+
+
+/** Finalizes all the things that have to be done with a GetTrans
+ * job.  Returns true if everything has been finished succesfully. */
+gboolean
+gnc_hbci_gettrans_final(GtkWidget *parent, 
+			Account *gnc_acc, 
+			const AB_JOB *trans_job,
+			gboolean run_until_done)
+{
+  /* Now add the retrieved transactions to the gnucash account. */
+  AB_TRANSACTION_LIST2 *trans_list;
+
+  trans_list = AB_JobGetTransactions_GetTransactions(trans_job);
+  if (!trans_list) {
+    /* printf("gnc_hbci_gettrans_final: No transactions section. Response was:\n"); */
+
+    gnome_ok_dialog_parented 
+      (_("The HBCI import returned no transactions for the selected time period."),
+       GTK_WINDOW (parent));
+    return TRUE;
+  }
+  
+  if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
+    struct trans_list_data data;
+    GNCImportMainMatcher *importer_generic_gui = 
+      gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
+
+    data.importer_generic = importer_generic_gui;
+    data.gnc_acc = gnc_acc;
+	
+    AB_Transaction_List2_ForEach (trans_list, trans_list_cb, &data);
+
+    if (run_until_done)
+      return gnc_gen_trans_list_run (importer_generic_gui);
+
+  }
+  else {
+    gnome_ok_dialog_parented 
+      (_("The HBCI import returned no transactions for the selected time period."),
+       GTK_WINDOW (parent));
+  }
+
+  return TRUE;
+}
+
+
+/* list_AB_TRANSACTION_foreach callback. The Conversion from HBCI to
+   GNC transaction is done here, once for each AB_TRANSACTION.  */
+static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
+{
+  time_t current_time;
+  /* time_t tt1, tt2; */
   /*struct tm tm1, tm2;*/
   Account *gnc_acc;
   GNCBook *book;
   Transaction *gnc_trans;
+  const GWEN_TIME *valutaDate, *normalDate;
   Split *split;
   struct trans_list_data *data = user_data;
   g_assert(data);
-  g_assert(h_trans);
+
+  if (!h_trans) return NULL;
 
   gnc_acc = data->gnc_acc;
   g_assert(gnc_acc);
-  
   book = xaccAccountGetBook(gnc_acc);
+
+  /* Create new gnucash transaction for the given hbci one */
   gnc_trans = xaccMallocTransaction(book);
   xaccTransBeginEdit(gnc_trans);
 
@@ -264,32 +258,37 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
     gnc_import_set_trans_online_id(gnc_trans, data.fi_id);
     }*/
 
-  tt1 = HBCI_Date_to_time_t (HBCI_Transaction_date(h_trans));
-  tt2 = HBCI_Date_to_time_t (HBCI_Transaction_valutaDate(h_trans));
+  normalDate = AB_Transaction_GetDate(h_trans);
+  valutaDate = AB_Transaction_GetValutaDate(h_trans);
+  if (normalDate && !valutaDate)
+    valutaDate = normalDate;
+  /* Watch out -- any of the GWEN_TIME may be NULL */
+  /*   tt1 = GWEN_Time_toTime_t (normalDate); */
+  /*   tt2 = GWEN_Time_toTime_t (valutaDate); */
   /*printf("Date? %s ValutaDate? %s", ctime(&tt1), ctime(&tt2));*/
-  /*tm1 = HBCI_Date_to_tm (HBCI_Transaction_date(h_trans));
-    tm2 = HBCI_Date_to_tm (HBCI_Transaction_valutaDate(h_trans));
-    printf("Date asc %s ValutaDate asc %s", asctime(&tm1), asctime(&tm2));*/
   
   
   /* Date / Time */
-  xaccTransSetDateSecs
-    (gnc_trans, HBCI_Date_to_time_t (HBCI_Transaction_valutaDate (h_trans)));
-
+  if (valutaDate)
+    xaccTransSetDateSecs
+      (gnc_trans, GWEN_Time_toTime_t (valutaDate));
+  else
+    printf("trans_list_cb: Oops, date 'valutaDate' was NULL.\n");
+    
   current_time = time(NULL);
   xaccTransSetDateEnteredSecs(gnc_trans, mktime(localtime(&current_time)));
-  
+    
   /* Currency; we take simply the default currency of the gnucash account */
   xaccTransSetCurrency(gnc_trans, xaccAccountGetCommodity(gnc_acc));
-
+    
   {
     /* Number. We use the "customer reference", if there is one. */
-    const char *custref = HBCI_Transaction_customerReference (h_trans);
+    const char *custref = AB_Transaction_GetCustomerReference (h_trans);
     if (custref && (strlen (custref) > 0) && 
 	(g_strncasecmp (custref, "NONREF", 6) != 0))
       xaccTransSetNum (gnc_trans, custref);
   }
-  
+    
   /* Description */
   {
     char *g_descr = gnc_hbci_descr_tognc (h_trans);
@@ -300,21 +299,24 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   /* Notes. */
   /*xaccTransSetNotes (gnc_trans, g_notes);*/
   /* But Nobody ever uses the Notes field? */
-
+  
   /* Add one split */
   split=xaccMallocSplit(book);
   xaccTransAppendSplit(gnc_trans, split);
   xaccAccountInsertSplit(gnc_acc, split);
-
+    
   {
     /* Amount into the split */
+    const AB_VALUE *h_value = AB_Transaction_GetValue (h_trans);
     gnc_numeric gnc_amount = double_to_gnc_numeric
-      (HBCI_Value_getValue (HBCI_Transaction_value (h_trans)),
+      (h_value ? AB_Value_GetValue (h_value) : 0.0,
        xaccAccountGetCommoditySCU(gnc_acc),
        GNC_RND_ROUND);
+    if (!h_value)
+      printf("trans_list_cb: Oops, value was NULL. Using 0.\n");
     xaccSplitSetBaseValue(split, gnc_amount, xaccAccountGetCommodity(gnc_acc));
   }
-
+    
   /* Memo in the Split. */
   {
     char *g_memo = gnc_hbci_memo_tognc (h_trans);
@@ -323,16 +325,9 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
   }
     
   /* Instead of xaccTransCommitEdit(gnc_trans)  */
-  /*gnc_import_add_trans(gnc_trans);*/
-  /*if(data->use_generic_matcher == TRUE)
-    {*/
   g_assert (data->importer_generic);
   gnc_gen_trans_list_add_trans (data->importer_generic, gnc_trans);
-  /*}
-    else
-    {
-    g_assert (data->importer);
-    gnc_gen_trans_add_trans (data->importer, gnc_trans);
-    }*/
+
   return NULL;
+  
 }

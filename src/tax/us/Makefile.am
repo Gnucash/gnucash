@@ -10,11 +10,14 @@ libgncmod_tax_us_la_LIBADD = \
  ${GUILE_LIBS} \
  ${GLIB_LIBS}
 
-AM_CFLAGS = -I${top_srcdir}/src/gnc-module ${GLIB_CFLAGS} ${GUILE_INCS}
+AM_CFLAGS = \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/gnc-module \
+  ${GLIB_CFLAGS} ${GUILE_INCS}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = us.scm
+SCM_FILE_LINKS = us.scm de_DE.scm
 endif
 
 .scm-links:
@@ -31,10 +34,10 @@ endif
 noinst_DATA = .scm-links
 
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/tax
-gncscmmod_DATA = us.scm
+gncscmmod_DATA = us.scm de_DE.scm
 
 gncscmdir = ${GNC_SHAREDIR}/scm
-gncscm_DATA = txf.scm txf-help.scm 
+gncscm_DATA = txf.scm txf-help.scm txf-de_DE.scm txf-help-de_DE.scm 
 
 EXTRA_DIST = \
   ${gncscmmod_DATA} \

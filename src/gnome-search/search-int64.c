@@ -110,7 +110,7 @@ static void
 gnc_search_int64_init (GNCSearchInt64 *o)
 {
   o->priv = g_malloc0 (sizeof (*o->priv));
-  o->how = COMPARE_LT;
+  o->how = COMPARE_EQUAL;
 }
 
 static void
@@ -206,7 +206,7 @@ static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
   GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
+  GtkWidget *menu, *item, *first = NULL, *opmenu;
   int current = 0, index = 0;
 
   menu = gtk_menu_new ();

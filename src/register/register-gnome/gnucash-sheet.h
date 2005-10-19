@@ -105,7 +105,7 @@ typedef struct
 
         gint editing;
 
-        gint button; /* mouse button being held down */
+        guint button; /* mouse button being held down */
         gboolean grabbed; /* has the grab */
 
         guint insert_signal;

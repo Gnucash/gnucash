@@ -48,3 +48,4 @@ tags
 *.diff
 *.diffs
 *.xac.*.xac
+autom4te.cache

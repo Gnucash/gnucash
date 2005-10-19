@@ -64,7 +64,7 @@ struct file_backend {
 };
 
 #define GNC_V2_STRING "gnc-v2"
-static const gchar *book_version_string;
+extern const gchar *gnc_v2_book_version_string;	/* see gnc-book-xml-v2 */
 
 void
 run_callback(sixtp_gdv2 *data, const char *type)
@@ -644,6 +644,19 @@ add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
       be_data->ok = FALSE;
 }
 
+static void
+scrub_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->scrub)
+    (data->scrub)(be_data->book);
+}
+
 static sixtp_gdv2 *
 gnc_sixtp_gdv2_new (
     GNCBook *book,
@@ -761,6 +774,11 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
 
     /* Mark the book as saved */
     gnc_book_mark_saved (book);
+
+    /* Call individual scrub functions */
+    memset(&be_data, 0, sizeof(be_data));
+    be_data.book = book;
+    gncObjectForeachBackend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* Fix account and transaction commodities */
     xaccGroupScrubCommodities (gnc_book_get_group(book), book);
@@ -908,7 +926,7 @@ write_book(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
     be_data.out = out;
     be_data.book = book;
 
-    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, book_version_string );
+    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string );
     write_book_parts (out, book);
 
     write_counts(out,

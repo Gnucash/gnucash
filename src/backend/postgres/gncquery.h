@@ -32,8 +32,8 @@
  * AND'ed together; the outer list OR's together the inner lists.
  *
  * The resulting query will resemble
- * SELECT * FROM gncEntry WHERE 
- * (entryguid='deadbeef') OR
+ * SELECT * FROM gncSplit WHERE 
+ * (splitguid='deadbeef') OR
  * (memo='deposit' AND date_reconciled>'1998-07-01 11:00:00.345678 -0500')
  *
  * HISTORY:

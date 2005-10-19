@@ -1,4 +1,5 @@
 SUBDIRS = . test
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-report-gnome.la libgw-report-gnome.la
 

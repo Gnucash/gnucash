@@ -998,9 +998,13 @@ gnc_option_set_ui_widget(GNCOption *option,
   char *type;
   GNCOptionDef_t *option_def;
 
+  ENTER("option %p(%s), box %p, tips %p",
+	option, gnc_option_name(option), page_box, tooltips);
   type = gnc_option_type(option);
-  if (type == NULL)
+  if (type == NULL) {
+    LEAVE("bad type");
     return;
+  }
 
   raw_name = gnc_option_name(option);
   if (raw_name != NULL)
@@ -1038,6 +1042,7 @@ gnc_option_set_ui_widget(GNCOption *option,
   if (raw_documentation != NULL)
     free(raw_documentation);
   free(type);
+  LEAVE(" ");
 }
 
 static void
@@ -1164,7 +1169,8 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
   gint default_page = -1;
   gint num_sections;
   gint page;
-  gint i, j;
+  gint i;
+  guint j;
 
   g_return_if_fail (propertybox != NULL);
   g_return_if_fail (odb != NULL);
@@ -2110,6 +2116,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   GtkWidget *label;
   gchar *colon_name;
 
+  ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
   colon_name = g_strconcat(name, ":", NULL);
   label = gtk_label_new(colon_name);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
@@ -2135,6 +2142,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   gtk_widget_show(value);
   gtk_widget_show(label);
   gtk_widget_show(*enclosing);
+  LEAVE("new widget = %p", value);
   return value;
 }
 
@@ -2483,23 +2491,26 @@ static gboolean
 gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 				 GtkWidget *widget, SCM value)
 {
+  ENTER("option %p(%s)", option, gnc_option_name(option));
   if (gh_string_p(value))
   {
     char * string = gh_scm2newstr(value, NULL);
 
     if (string && *string)
     {
-      GnomeFileEntry *fentry = 
-	GNOME_FILE_ENTRY(gnome_pixmap_entry_gnome_file_entry
-			 (GNOME_PIXMAP_ENTRY(widget)));
-      gnome_file_entry_set_default_path(fentry, string);
+      GtkEntry *entry;
+      DEBUG("string = %s", string);
+      entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
+      gtk_entry_set_text(entry, string);
     }
     if(string)
       free(string);
+    LEAVE("FALSE");
     return FALSE;
   }
-  else 
-    return TRUE;
+
+  LEAVE("TRUE");
+  return TRUE;
 }
 
 static gboolean
@@ -2704,7 +2715,7 @@ gnc_option_get_ui_value_list (GNCOption *option, GtkWidget *widget)
 
   clist = GTK_CLIST(widget);
   num_rows = gnc_option_num_permissible_values(option);
-  result = gh_eval_str("()");
+  result = gh_eval_str("'()");
 
   for (row = 0; row < num_rows; row++)
   {

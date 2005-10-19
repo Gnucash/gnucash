@@ -82,6 +82,29 @@ gnc_print_session_done(PrintSession * ps, gboolean hand_built_pages) {
 
 }
 
+void
+gnc_print_session_rotate(PrintSession *ps, double theta_in_degrees)
+{
+  gnome_print_rotate(GNOME_PRINT_CONTEXT(ps->meta), theta_in_degrees);
+}
+
+void
+gnc_print_session_translate(PrintSession *ps, double x, double y)
+{
+  gnome_print_translate(GNOME_PRINT_CONTEXT(ps->meta), x, y);
+}
+
+void
+gnc_print_session_gsave(PrintSession *ps)
+{
+  gnome_print_gsave(GNOME_PRINT_CONTEXT(ps->meta));
+}
+
+void
+gnc_print_session_grestore(PrintSession *ps)
+{
+  gnome_print_grestore(GNOME_PRINT_CONTEXT(ps->meta));
+}
 
 void
 gnc_print_session_print(PrintSession * ps) {

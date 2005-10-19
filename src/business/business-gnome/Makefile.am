@@ -1,4 +1,5 @@
 SUBDIRS = . glade
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 
@@ -73,6 +74,7 @@ libgncmod_business_gnome_la_LIBADD = \
 
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
 libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+libgw_business_gnome_la_LIBADD  = libgncmod-business-gnome.la
 
 # For Business Reports
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/

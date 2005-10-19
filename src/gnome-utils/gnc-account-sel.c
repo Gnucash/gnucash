@@ -214,9 +214,11 @@ gas_populate_list( GNCAccountSel *gas )
                         (gpointer)&atnd );
         g_list_free( accts );
 
-        if ( g_list_length( nameList ) > 0 ) {
-                gtk_combo_set_popdown_strings( gas->combo, nameList );
-        }
+	/* Make sure we have a list of something... */
+	if ( nameList == NULL )
+		nameList = g_list_prepend( NULL, "" );
+
+	gtk_combo_set_popdown_strings( gas->combo, nameList );
 
         /* If the account which was in the text box before still exists, then
          * reset to it. */

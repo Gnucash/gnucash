@@ -1,3 +1,4 @@
+PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-search.la libgw-gnome-search.la
 
@@ -27,7 +28,6 @@ libgncmod_gnome_search_la_SOURCES = \
   search-double.c \
   search-int64.c \
   search-numeric.c \
-  search-param.c \
   search-reconciled.c \
   search-string.c
 
@@ -44,7 +44,6 @@ noinst_HEADERS = \
   search-double.h \
   search-int64.h \
   search-numeric.h \
-  search-param.h \
   search-reconciled.h \
   search-string.h \
   gw-gnome-search.h

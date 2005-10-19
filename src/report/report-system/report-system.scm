@@ -16,8 +16,6 @@
 (use-modules (g-wrap gw-glib))
 
 (require 'hash-table)
-(if (not (defined? 'simple-format))
-    (require 'format))
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
@@ -97,6 +95,7 @@
 (export gnc:menuname-income-expense )
 (export gnc:menuname-taxes)
 (export gnc:menuname-utility)
+(export gnc:menuname-custom)
 (export gnc:pagename-general)
 (export gnc:pagename-accounts)
 (export gnc:pagename-display)
@@ -107,6 +106,7 @@
 (export *gnc:_reports_*)
 (export gnc:report-template-new-options/name)
 (export gnc:report-template-menu-name/name)
+(export gnc:report-template-renderer/name)
 (export gnc:report-template-new-options)
 (export gnc:report-template-version)
 (export gnc:report-template-name)
@@ -148,6 +148,8 @@
 (export gnc:find-report)
 (export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
+(export gnc:report-generate-saved-forms)
+(export gnc:report-save-to-savefile)
 (export gnc:report-render-html)
 (export gnc:report-run)
 (export gnc:report-templates-for-each)

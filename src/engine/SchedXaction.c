@@ -664,6 +664,10 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 
     xaccTransBeginEdit(new_trans);
 
+    /* Fix the transaction and posted dates to the current time. */
+    xaccTransSetDateSecs( new_trans, time(NULL) );
+    xaccTransSetDatePostedSecs( new_trans, time(NULL) );
+
     xaccTransSetDescription(new_trans, 
 			    gnc_ttinfo_get_description(tti));
 

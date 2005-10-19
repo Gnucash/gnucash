@@ -37,7 +37,8 @@
 ( "Brazilian Real" "real" "centavo"  "ISO4217" "BRL" "986" 100 100 ) ;; 1994 on
 ( "British Pound" "pound" "pence" "ISO4217" "GBP" "826" 100 100 )
 ( "Brunei Dollar" "dollar" "cent" "ISO4217" "BND" "096" 100 100 )
-( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGL" "100" 100 100 )
+( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGL" "100" 100 100 ) ;; replaced 1999
+( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGN" "975" 100 100 )
 ( "Burundi Franc" "franc" "centime" "ISO4217" "BIF" "108" 100 100 )
 ( "CFA Franc BEAC" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
 ( "CFA Franc BCEAO" "franc" "centime" "ISO4217" "XOF" "952" 100 100 )
@@ -64,7 +65,6 @@
 ( "Egyptian Pound" "pound" "pence"  "ISO4217" "EGP" "818" 100 100 )
 ( "El Salvador Colon" "colon" "centavo" "ISO4217" "SVC" "222" 100 100 )
 ( "Eritrean Nakfa" "nakfa" "cent" "ISO4217" "ERN" "232" 100 100 )
-( "Escudo Caboverdiano" "escudo" "centavo" "ISO4217" "CVE" "132" 100 100 )
 ( "Estonian Kroon" "kroon" "senti" "ISO4217" "EEK" "233" 100 100 )
 ( "Ethiopian Birr" "birr" "cent" "ISO4217" "ETB" "231" 100 100 )
 ( "Euro" "euro" "euro-cent" "ISO4217" "EUR" "978" 100 100)
@@ -92,12 +92,11 @@
 ( "Iranian Rial" "rial" "rial" "ISO4217" "IRR" "364" 1 1)
 ( "Iraqi Dinar" "dinar" "fil"  "ISO4217" "IQD" "368" 1000 1000)
 ( "Irish Punt" "punt" "pingin" "ISO4217" "IEP" "372" 100 100 ) ;; through 1998
-( "Israeli New Shekel" "new shekel" "new agorot"  "ISO4217" "ILS" "376" 100 100)
+( "Israeli New Shekel" "new shekel" "new agorot"  "ISO4217" "NIS" "376" 100 100)
 ( "Italian Lira" "lira" "lira" "ISO4217" "ITL" "380" 1 1 ) ;; through 1998
 ( "Jamaican Dollar" "dollar" "cent" "ISO4217" "JMD" "388" 100 100 )
 ( "Japanese Yen" "yen" "sen"  "ISO4217" "JPY" "392" 100 1 )
 ( "Jordanian Dinar" "dinar" "fil"  "ISO4217" "JOD" "400" 1000 1000 )
-( "Kampuchean (Cambodian) Riel" "riel" "sen" "ISO4217" "KHR" "116" 100 100 )
 ( "Kazakhstan Tenge" "tenge" "tiyn" "ISO4217" "KZT" "398" 100 100 )
 ( "Kenyan Shilling" "shilling" "cent" "ISO4217" "KES" "404" 100 100 )
 ( "Kuwaiti Dinar" "dinar" "fils"  "ISO4217" "KWD" "414" 1000 1000 )
@@ -112,7 +111,8 @@
 ( "Luxembourg Franc" "franc" "centime" "ISO4217" "LUF" "442" 100 100  ) ;; through 1998
 ( "Macau Pataca" "pataca" "avo"  "ISO4217" "MOP" "446" 100 100 )
 ( "Macedonian Denar" "denar" "deni" "ISO4217" "MKD" "807" 100 100 )
-( "Malagasy Franc" "franc" "centime" "ISO4217" "MGF" "450" 500 500 )
+( "Malagasy Ariary" "ariary" "iraimbilanja" "ISO4217" "MGA" "969" 200 200 )
+( "Malagasy Franc" "franc" "centime" "ISO4217" "MGF" "450" 500 500 ) ;; replaced 2003-07-31
 ( "Malawi Kwacha" "kwacha" "tambala"  "ISO4217" "MWK" "454" 100 100 )
 ( "Malaysian Ringgit" "ringgit" "sen"  "ISO4217" "MYR" "458" 100 100 )
 ( "Maldive Rufiyaa" "rufiyaa" "lari" "ISO4217" "MVR" "462" 100 100 )
@@ -140,10 +140,11 @@
 ( "Paraguay Guarani" "guarani" "centimo" "ISO4217" "PYG" "600" 100 100 )
 ( "Peruvian Nuevo Sol" "nuevo sol" "centimo"  "ISO4217" "PEN" "604" 100 100 )
 ( "Philippine Peso" "peso" "centavo" "ISO4217" "PHP" "608" 100 100 )
-( "Polish Zloty" "zloty" "groszy" "ISO4217" "PLZ" "616" 100 100 )
+( "Polish Zloty" "zloty" "groszy" "ISO4217" "PLN" "985" 100 100 )
 ( "Portuguese Escudo" "escudo" "centavo" "ISO4217" "PTE" "620" 100 100 ) ;; through 1998
 ( "Qatari Rial" "rial" "dirham" "ISO4217" "QAR" "634" 100 100 )
-( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 )
+( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 ) ;; through 2005-06
+( "Romanian Leu" "leu" "bani"  "ISO4217" "RON" "946" 100 100 ) ;; from 2005-07
 ( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUR" "810" 100 100 )
 ( "Rwanda Franc" "franc" "centime" "ISO4217" "RWF" "646" 100 100 )
 ( "Samoan Tala" "tala" "sene" "ISO4217" "WST" "882" 100 100 )
@@ -169,7 +170,7 @@
 ( "Swiss Franc" "franc" "centime" "ISO4217" "CHF" "756" 100 100 )
 ( "Syrian Pound" "pound" "pence"  "ISO4217" "SYP" "760" 100 100 )
 ( "Taiwan Dollar" "dollar" "cent" "ISO4217" "TWD" "901" 100 100 )
-( "Tajikistan Somani" "somani" "dirams" "ISO4217" "TJS" "972" 100 100 ) ;; 2002-11-06 on
+( "Tajikistani Somoni" "somoni" "dirams" "ISO4217" "TJS" "972" 100 100 ) ;; 2002-11-06 on
 ( "Tajikistan Ruble" "ruble" "ruble" "ISO4217" "TJR" "762" 1 1 ) ;; until 2002-11-05
 ( "Tanzanian Shilling" "shilling" "cent"  "ISO4217" "TZS" "834" 100 100 )
 ( "Thai Baht" "baht" "stang" "ISO4217" "THB" "764" 100 100 )
@@ -180,7 +181,7 @@
 ( "Turkmenistan Manat" "manat" "tenga" "ISO4217" "TMM" "795" 100 100 )
 ( "US Dollar" "dollar" "cent" "ISO4217" "USD" "840" 100 100 )
 ( "Uganda Shilling" "shilling" "cent"  "ISO4217" "UGX" "800" 100 100  )
-( "Ukraine Hryvnia" "hryvnia" "kopiyka"  "ISO4217" "UAG" "804" 100 100 )
+( "Ukraine Hryvnia" "hryvnia" "kopiyka"  "ISO4217" "UAH" "804" 100 100 )
 ( "United Arab Emirates Dirham" "dirham" "fil" "ISO4217" "AED" "784" 100 100 )
 ( "Uruguayan Peso" "peso" "centesimo" "ISO4217" "UYU" "858" 100 100 )
 ( "Uzbekistani Sum" "som" "tiyin" "ISO4217" "UZS" "860" 100 100 )

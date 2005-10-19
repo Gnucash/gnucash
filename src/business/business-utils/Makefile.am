@@ -38,3 +38,12 @@ EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA} \
   ${gncmod_DATA}
+
+noinst_DATA = .scm-links
+
+.scm-links: 
+	rm -f gnucash
+	ln -sf ${srcdir} gnucash 
+	touch .scm-links
+
+DISTCLEANFILES = gnucash .scm-links

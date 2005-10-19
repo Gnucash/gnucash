@@ -44,7 +44,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
-build-config.scm: build-config.scm.in Makefile
+build-config.scm: ${srcdir}/build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \

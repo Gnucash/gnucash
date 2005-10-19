@@ -23,7 +23,7 @@ test_binary()
     {
         bin_data *test_data1;
         void *test_data2;
-        guint64 test_data2_len;
+        gint64 test_data2_len;
         gchar *converted;
         
         test_data1 = get_random_binary_data();

@@ -4,8 +4,7 @@
      Investment Accounts
     </gnc-act:title>
     <gnc-act:short-description>
-      Brokerage account with related investment accounts
-        (stock, bond, mutual fund, index fund, interest, dividend)
+      Brokerage account with related investment accounts (stock, bond, mutual fund, index fund, interest, dividend)
     </gnc-act:short-description>
     <gnc-act:long-description>
     You would want to select this set of accounts if you have investments (stock, bond, mutual fund, index fund, interest, dividend).

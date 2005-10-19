@@ -117,6 +117,8 @@ FreqType xaccFreqSpecGetType( FreqSpec *fs );
 UIFreqType xaccFreqSpecGetUIType( FreqSpec *fs );
 void xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType );
 
+void xaccFreqSpecSetNone( FreqSpec *fs );
+
 /**
  * Sets the type to once-off, and initialises the
  * date it occurs on.

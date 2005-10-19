@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include "gnc-engine-util.h"
 
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
@@ -64,7 +65,7 @@ gnc_kvp_gemini (kvp_frame *kvp_root, const GUID *acct_guid,
 
    /* OK, now create subdirectory and put the actual data */
    --ncopies;
-   sprintf (buff, "%lld", ncopies);
+   sprintf (buff, GNC_SCANF_LLD, (long long int) ncopies);
    cwd = kvp_frame_new();
    kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 

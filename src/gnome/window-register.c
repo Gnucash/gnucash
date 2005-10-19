@@ -101,6 +101,7 @@ struct _RegWindow
   GtkWidget *voided_menu_item;
   GtkWidget *frozen_menu_item;
   GtkWidget *unreconciled_menu_item;
+  gint component_id;
 };
 
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
@@ -750,8 +751,10 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
     gnc_reg_save_size( regData );
   }
 
-  gnc_split_reg_check_close(regData->gsr);
-  gnc_ledger_display_close (regData->ledger);
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE) {
+    gnc_ledger_display_close (regData->ledger);
+    return FALSE;
+  }
 
   return TRUE; /* don't close */
 }
@@ -760,6 +763,8 @@ void
 gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
+
+  gnc_unregister_gui_component (regData->component_id);
 
   if (regData->date_window != NULL)
   {
@@ -783,15 +788,16 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
 {
   Account *leader;
   SplitRegister *reg;
-  gboolean single_account;
   gchar *account_name;
   gchar *reg_name;
   gchar *name;
+  GNCLedgerDisplayType ledger_type;
 
   if (regData == NULL)
     return NULL;
 
   reg = gnc_ledger_display_get_split_register (regData->ledger);
+  ledger_type = gnc_ledger_display_type (regData->ledger);
 
   switch (reg->type)
   {
@@ -801,40 +807,42 @@ gnc_reg_get_name (RegWindow *regData, gboolean for_window)
         reg_name = _("General Ledger");
       else
         reg_name = _("General Ledger Report");
-      single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
       if (for_window)
         reg_name = _("Portfolio");
       else
         reg_name = _("Portfolio Report");
-      single_account = FALSE;
       break;
     case SEARCH_LEDGER:
       if (for_window)
         reg_name = _("Search Results");
       else
         reg_name = _("Search Results Report");
-      single_account = FALSE;
       break;
     default:
       if (for_window)
         reg_name = _("Register");
       else
         reg_name = _("Register Report");
-      single_account = TRUE;
       break;
   }
 
   leader = gnc_ledger_display_leader (regData->ledger);
 
-  if ((leader != NULL) && single_account)
+  if ((leader != NULL) && (ledger_type != LD_GL))
   {
     account_name = xaccAccountGetFullName (leader,
                                            gnc_get_account_separator ());
 
-    name = g_strconcat (account_name, " - ", reg_name, NULL);
-
+    if (ledger_type == LD_SINGLE)
+    {
+      name = g_strconcat (account_name, " - ", reg_name, NULL);
+    }
+    else 
+    {
+      name = g_strconcat (account_name, " ", _("and subaccounts"), " - ", reg_name, NULL);
+    }
     g_free(account_name);
   }
   else
@@ -872,6 +880,26 @@ gnc_register_size_allocate (GtkWidget *widget,
 
   regData->width = allocation->width;
   gtk_window_set_default_size( GTK_WINDOW(regData->window), regData->width, 0 );
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  gnc_reg_set_window_name (regData);
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  RegWindow *regData = user_data;
+
+  if (!regData)
+    return;
+
+  gnc_register_delete_cb(NULL, NULL, regData);
+  gnc_register_destroy_cb(NULL, regData);
 }
 
 /********************************************************************\
@@ -981,7 +1009,11 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     GtkWidget *toolbar = gnc_register_setup_toolbar( regData );
     regData->toolbar_dock = glade_xml_get_widget( xml, "toolbar_dock" );
     if ( toolbar ) {
-      gtk_widget_show_all( toolbar );
+      /*
+       * Don't call gtk_widget_show_all() here. It overrides the users
+       * toolbar preference setting.
+       */
+      gtk_widget_show( toolbar );
       gtk_container_add( GTK_CONTAINER(regData->toolbar_dock), toolbar );
     }
   }
@@ -1035,6 +1067,14 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     gnc_ledger_display_refresh( regData->ledger );
   }
 
+  /* Get event updates so we can check the window title */
+  regData->component_id = gnc_register_gui_component ("register-window",
+						      refresh_handler,
+						      close_handler, regData);
+
+  gnc_gui_component_watch_entity_type (regData->component_id,
+                                       GNC_ID_ACCOUNT,
+                                       GNC_EVENT_MODIFY);
   return regData;
 }
 
@@ -1251,7 +1291,11 @@ gnc_register_setup_toolbar( RegWindow *regData )
 
   gtk_widget_destroy( GTK_WIDGET(regTbar) );
 
-  gtk_widget_show_all( GTK_WIDGET(tbar) );
+  /*
+   * Don't call gtk_widget_show_all() here. It overrides the users
+   * toolbar preference setting.
+   */
+  gtk_widget_show( GTK_WIDGET(tbar) );
 
   return GTK_WIDGET(tbar);
 }
@@ -1453,8 +1497,9 @@ void
 gnc_register_close_cb (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData = data;
-  gnc_split_reg_check_close( GNC_SPLIT_REG(regData->gsr) );
-  gnc_ledger_display_close( regData->ledger );
+
+  if (gnc_split_reg_check_close(regData->gsr) != FALSE)
+    gnc_ledger_display_close( regData->ledger );
 }
 
 static int

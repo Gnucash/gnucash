@@ -128,10 +128,21 @@
 	  subreport (gnc:report-stylesheet report))
 	 
 	 ;; render the report body ... hopefully this will DTRT
+	 ;; if there is an error, then dump a backtrace and print
+	 ;; an error message
 	 ;; and cache when it's ok to cache.
-	 (gnc:html-table-cell-append-objects! 
-	  contents-cell (gnc:report-render-html subreport #f))
-	 
+	 (if (not (gnc:backtrace-if-exception
+		   (lambda ()
+		     (gnc:html-table-cell-append-objects! 
+		      contents-cell (gnc:report-render-html subreport #f))
+		     #t)))
+	     (gnc:html-table-cell-append-objects!
+	      contents-cell
+	      (gnc:make-html-text
+	       (string-append
+		"<h3>" (_ "Report error") "</h3><p>"
+		(_ "An error occurred while running the report.")))))
+
 	 ;; increment the alloc number for each occupied row
 	 (let loop ((row current-row-num))
 	   (let ((allocation (hash-ref column-allocs row)))

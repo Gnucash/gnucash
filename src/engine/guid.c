@@ -147,7 +147,8 @@ init_from_file(const char *filename, size_t max_size)
 
   file_bytes = init_from_stream(fp, max_size);
 
-  PINFO ("guid_init got %u bytes from %s", file_bytes, filename);
+  PINFO ("guid_init got %llu bytes from %s", (unsigned long long int) file_bytes,
+	 filename);
 
   total += file_bytes;
 
@@ -186,7 +187,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
 
     result = snprintf(filename, sizeof(filename),
                       "%s/%s", dirname, de->d_name);
-    if ((result < 0) || (result >= sizeof(filename)))
+    if ((result < 0) || (result >= (int)sizeof(filename)))
       continue;
 
     if (stat(filename, &stats) != 0)
@@ -340,11 +341,12 @@ guid_init(void)
   /* time in secs and clock ticks */
   bytes += init_from_time();
 
-  PINFO ("got %u bytes", bytes);
+  PINFO ("got %llu bytes", (unsigned long long int) bytes);
 
   if (bytes < THRESHOLD)
-    PWARN("only got %u bytes.\n"
-              "The identifiers might not be very random.\n", bytes);
+    PWARN("only got %llu bytes.\n"
+              "The identifiers might not be very random.\n",
+	  (unsigned long long int)bytes);
 
   guid_initialized = TRUE;
 }
@@ -548,7 +550,7 @@ guid_hash_to_guint (gconstpointer ptr)
   else
   {
     guint hash = 0;
-    int i, j;
+    unsigned int i, j;
 
     for (i = 0, j = 0; i < sizeof(guint); i++, j++) {
       if (j == 16) j = 0;

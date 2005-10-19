@@ -112,7 +112,7 @@ gnc_search_numeric_init (GNCSearchNumeric *o)
 {
   o->priv = g_malloc0 (sizeof (*o->priv));
   o->value = gnc_numeric_zero ();
-  o->how = COMPARE_LT;
+  o->how = COMPARE_EQUAL;
   o->option = NUMERIC_MATCH_ANY;
 }
 
@@ -237,7 +237,7 @@ static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
   GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-  GtkWidget *menu, *item, *first, *opmenu;
+  GtkWidget *menu, *item, *first = NULL, *opmenu;
   int current = 0, index = 0;
 
   menu = gtk_menu_new ();

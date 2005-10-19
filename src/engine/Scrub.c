@@ -412,7 +412,9 @@ xaccTransScrubCurrency (Transaction *trans, GNCBook *book)
   }
   else
   {
-    PWARN ("no common transaction currency found");
+    char *guid_str = guid_to_string(xaccTransGetGUID(trans));
+    PWARN ("no common transaction currency found (guid %s)", guid_str);
+    g_free(guid_str);
   }
   {
     Split *sp;

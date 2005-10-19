@@ -31,9 +31,11 @@
 
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
+		       const char *windowtitle,
 		       const char *heading,
 		       const char *initial_password,
-		       char **password)
+		       char **password,
+		       gboolean hide_input)
 {
   GtkWidget *dialog;
   GtkWidget *heading_label;
@@ -59,11 +61,15 @@ gnc_hbci_get_password (GtkWidget *parent,
   gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
                                 GTK_EDITABLE (password_entry));
 
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
+
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
   if (initial_password)
     gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+  gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
 
   gtk_widget_grab_focus (password_entry);
 
@@ -90,6 +96,7 @@ gnc_hbci_get_password (GtkWidget *parent,
 
 gboolean
 gnc_hbci_get_initial_password (GtkWidget *parent,
+			       const char *windowtitle,
 			       const char *heading,
 			       char **password)
 {
@@ -120,6 +127,9 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
                                 GTK_EDITABLE (password_entry));
   gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
                                 GTK_EDITABLE (confirm_entry));
+
+  if (windowtitle)
+    gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
 
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -152,10 +162,9 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
       break;
 
     /* strings didn't match */
-    if (gnc_ok_cancel_dialog_parented (parent, 
-				       GNC_VERIFY_OK,
-				       _("The two passwords didn't match. \n"
-					 "Please try again."))
+    if (gnc_ok_cancel_dialog_parented (parent, GNC_VERIFY_OK,
+			      _("The two passwords didn't match. \n"
+				"Please try again."))
 	== GNC_VERIFY_CANCEL)
       break;
   }
