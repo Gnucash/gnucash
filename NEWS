@@ -1,6 +1,20 @@
 Version history:
 ------- -------
 
+ 1.8.12 - 19 Oct 2005
+ 	 o Online Banking/HBCI improvements: Debit notes are fixed
+ 	 again; Bank-internal money transfers are now supported, if
+ 	 the HBCI bank offers them; Setup wizard can now works with
+ 	 HBCI, OFX-Connect, and other AqBanking backends; Fix
+ 	 character encoding issues in utf-8 locales; Fix date interval
+ 	 in the import transaction matcher for OFX and HBCI import;
+ 	 Fix PIN entry bug.
+ 	 o New currencies added: Romanian Leu, Bulgarian Lev, Malagasy Ariary
+ 	 o Fix problem with long date formats in some locales (bug#170444)
+ 	 o Add configure macros for mips, mipsel, arm, and m68k; Fix
+ 	 compilation on OpenBSD 64bit architectures
+ 	 o Updated translations: German, Italian, Kinyarwanda
+
  1.8.11 - 06 Feb 2005
  	 o Add extra sanity checks and verbose error message if the setup
 	 wizard of aqhbci cannot be found.

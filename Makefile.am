@@ -160,7 +160,7 @@ distcleancheck_listfiles = \
 
 # ack this is stupid
 distcheck-hook:
-	: > "$(distdir)/=build/distcleancheck1.5-is-stupid"
+	: > "$(distdir)/_build/distcleancheck1.5-is-stupid"
 
 distclean-local:
 	-test -f distcleancheck1.5-is-stupid \
