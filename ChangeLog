@@ -1,3 +1,76 @@
+2005-10-20  Neil Williams <linux@codehelp.co.uk>
+
+	* configure.in: Allow GnuCash to use QOF externally,
+	where available, otherwise use internal QOF.
+	* src/app-utils/gnc-ui-util.c : Didier Vital's patch to
+	solve pango warnings with non UTF-8 locales.
+	
+	Replace private headers with new API functions.
+	* src/backend/postgres/PostgresBackend.h : 
+	* src/backend/postgres/account.c : 
+	* src/backend/postgres/book.c : 
+	* src/backend/postgres/events.c : 
+	* src/backend/postgres/gncquery.c : 
+	* src/backend/postgres/price.c: 
+	* src/backend/postgres/putil.h: 
+	* src/backend/postgres/table.m4 : 
+	* src/backend/postgres/txnmass.c : 
+	* src/engine/engine-helpers.c : 
+	* src/engine/qofbackend-p.h: 
+	* src/engine/qofbook.c: 
+
+	* src/engine/.cvsignore : New file.
+	* src/engine/gncla-dir.h.in: 
+
+	Maintaining backwards compatibility.
+	* src/engine/gnc-engine-util.c: 
+	* src/engine/gnc-engine-util.h: 
+
+	New home for functions that do not belong in QOF.
+	* src/engine/gnc-engine.c : 
+	* src/engine/gnc-engine.h : 
+
+	Conditional QOF build.
+	* src/app-utils/Makefile.am:
+	* src/app-utils/test/Makefile.am :
+	* src/backend/Makefile.am : 
+	* src/backend/file/Makefile.am: 
+	* src/backend/file/test/Makefile.am: 
+	* src/backend/postgres/Makefile.am : 
+	* src/backend/postgres/test/Makefile.am  : 
+	* src/business/business-core/Makefile.am : 
+	* src/business/business-core/file/Makefile.am : 
+	* src/business/business-core/test/Makefile.am : 
+	* src/business/business-gnome/Makefile.am : 
+	* src/business/business-ledger/Makefile.am : 
+	* src/business/business-utils/Makefile.am : 
+	* src/business/dialog-tax-table/Makefile.am: 
+	* src/calculation/Makefile.am : 
+	* src/calculation/expression_parser.c : 
+	* src/calculation/test/Makefile.am : 
+	* src/engine/Makefile.am : 
+	* src/engine/test-core/Makefile.am : 
+	* src/engine/test/Makefile.am : 
+	* src/engine/test/test-book-merge.c: 
+	* src/gnome-search/Makefile.am: 
+	* src/gnome-utils/Makefile.am : 
+	* src/gnome/Makefile.am : 
+	* src/import-export/Makefile.am : 
+	* src/import-export/binary-import/Makefile.am : 
+	* src/import-export/log-replay/Makefile.am : 
+	* src/import-export/qif-import/Makefile.am : 
+	* src/import-export/qif/Makefile.am: 
+	* src/import-export/qif/test/Makefile.am : 
+	* src/import-export/test/Makefile.am : 
+	* src/network-utils/Makefile.am : 
+	* src/register/ledger-core/Makefile.am: 
+	* src/register/register-core/Makefile.am : 
+	* src/register/register-gnome/Makefile.am : 
+	* src/report/report-gnome/Makefile.am : 
+	* src/report/stylesheets/Makefile.am : 
+
+	* src/engine/test/test-book-merge.c: QOF sync.
+
 2005-10-17  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/gnc-generate-script: revert Neils utf-8 change.
