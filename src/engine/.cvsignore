@@ -21,4 +21,5 @@ iso-4217-currencies.c
 test-link
 .DS_Store
 qofla-dir.h
+gncla-dir.h
 
