@@ -30,15 +30,11 @@
 #include <string.h>
 #include <libpq-fe.h>  
 
-#include "qofbook.h"
-#include "qofbook-p.h"
+#include "qof.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "guid.h"
 
 #include "PostgresBackend.h"
 #include "base-autogen.h"

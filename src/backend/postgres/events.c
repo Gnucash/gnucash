@@ -30,15 +30,7 @@
 
 #include "events.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-event-p.h"
-#include "guid.h"
-#include "qofbackend.h"
-#include "qofbackend-p.h"
-#include "qofid.h"
-#include "qofid-p.h"
-
+#include "Transaction.h"
 #include "PostgresBackend.h"
 #include "account.h"
 #include "putil.h"
@@ -270,7 +262,9 @@ pgendProcessEvents (QofBackend *bend)
    {
       Event *ev = (Event *) node->data;
       QofIdType local_obj_type;
+      QofEntity *ent;
 
+      ent = NULL;
       /* lets see if the local cache has this item in it */
       local_obj_type = pgendGUIDType (be, &(ev->guid));
       if ((local_obj_type != GNC_ID_NONE) && 
@@ -300,6 +294,7 @@ pgendProcessEvents (QofBackend *bend)
                /* if the remote user created an account, mirror it here */
                acc = pgendCopyAccountToEngine (be, &(ev->guid));
                xaccGroupMarkSaved (xaccAccountGetRoot(acc));
+               ent = (QofEntity*)acc;
                break;
             }
             case GNC_EVENT_DESTROY: {
@@ -308,6 +303,7 @@ pgendProcessEvents (QofBackend *bend)
                xaccAccountBeginEdit (acc);
                xaccAccountDestroy (acc);
                xaccGroupMarkSaved (topgrp);
+               ent = (QofEntity*)acc;
                break;
             }
          }
@@ -324,19 +320,29 @@ pgendProcessEvents (QofBackend *bend)
             default:
                PERR ("transaction: cant' happen !!!!!!!");
                break;
-            case GNC_EVENT_CREATE:
+            case GNC_EVENT_CREATE: {
+               Transaction *trans;
                /* don't mirror transaction creations. If a register needs
                 * it, it will do a query. */
+               trans = pgendTransLookup (be, &(ev->guid));
+               ent = (QofEntity*)trans;
                PINFO ("create transaction");
                break;
-            case GNC_EVENT_MODIFY: 
+			}
+            case GNC_EVENT_MODIFY: {
+               Transaction *trans;
+               trans = pgendTransLookup (be, &(ev->guid));
                pgendCopyTransactionToEngine (be, &(ev->guid));
+               ent = (QofEntity*)trans;
                break;
+			}
             case GNC_EVENT_DESTROY: {
                Transaction *trans = pgendTransLookup (be, &(ev->guid));
                xaccTransBeginEdit (trans);
+               /* mark trans for freeing */
                xaccTransDestroy (trans);
                xaccTransCommitEdit (trans);
+               ent = (QofEntity*)trans;
                break;
             }
          }
@@ -369,7 +375,7 @@ pgendProcessEvents (QofBackend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_CREATE);
+              gnc_engine_gen_event(ent, GNC_EVENT_CREATE);
          }
       }
       else 
@@ -377,11 +383,11 @@ pgendProcessEvents (QofBackend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_MODIFY);
+              gnc_engine_gen_event(ent, GNC_EVENT_MODIFY);
          }
          else
          {
-            gnc_engine_generate_event (&(ev->guid), local_obj_type, GNC_EVENT_DESTROY);
+              gnc_engine_gen_event(ent, GNC_EVENT_DESTROY);
          }
       }
    

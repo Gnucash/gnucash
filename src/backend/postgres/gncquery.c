@@ -44,12 +44,12 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-
-#include "qofquery.h"
+/** \todo Code dependent on the private query headers 
+qofquery-p.h and qofquerycore-p.h may need to be modified.
+These files are temporarily exported for QOF 0.6.0 but
+cannot be considered "standard" or public parts of QOF. */
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
-#include "qofclass.h"
 
 #include "gncquery.h"
 #include "builder.h"

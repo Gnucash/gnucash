@@ -36,9 +36,10 @@
 #include "gnc-engine.h"
 #include "guile-mappings.h"
 #include "qof.h"
-/** \todo Private query headers 
-qofquery-p.h and qofquerycore-p.h
-are not exported from QOF */
+/** \todo Code dependent on the private query headers 
+qofquery-p.h and qofquerycore-p.h may need to be modified.
+These files are temporarily exported for QOF 0.6.0 but
+cannot be considered "standard" or public parts of QOF. */
 #include "qofquery-p.h"
 #include "qofquerycore-p.h"
 

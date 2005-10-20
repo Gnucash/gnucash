@@ -37,14 +37,11 @@
 #include <libpq-fe.h>
 
 #include "Group.h"
-#include "guid.h"
+#include "qof.h"
 #include "Transaction.h"
 
 #include "builder.h"
 #include "qof.h"
-/** \todo Remove the private header
-and use API functions instead. */
-#include "qofbook-p.h"
 
 #define GNC_MOD_TXN    "gnucash-postgres-transaction"
 

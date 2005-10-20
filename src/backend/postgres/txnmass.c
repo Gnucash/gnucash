@@ -38,11 +38,6 @@
 #include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 

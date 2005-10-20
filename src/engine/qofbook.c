@@ -288,6 +288,36 @@ void qof_book_mark_closed (QofBook *book)
 	book->book_open = 'n';
 }
 
+gchar qof_book_get_open_marker(QofBook *book)
+{
+       if(!book) { return 'n'; }
+       return book->book_open;
+}
+
+gint32 qof_book_get_version (QofBook *book)
+{
+       if(!book) { return -1; }
+       return book->version;
+}
+
+guint32 qof_book_get_idata (QofBook *book)
+{
+       if(!book) { return 0; }
+       return book->idata;
+}
+
+void qof_book_set_version (QofBook *book, gint32 version)
+{
+       if(!book && version < 0) { return; }
+       book->version = version;
+}
+
+void qof_book_set_idata(QofBook *book, guint32 idata)
+{
+       if(!book && idata < 0) { return; }
+       book->idata = idata;
+}
+
 gint64
 qof_book_get_counter (QofBook *book, const char *counter_name)
 {
