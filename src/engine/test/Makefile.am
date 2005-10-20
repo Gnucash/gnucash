@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 LDADD = \
@@ -17,6 +18,7 @@ LDADD = \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   -lltdl
 
 # these tests are ordered kind more or less in the order
@@ -80,7 +82,7 @@ noinst_PROGRAMS = \
   test-transaction-voiding
 
 test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgncmod-engine.la 
+test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
 
 EXTRA_DIST = \
   test-create-account \

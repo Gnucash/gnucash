@@ -10,6 +10,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GUILE_INCS}
 
@@ -25,7 +26,7 @@ gncinclude_HEADERS = \
 
 libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GNOME_LIBS}
+  ${GNOME_LIBS} ${QOF_LIBS}
 
 EXTRA_DIST = \
   .cvsignore

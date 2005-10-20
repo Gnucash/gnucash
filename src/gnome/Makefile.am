@@ -12,7 +12,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
-  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS}
+  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
 
@@ -153,6 +153,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GUPPI_CFLAGS} 
 
 # We build this in an earlier directory.

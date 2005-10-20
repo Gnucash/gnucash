@@ -24,6 +24,7 @@ noinst_HEADERS = \
   split-register-p.h
 
 libgncmod_ledger_core_la_LIBADD = \
+  ${QOF_LIBS} \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -42,4 +43,5 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}

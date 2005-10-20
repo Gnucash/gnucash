@@ -42,6 +42,7 @@ LDADD = \
    ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
    ${top_builddir}/src/core-utils/libcore-utils.la \
    ${GUILE_LIBS} \
+   ${QOF_LIBS} \
    ${GCONF_LIBS}
 
 noinst_PROGRAMS = \
@@ -65,5 +66,5 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GCONF_CFLAGS}
-

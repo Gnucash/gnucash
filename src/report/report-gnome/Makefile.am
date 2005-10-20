@@ -20,6 +20,7 @@ AM_CFLAGS = \
   ${GNOME_PRINT_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_report_gnome_la_SOURCES = \
@@ -45,6 +46,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GNOME_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 libgw_report_gnome_la_SOURCES = gw-report-gnome.c

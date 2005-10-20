@@ -6,6 +6,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/business/business-core \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 LDADD = \
@@ -16,6 +17,7 @@ LDADD = \
   ../libgncmod-business-core.la \
   ../libgw-business-core.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   -lltdl
 
 TESTS = \

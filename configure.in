@@ -397,6 +397,59 @@ AC_CHECK_LIB(xml2, xmlElemDump, [:], [
   ])
 LIBS="$oLIBS"
 
+dnl *************************************
+dnl QOF
+dnl *************************************
+
+AC_ARG_WITH(qof, [  --with-qof=path         prefix for Query Object Framework - QOF (auto)])
+QOF_REQUIRED=0.6.0
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test pkg-config = no; then
+        AC_MSG_ERROR([Please install pkgconfig])
+        exit 1
+fi
+AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
+if test "$withval" != "yes"; then
+        QOF=`$PKG_CONFIG --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --libs $withval/lib/pkgconfig/qof-1.pc`
+        QOF_CFLAGS=`$PKG_CONFIG --cflags $withval/lib/pkgconfig/qof-1.pc`
+        QOF_VERSION=`$PKG_CONFIG --modversion $withval/lib/pkgconfig/qof-1.pc`
+        QOF_PREFIX=`$PKG_CONFIG --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
+        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
+        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
+else
+        QOF=`$PKG_CONFIG --exists 'qof-1 >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --libs qof-1`
+        QOF_CFLAGS=`$PKG_CONFIG --cflags qof-1`
+        QOF_VERSION=`$PKG_CONFIG --modversion qof-1`
+        QOF_PREFIX=`$PKG_CONFIG --variable=prefix qof-1`
+        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir qof-1`
+        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir qof-1`
+fi
+if test x$QOF_XML_DIR = x; then
+        AC_MSG_RESULT([no, will use internal QOF code])
+	QOF_CFLAGS="-I\${top_srcdir}/src/engine"
+	QOF_LIBS="\${top_srcdir}/src/engine/libqof.la"
+	QOF_LIB_DIR="${libdir}"
+	QOF_PREFIX="internal"
+	QOF_XML_DIR="$QSF_SCHEMA_DIR"
+	LIBQOF_LIBRARY_VERSION=1:1:0
+	LIBQOF_BACKEND_QSF_LIBRARY_VERSION=0:0:0
+	AC_SUBST(LIBQOF_LIBRARY_VERSION)
+	AC_SUBST(LIBQOF_BACKEND_QSF_LIBRARY_VERSION)
+  	AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
+	HAVE_LIBQOF="use_internal"
+else
+        AC_MSG_RESULT([yes])
+fi
+AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
+AM_CONDITIONAL(USE_LIBQOF, [test $HAVE_LIBQOF = "use_internal"])
+AC_SUBST(USE_LIBQOF)
+AC_SUBST(QOF_CFLAGS)
+AC_SUBST(QOF_LIBS)
+AS_SCRUB_INCLUDE(QOF_PREFIX)
+AC_SUBST(QOF_PREFIX)
+AC_SUBST(QOF_LIB_DIR)
 
 ### --------------------------------------------------------------------------
 ### for GOG/goffice...
@@ -1390,5 +1443,8 @@ AC_MSG_RESULT([
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
   LDFLAGS .............. : $LDFLAGS
+  QOF support ...........: $QOF_VERSION
+  QOF location ..........: $QOF_PREFIX
+  QOF library dir .......: $QOF_LIB_DIR
+  QOF backend config ....: $QOF_XML_DIR
 ])
-

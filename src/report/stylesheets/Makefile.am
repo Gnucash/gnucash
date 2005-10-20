@@ -12,6 +12,7 @@ noinst_HEADERS = \
 libgncmod_stylesheets_la_LDFLAGS=-module
 
 libgncmod_stylesheets_la_LIBADD = \
+  ${QOF_LIBS} \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la
 
 AM_CFLAGS = \
@@ -23,6 +24,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 .scm-links:

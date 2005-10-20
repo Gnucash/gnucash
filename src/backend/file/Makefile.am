@@ -11,6 +11,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/core-utils\
   -I${top_srcdir}/lib/libc\
   ${XML_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GCONF_CFLAGS}
 
@@ -57,4 +58,5 @@ noinst_HEADERS = \
 libgnc_backend_file_la_LDFLAGS = -module
 libgnc_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${XML_LIBS} \
-   ${top_builddir}/src/engine/libgncmod-engine.la
+   ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${QOF_LIBS}

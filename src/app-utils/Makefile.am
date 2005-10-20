@@ -13,6 +13,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
@@ -74,6 +75,7 @@ libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
   ${GUILE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 libgw_app_utils_la_SOURCES = gw-app-utils.c

@@ -44,6 +44,7 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLADE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 gladedir = ${GNC_GLADE_DIR}
@@ -65,6 +66,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 EXTRA_DIST = \

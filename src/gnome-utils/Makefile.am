@@ -26,6 +26,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GSF_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${LIBGOFFICE_CFLAGS}
 else
 AM_CFLAGS = \
@@ -51,6 +52,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GNOME_PRINT_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
+  ${QOF_CFLAGS} \
   ${GSF_CFLAGS}
 endif
 
@@ -212,6 +214,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${GSF_LIBS} \
+  ${QOF_LIBS} \
   ${LIBGOFFICE_LIBS} \
   ${XML_LIBS}
 else
@@ -234,6 +237,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
   ${GSF_LIBS} \
+  ${QOF_LIBS} \
   ${XML_LIBS}
 endif
 

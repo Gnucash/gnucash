@@ -18,6 +18,7 @@ noinst_HEADERS = \
   gncEntryLedgerModel.h
 
 libgnc_business_ledger_la_LIBADD = \
+  ${QOF_LIBS} \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -39,5 +40,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-core \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GLIB_CFLAGS}

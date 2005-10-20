@@ -24,6 +24,7 @@ libgncmod_qif_import_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 
@@ -62,6 +63,7 @@ AM_CFLAGS = \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GTKHTML_CFLAGS}
 
 uidir = $(GNC_UI_DIR)

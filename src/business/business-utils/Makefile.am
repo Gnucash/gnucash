@@ -9,6 +9,7 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 libgncmod_business_utils_la_SOURCES = \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
 libgncmod_business_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 # Guile Modules

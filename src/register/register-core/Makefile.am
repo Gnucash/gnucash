@@ -8,7 +8,7 @@ libgncmod_register_core_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${GLIB_LIBS}
+  ${QOF_LIBS} ${GLIB_LIBS}
 
 libgncmod_register_core_la_SOURCES = \
   gncmod-register-core.c \
@@ -50,7 +50,6 @@ gncinclude_HEADERS = \
   table-model.h
 
 libgw_register_core_la_SOURCES = gw-register-core.c
-libgw_register_core_la_LDFLAGS = -module
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-register-core.scm gw-register-core-spec.scm
@@ -72,6 +71,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 

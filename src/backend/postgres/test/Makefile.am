@@ -34,6 +34,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  ${QOF_CFLAGS} \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \

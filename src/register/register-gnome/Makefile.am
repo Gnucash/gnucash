@@ -10,6 +10,7 @@ libgncmod_register_gnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${GNOME_LIBS}
 
 libgncmod_register_gnome_la_SOURCES = \
@@ -63,4 +64,5 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GTK_XIM_FLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}

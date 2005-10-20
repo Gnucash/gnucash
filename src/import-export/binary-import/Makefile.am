@@ -13,6 +13,7 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
 #FIXME remove the following deps
@@ -36,6 +37,7 @@ libgncmod_binary_import_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLADE_LIBS} \
   ${GNOME_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 gladedir = $(GNC_GLADE_DIR)

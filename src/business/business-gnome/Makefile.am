@@ -24,6 +24,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/register/ledger-core
@@ -73,6 +74,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 

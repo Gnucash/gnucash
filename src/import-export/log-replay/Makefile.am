@@ -16,7 +16,7 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} ${QOF_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -31,6 +31,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 uidir = $(GNC_UI_DIR)

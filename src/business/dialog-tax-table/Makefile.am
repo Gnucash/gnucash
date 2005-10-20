@@ -16,6 +16,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS}
 
@@ -34,6 +35,7 @@ libgncmod_dialog_tax_table_la_LIBADD = \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c

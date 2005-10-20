@@ -9,6 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 libgncmod_business_core_la_SOURCES = \
@@ -58,6 +59,7 @@ noinst_HEADERS = \
 libgncmod_business_core_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 # business-core-helpers.c
