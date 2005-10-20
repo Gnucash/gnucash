@@ -710,14 +710,16 @@ gnc_account_get_full_name (Account *account)
 }
 
 static void
-gnc_lconv_set (char **p_value, char *default_value)
+gnc_lconv_set_utf8 (char **p_value, char *default_value)
 {
   char *value = *p_value;
 
   if ((value == NULL) || (value[0] == 0))
     *p_value = default_value;
 
-  *p_value = g_strdup (*p_value);
+  *p_value = g_locale_to_utf8 (*p_value, -1, NULL, NULL, NULL);
+  // FIXME: Do we really need to make a copy here ?
+  //*p_value = g_strdup (*p_value);
 }
 
 static void
@@ -738,15 +740,15 @@ gnc_localeconv (void)
 
   lc = *localeconv();
 
-  gnc_lconv_set(&lc.decimal_point, ".");
-  gnc_lconv_set(&lc.thousands_sep, ",");
-  gnc_lconv_set(&lc.grouping, "\003");
-  gnc_lconv_set(&lc.int_curr_symbol, "USD ");
-  gnc_lconv_set(&lc.currency_symbol, "$");
-  gnc_lconv_set(&lc.mon_decimal_point, ".");
-  gnc_lconv_set(&lc.mon_thousands_sep, ",");
-  gnc_lconv_set(&lc.mon_grouping, "\003");
-  gnc_lconv_set(&lc.negative_sign, "-");
+  gnc_lconv_set_utf8(&lc.decimal_point, ".");
+  gnc_lconv_set_utf8(&lc.thousands_sep, ",");
+  gnc_lconv_set_utf8(&lc.grouping, "\003");
+  gnc_lconv_set_utf8(&lc.int_curr_symbol, "USD ");
+  gnc_lconv_set_utf8(&lc.currency_symbol, "$");
+  gnc_lconv_set_utf8(&lc.mon_decimal_point, ".");
+  gnc_lconv_set_utf8(&lc.mon_thousands_sep, ",");
+  gnc_lconv_set_utf8(&lc.mon_grouping, "\003");
+  gnc_lconv_set_utf8(&lc.negative_sign, "-");
 
   gnc_lconv_set_char(&lc.frac_digits, 2);
   gnc_lconv_set_char(&lc.int_frac_digits, 2);
