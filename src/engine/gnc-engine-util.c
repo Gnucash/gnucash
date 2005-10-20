@@ -246,7 +246,7 @@ static gboolean gnc_str_equal(gconstpointer v, gconstpointer v2)
 }
 #endif
 
-static GCache*
+GCache*
 gnc_engine_get_string_cache(void)
 {
     if(!gnc_string_cache) {

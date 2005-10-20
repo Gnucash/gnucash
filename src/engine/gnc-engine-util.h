@@ -240,6 +240,12 @@ int qof_util_bool_to_int (const char * val);
  *
  **/
 
+/** \deprecated use qof_init instead.
+
+Get the gnc_string_cache.  Create it if it doesn't exist already
+*/
+GCache* gnc_engine_get_string_cache(void);
+
 /** Destroy the gnc_string_cache */
 void gnc_engine_string_cache_destroy (void);
 
