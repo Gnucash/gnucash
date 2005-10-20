@@ -228,5 +228,12 @@ gboolean gnc_engine_is_initialized(void);
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
 
+gboolean
+qof_session_export (QofSession *tmp_session,
+                    QofSession *real_session,
+                    QofPercentageFunc percentage_func);
+
+void gnc_run_rpc_server(void);
+
 #endif
 /** @} */

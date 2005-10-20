@@ -1261,48 +1261,6 @@ qof_session_save (QofSession *session,
 }
 
 /* ====================================================================== */
-/* XXX This exports the list of accounts to a file.  It does not export
- * any transactions.  Its a place-holder until full book-closing is implemented.
- */
-
-#ifdef GNUCASH_MAJOR_VERSION
-
-gboolean
-qof_session_export (QofSession *tmp_session,
-                    QofSession *real_session,
-                    QofPercentageFunc percentage_func)
-{
-  QofBook *book;
-  QofBackend *be;
-
-  if ((!tmp_session) || (!real_session)) return FALSE;
-
-  book = qof_session_get_book (real_session);
-  ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
-         tmp_session, real_session, book,
-         tmp_session -> book_id
-         ? tmp_session->book_id : "(null)");
-
-  /* There must be a backend or else.  (It should always be the file
-   * backend too.)
-   */
-  be = tmp_session->backend;
-  if (!be)
-    return FALSE;
-
-  be->percentage = percentage_func;
-  if (be->export)
-    {
-
-      (be->export)(be, book);
-      if (save_error_handler(be, tmp_session)) return FALSE;
-    }
-
-  return TRUE;
-}
-#endif /* GNUCASH_MAJOR_VERSION */
-
-/* ====================================================================== */
 
 void
 qof_session_end (QofSession *session)
@@ -1411,49 +1369,5 @@ qof_session_process_events (QofSession *session)
 
   return session->backend->process_events (session->backend);
 }
-
-/* ====================================================================== */
-
-#ifdef GNUCASH_MAJOR_VERSION
-
-/* this should go in a separate binary to create a rpc server */
-
-void
-gnc_run_rpc_server (void)
-{
-  const char * dll_err;
-  void * dll_handle;
-  int (*rpc_run)(short);
-  int ret;
- 
-  /* open and resolve all symbols now (we don't want mystery 
-   * failure later) */
-#ifndef RTLD_NOW
-# ifdef RTLD_LAZY
-#  define RTLD_NOW RTLD_LAZY
-# endif
-#endif
-  dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
-  if (! dll_handle) 
-  {
-    dll_err = dlerror();
-    PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
-    return;
-  }
-  
-  rpc_run = dlsym (dll_handle, "rpc_server_run");
-  dll_err = dlerror();
-  if (dll_err) 
-  {
-    dll_err = dlerror();
-    PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
-    return;
-  }
-  
-  ret = (*rpc_run)(0);
-
-  /* XXX How do we force an exit? */
-}
-#endif /* GNUCASH_MAJOR_VERSION */
 
 /* =================== END OF FILE ====================================== */
