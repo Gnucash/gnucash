@@ -309,5 +309,5 @@ DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
 gncla-dir.h: gncla-dir.h.in
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
-                -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g'
+                -e 's:@-libdir-@:${libdir}:g'
 	mv $@.tmp $@
