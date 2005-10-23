@@ -528,8 +528,11 @@ static void
 gnc_option_account_cb(GtkTreeSelection *selection, gpointer data)
 {
   GNCOption *option = data;
+  GtkTreeView *tree_view;
 
-  gnc_option_changed_widget_cb(GTK_WIDGET(selection), option);
+  tree_view = gtk_tree_selection_get_tree_view(selection);
+
+  gnc_option_changed_widget_cb(GTK_WIDGET(tree_view), option);
 }
 
 static void
