@@ -1,3 +1,18 @@
+2005-10-23  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-options.c: Disable the "OK" and "Apply"
+	buttons before calling the apply function.  Makes the UI appear
+	more responsive and prevents a crash if the user clicks Apply then
+	OK quickly. (#319546) Patch from Arnout 'raboof' Engelen
+	<gnomebugzilla at bzzt.net>.
+	
+	* src/register/register-gnome/gnucash-sheet.c: Patch from Scott
+	Oonk to re-enable mouse scrolling in the account register.
+
+	* src/gnome-utils/dialog-options.c: Patch from Scott Oonk to fix
+	an invalid cast warning when selecting an account in the accounts
+	tab of the options dialog.
+	
 2005-10-21  Neil Williams <linux@codehelp.co.uk>
 
 	* src/engine/Makefile.am :

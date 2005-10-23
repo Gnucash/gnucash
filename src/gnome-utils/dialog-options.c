@@ -1051,9 +1051,9 @@ gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *w
 
    case GTK_RESPONSE_OK:
    case GTK_RESPONSE_APPLY:
+    gnc_options_dialog_changed_internal (window->dialog, FALSE);
     if (window->apply_cb)
       window->apply_cb (window, window->apply_cb_data);
-    gnc_options_dialog_changed_internal (window->dialog, FALSE);
     if (response == GTK_RESPONSE_APPLY)
       break;
     /* fall through */
