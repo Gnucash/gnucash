@@ -1172,33 +1172,38 @@ gnucash_button_release_event (GtkWidget *widget, GdkEventButton *event)
         return TRUE;
 }
 
-static void
-gnucash_sheet_scroll_event(GnucashSheet *sheet, GdkEventButton *event)
+static gboolean
+gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
 {
+        GnucashSheet *sheet;
         GtkAdjustment *vadj;
-        gfloat multiplier = 1.0;
         gfloat v_value;
 
+        g_return_val_if_fail(widget != NULL, TRUE);
+        g_return_val_if_fail(GNUCASH_IS_SHEET(widget), TRUE);
+        g_return_val_if_fail(event != NULL, TRUE);
+
+        sheet = GNUCASH_SHEET (widget);
         vadj = sheet->vadj;
         v_value = vadj->value;
-        if (event->state & GDK_SHIFT_MASK)
-                multiplier = sheet->num_visible_blocks / 2;
 
-        switch (event->button)
+        switch (event->direction)
         {
-                case 4:
-                        v_value -= vadj->step_increment * multiplier;
+                case GDK_SCROLL_UP:
+                        v_value -= vadj->step_increment;
                         break;
-                case 5:
-                        v_value += vadj->step_increment * multiplier;
+                case GDK_SCROLL_DOWN:
+                        v_value += vadj->step_increment;
                         break;
                 default:
-                        return;
+                        return FALSE;
         }
 
         v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
 
         gtk_adjustment_set_value(vadj, v_value);
+
+        return TRUE;
 }
 
 static void
@@ -1274,10 +1279,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 			if (!do_popup)
 				return FALSE;
                         break;
-                case 4:
-                case 5:
-                        gnucash_sheet_scroll_event(sheet, event);
-                        return TRUE;
                 default:
                         return FALSE;
         }
@@ -2337,6 +2338,7 @@ gnucash_sheet_class_init (GnucashSheetClass *class)
         widget_class->button_press_event = gnucash_button_press_event;
         widget_class->button_release_event = gnucash_button_release_event;
         widget_class->motion_notify_event = gnucash_motion_event;
+        widget_class->scroll_event = gnucash_scroll_event;
 
         widget_class->selection_clear_event = gnucash_sheet_selection_clear;
         widget_class->selection_received = gnucash_sheet_selection_received;
