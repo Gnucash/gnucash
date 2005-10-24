@@ -1,5 +1,8 @@
 2005-10-23  David Hampton  <hampton@employees.org>
 
+	* Makefile.TAGS:
+	* Makefile.am: Chris Shoemaker's enhancements to tags generation.
+
 	* src/gnome-utils/dialog-options.c: Disable the "OK" and "Apply"
 	buttons before calling the apply function.  Makes the UI appear
 	more responsive and prevents a crash if the user clicks Apply then
