@@ -110,6 +110,7 @@ endif
 libgncmod_engine_la_SOURCES = \
   Account.c \
   FreqSpec.c \
+  Recurrence.c \
   Group.c \
   Period.c \
   Query.c \
@@ -146,6 +147,7 @@ gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   Account.h \
   FreqSpec.h \
+  Recurrence.h \
   GNCId.h \
   Group.h \
   Period.h \

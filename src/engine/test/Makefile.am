@@ -43,6 +43,7 @@ TESTS = \
   test-transaction-reversal \
   test-transaction-voiding \
   test-freq-spec \
+  test-recurrence \
   test-scm-query \
   test-book-merge 
   
@@ -65,6 +66,7 @@ noinst_PROGRAMS = \
   test-commodities \
   test-date \
   test-freq-spec \
+  test-recurrence \
   test-guid \
   test-group-vs-book \
   test-load-engine \
