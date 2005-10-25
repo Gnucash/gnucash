@@ -256,6 +256,27 @@ GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
  */
 void gnc_main_window_set_progressbar_window( GncMainWindow *window );
 
+
+/** Callback function invoked when the user clicks in the content of
+ *  any Gnucash window.  If this was a "right-click" then Gnucash will
+ *  popup the contextual menu.
+ *
+ *  @param widget Whatever widget had focus when the user issued the
+ *  keyboard context-menu request.
+ *
+ *  @param event The event parameter describing where on the screen
+ *  the mouse was pointing when clicked, type of click, modifiers,
+ *  etc.
+ *
+ *  @param page This is the GncPluginPage corresponding to the visible
+ *  page.
+ *
+ *  @return Returns TRUE if this was a right-click, meaning Gnucash
+ *  handled the click.
+ */
+gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
+					  GdkEventButton *event,
+					  GncPluginPage *page);
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

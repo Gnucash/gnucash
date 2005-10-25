@@ -47,14 +47,7 @@ static void gnc_plugin_page_invoice_finalize (GObject *object);
 static GtkWidget *gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
-static void gnc_plugin_page_invoice_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
-static void gnc_plugin_page_invoice_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
-
-/* Callbacks */
-static gboolean gnc_plugin_page_invoice_button_press_cb (GtkWidget *widget,
-							      GdkEventButton *event,
-			       				      GncPluginPageInvoice *page);
 
 void gnc_plugin_page_invoice_start_toggle_cb(GtkToggleButton *toggle, gpointer data);
 void gnc_plugin_page_invoice_end_toggle_cb(GtkToggleButton *toggle, gpointer data);
@@ -209,10 +202,6 @@ static action_short_labels short_labels[] = {
 
 struct GncPluginPageInvoicePrivate
 {
-	GtkActionGroup *action_group;
-	guint merge_id;
-	GtkUIManager *ui_merge;
-
 	InvoiceWindow *iw;
 
 	GtkWidget *widget;
@@ -293,8 +282,6 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
 	gnc_plugin_class->create_widget   = gnc_plugin_page_invoice_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_invoice_destroy_widget;
 	gnc_plugin_class->window_changed  = gnc_plugin_page_invoice_window_changed;
-	gnc_plugin_class->merge_actions   = gnc_plugin_page_invoice_merge_actions;
-	gnc_plugin_class->unmerge_actions = gnc_plugin_page_invoice_unmerge_actions;
 }
 
 static void
@@ -310,19 +297,21 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-	gnc_plugin_page_set_title(parent, _("Invoice"));
-	gnc_plugin_page_set_tab_name(parent, _("Incoice"));
-	gnc_plugin_page_set_uri(parent, "default:");
-
 	use_new = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, KEY_USE_NEW, NULL);
-	gnc_plugin_page_set_use_new_window(parent, use_new);
+	g_object_set(G_OBJECT(plugin_page),
+		     "page-name",      _("Invoice"),
+		     "page-uri",       "default:",
+		     "ui-description", "gnc-plugin-page-invoice-ui.xml",
+		     "use-new-window", use_new,
+		     NULL);
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
 	/* Create menu and toolbar information */
-	action_group = gtk_action_group_new ("GncPluginPageInvoiceActions");
-	priv->action_group = action_group;
+	action_group =
+	  gnc_plugin_page_create_action_group(parent,
+					      "GncPluginPageInvoiceActions");
 	gtk_action_group_add_actions (action_group, gnc_plugin_page_invoice_actions,
 				      gnc_plugin_page_invoice_n_actions, plugin_page);
 	gtk_action_group_add_radio_actions (action_group,
@@ -355,13 +344,11 @@ gnc_plugin_page_invoice_finalize (GObject *object)
 void
 gnc_plugin_page_invoice_update_menus (GncPluginPage *page, gboolean is_posted, gboolean can_unpost)
 { 
-  GncPluginPageInvoice *invoice_page;
   GtkActionGroup *action_group;
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
 
-  invoice_page = GNC_PLUGIN_PAGE_INVOICE(page);
-  action_group = invoice_page->priv->action_group;
+  action_group = gnc_plugin_page_get_action_group(page);
   gnc_plugin_update_actions (action_group, posted_actions,
 			     "sensitive", is_posted);
   gnc_plugin_update_actions (action_group, unposted_actions,
@@ -396,8 +383,6 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 	if (regWidget) {
 	  g_signal_connect (G_OBJECT (regWidget), "redraw-help",
 			    G_CALLBACK (gnc_plugin_page_redraw_help_cb), page);
-	  g_signal_connect (G_OBJECT (regWidget), "button-press-event",
-			    G_CALLBACK (gnc_plugin_page_invoice_button_press_cb), page);
 	}
 
 	priv->component_manager_id =
@@ -443,61 +428,6 @@ gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,
 	gnc_invoice_window_changed (page->priv->iw, window);
 }
 	
-static void
-gnc_plugin_page_invoice_merge_actions (GncPluginPage *plugin_page,
-					GtkUIManager *ui_merge)
-{
-	GncPluginPageInvoice *invoice_page;
-	GncPluginPageInvoicePrivate *priv;
-	
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE (plugin_page));
-
-	invoice_page = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
-	priv = invoice_page->priv;
-
-	priv->ui_merge = ui_merge;
-	priv->merge_id =
-	  gnc_plugin_add_actions (priv->ui_merge,
-				  priv->action_group,
-				  "gnc-plugin-page-invoice-ui.xml");
-}
-	
-static void
-gnc_plugin_page_invoice_unmerge_actions (GncPluginPage *plugin_page,
-					      GtkUIManager *ui_merge)
-{
-	GncPluginPageInvoice *plugin_page_register = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
-	
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE (plugin_page_register));
-	g_return_if_fail (plugin_page_register->priv->merge_id != 0);
-	g_return_if_fail (plugin_page_register->priv->action_group != NULL);
-
-	gtk_ui_manager_remove_ui (ui_merge, plugin_page_register->priv->merge_id);
-	gtk_ui_manager_remove_action_group (ui_merge, plugin_page_register->priv->action_group);
-
-	plugin_page_register->priv->ui_merge = NULL;
-}
-
-
-/* Callbacks */
-static gboolean
-gnc_plugin_page_invoice_button_press_cb (GtkWidget *widget,
-					 GdkEventButton *event,
-					 GncPluginPageInvoice *page)
-{
-	GtkWidget *menu;
-
-	if (event->button == 3 && page->priv->ui_merge != NULL) {
-		/* Maybe show a different popup menu if no account is selected. */
-		menu = gtk_ui_manager_get_widget (page->priv->ui_merge, "/RegisterPopup");
-		if (menu)
-		  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-				  event->button, event->time);
-		return TRUE;
-	}
-
-	return FALSE;
-}
 
 /************************************************************/
 /*                     Command callbacks                    */
@@ -761,9 +691,7 @@ gnc_plugin_page_invoice_update_title (GncPluginPage *plugin_page)
 
   page = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
   title = gnc_invoice_get_title(page->priv->iw);
-  plugin_page = GNC_PLUGIN_PAGE(page);
-  gnc_plugin_page_set_tab_name(plugin_page, title);
-  gnc_plugin_page_set_title(plugin_page, title);
+  gnc_plugin_page_set_page_name(plugin_page, title);
   g_free(title);
 }
 

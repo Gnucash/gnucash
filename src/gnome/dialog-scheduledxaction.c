@@ -1588,8 +1588,8 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
 	/* Now create the register plugin page. */
 	sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
-	gnc_plugin_page_register_set_ui_description (sxed->plugin_page,
-						     "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_set_ui_description (sxed->plugin_page,
+					    "gnc-plugin-page-sxregister-ui.xml");
 	gnc_plugin_page_register_set_options (sxed->plugin_page,
 					      SXED_GCONF_SECTION,
 					      KEY_NUMBER_OF_ROWS,

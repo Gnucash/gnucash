@@ -50,11 +50,8 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
-typedef struct GncPluginPagePrivate GncPluginPagePrivate;
-
 typedef struct GncPluginPage {
 	GObject parent;			/**< The parent object data. */
-	GncPluginPagePrivate *priv;	/**< Object private data. */
 
 	GtkWidget *window;		/**< The window that contains the
 					 *   display widget for this plugin.
@@ -88,8 +85,6 @@ typedef struct {
 	GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
 	void (* destroy_widget) (GncPluginPage *plugin_page);
 	void (* window_changed) (GncPluginPage *plugin_page, GtkWidget *window);
-	void (* merge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
-	void (* unmerge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
 } GncPluginPageClass;
 
 /* function prototypes */
@@ -143,39 +138,24 @@ gboolean gnc_plugin_page_has_books (GncPluginPage *page);
  */
 GtkWidget *gnc_plugin_page_get_window (GncPluginPage *page);
 
-/** Retrieve the name used in the notebook tab for this page.
+/** Retrieve the name of this page.  This is the string used in the
+ *  window title, and in the notebook tab and page selection menus.
  *
- *  @param page The page whose tab name should be retrieved.
+ *  @param page The page whose name should be retrieved.
  *
- *  @return The page's tab name.  This string is owned by the page and
+ *  @return The page's name.  This string is owned by the page and
  *  should not be freed by the caller.
  */
-const gchar *gnc_plugin_page_get_tab_name (GncPluginPage *page);
+const gchar *gnc_plugin_page_get_page_name (GncPluginPage *page);
 
-/** Set the name used in the notebook tab for this page.
+/** Set the name of this page.  This is the string used in the
+ *  window title, and in the notebook tab and page selection menus.
  *
- *  @param page The page whose tab label should be set.
+ *  @param page The page whose name should be set.
  *
- *  @param name The new string for the tab label.
+ *  @param name The new string for the name.
  */
-void gnc_plugin_page_set_tab_name (GncPluginPage *page, const char *name);
-
-/** Retrieve the page part of the window title.
- *
- *  @param page The page whose title component should be retrieved.
- *
- *  @return The page title.  This string is owned by the page and
- *  should not be freed by the caller.
- */
-const gchar *gnc_plugin_page_get_title (GncPluginPage *page);
-
-/** Set the page part of the window title.
- *
- *  @param page The page whose title component should be set.
- *
- *  @param name The new title for the page.
- */
-void gnc_plugin_page_set_title (GncPluginPage *page, const char *name);
+void gnc_plugin_page_set_page_name (GncPluginPage *page, const char *name);
 
 /** Retrieve the Uniform Resource Identifier for this page.
  *
@@ -232,11 +212,66 @@ gboolean gnc_plugin_page_get_use_new_window (GncPluginPage *page);
 void gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new);
 
 
+/** Retrieve the name of the XML UI file associated with this page.
+ *
+ *  @param page The page whose setting should be retrieved.
+ *
+ *  @return A pointer to the filename used for the UI.  This
+ *  string is owned by the page and should not be freed by the caller.
+ */
+const char *gnc_plugin_page_get_ui_description (GncPluginPage *page);
+
+
+/** Set an alternate UI for the specified page.  This alternate ui
+ *  may only use actions specified in the source for the page.
+ *
+ *  @note This function must be called before the page is installed
+ *  into a window.
+ *
+ *  @param page The page to modify.
+ *
+ *  @param ui_filename The filename (no path) of the alternate UI.
+ */
+void gnc_plugin_page_set_ui_description (GncPluginPage *page, const char *ui_filename);
+
+
+/** Retrieve the GtkUIManager object associated with this page.
+ *
+ *  @param page The page whose UI information should be retrieved.
+ *
+ *  @return A pointer to the GtkUIManager object for this page. */
+GtkUIManager *gnc_plugin_page_get_ui_merge (GncPluginPage *page);
+
+
+/** Retrieve the GtkActionGroup object associated with this page.
+ *
+ *  @param page The page whose menu/toolbar action group should be
+ *  retrieved.
+ *
+ *  @return A pointer to the GtkActionGroup object for this page. */
+GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
+
+
+/** Create the GtkActionGroup object associated with this page.
+ *
+ *  @param page The page whose menu/toolbar action group should be
+ *  created.
+ *
+ *  @param group_name The name associate with this action group.  The
+ *  name is used to associate keybindings with actions, so it should
+ *  be consistent across all pages of the same type.
+ *
+ *  @return A pointer to the newly created GtkActionGroup object for
+ *  this page. */
+GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name);
+
+
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_removed         (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_selected        (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
+
 
 G_END_DECLS
 

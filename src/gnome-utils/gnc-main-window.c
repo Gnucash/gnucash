@@ -111,6 +111,10 @@ static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *wi
 
 static void gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window );
 
+static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
+static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
+
+
 struct GncMainWindowPrivate
 {
 	GtkWidget *menu_dock;
@@ -555,7 +559,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
   if (page) {
     /* The Gnome HIG 2.0 recommends the application name not be used. (p16) */
     title = g_strdup_printf("%s - %s", filename,
-			    gnc_plugin_page_get_title(page));
+			    gnc_plugin_page_get_page_name(page));
   } else {
     title = g_strdup_printf("%s", filename);
   }
@@ -1121,6 +1125,11 @@ gnc_main_window_connect (GncMainWindow *window,
 	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
 	  (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
 	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
+
+	g_signal_connect(G_OBJECT(page->notebook_page), "popup-menu",
+			 G_CALLBACK(gnc_main_window_popup_menu_cb), page);
+	g_signal_connect_after(G_OBJECT(page->notebook_page), "button-press-event",
+			 G_CALLBACK(gnc_main_window_button_press_cb), page);
 }
 
 
@@ -1143,6 +1152,12 @@ gnc_main_window_disconnect (GncMainWindow *window,
 {
 	GtkNotebook *notebook;
 	gint page_num;
+
+	/* Disconnect the callbacks */
+	g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
+			 G_CALLBACK(gnc_main_window_popup_menu_cb), page);
+	g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
+			 G_CALLBACK(gnc_main_window_button_press_cb), page);
 
 	/* Disconnect the page and summarybar from the window */
 	if (window->priv->current_page == page) {
@@ -1253,7 +1268,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	 * The page tab.
 	 */
 	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
-	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
+	label = gtk_label_new (gnc_plugin_page_get_page_name(page));
 	gtk_widget_show (label);
 
 	tab_hbox = gtk_hbox_new (FALSE, 6);
@@ -1292,7 +1307,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	/*
 	 * The popup menu
 	 */
-	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
+	label = gtk_label_new (gnc_plugin_page_get_page_name(page));
 
 	/*
 	 * Now install it all in the window.
@@ -2090,6 +2105,102 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
   gncwin = GNC_WINDOW(window);
   gnc_window_set_progressbar_window(gncwin);
 }
+
+
+/** Popup a contextual menu.  This function ends up being called when
+ *  the user right-clicks in the context of a window, or uses the
+ *  keyboard context-menu request key combination (Shift-F10 by
+ *  default).
+ *
+ *  @param page This is the GncPluginPage corresponding to the visible
+ *  page.
+ *
+ *  @param event The event parameter passed to the "button-press"
+ *  callback.  May be null if there was no event (aka keyboard
+ *  request).
+ */
+static void
+do_popup_menu(GncPluginPage *page, GdkEventButton *event)
+{
+  GtkUIManager *ui_merge;
+  GtkWidget *menu;
+  int button, event_time;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE(page));
+
+  ENTER("page %p, event %p", page, event);
+  ui_merge = gnc_plugin_page_get_ui_merge(page);
+  if (ui_merge == NULL) {
+    LEAVE("no ui merge");
+    return;
+  }
+
+  menu = gtk_ui_manager_get_widget(ui_merge, "/MainPopup");
+  if (!menu) {
+    LEAVE("no menu");
+    return;
+  }
+
+  if (event) {
+    button = event->button;
+    event_time = event->time;
+  } else {
+    button = 0;
+    event_time = gtk_get_current_event_time ();
+  }
+
+  gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
+  LEAVE(" ");
+}
+
+
+/** Callback function invoked when the user requests that Gnucash
+ *  popup the contextual menu via the keyboard context-menu request
+ *  key combination (Shift-F10 by default).
+ *
+ *  @param page This is the GncPluginPage corresponding to the visible
+ *  page.
+ *
+ *  @param widget Whatever widget had focus when the user issued the
+ *  keyboard context-menu request.
+ *
+ *  @return Always returns TRUE to indicate that the menu request was
+ *  handled.
+ */
+static gboolean
+gnc_main_window_popup_menu_cb (GtkWidget *widget,
+			       GncPluginPage *page)
+{
+  ENTER("widget %p, page %p", widget, page);
+  do_popup_menu(page, NULL);
+  LEAVE(" ");
+  return TRUE;
+}
+
+
+/*  Callback function invoked when the user clicks in the content of
+ *  any Gnucash window.  If this was a "right-click" then Gnucash will
+ *  popup the contextual menu.
+ */
+gboolean
+gnc_main_window_button_press_cb (GtkWidget *whatever,
+				 GdkEventButton *event,
+				 GncPluginPage *page)
+{
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+
+  ENTER("widget %p, event %p, page %p", whatever, event, page);
+  /* Ignore double-clicks and triple-clicks */
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
+    do_popup_menu(page, event);
+    LEAVE("menu shown");
+    return TRUE;
+  }
+
+  LEAVE("other click");
+  return FALSE;
+}
+
 
 /** @} */
 /** @} */

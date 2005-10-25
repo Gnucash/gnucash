@@ -72,12 +72,14 @@
     </placeholder>
   </toolbar>
 
-  <popup name="InvoicePopup"                    action="FakeToplevel">
-    <menuitem name="RecordEntry"       		action="RecordEntryAction"/>
-    <menuitem name="CancelEntry"       		action="CancelEntryAction"/>
-    <menuitem name="DeleteEntry"       		action="DeleteEntryAction"/>
-    <separator name="PopupSep1"/>
-    <menuitem name="DuplicateEntry"    		action="DuplicateEntryAction"/>
-    <menuitem name="BlankEntry"        		action="BlankEntryAction"/>
+  <popup name="MainPopup"                       action="FakeToplevel">
+    <placeholder name="PopupPlaceholder2">
+      <menuitem name="RecordEntry"       		action="RecordEntryAction"/>
+      <menuitem name="CancelEntry"       		action="CancelEntryAction"/>
+      <menuitem name="DeleteEntry"       		action="DeleteEntryAction"/>
+      <separator name="PopupSep1"/>
+      <menuitem name="DuplicateEntry"    		action="DuplicateEntryAction"/>
+      <menuitem name="BlankEntry"        		action="BlankEntryAction"/>
+    </placeholder>
   </popup>
 </ui>

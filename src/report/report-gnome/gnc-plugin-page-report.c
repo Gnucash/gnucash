@@ -75,8 +75,6 @@ static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
 static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId);
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
-static void gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
-static void gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
@@ -85,8 +83,8 @@ static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                                       gpointer data);
 static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
 static void gnc_plugin_page_report_refresh (gpointer data);
-static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReportPrivate * win, int enabled);
-static void gnc_plugin_page_report_set_back_button(GncPluginPageReportPrivate * win, int enabled);
+static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
+static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
 static void gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node, gpointer user_data);
 static void close_handler(gpointer user_data);
 void gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win);
@@ -134,12 +132,6 @@ struct GncPluginPageReportPrivate
 
         /// the container the above HTML widget is in.
         GtkContainer *container;
-
-        /// The GtkActionGroup to use for [un]merging our UI.
-        GtkActionGroup *action_group;
-
-        GtkUIManager *ui_merge;
-        gint merge_id;
 };
 
 GType
@@ -238,8 +230,6 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 
 	gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
 	gnc_plugin_page_class->destroy_widget  = gnc_plugin_page_report_destroy_widget;
-	gnc_plugin_page_class->merge_actions   = gnc_plugin_page_report_merge_actions;
-	gnc_plugin_page_class->unmerge_actions = gnc_plugin_page_report_unmerge_actions;
 
         // create the "reportId" property
         g_object_class_install_property( object_class,
@@ -311,7 +301,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                     close_handler, report );
   
         gnc_html_set_urltype_cb(report->html, gnc_plugin_page_report_check_urltype);
-        gnc_html_set_load_cb(report->html, gnc_plugin_page_report_load_cb, report);
+        gnc_html_set_load_cb(report->html, gnc_plugin_page_report_load_cb, gppReport);
 
         // FIXME.  This is f^-1(f(x)), isn't it?
         DEBUG( "id=%d", report->reportId );
@@ -401,8 +391,8 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                                const gchar * location, const gchar * label, 
                                gpointer data)
 {
-        //GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT();
-        GncPluginPageReportPrivate *win = (GncPluginPageReportPrivate*)data;
+        GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(data);
+        GncPluginPageReportPrivate *win = report->priv;
         int  report_id;
         SCM  find_report    = scm_c_eval_string("gnc:find-report");
         SCM  get_options    = scm_c_eval_string("gnc:report-options");
@@ -480,15 +470,15 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                                                        win, NULL, NULL);
         
         if (gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
-                gnc_plugin_page_report_set_fwd_button(win, TRUE); 
+                gnc_plugin_page_report_set_fwd_button(report, TRUE); 
         } else {
-                gnc_plugin_page_report_set_fwd_button(win, FALSE); 
+                gnc_plugin_page_report_set_fwd_button(report, FALSE); 
         }
         
         if(gnc_html_history_back_p(gnc_html_get_history(win->html))) {
-                gnc_plugin_page_report_set_back_button(win, TRUE); 
+                gnc_plugin_page_report_set_back_button(report, TRUE); 
         } else {
-                gnc_plugin_page_report_set_back_button(win, FALSE); 
+                gnc_plugin_page_report_set_back_button(report, FALSE); 
         }
 
         LEAVE( "done" );
@@ -632,40 +622,6 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
         g_free(win);
 }
 
-static void
-gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
-                                      GtkUIManager *ui_merge )
-{
-        GncPluginPageReport *page;
-        GncPluginPageReportPrivate *priv;
-
-        page = GNC_PLUGIN_PAGE_REPORT(plugin_page);
-        priv = (GncPluginPageReportPrivate*)page->priv;
-
-        DEBUG( "merge actions" );
-        priv->ui_merge = ui_merge;
-        priv->merge_id
-                = gnc_plugin_add_actions( priv->ui_merge,
-					  priv->action_group,
-					  "gnc-plugin-page-report-ui.xml" );
-        DEBUG( "done merging" );
-}
-
-static void
-gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
-                                        GtkUIManager *ui_merge )
-{
-        GncPluginPageReport *rep = GNC_PLUGIN_PAGE_REPORT( plugin_page );
-        GncPluginPageReportPrivate *priv = (GncPluginPageReportPrivate*)rep->priv;
-
-        DEBUG( "unmerge actions" );
-	gtk_ui_manager_remove_ui( ui_merge, priv->merge_id );
-	gtk_ui_manager_remove_action_group( ui_merge, priv->action_group );
-
-	priv->ui_merge = NULL;
-        DEBUG( "done unmerging" );
-}
-
 static GtkActionEntry report_actions[] =
 {
         { "FilePrintAction", GTK_STOCK_PRINT, N_("Print Report..."), NULL, NULL,
@@ -742,24 +698,25 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
 
         /* Init parent declared variables */
         parent = GNC_PLUGIN_PAGE(plugin_page);
+        use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
         tmpStr = g_string_sized_new( 32 );
         g_string_sprintf( tmpStr, "%s: %s", _("Report"),
                           gnc_report_name( plugin_page->priv->initial_report ) );
-        gnc_plugin_page_set_title(parent, tmpStr->str);
-        gnc_plugin_page_set_tab_name(parent, tmpStr->str);
-        gnc_plugin_page_set_uri(parent, "default:");
-
-        use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
-        gnc_plugin_page_set_use_new_window(parent, use_new);
+	g_object_set(G_OBJECT(plugin_page),
+		     "page-name",      tmpStr->str,
+		     "page-uri",       "default:",
+		     "ui-description", "gnc-plugin-page-report-ui.xml",
+		     "use-new-window", use_new,
+		     NULL);
 
         /* change me when the system supports multiple books */
         gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
-        /* Create menu and toolbar information. */
-        /* Note that we're not actually doing the merge, here ... just setup
-         * the UI objects.  See gnc_plugin_page_report_[un]merge_actions(...) */
-        action_group = gtk_action_group_new ("GncPluginPageReportActions");
-        plugin_page->priv->action_group = action_group;
+	/* Create menu and toolbar information */
+	action_group =
+	  gnc_plugin_page_create_action_group(parent,
+					      "GncPluginPageReportActions");
+	action_group = gnc_plugin_page_get_action_group(parent);
         gtk_action_group_add_actions( action_group,
                                       report_actions,
                                       num_report_actions,
@@ -817,24 +774,28 @@ close_handler (gpointer user_data)
 }
 
 static void
-gnc_plugin_page_report_set_fwd_button(GncPluginPageReportPrivate *win, int enabled)
+gnc_plugin_page_report_set_fwd_button(GncPluginPageReport *report, int enabled)
 {
+        GtkActionGroup *action_group;
         GValue value = { 0 };
         GtkAction *act;
 
-        act = gtk_action_group_get_action( win->action_group, "ReportForwAction" );
+	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
+        act = gtk_action_group_get_action( action_group, "ReportForwAction" );
 	g_value_init (&value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&value, enabled);
         g_object_set_property( G_OBJECT(act), "sensitive", &value );
 }
 
 static void
-gnc_plugin_page_report_set_back_button(GncPluginPageReportPrivate *win, int enabled)
+gnc_plugin_page_report_set_back_button(GncPluginPageReport *report, int enabled)
 {
+        GtkActionGroup *action_group;
         GValue value = { 0 };
         GtkAction *act;
 
-        act = gtk_action_group_get_action( win->action_group, "ReportBackAction" );
+	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
+        act = gtk_action_group_get_action( action_group, "ReportBackAction" );
 	g_value_init (&value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&value, enabled);
         g_object_set_property( G_OBJECT(act), "sensitive", &value );

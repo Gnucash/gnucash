@@ -1,3 +1,22 @@
+2005-10-24  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/business/business-gnome/ui/gnc-plugin-page-invoice-ui.xml:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.[ch]:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Factor out
+	common code for handling menus, popup menus, and the toolbar and
+	move the code to the shared base class.  Rework the private data
+	structure in gnc-plugin-page.c.
+
 2005-10-23  David Hampton  <hampton@employees.org>
 
 	* Makefile.TAGS:

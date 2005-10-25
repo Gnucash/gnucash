@@ -75,15 +75,11 @@ static void gnc_plugin_page_account_tree_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
-static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
-static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
 /* Callbacks */
-static gboolean gnc_plugin_page_account_tree_popup_menu_cb (GtkTreeView *treeview,
-							    GncPluginPageAccountTree *page);
-static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
+static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 							      GdkEventButton *event,
-			       				      GncPluginPageAccountTree *page);
+			       				      GncPluginPage *page);
 static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
 							  GtkTreePath        *path,
 							  GtkTreeViewColumn  *col,
@@ -167,6 +163,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ScrubAllAction", NULL, N_("Check & Repair A_ll"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all) },
+
+        /* Popup menu */
+
+	{ "PopupOptionsAction", GTK_STOCK_PROPERTIES, N_("_Options"), NULL,
+	  N_("Edit the account view options"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 };
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
 
@@ -192,10 +194,6 @@ static action_short_labels short_labels[] = {
 
 struct GncPluginPageAccountTreePrivate
 {
-	GtkActionGroup *action_group;
-	guint merge_id;
-	GtkUIManager *ui_merge;
-
 	GtkWidget *widget;
 	GtkTreeView *tree_view;
 
@@ -266,8 +264,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
-	gnc_plugin_class->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
-	gnc_plugin_class->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
 
 	plugin_page_signals[ACCOUNT_SELECTED] =
 	  g_signal_new ("account_selected",
@@ -302,20 +298,23 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-	gnc_plugin_page_set_title(parent, _("Accounts"));
-	gnc_plugin_page_set_tab_name(parent, _("Accounts"));
-	gnc_plugin_page_set_uri(parent, "default:");
+	g_object_set(G_OBJECT(plugin_page),
+		     "page-name",      _("Accounts"),
+		     "page-uri",       "default:",
+		     "ui-description", "gnc-plugin-page-account-tree-ui.xml",
+		     NULL);
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
 	/* Create menu and toolbar information */
-	action_group = gtk_action_group_new ("GncPluginPageAccountTreeActions");
-	priv->action_group = action_group;
-	gtk_action_group_add_actions (action_group,
-				      gnc_plugin_page_account_tree_actions,
-				      gnc_plugin_page_account_tree_n_actions,
-				      plugin_page);
+	action_group =
+	  gnc_plugin_page_create_action_group(parent,
+					      "GncPluginPageAccountTreeActions");
+	gtk_action_group_add_actions(action_group,
+				     gnc_plugin_page_account_tree_actions,
+				     gnc_plugin_page_account_tree_n_actions,
+				     plugin_page);
 	gnc_plugin_init_short_names (action_group, short_labels);
 
 	
@@ -368,7 +367,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	scm_gc_protect_object(priv->name_change_callback_id);
 
 	LEAVE("page %p, priv %p, action group %p",
-	      plugin_page, plugin_page->priv, plugin_page->priv->action_group);
+	      plugin_page, plugin_page->priv, action_group);
 }
 
 static void
@@ -482,8 +481,6 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
-	g_signal_connect (G_OBJECT (tree_view), "popup-menu",
-			  G_CALLBACK (gnc_plugin_page_account_tree_popup_menu_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "button-press-event",
 			  G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
 	g_signal_connect (G_OBJECT (tree_view), "row-activated",
@@ -535,98 +532,29 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 	LEAVE("widget destroyed");
 }
 
-static void
-gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page,
-					    GtkUIManager *ui_merge)
-{
-	GncPluginPageAccountTree *account_page;
-	GncPluginPageAccountTreePrivate *priv;
-	
-	ENTER("page %p, ui_merge %p", plugin_page, ui_merge);
-
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page));
-
-	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
-	priv = account_page->priv;
-
-	priv->ui_merge = ui_merge;
-	priv->merge_id =
-	  gnc_plugin_add_actions (priv->ui_merge,
-				  priv->action_group,
-				  "gnc-plugin-page-account-tree-ui.xml");
-	LEAVE(" ");
-}
-	
-static void
-gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
-					      GtkUIManager *ui_merge)
-{
-	GncPluginPageAccountTree *plugin_page_account_tree = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
-	
-	ENTER("page %p (merge_id %d, action_group %p), ui_merge %p",
-	      plugin_page,
-	      plugin_page_account_tree->priv->merge_id,
-	      plugin_page_account_tree->priv->action_group,
-	      ui_merge);
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page_account_tree));
-	g_return_if_fail (plugin_page_account_tree->priv->merge_id != 0);
-	g_return_if_fail (plugin_page_account_tree->priv->action_group != NULL);
-
-	gtk_ui_manager_remove_ui (ui_merge, plugin_page_account_tree->priv->merge_id);
-	gtk_ui_manager_remove_action_group (ui_merge, plugin_page_account_tree->priv->action_group);
-
-	plugin_page_account_tree->priv->ui_merge = NULL;
-	LEAVE(" ");
-}
-
 
 /* Callbacks */
+
+/** This button press handler calls the common button press handler
+ *  for all pages.  The GtkTreeView eats all button presses and
+ *  doesn't pass them up the widget tree, even when doesn't do
+ *  anything with them.  The only way to get access to the button
+ *  presses in an account tree page is here on the tree view widget.
+ *  Button presses on all other pages are caught by the signal
+ *  registered in gnc-main-window.c. */
 static gboolean
-gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
+gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 					      GdkEventButton *event,
-	       				      GncPluginPageAccountTree *page)
+	       				      GncPluginPage *page)
 {
-	GtkWidget *menu;
-	gint button;
-	guint32 time;
+  gboolean result;
 
-	ENTER("tree %p, event %p, page %p", treeview, event, page);
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
 
-	if (event && event->button != 3) {
-	  LEAVE("not button 3");
-	  return FALSE;
-	}
-
-	if (page->priv->ui_merge == NULL) {
-	  LEAVE("no ui merge");
-	  return FALSE;
-	}
-
-	button = event ? event->button : 0;
-	time = event ? event->time : 0;
-
-	/* Maybe show a different popup menu if no account is selected. */
-	menu = gtk_ui_manager_get_widget (page->priv->ui_merge, "/AccountPopup");
-	if (!menu) {
-	  LEAVE("no menu");
-	  return FALSE;
-	}
-
-	gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL, button, time);
-	LEAVE(" ");
-	return TRUE;
-}
-
-static gboolean
-gnc_plugin_page_account_tree_popup_menu_cb (GtkTreeView *treeview,
-					    GncPluginPageAccountTree *page)
-{
-	gboolean result;
-
-	ENTER("tree %p, page %p", treeview, page);
-	result = gnc_plugin_page_account_tree_button_press_cb (treeview, NULL, page);
-	LEAVE("result %d", result);
-	return result;
+  ENTER("widget %p, event %p, page %p", widget, event, page);
+  result = gnc_main_window_button_press_cb(widget, event, page);
+  LEAVE(" ");
+  return result;
 }
 
 static void
@@ -671,7 +599,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 		/* Check here for placeholder accounts, etc. */
 	}
 
-	action_group = page->priv->action_group;
+	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
 	gnc_plugin_update_actions (action_group, actions_requiring_account,
 				   "sensitive", sensitive);
 	g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
@@ -734,8 +662,7 @@ gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageA
 {
 	Account *account;
 
-	ENTER("action %p, page %p (merge_id %d, action_group %p)",
-	      action, page, page->priv->merge_id, page->priv->action_group);
+	ENTER("action %p, page %p", action, page);
 
 	account = gnc_plugin_page_account_tree_get_current_account (page);
 	g_return_if_fail (account != NULL);

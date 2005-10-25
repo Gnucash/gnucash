@@ -75,15 +75,8 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
-static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
-static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
-
-/* Callbacks */
-static gboolean gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
-							      GdkEventButton *event,
-			       				      GncPluginPageRegister *page);
 
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb(GtkToggleButton *button, GncPluginPageRegister *page);
@@ -298,16 +291,10 @@ struct {
 
 struct GncPluginPageRegisterPrivate
 {
-	GtkActionGroup *action_group;
-	guint merge_id;
-	GtkUIManager *ui_merge;
-
 	GNCLedgerDisplay *ledger;
 	GNCSplitReg *gsr;
 
 	GtkWidget *widget;
-
-	char *ui_description;
 
 	gint component_manager_id;
 
@@ -374,7 +361,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GList *book_list;
 	gchar *label;
 	QofQuery *q;
-	gboolean use_new;
 
 	/* Is there an existing page? */
 	gsr = gnc_ledger_display_get_user_data (ledger);
@@ -392,12 +378,8 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 
 	plugin_page = GNC_PLUGIN_PAGE(register_page);
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
-	gnc_plugin_page_set_title(plugin_page, label);
-	gnc_plugin_page_set_tab_name(plugin_page, label);
+	gnc_plugin_page_set_page_name(plugin_page, label);
 	g_free(label);
-
-	use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
-	gnc_plugin_page_set_use_new_window(plugin_page, use_new);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);
@@ -456,8 +438,6 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
-	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
-	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
 }
 
 static void
@@ -466,19 +446,25 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	GncPluginPageRegisterPrivate *priv;
 	GncPluginPage *parent;
 	GtkActionGroup *action_group;
+	gboolean use_new;
 
 	priv = g_new0 (GncPluginPageRegisterPrivate, 1);
 	plugin_page->priv = priv;
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-	gnc_plugin_page_set_title(parent, _("General Ledger"));
-	gnc_plugin_page_set_tab_name(parent, _("General Ledger"));
-	gnc_plugin_page_set_uri(parent, "default:");
+	use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
+	g_object_set(G_OBJECT(plugin_page),
+		     "page-name",      _("General Ledger"),
+		     "page-uri",       "default:",
+		     "ui-description", "gnc-plugin-page-register-ui.xml",
+		     "use-new-window", use_new,
+		     NULL);
 
 	/* Create menu and toolbar information */
-	action_group = gtk_action_group_new ("GncPluginPageRegisterActions");
-	priv->action_group = action_group;
+	action_group =
+	  gnc_plugin_page_create_action_group(parent,
+					      "GncPluginPageRegisterActions");
 	gtk_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
 				      gnc_plugin_page_register_n_actions, plugin_page);
 	gtk_action_group_add_toggle_actions (action_group,
@@ -491,8 +477,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 					    plugin_page);
 
 	gnc_plugin_init_short_names (action_group, short_labels);
-
-	priv->ui_description = g_strdup("gnc-plugin-page-register-ui.xml");
 
 	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;
 	priv->lines_opt_name    = DEFAULT_LINES_OPTION_NAME;
@@ -512,7 +496,6 @@ gnc_plugin_page_register_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 	g_return_if_fail (page->priv != NULL);
 
-	g_free (page->priv->ui_description);
 	g_free (page->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -539,6 +522,7 @@ static void
 gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
+	GtkActionGroup *action_group;
 	Account *account;
 	SplitRegister *sr;
 	GtkAction *action;
@@ -546,7 +530,8 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 
 	priv = page->priv;
 	account = gnc_plugin_page_register_get_account (page);
-	gnc_plugin_update_actions(priv->action_group, actions_requiring_account,
+	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
+	gnc_plugin_update_actions(action_group, actions_requiring_account,
 				  "sensitive", account != NULL);
 
 	/* Set "style" radio button */
@@ -560,13 +545,13 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	}
 
 	/* Either a match was found, or fell out with i = 0 */
-	action = gtk_action_group_get_action(priv->action_group, radio_entries_2[i].name);
+	action = gtk_action_group_get_action(action_group, radio_entries_2[i].name);
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), TRUE);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
 
 	/* Set "double line" toggle button */
-	action = gtk_action_group_get_action (priv->action_group,
+	action = gtk_action_group_get_action (action_group,
 					      "ViewStyleDoubleLineAction");
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), sr->use_double_line);
@@ -616,8 +601,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	g_signal_connect (G_OBJECT (gsr), "help-changed",
 			  G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
 			  page );
-	g_signal_connect (G_OBJECT (gsr), "button-press-event",
-			  G_CALLBACK (gnc_plugin_page_register_button_press_cb), page);
 
 	sr = gnc_ledger_display_get_split_register(priv->ledger);
 	gnc_split_register_config(sr, sr->type, sr->style, sr->use_double_line);
@@ -686,40 +669,6 @@ gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
 	  GTK_WIDGET(gnc_window_get_gtk_window(GNC_WINDOW(window)));
 }
 	
-static void
-gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
-					GtkUIManager *ui_merge)
-{
-	GncPluginPageRegister *register_page;
-	GncPluginPageRegisterPrivate *priv;
-	
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
-
-	register_page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
-	priv = register_page->priv;
-
-	priv->ui_merge = ui_merge;
-	priv->merge_id = gnc_plugin_add_actions (priv->ui_merge,
-						 priv->action_group,
-						 priv->ui_description);
-}
-	
-static void
-gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page,
-					      GtkUIManager *ui_merge)
-{
-	GncPluginPageRegister *plugin_page_register = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
-	
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page_register));
-	g_return_if_fail (plugin_page_register->priv->merge_id != 0);
-	g_return_if_fail (plugin_page_register->priv->action_group != NULL);
-
-	gtk_ui_manager_remove_ui (ui_merge, plugin_page_register->priv->merge_id);
-	gtk_ui_manager_remove_action_group (ui_merge, plugin_page_register->priv->action_group);
-
-	plugin_page_register->priv->ui_merge = NULL;
-}
-
 static gchar *
 gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 {
@@ -760,26 +709,6 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
-}
-
-/* Callbacks */
-static gboolean
-gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
-					  GdkEventButton *event,
-					  GncPluginPageRegister *page)
-{
-	GtkWidget *menu;
-
-	if (event->button == 3 && page->priv->ui_merge != NULL) {
-		/* Maybe show a different popup menu if no account is selected. */
-		menu = gtk_ui_manager_get_widget (page->priv->ui_merge, "/RegisterPopup");
-		if (menu)
-		  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-				  event->button, event->time);
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 /************************************************************/
@@ -1701,7 +1630,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   title = g_strdup_printf(N_("Sort %s by..."),
-			  gnc_plugin_page_get_tab_name(GNC_PLUGIN_PAGE(page)));
+			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
 
@@ -1750,7 +1679,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   title = g_strdup_printf(N_("Filter %s by..."),
-			  gnc_plugin_page_get_tab_name(GNC_PLUGIN_PAGE(page)));
+			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
 
@@ -2326,22 +2255,6 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 	priv->lines_opt_name 	= lines_opt_name;
 	priv->lines_default  	= lines_default;
 	priv->disallowCaps   	= disallowCaps;
-}
-
-void
-gnc_plugin_page_register_set_ui_description (GncPluginPage *plugin_page,
-					     const char *ui_filename)
-{
-	GncPluginPageRegister *page;
-	GncPluginPageRegisterPrivate *priv;
-
-	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
-
-	page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
-	priv = page->priv;
-
-	g_free(priv->ui_description);
-	priv->ui_description = g_strdup(ui_filename);
 }
 
 GNCSplitReg *

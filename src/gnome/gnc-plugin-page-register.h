@@ -133,22 +133,6 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 				      gint disallowCaps);
 
 
-/** Set an alternate UI for the specified register.  This alternate ui
- *  may only use actions specified in the standard (default) register
- *  ui.
- *
- *  @note This function must be called before the register page is
- *  installed into a window.
- *
- *  @param plugin_page The "register" page to modify.
- *
- *  @param ui_filename The filename (no path) of the alternate UI.
- */
-void
-gnc_plugin_page_register_set_ui_description (GncPluginPage *plugin_page,
-					     const char *ui_filename);
-
-
 /** Get the GNCSplitReg data structure associated with this register page.
  *
  *  @param plugin_page A "register" page.

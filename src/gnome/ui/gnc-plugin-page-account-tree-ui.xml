@@ -38,8 +38,11 @@
     </menu>
   </menubar>
 
-  <popup name="AccountPopup" action="FakeToplevel">
-    <placeholder name="ActionsMiddlePlaceholder">
+  <popup name="MainPopup" action="FakeToplevel">
+    <placeholder name="PopupPlaceholder1">
+      <menuitem name="PopupOptions" action="PopupOptionsAction"/>
+    </placeholder>
+    <placeholder name="PopupPlaceholder2">
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
       <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
@@ -53,7 +56,7 @@
       <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>
       <separator name="AccountSep3"/>
     </placeholder>
-    <placeholder name="ActionsBottomPlaceholder">
+    <placeholder name="PopupBottomPlaceholder">
       <menu name="ScrubMenu" action="ScrubMenuAction">
         <menuitem name="Scrub" action="ScrubAction"/>
         <menuitem name="ScrubSub" action="ScrubSubAction"/>

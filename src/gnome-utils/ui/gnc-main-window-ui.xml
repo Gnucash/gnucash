@@ -125,8 +125,19 @@
     <menu name="Misc" action="MiscAction">
       <menuitem name="MiscTest" action="MiscTestAction"/>
     </menu>
-
   </menubar>
+
+  <popup name="MainPopup" action="FakeToplevel">
+    <separator name="PopupSep1"/>
+    <placeholder name="PopupPlaceholder1"/>
+    <separator name="PopupSep2"/>
+    <placeholder name="PopupPlaceholder2"/>
+    <separator name="PopupSep3"/>
+    <placeholder name="PopupPlaceholder3"/>
+    <separator name="PopupSep4"/>
+    <placeholder name="PopupPlaceholder4"/>
+    <separator name="PopupSep5"/>
+  </popup>
 
   <toolbar name="DefaultToolbar">
     <placeholder name="ToolbarSavePlaceholder"/>
