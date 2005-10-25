@@ -18,6 +18,7 @@ test-period
 test-print-queries
 test-query
 test-querynew
+test-recurrence
 test-resolve-file-path
 test-scm-query
 test-split-vs-account
