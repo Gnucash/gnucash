@@ -1,5 +1,9 @@
 2005-10-26  David Hampton  <hampton@employees.org>
 
+	* lib/goffice/cut-n-paste/pcre/pcre.c:
+	* src/gnome-utils/gnc-date-edit.c: Add extra initialization to fix
+	compilation errors on some gcc4 systems.
+
 	* src/bin/update-gnucash-gconf.in:
 	* src/gnome-utils/druid-gconf-setup.c:
 	* src/gnome-utils/druid-gconf-setup.glade: Fix items from Volker

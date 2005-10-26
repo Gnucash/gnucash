@@ -4207,7 +4207,7 @@ pattern. We can't be so clever for #-comments. */
 ptr = (const uschar *)(pattern - 1);
 while ((c = *(++ptr)) != 0)
   {
-  int min, max;
+  int min = 0, max = 0;
   int class_optcount;
   int bracket_length;
   int duplength;

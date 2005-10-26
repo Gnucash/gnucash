@@ -795,7 +795,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 		tm.tm_year -= 1900;
 
 	if (gde->flags & GNC_DATE_EDIT_SHOW_TIME) {
-		char *tokp, *temp;
+		char *tokp = NULL, *temp;
 
 		str = g_strdup (gtk_entry_get_text
                                 (GTK_ENTRY (gde->time_entry)));
