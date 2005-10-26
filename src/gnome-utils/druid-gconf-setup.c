@@ -57,6 +57,8 @@
 #define HOW_UPDATE		1
 #define HOW_INSTALL		2
 
+#define SCRIPT_NAME "update-gnucash-gconf"
+
 #define PATH_STRING1 "xml:readwrite:$(HOME)/.gconf\n"
 #define PATH_STRING2 "xml:readonly:%s\n"
 
@@ -185,8 +187,7 @@ druid_gconf_update_path (GError **error)
 static gboolean
 druid_gconf_install_keys (GError **error)
 {
-  return g_spawn_command_line_sync("update-gnucash-gconf", NULL, NULL,
-				     NULL, error);
+  return g_spawn_command_line_sync(SCRIPT_NAME, NULL, NULL, NULL, error);
 }
 
 /********************
@@ -237,17 +238,6 @@ druid_gconf_choose_page_prepare (GnomeDruidPage *druidpage,
 				 GnomeDruid *druid,
 				 gpointer user_data)
 {
-  GtkWidget *textview;
-
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "textview1");
-  gtk_widget_modify_base(textview, GTK_STATE_INSENSITIVE,
-			 &GNOME_DRUID_PAGE_STANDARD(druidpage)->contents_background);
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "textview2");
-  gtk_widget_modify_base(textview, GTK_STATE_INSENSITIVE,
-			 &GNOME_DRUID_PAGE_STANDARD(druidpage)->contents_background);
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "textview3");
-  gtk_widget_modify_base(textview, GTK_STATE_INSENSITIVE,
-			 &GNOME_DRUID_PAGE_STANDARD(druidpage)->contents_background);
 }
 
 
@@ -296,11 +286,6 @@ druid_gconf_update_page_prepare (GnomeDruidPage *druidpage,
   GtkWidget *textview;
   gchar *msg;
 
-  /* The text views don't have the right background color for some reason. */
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "textview4");
-  gtk_widget_modify_base(textview, GTK_STATE_INSENSITIVE,
-			 &GNOME_DRUID_PAGE_STANDARD(druidpage)->contents_background);
-
   textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "update_text");
   textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
   msg = g_strdup_printf(PATH_STRING1 PATH_STRING2, GNC_GCONF_DIR);
@@ -347,11 +332,12 @@ druid_gconf_install_page_prepare (GnomeDruidPage *druidpage,
 				  GnomeDruid *druid,
 				  gpointer user_data)
 {
+  GtkTextBuffer *textbuffer;
   GtkWidget *textview;
 
-  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "textview5");
-  gtk_widget_modify_base(textview, GTK_STATE_INSENSITIVE,
-			 &GNOME_DRUID_PAGE_STANDARD(druidpage)->contents_background);
+  textview = gnc_glade_lookup_widget(GTK_WIDGET(druidpage), "install_text");
+  textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+  gtk_text_buffer_set_text(textbuffer, SCRIPT_NAME, -1);
 }
 
 
@@ -413,47 +399,60 @@ druid_gconf_finish_page_prepare (GnomeDruidPage *druidpage,
 				 gpointer user_data)
 {
   gint who, how;
-  const gchar *text;
+  gchar *text;
   const gchar *pgm_path =
-    "When you click Appply, Gnucash will modify your ~/.gconf.path file "
-    "and restart the gconf backend.";
+    _("When you click Appply, Gnucash will modify your ~/.gconf.path file "
+      "and restart the gconf backend.");
   const gchar *pgm_install =
-    "When you click Appply, Gnucash will install the gconf data into your "
-    "local ~/.gconf file and restart the gconf backend.";
-  const gchar *user_does =
-    "You have chosen to correct the problem by yourself.  When you click "
-    "Apply, Gnucash will exit.  Please correct the problem and restart "
-    "the gconf backend before restarting Gnucash.  If you have not already "
-    "done so, you can click the Back button and copy the necessary text "
-    "from the dialog.";
+    _("When you click Appply, Gnucash will install the gconf data into your "
+      "local ~/.gconf file and restart the gconf backend.  The %s script "
+      "must be found in your search path for this to work correctly.");
+  const gchar *user_path =
+    _("You have chosen to correct the problem by yourself.  When you click "
+      "Apply, Gnucash will exit.  Please correct the problem and restart "
+      "the gconf backend with the command 'gconftool-2 --shutdown' before "
+      "restarting Gnucash.  If you have not already done so, you can click "
+      "the Back button and copy the necessary text from the dialog.");
+  const gchar *user_install =
+    _("You have chosen to correct the problem by yourself.  When you "
+      "click Apply, Gnucash will exit.  Please run the %s script which "
+      "will install the configuration data and restart the gconf backend.");
   const gchar *user_did =
-    "You have already corrected the problem.  When you click Apply, Gnucash "
-    "will continue loading.";
+    _("You have already corrected the problem and restarted the gconf "
+      "backend with the command 'gconftool-2 --shutdown'.  When you click "
+      "Apply, Gnucash will continue loading.");
 
   who = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
   switch (who) {
     case WHO_ALREADY_DONE:
-      text = user_did;
+      gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+				     user_did);
       break;
 
     case WHO_USER:
-      text = user_does;
+      how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
+      if (how == HOW_INSTALL) {
+	text = g_strdup_printf(user_install, SCRIPT_NAME);
+	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
+	g_free(text);
+      } else {
+	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+				       user_path);
+      }
       break;
 
     default:
       how = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), HOW));
-      switch(how) {
-      case HOW_INSTALL:
-	text = pgm_install;
-	break;
-
-      default:
-	text = pgm_path;
-	break;
+      if (how == HOW_INSTALL) {
+	text = g_strdup_printf(pgm_install, SCRIPT_NAME);
+	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
+	g_free(text);
+      } else {
+	gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage),
+				       pgm_path);
       }
+      break;
   }
-
-  gnome_druid_page_edge_set_text(GNOME_DRUID_PAGE_EDGE(druidpage), text);
 }
 
 
@@ -531,6 +530,30 @@ druid_gconf_finish_page_finish (GnomeDruidPage *druidpage,
  * Druid Creation
  ********************/
 
+static void
+druid_gconf_fix_textview_color (GtkWidget *window)
+{
+  GdkColor *color;
+  GtkWidget *widget;
+  gint i;
+  const gchar *names[] = {
+    "textview1",
+    "textview2",
+    "textview3",
+    "textview4",
+    "textview5",
+    "textview6",
+    NULL
+  };
+
+  widget = gnc_glade_lookup_widget(window, "choose_page");
+  color = &GNOME_DRUID_PAGE_STANDARD(widget)->contents_background;
+
+  for (i = 0; names[i]; i++) {
+    widget = gnc_glade_lookup_widget(widget, names[i]);
+    gtk_widget_modify_base(widget, GTK_STATE_INSENSITIVE, color);
+  }
+}
 
 /** This function build and presents the druid that presents the user
  *  with the two methods of making the gconf schemas visible, and
@@ -550,6 +573,7 @@ gnc_gnome_install_gconf_schemas (void)
   xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Install Druid");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, NULL);
   window = glade_xml_get_widget (xml, "GConf Install Druid");
+  druid_gconf_fix_textview_color(window);
   gtk_widget_show_all(window);
 
   /* This won't return until the dialog is finished */
