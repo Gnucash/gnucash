@@ -123,7 +123,7 @@ endif
 
 .PHONY: etags ctags
 
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I macros -I m4
 
 .PHONY: doc
 doc:

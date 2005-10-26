@@ -18,21 +18,25 @@ dnl Process this file with autoconf to produce a configure script.
 #   Libraries - Check for libraries
 #   Footer    - Autoconf footer stuff
 
-
-##  Do this first, because the other tests depend on it:
-
-### --------------------------------------------------------------------------
-### Headers
-### check for various programs, and stuff (do this first because later
-### commands depend on them):
-
-AC_INIT(gnucash, 1.99.0, http://bugzilla.gnome.org/enter_bug.cgi?product=GnuCash)
-AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
-
-AM_CONFIG_HEADER(config.h)
+# Autoconf initialization
+AC_INIT(gnucash)
+AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 AC_PREREQ(2.53)
 
+# Define the version number
+GNUCASH_MAJOR_VERSION=1
+GNUCASH_MINOR_VERSION=9
+GNUCASH_MICRO_VERSION=0
+GNUCASH_VERSION_STRING="$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION"
+
+AM_INIT_AUTOMAKE($PACKAGE_NAME, $GNUCASH_VERSION_STRING)
+
+
+##  Do this first, because the other tests depend on it:
+
+# Check for gcc and intltool (somehow breaks the suggested content
+# order, doesn't it? Whatever.)
 AC_PROG_CC
 AC_PROG_INTLTOOL
 
@@ -50,10 +54,6 @@ AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
 # Comment out for production or semi-production builds.  I.E. Anything
 # that is explicitly tagged in cvs as a version.
 AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
-
-GNUCASH_MAJOR_VERSION=1
-GNUCASH_MINOR_VERSION=9
-GNUCASH_MICRO_VERSION=0
 
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
@@ -78,7 +78,7 @@ AM_GLIB_GNU_GETTEXT
 
 
 AM_MAINTAINER_MODE
-#AM_ACLOCAL_INCLUDE(macros) -- old, deprecated macro
+AC_CONFIG_MACRO_DIR(macros)
 
 
 AC_PROG_INSTALL
@@ -1264,7 +1264,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( po/Makefile.in
+AC_CONFIG_FILES(po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -1422,7 +1422,8 @@ AC_OUTPUT( po/Makefile.in
           gnucash-config
           ,
           dnl # commands go here, but we don't have any right now
-          )
+)
+AC_OUTPUT
 
 if test x$RPC_DIR = xrpc ; then
        AC_MSG_WARN([

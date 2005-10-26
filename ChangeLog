@@ -1,3 +1,10 @@
+2005-10-26  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Compose the version string again from several
+	shell variables. Makes life much easier for anyone, including
+	potential automated tarball builds. Slight updates in the build
+	system.
+
 2005-10-26  David Hampton  <hampton@employees.org>
 
 	* src/scm/main.scm: Update previous version to 1.8.12.
