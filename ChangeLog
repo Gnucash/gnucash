@@ -1,4 +1,25 @@
+2005-10-25  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/gnome/dialog-chart-export.c:
+	* src/gnome-utils/gnc-file.[ch]:
+	* src/import-export/log-replay/gnc-log-replay.c:
+	* src/import-export/mt940/gnc-mt940-import.c:
+	* src/import-export/ofx/gnc-ofx-import.c:
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Update file
+	selection boxes to use a GtkFileChooserDialog.  Reinstate file
+	filtering in the dialog.  Patch from Arnout 'raboof' Engelen
+	<gnomebugzilla at bzzt.net>.  #116205
+
 2005-10-24  David Hampton  <hampton@employees.org>
+
+	* src/engine/Makefile.am:
+	* src/engine/Recurrence.[ch]:
+	* src/engine/test/Makefile.am:
+	* src/engine/test/test-recurrence.c: Chris Shoemaker's patch to
+	add a "Recurrence" data type to the engine.  This should
+	eventually subsume the FreqSpec data type.
 
 	* src/business/business-gnome/gnc-plugin-page-invoice.c:
 	* src/business/business-gnome/ui/gnc-plugin-page-invoice-ui.xml:
