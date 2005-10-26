@@ -116,6 +116,14 @@
 #include <glib.h>
 #include "qofbackend.h"
 
+typedef enum
+{
+  GNC_FILE_DIALOG_OPEN,
+  GNC_FILE_DIALOG_IMPORT,
+  GNC_FILE_DIALOG_SAVE,
+  GNC_FILE_DIALOG_EXPORT
+} GNCFileDialogType;
+
 void gnc_file_new (void);
 gboolean gnc_file_open (void);
 void gnc_file_save (void);
@@ -128,7 +136,8 @@ gboolean show_session_error (QofBackendError io_error, const char *newfile);
 
 char * gnc_file_dialog (const char * title,
 			const char * filter,
-			const char * default_name);
+			const char * starting_dir,
+			GNCFileDialogType type);
 
 gboolean gnc_file_open_file (const char *filename);
 void gnc_file_export_file(const char * filename);

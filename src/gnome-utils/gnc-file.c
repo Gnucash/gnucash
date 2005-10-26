@@ -65,49 +65,106 @@ static GNCShutdownCB shutdown_cb = NULL;
  *                                                                  * 
  * Args:   title        - the title of the window                   *
  *         filter       - the file filter to use                    * 
- *         default_name - the default name to use                   *
+ *         default_dir  - start the chooser in this directory       *
+ *         type         - what type of dialog (open, save, etc.)    *
  * Return: containing the name of the file the user selected        *
 \********************************************************************/
 
 char *
 gnc_file_dialog (const char * title,
                  const char * filter,
-                 const char *default_name)
+                 const char * starting_dir,
+		 GNCFileDialogType type
+		 )
 {
-  GtkFileSelection *file_box;
+  GtkWidget *file_box;
   const char *internal_name;
   char *file_name = NULL;
+  gchar * okbutton = GTK_STOCK_OPEN;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN; 
   gint response;
 
-  ENTER("\n");
+  ENTER(" ");
 
-  /* Set a default title if nothing was passed in */  
-  if (title == NULL)
-    title = _("Open");
+  switch (type) {
+	case GNC_FILE_DIALOG_OPEN:
+		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
+		  okbutton = GTK_STOCK_OPEN;
+		  if (title == NULL)
+			  title = _("Open");
+		  break;
+	case GNC_FILE_DIALOG_IMPORT:
+		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
+		  okbutton = _("Import");
+		  if (title == NULL)
+			  title = _("Import");
+		  break;
+	case GNC_FILE_DIALOG_SAVE:
+		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
+		  okbutton = GTK_STOCK_SAVE;
+		  if (title == NULL)
+			  title = _("Save");
+		  break;
+	case GNC_FILE_DIALOG_EXPORT:
+		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
+		  okbutton = _("Export");
+		  if (title == NULL)
+			  title = _("Export");
+		  break;
+	
+  }
 
-  file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
+  file_box = gtk_file_chooser_dialog_new(
+			  title,
+			  NULL,
+			  GTK_FILE_CHOOSER_ACTION_OPEN,
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			  okbutton, GTK_RESPONSE_ACCEPT,
+			  NULL);
 
-  if (default_name)
-    gtk_file_selection_set_filename(file_box, default_name);
+  if (starting_dir) {
+    gchar *dir_name;
 
-  /* hack alert - this was filtering directory names as well as file 
-   * names, so I think we should not do this by default (rgmerk) */
-#if 0
-  if (filter != NULL)
-    gtk_file_selection_complete(file_box, filter);
-#endif
+    /* Ensure we have a directory name.  The set function fails otherwise. */
+    dir_name = g_path_get_dirname(starting_dir);
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box), dir_name);
+    g_free(dir_name);
+  }
 
   gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
+  /*
   gtk_window_set_transient_for(GTK_WINDOW(file_box),
 			       GTK_WINDOW(gnc_ui_get_toplevel()));
+  */
+
+  if (filter != NULL)
+  {
+    GtkFileFilter* g_filter = gtk_file_filter_new();
+    GtkFileFilter* all_filter = gtk_file_filter_new();
+
+    gtk_file_filter_set_name (g_filter, filter);
+    gtk_file_filter_add_pattern (g_filter, filter);
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+
+    gtk_file_filter_set_name (all_filter, "All files");
+    gtk_file_filter_add_pattern (all_filter, "*");
+    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), all_filter);
+
+    /* Note: You cannot set a file filter and pre-select a file name.
+     * The latter wins, and the filter ends up diabled.  Since we are
+     * only settin the starting directory for the chooser dialog,
+     * everything works as expected. */
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+  }
+
   response = gtk_dialog_run(GTK_DIALOG(file_box));
 
-  if (response == GTK_RESPONSE_OK) {
+  if (response == GTK_RESPONSE_ACCEPT) {
     /* look for constructs like postgres://foo */
-    internal_name = gtk_entry_get_text(GTK_ENTRY(file_box->selection_entry));
-    if (strstr (internal_name, "://") == 0) {
+    internal_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+    if (strstr (internal_name, "file://") == internal_name) {
       /* nope, a local file name */
-      internal_name = gtk_file_selection_get_filename(file_box);
+      internal_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
     }
     file_name = g_strdup(internal_name);
   }
@@ -665,7 +722,7 @@ gnc_file_open (void)
     return FALSE;
 
   lastfile = gnc_history_get_last();
-  newfile = gnc_file_dialog (_("Open"), NULL, lastfile);
+  newfile = gnc_file_dialog (_("Open"), NULL, lastfile, GNC_FILE_DIALOG_OPEN);
   if (lastfile)
     g_free(lastfile);
   result = gnc_post_file_open (newfile);
@@ -703,7 +760,7 @@ gnc_file_export_file(const char * newfile)
     gnc_init_default_directory(&default_dir);
 
   if (!newfile) {
-    newfile =  gnc_file_dialog (_("Export"), NULL, default_dir);
+    newfile =  gnc_file_dialog (_("Export"), NULL, default_dir, GNC_FILE_DIALOG_EXPORT);
     g_free(default_dir);
     default_dir = NULL;
     if (!newfile)
@@ -849,7 +906,8 @@ gnc_file_save_as (void)
   } else {
     gnc_init_default_directory(&default_dir);
   }
-  filename = gnc_file_dialog (_("Save"), "*.gnc", default_dir);
+  filename = gnc_file_dialog (_("Save"), NULL, default_dir, 
+		  GNC_FILE_DIALOG_SAVE);
   if (default_dir)
     free(default_dir);
   if (!filename) return;

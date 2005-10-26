@@ -232,7 +232,7 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
 	chart_session = qof_session_new();
 	filename = gnc_file_dialog(_("Export Chart of Accounts to QSF XML"),
-				   NULL, NULL);
+				   NULL, NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
 		gnc_engine_suspend_events();

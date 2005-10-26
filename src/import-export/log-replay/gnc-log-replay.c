@@ -512,7 +512,8 @@ void gnc_file_log_replay (void)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
 				      NULL,
-				      default_dir);
+				      default_dir,
+				      GNC_FILE_DIALOG_OPEN);
   g_free(default_dir);
 
   if(selected_filename!=NULL)

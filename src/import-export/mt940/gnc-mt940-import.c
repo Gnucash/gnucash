@@ -78,7 +78,8 @@ void gnc_file_mt940_import (void)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select an MT940 file to process"),
 				      NULL,
-				      default_dir);
+				      default_dir,
+				      GNC_FILE_DIALOG_IMPORT);
   g_free(default_dir);
 
   if(selected_filename!=NULL)

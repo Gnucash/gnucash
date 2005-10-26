@@ -949,7 +949,7 @@ gnc_get_export_filename (SCM choice)
         /* %s is the type of what is about to be saved, e.g. "HTML". */
         title = g_strdup_printf (_("Save %s To File"), type);
 
-        filepath = gnc_file_dialog (title, NULL, NULL);
+        filepath = gnc_file_dialog (title, NULL, NULL, GNC_FILE_DIALOG_EXPORT);
 
         g_free (title);
 
