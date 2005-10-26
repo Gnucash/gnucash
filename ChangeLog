@@ -1,5 +1,7 @@
 2005-10-26  David Hampton  <hampton@employees.org>
 
+	* src/scm/main.scm: Update previous version to 1.8.12.
+
 	* lib/goffice/cut-n-paste/pcre/pcre.c:
 	* src/gnome-utils/gnc-date-edit.c: Add extra initialization to fix
 	compilation errors on some gcc4 systems.
