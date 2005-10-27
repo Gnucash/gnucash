@@ -19,7 +19,7 @@ dnl Process this file with autoconf to produce a configure script.
 #   Footer    - Autoconf footer stuff
 
 # Autoconf initialization
-AC_INIT(gnucash)
+AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
 AC_PREREQ(2.53)
@@ -30,7 +30,7 @@ GNUCASH_MINOR_VERSION=9
 GNUCASH_MICRO_VERSION=0
 GNUCASH_VERSION_STRING="$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION"
 
-AM_INIT_AUTOMAKE($PACKAGE_NAME, $GNUCASH_VERSION_STRING)
+AM_INIT_AUTOMAKE(gnucash, $GNUCASH_VERSION_STRING)
 
 
 ##  Do this first, because the other tests depend on it:

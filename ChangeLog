@@ -1,3 +1,10 @@
+2005-10-27  David Hampton  <hampton@employees.org>
+
+	* configure.in: Temporarily revert to the old-school way of
+	defining the PACKAGE variable.
+
+	* macros/autogen.sh: Tweak so that autoconf still gets run.
+
 2005-10-26  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Compose the version string again from several
