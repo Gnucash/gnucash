@@ -345,7 +345,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Credit _Accounts</property>
+		  <property name="label" translatable="yes">Credit _accounts</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -370,7 +370,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Sign reverse balances on income and expense accounts.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Income &amp; Expense</property>
+		  <property name="label" translatable="yes">_Income &amp; expense</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -393,7 +393,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label55">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">&lt;b&gt;Reverse Balanced Accoutns&lt;/b&gt;</property>
+		  <property name="label" translatable="yes">&lt;b&gt;Reverse Balanced Accounts&lt;/b&gt;</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">True</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -664,6 +664,7 @@
 		  <child>
 		    <widget class="GtkRadioButton" id="gconf/general/currency_choice/locale">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Use the system locale currency for all newly created accounts.</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Locale:</property>
 		      <property name="use_underline">True</property>
@@ -700,6 +701,7 @@
 		  <child>
 		    <widget class="GtkRadioButton" id="gconf/general/currency_choice/other">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Use the specified currency for all newly created accounts.</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Choose:</property>
 		      <property name="use_underline">True</property>
@@ -806,7 +808,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label102">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">2004-12-31</property>
+		  <property name="label" translatable="yes">2005-07-31</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -830,7 +832,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label101">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">31.12.2004</property>
+		  <property name="label" translatable="yes">31.07.05</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -854,7 +856,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label100">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">31/12/2004</property>
+		  <property name="label" translatable="yes">31/07/05</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -878,7 +880,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label99">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">12/31/2004</property>
+		  <property name="label" translatable="yes">07/31/05</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -926,6 +928,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/iso">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the date format specified by the ISO-8601 standard.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_ISO:</property>
 		  <property name="use_underline">True</property>
@@ -949,6 +952,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/ce">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the date format comon in continental Europe.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Europe:</property>
 		  <property name="use_underline">True</property>
@@ -973,6 +977,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/uk">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the date format comon in the United Kingdom.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">U_K:</property>
 		  <property name="use_underline">True</property>
@@ -997,6 +1002,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/us">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the date format comon in the United States.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_US:</property>
 		  <property name="use_underline">True</property>
@@ -1021,6 +1027,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/date_format/locale">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the date format specified by the system locale.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Locale:</property>
 		  <property name="use_underline">True</property>
@@ -1171,7 +1178,7 @@
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
-	      <property name="column_spacing">12</property>
+	      <property name="column_spacing">0</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label50">
@@ -1226,7 +1233,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Enables support for the European Union EURO currency.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Enable Euro support</property>
+		  <property name="label" translatable="yes">_Enable euro support</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1250,7 +1257,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Display hints for using GnuCash at startup</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Display &quot;_Tip of the Day&quot; dialog</property>
+		  <property name="label" translatable="yes">Display &quot;_tip of the day&quot; dialog</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1272,6 +1279,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/tab_close_buttons">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show a close button on each notebook tab.  These function identically to the 'Close' menu item.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Show close button on _notebook tabs</property>
 		  <property name="use_underline">True</property>
@@ -1378,7 +1386,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/compress_files">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Compress the data file.</property>
+		  <property name="tooltip" translatable="yes">Compress the data file with gzip when saving it to disk.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Com_press files</property>
 		  <property name="use_underline">True</property>
@@ -1501,7 +1509,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Automatically insert a decimal point into values that are entered without one.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Automatic Decimal Point</property>
+		  <property name="label" translatable="yes">_Automatic decimal point</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1655,7 +1663,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label44">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New Search Limit:</property>
+		      <property name="label" translatable="yes">New search limit:</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1762,6 +1770,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/enter_moves_to_end">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, pressing the 'Enter' key will move to the blank transaction at the bottom of the register.  If clear, pressing the 'Enter' key will move down one row.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">'_Enter' moves to blank transaction</property>
 		  <property name="use_underline">True</property>
@@ -1811,7 +1820,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Automatically raise the list of accounts or actions during input.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Auto-Raise Lists</property>
+		  <property name="label" translatable="yes">_Auto-raise Lists</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1953,6 +1962,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/draw_vertical_lines">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show vertical borders on the cells.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Draw _vertical lines between cells</property>
 		  <property name="use_underline">True</property>
@@ -1976,6 +1986,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/draw_horizontal_lines">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show horizontal borders on the cells.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Draw hori_zontal lines between cells</property>
 		  <property name="use_underline">True</property>
@@ -1999,6 +2010,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/alternate_color_by_transaction">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Alternate the primary and secondary colors by transaction instead of by alternating by row.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Double _mode colors alternate with transactions</property>
 		  <property name="use_underline">True</property>
@@ -2022,8 +2034,9 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/use_theme_colors">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, the system color theme will be applied to register windows.  If clear, the original gnucash register colors will be used.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Use system theme color in registers</property>
+		  <property name="label" translatable="yes">_Use system theme colors</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2099,7 +2112,7 @@
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
-	      <property name="column_spacing">12</property>
+	      <property name="column_spacing">0</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label63">
@@ -2176,8 +2189,9 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/register/default_style/ledger">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show all transactions on one line. (Two in double line mode.)</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Basic Ledger</property>
+		  <property name="label" translatable="yes">_Basic ledger</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2199,8 +2213,9 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/register/default_style/auto_ledger">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Automatically expand the current transaction to show all splits.  All other transactions are shown on one line. (Two in double line mode.)</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Auto-Split Ledger</property>
+		  <property name="label" translatable="yes">_Auto-split ledger</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2223,8 +2238,9 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/register/default_style/journal">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">All transactions are expanded to show all splits.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Transaction _Journal</property>
+		  <property name="label" translatable="yes">Transaction _journal</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2322,6 +2338,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/double_line_mode">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show two lines of information for each transaction instead of one.  Does not affect expanded transactions.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Double line mode</property>
 		  <property name="use_underline">True</property>
@@ -2345,6 +2362,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/use_new_window">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, each register will be opened in its own top level window.  If clear, the register will be opened in the current window.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Register opens in a new _window</property>
 		  <property name="use_underline">True</property>
@@ -2479,6 +2497,7 @@
 		  <child>
 		    <widget class="GtkRadioButton" id="gconf/general/report/currency_choice/other">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Use the specified currency for all newly created reports.</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Choose:</property>
 		      <property name="use_underline">True</property>
@@ -2515,6 +2534,7 @@
 		  <child>
 		    <widget class="GtkRadioButton" id="gconf/general/report/currency_choice/locale">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Use the system locale currency for all newly created reports.</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Locale:</property>
 		      <property name="use_underline">True</property>
@@ -2612,6 +2632,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/report/use_new_window">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, each report will be opened in its own top level window.  If clear, the report will be opened in the current window.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Report opens in a new _window</property>
 		  <property name="use_underline">True</property>
@@ -2664,7 +2685,7 @@
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
-	      <property name="column_spacing">12</property>
+	      <property name="column_spacing">0</property>
 
 	      <child>
 		<widget class="GtkLabel" id="label91">
@@ -2682,7 +2703,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
+		  <property name="right_attach">4</property>
 		  <property name="top_attach">0</property>
 		  <property name="bottom_attach">1</property>
 		  <property name="x_options">fill</property>
@@ -2693,6 +2714,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/window/pages/account_tree/summary/grand_total">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show a grand total of all accounts converted to the default report currency.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Include grand total</property>
 		  <property name="use_underline">True</property>
@@ -2716,6 +2738,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/window/pages/account_tree/summary/non_currency">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Include non currency totals</property>
 		  <property name="use_underline">True</property>
@@ -2737,30 +2760,6 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label92">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes"></property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
-		  <property name="top_attach">3</property>
-		  <property name="bottom_attach">4</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
 		<widget class="GtkLabel" id="label93">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">&lt;b&gt;Start Date&lt;/b&gt;</property>
@@ -2776,33 +2775,9 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
+		  <property name="right_attach">4</property>
 		  <property name="top_attach">4</property>
 		  <property name="bottom_attach">5</property>
-		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkLabel" id="label94">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes"></property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_LEFT</property>
-		  <property name="wrap">False</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-		<packing>
-		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
-		  <property name="top_attach">7</property>
-		  <property name="bottom_attach">8</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options"></property>
 		</packing>
@@ -2824,7 +2799,7 @@
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
-		  <property name="right_attach">1</property>
+		  <property name="right_attach">4</property>
 		  <property name="top_attach">8</property>
 		  <property name="bottom_attach">9</property>
 		  <property name="x_options">fill</property>
@@ -2835,8 +2810,9 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/start_choice/relative">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the specified relative starting date for profit/loss calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Relative</property>
+		  <property name="label" translatable="yes">Relative:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2851,15 +2827,16 @@
 		  <property name="bottom_attach">6</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/start_choice/absolute">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the specified absolute starting date for profit/loss calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Absolute</property>
+		  <property name="label" translatable="yes">Absolute:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2875,15 +2852,16 @@
 		  <property name="bottom_attach">7</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/end_choice/relative">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Relative</property>
+		  <property name="label" translatable="yes">Relative:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2898,15 +2876,16 @@
 		  <property name="bottom_attach">10</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/window/pages/account_tree/summary/end_choice/absolute">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Absolute</property>
+		  <property name="label" translatable="yes">Absolute:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2922,7 +2901,7 @@
 		  <property name="bottom_attach">11</property>
 		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
-		  <property name="y_options"></property>
+		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
 
@@ -2957,7 +2936,6 @@
 		  <property name="right_attach">4</property>
 		  <property name="top_attach">10</property>
 		  <property name="bottom_attach">11</property>
-		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
 		</packing>
 	      </child>
@@ -2995,6 +2973,54 @@
 		  <property name="bottom_attach">6</property>
 		  <property name="x_options">fill</property>
 		  <property name="y_options">fill</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label94">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">7</property>
+		  <property name="bottom_attach">8</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label92">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
 		</packing>
 	      </child>
 	    </widget>
@@ -3036,6 +3062,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/text">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display toolbar items as text only.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Text only</property>
 		  <property name="use_underline">True</property>
@@ -3059,6 +3086,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/icons">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display toolbar items as icons only.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Icons only</property>
 		  <property name="use_underline">True</property>
@@ -3083,6 +3111,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/both_horiz">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display toolbar items with the text label beside the icon.  Labels are only shown for the most frequently used items.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Text besi_de icons</property>
 		  <property name="use_underline">True</property>
@@ -3107,6 +3136,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/both">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Display toolbar items with the text label below the icon.  Labels are show for all items.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Text _below icons</property>
 		  <property name="use_underline">True</property>
@@ -3131,6 +3161,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="gconf/general/toolbar_style/system">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Use the system setting for displaying toolbar items.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Use s_ystem _default</property>
 		  <property name="use_underline">True</property>

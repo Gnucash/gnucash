@@ -1262,7 +1262,7 @@ gnc_preferences_dialog_create(void)
   DEBUG("Done with interesting widgets.");
 
   /* Other stuff */
-  gdate = g_date_new_dmy(31, G_DATE_DECEMBER, 2004);
+  gdate = g_date_new_dmy(31, G_DATE_JULY, 2005);
   g_date_strftime(buf, sizeof(buf), "%x", gdate);
   label = glade_xml_get_widget(xml, "locale_date_sample");
   gtk_label_set_text(GTK_LABEL(label), buf);

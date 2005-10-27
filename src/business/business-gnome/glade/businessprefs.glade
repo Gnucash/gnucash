@@ -3,9 +3,9 @@
 
 <glade-interface>
 
-<widget class="GtkWindow" id="window1">
+<widget class="GtkWindow" id="Preferences">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">window1</property>
+  <property name="title" translatable="yes">Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -80,7 +80,7 @@
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Whether tax is included by default in entries on Bills. This setting is inherited by new customers and vendors.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">Ta_x Included</property>
+	  <property name="label" translatable="yes">Ta_x included</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -125,7 +125,7 @@
       <child>
 	<widget class="GtkLabel" id="label15">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">_Days in Advance:</property>
+	  <property name="label" translatable="yes">_Days in advance:</property>
 	  <property name="use_underline">True</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -152,7 +152,7 @@
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Whether to display the list of Bills Due at startup.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">_Notify When Due</property>
+	  <property name="label" translatable="yes">_Notify when due</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -224,7 +224,7 @@
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Whether tax is included by default in entries on Invoices. This setting is inherited by new customers and vendors.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">_Tax Included</property>
+	  <property name="label" translatable="yes">_Tax included</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -248,7 +248,7 @@
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Whether multiple entries in an invoice which transfer to the same account should be accumulated into a single split by default. This setting can be changed in the Post dialog.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">_Accumulate splits on Post</property>
+	  <property name="label" translatable="yes">_Accumulate splits on post</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
@@ -270,7 +270,7 @@
       <child>
 	<widget class="GtkLabel" id="label14">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Number of _Rows:</property>
+	  <property name="label" translatable="yes">Number of _rows:</property>
 	  <property name="use_underline">True</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -280,6 +280,7 @@
 	  <property name="yalign">0.5</property>
 	  <property name="xpad">0</property>
 	  <property name="ypad">0</property>
+	  <property name="mnemonic_widget">gconf/dialogs/business/invoice/number_of_rows</property>
 	</widget>
 	<packing>
 	  <property name="left_attach">2</property>
@@ -317,6 +318,7 @@
       <child>
 	<widget class="GtkCheckButton" id="gconf/dialogs/business/invoice/use_new_window">
 	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">If checked, each invoice will be opened in its own top level window.  If clear, the invoice will be opened in the current window.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">_Open in new window</property>
 	  <property name="use_underline">True</property>

@@ -130,7 +130,7 @@
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			</widget>
 			<packing>
@@ -205,7 +205,7 @@
 		  <child>
 		    <widget class="GtkFrame" id="frame73">
 		      <property name="visible">True</property>
-		      <property name="label_xalign">0.05</property>
+		      <property name="label_xalign">0.5</property>
 		      <property name="label_yalign">0.5</property>
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -473,7 +473,7 @@
 		  <child>
 		    <widget class="GtkFrame" id="frame77">
 		      <property name="visible">True</property>
-		      <property name="label_xalign">0.05</property>
+		      <property name="label_xalign">0.5</property>
 		      <property name="label_yalign">0.5</property>
 		      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -580,7 +580,7 @@
 				      <property name="justify">GTK_JUSTIFY_LEFT</property>
 				      <property name="wrap">False</property>
 				      <property name="selectable">False</property>
-				      <property name="xalign">7.45058e-09</property>
+				      <property name="xalign">0</property>
 				      <property name="yalign">0.5</property>
 				      <property name="xpad">0</property>
 				      <property name="ypad">0</property>
@@ -601,7 +601,7 @@
 				      <property name="max_length">0</property>
 				      <property name="text" translatable="yes"></property>
 				      <property name="has_frame">True</property>
-				      <property name="invisible_char" translatable="yes">*</property>
+				      <property name="invisible_char">*</property>
 				      <property name="activates_default">False</property>
 				    </widget>
 				    <packing>
@@ -641,7 +641,7 @@
 				      <property name="max_length">0</property>
 				      <property name="text" translatable="yes"></property>
 				      <property name="has_frame">True</property>
-				      <property name="invisible_char" translatable="yes">*</property>
+				      <property name="invisible_char">*</property>
 				      <property name="activates_default">False</property>
 				    </widget>
 				    <packing>
@@ -698,7 +698,7 @@
 	      <child>
 		<widget class="GtkFrame" id="recur_frame">
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.05</property>
+		  <property name="label_xalign">0.5</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -782,7 +782,7 @@
 	  <child>
 	    <widget class="GtkFrame" id="tempxaction_frame">
 	      <property name="visible">True</property>
-	      <property name="label_xalign">0.05</property>
+	      <property name="label_xalign">0.5</property>
 	      <property name="label_yalign">0.5</property>
 	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -1196,7 +1196,7 @@
 		      <property name="justify">GTK_JUSTIFY_CENTER</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
-		      <property name="xalign">7.45058e-09</property>
+		      <property name="xalign">0</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">5</property>
 		      <property name="ypad">0</property>
@@ -1301,7 +1301,7 @@
 		      <property name="justify">GTK_JUSTIFY_CENTER</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
-		      <property name="xalign">7.45058e-09</property>
+		      <property name="xalign">0</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">5</property>
 		      <property name="ypad">0</property>
@@ -1406,7 +1406,7 @@
 		      <property name="justify">GTK_JUSTIFY_FILL</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
-		      <property name="xalign">7.45058e-09</property>
+		      <property name="xalign">0</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
@@ -1429,7 +1429,7 @@
 		<widget class="GtkFrame" id="frame51">
 		  <property name="border_width">2</property>
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.05</property>
+		  <property name="label_xalign">0.5</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -1784,7 +1784,7 @@
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
 			  <property name="wrap">False</property>
 			  <property name="selectable">False</property>
-			  <property name="xalign">7.45058e-09</property>
+			  <property name="xalign">0</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
@@ -2504,7 +2504,7 @@
 			  <property name="justify">GTK_JUSTIFY_CENTER</property>
 			  <property name="wrap">False</property>
 			  <property name="selectable">False</property>
-			  <property name="xalign">7.45058e-09</property>
+			  <property name="xalign">0</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
@@ -4183,7 +4183,7 @@
 		      <property name="justify">GTK_JUSTIFY_CENTER</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
-		      <property name="xalign">7.45058e-09</property>
+		      <property name="xalign">0</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">5</property>
 		      <property name="ypad">0</property>
@@ -4934,7 +4934,7 @@
 	<widget class="GtkFrame" id="upcoming_cal_frame">
 	  <property name="border_width">2</property>
 	  <property name="visible">True</property>
-	  <property name="label_xalign">0.05</property>
+	  <property name="label_xalign">0.5</property>
 	  <property name="label_yalign">0.5</property>
 	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -5073,7 +5073,7 @@
 		  <property name="max_length">0</property>
 		  <property name="text" translatable="yes"></property>
 		  <property name="has_frame">True</property>
-		  <property name="invisible_char" translatable="yes">*</property>
+		  <property name="invisible_char">*</property>
 		  <property name="activates_default">False</property>
 		</widget>
 		<packing>
@@ -5473,7 +5473,7 @@
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>
 			      <property name="wrap">False</property>
 			      <property name="selectable">False</property>
-			      <property name="xalign">7.45058e-09</property>
+			      <property name="xalign">0</property>
 			      <property name="yalign">0.5</property>
 			      <property name="xpad">0</property>
 			      <property name="ypad">0</property>
@@ -5922,7 +5922,7 @@
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		    </widget>
 		    <packing>
@@ -5945,7 +5945,7 @@
 		<widget class="GtkFrame" id="frame78">
 		  <property name="border_width">2</property>
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.05</property>
+		  <property name="label_xalign">0.5</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -6051,7 +6051,7 @@
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				</widget>
 			      </child>
@@ -6182,7 +6182,7 @@
 		<widget class="GtkFrame" id="frame82">
 		  <property name="border_width">38</property>
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.05</property>
+		  <property name="label_xalign">0.5</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -6711,7 +6711,7 @@ Select any which you would like to create now, and click
 	      <child>
 		<widget class="GtkFrame" id="to_create_txn_reg_frame">
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.05</property>
+		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -7328,7 +7328,7 @@ the created Scheduled Transactions directly.</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
 		      <property name="xalign">1</property>
-		      <property name="yalign">7.45058e-09</property>
+		      <property name="yalign">0</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
 		    </widget>
@@ -7380,7 +7380,7 @@ the created Scheduled Transactions directly.</property>
 			<widget class="GtkFrame" id="type_freq_frame">
 			  <property name="border_width">3</property>
 			  <property name="visible">True</property>
-			  <property name="label_xalign">0.05</property>
+			  <property name="label_xalign">0.5</property>
 			  <property name="label_yalign">0.5</property>
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -7454,7 +7454,7 @@ the created Scheduled Transactions directly.</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
 		  <property name="wrap">False</property>
 		  <property name="selectable">False</property>
-		  <property name="xalign">0.05</property>
+		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">10</property>
@@ -7569,7 +7569,7 @@ the created Scheduled Transactions directly.</property>
 		  <property name="visible">True</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
-		  <property name="xscale">0.9</property>
+		  <property name="xscale">0.899999976158</property>
 		  <property name="yscale">1</property>
 		  <property name="top_padding">0</property>
 		  <property name="bottom_padding">0</property>
@@ -7759,7 +7759,7 @@ the created Scheduled Transactions directly.</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			</widget>
 		      </child>
@@ -7794,7 +7794,7 @@ the created Scheduled Transactions directly.</property>
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			</widget>
 		      </child>
@@ -7815,7 +7815,7 @@ the created Scheduled Transactions directly.</property>
 		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xscale">0.5</property>
-		      <property name="yscale">0.9</property>
+		      <property name="yscale">0.899999976158</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
 		      <property name="left_padding">0</property>
@@ -7825,7 +7825,7 @@ the created Scheduled Transactions directly.</property>
 			<widget class="GtkFrame" id="freq_frame">
 			  <property name="border_width">3</property>
 			  <property name="visible">True</property>
-			  <property name="label_xalign">0.05</property>
+			  <property name="label_xalign">0.5</property>
 			  <property name="label_yalign">0.5</property>
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -8029,7 +8029,7 @@ the created Scheduled Transactions directly.</property>
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				</widget>
 			      </child>
@@ -8064,7 +8064,7 @@ the created Scheduled Transactions directly.</property>
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				</widget>
 			      </child>
@@ -8193,7 +8193,7 @@ the created Scheduled Transactions directly.</property>
 			    <widget class="GtkFrame" id="frame92">
 			      <property name="border_width">5</property>
 			      <property name="visible">True</property>
-			      <property name="label_xalign">0.05</property>
+			      <property name="label_xalign">0.5</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -8253,7 +8253,7 @@ the created Scheduled Transactions directly.</property>
 					  <property name="visible">True</property>
 					  <property name="xalign">1</property>
 					  <property name="yalign">0.5</property>
-					  <property name="xscale">0.95</property>
+					  <property name="xscale">0.949999988079</property>
 					  <property name="yscale">1</property>
 					  <property name="top_padding">0</property>
 					  <property name="bottom_padding">0</property>
@@ -8451,7 +8451,7 @@ the created Scheduled Transactions directly.</property>
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
-			  <property name="label_xalign">0.05</property>
+			  <property name="label_xalign">0.5</property>
 			  <property name="label_yalign">0.5</property>
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -8921,7 +8921,7 @@ the created Scheduled Transactions directly.</property>
       <child>
 	<widget class="GtkLabel" id="label847988">
 	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Register _Lines</property>
+	  <property name="label" translatable="yes">Register _lines</property>
 	  <property name="use_underline">True</property>
 	  <property name="use_markup">False</property>
 	  <property name="justify">GTK_JUSTIFY_LEFT</property>
