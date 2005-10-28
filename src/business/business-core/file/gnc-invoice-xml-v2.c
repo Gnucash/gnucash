@@ -184,7 +184,7 @@ set_timespec(xmlNodePtr node, GncInvoice* invoice,
            void (*func)(GncInvoice *invoice, Timespec ts))
 {
   Timespec ts = dom_tree_to_timespec(node);
-  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
     
   func(invoice, ts);
   return TRUE;

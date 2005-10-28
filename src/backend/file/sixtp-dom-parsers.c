@@ -850,3 +850,15 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     return successful;
 }
+
+gboolean
+dom_tree_valid_timespec (Timespec *ts, const gchar *name)
+{
+
+  if (ts->tv_sec || ts->tv_nsec)
+    return TRUE;
+
+  g_warning("Invalid timestamp in data file.  Look for a '%s' entry "
+	    "with a date of 1969-12-31 or 1970-01-01.", name);
+  return FALSE;
+}

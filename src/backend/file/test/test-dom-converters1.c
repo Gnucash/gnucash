@@ -137,7 +137,7 @@ test_dom_tree_to_timespec(void)
 
         test_spec2 = dom_tree_to_timespec(test_node);
 
-        if(!is_valid_timespec(test_spec2))
+	if (!dom_tree_valid_timespec(&test_spec2, "test-spec"))
         {
             failure_args("dom_tree_to_timespec",
                          __FILE__, __LINE__, "NULL return");

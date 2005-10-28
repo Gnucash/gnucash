@@ -1,3 +1,15 @@
+2005-10-28  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-pricedb-xml-v2.c:
+	* src/backend/file/gnc-transaction-xml-v2.c:
+	* src/backend/file/io-gncxml-v1.c:
+	* src/backend/file/sixtp-dom-parsers.[ch]:
+	* src/backend/file/test/test-dom-converters1.c:
+	* src/business/business-core/file/gnc-entry-xml-v2.c:
+	* src/business/business-core/file/gnc-invoice-xml-v2.c:
+	* src/business/business-core/file/gnc-order-xml-v2.c: Print a
+	better error when an invalid timestamp is in a data file.
+
 2005-10-27  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-budget-book-p.h:

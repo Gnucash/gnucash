@@ -277,7 +277,7 @@ spl_reconcile_date_handler(xmlNodePtr node, gpointer data)
     Timespec ts;
 
     ts = dom_tree_to_timespec(node);
-    g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+    if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
 
     xaccSplitSetDateReconciledTS(pdata->split, &ts);
 
@@ -437,7 +437,7 @@ set_tran_date(xmlNodePtr node, Transaction *trn,
 
     tm = dom_tree_to_timespec(node);
 
-    g_return_val_if_fail(is_valid_timespec(tm), FALSE);
+    if (!dom_tree_valid_timespec(&tm, node->name)) return FALSE;
     
     func(trn, &tm);
 

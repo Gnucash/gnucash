@@ -238,7 +238,7 @@ set_timespec(xmlNodePtr node, GncEntry* entry,
            void (*func)(GncEntry *entry, Timespec ts))
 {
   Timespec ts = dom_tree_to_timespec (node);
-  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
     
   func(entry, ts);
   return TRUE;

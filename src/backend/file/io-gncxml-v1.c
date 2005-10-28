@@ -3580,7 +3580,7 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
     gnc_price_set_currency(p, c);
   } else if(safe_strcmp("price:time", (char*)sub_node->name) == 0) {
     Timespec t = dom_tree_to_timespec(sub_node);
-    if(!is_valid_timespec(t)) return FALSE;
+    if (!dom_tree_valid_timespec(&t, sub_node->name)) return FALSE;
     gnc_price_set_time(p, t);
   } else if(safe_strcmp("price:source", (char*)sub_node->name) == 0) {
     char *text = dom_tree_to_text(sub_node);
