@@ -1,5 +1,71 @@
 2005-10-27  David Hampton  <hampton@employees.org>
 
+	* src/engine/gnc-budget-book-p.h:
+	* src/engine/gnc-budget-book.[ch]:
+	* src/engine/gnc-budget-cat-p.h:
+	* src/engine/gnc-budget-cat.[ch]:
+	* src/engine/gnc-budget-p.h:
+	* src/engine/gnc-budget-period-p.h:
+	* src/engine/gnc-budget-period-value-p.h:
+	* src/engine/gnc-budget-period-value.[ch]:
+	* src/engine/gnc-budget-period.[ch]:
+	* src/gnome/dialog-budget-category.[ch]:
+	* src/gnome/dialog-budget-list.[ch]:
+	* src/gnome/dialog-budget-workbench.[ch]:
+	* src/gnome/druid-budget-create.[ch]:
+	* src/gnome/gnc-budget-gui.h:
+	* src/gnome-utils/gnc-budget-list-tree-model.[ch]:
+	* src/gnome-utils/gnc-budget-tree-model.[ch]: Remove files from
+	old budgeting code that are no longer used.
+
+	* src/app-utils/app-utils.scm:
+	* src/app-utils/options.scm:
+	* src/backend/file/Makefile.am:
+	* src/backend/file/gnc-xml.h:
+	* src/backend/file/io-gncxml-v2.[ch]:
+	* src/backend/file/sixtp-dom-generators.[ch]:
+	* src/backend/file/sixtp-dom-parsers.[ch]:
+	* src/backend/file/sixtp-utils.c:
+	* src/backend/file/test/Makefile.am:
+	* src/engine/Makefile.am:
+	* src/engine/cashobjects.c:
+	* src/engine/gnc-budget.[ch]:
+	* src/engine/gnc-engine.[ch]:
+	* src/engine/gw-engine-spec.scm:
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome/top-level.c:
+	* src/gnome/glade/budget.glade:
+	* src/gnome/ui/Makefile.am:
+	* src/gnome/ui/gnc-plugin-basic-commands-ui.xml:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/gnc-html.[ch]:
+	* src/gnome-utils/gnc-icons.h:
+	* src/gnome-utils/test/Makefile.am:
+	* src/report/report-system/html-utilities.scm:
+	* src/report/report-system/report-system.scm:
+	* src/report/standard-reports/Makefile.am:
+	* src/report/standard-reports/standard-reports.scm: Files that are
+	changed somewhat with the addition of Chris Shoemaker's budgeting
+	functionality rewrite.  A changed include file here, a single
+	function there, etc. etc.
+
+	* src/backend/file/gnc-budget-xml-v2.c:
+	* src/backend/file/gnc-recurrence-xml-v2.c:
+	* src/gnome/gnc-plugin-budget.[ch]:
+	* src/gnome/gnc-plugin-page-budget.[ch]:
+	* src/gnome/gncmod-budget.c:
+	* src/gnome/ui/gnc-plugin-budget-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-budget-ui.xml:
+	* src/gnome-utils/gnc-dialog.[ch]:
+	* src/gnome-utils/gnc-recurrence.[ch]:
+	* src/gnome-utils/gnc-tree-model-budget.[ch]:
+	* src/gnome-utils/test/test-gnc-dialog.c:
+	* src/gnome-utils/test/test-gnc-recurrence.c:
+	* src/report/standard-reports/budget.scm: New files for Chris
+	Shoemaker's rewrite of budgeting functionality.
+	
 	* src/business/business-gnome/glade/businessprefs.glade:
 	* src/gnome/glade/sched-xact.glade:
 	* src/gnome-utils/dialog-preferences.c:
