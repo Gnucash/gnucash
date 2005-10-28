@@ -54,6 +54,7 @@
 #include "gnc-plugin-basic-commands.h" /* FIXME Remove this line*/
 #include "gnc-plugin-file-history.h" /* FIXME Remove this line*/
 #include "gnc-plugin-register.h" /* FIXME Remove this line*/
+#include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
 #include "gnc-icons.h" /* FIXME Remove this line*/
@@ -308,6 +309,11 @@ gnc_gui_init (SCM command_line)
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
+    /* I'm not sure why the FIXME note says to remove this.  Maybe
+       each module should be adding its own plugin to the manager?
+       Anyway... Oh, maybe... nah */
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
+                                   gnc_plugin_budget_new ());
     gnc_load_stock_icons ();
     gnc_ui_hierarchy_druid_initialize();
 

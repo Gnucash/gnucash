@@ -211,7 +211,8 @@ string_to_double(const char *str, double *result)
 /*********/
 /* gint64
  */
-
+/* Maybe there should be a comment here explaining why this function
+   doesn't call g_ascii_strtoull, because it's not so obvious. -CAS */
 gboolean
 string_to_gint64(const gchar *str, gint64 *v)
 {

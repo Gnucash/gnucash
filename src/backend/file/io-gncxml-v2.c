@@ -273,7 +273,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
             xaccGetAccountFromName( acctGroup,
                                     xaccAccountGetName( (Account*)n->data ) );
             if ( tmpAcct != NULL ) {
-/* XXX hack alert FIXME .... Should the be 'Remove', or 'Destroy'?
+/* XXX hack alert FIXME .... Should this be 'Remove', or 'Destroy'?
  * If we just remove, then this seems to be a memory leak to me, since
  * it is never reparented.  Shouldn't it be a Destroy ???
  */
@@ -379,6 +379,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         sixdata->counter.schedXactions_total = val;
     }
+    else if(safe_strcmp(type, "budget") == 0)
+    {
+        sixdata->counter.budgets_total = val;
+    }
     else
     {
       struct file_backend be_data;
@@ -421,6 +425,8 @@ print_counter_data(load_counter *data)
            data->commodities_total, data->commodities_loaded);
     PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
            data->schedXactions_total, data->schedXactions_loaded);
+    PINFO("Budgets: Total: %d, Loaded: %d",
+	  data->budgets_total, data->budgets_loaded);
 }
 
 static void
@@ -436,13 +442,15 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
     counter = &gd->counter;
     loaded = counter->transactions_loaded + counter->accounts_loaded +
       counter->books_loaded + counter->commodities_loaded +
-      counter->schedXactions_loaded;
+      counter->schedXactions_loaded + counter->budgets_loaded;
     total = counter->transactions_total + counter->accounts_total +
       counter->books_total + counter->commodities_total +
-      counter->schedXactions_total;
+      counter->schedXactions_total + counter->budgets_total;
 
     percentage = (loaded * 100)/total;
     if (percentage > 100) {
+      /* FIXME: Perhaps the below should be replaced by:
+	 print_counter_data(counter); */
       printf("Transactions: Total: %d, Loaded: %d\n",
              counter->transactions_total, counter->transactions_loaded);
       printf("Accounts: Total: %d, Loaded: %d\n",
@@ -453,6 +461,8 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
              counter->commodities_total, counter->commodities_loaded);
       printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
              counter->schedXactions_total, counter->schedXactions_loaded);
+      printf("Budgets: Total: %d, Loaded: %d\n",
+	     counter->budgets_total, counter->budgets_loaded);
     }
     percentage = MIN(percentage, 100);
     gd->gui_display_fn(NULL, percentage);
@@ -468,6 +478,7 @@ static const char *COUNT_DATA_TAG = "gnc:count-data";
 static const char *TRANSACTION_TAG = "gnc:transaction";
 static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
 static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
+static const char *BUDGET_TAG = "gnc:budget";
 
 static void
 add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -514,9 +525,13 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
     {
         add_schedXaction_local(gd, (SchedXaction*)data);
     }
-    else if(safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG ) == 0 )
+    else if(safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG) == 0)
     {
         add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
+    }
+    else if(safe_strcmp(tag, BUDGET_TAG) == 0)
+    {
+        // Nothing needed here.
     }
     else
     {
@@ -612,6 +627,8 @@ gnc_sixtp_gdv2_new (
     gd->counter.prices_total = 0;
     gd->counter.schedXactions_loaded = 0;
     gd->counter.schedXactions_total = 0;
+    gd->counter.budgets_loaded = 0;
+    gd->counter.budgets_total = 0;
     gd->exporting = exporting;
     gd->countCallback = countcallback;
     gd->gui_display_fn = gui_display_fn;
@@ -670,6 +687,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
            COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
            ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
+           BUDGET_TAG, gnc_budget_sixtp_parser_create(),
            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
@@ -796,6 +814,7 @@ static void write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static void write_budget (QofEntity *ent, gpointer data);
 
 static void
 write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -857,6 +876,7 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     be_data.out = out;
     be_data.book = book;
+    be_data.gd = gd;
     if(fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string) < 0)
 	{
 		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
@@ -864,6 +884,9 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 	}
     write_book_parts (out, book);
 
+    /* gd->counter.{foo}_total fields should have all these totals
+       already collected.  I don't know why we're re-calling all these
+       functions.  */
     write_counts(out,
                  "commodity",
                  gnc_commodity_table_get_size(
@@ -874,9 +897,11 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  gnc_book_count_transactions(book),
                  "schedxaction",
                  g_list_length( gnc_book_get_schedxactions(book) ),
-                 NULL);
+		 "budget", qof_collection_count(
+                     qof_book_get_collection(book, GNC_ID_BUDGET)),
+		 NULL);
 
-	qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
     write_commodities(out, book, gd);
     write_pricedb(out, book, gd);
@@ -884,6 +909,9 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     write_transactions(out, book, gd);
     write_template_transaction_data(out, book, gd);
     write_schedXactions(out, book, gd);
+
+    qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET), 
+        write_budget, &be_data);
 
     qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
 
@@ -1034,6 +1062,22 @@ write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
     } while ( (schedXactions = schedXactions->next) );
 }
 
+static void
+write_budget (QofEntity *ent, gpointer data)
+{
+    xmlNodePtr node;
+    struct file_backend* be = data;
+
+    GncBudget *bgt = GNC_BUDGET(ent);
+    node = gnc_budget_dom_tree_create(bgt);
+    xmlElemDump( be->out, NULL, node );
+    fprintf( be->out, "\n" );
+    xmlFreeNode( node );
+    
+    be->gd->counter.budgets_loaded++;
+    run_callback(be->gd, "budgets");    
+}
+
 void
 gnc_xml2_write_namespace_decl (FILE *out, const char *namespace)
 {
@@ -1102,6 +1146,8 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
       g_list_length( gnc_book_get_schedxactions(book));
+    gd->counter.budgets_total = qof_collection_count(
+        qof_book_get_collection(book, GNC_ID_BUDGET));
 
     write_book(out, book, gd);
 
@@ -1207,7 +1253,7 @@ gnc_book_write_to_xml_file_v2(
     FILE *out;
 
     out = try_gz_open(filename, "w", compress);
-     if (out == NULL)
+    if (out == NULL)
     {
         return FALSE;
     }

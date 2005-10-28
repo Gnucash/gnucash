@@ -25,6 +25,9 @@
 #include <gnome.h>
 #include <g-wrap-wct.h>
 
+#include "gnc-tree-model-budget.h" //FIXME?
+#include "gnc-budget.h"
+
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "engine-helpers.h"
@@ -48,6 +51,9 @@
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
 
+/* TODO: clean up "register-stocks" junk
+ */
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -58,6 +64,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
  */
 #define MAX_TAB_COUNT 4
 
+/* A Hash-table of GNCOptionDef_t keyed with option names. */
 static GHashTable *optionTable = NULL;
 
 struct gnc_option_win
@@ -93,9 +100,11 @@ typedef enum {
 static GNCOptionWinCallback global_help_cb = NULL;
 gpointer global_help_cb_data = NULL;
 
-void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response, GNCOptionWin *window);
+void gnc_options_dialog_response_cb(GtkDialog *dialog, gint response,
+				    GNCOptionWin *window);
 static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
-void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item, gpointer data);
+void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
+				       gpointer data);
 
 
 static void
@@ -229,15 +238,14 @@ gnc_option_set_ui_value_internal (GNCOption *option, gboolean use_default)
   if (option_def && option_def->set_value)
   {
     bad_value = option_def->set_value (option, use_default, widget, value);
+    if (bad_value)
+    {
+      PERR("bad value\n");
+    }
   }
   else
   {
     PERR("Unknown type. Ignoring.\n");
-  }
-
-  if (bad_value)
-  {
-    PERR("bad value\n");
   }
 
   free(type);
@@ -434,6 +442,23 @@ gnc_option_create_date_widget (GNCOption *option)
   }
 }
 
+static GtkWidget *
+gnc_option_create_budget_widget(GNCOption *option)
+{
+    GtkTreeModel *tm;
+    GtkComboBox *cb;
+    GtkCellRenderer *cr;
+
+    tm = gnc_tree_model_budget_new(gnc_get_current_book());
+    cb = GTK_COMBO_BOX(gtk_combo_box_new_with_model(tm));
+    g_object_unref(tm);
+    cr = gtk_cell_renderer_text_new();
+    gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(cb), cr, TRUE);
+
+    gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(cb), cr, "text",
+                                   BUDGET_NAME_COLUMN, NULL);
+    return GTK_WIDGET(cb);
+}
 
 static GtkWidget *
 gnc_option_create_multichoice_widget(GNCOption *option)
@@ -523,6 +548,7 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 
   return frame;
 }
+
 
 static void
 gnc_option_account_cb(GtkTreeSelection *selection, gpointer data)
@@ -1120,7 +1146,14 @@ gnc_options_register_stocks (void)
 #endif
 }
 
-
+/* gnc_options_dialog_new:
+ *
+ *   - Opens the preferences glade file
+ *   - Connects signals specified in the glade file
+ *   - Sets the window's title
+ *   - Initializes a new GtkNotebook, and adds it to the window
+ *
+ */
 GNCOptionWin *
 gnc_options_dialog_new(gchar *title)
 {
@@ -1149,6 +1182,8 @@ gnc_options_dialog_new(gchar *title)
   return retval;
 }
 
+/* Creates a new GNCOptionWin structure, but assumes you have your own
+   dialog widget you want to plugin */
 GNCOptionWin *
 gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog)
 {
@@ -1191,6 +1226,7 @@ gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
   global_help_cb_data = cb_data;
 }
 
+/* This is for global program preferences. */
 void
 gnc_options_dialog_destroy(GNCOptionWin * win)
 {
@@ -1215,8 +1251,40 @@ gnc_options_dialog_destroy(GNCOptionWin * win)
 /*****************************************************************/
 /* Option Registration                                           */
 
-/* SET WIDGET */
-
+/*************************
+ *       SET WIDGET      *
+ *************************
+ *
+ * gnc_option_set_ui_widget_<type>():
+ *
+ * You should create the widget representation for the option type,
+ * and set the top-level container widget for your control in
+ * *enclosing.  If you want to pack the widget into the page yourself,
+ * then you may -- just set *packed to TRUE.  Otherwise, the widget
+ * you return in *enclosing will be packed for you.  (*packed is
+ * initialized to FALSE, so if you're not setting it to TRUE, you
+ * don't have to touch it at all.)
+ *
+ * If you need to initialize the state of your control or to connect
+ * any signals to you widgets, then you should do so in this function.
+ * If you want to create a label for the widget you should use 'name'
+ * for the label text.
+ *
+ * Somewhere in this function, you should also call
+ * gnc_option_set_widget(option, value); where 'value' is the
+ * GtkWidget you will actually store the value in.
+ *
+ * Also call gnc_option_set_ui_value(option, FALSE);
+ *
+ * You probably want to end with something like:
+ *   gtk_widget_show_all(*enclosing);
+ *
+ * If you can can detect state changes for your widget's value, you should also
+ * gnc_option_changed_widget_cb() upon changes.
+ *
+ * The widget you return from this function should be the widget in
+ * which you're storing the option value.
+ */
 static GtkWidget *
 gnc_option_set_ui_widget_boolean (GNCOption *option, GtkBox *page_box,
 				  GtkTooltips *tooltips,
@@ -1487,7 +1555,7 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkWidget *label;
   GList *acct_type_list;
-  char * colon_name;
+  gchar *colon_name;
 
   colon_name = g_strconcat(name, ":", NULL);
   label = gtk_label_new(colon_name);
@@ -1503,6 +1571,8 @@ gnc_option_set_ui_widget_account_sel (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
   gnc_option_set_widget (option, value);
+  /* DOCUMENT ME: Why is the only option type that sets use_default to
+     TRUE? */
   gnc_option_set_ui_value(option, TRUE);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
@@ -1780,7 +1850,43 @@ gnc_option_set_ui_widget_dateformat (GNCOption *option, GtkBox *page_box,
   return *enclosing;
 }
 
-/* SET VALUE */
+static GtkWidget *
+gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
+                                 GtkTooltips *tooltips,
+                                 char *name, char *documentation,
+                                 /* Return values */
+                                 GtkWidget **enclosing, gboolean *packed)
+{
+  GtkWidget *value;
+
+  *enclosing = gtk_hbox_new(FALSE, 5);
+
+  value = gnc_option_create_budget_widget(option);
+
+  gnc_option_set_widget (option, value);
+  gnc_option_set_ui_value(option, FALSE);
+
+  /* Maybe connect destroy handler for tree model here? */
+  g_signal_connect(G_OBJECT(value), "changed",
+		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+
+  gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+  gtk_widget_show_all(*enclosing);
+  return value;
+}
+
+/*************************
+ *       SET VALUE       *
+ *************************
+ *
+ * gnc_option_set_ui_value_<type>():
+ *
+ *   In this function you should set the state of the gui widget to
+ * correspond to the value provided in 'value'.  You should return
+ * TRUE if there was an error, FALSE otherwise.
+ *
+ *
+ */
 
 static gboolean
 gnc_option_set_ui_value_boolean (GNCOption *option, gboolean use_default,
@@ -1989,7 +2095,7 @@ gnc_option_set_ui_value_account_sel (GNCOption *option, gboolean use_default,
 
   if (value != SCM_BOOL_F) {
     if (!gw_wcp_p(value))
-      scm_misc_error("gnc_optoin_set_ui_value_account_sel",
+      scm_misc_error("gnc_option_set_ui_value_account_sel",
 		     "Option Value not a gw:wcp.", value);
       
     acc = gw_wcp_get_ptr(value);
@@ -2116,6 +2222,31 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
   return TRUE;
 }
 
+static gboolean gnc_option_set_ui_value_budget(
+    GNCOption *option, gboolean use_default, GtkWidget *widget, SCM value)
+{
+    GncBudget *bgt;
+    GtkComboBox *cb;
+    GtkTreeModel *tm;
+    GtkTreeIter iter;
+
+    if (value != SCM_BOOL_F) {
+        if (!gw_wcp_p(value))
+            scm_misc_error("gnc_option_set_ui_value_budget",
+                           "Option Value not a gw:wcp.", value);
+
+        bgt = gw_wcp_get_ptr(value);
+        cb = GTK_COMBO_BOX(widget);
+        tm = gtk_combo_box_get_model(cb);
+        gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt);
+        gtk_combo_box_set_active_iter(cb, &iter);
+    }
+
+
+    //FIXME: Unimplemented.
+    return FALSE;
+}
+
 static gboolean
 gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
 				     GtkWidget *widget, SCM value)
@@ -2176,7 +2307,19 @@ gnc_option_set_ui_value_dateformat (GNCOption *option, gboolean use_default,
   return FALSE;
 }
 
-/* GET VALUE */
+/*************************
+ *       GET VALUE       *
+ *************************
+ *
+ * gnc_option_get_ui_value_<type>():
+ *
+ * 'widget' will be the widget returned from the
+ * gnc_option_set_ui_widget_<type>() function.
+ *
+ * You should return a SCM value corresponding to the current state of the
+ * gui widget.
+ *
+ */
 
 static SCM
 gnc_option_get_ui_value_boolean (GNCOption *option, GtkWidget *widget)
@@ -2328,6 +2471,26 @@ gnc_option_get_ui_value_account_sel (GNCOption *option, GtkWidget *widget)
 }
 
 static SCM
+gnc_option_get_ui_value_budget(GNCOption *option, GtkWidget *widget)
+{
+    GncBudget *bgt;
+    GtkComboBox *cb;
+    GtkTreeModel *tm;
+    GtkTreeIter iter;
+    gboolean success;
+
+    cb = GTK_COMBO_BOX(widget);
+    success = gtk_combo_box_get_active_iter(cb, &iter);
+    tm = gtk_combo_box_get_model(cb);
+    bgt = gnc_tree_model_budget_get_budget(tm, &iter);
+
+    if (!bgt)
+        return SCM_BOOL_F;
+
+    return gw_wcp_assimilate_ptr(bgt, scm_c_eval_string("<gnc:Budget*>"));
+}
+
+static SCM
 gnc_option_get_ui_value_list (GNCOption *option, GtkWidget *widget)
 {
   SCM result;
@@ -2471,6 +2634,8 @@ static void gnc_options_initialize_options (void)
       gnc_option_set_ui_value_radiobutton, gnc_option_get_ui_value_radiobutton },
     { "dateformat", gnc_option_set_ui_widget_dateformat,
       gnc_option_set_ui_value_dateformat, gnc_option_get_ui_value_dateformat },
+    { "budget", gnc_option_set_ui_widget_budget,
+      gnc_option_set_ui_value_budget, gnc_option_get_ui_value_budget },
     { NULL, NULL, NULL, NULL }
   };
   int i;
@@ -2485,15 +2650,21 @@ void gnc_options_ui_register_option (GNCOptionDef_t *option)
   g_return_if_fail (optionTable);
   g_return_if_fail (option);
 
+  /* FIXME: should protect against repeat insertion. */
   g_hash_table_insert (optionTable, (gpointer)(option->option_name), option);
 }
 
 GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name)
 {
+  GNCOptionDef_t *retval;
   g_return_val_if_fail (optionTable, NULL);
   g_return_val_if_fail (option_name, NULL);
 
-  return g_hash_table_lookup (optionTable, option_name);
+  retval = g_hash_table_lookup (optionTable, option_name);
+  if (!retval) {
+      PERR("Option lookup for type '%s' failed!", option_name);
+  }
+  return retval;
 }
 
 void gnc_options_ui_initialize (void)

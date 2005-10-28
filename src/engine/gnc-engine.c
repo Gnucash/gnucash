@@ -31,7 +31,7 @@
 #include "AccountP.h"
 #include "GroupP.h"
 #include "SX-book-p.h"
-#include "gnc-budget-book-p.h"
+#include "gnc-budget.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"

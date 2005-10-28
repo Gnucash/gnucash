@@ -19,10 +19,12 @@ libgnc_backend_file_la_SOURCES = \
   gnc-account-xml-v2.c \
   gnc-backend-file.c \
   gnc-book-xml-v2.c \
+  gnc-budget-xml-v2.c \
   gnc-commodity-xml-v2.c \
   gnc-freqspec-xml-v2.c \
   gnc-lot-xml-v2.c \
   gnc-pricedb-xml-v2.c \
+  gnc-recurrence-xml-v2.c \
   gnc-schedxaction-xml-v2.c \
   gnc-transaction-xml-v2.c \
   io-example-account.c \

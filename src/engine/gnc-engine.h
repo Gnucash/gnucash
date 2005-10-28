@@ -62,6 +62,7 @@
 #define GNC_MOD_IMPORT    "gnucash-import-export"
 #define GNC_MOD_DRUID     "gnucash-druids"
 #define GNC_MOD_TEST      "gnucash-tests"
+#define GNC_MOD_BUDGET    "gnucash-budget"
 //@}
 
 /** @brief IDENTIFIERS
@@ -99,12 +100,28 @@
 #define GNC_ID_SPLIT          "Split"
 #define GNC_ID_SCHEDXACTION   "SchedXaction"
 #define GNC_ID_BUDGET         "Budget"
-#define GNC_ID_BUDGET_CATEGORY "BudgetCategory"
 #define GNC_ID_SXTG           "SXTGroup"
 #define GNC_ID_SXTT           "SXTTrans"
 #define GNC_ID_TRANS          "Trans"
                                                                                 
 /* TYPES **********************************************************/
+
+/* CAS: ISTM, it would make more sense to put the typedefs in their
+   corresponding header files, (e.g. Account.h), and to #include all
+   the engine API header files right here.  After all, when I jump to
+   the definition "Account", I want to end up in Account.h, not this
+   file, like I do now.
+
+   Also, as it is now, if I want to use the engine api, I need to
+   include this header, plus all the other engine headers for the
+   types whose functions I call, so this header is providing almost no
+   benefit of aggregation.  But, if it included all the headers I
+   could just include this file.  Or would that cause a massive
+   recompile everytime one engine header changed?
+   Even if including all the headers here doesn't make sense, I think
+   distributing the stuff in the "Types" section does.
+*/
+
 
 /** @brief Account in Gnucash. 
  * This is the typename for an account. The actual structure is

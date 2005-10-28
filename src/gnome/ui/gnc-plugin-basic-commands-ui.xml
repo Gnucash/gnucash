@@ -48,7 +48,6 @@
           <menuitem name="ActionsSinceLastRun" action="ActionsSinceLastRunAction"/>
           <menuitem name="ActionsMortgageLoan" action="ActionsMortgageLoanAction"/>
         </menu>
-        <menuitem name="ActionsBudgetWorkbenchAction" action="ActionsBudgetWorkbenchAction"/>
         <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/>
       </placeholder>
     </menu>

@@ -32,6 +32,7 @@
 #include "qofbook.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "gnc-budget.h"
 #include "gnc-xml-helper.h"
 #include "sixtp.h"
 
@@ -57,6 +58,9 @@ sixtp* gnc_pricedb_sixtp_parser_create(void);
 
 xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
 sixtp* gnc_schedXaction_sixtp_parser_create(void);
+
+xmlNodePtr gnc_budget_dom_tree_create( GncBudget *bgt );
+sixtp* gnc_budget_sixtp_parser_create(void);
 
 xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
 sixtp* gnc_transaction_sixtp_parser_create(void);

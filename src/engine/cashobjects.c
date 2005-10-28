@@ -32,7 +32,7 @@
 #include "SX-book-p.h"
 #include "gnc-pricedb-p.h"
 #include "gnc-lot-p.h"
-#include "gnc-budget-book-p.h"
+#include "gnc-budget.h"
 
 gboolean
 cashobjects_register(void)

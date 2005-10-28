@@ -73,8 +73,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   druid-gconf-setup.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
-  gnc-budget-list-tree-model.c \
-  gnc-budget-tree-model.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
   gnc-date-delta.c \
@@ -88,6 +86,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-embedded-window.c \
   gnc-file.c \
   gnc-frequency.c \
+  gnc-recurrence.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
@@ -121,7 +120,9 @@ libgncmod_gnome_utils_la_SOURCES = \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
   print-session.c \
-  search-param.c
+  search-param.c \
+  gnc-dialog.c \
+  gnc-tree-model-budget.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -139,8 +140,6 @@ gncinclude_HEADERS = \
   druid-gconf-setup.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
-  gnc-budget-list-tree-model.h \
-  gnc-budget-tree-model.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
   gnc-date-delta.h \
@@ -151,6 +150,7 @@ gncinclude_HEADERS = \
   gnc-embedded-window.h \
   gnc-file.h \
   gnc-frequency.h \
+  gnc-recurrence.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
@@ -182,7 +182,9 @@ gncinclude_HEADERS = \
   gnc-tree-view.h \
   gnc-window.h \
   misc-gnome-utils.h \
-  print-session.h
+  print-session.h \
+  gnc-dialog.h \
+  gnc-tree-model-budget.h
 
 noinst_HEADERS = \
   argv-list-converters.h \

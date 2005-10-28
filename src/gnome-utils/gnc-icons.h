@@ -15,6 +15,14 @@ G_BEGIN_DECLS
 #define GNC_STOCK_NEW_ACCOUNT "gnc-new-account"
 #define GNC_STOCK_OPEN_ACCOUNT "gnc-open-account"
 
+//FIXME: use own budget icons?
+#define GNC_STOCK_BUDGET "gnc-budget"
+#define GNC_STOCK_NEW_BUDGET "gnc-account"
+#define GNC_STOCK_OPEN_BUDGET "gnc-open-account"
+//#define GNC_STOCK_CLOSE_BUDGET "gnc-close-account"
+//#define GNC_STOCK_EDIT_BUDGET "gnc-edit-account"
+#define GNC_STOCK_DELETE_BUDGET "gnc-delete-account"
+
 void gnc_load_stock_icons (void);
 
 G_END_DECLS

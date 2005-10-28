@@ -1,6 +1,7 @@
 /********************************************************************\
- * gnc-budget.h -- Budget public handling routines.                     *
+ * gnc-budget.h -- Budget public handling routines.                 *
  * Copyright (C) 04 sep 2003    Darin Willits <darin@willits.ca>    *
+ * Copyright (C) 2005  Chris Shoemaker <c.shoemaker@cox.net>        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,25 +22,38 @@
  *                                                                  *
 \********************************************************************/
 
-
-/** @addtogroup Engine
- *     @{ */
-/** @addtogroup Budget Budget objects
- * A budget object contains a list of budget_categories each of 
- * which define an individual budgetable item.  When a budget is first
- * created these catagories will be initialized based on the existing 
- * account hierarchy.
- *     @{ */
-/** @file gnc-budget.h
- *  @brief Public interface for budget objects.
- *  @author Created by Darin Willits 04 sep 2003 
- *  @author Copyright (c) 04 Darin Willits <darin@willits.ca>
+/*  Design decisions:
  *
- * This file contains the public methods to interact with a budgeting
- * object. 
- * This is pre-alpha code right now.  User beware.
+ *  - The budget values that the user enters (and that are stored) for
+ *  each account are inclusive of any sub-accounts.
+ *
+ *     - Reason: This allows the user to budget an amount for a
+ *     "parent" account, while tracking (e.g.) expenses with more
+ *     detail in sub-accounts.
+ *
+ *     - Implication: when reporting budgeted values for parent
+ *     accounts, just show the stored value, not a sum.
+ *
+ *  - Budget values are always in the account's commodity.
+ *
+ *
+ *
+ *  Accounts with sub-accounts can have a value budgeted.  For those
+ *  accounts,
+ *
+ *    Option 1: when setting or getting budgeted values, the value is
+ *    *always* exclusive of sub-account values.  Pro: consistent
+ *    values in all contexts.  Con: no summary behavior.
+ *
+ *    Option 2: make setting only for account proper, but always
+ *    report summaries. Con: value can change as soon as it is
+ *    entered; forces entry from bottom-up.
+ *
+ *    * Option 3: value is always *inclusive* of sub-accounts, although
+ *    potentially in a different commodity.  Pro: allows top-down
+ *    entry; no auto value update. Con: ?  [ This option was selected. ]
+ *
  */
-
 
 #ifndef __GNC_BUDGET_H__
 #define __GNC_BUDGET_H__
@@ -47,13 +61,19 @@
 #include <glib.h>
 
 /** The budget data.*/
-typedef struct gncp_budget GncBudget;
+typedef struct gnc_budget_private GncBudget;
 
 #include "guid.h"
 #include "qofbook.h"
-#include "gnc-budget-cat.h"
-#include "FreqSpec.h"
+#include "Account.h"
+#include "Recurrence.h"
 
+#define GNC_IS_BUDGET(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BUDGET))
+#define GNC_BUDGET(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BUDGET, GncBudget))
+
+#define GNC_BUDGET_MAX_NUM_PERIODS_DIGITS 3 // max num periods == 999
+
+gboolean gnc_budget_register(void);
 
 /**
  * Creates and initializes a Budget.
@@ -61,130 +81,53 @@ typedef struct gncp_budget GncBudget;
 GncBudget *gnc_budget_new(QofBook *book);
 
 /** Deletes the given budget object.*/
-void gnc_budget_delete(GncBudget* budget);
+void gnc_budget_free(GncBudget* budget);
 
+const GUID* gnc_budget_get_guid(GncBudget* budget);
+#define gnc_budget_return_guid(X) \
+  (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
 
-
-/**  Set the Name of the Budget.
- */
+/** Set/Get the name of the Budget */
 void gnc_budget_set_name(GncBudget* budget, const gchar* name);
+const gchar* gnc_budget_get_name(GncBudget* budget);
 
-/**  Retieve the Name of the Budget.
- */
-gchar* gnc_budget_get_name(GncBudget* budget);
-
-
-
-/**  Set the Description of the Budget.
- */
+/** Set/Get the description of the Budget */
 void gnc_budget_set_description(GncBudget* budget, const gchar* description);
+const gchar* gnc_budget_get_description(GncBudget* budget);
 
-/**  Retieve the Description of the Budget.
- */
-gchar* gnc_budget_get_description(GncBudget* budget);
+/** Set/Get the number of periods in the Budget */
+void gnc_budget_set_num_periods(GncBudget* budget, guint num_periods);
+guint gnc_budget_get_num_periods(GncBudget* budget);
 
+void gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r);
+const Recurrence * gnc_budget_get_recurrence(GncBudget *budget);
 
+/** Set/Get the starting date of the Budget */
+void gnc_budget_set_start_date(GncBudget* budget, Timespec date);
+Timespec gnc_budget_get_start_date(GncBudget* budget);
+Timespec gnc_budget_get_period_start_date(GncBudget* budget, guint period_num);
 
-/** Set the period frequency.
- */
-void gnc_budget_set_period_frequency(GncBudget* budget, FreqSpec* period);
+/* Period indices are zero-based. */
+void gnc_budget_set_account_period_value(
+    GncBudget* budget, Account* account, guint period_num, gnc_numeric val);
 
-/** Get the period frequency.
- */
-FreqSpec* gnc_budget_get_period_frequency(GncBudget* budget);
+gnc_numeric gnc_budget_get_account_period_value(
+    GncBudget *budget, Account *account, guint period_num);
+gnc_numeric gnc_budget_get_account_period_actual_value(
+    GncBudget *budget, Account *account, guint period_num);
 
-
-
-/** Set the start date*/
-void gnc_budget_set_start_date(GncBudget* budget, GDate* date);
-
-/** Return the start date */
-GDate* gnc_budget_get_start_date(GncBudget* budget);
-
-
-/** Set the Length for this budget in terms of a number of months.
- */
-void gnc_budget_set_length_months(GncBudget* budget, gint months);
-
-/** Set the Length for this budget in terms of a number of months.
- */
-void gnc_budget_set_length_years(GncBudget* budget, gint years);
-
-/** Retrieve the Length for this budget in number of months.
- */
-gint gnc_budget_get_length_months(GncBudget* budget);
-
-/** Retrieve the Length for this budget in number of years.
- */
-gint gnc_budget_get_length_years(GncBudget* budget);
-
-
-
-/* Add the inflow category for this budget.  
- * This is a wrapper function to make it easier to add a category
- * as a child of the inflow category.  It's here cause I'm a lazy ass.
- */
-void gnc_budget_add_inflow_category(GncBudget* budget, GncBudgetCategory* inflow);
-
-/* Remove the inflow category for this budget.  
- */
-void gnc_budget_remove_inflow_category(GncBudget* budget, GncBudgetCategory* category);
-
-/* Set the inflow category for this budget.  
- */
-void gnc_budget_set_inflow_category(GncBudget* budget, GncBudgetCategory* inflow);
-
-/** Retrieve the inflow category for this budget. 
- */
-GncBudgetCategory* gnc_budget_get_inflow_category(GncBudget* budget);
-
-
-
-
-/* Add the outflow category for this budget.  
- */
-void gnc_budget_add_outflow_category(GncBudget* budget, GncBudgetCategory* outflow);
-
-/* Remove the outflow category for this budget.  
- */
-void gnc_budget_remove_outflow_category(GncBudget* budget, GncBudgetCategory* inflow);
-
-/* Set the outflow category for this budget.  
- */
-void gnc_budget_set_outflow_category(GncBudget* budget, GncBudgetCategory* category);
-
-/** Retrieve the outflow category for this budget. 
- */
-GncBudgetCategory* gnc_budget_get_outflow_category(GncBudget* budget);
-
-
-
-/** Retrieve the book that this budget is associated with.*/
+/** Get the book that this budget is associated with. */
 QofBook* gnc_budget_get_book(GncBudget* budget);
 
+/* Caller owns the list of all budgets in the book. */
+GList* gnc_book_get_budgets(QofBook* book);
 
-/** Generate the list of periods.
- * This function will use the start date and budget length to generate a 
- * list of budget periods.  The periods are represented by a list of start
- * dates for each period.
- * As well this function regenerates the list of values for each
- * category.
- * */
-void gnc_budget_generate_periods(GncBudget* budget);
+/* Returns some budget in the book, or NULL. */
+GncBudget* gnc_budget_get_default(QofBook *book);
 
-/** Get the number of periods.
- */
-gint gnc_budget_get_num_periods(GncBudget* budget);
-
-/* Return the list of periods.
- */
-GList* gnc_budget_get_period_list(GncBudget* budget);
-
-
-/** Retrieve the budget object associated with the given GUID from 
- * the given book.
- */
+/* Get the budget associated with the given GUID from the given book. */
 GncBudget* gnc_budget_lookup (const GUID *guid, QofBook *book);
+#define  gnc_budget_lookup_direct(g,b) gnc_budget_lookup(&(g),(b))
 
 #endif // __BUDGET_H__
 

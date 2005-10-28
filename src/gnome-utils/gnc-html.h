@@ -44,6 +44,7 @@ typedef char * URLType;
 #define URL_TYPE_XMLDATA	"xmldata"    /* links to gnucash XML data files */ 
 #define URL_TYPE_PRICE	"price"      /* for price editor popups */
 #define URL_TYPE_OTHER	"other"
+#define URL_TYPE_BUDGET "budget"
 
 #include "gnc-html-history.h"
 

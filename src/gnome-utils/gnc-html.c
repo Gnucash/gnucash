@@ -376,6 +376,7 @@ gnc_html_initialize (void)
     { URL_TYPE_HELP, "gnc-help" },
     { URL_TYPE_XMLDATA, "gnc-xml" },
     { URL_TYPE_PRICE, "gnc-price" },
+    { URL_TYPE_BUDGET, "gnc-budget" },
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
 

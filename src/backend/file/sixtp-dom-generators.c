@@ -38,14 +38,14 @@ static QofLogModule log_module = GNC_MOD_IO;
 xmlNodePtr
 text_to_dom_tree(const char *tag, const char *str)
 {
-  xmlNodePtr result;
+    xmlNodePtr result;
 
-  g_return_val_if_fail(tag, NULL);
-  g_return_val_if_fail(str, NULL);
-  result = xmlNewNode(NULL, BAD_CAST tag);
-  g_return_val_if_fail(result, NULL);
-  xmlNodeAddContent(result, BAD_CAST str);
-  return result;
+    g_return_val_if_fail(tag, NULL);
+    g_return_val_if_fail(str, NULL);
+    result = xmlNewNode(NULL, BAD_CAST tag);
+    g_return_val_if_fail(result, NULL);
+    xmlNodeAddContent(result, BAD_CAST str);
+    return result;
 }
 
 xmlNodePtr
@@ -55,11 +55,26 @@ int_to_dom_tree(const char *tag, gint64 val)
     xmlNodePtr result;
 
     text = g_strdup_printf("%" G_GINT64_FORMAT, val);
+    g_return_val_if_fail(text, NULL);
     result = text_to_dom_tree(tag, text);
     g_free(text);
     return result;
 }
+
+xmlNodePtr
+guint_to_dom_tree(const char *tag, guint an_int)
+{
+    gchar *text;
+    xmlNodePtr result;
     
+    text = g_strdup_printf("%u", an_int );
+    g_return_val_if_fail(text, NULL);
+    result = text_to_dom_tree(tag, text);
+    g_free(text);
+    return result;
+}
+
+
 xmlNodePtr
 guid_to_dom_tree(const char *tag, const GUID* gid)
 {
@@ -72,7 +87,7 @@ guid_to_dom_tree(const char *tag, const GUID* gid)
 
     if (!guid_to_string_buff(gid, guid_str))
     {
-        PERR("guid_to_string failed\n");
+        PERR("guid_to_string_buff failed\n");
         return NULL;
     }
 
@@ -158,7 +173,7 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
 }
 
 xmlNodePtr
-gdate_to_dom_tree(const char *tag, GDate *date)
+gdate_to_dom_tree(const char *tag, const GDate *date)
 {
 	xmlNodePtr ret;
 	gchar *date_str = NULL;
@@ -275,6 +290,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
     case KVP_TYPE_GUID:
+        /* THREAD-UNSAFE */
         add_text_to_node(val_node,"guid",
                          g_strdup(guid_to_string(kvp_value_get_guid(val))));
         break;
@@ -371,19 +387,3 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
     return ret;
 }
 
-xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int)
-{
-    xmlNodePtr ret;
-    gchar *numstr;
-
-    numstr = g_strdup_printf( "%u", an_int );
-    g_return_val_if_fail(numstr, NULL);
-
-    ret = xmlNewNode(NULL, BAD_CAST tag);
-
-    xmlNodeAddContent(ret, BAD_CAST numstr);
-
-    g_free(numstr);
-
-    return ret;
-}

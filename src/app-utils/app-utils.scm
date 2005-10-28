@@ -15,6 +15,7 @@
 (export-syntax N_)
 (export gnc:make-string-database)
 
+;; options.scm
 (export gnc:make-option)
 (export gnc:option-section)
 (export gnc:option-name)
@@ -52,6 +53,7 @@
 (export gnc:make-complex-boolean-option)
 (export gnc:make-pixmap-option)
 (export gnc:make-date-option)
+(export gnc:make-budget-option)
 (export gnc:get-rd-option-data-subtype)
 (export gnc:get-rd-option-data-show-time)
 (export gnc:get-rd-option-data-rd-list)

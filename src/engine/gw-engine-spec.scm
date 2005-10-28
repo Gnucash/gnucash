@@ -26,6 +26,7 @@
     "#include <guid.h>\n"
     "#include <Group.h>\n"
     "#include <Query.h>\n"
+    "#include <gnc-budget.h>\n"
     "#include <gnc-commodity.h>\n"
     "#include <gnc-date.h>\n"
     "#include <gnc-engine.h>\n"
@@ -260,6 +261,7 @@
 ;
 (gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
 (gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")
+(gw:wrap-value ws 'gnc:id-budget '<gnc:id-type> "GNC_ID_BUDGET")
 (gw:wrap-value ws 'gnc:id-lot '<gnc:id-type> "GNC_ID_LOT")
 (gw:wrap-value ws 'gnc:id-price '<gnc:id-type> "GNC_ID_PRICE")
 (gw:wrap-value ws 'gnc:id-split '<gnc:id-type> "GNC_ID_SPLIT")
@@ -2490,6 +2492,87 @@ the timepair representing midday on that day")
  "gnc_quote_source_set_fq_installed"
  '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
  "Takes a list of installed Finance::Quote souces and records it internally.")
+
+
+;; Budget functions
+
+(gw:wrap-as-wct ws '<gnc:Budget*> "GncBudget *" "const GncBudget *")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-guid
+ '<gnc:guid-scm>
+ "gnc_budget_return_guid"
+ '((<gnc:Budget*> budget))
+ "Gets the guid of the budget")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-lookup
+ '<gnc:Budget*>
+ "gnc_budget_lookup_direct"
+ '((<gnc:guid-scm> guid)
+   (<gnc:Book*> book))
+ "Lookup a budget from its GUID.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-default
+ '<gnc:Budget*>
+ "gnc_budget_get_default"
+ '((<gnc:Book*> book))
+ "Get the default budget for the book.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-name
+ '(<gw:mchars> callee-owned const)
+ "gnc_budget_get_name"
+ '((<gnc:Budget*> budget))
+ "Get the brief name for the budget.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-num-periods
+ '<gw:unsigned-int>
+ "gnc_budget_get_num_periods"
+ '((<gnc:Budget*> budget))
+ "Get the number of periods in a budget.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-account-period-value
+ '<gnc:numeric>
+ "gnc_budget_get_account_period_value"
+ '((<gnc:Budget*> budget)
+   (<gnc:Account*> acct)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the budgeted value for the given account and budget period.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-account-period-actual-value
+ '<gnc:numeric>
+ "gnc_budget_get_account_period_actual_value"
+ '((<gnc:Budget*> budget)
+   (<gnc:Account*> acct)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the actual account value for the given account and budget period.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-period-start-date
+ '<gnc:time-pair>
+ "gnc_budget_get_period_start_date"
+ '((<gnc:Budget*> budget)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the date that the given period begins.")
 
 ;;
 ;; gnc-hooks-scm.h

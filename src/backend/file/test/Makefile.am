@@ -39,11 +39,13 @@ test_load_example_account_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/io-example-account.c \
-  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
   ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/file/io-utils.c \
+  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
@@ -124,9 +126,11 @@ test_xml_transaction_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-book-xml-v2.c \
@@ -143,7 +147,9 @@ test_xml2_is_file_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \

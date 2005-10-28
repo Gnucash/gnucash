@@ -58,6 +58,9 @@ typedef struct
 
     int schedXactions_total;
     int schedXactions_loaded;
+
+    int budgets_total;
+    int budgets_loaded;
 } load_counter;
 
 typedef struct sixtp_gdv2 sixtp_gdv2;

@@ -26,7 +26,6 @@
 
 #include "gnc-plugin-basic-commands.h"
 
-#include "dialog-budget-list.h"
 #include "dialog-chart-export.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
@@ -61,7 +60,6 @@ static void gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWin
 static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
-static void gnc_main_window_cmd_actions_budget_workbench(GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
@@ -125,9 +123,6 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
-  { "ActionsBudgetWorkbenchAction", NULL, N_("Budget _Workbench (Experimental)"), NULL, 
-    N_("Create, Manage, and Monitor Budgets." ),
-    G_CALLBACK(gnc_main_window_cmd_actions_budget_workbench) },
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
@@ -395,12 +390,6 @@ static void
 gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data)
 {
   gnc_ui_sx_loan_druid_create ();
-}
-
-static void 
-gnc_main_window_cmd_actions_budget_workbench(GtkAction *action, GncMainWindowActionData *data)
-{
-  gnc_budget_list_dialog_create();
 }
 
 static void

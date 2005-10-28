@@ -21,9 +21,6 @@ libgw_gnc_la_LDFLAGS =  \
 libgw_gnc_la_LIBADD = libgncgnome.la
 
 libgncgnome_la_SOURCES = \
-  dialog-budget-category.c \
-  dialog-budget-list.c \
-  dialog-budget-workbench.c \
   dialog-chart-export.c  \
   dialog-commodities.c \
   dialog-fincalc.c \
@@ -39,16 +36,17 @@ libgncgnome_la_SOURCES = \
   dialog-totd.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
-  druid-budget-create.c \
   druid-acct-period.c \
   druid-hierarchy.c \
   druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
-  gnc-plugin-basic-commands.c \
   gnc-plugin-account-tree.c \
+  gnc-plugin-basic-commands.c \
+  gnc-plugin-budget.c \
   gnc-plugin-register.c \
   gnc-plugin-page-account-tree.c \
+  gnc-plugin-page-budget.c \
   gnc-plugin-page-register.c \
   gnc-split-reg.c \
   lot-viewer.c \
@@ -63,18 +61,20 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/io-example-account.c \
-  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
   ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
   ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/file/io-utils.c \
+  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-book-xml-v2.c \
   ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
-  
+
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -88,9 +88,6 @@ mimedir = $(datadir)/mime-info
 mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
-  dialog-budget-category.h \
-  dialog-budget-list.h \
-  dialog-budget-workbench.h \
   dialog-chart-export.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
@@ -101,17 +98,17 @@ noinst_HEADERS = \
   dialog-sxsincelast.h \
   dialog-totd.h \
   dialog-scheduledxaction.h \
-  druid-budget-create.h \
   druid-acct-period.h \
   druid-hierarchy.h \
   druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
-  gnc-budget-gui.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
+  gnc-plugin-budget.h \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
+  gnc-plugin-page-budget.h \
   gnc-plugin-page-register.h \
   gnc-split-reg.h \
   gw-gnc.h \
