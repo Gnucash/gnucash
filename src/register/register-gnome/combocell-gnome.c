@@ -45,6 +45,7 @@
 #include "messages.h"
 #include "table-allgui.h"
 
+#define KEY_AUTO_RAISE_LISTS	"auto_raise_lists"
 
 typedef struct _PopBox
 {
@@ -57,7 +58,6 @@ typedef struct _PopBox
 	gboolean signals_connected; /* list signals connected? */
 
 	gboolean list_in_sync; /* list in sync with menustrings? */
-        gboolean list_sorted;  /* list has been sorted? */
         gboolean list_popped;  /* list is popped up? */
 
         gboolean autosize;
@@ -101,9 +101,13 @@ gnc_combo_cell_set_autopop (GConfEntry *entry, gpointer user_data)
 static gpointer
 gnc_combo_cell_autopop_init (gpointer unused)
 {
-	gnc_gconf_general_register_cb("auto_raise_lists",
-				      gnc_combo_cell_set_autopop,
-				      NULL);
+        auto_pop_combos = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, 
+                                              KEY_AUTO_RAISE_LISTS, 
+                                              NULL);
+
+        gnc_gconf_general_register_cb(KEY_AUTO_RAISE_LISTS,
+                                      gnc_combo_cell_set_autopop,
+                                      NULL);
 	return NULL;
 }
 
@@ -143,7 +147,6 @@ gnc_combo_cell_init (ComboCell *cell)
 	box->menustrings = NULL;
 	box->signals_connected = FALSE;
 	box->list_in_sync = TRUE;
-        box->list_sorted = TRUE;
         box->list_popped = FALSE;
         box->autosize = FALSE;
 
@@ -382,7 +385,6 @@ gnc_combo_cell_clear_menu (ComboCell * cell)
         }
 
         box->list_in_sync = TRUE;
-        box->list_sorted = TRUE;
 }
 
 void
@@ -423,15 +425,6 @@ gnc_combo_sync_edit_list(PopBox *box)
                         box->item_list);
 }
 
-static void
-gnc_combo_sort_edit_list(PopBox *box)
-{
-	if (box->list_sorted || box->item_list == NULL)
-		return;
-
-        gnc_item_list_sort(box->item_list);
-}
-
 void 
 gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
 { 
@@ -468,8 +461,6 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
         {
                 gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
         }
-
-        box->list_sorted = FALSE;
 }
 
 void 
@@ -516,8 +507,6 @@ gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr)
         {
                 gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
         }
-
-        box->list_sorted = FALSE;
 }
 
 void
@@ -876,7 +865,6 @@ gnc_combo_cell_enter (BasicCell *bcell,
                 return FALSE;
 
 	gnc_combo_sync_edit_list (box);
-        gnc_combo_sort_edit_list (box);
 
 	gnc_item_edit_set_popup (box->item_edit,
                              GNOME_CANVAS_ITEM (box->item_list),

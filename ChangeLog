@@ -1,3 +1,18 @@
+2005-10-30  Joshua Sled  <jsled@asynchronous.org>
+
+	Patches from Scott Oonk <scott.oonk@gmail.com>:
+	* src/register/register-gnome/combocell-gnome.c:
+	* src/register/register-gnome/gnucash-item-list.c:
+	Remove sort-state flag, code.
+	* src/register/register-gnome/gnucash-item-list.c
+	(gnc_item_list_show_selected): scroll to selected position.
+	* src/register/register-gnome/combocell-gnome.c
+	(gnc_combo_cell_autopop_init): auto-raise popups when initialized.
+	* src/register/register-gnome/gnucash-item-list.c:
+	Change signal emission so initial-combobox-display, keyboard
+	arrows/return and selection work correctly.
+	* GNOME2_STATUS: Remove items as per fixes.  Yay! :)
+
 2005-10-28  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-pricedb-xml-v2.c:
