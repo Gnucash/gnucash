@@ -9,6 +9,8 @@
 #include <ieee754.h>
 #endif
 
+#include "config.h"
+
 /* What a circus!  */
 #ifdef HAVE_FINITE
 #define go_finite finite
