@@ -55,6 +55,7 @@ struct gnc_price_db_s
 {
   QofInstance inst;              /* globally unique object identifier */
   GHashTable *commodity_hash;
+  gboolean bulk_update;		 /* TRUE while reading XML file, etc. */
 };
 
 /* These structs define the kind of price lookup being done

@@ -1,3 +1,12 @@
+2005-10-30  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-pricedb-xml-v2.c:
+	* src/engine/Period.c:
+	* src/engine/gnc-pricedb-p.h:
+	* src/engine/gnc-pricedb.[ch]: Slightly modified version of
+	Herbert Toma's fix to reduce load time with a large database of
+	stock prices.
+
 2005-10-30  Joshua Sled  <jsled@asynchronous.org>
 
 	Patches from Scott Oonk <scott.oonk@gmail.com>:

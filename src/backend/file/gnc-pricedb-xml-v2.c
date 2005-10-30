@@ -231,6 +231,7 @@ pricedb_start_handler(GSList* sibling_data,
   QofBook *book = gdata->bookdata;
   GNCPriceDB *db = gnc_pricedb_create(book);
   g_return_val_if_fail(db, FALSE);
+  gnc_pricedb_set_bulk_update(db, TRUE);
   *result = db;
   return(TRUE);
 }
@@ -304,6 +305,8 @@ pricedb_v2_end_handler(
     
     gdata->cb(tag, gdata->parsedata, db);
     *result = NULL;
+
+    gnc_pricedb_set_bulk_update(db, FALSE);
 
     return TRUE;
 }

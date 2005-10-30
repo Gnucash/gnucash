@@ -455,7 +455,7 @@ price_list_is_duplicate( gpointer data, gpointer user_data )
 }
 
 gboolean
-gnc_price_list_insert(GList **prices, GNCPrice *p)
+gnc_price_list_insert(GList **prices, GNCPrice *p, gboolean check_dupl)
 {
   GList *result_list;
   PriceListIsDuplStruct* pStruct;
@@ -464,15 +464,17 @@ gnc_price_list_insert(GList **prices, GNCPrice *p)
   if(!prices || !p) return FALSE;
   gnc_price_ref(p);
 
-  pStruct = g_new0( PriceListIsDuplStruct, 1 );
-  pStruct->pPrice = p;
-  pStruct->isDupl = FALSE;
-  g_list_foreach( *prices, price_list_is_duplicate, pStruct );
-  isDupl = pStruct->isDupl;
-  g_free( pStruct );
+  if (check_dupl) {
+    pStruct = g_new0( PriceListIsDuplStruct, 1 );
+    pStruct->pPrice = p;
+    pStruct->isDupl = FALSE;
+    g_list_foreach( *prices, price_list_is_duplicate, pStruct );
+    isDupl = pStruct->isDupl;
+    g_free( pStruct );
 
-  if( isDupl ) {
-	return TRUE;
+    if( isDupl ) {
+      return TRUE;
+    }
   }
 
   result_list = g_list_insert_sorted(*prices, p, compare_prices_by_date);
@@ -651,6 +653,12 @@ gnc_pricedb_destroy(GNCPriceDB *db)
   g_free(db);
 }
 
+void
+gnc_pricedb_set_bulk_update(GNCPriceDB *db, gboolean bulk_update)
+{
+  db->bulk_update = bulk_update;
+}
+
 /* ==================================================================== */
 /* This is kind of weird, the way its done.  Each collection of prices
  * for a given commodity should get its own guid, be its own entity, etc.
@@ -816,7 +824,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
 
   price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!gnc_price_list_insert(&price_list, p)) 
+  if(!gnc_price_list_insert(&price_list, p, !db->bulk_update)) 
   {
 	  LEAVE ("gnc_price_list_insert failed");
 	  return FALSE;
@@ -1053,7 +1061,7 @@ lookup_latest(gpointer key, gpointer val, gpointer user_data)
   if(!price_list) return;
 
   /* the latest price is the first in list */
-  gnc_price_list_insert(return_list, price_list->data);
+  gnc_price_list_insert(return_list, price_list->data, FALSE);
 }
 
 GList *
@@ -1264,7 +1272,7 @@ lookup_day(gpointer key, gpointer val, gpointer user_data)
     GNCPrice *p = item->data;
     Timespec price_time = timespecCanonicalDayTime(gnc_price_get_time(p));
     if(timespec_equal(&price_time, &t)) {
-      gnc_price_list_insert(return_list, item->data);
+      gnc_price_list_insert(return_list, item->data, FALSE);
     }
     item = item->next;
   }
@@ -1379,7 +1387,7 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
     GNCPrice *p = item->data;
     Timespec price_time = gnc_price_get_time(p);
     if(timespec_equal(&price_time, &t)) {
-      gnc_price_list_insert(return_list, item->data);
+      gnc_price_list_insert(return_list, item->data, FALSE);
     }
     item = item->next;
   }
@@ -1557,7 +1565,7 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
     }
   }
 
-  gnc_price_list_insert(return_list, result);
+  gnc_price_list_insert(return_list, result, FALSE);
 }
 
 GList *

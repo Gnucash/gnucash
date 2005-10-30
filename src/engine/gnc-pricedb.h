@@ -216,7 +216,7 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
 /** gnc_price_list_insert - insert a price into the given list, calling
      gnc_price_ref on it during the process. */
-gboolean gnc_price_list_insert(GList **prices, GNCPrice *p);
+gboolean gnc_price_list_insert(GList **prices, GNCPrice *p, gboolean check_dupl);
 
 /** gnc_price_list_remove - remove the price, p, from the given list,
      calling gnc_price_unref on it during the process. */
@@ -264,6 +264,11 @@ void gnc_pricedb_destroy(GNCPriceDB *db);
 /** Used for editing the pricedb en-mass */
 void gnc_pricedb_begin_edit (GNCPriceDB *);
 void gnc_pricedb_commit_edit (GNCPriceDB *);
+
+/** Indicate whether or not the database is in the middle of a bulk
+ *  update.  Setting this flag will disable checks for duplicate
+ *  entries. */
+void gnc_pricedb_set_bulk_update(GNCPriceDB *db, gboolean bulk_update);
 
 /** gnc_pricedb_add_price - add a price to the pricedb, you may drop
      your reference to the price (i.e. call unref) after this

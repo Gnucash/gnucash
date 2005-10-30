@@ -505,6 +505,7 @@ gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *que
 
    gnc_pricedb_begin_edit (src_pdb);
    gnc_pricedb_begin_edit (dest_pdb);
+   gnc_pricedb_set_bulk_update (dest_pdb, TRUE);
 
    qof_query_set_book (query, src_book);
    price_list = qof_query_run (query);
@@ -516,6 +517,7 @@ printf ("duude XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prices\n
       gnc_book_insert_price (dest_book, pr);
    }
 
+   gnc_pricedb_set_bulk_update (dest_pdb, FALSE);
    gnc_pricedb_commit_edit (dest_pdb);
    gnc_pricedb_commit_edit (src_pdb);
 
