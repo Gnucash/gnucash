@@ -180,7 +180,7 @@ Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
-Scott Oonk <s.oonk@comcast.net> utf-8 changes.
+Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> utf-8 changes.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
@@ -213,6 +213,7 @@ Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
+Didier Vidal <didier-devel@9online.fr> various G2 fixes.
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 Andy Wingo <wingo@pobox.com> income per day-of-week report
