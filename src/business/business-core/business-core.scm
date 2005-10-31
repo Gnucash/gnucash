@@ -91,7 +91,7 @@
        (let ((e (gnc:owner-get-employee owner)))
 	 (gnc:employee-get-id e)))
       ((gnc-owner-job)
-       (gnc:owner-get-id (gnc:job-get-owner (gnc:owner-get-job owner))))
+       (gnc:owner-get-owner-id (gnc:job-get-owner (gnc:owner-get-job owner))))
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)

@@ -591,7 +591,7 @@ on_aqhbci_button (GtkButton *button,
 
     if (res == 0) {
       res = AB_Banking_ActivateProvider(banking, backend_name);
-      if (res == 0)
+      if ((res == 0) || (res == AB_ERROR_FOUND))
 	druid_enable_next_button(info);
       else {
 	printf("on_aqhbci_button: Oops, after successful wizard the activation return nonzero value: %d. \n", res);
@@ -617,9 +617,9 @@ on_aqhbci_button (GtkButton *button,
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
        _("The external program \"%s Setup Wizard\" has not been found. \n\n"
-	 "Did you install the package \"%s-qt-tools\" of %s? \n"
-	 "If not, please install it now."),
-       backend_name, backend_name, backend_name);
+	 "The package aqbanking is supposed to install the program \n"
+	 "\"%s-qt3-wizard\". Please check your installation of aqbanking."),
+       backend_name, backend_name);
     druid_disable_next_button(info);
   }
   g_free (backend_name);

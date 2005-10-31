@@ -6312,6 +6312,50 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2005-10-26  Christian Stimming  <stimming@tuhh.de>
+
+	* po/eu.po: Add Basque translation by Mikel Olasagasti
+	<hey_neken@mundurat.net>.
+
+2005-10-16  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/pl.po: Added polish glossary by A. Tokarski
+	<szczur@malinablue.punkt.pl>
+
+2005-10-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/Transaction.c: Remove misleading (char*) casts by
+	Linas Vepstas from 2003-09-14, but nevertheless the code doesn't
+	have any errorneous double-free's at this point.
+
+2005-10-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/iso-4217-currencies.scm: Fix spelling of TJS
+	currency. Fixes #310697.
+
+2005-10-06  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/date-utilities.scm: Patch from Yves-Eric Martin
+	<yem_lists.gnucash.org@filter.yve.net> to make it easier for users
+	to change the financial year end date.  They still have to edit a
+	scheme file though.
+
+2005-08-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c (inputBoxCB): Aaarg,
+	fix extremely stupid bug that occasionally crashes the PIN entry.
+
+2005-08-15  David Hampton  <hampton@employees.org>
+
+	* src/engine/Query.c: Todd T. Fries patch for compilation on
+	OpenBSD 64bit architectures.
+
+2005-08-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm:  need to
+	  properly recurse in gnc:owner-get-owner-id.  there is no
+	  gnc:owner-get-id API.
+
 2005-07-17  Christian Stimming  <stimming@tuhh.de>
 
 	* macros/openhbci.m4: Remove old unused macros. Add macro name
