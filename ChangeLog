@@ -1,3 +1,9 @@
+2005-10-31  David Hampton  <hampton@employees.org>
+
+	* macros/autogen.sh: Remove obsolete warning about gettext.
+
+	* various: Final sync from HEAD to the gnucash-gnome2-dev branch.
+
 2005-10-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* GNOME2_STATUS: Updates
