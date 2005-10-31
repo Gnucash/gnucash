@@ -523,7 +523,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     xaccSchedXactionSetAdvanceCreation( sx, daysInAdvance );
 
     daysInAdvance =
-      gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_NOTIFY_DAYS, NULL );
+      gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
     xaccSchedXactionSetAdvanceReminder( sx, daysInAdvance );
   }
 

@@ -32,9 +32,9 @@
 
 #define SXED_GCONF_SECTION "dialogs/scheduled_trans/transaction_editor"
 #define KEY_CREATE_AUTO	"create_auto"
-#define KEY_CREATE_DAYS	"create_days"
 #define KEY_NOTIFY	"notify"
-#define KEY_NOTIFY_DAYS	"notify_days"
+#define KEY_CREATE_DAYS	"create_days"
+#define KEY_REMIND_DAYS	"remind_days"
 
 struct _SchedXactionDialog;
 struct _SchedXactionEditorDialog;

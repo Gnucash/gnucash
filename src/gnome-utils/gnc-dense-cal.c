@@ -1083,10 +1083,16 @@ gnc_dense_cal_button_press( GtkWidget *widget,
         doc = wheres_this( dcal, evt->x, evt->y );
         dcal->showPopup = ~(dcal->showPopup);
         if ( dcal->showPopup && doc >= 0 ) {
-                gdk_window_move( GTK_WIDGET(dcal->transPopup)->window,
-                                 evt->x_root+5, evt->y_root+5 );
+                // Do the move twice in case the WM is ignoring the first one
+                // because the window hasn't been shown, yet.  The WM is free
+                // to ignore our move and place windows according to it's own
+                // strategy, but hopefully it'll listen to us.  Certainly the
+                // second move after show_all'ing the window should do the
+                // trick with a bit of flicker.
+                gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
                 populate_hover_window( dcal, doc );
                 gtk_widget_show_all( GTK_WIDGET(dcal->transPopup) );
+                gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root+5, evt->y_root+5);
         } else {
                 gtk_widget_hide( GTK_WIDGET(dcal->transPopup) );
         }

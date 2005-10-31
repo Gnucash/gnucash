@@ -232,8 +232,34 @@ Resources
 
 - Backend
 
-	price_lookup awaits a solution - as a query instead of a backend operation.
+  - price_lookup awaits a solution - as a query instead of a backend operation.
 
+- Scheduled Transactions
+
+  - Since Last Run dialog spews console-crap on init, generally broken?
+
+  - SX Editor
+
+    - "Register Lines" preference not respected.
+
+    - When tabbing from memo to account on the second split with the same
+      name as the first, the account will be auto-populated with a GUID
+      (instead of an account name), but not a valid one.
+
+    - Template-register Cut/Copy/Paste not connected.
+
+    - Template-register View > {Basic, Auto-Split} options have no effect.
+
+  - Open SX Editor, close it; open Register Preferences, change "Draw
+    {horiz,vert} lines" => crash.
+
+  - Entering a value (e.g. '20.00') without entering an account or a memo for
+    the first split causes everything else entered so far to be reset when
+    tabbing to the second split.
+
+  - Font hard-coded (dense-cal), especially broken for non-ISO8859-1 locales.
+
+    - http://bugzilla.gnome.org/show_bug.cgi?id=303180
 
 ========================================
               ENHANCEMENTS
@@ -264,12 +290,6 @@ Resources
 
   - There's no way to edit/refine a search.
     [There's no way to do so in 1.8, either...]
-
-- Scheduled Transactions
-
-  - Font hard-coded (dense-cal), especially broken for non-ISO8859-1 locales.
-
-    - http://bugzilla.gnome.org/show_bug.cgi?id=303180
 
 - Main Window
 

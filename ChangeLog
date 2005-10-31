@@ -1,3 +1,22 @@
+2005-10-30  Joshua Sled  <jsled@asynchronous.org>
+
+	* GNOME2_STATUS: Updates
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_button_press):
+	Better transient-window positioning.
+	* src/gnome/schemas/apps_gnucash_dialog_scheduled_transctions.schemas:
+	* src/gnome/dialog-scheduledxaction.[ch]: 
+	* src/gnome/dialog-sx-from-trans.c: 
+	Rename "notify-days" to "remind-days", as it should have been in
+	the first place.  Fix conditional-option logic in preferences.
+	* src/gnome/glade/sched-xact.glade (SX Preferences):
+	Re-layout to visually and semantically mirror SX editor; rename
+	"notify-days" to "remind-days"
+	* src/gnome/glade/sched-xact.glade (Scheduled Transaction Editor):
+	Reformat {create,remind}-days-in-advance checkbox + spinbutton
+	pairs to respect UI semantic of gtk2.0 checkboxes (since the whole
+	label is selectable, we can't embed a control in the label lest it
+	can never be used).
+
 2005-10-30  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-pricedb-xml-v2.c:

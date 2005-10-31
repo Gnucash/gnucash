@@ -1704,7 +1704,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do days-in-advance-to-remind widget[s] setup. */
         if ( sxed->newsxP ) {
                 daysInAdvance =
-		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_NOTIFY_DAYS, NULL );
+		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
         } else {
                 daysInAdvance =
                         xaccSchedXactionGetAdvanceReminder( sxed->sx );
@@ -2465,7 +2465,7 @@ on_sx_check_toggled (GtkWidget *togglebutton,
 		     gpointer user_data)
 {
   GtkWidget *widget;
-  gboolean create, notify;
+  gboolean create; // , notify;
 
   /* The gnc_glade_lookup_widget() function works because all of these
    * widgets come from the same glade file. */
@@ -2475,17 +2475,6 @@ on_sx_check_toggled (GtkWidget *togglebutton,
   widget = gnc_glade_lookup_widget(togglebutton,
 	"gconf/dialogs/scheduled_trans/transaction_editor/notify");
   gtk_widget_set_sensitive(widget, create);
-  notify = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-  widget = gnc_glade_lookup_widget(togglebutton, "create_days_label");
-  gtk_widget_set_sensitive(widget, create);
-  widget = gnc_glade_lookup_widget(togglebutton, "create_days_hbox");
-  gtk_widget_set_sensitive(widget, create);
-
-  widget = gnc_glade_lookup_widget(togglebutton, "notify_days_label");
-  gtk_widget_set_sensitive(widget, create && notify);
-  widget = gnc_glade_lookup_widget(togglebutton, "notify_days_hbox");
-  gtk_widget_set_sensitive(widget, create && notify);
 }
 
 

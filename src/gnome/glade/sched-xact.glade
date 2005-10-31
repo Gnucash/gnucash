@@ -241,7 +241,7 @@
 			      <property name="visible">True</property>
 			      <property name="xalign">1</property>
 			      <property name="yalign">0.5</property>
-			      <property name="xscale">0.66</property>
+			      <property name="xscale">0.660000026226</property>
 			      <property name="yscale">1</property>
 			      <property name="top_padding">0</property>
 			      <property name="bottom_padding">0</property>
@@ -271,41 +271,62 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="advance_opt">
+			    <widget class="GtkHBox" id="hbox183">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkHBox" id="hbox150">
+				<widget class="GtkCheckButton" id="advance_opt">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+
+				  <child>
+				    <widget class="GtkHBox" id="hbox150">
+				      <property name="visible">True</property>
+				      <property name="homogeneous">False</property>
+				      <property name="spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="label847807">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Create in advance:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_CENTER</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="padding">0</property>
+					  <property name="expand">False</property>
+					  <property name="fill">False</property>
+					</packing>
+				      </child>
+				    </widget>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHBox" id="hbox184">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">0</property>
-
-				  <child>
-				    <widget class="GtkLabel" id="label847807">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Create </property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_CENTER</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
-				    </packing>
-				  </child>
 
 				  <child>
 				    <widget class="GtkSpinButton" id="advance_days">
@@ -321,15 +342,15 @@
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 
 				  <child>
 				    <widget class="GtkLabel" id="label847808">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes"> days in advance</property>
+				      <property name="label" translatable="yes"> days</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -347,6 +368,11 @@
 				    </packing>
 				  </child>
 				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
 			      </child>
 			    </widget>
 			    <packing>
@@ -357,41 +383,62 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="remind_opt">
+			    <widget class="GtkHBox" id="hbox185">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="focus_on_click">True</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkHBox" id="hbox151">
+				<widget class="GtkCheckButton" id="remind_opt">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="relief">GTK_RELIEF_NORMAL</property>
+				  <property name="focus_on_click">True</property>
+				  <property name="active">False</property>
+				  <property name="inconsistent">False</property>
+				  <property name="draw_indicator">True</property>
+
+				  <child>
+				    <widget class="GtkHBox" id="hbox151">
+				      <property name="visible">True</property>
+				      <property name="homogeneous">False</property>
+				      <property name="spacing">0</property>
+
+				      <child>
+					<widget class="GtkLabel" id="label847809">
+					  <property name="visible">True</property>
+					  <property name="label" translatable="yes">Remind in advance:</property>
+					  <property name="use_underline">False</property>
+					  <property name="use_markup">False</property>
+					  <property name="justify">GTK_JUSTIFY_CENTER</property>
+					  <property name="wrap">False</property>
+					  <property name="selectable">False</property>
+					  <property name="xalign">0.5</property>
+					  <property name="yalign">0.5</property>
+					  <property name="xpad">0</property>
+					  <property name="ypad">0</property>
+					</widget>
+					<packing>
+					  <property name="padding">0</property>
+					  <property name="expand">False</property>
+					  <property name="fill">False</property>
+					</packing>
+				      </child>
+				    </widget>
+				  </child>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHBox" id="hbox186">
 				  <property name="visible">True</property>
 				  <property name="homogeneous">False</property>
 				  <property name="spacing">0</property>
-
-				  <child>
-				    <widget class="GtkLabel" id="label847809">
-				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">Remind me </property>
-				      <property name="use_underline">False</property>
-				      <property name="use_markup">False</property>
-				      <property name="justify">GTK_JUSTIFY_CENTER</property>
-				      <property name="wrap">False</property>
-				      <property name="selectable">False</property>
-				      <property name="xalign">0.5</property>
-				      <property name="yalign">0.5</property>
-				      <property name="xpad">0</property>
-				      <property name="ypad">0</property>
-				    </widget>
-				    <packing>
-				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
-				    </packing>
-				  </child>
 
 				  <child>
 				    <widget class="GtkSpinButton" id="remind_days">
@@ -407,15 +454,15 @@
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>
-				      <property name="expand">False</property>
-				      <property name="fill">False</property>
+				      <property name="expand">True</property>
+				      <property name="fill">True</property>
 				    </packing>
 				  </child>
 
 				  <child>
 				    <widget class="GtkLabel" id="label847810">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes"> days in advance</property>
+				      <property name="label" translatable="yes"> days</property>
 				      <property name="use_underline">False</property>
 				      <property name="use_markup">False</property>
 				      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -433,6 +480,11 @@
 				    </packing>
 				  </child>
 				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
 			      </child>
 			    </widget>
 			    <packing>
@@ -5132,7 +5184,7 @@
 		      <property name="visible">True</property>
 		      <property name="xalign">1</property>
 		      <property name="yalign">0.5</property>
-		      <property name="xscale">0.66</property>
+		      <property name="xscale">0.660000026226</property>
 		      <property name="yscale">1</property>
 		      <property name="top_padding">0</property>
 		      <property name="bottom_padding">0</property>
@@ -5522,7 +5574,7 @@
 	      <child>
 		<widget class="GtkFrame" id="recur_frame">
 		  <property name="visible">True</property>
-		  <property name="label_xalign">0.1</property>
+		  <property name="label_xalign">0.10000000149</property>
 		  <property name="label_yalign">0.5</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -6191,7 +6243,7 @@
 		      <property name="visible">True</property>
 		      <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
 		      <property name="fraction">0</property>
-		      <property name="pulse_step">0.1</property>
+		      <property name="pulse_step">0.10000000149</property>
 		    </widget>
 		  </child>
 
@@ -6530,7 +6582,7 @@ Select any which you would like to create now, and click
 			<widget class="GtkFrame" id="frame81">
 			  <property name="border_width">3</property>
 			  <property name="visible">True</property>
-			  <property name="label_xalign">0.1</property>
+			  <property name="label_xalign">0.10000000149</property>
 			  <property name="label_yalign">0.5</property>
 			  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
@@ -8816,31 +8868,6 @@ the created Scheduled Transactions directly.</property>
       </child>
 
       <child>
-	<widget class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/transaction_editor/notify">
-	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">Set the 'notify' flag on newly created scheduled transactions.</property>
-	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">_Notify before transactions are created </property>
-	  <property name="use_underline">True</property>
-	  <property name="relief">GTK_RELIEF_NORMAL</property>
-	  <property name="focus_on_click">True</property>
-	  <property name="active">False</property>
-	  <property name="inconsistent">False</property>
-	  <property name="draw_indicator">True</property>
-	  <signal name="toggled" handler="on_sx_check_toggled" last_modification_time="Tue, 02 Aug 2005 03:22:26 GMT"/>
-	</widget>
-	<packing>
-	  <property name="left_attach">0</property>
-	  <property name="right_attach">4</property>
-	  <property name="top_attach">6</property>
-	  <property name="bottom_attach">7</property>
-	  <property name="x_padding">12</property>
-	  <property name="x_options">fill</property>
-	  <property name="y_options"></property>
-	</packing>
-      </child>
-
-      <child>
 	<widget class="GtkAlignment" id="alignment25">
 	  <property name="visible">True</property>
 	  <property name="xalign">0.5</property>
@@ -8849,13 +8876,13 @@ the created Scheduled Transactions directly.</property>
 	  <property name="yscale">1</property>
 	  <property name="top_padding">0</property>
 	  <property name="bottom_padding">0</property>
-	  <property name="left_padding">30</property>
+	  <property name="left_padding">12</property>
 	  <property name="right_padding">0</property>
 
 	  <child>
 	    <widget class="GtkLabel" id="create_days_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Days in advance:</property>
+	      <property name="label" translatable="yes">_Create in advance, days:</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8872,8 +8899,8 @@ the created Scheduled Transactions directly.</property>
 	<packing>
 	  <property name="left_attach">0</property>
 	  <property name="right_attach">1</property>
-	  <property name="top_attach">5</property>
-	  <property name="bottom_attach">6</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options">fill</property>
 	</packing>
@@ -8888,13 +8915,13 @@ the created Scheduled Transactions directly.</property>
 	  <property name="yscale">1</property>
 	  <property name="top_padding">0</property>
 	  <property name="bottom_padding">0</property>
-	  <property name="left_padding">30</property>
+	  <property name="left_padding">12</property>
 	  <property name="right_padding">0</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="notify_days_label">
+	    <widget class="GtkLabel" id="remind_days_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Da_ys in advance:</property>
+	      <property name="label" translatable="yes">R_emind in advance, days:</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -8904,7 +8931,6 @@ the created Scheduled Transactions directly.</property>
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
-	      <property name="mnemonic_widget">gconf/dialogs/scheduled_trans/transaction_editor/notify_days</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -9002,13 +9028,13 @@ the created Scheduled Transactions directly.</property>
       </child>
 
       <child>
-	<widget class="GtkHBox" id="notify_days_hbox">
+	<widget class="GtkHBox" id="remind_days_hbox">
 	  <property name="visible">True</property>
 	  <property name="homogeneous">False</property>
 	  <property name="spacing">6</property>
 
 	  <child>
-	    <widget class="GtkSpinButton" id="gconf/dialogs/scheduled_trans/transaction_editor/notify_days">
+	    <widget class="GtkSpinButton" id="gconf/dialogs/scheduled_trans/transaction_editor/remind_days">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Begin notifications this many days before the transaction is created.</property>
 	      <property name="can_focus">True</property>
@@ -9018,7 +9044,7 @@ the created Scheduled Transactions directly.</property>
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0 0 365 1 10 10</property>
+	      <property name="adjustment">0 0 10000000 1 10 10</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -9075,7 +9101,7 @@ the created Scheduled Transactions directly.</property>
 	      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 	      <property name="snap_to_ticks">False</property>
 	      <property name="wrap">False</property>
-	      <property name="adjustment">0 0 365 1 10 10</property>
+	      <property name="adjustment">0 0 10000000 1 10 10</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -9108,10 +9134,35 @@ the created Scheduled Transactions directly.</property>
 	<packing>
 	  <property name="left_attach">1</property>
 	  <property name="right_attach">2</property>
-	  <property name="top_attach">5</property>
-	  <property name="bottom_attach">6</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
 	  <property name="x_options">fill</property>
 	  <property name="y_options">fill</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/transaction_editor/notify">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Set the 'notify' flag on newly created scheduled transactions.</property>
+	  <property name="can_focus">True</property>
+	  <property name="label" translatable="yes">_Notify before transactions are created </property>
+	  <property name="use_underline">True</property>
+	  <property name="relief">GTK_RELIEF_NORMAL</property>
+	  <property name="focus_on_click">True</property>
+	  <property name="active">False</property>
+	  <property name="inconsistent">False</property>
+	  <property name="draw_indicator">True</property>
+	  <signal name="toggled" handler="on_sx_check_toggled" last_modification_time="Tue, 02 Aug 2005 03:22:26 GMT"/>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">4</property>
+	  <property name="top_attach">5</property>
+	  <property name="bottom_attach">6</property>
+	  <property name="x_padding">30</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
 	</packing>
       </child>
     </widget>
