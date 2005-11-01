@@ -318,7 +318,7 @@ int finishQuery(PGBackend *be);
 #define COMP_INT64(sqlname,fun,ndiffs) { 			\
    if (strtoll (DB_GET_VAL(sqlname,0), NULL, 0) != fun) {	\
       PINFO("mis-match: %s sql='%s', eng='%lld'", sqlname, 	\
-         DB_GET_VAL (sqlname,0), fun); 				\
+	 DB_GET_VAL (sqlname,0), (long long int) fun);	\
       ndiffs++; 						\
    }								\
 }

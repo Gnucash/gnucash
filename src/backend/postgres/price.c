@@ -197,7 +197,7 @@ foreach_price_cb (GNCPrice *pr, gpointer bend)
 static gboolean
 commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
 {
-   gint32 v = ((gint32) user_data) & 0xffff;
+   gint32 v = ((gint32) GPOINTER_TO_INT(user_data)) & 0xffff;
    gnc_commodity_set_mark (cm, (gint16) v);
    return TRUE;
 }

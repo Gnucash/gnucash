@@ -1,3 +1,14 @@
+2005-11-01  Karl Hegbloom  <hegbloom@pdx.edu>
+
+        * src/backend/postgres/upgrade.c:
+        * src/backend/postgres/price.c: Use glib
+        * src/backend/postgres/base-autogen.c:
+        * src/backend/postgres/kvp-sql.c: Use glib macros for type
+	conversions to suppress compiler warnings on amd64.
+
+        * src/backend/postgres/putil.h: Cast fun to long long int to
+	suppress compiler warning on amd64.
+
 2005-10-31  David Hampton  <hampton@employees.org>
 
 	* macros/autogen.sh: Remove obsolete warning about gettext.

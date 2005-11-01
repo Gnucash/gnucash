@@ -121,7 +121,7 @@ static gpointer
 ival_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
   int ival = atoi (DB_GET_VAL ("ipath", 0));
-  return (gpointer) ival;
+  return GINT_TO_POINTER(ival);
 }
 
 
@@ -143,7 +143,7 @@ pgendGetCache (PGBackend *be, const char *val_str, sqlEscape *escape)
    p = stpcpy (p, "';");
 
    SEND_QUERY (be,be->buff, 0);
-   ival = (int) pgendGetResults (be, ival_cb, (gpointer) 0);
+   ival = GPOINTER_TO_INT(pgendGetResults (be, ival_cb, (gpointer) 0));
    if (ival) return ival;
 
    /* Else, this guid has never been stored before. 
