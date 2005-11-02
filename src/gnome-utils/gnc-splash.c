@@ -47,7 +47,7 @@ gnc_show_splash_screen (void)
   GtkWidget *vbox;
   GtkWidget *version;
   GtkWidget *separator;
-  gchar ver_string[50];
+  gchar *ver_string;
 
   if (splash) return;
 
@@ -73,13 +73,14 @@ gnc_show_splash_screen (void)
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
 #ifdef GNUCASH_SVN
-  sprintf(ver_string, _("Version: Gnucash-%s svn (r%d built %s)"),
-	  VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+  ver_string = g_strdup_printf(_("Version: Gnucash-%s svn (r%d built %s)"),
+			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #else
-  sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
+  ver_string =  g_strdup_printf(_("Version: Gnucash-%s"), VERSION);
 #endif
 
   version = gtk_label_new (ver_string);
+  g_free(ver_string);
   separator = gtk_hseparator_new();
   progress = gtk_label_new(_("Loading..."));
 

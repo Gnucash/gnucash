@@ -1,3 +1,8 @@
+2005-11-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-splash.c: Use a dynamically allocated string
+	for the version.
+
 2005-11-02  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: don't need GNUCASH_CVS anymore
