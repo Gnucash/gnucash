@@ -72,9 +72,9 @@ gnc_show_splash_screen (void)
 
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
-#ifdef GNUCASH_CVS
-  sprintf(ver_string, _("Version: Gnucash-%s cvs (built %s)"),
-	  VERSION, GNUCASH_BUILD_DATE);
+#ifdef GNUCASH_SVN
+  sprintf(ver_string, _("Version: Gnucash-%s svn (r%d built %s)"),
+	  VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #else
   sprintf(ver_string, _("Version: Gnucash-%s"), VERSION);
 #endif

@@ -1,3 +1,13 @@
+2005-11-02  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: don't need GNUCASH_CVS anymore
+	* src/gnome-utils/Makefile.am:
+	  build gnc-version.h and gnc-svninfo.h.  add the
+	  latter to EXTRA_DIST.  Only build svninfo if
+	  $(srcdir)/.svn exists.  #define GNUCASH_SVN
+	  when that directory exists (at buildtime).
+	* src/gnome-utils/gnc-splash.h: use new SVN info.
+
 2005-11-01  David Hampton  <hampton@employees.org>
 
 	* All: Collapse the gnome2 branch back into HEAD.

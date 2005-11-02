@@ -51,10 +51,6 @@ GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY=`echo $GCONF_SCHEMA_CONFIG_SOURCE | cut -d ':
 AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
 
 
-# Comment out for production or semi-production builds.  I.E. Anything
-# that is explicitly tagged in cvs as a version.
-AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
-
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
 AC_SUBST(GNUCASH_MICRO_VERSION)
