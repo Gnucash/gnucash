@@ -1,8 +1,0 @@
-Makefile
-Makefile.in
-.deps
-fini
-financial
-.libs
-*.lo
-*.la

@@ -1,8 +1,0 @@
-.deps
-.libs
-.scm-links
-*.gladep
-*.la
-*.lo
-Makefile
-Makefile.in

@@ -1,9 +1,0 @@
-Makefile
-test-load-c
-test-modsysver
-test-incompatdep
-test-agedver
-test-dynload
-.deps
-.libs
-Makefile.in
