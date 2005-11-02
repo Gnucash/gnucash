@@ -3,14 +3,20 @@
 
 DIE=0
 
-GETTEXTIZE=${GETTEXTIZE:-gettextize}
+#GETTEXTIZE=${GETTEXTIZE:-gettextize}
 INTLTOOLIZE=${INTLTOOLIZE:-intltoolize}
 LIBTOOLIZE=${LIBTOOLIZE:-libtoolize}
 LIBTOOL=${LIBTOOL:-libtool}
 
 if [ -n "$GNOME2_PATH" ]; then
-	ACLOCAL_FLAGS="-I $GNOME2_PATH/share/aclocal $ACLOCAL_FLAGS"
-	PATH="$GNOME2_PATH/bin:$PATH"
+	for dir in `echo $GNOME2_PATH | sed 's/:/ /g'`; do
+	    if test -d "${dir}/share/aclocal"; then
+		ACLOCAL_FLAGS="${ACLOCAL_FLAGS} -I ${dir}/share/aclocal"
+	    fi;
+	    if test -d "${dir}/bin"; then
+		PATH="${PATH}:${dir}/bin"
+	    fi;
+	done;
 	export PATH
 fi
 
@@ -120,37 +126,37 @@ case $gettext_version in
 	INTL="--intl --no-changelog";;
 esac
 
-#(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
-#  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
-#    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
+    echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
-#grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
-#  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
-#  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
-#    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
+    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
-#grep "^AM_GNOME_GETTEXT" $srcdir/configure.in >/dev/null && {
-#  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
-#  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
-#    echo
-#    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
-#    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
-#    echo "(or a newer version if it is available)"
-#    DIE=1
-#  }
-#}
+grep "^AM_GNOME_GETTEXT" $srcdir/configure.in >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+  (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`gettext' installed to compile GnuCash."
+    echo "Get ftp://alpha.gnu.org/gnu/gettext-0.10.35.tar.gz"
+    echo "(or a newer version if it is available)"
+    DIE=1
+  }
+}
 
 (${AUTOMAKE} --version) < /dev/null > /dev/null 2>&1 || {
   echo
@@ -179,7 +185,7 @@ fi
 if test -z "$*"; then
   echo "**Warning**: I am going to run \`configure' with no arguments."
   echo "If you wish to pass any to it, please specify them on the"
-  echo \`$0\'" command line."
+  echo \`$0"' command line."
   echo
 fi
 
@@ -188,7 +194,7 @@ xlc )
   am_opt=--include-deps;;
 esac
 
-for coin in `find $srcdir -name configure.in -print`
+for coin in "$srcdir/configure.in"
 do 
   dr=`dirname $coin`
   if test -f $dr/NO-AUTO-GEN; then
@@ -197,7 +203,7 @@ do
     echo processing $dr
     macrodirs=`sed -n -e 's,AM_ACLOCAL_INCLUDE(\(.*\)),\1,gp' < $coin`
     ( cd $dr
-      macrosdir=`find . -name macros -print`
+      macrodirs="$dr/macros"
       for i in $macrodirs; do
 	if test -f $i/gnome-gettext.m4; then
 	  DELETEFILES="$DELETEFILES $i/gnome-gettext.m4"
@@ -221,16 +227,7 @@ do
 	  fi
         fi
       done
-      grep "intl/Makefile" configure.in > /dev/null &&
-      ( sed -e 's#^AC_OUTPUT(.*intl/Makefile po/Makefile.in#AC_OUTPUT(#' \
-	  configure.in >configure.in.new && mv configure.in.new configure.in )
-      echo
-      echo "*** WARNING ***"
-      echo "*** We're about to run \"gettext\" which may spew a few paragraphs"
-      echo "*** of crap at you and ask you to acknowledge it.  If it does this,"
-      echo "*** just hit return to acknowledge gettext.  You DO NOT need to do"
-      echo "*** anything that it asks of you except hitting return."
-      echo
+
       if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then
 	if grep "sed.*POTFILES" configure.in >/dev/null; then
 	  : do nothing -- we still have an old unmodified configure.in
@@ -242,55 +239,51 @@ do
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
+        grep "intl/Makefile" configure.in > /dev/null ||
+        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
+  	configure.in >configure.in.new && mv configure.in.new configure.in )
       fi
       if grep "^AM_GNOME_GETTEXT" configure.in >/dev/null; then
-	echo "Creating $dr/aclocal.m4 ..."
-	test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+        echo "Creating $dr/aclocal.m4 ..."
+        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	echo "(2) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
-	echo "no" | ${GETTEXTIZE} --force --copy $INTL
-	echo "Making $dr/aclocal.m4 writable ..."
-	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        echo "no" | gettextize --force --copy $INTL
+        echo "Making $dr/aclocal.m4 writable ..."
+        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        grep "intl/Makefile" configure.in > /dev/null ||
+        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
+  	configure.in >configure.in.new && mv configure.in.new configure.in )
       fi
-      echo
-      echo "*** WARNING ***"
-      echo "*** Ignore any instruction above about running aclocal by hand."
-      echo "*** I repeat, do not run aclocal by hand.  You have been warned....."
-      echo
-      grep "intl/Makefile" configure.in > /dev/null ||
-      ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
-	configure.in >configure.in.new && mv configure.in.new configure.in )
+      if grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null; then
+        echo "Creating $dr/aclocal.m4 ..."
+        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+        echo "(3) Running gettextize...  Ignore non-fatal messages."
+        echo "no" | glib-gettextize --force --copy
+        echo "Making $dr/aclocal.m4 writable ..."
+        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        grep "po/Makefile.in" configure.in > /dev/null ||
+        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( po/Makefile.in#' \
+  	configure.in >configure.in.new && mv configure.in.new configure.in )
+      fi
       if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
-        echo "Running ${INTLTOOLIZE} ..."
-        ${INTLTOOLIZE} --copy --force --automake
-      fi 
-#      if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
-#	if test -z "$NO_LIBTOOLIZE" ; then 
-#	  echo "Running ${LIBTOOLIZE}..."
-#	  ${LIBTOOLIZE} --force --copy
-#	fi
-#      fi
-      echo "Running ${ACLOCAL} $aclocalinclude ..."
-      ${ACLOCAL} $aclocalinclude || {
-	echo
-	echo "**Error**: aclocal failed. This may mean that you have not"
-	echo "installed all of the packages you need, or you may need to"
-	echo "set ACLOCAL_FLAGS to include \"-I \$prefix/share/aclocal\""
-	echo "for the prefix where you installed the packages whose"
-	echo "macros were not found"
-	exit 1
-      }
-
-      if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
+        echo "Running intltoolize ..."
+        intltoolize --force --copy
+      fi
+      if grep "^A[CM]_PROG_LIBTOOL" configure.in >/dev/null; then
+        echo "Running libtoolize..."
+        libtoolize --force --copy
+      fi
+      echo "Running $ACLOCAL $aclocalinclude ..."
+      $ACLOCAL $aclocalinclude
+      if grep "^AC_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running ${AUTOHEADER}..."
-	echo "Note: you can ignore messages about using deprecated aux files"
 	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
       fi
-      echo "Running ${AUTOMAKE} --gnu $am_opt ..."
-      ${AUTOMAKE} --add-missing --gnu $am_opt ||
-	{ echo "**Error**: automake failed."; exit 1; }
-      echo "Running ${AUTOCONF} ..."
-      ${AUTOCONF} || { echo "**Error**: autoconf failed."; exit 1; }
-    ) || exit 1
+      echo "Running $AUTOMAKE --gnu $am_opt ..."
+      $AUTOMAKE --add-missing --gnu $am_opt
+      echo "Running autoconf ..."
+      autoconf
+    )
   fi
 done
 

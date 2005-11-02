@@ -41,9 +41,7 @@
 #define QOF_BOOK_H
 
 #include <glib.h>
-
 #include "qofid.h"
-#include "qofbackend.h"
 #include "kvp_frame.h"
 
 /** @brief Encapsulates all the information about a dataset
@@ -80,6 +78,13 @@ QofBook * qof_book_new (void);
 /** End any editing sessions associated with book, and free all memory 
     associated with it. */
 void      qof_book_destroy (QofBook *book);
+
+/** Close a book to editing.
+
+It is up to the application to check this flag,
+and once marked closed, books cannnot be marked as open.
+*/
+void qof_book_mark_closed (QofBook *book);
 
 /** \return The table of entities of the given type.  
  *
@@ -125,15 +130,11 @@ void qof_book_set_data (QofBook *book, const char *key, gpointer data);
  *  when the book is destroyed.  The argument to the callback will be 
  *  the book followed by the data pointer.
  */
-void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFinalCB);
+void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data,
+                            QofBookFinalCB);
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
 gpointer qof_book_get_data (QofBook *book, const char *key);
-
-/** DOCUMENT ME! */
-QofBackend *qof_book_get_backend (QofBook *book);
-
-void qof_book_set_backend (QofBook *book, QofBackend *);
 
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (QofBook *book);
@@ -147,6 +148,13 @@ gboolean qof_book_shutting_down (QofBook *book);
  *    flag, when it actually does save the data.)
  */
 gboolean qof_book_not_saved (QofBook *book);
+
+/** The qof_book_mark_saved() routine marks the book as having been
+ *    saved (to a file, to a database). Used by backends to mark the
+ *    notsaved flag as FALSE just after loading.  Also used by the
+ *    main window code when the used has said to abandon any changes.
+ */
+void qof_book_mark_saved(QofBook *book);
 
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */

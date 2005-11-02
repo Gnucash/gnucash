@@ -34,7 +34,6 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "gnc-date.h"
 #include "gnc-engine-util.h"
 
 /* 
@@ -218,7 +217,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
       /* use tab-separated fields */
       fprintf (trans_log,
                "%c\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
-               "%s\t%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
+               "%s\t%s\t%s\t%s\t%c\t%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT "\t%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT "\t%s\n",
                flag,
                trans_guid_str, split_guid_str,  /* trans+split make up unique id */
                dnow ? dnow : "",
@@ -232,10 +231,10 @@ xaccTransWriteLog (Transaction *trans, char flag)
                split->memo ? split->memo : "",
                split->action ? split->action : "",
                split->reconciled,
-               (long long int) gnc_numeric_num(amt), 
-               (long long int) gnc_numeric_denom(amt),
-               (long long int) gnc_numeric_num(val), 
-               (long long int) gnc_numeric_denom(val),
+               gnc_numeric_num(amt), 
+               gnc_numeric_denom(amt),
+               gnc_numeric_num(val), 
+               gnc_numeric_denom(val),
                drecn ? drecn : "");
    }
 

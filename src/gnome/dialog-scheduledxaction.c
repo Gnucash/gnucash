@@ -31,6 +31,7 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
+#include "dialog-preferences.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
 #include "gnc-book.h"
@@ -38,17 +39,19 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
-#include "gnc-engine-util.h"
+#include "gnc-embedded-window.h"
+#include "gnc-engine.h"
 #include "gnc-frequency.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-hooks.h"
 #include "gnc-ledger-display.h"
+#include "gnc-plugin-page.h"
+#include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
-#include "window-help.h"
-#include "window-register.h"
 
 #include "gnc-split-reg.h"
 
@@ -59,14 +62,14 @@
 #include <langinfo.h>
 #endif
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
+#define SX_LIST_GCONF_SECTION "dialogs/scheduled_trans/transaction_list"
 #define SX_LIST_WIN_PREFIX "sx_list_win"
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
 #define SX_LIST "sched_xact_list"
 #define SX_LIST_UPCOMING_FRAME "upcoming_cal_frame"
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
-#define SX_OPT_STR "Scheduled Transactions"
 
 #define SXED_WIN_PREFIX "sx_editor_win"
 #define SXED_NAME_ENTRY "sxe_name"
@@ -78,9 +81,10 @@ static short module = MOD_SX;
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
 #define END_DATE_BOX "end_date_hbox"
-#define END_GNOME_NUMENTRY "end_gnome_nentry"
-#define REMAIN_GNOME_NUMENTRY "remain_gnome_nentry"
+#define END_ENTRY "end_nentry"
 #define REMAIN_ENTRY "remain_nentry"
+
+#define SX_GLADE_FILE "sched-xact.glade"
 
 #define END_NEVER_OPTION 0
 #define END_DATE_OPTION  1
@@ -156,13 +160,14 @@ struct _SchedXactionEditorDialog
         GtkToggleButton *optEndDate;
         GtkToggleButton *optEndNone;
         GtkToggleButton *optEndCount;
-        GnomeNumberEntry *endCountEntry;
-        GnomeNumberEntry *endRemainEntry;
+        GtkEntry *endCountEntry;
+        GtkEntry *endRemainEntry;
         GNCDateEdit *endDateEntry;
 
         char *sxGUIDstr;
 
-        GtkWidget *toolbar;
+        GncEmbeddedWindow *embed_window;
+	GncPluginPage *plugin_page;
 };
 
 /** Prototypes **********************************************************/
@@ -215,7 +220,7 @@ static void gnc_sxed_update_cal( SchedXactionEditorDialog *sxed );
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
-static gint sxed_close_event( GnomeDialog *dlg, gpointer ud );
+static gint sxed_close_event( GtkDialog *dlg, gpointer ud );
 
 static gboolean sxed_confirmed_cancel( SchedXactionEditorDialog *sxed );
 
@@ -226,6 +231,33 @@ static SxRuntimeInfo* _new_sx_runtime_info( SchedXaction *sx );
 static void _clear_runtime_info_row( gpointer key, gpointer value, gpointer user_data );
 
 
+static void gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed);
+
+static GtkActionEntry gnc_sxed_menu_entries [] =
+{
+	/* Toplevel */
+	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
+	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
+
+	/* Edit menu */
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_cut) },
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_copy) },
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_paste) },
+
+};
+static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
+
 /** Implementations *****************************************************/
 
 static
@@ -235,7 +267,7 @@ sxd_close_handler ( gpointer user_data )
         SchedXactionDialog        *sxd = user_data;
         
         gnc_sxl_record_size( sxd );
-        gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
+        gtk_widget_hide( sxd->dialog );
 }
 
 static
@@ -274,8 +306,8 @@ sxed_close_handler ( gpointer user_data )
 
         gnc_sxed_reg_check_close( sxed );
         gnc_sxed_record_size( sxed );
-        /* Real dialog cleanup occurs in "destroy" callback. */
-        gnome_dialog_close( GNOME_DIALOG( sxed->dialog ) );
+        gtk_widget_destroy( sxed->dialog );
+        /* The data will be cleaned up in the destroy handler. */
 }
 
 static
@@ -323,9 +355,7 @@ static
 void
 editor_help_button_clicked(GtkButton *b, SchedXactionEditorDialog *sxed)
 {
-        gnc_help_window *help = gnc_help_window_new();
-	gnc_help_window_show_help(help, HH_SXEDITOR, NULL);
-	return;
+	gnc_gnome_help(HF_USAGE, HL_SXEDITOR);
 }
 
 static void
@@ -460,15 +490,17 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                 /* dialog says... num occur */
                 if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                         gint sxNumOccur, sxNumRem, dlgNumOccur, dlgNumRem;
+			const gchar *text;
 
                         if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) ) {
                                 return TRUE;
                         }
 
-                        dlgNumOccur = (gint)gnome_number_entry_get_number( sxed->
-                                                                           endCountEntry );
-                        dlgNumRem = (gint)gnome_number_entry_get_number( sxed->
-                                                                         endRemainEntry );
+			text = gtk_entry_get_text (sxed->endCountEntry);
+			sscanf (text, "%d", &dlgNumOccur);
+
+			text = gtk_entry_get_text (sxed->endRemainEntry);
+			sscanf (text, "%d", &dlgNumRem);
 
                         sxNumOccur = xaccSchedXactionGetNumOccur( sxed->sx );
                         sxNumRem = xaccSchedXactionGetRemOccur( sxed->sx );
@@ -909,12 +941,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndCount)) {
                         gint occur, rem;
+			const gchar *text;
 
-                        occur = (gint)gnome_number_entry_get_number( sxed->endCountEntry );
-                        xaccSchedXactionSetNumOccur( sxed->sx, occur );
+			text = gtk_entry_get_text (sxed->endCountEntry);
+			sscanf (text, "%d", &occur);
 
-                        rem = (gint)gnome_number_entry_get_number( sxed->endRemainEntry );
-                        xaccSchedXactionSetRemOccur( sxed->sx, rem );
+			text = gtk_entry_get_text (sxed->endRemainEntry);
+			sscanf (text, "%d", &rem);
 
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
@@ -1004,10 +1037,15 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
                 } else if ( gtk_toggle_button_get_active(sxed->optEndCount) ) {
                         gint num;
+			const gchar *text;
+
                         /* get the occurances data */
-                        num = (gint)gnome_number_entry_get_number( sxed->endCountEntry );
+			text = gtk_entry_get_text (sxed->endCountEntry);
+			sscanf (text, "%d", &num);
                         xaccSchedXactionSetNumOccur( sxed->sx, num );
-                        num = (gint)gnome_number_entry_get_number( sxed->endRemainEntry );
+
+			text = gtk_entry_get_text (sxed->endRemainEntry);
+			sscanf (text, "%d", &num);
                         xaccSchedXactionSetRemOccur( sxed->sx, num );
 
                         g_date_clear( &gdate, 1 );
@@ -1172,7 +1210,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxd = g_new0( SchedXactionDialog, 1 );
 
-        sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", SX_LIST_GLADE_NAME );
+        sxd->gxml = gnc_glade_xml_new( SX_GLADE_FILE, SX_LIST_GLADE_NAME );
         sxd->dialog = glade_xml_get_widget( sxd->gxml, SX_LIST_GLADE_NAME );
 
         sxd->sxData = g_hash_table_new( NULL, NULL );
@@ -1216,15 +1254,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gnc_sxd_set_sort_compare( GTK_CLIST(w), sxd->currentSortCol );
         gtk_clist_set_auto_sort( GTK_CLIST(w), TRUE );
 
-        {
-                int width, height;
-
-                gnc_get_window_size( SX_LIST_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW(sxd->dialog),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(sxd->dialog));
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
                                     NULL, /* no refresh_handler */
@@ -1242,10 +1272,7 @@ static
 void
 gnc_sxl_record_size( SchedXactionDialog *sxd )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxd->dialog->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SX_LIST_WIN_PREFIX, w, h );
+	gnc_save_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(sxd->dialog));
 }
 
 void
@@ -1296,7 +1323,7 @@ schedXact_populate( SchedXactionDialog *sxd )
 
 static
 gint
-sxed_close_event( GnomeDialog *dlg, gpointer ud )
+sxed_close_event( GtkDialog *dlg, gpointer ud )
 {
         SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)ud;
 
@@ -1344,11 +1371,11 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
         w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
         sxed->optEndCount = GTK_TOGGLE_BUTTON(w);
 
-        w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
-        sxed->endCountEntry = GNOME_NUMBER_ENTRY(w);
+        w = glade_xml_get_widget( sxed->gxml, END_ENTRY );
+        sxed->endCountEntry = GTK_ENTRY(w);
 
-        w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
-        sxed->endRemainEntry = GNOME_NUMBER_ENTRY(w);
+        w = glade_xml_get_widget( sxed->gxml, REMAIN_ENTRY );
+        sxed->endRemainEntry = GTK_ENTRY(w);
 
 }
 
@@ -1397,7 +1424,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         }
 
         sxed         = g_new0( SchedXactionEditorDialog, 1 );
-        sxed->gxml   = gnc_glade_xml_new( "sched-xact.glade",
+        sxed->gxml   = gnc_glade_xml_new( SX_GLADE_FILE,
                                         SX_EDITOR_GLADE_NAME );
         sxed->dialog = glade_xml_get_widget( sxed->gxml, SX_EDITOR_GLADE_NAME );
 
@@ -1406,7 +1433,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         sxed->newsxP = newSX;
         /* Setup dense-cal local mark storage */
         {
-                int i;
                 sxed->cal_marks = g_new0( GDate*, EX_CAL_NUM_MONTHS * 31 );
                 for( i=0; i<(EX_CAL_NUM_MONTHS * 31); i++ ) {
                         sxed->cal_marks[i] = g_date_new();
@@ -1473,14 +1499,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 	/* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
 
-        {
-                int width, height;
-                gnc_get_window_size( SXED_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW( sxed->dialog ),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog));
 
         /* create the frequency-selection macrowidget and example
          * [dense-]calendar. */
@@ -1490,7 +1509,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         /* populate */
         schedXact_editor_populate( sxed );
 
-        gtk_widget_show_all(sxed->dialog);
+	/* Do not call show_all here. Screws up the gtkuimanager code */
+        gtk_widget_show(sxed->dialog);
 
 	/* Refresh the cal and the ledger */
 	gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
@@ -1503,10 +1523,7 @@ static
 void
 gnc_sxed_record_size( SchedXactionEditorDialog *sxed )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxed->dialog->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SXED_WIN_PREFIX, w, h );
+	gnc_save_window_size( SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog) );
 }
 
 static
@@ -1534,6 +1551,7 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
         gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxed->example_cal, EX_CAL_MO_PER_COL );
         gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->example_cal) );
+	gtk_widget_show( GTK_WIDGET(sxed->example_cal) );
 }
 
 static
@@ -1542,35 +1560,42 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *vbox;
-        int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
+        GtkWidget *main_vbox;
 
         tempxaction_frame =
                 GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                                  "tempxaction_frame" ) );
-        vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
 
-        sxed->sxGUIDstr = g_strdup( guid_to_string( xaccSchedXactionGetGUID(sxed->sx) ) );
+	/* Create the ledger */
+        /* THREAD-UNSAFE */
+        sxed->sxGUIDstr = g_strdup( guid_to_string(
+                                        xaccSchedXactionGetGUID(sxed->sx) ) );
         sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
         splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 
-        numLedgerLines =
-                (int)gnc_lookup_number_option( SX_OPT_STR,
-                                               "Template Register Lines",
-                                               NUM_LEDGER_LINES_DEFAULT );
-        sxed->gsr = GNC_SPLIT_REG(
-                gnc_split_reg_new( sxed->ledger, GTK_WINDOW(sxed->dialog),
-                                   numLedgerLines,
-                                   (CREATE_TOOLBAR | CREATE_POPUP | CREATE_MENUS),
-                                   (CAP_JUMP | CAP_SCHEDULE) ) );
+	/* First the embedded window */
+        main_vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
+	sxed->embed_window =
+	  gnc_embedded_window_new("SXWindowActions",
+				     gnc_sxed_menu_entries,
+				     gnc_sxed_menu_n_entries,
+				     "gnc-sxed-window-ui.xml",
+				     sxed->dialog,
+				     FALSE, /* no accelerators */
+				     sxed);
+	gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(sxed->embed_window),
+			    TRUE, TRUE, 0);
 
-        gnc_split_reg_use_extended_popup( sxed->gsr );
-
-        gtk_box_pack_start( GTK_BOX(vbox),
-                            gnc_split_reg_get_toolbar( sxed->gsr ),
-                            FALSE, TRUE, 2 );
-        gtk_box_pack_start( GTK_BOX(vbox), GTK_WIDGET(sxed->gsr),
-                            TRUE, TRUE, 2 );
+	/* Now create the register plugin page. */
+	sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
+	gnc_plugin_page_set_ui_description (sxed->plugin_page,
+					    "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_register_set_options (sxed->plugin_page,
+					      SXED_GCONF_SECTION,
+					      KEY_NUMBER_OF_ROWS,
+					      NUM_LEDGER_LINES_DEFAULT,
+					      (CAP_JUMP | CAP_SCHEDULE) );
+	gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);
 
         /* configure... */
         /* don't use double-line */
@@ -1580,7 +1605,6 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
-
 }
 
 static
@@ -1590,7 +1614,6 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         char *name;
         time_t tmpDate;
         SplitRegister *splitReg;
-        GtkWidget *w;
         GString *tmpgStr;
         struct tm *tmpTm;
         GDate *gd;
@@ -1605,7 +1628,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 gd = xaccSchedXactionGetLastOccurDate( sxed->sx );
                 if ( g_date_valid( gd ) ) {
                         gchar dateBuf[ MAX_DATE_LENGTH+1 ];
-                        printGDate( dateBuf, gd );
+                        qof_print_gdate( dateBuf,MAX_DATE_LENGTH, gd );
                         gtk_label_set_text( sxed->lastOccurLabel, dateBuf );
                 } else {
                         gtk_label_set_text( sxed->lastOccurLabel, _( "(never)" ) );
@@ -1630,16 +1653,14 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
 
                 gtk_toggle_button_set_active( sxed->optEndCount, TRUE );
 
-                w = gnome_number_entry_gtk_entry( sxed->endCountEntry );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", numOccur );
-                gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
+                gtk_entry_set_text( sxed->endCountEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
-                w = gnome_number_entry_gtk_entry( sxed->endRemainEntry );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", numRemain );
-                gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
+                gtk_entry_set_text( sxed->endRemainEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
                 set_endgroup_toggle_states( sxed, END_OCCUR );
@@ -1651,13 +1672,9 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do auto-create/notify setup */
         if ( sxed->newsxP ) {
                 autoCreateState =
-                        gnc_lookup_boolean_option( SX_OPT_STR,
-                                                   "Auto-Create new Scheduled "
-                                                   "Transactions by default", FALSE );
+		  gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_CREATE_AUTO, NULL );
                 notifyState =
-                        gnc_lookup_boolean_option( SX_OPT_STR,
-                                                   "Notify on new, auto-created "
-                                                   "Scheduled Transactions", FALSE );
+		  gnc_gconf_get_bool( SXED_GCONF_SECTION, KEY_NOTIFY, NULL );
         } else {
                 xaccSchedXactionGetAutoCreate( sxed->sx,
                                                &autoCreateState,
@@ -1673,9 +1690,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do days-in-advance-to-create widget[s] setup. */
         if ( sxed->newsxP ) {
                 daysInAdvance =
-                        (int)gnc_lookup_number_option( SX_OPT_STR,
-                                                       "Default number of days in "
-                                                       "advance to create", 0 );
+		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_CREATE_DAYS, NULL );
         } else {
                 daysInAdvance =
                         xaccSchedXactionGetAdvanceCreation( sxed->sx );
@@ -1689,9 +1704,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         /* Do days-in-advance-to-remind widget[s] setup. */
         if ( sxed->newsxP ) {
                 daysInAdvance =
-                        (int)gnc_lookup_number_option( SX_OPT_STR,
-                                                       "Default number of days in "
-                                                       "advance to remind", 0 );
+		  gnc_gconf_get_float( SXED_GCONF_SECTION, KEY_REMIND_DAYS, NULL );
         } else {
                 daysInAdvance =
                         xaccSchedXactionGetAdvanceReminder( sxed->sx );
@@ -2042,7 +2055,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
                 char dowBuf[ 25 ]; /* <- FIXME: appropriate length? */
                 nextInstDate = (GDate*)instList->data;
-                printGDate( tmpBuf, nextInstDate );
+                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, nextInstDate );
                 g_date_strftime( dowBuf, 25, "%A", nextInstDate );
                 g_string_sprintf( nextDate, "%s (%s)", tmpBuf, dowBuf );
         }
@@ -2311,6 +2324,7 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
         END_TYPE endType;
         GDate endDate;
         int numRemain;
+	gchar *text;
 
         endType = NO_END;
         numRemain = -1;
@@ -2330,9 +2344,10 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 endType = NO_END;
         } else if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                 endType = COUNT_END;
-                numRemain =
-                        (gint)gnome_number_entry_get_number(
-                                sxed->endRemainEntry );
+		text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
+					       0, -1 );
+		sscanf (text, "%d", &numRemain);
+		g_free (text);
         } else {
                 g_assert( FALSE );
         }
@@ -2424,4 +2439,51 @@ void
 sxed_excal_update_adapt( GtkObject *o, gpointer ud )
 {
         gnc_sxed_update_cal( (SchedXactionEditorDialog*)ud );
+}
+
+/* Command callbacks */
+static void
+gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+static void
+gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+static void
+gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+
+void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);
+
+void
+on_sx_check_toggled (GtkWidget *togglebutton,
+		     gpointer user_data)
+{
+  GtkWidget *widget;
+  gboolean create; // , notify;
+
+  /* The gnc_glade_lookup_widget() function works because all of these
+   * widgets come from the same glade file. */
+  widget = gnc_glade_lookup_widget(togglebutton,
+	"gconf/dialogs/scheduled_trans/transaction_editor/create_auto");
+  create = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+  widget = gnc_glade_lookup_widget(togglebutton,
+	"gconf/dialogs/scheduled_trans/transaction_editor/notify");
+  gtk_widget_set_sensitive(widget, create);
+}
+
+
+void
+gnc_ui_sx_initialize (void)
+{
+  gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+		       (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
+  gnc_preferences_add_page (SX_GLADE_FILE,
+			    "sx_prefs",
+			    "Scheduled Transactions");
 }

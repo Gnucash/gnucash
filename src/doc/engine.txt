@@ -1,17 +1,21 @@
+/** \page engine Engine Framework
 
+API: \ref Engine
 
-The engine API documentation can be found in the src/doc/design/engine.texinfo file.
+Additional engine API documentation can be found in the src/doc/design/engine.texinfo file.
 
 This file contains some extra meta-information that is not directly relevant
 to the API documentation.
 
+\section firstclass First Class Objects (C structs) vs. Storing Data in KVP Trees
 
-First Class Objects (C structs) vs. Storing Data in KVP Trees
--------------------------------------------------------------
+API: \ref KVP
+
 Suppose you have a neat idea for a new feature for the GnuCash engine.
 Should you create a C structure (a "first class object") and all
 of the required machinery for it (e.g. an SQL backend), or should you
-just put all of the data in a suitable KVP frame somewhere? 
+just put all of the data in a suitable KVP (Key Value Pair) frame
+somewhere? 
 
 The answer depends on whether the concept requires extensive
 pointer chasing between different types of existing C structs,
@@ -20,21 +24,22 @@ or whether it more naturally can hang with some existing object.
 If it seems to be an independent concept, it can still be placed
 in the KVP tree of the book, which gives it a 'top-level' existance.
 
-If the concept is used only infreqeuntly, then it probably belongs 
+If the concept is used only infrequently, then it probably belongs 
 in a KVP tree.  If the concept has performance-critical requriements,
 then it is better to implement it as a C struct, and similarly
 design an appropriate SQL table around it, so that the database
 can be queried efficiently and rapidly.
 
-Terminology:
+\subsection terms Terminology:
 
-First-class object:  something that has a C struct associated with it,
-nad has its own specialized  backend infrastructure for storing/quering
+- First-class object:  something that has a C struct associated with it,
+and has its own specialized backend infrastructure for storing/quering
 it.
 
-Second-class object: something that lives entirely in a KVP tree.
+- Second-class object: something that lives entirely in a KVP tree.
 Note, however, that not all data in a KVP tree deserves to be called
 an 'object'.  Some things in a KVP tree are merely 'attributes'.
 If you push on this point, there is indeed a gray area between
 second-class objects and attributes. 
 
+*/

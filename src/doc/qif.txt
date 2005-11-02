@@ -1,10 +1,13 @@
-		The (new new) QIF Importer infrastructure
+/** \page qif QIF importer infrastructure.
+
 		    Derek Atkins <derek@ihtfp.com>
 			      2004-01-07
 
 		        A work in progress....
 
-0. Introduction
+API: \ref Import_Export
+
+\section qifintro 0. Introduction
 
 The existing qif importer in src/import-export/qif-import is both hard
 to maintain and hard to re-integrate into the shared import
@@ -25,7 +28,7 @@ importer, implemented in C, and how it interfaces to the rest of the
 import infrastructure.
 
 
-1. Importer Architecture
+\section qifarch 1. Importer Architecture
 
 The importer is a multi-step, staged system that should implement a
 read, parse, convert, combine, filter, finish process.  The importer
@@ -51,8 +54,7 @@ the UI?  Simiarly, how does it pass back specific disambiguating
 questions to ask the user (and how are those responses returned to the
 importer)?
 
-
-2. The Import Process
+\section qifprocess 2. The Import Process
 
 The import process starts when the UI creates a new import context.
 All of a single import is performed within that context.  The context
@@ -101,8 +103,8 @@ are merged into the existing account tree, and the import context is
 freed.
 
 
-3. Importer Data Objects
-
+\section qifobject 3. Importer Data Objects
+\verbatim
 QifContext
 QifError
 QifFile
@@ -113,16 +115,17 @@ QifObject
  +-QifSecurity
  +-QifTxn
  +-QifInvstTxn
+\endverbatim
 
-Internal Data Types
+\subsection qifinternal Internal Data Types
 
 QifHandler
 QifData
 
-4. Importer API
+\section qifapi 4. Importer API
 
-QIF Contexts
-
+\subsection qifcontexts QIF Contexts
+\verbatim
 /** Create and destroy an import context */
 QifContext qif_context_create(void)
 void qif_context_destroy(QifContext ctx)
@@ -135,10 +138,10 @@ GList *qif_context_get_files(QifContext ctx)
  * same set of objects within the context.
  */
 void qif_context_merge_files(QifContext ctx);
+\endverbatim
 
-
-QIF Files
-
+\section qiffiles QIF Files
+\verbatim
 /**
  * Open, read, and minimally parse the QIF file, filename.
  * If progress is non-NULL, will call progress with pg_arg and a value from
@@ -166,9 +169,9 @@ void qif_file_set_default_account(QifFile file, const char *acct_name);
  *       Do we need progress-bar info here?
  */
 QifError qif_file_parse(QifFile ctx, gpointer ui_arg)
+\endverbatim
 
-
-5. Importer State Machine
+\section qifstate 5. Importer State Machine
 
 The state machine has the following structure.  Named states (and substates)
 must proceed in order.  Some states (e.g. state b) have multiple choices.
@@ -192,3 +195,4 @@ e. map qif categories to gnucash accounts
 f. map qif securities to gnucash commodities
 g. duplicate detection with existing gnucash txns
 h. transaction matcher (map one-sided txns using Payee/Memo info)
+*/

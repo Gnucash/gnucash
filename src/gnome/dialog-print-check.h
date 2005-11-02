@@ -33,7 +33,7 @@
 typedef struct {
   GtkWidget * dialog;
 
-  RegWindow     *reg_data;
+  GncPluginPageRegister *plugin_page;
   const char    *payee;
   gnc_numeric    amount;
   time_t         date;
@@ -58,7 +58,7 @@ typedef struct {
 
 } PrintCheckDialog;
 
-void gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
+void gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 				      const char    *payee,
 				      gnc_numeric    amount,
 				      time_t         date,

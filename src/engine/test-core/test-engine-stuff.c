@@ -31,12 +31,9 @@
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofquerycore.h"
 
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -251,12 +248,12 @@ get_random_binary_data(void)
 
     len = get_random_int_in_range(20,100);
     ret = g_new(bin_data, 1);
-    ret->data = g_new(char, len);
+    ret->data = g_new(guchar, len);
     ret->len = len;
 
     for(len--; len >= 0; len--)
     {
-        ret->data[len] = (char)get_random_int_in_range(0,255);
+        ret->data[len] = (guchar)get_random_int_in_range(0,255);
     }
 
     return ret;
@@ -271,6 +268,7 @@ static KvpValue*
 get_random_kvp_value_depth (int type, gint depth)
 {
     int datype = type;
+    KvpValue *ret;
 
     if (datype == -1)
     {
@@ -294,82 +292,74 @@ get_random_kvp_value_depth (int type, gint depth)
     switch(datype)
     {
     case KVP_TYPE_GINT64:
-        return kvp_value_new_gint64(get_random_gint64());
+        ret = kvp_value_new_gint64(get_random_gint64());
         break;
 
     case KVP_TYPE_DOUBLE:
-        return NULL;
+        ret = NULL;
         break;
 
     case KVP_TYPE_NUMERIC:
-        return kvp_value_new_gnc_numeric(get_random_gnc_numeric());
+        ret = kvp_value_new_gnc_numeric(get_random_gnc_numeric());
         break;
 
     case KVP_TYPE_STRING:
     {
         gchar *tmp_str;
-        KvpValue *ret;
         tmp_str = get_random_string();
         if(!tmp_str)
-        {
-            return NULL;
-        }
+	  return NULL;
         
         ret = kvp_value_new_string(tmp_str);
         g_free(tmp_str);
-        return ret;
     }
         break;
 
     case KVP_TYPE_GUID:
     {
         GUID *tmp_guid;
-        KvpValue *ret;
         tmp_guid = get_random_guid();
         ret = kvp_value_new_guid(tmp_guid);
         g_free(tmp_guid);
-        return ret;
     }
         break;
 
     case KVP_TYPE_TIMESPEC:
     {
         Timespec *ts = get_random_timespec();
-        return kvp_value_new_timespec (*ts);
+        ret = kvp_value_new_timespec (*ts);
+        g_free(ts);
     }
 	break;
     
     case KVP_TYPE_BINARY:
     {
         bin_data *tmp_data;
-        KvpValue *ret;
         tmp_data = get_random_binary_data();
         ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
         g_free(tmp_data->data);
         g_free(tmp_data);
-        return ret;
     }
         break;
  
     case KVP_TYPE_GLIST:
-        return kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
+        ret = kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
         break;
 
     case KVP_TYPE_FRAME:
     {
         KvpFrame *tmp_frame;
-        KvpValue *ret;
         tmp_frame = get_random_kvp_frame_depth(depth + 1);
         ret = kvp_value_new_frame(tmp_frame);
         kvp_frame_delete(tmp_frame);
-        return ret;
     }
         break;
 
     default:
-        return NULL;
+        ret = NULL;
         break;
     }
+    return ret;
 }
 
 static KvpFrame*
@@ -392,14 +382,19 @@ get_random_kvp_frame_depth (gint depth)
         gchar *key;
         KvpValue *val;
 
-        do
-        {
-          key = get_random_string_without("/");
-        } while (!key || *key == '\0');
-
+	key = NULL;
+	while (key == NULL) {
+	  key = get_random_string_without("/");
+	  if (*key == '\0') {
+	    g_free(key);
+	    key = NULL;
+	  }
+	}
+	
         val = get_random_kvp_value_depth (-1, depth + 1);
         if (!val)
         {
+	  g_free(key);
           if (!val_added)
             vals_to_add++;
           continue;
@@ -557,7 +552,7 @@ get_random_commodity (QofBook *book)
 #define MAX_SCU 6000
     ran_int = get_random_int_in_range(1, MAX_SCU);
 
-    ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
+    ret = gnc_commodity_new (book, name, space, mn, xcode, ran_int);
 
     g_free(mn);
     g_free(name);
@@ -673,29 +668,56 @@ get_random_price(QofBook *book)
   GNCPrice *p;
 
   p = gnc_price_create (book);
+  if(!p)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "get_random_price failed");
+      return NULL;
+  }
 
   make_random_changes_to_price (book, p);
+  if(!p)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "make_random_changes_to_price failed");
+      return NULL;
+  }
 
   return p;
 }
 
-void
+gboolean
 make_random_pricedb (QofBook *book, GNCPriceDB *db)
 {
   int num_prices;
+   gboolean check;
 
-  num_prices = get_random_int_in_range (0, 40);
+  num_prices = get_random_int_in_range (1, 41);
+  if(num_prices < 1) /* should be impossible */
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "get_random_int_in_range failed");
+        return FALSE;
+  }
 
   while (num_prices-- > 0)
   {
     GNCPrice *p;
 
     p = get_random_price (book);
+    if(!p)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_price failed");
+                return FALSE;
+    }
 
-    gnc_pricedb_add_price (db, p);
+        check = gnc_pricedb_add_price (db, p);
+        if(!check) { return check; }
 
     gnc_price_unref (p);
   }
+	return TRUE;
 }
 
 GNCPriceDB *
@@ -703,9 +725,14 @@ get_random_pricedb(QofBook *book)
 {
   GNCPriceDB *db;
 
-  // db = gnc_pricedb_create (book);
   db = gnc_pricedb_get_db (book);
-  make_random_pricedb (book, db);
+  if(!db)
+  {
+      failure_args("engine-stuff", __FILE__, __LINE__,
+                   "gnc_pricedb_get_db failed");
+      return NULL;
+  }
+  if(!make_random_pricedb (book, db)) { return NULL; }
 
   return db;
 }
@@ -888,8 +915,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
 
     acc = get_random_list_element (account_list);
-    s = get_random_split(book, acc);
-    xaccTransAppendSplit(trn, s);
+    s = get_random_split(book, acc, trn);
     xaccSplitSetValue(s, num);
 
     /* If the currencies are the same, the split amount should equal
@@ -916,8 +942,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
       }
     }
 
-    s = get_random_split(book, bcc);
-    xaccTransAppendSplit(trn, s);
+    s = get_random_split(book, bcc, trn);
 
     /* Other split should have equal and opposite value */
     if (do_bork()) 
@@ -1239,7 +1264,7 @@ set_split_random_string(Split *spl,
 static char possible_chars[] = { NREC, CREC, YREC, FREC };
 
 Split*
-get_random_split(QofBook *book, Account *acct)
+get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
     gnc_numeric num;
@@ -1254,6 +1279,8 @@ get_random_split(QofBook *book, Account *acct)
     xaccSplitSetDateReconciledTS(ret, get_random_timespec());
 
     /* Split must be in an account before we can set an amount */
+    /* and in a transaction before it can be added to an account. */
+    xaccTransAppendSplit(trn, ret);
     xaccAccountInsertSplit (acct, ret);
     num = get_random_gnc_numeric ();
     xaccSplitSetAmount(ret, num);
@@ -1298,10 +1325,13 @@ set_tran_random_string(Transaction* trn,
                        void(*func)(Transaction *act, const gchar*str))
 {
     gchar *tmp_str = get_random_string();
+    if(!trn || !(&trn->inst)) { return; }
     if(tmp_str)
     {
+        xaccTransBeginEdit(trn);
         (func)(trn, tmp_str);
         g_free(tmp_str);
+        xaccTransCommitEdit(trn);
     }
 }
 
@@ -1336,6 +1366,7 @@ get_random_transaction_with_currency(QofBook *book,
     ret = xaccMallocTransaction(book);
 
     xaccTransBeginEdit(ret);
+
     xaccTransSetCurrency (ret,
                           currency ? currency :
                           get_random_commodity (book));
@@ -1358,13 +1389,30 @@ get_random_transaction_with_currency(QofBook *book,
     }
 
     xaccTransCommitEdit(ret);
+    if(!ret)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_transaction_with_currency failed");
+        return NULL;
+    }
+
     return ret;
 }
 
 Transaction*
 get_random_transaction (QofBook *book)
 {
-  return get_random_transaction_with_currency (book, NULL, NULL);
+	Transaction *ret;
+
+	g_return_val_if_fail(book, NULL);
+	ret = get_random_transaction_with_currency (book, NULL, NULL);
+    if(!ret)
+    {
+        failure_args("engine-stuff", __FILE__, __LINE__,
+                     "get_random_transaction failed");
+        return NULL;
+    }
+	return ret;
 }
 
 void

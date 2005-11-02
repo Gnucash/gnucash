@@ -23,7 +23,7 @@
 /*
  * FILE:
  * gnc-lot-p.h
- * 
+ *
  * FUNCTION:
  * Lots implement the fundamental conceptual idea behind invoices,
  * inventory lots, and stock market investment lots.  See the file
@@ -37,24 +37,21 @@
 #ifndef GNC_LOT_P_H
 #define GNC_LOT_P_H
 
-#include "gnc-engine.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofid-p.h"
+#include "gnc-lot.h"
+#include "Account.h"
 
 struct gnc_lot_struct
 {
   QofEntity entity;     /* Unique guid for this lot */
 
   /* Book that this lot belongs to */
-  QofBook *book;  
+  QofBook *book;
 
   /* Anchor for generic lot-specific data. */
   KvpFrame *kvp_data;
 
   /* Account to which this lot applies.  All splits in the lot must
-   * belong to this account. 
+   * belong to this account.
    */
   Account * account;
 
@@ -72,7 +69,6 @@ struct gnc_lot_struct
 #define gnc_lot_set_guid(L,G)  qof_entity_set_guid(QOF_ENTITY(L),&(G))
 
 /* Register with the Query engine */
-void gnc_lot_register (void);
+gboolean gnc_lot_register (void);
 
 #endif /* GNC_LOT_P_H */
-

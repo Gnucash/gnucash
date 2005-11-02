@@ -22,10 +22,15 @@
 /** @addtogroup Business
     @{ */
 /** @addtogroup Invoice
+
+An invoice holds a list of entries, a pointer to the customer, 
+and the job, the dates entered and posted, as well as the account, 
+transaction and lot for the posted invoice.
     @{ */
 /** @file gncInvoice.h
     @brief  Business Invoice Interface 
     @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef GNC_INVOICE_H_
@@ -39,21 +44,18 @@ typedef struct _gncInvoice GncInvoice;
 #include "gncOwner.h"
 #include "gnc-lot.h"
 
-#include "qofid.h"
-#include "qofinstance.h"
-
 #define GNC_ID_INVOICE    "gncInvoice"
 #define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
 #define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncInvoice *gncInvoiceCreate (QofBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
@@ -74,8 +76,8 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
@@ -176,6 +178,8 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_POST_LOT	"posted_lot"
 #define INVOICE_TYPE	"type"
 #define INVOICE_BILLTO	"bill-to"
+#define INVOICE_ENTRIES     "list_of_entries"
+#define INVOICE_JOB         "invoice_job"
 
 #define INVOICE_FROM_LOT	"invoice-from-lot"
 #define INVOICE_FROM_TXN	"invoice-from-txn"

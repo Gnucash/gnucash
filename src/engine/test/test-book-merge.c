@@ -23,17 +23,13 @@
  /* Test the qof_book_merge infrastructure. */
  
 #include <glib.h>
-#include <libguile.h>
+
 #define _GNU_SOURCE
 
-#include "qofinstance-p.h"
-#include "gnc-module.h"
-#include "gnc-event-p.h"
 #include "qof.h"
-#include "qof_book_merge.h"
 #include "test-stuff.h"
-
 #include "gnc-engine.h"
+
 #define TEST_MODULE_NAME "book-merge-test"
 #define TEST_MODULE_DESC "Test Book Merge"
 #define OBJ_NAME "somename"
@@ -169,7 +165,7 @@ obj_setDate(myobj *g, Timespec h)
 Timespec
 obj_getDate(myobj *g)
 {
-	Timespec ts;
+  Timespec ts = {0};
 	if(!g) return ts;
 	ts = g->date;
 	return ts;
@@ -469,19 +465,13 @@ test_rule_loop (qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint r
 	do_test ((rule->mergeResult != MERGE_REPORT), "update result fail");
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
+int
+main (int argc, char **argv)
 {
 	gnc_engine_init(argc, argv);
 	myobjRegister();
 	test_merge();
 	print_test_results();
 	exit(get_rv());
-}
-
-int
-main (int argc, char **argv)
-{
-	scm_boot_guile (argc, argv, main_helper, NULL);
 	return 0;
 }

@@ -36,7 +36,7 @@
 
 #include "putil.h"
 
-static short module = MOD_BACKEND; 
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ============================================================= */
 
@@ -126,7 +126,7 @@ static gpointer
 get_iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    int fin = atoi(DB_GET_VAL ("iguid", j));
-   return (gpointer) fin;
+   return GINT_TO_POINTER(fin);
 }
 
 
@@ -150,7 +150,7 @@ put_iguid_in_tables (PGBackend *be)
 
    p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
    SEND_QUERY (be,p, );
-   iguid = (guint32) pgendGetResults (be, get_iguid_cb, 0);
+   iguid = (guint32) GPOINTER_TO_UINT(pgendGetResults (be, get_iguid_cb, 0));
    iguid ++;
 
    sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);

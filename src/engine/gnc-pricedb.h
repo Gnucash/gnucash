@@ -24,15 +24,9 @@
 #define GNC_PRICEDB_H
 
 #include <stdio.h>
-
+#include "qof.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofinstance.h"
 
 /** @addtogroup PriceDB
     @{ */
@@ -222,7 +216,7 @@ gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
 
 /** gnc_price_list_insert - insert a price into the given list, calling
      gnc_price_ref on it during the process. */
-gboolean gnc_price_list_insert(GList **prices, GNCPrice *p);
+gboolean gnc_price_list_insert(GList **prices, GNCPrice *p, gboolean check_dupl);
 
 /** gnc_price_list_remove - remove the price, p, from the given list,
      calling gnc_price_unref on it during the process. */
@@ -271,6 +265,11 @@ void gnc_pricedb_destroy(GNCPriceDB *db);
 void gnc_pricedb_begin_edit (GNCPriceDB *);
 void gnc_pricedb_commit_edit (GNCPriceDB *);
 
+/** Indicate whether or not the database is in the middle of a bulk
+ *  update.  Setting this flag will disable checks for duplicate
+ *  entries. */
+void gnc_pricedb_set_bulk_update(GNCPriceDB *db, gboolean bulk_update);
+
 /** gnc_pricedb_add_price - add a price to the pricedb, you may drop
      your reference to the price (i.e. call unref) after this
      succeeds, whenever you're finished with the price. */
@@ -279,6 +278,8 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
 /** gnc_pricedb_remove_price - removes the given price, p, from the
      pricedb.   Returns TRUE if successful, FALSE otherwise. */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
+
+gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff);
 
 /** gnc_pricedb_lookup_latest - find the most recent price for the
      given commodity in the given currency.  Returns NULL on
@@ -292,6 +293,13 @@ GNCPrice   * gnc_pricedb_lookup_latest(GNCPriceDB *db,
      returned as a GNCPrice list (see above). */
 GList      *gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
                                                    gnc_commodity *commodity);
+
+/** gnc_pricedb_has_prices - return an indication of whether or not
+    there are any prices for a given commodity in the given currency.
+    Returns TRUE if there are prices, FALSE otherwise. */
+gboolean     gnc_pricedb_has_prices(GNCPriceDB *db,
+                                    gnc_commodity *commodity,
+                                    gnc_commodity *currency);
 
 /** gnc_pricedb_get_prices - return all the prices for a given
      commodity in the given currency.  Returns NULL on failure.  The

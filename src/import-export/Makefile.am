@@ -1,5 +1,5 @@
-SUBDIRS = .  binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
-DIST_SUBDIRS = binary-import qif qif-import qif-io-core ofx hbci mt940 log-replay test
+SUBDIRS = . schemas binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
+DIST_SUBDIRS = schemas binary-import qif qif-import qif-io-core ofx hbci mt940 log-replay test
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 
@@ -14,11 +14,16 @@ libgncmod_generic_import_la_SOURCES = \
 	import-settings.c \
 	import-match-map.c \
 	import-main-matcher.c \
+	gnc-import-desc-format.c \
+	gnc-import-format-cb.c \
+	gnc-import-format-gnome.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   import-match-map.h \
+  gnc-import-desc-format.h \
+  gnc-import-format-cb.h \
   import-parse.h
 
 noinst_HEADERS = \
@@ -29,46 +34,43 @@ noinst_HEADERS = \
   import-match-map.h \
   import-match-picker.h \
   import-settings.h \
-  import-utilities.h 
-
-libgncmod_generic_import_la_LDFLAGS = -module
+  import-utilities.h \
+  gnc-import-format-gnome.h
 
 libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLADE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-gncscmdir = ${GNC_SCM_INSTALL_DIR}/generic-import
-
-gncscm_DATA = \
-	generic-import.scm
-
 gladedir = ${GNC_GLADE_DIR}
-glade_DATA = generic-import.glade
+glade_DATA = \
+  generic-import.glade \
+  import-provider-format.glade
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 EXTRA_DIST = \
   $(glade_DATA) \
-  ${gncscm_DATA} \
   .cvsignore \
   generic-import-design.txt
 

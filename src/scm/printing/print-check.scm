@@ -97,16 +97,19 @@
     ))
 
 (define (gnc:print-check format-info payee amount date memo)
-    (let* ((int-part (inexact->exact (truncate amount)))
-           (frac-part (inexact->exact 
+  (let* ((int-part (inexact->exact (truncate amount)))
+	 (frac-part (inexact->exact 
                      (truncate 
                       (+ (/ .5 100) (* 100 (- amount int-part))))))
-           (ps (gnc:print-session-create #t))
-           (format #f)
-           (offset #f)
-           (date-string "")
-           (payee-stub-text "")
-           (memo-stub-text ""))
+	 (ps (gnc:print-session-create #t))
+	 (format #f)
+	 (offset #f)
+	 (date-string "")
+	 (payee-stub-text "")
+	 (memo-stub-text ""))
+
+    (if (not (null? ps))
+     (begin
       (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
             (set! format (assq (print-check-format:format format-info) 
@@ -202,6 +205,5 @@
                                   (+ offset (caddr amountstub-pos)))
              (gnc:print-session-text ps (printable-value amount 100)))))
 
-      (gnc:print-session-done ps #t)
-      (gnc:print-session-print ps)))
+      (gnc:print-session-done ps)))))
 

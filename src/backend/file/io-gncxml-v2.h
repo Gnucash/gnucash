@@ -22,10 +22,9 @@
  *                                                                  *
 \********************************************************************/
 
-/*
- * @file io-gncxml.h
- * @breif api for GnuCash version 2 XML-based file format
- *
+/**
+ * @file io-gncxml-v2.h
+ * @brief api for GnuCash version 2 XML-based file format
  * @author Initial code by James LewisMoss, 2001
  */
 
@@ -59,6 +58,9 @@ typedef struct
 
     int schedXactions_total;
     int schedXactions_loaded;
+
+    int budgets_total;
+    int budgets_loaded;
 } load_counter;
 
 typedef struct sixtp_gdv2 sixtp_gdv2;
@@ -91,6 +93,9 @@ struct sixtp_gdv2
  *
  * The scrub() method will take a completed, parsed QofBook* and post process
  *   the data, allowing you to 'scrub' the data.
+ *
+ * The ns() method will output XML namespace information for the selected
+ *   plug-in object.
  */
 #define GNC_FILE_BACKEND	"gnc:file:2"
 #define GNC_FILE_BACKEND_VERS	2
@@ -104,6 +109,7 @@ typedef struct
   int	      (*get_count) (QofBook *);
   void		(*write) (FILE*, QofBook*);
   void		(*scrub) (QofBook *);
+  void		(*ns) (FILE*);
 } GncXmlDataType_t;
 
 /**
@@ -119,24 +125,29 @@ typedef struct
 	QofBook *book;
 } gnc_template_xaction_data;
 
-/* Call after loading each record */
+/** Call after loading each record */
 void run_callback(sixtp_gdv2 *data, const char *type);
 
-/* read in an account group from a file */
+/** read in an account group from a file */
 gboolean qof_session_load_from_xml_file_v2(FileBackend *, QofBook *);
 
 /* write all book info to a file */
 gboolean gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *fh);
 gboolean gnc_book_write_to_xml_file_v2(QofBook *book, const char *filename, gboolean compress);
 
-/* write just the commodities and accounts to a file */
+/** write just the commodities and accounts to a file */
 gboolean gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE *fh);
 gboolean gnc_book_write_accounts_to_xml_file_v2(QofBackend * be, QofBook *book,
 						const char *filename);
 
-/* The is_gncxml_file() routine checks to see if the first few 
+/** The is_gncxml_file() routine checks to see if the first few 
  * chars of the file look like gnc-xml data.
  */
 gboolean gnc_is_xml_data_file_v2(const gchar *name);
+
+/** Write a name-space declaration for the provided namespace data type
+ * within the GNC XML namespace at http://www.gnucash.org/XML.
+ */
+void gnc_xml2_write_namespace_decl (FILE *out, const char *namespace);
 
 #endif /* __IO_GNCXML_V2_H__ */

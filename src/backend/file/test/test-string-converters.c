@@ -5,15 +5,11 @@
 #include "sixtp-dom-parsers.h"
 #include "sixtp-dom-generators.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
-
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-#include "guid.h"
 
 static void
 test_binary()
@@ -47,8 +43,8 @@ test_binary()
         if(test_data2_len != test_data1->len)
         {
             failure_args("binary_data", __FILE__, __LINE__, 
-                         "lengths don't match: %lld vs %d",
-                         (long long int) test_data2_len, test_data1->len);
+                         "lengths don't match: %" G_GINT64_FORMAT " vs %d",
+                         test_data2_len, test_data1->len);
             continue;
         }
         

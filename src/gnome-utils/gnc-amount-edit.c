@@ -4,9 +4,9 @@
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
  * All rights reserved.
  *
- * Gnucash is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public License
- * as published by the Free Software Foundation; either version 2 of the
+ * Gnucash is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
  *
  * Gnucash is distributed in the hope that it will be useful,
@@ -54,7 +54,7 @@ static guint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_amount_edit_init         (GNCAmountEdit      *gae);
 static void gnc_amount_edit_class_init   (GNCAmountEditClass *class);
-static void gnc_amount_edit_changed      (GtkEditable        *gae);
+static void gnc_amount_edit_changed      (GtkEditable        *gae, gpointer data);
 static gint gnc_amount_edit_key_press    (GtkWidget          *widget,
 					  GdkEventKey        *event);
 
@@ -66,58 +66,60 @@ static GtkEntryClass *parent_class;
  *
  * Returns the GtkType for the GNCAmountEdit widget
  */
-guint
+GType
 gnc_amount_edit_get_type (void)
 {
-  static guint amount_edit_type = 0;
+  static GType amount_edit_type = 0;
 
-  if (!amount_edit_type){
-    GtkTypeInfo amount_edit_info = {
-      "GNCAmountEdit",
-      sizeof (GNCAmountEdit),
+  if (amount_edit_type == 0) {
+    GTypeInfo amount_edit_info = {
       sizeof (GNCAmountEditClass),
-      (GtkClassInitFunc) gnc_amount_edit_class_init,
-      (GtkObjectInitFunc) gnc_amount_edit_init,
       NULL,
       NULL,
-      (GtkClassInitFunc) NULL,
+      (GClassInitFunc) gnc_amount_edit_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCAmountEdit),
+      0,
+      (GInstanceInitFunc) gnc_amount_edit_init
     };
-
-    amount_edit_type = gtk_type_unique (GTK_TYPE_ENTRY, &amount_edit_info);
+		
+    amount_edit_type = g_type_register_static (GTK_TYPE_ENTRY,
+					       "GNCAmountEdit",
+					       &amount_edit_info,
+					       0);
   }
 
   return amount_edit_type;
 }
 
 static void
-gnc_amount_edit_class_init (GNCAmountEditClass *class)
+gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GtkWidgetClass *widget_class;
-  GtkEditableClass *editable_class;
+  /* GtkEditableClass *editable_class; */
 
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  editable_class = (GtkEditableClass*) class;
+  object_class = G_OBJECT_CLASS (klass);
+  widget_class = GTK_WIDGET_CLASS (klass);
+  /* editable_class = GTK_EDITABLE_CLASS (g_type_interface_peek (klass, GTK_TYPE_EDITABLE)); */
 
-  parent_class = gtk_type_class (gtk_entry_get_type ());
+  parent_class = g_type_class_peek_parent (klass);
 
   amount_edit_signals [AMOUNT_CHANGED] =
-    gtk_signal_new ("amount_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCAmountEditClass,
-                                       amount_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
-	
-  gtk_object_class_add_signals (object_class, amount_edit_signals,
-                                LAST_SIGNAL);
+    g_signal_new ("amount_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCAmountEditClass, amount_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
   widget_class->key_press_event = gnc_amount_edit_key_press;
 
-  editable_class->changed = gnc_amount_edit_changed;
-
-  class->amount_changed = NULL;
+  /* editable_class->changed = gnc_amount_edit_changed; */
 }
 
 static void
@@ -128,12 +130,15 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
   gae->print_info = gnc_default_print_info (FALSE);
   gae->fraction = 0;
   gae->evaluate_on_enter = FALSE;
+
+  g_signal_connect (G_OBJECT (gae), "changed",
+		    G_CALLBACK (gnc_amount_edit_changed), NULL);
 }
 
 static void
-gnc_amount_edit_changed (GtkEditable *editable)
+gnc_amount_edit_changed (GtkEditable *editable, gpointer data)
 {
-  (* GTK_EDITABLE_CLASS (parent_class)->changed)(editable);
+  /*GTK_EDITABLE_CLASS (parent_class)->changed(editable);*/
 
   GNC_AMOUNT_EDIT(editable)->need_to_parse = TRUE;
 }
@@ -187,7 +192,7 @@ gnc_amount_edit_new (void)
 {
   GNCAmountEdit *gae;
 
-  gae = gtk_type_new (gnc_amount_edit_get_type ());
+  gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
   return GTK_WIDGET (gae);
 }

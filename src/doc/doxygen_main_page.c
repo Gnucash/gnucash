@@ -1,55 +1,183 @@
+/** \mainpage GnuCash design and developer's reference
 
-/*! \mainpage GnuCash design and developer's reference
-  
-\section intro Introduction
+This is the new developer and design manual for GnuCash.
 
-This is the new GnuCash developer and design manual for GnuCash.
-Previous documentation will slowly be integrated into this, and
-eventually it should always be up to date since it is generated
-directly from the source files using Doxygen.
+\section maindocs Documentation Sections.
 
-\section hacking Hacking on this documentation
+The documentation is organised in a rough sequence:
 
-I will eventually post a style guide for documenting, and document one
-of the files "by the book".  Until then, feel free to start
-documenting or playing with doxygen configuration. This main page can
-be found in src/doc/doxygen_main_page.c .
+-# \ref manualguide Start with the main GnuCash manual.
+-# \ref texihtml Design overview.
+-# \ref doxylist Individual topic overviews, linked into the
+	full API reference for each topic, generated from source code.
+-# \ref maingeneral How to work with Doxygen in your own code.
 
-\subsection style_discussion Style discussion
+\subsection manualguide External documentation.
 
-[cstim 2003-03-25] It's too bad that doxygen doesn't show the "Member
-Groups" (those created on-the-fly with @{ and @}) inside the Module
-pages (named groups, created with \\addtogroup). This means that the
-"member group" grouping of the account-related functions is only shown
-in the documentation of the Account.h header file. But in the
-documentation of the Engine group (module) all these functions are
-lumped together into one unreadable long list. This is bad (because
-1. nobody will read through the long list, 2. hyperlinks don't even
-work properly since the document is simply too big). Isn't there a way
-to have this member groups also show up on the module pages...? 
-Unfortunately nesting several named modules (groups) into one another
-doesn't really solve this problem, because that way all
-account-related functions will show up in one separate group each --
-which makes these unreadable as well. Maybe it would even be better to
-not have these function names show up on the module page at all. If
-they appear *only* on the file page, they will show up in their
-respective "member group" grouping and everything would be fine.
+Please refer to the main 
+<a href="http://www.gnucash.org/en/docs.phtml">documentation
+page</a> on the gnucash website which includes links to the 
+GnuCash Manual and the Concepts Guide in various formats.
 
-[cstim 2003-03-25] The "Data Structures" page of doxygen doesn't show
-anything useful for gnucash. Obviously doxygen only accepts "real" C
-struct definitions for inclusion on that page. However, all gnucash
-data structures are defined somewhere in private headers, and only the
-typedefs are publically visible. Isn't there a way to have doxygen
-show the documentation for the <i>typedefs</i> on the "Data
-Structures" page? Unfortunately I don't know how.
+\subsection texihtml Documentation elsewhere in the source tree.
 
-[cstim 2003-03-25] This mainpage file should at some time be moved to
-a file name ending in .txt or even .html. It's a PITA to edit one huge
-C comment. All text editors will run amok sooner or later (well,
-XEmacs does :) and will not support proper HTML markup and editing
-inside this C comment... well, that's not really a problem of the
-outcome, yes. It would just make life easier for editing this
-non-source file.
+See also <a href="http://code.neil.williamsleesmill.me.uk/texi/gnucash-design.html">
+GnuCash Design Overview</a> which can be generated from the source using texi2html
+from the texinfo files in src/doc/design.
+
+The <a href="http://code.neil.williamsleesmill.me.uk/finutil.html">
+Financial Transaction Utility</a> documentation is not compatible with Doxygen.
+
+\section doxylist Doxygen overviews.
+
+Where possible, each overview is dated - take care to review older texts
+in relation to existing code.
+
+- \ref backuppolicy
+- \ref bookperiods
+- \ref business1
+- \ref currencies
+- \ref deprecated
+- \ref engine
+- \ref backendold
+- \ref financeconstraints
+- \ref druidframework
+- \ref guid
+- \ref gnome2
+- \ref networkoverview
+- \ref backenderrors
+- \ref loanhandling
+- \ref kvpvalues
+- \ref lotsoverview
+- \ref multicurrency
+- \ref plugindesign
+- \ref pricedocs
+- \ref gnucashextension
+- \ref qif
+- \ref backendapi
+- \ref budgetplan
+- \ref taxnotes
+- \ref todo
+- \ref userprefs
+
+Each overview in this section is generated directly from the 
+source files using Doxygen but some topics need updating.
+
+\section maingeneral General Doxygen help.
+
+- \ref tipshints
+- \ref reference
+- \ref stylediscussion
+
+*/
+
+/* Editing this file? Comments can be inserted in this file
+ Remember to use C syntax but skip the extra asterisk so that doxygen
+ignores the extra notes, like this one.
+*/
+/* Hacking alert: When adding new sections, keep the references in
+alphabetical order OF THE DESCRIPTION, not the reference title.
+
+Also, make sure all reference titles are unique across the entire
+Doxygen output.
+
+Keep each section within one C comment block and any text before
+the first section of a page must be in the same comment block as the
+page title itself.
+
+*/
+
+/** \section hacking Hacking on this documentation
+
+There is the beginning of a style guide for documenting under
+\ref tipshints.
+
+The Book Merge files are an attempt to document "by the book". 
+\ref BookMerge\n
+Feel free to start documenting or playing with doxygen configuration. 
+This main page can be found in src/doc/doxygen_main_page.c .
+
+Each doxygen section must be within a single comment block although 
+large comment blocks can be split into separate pages:
+\ref stylediscussion.
+
+This main page is just an introduction to doxygen markup, see the
+Doxygen manual for the full command set.
+
+- \ref tipshints Tips and hints for using doxygen
+- \ref stylediscussion Long comments, pages, editors
+- \ref reference Links to the Doxygen manual
+
+Code snippets need special handling in the text overviews. Change all
+comment markers to // (so that the overview comment remains intact) 
+and then wrap each code snippet in the \a verbatim \a endverbatim 
+doxygen markers.
+
+One useful method is to edit these .txt files using the syntax highlighting
+of normal C files.
+
+*/
+/**
+\page tipshints Useful tips for doxygen in C files
+
+ - \ref index Introduction
+ - \ref stylediscussion Long comments, pages, editors
+ - \ref reference The Doxygen manual
+ 
+\section tips An introduction to doxygen markup
+ 
+\subsection Locations What to document
+
+All declarations for:
+
+-# typedef
+-# struct
+-# enum
+-# functions
+
+This will enable doxygen to link all parameter types to the declarations
+every time the type is used in a function - very helpful to new developers.
+
+\subsection Files Private files
+
+If your declarations are in separate files, like private header files, 
+a simple block can still be linked into doxygen as long as the file is
+identified to doxygen using a '\\file' section:
+
+** \\file filename.h\n
+	\\brief one-liner summary of the file purpose\n
+	\\author the usual copyright statement
+
+\subsection Methods How to document
+
+Every doxygen comment block starts with an adapted comment marker. 
+You can use an extra slash /// or an extra asterisk ** . Blocks end
+in the usual way. Doxygen accepts commands using a backslash.
+
+To put a description with each function or structure, use '\\brief' 
+End the brief description with a blank line. The rest of the documentation will
+then be shown in the body of the doxygen page.
+
+Commands may begin with \\ or @
+
+\subsection Presentation Extras
+
+	-# Start a line with a hyphen to start a list - the indent determines the
+nesting of the list:
+		- To create a numbered list, use -# e.g. for a sublist:
+			-# start a numbered list
+		- revert to previous list
+
+	End the list with a blank line.
+Use :: at the start of a function or structure to link to the page 
+for that function in the doxygen documentation. e.g. ::qof_class_foreach
+
+Use the param command to describe function parameters in the text.
+
+Use the 'back reference' to document enumerator values:\n
+enum testenum {\n
+	enum_one **< less than marker tells doxygen to use this line
+		to document enum_one.
 
 \subsection config Editing Doxygen configuration
 
@@ -59,15 +187,50 @@ cd src/doc
 *
 doxywizard doxygen.cfg &
 
-\subsection reference Doxygen reference documentation
+*/
 
+/** \page stylediscussion Style discussion
+
+- \ref index Introduction
+- \ref tipshints Tips and hints for using doxygen
+- \ref reference Links to the Doxygen manual
+
+[codehelpgpg 2004-07-25] Doxygen now copes with addgroup and this page
+can be handled more easily by splitting the old single comment into repeated
+comments, split into pages. I've worked on doxygen files in Kate, KWrite and XCode (MacOSX) and
+the comment higlighting works fine. If you do have problems, particularly when
+you start a new line within an existing comment, enter a character at the end of 
+the last highlighted line to refresh the highlighting. Some editors have a specific
+refresh option.
+
+[cstim 2003-03-25] The "Data Structures" page of doxygen doesn't show
+anything useful for gnucash. Obviously doxygen only accepts "real" C
+struct definitions for inclusion on that page. However, all gnucash
+data structures are defined somewhere in private headers, and only the
+typedefs are publically visible. Isn't there a way to have doxygen
+show the documentation for the <i>typedefs</i> on the "Data
+Structures" page? Unfortunately I don't know how.
+
+[codehelpgpg 2004-07-25] Yes, there is a way of linking to these data structures.
+Make sure that the private header is included in the documentation by including a 
+\\file command in the private header file. Then include a short doxygen comment above
+the declaration. Doxygen will accept both valid C struct definition formats.
+
+*/
+
+/** \page reference Doxygen reference documentation
+
+- \ref index Introduction
+- \ref tipshints Tips and hints for using doxygen
+- \ref stylediscussion Long comments, pages, editors
+	
 The Doxygen web site (http://www.stack.nl/~dimitri/doxygen/) has a
 complete user manual.  For the impatient, here are the most
 interesting sections:
 
 - How to write grouped documentation for files, functions, variables,
 etc.: http://www.stack.nl/~dimitri/doxygen/grouping.html .  Do not
-forget to add a file documentation block (@file) at the top of your
+forget to add a file documentation block (\@file) at the top of your
 file. Otherwise, all documentation in that file will <i>not</i> appear
 in the html output.
 
@@ -80,7 +243,9 @@ blocks: http://www.stack.nl/~dimitri/doxygen/commands.html
 News about GnuCash as well as the latest version can always be found at http://www.gnucash.org/
 
 \subsection email Email
-If you have any suggestions concerning this documentation, do not hesitate to send suggestions to gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
+If you have any suggestions concerning this documentation, do not hesitate to send suggestions to 
+gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
 
-Benoit Grégoire mailto:bock@step.polymtl.ca
+Benoit Grégoire <bock@step.polymtl.ca>
+Neil Williams <linux@codehelp.co.uk>
  */

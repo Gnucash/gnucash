@@ -4,13 +4,27 @@
  * of vairous operations.
  *
  * June 2004
- * License: GPL
  */
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 
 #include <ctype.h>
 #include <glib.h>
-
-#include "gnc-module.h"
+#include "cashobjects.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
@@ -23,15 +37,15 @@ gnc_numeric_print(gnc_numeric in)
   char * retval;
   if(gnc_numeric_check(in)) 
   {
-    retval = g_strdup_printf("<ERROR> [%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("<ERROR> [%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   else 
   {
-    retval = g_strdup_printf("[%lld / %lld]",
-                             (long long int) in.num,
-                             (long long int) in.denom); 
+    retval = g_strdup_printf("[%" G_GINT64_FORMAT " / %" G_GINT64_FORMAT "]",
+                             in.num,
+                             in.denom); 
   }
   return retval;
 }
@@ -744,22 +758,15 @@ run_test (void)
 	check_mult_div ();
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-  do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "couldn't load engine");
-
-  run_test ();
-
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile(argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+		run_test ();
+		print_test_results();
+	}
+	qof_close();
   return 0;
 }
 

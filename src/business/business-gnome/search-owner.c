@@ -41,7 +41,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_owner_class_init	(GNCSearchOwnerClass *class);
 static void gnc_search_owner_init	(GNCSearchOwner *gspaper);
-static void gnc_search_owner_finalise	(GtkObject *obj);
+static void gnc_search_owner_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchOwner *)(x))->priv)
 
@@ -73,8 +73,8 @@ gnc_search_owner_get_type (void)
       sizeof(GNCSearchOwnerClass),
       (GtkClassInitFunc)gnc_search_owner_class_init,
       (GtkObjectInitFunc)gnc_search_owner_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+      NULL,
+      NULL
     };
 		
     type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
@@ -86,24 +86,19 @@ gnc_search_owner_get_type (void)
 static void
 gnc_search_owner_class_init (GNCSearchOwnerClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
+  object_class = G_OBJECT_CLASS (class);
   parent_class = gtk_type_class(gnc_search_core_type_get_type ());
 
-  object_class->finalize = gnc_search_owner_finalise;
+  object_class->finalize = gnc_search_owner_finalize;
 
   /* override methods */
   gnc_search_core_type->validate = gncs_validate;
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
 }
 
 static void
@@ -113,14 +108,14 @@ gnc_search_owner_init (GNCSearchOwner *o)
 }
 
 static void
-gnc_search_owner_finalise (GtkObject *obj)
+gnc_search_owner_finalize (GObject *obj)
 {
   GNCSearchOwner *o = (GNCSearchOwner *)obj;
   g_assert (IS_GNCSEARCH_OWNER (o));
 
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -178,8 +173,8 @@ set_owner_widget (GNCSearchOwner *fe)
 			     gnc_get_current_book(), &(fe->priv->owner));
 
   /* Setup the "changed" callback */
-  gtk_signal_connect (GTK_OBJECT (fe->priv->owner_choice), "changed",
-		      GTK_SIGNAL_FUNC (owner_changed_cb), fe);
+  g_signal_connect (G_OBJECT (fe->priv->owner_choice), "changed",
+		    G_CALLBACK (owner_changed_cb), fe);
 
   gtk_widget_show_all (fe->priv->owner_choice);
 }
@@ -188,7 +183,7 @@ static void
 type_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
 {
   GncOwnerType type = (GncOwnerType)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 
   /* If the type changed or if we don't have a type create the owner_choice */
   if (type != gncOwnerGetType (&(fe->priv->owner))) {
@@ -204,9 +199,9 @@ add_type_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 		    GncOwnerType type)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) type);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", type_option_changed,
-		      user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) type);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (type_option_changed),
+		    user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -239,7 +234,7 @@ make_type_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -249,7 +244,7 @@ static void
 how_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
 {
   fe->how = (query_compare_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static GtkWidget *
@@ -257,9 +252,9 @@ add_how_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 	       query_compare_t option)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", how_option_changed,
-		      user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (how_option_changed),
+		    user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -287,7 +282,7 @@ make_how_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;

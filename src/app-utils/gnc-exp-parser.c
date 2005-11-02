@@ -29,12 +29,13 @@
 
 #include "finproto.h"
 #include "fin_spl_protos.h"
-#include "global-options.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
 #include "messages.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
 
+#define GROUP_NAME "Variables"
 
 /** Data Types *****************************************************/
 
@@ -53,6 +54,12 @@ static gboolean      parser_inited     = FALSE;
 
 /** Implementations ************************************************/
 
+static gchar *
+gnc_exp_parser_filname (void)
+{
+  return g_build_filename(g_get_home_dir(), ".gnucash", "expressions-2.0", NULL);
+}
+
 void
 gnc_exp_parser_init ( void )
 {
@@ -62,7 +69,9 @@ gnc_exp_parser_init ( void )
 void
 gnc_exp_parser_real_init ( gboolean addPredefined )
 {
-  SCM alist;
+  gchar *filename, **keys, **key, *str_value;
+  GKeyFile *key_file;
+  gnc_numeric value;
 
   if (parser_inited)
     gnc_exp_parser_shutdown ();
@@ -73,59 +82,20 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
   parser_inited = TRUE;
 
   if ( addPredefined ) {
-    alist = gnc_lookup_option ("__exp_parser", "defined_variables", SCM_EOL);
-
-    while (SCM_LISTP(alist) && !SCM_NULLP(alist))
-      {
-        char *name;
-        SCM assoc;
-        SCM val_scm;
-        gnc_numeric value;
-        gboolean good;
-
-        assoc = SCM_CAR (alist);
-        alist = SCM_CDR (alist);
-
-        if (!SCM_CONSP (assoc))
-          continue;
-
-        name = gh_scm2newstr (SCM_CAR (assoc), NULL);
-        if (name == NULL)
-          continue;
-
-        val_scm = SCM_CDR (assoc);
-        good = TRUE;
-
-        if (SCM_NUMBERP (val_scm))
-          {
-            double dvalue;
-
-            dvalue = scm_num2dbl (val_scm, __FUNCTION__);
-            value = double_to_gnc_numeric (dvalue, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_SIGFIGS(6)
-                                           | GNC_RND_ROUND);
-          }
-        else if (SCM_STRINGP (val_scm))
-          {
-            char *s;
-            gboolean err;
-
-            s = gh_scm2newstr (val_scm, NULL);
-
-            err = string_to_gnc_numeric (s, &value);
-            if (err == FALSE)
-              good = FALSE;
-
-            free (s);
-          }
-        else
-          good = FALSE;
-
-        if (good)
-          gnc_exp_parser_set_value (name, gnc_numeric_reduce (value));
-
-        free (name);
-      }
+    filename = gnc_exp_parser_filname();
+    key_file = gnc_key_file_load_from_file(filename, FALSE);
+    if (key_file) {
+      keys = g_key_file_get_keys(key_file, GROUP_NAME, NULL, NULL);
+      for (key = keys; key && *key; key++) {
+	str_value = g_key_file_get_string(key_file, GROUP_NAME, *key, NULL);
+	if (str_value && string_to_gnc_numeric(str_value, &value)) {
+	  gnc_exp_parser_set_value (*key, gnc_numeric_reduce (value));
+	}
+      } 
+      g_strfreev(keys);
+      g_key_file_free(key_file);
+    }
+    g_free(filename);
   }
 }
 
@@ -139,32 +109,35 @@ remove_binding (gpointer key, gpointer value, gpointer not_used)
 }
 
 static void
-binding_cons (gpointer key, gpointer value, gpointer data)
+set_one_key (gpointer key, gpointer value, gpointer data)
 {
   char *name = key;
   ParserNum *pnum = value;
-  SCM *alist_p = data;
   char *num_str;
-  SCM assoc;
 
   num_str = gnc_numeric_to_string (gnc_numeric_reduce (pnum->value));
-  assoc = scm_cons (scm_makfrom0str (name), scm_makfrom0str (num_str));
+  g_key_file_set_string ((GKeyFile *)data, GROUP_NAME, name, num_str);
   g_free (num_str);
-
-  *alist_p = scm_cons (assoc, *alist_p);
 }
 
 void
 gnc_exp_parser_shutdown (void)
 {
-  SCM alist;
+  GKeyFile* key_file;
+  gchar *filename;
 
   if (!parser_inited)
     return;
 
-  alist = SCM_EOL;
-  g_hash_table_foreach (variable_bindings, binding_cons, &alist);
-  gnc_set_option ("__exp_parser", "defined_variables", alist);
+  filename = gnc_exp_parser_filname();
+  key_file = g_key_file_new();
+  g_hash_table_foreach (variable_bindings, set_one_key, key_file);
+  g_key_file_set_comment(key_file, GROUP_NAME, NULL,
+			 _(" Variables are in the form 'name=value'"),
+			 NULL);
+  gnc_key_file_save_to_file(filename, key_file);
+  g_key_file_free(key_file);
+  g_free(filename);
 
   g_hash_table_foreach_remove (variable_bindings, remove_binding, NULL);
   g_hash_table_destroy (variable_bindings);

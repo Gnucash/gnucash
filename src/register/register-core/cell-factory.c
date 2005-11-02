@@ -26,7 +26,7 @@
 #include <glib.h>
 
 #include "cell-factory.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 
 typedef struct cell_record

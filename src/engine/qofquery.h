@@ -85,6 +85,9 @@ search if there's no chance of them having splits that match.
 #include "guid.h"
 #include "qofbook.h"
 #include "qofquerycore.h"
+#include "qofchoice.h"
+
+#define QOF_MOD_QUERY "qof-query"
 
 /** A Query */
 typedef struct _QofQuery QofQuery;
@@ -114,8 +117,8 @@ typedef enum {
 #define QOF_PARAM_VERSION "version" 
 
 /* --------------------------------------------------------- */
-/** @name Query Subsystem Initialization and Shudown  */
-/* @{ */
+/** \name Query Subsystem Initialization and Shudown  */
+// @{
 /** Subsystem initialization and shutdown. Call init() once 
  *  to initalize the query subsytem; call shutdown() to free
  *  up any resources associated with the query subsystem. 
@@ -124,11 +127,11 @@ typedef enum {
 
 void qof_query_init (void);
 void qof_query_shutdown (void);
-/* @} */
+// @}
 
 /* --------------------------------------------------------- */
-/** @name Low-Level API Functions */
-/* @{ */
+/** \name Low-Level API Functions */
+// @{
 
 GSList * qof_query_build_param_list (char const *param, ...);
 
@@ -152,10 +155,12 @@ void qof_query_destroy (QofQuery *q);
  */
 void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
-/** Set the book to be searched.  Books contain/identify collections 
+/** Set the book to be searched.  Books contain/identify collections
  *  of objects; the search will be performed over those books
- *  specified with this function.  If no books are set, no results 
- *  will be returned (since there is nothing to search over).
+ *  specified with this function.  If no books are set, no results
+ *  will be returned (since there is nothing to search over). (CAS:
+ *  Apparently, if no books are set, you'll actually get a critical
+ *  assertion failure.)
  *
  *  You can search multiple books.  To specify multiple books, call 
  *  this function multiple times with different arguments.  
@@ -251,6 +256,7 @@ int qof_query_num_terms (QofQuery *q);
 
 /** DOCUMENT ME !! */
 gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param);
+GSList * qof_query_get_term_type (QofQuery *q, GSList *term_param);
 
 /** Make a copy of the indicated query */
 QofQuery * qof_query_copy (QofQuery *q);
@@ -364,6 +370,6 @@ QofIdType qof_query_get_search_for (QofQuery *q);
 /** Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);
 
+// @}
 /* @} */
 #endif /* QOF_QUERYNEW_H */
-/* @} */

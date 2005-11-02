@@ -31,12 +31,9 @@
 #include "AccountP.h"
 #include "gnc-associate-account.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-trace.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* Maps GNCTrackingIncomeCategory to string keys.  If this enum
    changes, update */
@@ -90,8 +87,8 @@ back_associate_expense_accounts(Account *stock_account,
   for(; accounts; accounts = g_list_next(accounts))
   {
     acc_frame = xaccAccountGetSlots(accounts->data);
-    g_return_if_fail(val = kvp_frame_get_slot(acc_frame, 
-					      "associated-stock-account"));
+    g_return_if_fail((val = kvp_frame_get_slot(acc_frame, 
+					      "associated-stock-account")));
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
@@ -123,8 +120,8 @@ back_associate_income_accounts(Account *stock_account,
   for(; accounts; accounts = g_list_next(accounts))
   {
     acc_frame = xaccAccountGetSlots(accounts->data);
-    g_return_if_fail(val = kvp_frame_get_slot(acc_frame, 
-					      "associated-stock-account"));
+    g_return_if_fail((val = kvp_frame_get_slot(acc_frame, 
+					      "associated-stock-account")));
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
@@ -455,22 +452,22 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 
   stock_account_kvpframe = xaccAccountGetSlots(stock_account);
 
-  g_return_if_fail(stock_account_kvpval =
+  g_return_if_fail((stock_account_kvpval =
                    kvp_frame_get_slot(stock_account_kvpframe,
-                                      "associated-accounts"));
+                                      "associated-accounts")));
 
   assoc_acc_kvpframe = kvp_value_get_frame(stock_account_kvpval);
 
-  g_return_if_fail(acc_list_kvpval = kvp_frame_get_slot(assoc_acc_kvpframe, 
-							category_name));
-  g_return_if_fail(assoc_acc_list_start =
-                   kvp_value_get_glist(acc_list_kvpval));
+  g_return_if_fail((acc_list_kvpval = kvp_frame_get_slot(assoc_acc_kvpframe, 
+							category_name)));
+  g_return_if_fail((assoc_acc_list_start =
+                   kvp_value_get_glist(acc_list_kvpval)));
   
   for(assoc_acc_list = assoc_acc_list_start;
       assoc_acc_list;
       assoc_acc_list = g_list_next(assoc_acc_list))
   {
-    g_return_if_fail(current_guid = kvp_value_get_guid(assoc_acc_list->data));
+    g_return_if_fail((current_guid = kvp_value_get_guid(assoc_acc_list->data)));
     if(guid_equal(current_guid, inc_or_expense_account_guid))
     {
       assoc_acc_list_start =

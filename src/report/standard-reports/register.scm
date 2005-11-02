@@ -579,12 +579,12 @@
            (gnc:make-html-text
             (gnc:html-markup-br)
             ;;(gnc:option-value
-            ;; (gnc:lookup-global-option "User Info" "User Name"))
+            ;; (gnc:gconf-get-string "user_info" "name"))
 	    "User Name"
             (gnc:html-markup-br)
             (string-expand
              ;;(gnc:option-value
-	     ;; (gnc:lookup-global-option "User Info" "User Address"))
+	     ;; (gnc:gconf-get-string "user_info" "address"))
 	     "User Address"
              #\newline
              "<br>")

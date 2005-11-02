@@ -19,7 +19,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-backend-file.h
- *  @breif load and save data to files 
+ *  @brief load and save data to files 
  *  @author Copyright (c) 2000 Gnumatic Inc.
  *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
@@ -31,8 +31,7 @@
 #ifndef GNC_BACKEND_FILE_H_
 #define GNC_BACKEND_FILE_H_
 
-#include "qofbackend.h"
-#include "qofbackend-p.h"
+#include "qof.h"
 
 struct FileBackend_struct
 {
@@ -43,6 +42,22 @@ struct FileBackend_struct
     char *lockfile;
     char *linkfile;
     int lockfd;
+   /** \deprecated 
+	XXX price_lookup should be removed during the redesign
+   * of the SQL backend... prices can now be queried using
+   * the generic query mechanism.
+   *
+   * Note the correct signature for this call is
+   * void (*price_lookup) (QofBackend *, GNCPriceLookup *);
+   * we use gpointer to avoid an unwanted include file dependency.
+   */  
+    void (*price_lookup) (QofBackend *, gpointer);
+  /** XXX Export should really _NOT_ be here, but is left here for now.
+   * I'm not sure where this should be going to. It should be
+   * removed ASAP.   This is a temporary hack-around until period-closing
+   * is fully implemented.
+   */
+    void (*export) (QofBackend *, QofBook *);
 
     QofBook *primary_book;  /* The primary, main open book */
 };
@@ -55,8 +70,13 @@ typedef enum
     GNC_BOOK_BIN_FILE,
     GNC_BOOK_XML1_FILE,
     GNC_BOOK_XML2_FILE,
+    QSF_GNC_OBJECT,
+    QSF_OBJECT,
+    QSF_MAP,
 } QofBookFileType;
 
 QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
+void gnc_provider_init(void);
 
 #endif /* GNC_BACKEND_FILE_H_ */

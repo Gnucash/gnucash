@@ -32,32 +32,27 @@
 #ifndef GNC_DATE_EDIT_H
 #define GNC_DATE_EDIT_H 
 
-#include <gnome.h>
-
-BEGIN_GNOME_DECLS
-
+#include <glib.h>
 
 typedef enum {
 	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
 	GNC_DATE_EDIT_24_HR                 = 1 << 1,
 	GNC_DATE_EDIT_WEEK_STARTS_ON_MONDAY = 1 << 2,
-#if 0
-        GNC_DATE_EDIT_SHOW_DATE             = 1 << 3,
-        GNC_DATE_EDIT_SHOW_DELTA            = 1 << 4
-#endif
 } GNCDateEditFlags;
 
-
-#define GNC_DATE_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_date_edit_get_type(), GNCDateEdit)
-#define GNC_DATE_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_edit_get_type(), GNCDateEditClass)
-#define GNC_IS_DATE_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_date_edit_get_type ())
+#define GNC_TYPE_DATE_EDIT          (gnc_date_edit_get_type ())
+#define GNC_DATE_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_edit_get_type(), GNCDateEdit)
+#define GNC_DATE_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_edit_get_type(), GNCDateEditClass)
+#define GNC_IS_DATE_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_edit_get_type ())
 
 /**
+ *  \verbatim
  *  * 2001.05.13T1647 [PDT], #gnucash:
  * <jsled> dave_p: So the header for gnc-dateedit.h is a bit light
  *         on _why_ such a thing was done... any help?
  * <dave_p> jsled: gnome date edit isn't i18n'd properly. also, we
  *          added the register date hotkeys.
+ *  \endverbatim
  **/
 typedef struct {
 	GtkHBox hbox;
@@ -78,6 +73,8 @@ typedef struct {
 	int       upper_hour;
 	
 	int       flags;
+
+	int       disposed;
 } GNCDateEdit;
 
 typedef struct {
@@ -86,12 +83,33 @@ typedef struct {
 	void (*time_changed) (GNCDateEdit *gde);
 } GNCDateEditClass;
 
-guint     gnc_date_edit_get_type        (void);
+GType     gnc_date_edit_get_type        (void);
 
 GtkWidget *gnc_date_edit_new            (time_t the_time,
                                          int show_time, int use_24_format);
 GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
                                          int show_time, int use_24_format);
+
+/**
+ * Create a new GncDateEdit widget from a glade file.  The widget
+ * generated is set to today's date, and will not show a time as part
+ * of the date.  This function does not use any of the arguments
+ * passed by glade.
+ *
+ * @param widget_name This parameter is unused.  The actual widget
+ * name will be set by glade so it does not need to be done here.
+ *
+ * @param string1 Unused.
+ * @param string2 Unused.
+ * @param int1 Unused.
+ * @param int2 Unused.
+ *
+ * @return A pointer to the newly created GncDateEdit widget.
+ */
+GtkWidget *gnc_date_edit_new_glade (gchar *widget_name,
+				    gchar *string1, gchar *string2,
+				    gint int1, gint int2);
+
 GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
                                          GNCDateEditFlags flags);
 
@@ -110,10 +128,5 @@ void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
                                          GNCDateEditFlags flags);
 int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
-void      gnc_date_editable_enters      (GnomeDialog *dialog,
-					 GNCDateEdit *gde);
-
-
-END_GNOME_DECLS
-
+void      gnc_date_editable_enters (GNCDateEdit *gde, gboolean state);
 #endif

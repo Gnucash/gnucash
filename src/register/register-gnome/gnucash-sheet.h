@@ -23,6 +23,8 @@
 
 #include <gnome.h>
 
+#include "split-register-model.h"
+
 #include "table-allgui.h"
 
 #define CELL_VPADDING 3
@@ -30,15 +32,15 @@
 
 
 #define GNUCASH_TYPE_REGISTER     (gnucash_register_get_type ())
-#define GNUCASH_REGISTER(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_REGISTER, GnucashRegister))
-#define GNUCASH_REGISTER_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_REGISTER))
-#define GNUCASH_IS_REGISTER(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_REGISTER))
+#define GNUCASH_REGISTER(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_REGISTER, GnucashRegister))
+#define GNUCASH_REGISTER_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_REGISTER))
+#define GNUCASH_IS_REGISTER(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_REGISTER))
 
 
 #define GNUCASH_TYPE_SHEET     (gnucash_sheet_get_type ())
-#define GNUCASH_SHEET(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_SHEET, GnucashSheet))
-#define GNUCASH_SHEET_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_SHEET))
-#define GNUCASH_IS_SHEET(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_SHEET))
+#define GNUCASH_SHEET(obj)     (G_TYPE_CHECK_INSTANCE_CAST((obj), GNUCASH_TYPE_SHEET, GnucashSheet))
+#define GNUCASH_SHEET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_SHEET))
+#define GNUCASH_IS_SHEET(o)    (G_TYPE_CHECK_INSTANCE_TYPE((o), GNUCASH_TYPE_SHEET))
 
 
 typedef struct _SheetBlockStyle SheetBlockStyle;
@@ -85,6 +87,14 @@ typedef struct
         GnomeCanvasItem *item_editor;
         GtkWidget *entry;   
 
+        gboolean   use_theme_colors;
+        gboolean   use_horizontal_lines;
+        gboolean   use_vertical_lines;
+        GtkWidget *header_color;   
+        GtkWidget *primary_color;   
+        GtkWidget *secondary_color;   
+        GtkWidget *split_color;   
+
         gboolean input_cancelled;
 
         gint top_block;  /* maybe not fully visible */
@@ -127,14 +137,14 @@ typedef struct
 } GnucashRegister;
 
 
-GtkType    gnucash_sheet_get_type (void);
+GType      gnucash_sheet_get_type (void);
 GtkWidget *gnucash_sheet_new (Table *table);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
 
 void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
 
-GtkType gnucash_register_get_type (void);
+GType gnucash_register_get_type (void);
 
 /* this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);
@@ -202,7 +212,7 @@ void gnucash_register_set_initial_rows(guint num_rows);
 void gnucash_register_cut_clipboard (GnucashRegister *reg);
 void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
-
+void gnucash_register_refresh_from_gconf (GnucashRegister *reg);
 
 typedef struct
 {
@@ -218,6 +228,8 @@ typedef struct
         void (*redraw_all)      (GnucashRegister *reg);
         void (*redraw_help)     (GnucashRegister *reg);
 } GnucashRegisterClass;
+
+GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 
 #endif
 

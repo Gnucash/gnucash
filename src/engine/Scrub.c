@@ -49,12 +49,10 @@
 #include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "gnc-engine-util.h"
 #include "messages.h"
 #include "gnc-commodity.h"
-#include "gnc-trace.h"
 
-static short module = MOD_SCRUB;
+static QofLogModule log_module = GNC_MOD_SCRUB;
 
 /* ================================================================ */
 
@@ -825,7 +823,7 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
   ENTER(" ");
 
   if (!group || !table) {
-    LEAVE("Oops")
+    LEAVE("Oops");
     return;
   }
 

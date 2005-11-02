@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofclass.h -- API for registering paramters on objects           *
+ * qofclass.h -- API for registering parameters on objects          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -42,8 +42,8 @@
   declaring a new QOF Class.
 
   Because a QOF Class associates getters and setters with
-  a type, one can then ask, at run time, what paramters
-  are associated with a given type, even if those paramters
+  a type, one can then ask, at run time, what parameters
+  are associated with a given type, even if those parameters
   were not known at compile time.  Thus, a QOF Class is 
   sort-of like a DynAny implementation.  QOF classes can
   be used to provide "object introspection", i.e. asking 
@@ -52,12 +52,18 @@
   The QOF Query subsystem depends on QOF classes having been
   declared; the Query uses the getters to get values associated
   with particular instances.
+  
+  A QofAccessFunc or QofSetterFunc do not need to be public 
+  functions, if you need to add functions to an object with an
+  established API, define the additional QOF routines as static.
+  Only the register routine needs to be public.
 @{ */
 
 /** @file qofclass.h
     @brief API for registering paramters on objects 
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef QOF_CLASS_H
@@ -65,8 +71,16 @@
 
 #include "qofid.h"
 
-/** Core types of objects that can be used in parameters.
- *  Note that QofIdTypes may also be used.  */
+#define QOF_MOD_CLASS "qof-class"
+
+/** \name Core types
+
+Core data types for objects that can be used in parameters.
+Note that QofIdTypes may also be used and will create a 
+single reference between two known objects.
+
+ @{
+ */
 
 #define QOF_TYPE_STRING    "string"
 #define QOF_TYPE_DATE      "date"
@@ -79,10 +93,38 @@
 #define QOF_TYPE_BOOLEAN   "boolean"
 #define QOF_TYPE_KVP       "kvp"
 #define QOF_TYPE_CHAR      "character"
+#define QOF_TYPE_COLLECT   "collection" /**< secondary collections
+are used for one-to-many references between entities and are
+implemented using ::QofCollection.
+These are \b NOT the same as the main collections in the QofBook.
 
+-# Each ::QofCollection contains one or many entities - *all* of a single type.
+-# The entity type within the collection can be determined at run time.
+-# Easy conversions to GList or whatever in the param_setfcn handler.
+-# Each parameter can have it's own collection.
+-# Each entity can have a different *type* of collection to it's siblings, 
+provided that it is acceptable to the set function.
+-# Each object decides which types are acceptable for which parameter in the 
+set functions. This is then part of the API for that object.
+
+QOF_TYPE_COLLECT has two functions, both related to one-to-many 
+links:
+- Represent a reference between 2 entities with a list of acceptable types.
+        (one object linked to many types of single entities)
+- Represent a reference between one entity and many entities of another type.
+        (one object linked to many entities of a single type.)
+
+If the set function can handle it, it could also be used for true one-to-many 
+links: one object linked to many entities of many types.
+
+n.b. Always subject to each collection holding only one type at runtime.
+(otherwise use books).
+
+*/
+/** @} */
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
-/** Type of QofParam */
+
 typedef struct _QofParam QofParam;
 
 /** The QofAccessFunc defines an arbitrary function pointer
@@ -143,8 +185,8 @@ typedef int (*QofSortFunc)(gpointer, gpointer);
  *  controlling the object.   The getters are typically used by the
  *  query subsystem to query type specific data.   Note that there
  *  is no particular requirement for there to be a setter for every
- *  getter or even vice-versa, nor is there any requeirement for these
- *  to map 'cleanly' or orthogonaly to the underlying object.  The
+ *  getter or even vice-versa, nor is there any requirement for these
+ *  to map 'cleanly' or orthogonally to the underlying object.  The
  *  parameters are really just a set of value setting and getting 
  *  routines.
  *
@@ -212,7 +254,15 @@ typedef void (*QofParamForeachCB) (QofParam *, gpointer user_data);
 void qof_class_param_foreach (QofIdTypeConst obj_name,
                               QofParamForeachCB, gpointer user_data);
 
+/** \brief List of the parameters that could be references.
+
+Simple check to return a GList of all parameters
+of this object type that are not known QOF data types.
+Used for partial QofBook support, see ::QofEntityReference
+*/
+GList* qof_class_get_referenceList(QofIdTypeConst type);
+
 
 #endif /* QOF_CLASS_H */
-/* @} */
-/* @} */
+/** @} */
+/** @} */

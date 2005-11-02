@@ -1,20 +1,31 @@
-
 /*
  * Testing routine added by Ben Stanley bds02@uow.edu.au 20010320
  * Try to test Joshua Sled's FreqSpec module.
  *
  */
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
 #include "config.h"
-
 #include <stdlib.h>
 #include <glib.h>
-#include <libguile.h>
-
+#include "cashobjects.h"
 #include "test-stuff.h"
 #include "FreqSpec.h"
 #include "gnc-engine.h"
-#include "gnc-module.h"
 #include "qofbook.h"
 
 static QofBook *book;
@@ -41,7 +52,8 @@ test_once (void)
             "once off" );
       }
    }
-
+   fprintf (stdout, " FreqSpec: Single test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -77,7 +89,7 @@ test_daily (void)
    g_date_set_dmy( &date1, 25, 3, 2001 );
    for( interval = 1; interval < 20; ++interval ) {
       xaccFreqSpecSetDaily( fs, &date1, interval );
-      for( j = 0; j < 20; ++j ) {
+      for( j = 0; j < 20; ++j ) { /* j=0 passes by luck, but it's not valid */
          date2 = date1;
          for( i = 0; i < j; ++i ) {
             xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
@@ -89,7 +101,8 @@ test_daily (void)
             interval, j );
       }
    }
-
+   fprintf(stdout, " FreqSpec: Daily test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -149,7 +162,8 @@ test_weekly (void)
             interval, j );
       }
    }
-
+   fprintf(stdout, " FreqSpec: Weekly test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -222,7 +236,8 @@ test_monthly (void)
          }
       }
    }
-
+   fprintf(stdout, " FreqSpec: Monthly test OK, continuing . . . \r");
+   fflush(stdout);
    xaccFreqSpecFree(fs);
 }
 
@@ -258,11 +273,11 @@ test_month_relative (void)
                g_date_set_julian( &date2, start_julian + i );
                xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
                do_test_args(
-                  g_date_weekday( &next_date ) == g_date_weekday( &date1 ),
+                  g_date_get_weekday( &next_date ) == g_date_get_weekday( &date1 ),
                   "month relative repeats - check weekday",
                   __FILE__, __LINE__,
                   "monthday = %d, month = %d, interval = %d months, days from start = %d, weekday = %d",
-                  monthday, month, interval, i, g_date_weekday( &date1 ) );
+                  monthday, month, interval, i, g_date_get_weekday( &date1 ) );
                do_test_args(
                   (g_date_day( &next_date )-1)/7 == (g_date_day( &date1 )-1)/7,
                   "month relative repeats - check occurrence",
@@ -301,15 +316,15 @@ test_month_relative (void)
          do_test_args( g_date_month( &date2 ) == g_date_month( &next_date ),
             "month_relative repeats end up in the right place - month",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-            interval, j, g_date_weekday( &date1 ) );
-         do_test_args( g_date_weekday( &date1 ) == g_date_weekday( &next_date ),
+            interval, j, g_date_get_weekday( &date1 ) );
+         do_test_args( g_date_get_weekday( &date1 ) == g_date_get_weekday( &next_date ),
             "month_relative repeats end up in the right place - weekday",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-            interval, j, g_date_weekday( &date1 ) );
+            interval, j, g_date_get_weekday( &date1 ) );
          do_test_args( (g_date_day( &date2 )-1)/7 == (g_date_day( &next_date )-1)/7,
             "month_relative repeats end up in the right place - occurrence",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
-            interval, j, g_date_weekday( &date1 ) );
+            interval, j, g_date_get_weekday( &date1 ) );
       }
    }
    
@@ -337,7 +352,28 @@ test_month_relative (void)
    g_date_set_dmy( &date1, 31, 3, 2002 );
    do_test( g_date_compare( &next_date, &date1 ) == 0, "find five-sunday months" );
    date2 = next_date;
-   
+   fprintf(stdout, " FreqSpec: Relative months test OK, continuing . . . \r");
+   fflush(stdout);   
+   xaccFreqSpecFree(fs);
+}
+
+static void test_caseA()
+{
+   FreqSpec *fs;
+   GDate date0, date1, date2, date3;
+
+   fs = xaccFreqSpecMalloc(book);
+
+   g_date_set_dmy(&date0, 31, 12, 1); /* end of year */
+
+   xaccFreqSpecSetMonthly(fs, &date0, 3);  /* quarterly */
+
+   g_date_set_dmy(&date1, 13, 2, 1);  /* Feb 13th */
+   xaccFreqSpecGetNextInstance( fs, &date1, &date2 );
+
+   g_date_set_dmy( &date3, 31, 3, 1 ); /* Should get March 31st */
+   do_test( g_date_compare( &date2, &date3 ) == 0, "end of quarter" );
+
    xaccFreqSpecFree(fs);
 }
 
@@ -518,45 +554,29 @@ test_composite (void)
    xaccFreqSpecGetNextInstance( fs, &date0, &date1 );
    g_date_set_dmy( &date2, 21, 4, 2001 );
    do_test( g_date_compare( &date1, &date2 ) == 0, "sixth date in sequence" );
-
+   fprintf(stdout, " FreqSpec: Composite months test OK, cleaning up\n");
+   fflush(stdout);   
    xaccFreqSpecFree(fs);
 }
-
-static void
-guile_main ( void *closure, int argc, char* argv[] )
-{
-   gnc_module_load("gnucash/engine", 0);
-
-   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
-
-#if 0
-   set_success_print(TRUE);
-#endif
-
-   book = qof_book_new ();
-
-   test_once();
-
-   test_daily();
-
-   test_weekly();
-
-   test_monthly();
-
-   test_month_relative();
-
-   test_composite();
-
-   qof_book_destroy (book);
-
-   print_test_results();
-   exit (get_rv());
-}
-
 
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, guile_main, NULL);
+	QofSession *session;
+
+	qof_init();
+	g_return_val_if_fail(cashobjects_register(), -1);
+	session = qof_session_new ();
+	book = qof_session_get_book(session);
+   test_once();
+   test_caseA();
+   test_daily();
+   test_weekly();
+   test_monthly();
+   test_month_relative();
+   test_composite();
+   print_test_results();
+	qof_session_end(session);
+	qof_close();
   return 0;
 }

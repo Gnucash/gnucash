@@ -24,14 +24,14 @@
 
 #include "Account.h"
 
-static GNCBook *book;
+static QofBook *book;
 
 static gchar*
 node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
 {
     xmlNodePtr mark;
 
-    while (safe_strcmp (node->name, "text") == 0)
+    while (safe_strcmp ((char*)node->name, "text") == 0)
       node = node->next;
 
     if(!check_dom_tree_version(node, "2.0.0"))
@@ -39,17 +39,17 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
         return "version wrong.  Not 2.0.0 or not there";
     }
 
-    if(!node->name || safe_strcmp(node->name, "gnc:commodity"))
+    if(!node->name || safe_strcmp((char*)node->name, "gnc:commodity"))
     {
         return "Name of toplevel node is bad";
     }
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp(mark->name, "text") == 0)
+        if(safe_strcmp((char*)mark->name, "text") == 0)
         {
         }
-        else if(safe_strcmp(mark->name, "cmdty:space") == 0)
+        else if(safe_strcmp((char*)mark->name, "cmdty:space") == 0)
         {
             if(!equals_node_val_vs_string(
                    mark, gnc_commodity_get_namespace(com)))
@@ -57,7 +57,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "namespaces differ";
             }
         }
-        else if(safe_strcmp(mark->name, "cmdty:id") == 0)
+        else if(safe_strcmp((char*)mark->name, "cmdty:id") == 0)
         {
             if(!equals_node_val_vs_string(
                    mark, gnc_commodity_get_mnemonic(com)))
@@ -65,7 +65,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "mnemonic differ";
             }
         }
-        else if(safe_strcmp(mark->name, "cmdty:name") == 0)
+        else if(safe_strcmp((char*)mark->name, "cmdty:name") == 0)
         {
             if(!equals_node_val_vs_string(
                    mark, gnc_commodity_get_fullname(com)))
@@ -73,7 +73,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "names differ";
             }
         }
-        else if(safe_strcmp(mark->name, "cmdty:xcode") == 0)
+        else if(safe_strcmp((char*)mark->name, "cmdty:xcode") == 0)
         {
             if(!equals_node_val_vs_string(
                    mark, gnc_commodity_get_exchange_code(com)))
@@ -81,7 +81,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
                 return "exchange codes differ";
             }
         }
-        else if(safe_strcmp(mark->name, "cmdty:fraction") == 0)
+        else if(safe_strcmp((char*)mark->name, "cmdty:fraction") == 0)
         {
             gchar *txt;
             gint64 type;
@@ -228,7 +228,7 @@ guile_main (void *closure, int argc, char **argv)
     gnc_module_system_init();
     gnc_module_load("gnucash/engine", 0);
 
-    book = gnc_book_new ();
+    book = qof_book_new ();
 
     if(argc > 1)
     {

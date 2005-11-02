@@ -37,13 +37,8 @@
 #define XACC_GROUP_P_H
 
 #include "config.h"
-
+#include "Group.h"
 #include "Transaction.h"
-#include "gnc-numeric.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofid.h"
-
 
 /** STRUCTS *********************************************************/
 struct account_group_s

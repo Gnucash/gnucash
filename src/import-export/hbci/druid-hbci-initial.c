@@ -40,6 +40,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-html.h"
+//#include "import-account-matcher.h"
 #include "gnc-component-manager.h"
 
 #include <aqbanking/banking.h>
@@ -248,14 +249,14 @@ druid_enable_next_button(HBCIInitialInfo *info)
 {
   g_assert(info);
   gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
-				     TRUE, TRUE, TRUE);
+				     TRUE, TRUE, TRUE, TRUE);
 }
 static void 
 druid_disable_next_button(HBCIInitialInfo *info)
 {
   g_assert(info);
   gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
-				     TRUE, FALSE, TRUE);
+				     TRUE, FALSE, TRUE, TRUE);
 }
 /*
  * end button enabling
@@ -266,7 +267,6 @@ druid_disable_next_button(HBCIInitialInfo *info)
 /*************************************************************
  * GUI callbacks
  */
-
 
 static gboolean banking_has_accounts(AB_BANKING *banking)
 {
@@ -366,7 +366,7 @@ on_accountlist_prepare (GnomeDruidPage *gnomedruidpage,
     info->gnc_hash = gnc_hbci_new_hash_from_kvp (info->api);
   
   gnome_druid_set_buttons_sensitive (GNOME_DRUID (info->druid),
-				     FALSE, TRUE, TRUE);
+				     FALSE, TRUE, TRUE, TRUE);
 
   update_accountlist(info);
 }
@@ -426,7 +426,7 @@ on_button_clicked (GtkButton *button,
 		   gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  char *name;
+  const char *name;
   g_assert(info->druid);
   
   name = gtk_widget_get_name (GTK_WIDGET (button));
@@ -689,11 +689,4 @@ void gnc_hbci_initial_druid (void)
   /*                   GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);*/
 
   gtk_widget_show_all (info->window);
-  
-}
-
-SCM  scm_hbci_initial_druid (void)
-{
-  gnc_hbci_initial_druid();
-  return SCM_EOL;
 }

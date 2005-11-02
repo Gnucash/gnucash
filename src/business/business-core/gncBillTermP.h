@@ -29,7 +29,6 @@
 #ifndef GNC_BILLTERMP_H_
 #define GNC_BILLTERMP_H_
 
-#include "qofid-p.h"
 #include "gncBillTerm.h"
 
 gboolean gncBillTermRegister (void);

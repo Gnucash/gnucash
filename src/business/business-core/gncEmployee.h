@@ -33,9 +33,6 @@
 
 typedef struct _gncEmployee GncEmployee;
 
-#include "qofbook.h"
-#include "qofid.h"
-
 #include "gncAddress.h"
 #include "Account.h"
 
@@ -43,8 +40,8 @@ typedef struct _gncEmployee GncEmployee;
 #define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
 #define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 void gncEmployeeBeginEdit (GncEmployee *employee);
@@ -52,8 +49,8 @@ void gncEmployeeCommitEdit (GncEmployee *employee);
 int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 void gncEmployeeSetID (GncEmployee *employee, const char *id);
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username);
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language);
@@ -63,10 +60,12 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
+void qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent);
+
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
@@ -99,9 +98,11 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee);
 #define EMPLOYEE_ACL		"acl"
 #define EMPLOYEE_WORKDAY	"workday"
 #define EMPLOYEE_RATE		"rate"
+#define EMPLOYEE_CC    "credit_card_account"
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))
+#define gncEmployeeGetBook(E) qof_instance_get_book(QOF_INSTANCE(E))
 #define gncEmployeeRetGUID(E) (E ? *(qof_entity_get_guid(QOF_ENTITY(E))) : *(guid_null()))
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 

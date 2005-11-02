@@ -84,6 +84,20 @@ int qof_instance_version_cmp (QofInstance *left, QofInstance *right);
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
 
+/** \brief Set the dirty flag
+
+Sets this instance AND the collection as dirty.
+*/
+void qof_instance_set_dirty(QofInstance* inst);
+
+gboolean qof_instance_check_edit(QofInstance *inst);
+
+gboolean qof_instance_do_free(QofInstance *inst);
+
+void qof_instance_mark_free(QofInstance *inst);
+
+QofInstance* qof_instance_create (QofIdType type, QofBook *book);
+
 /** Pair things up.  This routine inserts a kvp value into each instance
  *  containing the guid of the other.  In this way, if one has one of the
  *  pair, one can always find the other by looking up it's guid.  Typically,

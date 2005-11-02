@@ -28,10 +28,27 @@
 typedef struct _invoice_window InvoiceWindow;
 
 #include "qofbook.h"
+#include "qofsession.h"
 #include "gncInvoice.h"
 #include "gncOwner.h"
 #include "dialog-search.h"
 #include "dialog-query-list.h"
+
+typedef enum
+{
+  BY_STANDARD = 0,
+  BY_DATE,
+  BY_DATE_ENTERED,
+  BY_DESC,
+  BY_QTY,
+  BY_PRICE
+} invoice_sort_type_t;
+
+
+#define GCONF_SECTION_INVOICE "dialogs/business/invoice"
+#define GCONF_SECTION_BILL    "dialogs/business/bill"
+#define GCONF_SECTION_VOUCHER "dialogs/business/voucher"
+
 
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
@@ -51,6 +68,39 @@ GNCSearchWindow * gnc_invoice_search_edit (gpointer start, gpointer book);
 
 void gnc_business_call_owner_report (GncOwner *owner, Account *acc);
 
+void gnc_invoice_window_sort (InvoiceWindow *iw, invoice_sort_type_t sort_code);
+
+GtkWidget * gnc_invoice_window_create_summary_bar (InvoiceWindow *iw);
+
+void gnc_invoice_window_changed (InvoiceWindow *iw, GtkWidget *window);;
+
+gchar *gnc_invoice_get_help (InvoiceWindow *iw);
+
+gchar *gnc_invoice_get_title (InvoiceWindow *iw);
+
+GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
+
 DialogQueryList *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance);
+
+GtkWidget *gnc_invoice_get_register(InvoiceWindow *iw);
+
+/* definitions for CB functions */
+void gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data);
+
+void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_printCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_editCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_recordCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_cancelCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data);
 
 #endif /* GNC_DIALOG_INVOICE_H_ */

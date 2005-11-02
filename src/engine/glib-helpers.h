@@ -26,7 +26,6 @@
 
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 SCM gnc_glist_to_scm_list(GList *glist, SCM wct);
 GList* gnc_scm_list_to_glist(SCM wcp_list);

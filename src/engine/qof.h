@@ -21,8 +21,9 @@
 
 #ifndef QOF_H_
 #define QOF_H_
-/** @defgroup QOF Query Object Framework */
-/** @{ */
+/** @defgroup QOF Query Object Framework 
+ @{
+*/
 
 /**
     @addtogroup Date Date:  Date and Time Printing, Parsing and Manipulation
@@ -49,6 +50,9 @@
     @addtogroup Object Object: Dynamic Object Class Framework
     @ingroup QOF
 */
+/** @addtogroup Choice Choice and collect : One to many links.
+	@ingroup QOF
+*/
 /**
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
@@ -57,27 +61,41 @@
     @addtogroup Trace Trace: Error Reporting and Debugging
     @ingroup QOF
 */
+/** @addtogroup BookMerge Merging QofBook structures
+	@ingroup QOF
+*/
+/** @addtogroup Event Event: QOF event handlers.
+	@ingroup QOF
+*/
 /**
     @addtogroup Utilities Misc Utilities
     @ingroup QOF
 */
 /** @} */
 
-#include "qof/gnc-date.h"
-#include "qof/gnc-engine-util.h"
-#include "qof/gnc-numeric.h"
-#include "qof/gnc-event.h"
-#include "qof/gnc-trace.h"
-#include "qof/guid.h"
-#include "qof/kvp_frame.h"
-#include "qof/qofbackend.h"
-#include "qof/qofid.h"
-#include "qof/qofbook.h"
-#include "qof/qofclass.h"
-#include "qof/qofobject.h"
-#include "qof/qofquery.h"
-#include "qof/qofquerycore.h"
-#include "qof/qofsession.h"
-#include "qof/qofsql.h"
+#include "qofid.h"
+#include "gnc-trace.h"
+#include "gnc-date.h"
+#include "gnc-numeric.h"
+#include "gnc-event.h"
+#include "gnc-engine-util.h"
+#include "guid.h"
+#include "kvp_frame.h"
+#include "kvp-util.h"
+#include "kvp-util-p.h"
+#include "qofbackend.h"
+#include "qofid-p.h"
+#include "qofinstance-p.h"
+#include "qofbook.h"
+#include "qofclass.h"
+#include "qofobject.h"
+#include "qofquery.h"
+#include "qofquerycore.h"
+#include "qofsession.h"
+#include "qofsql.h"
+#include "qofchoice.h"
+#include "qof_book_merge.h"
+#include "qof-be-utils.h"
+#include "qofla-dir.h"
 
 #endif /* QOF_H_ */

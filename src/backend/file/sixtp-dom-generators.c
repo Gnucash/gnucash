@@ -33,23 +33,19 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
 
-#include "gnc-engine-util.h"
-#include "kvp_frame.h"
-#include "qofid.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 xmlNodePtr
 text_to_dom_tree(const char *tag, const char *str)
 {
-  xmlNodePtr result;
+    xmlNodePtr result;
 
-  g_return_val_if_fail(tag, NULL);
-  g_return_val_if_fail(str, NULL);
-  result = xmlNewNode(NULL, tag);
-  g_return_val_if_fail(result, NULL);
-  xmlNodeAddContent(result, str);
-  return result;
+    g_return_val_if_fail(tag, NULL);
+    g_return_val_if_fail(str, NULL);
+    result = xmlNewNode(NULL, BAD_CAST tag);
+    g_return_val_if_fail(result, NULL);
+    xmlNodeAddContent(result, BAD_CAST str);
+    return result;
 }
 
 xmlNodePtr
@@ -58,29 +54,44 @@ int_to_dom_tree(const char *tag, gint64 val)
     gchar *text;
     xmlNodePtr result;
 
-    text = g_strdup_printf("%lld", (long long int) val);
+    text = g_strdup_printf("%" G_GINT64_FORMAT, val);
+    g_return_val_if_fail(text, NULL);
     result = text_to_dom_tree(tag, text);
     g_free(text);
     return result;
 }
+
+xmlNodePtr
+guint_to_dom_tree(const char *tag, guint an_int)
+{
+    gchar *text;
+    xmlNodePtr result;
     
+    text = g_strdup_printf("%u", an_int );
+    g_return_val_if_fail(text, NULL);
+    result = text_to_dom_tree(tag, text);
+    g_free(text);
+    return result;
+}
+
+
 xmlNodePtr
 guid_to_dom_tree(const char *tag, const GUID* gid)
 {
     char guid_str[GUID_ENCODING_LENGTH + 1];
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    xmlSetProp(ret, "type", "guid");
+    xmlSetProp(ret, BAD_CAST "type", BAD_CAST "guid");
 
     if (!guid_to_string_buff(gid, guid_str))
     {
-        PERR("guid_to_string failed\n");
+        PERR("guid_to_string_buff failed\n");
         return NULL;
     }
 
-    xmlNodeAddContent(ret, guid_str);
+    xmlNodeAddContent(ret, BAD_CAST guid_str);
 
     return ret;
 }
@@ -92,15 +103,15 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
 
     g_return_val_if_fail(c, NULL);
     
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
     if(!gnc_commodity_get_namespace(c) || !gnc_commodity_get_mnemonic(c))
     {
         return NULL;
     }
     
-    xmlNewTextChild(ret, NULL, "cmdty:space", gnc_commodity_get_namespace(c));
-    xmlNewTextChild(ret, NULL, "cmdty:id", gnc_commodity_get_mnemonic(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", BAD_CAST gnc_commodity_get_namespace(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", BAD_CAST gnc_commodity_get_mnemonic(c));
 
     return ret;
 }
@@ -142,14 +153,14 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
 		return NULL;
 	}
     
-	ret = xmlNewNode(NULL, tag);
+	ret = xmlNewNode(NULL, BAD_CAST tag);
     
-	xmlNewTextChild(ret, NULL, "ts:date", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", BAD_CAST date_str);
 
 	if(spec->tv_nsec > 0){
 		ns_str = timespec_nsec_to_string(spec);
 		if(ns_str){
-			xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
+			xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", BAD_CAST ns_str);
 		}
 	}
 
@@ -162,7 +173,7 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
 }
 
 xmlNodePtr
-gdate_to_dom_tree(const char *tag, GDate *date)
+gdate_to_dom_tree(const char *tag, const GDate *date)
 {
 	xmlNodePtr ret;
 	gchar *date_str = NULL;
@@ -172,9 +183,9 @@ gdate_to_dom_tree(const char *tag, GDate *date)
 
 	g_date_strftime( date_str, 512, "%Y-%m-%d", date );
 
-	ret = xmlNewNode(NULL, tag);
+	ret = xmlNewNode(NULL, BAD_CAST tag);
 
-	xmlNewTextChild(ret, NULL, "gdate", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "gdate", BAD_CAST date_str);
 
 	g_free(date_str);
 
@@ -192,9 +203,9 @@ gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num)
     numstr = gnc_numeric_to_string(*num);
     g_return_val_if_fail(numstr, NULL);
 
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
 
-    xmlNodeAddContent(ret, numstr);
+    xmlNodeAddContent(ret, BAD_CAST numstr);
 
     g_free(numstr);
 
@@ -234,8 +245,8 @@ double_to_string(double value)
 static void
 add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
 {
-    xmlSetProp(node, "type", type);
-    xmlNodeSetContent(node, val);
+    xmlSetProp(node, BAD_CAST "type", BAD_CAST type);
+    xmlNodeSetContent(node, BAD_CAST val);
     g_free(val);
 }
 
@@ -254,18 +265,17 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     kvp_type = kvp_value_get_type(val);
 
     if (kvp_type == KVP_TYPE_STRING)
-      val_node = xmlNewTextChild(node, NULL, tag, kvp_value_get_string(val));
+      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, BAD_CAST kvp_value_get_string(val));
     else if (kvp_type == KVP_TYPE_TIMESPEC)
       val_node = NULL;
     else
-      val_node = xmlNewTextChild(node, NULL, tag, NULL);
+      val_node = xmlNewTextChild(node, NULL, BAD_CAST tag, NULL);
 
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
         add_text_to_node(val_node, "integer",
-                         g_strdup_printf("%lld",
-                                         (long long int)
+                         g_strdup_printf("%" G_GINT64_FORMAT,
                                          kvp_value_get_gint64(val)));
         break;
     case KVP_TYPE_DOUBLE:
@@ -277,9 +287,10 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
                          gnc_numeric_to_string(kvp_value_get_numeric(val)));
         break;
     case KVP_TYPE_STRING:
-        xmlSetProp(val_node, "type", "string");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
     case KVP_TYPE_GUID:
+        /* THREAD-UNSAFE */
         add_text_to_node(val_node,"guid",
                          g_strdup(guid_to_string(kvp_value_get_guid(val))));
         break;
@@ -288,7 +299,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
       Timespec ts = kvp_value_get_timespec (val);
 
       val_node = timespec_to_dom_tree (tag, &ts);
-      xmlSetProp (val_node, "type", "timespec");
+      xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
       xmlAddChild (node, val_node);
     }
     break;
@@ -296,10 +307,10 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         guint64 size;
         void *binary_data = kvp_value_get_binary(val, &size);
-        xmlSetProp(val_node, "type", "binary");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "binary");
         g_return_if_fail(binary_data);
         tmp_str1 = binary_to_string(binary_data, size);
-        xmlNodeSetContent(val_node, tmp_str1);
+        xmlNodeSetContent(val_node, BAD_CAST tmp_str1);
         g_free(tmp_str1);
     }
     break;
@@ -307,7 +318,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         GList *cursor;
         
-        xmlSetProp(val_node, "type", "list");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
         for(cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
@@ -320,7 +331,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         kvp_frame *frame;
 
-        xmlSetProp(val_node, "type", "frame");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
         frame = kvp_value_get_frame (val);
         if (!frame || !kvp_frame_get_hash (frame))
@@ -342,9 +353,9 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
     xmlNodePtr slot_node;
     xmlNodePtr node = (xmlNodePtr)data;
 
-    slot_node = xmlNewChild(node, NULL, "slot", NULL);
+    slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
 
-    xmlNewTextChild(slot_node, NULL, "slot:key", (gchar*)key);
+    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", (xmlChar*)key);
 
     add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
 }
@@ -369,27 +380,10 @@ kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame)
         return NULL;
     }
     
-    ret = xmlNewNode(NULL, tag);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
     
     g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
     
-    return ret;
-}
-
-xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int)
-{
-    xmlNodePtr ret;
-    gchar *numstr;
-
-    numstr = g_strdup_printf( "%u", an_int );
-    g_return_val_if_fail(numstr, NULL);
-
-    ret = xmlNewNode(NULL, tag);
-
-    xmlNodeAddContent(ret, numstr);
-
-    g_free(numstr);
-
     return ret;
 }
 

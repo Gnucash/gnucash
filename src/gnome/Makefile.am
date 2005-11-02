@@ -1,4 +1,4 @@
-SUBDIRS = glade
+SUBDIRS = glade schemas ui
 
 lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
 
@@ -6,23 +6,22 @@ gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 #nodist_gwmod_DATA = gw-gnc.scm
 
-libgncgnome_la_LDFLAGS = -module
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
-  ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
-  ${GUILE_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GLIB_LIBS}
+  ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
-libgw_gnc_la_LDFLAGS = -module \
+
+libgw_gnc_la_LDFLAGS =  \
   ${G_WRAP_LINK_ARGS} ${GLIB_LIBS}
 libgw_gnc_la_LIBADD = libgncgnome.la
 
 libgncgnome_la_SOURCES = \
+  dialog-chart-export.c  \
   dialog-commodities.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
@@ -42,17 +41,40 @@ libgncgnome_la_SOURCES = \
   druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
+  gnc-plugin-account-tree.c \
+  gnc-plugin-basic-commands.c \
+  gnc-plugin-budget.c \
+  gnc-plugin-register.c \
+  gnc-plugin-page-account-tree.c \
+  gnc-plugin-page-budget.c \
+  gnc-plugin-page-register.c \
   gnc-split-reg.c \
   lot-viewer.c \
-  mainwindow-account-tree.c \
   reconcile-list.c \
-  tip-of-the-day.c \
   top-level.c \
-  window-acct-tree.c \
-  window-main.c \
   window-main-summarybar.c \
   window-reconcile.c \
-  window-register.c
+  ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
+  ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
+  ${top_srcdir}/src/backend/file/sixtp-utils.c \
+  ${top_srcdir}/src/backend/file/sixtp.c \
+  ${top_srcdir}/src/backend/file/sixtp-stack.c \
+  ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
+  ${top_srcdir}/src/backend/file/io-example-account.c \
+  ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
+  ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
+  ${top_srcdir}/src/backend/file/io-utils.c \
+  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-book-xml-v2.c \
+  ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
+
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -66,6 +88,7 @@ mimedir = $(datadir)/mime-info
 mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
+  dialog-chart-export.h \
   dialog-fincalc.h \
   dialog-find-transactions.h \
   dialog-new-user.h \
@@ -80,19 +103,20 @@ noinst_HEADERS = \
   druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
-  gnc-network.h \
+  gnc-plugin-account-tree.h \
+  gnc-plugin-basic-commands.h \
+  gnc-plugin-budget.h \
+  gnc-plugin-register.h \
+  gnc-plugin-page-account-tree.h \
+  gnc-plugin-page-budget.h \
+  gnc-plugin-page-register.h \
   gnc-split-reg.h \
   gw-gnc.h \
   lot-viewer.h \
-  mainwindow-account-tree.h \
   reconcile-list.h \
-  tip-of-the-day.h \
   top-level.h \
-  window-acct-tree.h \
-  window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \
-  window-register.h \
   gw-gnc.h
 
 EXTRA_DIST = \
@@ -100,7 +124,6 @@ EXTRA_DIST = \
   gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime \
-  gnc-network.c \
   ${gwmod_DATA}
 
 
@@ -111,8 +134,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/app-file \
-  -I${top_srcdir}/src/app-file/gnome \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \
@@ -124,12 +145,12 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${GHTTP_CFLAGS} \
   ${GLADE_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GUPPI_CFLAGS} 
 
 # We build this in an earlier directory.

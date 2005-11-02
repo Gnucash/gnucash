@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file policy.c
- *  @breif Implement FIFO Accounting Policy.
+ *  @brief Implement FIFO Accounting Policy.
  *  @author Created by Linas Vepstas August 2003
  *  @author Copyright (c) 2003,2004 Linas Vepstas <linas@linas.org>
  *
@@ -40,11 +40,10 @@
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
 #include "policy.h"
 #include "policy-p.h"
 
-/* static short module = MOD_LOT; */
+//static QofLogModule log_module = GNC_MOD_LOT;
 
 static Split * 
 DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)

@@ -75,13 +75,22 @@
  * make that assumption, in order to store the different accounting
  * periods in a clump so that one can be found, given another.
  *
- *  @{ 
+
+   The session now calls QofBackendProvider->check_data_type
+   to check that the incoming path contains data that the
+   backend provider can open. The backend provider should
+   also check if it can contact it's storage media (disk,
+   network, server, etc.) and abort if it can't.  Malformed
+   file URL's would be handled the same way.
+  
+ @{ 
  */
 
 /** @file qofsession.h
  * @brief Encapsulates a connection to a backend (persistent store)
  * @author Copyright (c) 1998, 1999, 2001, 2002 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
+ * @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  */
 
 #ifndef QOF_SESSION_H
@@ -89,6 +98,10 @@
 
 #include "qofbackend.h"
 #include "qofbook.h"
+#include "qofclass.h"
+#include "qofobject.h"
+
+#define QOF_MOD_SESSION "qof-session"
 
 /* PROTOTYPES ******************************************************/
 
@@ -180,24 +193,25 @@ const char * qof_session_get_error_message(QofSession *session);
  *    See qofbackend.h for a listing of returned errors.
  */
 QofBackendError qof_session_pop_error (QofSession *session);
-/* @} */
+/** @} */
 
 /** The qof_session_add_book() allows additional books to be added to
  *    a session. 
  * XXX Under construction, clarify the following when done:
  * XXX There must already be an open book in the session already!?
- * XXX Only one open bok at a time per session is alowed!?
+ * XXX Only one open book at a time per session is allowed!?
  * XXX each book gets its own unique backend ???
  */
 void qof_session_add_book (QofSession *session, QofBook *book);
 
 QofBook * qof_session_get_book (QofSession *session);
 
-/** The qof_session_get_file_path() routine returns the fully-qualified file
+/**
+ *    The qof_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename
  *    was for the session, then it had to have been fully resolved to
  *    open the session. This routine returns the result of this resolution.
- *    The path is always guarenteed to reside in the local file system, 
+ *    The path is always guaranteed to reside in the local file system, 
  *    even if the session itself was opened as a URL.  (currently, the
  *    filepath is derived from the url by substituting commas for
  *    slashes).
@@ -207,6 +221,7 @@ QofBook * qof_session_get_book (QofSession *session);
  *    file:/some/where/some/file.gml
  */
 const char * qof_session_get_file_path (QofSession *session);
+
 const char * qof_session_get_url (QofSession *session);
 
 /**
@@ -236,8 +251,267 @@ void     qof_session_save (QofSession *session,
  */
 void     qof_session_end  (QofSession *session);
 
-/** @name Event Handling
+/** @name Copying entities between sessions.
+
+Only certain backends can cope with selective copying of
+entities and only fully defined QOF entities can be copied
+between sessions - see the \ref QSF (QSF) documentation 
+(::qsf_write_file) for more information.
+
+The recommended backend for the new session is QSF or a future
+SQL backend. Using any of these entity copy functions sets a 
+flag in the backend that this is now a partial QofBook.
+When you save a session containing a partial QofBook,
+the session will check that the backend is able to handle the
+partial book. If not, the backend will be replaced by one that
+can handle partial books, preferably one using the same
+::access_method. Currently, this means that a book 
+using the GnuCash XML v2 file backend will be switched to QSF.
+
+Copied entities are identical to the source entity, all parameters
+defined with ::QofAccessFunc and ::QofSetterFunc in QOF are copied
+and the ::GUID of the original ::QofEntity is set in the new entity.
+Sessions containing copied entities are intended for use
+as mechanisms for data export.
+
+It is acceptable to add entities to new_session in batches. Note that
+any of these calls will fail if an entity already exists in new_session
+with the same GUID as any entity to be copied. 
+
+To merge a whole QofBook or where there is any possibility
+of collisions or requirement for user intervention,
+see \ref BookMerge
+
+@{
+
+*/
+
+/** \brief Copy a single QofEntity to another session
+ 
+Checks first that no entity in the session book contains
+the GUID of the source entity. 
+
+ @param new_session - the target session
+ @param original - the QofEntity* to copy
+
+@return FALSE without copying if the session contains an entity
+with the same GUID already, otherwise TRUE.
+*/
+
+gboolean qof_entity_copy_to_session(QofSession* new_session, QofEntity* original);
+
+/** @brief Copy a GList of entities to another session
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any of the source entities - there is
+no support for handling collisions, instead use \ref BookMerge
+
+Note that the GList (e.g. from ::qof_sql_query_run) can contain
+QofEntity pointers of any ::QofIdType, in any sequence. As long
+as all members of the list are ::QofEntity*, and all GUID's are
+unique, the list can be copied.
+
+ @param new_session - the target session
+ @param entity_list - a GList of QofEntity pointers of any type(s).
+
+@return FALSE, without copying, if new_session contains any entities
+with the same GUID. Otherwise TRUE.
+
+*/
+gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list);
+
+/** @brief Copy a QofCollection of entities.
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any entities in the collection - there is
+no support for handling collisions - instead, use \ref BookMerge
+
+@param new_session - the target session
+@param entity_coll - a QofCollection of any QofIdType.
+
+@return FALSE, without copying, if new_session contains any entities
+with the same GUID. Otherwise TRUE.
+*/
+
+gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll);
+
+/** \brief Recursively copy a collection of entities to a session.
+
+\note This function creates a <b>partial QofBook</b>. See 
+::qof_entity_copy_to_session for more information.
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any entities to be copied - there is
+no support for handling collisions - instead, use \ref BookMerge
+
+Objects can be defined solely in terms of QOF data types or
+as a mix of data types and other objects, which may in turn
+include other objects. These references can be copied recursively
+down to the third level. e.g. ::GncInvoice refers to ::GncOwner which
+refers to ::GncCustomer which refers to ::GncAddress. See
+::QofEntityReference.
+
+\note This is a deep recursive copy - every referenced entity is copied
+to the new session, including all parameters. The starting point is all
+entities in the top level collection. It can take some time.
+
+@param coll A QofCollection of entities that may or may not have 
+references.
+
+@param new_session The QofSession to receive the copied entities.
+
+@return TRUE on success; if any individual copy fails, returns FALSE.
+<b>Note</b> : Some entities may have been copied successfully even if
+one of the references fails to copy.
+
+*/
+gboolean
+qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll);
+
+/** \brief Recursively copy a single entity to a new session.
+
+Copy the single entity and all referenced entities to the second level.
+
+Only entities that are directly referenced by the top level entity are
+copied.
+
+This is a deep copy - all parameters of all referenced entities are copied. If 
+the top level entity has no references, this is identical to 
+::qof_entity_copy_to_session.
+
+@param ent A single entity that may or may not have references.
+
+@param new_session The QofSession to receive the copied entities.
+
+@return TRUE on success; if any individual copy fails, returns FALSE.
+<b>Note</b> : Some entities may have been copied successfully even if
+one of the references fails to copy.
+*/
+gboolean
+qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent);
+
+/** @} 
+*/
+
+/** @name Using a partial QofBook.
+
+Part of the handling for partial books requires a storage mechanism for
+references to entities that are not within reach of the partial book.
+This requires a GList in the book data to contain the reference 
+QofIdType and GUID so that when the book is written out, the
+reference can be included. See ::qof_book_get_data. 
+
+When the file is imported back in, the list needs to be rebuilt.
+The QSF backend rebuilds the references by linking to real entities. Other
+backends can process the hash table in similar ways.
+
+The list stores the QofEntityReference to the referenced entity -
+a struct that contains the GUID and the QofIdType of the referenced entity 
+as well as the parameter used to obtain the reference.
+
+Partial books need to be differentiated in the backend, the 
+flag in the book data is used by qof_session_save to prevent a partial
+book being saved using a backend that requires a full book.
+
  @{ */
+
+
+/** \brief External references in a partial QofBook.
+
+For use by any session that deals with partial QofBooks.
+It is used by the entity copy functions and by the QSF backend.
+Creates a GList stored in the Book hashtable to contain
+repeated references for a single entity.
+*/
+typedef struct qof_entity_reference {
+	QofIdType       choice_type;/**< When the reference is a different type.*/
+	QofIdType        type;       /**< The type of entity */
+	GUID             *ref_guid;  /**< The GUID of the REFERENCE entity */
+	const QofParam  *param;      /**< The parameter name and type. */
+	const GUID      *ent_guid;   /**< The GUID of the original entity. */
+}QofEntityReference;
+
+/** \brief Get a reference from this entity to another entity.
+
+Used in the preparation of a partial QofBook when the known entity
+(the one currently being copied into the partial book) refers to
+any other entity, usually as a parent or child.
+The routine calls the param_getfcn of the supplied parameter,
+which must return an object (QofEntity*), not a known QOF data type, to
+retrieve the referenced entity and therefore the GUID. The GUID of
+both entities are stored in the reference which then needs to be added
+to the reference list which is added to the partial book data hash.
+The reference itself is used by the backend to preserve the relationship
+between entities within and outside the partial book.
+
+See also ::qof_class_get_referenceList to obtain the list of 
+parameters that provide references to the known entity whilst
+excluding parameters that return known QOF data types.
+
+Note that even if the referenced entity \b exists in the partial
+book (or will exist later), a reference must still be obtained and
+added to the reference list for the book itself. This maintains
+the integrity of the partial book during sequential copy operations.
+
+@param ent   The known entity.
+@param param  The parameter to use to get the referenced entity.
+
+@return FALSE on error, otherwise a pointer to the QofEntityReference.
+*/
+QofEntityReference*
+qof_entity_get_reference_from(QofEntity *ent, const QofParam *param);
+
+/** \brief Adds a new reference to the partial book data hash.
+
+Retrieves any existing reference list and appends the new reference.
+
+If the book is not already marked as partial, it will be marked as partial.
+*/
+void
+qof_session_update_reference_list(QofSession *session, QofEntityReference *reference);
+
+/** Used as the key value for the QofBook data hash.
+ *
+ * Retrieved later by QSF (or any other suitable backend) to
+ * rebuild the references from the QofEntityReference struct
+ * that contains the QofIdType and GUID of the referenced entity
+ * of the original QofBook as well as the parameter data and the
+ * GUID of the original entity.
+ * */
+#define ENTITYREFERENCE "QofEntityReference"
+
+/** \brief Flag indicating a partial QofBook.
+
+When set in the book data with a gboolean value of TRUE,
+the flag denotes that only a backend that supports partial
+books can be used to save this session.
+*/
+
+#define PARTIAL_QOFBOOK "PartialQofBook"
+
+/** @}
+*/
+
+/** \brief Allow session data to be printed to stdout
+
+book_id can't be NULL and we do need to have an access_method,
+so use one to solve the other.
+
+To print a session to stdout, use ::qof_session_begin. Example:
+
+\a qof_session_begin(session,QOF_STDOUT,TRUE,FALSE);
+
+When you call qof_session_save(session, NULL), the output will appear
+on stdout and can be piped or redirected to other processes.
+
+Currently, only the QSF backend supports writing to stdout, other
+backends may return a ::QofBackendError.
+*/
+#define QOF_STDOUT "file:"
+
+/** @name Event Handling
+
+  @{ */
 /** The qof_session_events_pending() method will return TRUE if the backend
  *    has pending events which must be processed to bring the engine
  *    up to date with the backend.
@@ -249,7 +523,7 @@ gboolean qof_session_events_pending (QofSession *session);
  *    engine was modified while engine events were suspended.
  */
 gboolean qof_session_process_events (QofSession *session);
-/* @} */
+/** @} */
 
 #ifdef GNUCASH_MAJOR_VERSION
 /** Run the RPC Server 
@@ -264,7 +538,21 @@ gboolean qof_session_export (QofSession *tmp_session,
 			     QofSession *real_session,
 			     QofPercentageFunc percentage_func);
 
-#endif /* GNUCASH_MJOR_VERSION */
+#endif /* GNUCASH_MAJOR_VERSION */
+
+/** Register a function to be called just before a session is closed.
+ *
+ *  @param fn The function to be called.  The function definition must
+ *  be func(gpointer session, gpointer user_data);
+ *
+ *  @param data The data to be passed to the function. */
+void qof_session_add_close_hook (GFunc fn, gpointer data);
+
+/** Call all registered session close hooks, informing them that the
+ *  specified session is about to be closed.
+ *
+ *  @param session A pointer to the session being closed. */
+void qof_session_call_close_hooks (QofSession *session);
 
 #endif /* QOF_SESSION_H */
 /** @} */

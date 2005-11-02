@@ -6,16 +6,32 @@
 (define-module (g-wrapped gw-core-utils-spec))
 
 (use-modules (g-wrap))
+(use-modules (g-wrap simple-type))
 
-(display "**** NOTE: this wrapset appears to be empty !?\n")
+(use-modules (g-wrap gw-standard-spec))
+(use-modules (g-wrap gw-wct-spec))
+(use-modules (g-wrap gw-glib-spec))
 
 (let ((ws (gw:new-wrapset "gw-core-utils")))
+
+  (gw:wrapset-depends-on ws "gw-standard")
+  (gw:wrapset-depends-on ws "gw-wct")
+  (gw:wrapset-depends-on ws "gw-glib")
 
   (gw:wrapset-set-guile-module! ws '(g-wrapped gw-core-utils))
 
   (gw:wrapset-add-cs-declarations!
    ws
    (lambda (wrapset client-wrapset)
-     (if client-wrapset
-         '()
-         "#include <core-utils.h>\n"))))
+     (list
+      "#include <gnc-gconf-utils.h>\n")))
+
+  (gw:wrap-function
+   ws
+   'gnc:gconf-get-bool
+   '<gw:bool>
+   "gnc_gconf_get_bool_no_error"
+   '(((<gw:mchars> caller-owned) section)
+     ((<gw:mchars> caller-owned) name))
+   "Get a boolean value from gconf.")
+)

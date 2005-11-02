@@ -39,22 +39,13 @@
  */
 
 #include "Account.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
-#include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofquery.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================= */
 
@@ -361,9 +352,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
 
 /* ============================================================= */
 
-/* change prototype of gnc_lot_register to return a gboolean
-and set a foreach 
-before enabling the object description. */
+/* Should the object description be enabled?. */
 /*
 static QofObject gncLotDesc =
 {
@@ -375,17 +364,17 @@ book_begin:         NULL,
 book_end:           NULL,
 is_dirty:           NULL,
 mark_clean:         NULL,
-foreach:            NULL,
+foreach:            qof_collection_foreach,
 printable:          NULL,
-version_cmp:        NULL,
+version_cmp:        (int (*)(gpointer,gpointer))qof_instance_version_cmp,
 };
 */
 
-void gnc_lot_register (void)
+gboolean gnc_lot_register (void)
 {
   static const QofParam params[] = {
-	{ LOT_TITLE, 		QOF_TYPE_STRING,	(QofAccessFunc)gnc_lot_get_title, 		(QofSetterFunc)gnc_lot_set_title },
-	{ LOT_NOTES,		QOF_TYPE_STRING,	(QofAccessFunc)gnc_lot_get_notes,		(QofSetterFunc)gnc_lot_set_notes },
+   { LOT_TITLE, QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_title, (QofSetterFunc)gnc_lot_set_title },
+   { LOT_NOTES,	QOF_TYPE_STRING, (QofAccessFunc)gnc_lot_get_notes, (QofSetterFunc)gnc_lot_set_notes },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gnc_lot_get_book, NULL },
     { LOT_IS_CLOSED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gnc_lot_is_closed, NULL },
@@ -394,7 +383,7 @@ void gnc_lot_register (void)
   };
 
   qof_class_register (GNC_ID_LOT, NULL, params);
-  
+  return TRUE;
 //  return qof_object_register(&gncLotDesc);
 
 }

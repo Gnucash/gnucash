@@ -64,12 +64,16 @@
 #include "SX-book-p.h"
 #include "dialog-utils.h"
 #include "finvar.h"
-#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-exp-parser.h"
+#include "gnc-embedded-window.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-main-window.h"
 #include "gnc-numeric.h"
+#include "gnc-plugin-page.h"
+#include "gnc-plugin-page-register.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -77,7 +81,6 @@
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
-#include "window-register.h"
 #include "messages.h"
 
 #include "dialog-sxsincelast.h"
@@ -94,6 +97,7 @@
 #define DIALOG_SXSINCELAST_GLADE_NAME "Since Last Run Druid"
 #define SXSLD_DRUID_GLADE_NAME "sincelast_druid"
 #define SXSLD_WIN_PREFIX "sx_sincelast_win"
+#define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
 
 #define SINCELAST_DRUID   "sincelast_druid"
 #define WHAT_TO_DO_PG "what_to_do"
@@ -102,6 +106,7 @@
 #define TO_CREATE_PG "to_create_page"
 #define CREATED_PG "created_page"
 #define OBSOLETE_PG "obsolete_page"
+#define COMMIT_PG "commit_page"
 
 #define SX_OBSOLETE_CLIST "sx_obsolete_clist"
 #define TO_CREATE_LIST "to_create_list"
@@ -116,7 +121,7 @@
 #define CANCEL_BUTTON "cancel_button"
 #define VARIABLE_TABLE "variables_table"
 #define AUTO_CREATE_VBOX "ac_vbox"
-#define TO_CREATE_TXN_REG_FRAME "to_create_txn_reg_frame"
+#define TO_CREATE_TXN_VBOX "to_create_txn_vbox"
 #define CREATED_VBOX "created_vbox"
 #define WHAT_TO_DO_VBOX "what_to_do_vbox"
 #define WHAT_TO_DO_PROGRESS "creation_progress"
@@ -133,7 +138,7 @@
 #define READY_TEXT          "Ready to create"
 #define NEEDS_BINDINGS_TEXT "Needs values for variables"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * Directions for {forward,back}-page determining.
@@ -269,14 +274,17 @@ typedef struct _sxSinceLastData {
         /* The count of auto-created transactions. */
         gint autoCreatedCount;
 
-        GNCLedgerDisplay *ac_ledger;
-        GNCSplitReg *ac_gsr;
+	GncEmbeddedWindow   *ac_window;
+	GncPluginPage       *ac_register;
+        GNCLedgerDisplay    *ac_ledger;
 
-        GNCLedgerDisplay *created_ledger;
-        GNCSplitReg *created_gsr;
+	GncEmbeddedWindow   *created_window;
+	GncPluginPage       *created_register;
+        GNCLedgerDisplay    *created_ledger;
 
-        GNCLedgerDisplay *to_create_ledger;
-        GNCSplitReg *to_create_gsr;
+	GncEmbeddedWindow   *to_create_window;
+	GncPluginPage       *to_create_register;
+        GNCLedgerDisplay    *to_create_ledger;
 
 } sxSinceLastData;
 
@@ -285,6 +293,7 @@ static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static void create_to_create_ledger( sxSinceLastData *sxsld );
 static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
+static void sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld );
 
 static gint sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
@@ -299,6 +308,7 @@ static gboolean gnc_sxsld_tocreate_appr( sxSinceLastData *sxsld );
 static gboolean gnc_sxsld_autocreate_appr( sxSinceLastData *sxsld );
 static gboolean gnc_sxsld_created_appr( sxSinceLastData *sxsld );
 static gboolean gnc_sxsld_obsolete_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_commit_appr( sxSinceLastData *sxsld );
 
 static void sxsincelast_entry_changed( GtkEditable *e, gpointer ud );
 static void sxsincelast_destroy( GtkObject *o, gpointer ud );
@@ -373,13 +383,46 @@ static gint sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
 static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 
+static void gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld);
+static void gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld);
+static void gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld);
+
+static GtkActionEntry gnc_sxsld_menu_entries [] =
+{
+	/* Toplevel */
+	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
+
+	/* Edit menu */
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
+	  NULL,
+	  G_CALLBACK (gnc_sxsld_cmd_edit_cut) },
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
+	  NULL,
+	  G_CALLBACK (gnc_sxsld_cmd_edit_copy) },
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
+	  NULL,
+	  G_CALLBACK (gnc_sxsld_cmd_edit_paste) },
+
+	/* Actions menu */
+	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
+	  N_("Jump to the corresponding transaction in the other account"),
+	  G_CALLBACK (sxsld_jump_to_real_txn) },
+};
+static guint gnc_sxsld_menu_n_entries = G_N_ELEMENTS (gnc_sxsld_menu_entries);
+
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
  **/
 void
-gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
+gnc_sx_sxsincelast_book_opened (void)
 {
   gint ret;
+
+  if (!gnc_gconf_get_bool(GCONF_SECTION, "show_at_file_open", NULL))
+    return;
+
   ret = gnc_ui_sxsincelast_dialog_create();
   if ( ret < 0 ) {
     gnc_info_dialog
@@ -393,6 +436,7 @@ gnc_ui_sxsincelast_guile_wrapper( char *bookfile )
        -(ret));
   }
 }
+
 
 static gboolean
 show_handler (const char *class, gint component_id,
@@ -490,9 +534,9 @@ dialog_widgets_attach_handlers(GladeXML *dialog_xml,
         for(i = 0; handler_info[i].name != NULL; i++)
         {
                 w = glade_xml_get_widget(dialog_xml, handler_info[i].name);
-                gtk_signal_connect( GTK_OBJECT(w), handler_info[i].signal, 
-                                    GTK_SIGNAL_FUNC(handler_info[i].handlerFn),
-                                    sxsld);
+                g_signal_connect( G_OBJECT(w), handler_info[i].signal, 
+				  G_CALLBACK(handler_info[i].handlerFn),
+				  sxsld);
         }
 }
 
@@ -508,34 +552,34 @@ druid_pages_attach_handlers( GladeXML *dialog_xml,
         {
                 w = glade_xml_get_widget(dialog_xml, handler_info[i].pageName);
                 if ( handler_info[i].prepareHandlerFn ) {
-                        gtk_signal_connect( GTK_OBJECT(w), "prepare",
-                                            GTK_SIGNAL_FUNC(handler_info[i].
-                                                            prepareHandlerFn),
-                                            sxsld);
+                        g_signal_connect( G_OBJECT(w), "prepare",
+					  G_CALLBACK(handler_info[i].
+						     prepareHandlerFn),
+					  sxsld);
                 }
                 if ( handler_info[i].backHandlerFn ) {
-                        gtk_signal_connect( GTK_OBJECT(w), "back",
-                                            GTK_SIGNAL_FUNC(handler_info[i].
-                                                            backHandlerFn),
-                                            sxsld);
+                        g_signal_connect( G_OBJECT(w), "back",
+					  G_CALLBACK(handler_info[i].
+						     backHandlerFn),
+					  sxsld);
                 }
                 if ( handler_info[i].nextHandlerFn ) {
-                        gtk_signal_connect( GTK_OBJECT(w), "next",
-                                            GTK_SIGNAL_FUNC(handler_info[i].
-                                                            nextHandlerFn),
-                                            sxsld);
+                        g_signal_connect( G_OBJECT(w), "next",
+					  G_CALLBACK(handler_info[i].
+						     nextHandlerFn),
+					  sxsld);
                 }
                 if ( handler_info[i].finishHandlerFn ) {
-                        gtk_signal_connect( GTK_OBJECT(w), "finish",
-                                            GTK_SIGNAL_FUNC(handler_info[i].
-                                                            finishHandlerFn),
-                                            sxsld);
+                        g_signal_connect( G_OBJECT(w), "finish",
+					  G_CALLBACK(handler_info[i].
+						     finishHandlerFn),
+					  sxsld);
                 }
                 if ( handler_info[i].cancelHandlerFn ) {
-                        gtk_signal_connect( GTK_OBJECT(w), "cancel",
-                                            GTK_SIGNAL_FUNC(handler_info[i].
-                                                            cancelHandlerFn),
-                                            sxsld);
+                        g_signal_connect( G_OBJECT(w), "cancel",
+					  G_CALLBACK(handler_info[i].
+						     cancelHandlerFn),
+					  sxsld);
                 }
         }
 }
@@ -569,6 +613,7 @@ gnc_sxsld_get_appropriate_page( sxSinceLastData *sxsld,
                 { TO_CREATE_PG,          gnc_sxsld_tocreate_appr },
                 { CREATED_PG,            gnc_sxsld_created_appr },
                 { OBSOLETE_PG,           gnc_sxsld_obsolete_appr },
+                { COMMIT_PG,             gnc_sxsld_commit_appr },
                 { NULL,                  NULL }
         };
         int modifier;
@@ -649,6 +694,14 @@ gnc_sxsld_obsolete_appr( sxSinceLastData *sxsld )
 
 static
 gboolean
+gnc_sxsld_commit_appr( sxSinceLastData *sxsld )
+{
+	/* Always show this page */
+        return TRUE;
+}
+
+static
+gboolean
 gen_back( GnomeDruidPage *druid_page,
           gpointer arg1, gpointer ud )
 {
@@ -704,7 +757,7 @@ reminders_prep( GnomeDruidPage *druid_page,
                                                   druid_page,
                                                   BACK )
                   != NULL ),
-                TRUE, TRUE );
+                TRUE, TRUE, TRUE );
         /* FIXME: this isn't quite right; see the comment in
          * sxsld_remind_row_toggle */
         gnome_druid_set_show_finish( sxsld->sincelast_druid,
@@ -833,7 +886,7 @@ created_prep( GnomeDruidPage *druid_page,
                                                   druid_page,
                                                   BACK )
                   != NULL ),
-                TRUE, TRUE );
+                TRUE, TRUE, TRUE );
 
         if ( !gnc_sxsld_get_appropriate_page( sxsld,
                                               druid_page,
@@ -855,10 +908,22 @@ obsolete_prep( GnomeDruidPage *druid_page,
                                                   druid_page,
                                                   BACK )
                   != NULL ),
-                TRUE, TRUE );
+                TRUE, TRUE, TRUE );
+}
 
-        /* This is always the last/finish page. */
-        gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
+static void
+commit_prep( GnomeDruidPage *druid_page,
+	     gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
+        gnome_druid_set_buttons_sensitive(
+                sxsld->sincelast_druid,
+                ( gnc_sxsld_get_appropriate_page( sxsld,
+                                                  druid_page,
+                                                  BACK )
+                  != NULL ),
+                TRUE, TRUE, TRUE );
 }
 
 static
@@ -946,7 +1011,7 @@ auto_create_prep( GnomeDruidPage *druid_page,
                                                   druid_page,
                                                   BACK )
                   != NULL ),
-                TRUE, TRUE );
+                TRUE, TRUE, TRUE );
 
         if ( !gnc_sxsld_get_appropriate_page( sxsld,
                                               druid_page,
@@ -978,7 +1043,7 @@ to_create_prep( GnomeDruidPage *druid_page,
                                                   druid_page,
                                                   BACK )
                   != NULL ),
-                TRUE, TRUE );
+                TRUE, TRUE, TRUE );
         /* Setup next/finish button based on the number of ready-to-go
          * to-create transactions */
         gnome_druid_set_show_finish(
@@ -1133,7 +1198,7 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 /* add to the postponed list. */
                 { 
                         char tmpBuf[ MAX_DATE_LENGTH+1 ];
-                        printGDate( tmpBuf, tci->date );
+                        qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, tci->date );
                         DEBUG( "Adding defer instance on %s for %s",
                                tmpBuf,
                                xaccSchedXactionGetName( tci->parentTCT->sx ) );
@@ -1230,7 +1295,7 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
                                               &allVarsBound );
                         if ( !allVarsBound ) {
                                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
-                                printGDate( tmpBuf, tci->date );
+                                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, tci->date );
                                 /* FIXME: this should be better-presented to the user. */
                                 DEBUG( "SX %s on date %s still has unbound variables.",
                                        xaccSchedXactionGetName(tci->parentTCT->sx), tmpBuf );
@@ -1477,7 +1542,7 @@ static void
 sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget *w;
-        GtkObject *o;
+        GObject *o;
         GnomeDruidPage *nextPage;
         int i;
         static widgetSignalHandlerTuple widgets[] = {
@@ -1525,6 +1590,10 @@ sxsincelast_init( sxSinceLastData *sxsld )
                   obsolete_prep, gen_back, gen_next,
                   gnc_sxsld_finish, cancel_check },
 
+                { COMMIT_PG,
+                  commit_prep, gen_back, gen_next,
+                  gnc_sxsld_finish, cancel_check },
+
                 { NULL, NULL, NULL, NULL, NULL, NULL }
         };
 
@@ -1542,8 +1611,8 @@ sxsincelast_init( sxSinceLastData *sxsld )
                                     sxsincelast_close_handler,
                                     sxsld->sincelast_window );
 
-        gtk_signal_connect( GTK_OBJECT(sxsld->sincelast_window), "destroy",
-                            GTK_SIGNAL_FUNC( sxsincelast_destroy ), sxsld );
+        g_signal_connect( G_OBJECT(sxsld->sincelast_window), "destroy",
+			  G_CALLBACK( sxsincelast_destroy ), sxsld );
 
         dialog_widgets_attach_handlers(sxsld->gxml, widgets, sxsld);
         druid_pages_attach_handlers( sxsld->gxml, pages, sxsld );
@@ -1552,10 +1621,10 @@ sxsincelast_init( sxSinceLastData *sxsld )
         for ( i=0; optionMenus[i].name != NULL; i++ ) {
                 w = glade_xml_get_widget( sxsld->gxml, optionMenus[i].name );
                 gnc_option_menu_init( w );
-                o = GTK_OBJECT(gtk_option_menu_get_menu(GTK_OPTION_MENU(w)));
-                gtk_signal_connect( o, "selection-done",
-                                    GTK_SIGNAL_FUNC( optionMenus[i].fn ),
-                                    sxsld );
+                o = G_OBJECT(gtk_option_menu_get_menu(GTK_OPTION_MENU(w)));
+                g_signal_connect( o, "selection-done",
+				  G_CALLBACK( optionMenus[i].fn ),
+				  sxsld );
         }
 
         /* set all to-create clist columns to auto-resize. */
@@ -1580,20 +1649,17 @@ sxsincelast_init( sxSinceLastData *sxsld )
                                                * cares... */
                                               TO_CREATE_STATUS );
 
+	/* The last druid page is blank without this call. */
+        gtk_widget_show_all( sxsld->sincelast_window );
+
         create_autoCreate_ledger( sxsld );
         create_created_ledger( sxsld );
         create_to_create_ledger( sxsld );
 
-        {
-                int width, height;
-                gnc_get_window_size( SXSLD_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW(sxsld->sincelast_window),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(sxsld->sincelast_window));
 
-        gtk_widget_show_all( sxsld->sincelast_window );
+	/* Do not call show_all here. Screws up the gtkuimanager code */
+        gtk_widget_show( sxsld->sincelast_window );
 
         process_auto_create_list( sxsld->autoCreateList, sxsld );
 
@@ -1613,10 +1679,7 @@ static
 void
 sxsincelast_save_size( sxSinceLastData *sxsld )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxsld->sincelast_window->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SXSLD_WIN_PREFIX, w, h );
+  gnc_save_window_size( GCONF_SECTION, GTK_WINDOW(sxsld->sincelast_window) );
 }
 
 static void
@@ -1789,7 +1852,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                         }
 
                         rowText[0] = g_new0( char, MAX_DATE_LENGTH+1 );
-                        printGDate( rowText[0], tci->date );
+                        qof_print_gdate( rowText[0], MAX_DATE_LENGTH, tci->date );
                         
 
                         switch ( tci->state ) {
@@ -1876,7 +1939,7 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         rit = (reminderInstanceTuple*)instances->data;
 
                         rowText[0] = g_new0( gchar, MAX_DATE_LENGTH+1 );
-                        printGDate( rowText[0], rit->occurDate );
+                        qof_print_gdate( rowText[0], MAX_DATE_LENGTH, rit->occurDate );
                         rowText[1] = "";
                         rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size? */
                         sprintf( rowText[2], "%d",
@@ -1890,15 +1953,15 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         gtk_ctree_node_set_row_data( ctree,
                                                      instNode,
                                                      (gpointer)rit );
-                        gtk_signal_handler_block_by_func( GTK_OBJECT(ctree),
-                                                          sxsld_remind_row_toggle,
-                                                          sxsld ); 
+                        g_signal_handlers_block_by_func( G_OBJECT(ctree),
+                                                         sxsld_remind_row_toggle,
+                                                         sxsld ); 
                         if ( rit->isSelected ) {
                                 gtk_ctree_select( ctree, instNode );
                         }
-                        gtk_signal_handler_unblock_by_func( GTK_OBJECT(ctree),
-                                                            sxsld_remind_row_toggle,
-                                                            sxsld );
+                        g_signal_handlers_unblock_by_func( G_OBJECT(ctree),
+                                                           sxsld_remind_row_toggle,
+                                                           sxsld );
                         g_free( rowText[0] );
                         g_free( rowText[2] );
                 }
@@ -1922,9 +1985,9 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
 
         gtk_clist_freeze( cl );
         gtk_clist_clear( cl );
-        gtk_signal_handler_block_by_func( GTK_OBJECT(cl),
-                                          sxsld_obsolete_row_toggle,
-                                          sxsld );
+        g_signal_handlers_block_by_func( G_OBJECT(cl),
+                                         sxsld_obsolete_row_toggle,
+                                         sxsld );
 
         for ( row = 0; removeList;
               row++, removeList = removeList->next ) {
@@ -1944,9 +2007,9 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                         gtk_clist_select_row( cl, row, 0 );
                 }
         }
-        gtk_signal_handler_unblock_by_func( GTK_OBJECT(cl),
-                                            sxsld_obsolete_row_toggle,
-                                            sxsld );
+        g_signal_handlers_unblock_by_func( G_OBJECT(cl),
+                                           sxsld_obsolete_row_toggle,
+                                           sxsld );
         gtk_clist_thaw( cl );
 
         g_string_free(tmp_str, TRUE);
@@ -2628,6 +2691,8 @@ create_transactions_on( SchedXaction *sx,
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
         if ( ag && id ) {
+            /* This looks strange but it's right.  The account is
+               named after the guid string. */
                 acct = xaccGetAccountFromName( ag, id );
                 if ( acct ) {
                         createUD.tci = tci;
@@ -2675,6 +2740,7 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
 
                 ag = gnc_book_get_template_group( gnc_get_current_book () );
                 id = guid_to_string( xaccSchedXactionGetGUID(sx) );
+                /* Get account named after guid string. */
                 acct = xaccGetAccountFromName( ag, id );
                 splitList = xaccAccountGetSplitList( acct );
         }
@@ -3427,7 +3493,7 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
 
         rit = (reminderInstanceTuple*)data;
         msg = (GString*)ud;
-        printGDate( tmpBuf, rit->occurDate );
+        qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, rit->occurDate );
         g_string_sprintfa( msg, tmpBuf );
         g_string_sprintfa( msg, "\n" );
 }
@@ -3496,7 +3562,7 @@ static void
 create_autoCreate_ledger( sxSinceLastData *sxsld )
 {
         SplitRegister *splitreg;
-        GtkWidget *vbox, *toolbar;
+        GtkWidget *vbox;
         Query *q;
 
         q = xaccMallocQuery();
@@ -3504,34 +3570,42 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         sxsld->ac_ledger = gnc_ledger_display_query( q,
                                                      GENERAL_LEDGER,
                                                      REG_STYLE_LEDGER );
-        splitreg = gnc_ledger_display_get_split_register( sxsld->ac_ledger );
 
-        /* FIXME: Make numRows configurable. */
-        sxsld->ac_gsr =
-                GNC_SPLIT_REG(
-                        gnc_split_reg_new( sxsld->ac_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ),
-                                           4,
-                                           (CREATE_TOOLBAR | CREATE_POPUP),
-                                           CAP_SCHEDULE ) );
+	/* First the embedded window */
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
-        toolbar = gnc_split_reg_get_toolbar( sxsld->ac_gsr );
+	sxsld->ac_window =
+	  gnc_embedded_window_new("SXWindowActions",
+				     gnc_sxsld_menu_entries,
+				     gnc_sxsld_menu_n_entries,
+				     "gnc-sxed-window-ui.xml",
+				     sxsld->sincelast_window,
+				     FALSE, /* no accelerators */
+				     sxsld);
+	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->ac_window),
+			    TRUE, TRUE, 0);
 
-        gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
-        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->ac_gsr), TRUE, TRUE, 2 );
-        gnc_split_reg_use_extended_popup( sxsld->ac_gsr );
+	/* Then the register in it */
+	sxsld->ac_register = gnc_plugin_page_register_new_ledger(sxsld->ac_ledger);
+	gnc_plugin_page_set_ui_description (sxsld->ac_register,
+					    "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_register_set_options (sxsld->ac_register,
+					      NULL, NULL, 4,
+					      CAP_SCHEDULE);
+	gnc_embedded_window_open_page (sxsld->ac_window, sxsld->ac_register);
+
+	/* Now configure the register */
+        splitreg = gnc_ledger_display_get_split_register( sxsld->ac_ledger );
         gnc_split_register_config(splitreg,
                                   splitreg->type, splitreg->style,
                                   FALSE);
         gnc_split_register_show_present_divider( splitreg, FALSE );
-        gnc_ledger_display_refresh( sxsld->ac_ledger );
 }
 
 static void
 create_created_ledger( sxSinceLastData *sxsld )
 {
         SplitRegister *splitreg;
-        GtkWidget *vbox, *toolbar;
+        GtkWidget *vbox;
         Query *q;
 
         q = xaccMallocQuery();
@@ -3539,41 +3613,49 @@ create_created_ledger( sxSinceLastData *sxsld )
         sxsld->created_ledger = gnc_ledger_display_query( q,
                                                           GENERAL_LEDGER,
                                                           REG_STYLE_LEDGER );
-        splitreg = gnc_ledger_display_get_split_register( sxsld->created_ledger );
-        /* FIXME: make numRows configurable? */
-        sxsld->created_gsr =
-                GNC_SPLIT_REG( 
-                        gnc_split_reg_new( sxsld->created_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ),
-                                           4,
-                                           ( CREATE_TOOLBAR | CREATE_POPUP ),
-                                           CAP_SCHEDULE ) );
 
+	/* First the embedded window */
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
-        toolbar = gnc_split_reg_get_toolbar( sxsld->created_gsr );
+	sxsld->created_window =
+	  gnc_embedded_window_new("SXWindowActions",
+				  gnc_sxsld_menu_entries,
+				  gnc_sxsld_menu_n_entries,
+				  "gnc-sxed-window-ui.xml",
+				  sxsld->sincelast_window,
+				  FALSE, /* no accelerators */
+				  sxsld);
+	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->created_window),
+			    TRUE, TRUE, 0);
 
-        gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
-        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_gsr), TRUE, TRUE, 2 );
+	/* Then the register in it */
+	sxsld->created_register = gnc_plugin_page_register_new_ledger(sxsld->created_ledger);
+	gnc_plugin_page_set_ui_description (sxsld->created_register,
+					    "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_register_set_options (sxsld->created_register,
+					      NULL, NULL, 4,
+					      CAP_SCHEDULE);
+	gnc_embedded_window_open_page (sxsld->created_window, sxsld->created_register);
 
-        gnc_split_reg_use_extended_popup( sxsld->created_gsr );
+	/* Now configure the register */
+        splitreg = gnc_ledger_display_get_split_register( sxsld->created_ledger );
         gnc_split_register_config(splitreg,
                                   splitreg->type, splitreg->style,
                                   FALSE);
         gnc_split_register_show_present_divider( splitreg, FALSE );
-        gnc_ledger_display_refresh( sxsld->created_ledger );
 }
 
 static
 void
-sxsld_jump_to_real_txn( GNCSplitReg *gsr, gpointer ud )
+sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
 {
         SplitRegister *reg;
+	GNCSplitReg *gsr;
         Account *account;
         Account *leader;
         Split *split;
-        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        reg = gnc_ledger_display_get_split_register( sxsld
-                                                     ->to_create_ledger );
+
+        reg = gnc_ledger_display_get_split_register(sxsld->to_create_ledger);
+	gsr = gnc_ledger_display_get_user_data(sxsld->to_create_ledger);
 
         split = gnc_split_register_get_current_split (reg);
         if (split == NULL)
@@ -3616,17 +3698,13 @@ sxsld_jump_to_real_txn( GNCSplitReg *gsr, gpointer ud )
         }
 
         {
-                GNCLedgerDisplay *ld;
+		GncPluginPage *new_page;
                 GNCSplitReg *gsr;
 
-                ld = gnc_ledger_display_simple( account );
-                gsr = gnc_ledger_display_get_user_data( ld );
-                if ( !gsr ) {
-                        /* create new */
-                        gsr = regWindowSimple( account );
-                }
-                gnc_split_reg_raise( gsr );
-                gnc_split_reg_jump_to_split( gsr, split );
+		new_page = gnc_plugin_page_register_new (account, FALSE);
+		gnc_main_window_open_page (NULL, new_page);
+		gsr = gnc_plugin_page_register_get_gsr (new_page);
+		gnc_split_reg_jump_to_split(gsr, split);
         }
         
         gtk_signal_emit_stop_by_name( GTK_OBJECT(gsr), "jump" );
@@ -3636,34 +3714,41 @@ static void
 create_to_create_ledger( sxSinceLastData *sxsld )
 {
         SplitRegister *splitreg;
-        GtkWidget *txn_reg_frame;
+        GtkWidget *vbox;
         Query *q;
 
         sxsld->to_create_ledger = gnc_ledger_display_template_gl( NULL );
         q = xaccMallocQuery();
         xaccQueryClear( q );
         gnc_ledger_display_set_query( sxsld->to_create_ledger, q );
+
+ 	/* First the embedded window */
+	vbox = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_VBOX );
+	sxsld->to_create_window =
+	  gnc_embedded_window_new("SXWindowActions",
+				  gnc_sxsld_menu_entries,
+				  gnc_sxsld_menu_n_entries,
+				  "gnc-sxed-to-create-window-ui.xml",
+				  sxsld->sincelast_window,
+				  FALSE, /* no accelerators */
+				  sxsld);
+	gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET(sxsld->to_create_window),
+			    TRUE, TRUE, 0);
+
+	/* Then the register in it */
+	sxsld->to_create_register = gnc_plugin_page_register_new_ledger(sxsld->to_create_ledger);
+	gnc_plugin_page_set_ui_description (sxsld->to_create_register,
+					    "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_register_set_options (sxsld->to_create_register,
+					      NULL, NULL, 4,
+					      CAP_READ_ONLY | CAP_SCHEDULE);
+	gnc_embedded_window_open_page (sxsld->to_create_window, sxsld->to_create_register);
+
+	/* Now configure the register */
         splitreg = gnc_ledger_display_get_split_register( sxsld->to_create_ledger );
-        /* FIXME: make numRows configurable? */
-        sxsld->to_create_gsr =
-                GNC_SPLIT_REG( 
-                        gnc_split_reg_new( sxsld->to_create_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ),
-                                           4,
-                                           ( CREATE_TOOLBAR | CREATE_POPUP ),
-                                           ( CAP_READ_ONLY | CAP_SCHEDULE) ) );
-
-        gtk_signal_connect( GTK_OBJECT(sxsld->to_create_gsr), "jump",
-                            GTK_SIGNAL_FUNC( sxsld_jump_to_real_txn ),
-                            sxsld );
-
-        txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
-        gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
-                           GTK_WIDGET( sxsld->to_create_gsr ) );
         gnc_split_register_config( splitreg, splitreg->type, splitreg->style,
                                    FALSE );
         gnc_split_register_show_present_divider( splitreg, FALSE );
-        gnc_ledger_display_refresh( sxsld->to_create_ledger );
 }
 
 static void
@@ -3831,3 +3916,18 @@ gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
                 TRUE );
 }
 
+/* Command callbacks */
+static void
+gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld)
+{
+}
+
+static void
+gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld)
+{
+}
+
+static void
+gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld)
+{
+}

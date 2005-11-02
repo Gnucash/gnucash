@@ -3,3 +3,5 @@ Makefile.in
 .deps
 .libs
 test-link-module
+test-gnc-dialog
+test-gnc-recurrence

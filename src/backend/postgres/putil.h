@@ -318,7 +318,7 @@ int finishQuery(PGBackend *be);
 #define COMP_INT64(sqlname,fun,ndiffs) { 			\
    if (strtoll (DB_GET_VAL(sqlname,0), NULL, 0) != fun) {	\
       PINFO("mis-match: %s sql='%s', eng='%lld'", sqlname, 	\
-         DB_GET_VAL (sqlname,0), fun); 				\
+	 DB_GET_VAL (sqlname,0), (long long int) fun);	\
       ndiffs++; 						\
    }								\
 }
@@ -362,7 +362,7 @@ int finishQuery(PGBackend *be);
       for (node=be->blist; node; node=node->next)                \
       {                                                          \
          book = node->data;                                      \
-         if (guid_equal (&book->inst.entity.guid, &book_guid)) break; \
+         if (guid_equal (qof_entity_get_guid((QofEntity*)book), &book_guid)) break; \
          book = NULL;                                            \
       }                                                          \
       if (!book) return data;                                    \

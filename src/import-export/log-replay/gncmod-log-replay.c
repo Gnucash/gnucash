@@ -26,11 +26,11 @@
 #include "config.h"
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-log-replay.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-plugin-log-replay.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_log_replay_LTX_gnc_module_system_interface = 0;
@@ -79,8 +79,10 @@ libgncmod_log_replay_LTX_gnc_module_init(int refcount)
   {
     return FALSE;
   }
-    scm_c_eval_string("(load-from-path \"log-replay/log-replay.scm\")");
-    scm_c_define_gsubr("gnc:log-replay", 0, 0, 0, scm_gnc_file_log_replay);
+
+  /* Add menu items with C callbacks */
+  gnc_plugin_log_replay_create_plugin();
+
   return TRUE;
 }
 

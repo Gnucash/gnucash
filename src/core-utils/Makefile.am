@@ -1,24 +1,45 @@
 
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
+libcore_utils_la_SOURCES = \
+  gnc-gconf-utils.c \
+  gnc-gdate-utils.c \
+  gnc-gkeyfile-utils.c \
+  gnc-gobject-utils.c
 
-libcore_utils_la_SOURCES = core-utils.c
-libcore_utils_la_LDFLAGS = -module ${GLIB_LIBS}
-libcore_utils_la_LIBADD =
+libcore_utils_la_LIBADD = \
+  ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GLIB_LIBS} \
+  ${GCONF_LIBS} \
+  ${GTK_LIBS}
 
-libgw_core_utils_la_SOURCES = gw-core-utils.c
-libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS} ${GUILE_LIBS}
-libgw_core_utils_la_LIBADD = libcore-utils.la
+libgw_core_utils_la_SOURCES = \
+  gw-core-utils.c
+
+libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
+libgw_core_utils_la_LIBADD = \
+  libcore-utils.la \
+  ${GUILE_LIBS}
 
 noinst_HEADERS = \
-  core-utils.h \
+  gnc-gconf-utils.h \
+  gnc-gdate-utils.h \
+  gnc-gkeyfile-utils.h \
+  gnc-gobject-utils.h \
   gw-core-utils.h
 
 EXTRA_DIST = .cvsignore ${gwmod_DATA}
 
-AM_CFLAGS = ${G_WRAP_COMPILE_ARGS} ${GLIB_CFLAGS} ${GUILE_INCS}
+AM_CFLAGS = \
+  -I${top_srcdir}/lib/glib26 \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} \
+  ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS}
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

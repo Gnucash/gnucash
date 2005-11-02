@@ -26,11 +26,13 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkwidget.h>
+#include <glib.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+#define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ()) 
 #define GNC_DENSE_CAL(obj)          GTK_CHECK_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
 #define GNC_DENSE_CAL_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_dense_cal_get_type (), GncDenseCalClass)
 #define GNC_IS_DENSE_CAL(obj)       GTK_CHECK_TYPE (obj, gnc_dense_cal_get_type ())
@@ -67,7 +69,7 @@ struct _GncDenseCal
 
         gint numMonths;
         gint monthsPerCol;
-        gint num_weeks; // computed
+        gint num_weeks; /* computed */
 
         GDateMonth month;
         gint year;
@@ -99,6 +101,8 @@ struct _GncDenseCal
         int numMarks;
         /* array of GList*s of per-cell markings. */
         GList **marks;
+
+	int disposed; /* private */
 };
 
 struct _GncDenseCalClass
@@ -111,7 +115,7 @@ typedef struct _gdc_mark_data {
         gchar *name;
         gchar *info;
         guint tag;
-        // GdkColor markStyle;
+        /* GdkColor markStyle; */
         /**
          * A GList of the dcal->marks indexes containing this mark.
          **/
@@ -119,7 +123,7 @@ typedef struct _gdc_mark_data {
 } gdc_mark_data;
 
 GtkWidget*     gnc_dense_cal_new                    (void);
-GtkType        gnc_dense_cal_get_type               (void);
+GType          gnc_dense_cal_get_type               (void);
 
 void gnc_dense_cal_set_month( GncDenseCal *dcal, GDateMonth mon );
 /**

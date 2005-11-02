@@ -37,7 +37,6 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-xml.h"
-#include "gnc-engine-util.h"
 #include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
@@ -45,7 +44,7 @@
 #include "Account.h"
 #include "Group.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *commodity_version_string = "2.0.0";
 
@@ -67,9 +66,9 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     const char *string;
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_commodity_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
 
-    xmlSetProp(ret, "version", commodity_version_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST commodity_version_string);
     
     xmlAddChild(ret, text_to_dom_tree(cmdty_namespace,
                                       gnc_commodity_get_namespace(com)));
@@ -94,7 +93,7 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
                                      gnc_commodity_get_fraction(com)));
 
     if (gnc_commodity_get_quote_flag(com)) {
-      xmlNewChild(ret, NULL, cmdty_get_quotes, NULL);
+      xmlNewChild(ret, NULL, BAD_CAST cmdty_get_quotes, NULL);
       source = gnc_commodity_get_quote_source(com);
       if (source)
 	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source,
@@ -126,28 +125,28 @@ struct com_char_handler com_handlers[] = {
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if(safe_strcmp(node->name, cmdty_fraction) == 0)
+    if(safe_strcmp((char*) node->name, cmdty_fraction) == 0)
     {
         gint64 val;
         char *string;
 
-        string = xmlNodeGetContent (node->xmlChildrenNode);
+        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
         if(string_to_gint64(string, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
         xmlFree (string);
     }
-    else if(safe_strcmp(node->name, cmdty_get_quotes) == 0)
+    else if(safe_strcmp((char*)node->name, cmdty_get_quotes) == 0)
     {
 	gnc_commodity_set_quote_flag(com, TRUE);
     }
-    else if(safe_strcmp(node->name, cmdty_quote_source) == 0)
+    else if(safe_strcmp((char*)node->name, cmdty_quote_source) == 0)
     {
         gnc_quote_source *source;
         char *string;
 
-        string = xmlNodeGetContent (node->xmlChildrenNode);
+        string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
 	source = gnc_quote_source_lookup_by_internal(string);
 	if (!source)
 	  source = gnc_quote_source_add_new(string, FALSE);
@@ -160,7 +159,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 
         for(mark = com_handlers; mark->tag; mark++)
         {
-            if(safe_strcmp(mark->tag, node->name) == 0)
+            if(safe_strcmp(mark->tag, (char*)node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
                 g_strstrip(val);
@@ -203,6 +202,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
+    QofBook *book = gdata->bookdata;
 
     if(parent_data)
     {
@@ -218,7 +218,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
     
-    com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0); 
+    com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
 
     for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {

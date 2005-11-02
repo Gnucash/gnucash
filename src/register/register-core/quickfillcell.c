@@ -35,15 +35,10 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef HAVE_WCTYPE_H
-#include <wctype.h>
-#endif
 
 #include "basiccell.h"
 #include "dialog-utils.h"
@@ -52,12 +47,12 @@
 
 
 static void gnc_quickfill_cell_set_original (QuickFillCell *cell,
-                                             const GdkWChar *original);
+                                             const char *original);
 
 
-static void 
+static void
 gnc_quickfill_cell_set_value_internal (BasicCell *_cell,
-                                       const char *val) 
+                                       const char *val)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
    gnc_quickfill_cell_set_value (cell, val);
@@ -81,71 +76,74 @@ gnc_quickfill_cell_enter (BasicCell *_cell,
    return TRUE;
 }
 
-/* by definition, all text is valid text.  So accept
- * all modifications */
 static gboolean
-wcstrcaseequal (const GdkWChar *s1, const GdkWChar *s2)
+utf8_caseequal (const char *s1, const char *s2)
 {
-  int i;
-
-  if (s1 == s2)
-    return TRUE;
-
-  if (!s1 || !s2)
-    return FALSE;
-
-  for (i = 0; TRUE; i++)
-  {
-    GdkWChar a;
-    GdkWChar b;
-
-    if (s1[i] == 0 || s2[i] == 0)
-      return s1[i] == s2[i];
-
-    a = iswlower (s1[i]) ? towupper (s1[i]) : s1[i];
-    b = iswlower (s2[i]) ? towupper (s2[i]) : s2[i];
-
-    if (a != b)
+   char *s1new;
+   char *s2new;
+   gboolean equal = FALSE;
+    
+   if (s1 == s2)
+      return TRUE;
+   
+   if (!s1 || !s2)
       return FALSE;
-  }
 
-  return TRUE;
+   s1new = g_utf8_casefold(s1, -1);
+   s2new = g_utf8_casefold(s2, -1);
+
+   if (g_utf8_collate(s1new, s2new) == 0)
+      equal = TRUE;
+
+   g_free (s1new);
+   g_free (s2new);
+   
+   return equal;
 }
 
 static gboolean
-wcstrncaseequal (const GdkWChar *s1, const GdkWChar *s2, int len)
-{
-  int i;
-
-  if (s1 == s2)
-    return TRUE;
-
-  if (!s1 || !s2)
-    return FALSE;
-
-  for (i = 0; i < len; i++)
-  {
-    GdkWChar a;
-    GdkWChar b;
-
-    if (s1[i] == 0 || s2[i] == 0)
+utf8_caseequal_len (const char *s1, const char *s2, guint len)
+{   
+   char *s1new;
+   char *s2new;
+   glong s1chars;
+   glong s2chars;
+   gboolean equal = FALSE;
+    
+   if (len == 0)
+      return TRUE;       
+   
+   if (s1 == s2)
+      return TRUE;
+   
+   if (!s1 || !s2)
       return FALSE;
 
-    a = iswlower (s1[i]) ? towupper (s1[i]) : s1[i];
-    b = iswlower (s2[i]) ? towupper (s2[i]) : s2[i];
+   s1chars = g_utf8_strlen (s1, -1);
+   s2chars = g_utf8_strlen (s2, -1);
+   
+   if ( (s1chars < len) || (s2chars < len) )
+       return FALSE;
+   
+   s1new = g_new0 (gchar, strlen (s1));
+   s2new = g_new0 (gchar, strlen (s2));
 
-    if (a != b)
-      return FALSE;
-  }
+   g_utf8_strncpy (s1new, s1, len);
+   g_utf8_strncpy (s2new, s2, len);
 
-  return TRUE;
+   equal = utf8_caseequal (s1new, s2new);
+   
+   g_free (s1new);
+   g_free (s2new);
+    
+   return equal;
 }
 
 static void
 gnc_quickfill_cell_modify_verify (BasicCell *_cell,
-                                  const GdkWChar *change,
+                                  const char *change,
                                   int change_len,
-                                  const GdkWChar *newval,
+                                  const char *newval,
                                   int newval_len,
                                   int *cursor_position,
                                   int *start_selection,
@@ -155,52 +153,54 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
    const char *match_str;
    QuickFill *match;
 
+   glong newval_chars;
+   glong change_chars;
+
+   newval_chars = g_utf8_strlen(newval, newval_len);
+   change_chars = g_utf8_strlen(change, change_len);
+   
    /* If deleting, just accept */
    if (change == NULL)
    {
      /* if the new value is a prefix of the original modulo case,
       * just truncate the end of the original. Otherwise, set it
       * to NULL */
-     if ((*cursor_position >= newval_len) &&
+     if ((*cursor_position >= newval_chars) &&
          (cell->original != NULL) &&
-         (gnc_wcslen (cell->original) >= newval_len) &&
-         wcstrncaseequal (cell->original, newval, newval_len))
-       cell->original[newval_len] = 0;
+         (g_utf8_strlen (cell->original, -1) >= newval_chars) &&
+         utf8_caseequal_len (cell->original, newval, newval_chars))
+     {
+         gchar *temp = g_strndup (cell->original, newval_len);
+         gnc_quickfill_cell_set_original (cell, temp);
+         g_free (temp);
+     }
      else
        gnc_quickfill_cell_set_original (cell, NULL);
 
-     gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
+     gnc_basic_cell_set_value_internal (&cell->cell, newval);
      return;
    }
 
    /* If we are inserting in the middle, just accept */
-   if (*cursor_position < _cell->value_len)
+   if (*cursor_position < _cell->value_chars)
    {
-     gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
+     gnc_basic_cell_set_value_internal (&cell->cell, newval);
      gnc_quickfill_cell_set_original (cell, NULL);
      return;
    }
 
    if (cell->original == NULL)
-     cell->original = gnc_wcsdup (newval);
-   else if (wcstrcaseequal (cell->original, _cell->value_w))
+     cell->original = g_strdup (newval);
+   else if (utf8_caseequal (cell->original, _cell->value))
    {
-     int orig_len = gnc_wcslen (cell->original);
-     GdkWChar *original;
-     int i;
+     GString *original;
 
-     original = g_new0 (GdkWChar, orig_len + change_len + 1);
-
-     for (i = 0; i < orig_len; i++)
-       original[i] = cell->original[i];
-
-     for (i = orig_len; i < orig_len + change_len; i++)
-       original[i] = change[i - orig_len];
-
-     original[orig_len + change_len] = 0;
+     original = g_string_new (cell->original);
+     g_string_append (original, change);
 
      g_free (cell->original);
-     cell->original = original;
+     cell->original = g_strdup (original->str);
+     g_string_free (original, TRUE);
    }
    else
    {
@@ -219,13 +219,13 @@ gnc_quickfill_cell_modify_verify (BasicCell *_cell,
 
      *cursor_position = -1;
 
-     gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
+     gnc_basic_cell_set_value_internal (&cell->cell, newval);
      return;
    }
 
-   *start_selection = newval_len;
+   *start_selection = newval_chars;
    *end_selection = -1;
-   *cursor_position += change_len;
+   *cursor_position += change_chars;
 
    gnc_basic_cell_set_value_internal (&cell->cell, match_str);
 }
@@ -237,7 +237,7 @@ gnc_quickfill_cell_leave (BasicCell * _cell)
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
 
-   gnc_quickfill_insert_wc (cell->qf, _cell->value_w, cell->sort);
+   gnc_quickfill_insert (cell->qf, _cell->value, cell->sort);
 }
 
 static void
@@ -293,7 +293,7 @@ gnc_quickfill_cell_set_value (QuickFillCell *cell, const char * value)
     return;
 
   gnc_basic_cell_set_value_internal (&cell->cell, value);
-  gnc_quickfill_insert_wc (cell->qf, cell->cell.value_w, cell->sort);
+  gnc_quickfill_insert (cell->qf, value, cell->sort);
 }
 
 void
@@ -306,7 +306,7 @@ gnc_quickfill_cell_set_sort (QuickFillCell *cell, QuickFillSort sort)
 }
 
 static void
-gnc_quickfill_cell_set_original (QuickFillCell *cell, const GdkWChar *original)
+gnc_quickfill_cell_set_original (QuickFillCell *cell, const char *original)
 {
   if (cell == NULL)
     return;
@@ -314,7 +314,7 @@ gnc_quickfill_cell_set_original (QuickFillCell *cell, const GdkWChar *original)
   g_free (cell->original);
 
   if ((original != NULL) && (*original != 0))
-    cell->original = gnc_wcsdup (original);
+    cell->original = strdup (original);
   else
     cell->original = NULL;
 }

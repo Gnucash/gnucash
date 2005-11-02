@@ -1,4 +1,4 @@
-# $Id$
+# Id: aqbanking.m4,v 1.3 2005/07/17 13:02:52 cstim Exp
 # (c) 2004 Martin Preuss<martin@libchipcard.de>
 # This function checks for AqBanking
 

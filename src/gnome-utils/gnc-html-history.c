@@ -153,7 +153,7 @@ gnc_html_history_append(gnc_html_history * hist,
   else {
     /* this is the first entry in the list */
     if(hist->nodes) {
-      printf("???? hist->nodes non-NULL, but no last_node \n");
+      g_print ("???? hist->nodes non-NULL, but no last_node \n");
     }
     hist->nodes        = n;
     hist->last_node    = n;

@@ -29,11 +29,8 @@
      (list
       "#include <dialog-column-view.h>\n"
       "#include <dialog-style-sheet.h>\n"
+      "#include <gnc-plugin-page-report.h>\n"
       "#include <window-report.h>\n")))
-
-  (gw:wrap-as-wct ws
-                  '<gnc:report-window*>
-                  "gnc_report_window*" "const gnc_report_window*")
 
   (gw:wrap-function
    ws
@@ -42,22 +39,6 @@
    "reportWindow"
    '((<gw:int> report-id))
    "Show report window")
-
-  (gw:wrap-function
-   ws
-   'gnc:report-window-reload
-   '<gw:void>
-   "gnc_report_window_reload"
-   '((<gnc:report-window*> wind))
-   "Force reload of a report window")
-
-  (gw:wrap-function
-   ws
-   'gnc:report-window-add-edited-report
-   '<gw:void>
-   "gnc_report_window_add_edited_report"
-   '((<gnc:report-window*> wind) (<gw:scm> report))
-   "Add a report to the list of reports with open editors")
 
   (gw:wrap-function
    ws
@@ -80,9 +61,12 @@
    'gnc:main-window-open-report
    '<gw:void>
    "gnc_main_window_open_report"
-   '((<gw:int> report-id) (<gw:bool> top-level))
+   '((<gw:int> report-id) (<gnc:MainWindow*> window))
    "Show report window")
 
+
+;; This is the function that's responsible for creating and returning
+;; the editor widget for a report's options.
   (gw:wrap-function
    ws
    'gnc:default-options-editor
@@ -90,14 +74,6 @@
    "gnc_report_window_default_params_editor"
    '((<gw:scm> options) (<gw:scm> report))
    "Default options editor window for reports")
-
-  (gw:wrap-function
-   ws
-   'gnc:style-sheet-dialog-open
-   '<gw:void>
-   "gnc_style_sheet_dialog_open"
-   '()
-   "Show the style sheet editor window.")
 
   (gw:wrap-function
    ws

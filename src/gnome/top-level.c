@@ -32,21 +32,32 @@
 #include <X11/Xlib.h>
 
 #include "TransLog.h"
-#include "backend/gnc-backend-api.h"
 #include "combocell.h"
 #include "dialog-account.h"
 #include "dialog-commodity.h"
 #include "dialog-options.h"
+#include "dialog-scheduledxaction.h"
 #include "dialog-transfer.h"
+#include "dialog-totd.h"
 #include "dialog-utils.h"
+#include "druid-hierarchy.h"
 #include "file-utils.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-file.h"
+#include "gnc-hooks.h"
+#include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
-#include "gnc-network.h"
+#include "gnc-plugin-menu-additions.h" /* FIXME Remove this line*/
+#include "gnc-plugin-account-tree.h" /* FIXME Remove this line*/
+#include "gnc-plugin-basic-commands.h" /* FIXME Remove this line*/
+#include "gnc-plugin-file-history.h" /* FIXME Remove this line*/
+#include "gnc-plugin-register.h" /* FIXME Remove this line*/
+#include "gnc-plugin-budget.h"
+#include "gnc-plugin-page-register.h"
+#include "gnc-plugin-manager.h" /* FIXME Remove this line*/
+#include "gnc-icons.h" /* FIXME Remove this line*/
 #include "gnc-splash.h"
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
@@ -54,69 +65,28 @@
 #include "gnc-report.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnucash-color.h"
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
-#include "qofbook.h"
-#include "qofsession.h"
 #include "messages.h"
-#include "split-register.h"
 #include "top-level.h"
-#include "window-help.h"
-#include "window-main.h"
-#include "window-acct-tree.h"
-#include "window-register.h"
 #include "window-report.h"
 
 
 /** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
-static void gnc_configure_account_separator_cb(gpointer);
-static void gnc_configure_register_colors_cb(gpointer);
-static void gnc_configure_register_colors(void);
-static void gnc_configure_register_borders_cb(gpointer);
-static void gnc_configure_register_borders(void);
-static void gnc_configure_auto_raise_cb(gpointer);
-static void gnc_configure_auto_raise(void);
-static void gnc_configure_negative_color_cb(gpointer);
-static void gnc_configure_negative_color(void);
-static void gnc_configure_auto_decimal_cb(gpointer);
-static void gnc_configure_auto_decimal(void);
-static void gnc_configure_auto_decimal_places_cb(gpointer);
-static void gnc_configure_auto_decimal_places(void);
-static void gnc_configure_file_be_retention_days_cb(gpointer);
-static void gnc_configure_file_be_retention_days(void);
-static void gnc_configure_file_be_compression_cb(gpointer);
-static void gnc_configure_file_be_compression(void);
-static void gnc_configure_register_font_cb(gpointer);
-static void gnc_configure_register_font(void);
-static void gnc_configure_register_hint_font_cb(gpointer);
-static void gnc_configure_register_hint_font(void);
 
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static int gnome_is_running = FALSE;
 static int splash_is_initialized = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
-
-static SCM date_callback_id = SCM_UNDEFINED;
-static SCM account_separator_callback_id = SCM_UNDEFINED;
-static SCM register_colors_callback_id = SCM_UNDEFINED;
-static SCM register_borders_callback_id = SCM_UNDEFINED;
-static SCM auto_raise_callback_id = SCM_UNDEFINED;
-static SCM negative_color_callback_id = SCM_UNDEFINED;
-static SCM auto_decimal_callback_id = SCM_UNDEFINED;
-static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
-static SCM log_retention_days_callback_id = SCM_UNDEFINED;
-static SCM compression_callback_id = SCM_UNDEFINED;
-static SCM register_font_callback_id = SCM_UNDEFINED;
-static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 
 gboolean
@@ -134,13 +104,13 @@ gnucash_ui_is_terminating(void)
 static void
 gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
 {
-  helpWindow (NULL, NULL, HH_GLOBPREFS);
+  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
 }
 
 static void
 gnc_commodity_help_cb (void)
 {
-  helpWindow (NULL, _("Help"), HH_COMMODITY);
+  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
 }
 
 /* ============================================================== */
@@ -170,6 +140,7 @@ static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
+  GncPluginPage *page = NULL;
   GNCSplitReg * gsr   = NULL;
   Split       * split = NULL;
   Account     * account = NULL;
@@ -223,10 +194,12 @@ gnc_html_register_url_cb (const char *location, const char *label,
     return FALSE;
   }
 
-  gsr = regWindowSimple (account);
-  gnc_split_reg_raise(gsr);
-  if (split)
+  page = gnc_plugin_page_register_new (account, FALSE);
+  gnc_main_window_open_page (NULL, page);
+  if (split) {
+      gsr = gnc_plugin_page_register_get_gsr(page);
       gnc_split_reg_jump_to_split( gsr, split );
+  }
 
   return TRUE;
 }
@@ -290,6 +263,7 @@ SCM
 gnc_gui_init (SCM command_line)
 {
   SCM ret = command_line;
+  GncMainWindow *main_window;
 
   ENTER (" ");
 
@@ -301,75 +275,11 @@ gnc_gui_init (SCM command_line)
 
     gnome_is_initialized = TRUE;
 
-    /* load default HTML action handlers */ 
-    // gnc_network_init();
-
+    gnc_ui_util_init();
     gnc_configure_date_format();
-    date_callback_id =
-      gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
-                                          "International", "Date Format");
-
-    account_separator_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_account_separator_cb,
-                                          NULL, "Accounts",
-                                          "Account Separator");
-
-    gnc_configure_register_colors();
-    register_colors_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_register_colors_cb,
-                                          NULL, "Register Colors", NULL);
-
-    gnc_configure_register_borders();
-    register_borders_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_register_borders_cb,
-                                          NULL, "Register", NULL);
-    
-    gnc_configure_auto_raise();
-    auto_raise_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
-                                          NULL, "_+Advanced",
-                                          "Auto-Raise Lists");
-
-    gnc_configure_negative_color();
-    negative_color_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_negative_color_cb,
-                                          NULL, "General",
-                                          "Display negative amounts in red");
-
-    gnc_configure_auto_decimal();
-    auto_decimal_callback_id =
-      gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
-                                          NULL, "General",
-                                          "Automatic Decimal Point");
-
-    gnc_configure_auto_decimal_places();
-    auto_decimal_places_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
-                                          NULL, "General",
-                                          "Auto Decimal Places");
-
-    gnc_configure_file_be_retention_days();
-    log_retention_days_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_file_be_retention_days_cb,
-                                          NULL, "General",
-                                          "Days to retain log files");
-
-    gnc_configure_file_be_compression();
-    compression_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_file_be_compression_cb,
-                                          NULL, "General",
-                                          "Use file compression");
-
-    gnc_configure_register_font();
-    register_font_callback_id =
-      gnc_register_option_change_callback(gnc_configure_register_font_cb,
-                                          NULL, "Register", "Register font");
-
-    gnc_configure_register_hint_font();
-    register_hint_font_callback_id =
-      gnc_register_option_change_callback(gnc_configure_register_hint_font_cb,
-                                          NULL, "Register",
-                                          "Register hint font");
+    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
+				  (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -383,21 +293,39 @@ gnc_gui_init (SCM command_line)
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
-    gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
     gnc_file_set_shutdown_callback (gnc_shutdown);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
-    /* initialize gnome MDI and set up application window defaults  */
-    if (!gnc_mdi_get_current ())
-      gnc_main_window_new ();
+    gnc_totd_dialog(NULL, TRUE);
+    gnc_ui_sx_initialize();
+
+    main_window = gnc_main_window_new ();
+    gtk_widget_show (GTK_WIDGET (main_window));
+
+    /* FIXME Remove this test code */
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
+    /* I'm not sure why the FIXME note says to remove this.  Maybe
+       each module should be adding its own plugin to the manager?
+       Anyway... Oh, maybe... nah */
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
+                                   gnc_plugin_budget_new ());
+    gnc_load_stock_icons ();
+    gnc_ui_hierarchy_druid_initialize();
 
     /* Run the ui startup hooks. */
+    gnc_hook_run(HOOK_UI_STARTUP, NULL);
+
+    // return ( main_window . command_line )
     {
-      SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
-      SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
-      scm_call_1(run_danglers, hook); 
-    }    
+      SCM gncMainWindowType;
+      gncMainWindowType = scm_c_eval_string("<gnc:MainWindow*>");
+      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncMainWindowType), ret );
+    }
   }
 
   LEAVE (" ");
@@ -427,17 +355,6 @@ gnc_gui_destroy (void)
 {
   if (!gnome_is_initialized)
     return;
-
-  gnc_unregister_option_change_callback_id(date_callback_id);
-  gnc_unregister_option_change_callback_id(account_separator_callback_id);
-  gnc_unregister_option_change_callback_id(register_colors_callback_id);
-  gnc_unregister_option_change_callback_id(register_borders_callback_id);
-  gnc_unregister_option_change_callback_id(auto_raise_callback_id);
-  gnc_unregister_option_change_callback_id(negative_color_callback_id);
-  gnc_unregister_option_change_callback_id(register_font_callback_id);
-  gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
-
-  gnc_mdi_destroy (gnc_mdi_get_current ());
 
   gnc_extensions_shutdown ();
 }
@@ -521,21 +438,6 @@ gnc_ui_start_event_loop (void)
 
 /* ============================================================== */
 
-/* gnc_configure_date_format_cb
- *    Callback called when options change - sets dateFormat to the current
- *    value on the scheme side and refreshes register windows
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_date_format_cb (gpointer data)
-{
-  gnc_configure_date_format ();
-  gnc_gui_refresh_all ();
-}
-
-
 /* gnc_configure_date_format
  *    sets dateFormat to the current value on the scheme side
  *
@@ -545,11 +447,16 @@ gnc_configure_date_format_cb (gpointer data)
 static void 
 gnc_configure_date_format (void)
 {
-  char *format_code = gnc_lookup_multichoice_option("International", 
-                                                    "Date Format",
-                                                    "locale");
+  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, KEY_DATE_FORMAT, NULL);
 
-  DateFormat df;
+  QofDateFormat df;
+
+  if (format_code == NULL)
+    format_code = g_strdup("locale");
+  if (*format_code == '\0') {
+    g_free(format_code);
+    format_code = g_strdup("locale");
+  }
 
   if (gnc_date_string_to_dateformat(format_code, &df))
   {
@@ -559,370 +466,10 @@ gnc_configure_date_format (void)
     return;
   }
 
-  setDateFormat(df);
+  qof_date_format_set(df);
 
   if (format_code != NULL)
     free(format_code);
-}
-
-/* gnc_configure_account_separator_cb
- *    Callback called when options change - sets account separator
- *    to the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_account_separator_cb (gpointer data)
-{
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_colors_cb
- *    Callback called when options change - sets
- *    register colors to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_colors_cb (gpointer data)
-{
-  gnc_configure_register_colors ();
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_colors_cb
- *    sets register colors to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_colors (void)
-{
-  SplitRegisterColors reg_colors;
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header color",
-                                 0xffffff);
-
-  reg_colors.primary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary color",
-                                 0xffffff);
-
-  reg_colors.secondary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary color",
-                                 0xffffff);
-
-  reg_colors.primary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary active color",
-                                 0xffffff);
-
-  reg_colors.secondary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary active color",
-                                 0xffffff);
-
-  reg_colors.split_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Split color",
-                                 0xffffff);
-
-  reg_colors.split_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Split active color",
-                                 0xffffff);
-
-  reg_colors.double_alternate_virt =
-    gnc_lookup_boolean_option("Register Colors",
-                              "Double mode colors alternate with transactions",
-                              FALSE);
-
-  gnc_split_register_set_colors (reg_colors);
-}
-
-
-/* gnc_configure_register_borders_cb
- *    Callback called when options change - sets
- *    register borders to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_borders_cb (gpointer data)
-{
-  gnc_configure_register_borders ();
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_border
- *    sets register borders to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_borders (void)
-{
-  gboolean use_vertical_lines;
-  gboolean use_horizontal_lines;
-
-  use_vertical_lines = gnc_lookup_boolean_option("_+Advanced",
-                                                 "Show Vertical Borders",
-                                                 FALSE);
-
-  
-  use_horizontal_lines = gnc_lookup_boolean_option("_+Advanced",
-                                                   "Show Horizontal Borders",
-                                                   FALSE);
-
-  gnucash_style_config_register_borders (use_vertical_lines,
-                                         use_horizontal_lines);
-}
-
-/* gnc_configure_auto_raise_cb
- *    Callback called when options change - sets
- *    auto-raise status of combocell class
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise_cb (gpointer data)
-{
-  gnc_configure_auto_raise ();
-}
-
-/* gnc_configure_auto_raise
- *    sets combocell auto raise status
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise (void)
-{
-  gboolean auto_pop;
-
-  auto_pop = gnc_lookup_boolean_option("_+Advanced", "Auto-Raise Lists", TRUE);
-
-  gnc_combo_cell_set_autopop (auto_pop);
-}
-
-/* gnc_configure_negative_color_cb
- *    Callback called when options change - sets
- *    negative amount color flags
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_negative_color_cb (gpointer data)
-{
-  gnc_configure_negative_color ();
-
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_negative_color
- *    sets negative amount color flags
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_negative_color(void)
-{
-  gboolean use_red;
-
-  use_red = gnc_lookup_boolean_option("General",
-                                      "Display negative amounts in red",
-                                      TRUE);
-
-  gnc_split_register_colorize_negative (use_red);
-}
-
-
-/* gnc_configure_auto_decimal_cb
- *     Callback called when options change -
- *     sets auto decimal option.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_cb(gpointer not_used)
-{
-  gnc_configure_auto_decimal();
-}
-
-/* gnc_configure_auto_decimal
- *     Pass the global value for the auto decimal field to the engine.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal(void)
-{
-  gboolean enabled;
-
-  enabled = gnc_lookup_boolean_option("General",
-                                      "Automatic Decimal Point",
-                                      FALSE);
-
-  gnc_set_auto_decimal_enabled(enabled);
-}
-
-/* gnc_configure_auto_decimal_places_cb
- *     Callback called when options change -
- *     sets auto decimal places option.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_places_cb (gpointer not_used)
-{
-  gnc_configure_auto_decimal_places ();
-}
-
-/* gnc_configure_auto_decimal_places
- *     Pass the global value for the auto decimal places range to the engine.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_places (void)
-{
-   gnc_set_auto_decimal_places
-     (gnc_lookup_number_option("General",
-                               "Auto Decimal Places", 2));
-}
-
-
-/* gnc_configure_file_be_retention_days_cb
- *     Callback called when options change -
- *     sets days retained for the file backend.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_file_be_retention_days_cb (gpointer not_used)
-{
-  gnc_configure_file_be_retention_days ();
-}
-
-/* gnc_configure_file_be_retention_days
- *     Pass the global value for the number of days to retain files to the file backend.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_file_be_retention_days (void)
-{
-  gnc_file_be_set_retention_days
-    (gnc_lookup_number_option("General",
-                              "Days to retain log files", 0));
-}
-
-/* gnc_configure_file_be_retention_days_cb
- *     Callback called when options change -
- *     sets days retained for the file backend.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_file_be_compression_cb (gpointer not_used)
-{
-  gnc_configure_file_be_compression ();
-}
-
-/* gnc_configure_file_be_retention_days
- *     Pass the global value for the number of days to retain files to the file backend.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_file_be_compression (void)
-{
-  gnc_file_be_set_compression
-    (gnc_lookup_boolean_option("General", "Use file compression", FALSE));
-}
-
-/* gnc_configure_register_font_cb
- *     Callback called when options change -
- *     sets register font
- * 
- *  Args: unused data
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_font_cb (gpointer not_used)
-{
-  gnc_configure_register_font ();
-}
-
-/* gnc_configure_register_font
- *     Set up the register font
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_font(void)
-{
-  char *font_name;
-
-  font_name = gnc_lookup_font_option("Register", "Register font", NULL);
-
-  gnucash_style_set_register_font_name(font_name);
-
-  if (font_name != NULL)
-    free(font_name);
-}
-
-/* gnc_configure_register_hint_font_cb
- *     Callback called when options change -
- *     sets register hint font
- * 
- *  Args: unused data
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_hint_font_cb(gpointer not_used)
-{
-  gnc_configure_register_hint_font();
-}
-
-/* gnc_configure_register_hint_font
- *     Set up the register hint font
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_register_hint_font(void)
-{
-  char *font_name;
-
-  font_name = gnc_lookup_font_option("Register", "Register hint font", NULL);
-
-  gnucash_style_set_register_hint_font_name(font_name);
-
-  if (font_name != NULL)
-    free(font_name);
 }
 
 /****************** END OF FILE **********************/

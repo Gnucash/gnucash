@@ -22,15 +22,11 @@
 
 #include "config.h"
 
-#include "dialog-account.h"
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
 #include "gnc-ui.h"
-#include "gnc-ui-util.h"
 #include "messages.h"
 #include "pricecell.h"
 #include "datecell.h"
@@ -42,7 +38,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 static gboolean
@@ -336,7 +332,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
       if (xaccTransIsOpen (old_trans))
         xaccTransCommitEdit (old_trans);
 
-      info->pending_trans_guid = *xaccGUIDNULL ();
+      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
       saved = TRUE;
     }
@@ -1251,7 +1247,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   Transaction *pending_trans;
   VirtualLocation virt_loc;
   Transaction *trans, *new_trans;
-  GNCVerifyResult result;
+  gint result;
   gboolean changed;
   SRInfo *info;
   Split *split;
@@ -1537,23 +1533,21 @@ gboolean
 gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
   SplitRegister *reg = data;
+  gint response;
+  const gchar *message =
+    _("<b>Mark split as unreconciled?</b>\n\n"
+      "You are about to mark a reconciled split as unreconciled.  Doing "
+      "so might make future reconciliation difficult!  Continue "
+      "with this change?\n");
 
-  if (old_flag == YREC)
-  {
-    const char *message = _("Do you really want to mark this transaction "
-                            "not reconciled?\nDoing so might make future "
-                            "reconciliation difficult!");
-    gboolean confirm;
+  if (old_flag != YREC)
+    return TRUE;
 
-    confirm = gnc_lookup_boolean_option ("Register",
-                                         "Confirm before changing reconciled",
-                                         TRUE);
-    if (!confirm)
-      return TRUE;
+  /* Does the user want to be warned? */
+  response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
+					 "mark_split_unreconciled",
+					 "_Unreconcile", GTK_STOCK_CANCEL,
+					 message);
 
-    return gnc_verify_dialog (gnc_split_register_get_parent (reg),
-                              TRUE, message);
-  }
-
-  return TRUE;
+  return (response == GTK_RESPONSE_YES);
 }

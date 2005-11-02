@@ -107,7 +107,9 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
   gtk_box_pack_start(GTK_BOX(menu_box), menu, TRUE, TRUE, 0);
 
   gtk_widget_show_all(dialog);
-  gnome_dialog_run_and_close(GNOME_DIALOG(dialog));
+  gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy(dialog);
 
   return formats[index];
 }

@@ -89,6 +89,7 @@
 (export gnc:first-html-build-acct-table)
 (export gnc:html-make-exchangerates)
 (export gnc:html-make-no-account-warning)
+(export gnc:html-make-generic-options-warning)
 (export gnc:html-make-empty-data-warning)
 
 ;; report.scm
@@ -435,7 +436,7 @@
 (export gnc:account-code-less-p)
 (export gnc:account-name-less-p)
 (export gnc:account-path-less-p)
-(export gnc:identity)
+;;(export gnc:identity)
 (export gnc:html-table-add-labeled-amount-line!)
 (export gnc:html-table-add-account-balances)
 (export gnc:second-html-build-acct-table)

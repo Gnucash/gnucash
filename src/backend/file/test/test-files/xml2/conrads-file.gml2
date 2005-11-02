@@ -1,5 +1,30 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="commodity">1</gnc:count-data>
 <gnc:count-data cd:type="account">6</gnc:count-data>
 <gnc:count-data cd:type="transaction">12</gnc:count-data>
@@ -13,21 +38,21 @@
   <act:name>Imbalance-AUD</act:name>
   <act:id type="guid">ca36693eb25a602c171d07cb682b3e1b</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Assets</act:name>
   <act:id type="guid">a947017cbd3b26198484086f8d93863b</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0000</act:code>
   <act:slots>
     <slot>
@@ -40,11 +65,11 @@
   <act:name>Stock1</act:name>
   <act:id type="guid">33181c172f50aaa24792256f2db4690e</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0001</act:code>
   <act:security>
     <cmdty:space>AMEX</cmdty:space>
@@ -63,11 +88,11 @@
   <act:name>Stock2</act:name>
   <act:id type="guid">4ca39e2f16ccf288ea0d956d2371bf82</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:code>A0002</act:code>
   <act:security>
     <cmdty:space>AMEX</cmdty:space>
@@ -86,11 +111,11 @@
   <act:name>Cash</act:name>
   <act:id type="guid">dd0cfd17078251ec6ef03da8a081f2a3</act:id>
   <act:type>ASSET</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:code>C0000</act:code>
   <act:slots>
     <slot>
@@ -103,11 +128,11 @@
   <act:name>Bank</act:name>
   <act:id type="guid">6f8df62ae08403ee2a8eb5aa61cec772</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>AUD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:code>C0001</act:code>
   <act:slots>
     <slot>

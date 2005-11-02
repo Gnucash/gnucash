@@ -1,7 +1,7 @@
 
-
+/*
 XXX TODO:
--- contemplate a per-colection (per type) edit/commmit-edit, 
+-- contemplate a per-collection (per type) edit/commmit-edit, 
    clone, dirty, etc. functions some more ...
 
 -- turn clone into a generic object callback, so that 
@@ -14,13 +14,13 @@ XXX TODO:
 -- billterm and taxtables are incompletely cloned, not sure 
    what to do with refcount, ask warlord, need to explore.
 
--- The following busines objects have an id/name/desc/active
+-- The following business objects have an id/name/desc/active
    this could be abstracted into an common object.
    vendor (customer)
    bill term (but bill terms doesn't have id or active)
    job 
 
--- gnVendor should be a base class to gncCustomer (they're
+-- gncVendor should be a base class to gncCustomer (they're
    identical, but customer adds more stuff).
 
    Employee could be base class for vendor, its got some of the 
@@ -38,7 +38,7 @@ XXX TODO:
    ditto jobs in the customer list ??
 
 -- closed orders can be removed from new book ?
-
+*/
 
 
 
@@ -76,8 +76,6 @@ partition (QofBook *dest_book, QofBook *src_book)
 
   /* Copy all bill terms first, since the CustomerCopy expects
    * these to be in place already. */
-/* XXX not strictly needed, the customer can pull thier own .. ? */
+/* XXX not strictly needed, the customer can pull their own .. ? */
   gncBillTermCopyAll (dest_book, src_book);
 }
-
-

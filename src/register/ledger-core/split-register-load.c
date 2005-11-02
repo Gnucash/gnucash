@@ -27,7 +27,6 @@
 #include "Group.h"
 #include "account-quickfill.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
@@ -513,7 +512,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     if (xaccTransIsOpen (pending_trans))
       xaccTransCommitEdit (pending_trans);
 
-    info->pending_trans_guid = *xaccGUIDNULL ();
+    info->pending_trans_guid = *guid_null ();
     pending_trans = NULL;
   }
 
@@ -554,7 +553,7 @@ load_xfer_cell_cb (Account *account, gpointer data)
 
   name = xaccAccountGetFullName (account, gnc_get_account_separator ());
   if (NULL == name) return NULL;
-  gnc_combo_cell_add_menu_item (cell, name);
+  gnc_combo_cell_add_account_menu_item (cell, name);
   g_free(name);
 
   return NULL;

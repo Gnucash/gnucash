@@ -24,8 +24,32 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  *
  */
-/*
-  @NOTATION@
+
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup GncCurrencyEdit
+ * @{ */
+/** @file gnc-currency-edit.h
+ *  @brief Currency selection widget.
+ *  @author Dave Peticolas <dave@krondo.com>
+ *  @author David Hampton <hampton@employees.org>
+ *
+ *  This widget is a GtkComboBox that is wrapped with support
+ *  functions for building/selecting from a list of ISO4217 currency
+ *  names.  All data is maintained within the widget itself, which
+ *  makes the name/item lookup functions somewhat complicated.  The
+ *  alternative coding would be to keep an auxiliary list of strings
+ *  attacked to the widget for lookup purposes, but that would be 100%
+ *  redundant information.
+ *
+ *  When the GtkComboCellEntry widget supports completion, this Gnucash
+ *  widget should be modified so that it is based upon that widget.
+ *  That would give users the capability to select a currency by typing
+ *  its ISO 4217 code (e.g. USD, GBP, etc).  Moving to that widget
+ *  today, however, would cause more problems that its worth.  There is
+ *  currently no way to get access to the embedded GtkEntry widget, and
+ *  therefore no way to implement completion in gnucash or prevent the
+ *  user from typing in random data.
  */
 
 #ifndef GNC_CURRENCY_EDIT_H
@@ -35,33 +59,63 @@
 
 #include "gnc-commodity.h"
 
-BEGIN_GNOME_DECLS
+/** @name Basic Object Implementation */
+/** @{ */
 
-
-#define GNC_CURRENCY_EDIT(obj)          GTK_CHECK_CAST (obj, gnc_currency_edit_get_type(), GNCCurrencyEdit)
-#define GNC_CURRENCY_EDIT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_currency_edit_get_type(), GNCCurrencyEditClass)
-#define GNC_IS_CURRENCY_EDIT(obj)       GTK_CHECK_TYPE (obj, gnc_currency_edit_get_type ())
+#define GNC_TYPE_CURRENCY_EDIT	    (gnc_currency_edit_get_type())
+#define GNC_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEdit))
+#define GNC_CURRENCY_EDIT_CLASS(k)  (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditClass))
+#define GNC_IS_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_CURRENCY_EDIT))
 
 typedef struct {
-        GtkCombo combo;
+        GtkComboBox combobox;
 } GNCCurrencyEdit;
 
 typedef struct {
-        GtkComboClass parent_class;
+        GtkComboBoxClass combobox;
 } GNCCurrencyEditClass;
 
-guint      gnc_currency_edit_get_type       (void);
+/** Return the GType for the GNCCurrencyEdit currency selection widget.
+ *
+ *  @return A GType value.
+ */
+GType gnc_currency_edit_get_type (void);
 
-GtkWidget *gnc_currency_edit_new            (void);
 
-void       gnc_currency_edit_set_currency   (GNCCurrencyEdit *gce,
-                                             const gnc_commodity *currency);
+/** Create a new GNCCurrencyEdit widget which can be used to provide
+ *  an easy way to enter ISO currency codes.
+ * 
+ *  @return A GNCCurrencyEdit widget.
+ */
+GtkWidget *gnc_currency_edit_new (void);
+/** @} */
 
-gnc_commodity * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
-END_GNOME_DECLS
+/** @name Get/Set Functions */
+
+
+/** Set the widget to display a certain currency name.
+ *
+ *  @param gce The currency editor widget to set.
+ *
+ *  @param currency The currency to set as the displayed/selected
+ *  value of the widget.
+ */
+void gnc_currency_edit_set_currency (GNCCurrencyEdit *gce, const gnc_commodity *currency);
+
+
+/** Retrieve the displayed currency of the widget.
+ *
+ *  @param gce The currency editor widget whose values should be retrieved.
+ *
+ *  @return A pointer to the selected currency (a gnc_commodity
+ *  structure).
+ */
+gnc_commodity *gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
 
 #endif
+
+/** @} */
 
 /*
   Local Variables:

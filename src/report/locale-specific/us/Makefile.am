@@ -5,7 +5,6 @@ pkglib_LTLIBRARIES = libgncmod-locale-reports-us.la
 libgncmod_locale_reports_us_la_SOURCES = \
   gncmod-locale-reports-us.c 
 
-libgncmod_locale_reports_us_la_LDFLAGS = -module
 libgncmod_locale_reports_us_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \

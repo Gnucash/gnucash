@@ -20,7 +20,7 @@
 \********************************************************************/
 
 /** @file Scrub2.c
- *  @breif Utilities to Convert Stock Accounts to use Lots
+ *  @brief Utilities to Convert Stock Accounts to use Lots
  *  @author Created by Linas Vepstas March 2003
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
  *
@@ -44,15 +44,12 @@
 #include "ScrubP.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-trace.h"
-#include "kvp-util-p.h"
 #include "messages.h"
 #include "policy-p.h"
 
-static short module = MOD_LOT;
+static QofLogModule log_module = GNC_MOD_LOT;
 
 /* ============================================================== */
 /** Loop over all splits, and make sure that every split
@@ -324,7 +321,7 @@ remove_guids (Split *sa, Split *sb)
    KvpFrame *ksub;
 
    /* Find and remove the matching guid's */
-   ksub = gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
                     "peer_guid", &sb->entity.guid);
    if (ksub) 
    {
@@ -333,7 +330,7 @@ remove_guids (Split *sa, Split *sb)
    }
 
    /* Now do it in the other direction */
-   ksub = gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
                     "peer_guid", &sa->entity.guid);
    if (ksub) 
    {

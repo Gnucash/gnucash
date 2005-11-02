@@ -29,8 +29,8 @@
 #include <regex.h>
 #include <string.h>
 
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
+#include "gnc-engine-util.h"
 
 #include "qofbackend-p.h"
 #include "qofbook.h"
@@ -43,7 +43,7 @@
 #include "qofquerycore.h"
 #include "qofquerycore-p.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = QOF_MOD_QUERY;
 
 struct _QofQueryTerm 
 {
@@ -409,6 +409,7 @@ check_object (QofQuery *q, gpointer object)
     }
     if (and_terms_ok) 
     {
+      LEAVE (" (terms are OK)");
       return 1;
     }
   }
@@ -418,8 +419,8 @@ check_object (QofQuery *q, gpointer object)
    * may want to get all objects, but in a particular sorted 
    * order.
    */
+  LEAVE (" ");
   if (NULL == q->terms) return 1;
-
   return 0;
 }
 
@@ -477,7 +478,7 @@ compile_sort (QofQuerySort *sort, QofIdType obj)
   sort->obj_cmp = NULL;
 
   /* An empty param_list implies "no sort" */
-  if (!sort->param_list) return;
+  if (!sort->param_list) { LEAVE (" "); return; }
 
   /* Walk the parameter list of obtain the parameter functions */
   sort->param_fcns = compile_params (sort->param_list, obj, &resObj);
@@ -564,7 +565,6 @@ static void check_item_cb (gpointer object, gpointer user_data)
     ql->list = g_list_prepend (ql->list, object);
     ql->count++;
   }
-
   return;
 }
 
@@ -703,10 +703,10 @@ GList * qof_query_run (QofQuery *q)
   GList *node;
   int        object_count = 0;
 
-  ENTER (" q=%p", q);
   if (!q) return NULL;
   g_return_val_if_fail (q->search_for, NULL);
   g_return_val_if_fail (q->books, NULL);
+  ENTER (" q=%p", q);
 
   /* XXX: Prioritize the query terms? */
 
@@ -718,7 +718,7 @@ GList * qof_query_run (QofQuery *q)
   }
 
   /* Maybe log this sucker */
-  if (gnc_should_log (module, GNC_LOG_DETAIL)) qof_query_print (q);
+  if (gnc_should_log (log_module, GNC_LOG_DETAIL)) qof_query_print (q);
 
   /* Now run the query over all the objects and save the results */
   {
@@ -893,6 +893,26 @@ gboolean qof_query_has_term_type (QofQuery *q, GSList *term_param)
   }
 
   return FALSE;
+}
+
+GSList * qof_query_get_term_type (QofQuery *q, GSList *term_param)
+{
+  GList *or;
+  GList *and;
+  GSList *results = NULL;
+
+  if (!q || !term_param)
+    return FALSE;
+
+  for(or = q->terms; or; or = or->next) {
+    for(and = or->data; and; and = and->next) {
+      QofQueryTerm *qt = and->data;
+      if (!param_list_cmp (term_param, qt->param_list))
+        results = g_slist_append(results, qt->pdata);
+    }
+  }
+
+  return results;
 }
 
 void qof_query_destroy (QofQuery *q)
@@ -1627,7 +1647,7 @@ qof_query_printPredData (QofQueryPredData *pd)
   gs = g_string_new ("    Pred Data:\n      ");
   g_string_append (gs, (gchar *) pd->type_name);
 
-  /* Char Predicate and GUID predicate dosn't use the 'how' field. */
+  /* Char Predicate and GUID predicate don't use the 'how' field. */
   if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
       safe_strcmp (pd->type_name, QOF_TYPE_GUID))
   {
@@ -1680,6 +1700,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
                        qof_query_printGuidMatch (pdata->options));
     for (node = pdata->guids; node; node = node->next)
     {
+        /* THREAD-UNSAFE */
       g_string_sprintfa (gs, ", guids: %s",
 			 guid_to_string ((GUID *) node->data));
     }
@@ -1721,7 +1742,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
   {
     query_int64_t pdata = (query_int64_t) pd;
-    g_string_sprintfa (gs, " int64: %lld", pdata->val);
+    g_string_sprintfa (gs, " int64: %" G_GINT64_FORMAT, pdata->val);
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT32))
@@ -1758,6 +1779,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
     g_string_sprintfa (gs, " boolean: %s", pdata->val?"TRUE":"FALSE");
     return;
   }
+  /** \todo QOF_TYPE_COLLECT */
   return;
 }                               /* qof_query_printValueForParam */
 
@@ -1789,8 +1811,8 @@ qof_query_printDateMatch (QofDateMatch d)
   {
     case QOF_DATE_MATCH_NORMAL:
       return "QOF_DATE_MATCH_NORMAL";
-    case QOF_DATE_MATCH_ROUNDED:
-      return "QOF_DATE_MATCH_ROUNDED";
+    case QOF_DATE_MATCH_DAY:
+      return "QOF_DATE_MATCH_DAY";
   }
   return "UNKNOWN MATCH TYPE";
 }                               /* qof_query_printDateMatch */

@@ -31,24 +31,8 @@
 #include <glib.h>
 #include <string.h>
 
-#include "guid.h"
 #include "messages.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
-#include "gnc-event-p.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-
-#include "gncBusiness.h"
+#include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 #include "gncOwnerP.h"
@@ -63,19 +47,15 @@ struct _gncJob
   gboolean      active;
 };
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_JOB
 
 /* ================================================================== */
 /* misc inline functions */
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
 G_INLINE_FUNC void mark_job (GncJob *job);
-G_INLINE_FUNC void
-mark_job (GncJob *job)
+void mark_job (GncJob *job)
 {
   job->inst.dirty = TRUE;
   qof_collection_mark_dirty (job->inst.entity.collection);
@@ -269,6 +249,16 @@ void gncJobSetActive (GncJob *job, gboolean active)
   gncJobCommitEdit (job);
 }
 
+static void
+qofJobSetOwner (GncJob *job, QofEntity *ent)
+{
+	if(!job || !ent) { return; }
+	qof_begin_edit(&job->inst);
+	qofOwnerSetEntity(&job->owner, ent);
+	mark_job (job);
+	qof_commit_edit(&job->inst);
+}
+
 void gncJobBeginEdit (GncJob *job)
 {
   QOF_BEGIN_EDIT (&job->inst);
@@ -327,6 +317,13 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
+static QofEntity*
+qofJobGetOwner (GncJob *job)
+{
+	if(!job) { return NULL; }
+	return (QofEntity*)qofOwnerGetOwner(&job->owner);
+}
+
 /* Other functions */
 
 int gncJobCompare (const GncJob * a, const GncJob *b) {
@@ -370,15 +367,25 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
-    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner },
+#ifdef GNUCASH_MAJOR_VERSION
+    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
+#else
+    { JOB_OWNER, QOF_TYPE_CHOICE, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },
+#endif
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
-  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
+  if(!qof_choice_create(GNC_ID_JOB)) { return FALSE; }
+  if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_JOB, INVOICE_OWNER)) { return FALSE; }
 
+  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
+#ifdef GNUCASH_MAJOR_VERSION
+  qofJobGetOwner(NULL);
+  qofJobSetOwner(NULL, NULL);
+#endif
   return qof_object_register (&gncJobDesc);
 }
 

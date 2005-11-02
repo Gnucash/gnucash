@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_skip</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_skip</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Enable SKIP transaction action</short>
+        <long>
+          Enable the SKIP action in the transaction matcher.  If
+          enabled, a transaction whose best match's score is in the
+          yellow zone (above the Auto-ADD threshold but below the
+          Auto-CLEAR threshold) will be SKIPed by default.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/enable_edit</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/enable_edit</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Enable EDIT transaction action</short>
+        <long>
+          Enable the EDIT action in the transaction matcher.  NOT YET
+          SUPPORTED.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/use_bayes</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/use_bayes</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Use bayesian matching.</short>
+        <long>Use bayesian matching.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/match_threshold</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/match_threshold</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>1.0</default>
+      <locale name="C">
+        <short>
+          The minimum score a potential match must have to be
+          displayed in the match list.
+        </short>
+        <long>
+          The minimum score a potential match must have to be
+          displayed in the match list.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/auto_add_threshold</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/auto_add_threshold</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>3.0</default>
+      <locale name="C">
+        <short>
+          Score below this is automatically added.
+        </short>
+        <long>
+          A transaction whose best match's score is in the red zone
+          (above the display threshold but below or equal to the
+          Auto-ADD threshold) will be ADDed by default.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/auto_clear_threshold</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/auto_clear_threshold</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>6.0</default>
+      <locale name="C">
+        <short>
+          Score above this is automatically cleared.
+        </short>
+        <long>
+          A transaction whose best match's score is in the green zone
+          (above or equal to the Auto-CLEAR threshold) will be CLEARed
+          by default.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/generic_matcher/atm_fee_threshold</key>
+      <applyto>/apps/gnucash/dialogs/import/generic_matcher/atm_fee_threshold</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>2.0</default>
+      <locale name="C">
+        <short>
+          Maximum atm fees in your area.
+        </short>
+        <long>
+          In some places commercial ATMs (not belonging to a financial
+          institution) are installed in places like convienience
+          store.  These ATM add its fee directly to the amount instead
+          of showing up as a separate transaction or in your monthly
+          banking fees.  For example, you withdraw 100$, and you are
+          charged 101,50$ plus Interac fees.  If you manually entered
+          that 100$, the amounts won't match.  You should set this to
+          whatever is the maximum such fee in your area (in units of
+          your local currency), so the transaction will be recognised
+          as a match.
+        </long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

@@ -28,9 +28,7 @@
 #include <zlib.h>
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
-#include "gncObject.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "Scrub.h"
@@ -39,10 +37,6 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "qofbackend-p.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
 #include "io-gncxml-gen.h"
@@ -53,8 +47,7 @@
 #include "gnc-xml.h"
 #include "io-utils.h"
 
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* Callback structure */
 struct file_backend {
@@ -82,9 +75,9 @@ run_callback(sixtp_gdv2 *data, const char *type)
 static void
 clear_up_account_commodity(
     gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (Account *account),
+    gnc_commodity * (*getter) (const Account *account),
     void (*setter) (Account *account, gnc_commodity *comm),
-    int (*scu_getter) (Account *account),
+    int (*scu_getter) (const Account *account),
     void (*scu_setter) (Account *account, int scu))
 {
     gnc_commodity *gcom;
@@ -116,10 +109,10 @@ clear_up_account_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         setter(act, gcom);
         if (old_scu != 0 && scu_setter)
           scu_setter(act, old_scu);
+        gnc_commodity_destroy(com);
     }
 }
 
@@ -152,10 +145,10 @@ clear_up_transaction_commodity(
     }
     else
     {
-        gnc_commodity_destroy(com);
         xaccTransBeginEdit(trans);
         setter(trans, gcom);
         xaccTransCommitEdit(trans);
+        gnc_commodity_destroy(com);
     }
 }
 
@@ -280,7 +273,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
             xaccGetAccountFromName( acctGroup,
                                     xaccAccountGetName( (Account*)n->data ) );
             if ( tmpAcct != NULL ) {
-/* XXX hack alert FIXME .... Should the be 'Remove', or 'Destroy'?
+/* XXX hack alert FIXME .... Should this be 'Remove', or 'Destroy'?
  * If we just remove, then this seems to be a memory leak to me, since
  * it is never reparented.  Shouldn't it be a Destroy ???
  */
@@ -354,7 +347,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
-    type = xmlGetProp(tree, "cd:type");
+    type = (char*)xmlGetProp(tree, BAD_CAST "cd:type");
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
     {
@@ -386,6 +379,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     {
         sixdata->counter.schedXactions_total = val;
     }
+    else if(safe_strcmp(type, "budget") == 0)
+    {
+        sixdata->counter.budgets_total = val;
+    }
     else
     {
       struct file_backend be_data;
@@ -393,7 +390,7 @@ gnc_counter_end_handler(gpointer data_for_children,
       be_data.ok = FALSE;
       be_data.tag = type;
 
-      gncObjectForeachBackend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
+      qof_object_foreach_backend (GNC_FILE_BACKEND, do_counter_cb, &be_data);
 
       if (be_data.ok == FALSE)
       {
@@ -428,6 +425,8 @@ print_counter_data(load_counter *data)
            data->commodities_total, data->commodities_loaded);
     PINFO("Scheduled Tansactions: Total: %d, Loaded: %d",
            data->schedXactions_total, data->schedXactions_loaded);
+    PINFO("Budgets: Total: %d, Loaded: %d",
+	  data->budgets_total, data->budgets_loaded);
 }
 
 static void
@@ -443,13 +442,15 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
     counter = &gd->counter;
     loaded = counter->transactions_loaded + counter->accounts_loaded +
       counter->books_loaded + counter->commodities_loaded +
-      counter->schedXactions_loaded;
+      counter->schedXactions_loaded + counter->budgets_loaded;
     total = counter->transactions_total + counter->accounts_total +
       counter->books_total + counter->commodities_total +
-      counter->schedXactions_total;
+      counter->schedXactions_total + counter->budgets_total;
 
     percentage = (loaded * 100)/total;
     if (percentage > 100) {
+      /* FIXME: Perhaps the below should be replaced by:
+	 print_counter_data(counter); */
       printf("Transactions: Total: %d, Loaded: %d\n",
              counter->transactions_total, counter->transactions_loaded);
       printf("Accounts: Total: %d, Loaded: %d\n",
@@ -460,6 +461,8 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
              counter->commodities_total, counter->commodities_loaded);
       printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
              counter->schedXactions_total, counter->schedXactions_loaded);
+      printf("Budgets: Total: %d, Loaded: %d\n",
+	     counter->budgets_total, counter->budgets_loaded);
     }
     percentage = MIN(percentage, 100);
     gd->gui_display_fn(NULL, percentage);
@@ -475,6 +478,7 @@ static const char *COUNT_DATA_TAG = "gnc:count-data";
 static const char *TRANSACTION_TAG = "gnc:transaction";
 static const char *SCHEDXACTION_TAG = "gnc:schedxaction";
 static const char *TEMPLATE_TRANSACTION_TAG = "gnc:template-transactions";
+static const char *BUDGET_TAG = "gnc:budget";
 
 static void
 add_item_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -521,9 +525,13 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
     {
         add_schedXaction_local(gd, (SchedXaction*)data);
     }
-    else if(safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG ) == 0 )
+    else if(safe_strcmp(tag, TEMPLATE_TRANSACTION_TAG) == 0)
     {
         add_template_transaction_local( gd, (gnc_template_xaction_data*)data );
+    }
+    else if(safe_strcmp(tag, BUDGET_TAG) == 0)
+    {
+        // Nothing needed here.
     }
     else
     {
@@ -534,7 +542,7 @@ book_callback(const char *tag, gpointer globaldata, gpointer data)
       be_data.gd = gd;
       be_data.data = data;
 
-      gncObjectForeachBackend (GNC_FILE_BACKEND, add_item_cb, &be_data);
+      qof_object_foreach_backend (GNC_FILE_BACKEND, add_item_cb, &be_data);
 
       if (be_data.ok == FALSE)
       {
@@ -619,6 +627,8 @@ gnc_sixtp_gdv2_new (
     gd->counter.prices_total = 0;
     gd->counter.schedXactions_loaded = 0;
     gd->counter.schedXactions_total = 0;
+    gd->counter.budgets_loaded = 0;
+    gd->counter.budgets_total = 0;
     gd->exporting = exporting;
     gd->countCallback = countcallback;
     gd->gui_display_fn = gui_display_fn;
@@ -677,6 +687,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
            PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
            COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
            ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
+           BUDGET_TAG, gnc_budget_sixtp_parser_create(),
            TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
            SCHEDXACTION_TAG, gnc_schedXaction_sixtp_parser_create(),
            TEMPLATE_TRANSACTION_TAG, gnc_template_transaction_sixtp_parser_create(),
@@ -687,7 +698,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
 
     be_data.ok = TRUE;
     be_data.parser = book_parser;
-    gncObjectForeachBackend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, add_parser_cb, &be_data);
     if (be_data.ok == FALSE)
       goto bail;
 
@@ -717,7 +728,7 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
     /* Call individual scrub functions */
     memset(&be_data, 0, sizeof(be_data));
     be_data.book = book;
-    gncObjectForeachBackend (GNC_FILE_BACKEND, scrub_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
     /* fix price quote sources */
     grp = gnc_book_get_group(book);
@@ -753,7 +764,6 @@ write_counts(FILE* out, ...)
     char *type;
 
     va_start(ap, out);
-
     type = va_arg(ap, char *);
 
     while(type)
@@ -766,9 +776,9 @@ write_counts(FILE* out, ...)
         {
             val = g_strdup_printf("%d", amount);
 
-            node = xmlNewNode(NULL, COUNT_DATA_TAG);
-            xmlSetProp(node, "cd:type", type);
-            xmlNodeAddContent(node, val);
+            node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
+            xmlSetProp(node, BAD_CAST "cd:type", BAD_CAST type);
+            xmlNodeAddContent(node, BAD_CAST val);
 
             xmlElemDump(out, NULL, node);
             fprintf(out, "\n");
@@ -804,6 +814,7 @@ static void write_pricedb (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_transactions (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_template_transaction_data (FILE *out, QofBook *book, sixtp_gdv2 *gd);
 static void write_schedXactions(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+static void write_budget (QofEntity *ent, gpointer data);
 
 static void
 write_counts_cb (const char *type, gpointer data_p, gpointer be_data_p)
@@ -854,17 +865,28 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     }
     
     xmlElemDump(out, NULL, node);
-    fprintf(out, "\n");
+    if(fprintf(out, "\n") < 0)
+	{
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		return;
+	}
 
     xmlFreeNode(node);
 #endif
 
     be_data.out = out;
     be_data.book = book;
-
-    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string );
+    be_data.gd = gd;
+    if(fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string) < 0)
+	{
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		return;
+	}
     write_book_parts (out, book);
 
+    /* gd->counter.{foo}_total fields should have all these totals
+       already collected.  I don't know why we're re-calling all these
+       functions.  */
     write_counts(out,
                  "commodity",
                  gnc_commodity_table_get_size(
@@ -875,9 +897,11 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
                  gnc_book_count_transactions(book),
                  "schedxaction",
                  g_list_length( gnc_book_get_schedxactions(book) ),
-                 NULL);
+		 "budget", qof_collection_count(
+                     qof_book_get_collection(book, GNC_ID_BUDGET)),
+		 NULL);
 
-    gncObjectForeachBackend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
+    qof_object_foreach_backend (GNC_FILE_BACKEND, write_counts_cb, &be_data);
 
     write_commodities(out, book, gd);
     write_pricedb(out, book, gd);
@@ -886,9 +910,14 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     write_template_transaction_data(out, book, gd);
     write_schedXactions(out, book, gd);
 
-    gncObjectForeachBackend (GNC_FILE_BACKEND, write_data_cb, &be_data);
+    qof_collection_foreach(qof_book_get_collection(book, GNC_ID_BUDGET), 
+        write_budget, &be_data);
 
-    fprintf( out, "</%s>\n", BOOK_TAG );
+    qof_object_foreach_backend (GNC_FILE_BACKEND, write_data_cb, &be_data);
+
+    if(fprintf( out, "</%s>\n", BOOK_TAG ) < 0) {
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+	}
 }
 
 void
@@ -1033,30 +1062,64 @@ write_schedXactions( FILE *out, QofBook *book, sixtp_gdv2 *gd)
     } while ( (schedXactions = schedXactions->next) );
 }
 
-#if 0
 static void
-write_namespace_decl (FILE *out, const char *namespace)
+write_budget (QofEntity *ent, gpointer data)
+{
+    xmlNodePtr node;
+    struct file_backend* be = data;
+
+    GncBudget *bgt = GNC_BUDGET(ent);
+    node = gnc_budget_dom_tree_create(bgt);
+    xmlElemDump( be->out, NULL, node );
+    fprintf( be->out, "\n" );
+    xmlFreeNode( node );
+    
+    be->gd->counter.budgets_loaded++;
+    run_callback(be->gd, "budgets");    
+}
+
+void
+gnc_xml2_write_namespace_decl (FILE *out, const char *namespace)
 {
   g_return_if_fail (namespace);
-  fprintf(out, " xmlns:%s=\"\"", namespace);
+  fprintf(out, "\n     xmlns:%s=\"http://www.gnucash.org/XML/%s\"",
+          namespace, namespace);
 }
-#endif
+
+static void
+do_write_namespace_cb (const char *type, gpointer data_p, gpointer file_p)
+{
+  GncXmlDataType_t *data = data_p;
+  FILE *out = file_p;
+
+  g_return_if_fail (type && data && out);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->ns)
+    (data->ns)(out);
+}
 
 static void
 write_v2_header (FILE *out)
 {
     fprintf(out, "<?xml version=\"1.0\"?>\n");
     fprintf(out, "<" GNC_V2_STRING);
-    /*
-    write_namespace_decl (out, "cd");
-    write_namespace_decl (out, "gnc");
-    write_namespace_decl (out, "act");
-    write_namespace_decl (out, "cmdty");
-    write_namespace_decl (out, "trn");
-    write_namespace_decl (out, "ts");
-    write_namespace_decl (out, "split");
-    write_namespace_decl (out, "sx");
-    */
+    
+    gnc_xml2_write_namespace_decl (out, "gnc");
+    gnc_xml2_write_namespace_decl (out, "act");
+    gnc_xml2_write_namespace_decl (out, "book");
+    gnc_xml2_write_namespace_decl (out, "cd");
+    gnc_xml2_write_namespace_decl (out, "cmdty");
+    gnc_xml2_write_namespace_decl (out, "price");
+    gnc_xml2_write_namespace_decl (out, "slot");
+    gnc_xml2_write_namespace_decl (out, "split");
+    gnc_xml2_write_namespace_decl (out, "sx");
+    gnc_xml2_write_namespace_decl (out, "trn");
+    gnc_xml2_write_namespace_decl (out, "ts");
+
+    /* now cope with the plugins */
+    qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
+
     fprintf(out, ">\n");
 }
 
@@ -1083,6 +1146,8 @@ gnc_book_write_to_xml_filehandle_v2(QofBook *book, FILE *out)
     gd->counter.transactions_total = gnc_book_count_transactions(book);
     gd->counter.schedXactions_total =
       g_list_length( gnc_book_get_schedxactions(book));
+    gd->counter.budgets_total = qof_collection_count(
+        qof_book_get_collection(book, GNC_ID_BUDGET));
 
     write_book(out, book, gd);
 
@@ -1149,12 +1214,6 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
   if (!use_gzip)
     return fopen(filename, perms);
 
-//gboolean
-//gnc_lookup_boolean_option( const char *section,
-//                                    const char *name,
-//                                    gboolean default_value)
-//
-
   if (pipe(filedes) < 0) {
     PWARN("Pipe call failed. Opening uncompressed file.");
     return fopen(filename, perms);
@@ -1194,7 +1253,7 @@ gnc_book_write_to_xml_file_v2(
     FILE *out;
 
     out = try_gz_open(filename, "w", compress);
-     if (out == NULL)
+    if (out == NULL)
     {
         return FALSE;
     }

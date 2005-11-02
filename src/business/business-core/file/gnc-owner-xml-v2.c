@@ -41,17 +41,13 @@
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
 
-#include "qofinstance.h"
-
 #include "gnc-owner-xml-v2.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
 #include "gncVendorP.h"
 #include "gncEmployeeP.h"
 
-#include "gnc-engine-util.h"
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *owner_version_string = "2.0.0";
 
@@ -83,8 +79,8 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
       return NULL;
     }
 
-    ret = xmlNewNode(NULL, tag);
-    xmlSetProp(ret, "version", owner_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST owner_version_string);
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,
@@ -98,7 +94,7 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 struct owner_pdata
 {
   GncOwner *owner;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -193,7 +189,7 @@ static struct dom_tree_handler owner_handlers_v2[] = {
 };
 
 gboolean
-gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, GNCBook *book)
+gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, QofBook *book)
 {
     struct owner_pdata owner_pdata;
     gboolean successful;
@@ -210,4 +206,30 @@ gnc_dom_tree_to_owner (xmlNodePtr node, GncOwner *owner, GNCBook *book)
     }
 
     return successful;
+}
+
+static void
+owner_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "owner");
+}
+
+void
+gnc_owner_xml_initialize (void)
+{
+  static GncXmlDataType_t be_data = {
+    GNC_FILE_BACKEND_VERS,
+    "gnc:Owner",
+    NULL,			/* parser_create */
+    NULL,			/* add_item */
+    NULL,			/* get_count */
+    NULL,			/* write */
+    NULL,			/* scrub */
+    owner_ns,
+  };
+
+  qof_object_register_backend ("gnc:Owner",
+			    GNC_FILE_BACKEND,
+			    &be_data);
 }

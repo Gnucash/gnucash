@@ -38,12 +38,13 @@
 #include <string.h>
 
 #include "escape.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
 #include "putil.h"
 
-static short module = MOD_KVP; 
+static QofLogModule log_module = QOF_MOD_KVP;
 
 /* =========================================================== */
 /* get a unique iguid index */
@@ -120,7 +121,7 @@ static gpointer
 ival_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
   int ival = atoi (DB_GET_VAL ("ipath", 0));
-  return (gpointer) ival;
+  return GINT_TO_POINTER(ival);
 }
 
 
@@ -142,7 +143,7 @@ pgendGetCache (PGBackend *be, const char *val_str, sqlEscape *escape)
    p = stpcpy (p, "';");
 
    SEND_QUERY (be,be->buff, 0);
-   ival = (int) pgendGetResults (be, ival_cb, (gpointer) 0);
+   ival = GPOINTER_TO_INT(pgendGetResults (be, ival_cb, (gpointer) 0));
    if (ival) return ival;
 
    /* Else, this guid has never been stored before. 
@@ -211,7 +212,7 @@ store_cb (const char *key, KvpValue *val, gpointer p)
    char *path_save;
 
    path_save = cb_data->path;
-   cb_data->path = g_strjoin ("/", path_save, key, 0);
+   cb_data->path = g_strjoin ("/", path_save, key, NULL);
 
    ipath = pgendGetPathCache (be, cb_data->path, cb_data->escape);
    cb_data->ipath = ipath;
@@ -224,9 +225,9 @@ store_cb (const char *key, KvpValue *val, gpointer p)
          case KVP_TYPE_GINT64:
             {
                gint64 ival = kvp_value_get_gint64 (val);
-               PINFO ("path=%s type=gint64 val=%lld",
+               PINFO ("path=%s type=gint64 val=%" G_GINT64_FORMAT,
                       cb_data->path,
-                      (long long int) ival);
+                      ival);
 
                cb_data->stype = "int8";
                cb_data->u.ival = ival;
@@ -248,10 +249,10 @@ store_cb (const char *key, KvpValue *val, gpointer p)
          case KVP_TYPE_NUMERIC:
             {
                gnc_numeric ival = kvp_value_get_numeric (val);
-               PINFO ("path=%s type=numeric val=%lld/%lld",
+               PINFO ("path=%s type=numeric val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
                       cb_data->path,
-                      (long long int) ival.num,
-                      (long long int) ival.denom);
+                      ival.num,
+                      ival.denom);
 
                cb_data->stype = "frac";
                cb_data->u.numeric = ival;

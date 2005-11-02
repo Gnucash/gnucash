@@ -40,7 +40,6 @@
 #define GNC_SESSION_SCM_H
 
 #include <libguile.h>
-#include "guile-mappings.h"
 #include "gnc-engine.h"
 #include "qofsession.h"
 

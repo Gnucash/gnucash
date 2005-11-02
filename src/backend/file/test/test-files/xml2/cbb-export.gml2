@@ -1,131 +1,156 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="account">12</gnc:count-data>
 <gnc:count-data cd:type="transaction">9</gnc:count-data>
 <gnc:account version="2.0.0">
   <act:name>cbb export</act:name>
   <act:id type="guid">504a8f7f0ff8e1e53c6df8b1bb714c47</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gifts</act:name>
   <act:id type="guid">8cd43c12f1dc32ea8a51ec997fcf35ef</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gift Expenses</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reimbursements</act:name>
   <act:id type="guid">4f502fe69043087c2186dcac27cc56bf</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Salary</act:name>
   <act:id type="guid">077894556323647344da06d5f5fe6449</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Salary Income</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Clothing</act:name>
   <act:id type="guid">37539261eaf4bcf82c17eba0a5bf5949</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Clothing</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
   <act:id type="guid">3b09243ca91d85c7b2984dd5f2490701</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dining-Out</act:name>
   <act:id type="guid">cd6d68365b6c9f80e4b68a552b71950b</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Entertainment</act:name>
   <act:id type="guid">47585dff7df1969ea961e4b1a7fa9f27</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Household</act:name>
   <act:id type="guid">46d28144c136899835833bca6cda4e52</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Household Misc. Exp</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Personal Cash</act:name>
   <act:id type="guid">98e07d070ecce19416db949e9124a45d</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telephone</act:name>
   <act:id type="guid">72e555d138c8a1e7c5e8c7953a54a55e</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Telephone Expense</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Textbooks</act:name>
   <act:id type="guid">224840878e17f4f7c6a5d6418747cafa</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>HRK</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">9d2c18d552ab4a405bee914ca188eb70</trn:id>

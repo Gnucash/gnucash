@@ -6,13 +6,14 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/import-export \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} 
 
 LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-generic-import.la \
-  ${GLIB_LIBS}
+  ${GLIB_LIBS} ${QOF_LIBS}
 
 TESTS = \
   test-link \

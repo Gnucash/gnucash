@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/close_on_finish</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/close_on_finish</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>True</default>
+      <locale name="C">
+        <short>Close dialog when finished</short>
+        <long>
+	  Set this key to TRUE to automatically close the window when
+	  you finish the HBCI import process.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/remember_pin</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/remember_pin</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>False</default>
+      <locale name="C">
+        <short>Remember the PIN for HBCI in memory during a session.</short>
+        <long>Remember the PIN for HBCI in memory during a session.</long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/verbose_debug</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/verbose_debug</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>False</default>
+      <locale name="C">
+        <short>Activate verbose debug messages for HBCI Online Banking.</short>
+        <long>Activate verbose debug messages for HBCI Online Banking.</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

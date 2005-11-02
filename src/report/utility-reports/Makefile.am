@@ -26,7 +26,8 @@ gncscmmod_DATA = \
   iframe-url.scm \
   utility-reports.scm \
   view-column.scm \
-  welcome-to-gnucash.scm 
+  welcome-to-gnucash.scm \
+  test-graphing.scm
 
 EXTRA_DIST = ${gncscmmod_DATA}
 

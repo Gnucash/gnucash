@@ -31,7 +31,6 @@
 #include "SX-book.h"
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
@@ -47,7 +46,7 @@
 
 #include "sixtp-dom-parsers.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /**
  * The XML output should look something like:
@@ -155,20 +154,20 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
-    ret = xmlNewNode( NULL, GNC_SCHEDXACTION_TAG );
+    ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
 
-    xmlSetProp( ret, "version", schedxaction_version_string );
+    xmlSetProp( ret, BAD_CAST "version", BAD_CAST schedxaction_version_string );
 
     xmlAddChild( ret,
                  guid_to_dom_tree(SX_ID,
                                   xaccSchedXactionGetGUID(sx)) );
 
-    xmlNewTextChild( ret, NULL, SX_NAME, xaccSchedXactionGetName(sx) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, BAD_CAST xaccSchedXactionGetName(sx) );
 
-    xmlNewTextChild( ret, NULL, SX_AUTOCREATE,
-                     ( sx->autoCreateOption ? "y" : "n" ) );
-    xmlNewTextChild( ret, NULL, SX_AUTOCREATE_NOTIFY,
-                     ( sx->autoCreateNotify ? "y" : "n" ) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE,
+                     BAD_CAST ( sx->autoCreateOption ? "y" : "n" ) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE_NOTIFY,
+                     BAD_CAST ( sx->autoCreateNotify ? "y" : "n" ) );
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_CREATE_DAYS,
                                      sx->advanceCreateDays));
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
@@ -206,7 +205,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 				  templ_acc_guid));
 				  
     /* output freq spec */
-    fsNode = xmlNewNode(NULL, SX_FREQSPEC);
+    fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
     xmlAddChild( fsNode,
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
@@ -221,7 +220,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
             for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next ) {
                     tsd = (temporalStateData*)l->data;
 
-                    instNode = xmlNewNode( NULL, SX_DEFER_INSTANCE );
+                    instNode = xmlNewNode( NULL, BAD_CAST SX_DEFER_INSTANCE );
                     if ( g_date_valid( &tsd->last_date ) )
                     {
                       xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,
@@ -646,6 +645,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
                change re: storing template accounts. */
             /* Fix: get account with name of our GUID from the template
                accounts group.  Make that our template_acct pointer. */
+            /* THREAD-UNSAFE */
             id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
             ag = gnc_book_get_template_group(book);
             if ( ag == NULL )
@@ -712,7 +712,8 @@ tt_act_handler( xmlNodePtr node, gpointer data )
                            away at some point, but the same concern still
                            applies for
                            SchedXaction.c:xaccSchedXactionInit... */
-                        com = gnc_commodity_new( "template", "template",
+                        com = gnc_commodity_new( txd->book,
+						 "template", "template",
                                                  "template", "template",
                                                  1 );
                         xaccAccountSetCommodity( acc, com );

@@ -28,7 +28,7 @@
 #include <stdarg.h>
 #include <gnome.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "GNCId.h"
 #include "QueryCore.h"
 #include "QueryObject.h"
@@ -37,9 +37,8 @@
 
 static void gnc_search_param_class_init	(GNCSearchParamClass *class);
 static void gnc_search_param_init	(GNCSearchParam *gspaper);
-static void gnc_search_param_finalise	(GtkObject *obj);
+static void gnc_search_param_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchParam *)(x))->priv)
 struct _GNCSearchParamPrivate {
   GSList *		converters;
   GSList *		param_path;
@@ -49,7 +48,7 @@ struct _GNCSearchParamPrivate {
   gpointer		lookup_arg;
 };
 
-static GtkObjectClass *parent_class;
+static GObjectClass *parent_class;
 
 enum {
   LAST_SIGNAL
@@ -59,44 +58,39 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 #endif
 
-guint
+GType
 gnc_search_param_get_type (void)
 {
-  static guint type = 0;
-	
-  if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchParam",
-      sizeof(GNCSearchParam),
+  static GType type = 0;
+
+  if (type == 0) {
+    static GTypeInfo type_info = {
       sizeof(GNCSearchParamClass),
-      (GtkClassInitFunc)gnc_search_param_class_init,
-      (GtkObjectInitFunc)gnc_search_param_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+      NULL,
+      NULL,
+      (GClassInitFunc)gnc_search_param_class_init,
+      NULL,
+      NULL,
+      sizeof(GNCSearchParam),
+      0,
+      (GInstanceInitFunc)gnc_search_param_init
     };
-		
-    type = gtk_type_unique(gtk_object_get_type (), &type_info);
+
+    type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchParam",
+				   &type_info, 0);
   }
-	
+
   return type;
 }
 
 static void
-gnc_search_param_class_init (GNCSearchParamClass *class)
+gnc_search_param_class_init (GNCSearchParamClass *klass)
 {
-  GtkObjectClass *object_class;
-	
-  object_class = (GtkObjectClass *)class;
-  parent_class = gtk_type_class (gtk_object_get_type ());
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gnc_search_param_finalise;
+  parent_class = g_type_class_peek_parent (klass);
 
-  /* override methods */
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-#endif
+  object_class->finalize = gnc_search_param_finalize;
 }
 
 static void
@@ -106,15 +100,24 @@ gnc_search_param_init (GNCSearchParam *o)
 }
 
 static void
-gnc_search_param_finalise (GtkObject *obj)
+gnc_search_param_finalize (GObject *obj)
 {
-  GNCSearchParam *o = (GNCSearchParam *)obj;
+  GNCSearchParam *o;
+
+  g_return_if_fail (obj != NULL);
+  g_return_if_fail (GNC_IS_SEARCH_PARAM (obj));	
+
+  o = GNC_SEARCH_PARAM (obj);
+
+  g_return_if_fail (o->priv != NULL);
+	
   g_slist_free (o->priv->param_path);
   o->priv->param_path = NULL;
   g_slist_free (o->priv->converters);
   o->priv->converters = NULL;
   g_free(o->priv);
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -127,7 +130,7 @@ gnc_search_param_finalise (GtkObject *obj)
 GNCSearchParam *
 gnc_search_param_new (void)
 {
-  GNCSearchParam *o = (GNCSearchParam *)gtk_type_new(gnc_search_param_get_type ());
+  GNCSearchParam *o = (GNCSearchParam *)g_object_new(gnc_search_param_get_type (), NULL);
   return o;
 }
 
@@ -136,7 +139,7 @@ gnc_search_param_clone (GNCSearchParam *param)
 {
   GNCSearchParam *n;
 
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 
   n = gnc_search_param_new ();
   n->title = param->title;
@@ -154,10 +157,11 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
   GNCIdTypeConst type = NULL;
   GSList *converters = NULL;
 
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
 
-  if (param->priv->param_path)
+  if (param->priv->param_path) {
     g_slist_free (param->priv->param_path);
+  }
   param->priv->param_path = g_slist_copy (param_path);
 
   /* Compute the parameter type */
@@ -167,7 +171,7 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
       gncQueryObjectGetParameter (search_type, param_name);
 
     /* If it doesn't exist, then we've reached the end */
-    if (!objDef)
+    if (objDef == NULL)
       break;
 
     /* Save the converter */
@@ -181,8 +185,9 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
   param->priv->type = type;
 
   /* Save the converters */
-  if (param->priv->converters)
+  if (param->priv->converters) {
     g_slist_free (param->priv->converters);
+  }
   param->priv->converters = g_slist_reverse (converters);
 }
 
@@ -190,8 +195,9 @@ void
 gnc_search_param_override_param_type (GNCSearchParam *param,
 				      GNCIdTypeConst param_type)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
-  g_assert (param_type != NULL && *param_type != '\0');
+  g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
+  g_return_if_fail (param_type != NULL && *param_type != '\0');
+
   param->priv->type = param_type;
   /* XXX: What about the converters? */
 }
@@ -199,15 +205,15 @@ gnc_search_param_override_param_type (GNCSearchParam *param,
 GSList *
 gnc_search_param_get_param_path (GNCSearchParam *param)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
-
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
+	
   return g_slist_copy (param->priv->param_path);
 }
 
 GSList *
 gnc_search_param_get_converters (GNCSearchParam *param)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 
   return param->priv->converters;
 }
@@ -215,7 +221,7 @@ gnc_search_param_get_converters (GNCSearchParam *param)
 GNCIdTypeConst
 gnc_search_param_get_param_type (GNCSearchParam *param)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 
   return param->priv->type;
 }
@@ -223,7 +229,7 @@ gnc_search_param_get_param_type (GNCSearchParam *param)
 void
 gnc_search_param_set_title (GNCSearchParam *param, const char *title)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
 
   param->title = title;
 }
@@ -231,7 +237,7 @@ gnc_search_param_set_title (GNCSearchParam *param, const char *title)
 void
 gnc_search_param_set_justify (GNCSearchParam *param, GtkJustification justify)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
 
   param->justify = justify;
 }
@@ -239,7 +245,7 @@ gnc_search_param_set_justify (GNCSearchParam *param, GtkJustification justify)
 void
 gnc_search_param_set_passive (GNCSearchParam *param, gboolean value)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_assert (GNC_IS_SEARCH_PARAM (param));
 
   param->passive = value;
 }
@@ -247,7 +253,7 @@ gnc_search_param_set_passive (GNCSearchParam *param, gboolean value)
 void
 gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
 {
-  g_assert (IS_GNCSEARCH_PARAM (param));
+  g_assert (GNC_IS_SEARCH_PARAM (param));
 
   param->non_resizeable = value;
 }
@@ -255,10 +261,10 @@ gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
 gboolean
 gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 {
-  g_assert (IS_GNCSEARCH_PARAM (a));
-  g_assert (IS_GNCSEARCH_PARAM (b));
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (a), FALSE);
+  g_return_val_if_fail (GNC_IS_SEARCH_PARAM (b), FALSE);
 
-  if (a->priv->type == b->priv->type ||
+  if (a->priv->type == b->priv->type || 
       !safe_strcmp (a->priv->type, b->priv->type))
     return TRUE;
 
@@ -351,7 +357,7 @@ gnc_search_param_set_param_fcn (GNCSearchParam *param,
   g_return_if_fail (param);
   g_return_if_fail (param_type && *param_type);
   g_return_if_fail (fcn);
-  g_return_if_fail (IS_GNCSEARCH_PARAM(param));
+  g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
 
   param->priv->lookup_fcn = fcn;
   param->priv->lookup_arg = arg;
@@ -363,7 +369,7 @@ gpointer
 gnc_search_param_compute_value (GNCSearchParam *param, gpointer object)
 {
   g_return_val_if_fail(param, NULL);
-  g_return_val_if_fail(IS_GNCSEARCH_PARAM(param), NULL);
+  g_return_val_if_fail(GNC_IS_SEARCH_PARAM(param), NULL);
 
   if (param->priv->lookup_fcn)
   {

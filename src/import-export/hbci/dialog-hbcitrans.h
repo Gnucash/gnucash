@@ -39,7 +39,8 @@ typedef struct _trans_data HBCITransDialog;
 
 typedef enum GNC_HBCI_Transtype {
   SINGLE_TRANSFER = 0,
-  SINGLE_DEBITNOTE
+  SINGLE_DEBITNOTE,
+  SINGLE_INTERNAL_TRANSFER
 } GNC_HBCI_Transtype;
 
 

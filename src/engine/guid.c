@@ -41,6 +41,7 @@
 
 #include "guid.h"
 #include "md5.h"
+#include "qofid.h"
 #include "gnc-trace.h"
 
 # ifndef P_tmpdir
@@ -58,15 +59,8 @@ static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
 static GMemChunk *guid_memchunk = NULL;
 
-#if USING_THREADS
-/* guid_to_string uses a thread local buffer. These are used to set it up */
-#include <pthread.h>
-static pthread_key_t guid_buffer_key;
-static pthread_once_t guid_buffer_key_once = PTHREAD_ONCE_INIT;
-#endif
-
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /** Memory management routines ***************************************/
 static void
@@ -106,17 +100,19 @@ guid_free (GUID *guid)
 const GUID *
 guid_null(void)
 {
-  static int null_inited = (0 == 1);
+  static int null_inited = 0;
   static GUID null_guid;
 
   if (!null_inited)
   {
     int i;
+    char *tmp = "NULLGUID.EMPTY.";
 
+    /* 16th space for '\O' */
     for (i = 0; i < 16; i++)
-      null_guid.data[i] = 0;
+      null_guid.data[i] = tmp[i];
 
-    null_inited = (0 == 0);
+    null_inited = 1;
   }
 
   return &null_guid;
@@ -193,6 +189,7 @@ init_from_file(const char *filename, size_t max_size)
   size_t file_bytes;
   FILE *fp;
 
+  memset(&stats, 0, sizeof(stats));
   if (stat(filename, &stats) != 0)
     return 0;
 
@@ -251,6 +248,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
     if ((result < 0) || (result >= (int)sizeof(filename)))
       continue;
 
+    memset(&stats, 0, sizeof(stats));
     if (stat(filename, &stats) != 0)
       continue;
     md5_process_bytes(&stats, sizeof(stats), &guid_context);
@@ -294,7 +292,7 @@ init_from_int(int val)
 }
 
 static size_t
-init_from_buff(char * buf, size_t buflen)
+init_from_buff(unsigned char * buf, size_t buflen)
 {
   md5_process_bytes(buf, buflen, &guid_context);
   return buflen;
@@ -305,7 +303,8 @@ guid_init(void)
 {
   size_t bytes = 0;
 
-  guid_memchunk_init();
+  /* Not needed; taken care of on first malloc.
+   * guid_memchunk_init(); */
 
   md5_init_ctx(&guid_context);
 
@@ -395,6 +394,7 @@ guid_init(void)
   {
     char string[1024];
 
+    memset(string, 0, sizeof(string));
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);
@@ -474,16 +474,16 @@ guid_new(GUID *guid)
   init_from_time();
 
   /* Make it a little extra salty.  I think init_from_time was buggy,
-	* or something, since duplicate id's actually happened. Or something
-	* like that.  I think this is because init_from_time kept returning
-	* the same values too many times in a row.  So we'll do some 'block
-	* chaining', and feed in the old guid as new random data.
-	*
-	* Anyway, I think the whole fact that I saw a bunch of duplicate 
-	* id's at one point, but can't reproduce the bug is rather alarming.
-	* Something must be broken somewhere, and merely adding more salt
-	* is just hiding the problem, not fixing it.
-	*/
+   * or something, since duplicate id's actually happened. Or something
+   * like that.  I think this is because init_from_time kept returning
+   * the same values too many times in a row.  So we'll do some 'block
+   * chaining', and feed in the old guid as new random data.
+   *
+   * Anyway, I think the whole fact that I saw a bunch of duplicate 
+   * id's at one point, but can't reproduce the bug is rather alarming.
+   * Something must be broken somewhere, and merely adding more salt
+   * is just hiding the problem, not fixing it.
+   */
   init_from_int (433781*counter);
   init_from_buff (guid->data, 16);
 
@@ -572,22 +572,19 @@ badstring:
 }
 
 /* Allocate the key */
-#if USING_THREADS
-static void guid_buffer_key_alloc(void)
-{
-  pthread_key_create(&guid_buffer_key, NULL /* Never freed */);
-  pthread_setspecific(guid_buffer_key, malloc(GUID_ENCODING_LENGTH+1));
-}
-#endif
 
 const char *
 guid_to_string(const GUID * guid)
 {
-#if USING_THREADS
-  char *string;
+#ifdef G_THREADS_ENABLED
+  static GStaticPrivate guid_buffer_key = G_STATIC_PRIVATE_INIT;
+  gchar *string;
 
-  pthread_once(&guid_buffer_key_once, guid_buffer_key_alloc);
-  string = pthread_getspecific(guid_buffer_key);
+  string = g_static_private_get (&guid_buffer_key);
+  if (string == NULL) {
+    string = malloc(GUID_ENCODING_LENGTH+1);
+    g_static_private_set (&guid_buffer_key, string, g_free);
+  }
 #else
   static char string[64];
 #endif

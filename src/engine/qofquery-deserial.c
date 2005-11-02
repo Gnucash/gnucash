@@ -33,11 +33,6 @@
 #include "qofquerycore-p.h"
 #include "gnc-engine-util.h"
 
-#define CACHE_INSERT(str)  \
-    g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str))
-#define CACHE_REMOVE(str)  \
-    g_cache_remove(gnc_engine_get_string_cache(), (gpointer)(str))
-
 /* =========================================================== */
 
 #define GET_TEXT(node)  ({                                   \
@@ -413,7 +408,7 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 	xp = root->xmlChildrenNode;
 
 	how = QOF_COMPARE_EQUAL;
-	sm = QOF_DATE_MATCH_ROUNDED;
+	sm = QOF_DATE_MATCH_DAY;
 	date = (Timespec){0,0};
 
 	for (node=xp; node; node = node->next)
@@ -422,7 +417,7 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 
 		GET_HOW (how, "qofquery:compare", LT, LTE, EQUAL, GT, GTE, NEQ);
 		GET_MATCH2 (sm, "qofquery:date-match", 
-		            DATE_MATCH, NORMAL, ROUNDED);
+		            DATE_MATCH, NORMAL, DAY);
 		GET_DATE (0, date=, "qofquery:date");
 		{}
 	}
@@ -483,6 +478,7 @@ qof_query_param_path_from_xml (xmlNodePtr root)
 		if (0 == strcmp (node->name, "qofquery:param"))
 		{
 			const char *str = GET_TEXT (node);
+                        /* BUG? I can't find the matching cache removal. */
 			plist = g_slist_append (plist, CACHE_INSERT(str));
 		}
 	}

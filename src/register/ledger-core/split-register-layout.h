@@ -25,16 +25,12 @@
 
 #include "table-layout.h"
 #include "split-register.h"
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup Register Register visual layout.
 
-/** @addtogroup Register
- *  @{
- *  @file split-register-layout.h
- *  @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
- */
-
-/** Create the actual register visual layout: pick specific cell types
- *  to sit in specific columns, and add connections so that user can tab
- *  from one field to the next.  
+ *  pick specific cell types to sit in specific columns, and add 
+ *  connections so that user can tab from one field to the next.  
  *
  *  The actual layout depends on the register type, but, typically,
  *  all of the registers have the date cell on the left, description
@@ -44,8 +40,16 @@
  *  original intent was that the layout would be fetched from a 
  *  config file that could be tweaked for a specific, non-GnuCash 
  *  application.
+    @{
  */
+/** @file split-register-layout.h
+    @brief Create the actual register visual layout
+    @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
+*/
+
+/** Generate the split register layout. */
 TableLayout * gnc_split_register_layout_new (SplitRegister *reg);
 
+/** @} */
 /** @} */
 #endif

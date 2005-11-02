@@ -1,19 +1,34 @@
+/***************************************************************************
+ *            test-transaction-reversal.c
+ *
+ *  Modified to run without Guile: Mon Aug 22 11:19:56 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include <glib.h>
-#include <libguile.h>
 #include <string.h>
-
+#include "cashobjects.h"
+#include "Transaction.h"
 #include "Account.h"
 #include "TransLog.h"
-#include "Transaction.h"
-#include "gnc-engine.h"
-#include "gnc-module.h"
-#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-#include "Transaction.h"
-#include "guid.h"
-
-
 
 #define print_gnc_numeric(num) fprintf(stderr, "%s\n", gnc_numeric_to_string(num))
 
@@ -101,25 +116,16 @@ run_test (void)
   return;
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/engine", 0);
-
-  xaccLogDisable ();
-  set_success_print (TRUE);
-
-  run_test ();
-
-  success("transaction voiding seems OK");
-
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+  set_success_print (TRUE);
+  run_test ();
+  success("transaction voiding seems OK");
+  print_test_results();
+	}
+	qof_close();
   return 0;
 }

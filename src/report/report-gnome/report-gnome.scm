@@ -12,6 +12,7 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-report-gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
@@ -21,11 +22,15 @@
 (export gnc:report-menu-setup)
 (export gnc:add-report-template-menu-items)
 
+;; returns a function that takes a list: (options, report),
+;; and returns a widget
 (define (gnc:report-options-editor report) 
   (if (equal? (gnc:report-type report) "Multicolumn View")
       gnc:column-view-edit-options
       gnc:default-options-editor))
 
+;; do not rely on the return value of this function - it has none.
+;; instead, this function's side-effect is to set the report's editor widget.
 (define (gnc:report-edit-options report) 
   (let* ((editor-widg (gnc:report-editor-widget report)))
     (if editor-widg
@@ -51,12 +56,15 @@
               (menu-tip (gnc:report-template-menu-tip template))
               (item #f))
 
-          (if (not menu-path)
-              (set! menu-path '(""))
-              (set! menu-path
-                    (append menu-path '(""))))
+          ;;(if (not menu-path)
+              ;;(set! menu-path '(""))
+              ;;(set! menu-path
+              ;; (append menu-path '(""))))
 
-          (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
+          (if (not menu-path)
+              (set! menu-path '()))
+
+          (set! menu-path (append (list gnc:menuname-reports) menu-path))
 
           (if (not menu-tip)
               (set! menu-tip
@@ -67,10 +75,10 @@
                  ((menu-namer 'add-name) name)
                  menu-tip
                  menu-path
-                 (lambda ()
+                 (lambda (window)
                    (let ((report (gnc:make-report
                                   (gnc:report-template-name template))))
-                     (gnc:main-window-open-report report #f)))))
+                     (gnc:main-window-open-report report window)))))
           (gnc:add-extension item))))
 
   (define (add-template name template)
@@ -87,30 +95,20 @@
      (add-template-menu-item (car item) (cdr item)))
    (sort *template-items* sort-templates)))
 
-
 (define (gnc:report-menu-setup)
-  ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_Actions" menu. 
-  (define menu (gnc:make-menu gnc:menuname-reports
-			      (list gnc:window-name-main "_Actions")))
   (define menu-namer (gnc:new-menu-namer))
   (define asset-liability-menu
-    (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+    (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
   (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+    (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
   (define utility-menu
-    (gnc:make-menu gnc:menuname-utility
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+    (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define custom-menu
-    (gnc:make-menu gnc:menuname-custom
-                   (list gnc:window-name-main gnc:menuname-reports "")))
+    (gnc:make-menu gnc:menuname-custom (list gnc:menuname-reports)))
   (define tax-menu 
-    (gnc:make-menu gnc:menuname-taxes
-		   (list gnc:window-name-main gnc:menuname-reports "")))
+    (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  (gnc:add-extension menu)
+  (gnc:warn "report-menu-setup") ;; why do we do this?
 
   ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)

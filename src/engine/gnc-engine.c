@@ -24,27 +24,31 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include <dlfcn.h>
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-
+#include "qof.h"
+#include "cashobjects.h"
 #include "AccountP.h"
 #include "GroupP.h"
 #include "SX-book-p.h"
+#include "gnc-budget.h"
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
+#include "SchedXactionP.h"
+#include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofid.h"
-#include "qofobject.h"
-#include "qofobject-p.h"
-#include "qofquery.h" 
-#include "qofquery-p.h" 
+
+/** gnc file backend library name */
+#define GNC_LIB_NAME "libgnc-backend-file.la"
+/** init_fcn for gnc file backend library. */
+#define GNC_LIB_INIT "gnc_provider_init"
+/* gnc-backend-file location */
+#include "gncla-dir.h"
 
 static GList * engine_init_hooks = NULL;
 static int engine_is_initialized = 0;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /* GnuCash version functions */
 unsigned int
@@ -77,28 +81,27 @@ gnc_engine_init(int argc, char ** argv)
   GList                  * cur;
 
   if (1 == engine_is_initialized) return;
-  engine_is_initialized = 1;
 
-  gnc_log_init();
-
-  /* initialize the string cache */
-  gnc_engine_get_string_cache();
-  
-  guid_init ();
-  qof_object_initialize ();
-  qof_query_init ();
-  qof_book_register ();
+  /* initialize logging to our file. */
+  qof_log_init_filename("/tmp/gnucash.trace");
+  /* Only set the core log_modules here
+	the rest can be set locally.  */
+  gnc_set_log_level(GNC_MOD_ENGINE, GNC_LOG_WARNING);
+  gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
+  gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
+  qof_log_set_default(GNC_LOG_WARNING);
+  /* initialize QOF */
+  qof_init();
 
   /* Now register our core types */
-  xaccSplitRegister ();
-  xaccTransRegister ();
-  xaccAccountRegister ();
-  xaccGroupRegister ();
-  gnc_sxtt_register ();
-  gnc_pricedb_register ();
-  gnc_commodity_table_register();
-  gnc_lot_register ();
+  cashobjects_register();
 
+  g_return_if_fail((qof_load_backend_library 
+		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")));
+  g_return_if_fail((qof_load_backend_library
+		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)));
+
+  engine_is_initialized = 1;
   /* call any engine hooks */
   for (cur = engine_init_hooks; cur; cur = cur->next)
   {
@@ -121,6 +124,8 @@ gnc_engine_shutdown (void)
   qof_object_shutdown ();
   guid_shutdown();
   gnc_engine_string_cache_destroy ();
+  qof_log_shutdown();
+  engine_is_initialized = 0;
 }
 
 /********************************************************************
@@ -131,4 +136,93 @@ gnc_engine_shutdown (void)
 void
 gnc_engine_add_init_hook(gnc_engine_init_hook_t h) {
   engine_init_hooks = g_list_append(engine_init_hooks, (gpointer)h);
+}
+
+gboolean
+gnc_engine_is_initialized (void)
+{
+/*	if (engine_is_initialized == 1) return TRUE;
+	return FALSE;
+*/	
+	return (engine_is_initialized == 1) ? TRUE : FALSE;
+}
+
+/* ====================================================================== */
+/* XXX This exports the list of accounts to a file.  It does not export
+ * any transactions.  Its a place-holder until full book-closing is implemented.
+ */
+
+gboolean
+qof_session_export (QofSession *tmp_session,
+                    QofSession *real_session,
+                    QofPercentageFunc percentage_func)
+{
+  QofBook *book, *book2;
+  QofBackend *be;
+  int err;
+
+  if ((!tmp_session) || (!real_session)) return FALSE;
+
+  book = qof_session_get_book (real_session);
+  ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
+         tmp_session, real_session, book,
+         qof_session_get_url(tmp_session)
+         ? qof_session_get_url(tmp_session) : "(null)");
+
+  /* There must be a backend or else.  (It should always be the file
+   * backend too.)
+   */
+  book2 = qof_session_get_book(tmp_session);
+  be = qof_book_get_backend(book2);
+  if (!be)
+    return FALSE;
+
+  be->percentage = percentage_func;
+  if (be->export)
+    {
+
+      (be->export)(be, book);
+      err = qof_backend_get_error(be);
+    
+      if (ERR_BACKEND_NO_ERR != err) { return FALSE; }
+    }
+
+  return TRUE;
+}
+
+void
+gnc_run_rpc_server (void)
+{
+  const char * dll_err;
+  void * dll_handle;
+  int (*rpc_run)(short);
+  int ret;
+
+  /* open and resolve all symbols now (we don't want mystery 
+   * failure later) */
+#ifndef RTLD_NOW
+# ifdef RTLD_LAZY
+#  define RTLD_NOW RTLD_LAZY
+# endif
+#endif
+  dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
+  if (! dll_handle) 
+  {
+    dll_err = dlerror();
+    PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
+    return;
+  }
+  
+  rpc_run = dlsym (dll_handle, "rpc_server_run");
+  dll_err = dlerror();
+  if (dll_err) 
+  {
+    dll_err = dlerror();
+    PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
+    return;
+  }
+  
+  ret = (*rpc_run)(0);
+
+  /* XXX How do we force an exit? */
 }

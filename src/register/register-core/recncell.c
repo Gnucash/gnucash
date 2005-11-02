@@ -41,7 +41,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "recncell.h"
 
 
@@ -204,4 +204,3 @@ gnc_recn_cell_set_flag_order (RecnCell *cell, const char *flags)
 
   cell->flag_order = (char *)flags;
 }
-

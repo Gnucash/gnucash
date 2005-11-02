@@ -1,5 +1,9 @@
 TESTS =  \
-  test-link-module test-load-module 
+  test-link-module test-load-module test-gnc-recurrence test-gnc-dialog
+
+##lib_LTLIBRARIES = libgncgnome.la
+
+
 
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -23,12 +27,23 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
-  test-link-module
+  test-link-module test-gnc-recurrence test-gnc-dialog
 
 INCLUDES= \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS} ${GUILE_INCS}
+  -I${top_srcdir}/src/app-utils \
+  ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS}
+
+test_gnc_recurrence_SOURCES=test-gnc-recurrence.c
+test_gnc_recurrence_LDADD = ${GNOME_LIBS} \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
+
+test_gnc_dialog_LDADD = ${GNOME_LIBS} \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \

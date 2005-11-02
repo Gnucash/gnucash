@@ -42,17 +42,18 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "global-options.h"
 
-#include "gnc-engine-util.h"
-#include "gnc-file-dialog.h"
+#include "gnc-engine.h"
+#include "gnc-file.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-hbci-utils.h"
 
 #include "gnc-mt940-import.h"
 
+#define GCONF_SECTION "dialogs/import/mt940"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 static void *trans_importer_cb (const HBCI_Transaction *h_trans, 
 			    void *user_data);
@@ -62,15 +63,9 @@ static void *trans_importer_cb (const HBCI_Transaction *h_trans,
  * Entry point
 \********************************************************************/
 
-SCM  scm_gnc_file_mt940_import ()
-{
-  gnc_file_mt940_import();
-  return SCM_EOL;
-}
-
 void gnc_file_mt940_import (void)
 {
-  const char *selected_filename;
+  char *selected_filename;
   char *default_dir;
   FILE *mt940_file;
   GNCImportMainMatcher *gnc_mt940_importer_gui = NULL;
@@ -78,18 +73,20 @@ void gnc_file_mt940_import (void)
   /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
   DEBUG("gnc_file_mt940_import(): Begin...\n");
 
-  default_dir = gnc_lookup_string_option("__paths", "Import MT940", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select an MT940 file to process"),
 				      NULL,
-				      default_dir);
+				      default_dir,
+				      GNC_FILE_DIALOG_IMPORT);
+  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
-      gnc_set_string_option("__paths", "Import MT940", default_dir);
+      gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
       g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/
@@ -140,6 +137,7 @@ void gnc_file_mt940_import (void)
         HBCI_transactionReport_delete(tr);
       }
       g_free(mt940_records);
+      g_free(selected_filename);
     }
 }
 

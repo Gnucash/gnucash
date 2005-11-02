@@ -58,7 +58,7 @@
                 (value-validator (convert-to-invoice invoice))))))
     (gnc:make-option
      section name sort-tag 'invoice documentation-string getter
-     (lambda (invoice)
+     (lambda (invoice) ;; setter
        (if (not invoice) (set! invoice (default-getter)))
        (set! invoice (convert-to-invoice invoice))
        (let* ((result (validator invoice))

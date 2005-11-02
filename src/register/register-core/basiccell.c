@@ -40,10 +40,10 @@
 
 #include "basiccell.h"
 #include "dialog-utils.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /* Debugging module */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 gboolean
 gnc_cell_name_equal (const char * cell_name_1,
@@ -74,8 +74,7 @@ gnc_basic_cell_clear (BasicCell *cell)
   cell->conditionally_changed = FALSE;
 
   cell->value = NULL;
-  cell->value_w = NULL;
-  cell->value_len = 0;
+  cell->value_chars = 0;
 
   cell->set_value = NULL;
   cell->enter_cell = NULL;
@@ -100,8 +99,6 @@ gnc_basic_cell_init (BasicCell *cell)
   gnc_basic_cell_clear (cell);
 
   cell->value = g_strdup ("");
-
-  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
 }
 
 void
@@ -118,9 +115,6 @@ gnc_basic_cell_destroy (BasicCell *cell)
   /* free up data strings */
   g_free (cell->value);
   cell->value = NULL;
-
-  g_free (cell->value_w);
-  cell->value_w = NULL;
 
   /* help prevent access to freed memory */
   gnc_basic_cell_clear (cell);
@@ -257,23 +251,5 @@ gnc_basic_cell_set_value_internal (BasicCell *cell, const char *value)
 
   g_free (cell->value);
   cell->value = g_strdup (value);
-
-  g_free (cell->value_w);
-  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
-}
-
-void
-gnc_basic_cell_set_wcvalue_internal (BasicCell *cell, const GdkWChar *value)
-{
-  if (!value)
-  {
-    gnc_basic_cell_set_value_internal (cell, "");
-    return;
-  }
-
-  g_free (cell->value);
-  cell->value = gnc_wcstombs (value);
-
-  g_free (cell->value_w);
-  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
+  cell->value_chars = g_utf8_strlen(value, -1);
 }

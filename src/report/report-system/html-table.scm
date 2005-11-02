@@ -418,6 +418,8 @@
 	 )
     ))
 
+;; if the 4th arg is a cell, overwrite the existing cell,
+;; otherwise, append all remaining objects to the existing cell
 (define (gnc:html-table-set-cell! table row col . objects)
   (let ((rowdata #f)
 	(row-loc #f)
@@ -562,12 +564,15 @@
 ;; It would be nice to have table row/col/cell accessor functions in here.
 ;; It would also be nice to have table juxtaposition functions, too.
 ;; i.e., (gnc:html-table-nth-row table n)
+;;  [ CAS: how is that different from gnc:html-table-get-row ? ]
+
 ;;       (gnc:html-table-append-table-horizontal table add-table)
 ;; (An old merge-table used to exist inside balance-sheet.scm/GnuCash 1.8.9.)
 ;; Feel free to contribute! :-)
 ;; 
 
 ;; This function was moved here from balance-sheet.scm.
+;; This function "stacks" the two tables vertically.
 (define (gnc:html-table-merge t1 t2)
   (begin 
     (gnc:html-table-set-data! t1

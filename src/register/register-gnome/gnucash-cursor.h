@@ -28,18 +28,18 @@
 
 
 #define GNUCASH_TYPE_CURSOR     (gnucash_cursor_get_type ())
-#define GNUCASH_CURSOR(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_CURSOR, GnucashCursor))
-#define GNUCASH_CURSOR_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_CURSOR))
-#define GNUCASH_IS_CURSOR(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_CURSOR))
+#define GNUCASH_CURSOR(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNUCASH_TYPE_CURSOR, GnucashCursor))
+#define GNUCASH_CURSOR_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_CURSOR, GnucashCursorClass))
+#define GNUCASH_IS_CURSOR(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNUCASH_TYPE_CURSOR))
 
 #define GNUCASH_TYPE_ITEM_CURSOR     (gnucash_item_cursor_get_type ())
-#define GNUCASH_ITEM_CURSOR(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_ITEM_CURSOR, GnucashItemCursor))
-#define GNUCASH_ITEM_CURSOR_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_ITEM_CURSOR))
-#define GNUCASH_IS_ITEM_CURSOR(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_ITEM_CURSOR))
+#define GNUCASH_ITEM_CURSOR(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNUCASH_TYPE_ITEM_CURSOR, GnucashItemCursor))
+#define GNUCASH_ITEM_CURSOR_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNUCASH_TYPE_ITEM_CURSOR, GnucashItemCursorClass))
+#define GNUCASH_IS_ITEM_CURSOR(o)    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNUCASH_TYPE_ITEM_CURSOR))
 
 
-GtkType    gnucash_item_cursor_get_type (void);
-GtkType    gnucash_cursor_get_type (void);
+GType    gnucash_item_cursor_get_type (void);
+GType    gnucash_cursor_get_type (void);
 
 
 enum

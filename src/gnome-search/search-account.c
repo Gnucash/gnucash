@@ -22,11 +22,11 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "Account.h"
 #include "QueryCore.h"
-#include "gnc-account-tree.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
 
 #include "search-account.h"
@@ -40,7 +40,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_account_class_init	(GNCSearchAccountClass *class);
 static void gnc_search_account_init	(GNCSearchAccount *gspaper);
-static void gnc_search_account_finalise	(GtkObject *obj);
+static void gnc_search_account_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchAccount *)(x))->priv)
 
@@ -51,13 +51,6 @@ struct _GNCSearchAccountPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
 
 guint
 gnc_search_account_get_type (void)
@@ -65,17 +58,21 @@ gnc_search_account_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchAccount",
-      sizeof(GNCSearchAccount),
-      sizeof(GNCSearchAccountClass),
-      (GtkClassInitFunc)gnc_search_account_class_init,
-      (GtkObjectInitFunc)gnc_search_account_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchAccountClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_account_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchAccount),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_account_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchAccount",
+				   &type_info, 0);
   }
 	
   return type;
@@ -84,24 +81,19 @@ gnc_search_account_get_type (void)
 static void
 gnc_search_account_class_init (GNCSearchAccountClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  object_class = G_OBJECT_CLASS (class);
+  parent_class = g_type_class_peek_parent (class);
 
-  object_class->finalize = gnc_search_account_finalise;
+  object_class->finalize = gnc_search_account_finalize;
 
   /* override methods */
   gnc_search_core_type->validate = gncs_validate;
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals(object_class, signals, LAST_SIGNAL);
-#endif
 }
 
 static void
@@ -112,14 +104,14 @@ gnc_search_account_init (GNCSearchAccount *o)
 }
 
 static void
-gnc_search_account_finalise (GtkObject *obj)
+gnc_search_account_finalize (GObject *obj)
 {
   GNCSearchAccount *o = (GNCSearchAccount *)obj;
   g_assert (IS_GNCSEARCH_ACCOUNT (o));
 
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -132,7 +124,7 @@ gnc_search_account_finalise (GtkObject *obj)
 GNCSearchAccount *
 gnc_search_account_new (void)
 {
-  GNCSearchAccount *o = (GNCSearchAccount *)gtk_type_new(gnc_search_account_get_type ());
+  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
   return o;
 }
 
@@ -146,7 +138,7 @@ gnc_search_account_new (void)
 GNCSearchAccount *
 gnc_search_account_matchall_new (void)
 {
-  GNCSearchAccount *o = (GNCSearchAccount *)gtk_type_new(gnc_search_account_get_type ());
+  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
   o->priv->match_all = TRUE;
   o->how = GUID_MATCH_ALL;
   return o;
@@ -175,7 +167,7 @@ static void
 option_changed (GtkWidget *widget, GNCSearchAccount *fe)
 {
   fe->how = (query_compare_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static GtkWidget *
@@ -183,8 +175,8 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 	       query_compare_t option)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", option_changed, user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -217,7 +209,7 @@ make_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -234,24 +226,23 @@ describe_button (GNCSearchAccount *fi)
 static void
 button_clicked (GtkButton *button, GNCSearchAccount *fi)
 {
-  GnomeDialog *dialog;
+  GtkDialog *dialog;
   GtkWidget *account_tree;
   GtkWidget *accounts_scroller;
   GtkWidget *label;
   char *desc;
+  GtkTreeSelection *selection;
 
   /* Create the account tree */
-  account_tree = gnc_account_tree_new ();
-  gtk_clist_column_titles_hide(GTK_CLIST(account_tree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(account_tree));
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(account_tree));
-  gtk_clist_set_selection_mode(GTK_CLIST(account_tree),
-			       GTK_SELECTION_MULTIPLE);
+  account_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(account_tree), FALSE);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(account_tree));
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
   /* Select the currently-selected accounts */
   if (fi->priv->selected_accounts)
-    gnc_account_tree_select_accounts (GNC_ACCOUNT_TREE(account_tree),
-				      fi->priv->selected_accounts, FALSE);
+    gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(account_tree),
+						 fi->priv->selected_accounts, FALSE);
 
   /* Create the account scroller and put the tree in it */
   accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -263,11 +254,12 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
   /* Create the dialog */
   dialog =
-    (GnomeDialog *) gnome_dialog_new (_("Select the Accounts to Compare"),
-				      GNOME_STOCK_BUTTON_OK,
-				      GNOME_STOCK_BUTTON_CANCEL,
-				      NULL);
-  gnome_dialog_close_hides (dialog, TRUE);
+    GTK_DIALOG(gtk_dialog_new_with_buttons(_("Select the Accounts to Compare"),
+					   NULL,
+					   0,
+					   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					   GTK_STOCK_OK, GTK_RESPONSE_OK,
+					   NULL));
 
   /* Put the dialog together */
   gtk_box_pack_start ((GtkBox *)dialog->vbox, label,
@@ -278,21 +270,15 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
   gtk_widget_show_all (GTK_WIDGET (dialog));
 
   /* Now run the dialog */
-  switch (gnome_dialog_run (dialog)) {
-  case -1:			/* wm close */
-  case 0:			/* ok */
+  if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK) {
     if (fi->priv->selected_accounts)
       g_list_free (fi->priv->selected_accounts);
 
     fi->priv->selected_accounts =
-      gnc_account_tree_get_current_accounts (GNC_ACCOUNT_TREE (account_tree));
+      gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
 
     desc = describe_button (fi);
     gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), desc);
-    break;
-
-  case 1:			/* cancel */
-    break;
   }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -321,7 +307,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", button_clicked, fe);
+  g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (button_clicked), fe);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
 
   /* And return the box */

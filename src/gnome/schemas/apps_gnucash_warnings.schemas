@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/warnings/change_reconciled_split</key>
+      <applyto>/apps/gnucash/general/warnings/permanent/change_reconciled_split</applyto>
+      <applyto>/apps/gnucash/general/warnings/temporary/change_reconciled_split</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Change contents of reconciled split.</short>
+        <long>
+	  This dialog is presented before allowing you to change the
+	  contents of a reconciled split.  Allowing these chagnes can
+	  make it hard to perform future reconciliations.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/warnings/mark_split_unreconciled</key>
+      <applyto>/apps/gnucash/general/warnings/permanent/mark_split_unreconciled</applyto>
+      <applyto>/apps/gnucash/general/warnings/temporary/mark_split_unreconciled</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Mark transaction split as unreconciled.</short>
+        <long>
+	  This dialog is presented before allowing you to mark a
+	  transaction split as unreconciled.  Doing so will throw off
+	  the reconciled value of the register and can make it hard to
+	  perform future reconciliations.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

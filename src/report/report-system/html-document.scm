@@ -106,6 +106,8 @@
     (do-list tree)
     retval))
 
+;; first optional argument is "headers?"
+;; returns the html document as a string, I think.
 (define (gnc:html-document-render doc . rest) 
   (let ((stylesheet (gnc:html-document-style-sheet doc))
         (headers? (if (null? rest) #f (if (car rest) #t #f))))

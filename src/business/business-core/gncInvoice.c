@@ -23,6 +23,7 @@
 /*
  * Copyright (C) 2001,2002 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -30,28 +31,9 @@
 
 #include <glib.h>
 
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
-
 #include "Transaction.h"
 #include "Account.h"
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "gnc-engine-util.h"
-
-#include "gnc-event-p.h"
-#include "gnc-lot.h"
-
-#include "gncBusiness.h"
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
@@ -64,38 +46,35 @@ struct _gncInvoice
 {
   QofInstance inst;
   
-  char *	id;
-  char *	notes;
-  gboolean 	active;
+  char        *id;
+  char        *notes;
+  gboolean    active;
 
-  char *	billing_id;
-  char *	printname;
-  GncBillTerm *	terms;
-  GList * 	entries;
-  GncOwner	owner;
-  GncOwner	billto;
-  GncJob *	job;
-  Timespec 	date_opened;
-  Timespec 	date_posted;
+  char        *billing_id;
+  char        *printname;
+  GncBillTerm *terms;
+  GList       *entries;
+  GncOwner    owner;
+  GncOwner    billto;
+  GncJob      *job;
+  Timespec    date_opened;
+  Timespec    date_posted;
 
   gnc_numeric	to_charge_amount;
 
   gnc_commodity * currency;
 
-  Account * 	posted_acc;
-  Transaction * posted_txn;
-  GNCLot *	posted_lot;
+  Account     *posted_acc;
+  Transaction *posted_txn;
+  GNCLot      *posted_lot;
 };
 
-static short	module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
 
 #define GNC_INVOICE_ID		"gncInvoice"
 #define GNC_INVOICE_GUID	"invoice-guid"
-
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
@@ -187,7 +166,7 @@ gncCloneInvoice (GncInvoice *from, QofBook *book)
 
   invoice->billto = gncCloneOwner (&from->billto, book);
   invoice->owner = gncCloneOwner (&from->owner, book);
-  invoice->job = gncJobObtainTwin (from->job, book);
+  invoice->job = (GncJob*)gncJobObtainTwin (from->job, book);
   invoice->terms = gncBillTermObtainTwin (from->terms, book);
   gncBillTermIncRef (invoice->terms);
 
@@ -255,6 +234,26 @@ void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner)
   gncOwnerCopy (owner, &invoice->owner);
   mark_invoice (invoice);
   gncInvoiceCommitEdit (invoice);
+}
+
+static void
+qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent)
+{
+	if(!invoice || !ent) { return; }
+	gncInvoiceBeginEdit (invoice);
+	qofOwnerSetEntity(&invoice->owner, ent);
+	mark_invoice (invoice);
+	gncInvoiceCommitEdit (invoice);
+}
+
+static void
+qofInvoiceSetBillTo (GncInvoice *invoice, QofEntity *ent)
+{
+	if(!invoice || !ent) { return; }
+	gncInvoiceBeginEdit (invoice);
+	qofOwnerSetEntity(&invoice->billto, ent);
+	mark_invoice (invoice);
+	gncInvoiceCommitEdit (invoice);
 }
 
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date)
@@ -448,6 +447,20 @@ GncOwner * gncInvoiceGetOwner (GncInvoice *invoice)
   return &invoice->owner;
 }
 
+static QofEntity*
+qofInvoiceGetOwner (GncInvoice *invoice)
+{
+	if(!invoice) { return NULL; }
+	return (QofEntity*)&invoice->owner;
+}
+
+static QofEntity*
+qofInvoiceGetBillTo (GncInvoice *invoice)
+{
+	if(!invoice) { return NULL; }
+	return (QofEntity*)&invoice->billto;
+}
+
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice)
 {
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
@@ -623,6 +636,65 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->entries;
+}
+
+static QofCollection*
+qofInvoiceGetEntries (GncInvoice *invoice)
+{
+	QofCollection *entry_coll;
+	GList         *list;
+	QofEntity     *entry;
+
+	entry_coll = qof_collection_new(GNC_ID_ENTRY);
+	for(list = gncInvoiceGetEntries(invoice); list != NULL; list = list->next)
+	{
+		entry = (QofEntity*)list->data;
+		qof_collection_add_entity(entry_coll, entry);
+	}
+	return entry_coll;
+}
+
+static void
+qofInvoiceEntryCB (QofEntity *ent, gpointer user_data)
+{
+	GncInvoice *invoice;
+
+	invoice = (GncInvoice*)user_data;
+	if(!invoice || !ent) { return; }
+	switch (gncInvoiceGetOwnerType (invoice)) {
+		case GNC_OWNER_VENDOR: {
+		gncBillAddEntry (invoice, (GncEntry*) ent);
+		break;
+		}
+		default : {
+			gncInvoiceAddEntry(invoice, (GncEntry*)ent);
+			break;
+		}
+	}
+}
+
+static void 
+qofInvoiceSetEntries(GncInvoice *invoice, QofCollection *entry_coll)
+{
+	if(!entry_coll) { return; }
+	if(0 == safe_strcmp(qof_collection_get_type(entry_coll), GNC_ID_ENTRY))
+	{
+		qof_collection_foreach(entry_coll, qofInvoiceEntryCB, invoice);
+	}
+}
+
+static GncJob*
+qofInvoiceGetJob (GncInvoice *invoice)
+{
+	if(!invoice) { return NULL; }
+	return invoice->job;
+}
+
+static void 
+qofInvoiceSetJob (GncInvoice *invoice, GncJob *job)
+{
+	if(!invoice) { return; }
+	invoice->job = job;
 }
 
 static void
@@ -1425,21 +1497,23 @@ reg_txn (void)
 gboolean gncInvoiceRegister (void)
 {
   static QofParam params[] = {
-    { INVOICE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID, (QofSetterFunc)gncInvoiceSetID },
-    { INVOICE_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetOwner, (QofSetterFunc)gncInvoiceSetOwner },
-    { INVOICE_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateOpened, (QofSetterFunc)gncInvoiceSetDateOpened },
-    { INVOICE_DUE, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateDue, NULL },
-    { INVOICE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDatePosted, (QofSetterFunc)gncInvoiceSetDatePosted },
+    { INVOICE_ID,      QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID,     (QofSetterFunc)gncInvoiceSetID },
+    { INVOICE_OWNER,   GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetOwner, NULL },
+    { INVOICE_OPENED,  QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDateOpened, (QofSetterFunc)gncInvoiceSetDateOpened },
+    { INVOICE_DUE,     QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDateDue, NULL },
+    { INVOICE_POSTED,  QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDatePosted, (QofSetterFunc)gncInvoiceSetDatePosted },
     { INVOICE_IS_POSTED, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPosted, NULL },
-    { INVOICE_IS_PAID, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPaid, NULL },
+    { INVOICE_IS_PAID, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPaid,    NULL },
     { INVOICE_BILLINGID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetBillingID, (QofSetterFunc)gncInvoiceSetBillingID },
-    { INVOICE_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetNotes, (QofSetterFunc)gncInvoiceSetNotes },
-    { INVOICE_ACC, GNC_ID_ACCOUNT, (QofAccessFunc)gncInvoiceGetPostedAcc, NULL },
-    { INVOICE_POST_TXN, GNC_ID_TRANS, (QofAccessFunc)gncInvoiceGetPostedTxn, NULL },
-    { INVOICE_POST_LOT, GNC_ID_LOT, (QofAccessFunc)gncInvoiceGetPostedLot, NULL },
-    { INVOICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType, NULL },
-    { INVOICE_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms, (QofSetterFunc)gncInvoiceSetTerms },
-    { INVOICE_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, (QofSetterFunc)gncInvoiceSetBillTo },
+    { INVOICE_NOTES,   QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetNotes,   (QofSetterFunc)gncInvoiceSetNotes },
+    { INVOICE_ACC,     GNC_ID_ACCOUNT,  (QofAccessFunc)gncInvoiceGetPostedAcc, (QofSetterFunc)gncInvoiceSetPostedAcc },
+    { INVOICE_POST_TXN, GNC_ID_TRANS,   (QofAccessFunc)gncInvoiceGetPostedTxn, (QofSetterFunc)gncInvoiceSetPostedTxn },
+    { INVOICE_POST_LOT, GNC_ID_LOT,     (QofAccessFunc)gncInvoiceGetPostedLot, NULL/*(QofSetterFunc)gncInvoiceSetPostedLot*/ },
+    { INVOICE_TYPE,    QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType,    NULL },
+    { INVOICE_TERMS,   GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms,   (QofSetterFunc)gncInvoiceSetTerms },
+    { INVOICE_BILLTO,  GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, NULL  },
+    { INVOICE_ENTRIES, QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetEntries, (QofSetterFunc)qofInvoiceSetEntries },
+    { INVOICE_JOB,     GNC_ID_JOB,      (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob }, 
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
@@ -1450,6 +1524,14 @@ gboolean gncInvoiceRegister (void)
   reg_lot ();
   reg_txn ();
 
+  /* Make the compiler happy... */
+  if (0) {
+    qofInvoiceSetOwner(NULL, NULL);
+    qofInvoiceGetOwner(NULL);
+    qofInvoiceSetBillTo(NULL, NULL);
+    qofInvoiceGetBillTo(NULL);
+  }
+  if(!qof_choice_create(GNC_ID_INVOICE)) { return FALSE;}
   return qof_object_register (&gncInvoiceDesc);
 }
 

@@ -1,0 +1,199 @@
+GnuCash Dependency Policy
+-------------------------
+
+GnuCash desires to only depend on library versions and packages that are
+practically available.  Specifically, we choose to depend only on versions
+that have been in the major distributions for 6 months. This is motivated in
+part by the 1.6 release, which required a large set of relatively-recent
+dependencies.  Specifically, as most user's (distributions) did not have the
+required versions packaged, it was exceedingly painful for end users to
+upgrade to the anticipated release, leading to a reputation that gnucash
+still has.
+
+This document serves to keep track of the major distributions, the date of
+their major release[s], and the relevant library versions as part of that
+release (or an official package-upgrade path)
+
+
+Libraries/Deps
+--------------
+aqbanking
+cairo
+gconf-2
+glib[+gobject,module]-2
+gtk+-2
+guile
+gwrap
+libart-2
+libglade-2
+libgnomeprint-2.2
+libgnomeui-2
+libgsf-1
+libofx
+libxml-2
+pango
+
+
+libgoffice/libgsf details
+-------------------------
+
+- libgoffice-0.1.0
+  - glib-2.0 >= 2.6.3
+  - libgsf-1 >= 1.13.1
+    - libgsf-1.13.1
+      - glib-2.0 >= 2.6.0
+      - libxml-2.0 >= 2.4.16
+      - libbonobo-2.0 >= 2.0.0
+      - gnome-vfs-2.0 >= 2.2.0
+      - gnome-vfs-module-2.0 >= 2.2.0
+  - libxml-2.0 >= 2.4.12
+  - pango  >= 1.8.1
+  - pangoft2 >= 1.8.1
+  - cairo >= 0.5.0 [optional]
+  - gtk+-2.0 >= 2.6.0
+  - libglade-2.0 >= 2.3.6
+  - libgnomeprint-2.2 >= 2.8.2
+  - libart-2.0 >= 2.3.11
+  - gconf-2.0
+  - libgnomeui-2.0 >= 2.0.0
+  - libgsf-gnome-1 >= 1.12.2
+
+Status, 2005-10-15
+------------------
+
+The major distributions, as defined by http://distrowatch.com/dwres.php?resource=major, are:
+
+- Ubuntu - http://www.ubuntu.com/
+  -  5.10 = 2005-10-13 - http://www.ubuntu.com/newsitems/release510
+  - *5.04 = 2005-04-08 - http://www.ubuntu.com/504Released
+- Mandriva
+  -  2006 = 2005-10-06
+  - *2005 = 2005-04-14
+- SUSE
+  -  10.0 = 2005-10-06
+    - aqbanking: not included; binary aqbanking-1.6.0 available at ftp://ftp.gwdg.de/linux/misc/suser-crauch/10.0/
+    - cairo-1.0.0
+    - gconf2-2.12.0
+    - glib2-2.8.1
+    - gtk2-2.8.3
+    - guile-1.6.7
+    - g-wrap: not included
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint-2.12.0
+    - libgnomeui-2.12.0
+    - libgsf-1.12.1
+    - libofx-0.7.0
+    - libxml2-2.6.20
+    - pango-1.10.0
+  - *9.3  = 2005-04-15
+    - aqbanking: not included, but binary aqbanking-1.6.0 provided by upstream
+    - cairo-0.3.0
+    - gconf2-2.10.0
+    - glib2-2.6.3
+    - gtk2-2.6.4
+    - guile-1.6.7
+    - gwrap: not included
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint-2.10.1
+    - libgnomeui-2.10.0
+    - libgsf-1.11.1
+    - libofx-0.7.0
+    - libxml2-2.6.17
+    - pango-1.8.1
+- Fedora Core
+  - *FC4 = 2005-06-13
+    - g-wrap-1.3.4
+    - gconf2-2.10.0
+    - glib-2.6.6
+    - guile-1.6.7
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint22-2.10.3
+    - libgnomeui-2.10.0
+    - libgsf-1.11.1
+    - libxml2-2.6.20
+    - pango-1.8.1
+  -  FC3 = 2004-11-08
+- Debian GNU/Linux
+  - unstable4
+    (already includes goffice and will include libqof1)
+- Knoppix
+  -  4.0.2 = 2005-09-24
+  - *3.9   = 2005-06-01
+  -  3.8.2 = 2005-05-12
+- MEPIS
+  - *3.3.1 = 2005-05-12
+- Gentoo
+  -  2005.1 = 2005-08-08
+    [from http://distro.ibiblio.org/pub/linux/distributions/gentoo/releases/snapshots/2005.1/portage-20050709.tar.bz2]
+    - aqbanking-1.0.8
+    - cairo-0.4.0
+    - g-wrap-1.3.4
+    - gconf-2.10.0
+    - glib-2.6.5
+    - gtk+-2.6.8
+    - guile-1.6.7
+    - libart_lgpl-2.3.17
+    - libglade-2.5.1
+    - libgnomeprint-2.10.3
+    - libgnomeui-2.10.0
+    - libgsf-1.12.1
+    - libofx-0.7.0
+    - libxml2-2.6.19
+    - pango-1.8.1-r1
+  -  2005.0 = 2005-03-28
+    [from http://gentoo.osuosl.org/releases/x86/2005.0/packagecd/CONTENTS
+     and http://gentoo.osuosl.org/releases/snapshots/2005.0/portage-20050303.tar.bz2]
+    - aqbanking-1.0.4_beta, -0.9.9
+    - cairo-0.3.0-r1
+    - g-wrap-1.3.4-r1
+    - gconf-2.8.1-r1
+    - glib-2.6.2
+    - guile-1.6.7
+    - libart_gpl-2.3.16
+    - libglade-2.4.0
+    - libgnomeprint-2.8.1
+    - libgnomeui-2.8.1-r1
+    - libgsf-1.10.0
+    - libxml2-2.6.16
+    - pango-1.8.0
+- Slackware
+  -  10.2 = 2005-09-14
+  - *10.1 = 2005-02-07
+  -  10.0 = 2004-06-21
+- Xandros Desktop
+  - *3.0 = 2004-12
+  -  2.5 = 2004-07
+  - ftp://ftp2.xandros.com/src/dists/
+- FreeBSD
+  - *5.4  = 2005-05-09 - http://www.freebsd.org/releases/5.4R/announce.html
+  -  4.11 = 2005-01-25 - http://www.freebsd.org/releases/4.11R/announce.html
+- Fink/OSX
+  - ??
+- RHEL
+  - *RHEL 4 = 2005-02-15
+    [from http://ftp.redhat.com/pub/redhat/linux/enterprise/4/en/]
+    - aqbanking no
+    - cairo no
+    - gconf2-2.8.1-1
+    - glib[+gobject,module]-2-2.4.7-1
+    - gtk+-2.4.13-12
+    - guile-1.6.4-14
+    - gwrap no
+    - libart-2.3.16-3
+    - libglade-2-4.0-5
+    - libgnomeprint-2.2-2.8.0-3
+    - libgnomeui-2.8.0-1
+    - libgsf-1.10.1-1
+    - libofx no
+    - libxml-2-2.6.16-6
+    - pango-1.6.0-7
+  -  RHEL 3 = 2003-10-22
+- CentOS
+  -  4.2 = 2005-10-12
+  - *4.1 = 2005-06-12
+  -  3.6 = 2005-10-12
+  -  3.5 = 2005-06-10
+  -  2.0 = 2004-05-24

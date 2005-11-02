@@ -31,6 +31,7 @@
 #include <libguile.h>
 #include <glib.h>
 
+#include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 #include "gw-business-gnome.h"
@@ -40,6 +41,13 @@
 #include "gncOwner.h"
 #include "business-options-gnome.h"
 #include "business-urls.h"
+
+#include "gnc-plugin-manager.h"
+#include "gnc-plugin-business.h"
+
+#include "gnc-hooks.h"
+#include "dialog-invoice.h"
+#include "dialog-preferences.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_business_gnome_LTX_gnc_module_system_interface = 0;
@@ -102,6 +110,15 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 				   (GNCSearchCoreNew) gnc_search_owner_new);
     gnc_business_urls_initialize ();
     gnc_business_options_gnome_initialize ();
+
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
+				   gnc_plugin_business_new ());
+
+    gnc_hook_add_dangler(HOOK_UI_POST_STARTUP,
+			 (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
+
+    gnc_preferences_add_page("businessprefs.glade", "business_prefs",
+			     "Business");
   }
 
   return TRUE;

@@ -32,17 +32,8 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-numeric.h"
-#include "gnc-trace.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofid-p.h"
-#include "qofobject.h"
 
-static short module = MOD_ENGINE;
+static QofLogModule log_module = GNC_MOD_ENGINE;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -394,7 +385,7 @@ xaccGroupGetNumSubAccounts (AccountGroup *grp)
 }
 
 /********************************************************************\
- * Get all of the accounts, including subaccounts                   *
+ * Recursively get all of the accounts, including subaccounts       *
 \********************************************************************/
 
 static void
@@ -671,6 +662,8 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     return;
   }
 
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_REMOVE);
+
   acc->parent = NULL;
 
   grp->accounts = g_list_remove (grp->accounts, acc);
@@ -730,6 +723,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   if (!grp || !grp->book) return;
   if (!acc) return;
 
+  ENTER("group %p, account %p named %s", grp, acc, xaccAccountGetName(acc));
   /* If the account is currently in another group, remove it there
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
@@ -762,7 +756,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           *
           * Note also, we need to reparent the children to the new book as well.
           */
-         PWARN ("reparenting accounts accross books is not correctly supported\n");
+         PWARN ("reparenting accounts across books is not correctly supported\n");
 
          gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
          col = qof_book_get_collection (grp->book, GNC_ID_ACCOUNT);
@@ -776,6 +770,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
     grp->accounts = g_list_insert_sorted (grp->accounts, acc,
                                           group_sort_helper);
+    gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_ADD);
 
     acc->inst.dirty = TRUE;
     xaccAccountCommitEdit (acc);
@@ -784,6 +779,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   grp->saved = 0;
 
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  LEAVE(" ");
 }
 
 /********************************************************************\
@@ -945,6 +941,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         node_b = node_b->prev;
 
         /* remove from list -- node_a is ok, it's before node_b */
+	gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_REMOVE);
         grp->accounts = g_list_remove (grp->accounts, acc_b);
 
         xaccAccountBeginEdit (acc_b);
@@ -1011,7 +1008,6 @@ xaccGroupGetDepth (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
-
 void
 xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 {
@@ -1228,7 +1224,7 @@ xaccGroupGetBackend (AccountGroup *grp)
 {
   grp = xaccGroupGetRoot (grp);
   if (!grp || !grp->book) return NULL;
-  return grp->book->backend;
+  return qof_book_get_backend(grp->book);
 }
 
 /* ============================================================== */

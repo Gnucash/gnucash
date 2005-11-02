@@ -62,28 +62,19 @@
 #include <time.h>
 
 /** The maximum length of a string created by the date printers */
-#define MAX_DATE_LENGTH 11
-
-		/* Deprecated, backwards-compat defines; remove after gnome2 port */
-		#define getDateFormatString qof_date_format_get_string
-		#define getDateTextFormatString qof_date_format_get_format
-		#define getDateFormat qof_date_format_get
-		#define setDateFormat qof_date_format_set
-		#define DateFormat QofDateFormat
-		#define printDateSecs(B,S) qof_print_date_buff(B,MAX_DATE_LENGTH,S)
-		#define printDate(B,D,M,Y) qof_print_date_dmy_buff(B,MAX_DATE_LENGTH,D,M,Y)
-		#define printGDate(B,D) qof_print_gdate(B,MAX_DATE_LENGTH,D)
-		#define xaccPrintDateSecs qof_print_date
-		#define scanDate qof_scan_date
-
-		#define DATE_FORMAT_US QOF_DATE_FORMAT_US
-  		#define DATE_FORMAT_UK QOF_DATE_FORMAT_UK
-  		#define DATE_FORMAT_CE QOF_DATE_FORMAT_CE
-  		#define DATE_FORMAT_ISO QOF_DATE_FORMAT_ISO
-  		#define DATE_FORMAT_LOCALE QOF_DATE_FORMAT_LOCALE
-  		#define DATE_FORMAT_CUSTOM QOF_DATE_FORMAT_CUSTOM
+#define MAX_DATE_LENGTH 31
 
 /** Constants *******************************************************/
+/** \brief UTC date format string.
+
+Timezone independent, date and time inclusive, as used in the QSF backend.
+The T and Z characters are from xsd:dateTime format in coordinated universal time, UTC.
+You can reproduce the string from the GNU/Linux command line using the date utility:
+date -u +%Y-%m-%dT%H:M:SZ = 2004-12-12T23:39:11Z The datestring must be timezone independent 
+and include all specified fields. Remember to use gmtime() NOT localtime()! 
+*/
+
+#define QOF_UTC_DATE_FORMAT     "%Y-%m-%dT%H:%M:%SZ"
 
 /** Enum for determining a date format */
 typedef enum
@@ -92,6 +83,7 @@ typedef enum
   QOF_DATE_FORMAT_UK,       /**< Britain: dd/mm/yyyy */
   QOF_DATE_FORMAT_CE,       /**< Continental Europe: dd.mm.yyyy */
   QOF_DATE_FORMAT_ISO,      /**< ISO: yyyy-mm-dd */
+  QOF_DATE_FORMAT_UTC,      /**< UTC: 2004-12-12T23:39:11Z */
   QOF_DATE_FORMAT_LOCALE,   /**< Take from locale information */
   QOF_DATE_FORMAT_CUSTOM    /**< Used by the check printing code */
 } QofDateFormat;
@@ -111,20 +103,36 @@ typedef enum {
 } GNCDateMonthFormat;
 
 
-/* The string->value versions return 0 on success and 1 on failure */
+/** \name String / DateFormat conversion. */
+//@{ 
+
+/** \brief The string->value versions return FALSE on success and TRUE on failure */
 const char* gnc_date_dateformat_to_string(QofDateFormat format);
+
+/** \brief Converts the date format to a printable string.
+
+Note the reversed return values!
+@return FALSE on success, TRUE on failure.
+*/
 gboolean gnc_date_string_to_dateformat(const char* format_string,
 				       QofDateFormat *format);
 
-
 const char* gnc_date_monthformat_to_string(GNCDateMonthFormat format);
+
+/** \brief Converts the month format to a printable string.
+
+Note the reversed return values!
+@return FALSE on success, TRUE on failure.
+*/
 gboolean gnc_date_string_to_monthformat(const char *format_string,
 					GNCDateMonthFormat *format);
+// @}
 
+/* Datatypes *******************************************************/
 
-/** Datatypes *******************************************************/
-
-/** struct timespec64 is just like the unix 'struct timespec' except 
+/** \brief Use a 64-bit signed int timespec
+ *
+ * struct timespec64 is just like the unix 'struct timespec' except 
  * that we use a 64-bit
  * signed int to store the seconds.  This should adequately cover
  * dates in the distant future as well as the distant past, as long as
@@ -155,10 +163,10 @@ struct timespec64
 typedef struct timespec64 Timespec;
 
 
-/** Prototypes ******************************************************/
+/* Prototypes ******************************************************/
 
-/** @name Timespec functions */
-/*@{*/
+/** \name Timespec functions */
+// @{ 
 /** strict equality */
 gboolean timespec_equal(const Timespec *ta, const Timespec *tb);
 
@@ -228,8 +236,6 @@ char * gnc_timespec_to_iso8601_buff (Timespec ts, char * buff);
 /** DOCUMENT ME! FIXME: Probably similar to xaccDMYToSec() this date
  * routine might return incorrect values for dates before 1970.  */
 void gnc_timespec2dmy (Timespec ts, int *day, int *month, int *year);
-/*@}*/
-
 
 /** Add a number of months to a time value and normalize.  Optionally
  * also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/30. */
@@ -258,11 +264,11 @@ time_t xaccDMYToSec (int day, int month, int year);
  * standardized and is a big mess.
  */
 long int gnc_timezone (struct tm *tm);
-
+// @}
 
 /* ------------------------------------------------------------------------ */
-/** @name QofDateFormat functions */
-/*@{*/
+/** \name QofDateFormat functions */
+// @{
 /** The qof_date_format_get routine returns the date format that
  *  the date printing will use when printing a date, and the scaning 
  *  routines will assume when parsing a date.
@@ -277,11 +283,26 @@ QofDateFormat qof_date_format_get(void);
  */
 void qof_date_format_set(QofDateFormat df);
 
-/** DOCUMENT ME! */
+/** This function returns a strftime formatting string for printing an
+ *  all numeric date (e.g. 2005-09-14).  The string returned is based
+ *  upon the location specified.
+ *
+ *  @param df The date style (us, uk, iso, etc) that should be provided.
+ *
+ *  @return A formatting string that will print a date in the
+ *  requested style  */
 const gchar *qof_date_format_get_string(QofDateFormat df);
-/** DOCUMENT ME! */
-const gchar *qof_date_format_get_format(QofDateFormat df);
-/*@}*/
+
+/** This function returns a strftime formatting string for printing a
+ *  date using words and numbers (e.g. 2005-September-14).  The string
+ *  returned is based upon the location specified.
+ *
+ *  @param df The date style (us, uk, iso, etc) that should be provided.
+ *
+ *  @return A formatting string that will print a date in the
+ *  requested style  */
+const gchar *qof_date_text_format_get_string(QofDateFormat df);
+// @}
 
 /** dateSeparator
  *    Return the field separator for the current date format
@@ -294,15 +315,17 @@ const gchar *qof_date_format_get_format(QofDateFormat df);
  */
 char dateSeparator(void);
 
-/** @name Date Printing/Scanning functions 
- *
+/** \name Date Printing/Scanning functions 
+ */
+// @{
+/**
  * \warning HACK ALERT -- the scan and print routines should probably
  * be moved to somewhere else. The engine really isn't involved with
  * things like printing formats. This is needed mostly by the GUI and
  * so on.  If a file-io thing needs date handling, it should do it
  * itself, instead of depending on the routines here.
  */
-/*@{*/
+
 /** qof_print_date_dmy_buff
  *    Convert a date as day / month / year integers into a localized string
  *    representation
@@ -390,11 +413,11 @@ gboolean qof_scan_date (const char *buff, int *day, int *month, int *year);
 /** as above, but returns seconds */
 gboolean qof_scan_date_secs (const char *buff, time_t *secs);
 
-
-/** @name Date Start/End Adjustment routines
+// @}
+/** \name Date Start/End Adjustment routines
  * Given a time value, adjust it to be the beginning or end of that day.
  */
-/** @{ */
+// @{
 
 /** The gnc_tm_set_day_start() inline routine will set the appropriate
  *  fields in the struct tm to indicate the first second of that day.
@@ -456,13 +479,21 @@ time_t gnc_timet_get_day_start(time_t time_val);
  *  seconds and adjust it to the last second of that day. */
 time_t gnc_timet_get_day_end(time_t time_val);
 
+#ifndef GNUCASH_MAJOR_VERSION
 /** The gnc_timet_get_day_start() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day. */
+ *  GLib GDate format and adjust it to the last second of that day.
+ *
+ *  @deprecated
+ */
 time_t gnc_timet_get_day_start_gdate (GDate *date);
 
 /** The gnc_timet_get_day_end() routine will take the given time in
- *  GLib GDate format and adjust it to the last second of that day. */
+ *  GLib GDate format and adjust it to the last second of that day.
+ *
+ *  @deprecated
+ */
 time_t gnc_timet_get_day_end_gdate (GDate *date);
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /** Get the numerical last date of the month. (28, 29, 30, 31) */
 int date_get_last_mday(struct tm *tm);
@@ -474,12 +505,12 @@ gboolean date_is_last_mday(struct tm *tm);
 int gnc_date_my_last_mday (int month, int year);
 /** DOCUMENT ME! Probably the same as date_get_last_mday() */
 int gnc_timespec_last_mday (Timespec ts);
-/*@}*/
+// @}
 
 /* ======================================================== */
 
-/** @name Today's Date */
-/*@{*/
+/** \name Today's Date */
+// @{
 /** The gnc_tm_get_today_start() routine takes a pointer to a struct
  *  tm and fills it in with the first second of the today. */
 void   gnc_tm_get_today_start(struct tm *tm);
@@ -502,7 +533,7 @@ time_t gnc_timet_get_today_end(void);
  *  @note The caller owns this buffer and must free it when done. */
 char * xaccDateUtilGetStampNow (void);
 
-/*@}*/
-
+//@}
+//@}
 #endif /* GNC_DATE_H */
-/** @} */
+

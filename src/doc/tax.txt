@@ -1,6 +1,4 @@
-
-Some notes about taxes
-----------------------
+/** \page taxnotes Some notes about taxes
 
 From: Jon Kaare Hellan <Jon.K.Hellan@item.ntnu.no>
 
@@ -20,4 +18,4 @@ attractive, difficult in practice.
 So I need a way to keep track of these adjustments register for each
 stock in a portfolio.
 
-
+*/

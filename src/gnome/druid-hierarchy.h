@@ -25,4 +25,5 @@
 
 void gnc_ui_hierarchy_druid (void);
 GtkWidget* gnc_ui_hierarchy_running (void);
+void gnc_ui_hierarchy_druid_initialize (void);
 #endif

@@ -2,6 +2,7 @@
  * dialog-utils.c -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
  * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -32,18 +33,23 @@
 #include <dlfcn.h>
 
 #include "dialog-utils.h"
-#include "global-options.h"
 #include "gnc-commodity.h"
 #include "messages.h"
 #include "Group.h"
 #include "gnc-dir.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
+#define WINDOW_POSITION		"window_position"
+#define WINDOW_GEOMETRY		"window_geometry"
+
+#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define KEY_TOOLBAR_STYLE	"toolbar_style"
 
 /* =========================================================== */
 
@@ -67,12 +73,12 @@ option_menu_destroy_cb (GtkObject *obj, gpointer data)
 {
   GtkTooltips *tips = data;
 
-  gtk_object_unref (GTK_OBJECT (tips));
+  g_object_unref (tips);
 }
 
 /********************************************************************\
- * gnc_ui_create_option_button                                      *
- *   create an option button given the option structure             *
+ * gnc_build_option_menu:                                           *
+ *   create an GTK "option menu" given the option structure         *
  *                                                                  *
  * Args: option_info - the option structure to use                  *
  *       num_options - the number of options                        *
@@ -95,7 +101,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
   tooltips = gtk_tooltips_new();
 
-  gtk_object_ref (GTK_OBJECT (tooltips));
+  g_object_ref (tooltips);
   gtk_object_sink (GTK_OBJECT (tooltips));
 
   for (i = 0; i < num_options; i++)
@@ -134,53 +140,6 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 
 
 /********************************************************************\
- * gnc_get_pixmap                                                   *
- *   returns a GnomePixmap widget given a pixmap filename           *
- *                                                                  *
- * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GtkWidget *
-gnc_get_pixmap (const char *name)
-{
-  GtkWidget *pixmap;
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
-  pixmap = gnome_pixmap_new_from_file (fullname);
-  g_free (fullname);
-
-  return pixmap;
-}
-
-
-/********************************************************************\
- * gnc_get_imlib_image                                              *
- *   returns a GdkImlibImage object given a pixmap filename         *
- *                                                                  *
- * Args: none                                                       *
- * Returns: GnomePixmap widget or NULL if there was a problem       *
- \*******************************************************************/
-GdkImlibImage *
-gnc_get_gdk_imlib_image (const char *name)
-{
-  GdkImlibImage *image;
-
-  char *fullname;
-
-  g_return_val_if_fail (name != NULL, NULL);
-
-  fullname = g_strconcat (GNC_PIXMAP_DIR, "/", name, NULL);
-  image = gdk_imlib_load_image (fullname);
-  g_free (fullname);
-
-  return image;
-}
-
-
-/********************************************************************\
  * gnc_get_toolbar_style                                            *
  *   returns the current toolbar style for gnucash toolbars         *
  *                                                                  *
@@ -193,50 +152,23 @@ gnc_get_toolbar_style(void)
   GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
   char *style_string;
 
-  style_string = gnc_lookup_multichoice_option("General",
-                                               "Toolbar Buttons",
-                                               "icons_and_text");
+  style_string = gnc_gconf_get_string(GCONF_GENERAL,
+				      KEY_TOOLBAR_STYLE, NULL);
+  if (!style_string || strcmp(style_string, "system") == 0) {
+    if (style_string)
+      g_free(style_string);
+    style_string = gnc_gconf_get_string(DESKTOP_GNOME_INTERFACE,
+					KEY_TOOLBAR_STYLE, NULL);
+  }
 
-  if (safe_strcmp(style_string, "icons_and_text") == 0)
-    tbstyle = GTK_TOOLBAR_BOTH;
-  else if (safe_strcmp(style_string, "icons_only") == 0)
-    tbstyle = GTK_TOOLBAR_ICONS;
-  else if (safe_strcmp(style_string, "text_only") == 0)
-    tbstyle = GTK_TOOLBAR_TEXT;
-
-  if (style_string != NULL)
-    free(style_string);
+  if (style_string == NULL)
+    return GTK_TOOLBAR_BOTH;
+  tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
+			       GTK_TOOLBAR_BOTH);
+  free(style_string);
 
   return tbstyle;
 }
-
-/********************************************************************
- * gnc_get_mdi_mode                                                 *
- * returns the current Gnome MDI mode preference                    *
- ********************************************************************/
-GnomeMDIMode 
-gnc_get_mdi_mode(void) {
-  GnomeMDIMode mode = GNOME_MDI_DEFAULT_MODE;
-  char * mode_string = gnc_lookup_multichoice_option("_+Advanced",
-                                                     "Application MDI mode",
-                                                     "");
-  if(!safe_strcmp(mode_string, "mdi-notebook")) {
-    mode = GNOME_MDI_NOTEBOOK;
-  }
-  else if(!safe_strcmp(mode_string, "mdi-toplevel")) {
-    mode = GNOME_MDI_TOPLEVEL;    
-  }
-  else if(!safe_strcmp(mode_string, "mdi-modal")) {
-    mode = GNOME_MDI_MODAL;    
-  }
-  else if(!safe_strcmp(mode_string, "mdi-default")) {
-    mode = GNOME_MDI_DEFAULT_MODE;    
-  }
-
-  if(mode_string) free(mode_string);
-  return mode;
-}
-
 
 /********************************************************************\
  * gnc_get_deficit_color                                            *
@@ -269,7 +201,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
   GdkColormap *cm;
   GtkStyle *style;
 
-  if (!gnc_color_deficits())
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, "red_for_negative", NULL))
     return;
 
   cm = gtk_widget_get_colormap(GTK_WIDGET(label));
@@ -290,12 +222,12 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 
   gtk_widget_set_style(label, style);
 
-  gtk_style_unref(style);
+  g_object_unref(style);
 }
 
 
 /********************************************************************\
- * gnc_get_window_size                                              *
+ * gnc_restore_window_size                                          *
  *   returns the window size to use for the given option prefix,    *
  *   if window sizes are being saved, otherwise returns 0 for both. *
  *                                                                  *
@@ -305,32 +237,35 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
  * Returns: nothing                                                 *
  \*******************************************************************/
 void
-gnc_get_window_size(const char *prefix, int *width, int *height)
+gnc_restore_window_size(const char *section, GtkWindow *window)
 {
-  int w, h;
-  char *name;
+  GSList *coord_list;
+  gint coords[2];
 
-  if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
-  {
-    name = g_strconcat(prefix, "_width", NULL);
-    w = gnc_lookup_number_option("__gui", name, 0.0);
-    g_free(name);
+  g_return_if_fail(section != NULL);
+  g_return_if_fail(window != NULL);
 
-    name = g_strconcat(prefix, "_height", NULL);
-    h = gnc_lookup_number_option("__gui", name, 0.0);
-    g_free(name);
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    return;
+  
+  coord_list = gnc_gconf_get_list(section, WINDOW_POSITION,
+				  GCONF_VALUE_INT, NULL);
+  if (coord_list) {
+    coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
+    coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+    gtk_window_move(window, coords[0], coords[1]);
+    g_slist_free(coord_list);
   }
-  else
-  {
-    w = 0;
-    h = 0;
+
+  coord_list = gnc_gconf_get_list(section, WINDOW_GEOMETRY,
+				  GCONF_VALUE_INT, NULL);
+  if (coord_list) {
+    coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
+    coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+    if ((coords[0] != 0) && (coords[1] != 0))
+      gtk_window_resize(window, coords[0], coords[1]);
+    g_slist_free(coord_list);
   }
-
-  if (width != NULL)
-    *width = w;
-
-  if (height != NULL)
-    *height = h;
 }
 
 
@@ -345,26 +280,34 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_save_window_size(const char *prefix, int width, int height)
+gnc_save_window_size(const char *section, GtkWindow *window)
 {
-  char *name;
-  gboolean save;
+  GSList *coord_list = NULL;
+  gint coords[2];
 
-  save = gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE);
+  g_return_if_fail(section != NULL);
+  g_return_if_fail(window != NULL);
 
-  name = g_strconcat(prefix, "_width", NULL);
-  if (save)
-    gnc_set_number_option("__gui", name, width);
-  else
-    gnc_set_option_default("__gui", name);
-  g_free(name);
+  if (GTK_OBJECT_FLAGS(window) & GTK_IN_DESTRUCTION)
+    return;
 
-  name = g_strconcat(prefix, "_height", NULL);
-  if (save)
-    gnc_set_number_option("__gui", name, height);
-  else
-    gnc_set_option_default("__gui", name);
-  g_free(name);
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
+    return;
+
+  gtk_window_get_size(GTK_WINDOW(window), &coords[0], &coords[1]);
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
+  gnc_gconf_set_list(section, WINDOW_GEOMETRY, GCONF_VALUE_INT,
+		     coord_list, NULL);
+  g_slist_free(coord_list);
+  coord_list = NULL;
+
+  gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
+  gnc_gconf_set_list(section, WINDOW_POSITION, GCONF_VALUE_INT,
+		     coord_list, NULL);
+  g_slist_free(coord_list);
 }
 
 
@@ -427,23 +370,23 @@ gnc_option_menu_init(GtkWidget * w)
 
 typedef struct {
   int i;
-  GtkSignalFunc f;
+  GCallback f;
   gpointer cb_data;
 } menu_init_data;
 
 static void
 gnc_option_menu_set_one_item (gpointer loop_data, gpointer user_data)
 {
-  GtkObject *item = GTK_OBJECT(loop_data);
+  GObject *item = G_OBJECT(loop_data);
   menu_init_data *args = (menu_init_data *) user_data;
   
-  gtk_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
-  gtk_signal_connect(item, "activate", args->f, args->cb_data);
+  g_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
+  g_signal_connect(item, "activate", args->f, args->cb_data);
 }
 
 
 void
-gnc_option_menu_init_w_signal(GtkWidget * w, GtkSignalFunc f, gpointer cb_data)
+gnc_option_menu_init_w_signal(GtkWidget * w, GCallback f, gpointer cb_data)
 {
   GtkWidget * menu;
   menu_init_data foo;
@@ -512,29 +455,6 @@ gnc_window_adjust_for_screen(GtkWindow * window)
   gtk_widget_queue_resize(GTK_WIDGET(window));
 }
 
-/*
- * This routine must be removed when GnuCash is ported to GTK 2.0.  It
- * replicates the functionality (as much as possible) of that routine
- * using functions available in GTK 1.4.
- */
-void
-gtk_window_present (GtkWindow *window)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-
-  if (GTK_WIDGET_VISIBLE (window)) {
-      g_assert (widget->window != NULL);
-      gdk_window_show(widget->window); 	/* De-iconify */
-      gdk_window_raise(widget->window);	/* Bring to front */
-  } else {
-      gtk_widget_show (widget);
-  }
-}
-
 gboolean
 gnc_handle_date_accelerator (GdkEventKey *event,
                              struct tm *tm,
@@ -580,23 +500,19 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     case GDK_minus:
       if ((strlen (date_str) != 0) && (dateSeparator () == '-'))
       {
-        GdkWChar *wcs;
-        int count;
-        int len;
-        int i;
-
-        len = gnc_mbstowcs (&wcs, date_str);
-        if (len < 0)
-          return FALSE;
+        const char *c;
+        gunichar uc;
+        int count = 0;
 
         /* rough check for existing date */
-        for (i = count = 0; i < len; i++)
+        c = date_str;
+        while (*c)
         {
-          if (wcs[i] == '-')
+          uc = g_utf8_get_char (c);
+          if (uc == '-')
             count++;
+          c = g_utf8_next_char (c);          
         }
-
-        g_free (wcs);
 
         if (count < 2)
           return FALSE;
@@ -735,13 +651,15 @@ check_realize (GtkWidget *widget, gpointer user_data)
   GList *list;
   GList *node;
   GdkGC *gc;
+  GdkFont *font;
 
   if (check_info->mask)
     return;
 
   style = gtk_widget_get_style (widget);
+  font = gdk_font_from_description(style->font_desc);
 
-  font_height = style->font->ascent + style->font->descent;
+  font_height = font->ascent + font->descent;
   check_size = (font_height > 0) ? font_height - 3 : 9;
 
   check_info->mask = gdk_pixmap_new (NULL, check_size, check_size, 1);
@@ -925,7 +843,7 @@ gnc_clist_columns_autosize (GtkCList *list)
   if (!style)
     return;
 
-  font = style->font;
+  font = gdk_font_from_description (style->font_desc);
   if (!font)
     return;
 
@@ -951,9 +869,17 @@ gnc_clist_columns_autosize (GtkCList *list)
   gtk_clist_columns_autosize (list);
 }
 
+/*   Glade Stuff
+ *
+ *
+ */
 
 static gboolean glade_inited = FALSE;
 
+/* gnc_glade_xml_new: a convenience wrapper for glade_xml_new
+ *   - takes care of glade initialization, if needed
+ *   - takes care of finding the directory for glade files
+ */
 GladeXML *
 gnc_glade_xml_new (const char *filename, const char *root)
 {
@@ -971,13 +897,16 @@ gnc_glade_xml_new (const char *filename, const char *root)
 
   fname = g_strconcat (GNC_GLADE_DIR, "/", filename, NULL);
 
-  xml = glade_xml_new (fname, root);
+  xml = glade_xml_new (fname, root, NULL);
 
   g_free (fname);
 
   return xml;
 }
 
+/* gnc_glade_lookup_widget:  Given a root (or at least ancestor) widget,
+ *   find the child widget with the given name.
+ */
 GtkWidget *
 gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 {
@@ -998,14 +927,14 @@ GModule *allsymbols = NULL;
 
 void
 gnc_glade_autoconnect_full_func(const gchar *handler_name,
-				GtkObject *signal_object,
+				GObject *signal_object,
 				const gchar *signal_name,
 				const gchar *signal_data,
-				GtkObject *other_object,
+				GObject *other_object,
 				gboolean signal_after,
 				gpointer user_data)
 {
-  GtkSignalFunc func;
+  GCallback func;
   GtkSignalFunc *p_func = &func;
 
   if (allsymbols == NULL) {
@@ -1024,98 +953,14 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 
   if (other_object) {
     if (signal_after)
-      gtk_signal_connect_object_after(signal_object, signal_name, func,
-				      other_object);
+      g_signal_connect_object (signal_object, signal_name, func,
+			       other_object, G_CONNECT_AFTER | G_CONNECT_SWAPPED);
     else
-      gtk_signal_connect_object(signal_object, signal_name, func,
-				other_object);
+      g_signal_connect_swapped (signal_object, signal_name, func, other_object);
   } else {
     if (signal_after)
-      gtk_signal_connect_after(signal_object, signal_name, func, user_data);
+      g_signal_connect_after(signal_object, signal_name, func, user_data);
     else
-      gtk_signal_connect(signal_object, signal_name, func, user_data);
+      g_signal_connect(signal_object, signal_name, func, user_data);
   }
-}
-
-
-gint
-gnc_mbstowcs (GdkWChar **dest_p, const char *src)
-{
-  GdkWChar *dest;
-  gint src_len;
-  gint retval;
-
-  if (!src)
-    return -1;
-
-  src_len = strlen (src);
-
-  dest = g_new0 (GdkWChar, src_len + 1);
-
-  retval = gdk_mbstowcs (dest, src, src_len);
-
-  if (retval < 0)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  if (dest_p)
-    *dest_p = dest;
-  else
-    g_free (dest);
-
-  return retval;
-}
-
-char *
-gnc_wcstombs (const GdkWChar *src)
-{
-  char *retval;
-
-  if (!src)
-    return NULL;
-
-  retval = gdk_wcstombs (src);
-  if (!retval)
-  {
-    PERR ("bad multi-byte conversion");
-  }
-
-  return retval;
-}
-
-gint
-gnc_wcslen (const GdkWChar *src)
-{
-  int len = 0;
-
-  if (!src)
-    return 0;
-
-  while (src[len])
-    len++;
-
-  return len;
-}
-
-GdkWChar *
-gnc_wcsdup (const GdkWChar *src)
-{
-  GdkWChar *dest;
-  int len;
-  int i;
-
-  if (!src)
-    return NULL;
-
-  len = gnc_wcslen (src);
-
-  dest = g_new (GdkWChar, len + 1);
-
-  for (i = 0; i < len; i++)
-    dest[i] = src[i];
-
-  dest[len] = 0;
-
-  return dest;
 }

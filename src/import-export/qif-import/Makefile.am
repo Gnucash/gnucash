@@ -5,22 +5,26 @@ pkglib_LTLIBRARIES=libgncmod-qif-import.la
 libgncmod_qif_import_la_SOURCES = \
   dialog-account-picker.c \
   druid-qif-import.c \
+  gnc-plugin-qif-import.c \
+  gnc-druid-test.c \
   gncmod-qif-import.c
 
 noinst_HEADERS = \
   dialog-account-picker.h \
-  druid-qif-import.h
-
-libgncmod_qif_import_la_LDFLAGS = -module 
+  druid-qif-import.h \
+  gnc-druid-test.h \
+  gnc-plugin-qif-import.h
 
 libgncmod_qif_import_la_LIBADD = \
+  ${top_builddir}/src/import-export/libgncmod-generic-import.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 
@@ -45,26 +49,33 @@ glade_DATA = qif.glade
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/import-export \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${GNOME_CFLAGS} \
   ${GDK_PIXBUF_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GTKHTML_CFLAGS}
+
+uidir = $(GNC_UI_DIR)
+ui_DATA = \
+	gnc-plugin-qif-import-ui.xml
 
 EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA} \
   ${glade_DATA} \
-  file-format.txt
+  file-format.txt \
+  $(ui_DATA)
 
 CLEANFILES =
 

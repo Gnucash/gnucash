@@ -246,7 +246,7 @@ Return a GUID which is guaranteed to always have type @code{GNC_ID_NULL}.
 @subsection How to use GUIDs
 
 The Engine API functions which access the GUID for a specific entity
-return a pointer to the GUID. @strong{Note:} Do not store the pointer
+return a pointer to the GUID.  NOTE: Do not store the pointer
 itself! Instead, store a copy of the GUID. Storing the pointer itself
 would present some of the same problems as using the account pointer
 directly. Example:
@@ -282,12 +282,12 @@ Return the @code{memcmp} of the two GUID's.
 You can encode and decode GUIDs and their string representations using the
 next two functions.
 
-@deftypefun {char *} guid_to_string (const GUID * @var{guid})
+@deftypefun {const char *} guid_to_string (const GUID * @var{guid})
 Return a null-terminated string encoding of @var{guid}. String encodings
 of identifiers are hex numbers printed only with the characters @code{0}
 through @code{9} and @code{a} through @code{f}.  The encoding will
 always be @code{GUID_ENCODING_LENGTH} characters long. The returned
-string should be freed when no longer needed.
+string must NOT be freed when no longer needed.
 @end deftypefun
 
 @deftypefun {char *} guid_to_string_buff (const GUID * @var{guid}, char * @var{buff})

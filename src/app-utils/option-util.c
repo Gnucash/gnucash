@@ -30,12 +30,19 @@
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "guile-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-err-popup.h"
 #include "guile-mappings.h"
 #include "messages.h"
 
 #include <g-wrap-wct.h>
+
+/* TODO: 
+
+  - for make-date-option, there seems to be only support for getting,
+    not for setting.
+*/
+
 
 /****** Structures *************************************************/
 
@@ -109,7 +116,7 @@ static Getters getters = {0, 0, 0, 0, 0, 0, 0, 0, 0,
                           0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /* This static indicates the debugging module this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static GHashTable *option_dbs = NULL;
 static int last_db_handle = 0;
@@ -926,8 +933,10 @@ gnc_option_permissible_value_name(GNCOption *option, int index)
                     scm_int2num(index));
   if (name == SCM_UNDEFINED)
     return NULL;
+  if (!SCM_STRINGP(name))
+    return NULL;
   
-  return gh_scm2newstr(name, NULL);
+  return g_strdup(SCM_STRING_CHARS(name));
 }
 
 
@@ -955,8 +964,10 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
                     scm_int2num(index));
   if (help == SCM_UNDEFINED)
     return NULL;
+  if (!SCM_SYMBOLP(help))
+    return NULL;
 
-  return gh_scm2newstr(help, NULL);
+  return g_strdup(SCM_STRING_CHARS(help));
 }
 
 
@@ -1718,7 +1729,8 @@ gnc_commit_option(GNCOption *option)
   else
   {
     SCM oops;
-    char *section, *name, *message;
+    char *section, *name;
+    const gchar *message;
 
     /* Second element is error message */
     oops = SCM_CADR(result);
@@ -1728,7 +1740,7 @@ gnc_commit_option(GNCOption *option)
       return;
     }
 
-    message = gh_scm2newstr(oops, NULL);
+    message = SCM_STRING_CHARS(oops);
     name = gnc_option_name(option);
     section = gnc_option_section(option);
 
@@ -1737,8 +1749,6 @@ gnc_commit_option(GNCOption *option)
                            name ? name : "(null)",
                            message ? message : "(null)");
 
-    if (message != NULL)
-      free(message);
     if (name != NULL)
       free(name);
     if (section != NULL)
@@ -1915,7 +1925,7 @@ gnc_option_db_get_default_section(GNCOptionDB *odb)
   if (!SCM_STRINGP(value))
     return NULL;
 
-  return gh_scm2newstr(value, NULL);
+  return g_strdup(SCM_STRING_CHARS(value));
 }
 
 
@@ -2021,7 +2031,7 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_STRINGP(value))
-        return gh_scm2newstr(value, NULL);
+        return g_strdup(SCM_STRING_CHARS(value));
     }
   }
 
@@ -2086,7 +2096,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_SYMBOLP(value))
-        return gh_symbol2newstr(value, NULL);
+        return g_strdup(SCM_SYMBOL_CHARS(value));
     }
   }
 
@@ -2102,10 +2112,10 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  *   looks up a date option. If present, returns the absolute date  *
  *   represented in the set_ab_value argument provided, otherwise   *
  *   copies the default_value argument (if non-NULL) to the         *
- *   set_value argument. If the default_value argument is NULL,     *
+ *   set_ab_value argument. If the default_value argument is NULL,  *
  *   copies the current date to set_ab_value. Whatever value is     *
- *   stored in set_value is return as an approximate (no            *
- *   nanoseconds) time_t value. set_value may be NULL, in which     *
+ *   stored in set_ab_value is returned as an approximate (no       *
+ *   nanoseconds) time_t value.  set_ab_value may be NULL, in which *
  *   case only the return value can be used. If is_relative is      *
  *   non-NULL, it is set to whether the date option is currently    *
  *   storing a relative date.  If it is, and set_rel_value          *
@@ -2115,6 +2125,7 @@ gnc_option_db_lookup_multichoice_option(GNCOptionDB *odb,
  * Args: odb           - option database to search in               *
  *       section       - section name of option                     *
  *       name          - name of option                             *
+ *       is_relative   - location to store boolean value            *
  *       set_ab_value  - location to store absolute option value    *
  *       set_rel_value - location to store relative option value    *
  *       default       - default value if not found                 *
@@ -2179,7 +2190,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
             *is_relative = TRUE;
 
           if (set_rel_value != NULL)
-            *set_rel_value = gh_symbol2newstr (relative, NULL);
+            *set_rel_value = g_strdup(SCM_SYMBOL_CHARS (relative));
         }
 
         if (symbol)
@@ -2340,7 +2351,7 @@ gnc_option_db_lookup_list_option(GNCOptionDB *odb,
       return default_value;
     }
 
-    list = g_slist_prepend(list, gh_symbol2newstr(item, NULL));
+    list = g_slist_prepend(list, g_strdup(SCM_SYMBOL_CHARS(item)));
   }
 
   if (!SCM_LISTP(value) || !SCM_NULLP(value))
@@ -2602,7 +2613,7 @@ gnc_option_date_option_get_subtype(GNCOption *option)
   value = scm_call_1(getters.date_option_subtype, option->guile_option);
 
   if (SCM_SYMBOLP(value))
-    return gh_symbol2newstr(value, NULL);
+    return g_strdup(SCM_SYMBOL_CHARS(value));
   else
     return NULL;
 }
@@ -2625,7 +2636,7 @@ gnc_date_option_value_get_type (SCM option_value)
   if (!SCM_SYMBOLP (value))
     return NULL;
 
-  return gh_symbol2newstr (value, NULL);
+  return g_strdup(SCM_SYMBOL_CHARS (value));
 }
 
 /*******************************************************************\
@@ -2696,12 +2707,12 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
  * format(symbol), month(symbol), include-years(bool), custom-string(string)
  */
 
-gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
+gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
                                            GNCDateMonthFormat *months,
                                            gboolean *years, char **custom)
 {
   SCM val;
-  char *str;
+  const char *str;
 
   if (!SCM_LISTP(value) || SCM_NULLP(value))
     return TRUE;
@@ -2713,13 +2724,12 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
     value = SCM_CDR(value);
     if (!SCM_SYMBOLP(val))
       break;
-    str = gh_symbol2newstr (val, NULL);
+    str = SCM_SYMBOL_CHARS (val);
     if (!str)
       break;
 
     if (format) {
       if (gnc_date_string_to_dateformat(str, format)) {
-        free(str);
         break;
       }
     }
@@ -2729,13 +2739,12 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
     value = SCM_CDR(value);
     if (!SCM_SYMBOLP(val))
       break;
-    str = gh_symbol2newstr (val, NULL);
+    str = SCM_SYMBOL_CHARS (val);
     if (!str)
       break;
 
     if (months) {
       if (gnc_date_string_to_monthformat(str, months)) {
-        free(str);
         break;
       }
     }
@@ -2758,7 +2767,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
       break;
 
     if (custom)
-      *custom = gh_scm2newstr(val, NULL);
+      *custom = g_strdup(SCM_STRING_CHARS(val));
 
     return FALSE;
 
@@ -2767,7 +2776,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
   return TRUE;
 }
 
-SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
+SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat months,
                                     gboolean years, const char *custom)
 {
   SCM value = SCM_EOL;

@@ -44,14 +44,10 @@
 #include "gncEmployeeP.h"
 #include "gnc-employee-xml-v2.h"
 #include "gnc-address-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofinstance.h"
-#include "qofobject.h"
 
 #define _GNC_MOD_NAME	GNC_ID_EMPLOYEE
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *employee_version_string = "2.0.0";
 
@@ -84,8 +80,8 @@ employee_dom_tree_create (GncEmployee *employee)
     gnc_numeric num;
     Account* ccard_acc;
 
-    ret = xmlNewNode(NULL, gnc_employee_string);
-    xmlSetProp(ret, "version", employee_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_employee_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST employee_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(employee_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE (employee))));
@@ -130,7 +126,7 @@ employee_dom_tree_create (GncEmployee *employee)
 struct employee_pdata
 {
   GncEmployee *employee;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -311,7 +307,7 @@ static struct dom_tree_handler employee_handlers_v2[] = {
 };
 
 static GncEmployee*
-dom_tree_to_employee (xmlNodePtr node, GNCBook *book)
+dom_tree_to_employee (xmlNodePtr node, QofBook *book)
 {
     struct employee_pdata employee_pdata;
     gboolean successful;
@@ -344,7 +340,7 @@ gnc_employee_end_handler(gpointer data_for_children,
     GncEmployee *employee;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -401,7 +397,7 @@ do_count (QofEntity * employee_p, gpointer count_p)
 }
 
 static int
-employee_get_count (GNCBook *book)
+employee_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -425,9 +421,16 @@ xml_add_employee (QofEntity * employee_p, gpointer out_p)
 }
 
 static void
-employee_write (FILE *out, GNCBook *book)
+employee_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_employee, (gpointer) out);
+}
+
+static void
+employee_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "employee");
 }
 
 void
@@ -441,6 +444,7 @@ gnc_employee_xml_initialize (void)
     employee_get_count,
     employee_write,
     NULL,			/* scrub */
+    employee_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

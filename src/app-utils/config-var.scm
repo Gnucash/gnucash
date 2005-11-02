@@ -15,7 +15,7 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-;;; config-var: You can create them, set values, find out of the value
+;;; config-var: You can create them, set values, find out if the value
 ;;; is different from the default, and you can get a description.  You
 ;;; can also specify an action function which will be called whenever
 ;;; the value is changed.  The action function receives the special

@@ -33,13 +33,13 @@
 #include "kvp_frame.h"
 #include "Group.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 /********************************************************************\
  *   Constants   *
 \********************************************************************/
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 struct _GncImportMatchMap {
@@ -303,8 +303,6 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
   kvp_frame* token_frame;
 
   ENTER(" ");
-
-gnc_set_log_level(MOD_IMPORT, GNC_LOG_INFO);
 
   /* check to see if the imap is NULL */
   if(!imap)

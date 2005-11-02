@@ -1,17 +1,34 @@
+/***************************************************************************
+ *            test-group-vs-book.c
+ *
+ *  Tue Sep 27 19:32:31 2005
+ *  Copyright  2005  Gnucash team
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
 #include <glib.h>
-#include <libguile.h>
-
+#include "qof.h"
+#include "cashobjects.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
-#include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-
 
 static gboolean
 group_has_book (AccountGroup *group, QofBook *book)
@@ -139,43 +156,22 @@ run_test (void)
     failure("remove group didn't take");
     exit(get_rv());
   }
-
-#if 0
-  /* a group cannot have a 'null' book; this test is nonsense. */
-  if (!group_has_book (xaccAccountGetParent (account2), NULL))
-  {
-    failure("remove group didn't clear book");
-    exit(get_rv());
-  }
-#endif
-}
-
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  int i;
-
-  gnc_module_system_init();
-
-  if(!gnc_module_load("gnucash/engine", 0))
-  {
-    failure("couldn't load gnucash/engine");
-    exit(get_rv());
-  }
-
-  xaccLogDisable ();
-
-  for (i = 0; i < 10; i++)
-    run_test ();
-
-  success ("group/book stuff seems to work");
-  print_test_results();
-  exit(get_rv());
 }
 
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	gint i;
+	qof_init();
+	if(cashobjects_register()) {
+  xaccLogDisable ();
+  for (i = 0; i < 10; i++)
+		{
+    run_test ();
+		}
+  success ("group/book stuff seems to work");
+  print_test_results();
+	}
+	qof_close();
   return 0;
 }

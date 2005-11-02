@@ -9,7 +9,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  $(GNOME_XML_CFLAGS) \
+  ${XML_CFLAGS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
 libgncmod_business_backend_file_la_SOURCES = \
@@ -37,9 +38,10 @@ noinst_HEADERS = \
   gnc-order-xml-v2.h \
   gnc-owner-xml-v2.h \
   gnc-tax-table-xml-v2.h \
-  gnc-vendor-xml-v2.h
+  gnc-vendor-xml-v2.h \
+  xml-helpers.h
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
 libgncmod_business_backend_file_la_LIBADD = \
-   ${GLIB_LIBS} ${GNOME_XML_LIB} \
+   ${GLIB_LIBS} ${XML_LIBS} ${QOF_LIBS} \
    ${top_builddir}/src/business/business-core/libgncmod-business-core.la

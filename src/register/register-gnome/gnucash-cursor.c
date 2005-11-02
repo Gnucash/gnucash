@@ -40,9 +40,9 @@ static GnomeCanvasItem *gnucash_cursor_parent_class;
 static GnomeCanvasItem *gnucash_item_cursor_parent_class;
 
 enum {
-        ARG_0,
-        ARG_SHEET,
-        ARG_GRID,
+        PROP_0,
+        PROP_SHEET,
+        PROP_GRID,
 };
 
 
@@ -239,7 +239,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			/* draw the rectangle around the entire active
 			   virtual row */
 			gdk_gc_set_line_attributes (cursor->gc, 1,
-						    GDK_LINE_SOLID, -1, -1);
+						    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 
@@ -257,7 +257,7 @@ gnucash_item_cursor_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 			dh = item_cursor->h;
 
 			gdk_gc_set_line_attributes (cursor->gc, 1,
-						    GDK_LINE_SOLID, -1, -1);
+						    GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_MITER);
 
 			gdk_gc_set_foreground (cursor->gc, &gn_black);
 
@@ -336,22 +336,11 @@ gnucash_cursor_set (GnucashCursor *cursor, VirtualLocation virt_loc)
         gnucash_cursor_configure (cursor);
 
         gnome_canvas_item_set (GNOME_CANVAS_ITEM(sheet->header_item),
-                               "GnucashHeader::cursor_name",
+                               "cursor_name",
                                cursor->style->cursor->cursor_name,
                                NULL);
 
         gnucash_cursor_request_redraw (cursor);
-}
-
-
-static void
-gnucash_item_cursor_destroy (GtkObject *object)
-{
-	GNUCASH_ITEM_CURSOR(object);
-
-        if (GTK_OBJECT_CLASS (gnucash_item_cursor_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS (gnucash_item_cursor_parent_class)->destroy)
-			(object);
 }
 
 
@@ -403,44 +392,43 @@ gnucash_cursor_unrealize (GnomeCanvasItem *item)
 
 
 static void
-gnucash_item_cursor_class_init (GnucashItemCursorClass *item_cursor_class)
+gnucash_item_cursor_class_init (GnucashItemCursorClass *class)
 {
-        GtkObjectClass  *object_class;
+        GObjectClass  *object_class;
         GnomeCanvasItemClass *item_class;
 
-        gnucash_item_cursor_parent_class =
-		gtk_type_class (gnome_canvas_item_get_type());
+        object_class = G_OBJECT_CLASS (class);
+        item_class = GNOME_CANVAS_ITEM_CLASS (class);
 
-        object_class = (GtkObjectClass *) item_cursor_class;
-        item_class = (GnomeCanvasItemClass *) item_cursor_class;
-
-        object_class->destroy = gnucash_item_cursor_destroy;
+        gnucash_item_cursor_parent_class = g_type_class_peek_parent (class);
 
         /* GnomeCanvasItem method overrides */
-        item_class->draw        = gnucash_item_cursor_draw;
+        item_class->draw = gnucash_item_cursor_draw;
 }
 
 
-GtkType
+GType
 gnucash_item_cursor_get_type (void)
 {
-        static GtkType gnucash_item_cursor_type = 0;
+        static GType gnucash_item_cursor_type = 0;
 
         if (!gnucash_item_cursor_type) {
-                GtkTypeInfo gnucash_item_cursor_info = {
-                        "GnucashItemCursor",
-                        sizeof (GnucashItemCursor),
+                static const GTypeInfo gnucash_item_cursor_info = {
                         sizeof (GnucashItemCursorClass),
-                        (GtkClassInitFunc) gnucash_item_cursor_class_init,
-                        (GtkObjectInitFunc) gnucash_item_cursor_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_item_cursor_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashItemCursor),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_item_cursor_init
                 };
 
                 gnucash_item_cursor_type =
-			gtk_type_unique (gnome_canvas_item_get_type (),
-					 &gnucash_item_cursor_info);
+			g_type_register_static (gnome_canvas_item_get_type (),
+						"GnucashItemCursor",
+						&gnucash_item_cursor_info, 0);
         }
 
         return gnucash_item_cursor_type;
@@ -448,34 +436,53 @@ gnucash_item_cursor_get_type (void)
 
 
 static void
-gnucash_cursor_destroy (GtkObject *object)
-{
-	GNUCASH_CURSOR(object);
-
-        if (GTK_OBJECT_CLASS (gnucash_cursor_parent_class)->destroy)
-                (*GTK_OBJECT_CLASS
-		 (gnucash_cursor_parent_class)->destroy)(object);
-}
-
-
-static void
-gnucash_cursor_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
+gnucash_cursor_set_property (GObject         *object,
+                             guint            prop_id,
+                             const GValue    *value,
+                             GParamSpec      *pspec)
 {
         GnomeCanvasItem *item;
         GnucashCursor *cursor;
 
-        item = GNOME_CANVAS_ITEM (o);
-        cursor = GNUCASH_CURSOR (o);
+        item = GNOME_CANVAS_ITEM (object);
+        cursor = GNUCASH_CURSOR (object);
 
-        switch (arg_id){
-        case ARG_SHEET:
-                cursor->sheet = GTK_VALUE_POINTER (*arg);
-                break;
-        case ARG_GRID:
-                cursor->grid = GTK_VALUE_POINTER (*arg);
-                break;
-        default:
-                break;
+        switch (prop_id){
+                case PROP_SHEET:
+                        cursor->sheet = 
+                                GNUCASH_SHEET (g_value_get_object (value));
+                        break;
+                case PROP_GRID:
+                        cursor->grid = 
+                                GNUCASH_GRID (g_value_get_object (value));
+                        break;
+                default:
+                        break;
+        }
+}
+
+
+static void
+gnucash_cursor_get_property (GObject         *object,
+                             guint            prop_id,
+                             GValue          *value,
+                             GParamSpec      *pspec)
+{
+        GnomeCanvasItem *item;
+        GnucashCursor *cursor;
+
+        item = GNOME_CANVAS_ITEM (object);
+        cursor = GNUCASH_CURSOR (object);
+
+        switch (prop_id){
+                case PROP_SHEET:
+                        g_value_set_object (value, cursor->sheet);
+                        break;
+                case PROP_GRID:
+                        g_value_set_object (value, cursor->grid);
+                        break;
+                default:
+                        break;
         }
 }
 
@@ -493,51 +500,66 @@ gnucash_cursor_init (GnucashCursor *cursor)
 
 
 static void
-gnucash_cursor_class_init (GnucashCursorClass *cursor_class)
+gnucash_cursor_class_init (GnucashCursorClass *class)
 {
-        GtkObjectClass  *object_class;
+        GObjectClass  *object_class;
         GnomeCanvasItemClass *item_class;
 
-        gnucash_cursor_parent_class =
-		gtk_type_class (gnome_canvas_group_get_type());
+        object_class = G_OBJECT_CLASS (class);
+        item_class = GNOME_CANVAS_ITEM_CLASS (class);
 
-        object_class = (GtkObjectClass *) cursor_class;
-        item_class = (GnomeCanvasItemClass *) cursor_class;
+        gnucash_cursor_parent_class = g_type_class_peek_parent (class);
 
-        gtk_object_add_arg_type ("GnucashCursor::sheet", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_SHEET);
-        gtk_object_add_arg_type ("GnucashCursor::grid", GTK_TYPE_POINTER,
-                                 GTK_ARG_WRITABLE, ARG_GRID);
-
-        object_class->set_arg = gnucash_cursor_set_arg;
-        object_class->destroy = gnucash_cursor_destroy;
+        /* GObject method overrides */
+        object_class->set_property = gnucash_cursor_set_property;
+        object_class->get_property = gnucash_cursor_get_property;
 
         /* GnomeCanvasItem method overrides */
         item_class->realize     = gnucash_cursor_realize;
         item_class->unrealize   = gnucash_cursor_unrealize;
+        
+        /* properties */
+        g_object_class_install_property 
+                        (object_class,
+                         PROP_SHEET,
+                         g_param_spec_object ("sheet",
+                                              "Sheet Value",
+                                              "Sheet Value",
+                                              GNUCASH_TYPE_SHEET,
+                                              G_PARAM_READWRITE));
+        g_object_class_install_property 
+                        (object_class,
+                         PROP_GRID,
+                         g_param_spec_object ("grid",
+                                              "Grid Value",
+                                              "Grid Value",
+                                              GNUCASH_TYPE_GRID,
+                                              G_PARAM_READWRITE));
 }
 
 
-GtkType
+GType
 gnucash_cursor_get_type (void)
 {
-        static GtkType gnucash_cursor_type = 0;
+        static GType gnucash_cursor_type = 0;
 
         if (!gnucash_cursor_type) {
-                GtkTypeInfo gnucash_cursor_info = {
-                        "GnucashCursor",
-                        sizeof (GnucashCursor),
+                static const GTypeInfo gnucash_cursor_info = {
                         sizeof (GnucashCursorClass),
-                        (GtkClassInitFunc) gnucash_cursor_class_init,
-                        (GtkObjectInitFunc) gnucash_cursor_init,
-                        NULL, /* reserved_1 */
-                        NULL, /* reserved_2 */
-                        (GtkClassInitFunc) NULL
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+                        (GClassInitFunc) gnucash_cursor_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+                        sizeof (GnucashCursor),
+			0,		/* n_preallocs */
+                        (GInstanceInitFunc) gnucash_cursor_init
                 };
 
                 gnucash_cursor_type =
-			gtk_type_unique (gnome_canvas_group_get_type (),
-					 &gnucash_cursor_info);
+			g_type_register_static (gnome_canvas_group_get_type (),
+						"GnucashCursor",
+						&gnucash_cursor_info, 0);
         }
 
         return gnucash_cursor_type;

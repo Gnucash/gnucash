@@ -336,15 +336,16 @@
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
-;; result can be fetched via 'format.  Used to work with strings as
-;; currencies and doubles as values, but now it uses <gnc:commodity*>
-;; as commodity and <gnc:numeric> as value. 
-;; Old Example: (define a (make-commodity-collector)) ... 
-;; (a 'add 'USD 12) ...  (a 'format (lambda(x y)(list x y)) #f) 
-;; used to give you something like 
-;; ((USD 123.4) (DEM 12.21) (FRF -23.32))
-;; But now USD is a <gnc:commodity*> and 123.4 a <gnc:numeric>, so
-;; there is no simple example anymore.
+;; result can be fetched via 'format.  This used to work with strings
+;; as currencies and doubles as values, but now it uses
+;; <gnc:commodity*> as commodity and <gnc:numeric> as value.
+;;
+;; Old Example: (define a (make-commodity-collector)) ...  (a 'add 'USD
+;; 12) ...  (a 'format (lambda(x y)(list x y)) #f) used to give you
+;; something like ((USD 123.4) (DEM 12.21) (FRF -23.32))
+;;
+;; New Example: But now USD is a <gnc:commodity*> and 123.4 a
+;; <gnc:numeric>, so there is no simple example anymore.
 ;;
 ;; The functions:
 ;;   'add <commodity> <amount>: Add the given amount to the 
@@ -456,9 +457,15 @@
 	('getmonetary (getmonetary commodity amount))
 	('list commoditylist) ; this one is only for internal use
 	(else (gnc:warn "bad commodity-collector action: " action))))))
+
+
 ;; Bah. Let's get back to normal data types -- this procedure thingy
 ;; from above makes every code almost unreadable. First step: replace
 ;; all 'action function calls by the normal functions below.
+
+;; CAS: ugh.  Having two usages is even *more* confusing, so let's
+;; please settle on one or the other.  What's Step 2?  How 'bout
+;; documenting the new functions?
 (define (gnc:commodity-collector-add collector commodity amount)
   (collector 'add commodity amount))
 (define (gnc:commodity-collector-merge collector other-collector)
@@ -669,24 +676,24 @@
     (gnc:transaction-get-void-status trans)))
 
 (define (gnc:report-starting report-name)
-  (gnc:mdi-show-progress (sprintf #f
-				  (_ "Building '%s' report ...")
-				  (gnc:gettext report-name))
-			 0))
+  (gnc:window-show-progress (sprintf #f
+				     (_ "Building '%s' report ...")
+				     (gnc:gettext report-name))
+			    0))
 
 (define (gnc:report-render-starting report-name)
-  (gnc:mdi-show-progress (sprintf #f
-				  (_ "Rendering '%s' report ...")
-				  (if (string-null? report-name)
-				      (gnc:gettext "Untitled")
-				      (gnc:gettext report-name)))
-			 0))
+  (gnc:window-show-progress (sprintf #f
+				     (_ "Rendering '%s' report ...")
+				     (if (string-null? report-name)
+					 (gnc:gettext "Untitled")
+					 (gnc:gettext report-name)))
+			    0))
 
 (define (gnc:report-percent-done percent)
-  (gnc:mdi-show-progress #f percent))
+  (gnc:window-show-progress #f percent))
 
 (define (gnc:report-finished)
-  (gnc:mdi-show-progress #f -1))
+  (gnc:window-show-progress #f -1))
 
 ;; function to count the total number of splits to be iterated
 (define (gnc:accounts-count-splits accounts)

@@ -1,8 +1,9 @@
 /*********************************************************************
- * businessmod-core.c
- * module definition/initialization for the core Business module
+ * test-address.c
+ * object definition/initialization for Address
  * 
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,14 +25,8 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <libguile.h>
-
-#include "guid.h"
-#include "gnc-module.h"
-#include "gnc-engine-util.h"
-
-#include "gncBusiness.h"
-#include "gncAddress.h"
+#include "cashobjects.h"
+#include "gncAddressP.h"
 #include "test-stuff.h"
 
 static void
@@ -88,18 +83,14 @@ test_string_fcn (GncAddress *address, const char *message,
   gncAddressClearDirty (address);
 }
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/business-core", 0);
-  test_address();
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+	test_address();
+	print_test_results();
+	}
+	qof_close();
   return 0;
 }

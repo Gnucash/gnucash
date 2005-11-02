@@ -31,11 +31,11 @@
 #include "FreqSpec.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-frequency.h"
 #include "gnc-ui-util.h"
 
-static short module = MOD_SX;
+static QofLogModule log_module = GNC_MOD_SX;
 
 /** Private Defs ********************/
 
@@ -103,46 +103,48 @@ static const char *CHECKBOX_NAMES[] = {
 
 /** Implementations ********************/
 
-guint
+GType
 gnc_frequency_get_type()
 {
-        static guint gncfreq_type = 0;
-        if ( ! gncfreq_type ) {
-                GtkTypeInfo gncfreq_info =
-                        {
-                                "GNCFrequency",
-                                sizeof(GNCFrequency),
-                                sizeof(GNCFrequencyClass),
-                                (GtkClassInitFunc)gnc_frequency_class_init,
-                                (GtkObjectInitFunc)gnc_frequency_init,
-                                (GtkArgSetFunc)NULL,
-                                (GtkArgGetFunc)NULL
-                        };
-    
-                gncfreq_type = gtk_type_unique( gtk_vbox_get_type(), &gncfreq_info );
+	static GType gncfreq_type = 0;
+        if (gncfreq_type == 0) {
+                static GTypeInfo gncfreq_info = {
+			sizeof(GNCFrequencyClass),
+			NULL,
+			NULL,
+			(GClassInitFunc)gnc_frequency_class_init,
+			NULL,
+			NULL,
+			sizeof(GNCFrequency),
+			0,
+			(GInstanceInitFunc)gnc_frequency_init
+		};
+
+                gncfreq_type = g_type_register_static (GTK_TYPE_VBOX,
+						       "GNCFrequency",
+						       &gncfreq_info, 0);
         }
-        return gncfreq_type;
+
+	return gncfreq_type;
 }
 
 static void
 gnc_frequency_class_init( GNCFrequencyClass *klass )
 {
-        GtkObjectClass *objectClass;
+	GObjectClass *object_class;
+	
+	object_class = G_OBJECT_CLASS (klass);
 
-
-        objectClass = (GtkObjectClass*)klass;
         gnc_frequency_signals[GNCFREQ_CHANGED] =
-                gtk_signal_new( "changed",
-                                GTK_RUN_FIRST,
-                                objectClass->type,
-                                GTK_SIGNAL_OFFSET( GNCFrequencyClass, changed ),
-                                gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
-
-        gtk_object_class_add_signals( objectClass,
-                                      gnc_frequency_signals,
-                                      LAST_SIGNAL );
-
-        klass->changed = NULL;
+		g_signal_new ("changed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GNCFrequencyClass, changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 }
 
 void

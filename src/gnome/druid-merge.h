@@ -23,6 +23,8 @@
 
 #ifndef DRUID_MERGE_H
 #define DRUID_MERGE_H
+#include "qofsession.h"
+
 /** @addtogroup GUI
 	@{ */
 /** @addtogroup NewHierarchy Merging a new account tree into an existing file
@@ -67,12 +69,15 @@ Only ::qof_book_mergeInit, ::qof_book_mergeUpdateResult and ::qof_book_mergeComm
 any error values to the calling process. 
 
 	@{ */
-/** @file  druid_merge.h
+/** @file  druid-merge.h
 	@brief API for merging two \c QofBook* structures with collision handling
 	@author Copyright (c) 2004 Neil Williams <linux@codehelp.co.uk>
 */
 
 void gnc_ui_qof_book_merge_druid (void);
+
+void gnc_ui_qsf_import_merge_druid(QofSession *original, QofSession *import);
+
 GtkWidget* qof_book_merge_running (void);
 
 /** \brief 	gncCommodity is not QOF enabled, need to set a default commodity before the merge */

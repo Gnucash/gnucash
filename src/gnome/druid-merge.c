@@ -34,16 +34,15 @@
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-gui-query.h"
-#include "qof_book_merge.h"
+#include "qof.h"
 #include "druid-hierarchy.h"
 #include "gnc-ui-util.h"
 #include "Account.h"
-#include "global-options.h"
-#include "gnc-trace.h"
 #include "Group.h"
 
 static GtkWidget			*qof_book_merge_window = NULL;
 GtkWidget			*druid_hierarchy_window = NULL;
+static GtkWidget	*qsf_import_merge_window = NULL;
 QofSession			*previous_session = NULL;
 gint					count = 0;
 qof_book_mergeData	*mergeData = NULL;
@@ -52,7 +51,9 @@ QofBook				*mergeBook = NULL;
 QofBook				*targetBook = NULL;
 gchar 				*buffer = "";
 
-void collision_rule_loop	( qof_book_mergeData*, qof_book_mergeRule*, 	guint );
+static QofLogModule log_module = GNC_MOD_GUI;
+
+void collision_rule_loop ( qof_book_mergeData*, qof_book_mergeRule*, guint );
 
 static GtkWidget*
 merge_get_widget (const char *name)
@@ -65,16 +66,27 @@ merge_get_widget (const char *name)
 static void
 delete_merge_window (void)
 {
-  if (!qof_book_merge_window) return;
-
-  gtk_widget_destroy (qof_book_merge_window);
-  qof_book_merge_window = NULL;
+	if (!qof_book_merge_window) return;
+	
+	gtk_widget_destroy (qof_book_merge_window);
+	qof_book_merge_window = NULL;
 }
 
 static void
 qof_book_merge_destroy_cb (GtkObject *obj, gpointer user_data)
 {
 }
+
+static gboolean
+on_import_start_page_next(GnomeDruidPage  *gnomedruidpage,
+                       gpointer         arg1,
+                       gpointer         user_data)
+{
+
+	return FALSE;
+}
+
+
 
 static gboolean
 on_qof_start_page_next(GnomeDruidPage  *gnomedruidpage,
@@ -91,6 +103,7 @@ on_MergeUpdate_clicked 	(GtkButton       *button,
               		    gpointer         user_data)
 {
 	g_return_if_fail(mergeData != NULL);
+	ENTER (" ");
 	mergeData = qof_book_mergeUpdateResult(mergeData, MERGE_UPDATE); 
 	count = 0;
  	qof_book_mergeRuleForeach(mergeData, collision_rule_loop, MERGE_REPORT);
@@ -103,6 +116,7 @@ on_MergeDuplicate_clicked 	(GtkButton       *button,
 	qof_book_mergeRule *currentRule;
 	
 	g_return_if_fail(mergeData != NULL);
+	ENTER (" ");
 	currentRule = mergeData->currentRule;
 	if(currentRule->mergeAbsolute == FALSE) { 
 		mergeData = qof_book_mergeUpdateResult(mergeData, MERGE_DUPLICATE); 
@@ -120,7 +134,8 @@ on_MergeNew_clicked (GtkButton       *button,
               		gpointer         user_data)
 {
 	qof_book_mergeRule *currentRule;
-	
+
+	ENTER (" ");
 	g_return_if_fail(mergeData != NULL);
 	currentRule = mergeData->currentRule;
 	g_return_if_fail(currentRule != NULL);
@@ -132,30 +147,34 @@ on_MergeNew_clicked (GtkButton       *button,
 }
 
 static gboolean
+on_import_next (GnomeDruidPage  *gnomedruidpage,
+                       gpointer         arg1,
+                       gpointer         user_data)
+{
+	return FALSE;
+}
+
+static gboolean
 on_qof_book_merge_next (GnomeDruidPage  *gnomedruidpage,
                        gpointer         arg1,
                        gpointer         user_data)
 {
     GtkWidget *top;
-	GtkLabel *output;
     const char *message = _("You must resolve all collisions.");
 
+	ENTER (" count=%d", count);
 	if(count > 0) {
 		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
 	    gnc_error_dialog(top, message);
 		return TRUE;
 	}
 	buffer = "";
-	gnc_suspend_gui_refresh ();
-	output = GTK_LABEL(merge_get_widget("OutPut"));
-	gtk_label_set_text(output, buffer);
-	gtk_widget_show(GTK_WIDGET(output));
-	gnc_resume_gui_refresh ();
+	LEAVE (" ");
 	return FALSE;
 }
 
 static void
-on_cancel (	GnomeDruid      *gnomedruid,
+on_merge_cancel (	GnomeDruid      *gnomedruid,
 			gpointer         user_data)
 {
 	gnc_suspend_gui_refresh ();
@@ -184,7 +203,7 @@ void reference_parent_cb ( QofEntity* ent, gpointer user_data)
 }
 
 static void
-on_finish (GnomeDruidPage  *gnomedruidpage,
+on_merge_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         arg1,
            gpointer         user_data)
 {
@@ -192,6 +211,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
     GtkWidget *top;
     const char *message;
 
+	ENTER (" ");
 	message = _("Error: the Commit operation failed.");
 	g_return_if_fail(mergeData != NULL);
 	gnc_suspend_gui_refresh ();
@@ -211,13 +231,14 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 }
 
 static void
-on_qof_book_merge_prepare (GnomeDruidPage  *gnomedruidpage,
+on_merge_prepare (GnomeDruidPage  *gnomedruidpage,
                             gpointer         arg1,
                             gpointer         user_data)
 {
 	GtkLabel *progress;
 
-    gnc_suspend_gui_refresh ();
+	gnc_suspend_gui_refresh ();
+	ENTER (" ");
 	progress = GTK_LABEL (merge_get_widget("ResultsBox"));
 	/* blank out old data */
 	gtk_label_set_text(progress, "");
@@ -227,6 +248,50 @@ on_qof_book_merge_prepare (GnomeDruidPage  *gnomedruidpage,
 	g_return_if_fail(mergeData != NULL);
  	qof_book_mergeRuleForeach(mergeData, collision_rule_loop, MERGE_REPORT);
 	gnc_resume_gui_refresh ();
+}
+
+static GtkWidget *
+gnc_create_import_druid ( void )
+{
+  GtkWidget *dialog;
+  GtkWidget *druid;
+  GladeXML *xml;
+
+	xml = gnc_glade_xml_new ("merge.glade", "Merge Druid");
+
+	glade_xml_signal_connect(xml, "on_start_page_next",
+		GTK_SIGNAL_FUNC (on_import_start_page_next));
+	
+	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
+		GTK_SIGNAL_FUNC (on_merge_prepare));
+
+	glade_xml_signal_connect(xml, "on_qof_book_merge_next",
+		GTK_SIGNAL_FUNC (on_import_next));
+
+	glade_xml_signal_connect (xml, "on_finish", 
+		GTK_SIGNAL_FUNC (on_merge_finish));
+
+	glade_xml_signal_connect (xml, "on_cancel", 
+		GTK_SIGNAL_FUNC (on_merge_cancel));
+	
+	glade_xml_signal_connect (xml, "on_MergeUpdate_clicked",
+		GTK_SIGNAL_FUNC (on_MergeUpdate_clicked));
+		
+	glade_xml_signal_connect (xml, "on_MergeDuplicate_clicked",
+		GTK_SIGNAL_FUNC (on_MergeDuplicate_clicked));
+		
+	glade_xml_signal_connect (xml, "on_MergeNew_clicked",
+		GTK_SIGNAL_FUNC (on_MergeNew_clicked));
+
+	dialog = glade_xml_get_widget (xml, "Merge Druid");
+	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
+
+	druid = glade_xml_get_widget (xml, "merge_druid");
+	gnc_druid_set_colors (GNOME_DRUID (druid));
+
+	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
+                      GTK_SIGNAL_FUNC(qof_book_merge_destroy_cb), NULL);
+	return dialog;
 }
 
 static GtkWidget *
@@ -242,16 +307,16 @@ gnc_create_merge_druid ( void )
 		GTK_SIGNAL_FUNC (on_qof_start_page_next));
 	
 	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
-		GTK_SIGNAL_FUNC (on_qof_book_merge_prepare));
+		GTK_SIGNAL_FUNC (on_merge_prepare));
 
 	glade_xml_signal_connect(xml, "on_qof_book_merge_next",
 		GTK_SIGNAL_FUNC (on_qof_book_merge_next));
 
 	glade_xml_signal_connect (xml, "on_finish", 
-		GTK_SIGNAL_FUNC (on_finish));
+		GTK_SIGNAL_FUNC (on_merge_finish));
 
 	glade_xml_signal_connect (xml, "on_cancel", 
-		GTK_SIGNAL_FUNC (on_cancel));
+		GTK_SIGNAL_FUNC (on_merge_cancel));
 	
 	glade_xml_signal_connect (xml, "on_MergeUpdate_clicked",
 		GTK_SIGNAL_FUNC (on_MergeUpdate_clicked));
@@ -281,6 +346,7 @@ void collision_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule
 	GtkLabel *output;
 	
 	g_return_if_fail(rule != NULL);
+	ENTER (" count=%d", count);
 	buffer = "";
 	/* there is a rule awaiting resolution, don't print any more */
 	if(count > 0) return;
@@ -328,13 +394,26 @@ qof_book_merge_running (void)
 	return NULL;
 }
 
+void
+gnc_ui_qsf_import_merge_druid (QofSession *original, QofSession *import)
+{
+	if (qsf_import_merge_window) { return; }
+	gnc_engine_suspend_events ();
+	qsf_import_merge_window = gnc_create_import_druid();
+	g_return_if_fail(qsf_import_merge_window != NULL);
+	previous_session = original;
+	targetBook = qof_session_get_book(previous_session);
+	merge_session = import;
+	mergeBook = qof_session_get_book(merge_session);
+	gtk_widget_show(qsf_import_merge_window);
+}
 
 void
 gnc_ui_qof_book_merge_druid (void)
 {
 	if (qof_book_merge_window) return;
 	/*	QofSession changes to avoid using current book */
-    gnc_engine_suspend_events ();
+	gnc_engine_suspend_events ();
 	previous_session = qof_session_get_current_session();
 	targetBook = qof_session_get_book(previous_session);
 	merge_session = qof_session_new();
@@ -350,7 +429,7 @@ gnc_ui_qof_book_merge_druid (void)
 	druid_hierarchy_window = gnc_ui_hierarchy_running();
 	gtk_widget_hide (druid_hierarchy_window);
 	gtk_object_set_data (GTK_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
-	gtk_widget_show (qof_book_merge_window);
+	gtk_widget_show_all (qof_book_merge_window);
 	g_return_if_fail(targetBook != NULL);
 	g_return_if_fail(mergeBook != NULL);
 	g_return_if_fail(merge_session != NULL);

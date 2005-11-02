@@ -1,6 +1,8 @@
-Handling loan repayment in GnuCash::Scheduled Transactions
-------------------------------------------------------------
+/** \page loanhandling Handling loan repayment in GnuCash::Scheduled Transactions
+
 July, 2002 - jsled@asychronous.org
+
+API: \ref SchedXaction
 
 Bugs 84892 and 84877 detail a request for a new Loan/Mortgage account type,
 and Scheduled Transaction support for loan repayment.  While it's debatable
@@ -16,23 +18,23 @@ instead will result in the following changes:
 
 We define loan repayment values in the following terms:
 
-Identifiers:
+Identifiers:\n
 P  : the original principal.  This is the overall principal afforded by the
-     loan at the time of it's creation.
+     loan at the time of it's creation.\n
 P' : The beginning principal.  This is the principal at the time of entry
-     into GnuCash.
+     into GnuCash.\n
 I :  The interest rate associated with the loan.  Note that this may change
      over time [based on an addition to the Prime rate, for instance], at
      various frequencies [yearly, monthly, quarterly...].  Ideally, we can
-     use the FreqSpec mechanism to facilitate the interest rate adjustment.
-N  : The length of the loan in periods.
-m  : The minimum periodic payment.
+     use the FreqSpec mechanism to facilitate the interest rate adjustment.\n
+N  : The length of the loan in periods.\n
+m  : The minimum periodic payment.\n
 n  : The current period of the repayment.
 
-Functions:
+Functions:\n
 PMT  : Total equal periodic payment, as per Gnumeric/Excel's definitions
-       [see end for more detail].
-IPMT : Monthly payment interest portion,  ""
+       [see end for more detail].\n
+IPMT : Monthly payment interest portion,  ""\n
 PPMT : Monthly payment principal portion, ""
 
 [ NOTE: 'PMT(I,N,P) = IPMT(I, n, N, P) + PPMT(I, n, N, P)' for 0 <= n < N ]
@@ -41,6 +43,7 @@ PPMT : Monthly payment principal portion, ""
 The formula entered into the SX template for a loan may then look like:
 
 Example 1:
+\verbatim
 Desc/Memo |                     Account |         Credit |           Debit
 ----------+-----------------------------+----------------+-------------------
 Repayment | Assets:Bank:Checking        |                | =PMT(I,n,N,P)
@@ -49,11 +52,13 @@ Interest  | Expenses:Loan_Name:Interest | =IPMT(I,n,N,P) |
 PMI       | Expenses:Loan_Name:Misc     | fixed_amt      |
 Principal | Liabilities:Loan_Name       | =PPMT(I,n,N,P) |
 -----------------------------------------------------------------------------
+\endverbatim
 
 Or, in the case where an escrow account is involved [with thanks to warlord
 for the review and fixes]:
 
 Example 2:
+\verbatim
 Desc/Memo      |             Account         |       Credit   |       Debit
 ---------------+-----------------------------+----------------+--------------
 Repayment      | Assets:Bank:Checking        |                | =PMT(I,n,N,P)
@@ -65,15 +70,20 @@ Interest       | Expenses:Loan_Name:Interest | =IPMT(I,n,N,P) |
 PMI            | Expenses:Loan_Name:Misc     | fixed_amt      |
 Principal      | Liabilities:Loan_Name       | =PPMT(I,n,N,P) |
                |                             | + pre_payment  |
+\endverbatim
+
 FreqSpec = 1 month
+\verbatim
 -----------------------------------------------------------------------------
 
 Desc/Memo      |             Account         |       Credit   |       Debit
 ---------------+-----------------------------+----------------+--------------
 Insurance      | Assets:Loan_Escrow_acct     |                | insurance_amt
 Insurance      | Expenses:Home_Insurance     | insurance_amt  |
-FreqSpec = 1 year
+\endverbatim
 
+FreqSpec = 1 year
+\verbatim
 -----------------------------------------------------------------------------
 Desc/Memo      |             Account         |       Credit   |       Debit
 ---------------+-----------------------------+----------------+--------------
@@ -81,15 +91,13 @@ Taxes          | Assets:Loan_Escrow_acct     |                | taxes_amt
 Taxes          | Expenses:Property_Taxes     | taxes_amt      |
 FreqSpec = Quarterly
 -----------------------------------------------------------------------------
+\endverbatim
 
 
--------------------------
+\section guidpractical Practical questions regarding the implementation of this facility are:
 
-Practical questions regarding the implementation of this facility are:
-
------
-| 1. The transactions as in Example 2 are not going to be scheduled for the
-|    same day; are their values linked at all / do they need to share the
+| 1. The transactions as in Example 2 are not going to be scheduled for the\n
+|    same day; are their values linked at all / do they need to share the\n
 |    same var bindings?
 
 Yes, they would want to be linked.  More precisely, the insurance/tax amounts
@@ -138,7 +146,6 @@ storage/data structure: immediately allowing visual grouping of related SXes,
 and potentially allowing a storage place for such frame data in the future
 with less file-versioning headache.  This is the option that will be pursued.
 
-
 Another element implicit in the original requirements to support
 loans/repayment calculations is implicit variables.  These are symbolic names
 which can be used and are automagically bound to values.  The known implicit
@@ -159,16 +166,15 @@ could be passed to scheme for evaluation.  Hopefully this would make it
 easier to add support for new functions to the SX code via Scheme.
 
 
------
-| 3. How do we deal with periodic [yearly, semi-yearly] updating of various
+| 3. How do we deal with periodic [yearly, semi-yearly] updating of various\n
 |    "fixed" variables?
 
 Another change in the way variables are used is that some SXes -- especially
 loan-repayment -- may involve variables which are not tied to the instance of
 the SX, but rather to variables which:
-. are also involved in another SX
-. change with a frequency different than the SX
-. are represented by a relationship to the outside world ["prime + 1.7"]
+- are also involved in another SX
+- change with a frequency different than the SX
+- are represented by a relationship to the outside world ["prime + 1.7"]
 
 A partial fix for this problem is to provide multiple levels of scope for
 variable bindings, and expose this to the user by a method of assigning
@@ -188,7 +194,6 @@ A question which comes up when thinking about yearly-changing values such as
 interest rates is if the historical information needs to be versioned.  For
 now, we punt on this issue, but hopefully will provide enough of a framework
 for this to be reasonably added in the future.
-
 
 We define four types of variables supported by this scheme:
 
@@ -210,85 +215,78 @@ periodic  : have user-defined values which change at specific points in
             created.
             e.g.: loan tax amount, loan interest rate
 
------
-| 4. From where do we get the dollar amount against which to do the [PI]PMT
+| 4. From where do we get the dollar amount against which to do the [PI]PMT\n
 |    calculation?
 
 The user will specify the parameters of the Loan via some UI... then where
 does the data go?
 
-. KVP data for that account?
-. KVP data for the SX?
-. Do we have a different top-level "Loan" object?
-. Present only in the SX template transactions/variable-frames?
-
+- KVP data for that account?
+- KVP data for the SX?
+- Do we have a different top-level "Loan" object?
+- Present only in the SX template transactions/variable-frames?
 
 I believe that the only location of the data after Druid creation is in the
 variable-binding frames and the formulae in the template transactions.  The
 Druid would thus simply assist the user in creating the following SX-related
 structures:
 
-. SXGroup: Loan Repayment
-  . variable_frame
-    . P [static]
-    . N [static]
-    . n [implicit]
-    . I [periodic]
-    . pmi_amount [periodic]
-    . tax_amount [periodic]
-    . pre_payment [periodic]
-    . insurance_amount [periodic]
-  . SX: Payment
-    . Bank -> { Escrow,
+- SXGroup: Loan Repayment
+	- variable_frame
+		 - P [static]
+		 - N [static]
+		 - n [implicit]
+		 - I [periodic]
+		 - pmi_amount [periodic]
+		 - tax_amount [periodic]
+		 - pre_payment [periodic]
+		 - insurance_amount [periodic]
+- SX: Payment
+	 - Bank -> { Escrow,
                 Liability:Loan:Principal,
                 Expense:Loan:Interest,
                 Expense:Loan:Insurance }
-  . SX: Tax
-    . Escrow -> Expense:Tax
-  . SX: Insurance
-    . Escrow -> Expense:Insurance
+- SX: Tax
+	 - Escrow -> Expense:Tax
+- SX: Insurance
+	 - Escrow -> Expense:Insurance
 
---------------------------------------------------
 
-Questions
+/section loansquestions Questions
 
-1/ UI - visible should all this machination be to the user?  Should they even
+- UI - visible should all this machination be to the user?  Should they even
    see them as such.  The current SX since-last-run UI makes them pretty
    visible, and in my estimation it actually helps to make them a bit more
    formal and visible.  At the same time, it may be overwhelming for the user
    to have to create formal variables with weird types like "implicit",
    "transient", "static", and "periodic".
 
---------------------------------------------------
-
-Priorities, Plan
+\section loansplan Priorities, Plan
 
 The above represents an "ideal" set of extensions to the SX framework to
 enable multiple "enhancement"-level functionalities.  Therefore, the
 following is the prioritized schedule, with annotations:
 
-1. Functions [PMT, [IP]PMT] in exp_parser; implicit variables [n].
-2. [Visual-only] SX grouping
-3. Loan-repayment creation Druid
-4. SX-only static vars
-5. SX-only periodic vars
-6. SX-group vars, var_frames
+-# Functions [PMT, [IP]PMT] in exp_parser; implicit variables [n].
+-# [Visual-only] SX grouping
+-# Loan-repayment creation Druid
+-# SX-only static vars
+-# SX-only periodic vars
+-# SX-group vars, var_frames
 
 After the completion of item 4, the feature can safely be called "finished".
 Items 5 and 6 only serve to increase the robustness of the facility and make
 the user's life slightly easier, at the cost of making _my_ life harder. :)
 
---------------------------------------------------
 
-Reference
--------------------------
+\section loansreference Reference
 
-Other software:
-----------
+
+\subsection loanssoftware Other software:
 
 Gnumeric supports the following functions WRT payment calculation:
 
-* PMT( rate, nper, pv [, fv, type] )
+- PMT( rate, nper, pv [, fv, type] )
   PMT returns the amount of payment for a loan based on a constant interest
   rate and constant payments (ea. payment equal).
   @rate : constant interest rate
@@ -296,39 +294,35 @@ Gnumeric supports the following functions WRT payment calculation:
   @pv   : present value
   @fv   : future value
   @type : payment type
-          . 0 : end of period
-          . 1 : beginning of period
+	 - 0 : end of period
+	 - 1 : beginning of period
 
-* IPMT( rate, per, nper, pv, fv, type )
+- IPMT( rate, per, nper, pv, fv, type )
   IPMT calculates the amount of a payment of an annuity going towards
   interest. Formula for IPMT is:
   IPMT(per) = - principal(per-1) * interest_rate
   where:
   principal(per-1) = amount of the remaining principal from last period.
 
-* ISPMT( rate, per, nper, pv )
+- ISPMT( rate, per, nper, pv )
   ISPMT returns the interest paid on a given period.
   If @per < 1 or @per > @nper, returns #NUM! err.
 
-* PPMT(rate, per, nper, pv [, fv, type] )
+- PPMT(rate, per, nper, pv [, fv, type] )
   PPMT calculates the amount of a payment of an annuity going towards
   principal.
   PPMT(per) = PMT - IPMT(per)
   where: PMT is payment
-         IPMT is interest for period per
+	- IPMT is interest for period per
 
-* PV( rate, nper, pmt [, fv, type] )
+- PV( rate, nper, pmt [, fv, type] )
   Calculates the present value of an investment
   @rate : periodic interest rate
   @nper : number of compounding periods
   @pmt  : payment made each period
   @fv   : future value
 
-
---------------------------------------------------
---------------------------------------------------
-
-Day Two:
+/section loanspayment Day Two:
 
 As per warlord's comments, the definition of IPMT needs to be updated to
 account for principal pre-payment.  IPMT is actually defined by computation
@@ -342,25 +336,27 @@ user an estimation of the IPMT cell value during variable binding, then we
 would need to do something creative about this ... but as it stands, we'll
 leave this as an Excercise for the Reader. :)
 
-
------
-
-Druid thoughts...
+\section loansdruid Druid thoughts...
 
 Page Order:
+
 Intro ->
+
 Params ->
+
 Opts ->
+
 Repayment ->
+
 [Insurance ->]
+
 [PMI ->]
+
 [Taxes ->]
+
 Review/Approval
 
-
---------------------------------------------------
-| Intro
---------------------------------------------------
+\subsection loansdruidintro Intro
 
 "This is a step-by-step method of creating a loan
  repayment setup within GnuCash.  In this Druid,
@@ -372,12 +368,10 @@ Review/Approval
 "If you make a mistake or want to make changes
  later, you can edit the created Scheduled
  Transactions directly."
---------------------------------------------------
 
+\subsection loansdruidparams Params
 
---------------------------------------------------
-| Params
---------------------------------------------------
+\verbatim
 Principal        : [amount entry]
 Actual Principal : [[optional] amount entry]
 Interest Rate    : [numeric entry] %
@@ -389,12 +383,10 @@ Interest Rate    : [numeric entry] %
 Start Date       : [Gnome Date Entry]
 Length           : [num entry] [years|v]
    Remaining     : [num entry]
---------------------------------------------------
+\endverbatim
 
-
---------------------------------------------------
-| Options
---------------------------------------------------
+\section loansoptions Options
+\verbatim
 Do you...
   [ ] ... utilize an escrow account?
       Account: [ acct select |v]
@@ -406,12 +398,10 @@ Do you...
       [ ] Via the Escrow account?
   [ ] ... have some other expense not listed above?
       [ ] Via the Escrow account?
---------------------------------------------------
+\endverbatim
 
-
---------------------------------------------------
-| Repayment
---------------------------------------------------
+\section loansrepayment Repayment
+\verbatim
 Amount        : [ amount entry ]
 Assets from   : [ account sel |v] 
 Princiapl to  : [ account sel |v]
@@ -421,11 +411,10 @@ Remainder to  : [{escrow,principal,interest}|v]
 Frequency     : +- freqspec ----------------+
                 |           ....            |
                 +---------------------------+
---------------------------------------------------
+\endverbatim
 
---------------------------------------------------
-| Insurance
---------------------------------------------------
+\section loansinsurance Insurance
+\verbataim
 Amount    : [ amount entry ]
 Account   : [ account sel |v]
 Frequency :
@@ -433,49 +422,42 @@ Frequency :
    [ ] Other:      +- freqspec ----------------+
                    |           ....            |
                    +---------------------------+
---------------------------------------------------
+\endverbatim
 
+\section loanstaxes Taxes/PMI/Other
 
---------------------------------------------------
-| Taxes/PMI/Other
---------------------------------------------------
 [ same as Insurance ]
---------------------------------------------------
 
-===========================================================================
-===========================================================================
+
 
 Options in repayment:
-. loan freq != repayment freq
-  . floated
-  . not
+- loan freq != repayment freq
+	- floated
+	- not
 
-. Where does over-payment go?
-  . where
-    . into the escrow account
-    . directly applied
-  . how
-    . towards principal [interest is then re-calculated]
-    . towards interest  [principal is then re-calculated]
-  
-. still to do...
-  . expression parser/gnc-exp-parser extensions to handle...
-    . ...symbols [account names] into functions
-    . ...errors better
-    . ...iter/count/implicit vars
-  . druid...
-  . add ipmt', ppmt' calculations, using above
-  . kvp storage of "real" data
-  . sx grouping
+- Where does over-payment go?
+	 - where
+	 - into the escrow account
+	 - directly applied
+	 - how
+		- towards principal [interest is then re-calculated]
+		- towards interest  [principal is then re-calculated]
+
+- still to do...
+	- expression parser/gnc-exp-parser extensions to handle...
+		- ...symbols [account names] into functions
+		- ...errors better
+		- ...iter/count/implicit vars
+	- druid...
+	- add ipmt', ppmt' calculations, using above
+	- kvp storage of "real" data
+	- sx grouping
 
 http://www.interest.com/hugh/calc/mort_links.html
 
+\section loansfeedback Druid Feedback:
 
-===========================================================================
-===========================================================================
-
-Druid Feedback:
-
+\verbatim
 <Wilddev> jsled: <auspex> Wilddev: The labels need colons, mnemonics, and right-alignment. 
 <Wilddev> <auspex> Wilddev: It may be worthwhile for gnucash to create GtkSpinButton subclasses which show the percent symbol and others within the field.
 <Wilddev> <auspex> Wilddev: I don't know how complicated that will be.
@@ -494,29 +476,29 @@ Druid Feedback:
 <jsled> Hmm.  Okay.  The between-transaction period is a frequency editor on the Repayment page.
 <Wilddev> <auspex> I'm wondering if "Original Principal" should be a vulgate
 such as "Loan Amount"
+\endverbatim
 
-----------
 
-Expression changes, round 2
+\section loansexpression Expression changes, round 2
 
 We need the following abilities in order to get mortgage/loan repayment
 working:
-. Ability to get the original value of an account
-  . [perhaps, ability to reference an external value?]
-. Ability to get the present value of an account
-. Ability to get the current i in an "i-of-N" sequence
+- Ability to get the original value of an account
+	 - [perhaps, ability to reference an external value?]
+- Ability to get the present value of an account
+- Ability to get the current i in an "i-of-N" sequence
 
 As well, it'd be nice to have:
-. some sort of signature checking on functions in expressions
-. safe[r] error handling?
+- some sort of signature checking on functions in expressions
+- safe[r] error handling?
 
 We decide that the original/present value of the account should be handled in
 scheme, and thus we actually need a way to reference accounts down to the
 scheme expressions.  We decide to use the Quote symbols to refer to a string
 literal.  The expression parser should be modified to parse this.
 
-----------
-
 The current 'i' and 'N' are going to be handled by having a list of
 predefined variables which the user cannot have access to.  For the time
 being, this is 'i' and 'N'.
+
+*/

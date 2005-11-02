@@ -32,25 +32,15 @@
 #include <string.h>
 
 #include "messages.h"
-#include "gnc-engine-util.h"
 #include "gnc-commodity.h"
-#include "gnc-numeric.h"
-#include "gnc-event-p.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid-p.h"
-#include "qofid.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquerycore.h"
-#include "qofquery.h"
 
 #include "gncAddressP.h"
 #include "gncBillTermP.h"
+#include "gncInvoice.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
+
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 #include "gncJobP.h"
@@ -79,19 +69,15 @@ struct _gncCustomer
   GncAddress *    shipaddr;
 };
 
-static short module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_CUSTOMER
 
 /* ============================================================== */
 /* misc inline funcs */
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
-G_INLINE_FUNC void
-mark_customer (GncCustomer *customer)
+void mark_customer (GncCustomer *customer)
 {
   customer->inst.dirty = TRUE;
   qof_collection_mark_dirty (customer->inst.entity.collection);
@@ -194,8 +180,9 @@ static void gncCustomerFree (GncCustomer *cust)
 
   if (cust->terms)
     gncBillTermDecRef (cust->terms);
-  if (cust->taxtable)
+  if (cust->taxtable) {
     gncTaxTableDecRef (cust->taxtable);
+  }
 
   qof_instance_release (&cust->inst);
   g_free (cust);
@@ -377,7 +364,7 @@ void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
 
 void gncCustomerBeginEdit (GncCustomer *cust)
 {
-  QOF_BEGIN_EDIT (&cust->inst);
+  qof_begin_edit (&cust->inst);
 }
 
 static inline void gncCustomerOnError (QofInstance *inst, QofBackendError errcode)
@@ -424,6 +411,34 @@ GncAddress * gncCustomerGetAddr (GncCustomer *cust)
 {
   if (!cust) return NULL;
   return cust->addr;
+}
+
+static void
+qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent)
+{
+	GncAddress *addr;
+
+	if(!cust || !addr_ent) { return; }
+	addr = (GncAddress*)addr_ent;
+	if(addr == cust->addr) { return; }
+	if(cust->addr != NULL) { gncAddressDestroy(cust->addr); }
+	gncCustomerBeginEdit(cust);
+	cust->addr = addr;
+	gncCustomerCommitEdit(cust);
+}
+
+static void
+qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent)
+{
+	GncAddress *ship_addr;
+
+	if(!cust || !ship_addr_ent) { return; }
+	ship_addr = (GncAddress*)ship_addr_ent;
+	if(ship_addr == cust->shipaddr) { return; }
+	if(cust->shipaddr != NULL) { gncAddressDestroy(cust->shipaddr); }
+	gncCustomerBeginEdit(cust);
+	cust->shipaddr = ship_addr;
+	gncCustomerCommitEdit(cust);
 }
 
 GncAddress * gncCustomerGetShipAddr (GncCustomer *cust)
@@ -506,7 +521,7 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
 gboolean gncCustomerIsDirty (GncCustomer *cust)
 {
   if (!cust) return FALSE;
-  return (cust->inst.dirty ||
+  return (qof_instance_is_dirty(&cust->inst) ||
           gncAddressIsDirty (cust->addr) ||
           gncAddressIsDirty (cust->shipaddr));
 }
@@ -526,9 +541,9 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
 /* Package-Private functions */
 static const char * _gncCustomerPrintable (gpointer item)
 {
-  GncCustomer *c = item;
-  if (!item) return NULL;
-  return c->name;
+//  GncCustomer *c = item;
+  if (!item) return "failed";
+  return gncCustomerGetName((GncCustomer*)item);
 }
 
 static QofObject gncCustomerDesc =
@@ -542,7 +557,7 @@ static QofObject gncCustomerDesc =
   is_dirty:           qof_collection_is_dirty,
   mark_clean:         qof_collection_mark_clean,
   foreach:            qof_collection_foreach,
-  printable:          _gncCustomerPrintable,
+  printable:          (const char* (*)(gpointer))gncCustomerGetName,
   version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
@@ -556,18 +571,24 @@ gboolean gncCustomerRegister (void)
 		(QofSetterFunc)gncCustomerSetDiscount },
 	{ CUSTOMER_CREDIT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetCredit,
 		(QofSetterFunc)gncCustomerSetCredit },
-    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
-    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
+    { CUSTOMER_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetAddr, (QofSetterFunc)qofCustomerSetAddr },
+    { CUSTOMER_SHIPADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetShipAddr, (QofSetterFunc)qofCustomerSetShipAddr },
 	{ CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride, 
 		(QofSetterFunc)gncCustomerSetTaxTableOverride },
+	{ CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
+	{ CUSTOMER_SLOTS, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
+  if(!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_CUSTOMER, INVOICE_OWNER)) { return FALSE; }
+  if(!qof_choice_add_class(GNC_ID_JOB, GNC_ID_CUSTOMER, JOB_OWNER)) { return FALSE; }
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
-
+  if(!qof_choice_create(GNC_ID_CUSTOMER)) { return FALSE;}
+  /* temp */
+  _gncCustomerPrintable(NULL);
   return qof_object_register (&gncCustomerDesc);
 }
 

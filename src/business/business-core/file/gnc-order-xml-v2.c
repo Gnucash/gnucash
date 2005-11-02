@@ -42,15 +42,13 @@
 #include "io-gncxml-v2.h"
 
 #include "gncOrderP.h"
+
 #include "gnc-order-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "gncObject.h"
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *order_version_string = "2.0.0";
 
@@ -79,8 +77,8 @@ order_dom_tree_create (GncOrder *order)
     xmlNodePtr ret;
     Timespec ts;
 
-    ret = xmlNewNode(NULL, gnc_order_string);
-    xmlSetProp(ret, "version", order_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_order_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST order_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(order_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE (order))));
@@ -112,7 +110,7 @@ order_dom_tree_create (GncOrder *order)
 struct order_pdata
 {
   GncOrder *order;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static inline gboolean
@@ -133,7 +131,7 @@ set_timespec(xmlNodePtr node, GncOrder* order,
            void (*func)(GncOrder *order, Timespec ts))
 {
   Timespec ts = dom_tree_to_timespec(node);
-  g_return_val_if_fail(is_valid_timespec(ts), FALSE);
+  if (!dom_tree_valid_timespec(&ts, node->name)) return FALSE;
     
   func(order, ts);
   return TRUE;
@@ -250,7 +248,7 @@ static struct dom_tree_handler order_handlers_v2[] = {
 };
 
 static GncOrder*
-dom_tree_to_order (xmlNodePtr node, GNCBook *book)
+dom_tree_to_order (xmlNodePtr node, QofBook *book)
 {
     struct order_pdata order_pdata;
     gboolean successful;
@@ -284,7 +282,7 @@ gnc_order_end_handler(gpointer data_for_children,
     GncOrder *order;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -341,10 +339,10 @@ do_count (QofEntity * order_p, gpointer count_p)
 }
 
 static int
-order_get_count (GNCBook *book)
+order_get_count (QofBook *book)
 {
   int count = 0;
-  gncObjectForeach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
+  qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
   return count;
 }
 
@@ -365,9 +363,16 @@ xml_add_order (QofEntity * order_p, gpointer out_p)
 }
 
 static void
-order_write (FILE *out, GNCBook *book)
+order_write (FILE *out, QofBook *book)
 {
-  gncObjectForeach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
+  qof_object_foreach (_GNC_MOD_NAME, book, xml_add_order, (gpointer) out);
+}
+
+static void
+order_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "order");
 }
 
 void
@@ -381,9 +386,10 @@ gnc_order_xml_initialize (void)
     order_get_count,
     order_write,
     NULL,			/* scrub */
+    order_ns,
   };
 
-  gncObjectRegisterBackend (_GNC_MOD_NAME,
+  qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
 }

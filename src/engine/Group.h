@@ -36,16 +36,13 @@
 #define XACC_ACCOUNT_GROUP_H
 
 #include <glib.h>
-
+#include "qof.h"
 #include "Account.h"
-#include "gnc-engine.h"
-#include "guid.h"
-#include "qofbook.h"
 
-
-/** PROTOTYPES ******************************************************/
-/** @name Constructors, Destructors */
-/** @{ */
+/* PROTOTYPES ******************************************************/
+/** @name Constructors, Destructors 
+ @{
+*/
 /**
  * The xaccMallocAccountGroup() routine will create a new account group.
  *    This is an internal-use function, you almost certainly want to
@@ -90,8 +87,9 @@ gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
 
 /** @} */
 
-/** @name Editing */
-/** @{ */
+/** @name Editing
+ @{
+*/
 /** Start of begine/commit sequence.  All changes to an account 
  *  group should be bracketed by calls to begin-edit/commit-edit
  */
@@ -124,8 +122,9 @@ void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
 /** @} */
 
-/** @name Concatenation, Merging */
-/** @{ */
+/** @name Concatenation, Merging
+ @{
+*/
 /**
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
  *    all accounts from the "src" group to the "dest" group,
@@ -167,8 +166,9 @@ void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 /** @} */
 
-/** @name Counting the Size and Depth of the Account Tree */
-/** @{ */
+/** @name Counting the Size and Depth of the Account Tree
+ @{
+*/
 /** The xaccGroupGetNumSubAccounts() subroutine returns the number
  *    of accounts, including subaccounts, in the account group
  */
@@ -186,8 +186,9 @@ int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
 /** @} */
 
-/** @name Getting Accounts and Subaccounts */
-/** @{ */
+/** @name Getting Accounts and Subaccounts
+ @{
+*/
 /** DOCUMENT ME! is this routine deprecated? XXX using index is weird! */
 Account * xaccGroupGetAccount (AccountGroup *group, int index);
 
@@ -220,8 +221,9 @@ Account * xaccGroupGetParentAccount (AccountGroup *group);
 
 /** @} */
 
-/** @name Getting Accounts and Subaccounts by Name */
-/** @{ */
+/** @name Getting Accounts and Subaccounts by Name
+ @{
+*/
 /** The xaccGetAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the indicated AccountGroup group.  It returns NULL if the
@@ -254,8 +256,9 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
 
 /** @} */
 
-/** @name Traversal, ForEach */
-/** @{ */
+/** @name Traversal, ForEach
+ @{
+*/
 
 typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
 
@@ -266,25 +269,29 @@ typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
       you are done with it.
 */
 AccountList *xaccGroupMapAccounts(AccountGroup *grp,
-                             AccountCallback,
-                             gpointer data);
+                                  AccountCallback func,
+                                  gpointer data);
 
 /** The xaccGroupForEachAccount() method will traverse the AccountGroup
  *    tree, calling 'func' on each account.   Traversal will stop when
- *    func returns a non-null value, and the routine wil return with that 
- *    value.  If 'deeply' is FALSE, then only the immediate children of 
+ *    func returns a non-null value, and the routine will return with that
+ *    value.  Therefore, this function will return null iff func returns
+ *    null for every account.
+ *
+ *    If 'deeply' is FALSE, then only the immediate children of
  *    the account will be traversed.  If TRUE, then the whole tree will
  *    be traversed.
  */
 
 gpointer xaccGroupForEachAccount (AccountGroup *grp,
-                                  AccountCallback,
+                                  AccountCallback func,
                                   gpointer data,
                                   gboolean deeply);
 
 /** @} */
 
-/** @name Staged Traversal 
+/** @name Staged Traversal
+
  * The following functions provide support for "staged traversals"
  * over all of the transactions in an account or group.  The idea
  * is to be able to perform a sequence of traversals ("stages"),
@@ -318,9 +325,9 @@ gpointer xaccGroupForEachAccount (AccountGroup *grp,
  *
  * Note that currently, there is a hard limit of 256 stages, which
  * can be changed by enlarging "marker" in the transaction struct.
- * */
-
-/** @{ */
+ *
+ @{
+*/
 /** xaccGroupBeginStagedTransactionTraversals() resets the traversal
  *    marker inside each of all the transactions in the group so that
  *    a new sequence of staged traversals can begin.
@@ -382,7 +389,7 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
 
 int xaccAccountStagedTransactionTraversal(Account *a,
                                           unsigned int stage,
-                                          TransactionCallback,
+                                          TransactionCallback thunk,
                                           void *data);
 
 /** Traverse all of the transactions in the given account group.
@@ -408,15 +415,14 @@ int xaccAccountStagedTransactionTraversal(Account *a,
 
    Note that this routine is just a trivial wrapper for 
    
-   xaccGroupBeginStagedTransactionTraversals(grp);
-   xaccGroupStagedTransactionTraversal(grp, 42, cb, data);
+   xaccGroupBeginStagedTransactionTraversals(g);
+   xaccGroupStagedTransactionTraversal(g, 42, proc, data);
  */
 
 int xaccGroupForEachTransaction(AccountGroup *g, 
-                                TransactionCallback, void *data);
+                                TransactionCallback proc, void *data);
 
 /** @} */
 #endif /* XACC_ACCOUNT_GROUP_H */
 /** @} */
 /** @} */
-

@@ -21,7 +21,7 @@
 
 /*
  * @file gnc-filepath-utils.c
- * @brief file path resolutionutilities
+ * @brief file path resolution utilities
  * @author Copyright (c) 1998-2004 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  *
@@ -39,11 +39,10 @@
 #include <unistd.h>
 
 #include <glib.h>
-
+#include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
-#include "gnc-trace.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 
 /* ====================================================================== */

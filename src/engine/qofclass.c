@@ -25,13 +25,13 @@
 
 #include <glib.h>
 
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
+#include "gnc-engine-util.h"
 #include "qofclass.h"
 #include "qofclass-p.h"
 #include "qofquery.h"
 
-static short module = MOD_QUERY;
+static QofLogModule log_module = QOF_MOD_CLASS;
 
 static GHashTable *classTable = NULL;
 static GHashTable *sortTable = NULL;
@@ -70,7 +70,7 @@ qof_class_register (QofIdTypeConst obj_name,
     g_hash_table_insert (classTable, (char *)obj_name, ht);
   }
 
-  /* At least right now, we allow dummy, paramterless objects, 
+  /* At least right now, we allow dummy, parameterless objects,
    * for testing purposes.  Although I suppose that should be 
    * an error..  */
   /* Now insert all the parameters */
@@ -126,7 +126,7 @@ qof_class_get_parameter (QofIdTypeConst obj_name,
   ht = g_hash_table_lookup (classTable, obj_name);
   if (!ht)
   {
-    PERR ("no object of type %s", obj_name);
+    PWARN ("no object of type %s", obj_name);
     return NULL;
   }
 
@@ -249,5 +249,46 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
 
   g_hash_table_foreach (param_ht, param_foreach_cb, &iter);
 }
+
+struct param_ref_list
+{
+	GList *list;
+};
+
+static void
+find_reference_param_cb(QofParam *param, gpointer user_data)
+{
+	struct param_ref_list *b;
+
+	b = (struct param_ref_list*)user_data;
+	if((param->param_getfcn == NULL)||(param->param_setfcn == NULL)) { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_STRING))   { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DATE))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_CHAR))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DEBCRED))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_GUID))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT32))    { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT64))    { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DOUBLE))   { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_KVP))      { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_BOOLEAN))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_ID_BOOK))       { return; }
+	b->list = g_list_append(b->list, param);
+}
+
+GList*
+qof_class_get_referenceList(QofIdTypeConst type)
+{
+	GList *ref_list;
+	struct param_ref_list b;
+
+	ref_list = NULL;
+	b.list = NULL;
+	qof_class_param_foreach(type, find_reference_param_cb, &b);
+	ref_list = g_list_copy(b.list);
+	return ref_list;
+}
+
 
 /* ============================= END OF FILE ======================== */

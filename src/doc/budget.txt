@@ -1,12 +1,12 @@
+/** \page budgetplan Some Thoughts about GnuCash Budgeting
 
-
-Some Thoughts about GnuCash Budgeting
+API: \ref Budget
 
 Bob Drzyzgula
 
 18-April-1998
 
-Abstract
+\section budgetabstract Abstract
 
 At this point, this document contains my personal thoughts about possible
 design criteria for a budgeting engine in GnuCash. These should not
@@ -17,29 +17,27 @@ However, I believe that they provide a self-consistant view of how
 one might do this, and I hope that this document will serve to continue
 the discussion that began on the GnuCash/Xacc mailing list.
 
-\tableofcontents
+\section bugettoc tableofcontents
 
-1 Definitions
+\subsection budgetdefines Definitions
 
 As with any design paper, we'll need a few definitions. I'll try to
 stick as close to possible to the Xacc usage of these terms, but I'm
 not intimately familiar with the code, so I may have made some errors
 here. 
 
-Journal A journal is a simply a list of transactions with minimal
+- Journal A journal is a simply a list of transactions with minimal
   characterization. For the purposes of this paper, the journal is
   defined to include only transactions that have already occurred,
   i.e., expected or up-coming expenses would not appear in the journal.
-
-Calendar For the purposes of this paper, the calendar as a list of
+- Calendar For the purposes of this paper, the calendar as a list of
   fully-defined future transactions, organized by date. A transaction
   would only appear in the calendar if there was a low likelihood
   that it would change. Future transactions that would only change
   by surprise (e.g. the cable TV bill) could appear in the calendar,
   but utility bills such as from the natural gas company would appear
   in the calendar only after receipt.
-
-Template A template is in effect a partially defined transaction,
+- Template A template is in effect a partially defined transaction,
   possibly containing constraints. For example, one might have a template
   that would identify the price, payee, description, asset account
   and expense account (but not the date) for buying a Value Meal #4
@@ -56,13 +54,11 @@ Template A template is in effect a partially defined transaction,
   could be extremely useful in making projections. Quicken, of course,
   has similar things called ``memorized transactions,'' but Quicken
   gives less control over their creation, meaning and use.
-
-Schedule The schedule is a supplement to the calendar that contains
+- Schedule The schedule is a supplement to the calendar that contains
   only dated references to templates, which could be further narrowed
   as part of the reference, e.g. an undated template could be given
   a date but not a firm value when referenced from the schedule.
-
-Ledger The ledger is in effect documentation of the journal, in that
+- Ledger The ledger is in effect documentation of the journal, in that
   it describes the meaning of the transactions with respect to the
   balances in the various accounts. In Xacc, this appears also to
   be known as the register. It isn't clear to me that Xacc maintans
@@ -71,8 +67,7 @@ Ledger The ledger is in effect documentation of the journal, in that
   but it is less clear that one would want to include the template
   references from the schedule directly in the ledger; it may make
   more sense for the schedule to be a ledger unto itself.
-
-Budget A budget is an allocation of monetary flows. As funds enter
+- Budget A budget is an allocation of monetary flows. As funds enter
   the system through the income accounts, they must be transferred
   to other accounts; a direct deposit would be a transfer to an asset
   account, a loan payment through payroll deduction a transfer to
@@ -100,11 +95,11 @@ Budget A budget is an allocation of monetary flows. As funds enter
   monthly or per-four-weeks. The former might be referred to as ``budgeting
   on a monthly basis.''
 
-2 Documenting the Budget
+\subsection budgetdocs Documenting the Budget
 
 One possible way to document a budget might be as a classic ``input-ouput
 table''. Consider the following table:
-
+\verbatim
 +---------+----------+---------+-----+------+------+-----+------+------+
 |         | Checking | Savings | MMA | Cash | Visa | Tax | Food | Rent |
 +---------+----------+---------+-----+------+------+-----+------+------+
@@ -123,7 +118,7 @@ table''. Consider the following table:
 +---------+----------+---------+-----+------+------+-----+------+------+
 |Interest |          |    2    |  3  |      |      |     |      |      |
 +---------+----------+---------+-----+------+------+-----+------+------+
-
+\endverbatim
 
 The first five data columns and the first five data rows have the same
 names. These are the asset and liability accounts. The last three
@@ -131,22 +126,20 @@ columns are the expense accounts, and the last two rows are the income
 accounts (When I learn a little more SGML I'll try to make the table
 a little more readable). Notice:
 
-* If you sum across the income rows, you obtain the total income for
+- If you sum across the income rows, you obtain the total income for
   each account: $25 from paychecks and $5 from interest, for a total
   of $30. If you sum down the expense rows, you obtain the total expenses
   for each account: $5 for taxes, $13 for food, and $5 for rent (OK,
   so we eat a lot). Just looking at these two figures, we can immediately
   see that we expect to make $30 and spend $23 of it.
-
-* The sense of each amount is positive from the row account to the
+- The sense of each amount is positive from the row account to the
   column account. Thus, $20 of pay is direct-deposited to the checking
   account, and the remaining $5 is withheld for taxes. $1 is transferred
   from the savings account to the money market account. We plan to
   use the Visa card to buy $7 worth of food and to take a $8 cash
   advance. We also plan to pay Visa bills totalling $3 from the checking
   account.
-
-* If you sum down an asset/liability column, you will obtain the total
+- If you sum down an asset/liability column, you will obtain the total
   amount we expect to add to that account (e.g. $6 added to the MMA,
   $20 added to checking, $3 to Visa). If you sum across an asset/liability
   row, you will obtain the total amount we expect to remove from that
@@ -156,11 +149,10 @@ a little more readable). Notice:
   in that account for the budget period. Thus, we expect checking
   to be a wash, the MMA to grow by $6, and to go $12 further in the
   hole on our Visa card.
-
-* Again, what is documented here is the planned account-to-account
+- Again, what is documented here is the planned account-to-account
   flow across the entire period, not individual transactions.
 
-3 Contributing Data
+\subsection budgetcontrib Contributing Data
 
 (to be done)
 ================================================================
@@ -168,15 +160,14 @@ a little more readable). Notice:
 
 Where I'm headed for the rest of it is this:
 
- * I expect to point out that the Journal, Calendar and
+- I expect to point out that the Journal, Calendar and
  Ledger as I have described them are only tangentially
  related to the budget. They are the emperical data and
  the Budget and the Schedule are the models. The goal
  would be to have an engine that would allow one to
  measure the deviation of the emperical data from 
  the model in various ways.
-
- * I expect to talk about the task of generating both
+- I expect to talk about the task of generating both
  the schedule and the budget. When one prepares this
  stuff, one usually has a rather diverse collection of
  data to work with. Bi-weekly paychecks, monthly
@@ -188,8 +179,7 @@ Where I'm headed for the rest of it is this:
  I expect to do this by preparing projected transactions
  as "templates", and then specifying a time series of
  instantiations of the templates.
-
- * I expect to describe a design for a sort of OO
+- I expect to describe a design for a sort of OO
  time series engine, where "time series" is a class.
  Instances of "time series" will have begin dates,
  end dates, frequencies, and the data series itself.
@@ -198,8 +188,7 @@ Where I'm headed for the rest of it is this:
  to commensurate frequencies before combination.  Thus,
  explicit conversion functions, say "monthly_to_daily"
  will need to be defined.
-
- * Once these pieces are in place, then one should be
+- Once these pieces are in place, then one should be
  able to use the time series engine to digest the
  scraps of paper with scribbles saying "Katie's lunch,
  $2.30 every Monday through Thursday except only
@@ -208,8 +197,7 @@ Where I'm headed for the rest of it is this:
  still needs milk" into something usable as a
  budget -or- as a schedule (these being two seperate
  outputs).
-
- * While I expect that such an engine would be extremely
+- While I expect that such an engine would be extremely
  useful for about 80% of the data that would go into
  a budget, there will of course be other data for which
  this would be overkill or cumbersome. Like "$85 each
@@ -223,16 +211,15 @@ Where I'm headed for the rest of it is this:
  it should not, however, be implemented as hand edits to the
  draft table coming out of the time series engine,
  because one will want to be able to iterate on this.
- 
- * Nonetheless, it probably remains true that users
+- Nonetheless, it probably remains true that users
  would wish to take the final budget output of all this
  automated stuff, and hack it up into something
  that somehow pleases them better. Thus it probably
  *does* make sense to allow hand edits at the final
  stage, and/or to simply enter an entire budget by
  hand if that is what you want to do.
-
- * So far, I don't see any simple way to implement
+- So far, I don't see any simple way to implement
  something like Quicken's SuperCategories. Maybe this
  is related to why it works so poorly in Quicken. :-)
 
+*/

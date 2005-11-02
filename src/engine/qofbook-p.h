@@ -101,12 +101,6 @@ void qof_book_set_schedxactions( QofBook *book, GList *newList );
 
 void qof_book_set_backend (QofBook *book, QofBackend *be);
 
-/** The qof_book_mark_saved() routine marks the book as having been
- *    saved (to a file, to a database). Used by backends to mark the 
- *    notsaved flag as FALSE just after loading.  Do not use otherwise!
- */
-void qof_book_mark_saved(QofBook *book);
-
 /** Register books with the engine */
 gboolean qof_book_register (void);
 

@@ -81,18 +81,28 @@
   (= (gnc:split-compare-other-account-codes a b) 0))
 
 (define (timepair-same-year tp-a tp-b)
-  (= (tm:year (gnc:timepair->date tp-a))
-     (tm:year (gnc:timepair->date tp-b))))
+  (= (gnc:timepair-get-year tp-a)
+     (gnc:timepair-get-year tp-b)))
+
+(define (timepair-same-quarter tp-a tp-b)
+  (and (timepair-same-year tp-a tp-b) 
+       (= (gnc:timepair-get-quarter tp-a)
+          (gnc:timepair-get-quarter tp-b))))
 
 (define (timepair-same-month tp-a tp-b)
   (and (timepair-same-year tp-a tp-b) 
-       (= (tm:mon (gnc:timepair->date tp-a))
-          (tm:mon (gnc:timepair->date tp-b)))))
+       (= (gnc:timepair-get-month tp-a)
+          (gnc:timepair-get-month tp-b))))
 
 (define (split-same-month-p a b)
   (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
         (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
     (timepair-same-month tp-a tp-b)))
+
+(define (split-same-quarter-p a b)
+  (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
+        (tp-b (gnc:transaction-get-date-posted (gnc:split-get-parent b))))
+    (timepair-same-quarter tp-a tp-b)))
 
 (define (split-same-year-p a b)
   (let ((tp-a (gnc:transaction-get-date-posted (gnc:split-get-parent a)))
@@ -158,15 +168,24 @@
                         table width subheading-style)))
 
 (define (render-month-subheading split table width subheading-style column-vector)
-  (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
-                                 (gnc:split-get-parent split)))))
-    (add-subheading-row (strftime "%B %Y" tm)
-                        table width subheading-style)))
+  (add-subheading-row (gnc:date-get-month-year-string
+                      (gnc:timepair->date 
+                       (gnc:transaction-get-date-posted
+                        (gnc:split-get-parent split))))
+                     table width subheading-style))
+
+(define (render-quarter-subheading split table width subheading-style column-vector)
+  (add-subheading-row (gnc:date-get-quarter-year-string 
+                      (gnc:timepair->date 
+                       (gnc:transaction-get-date-posted
+                        (gnc:split-get-parent split))))
+                     table width subheading-style))
 
 (define (render-year-subheading split table width subheading-style column-vector)
-  (add-subheading-row (strftime "%Y" (gnc:timepair->date
-                                      (gnc:transaction-get-date-posted
-                                       (gnc:split-get-parent split))))
+  (add-subheading-row (gnc:date-get-year-string 
+                      (gnc:timepair->date 
+                       (gnc:transaction-get-date-posted
+                        (gnc:split-get-parent split))))
                       table width subheading-style))
 
 
@@ -227,9 +246,17 @@
   (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
                                  (gnc:split-get-parent split)))))
     (add-subtotal-row table width 
-                      (total-string (strftime "%B %Y" tm))
+                      (total-string (gnc:date-get-month-year-string tm))
                       total-collector subtotal-style export?)))
 
+
+(define (render-quarter-subtotal
+         table width split total-collector subtotal-style column-vector export?)
+  (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
+                                 (gnc:split-get-parent split)))))
+    (add-subtotal-row table width 
+                      (total-string (gnc:date-get-quarter-year-string tm))
+                     total-collector subtotal-style export?)))
 
 (define (render-year-subtotal
          table width split total-collector subtotal-style column-vector export?)
@@ -645,6 +672,7 @@
           (vector 'none (N_ "None") (N_ "None"))
           ;;(vector 'weekly (N_ "Weekly") (N_ "Weekly"))
           (vector 'monthly (N_ "Monthly") (N_ "Monthly"))
+          (vector 'quarterly (N_ "Quarterly") (N_ "Quarterly"))
           (vector 'yearly (N_ "Yearly") (N_ "Yearly")))))
     
     ;; primary sorting criterion
@@ -1105,6 +1133,8 @@ Credit Card, and Income accounts")))))
      (cons 'none (vector #f #f #f))
      (cons 'monthly (vector split-same-month-p render-month-subheading 
                             render-month-subtotal))
+     (cons 'quarterly (vector split-same-quarter-p render-quarter-subheading 
+                            render-quarter-subtotal))
      (cons 'yearly (vector split-same-year-p render-year-subheading
                            render-year-subtotal))))
 

@@ -3,6 +3,7 @@
  * Test the vendor object.
  * 
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,14 +25,9 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <libguile.h>
-
-#include "guid.h"
-#include "gnc-module.h"
-#include "gnc-engine-util.h"
-#include "qofobject.h"
-
-#include "gncVendor.h"
+#include "gncInvoiceP.h"
+#include "gncCustomerP.h"
+#include "gncJobP.h"
 #include "gncVendorP.h"
 #include "test-stuff.h"
 
@@ -61,21 +57,23 @@ test_gint_fcn (QofBook *book, const char *message,
 	       gint (*get) (GncVendor *));
 #endif
 
-extern QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
 static void
 test_vendor (void)
 {
-  QofBackend *fbe;
+  QofBackend *be;
+  QofSession *session;
   QofBook *book;
   GncVendor *vendor;
 
-  book = qof_book_new ();
+  session = qof_session_new();
+  be = NULL;
+  qof_session_begin(session, QOF_STDOUT, FALSE, FALSE);
+  book = qof_session_get_book (session);
+  be = qof_book_get_backend(book);
 
   /* The book *must* have a backend to pass the test of the 'dirty' flag */
   /* See the README file for details */
-  fbe = libgncmod_backend_file_LTX_gnc_backend_new();
-  qof_book_set_backend (book, fbe);
+  do_test (be != NULL, "qsf backend could not be set");
 
   /* Test creation/destruction */
   {
@@ -149,7 +147,7 @@ test_string_fcn (QofBook *book, const char *message,
   set (vendor, str);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
   gncVendorCommitEdit (vendor);
-  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
+  do_test (gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (safe_strcmp (get (vendor), str) == 0, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
@@ -189,7 +187,7 @@ test_bool_fcn (QofBook *book, const char *message,
   set (vendor, num);
   do_test (gncVendorIsDirty (vendor), "test dirty later");
   gncVendorCommitEdit (vendor);
-  do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
+  do_test (gncVendorIsDirty (vendor), "test dirty after commit");
   do_test (get (vendor) == num, message);
   gncVendorSetActive (vendor, FALSE); count++;
 }
@@ -214,18 +212,21 @@ test_gint_fcn (QofBook *book, const char *message,
 }
 #endif
 
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/business-core", 0);
-  test_vendor();
-  print_test_results();
-  exit(get_rv());
-}
-
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+  guid_init ();
+  qof_query_init ();
+  qof_object_initialize ();
+  qof_book_register ();
+  do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
+  do_test (gncJobRegister (),  "Cannot register GncJob");
+  do_test (gncCustomerRegister(), "Cannot register GncCustomer");
+  do_test (gncVendorRegister(), "Cannot register GncVendor");		
+  test_vendor();
+  print_test_results();
+  qof_query_shutdown();
+  guid_shutdown();
+  qof_object_shutdown ();
   return 0;
 }

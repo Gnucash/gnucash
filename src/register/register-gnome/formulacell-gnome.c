@@ -21,9 +21,9 @@
 /* formulacell-gnome.c
  *
  * Implements Gnome-dependent formula-cell functions :
- * 
- * Often the decimal key in the keypad is not mapped to the correct locale 
- * decimal point, the function PriceDirect handle this case.  
+ *
+ * Often the decimal key in the keypad is not mapped to the correct locale
+ * decimal point, the function PriceDirect handle this case.
  */
 
 #include "config.h"
@@ -31,7 +31,7 @@
 #include <gnome.h>
 #include <locale.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
@@ -39,7 +39,7 @@
 #include "formulacell.h"
 #include "formulacell-gnome.h"
 
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static
 gboolean
@@ -53,9 +53,11 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     GdkEventKey *event = gui_data;
     char decimal_point;
     struct lconv *lc;
-    GdkWChar *newval;
+    GString *newval_gs;
     gboolean is_return;
     int i;
+    const gchar *c;
+    gunichar uc;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
@@ -96,28 +98,38 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
     else
         decimal_point = lc->decimal_point[0];
 
-    /* allocate space for newval_ptr : oldval + one letter ( the
-       decimal_point ) */
-    newval = g_new( GdkWChar, bcell->value_len + 2 );
-
-    /* copy oldval up to the cursor position */
-    for (i = 0; i < *cursor_position; i++)
-        newval[i] = bcell->value_w[i];
-
+    newval_gs = g_string_new ("");
+    c = bcell->value;
+    i = 0;
+    
+    /* copy original value up to cursor position */
+    while (*c && (i < *cursor_position))
+    {
+        uc = g_utf8_get_char (c);
+        g_string_append_unichar (newval_gs, uc);
+        c = g_utf8_next_char (c);
+        i++;
+    }
+    
     /* insert the decimal_point at cursor position */
-    newval[*cursor_position] = decimal_point;
-
-    for (i = *cursor_position + 1; i < bcell->value_len + 1; i++)
-        newval[i] = bcell->value_w[i - 1];
-
-    newval[bcell->value_len + 1] = 0;
+    g_string_append_c (newval_gs, decimal_point);
+	i++;
+    c = g_utf8_next_char (c);
+    
+    /* copy rest of original value */
+    while (*c)
+    {
+        uc = g_utf8_get_char (c);
+        g_string_append_unichar (newval_gs, uc);
+        c = g_utf8_next_char (c);
+    }
 
     /* update the cursor position */
     (*cursor_position)++;
 
-    gnc_basic_cell_set_wcvalue_internal( bcell, newval );
+    gnc_basic_cell_set_value_internal( bcell, newval_gs->str );
 
-    g_free (newval);
+    g_string_free (newval_gs, TRUE);
 
     return TRUE;
 }

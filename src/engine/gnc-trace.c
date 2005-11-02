@@ -1,6 +1,7 @@
-/********************************************************************\
- * gnc-trace.c -- GnuCash error loging and tracing facility         *
+/* *****************************************************************\
+ * gnc-trace.c -- QOF error logging and tracing facility            *
  * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +24,14 @@
  *   Author: Linas Vepstas (linas@linas.org)                        *
 \********************************************************************/
 
+/** @addtogroup Trace
+@{ */
+
+/** @file gnc-trace.c
+    @brief QOF error logging facility 
+		@author Neil Williams <linux@codehelp.co.uk>
+*/
+
 #include "config.h"
 
 #include <glib.h>
@@ -34,43 +43,22 @@
 #include <stdarg.h>
 #include <string.h>
 #include <sys/time.h>
-
+#include "qof.h"
 #include "gnc-trace.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-/* static short module = MOD_ENGINE; */
-
-gncLogLevel gnc_log_modules[MOD_LAST + 1] =
-{
-  GNC_LOG_FATAL,        /* DUMMY */
-  GNC_LOG_WARNING,      /* ENGINE */
-  GNC_LOG_WARNING,      /* IO */
-  GNC_LOG_WARNING,      /* REGISTER */
-  GNC_LOG_WARNING,      /* LEDGER */
-  GNC_LOG_WARNING,      /* HTML */
-  GNC_LOG_WARNING,      /* GUI */
-  GNC_LOG_WARNING,      /* SCRUB */
-  GNC_LOG_WARNING,      /* GTK_REG */
-  GNC_LOG_WARNING,      /* GUILE */
-  GNC_LOG_WARNING,      /* BACKEND */
-  GNC_LOG_WARNING,      /* QUERY */
-  GNC_LOG_WARNING,      /* PRICE */
-  GNC_LOG_WARNING,      /* SQL EVENT */
-  GNC_LOG_WARNING,      /* SQL TXN */
-  GNC_LOG_WARNING,      /* KVP */
-  GNC_LOG_WARNING,      /* SX */
-  GNC_LOG_WARNING,      /* BOOK */
-  GNC_LOG_TRACE,        /* TEST */
-  GNC_LOG_WARNING,      /* LOT */
-  GNC_LOG_WARNING,      /* ACCOUNT */
-  GNC_LOG_WARNING,      /* IMPORT */
-  GNC_LOG_WARNING,      /* BUSINESS */
-  GNC_LOG_WARNING,      /* DRUID */
-  GNC_LOG_WARNING,      /* COMMODITY */
-};
-
 static FILE *fout = NULL;
+static gchar* filename = NULL;
+
 static const int MAX_TRACE_FILENAME = 100;
+static GHashTable *log_table = NULL;
+
+AS_STRING_FUNC(gncLogLevel, LOG_LEVEL_LIST)  /**< enum_as_string function
+
+uses the enum_as_string macro from QOF
+but the From macro is not required. Lookups
+are done on the string. */
+
+FROM_STRING_FUNC(gncLogLevel, LOG_LEVEL_LIST)
 
 /* Don't be fooled: gnc_trace_num_spaces has external linkage and
    static storage, but can't be defined with 'extern' because it has
@@ -93,12 +81,13 @@ fh_printer (const gchar   *log_domain,
 void 
 gnc_log_init (void)
 {
-   char *filename;
-
-   fout = fopen ("/tmp/gnucash.trace", "w");
+   if(!fout) //allow gnc_set_logfile
+   {
+	   fout = fopen ("/tmp/qof.trace", "w");
+   }
 
    if(!fout && (filename = (char *)g_malloc(MAX_TRACE_FILENAME))) {
-      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/gnucash.trace.%d", 
+      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/qof.trace.%d", 
 	       getpid());
       fout = fopen (filename, "w");
       g_free(filename);
@@ -112,30 +101,67 @@ gnc_log_init (void)
 
 /* Set the logging level of the given module. */
 void
-gnc_set_log_level(gncModuleType module, gncLogLevel level)
+gnc_set_log_level(QofLogModule log_module, gncLogLevel level)
 {
-  if ((module < 0) || (module > MOD_LAST))
-    return;
+	gchar* level_string;
 
-  gnc_log_modules[module] = level;
+	if(!log_module || level == 0) { return; }
+	level_string = g_strdup(gncLogLevelasString(level));
+	if(!log_table)
+	{
+		log_table = g_hash_table_new(g_str_hash, g_str_equal);
+	}
+	g_hash_table_insert(log_table, (gpointer)log_module, level_string);
 }
 
-/* Set the logging level for all modules. */
+static void
+log_module_foreach(gpointer key, gpointer value, gpointer data)
+{
+	g_hash_table_insert(log_table, key, data);
+}
+
+/* Set the logging level for all known modules. */
 void
 gnc_set_log_level_global(gncLogLevel level)
 {
-  gncModuleType module;
+	gchar* level_string;
 
-  for (module = 0; module <= MOD_LAST; module++)
-    gnc_log_modules[module] = level;
+	if(!log_table || level == 0) { return; }
+	level_string = g_strdup(gncLogLevelasString(level));
+	g_hash_table_foreach(log_table, log_module_foreach, level_string);
 }
 
 void
 gnc_set_logfile (FILE *outfile)
 {
+   if(!outfile) { fout = stderr; return; }
    fout = outfile;
 }
 
+void
+qof_log_init_filename (const gchar* logfilename)
+{
+	if(!logfilename)
+	{
+		fout = stderr;
+	}
+	else
+	{
+		filename = g_strdup(logfilename);
+		fout = fopen(filename, "w");
+	}
+	gnc_log_init();
+}
+
+void
+qof_log_shutdown (void)
+{
+	if(fout && fout != stderr) { fclose(fout); }
+	if(filename) { g_free(filename); }
+	g_hash_table_destroy(log_table);
+}
+
+#define MAX_CHARS 50
 /* gnc_log_prettify() cleans up subroutine names. AIX/xlC has the habit
  * of printing signatures not names; clean this up. On other operating
  * systems, truncate name to 30 chars. Note this routine is not thread
@@ -150,7 +176,7 @@ gnc_log_prettify (const char *name)
   if (!name)
     return "";
 
-  strncpy (bf, name, 29); bf[28] = 0;
+  strncpy (bf, name, MAX_CHARS-1); bf[MAX_CHARS-2] = 0;
   p = strchr (bf, '(');
 
   if (p)
@@ -159,7 +185,7 @@ gnc_log_prettify (const char *name)
     *(p+2) = 0x0;
   }
   else
-    strcpy (&bf[26], "...()");
+    strcpy (&bf[MAX_CHARS-4], "...()");
 
   return bf;
 }
@@ -182,7 +208,7 @@ struct timeval gnc_clock_total[NUM_CLOCKS] = {
 };
 
 void
-gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+gnc_start_clock (int clockno, QofLogModule log_module, gncLogLevel log_level,
                  const char *function_name, const char *format, ...)
 {
   struct timezone tz;
@@ -207,7 +233,7 @@ gnc_start_clock (int clockno, gncModuleType module, gncLogLevel log_level,
 }
 
 void
-gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
+gnc_report_clock (int clockno, QofLogModule log_module, gncLogLevel log_level,
                   const char *function_name, const char *format, ...)
 {
   struct timezone tz;
@@ -247,7 +273,7 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
 
 void
 gnc_report_clock_total (int clockno,
-                        gncModuleType module, gncLogLevel log_level,
+                        QofLogModule log_module, gncLogLevel log_level,
                         const char *function_name, const char *format, ...)
 {
   va_list ap;
@@ -280,10 +306,65 @@ gnc_report_clock_total (int clockno,
 }
 
 gboolean
-gnc_should_log(gncModuleType module, gncLogLevel log_level)
+gnc_should_log(QofLogModule log_module, gncLogLevel log_level)
 {
-  return (log_level <= gnc_log_modules[module]);
+	gchar* log_string;
+	gncLogLevel maximum; /* Any log_level less than this will be logged. */
+
+	log_string = NULL;
+	if(!log_table || log_module == NULL || log_level == 0) { return FALSE; }
+	log_string = (gchar*)g_hash_table_lookup(log_table, log_module);
+	/* if log_module not found, do not log. */
+	if(!log_string) { return FALSE; }
+	maximum = gncLogLevelfromString(log_string);
+	if(log_level <= maximum) { return TRUE; }
+	return FALSE;
 }
+
+void qof_log_set_default(gncLogLevel log_level)
+{
+	gnc_set_log_level(QOF_MOD_BACKEND, log_level);
+	gnc_set_log_level(QOF_MOD_CLASS,   log_level);
+	gnc_set_log_level(QOF_MOD_ENGINE,  log_level);
+	gnc_set_log_level(QOF_MOD_OBJECT,  log_level);
+	gnc_set_log_level(QOF_MOD_KVP,     log_level);
+	gnc_set_log_level(QOF_MOD_MERGE,   log_level);
+	gnc_set_log_level(QOF_MOD_QUERY,   log_level);
+	gnc_set_log_level(QOF_MOD_SESSION, log_level);
+}
+
+struct hash_s
+{
+	QofLogCB cb;
+	gpointer data;
+};
+
+static void hash_cb (gpointer key, gpointer value, gpointer data)
+{
+	struct hash_s *iter;
+
+	iter = (struct hash_s*)data;
+	if(!iter) { return; }
+	(iter->cb)(key, value, iter->data);
+}
+
+void qof_log_module_foreach(QofLogCB cb, gpointer data)
+{
+	struct hash_s iter;
+
+	if(!cb) { return; }
+	iter.cb = cb;
+	iter.data = data;
+	g_hash_table_foreach(log_table, hash_cb, (gpointer)&iter);
+}
+
+gint qof_log_module_count(void)
+{
+	if(!log_table) { return 0; }
+	return g_hash_table_size(log_table);
+}
+
+/** @} */
 
 /************************* END OF FILE ******************************\
 \********************************************************************/

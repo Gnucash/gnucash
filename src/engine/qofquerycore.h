@@ -70,22 +70,22 @@ typedef enum {
 /** Comparisons for QOF_TYPE_DATE	
  * The QOF_DATE_MATCH_DAY comparison rounds the two time
  *     values to mid-day and then compares these rounded values.
- * The QOF_DATE_MATCH_TIME comparison matches teh time values,
+ * The QOF_DATE_MATCH_NORMAL comparison matches the time values,
  *     down to the second.
  */
 /* XXX remove these deprecated old names .. */
-#define QOF_DATE_MATCH_ROUNDED QOF_DATE_MATCH_DAY
-#define QOF_DATE_MATCH_NORMAL  QOF_DATE_MATCH_TIME
+//#define QOF_DATE_MATCH_ROUNDED QOF_DATE_MATCH_DAY
+//#define QOF_DATE_MATCH_NORMAL  QOF_DATE_MATCH_TIME
 typedef enum {
   QOF_DATE_MATCH_NORMAL = 1,
   QOF_DATE_MATCH_DAY
 } QofDateMatch;
 
-/* Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED	
+/** Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED
  *
  * XXX Should be deprecated, or at least wrapped up as a convnience
  * function,  this is based on the old bill gribble code, which assumed 
- * the amount was always positive, and the then specified a funds-flow 
+ * the amount was always positive, and then specified a funds-flow 
  * direction (credit, debit, or either).
  * 
  * The point being that 'match credit' is equivalent to the compound
@@ -160,6 +160,9 @@ QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
                                             const char *chars);
+QofQueryPredData *qof_query_collect_predicate (QofGuidMatch options,
+                                            QofCollection *coll);
+QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guids);
 
 /** The qof_query_kvp_predicate() matches the object that has
  *  the value 'value' located at the path 'path'.  In a certain
@@ -181,6 +184,8 @@ QofQueryPredData *qof_query_core_predicate_copy (QofQueryPredData *pdata);
 /** Destroy a predicate. */
 void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
+/** Retrieve a predicate. */
+gboolean qof_query_date_predicate_get_date (QofQueryPredData *pd, Timespec *date);
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */

@@ -5,7 +5,6 @@ pkglib_LTLIBRARIES = libgncmod-tax-us.la
 libgncmod_tax_us_la_SOURCES = \
   gncmod-tax-us.c 
 
-libgncmod_tax_us_la_LDFLAGS = -module
 libgncmod_tax_us_la_LIBADD = \
  ${GUILE_LIBS} \
  ${GLIB_LIBS}

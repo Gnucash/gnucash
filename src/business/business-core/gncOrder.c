@@ -30,24 +30,6 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "gnc-engine-util.h"
-
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-
-#include "gnc-event-p.h"
-
-#include "gncBusiness.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"
@@ -71,12 +53,9 @@ struct _gncOrder
   Timespec 	closed;
 };
 
-static short	module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME	GNC_ID_ORDER
-
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
 #define SET_STR(obj, member, str) { \
 	char * tmp; \
@@ -89,8 +68,7 @@ static short	module = MOD_BUSINESS;
 	}
 
 G_INLINE_FUNC void mark_order (GncOrder *order);
-G_INLINE_FUNC void
-mark_order (GncOrder *order)
+void mark_order (GncOrder *order)
 {
   order->inst.dirty = TRUE;
   qof_collection_mark_dirty (order->inst.entity.collection);
@@ -356,7 +334,7 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  QOF_BEGIN_EDIT (&order->inst);
+  qof_begin_edit(&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)

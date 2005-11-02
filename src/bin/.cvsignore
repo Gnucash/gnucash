@@ -12,3 +12,4 @@ gnucash-env
 gnucash-make-guids
 gnucash-run-script
 strsub
+update-gnucash-gconf

@@ -1,3 +1,26 @@
+/***************************************************************************
+ *            test-dom-converters1.c
+ *
+ *  Fri Oct  7 20:51:06 2005
+ *  Copyright  2005  Neil Williams
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
 #include "config.h"
 
 #include <stdlib.h>
@@ -8,9 +31,9 @@
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
-
+#include "cashobjects.h"
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "sixtp.h"
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
@@ -31,14 +54,17 @@ test_dom_tree_to_commodity_ref(void)
         gchar *test_str2;
         gnc_commodity *test_com2;
         xmlNodePtr test_node;
+        QofBook *book;
+
+        book = qof_book_new ();
 
         test_str1 = get_random_string();
         test_str2 = get_random_string();
         
-        test_com1 = gnc_commodity_new(NULL, test_str1, test_str2, NULL, 0);
+        test_com1 = gnc_commodity_new(book, NULL, test_str1, test_str2, NULL, 0);
         test_node = commodity_ref_to_dom_tree("test-com", test_com1);
 
-        test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, NULL);
+        test_com2 = dom_tree_to_commodity_ref_no_engine(test_node, book);
 
         do_test(gnc_commodity_equiv(test_com1, test_com2),
                             "dom_tree_to_commodity_ref_no_engine");
@@ -48,6 +74,8 @@ test_dom_tree_to_commodity_ref(void)
         gnc_commodity_destroy(test_com2);
         g_free(test_str1);
         g_free(test_str2);
+
+	qof_book_destroy (book);
     }
 }
 
@@ -62,10 +90,10 @@ test_dom_tree_to_text(void)
         gchar *test_string2;
         xmlNodePtr test_node;
 
-        test_node = xmlNewNode(NULL, "test-node");
+        test_node = xmlNewNode(NULL, BAD_CAST "test-node");
         test_string1 = get_random_string();
 
-        xmlNodeAddContent(test_node, test_string1);
+        xmlNodeAddContent(test_node, BAD_CAST test_string1);
 
         test_string2 = dom_tree_to_text(test_node);
 
@@ -109,7 +137,7 @@ test_dom_tree_to_timespec(void)
 
         test_spec2 = dom_tree_to_timespec(test_node);
 
-        if(!is_valid_timespec(test_spec2))
+	if (!dom_tree_valid_timespec(&test_spec2, "test-spec"))
         {
             failure_args("dom_tree_to_timespec",
                          __FILE__, __LINE__, "NULL return");
@@ -240,6 +268,8 @@ test_dom_tree_to_guid(void)
 int
 main(int argc, char **argv)
 {
+     qof_init();
+     cashobjects_register();
     test_dom_tree_to_guid();
     fflush(stdout);
     test_dom_tree_to_commodity_ref();
@@ -251,5 +281,6 @@ main(int argc, char **argv)
     test_dom_tree_to_gnc_numeric();
     fflush(stdout);
     print_test_results();
+     qof_close();
     exit(get_rv());
 }

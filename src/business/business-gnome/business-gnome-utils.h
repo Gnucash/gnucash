@@ -30,6 +30,12 @@
 #include "gncBillTerm.h"
 #include "gncTaxTable.h"
 
+#define GCONF_SECTION_ORDER    "dialogs/business/order"
+#define GCONF_SECTION_JOB      "dialogs/business/job"
+#define GCONF_SECTION_CUSTOMER "dialogs/business/customer"
+#define GCONF_SECTION_VENDOR   "dialogs/business/vendor"
+#define GCONF_SECTION_EMPLOYEE "dialogs/business/employee"
+
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 				     GNCBook *book, GncOwner *owner);
 

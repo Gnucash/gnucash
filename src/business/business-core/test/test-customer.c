@@ -1,8 +1,9 @@
 /*********************************************************************
  * test-customer.c
- * Test the customer object 
+ * Test the customer object (without Guile/Scheme)
  * 
  * Copyright (c) 2001 Derek Atkins <warlord@MIT.EDU>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,14 +25,8 @@
  *********************************************************************/
 
 #include <glib.h>
-#include <libguile.h>
-
-#include "guid.h"
-#include "gnc-module.h"
-#include "gnc-engine-util.h"
-#include "gncObject.h"
-
-#include "gncCustomer.h"
+#include "qof.h"
+#include "cashobjects.h"
 #include "gncCustomerP.h"
 #include "test-stuff.h"
 
@@ -52,37 +47,31 @@ test_bool_fcn (QofBook *book, const char *message,
 		  void (*set) (GncCustomer *, gboolean),
 		  gboolean (*get) (GncCustomer *));
 
-#if 0
-static void
-test_gint_fcn (QofBook *book, const char *message,
-	       void (*set) (GncCustomer *, gint),
-	       gint (*get) (GncCustomer *));
-#endif
-
-extern QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
-
 static void
 test_customer (void)
 {
-  QofBackend *fbe;
+  QofBackend *be;
+  QofSession *session;
   QofBook *book;
   GncCustomer *customer;
 
-  book = qof_book_new ();
+  session = qof_session_new();
+  be = NULL;
+  qof_session_begin(session, QOF_STDOUT, FALSE, FALSE);
+  book = qof_session_get_book(session);
+  be = qof_book_get_backend(book);
 
-  /* The book *must* have a backend to pass the test of the 'dirty' flag */
-  /* See the README file for details */
-  fbe = libgncmod_backend_file_LTX_gnc_backend_new();
-  qof_book_set_backend (book, fbe);
+  /* The book *must* have a backend to pass the test of the 'dirty' flag 
+  so use a session to use the default QSF. However, until the SQL backend can be used, 
+  entities remain dirty until the session is saved or closed. */
+  do_test (be != NULL, "qsf backend could not be set");
 
   /* Test creation/destruction */
   {
     do_test (gncCustomerCreate (NULL) == NULL, "customer create NULL");
     customer = gncCustomerCreate (book);
     do_test (customer != NULL, "customer create");
-    do_test (gncCustomerGetBook (customer) == book,
-	     "getbook");
+    do_test (gncCustomerGetBook (customer) == book, "getbook");
 
     gncCustomerBeginEdit (customer);
     gncCustomerDestroy (customer);
@@ -102,7 +91,6 @@ test_customer (void)
     test_numeric_fcn (book, "Discount", gncCustomerSetDiscount, gncCustomerGetDiscount);
     test_numeric_fcn (book, "Credit", gncCustomerSetCredit, gncCustomerGetCredit);
 
-    //test_bool_fcn (book, "TaxIncluded", gncCustomerSetTaxIncluded, gncCustomerGetTaxIncluded);
     test_bool_fcn (book, "Active", gncCustomerSetActive, gncCustomerGetActive);
 
     do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
@@ -132,8 +120,11 @@ test_customer (void)
     const char *str = get_random_string();
     const char *res;
 
+    res = NULL;
+    gncCustomerBeginEdit(customer);
     gncCustomerSetName (customer, str);
-    res = gncObjectPrintable (GNC_ID_CUSTOMER, customer);
+    gncCustomerCommitEdit(customer);
+    res = qof_object_printable (GNC_ID_CUSTOMER, customer);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
@@ -149,6 +140,7 @@ test_customer (void)
   }
 
   /* Note: JobList is tested from the Job tests */
+  qof_session_end(session);
 }
 
 static void
@@ -164,7 +156,7 @@ test_string_fcn (QofBook *book, const char *message,
   set (customer, str);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
   gncCustomerCommitEdit (customer);
-  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
+  do_test (gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (safe_strcmp (get (customer), str) == 0, message);
   gncCustomerSetActive (customer, FALSE);
   count++;
@@ -183,7 +175,7 @@ test_numeric_fcn (QofBook *book, const char *message,
   set (customer, num);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
   gncCustomerCommitEdit (customer);
-  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
+  do_test (gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (gnc_numeric_equal (get (customer), num), message);
   gncCustomerSetActive (customer, FALSE);
   count++;
@@ -204,45 +196,24 @@ test_bool_fcn (QofBook *book, const char *message,
   set (customer, num);
   do_test (gncCustomerIsDirty (customer), "test dirty later");
   gncCustomerCommitEdit (customer);
-  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
+  do_test (gncCustomerIsDirty (customer), "test dirty after commit");
   do_test (get (customer) == num, message);
   gncCustomerSetActive (customer, FALSE);
   count++;
-}
-
-#if 0
-static void
-test_gint_fcn (QofBook *book, const char *message,
-	       void (*set) (GncCustomer *, gint),
-	       gint (*get) (GncCustomer *))
-{
-  GncCustomer *customer = gncCustomerCreate (book);
-  gint num = 17;
-
-  do_test (!gncCustomerIsDirty (customer), "test if start dirty");
-  gncCustomerBeginEdit (customer);
-  set (customer, num);
-  do_test (gncCustomerIsDirty (customer), "test dirty later");
-  gncCustomerCommitEdit (customer);
-  do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
-  do_test (get (customer) == num, message);
-  gncCustomerSetActive (customer, FALSE);
-  count++;
-}
-#endif
-
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/business-core", 0);
-  test_customer();
-  print_test_results();
-  exit(get_rv());
 }
 
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+  guid_init ();
+  qof_query_init ();
+  qof_object_initialize ();
+  qof_book_register ();
+  do_test (cashobjects_register(), "Cannot register cash objects");
+  test_customer();
+  print_test_results();
+  qof_query_shutdown();
+  guid_shutdown();
+  qof_object_shutdown ();
   return 0;
 }

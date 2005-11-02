@@ -26,6 +26,7 @@
     "#include <guid.h>\n"
     "#include <Group.h>\n"
     "#include <Query.h>\n"
+    "#include <gnc-budget.h>\n"
     "#include <gnc-commodity.h>\n"
     "#include <gnc-date.h>\n"
     "#include <gnc-engine.h>\n"
@@ -38,6 +39,7 @@
     "#include <qofbackend.h>\n"
     "#include <qofbook.h>\n"
     "#include <qofsession.h>\n"
+    "#include <gnc-hooks-scm.h>\n"
     "#include <engine-helpers.h>\n")))
 
 (gw:wrapset-add-cs-initializers!
@@ -104,6 +106,9 @@
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
 (gw:wrap-as-wct ws '<gnc:Transaction*> "Transaction*" "const Transaction*")  
 (gw:wrap-as-wct ws '<gnc:commodity*> "gnc_commodity*" "const gnc_commodity*")
+(gw:wrap-as-wct ws '<gnc:commodity-namespace*>
+                "gnc_commodity_namespace*" 
+                "const gnc_commodity_namespace*")
 (gw:wrap-as-wct ws '<gnc:commodity-table*>
                 "gnc_commodity_table*" 
                 "const gnc_commodity_table*")
@@ -142,7 +147,7 @@
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:date-match-how> "QofDateMatch")))
   (gw:enum-add-value! wt "QOF_DATE_MATCH_NORMAL" 'date-match-normal)
-  (gw:enum-add-value! wt "QOF_DATE_MATCH_ROUNDED" 'date-match-rounded)
+  (gw:enum-add-value! wt "QOF_DATE_MATCH_DAY" 'date-match-rounded)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:numeric-match-how> "QofNumericMatch")))
@@ -256,6 +261,7 @@
 ;
 (gw:wrap-value ws 'gnc:id-account '<gnc:id-type> "GNC_ID_ACCOUNT")
 (gw:wrap-value ws 'gnc:id-book '<gnc:id-type> "GNC_ID_BOOK")
+(gw:wrap-value ws 'gnc:id-budget '<gnc:id-type> "GNC_ID_BUDGET")
 (gw:wrap-value ws 'gnc:id-lot '<gnc:id-type> "GNC_ID_LOT")
 (gw:wrap-value ws 'gnc:id-price '<gnc:id-type> "GNC_ID_PRICE")
 (gw:wrap-value ws 'gnc:id-split '<gnc:id-type> "GNC_ID_SPLIT")
@@ -2017,7 +2023,8 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-create
  '<gnc:commodity*>
  "gnc_commodity_new"
- '(((<gw:mchars> caller-owned const) fullname)
+ '((<gnc:Book*> book)
+   ((<gw:mchars> caller-owned const) fullname)
    ((<gw:mchars> caller-owned const) namespace)
    ((<gw:mchars> caller-owned const) mnemonic)
    ((<gw:mchars> caller-owned const) exchange-code)
@@ -2145,7 +2152,7 @@ of having a parent transaction with which one is working...")
 (gw:wrap-function
  ws
  'gnc:commodity-table-add-namespace
- '<gw:void>
+ '<gnc:commodity-namespace*>
  "gnc_commodity_table_add_namespace"
  '((<gnc:commodity-table*> table)
    ((<gw:mchars> caller-owned const) namespace))
@@ -2183,7 +2190,8 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-table-add-default-data
  '<gw:bool>
  "gnc_commodity_table_add_default_data"
- '((<gnc:commodity-table*> table))
+ '((<gnc:commodity-table*> table)
+   (<gnc:Book*> book))
  "Add default commodities to the commodity table.")
 
 ;;=========
@@ -2484,3 +2492,152 @@ the timepair representing midday on that day")
  "gnc_quote_source_set_fq_installed"
  '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
  "Takes a list of installed Finance::Quote souces and records it internally.")
+
+
+;; Budget functions
+
+(gw:wrap-as-wct ws '<gnc:Budget*> "GncBudget *" "const GncBudget *")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-guid
+ '<gnc:guid-scm>
+ "gnc_budget_return_guid"
+ '((<gnc:Budget*> budget))
+ "Gets the guid of the budget")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-lookup
+ '<gnc:Budget*>
+ "gnc_budget_lookup_direct"
+ '((<gnc:guid-scm> guid)
+   (<gnc:Book*> book))
+ "Lookup a budget from its GUID.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-default
+ '<gnc:Budget*>
+ "gnc_budget_get_default"
+ '((<gnc:Book*> book))
+ "Get the default budget for the book.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-name
+ '(<gw:mchars> callee-owned const)
+ "gnc_budget_get_name"
+ '((<gnc:Budget*> budget))
+ "Get the brief name for the budget.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-num-periods
+ '<gw:unsigned-int>
+ "gnc_budget_get_num_periods"
+ '((<gnc:Budget*> budget))
+ "Get the number of periods in a budget.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-account-period-value
+ '<gnc:numeric>
+ "gnc_budget_get_account_period_value"
+ '((<gnc:Budget*> budget)
+   (<gnc:Account*> acct)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the budgeted value for the given account and budget period.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-account-period-actual-value
+ '<gnc:numeric>
+ "gnc_budget_get_account_period_actual_value"
+ '((<gnc:Budget*> budget)
+   (<gnc:Account*> acct)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the actual account value for the given account and budget period.")
+
+(gw:wrap-function
+ ws
+ 'gnc:budget-get-period-start-date
+ '<gnc:time-pair>
+ "gnc_budget_get_period_start_date"
+ '((<gnc:Budget*> budget)
+   (<gw:unsigned-int> period_num)
+   )
+ "Get the date that the given period begins.")
+
+;;
+;; gnc-hooks-scm.h
+;;   (and gnc-hooks.h)
+;;
+(gw:wrap-function
+ ws
+ 'gnc:hook-define
+ '(<gw:mchars> caller-owned)
+ "gnc_hook_create"
+ '(((<gw:mchars> caller-owned) name) (<gw:int> how) ((<gw:mchars> caller-owned) desc))
+ "Define (create) a new hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-get-description
+ '(<gw:mchars> callee-owned)
+ "gnc_hook_get_description"
+ '(((<gw:mchars> caller-owned) hook))
+ "Get the description of a hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-add-dangler
+ '<gw:void>
+ "gnc_hook_add_scm_dangler"
+ '(((<gw:mchars> caller-owned) hook) (<gw:scm> procedure))
+ "Add a hook dangler to an existing hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-remove-dangler
+ '<gw:void>
+ "gnc_hook_del_scm_dangler"
+ '(((<gw:mchars> caller-owned) hook) (<gw:scm> procedure))
+ "Remove a hook dangler from an existing hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-run-danglers-real
+ '<gw:void>
+ "gnc_hook_run"
+ '(((<gw:mchars> caller-owned) name) (<gnc:Session*> arg))
+ "Run the danglers on a hook.")
+
+; Now wrap all the 'known' hooks
+(gw:wrap-value ws 'gnc:*startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_STARTUP")
+(gw:wrap-value ws 'gnc:*shutdown-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_SHUTDOWN")
+(gw:wrap-value ws 'gnc:*ui-startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_UI_STARTUP")
+(gw:wrap-value ws 'gnc:*ui-post-startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_UI_POST_STARTUP")
+(gw:wrap-value ws 'gnc:*ui-shutdown-hook* 
+	       '(<gw:mchars> callee-owned) "HOOK_UI_SHUTDOWN")
+(gw:wrap-value ws 'gnc:*new-book-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_NEW_BOOK")
+(gw:wrap-value ws 'gnc:*report-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_REPORT")
+(gw:wrap-value ws 'gnc:*save-options-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_SAVE_OPTIONS")
+(gw:wrap-value ws 'gnc:*add-extension-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_ADD_EXTENSION")
+(gw:wrap-value ws 'gnc:*book-opened-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_BOOK_OPENED")
+(gw:wrap-value ws 'gnc:*book-closed-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_BOOK_CLOSED")

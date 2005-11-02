@@ -47,6 +47,8 @@
 ;; get stuff from localtime date vector
 (define (gnc:date-get-year datevec)
   (+ 1900 (tm:year datevec)))
+(define (gnc:date-get-quarter datevec)
+  (+ (quotient (tm:mon datevec) 3) 1))
 (define (gnc:date-get-month-day datevec)
   (tm:mday datevec))
 ;; get month with january==1
@@ -62,8 +64,11 @@
 (define (gnc:timepair-get-year tp)
   (gnc:date-get-year (gnc:timepair->date tp)))
 
+(define (gnc:timepair-get-quarter tp)
+  (gnc:date-get-quarter (gnc:timepair->date tp)))
+
 (define (gnc:timepair-get-month-day tp)
-  (gnc:date-get-month (gnc:timepair->date tp)))
+  (gnc:date-get-month-day (gnc:timepair->date tp)))
 
 (define (gnc:timepair-get-month tp)
   (gnc:date-get-month (gnc:timepair->date tp)))
@@ -74,8 +79,23 @@
 (define (gnc:timepair-get-year-day tp)
   (gnc:date-get-year-day (gnc:timepair->date tp)))
 
+(define (gnc:date-get-year-string datevec)
+  (strftime "%Y" datevec))
+
+(define (gnc:date-get-quarter-string datevec)
+  (sprintf #f "Q%d" (gnc:date-get-quarter datevec)))
+
+(define (gnc:date-get-quarter-year-string datevec)
+  (string-append 
+   (gnc:date-get-quarter-string datevec) 
+   " " 
+   (gnc:date-get-year-string datevec)))
+
 (define (gnc:date-get-month-string datevec)
   (strftime "%B" datevec))
+
+(define (gnc:date-get-month-year-string datevec)
+  (strftime "%B %Y" datevec))
 
 ;; is leap year?
 (define (gnc:leap-year? year)

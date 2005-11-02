@@ -31,12 +31,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "qif-import-p.h"
 #include "qif-objects-p.h"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 static QifLine
@@ -309,4 +309,3 @@ qif_file_set_default_account(QifContext ctx, const char *acct_name)
   qif_clear_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
   qif_clear_flag(ctx->parse_flags, QIF_F_ITXN_NEEDS_ACCT);
 }
-

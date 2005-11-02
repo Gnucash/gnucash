@@ -44,19 +44,20 @@ enum
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
-static void gnc_account_sel_init         (GNCAccountSel      *gas);
-static void gnc_account_sel_class_init   (GNCAccountSelClass *class);
-static void gas_accounts_to_names( gpointer data, gpointer user_data );
+static void gnc_account_sel_init (GNCAccountSel *gas);
+static void gnc_account_sel_class_init (GNCAccountSelClass *klass);
+static void gnc_account_sel_finalize (GObject *object);
+static void gnc_account_sel_dispose (GObject *object);
 
-static void gas_populate_list( GNCAccountSel *gas );
-static void gas_strcmp_adapter( gpointer a, gpointer b );
-static void gnc_account_sel_event_cb( GUID *entity, QofIdType id_type,
+static void gas_accounts_to_names (gpointer data, gpointer user_data);
+
+static void gas_populate_list (GNCAccountSel *gas);
+static void gas_strcmp_adapter (gpointer a, gpointer b);
+static void gnc_account_sel_event_cb (GUID *entity, QofIdType id_type,
                                       GNCEngineEventType event_type,
-                                      gpointer user_data );
+                                      gpointer user_data);
 
-static void gas_new_account_click( GtkButton *b, gpointer ud );
-
-static void gas_destroy( GtkObject *o, gpointer user_data );
+static void gas_new_account_click (GtkButton *b, gpointer ud);
 
 #if 0 /* completion not implemented */
 static void gnc_account_sel_changed( GtkEditable *entry, gpointer ud );
@@ -67,24 +68,27 @@ static gint gnc_account_sel_key_press( GtkWidget          *widget,
 
 static GtkHBox *parent_class;
 
-guint
+GType
 gnc_account_sel_get_type (void)
 {
-        static guint account_sel_type = 0;
+        static GType account_sel_type = 0;
 
-        if (!account_sel_type){
-                GtkTypeInfo account_sel_info = {
-                        "GNCAccountSel",
-                        sizeof (GNCAccountSel),
+        if (account_sel_type == 0) {
+                GTypeInfo account_sel_info = {
                         sizeof (GNCAccountSelClass),
-                        (GtkClassInitFunc) gnc_account_sel_class_init,
-                        (GtkObjectInitFunc) gnc_account_sel_init,
-                        NULL,
-                        NULL,
-                        (GtkClassInitFunc) NULL,
+			NULL,
+			NULL,
+                        (GClassInitFunc) gnc_account_sel_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCAccountSel),
+			0,
+                        (GInstanceInitFunc) gnc_account_sel_init
                 };
 
-                account_sel_type = gtk_type_unique (GTK_TYPE_HBOX, &account_sel_info);
+                account_sel_type = g_type_register_static (GTK_TYPE_HBOX,
+							   "GNCAccountSel",
+							   &account_sel_info, 0);
         }
 
         return account_sel_type;
@@ -107,31 +111,25 @@ gnc_account_sel_event_cb( GUID *entity, QofIdType type,
 
 static
 void
-gnc_account_sel_class_init (GNCAccountSelClass *class)
+gnc_account_sel_class_init (GNCAccountSelClass *klass)
 {
-        GtkObjectClass *object_class;
-        GtkWidgetClass *widget_class;
-        GtkHBoxClass *hbox_class;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-        object_class = (GtkObjectClass*) class;
-        widget_class = (GtkWidgetClass*) class;
-        hbox_class = (GtkHBoxClass*) class;
+	parent_class = g_type_class_peek_parent (klass);
 
-        parent_class = gtk_type_class (gtk_entry_get_type ());
+	object_class->finalize = gnc_account_sel_finalize;
+	object_class->dispose = gnc_account_sel_dispose;
 
         account_sel_signals [ACCOUNT_SEL_CHANGED] =
-                gtk_signal_new ("account_sel_changed",
-                                GTK_RUN_FIRST, object_class->type, 
-                                GTK_SIGNAL_OFFSET (GNCAccountSelClass,
-                                                   account_sel_changed),
-                                gtk_signal_default_marshaller,
-                                GTK_TYPE_NONE, 0);
-	
-        gtk_object_class_add_signals (object_class,
-                                      account_sel_signals,
-                                      LAST_SIGNAL);
-
-        class->account_sel_changed = NULL;
+                g_signal_new ("account_sel_changed",
+                              G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GNCAccountSelClass, account_sel_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+                              G_TYPE_NONE,
+			      0);
 }
 
 static void
@@ -147,9 +145,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
 
         /* This is only because completion cannot be implemented. */
         gtk_editable_set_editable( GTK_EDITABLE(gas->combo->entry), FALSE );
-        gtk_signal_connect( GTK_OBJECT(gas), "destroy",
-                            GTK_SIGNAL_FUNC( gas_destroy ),
-                            gas );
 
 #if 0 /* completion not implemented. */
         gtk_signal_connect( GTK_OBJECT(gas->combo->entry), "changed",
@@ -359,7 +354,7 @@ gnc_account_sel_new (void)
 {
         GNCAccountSel *gas;
 
-        gas = gtk_type_new (gnc_account_sel_get_type ());
+        gas = g_object_new (GNC_TYPE_ACCOUNT_SEL, NULL);
 
         return GTK_WIDGET (gas);
 }
@@ -426,22 +421,47 @@ gnc_account_sel_set_acct_filters( GNCAccountSel *gas, GList *filters )
         gas_populate_list( gas );
 }
 
-static
-void
-gas_destroy( GtkObject *o, gpointer user_data )
+static void
+gnc_account_sel_finalize (GObject *object)
 {
-        GNCAccountSel *gas = (GNCAccountSel*)user_data;
-        if ( gas->acctTypeFilters ) {
-                g_list_free( gas->acctTypeFilters );
+	GNCAccountSel *gas;
+	
+	g_return_if_fail (object != NULL);
+        g_return_if_fail (GNC_IS_ACCOUNT_SEL (object));
+
+	gas = GNC_ACCOUNT_SEL (object);
+
+        if (gas->acctTypeFilters) {
+                g_list_free (gas->acctTypeFilters);
         }
-        gnc_engine_unregister_event_handler( gas->eventHandlerId );
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gnc_account_sel_dispose (GObject *object)
+{
+	GNCAccountSel *gas;
+	
+	g_return_if_fail (object != NULL);
+        g_return_if_fail (GNC_IS_ACCOUNT_SEL (object));
+
+	gas = GNC_ACCOUNT_SEL (object);
+
+        if (gas->eventHandlerId) {
+		gnc_engine_unregister_event_handler (gas->eventHandlerId);
+		gas->eventHandlerId = 0;
+	}
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 void
 gnc_account_sel_set_new_account_ability( GNCAccountSel *gas,
                                          gboolean state )
 {
-        g_assert( gas );
+        g_return_if_fail (gas != NULL);
+
         if ( state == (gas->newAccountButton != NULL) ) {
                 /* We're already in that state; don't do anything. */
                 return;
@@ -471,12 +491,11 @@ void
 gnc_account_sel_set_new_account_modal( GNCAccountSel *gas,
 				       gboolean state )
 {
-	g_assert ( gas );
+	g_return_if_fail (gas != NULL);
 	gas->isModal = state;
 }
 
-static
-void
+static void
 gas_new_account_click( GtkButton *b, gpointer ud )
 {
         GNCAccountSel *gas = (GNCAccountSel*)ud;

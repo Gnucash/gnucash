@@ -90,7 +90,6 @@ struct _GNCSplitReg {
   gint width;
   gint height;
 
-  SCM toolbar_change_callback_id;
   GtkWidget *toolbar;
   GtkWidget *summarybar; 
 
@@ -108,6 +107,7 @@ struct _GNCSplitReg {
   GtkWidget *split_menu_check;
   GtkWidget *split_popup_check;
 
+  /* Summary Bar Labels */
   GtkWidget *balance_label;
   GtkWidget *cleared_label;
   GtkWidget *reconciled_label;
@@ -181,19 +181,22 @@ typedef enum {
  * but this provides a simple case statement internally.  This should
  * probably not actually be exposed in the external interface....
  */
-typedef enum {
-  BY_NONE = 0,
-  BY_STANDARD,
-  BY_DATE,
-  BY_DATE_ENTERED,
-  BY_DATE_RECONCILED,
-  BY_NUM,
-  BY_AMOUNT,
-  BY_MEMO,
-  BY_DESC,
-  BY_ACTION,
-  BY_NOTES
-} SortType;
+#define ENUM_LIST_SORTTYPE(_) \
+  _(BY_NONE,) \
+  _(BY_STANDARD,) \
+  _(BY_DATE,) \
+  _(BY_DATE_ENTERED,) \
+  _(BY_DATE_RECONCILED,) \
+  _(BY_NUM,) \
+  _(BY_AMOUNT,) \
+  _(BY_MEMO,) \
+  _(BY_DESC,) \
+  _(BY_ACTION,) \
+  _(BY_NOTES,)
+
+DEFINE_ENUM(SortType, ENUM_LIST_SORTTYPE)
+AS_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
+FROM_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
 
 /**
  * Flags for creation-time selection of what subwidgets are to be created.
@@ -238,10 +241,20 @@ GtkWidget* gnc_split_reg_new( GNCLedgerDisplay *ld,
 GnucashRegister *gnc_split_reg_get_register( GNCSplitReg *gsr );
 
 /**
+ * Create and returns a summarybar for this GNCSplitReg.
+ **/
+GtkWidget *gsr_create_summary_bar( GNCSplitReg *gsr );
+
+/**
  * Gets/sets the sort-type of the GNCSplitReg.
  **/
 SortType gnc_split_reg_get_sort_type( GNCSplitReg *gsr );
 void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
+
+/**
+ * Gets/sets the style of the GNCSplitReg.
+ **/
+void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 /**
  * Retreives the various menus created by the GNCSplitReg.  Callers may want
@@ -302,5 +315,12 @@ gboolean gnc_split_reg_get_read_only( GNCSplitReg *gsr );
 void gnc_split_reg_jump_to_blank (GNCSplitReg *gsr);
 void gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split);
 void gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split);
+
+void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
+void gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction );
+void gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data );
+void gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data );
 
 #endif /* GNC_SPLIT_REG_H */

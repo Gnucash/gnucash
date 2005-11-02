@@ -127,8 +127,8 @@
 
 (define (gnc:save-style-sheet-options) 
   (let ((port (false-if-exception
-               (open gnc:current-config-auto
-                     (logior O_WRONLY O_CREAT O_APPEND)))))
+               (open gnc:current-saved-stylesheets
+                     (logior O_WRONLY O_CREAT O_TRUNC)))))
     (if (not port)
         (gnc:warn (_ "Can't save style sheet"))
         (begin

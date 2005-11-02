@@ -27,8 +27,7 @@
 /** @name  Backend_Private
    Pseudo-object defining how the engine can interact with different
    back-ends (which may be SQL databases, or network interfaces to 
-   remote GnuCash servers.  In theory, file-io should be a type of 
-   backend).
+   remote GnuCash servers. File-io is just one type of backend).
    
    The callbacks will be called at the appropriate times during 
    a book session to allow the backend to store the data as needed.
@@ -36,16 +35,17 @@
    @file qofbackend-p.h
    @brief private api for data storage backend
    @author Copyright (c) 2000,2001,2004 Linas Vepstas <linas@linas.org> 
+   @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 @{ */
 
 #ifndef QOF_BACKEND_P_H
 #define QOF_BACKEND_P_H
 
 #include "config.h"
-
+#include "qof-be-utils.h"
 #include "qofbackend.h"
 #include "qofbook.h"
-#include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofquery.h"
 #include "qofsession.h"
 
@@ -231,6 +231,16 @@
  *    a mass transfer of transactions between books without having
  *    to actually move much (or any) data to the engine.
  *
+ *
+ * To support configuration options from the frontend, the backend
+ *    can be passed a GHashTable - according to the allowed options
+ *    for that backend, using load_config(). Configuration can be
+ *    updated at any point - it is up to the frontend to load the
+ *    data in time for whatever the backend needs to do. e.g. an
+ *    option to save a new book in a compressed format need not be
+ *    loaded until the backend is about to save. If the configuration
+ *    is updated by the user, the frontend should call load_config
+ *    again to update the backend.
  */
 
 struct QofBackendProvider_s
@@ -243,9 +253,33 @@ struct QofBackendProvider_s
    */
   const char * access_method;
 
+  /** \brief Partial QofBook handler
+	
+	TRUE if the backend handles external references
+	to entities outside this book and can save a QofBook that
+	does not contain any specific QOF objects.
+	*/
+  gboolean partial_book_supported;
+	
   /** Return a new, initialized backend backend. */
   QofBackend * (*backend_new) (void);
 
+/** \brief Distinguish two providers with same access method.
+  
+  More than 1 backend can be registered under the same access_method,
+  so each one is passed the path to the data (e.g. a file) and
+  should return TRUE only:
+-# if the backend recognises the type as one that it can load and write or 
+-# if the path contains no data but can be used (e.g. a new session).
+  
+  \note If the backend can cope with more than one type, the backend
+  should not try to store or cache the sub-type for this data.
+  It is sufficient only to return TRUE if any ONE of the supported
+  types match the incoming data. The backend should not assume that
+  returning TRUE will mean that the data will naturally follow.
+  */
+  gboolean (*check_data_type) (const char*);
+  
   /** Free this structure, unregister this backend handler. */
   void (*provider_free) (QofBackendProvider *);
 };
@@ -271,7 +305,8 @@ struct QofBackend_s
   void (*run_query) (QofBackend *, gpointer);
 
   void (*sync) (QofBackend *, QofBook *);
-
+  void (*load_config) (QofBackend *, KvpFrame *);
+  KvpFrame* (*get_config) (QofBackend *);
   gint64 (*counter) (QofBackend *, const char *counter_name);
 
   gboolean (*events_pending) (QofBackend *);
@@ -279,15 +314,18 @@ struct QofBackend_s
 
   QofBePercentageFunc percentage;
 
+  QofBackendProvider *provider;
+
   /** Document Me !!! what is this supposed to do ?? */
   gboolean (*save_may_clobber_data) (QofBackend *);
 
   QofBackendError last_err;
   char * error_msg;
 
-  /** XXX the file backend resolves the if to a fully-qualified file
-   *  path.  This holds the filepath and communicates it to the GUI.
-   *  This is temprary scaffolding and should be removed.  Deprecated.
+  KvpFrame* backend_configuration;
+  gint config_count;
+  /** Each backend resolves a fully-qualified file path.
+   * This holds the filepath and communicates it to the frontends.
    */
   char * fullpath;
 
@@ -340,6 +378,31 @@ void qof_backend_set_message(QofBackend *be, const char *format, ...);
 char * qof_backend_get_message(QofBackend *be);
 
 void qof_backend_init(QofBackend *be);
+
+/** Allow backends to see if the book is open 
+
+@return 'y' if book is open, otherwise 'n'.
+*/
+gchar qof_book_get_open_marker(QofBook *book);
+
+/** get the book version
+
+used for tracking multiuser updates in backends.
+
+@return -1 if no book exists, 0 if the book is
+new, otherwise the book version number.
+*/
+gint32 qof_book_get_version (QofBook *book);
+
+/** get the book tag number
+
+used for kvp management in sql backends.
+*/
+guint32 qof_book_get_idata (QofBook *book);
+
+void qof_book_set_version (QofBook *book, gint32 version);
+
+void qof_book_set_idata(QofBook *book, guint32 idata);
 
 /* @} */
 /* @} */

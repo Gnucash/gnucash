@@ -38,26 +38,26 @@
 
 #include "QuickFill.h"
 #include "combocell.h"
-#include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
 #include "table-allgui.h"
 
+#define KEY_AUTO_RAISE_LISTS	"auto_raise_lists"
 
 typedef struct _PopBox
 {
 	GList *menustrings;
 
 	GnucashSheet *sheet;
-	ItemEdit     *item_edit;
-	GNCItemList  *item_list;
+	GncItemEdit  *item_edit;
+	GncItemList  *item_list;
 
 	gboolean signals_connected; /* list signals connected? */
 
 	gboolean list_in_sync; /* list in sync with menustrings? */
-        gboolean list_sorted;  /* list has been sorted? */
         gboolean list_popped;  /* list is popped up? */
 
         gboolean autosize;
@@ -85,13 +85,38 @@ static gboolean gnc_combo_cell_enter (BasicCell *bcell,
 static void gnc_combo_cell_leave (BasicCell *bcell);
 static void gnc_combo_cell_destroy (BasicCell *bcell);
 
+static GOnce auto_pop_init_once = G_ONCE_INIT;
 static gboolean auto_pop_combos = FALSE;
 
+
+static void
+gnc_combo_cell_set_autopop (GConfEntry *entry, gpointer user_data)
+{
+	GConfValue *value;
+
+	value = gconf_entry_get_value(entry);
+	auto_pop_combos = gconf_value_get_bool(value);
+}
+
+static gpointer
+gnc_combo_cell_autopop_init (gpointer unused)
+{
+        auto_pop_combos = gnc_gconf_get_bool (GCONF_GENERAL_REGISTER, 
+                                              KEY_AUTO_RAISE_LISTS, 
+                                              NULL);
+
+        gnc_gconf_general_register_cb(KEY_AUTO_RAISE_LISTS,
+                                      gnc_combo_cell_set_autopop,
+                                      NULL);
+	return NULL;
+}
 
 BasicCell *
 gnc_combo_cell_new (void)
 {
 	ComboCell * cell;
+
+	g_once(&auto_pop_init_once, gnc_combo_cell_autopop_init, NULL);
 
         cell = g_new0 (ComboCell, 1);
 
@@ -122,7 +147,6 @@ gnc_combo_cell_init (ComboCell *cell)
 	box->menustrings = NULL;
 	box->signals_connected = FALSE;
 	box->list_in_sync = TRUE;
-        box->list_sorted = TRUE;
         box->list_popped = FALSE;
         box->autosize = FALSE;
 
@@ -141,7 +165,7 @@ gnc_combo_cell_init (ComboCell *cell)
 }
 
 static void
-select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
+select_item_cb (GncItemList *item_list, char *item_string, gpointer data)
 {
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
@@ -150,12 +174,12 @@ select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 	gnucash_sheet_modify_current_cell (box->sheet, item_string);
         box->in_list_select = FALSE;
 
-        item_edit_hide_popup (box->item_edit);
+        gnc_item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
 }
 
 static void
-change_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
+change_item_cb (GncItemList *item_list, char *item_string, gpointer data)
 {
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
@@ -166,17 +190,17 @@ change_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 }
 
 static void
-activate_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
+activate_item_cb (GncItemList *item_list, char *item_string, gpointer data)
 {
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
 
-        item_edit_hide_popup (box->item_edit);
+        gnc_item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
 }
 
 static void
-key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
+key_press_item_cb (GncItemList *item_list, GdkEventKey *event, gpointer data)
 {
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
@@ -184,7 +208,7 @@ key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
         switch (event->keyval)
         {
                 case GDK_Escape:
-                        item_edit_hide_popup (box->item_edit);
+                        gnc_item_edit_hide_popup (box->item_edit);
                         box->list_popped = FALSE;
                         break;
 
@@ -203,10 +227,8 @@ combo_disconnect_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        if (GTK_OBJECT_DESTROYED (GTK_OBJECT(box->item_list)))
-                return;
-
-	gtk_signal_disconnect_by_data (GTK_OBJECT(box->item_list), cell);
+	g_signal_handlers_disconnect_matched (G_OBJECT (box->item_list), G_SIGNAL_MATCH_DATA,
+					      0, 0, NULL, NULL, cell);
 
 	box->signals_connected = FALSE;
 }
@@ -219,20 +241,17 @@ combo_connect_signals (ComboCell *cell)
 	if (box->signals_connected)
 		return;
 
-        if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
-                return;
+        g_signal_connect (G_OBJECT (box->item_list), "select_item",
+                          G_CALLBACK (select_item_cb), cell);
 
-        gtk_signal_connect (GTK_OBJECT(box->item_list), "select_item",
-                            GTK_SIGNAL_FUNC(select_item_cb), cell);
+        g_signal_connect (G_OBJECT (box->item_list), "change_item",
+                          G_CALLBACK (change_item_cb), cell);
 
-        gtk_signal_connect (GTK_OBJECT(box->item_list), "change_item",
-                            GTK_SIGNAL_FUNC(change_item_cb), cell);
+        g_signal_connect (G_OBJECT (box->item_list), "activate_item",
+                          G_CALLBACK (activate_item_cb), cell);
 
-        gtk_signal_connect (GTK_OBJECT(box->item_list), "activate_item",
-                            GTK_SIGNAL_FUNC(activate_item_cb), cell);
-
-        gtk_signal_connect (GTK_OBJECT(box->item_list), "key_press_event",
-                            GTK_SIGNAL_FUNC(key_press_item_cb), cell);
+        g_signal_connect (G_OBJECT (box->item_list), "key_press_event",
+                          G_CALLBACK (key_press_item_cb), cell);
 
 	box->signals_connected = TRUE;
 }
@@ -245,7 +264,8 @@ block_list_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        gtk_signal_handler_block_by_data (GTK_OBJECT(box->item_list), cell);
+        g_signal_handlers_block_matched (G_OBJECT (box->item_list), G_SIGNAL_MATCH_DATA,
+					 0, 0, NULL, NULL, cell);
 }
 
 static void
@@ -256,7 +276,8 @@ unblock_list_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        gtk_signal_handler_unblock_by_data (GTK_OBJECT(box->item_list), cell);
+        g_signal_handlers_unblock_matched (G_OBJECT (box->item_list), G_SIGNAL_MATCH_DATA,
+					   0, 0, NULL, NULL, cell);
 }
 
 static void
@@ -270,7 +291,7 @@ gnc_combo_cell_gui_destroy (BasicCell *bcell)
 		if (box != NULL && box->item_list != NULL)
                 {
 			combo_disconnect_signals(cell);
-			gtk_object_unref(GTK_OBJECT(box->item_list));
+			g_object_unref (box->item_list);
 			box->item_list = NULL;
 		}
 
@@ -301,8 +322,8 @@ gnc_combo_cell_destroy (BasicCell *bcell)
         {
                 GList *node;
 
-		g_list_foreach(box->menustrings, menustring_free, NULL);
-		g_list_free(box->menustrings);
+		g_list_foreach (box->menustrings, menustring_free, NULL);
+		g_list_free (box->menustrings);
                 box->menustrings = NULL;
 
                 /* Don't destroy the qf if its not ours to destroy */
@@ -321,7 +342,7 @@ gnc_combo_cell_destroy (BasicCell *bcell)
                 g_list_free (box->ignore_strings);
                 box->ignore_strings = NULL;
 
-		g_free(box);
+		g_free (box);
 		cell->cell.gui_private = NULL;
 	}
 
@@ -364,7 +385,6 @@ gnc_combo_cell_clear_menu (ComboCell * cell)
         }
 
         box->list_in_sync = TRUE;
-        box->list_sorted = TRUE;
 }
 
 void
@@ -389,7 +409,7 @@ static void
 gnc_append_string_to_list (gpointer _string, gpointer _item_list)
 {
 	char *string = _string;
-	GNCItemList *item_list = GNC_ITEM_LIST (_item_list);
+	GncItemList *item_list = GNC_ITEM_LIST (_item_list);
 
 	gnc_item_list_append (item_list, string);
 }
@@ -403,15 +423,6 @@ gnc_combo_sync_edit_list(PopBox *box)
 	gnc_item_list_clear (box->item_list);
 	g_list_foreach (box->menustrings, gnc_append_string_to_list,
                         box->item_list);
-}
-
-static void
-gnc_combo_sort_edit_list(PopBox *box)
-{
-	if (box->list_sorted || box->item_list == NULL)
-		return;
-
-        gnc_item_list_sort(box->item_list);
 }
 
 void 
@@ -450,8 +461,52 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
         {
                 gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
         }
+}
 
-        box->list_sorted = FALSE;
+void 
+gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr)
+{ 
+	PopBox *box;
+	gchar *menu_copy, *value_copy;
+
+	if (cell == NULL)
+		return;
+	if (menustr == NULL)
+		return;
+
+	box = cell->cell.gui_private;
+	box->menustrings = g_list_append (box->menustrings,
+                                          g_strdup (menustr));
+
+	gnc_combo_sync_edit_list(box);
+
+	if (box->item_list != NULL)
+        {
+                block_list_signals (cell);
+
+                gnc_item_list_append (box->item_list, menustr);
+                if (cell->cell.value) {
+		    menu_copy = g_strdelimit(g_strdup(menustr), "-:/\\.", ' ');
+		    value_copy =
+			g_strdelimit(g_strdup(cell->cell.value), "-:/\\.", ' ');
+		    if (strcmp (menu_copy, value_copy) == 0) {
+			gnc_combo_cell_set_value (cell, menustr);
+                        gnc_item_list_select (box->item_list, menustr);
+		    }
+		    g_free(value_copy);
+		    g_free(menu_copy);
+		}
+                unblock_list_signals (cell);
+        }
+	else
+		box->list_in_sync = FALSE;
+
+        /* If we're going to be using a pre-fab quickfill, 
+         * then don't fill it in here */
+        if (FALSE == box->use_quickfill_cache)
+        {
+                gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
+        }
 }
 
 void
@@ -462,9 +517,9 @@ gnc_combo_cell_set_value (ComboCell *cell, const char *str)
 
 static void
 gnc_combo_cell_modify_verify (BasicCell *_cell,
-                              const GdkWChar *change,
+                              const char *change,
                               int change_len,
-                              const GdkWChar *newval,
+                              const char *newval,
                               int newval_len,
                               int *cursor_position,
                               int *start_selection,
@@ -475,10 +530,15 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         const char *match_str;
         QuickFill *match;
         gboolean pop_list;
+        glong newval_chars;
+        glong change_chars;
+    
+        newval_chars = g_utf8_strlen (newval, newval_len);
+        change_chars = g_utf8_strlen (change, change_len);
 
         if (box->in_list_select)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
 
                 *cursor_position = -1;
                 *start_selection = 0;
@@ -490,14 +550,14 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
         /* If deleting, just accept */
         if (change == NULL)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
                 return;
         }
 
         /* If we are inserting in the middle, just accept */
-        if (*cursor_position < _cell->value_len)
+        if (*cursor_position < _cell->value_chars)
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
                 return;
         }
 
@@ -507,7 +567,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
 
         if ((match == NULL) || (match_str == NULL))
         {
-                gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+                gnc_basic_cell_set_value_internal (_cell, newval);
 
                 block_list_signals (cell);
                 gnc_item_list_select (box->item_list, NULL);
@@ -516,9 +576,9 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
                 return;
         }
 
-        *start_selection = newval_len;
+        *start_selection = newval_chars;
         *end_selection = -1;
-        *cursor_position += change_len;
+        *cursor_position += change_chars;
 
         if (!box->list_popped)
                 pop_list = auto_pop_combos;
@@ -527,7 +587,7 @@ gnc_combo_cell_modify_verify (BasicCell *_cell,
 
         if (pop_list)
         {
-                item_edit_show_popup (box->item_edit);
+                gnc_item_edit_show_popup (box->item_edit);
                 box->list_popped = TRUE;
         }
 
@@ -577,7 +637,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
                                 return FALSE;
 
                         match = gnc_quickfill_get_string_len_match
-                                (box->qf, bcell->value_w, *cursor_position);
+                                (box->qf, bcell->value, *cursor_position);
                         if (match == NULL)
                                 return TRUE;
 
@@ -618,28 +678,34 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
                 return FALSE;
 
-        if ((*cursor_position < bcell->value_len) &&
-            ((*end_selection < bcell->value_len) ||
+        if ((*cursor_position < bcell->value_chars) &&
+            ((*end_selection < bcell->value_chars) ||
              (*cursor_position < *start_selection)))
                 return FALSE;
 
-        if ((*cursor_position == bcell->value_len) &&
+        if ((*cursor_position == bcell->value_chars) &&
             (*start_selection != *end_selection) &&
-            (*end_selection < bcell->value_len))
+            (*end_selection < bcell->value_chars))
                 return FALSE;
 
         find_pos = -1;
-        if (*cursor_position < bcell->value_len)
+        if (*cursor_position < bcell->value_chars)
         {
                 int i = *cursor_position;
-
-                while (bcell->value_w[i])
+                const char *c;
+                gunichar uc;
+              
+                c = g_utf8_offset_to_pointer (bcell->value, i);
+                while (*c)
                 {
-                        if (bcell->value_w[i++] == box->complete_char)
-                        {
-                                find_pos = i;
-                                break;
-                        }
+                    uc = g_utf8_get_char (c);
+                    if (uc == box->complete_char)
+                    {
+                        find_pos = (i + 1);
+                        break;
+                    }
+                    c = g_utf8_next_char (c);
+                    i++;
                 }
         }
 
@@ -652,12 +718,12 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         }
         else
         {
-                new_pos = bcell->value_len;
+                new_pos = bcell->value_chars;
                 extra_colon = TRUE;
         }
 
         match = gnc_quickfill_get_string_len_match (box->qf,
-                                                    bcell->value_w, new_pos);
+                                                    bcell->value, new_pos);
         if (match == NULL)
                 return FALSE;
 
@@ -696,15 +762,15 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 {
 	GnucashSheet *sheet = data;
 	GnomeCanvasItem *item = sheet->item_editor;
-	ItemEdit *item_edit = ITEM_EDIT (item);
+	GncItemEdit *item_edit = GNC_ITEM_EDIT (item);
 	ComboCell *cell = (ComboCell *) bcell;
 	PopBox *box = cell->cell.gui_private;
 
 	/* initialize gui-specific, private data */
 	box->sheet = sheet;
 	box->item_edit = item_edit;
-	box->item_list = item_edit_new_list(box->item_edit);
-	gtk_object_ref (GTK_OBJECT(box->item_list));
+	box->item_list = gnc_item_edit_new_list(box->item_edit);
+	g_object_ref (box->item_list);
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 
 	/* to mark cell as realized, remove the realize method */
@@ -724,7 +790,7 @@ gnc_combo_cell_gui_move (BasicCell *bcell)
 
 	combo_disconnect_signals ((ComboCell *) bcell);
 
-	item_edit_set_popup (box->item_edit, NULL, NULL,
+	gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                              NULL, NULL, NULL, NULL, NULL);
 
         box->list_popped = FALSE;
@@ -756,7 +822,7 @@ static void
 popup_set_focus (GnomeCanvasItem *item,
                  gpointer user_data)
 {
-        gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (item)->clist));
+        gtk_widget_grab_focus (GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view));
 }
 
 static void
@@ -778,7 +844,7 @@ static int
 popup_get_width (GnomeCanvasItem *item,
                  gpointer user_data)
 {
-        return GTK_WIDGET (GNC_ITEM_LIST (item)->clist)->allocation.width;
+        return GTK_WIDGET (GNC_ITEM_LIST (item)->tree_view)->allocation.width;
 }
 
 static gboolean
@@ -799,9 +865,8 @@ gnc_combo_cell_enter (BasicCell *bcell,
                 return FALSE;
 
 	gnc_combo_sync_edit_list (box);
-        gnc_combo_sort_edit_list (box);
 
-	item_edit_set_popup (box->item_edit,
+	gnc_item_edit_set_popup (box->item_edit,
                              GNOME_CANVAS_ITEM (box->item_list),
                              get_popup_height, popup_autosize,
                              popup_set_focus, popup_post_show,
@@ -827,7 +892,7 @@ gnc_combo_cell_leave (BasicCell *bcell)
 
 	combo_disconnect_signals ((ComboCell *) bcell);
 
-	item_edit_set_popup (box->item_edit, NULL, NULL,
+	gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                              NULL, NULL, NULL, NULL, NULL);
 
         box->list_popped = FALSE;
@@ -911,12 +976,6 @@ gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize)
                 return;
 
         box->autosize = autosize;
-}
-
-void
-gnc_combo_cell_set_autopop (gboolean auto_pop_combos_arg)
-{
-        auto_pop_combos = auto_pop_combos_arg;
 }
 
 /*

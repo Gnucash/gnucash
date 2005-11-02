@@ -3,3 +3,5 @@ doxygen.log
 html
 Makefile
 Makefile.in
+.DS_Store
+

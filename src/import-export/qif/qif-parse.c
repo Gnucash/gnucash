@@ -36,7 +36,7 @@
 #include <stdarg.h>
 
 #include "messages.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 #include "qif-import-p.h"
@@ -44,7 +44,7 @@
 
 #include "import-parse.h"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* An array of handlers for the various bang-types */
 static QifHandler qif_handlers[QIF_TYPE_MAX+1] = { NULL };

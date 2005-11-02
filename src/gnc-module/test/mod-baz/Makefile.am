@@ -10,7 +10,6 @@ PWD := $(shell pwd)
 checklibdir = ${PWD}
 checklib_LTLIBRARIES = libbaz.la libgncmodbaz.la
 
-libbaz_la_LDFLAGS = -module
 libbaz_la_SOURCES = baz.c
 
 noinst_HEADERS = \
@@ -18,7 +17,6 @@ noinst_HEADERS = \
   baz-gwrap.h
 
 libgncmodbaz_la_SOURCES = baz-gwrap.c gnc-mod-baz.c
-libgncmodbaz_la_LDFLAGS = -module
 
 libgncmodbaz_la_LIBADD = ../mod-foo/libfoo.la libbaz.la
 

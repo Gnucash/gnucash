@@ -27,7 +27,7 @@
 #include "Scrub.h"
 #include "SchedXaction.h"
 #include "datecell.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "recncell.h"
@@ -46,7 +46,7 @@ struct sr_save_data
 };
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_LEDGER;
+static QofLogModule log_module = GNC_MOD_LEDGER;
 
 
 static void

@@ -33,10 +33,7 @@
 #include "sixtp-parsers.h"
 #include "sixtp-stack.h"
 
-#include "gnc-engine-util.h"
-
-
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /************************************************************************/
 gboolean
@@ -431,11 +428,11 @@ sixtp_sax_start_handler(void *user_data,
                                           pdata->global_data,
                                           &(current_frame->frame_data),
                                           current_frame->tag,
-                                          name);
+                                          (gchar*) name);
   }
 
   /* now allocate the new stack frame and shift to it */
-  new_frame = sixtp_stack_frame_new(next_parser, g_strdup(name));
+  new_frame = sixtp_stack_frame_new( next_parser, g_strdup((char*) name));
 
   new_frame->line = getLineNumber( pdata->saxParserCtxt );
   new_frame->col  = getColumnNumber( pdata->saxParserCtxt );
@@ -450,7 +447,7 @@ sixtp_sax_start_handler(void *user_data,
                                  pdata->global_data,
                                  &new_frame->data_for_children,
                                  &new_frame->frame_data,
-                                 name,
+                                 (gchar*) name,
                                  (gchar**)attrs);
   }
 }
@@ -471,7 +468,7 @@ sixtp_sax_characters_handler(void *user_data, const xmlChar *text, int len)
                                         frame->data_for_children,
                                         pdata->global_data,
                                         &result,
-                                        text,
+                                        (gchar*) text,
                                         len);
     if(pdata->parsing_ok && result)
     {
@@ -504,13 +501,13 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
 
   /* time to make sure we got the right closing tag.  Is this really
      necessary? */
-  if(safe_strcmp(current_frame->tag, name) != 0) 
+  if(safe_strcmp(current_frame->tag, (gchar*) name) != 0) 
   {
     PWARN ("bad closing tag (start <%s>, end <%s>)", current_frame->tag, name);
     pdata->parsing_ok = FALSE;
 
     /* See if we're just off by one and try to recover */
-    if(safe_strcmp(parent_frame->tag, name) == 0) {
+    if(safe_strcmp(parent_frame->tag, (gchar*) name) == 0) {
       pdata->stack = sixtp_pop_and_destroy_frame(pdata->stack);
       current_frame = (sixtp_stack_frame *) pdata->stack->data;
       parent_frame = (sixtp_stack_frame *) pdata->stack->next->data;
@@ -594,7 +591,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
 }
 
 xmlEntityPtr
-sixtp_sax_get_entity_handler(void *user_data, const CHAR *name) 
+sixtp_sax_get_entity_handler(void *user_data, const xmlChar *name) 
 {
   return xmlGetPredefinedEntity(name);
 }
@@ -729,9 +726,11 @@ sixtp_parse_file(sixtp *sixtp,
                  gpointer global_data,
                  gpointer *parse_result) 
 {
-  xmlParserCtxtPtr context = xmlCreateFileParserCtxt( filename );
-  return sixtp_parse_file_common(sixtp, context, data_for_top_level,
-				 global_data, parse_result);
+    gboolean ret;
+    xmlParserCtxtPtr context = xmlCreateFileParserCtxt( filename );
+    ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
+                                  global_data, parse_result);
+    return ret;
 }
 
 gboolean
@@ -742,9 +741,11 @@ sixtp_parse_buffer(sixtp *sixtp,
                    gpointer global_data,
                    gpointer *parse_result) 
 {
-  xmlParserCtxtPtr context = xmlCreateMemoryParserCtxt( bufp, bufsz );
-  return sixtp_parse_file_common(sixtp, context, data_for_top_level,
-				 global_data, parse_result);
+    gboolean ret;
+    xmlParserCtxtPtr context = xmlCreateMemoryParserCtxt( bufp, bufsz );
+    ret = sixtp_parse_file_common(sixtp, context, data_for_top_level,
+                                  global_data, parse_result);
+    return ret;
 }
 
 /***********************************************************************/
@@ -797,8 +798,9 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
   g_return_val_if_fail(first_tag, FALSE);
   
   f = fopen(filename, "r");
-  if (f == NULL)
+  if (f == NULL) {
     return FALSE;
+  }
 
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   fclose(f);

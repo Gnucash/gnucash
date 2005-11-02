@@ -162,7 +162,7 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
 {
   g_assert (parent);
   
-  if (g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)) {
+  if (g_file_test (filename, G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
     return TRUE;
   }
 
@@ -177,7 +177,7 @@ gboolean
 gnc_test_dir_exist_error (GtkWindow *parent, const char *filename) 
 {
   char *dirname = g_dirname (filename);
-  gboolean dirtest = g_file_test (dirname, G_FILE_TEST_ISDIR);
+  gboolean dirtest = g_file_test (dirname, G_FILE_TEST_IS_DIR);
   g_free (dirname);
   if (!dirtest) {
     gnc_error_dialog

@@ -38,7 +38,7 @@
  *  dialog stating there's nothing to do.]
  **/
 gint gnc_ui_sxsincelast_dialog_create( void );
-void gnc_ui_sxsincelast_guile_wrapper( char* );
+void gnc_sx_sxsincelast_book_opened (void);
 
 /**
  * Returns the varaibles from the Splits of the given SchedXaction as the

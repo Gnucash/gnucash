@@ -48,9 +48,9 @@ void gnc_xfer_dialog_close( XferDialog * );
 /*********** Access routines ***********/
 void gnc_xfer_dialog_set_title( XferDialog *, const gchar * );
 
-/** Set the label of the topmost frame */
-void gnc_xfer_dialog_set_information_frame_label( XferDialog *,
-                                                  const gchar * );
+/** Set the label of the topmost table */
+void gnc_xfer_dialog_set_information_label( XferDialog *,
+					    const gchar * );
 
 /** Add a button with a user-specified label and "clicked" callback.
  * For now this doesn't offer a lot of flexibility, but it doesn't have to.
@@ -60,12 +60,12 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
                                                 GtkSignalFunc callback,
                                                 gpointer user_data );
 
-void gnc_xfer_dialog_toggle_currency_frame( XferDialog *xferData,
-                                            gboolean show_frame );
+void gnc_xfer_dialog_toggle_currency_table ( XferDialog *xferData,
+					     gboolean show_table );
 
-void gnc_xfer_dialog_set_from_account_frame_label( XferDialog *,
-                                                   const gchar * );
-void gnc_xfer_dialog_set_to_account_frame_label( XferDialog *, const gchar * );
+void gnc_xfer_dialog_set_from_account_label( XferDialog *,
+					     const gchar * );
+void gnc_xfer_dialog_set_to_account_label( XferDialog *, const gchar * );
 
 /** Set the buttons for "Show Income/Expense" */
 void gnc_xfer_dialog_set_from_show_button_active( XferDialog *, gboolean );
@@ -148,7 +148,7 @@ void gnc_xfer_dialog_quickfill_to_account(XferDialog *xferData,
 
 /**
  *   Set the dialog as an "exchange-dialog", which means that the   
- *   Transfer Information frame is read-only (and the dialog        
+ *   Transfer Information table read-only (and the dialog        
  *   will NOT create a transaction when it is closed).               
  *
  * In other words: Indicate that this is just trying to obtain the

@@ -1,17 +1,35 @@
+/***************************************************************************
+ *            test-split-vs-account.c
+ *
+ *  Tue Sep 27 19:44:50 2005
+ *  Copyright  2005  GnuCash team
+ *  linux@codehelp.co.uk
+ ****************************************************************************/
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
 
 #include <glib.h>
-#include <libguile.h>
-
+#include "qof.h"
+#include "cashobjects.h"
 #include "AccountP.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
-#include "gnc-module.h"
-#include "qofsession.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
 #include "Transaction.h"
-#include "guid.h"
-
 
 static void
 run_test (void)
@@ -31,27 +49,30 @@ run_test (void)
         failure("act1 not created");
         return;
     }
-    
+    success("act1 created");
     act2 = get_random_account(book);
     if(!act2)
     {
         failure("act2 not created");
         return;
     }
-
-    spl = get_random_split(book, act1);
+	success("act2 created");
+	/* if we use a trans here, the scrub routines
+	 will add a pointer to a newly created Orphan-...
+	account. */
+    spl = get_random_split(book, act1, NULL);
     if(!spl)
     {
         failure("spl not created");
         return;
     }
-
+	success("random split created");
     if(act1 != xaccSplitGetAccount(spl))
     {
         failure("xaccAccountInsertSplit is broken");
         return;
     }
-
+	success("xaccAccountInsertSplit works");
     /* this is weird -- we are testing an engine private function.
      * is this really what is intended here ??? */
     xaccAccountRemoveSplit (act1, spl);
@@ -62,26 +83,18 @@ run_test (void)
 		     __FILE__, __LINE__, "account not NULL");
         return;
     }
-}
-
-static void
-main_helper (void *closure, int argc, char **argv)
-{
-  gnc_module_load("gnucash/engine", 0);
-
-  xaccLogDisable ();
-
-  run_test ();
-
-  success("split account crap seems to work");
-
-  print_test_results();
-  exit(get_rv());
+	success("xaccSplitGetAccount works");
 }
 
 int
 main (int argc, char **argv)
 {
-  scm_boot_guile (argc, argv, main_helper, NULL);
+	qof_init();
+	if(cashobjects_register()) {
+  xaccLogDisable ();
+  run_test ();
+  print_test_results();
+	}
+	qof_close();
   return 0;
 }

@@ -46,16 +46,11 @@
 #include "gncTaxTableP.h"
 #include "gnc-vendor-xml-v2.h"
 #include "gnc-address-xml-v2.h"
-#include "gnc-engine-util.h"
-
-#include "qofinstance.h"
-#include "qofobject.h"
-
 #include "xml-helpers.h"
 
 #define _GNC_MOD_NAME	GNC_ID_VENDOR
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *vendor_version_string = "2.0.0";
 
@@ -81,8 +76,8 @@ vendor_dom_tree_create (GncVendor *vendor)
     GncBillTerm *term;
     GncTaxTable *taxtable;
 
-    ret = xmlNewNode(NULL, gnc_vendor_string);
-    xmlSetProp(ret, "version", vendor_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_vendor_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST vendor_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(vendor_guid_string,
 				      qof_instance_get_guid (QOF_INSTANCE(vendor))));
@@ -130,7 +125,7 @@ vendor_dom_tree_create (GncVendor *vendor)
 struct vendor_pdata
 {
   GncVendor *vendor;
-  GNCBook *book;
+  QofBook *book;
 };
 
 static gboolean
@@ -335,7 +330,7 @@ static struct dom_tree_handler vendor_handlers_v2[] = {
 };
 
 static GncVendor*
-dom_tree_to_vendor (xmlNodePtr node, GNCBook *book)
+dom_tree_to_vendor (xmlNodePtr node, QofBook *book)
 {
     struct vendor_pdata vendor_pdata;
     gboolean successful;
@@ -369,7 +364,7 @@ gnc_vendor_end_handler(gpointer data_for_children,
     GncVendor *vendor;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
-    GNCBook *book = gdata->bookdata;
+    QofBook *book = gdata->bookdata;
 
     successful = TRUE;
 
@@ -426,7 +421,7 @@ do_count (QofEntity * vendor_p, gpointer count_p)
 }
 
 static int
-vendor_get_count (GNCBook *book)
+vendor_get_count (QofBook *book)
 {
   int count = 0;
   qof_object_foreach (_GNC_MOD_NAME, book, do_count, (gpointer) &count);
@@ -450,9 +445,16 @@ xml_add_vendor (QofEntity * vendor_p, gpointer out_p)
 }
 
 static void
-vendor_write (FILE *out, GNCBook *book)
+vendor_write (FILE *out, QofBook *book)
 {
   qof_object_foreach (_GNC_MOD_NAME, book, xml_add_vendor, (gpointer) out);
+}
+
+static void
+vendor_ns(FILE *out)
+{
+  g_return_if_fail(out);
+  gnc_xml2_write_namespace_decl(out, "vendor");
 }
 
 void
@@ -466,6 +468,7 @@ gnc_vendor_xml_initialize (void)
     vendor_get_count,
     vendor_write,
     NULL,			/* scrub */
+    vendor_ns,
   };
 
   qof_object_register_backend (_GNC_MOD_NAME,

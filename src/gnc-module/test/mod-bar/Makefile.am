@@ -9,7 +9,6 @@ PWD := $(shell pwd)
 checklibdir=${PWD}
 checklib_LTLIBRARIES = libbar.la libgncmodbar.la
 
-libbar_la_LDFLAGS = -module
 libbar_la_SOURCES = bar.c
 
 noinst_HEADERS = \
@@ -17,7 +16,7 @@ noinst_HEADERS = \
   bar-gwrap.h
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
-libgncmodbar_la_LDFLAGS=-module
+
 libgncmodbar_la_LIBADD=libbar.la
 
 EXTRA_DIST = \

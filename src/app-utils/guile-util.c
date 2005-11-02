@@ -22,10 +22,10 @@
 
 #include <string.h>
 
-#include "global-options.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
+#include "gnc-gconf-utils.h"
 #include "guile-util.h"
 #include "messages.h"
 
@@ -34,7 +34,7 @@
 #include "guile-mappings.h"
 
 /* This static indicates the debugging module this .o belongs to.  */
-static short module = MOD_GUILE;
+static QofLogModule log_module = GNC_MOD_GUILE;
 
 
 struct _setters
@@ -141,7 +141,7 @@ gnc_guile_call1_to_string(SCM func, SCM arg)
     value = scm_call_1(func, arg);
 
     if (SCM_STRINGP(value))
-      return gh_scm2newstr(value, NULL);
+      return g_strdup(SCM_STRING_CHARS(value));
     else
     {
       PERR("bad value\n");
@@ -176,7 +176,7 @@ gnc_guile_call1_symbol_to_string(SCM func, SCM arg)
     value = scm_call_1(func, arg);
 
     if (SCM_SYMBOLP(value))
-      return gh_symbol2newstr(value, NULL);
+      return g_strdup(SCM_SYMBOL_CHARS(value));
     else
     {
       PERR("bad value\n");
@@ -645,7 +645,7 @@ gnc_split_scm_get_memo(SCM split_scm)
   if (!SCM_STRINGP(result))
     return NULL;
 
-  return gh_scm2newstr(result, NULL);
+  return g_strdup(SCM_STRING_CHARS(result));
 }
 
 
@@ -670,7 +670,7 @@ gnc_split_scm_get_action(SCM split_scm)
   if (!SCM_STRINGP(result))
     return NULL;
 
-  return gh_scm2newstr(result, NULL);
+  return g_strdup(SCM_STRING_CHARS(result));
 }
 
 
@@ -1089,14 +1089,13 @@ char *
 gnc_get_debit_string(GNCAccountType account_type)
 {
   const char *type_string;
-  char *string;
-  char *temp;
+  const gchar *string;
   SCM result;
   SCM arg;
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Debit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
@@ -1110,16 +1109,10 @@ gnc_get_debit_string(GNCAccountType account_type)
   if (!SCM_STRINGP(result))
     return NULL;
 
-  string = gh_scm2newstr(result, NULL);
+  string = SCM_STRING_CHARS(result);
   if (string)
-  {
-    temp = g_strdup (string);
-    free (string);
-  }
-  else
-    temp = NULL;
-
-  return temp;
+    return g_strdup(string);
+  return NULL;
 }
 
 
@@ -1134,14 +1127,13 @@ char *
 gnc_get_credit_string(GNCAccountType account_type)
 {
   const char *type_string;
-  char *string;
-  char *temp;
+  const gchar *string;
   SCM result;
   SCM arg;
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Credit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
@@ -1155,16 +1147,8 @@ gnc_get_credit_string(GNCAccountType account_type)
   if (!SCM_STRINGP(result))
     return NULL;
 
-  string = gh_scm2newstr(result, NULL);
+  string = SCM_STRING_CHARS(result);
   if (string)
-  {
-    temp = g_strdup (string);
-    free (string);
-  }
-  else
-    temp = NULL;
-
-  return temp;
+    return g_strdup(string);
+  return NULL;
 }
-
-

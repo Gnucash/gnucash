@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/********************************************************************\
+/* *******************************************************************\
 This file contains private definitions and should not be used by
 other parts of the engine. This is private data and is subject to
 change.
@@ -34,30 +34,7 @@ Currently the only files which include this file are:
 #define XACC_FREQSPECP_H
 
 #include "FreqSpec.h"
-#include "qofid.h"
 
-/**
- * Scheduled transactions have a frequency defined by a frequency
- * specifier.  This specifier, given a start date, end date [present
- * in the scheduled transaction] and last occurance date [possibly not
- * present] can be used to determine that a s.transaction should be
- * instantiated on a given date [the given query date].
- *
- * There is a split between the UIFreqType and the 'internal' FreqType
- * to reduce the complexity of some of the code involved.
- *
- * Hmmm... having this in the private header file actually prevents
- * client code from allocating this 'class' on the stack.
- * Is that a problem?
- *
- * This still needs to deal with:
- * . exceptions
- * . 13 periods: (4 weeks/period 4x13=52 weeks/year)
- * . yearly 360/365?
- * . re-based frequencies [based around a non-standard [read:
- *   not-Jan-1-based/fiscal] year]
- * . "business days" -- m-f sans holidays [per-user list thereof]
- **/
 struct gncp_freq_spec 
 {
         QofEntity       entity;
@@ -65,13 +42,13 @@ struct gncp_freq_spec
         UIFreqType      uift;
         union u {
                 struct {
-                         /** The date on which the single event occurs. */
+                         /* The date on which the single event occurs. */
                         GDate date;
                 } once;
                 struct {
-                         /** number of days from one repeat to the next. */
+                         /* number of days from one repeat to the next. */
                         guint interval_days;
-                         /** epoch is defined by glib to be 1/1/1. Offset
+                         /* epoch is defined by glib to be 1/1/1. Offset
                              measured in days. 0 <= offset < interval */
                         guint offset_from_epoch;
                 } daily;
@@ -79,16 +56,16 @@ struct gncp_freq_spec
                         /* A week here is measured as 7 days. The first week starts at epoch.
                          * 1/1/1 was a ?. */
 
-                        /** number of weeks from one repeat to the next. */
+                        /* number of weeks from one repeat to the next. */
                         guint interval_weeks;
                          /* offset measured in days.  This combines the week
                           * offset and the day of the week offset.  */
                         guint offset_from_epoch;
-/*                        guint offset_from_epoch;*/ /* offset measured in weeks, 0 <= offset < interval */
-/*                        guint day_of_week;*/ /* I'm not sure what days each value represents, but it's not important. */
+                         /* guint offset_from_epoch;*/ /* offset measured in weeks, 0 <= offset < interval */
+                         /* guint day_of_week;*/ /* I'm not sure what days each value represents, but it's not important. */
                 } weekly;
                 struct {
-                         /** number of months from one repeat to the next. */
+                         /* number of months from one repeat to the next. */
                         guint interval_months;
                          /* offset measured in months */
                         guint offset_from_epoch;
@@ -96,7 +73,7 @@ struct gncp_freq_spec
                         guint day_of_month;
                 } monthly;
                 struct {
-                         /** Number of months from one repeat to the next. */
+                         /* Number of months from one repeat to the next. */
                         guint interval_months;
                          /* offset measured in months */
                         guint offset_from_epoch;
@@ -106,10 +83,12 @@ struct gncp_freq_spec
                         guint occurrence;
                 } month_relative;
                 struct {
-                        /** A list of specs for a composite freq. */
+                        /* A list of specs for a composite freq. */
                         GList *subSpecs;
                 } composites;
         } s;
+        /* temporary storage for QOF */
+        gint            value;
 };
 
 #endif /* XACC_FREQSPECP_H */

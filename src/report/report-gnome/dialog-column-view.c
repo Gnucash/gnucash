@@ -123,10 +123,8 @@ update_display_lists(gnc_column_view_edit * view) {
     for(i = 0; !SCM_NULLP(names); names = SCM_CDR(names), i++) {
       if (SCM_EQUALP (SCM_CAR(names), selection))
         row = i;
-      name[0] = gh_scm2newstr(scm_call_1(template_menu_name, SCM_CAR(names)),
-			      NULL);
+      name[0] = SCM_STRING_CHARS(scm_call_1(template_menu_name, SCM_CAR(names)));
       gtk_clist_append(view->available, name);
-      free(name[0]);
     }
   }
   gtk_clist_select_row(view->available, row, 0);
@@ -158,13 +156,13 @@ update_display_lists(gnc_column_view_edit * view) {
       this_report = scm_call_1(find_report, SCM_CAAR(contents));
       /* this_name = scm_call_1(report_name, this_report); */
       this_name = scm_call_1(report_menu_name, this_report);
-      name[0] = gh_scm2newstr(this_name, NULL);
+      name[0] = g_strdup(SCM_STRING_CHARS(this_name));
       name[1] = g_strdup_printf("%d", scm_num2int(SCM_CADR(SCM_CAR(contents)),
 						  SCM_ARG1, __FUNCTION__));
       name[2] = g_strdup_printf("%d", scm_num2int(SCM_CADDR(SCM_CAR(contents)),
 						  SCM_ARG1, __FUNCTION__));
       gtk_clist_append(view->contents, name);
-      free(name[0]);
+      g_free(name[0]);
       g_free(name[1]);
       g_free(name[2]);
     }
@@ -231,7 +229,7 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
     GladeXML *xml;
 
-    r->optwin = gnc_options_dialog_new(TRUE, NULL);
+    r->optwin = gnc_options_dialog_new(NULL);
 
     xml = gnc_glade_xml_new ("report.glade", "view_contents_hbox");
 
@@ -278,10 +276,10 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     scm_gc_protect_object(r->available_list);
     scm_gc_protect_object(r->contents_list);
 
-    gtk_signal_connect(GTK_OBJECT(r->available), "select_row", 
-                       gnc_column_view_select_avail_cb, (gpointer)r);
-    gtk_signal_connect(GTK_OBJECT(r->contents), "select_row", 
-                       gnc_column_view_select_contents_cb, (gpointer)r);
+    g_signal_connect(G_OBJECT(r->available), "select_row", 
+                     G_CALLBACK (gnc_column_view_select_avail_cb), (gpointer)r);
+    g_signal_connect(G_OBJECT(r->contents), "select_row", 
+                     G_CALLBACK (gnc_column_view_select_contents_cb), (gpointer)r);
 
     update_display_lists(r);
 

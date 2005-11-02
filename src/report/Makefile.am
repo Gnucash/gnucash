@@ -2,11 +2,11 @@ NONGUI_SUBDIRS = \
   report-system \
   standard-reports \
   utility-reports \
-  locale-specific \
-  stylesheets
+  locale-specific
 
 GUI_SUBDIRS = \
-  report-gnome
+  report-gnome \
+  stylesheets
 
 if GNUCASH_ENABLE_GUI
 SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS)

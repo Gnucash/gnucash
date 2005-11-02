@@ -30,13 +30,13 @@
 #include <string.h>
 #include "Account.h"
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 #include "qif-import-p.h"
 #include "qif-objects-p.h"
 #include "qif-defaults.h"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* create a new object of type t, with type-string type and
  * destroy function dest.  Requires 'obj' to be set.

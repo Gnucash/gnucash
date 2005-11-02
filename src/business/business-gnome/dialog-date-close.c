@@ -53,7 +53,10 @@ typedef struct _dialog_date_close_window {
   gboolean answer;
 } DialogDateClose;
 
-static void
+void gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data);
+
+
+void
 gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 {
   DialogDateClose *ddc = user_data;
@@ -88,22 +91,6 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
   if (ddc->question_check)
 	  ddc->answer = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ddc->question_check));
   ddc->retval = TRUE;
-  gnome_dialog_close (GNOME_DIALOG (ddc->dialog));
-}
-
-static void
-gnc_dialog_date_close_cancel_cb (GtkWidget *widget, gpointer user_data)
-{
-  DialogDateClose *ddc = user_data;
-  ddc->retval = FALSE;
-  gnome_dialog_close (GNOME_DIALOG (ddc->dialog));
-}
-
-static gint
-gnc_dialog_date_close_cb (GnomeDialog *dialog, gpointer data)
-{
-  gtk_main_quit ();
-  return FALSE;
 }
 
 static void
@@ -131,9 +118,11 @@ build_date_close_window (GtkWidget *hbox, const char *message)
   /* Make noises, basically */
   gnome_triggers_vdo(message, GNOME_MESSAGE_BOX_QUESTION, NULL);
 
-  s = gnome_unconditional_pixmap_file("gnome-question.png");
+  s = gnome_program_locate_file (NULL,
+				 GNOME_FILE_DOMAIN_PIXMAP,
+				 "gnome-question.png", TRUE, NULL);
   if (s) {
-    pixmap = gnome_pixmap_new_from_file(s);
+    pixmap = gtk_image_new_from_file(s);
     g_free(s);
   }
 
@@ -188,27 +177,28 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
   gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
+    gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
 
   build_date_close_window (hbox, message);
 
   gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ts);
   gtk_label_set_text (GTK_LABEL (label), label_message);
 
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 0,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_ok_cb), ddc);
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 1,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_cancel_cb), ddc);
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ddc);
 
-  gtk_signal_connect (GTK_OBJECT(ddc->dialog), "close",
-                      GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
-
-  gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
   gtk_widget_show_all (ddc->dialog);
-  gtk_main ();
 
+  ddc->retval = FALSE;
+  while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK) {
+    /* If reponse is OK but flag is not set, try again */
+    if (ddc->retval)
+      break;
+  }
+
+  gtk_widget_destroy(ddc->dialog);
   retval = ddc->retval;
   g_list_free (ddc->acct_types);
   g_free (ddc);
@@ -283,7 +273,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
   ddc->question_check = glade_xml_get_widget(xml, "question_check");
   
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
+    gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
 
   build_date_close_window (hbox, message);
 
@@ -310,8 +300,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
   /* Deal with the terms handling of the due date */
   if (terms) {
-    gtk_signal_connect (GTK_OBJECT (ddc->post_date), "date_changed",
-			post_date_changed_cb, ddc);
+    g_signal_connect (G_OBJECT (ddc->post_date), "date_changed",
+		      G_CALLBACK (post_date_changed_cb), ddc);
     gtk_widget_set_sensitive (ddc->date, FALSE);
     post_date_changed_cb (GNC_DATE_EDIT (ddc->post_date), ddc);
   } else
@@ -320,21 +310,21 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
   /* Setup the account widget */
   fill_in_acct_info (ddc);
 
-  /* Connect the buttons */
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 0,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_ok_cb), ddc);
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 1,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_cancel_cb), ddc);
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ddc);
 
-  gtk_signal_connect (GTK_OBJECT(ddc->dialog), "close",
-                      GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
-
-  gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
   gtk_widget_show_all (ddc->dialog);
-  gtk_main ();
 
+  ddc->retval = FALSE;
+  while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK) {
+    /* If reponse is OK but flag is not set, try again */
+    if (ddc->retval)
+      break;
+  }
+
+  gtk_widget_destroy(ddc->dialog);
   retval = ddc->retval;
   *acct = ddc->acct;
   if (question_check_message)
@@ -383,7 +373,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
+    gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
 
   build_date_close_window (hbox, message);
 
@@ -399,18 +389,11 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   /* Setup the account widget */
   fill_in_acct_info (ddc);
 
-  /* Connect the buttons */
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 0,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_ok_cb), ddc);
-  gnome_dialog_button_connect
-    (GNOME_DIALOG(ddc->dialog), 1,
-     GTK_SIGNAL_FUNC(gnc_dialog_date_close_cancel_cb), ddc);
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     ddc);
 
-  gtk_signal_connect (GTK_OBJECT(ddc->dialog), "close",
-                      GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
-
-  gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
   gtk_widget_show_all (ddc->dialog);
 
   gtk_widget_hide_all (glade_xml_get_widget (xml, "postdate_label"));
@@ -418,8 +401,14 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gtk_widget_hide_all (glade_xml_get_widget (xml, "memo_entry"));
   gtk_widget_hide_all (glade_xml_get_widget (xml, "memo_label"));
 
-  gtk_main ();
+  ddc->retval = FALSE;
+  while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK) {
+    /* If reponse is OK but flag is not set, try again */
+    if (ddc->retval)
+      break;
+  }
 
+  gtk_widget_destroy(ddc->dialog);
   retval = ddc->retval;
   *acct = ddc->acct;
   g_free (ddc);

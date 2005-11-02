@@ -34,6 +34,7 @@
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-numeric.h"
+#include "Recurrence.h"
 #include "kvp_frame.h"
 #include "qofid.h"
 
@@ -44,10 +45,11 @@ xmlNodePtr commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c);
 xmlNodePtr timespec_to_dom_tree(const char *tag, const Timespec *spec);
 gchar * timespec_nsec_to_string(const Timespec *ts);
 gchar * timespec_sec_to_string(const Timespec *ts);
-xmlNodePtr gdate_to_dom_tree(const char *tag, GDate *spec);
+xmlNodePtr gdate_to_dom_tree(const char *tag, const GDate *spec);
 xmlNodePtr gnc_numeric_to_dom_tree(const char *tag, const gnc_numeric *num);
 xmlNodePtr kvp_frame_to_dom_tree(const char *tag, const kvp_frame *frame);
 xmlNodePtr guint_to_dom_tree(const char *tag, guint an_int);
+xmlNodePtr recurrence_to_dom_tree(const gchar *tag, const Recurrence *r);
 
 gchar* double_to_string(double value);
 

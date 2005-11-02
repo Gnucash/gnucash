@@ -42,7 +42,6 @@
 #include <glib.h>
 
 #include "gnc-date.h"
-#include "gnc-engine-util.h"
 #include "gnc-trace.h"
 
 #ifndef HAVE_STRPTIME
@@ -70,7 +69,7 @@ static QofDateFormat dateFormat = QOF_DATE_FORMAT_LOCALE;
 static QofDateFormat prevQofDateFormat = QOF_DATE_FORMAT_LOCALE;
 
 /* This static indicates the debugging module that this .o belongs to. */
-static short module = MOD_ENGINE;
+static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /********************************************************************\
 \********************************************************************/
@@ -87,6 +86,8 @@ gnc_date_dateformat_to_string(QofDateFormat format)
     return "ce";
   case QOF_DATE_FORMAT_ISO:
     return "iso";
+  case QOF_DATE_FORMAT_UTC:
+   return "utc";
   case QOF_DATE_FORMAT_LOCALE:
     return "locale";
   case QOF_DATE_FORMAT_CUSTOM:
@@ -108,6 +109,8 @@ gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)
     *format = QOF_DATE_FORMAT_UK;
   else if (!strcmp(fmt_str, "ce"))
     *format = QOF_DATE_FORMAT_CE;
+  else if (!strcmp(fmt_str, "utc"))
+    *format = QOF_DATE_FORMAT_UTC;
   else if (!strcmp(fmt_str, "iso"))
     *format = QOF_DATE_FORMAT_ISO;
   else if (!strcmp(fmt_str, "locale"))
@@ -232,8 +235,8 @@ timespec_abs(const Timespec *t)
   return retval;
 }
 
-/**
- * timespecCanonicalDayTime
+/** \brief Converts any time on a day to midday that day.
+
  * given a timepair contains any time on a certain day (local time)
  * converts it to be midday that day.  
  */
@@ -270,39 +273,42 @@ int gnc_date_my_last_mday (int month, int year)
   return days_in_month[is_leap][month-1];
 }
 
-/**
- * date_get_last_mday
- * Retrieve the last nomerical day for the month specified in the
- * tm_year and tm_mon fields.
- * Args:  tm: the time value in question
- * returns: T/F
- **/
+/* Retrieve the last numerical day of the month
+
+ Retrieve the last numerical day for the month specified in the
+ tm_year and tm_mon fields.
+
+param  tm: the time value in question
+return the last day of the month, integer.
+*/
 int date_get_last_mday(struct tm *tm)
 {
   return gnc_date_my_last_mday (tm->tm_mon+1, tm->tm_year+1900);
 }
 
-/**
- * date_is_last_mday
- * Determines whether the tm_mday field contains the last day of the
- * month as specified in the tm_year and tm_mon fields.
- * Args:  tm: the time value in question
- * returns: T/F
- **/
+/* Determines if tm_mday is the last day of the month.
+
+ Determines whether the tm_mday field contains the last day of the
+ month as specified in the tm_year and tm_mon fields.
+param  tm: the time value in question
+return TRUE if tm_mday matches the last day of the month, else FALSE.
+*/
 gboolean date_is_last_mday(struct tm *tm)
 {
   return(tm->tm_mday == date_get_last_mday(tm));
 }
 
-/**
- * date_add_months
- * Add a number of months to a time value, and normalize.  Optionally
- * also track the last day of hte month, i.e. 1/31 -> 2/28 -> 3/30.
- * Args:  tm: base time value
- *        months: The number of months to add to this time
- *        track_last_day: Coerce the date value if necessary.
- * returns: nothing
- **/
+/* Add a number of months to a time value
+
+ Add a number of months to a time value, and normalize.  Optionally
+ also track the last day of the month, i.e. 1/31 -> 2/28 -> 3/30.
+
+param  tm: base time value
+param  months: The number of months to add to this time
+param  track_last_day: Coerce the date value if necessary.
+
+return void
+*/
 void date_add_months (struct tm *tm, int months, gboolean track_last_day)
 {
   gboolean was_last_day;
@@ -327,27 +333,28 @@ void date_add_months (struct tm *tm, int months, gboolean track_last_day)
     tm->tm_mday = new_last_mday;
 }
 
-/**
- * qof_date_format_get
- * Args: nothing
- * returns: QofDateFormat: enumeration indicating preferred format
- *
- * Globals: dateFormat
- **/
+/* Return the set dateFormat.
+
+return QofDateFormat: enumeration indicating preferred format
+
+Global: dateFormat
+*/
 QofDateFormat qof_date_format_get (void)
 {
   return dateFormat;
 }
 
-/**
- * qof_date_format_set
- * set date format to one of US, UK, CE, OR ISO
- * checks to make sure it's a legal value
- * Args: QofDateFormat: enumeration indicating preferred format
- * returns: nothing
- *
- * Globals: dateFormat
- **/
+/* set date format
+
+set date format to one of US, UK, CE, ISO OR UTC
+checks to make sure it's a legal value
+
+param QofDateFormat: enumeration indicating preferred format
+
+return void
+
+Globals: dateFormat
+*/
 void qof_date_format_set(QofDateFormat df)
 {
   if(df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
@@ -356,20 +363,22 @@ void qof_date_format_set(QofDateFormat df)
     dateFormat = df;
   }
   else
-  {    /* hack alert - is this what we should be doing here? */
-    PERR("non-existent date format set");
+  {    /* hack alert - Use a neutral default. */
+    PERR("non-existent date format set attempted. Setting ISO default");
+    prevQofDateFormat = dateFormat;
+    dateFormat = QOF_DATE_FORMAT_ISO;
   }
 
   return;
 }
 
-/**
- * qof_date_format_get_string
- * get the date format string for the current format
- * returns: string
- *
- * Globals: dateFormat
- **/
+/*
+ qof_date_format_get_string
+ get the date format string for the current format
+ returns: string
+
+ Globals: dateFormat
+*/
 const gchar *qof_date_format_get_string(QofDateFormat df)
 {
   switch(df) {
@@ -379,6 +388,8 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
     return "%d/%m/%y";
    case QOF_DATE_FORMAT_CE:
     return "%d.%m.%y";
+   case QOF_DATE_FORMAT_UTC:
+    return "%Y-%m-%dT%H:%M:%SZ";
    case QOF_DATE_FORMAT_ISO:
     return "%y-%m-%d";
    case QOF_DATE_FORMAT_LOCALE:
@@ -387,14 +398,16 @@ const gchar *qof_date_format_get_string(QofDateFormat df)
   };
 }
 
-/**
- * qof_date_format_get_format
- * get the date format string for the current format
- * returns: string
- *
- * Globals: dateFormat
- **/
-const gchar *qof_date_format_get_format(QofDateFormat df)
+/* get the date format string for the current format
+
+get the date format string for the current format
+
+param df Required date format.
+return string
+
+Globals: dateFormat
+*/
+const gchar *qof_date_text_format_get_string(QofDateFormat df)
 {
   switch(df) {
    case QOF_DATE_FORMAT_US:
@@ -402,6 +415,8 @@ const gchar *qof_date_format_get_format(QofDateFormat df)
    case QOF_DATE_FORMAT_UK:
    case QOF_DATE_FORMAT_CE:
     return "%d %b, %y";
+   case QOF_DATE_FORMAT_UTC:
+    return "%Y-%m-%dT%H:%M:%SZ";
    case QOF_DATE_FORMAT_ISO:
     return "%y-%b-%d";
    case QOF_DATE_FORMAT_LOCALE:
@@ -410,21 +425,21 @@ const gchar *qof_date_format_get_format(QofDateFormat df)
   };
 }
 
-/**
- * qof_print_date_dmy_buff
- *    Convert a date as day / month / year integers into a localized string
- *    representation
- *
- * Args:   buff - pointer to previously allocated character array; its size
- *                must be at lease MAX_DATE_LENTH bytes.
- *         day - day of the month as 1 ... 31
- *         month - month of the year as 1 ... 12
- *         year - year (4-digit)
- *
- * Return: nothing
- *
- * Globals: global dateFormat value
- */
+/* Convert day, month and year values to a date string
+
+  Convert a date as day / month / year integers into a localized string
+  representation
+
+param   buff - pointer to previously allocated character array; its size
+         must be at lease MAX_DATE_LENTH bytes.
+param   day - value to be set with the day of the month as 1 ... 31
+param   month - value to be set with the month of the year as 1 ... 12
+param   year - value to be set with the year (4-digit)
+
+return void
+
+Globals: global dateFormat value
+*/
 size_t
 qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 {
@@ -447,12 +462,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
     case QOF_DATE_FORMAT_CE:
       flen = g_snprintf (buff, len, "%2d.%2d.%-4d", day, month, year);
       break;
-    case QOF_DATE_FORMAT_ISO:
-      flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
-      break;
     case QOF_DATE_FORMAT_LOCALE:
       {
         struct tm tm_str;
+	time_t t;
 
         tm_str.tm_mday = day;
         tm_str.tm_mon = month - 1;    /* tm_mon = 0 through 11 */
@@ -460,10 +473,17 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
                                        * says, it's not a Y2K thing */
 
         gnc_tm_set_day_start (&tm_str);
+	t = mktime (&tm_str);
+	localtime_r (&t, &tm_str);
         flen = strftime (buff, len, GNC_D_FMT, &tm_str);
+	if (flen != 0)
+	  break;
       }
+      /* FALLTHROUGH */
+    case QOF_DATE_FORMAT_ISO:
+    case QOF_DATE_FORMAT_UTC:
+      flen = g_snprintf (buff, len, "%04d-%02d-%02d", year, month, day);
       break;
-
     case QOF_DATE_FORMAT_US:
     default:
       flen = g_snprintf (buff, len, "%2d/%2d/%-4d", month, day, year);
@@ -600,7 +620,7 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 {
   int flen;
   int day, month, year, hour, min, sec;
-  struct tm ltm;
+  struct tm ltm, gtm;
   
   if (!buff) return 0;
 
@@ -622,22 +642,28 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
   
   switch(dateFormat)
   {
-    case DATE_FORMAT_UK:
+    case QOF_DATE_FORMAT_UK:
       flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", day, month, year, hour, min);
       break;
-    case DATE_FORMAT_CE:
+    case QOF_DATE_FORMAT_CE:
       flen = g_snprintf (buff, len, "%2d.%2d.%-4d %2d:%02d", day, month, year, hour, min);
       break;
-    case DATE_FORMAT_ISO:
+    case QOF_DATE_FORMAT_ISO:
       flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
       break;
-    case DATE_FORMAT_LOCALE:
+	case QOF_DATE_FORMAT_UTC:
+	{
+		gtm = *gmtime (&secs);
+		flen = strftime (buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+		break;
+	}
+    case QOF_DATE_FORMAT_LOCALE:
       {
         flen = strftime (buff, len, GNC_D_T_FMT, &ltm);
       }
       break;
 
-    case DATE_FORMAT_US:
+    case QOF_DATE_FORMAT_US:
     default:
       flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", month, day, year, hour, min);
       break;
@@ -649,9 +675,15 @@ size_t
 qof_print_time_buff (char * buff, size_t len, time_t secs)
 {
   int flen;
-  struct tm ltm;
+	struct tm ltm, gtm;
   
   if (!buff) return 0;
+	if(dateFormat == QOF_DATE_FORMAT_UTC)
+	{
+		gtm = *gmtime (&secs);
+		flen = strftime(buff, len, QOF_UTC_DATE_FORMAT, &gtm);
+		return flen;
+	}
   ltm = *localtime (&secs);
   flen = strftime (buff, len, GNC_T_FMT, &ltm);
 
@@ -675,37 +707,49 @@ qof_is_same_day (time_t ta, time_t tb)
 
 /* ============================================================== */
 
-/**
- * qof_scan_date
- *    Convert a string into  day / month / year integers according to
- *    the current dateFormat value.
- *
- *    This function will always parse a single number as the day of
- *    the month, regardless of the ordering of the dateFormat value.
- *    Two numbers will always be parsed as the day and the month, in
- *    the same order that they appear in the dateFormat value.  Three
- *    numbers are parsed exactly as specified in the dateFormat field.
- *
- * Args:   buff - pointer to date string
- *         day -  will store day of the month as 1 ... 31
- *         month - will store month of the year as 1 ... 12
- *         year - will store the year (4-digit)
- *
- * Return: TRUE if date appeared to be valid.
- *
- * Globals: global dateFormat value
- */
+/* Convert a string into  day, month and year integers
+
+    Convert a string into  day / month / year integers according to
+    the current dateFormat value.
+
+    This function will always parse a single number as the day of
+    the month, regardless of the ordering of the dateFormat value.
+    Two numbers will always be parsed as the day and the month, in
+    the same order that they appear in the dateFormat value.  Three
+    numbers are parsed exactly as specified in the dateFormat field.
+
+    Fully formatted UTC timestamp strings are converted separately.
+
+param   buff - pointer to date string
+param     day -  will store day of the month as 1 ... 31
+param     month - will store month of the year as 1 ... 12
+param     year - will store the year (4-digit)
+
+return TRUE if date appeared to be valid.
+
+ Globals: global dateFormat value
+*/
 static gboolean
 qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
                   QofDateFormat which_format)
 {
    char *dupe, *tmp, *first_field, *second_field, *third_field;
    int iday, imonth, iyear;
-   struct tm *now;
+   struct tm *now, utc;
    time_t secs;
 
    if (!buff) return(FALSE);
 
+	if(which_format == QOF_DATE_FORMAT_UTC)
+	{
+		if(strptime(buff, QOF_UTC_DATE_FORMAT, &utc)) {
+			*day = utc.tm_mday;
+			*month = utc.tm_mon + 1;
+			*year = utc.tm_year + 1900;
+			return TRUE;
+		}
+		else { return FALSE; }
+	}
    dupe = g_strdup (buff);
 
    tmp = dupe;
@@ -818,7 +862,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
       * Ack! Thppfft!  Someone just fed this routine a string in the
       * wrong date format.  This is known to happen if a register
       * window is open when changing the date format.  Try the
-      * previous date format.  If that doesn't work, se if we can
+      * previous date format.  If that doesn't work, see if we can
       * exchange month and day. If that still doesn't work,
       * bail and give the caller what they asked for (garbage) 
       * parsed in the new format.
@@ -871,16 +915,9 @@ qof_scan_date_secs (const char *buff, time_t *secs)
   return rc;
 }
 
-/**
- * dateSeparator
- *    Return the field separator for the current date format
- *
- * Args:   none
- *
- * Return: date character
- *
- * Globals: global dateFormat value
- */
+/* Return the field separator for the current date format
+return date character
+*/
 char dateSeparator (void)
 {
   static char locale_separator = '\0';
@@ -890,6 +927,7 @@ char dateSeparator (void)
     case QOF_DATE_FORMAT_CE:
       return '.';
     case QOF_DATE_FORMAT_ISO:
+    case QOF_DATE_FORMAT_UTC:
       return '-';
     case QOF_DATE_FORMAT_US:
     case QOF_DATE_FORMAT_UK:
@@ -921,11 +959,15 @@ char dateSeparator (void)
 /********************************************************************\
 \********************************************************************/
                                                                                 
-/** The xaccDateUtilGetStamp() routine will take the given time in
- *  seconds and return a buffer containing a textual for the date.
- *  @param thyme The time in seconds to convert.
- *  @return A pointer to the generated string.
- *  @note The caller owns this buffer and must free it when done. */
+/* Convert time in seconds to a textual.
+
+The xaccDateUtilGetStamp() routine will take the given time in
+seconds and return a buffer containing a textual for the date.
+
+param thyme The time in seconds to convert.
+return A pointer to the generated string.
+The caller owns this buffer and must free it when done.
+*/
 char *
 xaccDateUtilGetStamp (time_t thyme)
 {
@@ -944,10 +986,15 @@ xaccDateUtilGetStamp (time_t thyme)
 }
                                                                                 
                                                                                 
-/** The xaccDateUtilGetStampNow() routine returns the current time in
- *  seconds in textual format.
- *  @return A pointer to the generated string.
- *  @note The caller owns this buffer and must free it when done. */
+/* Convert textual to time in seconds.
+
+The xaccDateUtilGetStampNow() routine returns the current time in
+seconds in textual format.
+
+return A pointer to the generated string.
+
+note The caller owns this buffer and must free it when done.
+*/
 char *
 xaccDateUtilGetStampNow (void)
 {
@@ -1273,6 +1320,8 @@ gnc_timet_get_day_end (time_t time_val)
   return mktime(&tm);
 }
 
+
+#ifndef GNUCASH_MAJOR_VERSION
 time_t
 gnc_timet_get_day_start_gdate (GDate *date)
 {
@@ -1304,6 +1353,7 @@ gnc_timet_get_day_end_gdate (GDate *date)
   secs = mktime (&stm);
   return secs;
 }
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /* ======================================================== */
 

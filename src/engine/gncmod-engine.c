@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-engine.h"
 #include "gnc-module-api.h"

@@ -21,6 +21,12 @@
  *                                                                  *
 \********************************************************************/
 
+/********************************************************************\
+ * 2003-03-11 TomF changes for Gnome-2 branch, 6th batch            *
+ * src/backend/net/NetIO.c: Remove include ghttp.h                  *
+ * to bypass missing ghttp.  The functions were already disabled.   *
+\********************************************************************/
+
 /*
  * Rudimentary implmentation right now; good enough for a demo, 
  * but that's all.
@@ -33,7 +39,6 @@
 
 #include "config.h"
 
-#include <ghttp.h>
 #include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>

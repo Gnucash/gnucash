@@ -12,12 +12,11 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
-#include "gnc-menu-extensions.h"
-
-#include "gnc-hbci-cb.h"
+#include "gnc-plugin-hbci.h"
 #include "druid-hbci-initial.h"
 #include "gnc-hbci-utils.h"
 #include <gwenhywfar/gwenhywfar.h>
+#include "dialog-preferences.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;
@@ -32,8 +31,6 @@ char *libgncmod_hbci_LTX_gnc_module_path(void);
 char *libgncmod_hbci_LTX_gnc_module_description(void);
 int libgncmod_hbci_LTX_gnc_module_init(int refcount);
 int libgncmod_hbci_LTX_gnc_module_end(int refcount);
-
-static void gnc_hbci_addmenus(void);
 
 char *
 libgncmod_hbci_LTX_gnc_module_path(void) {
@@ -66,14 +63,11 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  /* load the HBCI Scheme code */
-  scm_c_eval_string("(load-from-path \"hbci/hbci.scm\")");
-
-  scm_c_define_gsubr("gnc:hbci-initial-setup", 
-		     0, 0, 0, scm_hbci_initial_druid);
-
   /* Add menu items with C callbacks */
-  gnc_hbci_addmenus();
+  gnc_plugin_hbci_create_plugin();
+  
+  gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
+			      "Online Banking");
 
   /* Initialize gwen library */
   GWEN_Init();
@@ -89,39 +83,4 @@ libgncmod_hbci_LTX_gnc_module_end(int refcount) {
   GWEN_Fini();
 
   return TRUE;
-}
-
-static void
-gnc_hbci_addmenus(void)
-{
-  static GnomeUIInfo reg_online_submenu[] =    
-    {
-      GNOMEUIINFO_ITEM ( N_("HBCI Get Balance"),
-			 N_("Get the account balance online through HBCI"),
-			 gnc_hbci_register_menu_getbalance_cb, 
-			 GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM ( N_("HBCI Get Transactions"),
-			 N_("Get the transactions online through HBCI"),
-			 gnc_hbci_register_menu_gettrans_cb, 
-			 GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM ( N_("HBCI Issue Transaction"),
-			 N_("Issue a new transaction online through HBCI"),
-			 gnc_hbci_register_menu_maketrans_cb, 
-			 GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_ITEM ( N_("HBCI Issue Direct Debit"),
-			 N_("Issue a new direct debit note online through HBCI"),
-			 gnc_hbci_register_menu_makedebnote_cb, 
-			 GNOME_APP_PIXMAP_NONE),
-      GNOMEUIINFO_END
-    };
-    
-  static GnomeUIInfo reg_online_menu[] =
-    {
-      GNOMEUIINFO_SUBTREE( N_("Online Actions"),
-			   reg_online_submenu ),
-      GNOMEUIINFO_END
-    };
-    
-    
-  gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/_Actions/");
 }

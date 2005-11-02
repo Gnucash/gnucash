@@ -46,8 +46,6 @@
 #include "sixtp-dom-parsers.h"
 #include "gnc-engine-util.h"
 #include "Group.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
 
 /* non-static because it's used in io-gncxml-v2.c */
 const gchar *gnc_v2_book_version_string = "2.0.0";
@@ -57,7 +55,7 @@ const gchar *gnc_v2_book_version_string = "2.0.0";
 #define book_id_string "book:id"
 #define book_slots_string "book:slots"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 /* ================================================================ */
 
@@ -108,8 +106,8 @@ gnc_book_dom_tree_create(QofBook *book)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_book_string);
-    xmlSetProp(ret, "version", gnc_v2_book_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(book_id_string, qof_book_get_guid(book)));
 
@@ -158,7 +156,11 @@ write_book_parts(FILE *out, QofBook *book)
 
     domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
-    fprintf(out, "\n");
+    if(fprintf(out, "\n") < 0) {
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		xmlFreeNode (domnode);
+		return;
+	}
     xmlFreeNode (domnode);
 
     if(qof_book_get_slots(book))
@@ -174,6 +176,7 @@ write_book_parts(FILE *out, QofBook *book)
     }
 }
 
+
 /* ================================================================ */
 
 static gboolean
@@ -183,8 +186,7 @@ book_id_handler (xmlNodePtr node, gpointer book_pdata)
     GUID *guid;
 
     guid = dom_tree_to_guid(node);
-    qof_book_set_guid(book, guid);
-
+    qof_entity_set_guid(QOF_ENTITY(book), guid);
     g_free(guid);
     
     return TRUE;
@@ -327,4 +329,3 @@ gnc_book_slots_sixtp_parser_create(void)
 {
     return sixtp_dom_parser_new(gnc_book_slots_end_handler, NULL, NULL);
 }
-

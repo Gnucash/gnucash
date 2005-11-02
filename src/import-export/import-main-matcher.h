@@ -60,14 +60,15 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 /** Deletes the given object. */
 void gnc_gen_trans_list_delete (GNCImportMainMatcher *info);
 
-/** Add a newly imported Transaction to the Transaction Importer.
+/** Add a newly imported Transaction to the Transaction Importer. The Importer takes over ownership of the passed transaction.
  *
  * @param gui The Transaction Importer to use.
  *
  * @param trans The Transaction to add.  The must contain at least one
  * split, and this split must have been associated with an account
  * Only the first split will be used for matching.  The transaction
- * must NOT be commited.
+ * must NOT be commited. The Importer takes over ownership of the
+ * passed transaction.
  */
 void gnc_gen_trans_list_add_trans(GNCImportMainMatcher *gui, Transaction *trans);
 

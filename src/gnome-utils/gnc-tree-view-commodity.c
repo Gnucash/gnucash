@@ -1,0 +1,1107 @@
+/********************************************************************\
+ * gnc-tree-view-commodity.c -- GtkTreeView implementation to       *
+ *                            display commodities in a GtkTreeView. *
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
+#include "config.h"
+
+#include <gtk/gtk.h>
+#include <string.h>
+
+#include "gnc-tree-view.h"
+#include "gnc-tree-model-commodity.h"
+#include "gnc-tree-view-commodity.h"
+
+#include "gnc-commodity.h"
+#include "gnc-component-manager.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-gnome-utils.h"
+#include "gnc-icons.h"
+#include "gnc-ui-util.h"
+//#include "messages.h"
+#include <libgnome/libgnome.h>
+
+
+/** Static Globals *******************************************************/
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
+
+/** Declarations *********************************************************/
+static void gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass);
+static void gnc_tree_view_commodity_init (GncTreeViewCommodity *view);
+static void gnc_tree_view_commodity_finalize (GObject *object);
+static void gnc_tree_view_commodity_destroy (GtkObject *object);
+
+struct GncTreeViewCommodityPrivate
+{
+  gboolean show_currencies;
+};
+
+
+/************************************************************/
+/*               g_object required functions                */
+/************************************************************/
+
+static GObjectClass *parent_class = NULL;
+
+GType
+gnc_tree_view_commodity_get_type (void)
+{
+	static GType gnc_tree_view_commodity_type = 0;
+
+	if (gnc_tree_view_commodity_type == 0) {
+		static const GTypeInfo our_info = {
+			sizeof (GncTreeViewCommodityClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) gnc_tree_view_commodity_class_init,
+			NULL,
+			NULL,
+			sizeof (GncTreeViewCommodity),
+			0,
+			(GInstanceInitFunc) gnc_tree_view_commodity_init
+		};
+		
+		gnc_tree_view_commodity_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
+								     "GncTreeViewCommodity",
+								     &our_info, 0);
+	}
+
+	return gnc_tree_view_commodity_type;
+}
+
+static void
+gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
+{
+	GObjectClass *o_class;
+	GtkObjectClass *object_class;
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	o_class = G_OBJECT_CLASS (klass);
+	object_class = GTK_OBJECT_CLASS (klass);
+
+	/* GObject signals */
+	o_class->finalize = gnc_tree_view_commodity_finalize;
+
+	/* GtkObject signals */
+	object_class->destroy = gnc_tree_view_commodity_destroy;
+}
+
+static void
+gnc_tree_view_commodity_init (GncTreeViewCommodity *view)
+{
+  view->priv = g_new0 (GncTreeViewCommodityPrivate, 1);
+}
+
+static void
+gnc_tree_view_commodity_finalize (GObject *object)
+{
+  GncTreeViewCommodity *view;
+
+  ENTER("view %p", object);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
+
+  view = GNC_TREE_VIEW_COMMODITY (object);
+
+  g_free (view->priv);
+
+  if (G_OBJECT_CLASS (parent_class)->finalize)
+    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  LEAVE(" ");
+}
+
+static void
+gnc_tree_view_commodity_destroy (GtkObject *object)
+{
+  GncTreeViewCommodity *view;
+
+  ENTER("view %p", object);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
+
+  view = GNC_TREE_VIEW_COMMODITY (object);
+
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  LEAVE(" ");
+}
+
+
+/************************************************************/
+/*                      sort functions                      */
+/************************************************************/
+
+static gboolean
+get_commodities (GtkTreeModel *f_model,
+		 GtkTreeIter *f_iter_a,
+		 GtkTreeIter *f_iter_b,
+		 gnc_commodity **comm_a,
+		 gnc_commodity **comm_b)
+{
+  GncTreeModelCommodity *model;
+  GtkTreeModel *tree_model;
+  GtkTreeIter iter_a, iter_b;
+
+  tree_model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  model = GNC_TREE_MODEL_COMMODITY(tree_model);
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter_a,
+						    f_iter_a);
+
+  /* Both iters must point to commodities for this to be meaningful */
+  if (!gnc_tree_model_commodity_iter_is_commodity (model, &iter_a))
+    return FALSE;
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter_b,
+						    f_iter_b);
+
+  *comm_a = gnc_tree_model_commodity_get_commodity (model, &iter_a);
+  *comm_b = gnc_tree_model_commodity_get_commodity (model, &iter_b);
+  return TRUE;
+}
+
+static gint
+sort_namespace (GtkTreeModel *f_model,
+		GtkTreeIter *f_iter_a,
+		GtkTreeIter *f_iter_b)
+{
+  GncTreeModelCommodity *model;
+  GtkTreeModel *tree_model;
+  GtkTreeIter iter_a, iter_b;
+  gnc_commodity_namespace *ns_a, *ns_b;
+
+  tree_model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  model = GNC_TREE_MODEL_COMMODITY(tree_model);
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter_a,
+						    f_iter_a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter_b,
+						    f_iter_b);
+
+  ns_a = gnc_tree_model_commodity_get_namespace (model, &iter_a);
+  ns_b = gnc_tree_model_commodity_get_namespace (model, &iter_b);
+  SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
+	       gnc_commodity_namespace_get_name (ns_b));
+  return 0;
+}
+
+static gint
+default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
+{
+  gint fraction_a, fraction_b;
+
+  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
+               gnc_commodity_get_namespace (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
+               gnc_commodity_get_mnemonic (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
+               gnc_commodity_get_fullname (comm_b));
+
+  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
+               gnc_commodity_get_exchange_code (comm_b));
+
+  fraction_a = gnc_commodity_get_fraction (comm_a);
+  fraction_b = gnc_commodity_get_fraction (comm_b);
+
+  if (fraction_a < fraction_b)
+    return -1;
+
+  if (fraction_b < fraction_a)
+    return 1;
+
+  return 0;
+}
+
+static gint
+sort_by_namespace (GtkTreeModel *f_model,
+		   GtkTreeIter *f_iter_a,
+		   GtkTreeIter *f_iter_b,
+		   gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
+               gnc_commodity_get_namespace (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_mnemonic (GtkTreeModel *f_model,
+		   GtkTreeIter *f_iter_a,
+		   GtkTreeIter *f_iter_b,
+		   gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
+               gnc_commodity_get_mnemonic (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_fullname (GtkTreeModel *f_model,
+		  GtkTreeIter *f_iter_a,
+		  GtkTreeIter *f_iter_b,
+		  gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
+               gnc_commodity_get_fullname (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_printname (GtkTreeModel *f_model,
+		   GtkTreeIter *f_iter_a,
+		   GtkTreeIter *f_iter_b,
+		   gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_printname (comm_a),
+               gnc_commodity_get_printname (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_unique_name (GtkTreeModel *f_model,
+		     GtkTreeIter *f_iter_a,
+		     GtkTreeIter *f_iter_b,
+		     gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_unique_name (comm_a),
+               gnc_commodity_get_unique_name (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_cusip_code (GtkTreeModel *f_model,
+		    GtkTreeIter *f_iter_a,
+		    GtkTreeIter *f_iter_b,
+		    gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
+               gnc_commodity_get_exchange_code (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_fraction (GtkTreeModel *f_model,
+		  GtkTreeIter *f_iter_a,
+		  GtkTreeIter *f_iter_b,
+		  gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+  gint fraction_a, fraction_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  fraction_a = gnc_commodity_get_fraction (comm_a);
+  fraction_b = gnc_commodity_get_fraction (comm_b);
+
+  if (fraction_a < fraction_b)
+    return -1;
+
+  if (fraction_b < fraction_a)
+    return 1;
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_quote_flag (GtkTreeModel *f_model,
+		    GtkTreeIter *f_iter_a,
+		    GtkTreeIter *f_iter_b,
+		    gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+  gboolean flag_a, flag_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  flag_a = gnc_commodity_get_quote_flag(comm_a);
+  flag_b = gnc_commodity_get_quote_flag(comm_b);
+
+  if (flag_a < flag_b)
+    return -1;
+  else if (flag_a > flag_b)
+    return 1;
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_quote_source (GtkTreeModel *f_model,
+		       GtkTreeIter *f_iter_a,
+		       GtkTreeIter *f_iter_b,
+		       gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+  gnc_quote_source *source_a, *source_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  source_a = gnc_commodity_get_quote_source (comm_a);
+  source_b = gnc_commodity_get_quote_source (comm_b);
+
+  SAFE_STRCMP(gnc_quote_source_get_user_name (source_a),
+	      gnc_quote_source_get_user_name (source_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+static gint
+sort_by_quote_tz (GtkTreeModel *f_model,
+		  GtkTreeIter *f_iter_a,
+		  GtkTreeIter *f_iter_b,
+		  gpointer user_data)
+{
+  gnc_commodity *comm_a, *comm_b;
+
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+    return sort_namespace (f_model, f_iter_a, f_iter_b);
+
+  SAFE_STRCMP (gnc_commodity_get_quote_tz (comm_a),
+               gnc_commodity_get_quote_tz (comm_b));
+
+  return default_sort(comm_a, comm_b);
+}
+
+/************************************************************/
+/*                    New View Creation                     */
+/************************************************************/
+
+/*
+ * Create a new commodity tree view with (optional) top level root node.
+ * This view will be based on a model that is common to all view of
+ * the same set of books, but will have its own private filter on that
+ * model.
+ */
+GtkTreeView *
+gnc_tree_view_commodity_new (QofBook *book,
+			     const gchar *first_property_name,
+			     ...)
+{
+  GncTreeView *view;
+  GtkTreeModel *model, *f_model, *s_model;
+  gnc_commodity_table *ct;
+  va_list var_args;
+
+  ENTER(" ");
+  /* Create our view */
+  va_start (var_args, first_property_name);
+  view = (GncTreeView *)g_object_new_valist (GNC_TYPE_TREE_VIEW_COMMODITY,
+					     first_property_name, var_args);
+  va_end (var_args);
+  g_object_set(view, "name", "commodity_tree", NULL);
+
+  /* Create/get a pointer to the existing model for this set of books. */
+  ct = gnc_book_get_commodity_table (book);
+  model = gnc_tree_model_commodity_new (book, ct);
+
+  /* Set up the view private filter on the common model. */
+  f_model = gtk_tree_model_filter_new (model, NULL);
+  gtk_object_sink(GTK_OBJECT(model));
+  s_model = gtk_tree_model_sort_new_with_model (f_model);
+  g_object_unref(G_OBJECT(f_model));
+  gnc_tree_view_set_model (view, s_model);
+  g_object_unref(G_OBJECT(s_model));
+
+  DEBUG("model ref count is %d",   G_OBJECT(model)->ref_count);
+  DEBUG("f_model ref count is %d", G_OBJECT(f_model)->ref_count);
+  DEBUG("s_model ref count is %d", G_OBJECT(s_model)->ref_count);
+
+  /* Set default visibilities */
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
+
+  gnc_tree_view_add_text_column (view, N_("Namespace"), "namespace", NULL,
+				 "NASDAQ",
+				 GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
+				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				 sort_by_namespace);
+  gnc_tree_view_add_text_column (view, N_("Symbol"), "symbol", NULL,
+				 "ACMEACME",
+				 GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_mnemonic);
+  gnc_tree_view_add_text_column (view, N_("Name"), "name", NULL,
+				 "Acme Corporation, Inc.",
+				 GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_fullname);
+  gnc_tree_view_add_text_column (view, N_("Print Name"), "printname", NULL,
+				 "ACMEACME (Acme Corporation, Inc.)",
+				 GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_printname);
+  gnc_tree_view_add_text_column (view, N_("Unique Name"), "uniquename", NULL,
+				 "NASDAQ::ACMEACME",
+				 GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_unique_name);
+  gnc_tree_view_add_text_column (view, N_("CUSIP code"), "cusip_code", NULL,
+				 "QWERTYUIOP",
+				 GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_cusip_code);
+  gnc_tree_view_add_numeric_column (view, N_("Fraction"), "fraction", "10000",
+				    GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
+				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+				    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				    sort_by_fraction);
+  gnc_tree_view_add_toggle_column (view, N_("Get Quotes"), "Q", "quote_flag",
+				   GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+				   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				   sort_by_quote_flag,
+				   NULL);
+  gnc_tree_view_add_text_column (view, N_("Source"), "quote_source", NULL,
+				 "yahoo",
+				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_quote_source);
+  gnc_tree_view_add_text_column (view, N_("Timezone"), "quote_timezone", NULL,
+				 "America/New_York",
+				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_quote_tz);
+
+  gnc_tree_view_configure_columns(view, "symbol", "name", "cusip_code",
+				  "fraction", NULL);
+
+  gtk_widget_show(GTK_WIDGET(view));
+  LEAVE(" %p", view);
+  return GTK_TREE_VIEW(view);
+}
+
+/************************************************************/
+/*                   Auxiliary Functions                    */
+/************************************************************/
+
+#define debug_path(fn, path) {				\
+    gchar *path_string = gtk_tree_path_to_string(path); \
+    fn("tree path %s", path_string);			\
+    g_free(path_string);				\
+  }
+
+#if 0
+static GtkTreePath *
+gnc_tree_view_commodity_get_path_from_commodity (GncTreeViewCommodity *view,
+						 gnc_commodity *commodity)
+{
+  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreePath *path, *f_path, *s_path;
+
+  ENTER("view %p, commodity %p (%s)", view, commodity, gnc_commodity_get_name(commodity));
+
+  if (commodity == NULL) {
+    LEAVE("no commodity");
+    return NULL;
+  }
+
+  /* Reach down to the real model and get a path for this commodity */
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  path = gnc_tree_model_commodity_get_path_from_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity);
+  if (path == NULL) {
+    LEAVE("no path");
+    return NULL;
+  }
+
+  /* convert back to a filtered path */
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model), path);
+  gtk_tree_path_free(path);
+  if (!f_path) {
+    LEAVE("no filter path");
+    return NULL;
+  }
+
+  /* convert back to a sorted path */
+  s_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
+  gtk_tree_path_free(f_path);
+  debug_path(LEAVE, s_path);
+  return s_path;
+}
+#endif
+
+static gboolean
+gnc_tree_view_commodity_get_iter_from_commodity (GncTreeViewCommodity *view,
+						 gnc_commodity *commodity,
+						 GtkTreeIter *s_iter)
+{
+  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreeIter iter, f_iter;
+
+  g_return_val_if_fail(GNC_IS_TREE_VIEW_COMMODITY(view), FALSE);
+  g_return_val_if_fail(commodity != NULL, FALSE);
+  g_return_val_if_fail(s_iter != NULL, FALSE);
+  
+  ENTER("view %p, commodity %p (%s)", view, commodity, gnc_commodity_get_mnemonic(commodity));
+
+  /* Reach down to the real model and get an iter for this commodity */
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  if (!gnc_tree_model_commodity_get_iter_from_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity, &iter)) {
+    LEAVE("model_get_iter_from_commodity failed");
+    return FALSE;
+  }
+
+  /* convert back to a sort iter */
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &f_iter, &iter);
+  gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(s_model),
+						    s_iter, &f_iter);
+  LEAVE(" ");
+  return TRUE;
+}
+
+gint
+gnc_tree_view_commodity_count_children (GncTreeViewCommodity *view,
+					gnc_commodity *commodity)
+{
+  GtkTreeModel *s_model;
+  GtkTreeIter s_iter;
+  gint num_children;
+
+  ENTER("view %p, commodity %p (%s)", view, commodity, gnc_commodity_get_mnemonic(commodity));
+
+  if (commodity == NULL) {
+    LEAVE("no commodity");
+    return 0;
+  }
+
+  if (!gnc_tree_view_commodity_get_iter_from_commodity (view, commodity, &s_iter)) {
+    LEAVE("view_get_iter_from_commodity failed");
+    return 0;
+  }
+
+  /* Any children? */
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  num_children = gtk_tree_model_iter_n_children(s_model, &s_iter);
+  LEAVE("%d children", num_children);
+  return num_children;
+}
+
+
+gnc_commodity *
+gnc_tree_view_commodity_get_commodity_from_column (GtkTreeViewColumn *column,
+						   GtkTreeModel *s_model,
+						   GtkTreeIter  *s_iter)
+{
+  GtkTreeModel *model, *f_model;
+  GtkTreeIter iter, f_iter;
+  gnc_commodity *commodity;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN(column), NULL);
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
+  g_return_val_if_fail (s_iter != NULL, NULL);
+
+  ENTER("column %p, model %p, iter %p", column, s_model, s_iter);
+  gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
+						  &f_iter,
+						  s_iter);
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter,
+						    &f_iter);
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model), &iter);
+  LEAVE("commodity %p (%s)", commodity, gnc_commodity_get_mnemonic (commodity));
+  return commodity;
+}
+
+/************************************************************/
+/*            Commodity Tree View Filter Functions            */
+/************************************************************/
+
+/*
+ * Set the list of columns that will be visible in an commodity tree view.
+ */
+void
+gnc_tree_view_commodity_configure_columns (GncTreeViewCommodity *view,
+					   GSList *column_names)
+{
+  GtkTreeViewColumn *column;
+  GSList *node;
+  int i;
+
+  ENTER(" ");
+
+  for (i = 1; i < GNC_TREE_MODEL_COMMODITY_NUM_COLUMNS; i++) {
+    column = gtk_tree_view_get_column (GTK_TREE_VIEW(view), i);
+    gtk_tree_view_column_set_visible (column, FALSE);
+  }
+
+  for (node = column_names; node != NULL; node = node->next)
+  {
+    for (i = 0; i < GNC_TREE_MODEL_COMMODITY_NUM_COLUMNS; i++) {
+      column = gtk_tree_view_get_column (GTK_TREE_VIEW(view), i);
+      gtk_tree_view_column_set_visible (column, TRUE);
+    }
+  }
+
+  LEAVE(" ");
+}
+
+/************************************************************/
+/*          Commodity Tree View Visibility Filter           */
+/************************************************************/
+
+typedef struct {
+  gnc_tree_view_commodity_ns_filter_func user_ns_fn;
+  gnc_tree_view_commodity_cm_filter_func user_cm_fn;
+  gpointer                               user_data;
+  GtkDestroyNotify                       user_destroy;
+} filter_user_data;
+
+static void
+gnc_tree_view_commodity_filter_destroy (gpointer data)
+{
+  filter_user_data *fd = data;
+
+  if (fd->user_destroy)
+    fd->user_destroy(fd->user_data);
+  g_free(fd);
+}
+
+static gboolean
+gnc_tree_view_commodity_filter_helper (GtkTreeModel *model,
+				     GtkTreeIter *iter,
+				     gpointer data)
+{
+  gnc_commodity_namespace *namespace;
+  gnc_commodity *commodity;
+  filter_user_data *fd = data;
+
+  g_return_val_if_fail (GNC_IS_TREE_MODEL_COMMODITY (model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  if (gnc_tree_model_commodity_iter_is_namespace (GNC_TREE_MODEL_COMMODITY(model), iter)) {
+    if (fd->user_ns_fn) {
+      namespace = gnc_tree_model_commodity_get_namespace (GNC_TREE_MODEL_COMMODITY(model), iter);
+      return fd->user_ns_fn(namespace, fd->user_data);
+    }
+    return TRUE;
+  }
+
+  if (gnc_tree_model_commodity_iter_is_commodity (GNC_TREE_MODEL_COMMODITY(model), iter)) {
+    if (fd->user_cm_fn) {
+      commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model), iter);
+      return fd->user_cm_fn(commodity, fd->user_data);
+    }
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/*
+ * Set an GtkTreeModel visible filter on this commodity.  This filter will be
+ * called for each commodity that the tree is about to show, and the
+ * commodity will be passed to the callback function.
+ */
+void
+gnc_tree_view_commodity_set_filter (GncTreeViewCommodity *view,
+				    gnc_tree_view_commodity_ns_filter_func ns_func,
+				    gnc_tree_view_commodity_cm_filter_func cm_func,
+				    gpointer data,
+				    GtkDestroyNotify destroy)
+{
+  GtkTreeModel *f_model, *s_model;
+  filter_user_data *fd = data;
+
+  ENTER("view %p, ns func %p, cm func %p, data %p, destroy %p",
+	view, ns_func, cm_func, data, destroy);
+
+  g_return_if_fail(GNC_IS_TREE_VIEW_COMMODITY(view));
+  g_return_if_fail((ns_func != NULL) || (cm_func != NULL));
+
+  fd = g_malloc(sizeof(filter_user_data));
+  fd->user_ns_fn   = ns_func;
+  fd->user_cm_fn   = cm_func;
+  fd->user_data    = data;
+  fd->user_destroy = destroy;
+
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
+					  gnc_tree_view_commodity_filter_helper,
+					  fd,
+					  gnc_tree_view_commodity_filter_destroy);
+
+  /* Whack any existing levels. The top two levels have been created
+   * before this routine can be called. */
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
+  LEAVE(" ");
+}
+
+/*
+ * Forces the entire commodity tree to be re-evaluated for visibility.
+ */
+void
+gnc_tree_view_commodity_refilter (GncTreeViewCommodity *view)
+{
+  GtkTreeModel *f_model, *s_model;
+
+  ENTER("view %p", view);
+
+  g_return_if_fail(GNC_IS_TREE_VIEW_COMMODITY(view));
+
+  s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
+  LEAVE(" ");
+}
+
+
+/************************************************************/
+/*           Commodity Tree View Get/Set Functions            */
+/************************************************************/
+
+/*
+ * Retrieve the selected commodity from an commodity tree view.  The
+ * commodity tree must be in single selection mode.
+ */
+gnc_commodity *
+gnc_tree_view_commodity_get_commodity_from_path (GncTreeViewCommodity *view,
+						 GtkTreePath *s_path)
+{
+    GtkTreeModel *model, *f_model, *s_model;
+    GtkTreePath *path, *f_path;
+    GtkTreeIter iter;
+    gnc_commodity *commodity;
+
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
+    g_return_val_if_fail (s_path != NULL, NULL);
+
+    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+    f_path = gtk_tree_model_sort_convert_path_to_child_path (GTK_TREE_MODEL_SORT (s_model), s_path);
+    if (!f_path) {
+      LEAVE("no filter path");
+      return NULL;
+    }
+
+    f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+    path = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), f_path);
+    gtk_tree_path_free(f_path);
+    if (!path) {
+      LEAVE("no path");
+      return NULL;
+    }
+
+    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+    if (!gtk_tree_model_get_iter (model, &iter, path)) {
+      LEAVE("no iter");
+      return NULL;
+    }
+
+    commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model),
+							&iter);
+    gtk_tree_path_free(path);
+    LEAVE("commodity %p (%s)", commodity, gnc_commodity_get_mnemonic (commodity));
+    return commodity;
+}
+
+/*
+ * Retrieve the selected commodity from an commodity tree view.  The
+ * commodity tree must be in single selection mode.
+ */
+gnc_commodity *
+gnc_tree_view_commodity_get_selected_commodity (GncTreeViewCommodity *view)
+{
+    GtkTreeSelection *selection;
+    GtkTreeModel *model, *f_model, *s_model;
+    GtkTreeIter iter, f_iter, s_iter;
+    gnc_commodity *commodity;
+
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
+
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+    if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter)) {
+      LEAVE("no commodity, get_selected failed");
+      return FALSE;
+    }
+
+    gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
+						    &f_iter, &s_iter);
+
+    f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
+						      &iter, &f_iter);
+
+    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+    commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model),
+							&iter);
+    LEAVE("commodity %p (%s)", commodity, gnc_commodity_get_mnemonic (commodity));
+    return commodity;
+}
+
+/*
+ * Selects a single commodity in the commodity tree view.  The commodity
+ * tree must be in single selection mode.
+ */
+void
+gnc_tree_view_commodity_set_selected_commodity (GncTreeViewCommodity *view,
+						gnc_commodity *commodity)
+{
+  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreePath *path, *f_path, *s_path, *parent_path;
+  GtkTreeSelection *selection;
+
+  ENTER("view %p, commodity %p (%s)", view,
+	commodity, gnc_commodity_get_mnemonic (commodity));
+
+  /* Clear any existing selection. */
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  gtk_tree_selection_unselect_all (selection);
+
+  if (commodity == NULL)
+    return;
+
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model));
+
+  path = gnc_tree_model_commodity_get_path_from_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity);
+  if (path == NULL) {
+    LEAVE("get_path_from_commodity failed");
+    return;
+  }
+  debug_path(DEBUG, path);
+
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
+							     path);
+  gtk_tree_path_free(path);
+  if (f_path == NULL) {
+    LEAVE("no filter path");
+    return;
+  }
+  debug_path(DEBUG, f_path);
+
+  s_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model),
+							   f_path);
+  gtk_tree_path_free(f_path);
+  if (s_path == NULL) {
+    LEAVE("no sort path");
+    return;
+  }
+
+  /* gtk_tree_view requires that a row be visible before it can be selected */
+  parent_path = gtk_tree_path_copy (s_path);
+  if (gtk_tree_path_up (parent_path)) {
+    /* This function is misnamed.  It expands the actual item
+     * specified, not the path to the item specified. I.E. It expands
+     * one level too many, thus the get of the parent. */
+    gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), parent_path);
+  }
+  gtk_tree_path_free(parent_path);
+
+  gtk_tree_selection_select_path (selection, s_path);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
+  debug_path(LEAVE, s_path);
+  gtk_tree_path_free(s_path);
+}
+
+/*
+ * This helper function is called once for each row in the tree view
+ * that is currently selected.  Its task is to an the corresponding
+ * commodity to the end of a glist.
+ */
+static void
+get_selected_commodities_helper (GtkTreeModel *s_model,
+				 GtkTreePath *s_path,
+				 GtkTreeIter *s_iter,
+				 gpointer data)
+{
+  GList **return_list = data;
+  GtkTreeModel *model, *f_model;
+  GtkTreeIter iter, f_iter;
+  gnc_commodity *commodity;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
+						  &f_iter, s_iter);
+
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
+						    &iter, &f_iter);
+
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  commodity = gnc_tree_model_commodity_get_commodity (GNC_TREE_MODEL_COMMODITY(model),
+						      &iter);
+  *return_list = g_list_append(*return_list, commodity);
+}
+
+/*
+ * Given an commodity tree view, return a list of the selected commodities. The
+ * commodity tree must be in multiple selection mode.
+ *
+ * Note: It is the responsibility of the caller to free the returned
+ * list.
+ */
+GList *
+gnc_tree_view_commodity_get_selected_commodities (GncTreeViewCommodity *view)
+{
+  GtkTreeSelection *selection;
+  GList *return_list = NULL;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+  gtk_tree_selection_selected_foreach(selection, get_selected_commodities_helper, &return_list);
+  return return_list;
+}
+
+/*
+ * Given an commodity tree view and a list of commodities, select those
+ * commodities in the tree view.
+ */
+void
+gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommodity *view,
+						  GList *commodity_list,
+						  gboolean show_last)
+{
+  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreePath *path, *f_path, *s_path, *parent_path;
+  GtkTreeSelection *selection;
+  GList *element;
+  gnc_commodity *commodity;
+
+  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+
+  /* Clear any existing selection. */
+  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+  gtk_tree_selection_unselect_all (selection);
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW(view));
+
+  /* Now go select what the user requested. */
+  for (element = commodity_list; element; ) {
+    commodity = element->data;
+    element = g_list_next(element);
+
+    path = gnc_tree_model_commodity_get_path_from_commodity (GNC_TREE_MODEL_COMMODITY(model), commodity);
+    if (path == NULL) {
+      /*
+       * Oops.  Someone must have deleted this commodity and not cleaned
+       * up all references to it.
+       */
+      continue;
+    }
+
+    f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
+							       path);
+    gtk_tree_path_free(path);
+    if (f_path == NULL)
+      continue;
+
+    s_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model),
+							     f_path);
+    gtk_tree_path_free(f_path);
+    if (s_path == NULL)
+      continue;
+
+    /* gtk_tree_view requires that a row be visible before it can be selected */
+    parent_path = gtk_tree_path_copy (s_path);
+    if (gtk_tree_path_up (parent_path)) {
+      /* This function is misnamed.  It expands the actual item
+       * specified, not the path to the item specified. I.E. It
+       * expands one level too many, thus the get of the parent. */
+      gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), parent_path);
+    }
+    gtk_tree_path_free(parent_path);
+
+    gtk_tree_selection_select_path (selection, s_path);
+    if (show_last && (element == NULL))
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
+    gtk_tree_path_free(s_path);
+  }
+}
+
+#ifdef NEEDED
+/*
+ * Retrieve the commodity currently under the cursor.
+ */
+gnc_commodity *
+gnc_tree_view_commodity_get_cursor_account (GncTreeViewCommodity *view)
+{
+    GtkTreeModel *s_model;
+    GtkTreePath *s_path;
+    gnc_commodity *commodity;
+
+    ENTER("view %p", view);
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_COMMODITY (view), NULL);
+
+    s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
+    gtk_tree_view_get_cursor (GTK_TREE_VIEW(view), &s_path, NULL);
+    if (s_path) {
+      account = gnc_tree_view_commodity_get_account_from_path (view, s_path);
+      gtk_tree_path_free(s_path);
+    } else {
+      account = NULL;
+    }
+    LEAVE("account %p (%s)", account, gnc_commodity_get_mnemonic (account));
+    return account;
+}
+#endif

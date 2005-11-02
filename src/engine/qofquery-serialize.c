@@ -53,7 +53,7 @@
 #define PUT_INT64(TOK,VAL) {                         \
    xmlNodePtr node;                                  \
    char buff[80];                                    \
-   g_snprintf (buff, sizeof(buff), "%lld", (VAL));   \
+   g_snprintf (buff, sizeof(buff), "%" G_GINT64_FORMAT, (VAL));   \
    node = xmlNewNode (NULL, TOK);                    \
    xmlNodeAddContent(node, buff);                    \
    xmlAddChild (topnode, node);                      \
@@ -282,7 +282,7 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 		pdata_d = (query_date_t) pd;
 		
 		PUT_MATCH2("qofquery:date-match", pdata_d->options,
-		                 DATE_MATCH, NORMAL, ROUNDED);
+		                 DATE_MATCH, NORMAL, DAY);
 
 		PUT_DATE ("qofquery:date", pdata_d->date);
 		return topnode;

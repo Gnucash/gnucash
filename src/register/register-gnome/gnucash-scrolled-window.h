@@ -26,39 +26,27 @@
 
 #include <gtk/gtkscrolledwindow.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
+
+#define GNC_TYPE_SCROLLED_WINDOW        (gnc_scrolled_window_get_type ())
+#define GNC_SCROLLED_WINDOW(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SCROLLED_WINDOW, GNCScrolledWindow))
+#define GNC_SCROLLED_WINDOW_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SCROLLED_WINDOW, GNCScrolledWindowClass))
+#define GNC_IS_SCROLLED_WINDOW(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SCROLLED_WINDOW))
+#define GNC_IS_SCROLLED_WINDOW_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_SCROLLED_WINDOW))
 
 
-#define GNC_TYPE_SCROLLED_WINDOW            (gnc_scrolled_window_get_type ())
-#define GNC_SCROLLED_WINDOW(obj)            (GTK_CHECK_CAST ((obj), GNC_TYPE_SCROLLED_WINDOW, GNCScrolledWindow))
-#define GNC_SCROLLED_WINDOW_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLED_WINDOW, GNCScrolledWindowClass))
-#define GNC_IS_SCROLLED_WINDOW(obj)         (GTK_CHECK_TYPE ((obj), GNC_TYPE_SCROLLED_WINDOW))
-#define GNC_IS_SCROLLED_WINDOW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SCROLLED_WINDOW))
-
-
-typedef struct _GNCScrolledWindow       GNCScrolledWindow;
-typedef struct _GNCScrolledWindowClass  GNCScrolledWindowClass;
-
-struct _GNCScrolledWindow
-{
+typedef struct {
   GtkScrolledWindow scrollwin;
-};
+} GncScrolledWindow;
 
-struct _GNCScrolledWindowClass
-{
+typedef struct {
   GtkScrolledWindowClass parent_class;
-};
+} GncScrolledWindowClass;
 
 
-GtkType     gnc_scrolled_window_get_type (void);
-GtkWidget * gnc_scrolled_window_new (void);
+GType      gnc_scrolled_window_get_type (void);
+GtkWidget *gnc_scrolled_window_new (void);
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* GNC_SCROLLED_WINDOW_H */

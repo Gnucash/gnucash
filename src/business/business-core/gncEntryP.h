@@ -30,7 +30,6 @@
 #define GNC_ENTRYP_H_
 
 #include "gncEntry.h"
-#include "qofid-p.h"
 
 gboolean gncEntryRegister (void);
 void gncEntrySetGUID (GncEntry *entry, const GUID *guid);

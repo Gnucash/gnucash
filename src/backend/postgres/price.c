@@ -30,15 +30,11 @@
 #include <string.h>
 #include <libpq-fe.h>  
 
-#include "qofbook.h"
-#include "qofbook-p.h"
+#include "qof.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "guid.h"
 
 #include "PostgresBackend.h"
 #include "base-autogen.h"
@@ -46,7 +42,7 @@
 #include "price.h"
 #include "putil.h"
 
-static short module = MOD_BACKEND; 
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
 /* ============================================================= */
 /* ============================================================= */
@@ -79,7 +75,8 @@ get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       if (com) continue;
    
       /* no we don't ... restore it */
-      com = gnc_commodity_new (DB_GET_VAL("fullname",j),
+      com = gnc_commodity_new (book,
+			       DB_GET_VAL("fullname",j),
                                DB_GET_VAL("namespace",j),
                                DB_GET_VAL("mnemonic",j),
                                DB_GET_VAL("code",j),
@@ -200,7 +197,7 @@ foreach_price_cb (GNCPrice *pr, gpointer bend)
 static gboolean
 commodity_mark_cb (gnc_commodity *cm, gpointer user_data)
 {
-   gint32 v = ((gint32) user_data) & 0xffff;
+   gint32 v = ((gint32) GPOINTER_TO_INT(user_data)) & 0xffff;
    gnc_commodity_set_mark (cm, (gint16) v);
    return TRUE;
 }

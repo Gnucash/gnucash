@@ -34,25 +34,18 @@
  */
 
 #include "AccountP.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
+#include "qof.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
-#include "gnc-trace.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "kvp-util-p.h"
 #include "Period.h"
 #include "TransactionP.h"
-#include "qofbackend-p.h"
-#include "qofbook.h"
-#include "qofbook-p.h"
-#include "qofid-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_BOOK;
+static QofLogModule log_module = GNC_MOD_BOOK;
 
 /* ================================================================ */
 
@@ -147,7 +140,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (book->backend != trans->inst.book->backend)
+   if (qof_book_get_backend(book) != qof_book_get_backend(trans->inst.book))
    {
       gnc_book_insert_trans_clobber (book, trans);
       return;
@@ -219,12 +212,13 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    QofCollection *col;
    SplitList *snode;
    Account *twin;
+
    if (!lot || !book) return;
    
    /* If this is the same book, its a no-op. */
    if (lot->book == book) return;
 
-   if (book->backend != lot->book->backend)
+   if (qof_book_get_backend(book) != qof_book_get_backend(lot->book))
    {
       gnc_book_insert_lot_clobber (book, lot);
       return;
@@ -272,7 +266,7 @@ gnc_book_insert_price (QofBook *book, GNCPrice *pr)
 
    /* If the old and new book don't share backends, then clobber-copy;
     * i.e. destroy it in one backend, create it in another.  */
-   if (book->backend != pr->inst.book->backend)
+   if (qof_book_get_backend(book) != qof_book_get_backend(pr->inst.book))
    {
       gnc_book_insert_price_clobber (book, pr);
       return;
@@ -511,6 +505,7 @@ gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *que
 
    gnc_pricedb_begin_edit (src_pdb);
    gnc_pricedb_begin_edit (dest_pdb);
+   gnc_pricedb_set_bulk_update (dest_pdb, TRUE);
 
    qof_query_set_book (query, src_book);
    price_list = qof_query_run (query);
@@ -522,6 +517,7 @@ printf ("duude XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prices\n
       gnc_book_insert_price (dest_book, pr);
    }
 
+   gnc_pricedb_set_bulk_update (dest_pdb, FALSE);
    gnc_pricedb_commit_edit (dest_pdb);
    gnc_pricedb_commit_edit (src_pdb);
 
@@ -538,6 +534,7 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    time_t now;
    TransList *trans_list, *tnode;
    LotList *lot_list, *lnode;
+   QofInstance *book_inst;
 
    if (!src_book || !dest_book || !query) return;
    ENTER (" src_book=%p dest_book=%p", src_book, dest_book);
@@ -546,8 +543,9 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
    /* hack alert -- FIXME -- this should really be a merge, not a
     * clobber copy, but I am too lazy to write a kvp merge routine,
     * and it is not needed for the current usage. */
-   kvp_frame_delete (dest_book->inst.kvp_data);
-   dest_book->inst.kvp_data = kvp_frame_copy (src_book->inst.kvp_data);
+   kvp_frame_delete (qof_book_get_slots(dest_book));
+   book_inst = (QofInstance*)dest_book;
+   book_inst->kvp_data = kvp_frame_copy (qof_book_get_slots(src_book));
 
    /* Next, copy the commodity tables */
    src_tbl = gnc_commodity_table_get_table (src_book);
@@ -598,11 +596,11 @@ gnc_book_partition_txn (QofBook *dest_book, QofBook *src_book, QofQuery *query)
 
    /* Make note of the sibling books */
    now = time(0);
-   gnc_kvp_bag_add (src_book->inst.kvp_data, "gemini", now, 
-                          "book_guid", &dest_book->inst.entity.guid, 
+   gnc_kvp_bag_add (qof_book_get_slots(src_book), "gemini", now, 
+                          "book_guid", qof_book_get_guid(dest_book),
                            NULL);
-   gnc_kvp_bag_add (dest_book->inst.kvp_data, "gemini", now, 
-                          "book_guid", &src_book->inst.entity.guid, 
+   gnc_kvp_bag_add (qof_book_get_slots(dest_book), "gemini", now, 
+                          "book_guid", qof_book_get_guid(src_book),
                            NULL);
    LEAVE (" ");
 }
@@ -670,6 +668,7 @@ add_closing_balances (AccountGroup *closed_grp,
    AccountList *acc_list, *node;
 
    if (!closed_grp) return;
+
    ENTER (" enter=%s post=%s desc=%s", gnc_print_date(*date_entered),
        gnc_print_date (*post_date), desc);
    xaccAccountBeginEdit (equity_account);
@@ -693,7 +692,7 @@ add_closing_balances (AccountGroup *closed_grp,
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
       kvp_frame_set_guid (cwd, "/book/prev-acct", xaccAccountGetGUID (candidate));
-      kvp_frame_set_guid (cwd, "/book/prev-book", &closed_book->inst.entity.guid);
+      kvp_frame_set_guid (cwd, "/book/prev-book", qof_book_get_guid(closed_book));
 
       xaccAccountSetSlots_nc (twin, twin->inst.kvp_data);
       
@@ -702,7 +701,7 @@ add_closing_balances (AccountGroup *closed_grp,
        * the next book is. */
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
-      kvp_frame_set_guid (cwd, "/book/next-book", &open_book->inst.entity.guid);
+      kvp_frame_set_guid (cwd, "/book/next-book", qof_book_get_guid(open_book));
       kvp_frame_set_guid (cwd, "/book/next-acct", xaccAccountGetGUID (twin));
 
       xaccAccountSetSlots_nc (candidate, candidate->inst.kvp_data);
@@ -760,7 +759,7 @@ add_closing_balances (AccountGroup *closed_grp,
             /* Add KVP data showing where the balancing 
              * transaction came from */
             cwd = xaccTransGetSlots (trans);
-            kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->inst.entity.guid);
+            kvp_frame_set_guid (cwd, "/book/closed-book", qof_book_get_guid(closed_book));
             kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
             
             xaccTransCommitEdit (trans);
@@ -802,7 +801,7 @@ static void
 period_begin_edit (QofBook *src_book, QofBook *dest_book)
 {
    QofBackend *be;
-   be = src_book->backend;
+   be = qof_book_get_backend(src_book);
    if (be && be->begin)
    {
       // (*be->begin)(be, GNC_ID_PERIOD, dest_book);
@@ -813,7 +812,7 @@ static void
 period_commit_edit (QofBook *src_book, QofBook *dest_book)
 {
    QofBackend *be;
-   be = src_book->backend;
+   be = qof_book_get_backend(src_book);
    if (be && be->commit)
    {
       // (*be->commit)(be, GNC_ID_PERIOD, dest_book);
@@ -840,8 +839,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 
    /* Setup closing book */
    closing_book = qof_book_new();
-   qof_book_set_backend (closing_book, existing_book->backend);
-   closing_book->book_open = 'n';
+   qof_book_set_backend (closing_book, qof_book_get_backend(existing_book));
+   qof_book_mark_closed(closing_book);
 
    period_begin_edit (existing_book, closing_book);
 
@@ -870,8 +869,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
 
    /* Now add the various identifying kvp's */
    /* cwd == 'current working directory' */
-   exist_cwd = existing_book->inst.kvp_data;
-   partn_cwd = closing_book->inst.kvp_data;
+   exist_cwd = qof_book_get_slots(existing_book);
+   partn_cwd = qof_book_get_slots(closing_book);
    
    /* Mark the boundary date between the books */
    kvp_frame_set_timespec (exist_cwd, "/book/open-date", calve_date);
@@ -883,8 +882,8 @@ gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
    kvp_frame_set_timespec (partn_cwd, "/book/log-date", ts);
 
    /* Set up pointers to each book from the other. */
-   kvp_frame_set_guid (partn_cwd, "/book/next-book", &existing_book->inst.entity.guid);
-   kvp_frame_set_guid (exist_cwd, "/book/prev-book", &closing_book->inst.entity.guid);
+   kvp_frame_set_guid (partn_cwd, "/book/next-book", qof_book_get_guid(existing_book));
+   kvp_frame_set_guid (exist_cwd, "/book/prev-book", qof_book_get_guid(closing_book));
 
    /* add in transactions to equity accounts that will
     * hold the colsing balances */

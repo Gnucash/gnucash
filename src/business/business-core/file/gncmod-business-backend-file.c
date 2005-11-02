@@ -28,7 +28,10 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-engine.h"
+#include "io-gncxml-v2.h"
 
+#include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-employee-xml-v2.h"
@@ -36,6 +39,7 @@
 #include "gnc-invoice-xml-v2.h"
 #include "gnc-job-xml-v2.h"
 #include "gnc-order-xml-v2.h"
+#include "gnc-owner-xml-v2.h"
 #include "gnc-tax-table-xml-v2.h"
 #include "gnc-vendor-xml-v2.h"
 
@@ -72,17 +76,14 @@ libgncmod_business_backend_file_LTX_gnc_module_description(void)
 int
 libgncmod_business_backend_file_LTX_gnc_module_init(int refcount) 
 {  
+  if(!gnc_engine_is_initialized()) { return FALSE; }
+
   bus_core = gnc_module_load("gnucash/business-core", 0);
   if(!bus_core) return FALSE;
 
-  file = gnc_module_load("gnucash/backend/file", 0);
-  if(!file) {
-    gnc_module_unload (bus_core);
-    return FALSE;
-  }
-
   if (refcount == 0) {
     /* Initialize our pointers into the backend subsystem */
+    gnc_address_xml_initialize ();
     gnc_billterm_xml_initialize ();
     gnc_customer_xml_initialize ();
     gnc_employee_xml_initialize ();
@@ -90,6 +91,7 @@ libgncmod_business_backend_file_LTX_gnc_module_init(int refcount)
     gnc_invoice_xml_initialize ();
     gnc_job_xml_initialize ();
     gnc_order_xml_initialize ();
+    gnc_owner_xml_initialize ();
     gnc_taxtable_xml_initialize ();
     gnc_vendor_xml_initialize ();
   }
@@ -104,9 +106,6 @@ libgncmod_business_backend_file_LTX_gnc_module_end(int refcount)
 
   if (bus_core)
     unload = gnc_module_unload(bus_core);
-
-  if (file)
-    unload = gnc_module_unload(file);
 
   if (refcount == 0) {
     bus_core = NULL;

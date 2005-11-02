@@ -31,26 +31,10 @@
 #include <glib.h>
 #include <string.h>
 
-#include "guid.h"
-#include "qof-be-utils.h"
-#include "qofbook.h"
-#include "qofclass.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
-#include "qofquerycore.h"
-
 #include "Account.h"
 #include "messages.h"
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-
 #include "gncAddressP.h"
-#include "gncBusiness.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 
@@ -71,16 +55,12 @@ struct _gncEmployee
   Account *        ccard_acc;
 };
 
-static short        module = MOD_BUSINESS;
+static QofLogModule log_module = GNC_MOD_BUSINESS;
 
 #define _GNC_MOD_NAME        GNC_ID_EMPLOYEE
 
-#define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
-#define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
-
 G_INLINE_FUNC void mark_employee (GncEmployee *employee);
-G_INLINE_FUNC void
-mark_employee (GncEmployee *employee)
+void mark_employee (GncEmployee *employee)
 {
   employee->inst.dirty = TRUE;
   qof_collection_mark_dirty (employee->inst.entity.collection);
@@ -279,6 +259,20 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
   gncEmployeeCommitEdit (employee);
 }
 
+void
+qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent)
+{
+	GncAddress *addr;
+
+	if(!employee || !addr_ent) { return; }
+	addr = (GncAddress*)addr_ent;
+	if(addr == employee->addr) { return; }
+	if(employee->addr != NULL) { gncAddressDestroy(employee->addr); }
+	gncEmployeeBeginEdit(employee);
+	employee->addr = addr;
+	gncEmployeeCommitEdit(employee);
+}
+
 /* ============================================================== */
 /* Get Functions */
 const char * gncEmployeeGetID (GncEmployee *employee)
@@ -425,7 +419,8 @@ gboolean gncEmployeeRegister (void)
 	{ EMPLOYEE_WORKDAY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEmployeeGetWorkday,
 		(QofSetterFunc)gncEmployeeSetWorkday },
 	{ EMPLOYEE_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEmployeeGetRate, (QofSetterFunc)gncEmployeeSetRate },
-    { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr, NULL },
+    { EMPLOYEE_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncEmployeeGetAddr, (QofSetterFunc)qofEmployeeSetAddr },
+    { EMPLOYEE_CC,  GNC_ID_ACCOUNT, (QofAccessFunc)gncEmployeeGetCCard, (QofSetterFunc)gncEmployeeSetCCard },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, (QofSetterFunc)gncEmployeeSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

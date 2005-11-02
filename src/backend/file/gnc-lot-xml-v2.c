@@ -41,13 +41,11 @@
 #include "gnc-xml.h"
 #include "io-gncxml-gen.h"
 #include "io-gncxml-v2.h"
-
 #include "sixtp-dom-parsers.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "gnc-engine-util.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 const gchar *lot_version_string = "2.0.0";
 
@@ -63,8 +61,8 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     kvp_frame *kf;
 
 	 ENTER("(lot=%p)", lot);
-    ret = xmlNewNode(NULL, gnc_lot_string);
-    xmlSetProp(ret, "version", lot_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
 

@@ -32,9 +32,8 @@
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
-#include "global-options.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "gnc-trace.h"
 #include "import-settings.h"
 #include "import-match-map.h"
@@ -67,7 +66,7 @@ struct _main_matcher_info
 #define DOWNLOADED_CLIST_ACTION_CLEAR 6
 #define DOWNLOADED_CLIST_ACTION_EDIT 7
 #define DOWNLOADED_CLIST_ACTION_INFO 8
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* Local prototypes */
 static void automatch_clist_transactions(GNCImportMainMatcher *info, GtkCList *clist, int starting_row);
@@ -388,23 +387,21 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   GladeXML *xml;
   GtkWidget *heading_label;
   
-  gnc_set_log_level(MOD_IMPORT, GNC_LOG_TRACE);
-
   info = g_new0 (GNCImportMainMatcher, 1);
 
   /* Initialize user Settings. */
   info->user_settings = gnc_import_Settings_new ();
   gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
 
-  /* Initialize the GnomeDialog. */
+  /* Initialize the GtkDialog. */
   xml = gnc_glade_xml_new ("generic-import.glade", "transaction_matcher");
 
-  g_assert
-    (info->dialog = glade_xml_get_widget (xml, "transaction_matcher"));
-  g_assert 
-    (info->clist = glade_xml_get_widget (xml, "downloaded_clist"));
-  g_assert
-    (heading_label = glade_xml_get_widget (xml, "heading_label"));
+  info->dialog = glade_xml_get_widget (xml, "transaction_matcher");
+  g_assert (info->dialog != NULL);
+  info->clist = glade_xml_get_widget (xml, "downloaded_clist");
+  g_assert (info->clist != NULL);
+  heading_label = glade_xml_get_widget (xml, "heading_label");
+  g_assert (heading_label != NULL);
 
   /*if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (info->dialog), 
@@ -566,7 +563,7 @@ refresh_clist_row (GNCImportMainMatcher *gui,
   /*Date*/
 
   text[DOWNLOADED_CLIST_DATE] = 
-    xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
+    qof_print_date ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) );
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_DATE, 
 		      text[DOWNLOADED_CLIST_DATE]);

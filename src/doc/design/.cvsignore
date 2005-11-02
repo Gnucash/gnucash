@@ -19,3 +19,5 @@ gnucash-design.aux
 *.info-*
 *.html
 texinfo.tex
+.DS_Store
+

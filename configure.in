@@ -18,37 +18,46 @@ dnl Process this file with autoconf to produce a configure script.
 #   Libraries - Check for libraries
 #   Footer    - Autoconf footer stuff
 
+# Autoconf initialization
+AC_INIT
+AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_SRCDIR(src/engine/Transaction.h)
+AC_PREREQ(2.53)
+
+# Define the version number
+GNUCASH_MAJOR_VERSION=1
+GNUCASH_MINOR_VERSION=9
+GNUCASH_MICRO_VERSION=0
+GNUCASH_VERSION_STRING="$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION"
+
+AM_INIT_AUTOMAKE(gnucash, $GNUCASH_VERSION_STRING)
+
 
 ##  Do this first, because the other tests depend on it:
 
-### --------------------------------------------------------------------------
-### Headers
-### check for various programs, and stuff (do this first because later
-### commands depend on them):
-
-AC_INIT(src/engine/Transaction.h)
-AC_PREREQ(2.53)
-
+# Check for gcc and intltool (somehow breaks the suggested content
+# order, doesn't it? Whatever.)
 AC_PROG_CC
+AC_PROG_INTLTOOL
+
+AM_GCONF_SOURCE_2
+
+# Override gconf default install locations.  The default is to always
+# put them into /etc.  This change puts them into $(prefix)/etc.
+if test "x$GCONF_SCHEMA_INSTALL_SOURCE" = "x"; then
+  GCONF_SCHEMA_CONFIG_SOURCE="xml::${sysconfdir}/gconf/gconf.xml.defaults"
+fi
+GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY=`echo $GCONF_SCHEMA_CONFIG_SOURCE | cut -d ':' -f 3`
+AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
+
 
 # Comment out for production or semi-production builds.  I.E. Anything
 # that is explicitly tagged in cvs as a version.
 AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
 
-GNUCASH_MAJOR_VERSION=1
-GNUCASH_MINOR_VERSION=9
-GNUCASH_MICRO_VERSION=0
-GNUCASH_VERSION=$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION
-
 AC_SUBST(GNUCASH_MAJOR_VERSION)
 AC_SUBST(GNUCASH_MINOR_VERSION)
 AC_SUBST(GNUCASH_MICRO_VERSION)
-
-AM_INIT_AUTOMAKE(gnucash,$GNUCASH_VERSION)
-
-AC_PROG_INTLTOOL
-
-AM_CONFIG_HEADER(config.h)
 
 AC_DEFINE_UNQUOTED(GNUCASH_MAJOR_VERSION, $GNUCASH_MAJOR_VERSION,
 	[GnuCash Major version number])
@@ -59,11 +68,18 @@ AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION,
 
 dnl Set of available languages.
 ALL_LINGUAS="da de el en_GB es es_NI fr hu it ja nb nl pl pt pt_BR ru rw sk sv ta uk zh_CN zh_TW"
-AM_GNU_GETTEXT([use-libtool])
+
+GETTEXT_PACKAGE=gnucash
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
+	[GetText version number])
+               
+AM_GLIB_GNU_GETTEXT
 
 
 AM_MAINTAINER_MODE
-AM_ACLOCAL_INCLUDE(macros)
+AC_CONFIG_MACRO_DIR(macros)
+
 
 AC_PROG_INSTALL
 
@@ -73,29 +89,6 @@ AM_PROG_LIBTOOL
 
 AC_SUBST(LIBTOOL_DEPS)
 
-# # checks for the pthreads library
-# have_pthread=no
-# for i in pthreads lthread pthread; do
-#   if test "x$have_pthread" = xno; then
-#     AC_CHECK_LIB($i, pthread_once, [
-#  	PTHREAD_LIBS=-l$i
-# 	have_pthread=yes
-# 	])
-#   fi
-# done
-# 
-# # Hmm, maybe it's just in libc?
-# if test "x$have_pthread" = xno; then
-#     AC_CHECK_FUNC(pthread_once, [ have_pthread=yes ])
-# fi
-# 
-# # Do we HAVE threads?!?
-# if test "x$have_pthread" = xno; then
-#   AC_MSG_ERROR([unable to find pthreads on your system.  Sorry.])
-# fi
-# 
-# AC_SUBST(PTHREAD_LIBS)
-
 AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
@@ -103,6 +96,18 @@ AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
+AC_CHECK_FUNCS(setenv,,[
+  AC_CHECK_FUNCS(putenv,,[
+    AC_MSG_ERROR([Must have one of the setenv or putenv functions.])
+  ])
+])
+
+## +jsled
+# copied from gnumeric
+AC_CHECK_HEADERS(ieeefp.h ieee754.h)
+dnl Check for some functions
+AC_CHECK_FUNCS(random drand48 finite memmove mkdtemp uname times sysconf fmin)
+## --jsled
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
@@ -119,14 +124,29 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
 fi
 
-AM_PATH_GLIB
+AM_PATH_GLIB_2_0(2.4.0,,AC_MSG_ERROR([
+*** GLIB >= 2.4 is required to build Gnucash; please make sure you have the
+*** development headers installed. The latest version of GLIB is
+*** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
+	gthread gobject)
 
 if test ${no_glib}x = yesx
 then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
-AC_CHECK_HEADERS(dlfcn.h dl.h ghttp_ssl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
+AC_MSG_CHECKING(for GLIB - version >= 2.6.0)
+if $PKG_CONFIG 'glib-2.0 >= 2.6.0'
+then
+  AC_MSG_RESULT(yes)
+  AC_DEFINE(HAVE_GLIB26,1,[System has glib 2.6.0 or better])
+  HAVE_GLIB26=yes
+else
+  AC_MSG_RESULT(no)
+fi
+AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
+
+AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 DL_LIB=
 AC_CHECK_FUNCS(dlopen,,[
@@ -149,8 +169,9 @@ AC_SUBST(DL_LIB)
 ### MacOS 10.x requires some special handling...
 
 # Some systems (MacOS) require -lintl
-AC_SEARCH_LIBS(gettext, intl, ,[
-	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
+# not true for darwin 10.3 - halts the build.
+#AC_SEARCH_LIBS(gettext, intl, ,[
+#	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
 
 AC_MSG_CHECKING(for darwin)
 case $host_os in
@@ -160,6 +181,16 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
+     dnl Use fink under MacOS X to find popt
+     AC_MSG_CHECKING(for fink support)
+     if test -d "/sw/lib" -a -d "/sw/include"; then
+        AM_CFLAGS="$AM_CFLAGS -I/sw/include"
+        LDFLAGS="$LDFLAGS -L/sw/lib"
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+    AC_CHECK_HEADERS(popt.h)
 		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
 		mv libtool libtool.old
 		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
@@ -179,8 +210,10 @@ esac
 ### Guile and g-wrap version checks (should this be something other than
 ### the Gnome check?)
 
+GUILE_LIBS=""
 GNOME_CHECK_GUILE
 AS_SCRUB_INCLUDE(GUILE_INCS)
+AC_SUBST(GUILE_LIBS)
 
 ### --------------------------------------------------------------------------
 ### G-wrap (libraries and executable)
@@ -188,12 +221,11 @@ AS_SCRUB_INCLUDE(GUILE_INCS)
 G_WRAP_COMPILE_ARGS=""
 G_WRAP_LINK_ARGS=""
 
-AM_GUILE_VERSION_CHECK(1.3.4, , , [AC_MSG_ERROR([
+AM_GUILE_VERSION_CHECK(1.6, , , [AC_MSG_ERROR([
 
   guile  does not appear to be installed correctly, or is not in the
   correct version range.  Perhaps you have not installed the guile
-  development packages?  Right now gnucash requires at least version
-  1.3.4 to build.
+  development packages?  Gnucash requires at least version 1.6 to build.
 ])])
 
 AC_DEFINE_UNQUOTED(GNC_GUILE_MAJOR_VERSION, ${guile_major_version},
@@ -206,10 +238,7 @@ AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
 AM_PATH_GWRAP(1.3.3, , , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
-  enough.  Right now gnucash requires at least version 1.3.3 to build
-  as there were major changes between version 1.3.1 and 1.3.2, and
-  extra support added between 1.3.2 and 1.3.3 that is now required
-  by gnucash.
+  enough.  Right now gnucash requires at least version 1.3.3 to build.
   If you need to install g-wrap, you can find it at
   http://www.gnucash.org/pub/g-wrap.
 ])])
@@ -241,7 +270,7 @@ AS_SCRUB_INCLUDE(CFLAGS)
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)
 GNC_OLDCFLAGS="$CFLAGS"
-CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
 AC_TRY_RUN([
   #include <glib.h>
   #include <libguile/__scm.h>
@@ -263,7 +292,7 @@ CFLAGS="$GNC_OLDCFLAGS"
 # unless you've done sufficient code review/testing.
 AC_MSG_CHECKING(if unsigned long is at least as big as guint32)
 GNC_OLDCFLAGS="$CFLAGS"
-CFLAGS="${GNOME_INCLUDEDIR} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
+CFLAGS="${GNOME_CFLAGS} ${GUILE_INCS} ${CFLAGS} ${GLIB_CFLAGS}"
 AC_TRY_RUN([
   #include <glib.h>
   int main(int argc, char *argv[]) {
@@ -323,24 +352,169 @@ else
   AC_MSG_RESULT(yes)
 fi
 
+### --------------------------------------------------------------------------
+### See if we have pkg-config
+
+AC_PATH_PROG(PKG_CONFIG,pkg-config)
+if test "x$PKG_CONFIG" = x; then
+    # @*%&$ Ximian programmers renamed this application
+    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+    if test "x$PKG_CONFIG" = x; then
+    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
+    fi
+fi
+
+PKG_CHECK_MODULES(GCONF, gconf-2.0 >= "2.0")
+AC_SUBST(GCONF_CFLAGS)
+AC_SUBST(GCONF_LIBS)
+
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
 ### --------------------------------------------------------------------------
 ### Gnome XML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
-GNOME_XML_CHECK
-GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
-AS_SCRUB_INCLUDE(GNOME_XML_CFLAGS)
+PKG_CHECK_MODULES(XML, libxml-2.0)
+AS_SCRUB_INCLUDE(XML_CFLAGS)
+AC_SUBST(XML_CFLAGS)
+AC_SUBST(XML_LIBS)
 
-AC_SUBST(GNOME_XML_CFLAGS)
+LIBXML2_REQUIRED=2.5.10
+PKG_CHECK_MODULES(LIBXML2, libxml-2.0 >= $LIBXML2_REQUIRED)
+LIBXML_VERSION=`$PKG_CONFIG --version xml`
+AC_SUBST(LIBXML2_CFLAGS)
+AC_SUBST(LIBXML2_LIBS)
+AC_SUBST(LIBXML_VERSION)
 
 oLIBS="$LIBS"
-LIBS="$LIBS $GNOME_XML_LIB"
-AC_CHECK_LIB(xml, xmlElemDump, [:], [
-  AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
+LIBS="$LIBS $XML_LIBS"
+
+# Compile a test program to verify that the xml2 library works.
+AC_CHECK_LIB(xml2, xmlElemDump, [:], [
+  AC_MSG_ERROR([libxml2 is required for GnuCash])
   ])
 LIBS="$oLIBS"
 
+dnl *************************************
+dnl QOF
+dnl *************************************
+
+AC_ARG_WITH(qof, [  --with-qof=path         prefix for Query Object Framework - QOF (auto)])
+QOF_REQUIRED=0.6.0
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test pkg-config = no; then
+        AC_MSG_ERROR([Please install pkgconfig])
+        exit 1
+fi
+AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
+if test "$withval" != "yes"; then
+        QOF=`$PKG_CONFIG --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --libs $withval/lib/pkgconfig/qof-1.pc`
+        QOF_CFLAGS=`$PKG_CONFIG --cflags $withval/lib/pkgconfig/qof-1.pc`
+        QOF_VERSION=`$PKG_CONFIG --modversion $withval/lib/pkgconfig/qof-1.pc`
+        QOF_PREFIX=`$PKG_CONFIG --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
+        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
+        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
+else
+        QOF=`$PKG_CONFIG --exists 'qof-1 >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --libs qof-1`
+        QOF_CFLAGS=`$PKG_CONFIG --cflags qof-1`
+        QOF_VERSION=`$PKG_CONFIG --modversion qof-1`
+        QOF_PREFIX=`$PKG_CONFIG --variable=prefix qof-1`
+        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir qof-1`
+        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir qof-1`
+fi
+if test x$QOF_XML_DIR = x; then
+        AC_MSG_RESULT([no, will use internal QOF code])
+	QOF_CFLAGS="-I\${top_srcdir}/src/engine"
+	QOF_LIBS="\${top_srcdir}/src/engine/libqof.la"
+	QOF_LIB_DIR="${libdir}"
+	QOF_PREFIX="internal"
+	QOF_XML_DIR="$QSF_SCHEMA_DIR"
+	LIBQOF_LIBRARY_VERSION=1:1:0
+	LIBQOF_BACKEND_QSF_LIBRARY_VERSION=0:0:0
+	AC_SUBST(LIBQOF_LIBRARY_VERSION)
+	AC_SUBST(LIBQOF_BACKEND_QSF_LIBRARY_VERSION)
+  	AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
+	HAVE_LIBQOF="use_internal"
+else
+        AC_MSG_RESULT([yes])
+fi
+AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
+AM_CONDITIONAL(USE_LIBQOF, [test $HAVE_LIBQOF = "use_internal"])
+AC_SUBST(USE_LIBQOF)
+AC_SUBST(QOF_CFLAGS)
+AC_SUBST(QOF_LIBS)
+AS_SCRUB_INCLUDE(QOF_PREFIX)
+AC_SUBST(QOF_PREFIX)
+AC_SUBST(QOF_LIB_DIR)
+
+### --------------------------------------------------------------------------
+### for GOG/goffice...
+
+dnl If libgoffice-1 >= 0.0.3-2 and libgsf >= 1.12.0-1 are found, 
+dnl we need to omit lib/goffice and use the external library
+dnl because lib/goffice will not build with newer versions of libgsf.
+
+GOFFICE_REQUIRED=0.0.3
+GSF_REQUIRED=1.12.0
+AC_MSG_CHECKING([for GOffice and GSF])
+LIBGOFFICE_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgoffice-1 >= $GOFFICE_REQUIRED"`
+LIBGOFFICE_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice-1 >= $GOFFICE_REQUIRED"`
+LIBGSF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgsf-1 >= $GSF_REQUIRED"`
+LIBGSF_LIBS=`$PKG_CONFIG --silence-errors --libs " libgsf-1 >= $GSF_REQUIRED"`
+AC_SUBST(LIBGOFFICE_CFLAGS)
+AC_SUBST(LIBGOFFICE_LIBS)
+
+if test x"$LIBGOFFICE_LIBS" = x; then
+  AC_MSG_RESULT([No, GOffice not found, will build using internal goffice library.])
+else
+  AC_MSG_RESULT([Yes, using GOffice])
+  AC_DEFINE(HAVE_GOFFICE,,[We have found an external GOffice])
+  HAVE_GOFFICE="use_external"
+fi
+AM_CONDITIONAL(USE_LIBGOFFICE, [test x$HAVE_GOFFICE != x])
+AM_CONDITIONAL(USE_LIBGOFFICE, [test $HAVE_GOFFICE = "use_external"])
+AC_SUBST(USE_LIBGOFFICE)
+
+###
+### GSF
+PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.8.0
+                       libgsf-gnome-1 >= 1.8.0)
+AC_SUBST(GSF_LIBS)
+AC_SUBST(GSF_CFLAGS)
+
+### libart
+PKG_CHECK_MODULES(ART, libart-2.0 >= 2.3.11)
+AC_SUBST(ART_LIBS)
+AC_SUBST(ART_CFLAGS)
+
+### silence convention-difference from cut-n-paste'd gnumeric Makefile.am's:
+AM_CONDITIONAL(WITH_GNOME, true)
+# for lib/goffice/graph/plugins/plot_barcol/gog-1.5d.c's use of
+# goffice/graph/gog-error-bar.h:gog_error_bar_prefs, which is bounded by
+# WITH_GTK for some reason... :/
+AM_CONDITIONAL(WITH_GTK, true)
+AC_DEFINE(WITH_GTK, 1, [Define if UI is built])
+
+### gnome-print [= gnome-font]
+PKG_CHECK_MODULES(PRINT, libgnomeprint-2.2 >= 2.5.2)
+AC_SUBST(PRINT_LIBS)
+AC_SUBST(PRINT_CFLAGS)
+
+AC_ARG_VAR(GLIB_GENMARSHAL, [Absolute path of the glib-genmarshal executable.])
+AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+
+gog_plugindir='${GNC_LIBDIR}/plugins'
+# do this to minimize changes in the plugin makefiles...
+gnumeric_plugindir='${gog_plugindir}'
+AC_SUBST(gog_plugindir)
+AC_SUBST(gnumeric_plugindir)
+#AC_SUBST(pkglibdir) -- this breaks builds into /opt.
+gnumeric_icondir='${GNC_SHAREDIR}/pixmaps'
+AC_SUBST(gnumeric_icondir)
+
+
+# /GOG
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -376,14 +550,18 @@ fi
 
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
+QSF_SCHEMA_DIR='${GNC_SHAREDIR}/xml/qsf'
+GNC_UI_DIR='${GNC_SHAREDIR}/ui'
 GNC_GWRAP_LIBDIR='${GNC_SHAREDIR}/guile-modules/g-wrapped'
 GNC_MODULE_DIR='${pkglibdir}'
-GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
+GNC_PIXMAP_DIR='${GNC_SHAREDIR}/pixmaps'
 
 AC_SUBST(GNC_ACCOUNTS_DIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
+AC_SUBST(QSF_SCHEMA_DIR)
+AC_SUBST(GNC_UI_DIR)
 AC_SUBST(GNC_GWRAP_LIBDIR)
 AC_SUBST(GNC_INCLUDE_DIR)
 AC_SUBST(GNC_LIBDIR)
@@ -404,6 +582,11 @@ AC_ARG_ENABLE( profile,
   [  --enable-profile             compile with profiling set],
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
+
+AC_ARG_ENABLE( ref-counts-dumps,
+  [  --enable-ref-counts-dumps     compile with ref count dumps],
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,Enable reference count dumps),
+       AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,Enable reference count dumps) )
 
 
 ### --------------------------------------------------------------------------
@@ -572,7 +755,7 @@ then
 	  [ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
     fi
 
-    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx -lstdc++"
+    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
     AC_MSG_CHECKING(for libofx)
     save_LIBS="${LIBS}"
     LIBS="${LIBS} ${LIBOFX_LIBS}"
@@ -667,8 +850,8 @@ AC_ARG_ENABLE( locale-specific-tax,
 # Used to initialize doc-path.
 AC_ARG_WITH( help-prefix,
   [  --with-help-prefix=PATH      specify where to store the help files],
-  GNC_HELPDIR="$with_help_prefix/gnome/help/gnucash",
-  GNC_HELPDIR="\${datadir}/gnome/help/gnucash")
+  GNC_HELPDIR="$with_help_prefix",
+  GNC_HELPDIR="\${datadir}")
 
 AC_SUBST(GNC_HELPDIR)
 
@@ -793,68 +976,8 @@ LIBS="$LIBS -lm"
 
 
 ### --------------------------------------------------------------------------
-### Berkeley db
-
-AC_ARG_ENABLE(prefer-db1,
-  [  --enable-prefer-db1          Prefer Berkeley DB 1.x],[prefer_db1="$enableval"],[prefer_db1=yes])
-
-DB_LIBS=
-AC_CHECK_FUNC(dbopen, [],
-if test "$prefer_db1" = "yes"; then
- AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-  AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_CHECK_LIB(db-4.1, __db185_open, DB_LIBS="-ldb-4.1",
-      AC_CHECK_LIB(db-4.2, __db185_open, DB_LIBS="-ldb-4.2",
-       AC_CHECK_LIB(db, __db185_open, DB_LIBS="-ldb",
-        AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-       )
-      )
-     )
-    )
-   )
-  )
- )
-else
- AC_CHECK_LIB(db, dbopen, DB_LIBS="-ldb",
-  AC_CHECK_LIB(db1, dbopen, DB_LIBS="-ldb1",
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_CHECK_LIB(db-4.1, __db185_open, DB_LIBS="-ldb-4.1",
-      AC_CHECK_LIB(db-4.2, __db185_open, DB_LIBS="-ldb-4.2",
-       AC_CHECK_LIB(db, __db185_open, DB_LIBS="-ldb",
-        AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-       )
-      )
-     )
-    )
-   )
-  )
- )
-fi
-)
-
-dnl look for db headers
-if test "$prefer_db1" = "yes"; then
-	AC_CHECK_HEADERS(db_185.h db1/db.h db4/db_185.h)
-	if test "$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nonono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
-	AC_DEFINE(PREFER_DB1,,Prefer DB1)
-else
-	AC_CHECK_HEADERS(db.h db_185.h db1/db.h db4/db_185.h)
-
-	if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
-	  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-	fi
-fi
-
-AC_SUBST(DB_LIBS)
-
-### --------------------------------------------------------------------------
 ### popt
-
+AC_CHECK_HEADERS(popt.h)
 AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
 
   popt 1.5 or newer is required to build gnucash. You can download
@@ -881,125 +1004,84 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
-    GNOME_INIT
     GNOME_COMPILE_WARNINGS
-    GNOME_CHECK_GDK_PIXBUF
-    GNOME_PRINT_CHECK
-    
-    # gnome-print-check appears tobe sort of b0rked for the time being
-    GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
+
+    # Look for libgnomeui by pkg-config
+    PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4)
+    AS_SCRUB_INCLUDE(GTK_CFLAGS)
+    AC_SUBST(GTK_CFLAGS)
+    AC_SUBST(GTK_LIBS)
+
+    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4)
+    AS_SCRUB_INCLUDE(GNOME_CFLAGS)
+
+    AC_SUBST(GNOME_CFLAGS)
+    AC_SUBST(GNOME_LIBS)
+
+    # look for gdk-pixbuf
+    PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
+    AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
+    AC_SUBST(GDK_PIXBUF_CFLAGS)
+    AC_SUBST(GDK_PIXBUF_LIBS)
+
+    # Gnome-Print -- some people already have/need libgnomeprint-2.2
+    # Yep, so lets test to see if it is 2.0 or 2.2, 
+    # Anyone know why gnome has versions in the package config? 
+    # Why cant I just ask for the version of 'libgnomeprint'
+
+    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2 libgnomeprintui-2.2)
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+    AC_SUBST(GNOME_PRINT_CFLAGS)
+    AC_SUBST(GNOME_PRINT_LIBS)
+
+    # There is no libguppi.  Just substitute empty stuff
+    LIBGUPPI_CFLAGS=
+    LIBGUPPI_LIBS=
+    AC_SUBST(LIBGUPPI_CFLAGS)
+    AC_SUBST(LIBGUPPI_LIBS)
     
     ### ----------------------------------------------------------------------
-    ### Check for glade
+    ### Check for glade, gtkhtml
     
-    AM_PATH_LIBGLADE
-    
-    GLADE_LIBS="$LIBGLADE_LIBS"
-    GLADE_CFLAGS="$LIBGLADE_CFLAGS"
-    
+    PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
-    AC_SUBST(GLADE_LIBS)
     AC_SUBST(GLADE_CFLAGS)
-    
-    
-    ### ----------------------------------------------------------------------
-    AC_CHECK_LIB(gal, main, true,
-      [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
-      `$GNOME_CONFIG --libs gal`)
-    
-    #
-    # Check for GtkHTML..  First check for 1.1, then check for < 1.1
-    #
+    AC_SUBST(GLADE_LIBS)
 
-    AC_PATH_PROG(PKG_CONFIG,pkg-config)
-    if test "x$PKG_CONFIG" = x; then
-	# @*%&$ Ximian programmers renamed this application
-	AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+    # check for gtkhtml 3.x
+    gtkhtml=0
+    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1] , [gtkhtml=0])
+    if test $gtkhtml = 0
+      then
+    	PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.6 , [gtkhtml=1] , [gtkhtml=0])
+    	if test $gtkhtml = 0
+    	  then
+    	     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , [gtkhtml=1] , [gtkhtml=0])
+    	     if test $gtkhtml = 0
+    	       then 
+    	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1] , [gtkhtml=0])
+    	          if test $gtkhtml = 0
+    	            then 
+    	              PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0 ,,
+    	    		AC_MSG_ERROR([Could not find a working gtkhtml version]))
+    	          fi
+    	    fi
+    	fi
     fi
-
-    AC_MSG_CHECKING([for gtkhtml >= 1.1])
-    if test "x$PKG_CONFIG" != x; then
-	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
-	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
-        AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
-    fi
-
-    if test "x$GTKHTML_LIBS" != x; then
-	AC_MSG_RESULT(yes)
-	# check for gtkhtml and enable it via HAVE_LIBGTKHTML if found
-	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
-		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
-		     AC_DEFINE(HAVE_LIBGTKHTML,,We Have LIBGTKHTML),
-		     AC_MSG_ERROR([Cannot link gtkhtml-1.1. See the README and config.log for more info.]),
-		     $GTKHTML_LIBS)
-    else
-        AC_MSG_CHECKING([for gtkhtml < 1.1])
-        GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
-        GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
-        AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
-
-	if test "x$GTKHTML_LIBS" != x; then
-	    AC_MSG_RESULT(yes)
-
-	    # check for gtkhtml and enable it via HAVE_LIBGTKHTML if found
-	    AC_CHECK_LIB(gtkhtml, gtk_html_new,
-		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
-		     AC_DEFINE(HAVE_LIBGTKHTML,,We Have LIBGTKHTML),
-		     AC_MSG_ERROR([Cannot link gtkhtml. See the README and config.log for more info.]),
-		     $GTKHTML_LIBS)
-	else
-	    AC_MSG_ERROR([Cannot find GtkHTML <= 1.x on your system.  See the README and config.log for more info.])
-
-	fi
-    fi
-    
-    #
-    # Check for GHTTP
-    #
-
-    GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
-    GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
-    
-    # Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
-    AC_CHECK_LIB(ghttp, ghttp_request_new,
-                 GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
-                 AC_DEFINE(HAVE_LIBGHTTP,,We Have GHTTP)
-    	     if test "x$GHTTP_LIBS" = "x" ; then
-    		GHTTP_LIBS=-lghttp
-    	     fi,
-                 AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
-                 $GHTTP_LIBS)
-    
-    AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
-                 AC_DEFINE(HAVE_OPENSSL,,We Have OpenSSL),
-    	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
-    	     $GHTTP_LIBS)
-    
-    AS_SCRUB_INCLUDE(GHTTP_CFLAGS)
-    AC_SUBST(GTKHTML_LIBS)
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+dnl if Mac OSX, also scrub /sw/include
+dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
+case $host_os in
+	darwin*)
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include/gtkhtml ;;" | sed -e "s;-I/sw/includ/gtkhtmle$;;")
+		;;
+esac
     AC_SUBST(GTKHTML_CFLAGS)
-    AC_SUBST(GHTTP_LIBS)
-    AC_SUBST(GHTTP_CFLAGS)
-    
-    
+    AC_SUBST(GTKHTML_LIBS)
+
+   
     ### ----------------------------------------------------------------------
-    ### guppi
-    
-    AC_ARG_ENABLE( guppi,
-      [  --disable-guppi               compile without guppi support],
-      if test $enableval = no; then
-        USE_GUPPI=0
-      else
-        USE_GUPPI=1
-      fi,
-      USE_GUPPI=1 )
-    
-    if test ${USE_GUPPI} = 0; then
-      AC_MSG_WARN([Compiling without guppi support])
-    else
-      AC_DEFINE(USE_GUPPI,,We are using guppi)
-    
     
     AC_ARG_ENABLE( efence,
       [  --enable-efence               link using efence],
@@ -1011,34 +1093,6 @@ then
       USE_EFENCE=0
       EFENCE_LIBS="")
     AC_SUBST(EFENCE_LIBS)
-    
-    ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
-    
-    # LAME: if you ask gnome-config for the zvt libs, it doesn't include
-    # imlib, though it needs it so we'll just steal gtkhtml's which does.
-    AC_CHECK_LIB(zvt, main, true,
-      [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
-      `$GNOME_CONFIG --libs zvt` $GTKHTML_LIBS)
-    
-    #AC_CHECK_LIB(bonobo, main, true,
-    #  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
-    #],
-    #  `$GNOME_CONFIG --libs bonobo`)
-    
-    AC_CHECK_LIB(oaf, main, true,
-      [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
-      `$GNOME_CONFIG --libs oaf`)
-    
-    ## guppi itself.
-    
-    GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
-    GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
-    AS_SCRUB_INCLUDE(GUPPI_CFLAGS)
-    LIBGUPPI_CHECK
-    AC_SUBST(GUPPI_LIBS)
-    AC_SUBST(GUPPI_CFLAGS)
-    
-    fi
     
     ### ----------------------------------------------------------------------
     ### XIM
@@ -1153,6 +1207,7 @@ then
   # us to keep it turned on, but also not break configure proceses.
   # -- warlord, 02/02/2003
 
+
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
   AC_ARG_ENABLE(error-on-warning,
@@ -1173,6 +1228,10 @@ then
      if test `echo ${GCC_VERSION} | cut -d. -f2` -ge 4; then
 	# This is gcc >= 3.4.x
 	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement"
+     else if test `echo ${GCC_VERSION} | cut -d. -f1` -ge 4; then
+	# This is gcc == 4.x.x
+	warnFLAGS="${warnFLAGS} -Wdeclaration-after-statement -Wno-pointer-sign"
+	fi
      fi
   fi
 
@@ -1202,8 +1261,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( intl/Makefile po/Makefile.in 
-	  m4/Makefile
+AC_CONFIG_FILES(po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -1224,15 +1282,29 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
+          lib/glib26/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
-          macros/Makefile
+          lib/goffice/Makefile
+          lib/goffice/split/Makefile
+          lib/goffice/split/widgets/Makefile
+          lib/goffice/app/Makefile
+          lib/goffice/graph/Makefile
+          lib/goffice/graph/plugins/Makefile
+          lib/goffice/graph/plugins/plot_barcol/Makefile
+          lib/goffice/graph/plugins/plot_pie/Makefile
+          lib/goffice/graph/plugins/plot_radar/Makefile
+          lib/goffice/graph/plugins/plot_surface/Makefile
+          lib/goffice/graph/plugins/plot_xy/Makefile
+          lib/goffice/utils/Makefile
+          lib/goffice/gui-utils/Makefile
+          lib/goffice/drawing/Makefile
+          lib/goffice/pixmaps/Makefile
+          lib/goffice/cut-n-paste/Makefile
+          lib/goffice/cut-n-paste/pcre/Makefile
           rpm/Makefile
           src/Makefile
-          src/app-file/Makefile
-          src/app-file/test/Makefile
-          src/app-file/gnome/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
@@ -1241,6 +1313,7 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/backend/file/test/Makefile
           src/backend/file/test/test-files/Makefile
           src/backend/file/test/test-files/xml2/Makefile
+	  src/backend/qsf/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
           src/backend/rpc/Makefile
@@ -1256,11 +1329,6 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/engine/Makefile
           src/engine/test/Makefile
           src/engine/test-core/Makefile
-          src/experimental/Makefile
-          src/experimental/cbb/Makefile
-          src/experimental/cbb/cbb-engine/Makefile
-          src/experimental/cgi-bin/Makefile
-          src/experimental/gg/Makefile
           src/gnc-module/Makefile
           src/gnc-module/test/Makefile
           src/gnc-module/test/mod-foo/Makefile
@@ -1268,9 +1336,13 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/gnc-module/test/mod-baz/Makefile
           src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
-          src/gnome/glade/Makefile
+	  src/gnome/glade/Makefile
+	  src/gnome/schemas/Makefile
+	  src/gnome/ui/Makefile
           src/gnome-utils/Makefile
-          src/gnome-utils/test/Makefile
+	  src/gnome-utils/schemas/Makefile
+	  src/gnome-utils/test/Makefile
+	  src/gnome-utils/ui/Makefile
           src/gnome-search/Makefile
           src/import-export/Makefile
           src/import-export/test/Makefile
@@ -1282,12 +1354,14 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
+          src/import-export/schemas/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
           src/import-export/mt940/Makefile
           src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
+          src/import-export/hbci/schemas/Makefile
           src/import-export/hbci/test/Makefile
           src/network-utils/Makefile
           src/network-utils/test/Makefile
@@ -1305,7 +1379,7 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/register/register-gnome/test/Makefile
           src/report/Makefile
           src/report/report-gnome/Makefile
-          src/report/report-gnome/test/Makefile
+          dnl # src/report/report-gnome/test/Makefile
           src/report/report-system/Makefile
           src/report/report-system/test/Makefile
           src/report/standard-reports/Makefile
@@ -1332,6 +1406,8 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
           src/business/business-gnome/glade/Makefile
+          src/business/business-gnome/schemas/Makefile
+          src/business/business-gnome/ui/Makefile
           src/business/business-ledger/Makefile
           src/business/business-reports/Makefile
 
@@ -1343,14 +1419,30 @@ AC_OUTPUT( intl/Makefile po/Makefile.in
           gnucash-config
           ,
           dnl # commands go here, but we don't have any right now
-          )
+)
+AC_OUTPUT
 
 if test x$RPC_DIR = xrpc ; then
        AC_MSG_WARN([
 
-       The RPC Backend is depricated.  You should not use it.
+       The RPC Backend is deprecated.  You should not use it.
        It may go away in the future.  If you need it, please
        contact gnucash-devel@gnucash.org and let the developers
        know.
        ])
 fi
+
+AC_MSG_RESULT([
+  Options detected/selected
+  -------------------------
+  gnucash version ...... : $VERSION
+  Build for host ....... : $host
+  Extra Warnings ....... : $warnFLAGS
+  CPPFLAGS ............. : $CPPFLAGS
+  CFLAGS ............... : $CFLAGS
+  LDFLAGS .............. : $LDFLAGS
+  QOF support ...........: $QOF_VERSION
+  QOF location ..........: $QOF_PREFIX
+  QOF library dir .......: $QOF_LIB_DIR
+  QOF backend config ....: $QOF_XML_DIR
+])

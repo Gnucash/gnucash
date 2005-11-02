@@ -19,10 +19,10 @@
 #ifndef __GTT_UTIL_H__
 #define __GTT_UTIL_H__
 
-#include <gtk/gtktext.h>
+#include <gtk/gtk.h>
 
 /* Some gtk-like utilities */
-void xxxgtk_text_set_text (GtkText *text, const char *str);
-const char * xxxgtk_text_get_text (GtkText *text);
+void xxxgtk_textview_set_text (GtkTextView *text, const char *str);
+char * xxxgtk_textview_get_text (GtkTextView *text);
 
 #endif /* __GTT_UTIL_H__ */

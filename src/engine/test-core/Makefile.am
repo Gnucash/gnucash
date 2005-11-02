@@ -6,6 +6,7 @@ LDADD = \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   -lltdl
 
 libgncmod_test_engine_la_SOURCES = gncmod-test-engine.c test-engine-stuff.c
@@ -15,6 +16,7 @@ libgncmod_test_engine_la_LIBADD = \
   ../libgncmod-engine.la \
   ../libgw-engine.la \
   ../libgw-kvp.la \
+  ${QOF_LIBS} \
   ${GLIB_LIBS}
 
 noinst_HEADERS=test-engine-stuff.h
@@ -24,4 +26,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GUILE_INCS}

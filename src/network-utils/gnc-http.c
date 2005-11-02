@@ -20,8 +20,17 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
+/********************************************************************
+ * 3/11/03 TomF Gnome2 changes for Gnome2                           * 
+ * gnc_http.c Disable all functions to bypass missing ghttp	    *
+ *   include "gnc-engine-util.h" to allow PERR warnings		    *
+ *   Use long if 0 to make it easy to go back to the original to    *
+ *   start developing a ghttp replacement.                          *
+*********************************************************************/
+
 #include "config.h"
 
+#if 0
 #ifdef HAVE_OPENSSL
 #include <openssl/ssl.h>
 #include <openssl/err.h>
@@ -42,9 +51,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
 
 #include "gnc-http.h"
+#include "gnc-engine.h"  /* To allow PERR messages             */ 
 
+/* ***Warning*** Find a gnome2 replacement for ghttp  ***************/
+#if 0
 
 struct _gnc_http {
   GList  * requests; 
@@ -58,7 +71,14 @@ struct request_info {
   GncHTTPRequestCB callback;
   gpointer         callback_data;
 };
+#endif
 
+gnc_http *
+gnc_http_new(void) {
+  return NULL;
+}
+
+#if 0 
 gnc_http *
 gnc_http_new(void) {
   gnc_http * ret = g_new0(struct _gnc_http, 1);
@@ -266,3 +286,49 @@ gnc_http_start_post(gnc_http * http, const char * uri,
   }  
 }
 
+#else
+static QofLogModule log_module = GNC_MOD_IO;
+
+/* ***Warning*** Find a gnome2 replacement for ghttp  ***************/
+
+void
+gnc_http_destroy(gnc_http * http) {
+  PERR ("***Warning*** Find a gnome2 replacement for ghttp  *******");
+  return;
+}
+
+void
+gnc_http_cancel_requests(gnc_http * http) {
+  PERR ("***Warning*** Find a gnome2 replacement for ghttp  *******");
+  return;
+}
+
+
+#ifdef HAVE_OPENSSL
+static int
+gnc_http_certificate_check_cb(ghttp_request * req, X509 * cert, 
+                              void * user_data) {
+  PERR ("***Warning*** Find a gnome2 replacement for ghttp  *******");
+  return;
+}
+#endif
+
+void 
+gnc_http_start_request(gnc_http * http, const gchar * uri, 
+                       GncHTTPRequestCB cb, gpointer user_data) {
+  PERR ("***Warning*** Find a gnome2 replacement for ghttp  *******");
+  return;
+}
+
+void
+gnc_http_start_post(gnc_http * http, const char * uri, 
+                    const char * content_type, 
+                    const char * data, int datalen,
+                    GncHTTPRequestCB cb, gpointer user_data) {
+  PERR ("***Warning*** Find a gnome2 replacement for ghttp  *******");
+  return; 
+}
+
+
+  /* ***Warning*** Find a gnome2 replacement for ghttp  *************/
+#endif

@@ -272,7 +272,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry, *new_entry;
-  GNCVerifyResult result;
+  gint result;
   VirtualLocation virt_loc;
   int changed;
   char const *cell_name;

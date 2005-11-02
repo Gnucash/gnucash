@@ -21,7 +21,7 @@
 \********************************************************************/
 
 /** @addtogroup Query
-    @{ */
+@{ */
 /**
     @file qofsql.h
     @brief QOF client-side SQL parser.
@@ -32,11 +32,98 @@
 #define QOF_SQL_QUERY_H
 
 #include <glib.h>
-#include <qof/kvp_frame.h>
-#include <qof/qofbook.h>
-#include <qof/qofquery.h>
+#include <kvp_frame.h>
+#include <qofbook.h>
+#include <qofquery.h>
 
 /** @addtogroup SQL SQL Interface to Query
+
+The types of SQL queries that are allowed at this point are very 
+limited.  In general, only the following types of queries are 
+supported:
+  SELECT * FROM SomeObj WHERE (param_a < 10.0) AND (param_b = "asdf")
+         SORT BY param_c DESC;
+  INSERT INTO SomeObj (param_a, param_b, param_c) VALUES
+        ("value_a", true, "0/1");
+
+For SELECT, the returned list is a list of all of the instances of 'SomeObj' that
+match the query.  The 'SORT' term is optional. The 'WHERE' term is
+optional; but if you don't include 'WHERE', you will get a list of 
+all of the object instances.  The Boolean operations 'AND' and 'OR'
+together with parenthesis can be used to construct arbitrarily 
+nested predicates.
+
+For INSERT, the returned list is a list containing the newly created instance
+of 'SomeObj'.
+
+Joins are not supported directly.
+  SELECT * FROM ObjA,ObjB WHERE (ObjA.param_id = ObjB.param_other_id);
+The problem with the above is that the search requires a nested
+search loop, aka a 'join', which is not currently supported in the
+underlying QofQuery code.
+
+However, by repeating queries and adding the entities to a new session using
+::qof_entity_copy_list, a series of queries can be added to a single
+book. e.g. You can insert multiple entities and save out as a QSF XML
+file or use multiple SELECT queries to build a precise list - this
+can be used to replicate most of the functionality of a SQL join.
+
+SELECT * from ObjA where param_id = value;
+SELECT * from ObjB where param_other_id = value;
+
+Equivalent to:
+SELECT * from ObjA,ObjB where param_id = param_other_id and param_id = value;
+
+When combined with a foreach callback on the value of param_id for each
+entity in the QofBook, you can produce the effect of a join from running
+the two SELECT queries for each value of param_id held in 'value'.
+
+See ::QofEntityForeachCB and ::qof_object_foreach.
+
+Date queries handle full date and time strings, using the format
+exported by the QSF backend. To query dates and times, convert
+user input into UTC time using the ::QOF_UTC_DATE_FORMAT string.
+e.g. set the UTC date format and call ::qof_print_time_buff
+with a time_t obtained via ::timespecToTime_t.
+
+If the param is a KVP frame, then we use a special markup to 
+indicate frame values.  The markup should look like 
+/some/kvp/path:value. Thus, for example,
+  SELECT * FROM SomeObj WHERE (param_a < '/some/kvp:10.0')
+will search for the object where param_a is a KVP frame, and this
+KVP frame contains a path '/some/kvp' and the value stored at that
+path is floating-point and that float value is less than 10.0.
+
+The following are types of queries are NOT supported:
+  SELECT a,b,c FROM ...
+I am thinking of implementing the above as a list of KVP's
+whose keys would be a,b,c and values would be the results of the
+search. (Linas)
+
+XXX (Neil W). Alternatively, I need to use something like this
+when converting QOF objects between applications by using the
+returned parameter values to create a second object. One application
+using QOF could register objects from two applications and convert
+data from one to the other by using SELECT a,b,c FROM ObjA;
+SELECT d,f,k FROM ObjB; qof_object_new_instance(); ObjC_set_a(value_c);
+ObjC_set_b(value_k) etc. What's needed is for the SELECT to return
+a complete object that only contains the parameters selected.
+
+ Also unsupported:  UPDATE. 
+ 
+Certain SQL commands can have no QOF equivalent and will
+generate a runtime parser error:
+ - ALTER
+ - CREATE
+ - DROP
+ - FLUSH
+ - GRANT
+ - KILL
+ - LOCK
+ - OPTIMIZE
+ - REVOKE
+ - USE
+
   @{ */
 typedef struct _QofSqlQuery QofSqlQuery;
 
@@ -51,57 +138,25 @@ void qof_sql_query_destroy (QofSqlQuery *);
  */
 void qof_sql_query_set_book (QofSqlQuery *q, QofBook *book);
 
-/** Perform the query, return the results.
+/** \brief Perform the query, return the results.
+
  *  The book must be set in order to be able to perform a query.
  *
- *  The returned list is a list of ... See below ... 
  *  The returned list will have been sorted using the indicated sort 
- *  order, (by default ascending order) and trimed to the
+ *  order, (by default ascending order) and trimmed to the
  *  max_results length.
  *  Do NOT free the resulting list.  This list is managed internally
  *  by QofSqlQuery.
  *
- * The types of SQL queries that are allowed at this point are very 
- * limited.  In general, only the following types of queries are 
- * supported:
- *   SELECT * FROM SomeObj WHERE (param_a < 10.0) AND (param_b = "asdf")
- *          SORT BY param_c DESC;
- * The returned list is a list of all of the instances of 'SomeObj' that
- * mathc the query.   The 'SORT' term is optional. The 'WHERE' term is
- * optional; but if you don't include 'WHERE', you will get a list of 
- * all of the object instances.  The Boolean operations 'AND' and 'OR'
- * together with parenthesis can be used to construct arbitrarily 
- * nested predicates.
- *
- * If the param is a KVP frame, then we use a special markup to 
- * indicate frame values.  The markup should look like 
- * /some/kvp/path:value. Thus, for example,
- *   SELECT * FROM SomeObj WHERE (param_a < '/some/kvp:10.0')
- * will search for the object where param_a is a KVP frame, and this
- * KVP frame contains a path '/some/kvp' and the value stored at that
- * path is floating-point and that float value is less than 10.0.
- *
- * The following are types of queries are NOT supported:
- *   SELECT a,b,c FROM ...
- * I am thinking of implementing the above as a list of KVP's
- * whose keys would be a,b,c and values would be the results of the
- * search.
- *
- * Also unsupported are joins:
- *   SELECT * FROM ObjA,ObjB WHERE (ObjA.thingy = ObjB.Stuff);
- * The problem with the above is that the search requires a nested
- * search loop, aka a 'join', which is not currently supported in the
- * underlying QofQuery code.
- *
- * Also unsupported:  UPDATE and INSERT. 
  */
 
 GList * qof_sql_query_run (QofSqlQuery *query, const char * str);
 
-/** Same as above, but just parse/pre-process the query; do
- *  not actually run it over the dataset.  The QofBook does not
- *  need to be set before calling this function.
- */
+/** Same ::qof_sql_query_run, but just parse/pre-process the query; do
+  not actually run it over the dataset.  The QofBook does not
+  need to be set before calling this function.
+*/
+
 void qof_sql_query_parse (QofSqlQuery *query, const char * str);
 
 /** Return the QofQuery form of the previously parsed query. */

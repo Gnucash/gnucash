@@ -27,15 +27,13 @@
 #include <stdio.h>
 #include <gnome.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "gnc-date.h"
 #include "messages.h"
 #include "gnc-numeric.h"
-#include "window-register.h"
+#include "gnc-plugin-page-register.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
-#include "window-help.h"
 #include "print-session.h"
 #include "gnc-ui.h"
 #include "gnc-date-format.h"
@@ -43,6 +41,8 @@
 #define CHECK_PRINT_NUM_FORMATS 3
 #define CHECK_PRINT_NUM_POSITIONS 4
 #define CHECK_PRINT_NUM_UNITS 4
+
+#define PRINT_CHECK_DATA "print-check-data"
 
 /* Used by glade_xml_signal_autoconnect_full */
 void gnc_ui_print_check_dialog_ok_cb(GtkButton * button, gpointer user_data);
@@ -56,7 +56,7 @@ void gnc_ui_print_check_dialog_help_cb(GtkButton * button, gpointer user_data);
 \********************************************************************/
 
 void
-gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
+gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 				 const char    *payee,
 				 gnc_numeric    amount,
 				 time_t         date,
@@ -65,8 +65,9 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   PrintCheckDialog * pcd;
   GladeXML *xml;
   GtkWidget *table;
+  GtkWindow *window;
 
-  pcd = (PrintCheckDialog *)gnc_RegWindow_get_pcd(reg_data);
+  pcd = g_object_get_data(G_OBJECT(plugin_page), PRINT_CHECK_DATA);
   if (pcd) {
     pcd->payee = payee;
     pcd->amount = amount;
@@ -78,8 +79,8 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   }
 
   pcd = g_new0(PrintCheckDialog, 1);
-  gnc_RegWindow_set_pcd(reg_data, pcd);
-  pcd->reg_data = reg_data;
+  g_object_set_data(G_OBJECT(plugin_page), PRINT_CHECK_DATA, pcd);
+  pcd->plugin_page = plugin_page;
   pcd->payee = payee;
   pcd->amount = amount;
   pcd->date = date;
@@ -114,8 +115,8 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   gnc_option_menu_init(pcd->position_picker);
   gnc_option_menu_init(pcd->units_picker);
 
-  gnome_dialog_set_parent(GNOME_DIALOG(pcd->dialog),
-			  GTK_WINDOW(gnc_RegWindow_window(reg_data)));
+  window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+  gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
 
   /* Create and attach the date-format chooser */
   table = glade_xml_get_widget (xml, "options_table");
@@ -137,11 +138,10 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
 void
 gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd)
 {
-  gnome_dialog_close(GNOME_DIALOG(pcd->dialog));
   gtk_widget_destroy(pcd->dialog);
   pcd->dialog = NULL;
 
-  gnc_RegWindow_set_pcd(pcd->reg_data, NULL);
+  g_object_set_data(G_OBJECT(pcd->plugin_page), PRINT_CHECK_DATA, NULL);
   g_free(pcd);
 }
 
@@ -154,7 +154,7 @@ gnc_ui_print_check_dialog_hide(PrintCheckDialog * pcd)
 static double 
 entry_to_double(GtkWidget * entry)
 {
-  char  * text = gtk_entry_get_text(GTK_ENTRY(entry));
+  const char  * text = gtk_entry_get_text(GTK_ENTRY(entry));
   double retval = 0.0;
   
   sscanf(text, "%le", &retval);
@@ -262,5 +262,5 @@ void
 gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
                                   gpointer user_data)
 {
-  helpWindow(NULL, NULL, HH_PRINTCHECK);
+  gnc_gnome_help(HF_USAGE, HL_PRINTCHECK);
 }

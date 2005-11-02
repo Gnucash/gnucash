@@ -20,6 +20,7 @@
  *******************************************************************/
 
 /** @addtogroup Numeric
+
     The 'Numeric' functions provide a way of working with rational
     numbers while maintaining strict control over rounding errors
     when adding rationals with different denominators.  The Numeric
@@ -35,31 +36,22 @@
     addition and multiplication, but 64-bit rationals do not have 
     the dynamic range of floating point numbers.  
 
-@{ */
-/** @file gnc-numeric.h
-    @brief An exact-rational-number library for gnucash.
-    @author Copyright (C) 2000 Bill Gribble
-    @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
-*/
-
-/* ----------------------------------------------------------------
-
-EXAMPLE
--------
-The following program finds the best @code{gnc_numeric} approximation to
-the @file{math.h} constant @code{M_PI} given a maximum denominator. For
-large denominators, the @code{gnc_numeric} approximation is accurate to
+EXAMPLE\n
+-------\n
+The following program finds the best ::gnc_numeric approximation to
+the \a math.h constant \a M_PI given a maximum denominator. For
+large denominators, the ::gnc_numeric approximation is accurate to
 more decimal places than will generally be needed, but in some cases
 this may not be good enough. For example,
 
-@example
+@verbatim
     M_PI                   = 3.14159265358979323846
     245850922 / 78256779   = 3.14159265358979311599  (16 sig figs)
     3126535 / 995207       = 3.14159265358865047446  (12 sig figs)
     355 / 113              = 3.14159292035398252096  (7 sig figs)
-@end example
+@endverbatim
 
-@example
+@verbatim
 #include <glib.h>
 #include "gnc-numeric.h"
 #include <math.h>
@@ -88,8 +80,15 @@ main(int argc, char ** argv)
     }
   }
 }
+@endverbatim
 
------------------------------------------------------------------ */
+@{ */
+/** @file gnc-numeric.h
+    @brief An exact-rational-number library for gnucash.
+    @author Copyright (C) 2000 Bill Gribble
+    @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
+*/
+
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
@@ -107,8 +106,7 @@ struct _gnc_numeric
  * This is a rational number, defined by numerator and denominator. */
 typedef struct _gnc_numeric gnc_numeric;
 
-/** @name Arguments 
-  * @brief Standard Arguments to most functions
+/** @name Arguments Standard Arguments to most functions
 
     Most of the gnc_numeric arithmetic functions take two arguments
     in addition to their numeric args: 'denom', which is the denominator
@@ -120,7 +118,7 @@ typedef struct _gnc_numeric gnc_numeric;
 
     Valid values for denom are:
     GNC_DENOM_AUTO  -- compute denominator exactly
-    integer n       -- Force the denominator of teh result to be this integer
+    integer n       -- Force the denominator of the result to be this integer
     GNC_DENOM_RECIPROCAL -- Use 1/n as the denominator (???huh???)
 
     Valid values for 'how' are bitwise combinations of zero or one
@@ -153,10 +151,11 @@ typedef struct _gnc_numeric gnc_numeric;
    the same denominator as each other and as the result), use
    GNC_DENOM_AUTO as 'denom' and 
    GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER as 'how'.
+@{
+*/
 
-  @{ */
+/** \brief bitmasks for HOW flags.
 
-/** bitmasks for HOW flags.
  * bits 8-15 of 'how' are reserved for the number of significant
  * digits to use in the output with GNC_HOW_DENOM_SIGFIG 
  */ 
@@ -164,7 +163,8 @@ typedef struct _gnc_numeric gnc_numeric;
 #define GNC_NUMERIC_DENOM_MASK   0x000000f0
 #define GNC_NUMERIC_SIGFIGS_MASK 0x0000ff00
 
-/** Rounding/Truncation modes for operations.
+/** \brief Rounding/Truncation modes for operations.
+
  *  Rounding instructions control how fractional parts in the specified
  *  denominator affect the result. For example, if a computed result is
  *  "3/4" but the specified denominator for the return value is 2, should
@@ -264,7 +264,7 @@ typedef enum {
 
 /** Values that can be passed as the 'denom' argument.  
  *  The include a positive number n to be used as the 
- *  denominator of teh output value.  Other possibilities 
+ *  denominator of the output value.  Other possibilities
  *  include the list below:
  */
 
@@ -278,8 +278,9 @@ typedef enum {
 
 /**  @} */
 
-/** @name Constructors */
-/*@{*/
+/** @name Constructors
+@{
+*/
 /** Make a gnc_numeric from numerator and denominator */
 static inline 
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom) {
@@ -310,10 +311,11 @@ gboolean string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
  *  noted by error_code, rather than a number. 
  */
 gnc_numeric gnc_numeric_error(GNCNumericErrorCode error_code);
-/*@}*/
+/** @} */
 
-/** @name Value Accessors */
-/** @{*/
+/** @name Value Accessors
+ @{
+*/
 /** Return numerator */
 static inline 
 gint64 gnc_numeric_num(gnc_numeric a) { return a.num; }
@@ -333,8 +335,9 @@ gchar *gnc_numeric_to_string(gnc_numeric n);
 gchar * gnc_num_dbg_to_string(gnc_numeric n);
 /** @}*/
 
-/** @name Comparisons and Predicates */
-/** @{ */
+/** @name Comparisons and Predicates 
+ @{
+*/
 /** Check for error signal in value. Returns GNC_ERROR_OK (==0) if
  *  the number appears to be valid, otherwise it returns the
  *  type of error.  Error values always have a denominator of zero.
@@ -378,10 +381,11 @@ gboolean gnc_numeric_equal(gnc_numeric a, gnc_numeric b);
  */ 
 int gnc_numeric_same(gnc_numeric a, gnc_numeric b,   
                      gint64 denom, gint how);
-/** @}*/
+/** @} */
 
-/** @name Arithmetic Operations */
-/** @{*/
+/** @name Arithmetic Operations 
+ @{ 
+*/
 /** Return a+b. */
 gnc_numeric gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
@@ -432,10 +436,11 @@ gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
   return gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
                          GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
 }
-/** @}*/
+/** @} */
 
-/** @name Arithmetic Functions with Exact Error Returns */
-/** @{*/
+/** @name Arithmetic Functions with Exact Error Returns 
+ @{
+*/
 /** The same as gnc_numeric_add, but uses 'error' for accumulating
  *  conversion roundoff error. */
 gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
@@ -461,10 +466,11 @@ gnc_numeric gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
-/** @}*/
+/** @} */
 
-/** @name Change Denominator */
-/** @{*/
+/** @name Change Denominator 
+ @{
+*/
 /** Change the denominator of a gnc_numeric value to the 
  *  specified denominator under standard arguments 
  *  'denom' and 'how'. 
@@ -482,10 +488,11 @@ gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom,
 /** Return input after reducing it by Greated Common Factor (GCF) 
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric in);
-/** @}*/
+/** @} */
 
 /** @name Deprecated, backwards-compatible definitions 
-  @{ */
+  @{
+*/
 #define GNC_RND_FLOOR	GNC_HOW_RND_FLOOR
 #define GNC_RND_CEIL 	GNC_HOW_RND_CEIL 
 #define GNC_RND_TRUNC	GNC_HOW_RND_TRUNC
@@ -503,6 +510,6 @@ gnc_numeric gnc_numeric_reduce(gnc_numeric in);
 
 #define GNC_DENOM_SIGFIGS(X)  GNC_HOW_DENOM_SIGFIGS(X)
 #define GNC_NUMERIC_GET_SIGFIGS(X) GNC_HOW_GET_SIGFIGS(X)
-/** @}*/
-/** @}*/
+/** @} */
+/** @} */
 #endif

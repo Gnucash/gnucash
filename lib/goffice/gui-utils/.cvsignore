@@ -1,0 +1,13 @@
+Makefile
+Makefile.in
+*.diff
+*.diffs
+*.patch
+*.log
+*.xac.*.xac
+.deps
+.libs
+go-marshalers.h
+go-marshalers.c
+*.la
+*.lo

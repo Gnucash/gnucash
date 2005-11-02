@@ -19,7 +19,7 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-backend-file.c
- *  @breif load and save data to files 
+ *  @brief load and save data to files 
  *  @author Copyright (c) 2000 Gnumatic Inc.
  *  @author Copyright (c) 2002 Derek Atkins <warlord@MIT.EDU>
  *  @author Copyright (c) 2003 Linas Vepstas <linas@linas.org>
@@ -43,37 +43,67 @@
 
 #include "TransLog.h"
 #include "gnc-engine.h"
-#include "gnc-date.h"
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
+
 #include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-
+#include "messages.h"
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 
-#include "qofbackend-p.h"
-#include "qofbook-p.h"
-#include "qofsession.h"
+#define GNC_BE_DAYS "file_retention_days"
+#define GNC_BE_ZIP  "file_compression"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static int file_retention_days = 0;
+static gint file_retention_days = 0;
 static gboolean file_compression = FALSE;
 
-void
-gnc_file_be_set_retention_days (int days)
+static void option_cb (QofBackendOption *option, gpointer data)
 {
-    file_retention_days = days;
+	if(0 == safe_strcmp(GNC_BE_DAYS, option->option_name)) {
+		file_retention_days = *(gint*)option->value;
+	}
+	if(0 == safe_strcmp(GNC_BE_ZIP, option->option_name)) {
+		file_compression = (gboolean)qof_util_bool_to_int(option->value);
+	}
 }
 
-void
-gnc_file_be_set_compression (gboolean compress)
+/* lookup the options and modify the frame */
+static void
+gnc_file_be_set_config(QofBackend *be, KvpFrame *config)
 {
-    file_compression = compress;
+	qof_backend_option_foreach(config, option_cb, NULL);
+}
+
+static KvpFrame*
+gnc_file_be_get_config(QofBackend *be)
+{
+	QofBackendOption *option;
+
+	qof_backend_prepare_frame(be);
+	option = g_new0(QofBackendOption, 1);
+	option->option_name = GNC_BE_DAYS;
+	option->description = _("Number of days to retain old files");
+	option->tooltip = _("GnuCash keeps backups of old files, "
+		"this setting dictates how long each is kept");
+	option->type = KVP_TYPE_GINT64;
+	option->value = (gpointer)&file_retention_days;
+	qof_backend_prepare_option(be, option);
+	g_free(option);
+	option = g_new0(QofBackendOption, 1);
+	option->option_name = GNC_BE_ZIP;
+	option->description = _("Compress output files?");
+	option->tooltip = _("GnuCash can save data files with compression."
+		" Enable this option to compress your data file. ");
+	option->type = KVP_TYPE_STRING;
+	if(file_compression) { option->value = (gpointer)"TRUE"; }
+	else { option->value = (gpointer)"FALSE"; }
+	qof_backend_prepare_option(be, option);
+	g_free(option);
+	return qof_backend_complete_frame(be);
 }
 
 /* ================================================================= */
@@ -390,17 +420,39 @@ is_gzipped_file(const gchar *name)
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
-    if(gnc_is_xml_data_file_v2(path)) {
+	if(gnc_is_xml_data_file_v2(path)) {
         return GNC_BOOK_XML2_FILE;
     } else if(gnc_is_xml_data_file(path)) {
         return GNC_BOOK_XML1_FILE;
     } else if(is_gzipped_file(path)) {
         return GNC_BOOK_XML2_FILE;
-    } else {
-        return GNC_BOOK_BIN_FILE;
-    }
+	}
+	else if(gnc_is_bin_file(path)) { return GNC_BOOK_BIN_FILE; }
+	return GNC_BOOK_NOT_OURS;
 }
 
+static gboolean
+gnc_determine_file_type (const char *path)
+{
+	struct stat sbuf;
+	int rc;
+	FILE *t;
+
+	if (!path) { return FALSE; }
+	if (0 == safe_strcmp(path, QOF_STDOUT)) { return FALSE; }
+	t = fopen(path, "r");
+	if(!t) { PINFO (" new file"); return TRUE; }
+	fclose(t);
+	rc = stat(path, &sbuf);
+	if(rc < 0) { return FALSE; }
+	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
+	if(gnc_is_xml_data_file_v2(path))   { return TRUE; } 
+	else if(gnc_is_xml_data_file(path)) { return TRUE; } 
+	else if(is_gzipped_file(path))      { return TRUE; }
+	else if(gnc_is_bin_file(path))      { return TRUE; }
+	PINFO (" %s is not a gnc file", path);
+	return FALSE;
+}	
 
 static gboolean
 gnc_file_be_backup_file(FileBackend *be)
@@ -798,7 +850,7 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
 /* ---------------------------------------------------------------------- */
 
 
-/* Load financial data from a file into the book, automtically
+/* Load financial data from a file into the book, automatically
    detecting the format of the file, if possible.  Return FALSE on
    error, and set the error parameter to indicate what went wrong if
    it's not NULL.  This function does not manage file locks in any
@@ -807,10 +859,11 @@ file_commit_edit (QofBackend *be, QofInstance *inst)
 static void
 gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
 {
-    QofBackendError error = ERR_BACKEND_NO_ERR;
+    QofBackendError error;
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
 
+	error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;
 
     switch (gnc_file_be_determine_file_type(be->fullpath))
@@ -824,13 +877,10 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
-
     case GNC_BOOK_BIN_FILE:
-        /* presume it's an old-style binary file */
         qof_session_load_from_binfile(book, be->fullpath);
         error = gnc_get_binfile_io_error();
         break;
-
     default:
         PWARN("File not any known type");
         error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
@@ -852,13 +902,11 @@ static gboolean
 gnc_file_be_save_may_clobber_data (QofBackend *bend)
 {
   struct stat statbuf;
-
   if (!bend->fullpath) return FALSE;
 
   /* FIXME: Make sure this doesn't need more sophisticated semantics
    * in the face of special file, devices, pipes, symlinks, etc. */
   if (stat(bend->fullpath, &statbuf) == 0) return TRUE;
-                                                                                
   return FALSE;
 }
 
@@ -873,53 +921,97 @@ gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 }
 
 /* ================================================================= */
-
+#if 0 //def GNUCASH_MAJOR_VERSION
 QofBackend *
 libgncmod_backend_file_LTX_gnc_backend_new(void)
 {
-    FileBackend *fbe;
-    QofBackend *be;
-    
-    fbe = g_new0(FileBackend, 1);
-    be = (QofBackend*)fbe;
-    qof_backend_init(be);
-    
-    be->session_begin = file_session_begin;
-    be->session_end = file_session_end;
-    be->destroy_backend = file_destroy_backend;
-
-    be->load = gnc_file_be_load_from_file;
-    be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
-
-    /* The file backend treats accounting periods transactionally. */
-    be->begin = file_begin_edit;
-    be->commit = file_commit_edit;
-    be->rollback = file_rollback_edit;
-
-    /* The file backend always loads all data ... */
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-    be->price_lookup = NULL;
-
-    be->counter = NULL;
-
-    /* The file backend will never be multi-user... */
-    be->events_pending = NULL;
-    be->process_events = NULL;
-
-    be->sync = file_sync_all;
-    be->export = gnc_file_be_write_accounts_to_file;
 
     fbe->dirname = NULL;
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
+    fbe->price_lookup = NULL;
     fbe->lockfd = -1;
 
     fbe->primary_book = NULL;
 
     return be;
+}
+#endif
+QofBackend*
+gnc_backend_new(void)
+{
+	FileBackend *gnc_be;
+	QofBackend *be;
+
+	gnc_be = g_new0(FileBackend, 1);
+	be = (QofBackend*) gnc_be;
+	qof_backend_init(be);
+
+	be->session_begin = file_session_begin;
+	be->session_end = file_session_end;
+	be->destroy_backend = file_destroy_backend;
+
+	be->load = gnc_file_be_load_from_file;
+	be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
+
+	/* The file backend treats accounting periods transactionally. */
+	be->begin = file_begin_edit;
+	be->commit = file_commit_edit;
+	be->rollback = file_rollback_edit;
+
+	/* The file backend always loads all data ... */
+	be->compile_query = NULL;
+	be->free_query = NULL;
+	be->run_query = NULL;
+
+	be->counter = NULL;
+
+	/* The file backend will never be multi-user... */
+	be->events_pending = NULL;
+	be->process_events = NULL;
+
+	be->sync = file_sync_all;
+	be->load_config = gnc_file_be_set_config;
+	be->get_config = gnc_file_be_get_config;
+
+	gnc_be->export = gnc_file_be_write_accounts_to_file;
+	gnc_be->dirname = NULL;
+	gnc_be->fullpath = NULL;
+	gnc_be->lockfile = NULL;
+	gnc_be->linkfile = NULL;
+	gnc_be->lockfd = -1;
+
+	gnc_be->primary_book = NULL;
+	return be;
+}
+
+static void
+gnc_provider_free (QofBackendProvider *prov)
+{
+        prov->provider_name = NULL;
+        prov->access_method = NULL;
+        g_free (prov);
+}
+
+void
+gnc_provider_init(void)
+{
+	QofBackendProvider *prov;
+#ifdef ENABLE_NLS
+	setlocale (LC_ALL, "");
+	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+#endif
+        prov = g_new0 (QofBackendProvider, 1);
+        prov->provider_name = "GnuCash File Backend Version 2";
+        prov->access_method = "file";
+        prov->partial_book_supported = FALSE;
+        prov->backend_new = gnc_backend_new;
+        prov->provider_free = gnc_provider_free;
+	prov->check_data_type = gnc_determine_file_type;
+        qof_backend_register_provider (prov);
 }
 
 /* ========================== END OF FILE ===================== */

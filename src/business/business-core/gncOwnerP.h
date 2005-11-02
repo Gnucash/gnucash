@@ -28,7 +28,6 @@
 #ifndef GNC_OWNERP_H_
 #define GNC_OWNERP_H_
 
-#include "qofbook.h"
 #include "gncOwner.h"
 
 gboolean gncOwnerRegister (void);

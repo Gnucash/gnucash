@@ -1,3 +1,6 @@
+# 2003-03-11 TomF changes for Gnome-2 branch, 5th batch
+# Add src/engine to allow including gnc-engine-util.h
+
 SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-network-utils.la
@@ -5,9 +8,10 @@ pkglib_LTLIBRARIES = libgncmod-network-utils.la
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/engine \
   ${GLIB_CFLAGS} \
-  ${GHTTP_CFLAGS} \
-  ${GNOME_INCLUDEDIR} \
+  ${QOF_CFLAGS} \
+  ${GNOME_CFLAGS} \
   ${GUILE_INCS}
 
 libgncmod_network_utils_la_SOURCES = \
@@ -20,14 +24,9 @@ gncinclude_HEADERS = \
   gnc-gpg.h \
   gnc-http.h
 
-libgncmod_network_utils_la_LDFLAGS = -module
-
 libgncmod_network_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GHTTP_LIBS} \
-  ${GNOME_LIBDIR} \
-  ${GNOME_LIBS} \
-  ${GNOMEUI_LIBS}
+  ${GNOME_LIBS} ${QOF_LIBS}
 
 EXTRA_DIST = \
   .cvsignore

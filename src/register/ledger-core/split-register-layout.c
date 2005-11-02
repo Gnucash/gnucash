@@ -25,13 +25,13 @@
 
 #include <glib.h>
 
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 #include "messages.h"
 #include "split-register-layout.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_REGISTER;
+static QofLogModule log_module = GNC_MOD_REGISTER;
 
 
 static void

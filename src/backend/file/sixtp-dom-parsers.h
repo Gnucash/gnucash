@@ -36,7 +36,7 @@
 #include "kvp_frame.h"
 #include "qofbook.h"
 #include "qofid.h"
-
+#include "gnc-budget.h"
 
 GUID* dom_tree_to_guid(xmlNodePtr node);
 
@@ -44,9 +44,10 @@ gnc_commodity* dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book);
 gnc_commodity *dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *);
 
 FreqSpec* dom_tree_to_freqSpec( xmlNodePtr node, QofBook *book);
+Recurrence* dom_tree_to_recurrence(xmlNodePtr node);
 
 Timespec dom_tree_to_timespec(xmlNodePtr node);
-#define is_valid_timespec(ts) (ts.tv_sec || ts.tv_nsec)
+gboolean dom_tree_valid_timespec(Timespec *ts, const gchar *name);
 GDate* dom_tree_to_gdate(xmlNodePtr node);
 gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);
@@ -67,12 +68,15 @@ kvp_value* dom_tree_to_list_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_frame_kvp_value(xmlNodePtr node);
 
 gboolean dom_tree_to_integer(xmlNodePtr node, gint64 *daint);
+gboolean dom_tree_to_guint16(xmlNodePtr node, guint16 *i);
+gboolean dom_tree_to_guint(xmlNodePtr node, guint *i);
 
 /* higher level structures */
 Account* dom_tree_to_account(xmlNodePtr node, QofBook *book);
 QofBook* dom_tree_to_book   (xmlNodePtr node, QofBook *book);
 GNCLot*  dom_tree_to_lot    (xmlNodePtr node, QofBook *book);
 Transaction* dom_tree_to_transaction(xmlNodePtr node, QofBook *book);
+GncBudget* dom_tree_to_budget(xmlNodePtr node, QofBook *book);
 
 struct dom_tree_handler
 {

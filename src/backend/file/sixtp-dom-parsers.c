@@ -1,5 +1,5 @@
 /********************************************************************
- * sixtp-dom-parsers.h                                              *
+ * sixtp-dom-parsers.c                                              *
  * Copyright 2001 Gnumatic, Inc.                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -27,15 +27,11 @@
 #include <string.h>
 
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
-#include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "qofid.h"
-
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 GUID*
 dom_tree_to_guid(xmlNodePtr node)
@@ -45,7 +41,7 @@ dom_tree_to_guid(xmlNodePtr node)
         return NULL;
     }
 
-    if(strcmp(node->properties->name, "type") != 0)
+    if(strcmp((char*) node->properties->name, "type") != 0)
     {
         PERR("Unknown attribute for id tag: %s",
              node->properties->name ?
@@ -56,7 +52,7 @@ dom_tree_to_guid(xmlNodePtr node)
     {
         char *type;
 
-        type = xmlNodeGetContent (node->properties->xmlAttrPropertyValue);
+        type = (char*)xmlNodeGetContent (node->properties->xmlAttrPropertyValue);
 
         /* handle new and guid the same for the moment */
         if((safe_strcmp("guid", type) == 0) || (safe_strcmp("new", type) == 0))
@@ -64,7 +60,7 @@ dom_tree_to_guid(xmlNodePtr node)
             GUID *gid = g_new(GUID, 1);
             char *guid_str;
 
-            guid_str = xmlNodeGetContent (node->xmlChildrenNode);
+            guid_str = (char*)xmlNodeGetContent (node->xmlChildrenNode);
             string_to_guid(guid_str, gid);
             xmlFree (guid_str);
             xmlFree (type);
@@ -112,6 +108,33 @@ dom_tree_to_integer(xmlNodePtr node, gint64 *daint)
 
     g_free (text);
 
+    return ret;
+}
+
+gboolean
+dom_tree_to_guint16(xmlNodePtr node, guint16 *i)
+{
+    gboolean ret;
+    guint j = 0;
+
+    ret = dom_tree_to_guint(node, &j);
+    *i = (guint16) j;
+    return ret;
+}
+
+gboolean
+dom_tree_to_guint(xmlNodePtr node, guint *i)
+{
+    gchar *text, *endptr;
+    gboolean ret;
+
+    text = dom_tree_to_text(node);
+    /* In spite of the strange string_to_gint64 function, I'm just
+       going to use strtoul here until someone shows me the error of
+       my ways. -CAS */
+    *i = (guint) strtoul(text, &endptr, 0);
+    ret = (endptr != text);
+    g_free(text);
     return ret;
 }
 
@@ -274,7 +297,7 @@ dom_tree_to_list_kvp_value(xmlNodePtr node)
     {
         kvp_value *new_val;
 
-        if (safe_strcmp (mark->name, "text") == 0)
+        if (safe_strcmp ((char*)mark->name, "text") == 0)
           continue;
 
         new_val = dom_tree_to_kvp_value(mark);
@@ -335,10 +358,10 @@ dom_tree_to_kvp_value(xmlNodePtr node)
     struct kvp_val_converter *mark;
     kvp_value *ret = NULL;
 
-    xml_type = xmlGetProp(node, "type");
+    xml_type = xmlGetProp(node, BAD_CAST "type");
     if(xml_type)
     {
-        type = g_strdup (xml_type);
+        type = g_strdup ((char*) xml_type);
         xmlFree (xml_type);
     }
     else
@@ -372,7 +395,7 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
-        if(safe_strcmp(mark->name, "slot") == 0)
+        if(safe_strcmp((char*)mark->name, "slot") == 0)
         {
             xmlNodePtr mark2;
             gchar *key = NULL;
@@ -380,11 +403,11 @@ dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 
             for(mark2 = mark->xmlChildrenNode; mark2; mark2 = mark2->next)
             {
-                if(safe_strcmp(mark2->name, "slot:key") == 0)
+                if(safe_strcmp((char*)mark2->name, "slot:key") == 0)
                 {
                     key = dom_tree_to_text(mark2);
                 }
-                else if(safe_strcmp(mark2->name, "slot:value") == 0)
+                else if(safe_strcmp((char*)mark2->name, "slot:value") == 0)
                 {
                     val = dom_tree_to_kvp_value(mark2);
                 }
@@ -456,7 +479,7 @@ dom_tree_to_text(xmlNodePtr tree)
       return g_strdup("");
   }
 
-  temp = xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
+  temp = (char*)xmlNodeListGetString (NULL, tree->xmlChildrenNode, TRUE);
   if (!temp) 
   {
     PINFO ("Null string");
@@ -529,7 +552,7 @@ dom_tree_to_timespec(xmlNodePtr node)
     case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
-      if(safe_strcmp("ts:date", n->name) == 0) {
+      if(safe_strcmp("ts:date", (char*)n->name) == 0) {
         if(seen_s)
         {
             return timespec_failure(ret);
@@ -550,7 +573,7 @@ dom_tree_to_timespec(xmlNodePtr node)
           seen_s = TRUE;
         }
       }
-      else if(safe_strcmp("ts:ns", n->name) == 0) {
+      else if(safe_strcmp("ts:ns", (char*)n->name) == 0) {
         if(seen_ns)
         {
             return timespec_failure(ret);
@@ -612,7 +635,7 @@ dom_tree_to_gdate(xmlNodePtr node)
     case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
-      if(safe_strcmp("gdate", n->name) == 0) {
+      if(safe_strcmp("gdate", (char*)n->name) == 0) {
         if(seen_date) {
             goto failure;
         } else {
@@ -681,7 +704,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
     case XML_TEXT_NODE:
       break;
     case XML_ELEMENT_NODE:
-      if(safe_strcmp("cmdty:space", n->name) == 0) {
+      if(safe_strcmp("cmdty:space", (char*)n->name) == 0) {
         if(space_str) {
           return NULL;
         } else {
@@ -689,7 +712,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
           if(!content) return NULL;
           space_str = content;
         }
-      } else if(safe_strcmp("cmdty:id", n->name) == 0) {
+      } else if(safe_strcmp("cmdty:id", (char*)n->name) == 0) {
         if(id_str) {
           return NULL;
         } else {
@@ -710,7 +733,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
   } else {
     g_strstrip(space_str);
     g_strstrip(id_str);
-    c = gnc_commodity_new(NULL, space_str, id_str, NULL, 0);
+    c = gnc_commodity_new(book, NULL, space_str, id_str, NULL, 0);
   }
 
   g_free(space_str);
@@ -808,10 +831,10 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
     for(achild = node->xmlChildrenNode; achild; achild = achild->next)
     {
         /* ignore stray text nodes */
-        if (safe_strcmp (achild->name, "text") == 0)
+        if (safe_strcmp ((char*)achild->name, "text") == 0)
           continue;
 
-        if(!gnc_xml_set_data(achild->name, achild, data, handlers))
+        if(!gnc_xml_set_data((char*)achild->name, achild, data, handlers))
         {
             PERR("gnc_xml_set_data failed");
             successful = FALSE;
@@ -826,4 +849,16 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
     }
 
     return successful;
+}
+
+gboolean
+dom_tree_valid_timespec (Timespec *ts, const gchar *name)
+{
+
+  if (ts->tv_sec || ts->tv_nsec)
+    return TRUE;
+
+  g_warning("Invalid timestamp in data file.  Look for a '%s' entry "
+	    "with a date of 1969-12-31 or 1970-01-01.", name);
+  return FALSE;
 }

@@ -27,11 +27,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_XML_VERSION_HEADER
 #include <libxml/xmlversion.h>
-#endif
-
-#if defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000
 
 #  include <libxml/SAX.h>
 #  include <libxml/tree.h>
@@ -48,23 +44,5 @@
 #    define xmlAttrPropertyValue children
 #  endif /* ifndef xmlAttrPropertyValue */
 
-#else /* defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000 */
-
-#  include <gnome-xml/SAX.h>
-#  include <gnome-xml/tree.h>
-#  include <gnome-xml/parser.h>
-#  include <gnome-xml/xmlmemory.h>
-#  include <gnome-xml/parserInternals.h>
-#  ifndef xmlChildrenNode
-#    define xmlChildrenNode childs
-#  endif /* ifndef xmlChildrenNode */
-#  ifndef xmlRootNode
-#    define xmlRootNode root
-#  endif /* ifndef xmlRootNode */
-#  ifndef xmlAttrPropertyValue
-#    define xmlAttrPropertyValue val
-#  endif /* ifndef xmlAttrPropertyValue */
-
-#endif /* defined(LIBXML_VERSION) && LIBXML_VERSION >= 20000 */
 
 #endif /* _GNC_XML_HELPER_H_ */

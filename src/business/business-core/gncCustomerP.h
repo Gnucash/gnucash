@@ -30,7 +30,6 @@
 #define GNC_CUSTOMERP_H_
 
 #include "gncCustomer.h"
-#include "qofid-p.h"
 
 gboolean gncCustomerRegister (void);
 gint64 gncCustomerNextID (QofBook *book);

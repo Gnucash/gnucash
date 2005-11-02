@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/column_order</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/column_order</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>string</list_type>
+      <default>[namespace,symbol,name,printname,uniquename,cusip_code,fraction,quote_flag,quote_source,quote_timezone]</default>
+      <locale name="C">
+        <short>Order of columns in the dialog</short>
+        <long>This key contains a list of name which control the order
+	in which the columns are listed in the dialog.  Names may be reordered
+	or removed from this list to control which columns appear in the dialog
+	and in what order.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/namespace_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/namespace_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Whether or not to show the Namespace column</short>
+        <long>Whether or not to show the Namespace column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/symbol_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/symbol_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Whether or not to show the symbol column</short>
+        <long>Whether or not to show the symbol column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/name_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/name_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Whether or not to show the name column</short>
+        <long>Whether or not to show the name column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/fullname_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/fullname_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Full Name column</short>
+        <long>Whether or not to show the Full Name column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/printname_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/printname_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Print Name column</short>
+        <long>Whether or not to show the Print Name column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/uniquename_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/uniquename_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Unique Name column</short>
+        <long>Whether or not to show the Unique Name column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/cusip_code_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/cusip_code_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Whether or not to show the CUSIP Code (Exchange Specific Data) column</short>
+        <long>Whether or not to show the CUSIP Code (Exchange Specific Data) column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/fraction_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/fraction_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Whether or not to show the fraction column</short>
+        <long>Whether or not to show the fraction column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_flag_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/quote_flag_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Quote Flag column</short>
+        <long>Whether or not to show the Quote Flag column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_source_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/quote_source_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Quote Source column</short>
+        <long>Whether or not to show the Quote Source column.</long>
+      </locale>
+    </schema>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/quote_timezone_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/quote_timezone_visible</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show the Quote Timezone column</short>
+        <long>Whether or not to show the Quote Timezone column.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/edit_commodities/include_iso</key>
+      <applyto>/apps/gnucash/dialogs/edit_commodities/include_iso</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Whether or not to show currencies in this dialog</short>
+        <long>Whether or not to show currencies in this dialog.</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

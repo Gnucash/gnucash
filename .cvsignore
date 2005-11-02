@@ -32,6 +32,7 @@ ltconfig
 make-gnucash-patch
 make-gnucash-potfiles
 missing
+mkinstalldirs
 stamp-h
 stamp-h1
 stamp-h.in
@@ -50,5 +51,11 @@ tags
 *.diff
 *.diffs
 *.xac.*.xac
+autom4te.cache
 ltmain.sh
 mkinstalldirs
+.DS_Store
+*.prj
+*.pws
+.tm_project.cache
+

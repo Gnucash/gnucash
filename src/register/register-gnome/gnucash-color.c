@@ -43,7 +43,6 @@
 #include "gnucash-color.h"
 
 static int color_inited;
-static GdkColorContext *gnucash_color_context;
 
 /* Public Colors */
 GdkColor gn_white, gn_black, gn_light_gray;
@@ -73,40 +72,47 @@ color_equal (gconstpointer v, gconstpointer w)
 gulong
 gnucash_color_alloc (gushort red, gushort green, gushort blue)
 {
-        int failed;
-
+	GdkColormap *colormap = gtk_widget_get_default_colormap ();
+	GdkColor *c;
+	
         if (!color_inited)
                 gnucash_color_init ();
 
-        return gdk_color_context_get_pixel (gnucash_color_context,
-                                            red, green, blue, &failed);
+	c = g_new0 (GdkColor, 1);
+	c->red = red;
+	c->green = green;
+	c->blue = blue;
+
+        g_return_val_if_fail (gdk_colormap_alloc_color (colormap, c, FALSE, TRUE), 0);
+
+	return c->pixel;
 }
 
 
 void
 gnucash_color_alloc_gdk (GdkColor *c)
 {
-        int failed;
+	GdkColormap *colormap = gtk_widget_get_default_colormap ();
 
         g_return_if_fail (c != NULL);
 
-        c->pixel = gdk_color_context_get_pixel (gnucash_color_context, c->red,
-						c->green, c->blue, &failed);
+        g_assert (gdk_colormap_alloc_color (colormap, c,
+					    FALSE, TRUE));
 }
 
 
 void
 gnucash_color_alloc_name (const char *name, GdkColor *c)
 {
-        int failed;
+	GdkColormap *colormap = gtk_widget_get_default_colormap ();
 
         g_return_if_fail (name != NULL);
         g_return_if_fail (c != NULL);
 
         gdk_color_parse (name, c);
         c->pixel = 0;
-        c->pixel = gdk_color_context_get_pixel (gnucash_color_context, c->red,
-						c->green, c->blue, &failed);
+        g_assert (gdk_colormap_alloc_color (colormap, c,
+					    FALSE, TRUE));
 }
 
 
@@ -135,9 +141,7 @@ gnucash_color_argb_to_gdk (guint32 argb)
         color->green = argb & 0xff00;
         color->blue = (argb & 0xff) << 8;
 
-        color->pixel = gnucash_color_alloc(color->red,
-                                           color->green,
-                                           color->blue);
+        gnucash_color_alloc_gdk(color);
 
         g_hash_table_insert (color_hash_table, newkey, color);
 
@@ -149,11 +153,6 @@ void
 gnucash_color_init (void)
 {
         GdkColormap *colormap = gtk_widget_get_default_colormap ();
-
-        /* Initialize the color context */
-        gnucash_color_context =
-                gdk_color_context_new (gtk_widget_get_default_visual (),
-                                       colormap);
 
         /* Allocate the default colors */
         gdk_color_white (colormap, &gn_white);

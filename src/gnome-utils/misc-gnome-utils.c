@@ -22,8 +22,6 @@
 #include "misc-gnome-utils.h"
 
 /* ============================================================== */
-#ifdef GNOME2_PORT_IS_READY
-/* Use the following for the gnome2 port only -- */
 
 void
 xxxgtk_textview_set_text (GtkTextView *text, const char *str)
@@ -45,25 +43,4 @@ xxxgtk_textview_get_text (GtkTextView *text)
 }
 
 
-#else /*GNOME2_PORT_IS_READY */
-/* ============================================================== */
-
-void
-xxxgtk_text_set_text (GtkText *text, const char *str)
-{
-	gint pos=0;
-	if (!str) str = "";
-	gtk_editable_delete_text (GTK_EDITABLE (text), 0, -1);
-	gtk_editable_insert_text (GTK_EDITABLE (text), str,
-                            strlen(str), &pos);
-
-}
-
-const char *
-xxxgtk_text_get_text (GtkText *text)
-{
- 	return gtk_editable_get_chars (GTK_EDITABLE(text), 0, -1);
-}
-
-#endif
 /* ===================== END OF FILE ============================ */

@@ -23,11 +23,19 @@
 
 (define <html-piechart>
   (make-record-type "<html-piechart>"
-                    '(width height title subtitle data colors labels
-                            button-1-slice-urls button-2-slice-urls 
-                            button-3-slice-urls
-                            button-1-legend-urls button-2-legend-urls 
-                            button-3-legend-urls)))
+                    '(width
+                      height
+                      title
+                      subtitle
+                      data
+                      colors
+                      labels
+                      button-1-slice-urls
+                      button-2-slice-urls 
+                      button-3-slice-urls
+                      button-1-legend-urls
+                      button-2-legend-urls 
+                      button-3-legend-urls)))
 
 
 (define gnc:html-piechart? 

@@ -13,4 +13,6 @@
 (use-modules (gnucash report view-column))
 (use-modules (gnucash report welcome-to-gnucash))
 
+(use-modules (gnucash report test-graphing))
+
 (re-export gnc:make-welcome-report)

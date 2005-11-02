@@ -132,7 +132,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   gnc_date_picker_signals[DATE_SELECTED] =
     gtk_signal_new("date_selected",
                    GTK_RUN_LAST,
-                   object_class->type,
+                   GTK_CLASS_TYPE(object_class),
                    GTK_SIGNAL_OFFSET(GNCDatePickerClass,
                                      date_selected),
                    gtk_signal_default_marshaller,
@@ -141,7 +141,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   gnc_date_picker_signals[DATE_PICKED] =
     gtk_signal_new("date_picked",
                    GTK_RUN_LAST,
-                   object_class->type,
+                   GTK_CLASS_TYPE(object_class),
                    GTK_SIGNAL_OFFSET(GNCDatePickerClass,
                                      date_picked),
                    gtk_signal_default_marshaller,
@@ -150,16 +150,12 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   gnc_date_picker_signals[KEY_PRESS_EVENT] =
     gtk_signal_new ("key_press_event",
                     GTK_RUN_LAST,
-                    object_class->type,
+                    GTK_CLASS_TYPE(object_class),
                     GTK_SIGNAL_OFFSET(GNCDatePickerClass,
                                       key_press_event),
                     gtk_marshal_NONE__POINTER,
                     GTK_TYPE_NONE, 1,
-                    GTK_TYPE_GDK_EVENT);
-
-  gtk_object_class_add_signals (object_class,
-                                gnc_date_picker_signals,
-                                LAST_SIGNAL);
+                    GDK_TYPE_EVENT);
 
   date_picker_class->date_selected = NULL;
   date_picker_class->date_picked = NULL;
@@ -231,7 +227,6 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
                                   "x", -10000.0,
                                   "y", -10000.0,
                                   NULL);
-    gtk_widget_realize( hbox );
     gtk_widget_show_all( hbox );
 
     gtk_widget_size_request (calendar, &requisition);

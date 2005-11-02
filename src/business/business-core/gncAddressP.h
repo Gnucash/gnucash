@@ -29,7 +29,6 @@
 #define GNC_ADDRESSP_H_
 
 #include "gncAddress.h"
-#include "qofid.h"
 
 gboolean gncAddressRegister (void);
 

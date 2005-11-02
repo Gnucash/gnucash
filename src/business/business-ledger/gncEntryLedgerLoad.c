@@ -31,8 +31,8 @@
 #include "Account.h"
 #include "account-quickfill.h"
 #include "combocell.h"
-#include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "recncell.h"
@@ -408,10 +408,11 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  taxincluded = FALSE;
 	  break;
 	case GNC_TAXINCLUDED_USEGLOBAL:
-	  taxincluded = gnc_lookup_boolean_option ("Business",
-						   (ledger->is_invoice ?
-						    "Invoice Tax Included?" :
-						    "Bill Tax Included?"), FALSE);
+	  if (ledger->gconf_section) {
+	    taxincluded = gnc_gconf_get_bool(ledger->gconf_section, "tax_included", NULL);
+	  } else {
+	    taxincluded = FALSE;
+	  }
 	  break;
 	}
 

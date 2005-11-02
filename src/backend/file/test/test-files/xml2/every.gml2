@@ -1,5 +1,30 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="commodity">5</gnc:count-data>
 <gnc:count-data cd:type="account">27</gnc:count-data>
 <gnc:count-data cd:type="transaction">161</gnc:count-data>
@@ -37,22 +62,22 @@
   <act:name>Fidelity Inv</act:name>
   <act:id type="guid">1b791374ee19ad07b06c3e0a99aeb4fa</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:description>Mutual Fund Family</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>FID Cap &amp; Income</act:name>
   <act:id type="guid">31123b56c4780f491050562fc2bbdc20</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
@@ -64,11 +89,11 @@
   <act:name>FID Eq Inc II</act:name>
   <act:id type="guid">db2182ba7d730b4e90c755d29c64c894</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Eq Inc II</cmdty:id>
@@ -80,11 +105,11 @@
   <act:name>FID Govt Res</act:name>
   <act:id type="guid">504f743d68e663efff21fc66b85cc491</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Govt Res</cmdty:id>
@@ -96,11 +121,11 @@
   <act:name>FID Growth &amp; Inc</act:name>
   <act:id type="guid">ebec8d5a26522f4a0865fa5f837af17b</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
@@ -112,11 +137,11 @@
   <act:name>FID NewMkt Inc</act:name>
   <act:id type="guid">0fac2553ae5a682f5ae978d081566ea5</act:id>
   <act:type>STOCK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID NewMkt Inc</cmdty:id>
@@ -128,43 +153,43 @@
   <act:name>Dummy Cash</act:name>
   <act:id type="guid">049676696675474217124e24f44fbaa7</act:id>
   <act:type>CASH</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:description>Reconcile Accounts</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Cap. gain (long)</act:name>
   <act:id type="guid">1ade3e58381c463d8a8c2703d134ccea</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fidelity Inv</act:name>
   <act:id type="guid">b7eaa97e2760274bd7eb5104a3f6fd84</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:parent type="guid">1ade3e58381c463d8a8c2703d134ccea</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>FID Eq Inc II</act:name>
   <act:id type="guid">2998f1baa86deced08bf21cb73d4d194</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Eq Inc II</cmdty:id>
@@ -176,11 +201,11 @@
   <act:name>FID Growth &amp; Inc</act:name>
   <act:id type="guid">5b7c74145709c67b9fa6d33ea12c9163</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
@@ -192,32 +217,32 @@
   <act:name>Cap. gain (short)</act:name>
   <act:id type="guid">fec86ac037ee8dd3cfe9512f7fced74b</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fidelity Inv</act:name>
   <act:id type="guid">57e365b7b895c5a9ef328a69367c49e5</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:parent type="guid">fec86ac037ee8dd3cfe9512f7fced74b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>FID Eq Inc II</act:name>
   <act:id type="guid">f9599ed5ecf62d2c9326766617d6e5e7</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Eq Inc II</cmdty:id>
@@ -229,11 +254,11 @@
   <act:name>FID Growth &amp; Inc</act:name>
   <act:id type="guid">d023c36ca9c320b873c5be9993078451</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
@@ -245,11 +270,11 @@
   <act:name>FID NewMkt Inc</act:name>
   <act:id type="guid">5f4d3dd84f8df6527d5091152aadb4d6</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID NewMkt Inc</cmdty:id>
@@ -261,32 +286,32 @@
   <act:name>Dividends</act:name>
   <act:id type="guid">0406079e56613a22d8112b8dbfbed622</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fidelity Inv</act:name>
   <act:id type="guid">928026d717b302da3d24fb64f086b18a</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:parent type="guid">0406079e56613a22d8112b8dbfbed622</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>FID Cap &amp; Income</act:name>
   <act:id type="guid">98a3d87a9305f733420ceee444cbfbe4</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Cap &amp; Income</cmdty:id>
@@ -298,11 +323,11 @@
   <act:name>FID Eq Inc II</act:name>
   <act:id type="guid">6344d1b4710050ba1fd600c56eee740b</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Eq Inc II</cmdty:id>
@@ -314,11 +339,11 @@
   <act:name>FID Govt Res</act:name>
   <act:id type="guid">11709b1c45e84450d7a282228e69b56c</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Govt Res</cmdty:id>
@@ -330,11 +355,11 @@
   <act:name>FID Growth &amp; Inc</act:name>
   <act:id type="guid">55d69cebd7b9b64b6e9678b6588e64a1</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID Growth &amp; Inc</cmdty:id>
@@ -346,11 +371,11 @@
   <act:name>FID NewMkt Inc</act:name>
   <act:id type="guid">4ed39bec2d9009028bc277e7ca58b372</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:security>
     <cmdty:space>NYSE</cmdty:space>
     <cmdty:id>FID NewMkt Inc</cmdty:id>
@@ -362,42 +387,42 @@
   <act:name>Unspecified</act:name>
   <act:id type="guid">5f856918b8284a11ebc757485d853667</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Commissions</act:name>
   <act:id type="guid">c4ab48d47126697c3ee461627fedbc86</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fidelity Inv</act:name>
   <act:id type="guid">01ebde432dcc5dee900ce670743eab41</act:id>
   <act:type>EXPENSE</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
   <act:parent type="guid">c4ab48d47126697c3ee461627fedbc86</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Retained Earnings</act:name>
   <act:id type="guid">7914214426a5a0d6f1d6d64c6614f80a</act:id>
   <act:type>EQUITY</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>IRR</cmdty:id>
-  </act:currency>
-  <act:currency-scu>1</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>1</act:commodity-scu>
 </gnc:account>
 <gnc:transaction version="2.0.0">
   <trn:id type="guid">d6e78e4275e257da6c333a9876c3b644</trn:id>

@@ -43,8 +43,8 @@
 
 
 #include <glib-object.h>
-#include <qof/qofbook.h>
-#include <qof/qofclass.h>
+#include "qofbook.h"
+#include "qofclass.h"
 
 /** Initalize and shut down this subsystem. */
 void qof_gobject_init(void);

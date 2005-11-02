@@ -43,30 +43,24 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "global-options.h"
 #include "gnc-associate-account.h"
 #include "gnc-ofx-import.h"
-#include "gnc-file-dialog.h"
-#include "gnc-engine-util.h"
+#include "gnc-file.h"
+#include "gnc-engine.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
-
+#include "gnc-gconf-utils.h"
 
 #include "dialog-utils.h"
 
+#define GCONF_SECTION "dialogs/import/ofx"
 
-static short module = MOD_IMPORT;
+static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /********************************************************************\
  * gnc_file_ofx_import
  * Entry point
 \********************************************************************/
-
-SCM  scm_gnc_file_ofx_import ()
-{
-  gnc_file_ofx_import();
-  return SCM_EOL;
-}
 
 /* CS: Store the reference to the created importer gui so that the
    ofx_proc_transaction_cb can use it. */
@@ -364,6 +358,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								   NULL,
 								   NULL);
 		    g_free (investment_account_text);
+		    investment_account_text = NULL;
 		    if(investment_account!=NULL&&
 		       data.unitprice_valid==true&&
 		       data.units_valid==true&&
@@ -621,22 +616,26 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  gnc_should_log(GNC_MOD_IMPORT, GNC_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
-  default_dir = gnc_lookup_string_option("__paths", "Import OFX", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select an OFX/QFX file to process"),
 				      NULL,
-				      default_dir);
+				      default_dir,
+				      GNC_FILE_DIALOG_IMPORT);
+  g_free(default_dir);
+  default_dir = NULL;
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
-      gnc_set_string_option("__paths", "Import OFX", default_dir);
+      gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
       g_free(default_dir);
+      default_dir = NULL;
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);

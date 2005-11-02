@@ -33,7 +33,7 @@
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "global-options.h"
+#include "gnc-gconf-utils.h"
 
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
@@ -42,8 +42,6 @@
 #include <gwenhywfar/xml.h>
 
 #include <iconv.h>
-
-#define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 gchar *gnc__extractText(const char *text);
 
@@ -63,9 +61,7 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
-    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
-			      "HBCI Remember PIN in memory",
-                              FALSE);
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
 
@@ -79,9 +75,10 @@ void GNCInteractor_delete(GNCInteractor *data)
   if (data == NULL)
     return;
   if (data->dialog != NULL) {
-    gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
-			    gtk_toggle_button_get_active 
-			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
+    gnc_gconf_set_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH,
+		       gtk_toggle_button_get_active 
+		       (GTK_TOGGLE_BUTTON (data->close_checkbutton)),
+		       NULL);
     gtk_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
@@ -143,9 +140,7 @@ gboolean GNCInteractor_aborted(const GNCInteractor *i)
 void GNCInteractor_show_nodelete(GNCInteractor *i)
 {
   gboolean cache_pin = 
-    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
-			      "HBCI Remember PIN in memory",
-			      FALSE);
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   g_assert(i);
   /* Show widgets */
   gtk_widget_show_all (i->dialog);
@@ -163,7 +158,9 @@ void GNCInteractor_show(GNCInteractor *i)
   g_assert(i);
   GNCInteractor_show_nodelete(i);
   /* Clear log window. */
-  gtk_editable_delete_text (GTK_EDITABLE (i->log_text), 0, -1);
+  gtk_text_buffer_set_text
+    (gtk_text_view_get_buffer (GTK_TEXT_VIEW (i->log_text) ),
+     "", 0);
 }
 
 
@@ -173,9 +170,10 @@ void GNCInteractor_hide(GNCInteractor *i)
   if (gtk_toggle_button_get_active 
       (GTK_TOGGLE_BUTTON (i->close_checkbutton)))
     gtk_widget_hide_all (i->dialog);
-  gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
-			  gtk_toggle_button_get_active 
-			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
+  gnc_gconf_set_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH,
+		     gtk_toggle_button_get_active 
+		     (GTK_TOGGLE_BUTTON (i->close_checkbutton)),
+		     NULL);
 }
 
 gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i)
@@ -204,7 +202,7 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 	gtk_widget_reparent (GTK_WIDGET (i->dialog), new_parent);
 	else
 	gtk_widget_set_parent (GTK_WIDGET (i->dialog), new_parent);*/
-      gnome_dialog_set_parent (GNOME_DIALOG (i->dialog), 
+      gtk_window_set_transient_for (GTK_WINDOW (i->dialog), 
 			       GTK_WINDOW (new_parent));
     }
 }
@@ -337,6 +335,7 @@ static int inputBoxCB(AB_BANKING *ab,
     if (!retval)
       break;
     
+    g_assert(passwd);
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
@@ -507,7 +506,7 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
     dialog = data->showbox_last;
   }
   if (dialog) {
-    gnome_dialog_close (GNOME_DIALOG (dialog));
+    gtk_widget_hide (dialog);
     gtk_widget_destroy (dialog);
     g_hash_table_remove(data->showbox_hash, (gpointer)id);
   }
@@ -570,34 +569,39 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   b2text = gnc_hbci_utf8ToLatin1(data, b2);
   b3text = gnc_hbci_utf8ToLatin1(data, b3);
 
-  dialog = gnome_dialog_new (title, 
-			     b1 ? b1text : NULL,
-			     b2 ? b2text : NULL,
-			     b3 ? b3text : NULL,
-			     NULL);
-  gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
-  gnome_dialog_set_close (GNOME_DIALOG (dialog), TRUE);
+  dialog = gtk_dialog_new_with_buttons (title, 
+					GTK_WINDOW (data->parent),
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+					b1 ? b1text : NULL,
+					1,
+					b2 ? b2text : NULL,
+					2,
+					b3 ? b3text : NULL,
+					3,
+					NULL);
+  /* Ensure that the dialog box is destroyed when the user responds. */
+  g_signal_connect_swapped (dialog,
+			    "response", 
+			    G_CALLBACK (gtk_widget_destroy),
+			    dialog);
+  /* Add the label, and show everything we've added to the dialog. */
   label = gtk_label_new (text);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start (GTK_BOX (GNOME_DIALOG (dialog)->vbox), label, TRUE, TRUE, 0);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (GTK_DIALOG(dialog)->vbox),
+		     label);
+  gtk_widget_show_all (dialog);
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-  if (result<0 || result>2) {
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result<1 || result>3) {
     printf("messageBoxCB: Bad result %d", result);
-    g_free(title);
-    g_free(text);
-    g_free(b1text);
-    g_free(b2text);
-    g_free(b3text);
-    return 0;
+    result = 0;
   }
   g_free(title);
   g_free(text);
   g_free(b1text);
   g_free(b2text);
   g_free(b3text);
-  return result+1;
+  return result;
 }
 
 
@@ -627,6 +631,7 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
   /*   GNCInteractor_add_log_text (data, text); */
 
   /* Set progress bar */
+  gtk_widget_set_sensitive (data->action_progress, TRUE);
   gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
 			       0.0);
   data->action_max = total;
@@ -715,16 +720,17 @@ static int progressEndCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
 int debug_pmonitor = FALSE;
 void GNCInteractor_add_log_text (GNCInteractor *data, const char *msg)
 {
-  int pos;
+  GtkTextBuffer *tb;
+  GtkTextView *tv;
   g_assert(data);
-  
-  pos = gtk_text_get_length (GTK_TEXT (data->log_text));
-  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
-			    msg, strlen (msg),
-			    &pos);
-  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
-			    "\n", 1,
-			    &pos);
+
+  tv = GTK_TEXT_VIEW (data->log_text);
+  tb = gtk_text_view_get_buffer (tv);
+  gtk_text_buffer_insert_at_cursor (tb, msg, -1);
+  gtk_text_buffer_insert_at_cursor (tb, "\n", -1);
+  /* and scroll to the end of the buffer */
+  gtk_text_view_scroll_to_mark (tv, gtk_text_buffer_get_insert (tb),
+				0.0, FALSE, 0.0, 0.0);
 }
 
 static void
@@ -732,7 +738,7 @@ on_button_clicked (GtkButton *button,
 		   gpointer user_data)
 {
   GNCInteractor *data = user_data;
-  char *name;
+  const char *name;
   g_assert(data);
   
   name = gtk_widget_get_name (GTK_WIDGET (button));
@@ -766,24 +772,24 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
   /* Create the progress dialog window */
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI_connection_dialog");
 
-  g_assert (dialog = glade_xml_get_widget (xml, "HBCI_connection_dialog"));
+  g_assert ((dialog = glade_xml_get_widget (xml, "HBCI_connection_dialog")) != NULL);
   data->dialog = dialog;
-  g_assert (data->job_entry = glade_xml_get_widget (xml, "job_entry"));
-  g_assert (data->action_entry = glade_xml_get_widget (xml, "action_entry"));
-  g_assert (data->action_progress = 
-	    glade_xml_get_widget (xml, "action_progress"));
-  g_assert (data->log_text = glade_xml_get_widget (xml, "log_text"));
-  g_assert (data->abort_button = glade_xml_get_widget (xml, "abort_button"));
+  g_assert ((data->job_entry = glade_xml_get_widget (xml, "job_entry")) != NULL);
+  g_assert ((data->action_entry = glade_xml_get_widget (xml, "action_entry")) != NULL);
+  g_assert ((data->action_progress = 
+	     glade_xml_get_widget (xml, "action_progress")) != NULL);
+  g_assert ((data->log_text = glade_xml_get_widget (xml, "log_text")) != NULL);
+  g_assert ((data->abort_button = glade_xml_get_widget (xml, "abort_button")) != NULL);
   gtk_widget_set_sensitive (GTK_WIDGET (data->abort_button), FALSE);
-  g_assert (data->close_button = glade_xml_get_widget (xml, "close_button"));
-  g_assert (data->close_checkbutton = 
-	    glade_xml_get_widget (xml, "close_checkbutton"));
+  g_assert ((data->close_button = glade_xml_get_widget (xml, "close_button")) != NULL);
+  g_assert ((data->close_checkbutton = 
+	     glade_xml_get_widget (xml, "close_checkbutton")) != NULL);
 
   /* grey out the progress bar -- its unused at the moment */
   gtk_widget_set_sensitive (data->action_progress, FALSE);
   gtk_toggle_button_set_active 
     (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
-     gnc_lookup_boolean_option("__gui", "hbci_close_on_finish", TRUE));
+     gnc_gconf_get_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH, NULL));
 
   gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
@@ -791,7 +797,7 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
 
   if (data->parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
   /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
 
   gtk_object_ref (GTK_OBJECT (dialog));

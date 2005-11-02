@@ -26,6 +26,11 @@
 #include <aqbanking/banking.h>
 #include <gnome.h>
 
+#define GCONF_SECTION "dialogs/import/hbci"
+#define KEY_CLOSE_ON_FINISH "close_on_finish"
+#define KEY_REMEMBER_PIN    "remember_pin"
+#define KEY_VERBOSE_DEBUG   "verbose_debug"
+
 typedef struct _inter_data GNCInteractor;
 
 /** Adds the interactor and progressmonitor classes to the api. */

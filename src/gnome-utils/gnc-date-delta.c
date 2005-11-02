@@ -70,80 +70,86 @@ static GtkHBoxClass *parent_class;
  *
  * Returns the GtkType for the GNCDateDelta widget
  */
-guint
+GType
 gnc_date_delta_get_type (void)
 {
-  static guint date_delta_type = 0;
-
-  if (!date_delta_type){
-    GtkTypeInfo date_delta_info = {
-      "GNCDateDelta",
-      sizeof (GNCDateDelta),
+  static GType date_delta_type = 0;
+	
+  if (date_delta_type == 0) {
+    GTypeInfo date_delta_info = {
       sizeof (GNCDateDeltaClass),
-      (GtkClassInitFunc) gnc_date_delta_class_init,
-      (GtkObjectInitFunc) gnc_date_delta_init,
       NULL,
       NULL,
+      (GClassInitFunc) gnc_date_delta_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCDateDelta),
+      0,
+      (GInstanceInitFunc) gnc_date_delta_init
     };
-
-    date_delta_type = gtk_type_unique (gtk_hbox_get_type (),
-                                       &date_delta_info);
+    
+    date_delta_type = g_type_register_static (gtk_hbox_get_type (),
+					      "GNCDateDelta",
+					      &date_delta_info,
+					      0);
   }
 	
   return date_delta_type;
 }
 
 static void
-gnc_date_delta_class_init (GNCDateDeltaClass *class)
+gnc_date_delta_class_init (GNCDateDeltaClass *klass)
 {
-  GtkObjectClass *object_class = (GtkObjectClass *) class;
-  GtkContainerClass *container_class = (GtkContainerClass *) class;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  object_class = (GtkObjectClass*) class;
-
-  parent_class = gtk_type_class (gtk_hbox_get_type ());
+  parent_class = g_type_class_peek_parent (klass);
 
   date_delta_signals [VALUE_CHANGED] =
-    gtk_signal_new ("value_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
-                                       value_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("value_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, value_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
   date_delta_signals [UNITS_CHANGED] =
-    gtk_signal_new ("units_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
-                                       units_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
+    g_signal_new ("units_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, units_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
   date_delta_signals [POLARITY_CHANGED] =
-    gtk_signal_new ("polarity_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
-                                       polarity_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
-
+    g_signal_new ("polarity_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, polarity_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
+               
   date_delta_signals [DELTA_CHANGED] =
-    gtk_signal_new ("delta_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCDateDeltaClass,
-                                       delta_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, date_delta_signals,
-                                LAST_SIGNAL);
+    g_signal_new ("delta_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateDeltaClass, delta_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
 
   container_class->forall = gnc_date_delta_forall;
-
-  class->value_changed    = NULL;
-  class->units_changed    = NULL;
-  class->polarity_changed = NULL;
-  class->delta_changed    = NULL;
 }
 
 static void

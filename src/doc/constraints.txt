@@ -1,12 +1,11 @@
+/** \page financeconstraints Financial Constraints in GnuCash
 
-                  Financial Constraints in GnuCash
-                  --------------------------------
-                  Linas Vepstas <linas@linas.org>
+				Linas Vepstas <linas@linas.org>
                         September 2003
  
 
-Overview:
----------
+\section financeoverview Overview:
+
 The GnuCash Engine implements a set of financial constraints so
 that a set of basic/core accounting rules are obeyed.  The best
 known example is the "double-entry" constraint: the total value
@@ -22,8 +21,8 @@ future direction is to formalize the framework, so that it becomes
 easier to add and work with new types of constraints.
 
 
-Introduction:
--------------
+\section financeintro Introduction:
+
 There are three very different classes of constraints within GnuCash,
 which should not be confused with each other. They work in very
 different ways and have very different goals.  First, there are
@@ -61,9 +60,9 @@ in an ad-hoc manner, with no governing framework.  This may change,
 as there is pressure to support more complex constraints that vary
 by region/country, by account type, by industry, etc.
 
-Why Not 'Lazy Evaluation'?
---------------------------
-Lazy evaluation is supperfically like constraints, but differs in an
+\section financelazy Why Not 'Lazy Evaluation'?
+
+Lazy evaluation is superficially like constraints, but differs in an
 important way.  With lazy evaluation, when something changes (e.g.
 the posted date) it is marked dirty. Later, when something else needs
 something (e.g. the posted date on a gains split), the dirty flag
@@ -79,24 +78,21 @@ constraint checking can be done, without incuring circular
 deopendencies.  At this time, the sync point is the xaccTransCommitEdit()
 subroutine.
 
-List of Constraints
--------------------
+\section financelist List of Constraints
+
 The following is a list of the constraints that are currently
 implemented in the GnuCash Engine, with a short description of what
 they are, and how they work.
 
--- Double Entry
--- Double-Balance
--- Date Posted of Gains Transaction
+- Double Entry
+- Double-Balance
+- Date Posted of Gains Transaction
    The posted date of the gains transaction is kept in sync with the
    posted date on the transaction that is the source of the gains.
    See the document 'lots.txt', section 'Cap Gains Actual Implementation' 
    for details.
--- Value of Gains Transaction
+- Value of Gains Transaction
    The value recorded by teh gains transaction is kept in sync with
    the value
 
-
-
-
-
+*/

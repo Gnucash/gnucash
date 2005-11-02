@@ -26,24 +26,27 @@
 
 (define <html-scatter>
   (make-record-type "<html-scatter>"
-                    '(width height title subtitle 
-			    x-axis-label y-axis-label
-
-			    ;; a list of x-y-value lists.
-			    data 
-			    ;; Valid marker names are: 
-			    ;; "none", "circle", "diamond", "cross", "x",
-			    ;; "square", "asterisk", "filled circle",
-			    ;; "filled square", "filled diamond"
-			    ;; The full list can be found in
-			    ;; guppi3/src/libguppiplot/guppi-marker.c in
-			    ;; guppi_marker_info_array[]
-			    marker
-			    ;; The color of the marker. Should be a rgba
-			    ;; value as a hex string, as returned by
-			    ;; gnc:color-option->hex-string
-			    markercolor 
-			    )))
+                    '(width
+                      height
+                      title
+                      subtitle 
+                      x-axis-label
+                      y-axis-label
+                      ;; a list of x-y-value lists.
+                      data 
+                      ;; Valid marker names are: 
+                      ;; "none", "circle", "diamond", "cross", "x",
+                      ;; "square", "asterisk", "filled circle",
+                      ;; "filled square", "filled diamond"
+                      ;; The full list can be found in
+                      ;; guppi3/src/libguppiplot/guppi-marker.c in
+                      ;; guppi_marker_info_array[]
+                      marker
+                      ;; The color of the marker. Should be a rgba
+                      ;; value as a hex string, as returned by
+                      ;; gnc:color-option->hex-string
+                      markercolor 
+                      )))
 
 (define gnc:html-scatter? 
   (record-predicate <html-scatter>))

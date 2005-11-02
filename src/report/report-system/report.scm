@@ -26,8 +26,8 @@
 ;; to generate the reports menu whenever a new window opens and to
 ;; figure out what to do when a report needs to be generated.
 ;;
-;; The key is the string naming the report and the value is the 
-;; report definition structure.
+;; The key is the string naming the report (the report "type") and the
+;; value is the report definition structure.
 (define *gnc:_report-templates_* (make-hash-table 23))
 
 ;; this is a hash of 'report ID' to instantiated report.  the 
@@ -36,7 +36,7 @@
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
-(define gnc:menuname-reports (N_ "_Reports"))
+(define gnc:menuname-reports "Reports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
@@ -47,6 +47,7 @@
 (define gnc:pagename-display (N_ "Display"))
 (define gnc:optname-reportname (N_ "Report name"))
 
+;; A <report-template> represents one of the available report types.
 (define <report-template>
   (make-record-type "<report-template>"
                     ;; The data items in a report record
@@ -55,6 +56,7 @@
                               renderer in-menu? menu-path menu-name
                               menu-tip export-types export-thunk)))
 
+;; if args is supplied, it is a list of field names and values
 (define (gnc:define-report . args)
   ;; For now the version is ignored, but in the future it'll let us
   ;; change behaviors without breaking older reports.
@@ -173,6 +175,7 @@
           (gnc:register-option options names)
           options))))
 
+;; A <report> represents an instantiation of a particular report type.
 (define <report>
   (make-record-type "<report>"
                     '(type id options dirty? needs-save? editor-widget ctext)))
@@ -221,12 +224,15 @@
 (define gnc:report-set-editor-widget!
   (record-modifier <report> 'editor-widget))
 
+;; ctext is for caching the rendered html
 (define gnc:report-ctext 
   (record-accessor <report> 'ctext))
 
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
+;; gnc:make-report instantiates a report from a report-template.
+;; The actual report is stored away in a hash-table -- only the id is returned.
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
             template-name ;; type
@@ -254,7 +260,7 @@
            (if cb
                (cb r))))
        options))
-    
+
     (hash-set! *gnc:_reports_* (gnc:report-id r) r)
     id))
 
@@ -272,6 +278,8 @@
         (gnc:report-template-new-options template)
         #f)))
 
+;; A convenience wrapper to get the report-template's export types from
+;; an instantiated report.
 (define (gnc:report-export-types report)
   (let ((template (hash-ref *gnc:_report-templates_* 
                             (gnc:report-type report))))
@@ -279,6 +287,8 @@
         (gnc:report-template-export-types template)
         #f)))
 
+;; A convenience wrapper to get the report-template's export thunk from
+;; an instantiated report.
 (define (gnc:report-export-thunk report)
   (let ((template (hash-ref *gnc:_report-templates_* 
                             (gnc:report-type report))))
@@ -326,13 +336,14 @@
 
 (define (gnc:report-remove-by-id id)
   (let ((r (hash-ref *gnc:_reports_* id)))
-    (for-each 
-     (lambda (child)
-       (gnc:report-remove-by-id child))
-     (gnc:report-children r))
+    ;; 2005.10.02, jsled: gnc:report-children doesn't appear defined anywhere?
+    ;; (for-each 
+     ;; (lambda (child)
+     ;;   (gnc:report-remove-by-id child))
+     ;; (gnc:report-children r))
     (hash-remove! *gnc:_reports_* id)))
-
-(define (gnc:find-report id) 
+ 
+(define (gnc:find-report id)
   (hash-ref *gnc:_reports_* id))
 
 (define (gnc:find-report-template report-type) 
@@ -392,30 +403,37 @@
 	     (open-file conf-file-name "a"))
     (force-output)))
 
+;; gets the renderer from the report template;
+;; gets the stylesheet from the report;
+;; renders the html doc and caches the resulting string;
+;; returns the html string.
 (define (gnc:report-render-html report headers?)
   (if (and (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
       ;; if there's clean cached text, return it 
-      (begin 
-        (gnc:report-ctext report))
+      ;;(begin
+      (gnc:report-ctext report)
+      ;;  )
       
       ;; otherwise, rerun the report 
       (let ((template (hash-ref *gnc:_report-templates_* 
                                 (gnc:report-type report)))
 	    (doc #f))
         (set! doc (if template
-            (let* ((renderer (gnc:report-template-renderer template))
-                   (stylesheet (gnc:report-stylesheet report))
-                   (doc (renderer report))
-                   (html #f))
-              (gnc:html-document-set-style-sheet! doc stylesheet)
-              (set! html (gnc:html-document-render doc headers?))
-              (gnc:report-set-ctext! report html)
-              (gnc:report-set-dirty?! report #f)              
-              html)
-            #f))
-	doc)))
+                      (let* ((renderer (gnc:report-template-renderer template))
+                             (stylesheet (gnc:report-stylesheet report))
+                             (doc (renderer report))
+                             (html #f))
+                        (gnc:html-document-set-style-sheet! doc stylesheet)
+                        (set! html (gnc:html-document-render doc headers?))
+                        (gnc:report-set-ctext! report html) ;; cache the html
+                        (gnc:report-set-dirty?! report #f)  ;; mark it clean
+                        html)
+                      #f))
+	doc))) ;; YUK! inner doc is html-doc object; outer doc is a string.
 
+;; looks up the report by id and renders it with gnc:report-render-html
+;; marks the cursor busy during rendering; returns the html
 (define (gnc:report-run id)
   (let ((report (gnc:find-report id))
 	(start-time (gettimeofday))
@@ -434,6 +452,8 @@
     (gnc:unset-busy-cursor #f)
     html))
 
+
+;; "thunk" should take the report-type and the report template record
 (define (gnc:report-templates-for-each thunk)
   (hash-for-each (lambda (name template) (thunk name template))
                  *gnc:_report-templates_*))

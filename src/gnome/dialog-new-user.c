@@ -28,10 +28,16 @@
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
-#include "global-options.h"
+#include "gnc-engine.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-ui.h"
-#include "window-help.h"
 
+#define GCONF_SECTION "dialogs/new_user"
+#define FIRST_STARTUP "first_startup"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /* function to open a qif import druid */
 static void (*qifImportDruidFcn)(void) = NULL;
@@ -50,7 +56,7 @@ gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
 void
 gnc_set_first_startup (gboolean first_startup)
 {
-  gnc_set_boolean_option ("__new_user", "first_startup", first_startup);
+  gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
 }
 
 void
@@ -63,11 +69,10 @@ gnc_ui_new_user_dialog (void)
   GladeXML  *xml;
   gint result;
 
+  ENTER(" ");
   xml = gnc_glade_xml_new ("newuser.glade", "New User Dialog");
 
   dialog = glade_xml_get_widget (xml, "New User Dialog");
-
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
 
   new_accounts_button = glade_xml_get_widget (xml, "new_accounts_button");
   import_qif_button = glade_xml_get_widget (xml, "import_qif_button");
@@ -78,66 +83,57 @@ gnc_ui_new_user_dialog (void)
    */
   gtk_widget_set_sensitive (import_qif_button, (qifImportDruidFcn != NULL));
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-  if (result != 0)
-  {
-    gnc_ui_new_user_cancel_dialog ();
-    gtk_widget_destroy (dialog);
-    gncp_new_user_finish ();
-    return;
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  switch (result) {
+	  case GTK_RESPONSE_CANCEL:
+		gnc_ui_new_user_cancel_dialog ();
+		break;
+	  case GTK_RESPONSE_OK:
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button))) {
+			gnc_ui_hierarchy_druid ();
+			break;
+		} else if ((qifImportDruidFcn != NULL) &&
+				gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {
+			qifImportDruidFcn();
+			gncp_new_user_finish ();
+			break;
+		} else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button))) {
+			gnc_gnome_help (HF_GUIDE, NULL);
+			gncp_new_user_finish ();
+			break;
+		}
+	  default:
+		g_print ("DEBUG: Response: %d", result);
+		g_assert_not_reached ();
   }
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button)))
-  {
-    gnc_ui_hierarchy_druid ();
-    gtk_widget_destroy (dialog);
-    return;
-  }
-
-  if ((qifImportDruidFcn != NULL) &&
-      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button)))
-  {
-    qifImportDruidFcn();
-  }
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tutorial_button)))
-  {
-    helpWindow (NULL, NULL, HH_QUICKSTART);
-  }
-
-  gncp_new_user_finish ();
   gtk_widget_destroy (dialog);
+  LEAVE(" ");
 }
 
 static void
 gnc_ui_new_user_cancel_dialog (void)
 {
   GtkWidget *dialog;
-  GtkWidget *toggle;
   GladeXML  *xml;
   gint result;
+  gboolean keepshowing;
 
   xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
 
   dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
-  toggle = glade_xml_get_widget (xml, "run_again_toggle");
 
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  keepshowing = (result == GTK_RESPONSE_YES);
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-  if (result == 0)
-  {
-    gboolean keepshowing = TRUE;
+  gnc_set_first_startup (keepshowing);
+  gncp_new_user_finish ();
 
-    keepshowing = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
-
-    gnc_set_first_startup (keepshowing);
-
-    gncp_new_user_finish ();
-  }
+  gtk_widget_destroy(dialog);
 }
 
 void
 gncp_new_user_finish (void)
 {
-  scm_c_eval_string("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+  gnc_hook_run(HOOK_BOOK_OPENED, NULL);
 }

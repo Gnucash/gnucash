@@ -2,3 +2,4 @@ Makefile.in
 Makefile
 macros.dep
 gnome-macros.dep
+intltool.m4

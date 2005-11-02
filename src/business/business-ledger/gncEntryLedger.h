@@ -63,12 +63,12 @@ typedef struct entry_ledger_colors
 #define ENTRY_DISHOW_CELL	"discount-how"
 #define ENTRY_PRIC_CELL		"price"
 #define ENTRY_QTY_CELL		"quantity"
-#define ENTRY_TAXABLE_CELL	"taxable?"
+#define ENTRY_TAXABLE_CELL	"istaxable"
 #define ENTRY_TAXTABLE_CELL	"taxtable"
 #define ENTRY_TAXINCLUDED_CELL	"taxincluded"
-#define ENTRY_BILLABLE_CELL	"billable?"
+#define ENTRY_BILLABLE_CELL	"isbillable"
 
-#define ENTRY_INV_CELL		"invoiced?"
+#define ENTRY_INV_CELL		"isinvoiced"
 #define ENTRY_VALUE_CELL	"line-value"
 #define ENTRY_TAXVAL_CELL	"line-tax-val"
 
@@ -103,8 +103,6 @@ void gnc_entry_ledger_display_refresh (GncEntryLedger *ledger);
 /* Get the Table */
 Table * gnc_entry_ledger_get_table (GncEntryLedger *ledger);
 
-void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new);
-
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
 void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly);
@@ -131,5 +129,7 @@ void gnc_entry_ledger_delete_current_entry (GncEntryLedger *ledger);
 void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
 
 QueryNew * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
+
+void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);
 
 #endif /* GNC_ENTRY_LEDGER_H */

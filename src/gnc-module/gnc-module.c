@@ -14,8 +14,9 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-
-#include "core-utils.h"
+#ifndef HAVE_SETENV
+#include "setenv.h"
+#endif
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
@@ -132,7 +133,7 @@ gnc_module_system_setup_load_path(void)
     }
     g_list_free(dirs);
     
-    if(gnc_setenv("LD_LIBRARY_PATH", envt, 1) != 0)
+    if(setenv("LD_LIBRARY_PATH", envt, 1) != 0)
     {
       g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
     }
@@ -257,25 +258,35 @@ gnc_module_system_modinfo(void)
 GNCModuleInfo * 
 gnc_module_get_info(const char * fullpath) 
 {
-  lt_dlhandle  handle;
+  lt_dlhandle handle;
+  lt_ptr modsysver;
 
   //printf("(init) dlopening %s\n", fullpath);
   handle = lt_dlopen(fullpath);
-  if(handle) 
-  {
-    lt_ptr modsysver   = lt_dlsym(handle, "gnc_module_system_interface");
+  if (handle == NULL) {
+      g_warning ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
+      return NULL;
+  }
+
+  modsysver   = lt_dlsym(handle, "gnc_module_system_interface");
     
-    /* the modsysver tells us what the expected symbols and their 
-     * types are */ 
-    if (!modsysver) 
-    {
+  /* the modsysver tells us what the expected symbols and their
+   * types are */
+  if (!modsysver) {
       //printf("(init) closing %s\n", fullpath);
       //lt_dlclose(handle);
       return NULL;
-    }
+  }
 
-    if(*(int *)modsysver == 0) 
-    {
+  if (*(int *)modsysver != 0) {
+      /* unsupported module system interface version */
+      /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
+         fullpath); */
+      //lt_dlclose(handle);
+      return NULL;
+  }
+
+  {
       lt_ptr initfunc    = lt_dlsym(handle, "gnc_module_init");
       lt_ptr pathfunc    = lt_dlsym(handle, "gnc_module_path");
       lt_ptr descripfunc = lt_dlsym(handle, "gnc_module_description");
@@ -283,43 +294,29 @@ gnc_module_get_info(const char * fullpath)
       lt_ptr revision    = lt_dlsym(handle, "gnc_module_revision");
       lt_ptr age         = lt_dlsym(handle, "gnc_module_age");
       
-      if(initfunc && pathfunc && descripfunc && interface &&
-         revision && age) 
-      {
-        /* we have found a gnc_module. */
-        GNCModuleInfo * info = g_new0(GNCModuleInfo, 1);
-        char * (* f_path)(void) = pathfunc;
-        char * (* f_descrip)(void) = descripfunc;
-        info->module_path        = f_path();
-        info->module_description = f_descrip();
-        info->module_filepath    = g_strdup(fullpath);
-        info->module_interface   = *(int *)interface;
-        info->module_age         = *(int *)age;
-        info->module_revision    = *(int *)revision;
-        //printf("(init) closing %s\n", fullpath);
-        //lt_dlclose(handle);
-        return info;
+      if (!(initfunc && pathfunc && descripfunc && interface &&
+            revision && age)) {
+          g_warning ("module '%s' does not match module signature\n",
+                     fullpath);
+          //lt_dlclose(handle);
+          return NULL;
       }
-      else 
+
       {
-        g_warning ("module '%s' does not match module signature\n", fullpath);
-        //lt_dlclose(handle);
-        return NULL;
+          /* we have found a gnc_module. */
+          GNCModuleInfo * info = g_new0(GNCModuleInfo, 1);
+          char * (* f_path)(void) = pathfunc;
+          char * (* f_descrip)(void) = descripfunc;
+          info->module_path        = f_path();
+          info->module_description = f_descrip();
+          info->module_filepath    = g_strdup(fullpath);
+          info->module_interface   = *(int *)interface;
+          info->module_age         = *(int *)age;
+          info->module_revision    = *(int *)revision;
+          //printf("(init) closing %s\n", fullpath);
+          //lt_dlclose(handle);
+          return info;
       }
-    }
-    else 
-    {
-      /* unsupported module system interface version */
-      /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
-         fullpath); */
-      //lt_dlclose(handle);
-      return NULL;
-    }
-  }
-  else 
-  {
-    g_warning ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
-    return NULL;
   }
 }
 

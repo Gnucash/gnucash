@@ -11,4 +11,5 @@ noinst_HEADERS=test-stuff.h
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS}
+  ${GLIB_CFLAGS} \
+  ${GUILE_INCS}

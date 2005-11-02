@@ -1,0 +1,19 @@
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <placeholder name="FileOpenRecentPlaceholder">
+        <menuitem name="RecentFile0" action="RecentFile0Action"/>
+        <menuitem name="RecentFile1" action="RecentFile1Action"/>
+        <menuitem name="RecentFile2" action="RecentFile2Action"/>
+        <menuitem name="RecentFile3" action="RecentFile3Action"/>
+        <menuitem name="RecentFile4" action="RecentFile4Action"/>
+        <menuitem name="RecentFile5" action="RecentFile5Action"/>
+        <menuitem name="RecentFile6" action="RecentFile6Action"/>
+        <menuitem name="RecentFile7" action="RecentFile7Action"/>
+        <menuitem name="RecentFile8" action="RecentFile8Action"/>
+        <menuitem name="RecentFile9" action="RecentFile9Action"/>
+      </placeholder>
+    </menu>
+  </menubar>
+</ui>
+

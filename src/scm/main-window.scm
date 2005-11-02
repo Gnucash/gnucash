@@ -71,30 +71,6 @@ the account instead of opening a register.") #f))
 	    (list->vector (list 'payable   (N_ "Accounts Payable") ""))
 	    (list->vector (list 'receivable (N_ "Accounts Receivable") "")))))
 
-    (add-option
-     (gnc:make-list-option
-      (N_ "Account Tree") (N_ "Account fields to display")
-      "c" ""
-      (list 'description 'total)
-      (list (list->vector (list 'type           (N_ "Type") ""))
-            (list->vector (list 'code           (N_ "Code") ""))
-            (list->vector (list 'description    (N_ "Description") ""))
-            (list->vector (list 'notes          (N_ "Notes") ""))
-            (list->vector (list 'commodity      (N_ "Commodity") ""))
-            (list->vector (list 'balance        (N_ "Balance") ""))
-            (list->vector (list 'balance_report (N_ "Balance in Report Currency") ""))
-            (list->vector (list 'present        (N_ "Present Balance") ""))
-            (list->vector (list 'present_report (N_ "Present Balance in Report Currency") ""))
-            (list->vector (list 'cleared        (N_ "Cleared Balance") ""))
-            (list->vector (list 'cleared_report (N_ "Cleared Balance in Report Currency") ""))
-            (list->vector (list 'reconciled        (N_ "Reconciled Balance") ""))
-            (list->vector (list 'reconciled_report (N_ "Reconciled Balance in Report Currency") ""))
-            (list->vector (list 'future_min        (N_ "Future Minimum Balance") ""))
-            (list->vector (list 'future_min_report (N_ "Future Minimum Balance in Report Currency") ""))
-            (list->vector (list 'total          (N_ "Total") ""))
-            (list->vector (list 'total_report   (N_ "Total in Report Currency") ""))
-            (list->vector (list 'tax-info       (N_ "Tax Info") "")))))
-
     options))
 
 (define (gnc:make-new-acct-tree-window)  
@@ -142,7 +118,7 @@ the account instead of opening a register.") #f))
 
     (if (not save-file?) (gnc:warn (_ "Can't save window state")))
 
-    (if (and save-file? conf-file-name (gnc:mdi-has-apps?))
+    (if (and save-file? conf-file-name)
         (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
                                      conf-file-name)))
           (with-output-to-port (open-output-file book-path)
@@ -150,8 +126,7 @@ the account instead of opening a register.") #f))
               (hash-fold 
                (lambda (k v p)
                  (if (gnc:report-needs-save? v)
-                     (display 
-                      (gnc:report-generate-restore-forms v))))
+                     (display (gnc:report-generate-restore-forms v))))
                #t *gnc:_reports_*)
 
               (hash-fold 
@@ -160,24 +135,24 @@ the account instead of opening a register.") #f))
                #t gnc:*acct-tree-options*)
 
               (force-output)))
-          (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
+	  ))))
 
 (define (gnc:main-window-book-close-handler session)
-    (gnc:main-window-save-state session)
+  (gnc:main-window-save-state session)
 
-    (let ((dead-reports '()))
-      ;; get a list of the reports we'll be needing to nuke     
-      (hash-fold 
-       (lambda (k v p)
-         (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
+  (let ((dead-reports '()))
+    ;; get a list of the reports we'll be needing to nuke     
+    (hash-fold 
+     (lambda (k v p)
+       (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
 
-      ;; actually remove them (if they're being displayed, the
-      ;; window's reference will keep the report alive until the
-      ;; window is destroyed, but find-report will fail)
-      (for-each 
-       (lambda (dr) 
-         (hash-remove! *gnc:_reports_* dr))
-       dead-reports)))
+    ;; actually remove them (if they're being displayed, the
+    ;; window's reference will keep the report alive until the
+    ;; window is destroyed, but find-report will fail)
+    (for-each 
+     (lambda (dr)
+       (hash-remove! *gnc:_reports_* dr))
+     dead-reports)))
 
 (define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
@@ -194,25 +169,26 @@ the account instead of opening a register.") #f))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
+    (gnc:new-account-tree #f)
 
-(define (gnc:main-window-ui-startup-handler)
-  (gnc:add-extension
-    (gnc:make-menu-item (N_ "Properties")
-			(N_ "View and edit the properties of this file.")
-			(list "Main" "_File" "_Print")
-			(lambda ()
-			  (let* ((book (gnc:get-current-book))
-				 (slots (gnc:book-get-slots book)))
+    ;; the reports have only been created at this point; create their ui component.
+    (hash-fold (lambda (key val prior-result)
+                (gnc:main-window-open-report (gnc:report-id val)
+                                             #f ;; =window: #f/null => open in first window
+                                             ))
+               #t *gnc:_reports_*)
+    ))
 
-			    (define (changed_cb)
-			      (gnc:book-kvp-changed book))
+(define (gnc:main-window-properties-cb)
+  (let* ((book (gnc:get-current-book))
+	 (slots (gnc:book-get-slots book)))
+
+    (define (changed_cb)
+      (gnc:book-kvp-changed book))
 			    
-			    (gnc:kvp-option-dialog gnc:id-book
-						   slots (_ "Book Options")
-						   changed_cb)))))
-  (gnc:add-extension (gnc:make-separator (list "Main" "_File" "_Print")))
-)
+    (gnc:kvp-option-dialog gnc:id-book
+			   slots (_ "Book Options")
+			   changed_cb)))
 
 (gnc:hook-remove-dangler gnc:*book-opened-hook* 
                          gnc:main-window-book-open-handler)
@@ -223,8 +199,3 @@ the account instead of opening a register.") #f))
                          gnc:main-window-book-close-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
-
-(gnc:hook-remove-dangler gnc:*ui-startup-hook* 
-                         gnc:main-window-ui-startup-handler)
-(gnc:hook-add-dangler gnc:*ui-startup-hook* 
-                      gnc:main-window-ui-startup-handler)

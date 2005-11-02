@@ -64,12 +64,10 @@ typedef struct _gncTaxTableEntry GncTaxTableEntry;
 typedef struct _gncAccountValue GncAccountValue;
 
 #include "Account.h"
-#include "gnc-date.h"
-#include "gnc-numeric.h"
-
-#include "qofbook.h"
-#include "qofinstance.h"
+#include "qof.h"
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gncBusiness.h"
+#endif
 
 #define GNC_ID_TAXTABLE       "gncTaxTable"
 #define GNC_IS_TAXTABLE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TAXTABLE))
@@ -97,14 +95,16 @@ gboolean gncAmountStringToType (const char *str, GncAmountType *type);
 const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
 gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncTaxTable * gncTaxTableCreate (QofBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);
 GncTaxTableEntry * gncTaxTableEntryCreate (void);
 void gncTaxTableEntryDestroy (GncTaxTableEntry *entry);
-
-/** Set Functions */
+/** @} */
+/** \name Set Functions 
+@{
+*/
 void gncTaxTableSetName (GncTaxTable *table, const char *name);
 void gncTaxTableIncRef (GncTaxTable *table);
 void gncTaxTableDecRef (GncTaxTable *table);
@@ -112,7 +112,7 @@ void gncTaxTableDecRef (GncTaxTable *table);
 void gncTaxTableEntrySetAccount (GncTaxTableEntry *entry, Account *account);
 void gncTaxTableEntrySetType (GncTaxTableEntry *entry, GncAmountType type);
 void gncTaxTableEntrySetAmount (GncTaxTableEntry *entry, gnc_numeric amount);
-
+/** @} */
 void gncTaxTableAddEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 
@@ -120,10 +120,8 @@ void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
 
-/** @} */
-
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 
 /** Return a pointer to the instance gncTaxTable that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 

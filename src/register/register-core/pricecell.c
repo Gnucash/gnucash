@@ -34,15 +34,12 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <glib.h>
 #include <locale.h>
 #include <string.h>
-#include <string.h>
 
 #include "gnc-exp-parser.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
+#include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
 #include "basiccell.h"
@@ -69,10 +66,10 @@ gnc_price_cell_enter (BasicCell *_cell,
 }
 
 static void
-gnc_price_cell_modify_verify (BasicCell *_cell, 
-                              const GdkWChar *change,
+gnc_price_cell_modify_verify (BasicCell *_cell,
+                              const char *change,
                               int change_len,
-                              const GdkWChar *newval,
+                              const char *newval,
                               int newval_len,
                               int *cursor_position,
                               int *start_selection,
@@ -83,12 +80,13 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
   const char *toks = "+-*/=()_";
   unsigned char decimal_point;
   unsigned char thousands_sep;
-  int i;
+  const char *c;
+  gunichar uc;
 
   /* accept the newval string if user action was delete */
   if (change == NULL)
   {
-    gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+    gnc_basic_cell_set_value_internal (_cell, newval);
     cell->need_to_parse = TRUE;
     return;
   }
@@ -103,16 +101,21 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
   else
     thousands_sep = lc->thousands_sep[0];
 
-  for (i = 0; i < change_len; i++)
-    if (!isdigit(change[i]) &&
-        !isspace(change[i]) &&
-        !isalpha(change[i]) &&
-        (decimal_point != change[i]) &&
-        (thousands_sep != change[i]) &&
-        (strchr (toks, change[i]) == NULL))
+  c = change;
+  while (*c)
+  {
+    uc = g_utf8_get_char (c);
+    if (!g_unichar_isdigit (uc) &&
+        !g_unichar_isspace (uc) &&
+        !g_unichar_isalpha (uc) &&
+        (decimal_point != uc) &&
+        (thousands_sep != uc) &&
+        (g_utf8_strchr (toks, -1, uc) == NULL))
       return;
+    c = g_utf8_next_char (c);
+  }
 
-  gnc_basic_cell_set_wcvalue_internal (_cell, newval);
+  gnc_basic_cell_set_value_internal (_cell, newval);
   cell->need_to_parse = TRUE;
 }
 

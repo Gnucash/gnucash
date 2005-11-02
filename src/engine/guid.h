@@ -118,7 +118,7 @@ void guid_shutdown (void);
  * Note that while guid's are generated randomly, the odds of this 
  * routine returning a non-unique id are astronomically small.
  * (Literally astronomically: If you had Cray's on every solar
- * system in the universe running for the entire age of teh universe,
+ * system in the universe running for the entire age of the universe,
  * you'd still have less than a one-in-a-million chance of coming up 
  * with a duplicate id.  2^128 == 10^38 is a really really big number.)
  */
@@ -127,13 +127,19 @@ void guid_new(GUID *guid);
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.
  *
- *  @return guid A pointer to a data structure contaiing a new GUID.
+ *  @return guid A pointer to a data structure containing a new GUID.
  *  The memory pointed to is owned by this routine and the guid must
- *  be copied out.
+ *  be copied out. 
+ * 
+ *  CAS: huh? make that: @return guid A data structure containing a newly
+ * allocated GUID.  Caller is responsible for calling guid_free().
  */
 GUID guid_new_return(void);
 
 /** Returns a GUID which is guaranteed to never reference any entity. */
+/* CAS: AFAICT: this isn't really guaranteed, but it's only as likely
+   as any other md5 collision. This could be guaranteed if GUID
+   contained a validity flag. */
 const GUID * guid_null (void);
 
 /** Efficiently allocate & free memory for GUIDs */

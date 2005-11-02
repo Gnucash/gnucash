@@ -35,21 +35,22 @@
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
-#include "core-utils.h"
+#include <time.h>
+#include <errno.h>
 
-#include "gnc-date.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
-#include "guid.h"
-
+#ifdef GNUCASH_MAJOR_VERSION
+#ifndef HAVE_SETENV
+#include "setenv.h"
+#endif
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
 #ifndef HAVE_LOCALTIME_R
 #include "localtime_r.h"
 #endif
+#endif
 
-static short module = MOD_IO;
+static QofLogModule log_module = GNC_MOD_IO;
 
 gboolean
 isspace_str(const gchar *str, int nomorethan)
@@ -210,7 +211,8 @@ string_to_double(const char *str, double *result)
 /*********/
 /* gint64
  */
-
+/* Maybe there should be a comment here explaining why this function
+   doesn't call g_ascii_strtoull, because it's not so obvious. -CAS */
 gboolean
 string_to_gint64(const gchar *str, gint64 *v)
 {
@@ -388,27 +390,23 @@ static time_t
 gnc_timegm (struct tm *tm)
 {
   time_t result;
-  char *put_str;
   char *old_tz;
 
   old_tz = getenv ("TZ");
-
   /* FIXME: there's no way to report this error to the caller. */
-  if(gnc_setenv("TZ", "UTC", 1) != 0)
+  if(setenv("TZ", "UTC", 1) != 0)
     PERR ("couldn't switch the TZ.");
-
   result = mktime (tm);
-
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(gnc_setenv("TZ", old_tz, 1) != 0)
+    if(setenv("TZ", old_tz, 1) != 0)
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    gnc_unsetenv("TZ");
+    unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }

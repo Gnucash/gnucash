@@ -18,6 +18,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+
+/** @addtogroup GUI
+    @{ */
+
+/** @defgroup Dialogs Dialogs */
+/** @defgroup Druids Druids */
+
+/** @} */
+
+
 #ifndef GNC_UI_H
 #define GNC_UI_H
 
@@ -29,37 +39,33 @@
 
 
 /** Help Files ******************************************************/
-#define HH_ACC               "gnucash-help/usage.html#acct-create"
-#define HH_ACCEDIT           "gnucash-help/usage.html#acct-edit"
-#define HH_COMMODITY         "gnucash-help/usage.html#tool-commodity"
-#define HH_CUSTOMER          "gnucash-help/usage.html"
-#define HH_EMPLOYEE          "gnucash-help/usage.html"
-#define HH_FIND_TRANSACTIONS "gnucash-help/usage.html#tool-find"
-#define HH_GLOBPREFS         "gnucash-help/custom-gnucash.html#set-prefs"
-#define HH_HELP              "gnucash-help/help.html"
-#define HH_INVOICE           "gnucash-help/usage.html"
-#define HH_JOB               "gnucash-help/usage.html"
-#define HH_MAIN              "gnucash-guide/index.html"
-#define HH_ORDER             "gnucash-help/usage.html"
-#define HH_PRINTCHECK        "gnucash-help/usage.html#print-check"
-#define HH_QUICKSTART        "gnucash-guide/index.html"
-#define HH_RECNWIN           "gnucash-help/usage.html#acct-reconcile"
-#define HH_SXEDITOR          "gnucash-help/usage.html#tran-sched"
-#define HH_VENDOR            "gnucash-help/usage.html"
+#define HF_USAGE             "gnucash-help/usage.html"
+#define HF_CUSTOM            "gnucash-help/custom-gnucash.html"
+#define HF_GUIDE             "gnucash-guide/index.html"
+#define HF_HELP              "gnucash-help/help.html"
+
+/** Links in the Help Files *****************************************/
+#define HL_ACC               "acct-create"
+#define HL_ACCEDIT           "acct-edit"
+#define HL_COMMODITY         "tool-commodity"
+#define HL_FIND_TRANSACTIONS "tool-find"
+#define HL_GLOBPREFS         "set-prefs"
+#define HL_PRINTCHECK        "print-check"
+#define HL_RECNWIN           "acct-reconcile"
+#define HL_SXEDITOR          "tran-sched"
+#define HL_GCONF             "gconf"
+
+/* GTK Windows - Common Response Codes */
+
+#define GNC_RESPONSE_NEW    1
+#define GNC_RESPONSE_DELETE 2
+#define GNC_RESPONSE_EDIT   3
 
 /* Dialog windows ***************************************************/
 
-typedef enum
-{
-  GTK_RESPONSE_NO,
-  GTK_RESPONSE_YES,
-  GTK_RESPONSE_CANCEL,
-  GTK_RESPONSE_OK
-} GNCVerifyResult;
-
-extern GNCVerifyResult
+extern gint
 gnc_verify_cancel_dialog(gncUIWidget parent,
-			 GNCVerifyResult default_result,
+			 gint default_result,
 			 const char *format, ...) G_GNUC_PRINTF (3,4);
 
 
@@ -69,11 +75,15 @@ gnc_verify_dialog(gncUIWidget parent,
 		  gboolean yes_is_default,
 		  const char *format, ...) G_GNUC_PRINTF (3, 4);
 
+gint
+gnc_verify_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
+			   const gchar *yes_label, const gchar *no_label,
+			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
 
 
-extern GNCVerifyResult
+extern gint
 gnc_ok_cancel_dialog(gncUIWidget parent,
-		     GNCVerifyResult default_result,
+		     gint default_result,
 		     const char *format, ...) G_GNUC_PRINTF (3,4);
 
 
@@ -84,11 +94,19 @@ gnc_warning_dialog(gncUIWidget parent,
 
 
 
+gint
+gnc_warning_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
+			   const gchar *yes_label, const gchar *no_label,
+			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
+
+
 extern void
 gnc_error_dialog(GtkWidget *parent,
 		 const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
 
+extern void
+gnc_gnome_help (const char *file_name, const char *target_link);
 
 int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 					 const char *title,
@@ -99,7 +117,7 @@ int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 gboolean gnc_dup_trans_dialog (gncUIWidget parent, time_t *date_p,
                                const char *num, char **out_num);
 void     gnc_tax_info_dialog (gncUIWidget parent);
-void     gnc_stock_split_dialog (Account * initial);
+void     gnc_stock_split_dialog (gncUIWidget parent, Account * initial);
 
 typedef enum
 {

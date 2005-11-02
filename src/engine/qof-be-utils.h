@@ -21,28 +21,34 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Backend
- *  @{
- *  @file qof-be-utils.h 
- *  @brief QOF Backend Utilities
- *  @author Derek Atkins <derek@ihtfp.com>
- *    Common code used by objects to define begin_edit() and
- *    commit_edit() functions.
- *
- */
+   @{ */
+/**  @file qof-be-utils.h 
+   @brief QOF Backend Utilities
+   @author Derek Atkins <derek@ihtfp.com>
+   @author Neil Williams <linux@codehelp.co.uk>
+
+  Common code used by objects to define begin_edit() and
+  commit_edit() functions.
+
+*/
 
 #ifndef QOF_BE_UTILS_H
 #define QOF_BE_UTILS_H
 
+#include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 
 /** begin_edit helper
  *
- * @args:
- *        inst: an instance of QofInstance
+ * @param  inst: an instance of QofInstance
  *
  * The caller should use this macro first and then perform any other operations.
+
+ Uses newly created functions to allow the macro to be used
+ when QOF is linked as a library. qofbackend-p.h is a private header.
  */
 
 #define QOF_BEGIN_EDIT(inst)                                        \
@@ -61,13 +67,20 @@
                                                                     \
   /* See if there's a backend.  If there is, invoke it. */          \
   be = qof_book_get_backend ((inst)->book);                         \
-  if (be && be->begin) {                                            \
-     (be->begin) (be, (inst));                                      \
+    if (be && qof_backend_begin_exists((be))) {                     \
+     qof_backend_run_begin((be), (inst));                           \
   } else {                                                          \
      /* We tried and failed to start transaction! */                \
      (inst)->dirty = TRUE;                                          \
-  }
+  }                                                                 \
+  LEAVE (" ");
 
+/** \brief function version of QOF_BEGIN_EDIT
+
+The macro cannot be used in a function that returns a value,
+this function can be used instead.
+*/
+gboolean qof_begin_edit(QofInstance *inst);
 
 /**
  * commit_edit helpers
@@ -80,8 +93,7 @@
 /**
  * part1 -- deal with the editlevel
  * 
- * @args:
- *        inst: an instance of QofInstance
+ * @param inst: an instance of QofInstance
  */
 
 #define QOF_COMMIT_EDIT_PART1(inst) {                            \
@@ -97,8 +109,8 @@
   {                                                              \
     QofBackend * be;                                             \
     be = qof_book_get_backend ((inst)->book);                    \
-    if (be && be->begin) {                                       \
-     (be->begin) (be, (inst));                                   \
+    if (be && qof_backend_begin_exists((be))) {                  \
+     qof_backend_run_begin((be), (inst));                        \
     }                                                            \
     (inst)->editlevel = 0;                                       \
   }                                                              \
@@ -111,18 +123,24 @@
             (inst), (inst)->dirty, (inst)->do_free);             \
 }
 
+/** \brief function version of QOF_COMMIT_EDIT_PART1
+
+The macro cannot be used in a function that returns a value,
+this function can be used instead. Only Part1 is implemented.
+*/
+gboolean qof_commit_edit(QofInstance *inst);
+
 /**
  * part2 -- deal with the backend
  * 
- * @args:
- *        inst: an instance of QofInstance
- *        on_error: a function called if there is a backend error.
+ * @param inst: an instance of QofInstance
+ * @param on_error: a function called if there is a backend error.
  *                void (*on_error)(inst, QofBackendError)
- *        on_done: a function called after the commit is complete 
+ * @param on_done: a function called after the commit is complete 
  *                but before the instect is freed. Perform any other 
  *                operations after the commit.
  *                void (*on_done)(inst)
- *        on_free: a function called if inst->do_free is TRUE. 
+ * @param on_free: a function called if inst->do_free is TRUE. 
  *                void (*on_free)(inst)
  */
 #define QOF_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
@@ -130,7 +148,7 @@
                                                                  \
   /* See if there's a backend.  If there is, invoke it. */       \
   be = qof_book_get_backend ((inst)->book);                      \
-  if (be && be->commit)                                          \
+  if (be && qof_backend_commit_exists((be)))                     \
   {                                                              \
     QofBackendError errcode;                                     \
                                                                  \
@@ -139,7 +157,7 @@
       errcode = qof_backend_get_error (be);                      \
     } while (ERR_BACKEND_NO_ERR != errcode);                     \
                                                                  \
-    (be->commit) (be, (inst));                                   \
+    qof_backend_run_commit((be), (inst));                        \
     errcode = qof_backend_get_error (be);                        \
     if (ERR_BACKEND_NO_ERR != errcode)                           \
     {                                                            \

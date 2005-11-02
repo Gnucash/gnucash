@@ -784,6 +784,34 @@
     
     table))
 
+
+;; TODO: How 'bout factoring the "Edit report options" stuff out of
+;; these 3 functions?
+
+(define (gnc:html-make-generic-options-warning
+	 report-title-string report-id)
+  (let ((p (gnc:make-html-text)))
+    (gnc:html-text-append!
+     p
+     (gnc:html-markup-h2 (string-append
+			  report-title-string
+			  ":"))
+     (gnc:html-markup-h2 (_ ""))
+     (gnc:html-markup-p
+      (_ "This report requires you to specify certain report options.")))
+    (if report-id
+	(gnc:html-text-append!
+	 p
+	 (gnc:html-markup-p
+	  (gnc:html-markup-anchor
+	   (gnc:html-build-url gnc:url-type-options
+			       (string-append "report-id="
+					      (sprintf #f "%a" report-id))
+			       #f)
+	   (_ "Edit report options")))))
+    p))
+
+
 (define (gnc:html-make-no-account-warning
 	 report-title-string report-id)
   (let ((p (gnc:make-html-text)))

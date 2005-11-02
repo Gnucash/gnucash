@@ -38,7 +38,7 @@
 #include <string.h>
 
 #include "numcell.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -73,9 +73,9 @@ gnc_parse_num (const char *string, long int *num)
 
 static void
 gnc_num_cell_modify_verify (BasicCell *_cell, 
-                            const GdkWChar *change,
+                            const char *change,
                             int change_len,
-                            const GdkWChar *newval,
+                            const char *newval,
                             int new_val_len,
                             int *cursor_position,
                             int *start_selection,
@@ -85,12 +85,16 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
   gboolean accel = FALSE;
   gboolean is_num;
   long int number = 0;
+  gunichar uc;
+  glong change_chars;
+    
+  change_chars = g_utf8_strlen (change, -1);
 
-  if ((change == NULL) || (change_len == 0) || /* if we are deleting       */
-      (change_len > 1))                        /* or entering > 1 char     */
+  if ((change == NULL) || (change_chars == 0) || /* if we are deleting       */
+      (change_chars > 1))                        /* or entering > 1 char     */
     /* then just accept the proposed change */
   {
-    gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
+    gnc_basic_cell_set_value_internal (&cell->cell, newval);
     return;
   }
 
@@ -101,7 +105,8 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
   if (is_num && (number < 0))
     is_num = FALSE;
 
-  switch (change[0])
+  uc = g_utf8_get_char (change);
+  switch (uc)
   {
     case '+':
     case '=':
@@ -155,7 +160,7 @@ gnc_num_cell_modify_verify (BasicCell *_cell,
     return;
   }
 
-  gnc_basic_cell_set_wcvalue_internal (&cell->cell, newval);
+  gnc_basic_cell_set_value_internal (&cell->cell, newval);
 }
 
 BasicCell *

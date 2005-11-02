@@ -23,7 +23,7 @@
 #endif
 
 #include <string.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "QueryCore.h"
 #include "QueryNew.h"
@@ -41,12 +41,12 @@
 #include "search-account.h"
 
 static void grab_focus (GNCSearchCoreType *fe);
-static void editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog);
+static void editable_enters (GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 
 static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *class);
 static void gnc_search_core_type_init	(GNCSearchCoreType *gspaper);
-static void gnc_search_core_type_finalise	(GtkObject *obj);
+static void gnc_search_core_type_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchCoreType *)(x))->priv)
 struct _GNCSearchCoreTypePrivate {
@@ -54,57 +54,46 @@ struct _GNCSearchCoreTypePrivate {
 
 static GtkObjectClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
 static GHashTable *typeTable = NULL;
 
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
-
-guint
+GType
 gnc_search_core_type_get_type (void)
 {
-  static guint type = 0;
-	
-  if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchCoreType",
-      sizeof(GNCSearchCoreType),
-      sizeof(GNCSearchCoreTypeClass),
-      (GtkClassInitFunc)gnc_search_core_type_class_init,
-      (GtkObjectInitFunc)gnc_search_core_type_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+  static GType type = 0;
+
+  if (type == 0) {
+    GTypeInfo type_info = {
+      sizeof (GNCSearchCoreTypeClass),
+      NULL,
+      NULL,
+      (GClassInitFunc)gnc_search_core_type_class_init,
+      NULL,
+      NULL,
+      sizeof (GNCSearchCoreType),
+      0,
+      (GInstanceInitFunc)gnc_search_core_type_init
     };
 		
-    type = gtk_type_unique(gtk_object_get_type (), &type_info);
+    type = g_type_register_static (G_TYPE_OBJECT, "GNCSearchCoreType", &type_info, 0);
   }
-	
+  
   return type;
 }
 
 static void
-gnc_search_core_type_class_init (GNCSearchCoreTypeClass *class)
+gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
 	
-  object_class = (GtkObjectClass *)class;
-  parent_class = gtk_type_class (gtk_object_get_type ());
+  object_class = G_OBJECT_CLASS (klass);
+  parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gnc_search_core_type_finalise;
+  object_class->finalize = gnc_search_core_type_finalize;
 
   /* override methods */
-  class->validate = validate;
-  class->grab_focus = grab_focus;
-  class->editable_enters = editable_enters;
-
-  /* signals */
-#if LAST_SIGNAL > 0
-  gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
-#endif
+  klass->validate = validate;
+  klass->grab_focus = grab_focus;
+  klass->editable_enters = editable_enters;
 }
 
 static void
@@ -114,11 +103,12 @@ gnc_search_core_type_init (GNCSearchCoreType *o)
 }
 
 static void
-gnc_search_core_type_finalise (GtkObject *obj)
+gnc_search_core_type_finalize (GObject *obj)
 {
   GNCSearchCoreType *o = (GNCSearchCoreType *)obj;
   g_free(o->priv);
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -131,27 +121,29 @@ gnc_search_core_type_finalise (GtkObject *obj)
 GNCSearchCoreType *
 gnc_search_core_type_new (void)
 {
-  GNCSearchCoreType *o = (GNCSearchCoreType *)gtk_type_new(gnc_search_core_type_get_type ());
+  GNCSearchCoreType *o;
+
+  o = g_object_new (GNC_TYPE_SEARCH_CORE_TYPE, NULL);
+
   return o;
 }
 
 void
-gnc_search_core_type_editable_enters (GNCSearchCoreType *fe,
-				      GnomeDialog *dialog)
+gnc_search_core_type_editable_enters (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->editable_enters (fe, dialog);
+  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->editable_enters (fe);
 }
 
 void
 gnc_search_core_type_grab_focus (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->grab_focus (fe);
+  GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->grab_focus (fe);
 }
 
 gboolean
 gnc_search_core_type_validate (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->validate (fe);
+  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->validate (fe);
 }
 
 /**
@@ -165,7 +157,7 @@ gnc_search_core_type_validate (GNCSearchCoreType *fe)
 GNCSearchCoreType *
 gnc_search_core_type_clone (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->clone(fe);
+  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->clone(fe);
 }
 
 /**
@@ -180,7 +172,7 @@ gnc_search_core_type_clone (GNCSearchCoreType *fe)
 GtkWidget *
 gnc_search_core_type_get_widget (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->get_widget(fe);
+  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_widget(fe);
 }
 
 /**
@@ -194,7 +186,7 @@ gnc_search_core_type_get_widget (GNCSearchCoreType *fe)
 QueryPredData_t
 gnc_search_core_type_get_predicate (GNCSearchCoreType *fe)
 {
-  return ((GNCSearchCoreTypeClass *)((GtkObject *)fe)->klass)->get_predicate(fe);
+  return GNC_SEARCH_CORE_TYPE_GET_CLASS (fe)->get_predicate(fe);
 }
 
 /**
@@ -210,7 +202,7 @@ gnc_search_core_type_new_type_name (const char *type)
 {
   GNCSearchCoreNew fcn;
 
-  g_return_val_if_fail (typeTable, NULL);
+  g_return_val_if_fail (typeTable != NULL, NULL);
 
   if (type == NULL)
     return NULL;
@@ -238,7 +230,7 @@ grab_focus (GNCSearchCoreType *fe)
 }
 
 static void
-editable_enters (GNCSearchCoreType *fe, GnomeDialog *dialog)
+editable_enters (GNCSearchCoreType *fe)
 {
   return;
 }
@@ -248,6 +240,7 @@ gnc_search_core_register_type (const char *type_name, GNCSearchCoreNew fcn)
 {
   g_return_if_fail (type_name || *type_name || fcn);
   g_return_if_fail (typeTable);
+
   g_hash_table_insert (typeTable, (char *) type_name, (gpointer) fcn);
 }
 
@@ -272,17 +265,17 @@ init_table (void)
   gnc_search_core_register_type (GNC_ID_ACCOUNT,
 				 (GNCSearchCoreNew) gnc_search_account_new);
   gnc_search_core_register_type (ACCOUNT_MATCH_ALL_TYPE,
-				 (GNCSearchCoreNew) 
+				 (GNCSearchCoreNew)
 				 gnc_search_account_matchall_new);
   gnc_search_core_register_type (RECONCILED_MATCH_TYPE,
 				 (GNCSearchCoreNew) gnc_search_reconciled_new);
-
 }
 
 void
 gnc_search_core_initialize (void)
 {
   g_return_if_fail (typeTable == NULL);
+
   typeTable = g_hash_table_new (g_str_hash, g_str_equal);
   init_table ();
 }
@@ -290,7 +283,8 @@ gnc_search_core_initialize (void)
 void
 gnc_search_core_finalize (void)
 {
-  g_return_if_fail (typeTable);
+  g_return_if_fail (typeTable != NULL);
+
   g_hash_table_destroy (typeTable);
   typeTable = NULL;
 }

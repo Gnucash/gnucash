@@ -31,5 +31,4 @@
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
 void              gnc_file_mt940_import (void);
-SCM  scm_gnc_file_mt940_import (void);
 #endif

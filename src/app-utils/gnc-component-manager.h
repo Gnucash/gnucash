@@ -46,8 +46,8 @@ typedef struct
  *          GUIDs to EventInfo structs describing which
  *          events have been received. Entities not in
  *          the hash have not generated any events.
- *          Entities which have been destroyed may not
- *          exist.
+ *          Entities which have been destroyed will be in 
+ *          the hash, but may not exist anymore.
  *
  *          Note since refreshes may not occur with every change,
  *          an entity may have all three change values.
@@ -60,6 +60,15 @@ typedef struct
  *                      entities used by the component may have
  *                      already been deleted. 'Refreshing' the
  *                      component may require closing the component.
+ * 
+ * Notes on dealing with destroyed entities: As stated above, entities
+ * in the changes GHashTable may no longer exist.  So how can you
+ * determine if this has happened?  Well, it's a good idea to check
+ * for the GNC_EVENT_DESTROY bit in the EventInfo structure.  Of
+ * course, that means you need the hash key (GUID) for the destroyed
+ * entity.  How are you going to get the GUID from the entity if the
+ * entity has already been destroyed?  You're not.  So, you have to
+ * save a COPY of the key (GUID) away beforehand.
  *
  * user_data: user_data supplied when component was registered.
  */
@@ -169,8 +178,7 @@ gint gnc_register_gui_component_scm (const char * component_class,
  * component_id: id of component which is watching the entity
  * session:      the session this component is associated with
  */
-void
-gnc_gui_component_set_session (gint component_id, gpointer session);
+void gnc_gui_component_set_session (gint component_id, gpointer session);
 
 /* gnc_gui_component_watch_entity
  *   Add an entity to the list of those being watched by the component.
@@ -222,7 +230,7 @@ void gnc_gui_component_watch_entity_type (gint component_id,
  *          if it is not found.
  */
 const EventInfo * gnc_gui_get_entity_events (GHashTable *changes,
-                                             GUID *entity);
+                                             const GUID *entity);
 
 /* gnc_gui_component_clear_watches
  *   Clear all watches for the component.

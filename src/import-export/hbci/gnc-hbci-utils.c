@@ -32,9 +32,9 @@
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h" 
-#include "global-options.h"
 
 #include "hbci-interaction.h"
 #include <aqbanking/version.h>
@@ -438,8 +438,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   if (inter)
     GNCInteractor_show (inter);
 
-  if (gnc_lookup_boolean_option("_+Advanced", 
-				"HBCI Verbose Debug Messages", FALSE)) {
+  if (gnc_gconf_get_bool(GCONF_SECTION, KEY_VERBOSE_DEBUG, NULL)) {
     GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelNotice);
     GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelInfo);
     GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelInfo);
@@ -904,7 +903,7 @@ gchar *gnc_call_iconv(iconv_t handler, const char* input)
 {
   char *inbuffer = (char*)input;
   char *outbuffer, *outbufferstart;
-  int inbytes, outbytes;
+  size_t inbytes, outbytes;
 
   inbytes = strlen(inbuffer);
   outbytes = inbytes + 2;
@@ -921,7 +920,7 @@ const char *gnc_hbci_book_encoding()
 #if HAVE_LANGINFO_CODESET
   char* encoding = nl_langinfo(CODESET);
 #else
-  char* encoding = "ISO8859-15";
+  char* encoding = "UTF-8";
 #endif
   return encoding;
 }

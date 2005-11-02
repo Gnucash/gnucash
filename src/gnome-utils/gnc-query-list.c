@@ -137,11 +137,15 @@ GtkWidget *
 gnc_query_list_new(GList *param_list, Query *query)
 {
   GNCQueryList *list;
+  gint columns;
 
   g_return_val_if_fail(param_list, NULL);
   g_return_val_if_fail(query, NULL);
 
-  list = GNC_QUERY_LIST(gtk_type_new(gnc_query_list_get_type()));
+  columns = g_list_length(param_list);
+  list = GNC_QUERY_LIST(g_object_new(gnc_query_list_get_type(),
+				     "n_columns", columns,
+				     NULL));
 
   gnc_query_list_construct(list, param_list, query);
 
@@ -261,8 +265,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
     titles[i] = (gchar *)param->title;
   }
 
-  /* construct the clist */
-  gtk_clist_construct (clist, list->num_columns, titles);
+  gtk_clist_column_titles_show (clist);
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
 
   /* build all the column titles */
@@ -290,6 +293,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
 
   style = gtk_widget_get_style (GTK_WIDGET(list));
 
+#if 0
   {
     GdkFont *font = NULL;
     gint width;
@@ -308,6 +312,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
       }
     }
   }
+#endif
   g_free(titles);
 }
 
@@ -327,28 +332,26 @@ gnc_query_list_class_init (GNCQueryListClass *klass)
   parent_class = gtk_type_class(GTK_TYPE_CLIST);
 
   query_list_signals[LINE_TOGGLED] =
-    gtk_signal_new("line_toggled",
-		   GTK_RUN_FIRST,
-		   object_class->type,
-		   GTK_SIGNAL_OFFSET(GNCQueryListClass,
-				     line_toggled),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+    g_signal_new("line_toggled",
+		 G_TYPE_FROM_CLASS (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCQueryListClass, line_toggled),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE,
+		 1,
+		 G_TYPE_POINTER);
 
   query_list_signals[DOUBLE_CLICK_ENTRY] =
-    gtk_signal_new("double_click_entry",
-		   GTK_RUN_FIRST,
-		   object_class->type,
-		   GTK_SIGNAL_OFFSET(GNCQueryListClass,
-				     double_click_entry),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
-
-  gtk_object_class_add_signals(object_class,
-			       query_list_signals,
-			       LAST_SIGNAL);
+    g_signal_new("double_click_entry",
+		 G_TYPE_FROM_CLASS (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCQueryListClass, double_click_entry),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE,
+		 1,
+		 G_TYPE_POINTER);
 
   object_class->destroy = gnc_query_list_destroy;
 
@@ -490,7 +493,7 @@ gnc_query_list_get_needed_height (GNCQueryList *list, gint num_rows)
 
   /* sync with gtkclist.c */
   title_height = (clist->column_title_area.height +
-                  (GTK_WIDGET(list)->style->klass->ythickness +
+                  (GTK_WIDGET(list)->style->ythickness +
                    GTK_CONTAINER(list)->border_width) * 2);
   list_height = (clist->row_height * num_rows) + (num_rows + 1);
 
@@ -764,7 +767,6 @@ gnc_query_list_fill(GNCQueryList *list)
   gchar *strings[list->num_columns + 1];
   GList *entries, *item;
   const GUID *guid;
-  const QofParam *gup;
   gint i;
 
   /* Clear all watches */
@@ -777,6 +779,7 @@ gnc_query_list_fill(GNCQueryList *list)
   {
     GList *node;
     gint row;
+    const QofParam *gup;
     QofParam *qp= NULL;
 
     for (i = 0, node = list->column_params; node; node = node->next)

@@ -30,14 +30,13 @@
 
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "file-utils.h"
 #include "messages.h"
-#include "gnc-engine-util.h"
+#include "gnc-engine.h"
  
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUILE;
+static QofLogModule log_module = GNC_MOD_GUILE;
 
 /********************************************************************\
 \********************************************************************/
@@ -45,8 +44,7 @@ static short module = MOD_GUILE;
 char *
 gncFindFile (const char * filename) 
 {
-  char *full_filename = NULL;
-  char *g_filename;
+  const gchar *full_filename = NULL;
   SCM find_doc_file;
   SCM scm_filename;
   SCM scm_result;
@@ -59,13 +57,9 @@ gncFindFile (const char * filename)
   scm_result = scm_call_1(find_doc_file, scm_filename);
 
   if (SCM_STRINGP(scm_result))
-    full_filename = gh_scm2newstr(scm_result, NULL);
+    full_filename = SCM_STRING_CHARS(scm_result);
 
-  g_filename = g_strdup (full_filename);
-  if (full_filename)
-    free (full_filename);
-
-  return g_filename;
+  return g_strdup (full_filename);
 }
 
 /********************************************************************\

@@ -35,9 +35,7 @@
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
@@ -46,7 +44,7 @@
 #include "gnc-ui.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+static QofLogModule log_module = GNC_MOD_GUI;
 
 struct _commoditydruid {
   GtkWidget  * window; 
@@ -140,6 +138,7 @@ gnc_ui_commodity_druid_create(const char * filename)
   CommodityDruidPage * new_page;
   GnomeDruidPage * back_page;
   GladeXML       * xml;
+  QofBook        * book = gnc_get_current_book ();
 
   xml = gnc_glade_xml_new ("binary-import.glade",
                            "New Commodity Format Druid");
@@ -184,7 +183,7 @@ gnc_ui_commodity_druid_create(const char * filename)
 
     /* otherwise, guess that it's a NASDAQ security. */
     if(!found) {
-      found = gnc_commodity_new(gnc_commodity_get_mnemonic(lost),
+      found = gnc_commodity_new(book, gnc_commodity_get_mnemonic(lost),
                                 GNC_COMMODITY_NS_NASDAQ,
                                 gnc_commodity_get_mnemonic(lost),
                                 NULL, 100000);
@@ -245,7 +244,7 @@ make_commodity_druid_page(gnc_commodity * comm)
   GnomeDruidPageStandard * page;
 
   /* make the page widget */
-  retval->page = gnome_druid_page_standard_new_with_vals("", NULL);
+  retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
   gtk_object_set_data(GTK_OBJECT(retval->page), "page_struct", retval);
 
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
@@ -401,8 +400,8 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
                                               "page_struct");
   const char * new_type;
-  char * new_name;
-  char * new_mnemonic;
+  const char * new_name;
+  const char * new_mnemonic;
   gnc_commodity * new_comm;
 
   new_type     = gnc_ui_namespace_picker_ns (dpage->new_type_combo);
@@ -505,4 +504,13 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
+}
+
+
+void gnc_import_commodities(QofSession *session, gpointer unused)
+{
+  const gchar *book_url;
+
+  book_url = qof_session_get_url(session);
+  gnc_import_legacy_commodities(book_url);
 }

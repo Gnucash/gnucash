@@ -1,81 +1,106 @@
 <?xml version="1.0"?>
-<gnc-v2>
+<gnc-v2
+     xmlns:gnc="http://www.gnucash.org/XML/gnc"
+     xmlns:act="http://www.gnucash.org/XML/act"
+     xmlns:book="http://www.gnucash.org/XML/book"
+     xmlns:cd="http://www.gnucash.org/XML/cd"
+     xmlns:cmdty="http://www.gnucash.org/XML/cmdty"
+     xmlns:price="http://www.gnucash.org/XML/price"
+     xmlns:slot="http://www.gnucash.org/XML/slot"
+     xmlns:split="http://www.gnucash.org/XML/split"
+     xmlns:sx="http://www.gnucash.org/XML/sx"
+     xmlns:trn="http://www.gnucash.org/XML/trn"
+     xmlns:ts="http://www.gnucash.org/XML/ts"
+     xmlns:cust="http://www.gnucash.org/XML/cust"
+     xmlns:job="http://www.gnucash.org/XML/job"
+     xmlns:addr="http://www.gnucash.org/XML/addr"
+     xmlns:owner="http://www.gnucash.org/XML/owner"
+     xmlns:taxtable="http://www.gnucash.org/XML/taxtable"
+     xmlns:tte="http://www.gnucash.org/XML/tte"
+     xmlns:employee="http://www.gnucash.org/XML/employee"
+     xmlns:order="http://www.gnucash.org/XML/order"
+     xmlns:billterm="http://www.gnucash.org/XML/billterm"
+     xmlns:bt-days="http://www.gnucash.org/XML/bt-days"
+     xmlns:bt-prox="http://www.gnucash.org/XML/bt-prox"
+     xmlns:invoice="http://www.gnucash.org/XML/invoice"
+     xmlns:entry="http://www.gnucash.org/XML/entry"
+     xmlns:vendor="http://www.gnucash.org/XML/vendor">
 <gnc:count-data cd:type="account">7</gnc:count-data>
 <gnc:count-data cd:type="transaction">10</gnc:count-data>
 <gnc:account version="2.0.0">
   <act:name>ABC Bank</act:name>
   <act:id type="guid">eda56e3c0c402d1816f845430caf362e</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Some Old Bank Acct</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Swipe Brokers</act:name>
   <act:id type="guid">729ae65a6c202a83a5335bcd32709888</act:id>
   <act:type>BANK</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>My Investment Account</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>pocket cash</act:name>
   <act:id type="guid">5d0b89cb9bcc5074cda514d0d4c10af4</act:id>
   <act:type>CASH</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>SlaveCardt</act:name>
   <act:id type="guid">2b804a30e16e54a97da593fc1f71c386</act:id>
   <act:type>CREDIT</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>my credit card</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gift Received</act:name>
   <act:id type="guid">04b5cbc4192f4790fac0586c5cc152f4</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Gift Received</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Invest Inc</act:name>
   <act:id type="guid">d4f69b07cf7bb1a77c134f1b2c128684</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Investment Income</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Other Inc</act:name>
   <act:id type="guid">0a241ed16a10c3be1836ce37f8a069e9</act:id>
   <act:type>INCOME</act:type>
-  <act:currency>
+  <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
-  </act:currency>
-  <act:currency-scu>100</act:currency-scu>
+  </act:commodity>
+  <act:commodity-scu>100</act:commodity-scu>
   <act:description>Other Income</act:description>
 </gnc:account>
 <gnc:transaction version="2.0.0">

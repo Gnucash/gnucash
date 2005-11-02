@@ -1,2559 +1,2615 @@
-<?xml version="1.0"?>
-<GTK-Interface>
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
-<project>
-  <name>Glade</name>
-  <program_name>glade</program_name>
-  <directory></directory>
-  <source_directory></source_directory>
-  <pixmaps_directory></pixmaps_directory>
-  <language>C</language>
-  <gnome_support>True</gnome_support>
-  <gettext_support>True</gettext_support>
-  <output_main_file>False</output_main_file>
-  <output_support_files>False</output_support_files>
-  <output_build_files>False</output_build_files>
-  <backup_source_files>False</backup_source_files>
-</project>
+<glade-interface>
+<requires lib="gnome"/>
+<requires lib="bonobo"/>
 
-<widget>
-  <class>GnomeApp</class>
-  <name>Check Register</name>
-  <visible>False</visible>
-  <signal>
-    <name>destroy</name>
-    <handler>gnc_register_destroy_cb</handler>
-    <last_modification_time>Sat, 15 Jun 2002 22:04:14 GMT</last_modification_time>
-  </signal>
-  <signal>
-    <name>delete_event</name>
-    <handler>gnc_register_delete_cb</handler>
-    <last_modification_time>Sat, 15 Jun 2002 22:04:40 GMT</last_modification_time>
-  </signal>
-  <signal>
-    <name>size_allocate</name>
-    <handler>gnc_register_size_allocate</handler>
-    <last_modification_time>Sun, 16 Jun 2002 00:13:44 GMT</last_modification_time>
-  </signal>
-  <title>Check Register</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>True</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>True</auto_shrink>
-  <enable_layout_config>True</enable_layout_config>
+<widget class="GnomeApp" id="Check Register">
+  <property name="title" translatable="yes">Check Register</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="enable_layout_config">True</property>
+  <signal name="destroy" handler="gnc_register_destroy_cb"/>
+  <signal name="delete_event" handler="gnc_register_delete_cb"/>
+  <signal name="size_allocate" handler="gnc_register_size_allocate"/>
 
-  <widget>
-    <class>GnomeDock</class>
-    <child_name>GnomeApp:dock</child_name>
-    <name>dock</name>
-    <allow_floating>True</allow_floating>
-    <child>
-      <padding>0</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
+  <child internal-child="dock">
+    <widget class="BonoboDock" id="dock">
+      <property name="visible">True</property>
+      <property name="allow_floating">True</property>
 
-    <widget>
-      <class>GnomeDockItem</class>
-      <name>menu_dock</name>
-      <border_width>2</border_width>
-      <placement>GNOME_DOCK_TOP</placement>
-      <band>0</band>
-      <position>0</position>
-      <offset>26</offset>
-      <locked>False</locked>
-      <exclusive>True</exclusive>
-      <never_floating>False</never_floating>
-      <never_vertical>True</never_vertical>
-      <never_horizontal>False</never_horizontal>
-      <shadow_type>GTK_SHADOW_OUT</shadow_type>
+      <child>
+	<widget class="BonoboDockItem" id="menu_dock">
+	  <property name="border_width">2</property>
+	  <property name="visible">True</property>
+	  <property name="shadow_type">GTK_SHADOW_OUT</property>
 
-      <widget>
-	<class>GtkMenuBar</class>
-	<name>gnc_register_menubar</name>
-	<shadow_type>GTK_SHADOW_NONE</shadow_type>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menuitem1</name>
-	  <stock_item>GNOMEUIINFO_MENU_FILE_TREE</stock_item>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menuitem1_menu</name>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem2</name>
-	      <tooltip>Create a new account</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_new_account_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 05:41:11 GMT</last_modification_time>
-	      </signal>
-	      <label>New Account</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem3</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem1</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_file_save_cb</handler>
-		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_SAVE_ITEM</stock_item>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem2</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_file_save_as_cb</handler>
-		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_SAVE_AS_ITEM</stock_item>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem4</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem3</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_print_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:07:26 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_PRINT_ITEM</stock_item>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem5</name>
-	      <tooltip>Print a check using a standard format</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_print_check_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:03:51 GMT</last_modification_time>
-	      </signal>
-	      <label>Print _Check</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem6</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem4</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_close_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 01:59:32 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_CLOSE_ITEM</stock_item>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem5</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_exit_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 05:55:04 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_EXIT_ITEM</stock_item>
-	    </widget>
-	  </widget>
+	  <child>
+	    <placeholder/>
+	  </child>
 	</widget>
+	<packing>
+	  <property name="placement">BONOBO_DOCK_TOP</property>
+	  <property name="band">0</property>
+	  <property name="position">0</property>
+	  <property name="offset">26</property>
+	  <property name="behavior">BONOBO_DOCK_ITEM_BEH_EXCLUSIVE|BONOBO_DOCK_ITEM_BEH_NEVER_VERTICAL</property>
+	</packing>
+      </child>
 
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>gnc_register_edit_menu</name>
-	  <label>_Edit</label>
-	  <right_justify>False</right_justify>
+      <child>
+	<widget class="BonoboDockItem" id="toolbar_dock">
+	  <property name="border_width">2</property>
+	  <property name="visible">True</property>
+	  <property name="shadow_type">GTK_SHADOW_OUT</property>
 
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>gnc_register_edit_menu_menu</name>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_edit_mi</name>
-	      <accelerator>
-		<modifiers>0</modifiers>
-		<key>GDK_F6</key>
-		<signal>activate</signal>
-	      </accelerator>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_edit_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Edit Account</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>gnc_register_find_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_ui_find_transactions_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Find</label>
-	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_SEARCH</stock_icon>
-	    </widget>
-	  </widget>
+	  <child>
+	    <placeholder/>
+	  </child>
 	</widget>
+	<packing>
+	  <property name="placement">BONOBO_DOCK_TOP</property>
+	  <property name="band">1</property>
+	  <property name="position">0</property>
+	  <property name="offset">0</property>
+	  <property name="behavior">BONOBO_DOCK_ITEM_BEH_EXCLUSIVE</property>
+	</packing>
+      </child>
 
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>gnc_register_view_menu</name>
-	  <label>_View</label>
-	  <right_justify>False</right_justify>
+      <child>
+	<widget class="BonoboDockItem" id="summarybar_dock">
+	  <property name="border_width">2</property>
+	  <property name="visible">True</property>
+	  <property name="shadow_type">GTK_SHADOW_OUT</property>
 
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>gnc_register_view_menu_menu</name>
+	  <child>
+	    <placeholder/>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="placement">BONOBO_DOCK_TOP</property>
+	  <property name="band">2</property>
+	  <property name="position">0</property>
+	  <property name="offset">0</property>
+	  <property name="behavior">BONOBO_DOCK_ITEM_BEH_EXCLUSIVE</property>
+	</packing>
+      </child>
 
-	    <widget>
-	      <class>GtkCheckMenuItem</class>
-	      <name>gnc_register_toolbar_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_toolbar_cb</handler>
-		<last_modification_time>Mon, 04 Nov 2002 02:53:04 GMT</last_modification_time>
-	      </signal>
-	      <label>_Toolbar</label>
-	      <active>True</active>
-	      <always_show_toggle>True</always_show_toggle>
+      <child>
+	<widget class="GtkFrame" id="table_frame">
+	  <property name="visible">True</property>
+	  <property name="label_xalign">0</property>
+	  <property name="label_yalign">0.5</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+
+	  <child>
+	    <placeholder/>
+	  </child>
+	</widget>
+      </child>
+    </widget>
+    <packing>
+      <property name="padding">0</property>
+      <property name="expand">True</property>
+      <property name="fill">True</property>
+    </packing>
+  </child>
+
+  <child internal-child="appbar">
+    <widget class="GnomeAppBar" id="appbar">
+      <property name="visible">True</property>
+      <property name="has_progress">False</property>
+      <property name="has_status">True</property>
+    </widget>
+    <packing>
+      <property name="padding">0</property>
+      <property name="expand">True</property>
+      <property name="fill">True</property>
+    </packing>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="Check Register Popup Menu">
+  <property name="visible">True</property>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_transfer">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Transfer funds from one account to another</property>
+      <property name="label" translatable="yes">_Transfer...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_xfer_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_reconcile">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Reconcile the main account for this register</property>
+      <property name="label" translatable="yes">_Reconcile...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_start_recn_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_stock_split">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Record a stock split or a stock merger</property>
+      <property name="label" translatable="yes">_Stock Split...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_stock_split_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_separator1">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_enter">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Record the current transaction</property>
+      <property name="label" translatable="yes">_Enter</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_record_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_cancel">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Cancel the current transaction</property>
+      <property name="label" translatable="yes">_Cancel</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_cancel_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_delete">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Delete the current transaction</property>
+      <property name="label" translatable="yes">_Delete</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_delete_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_blank">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+      <property name="label" translatable="yes">_Blank</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_new_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_separator2">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_duplicate">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Make a copy of the current transaction</property>
+      <property name="label" translatable="yes">Dup_licate Transaction...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_duplicate_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_reinitialize">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Remove Transaction Splits</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_reinitialize_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="popup_splits">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Show all splits in the current transaction</property>
+      <property name="label" translatable="yes">S_plit Transaction</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="gnc_register_expand_trans_menu_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_schedule">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Schedule...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_recur_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="popup_jump">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
+      <property name="label" translatable="yes">_Jump</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_register_jump_cb"/>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkDialog" id="Duplicate Transaction Dialog">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Duplicate this Transaction</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">True</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
+
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox15">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">8</property>
+
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area15">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="button76">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
 	    </widget>
+	  </child>
 
-	    <widget>
-	      <class>GtkCheckMenuItem</class>
-	      <name>gnc_register_summary_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_summarybar_cb</handler>
-		<last_modification_time>Mon, 04 Nov 2002 02:53:04 GMT</last_modification_time>
-	      </signal>
-	      <label>S_ummary Bar</label>
-	      <active>True</active>
-	      <always_show_toggle>True</always_show_toggle>
+	  <child>
+	    <widget class="GtkButton" id="button77">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
 	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-	    <widget>
-	      <class>GtkCheckMenuItem</class>
-	      <name>gnc_register_statusbar_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_statusbar_cb</handler>
-		<last_modification_time>Mon, 04 Nov 2002 02:53:04 GMT</last_modification_time>
-	      </signal>
-	      <label>_Status Bar</label>
-	      <active>True</active>
-	      <always_show_toggle>True</always_show_toggle>
-	    </widget>
+      <child>
+	<widget class="GtkFrame" id="frame41">
+	  <property name="visible">True</property>
+	  <property name="label_xalign">0</property>
+	  <property name="label_yalign">0.5</property>
+	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>separator14</name>
-	      <right_justify>False</right_justify>
-	    </widget>
+	  <child>
+	    <widget class="GtkHBox" id="hbox84">
+	      <property name="border_width">3</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">2</property>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_select_trans_mi</name>
-	      <label>S_elect Transactions</label>
-	      <right_justify>False</right_justify>
+	      <child>
+		<widget class="GtkVBox" id="vbox94">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">True</property>
+		  <property name="spacing">5</property>
 
-	      <widget>
-		<class>GtkMenu</class>
-		<name>gnc_register_select_trans_mi_menu</name>
-
-		<widget>
-		  <class>GtkMenuItem</class>
-		  <name>gnc_register_date_range_mi</name>
-		  <label>Date _Range</label>
-		  <right_justify>False</right_justify>
-
-		  <widget>
-		    <class>GtkMenu</class>
-		    <name>gnc_register_date_range_mi_menu</name>
-
-		    <widget>
-		      <class>GtkMenuItem</class>
-		      <name>show_all1</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_date_show_all_cb</handler>
-			<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-		      </signal>
-		      <label>Show _All</label>
-		      <right_justify>False</right_justify>
+		  <child>
+		    <widget class="GtkLabel" id="label847669">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Date:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">1</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
 		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
-		    <widget>
-		      <class>GtkMenuItem</class>
-		      <name>set_range1</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_date_range_cb</handler>
-			<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-		      </signal>
-		      <label>Set _Range...</label>
-		      <right_justify>False</right_justify>
+		  <child>
+		    <widget class="GtkLabel" id="label847670">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Num:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_CENTER</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">1</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
 		    </widget>
-		  </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
 
-		<widget>
-		  <class>GtkMenuItem</class>
-		  <name>gnc_register_date_range_mi</name>
-		  <label>Status</label>
-		  <right_justify>False</right_justify>
+	      <child>
+		<widget class="GtkVBox" id="vbox95">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">True</property>
+		  <property name="spacing">5</property>
 
-		  <widget>
-		    <class>GtkMenu</class>
-		    <name>gnc_register_date_range_mi_menu</name>
+		  <child>
+		    <widget class="GtkHBox" id="date_hbox">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
 
-		    <widget>
-		      <class>GtkMenuItem</class>
-		      <name>show_all_status</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_all_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_All</label>
-		      <right_justify>False</right_justify>
+		      <child>
+			<placeholder/>
+		      </child>
 		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">True</property>
+		      <property name="fill">True</property>
+		    </packing>
+		  </child>
 
-		    <widget>
-		      <class>GtkMenuItem</class>
-		      <name>separator15</name>
-		      <right_justify>False</right_justify>
+		  <child>
+		    <widget class="GtkSpinButton" id="num_spin">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="climb_rate">1</property>
+		      <property name="digits">0</property>
+		      <property name="numeric">False</property>
+		      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+		      <property name="snap_to_ticks">False</property>
+		      <property name="wrap">False</property>
+		      <property name="adjustment">0 0 1e+09 1 10 10</property>
 		    </widget>
-
-		    <widget>
-		      <class>GtkCheckMenuItem</class>
-		      <name>show_reconciled</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_one_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_Reconciled</label>
-		      <active>True</active>
-		      <always_show_toggle>True</always_show_toggle>
-		    </widget>
-
-		    <widget>
-		      <class>GtkCheckMenuItem</class>
-		      <name>show_cleared</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_one_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_Cleared</label>
-		      <active>True</active>
-		      <always_show_toggle>True</always_show_toggle>
-		    </widget>
-
-		    <widget>
-		      <class>GtkCheckMenuItem</class>
-		      <name>show_voided</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_one_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_Voided</label>
-		      <active>True</active>
-		      <always_show_toggle>True</always_show_toggle>
-		    </widget>
-
-		    <widget>
-		      <class>GtkCheckMenuItem</class>
-		      <name>show_frozen</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_one_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_Frozen</label>
-		      <active>True</active>
-		      <always_show_toggle>True</always_show_toggle>
-		    </widget>
-
-		    <widget>
-		      <class>GtkCheckMenuItem</class>
-		      <name>show_unreconciled</name>
-		      <signal>
-			<name>activate</name>
-			<handler>gnc_register_show_one_status_cb</handler>
-			<last_modification_time>Sun, 15 Dec 2002 07:13:43 GMT</last_modification_time>
-		      </signal>
-		      <label>_Unreconciled</label>
-		      <active>True</active>
-		      <always_show_toggle>True</always_show_toggle>
-		    </widget>
-		  </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
-	      </widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
 	    </widget>
-	  </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label1">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Transaction Information</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="type">label_item</property>
+	    </packing>
+	  </child>
 	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
 
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>gnc_register_actions_menu</name>
-	  <label>_Actions</label>
-	  <right_justify>False</right_justify>
+<widget class="GtkDialog" id="Delete Transaction">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Delete Transaction</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">True</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
 
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>gnc_register_actions_menu_menu</name>
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">8</property>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_xfer_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_xfer_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Transfer...</label>
-	      <right_justify>False</right_justify>
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area17">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="button83">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">0</property>
 	    </widget>
+	  </child>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_recn_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_start_recn_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Reconcile...</label>
-	      <right_justify>False</right_justify>
+	  <child>
+	    <widget class="GtkButton" id="button81">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">0</property>
 	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_stock_split_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_stock_split_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Stock Split...</label>
-	      <right_justify>False</right_justify>
-	    </widget>
+      <child>
+	<widget class="GtkVBox" id="main_vbox">
+	  <property name="border_width">5</property>
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_lots_mi</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_lots_cb</handler>
-		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Lot Viewer...</label>
-	      <right_justify>False</right_justify>
-	    </widget>
+	  <child>
+	    <widget class="GtkFrame" id="frame43">
+	      <property name="border_width">5</property>
+	      <property name="visible">True</property>
+	      <property name="label_xalign">0</property>
+	      <property name="label_yalign">0.5</property>
+	      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>gnc_register_scrub_mi</name>
-	      <label>Chec_k &amp; Repair</label>
-	      <right_justify>False</right_justify>
+	      <child>
+		<widget class="GtkVBox" id="vbox99">
+		  <property name="visible">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
 
-	      <widget>
-		<class>GtkMenu</class>
-		<name>gnc_register_scrub_mi_menu</name>
+		  <child>
+		    <widget class="GtkRadioButton" id="delete_all">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Delete the whole transaction</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">True</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 
-		<widget>
-		  <class>GtkMenuItem</class>
-		  <name>all_transactions1</name>
-		  <signal>
-		    <name>activate</name>
-		    <handler>gnc_register_scrub_all_cb</handler>
-		    <last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-		  </signal>
-		  <label>_All transactions</label>
-		  <right_justify>False</right_justify>
+		  <child>
+		    <widget class="GtkRadioButton" id="delete_other">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Delete all the other splits</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <property name="group">delete_all</property>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
 
-		<widget>
-		  <class>GtkMenuItem</class>
-		  <name>this_transaction1</name>
-		  <signal>
-		    <name>activate</name>
-		    <handler>gnc_register_scrub_current_cb</handler>
-		    <last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
-		  </signal>
-		  <label>_This transaction</label>
-		  <right_justify>False</right_justify>
+	  <child>
+	    <widget class="GtkScrolledWindow" id="scrolledwindow1">
+	      <property name="visible">True</property>
+	      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	      <property name="shadow_type">GTK_SHADOW_IN</property>
+	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	      <child>
+		<widget class="GtkTextView" id="text">
+		  <property name="visible">True</property>
+		  <property name="editable">False</property>
+		  <property name="overwrite">False</property>
+		  <property name="accepts_tab">True</property>
+		  <property name="justification">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap_mode">GTK_WRAP_WORD</property>
+		  <property name="cursor_visible">True</property>
+		  <property name="pixels_above_lines">0</property>
+		  <property name="pixels_below_lines">0</property>
+		  <property name="pixels_inside_wrap">0</property>
+		  <property name="left_margin">0</property>
+		  <property name="right_margin">0</property>
+		  <property name="indent">0</property>
+		  <property name="text" translatable="yes"></property>
 		</widget>
-	      </widget>
+	      </child>
 	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menuitem41</name>
-	  <label>_Reports</label>
-	  <right_justify>False</right_justify>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menuitem41_menu</name>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem42</name>
-	      <tooltip>Open a register report window for this transaction</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_report_account_cb</handler>
-		<last_modification_time>Sun, 16 Jun 2002 17:31:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Account Report</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem43</name>
-	      <tooltip>Open a register report window for this transaction</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_report_trans_cb</handler>
-		<last_modification_time>Sun, 16 Jun 2002 17:31:17 GMT</last_modification_time>
-	      </signal>
-	      <label>_Transaction Report</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menuitem44</name>
-	  <label>_Tools</label>
-	  <right_justify>False</right_justify>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menuitem44_menu</name>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem45</name>
-	      <tooltip>Open a general ledger window</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_gl_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
-	      </signal>
-	      <label>_General Ledger</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem46</name>
-	      <tooltip>View and edit the prices for stocks and mutual funds</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_prices_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
-	      </signal>
-	      <label>_Price Editor</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem47</name>
-	      <tooltip>View and edit the commodities for stocks and mutual funds</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_commodities_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
-	      </signal>
-	      <label>_Commodity Editor</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem48</name>
-	      <tooltip>Use the financial calculator</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_register_fincalc_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
-	      </signal>
-	      <label>_Financial Calculator</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menuitem49</name>
-	  <stock_item>GNOMEUIINFO_MENU_HELP_TREE</stock_item>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menuitem49_menu</name>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem50</name>
-	      <tooltip>Open the GnuCash Tutorial</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_tutorial_cb</handler>
-		<last_modification_time>Sat, 23 Nov 2002 19:16:04 GMT</last_modification_time>
-	      </signal>
-	      <label>Tutorial and Concepts _Guide</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem51</name>
-	      <tooltip>View the Tips of the Day</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_totd_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
-	      </signal>
-	      <label>_Tip Of The Day</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>help1</name>
-	      <tooltip>Open the GnuCash Help</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_help_cb</handler>
-		<last_modification_time>Sat, 23 Nov 2002 19:16:04 GMT</last_modification_time>
-	      </signal>
-	      <label>_Help</label>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>menuitem52</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>pixmapmenuitem10</name>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_main_window_about_cb</handler>
-		<last_modification_time>Sun, 16 Jun 2002 01:12:45 GMT</last_modification_time>
-	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_ABOUT_ITEM</stock_item>
-	    </widget>
-	  </widget>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDockItem</class>
-      <name>toolbar_dock</name>
-      <border_width>2</border_width>
-      <placement>GNOME_DOCK_TOP</placement>
-      <band>1</band>
-      <position>0</position>
-      <offset>0</offset>
-      <locked>False</locked>
-      <exclusive>True</exclusive>
-      <never_floating>False</never_floating>
-      <never_vertical>False</never_vertical>
-      <never_horizontal>False</never_horizontal>
-      <shadow_type>GTK_SHADOW_OUT</shadow_type>
-
-      <widget>
-	<class>Placeholder</class>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDockItem</class>
-      <name>summarybar_dock</name>
-      <border_width>2</border_width>
-      <placement>GNOME_DOCK_TOP</placement>
-      <band>2</band>
-      <position>0</position>
-      <offset>0</offset>
-      <locked>False</locked>
-      <exclusive>True</exclusive>
-      <never_floating>False</never_floating>
-      <never_vertical>False</never_vertical>
-      <never_horizontal>False</never_horizontal>
-      <shadow_type>GTK_SHADOW_OUT</shadow_type>
-
-      <widget>
-	<class>Placeholder</class>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkFrame</class>
-      <child_name>GnomeDock:contents</child_name>
-      <name>table_frame</name>
-      <label_xalign>0</label_xalign>
-      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-
-      <widget>
-	<class>Placeholder</class>
-      </widget>
-    </widget>
-  </widget>
-
-  <widget>
-    <class>GnomeAppBar</class>
-    <child_name>GnomeApp:appbar</child_name>
-    <name>appbar</name>
-    <has_progress>False</has_progress>
-    <has_status>True</has_status>
-    <child>
-      <padding>0</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
-  </widget>
-</widget>
-
-<widget>
-  <class>GtkMenu</class>
-  <name>Check Register Popup Menu</name>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_transfer</name>
-    <tooltip>Transfer funds from one account to another</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_xfer_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 05:38:43 GMT</last_modification_time>
-    </signal>
-    <label>_Transfer...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_reconcile</name>
-    <tooltip>Reconcile the main account for this register</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_start_recn_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
-    </signal>
-    <label>_Reconcile...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_stock_split</name>
-    <tooltip>Record a stock split or a stock merger</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_stock_split_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:15:14 GMT</last_modification_time>
-    </signal>
-    <label>_Stock Split...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_separator1</name>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_enter</name>
-    <tooltip>Record the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_record_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
-    </signal>
-    <label>_Enter</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_cancel</name>
-    <tooltip>Cancel the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_cancel_trans_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
-    </signal>
-    <label>_Cancel</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_delete</name>
-    <tooltip>Delete the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_delete_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 20:29:44 GMT</last_modification_time>
-    </signal>
-    <label>_Delete</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_blank</name>
-    <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_new_trans_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>_Blank</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_separator2</name>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_duplicate</name>
-    <tooltip>Make a copy of the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_duplicate_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
-    </signal>
-    <label>Dup_licate Transaction...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_reinitialize</name>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_reinitialize_trans_cb</handler>
-      <last_modification_time>Wed, 16 Oct 2002 06:27:31 GMT</last_modification_time>
-    </signal>
-    <label>Remove Transaction Splits</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkCheckMenuItem</class>
-    <name>popup_splits</name>
-    <tooltip>Show all splits in the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_expand_trans_menu_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>S_plit Transaction</label>
-    <active>False</active>
-    <always_show_toggle>True</always_show_toggle>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_schedule</name>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_recur_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:39:42 GMT</last_modification_time>
-    </signal>
-    <label>Schedule...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>popup_jump</name>
-    <tooltip>Jump to the corresponding transaction in the other account</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_register_jump_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>_Jump</label>
-    <right_justify>False</right_justify>
-  </widget>
-</widget>
-
-<widget>
-  <class>GnomeDialog</class>
-  <name>Duplicate Transaction Dialog</name>
-  <title>Duplicate this Transaction</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>True</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>False</allow_grow>
-  <auto_shrink>False</auto_shrink>
-  <auto_close>False</auto_close>
-  <hide_on_close>True</hide_on_close>
-
-  <widget>
-    <class>GtkVBox</class>
-    <child_name>GnomeDialog:vbox</child_name>
-    <name>dialog-vbox15</name>
-    <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
-    <child>
-      <padding>4</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
-
-    <widget>
-      <class>GtkHButtonBox</class>
-      <child_name>GnomeDialog:action_area</child_name>
-      <name>dialog-action_area15</name>
-      <layout_style>GTK_BUTTONBOX_END</layout_style>
-      <spacing>8</spacing>
-      <child_min_width>85</child_min_width>
-      <child_min_height>27</child_min_height>
-      <child_ipad_x>7</child_ipad_x>
-      <child_ipad_y>0</child_ipad_y>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>True</fill>
-	<pack>GTK_PACK_END</pack>
-      </child>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button76</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button77</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkFrame</class>
-      <name>frame41</name>
-      <label>Transaction Information</label>
-      <label_xalign>0</label_xalign>
-      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-      <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
-      </child>
-
-      <widget>
-	<class>GtkHBox</class>
-	<name>hbox84</name>
-	<border_width>3</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>2</spacing>
-
-	<widget>
-	  <class>GtkVBox</class>
-	  <name>vbox94</name>
-	  <homogeneous>True</homogeneous>
-	  <spacing>5</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkLabel</class>
-	    <name>label847669</name>
-	    <label>Date:</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkLabel</class>
-	    <name>label847670</name>
-	    <label>Num:</label>
-	    <justify>GTK_JUSTIFY_CENTER</justify>
-	    <wrap>False</wrap>
-	    <xalign>1</xalign>
-	    <yalign>0.5</yalign>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkVBox</class>
-	  <name>vbox95</name>
-	  <homogeneous>True</homogeneous>
-	  <spacing>5</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>date_hbox</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkSpinButton</class>
-	    <name>num_spin</name>
-	    <can_focus>True</can_focus>
-	    <climb_rate>1</climb_rate>
-	    <digits>0</digits>
-	    <numeric>False</numeric>
-	    <update_policy>GTK_UPDATE_ALWAYS</update_policy>
-	    <snap>False</snap>
-	    <wrap>False</wrap>
-	    <value>0</value>
-	    <lower>0</lower>
-	    <upper>1000000000</upper>
-	    <step>1</step>
-	    <page>10</page>
-	    <page_size>10</page_size>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
-      </widget>
-    </widget>
-  </widget>
-</widget>
-
-<widget>
-  <class>GnomeDialog</class>
-  <name>Date Range</name>
-  <visible>False</visible>
-  <title>Register date ranges</title>
-  <type>GTK_WINDOW_DIALOG</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
-  <auto_close>True</auto_close>
-  <hide_on_close>True</hide_on_close>
-
-  <widget>
-    <class>GtkVBox</class>
-    <child_name>GnomeDialog:vbox</child_name>
-    <name>vbox42</name>
-    <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
-    <child>
-      <padding>4</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
-
-    <widget>
-      <class>GtkHButtonBox</class>
-      <child_name>GnomeDialog:action_area</child_name>
-      <name>dialog-action_area16</name>
-      <layout_style>GTK_BUTTONBOX_END</layout_style>
-      <spacing>8</spacing>
-      <child_min_width>85</child_min_width>
-      <child_min_height>27</child_min_height>
-      <child_ipad_x>7</child_ipad_x>
-      <child_ipad_y>0</child_ipad_y>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>True</fill>
-	<pack>GTK_PACK_END</pack>
-      </child>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>set_range</name>
-	<can_default>True</can_default>
-	<has_default>True</has_default>
-	<can_focus>True</can_focus>
-	<signal>
-	  <name>clicked</name>
-	  <handler>gnc_register_date_cb</handler>
-	  <last_modification_time>Sun, 08 Dec 2002 03:23:17 GMT</last_modification_time>
-	</signal>
-	<label>Set Date Range</label>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button80</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkFrame</class>
-      <name>main_frame</name>
-      <border_width>5</border_width>
-      <label_xalign>0</label_xalign>
-      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-      <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
-      </child>
-
-      <widget>
-	<class>GtkVBox</class>
-	<name>vbox97</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-
-	<widget>
-	  <class>GtkRadioButton</class>
-	  <name>start_earliest</name>
-	  <can_focus>True</can_focus>
-	  <signal>
-	    <name>toggled</name>
-	    <handler>gnc_register_date_toggle_cb</handler>
-	    <last_modification_time>Sun, 16 Jun 2002 23:55:04 GMT</last_modification_time>
-	  </signal>
-	  <label>Show Earliest</label>
-	  <active>True</active>
-	  <draw_indicator>True</draw_indicator>
-	  <group>start</group>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
 	  </child>
 	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox85</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+<widget class="GtkWindow" id="register_toolbar_win">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">[rtw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+
+  <child>
+    <widget class="GtkToolbar" id="toolbar">
+      <property name="border_width">2</property>
+      <property name="visible">True</property>
+      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+      <property name="tooltips">True</property>
+      <property name="show_arrow">True</property>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_enter">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Record the current transaction</property>
+	  <property name="label" translatable="yes">Enter</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-add</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_record_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_cancel">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Cancel the current transaction</property>
+	  <property name="label" translatable="yes">Cancel</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-undelete</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_cancel_trans_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_delete">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Delete the current transaction</property>
+	  <property name="label" translatable="yes">Delete</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gnome-stock-trash</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_delete_trans_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_duplicate">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Make a copy of the current transaction</property>
+	  <property name="label" translatable="yes">Duplicate</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-copy</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_duplicate_trans_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_schedule">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</property>
+	  <property name="label" translatable="yes">Schedule</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gnome-stock-line-in</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_recur_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToggleToolButton" id="toolbar_split">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Split</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gnome-stock-book-open</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <property name="active">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_expand_trans_toolbar_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_blank">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+	  <property name="label" translatable="yes">Blank</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-new</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_new_trans_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_jump">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
+	  <property name="label" translatable="yes">Jump</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-jump-to</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_jump_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkWindow" id="register_menubar_win">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">[rmw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+
+  <child>
+    <widget class="GtkMenuBar" id="register_menubar">
+      <property name="visible">True</property>
+
+      <child>
+	<widget class="GtkMenuItem" id="menu_edit">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">_Edit</property>
+	  <property name="use_underline">True</property>
+
 	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <widget class="GtkMenu" id="menu_edit_menu">
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_cut">
+		  <property name="visible">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_CUT_ITEM</property>
+		  <signal name="activate" handler="gnc_split_reg_cut_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_copy">
+		  <property name="visible">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_COPY_ITEM</property>
+		  <signal name="activate" handler="gnc_split_reg_copy_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_paste">
+		  <property name="visible">True</property>
+		  <property name="stock_item">GNOMEUIINFO_MENU_PASTE_ITEM</property>
+		  <signal name="activate" handler="gnc_split_reg_paste_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_cut_trans">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Cut the selected transaction</property>
+		  <property name="label" translatable="yes">Cut Transaction</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_cut_trans_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_copy_trans">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Copy the selected transaction</property>
+		  <property name="label" translatable="yes">Copy Transaction</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_copy_trans_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_paste_trans">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Paste the transaction from the clipboard</property>
+		  <property name="label" translatable="yes">Paste Transaction</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_paste_trans_cb"/>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GtkMenuItem" id="menu_view">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">_View</property>
+	  <property name="use_underline">True</property>
+
+	  <child>
+	    <widget class="GtkMenu" id="menu_view_menu">
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_sort_order">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Sort _Order</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="menu_sort_order_menu">
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_standard">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Keep normal account order</property>
+			  <property name="label" translatable="yes">_Standard</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_standard_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator5">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_date">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by Date</property>
+			  <property name="label" translatable="yes">_Date</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_date_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_date_of_entry">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by the date of entry</property>
+			  <property name="label" translatable="yes">Date of _Entry</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_date_entered_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_statement_date">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by the statement date (unreconciled items last)</property>
+			  <property name="label" translatable="yes">_Statement Date</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_date_reconciled_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_number">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by Number</property>
+			  <property name="label" translatable="yes">_Number</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_num_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_amount">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by Amount</property>
+			  <property name="label" translatable="yes">_Amount</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_amount_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_memo">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by Memo</property>
+			  <property name="label" translatable="yes">_Memo</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_memo_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_sort_description">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort by Description</property>
+			  <property name="label" translatable="yes">Descri_ption</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">True</property>
+			  <property name="group">menu_sort_standard</property>
+			  <signal name="activate" handler="gnc_split_reg_sort_desc_cb"/>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_style">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">St_yle</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="menu_style_menu">
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_style_basic_ledger">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Show transactions on one or two lines</property>
+			  <property name="label" translatable="yes">_Basic Ledger</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <signal name="activate" handler="gnc_split_reg_style_ledger_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_style_auto_split_ledger">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Show transactions on one or two lines and expand the current transaction</property>
+			  <property name="label" translatable="yes">_Auto-Split Ledger</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <property name="group">menu_style_basic_ledger</property>
+			  <signal name="activate" handler="gnc_split_reg_style_auto_ledger_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkRadioMenuItem" id="menu_style_transaction_journal">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Show expanded transactions with all splits</property>
+			  <property name="label" translatable="yes">_Transaction Journal</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">True</property>
+			  <property name="group">menu_style_basic_ledger</property>
+			  <signal name="activate" handler="gnc_split_reg_style_journal_cb"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="separator6">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckMenuItem" id="menu_style_double_line">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Show two lines of information for each transaction</property>
+			  <property name="label" translatable="yes">_Double Line</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <signal name="activate" handler="gnc_split_reg_double_line_cb"/>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+
+      <child>
+	<widget class="GtkMenuItem" id="menu_actions">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">_Actions</property>
+	  <property name="use_underline">True</property>
+
+	  <child>
+	    <widget class="GtkMenu" id="menu_actions_menu">
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_enter">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Record the current transaction</property>
+		  <property name="label" translatable="yes">_Enter</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_record_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_cancel">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Cancel the current transaction</property>
+		  <property name="label" translatable="yes">_Cancel</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_cancel_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image11">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-cancel</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_delete">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Delete the current transaction</property>
+		  <property name="label" translatable="yes">_Delete</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_delete_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image12">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-delete</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_blank">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+		  <property name="label" translatable="yes">_Blank</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_new_trans_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image13">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-clear</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="separator8">
+		  <property name="visible">True</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_duplicate">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Make a copy of the current transaction</property>
+		  <property name="label" translatable="yes">Dup_licate Transaction...</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_duplicate_trans_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_reinitialize">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Erase all splits except the one for this account.</property>
+		  <property name="label" translatable="yes">Remove Transaction Splits</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_reinitialize_trans_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckMenuItem" id="menu_splits">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Show all splits in the current transaction</property>
+		  <property name="label" translatable="yes">S_plit Transaction</property>
+		  <property name="use_underline">True</property>
+		  <property name="active">False</property>
+		  <signal name="activate" handler="gnc_split_reg_expand_trans_menu_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_exchange">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Edit Exchange Rate</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_handle_exchange_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="menu_schedule">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Schedule...</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_recur_cb"/>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkImageMenuItem" id="menu_jump">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
+		  <property name="label" translatable="yes">_Jump</property>
+		  <property name="use_underline">True</property>
+		  <signal name="activate" handler="gnc_split_reg_jump_cb"/>
+
+		  <child internal-child="image">
+		    <widget class="GtkImage" id="image14">
+		      <property name="visible">True</property>
+		      <property name="stock">gtk-jump-to</property>
+		      <property name="icon_size">1</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkWindow" id="win_register_toolbar_win">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">[wrtw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+
+  <child>
+    <widget class="GtkToolbar" id="gnc_register_toolbar">
+      <property name="border_width">2</property>
+      <property name="visible">True</property>
+      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+      <property name="tooltips">True</property>
+      <property name="show_arrow">True</property>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_close_b">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label" translatable="yes">Close</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-close</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_register_close_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem3">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_xfer_b">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label" translatable="yes">Transfer</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-convert</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_register_xfer_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem4">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_find_b">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label" translatable="yes">Find</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-find</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_ui_find_transactions_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_report_b">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label" translatable="yes">Report</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gnome-stock-book-green</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_register_report_account_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_print_b">
+	  <property name="visible">True</property>
+	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label" translatable="yes">Print</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gtk-print</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <signal name="clicked" handler="gnc_register_print_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkMenu" id="register_popup">
+  <property name="visible">True</property>
+
+  <child>
+    <widget class="GtkMenuItem" id="menuitem57">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Record the current transaction</property>
+      <property name="label" translatable="yes">_Enter</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_record_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="menuitem58">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Cancel the current transaction</property>
+      <property name="label" translatable="yes">_Cancel</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_cancel_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_delete">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Delete the current transaction</property>
+      <property name="label" translatable="yes">_Delete</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_delete_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="menuitem60">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+      <property name="label" translatable="yes">_Blank</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_new_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="menuitem61">
+      <property name="visible">True</property>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_duplicate">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Make a copy of the current transaction</property>
+      <property name="label" translatable="yes">Dup_licate Transaction...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_duplicate_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_reinitialize">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Remove Transaction Splits</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_reinitialize_trans_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkCheckMenuItem" id="popup_splits">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Show all splits in the current transaction</property>
+      <property name="label" translatable="yes">S_plit Transaction</property>
+      <property name="use_underline">True</property>
+      <property name="active">False</property>
+      <signal name="activate" handler="gnc_split_reg_expand_trans_menu_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_exchange">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Edit the exchange rate for the current split</property>
+      <property name="label" translatable="yes">Edit Exchange Rate</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_handle_exchange_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_schedule">
+      <property name="visible">True</property>
+      <property name="label" translatable="yes">Schedule...</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_recur_cb"/>
+    </widget>
+  </child>
+
+  <child>
+    <widget class="GtkMenuItem" id="sr_popup_jump">
+      <property name="visible">True</property>
+      <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
+      <property name="label" translatable="yes">_Jump</property>
+      <property name="use_underline">True</property>
+      <signal name="activate" handler="gnc_split_reg_jump_cb"/>
+    </widget>
+  </child>
+</widget>
+
+<widget class="GtkDialog" id="Void Transaction">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Void Transaction</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+  <property name="modal">True</property>
+  <property name="resizable">False</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
+
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox16">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
+
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area18">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="cancelbutton1">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
+	    </widget>
 	  </child>
 
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>start_date</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>toggled</name>
-	      <handler>gnc_register_date_toggle_cb</handler>
-	      <last_modification_time>Sun, 16 Jun 2002 23:54:45 GMT</last_modification_time>
-	    </signal>
-	    <label>Start date:</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>start</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>start_date_entry</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkHSeparator</class>
-	  <name>hseparator1</name>
 	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <widget class="GtkButton" id="okbutton1">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
+	    </widget>
 	  </child>
 	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
 
-	<widget>
-	  <class>GtkRadioButton</class>
-	  <name>end_latest</name>
-	  <can_focus>True</can_focus>
-	  <signal>
-	    <name>toggled</name>
-	    <handler>gnc_register_date_toggle_cb</handler>
-	    <last_modification_time>Sun, 16 Jun 2002 23:54:23 GMT</last_modification_time>
-	  </signal>
-	  <label>Show Latest</label>
-	  <active>True</active>
-	  <draw_indicator>True</draw_indicator>
-	  <group>end</group>
+      <child>
+	<widget class="GtkVBox" id="vbox100">
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+
 	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
+	    <widget class="GtkLabel" id="label847671">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Reason for voiding transaction:</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_CENTER</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkEntry" id="reason">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="has_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">True</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
 	  </child>
 	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
 
-	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox86</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
+<widget class="GtkDialog" id="Sort By">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Sort register by...</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+  <property name="modal">False</property>
+  <property name="resizable">False</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
+  <signal name="response" handler="gnc_plugin_page_register_sort_response_cb" last_modification_time="Sun, 12 Jun 2005 01:03:23 GMT"/>
+
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox17">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
+
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area19">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
 	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <widget class="GtkButton" id="cancelbutton2">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
+	    </widget>
 	  </child>
 
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>end_date</name>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>toggled</name>
-	      <handler>gnc_register_date_toggle_cb</handler>
-	      <last_modification_time>Sun, 16 Jun 2002 23:53:30 GMT</last_modification_time>
-	    </signal>
-	    <label>End date:</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>end</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkHBox</class>
-	    <name>end_date_entry</name>
-	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
-
-	    <widget>
-	      <class>Placeholder</class>
+	  <child>
+	    <widget class="GtkButton" id="okbutton2">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
 	    </widget>
-	  </widget>
-
-	  <widget>
-	    <class>GtkButton</class>
-	    <name>today</name>
-	    <sensitive>False</sensitive>
-	    <can_focus>True</can_focus>
-	    <signal>
-	      <name>clicked</name>
-	      <handler>gnc_register_today_cb</handler>
-	      <last_modification_time>Sun, 16 Jun 2002 23:56:10 GMT</last_modification_time>
-	    </signal>
-	    <label>Today</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
+	  </child>
 	</widget>
-      </widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkVBox" id="vbox101">
+	  <property name="border_width">12</property>
+	  <property name="visible">True</property>
+	  <property name="homogeneous">False</property>
+	  <property name="spacing">0</property>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_STANDARD">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Keep normal account order</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Standard Order</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkHSeparator" id="hseparator2">
+	      <property name="visible">True</property>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">True</property>
+	      <property name="fill">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_DATE">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by date</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Date</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_DATE_ENTERED">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by the date of entry</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Date of _Entry</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_DATE_RECONDILED">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by the statement date (unreconciled items last)</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Statement Date</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_NUMBER">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by number</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Number</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_AMOUNT">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by amount</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Amount</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_MEMO">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by memo</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Memo</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_DESC">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by description</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Descri_ption</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_ACTION">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by action field</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">A_ction</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkRadioButton" id="BY_NOTES">
+	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Sort by notes field</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">N_otes</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
+	      <property name="group">BY_STANDARD</property>
+	      <signal name="toggled" handler="gnc_plugin_page_register_sort_button_cb" last_modification_time="Sun, 12 Jun 2005 16:37:26 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="padding">0</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
     </widget>
-  </widget>
+  </child>
 </widget>
 
-<widget>
-  <class>GnomeDialog</class>
-  <name>Delete Transaction</name>
-  <title>Delete Transaction</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>True</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>False</allow_grow>
-  <auto_shrink>False</auto_shrink>
-  <auto_close>False</auto_close>
-  <hide_on_close>True</hide_on_close>
+<widget class="GtkDialog" id="Filter By">
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Filter register by...</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">False</property>
+  <property name="destroy_with_parent">True</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="has_separator">True</property>
+  <signal name="response" handler="gnc_plugin_page_register_filter_response_cb" last_modification_time="Sun, 12 Jun 2005 20:35:52 GMT"/>
 
-  <widget>
-    <class>GtkVBox</class>
-    <child_name>GnomeDialog:vbox</child_name>
-    <name>dialog-vbox</name>
-    <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
-    <child>
-      <padding>4</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
+  <child internal-child="vbox">
+    <widget class="GtkVBox" id="dialog-vbox19">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
 
-    <widget>
-      <class>GtkHButtonBox</class>
-      <child_name>GnomeDialog:action_area</child_name>
-      <name>dialog-action_area17</name>
-      <layout_style>GTK_BUTTONBOX_END</layout_style>
-      <spacing>8</spacing>
-      <child_min_width>85</child_min_width>
-      <child_min_height>27</child_min_height>
-      <child_ipad_x>7</child_ipad_x>
-      <child_ipad_y>0</child_ipad_y>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>True</fill>
-	<pack>GTK_PACK_END</pack>
+      <child internal-child="action_area">
+	<widget class="GtkHButtonBox" id="dialog-action_area21">
+	  <property name="visible">True</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
+
+	  <child>
+	    <widget class="GtkButton" id="cancelbutton4">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-cancel</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-6</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="okbutton4">
+	      <property name="visible">True</property>
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">gtk-ok</property>
+	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	      <property name="response_id">-5</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	  <property name="pack_type">GTK_PACK_END</property>
+	</packing>
       </child>
 
-      <widget>
-	<class>GtkButton</class>
-	<name>button81</name>
-	<can_default>True</can_default>
-	<has_default>True</has_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button83</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkVBox</class>
-      <name>main_vbox</name>
-      <border_width>5</border_width>
-      <homogeneous>False</homogeneous>
-      <spacing>0</spacing>
       <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
+	<widget class="GtkNotebook" id="notebook1">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="show_tabs">True</property>
+	  <property name="show_border">True</property>
+	  <property name="tab_pos">GTK_POS_TOP</property>
+	  <property name="scrollable">False</property>
+	  <property name="enable_popup">False</property>
+
+	  <child>
+	    <widget class="GtkVBox" id="vbox103">
+	      <property name="border_width">12</property>
+	      <property name="visible">True</property>
+	      <property name="homogeneous">False</property>
+	      <property name="spacing">0</property>
+
+	      <child>
+		<widget class="GtkRadioButton" id="filter_show_all">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Show _All	</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label847680">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkRadioButton" id="filter_show_range">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Select _Range:</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <property name="group">filter_show_all</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_select_range_cb" last_modification_time="Fri, 17 Jun 2005 00:07:15 GMT"/>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">False</property>
+		  <property name="fill">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkTable" id="select_range_table">
+		  <property name="visible">True</property>
+		  <property name="n_rows">7</property>
+		  <property name="n_columns">3</property>
+		  <property name="homogeneous">False</property>
+		  <property name="row_spacing">0</property>
+		  <property name="column_spacing">6</property>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847682">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Start:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
+		      <property name="x_padding">12</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="start_date_earliest">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">_Earliest</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" last_modification_time="Thu, 16 Jun 2005 23:04:52 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">0</property>
+		      <property name="bottom_attach">1</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="Custom" id="end_date">
+		      <property name="visible">True</property>
+		      <property name="creation_function">gnc_date_edit_new_glade</property>
+		      <property name="int1">0</property>
+		      <property name="int2">0</property>
+		      <property name="last_modification_time">Mon, 13 Jun 2005 22:14:34 GMT</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">2</property>
+		      <property name="right_attach">3</property>
+		      <property name="top_attach">6</property>
+		      <property name="bottom_attach">7</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="end_date_choose">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Ch_oose Date:</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" last_modification_time="Thu, 16 Jun 2005 23:05:16 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">6</property>
+		      <property name="bottom_attach">7</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="end_date_today">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Toda_y</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <property name="group">end_date_choose</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" last_modification_time="Thu, 16 Jun 2005 23:05:09 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">5</property>
+		      <property name="bottom_attach">6</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="end_date_latest">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">_Latest	</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <property name="group">end_date_choose</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_end_cb" last_modification_time="Thu, 16 Jun 2005 23:05:03 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">4</property>
+		      <property name="bottom_attach">5</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847683">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes"></property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">3</property>
+		      <property name="bottom_attach">4</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkLabel" id="label847684">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">End:</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">False</property>
+		      <property name="justify">GTK_JUSTIFY_LEFT</property>
+		      <property name="wrap">False</property>
+		      <property name="selectable">False</property>
+		      <property name="xalign">0</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xpad">0</property>
+		      <property name="ypad">0</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">0</property>
+		      <property name="right_attach">1</property>
+		      <property name="top_attach">4</property>
+		      <property name="bottom_attach">5</property>
+		      <property name="x_padding">12</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="start_date_choose">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">C_hoose Date:</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <property name="group">start_date_earliest</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" last_modification_time="Thu, 16 Jun 2005 23:04:05 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="Custom" id="start_date">
+		      <property name="visible">True</property>
+		      <property name="creation_function">gnc_date_edit_new_glade</property>
+		      <property name="int1">0</property>
+		      <property name="int2">0</property>
+		      <property name="last_modification_time">Mon, 13 Jun 2005 22:14:34 GMT</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">2</property>
+		      <property name="right_attach">3</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkRadioButton" id="start_date_today">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">_Today</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <property name="active">False</property>
+		      <property name="inconsistent">False</property>
+		      <property name="draw_indicator">True</property>
+		      <property name="group">start_date_earliest</property>
+		      <signal name="clicked" handler="gnc_plugin_page_register_filter_start_cb" last_modification_time="Thu, 16 Jun 2005 23:04:36 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="padding">0</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
+		</packing>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="tab_expand">False</property>
+	      <property name="tab_fill">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label847678">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Date</property>
+	      <property name="use_underline">True</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="type">tab</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkTable" id="table1">
+	      <property name="border_width">12</property>
+	      <property name="visible">True</property>
+	      <property name="n_rows">7</property>
+	      <property name="n_columns">3</property>
+	      <property name="homogeneous">False</property>
+	      <property name="row_spacing">0</property>
+	      <property name="column_spacing">0</property>
+
+	      <child>
+		<widget class="GtkLabel" id="label847688">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">2</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">5</property>
+		  <property name="bottom_attach">6</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkLabel" id="label847686">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes"></property>
+		  <property name="use_underline">False</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
+		  <property name="yalign">0.5</property>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">1</property>
+		  <property name="top_attach">5</property>
+		  <property name="bottom_attach">6</property>
+		  <property name="y_options">expand</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="filter_status_unreconciled">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Unreconciled</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" last_modification_time="Sun, 12 Jun 2005 21:32:39 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">0</property>
+		  <property name="bottom_attach">1</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="filter_status_reconciled">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Reconciled</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" last_modification_time="Sun, 12 Jun 2005 21:32:48 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">1</property>
+		  <property name="bottom_attach">2</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="filter_status_cleared">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">C_leared</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" last_modification_time="Sun, 12 Jun 2005 21:33:05 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">2</property>
+		  <property name="bottom_attach">3</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="filter_status_voided">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Voided</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" last_modification_time="Sun, 12 Jun 2005 21:33:14 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">3</property>
+		  <property name="bottom_attach">4</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkCheckButton" id="filter_status_frozen">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">_Frozen</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <property name="active">False</property>
+		  <property name="inconsistent">False</property>
+		  <property name="draw_indicator">True</property>
+		  <signal name="toggled" handler="gnc_plugin_page_register_filter_status_one_cb" last_modification_time="Sun, 12 Jun 2005 21:33:22 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">0</property>
+		  <property name="right_attach">3</property>
+		  <property name="top_attach">4</property>
+		  <property name="bottom_attach">5</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkButton" id="button84">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Select _All</property>
+		  <property name="use_underline">True</property>
+		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="gnc_plugin_page_register_filter_status_all_cb" last_modification_time="Sun, 12 Jun 2005 22:33:32 GMT"/>
+		</widget>
+		<packing>
+		  <property name="left_attach">1</property>
+		  <property name="right_attach">2</property>
+		  <property name="top_attach">6</property>
+		  <property name="bottom_attach">7</property>
+		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
+		</packing>
+	      </child>
+	    </widget>
+	    <packing>
+	      <property name="tab_expand">False</property>
+	      <property name="tab_fill">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label847679">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Status</property>
+	      <property name="use_underline">True</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0.5</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="type">tab</property>
+	    </packing>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
       </child>
-
-      <widget>
-	<class>GtkFrame</class>
-	<name>frame43</name>
-	<border_width>5</border_width>
-	<label_xalign>0</label_xalign>
-	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkVBox</class>
-	  <name>vbox99</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>delete_all</name>
-	    <can_focus>True</can_focus>
-	    <label>Delete the whole transaction</label>
-	    <active>True</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>group</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkRadioButton</class>
-	    <name>delete_other</name>
-	    <can_focus>True</can_focus>
-	    <label>Delete all the other splits</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	    <group>group</group>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
-	  </widget>
-	</widget>
-      </widget>
-
-      <widget>
-	<class>GtkScrolledWindow</class>
-	<name>scrolledwindow1</name>
-	<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-
-	<widget>
-	  <class>GtkText</class>
-	  <name>text</name>
-	  <width>226</width>
-	  <height>198</height>
-	  <editable>False</editable>
-	  <text></text>
-	</widget>
-      </widget>
     </widget>
-  </widget>
+  </child>
 </widget>
 
-<widget>
-  <class>GtkWindow</class>
-  <name>register_toolbar_win</name>
-  <title>[rtw] THIS WINDOW SHOULD NOT BE CREATED</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
-
-  <widget>
-    <class>GtkToolbar</class>
-    <name>toolbar</name>
-    <border_width>2</border_width>
-    <orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
-    <type>GTK_TOOLBAR_BOTH</type>
-    <space_size>10</space_size>
-    <space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
-    <relief>GTK_RELIEF_NONE</relief>
-    <tooltips>True</tooltips>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_enter</name>
-      <tooltip>Record the current transaction</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_record_cb</handler>
-	<last_modification_time>Wed, 12 Jun 2002 02:02:11 GMT</last_modification_time>
-      </signal>
-      <label>Enter</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_ADD</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_cancel</name>
-      <tooltip>Cancel the current transaction</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_cancel_trans_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:12:49 GMT</last_modification_time>
-      </signal>
-      <label>Cancel</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_UNDELETE</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_delete</name>
-      <tooltip>Delete the current transaction</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_delete_trans_cb</handler>
-	<last_modification_time>Tue, 18 Jun 2002 07:59:46 GMT</last_modification_time>
-      </signal>
-      <label>Delete</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_TRASH</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_duplicate</name>
-      <tooltip>Make a copy of the current transaction</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_duplicate_trans_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:09:03 GMT</last_modification_time>
-      </signal>
-      <label>Duplicate</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_COPY</stock_pixmap>
-      <child>
-	<new_group>True</new_group>
-      </child>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_schedule</name>
-      <tooltip>Create a Scheduled Transaction with the current transaction as a template</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_recur_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:08:53 GMT</last_modification_time>
-      </signal>
-      <label>Schedule</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_LINE_IN</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkToggleButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_split</name>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_expand_trans_toolbar_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 23:02:08 GMT</last_modification_time>
-      </signal>
-      <label>Split</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_BOOK_OPEN</stock_pixmap>
-      <active>False</active>
-      <child>
-	<new_group>True</new_group>
-      </child>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_blank</name>
-      <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_new_trans_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:09:31 GMT</last_modification_time>
-      </signal>
-      <label>Blank</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_NEW</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>toolbar_jump</name>
-      <tooltip>Jump to the corresponding transaction in the other account</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_split_reg_jump_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:09:46 GMT</last_modification_time>
-      </signal>
-      <label>Jump</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_JUMP_TO</stock_pixmap>
-    </widget>
-  </widget>
-</widget>
-
-<widget>
-  <class>GtkWindow</class>
-  <name>register_menubar_win</name>
-  <title>[rmw] THIS WINDOW SHOULD NOT BE CREATED</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
-
-  <widget>
-    <class>GtkMenuBar</class>
-    <name>register_menubar</name>
-    <shadow_type>GTK_SHADOW_NONE</shadow_type>
-
-    <widget>
-      <class>GtkMenuItem</class>
-      <name>menu_edit</name>
-      <stock_item>GNOMEUIINFO_MENU_EDIT_TREE</stock_item>
-
-      <widget>
-	<class>GtkMenu</class>
-	<name>menu_edit_menu</name>
-
-	<widget>
-	  <class>GtkPixmapMenuItem</class>
-	  <name>menu_cut</name>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_cut_cb</handler>
-	    <last_modification_time>Mon, 28 Oct 2002 01:31:01 GMT</last_modification_time>
-	  </signal>
-	  <stock_item>GNOMEUIINFO_MENU_CUT_ITEM</stock_item>
-	</widget>
-
-	<widget>
-	  <class>GtkPixmapMenuItem</class>
-	  <name>menu_copy</name>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_copy_cb</handler>
-	    <last_modification_time>Mon, 28 Oct 2002 01:31:01 GMT</last_modification_time>
-	  </signal>
-	  <stock_item>GNOMEUIINFO_MENU_COPY_ITEM</stock_item>
-	</widget>
-
-	<widget>
-	  <class>GtkPixmapMenuItem</class>
-	  <name>menu_paste</name>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_paste_cb</handler>
-	    <last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
-	  </signal>
-	  <stock_item>GNOMEUIINFO_MENU_PASTE_ITEM</stock_item>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>separator13</name>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_cut_trans</name>
-	  <tooltip>Cut the selected transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_cut_trans_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
-	  </signal>
-	  <label>Cut Transaction</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_copy_trans</name>
-	  <tooltip>Copy the selected transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_copy_trans_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
-	  </signal>
-	  <label>Copy Transaction</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_paste_trans</name>
-	  <tooltip>Paste the transaction from the clipboard</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_paste_trans_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 05:28:33 GMT</last_modification_time>
-	  </signal>
-	  <label>Paste Transaction</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>separator16</name>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_void_trans</name>
-	  <tooltip>Void the selected transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_void_trans_cb</handler>
-	    <last_modification_time>Tue, 19 Nov 2002 03:25:59 GMT</last_modification_time>
-	  </signal>
-	  <label>Void Transaction...</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_unvoid_trans</name>
-	  <tooltip>Restore a voided transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_unvoid_trans_cb</handler>
-	    <last_modification_time>Fri, 13 Jun 2003 03:56:55 GMT</last_modification_time>
-	  </signal>
-	  <label>Unvoid Transaction</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>reverse_transaction</name>
-	  <tooltip>Create a new transaction that cancels out the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_reverse_trans_cb</handler>
-	    <last_modification_time>Fri, 13 Jun 2003 06:37:26 GMT</last_modification_time>
-	  </signal>
-	  <label>Reverse Transaction</label>
-	  <right_justify>False</right_justify>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkMenuItem</class>
-      <name>menu_view</name>
-      <stock_item>GNOMEUIINFO_MENU_VIEW_TREE</stock_item>
-
-      <widget>
-	<class>GtkMenu</class>
-	<name>menu_view_menu</name>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_sort_order</name>
-	  <label>Sort _Order</label>
-	  <right_justify>False</right_justify>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menu_sort_order_menu</name>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_standard</name>
-	      <tooltip>Keep normal account order</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_standard_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Standard</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>separator5</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_date</name>
-	      <tooltip>Sort by Date</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_date_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Date</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_date_of_entry</name>
-	      <tooltip>Sort by the date of entry</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_date_entered_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>Date of _Entry</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_statement_date</name>
-	      <tooltip>Sort by the statement date (unreconciled items last)</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_date_reconciled_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Statement Date</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_number</name>
-	      <tooltip>Sort by Number</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_num_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Number</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_amount</name>
-	      <tooltip>Sort by Amount</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_amount_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Amount</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_memo</name>
-	      <tooltip>Sort by Memo</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_memo_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Memo</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_description</name>
-	      <tooltip>Sort by Description</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_desc_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
-	      </signal>
-	      <label>Descri_ption</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_action</name>
-	      <tooltip>Sort by Action</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_action_cb</handler>
-		<last_modification_time>Fri, 30 May 2003 00:03:32 GMT</last_modification_time>
-	      </signal>
-	      <label>A_ction</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_sort_notes</name>
-	      <tooltip>Sort by Notes</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_sort_notes_cb</handler>
-		<last_modification_time>Fri, 30 May 2003 00:05:06 GMT</last_modification_time>
-	      </signal>
-	      <label>N_otes</label>
-	      <active>True</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>sort</group>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_style</name>
-	  <label>St_yle</label>
-	  <right_justify>False</right_justify>
-
-	  <widget>
-	    <class>GtkMenu</class>
-	    <name>menu_style_menu</name>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_style_basic_ledger</name>
-	      <tooltip>Show transactions on one or two lines</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_style_ledger_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
-	      </signal>
-	      <label>_Basic Ledger</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>ledger</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_style_auto_split_ledger</name>
-	      <tooltip>Show transactions on one or two lines and expand the current transaction</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_style_auto_ledger_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
-	      </signal>
-	      <label>_Auto-Split Ledger</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>ledger</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkRadioMenuItem</class>
-	      <name>menu_style_transaction_journal</name>
-	      <tooltip>Show expanded transactions with all splits</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_style_journal_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
-	      </signal>
-	      <label>_Transaction Journal</label>
-	      <active>True</active>
-	      <always_show_toggle>True</always_show_toggle>
-	      <group>ledger</group>
-	    </widget>
-
-	    <widget>
-	      <class>GtkMenuItem</class>
-	      <name>separator6</name>
-	      <right_justify>False</right_justify>
-	    </widget>
-
-	    <widget>
-	      <class>GtkCheckMenuItem</class>
-	      <name>menu_style_double_line</name>
-	      <tooltip>Show two lines of information for each transaction</tooltip>
-	      <signal>
-		<name>activate</name>
-		<handler>gnc_split_reg_double_line_cb</handler>
-		<last_modification_time>Wed, 12 Jun 2002 02:11:59 GMT</last_modification_time>
-	      </signal>
-	      <label>_Double Line</label>
-	      <active>False</active>
-	      <always_show_toggle>True</always_show_toggle>
-	    </widget>
-	  </widget>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkMenuItem</class>
-      <name>menu_actions</name>
-      <label>_Actions</label>
-      <right_justify>False</right_justify>
-
-      <widget>
-	<class>GtkMenu</class>
-	<name>menu_actions_menu</name>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_enter</name>
-	  <tooltip>Record the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_record_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 02:01:51 GMT</last_modification_time>
-	  </signal>
-	  <label>_Enter</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_cancel</name>
-	  <tooltip>Cancel the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_cancel_trans_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
-	  </signal>
-	  <label>_Cancel</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_delete</name>
-	  <tooltip>Delete the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_delete_trans_cb</handler>
-	    <last_modification_time>Tue, 18 Jun 2002 07:59:59 GMT</last_modification_time>
-	  </signal>
-	  <label>_Delete</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_blank</name>
-	  <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_new_trans_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-	  </signal>
-	  <label>_Blank</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>separator8</name>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_duplicate</name>
-	  <tooltip>Make a copy of the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_duplicate_trans_cb</handler>
-	    <last_modification_time>Sun, 16 Jun 2002 00:14:37 GMT</last_modification_time>
-	  </signal>
-	  <label>Dup_licate Transaction...</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_reinitialize</name>
-	  <tooltip>Erase all splits except the one for this account.</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_reinitialize_trans_cb</handler>
-	    <last_modification_time>Wed, 16 Oct 2002 06:27:58 GMT</last_modification_time>
-	  </signal>
-	  <label>Remove Transaction Splits</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkCheckMenuItem</class>
-	  <name>menu_splits</name>
-	  <tooltip>Show all splits in the current transaction</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_expand_trans_menu_cb</handler>
-	    <last_modification_time>Sun, 16 Jun 2002 23:02:33 GMT</last_modification_time>
-	  </signal>
-	  <label>S_plit Transaction</label>
-	  <active>False</active>
-	  <always_show_toggle>True</always_show_toggle>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_exchange</name>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_handle_exchange_cb</handler>
-	    <last_modification_time>Thu, 05 Dec 2002 23:25:35 GMT</last_modification_time>
-	  </signal>
-	  <label>Edit Exchange Rate</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_schedule</name>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_recur_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 06:39:42 GMT</last_modification_time>
-	  </signal>
-	  <label>Schedule...</label>
-	  <right_justify>False</right_justify>
-	</widget>
-
-	<widget>
-	  <class>GtkMenuItem</class>
-	  <name>menu_jump</name>
-	  <tooltip>Jump to the corresponding transaction in the other account</tooltip>
-	  <signal>
-	    <name>activate</name>
-	    <handler>gnc_split_reg_jump_cb</handler>
-	    <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-	  </signal>
-	  <label>_Jump</label>
-	  <right_justify>False</right_justify>
-	</widget>
-      </widget>
-    </widget>
-  </widget>
-</widget>
-
-<widget>
-  <class>GtkWindow</class>
-  <name>win_register_toolbar_win</name>
-  <title>[wrtw] THIS WINDOW SHOULD NOT BE CREATED</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
-
-  <widget>
-    <class>GtkToolbar</class>
-    <name>gnc_register_toolbar</name>
-    <border_width>2</border_width>
-    <orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
-    <type>GTK_TOOLBAR_BOTH</type>
-    <space_size>10</space_size>
-    <space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
-    <relief>GTK_RELIEF_NONE</relief>
-    <tooltips>True</tooltips>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>gnc_register_close_b</name>
-      <tooltip>NOTUSED: Defined in src/gnome/window-register.c</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_register_close_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:11:38 GMT</last_modification_time>
-      </signal>
-      <label>Close</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_CLOSE</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>gnc_register_xfer_b</name>
-      <tooltip>NOTUSED: Defined in src/gnome/window-register.c</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_register_xfer_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:10:03 GMT</last_modification_time>
-      </signal>
-      <label>Transfer</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_CONVERT</stock_pixmap>
-      <child>
-	<new_group>True</new_group>
-      </child>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>gnc_register_find_b</name>
-      <tooltip>NOTUSED: Defined in src/gnome/window-register.c</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_ui_find_transactions_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:10:19 GMT</last_modification_time>
-      </signal>
-      <label>Find</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_SEARCH</stock_pixmap>
-      <child>
-	<new_group>True</new_group>
-      </child>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>gnc_register_report_b</name>
-      <tooltip>NOTUSED: Defined in src/gnome/window-register.c</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_register_report_account_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:10:38 GMT</last_modification_time>
-      </signal>
-      <label>Report</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_BOOK_GREEN</stock_pixmap>
-    </widget>
-
-    <widget>
-      <class>GtkButton</class>
-      <child_name>Toolbar:button</child_name>
-      <name>gnc_register_print_b</name>
-      <tooltip>NOTUSED: Defined in src/gnome/window-register.c</tooltip>
-      <signal>
-	<name>clicked</name>
-	<handler>gnc_register_print_cb</handler>
-	<last_modification_time>Sun, 16 Jun 2002 00:10:58 GMT</last_modification_time>
-      </signal>
-      <label>Print</label>
-      <stock_pixmap>GNOME_STOCK_PIXMAP_PRINT</stock_pixmap>
-    </widget>
-  </widget>
-</widget>
-
-<widget>
-  <class>GtkMenu</class>
-  <name>register_popup</name>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>menuitem57</name>
-    <tooltip>Record the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_record_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
-    </signal>
-    <label>_Enter</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>menuitem58</name>
-    <tooltip>Cancel the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_cancel_trans_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
-    </signal>
-    <label>_Cancel</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_delete</name>
-    <tooltip>Delete the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_delete_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 20:29:44 GMT</last_modification_time>
-    </signal>
-    <label>_Delete</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>menuitem60</name>
-    <tooltip>Move to the blank transaction at the bottom of the register</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_new_trans_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>_Blank</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>menuitem61</name>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_duplicate</name>
-    <tooltip>Make a copy of the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_duplicate_trans_cb</handler>
-      <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
-    </signal>
-    <label>Dup_licate Transaction...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_reinitialize</name>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_reinitialize_trans_cb</handler>
-      <last_modification_time>Wed, 16 Oct 2002 06:27:31 GMT</last_modification_time>
-    </signal>
-    <label>Remove Transaction Splits</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkCheckMenuItem</class>
-    <name>popup_splits</name>
-    <tooltip>Show all splits in the current transaction</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_expand_trans_menu_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>S_plit Transaction</label>
-    <active>False</active>
-    <always_show_toggle>True</always_show_toggle>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_exchange</name>
-    <tooltip>Edit the exchange rate for the current split</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_handle_exchange_cb</handler>
-      <last_modification_time>Thu, 05 Dec 2002 23:25:34 GMT</last_modification_time>
-    </signal>
-    <label>Edit Exchange Rate</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_schedule</name>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_recur_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:39:42 GMT</last_modification_time>
-    </signal>
-    <label>Schedule...</label>
-    <right_justify>False</right_justify>
-  </widget>
-
-  <widget>
-    <class>GtkMenuItem</class>
-    <name>sr_popup_jump</name>
-    <tooltip>Jump to the corresponding transaction in the other account</tooltip>
-    <signal>
-      <name>activate</name>
-      <handler>gnc_split_reg_jump_cb</handler>
-      <last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
-    </signal>
-    <label>_Jump</label>
-    <right_justify>False</right_justify>
-  </widget>
-</widget>
-
-<widget>
-  <class>GnomeDialog</class>
-  <name>Void Transaction</name>
-  <title>Void Transaction</title>
-  <type>GTK_WINDOW_POPUP</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>True</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>False</allow_grow>
-  <auto_shrink>False</auto_shrink>
-  <auto_close>False</auto_close>
-  <hide_on_close>False</hide_on_close>
-
-  <widget>
-    <class>GtkVBox</class>
-    <child_name>GnomeDialog:vbox</child_name>
-    <name>dialog-vbox16</name>
-    <homogeneous>False</homogeneous>
-    <spacing>8</spacing>
-    <child>
-      <padding>4</padding>
-      <expand>True</expand>
-      <fill>True</fill>
-    </child>
-
-    <widget>
-      <class>GtkHButtonBox</class>
-      <child_name>GnomeDialog:action_area</child_name>
-      <name>dialog-action_area18</name>
-      <layout_style>GTK_BUTTONBOX_END</layout_style>
-      <spacing>8</spacing>
-      <child_min_width>85</child_min_width>
-      <child_min_height>27</child_min_height>
-      <child_ipad_x>7</child_ipad_x>
-      <child_ipad_y>0</child_ipad_y>
-      <child>
-	<padding>0</padding>
-	<expand>False</expand>
-	<fill>True</fill>
-	<pack>GTK_PACK_END</pack>
-      </child>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button84</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-      </widget>
-
-      <widget>
-	<class>GtkButton</class>
-	<name>button86</name>
-	<can_default>True</can_default>
-	<can_focus>True</can_focus>
-	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GtkVBox</class>
-      <name>vbox100</name>
-      <homogeneous>False</homogeneous>
-      <spacing>5</spacing>
-      <child>
-	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
-      </child>
-
-      <widget>
-	<class>GtkLabel</class>
-	<name>label847671</name>
-	<label>Reason for voiding transaction:</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>0.5</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-      </widget>
-
-      <widget>
-	<class>GtkEntry</class>
-	<name>reason</name>
-	<can_focus>True</can_focus>
-	<has_focus>True</has_focus>
-	<editable>True</editable>
-	<text_visible>True</text_visible>
-	<text_max_length>0</text_max_length>
-	<text></text>
-	<child>
-	  <padding>0</padding>
-	  <expand>False</expand>
-	  <fill>False</fill>
-	</child>
-      </widget>
-    </widget>
-  </widget>
-</widget>
-
-</GTK-Interface>
+</glade-interface>

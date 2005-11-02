@@ -22,7 +22,7 @@
 
 /**
  * @file combocell.h
- * @breif The ComboCell object implements a cell handler with a 
+ * @brief The ComboCell object implements a cell handler with a 
  *        "combination-box" pull-down menu in it.  
  * 
  * On output, the currently selected menu item is displayed.
@@ -59,6 +59,11 @@ void         gnc_combo_cell_clear_menu (ComboCell *cell);
 /** Add a menu item to the list. */
 void         gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr);
 
+/** Add a 'account name' menu item to the list. When testing for
+ *  equality with the currently selected item, this function will
+ *  ignore the characters normally used to separate account names. */
+void         gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr);
+
 /** Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
 void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
@@ -75,10 +80,6 @@ void         gnc_combo_cell_add_ignore_string (ComboCell *cell,
 /** Determines whether the popup list autosizes itself or uses
  * all available space. FALSE by default. */
 void         gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize);
-
-/** Determines whether combocells are automatically raised upon typing.
- * Defaults to false. This is a 'class' method. */
-void         gnc_combo_cell_set_autopop (gboolean auto_pop_combos);
 
 /** Tell the combocell to use a shared QuickFill object.  Using this routine
  *  can dramatically improve performance when creating combocells with a 

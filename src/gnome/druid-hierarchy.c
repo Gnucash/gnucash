@@ -37,39 +37,61 @@
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-general-select.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-component-manager.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
+#include "gnc-tree-model-example-account.h"
+#include "gnc-tree-model-selection.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-ui-util.h"
-#include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
-#include "qofbook.h"
 
-#include "gnc-trace.h"
-static short module = MOD_IMPORT; 
+#include "gnc-engine.h"
+static QofLogModule log_module = GNC_MOD_IMPORT; 
+
+#define GCONF_SECTION "dialogs/new_hierarchy"
 
 static GtkWidget *hierarchy_window = NULL;
 GtkWidget *qof_book_merge_window = NULL;
 static AccountGroup *our_final_group = NULL;
 QofBook *temporary;
 
-static void on_balance_changed (GNCAmountEdit *gae);
+typedef struct {
+  GtkWidget *dialog;
+
+  GtkWidget *currency_selector;
+
+  GtkTreeView *categories_tree;
+  GtkLabel *category_description;
+  GtkBox *category_accounts_box;
+  GtkTreeView *category_accounts_tree;
+  gboolean category_set_changed;
+
+  GncTreeViewAccount *final_account_tree;
+  GtkWidget *final_account_tree_box;
+  Account *selected_account;
+  GNCAmountEdit *balance_edit;
+  GHashTable *balance_hash;
+} hierarchy_data;
+
+static void on_balance_changed (GNCAmountEdit *gae, hierarchy_data *data);
+void on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
+					   gpointer         arg1,
+					   hierarchy_data  *data);
+void select_all_clicked (GtkButton       *button,
+			 hierarchy_data  *data);
+void clear_all_clicked (GtkButton       *button,
+			hierarchy_data  *data);
+void on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
+			       gpointer         arg1,
+			       hierarchy_data  *data);
+void on_cancel (GnomeDruid      *gnomedruid, hierarchy_data *data);
+void on_finish (GnomeDruidPage  *gnomedruidpage, gpointer arg1, hierarchy_data *data);
 
 
-static GtkWidget*
-hierarchy_get_widget (const char *name)
-{
-  if (!hierarchy_window) return NULL;
-
-  return gnc_glade_lookup_widget (hierarchy_window, name);
-}
-
-static GtkCTree *
-hierarchy_get_final_account_tree (void)
-{
-    return GTK_CTREE (hierarchy_get_widget ("final_account_ctree"));
-}
 
 static void
 delete_hierarchy_window (void)
@@ -90,155 +112,90 @@ destroy_hash_helper (gpointer key, gpointer value, gpointer user_data)
   g_free (balance);
 }
 
-static GNCAmountEdit *
-get_balance_editor (void)
-{
-  if (!hierarchy_window) return NULL;
-
-  return gtk_object_get_data (GTK_OBJECT (hierarchy_window), "balance_editor");
-}
-
-static GtkToggleButton *
-get_placeholder_checkbox (void)
-{
-  if (!hierarchy_window) return NULL;
-
-  return GTK_TOGGLE_BUTTON(gnc_glade_lookup_widget(GTK_WIDGET(hierarchy_window),
-						   "placeholder"));
-}
-
-static GtkCList*
-get_account_types_clist (void)
-{
-  return GTK_CLIST(hierarchy_get_widget ("account_types_clist"));
-}
-
-static GtkWidget *
-get_currency_editor(void)
-{
-  GtkWidget *selector;
-  GtkWidget *tmp_wid = gtk_object_get_data (GTK_OBJECT (hierarchy_window),
-                                            "currency_editor");
-  if (tmp_wid)
-    return tmp_wid;
-
-  selector = gnc_currency_edit_new();
-  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(selector), gnc_default_currency());
-  gtk_widget_show (selector);
-  gtk_object_set_data(GTK_OBJECT(hierarchy_window),
-		      "currency_editor", selector);
-  return selector;
-}
-
 static void
-gnc_hierarchy_destroy_cb (GtkObject *obj, gpointer user_data)
+gnc_hierarchy_destroy_cb (GtkObject *obj,   hierarchy_data *data)
 {
   GHashTable *hash;
 
-  hash = gtk_object_get_data (obj, "balance_hash");
+  hash = data->balance_hash;
   if (hash)
   {
     g_hash_table_foreach (hash, destroy_hash_helper, NULL);
     g_hash_table_destroy (hash);
-    gtk_object_set_data (obj, "balance_hash", NULL);
+    data->balance_hash = NULL;
   }
 }
 
 static void
-block_amount_changed (void)
+block_amount_changed (hierarchy_data *data)
 {
-  GNCAmountEdit *balance_edit;
-
-  balance_edit = get_balance_editor ();
-  if (!balance_edit) return;
-
-  gtk_signal_handler_block_by_func
-    (GTK_OBJECT (balance_edit),
-     GTK_SIGNAL_FUNC(on_balance_changed), NULL);
+  g_signal_handlers_block_by_func
+    (G_OBJECT (data->balance_edit),
+     G_CALLBACK (on_balance_changed), data);
 }
 
 static void
-unblock_amount_changed (void)
+unblock_amount_changed (hierarchy_data *data)
 {
-  GNCAmountEdit *balance_edit;
-
-  balance_edit = get_balance_editor ();
-  if (!balance_edit) return;
-
-  gtk_signal_handler_unblock_by_func
-    (GTK_OBJECT (balance_edit),
-     GTK_SIGNAL_FUNC(on_balance_changed), NULL);
+  g_signal_handlers_unblock_by_func
+    (G_OBJECT (data->balance_edit),
+     G_CALLBACK (on_balance_changed), data);
 }
 
 static gnc_numeric
-get_final_balance (Account *account)
+get_final_balance (GHashTable *hash, Account *account)
 {
-  GHashTable *hash;
   gnc_numeric *balance;
   char *fullname;
 
-  if (!account || !hierarchy_window) return gnc_numeric_zero ();
-
-  hash = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "balance_hash");
-  if (!hash) return gnc_numeric_zero ();
+  if (!hash || !account)
+    return gnc_numeric_zero ();
 
   fullname = xaccAccountGetFullName (account, ':');
-
   balance = g_hash_table_lookup (hash, fullname);
-
   g_free (fullname);
 
   if (balance)
     return *balance;
-
   return gnc_numeric_zero ();
 }
 
 static void
-set_final_balance (Account *account, gnc_numeric in_balance)
+set_final_balance (GHashTable *hash, Account *account, gnc_numeric in_balance)
 {
-  GHashTable *hash;
   gnc_numeric *balance;
   char *fullname;
 
-  if (!account || !hierarchy_window) return;
-
-  hash = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "balance_hash");
-  if (!hash) return;
+  if (!hash || !account)
+    return;
 
   fullname = xaccAccountGetFullName (account, ':');
 
   balance = g_hash_table_lookup (hash, fullname);
-  if (balance)
-  {
+  if (balance) {
     *balance = in_balance;
     g_free (fullname);
+    return;
   }
-  else
-  {
-    balance = g_new (gnc_numeric, 1);
-    *balance = in_balance;
 
-    g_hash_table_insert (hash, fullname, balance);
-  }
+  balance = g_new (gnc_numeric, 1);
+  *balance = in_balance;
+  g_hash_table_insert (hash, fullname, balance);
+  /* fullname string now owned by the hash */
 }
 
 static void
-update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
+update_account_balance (Account *account,
+			hierarchy_data *data)
 {
-  Account *account;
-  GNCAmountEdit *balance_edit;
   gboolean result, placeholder;
 
-  balance_edit = get_balance_editor ();
-
-  account = gtk_ctree_node_get_row_data (ctree, node);
   if (!account)
     return;
 
-  block_amount_changed ();
-  result = gnc_amount_edit_evaluate (balance_edit);
-  unblock_amount_changed ();
+  block_amount_changed (data);
+  result = gnc_amount_edit_evaluate (data->balance_edit);
+  unblock_amount_changed (data);
 
   if (result)
   {
@@ -246,7 +203,7 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
     GNCPrintAmountInfo print_info;
     const char *string;
 
-    balance = gnc_amount_edit_get_amount (balance_edit);
+    balance = gnc_amount_edit_get_amount (data->balance_edit);
     placeholder = xaccAccountGetPlaceholder (account);
 
     print_info = gnc_account_print_info (account, FALSE);
@@ -255,50 +212,34 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
     if (gnc_numeric_zero_p (balance) || placeholder)
       string = "";
 
-    gtk_ctree_node_set_text (ctree, GTK_CTREE_NODE (node), 2, string);
-
     if (gnc_reverse_balance (account))
       balance = gnc_numeric_neg (balance);
 
-    set_final_balance (account, balance);
+    set_final_balance (data->balance_hash, account, balance);
+    gnc_engine_gen_event ((QofEntity*)account,
+			       GNC_EVENT_MODIFY);
   }
 }
 
 static void
-on_balance_changed (GNCAmountEdit *gae)
+on_balance_changed (GNCAmountEdit *gae, hierarchy_data *data)
 {
-  GtkCTree *ctree;
-  GtkCTreeNode *node;
+	Account *account;
 
-  if (!GTK_WIDGET_SENSITIVE (GTK_WIDGET (gae)))
-    return;
+	g_return_if_fail(data != NULL);
+	if (!GTK_WIDGET_SENSITIVE (GTK_WIDGET (gae)))
+		return;
 
-  ctree = hierarchy_get_final_account_tree ();
-  if (!ctree)
-    return;
-
-  node = gtk_ctree_node_nth (ctree, GTK_CLIST(ctree)->focus_row);
-  if (!node)
-    return;
-
-  update_account_balance (ctree, node);
+	account = gnc_tree_view_account_get_selected_account(data->final_account_tree);
+	if (account == NULL)
+	  return;
+	update_account_balance (account, data);
 }
 
 static void
-on_choose_currency_prepare (GnomeDruidPage  *gnomedruidpage,
-                            gpointer         arg1,
-                            gpointer         user_data)
+on_balance_focus_out (GNCAmountEdit *gae, GdkEventFocus *event, hierarchy_data *data)
 {
-  if(!GPOINTER_TO_INT (gtk_object_get_data
-                       (GTK_OBJECT(hierarchy_window), "currency_added")))
-  {
-    gtk_object_set_data (GTK_OBJECT(hierarchy_window),
-                         "currency_added", GINT_TO_POINTER (1));
-
-    gtk_box_pack_start(GTK_BOX(gnc_glade_lookup_widget
-                               (hierarchy_window, "currency_chooser_vbox")),
-                       GTK_WIDGET(get_currency_editor()), FALSE, FALSE, 0);
-  }
+  on_balance_changed (gae, data);
 }
 
 static gchar*
@@ -343,267 +284,203 @@ gnc_get_ea_locale_dir(const char *top_dir)
     return ret;
 }
 
+/************************************************************
+ *                  Choose Categories Page                  *
+ ************************************************************/
 static void
-add_each_gea_to_clist (gpointer data, gpointer user_data)
+categories_selection_changed (GtkTreeModel *treemodel,
+			      GtkTreePath *arg1,
+			      GtkTreeIter *arg2,
+			      hierarchy_data *data)
 {
-  GncExampleAccount *gea = (GncExampleAccount*)data;
-  GtkCList *clist = GTK_CLIST (user_data);
-  gchar *rowdata[2];
-  int row = 0;
+	data->category_set_changed = TRUE;
+}
 
-  rowdata[0] = gea->title;
-  rowdata[1] = gea->short_description;
 
-  row = gtk_clist_insert(clist, row, rowdata);
-  gtk_clist_set_row_data(clist, row, gea);
+static gboolean
+start_helper (GncTreeModelSelection *selection_model,
+	      GtkTreePath           *selection_path,
+	      GtkTreeIter           *selection_iter,
+	      gpointer               data)
+{
+	GtkTreeModel      *model;
+	GtkTreeIter  	   iter;
+	GncExampleAccount *gea;
+
+	g_return_val_if_fail(GNC_IS_TREE_MODEL_SELECTION(selection_model), FALSE);
+	model = gnc_tree_model_selection_get_model (selection_model);
+	gnc_tree_model_selection_convert_iter_to_child_iter (selection_model,
+							     &iter, selection_iter);
+
+	gea = gnc_tree_model_example_account_get_account (GNC_TREE_MODEL_EXAMPLE_ACCOUNT(model), &iter);
+	if (gea != NULL) {
+	  gnc_tree_model_selection_set_selected (selection_model,
+						 selection_iter,
+						 gea->start_selected);
+	}
+
+	return FALSE;  /* Run entire tree */
 }
 
 static void
-select_initial_geas (gpointer data, gpointer user_data)
+account_categories_tree_view_prepare (hierarchy_data  *data)
 {
-  GncExampleAccount *gea = (GncExampleAccount*)data;
-  GtkCList *clist = GTK_CLIST (user_data);
+	GSList *list;
+	gchar *locale_dir;
+	GtkTreeView *tree_view;
+	GtkTreeModel *model, *selection_model;
+	GtkTreeViewColumn *column;
+	GtkCellRenderer *renderer;
 
-  if (gea->start_selected) {
-    gint row = gtk_clist_find_row_from_data (clist, gea);
-    gtk_clist_select_row (clist, row, 0);
-  }
+	locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
+ 	list = gnc_load_example_account_list (temporary,
+					      locale_dir);
+	g_free (locale_dir);
+
+	/* Prepare the account_categories GtkTreeView with a model and with some columns */
+	tree_view = data->categories_tree;
+	model = gnc_tree_model_example_account_new (list);
+	selection_model = gnc_tree_model_selection_new (model);
+	gtk_tree_view_set_model (tree_view, selection_model);
+	g_object_unref (model);
+	g_object_unref (selection_model);
+
+	g_signal_connect (G_OBJECT (selection_model), "row_changed",
+			  G_CALLBACK (categories_selection_changed),
+			  data);
+
+	column = gnc_tree_model_selection_create_tree_view_column (GNC_TREE_MODEL_SELECTION (selection_model),
+								   _("Selected"));
+	gtk_tree_view_append_column (tree_view, column);
+
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes (_("Account Types"),
+							   renderer,
+							   "text", GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_TITLE,
+							   NULL);
+	gtk_tree_view_append_column (tree_view, column);
+
+	column = gtk_tree_view_column_new_with_attributes (_("Description"),
+							   renderer,
+							   "text", GNC_TREE_MODEL_EXAMPLE_ACCOUNT_COL_SHORT_DESCRIPTION,
+							   NULL);
+	gtk_tree_view_append_column (tree_view, column);
+
+	/* Now set the selected checkbox for each item */
+	gtk_tree_model_foreach (GTK_TREE_MODEL (selection_model),
+				(GtkTreeModelForeachFunc)start_helper,
+				NULL);
 }
 
-static void
-on_choose_account_types_prepare (GnomeDruidPage  *gnomedruidpage,
-                                 gpointer         arg1,
-                                 gpointer         user_data)
+void
+on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
+				      gpointer         arg1,
+				      hierarchy_data  *data)
 {
   gpointer added_ptr;
 
-  added_ptr = gtk_object_get_data (GTK_OBJECT(hierarchy_window),
-                                   "account_list_added");
+  added_ptr = g_object_get_data (G_OBJECT(hierarchy_window),
+                                 "account_list_added");
 
-  if (!GPOINTER_TO_INT(added_ptr))
+  if (GPOINTER_TO_INT(added_ptr) == 0)
   {
-    GSList *list;
-    GtkCList *clist;
-    gchar *locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
-
+    /* Build the categories tree if necessary */
     gnc_suspend_gui_refresh ();
-	temporary = qof_book_new();
-    list = gnc_load_example_account_list (temporary,
-                                          locale_dir);
+    temporary = qof_book_new();
+    account_categories_tree_view_prepare (data);
     gnc_resume_gui_refresh ();
 
-    clist = get_account_types_clist ();
-
-    gtk_clist_freeze (clist);
-
-    g_slist_foreach (list, add_each_gea_to_clist, (gpointer)clist);
-
-    gtk_clist_set_sort_column (clist, 0);
-    gtk_clist_sort (clist);
-
-    gtk_clist_thaw (clist);
-
-    g_slist_foreach (list, select_initial_geas, (gpointer)clist);
-
     /* clear out the description/tree */
-    {
-      GtkLabel *datext = GTK_LABEL (hierarchy_get_widget
-				    ("account_types_description_entry"));
-      GtkTree *datree = GTK_TREE (hierarchy_get_widget ("account_type_tree"));
-      gtk_label_set_text (datext, "");
-      gtk_tree_clear_items (datree, 0, g_list_length (datree->children));
-    }
+    if (data->category_accounts_tree)
+      gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+    data->category_accounts_tree = NULL;
+    gtk_label_set_text (data->category_description, "");
 
-    g_slist_free (list);
-    g_free (locale_dir);
-
-    gtk_object_set_data (GTK_OBJECT(hierarchy_window),
-                         "account_list_added",
-                         GINT_TO_POINTER(1));
+    g_object_set_data (G_OBJECT(hierarchy_window),
+                       "account_list_added", GINT_TO_POINTER(1));
   }
 }
 
-static gpointer
-add_to_tree_account (Account* toadd, gpointer data)
+static void
+categories_tree_selection_changed (GtkTreeSelection *selection,
+				      hierarchy_data *data)
 {
-  GtkWidget *item;
-  GtkTree *tree = GTK_TREE (data);
+	GtkTreeView *tree_view;
+	GtkTreeModel *selection_model, *model;
+	GtkTreeIter selection_iter, iter;
+	GncExampleAccount *gea;
 
-  if (!toadd)
-    return NULL;
+	/* Remove the old account tree */
+	if (data->category_accounts_tree)
+	  gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
+	data->category_accounts_tree = NULL;
+	gtk_label_set_text (data->category_description, "");
 
-  item = gtk_tree_item_new_with_label (xaccAccountGetName(toadd));
-  gtk_tree_insert (tree, item, 0);
-  gtk_widget_show (item);
+	/* Add a new one if something selected */
+	if (gtk_tree_selection_get_selected (selection, &selection_model, &selection_iter)) {
+		model = gnc_tree_model_selection_get_model (GNC_TREE_MODEL_SELECTION (selection_model));
+		gnc_tree_model_selection_convert_iter_to_child_iter (GNC_TREE_MODEL_SELECTION (selection_model),
+								     &iter, &selection_iter);
+		gea = gnc_tree_model_example_account_get_account (GNC_TREE_MODEL_EXAMPLE_ACCOUNT (model),
+								  &iter);
+		gtk_label_set_text (data->category_description, gea->long_description);
 
-  if (xaccGroupGetNumSubAccounts (xaccAccountGetChildren (toadd)) > 0)
-  {
-    GtkWidget *subtree = gtk_tree_new ();
+		tree_view = gnc_tree_view_account_new_with_group (gea->group, FALSE);
+		gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view), NULL);
 
-    gtk_tree_item_set_subtree (GTK_TREE_ITEM(item), subtree);
-    gtk_tree_item_expand (GTK_TREE_ITEM(item));
-    xaccGroupForEachAccount (xaccAccountGetChildren(toadd),
-                             add_to_tree_account, subtree, FALSE);
-  }
-
-  return NULL;
+		data->category_accounts_tree = tree_view;
+		gtk_tree_view_expand_all (tree_view);
+		gtk_container_add(GTK_CONTAINER(data->category_accounts_box), GTK_WIDGET(tree_view));
+		gtk_widget_show(GTK_WIDGET(tree_view));
+	}
 }
 
-static void
-add_to_tree (GtkTree *tree, AccountGroup *grp)
+static gboolean
+select_helper (GncTreeModelSelection *selection_model,
+	       GtkTreePath 	     *selection_path,
+	       GtkTreeIter 	     *selection_iter,
+	       gpointer               data)
 {
-  xaccGroupForEachAccount(grp, add_to_tree_account, tree, FALSE);
+	GtkTreeModel 	  *model;
+	GtkTreeIter  	   iter;
+	GncExampleAccount *gea;
+
+	g_return_val_if_fail(GNC_IS_TREE_MODEL_SELECTION(selection_model), FALSE);
+	model = gnc_tree_model_selection_get_model (selection_model);
+	gnc_tree_model_selection_convert_iter_to_child_iter (selection_model,
+							     &iter, selection_iter);
+
+	gea = gnc_tree_model_example_account_get_account (GNC_TREE_MODEL_EXAMPLE_ACCOUNT(model), &iter);
+	if ((gea != NULL) && !gea->exclude_from_select_all) {
+	  gnc_tree_model_selection_set_selected (selection_model,
+						 selection_iter,
+						 GPOINTER_TO_INT(data));
+	}
+
+	return FALSE;  /* Run entire tree */
 }
 
-static void
-on_account_types_list_select_row (GtkCList        *clist,
-                                  gint             row,
-                                  gint             column,
-                                  GdkEvent        *event,
-                                  gpointer         user_data)
-{
-  GtkLabel *datext = GTK_LABEL (hierarchy_get_widget
-                                ("account_types_description_entry"));
-  GtkTree *datree = GTK_TREE (hierarchy_get_widget ("account_type_tree"));
-  GncExampleAccount *gea = gtk_clist_get_row_data (clist, row);
-
-  if(gea->long_description != NULL)
-    gtk_label_set_text (datext, gea->long_description);
-
-  gtk_tree_clear_items (datree, 0, g_list_length (datree->children));
-  add_to_tree (datree, gea->group);
-}
-
-static void
-on_account_types_list_unselect_row (GtkCList        *clist,
-                                    gint             row,
-                                    gint             column,
-                                    GdkEvent        *event,
-                                    gpointer         user_data)
-{
-  GtkLabel *datext = GTK_LABEL (hierarchy_get_widget
-                                ("account_types_description_entry"));
-  GtkTree *datree = GTK_TREE (hierarchy_get_widget ("account_type_tree"));
-
-  gtk_label_set_text (datext, "");
-
-  gtk_tree_clear_items (datree, 0, g_list_length (datree->children));
-}
-
-static void
+void
 select_all_clicked (GtkButton       *button,
-                    gpointer         user_data)
+                    hierarchy_data  *data)
 {
-  //  gtk_clist_select_all (get_account_types_clist ());
-  GtkCList *clist;
-  gint row;
-
-  /* Walk the list; select the rows that are not "excluded" */
-  clist = get_account_types_clist ();
-  for (row = 0; row < clist->rows; row++) {
-    GncExampleAccount *gea = gtk_clist_get_row_data (clist, row);
-    if (! gea->exclude_from_select_all)
-      gtk_clist_select_row (clist, row, 0);
-  }
+	gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
+				(GtkTreeModelForeachFunc)select_helper,
+				GINT_TO_POINTER(TRUE));
 }
 
-static void
+void
 clear_all_clicked (GtkButton       *button,
-                   gpointer         user_data)
+		   hierarchy_data  *data)
 {
-  gtk_clist_unselect_all (get_account_types_clist ());
+	gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
+				(GtkTreeModelForeachFunc)select_helper,
+				GINT_TO_POINTER(FALSE));
 }
 
-typedef struct FinalInsertData_struct
-{
-  GtkCTree *tree;
-  GtkCTreeNode *node;
-  GtkCTreeNode *sibling;
-} FinalInsertData;
-
-static gchar**
-generate_account_titles (Account *act)
-{
-  gchar **ret;
-
-  ret = g_new (gchar *, 3);
-
-  ret[0] = (gchar*)xaccAccountGetName(act);
-  ret[1] = (gchar*)xaccAccountGetTypeStr(xaccAccountGetType(act));
-
-  {
-    gnc_numeric balance;
-    const char *string;
-
-    balance = get_final_balance (act);
-
-    if (gnc_numeric_zero_p (balance))
-      string = "";
-    else
-    {
-      GNCPrintAmountInfo print_info;
-
-      print_info = gnc_account_print_info (act, FALSE);
-      string = xaccPrintAmount (balance, print_info);
-    }
-
-    ret[2] = (gchar*)string;
-  }
-
-  return ret;
-}
-
-static void
-free_account_titles (gchar **tofree)
-{
-  g_free (tofree);
-}
-
-static gpointer
-add_to_ctree_final_account (Account* toadd, gpointer data)
-{
-  FinalInsertData *topdata = (FinalInsertData*)data;
-  GtkCTreeNode *node;
-  gchar **titles;
-
-  titles = generate_account_titles (toadd);
-
-  node = gtk_ctree_insert_node (topdata->tree, topdata->node,
-                                topdata->sibling, 
-                                titles, 0,
-                                NULL, NULL, NULL, NULL,
-                                FALSE, TRUE);
-
-  free_account_titles (titles);
-
-  gtk_ctree_node_set_row_data (topdata->tree, node, toadd);
-
-  if (xaccGroupGetNumAccounts (xaccAccountGetChildren (toadd)) > 0)
-  {
-    FinalInsertData nextdata;
-    nextdata.tree = topdata->tree;
-    nextdata.node = node;
-    nextdata.sibling = NULL;
-
-    xaccGroupForEachAccount (xaccAccountGetChildren(toadd),
-                             add_to_ctree_final_account, &nextdata, FALSE);
-  }
-
-  topdata->sibling = node;
-
-  return NULL;
-}
-
-static void
-insert_final_accounts (GtkCTree *tree, AccountGroup *group)
-{
-  FinalInsertData data;
-  data.tree = tree;
-  data.node = NULL;
-  data.sibling = NULL;
-
-  xaccGroupForEachAccount(group, add_to_ctree_final_account, &data, FALSE);
-}
+/************************************************************
+ *                  Opening Balances Page                   *
+ ************************************************************/
 
 static void
 delete_our_final_group (void)
@@ -689,13 +566,10 @@ add_groups_to_with_random_guids (AccountGroup *into, AccountGroup *from,
 }
 
 static AccountGroup *
-hierarchy_merge_groups (GSList *dalist)
+hierarchy_merge_groups (GSList *dalist, gnc_commodity *com)
 {
   GSList *mark;
-  gnc_commodity *com;
   AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_book ());
-
-  com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(get_currency_editor ()));
 
   for (mark = dalist; mark; mark = mark->next)
   {
@@ -707,201 +581,215 @@ hierarchy_merge_groups (GSList *dalist)
   return ret;
 }
 
+static GSList *
+get_selected_account_list (GtkTreeView *tree_view)
+{
+	GSList *actlist = NULL;
+	GtkTreeModel *model, *selection_model;
+	GtkTreeIter iter, selection_iter;
+	GncExampleAccount *gea;
+
+	selection_model = gtk_tree_view_get_model (tree_view);
+	model = gnc_tree_model_selection_get_model (GNC_TREE_MODEL_SELECTION (selection_model));
+
+	if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &iter)) {
+		do {
+			gnc_tree_model_selection_convert_child_iter_to_iter (GNC_TREE_MODEL_SELECTION (selection_model),
+									     &selection_iter, &iter);
+
+			if (gnc_tree_model_selection_is_selected (GNC_TREE_MODEL_SELECTION (selection_model),
+								  &selection_iter)) {
+				gea = gnc_tree_model_example_account_get_account (GNC_TREE_MODEL_EXAMPLE_ACCOUNT (model),
+										  &iter);
+				
+				actlist = g_slist_append (actlist, gea);
+			}
+		} while (gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter));
+	}
+
+	return actlist;
+}
+
 static void
+balance_cell_data_func (GtkTreeViewColumn *tree_column,
+	       		GtkCellRenderer *cell,
+			GtkTreeModel *model,
+			GtkTreeIter *iter,
+			gpointer user_data)
+{
+	Account *account;
+	gnc_numeric balance;
+	const gchar *string;
+	GNCPrintAmountInfo print_info;
+	hierarchy_data *data = (hierarchy_data *)user_data;
+
+	g_return_if_fail (GTK_TREE_MODEL (model));
+	account = gnc_tree_view_account_get_account_from_iter (model, iter);
+
+	balance = get_final_balance (data->balance_hash, account);
+	if (gnc_reverse_balance (account))
+		balance = gnc_numeric_neg (balance);
+
+	if (gnc_numeric_zero_p (balance)) {
+		string = "";
+	} else {
+		print_info = gnc_account_print_info (account, FALSE);
+		string = xaccPrintAmount (balance, print_info);
+	}
+
+	g_object_set (G_OBJECT (cell),
+		      "text", string,
+		      NULL);
+}
+
+static void
+on_final_account_tree_selection_changed (GtkTreeSelection *selection,
+					 hierarchy_data *data)
+{
+	Account *account;
+	GNCPrintAmountInfo print_info;
+	gnc_numeric balance;
+	GtkWidget *entry;
+
+	/* Update the account we came from */
+	if (data->selected_account) {
+	  update_account_balance (data->selected_account, data);
+	  data->selected_account = NULL;
+	}
+
+	/* Clean up the amount entry box */
+	entry = gnc_amount_edit_gtk_entry (data->balance_edit);
+	gtk_entry_set_text (GTK_ENTRY (entry), "");
+	gtk_widget_set_sensitive (GTK_WIDGET (data->balance_edit), FALSE);
+
+	/* What's the new selection? */
+	if (!gtk_tree_selection_get_selected (selection, NULL, NULL))
+		return;
+
+	/* Ignore equity accounts */
+	account = gnc_tree_view_account_get_selected_account(data->final_account_tree);
+	if (xaccAccountGetType (account) == EQUITY)
+		return;
+
+	/* Set up the amount entry box */
+	data->selected_account = account;
+	gtk_widget_set_sensitive (GTK_WIDGET (data->balance_edit),
+				  !xaccAccountGetPlaceholder (account));
+	balance = get_final_balance (data->balance_hash, account);
+	if (gnc_reverse_balance (account))
+		balance = gnc_numeric_neg (balance);
+	print_info = gnc_account_print_info (account, FALSE);
+	gnc_amount_edit_set_print_info (data->balance_edit, print_info);
+	gnc_amount_edit_set_fraction (data->balance_edit,
+				      xaccAccountGetCommoditySCU (account));
+	block_amount_changed (data);
+	gnc_amount_edit_set_amount (data->balance_edit, balance);
+	if (gnc_numeric_zero_p (balance))
+		gtk_entry_set_text (GTK_ENTRY (entry), "");
+	unblock_amount_changed (data);
+}
+
+void
 on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
                           gpointer         arg1,
-                          gpointer         user_data)
+                          hierarchy_data  *data)
 {
-  GtkCList *clist;
-  GtkWidget *ctree;
   GSList *actlist;
-  GList *dalist;
+  GtkTreeView *tree_view;
+  GtkTreeSelection *selection;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  gnc_commodity *com;
+  GtkWidget *entry;
 
-  clist = get_account_types_clist ();
-  ctree = GTK_WIDGET (hierarchy_get_final_account_tree ());
-
-  gtk_clist_clear (GTK_CLIST(ctree));
-
-  actlist = NULL;
-  for (dalist = clist->selection; dalist; dalist = dalist->next)
-  {
-    int row = GPOINTER_TO_INT(dalist->data);
-    actlist = g_slist_append (actlist, gtk_clist_get_row_data(clist, row));
-  }
+  /* Anything to do? */
+  if (!data->category_set_changed)
+    return;
+  data->category_set_changed = FALSE;
 
   gnc_suspend_gui_refresh ();
+
+  /* Delete any existing account tree */
+  if (data->final_account_tree) {
+    gtk_widget_destroy(GTK_WIDGET(data->final_account_tree));
+    data->final_account_tree = NULL;
+  }
   delete_our_final_group ();
-  our_final_group = hierarchy_merge_groups (actlist);
+
+
+  /* Build a new account list */
+  actlist = get_selected_account_list (data->categories_tree);
+  com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(data->currency_selector));
+  our_final_group = hierarchy_merge_groups (actlist, com);
+
+
+  /* Now build a new account tree */
+  data->final_account_tree = GNC_TREE_VIEW_ACCOUNT(gnc_tree_view_account_new_with_group (our_final_group, FALSE));
+  tree_view = GTK_TREE_VIEW(data->final_account_tree);
+  gtk_tree_view_set_headers_visible (tree_view, TRUE);
+
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree),
+				   "type", "placeholder", NULL);
+
+  selection = gtk_tree_view_get_selection (tree_view);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+  g_signal_connect (G_OBJECT (selection), "changed",
+		    G_CALLBACK (on_final_account_tree_selection_changed),
+		    data);
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (G_OBJECT (renderer),
+		"xalign", 1.0,
+		NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
+						     renderer,
+						     NULL);
+  gtk_tree_view_column_set_cell_data_func (column, renderer, 
+					   balance_cell_data_func,
+					   (gpointer)data, NULL);
+  gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
+
+  gtk_container_add(GTK_CONTAINER(data->final_account_tree_box),
+		    GTK_WIDGET(data->final_account_tree));
+
+  /* Expand the entire tree */
+  gtk_tree_view_expand_all (tree_view);
+  gtk_widget_show(GTK_WIDGET(data->final_account_tree));
   gnc_resume_gui_refresh ();
 
-  insert_final_accounts (GTK_CTREE(ctree), our_final_group);
 
-  gnc_clist_columns_autosize (GTK_CLIST(ctree));
 
-  {
-    GNCAmountEdit *balance_edit;
-    GtkWidget *entry;
+  /* Now set up the balance widget */
+  entry = gnc_amount_edit_gtk_entry (data->balance_edit);
 
-    block_amount_changed ();
+  block_amount_changed (data);
+  gnc_amount_edit_set_amount (data->balance_edit, gnc_numeric_zero ());
+  gtk_entry_set_text (GTK_ENTRY(entry), "");
+  unblock_amount_changed (data);
 
-    balance_edit = get_balance_editor ();
-    gnc_amount_edit_set_amount (balance_edit, gnc_numeric_zero ());
-
-    entry = gnc_amount_edit_gtk_entry (balance_edit);
-    gtk_entry_set_text (GTK_ENTRY (entry), "");
-
-    unblock_amount_changed ();
-
-    gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
-  }
+  gtk_widget_set_sensitive (GTK_WIDGET (data->balance_edit), FALSE);
 }
 
-static void
-on_final_account_tree_select_row (GtkCTree        *ctree,
-                                  GList           *node,
-                                  gint             column,
-                                  gpointer         user_data)
+
+void
+on_cancel (GnomeDruid      *gnomedruid,
+	   hierarchy_data  *data)
 {
-  Account *account;
-  GtkToggleButton *placeholder_button;
-  GNCAmountEdit *balance_edit;
-  GNCPrintAmountInfo print_info;
-  gnc_numeric balance;
-  gboolean is_placeholder;
-
-  balance_edit = get_balance_editor ();
-
-  account = gtk_ctree_node_get_row_data (ctree, GTK_CTREE_NODE (node));
-  if (!account || xaccAccountGetType (account) == EQUITY)
-  {
-    GtkWidget *entry;
-
-    entry = gnc_amount_edit_gtk_entry (balance_edit);
-    gtk_entry_set_text (GTK_ENTRY (entry), "");
-
-    gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
-
-    return;
-  }
-
-  is_placeholder = xaccAccountGetPlaceholder (account);
-  placeholder_button = get_placeholder_checkbox ();
-  gtk_toggle_button_set_active(placeholder_button, is_placeholder);
-
-  gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), !is_placeholder);
-
-  balance = get_final_balance (account);
-
-  if (gnc_reverse_balance (account))
-    balance = gnc_numeric_neg (balance);
-
-  print_info = gnc_account_print_info (account, FALSE);
-  gnc_amount_edit_set_print_info (balance_edit, print_info);
-  gnc_amount_edit_set_fraction (balance_edit,
-                                xaccAccountGetCommoditySCU (account));
-
-  block_amount_changed ();
-
-  gnc_amount_edit_set_amount (balance_edit, balance);
-  if (gnc_numeric_zero_p (balance))
-  {
-    GtkWidget *entry;
-
-    entry = gnc_amount_edit_gtk_entry (balance_edit);
-    gtk_entry_set_text (GTK_ENTRY (entry), "");
-  }
-
-  unblock_amount_changed ();
-}
-
-static void
-on_final_account_tree_unselect_row (GtkCTree        *ctree,
-                                    GList           *node,
-                                    gint             column,
-                                    gpointer         user_data)
-{
-  update_account_balance (ctree, GTK_CTREE_NODE (node));
-
-  {
-    GNCAmountEdit *balance_edit;
-    GtkWidget *entry;
-
-    balance_edit = get_balance_editor ();
-
-    entry = gnc_amount_edit_gtk_entry (balance_edit);
-    gtk_entry_set_text (GTK_ENTRY (entry), "");
-
-    gtk_widget_set_sensitive (GTK_WIDGET (balance_edit), FALSE);
-  }
-}
-
-static void
-on_final_account_tree_placeholder_toggled (GtkToggleButton *button,
-					   gpointer   user_data)
-{
-  gboolean state;
-  Account *account;
-  GtkCTree *ctree;
-  GtkCTreeNode *node;
-  GNCAmountEdit *balance_edit;
-
-  state = gtk_toggle_button_get_active(button);
-  if (((ctree = hierarchy_get_final_account_tree ()) != NULL) &&
-      ((node = gtk_ctree_node_nth (ctree, GTK_CLIST(ctree)->focus_row)) != NULL) &&
-      ((account = gtk_ctree_node_get_row_data (ctree, node)) != NULL)) {
-          xaccAccountSetPlaceholder (account, state);
-  }
-
-  balance_edit = get_balance_editor ();
-  if (balance_edit) {
-      gtk_widget_set_sensitive(GTK_WIDGET(balance_edit), !state);
-  }
-}
-
-static gboolean
-on_final_account_next (GnomeDruidPage  *gnomedruidpage,
-                       gpointer         arg1,
-                       gpointer         user_data)
-{
-  GNCAmountEdit *balance_edit;
-
-  balance_edit = get_balance_editor ();
-
-  if (!gnc_amount_edit_evaluate (balance_edit))
-  {
-    GtkWidget *top;
-    const char *message = _("You must enter a valid balance.");
-
-    top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-    gnc_error_dialog(top, message);
-
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-static void
-cancel_everything_out(void)
-{
+  gnc_suspend_gui_refresh ();
   delete_our_final_group ();
   delete_hierarchy_window ();
   gncp_new_user_finish ();
+  g_free(data);
+  gnc_resume_gui_refresh ();
 }
 
-static void
-on_cancel (GnomeDruid      *gnomedruid,
-                 gpointer         user_data)
-{
-  cancel_everything_out ();
-}
 
 static gpointer
-starting_balance_helper (Account *account, gpointer data)
+starting_balance_helper (Account *account, hierarchy_data *data)
 {
   gnc_numeric balance;
 
-  balance = get_final_balance (account);
+  balance = get_final_balance (data->balance_hash, account);
   if (!gnc_numeric_zero_p (balance))
     gnc_account_create_opening_balance (account, balance, time (NULL),
                                         gnc_get_current_book ());
@@ -909,16 +797,16 @@ starting_balance_helper (Account *account, gpointer data)
   return NULL;
 }
 
-static void
+void
 on_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         arg1,
-           gpointer         user_data)
+           hierarchy_data  *data)
 {
 	gnc_suspend_gui_refresh ();
 	
 	if (our_final_group)
-	xaccGroupForEachAccount (our_final_group, starting_balance_helper,
-							 NULL, TRUE);
+	  xaccGroupForEachAccount (our_final_group, (AccountCallback)starting_balance_helper,
+				   data, TRUE);
 	ENTER (" ");
 	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
 	if(qof_book_merge_window) {
@@ -942,6 +830,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 	xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
 	qof_book_destroy(temporary);
 	
+	g_free(data);
 	gnc_resume_gui_refresh ();
 	LEAVE (" ");
 }
@@ -949,89 +838,65 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 static GtkWidget *
 gnc_create_hierarchy_druid (void)
 {
+	hierarchy_data *data;
 	GtkWidget *balance_edit;
 	GtkWidget *dialog;
 	GtkWidget *druid;
-	GtkWidget *clist;
+	GtkTreeView *tree_view;
 	GtkWidget *box;
-	GHashTable *hash;
 	GladeXML *xml;
 	
+	data = g_new0 (hierarchy_data, 1);
 	xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
-	
-	glade_xml_signal_connect
-	(xml, "on_choose_currency_prepare",
-		 GTK_SIGNAL_FUNC (on_choose_currency_prepare));
-	
-	glade_xml_signal_connect
-	(xml, "on_choose_account_types_prepare",
-		 GTK_SIGNAL_FUNC (on_choose_account_types_prepare));
-	
-	glade_xml_signal_connect
-	(xml, "on_account_types_list_select_row",
-		 GTK_SIGNAL_FUNC (on_account_types_list_select_row));
-	
-	glade_xml_signal_connect
-	(xml, "on_account_types_list_unselect_row",
-		 GTK_SIGNAL_FUNC (on_account_types_list_unselect_row));
-	
-	glade_xml_signal_connect
-	(xml, "on_final_account_prepare",
-		 GTK_SIGNAL_FUNC (on_final_account_prepare));
-	
-	glade_xml_signal_connect
-	(xml, "on_final_account_tree_select_row",
-		 GTK_SIGNAL_FUNC (on_final_account_tree_select_row));
-	
-	glade_xml_signal_connect
-	(xml, "on_final_account_tree_unselect_row",
-		 GTK_SIGNAL_FUNC (on_final_account_tree_unselect_row));
-	
-	glade_xml_signal_connect
-	(xml, "on_final_account_tree_placeholder_toggled",
-		 GTK_SIGNAL_FUNC (on_final_account_tree_placeholder_toggled));
-	
-	glade_xml_signal_connect
-	(xml, "on_final_account_next",
-		 GTK_SIGNAL_FUNC (on_final_account_next));
-	
-	glade_xml_signal_connect
-	(xml, "select_all_clicked", GTK_SIGNAL_FUNC (select_all_clicked));
-	
-	glade_xml_signal_connect
-	(xml, "clear_all_clicked", GTK_SIGNAL_FUNC (clear_all_clicked));
-	
-	glade_xml_signal_connect (xml, "on_finish", GTK_SIGNAL_FUNC (on_finish));
-	
-	glade_xml_signal_connect (xml, "on_cancel", GTK_SIGNAL_FUNC (on_cancel));
 	
 	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
 	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
+	data->dialog = dialog;
 	
 	druid = glade_xml_get_widget (xml, "hierarchy_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
 	
+	gtk_widget_show (glade_xml_get_widget (xml, "start_page"));
+	gtk_widget_show (glade_xml_get_widget (xml, "newUserDruidFinishPage"));
+	
+	/* Currency Page */
+	data->currency_selector = gnc_currency_edit_new();
+	gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector), gnc_default_currency());
+	gtk_widget_show (data->currency_selector);
+	box = glade_xml_get_widget (xml, "currency_chooser_vbox");
+	gtk_box_pack_start(GTK_BOX(box), data->currency_selector, FALSE, FALSE, 0);
+
+	/* Categories Page */
 	balance_edit = gnc_amount_edit_new ();
+	data->balance_edit = GNC_AMOUNT_EDIT(balance_edit);
 	gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
 	gtk_widget_show (balance_edit);
-	
-	gtk_signal_connect (GTK_OBJECT (balance_edit), "amount_changed",
-					  GTK_SIGNAL_FUNC(on_balance_changed), NULL);
-	
-	clist = glade_xml_get_widget (xml, "account_types_clist");
-	gtk_clist_column_titles_passive (GTK_CLIST (clist));
-	
 	box = glade_xml_get_widget (xml, "start_balance_box");
 	gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
+	g_signal_connect (G_OBJECT (balance_edit), "amount_changed",
+			  G_CALLBACK (on_balance_changed), data);
+	g_signal_connect (G_OBJECT (balance_edit), "focus_out_event",
+			  G_CALLBACK (on_balance_focus_out), data);
 	
-	gtk_object_set_data (GTK_OBJECT(dialog), "balance_editor", balance_edit);
+	/* Opening Balances Page */
+	tree_view = GTK_TREE_VIEW(glade_xml_get_widget (xml, "account_categories_tree_view"));
+	g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (tree_view)), "changed",
+			  G_CALLBACK (categories_tree_selection_changed), data);
+	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
+	data->categories_tree = tree_view;
 	
-	hash = g_hash_table_new (g_str_hash, g_str_equal);
+	data->category_accounts_box = GTK_BOX(glade_xml_get_widget (xml, "accounts_in_category"));
+	data->category_description = GTK_LABEL(glade_xml_get_widget (xml, "account_types_description_entry"));
 	
-	gtk_object_set_data (GTK_OBJECT(dialog), "balance_hash", hash);
+	data->final_account_tree_box = glade_xml_get_widget (xml, "final_account_tree_box");
+	data->final_account_tree = NULL;
 	
-	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
-					  GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);
+	data->balance_hash = g_hash_table_new (g_str_hash, g_str_equal);
+	
+	g_signal_connect (G_OBJECT(dialog), "destroy",
+			  G_CALLBACK (gnc_hierarchy_destroy_cb), data);
+	
+	glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, data);
 	
 	return dialog;
 }
@@ -1051,4 +916,20 @@ gnc_ui_hierarchy_druid (void)
 	hierarchy_window = gnc_create_hierarchy_druid ();
 
 	return;
+}
+
+static void
+gnc_ui_hierarchy_druid_hook (void)
+{
+  if (gnc_gconf_get_bool(GCONF_SECTION, "show_on_new_file", NULL)) {
+    printf("start druid\n");
+    gnc_ui_hierarchy_druid();
+  }
+}
+
+void
+gnc_ui_hierarchy_druid_initialize (void)
+{
+  gnc_hook_add_dangler(HOOK_NEW_BOOK,
+		       (GFunc)gnc_ui_hierarchy_druid_hook, NULL);
 }

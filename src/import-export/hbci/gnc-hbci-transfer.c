@@ -144,7 +144,10 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	  continue;
 	}
 
-	if (result == 0) {
+	/* Result of run_until_ok: 1 == execute now, 3 == scheduled
+	   for later execution (currently unimplemented); 2 ==
+	   cancel */
+	if (result == 1) {
 
 	  /* If the user pressed "execute now", then execute this job
 	     now. This function already delete()s the job. */
@@ -160,12 +163,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	  }
 	  
 	  gnc_hbci_cleanup_job(api, job);
-	} /* result == 0 */
+	} /* result == 1 */
 	else {
 	  /* huh? Only result == 0 should be possible. Simply ignore
 	     this case. */
 	  break;
-	} /* result == 0 */
+	} /* result == 1 */
 	  
       } /* Create a do-transaction (transfer) job */
 	
@@ -229,6 +232,8 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
   switch (trans_type) {
   case SINGLE_DEBITNOTE:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Direct Debit Note"));
+  case SINGLE_INTERNAL_TRANSFER:
+    gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Bank-Internal Transfer"));
   case SINGLE_TRANSFER:
   default:
     gnc_xfer_dialog_set_title (transdialog, _("Online HBCI Transaction"));
