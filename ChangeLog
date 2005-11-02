@@ -1,5 +1,7 @@
 2005-11-02  David Hampton  <hampton@employees.org>
 
+	* README.svn: Update from README.cvs for switchover.
+
 	* src/gnome-utils/gnc-splash.c: Use a dynamically allocated string
 	for the version.
 

@@ -1,11 +1,11 @@
-This file contains guidelines for using Gnucash from CVS.
+This file contains guidelines for using Gnucash from Subversion.
 They have been adapted from the guidelines for gnome-libs by
 Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
 
- + In order to build GnuCash from CVS, you need to run the autogen.sh
+ + In order to build GnuCash from SVN, you need to run the autogen.sh
    command to generate and execute a configure script.  When building
-   from CVS you should ALWAYS pass your configure options directly to
+   from SVN you should ALWAYS pass your configure options directly to
    autogen.sh.  For example:
 
 	./autogen.sh --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
@@ -29,9 +29,9 @@ Owen Taylor.
 	autoheader: /usr/bin/autom4te failed with exit status: 1
 	**Error**: autoheader failed.
 
-   If you see this error, you may need to run "cvs update -C" to pull down
+   If you see this error, you may need to run "svn revert" to pull down
    the repository versions of configure.in and/or Makefile.am in various places.
-   NOTE WELL: using "-C" will over-write any local changes you may have.
+   NOTE WELL: using "revert" will over-write any local changes you may have.
 
 When making changes to GnuCash and trying to commit to the repository:
 
@@ -45,7 +45,7 @@ When making changes to GnuCash and trying to commit to the repository:
    you can submit your changes as a patch to gnucash-patches@gnucash.org.
    See README.patches for details.
 
-   If you are making changes to gnucash CVS, you should be subscribed
+   If you are making changes to gnucash SVN, you should be subscribed
    to gnucash-devel@gnucash.org and to gnucash-patches@gnucash.org.
    (Subscription address: http://www.gnucash.org/en/lists.phtml)
    gnucash-devel@gnucash.org is a good place to ask about intended
@@ -62,7 +62,7 @@ When making changes to GnuCash and trying to commit to the repository:
  + You must not break the build! Never check in changes that do not
    compile, install or run. Just because your local tree compiles
    doesn't mean you are done. The most common way to break the build
-   is to forget to add new files or directories to CVS. But it is easy
+   is to forget to add new files or directories to SVN. But it is easy
    to fix this problem:
 
     +  Keep two directories, one where you make changes and another
@@ -77,7 +77,7 @@ When making changes to GnuCash and trying to commit to the repository:
 
  + If you are going to be changing many files in an experimental fashion,
    it is probably a good idea to create a separate branch for your
-   changes. Please see the CVS info documentation to see how to create
+   changes. Please see the SVN info documentation to see how to create
    a branch. Also, please inform the gnucash-devel-list about what you
    are going to do.
 
