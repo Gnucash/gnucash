@@ -14,6 +14,7 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ../libgncmod-engine.la \
+  ../libcashobjects.la \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
@@ -84,7 +85,7 @@ noinst_PROGRAMS = \
   test-transaction-voiding
 
 test_link_SOURCES = test-link.c
-test_link_LDADD = ../libgncmod-engine.la ${QOF_LIBS}
+test_link_LDADD = ../libcashobjects.la ../libgncmod-engine.la ${QOF_LIBS}
 
 EXTRA_DIST = \
   test-create-account \

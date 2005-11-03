@@ -1,7 +1,7 @@
 if BUILD_CASHUTIL
-cashutil_dir=cashutil
-else
 cashutil_dir=
+else
+cashutil_dir= cashutil
 endif
 
 SUBDIRS = doc lib src intl-scm po rpm accounts ${cashutil_dir}

@@ -1,3 +1,19 @@
+2005-11-03  Neil Williams  <linux@codehelp.co.uk>
+
+	* Cashutil branch :
+	New cashobjects	library
+	* src/backend/file/test/Makefile.am : 
+	* src/business/business-core/test/Makefile.am :
+	* src/business/business-core/Makefile.am :
+	* src/gnome-utils/test/Makefile.am :
+	* src/engine/Makefile.am :
+	* src/engine/test/Makefile.am :
+	
+	* macros/autogen.sh : Temporary - trying to chain
+	cashutil autogen onto this one.
+	* configure.in : Enable cashutil build.
+	* Makefile.am : conditional support.
+	
 2005-11-02  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif.glade:

@@ -3,6 +3,21 @@ PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-core.la libgw-business-core.la
 
+lib_LTLIBRARIES = libcashbusobjects.la
+
+libcashbusobjects_la_SOURCES = \
+  gncAddress.c  \
+  gncBillTerm.c \
+  gncCustomer.c \
+  gncEmployee.c \
+  gncEntry.c \
+  gncInvoice.c \
+  gncJob.c \
+  gncVendor.c \
+  gncTaxTable.c \
+  gncOrder.c \
+  gncOwner.c
+
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \

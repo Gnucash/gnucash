@@ -13,6 +13,7 @@ LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ${top_builddir}/src/engine/libgw-engine.la \
   ../libgncmod-business-core.la \
   ../libgw-business-core.la \

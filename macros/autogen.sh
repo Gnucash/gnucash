@@ -287,6 +287,71 @@ do
   fi
 done
 
+for coin in `find $srcdir/cashutil -name configure.ac -print`
+do
+  dr=`dirname $coin`
+  if test -f $dr/NO-AUTO-GEN; then
+    echo skipping $dr -- flagged as no auto-gen
+  else
+    echo processing $dr
+    ( cd $dr
+      aclocalinclude="$ACLOCAL_FLAGS -I m4"
+
+      if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
+        if grep "sed.*POTFILES" cashutil/configure.ac >/dev/null; then
+          : do nothing -- we still have an old unmodified configure.ac
+        else
+          echo "Creating $dr/aclocal.m4 ..."
+          test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+          echo "Running glib-gettextize...  Ignore non-fatal messages."
+          echo "no" | glib-gettextize --force --copy
+          echo "Making $dr/aclocal.m4 writable ..."
+          test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+        fi
+      fi
+      if grep "^AM_PROG_LIBTOOL" configure.ac >/dev/null; then
+        if test -z "$NO_LIBTOOLIZE" ; then
+            case "$OSTYPE" in
+                *darwin*)
+                    echo "Running glibtoolize... ($MACHTYPE)"
+                    glibtoolize --force --copy
+                ;;
+                    *)
+                    echo "Running libtoolize..."
+                    libtoolize --force --copy
+                ;;
+            esac
+        fi
+      fi
+     if grep "^AC_PROG_INTLTOOL" configure.ac >/dev/null; then
+        echo "Running intltoolize ..."
+        intltoolize --force --copy --automake
+      fi
+
+      echo "Running aclocal $aclocalinclude ..."
+      $ACLOCAL $aclocalinclude || {
+        echo
+        echo "**Error**: aclocal failed. This may mean that you have not"
+        echo "installed all of the packages you need, or you may need to"
+        echo "set ACLOCAL_FLAGS to include \"-I \$prefix/share/aclocal\""
+        echo "for the prefix where you installed the packages whose"
+        echo "macros were not found"
+        exit 1
+      }
+
+      if grep "^AM_CONFIG_HEADER" configure.ac >/dev/null; then
+        echo "Running autoheader..."
+        $AUTOHEADER || { echo "**Error**: autoheader failed."; exit 1; }
+      fi
+      echo "Running automake --gnu $am_opt ..."
+      $AUTOMAKE --add-missing --gnu $am_opt ||
+        { echo "**Error**: automake failed."; exit 1; }
+      echo "Running autoconf ..."
+      $AUTOCONF || { echo "**Error**: autoconf failed."; exit 1; }
+    ) || exit 1
+  fi
+done
+
 conf_flags="--enable-maintainer-mode --enable-error-on-warning --enable-compile-warnings" # --enable-iso-c
 
 if test x$NOCONFIGURE = x; then

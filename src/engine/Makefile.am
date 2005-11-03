@@ -1,7 +1,11 @@
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
+pkglib_LTLIBRARIES = \
+  libgw-engine.la \
+  libgw-kvp.la \
+  libcashobjects.la \
+  libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
@@ -108,37 +112,45 @@ qof_builds =
 
 endif
 
-libgncmod_engine_la_SOURCES = \
+libcashobjects_la_SOURCES =  \
   Account.c \
+  cap-gains.c \
+  cashobjects.c \
   FreqSpec.c \
-  Recurrence.c \
+  gnc-filepath-utils.c \
+  gnc-lot.c \
+  gnc-commodity.c \
+  gnc-pricedb.c \
   Group.c \
+  messages.c \
   Period.c \
+  policy.c \
   Query.c \
+  Recurrence.c \
   SchedXaction.c \
   SX-book.c \
   SX-ttinfo.c \
   Scrub.c \
   Scrub2.c \
   Scrub3.c \
-  TransLog.c \
   Transaction.c \
-  cap-gains.c \
-  cashobjects.c \
+  TransLog.c
+
+libgncmod_engine_la_SOURCES = \
   gnc-associate-account.c \
   gnc-budget.c \
-  gnc-commodity.c \
   gnc-engine.c \
-  gnc-filepath-utils.c \
   gnc-hooks.c \
   gnc-lot.c \
-  gnc-pricedb.c \
   gnc-session-scm.c \
-  gncmod-engine.c \
-  messages.c \
-  policy.c
+  gncmod-engine.c
 
-EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
+EXTRA_libcashobjects_la_SOURCES = iso-4217-currencies.c
+
+libcashobjects_la_LIBADD= \
+  ${GLIB_LIBS} \
+  ${GMODULE_LIBS} \
+  ${QOF_LIBS}
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
