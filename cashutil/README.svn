@@ -1,0 +1,32 @@
+This file contains guidelines for using CashUtil from SVN.
+They have been adapted from the guidelines for GnuCash which 
+in turn were adapted from the guidelines for gnome-libs by
+Miguel de Icaza who adapted them from guidelines written by
+Owen Taylor.
+
+ + In order to build CashUtil from SVN, you need to run the 
+   autogen.sh command to generate and execute a configure 
+   script. When building from CVS you should ALWAYS pass your 
+   configure options directly to autogen.sh.  For example:
+
+   ./autogen.sh --prefix=/opt/cashutil
+
+   Autogen will automatically generate the configure script 
+   and then run it WITH SPECIAL ARGUMENTS to make sure 
+   certain files get built.
+   If you run "configure" without these special arguments, 
+   it is very likely that CashUtil will fail to build.  
+   Therefore, do not run configure by hand.
+
+   If in doubt, you can run autogen.sh, run 
+   ./configure --help,
+   then re-run autogen.sh with your options.
+
+Neil Williams
+Sep 03, 2005
+
+Dave Peticolas
+June 21, 2002
+
+Derek Atkins
+November 21, 2002
