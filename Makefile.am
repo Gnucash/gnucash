@@ -1,5 +1,10 @@
+if BUILD_CASHUTIL
+cashutil_dir=cashutil
+else
+cashutil_dir=
+endif
 
-SUBDIRS = doc lib src intl-scm po rpm accounts
+SUBDIRS = doc lib src intl-scm po rpm accounts ${cashutil_dir}
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 

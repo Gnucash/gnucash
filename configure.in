@@ -1120,6 +1120,22 @@ else
   fi
 fi
 
+### ----------------------------
+### CashUtil
+### ----------------------------
+
+AC_ARG_ENABLE( cashutil,
+        [  --enable-cashutil            compile with cashutil CLI],
+        if test "$package_cashutil_enabled" = yes; then
+                AC_CONFIG_SUBDIRS(cashutil)
+                MAKE_CASHUTIL="yes"
+                AC_DEFINE(MAKE_CASHUTIL,,Build cashutil)
+        fi,
+                MAKE_CASHUTIL="no"
+                AC_DEFINE(MAKE_CASHUTIL,,Skip cashutil))
+
+AM_CONDITIONAL(BUILD_CASHUTIL, test "$MAKE_CASHUTIL" = "yes")
+
 ###-------------------------------------------------------------------------
 ### Stuff from Mac OS X Port
 ###-------------------------------------------------------------------------
@@ -1319,6 +1335,12 @@ AC_CONFIG_FILES(po/Makefile.in
           src/core-utils/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
+          cashutil/Makefile
+          cashutil/src/Makefile
+          cashutil/doc/Makefile
+          cashutil/doc/xml/Makefile
+          cashutil/doc/man/Makefile
+          cashutil/po/Makefile.in
           src/doc/Makefile
           src/doc/design/Makefile
           src/doc/xml/Makefile
