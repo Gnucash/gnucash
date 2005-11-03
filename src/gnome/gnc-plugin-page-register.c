@@ -250,6 +250,11 @@ static GtkRadioActionEntry radio_entries_2 [] =
 };
 static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
+static const gchar *important_actions[] = {
+	"SplitTransactionAction",
+	NULL,
+};
+
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
@@ -477,6 +482,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 					    plugin_page);
 
 	gnc_plugin_init_short_names (action_group, short_labels);
+	gnc_plugin_set_important_actions (action_group, important_actions);
 
 	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;
 	priv->lines_opt_name    = DEFAULT_LINES_OPTION_NAME;

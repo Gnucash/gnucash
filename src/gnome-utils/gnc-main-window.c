@@ -257,6 +257,11 @@ static GtkRadioActionEntry radio_entries [] =
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
 
+static const gchar *gnc_menu_important_actions[] = {
+  "FileCloseAction",
+  NULL,
+};
+
 /** The following are in the main window so they will always be
  *  present in the menu structure, but they are never sensitive.
  *  These actions should be overridden in child windows where they
@@ -1637,6 +1642,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gnc_plugin_update_actions(window->priv->action_group,
 				  always_insensitive_actions,
 				  "sensitive", FALSE);
+	gnc_plugin_set_important_actions (window->priv->action_group,
+					  gnc_menu_important_actions);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",

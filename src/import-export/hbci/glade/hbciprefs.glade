@@ -79,7 +79,7 @@
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Activate verbose debug messages for HBCI Online Banking.</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">Verbose _debug messages</property>
+	  <property name="label" translatable="yes">_Verbose debug messages</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>

@@ -345,7 +345,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Sign reverse balances on the following: Credit Card, Payable, Liability, Equity, and Income.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Credit _accounts</property>
+		  <property name="label" translatable="yes">C_redit accounts</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -666,7 +666,7 @@
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Use the system locale currency for all newly created accounts.</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Locale:</property>
+		      <property name="label" translatable="yes">Loc_ale:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -703,7 +703,7 @@
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Use the specified currency for all newly created accounts.</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Choose:</property>
+		      <property name="label" translatable="yes">Ch_oose:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -1029,7 +1029,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use the date format specified by the system locale.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Locale:</property>
+		  <property name="label" translatable="yes">Loc_ale:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1126,7 +1126,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use a 24 hour (instead of a 12 hour) time format.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Use 24-hour _clock</property>
+		  <property name="label" translatable="yes">U_se 24-hour clock</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1533,7 +1533,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Display negative amounts in red</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Display _negative amounts in red</property>
+		  <property name="label" translatable="yes">Display ne_gative amounts in red</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1663,8 +1663,8 @@
 		  <child>
 		    <widget class="GtkLabel" id="label44">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New search limit:</property>
-		      <property name="use_underline">False</property>
+		      <property name="label" translatable="yes">New search _limit:</property>
+		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
@@ -1673,6 +1673,7 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
+		      <property name="mnemonic_widget">gconf/dialogs/search/new_search_limit</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -1820,7 +1821,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Automatically raise the list of accounts or actions during input.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">_Auto-raise Lists</property>
+		  <property name="label" translatable="yes">_Auto-raise lists</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2499,7 +2500,7 @@
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Use the specified currency for all newly created reports.</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Choose:</property>
+		      <property name="label" translatable="yes">Ch_oose:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -2536,7 +2537,7 @@
 		      <property name="visible">True</property>
 		      <property name="tooltip" translatable="yes">Use the system locale currency for all newly created reports.</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Locale:</property>
+		      <property name="label" translatable="yes">Loc_ale:</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -2716,7 +2717,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Show a grand total of all accounts converted to the default report currency.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Include grand total</property>
+		  <property name="label" translatable="yes">Include _grand total</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2740,7 +2741,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">If checked, non-currency commodities will be shown in the summary bar.  If clear, only currencies will be shown.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Include non currency totals</property>
+		  <property name="label" translatable="yes">Include _non-currency totals</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2812,7 +2813,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use the specified relative starting date for profit/loss calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Relative:</property>
+		  <property name="label" translatable="yes">_Relative:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2836,7 +2837,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use the specified absolute starting date for profit/loss calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Absolute:</property>
+		  <property name="label" translatable="yes">_Absolute:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2861,7 +2862,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use the specified relative ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Relative:</property>
+		  <property name="label" translatable="yes">Re_lative:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -2885,7 +2886,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Use the specified absolute ending date for profit/loss calculations.  Also use this date for net assets calculations.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Absolute:</property>
+		  <property name="label" translatable="yes">Ab_solute:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>

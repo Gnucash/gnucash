@@ -1,5 +1,16 @@
 2005-11-02  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/qif.glade:
+	* src/import-export/generic-import.glade:
+	* src/import-export/hbci/glade/hbciprefs.glade:
+	* src/gnome-utils/preferences.glade:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/glade/sched-xact.glade: Fix items from round two of
+	Volker Englisch's review of the preferences dialog.
+
+	* src/gnome-utils/gnc-plugin.c: Null terminate code properly.
+
 	* README.svn: Update from README.cvs for switchover.
 
 	* src/gnome-utils/gnc-splash.c: Use a dynamically allocated string
