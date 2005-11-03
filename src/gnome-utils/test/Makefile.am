@@ -35,7 +35,7 @@ INCLUDES= \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS}
+  ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS} ${QOF_CFLAGS}
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c
 test_gnc_recurrence_LDADD = ${GNOME_LIBS} \
