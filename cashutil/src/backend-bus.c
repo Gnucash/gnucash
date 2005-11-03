@@ -27,6 +27,17 @@
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
 
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
+#include "gncCustomerP.h"
+#include "gncEmployeeP.h"
+#include "gncEntryP.h"
+#include "gncInvoiceP.h"
+#include "gncJobP.h"
+#include "gncVendorP.h"
+#include "gncTaxTableP.h"
+#include "gncOrderP.h"
+
 #include "gnc-address-xml-v2.h"
 #include "gnc-bill-term-xml-v2.h"
 #include "gnc-customer-xml-v2.h"

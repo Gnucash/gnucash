@@ -4,6 +4,7 @@ AM_CFLAGS = \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I../../src/backend/file \
   -I../../src/business/business-core \
+  -I../../src/business/business-core/file \
   -I../../src/engine \
   ${GOBJECT_CFLAGS} \
   ${GLIB_CFLAGS}  \
