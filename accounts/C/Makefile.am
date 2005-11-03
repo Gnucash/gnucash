@@ -36,5 +36,4 @@ EXTRA_DIST = \
   acctlist_retiremt.gnucash-xea \
   acctlist_spouseinc.gnucash-xea \
   acctlist_spouseretire.gnucash-xea \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA} 

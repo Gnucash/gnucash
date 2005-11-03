@@ -3,8 +3,6 @@
 
 bin_PROGRAMS = hello hello2 fastcgi-hello hello3 gnc-server
 
-EXTRA_DIST = .cvsignore
-
 AM_CFLAGS = \
 	-I../../engine -I${srcdir}/../../engine \
 	-I../../backend/file -I${srcdir}/../../backend/file \
@@ -32,7 +30,6 @@ gnc_server_SOURCES = \
 noinst_HEADERS = 
 
 
-EXTRA_DIST += \
-  .cvsignore \
+EXTRA_DIST = \
   README \
   login.html

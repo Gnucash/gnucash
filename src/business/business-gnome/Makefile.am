@@ -96,7 +96,6 @@ gwmod_DATA = \
   gw-business-gnome-spec.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncmod_DATA} \
   ${gwmod_DATA} \
   ${gncscmmod_DATA}

@@ -1,5 +1,13 @@
 2005-11-03  Neil Williams  <linux@codehelp.co.uk>
 
+	* CashUtil branch: Use libcashobjects.
+	* Various : Add LD_ADD for libcashobjects.la
+	* configure.in :
+	* configure.ac : Nested configure being tested
+	and renamed to avoid conflicts / symbolic links.
+
+2005-11-03  Neil Williams  <linux@codehelp.co.uk>
+
 	* Cashutil branch :
 	New cashobjects	library
 	* src/backend/file/test/Makefile.am : 
@@ -14,6 +22,18 @@
 	* configure.in : Enable cashutil build.
 	* Makefile.am : conditional support.
 	
+2005-11-03  Neil Williams  <linux@codehelp.co.uk>
+
+	* Various Makefile.am : Remove .cvsignore from
+	EXTRA_DIST to allow make dist to complete again.
+	* various directories : set svn.ignore for symlinks
+	created during the build.
+
+2005-11-03  Neil Williams <linux@codehelp.co.uk>
+
+	* src/gnome-utils/test/Makefile.am : Tweak trunk
+	version to allow test files to find QOF externally.
+
 2005-11-02  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif.glade:

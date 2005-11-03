@@ -18,5 +18,4 @@ account_DATA = \
 
 
 EXTRA_DIST = \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA}

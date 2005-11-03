@@ -21,6 +21,7 @@ noinst_PROGRAMS = \
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ../libgncmod-network-utils.la
 
 EXTRA_DIST = test-load-module

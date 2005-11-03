@@ -48,9 +48,6 @@ noinst_HEADERS = \
   quickfillcell-gnome.h \
   table-gnome.h
 
-EXTRA_DIST = \
-  .cvsignore
-
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \

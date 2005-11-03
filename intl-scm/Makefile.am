@@ -1,5 +1,4 @@
 EXTRA_DIST = \
-  .cvsignore \
   guile-strings.c \
   xgettext.scm
 

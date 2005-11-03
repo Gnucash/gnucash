@@ -2,7 +2,9 @@ TESTS =  \
   test-link-module
 
 test_link_module_SOURCES=test-link-module.c
-test_link_module_LDADD=../libgncmod-binary-import.la 
+test_link_module_LDADD = \
+  ${top_builddir}/src/engine/libcashobjects.la \
+  ../libgncmod-binary-import.la 
 
 noinst_PROGRAMS = \
   test-link-module

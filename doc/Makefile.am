@@ -15,7 +15,6 @@ tipsdir = $(GNC_SHAREDIR)
 tips_DATA = tip_of_the_day.list
 
 EXTRA_DIST = \
-  .cvsignore \
   ${doc_DATA} \
   RAW-NOTES \
   README.build-system \

@@ -268,7 +268,6 @@ glade_DATA = \
   transfer.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   gnc-dir.h.in \
   gnc-svninfo.h \
   ${glade_DATA} \

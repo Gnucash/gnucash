@@ -28,7 +28,7 @@ noinst_HEADERS = \
   gnc-gobject-utils.h \
   gw-core-utils.h
 
-EXTRA_DIST = .cvsignore ${gwmod_DATA}
+EXTRA_DIST = ${gwmod_DATA}
 
 AM_CFLAGS = \
   -I${top_srcdir}/lib/glib26 \

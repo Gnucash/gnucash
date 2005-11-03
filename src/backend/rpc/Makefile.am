@@ -38,7 +38,6 @@ RPCGEN_FILES = \
   gncRpc_svc.c
 
 EXTRA_DIST = \
-  .cvsignore \
   README \
   gncRpc_server_stubs.c \
   $(RPCGEN_SRCS)

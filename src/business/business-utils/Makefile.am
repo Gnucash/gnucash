@@ -36,7 +36,6 @@ gncscm_DATA = \
   business-prefs.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncscm_DATA} \
   ${gncmod_DATA}
 

@@ -39,15 +39,18 @@ INCLUDES= \
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c
 test_gnc_recurrence_LDADD = ${GNOME_LIBS} \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 test_gnc_dialog_LDADD = ${GNOME_LIBS} \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la
 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
-../../gnc-module/libgncmodule.la 
+  ${top_builddir}/src/engine/libcashobjects.la \
+  ../../gnc-module/libgncmodule.la 
 
 EXTRA_DIST = \
   test-load-module

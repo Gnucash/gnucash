@@ -35,6 +35,7 @@ TESTS_ENVIRONMENT := \
 
 LDADD = \
    ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${top_builddir}/src/engine/libcashobjects.la \
    ${top_builddir}/src/gnc-module/libgncmodule.la \
    ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
    ${top_builddir}/src/engine/libgw-engine.la \

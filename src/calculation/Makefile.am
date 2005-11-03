@@ -18,7 +18,6 @@ noinst_HEADERS = \
   fin_static_proto.h
 
 EXTRA_DIST = \
-  .cvsignore \
   README \
   amort_opt.c \
   amort_prt.c \
