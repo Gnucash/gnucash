@@ -1134,8 +1134,8 @@ msgstr "Semi-Yearly: %u"
 #. day of month.
 #: src/objects/FreqSpec.c:971
 #, c-format
-msgid "Yearly (x%u): %s/%u"
-msgstr "Yearly (x%1$u): %3%u of month %s$s"
+msgid "Yearly "
+msgstr "Yearly month "
 
 #. %s is the abbreviated name of the
 #. month; %u is the day of month

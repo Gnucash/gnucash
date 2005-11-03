@@ -387,10 +387,6 @@ AC_OUTPUT([ po/Makefile.in
   Makefile
   src/Makefile
   src/cashutil.h
-  src/gncla-dir.h
-  src/objects/Makefile
-  src/backend/Makefile
-  src/test/Makefile
   doc/Makefile
   doc/doxygen.cfg
   doc/man/Makefile

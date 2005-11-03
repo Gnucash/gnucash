@@ -1,11 +1,10 @@
-#SUBDIRS = objects . test backend
 
 AM_CFLAGS = \
   -I.. -I../..  \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
-  -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/business/business-core \
-  -I${top_srcdir}/src/engine \
+  -I../../src/backend/file \
+  -I../../src/business/business-core \
+  -I../../src/engine \
   ${GOBJECT_CFLAGS} \
   ${GLIB_CFLAGS}  \
   ${QOF_CFLAGS}
@@ -14,20 +13,20 @@ bin_PROGRAMS= \
   cashutil
 
 cashutil_SOURCES = \
+  backend-bus.c \
   qof-main.c \
   qofundo.c \
   cashutil.c 
 
 EXTRA_DIST = \
   qof-main.h \
-  qofundo.h \
-  gncla-dir.h.in
+  qofundo.h
 
 noinst_HEADERS = qofundo-p.h
 
 cashutil_LDADD =   \
-  ${top_builddir}/src/objects/libcashobjects.la  \
-  ${top_builddir}/src/objects/libcashbusobjects.la  \
+  ../../src/engine/libcashobjects.la  \
+  ../../src/business/business-core/libcashbusobjects.la  \
   -lltdl  \
   ${QOF_LIBS}  \
   ${GLIB_LIBS}  \

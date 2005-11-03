@@ -1,3 +1,18 @@
+2005-11-03  Neil Williams <linux@codehelp.co.uk>
+	* cashutil-autogen.sh : Trying to chain onto
+	existing autogen.sh
+	* src/cashutil.h : Remove built source.
+	* src/cashutil.h.in : Add file to build .h
+	* src/Makefile.am : Locate engine libraries.
+	* src/README : Conversion to SVN
+	* README.cvs : Removed
+	* website : HTML docs.
+	* configure.ac : Remove old directories.
+	* HACKING : advice.
+	* NEWS : Notes on cashutil.
+	* en_GB.po : (In need of an update)
+	* POTFILES.in : Refresh for new location.
+
 2005-09-12  Neil Williams <linux@codehelp.co.uk>
 	* configure.ac: Check for setenv, use GModule,
 	and remove redundant notice.

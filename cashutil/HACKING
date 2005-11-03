@@ -1,0 +1,41 @@
+Hacking on CashUtil
+===================
+
+Debug output:
+=============
+
+Pass the --debug option to create a log file in /tmp/cashutil.trace
+
+IDEs:
+====
+
+KDevelop has some problems with CashUtil build frameworks when you 
+select the debug build. It tends to continually complain about lack 
+of configure.in - it seems to simply ignore configure.ac and 
+autogen.sh and complains that no Makefiles exist when the files are fine.
+
+Do NOT attempt to run configure (with or without arguments) on the CVS/SVN 
+code from within KDevelop - it will completely break your Makefiles 
+and you'll need to run ./autogen.sh with the usual parameters all over 
+again (plus make and then make install).
+
+Check your distribution for the updated KDevelop3 which does support code folding.
+
+CVS support in KDevelop seemed fragile - if KDevelop or Cervisia do not 
+connect to existing repositories, try loading cervisia with a known local 
+working copy directory on the command line:
+$ cervisia <path to checked out project>
+
+If KDevelop also complains about not setting a local working 
+copy, set CVS handling in KDevelop Project Options | Version 
+Control. Close the Options dialog and re-open it to see the 
+CvsService options at the very end of the list. Set the 
+repository name (as displayed by Cervisia or as given in 
+CVS/Root in each directory) as the CVS server location. Close 
+the Options dialog, *close the project* and re-open the 
+project. Suddenly, CVS should become available.
+
+Anjuta has none of these problems. Anjuta also incorporates 
+CVS handling and displays line numbers in the edit window 
+without any special configuration or problems.
+

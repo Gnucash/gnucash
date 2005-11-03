@@ -1,0 +1,9 @@
+
+This is very much pre-alpha - it compiles in it's original
+(out-of-tree) form and certain basic functions do work but 
+the objects and the interactive shell are not complete.
+
+Use the test-cash routine for examples of how each shell function
+can be built and to produce sample content.
+
+

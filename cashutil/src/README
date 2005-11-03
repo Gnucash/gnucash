@@ -2,28 +2,20 @@ CashUtil source readme
 ======================
 
 CashUtil is intended to be built separately from
-GnuCash whilst being developed in the same CVS tree.
+GnuCash whilst being developed in the same SVN tree.
 
-The modifications within GnuCash mean that the object
-files and the backend files need to be reorganised. 
+The modifications within GnuCash mean that the libraries
+built from the object files and the backend files need 
+to be renamed and reorganised.
+
 Also, the translation files, man page and configuration
-scripts are just for CashUtil.
+scripts in gnucash/cashutil are just for CashUtil.
 
-CashUtil also uses QOF as an external library, requiring
-libqof1 (>= 0.6.0).
+CashUtil is built to use QOF as an external library, requiring
+libqof1 (>= 0.6.0) - the internal libqof in gnucash can also
+be used.
 
 A lot of the translatable strings are similar to GnuCash
 but have to be formatted slightly differently for a command
 line interface.
-
-Important: When debugging this code, remember that CashUtil
-is linked against an installed version of QOF, AND it *only*
-uses the installed copies of libcashobjects.la and 
-libgnc-backend-file.la. You must 'make install' to test any
-changes in the source files for these libraries. If you
-change any QOF files, run 'make install' in QOF and then
-run 'make install' in CashUtil.
-
-If you have your own books to test during development, CVS 
-will ignore a src/books directory as a convenience.
 
