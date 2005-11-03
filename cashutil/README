@@ -15,9 +15,8 @@ objects for this program and provides main().
     There are problems with currencies that mean
     support is delayed.
 
-3.  CashUtil is now being steered towards full inclusion
-    in the GnuCash G2 source tree and using the full 
-    functionality of the GnuCash objects. 
+3.  CashUtil is now included in the GnuCash source tree 
+    and uses the full functionality of the GnuCash objects. 
 
 4.  The development of CashUtil is feeding back into
     GnuCash in the separation of the financial objects

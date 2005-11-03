@@ -1,10 +1,10 @@
-This file contains guidelines for using CashUtil from CVS.
+This file contains guidelines for using CashUtil from SVN.
 They have been adapted from the guidelines for GnuCash which 
 in turn were adapted from the guidelines for gnome-libs by
 Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
 
- + In order to build CashUtil from CVS, you need to run the 
+ + In order to build CashUtil from SVN, you need to run the 
    autogen.sh command to generate and execute a configure 
    script. When building from CVS you should ALWAYS pass your 
    configure options directly to autogen.sh.  For example:
