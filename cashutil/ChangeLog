@@ -1,4 +1,12 @@
 2005-11-03  Neil Williams <linux@codehelp.co.uk>
+
+	* src/business/business-core/file/Makefile.am : Quick fix
+	for the business file handlers - needs to be done properly.
+	* cashutil/src/Makefile.am : Nasty hack but it does allow
+	the cashutil to build for the first time. CashUtil branch
+	can (with some assistance) now complete make dist.
+
+2005-11-03  Neil Williams <linux@codehelp.co.uk>
 	* cashutil-autogen.sh : Trying to chain onto
 	existing autogen.sh
 	* src/cashutil.h : Remove built source.

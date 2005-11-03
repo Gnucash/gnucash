@@ -2,6 +2,8 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncmod-business-backend-file.la
 
+lib_LTLIBRARIES = libgnc-backend-bus.la
+
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/backend \
@@ -12,6 +14,19 @@ AM_CFLAGS = \
   ${XML_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
+
+libgnc_backend_bus_la_SOURCES = \
+  gnc-address-xml-v2.c \
+  gnc-bill-term-xml-v2.c \
+  gnc-customer-xml-v2.c \
+  gnc-employee-xml-v2.c \
+  gnc-entry-xml-v2.c \
+  gnc-invoice-xml-v2.c \
+  gnc-job-xml-v2.c \
+  gnc-order-xml-v2.c \
+  gnc-owner-xml-v2.c \
+  gnc-tax-table-xml-v2.c \
+  gnc-vendor-xml-v2.c
 
 libgncmod_business_backend_file_la_SOURCES = \
   gncmod-business-backend-file.c \
@@ -40,6 +55,12 @@ noinst_HEADERS = \
   gnc-tax-table-xml-v2.h \
   gnc-vendor-xml-v2.h \
   xml-helpers.h
+
+libgnc_backend_bus_la_LDFLAGS = -module
+
+libgnc_backend_bus_la_LIBADD = \
+  ${top_builddir}/src/business/business-core/libcashbusobjects.la \
+  ${GLIB_LIBS} ${XML_LIBS} ${QOF_LIBS} 
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
 libgncmod_business_backend_file_la_LIBADD = \

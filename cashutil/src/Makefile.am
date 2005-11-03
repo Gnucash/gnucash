@@ -28,6 +28,7 @@ noinst_HEADERS = qofundo-p.h
 cashutil_LDADD =   \
   ../../src/engine/libcashobjects.la  \
   ../../src/business/business-core/libcashbusobjects.la  \
+  ../../src/business/business-core/libgnc-backend-bus.la \
   -lltdl  \
   ${QOF_LIBS}  \
   ${GLIB_LIBS}  \
