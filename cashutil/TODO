@@ -1,0 +1,19 @@
+The shell is incomplete. The Doxygen output contains
+the list of todo items for completion. To build the docs:
+cd doc
+make doc
+Build the rest of the tree first, using:
+./autogen.sh --with-qof=<QOF location> --prefix=<cashutil prefix>
+
+The website template needs extending but keep to a GnuCash style.
+
+gncCommodity is the biggest problem outstanding. Until
+this is overhauled to be a genuine QOF object, currencies
+and probably stocks will be off-limits.
+
+Later, the GnuCash v2 XML backend will be linked to CashUtil
+in preparation for full inclusion into the GnuCash tree and the
+completed spin-out of QOF (which will have an interim location
+of lib/qof/ in the GnuCash source tree while remaining issues
+are being resolved.
+

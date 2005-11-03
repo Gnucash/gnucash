@@ -1,0 +1,76 @@
+CASHUTIL - Command line GnuCash.
+========
+
+Most of the QOF processing is done in qof-main.c - the 
+specifics of making this general template into CashUtil are 
+expressed in cashutil.c which simply loads the particular 
+objects for this program and provides main().
+
+1.  CashUtil uses QSF XML which can be exported
+    from GnuCash v2 - the Gnome2 port which is
+    due for release in late 2005.
+
+2.  CashUtil will concentrate on the business
+    objects, gncInvoice, gncCustomer etc.
+    There are problems with currencies that mean
+    support is delayed.
+
+3.  CashUtil is now being steered towards full inclusion
+    in the GnuCash G2 source tree and using the full 
+    functionality of the GnuCash objects. 
+
+4.  The development of CashUtil is feeding back into
+    GnuCash in the separation of the financial objects
+    into a shared library, together with ancillary
+    logic from the GnuCash UI.
+
+5.  CashUtil will also now link into the GnuCash v2 XML
+    backend to read existing user data files as well as
+    exported data.
+ 
+CashUtil needs QOF v0.6.0 (currently available at v0.6.0  
+and via CVS) - it can use the gnucash internal libqof.
+
+SUPPORT
+-------
+
+Please send problems, bug reports and feedback to the mailing list:
+http://lists.sourceforge.net/lists/listinfo/qof-devel
+
+
+USING THE CLI WITH YOUR OWN OBJECTS
+-----------------------------------
+
+To alter this program for any other set of objects, most of the 
+changes are within cashutil.c:
+
+-# Amend the list of Register() calls in register_objects(),
+
+-# Amend the help_header_text in main(), 
+
+-# Edit the copyright notice printed by qof_op_vers, also in main()
+
+-# Add your details to the copyright notices in each file and
+change the name of this file and it's header. (Keep existing 
+copyright notices intact to comply with the GNU GPL.) You are 
+reminded that QOF is only licenced under the GNU GPL and any 
+program that is linked against it must also be licenced under 
+the GNU GPL.
+http://www.gnu.org/licenses/gpl-faq.html#IfLibraryIsGPL
+http://www.gnu.org/licenses/gpl-faq.html#TOCLinkingWithGPL
+
+-# Replace the list of object header files in cashutil.c
+
+-# Change the version numbers and name of the program in 
+configure.ac AM_INIT_AUTOMAKE(cashutil, [$VERSION]),
+
+-# Adjust the makefile: src/Makefile.am, to change the names, 
+replacing cashutil in each case, e.g. libcashutil_la_SOURCES
+
+-# List the object files under libmyprog_la_SOURCES, 
+
+-# Replace the object headers in the list in EXTRA_DIST
+
+-# Finally, rename and edit the DocBook XML in doc/xml to 
+reflect the new program.
+

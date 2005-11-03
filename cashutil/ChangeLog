@@ -1,0 +1,137 @@
+2005-09-12  Neil Williams <linux@codehelp.co.uk>
+	* configure.ac: Check for setenv, use GModule,
+	and remove redundant notice.
+	* po/en_GB.po: tweak.
+	* src/Makefile.am: Use GModule.
+	* src/cashutil.c: Keep GnuCash options specific
+	to CashUtil.
+	* src/cashutil.h.in: Imitate the setenv code in
+	GnuCash - will be removed when folded in.
+	* src/qof-main.h: Input is not a generic function,
+	move to CashUtil only.
+	* src/backend/Makefile.am: tweak.
+	* src/backend/gnc-backend-file.c: GnuCash tweak.
+	* src/objects/Makefile.am: tweak.
+
+2005-08-14 Neil Williams <linux@codehelp.co.uk>
+	Sync with GnuCash 
+
+2005-08-12 Neil Williams <linux@codehelp.co.uk>
+	* src/test/test-address.c: Test-address without Guile 
+
+2005-08-10 Neil Williams <linux@codehelp.co.uk>
+	* src/cashutil.c: Sample QOF undo 
+
+2005-08-07 Neil Williams <linux@codehelp.co.uk>
+	* src/objects/Account.c:
+	* src/objects/cap-gains.c:
+	* src/objects/FreSpec.c:
+	* src/objects/Group.c:
+	* src/objectsSchedXaction.c:
+	* src/objects/Scrub2.c:
+	* src/objects/Scrub.c:
+	* src/objects/SX-book.c:
+	* src/objects/Transaction.c:
+	G2 sync and cast changes, removing unnecessary headers.
+
+2005-08-07 Neil Williams <linux@codehelp.co.uk>
+	* src/backend/gnc-account-xml-v2.c:
+	* src/backend/gnc-address-xml-v2.c:
+	* src/backend/gnc-commodity-xml-v2.c:
+	* src/backend/gnc-customer-xml-v2.c:
+	* src/backend/gnc-bill-term-xml-v2.c:
+	* src/backend/gnc-book-xml-v2.c:
+	* src/backend/gnc-employee-xml-v2.c:
+	* src/backend/gnc-entry-xml-v2.c:
+	* src/backend/gnc-invoice-xml-v2.c:
+	* src/backend/gnc-job-xml-v2.c:
+	* src/backend/gnc-order-xml-v2.c:
+	* src/backend/gnc-owner-xml-v2.c:
+	* src/backend/gnc-pricedb-xml-v2.c: 
+	* src/backend/gnc-transaction-xml-v2.c:
+	* src/backend/io-gncbin-r.c:
+	* src/backend/io-gncxml-v2.c:
+	* src/backend/sixtp-dom-generators.c:
+	* src/backend/sixtp-dom-parsers.c:
+	 Sync with G2 and more cast changes 
+	* src/backend/gnc-backend-file.c: 
+	* src/backend/gnc-backend-file.h: QofBackendProvider handling 
+
+2005-07-28  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* m4/codeset.m4: New file, from gettext-0.14.5.
+	* m4/gettext.m4: New file, from gettext-0.14.5.
+	* m4/glibc2.m4: New file, from gettext-0.14.5.
+	* m4/glibc21.m4: New file, from gettext-0.14.5.
+	* m4/iconv.m4: New file, from gettext-0.14.5.
+	* m4/intdiv0.m4: New file, from gettext-0.14.5.
+	* m4/intmax.m4: New file, from gettext-0.14.5.
+	* m4/inttypes.m4: New file, from gettext-0.14.5.
+	* m4/inttypes_h.m4: New file, from gettext-0.14.5.
+	* m4/inttypes-pri.m4: New file, from gettext-0.14.5.
+	* m4/isc-posix.m4: New file, from gettext-0.14.5.
+	* m4/lcmessage.m4: New file, from gettext-0.14.5.
+	* m4/lib-ld.m4: New file, from gettext-0.14.5.
+	* m4/lib-link.m4: New file, from gettext-0.14.5.
+	* m4/lib-prefix.m4: New file, from gettext-0.14.5.
+	* m4/longdouble.m4: New file, from gettext-0.14.5.
+	* m4/longlong.m4: New file, from gettext-0.14.5.
+	* m4/nls.m4: New file, from gettext-0.14.5.
+	* m4/po.m4: New file, from gettext-0.14.5.
+	* m4/printf-posix.m4: New file, from gettext-0.14.5.
+	* m4/progtest.m4: New file, from gettext-0.14.5.
+	* m4/signed.m4: New file, from gettext-0.14.5.
+	* m4/size_max.m4: New file, from gettext-0.14.5.
+	* m4/stdint_h.m4: New file, from gettext-0.14.5.
+	* m4/uintmax_t.m4: New file, from gettext-0.14.5.
+	* m4/ulonglong.m4: New file, from gettext-0.14.5.
+	* m4/wchar_t.m4: New file, from gettext-0.14.5.
+	* m4/wint_t.m4: New file, from gettext-0.14.5.
+	* m4/xsize.m4: New file, from gettext-0.14.5.
+	* m4/Makefile.am: New file.
+	* Makefile.am (ACLOCAL_AMFLAGS): New variable.
+	(EXTRA_DIST): Add config.rpath.
+	* configure.ac (AC_OUTPUT): Add m4/Makefile.
+
+2005-07-24  Neil Williams <linux@codehelp.co.uk>
+	* NEWS: news of test routines.
+	* README: How GnuCash will use CashUtil.
+	* TODO: Changes needed to fit with GnuCash.
+	* src/Account.h: Cannot search if the parameter
+	has a hyphen - this may need to be changed in GnuCash.
+	* src/README:
+	* src/backend/.cvsignore:
+	* src/backend/README: Where the GnuCash XML v2 backend
+	will live during further testing.
+	* src/cashutil.c: Moving the QOF_SQL_SUPPORTED regexp
+	handling to the standard qof-main to be used by all 
+	projects.
+	* src/cashutil.h:
+	* src/gnc-lot-p.h: Removing private QOF header.
+	* src/gnc-lot.c: Removing private QOF header.
+	* src/gncEmployee.c: Experimental. May be reverted.
+	* src/gncEmployee.h:
+	* src/gncEmployeeP.h:
+	* src/gncOrder.c: tweaks.
+	* src/objects/.cvsignore:
+	* src/objects/README: Where all the objects will live
+	during further testing.
+	* src/qof-main.c: regexp support.
+	* src/qof-main.h:
+	* src/test/test-book-merge.c: Imported from GnuCash.
+	* src/test/test-cash.c: Basis of a test routine, incomplete.
+	* website/gnucash.html: Setting out how CashUtil relates to
+	GnuCash.
+	* website/index.html: new page link.
+
+2005-07-17  Neil Williams <linux@codehelp.co.uk>
+
+	* src/website: Added prototype website content.
+	* src/cashutil.c: 
+	* src/cashutil.h: 
+	* src/qof-main.c:
+	* src/qof-main.h: Added shell handling
+
+2005-07-10  Neil Williams <linux@codehelp.co.uk>
+
+	* Initial project creation: based on Pilot-QOF
