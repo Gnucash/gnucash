@@ -1,0 +1,40 @@
+/** \page logic CashUtil Ancillary Logic
+
+This file represents ideas on how the ancillary logic from
+the GnuCash GUI can be abstracted into CashUtil in a way that
+will benefit other QOF applications.
+
+qof_object_logic_handler(QofObject, func, gpointer)
+Passed a complete QofEntity to check that each parameter 
+is logically acceptable for that object and that required
+parameters have acceptable data. e.g. parent accounts.
+
+qof_book_logic_handler(QofBook, func, gpointer)
+Passed a complete book to check hierarchy integrity - scan 
+the AccountGroups to make sure all accounts are acceptable.
+
+Each handler is application-specific - not part of QOF itself -
+to allow each handler to pass information to the user in a
+manner consistent with the application.
+
+typedef gboolean (*QofObjectLogicCB) (QofEntity*, gpointer);
+
+typedef gboolean (*QofBookLogicCB) (QofBook*, gpointer);
+
+If not acceptable, the handler should ask the user for missing
+data or corrections and return FALSE upon cancel.
+
+qof_object_logic_register (QofObject, QofObjectLogicCB);
+qof_book_logic_register (QofBook, QofBookLogicCB);
+
+CHANGE:
+
+Make object logic handler part of QofObject - it's an object 
+property that is called AFTER all parameters have been set.
+
+Book object handler : called prior to a write operation by
+calling handlers on the collections?
+
+
+
+*/

@@ -1,0 +1,15 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN"
+ "http://www.oasis-open.org/docbook/xml/4.1/docbookx.dtd" [
+<!ENTITY cashutil SYSTEM "cashutil.xml">
+ ]>
+<book label="cashutil" status="0.0.1">
+<chapter label="1" id="manpages">
+<title>manpages</title>
+<para>
+The CashUtil manpage is automatically generated from
+DocBook using xsltproc. The HTML version for the
+website can be generated manually using docbook2html. 
+</para>
+&cashutil;
+</chapter>
+</book>

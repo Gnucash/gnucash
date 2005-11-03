@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<!DOCTYPE catalog PUBLIC "-//OASIS/DTD Entity Resolution XML Catalog V1.0//EN"
+        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+        <nextCatalog catalog="" />
+        
+        <uri name="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl"
+                uri="/html/docbook.xsl"/>
+        <uri name="http://docbook.sourceforge.net/release/xsl/current/manpages/synop.xsl"
+                uri="/manpages/synop.xsl"/>
+        <uri name="http://docbook.sourceforge.net/release/xsl/current/manpages/lists.xsl"
+                uri="/manpages/lists.xsl"/>
+        <uri name="http://docbook.sourceforge.net/release/xsl/current/manpages/xref.xsl"
+                uri="/manpages/xref.xsl"/>
+        
+        <uri name="manpages/docbook.xsl" uri="/docbook.xsl"/>
+</catalog>

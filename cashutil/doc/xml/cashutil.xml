@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry id="cashutil">
+  <refmeta>
+    <refentrytitle>cashutil</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo>Copyright FSF 1996-2005</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>cashutil</refname>
+    <refpurpose>
+	Querying GnuCash data as objects using QOF.
+	</refpurpose>
+  </refnamediv>
+  <refsect1>
+    <title>synopsis</title>
+    <para><emphasis>cashutil</emphasis>
+		[<option>--version</option>] |
+		[<option>-?</option>|<option>--help</option>] |
+		[<option>--usage</option>] |
+		[<option>-i</option>|<option>--input</option>
+		<userinput>filename</userinput>] |
+		[<option>-l</option>|<option>--list</option>] |
+		[<option>--explain</option>] |
+		[ [<option>-d</option>|<option>--database</option>
+		<userinput>string</userinput>] |
+		[<option>-e</option>|<option>--exclude</option>
+		<userinput>string</userinput>] ]
+		[<option>-t</option>|<option>--date</option>
+		<userinput>string</userinput>]
+		[ [<option>-s</option>|<option>--sql</option>
+		<userinput>string</userinput>] |
+		[<option>-f</option>|<option>--sql-file</option>
+		<userinput>filename</userinput>] ]
+		[<option>-w</option>|<option>--write</option>
+		<userinput>filename</userinput>]
+		[<option>--compress</option>
+		<userinput>integer [0]</userinput>]
+		[<option>--debug</option>]
+	</para>
+	<para><emphasis>cashutil</emphasis>
+	<option>--shell</option>
+		[<option>-w</option>|<option>--write</option>
+		<userinput>filename</userinput>]
+		[<option>--debug</option>]
+		[<option>--compress</option>
+		<userinput>integer [0]</userinput>]
+	</para>
+  </refsect1>
+  <refsect1>
+    <title>Description</title>
+    <para>CashUtil provides access to GnuCash data as queriable objects.
+	Cashutil can write selected GnuCash data to QSF XML and
+	runs SQL-type queries on the XML file.
+	</para>
+  </refsect1>
+  <refsect1>
+	<title>Commands</title>
+    <para>Use exactly one of -i, -l, --shell or --explain.</para>
+	<variablelist>
+		<varlistentry>
+		<term>
+			<option>-i</option>,
+			<option>--input</option>
+			<filename>filename</filename>
+		</term>
+		<listitem>
+		<para>
+		Query the offline storage in <filename>filename</filename>
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>-l</option>,
+		<option>--list</option>
+		</term>
+		<listitem>
+		<para>
+		Lists all databases supported by the current QOF framework.
+		Any options are ignored.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>--explain</option>
+		</term>
+		<listitem>
+		<para>
+		List the fields within the specified database and exit, requires -d.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>--version</option>
+		</term>
+		<listitem>
+        <para>
+			Display version of <emphasis>cashutil</emphasis>.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>--shell</option>
+		</term>
+		<listitem>
+		<para>Start the QOF interactive shell.</para>
+		</listitem>
+		</varlistentry>
+	</variablelist>
+	</refsect1>
+  <refsect1>
+	<title>Shell commands</title>
+	<para>
+	The shell provides interactive data input and export using a top level shell
+	and sub shells. The top level shell provides book-level interaction -
+	load, write, merge - as well as access to the sub shells. Editing an existing instance
+	uses a sub shell to select the instance to edit and supports editing parameter
+	values, printing the instance data and deleting the instance. Adding an instance
+	simply loads an editing shell with the new instance pre-selected. All shell commands,
+	including help, are context-sensitive. e.g. in the top shell, explain requires an object
+	type argument, in a sub shell where the object type is already set, explain does not
+	require an argument.
+	</para>
+	<para>The shell prompt indicates the current shell type:</para>
+	<para>Top level shell:</para>
+	<blockquote>
+	<computeroutput>cashutil> </computeroutput>
+	</blockquote>
+	<para>Select / Edit shell for an Account:</para>
+	<blockquote>
+	<computeroutput>cash/Account> </computeroutput>
+	</blockquote>
+	<refsect2>
+	<title>Top level shell commands</title>
+		<variablelist>
+		<varlistentry>
+		<term>
+	<option>add</option> <userinput>[object]</userinput>
+		</term>
+		<listitem>
+		<para>Add a new instance of the object and load a sub-shell
+		with this instance pre-selected to edit the parameter values.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>edit</option><userinput> [object]</userinput>
+		</term>
+		<listitem>
+		<para>Select one instance and edit the parameter values.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>delete</option> <userinput>[object]</userinput>
+		</term>
+		<listitem>
+		<para>Select one instance for deletion.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>list</option>
+		</term>
+		<listitem>
+		<para>Synonym for the --list command outside the shell.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>print</option> <userinput>[object]</userinput>
+		</term>
+		<listitem>
+		<para>Select one instance and print the parameter values.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>explain</option>
+		</term>
+		<listitem>
+		<para>Like the --explain command outside the shell. In the top
+		level shell, explains the specified object. In a sub-shell, 
+		explains the object in use.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>load</option> <userinput>[filename]</userinput>
+		</term>
+		<listitem>
+		<para>
+		Replace the current book with data from the file.
+		Prompt to save the current book, if any.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>write</option> <userinput>[filename]</userinput>
+		</term>
+		<listitem>
+		<para>
+		Write out the current book. If no filename is given,
+		write to the original file. (uses STDOUT if STDIN is used.)
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>merge</option> <userinput>[filename]</userinput>
+		</term>
+		<listitem>
+		<para>
+		Merge data from the file into the current book.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>sql</option>
+		</term>
+		<listitem>
+		 <para>
+		 Run a SQL statement.
+		 </para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>help</option> | <option>?</option>
+		</term>
+		<listitem>
+		<para>
+		The help for the top level shell.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+        <option>quit</option> | <option>q</option> | <option>exit</option>
+		</term>
+		<listitem>
+		<para>
+		Quit the shell.
+		</para>
+		</listitem>
+		</varlistentry>
+		</variablelist>
+	</refsect2>
+	<refsect2>
+	<title>Sub shell commands</title>
+		<variablelist>
+		<varlistentry>
+		<term>
+	<option>edit</option><userinput> [parameter]</userinput> <userinput> [value]</userinput>
+		</term>
+		<listitem>
+		<para>Edit/set the value in the specified parameter of the current object.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>explain</option>
+		</term>
+		<listitem>
+		<para>Like the --explain command outside the shell. In a sub-shell, 
+		explain parameter names and types of the object in use.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>print</option>
+		</term>
+		<listitem>
+		<para>Print the parameter values of the current instance. Useful to check
+		the values before and after an edit.</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>help</option> | <option>?</option>
+		</term>
+		<listitem>
+		<para>
+		The context-sensitive help for the sub-shell.
+		</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	<option>quit</option> | <option>q</option> | <option>exit</option>
+		</term>
+		<listitem>
+		<para>
+		Quit the sub-shell.
+		</para>
+		</listitem>
+		</varlistentry>
+		</variablelist>
+	</refsect2>
+  </refsect1>
+  <refsect1>
+    <title>Options</title>
+    <refsect2>
+      <title>cashutil options</title>
+      <para>Use -dte, optionally with either -s or -f, followed by -w.
+	  </para>
+	  <variablelist>
+	  <varlistentry>
+		<term>
+		<option>-d</option>,
+		<option>--database</option>
+		<userinput>string</userinput>
+		</term>
+		<listitem>
+			<para>
+			Shorthand to only query objects within one
+			specific supported database.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>-t</option>,
+		<option>--date</option>
+		<userinput>string</userinput>
+		</term>
+		<listitem>
+			<para>
+			Shorthand to only query objects that contain the specified date.
+			Specify dates using YY-MM-DD, YY-MM or just YY. Single digits
+			can omit the leading zero, e.g. 04-12-1, 1st December 2004 - years
+			less than 100 are assumed to be in the 21st century.
+			Years prior to 2000 can be specified as YYYY-MM-DD etc.
+			This value is taken as a range, 05-03-01 includes all times
+			between Tue Mar  1 00:00:00 UTC 2005 and Tue Mar  1 23:59:59 UTC 2005.
+			05-03 includes all dates and times between Tue Mar  1 00:00:00 UTC 2005
+			and Thu Mar 31 23:59:59 UTC 2005. 05 includes all dates and times in 2005.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+	    <option>-e</option>,
+		<option>--exclude</option>
+		<userinput>string</userinput>
+		</term>
+        <listitem>
+			<para>
+			Shorthand to exclude a supported database from the query.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>-s</option>,
+		<option>--sql</option>
+		<userinput>string</userinput>
+		</term>
+        <listitem>
+			<para>
+			Specify a SQL query on the command line.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>-f</option>,
+		<option>--sql-file</option>
+		<userinput>filename</userinput>
+		</term>
+		<listitem>
+			<para>
+			Specify one or more SQL queries contained in a file.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+		<term>
+		<option>-w</option>,
+		<option>--write</option>
+		<userinput>filename</userinput>
+		</term>
+        <listitem>
+			<para>
+			Write the results of any query to the file.
+			</para>
+		</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>
+			<option>--compress</option>
+			<userinput>integer [0]</userinput>
+			</term>
+			<listitem>
+			<para>The level of compression to use on the output file.
+			Use zero for no compression, a number from 1 to 9 increases
+			the level of compression. Unless the file is very large, 
+			values over 4 produce little or no extra compression. 
+			The default is zero, no compression.</para>
+			<para>Compression is not available when using STDOUT.</para>
+			<para>The use of file extensions is entirely up to the user.
+			CashUtil does not require files to have any particular
+			extension, compression is automatically detected if used.
+			</para>
+			<para>CashUtil does <emphasis>NOT</emphasis>, therefore, 
+			add a .gz extension for you. (Neither does it add or require
+			a .xml or .xml.gz extension.)
+			</para>
+			</listitem>
+		</varlistentry>
+        <varlistentry>
+             <term>
+              <option>--debug</option>
+              </term>
+              <listitem>
+              <para>Enable debug output
+              using <filename>/tmp/cashutil.trace</filename> which will
+              be created if it does not exist or overwritten it if it does.
+              If this fails, creates a temporary trace file in 
+						  <filename>/tmp</filename> or uses <filename>stderr</filename>.
+              </para>
+              </listitem>
+        </varlistentry>
+	  </variablelist>
+    </refsect2>
+    <refsect2>
+      <title>help options</title>
+	  <variablelist>
+	  <varlistentry>
+      <term>
+	  <option>-?</option>, <option>--help</option>
+	  </term>
+      <listitem>
+        <para>
+		Display the help synopsis for <emphasis>cashutil</emphasis>
+		and exit.
+		</para>
+      </listitem>
+	  </varlistentry>
+	  <varlistentry>
+      <term>
+        <option>--usage</option>
+      </term>
+      <listitem>
+        <para>Display a brief usage message and exit.</para>
+      </listitem>
+	  </varlistentry>
+	  </variablelist>
+    </refsect2>
+  </refsect1>
+  <refsect1>
+  <title>Return values</title>
+  <para>CashUtil returns zero on success or negative one on error.
+  </para>
+  </refsect1>
+  <refsect1>
+    <title>Author</title>
+    <para><emphasis>cashutil</emphasis> was written
+      by Neil Williams <email>linux@codehelp.co.uk</email>.
+    </para>
+    <para>This  manual  page  was  written by Neil Williams
+      <email>linux@codehelp.co.uk</email>
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>Reporting Bugs</title>
+    <para>Please do NOT report bugs in cashutil to GnuCash.
+	Report bugs via the QOF-devel mailing list.</para>
+	<para><emphasis>http://lists.sourceforge.net/lists/listinfo/qof-devel</emphasis>
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>Copyright</title>
+    <para>This program is free software; you can redistribute it and/or
+		modify it under the terms of the GNU General Public License as
+		published by the Free Software Foundation; either version 2 of  the
+		License, or (at  your option) any later version.
+	</para>
+    <para>This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+		General Public License for more details.
+	</para>
+    <para>You  should  have  received a copy of the GNU General Public
+		License along with this program; if not, write to the Free Software
+		Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+		USA
+	</para>
+  </refsect1>
+</refentry>
