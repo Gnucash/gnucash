@@ -1,0 +1,97 @@
+BODY {
+	font-family:"Free Sans",helvetica,verdana,arial,clean,sans-serif;
+	font-size:1em;
+	color:black;
+	background-color:white;
+	border: 0px;
+	margin: 0px;
+}
+#head {
+	background-color: #5D8A76;
+	color: white;
+	font-size:0.9em;
+	padding:0.2em;
+}
+#head a:link {
+	color:white;
+	background-color:transparent;
+	}
+
+#head a:visited {
+	color:white;
+	background-color:transparent;
+	}
+
+#head a:active {
+	color:white;
+	background-color:transparent;
+	}
+#tail {
+	font-size:0.8em;
+	clear:both;
+	float:none;
+	background-color: #5D8A76;
+	color: white;
+	margin-left:0;
+	margin-right:0;
+	padding-top:0.1em;
+	padding-bottom:0.1em;
+	line-height:0.5em;
+}
+#gnclogo {
+	border-style: none;
+	width: 179px;
+	height: 45px;
+	margin-left: 0;
+	margin-top: 0;
+	margin-bottom: 5px;
+	border: 0;
+	padding: 0;
+}
+#news	{
+	float:left;
+	color: white;
+	width: 20%;
+	color: black;
+}
+#general {
+	background:#BBED93;
+	padding-bottom:0.2em;
+}
+.othernews {
+	background-color: white;
+}
+.dot	{
+	border-style:none;
+	width: 8px;
+	height: 8px;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+#content {
+	float:left;
+	width:75%;
+	margin-left:2em;
+	text-align:justify;
+}
+#news LI	{
+	list-style-image:url(images/webding.png);
+}
+#location {
+	padding-left:0.3em;
+}
+#language {
+	 float:right;
+	 margin-right:1em;
+}
+.linktop {
+	position:relative;
+	top:0.5em;
+}
+#gnucash {
+	width:125px;
+	height:125px;
+	padding:1em;
+	border-style:none;
+}
+

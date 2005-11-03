@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en_gb"><head>
+<link rel="stylesheet" href="cashutil.css" type="text/css">
+<link rel="icon" href="favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<meta name="author" content="Neil Williams">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>CashUtil and GnuCash</title>
+</head><body>
+<div id="head">
+<img src="images/logo.png" alt="GnuCash Logo" id="gnclogo">
+<br/><span id="language"> Language:<b>English</b></span>
+<span id="location">Continent: [USA / Europe]</span>
+</div>
+
+<div id="news">
+<div id="general">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>General Information</b></span>
+<ul>
+<li><a href="index.html">CashUtil home</a></li>
+<li><a href="http://www.gnucash.org/">GnuCash Home </a></li>
+<li><a href="http://qof.sourceforge.net/">QOF home</a></li>
+<li><a href="http://pilot-qof.sourceforge.net/">PilotQOF home</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/preface.html#QOFLIBS">
+QOF Dependencies</a></li>
+<li><a href="http://www.data-freedom.org">Data Freedom</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Download</b></span>
+<ul>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil.tar.gz">Package</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil-source.tar.gz">Source</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>XML</b></span>
+<ul>
+<li><a href="http://code.neil.williamsleesmill.me.uk/qsf.html">Format</a></li>
+<li><a href="http://qof.sourceforge.net/qsf-object.xsd.xml">Object schema</a></li>
+</ul>
+</div>
+
+<div>
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Support </b></span>
+<ul><li>
+<a href="http://lists.sourceforge.net/lists/listinfo/qof-devel">Mailing list</a>
+</li>
+<li><a href="manpages.html">Manpage</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Development</b></span>
+<ul>
+<li><a href="http://www.linux.codehelp.co.uk/#cashutil">Design</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil/">Doxygen</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>GnuCash Information</b></span>
+<ul>
+<li><a href="http://www.gnucash.org/en/links.phtml">Related Financial Software</a></li>
+<li><a href="http://www.gnucash.org/en/articles.phtml">GnuCash in the News</a></li>
+<li><a href="http://www.gnucash.org/en/promote.phtml">GnuCash Banners!</a></li>
+<li><a href="http://www.gnucash.org/en/history.phtml">History &amp; Credits</a></li>
+<li><a href="http://www.gnucash.org/en/quiz-results.phtml">Survey Results</a></li>
+<li><a href="http://www.gnucash.org/en/sizing.phtml">Sizing</a></li>
+</ul>
+</div>
+<a href="http://www.gnucash.org/">
+<img src="images/control_your_finan.jpg" id="gnucash"
+alt="gnucash home page"></a>
+</div>
+
+<div id="content">
+<h1><span class="title">How CashUtil relates to GnuCash</span></h1>
+<h2>Sharing the GnuCash financial logic</h2>
+<p>There has been a long-standing need for a command-line
+interface to GnuCash data. Originally, CashUtil was built as a test-routine
+for QOF but it became increasingly obvious that with a few adjustments to
+file locations and Makefiles, the existing GnuCash source tree could support
+a GUI and a CLI, each installable with or without the other.</p>
+<ol>
+<li>QOF provides the engine but has no financial logic (which makes
+it ideal for it's in other projects like PilotQOF). </li>
+<li>QOF also provides QSF to share data with other projects
+using XML, including PilotQOF.</li>
+<li>CashUtil is linked against the GnuCash source to provide
+the financial objects and ancillary logic.</li>
+<li>CashUtil will also be linked against the GnuCash v2 XML backend</li>
+<li>To achieve this, many changes are required to the existing GnuCash
+source tree.
+<ol style="list-style-type:lower-alpha">
+<li>The existing financial objects, including the business objects, need to
+be collated into a single library that can be shared with CashUtil.</li>
+<li>The existing GnuCash v2 XML backend, including it's business
+object handlers, also need to be collated into a single library.</li>
+<li>Ancillary logic, currently implemented in the GnuCash UI, needs
+to be abstracted into a form that can be installed <b>without</b>
+GnuCash.</li>
+<li>New directories in the source tree and movement of files to
+new locations, plus numerous changes to existing internal GnuCash
+libraries and build rules.</li>
+<li>In addition, QOF is due to be spun-out as a library of it's own
+and this requires other changes in the source. To handle these changes,
+QOF files currently in src/engine in the GnuCash source tree are to
+be moved to lib/qof/ once the G2 branch is merged into CVS HEAD.</li>
+</ol>
+</li>
+<li>Once this is all done, a new set of libraries will be available for
+packaging as a common dependency of CashUtil and GnuCash
+and users should be able to choose to install only CashUtil, only GnuCash
+or both.</li>
+</ol>
+<p>This small test routine has the potential to become a significant
+project with substantial benefits to GnuCash users.</p>
+<p>Additionally, the CLI - including the QOF interactive shell - can be
+easily added to any set of QOF objects to produce another CLI application
+to handle any kind of user data. As it develops, the CLI and shell will
+be folded into PilotQOF and QOFgen to make it even easier to build your
+own CLI for your own data with easy access to data from other QOF
+projects.</p>
+<p>Note also that the
+<a href="http://dwi.sourceforge.net/">DWI project</a> could allow
+the rapid development of GUI projects based on QOF and able to share
+and process data from QOF projects.
+</p>
+
+<div style="float:left;">
+<table border="1" style="border-style:groove;">
+<caption>Files from src/engine also in QOF</caption>
+<colgroup><col><col><col></colgroup>
+<tr><th>File</th><th>Object</th><th>installed</th></tr>
+<tr><td>gnc-date.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>gnc-date.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>gnc-engine-util.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>gnc-engine-util.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>gnc-event.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>gnc-event.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>gnc-event-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>gnc-numeric.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>gnc-numeric.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>gnc-trace.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>gnc-trace.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>guid.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>guid.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>kvp_frame.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>kvp_frame.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>kvp-util.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>kvp-util.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>kvp-util-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>md5.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>md5.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofbackend.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofbackend.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofbackend-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qof-be-utils.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofbook.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofbook.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qof_book_merge.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qof_book_merge.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofbook-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofchoice.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofchoice.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofclass.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofclass.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofclass-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofgobj.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofgobj.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qof.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofid.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofid.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofid-p.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofinstance.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofinstance.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofinstance-p.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofmath128.c</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofmath128.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofobject.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofobject.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofobject-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofquerycore.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofquerycore.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofquerycore-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery-deserial.c</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery-deserial.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofquery-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery-serialize.c</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofquery-serialize.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofsession.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofsession.h</td><td>&nbsp;</td><td>include</td></tr>
+<tr><td>qofsession-p.h</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>qofsql.c</td><td>libqof</td><td>&nbsp;</td></tr>
+<tr><td>qofsql.h</td><td>&nbsp;</td><td>include</td></tr>
+</table>
+</div>
+
+<div style="float:right;">
+<table border="1" style="border-style:groove;">
+<caption>Locations of cashutil/src/objects files in GnuCash</caption>
+<colgroup><col><col><col><col></colgroup>
+<tr><th>File</th><th>GnuCash engine</th><th>Business</th></tr>
+<tr><td>Account.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Account.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>AccountP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>cap-gains.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>cap-gains.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>FreqSpec.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>FreqSpec.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>FreqSpecP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncAddress.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncAddress.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncAddressP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncBillTerm.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncBillTerm.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncBillTermP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gnc-commodity.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-commodity.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncCustomer.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncCustomer.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncCustomerP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncEmployee.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncEmployee.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncEmployeeP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gnc-engine.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncEntry.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncEntry.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncEntryP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gnc-filepath-utils.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-filepath-utils.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncInvoice.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncInvoice.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncInvoiceP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncJob.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncJob.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncJobP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gnc-lot.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-lot.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-lot-p.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncOrder.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncOrder.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncOrderP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncOwner.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncOwner.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncOwnerP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gnc-pricedb.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-pricedb.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gnc-pricedb-p.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>gncTaxTable.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncTaxTable.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncTaxTableP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncVendor.c</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncVendor.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>gncVendorP.h</td><td>&nbsp;</td><td>business-core</td></tr>
+<tr><td>Group.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Group.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>GroupP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>iso-4217-currencies.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>messages.c</td><td>src/engine</td><td>&nbsp;</td></tr>
+<tr><td>messages.h</td><td>src/engine</td><td>&nbsp;</td></tr>
+<tr><td>policy.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>policy.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>policy-p.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Query.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>QueryCore.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Query.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>QueryNew.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>QueryObject.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>QueryP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SchedXaction.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SchedXaction.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SchedXactionP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub2.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub2.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub3.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub3.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Scrub.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>ScrubP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SX-book.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SX-book.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SX-book-p.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SX-ttinfo.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>SX-ttinfo.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Transaction.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>Transaction.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>TransactionP.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>TransLog.c</td><td>src/engine/</td><td>&nbsp;</td></tr>
+<tr><td>TransLog.h</td><td>src/engine/</td><td>&nbsp;</td></tr>
+</table>
+</div>
+
+<div style="clear:both;">
+<p>The above changes could be handled mostly in Makefile changes,
+the single CashUtil object library could be formed from two shared
+libraries, one built in src/engine and one in src/business/business-core
+but questions remain about how the other files in src/engine can be
+handled:</p>
+</div>
+<div>
+<table border="1" style="border-style:groove;" width="75%">
+<caption>Files remaining in src/engine after all moves.</caption>
+<colgroup><col><col><col><col></colgroup>
+<tr><th>File</th><th>Comment</th></tr>
+<tr><td>engine-helpers.c</td><td>g-wrap helper functions</td></tr>
+<tr><td>engine-helpers.h</td><td>g-wrap helper functions</td></tr>
+<tr><td>glib-helpers.c</td><td>g-wrap helper functions</td></tr>
+<tr><td>glib-helpers.h</td><td>g-wrap helper functions</td></tr>
+<tr><td>gnc-associate-account.c</td><td>TOTALLY UNTESTED</td></tr>
+<tr><td>gnc-associate-account.h</td><td>TOTALLY UNTESTED</td></tr>
+<tr><td>gnc-book.h</td><td>Redefines QOF functions with gnc prefix</td></tr>
+<tr><td>gnc-budget-book.c</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-book.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-book-p.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget.c</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-cat.c</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-cat.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-cat-p.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period.c</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period-p.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period-value.c</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period-value.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-period-value-p.h</td><td>Budgets</td></tr>
+<tr><td>gnc-budget-p.h</td><td>Budgets</td></tr>
+<tr><td>gnc-engine.c</td><td>initialization for Gnucash, not for CashUtil</td></tr>
+<tr><td>gnc-hooks.c</td><td>Glib hook functions</td></tr>
+<tr><td>gnc-hooks.h</td><td>Glib hook functions</td></tr>
+<tr><td>gnc-hooks-scm.h</td><td>Glib hook functions</td></tr>
+<tr><td>GNCId.h</td><td>Redefines QOF types with gnc prefix</td></tr>
+<tr><td>gncmod-engine.c</td><td>initialization for the Engine module</td></tr>
+<tr><td>gncObject.h</td><td>Redefines QOF types with gnc prefix</td></tr>
+<tr><td>gnc-session.h</td><td>Redefines QOF functions with gnc prefix</td></tr>
+<tr><td>gnc-session-scm.c</td><td>Scheme specific code</td></tr>
+<tr><td>gnc-session-scm.h</td><td>Scheme specific code</td></tr>
+<tr><td>gw-engine.c</td><td>Generated by G-Wrap</td></tr>
+<tr><td>gw-engine.h</td><td>Generated by G-Wrap</td></tr>
+<tr><td>gw-kvp.c</td><td>Generated by G-Wrap</td></tr>
+<tr><td>gw-kvp.h</td><td>Generated by G-Wrap</td></tr>
+<tr><td>kvp-scm.c</td><td>Generated by G-Wrap</td></tr>
+<tr><td>kvp-scm.h</td><td>Generated by G-Wrap</td></tr>
+<tr><td>Period.c</td><td>poorly tested</td></tr>
+<tr><td>Period.h</td><td>poorly tested</td></tr>
+</table>
+</div>
+
+<div>
+<h2>Current Hypothesis</h2>
+<p>The following is just a summary of my ideas on how CashUtil could share
+financial logic with GnuCash - with as few changes to the source tree as
+possible and retaining as much CVS history as possible.</p>
+<ol>
+<li>Those files that <b>redefine QOF</b> functions, defines or types with GNC
+prefixes can be retained by GnuCash (possibly deprecating the old names).</li>
+<li>The <b>G-Wrap</b> files can still be generated in situ - as long as they are
+then compiled into a separate library that is not linked against CashUtil.</li>
+<li><b>Scheme specific code</b> could be treated like the G-Wrap code</li>
+<li><b>Budgets</b> may or may not end up in CashUtil - it may not be appropriate to
+port Budgets to a CLI.</li>
+<li>The <b>engine module</b> would be GnuCash only - if it is still used. It could
+incorporate the same libraries as CashUtil with the extra code from these
+excluded files.</li>
+<li>The <b>files from gnucash/src/engine that are also in QOF</b> would be moved
+from src/engine into lib/qof and later removed completely when GnuCash links against
+QOF as an external library.</li>
+<li>Further changes in the <b>GnuCash XML v2 backend</b> (possibly split in
+the same way as the object library between src/backend/file and
+src/business/business-core/file) will remove the need to load the current
+backend using GnuCash specific code - it could be loaded in the same manner
+as QSF. (This will be necessary to use QOF as an external library.)</li>
+<li>Using the <b>business objects</b> as a separate library could offer the
+ability to retain the current Business module for GnuCash whilst integrating
+the business objects tightly into CashUtil.</li>
+</ol>
+<h3>Note</h3>
+<p>None of the above has yet been tested in the real tree and some of it
+may never work, it's just a set of ideas.</p>
+</div>
+
+</div>
+
+<div style="clear:both;float:none;">&nbsp;</div>
+<div id="tail">
+<p style="float:right;padding-right:1em;">
+<a href='http://validator.w3.org/check/referer'>Validate</a></p>
+<p style="text-align:center;"><b>Copyright &copy; 2005 Neil Williams</b></p>
+<p style="text-align:center;">Bugs or problem reports to:
+<a href="http://lists.sourceforge.net/mailman/listinfo/qof-devel">QOF-devel</a>
+mailing list.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>cashutil</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="manpages"
+HREF="manpages.html"><LINK
+REL="PREVIOUS"
+TITLE="manpages"
+HREF="manpages.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+></TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="manpages.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="CASHUTIL"
+></A
+>cashutil</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN9"
+></A
+><H2
+>Name</H2
+>cashutil&nbsp;--&nbsp;	Querying GnuCash databases as objects using QOF.
+	</DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN12"
+></A
+><H2
+>synopsis</H2
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+>
+		[<CODE
+CLASS="OPTION"
+>--version</CODE
+>] |
+		[<CODE
+CLASS="OPTION"
+>-?</CODE
+>|<CODE
+CLASS="OPTION"
+>--help</CODE
+>] |
+		[<CODE
+CLASS="OPTION"
+>--usage</CODE
+>] |
+		[<CODE
+CLASS="OPTION"
+>-i</CODE
+>|<CODE
+CLASS="OPTION"
+>--input</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>filename</KBD
+>] |
+		[<CODE
+CLASS="OPTION"
+>-l</CODE
+>|<CODE
+CLASS="OPTION"
+>--list</CODE
+>] |
+		[<CODE
+CLASS="OPTION"
+>--explain</CODE
+>] |
+		[<CODE
+CLASS="OPTION"
+>-d</CODE
+>|<CODE
+CLASS="OPTION"
+>--database</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+>]
+		[<CODE
+CLASS="OPTION"
+>-t</CODE
+>|<CODE
+CLASS="OPTION"
+>--date</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+>]
+		[<CODE
+CLASS="OPTION"
+>-e</CODE
+>|<CODE
+CLASS="OPTION"
+>--exclude</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+>]
+		[<CODE
+CLASS="OPTION"
+>-s</CODE
+>|<CODE
+CLASS="OPTION"
+>--sql</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+>]
+		[<CODE
+CLASS="OPTION"
+>-f</CODE
+>|<CODE
+CLASS="OPTION"
+>--sql-file</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>filename</KBD
+>]
+		[<CODE
+CLASS="OPTION"
+>-w</CODE
+>|<CODE
+CLASS="OPTION"
+>--write</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>filename</KBD
+>]
+	</P
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+>
+	<CODE
+CLASS="OPTION"
+>--shell</CODE
+>
+	</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN47"
+></A
+><H2
+>Description</H2
+><P
+>GnuCashUtil converts GnuCash QSF XML to queriable objects.
+	Cashutil writes selected GnuCash data to QSF XML offline storage and
+	runs SQL-type queries on the XML file.
+	</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN50"
+></A
+><H2
+>Commands</H2
+><P
+>Use exactly one of -i, -l, --shell or --explain.</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><CODE
+CLASS="OPTION"
+>-i</CODE
+>,
+			<CODE
+CLASS="OPTION"
+>--input</CODE
+>
+			<TT
+CLASS="FILENAME"
+>filename</TT
+></DT
+><DD
+><P
+>		Query the offline storage in <TT
+CLASS="FILENAME"
+>filename</TT
+>
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-l</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--list</CODE
+></DT
+><DD
+><P
+>		Lists all databases supported by the current QOF framework.
+		Any options are ignored.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>--explain</CODE
+></DT
+><DD
+><P
+>		List the fields within the specified database and exit, requires -d.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>--shell</CODE
+></DT
+><DD
+><P
+>Start the QOF interactive shell.</P
+></DD
+></DL
+></DIV
+><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN78"
+></A
+><H3
+>Shell</H3
+><P
+>	The shell provides interactive data input and export.
+	</P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><CODE
+CLASS="OPTION"
+>add</CODE
+> <KBD
+CLASS="USERINPUT"
+>[object]</KBD
+></DT
+><DD
+><P
+>Add a new instance of the object.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>edit</CODE
+><KBD
+CLASS="USERINPUT"
+> [object]</KBD
+></DT
+><DD
+><P
+>Select one instance and edit the parameter values.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>delete</CODE
+> <KBD
+CLASS="USERINPUT"
+>[object]</KBD
+></DT
+><DD
+><P
+>Select one instance for deletion.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>list</CODE
+></DT
+><DD
+><P
+>Synonym for the --list command outside the shell.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>print</CODE
+> <KBD
+CLASS="USERINPUT"
+>[object]</KBD
+></DT
+><DD
+><P
+>Select one instance and print the parameter values.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>explain</CODE
+> <KBD
+CLASS="USERINPUT"
+>[object]</KBD
+></DT
+><DD
+><P
+>Synonym for the --explain command outside the shell.</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>load</CODE
+> <KBD
+CLASS="USERINPUT"
+>[filename]</KBD
+></DT
+><DD
+><P
+>		Replace the current book with data from the file.
+        Prompt to save the current book, if any.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>write</CODE
+> <KBD
+CLASS="USERINPUT"
+>[filename]</KBD
+></DT
+><DD
+><P
+>		      Write out the current book. If no filename is given,
+			  write to the original file. (uses STDOUT if STDIN is used.)
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>merge</CODE
+> <KBD
+CLASS="USERINPUT"
+>[filename]</KBD
+></DT
+><DD
+><P
+>		      Merge data from the file into the current book.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>sql</CODE
+></DT
+><DD
+><P
+>		 Run a SQL statement.
+		 </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>help</CODE
+> | <CODE
+CLASS="OPTION"
+>?</CODE
+></DT
+><DD
+><P
+>		This screen.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>quit</CODE
+> | <CODE
+CLASS="OPTION"
+>q</CODE
+> | <CODE
+CLASS="OPTION"
+>exit</CODE
+></DT
+><DD
+><P
+>		         Quit the shell
+		</P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN153"
+></A
+><H2
+>Options</H2
+><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN155"
+></A
+><H3
+>cashutil options</H3
+><P
+>Use -dte, optionally with either -s or -f, followed by -w.
+	  </P
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><CODE
+CLASS="OPTION"
+>-d</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--database</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+></DT
+><DD
+><P
+>			Shorthand to only query objects within one
+			specific supported database.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-t</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--date</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+></DT
+><DD
+><P
+>			Shorthand to only query objects that contain the specified date.
+			Specify dates using YY-MM-DD, YY-MM or just YY. Single digits
+			can omit the leading zero, e.g. 04-12-1, 1st December 2004 - years
+			less than 100 are assumed to be in the 21st century.
+			Years prior to 2000 can be specified as YYYY-MM-DD etc.
+			This value is taken as a range, 05-03-01 includes all times
+			between Tue Mar  1 00:00:00 UTC 2005 and Tue Mar  1 23:59:59 UTC 2005.
+			05-03 includes all dates and times between Tue Mar  1 00:00:00 UTC 2005
+			and Thu Mar 31 23:59:59 UTC 2005. 05 includes all dates and times in 2005.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-e</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--exclude</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+></DT
+><DD
+><P
+>			Shorthand to exclude a supported database from the query.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-s</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--sql</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>string</KBD
+></DT
+><DD
+><P
+>			Specify a SQL query on the command line.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-f</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--sql-file</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>filename</KBD
+></DT
+><DD
+><P
+>			Specify one or more SQL queries contained in a file.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-w</CODE
+>,
+		<CODE
+CLASS="OPTION"
+>--write</CODE
+>
+		<KBD
+CLASS="USERINPUT"
+>filename</KBD
+></DT
+><DD
+><P
+>			Write the results of any query to the file.
+			</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-v</CODE
+>, <CODE
+CLASS="OPTION"
+>--version</CODE
+></DT
+><DD
+><P
+>			Display version of <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+>.
+		</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN208"
+></A
+><H3
+>help options</H3
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><CODE
+CLASS="OPTION"
+>-h</CODE
+>, <CODE
+CLASS="OPTION"
+>--help</CODE
+></DT
+><DD
+><P
+>			Display the help synopsis for <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+>.
+		</P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>--usage</CODE
+></DT
+><DD
+><P
+>Display a brief usage message and exit.</P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN223"
+></A
+><H2
+>Examples </H2
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN225"
+></A
+><P
+><B
+>Example 1-1.  List all currently supported databases.</B
+></P
+><P
+>      <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+>
+      <CODE
+CLASS="OPTION"
+>-l</CODE
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN230"
+></A
+><H2
+>Author</H2
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>cashutil</I
+></SPAN
+> was written
+      by Neil Williams <CODE
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:linux@codehelp.co.uk"
+>linux@codehelp.co.uk</A
+>&#62;</CODE
+>.
+    </P
+><P
+>This  manual  page  was  written by Neil Williams
+      <CODE
+CLASS="EMAIL"
+>&#60;<A
+HREF="mailto:linux@codehelp.co.uk"
+>linux@codehelp.co.uk</A
+>&#62;</CODE
+>
+    </P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN237"
+></A
+><H2
+>Reporting Bugs</H2
+><P
+>Please do NOT report bugs in cashutil to GnuCash.
+	Report bugs via the QOF-devel mailing list.</P
+><P
+><SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>http://lists.sourceforge.net/lists/listinfo/qof-devel</I
+></SPAN
+>
+    </P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN242"
+></A
+><H2
+>Copyright</H2
+><P
+>This program is free software; you can redistribute it and/or
+		modify it under the terms of the GNU General Public License as
+		published by the Free Software Foundation; either version 2 of  the
+		License, or (at  your option) any later version.
+	</P
+><P
+>This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+		General Public License for more details.
+	</P
+><P
+>You  should  have  received a copy of the GNU General Public
+		License along with this program; if not, write to the Free Software
+		Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+		USA
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="manpages.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>manpages</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="manpages.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

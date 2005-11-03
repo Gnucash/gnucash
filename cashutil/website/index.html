@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en_gb"><head>
+<link rel="stylesheet" href="cashutil.css" type="text/css">
+<link rel="icon" href="favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+<meta name="author" content="Neil Williams">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>CashUtil - Command line GnuCash</title>
+</head><body>
+<div id="head">
+<img src="images/logo.png" alt="GnuCash Logo" id="gnclogo">
+<br/><span id="language"> Language:<b>English</b></span>
+<span id="location">Continent: [USA / Europe]</span>
+</div>
+
+<div id="news">
+<div id="general">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>General Information</b></span>
+<ul>
+<li><a href="gnucash.html">Use in GnuCash</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#progress">Progress</a></li>
+<li><a href="#notes">Problems / issues</a></li>
+<li><a href="#objects">Object support</a></li>
+</ul>
+</div>
+
+
+<div id="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Project Homepages</b></span>
+<ul>
+<li><a href="http://www.gnucash.org/">GnuCash Home </a></li>
+<li><a href="http://qof.sourceforge.net/">QOF home</a></li>
+<li><a href="http://pilot-qof.sourceforge.net/">PilotQOF home</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/preface.html#QOFLIBS">
+QOF Dependencies</a></li>
+<li><a href="http://www.data-freedom.org">Data Freedom</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Download</b></span>
+<ul>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil.tar.gz">Package</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil-source.tar.gz">Source</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>XML</b></span>
+<ul>
+<li><a href="http://code.neil.williamsleesmill.me.uk/qsf.html">Format</a></li>
+<li><a href="http://qof.sourceforge.net/qsf-object.xsd.xml">Object schema</a></li>
+</ul>
+</div>
+
+<div>
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Support </b></span>
+<ul><li>
+<a href="http://lists.sourceforge.net/lists/listinfo/qof-devel">Mailing list</a>
+</li>
+<li><a href="manpages.html">Manpage</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>Development</b></span>
+<ul>
+<li><a href="http://www.linux.codehelp.co.uk/#cashutil">Design</a></li>
+<li><a href="http://code.neil.williamsleesmill.me.uk/cashutil/">Doxygen</a></li>
+</ul>
+</div>
+
+<div class="othernews">
+<span class="linktop">
+<img class="dot" src="images/webding.png" alt="marker">
+<b>GnuCash Information</b></span>
+<ul>
+<li><a href="http://www.gnucash.org/en/links.phtml">Related Financial Software</a></li>
+<li><a href="http://www.gnucash.org/en/articles.phtml">GnuCash in the News</a></li>
+<li><a href="http://www.gnucash.org/en/promote.phtml">GnuCash Banners!</a></li>
+<li><a href="http://www.gnucash.org/en/history.phtml">History &amp; Credits</a></li>
+<li><a href="http://www.gnucash.org/en/quiz-results.phtml">Survey Results</a></li>
+<li><a href="http://www.gnucash.org/en/sizing.phtml">Sizing</a></li>
+</ul>
+</div>
+<a href="http://www.gnucash.org/">
+<img src="images/control_your_finan.jpg" id="gnucash"
+alt="gnucash home page"></a>
+</div>
+
+<div id="content">
+<h1><span class="title">CashUtil: GnuCash
+<acronym title="Command Line Interface">CLI</acronym>.</span></h1>
+<p>A command-line GnuCash interface for Gnucash G2 (G2 is the next GnuCash
+release, compatible with Gnome2) using a modified Pilot-QOF front-end, the
+GnuCash financial objects and current GnuCash XML handlers.</p>
+<p><b>Note</b>: This is not a formal release and the tarball is not signed.
+Feel free to inspect the code. (manpage included).</p>
+<p>The project code is here only temporarily - it will be moved into the GnuCash
+source tree once library requirements are known, to provide CVS access and
+mirrored downloads. This home page will remain. The current tarball requires
+<a href="http://qof.sourceforge.net/">QOF 0.6.0</a> (available only via
+<a href="http://sourceforge.net/projects/qof/">SourceForge</a> CVS)
+to build. See the doxygen output for build information.</p>
+<p>CashUtil uses an interactive shell to add, edit, delete and export
+data. GnuCash XML v2 files and QSF XML files can be loaded into the shell.
+The shell will also merge an external QSF file into the currently loaded book
+and will also be used in PilotQOF.</p>
+<p id="examples">Example 1:</p>
+<code>
+$ cashutil --shell<br/>
+cashutil&gt; load ./gnucashdata.xml<br/>
+cashutil&gt; add Account<br/>
+cash/Account&gt; edit description "test description string"<br/>
+cash/Account&gt; commit<br/>
+cashutil&gt; write<br/>
+cashutil&gt; quit<br/>
+$
+</code>
+<p>Example 2:</p>
+<code>
+$ ./cashutil --shell<br/>
+cashutil> load books/gnucash.xml<br/>
+cashutil> edit Account name Assets<br/>
+cash/Account> edit code 0054<br/>
+cash/Account> commit<br/>
+cashutil> write<br/>
+cashutil> q<br/>
+</code>
+<h2 id="progress">Progress report</h2>
+<h3>Work completed</h3>
+<ul><li><b>GETTEXT</b> support</li>
+<li><b>man page</b></li>
+<li>Clean <b>build environment</b> - once QOF is released, CashUtil will build
+using make distcheck without errors.</li>
+<li><b>Mac OSX / Fink</b> support - has built cleanly on OSX with fink since before first release.
+A proportion of testing and development has been on OSX.</li>
+<li><b>GnuCash backend</b>: Loading and saving GnuCash data files.</li>
+<li><b>Undo</b> support.</li>
+</ul>
+<h3>Functions already supported</h3>
+<p>Most still need to be made more intuitive.</p>
+<ul>
+<li>Non-interactive:<ul>
+<li><b>-i</b>, <b>--input</b> &lt;filename&gt; : Query the GnuCash/QSF XML in &lt;filename&gt;</li>
+<li><b>-l</b>, <b>--list</b> : List all databases supported by the current QOF framework and exit.</li>
+<li><b>--explain</b>  : List the fields within the specified database and exit, requires -d.</li>
+<li><b>-t</b>, <b>--date</b> string  : Shorthand to only query objects that contain the specified date.</li>
+<li><b>-d</b>, <b>--database</b> string : Shorthand to only query objects within one specific supported database.</li>
+<li><b>-e</b>, <b>--exclude</b> string : Shorthand to exclude a supported database from the query.</li>
+<li><b>-s</b>, <b>--sql</b> string : Specify a SQL query on the command line.</li>
+<li><b>-f</b>, <b>--sql-file</b> filename : Specify one or more SQL queries contained in a file.</li>
+<li><b>-w</b>, <b>--write</b> filename : Write the results of any query to the file</li></ul></li>
+<li>Interactive<ul>
+<li><b>add</b> [object] : Add a new instance of the object.</li>
+<li><b>edit</b> [object] : Select one instance and edit (set) the parameter values.</li>
+<li><b>delete</b> [object] : Select one instance for deletion.</li>
+<li><b>list</b> : Synonym for the --list command outside the shell.</li>
+<li><b>print</b> [object] : Select one instance and print the parameter values.</li>
+<li><b>explain</b> [object] : Synonym for the --explain command outside the shell.</li>
+<li><b>load</b> [filename] : Replace the current book with data from the file. Prompt to
+save the current book, if any.</li>
+<li><b>write</b> [filename] : Write out the current book. If no filename is given, write to the original file.
+(uses STDOUT if STDIN is used.)</li>
+<li><b>merge</b> [filename] : Merge data from the file into the current book.</li>
+<li><b>help</b> | <b>?</b> : The help screen.</li>
+<li><b>quit</b> | <b>q</b> | <b>exit</b> : Quit the shell</li>
+</ul></li></ul>
+<h3>Functions requiring completion</h3>
+<ul>
+<li>Interactive<ul>
+<li><b>sql</b> Run a SQL statement.</li>
+</ul></li></ul>
+<h3>Other work still required</h3>
+<ul>
+<li>Folding into the <b>GnuCash source tree</b>.</li>
+</ul>
+<h3 id="notes">Notes</h3>
+<ol>
+<li>CashUtil is G2 only. Data can be loaded from existing GnuCash files or
+from exported QSF files (which is why I wrote it in the first place). The GnuCash
+XML v2 backend is built into CashUtil and is being adapted, along with the
+financial objects and ancillary logic to work as a library that can be shared
+between GnuCash and CashUtil.</li>
+<li>CashUtil is also for data-mining using SQL and it outputs more QSF XML
+which can be used to make your own reports, invoices, print-outs, calculations,
+abstractions, databases .... whatever you like. You can use XSL, Perl, PHP,
+whatever you fancy.</li>
+<li>The data itself can always be updated from more recent G2 exports or
+data files - just save the SQL statements in a file and run them again.</li>
+<li>The QSF XML itself will be importable back into GnuCash (G2) too.</li>
+<li>In due course, CashUtil will be folded into the GnuCash source tree and
+have full access to GnuCash data.</li>
+<li>So far, I've called it "cashutil". (I was short on inspiration).</li>
+<li>Remaining problems include gncCommodity and AccountGroup which do
+not work with QOF. (yet.)</li>
+<li>There's limited financial logic in this program - you cannot create data
+that is incompatible with the *object* but you might be able to create data
+that is financially inconsistent - non-existent accounts are the most
+obvious. GnuCash (via
+<a href="http://code.neil.williamsleesmill.me.uk/">qof_book_merge</a>)
+will deal with problems like that when merging QSF data back into it's own files
+but editing GnuCash files directly puts extra importance on the ancillary
+logic. CashUtil is therefore limited in the type of parameters and objects
+that can be edited, added or deleted. Multi-currency transactions and
+stocks/shares are unsupported and may produce unexpected results.</li>
+<li>During development of CashUtil, logic that is currently included in the
+GnuCash UI will be abstracted into the object library to fill the gaps.</li>
+</ol>
+<h3 id="objects">Object support</h3>
+<p>cashutil currently supports these database table names:
+You can use the names with cashutil -d, in the interactive shell (with
+'add' or 'edit') and in SQL queries (as the table name) with cashutil -s|f
+Descriptions are shown only for readability. Certain objects, like AccountGroup
+and Commodity, are supported but have few or no editable parameters. This
+illustrates the kind of ancillary logic that is yet to be built into CashUtil.</p>
+<table width="75%" border="1">
+<colgroup><col><col></colgroup>
+<tr><th>Name</th><th>Description</th></tr>
+<tr><td>SXTGroup</td><td>Scheduled Transaction Templates</td></tr>
+<tr><td>sched-xaction</td><td>Scheduled Transaction</td></tr>
+<tr><td>FreqSpec</td><td>Frequency Specification</td></tr>
+<tr><td>AccountGroup</td><td>AccountGroup</td></tr>
+<tr><td>Split</td><td>Split</td></tr>
+<tr><td>Trans</td><td>Transaction</td></tr>
+<tr><td>Account</td><td>Account</td></tr>
+<tr><td>CommodityTable</td><td>CommodityTable</td></tr>
+<tr><td>CommodityNamespace</td><td>Namespace</td></tr>
+<tr><td>Commodity</td><td>Commodity</td></tr>
+<tr><td>gncOrder</td><td>Order</td></tr>
+<tr><td>gncTaxTable</td><td>Tax Table</td></tr>
+<tr><td>gncVendor</td><td>Vendor</td></tr>
+<tr><td>gncJob</td><td>Job</td></tr>
+<tr><td>gncInvoice</td><td>Invoice</td></tr>
+<tr><td>gncEntry</td><td>Order/Invoice/Bill Entry</td></tr>
+<tr><td>gncEmployee</td><td>Employee</td></tr>
+<tr><td>gncCustomer</td><td>Customer</td></tr>
+<tr><td>gncBillTerm</td><td>Billing Term</td></tr>
+<tr><td>gncAddress</td><td>Address</td></tr>
+</table>
+<p>Use '-d &lt;database&gt; --explain' to see the list of fields within
+any supported database.</p>
+</div>
+<div style="clear:both;float:none;">&nbsp;</div>
+<div id="tail">
+<p style="float:right;padding-right:1em;">
+<a href='http://validator.w3.org/check/referer'>Validate</a></p>
+<p style="text-align:center;"><b>Copyright &copy; 2005 Neil Williams</b></p>
+<p style="text-align:center;">Bugs or problem reports to:
+<a href="http://lists.sourceforge.net/mailman/listinfo/qof-devel">QOF-devel</a>
+mailing list.</p>
+</div>
+</body>
+</html>
