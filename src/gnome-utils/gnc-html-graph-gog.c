@@ -211,7 +211,7 @@ create_basic_plot_elements(const char *plot_type_name,
   if (!*out_plot)
   {
     // FIXME - log betterer; should probably use GError?
-    printf("plugin not loaded");
+    g_warning("gog: unable to load %s plugin", plot_type_name);
     return FALSE;
   }
   gog_object_add_by_name(*out_chart, "Plot", GOG_OBJECT(*out_plot) );
