@@ -5,7 +5,6 @@ bin_SCRIPTS = dump-finance-quote gnc-prices update-finance-quote
 gncshare_SCRIPTS = finance-quote-helper finance-quote-check
 
 EXTRA_DIST = \
-  .cvsignore \
   Quote_example.pl \
   finance-quote-check.in \
   finance-quote-helper.in \

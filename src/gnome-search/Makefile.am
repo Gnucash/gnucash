@@ -66,6 +66,5 @@ glade_DATA = \
   search.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA}
 

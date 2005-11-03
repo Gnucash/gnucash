@@ -29,5 +29,4 @@ doc_DATA = \
   xfer.xac
 
 EXTRA_DIST = \
-  .cvsignore \
   ${doc_DATA}

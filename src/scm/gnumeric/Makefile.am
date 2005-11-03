@@ -6,5 +6,4 @@ gncscm_DATA = \
   table-utils.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncscm_DATA}

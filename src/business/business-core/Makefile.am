@@ -78,7 +78,6 @@ gwmod_DATA = \
   gw-business-core-spec.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncmod_DATA} \
   ${gwmod_DATA}
 

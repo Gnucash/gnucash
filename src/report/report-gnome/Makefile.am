@@ -71,7 +71,6 @@ noinst_HEADERS = \
  gw-report-gnome.h
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA} \

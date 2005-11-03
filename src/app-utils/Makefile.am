@@ -100,7 +100,6 @@ gwmod_DATA = gw-app-utils.scm gw-app-utils-spec.scm
 noinst_DATA = .scm-links
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
   ${gwmod_DATA} \

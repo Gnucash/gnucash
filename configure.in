@@ -403,21 +403,21 @@ if test pkg-config = no; then
 fi
 AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
 if test "$withval" != "yes"; then
-        QOF=`$PKG_CONFIG --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
-        QOF_LIBS=`$PKG_CONFIG --libs $withval/lib/pkgconfig/qof-1.pc`
-        QOF_CFLAGS=`$PKG_CONFIG --cflags $withval/lib/pkgconfig/qof-1.pc`
-        QOF_VERSION=`$PKG_CONFIG --modversion $withval/lib/pkgconfig/qof-1.pc`
-        QOF_PREFIX=`$PKG_CONFIG --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
-        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
-        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
+        QOF=`$PKG_CONFIG --silence-errors --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $withval/lib/pkgconfig/qof-1.pc`
+        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $withval/lib/pkgconfig/qof-1.pc`
+        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $withval/lib/pkgconfig/qof-1.pc`
+        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
+        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
+        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
 else
-        QOF=`$PKG_CONFIG --exists 'qof-1 >= $QOF_REQUIRED'`
-        QOF_LIBS=`$PKG_CONFIG --libs qof-1`
-        QOF_CFLAGS=`$PKG_CONFIG --cflags qof-1`
-        QOF_VERSION=`$PKG_CONFIG --modversion qof-1`
-        QOF_PREFIX=`$PKG_CONFIG --variable=prefix qof-1`
-        QOF_LIB_DIR=`$PKG_CONFIG --variable=libdir qof-1`
-        QOF_XML_DIR=`$PKG_CONFIG --variable=xmldir qof-1`
+        QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`
+        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags qof-1`
+        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion qof-1`
+        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix qof-1`
+        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir qof-1`
+        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir qof-1`
 fi
 if test x$QOF_XML_DIR = x; then
         AC_MSG_RESULT([no, will use internal QOF code])
@@ -436,7 +436,7 @@ else
         AC_MSG_RESULT([yes])
 fi
 AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
-AM_CONDITIONAL(USE_LIBQOF, [test $HAVE_LIBQOF = "use_internal"])
+AM_CONDITIONAL(USE_LIBQOF, [test "$HAVE_LIBQOF" = "use_internal"])
 AC_SUBST(USE_LIBQOF)
 AC_SUBST(QOF_CFLAGS)
 AC_SUBST(QOF_LIBS)
@@ -463,6 +463,11 @@ AC_SUBST(LIBGOFFICE_LIBS)
 
 if test x"$LIBGOFFICE_LIBS" = x; then
   AC_MSG_RESULT([No, GOffice not found, will build using internal goffice library.])
+  if test x"$LIBGSF_LIBS" != x; then
+    AC_MSG_NOTICE([Sorry, the internal goffice code cannot build with libgsf >= $GSF_REQUIRED.])
+    AC_MSG_ERROR([Please either install goffice or downgrade libgsf to earlier than $GSF_REQUIRED])
+    exit 1
+  fi
 else
   AC_MSG_RESULT([Yes, using GOffice])
   AC_DEFINE(HAVE_GOFFICE,,[We have found an external GOffice])

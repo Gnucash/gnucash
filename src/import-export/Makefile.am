@@ -71,7 +71,6 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   $(glade_DATA) \
-  .cvsignore \
   generic-import-design.txt
 
 if GNUCASH_SEPARATE_BUILDDIR

@@ -20,5 +20,4 @@ account_DATA = \
   acctchrt_spouseretire.gnucash-xea
 
 EXTRA_DIST = \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA}

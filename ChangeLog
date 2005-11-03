@@ -1,5 +1,12 @@
 2005-11-03  Neil Williams <linux@codehelp.co.uk>
 
+	* Various Makefile.am : Remove .cvsignore from
+	EXTRA_DIST to allow make dist to complete again.
+	* various directories : set svn.ignore for symlinks
+	created during the build.
+
+2005-11-03  Neil Williams <linux@codehelp.co.uk>
+
 	* src/gnome-utils/test/Makefile.am : Tweak trunk
 	version to allow test files to find QOF externally.
 

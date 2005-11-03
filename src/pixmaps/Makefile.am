@@ -18,5 +18,4 @@ gncpixmap_DATA = \
   stock_split_watermark.png
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncpixmap_DATA}

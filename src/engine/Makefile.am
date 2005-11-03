@@ -233,7 +233,6 @@ gwmod_DATA = \
   gw-kvp.scm
 
 EXTRA_DIST = \
-  .cvsignore \
   README.query-api \
   design.txt \
   extensions.txt \

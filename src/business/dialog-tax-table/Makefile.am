@@ -54,7 +54,6 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = tax-tables.glade
 
 EXTRA_DIST = \
-  .cvsignore \
   ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA}

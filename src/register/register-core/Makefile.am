@@ -58,7 +58,6 @@ noinst_HEADERS = \
   gw-register-core.h
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gwmod_DATA}
 
 AM_CFLAGS = \

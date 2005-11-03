@@ -10,5 +10,4 @@ account_DATA = \
   acctchrt_chkmu.gnucash-xea 
 
 EXTRA_DIST = \
-  ${account_DATA} \
-  .cvsignore
+  ${account_DATA}

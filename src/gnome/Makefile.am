@@ -120,7 +120,6 @@ noinst_HEADERS = \
   gw-gnc.h
 
 EXTRA_DIST = \
-  .cvsignore \
   gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime \

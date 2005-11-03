@@ -71,7 +71,6 @@ ui_DATA = \
 	gnc-plugin-qif-import-ui.xml
 
 EXTRA_DIST = \
-  .cvsignore \
   ${gncscm_DATA} \
   ${glade_DATA} \
   file-format.txt \
