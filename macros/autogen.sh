@@ -126,7 +126,7 @@ case $gettext_version in
 	INTL="--intl --no-changelog";;
 esac
 
-(grep "^AM_PROG_LIBTOOL" $srcdir/configure.in >/dev/null) && {
+(grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
   (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`libtool' installed to compile GnuCash."
@@ -136,8 +136,8 @@ esac
   }
 }
 
-grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
-  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+grep "^AM_GNU_GETTEXT" $srcdir/configure.ac >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.ac >/dev/null || \
   (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`gettext' installed to compile GnuCash."
@@ -147,8 +147,8 @@ grep "^AM_GNU_GETTEXT" $srcdir/configure.in >/dev/null && {
   }
 }
 
-grep "^AM_GNOME_GETTEXT" $srcdir/configure.in >/dev/null && {
-  grep "sed.*POTFILES" $srcdir/configure.in >/dev/null || \
+grep "^AM_GNOME_GETTEXT" $srcdir/configure.ac >/dev/null && {
+  grep "sed.*POTFILES" $srcdir/configure.ac >/dev/null || \
   (${GETTEXT} --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`gettext' installed to compile GnuCash."
@@ -194,7 +194,7 @@ xlc )
   am_opt=--include-deps;;
 esac
 
-for coin in "$srcdir/configure.in"
+for coin in "$srcdir/configure.ac"
 do 
   dr=`dirname $coin`
   if test -f $dr/NO-AUTO-GEN; then
@@ -228,9 +228,9 @@ do
         fi
       done
 
-      if grep "^AM_GNU_GETTEXT" configure.in >/dev/null; then
-	if grep "sed.*POTFILES" configure.in >/dev/null; then
-	  : do nothing -- we still have an old unmodified configure.in
+      if grep "^AM_GNU_GETTEXT" configure.ac >/dev/null; then
+	if grep "sed.*POTFILES" configure.ac >/dev/null; then
+	  : do nothing -- we still have an old unmodified configure.ac
 	else
 	  echo "Creating $dr/aclocal.m4 ..."
 	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
@@ -239,43 +239,43 @@ do
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
-        grep "intl/Makefile" configure.in > /dev/null ||
+        grep "intl/Makefile" configure.ac > /dev/null ||
         ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
-  	configure.in >configure.in.new && mv configure.in.new configure.in )
+  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
       fi
-      if grep "^AM_GNOME_GETTEXT" configure.in >/dev/null; then
+      if grep "^AM_GNOME_GETTEXT" configure.ac >/dev/null; then
         echo "Creating $dr/aclocal.m4 ..."
         test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
 	echo "(2) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
         echo "no" | gettextize --force --copy $INTL
         echo "Making $dr/aclocal.m4 writable ..."
         test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
-        grep "intl/Makefile" configure.in > /dev/null ||
+        grep "intl/Makefile" configure.ac > /dev/null ||
         ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
-  	configure.in >configure.in.new && mv configure.in.new configure.in )
+  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
       fi
-      if grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null; then
+      if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
         echo "Creating $dr/aclocal.m4 ..."
         test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
         echo "(3) Running gettextize...  Ignore non-fatal messages."
         echo "no" | glib-gettextize --force --copy
         echo "Making $dr/aclocal.m4 writable ..."
         test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
-        grep "po/Makefile.in" configure.in > /dev/null ||
+        grep "po/Makefile.in" configure.ac > /dev/null ||
         ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( po/Makefile.in#' \
-  	configure.in >configure.in.new && mv configure.in.new configure.in )
+  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
       fi
-      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+      if grep "^AC_PROG_INTLTOOL" configure.ac >/dev/null; then
         echo "Running intltoolize ..."
         intltoolize --force --copy
       fi
-      if grep "^A[CM]_PROG_LIBTOOL" configure.in >/dev/null; then
+      if grep "^A[CM]_PROG_LIBTOOL" configure.ac >/dev/null; then
         echo "Running libtoolize..."
         libtoolize --force --copy
       fi
       echo "Running $ACLOCAL $aclocalinclude ..."
       $ACLOCAL $aclocalinclude
-      if grep "^AC_CONFIG_HEADER" configure.in >/dev/null; then
+      if grep "^AC_CONFIG_HEADER" configure.ac >/dev/null; then
 	echo "Running ${AUTOHEADER}..."
 	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
       fi

@@ -6,7 +6,7 @@ test -z "$srcdir" && srcdir=.
 
 PKG_NAME="gnucash"
 
-(test -f $srcdir/configure.in \
+(test -f $srcdir/configure.ac \
 ## put other tests here
 ) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
