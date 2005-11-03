@@ -1,13 +1,24 @@
-if BUILD_XML
-SUBDIRS = xml man
-else
-SUBDIRS = man
-endif
 
-EXTRA_DIST = doxygen.cfg.in
+SUBDIRS = src . po doc
 
-all:
+noinst_DATA = make-potfiles
 
-doc: doxygen.cfg
-	rm -rf html refman.pdf
-	doxygen doxygen.cfg
+ACLOCAL_AMFLAGS = -I m4
+
+make-potfiles: make-potfiles.in Makefile
+	rm -f $@.tmp
+	 sed < $< > $@.tmp \
+             -e 's:@-PERL-@:${PERL}:g'
+	 chmod +x $@.tmp
+	 mv $@.tmp $@
+
+EXTRA_DIST =  \
+  make-potfiles.in \
+  intltool-extract.in \
+  intltool-merge.in \
+  intltool-update.in
+
+DISTCLEANFILES = \
+  intltool-extract intltool-update intltool-merge\
+  make-potfiles po/.intltool-merge-cache
+
