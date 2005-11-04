@@ -4,7 +4,6 @@ PWD := $(shell pwd)
 pkglib_LTLIBRARIES = \
   libgw-engine.la \
   libgw-kvp.la \
-  libcashobjects.la \
   libgncmod-engine.la
 
 AM_CFLAGS = \
@@ -79,7 +78,7 @@ qof_noinst_headers = \
 				 
 if USE_LIBQOF
 
-lib_LTLIBRARIES = libqof.la
+lib_LTLIBRARIES = libqof.la libcashobjects.la
 
 libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION) 
 
@@ -102,6 +101,8 @@ qof_builds = qofla-dir.h
 
 else
 
+lib_LTLIBRARIES = libcashobjects.la
+
 libqof_la_SOURCES =
 
 qofincludedir = ${pkgincludedir}
@@ -117,6 +118,7 @@ libcashobjects_la_SOURCES =  \
   cap-gains.c \
   cashobjects.c \
   FreqSpec.c \
+  gnc-budget.c \
   gnc-filepath-utils.c \
   gnc-lot.c \
   gnc-commodity.c \

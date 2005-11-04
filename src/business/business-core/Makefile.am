@@ -6,6 +6,7 @@ pkglib_LTLIBRARIES = libgncmod-business-core.la libgw-business-core.la
 lib_LTLIBRARIES = libcashbusobjects.la
 
 libcashbusobjects_la_SOURCES = \
+  backend-bus.c \
   gncAddress.c  \
   gncBillTerm.c \
   gncCustomer.c \

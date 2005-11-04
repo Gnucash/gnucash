@@ -1,5 +1,20 @@
 2005-11-04  Neil Williams <linux@codehelp.co.uk>
 
+	* src/business/business-core/backend-bus.c :
+	Load the business objects from the GModule.
+	* src/business/business-core/backend-bus.h :
+	* src/business/business-core/file/backend-bus-file.h :
+	Register the business backend handlers from the GModule.
+	* src/business/business-core/file/Makefile.am : New file.
+	* src/business/business-core/file/backend-bus-file.c :
+	Register the business backend handlers from the GModule.
+	* src/business/business-core/Makefile.am : New file.
+	* src/engine/Makefile.am : libcashobjects is no longer a
+	gnucash-only library.
+	* configure.ac : build within a build.
+
+2005-11-04  Neil Williams <linux@codehelp.co.uk>
+
 	* cashutil/cashutil-autogen.sh : Removed.
 	* cashutil/src/backend-bus.c : Moved.
 	* cashutil/src/backend-bus.h : Moved.

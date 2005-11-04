@@ -16,6 +16,7 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 libgnc_backend_bus_la_SOURCES = \
+  backend-bus-file.c \
   gnc-address-xml-v2.c \
   gnc-bill-term-xml-v2.c \
   gnc-customer-xml-v2.c \

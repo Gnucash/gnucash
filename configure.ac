@@ -1287,12 +1287,6 @@ AC_CONFIG_FILES(po/Makefile.in
           accounts/pt_PT/Makefile
           accounts/sk/Makefile
           accounts/tr_TR/Makefile
-          cashutil/Makefile
-          cashutil/src/Makefile
-          cashutil/doc/Makefile
-          cashutil/doc/xml/Makefile
-          cashutil/doc/man/Makefile
-          cashutil/po/Makefile.in
           doc/Makefile
           doc/examples/Makefile
           intl-scm/Makefile
