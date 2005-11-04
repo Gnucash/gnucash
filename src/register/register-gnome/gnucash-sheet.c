@@ -665,9 +665,6 @@ compute_optimal_height (GnucashSheet *sheet)
         if (!style)
                 return DEFAULT_REGISTER_HEIGHT;
 
-	if (sheet->window_height >= 0)
-	  return sheet->window_height;
-
         cd = gnucash_style_get_cell_dimensions (style, 0, 0);
         if (cd == NULL)
                 return DEFAULT_REGISTER_HEIGHT;
