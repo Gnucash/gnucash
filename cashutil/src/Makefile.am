@@ -4,7 +4,6 @@ AM_CFLAGS = \
   -DLOCALE_DIR=\""$(datadir)/locale"\" \
   -I../../src/backend/file \
   -I../../src/business/business-core \
-  -I../../src/business/business-core/file \
   -I../../src/engine \
   ${GOBJECT_CFLAGS} \
   ${GLIB_CFLAGS}  \
@@ -14,7 +13,6 @@ bin_PROGRAMS= \
   cashutil
 
 cashutil_SOURCES = \
-  backend-bus.c \
   qof-main.c \
   qofundo.c \
   cashutil.c 
@@ -28,7 +26,6 @@ noinst_HEADERS = qofundo-p.h
 cashutil_LDADD =   \
   ../../src/engine/libcashobjects.la  \
   ../../src/business/business-core/libcashbusobjects.la  \
-  ../../src/business/business-core/libgnc-backend-bus.la \
   -lltdl  \
   ${QOF_LIBS}  \
   ${GLIB_LIBS}  \

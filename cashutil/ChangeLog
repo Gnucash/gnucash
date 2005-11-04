@@ -1,3 +1,19 @@
+2005-11-04  Neil Williams <linux@codehelp.co.uk>
+
+	* cashutil/cashutil-autogen.sh : Removed.
+	* cashutil/src/backend-bus.c : Moved.
+	* cashutil/src/backend-bus.h : Moved.
+	* cashutil/src/Makefile.am : remove deleted files.
+	* cashutil/src/cashutil.c : gdb-style GNU notice
+	in --version.
+	* cashutil/src/README : Update for build changes.
+	* cashutil/README : Update for build changes.
+	* cashutil/autogen.sh : The original (external)
+	autogen.sh from cashutil.
+	* cashutil/po : svn:ignore change.
+	* cashutil/po/en_GB.po : updated.
+	* cashutil/po/POTFILES.in : remove deleted file.
+
 2005-11-03  Neil Williams <linux@codehelp.co.uk>
 
 	* src/business/business-core/file/Makefile.am : Quick fix

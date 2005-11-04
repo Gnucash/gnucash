@@ -26,7 +26,16 @@ objects for this program and provides main().
 5.  CashUtil will also now link into the GnuCash v2 XML
     backend to read existing user data files as well as
     exported data.
- 
+
+6. CashUtil shares the installed versions of these GModules
+   with gnucash:
+        libgnc-backend-file.la
+        libgnc-backend-bus.la
+
+   CashUtil also shares these libraries with gnucash:
+        libcashobjects.la
+        libcashbusobjects.la
+
 CashUtil needs QOF v0.6.0 (currently available at v0.6.0  
 and via CVS) - it can use the gnucash internal libqof.
 

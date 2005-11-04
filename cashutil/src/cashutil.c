@@ -221,13 +221,15 @@ main (int argc, const char *argv[])
 			}
 			case qof_op_vers :
 			{
-				fprintf (stdout, "\n (c) Copyright 2005 Neil Williams <linux@codehelp.co.uk>\n");
+				fprintf (stdout, " %s v%s\n", PACKAGE, VERSION);
+				fprintf (stdout, _(" GnuCash Command Line Interface.\n"));
+				fprintf (stdout, _(" Build date....: %s %s\n\n"), __DATE__, __TIME__);
+				fprintf (stdout, " Copyright 2005 Neil Williams <linux@codehelp.co.uk>\n");
+				fprintf (stdout, " %s is free software; see the source for copying conditions.\n", PACKAGE);
+				fprintf (stdout, " There is NO warranty; not even MERCHANTABILITY or FITNESS\n");
+				fprintf (stdout, " FOR A PARTICULAR PURPOSE.\n\n");
 				fprintf (stdout, _(" For CashUtil support, join the QOF-devel mailing list at\n"));
 				fprintf (stdout, " http://lists.sourceforge.net/mailman/listinfo/qof-devel\n");
-				fprintf (stdout, _("\n This is CashUtil v%s\n"), VERSION);
-				fprintf (stdout, _(" The GnuCash Command Line Interface.\n"));
-//				fprintf (stdout, _(" Build target..: %s\n"), HOST_OS);
-				fprintf (stdout, _(" Build date....: %s %s\n\n"), __DATE__, __TIME__);
 				fprintf (stdout, _("   Please use --help for more detailed options.\n\n"));
 				return 0;
 			}

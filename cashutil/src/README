@@ -19,3 +19,19 @@ A lot of the translatable strings are similar to GnuCash
 but have to be formatted slightly differently for a command
 line interface.
 
+CashUtil uses the *installed* versions of these GModules
+that are shared with gnucash:
+      libgnc-backend-file.la
+      libgnc-backend-bus.la
+When debugging cashutil, remember that if you change files
+in src/backend/file and/or src/business/business-core/file,
+run `make install` in src/backend/file and/or
+src/business/business-core/file before testing your changes
+in cashutil!
+
+CashUtil also shares these libraries with gnucash:
+      libcashobjects.la
+      libcashbusobjects.la
+These are linked 'in-situ' so a `make` is sufficient.
+
+
