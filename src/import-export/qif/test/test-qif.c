@@ -94,7 +94,6 @@ test_qif(void)
 static void
 main_helper(void *closure, int argc, char **argv)
 {
-  gnc_module_load("gnucash/import-export", 0);
   qif_object_init();		/* XXX:FIXME */
   test_qif();
   print_test_results();

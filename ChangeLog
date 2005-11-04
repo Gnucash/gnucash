@@ -1,3 +1,28 @@
+2005-11-04  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif/test/test-qif.c:
+	* src/app-utils/test/test-load-module: Other changes needed to get
+	'make check' closer to working.
+
+	* src/gnome-utils/test/Makefile.am: Remove GUI test cases from the
+	'TESTS' variable.  These tests will prevent 'make check' from
+	running unattended.
+
+	* src/import-export/qif/test/Makefile.am:
+	* src/import-export/test/Makefile.am:
+	* src/report/utility-reports/test/Makefile.am:
+	* src/report/locale-specific/us/test/Makefile.am:
+	* src/report/standard-reports/test/Makefile.am:
+	* src/report/stylesheets/test/Makefile.am:
+	* src/report/report-system/test/Makefile.am:
+	* src/business/business-core/test/Makefile.am:
+	* src/app-utils/test/Makefile.am: Include core-utils in the scheme
+	load path to allow some of the test cases run again.
+
+	* src/import-export/qif/qif-objects.c: Generate a new copy of the
+	amount string when copying a QIF split.  Prevents a double free
+	error when both the original and the copy split are destroyed.
+
 2005-11-03  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/gnc-plugin-page-invoice.c:
