@@ -615,8 +615,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	gnc_plugin_page_register_update_menus (page);
 
 	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
-	if (plugin_page->summarybar)
+	if (plugin_page->summarybar) {
 	  gtk_widget_show_all(plugin_page->summarybar);
+	  gtk_box_pack_end(GTK_BOX (priv->widget), plugin_page->summarybar,
+			   FALSE, FALSE, 0);
+	}
 
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,

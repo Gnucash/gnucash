@@ -93,6 +93,14 @@ GType                 gnc_plugin_page_get_type        (void);
 GtkWidget            *gnc_plugin_page_create_widget   (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_destroy_widget  (GncPluginPage *plugin_page);
 
+/** Show the summarybar associated with this page.
+ *
+ *  @param page The page whose summarybar visibility should be changed.
+ *
+ *  @param visible Whether or not the summarybar should be shown..
+ */
+void gnc_plugin_page_show_summarybar (GncPluginPage *page, gboolean visible);
+
 void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
                                                        GtkUIManager *merge);
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,

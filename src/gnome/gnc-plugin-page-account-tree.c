@@ -500,6 +500,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
+	gtk_box_pack_end (GTK_BOX (page->priv->widget), plugin_page->summarybar,
+			  FALSE, FALSE, 0);
 	gtk_widget_show(plugin_page->summarybar);
 
 	LEAVE("widget = %p", page->priv->widget);
@@ -522,11 +524,6 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 	if (page->priv->component_id) {
 	  gnc_unregister_gui_component(page->priv->component_id);
 	  page->priv->component_id = 0;
-	}
-
-	if (plugin_page->summarybar) {
-	  g_object_unref(G_OBJECT(plugin_page->summarybar));
-	  plugin_page->summarybar = NULL;
 	}
 
 	LEAVE("widget destroyed");

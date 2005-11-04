@@ -365,7 +365,7 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageInvoice *page;
 	GncPluginPageInvoicePrivate *priv;
-	GtkWidget *regWidget;
+	GtkWidget *regWidget, *widget;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_INVOICE (plugin_page);
@@ -373,11 +373,15 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 	if (priv->widget != NULL)
 		return priv->widget;
 
-	priv->widget = gnc_invoice_create_page(priv->iw, page);
+	priv->widget = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (priv->widget);
+	
+	widget = gnc_invoice_create_page(priv->iw, page);
+	gtk_widget_show (widget);
+	gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
 
 	plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
-	gtk_widget_show(plugin_page->summarybar);
+	gtk_box_pack_end(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
 
 	regWidget = gnc_invoice_get_register(priv->iw);
 	if (regWidget) {

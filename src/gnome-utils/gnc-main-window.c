@@ -123,9 +123,6 @@ struct GncMainWindowPrivate
 	GtkWidget *statusbar;
 	GtkWidget *progressbar;
 
-	GtkWidget *summarybar_dock;
-	gboolean   show_summarybar;
-
 	GtkActionGroup *action_group;
 
 	GncPluginPage *current_page;
@@ -1169,11 +1166,6 @@ gnc_main_window_disconnect (GncMainWindow *window,
 		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
 		gnc_plugin_page_unselected (page);
 		window->priv->current_page = NULL;
-
-		if (page->summarybar) {
-			gtk_container_remove(GTK_CONTAINER(window->priv->summarybar_dock),
-					     page->summarybar);
-		}
 	}
 
 	/* Remove it from the list of pages in the window */
@@ -1608,12 +1600,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
-	priv->show_summarybar = TRUE;
-	priv->summarybar_dock = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (priv->summarybar_dock);
-	gtk_box_pack_start (GTK_BOX (main_vbox), priv->summarybar_dock,
-			    FALSE, TRUE, 0);
-
 	priv->statusbar = gtk_statusbar_new ();
 	gtk_widget_show (priv->statusbar);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
@@ -1710,6 +1696,29 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 	gtk_widget_show (widget);
 }
 
+/** Should a summary bar be visible in this window?  In order to
+ *  prevent synchronization issues, the "ViewSummaryBar"
+ *  GtkToggleAction is the sole source of information for whether or
+ *  not any summary bar should be visibile in a window.
+ *
+ *  @param window A pointer to the window in question.
+ *
+ *  @param action If known, a pointer to the "ViewSummaryBar"
+ *  GtkToggleAction.  If NULL, the function will look up this action.
+ *
+ *  @return TRUE if the summarybar should be visible.
+ */
+static gboolean
+gnc_main_window_show_summarybar (GncMainWindow *window, GtkAction *action)
+{
+	if (action == NULL)
+	  action = gtk_action_group_get_action(window->priv->action_group,
+					       "ViewSummaryAction");
+	if (action == NULL)
+	  return TRUE;
+	return gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action));
+}
+
 /** This function is invoked when the GtkNotebook switches pages.  It
  *  is responsible for updating the rest of the window contents
  *  outside of the notebook.  I.E. Updating the user interface, the
@@ -1725,26 +1734,18 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 			     gint pos,
 			     GncMainWindow *window)
 {
-	GtkWidget *child, *summarybar, *summarybar_dock;
+	GtkWidget *child;
 	GncPluginPage *page;
-	gboolean immutable;
+	gboolean immutable, visible;
 
 	ENTER("Notebook %p, page, %p, index %d, window %p",
 	       notebook, notebook_page, pos, window);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
-	summarybar_dock = window->priv->summarybar_dock;
-
 	if (window->priv->current_page != NULL) {
 		page = window->priv->current_page;
 		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
 		gnc_plugin_page_unselected (page);
-
-		/* Remove old page's summarybar too */
-		if (page->summarybar) {
-			gtk_container_remove(GTK_CONTAINER(summarybar_dock),
-					     page->summarybar);
-		}
 	}
 
 	child = gtk_notebook_get_nth_page (notebook, pos);
@@ -1759,24 +1760,8 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	if (page != NULL) {
 		/* Update the user interface (e.g. menus and toolbars */
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
-
-		/* install new summarybar (if any) */
-		summarybar = page->summarybar;
-		if (summarybar) {
-		  if (GTK_OBJECT_FLOATING(summarybar)) {
-		    /* Own this object. This will prevent it from being deleted by
-		     * gtk when it is removed from the summarybar. */
-		    g_object_ref (summarybar);
-		    gtk_object_sink (GTK_OBJECT (summarybar));
-		  }
-
-		  if (window->priv->show_summarybar)
-		    gtk_widget_show(summarybar);
-		  else
-		    gtk_widget_hide(summarybar);
-		  gtk_box_pack_start(GTK_BOX(summarybar_dock), summarybar,
-				     FALSE, TRUE, 0 );
-		}
+		visible = gnc_main_window_show_summarybar(window, NULL);
+		gnc_plugin_page_show_summarybar (page, visible);
 
 		/* Allow page specific actions */
 		gnc_plugin_page_selected (page);
@@ -1891,10 +1876,12 @@ gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window)
 {
-	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-		gtk_widget_show (window->priv->summarybar_dock);
-	} else {
-		gtk_widget_hide (window->priv->summarybar_dock);
+	GList *item;
+	gboolean visible;
+
+	visible = gnc_main_window_show_summarybar(window, action);
+	for (item = window->priv->installed_pages; item; item = g_list_next(item)) {
+	  gnc_plugin_page_show_summarybar(item->data, visible);
 	}
 }
 
@@ -1959,8 +1946,8 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 	g_object_unref(page);
 
 	/* just a little debugging. :-) */
-	DEBUG("Moved page %p (sb %p) from window %p to new window %p",
-	      page, page->summarybar, window, new_window);
+	DEBUG("Moved page %p from window %p to new window %p",
+	      page, window, new_window);
 	DEBUG("Old window current is %p, new window current is %p",
 	      window->priv->current_page, new_window->priv->current_page);
 }

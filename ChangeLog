@@ -1,3 +1,20 @@
+2005-11-03  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-page-account-tree.c: Push the summarybar
+	inside of the created page widget.  This solves several problems
+	with window resizing when switching between pages, or when turning
+	the summary bar off and on.
+
+	* src/register/register-gnome/gnucash-sheet.c
+	(compute_optimal_height): This routine should always return the
+	minimal height the widget will accept, not the current height of
+	the widget.  Returning the current height causes all sorts of
+	problems such as windows that are impossible to resize down.
+
 2005-11-03  Neil Williams <linux@codehelp.co.uk>
 
 	* Various Makefile.am : Remove .cvsignore from

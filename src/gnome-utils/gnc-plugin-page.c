@@ -165,6 +165,22 @@ gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 }
 
 void
+gnc_plugin_page_show_summarybar (GncPluginPage *page,
+				 gboolean visible)
+{
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+	if (!page->summarybar)
+	  return;
+
+	if (visible) {
+	  gtk_widget_show(page->summarybar);
+	} else {
+	  gtk_widget_hide(page->summarybar);
+	}
+}
+
+void
 gnc_plugin_page_merge_actions (GncPluginPage *page,
 			       GtkUIManager *ui_merge)
 {
@@ -410,10 +426,6 @@ gnc_plugin_page_finalize (GObject *object)
     priv->books = NULL;
   }
 
-  if (page->summarybar) {
-    g_object_unref(G_OBJECT(page->summarybar));
-    page->summarybar = NULL;
-  }
   page->window = NULL; // Don't need to free it.
 
   gnc_gobject_tracking_forget(object);
