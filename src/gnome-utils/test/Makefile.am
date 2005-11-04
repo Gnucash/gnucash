@@ -1,11 +1,17 @@
 TESTS =  \
-  test-link-module test-load-module test-gnc-recurrence test-gnc-dialog
+  test-link-module test-load-module
+
+# The following tests are nice, but have absolutely no place in an
+# automated testing system.
+#
+TESTS_GUI = test-gnc-recurrence test-gnc-dialog
 
 ##lib_LTLIBRARIES = libgncgnome.la
 
 
 
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/network-utils \
   --gnc-module-dir ${top_builddir}/src/engine \
