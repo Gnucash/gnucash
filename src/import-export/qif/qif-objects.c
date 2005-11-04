@@ -489,6 +489,7 @@ qif_split_copy(QifSplit split)
 
   memcpy(s, split, sizeof(*s));
   if (s->memo) s->memo = g_strdup(s->memo);
+  if (s->amountstr) s->amountstr = g_strdup(s->amountstr);
   if (s->catstr) s->memo = g_strdup(s->catstr);
 
   return s;
