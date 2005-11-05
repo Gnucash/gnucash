@@ -1,3 +1,10 @@
+2005-11-05  Neil Williams <linux@codehelp.co.uk>
+
+	* cashutil/src/qof-main.c : Skip objects not registered
+	as classes - i.e. have no QOF parameters.
+	* cashutil/src/cashutil.c : Ensure the business objects
+	are registered in time for --explain.
+
 2005-11-04  Neil Williams <linux@codehelp.co.uk>
 
 	* src/business/business-core/backend-bus.c :

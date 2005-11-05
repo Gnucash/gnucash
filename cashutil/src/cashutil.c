@@ -107,7 +107,6 @@ load_bus_backend (const char *directory)
 	bus_backend_init bus_init;
 	gpointer g;
 
-	g_return_val_if_fail(bus_cashobjects_register(), FALSE);
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, "libgnc-backend-bus.la");
 	g_return_val_if_fail((stat(fullpath, &sbuf) == 0), FALSE);
@@ -187,6 +186,7 @@ main (int argc, const char *argv[])
 	}
 	qof_init();
 	g_return_val_if_fail(cashobjects_register(), -1);
+        g_return_val_if_fail(bus_cashobjects_register(), -1);
 	context = qof_create();
 	if(!context) {
 		fprintf(stderr, _("Fatal error: Cannot initialise QOF.\n\n"));

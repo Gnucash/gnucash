@@ -473,7 +473,9 @@ static int delete_fcn(qof_data *context)
 static void
 qof_list_cb(QofObject *obj, gpointer data)
 {
-	fprintf(stdout, "%-20s\t%s\n", obj->e_type, obj->type_label);
+	if(qof_class_is_registered(obj->e_type)) {
+		fprintf(stdout, "%-20s\t%s\n", obj->e_type, obj->type_label);
+	}
 }
 
 static int list_fcn(qof_data *context)
