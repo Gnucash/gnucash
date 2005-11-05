@@ -1,3 +1,9 @@
+2005-11-05  Christian Stimming  <stimming@tuhh.de>
+
+	* autogen.sh: Replace old crufty autogen.sh script with radically
+	simplified version. Simply call all helper programs in one
+	sequence and that's it.
+
 2005-11-04  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif/test/test-qif.c:
