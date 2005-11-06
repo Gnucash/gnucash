@@ -36,14 +36,17 @@
 #include "dialog-search.h"
 #include "gnc-book.h"
 
+#define GNC_TYPE_GENERAL_SEARCH \
+	(gnc_general_search_get_type ())
+
 #define GNC_GENERAL_SEARCH(obj) \
-	G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_search_get_type(), GNCGeneralSearch)
+	G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_GENERAL_SEARCH, GNCGeneralSearch)
 
 #define GNC_GENERAL_SEARCH_CLASS(klass) \
-	G_TYPE_CLASS_CAST (klass, gnc_general_search_get_type(), \
+	G_TYPE_CLASS_CAST (klass, GNC_TYPE_GENERAL_SEARCH, \
 				GNCGeneralSearchClass)
 #define GNC_IS_GENERAL_SEARCH(obj) \
-	G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_general_search_get_type ())
+	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_GENERAL_SEARCH)
 
 /*
  * If this returns NULL, then do nothing (probably an edit window).  If
@@ -54,7 +57,6 @@ typedef GNCSearchWindow *(*GNCSearchCB) (gpointer start, gpointer user_data);
 
 typedef struct {
   GtkHBox hbox;
-  struct _GNCGeneralSearchPrivate	*priv;
 
   GtkWidget *	entry;  /* display of selection name */
   GtkWidget *	button; /* button for popping up search window */

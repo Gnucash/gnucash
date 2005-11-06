@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_BOOLEAN(obj)	GTK_CHECK_CAST (obj, gnc_search_boolean_get_type (), GNCSearchBoolean)
-#define GNCSEARCH_BOOLEAN_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_boolean_get_type (), GNCSearchBooleanClass)
-#define IS_GNCSEARCH_BOOLEAN(obj)      GTK_CHECK_TYPE (obj, gnc_search_boolean_get_type ())
+#define GNC_TYPE_SEARCH_BOOLEAN		(gnc_search_boolean_get_type ())
+#define GNCSEARCH_BOOLEAN(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBoolean)
+#define GNCSEARCH_BOOLEAN_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBooleanClass)
+#define IS_GNCSEARCH_BOOLEAN(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_BOOLEAN)
 
 typedef struct _GNCSearchBoolean	GNCSearchBoolean;
 typedef struct _GNCSearchBooleanClass	GNCSearchBooleanClass;
 
 struct _GNCSearchBoolean {
   GNCSearchCoreType parent;
-  struct _GNCSearchBooleanPrivate *priv;
 
   query_compare_t	how;
   gboolean		value;

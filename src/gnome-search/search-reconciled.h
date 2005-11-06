@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "Query.h"		/* for cleared_match_t */
 
-#define GNCSEARCH_RECONCILED(obj)	GTK_CHECK_CAST (obj, gnc_search_reconciled_get_type (), GNCSearchReconciled)
-#define GNCSEARCH_RECONCILED_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_reconciled_get_type (), GNCSearchReconciledClass)
-#define IS_GNCSEARCH_RECONCILED(obj)      GTK_CHECK_TYPE (obj, gnc_search_reconciled_get_type ())
+#define GNC_TYPE_SEARCH_RECONCILED	  (gnc_search_reconciled_get_type ())
+#define GNCSEARCH_RECONCILED(obj)	  GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciled)
+#define GNCSEARCH_RECONCILED_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciledClass)
+#define IS_GNCSEARCH_RECONCILED(obj)      GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_RECONCILED)
 
 typedef struct _GNCSearchReconciled	GNCSearchReconciled;
 typedef struct _GNCSearchReconciledClass	GNCSearchReconciledClass;
 
 struct _GNCSearchReconciled {
   GNCSearchCoreType parent;
-  struct _GNCSearchReconciledPrivate *priv;
 
   char_match_t		how;
   cleared_match_t	value;

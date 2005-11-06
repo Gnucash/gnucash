@@ -43,11 +43,14 @@ static void gnc_search_string_class_init	(GNCSearchStringClass *class);
 static void gnc_search_string_init	(GNCSearchString *gspaper);
 static void gnc_search_string_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchString *)(x))->priv)
+typedef struct _GNCSearchStringPrivate GNCSearchStringPrivate;
 
 struct _GNCSearchStringPrivate {
   GtkWidget *entry;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_STRING, GNCSearchStringPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -95,12 +98,13 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchStringPrivate));
 }
 
 static void
 gnc_search_string_init (GNCSearchString *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->value = NULL;
   o->how = SEARCH_STRING_CONTAINS;
   o->ign_case = TRUE;
@@ -113,7 +117,6 @@ gnc_search_string_finalize (GObject *obj)
   g_assert (IS_GNCSEARCH_STRING (o));
 
   g_free (o->value);
-  g_free(o->priv);
 	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
@@ -128,7 +131,7 @@ gnc_search_string_finalize (GObject *obj)
 GNCSearchString *
 gnc_search_string_new (void)
 {
-  GNCSearchString *o = g_object_new(gnc_search_string_get_type (), NULL);
+  GNCSearchString *o = g_object_new(GNC_TYPE_SEARCH_STRING, NULL);
   return o;
 }
 
@@ -295,24 +298,28 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
   GNCSearchString *fi = (GNCSearchString *)fe;
+  GNCSearchStringPrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_STRING (fi));
 
-  if (fi->priv->entry)
-    gtk_widget_grab_focus (fi->priv->entry);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gtk_widget_grab_focus (priv->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchString *fi = (GNCSearchString *)fe;
+  GNCSearchStringPrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_STRING (fi));
 
-  if (fi->priv->entry)
-    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
 }
 
 static GtkWidget *
@@ -320,10 +327,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *entry, *toggle, *menu, *box;
   GNCSearchString *fi = (GNCSearchString *)fe;
+  GNCSearchStringPrivate *priv;
 	
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_STRING (fi), NULL);
 
+  priv = _PRIVATE(fi);
   box = gtk_hbox_new (FALSE, 3);
 
   /* Build and connect the option menu */
@@ -336,7 +345,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
   g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-  fi->priv->entry = entry;
+  priv->entry = entry;
 
   /* Build and connect the toggle button */
   toggle = gtk_toggle_button_new_with_label (_("Case Insensitive?"));

@@ -40,10 +40,14 @@ static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *class);
 static void gnc_search_reconciled_init	(GNCSearchReconciled *gspaper);
 static void gnc_search_reconciled_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchReconciled *)(x))->priv)
+typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
 
 struct _GNCSearchReconciledPrivate {
+  gpointer dummy;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciledPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -89,12 +93,13 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchReconciledPrivate));
 }
 
 static void
 gnc_search_reconciled_init (GNCSearchReconciled *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->how = COMPARE_EQUAL;
   o->value = CLEARED_NO;
 }
@@ -105,8 +110,6 @@ gnc_search_reconciled_finalize (GObject *obj)
   GNCSearchReconciled *o = (GNCSearchReconciled *)obj;
   g_assert (IS_GNCSEARCH_RECONCILED (o));
 
-  g_free(o->priv);
-	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -120,7 +123,7 @@ gnc_search_reconciled_finalize (GObject *obj)
 GNCSearchReconciled *
 gnc_search_reconciled_new (void)
 {
-  GNCSearchReconciled *o = g_object_new(gnc_search_reconciled_get_type (), NULL);
+  GNCSearchReconciled *o = g_object_new(GNC_TYPE_SEARCH_RECONCILED, NULL);
   return o;
 }
 

@@ -39,10 +39,14 @@ static void gnc_search_boolean_class_init	(GNCSearchBooleanClass *class);
 static void gnc_search_boolean_init	(GNCSearchBoolean *gspaper);
 static void gnc_search_boolean_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchBoolean *)(x))->priv)
+typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
 
 struct _GNCSearchBooleanPrivate {
+  gpointer dummy;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBooleanPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -88,12 +92,13 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchBooleanPrivate));
 }
 
 static void
 gnc_search_boolean_init (GNCSearchBoolean *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->how = COMPARE_EQUAL;
   o->value = TRUE;
 }
@@ -104,8 +109,6 @@ gnc_search_boolean_finalize (GObject *obj)
   GNCSearchBoolean *o = (GNCSearchBoolean *)obj;
   g_assert (IS_GNCSEARCH_BOOLEAN (o));
 
-  g_free(o->priv);
-	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -119,7 +122,7 @@ gnc_search_boolean_finalize (GObject *obj)
 GNCSearchBoolean *
 gnc_search_boolean_new (void)
 {
-  GNCSearchBoolean *o = g_object_new(gnc_search_boolean_get_type (), NULL);
+  GNCSearchBoolean *o = g_object_new(GNC_TYPE_SEARCH_BOOLEAN, NULL);
   return o;
 }
 

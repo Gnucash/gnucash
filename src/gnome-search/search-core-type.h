@@ -29,12 +29,11 @@
 #define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())
 #define GNC_SEARCH_CORE_TYPE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreType))
 #define GNC_SEARCH_CORE_TYPE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
-#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE)
+#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE))
 #define GNC_SEARCH_CORE_TYPE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
 
 typedef struct {
   GtkObject parent;
-  struct _GNCSearchCoreTypePrivate *priv;
 
   GNCSearchParam *	param;
 } GNCSearchCoreType;

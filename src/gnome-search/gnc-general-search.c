@@ -54,7 +54,7 @@ static void gnc_general_search_init         (GNCGeneralSearch      *gsl);
 static void gnc_general_search_class_init   (GNCGeneralSearchClass *class);
 static void gnc_general_search_destroy      (GtkObject             *object);
 
-#define _PRIVATE(x) (((GNCSearchString *)(x))->priv)
+typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
 
 struct _GNCGeneralSearchPrivate {
 	GUID			guid;
@@ -65,6 +65,9 @@ struct _GNCGeneralSearchPrivate {
 	const QofParam * get_guid;
 	gint			component_id;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_GENERAL_SEARCH, GNCGeneralSearchPrivate))
 
 static GtkHBoxClass *parent_class;
 static guint general_search_signals[LAST_SIGNAL];
@@ -122,12 +125,13 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 	object_class->destroy = gnc_general_search_destroy;
 
 	klass->changed = NULL;
+
+	g_type_class_add_private(klass, sizeof(GNCGeneralSearchPrivate));
 }
 
 static void
 gnc_general_search_init (GNCGeneralSearch *gsl)
 {
-	gsl->priv = g_malloc0 (sizeof (*gsl->priv));
 	gsl->selected_item = NULL;
 }
 
@@ -135,6 +139,7 @@ static void
 gnc_general_search_destroy (GtkObject *object)
 {
 	GNCGeneralSearch *gsl;
+	GNCGeneralSearchPrivate *priv;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_GENERAL_SEARCH (object));
@@ -144,21 +149,15 @@ gnc_general_search_destroy (GtkObject *object)
 	gsl->entry = NULL;
 	gsl->button = NULL;
 
-	if (gsl->priv) {
-		/* Clear the callbacks */
-		if (gsl->priv->sw) {
-			gnc_search_dialog_set_select_cb (gsl->priv->sw, NULL,
-							 NULL, FALSE);
-			gnc_search_dialog_disconnect (gsl->priv->sw, gsl);
-			gsl->priv->sw = NULL;
-		}
+	priv = _PRIVATE(gsl);
+	/* Clear the callbacks */
+	if (priv->sw) {
+		gnc_search_dialog_set_select_cb (priv->sw, NULL, NULL, FALSE);
+		gnc_search_dialog_disconnect (priv->sw, gsl);
+		priv->sw = NULL;
 
 		/* Unregister ourselves */
-		gnc_unregister_gui_component (gsl->priv->component_id);
-
-		/* And let go */
-		g_free (gsl->priv);
-		gsl->priv = NULL;
+		gnc_unregister_gui_component (priv->component_id);
 	}
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -169,12 +168,14 @@ gnc_general_search_destroy (GtkObject *object)
 static void
 reset_selection_text (GNCGeneralSearch *gsl)
 {
+	GNCGeneralSearchPrivate *priv;
 	const char *text;
 
+	priv = _PRIVATE(gsl);
 	if (gsl->selected_item == NULL)
 		text = "";
 	else
-		text = gncObjectPrintable (gsl->priv->type, gsl->selected_item);
+		text = gncObjectPrintable (priv->type, gsl->selected_item);
 
 	gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 }
@@ -184,10 +185,12 @@ static void
 refresh_handler (GHashTable *changes, gpointer data)
 {
 	GNCGeneralSearch *gsl = data;
+	GNCGeneralSearchPrivate *priv;
 	const EventInfo *info;
 
+	priv = _PRIVATE(gsl);
 	if (changes) {
-		info = gnc_gui_get_entity_events (changes, &gsl->priv->guid);
+		info = gnc_gui_get_entity_events (changes, &priv->guid);
 		if (info) {
 			if (info->event_mask & GNC_EVENT_DESTROY)
 				gsl->selected_item = NULL;
@@ -209,7 +212,10 @@ static int
 on_close_cb (GtkDialog *dialog, gpointer user_data)
 {
 	GNCGeneralSearch *gsl = user_data;
-	gsl->priv->sw = NULL;
+	GNCGeneralSearchPrivate *priv;
+
+	priv = _PRIVATE(gsl);
+	priv->sw = NULL;
 	return FALSE;
 }
 
@@ -218,21 +224,23 @@ static void
 search_cb(GtkButton * button, gpointer user_data)
 {
 	GNCGeneralSearch *gsl = user_data;
+	GNCGeneralSearchPrivate *priv;
 	GNCSearchWindow *sw;
 
-	if (gsl->priv->sw) {
-		gnc_search_dialog_raise (gsl->priv->sw);
+	priv = _PRIVATE(gsl);
+	if (priv->sw) {
+		gnc_search_dialog_raise (priv->sw);
 		return;
 	}
 
-	sw = (gsl->priv->search_cb)(gsl->selected_item, gsl->priv->user_data);
+	sw = (priv->search_cb)(gsl->selected_item, priv->user_data);
 
 	/* NULL means nothing to 'select' */
 	if (sw == NULL)
 		return;
 
 	/* Ok, save this search window and setup callbacks */
-	gsl->priv->sw = sw;
+	priv->sw = sw;
 
 	/* Catch when the search dialog closes */
 	gnc_search_dialog_connect_on_close (sw, GTK_SIGNAL_FUNC (on_close_cb),
@@ -272,6 +280,7 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 			GNCSearchCB search_cb, gpointer user_data)
 {
 	GNCGeneralSearch *gsl;
+	GNCGeneralSearchPrivate *priv;
 	const QofParam *get_guid;
 
 	g_return_val_if_fail (type && label && search_cb, NULL);
@@ -279,15 +288,16 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 	get_guid = qof_class_get_parameter (type, QOF_PARAM_GUID);
 	g_return_val_if_fail (get_guid, NULL);
 
-	gsl = g_object_new (gnc_general_search_get_type (), NULL);
+	gsl = g_object_new (GNC_TYPE_GENERAL_SEARCH, NULL);
 
 	create_children (gsl, label);
 
-	gsl->priv->type = type;
-	gsl->priv->search_cb = search_cb;
-	gsl->priv->user_data = user_data;
-	gsl->priv->get_guid = get_guid;
-	gsl->priv->component_id =
+	priv = _PRIVATE(gsl);
+	priv->type = type;
+	priv->search_cb = search_cb;
+	priv->user_data = user_data;
+	priv->get_guid = get_guid;
+	priv->component_id =
 		gnc_register_gui_component (GNCGENERALSEARCH_CLASS,
 					    refresh_handler, NULL, gsl);
 
@@ -306,9 +316,12 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 void
 gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 {
+	GNCGeneralSearchPrivate *priv;
+
 	g_return_if_fail(gsl != NULL);
 	g_return_if_fail(GNC_IS_GENERAL_SEARCH(gsl));
 
+	priv = _PRIVATE(gsl);
 	if (selection != gsl->selected_item) {
 		gsl->selected_item = selection;
 		reset_selection_text (gsl);
@@ -316,18 +329,17 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 			      general_search_signals[SELECTION_CHANGED]);
 	}
 
-	gnc_gui_component_clear_watches (gsl->priv->component_id);
+	gnc_gui_component_clear_watches (priv->component_id);
 
-	if (selection) 
-   {
-      const QofParam *get_guid = gsl->priv->get_guid;
-		gsl->priv->guid = * ((GUID *)(get_guid->param_getfcn
+	if (selection) {
+		const QofParam *get_guid = priv->get_guid;
+		priv->guid = * ((GUID *)(get_guid->param_getfcn
 					      (gsl->selected_item, get_guid)));
 		gnc_gui_component_watch_entity
-			(gsl->priv->component_id, &(gsl->priv->guid),
+			(priv->component_id, &(priv->guid),
 			 GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 	} else
-		gsl->priv->guid = *xaccGUIDNULL ();
+		priv->guid = *xaccGUIDNULL ();
 }
 
 /**

@@ -25,16 +25,16 @@
 #include "QueryNew.h"
 #include "gnc-date.h"
 
-#define GNCSEARCH_DATE(obj)	GTK_CHECK_CAST (obj, gnc_search_date_get_type (), GNCSearchDate)
-#define GNCSEARCH_DATE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_date_get_type (), GNCSearchDateClass)
-#define IS_GNCSEARCH_DATE(obj)      GTK_CHECK_TYPE (obj, gnc_search_date_get_type ())
+#define GNC_TYPE_SEARCH_DATE		(gnc_search_date_get_type ())
+#define GNCSEARCH_DATE(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_DATE, GNCSearchDate)
+#define GNCSEARCH_DATE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DATE, GNCSearchDateClass)
+#define IS_GNCSEARCH_DATE(obj)     	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_DATE)
 
 typedef struct _GNCSearchDate	GNCSearchDate;
 typedef struct _GNCSearchDateClass	GNCSearchDateClass;
 
 struct _GNCSearchDate {
   GNCSearchCoreType parent;
-  struct _GNCSearchDatePrivate *priv;
 
   query_compare_t	how;
   Timespec		ts;

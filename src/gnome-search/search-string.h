@@ -23,9 +23,10 @@
 
 #include "search-core-type.h"
 
-#define GNCSEARCH_STRING(obj)	GTK_CHECK_CAST (obj, gnc_search_string_get_type (), GNCSearchString)
-#define GNCSEARCH_STRING_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_string_get_type (), GNCSearchStringClass)
-#define IS_GNCSEARCH_STRING(obj)      GTK_CHECK_TYPE (obj, gnc_search_string_get_type ())
+#define GNC_TYPE_SEARCH_STRING		(gnc_search_string_get_type ())
+#define GNCSEARCH_STRING(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_STRING, GNCSearchString)
+#define GNCSEARCH_STRING_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_STRING, GNCSearchStringClass)
+#define IS_GNCSEARCH_STRING(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_STRING)
 
 typedef struct _GNCSearchString	GNCSearchString;
 typedef struct _GNCSearchStringClass	GNCSearchStringClass;
@@ -39,7 +40,6 @@ typedef enum _search_string_how {
 
 struct _GNCSearchString {
   GNCSearchCoreType parent;
-  struct _GNCSearchStringPrivate *priv;
 
   GNCSearchString_Type	how;
   gboolean		ign_case;

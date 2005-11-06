@@ -43,11 +43,14 @@ static void gnc_search_date_class_init	(GNCSearchDateClass *class);
 static void gnc_search_date_init	(GNCSearchDate *gspaper);
 static void gnc_search_date_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchDate *)(x))->priv)
+typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 
 struct _GNCSearchDatePrivate {
   GtkWidget *entry;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_DATE, GNCSearchDatePrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -95,12 +98,13 @@ gnc_search_date_class_init (GNCSearchDateClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchDatePrivate));
 }
 
 static void
 gnc_search_date_init (GNCSearchDate *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->ts.tv_sec = time(NULL);
   o->how = COMPARE_LT;
 }
@@ -108,14 +112,16 @@ gnc_search_date_init (GNCSearchDate *o)
 static void
 gnc_search_date_finalize (GObject *obj)
 {
-  GNCSearchDate *o = (GNCSearchDate *)obj;
-  g_assert (IS_GNCSEARCH_DATE (o));
+  GNCSearchDate *o;
+  GNCSearchDatePrivate *priv;
 
-  if (o->priv->entry)
-    gtk_widget_destroy (o->priv->entry);
+  g_assert (IS_GNCSEARCH_DATE (obj));
 
-  g_free(o->priv);
-	
+  o = GNCSEARCH_DATE(obj);
+  priv = _PRIVATE(o);
+  if (priv->entry)
+    gtk_widget_destroy (priv->entry);
+
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -129,7 +135,7 @@ gnc_search_date_finalize (GObject *obj)
 GNCSearchDate *
 gnc_search_date_new (void)
 {
-  GNCSearchDate *o = g_object_new(gnc_search_date_get_type (), NULL);
+  GNCSearchDate *o = g_object_new(GNC_TYPE_SEARCH_DATE, NULL);
   return o;
 }
 
@@ -225,24 +231,28 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
   GNCSearchDate *fi = (GNCSearchDate *)fe;
+  GNCSearchDatePrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
-  if (fi->priv->entry)
-    gtk_widget_grab_focus (GNC_DATE_EDIT(fi->priv->entry)->date_entry);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gtk_widget_grab_focus (GNC_DATE_EDIT(priv->entry)->date_entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
   GNCSearchDate *fi = (GNCSearchDate *)fe;
+  GNCSearchDatePrivate *priv;
 
   g_return_if_fail (fi);
   g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
-  if (fi->priv->entry)
-    gnc_date_editable_enters (GNC_DATE_EDIT (fi->priv->entry), TRUE);
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    gnc_date_editable_enters (GNC_DATE_EDIT (priv->entry), TRUE);
 }
 
 static GtkWidget *
@@ -250,10 +260,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *entry, *menu, *box;
   GNCSearchDate *fi = (GNCSearchDate *)fe;
+  GNCSearchDatePrivate *priv;
 	
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
 
+  priv = _PRIVATE(fi);
   box = gtk_hbox_new (FALSE, 3);
 
   /* Build and connect the option menu */
@@ -265,7 +277,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
   g_object_ref (entry);
-  fi->priv->entry = entry;
+  priv->entry = entry;
 
   /* And return the box */
   return box;
@@ -274,13 +286,15 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchDate *fi = (GNCSearchDate *)fe;
+  GNCSearchDatePrivate *priv;
 
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
 
   /* Make sure we actually use the currently-entered date */
-  if (fi->priv->entry)
-    fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (fi->priv->entry));
+  priv = _PRIVATE(fi);
+  if (priv->entry)
+    fi->ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (priv->entry));
 
   return gncQueryDatePredicate (fi->how, DATE_MATCH_NORMAL, fi->ts);
 }

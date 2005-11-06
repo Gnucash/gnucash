@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_INT64(obj)	GTK_CHECK_CAST (obj, gnc_search_int64_get_type (), GNCSearchInt64)
-#define GNCSEARCH_INT64_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_int64_get_type (), GNCSearchInt64Class)
-#define IS_GNCSEARCH_INT64(obj)      GTK_CHECK_TYPE (obj, gnc_search_int64_get_type ())
+#define GNC_TYPE_SEARCH_INT64		(gnc_search_int64_get_type ())
+#define GNCSEARCH_INT64(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_INT64, GNCSearchInt64)
+#define GNCSEARCH_INT64_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_INT64, GNCSearchInt64Class)
+#define IS_GNCSEARCH_INT64(obj)		GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_INT64)
 
 typedef struct _GNCSearchInt64	GNCSearchInt64;
 typedef struct _GNCSearchInt64Class	GNCSearchInt64Class;
 
 struct _GNCSearchInt64 {
   GNCSearchCoreType parent;
-  struct _GNCSearchInt64Private *priv;
 
   query_compare_t	how;
   gint64		value;

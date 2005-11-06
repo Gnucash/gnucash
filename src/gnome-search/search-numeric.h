@@ -25,9 +25,10 @@
 #include "gnc-numeric.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_NUMERIC(obj)	GTK_CHECK_CAST (obj, gnc_search_numeric_get_type (), GNCSearchNumeric)
-#define GNCSEARCH_NUMERIC_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_numeric_get_type (), GNCSearchNumericClass)
-#define IS_GNCSEARCH_NUMERIC(obj)      GTK_CHECK_TYPE (obj, gnc_search_numeric_get_type ())
+#define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
+#define GNCSEARCH_NUMERIC(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
+#define GNCSEARCH_NUMERIC_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericClass)
+#define IS_GNCSEARCH_NUMERIC(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_NUMERIC)
 
 typedef struct _GNCSearchNumeric	GNCSearchNumeric;
 typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;

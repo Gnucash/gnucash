@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_DOUBLE(obj)	GTK_CHECK_CAST (obj, gnc_search_double_get_type (), GNCSearchDouble)
-#define GNCSEARCH_DOUBLE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_double_get_type (), GNCSearchDoubleClass)
-#define IS_GNCSEARCH_DOUBLE(obj)      GTK_CHECK_TYPE (obj, gnc_search_double_get_type ())
+#define GNC_TYPE_SEARCH_DOUBLE		(gnc_search_double_get_type ())
+#define GNCSEARCH_DOUBLE(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDouble)
+#define GNCSEARCH_DOUBLE_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDoubleClass)
+#define IS_GNCSEARCH_DOUBLE(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_DOUBLE)
 
 typedef struct _GNCSearchDouble	GNCSearchDouble;
 typedef struct _GNCSearchDoubleClass	GNCSearchDoubleClass;
 
 struct _GNCSearchDouble {
   GNCSearchCoreType parent;
-  struct _GNCSearchDoublePrivate *priv;
 
   query_compare_t	how;
   double		value;

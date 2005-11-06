@@ -42,12 +42,15 @@ static void gnc_search_account_class_init	(GNCSearchAccountClass *class);
 static void gnc_search_account_init	(GNCSearchAccount *gspaper);
 static void gnc_search_account_finalize	(GObject *obj);
 
-#define _PRIVATE(x) (((GNCSearchAccount *)(x))->priv)
+typedef struct _GNCSearchAccountPrivate GNCSearchAccountPrivate;
 
 struct _GNCSearchAccountPrivate {
   gboolean	match_all;
   GList *	selected_accounts;
 };
+
+#define _PRIVATE(o) \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccountPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -94,12 +97,13 @@ gnc_search_account_class_init (GNCSearchAccountClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchAccountPrivate));
 }
 
 static void
 gnc_search_account_init (GNCSearchAccount *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
   o->how = GUID_MATCH_ANY;
 }
 
@@ -109,8 +113,6 @@ gnc_search_account_finalize (GObject *obj)
   GNCSearchAccount *o = (GNCSearchAccount *)obj;
   g_assert (IS_GNCSEARCH_ACCOUNT (o));
 
-  g_free(o->priv);
-	
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -124,7 +126,7 @@ gnc_search_account_finalize (GObject *obj)
 GNCSearchAccount *
 gnc_search_account_new (void)
 {
-  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
+  GNCSearchAccount *o = g_object_new(GNC_TYPE_SEARCH_ACCOUNT, NULL);
   return o;
 }
 
@@ -138,8 +140,12 @@ gnc_search_account_new (void)
 GNCSearchAccount *
 gnc_search_account_matchall_new (void)
 {
-  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
-  o->priv->match_all = TRUE;
+  GNCSearchAccount *o;
+  GNCSearchAccountPrivate *priv;
+
+  o = g_object_new(GNC_TYPE_SEARCH_ACCOUNT, NULL);
+  priv = _PRIVATE(o);
+  priv->match_all = TRUE;
   o->how = GUID_MATCH_ALL;
   return o;
 }
@@ -148,12 +154,14 @@ static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchAccount *fi = (GNCSearchAccount *)fe;
+  GNCSearchAccountPrivate *priv;
   gboolean valid = TRUE;
 
   g_return_val_if_fail (fi, FALSE);
   g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), FALSE);
 	
-  if (fi->priv->selected_accounts == NULL && fi->how ) {
+  priv = _PRIVATE(fi);
+  if (priv->selected_accounts == NULL && fi->how ) {
     valid = FALSE;
     gnc_error_dialog (NULL, _("You have not selected any accounts"));
   }
@@ -192,12 +200,14 @@ static GtkWidget *
 make_menu (GNCSearchCoreType *fe)
 {
   GNCSearchAccount *fi = (GNCSearchAccount *)fe;
+  GNCSearchAccountPrivate *priv;
   GtkWidget *menu, *item, *first, *opmenu;
   int current = 0, index = 0;
 
   menu = gtk_menu_new ();
 
-  if (fi->priv->match_all) {
+  priv = _PRIVATE(fi);
+  if (priv->match_all) {
     ADD_MENU_ITEM (_("matches all accounts"), GUID_MATCH_ALL);
     first = item;
   } else {
@@ -218,7 +228,10 @@ make_menu (GNCSearchCoreType *fe)
 static char *
 describe_button (GNCSearchAccount *fi)
 {
-  if (fi->priv->selected_accounts)
+  GNCSearchAccountPrivate *priv;
+
+  priv = _PRIVATE(fi);
+  if (priv->selected_accounts)
     return (_("Selected Accounts"));
   return (_("Choose Accounts"));
 }
@@ -226,6 +239,7 @@ describe_button (GNCSearchAccount *fi)
 static void
 button_clicked (GtkButton *button, GNCSearchAccount *fi)
 {
+  GNCSearchAccountPrivate *priv;
   GtkDialog *dialog;
   GtkWidget *account_tree;
   GtkWidget *accounts_scroller;
@@ -240,9 +254,10 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
   /* Select the currently-selected accounts */
-  if (fi->priv->selected_accounts)
+  priv = _PRIVATE(fi);
+  if (priv->selected_accounts)
     gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(account_tree),
-						 fi->priv->selected_accounts, FALSE);
+						 priv->selected_accounts, FALSE);
 
   /* Create the account scroller and put the tree in it */
   accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -271,10 +286,10 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 
   /* Now run the dialog */
   if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK) {
-    if (fi->priv->selected_accounts)
-      g_list_free (fi->priv->selected_accounts);
+    if (priv->selected_accounts)
+      g_list_free (priv->selected_accounts);
 
-    fi->priv->selected_accounts =
+    priv->selected_accounts =
       gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
 
     desc = describe_button (fi);
@@ -316,13 +331,15 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
+  GNCSearchAccountPrivate *priv;
   GNCSearchAccount *fi = (GNCSearchAccount *)fe;
   GList *l = NULL, *node;
 
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), NULL);
 
-  for (node = fi->priv->selected_accounts; node; node = node->next) {
+  priv = _PRIVATE(fi);
+  for (node = priv->selected_accounts; node; node = node->next) {
     Account *acc = node->data;
     const GUID *guid = xaccAccountGetGUID (acc);
     l = g_list_prepend (l, (gpointer)guid);
@@ -335,14 +352,17 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchAccount *se, *fse = (GNCSearchAccount *)fe;
+  GNCSearchAccountPrivate *se_priv, *fse_priv;
 
   g_return_val_if_fail (fse, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fse), NULL);
+  fse_priv = _PRIVATE(fse);
 
   se = gnc_search_account_new ();
+  se_priv = _PRIVATE(se);
   se->how = fse->how;
-  se->priv->match_all = fse->priv->match_all;
-  se->priv->selected_accounts = g_list_copy (fse->priv->selected_accounts);
+  se_priv->match_all = fse_priv->match_all;
+  se_priv->selected_accounts = g_list_copy (fse_priv->selected_accounts);
 
   return (GNCSearchCoreType *)se;
 }
