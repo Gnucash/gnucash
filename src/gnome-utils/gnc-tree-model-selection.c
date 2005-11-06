@@ -89,12 +89,15 @@ static void gnc_tree_model_selection_toggled (GtkCellRendererToggle *toggle,
 					      gchar *path,
 					      GncTreeModelSelection *model);
 
-struct GncTreeModelSelectionPrivate
+typedef struct GncTreeModelSelectionPrivate
 {
 	GtkTreeModel *child_model;
 
 	GHashTable *selections;
-};
+} GncTreeModelSelectionPrivate;
+
+#define GNC_TREE_MODEL_SELECTION_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_SELECTION, GncTreeModelSelectionPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -142,34 +145,37 @@ gnc_tree_model_selection_class_init (GncTreeModelSelectionClass *klass)
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = gnc_tree_model_selection_finalize;
+
+	g_type_class_add_private(klass, sizeof(GncTreeModelSelectionPrivate));
 }
 
 static void
 gnc_tree_model_selection_init (GncTreeModelSelection *model)
 {
+	GncTreeModelSelectionPrivate *priv;
+
 	while (model->stamp == 0) {
 		model->stamp = g_random_int ();
 	}
 
-	model->priv = g_new0 (GncTreeModelSelectionPrivate, 1);
-	model->priv->selections = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
+	priv->selections = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 static void
 gnc_tree_model_selection_finalize (GObject *object)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_TREE_MODEL_SELECTION (object));
 
 	model = GNC_TREE_MODEL_SELECTION (object);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
-	g_return_if_fail (model->priv != NULL);
-
-	g_object_unref (model->priv->child_model);
-	g_hash_table_destroy (model->priv->selections);
-	g_free (model->priv);
+	g_object_unref (priv->child_model);
+	g_hash_table_destroy (priv->selections);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -178,10 +184,12 @@ GtkTreeModel *
 gnc_tree_model_selection_new (GtkTreeModel *child_model)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 
 	model = g_object_new (GNC_TYPE_TREE_MODEL_SELECTION, NULL);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
-	model->priv->child_model = child_model;
+	priv->child_model = child_model;
 	g_object_ref (child_model);
 	g_signal_connect (G_OBJECT (child_model), "row_changed",
 			  G_CALLBACK (gnc_tree_model_selection_row_changed), model);
@@ -200,9 +208,12 @@ gnc_tree_model_selection_new (GtkTreeModel *child_model)
 GtkTreeModel *
 gnc_tree_model_selection_get_model (GncTreeModelSelection *model)
 {
+	GncTreeModelSelectionPrivate *priv;
+
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (model), NULL);
 
-	return model->priv->child_model;
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
+	return priv->child_model;
 }
 
 void
@@ -239,9 +250,12 @@ gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeModelSelection *mode
 gint
 gnc_tree_model_selection_get_selection_row (GncTreeModelSelection *model)
 {
+	GncTreeModelSelectionPrivate *priv;
+
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (model), 0);
 
-	return gtk_tree_model_get_n_columns (model->priv->child_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
+	return gtk_tree_model_get_n_columns (priv->child_model);
 }
 
 GtkTreeViewColumn *
@@ -269,11 +283,13 @@ gboolean
 gnc_tree_model_selection_is_selected  (GncTreeModelSelection *model,
 				       GtkTreeIter *iter)
 {
+	GncTreeModelSelectionPrivate *priv;
 	gchar *path;
 	gboolean selected;
 	
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 	path = gtk_tree_model_get_string_from_iter (GTK_TREE_MODEL (model), iter);
-	selected = g_hash_table_lookup (model->priv->selections, path) != NULL;
+	selected = g_hash_table_lookup (priv->selections, path) != NULL;
 	g_free (path);
 
 	return selected;
@@ -284,20 +300,22 @@ gnc_tree_model_selection_set_selected (GncTreeModelSelection *model,
 				       GtkTreeIter *iter,
 				       gboolean selected)
 {
+	GncTreeModelSelectionPrivate *priv;
 	gchar *path_string;
 	GtkTreePath *path;
 	
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 	path_string = gtk_tree_model_get_string_from_iter (GTK_TREE_MODEL (model), iter);
 
-	if (selected == (g_hash_table_lookup (model->priv->selections, path_string) != NULL)) {
+	if (selected == (g_hash_table_lookup (priv->selections, path_string) != NULL)) {
 		g_free (path_string);
 		return;
 	}
 
 	if (selected) {
-		g_hash_table_insert (model->priv->selections, g_strdup (path_string), GINT_TO_POINTER (1));
+		g_hash_table_insert (priv->selections, g_strdup (path_string), GINT_TO_POINTER (1));
 	} else {
-		g_hash_table_remove (model->priv->selections, path_string);
+		g_hash_table_remove (priv->selections, path_string);
 	}
 
 	path = gtk_tree_path_new_from_string (path_string);
@@ -328,24 +346,28 @@ static guint
 gnc_tree_model_selection_get_flags (GtkTreeModel *tree_model)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), 0);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
-	return gtk_tree_model_get_flags (model->priv->child_model);
+	return gtk_tree_model_get_flags (priv->child_model);
 }
 
 static int
 gnc_tree_model_selection_get_n_columns (GtkTreeModel *tree_model)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), 0);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
-	return gtk_tree_model_get_n_columns (model->priv->child_model) + 1;
+	return gtk_tree_model_get_n_columns (priv->child_model) + 1;
 }
 
 static GType
@@ -353,15 +375,17 @@ gnc_tree_model_selection_get_column_type (GtkTreeModel *tree_model,
 					  int index)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	gint columns = gnc_tree_model_selection_get_n_columns (tree_model);
 	
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), G_TYPE_INVALID);
 	g_return_val_if_fail ((index >= 0) && (index < columns), G_TYPE_INVALID);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	if (index < columns - 1) {
-		return gtk_tree_model_get_column_type (model->priv->child_model, index);
+		return gtk_tree_model_get_column_type (priv->child_model, index);
 	} else {
 		return G_TYPE_BOOLEAN;
 	}
@@ -373,13 +397,15 @@ gnc_tree_model_selection_get_iter (GtkTreeModel *tree_model,
 				   GtkTreePath *path)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
-	if (!gtk_tree_model_get_iter (model->priv->child_model, &child_iter, path)) {
+	if (!gtk_tree_model_get_iter (priv->child_model, &child_iter, path)) {
 		return FALSE;
 	}
 
@@ -393,6 +419,7 @@ gnc_tree_model_selection_get_path (GtkTreeModel *tree_model,
 				   GtkTreeIter *iter)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), NULL);
@@ -400,10 +427,11 @@ gnc_tree_model_selection_get_path (GtkTreeModel *tree_model,
 	g_return_val_if_fail (iter->stamp == GNC_TREE_MODEL_SELECTION (tree_model)->stamp, NULL);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_iter, iter);
 
-	return gtk_tree_model_get_path (model->priv->child_model, &child_iter);
+	return gtk_tree_model_get_path (priv->child_model, &child_iter);
 }
 
 static void
@@ -414,6 +442,7 @@ gnc_tree_model_selection_get_value (GtkTreeModel *tree_model,
 {
 	gint columns = gnc_tree_model_selection_get_n_columns (tree_model);
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 	gchar *path;
 
@@ -423,16 +452,17 @@ gnc_tree_model_selection_get_value (GtkTreeModel *tree_model,
 	g_return_if_fail (iter->stamp == GNC_TREE_MODEL_SELECTION (tree_model)->stamp);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_iter, iter);
 
 	if (column < columns - 1) {
-		gtk_tree_model_get_value (model->priv->child_model, &child_iter, column, value);
+		gtk_tree_model_get_value (priv->child_model, &child_iter, column, value);
 	} else {
 		g_value_init (value, G_TYPE_BOOLEAN);
 
-		path = gtk_tree_model_get_string_from_iter (model->priv->child_model, &child_iter);
-		g_value_set_boolean (value, g_hash_table_lookup (model->priv->selections, path) != NULL);
+		path = gtk_tree_model_get_string_from_iter (priv->child_model, &child_iter);
+		g_value_set_boolean (value, g_hash_table_lookup (priv->selections, path) != NULL);
 		g_free (path);
 	}
 }
@@ -442,6 +472,7 @@ gnc_tree_model_selection_iter_next (GtkTreeModel *tree_model,
 				    GtkTreeIter *iter)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), FALSE);
@@ -449,10 +480,11 @@ gnc_tree_model_selection_iter_next (GtkTreeModel *tree_model,
 	g_return_val_if_fail (iter->stamp == GNC_TREE_MODEL_SELECTION (tree_model)->stamp, FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_iter, iter);
 
-	if (!gtk_tree_model_iter_next (model->priv->child_model, &child_iter)) {
+	if (!gtk_tree_model_iter_next (priv->child_model, &child_iter)) {
 		return FALSE;
 	} else {
 		gnc_tree_model_selection_convert_child_iter_to_iter (model, iter, &child_iter);
@@ -467,15 +499,17 @@ gnc_tree_model_selection_iter_children (GtkTreeModel *tree_model,
 					GtkTreeIter *parent)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 	GtkTreeIter child_parent;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	if (parent == NULL) {
-		if (!gtk_tree_model_iter_children (model->priv->child_model, &child_iter, NULL))
+		if (!gtk_tree_model_iter_children (priv->child_model, &child_iter, NULL))
 			return FALSE;
 	} else {
 		g_return_val_if_fail (parent != NULL, FALSE);
@@ -483,7 +517,7 @@ gnc_tree_model_selection_iter_children (GtkTreeModel *tree_model,
 
 		gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_parent, parent);
 
-		if (!gtk_tree_model_iter_children (model->priv->child_model, &child_iter, &child_parent))
+		if (!gtk_tree_model_iter_children (priv->child_model, &child_iter, &child_parent))
 			return FALSE;
 	}
 
@@ -497,6 +531,7 @@ gnc_tree_model_selection_iter_has_child (GtkTreeModel *tree_model,
 					 GtkTreeIter *iter)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), FALSE);
@@ -504,10 +539,11 @@ gnc_tree_model_selection_iter_has_child (GtkTreeModel *tree_model,
 	g_return_val_if_fail (iter->stamp == GNC_TREE_MODEL_SELECTION (tree_model)->stamp, FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_iter, iter);
 
-	return gtk_tree_model_iter_has_child (model->priv->child_model, &child_iter);
+	return gtk_tree_model_iter_has_child (priv->child_model, &child_iter);
 }
 
 static int
@@ -515,21 +551,23 @@ gnc_tree_model_selection_iter_n_children (GtkTreeModel *tree_model,
 					  GtkTreeIter *iter)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), 0);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	if (iter == NULL) {
-		return gtk_tree_model_iter_n_children (model->priv->child_model, NULL);
+		return gtk_tree_model_iter_n_children (priv->child_model, NULL);
 	} else {
 		g_return_val_if_fail (iter != NULL, 0);
 		g_return_val_if_fail (iter->stamp == model->stamp, 0);
 
 		gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_iter, iter);
 
-		return gtk_tree_model_iter_n_children (model->priv->child_model, &child_iter);
+		return gtk_tree_model_iter_n_children (priv->child_model, &child_iter);
 	}
 }
 
@@ -540,15 +578,17 @@ gnc_tree_model_selection_iter_nth_child (GtkTreeModel *tree_model,
 					 int n)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_iter;
 	GtkTreeIter child_parent;
 
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_SELECTION (tree_model), FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	if (parent == NULL) {
-		if (!gtk_tree_model_iter_nth_child (model->priv->child_model, &child_iter, NULL, n))
+		if (!gtk_tree_model_iter_nth_child (priv->child_model, &child_iter, NULL, n))
 			return FALSE;
 	} else {
 		g_return_val_if_fail (iter != NULL, FALSE);
@@ -556,7 +596,7 @@ gnc_tree_model_selection_iter_nth_child (GtkTreeModel *tree_model,
 
 		gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_parent, parent);
 
-		if (!gtk_tree_model_iter_nth_child (model->priv->child_model, &child_iter, &child_parent, n))
+		if (!gtk_tree_model_iter_nth_child (priv->child_model, &child_iter, &child_parent, n))
 			return FALSE;
 	}
 
@@ -571,6 +611,7 @@ gnc_tree_model_selection_iter_parent (GtkTreeModel *tree_model,
 				      GtkTreeIter *child)
 {
 	GncTreeModelSelection *model;
+	GncTreeModelSelectionPrivate *priv;
 	GtkTreeIter child_child;
 	GtkTreeIter child_iter;
 
@@ -579,10 +620,11 @@ gnc_tree_model_selection_iter_parent (GtkTreeModel *tree_model,
 	g_return_val_if_fail (child->stamp == GNC_TREE_MODEL_SELECTION (tree_model)->stamp, FALSE);
 
 	model = GNC_TREE_MODEL_SELECTION (tree_model);
+	priv = GNC_TREE_MODEL_SELECTION_GET_PRIVATE(model);
 
 	gnc_tree_model_selection_convert_iter_to_child_iter (model, &child_child, child);
 
-	if (!gtk_tree_model_iter_parent (model->priv->child_model, &child_iter, &child_child)) {
+	if (!gtk_tree_model_iter_parent (priv->child_model, &child_iter, &child_child)) {
 		return FALSE;
 	} else {
 		gnc_tree_model_selection_convert_child_iter_to_iter (model, iter, &child_iter);

@@ -52,10 +52,13 @@ static void gnc_tree_view_price_init (GncTreeViewPrice *view);
 static void gnc_tree_view_price_finalize (GObject *object);
 static void gnc_tree_view_price_destroy (GtkObject *object);
 
-struct GncTreeViewPricePrivate
+typedef struct GncTreeViewPricePrivate
 {
-  gboolean show_currencies;
-};
+  gpointer dummy;
+} GncTreeViewPricePrivate;
+
+#define GNC_TREE_VIEW_PRICE_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_PRICE, GncTreeViewPricePrivate))
 
 
 /************************************************************/
@@ -106,26 +109,27 @@ gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_view_price_destroy;
+
+	g_type_class_add_private(klass, sizeof(GncTreeViewPricePrivate));
 }
 
 static void
 gnc_tree_view_price_init (GncTreeViewPrice *view)
 {
-  view->priv = g_new0 (GncTreeViewPricePrivate, 1);
 }
 
 static void
 gnc_tree_view_price_finalize (GObject *object)
 {
   GncTreeViewPrice *view;
+  GncTreeViewPricePrivate *priv;
 
   ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
   view = GNC_TREE_VIEW_PRICE (object);
-
-  g_free (view->priv);
+  priv = GNC_TREE_VIEW_PRICE_GET_PRIVATE (view);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);

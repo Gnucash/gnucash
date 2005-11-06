@@ -42,16 +42,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_ACCOUNT_TREE_NAME "gnc-plugin-account-tree"
 
 /* typedefs & structures */
-typedef struct GncPluginAccountTreePrivate GncPluginAccountTreePrivate;
-
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginAccountTreePrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginAccountTree;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginAccountTreeClass;
 
 /* function prototypes */

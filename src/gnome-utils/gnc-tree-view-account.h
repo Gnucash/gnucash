@@ -52,7 +52,6 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
 
 /* typedefs & structures */
-typedef struct GncTreeViewAccountPrivate GncTreeViewAccountPrivate;
 typedef struct AccountViewInfo_s     AccountViewInfo;
 
 
@@ -63,15 +62,12 @@ struct AccountViewInfo_s
 
 
 typedef struct {
-	GncTreeView parent;
-
-	GncTreeViewAccountPrivate *priv;
-
+	GncTreeView gnc_tree_view;
 	int stamp;
 } GncTreeViewAccount;
 
 typedef struct {
-	GncTreeViewClass parent;
+	GncTreeViewClass gnc_tree_view;
 } GncTreeViewAccountClass;
 
 

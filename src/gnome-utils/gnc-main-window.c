@@ -115,7 +115,7 @@ static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
 
-struct GncMainWindowPrivate
+typedef struct GncMainWindowPrivate
 {
 	GtkWidget *menu_dock;
 	GtkWidget *toolbar_dock;
@@ -131,7 +131,10 @@ struct GncMainWindowPrivate
 
 
 	GHashTable *merged_actions_table;
-};
+} GncMainWindowPrivate;
+
+#define GNC_MAIN_WINDOW_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_MAIN_WINDOW, GncMainWindowPrivate))
 
 typedef struct {
 	guint merge_id;
@@ -321,11 +324,13 @@ static gboolean
 gnc_main_window_page_exists (GncPluginPage *page)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 	GList *walker;
 
 	for (walker = active_windows; walker; walker = g_list_next(walker)) {
 	  window = walker->data;
-	  if (g_list_find(window->priv->installed_pages, page)) {
+	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	  if (g_list_find(priv->installed_pages, page)) {
 	    return TRUE;
 	  }
 	}
@@ -498,6 +503,7 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 			       gpointer user_data)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 	GncPluginPage *page;
 	GList *item, *next;
 
@@ -513,11 +519,12 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	ENTER("entity %p of type %s, event %d, window %p",
 	      entity, type, event_type, user_data);
 	window = GNC_MAIN_WINDOW(user_data);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
         /* This is not a typical list iteration.  We're removing while
          * we iterate, so we have to cache the 'next' pointer before
          * executing any code in the loop. */
-	for (item = window->priv->installed_pages; item; item = next) {
+	for (item = priv->installed_pages; item; item = next) {
 	  next = g_list_next(item);
 	  page = GNC_PLUGIN_PAGE(item->data);
 	  if (gnc_plugin_page_has_book (page, entity))
@@ -542,6 +549,7 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 static gchar *
 gnc_main_window_generate_title (GncMainWindow *window)
 {
+  GncMainWindowPrivate *priv;
   GncPluginPage *page;
   const gchar *filename;
   gchar *title, *ptr;
@@ -557,7 +565,8 @@ gnc_main_window_generate_title (GncMainWindow *window)
       filename = ptr+1;
   }
 
-  page = window->priv->current_page;
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  page = priv->current_page;
   if (page) {
     /* The Gnome HIG 2.0 recommends the application name not be used. (p16) */
     title = g_strdup_printf("%s - %s", filename,
@@ -622,12 +631,13 @@ static void
 gnc_main_window_update_one_menu_action (GncMainWindow *window,
 					struct menu_update *data)
 {
+  GncMainWindowPrivate *priv;
   GtkAction* action;
 
   ENTER("window %p, action %s, label %s, visible %d", window,
 	data->action_name, data->label, data->visible);
-  action = gtk_action_group_get_action(window->priv->action_group,
-				       data->action_name);
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  action = gtk_action_group_get_action(priv->action_group, data->action_name);
   if (action)
     g_object_set(G_OBJECT(action),
 		 "label", data->label,
@@ -652,6 +662,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
 static void
 gnc_main_window_update_radio_button (GncMainWindow *window)
 {
+  GncMainWindowPrivate *priv;
   GtkAction *action, *first_action;
   GSList *action_list;
   gchar *action_name;
@@ -666,9 +677,9 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
     return;
   }
 
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   action_name = g_strdup_printf("Window%dAction", index);
-  action = gtk_action_group_get_action(window->priv->action_group,
-				       action_name);
+  action = gtk_action_group_get_action(priv->action_group, action_name);
 
   /* Block the signal so as not to affect window ordering (top to
    * bottom) on the screen */
@@ -823,8 +834,11 @@ gnc_main_window_update_tabs_one_page (GncPluginPage *page,
 static void
 gnc_main_window_update_tabs_one_window (GncMainWindow *window, gboolean *new_value)
 {
+  GncMainWindowPrivate *priv;
+
   ENTER("window %p, visible %d", window, *new_value);
-  g_list_foreach(window->priv->installed_pages,
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  g_list_foreach(priv->installed_pages,
 		 (GFunc)gnc_main_window_update_tabs_one_page,
 		 new_value);
   LEAVE(" ");
@@ -922,6 +936,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 	/* GtkObject signals */
 	gtkobject_class->destroy = gnc_main_window_destroy;
 
+	g_type_class_add_private(klass, sizeof(GncMainWindowPrivate));
+
 	/**
 	 * GncMainWindow::page_added:
 	 * @param window: the #GncMainWindow
@@ -983,12 +999,13 @@ static void
 gnc_main_window_init (GncMainWindow *window,
 		      GncMainWindowClass *klass)
 {
-	window->priv = g_new0 (GncMainWindowPrivate, 1);
+	GncMainWindowPrivate *priv;
 
-	window->priv->merged_actions_table =
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	priv->merged_actions_table =
 	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-	window->priv->event_handler_id =
+	priv->event_handler_id =
 	  gnc_engine_register_event_handler(gnc_main_window_event_handler,
 					    window);
 
@@ -1012,20 +1029,18 @@ static void
 gnc_main_window_finalize (GObject *object)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
 
 	window = GNC_MAIN_WINDOW (object);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE (window);
 
 	if (active_windows == NULL) {
 	  /* Oops. User killed last window and we didn't catch it. */
 	  g_idle_add((GSourceFunc)gnc_shutdown, 0);
 	}
-
-	g_return_if_fail (window->priv != NULL);
-
-	g_free (window->priv);
 
 	gnc_gobject_tracking_forget(object);
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -1036,6 +1051,7 @@ static void
 gnc_main_window_destroy (GtkObject *object)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
@@ -1044,14 +1060,13 @@ gnc_main_window_destroy (GtkObject *object)
 
 	active_windows = g_list_remove (active_windows, window);
 
-	g_return_if_fail (window->priv != NULL);
-
 	/* Do these things once */
-	if (window->priv->merged_actions_table) {
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->merged_actions_table) {
 
 	  /* Close any pages in this window */
-	  while (window->priv->current_page)
-	    gnc_main_window_close_page(window->priv->current_page);
+	  while (priv->current_page)
+	    gnc_main_window_close_page(priv->current_page);
 
 	  if (gnc_window_get_progressbar_window() == GNC_WINDOW(window))
 	    gnc_window_set_progressbar_window(NULL);
@@ -1062,11 +1077,11 @@ gnc_main_window_destroy (GtkObject *object)
 	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
 	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL);
 
-	  gnc_engine_unregister_event_handler(window->priv->event_handler_id);
-	  window->priv->event_handler_id = 0;
+	  gnc_engine_unregister_event_handler(priv->event_handler_id);
+	  priv->event_handler_id = 0;
 
-	  g_hash_table_destroy (window->priv->merged_actions_table);
-	  window->priv->merged_actions_table = NULL;
+	  g_hash_table_destroy (priv->merged_actions_table);
+	  priv->merged_actions_table = NULL;
 	}
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -1114,12 +1129,13 @@ gnc_main_window_connect (GncMainWindow *window,
 			 GtkWidget *tab_hbox,
 			 GtkWidget *menu_label)
 {
+	GncMainWindowPrivate *priv;
 	GtkNotebook *notebook;
 
 	page->window = GTK_WIDGET(window);
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
-	window->priv->installed_pages =
-	  g_list_append (window->priv->installed_pages, page);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	priv->installed_pages = g_list_append (priv->installed_pages, page);
 	gtk_notebook_append_page_menu (notebook, page->notebook_page,
 				       tab_hbox, menu_label);
 	gnc_plugin_page_inserted (page);
@@ -1152,6 +1168,7 @@ static void
 gnc_main_window_disconnect (GncMainWindow *window,
 			    GncPluginPage *page)
 {
+	GncMainWindowPrivate *priv;
 	GtkNotebook *notebook;
 	gint page_num;
 
@@ -1162,19 +1179,19 @@ gnc_main_window_disconnect (GncMainWindow *window,
 			 G_CALLBACK(gnc_main_window_button_press_cb), page);
 
 	/* Disconnect the page and summarybar from the window */
-	if (window->priv->current_page == page) {
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->current_page == page) {
 		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
 		gnc_plugin_page_unselected (page);
-		window->priv->current_page = NULL;
+		priv->current_page = NULL;
 	}
 
 	/* Remove it from the list of pages in the window */
-	window->priv->installed_pages =
-	  g_list_remove (window->priv->installed_pages, page);
+	priv->installed_pages = g_list_remove (priv->installed_pages, page);
 
 
 	/* Remove the page from the notebook */
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	notebook = GTK_NOTEBOOK (priv->notebook);
 	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
 	gtk_notebook_remove_page (notebook, page_num);
 
@@ -1203,11 +1220,13 @@ void
 gnc_main_window_display_page (GncPluginPage *page)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 	GtkNotebook *notebook;
 	gint page_num;
 
 	window = GNC_MAIN_WINDOW (page->window);
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	notebook = GTK_NOTEBOOK (priv->notebook);
 	page_num = gtk_notebook_page_num(notebook, page->notebook_page);
 	gtk_notebook_set_current_page (notebook, page_num);
 	gtk_window_present(GTK_WINDOW(window));
@@ -1225,6 +1244,7 @@ void
 gnc_main_window_open_page (GncMainWindow *window,
 			   GncPluginPage *page)
 {
+	GncMainWindowPrivate *priv;
 	GtkWidget *tab_hbox;
 	GtkWidget *label;
 	const gchar *icon;
@@ -1249,11 +1269,13 @@ gnc_main_window_open_page (GncMainWindow *window,
 	}
 
 	/* Is this the first page in the first window? */
-	if ((window == active_windows->data) &&
-	    (window->priv->installed_pages == NULL)) {
-	  immutable = TRUE;
-	  g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
-			     GINT_TO_POINTER(1));
+	if (window == active_windows->data) {
+	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	  if (priv->installed_pages == NULL) {
+	    immutable = TRUE;
+	    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
+			       GINT_TO_POINTER(1));
+	  }
 	}
 
 	page->window = GTK_WIDGET(window);
@@ -1322,6 +1344,7 @@ void
 gnc_main_window_close_page (GncPluginPage *page)
 {
 	GncMainWindow *window;
+	GncMainWindowPrivate *priv;
 
 	if (!page->notebook_page)
 		return;
@@ -1337,7 +1360,8 @@ gnc_main_window_close_page (GncPluginPage *page)
 	g_object_unref(page);
 
 	/* If this isn't the last window, go ahead and destroy the window. */
-	if (window->priv->installed_pages == NULL) {
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->installed_pages == NULL) {
 		if (g_list_length(active_windows) > 1) {
 			gtk_widget_destroy(GTK_WIDGET(window));
 		}
@@ -1355,7 +1379,10 @@ gnc_main_window_close_page (GncPluginPage *page)
 GncPluginPage *
 gnc_main_window_get_current_page (GncMainWindow *window)
 {
-	return window->priv->current_page;
+	GncMainWindowPrivate *priv;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	return priv->current_page;
 }
 
 
@@ -1370,6 +1397,7 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
 				      GtkActionGroup *group,
 				      guint merge_id)
 {
+	GncMainWindowPrivate *priv;
 	MergedActionEntry *entry;
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -1377,11 +1405,12 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
 	g_return_if_fail (GTK_IS_ACTION_GROUP(group));
 	g_return_if_fail (merge_id > 0);
 
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = group;
 	entry->merge_id = merge_id;
 	gtk_ui_manager_ensure_update (window->ui_merge);
-	g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+	g_hash_table_insert (priv->merged_actions_table, g_strdup (group_name), entry);
 }
 
 
@@ -1399,6 +1428,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 			       const gchar *filename,
 			       gpointer user_data)
 {
+	GncMainWindowPrivate *priv;
 	GncMainWindowActionData *data;
 	MergedActionEntry *entry;
 	GError *error = NULL;
@@ -1418,6 +1448,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	if (pathname == NULL)
 	  return;
 
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = gtk_action_group_new (group_name);
 	gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
@@ -1426,7 +1457,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	g_assert(entry->merge_id || error);
 	if (entry->merge_id) {
 	  gtk_ui_manager_ensure_update (window->ui_merge);
-	  g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+	  g_hash_table_insert (priv->merged_actions_table, g_strdup (group_name), entry);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
 		     filename, error->message);
@@ -1446,12 +1477,14 @@ void
 gnc_main_window_unmerge_actions (GncMainWindow *window,
 				 const gchar *group_name)
 {
+	GncMainWindowPrivate *priv;
 	MergedActionEntry *entry;
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (group_name != NULL);
 
-	entry = g_hash_table_lookup (window->priv->merged_actions_table, group_name);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	entry = g_hash_table_lookup (priv->merged_actions_table, group_name);
 
 	if (entry == NULL)
 		return;
@@ -1460,7 +1493,7 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 	gtk_ui_manager_remove_ui (window->ui_merge, entry->merge_id);
 	gtk_ui_manager_ensure_update (window->ui_merge);
 
-	g_hash_table_remove (window->priv->merged_actions_table, group_name);
+	g_hash_table_remove (priv->merged_actions_table, group_name);
 }
 
 
@@ -1496,12 +1529,14 @@ GtkActionGroup *
 gnc_main_window_get_action_group (GncMainWindow *window,
 				  const gchar *group_name)
 {
+	GncMainWindowPrivate *priv;
 	MergedActionEntry *entry;
 
 	g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window), NULL);
 	g_return_val_if_fail (group_name != NULL, NULL);
 
-	entry = g_hash_table_lookup (window->priv->merged_actions_table, group_name);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	entry = g_hash_table_lookup (priv->merged_actions_table, group_name);
 
 	if (entry == NULL)
 		return NULL;
@@ -1583,7 +1618,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (main_vbox);
 	gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
-	priv = window->priv;
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	priv->menu_dock = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (priv->menu_dock);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
@@ -1625,10 +1660,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 					    0,
 					    G_CALLBACK(gnc_main_window_cmd_window_raise),
 					    window);
-	gnc_plugin_update_actions(window->priv->action_group,
+	gnc_plugin_update_actions(priv->action_group,
 				  always_insensitive_actions,
 				  "sensitive", FALSE);
-	gnc_plugin_set_important_actions (window->priv->action_group,
+	gnc_plugin_set_important_actions (priv->action_group,
 					  gnc_menu_important_actions);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
@@ -1688,11 +1723,14 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 			    GtkWidget *widget,
 			    GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (GTK_IS_TOOLBAR (widget)) {
-		window->priv->toolbar_dock = widget;
+		priv->toolbar_dock = widget;
 	}
 
-	gtk_box_pack_start (GTK_BOX (window->priv->menu_dock), widget, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
 	gtk_widget_show (widget);
 }
 
@@ -1711,8 +1749,11 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 static gboolean
 gnc_main_window_show_summarybar (GncMainWindow *window, GtkAction *action)
 {
+	GncMainWindowPrivate *priv;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (action == NULL)
-	  action = gtk_action_group_get_action(window->priv->action_group,
+	  action = gtk_action_group_get_action(priv->action_group,
 					       "ViewSummaryAction");
 	if (action == NULL)
 	  return TRUE;
@@ -1734,6 +1775,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 			     gint pos,
 			     GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
 	GtkWidget *child;
 	GncPluginPage *page;
 	gboolean immutable, visible;
@@ -1742,8 +1784,9 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	       notebook, notebook_page, pos, window);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
-	if (window->priv->current_page != NULL) {
-		page = window->priv->current_page;
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->current_page != NULL) {
+		page = priv->current_page;
 		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
 		gnc_plugin_page_unselected (page);
 	}
@@ -1755,7 +1798,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 		page = NULL;
 	}
 
-	window->priv->current_page = page;
+	priv->current_page = page;
 
 	if (page != NULL) {
 		/* Update the user interface (e.g. menus and toolbars */
@@ -1771,13 +1814,13 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	/* Update the menus based upon whether this is an "immutable" page. */
 	immutable = page &&
 	  g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
-	gnc_plugin_update_actions(window->priv->action_group,
+	gnc_plugin_update_actions(priv->action_group,
 				  immutable_page_actions,
 				  "sensitive", !immutable);
-	gnc_plugin_update_actions(window->priv->action_group,
+	gnc_plugin_update_actions(priv->action_group,
 				  multiple_page_actions,
 				  "sensitive",
-				  g_list_length(window->priv->installed_pages) > 1);
+				  g_list_length(priv->installed_pages) > 1);
 
 	gnc_main_window_update_title(window);
 	gnc_main_window_update_menu_item(window);
@@ -1824,10 +1867,13 @@ gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
+
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
-	if (window->priv->current_page != NULL) {
-		gnc_main_window_close_page (window->priv->current_page);
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->current_page != NULL) {
+		gnc_main_window_close_page (priv->current_page);
 	}
 }
 
@@ -1866,21 +1912,26 @@ gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *wi
 static void
 gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-		gtk_widget_show (window->priv->toolbar_dock);
+		gtk_widget_show (priv->toolbar_dock);
 	} else {
-		gtk_widget_hide (window->priv->toolbar_dock);
+		gtk_widget_hide (priv->toolbar_dock);
 	}
 }
 
 static void
 gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
 	GList *item;
 	gboolean visible;
 
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	visible = gnc_main_window_show_summarybar(window, action);
-	for (item = window->priv->installed_pages; item; item = g_list_next(item)) {
+	for (item = priv->installed_pages; item; item = g_list_next(item)) {
 	  gnc_plugin_page_show_summarybar(item->data, visible);
 	}
 }
@@ -1888,10 +1939,13 @@ gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 {
+	GncMainWindowPrivate *priv;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-		gtk_widget_show (window->priv->statusbar);
+		gtk_widget_show (priv->statusbar);
 	} else {
-		gtk_widget_hide (window->priv->statusbar);
+		gtk_widget_hide (priv->statusbar);
 	}
 }
 
@@ -1910,14 +1964,14 @@ gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 {
-	GncMainWindowPrivate *priv;
+	GncMainWindowPrivate *priv, *new_priv;
 	GncMainWindow *new_window;
 	GncPluginPage *page;
 	GtkNotebook *notebook;
 	GtkWidget *tab_widget, *menu_widget;
 
 	/* Setup */
-	priv = window->priv;
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (priv->current_page == NULL)
 		return;
 	notebook = GTK_NOTEBOOK (priv->notebook);
@@ -1946,10 +2000,11 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 	g_object_unref(page);
 
 	/* just a little debugging. :-) */
+	new_priv = GNC_MAIN_WINDOW_GET_PRIVATE(new_window);
 	DEBUG("Moved page %p from window %p to new window %p",
 	      page, window, new_window);
 	DEBUG("Old window current is %p, new window current is %p",
-	      window->priv->current_page, new_window->priv->current_page);
+	      priv->current_page, priv->current_page);
 }
 
 static void
@@ -2062,7 +2117,7 @@ gnc_main_window_get_statusbar (GncWindow *window_in)
   g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window_in), NULL);
 
   window = GNC_MAIN_WINDOW(window_in);
-  priv = window->priv;
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   return priv->statusbar;
 }
 
@@ -2075,7 +2130,7 @@ gnc_main_window_get_progressbar (GncWindow *window_in)
   g_return_val_if_fail (GNC_IS_MAIN_WINDOW (window_in), NULL);
 
   window = GNC_MAIN_WINDOW(window_in);
-  priv = window->priv;
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   return priv->progressbar;
 }
 

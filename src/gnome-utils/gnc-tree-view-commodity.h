@@ -52,19 +52,13 @@ G_BEGIN_DECLS
 #define GNC_TREE_VIEW_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityClass))
 
 /* typedefs & structures */
-typedef struct GncTreeViewCommodityPrivate GncTreeViewCommodityPrivate;
-
-
 typedef struct {
-	GncTreeView parent;
-
-	GncTreeViewCommodityPrivate *priv;
-
+	GncTreeView gnc_tree_view;
 	int stamp;
 } GncTreeViewCommodity;
 
 typedef struct {
-	GncTreeViewClass parent;
+	GncTreeViewClass gnc_tree_view;
 } GncTreeViewCommodityClass;
 
 

@@ -53,10 +53,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginRegisterPrivate
+typedef struct GncPluginRegisterPrivate
 {
 	gpointer dummy;
-};
+} GncPluginRegisterPrivate;
+
+#define GNC_PLUGIN_REGISTER_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REGISTER, GncPluginRegisterPrivate))
 
 static GObjectClass *parent_class = NULL;
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -155,26 +158,25 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 
 	plugin_class->gconf_section = GCONF_REGISTER_SECTION;
 	plugin_class->gconf_notifications = gnc_plugin_register_gconf_changed;
+
+	g_type_class_add_private(klass, sizeof(GncPluginRegisterPrivate));
 }
 
 static void
 gnc_plugin_register_init (GncPluginRegister *plugin)
 {
-	plugin->priv = g_new0 (GncPluginRegisterPrivate, 1);
 }
 
 static void
 gnc_plugin_register_finalize (GObject *object)
 {
 	GncPluginRegister *plugin;
+	GncPluginRegisterPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_REGISTER (object));
 
 	plugin = GNC_PLUGIN_REGISTER (object);
-
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_REGISTER_GET_PRIVATE(plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

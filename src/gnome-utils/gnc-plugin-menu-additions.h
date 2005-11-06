@@ -49,15 +49,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME "gnc-plugin-hide-menu-additions"
 
 /* typedefs & structures */
-typedef struct GncPluginMenuAdditionsPrivate GncPluginMenuAdditionsPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginMenuAdditionsPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginMenuAdditions;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginMenuAdditionsClass;
 
 /* function prototypes */

@@ -38,13 +38,10 @@
 #define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
 #define GNC_IS_DATE_FORMAT(obj)       GTK_CHECK_TYPE (obj, gnc_date_format_get_type ())
 
-typedef struct _GNCDateFormatPriv GNCDateFormatPriv;
-
 /**
  **/
 typedef struct {
 	GtkHBox hbox;
-	GNCDateFormatPriv *priv;
 } GNCDateFormat;
 
 typedef struct {

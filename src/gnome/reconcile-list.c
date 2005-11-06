@@ -84,7 +84,7 @@ gnc_reconcile_list_get_type (void)
       (GInstanceInitFunc) gnc_reconcile_list_init
     };
 
-    gnc_reconcile_list_type = g_type_register_static (GTK_TYPE_GNC_QUERY_LIST,
+    gnc_reconcile_list_type = g_type_register_static (GNC_TYPE_QUERY_LIST,
 						      "GncReconcileList",
 						      &gnc_reconcile_list_info, 0);
   }

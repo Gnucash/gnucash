@@ -51,7 +51,7 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 typedef struct GncPluginPage {
-	GObject parent;			/**< The parent object data. */
+	GObject gobject;		/**< The parent object data. */
 
 	GtkWidget *window;		/**< The window that contains the
 					 *   display widget for this plugin.
@@ -70,7 +70,7 @@ typedef struct GncPluginPage {
 } GncPluginPage;
 
 typedef struct {
-	GObjectClass parent;
+	GObjectClass gobject;
 
 	const gchar *tab_icon;
 	const gchar *plugin_name;

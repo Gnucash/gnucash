@@ -86,10 +86,13 @@ gnc_tree_model_account_types_iter_parent (GtkTreeModel * tree_model,
                                           GtkTreeIter * child);
 */
 
-struct GncTreeModelAccountTypesPrivate
+typedef struct GncTreeModelAccountTypesPrivate
 {
     guint32 selected;
-};
+} GncTreeModelAccountTypesPrivate;
+
+#define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypesPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -137,6 +140,8 @@ gnc_tree_model_account_types_class_init (GncTreeModelAccountTypesClass * klass)
     parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_tree_model_account_types_finalize;
+
+    g_type_class_add_private(klass, sizeof(GncTreeModelAccountTypesPrivate));
 }
 
 static void
@@ -145,23 +150,19 @@ gnc_tree_model_account_types_init (GncTreeModelAccountTypes * model)
     while (model->stamp == 0) {
         model->stamp = g_random_int ();
     }
-
-    model->priv = g_new0 (GncTreeModelAccountTypesPrivate, 1);
 }
 
 static void
 gnc_tree_model_account_types_finalize (GObject * object)
 {
     GncTreeModelAccountTypes *model;
+    GncTreeModelAccountTypesPrivate *priv;
 
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (object));
 
     model = GNC_TREE_MODEL_ACCOUNT_TYPES (object);
-
-    g_return_if_fail (model->priv != NULL);
-
-    g_free (model->priv);
+    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE (model);
 
     G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -170,9 +171,11 @@ GtkTreeModel *
 gnc_tree_model_account_types_new (guint32 selected)
 {
     GncTreeModelAccountTypes *model;
+    GncTreeModelAccountTypesPrivate *priv;
 
     model = g_object_new (GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, NULL);
-    model->priv->selected = selected;
+    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
+    priv->selected = selected;
 
     return GTK_TREE_MODEL (model);
 }
@@ -191,20 +194,24 @@ gnc_tree_model_account_types_master(void)
 guint32
 gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes * model)
 {
-	g_return_val_if_fail (model != NULL, 0);
-	g_return_val_if_fail (model->priv != NULL, 0);
+	GncTreeModelAccountTypesPrivate *priv;
 
-	return model->priv->selected;
+	g_return_val_if_fail (model != NULL, 0);
+
+	priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
+	return priv->selected;
 }
 
 void
 gnc_tree_model_account_types_set_selected (GncTreeModelAccountTypes * model,
 					   guint32 selected)
 {
-	g_return_if_fail (model != NULL);
-	g_return_if_fail (model->priv != NULL);
+	GncTreeModelAccountTypesPrivate *priv;
 
-	model->priv->selected = selected;
+	g_return_if_fail (model != NULL);
+
+	priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
+	priv->selected = selected;
 }
 
 guint32
@@ -349,12 +356,13 @@ gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
                                         GValue * value)
 {
     GncTreeModelAccountTypes *model = GNC_TREE_MODEL_ACCOUNT_TYPES(tree_model);
+    GncTreeModelAccountTypesPrivate *priv;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (model));
-    g_return_if_fail (model->priv != NULL);
     g_return_if_fail (iter != NULL);
     g_return_if_fail (iter->stamp == model->stamp);
 
+    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
     switch (column) {
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE:
         g_value_init (value, G_TYPE_INT);
@@ -367,7 +375,7 @@ gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
         break;
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_SELECTED:
         g_value_init (value, G_TYPE_BOOLEAN);
-        g_value_set_boolean (value, model->priv->selected &
+        g_value_set_boolean (value, priv->selected &
                              (1 << GPOINTER_TO_INT (iter->user_data)));
         break;
     default:

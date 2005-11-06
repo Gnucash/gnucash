@@ -90,13 +90,8 @@ typedef enum {
 } GncTreeModelAccountColumn;
 
 /* typedefs & structures */
-typedef struct GncTreeModelAccountPrivate GncTreeModelAccountPrivate;
-
 typedef struct {
 	GncTreeModel gnc_tree_model;
-
-	GncTreeModelAccountPrivate *priv;
-
 	int stamp;
 } GncTreeModelAccount;
 

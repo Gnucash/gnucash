@@ -42,16 +42,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BUSINESS_NAME "gnc-plugin-business"
 
 /* typedefs & structures */
-typedef struct GncPluginBusinessPrivate GncPluginBusinessPrivate;
-
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginBusinessPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginBusiness;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginBusinessClass;
 
 /* function prototypes */

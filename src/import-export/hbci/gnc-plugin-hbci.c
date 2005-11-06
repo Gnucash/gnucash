@@ -151,10 +151,13 @@ static const gchar *need_account_actions[] = {
   NULL
 };
 
-struct GncPluginHbciPrivate
+typedef struct GncPluginHbciPrivate
 {
   gpointer dummy;
-};
+} GncPluginHbciPrivate;
+
+#define GNC_PLUGIN_HBCI_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_HBCI, GncPluginHbciPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -214,26 +217,25 @@ gnc_plugin_hbci_class_init (GncPluginHbciClass *klass)
   plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
   plugin_class->add_to_window 	   = gnc_plugin_hbci_add_to_window;
   plugin_class->remove_from_window = gnc_plugin_hbci_remove_from_window;
+
+  g_type_class_add_private(klass, sizeof(GncPluginHbciPrivate));
 }
 
 static void
 gnc_plugin_hbci_init (GncPluginHbci *plugin)
 {
-  plugin->priv = g_new0 (GncPluginHbciPrivate, 1);
 }
 
 static void
 gnc_plugin_hbci_finalize (GObject *object)
 {
   GncPluginHbci *plugin;
+  GncPluginHbciPrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_HBCI (object));
 
   plugin = GNC_PLUGIN_HBCI (object);
-
-  g_return_if_fail (plugin->priv != NULL);
-
-  g_free (plugin->priv);
+  priv = GNC_PLUGIN_HBCI_GET_PRIVATE(plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

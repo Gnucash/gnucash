@@ -116,7 +116,7 @@ static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 
 /** Private Data Structure ***********************************************/
 
-struct GncTreeViewPrivate
+typedef struct GncTreeViewPrivate
 {
   GtkTooltips       *title_tips;
   GSList            *default_visible;
@@ -132,7 +132,10 @@ struct GncTreeViewPrivate
   gulong             columns_changed_cb_id;
   gulong             sort_column_changed_cb_id;
   gulong             size_allocate_cb_id;
-};
+} GncTreeViewPrivate;
+
+#define GNC_TREE_VIEW_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW, GncTreeViewPrivate))
 
 
 /************************************************************/
@@ -199,6 +202,8 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
 	gobject_class->set_property = gnc_tree_view_set_property;
 	gobject_class->get_property = gnc_tree_view_get_property;
 
+	g_type_class_add_private(klass, sizeof(GncTreeViewPrivate));
+
         g_object_class_install_property (gobject_class,
 					 PROP_GCONF_SECTION,
 					 g_param_spec_string ("gconf-section",
@@ -233,22 +238,22 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
 static void
 gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column;
   GtkWidget *icon;
   GtkRequisition requisition;
 
   gnc_gobject_tracking_remember(G_OBJECT(view), G_OBJECT_CLASS(klass));
 
-  view->priv = g_new0 (GncTreeViewPrivate, 1);
-
-  view->priv->default_visible = NULL;
-  view->priv->column_menu = NULL;
-  view->priv->show_column_menu = FALSE;
-  view->priv->gconf_section = NULL;
-  view->priv->seen_gconf_visibility = FALSE;
-  view->priv->columns_changed_cb_id = 0;
-  view->priv->sort_column_changed_cb_id = 0;
-  view->priv->size_allocate_cb_id = 0;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  priv->default_visible = NULL;
+  priv->column_menu = NULL;
+  priv->show_column_menu = FALSE;
+  priv->gconf_section = NULL;
+  priv->seen_gconf_visibility = FALSE;
+  priv->columns_changed_cb_id = 0;
+  priv->sort_column_changed_cb_id = 0;
+  priv->size_allocate_cb_id = 0;
 
   /* Ask gtk to help the user keep track of rows. */
   g_object_set(view, "rules-hint", TRUE, NULL);
@@ -283,7 +288,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
   g_signal_connect(G_OBJECT(column), "clicked",
 		   G_CALLBACK (gnc_tree_view_select_column_cb),
 		   view);
-  view->priv->column_menu_column = column;
+  priv->column_menu_column = column;
 }
 
 /** Finalize the GncTreeView object.  This function is called from the
@@ -300,6 +305,7 @@ static void
 gnc_tree_view_finalize (GObject *object)
 {
   GncTreeView *view;
+  GncTreeViewPrivate *priv;
 
   ENTER("view %p", object);
   g_return_if_fail (object != NULL);
@@ -308,7 +314,7 @@ gnc_tree_view_finalize (GObject *object)
   gnc_gobject_tracking_forget(object);
 
   view = GNC_TREE_VIEW (object);
-  g_free (view->priv);
+  priv= GNC_TREE_VIEW_GET_PRIVATE (view);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
@@ -330,6 +336,7 @@ static void
 gnc_tree_view_destroy (GtkObject *object)
 {
   GncTreeView *view;
+  GncTreeViewPrivate *priv;
   GSList *slist;
 
   ENTER("view %p", object);
@@ -340,17 +347,18 @@ gnc_tree_view_destroy (GtkObject *object)
 
   gnc_tree_view_remove_gconf(view);
 
-  if (view->priv->default_visible) {
-    slist = view->priv->default_visible;
-    view->priv->default_visible = NULL;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (priv->default_visible) {
+    slist = priv->default_visible;
+    priv->default_visible = NULL;
     g_slist_foreach(slist, (GFunc)g_free, NULL);
     g_slist_free(slist);
   }
 
-  if (view->priv->column_menu) {
+  if (priv->column_menu) {
     DEBUG("removing column selection menu");
-    gtk_widget_unref(view->priv->column_menu);
-    view->priv->column_menu = NULL;
+    gtk_widget_unref(priv->column_menu);
+    priv->column_menu = NULL;
   }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
@@ -381,14 +389,16 @@ gnc_tree_view_get_property (GObject     *object,
 			    GParamSpec  *pspec)
 {
   GncTreeView *view = GNC_TREE_VIEW (object);
+  GncTreeViewPrivate *priv;
   
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   switch (prop_id)
     {
     case PROP_GCONF_SECTION:
-      g_value_set_string (value, view->priv->gconf_section);
+      g_value_set_string (value, priv->gconf_section);
       break;
     case PROP_SHOW_COLUMN_MENU:
-      g_value_set_boolean (value, view->priv->show_column_menu);
+      g_value_set_boolean (value, priv->show_column_menu);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -592,6 +602,7 @@ static void
 gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
 				      GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column;
   const gchar  	    *gconf_section;
   gchar        	    *column_pref_name;
@@ -602,7 +613,8 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER(" ");
-  if (!view->priv->gconf_section) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (!priv->gconf_section) {
     LEAVE("no gconf section");
     return;
   }
@@ -616,7 +628,7 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
   column_pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
 
   /* Store the values in gconf */
-  gconf_section = view->priv->gconf_section;
+  gconf_section = priv->gconf_section;
   gnc_gconf_set_string(gconf_section, "sort_column", column_pref_name, NULL);
   gnc_gconf_set_string(gconf_section, "sort_order",
 		       gnc_enum_to_nick(GTK_TYPE_SORT_TYPE, order), NULL);
@@ -640,11 +652,13 @@ static void
 gtk_tree_view_columns_changed_cb (GncTreeView *view,
 				  gpointer data)
 {
+  GncTreeViewPrivate *priv;
   GList *column_list, *tmp;
   GSList *column_names = NULL;
   gchar *name;
 
   //ENTER("view %p, data %p", view, data);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   column_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
   for (tmp = column_list; tmp; tmp = g_list_next(tmp)) {
     name = g_object_get_data(tmp->data, PREF_NAME);
@@ -655,7 +669,7 @@ gtk_tree_view_columns_changed_cb (GncTreeView *view,
   }
   g_list_free(column_list);
 
-  gnc_gconf_set_list(view->priv->gconf_section, GCONF_KEY_COLUMN_ORDER,
+  gnc_gconf_set_list(priv->gconf_section, GCONF_KEY_COLUMN_ORDER,
 		     GCONF_VALUE_STRING, column_names, NULL);
   g_slist_free(column_names);
   //LEAVE(" ");
@@ -679,6 +693,7 @@ static void
 gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
 				    GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   const gchar *column_pref_name;
   gint new_width, current_width;
   gchar *key;
@@ -687,6 +702,7 @@ gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   /* Any updates to be made? */
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   column_pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
   if (!column_pref_name)
     return;
@@ -696,9 +712,9 @@ gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
 
   /* Do it */
   key = g_strdup_printf("%s_%s", column_pref_name, GCONF_KEY_WIDTH);
-  current_width = gnc_gconf_get_int(view->priv->gconf_section, key, NULL);
+  current_width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
   if (new_width != current_width) {
-    gnc_gconf_set_int(view->priv->gconf_section, key, new_width, NULL);
+    gnc_gconf_set_int(priv->gconf_section, key, new_width, NULL);
     DEBUG("set %s width to %d", column_pref_name, new_width);
   }
   g_free(key);
@@ -776,10 +792,12 @@ gnc_tree_view_column_visible (GncTreeView *view,
 			      GtkTreeViewColumn *column,
 			      const gchar *pref_name)
 {
+  GncTreeViewPrivate *priv;
   gboolean visible;
   gchar *key;
 
   ENTER("column %p, name %s", column, pref_name);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   if (column) {
     if (g_object_get_data(G_OBJECT(column), ALWAYS_VISIBLE)) {
       LEAVE("1, first column");
@@ -795,23 +813,23 @@ gnc_tree_view_column_visible (GncTreeView *view,
   }
   
   /* Using gconf? */
-  if (view->priv->gconf_section) {
-    if (view->priv->seen_gconf_visibility) {
+  if (priv->gconf_section) {
+    if (priv->seen_gconf_visibility) {
       key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_VISIBLE);
-      visible = gnc_gconf_get_bool(view->priv->gconf_section, key, NULL);
+      visible = gnc_gconf_get_bool(priv->gconf_section, key, NULL);
       g_free(key);
       LEAVE("%d, gconf visibility", visible);
       return visible;
     }
 
-    visible =  (g_slist_find_custom(view->priv->default_visible, pref_name,
+    visible =  (g_slist_find_custom(priv->default_visible, pref_name,
 				    (GCompareFunc)strcmp) != NULL);
     LEAVE("%d, gconf but using defaults", visible);
     return visible;
   }
 
   /* Check the default columns list */
-  visible = (g_slist_find_custom(view->priv->default_visible, pref_name,
+  visible = (g_slist_find_custom(priv->default_visible, pref_name,
 				 (GCompareFunc)strcmp) != NULL);
   LEAVE("defaults says %d", visible);
   return visible;
@@ -831,6 +849,7 @@ static void
 gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
 				 GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   gchar *name, *key;
   gboolean visible;
 
@@ -838,16 +857,17 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER(" ");
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   visible = gnc_tree_view_column_visible(view, column, NULL);
   gtk_tree_view_column_set_visible(column, visible);
-  if (view->priv->gconf_section) {
+  if (priv->gconf_section) {
     name = (gchar *)g_object_get_data(G_OBJECT(column), PREF_NAME);
     if (!name) {
       LEAVE("no pref name");
       return;
     }
     key = g_strdup_printf("%s_%s", name, GCONF_KEY_VISIBLE);
-    gnc_gconf_set_bool(view->priv->gconf_section, key, visible, NULL);
+    gnc_gconf_set_bool(priv->gconf_section, key, visible, NULL);
     g_free(key);
     LEAVE("made visible, set gconf key");
     return;
@@ -873,10 +893,12 @@ static void
 gnc_tree_view_set_sort_order (GncTreeView *view,
 			      const gchar *name)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *s_model;
   GtkSortType order;
   gint current;
 
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   if (!s_model)
     return;
@@ -884,10 +906,10 @@ gnc_tree_view_set_sort_order (GncTreeView *view,
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
 					    &current, &order))
     current = 0;
-  g_signal_handler_block(s_model, view->priv->sort_column_changed_cb_id);
+  g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
 				       current, order);
-  g_signal_handler_unblock(s_model, view->priv->sort_column_changed_cb_id);
+  g_signal_handler_unblock(s_model, priv->sort_column_changed_cb_id);
   DEBUG("sort_order set to %s", gnc_enum_to_nick(GTK_TYPE_SORT_TYPE, order));
 }
 
@@ -909,11 +931,13 @@ static void
 gnc_tree_view_set_sort_column (GncTreeView *view,
 			       const gchar *name)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *s_model;
   GtkTreeViewColumn *column;
   GtkSortType order;
   gint model_column, current;
 
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   column = view_column_find_by_name(view, name);
   if (!column)
     return;
@@ -927,10 +951,10 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
 					    &current, &order))
     order = GTK_SORT_ASCENDING;
-  g_signal_handler_block(s_model, view->priv->sort_column_changed_cb_id);
+  g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
 				       model_column, order);
-  g_signal_handler_unblock(s_model, view->priv->sort_column_changed_cb_id);
+  g_signal_handler_unblock(s_model, priv->sort_column_changed_cb_id);
   DEBUG("sort column set to %s", name);
 }
 
@@ -951,6 +975,7 @@ static void
 gnc_tree_view_set_column_order (GncTreeView *view,
 				const GSList *column_names)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column, *prev;
   const gchar *name;
   const GSList *tmp;
@@ -958,6 +983,7 @@ gnc_tree_view_set_column_order (GncTreeView *view,
 
   /* First, convert from names to pointers */
   ENTER(" ");
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   columns = NULL;
   for (tmp = column_names; tmp; tmp = g_slist_next(tmp)) {
     name = gconf_value_get_string(tmp->data);
@@ -968,13 +994,13 @@ gnc_tree_view_set_column_order (GncTreeView *view,
   }
     
   /* Then reorder the columns */
-  g_signal_handler_block(view, view->priv->columns_changed_cb_id);
+  g_signal_handler_block(view, priv->columns_changed_cb_id);
   for (prev = NULL, tmp = columns; tmp; tmp = g_slist_next(tmp)) {
     column = tmp->data;
     gtk_tree_view_move_column_after(GTK_TREE_VIEW(view), column, prev);
     prev = column;
   }
-  g_signal_handler_unblock(view, view->priv->columns_changed_cb_id);
+  g_signal_handler_unblock(view, priv->columns_changed_cb_id);
 
   /* Clean up */
   g_slist_free(columns);
@@ -1007,6 +1033,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
 			     gpointer data)
 {
   GncTreeView *view;
+  GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column;
   GConfValue *value;
   const gchar *key, *local;
@@ -1018,6 +1045,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
 
   ENTER(" ");
   view = GNC_TREE_VIEW(data);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   key = gconf_entry_get_key(entry);
   value = gconf_entry_get_value(entry);
   if (!value) {
@@ -1043,7 +1071,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
     *type_name++ = '\0';
 
     if (strcmp(type_name, GCONF_KEY_VISIBLE) == 0) {
-      view->priv->seen_gconf_visibility = TRUE;
+      priv->seen_gconf_visibility = TRUE;
       column = view_column_find_by_name(view, column_name);
       if (column) {
 	known = TRUE;
@@ -1083,16 +1111,18 @@ gnc_tree_view_gconf_changed (GConfClient *client,
 static void
 gnc_tree_view_gconf_force_update (GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   GSList *all_entries, *etmp;
   GList *columns;
 
   ENTER("view %p", view);
-  all_entries = gnc_gconf_client_all_entries(view->priv->gconf_section);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  all_entries = gnc_gconf_client_all_entries(priv->gconf_section);
 
   /* Set a flag indicating that the gconf data section may be empty.
    * It will be checked later on and appropriate action taken if its
    * still set. */
-  view->priv->seen_gconf_visibility = FALSE;
+  priv->seen_gconf_visibility = FALSE;
 
   /* Pull all the entries from gconf */
   for (etmp = all_entries; etmp; etmp = g_slist_next(etmp)) {
@@ -1102,7 +1132,7 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
   g_slist_free(all_entries);
 
   /* No visibilities seen yet.  Write out any columns we may have */
-  if (!view->priv->seen_gconf_visibility) {
+  if (!priv->seen_gconf_visibility) {
     columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
     g_list_foreach(columns, (GFunc)gnc_tree_view_update_visibility, view);
     g_list_free(columns);
@@ -1125,43 +1155,46 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
 static void
 gnc_tree_view_remove_gconf(GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *model;
 
   ENTER(" ");
-  if (!view->priv->gconf_section) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (!priv->gconf_section) {
     LEAVE("no gconf section");
     return;
   }
 
-  if (view->priv->sort_column_changed_cb_id) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (priv->sort_column_changed_cb_id) {
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
     if (model) {
       DEBUG("removing sort_column_changed callback (# %ld)",
-	    view->priv->sort_column_changed_cb_id);
+	    priv->sort_column_changed_cb_id);
       g_signal_handler_disconnect(GTK_TREE_SORTABLE(model),
-				  view->priv->sort_column_changed_cb_id);
-      view->priv->sort_column_changed_cb_id = 0;
+				  priv->sort_column_changed_cb_id);
+      priv->sort_column_changed_cb_id = 0;
     }
   }
 
-  if (view->priv->columns_changed_cb_id) {
+  if (priv->columns_changed_cb_id) {
     DEBUG("removing columns_changed callback (# %ld)",
-	  view->priv->columns_changed_cb_id);
-    g_signal_handler_disconnect(view, view->priv->columns_changed_cb_id);
-    view->priv->columns_changed_cb_id = 0;
+	  priv->columns_changed_cb_id);
+    g_signal_handler_disconnect(view, priv->columns_changed_cb_id);
+    priv->columns_changed_cb_id = 0;
   }
 
-  if (view->priv->size_allocate_cb_id) {
+  if (priv->size_allocate_cb_id) {
     DEBUG("removing size_allocate callback (# %ld)",
-	  view->priv->size_allocate_cb_id);
-    g_signal_handler_disconnect(view, view->priv->size_allocate_cb_id);
-    view->priv->size_allocate_cb_id = 0;
+	  priv->size_allocate_cb_id);
+    g_signal_handler_disconnect(view, priv->size_allocate_cb_id);
+    priv->size_allocate_cb_id = 0;
   }
 
   DEBUG("removing gconf notification");
-  gnc_gconf_remove_notification(G_OBJECT(view), view->priv->gconf_section);
-  g_free(view->priv->gconf_section);
-  view->priv->gconf_section = NULL;
+  gnc_gconf_remove_notification(G_OBJECT(view), priv->gconf_section);
+  g_free(priv->gconf_section);
+  priv->gconf_section = NULL;
   LEAVE(" ");
 }
 
@@ -1178,6 +1211,7 @@ void
 gnc_tree_view_set_gconf_section (GncTreeView *view,
 				 const gchar *section)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *model;
   gulong id;
 
@@ -1192,7 +1226,8 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
   }
 
   /* Catch changes in gconf. Propagate to view. */
-  view->priv->gconf_section = g_strdup(section);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  priv->gconf_section = g_strdup(section);
   gnc_gconf_add_notification(G_OBJECT(view), section,
 			     gnc_tree_view_gconf_changed);
 
@@ -1200,19 +1235,19 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
    * be set before the model, so the code must handle that case. */
   model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
   if (model)
-    view->priv->sort_column_changed_cb_id =
+    priv->sort_column_changed_cb_id =
       g_signal_connect(GTK_TREE_SORTABLE(model), "sort-column-changed",
 		       (GCallback)gtk_tree_view_sort_column_changed_cb, view);
 
   /* Catch changes to the column order. Propagate to gconf */
   id = g_signal_connect(view, "columns-changed",
 			(GCallback)gtk_tree_view_columns_changed_cb, NULL);
-  view->priv->columns_changed_cb_id = id;
+  priv->columns_changed_cb_id = id;
 
   /* Catch changes to the column width. Propagate to gconf */
   id = g_signal_connect(view, "size-allocate",
 			(GCallback)gtk_tree_view_size_allocate_cb, NULL);
-  view->priv->size_allocate_cb_id = id;
+  priv->size_allocate_cb_id = id;
 
   /* Force an update of the view with all items from gconf. */
   gnc_tree_view_gconf_force_update(view);
@@ -1232,9 +1267,12 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
 const gchar *
 gnc_tree_view_get_gconf_section (GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
+
   g_return_val_if_fail(GNC_IS_TREE_VIEW(view), NULL);
 
-  return(view->priv->gconf_section);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  return(priv->gconf_section);
 }
 
 
@@ -1262,6 +1300,7 @@ static void
 gnc_tree_view_menu_item_toggled (GtkCheckMenuItem *checkmenuitem,
 				 GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   gboolean value;
   gchar *key;
 
@@ -1269,16 +1308,17 @@ gnc_tree_view_menu_item_toggled (GtkCheckMenuItem *checkmenuitem,
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER("checkmenuitem %p, view %p", checkmenuitem, view);
-  if (!view->priv->gconf_section) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (!priv->gconf_section) {
     LEAVE("no gconf section");
     return;
   }
 
   key = g_object_get_data(G_OBJECT(checkmenuitem), GCONF_KEY);
   value = gtk_check_menu_item_get_active(checkmenuitem);
-  gnc_gconf_set_bool(view->priv->gconf_section, key, value, NULL);
+  gnc_gconf_set_bool(priv->gconf_section, key, value, NULL);
   LEAVE("set gconf section %s, key %s, visible %d",
-	view->priv->gconf_section, key, value);
+	priv->gconf_section, key, value);
 }
 
 /** This function is called to create a single checkmenuitem in the
@@ -1307,7 +1347,7 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
   gchar *key;
 
   // ENTER("view %p, column %p", view, column);
-  priv = view->priv;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   if (!priv->gconf_section) {
     // LEAVE("no gconf section");
     return;
@@ -1369,7 +1409,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER("view %p", view);
-  priv = GNC_TREE_VIEW(view)->priv;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
   /* Destroy any old menu */
   if (priv->column_menu) {
@@ -1379,8 +1419,8 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
 
   if (priv->show_column_menu && priv->gconf_section) {
     /* Show the menu popup button */
-    if (view->priv->column_menu_column)
-      g_object_set(G_OBJECT(view->priv->column_menu_column),
+    if (priv->column_menu_column)
+      g_object_set(G_OBJECT(priv->column_menu_column),
 		   "visible", TRUE, NULL);
 
     /* Now build a new menu */
@@ -1389,8 +1429,8 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
     g_list_free(column_list);
   } else {
     /* Hide the menu popup button */
-    if (view->priv->column_menu_column)
-      g_object_set(G_OBJECT(view->priv->column_menu_column),
+    if (priv->column_menu_column)
+      g_object_set(G_OBJECT(priv->column_menu_column),
 		   "visible", FALSE, NULL);
   }
   LEAVE("menu: show %d, section %s", priv->show_column_menu,
@@ -1416,17 +1456,19 @@ static void
 gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
 				       GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   gchar *key;
   gboolean visible;
 
   g_return_if_fail(GTK_IS_CHECK_MENU_ITEM(checkmenuitem));
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   key = g_object_get_data(G_OBJECT(checkmenuitem), GCONF_KEY);
   if (g_object_get_data(G_OBJECT(checkmenuitem), ALWAYS_VISIBLE)) {
     visible = TRUE;
   } else {
-    visible = gnc_gconf_get_bool(view->priv->gconf_section, key, NULL);
+    visible = gnc_gconf_get_bool(priv->gconf_section, key, NULL);
   }
 
   g_signal_handlers_block_by_func(checkmenuitem,
@@ -1452,12 +1494,14 @@ static void
 gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 				GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
   GtkWidget *widget, *menu;
 
   g_return_if_fail(GTK_IS_TREE_VIEW_COLUMN(column));
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
-  menu = view->priv->column_menu;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  menu = priv->column_menu;
   if (!menu)
     return;
 
@@ -1471,7 +1515,7 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 
   /* Pop the menu up at the button */
   widget = gtk_tree_view_column_get_widget(column);
-  gtk_menu_popup(GTK_MENU(view->priv->column_menu), NULL, GTK_WIDGET(menu),
+  gtk_menu_popup(GTK_MENU(priv->column_menu), NULL, GTK_WIDGET(menu),
 		 NULL, NULL, 0, gtk_get_current_event_time());
 }
 
@@ -1490,7 +1534,7 @@ gnc_tree_view_set_show_column_menu (GncTreeView *view,
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER("view %p, show menu %d", view, visible);
-  priv = GNC_TREE_VIEW(view)->priv;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   priv->show_column_menu = visible;
   gnc_tree_view_build_column_menu(view);
   LEAVE(" ");
@@ -1505,9 +1549,12 @@ gnc_tree_view_set_show_column_menu (GncTreeView *view,
 gboolean
 gnc_tree_view_get_show_column_menu (GncTreeView *view)
 {
+  GncTreeViewPrivate *priv;
+
   g_return_val_if_fail(GNC_IS_TREE_VIEW(view), FALSE);
 
-  return(view->priv->show_column_menu);
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  return(priv->show_column_menu);
 }
 
 /** @} */
@@ -1528,21 +1575,22 @@ gnc_tree_view_get_show_column_menu (GncTreeView *view)
 void
 gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *old_model;
 
   /* Remove existing callback */
-  if (view->priv->sort_column_changed_cb_id) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (priv->sort_column_changed_cb_id) {
     old_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
-    g_signal_handler_disconnect (old_model,
-				 view->priv->sort_column_changed_cb_id);
-    view->priv->sort_column_changed_cb_id = 0;
+    g_signal_handler_disconnect (old_model, priv->sort_column_changed_cb_id);
+    priv->sort_column_changed_cb_id = 0;
   }
 
   gtk_tree_view_set_model (GTK_TREE_VIEW(view), model);
 
   /* Maybe add a new callback */
-  if (model && view->priv->gconf_section) {
-    view->priv->sort_column_changed_cb_id =
+  if (model && priv->gconf_section) {
+    priv->sort_column_changed_cb_id =
       g_signal_connect(GTK_TREE_SORTABLE(model), "sort-column-changed",
 		       (GCallback)gtk_tree_view_sort_column_changed_cb, view);
   }
@@ -1563,6 +1611,7 @@ gnc_tree_view_configure_columns (GncTreeView *view,
 				 gchar *first_column_name,
 				 ...)
 {
+  GncTreeViewPrivate *priv;
   GSList *slist;
   GList *columns;
   gchar *name;
@@ -1572,9 +1621,10 @@ gnc_tree_view_configure_columns (GncTreeView *view,
 
   ENTER(" ");
   /* Delete any old list of column names */
-  if (view->priv->default_visible) {
-    slist = view->priv->default_visible;
-    view->priv->default_visible = NULL;
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (priv->default_visible) {
+    slist = priv->default_visible;
+    priv->default_visible = NULL;
     g_slist_foreach(slist, (GFunc)g_free, NULL);
     g_slist_free(slist);
   }
@@ -1583,8 +1633,8 @@ gnc_tree_view_configure_columns (GncTreeView *view,
   va_start (args, first_column_name);
   name = first_column_name;
   while (name != NULL) {
-    view->priv->default_visible =
-      g_slist_append(view->priv->default_visible, g_strdup(name));
+    priv->default_visible =
+      g_slist_append(priv->default_visible, g_strdup(name));
     name = va_arg(args, gchar*);
   }
   va_end (args);
@@ -1594,8 +1644,8 @@ gnc_tree_view_configure_columns (GncTreeView *view,
   g_list_foreach(columns, (GFunc)gnc_tree_view_update_visibility, view);
   g_list_free(columns);
 
-  if (view->priv->gconf_section)
-    view->priv->seen_gconf_visibility = TRUE;
+  if (priv->gconf_section)
+    priv->seen_gconf_visibility = TRUE;
   LEAVE(" ");
 }
 
@@ -1638,6 +1688,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
 				 gboolean resizable,
 				 GtkTreeIterCompareFunc column_sort_fn)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeModel *s_model;
   gboolean visible;
   int width = 0;
@@ -1656,9 +1707,10 @@ gnc_tree_view_column_properties (GncTreeView *view,
   visible = gnc_tree_view_column_visible(view, NULL, pref_name);
 
   /* Get width */
-  if (view->priv->gconf_section) {
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
+  if (priv->gconf_section) {
     key = g_strdup_printf("%s_%s", pref_name, GCONF_KEY_WIDTH);
-    width = gnc_gconf_get_int(view->priv->gconf_section, key, NULL);
+    width = gnc_gconf_get_int(priv->gconf_section, key, NULL);
     g_free(key);
   }
 
@@ -1716,6 +1768,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
 				 GtkTreeIterCompareFunc column_sort_fn,
 				 renderer_toggled toggle_edited_cb)
 {
+  GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
   PangoLayout* layout;
@@ -1723,6 +1776,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
 
   g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   renderer = gtk_cell_renderer_toggle_new ();
   column =
     gtk_tree_view_column_new_with_attributes (gettext(column_short_title),
@@ -1752,11 +1806,9 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
   gnc_tree_view_append_column (view, column);
 
   /* Also add the full title to the object as a tooltip */
-  if (!view->priv->title_tips)
-    view->priv->title_tips = gtk_tooltips_new();
-  gtk_tooltips_set_tip(view->priv->title_tips,
-		       column->button,
-		       column_title, NULL);
+  if (!priv->title_tips)
+    priv->title_tips = gtk_tooltips_new();
+  gtk_tooltips_set_tip(priv->title_tips, column->button, column_title, NULL);
 
   return column;
 }

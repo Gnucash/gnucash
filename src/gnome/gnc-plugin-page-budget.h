@@ -48,15 +48,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_BUDGET_NAME "gnc-plugin-page-budget"
 
 /* typedefs & structures */
-typedef struct GncPluginPageBudgetPrivate GncPluginPageBudgetPrivate;
-
 typedef struct {
-	GncPluginPage parent;
-	GncPluginPageBudgetPrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageBudget;
 
 typedef struct {
-    GncPluginPageClass parent;
+    GncPluginPageClass gnc_plugin_page;
 } GncPluginPageBudgetClass;
 
 /* function prototypes */

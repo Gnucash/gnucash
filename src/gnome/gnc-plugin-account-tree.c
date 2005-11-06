@@ -53,10 +53,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 
-struct GncPluginAccountTreePrivate
+typedef struct GncPluginAccountTreePrivate
 {
 	gpointer dummy;
-};
+} GncPluginAccountTreePrivate;
+
+#define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreePrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -118,26 +121,25 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+	g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
 }
 
 static void
 gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 {
-	plugin->priv = g_new0 (GncPluginAccountTreePrivate, 1);
 }
 
 static void
 gnc_plugin_account_tree_finalize (GObject *object)
 {
 	GncPluginAccountTree *plugin;
+	GncPluginAccountTreePrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (object));
 
 	plugin = GNC_PLUGIN_ACCOUNT_TREE (object);
-
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

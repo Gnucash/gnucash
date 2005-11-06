@@ -81,15 +81,13 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN, GncPluginClass))
 
 /* typedefs & structures */
-typedef struct GncPluginPrivate GncPluginPrivate;
 
 typedef struct {
-	GObject parent;
-	GncPluginPrivate *priv;
+	GObject gobject;
 } GncPlugin;
 
 typedef struct {
-	GObjectClass parent;
+	GObjectClass gobject;
 	const gchar *plugin_name;
 
 	const gchar *actions_name;

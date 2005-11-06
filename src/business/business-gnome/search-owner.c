@@ -45,11 +45,14 @@ static void gnc_search_owner_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchOwner *)(x))->priv)
 
-struct _GNCSearchOwnerPrivate {
+typedef struct _GNCSearchOwnerPrivate {
   GncOwner	owner;
   GtkWidget *	owner_box;
   GtkWidget *	owner_choice;
-};
+} GNCSearchOwnerPrivate;
+
+#define GNC_SEARCH_OWNER_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_OWNER, GNCSearchOwnerPrivate))
 
 static GNCSearchCoreTypeClass *parent_class;
 
@@ -99,22 +102,26 @@ gnc_search_owner_class_init (GNCSearchOwnerClass *class)
   gnc_search_core_type->get_widget = gncs_get_widget;
   gnc_search_core_type->get_predicate = gncs_get_predicate;
   gnc_search_core_type->clone = gncs_clone;
+
+  g_type_class_add_private(class, sizeof(GNCSearchOwnerPrivate));
 }
 
 static void
 gnc_search_owner_init (GNCSearchOwner *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
 }
 
 static void
 gnc_search_owner_finalize (GObject *obj)
 {
-  GNCSearchOwner *o = (GNCSearchOwner *)obj;
-  g_assert (IS_GNCSEARCH_OWNER (o));
+  GNCSearchOwner *o;
+  GNCSearchOwnerPrivate *priv;
 
-  g_free(o->priv);
-	
+  g_assert (IS_GNCSEARCH_OWNER (obj));
+
+  o = GNCSEARCH_OWNER(obj);
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(o);
+
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
@@ -136,12 +143,14 @@ static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
+  GNCSearchOwnerPrivate *priv;
   gboolean valid = TRUE;
 
   g_return_val_if_fail (fi, FALSE);
   g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), FALSE);
-	
-  if (fi->priv->owner.owner.undefined == NULL) {
+  
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
+  if (priv->owner.owner.undefined == NULL) {
     valid = FALSE;
     gnc_error_dialog (NULL, _("You have not selected an owner"));
   }
@@ -155,42 +164,49 @@ static int
 owner_changed_cb (GtkWidget *widget, gpointer data)
 {
   GNCSearchOwner *fe = data;
-  gnc_owner_get_owner (fe->priv->owner_choice, &(fe->priv->owner));
+  GNCSearchOwnerPrivate *priv;
+
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fe);
+  gnc_owner_get_owner (priv->owner_choice, &(priv->owner));
   return FALSE;
 }
 
 static void
 set_owner_widget (GNCSearchOwner *fe)
 {
+  GNCSearchOwnerPrivate *priv;
+
   /* Remove the old choice widget */
-  if (fe->priv->owner_choice)
-    gtk_container_remove (GTK_CONTAINER (fe->priv->owner_box),
-			  fe->priv->owner_choice);
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fe);
+  if (priv->owner_choice)
+    gtk_container_remove (GTK_CONTAINER (priv->owner_box), priv->owner_choice);
 
   /* Create a new choice widget */
-  fe->priv->owner_choice =
-    gnc_owner_select_create (NULL, fe->priv->owner_box,
-			     gnc_get_current_book(), &(fe->priv->owner));
+  priv->owner_choice =
+    gnc_owner_select_create (NULL, priv->owner_box,
+			     gnc_get_current_book(), &(priv->owner));
 
   /* Setup the "changed" callback */
-  g_signal_connect (G_OBJECT (fe->priv->owner_choice), "changed",
+  g_signal_connect (G_OBJECT (priv->owner_choice), "changed",
 		    G_CALLBACK (owner_changed_cb), fe);
 
-  gtk_widget_show_all (fe->priv->owner_choice);
+  gtk_widget_show_all (priv->owner_choice);
 }
 
 static void
 type_option_changed (GtkWidget *widget, GNCSearchOwner *fe)
 {
+  GNCSearchOwnerPrivate *priv;
   GncOwnerType type = (GncOwnerType)
     g_object_get_data (G_OBJECT (widget), "option");
 
   /* If the type changed or if we don't have a type create the owner_choice */
-  if (type != gncOwnerGetType (&(fe->priv->owner))) {
-    fe->priv->owner.type = type;
-    fe->priv->owner.owner.undefined = NULL;
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fe);
+  if (type != gncOwnerGetType (&(priv->owner))) {
+    priv->owner.type = type;
+    priv->owner.owner.undefined = NULL;
     set_owner_widget (fe);
-  } else if (fe->priv->owner_choice == NULL)
+  } else if (priv->owner_choice == NULL)
     set_owner_widget (fe);
 }
 
@@ -217,13 +233,15 @@ static GtkWidget *
 make_type_menu (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
+  GNCSearchOwnerPrivate *priv;
   GtkWidget *menu, *item, *first, *opmenu;
   int current = 0, index = 0;
   GncOwnerType type;
 
   menu = gtk_menu_new ();
 
-  type = gncOwnerGetType (&(fi->priv->owner));
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
+  type = gncOwnerGetType (&(priv->owner));
 
   ADD_TYPE_MENU_ITEM (_("Customer"), GNC_OWNER_CUSTOMER);
   first = item;
@@ -293,10 +311,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
   GtkWidget *how_menu, *type_menu, *box;
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
+  GNCSearchOwnerPrivate *priv;
 	
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), NULL);
 
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
   box = gtk_hbox_new (FALSE, 3);
 
   /* Build and connect the "how" option menu. */
@@ -304,7 +324,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   gtk_box_pack_start (GTK_BOX (box), how_menu, FALSE, FALSE, 3);
 
   /* Create the owner box */
-  fi->priv->owner_box = gtk_hbox_new (FALSE, 0);
+  priv->owner_box = gtk_hbox_new (FALSE, 0);
 
   /* Build and connect the "type" option menu.
    * Note that this will build the owner_choice and
@@ -314,7 +334,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
   gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
 
   /* connect the owner box */
-  gtk_box_pack_start (GTK_BOX (box), fi->priv->owner_box, FALSE, FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (box), priv->owner_box, FALSE, FALSE, 3);
 
   /* And return the box */
   return box;
@@ -323,13 +343,15 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 {
   GNCSearchOwner *fi = (GNCSearchOwner *)fe;
+  GNCSearchOwnerPrivate *priv;
   const GUID *guid;
   GList *l = NULL;
 
   g_return_val_if_fail (fi, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), NULL);
 
-  guid = gncOwnerGetGUID (&(fi->priv->owner));
+  priv = GNC_SEARCH_OWNER_GET_PRIVATE(fi);
+  guid = gncOwnerGetGUID (&(priv->owner));
   l = g_list_prepend (l, (gpointer)guid);
 
   return gncQueryGUIDPredicate (fi->how, l);
@@ -338,13 +360,16 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe)
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
   GNCSearchOwner *se, *fse = (GNCSearchOwner *)fe;
+  GNCSearchOwnerPrivate *se_priv, *fse_priv;
 
   g_return_val_if_fail (fse, NULL);
   g_return_val_if_fail (IS_GNCSEARCH_OWNER (fse), NULL);
 
   se = gnc_search_owner_new ();
   se->how = fse->how;
-  gncOwnerCopy (&(fse->priv->owner), &(se->priv->owner));
+  se_priv = GNC_SEARCH_OWNER_GET_PRIVATE(se);
+  fse_priv = GNC_SEARCH_OWNER_GET_PRIVATE(fse);
+  gncOwnerCopy (&(fse_priv->owner), &(se_priv->owner));
 
   return (GNCSearchCoreType *)se;
 }

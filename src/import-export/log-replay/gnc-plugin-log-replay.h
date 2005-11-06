@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_LOG_REPLAY_NAME "gnc-plugin-log-replay"
 
 /* typedefs & structures */
-typedef struct GncPluginLogreplayPrivate GncPluginLogreplayPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginLogreplayPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginLogreplay;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginLogreplayClass;
 
 /* function prototypes */

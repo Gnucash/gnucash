@@ -75,13 +75,8 @@ typedef enum {
 } GncTreeModelCommodityColumn;
 
 /* typedefs & structures */
-typedef struct GncTreeModelCommodityPrivate GncTreeModelCommodityPrivate;
-
 typedef struct {
 	GncTreeModel gnc_tree_model;
-
-	GncTreeModelCommodityPrivate *priv;
-
 	int stamp;
 } GncTreeModelCommodity;
 

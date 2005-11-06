@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_STYLESHEETS_NAME "gnc-plugin-stylesheets"
 
 /* typedefs & structures */
-typedef struct GncPluginStylesheetsPrivate GncPluginStylesheetsPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginStylesheetsPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginStylesheets;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginStylesheetsClass;
 
 /* function prototypes */

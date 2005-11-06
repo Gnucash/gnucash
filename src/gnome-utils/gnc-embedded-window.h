@@ -53,18 +53,13 @@ G_BEGIN_DECLS
 #define GNC_EMBEDDED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowClass))
 
 /* typedefs & structures */
-typedef struct GncEmbeddedWindowPrivate GncEmbeddedWindowPrivate;
-
 typedef struct {
-	GtkVBox parent;
-
-	GncEmbeddedWindowPrivate *priv;
-
+	GtkVBox vbox;
 	GtkUIManager   	 *ui_merge;
 } GncEmbeddedWindow;
 
 typedef struct {
-	GtkVBoxClass parent;
+	GtkVBoxClass vbox;
 } GncEmbeddedWindowClass;
 
 /* function prototypes */

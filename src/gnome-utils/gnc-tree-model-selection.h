@@ -40,18 +40,13 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_SELECTION_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_SELECTION, GncTreeModelSelectionClass))
 
 /* typedefs & structures */
-typedef struct GncTreeModelSelectionPrivate GncTreeModelSelectionPrivate;
-
 typedef struct {
-	GObject parent;
-
-	GncTreeModelSelectionPrivate *priv;
-
+	GObject gobject;
 	int stamp;
 } GncTreeModelSelection;
 
 typedef struct {
-	GObjectClass parent;
+	GObjectClass gobject;
 } GncTreeModelSelectionClass;
 
 /* function prototypes */

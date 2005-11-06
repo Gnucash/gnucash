@@ -68,9 +68,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginBudgetPrivate {
+typedef struct GncPluginBudgetPrivate {
     gpointer dummy;
-};
+} GncPluginBudgetPrivate;
+
+#define GNC_PLUGIN_BUDGET_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudgetPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -129,24 +132,27 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 
+    g_type_class_add_private(klass, sizeof(GncPluginBudgetPrivate));
     LEAVE (" ");
 }
 
 static void
 gnc_plugin_budget_init(GncPluginBudget *plugin)
 {
-    plugin->priv = g_new0(GncPluginBudgetPrivate, 1);
 }
 
 static void
 gnc_plugin_budget_finalize(GObject *object)
 {
-    GncPluginBudget *plugin = GNC_PLUGIN_BUDGET(object);
+    GncPluginBudget *plugin;
+    GncPluginBudgetPrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_BUDGET (object));
-    g_return_if_fail(plugin->priv != NULL);
+
     ENTER(" ");
-    g_free (plugin->priv);
+    plugin = GNC_PLUGIN_BUDGET(object);
+    priv = GNC_PLUGIN_BUDGET_GET_PRIVATE(plugin);
+
     (parent_class->finalize)(object);
     ENTER(" ");
 

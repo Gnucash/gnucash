@@ -50,16 +50,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_REPORT_NAME "gnc-plugin-page-report"
 
 /* typedefs & structures */
-typedef struct GncPluginPageReportPrivate GncPluginPageReportPrivate;
-
 typedef struct {
-	GncPluginPage parent;
-        
-	GncPluginPageReportPrivate *priv;
+	GncPluginPage gnc_plugin;
 } GncPluginPageReport;
 
 typedef struct {
-        GncPluginPageClass parent;
+        GncPluginPageClass gnc_plugin;
 
 	/* callbacks */
 } GncPluginPageReportClass;

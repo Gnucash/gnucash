@@ -34,8 +34,7 @@ typedef struct _GNCSearchParam	GNCSearchParam;
 typedef struct _GNCSearchParamClass	GNCSearchParamClass;
 
 struct _GNCSearchParam {
-  GObject parent;
-  struct _GNCSearchParamPrivate *priv;
+  GObject gobject;
 
   const char *		title;
   GtkJustification	justify;
@@ -44,7 +43,7 @@ struct _GNCSearchParam {
 };
 
 struct _GNCSearchParamClass {
-  GObjectClass parent_class;
+  GObjectClass gobject_class;
 
   /* virtual methods */
 

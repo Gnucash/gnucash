@@ -64,6 +64,26 @@ enum {
   LAST_SIGNAL
 };
 
+typedef struct GncPluginPageAccountTreePrivate
+{
+	GtkWidget *widget;
+	GtkTreeView *tree_view;
+
+	SCM         name_change_callback_id;
+
+	GNCOptionDB * odb;
+	SCM         options; 
+	int         options_id;
+	GNCOptionWin * editor_dialog;
+
+	GtkWidget *options_db;
+	gint       component_id;
+} GncPluginPageAccountTreePrivate;
+
+#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE, GncPluginPageAccountTreePrivate))
+
+static GObjectClass *parent_class = NULL;
 
 /************************************************************
  *                        Prototypes                        *
@@ -192,24 +212,6 @@ static action_short_labels short_labels[] = {
   { NULL, NULL },
 };
 
-struct GncPluginPageAccountTreePrivate
-{
-	GtkWidget *widget;
-	GtkTreeView *tree_view;
-
-	SCM         name_change_callback_id;
-
-	GNCOptionDB * odb;
-	SCM         options; 
-	int         options_id;
-	GNCOptionWin * editor_dialog;
-
-	GtkWidget *options_db;
-	gint       component_id;
-};
-
-static GObjectClass *parent_class = NULL;
-
 
 GType
 gnc_plugin_page_account_tree_get_type (void)
@@ -265,6 +267,8 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 	gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
 
+	g_type_class_add_private(klass, sizeof(GncPluginPageAccountTreePrivate));
+
 	plugin_page_signals[ACCOUNT_SELECTED] =
 	  g_signal_new ("account_selected",
 			G_OBJECT_CLASS_TYPE (object_class),
@@ -294,7 +298,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	URLType type;
 
 	ENTER("page %p", plugin_page);
-	priv = plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
@@ -367,7 +371,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	scm_gc_protect_object(priv->name_change_callback_id);
 
 	LEAVE("page %p, priv %p, action group %p",
-	      plugin_page, plugin_page->priv, action_group);
+	      plugin_page, priv, action_group);
 }
 
 static void
@@ -380,7 +384,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	ENTER("object %p", object);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-	priv = page->priv;
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	g_return_if_fail (priv != NULL);
 
 	if (priv->editor_dialog) {
@@ -396,8 +400,6 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 
 	scm_gc_unprotect_object(priv->options);
 
-	g_free (priv);
-
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
 }
@@ -405,10 +407,12 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 Account *
 gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page)
 {
+	GncPluginPageAccountTreePrivate *priv;
 	Account *account;
 
-	ENTER("page %p (tree view %p)", page, page->priv->tree_view);
-	account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(page->priv->tree_view));
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+	ENTER("page %p (tree view %p)", page, priv->tree_view);
+	account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
 	if (account == NULL) {
 		LEAVE("no account");
 		return NULL;
@@ -425,6 +429,7 @@ static void
 gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
 {
   GncPluginPageAccountTree *page = user_data;
+  GncPluginPageAccountTreePrivate *priv;
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
@@ -432,7 +437,8 @@ gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
   if (changes)
     return;
 
-  gtk_widget_queue_draw(page->priv->widget);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  gtk_widget_queue_draw(priv->widget);
 }
 
 static void
@@ -450,25 +456,27 @@ static GtkWidget *
 gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page;
+	GncPluginPageAccountTreePrivate *priv;
 	GtkTreeSelection *selection;
 	GtkTreeView *tree_view;
 	GtkWidget *scrolled_window;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
-	if (page->priv->widget != NULL) {
-		LEAVE("widget = %p", page->priv->widget);
-		return page->priv->widget;
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+	if (priv->widget != NULL) {
+		LEAVE("widget = %p", priv->widget);
+		return priv->widget;
 	}
 
-	page->priv->widget = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (page->priv->widget);
+	priv->widget = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (priv->widget);
 
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 					GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_widget_show (scrolled_window);
-	gtk_box_pack_start (GTK_BOX (page->priv->widget), scrolled_window,
+	gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
 			    TRUE, TRUE, 0);
 
 	tree_view = gnc_tree_view_account_new(FALSE);
@@ -477,7 +485,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		     "show-column-menu", TRUE,
 		     NULL);
 
-	page->priv->tree_view = tree_view;
+	priv->tree_view = tree_view;
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
 			  G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
@@ -491,39 +499,41 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
-	page->priv->component_id =
+	priv->component_id =
 	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
 				     gnc_plugin_page_account_refresh_cb,
 				     gnc_plugin_page_account_tree_close_cb,
 				     page);
-	gnc_gui_component_set_session (page->priv->component_id,
+	gnc_gui_component_set_session (priv->component_id,
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
-	gtk_box_pack_end (GTK_BOX (page->priv->widget), plugin_page->summarybar,
+	gtk_box_pack_end (GTK_BOX (priv->widget), plugin_page->summarybar,
 			  FALSE, FALSE, 0);
 	gtk_widget_show(plugin_page->summarybar);
 
-	LEAVE("widget = %p", page->priv->widget);
-	return page->priv->widget;
+	LEAVE("widget = %p", priv->widget);
+	return priv->widget;
 }
 
 static void
 gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 {
 	GncPluginPageAccountTree *page;
+	GncPluginPageAccountTreePrivate *priv;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
-	if (page->priv->widget) {
-	  g_object_unref(G_OBJECT(page->priv->widget));
-	  page->priv->widget = NULL;
+	if (priv->widget) {
+	  g_object_unref(G_OBJECT(priv->widget));
+	  priv->widget = NULL;
 	}
 
-	if (page->priv->component_id) {
-	  gnc_unregister_gui_component(page->priv->component_id);
-	  page->priv->component_id = 0;
+	if (priv->component_id) {
+	  gnc_unregister_gui_component(priv->component_id);
+	  priv->component_id = 0;
 	}
 
 	LEAVE("widget destroyed");
@@ -839,7 +849,7 @@ gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageA
   GncPluginPageAccountTreePrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-  priv = page->priv;
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 
   if (!priv->editor_dialog) {
     priv->editor_dialog = gnc_options_dialog_new(_("Account Tree Options"));

@@ -53,18 +53,13 @@ G_BEGIN_DECLS
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
 
 /* typedefs & structures */
-typedef struct GncMainWindowPrivate GncMainWindowPrivate;
-
 typedef struct GncMainWindow {
-	GtkWindow parent;
-
+	GtkWindow gtk_window;
 	GtkUIManager *ui_merge;
-
-	GncMainWindowPrivate *priv;
 } GncMainWindow;
 
 typedef struct {
-	GtkWindowClass parent;
+	GtkWindowClass gtk_window;
 
 	/* callbacks */
 	void (*page_added)   (GncMainWindow *window,

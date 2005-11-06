@@ -50,9 +50,12 @@ static void gnc_plugin_init       (GncPlugin *plugin_page,
 				   GncPluginClass *klass);
 static void gnc_plugin_finalize   (GObject *object);
 
-struct  GncPluginPrivate {
+typedef struct GncPluginPrivate {
 	gpointer dummy;
-};
+} GncPluginPrivate;
+
+#define GNC_PLUGIN_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN, GncPluginPrivate))
 
 
 /** Get the type of a gnc window plugin.
@@ -100,6 +103,8 @@ gnc_plugin_class_init (GncPluginClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 	gobject_class->finalize = gnc_plugin_finalize;
+
+	g_type_class_add_private(klass, sizeof(GncPluginPrivate));
 }
 
 
@@ -114,9 +119,6 @@ gnc_plugin_class_init (GncPluginClass *klass)
 static void
 gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
 {
-	GncPluginPrivate *priv;
-
-	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
 	gnc_gobject_tracking_remember(G_OBJECT(plugin_page),\
 				      G_OBJECT_CLASS(klass));
 }
@@ -136,13 +138,12 @@ static void
 gnc_plugin_finalize (GObject *object)
 {
 	GncPlugin *plugin;
+	GncPluginPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN (object));
 
 	plugin = GNC_PLUGIN (object);
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_GET_PRIVATE (plugin);
 
 	gnc_gobject_tracking_forget(object);
 	G_OBJECT_CLASS (parent_class)->finalize (object);

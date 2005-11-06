@@ -72,10 +72,13 @@ static const gchar *account_tree_actions[] = {
 };
 
 
-struct GncPluginStylesheetsPrivate
+typedef struct GncPluginStylesheetsPrivate
 {
   gpointer dummy;
-};
+} GncPluginStylesheetsPrivate;
+
+#define GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_STYLESHEETS, GncPluginStylesheetsPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -135,26 +138,25 @@ gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass)
   plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
   plugin_class->add_to_window 	   = gnc_plugin_stylesheets_add_to_window;
   plugin_class->remove_from_window = gnc_plugin_stylesheets_remove_from_window;
+
+  g_type_class_add_private(klass, sizeof(GncPluginStylesheetsPrivate));
 }
 
 static void
 gnc_plugin_stylesheets_init (GncPluginStylesheets *plugin)
 {
-  plugin->priv = g_new0 (GncPluginStylesheetsPrivate, 1);
 }
 
 static void
 gnc_plugin_stylesheets_finalize (GObject *object)
 {
   GncPluginStylesheets *plugin;
+  GncPluginStylesheetsPrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_STYLESHEETS (object));
 
   plugin = GNC_PLUGIN_STYLESHEETS (object);
-
-  g_return_if_fail (plugin->priv != NULL);
-
-  g_free (plugin->priv);
+  priv = GNC_PLUGIN_STYLESHEETS_GET_PRIVATE(plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

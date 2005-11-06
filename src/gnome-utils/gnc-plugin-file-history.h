@@ -52,15 +52,12 @@ G_BEGIN_DECLS
 #define HISTORY_STRING_FILE_N   "file%d"
 
 /* typedefs & structures */
-typedef struct GncPluginFileHistoryPrivate GncPluginFileHistoryPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginFileHistoryPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginFileHistory;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginFileHistoryClass;
 
 /* function prototypes */

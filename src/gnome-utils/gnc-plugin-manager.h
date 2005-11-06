@@ -66,16 +66,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MANAGER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_MANAGER, GncPluginManagerClass))
 
 /* typedefs & structures */
-typedef struct GncPluginManagerPrivate GncPluginManagerPrivate;
-
 typedef struct {
-	GObject object;
-
-	GncPluginManagerPrivate *priv;
+	GObject gobject;
 } GncPluginManager;
 
 typedef struct {
-	GObjectClass object;
+	GObjectClass gobject;
 
 	/* Signals */
 	void (* plugin_added)

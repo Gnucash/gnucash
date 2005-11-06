@@ -153,10 +153,13 @@ static const gchar *gnc_plugin_important_actions[] = {
 };
 
 
-struct GncPluginBasicCommandsPrivate
+typedef struct GncPluginBasicCommandsPrivate
 {
   gpointer dummy;
-};
+} GncPluginBasicCommandsPrivate;
+
+#define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_BASIC_COMMANDS, GncPluginBasicCommandsPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -215,26 +218,25 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
   plugin_class->n_actions    	  = gnc_plugin_n_actions;
   plugin_class->important_actions = gnc_plugin_important_actions;
   plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
+
+  g_type_class_add_private(klass, sizeof(GncPluginBasicCommandsPrivate));
 }
 
 static void
 gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 {
-  plugin->priv = g_new0 (GncPluginBasicCommandsPrivate, 1);
 }
 
 static void
 gnc_plugin_basic_commands_finalize (GObject *object)
 {
   GncPluginBasicCommands *plugin;
+  GncPluginBasicCommandsPrivate *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS (object));
 
   plugin = GNC_PLUGIN_BASIC_COMMANDS (object);
-
-  g_return_if_fail (plugin->priv != NULL);
-
-  g_free (plugin->priv);
+  priv= GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE (plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -371,9 +373,9 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
   window = data->window;
   ret = gnc_ui_sxsincelast_dialog_create ();
   if ( ret == 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->parent), nothing_to_do_msg);
+    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), nothing_to_do_msg);
   } else if ( ret < 0 ) {
-    gnc_info_dialog (GTK_WIDGET(&window->parent), ngettext
+    gnc_info_dialog (GTK_WIDGET(&window->gtk_window), ngettext
 		     /* Translators: %d is the number of transactions. This is a
 			ngettext(3) message. */
 		     ("There are no Scheduled Transactions to be entered at this time.\n"

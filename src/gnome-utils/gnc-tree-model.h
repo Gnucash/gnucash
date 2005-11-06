@@ -52,12 +52,8 @@ G_BEGIN_DECLS
 
 
 /* typedefs & structures */
-typedef struct GncTreeModelPrivate GncTreeModelPrivate;
-
 typedef struct {
 	GtkObject gtk_object;
-
-	GncTreeModelPrivate *priv;
 } GncTreeModel;
 
 typedef struct {

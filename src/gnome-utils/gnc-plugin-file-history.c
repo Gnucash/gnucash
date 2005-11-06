@@ -79,11 +79,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 
-struct GncPluginFileHistoryPrivate
+typedef struct GncPluginFileHistoryPrivate
 {
 	gpointer dummy;
-};
+} GncPluginFileHistoryPrivate;
 
+#define GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_FILE_HISTORY, GncPluginFileHistoryPrivate))
 
 /************************************************************
  *                     Other Functions                      *
@@ -413,13 +415,14 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 
 	plugin_class->gconf_section = HISTORY_STRING_SECTION;
 	plugin_class->gconf_notifications = gnc_plugin_history_list_changed;
+
+	g_type_class_add_private(klass, sizeof(GncPluginFileHistoryPrivate));
 }
 
 static void
 gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 {
 	ENTER("plugin %p", plugin);
-	plugin->priv = g_new0 (GncPluginFileHistoryPrivate, 1);
 	LEAVE("");
 }
 
@@ -427,14 +430,13 @@ static void
 gnc_plugin_file_history_finalize (GObject *object)
 {
 	GncPluginFileHistory *plugin;
+	GncPluginFileHistoryPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
 
+	ENTER("plugin %p", object);
 	plugin = GNC_PLUGIN_FILE_HISTORY (object);
-	ENTER("plugin %p", plugin);
-
-	g_return_if_fail (plugin->priv != NULL);
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE (plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE("");

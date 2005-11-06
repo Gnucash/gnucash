@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_OFX_NAME "gnc-plugin-ofx"
 
 /* typedefs & structures */
-typedef struct GncPluginOfxPrivate GncPluginOfxPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginOfxPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginOfx;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginOfxClass;
 
 /* function prototypes */

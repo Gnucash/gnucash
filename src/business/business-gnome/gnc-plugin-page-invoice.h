@@ -52,16 +52,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_INVOICE_NAME "gnc-plugin-page-invoice"
 
 /* typedefs & structures */
-typedef struct GncPluginPageInvoicePrivate GncPluginPageInvoicePrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageInvoicePrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageInvoice;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 } GncPluginPageInvoiceClass;
 
 /* function prototypes */

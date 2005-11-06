@@ -54,16 +54,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_REGISTER_NAME "GncPluginPageRegister"
 
 /* typedefs & structures */
-typedef struct GncPluginPageRegisterPrivate GncPluginPageRegisterPrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageRegisterPrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageRegister;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 } GncPluginPageRegisterClass;
 
 /* function prototypes */

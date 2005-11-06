@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MT940_NAME "gnc-plugin-mt940"
 
 /* typedefs & structures */
-typedef struct GncPluginMt940Private GncPluginMt940Private;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginMt940Private *priv;
+	GncPlugin gnc_plugin;
 } GncPluginMt940;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginMt940Class;
 
 /* function prototypes */

@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_HBCI_NAME "gnc-plugin-hbci"
 
 /* typedefs & structures */
-typedef struct GncPluginHbciPrivate GncPluginHbciPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginHbciPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginHbci;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginHbciClass;
 
 /* function prototypes */

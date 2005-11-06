@@ -54,7 +54,7 @@ static void gnc_window_embedded_window_init (GncWindowIface *iface);
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
 
-struct GncEmbeddedWindowPrivate
+typedef struct GncEmbeddedWindowPrivate
 {
   GtkWidget *menu_dock;
   GtkWidget *toolbar_dock;
@@ -64,7 +64,10 @@ struct GncEmbeddedWindowPrivate
 
   GncPluginPage *page;
   GtkWidget     *parent_window;
-};
+} GncEmbeddedWindowPrivate;
+
+#define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -107,12 +110,15 @@ void
 gnc_embedded_window_open_page (GncEmbeddedWindow *window,
 			       GncPluginPage *page)
 {
+  GncEmbeddedWindowPrivate *priv;
+
   ENTER("window %p, page %p", window, page);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (window));
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
-  g_return_if_fail (window->priv->page == NULL);
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  g_return_if_fail (priv->page == NULL);
 
-  window->priv->page = page;
+  priv->page = page;
   page->window = GTK_WIDGET(window);
   page->notebook_page = gnc_plugin_page_create_widget (page);
   g_object_set_data (G_OBJECT (page->notebook_page), PLUGIN_PAGE_LABEL, page);
@@ -128,6 +134,8 @@ void
 gnc_embedded_window_close_page (GncEmbeddedWindow *window,
 				GncPluginPage *page)
 {
+  GncEmbeddedWindowPrivate *priv;
+
   ENTER("window %p, page %p", window, page);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (window));
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
@@ -137,8 +145,9 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
     return;
   }
 
-  gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(window->priv->page));
-  window->priv->page = NULL;
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(priv->page));
+  priv->page = NULL;
   gnc_plugin_page_removed (page);
 
   gnc_plugin_page_unmerge_actions (page, window->ui_merge);
@@ -152,7 +161,10 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
 GncPluginPage *
 gnc_embedded_window_get_page (GncEmbeddedWindow *window)
 {
-  return window->priv->page;
+  GncEmbeddedWindowPrivate *priv;
+
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  return priv->page;
 }
 
 
@@ -167,6 +179,8 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 
   object_class->finalize = gnc_embedded_window_finalize;
   object_class->dispose = gnc_embedded_window_dispose;
+
+  g_type_class_add_private(klass, sizeof(GncEmbeddedWindowPrivate));
   LEAVE(" ");
 }
 
@@ -175,7 +189,6 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
 			  GncEmbeddedWindowClass *klass)
 {
   ENTER("window %p", window);
-  window->priv = g_new0 (GncEmbeddedWindowPrivate, 1);
 
   gnc_embedded_window_setup_window (window);
 
@@ -188,16 +201,14 @@ static void
 gnc_embedded_window_finalize (GObject *object)
 {
   GncEmbeddedWindow *window;
+  GncEmbeddedWindowPrivate *priv;
 
   ENTER("object %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
   window = GNC_EMBEDDED_WINDOW (object);
-
-  g_return_if_fail (window->priv != NULL);
-
-  g_free (window->priv);
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
 
   gnc_gobject_tracking_forget(object);
   G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -208,17 +219,19 @@ static void
 gnc_embedded_window_dispose (GObject *object)
 {
   GncEmbeddedWindow *window;
+  GncEmbeddedWindowPrivate *priv;
 
   ENTER("object %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_EMBEDDED_WINDOW (object));
 
   window = GNC_EMBEDDED_WINDOW (object);
-  if (window->priv->page) {
-    DEBUG("unreffing page %p (count currently %d)", window->priv->page,
-	  G_OBJECT(window->priv->page)->ref_count);
-    g_object_unref(window->priv->page);
-    window->priv->page = NULL;
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  if (priv->page) {
+    DEBUG("unreffing page %p (count currently %d)", priv->page,
+	  G_OBJECT(priv->page)->ref_count);
+    g_object_unref(priv->page);
+    priv->page = NULL;
   }
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -230,12 +243,15 @@ gnc_embedded_window_add_widget (GtkUIManager *merge,
 				GtkWidget *widget,
 				GncEmbeddedWindow *window)
 {
+  GncEmbeddedWindowPrivate *priv;
+
   ENTER("merge %p, new widget %p, window %p", merge, widget, window);
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   if (GTK_IS_TOOLBAR (widget)) {
-    window->priv->toolbar_dock = widget;
+    priv->toolbar_dock = widget;
   }
 
-  gtk_box_pack_start (GTK_BOX (window->priv->menu_dock), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
   gtk_widget_show (widget);
   LEAVE(" ");
 }
@@ -246,7 +262,7 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
   GncEmbeddedWindowPrivate *priv;
 
   ENTER("window %p", window);
-  priv = window->priv;
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
 
   /* Create widgets and add them to the window */
   gtk_widget_show (GTK_WIDGET(window));
@@ -287,7 +303,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
 	action_group_name, action_entries, n_action_entries, ui_filename,
 	enclosing_win, add_accelerators, user_data);
   window = g_object_new (GNC_TYPE_EMBEDDED_WINDOW, NULL);
-  priv = window->priv;
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
 
   /* Determine the full pathname of the ui file */
   ui_fullname = gnc_gnome_locate_ui_file(ui_filename);
@@ -328,11 +344,13 @@ static GtkWindow *
 gnc_embedded_window_get_gtk_window (GncWindow *window_in)
 {
   GncEmbeddedWindow *window;
+  GncEmbeddedWindowPrivate *priv;
 
   g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW (window_in), NULL);
 
   window = GNC_EMBEDDED_WINDOW(window_in);
-  return GTK_WINDOW(window->priv->parent_window);
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+  return GTK_WINDOW(priv->parent_window);
 }
 
 static GtkWidget *
@@ -344,13 +362,13 @@ gnc_embedded_window_get_statusbar (GncWindow *window_in)
   g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW (window_in), NULL);
 
   window = GNC_EMBEDDED_WINDOW(window_in);
-  priv = window->priv;
+  priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   return priv->statusbar;
 }
 
 static void
 gnc_window_embedded_window_init (GncWindowIface *iface)
 {
-	iface->get_gtk_window = gnc_embedded_window_get_gtk_window;
-	iface->get_statusbar = gnc_embedded_window_get_statusbar;
+  iface->get_gtk_window = gnc_embedded_window_get_gtk_window;
+  iface->get_statusbar = gnc_embedded_window_get_statusbar;
 }

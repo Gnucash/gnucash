@@ -58,14 +58,17 @@ static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
 
-struct GncTreeViewAccountPrivate
+typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;
 
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
     GtkDestroyNotify                  filter_destroy;
-};
+} GncTreeViewAccountPrivate;
+
+#define GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountPrivate))
 
 
 /************************************************************/
@@ -110,6 +113,8 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 	o_class = G_OBJECT_CLASS (klass);
 	o_class->finalize = gnc_tree_view_account_finalize;
         o_class->dispose = gnc_tree_view_account_dispose;
+
+	g_type_class_add_private(klass, sizeof(GncTreeViewAccountPrivate));
 }
 
 /********************************************************************\
@@ -131,9 +136,10 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 static void
 gnc_tree_view_account_init (GncTreeViewAccount *view)
 {
-  view->priv = g_new0 (GncTreeViewAccountPrivate, 1);
+  GncTreeViewAccountPrivate *priv;
 
-  gnc_init_account_view_info(&view->priv->avi);
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gnc_init_account_view_info(&priv->avi);
 }
 
 static void
@@ -148,14 +154,12 @@ gnc_tree_view_account_finalize (GObject *object)
 
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
 
-  priv = account_view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
   if (priv->filter_destroy) {
       priv->filter_destroy(priv->filter_data);
       priv->filter_destroy = NULL;
   }
   priv->filter_fn = NULL;
-
-  g_free (account_view->priv);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
@@ -660,7 +664,7 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
   g_return_if_fail(avi != NULL);
 
-  priv = account_view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
 
   *avi = priv->avi;
 }
@@ -683,6 +687,7 @@ void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 				     AccountViewInfo *avi)
 {
+  GncTreeViewAccountPrivate *priv;
   gint i;
   guint sel_bits = 0;
 
@@ -690,7 +695,8 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
   g_return_if_fail(avi != NULL);
 
-  account_view->priv->avi = *avi;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
+  priv->avi = *avi;
   
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++) {
       sel_bits |= avi->include_type[i] ? (1 << i): 0;
@@ -714,6 +720,7 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
 {
   Account *account;
   GncTreeViewAccount *view = data;
+  GncTreeViewAccountPrivate *priv;
 
   g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -721,8 +728,9 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
   account = gnc_tree_model_account_get_account (
       GNC_TREE_MODEL_ACCOUNT(model), iter);
   
-  if (view->priv->filter_fn)
-      return view->priv->filter_fn(account, view->priv->filter_data);
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  if (priv->filter_fn)
+      return priv->filter_fn(account, priv->filter_data);
   else return TRUE;
 }
 
@@ -746,7 +754,7 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
 
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
 
-  priv = view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
   if (priv->filter_destroy) {
       priv->filter_destroy(priv->filter_data);
   }

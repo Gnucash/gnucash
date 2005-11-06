@@ -48,18 +48,13 @@ typedef enum {
 } GncTreeModelExampleAccountColumn;
 
 /* typedefs & structures */
-typedef struct GncTreeModelExampleAccountPrivate GncTreeModelExampleAccountPrivate;
-
 typedef struct {
-	GObject parent;
-
-	GncTreeModelExampleAccountPrivate *priv;
-
+	GObject gobject;
 	int stamp;
 } GncTreeModelExampleAccount;
 
 typedef struct {
-	GObjectClass parent;
+	GObjectClass gobject;
 } GncTreeModelExampleAccountClass;
 
 /* function prototypes */

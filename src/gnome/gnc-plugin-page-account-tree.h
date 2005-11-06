@@ -53,16 +53,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "gnc-plugin-page-account-tree"
 
 /* typedefs & structures */
-typedef struct GncPluginPageAccountTreePrivate GncPluginPageAccountTreePrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageAccountTreePrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageAccountTree;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 
 	/* callbacks */
 	void (*account_selected) (GncPluginPage	 *page,

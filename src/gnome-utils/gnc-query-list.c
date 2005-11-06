@@ -43,11 +43,16 @@ enum
   LAST_SIGNAL
 };
 
+typedef struct _GNCQueryListPriv  GNCQueryListPriv;
+
 struct _GNCQueryListPriv 
 {
   const QofParam * get_guid;
   gint	          component_id;
 };
+
+#define GNC_QUERY_LIST_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_QUERY_LIST, GNCQueryListPriv))
 
 /* Impossible to get at runtime. Assume this is a reasonable number */
 #define ARROW_SIZE      14
@@ -115,6 +120,8 @@ gnc_query_list_get_type (void)
 void
 gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
 {
+  GNCQueryListPriv *priv;
+
   g_return_if_fail(list);
   g_return_if_fail(param_list);
   g_return_if_fail(query);
@@ -125,7 +132,8 @@ gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
   list->column_params = param_list;
 
   /* cache the function to get the guid of this query type */
-  list->priv->get_guid =
+  priv = GNC_QUERY_LIST_GET_PRIVATE(list);
+  priv->get_guid =
     qof_class_get_parameter (qof_query_get_search_for(query), QOF_PARAM_GUID);
 
   /* Initialize the CList */
@@ -220,6 +228,8 @@ gnc_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
 static void
 gnc_query_list_init (GNCQueryList *list)
 {
+  GNCQueryListPriv *priv;
+
   list->query = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
@@ -237,8 +247,8 @@ gnc_query_list_init (GNCQueryList *list)
   list->numeric_abs = FALSE;
   list->numeric_inv_sort = FALSE;
 
-  list->priv = g_new0(GNCQueryListPriv, 1);
-  list->priv->component_id =
+  priv = GNC_QUERY_LIST_GET_PRIVATE(list);
+  priv->component_id =
     gnc_register_gui_component ("gnc-query-list-cm-class",
 				gnc_query_list_refresh_handler,
 				NULL, list);
@@ -330,6 +340,8 @@ gnc_query_list_class_init (GNCQueryListClass *klass)
   clist_class =     (GtkCListClass*) klass;
 
   parent_class = gtk_type_class(GTK_TYPE_CLIST);
+
+  g_type_class_add_private(klass, sizeof(GNCQueryListPriv));
 
   query_list_signals[LINE_TOGGLED] =
     g_signal_new("line_toggled",
@@ -444,14 +456,11 @@ static void
 gnc_query_list_destroy (GtkObject *object)
 {
   GNCQueryList *list = GNC_QUERY_LIST(object);
+  GNCQueryListPriv *priv;
 
-  if (list->priv && list->priv->component_id >= 0)
-    gnc_unregister_gui_component (list->priv->component_id);
-  if (list->priv)
-  {
-    g_free (list->priv);
-    list->priv = NULL;
-  }
+  priv = GNC_QUERY_LIST_GET_PRIVATE(list);
+  if (priv->component_id >= 0)
+    gnc_unregister_gui_component (priv->component_id);
   if (list->query)
   {
     xaccFreeQuery(list->query);
@@ -764,13 +773,15 @@ gnc_query_list_click_column_cb(GtkWidget *w, gint column, gpointer data)
 static void
 gnc_query_list_fill(GNCQueryList *list)
 {
+  GNCQueryListPriv *priv;
   gchar *strings[list->num_columns + 1];
   GList *entries, *item;
   const GUID *guid;
   gint i;
 
   /* Clear all watches */
-  gnc_gui_component_clear_watches (list->priv->component_id);
+  priv = GNC_QUERY_LIST_GET_PRIVATE(list);
+  gnc_gui_component_clear_watches (priv->component_id);
 
   /* Reverse the list now because 'append()' takes too long */
   entries = gncQueryRun(list->query);
@@ -832,9 +843,9 @@ gnc_query_list_fill(GNCQueryList *list)
     update_booleans (list, row);
 
     /* and set a watcher on this item */
-    gup = list->priv->get_guid;
+    gup = priv->get_guid;
     guid = (const GUID*)((gup->param_getfcn)(item->data, gup));
-    gnc_gui_component_watch_entity (list->priv->component_id, guid,
+    gnc_gui_component_watch_entity (priv->component_id, guid,
 				    GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
     list->num_entries++;

@@ -39,6 +39,8 @@ static void gnc_search_param_class_init	(GNCSearchParamClass *class);
 static void gnc_search_param_init	(GNCSearchParam *gspaper);
 static void gnc_search_param_finalize	(GObject *obj);
 
+typedef struct _GNCSearchParamPrivate	GNCSearchParamPrivate;
+
 struct _GNCSearchParamPrivate {
   GSList *		converters;
   GSList *		param_path;
@@ -47,6 +49,9 @@ struct _GNCSearchParamPrivate {
   GNCSearchParamFcn	lookup_fcn;
   gpointer		lookup_arg;
 };
+
+#define GNC_SEARCH_PARAM_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParamPrivate))
 
 static GObjectClass *parent_class;
 
@@ -91,31 +96,31 @@ gnc_search_param_class_init (GNCSearchParamClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gnc_search_param_finalize;
+
+  g_type_class_add_private(klass, sizeof(GNCSearchParamPrivate));
 }
 
 static void
 gnc_search_param_init (GNCSearchParam *o)
 {
-  o->priv = g_malloc0 (sizeof (*o->priv));
 }
 
 static void
 gnc_search_param_finalize (GObject *obj)
 {
   GNCSearchParam *o;
+  GNCSearchParamPrivate *priv;
 
   g_return_if_fail (obj != NULL);
   g_return_if_fail (GNC_IS_SEARCH_PARAM (obj));	
 
   o = GNC_SEARCH_PARAM (obj);
-
-  g_return_if_fail (o->priv != NULL);
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(o);
 	
-  g_slist_free (o->priv->param_path);
-  o->priv->param_path = NULL;
-  g_slist_free (o->priv->converters);
-  o->priv->converters = NULL;
-  g_free(o->priv);
+  g_slist_free (priv->param_path);
+  priv->param_path = NULL;
+  g_slist_free (priv->converters);
+  priv->converters = NULL;
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
@@ -138,13 +143,16 @@ GNCSearchParam *
 gnc_search_param_clone (GNCSearchParam *param)
 {
   GNCSearchParam *n;
+  GNCSearchParamPrivate *priv, *n_priv;
 
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
 
   n = gnc_search_param_new ();
+  n_priv = GNC_SEARCH_PARAM_GET_PRIVATE(n);
   n->title = param->title;
-  n->priv->param_path = g_slist_copy (param->priv->param_path);
-  n->priv->type = param->priv->type;
+  n_priv->param_path = g_slist_copy (priv->param_path);
+  n_priv->type = priv->type;
 
   return n;
 }
@@ -154,15 +162,17 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
 				 GNCIdTypeConst search_type,
 				 GSList *param_path)
 {
+  GNCSearchParamPrivate *priv;
   GNCIdTypeConst type = NULL;
   GSList *converters = NULL;
 
   g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
 
-  if (param->priv->param_path) {
-    g_slist_free (param->priv->param_path);
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  if (priv->param_path) {
+    g_slist_free (priv->param_path);
   }
-  param->priv->param_path = g_slist_copy (param_path);
+  priv->param_path = g_slist_copy (param_path);
 
   /* Compute the parameter type */
   for (; param_path; param_path = param_path->next) {
@@ -182,48 +192,60 @@ gnc_search_param_set_param_path (GNCSearchParam *param,
   }
 
   /* Save the type */
-  param->priv->type = type;
+  priv->type = type;
 
   /* Save the converters */
-  if (param->priv->converters) {
-    g_slist_free (param->priv->converters);
+  if (priv->converters) {
+    g_slist_free (priv->converters);
   }
-  param->priv->converters = g_slist_reverse (converters);
+  priv->converters = g_slist_reverse (converters);
 }
 
 void
 gnc_search_param_override_param_type (GNCSearchParam *param,
 				      GNCIdTypeConst param_type)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_if_fail (GNC_IS_SEARCH_PARAM (param));
   g_return_if_fail (param_type != NULL && *param_type != '\0');
 
-  param->priv->type = param_type;
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  priv->type = param_type;
   /* XXX: What about the converters? */
 }
 
 GSList *
 gnc_search_param_get_param_path (GNCSearchParam *param)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 	
-  return g_slist_copy (param->priv->param_path);
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  return g_slist_copy (priv->param_path);
 }
 
 GSList *
 gnc_search_param_get_converters (GNCSearchParam *param)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 
-  return param->priv->converters;
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  return priv->converters;
 }
 
 GNCIdTypeConst
 gnc_search_param_get_param_type (GNCSearchParam *param)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (param), NULL);
 
-  return param->priv->type;
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  return priv->type;
 }
 
 void
@@ -261,11 +283,15 @@ gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
 gboolean
 gnc_search_param_type_match (GNCSearchParam *a, GNCSearchParam *b)
 {
+  GNCSearchParamPrivate *a_priv, *b_priv;
+
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (a), FALSE);
   g_return_val_if_fail (GNC_IS_SEARCH_PARAM (b), FALSE);
 
-  if (a->priv->type == b->priv->type || 
-      !safe_strcmp (a->priv->type, b->priv->type))
+  a_priv = GNC_SEARCH_PARAM_GET_PRIVATE(a);
+  b_priv = GNC_SEARCH_PARAM_GET_PRIVATE(b);
+  if (a_priv->type == b_priv->type || 
+      !safe_strcmp (a_priv->type, b_priv->type))
     return TRUE;
 
   return FALSE;
@@ -354,13 +380,16 @@ gnc_search_param_set_param_fcn (GNCSearchParam *param,
 				GNCSearchParamFcn fcn,
 				gpointer arg)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_if_fail (param);
   g_return_if_fail (param_type && *param_type);
   g_return_if_fail (fcn);
   g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
 
-  param->priv->lookup_fcn = fcn;
-  param->priv->lookup_arg = arg;
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  priv->lookup_fcn = fcn;
+  priv->lookup_arg = arg;
   gnc_search_param_override_param_type (param, param_type);
 }
 
@@ -368,12 +397,15 @@ gnc_search_param_set_param_fcn (GNCSearchParam *param,
 gpointer
 gnc_search_param_compute_value (GNCSearchParam *param, gpointer object)
 {
+  GNCSearchParamPrivate *priv;
+
   g_return_val_if_fail(param, NULL);
   g_return_val_if_fail(GNC_IS_SEARCH_PARAM(param), NULL);
 
-  if (param->priv->lookup_fcn)
+  priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+  if (priv->lookup_fcn)
   {
-    return ((param->priv->lookup_fcn)(object, param->priv->lookup_arg));
+    return ((priv->lookup_fcn)(object, priv->lookup_arg));
   }
   else
   {

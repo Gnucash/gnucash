@@ -41,16 +41,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BASIC_COMMANDS_NAME "gnc-plugin-basic-commands"
 
 /* typedefs & structures */
-typedef struct GncPluginBasicCommandsPrivate GncPluginBasicCommandsPrivate;
-
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginBasicCommandsPrivate *priv;
+  GncPlugin gnc_plugin;
 } GncPluginBasicCommands;
 
 typedef struct {
-	GncPluginClass parent;
+  GncPluginClass gnc_plugin;
 } GncPluginBasicCommandsClass;
 
 /* function prototypes */

@@ -1,3 +1,17 @@
+2005-11-05  David Hampton  <hampton@employees.org>
+
+	* Various: Convert to newer method of allocating private data
+	structures for objects.  This allows glib to consolidate the space
+	for all of the various public and private data structures on an
+	object and reduce memory fragmentation.  Change all data structure
+	declarations of the parent object to be the actual name of the
+	object instead of the string "parent".  This makes debugging
+	easier when looking at data structures in gdb.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Same as
+	above. Also regularize the variable names used to refer to the
+	public and private data structures in this file.
+
 2005-11-05  Christian Stimming  <stimming@tuhh.de>
 
 	* autogen.sh: Replace old crufty autogen.sh script with radically

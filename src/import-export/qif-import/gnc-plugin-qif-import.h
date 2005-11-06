@@ -41,15 +41,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_QIF_IMPORT_NAME "gnc-plugin-qif-import"
 
 /* typedefs & structures */
-typedef struct GncPluginQifImportPrivate GncPluginQifImportPrivate;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginQifImportPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginQifImport;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginQifImportClass;
 
 /* function prototypes */
