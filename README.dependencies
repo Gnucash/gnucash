@@ -128,18 +128,37 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
 - Fedora Core
   - *FC4 = 2005-06-13
+    - aqbanking-1.0.4beta
+    - cairo: not included
     - g-wrap-1.3.4
     - gconf2-2.10.0
-    - glib-2.6.6
+    - glib2-2.6.6
+    - gtk2-2.6.10
     - guile-1.6.7
     - libart_lgpl-2.3.17
     - libglade2-2.5.1
     - libgnomeprint22-2.10.3
     - libgnomeui-2.10.0
     - libgsf-1.11.1
+    - libofx-0.7.0
     - libxml2-2.6.20
     - pango-1.8.1
   -  FC3 = 2004-11-08
+    - aqbanking: not included
+    - cairo: not included
+    - g-wrap-1.3.4
+    - gconf2-2.8.1
+    - glib2-2.4.8
+    - gtk2-2.4.14
+    - guile-1.6.4
+    - libart_lgpl-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint22-2.8.0
+    - libgnomeui-2.8.0
+    - libgsf-1.10.1
+    - libofx-0.7.0
+    - libxml2-2.6.16
+    - pango-1.6.0
 - Debian GNU/Linux
   - unstable4
     (already includes goffice and will include libqof1)
@@ -199,22 +218,37 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
 - RHEL
   - *RHEL 4 = 2005-02-15
     [from http://ftp.redhat.com/pub/redhat/linux/enterprise/4/en/]
-    - aqbanking no
-    - cairo no
-    - gconf2-2.8.1-1
-    - glib[+gobject,module]-2-2.4.7-1
-    - gtk+-2.4.13-12
-    - guile-1.6.4-14
-    - gwrap no
-    - libart-2.3.16-3
-    - libglade-2-4.0-5
-    - libgnomeprint-2.2-2.8.0-3
-    - libgnomeui-2.8.0-1
-    - libgsf-1.10.1-1
-    - libofx no
-    - libxml-2-2.6.16-6
-    - pango-1.6.0-7
+    - aqbanking: not included
+    - cairo: not included
+    - gconf2-2.8.1
+    - glib2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: not included
+    - libart_lgpl-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint22-2.8.0
+    - libgnomeui-2.8.0
+    - libgsf-1.10.1
+    - libofx: not included
+    - libxml2-2.6.16
+    - pango-1.6.0
   -  RHEL 3 = 2003-10-22
+    - aqbanking: not included
+    - cairo: not included
+    - gconf2-2.2.1
+    - glib2-2.2.3
+    - gtk2-2.2.4
+    - guile-1.6.4
+    - g-wrap: not included
+    - libart_lgpl-2.3.11
+    - libglade2-2.0.1
+    - libgnomeprint22-2.2.1.3
+    - libgnomeui-2.2.1
+    - libgsf-1.6.0
+    - libofx: not included
+    - libxml2-2.5.10
+    - pango-1.2.5
 - CentOS
   -  4.2 = 2005-10-12
   - *4.1 = 2005-06-12
