@@ -1,3 +1,15 @@
+2005-11-06  Neil Williams <linux@codehelp.co.uk>
+
+	* doc/RAW-NOTES : deleted
+	* doc/misc-notes.txt : new version, compatible
+	with doxygen.
+	* doc/Makefile.am : use GNU sed to allow OSX build
+	of tip of the day.
+	* doc/README.build-system : Document changes in autogen.sh
+	* configure.in : Allow make to use the already detected
+	usable version of sed. Remove OSX hacks that are no
+	longer required.
+
 2005-11-05  David Hampton  <hampton@employees.org>
 
 	* configure.in:
