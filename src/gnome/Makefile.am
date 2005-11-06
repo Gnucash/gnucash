@@ -188,7 +188,7 @@ endif
 
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
   gw-gnc-spec.scm .scm-links ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \
            (set! %load-path (cons \"../app-utils\" %load-path)) \

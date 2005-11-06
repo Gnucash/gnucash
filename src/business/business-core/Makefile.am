@@ -101,7 +101,7 @@ endif
 
 gw-business-core.scm gw-business-core.c gw-business-core.h: \
  .scm-links gw-business-core-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \

@@ -1,5 +1,23 @@
 2005-11-05  David Hampton  <hampton@employees.org>
 
+	* configure.in:
+	* src/register/register-core/Makefile.am:
+	* src/core-utils/Makefile.am:
+	* src/gnc-module/test/mod-bar/Makefile.am:
+	* src/gnc-module/test/mod-baz/Makefile.am:
+	* src/gnc-module/test/mod-foo/Makefile.am:
+	* src/gnc-module/Makefile.am:
+	* src/report/report-gnome/Makefile.am:
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/business/dialog-tax-table/Makefile.am:
+	* src/gnome-utils/Makefile.am:
+	* src/engine/Makefile.am:
+	* src/gnome/Makefile.am:
+	* src/app-utils/Makefile.am: Pass the name of the guile executable
+	from configure to the makefiles instead of hard-coding it.
+	Requested by Peter O'Gorman to improve Mac OS X support.
+
 	* src/gnome-utils/gnc-embedded-window.c:
 	* src/gnome-utils/gnc-embedded-window.h:
 	* src/gnome-utils/gnc-main-window.c:

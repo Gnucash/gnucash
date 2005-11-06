@@ -224,6 +224,7 @@ AM_GUILE_VERSION_CHECK(1.6, , , [AC_MSG_ERROR([
   development packages?  Gnucash requires at least version 1.6 to build.
 ])])
 
+AC_SUBST(GUILE)
 AC_DEFINE_UNQUOTED(GNC_GUILE_MAJOR_VERSION, ${guile_major_version},
 	[Guile Major version number])
 AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},

@@ -272,7 +272,7 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: \
   .scm-links gw-engine-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
@@ -280,7 +280,7 @@ gw-engine.scm gw-engine.c gw-engine.h: \
 
 gw-kvp.scm gw-kvp.c gw-kvp.h: \
   .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
