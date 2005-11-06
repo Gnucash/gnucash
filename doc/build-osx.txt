@@ -1,0 +1,45 @@
+/** \page osxbuild Building GnuCash on OSX
+
+\section osxprepare Preparation
+
+There are notable problems building gnucash with the default
+auto tools installed in OSX and even installing the GNU versions
+via fink may not be sufficient - OSX may still call the BSD version
+in preference to the newly installed GNU version.
+
+To avoid these problems, you are advised to change your PATH variable
+in ~/.bashrc to put the Fink binaries ahead of the main OSX binaries
+in the path:
+Instead of:
+PATH=/usr/bin/:/sbin/:/usr/sbin/:/bin:/opt/local/bin:/sw/bin
+use:
+PATH=/sw/bin:/usr/bin/:/sbin/:/usr/sbin/:/bin:/opt/local/bin
+
+Then, when calling ./autogen.sh and ./configure, it may be necessary
+to direct OSX to the correct Guile installation environment using:
+
+#!/bin/bash
+guile16-build env LIBRARY_PATH=/sw/lib CPATH=/sw/include \
+./autogen.sh
+guile16-build env LIBRARY_PATH=/sw/lib CPATH=/sw/include \
+./configure <your configure options>
+
+\section osxtools OSX tools
+
+GnuCash recommends <b>only>/b> the most recent versions of each of the 
+GNU auto tools available via Fink. As of November 2005, these were:
+
+\verbatim
+                 10.3         10.4
+autoconf2.5     2.59-6       2.59-6
+automake1.9     1.9.5-1      1.9.6-1
+libtool14       1.5.18-1     1.5.20-1
+\endverbatim
+
+Currently, these versions are only available in the unstable (CVS) version
+of Fink.
+
+http://pdb.finkproject.org/index.php
+
+*/
+
