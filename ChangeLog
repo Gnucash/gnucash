@@ -1,3 +1,13 @@
+2005-11-06  Neil Williams  <linux@codehelp.co.uk>
+
+	* src/business/business-core/backend-bus.c : Ignore
+	gncOrder - temporarily.
+	* cashutil/doc : svn:ignore tweak
+	* cashutil/doc/man : svn:ignore tweak
+	* cashutil/po/en_GB.po : tweak
+	* macros/autogen.sh : build within a build - chaining
+	cashutil/configure to the end of ./configure.
+
 2005-11-03  Neil Williams  <linux@codehelp.co.uk>
 
 	* CashUtil branch: Use libcashobjects.

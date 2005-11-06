@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CashUtil 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-04 22:55+0000\n"
+"POT-Creation-Date: 2005-11-05 21:48+0000\n"
 "PO-Revision-Date: 2005-08-14 20:41+0100\n"
 "Last-Translator: Neil Williams <linux@codehelp.co.uk>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../src/cashutil.c:147
+#: src/cashutil.c:146
 msgid "Load a GnuCash or QSF book from <filename>"
 msgstr ""
 
-#: ../src/cashutil.c:168
+#: src/cashutil.c:167
 #, fuzzy
 msgid ""
 "\n"
@@ -49,7 +49,7 @@ msgstr ""
 "   options are -tde, with either -s or -f, then -w.\n"
 "\n"
 
-#: ../src/cashutil.c:192
+#: src/cashutil.c:192
 #, c-format
 msgid ""
 "Fatal error: Cannot initialise QOF.\n"
@@ -58,22 +58,22 @@ msgstr ""
 "Fatal error: Cannot initialise QOF.\n"
 "\n"
 
-#: ../src/cashutil.c:214
+#: src/cashutil.c:214
 #, c-format
 msgid "%s: ERROR. Specify only one command out of -i, -l."
 msgstr "%s: ERROR. Specify only one command out of -i, -l."
 
-#: ../src/cashutil.c:215 ../src/cashutil.c:287
+#: src/cashutil.c:215 src/cashutil.c:287
 #, c-format
 msgid "--explain or --shell\n"
 msgstr "--explain or --shell\n"
 
-#: ../src/cashutil.c:225
+#: src/cashutil.c:225
 #, fuzzy, c-format
 msgid " GnuCash Command Line Interface.\n"
 msgstr " The GnuCash Command Line Interface.\n"
 
-#: ../src/cashutil.c:226
+#: src/cashutil.c:226
 #, c-format
 msgid ""
 " Build date....: %s %s\n"
@@ -82,12 +82,12 @@ msgstr ""
 " Build date....: %s %s\n"
 "\n"
 
-#: ../src/cashutil.c:231
+#: src/cashutil.c:231
 #, c-format
 msgid " For CashUtil support, join the QOF-devel mailing list at\n"
 msgstr " For CashUtil support, join the QOF-devel mailing list at\n"
 
-#: ../src/cashutil.c:233
+#: src/cashutil.c:233
 #, c-format
 msgid ""
 "   Please use --help for more detailed options.\n"
@@ -96,22 +96,22 @@ msgstr ""
 "   Please use --help for more detailed options.\n"
 "\n"
 
-#: ../src/cashutil.c:279
+#: src/cashutil.c:279
 #, c-format
 msgid "%s: ERROR. Unknown option %d, argument: %s\n"
 msgstr "%s: ERROR. Unknown option %d, argument: %s\n"
 
-#: ../src/cashutil.c:286
+#: src/cashutil.c:286
 #, c-format
 msgid "%s: Please specify only one command out of -i, -l."
 msgstr "%s: Please specify only one command out of -i, -l."
 
-#: ../src/cashutil.c:293
+#: src/cashutil.c:293
 #, c-format
 msgid "%s: Sorry, %s cannot yet read STDIN.\n"
 msgstr "%s: Sorry, %s cannot yet read STDIN.\n"
 
-#: ../src/cashutil.c:340
+#: src/cashutil.c:340
 #, c-format
 msgid ""
 "%s: Error. please specify the database to explain.\n"
@@ -120,52 +120,52 @@ msgstr ""
 "%s: Error. please specify the database to explain.\n"
 "\n"
 
-#: ../src/qof-main.c:193
+#: src/qof-main.c:193
 #, c-format
 msgid "Choose the %s to edit: (1 - %d): "
 msgstr ""
 
-#: ../src/qof-main.c:198
+#: src/qof-main.c:198
 #, c-format
 msgid "Choose the %s to DELETE: (1 - %d): "
 msgstr ""
 
-#: ../src/qof-main.c:203
+#: src/qof-main.c:203
 #, c-format
 msgid "Choose the %s to print: (1 - %d): "
 msgstr ""
 
-#: ../src/qof-main.c:216
+#: src/qof-main.c:216
 #, fuzzy, c-format
 msgid "Only %d objects are available of type '%s'.\n"
 msgstr "%s: No objects of type '%s' found.\n"
 
-#: ../src/qof-main.c:218
+#: src/qof-main.c:218
 #, c-format
 msgid "Choose the %s to use: (1 - %d): "
 msgstr ""
 
-#: ../src/qof-main.c:278
+#: src/qof-main.c:278
 #, c-format
 msgid "%s: No objects of type '%s' found.\n"
 msgstr "%s: No objects of type '%s' found.\n"
 
-#: ../src/qof-main.c:294
+#: src/qof-main.c:294
 #, c-format
 msgid "No parameter named '%s' found for object '%s'\n"
 msgstr "No parameter named '%s' found for object '%s'\n"
 
-#: ../src/qof-main.c:368
+#: src/qof-main.c:368
 #, c-format
 msgid "%s: Cannot add '%s' - object name not found\n"
 msgstr "%s: Cannot add '%s' - object name not found\n"
 
-#: ../src/qof-main.c:377
+#: src/qof-main.c:377
 #, c-format
 msgid "Failed to add an instance of %s\n"
 msgstr "Failed to add an instance of %s\n"
 
-#: ../src/qof-main.c:380
+#: src/qof-main.c:380
 #, c-format
 msgid ""
 "Added an instance of %s\n"
@@ -174,13 +174,13 @@ msgstr ""
 "Added an instance of %s\n"
 "\n"
 
-#: ../src/qof-main.c:381
+#: src/qof-main.c:381
 #, c-format
 msgid "Now edit the parameter details of this instance.\n"
 msgstr "Now edit the parameter details of this instance.\n"
 
-#: ../src/qof-main.c:382 ../src/qof-main.c:413 ../src/qof-main.c:423
-#: ../src/qof-main.c:455 ../src/qof-main.c:840
+#: src/qof-main.c:382 src/qof-main.c:413 src/qof-main.c:423 src/qof-main.c:455
+#: src/qof-main.c:842
 #, c-format
 msgid ""
 "Type 'help' for available commands or parameters.\n"
@@ -189,39 +189,39 @@ msgstr ""
 "Type 'help' for available commands or parameters.\n"
 "\n"
 
-#: ../src/qof-main.c:405
+#: src/qof-main.c:405
 #, c-format
 msgid "%s: Cannot edit '%s' - object name not found\n"
 msgstr "%s: Cannot edit '%s' - object name not found\n"
 
-#: ../src/qof-main.c:412
+#: src/qof-main.c:412
 #, c-format
 msgid "Select an instance of %s to edit:\n"
 msgstr "Select an instance of %s to edit:\n"
 
-#: ../src/qof-main.c:422 ../src/qof-main.c:839
+#: src/qof-main.c:422 src/qof-main.c:841
 #, c-format
 msgid "Edit the parameter details of the selected instance.\n"
 msgstr "Edit the parameter details of the selected instance.\n"
 
-#: ../src/qof-main.c:447
+#: src/qof-main.c:447
 #, c-format
 msgid "%s: Cannot delete '%s' - object name not found\n"
 msgstr "%s: Cannot delete '%s' - object name not found\n"
 
-#: ../src/qof-main.c:454
+#: src/qof-main.c:454
 #, c-format
 msgid "Select the instance of %s to delete\n"
 msgstr "Select the instance of %s to delete\n"
 
-#: ../src/qof-main.c:468
+#: src/qof-main.c:468
 #, c-format
 msgid ""
 "The instance has been DELETED. Type 'quit' to exit and undo. The file will "
 "not be changed until you type 'write'.\n"
 msgstr ""
 
-#: ../src/qof-main.c:481
+#: src/qof-main.c:483
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -238,16 +238,16 @@ msgstr ""
 "Descriptions are shown only for readability.\n"
 "\n"
 
-#: ../src/qof-main.c:485
+#: src/qof-main.c:487
 msgid "Object Name"
 msgstr ""
 
-#: ../src/qof-main.c:485
+#: src/qof-main.c:487
 #, fuzzy
 msgid "Description\n"
 msgstr "Name%sDescription"
 
-#: ../src/qof-main.c:487
+#: src/qof-main.c:489
 #, c-format
 msgid ""
 "\n"
@@ -258,22 +258,22 @@ msgstr ""
 "Use 'explain <database>' to see the list of fields within\n"
 "any supported database.\n"
 
-#: ../src/qof-main.c:501
+#: src/qof-main.c:503
 #, c-format
 msgid "%-24s %-12s %s\n"
 msgstr ""
 
-#: ../src/qof-main.c:512
+#: src/qof-main.c:514
 #, c-format
 msgid "%s: Cannot print '%s' - object name not found\n"
 msgstr "%s: Cannot print '%s' - object name not found\n"
 
-#: ../src/qof-main.c:520
+#: src/qof-main.c:522
 #, c-format
 msgid "Select the instance of '%s' to print.\n"
 msgstr "Select the instance of '%s' to print.\n"
 
-#: ../src/qof-main.c:521
+#: src/qof-main.c:523
 #, c-format
 msgid ""
 " Type 'help' for available commands or parameters.\n"
@@ -282,24 +282,24 @@ msgstr ""
 " Type 'help' for available commands or parameters.\n"
 "\n"
 
-#: ../src/qof-main.c:527 ../src/qof-main.c:915
+#: src/qof-main.c:529 src/qof-main.c:917
 msgid "Name"
 msgstr "Name"
 
-#: ../src/qof-main.c:527 ../src/qof-main.c:915
+#: src/qof-main.c:529 src/qof-main.c:917
 msgid "Type"
 msgstr "Type"
 
-#: ../src/qof-main.c:527 ../src/qof-main.c:915
+#: src/qof-main.c:529 src/qof-main.c:917
 msgid "Value"
 msgstr "Value"
 
-#: ../src/qof-main.c:538
+#: src/qof-main.c:540
 #, c-format
 msgid "Type: %-12s\tName: %-12s\n"
 msgstr "Type: %-12s\tName: %-12s\n"
 
-#: ../src/qof-main.c:546 ../src/qof-main.c:1727
+#: src/qof-main.c:548 src/qof-main.c:1729
 #, c-format
 msgid ""
 "\n"
@@ -310,7 +310,7 @@ msgstr ""
 "Parameters of the %s database:\n"
 "\n"
 
-#: ../src/qof-main.c:551
+#: src/qof-main.c:553
 #, c-format
 msgid ""
 "\n"
@@ -319,7 +319,7 @@ msgstr ""
 "\n"
 "%s: %s object not found.\n"
 
-#: ../src/qof-main.c:567
+#: src/qof-main.c:569
 #, c-format
 msgid ""
 "%s: The current book has not been saved.\n"
@@ -328,22 +328,22 @@ msgstr ""
 "%s: The current book has not been saved.\n"
 "Do you still want to overwrite it? [y/n]\n"
 
-#: ../src/qof-main.c:657
+#: src/qof-main.c:659
 #, c-format
 msgid "%i:Parameter name: %s "
 msgstr "%i:Parameter name: %s "
 
-#: ../src/qof-main.c:660
+#: src/qof-main.c:662
 #, c-format
 msgid "Import data : %s "
 msgstr "Import data : %s "
 
-#: ../src/qof-main.c:662
+#: src/qof-main.c:664
 #, c-format
 msgid "Original data : %s\n"
 msgstr "Original data : %s\n"
 
-#: ../src/qof-main.c:668
+#: src/qof-main.c:670
 #, c-format
 msgid ""
 "\n"
@@ -356,7 +356,7 @@ msgstr ""
 "    1 to use the import data or \n"
 "    2 to keep the original data or"
 
-#: ../src/qof-main.c:672
+#: src/qof-main.c:674
 #, c-format
 msgid ""
 "\n"
@@ -365,7 +365,7 @@ msgstr ""
 "\n"
 "    3 to import the data as a NEW object or"
 
-#: ../src/qof-main.c:674
+#: src/qof-main.c:676
 #, c-format
 msgid ""
 "\n"
@@ -374,12 +374,12 @@ msgstr ""
 "\n"
 "    9 to abort the entire merge operation.\n"
 
-#: ../src/qof-main.c:679
+#: src/qof-main.c:681
 #, c-format
 msgid "or 9) : "
 msgstr "or 9) : "
 
-#: ../src/qof-main.c:705
+#: src/qof-main.c:707
 #, c-format
 msgid ""
 "Are you sure you want to abort the entire merge operation?\n"
@@ -390,11 +390,11 @@ msgstr ""
 "The rest of the import data will not be processed.\n"
 "Your original data will not be modified. Abort? y/n : "
 
-#: ../src/qof-main.c:709
+#: src/qof-main.c:711
 msgid "y"
 msgstr "y"
 
-#: ../src/qof-main.c:710
+#: src/qof-main.c:712
 #, c-format
 msgid ""
 "Aborting . . \n"
@@ -403,7 +403,7 @@ msgstr ""
 "Aborting . . \n"
 "\n"
 
-#: ../src/qof-main.c:758
+#: src/qof-main.c:760
 #, c-format
 msgid ""
 "The current book has not been saved.\n"
@@ -412,7 +412,7 @@ msgstr ""
 "The current book has not been saved.\n"
 "Do you still want to quit without saving? %s"
 
-#: ../src/qof-main.c:773
+#: src/qof-main.c:775
 #, c-format
 msgid ""
 "\n"
@@ -421,7 +421,7 @@ msgstr ""
 "\n"
 "Thank you for using %s.\n"
 
-#: ../src/qof-main.c:779
+#: src/qof-main.c:781
 #, c-format
 msgid ""
 "Commands available in the shell are:\n"
@@ -430,82 +430,82 @@ msgstr ""
 "Commands available in the shell are:\n"
 "\n"
 
-#: ../src/qof-main.c:781
+#: src/qof-main.c:783
 msgid "Add a new instance of the object.\n"
 msgstr "Add a new instance of the object.\n"
 
-#: ../src/qof-main.c:783
+#: src/qof-main.c:785
 msgid "Select one instance and edit (set) the parameter values.\n"
 msgstr "Select one instance and edit (set) the parameter values.\n"
 
-#: ../src/qof-main.c:785
+#: src/qof-main.c:787
 msgid "Select one instance for deletion.\n"
 msgstr "Select one instance for deletion.\n"
 
-#: ../src/qof-main.c:787
+#: src/qof-main.c:789
 msgid "Synonym for the --list command outside the shell.\n"
 msgstr "Synonym for the --list command outside the shell.\n"
 
-#: ../src/qof-main.c:789
+#: src/qof-main.c:791
 msgid "Select one instance and print the parameter values.\n"
 msgstr "Select one instance and print the parameter values.\n"
 
-#: ../src/qof-main.c:791
+#: src/qof-main.c:793
 msgid "Synonym for the --explain command outside the shell.\n"
 msgstr "Synonym for the --explain command outside the shell.\n"
 
-#: ../src/qof-main.c:793
+#: src/qof-main.c:795
 msgid "Replace the current book with data from the file.\n"
 msgstr "Replace the current book with data from the file.\n"
 
-#: ../src/qof-main.c:795
+#: src/qof-main.c:797
 msgid "Prompts to save the current book, if any.\n"
 msgstr "Prompts to save the current book, if any.\n"
 
-#: ../src/qof-main.c:797
+#: src/qof-main.c:799
 msgid "Write out the current book. If no filename is given,\n"
 msgstr "Write out the current book. If no filename is given,\n"
 
-#: ../src/qof-main.c:798
+#: src/qof-main.c:800
 msgid "write to the original file.\n"
 msgstr "write to the original file.\n"
 
-#: ../src/qof-main.c:799
+#: src/qof-main.c:801
 msgid "(uses STDOUT if STDIN is used.)\n"
 msgstr "(uses STDOUT if STDIN is used.)\n"
 
-#: ../src/qof-main.c:801
+#: src/qof-main.c:803
 msgid "Merge data from the file into the current book.\n"
 msgstr "Merge data from the file into the current book.\n"
 
-#: ../src/qof-main.c:803
+#: src/qof-main.c:805
 msgid "Run a \"quoted\" SQL statement.\n"
 msgstr "Run a \"quoted\" SQL statement.\n"
 
-#: ../src/qof-main.c:804 ../src/qof-main.c:941
+#: src/qof-main.c:806 src/qof-main.c:943
 msgid "This screen.\n"
 msgstr "This screen.\n"
 
-#: ../src/qof-main.c:805
+#: src/qof-main.c:807
 msgid "Quit the shell\n"
 msgstr "Quit the shell\n"
 
-#: ../src/qof-main.c:847
+#: src/qof-main.c:849
 #, c-format
 msgid "Query returned %d entities\n"
 msgstr "Query returned %d entities\n"
 
-#: ../src/qof-main.c:876
+#: src/qof-main.c:878
 #, c-format
 msgid "%s: parameter name '%s' of object '%s' not recognised.\n"
 msgstr "%s: parameter name '%s' of object '%s' not recognised.\n"
 
-#: ../src/qof-main.c:878
+#: src/qof-main.c:880
 #, c-format
 msgid "Type 'explain' for more information.\n"
 msgstr "Type 'explain' for more information.\n"
 
-#: ../src/qof-main.c:895
+#: src/qof-main.c:897
 #, c-format
 msgid ""
 "\n"
@@ -516,7 +516,7 @@ msgstr ""
 "Editable parameters of the %s object:\n"
 "\n"
 
-#: ../src/qof-main.c:917
+#: src/qof-main.c:919
 #, c-format
 msgid ""
 "\n"
@@ -529,7 +529,7 @@ msgstr ""
 "parameters for the object '%s'.\n"
 "\n"
 
-#: ../src/qof-main.c:926
+#: src/qof-main.c:928
 #, c-format
 msgid ""
 "Commands available in this sub-shell are:\n"
@@ -538,46 +538,46 @@ msgstr ""
 "Commands available in this sub-shell are:\n"
 "\n"
 
-#: ../src/qof-main.c:928
+#: src/qof-main.c:930
 msgid "Edit the parameter 'Name' to have the 'Value' given.\n"
 msgstr "Edit the parameter 'Name' to have the 'Value' given.\n"
 
-#: ../src/qof-main.c:931
+#: src/qof-main.c:933
 msgid "Boolean values accept TRUE|true, 1, Y|y or yes|YES\n"
 msgstr "Boolean values accept TRUE|true, 1, Y|y or yes|YES\n"
 
-#: ../src/qof-main.c:932
+#: src/qof-main.c:934
 msgid "String values that include spaces should be quoted\n"
 msgstr "String values that include spaces should be quoted\n"
 
-#: ../src/qof-main.c:933
+#: src/qof-main.c:935
 msgid "Synonym for edit.\n"
 msgstr "Synonym for edit.\n"
 
-#: ../src/qof-main.c:934
+#: src/qof-main.c:936
 #, c-format
 msgid "Print the current values for this '%s' instance.\n"
 msgstr "Print the current values for this '%s' instance.\n"
 
-#: ../src/qof-main.c:937
+#: src/qof-main.c:939
 #, c-format
 msgid "Show the editable parameters for '%s'\n"
 msgstr "Show the editable parameters for '%s'\n"
 
-#: ../src/qof-main.c:940
+#: src/qof-main.c:942
 msgid "Set the edited parameter values.\n"
 msgstr "Set the edited parameter values.\n"
 
-#: ../src/qof-main.c:943
+#: src/qof-main.c:945
 msgid "Return to the top shell without setting changes.\n"
 msgstr "Return to the top shell without setting changes.\n"
 
-#: ../src/qof-main.c:1078 ../src/qof-main.c:1096
+#: src/qof-main.c:1080 src/qof-main.c:1098
 #, c-format
 msgid "%s: bad option - %s, available commands are:\n"
 msgstr "%s: bad option - %s, available commands are:\n"
 
-#: ../src/qof-main.c:1083 ../src/qof-main.c:1101
+#: src/qof-main.c:1085 src/qof-main.c:1103
 #, c-format
 msgid ""
 "\n"
@@ -588,7 +588,7 @@ msgstr ""
 "Use help for more information.\n"
 "\n"
 
-#: ../src/qof-main.c:1131 ../src/qof-main.c:1645
+#: src/qof-main.c:1133 src/qof-main.c:1647
 #, c-format
 msgid ""
 "%s: Error: Cannot exclude database \"%s\" with option -e\n"
@@ -599,7 +599,7 @@ msgstr ""
 "    because option -d is set to the include the same database: \"%s\"\n"
 "Use the '-l' command to see the full list of supported databases.\n"
 
-#: ../src/qof-main.c:1150
+#: src/qof-main.c:1152
 #, c-format
 msgid ""
 "\n"
@@ -608,7 +608,7 @@ msgstr ""
 "\n"
 "Welcome to the QOF interactive shell ...\n"
 
-#: ../src/qof-main.c:1151
+#: src/qof-main.c:1153
 #, c-format
 msgid ""
 " Type 'help' for additional information\n"
@@ -617,7 +617,7 @@ msgstr ""
 " Type 'help' for additional information\n"
 "\n"
 
-#: ../src/qof-main.c:1159
+#: src/qof-main.c:1161
 #, c-format
 msgid ""
 "\n"
@@ -628,50 +628,50 @@ msgstr ""
 "\n"
 "Thank you for using %s.\n"
 
-#: ../src/qof-main.c:1206
+#: src/qof-main.c:1208
 #, c-format
 msgid "%s: No suitable backend was found for %s.\n"
 msgstr "%s: No suitable backend was found for %s.\n"
 
-#: ../src/qof-main.c:1211
+#: src/qof-main.c:1213
 #, c-format
 msgid "%s: The URL '%s' is not supported by this version of %s.\n"
 msgstr "%s: The URL '%s' is not supported by this version of %s.\n"
 
-#: ../src/qof-main.c:1217
+#: src/qof-main.c:1219
 #, c-format
 msgid "%s: Cannot parse the URL '%s'\n"
 msgstr "%s: Cannot parse the URL '%s'\n"
 
-#: ../src/qof-main.c:1222
+#: src/qof-main.c:1224
 #, c-format
 msgid ""
 "%s: Cannot connect to '%s'. The host, username or password were incorrect.\n"
 msgstr ""
 "%s: Cannot connect to '%s'. The host, username or password were incorrect.\n"
 
-#: ../src/qof-main.c:1228
+#: src/qof-main.c:1230
 #, c-format
 msgid "%s: Cannot connect to '%s'. Connection was lost, unable to send data.\n"
 msgstr ""
 "%s: Cannot connect to '%s'. Connection was lost, unable to send data.\n"
 
-#: ../src/qof-main.c:1234
+#: src/qof-main.c:1236
 #, c-format
 msgid "%s: This file/URL appears to be from a newer version of %s.\n"
 msgstr "%s: This file/URL appears to be from a newer version of %s.\n"
 
-#: ../src/qof-main.c:1240
+#: src/qof-main.c:1242
 #, c-format
 msgid "%s: The database '%s' does not seem to exist.\n"
 msgstr "%s: The database '%s' does not seem to exist.\n"
 
-#: ../src/qof-main.c:1245
+#: src/qof-main.c:1247
 #, c-format
 msgid "%s: Could not obtain the lock for '%s'.\n"
 msgstr "%s: Could not obtain the lock for '%s'.\n"
 
-#: ../src/qof-main.c:1250
+#: src/qof-main.c:1252
 #, c-format
 msgid ""
 "%s could not write to '%s'. That database may be on a read-only file system, "
@@ -680,14 +680,14 @@ msgstr ""
 "%s could not write to '%s'. That database may be on a read-only file system, "
 "or you may not have write permission for the directory.\n"
 
-#: ../src/qof-main.c:1257
+#: src/qof-main.c:1259
 #, c-format
 msgid ""
 "%s: The file/URL '%s' does not contain %s data or the data is corrupt.\n"
 msgstr ""
 "%s: The file/URL '%s' does not contain %s data or the data is corrupt.\n"
 
-#: ../src/qof-main.c:1263
+#: src/qof-main.c:1265
 #, c-format
 msgid ""
 "%s: The server at URL '%s' experienced an error or encountered bad or "
@@ -696,17 +696,17 @@ msgstr ""
 "%s: The server at URL '%s' experienced an error or encountered bad or "
 "corrupt data.\n"
 
-#: ../src/qof-main.c:1269
+#: src/qof-main.c:1271
 #, c-format
 msgid "%s: You do not have permission to access '%s'.\n"
 msgstr "%s: You do not have permission to access '%s'.\n"
 
-#: ../src/qof-main.c:1274
+#: src/qof-main.c:1276
 #, c-format
 msgid "%s: An error occurred while processing '%s'.\n"
 msgstr "%s: An error occurred while processing '%s'.\n"
 
-#: ../src/qof-main.c:1280
+#: src/qof-main.c:1282
 #, c-format
 msgid ""
 "%s: Invalid QSF Object file! The QSF object file '%s'  failed to validate  "
@@ -717,7 +717,7 @@ msgstr ""
 "against the QSF object schema. The XML structure of the file is either not "
 "well-formed or the file contains illegal data.\n"
 
-#: ../src/qof-main.c:1288
+#: src/qof-main.c:1290
 #, c-format
 msgid ""
 "%s: Invalid QSF Map file! The QSF map file failed to validate against the "
@@ -728,7 +728,7 @@ msgstr ""
 "QSF map schema. The XML structure of the file is either not well-formed or "
 "the file contains illegal data.\n"
 
-#: ../src/qof-main.c:1296
+#: src/qof-main.c:1298
 #, c-format
 msgid ""
 "%s: The QSF Map file '%s' was written for a different version of QOF. It may "
@@ -737,7 +737,7 @@ msgstr ""
 "%s: The QSF Map file '%s' was written for a different version of QOF. It may "
 "need to be modified to work with your current QOF installation.\n"
 
-#: ../src/qof-main.c:1303
+#: src/qof-main.c:1305
 #, c-format
 msgid ""
 "%s: The selected QSF map '%s' contains unusable or missing data. This is "
@@ -748,7 +748,7 @@ msgstr ""
 "usually because not all the required parameters for the defined objects have "
 "calculations described in the map.\n"
 
-#: ../src/qof-main.c:1310
+#: src/qof-main.c:1312
 #, c-format
 msgid ""
 "%s: The selected QSF object file '%s' contains one or more invalid GUIDs. "
@@ -759,7 +759,7 @@ msgstr ""
 "The file cannot be processed - please check the source of the file and try "
 "again.\n"
 
-#: ../src/qof-main.c:1317
+#: src/qof-main.c:1319
 #, c-format
 msgid ""
 "%s: The selected QSF Object file '%s' requires a mapbut it was not "
@@ -768,7 +768,7 @@ msgstr ""
 "%s: The selected QSF Object file '%s' requires a mapbut it was not "
 "provided.\n"
 
-#: ../src/qof-main.c:1323
+#: src/qof-main.c:1325
 #, c-format
 msgid ""
 "%s: Wrong QSF map selected. The selected map, validates but was written for "
@@ -779,7 +779,7 @@ msgstr ""
 "different QOF objects. The list of objects defined in this map does not "
 "include all the objects described in the current QSF object file.\n"
 
-#: ../src/qof-main.c:1331
+#: src/qof-main.c:1333
 #, c-format
 msgid ""
 "%s: The selected file '%s' is a QSF map and cannotbe opened as a QSF "
@@ -788,7 +788,7 @@ msgstr ""
 "%s: The selected file '%s' is a QSF map and cannotbe opened as a QSF "
 "object.\n"
 
-#: ../src/qof-main.c:1337
+#: src/qof-main.c:1339
 #, c-format
 msgid ""
 "%s: When converting XML strings into numbers, an overflow has been detected. "
@@ -799,47 +799,47 @@ msgstr ""
 "The QSF object file '%s' contains invalid data in a field that is meant to "
 "hold a number.\n"
 
-#: ../src/qof-main.c:1344
+#: src/qof-main.c:1346
 #, c-format
 msgid "%s: The QSF object file '%s' should be merged, not opened directly.\n"
 msgstr "%s: The QSF object file '%s' should be merged, not opened directly.\n"
 
-#: ../src/qof-main.c:1350
+#: src/qof-main.c:1352
 #, c-format
 msgid "%s: There was an error reading the file '%s'.\n"
 msgstr "%s: There was an error reading the file '%s'.\n"
 
-#: ../src/qof-main.c:1355
+#: src/qof-main.c:1357
 #, c-format
 msgid "%s: There was an error parsing the file '%s'.\n"
 msgstr "%s: There was an error parsing the file '%s'.\n"
 
-#: ../src/qof-main.c:1360
+#: src/qof-main.c:1362
 #, c-format
 msgid "%s: The file '%s' is empty.\n"
 msgstr "%s: The file '%s' is empty.\n"
 
-#: ../src/qof-main.c:1365
+#: src/qof-main.c:1367
 #, c-format
 msgid "%s: The file '%s' could not be found.\n"
 msgstr "%s: The file '%s' could not be found.\n"
 
-#: ../src/qof-main.c:1370
+#: src/qof-main.c:1372
 #, c-format
 msgid "%s: This file is from an older version.\n"
 msgstr "%s: This file is from an older version.\n"
 
-#: ../src/qof-main.c:1375
+#: src/qof-main.c:1377
 #, c-format
 msgid "%s: Unknown file type, '%s'.\n"
 msgstr "%s: Unknown file type, '%s'.\n"
 
-#: ../src/qof-main.c:1380
+#: src/qof-main.c:1382
 #, c-format
 msgid "%s: Could not make a backup of '%s'.\n"
 msgstr "%s: Could not make a backup of '%s'.\n"
 
-#: ../src/qof-main.c:1385
+#: src/qof-main.c:1387
 #, c-format
 msgid ""
 "%s: Could not write to '%s'. Check that you have permission to write to this "
@@ -848,22 +848,22 @@ msgstr ""
 "%s: Could not write to '%s'. Check that you have permission to write to this "
 "file and that there is sufficient space to create it.\n"
 
-#: ../src/qof-main.c:1392
+#: src/qof-main.c:1394
 #, c-format
 msgid "%s: This database is from an older version.\n"
 msgstr "%s: This database is from an older version.\n"
 
-#: ../src/qof-main.c:1397
+#: src/qof-main.c:1399
 #, c-format
 msgid "%s: The SQL database is in use by other users.\n"
 msgstr "%s: The SQL database is in use by other users.\n"
 
-#: ../src/qof-main.c:1402
+#: src/qof-main.c:1404
 #, c-format
 msgid "%s: An unknown I/O error occurred.\n"
 msgstr "%s: An unknown I/O error occurred.\n"
 
-#: ../src/qof-main.c:1695
+#: src/qof-main.c:1697
 #, c-format
 msgid ""
 "\n"
@@ -884,7 +884,7 @@ msgstr ""
 "Name                    Description\n"
 "\n"
 
-#: ../src/qof-main.c:1703
+#: src/qof-main.c:1705
 #, c-format
 msgid ""
 "\n"
@@ -895,7 +895,7 @@ msgstr ""
 "Use '-d <database> --explain' to see the list of fields within\n"
 "any supported database.\n"
 
-#: ../src/qof-main.c:1705 ../src/qof-main.c:1729
+#: src/qof-main.c:1707 src/qof-main.c:1731
 #, c-format
 msgid ""
 "\n"
@@ -906,7 +906,7 @@ msgstr ""
 "Thank you for using %s\n"
 "\n"
 
-#: ../src/qofundo.c:126 ../src/qofundo.c:138
+#: src/qofundo.c:126 src/qofundo.c:138
 #, c-format
 msgid "%s: Cannot convert %s into a number: an overflow has been detected."
 msgstr "%s: Cannot convert %s into a number: an overflow has been detected."

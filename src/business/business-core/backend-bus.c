@@ -50,6 +50,6 @@ gboolean bus_cashobjects_register(void)
 	g_return_val_if_fail ( gncEntryRegister (), FALSE);
 	g_return_val_if_fail (gncVendorRegister (), FALSE);
 	g_return_val_if_fail(gncTaxTableRegister(), FALSE);
-	g_return_val_if_fail ( gncOrderRegister (), FALSE);
+//	g_return_val_if_fail ( gncOrderRegister (), FALSE);
 	return TRUE;
 }

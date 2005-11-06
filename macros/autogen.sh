@@ -298,7 +298,7 @@ do
       aclocalinclude="$ACLOCAL_FLAGS -I m4"
 
       if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
-        if grep "sed.*POTFILES" cashutil/configure.ac >/dev/null; then
+        if grep "sed.*POTFILES" configure.ac >/dev/null; then
           : do nothing -- we still have an old unmodified configure.ac
         else
           echo "Creating $dr/aclocal.m4 ..."
@@ -357,6 +357,9 @@ conf_flags="--enable-maintainer-mode --enable-error-on-warning --enable-compile-
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...
   $srcdir/configure $conf_flags "$@" \
+  && cd cashutil/ \
+  && ./configure "$@" \
+  && cd ../ \
   && echo Now type \`make\' to compile $PKG_NAME || exit 1
 else
   echo Skipping configure process.
