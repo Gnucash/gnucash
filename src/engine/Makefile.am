@@ -83,8 +83,9 @@ libqof_la_SOURCES =  ${qof_library}
 
 qofincludedir = ${pkgincludedir}
 
-qofinclude_HEADERS = ${qof_headers} \
-   qofla-dir.h
+qofinclude_HEADERS = ${qof_headers}
+
+nodist_qofinclude_HEADERS = qofla-dir.h
 
 QOFLIBdir = $(libdir)
 
