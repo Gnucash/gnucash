@@ -86,14 +86,35 @@ libgoffice/libgsf details
   - libgsf-gnome-1	>= 1.12.2
 
 
-Status, 2005-10-15
+Status, 2005-11-06
 ------------------
-
 The major distributions, as defined by http://distrowatch.com/dwres.php?resource=major, are:
 
 - Ubuntu - http://www.ubuntu.com/
   -  5.10 = 2005-10-13 - http://www.ubuntu.com/newsitems/release510
+    [from the {main,multiverse,universe}/binary-i386/Packages.gz files at
+     http://archive.ubuntu.com/ubuntu/dists/breezy/]
+    - aqbanking: libaqbanking0c2-1.5.99+1.6.0beta-1ubuntu1
+    - libcairo-1.0.2-0ubuntu1
+    - gconf2-2.12.0-0ubuntu1
+    - glib[+gobject,module]2-2.8.3-0ubuntu1
+    - gtk+2-2.8.6-0ubuntu2
+    - guile-1.6.7-1ubuntu3
+    - g-wrap-1.9.6-2ubuntu2
+    - libart2-2.3.17-1
+    - libglade2-2.5.1-2ubuntu1
+    - libgnomeprint2.2-2.12.1-0ubuntu1
+    - libgnomeui2-2.12.0-0ubuntu1
+    - libgtkhtml3
+      - libgtkhtml3.6-18-3.6.2-1
+      - gtkhtml3.8-15-3.8.1-0ubuntu1
+    - libgsf1-1.12.3-3ubuntu3
+    - libofx2-0.8.0-3ubuntu8
+    - libxml2-2.6.21-0ubuntu1
+    - pango-1.10.1-0ubuntu1
   - *5.04 = 2005-04-08 - http://www.ubuntu.com/504Released
+    [from the {main,multiverse,universe}/binary-i386/Packages.gz files at
+     http://archive.ubuntu.com/ubuntu/dists/hoary/]
     - aqbanking ??
     - cairo 0.3.0-1
     - gconf-2 gconf2_2.10.0-0ubuntu1_i386.deb
@@ -261,7 +282,6 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
 - Slackware
   -  10.2 = 2005-09-14
   - *10.1 = 2005-02-07
-  -  10.0 = 2004-06-21
 - Xandros Desktop
   - *3.0 = 2004-12
   -  2.5 = 2004-07
