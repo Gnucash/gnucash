@@ -1,22 +1,17 @@
-RAW NOTES
----------
-These need to be beautified into real documentation.
+/** \page rawnotes Miscellaneous Notes.
 
+\section stock splits & cost basis
 
-=========================================================================
-
-stock splits & cost basis
--------------------------
 OK, here's a question for accountants of various different countries:
-What's the cost basis for a stock split? Does the rest of teh world do
+What's the cost basis for a stock split? Does the rest of the world do
 it the way the US does it?
 
-For eaxmple:
+For example:
 In Jan 1995 buy 100s stock for $10 per share
 In July 1997 split 2-for-1
 In August 1997, sell 120s stock for $30 per share
 
-I beleive the following is correct for the united states:
+I believe the following is correct for the united states:
 My cost basis is $5 per share, and my gains of $25x120 are taxable
 as long-term cap gains.
 
@@ -25,7 +20,8 @@ as long-term cap gains.
 --- would there ever be a case where the gains would be considered
     'short-term' for some portion of the total?
 
-----------------------------------------------
+\subsection Spin off stocks.
+
 OK, that was easy. Here's the harder one: a spin-off:
 
 For example:
@@ -42,13 +38,11 @@ as of the date of this split.
 Note there is still an invarient:
 (old price of A) * 20s == (new price of A) *20s + (price of B) * 1s
 
-
-=========================================================================
-
-Depreciation, Sinking Funds ...
+\section Depreciation, Sinking Funds ...
 
 On 21 Apr 2000 20:39:43 CDT, the world broke into rejoicing as
 John Hasler <john@dhh.gt.org>  said:
+\verbatim
 > Lauren writes:
 > > I'm not familliar with sinking funds, but what makes them a bit different
 > > from a book entry like depreciation (also somewhat virtual) is that they
@@ -66,6 +60,7 @@ John Hasler <john@dhh.gt.org>  said:
 > When you transfer funds to your "Savings Goal" or your "Sinking Fund" you
 > are transferring funds from one asset account to another.  Just credit
 > 'Cash' and debit 'Savings Goals:Honeymoon'.
+\endvarbatim
 
 The problem with proceeding to credit Cash and debit "Savings Goal" is
 that this invalidates any reconciliation of Cash.  I'd be game to do
@@ -75,25 +70,13 @@ Cash that can be ignored when it needs to be,
 For different purposes, I will want both to consider and ignore these
 "funds reservations."
 
-a) When making up a _budget_, I care about what funds are reserved for
+- When making up a <b>budget</b>, I care about what funds are reserved for
    particular purposes.
 
-b) When trying to figure out if my bank account is going to be
-overdrawn,
-   "reserved" funds are _irrelevant._
+- When trying to figure out if my bank account is going to be
+overdrawn, "reserved" funds are <b>irrelevant.</b>
 
 I would thus suggest that the "gentle user" use the budget system to
 manage this rather than having these be "true" transactions in the
 ledger.
-
-======================================================================
-document the 'security' and the 'price quotes' fields.
-fix em up too ...
-
-======================================================================
-Instructins for how to do QIF import should be reviewed/redone
-======================================================================
-typing + in the check-number field uses the next check number ..
-
-
-xxx
+*/
