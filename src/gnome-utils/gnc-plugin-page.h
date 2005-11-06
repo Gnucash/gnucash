@@ -106,7 +106,7 @@ void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_pag
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
                                                        GtkUIManager *merge);
 
-const gchar *         gnc_plugin_page_get_name        (GncPluginPage *plugin_page);
+const gchar * gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
 
 /** Add a book reference to the specified page.
  *

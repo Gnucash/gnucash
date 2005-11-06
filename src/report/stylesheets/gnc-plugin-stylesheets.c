@@ -215,7 +215,7 @@ gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
   }
 
   /* Selectively make items visible */
-  page_name = gnc_plugin_page_get_name(page);
+  page_name = gnc_plugin_page_get_plugin_name(page);
   if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
     gnc_plugin_update_actions(action_group, account_tree_actions,

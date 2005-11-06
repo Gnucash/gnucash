@@ -215,7 +215,7 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 }
 
 const gchar *
-gnc_plugin_page_get_name (GncPluginPage *plugin_page)
+gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
 {
 	GncPluginPageClass *klass;
 
