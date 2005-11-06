@@ -16,7 +16,7 @@ tips_DATA = tip_of_the_day.list
 
 EXTRA_DIST = \
   ${doc_DATA} \
-  RAW-NOTES \
+  misc-notes.txt \
   README.build-system \
   README.francais \
   README.german \
