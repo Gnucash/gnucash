@@ -1,3 +1,8 @@
+2005-11-06  Neil Williams <linux@codehelp.co.uk>
+
+	* src/engine/Makefile.am : qofla-dir.h is not
+	for distribution, qofla-dir.h.in is used instead.
+
 2005-11-06  Christian Stimming  <stimming@tuhh.de>
 
 	* autogen.sh: Revert autogen.sh simplificatoin for now; to be
