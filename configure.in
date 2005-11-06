@@ -74,8 +74,11 @@ AM_GLIB_GNU_GETTEXT
 
 
 AM_MAINTAINER_MODE
-AC_CONFIG_MACRO_DIR(macros)
 
+# Enable only when we have autoconf --version >= 2.59
+# on all platforms. Note that AC_PREREQ(2.59) may be
+# insufficient to actually use v2.59 on OSX
+#AC_CONFIG_MACRO_DIR(macros)
 
 AC_PROG_INSTALL
 
@@ -169,6 +172,8 @@ AC_SUBST(DL_LIB)
 #AC_SEARCH_LIBS(gettext, intl, ,[
 #	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
 
+AC_SUBST(SED)
+
 AC_MSG_CHECKING(for darwin)
 case $host_os in
 	rhapsody* | darwin1*)
@@ -177,20 +182,10 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
-     dnl Use fink under MacOS X to find popt
-     AC_MSG_CHECKING(for fink support)
-     if test -d "/sw/lib" -a -d "/sw/include"; then
-        AM_CFLAGS="$AM_CFLAGS -I/sw/include"
-        LDFLAGS="$LDFLAGS -L/sw/lib"
-        AC_MSG_RESULT(yes)
-    else
-        AC_MSG_RESULT(no)
-    fi
-    AC_CHECK_HEADERS(popt.h)
+                AC_CHECK_HEADERS(popt.h)
 		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
 		mv libtool libtool.old
-		sed -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
-			-e 's|^archive_cmds.*|archive_cmds="$CC -dynamiclib \\$allow_undefined_flag -o \\$lib \\$libobjs \\$deplibs\\$linker_flags -install_name \\$rpath/\\$soname \\$verstring"|g' \
+		${SED} -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
 			-e 's|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$versuffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
 			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
 			< libtool.old > libtool
@@ -1075,8 +1070,8 @@ dnl if Mac OSX, also scrub /sw/include
 dnl GIVEN_CFLAGS=$(echo $GIVEN_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
 case $host_os in
 	darwin*)
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include ;;" | sed -e "s;-I/sw/include$;;")
-		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | sed -e "s;-I/sw/include/gtkhtml ;;" | sed -e "s;-I/sw/includ/gtkhtmle$;;")
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include ;;" | ${SED} -e "s;-I/sw/include$;;")
+		GTKHTML_CFLAGS=$(echo $GTKHTML_CFLAGS | ${SED} -e "s;-I/sw/include/gtkhtml ;;" | ${SED} -e "s;-I/sw/includ/gtkhtmle$;;")
 		;;
 esac
     AC_SUBST(GTKHTML_CFLAGS)
