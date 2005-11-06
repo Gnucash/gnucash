@@ -39,7 +39,7 @@ EXTRA_DIST = \
 ## the sed substitutions.
 gnc-prices.1: gnc-prices.1.in
 	rm -f $@.tmp
-	sed < $< > $@.tmp \
+	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
             -e 's:@-DATE-@:$(shell date +'%B %Y'):g'
 	chmod +x $@.tmp
@@ -47,7 +47,7 @@ gnc-prices.1: gnc-prices.1.in
 
 gnucash.1: gnucash.1.in
 	rm -f $@.tmp
-	sed < $< > $@.tmp \
+	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
             -e 's:@-DATE-@:$(shell date +'%B %Y'):g'
 	chmod +x $@.tmp
@@ -55,7 +55,7 @@ gnucash.1: gnucash.1.in
 
 tip_of_the_day.list: tip_of_the_day.list.in
 	gcc -E -P -x c -D'N_(x)=x' -o $@.tmp $<
-	cat -s $@.tmp | sed -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
+	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
 	rm -f $@.tmp
 
 DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list
