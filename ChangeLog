@@ -1,5 +1,10 @@
 2005-11-06  Neil Williams  <linux@codehelp.co.uk>
 
+	* src/engine/gnc-budget.c : Remove private and
+	unnecessary QOF headers.
+
+2005-11-06  Neil Williams  <linux@codehelp.co.uk>
+
 	* src/business/business-core/backend-bus.c : Ignore
 	gncOrder - temporarily.
 	* cashutil/doc : svn:ignore tweak
