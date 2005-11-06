@@ -1,26 +1,18 @@
-#!/bin/sh -x
+#!/bin/sh
+# Run this to generate all the initial makefiles, etc.
 
-# Exit this script if any command fails with non-zero exit status.
-set -e
+srcdir=`dirname $0`
+test -z "$srcdir" && srcdir=.
 
-# First cache the command names in variables. If you want to
-# override the names, simply set the variables before calling this
-# script.
+PKG_NAME="gnucash"
 
-: ${GLIB_GETTEXTIZE=glib-gettextize}
-: ${INTLTOOLIZE=intltoolize}
-: ${LIBTOOLIZE=libtoolize}
-: ${ACLOCAL=aclocal}
-: ${AUTOHEADER=autoheader}
-: ${AUTOMAKE=automake}
-: ${AUTOCONF=autoconf}
+(test -f $srcdir/configure.in \
+## put other tests here
+) || {
+    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+    echo " top-level $PKG_NAME directory"
+    exit 1
+}
 
-${GLIB_GETTEXTIZE} --force
-${INTLTOOLIZE} --force
-${LIBTOOLIZE} --force --automake
-${ACLOCAL} -I macros ${ACLOCAL_FLAGS}
-${AUTOHEADER}
-${AUTOMAKE} --add-missing
-${AUTOCONF}
-
-echo "Now you can run ./configure --enable-maintainer-mode --enable-error-on-warning --enable-compile-warnings"
+USE_GNOME2_MACROS=1
+. $srcdir/macros/autogen.sh

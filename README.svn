@@ -4,22 +4,22 @@ Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
 
  + In order to build GnuCash from SVN, you need to run the autogen.sh
-   command to generate a configure script and other files. autogen.sh does
-   NOT accept any options but it may output some options that you should
-   add to your own ./configure command.
+   command to generate and execute a configure script.  When building
+   from CVS you should ALWAYS pass your configure options directly to
+   autogen.sh.  For example:
 
-   For example:
+	./autogen.sh --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
 
-	./autogen.sh
-
-	./configure --enable-maintainer-mode --enable-error-on-warning \
-	--enable-compiler-warnings --enable-ofx --enable-opt-style-install \
-	--prefix=/opt/gnucash
-
-   Autogen will automatically generate the configure script but you must
-   run it WITH SPECIAL ARGUMENTS to make sure that certain files get built.
+   Autogen will automatically generate the configure script and then
+   run it WITH SPECIAL ARGUMENTS to make sure certain files get built.
    If you run "configure" without these special arguments, it is very likely
-   that GnuCash will fail to build.
+   that GnuCash will fail to build.  Therefore, do not run configure by
+   hand.
+
+   At the moment it seems that ./configure has to be called with
+   --enable-maintainer-mode always in order so that certain files get
+   built.  If you run "configure" without this argument, it is very
+   likely that GnuCash will fail to build.
 
    If in doubt, you can run autogen.sh, run ./configure --help,
    then re-run ./configure with your options.
