@@ -1,5 +1,12 @@
 2005-11-05  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-embedded-window.c:
+	* src/gnome-utils/gnc-embedded-window.h:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-main-window.h:
+	* src/gnome-utils/gnc-window.h: Cleanup usage of the
+	PLUGIN_PAGE_LABEL define.
+
 	* Various: Convert to newer method of allocating private data
 	structures for objects.  This allows glib to consolidate the space
 	for all of the various public and private data structures on an

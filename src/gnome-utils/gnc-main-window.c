@@ -67,6 +67,9 @@ enum {
   LAST_SIGNAL
 };
 
+/** This label is used to provide a mapping from a visible page widget
+ *  back to the corresponding GncPluginPage object. */
+#define PLUGIN_PAGE_LABEL "plugin-page"
 
 #define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"

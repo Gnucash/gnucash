@@ -121,7 +121,6 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
   priv->page = page;
   page->window = GTK_WIDGET(window);
   page->notebook_page = gnc_plugin_page_create_widget (page);
-  g_object_set_data (G_OBJECT (page->notebook_page), PLUGIN_PAGE_LABEL, page);
 
   gtk_box_pack_end(GTK_BOX(window), page->notebook_page, TRUE, TRUE, 2);
   gnc_plugin_page_inserted (page);

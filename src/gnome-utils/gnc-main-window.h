@@ -42,8 +42,6 @@
 
 G_BEGIN_DECLS
 
-#define PLUGIN_PAGE_LABEL "plugin-page"
-
 /* type macros */
 #define GNC_TYPE_MAIN_WINDOW            (gnc_main_window_get_type ())
 #define GNC_MAIN_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindow))
