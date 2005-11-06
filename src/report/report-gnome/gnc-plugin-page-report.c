@@ -66,43 +66,7 @@ enum {
     PROP_REPORT_ID,
   };
 
-static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
-static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
-static GObject *gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties);
-static void gnc_plugin_page_report_finalize (GObject *object);
-static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
-
-static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId);
-
-static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
-static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
-
-static int gnc_plugin_page_report_check_urltype(URLType t);
-static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
-                                      const gchar * location, const gchar * label,
-                                      gpointer data);
-static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
-static void gnc_plugin_page_report_refresh (gpointer data);
-static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
-static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
-static void gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node, gpointer user_data);
-static void close_handler(gpointer user_data);
-void gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win);
-static void gnc_plugin_page_report_option_change_cb(gpointer data);
-
-void gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win, SCM report);
-void gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win, SCM report);
-void gnc_plugin_page_report_raise_editor(SCM report);
-
-static void gnc_plugin_page_report_forw_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
-
-struct GncPluginPageReportPrivate
+typedef struct GncPluginPageReportPrivate
 {
         /// The report-id
         int reportId;
@@ -132,7 +96,46 @@ struct GncPluginPageReportPrivate
 
         /// the container the above HTML widget is in.
         GtkContainer *container;
-};
+} GncPluginPageReportPrivate;
+
+#define GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE_REPORT, GncPluginPageReportPrivate))
+
+static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
+static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
+static GObject *gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties);
+static void gnc_plugin_page_report_finalize (GObject *object);
+static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
+
+static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId);
+
+static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
+static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
+
+static int gnc_plugin_page_report_check_urltype(URLType t);
+static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
+                                      const gchar * location, const gchar * label,
+                                      gpointer data);
+static void gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data);
+static void gnc_plugin_page_report_refresh (gpointer data);
+static void gnc_plugin_page_report_set_fwd_button(GncPluginPageReport * page, int enabled);
+static void gnc_plugin_page_report_set_back_button(GncPluginPageReport * page, int enabled);
+static void gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node, gpointer user_data);
+static void close_handler(gpointer user_data);
+void gnc_plugin_page_report_destroy(GncPluginPageReportPrivate *priv);
+static void gnc_plugin_page_report_option_change_cb(gpointer data);
+
+void gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate *priv, SCM report);
+void gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate *priv, SCM report);
+void gnc_plugin_page_report_raise_editor(SCM report);
+
+static void gnc_plugin_page_report_forw_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
 
 GType
 gnc_plugin_page_report_get_type (void)
@@ -167,10 +170,10 @@ gnc_plugin_page_report_get_property( GObject *obj,
                                      GParamSpec *pspec )
 {
         GncPluginPageReport *rep;
-        GncPluginPageReportPrivate * priv;
+        GncPluginPageReportPrivate *priv;
 
         rep = GNC_PLUGIN_PAGE_REPORT( obj );
-        priv = (GncPluginPageReportPrivate*)rep->priv;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(rep);
         
         switch ( prop_id )
         {
@@ -193,10 +196,10 @@ gnc_plugin_page_report_set_property( GObject *obj,
         GncPluginPageReportPrivate *priv;
 
         rep = GNC_PLUGIN_PAGE_REPORT( obj );
-        priv = (GncPluginPageReportPrivate*)rep->priv;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(rep);
 
         DEBUG( "setting property with id %d / %p to value %d",
-               prop_id, rep->priv, g_value_get_int( value ) );
+               prop_id, priv, g_value_get_int( value ) );
 
         switch ( prop_id )
         {
@@ -231,6 +234,8 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 	gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
 	gnc_plugin_page_class->destroy_widget  = gnc_plugin_page_report_destroy_widget;
 
+	g_type_class_add_private(klass, sizeof(GncPluginPageReportPrivate));
+
         // create the "reportId" property
         g_object_class_install_property( object_class,
                                          PROP_REPORT_ID,
@@ -258,11 +263,11 @@ gnc_plugin_page_report_finalize (GObject *object)
 	GncPluginPageReport *page;
 	GncPluginPageReportPrivate *priv;
 
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT (object));
+
 	ENTER("object %p", object);
 	page = GNC_PLUGIN_PAGE_REPORT (object);
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT (page));
-	priv = page->priv;
-	g_return_if_fail (priv != NULL);
+	priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -272,8 +277,8 @@ static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
 {
-        GncPluginPageReport *gppReport;
-        GncPluginPageReportPrivate *report;
+        GncPluginPageReport *report;
+        GncPluginPageReportPrivate *priv;
         GtkWindow *topLvl;
         URLType type;
         char * id_name;
@@ -281,46 +286,46 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         char * url_location = NULL;
         char * url_label = NULL;
 
-        gppReport = GNC_PLUGIN_PAGE_REPORT(page);
+        report = GNC_PLUGIN_PAGE_REPORT(page);
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
-        report = (GncPluginPageReportPrivate*)gppReport->priv;
         topLvl = GTK_WINDOW(gnc_ui_get_toplevel());
-        report->html              = gnc_html_new( topLvl );
+        priv->html = gnc_html_new( topLvl );
 
-        gnc_html_history_set_node_destroy_cb(gnc_html_get_history(report->html),
+        gnc_html_history_set_node_destroy_cb(gnc_html_get_history(priv->html),
                                              gnc_plugin_page_report_history_destroy_cb,
-                                             (gpointer)report);
+                                             (gpointer)priv);
   
-        report->container = GTK_CONTAINER(gtk_frame_new(NULL));
-        gtk_frame_set_shadow_type(GTK_FRAME(report->container), GTK_SHADOW_NONE);
+        priv->container = GTK_CONTAINER(gtk_frame_new(NULL));
+        gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
   
-        gtk_container_add(GTK_CONTAINER(report->container), 
-                          gnc_html_get_widget(report->html));
+        gtk_container_add(GTK_CONTAINER(priv->container), 
+                          gnc_html_get_widget(priv->html));
   
         gnc_register_gui_component( WINDOW_REPORT_CM_CLASS, NULL,
-                                    close_handler, report );
+                                    close_handler, priv );
   
-        gnc_html_set_urltype_cb(report->html, gnc_plugin_page_report_check_urltype);
-        gnc_html_set_load_cb(report->html, gnc_plugin_page_report_load_cb, gppReport);
+        gnc_html_set_urltype_cb(priv->html, gnc_plugin_page_report_check_urltype);
+        gnc_html_set_load_cb(priv->html, gnc_plugin_page_report_load_cb, report);
 
         // FIXME.  This is f^-1(f(x)), isn't it?
-        DEBUG( "id=%d", report->reportId );
-        id_name = g_strdup_printf("id=%d", report->reportId );
+        DEBUG( "id=%d", priv->reportId );
+        id_name = g_strdup_printf("id=%d", priv->reportId );
         child_name = gnc_build_url( URL_TYPE_REPORT, id_name, NULL );
-        type = gnc_html_parse_url( report->html, child_name, &url_location, &url_label);
+        type = gnc_html_parse_url( priv->html, child_name, &url_location, &url_label);
         DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
                id_name, child_name, type, url_location, url_label );
 
         gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
-        gnc_html_show_url(report->html, type, url_location, url_label, 0);
+        gnc_html_show_url(priv->html, type, url_location, url_label, 0);
         gnc_window_set_progressbar_window( NULL );
 
-        gtk_signal_connect(GTK_OBJECT(report->container), "expose_event",
-                           GTK_SIGNAL_FUNC(gnc_plugin_page_report_expose_event_cb), gppReport);
+        gtk_signal_connect(GTK_OBJECT(priv->container), "expose_event",
+                           GTK_SIGNAL_FUNC(gnc_plugin_page_report_expose_event_cb), report);
   
-        gtk_widget_show_all( GTK_WIDGET(report->container) );
+        gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
-        return GTK_WIDGET( report->container );
+        return GTK_WIDGET( priv->container );
 }
 
 /********************************************************************
@@ -344,21 +349,22 @@ gnc_plugin_page_report_check_urltype(URLType t)
 static void
 gnc_plugin_page_report_setup( GncPluginPage *ppage )
 {
-        GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(ppage);
-        GncPluginPageReportPrivate *report = (GncPluginPageReportPrivate*)page->priv;
+        GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(ppage);
+        GncPluginPageReportPrivate *priv;
         SCM  find_report = scm_c_eval_string("gnc:find-report");
         SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
         SCM  inst_report;
         int  report_id;
 
-        report->cur_report        = SCM_BOOL_F;
-        report->initial_report    = SCM_BOOL_F;
-        report->edited_reports    = SCM_EOL;
-        report->name_change_cb_id = SCM_BOOL_F;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        priv->cur_report        = SCM_BOOL_F;
+        priv->initial_report    = SCM_BOOL_F;
+        priv->edited_reports    = SCM_EOL;
+        priv->name_change_cb_id = SCM_BOOL_F;
 
-        scm_gc_protect_object(report->cur_report);
-        scm_gc_protect_object(report->initial_report);
-        scm_gc_protect_object(report->edited_reports);
+        scm_gc_protect_object(priv->cur_report);
+        scm_gc_protect_object(priv->initial_report);
+        scm_gc_protect_object(priv->edited_reports);
 
         g_object_get( ppage, "report-id", &report_id, NULL );
 
@@ -371,10 +377,10 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
                 return;
         }
         
-        if (report->initial_report == SCM_BOOL_F) {
-                scm_gc_unprotect_object(report->initial_report);
-                report->initial_report = inst_report;
-                scm_gc_protect_object(report->initial_report);
+        if (priv->initial_report == SCM_BOOL_F) {
+                scm_gc_unprotect_object(priv->initial_report);
+                priv->initial_report = inst_report;
+                scm_gc_protect_object(priv->initial_report);
         }
 
         // all reports need [to be] saved immediately after they're created.
@@ -392,7 +398,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                                gpointer data)
 {
         GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(data);
-        GncPluginPageReportPrivate *win = report->priv;
+        GncPluginPageReportPrivate *priv;
         int  report_id;
         SCM  find_report    = scm_c_eval_string("gnc:find-report");
         SCM  get_options    = scm_c_eval_string("gnc:report-options");
@@ -405,6 +411,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         /* we get this callback if a new report is requested to be loaded OR
          * if any URL is clicked.  If an options URL is clicked, we want to
          * know about it */
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
         if (!safe_strcmp (type, URL_TYPE_REPORT)
             && location
             && (strlen(location) > 3)
@@ -419,7 +426,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 sscanf(location+10, "%d", &report_id);
                 inst_report = scm_call_1(find_report, scm_int2num(report_id));
                 if (inst_report != SCM_BOOL_F) {
-                        gnc_plugin_page_report_add_edited_report(win, inst_report);
+                        gnc_plugin_page_report_add_edited_report(priv, inst_report);
                 }
                 return;
         } else {
@@ -435,47 +442,47 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 return;
         }
 
-        if (win->initial_report == SCM_BOOL_F) {
-                scm_gc_unprotect_object(win->initial_report);
-                win->initial_report = inst_report;
-                scm_gc_protect_object(win->initial_report);
+        if (priv->initial_report == SCM_BOOL_F) {
+                scm_gc_unprotect_object(priv->initial_report);
+                priv->initial_report = inst_report;
+                scm_gc_protect_object(priv->initial_report);
                 
                 DEBUG("calling set_needs_save for report with id=%d", report_id);
                 scm_call_2(set_needs_save, inst_report, SCM_BOOL_T);
                 
-                win->initial_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
-                win->name_change_cb_id = 
-                        gnc_option_db_register_change_callback(win->initial_odb,
+                priv->initial_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
+                priv->name_change_cb_id = 
+                        gnc_option_db_register_change_callback(priv->initial_odb,
                                                                gnc_plugin_page_report_refresh,
-                                                               win,
+                                                               priv,
                                                                "General", "Report name");
         }
         
-        if ((win->cur_report != SCM_BOOL_F) && (win->cur_odb != NULL)) {
-                gnc_option_db_unregister_change_callback_id(win->cur_odb,
-                                                            win->option_change_cb_id);
-                gnc_option_db_destroy(win->cur_odb);
-                win->cur_odb = NULL;
+        if ((priv->cur_report != SCM_BOOL_F) && (priv->cur_odb != NULL)) {
+                gnc_option_db_unregister_change_callback_id(priv->cur_odb,
+                                                            priv->option_change_cb_id);
+                gnc_option_db_destroy(priv->cur_odb);
+                priv->cur_odb = NULL;
         }
         
-        if (win->cur_report != SCM_BOOL_F)
-                scm_gc_unprotect_object(win->cur_report);
-        win->cur_report = inst_report;
-        scm_gc_protect_object(win->cur_report);
+        if (priv->cur_report != SCM_BOOL_F)
+                scm_gc_unprotect_object(priv->cur_report);
+        priv->cur_report = inst_report;
+        scm_gc_protect_object(priv->cur_report);
         
-        win->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
-        win->option_change_cb_id = 
-                gnc_option_db_register_change_callback(win->cur_odb,
+        priv->cur_odb = gnc_option_db_new(scm_call_1(get_options, inst_report));  
+        priv->option_change_cb_id = 
+                gnc_option_db_register_change_callback(priv->cur_odb,
                                                        gnc_plugin_page_report_option_change_cb,
-                                                       win, NULL, NULL);
+                                                       priv, NULL, NULL);
         
-        if (gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
+        if (gnc_html_history_forward_p(gnc_html_get_history(priv->html))) {
                 gnc_plugin_page_report_set_fwd_button(report, TRUE); 
         } else {
                 gnc_plugin_page_report_set_fwd_button(report, FALSE); 
         }
         
-        if(gnc_html_history_back_p(gnc_html_get_history(win->html))) {
+        if(gnc_html_history_back_p(gnc_html_get_history(priv->html))) {
                 gnc_plugin_page_report_set_back_button(report, TRUE); 
         } else {
                 gnc_plugin_page_report_set_back_button(report, FALSE); 
@@ -487,23 +494,23 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
 static void
 gnc_plugin_page_report_option_change_cb(gpointer data)
 {
-        GncPluginPageReportPrivate * report = data;
-        SCM               dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
+        GncPluginPageReportPrivate *priv = data;
+        SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
 
         DEBUG( "option_change" );
-        if (report->cur_report == SCM_BOOL_F)
+        if (priv->cur_report == SCM_BOOL_F)
                 return;
         DEBUG( "set-dirty, queue-draw" );
 
         /* it's probably already dirty, but make sure */
-        scm_call_2(dirty_report, report->cur_report, SCM_BOOL_T);
+        scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
         
         /* Now queue the fact that we need to reload this report */
-        report->need_reload = TRUE;
+        priv->need_reload = TRUE;
         // jsled: this doesn't seem to cause any effect.
-        gtk_widget_queue_draw( GTK_WIDGET(report->container) );
+        gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
         // jsled: this does.
-        gnc_html_reload( report->html );
+        gnc_html_reload( priv->html );
 }
 
 static void 
@@ -534,21 +541,21 @@ static void
 gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data)
 {
         GncPluginPageReport *page = data;
-        GncPluginPageReportPrivate *win;
+        GncPluginPageReportPrivate *priv;
 
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
 
-	win = page->priv;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
         ENTER( "report_draw" );
-        if (!win->need_reload)
+        if (!priv->need_reload)
         {
                 LEAVE( "no reload needed" );
                 return;
         }
 
-        win->need_reload = FALSE;
+        priv->need_reload = FALSE;
         gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
-        gnc_html_reload(win->html);
+        gnc_html_reload(priv->html);
         gnc_window_set_progressbar_window( NULL );
         LEAVE( "reload forced" );
 }
@@ -566,6 +573,8 @@ gnc_plugin_page_report_refresh(gpointer data)
 static void
 gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 {
+        GncPluginPageReportPrivate *priv;
+
         // FIXME: cleanup other resources.
         static SCM         remover = SCM_BOOL_F;
         int                report_id;
@@ -575,7 +584,8 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
                 remover = scm_c_eval_string("gnc:report-remove-by-id");
         }
 
-        report_id = GNC_PLUGIN_PAGE_REPORT(plugin_page)->priv->reportId;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+        report_id = priv->reportId;
         PINFO("unreffing report %d and children\n", report_id);
         scm_call_1(remover, scm_int2num(report_id));
 }
@@ -585,16 +595,16 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
  * free and destroy a window 
  ********************************************************************/
 void
-gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
+gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 {
         SCM  get_editor = scm_c_eval_string("gnc:report-editor-widget");
         SCM  set_editor = scm_c_eval_string("gnc:report-set-editor-widget!");
         SCM  edited, editor; 
 
-        gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, win);
+        gnc_unregister_gui_component_by_data (WINDOW_REPORT_CM_CLASS, priv);
 
         /* close any open editors */
-        for (edited = scm_list_copy(win->edited_reports); !SCM_NULLP(edited);
+        for (edited = scm_list_copy(priv->edited_reports); !SCM_NULLP(edited);
              edited = SCM_CDR(edited)) {
                 editor = scm_call_1(get_editor, SCM_CAR(edited));
                 scm_call_2(set_editor, SCM_CAR(edited), SCM_BOOL_F);
@@ -603,24 +613,22 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
                 }
         }
 
-        if (win->initial_odb) {
-                gnc_option_db_unregister_change_callback_id(win->initial_odb, 
-                                                            win->name_change_cb_id);
+        if (priv->initial_odb) {
+                gnc_option_db_unregister_change_callback_id(priv->initial_odb, 
+                                                            priv->name_change_cb_id);
     
-                gnc_option_db_destroy(win->initial_odb);
-                win->initial_odb = NULL;
+                gnc_option_db_destroy(priv->initial_odb);
+                priv->initial_odb = NULL;
         }
 
-        gnc_html_destroy(win->html);
+        gnc_html_destroy(priv->html);
   
-        win->container     = NULL;
-        win->html          = NULL;
+        priv->container     = NULL;
+        priv->html          = NULL;
   
-        scm_gc_unprotect_object(win->cur_report);
-        scm_gc_unprotect_object(win->edited_reports);
-  
-        g_free(win);
-}
+        scm_gc_unprotect_object(priv->cur_report);
+        scm_gc_unprotect_object(priv->edited_reports);
+  }
 
 static GtkActionEntry report_actions[] =
 {
@@ -653,7 +661,6 @@ static action_short_labels short_labels[] = {
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
-        plugin_page->priv = g_new0( GncPluginPageReportPrivate, 1 );
 }
 
 static GObject*
@@ -686,13 +693,15 @@ gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectC
 static void
 gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint reportId)
 {
+        GncPluginPageReportPrivate *priv;
         GtkActionGroup *action_group;
         GncPluginPage *parent;
         GString *tmpStr;
         gboolean use_new;
 
         DEBUG( "property reportId=%d", reportId );
-        plugin_page->priv->reportId = reportId;
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+        priv->reportId = reportId;
 
         gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page) );
 
@@ -701,7 +710,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
         tmpStr = g_string_sized_new( 32 );
         g_string_sprintf( tmpStr, "%s: %s", _("Report"),
-                          gnc_report_name( plugin_page->priv->initial_report ) );
+                          gnc_report_name( priv->initial_report ) );
 	g_object_set(G_OBJECT(plugin_page),
 		     "page-name",      tmpStr->str,
 		     "page-uri",       "default:",
@@ -738,23 +747,23 @@ gnc_plugin_page_report_new( int reportId )
 }
 
 void
-gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * win,
+gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate *priv,
                                             SCM report)
 { 
-        SCM new_edited = scm_delete(win->edited_reports, report);
-        scm_gc_unprotect_object(win->edited_reports);
-        win->edited_reports = new_edited;
-        scm_gc_protect_object(win->edited_reports);
+        SCM new_edited = scm_delete(priv->edited_reports, report);
+        scm_gc_unprotect_object(priv->edited_reports);
+        priv->edited_reports = new_edited;
+        scm_gc_protect_object(priv->edited_reports);
 }
 
 void
-gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win,
+gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate *priv,
                                          SCM report)
 {
-        SCM new_edited = scm_cons(report, win->edited_reports);
-        scm_gc_unprotect_object(win->edited_reports);
-        win->edited_reports = new_edited;
-        scm_gc_protect_object(win->edited_reports);
+        SCM new_edited = scm_cons(report, priv->edited_reports);
+        scm_gc_unprotect_object(priv->edited_reports);
+        priv->edited_reports = new_edited;
+        scm_gc_protect_object(priv->edited_reports);
 }
 
 void
@@ -768,9 +777,9 @@ gnc_plugin_page_report_raise_editor(SCM report)
 static void
 close_handler (gpointer user_data)
 {
-        GncPluginPageReportPrivate *win = user_data;  
+        GncPluginPageReportPrivate *priv = user_data;  
         DEBUG("in close handler\n");
-        gnc_plugin_page_report_destroy (win);
+        gnc_plugin_page_report_destroy (priv);
 }
 
 static void
@@ -807,13 +816,15 @@ gnc_plugin_page_report_set_back_button(GncPluginPageReport *report, int enabled)
 static void
 gnc_plugin_page_report_forw_cb( GtkAction *action, GncPluginPageReport *report )
 {
+        GncPluginPageReportPrivate *priv;
         gnc_html_history_node * node = NULL;
 
         DEBUG( "forw" );
-        gnc_html_history_forward(gnc_html_get_history(report->priv->html));
-        node = gnc_html_history_get_current(gnc_html_get_history(report->priv->html));
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        gnc_html_history_forward(gnc_html_get_history(priv->html));
+        node = gnc_html_history_get_current(gnc_html_get_history(priv->html));
         if (node) {
-                gnc_html_show_url(report->priv->html, node->type, node->location, 
+                gnc_html_show_url(priv->html, node->type, node->location, 
                                   node->label, 0);
         }
 }
@@ -821,13 +832,15 @@ gnc_plugin_page_report_forw_cb( GtkAction *action, GncPluginPageReport *report )
 static void
 gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 {
+        GncPluginPageReportPrivate *priv;
         gnc_html_history_node * node;
   
         DEBUG( "back" );
-        gnc_html_history_back(gnc_html_get_history(report->priv->html));
-        node = gnc_html_history_get_current(gnc_html_get_history(report->priv->html));
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        gnc_html_history_back(gnc_html_get_history(priv->html));
+        node = gnc_html_history_get_current(gnc_html_get_history(priv->html));
         if(node) {
-                gnc_html_show_url(report->priv->html, node->type, node->location, 
+                gnc_html_show_url(priv->html, node->type, node->location, 
                                   node->label, 0);
         }
 }
@@ -835,30 +848,35 @@ gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 static void
 gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
 {
+        GncPluginPageReportPrivate *priv;
         SCM dirty_report;
 
         DEBUG( "reload" );
-        if (report->priv->cur_report == SCM_BOOL_F)
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        if (priv->cur_report == SCM_BOOL_F)
                 return;
 
         DEBUG( "reload-redraw" );
         dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
-        scm_call_2(dirty_report, report->priv->cur_report, SCM_BOOL_T);
+        scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
-        report->priv->need_reload = TRUE;
+        priv->need_reload = TRUE;
         /* now queue the fact that we need to reload this report */
 
         // this doens't seem to do anything...
-        gtk_widget_queue_draw( GTK_WIDGET(report->priv->container) );
+        gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
 
         // this does...
-        gnc_html_reload( report->priv->html );
+        gnc_html_reload( priv->html );
 }
 
 static void
 gnc_plugin_page_report_stop_cb( GtkAction *action, GncPluginPageReport *report )
 {
-        gnc_html_cancel(report->priv->html);
+        GncPluginPageReportPrivate *priv;
+
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        gnc_html_cancel(priv->html);
 }
 
 /* Returns SCM_BOOL_F if cancel. Returns SCM_BOOL_T if html.
@@ -996,13 +1014,14 @@ gnc_get_export_filename (SCM choice)
 static void
 gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report )
 {
-        GncPluginPageReportPrivate *priv = report->priv;
+        GncPluginPageReportPrivate *priv;
         char * filepath;
         SCM export_types;
         SCM export_thunk;
         gboolean result;
         SCM choice;
 
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
         export_types = scm_call_1 (scm_c_eval_string ("gnc:report-export-types"),
                                    priv->cur_report);
 
@@ -1051,9 +1070,10 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 static void
 gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
-        GncPluginPageReportPrivate *priv = report->priv;
+        GncPluginPageReportPrivate *priv;
         SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
         
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
         if (priv->cur_report == SCM_BOOL_F)
                 return;
 
@@ -1069,7 +1089,10 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
 static void
 gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
 {
-        gnc_html_print(report->priv->html);
+        GncPluginPageReportPrivate *priv;
+
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        gnc_html_print(priv->html);
 }
 
 /********************************************************************
