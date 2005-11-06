@@ -102,7 +102,7 @@ AC_CHECK_FUNCS(setenv,,[
 ])
 
 ## +jsled
-# copied from gnumeric
+# copied from gnumeric for our lib/goffice/ stuffs.
 AC_CHECK_HEADERS(ieeefp.h ieee754.h)
 dnl Check for some functions
 AC_CHECK_FUNCS(random drand48 finite memmove mkdtemp uname times sysconf fmin)
@@ -1003,7 +1003,6 @@ if test x${gnc_build_gui} = xtrue ;
 then
     GNOME_COMPILE_WARNINGS
 
-    # Look for libgnomeui by pkg-config
     PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GTK_CFLAGS)
     AC_SUBST(GTK_CFLAGS)
@@ -1015,16 +1014,10 @@ then
     AC_SUBST(GNOME_CFLAGS)
     AC_SUBST(GNOME_LIBS)
 
-    # look for gdk-pixbuf
     PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
     AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)
     AC_SUBST(GDK_PIXBUF_CFLAGS)
     AC_SUBST(GDK_PIXBUF_LIBS)
-
-    # Gnome-Print -- some people already have/need libgnomeprint-2.2
-    # Yep, so lets test to see if it is 2.0 or 2.2, 
-    # Anyone know why gnome has versions in the package config? 
-    # Why cant I just ask for the version of 'libgnomeprint'
 
     PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2 libgnomeprintui-2.2)
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
@@ -1037,15 +1030,12 @@ then
     AC_SUBST(LIBGUPPI_CFLAGS)
     AC_SUBST(LIBGUPPI_LIBS)
     
-    ### ----------------------------------------------------------------------
-    ### Check for glade, gtkhtml
-    
     PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
 
-    # check for gtkhtml 3.x
+    # check for gtkhtml 3.x versions.
     gtkhtml=0
     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.8 , [gtkhtml=1] , [gtkhtml=0])
     if test $gtkhtml = 0
@@ -1056,12 +1046,8 @@ then
     	     PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.2 , [gtkhtml=1] , [gtkhtml=0])
     	     if test $gtkhtml = 0
     	       then 
-    	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1] , [gtkhtml=0])
-    	          if test $gtkhtml = 0
-    	            then 
-    	              PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.0 ,,
-    	    		AC_MSG_ERROR([Could not find a working gtkhtml version]))
-    	          fi
+    	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1],
+                                    AC_MSG_ERROR([Could not find a working gtkhtml version]))
     	    fi
     	fi
     fi
