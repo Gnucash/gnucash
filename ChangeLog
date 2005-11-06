@@ -1,5 +1,10 @@
 2005-11-06  Neil Williams <linux@codehelp.co.uk>
 
+	* doc/build-osx.txt : Document some OSX-specific 
+	build solutions
+
+2005-11-06  Neil Williams <linux@codehelp.co.uk>
+
 	* doc/RAW-NOTES : deleted
 	* doc/misc-notes.txt : new version, compatible
 	with doxygen.
