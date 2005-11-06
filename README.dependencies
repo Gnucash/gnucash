@@ -58,6 +58,30 @@ libgoffice/libgsf details
   - libgnomeui-2.0 >= 2.0.0
   - libgsf-gnome-1 >= 1.12.2
 
+- libgoffice-0.4.0
+  - glib-2.0		>= 2.6.4
+  - gobject-2.0		>= 2.6.4
+  - gmodule-2.0		>= 2.6.4
+  - libgsf-1		>= 1.12.2
+    - gobject-2.0 >= 2.6.0
+    - glib-2.0 >= 2.6.0
+    - libxml-2.0 >= 2.4.16
+    - libbonobo-2.0 >= 2.0.0
+    - gnome-vfs-2.0 >= 2.2.0
+    - gnome-vfs-module-2.0 >= 2.2.0
+  - libxml-2.0		>= 2.4.12
+  - pango		>= 1.8.1
+  - pangoft2		>= 1.8.1
+  - cairo		>= 0.5.0
+  - gtk+-2.0		>= 2.6.0
+  - libglade-2.0	>= 2.3.6
+  - libgnomeprint-2.2	>= 2.8.2
+  - libart-2.0		>= 2.3.11
+  - gconf-2.0
+  - libgnomeui-2.0	>= 2.0.0
+  - libgsf-gnome-1	>= 1.12.2
+
+
 Status, 2005-10-15
 ------------------
 
