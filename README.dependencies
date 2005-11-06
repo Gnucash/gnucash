@@ -19,23 +19,20 @@ Libraries/Deps
 --------------
 aqbanking
 cairo
-gconf-2
-glib[+gobject,module]-2
-gtk+-2
+gconf2
+glib[+gobject,module]2
+gtk+2
 guile
 gwrap
-libart-2
-libglade-2
-libgnomeprint-2.2
-libgnomeui-2
-libgsf-1
+libart2
+libglade2
+libgnomeprint2.2
+libgnomeui2
+libgsf1
+[lib]gtkhtml3
 libofx
-libxml-2
+libxml2
 pango
-
-Need to determine
------------------
-libgtkhtml-3
 
 
 libgoffice/libgsf details
@@ -280,8 +277,47 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libxml2-2.6.16
     - pango-1.8.0
 - Slackware
+  [Need to check for gnome packages at...
+   - http://dropline-gnome.sourceforge.net/
+   - http://gsb.freerock.org/
+   - http://www.gware.org/]
   -  10.2 = 2005-09-14
+    [from http://slackware.it/en/pb/]
+    - aqbanking: no
+    - cairo: no
+    - gconf2: no
+    - glib[+gobject,module]2-2.6.6
+    - gtk+2-2.6.10
+    - guile-1.6.7
+    - gwrap: no
+    - libart2-2.3.17
+    - libglade2-2.4.2
+    - libgnomeprint2.2: no
+    - libgnomeui2: no
+    - libgsf1-1.12.1
+    - [lib]gtkhtml3: no
+    - libofx: no
+    - libxml2-2.6.22
+    - pango-1.8.2
   - *10.1 = 2005-02-07
+    [from http://slackware.it/en/pb/]
+    - aqbanking: no
+    - cairo: no
+    - gconf2-2.6.2
+    - glib[+gobject,module]2-2.6.4
+    - gtk+2-2.6.7
+    - guile-1.6.5
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.6.0
+    - libgnomeprint2.2-2.6.1
+    - libgnomeui2-2.6.1
+    - libgsf1-1.9.1
+    - [lib]gtkhtml3: no
+      - libgtkhtml-2.6.2
+    - libofx: no
+    - libxml2-2.6.16
+    - pango-1.8.1
 - Xandros Desktop
   - *3.0 = 2004-12
   -  2.5 = 2004-07
@@ -301,6 +337,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libgnomeprint-2.10.1
     - libgnomeui-2.10.0_1
     - libgsf-1.11.1
+    - [lib]gtkhtml3-3.6.1
     - libofx-0.7.0
     - libxml2-2.6.18
     - pango-1.8.1
@@ -342,8 +379,38 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - libxml2-2.5.10
     - pango-1.2.5
 - CentOS
+  [from http://vault.centos.org/]
   -  4.2 = 2005-10-12
+    - aqbanking: no
+    - cairo: no 
+    - gconf2-2.8.1
+    - glib[+gobject,module]2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint2.2-2.8.0
+    - libgnomeui2-2.8.0
+    - libgsf1-1.10.1
+    - [lib]gtkhtml3-3.3.2
+    - libofx: no 
+    - libxml2-2.6.16
+    - pango-1.6.0
   - *4.1 = 2005-06-12
-  -  3.6 = 2005-10-12
-  -  3.5 = 2005-06-10
-  -  2.0 = 2004-05-24
+    - aqbanking: no
+    - cairo: no
+    - gconf2-2.8.1
+    - glib[+gobject,module]2-2.4.7
+    - gtk2-2.4.13
+    - guile-1.6.4
+    - gwrap: no
+    - libart2-2.3.16
+    - libglade2-2.4.0
+    - libgnomeprint2.2-2.8.0
+    - libgnomeui2-2.8.0
+    - libgsf1-1.10.1
+    - [lib]gtkhtml3-3.3.2
+    - libofx: no
+    - libxml2-2.6.16
+    - pango-1.6.0
