@@ -443,12 +443,12 @@ AC_SUBST(QOF_LIB_DIR)
 ### --------------------------------------------------------------------------
 ### for GOG/goffice...
 
-dnl If libgoffice-1 >= 0.0.3-2 and libgsf >= 1.12.0-1 are found, 
+dnl If libgoffice-1 >= 0.0.3-2 and libgsf >= 1.12.2-1 are found, 
 dnl we need to omit lib/goffice and use the external library
 dnl because lib/goffice will not build with newer versions of libgsf.
 
 GOFFICE_REQUIRED=0.0.3
-GSF_REQUIRED=1.12.0
+GSF_REQUIRED=1.12.2
 AC_MSG_CHECKING([for GOffice and GSF])
 LIBGOFFICE_CFLAGS=`$PKG_CONFIG --silence-errors --cflags " libgoffice-1 >= $GOFFICE_REQUIRED"`
 LIBGOFFICE_LIBS=`$PKG_CONFIG --silence-errors --libs " libgoffice-1 >= $GOFFICE_REQUIRED"`
