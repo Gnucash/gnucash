@@ -1,5 +1,13 @@
 2005-11-07  Christian Stimming  <stimming@tuhh.de>
 
+	* configure.in: Remove AM_MAINTAINER_MODE since this causes only
+	problems anyway. From now on the build system always behaves as if
+	--enable-maintainer-mode had been specified. This makes all
+	related errors vanish.
+
+	* macros/autogen.sh: Clean up autogen script a bit, but leave the
+	functionality unchanged.
+
 	* po/ne.po: Add Nepali translation by Pawan Chitrakar
 	<pchitrakar@gmail.com>.
 
