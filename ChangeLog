@@ -1,3 +1,8 @@
+2005-11-07  Christian Stimming  <stimming@tuhh.de>
+
+	* po/ne.po: Add Nepali translation by Pawan Chitrakar
+	<pchitrakar@gmail.com>.
+
 2005-11-07  Neil Williams <linux@codehelp.co.uk>
 
 	* src/engine/gnc-budget.c : Remove unnecessary
