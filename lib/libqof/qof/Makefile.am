@@ -2,6 +2,10 @@ lib_LTLIBRARIES = libqof.la
 
 libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
 
+AM_CFLAGS = \
+  -I. \
+  ${GLIB_CFLAGS}
+
 libqof_la_SOURCES =  \
    gnc-date.c        \
    gnc-engine-util.c \
@@ -56,7 +60,7 @@ qofinclude_HEADERS = \
    qofla-dir.h       \
    qof_book_merge.h
 
-noinst_HEADERS += \
+noinst_HEADERS = \
    gnc-event-p.h \
    md5.h  \
    qofclass-p.h  \
@@ -71,16 +75,16 @@ noinst_HEADERS += \
 
 QOFLIBdir = $(libdir)
 
-EXTRA_DIST += \
+EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
 
 qofla-dir.h: qofla-dir.h.in
-        rm -f $@.tmp
-        sed < $< > $@.tmp \
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${QOFLIBdir}:g'
-        mv $@.tmp $@
+	 mv $@.tmp $@
 
-BUILT_SOURCES += qofla-dir.h
+BUILT_SOURCES = qofla-dir.h
 
 
