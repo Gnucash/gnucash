@@ -31,9 +31,7 @@
 #include "Group.h"
 
 #include "gnc-budget.h"
-#include "gnc-event-p.h"
 #include "gnc-commodity.h"
-#include "gnc-trace.h"
 #include "gnc-gdate-utils.h"
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
