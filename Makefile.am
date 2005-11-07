@@ -135,7 +135,6 @@ distcleancheck_listfiles = \
 distcheck-hook:
 
 distclean-local:
-	find . -type f -exec sh -c 'test -f ${srcdir}/{} && rm -f {}' ';'
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
