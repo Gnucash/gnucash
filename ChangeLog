@@ -1,5 +1,13 @@
 2005-11-07  Neil Williams <linux@codehelp.co.uk>
 
+	* configure.in : Adapt internal QOF build
+	variables for new locations.
+	* src/backend/Makefile.am : remove qsf/
+	* src/engine/Makefile.am : remove QOF files.
+	* lib/Makefile.am : New directory.	
+
+2005-11-07  Neil Williams <linux@codehelp.co.uk>
+
 	* src/engine/gnc-budget.c : Remove unnecessary
 	private headers.
 
