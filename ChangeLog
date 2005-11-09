@@ -1,3 +1,9 @@
+2005-11-09  Christian Stimming  <stimming@tuhh.de>
+
+	* po/cs.po, po/glossary/pt_BR.po, po/ca.po, po/tr.po: Merge
+	language files from branches/1.8 so that all languages are now
+	available in HEAD.
+
 2005-11-07  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Remove AM_MAINTAINER_MODE since this causes only
