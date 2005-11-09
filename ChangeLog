@@ -1,3 +1,11 @@
+2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
+
+	* src/register/register-gnome/gnucash-item-edit.[ch]: This patch
+	simplifies the mouse selection logic in gnucash-item-edit.  It
+	also fixes a problem where selection with the mouse does not work
+	correctly if you start draging in one direction, then drag back
+	over the original start point.
+
 2005-11-09  Christian Stimming  <stimming@tuhh.de>
 
 	* macros/autogen.sh: Remove the automatic call to ./configure from

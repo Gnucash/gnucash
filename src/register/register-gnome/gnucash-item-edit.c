@@ -765,68 +765,12 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
 
         if (extend_selection)
         {
-                // Setting the selection-range on the GtkEditable implicitly
-                // sets the `position` to the end of the range; this is
-                // unfortunate if you're setting and using the `position` to
-                // be at the end or beginning of the selection range to
-                // discriminate the forward- or reverse- nature of the
-                // dragging.  Now we just keep even-more-explicit enumeration
-                // of the selection-direction. -- jsled, Mar 2005, Gnome2 port
-
-                gboolean selection_exists;
-                gint current_pos, start_sel, end_sel, orig_start, orig_end;
-
-                current_pos = gtk_editable_get_position (editable);
-		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-                orig_start = start_sel;
-                orig_end = end_sel;
-
-                if ( item_edit->selection_dir == UNKNOWN && start_sel == end_sel )
-                {
-                        start_sel = current_pos;
-                        end_sel = pos;
-                }
-
-                // determine direction
-                if ( item_edit->selection_dir == UNKNOWN )
-                {
-                        if ( pos < start_sel )
-                        {
-                                item_edit->selection_dir = REVERSE;
-                        }
-                        else if ( pos > end_sel )
-                        {
-                                item_edit->selection_dir = FORWARD;
-                        }
-                }
-
-                // act accordingly
-                if ( item_edit->selection_dir == FORWARD )
-                {
-                        end_sel = pos;
-                }
-                else if ( item_edit->selection_dir == REVERSE )
-                {
-                        start_sel = pos;
-                }
-                else
-                {
-                        // @@FIXME : don't printf... so ghetto.
-                        printf( "unknown, but with movement\n" );
-                }
-
-                gtk_editable_set_position (editable, pos);
-
-                gtk_editable_select_region(editable, start_sel, end_sel);
-
-                pos = gtk_editable_get_position (editable);
-                selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+                gtk_editable_select_region (editable, item_edit->anchor_pos, pos);
         }
         else
         {
-                gtk_editable_select_region(editable, 0, 0);
                 gtk_editable_set_position (editable, pos);
-                item_edit->selection_dir = UNKNOWN;
+                item_edit->anchor_pos = pos;
         }
 
         queue_sync (item_edit);
