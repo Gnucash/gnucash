@@ -730,10 +730,13 @@ GtkActionGroup *
 gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name)
 {
   GncPluginPagePrivate *priv;
+  GtkActionGroup *group;
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-  priv->action_group = gtk_action_group_new(group_name);
-  return priv->action_group;
+  group = gtk_action_group_new(group_name);
+  gtk_action_group_set_translation_domain(group, GETTEXT_PACKAGE);
+  priv->action_group = group;
+  return group;
 }
 
 /** @} */

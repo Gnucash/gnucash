@@ -313,6 +313,7 @@ gnc_extensions_menu_setup (GtkUIManager *uiMerge )
 
   data.uiMerge = uiMerge;
   data.group = gtk_action_group_new("MainWindowActionsN");
+  gtk_action_group_set_translation_domain(data.group, GETTEXT_PACKAGE);
   gtk_ui_manager_insert_action_group(uiMerge, data.group, 0);
   data.merge_id = gtk_ui_manager_new_merge_id(uiMerge);
 

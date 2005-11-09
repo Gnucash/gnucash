@@ -1454,6 +1454,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = gtk_action_group_new (group_name);
+	gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
 	gtk_ui_manager_insert_action_group (window->ui_merge, entry->action_group, 0);
 	entry->merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, pathname, &error);
@@ -1653,6 +1654,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	/* Create menu and toolbar information */
 	priv->action_group = gtk_action_group_new ("MainWindowActions");
+	gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
 				      gnc_menu_n_actions, window);
 	gtk_action_group_add_toggle_actions (priv->action_group, 

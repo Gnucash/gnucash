@@ -1,3 +1,12 @@
+2005-11-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-embedded-window.c:
+	* src/gnome-utils/gnc-menu-extensions.c:
+	* src/gnome-utils/gnc-plugin-menu-additions.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-plugin-page.c: Andreas Köhler's <andi5.py at
+	gmx.net> patch to re-enable translation of menus and icons.
+
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
 
 	* src/register/register-gnome/gnucash-item-edit.c: This patch
