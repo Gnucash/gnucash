@@ -1567,7 +1567,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	CellBlock *header;
 	gboolean pass_on = FALSE;
         gboolean abort_move;
-        gboolean set_selection = TRUE;
         VirtualLocation cur_virt_loc;
         VirtualLocation new_virt_loc;
 	gncTableTraversalDir direction = 0;
@@ -1667,7 +1666,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 		case GDK_Alt_L:
 		case GDK_Alt_R:
                         pass_on = TRUE;
-                        set_selection = FALSE;
                         break;
 		default:
                         if (gnucash_sheet_clipboard_event(sheet, event))
@@ -1688,64 +1686,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                         break;
                         }
 
-                        if (event->length > 0)
-                                set_selection = FALSE;
-
 			break;
         }
 
 	/* Forward the keystroke to the input line */
 	if (pass_on)
-        {
-                GtkEditable *editable;
-                gboolean extend_selection;
-                gboolean result;
-                gint current_pos;
-                gint start_sel;
-                gint end_sel;
-                gint new_pos;
-
-                editable = GTK_EDITABLE(sheet->entry);
-
-                current_pos = gtk_editable_get_position (editable);
-
-                extend_selection = event->state & GDK_SHIFT_MASK;
-                if (extend_selection && set_selection)
-                {
-			gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-                }
-                else
-                {
-                        start_sel = 0;
-                        end_sel = 0;
-                }
-
-                sheet->input_cancelled = FALSE;
-
-		result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
-
-                sheet->input_cancelled = FALSE;
-
-                new_pos = gtk_editable_get_position (editable);
-
-                if (extend_selection && set_selection)
-                {
-                        if (start_sel == end_sel)
-                        {
-                                start_sel = current_pos;
-                                end_sel = new_pos;
-                        }
-                        else if (current_pos == start_sel)
-                                start_sel = new_pos;
-                        else
-                                end_sel = new_pos;
-                }
-
-                if (set_selection && (start_sel != end_sel))
-                        gtk_editable_select_region(editable, start_sel, end_sel);
-
-                return result;
-        }
+		return gtk_widget_event (sheet->entry, (GdkEvent *) event);
 
 	abort_move = gnc_table_traverse_update (table, cur_virt_loc,
                                                 direction, &new_virt_loc);

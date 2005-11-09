@@ -1,5 +1,10 @@
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
 
+	* src/register/register-gnome/gnucash-sheet.c: This patch
+	simplifies the keyboard selection in gnucash-sheet.  Fixes a
+	problem where selection does not work correctly when holding
+	'shift' and hitting the left arrow key.
+	
 	* src/register/register-gnome/gnucash-item-edit.[ch]: This patch
 	simplifies the mouse selection logic in gnucash-item-edit.  It
 	also fixes a problem where selection with the mouse does not work
