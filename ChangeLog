@@ -1,5 +1,9 @@
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
 
+	* src/register/register-gnome/gnucash-item-edit.c: This patch
+	allows selection of the last character in a cell.  Also fix
+	selection/highlighting of multi-byte characters.
+
 	* src/register/register-gnome/gnucash-sheet.c: This patch
 	simplifies the keyboard selection in gnucash-sheet.  Fixes a
 	problem where selection does not work correctly when holding

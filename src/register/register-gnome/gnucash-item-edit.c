@@ -132,7 +132,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 
         int xd, yd, wd, hd, dx, dy;
         int start_pos, end_pos;
-        int toggle_space, cursor_pos;
+        int toggle_space, cursor_pos, cursor_byte_pos;
         const gchar *text;
 	PangoRectangle strong_pos;
 	PangoAttribute *attr;
@@ -162,28 +162,37 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         info->fg_color2 = &gn_white;
 
         editable = GTK_EDITABLE (item_edit->editor);
-        cursor_pos = gtk_editable_get_position (editable);
-	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
-
         text = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
+        cursor_pos = gtk_editable_get_position (editable);
+        cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
+
+	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
 	info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
 
 	/* Selection */
-	attr_list = pango_attr_list_new ();
+        if (start_pos != end_pos)
+        {
+                gint start_byte_pos, end_byte_pos;
 
-	attr = pango_attr_foreground_new (0xffff, 0xffff, 0xffff);
-	attr->start_index = start_pos;
-	attr->end_index = end_pos;
-	pango_attr_list_insert (attr_list, attr);
-	
-	attr = pango_attr_background_new (0x0, 0x0, 0x0);
-	attr->start_index = start_pos;
-	attr->end_index = end_pos;
-	pango_attr_list_insert (attr_list, attr);
+                start_byte_pos = g_utf8_offset_to_pointer (text, start_pos) - text;
+                end_byte_pos = g_utf8_offset_to_pointer (text, end_pos) - text;
 
-	pango_layout_set_attributes (info->layout, attr_list);
-	pango_attr_list_unref (attr_list);
+                attr_list = pango_attr_list_new ();
+
+                attr = pango_attr_foreground_new (0xffff, 0xffff, 0xffff);
+                attr->start_index = start_byte_pos;
+                attr->end_index = end_byte_pos;
+                pango_attr_list_insert (attr_list, attr);
+
+                attr = pango_attr_background_new (0x0, 0x0, 0x0);
+                attr->start_index = start_byte_pos;
+                attr->end_index = end_byte_pos;
+                pango_attr_list_insert (attr_list, attr);
+
+                pango_layout_set_attributes (info->layout, attr_list);
+                pango_attr_list_unref (attr_list);
+       }
 
         gnc_item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
 
@@ -225,7 +234,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
                         break;
 	}
 
-	pango_layout_get_cursor_pos (info->layout, cursor_pos, NULL, &strong_pos);
+	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
         info->cursor = strong_pos;
 
         if (info->hatching)
@@ -753,14 +762,17 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         // get the text index for the mouse position into pos
         {
                 PangoLayout *layout;
-                int textIndex, textTrailing;
+                int textByteIndex, textIndex, textTrailing;
                 gboolean insideText;
+                const gchar *text;
 
                 layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
+                text = pango_layout_get_text (layout);
                 insideText = pango_layout_xy_to_index( layout,
-                                                       (x - o_x) * PANGO_SCALE, 10 * PANGO_SCALE,
-                                                       &textIndex, &textTrailing );
-                pos = textIndex;
+                                                       ((x - o_x) - CELL_HPADDING) * PANGO_SCALE, 10 * PANGO_SCALE,
+                                                       &textByteIndex, &textTrailing );
+                textIndex = (int) g_utf8_pointer_to_offset (text, text + textByteIndex);
+                pos = textIndex + textTrailing;
         }
 
         if (extend_selection)
@@ -1722,5 +1734,3 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
   c-basic-offset: 8
   End:
 */
-
-
