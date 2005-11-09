@@ -1,5 +1,9 @@
 2005-11-09  Christian Stimming  <stimming@tuhh.de>
 
+	* macros/autogen.sh: Remove the automatic call to ./configure from
+	autogen.sh; instead, only print a reminder that from now on,
+	./configure has to be called separately.
+
 	* po/cs.po, po/glossary/pt_BR.po, po/ca.po, po/tr.po: Merge
 	language files from branches/1.8 so that all languages are now
 	available in HEAD.

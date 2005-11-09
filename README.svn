@@ -4,17 +4,24 @@ Miguel de Icaza who adapted them from guidelines written by
 Owen Taylor.
 
  + In order to build GnuCash from SVN, you need to run the autogen.sh
-   command to generate and execute a configure script.  When building
-   from CVS you should ALWAYS pass your configure options directly to
-   autogen.sh.  For example:
+   command to generate a configure script:
 
-	./autogen.sh --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
+	./autogen.sh
 
-   Autogen will automatically generate the configure script and then
-   run it. After that, configure can also be run by hand.
+   After the ./configure script has been created, you need to run it
+   with all the usual options.  See ./configure --help for a
+   reminder.  For example:
+
+	./configure --enable-ofx --enable-opt-style-install --prefix=/opt/gnucash
 
    If in doubt, you can run autogen.sh, run ./configure --help,
    then re-run ./configure with your options.
+
+   (Note: Previously, autogen.sh automatically called configure as
+   well. This behaviour was dropped in favor of two separate calls
+   because: Autogen should be an additional step taken by only by
+   developers using SVN sources.  Configure is a step taken by
+   everyone compiling the sources, be it from svn or a tarball.)
 
  + Some versions of gettextize don't deal well with re-running themselves.
    You will see this as an error like:
