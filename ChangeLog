@@ -1,5 +1,8 @@
 2005-11-09  David Hampton  <hampton@employees.org>
 
+	* doc/README.dependencies: Document the devel packages needed to
+	compile gnucash on FC4.
+
 	* src/gnome-utils/gnc-embedded-window.c:
 	* src/gnome-utils/gnc-menu-extensions.c:
 	* src/gnome-utils/gnc-plugin-menu-additions.c:
