@@ -71,6 +71,7 @@ struct _TextDrawInfo
         GdkRectangle bg_rect;
         GdkRectangle text_rect;
         GdkRectangle hatch_rect;
+        GdkRectangle cursor_rect;
 
         GdkColor *fg_color;
         GdkColor *bg_color;
@@ -79,8 +80,6 @@ struct _TextDrawInfo
         GdkColor *bg_color2;
 
         gboolean hatching;
-
-        PangoRectangle cursor;
 };
 
 
@@ -226,7 +225,11 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         }
 
 	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
-        info->cursor = strong_pos;
+
+        info->cursor_rect.x = dx + PANGO_PIXELS (strong_pos.x);
+        info->cursor_rect.y = dy + PANGO_PIXELS (strong_pos.y);
+        info->cursor_rect.width = PANGO_PIXELS (strong_pos.width);
+        info->cursor_rect.height = PANGO_PIXELS (strong_pos.height);
 
         if (info->hatching)
         {
@@ -249,15 +252,17 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
 static void
 gnc_item_edit_update_scroll_offset(GncItemEdit *item_edit,
 				   TextDrawInfo *info) {
-	gint cursor_margin = CELL_HPADDING + 3;
-	if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
-	    > info->text_rect.width - cursor_margin) {
-		item_edit->x_offset = info->text_rect.width
-			- PANGO_PIXELS (info->cursor.x) - cursor_margin;
-	} else if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
-		   < 0) {
-		item_edit->x_offset = - PANGO_PIXELS (info->cursor.x);
-	}
+        if (info->cursor_rect.x + item_edit->x_offset >
+                info->text_rect.x + info->text_rect.width - CELL_HPADDING)
+        {
+                item_edit->x_offset =
+                        (info->text_rect.x + info->text_rect.width - CELL_HPADDING)
+                        - info->cursor_rect.x;
+        }
+        else if (info->cursor_rect.x + item_edit->x_offset < info->text_rect.x)
+        {
+                item_edit->x_offset = - info->cursor_rect.x;
+        }
 }
 
 static void
@@ -304,12 +309,10 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_draw_line (drawable,
                        item_edit->gc,
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING 
-		       + item_edit->x_offset,
-                       PANGO_PIXELS (info.cursor.y),
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING
-		       + item_edit->x_offset,
-                       PANGO_PIXELS (info.cursor.y + info.cursor.height));
+                       info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
+                       info.cursor_rect.y,
+                       info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
+                       info.cursor_rect.y + info.cursor_rect.height);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 

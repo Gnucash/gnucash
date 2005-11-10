@@ -1,5 +1,9 @@
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
 
+	* src/register/register-gnome/gnucash-item-edit.c: Draw cursor at
+	correct x,y offset from GdkDrawable.  Will now correctly draw
+	cursor on initial entry into a cell.
+
 	* src/register/register-gnome/gnucash-item-edit.c: Fix some
 	alignment problems in the register.
 
