@@ -67,11 +67,11 @@ Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    modularized the Book object storage, and modularized the backend
    to allow pluggable objects.
 
-David Hampton <hampton@employees.org> is an all-around
-   making-things-better guy. He is working on cleaning up the GUI and
-   on fleshing out support for stocks. David has picked up Dave's
-   previous tendency to hacks obsessively on GnuCash. (Something in
-   the name?)
+David Hampton <hampton@employees.org> is an all-around hacker. He
+   implemented a large porting of the gtk2 conversion.  He generally
+   works on cleaning up the GUI and on fleshing out support for
+   stocks. David has picked up Dave Peticolas's previous tendency to
+   hack obsessively on GnuCash. (Something in the name?)
 
 Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
    Is currently writing new help and integrating and finishing a
@@ -80,6 +80,13 @@ Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
 
 Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
    for GnuCash and wrote the external libOFX library that it uses.
+
+Neil Williams <linux@codehelp.co.uk> finished conversion from GncBook
+   to QofBook and the separation of QoF into a standalone library.
+   Lots of Doxygen fixes and updates.
+
+Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
+   for GnuCash. He is also an all around hacker.
 
 Other Contributors:
 ----------------
@@ -180,7 +187,7 @@ Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
-Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> utf-8 changes.
+Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> register changes for utf-8 and pango.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
