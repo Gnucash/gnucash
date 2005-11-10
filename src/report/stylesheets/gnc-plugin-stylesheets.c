@@ -25,29 +25,15 @@
 #include "dialog-style-sheet.h"
 #include <gtk/gtk.h>
 #include "gnc-gnome-utils.h"
-#include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-stylesheets.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-engine.h"
 #include "messages.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
-static QofLogModule log_module = GNC_MOD_GUI;
-
 static void gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass);
 static void gnc_plugin_stylesheets_init (GncPluginStylesheets *plugin);
 static void gnc_plugin_stylesheets_finalize (GObject *object);
 
-static void gnc_plugin_stylesheets_add_to_window (GncPlugin *plugin,
-						  GncMainWindow *window,
-						  GQuark type);
-static void gnc_plugin_stylesheets_remove_from_window (GncPlugin *plugin,
-						       GncMainWindow *window,
-						       GQuark type);
-
-/* Callbacks on other objects */
-static void gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
-							     GncPluginPage *page);
 
 /* Command callbacks */
 static void gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
@@ -64,12 +50,6 @@ static GtkActionEntry gnc_plugin_actions [] = {
     G_CALLBACK (gnc_plugin_stylesheets_cmd_edit_style_sheet) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
-
-
-static const gchar *account_tree_actions[] = {
-  "EditStyleSheetsAction",
-  NULL
-};
 
 
 typedef struct GncPluginStylesheetsPrivate
@@ -136,8 +116,6 @@ gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass)
   plugin_class->actions       	   = gnc_plugin_actions;
   plugin_class->n_actions     	   = gnc_plugin_n_actions;
   plugin_class->ui_filename   	   = PLUGIN_UI_FILENAME;
-  plugin_class->add_to_window 	   = gnc_plugin_stylesheets_add_to_window;
-  plugin_class->remove_from_window = gnc_plugin_stylesheets_remove_from_window;
 
   g_type_class_add_private(klass, sizeof(GncPluginStylesheetsPrivate));
 }
@@ -161,69 +139,6 @@ gnc_plugin_stylesheets_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-/*
- * The gnc_plugin_add_to_window() function has already added our
- * actions to the main window.  STYLESHEETS include this function so that it
- * can attach callbacks to the window and track page changes within
- * each window.  Sneaky, huh?
- */
-static void
-gnc_plugin_stylesheets_add_to_window (GncPlugin *plugin,
-				      GncMainWindow *window,
-				      GQuark type)
-{
-  g_signal_connect (G_OBJECT(window), "page_changed",
-		    G_CALLBACK (gnc_plugin_stylesheets_main_window_page_changed),
-		    plugin);
-}
-
-static void
-gnc_plugin_stylesheets_remove_from_window (GncPlugin *plugin,
-					   GncMainWindow *window,
-					   GQuark type)
-{
-  g_signal_handlers_disconnect_by_func(G_OBJECT(window),
-				       G_CALLBACK (gnc_plugin_stylesheets_main_window_page_changed),
-				       plugin);
-}
-
-/************************************************************
- *                     Object Callbacks                     *
- ************************************************************/
-
-/** Whenever the current page has changed, update the stylesheets menus based
- *  upon the page that is currently selected. */
-static void
-gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
-						 GncPluginPage *page)
-{
-  GtkActionGroup *action_group;
-  const gchar    *page_name;
-
-  ENTER("main window %p, page %p", window, page);
-  action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
-  g_return_if_fail(action_group != NULL);
-
-  /* Reset everything to known state */
-  gnc_plugin_update_actions(action_group, account_tree_actions,
-			    "visible", FALSE);
-
-  /* Any page selected? */
-  if (page == NULL) {
-    LEAVE("no page");
-    return;
-  }
-
-  /* Selectively make items visible */
-  page_name = gnc_plugin_page_get_plugin_name(page);
-  if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
-    DEBUG("account tree page");
-    gnc_plugin_update_actions(action_group, account_tree_actions,
-			      "visible", TRUE);
-  }
-
-  LEAVE(" ");
-}
 /************************************************************
  *                    Command Callbacks                     *
  ************************************************************/
