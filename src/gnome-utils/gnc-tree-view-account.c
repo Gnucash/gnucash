@@ -545,7 +545,6 @@ gnc_tree_view_account_new (gboolean show_root)
     g_free(path_string);				\
   }
 
-#if 0
 static GtkTreePath *
 gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
 					     Account *account)
@@ -579,12 +578,11 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   }
 
   /* convert back to a sorted path */
-  s_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
+  s_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
   gtk_tree_path_free(f_path);
   debug_path(LEAVE, s_path);
   return s_path;
 }
-#endif
 
 static gboolean
 gnc_tree_view_account_get_iter_from_account (GncTreeViewAccount *view,
@@ -1161,6 +1159,25 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   LEAVE(" ");
   return;
 }
+
+void
+gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view,
+					 Account *account)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail(view != NULL);
+  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
+  ENTER("view %p, account %p", view, account);
+
+  path = gnc_tree_view_account_get_path_from_account(view, account);
+  if (path) {
+    gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), path);
+    gtk_tree_path_free(path);
+  }
+  LEAVE(" ");
+}
+
 
 /*
  * Retrieve the account currently under the cursor.

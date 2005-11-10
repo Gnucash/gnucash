@@ -1,5 +1,8 @@
 2005-11-09  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Add a function that
+	allow you to expand the account tree to show a specific account.
+
 	* src/report/report-system/report.scm:
 	* src/business/business-reports/business-reports.scm:
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
