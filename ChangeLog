@@ -1,3 +1,17 @@
+2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
+
+	* src/register/register-gnome/gnucash-item-edit.c: Fix some
+	alignment problems in the register.
+
+	It removes the pango_layout_set_alignment code.  Since we are
+	rendering a single line of text, the layout is only as wide as the
+	text.  Because of this, the alignment within the layout doesn't
+	have any effect.
+
+	Use the same x_offset logic regardless of how we enter the cell.
+
+	Make sure x_offset gets reset when changing cells via the keyboard.
+	
 2005-11-09  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.[ch]: Add a function that

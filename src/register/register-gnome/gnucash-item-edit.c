@@ -218,21 +218,12 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         // pango_layout_set_ellipsize(...) as of pango 1.6 may be useful for
         // strings longer than the field width.
 
-        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        // Default x_offset based on cell alignment
+        if (item_edit->reset_pos)
         {
-                default:
-                case CELL_ALIGN_LEFT:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_LEFT);
-                        break;
-
-                case CELL_ALIGN_RIGHT:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_RIGHT);
-                        break;
-
-                case CELL_ALIGN_CENTER:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_CENTER);
-                        break;
-	}
+                gnc_item_edit_reset_offset (item_edit);
+                item_edit->reset_pos = FALSE;
+        }
 
 	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
         info->cursor = strong_pos;
@@ -283,8 +274,6 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         /* Get the measurements for drawing */
         gnc_item_edit_draw_info (item_edit, x, y, &info);
-
-        item_edit->reset_pos = FALSE;
 
         /* Draw the background */
         gdk_gc_set_foreground (item_edit->gc, info.bg_color);
@@ -575,10 +564,41 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
 void
 gnc_item_edit_reset_offset (GncItemEdit *item_edit)
 {
+        Table *table;
+        PangoRectangle ink_rect;
+        PangoLayout *layout;
+        gint x, y, width, height;
+
         g_return_if_fail (item_edit != NULL);
         g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-        item_edit->reset_pos = TRUE;
+        table = item_edit->sheet->table;
+        layout = gtk_entry_get_layout (GTK_ENTRY(item_edit->editor));
+        pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+        gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &width, &height);
+
+        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        {
+                default:
+                case CELL_ALIGN_LEFT:
+                        item_edit->x_offset = 0;
+                        break;
+
+                case CELL_ALIGN_RIGHT:
+                        item_edit->x_offset = width 
+                                - 2 * CELL_HPADDING
+                                - ink_rect.width;
+                        break;
+
+                case CELL_ALIGN_CENTER:
+                        if (ink_rect.width > width - 2 * CELL_HPADDING)
+                                item_edit->x_offset = 0;
+                        else
+                                item_edit->x_offset = (width
+                                        - 2 * CELL_HPADDING
+                                        - ink_rect.width) / 2;
+                        break;
+        }
 }
 
 /*
@@ -725,35 +745,7 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         editable = GTK_EDITABLE (item_edit->editor);
 
         if (changed_cells)
-        {
-                CellAlignment align;
-
-                align = gnc_table_get_align (table, item_edit->virt_loc);
-
-                if (align == CELL_ALIGN_RIGHT) {
-			PangoRectangle ink_rect;
-			PangoLayout *layout;
-
-                        gtk_editable_set_position(editable, -1);
-
-			layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->
-								 editor) );
-			pango_layout_get_pixel_extents(layout,
-						       &ink_rect,
-						       NULL);
-
-			item_edit->x_offset = 
-				cd->pixel_width - ink_rect.width -
-				2* CELL_HPADDING;
-		}
-                else {
-			gtk_editable_set_position(editable, 0);
-			item_edit->x_offset = 0;
-		}
-
-                if (item_edit->is_popup)
-                        x -= item_edit->popup_toggle.toggle_offset;
-        }
+                gnc_item_edit_reset_offset (item_edit);
 
         o_x = cd->origin_x + item_edit->x_offset;
         o_y = cd->origin_y;
