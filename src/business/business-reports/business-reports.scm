@@ -32,7 +32,7 @@
 ;; to define gnc:html-build-url
 (gnc:module-load "gnucash/business-gnome" 0)
 
-(define gnc:menuname-business-reports (N_ "Business Reports"))
+(define gnc:menuname-business-reports (N_ "_Business"))
 
 (define (guid-ref idstr type guid)
   (gnc:html-build-url type (string-append idstr guid) #f))

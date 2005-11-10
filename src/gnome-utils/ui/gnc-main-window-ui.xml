@@ -87,7 +87,16 @@
     <placeholder name="AdditionalMenusPlaceholder"/>
 
     <menu name="Reports" action="ReportsAction">
-      <placeholder name="ReportsPlaceholder"/>
+      <placeholder name="StandardReports"/>
+      <separator   name="ReportSep1"/>
+      <placeholder name="CustomReports"/>
+      <separator   name="ReportSep2"/>
+      <placeholder name="CustomReports"/>
+      <separator   name="ReportSep3"/>
+      <placeholder name="AccountReports"/>
+      <separator   name="ReportSep4"/>
+      <placeholder name="OtherReports"/>
+      <separator   name="ReportSep5"/>
     </menu>
 
     <menu name="Tools" action="ToolsAction">

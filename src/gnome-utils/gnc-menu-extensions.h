@@ -32,6 +32,7 @@ typedef struct _ExtensionInfo
 
   GtkActionEntry ae;
   gchar *path;
+  gchar *sort_key;
   const gchar *typeStr;
   GtkUIManagerItemType type;
 } ExtensionInfo;

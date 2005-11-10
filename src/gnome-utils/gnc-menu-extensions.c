@@ -49,7 +49,7 @@ static Getters getters = {0, 0, 0, 0, 0};
 GSList *
 gnc_extensions_get_menu_list (void)
 {
-  return extension_list;
+  return g_slist_copy(extension_list);
 }
 
 static void
@@ -217,7 +217,7 @@ static gboolean
 gnc_create_extension_info (SCM extension)
 {
   ExtensionInfo *ext_info;
-  gchar *typeStr;
+  gchar *typeStr, *tmp;
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
@@ -235,6 +235,10 @@ gnc_create_extension_info (SCM extension)
   ext_info->ae.stock_id = "";
   ext_info->ae.accelerator = NULL;
   ext_info->ae.callback = NULL;
+
+  tmp = g_strdup_printf("%s/%s", ext_info->path, ext_info->ae.label);
+  ext_info->sort_key = g_utf8_collate_key(tmp, -1);
+  g_free(tmp);
 
   switch (ext_info->type) {
     case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;

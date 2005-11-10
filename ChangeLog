@@ -1,5 +1,19 @@
 2005-11-09  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/report.scm:
+	* src/business/business-reports/business-reports.scm:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/gnome-utils/gnc-menu-extensions.[ch]:
+	* src/gnome-utils/gnc-plugin-menu-additions.[ch]:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: The register page
+	should add to the existing list of items in the Report menu, not
+	replace it.  Sort the items in the Reports menu, and add a couple
+	of accelerators.
+
+	* src/report/stylesheets/gnc-plugin-stylesheets.c: The "Edit
+	Stylesheets" menu item should always be visible.
+
 	* doc/README.dependencies: Document the devel packages needed to
 	compile gnucash on FC4.
 

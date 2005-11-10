@@ -46,7 +46,6 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_MENU_ADDITIONS, GncPluginMenuAdditionsClass))
 
 #define GNC_PLUGIN_MENU_ADDITIONS_NAME "gnc-plugin-menu-additions"
-#define GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME "gnc-plugin-hide-menu-additions"
 
 /* typedefs & structures */
 typedef struct {

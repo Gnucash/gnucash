@@ -61,10 +61,6 @@ static void gnc_plugin_menu_additions_finalize (GObject *object);
 static void gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
-/* Callbacks on other objects */
-static void gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
-								GncPluginPage *page);
-
 /* Command callbacks */
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -220,13 +216,19 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
   gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
 }
 
+static gint
+gnc_menu_additions_alpha_sort (ExtensionInfo *a, ExtensionInfo *b)
+{
+  return strcmp(a->sort_key, b->sort_key);
+}
+
 static void
 gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 				   GncPluginMenuAdditionsPerWindow *per_window)
 {
   GncMainWindowActionData *cb_data;
 
-  DEBUG( "Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
+  DEBUG( "Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->ae.label,
 	 ext_info->ae.name, ext_info->typeStr );
 
   cb_data = g_new0 (GncMainWindowActionData, 1);
@@ -244,14 +246,10 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
   gtk_ui_manager_ensure_update(per_window->ui_manager);
 }
 
-/** Initialize the file history menu for a window.  This function is
- *  called as part of the initialization of a window, after all the
- *  plugin menu items have been added to the menu structure.  Its job
- *  is to correctly initialize the file history menu.  It does this by
- *  first calling a function that initializes the menu to the current
- *  as maintained in gconf.  It then creates a gconf client that will
- *  listens for any changes to the file history menu, and will update
- *  the meny when they are signalled.
+/** Initialize the report menu and other additional menus.  This
+ *  function is called as part of the initialization of a window,
+ *  after all the plugin menu items have been added to the menu
+ *  structure.
  *
  *  @param plugin A pointer to the gnc-plugin object responsible for
  *  adding/removing the file history menu.
@@ -270,10 +268,6 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 
   ENTER(" ");
 
-  g_signal_connect (G_OBJECT(window), "page_changed",
-		    G_CALLBACK (gnc_plugin_menu_additions_main_window_page_changed),
-		    plugin);
-
   per_window.window = window;
   per_window.ui_manager = window->ui_merge;
   per_window.group = gtk_action_group_new ("MenuAdditions" );
@@ -281,7 +275,8 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
   per_window.merge_id = gtk_ui_manager_new_merge_id(window->ui_merge);
   gtk_ui_manager_insert_action_group(window->ui_merge, per_window.group, 0);
 
-  menu_list = gnc_extensions_get_menu_list();
+  menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
+			   (GCompareFunc)gnc_menu_additions_alpha_sort);
   g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
 		  &per_window);
 
@@ -315,62 +310,11 @@ gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
 
   ENTER(" ");
 
-  g_signal_handlers_disconnect_by_func(G_OBJECT(window),
-				       G_CALLBACK (gnc_plugin_menu_additions_main_window_page_changed),
-				       plugin);
-
   /* Have to remove our actions manually. Its only automatic if the
    * actions name is installed into the plugin class. */
   group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
   if (group)
     gtk_ui_manager_remove_action_group(window->ui_merge, group);
-
-  LEAVE(" ");
-}
-
-/************************************************************
- *                     Object Callbacks                     *
- ************************************************************/
-
-static void
-our_gtk_action_set_visible(GtkAction *action, gboolean visible)
-{
-  g_object_set(G_OBJECT(action), "visible", visible, NULL);
-}
-
-
-/** Whenever the current page has changed, update the reports menus based
- *  upon the page that is currently selected. */
-static void
-gnc_plugin_menu_additions_main_window_page_changed (GncMainWindow *window,
-						    GncPluginPage *page)
-{
-  GtkActionGroup *action_group;
-  GList *action_list;
-  gboolean visible;
-  gpointer tmp;
-
-  ENTER("main window %p, page %p", window, page);
-  action_group = gnc_main_window_get_action_group(window,PLUGIN_ACTIONS_NAME);
-  if (action_group == NULL) {
-    LEAVE("Can't find action group");
-    return;
-  }
-
-  /* Does the now-visible page want menu-extensions to be visible? */
-  if (page) {
-    tmp = g_object_get_data(G_OBJECT(page),GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME);
-    visible = !GPOINTER_TO_INT(tmp);
-  } else {
-    visible = TRUE;
-  }
-
-  action_list = gtk_action_group_list_actions(action_group);
-  // Use the following line for gtk2.6
-  // g_list_foreach(action_list, (GFunc)gtk_action_set_visible, (gpointer)visible);
-  g_list_foreach(action_list, (GFunc)our_gtk_action_set_visible,
-		 GINT_TO_POINTER(visible));
-  g_list_free(action_list);
 
   LEAVE(" ");
 }

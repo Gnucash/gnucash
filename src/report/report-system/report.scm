@@ -36,7 +36,7 @@
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
-(define gnc:menuname-reports "Reports")
+(define gnc:menuname-reports "Reports/StandardReports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
@@ -269,7 +269,8 @@
             template-name id options #t #t #f #f)))
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
-    (hash-set! *gnc:_reports_* id r)))
+    (hash-set! *gnc:_reports_* id r)
+    id))
 
 
 (define (gnc:make-report-options template-name)

@@ -225,9 +225,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 
 	/* Reports menu */
 
-	{ "ReportsAccountReportAction", NULL, N_("_Account Report"), NULL, NULL,
+	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
-	{ "ReportsTransactionReportAction", NULL, N_("_Transaction Report"), NULL, NULL,
+	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
@@ -398,10 +398,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
-	g_object_set_data(G_OBJECT(plugin_page),
-			  GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME,
-			  GINT_TO_POINTER(1));
-
 	priv->component_manager_id = 0;
 	return plugin_page;
 }
