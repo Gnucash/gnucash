@@ -1,3 +1,10 @@
+2005-11-10  David Hampton  <hampton@employees.org>
+
+	* src/core-utils/gnc-gkeyfile-utils.[ch]:
+	* src/app-utils/gnc-exp-parser.c: Add a GError parameter to the
+	gnc_key_file_save_to_file() function.  Check for an error
+	condition on every system call.
+
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
 
 	* src/register/register-gnome/gnucash-item-edit.c: Draw cursor at

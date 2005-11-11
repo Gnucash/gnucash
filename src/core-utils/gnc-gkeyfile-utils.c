@@ -77,27 +77,67 @@ gnc_key_file_load_from_file (const gchar *filename, gboolean ignore_error)
 
 gboolean
 gnc_key_file_save_to_file (const gchar *filename,
-			   GKeyFile *key_file)
+			   GKeyFile *key_file,
+			   GError **error)
 {
   gchar *contents;
   gint fd;
   extern int errno;
   gint length;
+  ssize_t written;
   gboolean success = TRUE;
+
+  g_return_val_if_fail(filename != NULL, FALSE);
+  g_return_val_if_fail(key_file != NULL, FALSE);
+  if (error)
+    g_return_val_if_fail(*error == NULL, FALSE);
 
   contents = g_key_file_to_data(key_file, NULL, NULL);
   length = strlen(contents);
-  if (length) {
-    fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-    if (fd != -1) {
-      write(fd, contents, length);
-      close(fd);
+  fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+  if (fd == -1) {
+    if (error) {
+      *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 
+			   "Cannot open file %s: %s", filename,
+			   strerror(errno));
     } else {
-      g_warning("Cannot open file %s: %s\n", filename, strerror(errno));
-      success = FALSE;
+      g_critical("Cannot open file %s: %s\n", filename, strerror(errno));
     }
-  } else {
-    unlink(filename);
+    g_free(contents);
+    return FALSE;
+  }
+
+  written = write(fd, contents, length);
+  if (written == -1 ) {
+    success = FALSE;
+    if (error) {
+      *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 
+			   "Cannot write to file %s: %s", filename,
+			   strerror(errno));
+    } else {
+      g_critical("Cannot write to file %s: %s\n", filename, strerror(errno));
+    }
+    close(fd);
+  } else if (written != length) {
+    success = FALSE;
+    if (error) {
+      *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 
+			   "File %s truncated (provided %d, written %d)",
+			   filename, length, written);
+    } else {
+      g_critical("File %s truncated (provided %d, written %d)",
+	      filename, length, written);
+    }
+    /* Ignore any error */
+    close(fd);
+  } else if (close(fd) == -1) {
+    if (error) {
+      *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 
+			   "Close failed for file %s: %s", filename,
+			   strerror(errno));
+    } else {
+      g_warning("Close failed for file %s: %s", filename, strerror(errno));
+    }
   }
   g_free(contents);
   return success;

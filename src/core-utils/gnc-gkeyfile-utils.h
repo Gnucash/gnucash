@@ -72,7 +72,8 @@ GKeyFile *gnc_key_file_load_from_file (const gchar *file,
  *  FALSE if there was an error.
  */
 gboolean gnc_key_file_save_to_file (const gchar *file,
-				    GKeyFile *key_file);
+				    GKeyFile *key_file,
+				    GError **error);
 
 #endif /* GNC_GKEYFILE_UTILS_H */
 /** @} */

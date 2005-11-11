@@ -135,7 +135,7 @@ gnc_exp_parser_shutdown (void)
   g_key_file_set_comment(key_file, GROUP_NAME, NULL,
 			 _(" Variables are in the form 'name=value'"),
 			 NULL);
-  gnc_key_file_save_to_file(filename, key_file);
+  gnc_key_file_save_to_file(filename, key_file, NULL);
   g_key_file_free(key_file);
   g_free(filename);
 
