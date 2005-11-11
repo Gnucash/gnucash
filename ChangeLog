@@ -1,5 +1,10 @@
 2005-11-11  David Hampton  <hampton@employees.org>
 
+	* src/import-export/log-replay/gnc-log-replay.c: Eliminate double
+	free of memory by just freeing default_dir once at the end of the
+	function.  The gnc_extract_directory() routine will handle any
+	intermediate freeing if called multiple times.
+
 	* src/app-utils/file-utils.[ch]:
 	* src/app-utils/guile-util.[ch]:
 	* src/business/business-gnome/gnc-plugin-business.c:

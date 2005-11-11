@@ -514,14 +514,12 @@ void gnc_file_log_replay (void)
 				      NULL,
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
-  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
       gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
-      g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
@@ -562,7 +560,7 @@ void gnc_file_log_replay (void)
 	}
       g_free(selected_filename);
     }
-  
+  g_free(default_dir);
 }
 
 
