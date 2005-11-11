@@ -35,9 +35,14 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include "gnc-engine.h"
+#include "gnc-trace.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page.h"
 #include "gnc-gobject-utils.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
 
 static gpointer         parent_class = NULL;
 
@@ -178,6 +183,84 @@ gnc_plugin_page_show_summarybar (GncPluginPage *page,
 	} else {
 	  gtk_widget_hide(page->summarybar);
 	}
+}
+
+
+/** Call a plugin specific function to save enough information about
+ *  this page that it can be recreated next time the user starts
+ *  gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+void
+gnc_plugin_page_save_page (GncPluginPage *page,
+			   GKeyFile *key_file,
+			   const gchar *group_name)
+{
+	GncPluginPageClass *klass;
+
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+	g_return_if_fail (key_file != NULL);
+	g_return_if_fail (group_name != NULL);
+
+	ENTER(" ");
+	klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
+	g_return_if_fail (klass != NULL);
+	g_return_if_fail (klass->save_page != NULL);
+
+	klass->save_page(page, key_file, group_name);
+	LEAVE(" ");
+}
+
+
+/** This function looks up a specific plugin type and then calls its
+ *  function to create a new page.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param page_type The name of the page type to create.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+GncPluginPage *
+gnc_plugin_page_recreate_page(GtkWidget *window,
+			      const gchar *page_type,
+			      GKeyFile *key_file,
+			      const gchar *page_group)
+{
+  GncPluginPageClass *klass;
+  GncPluginPage *page = NULL;
+  GType type;
+
+  ENTER("type %s, keyfile %p, group %s", page_type, key_file, page_group);
+  type = g_type_from_name(page_type);
+  if (type == 0) {
+    LEAVE("Cannot find type named %s", page_type);
+    return NULL;
+  }
+
+  klass = g_type_class_ref(type);
+  if (klass == NULL) {
+    LEAVE("Cannot create class %s(%ld)", page_type, type);
+    return NULL;
+  }
+
+  if (!klass->recreate_page) {
+    LEAVE("Class %shas no recreate function.", page_type);
+    g_type_class_unref(klass);
+    return NULL;
+  }
+
+  page = (klass->recreate_page)(window, key_file, page_group);
+  g_type_class_unref(klass);
+  LEAVE(" ");
+  return page;
 }
 
 void
@@ -601,6 +684,7 @@ void
 gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
 {
   GncPluginPagePrivate *priv;
+  GncPluginPageClass *klass;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
@@ -608,6 +692,12 @@ gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
   if (priv->page_name)
     g_free(priv->page_name);
   priv->page_name = g_strdup(name);
+
+  /* Perform page specific actions */
+  klass = GNC_PLUGIN_PAGE_GET_CLASS (page);
+  if (klass->page_name_changed) {
+    klass->page_name_changed(page, name);
+  }
 }
 
 const gchar *

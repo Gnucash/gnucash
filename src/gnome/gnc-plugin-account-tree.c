@@ -94,6 +94,10 @@ gnc_plugin_account_tree_new (void)
 {
 	GncPluginAccountTree *plugin;
 
+	/* Reference the account tree page plugin to ensure it exists
+	 * in the gtk type system. */
+	GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE;
+
 	plugin = g_object_new (GNC_TYPE_PLUGIN_ACCOUNT_TREE,
 			      NULL);
 
@@ -171,19 +175,10 @@ static void
 gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 					      GncMainWindowActionData *data)
 {
-	g_return_if_fail (data != NULL);
-	gnc_new_account_tree (data->window);
-}
-
-/************************************************************
- *                     Other Functions                      *
- ************************************************************/
-
-void
-gnc_new_account_tree (GncMainWindow *window)
-{
 	GncPluginPage *page;
 
+	g_return_if_fail (data != NULL);
+
 	page = gnc_plugin_page_account_tree_new ();
-	gnc_main_window_open_page (window, page);
+	gnc_main_window_open_page (data->window, page);
 }

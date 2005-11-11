@@ -38,6 +38,7 @@
 #include "dialog-tax-table.h"
 #include "dialog-vendor.h"
 #include "gnc-plugin-business.h"
+#include "gnc-plugin-page-invoice.h"
 #include "gncOwner.h"
 #include "messages.h"
 #include "gnc-ui-util.h"
@@ -302,6 +303,10 @@ GncPlugin *
 gnc_plugin_business_new (void)
 {
 	GncPluginBusiness *plugin;
+
+	/* Reference the invoice page plugin to ensure it exists in
+	 * the gtk type system. */
+	GNC_TYPE_PLUGIN_PAGE_INVOICE;
 
 	plugin = g_object_new (GNC_TYPE_PLUGIN_BUSINESS,
 			      NULL);

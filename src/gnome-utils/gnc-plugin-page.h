@@ -36,6 +36,7 @@
 #ifndef __GNC_PLUGIN_PAGE_H
 #define __GNC_PLUGIN_PAGE_H
 
+#include <glib.h>
 #include "guid.h"
 #include "qofbook.h"
 
@@ -50,6 +51,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
+#ifndef HAVE_GLIB26
+#ifndef __G_KEY_FILE_H__
+typedef struct _GKeyFile GKeyFile;
+#endif
+#endif
+
 typedef struct GncPluginPage {
 	GObject gobject;		/**< The parent object data. */
 
@@ -84,7 +91,47 @@ typedef struct {
 	/* Virtual Table */
 	GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
 	void (* destroy_widget) (GncPluginPage *plugin_page);
+
+	/** Save enough information about this page so that it can be
+	 *  recreated next time the user starts gnucash.
+	 *  
+	 *  @param page The page to save.
+	 *
+	 *  @param key_file A pointer to the GKeyFile data structure where the
+	 *  page information should be written.
+	 *
+	 *  @param group_name The group name to use when writing data.
+	 *  The name is specific to this page instance. */
+	void (* save_page) (GncPluginPage *page, GKeyFile *file, const gchar *group);
+
+	/** Create a new page based on the information saved during a
+	 *  previous instantiation of gnucash.  This function may or
+	 *  may not install the new page in the window as it sees fit.
+	 *  Generally the function will install the page int the
+	 *  window in order to manipulate the menu items that are
+	 *  created at install time.
+	 *
+	 *  @param window The window where this new page will be
+	 *  installed.
+	 *
+	 *  @param key_file A pointer to the GKeyFile data structure where the
+	 *  page information should be retrieved.
+	 *
+	 *  @param group_name The group name to use when retrieving
+	 *  data.  The name is specific to this page instance.
+	 *
+	 *  @return A pointer to the new page. */
+        GncPluginPage * (* recreate_page) (GtkWidget *window, GKeyFile *file, const gchar *group);
+
 	void (* window_changed) (GncPluginPage *plugin_page, GtkWidget *window);
+
+	/** This function vector allows page specific actions to occur
+	 *  when the page name is changed.
+	 *  
+	 *  @param page The page to update.
+	 *  
+	 *  @param name The new name for this page. */
+	void (* page_name_changed) (GncPluginPage *plugin_page, const gchar *name);
 } GncPluginPageClass;
 
 /* function prototypes */
@@ -100,6 +147,14 @@ void                  gnc_plugin_page_destroy_widget  (GncPluginPage *plugin_pag
  *  @param visible Whether or not the summarybar should be shown..
  */
 void gnc_plugin_page_show_summarybar (GncPluginPage *page, gboolean visible);
+
+void		      gnc_plugin_page_save_page (GncPluginPage *page,
+						 GKeyFile *key_file,
+						 const gchar *group_name);
+GncPluginPage *      gnc_plugin_page_recreate_page (GtkWidget *window,
+						    const gchar *page_type,
+						    GKeyFile *key_file,
+						    const gchar *group_name);
 
 void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
                                                        GtkUIManager *merge);

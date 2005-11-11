@@ -293,6 +293,10 @@ gnc_html_help_url_cb (const char *location, const char *label,
 void
 gnc_report_init (void)
 {
+  /* Reference the report page plugin to ensure it exists in the gtk
+   * type system. */
+  GNC_TYPE_PLUGIN_PAGE_REPORT;
+
   gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
   gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
   gnc_html_register_stream_handler (URL_TYPE_REPORT, gnc_html_report_stream_cb);

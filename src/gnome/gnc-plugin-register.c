@@ -128,6 +128,10 @@ gnc_plugin_register_new (void)
 {
 	GncPluginRegister *plugin;
 
+	/* Reference the register page plugin to ensure it exists in
+	 * the gtk type system. */
+	GNC_TYPE_PLUGIN_PAGE_REGISTER;
+
 	plugin = g_object_new (GNC_TYPE_PLUGIN_REGISTER,
 			      NULL);
 

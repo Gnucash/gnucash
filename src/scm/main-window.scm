@@ -40,12 +40,6 @@
             (gnc:register-option options opt))))
 
     (add-option
-     (gnc:make-string-option
-      (N_ "Account Tree") (N_ "Name of account view")
-      "a" (N_ "If you keep multiple account views open, it may be helpful \
-to give each one a descriptive name") (_ "Accounts")))
-
-    (add-option
      (gnc:make-simple-boolean-option
       (N_ "Account Tree") (N_ "Double click expands parent accounts")
       "a" (N_ "Double clicking on an account with children expands \
@@ -138,8 +132,6 @@ the account instead of opening a register.") #f))
 	  ))))
 
 (define (gnc:main-window-book-close-handler session)
-  (gnc:main-window-save-state session)
-
   (let ((dead-reports '()))
     ;; get a list of the reports we'll be needing to nuke     
     (hash-fold 
@@ -169,7 +161,6 @@ the account instead of opening a register.") #f))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:new-account-tree #f)
 
     ;; the reports have only been created at this point; create their ui component.
     (hash-fold (lambda (key val prior-result)
@@ -189,11 +180,6 @@ the account instead of opening a register.") #f))
     (gnc:kvp-option-dialog gnc:id-book
 			   slots (_ "Book Options")
 			   changed_cb)))
-
-(gnc:hook-remove-dangler gnc:*book-opened-hook* 
-                         gnc:main-window-book-open-handler)
-(gnc:hook-add-dangler gnc:*book-opened-hook* 
-                      gnc:main-window-book-open-handler)
 
 (gnc:hook-remove-dangler gnc:*book-closed-hook* 
                          gnc:main-window-book-close-handler)

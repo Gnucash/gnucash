@@ -55,8 +55,6 @@ GType      gnc_plugin_account_tree_get_type (void);
 
 GncPlugin *gnc_plugin_account_tree_new      (void);
 
-void       gnc_new_account_tree             (GncMainWindow *window);
-
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_ACCOUNT_TREE_H */

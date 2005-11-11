@@ -95,4 +95,13 @@ int    gnc_trans_scm_get_num_splits(SCM trans_scm);
 char * gnc_get_debit_string(GNCAccountType account_type);
 char * gnc_get_credit_string(GNCAccountType account_type);
 
+/** Clean up a scheme options string for use in a key/value file.
+ *  This function removes all full line comments, removes all blank
+ *  lines, and removes all leading/trailing white space.
+ *
+ *  @note: This function does not correctly handle comments that occur
+ *  at the end of a line. Fortunately there aren't any such
+ *  comments. */
+gchar *gnc_guile_strip_comments (const gchar *text);
+
 #endif

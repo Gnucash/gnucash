@@ -2,7 +2,7 @@
  * gnc-plugin-page-register.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,9 +22,22 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup ContentPlugins
+    @{ */
+/** @addtogroup RegisterPlugin Register Page
+    @{ */
+/** @file gnc-plugin-page-register.c
+    @brief  Functions for creating a register page for the GnuCash UI
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
+
 #include "config.h"
 
 #include <gtk/gtk.h>
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
 #include <g-wrap-wct.h>
 
 #include "gnc-plugin-page-register.h"
@@ -75,6 +88,8 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
+static void gnc_plugin_page_register_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage *gnc_plugin_page_register_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 
@@ -276,10 +291,11 @@ static action_short_labels short_labels[] = {
 };
 
 
-struct {
+struct status_action {
   const char *action_name;
   int value;
-} status_actions[] = {
+};
+static struct status_action status_actions[] = {
   { "filter_status_reconciled",   CLEARED_RECONCILED },
   { "filter_status_cleared",      CLEARED_CLEARED },
   { "filter_status_voided",       CLEARED_VOIDED },
@@ -445,6 +461,8 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
+	gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
+	gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
 }
@@ -533,9 +551,9 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
 	GtkActionGroup *action_group;
+	GtkAction *action;
 	Account *account;
 	SplitRegister *sr;
-	GtkAction *action;
 	int i;
 
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -683,6 +701,214 @@ gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
 	priv->gsr->window = 
 	  GTK_WIDGET(gnc_window_get_gtk_window(GNC_WINDOW(window)));
 }
+
+static const gchar *style_names[] = {
+  "Ledger",
+  "Auto Ledger",
+  "Journal",
+  NULL
+};
+
+#define KEY_REGISTER_TYPE	"Register Type"
+#define KEY_ACCOUNT_NAME	"Account Name"
+#define KEY_REGISTER_STYLE	"Register Style"
+#define KEY_DOUBLE_LINE		"Double Line Mode"
+
+#define LABEL_ACCOUNT		"Account"
+#define LABEL_SUBACCOUNT	"SubAccount"
+#define LABEL_GL		"GL"
+#define LABEL_SEARCH		"Search"
+
+
+/** Save enough information about this register page that it can be
+ *  recreated next time the user starts gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+static void
+gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
+				    GKeyFile *key_file,
+				    const gchar *group_name)
+{
+  GncPluginPageRegister *page;
+  GncPluginPageRegisterPrivate *priv;
+  GNCLedgerDisplayType ledger_type;
+  SplitRegister *reg;
+  Account *leader;
+
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+  g_return_if_fail (key_file != NULL);
+  g_return_if_fail (group_name != NULL);
+
+  ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
+	group_name);
+
+  page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+  priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+
+  reg = gnc_ledger_display_get_split_register(priv->ledger);
+  ledger_type = gnc_ledger_display_type(priv->ledger);
+  if (ledger_type > LD_GL) {
+    LEAVE("Unsupported ledger type");
+    return;
+  }
+  if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT)) {
+    const gchar *label;
+    label = (ledger_type == LD_SINGLE) ? LABEL_ACCOUNT : LABEL_SUBACCOUNT;
+    leader = gnc_ledger_display_leader(priv->ledger);
+    g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
+    g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME,
+			  xaccAccountGetFullName(leader,
+						 gnc_get_account_separator()));
+  } else if (reg->type == GENERAL_LEDGER) {
+    g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
+			  LABEL_GL);
+  } else if (reg->type == SEARCH_LEDGER) {
+    g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
+			  LABEL_SEARCH);
+  } else {
+    LEAVE("Unsupported register type");
+    return;
+  }
+
+  g_key_file_set_string(key_file, group_name, KEY_REGISTER_STYLE,
+			style_names[reg->style]);
+  g_key_file_set_boolean(key_file, group_name, KEY_DOUBLE_LINE,
+			 reg->use_double_line);
+
+  LEAVE(" ");
+}
+
+
+/** Read and restore the edit menu settings on the specified register
+ *  page.  This function will restore the register style (ledger, auto
+ *  ledger, journal) and whether or not the register is in double line
+ *  mode.  It should eventually restore the "filter by" and "sort by
+ *  settings.
+ *
+ *  @param page The register being restored.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static void
+gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
+					    GKeyFile *key_file,
+					    const gchar *group_name)
+{
+  GncPluginPageRegisterPrivate *priv;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GError *error = NULL;
+  gchar *style_name;
+  gint i;
+  gboolean use_double_line;
+
+  ENTER(" ");
+  priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+  action_group = gnc_plugin_page_get_action_group(page);
+
+  /* Convert the style name to an index */
+  style_name = g_key_file_get_string(key_file, group_name,
+				     KEY_REGISTER_STYLE, &error);
+  for (i = 0 ; style_names[i]; i++) {
+    if (g_ascii_strcasecmp(style_name, style_names[i]) == 0) {
+      DEBUG("Found match for style name: %s", style_name);
+      break;
+    }
+  }
+  g_free(style_name);
+
+  /* Update the style menu action for this page */
+  if (i <= REG_STYLE_JOURNAL) {
+    DEBUG("Setting style: %d", i);
+    action_group =
+      gnc_plugin_page_get_action_group(page);
+    action= gtk_action_group_get_action(action_group, radio_entries_2[i].name);
+    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
+  }
+
+  /* Update the  double line action on this page */
+  use_double_line =
+    g_key_file_get_boolean(key_file, group_name, KEY_DOUBLE_LINE, &error);
+  DEBUG("Setting double_line_mode: %d", use_double_line);
+  action = gtk_action_group_get_action(action_group,
+				       "ViewStyleDoubleLineAction");
+  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), use_double_line);
+
+  LEAVE(" ");
+}
+
+
+/** Create a new register page based on the information saved during a
+ *  previous instantiation of gnucash.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static GncPluginPage *
+gnc_plugin_page_register_recreate_page (GtkWidget *window,
+					GKeyFile *key_file,
+					const gchar *group_name)
+{
+  GncPluginPage *page;
+  GError *error = NULL;
+  gchar *reg_type, *acct_name;
+  Account *account;
+  QofBook *book;
+  gboolean include_subs;
+
+  g_return_val_if_fail(key_file, NULL);
+  g_return_val_if_fail(group_name, NULL);
+  ENTER("key_file %p, group_name %s", key_file, group_name);
+
+  /* Create the new page. */
+  reg_type = g_key_file_get_string(key_file, group_name,
+					 KEY_REGISTER_TYPE, &error);
+  DEBUG("Page type: %s", reg_type);
+  if ((g_ascii_strcasecmp(reg_type, LABEL_ACCOUNT) == 0) ||
+      (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0)) {
+    include_subs = (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0);
+    DEBUG("Include subs: %d", include_subs);
+    acct_name = g_key_file_get_string(key_file, group_name,
+				      KEY_ACCOUNT_NAME, &error);
+    book = qof_session_get_book(qof_session_get_current_session());
+    account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
+					 acct_name,
+					 gnc_get_account_separator());
+    g_free(acct_name);
+    if (account == NULL) {
+      LEAVE("Bad account name");
+      g_free(reg_type);
+      return NULL;
+    }
+    page = gnc_plugin_page_register_new (account, include_subs);
+  } else if (g_ascii_strcasecmp(reg_type, LABEL_GL) == 0) {
+    page = gnc_plugin_page_register_new_gl();
+  } else {
+    LEAVE("Bad ledger type");
+    g_free(reg_type);
+    return NULL;
+  }
+  g_free(reg_type);
+
+  /* Install it now so we can them manipulate the created widget */
+  gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
+
+  /* Now update the page to the last state it was in */
+  gnc_plugin_page_register_restore_edit_menu(page, key_file, group_name);
+  LEAVE(" ");
+  return page;
+}
+
 	
 static gchar *
 gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
@@ -2370,3 +2596,6 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   gnucash_register_refresh_from_gconf(priv->gsr->reg);
   gtk_widget_queue_draw(priv->widget);
 }
+
+/** @} */
+/** @} */

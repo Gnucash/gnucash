@@ -34,6 +34,7 @@
 #include "file-utils.h"
 #include "messages.h"
 #include "gnc-engine.h"
+#include "gnc-gkeyfile-utils.h"
  
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUILE;
@@ -165,5 +166,74 @@ gnc_getline (gchar **line, FILE *file)
   return len;
 }
 
+
+/*  Find the state file that corresponds to this URL and guid.  The
+ *  URL is used to compute the base name of the file (which will be in
+ *  ~/.gnucash/books) and the guid is used to differentiate when the
+ *  user has multiple data files with the same name. */
+GKeyFile *
+gnc_find_state_file (const gchar *url,
+		     const gchar *guid,
+		     gchar **filename_p)
+{
+  gchar *basename, *original = NULL, *filename, *tmp, *file_guid;
+  GKeyFile *key_file = NULL;
+  GError *error = NULL;
+  gint i;
+
+  ENTER("url %s, guid %s", url, guid);
+  tmp = index(url, ':');
+  if (tmp)
+    url = tmp + 1;
+
+  basename = g_path_get_basename(url);
+  DEBUG("Basename %s", basename);
+  original = g_build_filename(g_get_home_dir(), ".gnucash",
+			      "books", basename, NULL);
+  g_free(basename);
+  DEBUG("Original %s", original);
+
+  i = 1;
+  while (1) {
+    if (i == 1)
+      filename = g_strdup(original);
+    else
+      filename = g_strdup_printf("%s_%d", original, i);
+    DEBUG("Trying %s", filename);
+    key_file = gnc_key_file_load_from_file(filename, FALSE);
+    DEBUG("Result %p", key_file);
+
+    if (!key_file) {
+      DEBUG("No key file by that name");
+      break;
+    }
+
+    file_guid = g_key_file_get_string(key_file,
+				      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+				      &error);
+    DEBUG("File GUID is %s", file_guid);
+    if (strcmp(guid, file_guid) == 0) {
+      DEBUG("Matched !!!");
+      g_free(file_guid);
+      break;
+    }
+
+    DEBUG("Clean up this pass");
+    g_free(file_guid);
+    g_key_file_free(key_file);
+    g_free(filename);
+    i++;
+  }
+
+  DEBUG("Clean up");
+  g_free(original);
+  if (filename_p)
+    *filename_p = filename;
+  else
+    g_free(filename);
+  LEAVE("key_file %p, filename %s", key_file,
+	filename_p ? *filename_p : "(none)");
+  return key_file;
+}
 
 /* ----------------------- END OF FILE ---------------------  */

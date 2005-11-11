@@ -47,7 +47,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_REPORT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_REPORT))
 #define GNC_PLUGIN_PAGE_REPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_REPORT, GncPluginPageReportClass))
 
-#define GNC_PLUGIN_PAGE_REPORT_NAME "gnc-plugin-page-report"
+#define GNC_PLUGIN_PAGE_REPORT_NAME "GncPluginPageReport"
 
 /* typedefs & structures */
 typedef struct {

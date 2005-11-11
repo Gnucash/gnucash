@@ -82,6 +82,7 @@
       <menu name="ScrubMenu" action="ScrubMenuAction"/>
       <separator name="ActionSepE"/>
       <menuitem name="ActionsForgetWarnings" action="ActionsForgetWarningsAction"/>
+      <menuitem name="ActionsRenamePage" action="ActionsRenamePageAction"/>
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>
@@ -139,6 +140,7 @@
   <popup name="MainPopup" action="FakeToplevel">
     <separator name="PopupSep1"/>
     <placeholder name="PopupPlaceholder1"/>
+    <menuitem name="ActionsRenamePage" action="ActionsRenamePageAction"/>
     <separator name="PopupSep2"/>
     <placeholder name="PopupPlaceholder2"/>
     <separator name="PopupSep3"/>

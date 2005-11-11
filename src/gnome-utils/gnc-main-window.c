@@ -35,8 +35,10 @@
 
 #include "config.h"
 
-#include <gdk/gdkpixbuf.h>
 #include <gtk/gtk.h>
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -46,12 +48,15 @@
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
+#include "gnc-hooks.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
@@ -60,6 +65,7 @@
 #include "gnc-gconf-utils.h"
 // +JSLED
 #include "gnc-html.h"
+#include <g-wrap-wct.h>
 
 enum {
   PAGE_ADDED,
@@ -89,6 +95,8 @@ static void gnc_main_window_destroy (GtkObject *object);
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
 
+static void main_window_update_page_name (GncMainWindow *window, GncPluginPage *page, const gchar *name_in);
+
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
@@ -105,6 +113,7 @@ static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_raise (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
@@ -117,6 +126,7 @@ static void gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
+static GtkAction *gnc_main_window_find_action (GncMainWindow *window, const gchar *name);
 
 typedef struct GncMainWindowPrivate
 {
@@ -200,6 +210,9 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "ActionsForgetWarningsAction", NULL, N_("_Reset Warnings..."), NULL,
 	  N_("Reset the state of all warning message so they will be shown again."),
 	  G_CALLBACK (gnc_main_window_cmd_actions_reset_warnings) },
+	{ "ActionsRenamePageAction", NULL, N_("Rename Page"), NULL,
+	  N_("Rename this page."),
+	  G_CALLBACK (gnc_main_window_cmd_actions_rename_page) },
 
 	/* Windows menu */
 
@@ -298,18 +311,477 @@ static GQuark window_type = 0;
 /************************************************************
  *                                                          *
  ************************************************************/
+#define WINDOW_COUNT		"Window Count"
+#define WINDOW_STRING		"Window %d"
+#define WINDOW_GEOMETRY		"Window Geometry"
+#define WINDOW_POSITION		"Window Position"
+#define WINDOW_FIRSTPAGE	"First Page"
+#define WINDOW_PAGECOUNT	"Page Count"
+#define PAGE_TYPE		"Page Type"
+#define PAGE_NAME		"Page Name"
+#define PAGE_STRING		"Page %d"
 
+typedef struct {
+  GKeyFile *key_file;
+  const gchar *group_name;
+  gint window_num;
+  gint page_num;
+  gint page_offset;
+} GncMainWindowSaveData;
+
+
+/** Restore a single page to a window.  This function calls a page
+ *  specific function to create the actual page.  It then handles all
+ *  the common tasks such as insuring the page is installed into a
+ *  window, updating the page name, and anything else that might be
+ *  common to all pages.
+ *
+ *  @param window The GncMainWindow where the new page will be
+ *  installed.
+ *
+ *  @param data A data structure containing state about the
+ *  window/page restoration process. */
 static void
-gnc_main_window_save_window (GncMainWindow *window, gpointer session)
+gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data)
 {
-  DEBUG("window %p", window);
+  GncMainWindowPrivate *priv;
+  GncPluginPage *page;
+  gchar *page_group, *page_type = NULL, *name = NULL;
+  const gchar *class_type;
+  GError *error = NULL;
+
+  ENTER("window %p, data %p (key file %p, window %d, page start %d, page num %d)",
+	window, data, data->key_file, data->window_num, data->page_offset, data->page_num);
+
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  page_group = g_strdup_printf(PAGE_STRING, data->page_offset + data->page_num);
+  page_type = g_key_file_get_string(data->key_file, page_group,
+				    PAGE_TYPE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      page_group, PAGE_TYPE, error->message);
+    goto cleanup;
+  }
+
+  /* See if the page already exists. */
+  page = g_list_nth_data(priv->installed_pages, data->page_num);
+  if (page) {
+    class_type = GNC_PLUGIN_PAGE_GET_CLASS(page)->plugin_name;
+    if (strcmp(page_type, class_type) != 0) {
+      g_warning("error: page types don't match: state %s, existing page %s",
+		page_type, class_type);
+      goto cleanup;
+    }
+  } else {
+    /* create and install the page */
+    page = gnc_plugin_page_recreate_page(GTK_WIDGET(window), page_type,
+					 data->key_file, page_group);
+    if (page) {
+      /* Does the page still need to be installed into the window? */
+      if (page->window == NULL) {
+      	gnc_main_window_open_page(window, page);
+      }
+
+      /* Restore the page name */
+      name = g_key_file_get_string(data->key_file, page_group,
+				       PAGE_NAME, &error);
+      if (error) {
+	g_warning("error reading group %s key %s: %s",
+		  page_group, PAGE_NAME, error->message);
+	/* Fall through and still show the page. */
+      } else {
+	DEBUG("updating page name for %p to %s.", page, name);
+	main_window_update_page_name(window, page, name);
+	g_free(name);
+      }
+    }
+  }
+
+  LEAVE("ok");
+ cleanup:
+  if (error)
+    g_error_free(error);
+  if (page_type)
+    g_free(page_type);
+  g_free(page_group);
 }
 
+
+/** Restore all the pages in a given window.  This function restores
+ *  all the window specific attributes, then calls a helper function
+ *  to restore all the pages that are contained in the window.
+ *
+ *  @param window The GncMainWindow whose pages should be restored.
+ *
+ *  @param data A data structure containing state about the
+ *  window/page restoration process. */
 static void
-gnc_main_window_shutdown (gpointer session, gpointer user_data)
+gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
-  DEBUG("session %p (%s)", session, qof_session_get_url (session));
-  g_list_foreach (active_windows, (GFunc)gnc_main_window_save_window, session);
+  GncMainWindowPrivate *priv;
+  gint *pos, *geom;
+  gsize length;
+  gchar *window_group;
+  gint page_start, page_count, i;
+  GError *error = NULL;
+
+  /* Setup */
+  ENTER("window %p, data %p (key file %p, window %d)",
+	window, data, data->key_file, data->window_num);
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
+
+  /* Save the window coordinates, etc. */
+  pos = g_key_file_get_integer_list(data->key_file, window_group,
+				    WINDOW_POSITION, &length, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_POSITION, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (length != 2) {
+    g_warning("invalid number of values for group %s key %s",
+	      window_group, WINDOW_POSITION);
+  } else {
+    gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
+    DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
+  }
+
+  geom = g_key_file_get_integer_list(data->key_file, window_group,
+				     WINDOW_GEOMETRY, &length, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_GEOMETRY, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (length != 2) {
+    g_warning("invalid number of values for group %s key %s",
+	      window_group, WINDOW_GEOMETRY);
+  } else {
+    gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
+    DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
+  }
+
+  /* Get this window's notebook info */
+  page_start = g_key_file_get_integer(data->key_file,
+				      window_group, WINDOW_FIRSTPAGE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_FIRSTPAGE, error->message);
+    goto cleanup;
+  }
+  page_count = g_key_file_get_integer(data->key_file,
+				      window_group, WINDOW_PAGECOUNT, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_PAGECOUNT, error->message);
+    goto cleanup;
+  }
+
+  for (i = 0; i < page_count; i++) {
+    data->page_offset = page_start;
+    data->page_num = i;
+    gnc_main_window_restore_page(window, data);
+  }
+
+  LEAVE("window %p", window);
+ cleanup:
+  if (error)
+    g_error_free(error);
+  g_free(window_group);
+}
+
+
+/** Restore all windows.  This function finds the "new" state file
+ *  associated with a specific book guid.  It then iterates through
+ *  this state information, calling a helper function to recreate
+ *  each open window.
+ *
+ *  If the "new" state file cannot be found, this function will open
+ *  an account tree window and then attempt to invoke the old gnucash
+ *  1.x state routines.  This provides a fluid transition for users
+ *  from the old to the new state systems.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session A pointer to the current session.
+ *
+ *  @param unused An unused pointer. */
+static void
+gnc_main_window_restore_all_state (gpointer session, gpointer unused)
+{
+  GncMainWindow *window;
+  GncMainWindowSaveData data;
+  QofBook *book;
+  const gchar *url, *guid_string;
+  gchar *file_guid, *filename = NULL;
+  const GUID *guid;
+  gint i, window_count;
+  GError *error = NULL;
+	
+  url = qof_session_get_url(session);
+  ENTER("session %p (%s)", session, url);
+  if (!url) {
+    LEAVE("no url, nothing to do");
+    return;
+  }
+
+  /* Get the book GUID */
+  book = qof_session_get_book(session);
+  guid = qof_entity_get_guid(QOF_ENTITY(book));
+  guid_string = guid_to_string(guid);
+
+  data.key_file = gnc_find_state_file(url, guid_string, &filename);
+  if (filename)
+    g_free(filename);
+  if (!data.key_file) {
+    GtkAction *action;
+
+    /* The default state should be to have an Account Tree page open
+     * in the window. */
+    DEBUG("no saved state file");
+    window = g_list_nth_data(active_windows, 0);
+    action = gnc_main_window_find_action(window, "FileNewAccountTreeAction");
+    gtk_action_activate(action);
+
+#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
+    /* See if there's an old style state file to be found */
+    scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
+	       (session ?
+		gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+		SCM_BOOL_F));
+#endif
+
+    LEAVE("old");
+    return;
+  }
+
+#ifdef DEBUG
+  /*  Debugging: dump a copy to stdout and the trace log */
+  {
+    gchar *file_data;
+    gint file_length;
+    file_data = g_key_file_to_data(data.key_file, &file_length, NULL);
+    DEBUG("=== File Data Read===\n%s\n=== File End ===\n", file_data);
+    g_free(file_data);
+  }
+#endif
+
+  /* validate top level info */
+  file_guid = g_key_file_get_string(data.key_file,
+				    STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+				    &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      STATE_FILE_TOP, STATE_FILE_BOOK_GUID, error->message);
+    LEAVE("can't read guid");
+    goto cleanup;
+  }
+  if (!file_guid || strcmp(guid_string, file_guid)) {
+    g_warning("guid mismatch: book guid %s, state file guid %s",
+	      guid_string, file_guid);
+    LEAVE("guid values do not match");
+    goto cleanup;
+  }
+
+  window_count =
+    g_key_file_get_integer(data.key_file, STATE_FILE_TOP, WINDOW_COUNT, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      STATE_FILE_TOP, WINDOW_COUNT, error->message);
+    LEAVE("can't read count");
+    goto cleanup;
+  }
+
+  /* Restore all state information on the open windows.  Window
+     numbers in state file are 1-based. GList indices are 0-based. */
+  for (i = 0; i < window_count; i++) {
+    data.window_num = i;
+    window = g_list_nth_data(active_windows, i);
+    if (window == NULL) {
+      DEBUG("Window %d doesn't exist. Creating new window.", i);
+      DEBUG("active_windows %p.", active_windows);
+      if (active_windows)
+	DEBUG("first window %p.", active_windows->data);
+      window = gnc_main_window_new();
+    }
+    gnc_main_window_restore_window(window, &data);
+  }
+
+  /* Clean up */
+  LEAVE("ok");
+ cleanup:
+  if (error)
+    g_error_free(error);
+  if (file_guid)
+    g_free(file_guid);
+  g_key_file_free(data.key_file);
+}
+
+
+/** Save the state of a single page to a disk.  This function handles
+ *  all the common tasks such as saving the page type and name, and
+ *  anything else that might be common to all pages.  It then calls a
+ *  page specific function to save the actual page.
+ *
+ *  @param page The GncPluginPage whose state should be saved.
+ *
+ *  @param data A data structure containing state about the
+ *  window/page saving process. */
+static void
+gnc_main_window_save_page (GncPluginPage *page, GncMainWindowSaveData *data)
+{
+  gchar *page_group;
+
+  ENTER("page %p, data %p (key file %p, window %d, page %d)",
+	page, data, data->key_file, data->window_num, data->page_num);
+  page_group = g_strdup_printf(PAGE_STRING, data->page_num++);
+  g_key_file_set_string(data->key_file, page_group, PAGE_TYPE,
+			GNC_PLUGIN_PAGE_GET_CLASS(page)->plugin_name);
+
+  g_key_file_set_string(data->key_file, page_group, PAGE_NAME,
+			gnc_plugin_page_get_page_name(page));
+
+  gnc_plugin_page_save_page(page, data->key_file, page_group);
+  g_free(page_group);
+  LEAVE(" ");
+}
+
+
+/** Saves all the pages in a single window to a disk.  This function
+ *  saves all the window specific attributes, then calls a helper
+ *  function to save all the pages that are contained in the window.
+ *
+ *  @param window The GncMainWindow whose pages should be saved.
+ *
+ *  @param data A data structure containing state about the
+ *  window/page saving process. */
+static void
+gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
+{
+  GncMainWindowPrivate *priv;
+  gint num_pages, coords[4];
+  gchar *window_group;
+
+  /* Setup */
+  ENTER("window %p, data %p (key file %p, window %d)",
+	window, data, data->key_file, data->window_num);
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  window_group = g_strdup_printf(WINDOW_STRING, data->window_num++);
+
+  /* Save the window coordinates, etc. */
+  gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
+  gtk_window_get_size(GTK_WINDOW(window), &coords[2], &coords[3]);
+  g_key_file_set_integer_list(data->key_file, window_group,
+			      WINDOW_POSITION, &coords[0], 2);
+  g_key_file_set_integer_list(data->key_file, window_group,
+			      WINDOW_GEOMETRY, &coords[2], 2);
+  DEBUG("window (%p) position %dx%d, size %dx%d", window,  coords[0], coords[1],
+	coords[2], coords[3]);
+
+  /* Save this window's notebook info */
+  num_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(priv->notebook));
+  g_key_file_set_integer(data->key_file, window_group,
+			 WINDOW_PAGECOUNT, num_pages);
+  g_key_file_set_integer(data->key_file, window_group,
+			 WINDOW_FIRSTPAGE, data->page_num);
+
+  /* Save individual pages in this window */
+  g_list_foreach(priv->installed_pages, (GFunc)gnc_main_window_save_page, data);
+
+  g_free(window_group);
+  LEAVE("window %p", window);
+}
+
+
+/** Save the state of all windows to disk.  This function finds the
+ *  name of the "new" state file associated with a specific book guid.
+ *  It saves some top level data, then iterates through the list of
+ *  open windows calling a helper function to save each window.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param page The GncPluginPage whose state should be saved.
+ *
+ *  @param data A data structure containing state about the
+ *  window/page saving process. */
+static void
+gnc_main_window_save_all_state (gpointer session, gpointer user_data)
+{
+	GncMainWindowSaveData data;
+	QofBook *book;
+	const char *url, *guid_string;
+	gchar *filename;
+	const GUID *guid;
+	GError *error = NULL;
+
+	url = qof_session_get_url(session);
+	ENTER("session %p (%s)", session, url);
+	if (!url) {
+	  LEAVE("no url, nothing to do");
+	  return;
+	}
+
+	/* Get the book GUID */
+	book = qof_session_get_book(session);
+	guid = qof_entity_get_guid(QOF_ENTITY(book));
+	guid_string = guid_to_string(guid);
+
+	/* Find the filename to use.  This returns the data from the
+	 * file so its possible that we could reuse the data and
+	 * maintain comments that were added to the data file, but
+	 * that's not something we currently do. For now the existing
+	 * data is dumped and completely regenerated.*/
+	data.key_file = gnc_find_state_file(url, guid_string, &filename);
+	if (data.key_file)
+	  g_key_file_free(data.key_file);
+
+	/* Set up the iterator data structures */
+	data.key_file = g_key_file_new();
+	data.window_num = 1;
+	data.page_num = 1;
+
+	/* Store top level info in the data structure */
+	g_key_file_set_string(data.key_file,
+			      STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+			      guid_string);
+	g_key_file_set_integer(data.key_file,
+			       STATE_FILE_TOP, WINDOW_COUNT,
+			       g_list_length(active_windows));
+
+	/* Dump all state information on the open windows */
+	g_list_foreach(active_windows, (GFunc)gnc_main_window_save_window, &data);
+
+#ifdef DEBUG
+	/*  Debugging: dump a copy to the trace log */
+	{
+	  gchar *file_data;
+	  gint file_length;
+	  file_data = g_key_file_to_data(data.key_file, &file_length, NULL);
+	  DEBUG("=== File Data Written===\n%s\n=== File End ===\n", file_data);
+	  g_free(file_data);
+	}
+#endif
+
+	/* Write it all out to disk */
+	gnc_key_file_save_to_file(filename, data.key_file, &error);
+	if (error) {
+	  g_critical(_("Error: Failure saving state file.\n  %s"), error->message);
+	  g_error_free(error);
+	}
+	g_free(filename);
+
+	/* Clean up */
+	g_key_file_free(data.key_file);
+	LEAVE("");
 }
 
 
@@ -874,6 +1346,127 @@ gnc_main_window_update_tabs (GConfEntry *entry, gpointer user_data)
 
 
 /************************************************************
+ *                 Tab Label Implementation                 *
+ ************************************************************/
+static gboolean
+main_window_find_tab_items (GncMainWindow *window,
+			    GncPluginPage *page,
+			    GtkWidget **label_p,
+			    GtkWidget **entry_p)
+{
+  GncMainWindowPrivate *priv;
+  GtkWidget *tab_hbox, *widget;
+  GList *children, *tmp;
+
+  ENTER("window %p, page %p, label_p %p, entry_p %p",
+	window, page, label_p, entry_p);
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  *label_p = *entry_p = NULL;
+  tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+					page->notebook_page);
+  children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
+  for (tmp = children; tmp; tmp = g_list_next(tmp)) {
+    widget = tmp->data;
+    if (GTK_IS_LABEL(widget)) {
+      *label_p = widget;
+    } else if (GTK_IS_ENTRY(widget)) {
+      *entry_p = widget;
+    }
+  }
+  g_list_free(children);
+
+  LEAVE("label %p, entry %p", *label_p, *entry_p);
+  return (*label_p && *entry_p);
+}
+
+static void
+main_window_update_page_name (GncMainWindow *window,
+			      GncPluginPage *page,
+			      const gchar *name_in)
+{
+  GncMainWindowPrivate *priv;
+  GtkWidget *label, *entry;
+  gchar *name;
+
+  ENTER(" ");
+
+  if ((name_in == NULL) || (*name_in == '\0')) {
+    LEAVE("no string");
+    return;
+  }
+  name = g_strstrip(g_strdup(name_in));
+  if (*name == '\0') {
+    g_free(name);
+    LEAVE("empty string");
+    return;
+  }
+
+  /* Update the plugin */
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  gnc_plugin_page_set_page_name(page, name);
+
+  /* Update the notebook tab */
+  main_window_find_tab_items(window, page, &label, &entry);
+  gtk_label_set_text(GTK_LABEL(label), name);
+
+  /* Update the notebook menu */
+  label = gtk_notebook_get_menu_label (GTK_NOTEBOOK(priv->notebook),
+				       page->notebook_page);
+  gtk_label_set_text(GTK_LABEL(label), name);
+  
+  /* Force an update of the window title */
+  gnc_main_window_update_title(window);
+  g_free(name);
+  LEAVE("done");
+}
+
+static void
+gnc_main_window_tab_entry_activate (GtkWidget *entry,
+				    GncPluginPage *page)
+{
+  GtkWidget *label, *entry2;
+
+  g_return_if_fail(GTK_IS_ENTRY(entry));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE(page));
+
+  ENTER("");
+  if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
+				  page, &label, &entry2)) {
+    LEAVE("can't find required widgets");
+    return;
+  }
+
+  main_window_update_page_name(GNC_MAIN_WINDOW(page->window), page,
+			       gtk_entry_get_text(GTK_ENTRY(entry)));
+
+  gtk_widget_hide(entry);
+  gtk_widget_show(label);
+  LEAVE("");
+}
+
+
+static gboolean
+gnc_main_window_tab_entry_editing_done (GtkWidget *entry,
+					GncPluginPage *page)
+{
+  ENTER("");
+  gnc_main_window_tab_entry_activate(entry, page);
+  LEAVE("");
+  return FALSE;
+}
+
+static gboolean
+gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
+					   GdkEvent *event,
+					   GncPluginPage *page)
+{
+  ENTER("");
+  gnc_main_window_tab_entry_activate(entry, page);
+  LEAVE("");
+  return FALSE;
+}
+
+/************************************************************
  *                   Widget Implementation                  *
  ************************************************************/
 
@@ -982,7 +1575,10 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 			G_TYPE_NONE, 1,
 			G_TYPE_OBJECT);
 
-	qof_session_add_close_hook(gnc_main_window_shutdown, NULL);
+	gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+			     gnc_main_window_restore_all_state, NULL);
+	gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
+			     gnc_main_window_save_all_state, NULL);
 
 	gnc_gconf_general_register_cb (KEY_SHOW_CLOSE_BUTTON,
 				       gnc_main_window_update_tabs,
@@ -1249,7 +1845,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 {
 	GncMainWindowPrivate *priv;
 	GtkWidget *tab_hbox;
-	GtkWidget *label;
+	GtkWidget *label, *entry;
 	const gchar *icon;
 	GtkWidget *image;
 	gboolean immutable = FALSE;
@@ -1304,6 +1900,18 @@ gnc_main_window_open_page (GncMainWindow *window,
 
 	gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
   
+	entry = gtk_entry_new();
+	gtk_widget_hide (entry);
+	gtk_box_pack_start (GTK_BOX (tab_hbox), entry, TRUE, TRUE, 0);
+	g_signal_connect(G_OBJECT(entry), "activate",
+			 G_CALLBACK(gnc_main_window_tab_entry_activate), page);
+	g_signal_connect(G_OBJECT(entry), "focus-out-event",
+			 G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
+			 page);
+	g_signal_connect(G_OBJECT(entry), "editing-done",
+			 G_CALLBACK(gnc_main_window_tab_entry_editing_done),
+			 page);
+
 	/* Add close button - Not for immutable pages */
 	if (!immutable) {
 	  GtkWidget *close_image, *close_button;
@@ -1525,6 +2133,22 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 }
 
 
+static GtkAction *
+gnc_main_window_find_action (GncMainWindow *window, const gchar *name)
+{
+  GtkAction *action = NULL;
+  const GList *groups, *tmp;
+
+  groups = gtk_ui_manager_get_action_groups(window->ui_merge);
+  for (tmp = groups; tmp; tmp = g_list_next(tmp)) {
+    action = gtk_action_group_get_action(GTK_ACTION_GROUP(tmp->data), name);
+    if (action)
+      break;
+  }
+  return action;
+}
+
+
 /*  Retrieve a specific set of user interface actions from a window.
  *  This function can be used to get an group of action to be
  *  manipulated when the front page of a window has changed.
@@ -1556,9 +2180,11 @@ gnc_main_window_add_plugin (gpointer plugin,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
+	ENTER(" ");
 	gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
 				  GNC_MAIN_WINDOW (window),
 				  window_type);
+	LEAVE(" ");
 }
 
 static void
@@ -1612,6 +2238,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GError *error = NULL;
 	gchar *filename;
 	SCM debugging;
+
+	ENTER(" ");
 
 	/* Catch window manager delete signal */
 	g_signal_connect (G_OBJECT (window), "delete-event",
@@ -1721,8 +2349,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_signal_connect (G_OBJECT (manager), "plugin-removed",
 			  G_CALLBACK (gnc_main_window_plugin_removed), window);
 
+	LEAVE(" ");
 }
 
+/* Callbacks */
 static void
 gnc_main_window_add_widget (GtkUIManager *merge,
 			    GtkWidget *widget,
@@ -1912,6 +2542,43 @@ static void
 gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window)
 {
   gnc_reset_warnings_dialog(GTK_WIDGET(window));
+}
+
+static void
+gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window)
+{
+  GncMainWindowPrivate *priv;
+  GncPluginPage *page;
+  GtkWidget *tab_hbox, *widget, *label = NULL, *entry = NULL;
+  GList *children, *tmp;
+
+  ENTER(" ");
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+  page = priv->current_page;
+  tab_hbox = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
+                                       page->notebook_page);
+  children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
+  for (tmp = children; tmp; tmp = g_list_next(tmp)) {
+    widget = tmp->data;
+    if (GTK_IS_LABEL(widget)) {
+      label = widget;
+    } else if (GTK_IS_ENTRY(widget)) {
+      entry = widget;
+    }
+  }
+  g_list_free(children);
+
+  if (!label || !entry) {
+    LEAVE("Missing label or entry.");
+    return;
+  }
+
+  gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+  gtk_editable_select_region(GTK_EDITABLE(entry), 0, -1);
+  gtk_widget_hide(label);
+  gtk_widget_show(entry);
+  gtk_widget_grab_focus(entry);
+  LEAVE("opened for editing");
 }
 
 static void

@@ -1,5 +1,6 @@
 /* gnc-plugin-page-report.c
  * Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
  * Originally from window-report.c:
  * Copyright (C) 1997 Robin D. Clark
@@ -26,10 +27,23 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup GuiReport Reports
+    @{ */
+/** @file gnc-plugin-page-report.c
+    @brief  Report page.
+    @author Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
+*/
+
 #include "config.h"
 
 #include <errno.h>
 #include <gtk/gtk.h>
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
 #include <g-wrap-wct.h>
 #include <libguile.h>
 #include <sys/stat.h>
@@ -47,6 +61,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
+#include "guile-util.h"
 #include "messages.h"
 #include "option-util.h"
 
@@ -111,6 +126,9 @@ static void gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page,
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
+static void gnc_plugin_page_report_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
+static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
@@ -233,6 +251,9 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 
 	gnc_plugin_page_class->create_widget   = gnc_plugin_page_report_create_widget;
 	gnc_plugin_page_class->destroy_widget  = gnc_plugin_page_report_destroy_widget;
+	gnc_plugin_page_class->save_page       = gnc_plugin_page_report_save_page;
+	gnc_plugin_page_class->recreate_page   = gnc_plugin_page_report_recreate_page;
+	gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageReportPrivate));
 
@@ -474,7 +495,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         priv->option_change_cb_id = 
                 gnc_option_db_register_change_callback(priv->cur_odb,
                                                        gnc_plugin_page_report_option_change_cb,
-                                                       priv, NULL, NULL);
+                                                       report, NULL, NULL);
         
         if (gnc_html_history_forward_p(gnc_html_get_history(priv->html))) {
                 gnc_plugin_page_report_set_fwd_button(report, TRUE); 
@@ -491,16 +512,44 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         LEAVE( "done" );
 }
 
+
+/** This function is called when one of the options for a register
+ *  page has changed.  It is responsible for marking the report as
+ *  dirty, and causing the report to reload using the new options.
+ *
+ *  @note This function currently also calls the main window code to
+ *  update it if the name of the report has changed.  This code should
+ *  eventually go away, and the only way to change the name should be
+ *  via the main window.  gnucash.
+ *
+ *  @param data A pointer to the GncPluginPageReport data structure
+ *  that describes a report. */
 static void
 gnc_plugin_page_report_option_change_cb(gpointer data)
 {
-        GncPluginPageReportPrivate *priv = data;
+        GncPluginPageReport *report;
+        GncPluginPageReportPrivate *priv;
         SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
+	const gchar *old_name;
+	gchar *new_name;
+
+	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(data));
+	report = GNC_PLUGIN_PAGE_REPORT(data);
+	priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
         DEBUG( "option_change" );
         if (priv->cur_report == SCM_BOOL_F)
                 return;
         DEBUG( "set-dirty, queue-draw" );
+
+	/* Update the page (i.e. the notebook tab and window title) */
+	old_name = gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(report));
+	new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
+						      "Report name", NULL);
+	if (strcmp(old_name, new_name) != 0) {
+	  gnc_plugin_page_set_page_name(GNC_PLUGIN_PAGE(report), new_name);
+	}
+	g_free(new_name);
 
         /* it's probably already dirty, but make sure */
         scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
@@ -589,6 +638,144 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
         PINFO("unreffing report %d and children\n", report_id);
         scm_call_1(remover, scm_int2num(report_id));
 }
+
+
+/** The key name used it the state file for storing the report
+ *  options. */
+#define SCHEME_OPTIONS "Scheme Options"
+
+
+/** Save enough information about this report page that it can be
+ *  recreated next time the user starts gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+static void
+gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
+				  GKeyFile *key_file,
+				  const gchar *group_name)
+{
+	GncPluginPageReport *report;
+	GncPluginPageReportPrivate *priv;
+	SCM gen_save_text, scm_text;
+	gchar *text;
+	
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT(plugin_page));
+	g_return_if_fail (key_file != NULL);
+	g_return_if_fail (group_name != NULL);
+
+	ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
+	      group_name);
+
+	report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+
+        gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
+        scm_text = scm_call_1(gen_save_text, priv->cur_report);
+
+	if (!SCM_STRINGP (scm_text)) {
+	  LEAVE("nothing to save");
+	  return;
+	}
+
+	text = gnc_guile_strip_comments(SCM_STRING_CHARS(scm_text));
+	g_key_file_set_string(key_file, group_name, SCHEME_OPTIONS, text);
+	g_free(text);
+	LEAVE(" ");
+}
+
+
+/** Create a new report page based on the information saved during a
+ *  previous instantiation of gnucash.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static GncPluginPage *
+gnc_plugin_page_report_recreate_page (GtkWidget *window,
+				      GKeyFile *key_file,
+				      const gchar *group_name)
+{
+	GncPluginPage *page;
+	GError *error = NULL;
+	gchar *option_string;
+	gint report_id;
+	SCM scm_id;
+	
+	g_return_val_if_fail(key_file, NULL);
+	g_return_val_if_fail(group_name, NULL);
+	ENTER("key_file %p, group_name %s", key_file, group_name);
+
+	option_string = g_key_file_get_string(key_file, group_name,
+					      SCHEME_OPTIONS, &error);
+	if (error) {
+	  g_warning("error reading group %s key %s: %s",
+		    group_name, SCHEME_OPTIONS, error->message);
+	  LEAVE("bad value");
+	  return NULL;
+	}
+	scm_id = scm_c_eval_string(option_string);
+	if (!scm_integer_p(scm_id)) {
+	  g_free(option_string);
+	  LEAVE("report id not an integer");
+	  return NULL;
+	}
+
+	report_id = scm_num2int(scm_id, SCM_ARG1, __FUNCTION__);
+	page = gnc_plugin_page_report_new( report_id );
+
+	g_free(option_string);
+	LEAVE(" ");
+	return page;
+}
+
+
+/** Update a report page to reflect a name change made by external
+ *  code.  This is called from the main window code when a page's name
+ *  is changes.  The report code will update its copy of the name and
+ *  regenerate the report.
+ *
+ *  @internal
+ *  
+ *  @param page The page whose name has changed.
+ *
+ *  @param name The new name for the page. */
+static void
+gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
+{
+  GncPluginPageReportPrivate *priv;
+  static gint count = 1, max_count = 10;
+  const gchar *old_name;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
+  g_return_if_fail(name != NULL);
+  g_return_if_fail(count++ <= max_count);
+
+  ENTER("page %p, name %s", page, name);
+  priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(page);
+
+  /* Is this a redundant call? */
+  old_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
+						"Report name", NULL);
+  DEBUG("Comparing old name '%s' to new name '%s'", old_name, name);
+  if (old_name && (strcmp(old_name, name) == 0)) {
+    LEAVE("no change");
+    return;
+  }
+
+  gnc_option_db_set_string_option(priv->cur_odb, "General",
+				  "Report name", name);
+  gnc_plugin_page_report_option_change_cb(page);
+  LEAVE(" ");
+}
+
 
 /********************************************************************
  * gnc_report_window_destroy 
@@ -696,8 +883,8 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         GncPluginPageReportPrivate *priv;
         GtkActionGroup *action_group;
         GncPluginPage *parent;
-        GString *tmpStr;
         gboolean use_new;
+	gchar *name;
 
         DEBUG( "property reportId=%d", reportId );
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
@@ -708,15 +895,14 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
         /* Init parent declared variables */
         parent = GNC_PLUGIN_PAGE(plugin_page);
         use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
-        tmpStr = g_string_sized_new( 32 );
-        g_string_sprintf( tmpStr, "%s: %s", _("Report"),
-                          gnc_report_name( priv->initial_report ) );
+	name = gnc_report_name( priv->initial_report );
 	g_object_set(G_OBJECT(plugin_page),
-		     "page-name",      tmpStr->str,
+		     "page-name",      name,
 		     "page-uri",       "default:",
 		     "ui-description", "gnc-plugin-page-report-ui.xml",
 		     "use-new-window", use_new,
 		     NULL);
+	g_free(name);
 
         /* change me when the system supports multiple books */
         gnc_plugin_page_add_book(parent, gnc_get_current_book());
@@ -1125,3 +1311,6 @@ gnc_main_window_open_report_url(const char * url, GncMainWindow *window)
         reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
         gnc_main_window_open_page( window, reportPage );
 }
+
+/** @} */
+/** @} */

@@ -1,5 +1,29 @@
 2005-11-11  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/file-utils.[ch]:
+	* src/app-utils/guile-util.[ch]:
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/business/business-gnome/gnc-plugin-page-invoice.h:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/gnome/gnc-plugin-account-tree.[ch]:
+	* src/gnome/gnc-plugin-budget.c:
+	* src/gnome/gnc-plugin-page-account-tree.[ch]:
+	* src/gnome/gnc-plugin-page-budget.h:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-register.c:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/report/report-gnome/gnc-plugin-page-report.[ch]:
+	* src/report/report-gnome/window-report.c:
+	* src/scm/main-window.scm: Add code to save window state into a
+	Glib Key-Value file.  This code is distributed between the
+	gnc-main-window code and all of the plugin pages.  It subsumes the
+	existing state file code, and will call that code upon file open
+	if it cannot find a key-value state file.  This code is also where
+	the creation of the initial account tree page occurs when no state
+	file is found.
+
 	* lib/glib26/gkeyfile.c:
 	* lib/glib26/gutils26.c: Fix a couple of gcc4 warnings.
 

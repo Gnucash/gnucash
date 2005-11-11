@@ -106,6 +106,11 @@ GncPlugin * gnc_plugin_budget_new (void)
 {
     GncPluginBudget *plugin;
     ENTER(" ");
+
+    /* Reference the budget page plugin to ensure it exists in the gtk
+     * type system. */
+    GNC_TYPE_PLUGIN_PAGE_BUDGET;
+
     plugin = g_object_new (GNC_TYPE_PLUGIN_BUDGET, NULL);
     LEAVE(" ");
     return GNC_PLUGIN (plugin);

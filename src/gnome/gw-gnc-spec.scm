@@ -130,14 +130,6 @@
    '()
    "Destroy the UI.")
 
-  (gw:wrap-function
-   ws
-   'gnc:new-account-tree
-   '<gw:void>
-   "gnc_new_account_tree"
-   '((<gnc:MainWindow*> window))
-   "Create a new account tree window.")
-
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>
                   "GNCProgressDialog *" "const GNCProgressDialog *")

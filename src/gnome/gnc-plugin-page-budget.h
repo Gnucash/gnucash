@@ -45,7 +45,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_BUDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_BUDGET))
 #define GNC_PLUGIN_PAGE_BUDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_BUDGET, GncPluginPageBudgetClass))
 
-#define GNC_PLUGIN_PAGE_BUDGET_NAME "gnc-plugin-page-budget"
+#define GNC_PLUGIN_PAGE_BUDGET_NAME "GncPluginPageBudget"
 
 /* typedefs & structures */
 typedef struct {
