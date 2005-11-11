@@ -1,5 +1,9 @@
 2005-11-11  Christian Stimming  <stimming@tuhh.de>
 
+	* account/*/.xea: Explicitly denote the encoding of the file in
+	the initial xml tag. Fixes problems in the new-file-wizard in all
+	non-C locales.
+	
 	* po/glossary/*.po: Copy glossary po files from old 1.8 branch to
 	HEAD.
 
