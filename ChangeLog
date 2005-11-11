@@ -1,3 +1,8 @@
+2005-11-11  David Hampton  <hampton@employees.org>
+
+	* lib/glib26/gkeyfile.c:
+	* lib/glib26/gutils26.c: Fix a couple of gcc4 warnings.
+
 2005-11-10  David Hampton  <hampton@employees.org>
 
 	* src/core-utils/gnc-gkeyfile-utils.[ch]:

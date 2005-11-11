@@ -602,7 +602,7 @@ g_key_file_load_from_data_dirs (GKeyFile       *key_file,
   const gchar * user_data_dir;
   const gchar * const * system_data_dirs;
   gsize i, j;
-  gchar *output_path;
+  gchar *output_path = NULL;
   gint fd;
   gboolean found_file;
   
