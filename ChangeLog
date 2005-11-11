@@ -1,3 +1,8 @@
+2005-11-11  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/*.po: Copy glossary po files from old 1.8 branch to
+	HEAD.
+
 2005-11-11  David Hampton  <hampton@employees.org>
 
 	* src/import-export/log-replay/gnc-log-replay.c: Eliminate double

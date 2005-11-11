@@ -50,10 +50,22 @@ EXTRA_DIST = ChangeLog.1 \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
+  po/glossary/el.po \
   po/glossary/es.po \
   po/glossary/es_NI-policy.txt \
   po/glossary/gnc-glossary.txt \
+  po/glossary/it.po \
+  po/glossary/nl.po \
+  po/glossary/no.po \
+  po/glossary/pl.po \
+  po/glossary/pt.po \
+  po/glossary/pt_BR.po \
+  po/glossary/rw.po \
+  po/glossary/sk.po \
+  po/glossary/sv.po \
   po/glossary/txt-to-pot.sh \
+  po/glossary/vi.po \
+  po/glossary/zh_TW.po \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in
