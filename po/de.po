@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-11 21:11+0100\n"
-"PO-Revision-Date: 2005-09-23 22:08+0200\n"
+"POT-Creation-Date: 2005-11-12 11:44+0100\n"
+"PO-Revision-Date: 2005-11-12 11:45+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgstr "Eigenkapital"
 
 #. src/scm/help-topics-index.scm
 #: ../src/app-utils/gnc-ui-util.c:677 ../src/gnome/dialog-chart-export.c:36
-#: ../src/gnome/druid-hierarchy.c:744 ../src/gnome/glade/account.glade.h:42
+#: ../src/gnome/druid-hierarchy.c:744 ../src/gnome/glade/account.glade.h:41
 #: ../src/gnome-utils/dialog-account.c:244 ../intl-scm/guile-strings.c:414
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
@@ -156,22 +156,23 @@ msgstr "Anzahl Tage, deren Logdateien aufbewahrt werden sollen"
 
 #: ../src/backend/file/gnc-backend-file.c:90
 msgid ""
-"GnuCash keeps backups of old files, this setting dictates how long each is "
-"kept"
+"GnuCash keeps backups of old files. This setting specifies how long each is "
+"kept."
 msgstr ""
 
 #: ../src/backend/file/gnc-backend-file.c:98
-#, fuzzy
 msgid "Compress output files?"
-msgstr "Die Datei mit den Kontodaten komprimiert speichern."
+msgstr "Datei komprimiert speichern?"
 
 #: ../src/backend/file/gnc-backend-file.c:99
 msgid ""
 "GnuCash can save data files with compression. Enable this option to compress "
 "your data file. "
-msgstr ""
+msgstr "Die Datei mit den Kontodaten komprimiert speichern."
 
-#: ../src/backend/file/io-gncbin-r.c:508
+#. Translators: Name of the account where all the missing accounts
+#. are put into. (FIXME: is this correct?)
+#: ../src/backend/file/io-gncbin-r.c:510
 msgid "Lost Accounts"
 msgstr "Verlorene Konten"
 
@@ -586,6 +587,7 @@ msgstr "Benutzername"
 #. src/business/business-reports/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:705
 #: ../src/gnome/glade/sched-xact.glade.h:114
+#: ../src/gnome-utils/gnc-date-format.glade.h:10
 #: ../src/gnome-utils/gnc-dense-cal.c:282
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:491
 #: ../intl-scm/guile-strings.c:4184
@@ -1028,6 +1030,8 @@ msgstr "Zulieferernummer"
 msgid "(type)"
 msgstr "(Art)"
 
+#. * @}
+#. * @}
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
 #: ../src/business/business-gnome/glade/customer.glade.h:4
 #: ../src/business/business-gnome/glade/date-close.glade.h:1
@@ -1038,19 +1042,19 @@ msgstr "(Art)"
 #: ../src/business/business-gnome/glade/payment.glade.h:2
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:1
-#: ../src/gnome/glade/acctperiod.glade.h:1 ../src/gnome/glade/budget.glade.h:2
+#: ../src/gnome/glade/acctperiod.glade.h:1 ../src/gnome/glade/budget.glade.h:1
 #: ../src/gnome/glade/lots.glade.h:1 ../src/gnome/glade/price.glade.h:1
 #: ../src/gnome/glade/register.glade.h:1 ../src/gnome/glade/stocks.glade.h:1
 #: ../src/gnome/glade/userpass.glade.h:1
 #: ../src/gnome-utils/commodity.glade.h:1
 #: ../src/gnome-utils/exchange-dialog.glade.h:1
 #: ../src/gnome-utils/gnc-date-format.glade.h:3
-#: ../src/gnome-utils/transfer.glade.h:2
+#: ../src/gnome-utils/transfer.glade.h:1
 #: ../src/import-export/hbci/glade/hbci.glade.h:2
 #: ../src/import-export/hbci/glade/hbcipass.glade.h:1
-#: ../src/report/report-gnome/report.glade.h:2
+#: ../src/report/report-gnome/report.glade.h:1
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
 msgid "Absolute Day-of-the-month"
@@ -1096,7 +1100,7 @@ msgid "Delete the current Billing Term"
 msgstr "Ausgewählte Zahlungsbedingungen löschen"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
-#: ../src/gnome/glade/budget.glade.h:20
+#: ../src/gnome/glade/budget.glade.h:19
 msgid "Description: "
 msgstr "Beschreibung: "
 
@@ -1256,7 +1260,7 @@ msgid "Number of _rows:"
 msgstr "Anzahl der Zeilen"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
-#: ../src/gnome/glade/sched-xact.glade.h:140
+#: ../src/gnome/glade/sched-xact.glade.h:139
 #: ../src/import-export/generic-import.glade.h:47
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
 #: ../src/import-export/qif-import/qif.glade.h:112
@@ -1770,7 +1774,7 @@ msgid "Post To"
 msgstr "Buchen nach"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:9
-#: ../src/gnome/glade/account.glade.h:65
+#: ../src/gnome/glade/account.glade.h:64
 msgid "Transfer Account"
 msgstr "Herkunftskonto"
 
@@ -3172,7 +3176,7 @@ msgstr "Anteile"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../src/gnome/dialog-find-transactions.c:117
 #: ../src/gnome/glade/lots.glade.h:25
-#: ../src/gnome/glade/sched-xact.glade.h:203
+#: ../src/gnome/glade/sched-xact.glade.h:202
 #: ../src/register/ledger-core/split-register.c:1738
 #: ../src/register/ledger-core/split-register.c:1740
 #: ../intl-scm/guile-strings.c:2258 ../intl-scm/guile-strings.c:2586
@@ -3181,6 +3185,7 @@ msgstr "Wert"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/dialog-find-transactions.c:126
+#: ../src/gnome-utils/gnc-date-format.glade.h:11
 #: ../intl-scm/guile-strings.c:2908
 msgid "Number"
 msgstr "Nummer"
@@ -3221,7 +3226,7 @@ msgstr "Komplett"
 #: ../src/gnome/dialog-sxsincelast.c:393 ../src/gnome/glade/price.glade.h:22
 #: ../src/gnome/glade/reconcile.glade.h:28
 #: ../src/gnome/glade/register.glade.h:99
-#: ../src/gnome/glade/sched-xact.glade.h:217
+#: ../src/gnome/glade/sched-xact.glade.h:216
 #: ../src/gnome-utils/gnc-main-window.c:164
 #: ../src/gnome/window-reconcile.c:1269 ../src/gnome/window-reconcile.c:1342
 msgid "_Edit"
@@ -3456,7 +3461,7 @@ msgid "Obsolete"
 msgstr "Veraltet"
 
 #: ../src/gnome/druid-acct-period.c:173
-msgid "The book was closed suscessfully\n"
+msgid "The book was closed successfully."
 msgstr ""
 
 #: ../src/gnome/druid-acct-period.c:222
@@ -3479,7 +3484,7 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/druid-acct-period.c:310
-#, fuzzy, c-format
+#, c-format
 msgid "Period %s - %s"
 msgstr "Zeitraum von %s bis %s"
 
@@ -3497,20 +3502,24 @@ msgid ""
 "that is not in the future."
 msgstr "Sie müssen ein Kriterium der Liste auswählen"
 
-#: ../src/gnome/druid-acct-period.c:493
+#. Translation FIXME: Can this %s-containing message please be
+#. replaced by one single message? Either this closing went
+#. successfully ("success", "congratulations") or something else
+#. should be displayed anyway.
+#: ../src/gnome/druid-acct-period.c:497
 #, c-format
 msgid ""
 "%s\n"
-"Congradulations! You are done closing books!"
+"Congratulations! You are done closing books!"
 msgstr ""
 
 #. Change the text so that its more mainingful for this druid
-#: ../src/gnome/druid-acct-period.c:548
+#: ../src/gnome/druid-acct-period.c:552
 #, fuzzy
 msgid "Period:"
 msgstr ". (Punkt)"
 
-#: ../src/gnome/druid-acct-period.c:549
+#: ../src/gnome/druid-acct-period.c:553
 #, fuzzy
 msgid "Closing Date:"
 msgstr "Schließdatum"
@@ -3700,80 +3709,74 @@ msgid "You don't have any stock accounts with balances!"
 msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
 
 #: ../src/gnome/glade/account.glade.h:1
-#: ../src/gnome/glade/commodities.glade.h:1 ../src/gnome/glade/totd.glade.h:1
-#: ../src/gnome-utils/transfer.glade.h:1
-msgid "    "
-msgstr ""
+msgid "1"
+msgstr "1"
 
 #: ../src/gnome/glade/account.glade.h:2
-msgid "1"
-msgstr ""
+msgid "1/10"
+msgstr "1/10"
 
 #: ../src/gnome/glade/account.glade.h:3
-msgid "1/10"
-msgstr ""
+msgid "1/100"
+msgstr "1/100"
 
 #: ../src/gnome/glade/account.glade.h:4
-msgid "1/100"
-msgstr ""
+msgid "1/1000"
+msgstr "1/1000"
 
 #: ../src/gnome/glade/account.glade.h:5
-msgid "1/1000"
-msgstr ""
+msgid "1/10000"
+msgstr "1/10000"
 
 #: ../src/gnome/glade/account.glade.h:6
-msgid "1/10000"
-msgstr ""
+msgid "1/100000"
+msgstr "1/100000"
 
 #: ../src/gnome/glade/account.glade.h:7
-msgid "1/100000"
-msgstr ""
+msgid "1/1000000"
+msgstr "1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:8
-msgid "1/1000000"
-msgstr ""
-
-#: ../src/gnome/glade/account.glade.h:9
 #, fuzzy
 msgid "<b>Account Type</b>"
 msgstr "Kontoart"
 
-#: ../src/gnome/glade/account.glade.h:10
+#: ../src/gnome/glade/account.glade.h:9
 #, fuzzy
 msgid "<b>Categories</b>"
 msgstr "TXF Kategorien"
 
-#: ../src/gnome/glade/account.glade.h:11
+#: ../src/gnome/glade/account.glade.h:10
 #, fuzzy
 msgid "<b>Contained Accounts</b>"
 msgstr "Gebuchtes Konto"
 
-#: ../src/gnome/glade/account.glade.h:12
+#: ../src/gnome/glade/account.glade.h:11
 #, fuzzy
 msgid "<b>Description</b>"
 msgstr "Beschreibung"
 
-#: ../src/gnome/glade/account.glade.h:13
+#: ../src/gnome/glade/account.glade.h:12
 #, fuzzy
 msgid "<b>Identification</b>"
 msgstr "Identifizierung"
 
-#: ../src/gnome/glade/account.glade.h:14
+#: ../src/gnome/glade/account.glade.h:13
 #, fuzzy
 msgid "<b>New Account Currency</b>"
 msgstr "Standardwährung für neue Konten"
 
-#: ../src/gnome/glade/account.glade.h:15
+#: ../src/gnome/glade/account.glade.h:14
 #, fuzzy
 msgid "<b>Parent Account</b>"
 msgstr "Hauptkonto"
 
-#: ../src/gnome/glade/account.glade.h:16
+#: ../src/gnome/glade/account.glade.h:15
 #, fuzzy
 msgid "Account code:"
 msgstr "Kontonummer:"
 
-#: ../src/gnome/glade/account.glade.h:17
+#: ../src/gnome/glade/account.glade.h:16
 #: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Account name:"
 msgstr "Kontobezeichnung:"
@@ -3787,7 +3790,7 @@ msgstr "Kontobezeichnung:"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
-#: ../src/gnome/glade/account.glade.h:18 ../src/gnome/glade/tax.glade.h:2
+#: ../src/gnome/glade/account.glade.h:17 ../src/gnome/glade/tax.glade.h:2
 #: ../src/gnome/gnc-plugin-page-account-tree.c:315
 #: ../src/gnome-utils/preferences.glade.h:34 ../intl-scm/guile-strings.c:202
 #: ../intl-scm/guile-strings.c:490 ../intl-scm/guile-strings.c:1266
@@ -3798,55 +3801,55 @@ msgstr "Kontobezeichnung:"
 msgid "Accounts"
 msgstr "Konten"
 
-#: ../src/gnome/glade/account.glade.h:19
+#: ../src/gnome/glade/account.glade.h:18
 msgid "Balance Information"
 msgstr "Saldo-Informationen"
 
-#: ../src/gnome/glade/account.glade.h:20
+#: ../src/gnome/glade/account.glade.h:19
 msgid "Balance:"
 msgstr "Saldo:"
 
-#: ../src/gnome/glade/account.glade.h:21
+#: ../src/gnome/glade/account.glade.h:20
 msgid "Choose Currency"
 msgstr "Währung wählen"
 
-#: ../src/gnome/glade/account.glade.h:22
+#: ../src/gnome/glade/account.glade.h:21
 msgid "Choose accounts to create"
 msgstr "Zu erstellende Konten wählen"
 
-#: ../src/gnome/glade/account.glade.h:23
+#: ../src/gnome/glade/account.glade.h:22
 #: ../src/gnome-utils/dialog-options.c:660
 #: ../src/gnome-utils/dialog-options.c:784
 msgid "Clear All"
 msgstr "Keine auswählen"
 
-#: ../src/gnome/glade/account.glade.h:24 ../src/gnome/glade/budget.glade.h:17
+#: ../src/gnome/glade/account.glade.h:23 ../src/gnome/glade/budget.glade.h:16
 #: ../src/gnome/glade/price.glade.h:5
 msgid "Commodity:"
 msgstr "Währung/Aktie:"
 
-#: ../src/gnome/glade/account.glade.h:25 ../src/gnome/glade/price.glade.h:7
-#: ../src/gnome/glade/print.glade.h:13 ../src/gnome/glade/register.glade.h:17
+#: ../src/gnome/glade/account.glade.h:24 ../src/gnome/glade/price.glade.h:7
+#: ../src/gnome/glade/print.glade.h:11 ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/glade/stocks.glade.h:7
 #: ../src/gnome-utils/exchange-dialog.glade.h:3
-#: ../src/gnome-utils/transfer.glade.h:9
+#: ../src/gnome-utils/transfer.glade.h:8
 msgid "Date:"
 msgstr "Datum:"
 
-#: ../src/gnome/glade/account.glade.h:26 ../src/gnome/glade/budget.glade.h:19
-#: ../src/gnome/glade/stocks.glade.h:8 ../src/gnome-utils/transfer.glade.h:10
+#: ../src/gnome/glade/account.glade.h:25 ../src/gnome/glade/budget.glade.h:18
+#: ../src/gnome/glade/stocks.glade.h:8 ../src/gnome-utils/transfer.glade.h:9
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: ../src/gnome/glade/account.glade.h:27
+#: ../src/gnome/glade/account.glade.h:26
 msgid "Detailed Description"
 msgstr "Ausführliche Beschreibung"
 
-#: ../src/gnome/glade/account.glade.h:28
+#: ../src/gnome/glade/account.glade.h:27
 msgid "Enter opening balances"
 msgstr "Anfangsbestände eingeben"
 
-#: ../src/gnome/glade/account.glade.h:29
+#: ../src/gnome/glade/account.glade.h:28
 msgid "Finish Account Setup"
 msgstr "Konteneinrichten fertigstellen"
 
@@ -3861,7 +3864,7 @@ msgstr "Konteneinrichten fertigstellen"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/glade/account.glade.h:30
+#: ../src/gnome/glade/account.glade.h:29
 #: ../src/gnome-utils/preferences.glade.h:65 ../intl-scm/guile-strings.c:206
 #: ../intl-scm/guile-strings.c:494 ../intl-scm/guile-strings.c:516
 #: ../intl-scm/guile-strings.c:524 ../intl-scm/guile-strings.c:688
@@ -3884,7 +3887,7 @@ msgstr "Konteneinrichten fertigstellen"
 msgid "General"
 msgstr "Allgemein"
 
-#: ../src/gnome/glade/account.glade.h:31
+#: ../src/gnome/glade/account.glade.h:30
 #, fuzzy
 msgid ""
 "If you would like an account to have an opening balance, click on the\n"
@@ -3897,7 +3900,7 @@ msgstr ""
 "rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter\n"
 "kann einen Anfangsbestand haben."
 
-#: ../src/gnome/glade/account.glade.h:35
+#: ../src/gnome/glade/account.glade.h:34
 msgid ""
 "If you would like an account to have an opening balance, click on the "
 "account\n"
@@ -3910,36 +3913,36 @@ msgstr ""
 "rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter\n"
 "kann einen Anfangsbestand haben."
 
-#: ../src/gnome/glade/account.glade.h:38
+#: ../src/gnome/glade/account.glade.h:37
 #: ../src/gnome-utils/dialog-account.c:1454
 msgid "New Account"
 msgstr "_Neues Konto"
 
-#: ../src/gnome/glade/account.glade.h:39
+#: ../src/gnome/glade/account.glade.h:38
 msgid "New Account (not implemented)"
 msgstr "Neues Konto (unfertig)"
 
 #. src/scm/help-topics-index.scm
-#: ../src/gnome/glade/account.glade.h:40 ../intl-scm/guile-strings.c:344
+#: ../src/gnome/glade/account.glade.h:39 ../intl-scm/guile-strings.c:344
 msgid "New Account Hierarchy Setup"
 msgstr "Neuen Kontenrahmen erstellen"
 
-#: ../src/gnome/glade/account.glade.h:41
+#: ../src/gnome/glade/account.glade.h:40
 #: ../src/gnome/glade/acctperiod.glade.h:7
 #, fuzzy
 msgid "Notes:"
 msgstr "Bemerkung"
 
-#: ../src/gnome/glade/account.glade.h:43
+#: ../src/gnome/glade/account.glade.h:42
 #: ../src/gnome-utils/gnc-tree-view-account.c:506
 msgid "Placeholder"
 msgstr "Platzhalter"
 
-#: ../src/gnome/glade/account.glade.h:44
+#: ../src/gnome/glade/account.glade.h:43
 msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für neue Konten."
 
-#: ../src/gnome/glade/account.glade.h:45
+#: ../src/gnome/glade/account.glade.h:44
 #, fuzzy
 msgid ""
 "Press `Apply' to create your new accounts.\n"
@@ -3955,24 +3958,24 @@ msgstr ""
 "Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten "
 "zu erstellen."
 
-#: ../src/gnome/glade/account.glade.h:50
+#: ../src/gnome/glade/account.glade.h:49
 #: ../src/import-export/generic-import.glade.h:49
 #: ../src/import-export/qif-import/qif.glade.h:129
 msgid "Select Account"
 msgstr "Konto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:51
-#: ../src/gnome/glade/sched-xact.glade.h:161
+#: ../src/gnome/glade/account.glade.h:50
+#: ../src/gnome/glade/sched-xact.glade.h:160
 #: ../src/gnome-utils/dialog-options.c:654
 #: ../src/gnome-utils/dialog-options.c:778
 msgid "Select All"
 msgstr "Alle auswählen"
 
-#: ../src/gnome/glade/account.glade.h:52
+#: ../src/gnome/glade/account.glade.h:51
 msgid "Select Transfer Account"
 msgstr "Herkunftskonto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:53
+#: ../src/gnome/glade/account.glade.h:52
 msgid ""
 "Select categories that correspond to the ways that you will use GnuCash.  \n"
 "Each category you select will cause several accounts to be created.  \n"
@@ -3984,24 +3987,24 @@ msgstr ""
 "\n"
 "Sie können jederzeit auch später Konten anlegen. "
 
-#: ../src/gnome/glade/account.glade.h:57
+#: ../src/gnome/glade/account.glade.h:56
 #: ../src/import-export/qif-import/qif.glade.h:131
 msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
-#: ../src/gnome/glade/account.glade.h:58
+#: ../src/gnome/glade/account.glade.h:57
 msgid "Smallest Fraction:"
 msgstr "Kleinste Stückelung:"
 
-#: ../src/gnome/glade/account.glade.h:59
+#: ../src/gnome/glade/account.glade.h:58
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr "Kleinste Stückelung, in der diese Währung/Aktie gehandelt werden kann."
 
-#: ../src/gnome/glade/account.glade.h:60 ../src/gnome/glade/tax.glade.h:14
+#: ../src/gnome/glade/account.glade.h:59 ../src/gnome/glade/tax.glade.h:14
 msgid "Tax Related"
 msgstr "Steuerrelevant"
 
-#: ../src/gnome/glade/account.glade.h:61
+#: ../src/gnome/glade/account.glade.h:60
 msgid ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
@@ -4010,7 +4013,7 @@ msgstr ""
 "Dieses Konto dient als Platzhalter in der Kontenhierarchie. Buchungen können "
 "nicht auf dieses Konto gebucht werden, sondern nur auf Unterkonten davon."
 
-#: ../src/gnome/glade/account.glade.h:62
+#: ../src/gnome/glade/account.glade.h:61
 #, fuzzy
 msgid ""
 "This druid will help you create a set of GnuCash accounts for your assets "
@@ -4026,25 +4029,18 @@ msgstr ""
 "Drücken Sie 'Abbrechen', wenn Sie keine neuen Konten erstellen\n"
 "möchten."
 
-#: ../src/gnome/glade/account.glade.h:66
+#: ../src/gnome/glade/account.glade.h:65
 msgid "Transfer Type"
 msgstr "Buchungsart"
 
-#: ../src/gnome/glade/account.glade.h:67
-msgid ""
-"USD\n"
-"GBP\n"
-"EUR"
-msgstr ""
-
-#: ../src/gnome/glade/account.glade.h:70
+#: ../src/gnome/glade/account.glade.h:66
 #, fuzzy
 msgid "Use Commodity Value"
 msgstr ""
 "\n"
 "Währung/Aktie: "
 
-#: ../src/gnome/glade/account.glade.h:71
+#: ../src/gnome/glade/account.glade.h:67
 msgid "Use Opening Balances Equity account"
 msgstr "Benutze Ausgleichskonto für Anfangsbestand"
 
@@ -4093,167 +4089,162 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome/glade/acctperiod.glade.h:16
-#, fuzzy
 msgid "Title:"
-msgstr "Titel"
+msgstr "Titel:"
 
 #: ../src/gnome/glade/acctperiod.glade.h:17
 msgid "xxx"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:1
-msgid "     "
-msgstr ""
-
-#: ../src/gnome/glade/budget.glade.h:3
+#: ../src/gnome/glade/budget.glade.h:2
 #, fuzzy
 msgid "Account Types to Show"
 msgstr "Kontoarten"
 
-#: ../src/gnome/glade/budget.glade.h:4
+#: ../src/gnome/glade/budget.glade.h:3
 msgid "Always use the last day (or day of week) in the month?"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:5
+#: ../src/gnome/glade/budget.glade.h:4
 #, fuzzy
 msgid "Balance Budget"
 msgstr "Bilanz"
 
 #. src/report/standard-reports/budget.scm
-#: ../src/gnome/glade/budget.glade.h:6
+#: ../src/gnome/glade/budget.glade.h:5
 #: ../src/gnome/gnc-plugin-page-budget.c:258 ../intl-scm/guile-strings.c:3216
 #: ../intl-scm/guile-strings.c:3218
 msgid "Budget"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:7
+#: ../src/gnome/glade/budget.glade.h:6
 msgid "Budget Duration:"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:8
+#: ../src/gnome/glade/budget.glade.h:7
 msgid "Budget List"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:9
+#: ../src/gnome/glade/budget.glade.h:8
 #, fuzzy
 msgid "Budget Name"
 msgstr "Kontobezeichnung"
 
-#: ../src/gnome/glade/budget.glade.h:10
+#: ../src/gnome/glade/budget.glade.h:9
 #, fuzzy
 msgid "Budget Periods"
 msgstr "Zahlungsintervalle"
 
-#: ../src/gnome/glade/budget.glade.h:11
+#: ../src/gnome/glade/budget.glade.h:10
 #, fuzzy
 msgid "Budget Setup"
 msgstr "Konten einrichten"
 
-#: ../src/gnome/glade/budget.glade.h:12
+#: ../src/gnome/glade/budget.glade.h:11
 msgid "Budget View"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:13
+#: ../src/gnome/glade/budget.glade.h:12
 msgid "Budget Workbench"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:14
+#: ../src/gnome/glade/budget.glade.h:13
 #, fuzzy
 msgid "Category Information"
 msgstr "Mandanteninformationen"
 
-#: ../src/gnome/glade/budget.glade.h:15
+#: ../src/gnome/glade/budget.glade.h:14
 #, fuzzy
 msgid "Category Setup"
 msgstr "Komplette Einrichtung"
 
-#: ../src/gnome/glade/budget.glade.h:16
+#: ../src/gnome/glade/budget.glade.h:15
 #, fuzzy
 msgid "Category Type"
 msgstr "Einheit"
 
-#: ../src/gnome/glade/budget.glade.h:18
+#: ../src/gnome/glade/budget.glade.h:17
 #, fuzzy
 msgid "Create new Budget"
 msgstr "Eine neue Datei anlegen"
 
-#: ../src/gnome/glade/budget.glade.h:21
+#: ../src/gnome/glade/budget.glade.h:20
 #: ../src/gnome/glade/sched-xact.glade.h:76
 msgid "Every "
 msgstr "Alle "
 
-#: ../src/gnome/glade/budget.glade.h:22
+#: ../src/gnome/glade/budget.glade.h:21
 #, fuzzy
 msgid "Finish Budget"
 msgstr "Fertig"
 
 #. src/scm/help-topics-index.scm
-#: ../src/gnome/glade/budget.glade.h:23 ../intl-scm/guile-strings.c:412
+#: ../src/gnome/glade/budget.glade.h:22 ../intl-scm/guile-strings.c:412
 msgid "General Information"
 msgstr "Allgemeines"
 
-#: ../src/gnome/glade/budget.glade.h:24
+#: ../src/gnome/glade/budget.glade.h:23
 #, fuzzy
 msgid "In Flow"
 msgstr "Cash Flow"
 
-#: ../src/gnome/glade/budget.glade.h:25
+#: ../src/gnome/glade/budget.glade.h:24
 msgid "January 1, 2004"
-msgstr ""
+msgstr "1. Januar 2004"
 
-#: ../src/gnome/glade/budget.glade.h:26
+#: ../src/gnome/glade/budget.glade.h:25
 msgid ""
 "Match the \"day of week\" and \"week of month\"?  (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:27
+#: ../src/gnome/glade/budget.glade.h:26
 msgid "Modify Category"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:28
+#: ../src/gnome/glade/budget.glade.h:27
 #: ../src/gnome/glade/sched-xact.glade.h:115
-#: ../src/report/report-gnome/report.glade.h:13
+#: ../src/report/report-gnome/report.glade.h:12
 msgid "Name:"
 msgstr "Name:"
 
-#: ../src/gnome/glade/budget.glade.h:29 ../src/gnome/gnc-plugin-budget.c:61
+#: ../src/gnome/glade/budget.glade.h:28 ../src/gnome/gnc-plugin-budget.c:61
 #, fuzzy
 msgid "New Budget"
 msgstr "Neuer Wert"
 
-#: ../src/gnome/glade/budget.glade.h:30
+#: ../src/gnome/glade/budget.glade.h:29
 #, fuzzy
 msgid "Number of Periods:"
 msgstr "Anzahl der Zeilen"
 
-#: ../src/gnome/glade/budget.glade.h:31
+#: ../src/gnome/glade/budget.glade.h:30
 msgid ""
 "Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 month"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:32 ../src/gnome/glade/print.glade.h:19
-#: ../src/gnome/glade/sched-xact.glade.h:131
+#: ../src/gnome/glade/budget.glade.h:31 ../src/gnome/glade/print.glade.h:17
+#: ../src/gnome/glade/sched-xact.glade.h:130
 #: ../src/gnome/gnc-plugin-page-account-tree.c:221
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:843
 msgid "Options"
 msgstr "Optionen"
 
-#: ../src/gnome/glade/budget.glade.h:33
+#: ../src/gnome/glade/budget.glade.h:32
 msgid "Outflow"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:34
+#: ../src/gnome/glade/budget.glade.h:33
 msgid "Regenerate From Defaults"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:35
+#: ../src/gnome/glade/budget.glade.h:34
 #, fuzzy
 msgid "Related Accounts:"
 msgstr "Ausgewählte Konten"
 
-#: ../src/gnome/glade/budget.glade.h:36
+#: ../src/gnome/glade/budget.glade.h:35
 msgid ""
 "This druid will help you create a new \n"
 "Budget.\n"
@@ -4266,39 +4257,39 @@ msgid ""
 "You have been warned."
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:45
+#: ../src/gnome/glade/budget.glade.h:44
 #, fuzzy
 msgid "This is Sample2."
 msgstr "Dies ist eine Zahlen Option"
 
-#: ../src/gnome/glade/budget.glade.h:46
+#: ../src/gnome/glade/budget.glade.h:45
 msgid "Track Budget"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:47
-#: ../src/gnome/glade/sched-xact.glade.h:204
+#: ../src/gnome/glade/budget.glade.h:46
+#: ../src/gnome/glade/sched-xact.glade.h:203
 msgid "Value:"
 msgstr "Wert:"
 
-#: ../src/gnome/glade/budget.glade.h:48
+#: ../src/gnome/glade/budget.glade.h:47
 msgid ""
 "Welcome to the first step on the road\n"
 "to financial happiness!"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:50
+#: ../src/gnome/glade/budget.glade.h:49
 msgid "beginning on: "
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:51
+#: ../src/gnome/glade/budget.glade.h:50
 msgid "button1"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:52
+#: ../src/gnome/glade/budget.glade.h:51
 msgid "checkbutton1"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:53
+#: ../src/gnome/glade/budget.glade.h:52
 msgid ""
 "day(s)\n"
 "week(s)\n"
@@ -4306,31 +4297,31 @@ msgid ""
 "year(s)"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:57
+#: ../src/gnome/glade/budget.glade.h:56
 #, fuzzy
 msgid "last of month"
 msgstr "Anfang dieses Monats"
 
-#: ../src/gnome/glade/budget.glade.h:58
-#: ../src/gnome/glade/sched-xact.glade.h:223
+#: ../src/gnome/glade/budget.glade.h:57
+#: ../src/gnome/glade/sched-xact.glade.h:222
 #, fuzzy
 msgid "months"
 msgstr "Monate."
 
-#: ../src/gnome/glade/budget.glade.h:59
+#: ../src/gnome/glade/budget.glade.h:58
 msgid "radiobutton1"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:60
+#: ../src/gnome/glade/budget.glade.h:59
 msgid "same week & day"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:61
+#: ../src/gnome/glade/budget.glade.h:60
 msgid "togglebutton1"
 msgstr ""
 
-#: ../src/gnome/glade/budget.glade.h:62
-#: ../src/gnome/glade/sched-xact.glade.h:228
+#: ../src/gnome/glade/budget.glade.h:61
+#: ../src/gnome/glade/sched-xact.glade.h:227
 #, fuzzy
 msgid "years"
 msgstr "Jahre"
@@ -4382,11 +4373,11 @@ msgstr ""
 msgid "_Export"
 msgstr "_Export"
 
-#: ../src/gnome/glade/commodities.glade.h:2
+#: ../src/gnome/glade/commodities.glade.h:1
 msgid "<span weight=\"bold\">Commodities</span>"
 msgstr ""
 
-#: ../src/gnome/glade/commodities.glade.h:3
+#: ../src/gnome/glade/commodities.glade.h:2
 msgid "Add a new commodity."
 msgstr "Neue Aktie/Währung hinzufügen."
 
@@ -4395,25 +4386,25 @@ msgstr "Neue Aktie/Währung hinzufügen."
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/equity-statement.scm
-#: ../src/gnome/glade/commodities.glade.h:4 ../intl-scm/guile-strings.c:1884
+#: ../src/gnome/glade/commodities.glade.h:3 ../intl-scm/guile-strings.c:1884
 #: ../intl-scm/guile-strings.c:2084 ../intl-scm/guile-strings.c:2340
 #: ../intl-scm/guile-strings.c:2478 ../intl-scm/guile-strings.c:2624
 msgid "Commodities"
 msgstr "Währungen/Aktien"
 
-#: ../src/gnome/glade/commodities.glade.h:5
+#: ../src/gnome/glade/commodities.glade.h:4
 #: ../src/gnome/glade/reconcile.glade.h:8
 #: ../src/gnome/gnc-plugin-page-account-tree.c:220
 #: ../src/gnome/gnc-split-reg.c:2346 ../src/gnome/window-reconcile.c:1417
-#: ../src/report/report-gnome/report.glade.h:8
+#: ../src/report/report-gnome/report.glade.h:7
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: ../src/gnome/glade/commodities.glade.h:6
+#: ../src/gnome/glade/commodities.glade.h:5
 msgid "Remove the current commodity."
 msgstr "Aktuelle Aktie/Währung entfernen."
 
-#: ../src/gnome/glade/commodities.glade.h:7
+#: ../src/gnome/glade/commodities.glade.h:6
 msgid "Show National Currencies"
 msgstr "Nationale Währungen anzeigen"
 
@@ -4423,7 +4414,7 @@ msgstr "Kontenbeschreibung"
 
 #: ../src/gnome/glade/fincalc.glade.h:2
 msgid "Annual"
-msgstr ""
+msgstr "Jährlich"
 
 #: ../src/gnome/glade/fincalc.glade.h:3
 msgid "Beginning of Period Payments"
@@ -4527,7 +4518,7 @@ msgstr "Aktueller Wert"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/gnome/glade/fincalc.glade.h:26
-#: ../src/gnome/glade/sched-xact.glade.h:144 ../intl-scm/guile-strings.c:2932
+#: ../src/gnome/glade/sched-xact.glade.h:143 ../intl-scm/guile-strings.c:2932
 #: ../intl-scm/guile-strings.c:2934
 msgid "Quarterly"
 msgstr "Vierteljährlich"
@@ -4548,7 +4539,7 @@ msgid "Tri-annual"
 msgstr "Dreimal pro Jahr"
 
 #: ../src/gnome/glade/fincalc.glade.h:30
-#: ../src/gnome/glade/sched-xact.glade.h:208
+#: ../src/gnome/glade/sched-xact.glade.h:207
 msgid "Weekly"
 msgstr "Wöchentlich"
 
@@ -4620,7 +4611,6 @@ msgid "Gain/Loss"
 msgstr "Wertzuwachs/Verlust"
 
 #: ../src/gnome/glade/lots.glade.h:17
-#, fuzzy
 msgid "Gains"
 msgstr "Wertzuwachs"
 
@@ -4634,9 +4624,8 @@ msgid "Open a register showing the transactions in this lot"
 msgstr "Kontobuch als Bericht für diesen Buchungssatz öffnen"
 
 #: ../src/gnome/glade/lots.glade.h:22
-#, fuzzy
 msgid "Scrub _Account"
-msgstr "Aktiendepot"
+msgstr ""
 
 #: ../src/gnome/glade/lots.glade.h:23
 msgid "Scrub the highlighted lot"
@@ -4650,9 +4639,8 @@ msgid "Title"
 msgstr "Titel"
 
 #: ../src/gnome/glade/lots.glade.h:26
-#, fuzzy
 msgid "_Scrub"
-msgstr "Zwischen-"
+msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:1
 msgid "1. Update your existing book with the import data"
@@ -4663,7 +4651,7 @@ msgid "2. Ignore the import data, leave original unchanged"
 msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:3
-msgid "3.  Import the data as a NEW object"
+msgid "3. Import the data as a NEW object"
 msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:4
@@ -4709,12 +4697,11 @@ msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:17
 msgid ""
-"The next screen will allow you to resolve\n"
-"any conflicts in merging your new account\n"
-"tree into your current GnuCash file."
+"The next screen will allow you to resolve any conflicts in merging your new "
+"account tree into your current GnuCash file."
 msgstr ""
 
-#: ../src/gnome/glade/merge.glade.h:20
+#: ../src/gnome/glade/merge.glade.h:18
 msgid ""
 "This druid will merge your new hierarchy into the currently open \n"
 "GnuCash file.\n"
@@ -4736,7 +4723,7 @@ msgid ""
 "account types now."
 msgstr ""
 
-#: ../src/gnome/glade/merge.glade.h:38
+#: ../src/gnome/glade/merge.glade.h:36
 msgid ""
 "You have three choices for each collision.\n"
 "The import object can be allowed to overwrite the target - use this to "
@@ -4746,15 +4733,15 @@ msgid ""
 "The import object can be created as a new object in the existing book."
 msgstr ""
 
-#: ../src/gnome/glade/merge.glade.h:42
+#: ../src/gnome/glade/merge.glade.h:40
 msgid "Your new accounts are ready to merge"
 msgstr ""
 
-#: ../src/gnome/glade/merge.glade.h:43
+#: ../src/gnome/glade/merge.glade.h:41
 msgid "ignore the import, leave the original untouched"
 msgstr ""
 
-#: ../src/gnome/glade/merge.glade.h:44
+#: ../src/gnome/glade/merge.glade.h:42
 msgid "overwrite the original with the import data"
 msgstr ""
 
@@ -4803,14 +4790,14 @@ msgstr "Neuen Preis hinzufügen."
 
 #: ../src/gnome/glade/price.glade.h:3
 msgid "Ask"
-msgstr ""
+msgstr "Briefkurs"
 
 #: ../src/gnome/glade/price.glade.h:4
 msgid "Bid"
-msgstr ""
+msgstr "Geldkurs"
 
 #: ../src/gnome/glade/price.glade.h:6 ../src/gnome/glade/stocks.glade.h:6
-#: ../src/gnome-utils/transfer.glade.h:8
+#: ../src/gnome-utils/transfer.glade.h:7
 msgid "Currency:"
 msgstr "Währung:"
 
@@ -4828,9 +4815,8 @@ msgid "Get new online quotes for stock accounts."
 msgstr "Neue Börsenkurse für Aktienkonten online abrufen."
 
 #: ../src/gnome/glade/price.glade.h:11
-#, fuzzy
 msgid "Last"
-msgstr "Darlehen (englisch)"
+msgstr ""
 
 #: ../src/gnome/glade/price.glade.h:12
 #, fuzzy
@@ -4868,120 +4854,111 @@ msgid "Source:"
 msgstr "Quelle:"
 
 #: ../src/gnome/glade/price.glade.h:20
-#: ../src/gnome/glade/sched-xact.glade.h:199
+#: ../src/gnome/glade/sched-xact.glade.h:198
 #: ../src/gnome-utils/commodity.glade.h:21
 msgid "Type:"
 msgstr "Typ:"
 
 #: ../src/gnome/glade/print.glade.h:1
-msgid "                    "
-msgstr "\t\t\t"
-
-#: ../src/gnome/glade/print.glade.h:2
-msgid "                                  "
-msgstr "\t\t\t"
-
-#: ../src/gnome/glade/print.glade.h:3
 msgid "Amount (numbers):"
 msgstr "Betrag (in Zahlen):"
 
-#: ../src/gnome/glade/print.glade.h:4
+#: ../src/gnome/glade/print.glade.h:2
 msgid "Amount (words):"
 msgstr "Betrag (in Worten):"
 
-#: ../src/gnome/glade/print.glade.h:5
+#: ../src/gnome/glade/print.glade.h:3
 #, fuzzy
 msgid "Bottom"
 msgstr "Beides"
 
-#: ../src/gnome/glade/print.glade.h:6
+#: ../src/gnome/glade/print.glade.h:4
 #, fuzzy
 msgid "Centimeters"
 msgstr "Inhalt"
 
-#: ../src/gnome/glade/print.glade.h:7
+#: ../src/gnome/glade/print.glade.h:5
 msgid "Check format:"
 msgstr "Scheckformat:"
 
-#: ../src/gnome/glade/print.glade.h:8
+#: ../src/gnome/glade/print.glade.h:6
 msgid "Check position:"
 msgstr "Scheckposition:"
 
-#: ../src/gnome/glade/print.glade.h:9 ../src/gnome/glade/sched-xact.glade.h:58
+#: ../src/gnome/glade/print.glade.h:7 ../src/gnome/glade/sched-xact.glade.h:58
 #, fuzzy
 msgid "Custom"
 msgstr "Benutzer_definiert"
 
-#: ../src/gnome/glade/print.glade.h:10
+#: ../src/gnome/glade/print.glade.h:8
 msgid "Custom check format"
 msgstr "Benutzerdefiniertes Scheckformat"
 
-#: ../src/gnome/glade/print.glade.h:11
+#: ../src/gnome/glade/print.glade.h:9
 msgid "Custom format"
 msgstr "Benutzerdefiniertes Format"
 
-#: ../src/gnome/glade/print.glade.h:12
-#: ../src/gnome-utils/gnc-date-format.glade.h:4
+#: ../src/gnome/glade/print.glade.h:10
+#: ../src/gnome-utils/gnc-date-format.glade.h:5
 msgid "Date format:"
 msgstr "Datumsformat:"
 
-#: ../src/gnome/glade/print.glade.h:14
+#: ../src/gnome/glade/print.glade.h:12
 msgid "Deluxe(tm) Personal Checks US-Letter"
 msgstr ""
 
-#: ../src/gnome/glade/print.glade.h:15
+#: ../src/gnome/glade/print.glade.h:13
 #, fuzzy
 msgid "Inches"
 msgstr "Rechnungen"
 
-#: ../src/gnome/glade/print.glade.h:16 ../src/gnome/glade/stocks.glade.h:20
-#: ../src/gnome-utils/transfer.glade.h:12
+#: ../src/gnome/glade/print.glade.h:14 ../src/gnome/glade/stocks.glade.h:20
+#: ../src/gnome-utils/transfer.glade.h:11
 msgid "Memo:"
 msgstr "Buchungstext:"
 
-#: ../src/gnome/glade/print.glade.h:17
+#: ../src/gnome/glade/print.glade.h:15
 msgid "Middle"
-msgstr ""
+msgstr "Zentriert"
+
+#: ../src/gnome/glade/print.glade.h:16
+msgid "Millimeters"
+msgstr "Millimeter"
 
 #: ../src/gnome/glade/print.glade.h:18
-msgid "Millimeters"
-msgstr ""
+msgid "Payee:"
+msgstr "Zahlungsempfänger:"
+
+#: ../src/gnome/glade/print.glade.h:19
+msgid "Points"
+msgstr "Punkte"
 
 #: ../src/gnome/glade/print.glade.h:20
-msgid "Payee:"
-msgstr "Zahlungsempfänger"
-
-#: ../src/gnome/glade/print.glade.h:21
-#, fuzzy
-msgid "Points"
-msgstr "Gewinn"
-
-#: ../src/gnome/glade/print.glade.h:22
 msgid "Print Check"
 msgstr "Scheck drucken"
 
-#: ../src/gnome/glade/print.glade.h:23
+#: ../src/gnome/glade/print.glade.h:21
 msgid "Quicken(tm) Wallet Checks w/ side stub\n"
 msgstr ""
 
-#: ../src/gnome/glade/print.glade.h:25
+#: ../src/gnome/glade/print.glade.h:23
 msgid "Quicken/QuickBooks (tm) US-Letter"
 msgstr ""
 
-#: ../src/gnome/glade/print.glade.h:26
+#: ../src/gnome/glade/print.glade.h:24
 #, fuzzy
 msgid "Top"
 msgstr "Bis"
 
-#: ../src/gnome/glade/print.glade.h:27
+#: ../src/gnome/glade/print.glade.h:25
 msgid "Units:"
 msgstr "Maßeinheiten:"
 
-#: ../src/gnome/glade/print.glade.h:28
+#: ../src/gnome/glade/print.glade.h:26
 msgid "x"
 msgstr "x"
 
-#: ../src/gnome/glade/print.glade.h:29
+#: ../src/gnome/glade/print.glade.h:27
 msgid "y"
 msgstr "y"
 
@@ -5051,9 +5028,8 @@ msgid "Include Subaccounts"
 msgstr "Unterkonten mit einbeziehen"
 
 #: ../src/gnome/glade/reconcile.glade.h:15
-#, fuzzy
 msgid "New File"
-msgstr "_Neue Datei"
+msgstr "Neue Datei"
 
 #: ../src/gnome/glade/reconcile.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:219
@@ -5271,7 +5247,7 @@ msgid "N_otes"
 msgstr "Bemerkung"
 
 #: ../src/gnome/glade/register.glade.h:41
-#: ../src/gnome-utils/transfer.glade.h:13
+#: ../src/gnome-utils/transfer.glade.h:12
 msgid "Num:"
 msgstr "Nummer:"
 
@@ -5315,7 +5291,7 @@ msgstr "Buchungsteile entfernen"
 #. src/scm/help-topics-index.scm
 #. src/report/report-gnome/report-gnome.scm
 #: ../src/gnome/glade/register.glade.h:50
-#: ../src/report/report-gnome/report.glade.h:16
+#: ../src/report/report-gnome/report.glade.h:15
 #: ../intl-scm/guile-strings.c:386 ../intl-scm/guile-strings.c:1364
 msgid "Report"
 msgstr "Bericht"
@@ -5605,116 +5581,115 @@ msgstr "... Treuhandkonto für Zahlungen verwenden?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:6
 msgid "10th"
-msgstr ""
+msgstr "10."
 
 #: ../src/gnome/glade/sched-xact.glade.h:7
 msgid "11th"
-msgstr ""
+msgstr "11."
 
 #: ../src/gnome/glade/sched-xact.glade.h:8
 msgid "12th"
-msgstr ""
+msgstr "12."
 
 #: ../src/gnome/glade/sched-xact.glade.h:9
 msgid "13th"
-msgstr ""
+msgstr "13."
 
 #: ../src/gnome/glade/sched-xact.glade.h:10
 msgid "14th"
-msgstr ""
+msgstr "14."
 
 #: ../src/gnome/glade/sched-xact.glade.h:11
 msgid "15th"
-msgstr ""
+msgstr "15."
 
 #: ../src/gnome/glade/sched-xact.glade.h:12
 msgid "16th"
-msgstr ""
+msgstr "16."
 
 #: ../src/gnome/glade/sched-xact.glade.h:13
 msgid "17th"
-msgstr ""
+msgstr "17."
 
 #: ../src/gnome/glade/sched-xact.glade.h:14
 msgid "18th"
-msgstr ""
+msgstr "18."
 
 #: ../src/gnome/glade/sched-xact.glade.h:15
 msgid "19th"
-msgstr ""
+msgstr "19."
 
 #: ../src/gnome/glade/sched-xact.glade.h:16
 msgid "1st"
-msgstr ""
+msgstr "1."
 
 #: ../src/gnome/glade/sched-xact.glade.h:17
 msgid "20th"
-msgstr ""
+msgstr "20."
 
 #: ../src/gnome/glade/sched-xact.glade.h:18
 msgid "21st"
-msgstr ""
+msgstr "21."
 
 #: ../src/gnome/glade/sched-xact.glade.h:19
 msgid "22nd"
-msgstr ""
+msgstr "22."
 
 #: ../src/gnome/glade/sched-xact.glade.h:20
 msgid "23rd"
-msgstr ""
+msgstr "23."
 
 #: ../src/gnome/glade/sched-xact.glade.h:21
 msgid "24th"
-msgstr ""
+msgstr "24."
 
 #: ../src/gnome/glade/sched-xact.glade.h:22
 msgid "25th"
-msgstr ""
+msgstr "25."
 
 #: ../src/gnome/glade/sched-xact.glade.h:23
 msgid "26th"
-msgstr ""
+msgstr "26."
 
 #: ../src/gnome/glade/sched-xact.glade.h:24
 msgid "27th"
-msgstr ""
+msgstr "27."
 
 #: ../src/gnome/glade/sched-xact.glade.h:25
 msgid "28th"
-msgstr ""
+msgstr "28."
 
 #: ../src/gnome/glade/sched-xact.glade.h:26
-#, fuzzy
 msgid "2nd"
-msgstr "und"
+msgstr "2."
 
 #: ../src/gnome/glade/sched-xact.glade.h:27
 msgid "3rd"
-msgstr ""
+msgstr "3."
 
 #: ../src/gnome/glade/sched-xact.glade.h:28
 msgid "4th"
-msgstr ""
+msgstr "4."
 
 #: ../src/gnome/glade/sched-xact.glade.h:29
 msgid "5th"
-msgstr ""
+msgstr "5."
 
 #: ../src/gnome/glade/sched-xact.glade.h:30
 msgid "6th"
-msgstr ""
+msgstr "6."
 
 #: ../src/gnome/glade/sched-xact.glade.h:31
 msgid "7th"
-msgstr ""
+msgstr "7."
 
 #: ../src/gnome/glade/sched-xact.glade.h:32
 msgid "8th"
-msgstr ""
+msgstr "8."
 
 #: ../src/gnome/glade/sched-xact.glade.h:33
 msgid "9th"
-msgstr ""
+msgstr "9."
 
 #: ../src/gnome/glade/sched-xact.glade.h:34
 #, fuzzy
@@ -5722,9 +5697,8 @@ msgid "<b>Since Last Run Dialog</b>"
 msgstr "Seit-letztem-Aufruf Fenster"
 
 #: ../src/gnome/glade/sched-xact.glade.h:35
-#, fuzzy
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr "Vollständig"
+msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:36
 msgid "Advanced..."
@@ -5732,25 +5706,25 @@ msgstr "Erweitert..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:37
 #: ../src/gnome-utils/exchange-dialog.glade.h:2
-#: ../src/gnome-utils/transfer.glade.h:7
+#: ../src/gnome-utils/transfer.glade.h:6
 msgid "Amount:"
 msgstr "Betrag:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:38
 msgid "Apr, Jul, Dec"
-msgstr ""
+msgstr "Apr, Jul, Dez"
 
 #: ../src/gnome/glade/sched-xact.glade.h:39
 msgid "Apr, Oct"
-msgstr ""
+msgstr "Apr, Okt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:40
 msgid "April"
-msgstr ""
+msgstr "April"
 
 #: ../src/gnome/glade/sched-xact.glade.h:41
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: ../src/gnome/glade/sched-xact.glade.h:42
 msgid "Auto-Created Transactions Notification"
@@ -5815,9 +5789,8 @@ msgid "Creation State"
 msgstr "Erstellen Status"
 
 #: ../src/gnome/glade/sched-xact.glade.h:57
-#, fuzzy
 msgid "Current Year"
-msgstr "Ende dieses Jahres"
+msgstr "Dieses Jahr"
 
 #: ../src/gnome/glade/sched-xact.glade.h:60
 msgid "Daily [M-F]"
@@ -5839,9 +5812,8 @@ msgid "Days Away"
 msgstr "Tage in der Zukunft"
 
 #: ../src/gnome/glade/sched-xact.glade.h:65
-#, fuzzy
 msgid "December"
-msgstr "Abnahme"
+msgstr "Dezember"
 
 #: ../src/gnome/glade/sched-xact.glade.h:66
 msgid "Disposition?"
@@ -5885,19 +5857,19 @@ msgstr "Alle"
 
 #: ../src/gnome/glade/sched-xact.glade.h:77
 msgid "Feb, Apr, Oct"
-msgstr ""
+msgstr "Feb, Apr, Okt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:78
 msgid "Feb, Aug"
-msgstr ""
+msgstr "Feb, Aug"
 
 #: ../src/gnome/glade/sched-xact.glade.h:79
 msgid "Feb, May, Aug, Nov"
-msgstr ""
+msgstr "Feb, Mai, Aug, Nov"
 
 #: ../src/gnome/glade/sched-xact.glade.h:80
 msgid "February"
-msgstr ""
+msgstr "Februar"
 
 #: ../src/gnome/glade/sched-xact.glade.h:81
 msgid "First on the:"
@@ -5935,31 +5907,31 @@ msgstr "Zinsen nach:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:89
 msgid "Jan, Apr, Jul, Oct"
-msgstr ""
+msgstr "Jan, Apr, Jul, Okt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:90
 msgid "Jan, Jul"
-msgstr ""
+msgstr "Jan, Jul"
 
 #: ../src/gnome/glade/sched-xact.glade.h:91
 msgid "Jan, May, Sep"
-msgstr ""
+msgstr "Jan, Mai, Sep"
 
 #: ../src/gnome/glade/sched-xact.glade.h:92
 msgid "January"
-msgstr ""
+msgstr "Januar"
 
 #: ../src/gnome/glade/sched-xact.glade.h:93
 msgid "July"
-msgstr ""
+msgstr "Juli"
 
 #: ../src/gnome/glade/sched-xact.glade.h:94
 msgid "Jun, Dec"
-msgstr ""
+msgstr "Jun, Dez"
 
 #: ../src/gnome/glade/sched-xact.glade.h:95
 msgid "June"
-msgstr ""
+msgstr "Juni"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "Last Occurred: "
@@ -5987,29 +5959,27 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:102
 msgid "Mar, Jun, Nov"
-msgstr ""
+msgstr "Mar, Jun, Nov"
 
 #: ../src/gnome/glade/sched-xact.glade.h:103
 msgid "Mar, Jun, Sep, Dec"
-msgstr ""
+msgstr "Mar, Jun, Sep, Dez"
 
 #: ../src/gnome/glade/sched-xact.glade.h:104
 msgid "Mar, Sep"
-msgstr ""
+msgstr "Mar, Sep"
 
 #: ../src/gnome/glade/sched-xact.glade.h:105
-#, fuzzy
 msgid "March"
-msgstr "Suchen"
+msgstr "März"
 
 #: ../src/gnome/glade/sched-xact.glade.h:106
-#, fuzzy
 msgid "May"
-msgstr "Tag"
+msgstr "Mai"
 
 #: ../src/gnome/glade/sched-xact.glade.h:107
 msgid "May, Nov"
-msgstr ""
+msgstr "Mai, Nov"
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:108 ../intl-scm/guile-strings.c:3348
@@ -6051,235 +6021,227 @@ msgid "Notify me when created"
 msgstr "Bei Erstellung benachrichtigen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:122
-#, fuzzy
 msgid "November"
-msgstr "Nummer"
+msgstr "November"
 
 #: ../src/gnome/glade/sched-xact.glade.h:123
-#, fuzzy
 msgid "Now + 1 Year"
-msgstr "7/1 ARM"
+msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:124
-#, fuzzy
-msgid "Number of Occurences:"
-msgstr "Anzahl des Auftretens:"
-
-#: ../src/gnome/glade/sched-xact.glade.h:125
 msgid "Number of Occurrences:"
 msgstr "Anzahl des Auftretens:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:126
+#: ../src/gnome/glade/sched-xact.glade.h:125
 msgid "Obsolete Scheduled Transactions"
 msgstr "Terminierte Buchung löschen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:127
+#: ../src/gnome/glade/sched-xact.glade.h:126
 msgid "Occuring in"
 msgstr "In den Monaten"
 
-#: ../src/gnome/glade/sched-xact.glade.h:128
-#, fuzzy
+#: ../src/gnome/glade/sched-xact.glade.h:127
 msgid "October"
-msgstr "Weitere"
+msgstr "Oktober"
 
-#: ../src/gnome/glade/sched-xact.glade.h:129
+#: ../src/gnome/glade/sched-xact.glade.h:128
 msgid "On the"
 msgstr "Am"
 
-#: ../src/gnome/glade/sched-xact.glade.h:130
+#: ../src/gnome/glade/sched-xact.glade.h:129
 msgid "Once"
 msgstr "Einmal"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/account-piecharts.scm
-#: ../src/gnome/glade/sched-xact.glade.h:132 ../intl-scm/guile-strings.c:2224
+#: ../src/gnome/glade/sched-xact.glade.h:131 ../intl-scm/guile-strings.c:2224
 #: ../intl-scm/guile-strings.c:3420
 msgid "Other"
 msgstr "Weitere"
 
-#: ../src/gnome/glade/sched-xact.glade.h:133
+#: ../src/gnome/glade/sched-xact.glade.h:132
 msgid "Part of Payment Transaction"
 msgstr "Teil einer Zahlung"
 
-#: ../src/gnome/glade/sched-xact.glade.h:134
+#: ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Payment Frequency"
 msgstr "Zahlungshäufigkeit"
 
-#: ../src/gnome/glade/sched-xact.glade.h:135
+#: ../src/gnome/glade/sched-xact.glade.h:134
 msgid "Payment From (Escrow):"
 msgstr "Zahlung von (Treuhandkonto):"
 
-#: ../src/gnome/glade/sched-xact.glade.h:136
+#: ../src/gnome/glade/sched-xact.glade.h:135
 msgid "Payment From:"
 msgstr "Zahlung von:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:137
+#: ../src/gnome/glade/sched-xact.glade.h:136
 msgid "Payment To (Escrow):"
 msgstr "Zahlung an (Treuhandkonto):"
 
-#: ../src/gnome/glade/sched-xact.glade.h:138
+#: ../src/gnome/glade/sched-xact.glade.h:137
 msgid "Payment To:"
 msgstr "Zahlung an:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:139
+#: ../src/gnome/glade/sched-xact.glade.h:138
 msgid "Postpone"
 msgstr "Verschieben"
 
-#: ../src/gnome/glade/sched-xact.glade.h:141
+#: ../src/gnome/glade/sched-xact.glade.h:140
 msgid "Press apply to commit these changes."
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:142
+#: ../src/gnome/glade/sched-xact.glade.h:141
 #, fuzzy
 msgid "Press apply to create these transactions."
 msgstr "Schritt 2: Buchungszuordnung erstellen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:143
+#: ../src/gnome/glade/sched-xact.glade.h:142
 msgid "Principal To:"
 msgstr "Endbetrag Kapital an:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:145
+#: ../src/gnome/glade/sched-xact.glade.h:144
 msgid "REPLACEME with the Register control box"
 msgstr "REPLACEME with the Register control box"
 
-#: ../src/gnome/glade/sched-xact.glade.h:146
+#: ../src/gnome/glade/sched-xact.glade.h:145
 msgid "R_emind in advance, days:"
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:147
+#: ../src/gnome/glade/sched-xact.glade.h:146
 msgid "Range: "
 msgstr "Bereich: "
 
-#: ../src/gnome/glade/sched-xact.glade.h:148
+#: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "Record"
 msgstr "Speichern"
 
-#: ../src/gnome/glade/sched-xact.glade.h:149
+#: ../src/gnome/glade/sched-xact.glade.h:148
 msgid "Recurrence Frequency"
 msgstr "Häufigkeit"
 
-#: ../src/gnome/glade/sched-xact.glade.h:150
+#: ../src/gnome/glade/sched-xact.glade.h:149
 #, fuzzy
 msgid "Register _lines"
 msgstr "Kontobuch Farben"
 
-#: ../src/gnome/glade/sched-xact.glade.h:151
+#: ../src/gnome/glade/sched-xact.glade.h:150
 msgid "Remaining Occurrences:"
 msgstr "Verbleibendes Auftreten:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:152
+#: ../src/gnome/glade/sched-xact.glade.h:151
 #, fuzzy
 msgid "Remind in advance:"
 msgstr " Tage im voraus"
 
-#: ../src/gnome/glade/sched-xact.glade.h:153
+#: ../src/gnome/glade/sched-xact.glade.h:152
 msgid "Remind me "
 msgstr "Erinnern "
 
-#: ../src/gnome/glade/sched-xact.glade.h:154
+#: ../src/gnome/glade/sched-xact.glade.h:153
 msgid "Repayment"
 msgstr "Tilgung"
 
-#: ../src/gnome/glade/sched-xact.glade.h:155
+#: ../src/gnome/glade/sched-xact.glade.h:154
 msgid "Repayment Frequency"
 msgstr "Tilgungshäufigkeit"
 
-#: ../src/gnome/glade/sched-xact.glade.h:156
+#: ../src/gnome/glade/sched-xact.glade.h:155
 #, fuzzy
 msgid "Repayment Type"
 msgstr "<Tilgungsart>"
 
-#: ../src/gnome/glade/sched-xact.glade.h:157
+#: ../src/gnome/glade/sched-xact.glade.h:156
 msgid "Review"
 msgstr "Kontrolle"
 
 #. src/report/standard-reports/daily-reports.scm
-#: ../src/gnome/glade/sched-xact.glade.h:158 ../intl-scm/guile-strings.c:3358
+#: ../src/gnome/glade/sched-xact.glade.h:157 ../intl-scm/guile-strings.c:3358
 msgid "Saturday"
 msgstr "Samstag"
 
-#: ../src/gnome/glade/sched-xact.glade.h:159
+#: ../src/gnome/glade/sched-xact.glade.h:158
 msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung"
 
 #. src/scm/help-topics-index.scm
-#: ../src/gnome/glade/sched-xact.glade.h:160 ../intl-scm/guile-strings.c:218
+#: ../src/gnome/glade/sched-xact.glade.h:159 ../intl-scm/guile-strings.c:218
 #: ../intl-scm/guile-strings.c:506
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:162
+#: ../src/gnome/glade/sched-xact.glade.h:161
 msgid "Select initial date, above."
 msgstr "Wählen Sie oben ein Anfangsdatum."
 
-#: ../src/gnome/glade/sched-xact.glade.h:163
+#: ../src/gnome/glade/sched-xact.glade.h:162
 msgid "Select occurrence date above."
 msgstr "Wählen Sie oben ein Datum des Auftretens."
 
-#: ../src/gnome/glade/sched-xact.glade.h:164
+#: ../src/gnome/glade/sched-xact.glade.h:163
 msgid "Semi-Monthly"
 msgstr "Halbmonatlich"
 
-#: ../src/gnome/glade/sched-xact.glade.h:165
+#: ../src/gnome/glade/sched-xact.glade.h:164
 msgid "Semi-Yearly"
 msgstr "Halbjährlich"
 
-#: ../src/gnome/glade/sched-xact.glade.h:166
+#: ../src/gnome/glade/sched-xact.glade.h:165
 msgid "September"
-msgstr ""
+msgstr "September"
 
-#: ../src/gnome/glade/sched-xact.glade.h:167
+#: ../src/gnome/glade/sched-xact.glade.h:166
 #, fuzzy
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr "Benachrichtigen bei automatischer Erstellung"
 
-#: ../src/gnome/glade/sched-xact.glade.h:168
+#: ../src/gnome/glade/sched-xact.glade.h:167
 #, fuzzy
 msgid "Set the 'notify' flag on newly created scheduled transactions."
 msgstr "Benachrichtigen bei automatischer Erstellung"
 
-#: ../src/gnome/glade/sched-xact.glade.h:169
+#: ../src/gnome/glade/sched-xact.glade.h:168
 msgid "Show the \"since last run\" window when a file is opened."
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:170
+#: ../src/gnome/glade/sched-xact.glade.h:169
 msgid "Since Last Run"
 msgstr "Seit letztem Aufruf"
 
-#: ../src/gnome/glade/sched-xact.glade.h:171
+#: ../src/gnome/glade/sched-xact.glade.h:170
 msgid "Specify Source Account"
 msgstr "Herkunftskonto auswählen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:172
+#: ../src/gnome/glade/sched-xact.glade.h:171
 msgid "Start Date:"
 msgstr "Anfangsdatum:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:173
+#: ../src/gnome/glade/sched-xact.glade.h:172
 msgid "Start Date: "
 msgstr "Anfangsdatum: "
 
-#: ../src/gnome/glade/sched-xact.glade.h:174
+#: ../src/gnome/glade/sched-xact.glade.h:173
 msgid "State"
 msgstr "Status"
 
 #. src/report/standard-reports/daily-reports.scm
-#: ../src/gnome/glade/sched-xact.glade.h:175 ../intl-scm/guile-strings.c:3346
+#: ../src/gnome/glade/sched-xact.glade.h:174 ../intl-scm/guile-strings.c:3346
 msgid "Sunday"
 msgstr "Sonntag"
 
-#: ../src/gnome/glade/sched-xact.glade.h:176
+#: ../src/gnome/glade/sched-xact.glade.h:175
 msgid "Template Transaction"
 msgstr "Buchungsvorlage"
 
-#: ../src/gnome/glade/sched-xact.glade.h:177
+#: ../src/gnome/glade/sched-xact.glade.h:176
 msgid "Template Transaction (Read-Only)"
 msgstr "Buchungsvorlage (schreibgeschützt)"
 
-#: ../src/gnome/glade/sched-xact.glade.h:178
+#: ../src/gnome/glade/sched-xact.glade.h:177
 msgid "Template Transactions"
 msgstr "Buchungsvorlagen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:179
+#: ../src/gnome/glade/sched-xact.glade.h:178
 msgid ""
 "The following scheduled transactions have expired.\n"
 "Select those you wish to delete."
@@ -6287,7 +6249,7 @@ msgstr ""
 "Die folgenden terminierten Buchungen sind abgelaufen.\n"
 "Bitte wählen Sie jene, die Sie löschen möchten."
 
-#: ../src/gnome/glade/sched-xact.glade.h:181
+#: ../src/gnome/glade/sched-xact.glade.h:180
 msgid ""
 "The listed Scheduled Transactions are to-be created soon. \n"
 "Select any which you would like to create now, and click\n"
@@ -6297,13 +6259,13 @@ msgstr ""
 "werden. Wählen Sie jene, die jetzt erstellt werden sollen, und klicken\n"
 "Sie \"Weiter\", um Sie jetzt erstellen zu lassen."
 
-#: ../src/gnome/glade/sched-xact.glade.h:184
+#: ../src/gnome/glade/sched-xact.glade.h:183
 msgid ""
 "This druid will walk you through any scheduled transactions that should be "
 "created."
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:185
+#: ../src/gnome/glade/sched-xact.glade.h:184
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup\n"
 "within GnuCash.  In this Druid, you can input the parameters of\n"
@@ -6323,130 +6285,129 @@ msgstr ""
 "Wenn Sie einen Irrtum machen oder später Änderungen machen möchten,\n"
 "können Sie die erstellte Terminierte Buchung direkt ändern."
 
-#: ../src/gnome/glade/sched-xact.glade.h:193
+#: ../src/gnome/glade/sched-xact.glade.h:192
 msgid "This window should never be realized."
 msgstr "Dieses Fenster sollte nie erscheinen."
 
 #. src/report/standard-reports/daily-reports.scm
-#: ../src/gnome/glade/sched-xact.glade.h:194 ../intl-scm/guile-strings.c:3354
+#: ../src/gnome/glade/sched-xact.glade.h:193 ../intl-scm/guile-strings.c:3354
 msgid "Thursday"
 msgstr "Donnerstag"
 
-#: ../src/gnome/glade/sched-xact.glade.h:195
+#: ../src/gnome/glade/sched-xact.glade.h:194
 msgid "To-Create Transaction Preparation"
 msgstr "Vorbereitung der zu erstellenden Buchungen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:196
+#: ../src/gnome/glade/sched-xact.glade.h:195
 msgid "Transaction Reminders"
 msgstr "Buchungserinnerungen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:197
+#: ../src/gnome/glade/sched-xact.glade.h:196
 msgid "Tri-Yearly"
 msgstr "Dreimal pro Jahr"
 
 #. src/report/standard-reports/daily-reports.scm
-#: ../src/gnome/glade/sched-xact.glade.h:198 ../intl-scm/guile-strings.c:3350
+#: ../src/gnome/glade/sched-xact.glade.h:197 ../intl-scm/guile-strings.c:3350
 msgid "Tuesday"
 msgstr "Dienstag"
 
-#: ../src/gnome/glade/sched-xact.glade.h:200
+#: ../src/gnome/glade/sched-xact.glade.h:199
 msgid "Unselect All"
 msgstr "Keine auswählen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:201
+#: ../src/gnome/glade/sched-xact.glade.h:200
 msgid "Upcoming"
 msgstr "Geplante Terminierte Buchungen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:202
+#: ../src/gnome/glade/sched-xact.glade.h:201
 msgid "Use Escrow Account"
 msgstr "Treuhandkonto benutzen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:205
+#: ../src/gnome/glade/sched-xact.glade.h:204
 msgid "Variable"
 msgstr "Variable"
 
-#: ../src/gnome/glade/sched-xact.glade.h:206
+#: ../src/gnome/glade/sched-xact.glade.h:205
 msgid "Variables"
 msgstr "Variablen"
 
 #. src/report/standard-reports/daily-reports.scm
-#: ../src/gnome/glade/sched-xact.glade.h:207 ../intl-scm/guile-strings.c:3352
+#: ../src/gnome/glade/sched-xact.glade.h:206 ../intl-scm/guile-strings.c:3352
 msgid "Wednesday"
 msgstr "Mittwoch"
 
-#: ../src/gnome/glade/sched-xact.glade.h:209
+#: ../src/gnome/glade/sched-xact.glade.h:208
 msgid "What to do, what to do?"
 msgstr "Was ist zu tun?"
 
-#: ../src/gnome/glade/sched-xact.glade.h:210
+#: ../src/gnome/glade/sched-xact.glade.h:209
 msgid "Whole Loan"
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:211
+#: ../src/gnome/glade/sched-xact.glade.h:210
 msgid "YYYY-MM-DD"
 msgstr "JJJJ-MM-TT"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome/glade/sched-xact.glade.h:212 ../intl-scm/guile-strings.c:2936
+#: ../src/gnome/glade/sched-xact.glade.h:211 ../intl-scm/guile-strings.c:2936
 #: ../intl-scm/guile-strings.c:2938
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: ../src/gnome/glade/sched-xact.glade.h:213
+#: ../src/gnome/glade/sched-xact.glade.h:212
 msgid "[29th/last]"
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:214
+#: ../src/gnome/glade/sched-xact.glade.h:213
 msgid "[30th/last]"
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:215
+#: ../src/gnome/glade/sched-xact.glade.h:214
 msgid "[31st/last]"
 msgstr ""
 
-#: ../src/gnome/glade/sched-xact.glade.h:216
+#: ../src/gnome/glade/sched-xact.glade.h:215
 #, fuzzy
 msgid "_Auto-create new transactions"
 msgstr "Buchungen erstellen..."
 
-#: ../src/gnome/glade/sched-xact.glade.h:218
+#: ../src/gnome/glade/sched-xact.glade.h:217
 #, fuzzy
 msgid "_Notify before transactions are created "
 msgstr "Einige Buchungen sind eventuell verworfen worden."
 
-#: ../src/gnome/glade/sched-xact.glade.h:219
+#: ../src/gnome/glade/sched-xact.glade.h:218
 #, fuzzy
 msgid "_Run when data file opened"
 msgstr "Letzte geöffnete Datei nicht öffnen"
 
-#: ../src/gnome/glade/sched-xact.glade.h:220
+#: ../src/gnome/glade/sched-xact.glade.h:219
 #: ../src/gnome-utils/preferences.glade.h:151
-#, fuzzy
 msgid "days"
-msgstr "Tage."
+msgstr "Tage"
 
-#: ../src/gnome/glade/sched-xact.glade.h:221
+#: ../src/gnome/glade/sched-xact.glade.h:220
 msgid "days."
 msgstr "Tage."
 
-#: ../src/gnome/glade/sched-xact.glade.h:222
+#: ../src/gnome/glade/sched-xact.glade.h:221
 #, fuzzy
 msgid "lines"
 msgstr "Online"
 
-#: ../src/gnome/glade/sched-xact.glade.h:224
+#: ../src/gnome/glade/sched-xact.glade.h:223
 msgid "months."
 msgstr "Monate."
 
-#: ../src/gnome/glade/sched-xact.glade.h:225
+#: ../src/gnome/glade/sched-xact.glade.h:224
 msgid "then on the:"
 msgstr "dann am:"
 
-#: ../src/gnome/glade/sched-xact.glade.h:226
+#: ../src/gnome/glade/sched-xact.glade.h:225
 msgid "weeks."
 msgstr "Wochen."
 
-#: ../src/gnome/glade/sched-xact.glade.h:227
+#: ../src/gnome/glade/sched-xact.glade.h:226
 msgid "year(s)."
 msgstr "Jahre."
 
@@ -6579,16 +6540,16 @@ msgstr "TXF Kategorien"
 msgid "Tax Information"
 msgstr "Steuerrelevante Information"
 
-#: ../src/gnome/glade/totd.glade.h:2
+#: ../src/gnome/glade/totd.glade.h:1
 msgid "<span weight=\"bold\">Tip of the Day:</span>"
 msgstr ""
 
-#: ../src/gnome/glade/totd.glade.h:3
+#: ../src/gnome/glade/totd.glade.h:2
 #, fuzzy
 msgid "Gnucash Tip Of The Day"
 msgstr "_Tipp des Tages"
 
-#: ../src/gnome/glade/totd.glade.h:4
+#: ../src/gnome/glade/totd.glade.h:3
 msgid ""
 "Warning This is a DEVELOPMENT version of GnuCash. It probably has lots of "
 "bugs and unstable features!\n"
@@ -6596,7 +6557,7 @@ msgid ""
 "the latest release of GnuCash 1.8"
 msgstr ""
 
-#: ../src/gnome/glade/totd.glade.h:6
+#: ../src/gnome/glade/totd.glade.h:5
 msgid "_Show tips at startup"
 msgstr ""
 
@@ -6643,9 +6604,8 @@ msgid "_Open..."
 msgstr "Öffnen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:86
-#, fuzzy
 msgid "_Save"
-msgstr "Speichern"
+msgstr "_Speichern"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:89
 msgid "Save _As..."
@@ -8078,7 +8038,7 @@ msgstr "Soll Betrag:"
 
 #: ../src/gnome-utils/dialog-transfer.c:1808
 #: ../src/gnome-utils/exchange-dialog.glade.h:8
-#: ../src/gnome-utils/transfer.glade.h:15
+#: ../src/gnome-utils/transfer.glade.h:14
 msgid "To Amount:"
 msgstr "zum Betrag:"
 
@@ -8295,7 +8255,7 @@ msgid "labe82l7"
 msgstr "label827"
 
 #: ../src/gnome-utils/exchange-dialog.glade.h:4
-#: ../src/gnome-utils/transfer.glade.h:11
+#: ../src/gnome-utils/transfer.glade.h:10
 msgid "Exchange Rate:"
 msgstr "Wechselkurs:"
 
@@ -8348,27 +8308,32 @@ msgstr "Kalender"
 msgid "%Y-%m-%d"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-date-format.glade.h:5
+#: ../src/gnome-utils/gnc-date-format.glade.h:4
+msgid "Abbreviation"
+msgstr "Abkürzung"
+
+#: ../src/gnome-utils/gnc-date-format.glade.h:6
 msgid "December 31, 2000"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-date-format.glade.h:6
-#: ../src/import-export/generic-import.glade.h:34
-#, fuzzy
-msgid "Format:"
-msgstr "Formular"
-
 #: ../src/gnome-utils/gnc-date-format.glade.h:7
-#, fuzzy
-msgid "Months:"
-msgstr "Monate"
+#: ../src/import-export/generic-import.glade.h:34
+msgid "Format:"
+msgstr "Format:"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:8
-#, fuzzy
-msgid "Sample:"
-msgstr "sample:X"
+msgid "Include Century"
+msgstr ""
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:9
+msgid "Months:"
+msgstr "Monate:"
+
+#: ../src/gnome-utils/gnc-date-format.glade.h:12
+msgid "Sample:"
+msgstr "Beispiel:"
+
+#: ../src/gnome-utils/gnc-date-format.glade.h:13
 msgid ""
 "US (12/31/2001)\n"
 "UK (31/12/2001)\n"
@@ -8379,29 +8344,9 @@ msgid ""
 "Custom\n"
 msgstr ""
 
-#: ../src/gnome-utils/gnc-date-format.glade.h:17
-#, fuzzy
-msgid "Years:"
-msgstr "Jahre"
-
-#: ../src/gnome-utils/gnc-date-format.glade.h:18
-#, fuzzy
-msgid "abbreviation"
-msgstr "Symbol/Abkürzung:"
-
-#: ../src/gnome-utils/gnc-date-format.glade.h:19
-msgid "include century"
-msgstr ""
-
-#: ../src/gnome-utils/gnc-date-format.glade.h:20
-#, fuzzy
-msgid "name"
-msgstr "Name"
-
 #: ../src/gnome-utils/gnc-date-format.glade.h:21
-#, fuzzy
-msgid "number"
-msgstr "Nummer"
+msgid "Years:"
+msgstr "Jahre:"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -8657,7 +8602,10 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:326
 #, c-format
-msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
+msgid ""
+"The selected file \n"
+"  %s\n"
+" is a QSF map and cannot be opened as a QSF object."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:332
@@ -8665,15 +8613,15 @@ msgstr ""
 msgid ""
 "When converting XML strings into numbers, an overflow has been detected. The "
 "QSF object file\n"
-"%s\n"
-" contains invalid data in a field that is meant to hold a number."
+"  %s\n"
+"contains invalid data in a field that is meant to hold a number."
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:339
 #, c-format
 msgid ""
 "The QSF object file\n"
-"%s\n"
+"  %s\n"
 "is valid and contains GnuCash objects. However, GnuCash cannot open the file "
 "directly because the data needs to be merged into an existing GnuCash data "
 "book. Please open a GnuCash file or create a new one, then import this QSF "
@@ -8691,34 +8639,34 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:355
 #, c-format
 msgid ""
-"There was an error parsing the file \n"
-"    %s\n"
+"There was an error parsing the file\n"
+"  %s"
 msgstr ""
 "Beim Leser der Datei\n"
 "   %s\n"
-"ist ein Fehler aufgetreten.\n"
+"ist ein Fehler aufgetreten."
 
 #: ../src/gnome-utils/gnc-file.c:360
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The file \n"
-"    %s\n"
-" is empty."
+"  %s\n"
+"is empty."
 msgstr ""
 "Die Datei \n"
-"    %s\n"
-" ist leer."
+"  %s\n"
+"ist leer."
 
 #: ../src/gnome-utils/gnc-file.c:365
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The file \n"
-"    %s\n"
-" could not be found."
+"  %s\n"
+"could not be found."
 msgstr ""
 "Die Datei \n"
-"    %s\n"
-" konnte nicht gefunden werden."
+"  %s\n"
+"konnte nicht gefunden werden."
 
 #: ../src/gnome-utils/gnc-file.c:370
 msgid ""
@@ -8729,19 +8677,32 @@ msgstr ""
 "Möchten Sie fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:376
-msgid "Unknown file type"
-msgstr "Unbekannter Dateityp"
+#, c-format
+msgid ""
+"The file type of file\n"
+"  %s\n"
+"is unknown."
+msgstr ""
+"Der Dateityp der Datei \n"
+"  %s\n"
+"ist unbekannt."
 
 #: ../src/gnome-utils/gnc-file.c:381
 #, c-format
-msgid "Could not make a backup of %s\n"
+msgid ""
+"Could not make a backup of the file\n"
+"  %s"
 msgstr ""
+"Von der Datei\n"
+"  %s\n"
+"konnte kein Backup erstellt werden."
 
 #: ../src/gnome-utils/gnc-file.c:386
 #, c-format
 msgid ""
-"Could not write to %s\n"
-"Check that you have permission to write to this file and that  there is "
+"Could not write to file\n"
+"  %s\n"
+"Check that you have permission to write to this file and that there is "
 "sufficient space to create it."
 msgstr ""
 
@@ -10196,34 +10157,34 @@ msgstr ""
 msgid "Print GnuCash Document"
 msgstr "GnuCash Drucken"
 
-#: ../src/gnome-utils/transfer.glade.h:3
+#: ../src/gnome-utils/transfer.glade.h:2
 #, fuzzy
 msgid "<b>Basic Information</b>"
 msgstr "Saldo-Informationen"
 
-#: ../src/gnome-utils/transfer.glade.h:4
+#: ../src/gnome-utils/transfer.glade.h:3
 #, fuzzy
 msgid "<b>Currency Transfer</b>"
 msgstr "Währungs-Buchung"
 
-#: ../src/gnome-utils/transfer.glade.h:5
+#: ../src/gnome-utils/transfer.glade.h:4
 #, fuzzy
 msgid "<b>Transfer From</b>"
 msgstr "Herkunftskonto"
 
-#: ../src/gnome-utils/transfer.glade.h:6
+#: ../src/gnome-utils/transfer.glade.h:5
 #, fuzzy
 msgid "<b>Transfer To</b>"
 msgstr "Buchen nach"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/gnome-utils/transfer.glade.h:14 ../intl-scm/guile-strings.c:1598
+#: ../src/gnome-utils/transfer.glade.h:13 ../intl-scm/guile-strings.c:1598
 #: ../intl-scm/guile-strings.c:1682
 msgid "Show Income/Expense"
 msgstr "Erträge/Aufwendungen anzeigen"
 
-#: ../src/gnome-utils/transfer.glade.h:16
+#: ../src/gnome-utils/transfer.glade.h:15
 msgid "Transfer Funds"
 msgstr "Buchen"
 
@@ -11278,13 +11239,12 @@ msgid "Activate verbose debug messages for HBCI Online Banking."
 msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
-msgid "Remember _pin\t"
+msgid "Remember _PIN"
 msgstr ""
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
-#, fuzzy
 msgid "Remember the PIN for HBCI in memory during a session."
-msgstr "Die PIN für HBCI während einer GnuCash-Sitzung im Speicher merken"
+msgstr "Die PIN für HBCI während einer GnuCash-Sitzung im Speicher merken."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
 #, fuzzy
@@ -12458,65 +12418,67 @@ msgstr "Dividenden"
 msgid "Cap Return"
 msgstr "Kapitalverzinsung"
 
-#: ../src/import-export/qif/qif-parse.c:100
+#. Translators FIXME: It is unclear whether these strings should
+#. really be translated, and if yes, into which translation.
+#: ../src/import-export/qif/qif-parse.c:102
 msgid "type:bank"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:101
+#: ../src/import-export/qif/qif-parse.c:103
 msgid "type:cash"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:102
+#: ../src/import-export/qif/qif-parse.c:104
 msgid "type:ccard"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:103
+#: ../src/import-export/qif/qif-parse.c:105
 msgid "type:invst"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:104
+#: ../src/import-export/qif/qif-parse.c:106
 #, fuzzy
 msgid "type:port"
 msgstr "Bericht"
 
-#: ../src/import-export/qif/qif-parse.c:105
+#: ../src/import-export/qif/qif-parse.c:107
 #, fuzzy
 msgid "type:oth a"
 msgstr "Typ: "
 
-#: ../src/import-export/qif/qif-parse.c:106
+#: ../src/import-export/qif/qif-parse.c:108
 #, fuzzy
 msgid "type:oth l"
 msgstr "Typ: "
 
-#: ../src/import-export/qif/qif-parse.c:107
+#: ../src/import-export/qif/qif-parse.c:109
 msgid "type:class"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:108
+#: ../src/import-export/qif/qif-parse.c:110
 #, fuzzy
 msgid "type:cat"
 msgstr "Typ:"
 
-#: ../src/import-export/qif/qif-parse.c:109
+#: ../src/import-export/qif/qif-parse.c:111
 #, fuzzy
 msgid "type:security"
 msgstr "Neue Währung/Aktie"
 
-#: ../src/import-export/qif/qif-parse.c:110
+#: ../src/import-export/qif/qif-parse.c:112
 #, fuzzy
 msgid "account"
 msgstr "Konto"
 
-#: ../src/import-export/qif/qif-parse.c:111
+#: ../src/import-export/qif/qif-parse.c:113
 msgid "option:autoswitch"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:112
+#: ../src/import-export/qif/qif-parse.c:114
 msgid "clear:autoswitch"
 msgstr ""
 
-#: ../src/import-export/qif/qif-parse.c:661
+#: ../src/import-export/qif/qif-parse.c:663
 msgid "The Date format is ambiguous.  Please choose the correct format."
 msgstr ""
 
@@ -12985,86 +12947,80 @@ msgstr ""
 msgid "There are no options for this report."
 msgstr "Es gibt für diesen Bericht keine Optionen."
 
-#. * @}
-#. * @}
-#: ../src/report/report-gnome/report.glade.h:1
-msgid "                       "
-msgstr "                       "
-
-#: ../src/report/report-gnome/report.glade.h:3
+#: ../src/report/report-gnome/report.glade.h:2
 msgid "<< Remove"
 msgstr "<< Entfernen"
 
-#: ../src/report/report-gnome/report.glade.h:4
+#: ../src/report/report-gnome/report.glade.h:3
 msgid "Add  >>"
 msgstr "Hinzufügen >>"
 
-#: ../src/report/report-gnome/report.glade.h:5
+#: ../src/report/report-gnome/report.glade.h:4
 msgid "Available reports"
 msgstr "Verfügbare Berichte"
 
-#: ../src/report/report-gnome/report.glade.h:6
+#: ../src/report/report-gnome/report.glade.h:5
 msgid "Cols"
 msgstr "Spalten"
 
-#: ../src/report/report-gnome/report.glade.h:7
+#: ../src/report/report-gnome/report.glade.h:6
 msgid "Column span:"
 msgstr "Spaltenausdehnung:"
 
-#: ../src/report/report-gnome/report.glade.h:9
+#: ../src/report/report-gnome/report.glade.h:8
 msgid "Enter report row/column span"
 msgstr "Ausdehnung des Bericht in Tabellen-Spalten oder -Zeilen"
 
-#: ../src/report/report-gnome/report.glade.h:10
+#: ../src/report/report-gnome/report.glade.h:9
 msgid "HTML Style Sheets"
 msgstr "HTML-Stilvorlage"
 
-#: ../src/report/report-gnome/report.glade.h:11
+#: ../src/report/report-gnome/report.glade.h:10
 msgid "Move down"
 msgstr "Nach unten"
 
-#: ../src/report/report-gnome/report.glade.h:12
+#: ../src/report/report-gnome/report.glade.h:11
 msgid "Move up"
 msgstr "Nach oben"
 
-#: ../src/report/report-gnome/report.glade.h:14
+#: ../src/report/report-gnome/report.glade.h:13
 msgid "New Style Sheet"
 msgstr "Neue Stilvorlage"
 
-#: ../src/report/report-gnome/report.glade.h:15
+#: ../src/report/report-gnome/report.glade.h:14
 msgid "New style sheet info"
 msgstr "Info für neue Stilvorlage"
 
-#: ../src/report/report-gnome/report.glade.h:17
+#: ../src/report/report-gnome/report.glade.h:16
 msgid "Report Size"
 msgstr "Berichtsgröße"
 
-#: ../src/report/report-gnome/report.glade.h:18
+#: ../src/report/report-gnome/report.glade.h:17
 msgid "Row span:"
 msgstr "Zeilenausdehnung:"
 
-#: ../src/report/report-gnome/report.glade.h:19
+#: ../src/report/report-gnome/report.glade.h:18
 msgid "Rows"
 msgstr "Zeilen"
 
-#: ../src/report/report-gnome/report.glade.h:20
+#: ../src/report/report-gnome/report.glade.h:19
 #, fuzzy
 msgid "Select HTML Style Sheet"
 msgstr "HTML-Stilvorlage"
 
-#: ../src/report/report-gnome/report.glade.h:21
+#: ../src/report/report-gnome/report.glade.h:20
 msgid "Size..."
 msgstr "Größe..."
 
-#: ../src/report/report-gnome/report.glade.h:22
+#: ../src/report/report-gnome/report.glade.h:21
 msgid "Style sheet options"
 msgstr "Stilvorlage Optionen"
 
-#: ../src/report/report-gnome/report.glade.h:23
+#: ../src/report/report-gnome/report.glade.h:22
 msgid "Style sheet template:"
 msgstr "Vorlage für Stilvorlage:"
 
-#: ../src/report/report-gnome/report.glade.h:24
+#: ../src/report/report-gnome/report.glade.h:23
 msgid "Style sheets"
 msgstr "Stilvorlage"
 
@@ -19206,116 +19162,103 @@ msgid ""
 msgstr ""
 
 #: ../doc/tip_of_the_day.list.in:6
-#, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information. If you are "
 "upgrading from earlier versions of GnuCash, the section \"What's new in "
 "GnuCash 1.8\" is particularly interesting. You can access the manual under "
 "the Help menu."
 msgstr ""
-"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher\n"
-"Informationen. Falls Sie von früheren GnuCash-Versionen umgestiegen\n"
-"sind, ist der Abschnitt \"Was ist neu in GnuCash 1.8\" besonders\n"
-"interessant für Sie. Das Handbuch befindet sich unter dem Hilfe-Menü."
+"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher Informationen. "
+"Falls Sie von früheren GnuCash-Versionen umgestiegen sind, ist der Abschnitt "
+"\"Was ist neu in GnuCash 1.8\" besonders interessant für Sie. Das Handbuch "
+"befindet sich unter dem Hilfe-Menü."
 
 #: ../doc/tip_of_the_day.list.in:11
-#, fuzzy
 msgid ""
 "You can easily import your existing financial data from Quicken, MS Money or "
 "other programs that export QIF files or OFX files.  In the File menu, click "
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Sie können jederzeit existierende Finanzdaten aus Quicken, MS Money\n"
-"oder anderen Programmen importieren, solange die Programme die Daten\n"
-"im Dateiformat QIF oder OFX speichern können. Im Menü \"Datei\", wählen\n"
-"Sie das Untermenü \"Import\" und dort OFX oder QIF. Folgen Sie dann den\n"
+"Sie können jederzeit existierende Finanzdaten aus Quicken, MS Money oder "
+"anderen Programmen importieren, solange die Programme die Daten im "
+"Dateiformat QIF oder OFX speichern können. Im Menü \"Datei\", wählen Sie das "
+"Untermenü \"Import\" und dort OFX oder QIF. Folgen Sie dann den "
 "erscheinenden Anweisungen."
 
 #: ../doc/tip_of_the_day.list.in:16
-#, fuzzy
 msgid ""
 "If you are familiar with other financial programs such as Quicken, note that "
 "GnuCash uses accounts instead of categories to track income and expenses.  "
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"Wenn Sie bereits mit anderen Finanzprogrammen wie z.B. Quicken\n"
-"vertraut sind, sollten Sie beachten, daß GnuCash durchgängig \"Konten\"\n"
-"anstelle von \"Kategorien\" benutzt, um Erträge und Aufwendungen\n"
-"(Einnahmen und Ausgaben) zu gliedern. Weitere Informationen zu\n"
-"Ertrags- und Aufwandskonten finden Sie im GnuCash Online-Handbuch."
+"Wenn Sie bereits mit anderen Finanzprogrammen wie z.B. Quicken vertraut "
+"sind, sollten Sie beachten, daß GnuCash durchgängig \"Konten\" anstelle von "
+"\"Kategorien\" benutzt, um Erträge und Aufwendungen (Einnahmen und Ausgaben) "
+"zu gliedern. Weitere Informationen zu Ertrags- und Aufwandskonten finden Sie "
+"im GnuCash Online-Handbuch."
 
 #: ../doc/tip_of_the_day.list.in:21
-#, fuzzy
 msgid ""
 "Create new accounts by clicking the New button in the main window tool bar.  "
 "This will bring up a dialog box where you can enter account details.  For "
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
-"Sie können neue Konten erstellen, indem Sie auf den \"Neu\" Knopf in der\n"
-"Werkzeugleiste des Hauptfensters klicken. Dies öffnet ein\n"
-"Dialogfenster, in dem Sie weitere Details zum neuen Konto eingeben\n"
-"können. Weitere Informationen zu den Kontoarten, die Sie zur Verfügung\n"
-"haben, und Hinweise zum Erstellen eines Kontenrahmens finden Sie im\n"
-"GnuCash Online-Handbuch.  "
+"Sie können neue Konten erstellen, indem Sie auf den \"Neu\" Knopf in der "
+"Werkzeugleiste des Hauptfensters klicken. Dies öffnet ein Dialogfenster, in "
+"dem Sie weitere Details zum neuen Konto eingeben können. Weitere "
+"Informationen zu den Kontoarten, die Sie zur Verfügung haben, und Hinweise "
+"zum Erstellen eines Kontenrahmens finden Sie im GnuCash Online-Handbuch.  "
 
 #: ../doc/tip_of_the_day.list.in:27
-#, fuzzy
 msgid ""
 "Click the right mouse button in the main window to bring up the account menu "
 "options. Within each register, clicking the right mouse button brings up the "
 "transaction menu options."
 msgstr ""
-"Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die \"Konto\"\n"
-"Menüpunkte. Ein Klick mit der rechten Maustaste im Kontobuch\n"
-"öffnet die Menüpunkte zum \"Buchungssatz\"."
+"Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die \"Konto\" "
+"Menüpunkte. Ein Klick mit der rechten Maustaste im Kontobuch öffnet die "
+"Menüpunkte zum \"Buchungssatz\"."
 
 #: ../doc/tip_of_the_day.list.in:31
-#, fuzzy
 msgid ""
 "To enter multiple-split transactions such as a paycheck with multiple "
 "deductions, click the Split button in the tool bar. Alternatively, in the "
 "View -> Style menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
-"Um Buchungssätze mit mehr als zwei Buchungsteilen einzugeben\n"
-"(z.B. eine Gehaltszahlung mit mehreren Abzügen), drücken Sie den\n"
-"\"Vollständig\"-Knopf in der Werkzeugleiste. Alternativ können Sie auch\n"
-"im Menü Ansicht -> Buchung die Buchungsansicht \"Aktive vollständig\"\n"
-"oder \"Vollständig\" wählen."
+"Um Buchungssätze mit mehr als zwei Buchungsteilen einzugeben (z.B. eine "
+"Gehaltszahlung mit mehreren Abzügen), drücken Sie den \"Vollständig\"-Knopf "
+"in der Werkzeugleiste. Alternativ können Sie auch im Menü Ansicht -> Buchung "
+"die Buchungsansicht \"Aktive vollständig\" oder \"Vollständig\" wählen."
 
 #: ../doc/tip_of_the_day.list.in:36
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide .  Simply type the first value, then "
 "select '+', '-','*', or '/'.  Type the second value and press Enter to "
 "record the calculated amount."
 msgstr ""
-"Wenn Sie Beträge im Kontobuch eingeben, können Sie das Eingabefeld\n"
-"wie einen einfachen Taschenrechner benutzen. Es gibt die Funktionen\n"
-"Addieren, Subtrahieren, Multiplizieren und Dividieren. Tippen Sie\n"
-"einfach einen Wert, gefolgt von \"+\", \"-\", \"*\" oder \"/\", gefolgt von\n"
-"einem zweiten Wert. Das anschließende Drücken von \"Eingabe\" wird den\n"
-"berechneten Betrag buchen."
+"Wenn Sie Beträge im Kontobuch eingeben, können Sie das Eingabefeld wie einen "
+"einfachen Taschenrechner benutzen. Es gibt die Funktionen Addieren, "
+"Subtrahieren, Multiplizieren und Dividieren. Tippen Sie einfach einen Wert, "
+"gefolgt von \"+\", \"-\", \"*\" oder \"/\", gefolgt von einem zweiten Wert. "
+"Das anschließende Drücken von \"Eingabe\" wird den berechneten Betrag buchen."
 
 #: ../doc/tip_of_the_day.list.in:41
-#, fuzzy
 msgid ""
 "Quick-fill makes it easy to enter common transactions.  When you type the "
 "first letter(s) of a common transaction description, GnuCash will "
 "automatically complete the remainder of the transaction as it was last "
 "entered."
 msgstr ""
-"GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie\n"
-"die ersten Buchstaben der Beschreibung einer früheren Buchung\n"
-"eingeben, kann GnuCash den Rest mit dem bekannten Text\n"
-"vervollständigen."
+"GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie die "
+"ersten Buchstaben der Beschreibung einer früheren Buchung eingeben, kann "
+"GnuCash den Rest mit dem bekannten Text vervollständigen."
 
 #: ../doc/tip_of_the_day.list.in:46
-#, fuzzy
 msgid ""
 "Type the first letter(s) of an existing account name in the Transfer "
 "register column, and GnuCash will complete the name from your list of "
@@ -19323,108 +19266,96 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash.)"
 msgstr ""
-"Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen\n"
-"eingeben, kann GnuCash den Namen anhand Ihrer Kontenliste\n"
-"vervollständigen. Für Unterkonten geben Sie die ersten Buchstaben des\n"
-"Hauptkontos ein, gefolgt von einem ':', gefolgt von den ersten\n"
-"Buchstaben des Unterkontos (z.B. A:B für Aktiva:Bargeld)."
+"Wenn Sie im Kontobuch die ersten Buchstaben eines Kontennamen eingeben, kann "
+"GnuCash den Namen anhand Ihrer Kontenliste vervollständigen. Für Unterkonten "
+"geben Sie die ersten Buchstaben des Hauptkontos ein, gefolgt von einem ':', "
+"gefolgt von den ersten Buchstaben des Unterkontos (z.B. A:B für Aktiva:"
+"Bargeld)."
 
 #: ../doc/tip_of_the_day.list.in:52
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the main "
 "menu, highlight the parent account and select Accounts -> Open Subaccounts "
 "from the menu."
 msgstr ""
-"Sie können alle Buchungssätze von mehreren Unterkonten in einem\n"
-"Kontobuch ansehen: Wählen Sie im Kontenhierarchie-Fenster das\n"
-"Hauptkonto und klicken Sie auf den Menüpunkt Konten -> Unterkonten\n"
-"öffnen."
+"Sie können alle Buchungssätze von mehreren Unterkonten in einem Kontobuch "
+"ansehen: Wählen Sie im Kontenhierarchie-Fenster das Hauptkonto und klicken "
+"Sie auf den Menüpunkt Konten -> Unterkonten öffnen."
 
 #: ../doc/tip_of_the_day.list.in:56
-#, fuzzy
 msgid ""
 "When entering dates, you can type '+' or '-' to increment or decrement the "
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
-"Bei der Datumseingabe können Sie mit '+' und '-' das Datum weiter-\n"
-"oder zurückzählen oder mit ']','}' und '{','[' das Datum monatsweise\n"
-"weiterschalten. Wenn Sie im Kontobuch Buchungsnummern eingeben,\n"
-"können Sie ebenfalls mit '+' und '-' die nächstfolgende oder vorige\n"
-"Nummer auswählen."
+"Bei der Datumseingabe können Sie mit '+' und '-' das Datum weiter- oder "
+"zurückzählen oder mit ']','}' und '{','[' das Datum monatsweise "
+"weiterschalten. Wenn Sie im Kontobuch Buchungsnummern eingeben, können Sie "
+"ebenfalls mit '+' und '-' die nächstfolgende oder vorige Nummer auswählen."
 
 #: ../doc/tip_of_the_day.list.in:60
-#, fuzzy
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
 "reconciled.  You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
-"Im Fenster \"Abgleichen\" können Sie mit der Leertaste Buchungen als\n"
-"\"Abgeglichen\" markieren. Um zwischen Haben und Soll zu wechseln,\n"
-"können Sie die Tab (die Tabulatortaste) und Umschalt-Tab drücken."
+"Im Fenster \"Abgleichen\" können Sie mit der Leertaste Buchungen als "
+"\"Abgeglichen\" markieren. Um zwischen Haben und Soll zu wechseln, können "
+"Sie die Tab (die Tabulatortaste) und Umschalt-Tab drücken."
 
 #: ../doc/tip_of_the_day.list.in:64
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies, click on the "
 "Transfer button in the register toolbar, select the accounts, and the "
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Um Beträge zwischen Konten mit verschiedenen Währungen umzubuchen,\n"
-"klicken Sie auf den \"Buchen\"-Knopf in der Werkzeugleiste, wählen Sie\n"
-"die Konten, und die zusätzlichen Optionen für Währungstransaktionen\n"
-"werden automatisch aktiviert."
+"Um Beträge zwischen Konten mit verschiedenen Währungen umzubuchen, klicken "
+"Sie auf den \"Buchen\"-Knopf in der Werkzeugleiste, wählen Sie die Konten, "
+"und die zusätzlichen Optionen für Währungstransaktionen werden automatisch "
+"aktiviert."
 
 #: ../doc/tip_of_the_day.list.in:69
-#, fuzzy
 msgid ""
 "You can pack multiple reports into a single window,  providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom -> \"Custom Multicolumn Report\" report."
 msgstr ""
-"Sie können mehrere Berichte in einem einzigen Fenster anzeigen lassen,\n"
-"um alle Ihre Informationen im Blick zu haben. Benutzen Sie dafür den\n"
-"Bericht Beispiele -> \"Benutzerdefiniert Mehrspaltig\"."
+"Sie können mehrere Berichte in einem einzigen Fenster anzeigen lassen, um "
+"alle Ihre Informationen im Blick zu haben. Benutzen Sie dafür den Bericht "
+"Beispiele -> \"Benutzerdefiniert Mehrspaltig\"."
 
 #: ../doc/tip_of_the_day.list.in:74
-#, fuzzy
 msgid ""
 "GnuCash can act as a simple web browser!  To display a web page as a report, "
 "use the Sample & Custom -> \"Custom Web Report\" report."
 msgstr ""
-"GnuCash kann als einfacher Internet-Browser dienen. Um eine\n"
-"Internet-Seite anzuzeigen, benutzen Sie den Bericht\n"
-"\"Benutzerdefiniert\" -> \"Benutzerdefiniert Internet\"."
+"GnuCash kann als einfacher Internet-Browser dienen. Um eine Internet-Seite "
+"anzuzeigen, benutzen Sie den Bericht \"Benutzerdefiniert\" -> "
+"\"Benutzerdefiniert Internet\"."
 
 #: ../doc/tip_of_the_day.list.in:78
-#, fuzzy
 msgid ""
 "Style Sheets affect how reports are displayed.  Choose a style sheet for "
 "your report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
 msgstr ""
-"Mit einer Stilvorlage können Sie das Aussehen eines Berichts\n"
-"beeinflussen. Wählen Sie eine Stilvorlage für Ihren Bericht und\n"
-"benutzen Sie den Menüpunkt Bearbeiten -> \"Stilvorlagen...\", um die\n"
-"Stilvorlagen anzupassen.  "
+"Mit einer Stilvorlage können Sie das Aussehen eines Berichts beeinflussen. "
+"Wählen Sie eine Stilvorlage für Ihren Bericht und benutzen Sie den Menüpunkt "
+"Bearbeiten -> \"Stilvorlagen...\", um die Stilvorlagen anzupassen.  "
 
 #: ../doc/tip_of_the_day.list.in:82
-#, fuzzy
 msgid ""
 "The GnuCash developers are easy to contact.  As well as several mailing "
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
-"Die Entwickler von GnuCash können auf einfache Weise erreicht\n"
-"werden. Es gibt einige Mailing-Listen, aber Sie können genausogut\n"
-"einen Live-Chat im IRC (Internet Relay Chat) ausprobieren. Die\n"
-"Entwicker sind im Channel #gnucash auf irc.gnome.org zu finden."
+"Die Entwickler von GnuCash können auf einfache Weise erreicht werden. Es "
+"gibt einige Mailing-Listen, aber Sie können genausogut einen Live-Chat im "
+"IRC (Internet Relay Chat) ausprobieren. Die Entwicker sind im Channel "
+"#gnucash auf irc.gnome.org zu finden."
 
 #: ../doc/tip_of_the_day.list.in:86
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what the Universe is for and "
 "why it is here, it will instantly disappear and be replaced with something "
@@ -19432,1046 +19363,7 @@ msgid ""
 "already happened. Douglas Adams, \"The Restaurant at the End of the Universe"
 "\""
 msgstr ""
-"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard\n"
-"HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des\n"
-"HBCI-Zugangs. Nachdem ein HBCI-Zugang eingerichtet wurde, können die\n"
-"Menüpunkte im Kontofenster unter Aktionen -> Online Aktionen verwendet\n"
-"werden."
-
-#~ msgid "Open Anyway"
-#~ msgstr "Trotzdem öffnen"
-
-#~ msgid "Create New File"
-#~ msgstr "Neue Datei anlegen"
-
-#~ msgid "-- Multiple Sources --"
-#~ msgstr "-- Verschiedene Kurs-Herkunft --"
-
-#~ msgid "label1"
-#~ msgstr "label1"
-
-#~ msgid "Credit Account:"
-#~ msgstr "Gutschriftskonto:"
-
-#~ msgid "_New Invoice"
-#~ msgstr "Neue Rechnung"
-
-#~ msgid "Display the toolbar"
-#~ msgstr "Anzeigen der Werkzeugleiste"
-
-#~ msgid "Display the Summary Bar"
-#~ msgstr "Anzeigen der Zusammenfassungsleiste"
-
-#~ msgid "S_ummary Bar"
-#~ msgstr "_Zusammenfassung"
-
-#~ msgid "Display the Status Bar"
-#~ msgstr "Anzeigen der Statusleiste"
-
-#~ msgid "_Status Bar"
-#~ msgstr "_Statuszeile"
-
-#~ msgid "Keep normal invoice order"
-#~ msgstr "Beibehalten der normalen Rechnungsreihenfolge"
-
-#~ msgid "Sort by quantity"
-#~ msgstr "Sortieren nach Anzahl"
-
-#~ msgid "Sort by price"
-#~ msgstr "Sortiere nach Preis"
-
-#~ msgid "_Description"
-#~ msgstr "Beschreibung"
-
-#~ msgid "Process Pa_yment"
-#~ msgstr "Zahlung verarbeiten"
-
-#~ msgid "_Gnucash Users Manual"
-#~ msgstr "GnuCash Benutzeranleitung"
-
-#~ msgid "Order"
-#~ msgstr "Bestellung"
-
-#~ msgid "Entity type does not match Customer: %s"
-#~ msgstr "Entity type passt nicht zu Kunde: %s"
-
-#~ msgid "Entity type does not match Vendor: %s"
-#~ msgstr "Entity type passt nicht zu Zulieferer: %s"
-
-#~ msgid "Entity type does not match Employee: %s"
-#~ msgstr "Entity type passt nicht zu Angestelltem: %s"
-
-#~ msgid "Entity type does not match Invoice: %s"
-#~ msgstr "Entity type passt nicht zu Rechnung: %s"
-
-#~ msgid "label8"
-#~ msgstr "label8"
-
-#~ msgid "label9"
-#~ msgstr "label9"
-
-#~ msgid "Error message not available"
-#~ msgstr "Fehlermeldung nicht verfügbar"
-
-#~ msgid ""
-#~ "Error occurred while saving Account:\n"
-#~ "%d: %s"
-#~ msgstr ""
-#~ "Fehler aufgetreten beim Speichern eines Kontos:\n"
-#~ "%d: %s"
-
-#~ msgid ""
-#~ "Another user has modified this transaction\n"
-#~ "\tjust a moment ago. Please look at their changes,\n"
-#~ "\tand try again, if needed.\n"
-#~ msgstr ""
-#~ "Ein anderer Benutzer hat diesen Buchungssatz \n"
-#~ "soeben geändert. Bitte prüfen Sie die Änderungen und \n"
-#~ "versuchen Sie es gegenebenfalls nochmal.\n"
-
-#~ msgid "Print a check using a standard format"
-#~ msgstr "Einen Scheck mit Standard-Format drucken"
-
-#~ msgid "Print _Check"
-#~ msgstr "Scheck drucken"
-
-#~ msgid "S_elect Transactions"
-#~ msgstr "Buchungen aus_wählen"
-
-#~ msgid "Date _Range"
-#~ msgstr "_Datumsbereich"
-
-#~ msgid "_All"
-#~ msgstr "_Alle"
-
-#~ msgid "_Cleared"
-#~ msgstr "_Bestätigt"
-
-#~ msgid "Chec_k & Repair"
-#~ msgstr "Überprüfen"
-
-#~ msgid "_Transaction Report"
-#~ msgstr "Buchungsbericht"
-
-#~ msgid "Register date ranges"
-#~ msgstr "Datumbereich des Kontobuchs"
-
-#~ msgid "Set Date Range"
-#~ msgstr "Einstellen Datumsbereich"
-
-#~ msgid "End date:"
-#~ msgstr "Enddatum:"
-
-#~ msgid "Account Name:"
-#~ msgstr "Kontobezeichnung:"
-
-#~ msgid "label812"
-#~ msgstr "label812"
-
-#~ msgid "Price Quote Source"
-#~ msgstr "Börsenkursquelle"
-
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
-#~ msgid "Remove"
-#~ msgstr "Entfernen"
-
-#~ msgid "Help Topics"
-#~ msgstr "Hilfethemen"
-
-#~ msgid "Topics"
-#~ msgstr "Themen"
-
-#~ msgid "Search GnuCash Help"
-#~ msgstr "Hilfe durchsuchen"
-
-#~ msgid "Search Term:"
-#~ msgstr "Suchausdruck:"
-
-#~ msgid ""
-#~ "Type a single term into the box and hit 'search'. At the moment, this "
-#~ "search engine does not support complex searches, just single words."
-#~ msgstr ""
-#~ "Geben Sie ein einzelnes Wort ein und klicken 'Suchen'. Zur Zeit werden "
-#~ "keine komplexeren Ausdrücke unterstützt, nur einzelne Worte."
-
-#~ msgid "Help"
-#~ msgstr "Hilfe"
-
-#~ msgid "Search results"
-#~ msgstr "Suchergebnisse"
-
-#~ msgid "Welcome to GnuCash!"
-#~ msgstr "Willkommen zu GnuCash!"
-
-#~ msgid "Canceling"
-#~ msgstr "Abbrechen"
-
-#~ msgid ""
-#~ "Uncheck if you do not want this dialog to run if you start GnuCash up "
-#~ "again. "
-#~ msgstr ""
-#~ "Deaktivieren Sie dies, um den Assistenten beim nächsten Start nicht "
-#~ "wieder anzuzeigen."
-
-#~ msgid "Run dialog for new user again?"
-#~ msgstr "Beim nächsten Start Assistenten wieder anzeigen?"
-
-#~ msgid "%P %%"
-#~ msgstr "%P %%"
-
-#~ msgid "Number of Occurrences"
-#~ msgstr "Anzahl des Auftretens"
-
-#~ msgid "Remaining Number of Occurrences"
-#~ msgstr "Verbleibende Anzahl des Auftretens"
-
-#~ msgid "%v/%u (%p%%)"
-#~ msgstr "%v/%u (%p%%)"
-
-#~ msgid "old-file-import"
-#~ msgstr "Importiert aus alter Datei"
-
-#~ msgid "user:price-editor"
-#~ msgstr "Anwender:Preis-Editor"
-
-#~ msgid "user:stock-split"
-#~ msgstr "Anwender:Aktienteilung"
-
-#~ msgid "user:xfer-dialog"
-#~ msgstr "Anwender:Buchungseingabe"
-
-#~ msgid "Display this dialog next time"
-#~ msgstr "Anzeigen dieses Dialogs auch beim nächsten Mal?"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-#~ msgstr "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-
-#~ msgid "Tip of the Day:"
-#~ msgstr "Tipp des Tages:"
-
-#~ msgid "You must enter a valid balance."
-#~ msgstr "Sie müssen einen gültigen Wert angeben."
-
-#~ msgid "Enter GnuCash Network passphrase:"
-#~ msgstr "GnuCash Netzwerk Passwort (passphrase) eingeben:"
-
-#~ msgid "GnuCash Network authorization failed."
-#~ msgstr "Authorisierung des Zugangs zum GnuCash Netzwerk fehlgeschlagen."
-
-#~ msgid "Enter passphrase:"
-#~ msgstr "Passwort (passphrase) eingeben:"
-
-#~ msgid "Verify passphrase:"
-#~ msgstr "Passwort (passphrase) bestätigen:"
-
-#~ msgid "Passphrases did not match."
-#~ msgstr "Passwörter stimmten nicht überein."
-
-#~ msgid "Name of account view"
-#~ msgstr "Name der Konto-Ansicht"
-
-#~ msgid ""
-#~ "To open an account, you must first\n"
-#~ "choose an account to open."
-#~ msgstr ""
-#~ "Um ein Konto zu öffnen, müssen Sie zuerst \n"
-#~ "eines auswählen."
-
-#~ msgid ""
-#~ "To edit an account, you must first\n"
-#~ "choose an account to edit.\n"
-#~ msgstr ""
-#~ "Um ein Konto zu bearbeiten, müssen Sie zuerst \n"
-#~ "eines auswählen.\n"
-
-#~ msgid ""
-#~ "To delete an account, you must first\n"
-#~ "choose an account to delete.\n"
-#~ msgstr ""
-#~ "Um ein Konto zu löschen, müssen Sie zuerst \n"
-#~ "eines auswählen.\n"
-
-#~ msgid ""
-#~ "To reconcile an account, you must first\n"
-#~ "choose an account to reconcile."
-#~ msgstr ""
-#~ "Um ein Konto abzugleichen, müssen Sie zuerst \n"
-#~ "eines auswählen."
-
-#~ msgid "You must select an account to check and repair."
-#~ msgstr ""
-#~ "Sie müssen ein Konto wählen, daß überprüft und repariert werden soll."
-
-#~ msgid "Stock S_plit..."
-#~ msgstr "Aktienteilung..."
-
-#~ msgid "Open S_ubaccounts"
-#~ msgstr "_Unterkonten öffnen"
-
-#~ msgid "Net Assets non currency commodities total"
-#~ msgstr "Reinvermögen in Aktien/Edelmetallen"
-
-#~ msgid "Net Assets grand total"
-#~ msgstr "Gesamtsumme Reinvermögen"
-
-#~ msgid "Profits total"
-#~ msgstr "Summe Gewinn"
-
-#~ msgid "Profits grand total"
-#~ msgstr "Gesamtsumme Gewinn"
-
-#~ msgid "Select \"Exit\" to exit GnuCash."
-#~ msgstr "Klicken Sie \"Schließen\", um Gnucash zu beenden."
-
-#~ msgid "Open _Recent"
-#~ msgstr "_Zuletzt Geöffnet"
-
-#~ msgid "Commodity _Editor"
-#~ msgstr "Aktien _Editor"
-
-#~ msgid "Financial _Calculator"
-#~ msgstr "Finanzrechner"
-
-#~ msgid "Save the file to disk"
-#~ msgstr "Speichern dieser Datei"
-
-#~ msgid "Close the current notebook page"
-#~ msgstr "Aktuelle Karteikarte schließen."
-
-#~ msgid "Exit"
-#~ msgstr "Beenden"
-
-#~ msgid "%s [Read-Only]"
-#~ msgstr "%s [Nur-Lesen]"
-
-#~ msgid "Add criterion"
-#~ msgstr "Kriterium hinzufügen"
-
-#~ msgid "No options!"
-#~ msgstr "Keine Optionen."
-
-#~ msgid ""
-#~ "GnuCash Network is disabled and the link you have clicked requires it.\n"
-#~ "You can enable it in the Network section\n"
-#~ "of the Preferences dialog."
-#~ msgstr ""
-#~ "GnuCash Netzwerk is deaktiviert, aber der angeklickte Link benötigt es.\n"
-#~ "Sie können das Netzwerk im 'Einstellungen'-Dialog aktivieren."
-
-#~ msgid "Print Preview"
-#~ msgstr "Druckvorschau"
-
-#~ msgid "Enter URI to load:"
-#~ msgstr "Anzuzeigende URL eingeben:"
-
-#~ msgid "Move back one step in the history"
-#~ msgstr "Einen Schritt zurück"
-
-#~ msgid "Move forward one step in the history"
-#~ msgstr "Einen Schritt vorwärts"
-
-#~ msgid "Reload the current document"
-#~ msgstr "Aktuelle Datei erneut laden"
-
-#~ msgid "Open a new document"
-#~ msgstr "Neue Datei öffnen"
-
-#~ msgid "Cancel outstanding HTML requests"
-#~ msgstr "Unbeantwortete HTML-Anfragen abbrechen "
-
-#~ msgid "Print Help window"
-#~ msgstr "Hilfefenster ausdrucken"
-
-#~ msgid "Close this Help window"
-#~ msgstr "Hilfefenster schließen"
-
-#~ msgid "Transfer Information"
-#~ msgstr "Buchungsinformation"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "New Account (child of selected) ..."
-#~ msgstr "Neues Konto (Unterkonto) ..."
-
-#~ msgid "OFX Import"
-#~ msgstr "OFX Import"
-
-#~ msgid "Import OFX files"
-#~ msgstr "OFX-Datei importieren"
-
-#~ msgid ""
-#~ "GnuCash can import financial data from OFX (Quicken \n"
-#~ "Interchange Format) files written by Quicken/QuickBooks,\n"
-#~ "MS Money, Moneydance, and many other programs. \n"
-#~ "\n"
-#~ "The import process has several steps. Your GnuCash\n"
-#~ "accounts will not be changed until you click \"Finish\"\n"
-#~ "at the end of the process. \n"
-#~ "\n"
-#~ "Click \"Next\" to start loading your OFX data, or \"Cancel\"\n"
-#~ "to abort the process. "
-#~ msgstr ""
-#~ "GnuCash kann Finanzdaten von OFX-Dateien (Quicken Interchange Format)\n"
-#~ "importieren, die von Programmen wie Quicken/Quickbooks, MS Money oder\n"
-#~ "Moneydance geschrieben wurden.\n"
-#~ "\n"
-#~ "Der Prozess des Importierens hat mehrere Stufen. Ihre GnuCash Konten\n"
-#~ "werden erst dann verändert, wenn Sie am Ende \"Fertigstellen\"\n"
-#~ "anklicken.\n"
-#~ "\n"
-#~ "Klicken Sie jetzt \"Weiter\", um mit dem Laden Ihrer OFX Daten zu\n"
-#~ "beginnen. Sie können den Import jederzeit mit \"Abbrechen\" ohne\n"
-#~ "Änderungen beenden."
-
-#~ msgid "Select a OFX file to load"
-#~ msgstr "Zu ladende OFX-Datei auswählen"
-
-#~ msgid "OFX Filename:"
-#~ msgstr "OFX Dateiname:"
-
-#~ msgid "OFX files you have loaded"
-#~ msgstr "OFX-Dateien, die geladen wurden"
-
-#~ msgid "OFX import complete"
-#~ msgstr "OFX Import vollständig"
-
-#~ msgid ""
-#~ "You are about to change a reconciled split.\n"
-#~ "Are you sure you want to do that?"
-#~ msgstr ""
-#~ "Sie verändern eine abgeglichene Buchung. \n"
-#~ "Sind Sie sicher, daß Sie das möchten?"
-
-#~ msgid ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid "label847668"
-#~ msgstr "label837767"
-
-#~ msgid "(Report not found)"
-#~ msgstr "(Bericht nicht gefunden)"
-
-#~ msgid "Reload the current report"
-#~ msgstr "Aktuellen Bericht neu laden"
-
-#~ msgid "Export HTML-formatted report to file"
-#~ msgstr "HTML-formatierten Bericht in Datei exportieren"
-
-#~ msgid "Print report window"
-#~ msgstr "Bericht ausdrucken"
-
-#~ msgid "Save report"
-#~ msgstr "Bericht sp."
-
-#~ msgid ""
-#~ "Save the current report for later use in ~/.gnucash/saved-reports-1.8 so "
-#~ "that they are accessible as menu entries in the report menu. Will go into "
-#~ "effect at the next startup of gnucash."
-#~ msgstr ""
-#~ "Den aktuellen Bericht in ~/.gnucash/saved-reports-1.8 speichern, so daß "
-#~ "er beim nächsten Start als Menüeintrag zur Verfügung steht. Neue "
-#~ "Menüeinträge sind erst nach Neustart sichtbar."
-
-#~ msgid ""
-#~ "If you keep multiple account views open, it may be helpful to give each "
-#~ "one a descriptive name"
-#~ msgstr ""
-#~ "Wenn Sie mehrere Kontenansichten öffnen, sollten Sie jeder Ansicht einen "
-#~ "beschreibenden Namen geben."
-
-#~ msgid "Account fields to display"
-#~ msgstr "Kontenfelder, die angezeigt werden sollen"
-
-#~ msgid "Balance in Report Currency"
-#~ msgstr "Saldo in Berichtswährung"
-
-#~ msgid "Present Balance in Report Currency"
-#~ msgstr "Aktueller Saldo in Berichtswährung"
-
-#~ msgid "Cleared Balance"
-#~ msgstr "Bestätigter Saldo"
-
-#~ msgid "Cleared Balance in Report Currency"
-#~ msgstr "Bestätigter Saldo in Berichtswährung"
-
-#~ msgid "Reconciled Balance in Report Currency"
-#~ msgstr "Abgeglichener Saldo in Berichtswährung"
-
-#~ msgid "Future Minimum Balance"
-#~ msgstr "Zukünftiges Saldominimum"
-
-#~ msgid "Future Minimum Balance in Report Currency"
-#~ msgstr "Zukünftiges Saldominimum in Berichtswährung"
-
-#~ msgid "Total in Report Currency"
-#~ msgstr "Gesamtbetrag in Berichtswährung"
-
-#~ msgid "View and edit the properties of this file."
-#~ msgstr "Eigenschaften dieser Datei anzeigen und bearbeiten."
-
-#~ msgid "Loading tip-of-the-day..."
-#~ msgstr "Tipp des Tages laden..."
-
-#~ msgid "_Style Sheets..."
-#~ msgstr "_Stilvorlagen..."
-
-#~ msgid "Overview"
-#~ msgstr "Übersicht (englisch)"
-
-#~ msgid "Introduction"
-#~ msgstr "Einführung"
-
-#~ msgid "Features"
-#~ msgstr "Features"
-
-#~ msgid "Easy to Use"
-#~ msgstr "Eingängige Bedienung"
-
-#~ msgid "Tracks Your Investments"
-#~ msgstr "Investment-Verwaltung"
-
-#~ msgid "International Support"
-#~ msgstr "Internationale Features"
-
-#~ msgid "Business Support"
-#~ msgstr "Geschäftliche Features"
-
-#~ msgid "Accounting"
-#~ msgstr "Buchführung"
-
-#~ msgid "What's New in v1.8"
-#~ msgstr "Was ist neu in Version 1.8"
-
-#~ msgid "The Basics"
-#~ msgstr "Grundlagen (englisch)"
-
-#~ msgid "Accounting Concepts"
-#~ msgstr "Grundlagen der Kontoführung"
-
-#~ msgid "The 5 Basic Accounts"
-#~ msgstr "Die 5 grundlegenden Kontoarten"
-
-#~ msgid "The Principal Accounting Equation"
-#~ msgstr "Kontogleichung"
-
-#~ msgid "Backup file (.xac)"
-#~ msgstr "Backup-Datei (.xac)"
-
-#~ msgid "Log file (.log)"
-#~ msgstr "Log-Datei (.log)"
-
-#~ msgid "Lock files (.LNK and .LCK)"
-#~ msgstr "Schreibzugriffs-Datei (.LNK und .LCK)"
-
-#~ msgid "Principle of Balance"
-#~ msgstr "Prinzip des ausgeglichenen Saldos"
-
-#~ msgid "Simple Example"
-#~ msgstr "Beispiel"
-
-#~ msgid "The Basic Top Level Accounts"
-#~ msgstr "Grundlegende Top-level Konten"
-
-#~ msgid "Making Sub-Accounts"
-#~ msgstr "Unterkonten erstellen"
-
-#~ msgid "Basic Concepts"
-#~ msgstr "Grundlegende Konzepte"
-
-#~ msgid "Features of the Account Register"
-#~ msgstr "Eigenschaften des Kontobuch-Fenster"
-
-#~ msgid "Creating from the Ledger"
-#~ msgstr "Im Kontofenster erstellen"
-
-#~ msgid "Creating from the Editor"
-#~ msgstr "Im Editor erstellen"
-
-#~ msgid "Checkbook"
-#~ msgstr "Scheckbuch (englisch)"
-
-#~ msgid "Concepts"
-#~ msgstr "Konzepte"
-
-#~ msgid "Simple Setup"
-#~ msgstr "Grundlegende Einrichtung"
-
-#~ msgid "Purchases"
-#~ msgstr "Käufe"
-
-#~ msgid "Refund"
-#~ msgstr "Erstattung"
-
-#~ msgid "Terminology"
-#~ msgstr "Begrifflichkeiten"
-
-#~ msgid "Mortgage (How-To)"
-#~ msgstr "Hypothek (Wie geht...)"
-
-#~ msgid "Calculations"
-#~ msgstr "Berechnungen"
-
-#~ msgid "Example: Monthly Payments"
-#~ msgstr "Beispiel: Monatliche Zahlungen"
-
-#~ msgid "Example: Length of Loan"
-#~ msgstr "Beispiel: Darlehens-Länge"
-
-#~ msgid "Advanced: Calculation Details"
-#~ msgstr "Erweitert: Berechnungsdetails"
-
-#~ msgid "Types of Investments"
-#~ msgstr "Arten von Investments"
-
-#~ msgid "Predefined Accounts"
-#~ msgstr "Vordefinierte Konten"
-
-#~ msgid "Interest Bearing Accounts"
-#~ msgstr "Konten mit Verzinsung"
-
-#~ msgid "Example"
-#~ msgstr "Beispiel"
-
-#~ msgid "Setup Your Stock Portfolio"
-#~ msgstr "Aktienportfolio einrichten"
-
-#~ msgid "Setup Your Preexisting Stocks"
-#~ msgstr "Einrichten der existierenden Aktienkonten"
-
-#~ msgid "Example Stock Account"
-#~ msgstr "Beispiel Aktienkonto"
-
-#~ msgid "Setting Stock Price"
-#~ msgstr "Aktienkurs eintragen"
-
-#~ msgid "Initial Price Editor Setup"
-#~ msgstr "Grundlegende Preiseditor-Einrichtung"
-
-#~ msgid "Setting Stock Price Manually"
-#~ msgstr "Aktienkurs manuell eintragen"
-
-#~ msgid "Setting Stock Price Automatically"
-#~ msgstr "Aktienkurs automatisch eintragen"
-
-#~ msgid "Display Stock Value"
-#~ msgstr "Aktienwert anzeigen"
-
-#~ msgid "Selling Stocks"
-#~ msgstr "Aktien verkaufen"
-
-#~ msgid "Todo Investment Docs"
-#~ msgstr "Todo Investment Dokumentation"
-
-#~ msgid "Estimating Valuation"
-#~ msgstr "Wert schätzen"
-
-#~ msgid "Selling"
-#~ msgstr "Verkauf"
-
-#~ msgid "Caution about Valuation"
-#~ msgstr "Probleme bei Wertschätzung"
-
-#~ msgid "Taxation"
-#~ msgstr "Besteuerung"
-
-#~ msgid "GnuCash Currency Support"
-#~ msgstr "GnuCash Währungsunterstützung"
-
-#~ msgid "Setting International Preferences"
-#~ msgstr "GnuCash Internationale Einstellungen anpassen"
-
-#~ msgid "Recording Purchases in a Foreign Currency (How-To)"
-#~ msgstr "Einkäufe in fremden Währungen buchen (Wie geht...)"
-
-#~ msgid "Tracking Currency Investments (How-To)"
-#~ msgstr "Währungskonten überwachen (Wie geht...)"
-
-#~ msgid "Putting It All Together (Examples)"
-#~ msgstr "Alles Zusammensetzen (Beispiele)"
-
-#~ msgid "Depreciation"
-#~ msgstr "Abschreibung"
-
-#~ msgid "Depreciation Schemes"
-#~ msgstr "Abschreibungsarten"
-
-#~ msgid "Overview of Business Features"
-#~ msgstr "GnuCash Geschäft-Übersicht"
-
-#~ msgid "Initial Setup"
-#~ msgstr "Grundlegende Einrichtung"
-
-#~ msgid "Register Your Company"
-#~ msgstr "Geschäft einrichten"
-
-#~ msgid "System Components"
-#~ msgstr "Systembestandteile"
-
-#~ msgid "Customers"
-#~ msgstr "Kunden"
-
-#~ msgid "Find and Edit"
-#~ msgstr "Suchen und bearbeiten"
-
-#~ msgid "Assign Starting Invoice Number"
-#~ msgstr "Erste Rechnungsnummer zuweisen"
-
-#~ msgid "Customer Jobs"
-#~ msgstr "Aufträge des Kunden"
-
-#~ msgid "Changing the Invoice Appearance"
-#~ msgstr "Aussehen der Rechnung ändern"
-
-#~ msgid "Vendors"
-#~ msgstr "Zulieferer"
-
-#~ msgid "Bills"
-#~ msgstr "Rechnungen"
-
-#~ msgid "Vendor Jobs"
-#~ msgstr "Aufträge Zulieferer"
-
-#~ msgid "Payroll"
-#~ msgstr "Mitarbeiterverwaltung"
-
-#~ msgid "Protocol"
-#~ msgstr "Vorgehensweise"
-
-#~ msgid "Step 1: Deductions List"
-#~ msgstr "Schritt 1: Liste der Lohnabzüge"
-
-#~ msgid "Step 3: Pay the Employee"
-#~ msgstr "Schritt 3: Zahlung an Mitarbeiter"
-
-#~ msgid "Step 4: Pay the Government"
-#~ msgstr "Schritt 4: Zahlung an Fiskus"
-
-#~ msgid "Build Protocol"
-#~ msgstr "Vorgehensweise erstellen"
-
-#~ msgid "Pay an Employee"
-#~ msgstr "Zahlung an Mitarbeiter"
-
-#~ msgid "Pay the Government"
-#~ msgstr "Zahlung an Fiskus"
-
-#~ msgid "Appendix A: Migration Guide"
-#~ msgstr "Anhang A: Aktualisieren von früheren Versionen"
-
-#~ msgid "Appendix B: Frequently Asked Questions"
-#~ msgstr "Anhang B: Häufige Fragen (FAQ)"
-
-#~ msgid "Appendix C: Contributed Account Trees"
-#~ msgstr "Anhang C: Mitgelieferte Kontenhierarchien"
-
-#~ msgid "Appendix D: GNU Free Documentation License"
-#~ msgstr "Anhang D: GNU Free Documentation License"
-
-#~ msgid "Date Format Display"
-#~ msgstr "Anzeigeformat des Datums"
-
-#~ msgid "US (12/31/2001)"
-#~ msgstr "USA (12/31/2001)"
-
-#~ msgid "US-style: mm/dd/yyyy"
-#~ msgstr "Amerikanisches Format: Monat/Tag/Jahr"
-
-#~ msgid "UK (31/12/2001)"
-#~ msgstr "Großbritannien (31/12/2001)"
-
-#~ msgid "UK-style dd/mm/yyyy"
-#~ msgstr "Englisches Format: Tag/Monat/Jahr"
-
-#~ msgid "Europe (31.12.2001)"
-#~ msgstr "Europa (31.12.2001)"
-
-#~ msgid "Continental Europe: dd.mm.yyyy"
-#~ msgstr "Europäische Format: Tag.Monat.Jahr"
-
-#~ msgid "ISO (2001-12-31)"
-#~ msgstr "ISO (2001-12-31)"
-
-#~ msgid "ISO Standard: yyyy-mm-dd"
-#~ msgstr "ISO-Standard: Jahr-Monat-Tag"
-
-#~ msgid "Default system locale format"
-#~ msgstr "Systemweite Ländereinstellung"
-
-#~ msgid "Default currency for new accounts"
-#~ msgstr "Standardwährung für neue Konten"
-
-#~ msgid "Default currency for reports"
-#~ msgstr "Standardwährung, die bei neuen Berichten verwendet wird"
-
-#~ msgid "Default style for register windows"
-#~ msgstr ""
-#~ "Wählen Sie die Voreinstellung für die Buchungsansicht im Kontobuchfenster"
-
-#~ msgid "Basic Ledger"
-#~ msgstr "Einzeilig"
-
-#~ msgid "Auto-Split Ledger"
-#~ msgstr "Aktive vollständig"
-
-#~ msgid "Confirm before changing reconciled"
-#~ msgstr "Rückfrage vor Änderung an abgeglichenen Einträgen"
-
-#~ msgid ""
-#~ "If selected, use a dialog to confirm a change to a reconciled transaction."
-#~ msgstr ""
-#~ "Vor Änderungen an abgeglichenen Buchungen wird um Bestätigung gefragt."
-
-#~ msgid "The font to use in the register"
-#~ msgstr "Die Schriftart, die im Kontobuch benutzt werden soll"
-
-#~ msgid "Register hint font"
-#~ msgstr "Schriftart Kontobuch-Hinweise"
-
-#~ msgid "The font used to show hints in the register"
-#~ msgstr "Die Schriftart, in der die Hinweise im Kontobuch angezeigt werden"
-
-#~ msgid "Header color"
-#~ msgstr "Überschriften-Farbe"
-
-#~ msgid "The header background color"
-#~ msgstr "Die Hintergrundfarbe des Headers"
-
-#~ msgid "Primary color"
-#~ msgstr "Primärfarbe"
-
-#~ msgid "The default background color for register rows"
-#~ msgstr "Standard Hintergrundfarbe für Kontobuch-Zeilen"
-
-#~ msgid "Secondary color"
-#~ msgstr "Zweite Farbe"
-
-#~ msgid "The default secondary background color for register rows"
-#~ msgstr "Zweite Standard Hintergrundfarbe für Kontobuch-Zeilen"
-
-#~ msgid "Primary active color"
-#~ msgstr "Primäre Farbe für aktive"
-
-#~ msgid "The background color for the current register row"
-#~ msgstr "Hintergrundfarbe für die aktuelle Kontobuchzeile"
-
-#~ msgid "Secondary active color"
-#~ msgstr "Zweite aktive Farbe"
-
-#~ msgid "The secondary background color for the current register row"
-#~ msgstr "Zweite Standard Hintergrundfarbe für die momentane Kontobuchspalte"
-
-#~ msgid "Split color"
-#~ msgstr "Farbe Buchung"
-
-#~ msgid "The default background color for split rows in the register"
-#~ msgstr "Normale Hintergrundfarbe für Buchungen im Kontobuch"
-
-#~ msgid "Split active color"
-#~ msgstr "Farbe einer aktiven Buchung"
-
-#~ msgid "The background color for the current split row in the register"
-#~ msgstr "Hintergrundfarbe der aktiven Buchung im Kontobuch"
-
-#~ msgid "Show non currency commodities"
-#~ msgstr "Aktien/Edelmetalle (ohne Währungen) anzeigen"
-
-#~ msgid "Start date"
-#~ msgstr "Anfangsdatum"
-
-#~ msgid "End date"
-#~ msgstr "Enddatum"
-
-#~ msgid "Show Advanced Settings"
-#~ msgstr "Erweiterte Einstellungen zeigen"
-
-#~ msgid "Allow modification of less commonly used settings."
-#~ msgstr "Veränderungen an weniger gebräuchlichen Einstellungen ermöglichen."
-
-#~ msgid "Toolbar Buttons"
-#~ msgstr "Werkzeugleisten-Knöpfe"
-
-#~ msgid "Choose whether to display icons, text, or both for toolbar buttons"
-#~ msgstr ""
-#~ "Wählen Sie, ob die Werkzeugleiste das Symbol, Text oder beides anzeigen "
-#~ "soll"
-
-#~ msgid "Icons and Text"
-#~ msgstr "Icons und Text"
-
-#~ msgid "Show both icons and text"
-#~ msgstr "Sowohl Icons, als auch Text anzeigen"
-
-#~ msgid "Show icons only"
-#~ msgstr "Nur Icons zeigen"
-
-#~ msgid "Show text only"
-#~ msgstr "Nur Text anzeigen"
-
-#~ msgid "Account Separator"
-#~ msgstr "Kontentrenner"
-
-#~ msgid "The character used to separate fully-qualified account names"
-#~ msgstr "Das Zeichen, das Kontennamen trennt"
-
-#~ msgid "The types of accounts for which balances are sign-reversed"
-#~ msgstr "Die Kontenarten, bei deren Bilanzen die Vorzeichen umgekehrt sind"
-
-#~ msgid "Use file compression"
-#~ msgstr "Datei komprimieren"
-
-#~ msgid "Run on GnuCash start"
-#~ msgstr "Beim GnuCash Start ausführen"
-
-#~ msgid "Should the Since-Last-Run window appear on GnuCash startup?"
-#~ msgstr ""
-#~ "Soll das Fenster \"Seit-Letztem-Aufruf\" beim Starten von GnuCash "
-#~ "erscheinen?"
-
-#~ msgid "Auto-Create new Scheduled Transactions by default"
-#~ msgstr "Terminierte Buchungen automatisch erstellen lassen"
-
-#~ msgid ""
-#~ "Should new Scheduled Transactions have the 'Auto Create' flag set by "
-#~ "default?"
-#~ msgstr ""
-#~ "Sollen neue terminierte Buchungen mit aktivierter Option 'Automatisch "
-#~ "Erstellen' erstellt werden?"
-
-#~ msgid ""
-#~ "Should new Scheduled Transactions with the 'AutoCreate' flag set also be "
-#~ "set to notify?"
-#~ msgstr ""
-#~ "Sollen neue terminierte Buchungen mit automatischem Erstellen auch mit "
-#~ "Benachrichtigung erstellt werden?"
-
-#~ msgid "Default number of days in advance to create"
-#~ msgstr "Voreinstellung Tage für Erstellung"
-
-#~ msgid ""
-#~ "Default number of days in advance to create new Scheduled Transactions."
-#~ msgstr ""
-#~ "So viele Tage im voraus bevorstehende terminierten Buchungen erstellen"
-
-#~ msgid "Default number of days in advance to remind"
-#~ msgstr "Voreinstellung Tage für Erinnerung"
-
-#~ msgid ""
-#~ "Default number of days in advance to remind on new Scheduled Transactions."
-#~ msgstr ""
-#~ "So viele Tage im voraus an bevorstehende terminierte Buchungen erinnern"
-
-#~ msgid "Template Register Lines"
-#~ msgstr "Zeilen Kontobuch-Vorlage"
-
-#~ msgid "How many lines in the template register?"
-#~ msgstr "Wieviele Zeilen in der Kontobuch-Vorlage?"
-
-#~ msgid "_+Advanced"
-#~ msgstr "_+Erweitert"
-
-#~ msgid "Application MDI mode"
-#~ msgstr "Fenstermodus"
-
-#~ msgid "Choose how new windows are created for reports and account trees."
-#~ msgstr ""
-#~ "Wählen Sie, wie mehrere Fenster für Berichte und Kontenfenster angezeigt "
-#~ "werden."
-
-#~ msgid "Notebook"
-#~ msgstr "Karteikarten"
-
-#~ msgid ""
-#~ "New windows are created as notebook tabs in the current top-level window"
-#~ msgstr ""
-#~ "Neue Fenster werden als Karteikarten im aktuellen Top-Level Fenster "
-#~ "geöffnet"
-
-#~ msgid "Create a new top-level window for each report or account tree"
-#~ msgstr "Ein neues Fenster für jeden Bericht öffnen"
-
-#~ msgid "Single window"
-#~ msgstr "Nur ein Fenster"
-
-#~ msgid ""
-#~ "One window is used for all displays (select contents through Window menu)"
-#~ msgstr "Ein Fenster für alle Berichte (Inhalt im Fenster Menü wechseln)"
-
-#~ msgid "Default MDI mode can be set in the GNOME Control Center"
-#~ msgstr ""
-#~ "Die Voreinstellung für den Fenstermodus (MDI, Multi Document Interface) "
-#~ "kann in der GNOME Systemsteuerung gesetzt werden."
-
-#~ msgid "Show Vertical Borders"
-#~ msgstr "Vertikale Begrenzungen anzeigen"
-
-#~ msgid "Show Horizontal Borders"
-#~ msgstr "Anzeigen der horizontalen Begrenzungen"
-
-#~ msgid "Show All Transactions"
-#~ msgstr "Alle Buchungssätze anzeigen"
-
-#~ msgid "By default, show every transaction in an account."
-#~ msgstr "Standardeinstellung: Zeige jeden Buchungssatz im Konto"
-
-#~ msgid "Default number of register rows to display."
-#~ msgstr ""
-#~ "Standardanzahl von Zeilen, die im Kontobuch eines Kontos angezeigt werden "
-#~ "sollen."
-
-#~ msgid "Show accounts with a 0.0 total"
-#~ msgstr "Konten mit Gesamtsumme 0.0 anzeigen"
-
-#~ msgid "Show Foreign Currencies/Shares of Stock"
-#~ msgstr "Fremdwährungen/Aktien anzeigen"
-
-#~ msgid "Profit And Loss"
-#~ msgstr "Gewinn- und Verlustrechnung"
-
-#~ msgid "Show account with 0.0 balance"
-#~ msgstr "Konten mit Saldo 0,00 trotzdem anzeigen"
-
-#~ msgid "%s - %s to %s"
-#~ msgstr "%s - %s bis %s"
-
-#~ msgid "Profit & Loss"
-#~ msgstr "Gewinn- und Verlustrechnung"
-
-#~ msgid "HBCI Remember PIN in memory"
-#~ msgstr "HBCI PIN im Speicher merken"
-
-#~ msgid "Auto-CLEAR threshold"
-#~ msgstr "Entscheidungsschwelle für automatisches Abgleichen"
-
-#~ msgid "Employees"
-#~ msgstr "Mitarbeiter"
-
-#~ msgid "View the quick report of bills coming due soon."
-#~ msgstr "Bericht über demnächst fällige Rechnungen anzeigen."
-
-#~ msgid "View and Edit the available Billing Terms"
-#~ msgstr "Die verfügbaren Zahlungsbedingungen anzeigen und bearbeiten."
-
-#~ msgid "View and Edit the available Tax Tables"
-#~ msgstr "Die verfügbaren Steuertabellen anzeigen und bearbeiten"
-
-#~ msgid "Invoice Tax Included?"
-#~ msgstr "Rechnung mit MWSt?"
-
-#~ msgid "Bill Tax Included?"
-#~ msgstr "Rechnungen mit Steuern erstellen?"
-
-#~ msgid "Notify Bills Due?"
-#~ msgstr "Benachrichtigung bei fälligen Rechnungen?"
-
-#~ msgid "Bills Due Days"
-#~ msgstr "Zeitraum Fälligkeit"
+"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard HBCI. Im "
+"Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
+"Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
+"Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
