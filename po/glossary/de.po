@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
 "POT-Creation-Date: 2002-11-05 23:04+0100\n"
-"PO-Revision-Date: 2003-11-14 22:57+0100\n"
+"PO-Revision-Date: 2005-11-12 12:14+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. "English Definition"
@@ -43,7 +43,7 @@ msgstr "Girokonto"
 
 #. "-"
 msgid "account type: currency"
-msgstr "Währung (Währungskonto)"
+msgstr "WÃ¤hrung (WÃ¤hrungskonto)"
 
 #. "see: Equity"
 msgid "account type: Equity"
@@ -75,7 +75,7 @@ msgstr "Sparkonto"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "Aktienkonto (früher: Depot)"
+msgstr "Aktienkonto (frÃ¼her: Depot)"
 
 #. "-"
 msgid "account: parent account"
@@ -115,7 +115,7 @@ msgstr "Lastschrift"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "Ausschüttung"
+msgstr "AusschÃ¼ttung"
 
 #. "transaction is a dividend"
 msgid "action: div"
@@ -123,7 +123,7 @@ msgstr "Dividende"
 
 #. "-"
 msgid "action: fee"
-msgstr "Gebühr"
+msgstr "GebÃ¼hr"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -155,11 +155,11 @@ msgstr "Bankschalter"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "(Überweisung)"
+msgstr "(Ãœberweisung)"
 
 #. "-"
 msgid "action: wire"
-msgstr "Überweisung"
+msgstr "Ãœberweisung"
 
 #. "-"
 msgid "action: withdraw"
@@ -199,11 +199,11 @@ msgstr "Zahlungsbedingungen"
 
 #. "-"
 msgid "business (adjective)"
-msgstr "Geschäftlich"
+msgstr "GeschÃ¤ftlich"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr "Geschäft (Firma, Kaufmännisch, Unternehmen)"
+msgstr "GeschÃ¤ft (Firma, KaufmÃ¤nnisch, Unternehmen)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -211,7 +211,7 @@ msgstr "Kapitalertrag"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr "Groß-/Kleinschreibung beachten"
+msgstr "GroÃŸ-/Kleinschreibung beachten"
 
 #. "Money in coins or notes"
 msgid "cash"
@@ -223,7 +223,7 @@ msgstr "Scheck"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr "überprüfen"
+msgstr "Ã¼berprÃ¼fen"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
@@ -231,15 +231,15 @@ msgstr "Schliessen"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr "Währung/Aktie"
+msgstr "WÃ¤hrung/Aktie"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr "Börsenplatzkürzel"
+msgstr "BÃ¶rsenplatzkÃ¼rzel"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "Stückelung"
+msgstr "StÃ¼ckelung"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
@@ -248,7 +248,7 @@ msgstr "Symbol"
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
 msgstr ""
-"Haben (ist der professionelle Ausdruck für (a). Sonst: Gutschrift, Eingang?)"
+"Haben (ist der professionelle Ausdruck fÃ¼r (a). Sonst: Gutschrift, Eingang?)"
 
 #. "-"
 msgid "Credit Card"
@@ -256,11 +256,11 @@ msgstr "Kreditkarte"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr "Überweisung"
+msgstr "Ãœberweisung"
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr "Währung"
+msgstr "WÃ¤hrung"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
@@ -285,7 +285,7 @@ msgstr "Zeitraum"
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
 msgstr ""
-"Soll (ist der professionelle Ausdruck für (b). Sonst: Belastung, Ausgang?)"
+"Soll (ist der professionelle Ausdruck fÃ¼r (b). Sonst: Belastung, Ausgang?)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
@@ -305,7 +305,7 @@ msgstr "Beschreibung (Verwendungszweck, Buchungstext, Text?)"
 
 #. "Important Buzzword :)"
 msgid "double entry"
-msgstr "Doppelte Buchführung"
+msgstr "Doppelte BuchfÃ¼hrung"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -397,7 +397,7 @@ msgstr "Fenstermodus"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "Buchungstext, (Verwendungszweck, Text, Erklärung?)"
+msgstr "Buchungstext, (Verwendungszweck, Text, ErklÃ¤rung?)"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -405,7 +405,7 @@ msgstr "Hypothek"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr "Nationale Währung"
+msgstr "Nationale WÃ¤hrung"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
@@ -413,7 +413,7 @@ msgstr "netto, rein-"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr "Netto Anlagevermögen"
+msgstr "Netto AnlagevermÃ¶gen"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
@@ -421,7 +421,7 @@ msgstr "Reingewinn, (Ergebnis)"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr "Reinvermögen"
+msgstr "ReinvermÃ¶gen"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
@@ -433,7 +433,7 @@ msgstr "Nr"
 
 #. "to make accessible"
 msgid "open, to"
-msgstr "Öffnen"
+msgstr "Ã–ffnen"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
@@ -461,7 +461,7 @@ msgstr "Verbindlichkeiten/Forderungen (an Lieferungen und Leistungen)"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr "Zahlungsempfänger"
+msgstr "ZahlungsempfÃ¤nger"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
@@ -497,7 +497,7 @@ msgstr "Geldkurs"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "Börsenkurs, (Kurs, Börsennotierung, Marktwert)"
+msgstr "BÃ¶rsenkurs, (Kurs, BÃ¶rsennotierung, Marktwert)"
 
 #. "Money gained in business, esp. the difference between the amount earned and the amount spent"
 msgid "profit"
@@ -521,11 +521,11 @@ msgstr "Abgleichen (In Einklang bringen, Abstimmen, Ausgleichen?)"
 
 #. "-"
 msgid "record keeping"
-msgstr "Buchführung"
+msgstr "BuchfÃ¼hrung"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "Kontobuch (1.8.2 und älter: Kassenbericht)"
+msgstr "Kontobuch (1.8.2 und Ã¤lter: Kassenbericht)"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
@@ -537,7 +537,7 @@ msgstr "Aktienteilung"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "Buchungsansicht: Aktive vollständig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
+msgstr "Buchungsansicht: Aktive vollstÃ¤ndig (bis 1.8.7: Auto-Mehrteiliges Hauptbuch)"
 
 #. "another form of register"
 msgid "register: basic ledger"
@@ -549,7 +549,7 @@ msgstr "Journal (bis 1.8.7: Hauptbuch)"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "Buchungsansicht: Vollständig (bis 1.8.7: Amerikanisches Journal)"
+msgstr "Buchungsansicht: VollstÃ¤ndig (bis 1.8.7: Amerikanisches Journal)"
 
 #. "reload the current document"
 msgid "reload, to"
@@ -557,7 +557,7 @@ msgstr "Erneut laden"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "Gewinnrücklagen"
+msgstr "GewinnrÃ¼cklagen"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -565,11 +565,11 @@ msgstr "speichern"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr "Terminierte Buchung (Dauerauftrag, Termin-Überweisung)"
+msgstr "Terminierte Buchung (Dauerauftrag, Termin-Ãœberweisung)"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr "überprüfen (bis 1.6: ausbuchen)"
+msgstr "Ã¼berprÃ¼fen (bis 1.6: ausbuchen)"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
@@ -621,11 +621,11 @@ msgstr "Betrag"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr "Buchungssatz, ggf. Buchung (bis 1.8.7: Geschäftsvorgang)"
+msgstr "Buchungssatz, ggf. Buchung (bis 1.8.7: GeschÃ¤ftsvorgang)"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "Bestätigt"
+msgstr "BestÃ¤tigt"
 
 #. "-"
 msgid "transaction state: frozen"
@@ -637,11 +637,11 @@ msgstr "Abgeglichen"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "Storniert (Gelöscht?)"
+msgstr "Storniert (GelÃ¶scht?)"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr "Überweisung, ([Aktien-] Übertragung)"
+msgstr "Ãœberweisung, ([Aktien-] Ãœbertragung)"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
@@ -657,7 +657,7 @@ msgstr "Art"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr "Maßeinheiten"
+msgstr "MaÃŸeinheiten"
 
 #. "-"
 msgid "URL"
