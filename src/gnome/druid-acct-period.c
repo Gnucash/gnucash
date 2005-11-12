@@ -170,7 +170,7 @@ get_close_status_str (AcctPeriodInfo *info)
   switch (info->close_status)
   {
     case -1: str = ""; break;
-    case 0: str = _("The book was closed suscessfully\n"); break;
+    case 0: str = _("The book was closed successfully."); break;
     default: str = "";
   }
   return str;
@@ -490,7 +490,11 @@ ap_show_done (GnomeDruidPageEdge *druidpage,
   AcctPeriodInfo *info = user_data;
   ENTER ("info=%p", info);
 
-  msg = _("%s\nCongradulations! You are done closing books!");
+  /* Translation FIXME: Can this %s-containing message please be
+     replaced by one single message? Either this closing went
+     successfully ("success", "congratulations") or something else
+     should be displayed anyway. */
+  msg = _("%s\nCongratulations! You are done closing books!");
 
   str = g_strdup_printf (msg, get_close_status_str (info));
   gnome_druid_page_edge_set_text (druidpage, str);

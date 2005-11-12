@@ -87,8 +87,8 @@ gnc_file_be_get_config(QofBackend *be)
 	option = g_new0(QofBackendOption, 1);
 	option->option_name = GNC_BE_DAYS;
 	option->description = _("Number of days to retain old files");
-	option->tooltip = _("GnuCash keeps backups of old files, "
-		"this setting dictates how long each is kept");
+	option->tooltip = _("GnuCash keeps backups of old files. "
+		"This setting specifies how long each is kept.");
 	option->type = KVP_TYPE_GINT64;
 	option->value = (gpointer)&file_retention_days;
 	qof_backend_prepare_option(be, option);

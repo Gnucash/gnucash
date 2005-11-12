@@ -97,6 +97,8 @@ build_bangtype_map()
   qif_bangtype_map = g_hash_table_new(g_str_hash, g_str_equal);
   g_assert(qif_bangtype_map);
 
+  /* Translators FIXME: It is unclear whether these strings should
+     really be translated, and if yes, into which translation. */
   QIF_ADD_TYPE(N_("type:bank"), QIF_TYPE_BANK);
   QIF_ADD_TYPE(N_("type:cash"), QIF_TYPE_CASH);
   QIF_ADD_TYPE(N_("type:ccard"), QIF_TYPE_CCARD);

@@ -505,6 +505,8 @@ gnc_load_financials_from_fd(QofBook *book, int fd)
     /* create a lost account, put the missing accounts there */
     acc = xaccMallocAccount(book);
     xaccAccountBeginEdit (acc);
+    /* Translators: Name of the account where all the missing accounts
+       are put into. (FIXME: is this correct?) */
     xaccAccountSetName (acc, _("Lost Accounts"));
     acc -> children = holder;
     xaccAccountCommitEdit (acc);

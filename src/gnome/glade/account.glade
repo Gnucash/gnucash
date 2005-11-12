@@ -138,7 +138,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">    </property>
+			  <property name="label" translatable="no">    </property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -617,7 +617,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">    </property>
+			  <property name="label" translatable="no">    </property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -641,7 +641,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">    </property>
+			  <property name="label" translatable="no">    </property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -689,7 +689,7 @@
 		      <child>
 			<widget class="GtkLabel" id="label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">    </property>
+			  <property name="label" translatable="no">    </property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1945,7 +1945,7 @@ additional accounts by hand later.</property>
 			  <child>
 			    <widget class="GtkComboBox" id="combobox1">
 			      <property name="visible">True</property>
-			      <property name="items" translatable="yes">USD
+			      <property name="items" translatable="no">USD
 GBP
 EUR</property>
 			    </widget>

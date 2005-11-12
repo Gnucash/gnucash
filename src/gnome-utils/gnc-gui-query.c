@@ -159,6 +159,7 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_OK_CANCEL,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -206,6 +207,7 @@ gnc_verify_cancel_dialog(GtkWidget *parent,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -255,6 +257,7 @@ gnc_verify_dialog(gncUIWidget parent, gboolean yes_is_default,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_YES_NO,
+				   "%s",
 				   buffer);
   g_free(buffer);
   va_end(args);
@@ -315,6 +318,7 @@ gnc_info_dialog(GtkWidget *parent, const gchar *format, ...)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   va_end(args);
 
@@ -349,6 +353,7 @@ gnc_warning_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_WARNING,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   g_free(buffer);
 
@@ -420,6 +425,7 @@ gnc_error_dialog_common(GtkWidget *parent, const gchar *format, va_list args)
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_ERROR,
 				   GTK_BUTTONS_CLOSE,
+				   "%s",
 				   buffer);
   g_free(buffer);
 

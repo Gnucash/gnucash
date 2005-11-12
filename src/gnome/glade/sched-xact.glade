@@ -5519,7 +5519,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label847833">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Number of Occurences:</property>
+			      <property name="label" translatable="yes">Number of Occurrences:</property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -323,20 +323,20 @@ show_session_error (QofBackendError io_error, const char *newfile)
 	  break; 
 	}
 	case ERR_QSF_MAP_NOT_OBJ: {
-	  fmt = _("The selected file %s is a QSF map and cannot be "
+	  fmt = _("The selected file \n  %s\n is a QSF map and cannot be "
 			"opened as a QSF object.");
 	  gnc_error_dialog(parent, fmt, newfile);
 	  break; 
 	}
 	case ERR_QSF_OVERFLOW : {
 		fmt = _("When converting XML strings into numbers, an overflow "
-			"has been detected. The QSF object file\n%s\n contains invalid "
+			"has been detected. The QSF object file\n  %s\ncontains invalid "
 			"data in a field that is meant to hold a number.");
 		gnc_error_dialog(parent, fmt, newfile);
 		break;
 	}
 	case ERR_QSF_OPEN_NOT_MERGE : {
-		fmt = _("The QSF object file\n%s\nis valid and contains GnuCash "
+		fmt = _("The QSF object file\n  %s\nis valid and contains GnuCash "
 			"objects. However, GnuCash cannot open the file directly because "
 			"the data needs to be merged into an existing GnuCash data book. "
 			"Please open a GnuCash file or create a new one, then import "
@@ -352,17 +352,17 @@ show_session_error (QofBackendError io_error, const char *newfile)
       break;
 
     case ERR_FILEIO_PARSE_ERROR:
-      fmt = _("There was an error parsing the file \n    %s\n");
+      fmt = _("There was an error parsing the file\n  %s");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_EMPTY:
-      fmt = _("The file \n    %s\n is empty.");
+      fmt = _("The file \n  %s\nis empty.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
-      fmt = _("The file \n    %s\n could not be found.");
+      fmt = _("The file \n  %s\ncould not be found.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
@@ -373,19 +373,19 @@ show_session_error (QofBackendError io_error, const char *newfile)
       break;
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
-      fmt = _("Unknown file type");
+      fmt = _("The file type of file\n  %s\nis unknown.");
       gnc_error_dialog(parent, fmt, newfile);
       break;
       
     case ERR_FILEIO_BACKUP_ERROR:
-      fmt = _("Could not make a backup of %s\n");
+      fmt = _("Could not make a backup of the file\n  %s");
       gnc_error_dialog(parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_WRITE_ERROR:
-      fmt = _("Could not write to %s\nCheck that you have"
-              " permission to write to this file and that "
-              " there is sufficient space to create it.");
+      fmt = _("Could not write to file\n  %s\nCheck that you have "
+              "permission to write to this file and that "
+              "there is sufficient space to create it.");
       gnc_error_dialog(parent, fmt, newfile);
       break;
 

@@ -75,13 +75,11 @@ account types now.</property>
 	      <child>
 		<widget class="GtkLabel" id="label2">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The next screen will allow you to resolve
-any conflicts in merging your new account
-tree into your current GnuCash file.</property>
+		  <property name="label" translatable="yes">The next screen will allow you to resolve any conflicts in merging your new account tree into your current GnuCash file.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
-		  <property name="wrap">False</property>
+		  <property name="wrap">True</property>
 		  <property name="selectable">False</property>
 		  <property name="xalign">0.5</property>
 		  <property name="yalign">0.5</property>
@@ -271,7 +269,7 @@ The import object can be created as a new object in the existing book.</property
 			  <property name="visible">True</property>
 			  <property name="tooltip" translatable="yes">Add the import as a new object, leave original in place</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">3.  Import the data as a NEW object</property>
+			  <property name="label" translatable="yes">3. Import the data as a NEW object</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>

@@ -1,3 +1,8 @@
+2005-11-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/*/*.glade: String improvements: Fix typos, remove
+	unnecessary spaces from translations.
+
 2005-11-11  Christian Stimming  <stimming@tuhh.de>
 
 	* po/*.po: Copy translations from old 1.8 branch to HEAD and merge
