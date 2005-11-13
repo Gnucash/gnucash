@@ -434,8 +434,8 @@ sixtp_sax_start_handler(void *user_data,
   /* now allocate the new stack frame and shift to it */
   new_frame = sixtp_stack_frame_new( next_parser, g_strdup((char*) name));
 
-  new_frame->line = getLineNumber( pdata->saxParserCtxt );
-  new_frame->col  = getColumnNumber( pdata->saxParserCtxt );
+  new_frame->line = xmlSAX2GetLineNumber( pdata->saxParserCtxt );
+  new_frame->col  = xmlSAX2GetColumnNumber( pdata->saxParserCtxt );
   
   pdata->stack = g_slist_prepend(pdata->stack, (gpointer) new_frame);
   

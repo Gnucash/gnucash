@@ -1,5 +1,10 @@
 2005-11-13  Neil Williams <linux@codehelp.co.uk>
 
+	* src/backend/file/sixtp.c : Remove deprecated
+	SAX function. Closes bug #319559.
+
+2005-11-13  Neil Williams <linux@codehelp.co.uk>
+
 	* make-gncuash-potfiles.in : Add a specific
 	call to read one libqof file.
 	* po/POTFILES.in : the updated POTFILES list.
