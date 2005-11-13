@@ -1,7 +1,16 @@
-if USE_LIBGOFFICE
 SUBDIRS = libc glib26 guile-www srfi
+
+if USE_LIBGOFFICE
+SUBDIRS +=
 else
-SUBDIRS = libc glib26 guile-www srfi goffice
+SUBDIRS += goffice
+endif
+
+if USE_LIBQOF
+SUBDIRS += libqof
+else
+SUBDIRS +=
 endif
 
 EXTRA_DIST = README guppi-legend.patch
+

@@ -1,3 +1,96 @@
+2005-11-13  Neil Williams <linux@codehelp.co.uk>
+
+	* configure.in : New locations of QOF files and
+	postgres fix to clean up CFLAGS
+	* lib/Makefile.am : New directory.
+	* src/engine/Makefile.am : Remove QOF build
+	* src/backend/Makefile.am : Remove QSF directory.
+	* src/backend/postgres/test/Makefile.am : Build tests
+	without linking against the GModule to retain portability.
+	* src/import-export/qif-import/test/Makefile.am : Adjusted
+	linkage due to library changes.
+	* src/gnome-utils/test/Makefile.am : Adjusted linkage
+	due to library changes.
+
+	Moving QSF to lib/libqof/backend/file
+	* src/backend/qsf/qsf-backend.c
+	* src/backend/qsf/pilot-qsf-GnuCashInvoice.xml
+	* src/backend/qsf/qsf-dir.h.in
+	* src/backend/qsf/qsf-map.xsd.xml
+	* src/backend/qsf/qsf-xml-map.c
+	* src/backend/qsf/qof-backend-qsf.h
+	* src/backend/qsf/qsf-xml.c
+	* src/backend/qsf/Makefile.am
+	* src/backend/qsf/qsf-object.xsd.xml
+	* src/backend/qsf/qsf-xml.h :
+
+	Moving QOF to lib/libqof/qof/
+	* src/engine/qofbook-p.h
+	* src/engine/gnc-trace.c
+	* src/engine/qofquery-deserial.h
+	* src/engine/gnc-trace.h
+	* src/engine/gnc-date.c
+	* src/engine/qofquerycore-p.h
+	* src/engine/gnc-date.h
+	* src/engine/qofquery-serialize.c
+	* src/engine/qofid.c
+	* src/engine/qofquery-serialize.h
+	* src/engine/qofid.h
+	* src/engine/gnc-engine-util.c
+	* src/engine/gnc-event.c
+	* src/engine/qofgobj.c
+	* src/engine/gnc-engine-util.h
+	* src/engine/gnc-event.h
+	* src/engine/qofgobj.h
+	* src/engine/qofbook.c
+	* src/engine/qofchoice.c
+	* src/engine/qofbook.h
+	* src/engine/qofchoice.h
+	* src/engine/kvp_frame.c
+	* src/engine/qofquery.c
+	* src/engine/kvp_frame.h
+	* src/engine/qofquery.h
+	* src/engine/qofquerycore.c
+	* src/engine/qofquerycore.h
+	* src/engine/qofsession.c
+	* src/engine/qofsession-p.h
+	* src/engine/qofsession.h
+	* src/engine/qofid-p.h
+	* src/engine/qofsql.c
+	* src/engine/gnc-numeric.c
+	* src/engine/qofsql.h
+	* src/engine/gnc-numeric.h
+	* src/engine/kvp-util-p.h
+	* src/engine/qofclass-p.h
+	* src/engine/qof_book_merge.c
+	* src/engine/qof_book_merge.h
+	* src/engine/gnc-event-p.h
+	* src/engine/qofla-dir.h.in
+	* src/engine/qof.h
+	* src/engine/qofinstance.c
+	* src/engine/qofinstance.h
+	* src/engine/qofmath128.c
+	* src/engine/qofmath128.h
+	* src/engine/qofobject-p.h
+	* src/engine/Makefile.am
+	* src/engine/qofbackend.c
+	* src/engine/qofbackend-p.h
+	* src/engine/qofbackend.h
+	* src/engine/qofinstance-p.h
+	* src/engine/qofquery-p.h
+	* src/engine/md5.c
+	* src/engine/md5.h
+	* src/engine/kvp-util.c
+	* src/engine/qofclass.c
+	* src/engine/qof-be-utils.h
+	* src/engine/qofobject.c
+	* src/engine/kvp-util.h
+	* src/engine/qofclass.h
+	* src/engine/qofobject.h
+	* src/engine/guid.c
+	* src/engine/guid.h
+	* src/engine/qofquery-deserial.c :
+
 2005-11-12  Christian Stimming  <stimming@tuhh.de>
 
 	* src/*/*.glade: String improvements: Fix typos, remove

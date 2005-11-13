@@ -29,8 +29,42 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgw-engine.la \
         ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
-	${top_builddir}/src/backend/postgres/libgnc-backend-postgres.la \
-        -lltdl
+        -lltdl \
+	-lpq
+
+test_db_SOURCES = \
+  ${top_srcdir}/src/backend/postgres/PostgresBackend.c \
+  ${top_srcdir}/src/backend/postgres/account.c \
+  ${top_srcdir}/src/backend/postgres/book.c \
+  ${top_srcdir}/src/backend/postgres/builder.c \
+  ${top_srcdir}/src/backend/postgres/checkpoint.c \
+  ${top_srcdir}/src/backend/postgres/escape.c \
+  ${top_srcdir}/src/backend/postgres/events.c \
+  ${top_srcdir}/src/backend/postgres/gncquery.c \
+  ${top_srcdir}/src/backend/postgres/kvp-sql.c \
+  ${top_srcdir}/src/backend/postgres/price.c \
+  ${top_srcdir}/src/backend/postgres/txn.c \
+  ${top_srcdir}/src/backend/postgres/txnmass.c \
+  ${top_srcdir}/src/backend/postgres/upgrade.c \
+  ${top_srcdir}/src/backend/postgres/putil.c \
+  test-db.c
+
+test_escape_SOURCES = \
+  ${top_srcdir}/src/backend/postgres/PostgresBackend.c \
+  ${top_srcdir}/src/backend/postgres/account.c \
+  ${top_srcdir}/src/backend/postgres/book.c \
+  ${top_srcdir}/src/backend/postgres/builder.c \
+  ${top_srcdir}/src/backend/postgres/checkpoint.c \
+  ${top_srcdir}/src/backend/postgres/escape.c \
+  ${top_srcdir}/src/backend/postgres/events.c \
+  ${top_srcdir}/src/backend/postgres/gncquery.c \
+  ${top_srcdir}/src/backend/postgres/kvp-sql.c \
+  ${top_srcdir}/src/backend/postgres/price.c \
+  ${top_srcdir}/src/backend/postgres/txn.c \
+  ${top_srcdir}/src/backend/postgres/txnmass.c \
+  ${top_srcdir}/src/backend/postgres/upgrade.c \
+  ${top_srcdir}/src/backend/postgres/putil.c \
+  test-escape.c
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \

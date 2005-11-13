@@ -35,8 +35,10 @@ int main (int argc, char ** argv)
 {
 	qof_init();
 	cashobjects_register();
+	/* the test needs to run locally in case make install
+	 * has not yet been run. Use GNC_LIBDIR usually. */
 	do_test(
-		qof_load_backend_library (QOF_LIB_DIR, PG_LIB_NAME, PG_LIB_INIT),
+		qof_load_backend_library ("../", PG_LIB_NAME, PG_LIB_INIT),
 		" loading gnc-backend-postgres GModule failed");
 	print_test_results();
 	qof_close();
