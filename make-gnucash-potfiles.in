@@ -13,6 +13,8 @@ use File::Basename;
 my @cvsignores = `find src -name '.cvsignore'`;
 my @possible_files = `find src -name '*.c' -o -name '*.glade' -o -name '*.desktop.in' -o -name '*.keys.in' -o -name '*.pl' |sort`;
 
+push @possible_files, qw( lib/libqof/backend/file/qsf-backend.c);
+
 chomp(my $cwd = `pwd`);
 
 my %ignores;

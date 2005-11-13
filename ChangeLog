@@ -1,5 +1,11 @@
 2005-11-13  Neil Williams <linux@codehelp.co.uk>
 
+	* make-gncuash-potfiles.in : Add a specific
+	call to read one libqof file.
+	* po/POTFILES.in : the updated POTFILES list.
+
+2005-11-13  Neil Williams <linux@codehelp.co.uk>
+
 	* configure.in : New locations of QOF files and
 	postgres fix to clean up CFLAGS
 	* lib/Makefile.am : New directory.
