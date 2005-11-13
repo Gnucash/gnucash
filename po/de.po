@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-12 11:44+0100\n"
-"PO-Revision-Date: 2005-11-12 12:09+0100\n"
+"PO-Revision-Date: 2005-11-13 14:06+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1220,9 +1220,8 @@ msgid "The percentage discount applied for early payment."
 msgstr "Prozent Skonto bei früher Zahlung."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:39
-#, fuzzy
 msgid "Type Menu"
-msgstr "Typ: "
+msgstr "Typ-Menü"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:40
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:13
@@ -1231,12 +1230,11 @@ msgstr "Typ: "
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
 msgid "<b>Bills</b>"
-msgstr ""
+msgstr "<b>Rechnungseingang</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
-#, fuzzy
 msgid "<b>Invoices</b>"
-msgstr "Rechnungen"
+msgstr "<b>Rechnungsausgang</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
 msgid "Default number of register rows to display in Invoices."
@@ -3736,9 +3734,8 @@ msgid "1/1000000"
 msgstr "1/1000000"
 
 #: ../src/gnome/glade/account.glade.h:8
-#, fuzzy
 msgid "<b>Account Type</b>"
-msgstr "Kontoart"
+msgstr "<b>Kontoart</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
 #, fuzzy
