@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-12 11:44+0100\n"
-"PO-Revision-Date: 2005-11-13 14:06+0100\n"
+"PO-Revision-Date: 2005-11-13 15:45+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3738,37 +3738,30 @@ msgid "<b>Account Type</b>"
 msgstr "<b>Kontoart</b>"
 
 #: ../src/gnome/glade/account.glade.h:9
-#, fuzzy
 msgid "<b>Categories</b>"
-msgstr "TXF Kategorien"
+msgstr "<b>Kategorien</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
-#, fuzzy
 msgid "<b>Contained Accounts</b>"
-msgstr "Gebuchtes Konto"
+msgstr "<b>Enthaltene Konten</b>"
 
 #: ../src/gnome/glade/account.glade.h:11
-#, fuzzy
 msgid "<b>Description</b>"
-msgstr "Beschreibung"
+msgstr "<b>Beschreibung</b>"
 
 #: ../src/gnome/glade/account.glade.h:12
-#, fuzzy
 msgid "<b>Identification</b>"
-msgstr "Identifizierung"
+msgstr "<b>Identifizierung</b>"
 
 #: ../src/gnome/glade/account.glade.h:13
-#, fuzzy
 msgid "<b>New Account Currency</b>"
-msgstr "Standardwährung für neue Konten"
+msgstr "<b>Standardwährung für neue Konten</b>"
 
 #: ../src/gnome/glade/account.glade.h:14
-#, fuzzy
 msgid "<b>Parent Account</b>"
-msgstr "Hauptkonto"
+msgstr "<b>Hauptkonto</b>"
 
 #: ../src/gnome/glade/account.glade.h:15
-#, fuzzy
 msgid "Account code:"
 msgstr "Kontonummer:"
 
@@ -5688,9 +5681,8 @@ msgid "9th"
 msgstr "9."
 
 #: ../src/gnome/glade/sched-xact.glade.h:34
-#, fuzzy
 msgid "<b>Since Last Run Dialog</b>"
-msgstr "Seit-letztem-Aufruf Fenster"
+msgstr "<b>Seit-letztem-Aufruf Fenster</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:35
 msgid "<b>Transaction Editor Defaults</b>"
@@ -9459,53 +9451,44 @@ msgid ": (Co_lon)"
 msgstr ": (Doppelpunkt)"
 
 #: ../src/gnome-utils/preferences.glade.h:10
-#, fuzzy
 msgid "<b>Actions</b>"
-msgstr "A_ktionen"
+msgstr "<b>Aktionen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:11
-#, fuzzy
 msgid "<b>Content</b>"
-msgstr "Inhalt"
+msgstr "<b>Inhalt</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:12
-#, fuzzy
 msgid "<b>Date Format</b>"
-msgstr "Datumsformat"
+msgstr "<b>Datumsformat</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:13
-#, fuzzy
 msgid "<b>Default Currency</b>"
-msgstr "Standardwährung für Berichte"
+msgstr "<b>Standardwährung</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:14
-#, fuzzy
 msgid "<b>Default Report Currency</b>"
-msgstr "Standardwährung für Berichte"
+msgstr "<b>Standardwährung für Berichte</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:15
-#, fuzzy
 msgid "<b>Default Style</b>"
-msgstr "Voreinstellung Buchungsansicht"
+msgstr "<b>Voreinstellung Buchungsansicht</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:16
-#, fuzzy
 msgid "<b>End Date</b>"
-msgstr "Enddatum:"
+msgstr "<b>Enddatum</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:17
-#, fuzzy
 msgid "<b>Fancy Date Format</b>"
-msgstr "Datumsformat heute"
+msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:18
 msgid "<b>Files</b>"
-msgstr ""
+msgstr "<b>Dateien</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:19
-#, fuzzy
 msgid "<b>General</b>"
-msgstr "Allgemein"
+msgstr "<b>Allgemein</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:20
 msgid "<b>Graphics</b>"
@@ -9513,25 +9496,23 @@ msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:21
 msgid "<b>Labels</b>"
-msgstr ""
+msgstr "<b>Beschriftungen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:22
 msgid "<b>Location</b>"
 msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:23
-#, fuzzy
 msgid "<b>Numbers</b>"
-msgstr "Nummer"
+msgstr "<b>Zahlen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:24
 msgid "<b>Other Defaults</b>"
 msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:25
-#, fuzzy
 msgid "<b>Reconciling</b>"
-msgstr "Informationen zum Kontenabgleich"
+msgstr "<b>Kontenabgleich</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:26
 #, fuzzy
@@ -9539,36 +9520,32 @@ msgid "<b>Reverse Balanced Accounts</b>"
 msgstr "Betrags-Vorzeichen umkehren für Kontentypen"
 
 #: ../src/gnome-utils/preferences.glade.h:27
-#, fuzzy
 msgid "<b>Search Dialog</b>"
-msgstr "Den Such-Dialog testen"
+msgstr "<b>Such-Dialog</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:28
 msgid "<b>Separator Character</b>"
 msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:29
-#, fuzzy
 msgid "<b>Start Date</b>"
-msgstr "Anfangsdatum:"
+msgstr "<b>Anfangsdatum</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:30
 msgid "<b>Time Format</b>"
-msgstr ""
+msgstr "<b>Datumsformat</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:31
 msgid "<b>Toolbar Style</b>"
 msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:32
-#, fuzzy
 msgid "<b>Window Geometry</b>"
-msgstr "Fenster-Einstellungen speichern"
+msgstr "<b>Fenster-Einstellungen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:33
-#, fuzzy
 msgid "Ab_solute:"
-msgstr "Veraltet"
+msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:35
 #, fuzzy
@@ -10164,14 +10141,12 @@ msgid "<b>Currency Transfer</b>"
 msgstr "Währungs-Buchung"
 
 #: ../src/gnome-utils/transfer.glade.h:4
-#, fuzzy
 msgid "<b>Transfer From</b>"
-msgstr "Herkunftskonto"
+msgstr "<b>Herkunftskonto</b>"
 
 #: ../src/gnome-utils/transfer.glade.h:5
-#, fuzzy
 msgid "<b>Transfer To</b>"
-msgstr "Buchen nach"
+msgstr "<b>Buchen nach</b>"
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -11228,7 +11203,7 @@ msgstr "Geben Sie Ihr Passwort ein"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
 msgid "<b>HBCI</b>"
-msgstr ""
+msgstr "<b>HBCI</b>"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 msgid "Activate verbose debug messages for HBCI Online Banking."
@@ -11950,9 +11925,8 @@ msgid "Import a Quicken QIF file"
 msgstr "Importieren einer Quicken QIF-Datei"
 
 #: ../src/import-export/qif-import/qif.glade.h:1
-#, fuzzy
 msgid "<b>QIF Import</b>"
-msgstr "QIF Import"
+msgstr "<b>QIF Import</b>"
 
 #: ../src/import-export/qif-import/qif.glade.h:4
 msgid "Accounts and stock holdings"
