@@ -1,0 +1,15 @@
+;; Object pcre/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "pcre/"
+  :tables (list 
+   (semanticdb-table "Makefile.am"
+    :major-mode 'makefile-mode
+    :tags '(("noinst_LTLIBRARIES" variable (:default-value ("libpcre.la")) nil [1 33]) ("libpcre_la_SOURCES" variable (:default-value ("maketables.c" "get.c" "study.c" "pcre.c" "pcreposix.c")) nil [33 100]) ("EXTRA_DIST" variable (:default-value ("COPYING")) nil [100 121]) ("libpcre_a_ladir" variable (:default-value ("$(includedir)/libgoffice-1/goffice/cut-n-paste/pcre")) nil [122 192]) ("libpcre_a_la_HEADERS" variable (:default-value ("pcreposix.h")) nil [192 227]) ("noinst_HEADERS" variable (:default-value ("internal.h" "pcre.h")) nil [227 262]) ("AM_CPPFLAGS" variable (:default-value ("$(GOFFICE_DEPS_CFLAGS)" "-I$(top_builddir)/lib/goffice-0.0.4" "-DSUPPORT_UTF8" "-DNEWLINE=10" "-DPOSIX_MALLOC_THRESHOLD=100" "-DLINK_SIZE=2" "-DMATCH_LIMIT=10000000")) nil [263 451]))
+    :file "Makefile.am"
+    :pointmax 452
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )
