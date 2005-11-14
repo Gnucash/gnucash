@@ -285,46 +285,6 @@ gnc_add_scm_extension (SCM extension)
   }
 }
 
-/******************** Install Menus ********************/
-
-typedef struct {
-  GtkUIManager *uiMerge;
-  GtkActionGroup *group;
-  guint merge_id;
-} setup_data;
-
-static void
-gnc_extensions_menu_setup_one (ExtensionInfo *ext_info,
-			       setup_data *data)
-{
-  DEBUG("Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
-        ext_info->ae.name, ext_info->typeStr);
-
-  gtk_action_group_add_actions(data->group, &ext_info->ae, 1,
-			       ext_info->extension);
-  gtk_ui_manager_add_ui(data->uiMerge, data->merge_id, ext_info->path,
-			ext_info->ae.label, ext_info->ae.name,
-			ext_info->type, FALSE);
-  gtk_ui_manager_ensure_update(data->uiMerge);
-}
-
-void
-gnc_extensions_menu_setup (GtkUIManager *uiMerge )
-{
-  setup_data data;
-
-  ENTER(" ");
-
-  data.uiMerge = uiMerge;
-  data.group = gtk_action_group_new("MainWindowActionsN");
-  gtk_action_group_set_translation_domain(data.group, GETTEXT_PACKAGE);
-  gtk_ui_manager_insert_action_group(uiMerge, data.group, 0);
-  data.merge_id = gtk_ui_manager_new_merge_id(uiMerge);
-
-  g_slist_foreach(extension_list, (GFunc)gnc_extensions_menu_setup_one, &data);
-  LEAVE(" ");
-}
-
 /******************** Shutdown ********************/
 
 void

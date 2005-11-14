@@ -51,14 +51,6 @@ void gnc_extension_invoke_cb (SCM extension, SCM window);
  */
 void gnc_add_scm_extension(SCM extension);
 
-/** This function inserts all of the menu items stored by
- *  gnc_add_scm_extension() into the application menus.
- *
- *  @param uiMerge The GtkUIManager [GtkUIManager] object to use for
- *  merging.
- */
-void gnc_extensions_menu_setup( GtkUIManager *uiMerge );
-
 /** This function releases any memory being held by the 'extensions'
  *  code.  It is called from the window shutdown code.
  */
