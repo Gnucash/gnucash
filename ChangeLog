@@ -1,3 +1,10 @@
+2005-11-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/core-utils/gnc-gkeyfile-utils.c: cast the
+	  printf so we don't warn when sizeof(ssize_t) !=
+	  sizeof(int).  In this case the cast is safe because
+	  we can only write an int-size of data.
+
 2005-11-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/backend/file/sixtp.c : Remove deprecated
