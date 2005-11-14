@@ -30,11 +30,11 @@
     @brief  Plugin management functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
 
-    The plugin manager maintains a list of all plugins that have been
-    instantiated by various parts of Gnucash.  The manager will
-    provide this list upon request, it will also look up individual
-    plugins on request.  The main client of this manager is the main
-    gnucash window code.  All plugins registered here will
+    The plugin manager maintains a list of all non-content plugins
+    that have been instantiated by various parts of Gnucash.  The
+    manager will provide this list upon request, it will also look up
+    individual plugins on request.  The main client of this manager is
+    the main gnucash window code.  All plugins registered here will
     automatically be installed in each top level gnucash window that
     is created.
 

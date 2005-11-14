@@ -21,6 +21,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-basic-commands.c
+    @brief Functions providing a basic set of menu items.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
+*/
+
 #include "config.h"
 #include <string.h>
 
@@ -73,6 +82,8 @@ static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActio
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-basic-commands-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-basic-commands-ui.xml"
 
+/** An array of all of the actions provided by the basic commands
+ *  plugin. */
 static GtkActionEntry gnc_plugin_actions [] = {
 
   /* File menu */
@@ -145,14 +156,21 @@ static GtkActionEntry gnc_plugin_actions [] = {
     N_("View the Tips of the Day"),
     G_CALLBACK (gnc_main_window_cmd_help_totd) },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
+
+/** These are the "important" actions provided by the basic commands
+ *  plugin.  Their labels will appear when the toolbar is set to
+ *  "Icons and important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
 static const gchar *gnc_plugin_important_actions[] = {
   "FileSaveAction",
   NULL,
 };
 
 
+/** The instance private data structure for an basic commands
+ *  plugin. */
 typedef struct GncPluginBasicCommandsPrivate
 {
   gpointer dummy;
@@ -161,8 +179,11 @@ typedef struct GncPluginBasicCommandsPrivate
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_BASIC_COMMANDS, GncPluginBasicCommandsPrivate))
 
+/** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
 
+
+/*  Get the type of the basic commands menu plugin. */
 GType
 gnc_plugin_basic_commands_get_type (void)
 {
@@ -189,6 +210,8 @@ gnc_plugin_basic_commands_get_type (void)
   return gnc_plugin_basic_commands_type;
 }
 
+
+/** Create a new basic commands menu plugin. */
 GncPlugin *
 gnc_plugin_basic_commands_new (void)
 {
@@ -199,6 +222,14 @@ gnc_plugin_basic_commands_new (void)
   return GNC_PLUGIN (plugin);
 }
 
+
+/** Initialize the class for a new basic commands plugin.  This will
+ *  set up any function pointers that override functions in the parent
+ *  class, and also configure the private data storage for this
+ *  widget.
+ *
+ *  @param klass The new class structure created by the object system.
+ */
 static void
 gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
 {
@@ -222,11 +253,26 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
   g_type_class_add_private(klass, sizeof(GncPluginBasicCommandsPrivate));
 }
 
+
+/** Initialize a new instance of a basic commands plugin.  This
+ *  function currently does nothing.
+ *
+ *  @param page The new object instance created by the object
+ *  system. */
 static void
 gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin)
 {
 }
 
+
+/** Finalize the basic commands plugin object.  This function is
+ *  called from the G_Object level to complete the destruction of the
+ *  object.  It should release any memory not previously released by
+ *  the destroy function (i.e. the private data structure), then chain
+ *  up to the parent's destroy function.  This function currently does
+ *  nothing.
+ *
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_basic_commands_finalize (GObject *object)
 {
@@ -431,3 +477,6 @@ gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindowActionData *data)
 
   gnc_totd_dialog(GTK_WINDOW(data->window), FALSE);
 }
+
+/** @} */
+/** @} */

@@ -27,7 +27,7 @@
 /** @addtogroup GncPluginPageAccountTree An Account Tree Plugin
     @{ */
 /** @file gnc-plugin-page-account-tree.h 
-    @brief  utility functions for the GnuCash UI
+    @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003 David Hampton <hampton@employees.org>
 */

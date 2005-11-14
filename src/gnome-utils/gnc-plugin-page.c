@@ -27,7 +27,7 @@
 /** @addtogroup ContentPluginBase Common object and functions
     @{ */
 /** @file gnc-plugin-page.c
-    @brief Functions for adding plugins to a Gnucash window.
+    @brief Functions for adding plugins to a GnuCash window.
     @author Copyright (C) 2003 Jan Arne Petersen
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
 */
@@ -41,10 +41,10 @@
 #include "gnc-plugin-page.h"
 #include "gnc-gobject-utils.h"
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-
-static gpointer         parent_class = NULL;
+/** A pointer to the parent class of a plugin page. */
+static gpointer parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
 static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
@@ -81,10 +81,11 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-typedef struct _GncPluginPagePrivate GncPluginPagePrivate;
 
-struct _GncPluginPagePrivate
+/** The instance private data for a content plugin. */
+typedef struct _GncPluginPagePrivate
 {
+	/** The group of all actions provided by this plugin. */
 	GtkActionGroup *action_group;
 	GtkUIManager *ui_merge;
 	guint merge_id;
@@ -97,7 +98,7 @@ struct _GncPluginPagePrivate
 	gchar *page_name;
 	gchar *uri;
 	gchar *statusbar_text;
-};
+} GncPluginPagePrivate;
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPagePrivate))
@@ -129,6 +130,12 @@ gnc_plugin_page_get_type (void)
 	return gnc_plugin_page_type;
 }
 
+
+/*  Create the display widget that corresponds to this plugin.  This
+ *  function will be called by the main/embedded window manipulation
+ *  code to create a widget that they can display.  The returned
+ *  widget should encompass all information that goes with this page,
+ *  including scroll bars, a summary bar, etc. */
 GtkWidget *
 gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 {
@@ -155,6 +162,10 @@ gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 	return widget;
 }
 
+
+/*  Destroy the display widget that corresponds to this plugin.  This
+ *  function will be called by the main/embedded window manipulation
+ *  code when a page is closed. */
 void
 gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 {
@@ -169,6 +180,8 @@ gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 	return klass->destroy_widget (plugin_page);
 }
 
+
+/*  Show/hide the summarybar associated with this page. */
 void
 gnc_plugin_page_show_summarybar (GncPluginPage *page,
 				 gboolean visible)
@@ -186,16 +199,10 @@ gnc_plugin_page_show_summarybar (GncPluginPage *page,
 }
 
 
-/** Call a plugin specific function to save enough information about
- *  this page that it can be recreated next time the user starts
- *  gnucash.
- *
- *  @param page The page to save.
- *
- *  @param key_file A pointer to the GKeyFile data structure where the
- *  page information should be written.
- *
- *  @param group_name The group name to use when saving data. */
+/*  Call the plugin specific function that will save the state of a
+ *  content page to a disk.  That function must save enough
+ *  information about the page that it can be recreated next time the
+ *  user starts gnucash. */
 void
 gnc_plugin_page_save_page (GncPluginPage *page,
 			   GKeyFile *key_file,
@@ -217,17 +224,9 @@ gnc_plugin_page_save_page (GncPluginPage *page,
 }
 
 
-/** This function looks up a specific plugin type and then calls its
- *  function to create a new page.
- *
- *  @param window The window where this page should be installed.
- *
- *  @param page_type The name of the page type to create.
- *
- *  @param key_file A pointer to the GKeyFile data structure where the
- *  page information should be read.
- *
- *  @param group_name The group name to use when restoring data. */
+/*  This function looks up a specific plugin type by name, and then
+ *  calls a plugin specific function to create a new page and restore
+ *  its content to a previous state. */
 GncPluginPage *
 gnc_plugin_page_recreate_page(GtkWidget *window,
 			      const gchar *page_type,
@@ -263,6 +262,8 @@ gnc_plugin_page_recreate_page(GtkWidget *window,
   return page;
 }
 
+
+/*  Add the actions for a content page to the specified window. */
 void
 gnc_plugin_page_merge_actions (GncPluginPage *page,
 			       GtkUIManager *ui_merge)
@@ -278,6 +279,8 @@ gnc_plugin_page_merge_actions (GncPluginPage *page,
 						priv->ui_description);
 }
 
+
+/*  Remove the actions for a content page from the specified window. */
 void
 gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 				 GtkUIManager *ui_merge)
@@ -297,6 +300,8 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 	priv->merge_id = 0;
 }
 
+
+/*  Retrieve the textual name of a plugin. */
 const gchar *
 gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
 {
@@ -344,6 +349,14 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
 	g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
 }
 
+
+/** Initialize the class for a new generic plugin page.  This will set
+ *  up any function pointers that override functions in the parent
+ *  class, set up all properties and signals, and also configure the
+ *  private data storage for this widget.
+ *
+ *  @param klass The new class structure created by the object system.
+ */
 static void
 gnc_plugin_page_class_init (GncPluginPageClass *klass)
 {
@@ -469,6 +482,15 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 					    0);
 }
 
+
+/** Initialize a new instance of a gnucash content plugin.  This
+ *  function initializes the object private storage space, and adds
+ *  the object to the tracking system.
+ *
+ *  @param page The new object instance created by the object system.
+ *
+ *  @param klass A pointer to the class data structure for this
+ *  object. */
 static void
 gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
 {
@@ -484,6 +506,14 @@ gnc_plugin_page_init (GncPluginPage *page, GncPluginPageClass *klass)
 	gnc_gobject_tracking_remember(G_OBJECT(page), G_OBJECT_CLASS(klass));
 }
 
+
+/** Finalize the gnucash plugin object.  This function is called from
+ *  the G_Object level to complete the destruction of the object.  It
+ *  should release any memory not previously released by the destroy
+ *  function (i.e. the private data structure), then chain up to the
+ *  parent's destroy function.
+ *
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_page_finalize (GObject *object)
 {
@@ -519,13 +549,23 @@ gnc_plugin_page_finalize (GObject *object)
 /*                g_object other functions                  */
 /************************************************************/
 
+
 /** Retrieve a property specific to this GncPluginPage object.  This is
  *  nothing more than a dispatch function for routines that can be
  *  called directly.  It has the nice feature of allowing a single
  *  function call to retrieve multiple properties.
  *
- *  @internal
- */
+ *  @param object The object whose property should be retrieved.
+ *
+ *  @param prop_id The numeric identifier of the property.  This
+ *  should be a PROP_XXX constant as specified at the beginning of
+ *  this file.
+ *
+ *  @param value A pointer to where this property value should be
+ *  stored.
+ *
+ *  @param pspec A pointer to the meta data that described the property
+ *  being retrieved. */
 static void
 gnc_plugin_page_get_property (GObject     *object,
 			      guint        prop_id,
@@ -575,8 +615,16 @@ gnc_plugin_page_get_property (GObject     *object,
  *  to be created with a varargs list specifying the properties,
  *  instead of having to explicitly call each property function.
  *
- *  @internal
- */
+ *  @param object The object whose property should be set.
+ *
+ *  @param prop_id The numeric identifier of the property.  This
+ *  should be a PROP_XXX constant as specified at the beginning of
+ *  this file.
+ *
+ *  @param value A pointer to then new value for this property value.
+ *
+ *  @param pspec A pointer to the meta data that described the property
+ *  being retrieved. */
 static void
 gnc_plugin_page_set_property (GObject      *object,
 			      guint         prop_id,
@@ -616,6 +664,7 @@ gnc_plugin_page_set_property (GObject      *object,
 /*                                                          */
 /************************************************************/
 
+/*  Add a book reference to the specified page. */
 void
 gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
 {
@@ -632,6 +681,10 @@ gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
   priv->books = g_list_append(priv->books, guid);
 }
 
+
+/*  Query a page to see if it has a reference to a given book.  This
+ *  function takes a guid instead of a QofBook because that's what the
+ *  engine event mechanism provides. */
 gboolean
 gnc_plugin_page_has_book (GncPluginPage *page, GUID *entity)
 {
@@ -650,6 +703,8 @@ gnc_plugin_page_has_book (GncPluginPage *page, GUID *entity)
   return FALSE;
 }
 
+
+/*  Query a page to see if it has a reference to any book. */
 gboolean
 gnc_plugin_page_has_books (GncPluginPage *page)
 {
@@ -661,6 +716,9 @@ gnc_plugin_page_has_books (GncPluginPage *page)
   return (priv->books != NULL);
 }
 
+
+/*  Retrieve a pointer to the GncMainWindow (GtkWindow) containing
+ *  this page. */
 GtkWidget *
 gnc_plugin_page_get_window (GncPluginPage *page)
 {
@@ -669,6 +727,9 @@ gnc_plugin_page_get_window (GncPluginPage *page)
   return page->window;
 }
 
+
+/*  Retrieve the name of this page.  This is the string used in the
+ *  window title, and in the notebook tab and page selection menus. */
 const gchar *
 gnc_plugin_page_get_page_name (GncPluginPage *page)
 {
@@ -680,6 +741,9 @@ gnc_plugin_page_get_page_name (GncPluginPage *page)
   return priv->page_name;
 }
 
+
+/*  Set the name of this page.  This is the string used in the window
+ *  title, and in the notebook tab and page selection menus. */
 void
 gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
 {
@@ -700,6 +764,8 @@ gnc_plugin_page_set_page_name (GncPluginPage *page, const gchar *name)
   }
 }
 
+
+/*  Retrieve the Uniform Resource Identifier for this page. */
 const gchar *
 gnc_plugin_page_get_uri (GncPluginPage *page)
 {
@@ -711,6 +777,8 @@ gnc_plugin_page_get_uri (GncPluginPage *page)
   return priv->uri;
 }
 
+
+/*  Set the Uniform Resource Identifier for this page. */
 void
 gnc_plugin_page_set_uri (GncPluginPage *page, const gchar *name)
 {
@@ -724,6 +792,8 @@ gnc_plugin_page_set_uri (GncPluginPage *page, const gchar *name)
   priv->uri = g_strdup(name);
 }
 
+
+/*  Retrieve the statusbar text associated with this page. */
 const gchar *
 gnc_plugin_page_get_statusbar_text (GncPluginPage *page)
 {
@@ -735,6 +805,8 @@ gnc_plugin_page_get_statusbar_text (GncPluginPage *page)
   return priv->statusbar_text;
 }
 
+
+/*  Set the statusbar text associated with this page. */
 void
 gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const gchar *message)
 {
@@ -748,6 +820,8 @@ gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const gchar *message)
   priv->statusbar_text = g_strdup(message);
 }
 
+
+/*  Retrieve the "use new window" setting associated with this page. */
 gboolean
 gnc_plugin_page_get_use_new_window (GncPluginPage *page)
 {
@@ -759,6 +833,11 @@ gnc_plugin_page_get_use_new_window (GncPluginPage *page)
   return priv->use_new_window;
 }
 
+
+/*  Set the "use new window" setting associated with this page.  If
+ *  this setting is TRUE, the page will be installed into a new
+ *  window.  Otherwise the page will be installed into an existing
+ *  window. */
 void
 gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new)
 {
@@ -770,6 +849,8 @@ gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new)
   priv->use_new_window = use_new;
 }
 
+
+/*  Retrieve the name of the XML UI file associated with this page. */
 const gchar *
 gnc_plugin_page_get_ui_description (GncPluginPage *page)
 {
@@ -781,6 +862,9 @@ gnc_plugin_page_get_ui_description (GncPluginPage *page)
   return priv->ui_description;
 }
 
+
+/*  Set an alternate UI for the specified page.  This alternate ui
+ *  may only use actions specified in the source for the page. */
 void
 gnc_plugin_page_set_ui_description (GncPluginPage *page,
 				    const char *ui_filename)
@@ -795,6 +879,8 @@ gnc_plugin_page_set_ui_description (GncPluginPage *page,
   priv->ui_description = g_strdup(ui_filename);
 }
 
+
+/*  Retrieve the GtkUIManager object associated with this page. */
 GtkUIManager *
 gnc_plugin_page_get_ui_merge (GncPluginPage *page)
 {
@@ -806,6 +892,8 @@ gnc_plugin_page_get_ui_merge (GncPluginPage *page)
   return priv->ui_merge;
 }
 
+
+/*  Retrieve the GtkActionGroup object associated with this page. */
 GtkActionGroup *
 gnc_plugin_page_get_action_group(GncPluginPage *page)
 {
@@ -816,6 +904,8 @@ gnc_plugin_page_get_action_group(GncPluginPage *page)
   return priv->action_group;
 }
 
+
+/*  Create the GtkActionGroup object associated with this page. */
 GtkActionGroup *
 gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name)
 {

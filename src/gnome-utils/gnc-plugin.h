@@ -1,6 +1,6 @@
 /* 
  * gnc-plugin.h -- A module or plugin which can add more
- *	functionality to gnucash.
+ *	functionality to GnuCash.
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
@@ -58,9 +58,22 @@
 /** @addtogroup MenuPluginBase Common object and functions
     @{ */
 /** @file gnc-plugin.h
-    @brief Functions for adding plugins to a Gnucash window.
+    @brief Functions for adding plugins to a GnuCash window.
     @author Copyright (C) 2003 Jan Arne Petersen
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+
+    A GncPlugin is the basic object for adding a menu item or items to
+    the GnuCash user interface.  This object should be instantiated
+    once at startup time and passed to the plugin manager.  Whenever a
+    new window is opened, the main window code will ask the plugin
+    manager for a list of all plugins, and will add each plugin to the
+    new window by calling the gnc_plugin_add_to_window function.  This
+    function handles installing the plugin's actions, and then calls
+    the plugin to allow it to perform any plugin specific actions.
+    When a main window is closed, the gnc_plugin_remove_from_window
+    function is called, which first calls the plugin to perform plugin
+    specific actions and then removes the plugin's actions from the
+    window.
 */
 
 #ifndef __GNC_PLUGIN_H
@@ -82,40 +95,106 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 
+/** The instance data structure for a menu-only plugin. */
 typedef struct {
+	/** The parent object for this widget */
 	GObject gobject;
 } GncPlugin;
 
+/** The class data structure for a menu-only plugin. */
 typedef struct {
+	/** The parent class for this widget. */
 	GObjectClass gobject;
+	/** The textual name of this plugin. */
 	const gchar *plugin_name;
 
+	/*  Actions section */
+
+	/** A name for the set of actions that will be added by this
+	 *  plugin.  The actual name is irrelevant, as long as it is
+	 *  unique within GnuCash. */
 	const gchar *actions_name;
+	/** An array of actions that should automatically be added to
+	 *  any GnuCash "main" content window that is opened. */
 	GtkActionEntry *actions;
+	/** The number of actions in the actions array. */
 	guint n_actions; 
+	/** A NULL terminated list of actions that should be considered
+	 *  important.  In the toolbar, these actions will display the
+	 *  action name when the toolbar is in "text beside icons"
+	 *  mode. */ 
 	const gchar **important_actions;
+	/** The relative name of the XML file describing the
+	 *  menu/toolbar action items. */
 	const gchar *ui_filename;
 
-	const gchar* gconf_section;
-	void (* gconf_notifications) (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
+	/*  GConf section */
 
-	/* Virtual Table */
+	/** The partial section name that will be used in GConf for
+	 *  any preferences that are automatically stored for this
+	 *  page.  This will be converted to a full section name by
+	 *  prefixing the string "/apps/gnucash/" to whatever is
+	 *  here. */
+	const gchar* gconf_section;
+	/** A callback that will be invoked when any key in the
+	 *  specified GConf section is changed.
+	 *
+	 *  @param client A pointer to the gconf client instance.
+	 *
+	 *  @param cnxn_id The id number for this callback function.
+	 *
+	 *  @param entry A pointer to the changed data.
+	 *
+	 *  @param user_data A pointer to the GncWindow where the
+	 *  plugin is installed. */
+	void (* gconf_notifications)
+	  (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
+
+	/*  Virtual Table */
+
+	/** A callback that will be invoked when this plugin is added
+	 *  to a window.  This allows the plugin to perform any
+	 *  special actions at insertion time.
+	 *
+	 *  @param user_data A pointer to the this GncPlugin data
+	 *  structure.
+	 *
+	 *  @param window A pointer to the window in which this plugin
+	 *  has just been installed.
+	 *
+	 *  @param type An identifier for the type of window
+	 *  specified.  Currently the only type is a "main" content
+	 *  window. */
 	void (* add_to_window)
          (GncPlugin *plugin, GncMainWindow *window, GQuark type);
+
+	/** A callback that will be invoked when this plugin is
+	 *  removed from a window.  This allows the plugin to perform
+	 *  any special actions at removal time.
+	 *
+	 *  @param user_data A pointer to the this GncPlugin data
+	 *  structure.
+	 *
+	 *  @param window A pointer to the window from which this
+	 *  plugin is about to be removed.
+	 *
+	 *  @param type An identifier for the type of window
+	 *  specified.  Currently the only type is a "main" content
+	 *  window. */
 	void (* remove_from_window)
          (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 } GncPluginClass;
 
 /* function prototypes */
 
-/** Get the type of a gnc window plugin.
+/** Get the type of a menu-only plugin.
  *
  *  @return A GType.
  */
 GType gnc_plugin_get_type (void);
 
 
-/** Add the specified plugin from the specified window.  This function
+/** Add the specified plugin to the specified window.  This function
  *  will add the page's user interface from the window, set up gconf
  *  notifications if the page uses gconf, and call the plugin to
  *  perform any plugin specific actions.
@@ -147,12 +226,11 @@ void gnc_plugin_remove_from_window (GncPlugin *plugin,
 				    GQuark type);
 
 
-/** Retrieve the name of a plugin.
+/** Retrieve the textual name of a plugin.
  *
  *  @param plugin The plugin whose name should be returned.
  *
- *  @return  short_labels A pointer to a data structure containing
- *  [action name, label string] string pairs.
+ *  @return A string containing the name of this plugin
  */
 const gchar *gnc_plugin_get_name (GncPlugin *plugin);
 
@@ -229,17 +307,17 @@ void gnc_plugin_update_actions (GtkActionGroup *action_group,
 				gboolean value);
 
 
-/** Load a new set of actions into an existing UI.
+/** Load a new set of actions into an existing UI.  The actions from
+ *  the provided group will be merged into the pre-existing ui, as
+ *  directed by the specified file.
  *
- *  @param ui_merge The existing set of merged actions. This is the ui
- *  that a user sees.  The actions from the ui file will be added to
- *  this ui.
+ *  @param ui_merge A pointer to the UI manager data structure for a
+ *  window.  
  *
- *  @param action_group The local action group.  The actions from the
- *  ui file will be added to this private action group.
+ *  @param action_group The set of actions provided by a given plugin.
  *
- *  @param filename The name of the ui file to load.  This file name
- *  will be searched for in the ui directory.
+ *  @param filename The name of the ui description file.  This file
+ *  name will be searched for in the ui directory.
  *
  *  @return The merge_id number for the newly merged UI.  If an error
  *  occurred, the return value is 0.

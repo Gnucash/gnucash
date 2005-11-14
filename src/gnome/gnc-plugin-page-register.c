@@ -27,7 +27,7 @@
 /** @addtogroup RegisterPlugin Register Page
     @{ */
 /** @file gnc-plugin-page-register.c
-    @brief  Functions for creating a register page for the GnuCash UI
+    @brief  Functions providing a register page for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
 */
@@ -265,11 +265,18 @@ static GtkRadioActionEntry radio_entries_2 [] =
 };
 static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
+
+/** These are the "important" actions provided by the register page.
+ *  Their labels will appear when the toolbar is set to "Icons and
+ *  important text" (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
 static const gchar *important_actions[] = {
 	"SplitTransactionAction",
 	NULL,
 };
 
+
+/** Actions that require an account to be selected before they are
+ *  enabled. */
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
@@ -992,7 +999,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog *dialog,
 }
 
 
-/** This function is called when a radion button in the "Sort By..." 
+/** This function is called when a radio button in the "Sort By..." 
  *  dialog is clicked.
  *
  *  @param button The button that was toggled.
@@ -1266,7 +1273,7 @@ get_filter_times(GncPluginPageRegister *page)
  *  time limitation on the register query.  This is handled by a
  *  helper function when the radio button is selected (as potentially
  *  all the widgets in the table need to be inspected), and is trivial
- *  for th eother case.
+ *  for the other case.
  *
  *  @param button A pointer to the "select range" radio button.
  *

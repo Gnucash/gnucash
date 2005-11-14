@@ -25,8 +25,11 @@
 /** @addtogroup PluginFileHistory File History Menu Items
     @{ */
 /** @file gnc-plugin-file-history.h
-    @brief Utility functions for writing import modules.
+    @brief Functions providing the file history menu.
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+
+    This plugin handles the file history information that appears in
+    the application menus.
 */
 
 #ifndef __GNC_PLUGIN_FILE_HISTORY_H
@@ -52,10 +55,14 @@ G_BEGIN_DECLS
 #define HISTORY_STRING_FILE_N   "file%d"
 
 /* typedefs & structures */
+
+/** The instance data structure for a file history plugin. */
 typedef struct {
 	GncPlugin gnc_plugin;
 } GncPluginFileHistory;
 
+
+/** The class data structure for a file history plugin. */
 typedef struct {
 	GncPluginClass gnc_plugin;
 } GncPluginFileHistoryClass;

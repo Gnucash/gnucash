@@ -1,6 +1,6 @@
 /* 
  * gnc-embedded-window.h -- GtkWindow which represents an
- *	emvedded GnuCash window.
+ *	embedded GnuCash window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003 David Hampton <hampton@employees.org>
@@ -51,31 +51,68 @@ G_BEGIN_DECLS
 #define GNC_EMBEDDED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowClass))
 
 /* typedefs & structures */
+
+/** The instance data structure for an embedded window object. */
 typedef struct {
+	/** The parent object for an embedded window. */
 	GtkVBox vbox;
-	GtkUIManager   	 *ui_merge;
+	/** A pointer to the UI Manager data structure for the whole
+	 *  window. */
+	GtkUIManager *ui_merge;
 } GncEmbeddedWindow;
 
+
+/** The class data structure for an embedded window object. */
 typedef struct {
+	/** The parent class for an embedded window. */
 	GtkVBoxClass vbox;
 } GncEmbeddedWindowClass;
 
+
 /* function prototypes */
-GType               gnc_embedded_window_get_type (void);
 
-GncEmbeddedWindow * gnc_embedded_window_new      (const gchar *action_group_name,
-						  GtkActionEntry *action_entries,
-						  gint n_action_entries,
-						  const gchar *ui_filename,
-						  GtkWidget *enclosing_win,
-						  gboolean add_accelerators,
-						  gpointer user_data);
+/** Get the type of a gnc embedded window.
+ *
+ *  @return A GType. */
+GType gnc_embedded_window_get_type (void);
 
-void            gnc_embedded_window_open_page    (GncEmbeddedWindow *window,
-						  GncPluginPage *page);
-void            gnc_embedded_window_close_page	 (GncEmbeddedWindow *window,
-						  GncPluginPage *page);
-GncPluginPage  *gnc_embedded_window_get_page     (GncEmbeddedWindow *window);
+
+/** Create a new gnc embedded window plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncEmbeddedWindow *gnc_embedded_window_new (const gchar *action_group_name,
+					    GtkActionEntry *action_entries,
+					    gint n_action_entries,
+					    const gchar *ui_filename,
+					    GtkWidget *enclosing_win,
+					    gboolean add_accelerators,
+					    gpointer user_data);
+
+
+/** Display a data plugin page in a window.
+ *
+ *  @param window The window to display a new page in.
+ *
+ *  @param page The new page of data to be displayed.
+ */
+void gnc_embedded_window_open_page (GncEmbeddedWindow *window,
+				    GncPluginPage *page);
+
+
+/** Remove a data plugin page from a window.
+ *
+ *  @param page The page of data to be removed. */
+void gnc_embedded_window_close_page (GncEmbeddedWindow *window,
+				     GncPluginPage *page);
+
+
+/** Retrieve the plugin that is embedded in the specified window.
+ *
+ *  @param window The window whose plugin is desired.
+ *
+ *  @return A pointer to a GncPluginPage. */
+GncPluginPage *gnc_embedded_window_get_page (GncEmbeddedWindow *window);
 
 G_END_DECLS
 

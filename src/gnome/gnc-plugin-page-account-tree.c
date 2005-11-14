@@ -27,7 +27,7 @@
 /** @addtogroup GncPluginPageAccountTree An Account Tree Plugin
     @{ */
 /** @file gnc-plugin-page-account-tree.c
-    @brief  utility functions for the GnuCash UI
+    @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
             Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
 */
@@ -202,8 +202,12 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
 
+
+/** Actions that require an account to be selected before they are
+ *  enabled. */
 static const gchar *actions_requiring_account[] = {
 	"FileOpenAccountAction",
 	"FileOpenSubaccountsAction",

@@ -22,6 +22,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-account-tree.c
+    @brief Provide the menus to create a chart of account page.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+*/
+
 #include "config.h"
 
 #include <string.h>
@@ -42,14 +51,18 @@ static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, Gnc
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
 
+/** An array of all of the actions provided by the account tree
+ *  plugin. */
 static GtkActionEntry gnc_plugin_actions [] = {
 	{ "FileNewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
 	  N_("Open a new Account Tree page"),
 	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
 };
+/** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
 
+/** The instance private data structure for an account tree plugin. */
 typedef struct GncPluginAccountTreePrivate
 {
 	gpointer dummy;
@@ -58,8 +71,11 @@ typedef struct GncPluginAccountTreePrivate
 #define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreePrivate))
 
+/** A pointer to the parent class of a plugin page. */
 static GObjectClass *parent_class = NULL;
 
+
+/*  Get the type of the account tree menu plugin. */
 GType
 gnc_plugin_account_tree_get_type (void)
 {
@@ -86,6 +102,8 @@ gnc_plugin_account_tree_get_type (void)
 	return gnc_plugin_account_tree_type;
 }
 
+
+/*  Create a new account tree menu plugin. */
 GncPlugin *
 gnc_plugin_account_tree_new (void)
 {
@@ -101,6 +119,14 @@ gnc_plugin_account_tree_new (void)
 	return GNC_PLUGIN (plugin);
 }
 
+
+/** Initialize the class for a new account tree plugin.  This will set
+ *  up any function pointers that override functions in the parent
+ *  class, and also configure the private data storage for this
+ *  widget.
+ *
+ *  @param klass The new class structure created by the object system.
+ */
 static void
 gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 {
@@ -123,11 +149,26 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 	g_type_class_add_private(klass, sizeof(GncPluginAccountTreePrivate));
 }
 
+
+/** Initialize a new instance of a gnucash content plugin.  This
+ *  function currently does nothing.
+ *
+ *  @param page The new object instance created by the object
+ *  system. */
 static void
 gnc_plugin_account_tree_init (GncPluginAccountTree *plugin)
 {
 }
 
+
+/** Finalize the account tree plugin object.  This function is called
+ *  from the G_Object level to complete the destruction of the object.
+ *  It should release any memory not previously released by the
+ *  destroy function (i.e. the private data structure), then chain up
+ *  to the parent's destroy function.  This function currently does
+ *  nothing.
+ *
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_account_tree_finalize (GObject *object)
 {
@@ -157,3 +198,6 @@ gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 	page = gnc_plugin_page_account_tree_new ();
 	gnc_main_window_open_page (data->window, page);
 }
+
+/** @} */
+/** @} */

@@ -22,6 +22,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-account-tree.h
+    @brief Provide the menus to create a chart of account page.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+*/
+
 #ifndef __GNC_PLUGIN_ACCOUNT_TREE_H
 #define __GNC_PLUGIN_ACCOUNT_TREE_H
 
@@ -42,19 +51,36 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_ACCOUNT_TREE_NAME "gnc-plugin-account-tree"
 
 /* typedefs & structures */
+
+/** The instance data structure for an account tree menu plugin. */
 typedef struct {
+	/** The parent object for this widget */
 	GncPlugin gnc_plugin;
 } GncPluginAccountTree;
 
+/** The class data structure for an account tree menu plugin. */
 typedef struct {
+	/** The parent class for this widget. */
 	GncPluginClass gnc_plugin;
 } GncPluginAccountTreeClass;
 
-/* function prototypes */
-GType      gnc_plugin_account_tree_get_type (void);
 
-GncPlugin *gnc_plugin_account_tree_new      (void);
+/** Get the type of the account tree menu plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_plugin_account_tree_get_type (void);
+
+
+/** Create a new account tree menu plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncPlugin *gnc_plugin_account_tree_new (void);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_ACCOUNT_TREE_H */
+
+/** @} */
+/** @} */

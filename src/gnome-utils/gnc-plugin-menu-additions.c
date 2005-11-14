@@ -28,10 +28,9 @@
     @{ */
 /** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
     @{ */
-/** @internal
-    @file gnc-plugin-menu-additions.c
-    @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
+/** @file gnc-plugin-menu-additions.c
+    @brief Functions providing menu items from scheme code.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
 
 #include "config.h"
@@ -69,6 +68,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"
 
+/** Private data for this plugin.  This data structure is unused. */
 typedef struct GncPluginMenuAdditionsPrivate
 {
   gpointer dummy;
@@ -77,8 +77,14 @@ typedef struct GncPluginMenuAdditionsPrivate
 #define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_MENU_ADDITIONS, GncPluginMenuAdditionsPrivate))
 
+
+/** Per-window private data for this plugin.  This plugin is unique in
+ *  that it manages its own menu items. */
 typedef struct _GncPluginMenuAdditionsPerWindow
 {
+  /** The menu/toolbar action information associated with a specific
+      window.  This plugin must maintain its own data because of the
+      way the menus are currently built. */
   GncMainWindow  *window;
   GtkUIManager   *ui_manager;
   GtkActionGroup *group;
@@ -158,6 +164,12 @@ gnc_plugin_menu_additions_finalize (GObject *object)
   LEAVE("");
 }
 
+
+/*  Create a new menu_additions plugin.  This plugin attaches the menu
+ *  items from Scheme code to any window that is opened.
+ *
+ *  @return A pointer to the new object.
+ */
 GncPlugin *
 gnc_plugin_menu_additions_new (void)
 {
@@ -193,17 +205,17 @@ gnc_main_window_to_scm (GncMainWindow *window)
   return gw_wcp_assimilate_ptr ((void *)window, main_window_type);
 }
 
-/** The user has selected one of the items in the File History menu.
- *  Close down the current session and start up a new one with the
- *  requested file.
+
+/** The user has selected one of the items added by this plugin.
+ *  Invoke the callback function that was registered along with the
+ *  menu item.
  *
  *  @param action A pointer to the action selected by the user.  This
  *  action represents one of the items in the file history menu.
  *
  *  @param data A pointer to the gnc-main-window data to be used by
  *  this function.  This is mainly to find out which window it was
- *  that had a menu selected.  That's not really important for this
- *  function and we're about to close all the windows anyway.
+ *  that had a menu selected.
  */
 static void
 gnc_plugin_menu_additions_action_cb (GtkAction *action,
@@ -216,12 +228,34 @@ gnc_plugin_menu_additions_action_cb (GtkAction *action,
   gnc_extension_invoke_cb(data->data, gnc_main_window_to_scm(data->window));
 }
 
+
+/** Compare two extension menu item and indicate which should appear
+ *  first in the menu listings.  The strings being compared are
+ *  collation keys produced by g_utf8_collate_key(), so this function
+ *  doesn't have to be anything more than a wrapper around strcmp,
+ *
+ *  @param a A menu extension.
+ *
+ *  @param b A second menu extension.
+ *
+ *  @return -1 if extension 'a' should appear first. 1 if extension
+ *  'b' should appear first. */
 static gint
 gnc_menu_additions_alpha_sort (ExtensionInfo *a, ExtensionInfo *b)
 {
   return strcmp(a->sort_key, b->sort_key);
 }
 
+
+/** Add one extension item to the UI manager.  This function creates a
+ *  per-callback data structure for easy access to the opaque Scheme
+ *  data block in the callback.  It then adds the action to the UI
+ *  manager.
+ *
+ *  @param ext_info The extension info data block.
+ *
+ *  @param per_window The per-window data block maintained by the
+ *  plugin. */
 static void
 gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 				   GncPluginMenuAdditionsPerWindow *per_window)
@@ -246,15 +280,16 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
   gtk_ui_manager_ensure_update(per_window->ui_manager);
 }
 
+
 /** Initialize the report menu and other additional menus.  This
- *  function is called as part of the initialization of a window,
- *  after all the plugin menu items have been added to the menu
- *  structure.
+ *  function is called as part of the initialization of a window, when
+ *  the plugin menu items are being added to the menu structure.
  *
  *  @param plugin A pointer to the gnc-plugin object responsible for
- *  adding/removing the file history menu.
+ *  adding/removing the additional menu items.
  *
- *  @param window A pointer the gnc-main-window that is being initialized.
+ *  @param window A pointer the gnc-main-window where this plugin
+ *  should add its actions.
  *
  *  @param type Unused
  */
@@ -289,13 +324,12 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 }
 
 
-/** Finalize the file history menu for this window.  This function is
- *  called as part of the destruction of a window.
+/** Tear down the report menu and other additional menus.  This
+ *  function is called as part of the cleanup of a window, while the
+ *  plugin menu items are being removed from the menu structure.
  *
  *  @param plugin A pointer to the gnc-plugin object responsible for
- *  adding/removing the file history menu.  It stops the gconf
- *  notifications for this window, and destroys the gconf client
- *  object.
+ *  adding/removing the additional menu items.
  *
  *  @param window A pointer the gnc-main-window that is being destroyed.
  *
@@ -315,6 +349,10 @@ gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin,
   group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
   if (group)
     gtk_ui_manager_remove_action_group(window->ui_merge, group);
+
+  /* Note: This code does not clean up the per-callback data structures
+   * that are created by the gnc_menu_additions_menu_setup_one()
+   * function. Its not much memory and shouldn't be a problem. */
 
   LEAVE(" ");
 }

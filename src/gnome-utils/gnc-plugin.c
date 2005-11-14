@@ -42,14 +42,19 @@
 #include "gnc-gobject-utils.h"
 #include "messages.h"
 
-static gpointer parent_class = NULL;
+/** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
+/** A pointer to the parent class of a plugin. */
+static gpointer parent_class = NULL;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
 static void gnc_plugin_init       (GncPlugin *plugin_page,
 				   GncPluginClass *klass);
 static void gnc_plugin_finalize   (GObject *object);
 
+
+/** The instance private data for a menu-only plugin.  This data
+ *  structure is unused. */
 typedef struct GncPluginPrivate {
 	gpointer dummy;
 } GncPluginPrivate;
@@ -93,8 +98,6 @@ gnc_plugin_get_type (void)
  *  class.
  *
  *  @param klass The new class structure created by the object system.
- *
- *  @internal
  */
 static void
 gnc_plugin_class_init (GncPluginClass *klass)
@@ -108,14 +111,14 @@ gnc_plugin_class_init (GncPluginClass *klass)
 }
 
 
-/** Initialize a new instance of a gnucash plugin object.  This
- *  function allocates and initializes the object private storage
- *  space.
+/** Initialize a new instance of a gnucash menu-only plugin.  This
+ *  function adds the object to the tracking system.
  *
- *  @param view The new object instance created by the object system.
+ *  @param plugin_page The new object instance created by the object
+ *  system.
  *
- *  @internal
- */
+ *  @param klass A pointer to the class data structure for this
+ *  object. */
 static void
 gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
 {
@@ -130,10 +133,7 @@ gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
  *  function (i.e. the private data structure), then chain up to the
  *  parent's destroy function.
  *
- *  @param object The object being destroyed.
- *
- *  @internal
- */
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_finalize (GObject *object)
 {
@@ -154,7 +154,8 @@ gnc_plugin_finalize (GObject *object)
  *  will add the page's user interface from the window, set up gconf
  *  notifications if the page uses gconf, and call the plugin to
  *  perform any plugin specific actions.
- */
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_add_to_window (GncPlugin *plugin,
 			  GncMainWindow *window,
@@ -211,7 +212,8 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
  *  function will call the plugin to perform any plugin specific
  *  actions, remove any gconf notifications that were set up for the
  *  page, and remove the page's user interface from the window.
- */
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_remove_from_window (GncPlugin *plugin,
 			       GncMainWindow *window,
@@ -253,7 +255,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 }
 
 
-/** Retrieve the name of a plugin.
+/** Retrieve the textual name of a plugin.
  */
 const gchar *
 gnc_plugin_get_name (GncPlugin *plugin)
@@ -294,7 +296,9 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
 
 /** Mark certain actions as "important".  This means that their labels
  *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
+ *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_set_important_actions (GtkActionGroup *action_group,
 				  const gchar **name)
@@ -313,9 +317,11 @@ gnc_plugin_set_important_actions (GtkActionGroup *action_group,
 }
 
 
-/** Update the status of existing UI actions.  This function can
+/*  Update a property of existing UI actions.  This function can
  *  modify actions making them visible, invisible, sensitive, or
- *  insensitive. */
+ *  insensitive.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_update_actions (GtkActionGroup *action_group,
 			   const gchar **action_names,
@@ -336,7 +342,9 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
 }
 
 
-/** Load a new set of actions into an existing UI. */
+/** Load a new set of actions into an existing UI.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 gint
 gnc_plugin_add_actions (GtkUIManager *ui_merge,
 			GtkActionGroup *action_group,

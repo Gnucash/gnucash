@@ -50,20 +50,26 @@ G_BEGIN_DECLS
 #define GNC_TREE_MODEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL, GncTreeModelClass))
 #define GNC_TREE_MODEL_NAME            "GncTreeModel"
 
-
 /* typedefs & structures */
+
+/** The instance data structure for a generic tree model. */
 typedef struct {
-	GtkObject gtk_object;
+	GtkObject gtk_object;		/**< The parent object data. */
 } GncTreeModel;
 
+
+/** The class data structure for a generic tree model. */
 typedef struct {
-	GtkObjectClass gtk_object;
+	GtkObjectClass gtk_object;	/**< The parent object data. */
 } GncTreeModelClass;
 
 
 
-/* Standard g_object type */
-GType         gnc_tree_model_get_type              (void);
+/** Get the type of a generic tree model plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_tree_model_get_type (void);
 
 
 G_END_DECLS

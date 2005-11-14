@@ -21,6 +21,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-basic-commands.h
+    @brief Functions providing a basic set of menu items.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
+*/
+
 #ifndef __GNC_PLUGIN_BASIC_COMMANDS_H
 #define __GNC_PLUGIN_BASIC_COMMANDS_H
 
@@ -41,21 +50,37 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BASIC_COMMANDS_NAME "gnc-plugin-basic-commands"
 
 /* typedefs & structures */
+
+/** The instance data structure for an basic commands menu plugin. */
 typedef struct {
+  /** The parent object for this widget */
   GncPlugin gnc_plugin;
 } GncPluginBasicCommands;
 
+
+/** The class data structure for a basic commands menu plugin. */
 typedef struct {
+  /** The parent class for this widget. */
   GncPluginClass gnc_plugin;
 } GncPluginBasicCommandsClass;
 
-/* function prototypes */
-GType      gnc_plugin_basic_commands_get_type (void);
 
-GncPlugin *gnc_plugin_basic_commands_new      (void);
+/** Get the type of the basic commands menu plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_plugin_basic_commands_get_type (void);
 
-void       gnc_new_basic_commands             (GncMainWindow *window);
+
+/** Create a new basic commands menu plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncPlugin *gnc_plugin_basic_commands_new (void);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_BASIC_COMMANDS_H */
+
+/** @} */
+/** @} */

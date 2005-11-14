@@ -42,6 +42,7 @@ static void gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass);
 static void gnc_tree_model_finalize (GObject *object);
 static void gnc_tree_model_destroy (GtkObject *object);
 
+/** The instance private data for a generic tree model. */
 typedef struct GncTreeModelPrivate
 {
   gpointer dummy;
@@ -55,6 +56,7 @@ typedef struct GncTreeModelPrivate
 /*               g_object required functions                */
 /************************************************************/
 
+/** A pointer to the parent class of a generic tree model. */
 static GtkObjectClass *parent_class = NULL;
 
 GType

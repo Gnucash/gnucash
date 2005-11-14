@@ -87,6 +87,7 @@ static void gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type
 						    GNCEngineEventType event_type,
 						    gpointer user_data);
 
+/** The instance private data for a commodity database tree model. */
 typedef struct GncTreeModelCommodityPrivate
 {
 	QofBook *book;
@@ -97,6 +98,7 @@ typedef struct GncTreeModelCommodityPrivate
 #define GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodityPrivate))
 
+/** A pointer to the parent class of a commodity tree model. */
 static GtkObjectClass *parent_class = NULL;
 
 GType

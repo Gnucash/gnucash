@@ -24,7 +24,7 @@
 
 /** @addtogroup Windows
     @{ */
-/** @addtogroup GncWindow Basic Window Functions
+/** @addtogroup GncWindow Common Window Functions
     @{ */
 /** @file gnc-window.h
     @brief Functions that are supported by all types of windows.

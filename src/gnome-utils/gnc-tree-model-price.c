@@ -105,6 +105,7 @@ static void gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 						GNCEngineEventType event_type,
 						gpointer user_data);
 
+/** The instance private data for a price database tree model. */
 typedef struct GncTreeModelPricePrivate
 {
 	QofBook *book;
@@ -116,6 +117,7 @@ typedef struct GncTreeModelPricePrivate
 #define GNC_TREE_MODEL_PRICE_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_PRICE, GncTreeModelPricePrivate))
 
+/** A pointer to the parent class of a price tree model. */
 static GObjectClass *parent_class = NULL;
 
 GType
@@ -1404,7 +1406,7 @@ gnc_tree_model_price_path_deleted (GncTreeModelPrice *model,
  *  gnc_tree_model_price_event_handler() function.  It must be armed
  *  each time an item is removed from the model.  This function will
  *  be called as an idle function some time after the user requests
- *  the deleteion.  (Most likely when the event handler for the "OK"
+ *  the deletion.  (Most likely when the event handler for the "OK"
  *  button click returns.  This function will send the "row_deleted"
  *  signal to any/all parent models for each entry deleted.
  *

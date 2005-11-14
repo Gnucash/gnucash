@@ -80,7 +80,7 @@
 #define WIDGET_HASH			"widget_hash"
 #define NOTEBOOK			"notebook"
 
-/* This static indicates the debugging module that this .o belongs to.  */
+/** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PREFS;
 
 void gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused);
@@ -89,13 +89,27 @@ void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_response_cb (GtkDialog *dialog, gint arg1, gpointer user_data);
 
 
+/** This data structure holds the information for a single addition to
+ *  the preferences dialog. */
 typedef struct addition_t {
+  /** The relative name of the file where the glade data for this
+   *  addition can be found. */
   gchar *filename;
+  /** The name of the widget within the glade data file that should be
+   *  added to the preferences dialog.  This should point to a
+   *  GtkTable widget that has four columns. */
   gchar *widgetname;
+  /** The name of the tab within the preferences dialog where these
+   *  widgets should be placed. */
   gchar *tabname;
+  /** TRUE if this addition represents a full page in the preferences
+   *  dialog.  FALSE if this page may be combined with other pages. */
   gboolean full_page;
 } addition;
 
+/** A list of all additions that have been made to the preferences
+ *  dialog.  The data fields for this list are ::addition data
+ *  structures. */
 GSList *add_ins = NULL;
 
 
@@ -121,7 +135,7 @@ gnc_prefs_compare_addins (addition *a,
 /** This is the common function that adds any set of preferences to
  *  the preferences dialog.  It allocates a data structure to remember
  *  the passed in data and queues it for later when the dialog is
- *  actually built.  This code does check to insure there arent any
+ *  actually built.  This code does check to insure there aren't any
  *  conflicts, like multiple additions of the same tab name when the
  *  two pages being added aren't compatible.
  *
@@ -270,27 +284,43 @@ gnc_prefs_build_widget_table (GladeXML *xml,
 }
 
 
+/** This data structure is used while building the preferences dialog
+ *  to perform lookups in the dialog under construction.  It maintains
+ *  state information between invocations of the function
+ *  gnc_prefs_find_page which is called via a foreach loop over each
+ *  addition. */
 struct find_data {
+  /** The notebook being searched. */
   GtkNotebook *notebook;
+  /** The name of the tab being searched for. */
   const gchar *tabname;
+  /** The notebook index where the tab was found. */
   gint index;
+  /** If TRUE, the code will search for an exact match of tab name. If
+   *  FALSE, the code will search for where this tab falls
+   *  alphabetically. */
   gboolean exact;
 };
 
-struct copy_data {
-  GtkTable *table_from;
-  GtkTable *table_to;
-  gint row_offset;
-};
 
-struct page_data {
-  GtkNotebook *notebook;
-  GList *widgets;
+/** This data structure is used while building the preferences dialog
+ *  to copy a table from a glade file to the dialog under
+ *  construction.  It maintains state information between invocations
+ *  of the function gnc_prefs_move_table_entry which is called via a
+ *  foreach loop over each item in the table. */
+struct copy_data {
+  /** The table being copied from. */
+  GtkTable *table_from;
+  /** The table being copied to. */
+  GtkTable *table_to;
+  /** The number of lines offset from the old table to the new
+   *  table. */
+  gint row_offset;
 };
 
 
 /** This function is used while building the preferences dialog.  It
- *  searches through the existing pages in the dialog to determin
+ *  searches through the existing pages in the dialog to determine
  *  where a new page should go alphabetically.  If a matching page
  *  name is found, a pointer to that page will be returned.  This
  *  function can also be called and asked to perform an exact match
@@ -387,7 +417,7 @@ gnc_prefs_move_table_entry (GtkWidget *child,
 
 
 /** At dialog creation time, this function will be called once per
- *  adds-in.  It performs the work of addding the page into the main
+ *  adds-in.  It performs the work of adding the page into the main
  *  dialog.  It handles both the case of a full page being added to
  *  the dialog, and a partial page being added.
  *
@@ -516,7 +546,7 @@ gnc_preferences_build_page (gpointer data,
 
 /** The user clicked on a radio button.  Update gconf.  Radio button
  *  group choices are stored as a string.  The last component of the
- *  widget name is the string that will be stored.  I.E. The widet name
+ *  widget name is the string that will be stored.  I.E. The widget name
  *  must be in this form "gconf/<some-key-name>/value".
  *
  *  @internal
@@ -1302,7 +1332,7 @@ gnc_preferences_dialog_create(void)
  *
  *  @param user_data The name of the gconf key that was changed.
  *
- *  @return Zero if the gconf key is a sublse of this button's
+ *  @return Zero if the gconf key is a subset of this button's
  *  name. Non-zero otherwise.
  */
 static gboolean
@@ -1470,7 +1500,7 @@ close_handler (gpointer user_data)
 
 
 /*  This function creates the preferences dialog and presents it to
- *  the user.  The preferences dialog is a singletone, so if a
+ *  the user.  The preferences dialog is a singleton, so if a
  *  preferences dialog already exists it will be raised to the top of
  *  the window stack instead of creating a new dialog. */
 void

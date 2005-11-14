@@ -91,6 +91,7 @@ static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 						  GNCEngineEventType event_type,
 						  gpointer user_data);
 
+/** The instance private data for a account tree model. */
 typedef struct GncTreeModelAccountPrivate
 {
 	QofBook *book;
@@ -133,6 +134,7 @@ gnc_tree_model_account_update_color (GConfEntry *entry, gpointer user_data)
 /*               g_object required functions                */
 /************************************************************/
 
+/** A pointer to the parent class of a account tree model. */
 static GtkObjectClass *parent_class = NULL;
 
 GType
@@ -596,7 +598,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 	GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT (tree_model);
 	GncTreeModelAccountPrivate *priv;
 	Account *account;
-	gboolean negative; /* used to set "defecit style" aka red numbers */
+	gboolean negative; /* used to set "deficit style" aka red numbers */
 	gchar *string;
 
 	ENTER("model %p, iter %s, col %d", tree_model,
@@ -896,7 +898,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 
 	if (group == NULL || xaccGroupGetNumAccounts (group) == 0) {
 		iter->stamp = 0;
-		LEAVE("failed (chilren group was %s)", 
+		LEAVE("failed (children group was %s)", 
                       group ? "empty" : "null");
 		return FALSE;
 	}

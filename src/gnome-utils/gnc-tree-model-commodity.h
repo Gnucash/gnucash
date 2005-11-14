@@ -75,17 +75,26 @@ typedef enum {
 } GncTreeModelCommodityColumn;
 
 /* typedefs & structures */
+
+/** The instance data structure for a commodity tree model. */
 typedef struct {
-	GncTreeModel gnc_tree_model;
-	int stamp;
+	GncTreeModel gnc_tree_model;	/**< The parent object data. */
+	int stamp;			/**< The state of the model. Any state
+					 *   change increments this number. */
 } GncTreeModelCommodity;
 
+
+/** The class data structure for a commodity tree model. */
 typedef struct {
-	GncTreeModelClass gnc_tree_model;
+	GncTreeModelClass gnc_tree_model;/**< The parent object data. */
 } GncTreeModelCommodityClass;
 
-/* function prototypes */
-GType          gnc_tree_model_commodity_get_type        (void);
+
+/** Get the type of a commodity tree plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_tree_model_commodity_get_type (void);
 
 
 /** @name Account Tree Model Constructors 
@@ -147,8 +156,8 @@ gboolean gnc_tree_model_commodity_iter_is_commodity (GncTreeModelCommodity *mode
  *  the model.
  *
  *  @return A pointer to the corresponding namespace. */
-gnc_commodity_namespace *gnc_tree_model_commodity_get_namespace   (GncTreeModelCommodity *model,
-								   GtkTreeIter *iter);
+gnc_commodity_namespace *gnc_tree_model_commodity_get_namespace (GncTreeModelCommodity *model,
+								 GtkTreeIter *iter);
 
 /** Convert a model/iter pair to a gnucash commodity.  This routine
  *  should only be called from a commodity tree view filter function.
@@ -161,8 +170,8 @@ gnc_commodity_namespace *gnc_tree_model_commodity_get_namespace   (GncTreeModelC
  *  the model.
  *
  *  @return A pointer to the corresponding commodity. */
-gnc_commodity *gnc_tree_model_commodity_get_commodity   (GncTreeModelCommodity *model,
-                                                         GtkTreeIter *iter);
+gnc_commodity *gnc_tree_model_commodity_get_commodity (GncTreeModelCommodity *model,
+						       GtkTreeIter *iter);
 /** @} */
 
 
@@ -208,8 +217,8 @@ gboolean gnc_tree_model_commodity_get_iter_from_commodity (GncTreeModelCommodity
  *  namespace.  This pointer must be freed by the caller when no
  *  longer needed.  This routine will return NULL if the namespace
  *  does not exist in the tree. */
-GtkTreePath * gnc_tree_model_commodity_get_path_from_namespace (GncTreeModelCommodity *model,
-								gnc_commodity_namespace *namespace);
+GtkTreePath *gnc_tree_model_commodity_get_path_from_namespace (GncTreeModelCommodity *model,
+							       gnc_commodity_namespace *namespace);
 
 /** Convert a commodity pointer into a GtkTreePath.
  *
@@ -221,8 +230,8 @@ GtkTreePath * gnc_tree_model_commodity_get_path_from_namespace (GncTreeModelComm
  *  commodity.  This pointer must be freed by the caller when no
  *  longer needed.  This routine will return NULL if the commodity
  *  does not exist in the tree. */
-GtkTreePath * gnc_tree_model_commodity_get_path_from_commodity (GncTreeModelCommodity *model,
-								gnc_commodity *commodity);
+GtkTreePath *gnc_tree_model_commodity_get_path_from_commodity (GncTreeModelCommodity *model,
+							       gnc_commodity *commodity);
 /** @} */
 
 G_END_DECLS

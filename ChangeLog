@@ -1,5 +1,10 @@
 2005-11-13  David Hampton  <hampton@employees.org>
 
+	* various src/gnome-utils and src/gnome files: Add documentation.
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]: Remove unused
+	functions.
+
 	* src/gnome-utils/gnc-plugin.[ch]:
 	* src/gnome/gnc-plugin-budget.c:
 	* src/gnome/gnc-plugin-register.c:

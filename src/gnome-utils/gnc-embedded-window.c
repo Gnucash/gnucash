@@ -40,10 +40,15 @@
 #include "gnc-window.h"
 #include "messages.h"
 
-/** Static Globals *******************************************************/
-static QofLogModule log_module = GNC_MOD_GUI;
+/* Static Globals *******************************************************/
 
-/** Declarations *********************************************************/
+/** The debugging module that this .o belongs to.  */
+static QofLogModule log_module = GNC_MOD_GUI;
+/** A pointer to the parent class of an embedded window. */
+static GObjectClass *parent_class = NULL;
+
+
+/* Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_init (GncEmbeddedWindow *window, GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_finalize (GObject *object);
@@ -54,23 +59,40 @@ static void gnc_window_embedded_window_init (GncWindowIface *iface);
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
 
+/** The instance private data for an embedded window object. */
 typedef struct GncEmbeddedWindowPrivate
 {
+  /** The dock (vbox) at the top of the window containing the menubar
+   *  and toolbar.  These items are generated bu the UI manager and
+   *  stored here when the UI manager provides them to the main
+   *  window. */
   GtkWidget *menu_dock;
-  GtkWidget *toolbar_dock;
+  /* The toolbar created by the UI manager.  This pointer provides
+   * easy access for showing/hiding the toolbar. */
+  GtkWidget *toolbar;
+  /** A pointer to the status bar at the bottom edge of the window.
+   *  This pointer provides easy access for updating/showing/hiding
+   *  the status bar. */
   GtkWidget *statusbar;
 
+  /** The group of all actions provided by the main window itself.
+   *  This does not include any action provided by menu or content
+   *  plugins. */
   GtkActionGroup *action_group;
 
+  /** The currently selected page. */
   GncPluginPage *page;
-  GtkWidget     *parent_window;
+  /** The parent of this embedded "window".  This points to a real
+   *  GtkWindow widget. */
+  GtkWidget *parent_window;
 } GncEmbeddedWindowPrivate;
 
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowPrivate))
 
-static GObjectClass *parent_class = NULL;
 
+
+/*  Get the type of a gnc embedded window. */
 GType
 gnc_embedded_window_get_type (void)
 {
@@ -106,6 +128,8 @@ gnc_embedded_window_get_type (void)
   return gnc_embedded_window_type;
 }
 
+
+/*  Display a data plugin page in a window. */
 void
 gnc_embedded_window_open_page (GncEmbeddedWindow *window,
 			       GncPluginPage *page)
@@ -129,6 +153,8 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
   LEAVE(" ");
 }
 
+
+/*  Remove a data plugin page from a window. */
 void
 gnc_embedded_window_close_page (GncEmbeddedWindow *window,
 				GncPluginPage *page)
@@ -157,6 +183,8 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
   LEAVE(" ");
 }
 
+
+/*  Retrieve the plugin that is embedded in the specified window. */
 GncPluginPage *
 gnc_embedded_window_get_page (GncEmbeddedWindow *window)
 {
@@ -167,6 +195,12 @@ gnc_embedded_window_get_page (GncEmbeddedWindow *window)
 }
 
 
+/** Initialize the class for a new gnucash embedded window.  This will
+ *  set up any function pointers that override functions in the parent
+ *  class.
+ *
+ *  @param klass The new class structure created by the object system.
+ */
 static void
 gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 {
@@ -183,6 +217,15 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
   LEAVE(" ");
 }
 
+
+/** Initialize a new instance of a gnucash embedded window.  This
+ *  function initializes the object private storage space.  It also
+ *  adds the new object to a list (for memory tracking purposes).
+ *
+ *  @param view The new object instance created by the object system.
+ *
+ *  @param klass A pointer to the class data structure for this
+ *  object. */
 static void
 gnc_embedded_window_init (GncEmbeddedWindow *window,
 			  GncEmbeddedWindowClass *klass)
@@ -196,6 +239,10 @@ gnc_embedded_window_init (GncEmbeddedWindow *window,
   LEAVE(" ");
 }
 
+
+/** Finish destruction of an embedded window.
+ *
+ *  @object The window being destroyed. */
 static void
 gnc_embedded_window_finalize (GObject *object)
 {
@@ -214,6 +261,11 @@ gnc_embedded_window_finalize (GObject *object)
   LEAVE(" ");
 }
 
+
+/** Begin destruction of an embedded window.  This function should
+ *  release all objects referenced by the window (i.e. the page).
+ *
+ *  @object The window being destroyed. */
 static void
 gnc_embedded_window_dispose (GObject *object)
 {
@@ -237,6 +289,7 @@ gnc_embedded_window_dispose (GObject *object)
   LEAVE(" ");
 }
 
+
 static void
 gnc_embedded_window_add_widget (GtkUIManager *merge,
 				GtkWidget *widget,
@@ -247,7 +300,7 @@ gnc_embedded_window_add_widget (GtkUIManager *merge,
   ENTER("merge %p, new widget %p, window %p", merge, widget, window);
   priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
   if (GTK_IS_TOOLBAR (widget)) {
-    priv->toolbar_dock = widget;
+    priv->toolbar = widget;
   }
 
   gtk_box_pack_start (GTK_BOX (priv->menu_dock), widget, FALSE, FALSE, 0);
@@ -255,6 +308,10 @@ gnc_embedded_window_add_widget (GtkUIManager *merge,
   LEAVE(" ");
 }
 
+
+/** Initialize the data structures of a gnucash embedded window.
+ *
+ *  @param window The object to initialize. */
 static void
 gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
 {
@@ -283,6 +340,8 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
   LEAVE(" ");
 }
 
+
+/** Create a new gnc embedded window plugin. */
 GncEmbeddedWindow *
 gnc_embedded_window_new (const gchar *action_group_name,
 			 GtkActionEntry *action_entries,
@@ -340,6 +399,12 @@ gnc_embedded_window_new (const gchar *action_group_name,
   return window;
 }
 
+
+/** Retrieve the gtk window associated with an embedded window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
 static GtkWindow *
 gnc_embedded_window_get_gtk_window (GncWindow *window_in)
 {
@@ -353,6 +418,12 @@ gnc_embedded_window_get_gtk_window (GncWindow *window_in)
   return GTK_WINDOW(priv->parent_window);
 }
 
+
+/** Retrieve the status bar associated with an embedded window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
 static GtkWidget *
 gnc_embedded_window_get_statusbar (GncWindow *window_in)
 {
@@ -366,6 +437,11 @@ gnc_embedded_window_get_statusbar (GncWindow *window_in)
   return priv->statusbar;
 }
 
+
+/** Initialize the generic window interface for an embedded window.
+ *
+ *  @param iface A pointer to the interface data structure to
+ *  populate. */
 static void
 gnc_window_embedded_window_init (GncWindowIface *iface)
 {

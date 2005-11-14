@@ -51,13 +51,18 @@ G_BEGIN_DECLS
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
 
 /* typedefs & structures */
+
+/** The instance data structure for a main window object. */
 typedef struct GncMainWindow {
-	GtkWindow gtk_window;
-	GtkUIManager *ui_merge;
+	GtkWindow gtk_window;	/**< The parent object for a main window. */
+	GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
+				   structure for the whole window. */
 } GncMainWindow;
 
+/** The class data structure for a main window object. */
 typedef struct {
-	GtkWindowClass gtk_window;
+	GtkWindowClass gtk_window;	/**< The parent class for a
+					   main window. */
 
 	/* callbacks */
 	void (*page_added)   (GncMainWindow *window,
@@ -177,7 +182,7 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param entries A pointer to an array of GtkActionEntries.  These
+ *  @param entries A pointer to an array of GtkActionEntry.  These
  *  are the actions that will be added to the user interface.
  *
  *  @param n_entries The number of actions in the array.
@@ -254,7 +259,7 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
  *  any Gnucash window.  If this was a "right-click" then Gnucash will
  *  popup the contextual menu.
  *
- *  @param widget Whatever widget had focus when the user issued the
+ *  @param whatever Whatever widget had focus when the user issued the
  *  keyboard context-menu request.
  *
  *  @param event The event parameter describing where on the screen
