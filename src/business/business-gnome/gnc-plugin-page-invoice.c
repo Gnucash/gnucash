@@ -183,8 +183,8 @@ static const gchar *can_unpost_actions[] = {
 	NULL
 };
 
-/* Short labels: Used on toolbar buttons. */
-static action_short_labels short_labels[] = {
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
   { "RecordEntryAction", 	  N_("Enter") },
   { "CancelEntryAction", 	  N_("Cancel") },
   { "DeleteEntryAction", 	  N_("Delete") },
@@ -327,7 +327,7 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 					    G_CALLBACK(gnc_plugin_page_invoice_cmd_sort_changed),
 					    plugin_page);
 
-	gnc_plugin_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 static void

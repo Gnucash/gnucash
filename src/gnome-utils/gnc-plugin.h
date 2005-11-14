@@ -164,23 +164,37 @@ GncPluginPage *gnc_plugin_create_page (GncPlugin *plugin,
 const gchar *gnc_plugin_get_name (GncPlugin *plugin);
 
 
+/** A structure for defining alternate action names for use in the
+ *  toolbar.  All toolbar buttons are homogeneous in size and are sized
+ *  to fit the longest label.  Therefore, this structure should be
+ *  used if an action name is more than one word.  This way the menu
+ *  can have the label "Whizzy Feature", while the toolbar button only
+ *  has the label "Whizzy". */
 typedef struct {
+  /** The name of the action. */
   const char *action_name;
+  /** The alternate toolbar label to use */
   const char *label;
-} action_short_labels;
+} action_toolbar_labels;
+
 
 /** Add "short" labels to existing actions.  The "short" label is the
- *  string used on toolbar buttons when the action is visible.
+ *  string used on toolbar buttons when the action is visible.  All
+ *  toolbar buttons are homogeneous in size and are sized to fit the
+ *  longest label.  Therefore, this structure should be used if an
+ *  action name is more than one word.  This way the menu can have the
+ *  label "Whizzy Feature", while the toolbar button only has the
+ *  label "Whizzy".
  *
  *  @param action_group The group of all actions associated with a
  *  plugin or plugin page.  All actions to me modified must be in this
  *  group.
  *
- *  @param short_labels A pointer to a data structure containing
- *  [action name, label string] string pairs.
+ *  @param toolbar_labels A pointer to a NULL terminated array of data
+ *  action_toolbar_labels items.
  */
 void gnc_plugin_init_short_names (GtkActionGroup *action_group,
-				  action_short_labels *short_labels);
+				  action_toolbar_labels *toolbar_labels);
 
 
 /** Mark certain actions as "important".  This means that their labels

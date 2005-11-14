@@ -837,7 +837,8 @@ static GtkActionEntry report_actions[] =
 };
 static guint num_report_actions = G_N_ELEMENTS( report_actions );
 
-static action_short_labels short_labels[] = {
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
   { "FilePrintAction", 	    N_("Print") },
   { "ReportExportAction",   N_("Export") },
   { "ReportOptionsAction",  N_("Options") },
@@ -916,7 +917,7 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
                                       report_actions,
                                       num_report_actions,
                                       plugin_page );
-        gnc_plugin_init_short_names (action_group, short_labels);
+        gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 
 GncPluginPage*

@@ -277,8 +277,9 @@ static const gchar *actions_requiring_account[] = {
 	NULL
 };
 
-/* DRH - Suggest short_labels be added to libegg */
-static action_short_labels short_labels[] = {
+
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
   { "ActionsTransferAction", 	  N_("Transfer") },
   { "RecordTransactionAction", 	  N_("Enter") },
   { "CancelTransactionAction", 	  N_("Cancel") },
@@ -502,7 +503,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 					    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
 					    plugin_page);
 
-	gnc_plugin_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, toolbar_labels);
 	gnc_plugin_set_important_actions (action_group, important_actions);
 
 	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;

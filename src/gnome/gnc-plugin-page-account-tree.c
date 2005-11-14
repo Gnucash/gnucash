@@ -214,8 +214,9 @@ static const gchar *actions_requiring_account[] = {
 	NULL
 };
 
-/* DRH - Suggest short_labels be added to libegg */
-static action_short_labels short_labels[] = {
+
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
   { "FileOpenAccountAction", 	    N_("Open") },
   { "EditEditAccountAction", 	    N_("Edit") },
   { "EditAccountViewOptionsAction", N_("Options") },
@@ -328,7 +329,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 				     gnc_plugin_page_account_tree_actions,
 				     gnc_plugin_page_account_tree_n_actions,
 				     plugin_page);
-	gnc_plugin_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, toolbar_labels);
 
 	
 	/* get the options and the window ID */ 

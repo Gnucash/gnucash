@@ -130,18 +130,17 @@ static guint gnc_plugin_page_budget_n_actions =
     G_N_ELEMENTS (gnc_plugin_page_budget_actions);
 
 // TODO: What's all this do?
-/*
+#if 0
 static const gchar *actions_requiring_budget[] = {
   "OpenBudgetAction",
   "BudgetViewOptionsAction",
   "DeleteBudgetAction",
   NULL
 };
-*/
 
-/* DRH - Suggest this be added to libegg */
-/*
-static action_short_labels short_labels[] = {
+
+/** Short labels for use on the toolbar buttons. */
+static action_toolbar_labels toolbar_labels[] = {
 
   { "OpenBudgetAction", 	    N_("Open") },
   //{ "EditBudgetAction", 	    N_("Edit") },
@@ -150,7 +149,7 @@ static action_short_labels short_labels[] = {
   { "DeleteBudgetAction", 	    N_("Delete") },
   { NULL, NULL },
 };
-*/
+#endif
 
 typedef struct GncPluginPageBudgetPrivate
 {
@@ -272,7 +271,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                   gnc_plugin_page_budget_n_actions,
                                   plugin_page);
     // FIXME? needed?
-    //gnc_gnome_utils_init_short_names (action_group, short_labels);
+    //gnc_gnome_utils_init_short_names (action_group, toolbar_labels);
 
     // FIXME: need to test this url case
     if(!url) {

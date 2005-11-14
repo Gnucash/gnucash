@@ -1,3 +1,14 @@
+2005-11-13  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/gnome-utils/gnc-plugin.c:
+	* src/gnome-utils/gnc-plugin.h:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-budget.c: Clarify what "short" labels
+	are used for by adding comments and changing array names.
+
 2005-11-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/core-utils/gnc-gkeyfile-utils.c: cast the

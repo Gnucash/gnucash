@@ -281,10 +281,12 @@ gnc_plugin_get_name (GncPlugin *plugin)
 
 
 /** Add "short" labels to existing actions.  The "short" label is the
- *  string used on toolbar buttons when the action is visible.*/
+ *  string used on toolbar buttons when the action is visible.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_init_short_names (GtkActionGroup *action_group,
-			     action_short_labels *short_labels)
+			     action_toolbar_labels *toolbar_labels)
 {
   GtkAction *action;
   GValue value = { 0, };
@@ -292,11 +294,11 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
 
   g_value_init (&value, G_TYPE_STRING);
 
-  for (i = 0; short_labels[i].action_name; i++) {
+  for (i = 0; toolbar_labels[i].action_name; i++) {
     /* Add a couple of short labels for the toolbar */
     action = gtk_action_group_get_action (action_group,
-					  short_labels[i].action_name);
-    g_value_set_static_string (&value, gettext(short_labels[i].label));
+					  toolbar_labels[i].action_name);
+    g_value_set_static_string (&value, gettext(toolbar_labels[i].label));
     g_object_set_property (G_OBJECT(action), "short_label", &value);
   }
 }
