@@ -233,6 +233,8 @@ AC_MSG_RESULT($G_WRAP_COMPILE_ARGS)
 
 AC_MSG_CHECKING(for g-wrap link args)
 G_WRAP_LINK_ARGS=`${G_WRAP_CONFIG} --c-link-args guile`
+# Dear g-wrap: adding -L/usr/lib is very silly.  Do not do this.
+G_WRAP_LINK_ARGS=`echo ${G_WRAP_LINK_ARGS} | sed -e 's|-L/usr/lib ||'`
 AC_MSG_RESULT($G_WRAP_LINK_ARGS)
 
 AC_MSG_CHECKING(for g-wrap module directory)
