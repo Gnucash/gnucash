@@ -1547,7 +1547,8 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	  data->model = model;
 	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);
-	  g_idle_add (gnc_tree_model_price_do_deletions, NULL);
+	  g_idle_add_full(G_PRIORITY_HIGH_IDLE,
+			  gnc_tree_model_price_do_deletions, NULL, NULL);
 	  LEAVE(" ");
 	  return;
 

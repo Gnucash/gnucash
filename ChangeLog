@@ -1,3 +1,17 @@
+2005-11-14  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-model-commodity.c:
+	* src/gnome-utils/gnc-tree-model-price.c: Bump deleted item
+	removal to a higher priority.
+
+	* src/gnome-utils/gnc-tree-model-account.c: Correctly update the
+	tree model when an account is moved. Fixes #313782.
+
+	* src/gnome-utils/gnc-date-edit.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/dialog-scheduledxaction.c: Replace deprecated
+	gtk_window_set_policy() function with gtk_window_set_resizable().
+
 2005-11-14  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/gnc-glossary.txt: Add explanations to new strings in
