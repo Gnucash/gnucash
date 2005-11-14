@@ -1,3 +1,8 @@
+2005-11-14  Christian Stimming  <stimming@tuhh.de>
+
+	* make-gnucash-potfiles.in: Update potfiles script so that it
+	works without the old cvsignore files again.
+
 2005-11-13  David Hampton  <hampton@employees.org>
 
 	* various src/gnome-utils and src/gnome files: Add documentation.
