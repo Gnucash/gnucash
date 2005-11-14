@@ -1366,9 +1366,19 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 /*   Account Tree Model - Engine Event Handling Functions   */
 /************************************************************/
 
+/** This data structure maintains a record of a pending removal of an
+ *  account from GnuCash.  There is a chicken/egg problem whereby the
+ *  account cannot be removed from the model before it is removed from
+ *  the account group (throws the indices off), but after the account
+ *  has been removed from the account group a path to the account
+ *  can't be generated.  This data structure holds a temporary copy of
+ *  the account path to bridge this problem. */
 typedef struct _remove_data {
+  /** The guid of the account that was removed. */
   GUID                 guid;
+  /** A pointer to the model containing the account. */
   GncTreeModelAccount *model;
+  /** The path within the model to the account. */
   GtkTreePath         *path;
 } remove_data;
 
@@ -1406,32 +1416,69 @@ gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
 }
 
 
-/** This function is a helper routine for the following
- *  gnc_tree_model_account_event_handler() function.  It is called
- *  from an iterator over all the pending account removals, and is
- *  responsible for selecting the right item(s), deleting it from the
- *  pending list, and then sending the "row_deleted" signal to any/all
- *  parent models.
+/** This function is a one-shot helper routine for the following
+ *  gnc_tree_model_account_event_handler() function.  It must be armed
+ *  each time an item is removed from the model.  This function will
+ *  be called as an idle function some time after the user requests
+ *  the deletion.  This function will send the "row_deleted"
+ *  signal to any/all parent models for each entry deleted.
  *
  *  @internal
  *
- *  @param data An item in the pending deletion list.
+ *  @param unused
  *
- *  @param entity The guid value of the destroyed item.
+ *  @return FALSE.  Tells the glib idle function to remove this
+ *  handler, making it a one-shot that will be re-armed at the next
+ *  item removal.
+ */
+static gboolean
+gnc_tree_model_account_do_deletions (gpointer unused)
+{
+  GSList *iter, *next = NULL;
+  remove_data *data;
+
+  for (iter = pending_removals; iter != NULL; iter = next) {
+    next = g_slist_next(iter);
+    data = iter->data;
+    pending_removals = g_slist_delete_link (pending_removals, iter);
+
+    gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
+    gnc_tree_model_account_path_changed (data->model, data->path);
+    gtk_tree_path_free(data->path);
+    g_free(data);
+  }
+
+  /* Remove me */
+  return FALSE;
+}
+
+
+/** This function is a helper routine for the following
+ *  gnc_tree_model_account_event_handler() function.  It is called to
+ *  add an item to the pending removal list.
+ *
+ *  @param entity The guid value of the account that is being removed
+ *  from the model.
+ *
+ *  @param model A pointer to the tree model.
+ *
+ *  @param path The path to the removed account.  This can't be
+ *  generated once the account is removed.
  */
 static void
-gnc_tree_model_account_delete_event_helper (remove_data *data,
-					    GUID *entity)
+pending_list_add (GUID *entity,
+		  GncTreeModelAccount *model,
+		  GtkTreePath *path)
 {
-  if (!guid_equal(&data->guid, entity))
-    return;
+  remove_data *data;
 
-  pending_removals = g_slist_remove (pending_removals, data);
-
-  gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
-  gnc_tree_model_account_path_changed (data->model, data->path);
-  gtk_tree_path_free(data->path);
-  g_free(data);
+  data = malloc(sizeof(*data));
+  data->guid = *entity;
+  data->model = model;
+  data->path = path;
+  pending_removals = g_slist_append (pending_removals, data);
+  g_idle_add_full(G_PRIORITY_HIGH_IDLE,
+		  gnc_tree_model_account_do_deletions, NULL, NULL);
 }
 
 
@@ -1473,7 +1520,6 @@ gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	GtkTreePath *path;
 	GtkTreeIter iter;
 	Account *account;
-	remove_data *data;
 	const gchar *account_name;
 
 	/* hard failures */
@@ -1518,16 +1564,12 @@ gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	    return;
 	  }
 
-	  data = malloc(sizeof(*data));
-	  data->guid = *entity;
-	  data->model = model;
-	  data->path = path;
-	  pending_removals = g_slist_append (pending_removals, data);
+	  pending_list_add(entity, model, path);
 	  LEAVE(" ");
 	  return;
 
 	 case GNC_EVENT_MODIFY:
-	  DEBUG("change account %p (%s)", account, account_name);
+	  DEBUG("modify account %p (%s)", account, account_name);
 	  path = gnc_tree_model_account_get_path_from_account (model, account);
 	  if (path == NULL) {
 	    LEAVE("account not in model");
@@ -1546,9 +1588,6 @@ gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_DESTROY:
 	  /* Tell the filters/view the account has been deleted. */
 	  DEBUG("destroy account %p (%s)", account, account_name);
-	  g_slist_foreach (pending_removals,
-			   (GFunc)gnc_tree_model_account_delete_event_helper,
-			   entity);
 	  break;
 
 	 default:
