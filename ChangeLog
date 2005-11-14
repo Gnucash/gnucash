@@ -1,5 +1,11 @@
 2005-11-13  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-plugin.[ch]:
+	* src/gnome/gnc-plugin-budget.c:
+	* src/gnome/gnc-plugin-register.c:
+	* src/gnome/gnc-plugin-account-tree.c: Remove vestigial code from
+	the very early days of the gtk2 port.
+
 	* src/report/report-gnome/gnc-plugin-page-report.c:
 	* src/business/business-gnome/gnc-plugin-page-invoice.c:
 	* src/gnome-utils/gnc-plugin.c:

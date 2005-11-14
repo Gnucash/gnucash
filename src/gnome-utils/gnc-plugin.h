@@ -104,9 +104,6 @@ typedef struct {
          (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 	void (* remove_from_window)
          (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-
-	GncPluginPage *(* create_page)
-         (GncPlugin *plugin, const gchar *uri);
 } GncPluginClass;
 
 /* function prototypes */
@@ -148,10 +145,6 @@ void gnc_plugin_add_to_window (GncPlugin *plugin,
 void gnc_plugin_remove_from_window (GncPlugin *plugin,
 				    GncMainWindow *window,
 				    GQuark type);
-
-
-GncPluginPage *gnc_plugin_create_page (GncPlugin *plugin,
-				       const gchar *uri);
 
 
 /** Retrieve the name of a plugin.

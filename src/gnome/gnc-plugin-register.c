@@ -36,9 +36,6 @@ static void gnc_plugin_register_class_init (GncPluginRegisterClass *klass);
 static void gnc_plugin_register_init (GncPluginRegister *plugin);
 static void gnc_plugin_register_finalize (GObject *object);
 
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_register_create_page (GncPlugin *plugin, const gchar *uri);
-
 /* Command callbacks */
 static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
 
@@ -151,9 +148,6 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 	/* plugin info */
 	plugin_class->plugin_name  = GNC_PLUGIN_REGISTER_NAME;
 
-	/* function overrides */
-	plugin_class->create_page  = gnc_plugin_register_create_page;
-
 	/* widget addition/removal */
 	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
 	plugin_class->actions      = gnc_plugin_actions;
@@ -183,25 +177,6 @@ gnc_plugin_register_finalize (GObject *object)
 	priv = GNC_PLUGIN_REGISTER_GET_PRIVATE(plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-static GncPluginPage *
-gnc_plugin_register_create_page (GncPlugin *plugin,
-				 const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_REGISTER (plugin), NULL);
-	g_return_val_if_fail (uri != NULL, NULL);
-
-	/* FIXME add better URI handling */
-	if (strcmp ("default:", uri)) {
-		return NULL;
-	}
-	
-	return NULL;
 }
 
 /************************************************************

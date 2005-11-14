@@ -51,12 +51,6 @@ static void gnc_plugin_budget_cmd_new_budget (GtkAction *action,
 static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
 					      GncMainWindowActionData *data);
 
-#if 0
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_budget_create_page (GncPlugin *plugin,
-						     const gchar *uri);
-#endif
-
 static GtkActionEntry gnc_plugin_actions [] = {
     { "NewBudgetAction", NULL, N_("New Budget"), NULL,
       N_("Create a new Budget"),
@@ -126,11 +120,6 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_plugin_budget_finalize;
 
-    /* CAS: I'm still unsure how much needs to be overridden here. */
-
-    /* function overrides */
-    //plugin_class->create_page  = gnc_plugin_budget_create_page;
-
     plugin_class->plugin_name  = GNC_PLUGIN_BUDGET_NAME;
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
     plugin_class->actions      = gnc_plugin_actions;
@@ -162,30 +151,6 @@ gnc_plugin_budget_finalize(GObject *object)
     ENTER(" ");
 
 }
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-#if 0
-static GncPluginPage *
-gnc_plugin_budget_create_page (GncPlugin *plugin,
-			       const gchar *uri)
-{
-    g_return_val_if_fail (GNC_IS_PLUGIN_BUDGET (plugin), NULL);
-    g_return_val_if_fail (uri != NULL, NULL);
-
-    ENTER("");
-    LEAVE("");
-    /* FIXME add better URI handling */
-    if (strcmp ("default:", uri)) {
-        return NULL;
-    }
-
-    return NULL;
-}
-#endif
-
 
 /************************************************************
  *                    Command Callbacks                     *

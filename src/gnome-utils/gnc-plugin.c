@@ -253,18 +253,6 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 }
 
 
-GncPluginPage *
-gnc_plugin_create_page (GncPlugin *plugin,
-			const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
-
-	if (!GNC_PLUGIN_GET_CLASS (plugin)->create_page)
-	  return NULL;
-	return GNC_PLUGIN_GET_CLASS (plugin)->create_page (plugin, uri);
-}
-
-
 /** Retrieve the name of a plugin.
  */
 const gchar *

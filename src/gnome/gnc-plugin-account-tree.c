@@ -35,9 +35,6 @@ static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);
 static void gnc_plugin_account_tree_finalize (GObject *object);
 
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, const gchar *uri);
-
 /* Command callbacks */
 static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
 
@@ -117,9 +114,6 @@ gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass)
 	/* plugin info */
 	plugin_class->plugin_name  = GNC_PLUGIN_ACCOUNT_TREE_NAME;
 
-	/* function overrides */
-	plugin_class->create_page  = gnc_plugin_account_tree_create_page;
-
 	/* widget addition/removal */
 	plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
 	plugin_class->actions      = gnc_plugin_actions;
@@ -146,25 +140,6 @@ gnc_plugin_account_tree_finalize (GObject *object)
 	priv = GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE (object);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-static GncPluginPage *
-gnc_plugin_account_tree_create_page (GncPlugin *plugin,
-				     const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_ACCOUNT_TREE (plugin), NULL);
-	g_return_val_if_fail (uri != NULL, NULL);
-
-	/* FIXME add better URI handling */
-	if (strcmp ("default:", uri)) {
-		return NULL;
-	}
-	
-	return gnc_plugin_page_account_tree_new ();
 }
 
 /************************************************************
