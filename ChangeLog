@@ -1,5 +1,8 @@
 2005-11-14  Christian Stimming  <stimming@tuhh.de>
 
+	* po/glossary/gnc-glossary.txt: Add explanations to new strings in
+	glossary. Merge these into the language glossaries.
+
 	* make-gnucash-potfiles.in: Update potfiles script so that it
 	works without the old cvsignore files again.
 

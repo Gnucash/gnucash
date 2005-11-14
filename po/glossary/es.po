@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.8.9\n"
 "Report-Msgid-Bugs-To: Eneko Lacunza <enlar@enlar.net>\n"
-"POT-Creation-Date: 2004-11-20 10:32+0100\n"
+"POT-Creation-Date: 2005-11-14 21:55+0100\n"
 "PO-Revision-Date: 2004-11-23 22:19+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -201,6 +201,18 @@ msgstr "factura"
 msgid "billing terms"
 msgstr "condiciones de pago"
 
+#. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
+msgid "Book"
+msgstr ""
+
+#. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
+msgid "book closing"
+msgstr ""
+
+#. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
+msgid "Budget"
+msgstr ""
+
 #. "-"
 msgid "business (adjective)"
 msgstr "de negocio"
@@ -388,6 +400,16 @@ msgstr "pérdida"
 #. "name of an automatically created account"
 msgid "Lost Accounts"
 msgstr "Cuentas perdidas"
+
+#. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
+#, fuzzy
+msgid "Lot"
+msgstr "Tot."
+
+#. "Combine two books into one (see book)."
+#, fuzzy
+msgid "merge, to"
+msgstr "recargar"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"

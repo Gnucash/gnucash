@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.0\n"
-"POT-Creation-Date: 2004-11-20 10:32+0100\n"
+"POT-Creation-Date: 2005-11-14 21:55+0100\n"
 "PO-Revision-Date: 2001-12-28 00:17+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -224,6 +224,18 @@ msgstr ""
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
+msgstr ""
+
+#. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
+msgid "Book"
+msgstr ""
+
+#. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
+msgid "book closing"
+msgstr ""
+
+#. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
+msgid "Budget"
 msgstr ""
 
 #. "-"
@@ -453,6 +465,18 @@ msgstr "Κλείσιμο"
 #, fuzzy
 msgid "Lost Accounts"
 msgstr "Λογαριασμοί"
+
+#
+#. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
+#, fuzzy
+msgid "Lot"
+msgstr "Πρoς"
+
+#
+#. "Combine two books into one (see book)."
+#, fuzzy
+msgid "merge, to"
+msgstr "Ανανέωση"
 
 #. "The thing that the scatter plot uses to mark each data point"
 #, fuzzy

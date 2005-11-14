@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 1.7.4\n"
-"POT-Creation-Date: 2002-12-02 14:51MET\n"
+"POT-Creation-Date: 2005-11-14 21:55+0100\n"
 "PO-Revision-Date: 2004-01-31 15:33+0100\n"
 "Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -205,6 +205,18 @@ msgstr "ricevuta, scontrino"
 msgid "billing terms"
 msgstr "termini di pagamento"
 
+#. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
+msgid "Book"
+msgstr ""
+
+#. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
+msgid "book closing"
+msgstr ""
+
+#. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
+msgid "Budget"
+msgstr ""
+
 #. "-"
 msgid "business (adjective)"
 msgstr "commerciale"
@@ -393,6 +405,16 @@ msgstr "perdita"
 #. "name of an automatically created account"
 msgid "Lost Accounts"
 msgstr "Conti persi"
+
+#. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
+#, fuzzy
+msgid "Lot"
+msgstr "Tot"
+
+#. "Combine two books into one (see book)."
+#, fuzzy
+msgid "merge, to"
+msgstr "ricaricare"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"

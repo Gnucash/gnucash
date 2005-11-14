@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary\n"
-"POT-Creation-Date: 2004-11-20 10:32+0100\n"
+"POT-Creation-Date: 2005-11-14 21:55+0100\n"
 "PO-Revision-Date: 2002-02-09 22:00+0800\n"
 "Last-Translator: Chao-Hsiung Liao <pesder@seed.net.tw>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -195,6 +195,18 @@ msgstr ""
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
+msgstr ""
+
+#. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
+msgid "Book"
+msgstr ""
+
+#. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
+msgid "book closing"
+msgstr ""
+
+#. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
+msgid "Budget"
 msgstr ""
 
 #. "-"
@@ -388,6 +400,16 @@ msgstr "虧損"
 #. "name of an automatically created account"
 msgid "Lost Accounts"
 msgstr "迷失帳號"
+
+#. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
+#, fuzzy
+msgid "Lot"
+msgstr "合計"
+
+#. "Combine two books into one (see book)."
+#, fuzzy
+msgid "merge, to"
+msgstr "重新載入"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
