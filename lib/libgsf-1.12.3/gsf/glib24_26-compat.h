@@ -5,6 +5,8 @@
 #ifndef __GLIB_24_26_COMPAT_H__
 #define __GLIB_24_26_COMPAT_H__
 
+#include <glib.h>
+
 // START from gstdio.h
 /* gstdio.h - GFilename wrappers for C library functions
  *
@@ -28,8 +30,6 @@
 
 #include <sys/stat.h>
 
-#if defined(G_OS_UNIX) && !defined(G_STDIO_NO_WRAP_ON_UNIX)
-
 /* Just pass on to the system functions, so there's no potential for data
  * format mismatches, especially with large file interfaces.
  */
@@ -45,48 +45,6 @@
 #define g_fopen   fopen
 #define g_freopen freopen
 
-#else /* ! G_OS_UNIX */
-
-/* Wrappers for C library functions that take pathname arguments. On
- * Unix, the pathname is a file name as it literally is in the file
- * system. On well-maintained systems with consistent users who know
- * what they are doing and no exchange of files with others this would
- * be a well-defined encoding, preferrably UTF-8. On Windows, the
- * pathname is always in UTF-8, even if that is not the on-disk
- * encoding, and not the encoding accepted by the C library or Win32
- * API.
- */
-
-int g_open      (const gchar *filename,
-                 int          flags,
-                 int          mode);
-
-int g_rename    (const gchar *oldfilename,
-                 const gchar *newfilename);
-
-int g_mkdir     (const gchar *filename,
-                 int          mode);
-
-int g_stat      (const gchar *filename,
-                 struct stat *buf);
-
-int g_lstat     (const gchar *filename,
-                 struct stat *buf);
-
-int g_unlink    (const gchar *filename);
-
-int g_remove    (const gchar *filename);
-
-int g_rmdir (const gchar *filename);
-
-FILE *g_fopen   (const gchar *filename,
-                 const gchar *mode);
-
-FILE *g_freopen (const gchar *filename,
-                 const gchar *mode,
-                 FILE        *stream);
-
-#endif /* G_OS_UNIX */
 // END from gstdio.h
 
 // START from gconvert.h

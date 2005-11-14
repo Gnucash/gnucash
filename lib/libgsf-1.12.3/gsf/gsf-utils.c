@@ -29,6 +29,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef HAVE_GLIB26
+#include <gsf/glib24_26-compat.h>
+#endif
+
 /*
  * Glib gets this wrong, really.  ARM's floating point format is a weird
  * mixture.

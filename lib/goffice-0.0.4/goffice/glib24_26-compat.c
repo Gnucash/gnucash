@@ -1,4 +1,50 @@
-#include "glib24_26-compat.h"
+#include <goffice/glib24_26-compat.h>
+
+#include <string.h>
+
+static const guint16 days_in_year[2][14] = 
+{  /* 0, jan feb mar apr may  jun  jul  aug  sep  oct  nov  dec */
+  {  0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }, 
+  {  0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
+};
+
+/* "Julian days" just means an absolute number of days, where Day 1 ==
+ *   Jan 1, Year 1
+ */
+static void
+g_date_update_julian (const GDate *const_d)
+{
+  GDate *d = (GDate *) const_d;
+  GDateYear year;
+  gint index;
+  
+  g_return_if_fail (d != NULL);
+  g_return_if_fail (d->dmy);
+  g_return_if_fail (!d->julian);
+  g_return_if_fail (g_date_valid_dmy (d->day, d->month, d->year));
+  
+  /* What we actually do is: multiply years * 365 days in the year,
+   *  add the number of years divided by 4, subtract the number of
+   *  years divided by 100 and add the number of years divided by 400,
+   *  which accounts for leap year stuff. Code from Steffen Beyer's
+   *  DateCalc. 
+   */
+  
+  year = d->year - 1; /* we know d->year > 0 since it's valid */
+  
+  d->julian_days = year * 365U;
+  d->julian_days += (year >>= 2); /* divide by 4 and add */
+  d->julian_days -= (year /= 25); /* divides original # years by 100 */
+  d->julian_days += year >> 2;    /* divides by 4, which divides original by 400 */
+  
+  index = g_date_is_leap_year (d->year) ? 1 : 0;
+  
+  d->julian_days += days_in_year[index][d->month] + d->day;
+  
+  g_return_if_fail (g_date_valid_julian (d->julian_days));
+  
+  d->julian = TRUE;
+}
 
 /**
  * g_date_get_iso8601_week_of_year:
@@ -99,6 +145,124 @@ language_names_cache_free (gpointer data)
   g_free (cache->languages);
   g_strfreev (cache->language_names);
   g_free (cache);
+}
+
+static char *
+unalias_lang (char *lang)
+{
+  return lang;
+}
+
+/* Mask for components of locale spec. The ordering here is from
+ * least significant to most significant
+ */
+enum
+{
+  COMPONENT_CODESET =   1 << 0,
+  COMPONENT_TERRITORY = 1 << 1,
+  COMPONENT_MODIFIER =  1 << 2
+};
+
+/* Break an X/Open style locale specification into components
+ */
+static guint
+explode_locale (const gchar *locale,
+		gchar      **language, 
+		gchar      **territory, 
+		gchar      **codeset, 
+		gchar      **modifier)
+{
+  const gchar *uscore_pos;
+  const gchar *at_pos;
+  const gchar *dot_pos;
+
+  guint mask = 0;
+
+  uscore_pos = strchr (locale, '_');
+  dot_pos = strchr (uscore_pos ? uscore_pos : locale, '.');
+  at_pos = strchr (dot_pos ? dot_pos : (uscore_pos ? uscore_pos : locale), '@');
+
+  if (at_pos)
+    {
+      mask |= COMPONENT_MODIFIER;
+      *modifier = g_strdup (at_pos);
+    }
+  else
+    at_pos = locale + strlen (locale);
+
+  if (dot_pos)
+    {
+      mask |= COMPONENT_CODESET;
+      *codeset = g_strndup (dot_pos, at_pos - dot_pos);
+    }
+  else
+    dot_pos = at_pos;
+
+  if (uscore_pos)
+    {
+      mask |= COMPONENT_TERRITORY;
+      *territory = g_strndup (uscore_pos, dot_pos - uscore_pos);
+    }
+  else
+    uscore_pos = dot_pos;
+
+  *language = g_strndup (locale, uscore_pos - locale);
+
+  return mask;
+}
+
+/*
+ * Compute all interesting variants for a given locale name -
+ * by stripping off different components of the value.
+ *
+ * For simplicity, we assume that the locale is in
+ * X/Open format: language[_territory][.codeset][@modifier]
+ *
+ * TODO: Extend this to handle the CEN format (see the GNUlibc docs)
+ *       as well. We could just copy the code from glibc wholesale
+ *       but it is big, ugly, and complicated, so I'm reluctant
+ *       to do so when this should handle 99% of the time...
+ */
+GSList *
+_g_compute_locale_variants (const gchar *locale)
+{
+  GSList *retval = NULL;
+
+  gchar *language;
+  gchar *territory;
+  gchar *codeset;
+  gchar *modifier;
+
+  guint mask;
+  guint i;
+
+  g_return_val_if_fail (locale != NULL, NULL);
+
+  mask = explode_locale (locale, &language, &territory, &codeset, &modifier);
+
+  /* Iterate through all possible combinations, from least attractive
+   * to most attractive.
+   */
+  for (i = 0; i <= mask; i++)
+    if ((i & ~mask) == 0)
+      {
+	gchar *val = g_strconcat (language,
+				  (i & COMPONENT_TERRITORY) ? territory : "",
+				  (i & COMPONENT_CODESET) ? codeset : "",
+				  (i & COMPONENT_MODIFIER) ? modifier : "",
+				  NULL);
+	retval = g_slist_prepend (retval, val);
+      }
+
+  g_free (language);
+  if (mask & COMPONENT_CODESET)
+    g_free (codeset);
+  if (mask & COMPONENT_TERRITORY)
+    g_free (territory);
+  if (mask & COMPONENT_MODIFIER)
+    g_free (modifier);
+
+  return retval;
 }
 
 /**

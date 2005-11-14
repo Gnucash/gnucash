@@ -1,3 +1,8 @@
+#ifndef GLIB24_26_COMPAT_H
+#define GLIB24_26_COMPAT_H
+
+#include <glib.h>
+
 /* from glib-2.6[.6] gdate.h */
 guint        g_date_get_iso8601_week_of_year (const GDate *date);
 
@@ -30,3 +35,5 @@ G_CONST_RETURN gchar* G_CONST_RETURN * g_get_language_names (void);
 
 /* from glib-2.6[.6] gstrfuncs.h */
 guint                 g_strv_length    (gchar       **str_array);
+
+#endif // GLIB24_26_COMPAT_H
