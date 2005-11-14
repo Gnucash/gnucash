@@ -1887,8 +1887,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     }
   }
 
-  /* Allow grow, allow shrink, auto-shrink */
-  gtk_window_set_policy(GTK_WINDOW(recnData->window), TRUE, TRUE, TRUE);
+  /* Allow resize */
+  gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
 
   gtk_widget_show_all(recnData->window);
 

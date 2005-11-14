@@ -1496,8 +1496,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_editable_set_editable( GTK_EDITABLE(sxed->advanceSpin), TRUE );
         gtk_editable_set_editable( GTK_EDITABLE(sxed->remindSpin), TRUE );
 
-	/* Allow grow, allow shrink, auto-shrink */
-        gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
+	/* Allow resize */
+        gtk_window_set_resizable (GTK_WINDOW(sxed->dialog), TRUE);
 
 	gnc_restore_window_size(SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog));
 

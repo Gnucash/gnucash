@@ -683,8 +683,7 @@ create_children (GNCDateEdit *gde)
 	g_signal_connect (G_OBJECT (gde->cal_popup), "button_press_event",
 			    (GtkSignalFunc) button_press_popup,
 			    gde);
-	gtk_window_set_policy (GTK_WINDOW (gde->cal_popup),
-                               FALSE, FALSE, TRUE);
+	gtk_window_set_resizable (GTK_WINDOW (gde->cal_popup), FALSE);
 
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
