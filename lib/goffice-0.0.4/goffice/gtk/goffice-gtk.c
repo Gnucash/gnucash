@@ -124,11 +124,10 @@ go_access (const char *filename, int what)
 GtkWidget*
 go_gtk_button_new_with_stock (char const *text, char const* stock_id)
 {
-	GtkStockItem item;
-	GtkWidget *button = gtk_button_new_with_mnemonic (text);
-	if (gtk_stock_lookup (stock_id, &item))
-		gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON));
+	GtkWidget *button = gtk_button_new_from_stock(stock_id);
+	gtk_button_set_use_underline(GTK_BUTTON(button), TRUE);
+	gtk_button_set_use_stock(GTK_BUTTON(button), FALSE);
+	gtk_button_set_label(GTK_BUTTON(button), text);
 	return button;
 }
 

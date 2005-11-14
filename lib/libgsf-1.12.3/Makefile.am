@@ -8,7 +8,8 @@ if PLATFORM_WIN32
   pkgconfig_DATA += libgsf-win32-1.pc
 endif
 
-SUBDIRS = po gsf gsf-gnome gsf-win32 doc tests
+SUBDIRS = gsf gsf-gnome gsf-win32 doc tests
+# po 
 
 if WITH_PYTHON
   SUBDIRS += python
