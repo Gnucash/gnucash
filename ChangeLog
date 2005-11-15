@@ -1,5 +1,7 @@
 2005-11-14    <david@hampton-pc.rainbolthampton.net>
 
+	* src/gnome/glade/print.glade: Remove extraneous carriage return.
+
 	* src/gnome-utils/gnc-file.c: Pass the action variable to
 	gtk_file_chooser_dialog_new() to get the right style of
 	dialog (open, save. etc.).

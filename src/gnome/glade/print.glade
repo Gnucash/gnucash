@@ -255,8 +255,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="buyand2">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Quicken(tm) Wallet Checks w/ side stub
-</property>
+			  <property name="label" translatable="yes">Quicken(tm) Wallet Checks w/ side stub</property>
 			  <property name="use_underline">True</property>
 			</widget>
 		      </child>

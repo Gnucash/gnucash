@@ -55,7 +55,9 @@ Resources
 
   - Printing
 
-    - Tested? Reporting?  Accounts?
+    - Printing cheks works.
+    - Printing text reports works.
+    - Printing pie/bar charts fails.
 
   - Startup CRITICAL errors...
 
@@ -71,16 +73,9 @@ Resources
     (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
     Use of deprecated SAXv1 function getLineNumber
 
-  - Window size/position not being saved or used.
-
-    - Dialog window positions are now saved.  Saving position of the
-      main window is in progress.  Please annotate this file with any
-      windows whose positions are not saved but you think they should be.
-
-    - The main windows do not yet support saving position/size
-      information.  (On my list - DRH)
-
   - Open pages are no longer open after reopening file.
+    - Account tree, register and report pages are restored.
+    - Budget and busines pages are not restored.
 
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
     
@@ -90,22 +85,7 @@ Resources
 
 - Register Core - mostly functional
 
-  - mouse wheel up/down events only work if mouse-focused on scroll bar / are
-    not passed from the sheet to the scroll.
-
-  - (fixed, notes) Completion has problems.  It does complete when a
-    character is typed but it fails to select the inserted text.  This means
-    that the next character typed is inserted instead of continuing to test
-    for completion
-
-    - This is better, but by hacking around GTK... it appears that both
-      2.4(.14) and 2.6(.8) disallow the editable's selection to be set in the
-      char-insert callback/handler.  Instead, we register a one-shot
-      immediate callback for the idle loop to do the selection.
-
   - doesn't remember custom check formats.
-
-  - duplicate-transaction dialog is not initialized with transaction number
 
 - Reconcile
 
@@ -127,11 +107,6 @@ Resources
 
 - Reporting / Graphing [mostly functional]
 
-  - Menus added in reverse order.
-
-     - Probably a detail of gtk-ui-manager merging; should be controllable in
-       gnc-menu-extensions.c.
-
   - Graphing working, with some known issue; see top
     of src/gnome-utils/gnc-html-graph-gog.c for more detail.
 
@@ -149,17 +124,6 @@ Resources
 
   - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
     to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
-
-
-- Notebook tabs
-
-  - When opening multiple report tabs, all reports get tab title of
-    first report. [FIXED]
-
-  - Account Tree tab title is unaffected by "Name of Account View" option.
-
-  - Also, changing that option doesn't affect dirty status of options
-    dialog. [ FIXED ]
 
 
 - Budgeting
@@ -280,11 +244,6 @@ Resources
   - Provide in-place editing where feasable.  Eg.  Editing the account code
     or the account name, but not being able to re-parent the account.  (Maybe
     add DND support for this in long-term?)
-
-- File Menu
-
-  - Rename "New Account Tree" to "Display Account Tree" as "New" gives the
-    impression that a creation of something will occur.  PJK
 
 - Find
 
