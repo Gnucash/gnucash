@@ -87,24 +87,6 @@ Resources
 
   - doesn't remember custom check formats.
 
-- Reconcile
-
-  - Crash after initial value-prompting dialog:
-
-        #0  0x400f65e8 in waitpid () from /lib/libpthread.so.0
-        #1  0x405e8a90 in ?? () from /usr/lib/libgnomeui-2.so.0
-        #2  0x405ab116 in libgnomeui_module_info_get () from /usr/lib/libgnomeui-2.so.0
-        #3  0x400f5393 in __pthread_clock_settime () from /lib/libpthread.so.0
-        #4  <signal handler called>
-        #5  0x40d88809 in gnc_xfer_dialog_show_inc_exp_visible_cb (account=0x84d8cc8, data=0x8522a28) at dialog-transfer.c:414
-        #6  0x40dc0877 in gnc_tree_view_account_filter_helper (model=0x855e828, iter=0xbfffdc70, data=0x855e828) at gnc-tree-view-account.c:718
-        #7  0x40430d46 in egg_tree_model_filter_visible (filter=0x854bce0, child_iter=0xbfffdc70) at eggtreemodelfilter.c:618
-        #8  0x404341de in egg_tree_model_filter_row_changed (c_model=0x84aa138, c_path=0x8620470, c_iter=0x8640c60, data=0x84d8cc8) at eggtreemodelfilter.c:990
-        #9  0x40a7e185 in _gtk_marshal_VOID__BOXED_BOXED () from /usr/lib/libgtk-x11-2.0.so.0
-        #10 0x40313310 in g_closure_invoke () from /usr/lib/libgobject-2.0.so.0
-        #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
-        #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
-
 - Reporting / Graphing [mostly functional]
 
   - Graphing working, with some known issue; see top
