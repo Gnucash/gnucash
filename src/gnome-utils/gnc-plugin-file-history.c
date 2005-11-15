@@ -123,18 +123,16 @@ gnc_history_gconf_index_to_key (guint index)
  *  uses sscanf to pull the number off the end of the key and convert
  *  it to an integer.
  *
- *  @param fullkey The full gconf key starting with "/apps/...".
+ *  @param key The last part of the gconf key.
  *
  *  @return An index number that can be used with the
  *  gnc_plugin_actions array. */
 static gint
-gnc_history_gconf_key_to_index (const gchar *fullkey)
+gnc_history_gconf_key_to_index (const gchar *key)
 {
-  char *key;
   gint index, result;
 
-  key = rindex(fullkey, '/');
-  result = sscanf(key+1, HISTORY_STRING_FILE_N, &index);
+  result = sscanf(key, HISTORY_STRING_FILE_N, &index);
   if (result != 1)
     return -1;
   if ((index < 0) || (index >= gnc_plugin_n_actions))
@@ -292,6 +290,7 @@ gnc_history_update_action (GncMainWindow *window,
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	gchar *action_name, *label_name, *old_filename;
+	gint limit;
 
 	ENTER("window %p, index %d, filename %s", window, index, filename);
 	/* Get the action group */
@@ -299,9 +298,13 @@ gnc_history_update_action (GncMainWindow *window,
 	  gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
 
 	action_name = g_strdup_printf("RecentFile%dAction", index);
-	  action = gtk_action_group_get_action (action_group, action_name);
+	action = gtk_action_group_get_action (action_group, action_name);
 
-	if (filename && (strlen(filename) > 0)) {
+	limit = gnc_gconf_get_int (HISTORY_STRING_SECTION,
+				   HISTORY_STRING_MAXFILES,
+				   NULL);
+
+	if (filename && (strlen(filename) > 0) && (index < limit)) {
 	  /* set the menu label (w/accelerator) */
 	  label_name = gnc_history_generate_label(index, filename);
 	  g_object_set(G_OBJECT(action), "label", label_name, "visible", TRUE, NULL);
@@ -316,6 +319,32 @@ gnc_history_update_action (GncMainWindow *window,
 	  g_object_set(G_OBJECT(action), "visible", FALSE, NULL);
 	}
 	g_free(action_name);
+	LEAVE("");
+}
+
+
+/** Update the file history menu for a window.  This function walks
+ *  the list of all possible gconf keys for the file history and
+ *  forces a read/menu update on each key.  It should only be called
+ *  once when the window is created.
+ *
+ *  @param window A pointer to the window whose file history menu
+ *  should be updated.
+ */
+static void
+gnc_history_update_menus (GncMainWindow *window)
+{
+	gchar *filename, *key;
+	guint i;
+
+	ENTER("");
+	for (i = 0; i < MAX_HISTORY_FILES; i++) {
+	  key = gnc_history_gconf_index_to_key(i);
+	  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
+	  gnc_history_update_action(window, i, filename);
+	  g_free(filename);
+	  g_free(key);
+	}
 	LEAVE("");
 }
 
@@ -343,16 +372,25 @@ gnc_plugin_history_list_changed (GConfClient *client,
 {
 	GncMainWindow *window;
 	GConfValue *value;
-	const gchar *key, *filename;
+	const gchar *fullkey, *key, *filename;
 	gint index;
 
 	ENTER("");
-	key = gconf_entry_get_key(entry);
-	index = gnc_history_gconf_key_to_index(key);
-	if (index < 0)
-	  return;
-
 	window = GNC_MAIN_WINDOW(user_data);
+
+	fullkey = gconf_entry_get_key(entry);
+	key = rindex(fullkey, '/') + 1;
+	if (strcmp(key, HISTORY_STRING_MAXFILES) == 0) {
+	  gnc_history_update_menus (window);
+	  LEAVE("updated maxfiles");
+	  return;
+	}
+	index = gnc_history_gconf_key_to_index(key);
+	if (index < 0) {
+	  LEAVE("bad index");
+	  return;
+	}
+
 	value = gconf_entry_get_value(entry);
 	if (!value) {
 	  LEAVE("No gconf value");
@@ -362,31 +400,6 @@ gnc_plugin_history_list_changed (GConfClient *client,
 	gnc_history_update_action (window, index, filename);
 
 	gnc_main_window_actions_updated (window);
-	LEAVE("");
-}
-
-/** Update the file history menu for a window.  This function walks
- *  the list of all possible gconf keys for the file history and
- *  forces a read/menu update on each key.  It should only be called
- *  once when the window is created.
- *
- *  @param window A pointer to the window whose file history menu
- *  should be updated.
- */
-static void
-gnc_history_update_menus (GncMainWindow *window)
-{
-	gchar *filename, *key;
-	guint i;
-
-	ENTER("");
-	for (i = 0; i < MAX_HISTORY_FILES; i++) {
-	  key = gnc_history_gconf_index_to_key(i);
-	  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
-	  gnc_history_update_action(window, i, filename);
-	  g_free(filename);
-	  g_free(key);
-	}
 	LEAVE("");
 }
 

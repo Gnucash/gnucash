@@ -1,5 +1,9 @@
 2005-11-14  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-plugin-file-history.c: Read the maxfiles key
+	from gconf.  Move one function and change another to take a
+	partial key instead of a full key.
+
 	* src/gnome-utils/gnc-tree-model-commodity.c:
 	* src/gnome-utils/gnc-tree-model-price.c: Bump deleted item
 	removal to a higher priority.
