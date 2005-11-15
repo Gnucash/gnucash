@@ -751,6 +751,7 @@
 
 	  <child>
 	    <widget class="GtkTable" id="table10">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">17</property>
 	      <property name="n_columns">4</property>
@@ -1649,40 +1650,28 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkAlignment" id="alignment1">
+		<widget class="GtkLabel" id="label44">
 		  <property name="visible">True</property>
-		  <property name="xalign">0.5</property>
+		  <property name="label" translatable="yes">New search _limit:</property>
+		  <property name="use_underline">True</property>
+		  <property name="use_markup">False</property>
+		  <property name="justify">GTK_JUSTIFY_LEFT</property>
+		  <property name="wrap">False</property>
+		  <property name="selectable">False</property>
+		  <property name="xalign">0</property>
 		  <property name="yalign">0.5</property>
-		  <property name="xscale">1</property>
-		  <property name="yscale">1</property>
-		  <property name="top_padding">0</property>
-		  <property name="bottom_padding">0</property>
-		  <property name="left_padding">12</property>
-		  <property name="right_padding">0</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label44">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">New search _limit:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">gconf/dialogs/search/new_search_limit</property>
-		    </widget>
-		  </child>
+		  <property name="xpad">0</property>
+		  <property name="ypad">0</property>
+		  <property name="mnemonic_widget">gconf/dialogs/search/new_search_limit</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
 		  <property name="right_attach">1</property>
 		  <property name="top_attach">16</property>
 		  <property name="bottom_attach">17</property>
+		  <property name="x_padding">12</property>
 		  <property name="x_options">fill</property>
+		  <property name="y_options"></property>
 		</packing>
 	      </child>
 
@@ -2109,7 +2098,7 @@
 	    <widget class="GtkTable" id="table4">
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">11</property>
+	      <property name="n_rows">10</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>
@@ -2434,6 +2423,7 @@
 
 	  <child>
 	    <widget class="GtkTable" id="table8">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">6</property>
 	      <property name="n_columns">4</property>
@@ -2681,6 +2671,7 @@
 
 	  <child>
 	    <widget class="GtkTable" id="table9">
+	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
 	      <property name="n_rows">11</property>
 	      <property name="n_columns">4</property>
@@ -3054,7 +3045,7 @@
 	    <widget class="GtkTable" id="table5">
 	      <property name="border_width">6</property>
 	      <property name="visible">True</property>
-	      <property name="n_rows">12</property>
+	      <property name="n_rows">9</property>
 	      <property name="n_columns">4</property>
 	      <property name="homogeneous">False</property>
 	      <property name="row_spacing">0</property>

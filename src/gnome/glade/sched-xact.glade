@@ -8739,6 +8739,7 @@ the created Scheduled Transactions directly.</property>
 
   <child>
     <widget class="GtkTable" id="sx_prefs">
+      <property name="border_width">6</property>
       <property name="visible">True</property>
       <property name="n_rows">12</property>
       <property name="n_columns">4</property>

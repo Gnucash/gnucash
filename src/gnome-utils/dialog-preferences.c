@@ -504,6 +504,7 @@ gnc_preferences_build_page (gpointer data,
     location.exact = FALSE;
     rows = 0;
     existing_content = gtk_table_new(0, 4, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
     gtk_container_foreach(GTK_CONTAINER(notebook), gnc_prefs_find_page,
 			  &location);
     label = gtk_label_new(add_in->tabname);

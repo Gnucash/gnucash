@@ -1,5 +1,12 @@
 2005-11-14  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/preferences.glade:
+	* src/gnome/glade/sched-xact.glade: Andreas Köhler's patch to set
+	some border widths inside the main preferences window to the HIG
+	specified 6px. Fix alignment of the "General / New search limit"
+	label.
+
 	* src/gnome-utils/gnc-plugin-file-history.c: Read the maxfiles key
 	from gconf.  Move one function and change another to take a
 	partial key instead of a full key.
