@@ -472,6 +472,7 @@ PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.12.2
 if $PKG_CONFIG 'libgsf-1 >= 1.12.2'
 then
   AC_DEFINE(HAVE_LIBGSF,1,[System has libgsf-1.12.2 or better])
+  HAVE_LIBGSF=yes
 else
   AC_MSG_NOTICE(using internally-packaged libgsf)
   GSF_CFLAGS='-I${top_srcdir}/lib/libgsf-1.12.3'
@@ -482,10 +483,11 @@ AC_SUBST(GSF_CFLAGS)
 AC_SUBST(GSF_LIBS)
 
 # $4=true => don't die if failure.
-PKG_CHECK_MODULES(GOFFICE, goffice >= 0.0.4,,true)
-if $PKG_CONFIG 'goffice >= 0.0.4'
+PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
+if $PKG_CONFIG 'libgoffice-1 >= 0.0.4'
 then
-  AC_DEFINE(HAVE_LIBGOFFICE,1,[System has goffice-0.0.4 or better])
+  AC_DEFINE(HAVE_GOFFICE,1,[System has goffice-0.0.4 or better])
+  HAVE_GOFFICE=yes
 else
   AC_MSG_NOTICE(using internally-packaged goffice)
   GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
@@ -498,8 +500,7 @@ AC_SUBST(GOFFICE_LIBS)
 ### ----------
 
 ### +libgsf-1.12.3
-
-AC_MSG_NOTICE('internal libgsf configuration')
+AC_MSG_NOTICE('internal libgsf configuration...')
 
 m4_define([libgsf_version_major], [1])
 m4_define([libgsf_version_minor], [12])
@@ -508,7 +509,7 @@ m4_define([libgsf_version_extra], [])
 m4_define([libgsf_full_version],
     [libgsf_version_major.libgsf_version_minor.libgsf_version_micro[]libgsf_version_extra])
 
-AC_CONFIG_SRCDIR(lib/libgsf-1.12.3/gsf/gsf.h)
+dnl AC_CONFIG_SRCDIR(lib/libgsf-1.12.3/gsf/gsf.h)
 
 AC_SUBST(LIBGSF_MAJOR_VERSION, libgsf_version_major)
 AC_SUBST(LIBGSF_MINOR_VERSION, libgsf_version_minor)
@@ -812,8 +813,7 @@ AM_CONDITIONAL(WITH_PYTHON, false)
 # -libgsf-1.12.3
 
 # +goffice-0.0.4
-
-AC_MSG_NOTICE('internal goffice configuration')
+AC_MSG_NOTICE('internal goffice configuration...')
 
 m4_define([goffice_version_epoch], [0])
 m4_define([goffice_version_major], [0])
@@ -821,9 +821,6 @@ m4_define([goffice_version_minor], [4])
 m4_define([goffice_version_extra], [])
 m4_define([goffice_full_version],
     [goffice_version_epoch.goffice_version_major.goffice_version_minor[]goffice_version_extra])
-
-#AC_INIT([goffice], [goffice_full_version],
-#	[http://bugzilla.gnome.org/enter_bug.cgi?product=libgoffice])
 
 AC_CONFIG_SRCDIR(lib/goffice-0.0.4/goffice/goffice.h)
 
@@ -843,7 +840,7 @@ AH_BOTTOM([/* Don't include goffice-features.h, it's a subset of goffice-config.
 #define GOFFICE_FEATURES_H])
 
 dnl We use $host_os:
-#AC_CANONICAL_HOST
+dnl AC_CANONICAL_HOST
 
 AC_ISC_POSIX
 AC_PROG_CC
@@ -2161,6 +2158,8 @@ AC_MSG_RESULT([
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
   LDFLAGS .............. : $LDFLAGS
+  Have libgsf............: $HAVE_LIBGSF
+  Have goffice...........: $HAVE_GOFFICE
   QOF support ...........: $QOF_VERSION
   QOF location ..........: $QOF_PREFIX
   QOF library dir .......: $QOF_LIB_DIR
