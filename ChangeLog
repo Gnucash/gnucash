@@ -1,3 +1,8 @@
+2005-11-15  Neil Williams <linux@codehelp.co.uk>
+
+	* src/doc/doxygen.cfg.in : Add lib/libqof to the
+	Doxygen output.
+
 2005-11-14    <david@hampton-pc.rainbolthampton.net>
 
 	* src/gnome/glade/print.glade: Remove extraneous carriage return.
