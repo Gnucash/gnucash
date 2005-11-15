@@ -117,7 +117,7 @@ gnc_file_dialog (const char * title,
   file_box = gtk_file_chooser_dialog_new(
 			  title,
 			  NULL,
-			  GTK_FILE_CHOOSER_ACTION_OPEN,
+			  action,
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			  okbutton, GTK_RESPONSE_ACCEPT,
 			  NULL);

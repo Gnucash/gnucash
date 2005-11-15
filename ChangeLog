@@ -1,5 +1,9 @@
 2005-11-14    <david@hampton-pc.rainbolthampton.net>
 
+	* src/gnome-utils/gnc-file.c: Pass the action variable to
+	gtk_file_chooser_dialog_new() to get the right style of
+	dialog (open, save. etc.).
+
 	* src/gnome/glade/price.glade: Phil Longstaff's changes to set
 	GTK_SHADOW_IN in the commodities dialog scroll box and the account
 	dialog parent scroll box.  Also make the 'edit', 'remove' and
