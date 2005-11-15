@@ -1,5 +1,9 @@
 2005-11-14  David Hampton  <hampton@employees.org>
 
+	* src/core-utils/gnc-gkeyfile-utils.c:
+	* src/gnome-utils/gnc-main-window.c: Scott Oonk's for for x86_64
+	compile warnings.
+	
 	* src/gnome-utils/dialog-preferences.c:
 	* src/gnome-utils/preferences.glade:
 	* src/gnome/glade/sched-xact.glade: Andreas Köhler's patch to set

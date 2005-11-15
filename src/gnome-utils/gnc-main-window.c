@@ -620,7 +620,7 @@ gnc_main_window_restore_all_state (gpointer session, gpointer unused)
   /*  Debugging: dump a copy to stdout and the trace log */
   {
     gchar *file_data;
-    gint file_length;
+    gsize file_length;
     file_data = g_key_file_to_data(data.key_file, &file_length, NULL);
     DEBUG("=== File Data Read===\n%s\n=== File End ===\n", file_data);
     g_free(file_data);
@@ -820,7 +820,7 @@ gnc_main_window_save_all_state (gpointer session, gpointer user_data)
 	/*  Debugging: dump a copy to the trace log */
 	{
 	  gchar *file_data;
-	  gint file_length;
+	  gsize file_length;
 	  file_data = g_key_file_to_data(data.key_file, &file_length, NULL);
 	  DEBUG("=== File Data Written===\n%s\n=== File End ===\n", file_data);
 	  g_free(file_data);

@@ -122,10 +122,10 @@ gnc_key_file_save_to_file (const gchar *filename,
     success = FALSE;
     if (error) {
       *error = g_error_new(G_FILE_ERROR, g_file_error_from_errno(errno), 
-			   "File %s truncated (provided %d, written %d)",
+			   "File %s truncated (provided %d, written %zd)",
 			   filename, length, (int) written);
     } else {
-      g_critical("File %s truncated (provided %d, written %d)",
+      g_critical("File %s truncated (provided %d, written %zd)",
 	      filename, length, (int) written);
     }
     /* Ignore any error */
