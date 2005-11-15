@@ -1,4 +1,10 @@
-2005-11-14  David Hampton  <hampton@employees.org>
+2005-11-14    <david@hampton-pc.rainbolthampton.net>
+
+	* src/gnome/glade/price.glade: Phil Longstaff's changes to set
+	GTK_SHADOW_IN in the commodities dialog scroll box and the account
+	dialog parent scroll box.  Also make the 'edit', 'remove' and
+	'remove-old' buttons on the price db dialog box insensitive until
+	a price is chosen.
 
 	* src/core-utils/gnc-gkeyfile-utils.c:
 	* src/gnome-utils/gnc-main-window.c: Scott Oonk's for for x86_64
