@@ -938,7 +938,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 #endif
 
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			 "Close _without Saving", GTK_RESPONSE_CLOSE,
+			 _("Close _without Saving"), GTK_RESPONSE_CLOSE,
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			 GTK_STOCK_SAVE, GTK_RESPONSE_APPLY,
 			 NULL);
