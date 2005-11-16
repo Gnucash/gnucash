@@ -8,11 +8,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: de\n"
+"Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-12 11:44+0100\n"
-"PO-Revision-Date: 2005-11-13 15:45+0100\n"
-"Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
+"PO-Revision-Date: 2005-11-16 20:54+0100\n"
+"Last-Translator: Andreas Köhler <KoehlerAndreas@web.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1252,9 +1252,8 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/preferences.glade.h:83
-#, fuzzy
 msgid "Number of _rows:"
-msgstr "Anzahl der Zeilen"
+msgstr "Anzahl der _Zeilen:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
 #: ../src/gnome/glade/sched-xact.glade.h:139
@@ -1301,9 +1300,8 @@ msgid "_Accumulate splits on post"
 msgstr "Buchungen bei Ausstellung kumulieren?"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
-#, fuzzy
 msgid "_Days in advance:"
-msgstr " Tage im voraus"
+msgstr "_Tage im Voraus:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
 #, fuzzy
@@ -1311,9 +1309,8 @@ msgid "_Notify when due"
 msgstr "Bei Erstellung benachrichtigen"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
-#, fuzzy
 msgid "_Open in new window"
-msgstr "In neuem Fenster öffnen"
+msgstr "In neuem _Fenster öffnen"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 #, fuzzy
@@ -1819,185 +1816,153 @@ msgstr "_Geschäft"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:150
-#, fuzzy
 msgid "_Customer"
-msgstr "Kunde"
+msgstr "_Kunden"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
-#, fuzzy
 msgid "_New Customer"
-msgstr "Neuer Kunde"
+msgstr "Kunde anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
-#, fuzzy
 msgid "Open the New Customer dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Kunden öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
-#, fuzzy
 msgid "_Find Customer"
-msgstr "Kunde suchen"
+msgstr "_Kunde suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
-#, fuzzy
 msgid "Open the Find Customer dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für die Suche von Kunden anzeigen"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-business.c:157
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:93
-#, fuzzy
 msgid "New _Invoice"
-msgstr "Neue Rechnung"
+msgstr "Rechnung anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
-#, fuzzy
 msgid "Open the New Invoice dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:160
-#, fuzzy
 msgid "Find In_voice"
-msgstr "Rechnung suchen"
+msgstr "_Rechnung suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
-#, fuzzy
 msgid "Open the Find Invoice dialog"
-msgstr "Rechnung suchen"
+msgstr "Den Dialog für die Suche von Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:163
 #: ../src/business/business-gnome/gnc-plugin-business.c:187
-#, fuzzy
 msgid "New _Job"
-msgstr "Neuer Auftrag"
+msgstr "Auftrag anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
-#, fuzzy
 msgid "Open the New Job dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Aufträge öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:166
 #: ../src/business/business-gnome/gnc-plugin-business.c:190
-#, fuzzy
 msgid "Find Jo_b"
-msgstr "Auftrag suchen"
+msgstr "_Auftrag suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
-#, fuzzy
 msgid "Open the Find Job dialog"
-msgstr "Den GnuCash-Online-Kurs öffnen"
+msgstr "Den Dialog für die Suche von Aufträgen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:169
 #: ../src/business/business-gnome/gnc-plugin-business.c:193
 #: ../src/business/business-gnome/gnc-plugin-business.c:211
-#, fuzzy
 msgid "_Process Payment"
-msgstr "Zahlung verarbeiten"
+msgstr "_Zahlung verarbeiten..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
-#, fuzzy
 msgid "Open the Process Payment dialog"
-msgstr "Zahlung verarbeiten"
+msgstr "Den Dialog für das Eingeben von Zahlungen öffnen"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:174
-#, fuzzy
 msgid "_Vendor"
-msgstr "Zulieferer"
+msgstr "_Zulieferer"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
-#, fuzzy
 msgid "_New Vendor"
-msgstr "Neuer Zulieferer"
+msgstr "Zulieferer anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
-#, fuzzy
 msgid "Open the New Vendor dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Zulieferer öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:178
-#, fuzzy
 msgid "_Find Vendor"
-msgstr "Zulieferer suchen"
+msgstr "_Zulieferer suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
-#, fuzzy
 msgid "Open the Find Vendor dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für die Suche nach Zulieferern öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:181
-#, fuzzy
 msgid "New _Bill"
-msgstr "Neue Rechnung"
+msgstr "Rechnung anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
-#, fuzzy
 msgid "Open the New Bill dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:184
-#, fuzzy
 msgid "Find Bi_ll"
-msgstr "Rechnung suchen"
+msgstr "_Rechnung suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 msgid "Open the Find Bill dialog"
-msgstr ""
+msgstr "Den Dialog für die Suche nach Rechnungen öffnen"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:198
-#, fuzzy
 msgid "_Employee"
-msgstr "Mitarbeiter"
+msgstr "_Mitarbeiter"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
-#, fuzzy
 msgid "_New Employee"
-msgstr "Neuer Mitarbeiter"
+msgstr "Mitarbeiter anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
-#, fuzzy
 msgid "Open the New Employee dialog"
-msgstr "Die Einführung für neue Benutzer öffnen"
+msgstr "Den Dialog für das Anlegen neuer Mitarbeiter öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:202
-#, fuzzy
 msgid "_Find Employee"
-msgstr "Mitarbeiter suchen"
+msgstr "_Mitarbeiter suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
-#, fuzzy
 msgid "Open the Find Employee dialog"
-msgstr "Mitarbeiter suchen"
+msgstr "Den Dialog für die Suche nach Mitarbeitern öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:205
-#, fuzzy
 msgid "New _Expense Voucher"
-msgstr "Neue Auslagenerstattung"
+msgstr "Auslagenerstattung anlegen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
-#, fuzzy
 msgid "Open the New Expense Voucher dialog"
-msgstr "Neue Auslagenerstattung"
+msgstr "Den Dialog für das Anlegen von Auslagenerstattungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:208
-#, fuzzy
 msgid "Find Expense _Voucher"
-msgstr "Auslagenerstattung suchen"
+msgstr "_Auslagenerstattung suchen..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
-#, fuzzy
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Auslagenerstattung suchen"
+msgstr "Den Dialog für die Suche nach Auslagenerstattungen öffnen"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:216
 msgid "_Tax Table Editor"
-msgstr "Steuertabellen Editor"
+msgstr "Steuertabellen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
 msgid "View and edit the list of Tax Tables"
@@ -2005,16 +1970,15 @@ msgstr "Liste der Steuertabellen anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:219
 msgid "_Billing Terms Editor"
-msgstr "Zahlungsbedingungen Editor"
+msgstr "Zahlungsbedingungen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "View and edit the list of Billing Terms"
 msgstr "Liste der Zahlungsbedingungen anzeigen und bearbeiten"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:222
-#, fuzzy
 msgid "Bills _Due Reminder"
-msgstr "Erinnerung für fällige Rechnungen"
+msgstr "Erinnerung an fällige Rechnungen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
 #, fuzzy
@@ -2022,9 +1986,8 @@ msgid "Open the Bills Due Reminder dialog"
 msgstr "Erinnerung für fällige Rechnungen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:225
-#, fuzzy
 msgid "E_xport"
-msgstr "Exportieren"
+msgstr "E_xportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
 #, fuzzy
@@ -2126,9 +2089,8 @@ msgstr "Eine neue Rechnung anlegen"
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:96
 #: ../src/gnome/gnc-plugin-page-account-tree.c:151
-#, fuzzy
 msgid "New _Account..."
-msgstr "_Neues Konto"
+msgstr "Neues _Konto..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:97
 msgid "Create a new account"
@@ -2140,9 +2102,8 @@ msgid "Print Invoice"
 msgstr "Druckbare Rechnung"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:100
-#, fuzzy
 msgid "Make a printable invoice"
-msgstr "Druckbare Rechnung erstellen"
+msgstr "Eine druckbare Rechnung erstellen"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:104
@@ -2160,9 +2121,8 @@ msgstr "Firma"
 #: ../src/gnome/dialog-sxsincelast.c:404
 #: ../src/gnome/gnc-plugin-page-register.c:166
 #: ../src/gnome-utils/gnc-main-window.c:196
-#, fuzzy
 msgid "_Paste"
-msgstr "Datum"
+msgstr "E_infügen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:113
 msgid "_Edit Invoice"
@@ -2752,7 +2712,7 @@ msgstr "Wert"
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:205
 #, no-c-format
 msgid "Percent %"
-msgstr "Prozent %"
+msgstr "Prozent (%)"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:530
 #, c-format
@@ -2794,9 +2754,8 @@ msgid "Tax Tables"
 msgstr "Steuertabellen"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:14
-#, fuzzy
 msgid "Value ($)"
-msgstr "Wert"
+msgstr "Geldbetrag"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:15
 msgid "Value: "
@@ -2859,15 +2818,13 @@ msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
 #: ../src/engine/cap-gains.c:226
-#, fuzzy
 msgid "Orphaned Gains"
-msgstr "Noch nicht erzielter Gewinn/Verlust"
+msgstr "Unverknüpfte Gewinne"
 
 #: ../src/engine/cap-gains.c:240 ../src/engine/cap-gains.c:912
 #: ../src/engine/cap-gains.c:917 ../src/engine/cap-gains.c:918
-#, fuzzy
 msgid "Realized Gain/Loss"
-msgstr "Noch nicht erzielter Gewinn/Verlust"
+msgstr "Realisierter Gewinn/Verlust"
 
 #: ../src/engine/cap-gains.c:242
 msgid ""
@@ -3050,14 +3007,12 @@ msgid "Split"
 msgstr "Vollständig"
 
 #: ../src/engine/Transaction.c:3159
-#, fuzzy
 msgid "Voided transaction"
-msgstr "Stornierte Buchungssätze?"
+msgstr "Stornierte Buchung"
 
 #: ../src/engine/Transaction.c:3184
-#, fuzzy
 msgid "Transaction Voided"
-msgstr "Buchungserinnerungen"
+msgstr "Buchung storniert"
 
 #: ../src/gnome/dialog-chart-export.c:234
 #, fuzzy
@@ -3257,15 +3212,14 @@ msgstr "_Buchungssatz"
 #: ../src/gnome/gnc-plugin-page-register.c:160
 #: ../src/gnome-utils/gnc-main-window.c:194
 msgid "Cu_t"
-msgstr ""
+msgstr "_Ausschneiden"
 
 #: ../src/gnome/dialog-scheduledxaction.c:251
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/gnc-plugin-page-register.c:163
 #: ../src/gnome-utils/gnc-main-window.c:195
-#, fuzzy
 msgid "_Copy"
-msgstr "Firma"
+msgstr "_Kopieren"
 
 #: ../src/gnome/dialog-scheduledxaction.c:334
 msgid "This SX has changed; are you sure you want to cancel?"
@@ -3512,9 +3466,8 @@ msgstr ""
 
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:552
-#, fuzzy
 msgid "Period:"
-msgstr ". (Punkt)"
+msgstr "Periode:"
 
 #: ../src/gnome/druid-acct-period.c:553
 #, fuzzy
@@ -3918,9 +3871,8 @@ msgstr "Neuen Kontenrahmen erstellen"
 
 #: ../src/gnome/glade/account.glade.h:40
 #: ../src/gnome/glade/acctperiod.glade.h:7
-#, fuzzy
 msgid "Notes:"
-msgstr "Bemerkung"
+msgstr "Bemerkung:"
 
 #: ../src/gnome/glade/account.glade.h:42
 #: ../src/gnome-utils/gnc-tree-view-account.c:506
@@ -4360,7 +4312,7 @@ msgstr ""
 #: ../src/gnome/glade/chart-export.glade.h:9
 #: ../src/gnome-utils/gnc-main-window.c:180
 msgid "_Export"
-msgstr "_Export"
+msgstr "E_xportieren"
 
 #: ../src/gnome/glade/commodities.glade.h:1
 msgid "<span weight=\"bold\">Commodities</span>"
@@ -4935,9 +4887,8 @@ msgid "Quicken/QuickBooks (tm) US-Letter"
 msgstr ""
 
 #: ../src/gnome/glade/print.glade.h:24
-#, fuzzy
 msgid "Top"
-msgstr "Bis"
+msgstr "Oben"
 
 #: ../src/gnome/glade/print.glade.h:25
 msgid "Units:"
@@ -5028,9 +4979,8 @@ msgid "Open"
 msgstr "Öffnen"
 
 #: ../src/gnome/glade/reconcile.glade.h:17
-#, fuzzy
 msgid "Open File"
-msgstr "OFX Dateien"
+msgstr "Datei öffnen"
 
 #. src/scm/help-topics-index.scm
 #: ../src/gnome/glade/reconcile.glade.h:18 ../intl-scm/guile-strings.c:426
@@ -5081,9 +5031,8 @@ msgstr "_Neu"
 
 #: ../src/gnome/glade/reconcile.glade.h:31
 #: ../src/gnome-utils/gnc-main-window.c:178
-#, fuzzy
 msgid "_Open"
-msgstr "Öffnen"
+msgstr "Ö_ffnen"
 
 #: ../src/gnome/glade/reconcile.glade.h:32
 #: ../src/gnome/window-reconcile.c:1204
@@ -5406,7 +5355,7 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:77
 msgid "Sort register by..."
-msgstr ""
+msgstr "Kontofenster sortieren nach..."
 
 #: ../src/gnome/glade/register.glade.h:79
 msgid "St_yle"
@@ -6578,18 +6527,16 @@ msgstr "Neue Konto-Hierarchie Ansicht öffnen"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:80
-#, fuzzy
 msgid "New _File"
-msgstr "_Neue Datei"
+msgstr "Neue _Datei"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:81
 msgid "Create a new file"
 msgstr "Eine neue Datei anlegen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:83
-#, fuzzy
 msgid "_Open..."
-msgstr "Öffnen"
+msgstr "Ö_ffnen..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:86
 msgid "_Save"
@@ -6597,17 +6544,15 @@ msgstr "_Speichern"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:89
 msgid "Save _As..."
-msgstr ""
+msgstr "Speichern _unter..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:93
-#, fuzzy
 msgid "_QSF Import"
-msgstr "QIF Import"
+msgstr "_QSF-Import"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:94
-#, fuzzy
 msgid "Import a QSF object file"
-msgstr "QIF-Datei importieren"
+msgstr "QSF-Datei importieren"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:97
 #, fuzzy
@@ -6630,9 +6575,8 @@ msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:107
-#, fuzzy
 msgid "_Find..."
-msgstr "Suche"
+msgstr "_Suchen..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:108
 msgid "Find transactions with a search"
@@ -6745,9 +6689,8 @@ msgid "Create a new Account"
 msgstr "Ein neues Konto eröffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
-#, fuzzy
 msgid "New Account _Hierarchy..."
-msgstr "Neuen Kontenrahmen erstellen"
+msgstr "Neue Konten_hierarchie..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:155
 msgid "Extend the current book by merging with new account type categories"
@@ -7369,7 +7312,7 @@ msgstr "Alle Kriterien werden erfüllt"
 
 #: ../src/gnome-search/dialog-search.c:787
 msgid "any criteria are met"
-msgstr "Irgendeins der Kriterien wird erfüllt"
+msgstr "Irgendeines der Kriterien wird erfüllt"
 
 #. Translators: %s is either "item" or the name of some other
 #. * item, e.g. "Customer" or "Invoice".
@@ -8458,11 +8401,11 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the database?"
 msgstr ""
-"Für die Datei \n"
+"Für die Datei\n"
 "    %s\n"
-"konnte keine exklusive Schreibberechtigung erreicht werden. Diese\n"
-"Datei ist wahrscheinlich von jemand anderem in Benutzung. In diesem\n"
-"Fall sollten Sie die Datei nicht öffnen.\n"
+"konnte keine exklusive Schreibberechtigung erreicht werden.\n"
+"Diese Datei ist wahrscheinlich von jemand anderem in Benutzung.\n"
+"In diesem Fall sollten Sie die Datei nicht öffnen.\n"
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
@@ -8875,9 +8818,8 @@ msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
 
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:163
-#, fuzzy
 msgid "_File"
-msgstr "_Neue Datei"
+msgstr "_Datei"
 
 #: ../src/gnome-utils/gnc-main-window.c:168
 msgid "_Reports"
@@ -8908,37 +8850,32 @@ msgstr "Sonstiges"
 
 #: ../src/gnome-utils/gnc-main-window.c:179
 msgid "_Import"
-msgstr "_Import"
+msgstr "_Importieren"
 
 #: ../src/gnome-utils/gnc-main-window.c:181
-#, fuzzy
 msgid "_Print..."
-msgstr "Drucken"
+msgstr "_Drucken..."
 
 #: ../src/gnome-utils/gnc-main-window.c:182
-#, fuzzy
 msgid "Proper_ties"
-msgstr "Eigenschaften"
+msgstr "Ei_genschaften"
 
 #: ../src/gnome-utils/gnc-main-window.c:185
-#, fuzzy
 msgid "_Close"
-msgstr "Schließen"
+msgstr "S_chließen"
 
 #: ../src/gnome-utils/gnc-main-window.c:188
-#, fuzzy
 msgid "_Quit"
-msgstr "Beenden"
+msgstr "_Beenden"
 
 #: ../src/gnome-utils/gnc-main-window.c:197
-#, fuzzy
 msgid "Pr_eferences"
-msgstr "Referenz"
+msgstr "_Einstellungen"
 
 #. View menu
 #: ../src/gnome-utils/gnc-main-window.c:203
 msgid "_Refresh"
-msgstr "Aktualisieren"
+msgstr "A_ktualisieren"
 
 #: ../src/gnome-utils/gnc-main-window.c:204
 msgid "Refresh this window"
@@ -8996,18 +8933,16 @@ msgid "Open the GnuCash Tutorial"
 msgstr "Den GnuCash-Online-Kurs öffnen"
 
 #: ../src/gnome-utils/gnc-main-window.c:231
-#, fuzzy
 msgid "_Contents"
-msgstr "Inhalt"
+msgstr "I_nhalt"
 
 #: ../src/gnome-utils/gnc-main-window.c:232
 msgid "Open the GnuCash Help"
 msgstr "Die GnuCash-Hilfe öffnen"
 
 #: ../src/gnome-utils/gnc-main-window.c:234
-#, fuzzy
 msgid "_About"
-msgstr "Betrag"
+msgstr "_Info"
 
 #. Misc menu
 #: ../src/gnome-utils/gnc-main-window.c:240
@@ -9028,18 +8963,16 @@ msgid "Show/hide the toolbar on this window"
 msgstr "Die Werkzeugleiste in diesem Fenster anzeigen/verbergen"
 
 #: ../src/gnome-utils/gnc-main-window.c:251
-#, fuzzy
 msgid "Su_mmary Bar"
-msgstr "Zusammenfassungs-Leiste"
+msgstr "_Zusammenfassungsleiste"
 
 #: ../src/gnome-utils/gnc-main-window.c:252
 msgid "Show/hide the summary bar on this window"
 msgstr "Die Zusammenfassungs-Leiste in diesem Fenster anzeigen/verbergen"
 
 #: ../src/gnome-utils/gnc-main-window.c:254
-#, fuzzy
 msgid "Stat_us Bar"
-msgstr "Statusleiste"
+msgstr "_Statusleiste"
 
 #: ../src/gnome-utils/gnc-main-window.c:255
 #, fuzzy
@@ -9047,54 +8980,44 @@ msgid "Show/hide the status bar on this window"
 msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
 #: ../src/gnome-utils/gnc-main-window.c:262
-#, fuzzy
 msgid "Window _1"
-msgstr "window1"
+msgstr "Fenster _1"
 
 #: ../src/gnome-utils/gnc-main-window.c:263
-#, fuzzy
 msgid "Window _2"
-msgstr "_Fenster"
+msgstr "Fenster _2"
 
 #: ../src/gnome-utils/gnc-main-window.c:264
-#, fuzzy
 msgid "Window _3"
-msgstr "_Fenster"
+msgstr "Fenster _3"
 
 #: ../src/gnome-utils/gnc-main-window.c:265
-#, fuzzy
 msgid "Window _4"
-msgstr "_Fenster"
+msgstr "Fenster _4"
 
 #: ../src/gnome-utils/gnc-main-window.c:266
-#, fuzzy
 msgid "Window _5"
-msgstr "_Fenster"
+msgstr "Fenster _5"
 
 #: ../src/gnome-utils/gnc-main-window.c:267
-#, fuzzy
 msgid "Window _6"
-msgstr "_Fenster"
+msgstr "Fenster _6"
 
 #: ../src/gnome-utils/gnc-main-window.c:268
-#, fuzzy
 msgid "Window _7"
-msgstr "_Fenster"
+msgstr "Fenster _7"
 
 #: ../src/gnome-utils/gnc-main-window.c:269
-#, fuzzy
 msgid "Window _8"
-msgstr "_Fenster"
+msgstr "Fenster _8"
 
 #: ../src/gnome-utils/gnc-main-window.c:270
-#, fuzzy
 msgid "Window _9"
-msgstr "_Fenster"
+msgstr "Fenster _9"
 
 #: ../src/gnome-utils/gnc-main-window.c:271
-#, fuzzy
 msgid "Window _0"
-msgstr "_Fenster"
+msgstr "Fenster _0"
 
 #: ../src/gnome-utils/gnc-main-window.c:777
 #, c-format
@@ -9131,6 +9054,11 @@ msgid ""
 "You are attempting to close the last Gnucash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
 msgstr ""
+"<b>Gnucash beenden?</b>\n"
+"\n"
+"Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster\n"
+"zu schließen. Dies wird Gnucash beenden.\n"
+"Sind Sie sich sicher, dass Sie das wollen?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1035
 msgid "<no file>"
@@ -9166,38 +9094,33 @@ msgstr "Anfang dieses Monats"
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:65 ../intl-scm/guile-strings.c:640
 msgid "Start of previous month"
-msgstr "Beginn des vorherigen Monats"
+msgstr "Anfang des vorherigen Monats"
 
 #: ../src/gnome-utils/gnc-period-select.c:66
-#, fuzzy
 msgid "Start of this quarter"
-msgstr "Anfangsdatums des vorherigen Quartals"
+msgstr "Anfang dieses Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:67 ../intl-scm/guile-strings.c:656
 msgid "Start of previous quarter"
-msgstr "Anfangsdatums des vorherigen Quartals"
+msgstr "Anfang des vorherigen Quartals"
 
 #: ../src/gnome-utils/gnc-period-select.c:68
-#, fuzzy
 msgid "Start of this year"
-msgstr "Anfang dieses Monats"
+msgstr "Anfang dieses Jahres"
 
 #: ../src/gnome-utils/gnc-period-select.c:69
-#, fuzzy
 msgid "Start of previous year"
-msgstr "Anfangsdatums des vorherigen Quartals"
+msgstr "Anfang des vorherigen Jahres"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:72
-#, fuzzy
 msgid "Start of this fiscal year"
-msgstr "Beginn des momentanen Kalenderjahres"
+msgstr "Anfang dieses Haushaltsjahres"
 
 #: ../src/gnome-utils/gnc-period-select.c:73
-#, fuzzy
 msgid "Start of previous fiscal year"
-msgstr "Anfangsdatums des vorherigen Quartals"
+msgstr "Anfang des vorherigen Haushaltsjahres"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:79 ../intl-scm/guile-strings.c:636
@@ -9210,9 +9133,8 @@ msgid "End of previous month"
 msgstr "Ende des vorherigen Monats"
 
 #: ../src/gnome-utils/gnc-period-select.c:81
-#, fuzzy
 msgid "End of this quarter"
-msgstr "Ende des vorherigen Quartals"
+msgstr "Ende dieses Quartals"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:660
@@ -9220,30 +9142,26 @@ msgid "End of previous quarter"
 msgstr "Ende des vorherigen Quartals"
 
 #: ../src/gnome-utils/gnc-period-select.c:83
-#, fuzzy
 msgid "End of this year"
-msgstr "Ende des vorherigen Jahres"
+msgstr "Ende dieses Jahres"
 
 #: ../src/gnome-utils/gnc-period-select.c:84
-#, fuzzy
 msgid "End of previous year"
-msgstr "Ende des vorherigen Quartals"
+msgstr "Ende des vorherigen Jahres"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:87
-#, fuzzy
 msgid "End of this fiscal year"
-msgstr "Ende des vorherigen Jahres"
+msgstr "Ende dieses Haushaltsjahres"
 
 #: ../src/gnome-utils/gnc-period-select.c:88
-#, fuzzy
 msgid "End of previous fiscal year"
-msgstr "Ende des vorherigen Quartals"
+msgstr "Ende des vorherigen Haushaltsjahres"
 
 #: ../src/gnome-utils/gnc-splash.c:76
-#, fuzzy, c-format
+#, c-format
 msgid "Version: Gnucash-%s svn (r%d built %s)"
-msgstr "Version: Gnucash-cvs (Build %s)"
+msgstr "Version: Gnucash-%s svn (Revision %d, erstellt am %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:79
 #, c-format
@@ -9415,38 +9333,34 @@ msgid "'_Enter' moves to blank transaction"
 msgstr "Mit 'Eingabe' gehen Sie zum leeren Buchungssatz"
 
 #: ../src/gnome-utils/preferences.glade.h:2
-#, fuzzy
 msgid "- (_Dash)"
 msgstr "- (Minus)"
 
 #: ../src/gnome-utils/preferences.glade.h:3
-#, fuzzy
 msgid ". (_Period)"
 msgstr ". (Punkt)"
 
 #: ../src/gnome-utils/preferences.glade.h:4
-#, fuzzy
 msgid "/ (_Slash)"
 msgstr "/ (Slash)"
 
 #: ../src/gnome-utils/preferences.glade.h:5
 msgid "07/31/05"
-msgstr ""
+msgstr "07/31/05"
 
 #: ../src/gnome-utils/preferences.glade.h:6
 msgid "2005-07-31"
-msgstr ""
+msgstr "2005-07-31"
 
 #: ../src/gnome-utils/preferences.glade.h:7
 msgid "31.07.05"
-msgstr ""
+msgstr "31.07.05"
 
 #: ../src/gnome-utils/preferences.glade.h:8
 msgid "31/07/05"
-msgstr ""
+msgstr "31/07/05"
 
 #: ../src/gnome-utils/preferences.glade.h:9
-#, fuzzy
 msgid ": (Co_lon)"
 msgstr ": (Doppelpunkt)"
 
@@ -9460,7 +9374,7 @@ msgstr "<b>Inhalt</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:12
 msgid "<b>Date Format</b>"
-msgstr "<b>Datumsformat</b>"
+msgstr "<b>Datum</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:13
 msgid "<b>Default Currency</b>"
@@ -9500,7 +9414,7 @@ msgstr "<b>Beschriftungen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:22
 msgid "<b>Location</b>"
-msgstr ""
+msgstr "<b>Position</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:23
 msgid "<b>Numbers</b>"
@@ -9525,7 +9439,7 @@ msgstr "<b>Such-Dialog</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:28
 msgid "<b>Separator Character</b>"
-msgstr ""
+msgstr "<b>Trennzeichen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:29
 msgid "<b>Start Date</b>"
@@ -9533,11 +9447,11 @@ msgstr "<b>Anfangsdatum</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:30
 msgid "<b>Time Format</b>"
-msgstr "<b>Datumsformat</b>"
+msgstr "<b>Zeit</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:31
 msgid "<b>Toolbar Style</b>"
-msgstr ""
+msgstr "<b>Werkzeugleiste</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:32
 msgid "<b>Window Geometry</b>"
@@ -9545,7 +9459,7 @@ msgstr "<b>Fenster-Einstellungen</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:33
 msgid "Ab_solute:"
-msgstr ""
+msgstr "Ab_solut:"
 
 #: ../src/gnome-utils/preferences.glade.h:35
 #, fuzzy
@@ -9604,9 +9518,8 @@ msgid "C_redit accounts"
 msgstr "Habenkonten"
 
 #: ../src/gnome-utils/preferences.glade.h:44
-#, fuzzy
 msgid "Ch_oose:"
-msgstr "Schließen"
+msgstr "_Auswahl:"
 
 #: ../src/gnome-utils/preferences.glade.h:45
 #, fuzzy
@@ -9623,9 +9536,8 @@ msgid "Compress the data file with gzip when saving it to disk."
 msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:48
-#, fuzzy
 msgid "Date/Time"
-msgstr "Tageszeit"
+msgstr "Datum und Zeit"
 
 #: ../src/gnome-utils/preferences.glade.h:49
 msgid "Default to 'new search' if fewer than this number of items is returned."
@@ -9661,23 +9573,23 @@ msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:56
 msgid "Display toolbar items as icons only."
-msgstr ""
+msgstr "Nur Icons in der Werkzeugleiste anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:57
 msgid "Display toolbar items as text only."
-msgstr ""
+msgstr "Nur Texte in der Werkzeugleiste anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:58
 msgid ""
 "Display toolbar items with the text label below the icon.  Labels are show "
 "for all items."
-msgstr ""
+msgstr "Unterhalb jedes Icons in der Werkzeugleiste seine Beschreibung anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:59
 msgid ""
 "Display toolbar items with the text label beside the icon.  Labels are only "
 "shown for the most frequently used items."
-msgstr ""
+msgstr "Neben jedem Icon in der Werkzeugleiste seine Beschreibung anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:60
 #, fuzzy
@@ -9726,7 +9638,7 @@ msgstr ""
 msgid ""
 "If checked, each report will be opened in its own top level window.  If "
 "clear, the report will be opened in the current window."
-msgstr ""
+msgstr "Falls angeklickt wird jeder Bericht in einem neuen Top-Level-Fenster angezeigt. Ansonsten wird er in dem aktuellen Fenster geöffnet."
 
 #: ../src/gnome-utils/preferences.glade.h:71
 msgid ""
@@ -9780,9 +9692,8 @@ msgid "Income\\Salary\\Taxable"
 msgstr "Erträge/Bezahlung/zu versteuern"
 
 #: ../src/gnome-utils/preferences.glade.h:81
-#, fuzzy
 msgid "Loc_ale:"
-msgstr "Systemeinstellung"
+msgstr "_Systemeinstellung:"
 
 #: ../src/gnome-utils/preferences.glade.h:82
 #, fuzzy
@@ -9827,9 +9738,8 @@ msgstr ""
 "Aktiva, Forderungen und Verbindlichkeiten."
 
 #: ../src/gnome-utils/preferences.glade.h:89
-#, fuzzy
 msgid "Re_lative:"
-msgstr "Rabatt"
+msgstr "Re_lativ:"
 
 #: ../src/gnome-utils/preferences.glade.h:91
 #, fuzzy
@@ -9842,14 +9752,12 @@ msgid "Register opens in a new _window"
 msgstr "In neuem Fenster öffnen"
 
 #: ../src/gnome-utils/preferences.glade.h:93
-#, fuzzy
 msgid "Report opens in a new _window"
-msgstr "In neuem Fenster öffnen"
+msgstr "Bericht in neuem _Fenster öffnen"
 
 #: ../src/gnome-utils/preferences.glade.h:94
-#, fuzzy
 msgid "Reports"
-msgstr "Be_richte"
+msgstr "Berichte"
 
 #: ../src/gnome-utils/preferences.glade.h:95
 msgid ""
@@ -9911,15 +9819,15 @@ msgstr "Passiva-, Eigenkapitals- und Ertragskonten mit umgekehrten Vorzeichen"
 
 #: ../src/gnome-utils/preferences.glade.h:105
 msgid "Summarybar"
-msgstr "Zusammenfassungs-Leiste"
+msgstr "Zusammenfassungsleiste"
 
 #: ../src/gnome-utils/preferences.glade.h:106
 msgid "Text _below icons"
-msgstr ""
+msgstr "Text _unter Icons"
 
 #: ../src/gnome-utils/preferences.glade.h:107
 msgid "Text besi_de icons"
-msgstr ""
+msgstr "Text _neben Icons"
 
 #: ../src/gnome-utils/preferences.glade.h:108
 #, fuzzy
@@ -9928,16 +9836,15 @@ msgstr "Vollständig"
 
 #: ../src/gnome-utils/preferences.glade.h:109
 msgid "US Dollars (USD)"
-msgstr ""
+msgstr "US Dollars (USD)"
 
 #: ../src/gnome-utils/preferences.glade.h:110
 msgid "U_K:"
-msgstr ""
+msgstr "U_K:"
 
 #: ../src/gnome-utils/preferences.glade.h:111
-#, fuzzy
 msgid "U_se 24-hour clock"
-msgstr "24-Stunden-Format zur Zeitanzeige"
+msgstr "24-Stunden-_Format"
 
 #: ../src/gnome-utils/preferences.glade.h:112
 #, fuzzy
@@ -9954,29 +9861,28 @@ msgid "Use only 'debit' and 'credit' instead of informal synonyms"
 msgstr "Nur 'Soll' und 'Haben' anstatt informeller Bezeichnungen benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:115
-#, fuzzy
 msgid "Use s_ystem _default"
-msgstr "GNOME Voreinstellung benutzen"
+msgstr "_GNOME-Voreinstellung"
 
 #: ../src/gnome-utils/preferences.glade.h:116
 msgid "Use the date format comon in continental Europe."
-msgstr ""
+msgstr "Das auf dem europäischen Kontinent übliche Datumsformat benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:117
 msgid "Use the date format comon in the United Kingdom."
-msgstr ""
+msgstr "Das in Großbritannien übliche Datumsformat benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:118
 msgid "Use the date format comon in the United States."
-msgstr ""
+msgstr "Das in den Vereinigten Staaten von Amerika übliche Datumsformat benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:119
 msgid "Use the date format specified by the ISO-8601 standard."
-msgstr ""
+msgstr "Das in dem ISO-Standard 8601 beschriebene Datumsformat benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:120
 msgid "Use the date format specified by the system locale."
-msgstr ""
+msgstr "Das Datumsformat aus den Systemeinstellungen übernehmen"
 
 #: ../src/gnome-utils/preferences.glade.h:121
 #, fuzzy
@@ -10022,22 +9928,19 @@ msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:129
 msgid "Use the system setting for displaying toolbar items."
-msgstr ""
+msgstr "Die GNOME-Voreinstellung für die Anzeige der Icons in der Werkzeugleiste benutzen"
 
 #: ../src/gnome-utils/preferences.glade.h:130
-#, fuzzy
 msgid "Windows"
-msgstr "_Fenster"
+msgstr "Fenster"
 
 #: ../src/gnome-utils/preferences.glade.h:131
-#, fuzzy
 msgid "\\ (_Backslash)"
 msgstr "\\ (Backslash)"
 
 #: ../src/gnome-utils/preferences.glade.h:132
-#, fuzzy
 msgid "_Absolute:"
-msgstr "Veraltet"
+msgstr "_Absolut:"
 
 #: ../src/gnome-utils/preferences.glade.h:133
 #, fuzzy
@@ -10076,16 +9979,15 @@ msgstr "EURO-Unterstützung aktivieren"
 
 #: ../src/gnome-utils/preferences.glade.h:140
 msgid "_Europe:"
-msgstr ""
+msgstr "_Europa:"
 
 #: ../src/gnome-utils/preferences.glade.h:141
 msgid "_ISO:"
-msgstr ""
+msgstr "_ISO:"
 
 #: ../src/gnome-utils/preferences.glade.h:142
-#, fuzzy
 msgid "_Icons only"
-msgstr "Nur Icons"
+msgstr "Nur _Icons"
 
 #: ../src/gnome-utils/preferences.glade.h:143
 #, fuzzy
@@ -10098,9 +10000,8 @@ msgid "_None"
 msgstr "Keine"
 
 #: ../src/gnome-utils/preferences.glade.h:145
-#, fuzzy
 msgid "_Relative:"
-msgstr "Rabatt"
+msgstr "_Relativ:"
 
 #: ../src/gnome-utils/preferences.glade.h:146
 #, fuzzy
@@ -10108,18 +10009,16 @@ msgid "_Retain log files:"
 msgstr "Anzahl Tage, deren Logdateien aufbewahrt werden sollen"
 
 #: ../src/gnome-utils/preferences.glade.h:147
-#, fuzzy
 msgid "_Save window size and position"
-msgstr "Speichere Fenstergrössen und -positionen"
+msgstr "_Fenstergrößen und -positionen speichern"
 
 #: ../src/gnome-utils/preferences.glade.h:148
-#, fuzzy
 msgid "_Text only"
-msgstr "Nur Text"
+msgstr "Nur _Text"
 
 #: ../src/gnome-utils/preferences.glade.h:149
 msgid "_US:"
-msgstr ""
+msgstr "_USA:"
 
 #: ../src/gnome-utils/preferences.glade.h:150
 msgid "_Use system theme colors"
@@ -11211,16 +11110,15 @@ msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
 msgid "Remember _PIN"
-msgstr ""
+msgstr "_PIN merken"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
 msgid "Remember the PIN for HBCI in memory during a session."
 msgstr "Die PIN für HBCI während einer GnuCash-Sitzung im Speicher merken."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
-#, fuzzy
 msgid "_Verbose debug messages"
-msgstr "HBCI Ausführliche Fehlermeldungen"
+msgstr "Ausführliche _Fehlermeldungen"
 
 #. Translators: Strings from this file are really only
 #. * needed inside Germany (HBCI is not supported anywhere
@@ -12233,7 +12131,7 @@ msgstr "QIF Dateien"
 
 #: ../src/import-export/qif-import/qif.glade.h:115
 msgid "QIF Import"
-msgstr "QIF Import"
+msgstr "QIF-Import"
 
 #: ../src/import-export/qif-import/qif.glade.h:116
 msgid "QIF account name"
@@ -13023,9 +12921,8 @@ msgstr "Fehlerhafte Berichts ID: %s"
 
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:48
-#, fuzzy
 msgid "St_yle Sheets"
-msgstr "Stilvorlage"
+msgstr "_Stilvorlagen"
 
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
 msgid "Edit report style sheets."
@@ -13036,7 +12933,7 @@ msgstr "Stilvorlagen für Berichte bearbeiten."
 #: ../intl-scm/guile-strings.c:2 ../intl-scm/guile-strings.c:8
 #: ../intl-scm/guile-strings.c:364
 msgid "Account Tree"
-msgstr "Konto-Hierarchie"
+msgstr "Kontenhierarchie"
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:4

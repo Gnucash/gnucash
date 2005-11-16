@@ -1,3 +1,8 @@
+2005-11-16  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation by Andreas Köhler
+	<KoehlerAndreas@web.de>
+
 2005-11-15    <david@hampton-pc.rainbolthampton.net>
 
 	* src/core-utils/gnc-gkeyfile-utils.c: Undo double fix of compiler
