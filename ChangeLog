@@ -1,3 +1,7 @@
+2005-11-15    <david@hampton-pc.rainbolthampton.net>
+
+	* ChangeLog: Convert to utf-8.
+
 2005-11-15  Neil Williams <linux@codehelp.co.uk>
 
 	* src/doc/doxygen.cfg.in : Add lib/libqof to the
@@ -289,7 +293,7 @@
 	* src/gnome-utils/gnc-menu-extensions.c:
 	* src/gnome-utils/gnc-plugin-menu-additions.c:
 	* src/gnome-utils/gnc-main-window.c:
-	* src/gnome-utils/gnc-plugin-page.c: Andreas Köhler's <andi5.py at
+	* src/gnome-utils/gnc-plugin-page.c: Andreas KÃ¶hler's <andi5.py at
 	gmx.net> patch to re-enable translation of menus and icons.
 
 2005-11-09  Scott Oonk  <scott.oonk@gmail.com>
@@ -7284,7 +7288,7 @@
 	* src/import-export/hbci/hbci-interaction.c: Fix problems with
 	user messages.
 
-2004-10-24  Benoit Grégoire <bock@step.polymtl.ca>
+2004-10-24  Benoit GrÃ©goire <bock@step.polymtl.ca>
 	* po/fr.po:  Translation from Johan Buret, unfortunately on the wrong branch.
 
 2004-10-16  Derek Atkins  <derek@ihtfp.com>
@@ -7330,7 +7334,7 @@
 	  - protect headers from multiple inclusion
 	  - include gtk.h header when we use gtk objects.
 
-2004-10-08  Benoit Grégoire <bock@step.polymtl.ca>
+2004-10-08  Benoit GrÃ©goire <bock@step.polymtl.ca>
        	* src/import-export/import-backend.c:  Duplicate match tweaks:
                -Change MATCH_DATE_NOT_THRESHOLD from 3 weeks to two weeks
                -A transaction amount mismatch past the threshold is now punished by -5 instead of -1
@@ -8096,11 +8100,11 @@
 	* src/engine/gnc-numeric.c:  Rich Johnson's patch to convert
 	  atoll() -> strtoll()
 
-2003-12-08  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-12-08  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	*src/import-export/log-replay/gnc-log-replay.c:  Increase read buffer size.
 	Hopefully fixes 127421, but this time someone please do test the fix...
 
-2003-12-01  Benoit Grégoire <bock@step.polymtl.ca>
+2003-12-01  Benoit GrÃ©goire <bock@step.polymtl.ca>
 
 	* po/POTFILES.in: Remove reference to bin/strsub.c.
 
@@ -8529,7 +8533,7 @@
 	  there's an error.
 	Fixes #117657
 
-2003-07-26  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-07-26  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-account-matcher.c: Fix bug #105293
 
@@ -9174,7 +9178,7 @@
 	  labels in the summary bar to print the Invoice's total amounts.
 	Fixes #113769.
 
-2003-05-29  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-05-29  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/engine/TransLog.c: Now log the transaction notes field (kvp actually).
 	* src/engine/kvp_frame.h: Docs
@@ -9193,7 +9197,7 @@
 	  - Doesn't need libofx.h
 	  - use TRUE/FALSE, not true/false.
 
-2003-05-28  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-05-28  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-settings.c: Revert previous gettext macro addition.
 	* src/engine/TransLog.c,h: Change the log format to use GUID instead of
@@ -9260,7 +9264,7 @@
 
 	* src/scm/main.scm: Change stable version to 1.8.4
 
-2003-05-26  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-05-26  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-settings.c: Fix pref page define to the
 	  proper page, should fix the problem of all prefs being ignored.
@@ -9806,12 +9810,12 @@
 	* src/scm/main.scm: guile-1.6 requires empty lists to be quoted
 	  (fixes debian bug #186188)
 
-2003-04-03  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-04-03  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-commodity-matcher.c: Fix debian bug #187061
 	Crash during import of investment accounts.
 
-2003-04-02  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-04-02  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* po/POTFILES.in,
 	src/import-export/ofx/Makefile.am,
@@ -9932,7 +9936,7 @@
 	  gcc-3.2, and frankly we don't need it since we don't install
 	  before we're building.
 
-2003-03-18  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-03-18  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* Documentation update
 
 2003-03-16  David Hampton  <hampton@employees.org>
@@ -10163,7 +10167,7 @@
 
 	* src/gnome/dialog-sxsincelast.c: make sure to resume gui refresh events
 
-2003-02-26  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-26  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c:
 	-Disable -3 punishment for transactions which have an online ID.  This punished credit card transfer yet added no tangible benefit.
@@ -10257,7 +10261,7 @@
 	    make splits positive, and some make them negative.  This should
 	    deal properly in both cases, so it's a better fix for #105139.
 
-2003-02-14  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-14  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c:
 	-Remove unused code.
@@ -10303,13 +10307,13 @@
 	  gnc_import_TransInfo_refresh_destacc move g_assert before first
 	  assignment, otherwise I get a syntax error
 
-2003-02-10  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-10  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-main-matcher.c: Patch by cmorgan to
 	  restrict iterative destination account matching to transactions
 	  AFTER the current one in the clist.
 
-2003-02-10  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-10  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c,h:
 	* src/import-export/import-main-matcher.c: Apply most of cmorgan's
@@ -10381,7 +10385,7 @@
 	* src/business/business-utils/Makefile.am: make scm-links so you
 	  can run gnucash from within the build tree
 
-2003-02-04  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-04  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: Add heuristic for duplicate matching by check number.
 	* doc/README.OFX: Update
@@ -10421,7 +10425,7 @@
 
 	* rpm/gnucash.spec.in: add options to build ofx,hbci and postgresql
 
-2003-02-02  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-02  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* doc/README.OFX: I've quickly put together some docs for the ofx module and transaction matching.  Also includes a FAQ. Not perfect, but should closebug 99478.
 	* doc/Makefile.am: Add README.OFX
@@ -10460,7 +10464,7 @@
 	* src/import-export/Makefile.am:
 	  Removed gnc-gen-transaction.[ch] "properly" for the dist.
 
-2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-01  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/gnc-ofx-import.c: No longer assume that transaction with type OFX_OTHER are investement transactions.  Fixes bug reported by Rik harris.
 	* src/import-export/import-main-matcher.c: Fix unrelated display bug with balanced (typically investement) transactions.
@@ -10479,7 +10483,7 @@
 	string freeze -- but these strings *really* *only* apply to German
 	users, so I just fixed the translation myself.
 
-2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-02-01  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-utilities.c: Build on Nigel's patch.
 	This hopefully permanently closes
@@ -11213,7 +11217,7 @@
 	* src/engine/gnc-commodity.c: Convert from the old to new symbols
 	for Russian Roubles (RUB -> RUR). #102705
 
-2002-01-11  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-01-11  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c: Fixed the date heuristics
 	  modifications, which had an unfortunate interaction with old
@@ -11330,7 +11334,7 @@
     * src/engine/iso-currencies-to-c:
       Look for auto-generated files in srcdir.
 
-2002-1-6  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-1-6  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/import-backend.c: Give a much higher importance
 	the date heuristics.   Exact date now worth +3, date within
 	MATCH_DATE_THRESHOLD worth +2, and dates outside
@@ -11588,7 +11592,7 @@
 	  the rpc-server command-line option only works if gnucash was compiled
 	  with rpc enabled.
 
-2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-30  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c
 	* src/import-export/hbci/gnc-hbci-utils.c:
 	Fix a bunch of "warning: deprecated use of label at end of
@@ -11910,7 +11914,7 @@
 
 	* rpm/gnucash.spec.in: fix for problem reports on gnucash-user
 
-2002-12-12  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-12  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/import-account-matcher.c: Fix "level 3 and
 	more subaccount not selected by default" bug.
 
@@ -11966,7 +11970,7 @@
 	* src/report/report-system/commodity-utilities.scm: Fix bug
 	#100463.
 
-2002-12-10  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-10  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/*: Add user pref to allow HBCI users
 	to select if they want Christian's matcher or mine.
 	Update OFX readme.
@@ -11984,14 +11988,14 @@
 	  RO Txns before you delete the account.  Fix for bug# 100727 (although
 	  it requires invoice unposting to work).
 
-2002-12-9  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-9  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/import-main-matcher.c:
 	* src/import-export/generic-import.glade: Change colors, remove
 	imbalance column and put it's info into the "Select action column",
 	 when appropriate.  Change many strings after discussion with
 	Wilddev.
 
-2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-8  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/import-account-matcher.c,h: Add param to
 	 gnc_import_select_account():
 	@param ok_pressed A pointer to gboolean.  If non-NULL, whether or
@@ -12005,7 +12009,7 @@
 	above change.  Shorten the strings in the "Specific action to be
 	taken" column.
 
-2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-8  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/import-backend.c: Make the auto-balance
 	split have the correct amount in all cases by using
 	xaccTransGetImbalance() instead of the first split's value.
@@ -12065,7 +12069,7 @@
 
 	* src/scm/main.scm: Tweak the file name normalization code.
 
-2002-12-7  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-7  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/generic-import.glade:  Add user instructions,
 	get rid of apply button.
@@ -12139,7 +12143,7 @@
 	  gnc_commodity_equal(), because the average user doesn't need
 	  to know why commodities are not equal.
 
-2002-12-07  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-07  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	More Doxygenification.  Created an Engine module, and a
 	Deprecated list.  Unfortunately, unless we turn on EXTRACT_ALL
@@ -12177,7 +12181,7 @@
 	* po/nl.po: Fix use of msgid_plural by adding the appropriate
 	header entry.
 
-2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/ofx/gnc-ofx-import.c:  Do the "right"
 	thing for setting split amount and value.
@@ -12193,11 +12197,11 @@
 
 	* po/nl.po -- don't use msgid_plural -- it fails to work.
 
-2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/import-backend.c:  Fix for gcc2
 
-2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-12-06  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	Huge patch, this is the new generic import
 	architecture/transaction matcher.  Many old
@@ -12587,7 +12591,7 @@ v	  fix the print_info
 	* src/import-export/generic-import.glade: Add explaining label for
 	importer window.
 
-2002-11-27  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-27  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* Makefile.am configure.in src/doc/Makefile.am
 	src/doc/doxygen.cfg src/doc/doxygen_main_page.c: Added doxygen
@@ -12648,11 +12652,11 @@ v	  fix the print_info
 	fuzzy amount matching threshold, so that this feature can be used
 	from gnc-ofx-import.c.
 
-2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-25  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Remove
 	#include "gnc-generic-import.h"
 
-2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-25  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Account-matcher.[c,h]: Minor changes to make
 	the matcher more generic:  Improved text handling, default account
 	support, enable account description, disable showing Online ID
@@ -12685,7 +12689,7 @@ v	  fix the print_info
 	gnc-split-reg isn't changing the window-titles of windows it has
 	no authority over.  Fixed Bug#99396.
 
-2002-11-25  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-25  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/*.c,h: Split gnc-generic-import.h in one
 	header per file.
 
@@ -12865,7 +12869,7 @@ v	  fix the print_info
 	* README/README.cvs -- update to reference how to "properly" use
 	  autogen.sh
 
-2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-21  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Tweak the matching
 	heuristics.
 	-Memo and description heuristics now both have a very primitive
@@ -12877,7 +12881,7 @@ v	  fix the print_info
 	always written in the split's memo.
 	* src/doc/user-prefs-howto.txt:  Add new file, by Christian Stimming.
 
-2002-11-21  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-21  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/generic-import.scm: New file, contains user
 	prefs for the Transaction matcher:
 	Display, Auto-ADD and Auto-CLEAR thresholds can be adjusted.
@@ -12897,7 +12901,7 @@ v	  fix the print_info
 	correctly with currency exchange transactions from 1.6. Fixes
 	reported problems with importing 1.6 data files, #91505.
 
-2002-11-18  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-18  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Change default "RECONCILE"
 	action from 'y' (reconciled) to'c' (cleared)
 
@@ -12916,7 +12920,7 @@ v	  fix the print_info
 	* NEWS: update to new version 1.7.3
 	* configure.in: update to new version 1.7.3
 
-2002-11-18  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-18  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Remove constant length
 	strings and replace with moving pointers.  I wish _("string")
 	could be used as a could initializer like "string" can...
@@ -13101,7 +13105,7 @@ v	  fix the print_info
 	* po/nb.po: New filename for Norwegian (bokmal) translation -- it
 	used to be stored under no.po but that is no longer.
 
-2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-13  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c:
 	-Don't show match with probability less than 1, so we don't
 	end up showing the whole account.
@@ -13113,7 +13117,7 @@ v	  fix the print_info
 	online.
 	-Steal a better pixmap from gnome drop down menu.
 
-2002-11-13  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-13  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/ofx/gnc-ofx-import.c: MAJOR improvement to
 	investment support.  All transactions created from an investment
@@ -13187,7 +13191,7 @@ v	  fix the print_info
 	* src/business/business-ledger/gncEntryLedgerControl.c: Implement
 	the equivalent fixes for the business ledger.
 
-2002-11-12  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-11-12  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Transaction-matcher.c: Fix previous patch.
 	gcc 3.2 is too forgiving...
 
@@ -13425,7 +13429,7 @@ v	  fix the print_info
 2002-10-31  Derek Atkins  <derek@ihtfp.com>
 	* import-export/ofx/Makefile.am: add gncscm_DATA to EXTRA_DIST
 
-2002-10-30  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-10-30  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/ofx/gnc-ofx-import.c: Fix security account creation bug caused by the presence of the character ':' in the account default name.  Fix compiler warnings.
 
 2002-10-30  Derek Atkins  <derek@ihtfp.com>
@@ -13698,7 +13702,7 @@ v	  fix the print_info
 2002-10-21  Derek Atkins  <derek@ihtfp.com>
 	* app-utils/options.scm -- fix (find-first-account) to search subaccounts
 
-2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-10-20  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* src/import-export/Trasaction-matcher.c: Fix compiler warnings.
 	* src/import-export/ofx/gnc-ofx-import.c: Give the user more information
 	  for account creation.
@@ -13719,7 +13723,7 @@ v	  fix the print_info
 	  Also had to remove -Werror from hbci/Makefile.am due to darn cc
 	  warnings about order of includes.
 
-2002-10-20  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-10-20  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 	* Investment transactions now create two accounts, one is for the stock,
 	  the other is the account defined by the FI, where the cash is swapped.
 
@@ -13775,7 +13779,7 @@ v	  fix the print_info
 
 	* Matthew Vanecek's gncQueryPrint() patch
 
-2002-10-18  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-10-18  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* Implement a working commodity matcher for the generic import
 	module.
@@ -13983,7 +13987,7 @@ v	  fix the print_info
 	* src/app-utils/gnc-ui-util.c: Move gnc_get_current_session() into
 	gnc-session.c. #94551
 
-2002-10-09  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-10-09  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/Account-matcher.c: Change "Account ID" text
 	to "Full account ID" and make it translatable.
@@ -14239,7 +14243,7 @@ v	  fix the print_info
 	transaction download with usage of generic transaction
 	import. Requires OpenHBCI CVS update.
 
-2002-09-29  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-09-29  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/Transaction-matcher.c: Fix	segfault when
 	importing into a gnucash account which has no splits.
@@ -14264,7 +14268,7 @@ v	  fix the print_info
 	* src/report/standard-reports/balance-sheet.scm: Use the report
 	name from the options instead of a hard coded report title.
 
-2002-09-26  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-09-26  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/ofx/gnc-ofx-import.c: The default commodity
 	and account type are now preselected from OFX provided information
@@ -14309,7 +14313,7 @@ v	  fix the print_info
 
 	* src/gnome/dialog-transfer.[hc]: Add set_memo access function.
 
-2002-09-23  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-09-23  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/Transaction-matcher.c, generic-import.glade:
 	-Transactions just downloaded are now ignored from the matchlist.
@@ -14328,7 +14332,7 @@ v	  fix the print_info
 	transaction matcher and change the look and alignment of
 	the action buttons.
 
-2002-09-22  Benoit Grégoire  <bock@step.polymtl.ca>
+2002-09-22  Benoit GrÃ©goire  <bock@step.polymtl.ca>
 
 	* src/import-export/gnc-generic-import.c: Remove obsolete file now
 	split into Account.c Transaction.c and Utilities.c
@@ -18236,7 +18240,7 @@ v	  fix the print_info
 	* po/glossary/de.po, txt-to-pot.sh: Several updates from the
 	stable branch.
 
-	* po/glossary/es.po: Added Spanish translation by Raúl Miró
+	* po/glossary/es.po: Added Spanish translation by RaÃºl MirÃ³
 	<cotin@geocities.com>
 
 2001-10-03  Robert Graham Merkel  <rgmerk@mira.net>
