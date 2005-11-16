@@ -491,7 +491,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
     gboolean result;
 
     if (gncEntryGetOrder (entry))
-      msg = g_strconcat (message, "\n\n", order_warn, NULL);
+      msg = g_strconcat (message, "\n\n", order_warn, (char *)NULL);
     else
       msg = g_strdup (message);
 
@@ -1573,7 +1573,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
   if (iw->id_entry)
     id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
   if (id && *id)
-    return g_strconcat (wintitle, " - ", id, NULL);
+    return g_strconcat (wintitle, " - ", id, (char *)NULL);
   return g_strdup (wintitle);
 }
 

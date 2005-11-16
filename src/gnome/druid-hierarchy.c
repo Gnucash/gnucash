@@ -639,7 +639,7 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 
 	g_object_set (G_OBJECT (cell),
 		      "text", string,
-		      NULL);
+		      (char *)NULL);
 }
 
 static void
@@ -740,7 +740,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer),
 		"xalign", 1.0,
-		NULL);
+		(char *)NULL);
   column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
 						     renderer,
 						     NULL);

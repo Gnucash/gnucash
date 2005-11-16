@@ -230,12 +230,12 @@ gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (jw->dialog_type == EDIT_JOB)
-    title = g_strconcat (_("Edit Job"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Job"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Job"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Job"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (jw->dialog), title);
 

@@ -1,3 +1,26 @@
+2005-11-16    <david@hampton-pc.rainbolthampton.net>
+
+	* src/import-export/qif-import/dialog-account-picker.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/business-options-gnome.c:
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/gnome-utils/druid-gconf-setup.c:
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/dialog-utils.c:
+	* src/gnome/druid-hierarchy.c: Sjoerd Langkemper's <sjoerd-gnome
+	at linuxonly.nl> fixes to cast sentinel markers to pointers.
+	Solves compilation problems on 64 bit architectures using
+	gcc4/glib2.6.  Fixes #321316.
+
+	* lib/goffice/gui-utils/go-combo-text.c: Remove unused call to
+	g_object_set.
+
 2005-11-16  Christian Stimming  <stimming@tuhh.de>
 
 	* ChangeLog: Split top-level ChangeLog by year. Everything before

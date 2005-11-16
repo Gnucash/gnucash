@@ -309,7 +309,7 @@ gnc_plugin_business_new (void)
 	GNC_TYPE_PLUGIN_PAGE_INVOICE;
 
 	plugin = g_object_new (GNC_TYPE_PLUGIN_BUSINESS,
-			      NULL);
+			      (char *)NULL);
 
 	return GNC_PLUGIN (plugin);
 }

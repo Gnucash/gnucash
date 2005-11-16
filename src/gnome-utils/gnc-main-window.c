@@ -1173,7 +1173,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
     g_object_set(G_OBJECT(action),
 		 "label", data->label,
 		 "visible", data->visible,
-		 NULL);
+		 (char *)NULL);
   LEAVE(" ");
 }
 
@@ -2312,7 +2312,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_object_set(G_OBJECT(priv->notebook),
 			      "scrollable", TRUE,
 			      "enable-popup", TRUE,
-			      NULL);
+			      (char *)NULL);
 	gtk_widget_show (priv->notebook);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
@@ -2387,7 +2387,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	  GtkAction*  action;
 
 	  action = gtk_action_group_get_action(priv->action_group,"ExtensionsAction");
-	  g_object_set(G_OBJECT(action), "visible", FALSE, NULL);
+	  g_object_set(G_OBJECT(action), "visible", FALSE, (char *)NULL);
 	}
 
 	/* GncPluginManager stuff */

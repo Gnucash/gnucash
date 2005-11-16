@@ -261,7 +261,7 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
 	    return GNC_PLUGIN_PAGE(invoice_page);
 	}
 
-	invoice_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_INVOICE, NULL);
+	invoice_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_INVOICE, (char *)NULL);
 	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_page);
 	priv->iw = iw;
 
@@ -310,7 +310,7 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 		     "page-uri",       "default:",
 		     "ui-description", "gnc-plugin-page-invoice-ui.xml",
 		     "use-new-window", use_new,
-		     NULL);
+		     (char *)NULL);
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());

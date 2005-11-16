@@ -365,12 +365,12 @@ gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_entry_get_text (GTK_ENTRY (cw->id_entry));
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (cw->dialog_type == EDIT_CUSTOMER)
-    title = g_strconcat (_("Edit Customer"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Customer"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Customer"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Customer"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (cw->dialog), title);
 

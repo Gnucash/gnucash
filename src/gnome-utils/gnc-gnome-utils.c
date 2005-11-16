@@ -127,7 +127,7 @@ gnc_gtk_add_rc_file (void)
 
   var = g_get_home_dir ();
   if (var) {
-    str = g_build_filename (var, ".gtkrc-2.0.gnucash", NULL);
+    str = g_build_filename (var, ".gtkrc-2.0.gnucash", (char *)NULL);
     gtk_rc_add_default_file (str);
     g_free (str);
   }

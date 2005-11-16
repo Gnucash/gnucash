@@ -287,12 +287,12 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_editable_get_chars (GTK_EDITABLE (vw->id_entry), 0, -1);
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (vw->dialog_type == EDIT_VENDOR)
-    title = g_strconcat (_("Edit Vendor"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Vendor"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Vendor"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Vendor"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (vw->dialog), title);
 

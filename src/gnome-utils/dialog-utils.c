@@ -895,7 +895,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
     glade_inited = TRUE;
   }
 
-  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, NULL);
+  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, (char *)NULL);
 
   xml = glade_xml_new (fname, root, NULL);
 
