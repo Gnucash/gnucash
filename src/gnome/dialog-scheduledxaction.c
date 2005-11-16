@@ -2485,5 +2485,5 @@ gnc_ui_sx_initialize (void)
 		       (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
   gnc_preferences_add_page (SX_GLADE_FILE,
 			    "sx_prefs",
-			    "Scheduled Transactions");
+			    _("Scheduled Transactions"));
 }

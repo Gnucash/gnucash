@@ -118,7 +118,7 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 			 (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
 
     gnc_preferences_add_page("businessprefs.glade", "business_prefs",
-			     "Business");
+			     _("Business"));
   }
 
   return TRUE;
