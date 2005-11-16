@@ -85,7 +85,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* Menu Items */
   { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
-    N_("Gather initial HBCI information"),
+    N_("Initial setup of HBCI access"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
   { "HbciGetBalanceAction", NULL, N_("HBCI Get _Balance"), NULL,
     N_("Get the account balance online through HBCI"),
