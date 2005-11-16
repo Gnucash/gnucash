@@ -1,5 +1,9 @@
 2005-11-16  Christian Stimming  <stimming@tuhh.de>
 
+	* src/business/business-gnome/gnc-plugin-business.c: Add ellipsis
+	to menu labels that require further action from user. See
+	http://developer.gnome.org/projects/gup/hig/2.0/menus-design.html#menu-item-types
+
 	* po/de.po: Updated German translation by Andreas Köhler
 	<KoehlerAndreas@web.de>
 
