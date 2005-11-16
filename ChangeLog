@@ -1,5 +1,8 @@
 2005-11-15    <david@hampton-pc.rainbolthampton.net>
 
+	* src/core-utils/gnc-gkeyfile-utils.c: Undo double fix of compiler
+	warnings.
+
 	* ChangeLog: Convert to utf-8.
 
 2005-11-15  Neil Williams <linux@codehelp.co.uk>
