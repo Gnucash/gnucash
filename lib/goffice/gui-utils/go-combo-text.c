@@ -187,7 +187,7 @@ go_combo_text_init (GoComboText *ct)
 	ct->rows = 0;
 	ct->entry = gtk_entry_new ();
 	ct->list = gtk_tree_view_new ();
-	g_object_set (G_OBJECT (ct->list), NULL);
+	//g_object_set (G_OBJECT (ct->list), NULL);
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (ct->list), FALSE);
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (ct->list), GTK_TREE_MODEL (store));
