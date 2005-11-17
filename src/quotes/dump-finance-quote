@@ -165,7 +165,11 @@ if ($exchange eq "currency") {
   while ($#ARGV >= 0) {
     my $to = shift;
     my $result = $q->currency($from, $to);
-    printf "1 $from = $result $to\n";
+    if (defined($result)) {
+      printf "1 $from = $result $to\n";
+    } else {
+      printf "1 $from = <unknown> $to\n";
+    }
   }
 } else {
   while ($#ARGV >= 0) {

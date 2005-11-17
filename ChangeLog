@@ -1,7 +1,7 @@
 2005-11-17  David Hampton  <hampton@employees.org>
 
 	* src/quotes/dump-finance-quote: Add support for printing currency
-	quotes.
+	quotes.  Report a failure of F::Q to return a currency quote.
 
 	* most files: Update FSF street address.
 
