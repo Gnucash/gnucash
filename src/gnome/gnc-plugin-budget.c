@@ -184,7 +184,7 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
 {
     guint count;
     QofBook *book;
-    GncBudget *bgt;
+    GncBudget *bgt = NULL;
     QofCollection *col;
     g_return_if_fail (data != NULL);
 
