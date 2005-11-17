@@ -1,5 +1,8 @@
 2005-11-17  David Hampton  <hampton@employees.org>
 
+	* src/quotes/dump-finance-quote: Add support for printing currency
+	quotes.
+
 	* most files: Update FSF street address.
 
 2005-11-16  David Hampton  <hampton@employees.org>
