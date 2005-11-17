@@ -1,4 +1,8 @@
-2005-11-16    <david@hampton-pc.rainbolthampton.net>
+2005-11-17  David Hampton  <hampton@employees.org>
+
+	* most files: Update FSF street address.
+
+2005-11-16  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/dialog-account-picker.c:
 	* src/business/business-gnome/dialog-vendor.c:
@@ -34,7 +38,7 @@
 	* po/de.po: Updated German translation by Andreas Köhler
 	<KoehlerAndreas@web.de>
 
-2005-11-15    <david@hampton-pc.rainbolthampton.net>
+2005-11-15  David Hampton  <hampton@employees.org>
 
 	* src/core-utils/gnc-gkeyfile-utils.c: Undo double fix of compiler
 	warnings.
@@ -46,7 +50,7 @@
 	* src/doc/doxygen.cfg.in : Add lib/libqof to the
 	Doxygen output.
 
-2005-11-14    <david@hampton-pc.rainbolthampton.net>
+2005-11-14  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/print.glade: Remove extraneous carriage return.
 
