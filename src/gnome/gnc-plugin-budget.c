@@ -171,12 +171,6 @@ gnc_plugin_budget_cmd_new_budget (GtkAction *action,
     gnc_main_window_open_page (data->window, page);
 }
 
-static void just_get_one(QofEntity *ent, gpointer data)
-{
-    GncBudget **bgt = (GncBudget**)data;
-    if (bgt && !*bgt) *bgt = GNC_BUDGET(ent);
-}
-
 /* If only one budget exists, open it; otherwise user selects one to open */
 static void
 gnc_plugin_budget_cmd_open_budget (GtkAction *action,
@@ -193,7 +187,7 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
     count = qof_collection_count(col);
     if (count > 0) {
         if (count == 1) {
-            qof_collection_foreach(col, just_get_one, &bgt);
+            bgt = gnc_budget_get_default(book);
         } else {
             bgt = gnc_budget_gui_select_budget(book);
         }
