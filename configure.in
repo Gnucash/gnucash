@@ -1048,7 +1048,7 @@ then
     	     if test $gtkhtml = 0
     	       then 
     	          PKG_CHECK_MODULES(GTKHTML, libgtkhtml-3.1 , [gtkhtml=1],
-                                    AC_MSG_ERROR([Could not find a working gtkhtml version]))
+                                    AC_MSG_ERROR([Could not find a working gtkhtml version (need >= 3.0)]))
     	    fi
     	fi
     fi

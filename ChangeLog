@@ -1,3 +1,8 @@
+2005-11-18  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:  Derrick Hudson's patch to tell users
+	  that they need gtkhtml-3.
+
 2005-11-18  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report-ui.xml:
