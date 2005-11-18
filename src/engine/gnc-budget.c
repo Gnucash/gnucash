@@ -251,10 +251,7 @@ xaccAccountChildrenHaveSameCommodity(Account *account)
 #endif
 
 
-/* In order to distinguish between a value of zero and an unset value,
-   this function can return a gnc_numeric with GNC_ERROR_ARG set.
-   Currently, it only does so for placeholder accounts with
-   mixed-commodity subaccounts. */
+/* Does not distinguish between unset and zero - returns zero either way. */
 gnc_numeric
 gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
                                     guint period_num)
@@ -262,19 +259,16 @@ gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
     gnc_numeric numeric;
     gchar path[BUF_SIZE];
     gchar *bufend;
-    const GUID *guid;
     KvpFrame *frame;
 
     numeric = gnc_numeric_zero();
     g_return_val_if_fail(GNC_IS_BUDGET(budget), numeric);
     g_return_val_if_fail(account, numeric);
 
-    /* FIXME? check for unset?  Right now, returns zero on unset. */
     frame = qof_instance_get_slots(QOF_INSTANCE(budget));
-    guid = xaccAccountGetGUID(account);
-    bufend = guid_to_string_buff(guid, path);
+    bufend = guid_to_string_buff(xaccAccountGetGUID(account), path);
     g_sprintf(bufend, "/%d", period_num);
-    numeric = kvp_frame_get_numeric(frame, path);
+    numeric = kvp_frame_get_numeric(frame, path); /* Zero if unset */
     return numeric;
 }
 
@@ -365,25 +359,61 @@ gnc_budget_get_default (QofBook *book)
 }
 
 /* Define the QofObject. */
-/* TODO: Eventually, I'm think I'm going to have to check if this struct is
-   complete.  Also, do we need one of those QofParam thingys? */
 static QofObject budget_object_def =
 {
     interface_version: QOF_OBJECT_VERSION,
     e_type:            GNC_ID_BUDGET,
-    type_label:        "BUDGET",
-    create:            (gpointer (*)(QofBook *)) gnc_budget_new,
+    type_label:        "Budget",
+    create:            (gpointer)gnc_budget_new,
     book_begin:        NULL,
     book_end:          NULL,
-    is_dirty:          NULL,
-    mark_clean:        NULL,
+    is_dirty:          qof_collection_is_dirty,
+    mark_clean:        qof_collection_mark_clean,
     foreach:           qof_collection_foreach,
-    printable:         NULL,
+    printable:         (const char* (*)(gpointer)) gnc_budget_get_name,
     version_cmp:       (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
+
+
+/* Static wrapper getters for the recurrence params */
+static PeriodType gnc_budget_get_rec_pt(const GncBudget *bgt) 
+{ return recurrenceGetPeriodType(&(bgt->recurrence)); }
+static guint gnc_budget_get_rec_mult(const GncBudget *bgt) 
+{ return recurrenceGetMultiplier(&(bgt->recurrence)); }
+static GDate gnc_budget_get_rec_date(const GncBudget *bgt) 
+{ return recurrenceGetDate(&(bgt->recurrence)); }
 
 /* Register ourselves with the engine. */
 gboolean gnc_budget_register (void)
 {
-    return qof_object_register (&budget_object_def);
+    static QofParam params[] = {
+        { "name", QOF_TYPE_STRING,
+          (QofAccessFunc) gnc_budget_get_name,
+          (QofSetterFunc) gnc_budget_set_name },
+        { "description", QOF_TYPE_STRING, 
+          (QofAccessFunc) gnc_budget_get_description, 
+          (QofSetterFunc) gnc_budget_set_description },
+        { "recurrence_period_type", QOF_TYPE_INT32,
+          (QofAccessFunc) gnc_budget_get_rec_pt, NULL },
+        /* Signedness problem: Should be unsigned. */
+        { "recurrence_multiplier", QOF_TYPE_INT32,
+          (QofAccessFunc) gnc_budget_get_rec_mult, NULL },
+        /* This is the same way that SchedXaction.c uses QOF_TYPE_DATE
+           but I don't think QOF actually supports a GDate, so I think
+           this is wrong. */
+        { "recurrence_date", QOF_TYPE_DATE,
+          (QofAccessFunc) gnc_budget_get_rec_date, NULL },
+        /* Signedness problem: Should be unsigned. */
+        { "num_periods", QOF_TYPE_INT32, 
+          (QofAccessFunc) gnc_budget_get_num_periods,
+          (QofSetterFunc) gnc_budget_set_num_periods },        
+        { QOF_PARAM_BOOK, QOF_ID_BOOK, 
+          (QofAccessFunc) qof_instance_get_book, NULL },
+        { QOF_PARAM_GUID, QOF_TYPE_GUID, 
+          (QofAccessFunc) qof_instance_get_guid, NULL },
+        { NULL },
+    };
+
+    qof_class_register(GNC_ID_BUDGET, (QofSortFunc) NULL, params);
+    return qof_object_register(&budget_object_def);
 }
