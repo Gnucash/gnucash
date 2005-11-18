@@ -1,3 +1,9 @@
+2005-11-18  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Restore the
+	"Save Report" code that was lost in one of the head->g2 syncs.
+
 2005-11-17  David Hampton  <hampton@employees.org>
 
 	* src/quotes/dump-finance-quote: Add support for printing currency

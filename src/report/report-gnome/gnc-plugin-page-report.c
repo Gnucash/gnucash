@@ -151,6 +151,7 @@ static void gnc_plugin_page_report_forw_cb(GtkAction *action, GncPluginPageRepor
 static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
@@ -821,6 +822,12 @@ static GtkActionEntry report_actions[] =
 {
         { "FilePrintAction", GTK_STOCK_PRINT, N_("Print Report..."), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
+        { "ReportSaveAction", GTK_STOCK_SAVE, N_("Save Report"), NULL, 
+	  N_("Save the current report for later use in "
+	     "~/.gnucash/saved-reports-2.0 so that they are accessible as "
+	     "menu entries in the report menu. Will go into effect at the "
+	     "next startup of gnucash."),
+          G_CALLBACK(gnc_plugin_page_report_save_cb) },
         { "ReportExportAction", GTK_STOCK_CONVERT, N_("Export Report"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_export_cb) },
         { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("Report Options"), NULL, NULL,
@@ -1196,6 +1203,20 @@ gnc_get_export_filename (SCM choice)
         }
 
         return filepath;
+}
+
+static void
+gnc_plugin_page_report_save_cb( GtkAction *action, GncPluginPageReport *report )
+{
+        GncPluginPageReportPrivate *priv;
+        SCM save_func;
+
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+	if (priv->cur_report == SCM_BOOL_F)
+	  return;
+
+	save_func = scm_c_eval_string("gnc:report-save-to-savefile");
+	scm_call_1(save_func, priv->cur_report);
 }
 
 static void
