@@ -654,7 +654,6 @@ gnc_lot_viewer_dialog (Account *account)
                GNC_ID_LOT,
                GNC_EVENT_CREATE | GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
-   gnome_window_icon_set_from_default(GTK_WINDOW(lv->window));
    gtk_widget_show_all (lv->window);
    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 

@@ -723,7 +723,6 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     return;
   }
 
-  gnome_window_icon_set_from_default(GTK_WINDOW(info->window));
   gtk_widget_show_all (info->window);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(info->window));

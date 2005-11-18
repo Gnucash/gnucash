@@ -284,8 +284,6 @@ gnc_create_import_druid ( void )
 		GTK_SIGNAL_FUNC (on_MergeNew_clicked));
 
 	dialog = glade_xml_get_widget (xml, "Merge Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-
 	druid = glade_xml_get_widget (xml, "merge_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
 
@@ -328,8 +326,6 @@ gnc_create_merge_druid ( void )
 		GTK_SIGNAL_FUNC (on_MergeNew_clicked));
 
 	dialog = glade_xml_get_widget (xml, "Merge Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-
 	druid = glade_xml_get_widget (xml, "merge_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
 

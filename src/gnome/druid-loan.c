@@ -797,7 +797,6 @@ gnc_ui_sx_loan_druid_create(void)
                             GTK_SIGNAL_FUNC(ld_destroy),
                             ldd );
 
-        gnome_window_icon_set_from_default (GTK_WINDOW (ldd->dialog));
         gtk_widget_show_all( ldd->dialog );
         return ldd;
 }

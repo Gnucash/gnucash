@@ -1,3 +1,16 @@
+2005-11-18  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/lot-viewer.c:
+	* src/gnome/druid-acct-period.c:
+	* src/gnome/druid-merge.c:
+	* src/gnome/druid-stock-split.c:
+	* src/gnome/druid-hierarchy.c: Remove calls to the noop function
+	gnome_window_icon_set_from_default().  In gtk2 all windows get the
+	default application icon unless specified otherwise.
+
 2005-11-18  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:  Derrick Hudson's patch to tell users

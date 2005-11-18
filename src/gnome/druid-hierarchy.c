@@ -850,7 +850,6 @@ gnc_create_hierarchy_druid (void)
 	xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
 	
 	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
 	data->dialog = dialog;
 	
 	druid = glade_xml_get_widget (xml, "hierarchy_druid");
