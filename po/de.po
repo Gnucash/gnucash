@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-16 22:03+0100\n"
-"PO-Revision-Date: 2005-11-16 22:04+0100\n"
+"POT-Creation-Date: 2005-11-18 21:51+0100\n"
+"PO-Revision-Date: 2005-11-18 22:10+0100\n"
 "Last-Translator: Andreas Köhler <KoehlerAndreas@web.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgid "void:v"
 msgstr "void:s"
 
 #. src/scm/help-topics-index.scm
-#: ../src/app-utils/gnc-ui-util.c:541 ../src/gnome/dialog-chart-export.c:35
+#: ../src/app-utils/gnc-ui-util.c:541 ../src/gnome/dialog-chart-export.c:36
 #: ../intl-scm/guile-strings.c:270
 msgid "Opening Balances"
 msgstr "Anfangsbestand"
@@ -111,7 +111,7 @@ msgid "Equity"
 msgstr "Eigenkapital"
 
 #. src/scm/help-topics-index.scm
-#: ../src/app-utils/gnc-ui-util.c:677 ../src/gnome/dialog-chart-export.c:36
+#: ../src/app-utils/gnc-ui-util.c:677 ../src/gnome/dialog-chart-export.c:37
 #: ../src/gnome/druid-hierarchy.c:744 ../src/gnome/glade/account.glade.h:41
 #: ../src/gnome-utils/dialog-account.c:244 ../intl-scm/guile-strings.c:414
 msgid "Opening Balance"
@@ -807,9 +807,8 @@ msgid "Num"
 msgstr "Nr"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2214
-#, fuzzy
 msgid "View/Edit Bill"
-msgstr "Rechnung bearbeiten"
+msgstr "Rechnung anzeigen/bearbeiten"
 
 #. src/report/report-system/options-utilities.scm
 #. src/report/standard-reports/general-journal.scm
@@ -1817,7 +1816,6 @@ msgid "_Customer"
 msgstr "_Kunden"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
-#, fuzzy
 msgid "_New Customer..."
 msgstr "Kunde anlegen..."
 
@@ -1826,7 +1824,6 @@ msgid "Open the New Customer dialog"
 msgstr "Den Dialog für das Anlegen neuer Kunden öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:154
-#, fuzzy
 msgid "_Find Customer..."
 msgstr "_Kunde suchen..."
 
@@ -1835,7 +1832,6 @@ msgid "Open the Find Customer dialog"
 msgstr "Den Dialog für die Suche von Kunden anzeigen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:157
-#, fuzzy
 msgid "New _Invoice..."
 msgstr "Rechnung anlegen..."
 
@@ -1844,7 +1840,6 @@ msgid "Open the New Invoice dialog"
 msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:160
-#, fuzzy
 msgid "Find In_voice..."
 msgstr "_Rechnung suchen..."
 
@@ -1854,7 +1849,6 @@ msgstr "Den Dialog für die Suche von Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:163
 #: ../src/business/business-gnome/gnc-plugin-business.c:187
-#, fuzzy
 msgid "New _Job..."
 msgstr "Auftrag anlegen..."
 
@@ -1865,7 +1859,6 @@ msgstr "Den Dialog für das Anlegen neuer Aufträge öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:166
 #: ../src/business/business-gnome/gnc-plugin-business.c:190
-#, fuzzy
 msgid "Find Jo_b..."
 msgstr "_Auftrag suchen..."
 
@@ -1877,7 +1870,6 @@ msgstr "Den Dialog für die Suche von Aufträgen öffnen"
 #: ../src/business/business-gnome/gnc-plugin-business.c:169
 #: ../src/business/business-gnome/gnc-plugin-business.c:193
 #: ../src/business/business-gnome/gnc-plugin-business.c:211
-#, fuzzy
 msgid "_Process Payment..."
 msgstr "_Zahlung verarbeiten..."
 
@@ -1893,7 +1885,6 @@ msgid "_Vendor"
 msgstr "_Zulieferer"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
-#, fuzzy
 msgid "_New Vendor..."
 msgstr "Zulieferer anlegen..."
 
@@ -1902,7 +1893,6 @@ msgid "Open the New Vendor dialog"
 msgstr "Den Dialog für das Anlegen neuer Zulieferer öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:178
-#, fuzzy
 msgid "_Find Vendor..."
 msgstr "_Zulieferer suchen..."
 
@@ -1911,7 +1901,6 @@ msgid "Open the Find Vendor dialog"
 msgstr "Den Dialog für die Suche nach Zulieferern öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:181
-#, fuzzy
 msgid "New _Bill..."
 msgstr "Rechnung anlegen..."
 
@@ -1920,7 +1909,6 @@ msgid "Open the New Bill dialog"
 msgstr "Den Dialog für das Anlegen neuer Rechnungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:184
-#, fuzzy
 msgid "Find Bi_ll..."
 msgstr "_Rechnung suchen..."
 
@@ -1934,7 +1922,6 @@ msgid "_Employee"
 msgstr "_Mitarbeiter"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
-#, fuzzy
 msgid "_New Employee..."
 msgstr "Mitarbeiter anlegen..."
 
@@ -1943,7 +1930,6 @@ msgid "Open the New Employee dialog"
 msgstr "Den Dialog für das Anlegen neuer Mitarbeiter öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:202
-#, fuzzy
 msgid "_Find Employee..."
 msgstr "_Mitarbeiter suchen..."
 
@@ -1952,7 +1938,6 @@ msgid "Open the Find Employee dialog"
 msgstr "Den Dialog für die Suche nach Mitarbeitern öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:205
-#, fuzzy
 msgid "New _Expense Voucher..."
 msgstr "Auslagenerstattung anlegen..."
 
@@ -1961,7 +1946,6 @@ msgid "Open the New Expense Voucher dialog"
 msgstr "Den Dialog für das Anlegen von Auslagenerstattungen öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:208
-#, fuzzy
 msgid "Find Expense _Voucher..."
 msgstr "_Auslagenerstattung suchen..."
 
@@ -2000,36 +1984,32 @@ msgid "E_xport"
 msgstr "E_xportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
-#, fuzzy
 msgid "QSF _Invoice..."
-msgstr "Rechnung suchen"
+msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
 msgid "Export one or more invoices to QSF"
 msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:229
-#, fuzzy
 msgid "QSF _Customer..."
-msgstr "Kunde suchen"
+msgstr "QSF Kunde..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
 msgid "Export one or more customers to QSF"
 msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:232
-#, fuzzy
 msgid "QSF _Vendor..."
-msgstr "Zulieferer suchen"
+msgstr "QSF Zulieferer..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
 msgid "Export one or more vendors to QSF"
 msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:235
-#, fuzzy
 msgid "QSF _Employee..."
-msgstr "Mitarbeiter suchen"
+msgstr "QSF Mitarbeiter..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
 msgid "Export one or more employees to QSF"
@@ -3029,7 +3009,7 @@ msgstr "Stornierte Buchung"
 msgid "Transaction Voided"
 msgstr "Buchung storniert"
 
-#: ../src/gnome/dialog-chart-export.c:234
+#: ../src/gnome/dialog-chart-export.c:235
 #, fuzzy
 msgid "Export Chart of Accounts to QSF XML"
 msgstr "Neue Kontenhierarchie erstellen"
@@ -3997,11 +3977,8 @@ msgid "Transfer Type"
 msgstr "Buchungsart"
 
 #: ../src/gnome/glade/account.glade.h:66
-#, fuzzy
 msgid "Use Commodity Value"
-msgstr ""
-"\n"
-"Währung/Aktie: "
+msgstr "Währungseinstellung benutzen"
 
 #: ../src/gnome/glade/account.glade.h:67
 msgid "Use Opening Balances Equity account"
@@ -4190,7 +4167,7 @@ msgstr ""
 #: ../src/gnome/glade/budget.glade.h:31 ../src/gnome/glade/print.glade.h:17
 #: ../src/gnome/glade/sched-xact.glade.h:130
 #: ../src/gnome/gnc-plugin-page-account-tree.c:226
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:844
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:851
 msgid "Options"
 msgstr "Optionen"
 
@@ -4297,7 +4274,7 @@ msgstr ""
 
 #: ../src/gnome/glade/chart-export.glade.h:2 ../src/gnome-utils/gnc-file.c:110
 #: ../src/gnome-utils/gnc-file.c:112 ../src/gnome-utils/gnc-file.c:763
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:843
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:850
 msgid "Export"
 msgstr "Exportieren"
 
@@ -4800,9 +4777,8 @@ msgid "Prices"
 msgstr "Preise"
 
 #: ../src/gnome/glade/price.glade.h:16
-#, fuzzy
 msgid "Remove _Old"
-msgstr "Alte entfernen..."
+msgstr "Alte entfernen"
 
 #: ../src/gnome/glade/price.glade.h:17
 msgid "Remove prices older than a user-entered date"
@@ -5036,9 +5012,8 @@ msgid "_Account"
 msgstr "_Konto"
 
 #: ../src/gnome/glade/reconcile.glade.h:26
-#, fuzzy
 msgid "_Check and Repair..."
-msgstr "Überprüfen"
+msgstr "Überprüfen..."
 
 #: ../src/gnome/glade/reconcile.glade.h:29
 #: ../src/gnome/window-reconcile.c:1196
@@ -5221,7 +5196,7 @@ msgid "Paste the transaction from the clipboard"
 msgstr "Den Buchungssatz von der Zwischenablage einfügen"
 
 #: ../src/gnome/glade/register.glade.h:44
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:842
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:849
 msgid "Print"
 msgstr "Drucken"
 
@@ -5273,18 +5248,16 @@ msgid "Schedule..."
 msgstr "Terminiert..."
 
 #: ../src/gnome/glade/register.glade.h:54
-#, fuzzy
 msgid "Select _All"
 msgstr "Alle auswählen"
 
 #: ../src/gnome/glade/register.glade.h:55
-#, fuzzy
 msgid "Select _Range:"
-msgstr "_Bereich festlegen"
+msgstr "_Bereich festlegen:"
 
 #: ../src/gnome/glade/register.glade.h:56
 #, fuzzy
-msgid "Show _All\t"
+msgid "Show _All"
 msgstr "_Alle anzeigen"
 
 #: ../src/gnome/glade/register.glade.h:57
@@ -5462,7 +5435,7 @@ msgstr "_Fixiert"
 
 #: ../src/gnome/glade/register.glade.h:103
 #, fuzzy
-msgid "_Latest\t"
+msgid "_Latest"
 msgstr "Zeige den letzten"
 
 #: ../src/gnome/glade/register.glade.h:104
@@ -6750,7 +6723,7 @@ msgstr "Ausgewähltes Konto löschen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 #, fuzzy
-msgid "Account Tree _Options"
+msgid "Account Tree _Options..."
 msgstr "Kontenoptionen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:172
@@ -6781,7 +6754,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:188
 msgid "Check & Repair A_ccount"
-msgstr "Konto überprüfen"
+msgstr "_Konto überprüfen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:189
 #: ../src/gnome/window-reconcile.c:1249
@@ -6792,7 +6765,6 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Buchungssätzen in diesem Konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:191
-#, fuzzy
 msgid "Check & Repair Su_baccount"
 msgstr "_Unterkonten überprüfen"
 
@@ -6806,7 +6778,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:195
 msgid "Check & Repair A_ll"
-msgstr "Alle überprüfen"
+msgstr "_Alle überprüfen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:196
 msgid ""
@@ -8161,9 +8133,8 @@ msgid "_Install into home directory"
 msgstr ""
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:29
-#, fuzzy
 msgid "_Setup"
-msgstr "HBCI Einrichtung"
+msgstr "_Einrichtung"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:30
 #, fuzzy
@@ -8733,7 +8704,7 @@ msgid "Reading file..."
 msgstr "Datei lesen..."
 
 #: ../src/gnome-utils/gnc-file.c:799 ../src/gnome-utils/gnc-file.c:996
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1189
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1196
 #, c-format
 msgid ""
 "The file \n"
@@ -8863,9 +8834,8 @@ msgid "_Help"
 msgstr "_Hilfe"
 
 #: ../src/gnome-utils/gnc-main-window.c:219
-#, fuzzy
 msgid "_Misc"
-msgstr "Sonstiges"
+msgstr "_Sonstiges"
 
 #: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Import"
@@ -8907,9 +8877,8 @@ msgid "_Check & Repair"
 msgstr "Überprüfen"
 
 #: ../src/gnome-utils/gnc-main-window.c:256
-#, fuzzy
 msgid "_Reset Warnings..."
-msgstr "Gewinnrücklagen"
+msgstr "_Warnungen zurücksetzen..."
 
 #: ../src/gnome-utils/gnc-main-window.c:257
 msgid "Reset the state of all warning message so they will be shown again."
@@ -8917,7 +8886,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:259
 msgid "Rename Page"
-msgstr ""
+msgstr "Seite umbenennen"
 
 #: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Rename this page."
@@ -11410,49 +11379,48 @@ msgid "_HBCI Setup..."
 msgstr "_HBCI Einrichtung..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:88
-#, fuzzy
-msgid "Initial setup of HBCI access"
-msgstr "Grundlegende HBCI Einrichtung"
+msgid "Initial setup of HBCI/AqBanking access"
+msgstr "Grundlegende HBCI/AqBanking Einrichtung"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:90
-msgid "HBCI Get _Balance"
-msgstr "HBCI _Saldenabfrage"
+msgid "Get _Balance"
+msgstr "_Saldenabfrage"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:91
-msgid "Get the account balance online through HBCI"
-msgstr "Kontosaldo online abfragen via HBCI"
+msgid "Get the account balance online through HBCI/AqBanking"
+msgstr "Kontosaldo online abfragen via HBCI/AqBanking"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:93
-msgid "HBCI Get _Transactions"
-msgstr "HBCI Abfrage Konto_umsätze"
+msgid "Get _Transactions..."
+msgstr "Abfrage Konto_umsätze..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:94
-msgid "Get the transactions online through HBCI"
-msgstr "Kontoumsätze online abfragen via HBCI"
+msgid "Get the transactions online through HBCI/AqBanking"
+msgstr "Kontoumsätze online abfragen via HBCI/AqBanking"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:96
-msgid "HBCI _Issue Transaction"
-msgstr "HBCI _Einzelüberweisung"
+msgid "_Issue Transaction..."
+msgstr "_Einzelüberweisung..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:97
 msgid "Issue a new transaction online through HBCI"
 msgstr "Neue Einzelüberweisung mit HBCI online absenden"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:105
-msgid "HBCI Issue Internal Transaction"
-msgstr "HBCI Einzelumbuchung"
+msgid "I_nternal Transaction..."
+msgstr "Interne _Umbuchung..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:106
-msgid "Issue a new bank-internal transaction online through HBCI"
-msgstr "Neue bankinterne Einzelumbuchung mit HBCI online absenden"
+msgid "Issue a new bank-internal transaction online through HBCI/AqBanking"
+msgstr "Neue bankinterne Einzelumbuchung mit HBCI/AqBanking online absenden"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:109
-msgid "HBCI Issue _Direct Debit"
-msgstr "HBCI Einzel_lastschrift"
+msgid "_Direct Debit..."
+msgstr "Einzel_lastschrift..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:110
-msgid "Issue a new direct debit note online through HBCI"
-msgstr "Neue Einzellastschrift online mit HBCI absenden"
+msgid "Issue a new direct debit note online through HBCI/AqBanking"
+msgstr "Neue Einzellastschrift online mit HBCI/AqBanking absenden"
 
 #: ../src/import-export/hbci/hbci-interaction.c:342
 #, c-format
@@ -11703,9 +11671,8 @@ msgid "Select an OFX/QFX file to process"
 msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:43
-#, fuzzy
 msgid "Import _OFX/QFX..."
-msgstr "OFX/QFX importieren"
+msgstr "_OFX/QFX importieren..."
 
 #: ../src/import-export/ofx/gnc-plugin-ofx.c:44
 msgid "Process an OFX/QFX response file"
@@ -12737,64 +12704,76 @@ msgstr "Inhalt"
 msgid "Style Sheet Name"
 msgstr "Stilvorlage"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:264
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:265
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:266
 #, fuzzy
 msgid "The numeric ID of the report."
 msgstr "Titel des Berichts"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:822
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:823
 #, fuzzy
 msgid "Print Report..."
 msgstr "Aktuell (als Bericht)"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:824
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:825
+#, fuzzy
+msgid "Save Report"
+msgstr "Einzelner Bericht"
+
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:826
+msgid ""
+"Save the current report for later use in ~/.gnucash/saved-reports-2.0 so "
+"that they are accessible as menu entries in the report menu. Will go into "
+"effect at the next startup of gnucash."
+msgstr ""
+
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:831
 #, fuzzy
 msgid "Export Report"
 msgstr "Bericht Aufwendungen"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:826
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:833
 #, fuzzy
 msgid "Report Options"
 msgstr "Vierte Option"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:829
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:836
 msgid "Back"
 msgstr "Zurück"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:831
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:838
 msgid "Forward"
 msgstr "Vorwärts"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:833
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:840
 msgid "Reload"
 msgstr "Erneut laden"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:835
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:842
 msgid "Stop"
 msgstr "Abbrechen"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1112
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1148
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1119
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1155
 msgid "HTML"
 msgstr "HTML"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1115
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1122
 msgid "Choose export format"
 msgstr "Wählen Sie das Export-Format"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1116
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1123
 msgid "Choose the export format for this report:"
 msgstr "Wählen Sie das Export-Format für diesen Bericht:"
 
 #. %s is the type of what is about to be saved, e.g. "HTML".
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1155
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1162
 #, c-format
 msgid "Save %s To File"
 msgstr "%s in Datei speichern"
 
 #. %s is the strerror(3) string of the error that occurred.
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1170
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1177
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -12805,11 +12784,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1180
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1187
 msgid "You cannot save to that file."
 msgstr "Sie können nicht in diese Datei speichern."
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1247
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1268
 #, c-format
 msgid ""
 "Could not open the file\n"
@@ -12821,7 +12800,7 @@ msgstr ""
 " nicht öffnen.\n"
 "%s"
 
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:1269
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:1290
 msgid "There are no options for this report."
 msgstr "Es gibt für diesen Bericht keine Optionen."
 
@@ -12938,11 +12917,11 @@ msgstr "_Stilvorlagen"
 msgid "Edit report style sheets."
 msgstr "Stilvorlagen für Berichte bearbeiten."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:63
+#: ../lib/libqof/backend/file/qsf-backend.c:64
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:64
+#: ../lib/libqof/backend/file/qsf-backend.c:65
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
@@ -19247,3 +19226,9 @@ msgstr ""
 "Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des HBCI-Zugangs. "
 "Nachdem ein HBCI-Zugang eingerichtet wurde, können die Menüpunkte im "
 "Kontofenster unter Aktionen -> Online Aktionen verwendet werden."
+
+#~ msgid "HBCI Issue Internal Transaction..."
+#~ msgstr "HBCI Einzelumbuchung..."
+
+#~ msgid "HBCI Issue _Direct Debit..."
+#~ msgstr "HBCI Einzel_lastschrift..."

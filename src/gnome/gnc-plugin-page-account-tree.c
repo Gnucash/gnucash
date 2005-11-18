@@ -168,7 +168,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account"), NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
-	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree _Options"), NULL,
+	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree _Options..."), NULL,
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 

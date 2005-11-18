@@ -85,15 +85,15 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* Menu Items */
   { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
-    N_("Initial setup of HBCI access"),
+    N_("Initial setup of HBCI/AqBanking access"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
-  { "HbciGetBalanceAction", NULL, N_("HBCI Get _Balance"), NULL,
-    N_("Get the account balance online through HBCI"),
+  { "HbciGetBalanceAction", NULL, N_("Get _Balance"), NULL,
+    N_("Get the account balance online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_balance) },
-  { "HbciGetTransAction", NULL, N_("HBCI Get _Transactions"), NULL,
-    N_("Get the transactions online through HBCI"),
+  { "HbciGetTransAction", NULL, N_("Get _Transactions..."), NULL,
+    N_("Get the transactions online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
-  { "HbciIssueTransAction", NULL, N_("HBCI _Issue Transaction"), NULL,
+  { "HbciIssueTransAction", NULL, N_("_Issue Transaction..."), NULL,
     N_("Issue a new transaction online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
@@ -102,12 +102,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
        ((AQBANKING_VERSION_MINOR == 6) && \
         ((AQBANKING_VERSION_PATCHLEVEL > 0) || \
 	 (AQBANKING_VERSION_BUILD > 2))))))
-  { "HbciIssueIntTransAction", NULL, N_("HBCI Issue Internal Transaction"), NULL,
-    N_("Issue a new bank-internal transaction online through HBCI"),
+  { "HbciIssueIntTransAction", NULL, N_("I_nternal Transaction..."), NULL,
+    N_("Issue a new bank-internal transaction online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_inttransaction) },
 #endif
-  { "HbciIssueDirectDebitAction", NULL, N_("HBCI Issue _Direct Debit"), NULL,
-    N_("Issue a new direct debit note online through HBCI"),
+  { "HbciIssueDirectDebitAction", NULL, N_("_Direct Debit..."), NULL,
+    N_("Issue a new direct debit note online through HBCI/AqBanking"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
