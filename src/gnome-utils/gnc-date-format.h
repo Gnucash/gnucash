@@ -69,8 +69,6 @@ gboolean  gnc_date_format_get_years       (GNCDateFormat *gdf);
 void      gnc_date_format_set_custom      (GNCDateFormat *gdf, const char *format);
 const char* gnc_date_format_get_custom    (GNCDateFormat *gdf);
 
-void      gnc_date_format_editable_enters (GnomeDialog *dialog, GNCDateFormat *gdf);
-
 void      gnc_date_format_refresh         (GNCDateFormat *gdf);
 
 #endif

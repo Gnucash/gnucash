@@ -388,28 +388,6 @@ gnc_date_format_get_custom (GNCDateFormat *gdf)
   return gtk_entry_get_text(GTK_ENTRY(priv->custom_entry));
 }
 
-/**
- * gnc_date_format_editable_enters:
- * @dialog: The gnome dialog this date formator lives in
- * @gdf: The date formator to modity
- * 
- * Extracts the formatable field from a GNCDateFormat widget, and sets it
- * up so that pressing the Enter key in this field as the same as
- * clicking the button that has the default.
- **/
-void
-gnc_date_format_editable_enters (GnomeDialog *dialog, GNCDateFormat *gdf)
-{
-  GNCDateFormatPriv *priv;
-
-  g_return_if_fail(dialog);
-  g_return_if_fail(gdf);
-  g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
-
-  priv = GNC_DATE_FORMAT_GET_PRIVATE(gdf);
-  gtk_entry_set_activates_default(GTK_ENTRY(priv->custom_entry), TRUE);
-}
-
 void
 gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data)
 {
