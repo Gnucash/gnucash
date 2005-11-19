@@ -662,8 +662,8 @@
 	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
 	      (report-line
 	       build-table 
-	       (N_ "Unrealized gains")
-	       (N_ "Unrealized losses")
+	       (N_ "Unrealized Gains")
+	       (N_ "Unrealized Losses")
 	       net-unrealized-gains
 	       0 end-exchange-fn #f #f
 	       )
@@ -677,7 +677,7 @@
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Captial") ", "
+	   (string-append (N_ "Capital") ", "
 			  (gnc:print-date end-date-tp))
 	   #f
 	   end-total-equity

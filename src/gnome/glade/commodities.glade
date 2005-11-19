@@ -165,7 +165,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="label1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;span weight=&quot;bold&quot;&gt;Commodities&lt;/span&gt;</property>
+	      <property name="label" translatable="yes">&lt;b&gt;Commodities&lt;/b&gt;</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
