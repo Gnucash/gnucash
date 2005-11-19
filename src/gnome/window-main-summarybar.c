@@ -25,23 +25,17 @@
 
 #include "config.h"
 
-#include <gnome.h>
-#include <string.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "Group.h"
-#include "dialog-utils.h"
 #include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-ui.h"
-#include "messages.h"
-#include "option-util.h"
 #include "qofbook.h"
-#include "top-level.h"
 #include "window-main-summarybar.h"
 
 typedef struct {

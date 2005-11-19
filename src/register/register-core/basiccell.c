@@ -39,7 +39,6 @@
 #include <string.h>
 
 #include "basiccell.h"
-#include "dialog-utils.h"
 #include "gnc-engine.h"
 
 /* Debugging module */

@@ -24,11 +24,12 @@
  */
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
-#include <gtk/gtkmain.h>
 
 #include "gnc-tree-model-account.h"
-
 #include "gnc-component-manager.h"
 #include "Account.h"
 #include "Group.h"
@@ -37,7 +38,6 @@
 #include "gnc-engine.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 #define TREE_MODEL_ACCOUNT_CM_CLASS "tree-model-account"
 

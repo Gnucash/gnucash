@@ -22,8 +22,9 @@
 
 #include "config.h"
 
-#include <time.h>
 #include <glib.h>
+#include <glib/gi18n.h>
+#include <time.h>
 #include <string.h>
 
 #include "option-util.h"
@@ -33,7 +34,6 @@
 #include "qof.h"
 #include "gnc-err-popup.h"
 #include "guile-mappings.h"
-#include "messages.h"
 
 #include <g-wrap-wct.h>
 

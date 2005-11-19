@@ -24,12 +24,6 @@
 #ifndef DRUID_COMMODITY_H
 #define DRUID_COMMODITY_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <gnome.h>
-
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "qofsession.h"

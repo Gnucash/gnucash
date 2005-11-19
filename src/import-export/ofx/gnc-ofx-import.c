@@ -27,13 +27,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
-
-#include <glib.h>
 #include <libguile.h>
-#include <gmodule.h>
 
 #include <libofx/libofx.h>
 #include "import-account-matcher.h"
@@ -50,8 +49,6 @@
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-
-#include "dialog-utils.h"
 
 #define GCONF_SECTION "dialogs/import/ofx"
 

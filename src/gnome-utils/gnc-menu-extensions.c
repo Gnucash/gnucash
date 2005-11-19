@@ -22,8 +22,9 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
-#include <gnome.h>
 
 #include "guile-util.h"
 #include "gnc-engine.h"

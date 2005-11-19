@@ -23,7 +23,6 @@
 #ifndef GNC_HBCI_TRANSFER_H
 #define GNC_HBCI_TRANSFER_H
 
-#include <gnome.h>
 #include <aqbanking/jobsingletransfer.h>
 #include "Account.h"
 #include "dialog-hbcitrans.h"

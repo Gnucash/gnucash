@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-gnome-utils.h"
 #include "gnc-splash.h"

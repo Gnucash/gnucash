@@ -27,14 +27,12 @@
 
 #include "config.h"
 
-#include <glade/glade.h>
 #include <gnome.h>
-#include <gmodule.h>
+#include <glade/glade.h>
 #include <dlfcn.h>
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
-#include "messages.h"
 #include "Group.h"
 #include "gnc-dir.h"
 #include "gnc-engine.h"

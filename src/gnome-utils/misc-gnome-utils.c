@@ -19,7 +19,9 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <string.h>
+
 #include "misc-gnome-utils.h"
 
 /* ============================================================== */

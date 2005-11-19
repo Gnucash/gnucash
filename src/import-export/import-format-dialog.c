@@ -27,8 +27,8 @@
 #include "config.h"
 #endif
 
-#include <glib.h>
-
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade.h>
 
 #include "import-parse.h"

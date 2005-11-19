@@ -42,7 +42,6 @@
 
 #include "table-allgui.h"
 #include "cellblock.h"
-#include "dialog-utils.h"
 #include "gnc-engine.h"
 
 

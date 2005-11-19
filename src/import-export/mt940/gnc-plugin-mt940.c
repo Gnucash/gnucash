@@ -22,11 +22,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "gnc-plugin-mt940.h"
 #include "gnc-plugin-manager.h"
-
 #include "gnc-mt940-import.h"
-#include "messages.h"
 
 static void gnc_plugin_mt940_class_init (GncPluginMt940Class *klass);
 static void gnc_plugin_mt940_init (GncPluginMt940 *plugin);

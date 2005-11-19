@@ -26,8 +26,8 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <stdio.h>
-#include <glib.h>
 #include <libguile.h>
 
 #include "gnc-module.h"

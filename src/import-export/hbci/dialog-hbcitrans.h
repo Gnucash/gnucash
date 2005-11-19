@@ -25,8 +25,6 @@
 #ifndef DIALOG_HBCITRANS_H
 #define DIALOG_HBCITRANS_H
 
-#include <gnome.h>
-
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
 #include <aqbanking/job.h>

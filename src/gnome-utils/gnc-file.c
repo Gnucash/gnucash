@@ -21,9 +21,9 @@
 
 #include "config.h"
 
-#include <errno.h>
-#include <glib.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <errno.h>
 #include <libguile.h>
 #include <string.h>
 #include <g-wrap-wct.h>
@@ -43,7 +43,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
-#include "messages.h"
 #include "TransLog.h"
 
 #define GCONF_SECTION "dialogs/export_accounts"

@@ -42,7 +42,6 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
-#include "messages.h"
 #include "table-allgui.h"
 
 #define KEY_AUTO_RAISE_LISTS	"auto_raise_lists"

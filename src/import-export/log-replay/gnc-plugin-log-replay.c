@@ -23,10 +23,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "gnc-log-replay.h"
 #include "gnc-plugin-log-replay.h"
 #include "gnc-plugin-manager.h"
-#include "messages.h"
 
 static void gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass);
 static void gnc_plugin_log_replay_init (GncPluginLogreplay *plugin);

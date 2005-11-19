@@ -39,14 +39,15 @@
 
 #include "config.h"
 
-#include <errno.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
 #include <g-wrap-wct.h>
 #include <libguile.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -62,7 +63,6 @@
 #include "gnc-ui.h"
 #include "gnc-window.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "option-util.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"

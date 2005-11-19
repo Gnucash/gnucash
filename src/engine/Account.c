@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -35,7 +36,6 @@
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
-#include "messages.h"
 #include "policy.h"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;

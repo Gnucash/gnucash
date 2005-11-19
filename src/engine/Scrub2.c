@@ -46,7 +46,6 @@
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "messages.h"
 #include "policy-p.h"
 
 static QofLogModule log_module = GNC_MOD_LOT;

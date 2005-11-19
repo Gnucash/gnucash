@@ -23,7 +23,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <time.h>
 
 #include "dialog-utils.h"
@@ -39,7 +40,6 @@
 #include "gnc-ui-util.h"
 #include "guile-util.h"
 #include "engine-helpers.h"
-#include "messages.h"
 
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"

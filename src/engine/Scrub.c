@@ -38,6 +38,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -49,7 +50,6 @@
 #include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
-#include "messages.h"
 #include "gnc-commodity.h"
 
 static QofLogModule log_module = GNC_MOD_SCRUB;

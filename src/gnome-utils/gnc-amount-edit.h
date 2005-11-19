@@ -29,8 +29,6 @@
 #ifndef GNC_AMOUNT_EDIT_H
 #define GNC_AMOUNT_EDIT_H 
 
-#include <gnome.h>
-
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 

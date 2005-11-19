@@ -31,9 +31,6 @@
 #ifndef GNC_GENERAL_SELECT_H
 #define GNC_GENERAL_SELECT_H
 
-#include <gnome.h>
-#include <glib.h>
-
 #define GNC_TYPE_GENERAL_SELECT          (gnc_general_select_get_type ())
 #define GNC_GENERAL_SELECT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)
 #define GNC_GENERAL_SELECT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_general_select_get_type(), \ GNCGeneralSelectClass)

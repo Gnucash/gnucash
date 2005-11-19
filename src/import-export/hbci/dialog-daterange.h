@@ -23,7 +23,6 @@
 #ifndef DIALOG_DATERANGE_H
 #define DIALOG_DATERANGE_H
 
-#include <gnome.h>
 #include "gnc-date.h"
 
 gboolean

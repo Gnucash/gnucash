@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -31,20 +33,17 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <regex.h>
+#include <libguile.h>
 
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
 #ifdef USE_GUPPI
 #include <libguppitank/guppi-tank.h>
 #endif
-#include <gnome.h>
-#include <regex.h>
-#include <glib.h>
-#include <libguile.h>
 
 #include "Account.h"
 #include "Group.h"
-#include "dialog-utils.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gpg.h"
@@ -55,7 +54,6 @@
 #include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 struct gnc_html_struct {

@@ -26,7 +26,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "dialog-new-user.h"

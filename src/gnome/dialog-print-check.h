@@ -25,7 +25,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
 #include <libguile.h>
 
 #include "print-session.h"

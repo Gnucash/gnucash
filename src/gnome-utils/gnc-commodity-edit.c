@@ -33,7 +33,9 @@
  * 	    Derek Atkins <warlord@MIT.EDU>
  */
 
-#include <config.h>
+#include "config.h"
+
+#include <gtk/gtk.h>
 
 #include "dialog-commodity.h"
 #include "gnc-commodity-edit.h"

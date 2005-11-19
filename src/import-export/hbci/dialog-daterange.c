@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -102,9 +102,6 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
 
   gtk_widget_grab_focus (glade_xml_get_widget (xml, "ok_button"));
 
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
-  /* gnome_dialog_close_hides (GTK_DIALOG (dialog), TRUE); */
   gtk_widget_show_all (GTK_WIDGET (dialog));
   
   result = gtk_dialog_run (GTK_DIALOG (dialog));

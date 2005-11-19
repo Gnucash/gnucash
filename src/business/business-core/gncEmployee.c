@@ -32,7 +32,6 @@
 #include <string.h>
 
 #include "Account.h"
-#include "messages.h"
 #include "gnc-commodity.h"
 #include "gncAddressP.h"
 #include "gncEmployee.h"

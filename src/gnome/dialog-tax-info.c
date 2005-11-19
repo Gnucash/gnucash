@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <libguile.h>
 
 #include "Account.h"
@@ -33,7 +33,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"

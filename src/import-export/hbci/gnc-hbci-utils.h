@@ -23,10 +23,7 @@
 #ifndef GNC_HBCI_UTILS_H
 #define GNC_HBCI_UTILS_H
 
-#include <glib.h>
-#include <gnome.h>
 #include <iconv.h>
-
 #include <aqbanking/banking.h>
 #include <aqbanking/transaction.h>
 #include <aqbanking/account.h>

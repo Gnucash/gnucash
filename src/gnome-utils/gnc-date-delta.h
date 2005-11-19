@@ -31,8 +31,6 @@
 #ifndef GNC_DATE_DELTA_H
 #define GNC_DATE_DELTA_H 
 
-#include <gnome.h>
-
 typedef enum {
   GNC_DATE_DELTA_DAYS,
   GNC_DATE_DELTA_WEEKS,

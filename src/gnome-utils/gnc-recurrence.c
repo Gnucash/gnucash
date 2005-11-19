@@ -23,13 +23,14 @@
  */
 
 #include "config.h"
-#include <glade/glade.h>
+
 #include <gnome.h>
-#include <glib.h>
+#include <glade/glade.h>
 
 #include "dialog-utils.h"
 #include "gnc-recurrence.h"
 #include "Recurrence.h"
+#include "gnc-engine.h"
 #include "gnc-trace.h"
 #include "gnc-gdate-utils.h"
 

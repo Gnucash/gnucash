@@ -19,11 +19,13 @@
  *
 \********************************************************************/
 
+#include "config.h"
+
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
-#include <messages.h>
 
 #include "i18n.h"
-
 #include "gnc-gettext-util.h"
 
 /* ============================================================== */

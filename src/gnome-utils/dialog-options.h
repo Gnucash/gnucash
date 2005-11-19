@@ -23,11 +23,6 @@
 #ifndef OPTIONS_DIALOG_H
 #define OPTIONS_DIALOG_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <gnome.h>
 #include <libguile.h>
 
 #include "option-util.h"

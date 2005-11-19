@@ -24,9 +24,9 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <string.h>
 #include <stdarg.h>
-#include <gnome.h>
 
 #include "gnc-engine.h"
 #include "GNCId.h"

@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade-xml.h>
 
 #include "dialog-totd.h"
@@ -31,7 +32,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 
 #define GCONF_SECTION   "dialogs/tip_of_the_day"

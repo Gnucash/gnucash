@@ -24,8 +24,6 @@
 #ifndef DIALOG_FIND_TRANSACTIONS_H
 #define DIALOG_FIND_TRANSACTIONS_H
 
-#include <gnome.h>
-
 #include "gnc-ledger-display.h"
 #include "dialog-search.h"
 

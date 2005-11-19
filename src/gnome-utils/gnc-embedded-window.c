@@ -38,7 +38,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
-#include "messages.h"
 
 /* Static Globals *******************************************************/
 

@@ -30,7 +30,6 @@
 #include <stdio.h>
 
 #include "gnc-ui.h"
-#include "messages.h"
 #include "print-session.h"
 
 

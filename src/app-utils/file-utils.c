@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <libguile.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
@@ -28,11 +30,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <glib.h>
-#include <libguile.h>
-
 #include "file-utils.h"
-#include "messages.h"
 #include "gnc-engine.h"
 #include "gnc-gkeyfile-utils.h"
  

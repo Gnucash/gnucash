@@ -20,18 +20,17 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <guile/gh.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string.h>
-
-#include <glib.h>
-#include <guile/gh.h>
 
 #include "finproto.h"
 #include "fin_spl_protos.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
 

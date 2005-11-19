@@ -27,8 +27,8 @@
 
 #include "config.h"
 
-#include <errno.h>
 #include <gnome.h>
+#include <errno.h>
 #include <libguile.h>
 #include <sys/stat.h>
 

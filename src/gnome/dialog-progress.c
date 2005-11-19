@@ -23,13 +23,13 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include "guile-mappings.h"
 
 #include "dialog-progress.h"
 #include "dialog-utils.h"
-#include "messages.h"
 
 
 struct _GNCProgressDialog

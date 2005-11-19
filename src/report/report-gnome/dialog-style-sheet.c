@@ -23,13 +23,13 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
 

@@ -25,8 +25,6 @@
 
 #include "config.h"
 
-#include <gnome.h>
-
 typedef struct _FinCalcDialog FinCalcDialog;
 
 void gnc_ui_fincalc_dialog_create(void);

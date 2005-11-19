@@ -24,8 +24,6 @@
 #ifndef WINDOW_MAIN_SUMMARYBAR_H
 #define WINDOW_MAIN_SUMMARYBAR_H
 
-#include <gnome.h>
-
 GtkWidget * gnc_main_window_summary_new(void);
 
 #endif

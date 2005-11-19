@@ -56,6 +56,7 @@ ToDo:
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -69,7 +70,6 @@ ToDo:
 #include "gnc-engine.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
-#include "messages.h"
 #include "policy.h"
 #include "policy-p.h"
 

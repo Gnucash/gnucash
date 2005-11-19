@@ -32,33 +32,24 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <stdio.h>
-#include <time.h>
-#include <libgnomeui/gnome-window-icon.h>
-
+#include <glib/gi18n.h>
+//#include <stdio.h>
+//#include <time.h>
+//
 #include "Scrub.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "dialog-transfer.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-gui-query.h"
-#include "gnc-ledger-display.h"
 #include "gnc-main-window.h"
-#include "gnc-plugin-page.h"
 #include "gnc-plugin-page-register.h"
-#include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "reconcile-list.h"
 #include "window-reconcile.h"
-#include "top-level.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 

@@ -26,8 +26,8 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
-#include "messages.h"
 #include "Account.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"	/* for safe_strcmp */

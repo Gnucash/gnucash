@@ -27,9 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <glade/glade.h>
-#include <gnome.h> 
-#include "Account.h"
-
+#include "qof.h"
 
 /* option button callback function */
 typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
@@ -88,7 +86,9 @@ void gnc_save_window_size (const char *section, GtkWindow *window);
  *       data - the value to fill with                              *
  * Returns: nothing                                                 *
 \********************************************************************/
+#ifdef LIBGNOME_H
 void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
+#endif
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,

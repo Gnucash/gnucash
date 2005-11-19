@@ -21,18 +21,18 @@
 \********************************************************************/
 
 #include "config.h"
-#include "gnc-hbci-getbalance.h"
 
+#include <gnome.h>
+#include <glib/gi18n.h>
 #include <aqbanking/banking.h>
 
-#include "gnc-ui.h"
-#include "gnc-numeric.h"
-#include "gnc-date.h"
 #include "RecnWindow.h"
-
-#include "hbci-interaction.h"
+#include "gnc-date.h"
+#include "gnc-hbci-getbalance.h"
 #include "gnc-hbci-utils.h"
-/* #include "dialog-hbcitrans.h" */
+#include "gnc-numeric.h"
+#include "gnc-ui.h"
+#include "hbci-interaction.h"
 
 
 void gnc_hbci_getbalance_debugprint(AB_JOB *balance_job,

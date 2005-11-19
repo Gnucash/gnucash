@@ -30,7 +30,6 @@
 #include "gnucash-grid.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
-#include "messages.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
 

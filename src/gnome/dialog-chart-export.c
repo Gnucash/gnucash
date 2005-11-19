@@ -23,7 +23,10 @@
  *  02110-1301, USA.
  */
  
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <time.h>
+
 #include "qof.h"
 #include "AccountP.h"
 #include "Transaction.h"

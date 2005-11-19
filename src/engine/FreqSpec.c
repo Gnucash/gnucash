@@ -74,17 +74,17 @@
 \********************************************************************/
 
 #include "config.h"
-#include <time.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
+#include <time.h>
 
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
 #endif
 
 #include "FreqSpecP.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_SX;
 /* 

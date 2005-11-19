@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Group.h"
 #include "datecell.h"
@@ -30,7 +31,6 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-err-popup.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "pricecell.h"
 #include "recncell.h"
 #include "split-register.h"

@@ -24,14 +24,13 @@
  */
 
 #include "config.h"
-#include <string.h>
+
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "gnc-tree-model.h"
-
 #include "gnc-gobject-utils.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;

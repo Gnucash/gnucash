@@ -26,7 +26,6 @@
 #include "qof.h"
 #include "guid.h"
 #include "gnc-engine-util.h"
-#include "messages.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
 

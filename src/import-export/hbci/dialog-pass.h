@@ -23,8 +23,6 @@
 #ifndef DIALOG_PASS_H
 #define DIALOG_PASS_H
 
-#include <gnome.h>
-
 gboolean
 gnc_hbci_get_password (GtkWidget *parent,
 		       const char *windowtitle,

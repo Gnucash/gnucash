@@ -31,7 +31,6 @@
 #include <glib.h>
 #include <string.h>
 
-#include "messages.h"
 #include "gnc-commodity.h"
 #include "gncAddressP.h"
 #include "gncBillTermP.h"

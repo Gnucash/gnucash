@@ -35,7 +35,8 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
+#include <gnome.h>
+#include <glib/gi18n.h>
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
@@ -61,7 +62,6 @@
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
-#include "messages.h"
 #include "gnc-gconf-utils.h"
 // +JSLED
 #include "gnc-html.h"

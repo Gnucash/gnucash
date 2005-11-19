@@ -23,8 +23,6 @@
 #ifndef DIALOG_SCHEDULEDXACTION_H
 #define DIALOG_SCHEDULEDXACTION_H
 
-#include "config.h"
-#include <gnome.h>
 #include "SchedXaction.h"
 
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"

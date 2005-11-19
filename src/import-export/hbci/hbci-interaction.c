@@ -22,13 +22,18 @@
 
 #include "config.h"
 
+#include <gnome.h>
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <iconv.h>
+#include <aqbanking/banking.h>
+#include <gwenhywfar/bio_buffer.h>
+#include <gwenhywfar/xml.h>
+
 #include "hbci-interaction.h"
 #include "hbci-interactionP.h"
 
-#include <aqbanking/banking.h>
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -37,11 +42,6 @@
 
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
-
-#include <gwenhywfar/bio_buffer.h>
-#include <gwenhywfar/xml.h>
-
-#include <iconv.h>
 
 gchar *gnc__extractText(const char *text);
 

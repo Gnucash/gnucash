@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-plugin-budget.h"
@@ -33,8 +35,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
-
-#include "messages.h"
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-budget-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-budget-ui.xml"

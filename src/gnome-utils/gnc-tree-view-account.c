@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"
@@ -38,7 +39,6 @@
 #include "gnc-engine.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define SAMPLE_ACCOUNT_VALUE "$1,000,000.00"

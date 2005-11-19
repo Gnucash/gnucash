@@ -24,17 +24,15 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-date.h"
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "Transaction.h"
-
-#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-#include "messages.h"
 #include "reconcile-list.h"
 #include "search-param.h"
 #include "gnc-component-manager.h"

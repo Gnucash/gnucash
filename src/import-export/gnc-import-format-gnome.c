@@ -1,13 +1,15 @@
 
 
 #include "config.h"
+
+#include <gnome.h>
+
 #include "gnc-druid-gnome-ui.h"
 #include "gnc-import-format-gnome.h"
 #include "gnc-import-desc-format.h"
 
 #include "gnc-basic-gobject.h"
 #include "dialog-utils.h"
-#include "messages.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 

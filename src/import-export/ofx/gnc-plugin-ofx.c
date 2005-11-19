@@ -22,11 +22,12 @@
 
 #include "config.h"
 
-#include "gnc-plugin-ofx.h"
-#include "gnc-plugin-manager.h"
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-ofx-import.h"
-#include "messages.h"
+#include "gnc-plugin-ofx.h"
+#include "gnc-plugin-manager.h"
 
 static void gnc_plugin_ofx_class_init (GncPluginOfxClass *klass);
 static void gnc_plugin_ofx_init (GncPluginOfx *plugin);

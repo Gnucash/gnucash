@@ -24,9 +24,9 @@
  * Lightly test the QofObject infrastructure.
  */
 #include <glib.h>
+#include <glib/gi18n.h>
 #include "qof.h"
 #include "cashobjects.h"
-#include "messages.h"
 #include "test-stuff.h"
 
 #define TEST_MODULE_NAME "object-test"

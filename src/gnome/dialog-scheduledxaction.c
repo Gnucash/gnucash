@@ -23,7 +23,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <locale.h>
 #include <time.h>
 
@@ -51,7 +52,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnucash-sheet.h"
-#include "messages.h"
 
 #include "gnc-split-reg.h"
 

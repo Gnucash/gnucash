@@ -23,8 +23,8 @@
 
 #include "config.h"
 
-#include <glib.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"

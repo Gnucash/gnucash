@@ -23,7 +23,6 @@
 #ifndef DRUID_HBCI_UTILS_H
 #define DRUID_HBCI_UTILS_H
 
-#include <gnome.h>
 #include <aqbanking/banking.h>
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"

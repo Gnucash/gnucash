@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"
@@ -38,8 +39,6 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-//#include "messages.h"
-#include <libgnome/libgnome.h>
 
 
 /** Static Globals *******************************************************/

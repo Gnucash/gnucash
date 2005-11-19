@@ -24,7 +24,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
@@ -36,7 +37,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
-#include "messages.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"

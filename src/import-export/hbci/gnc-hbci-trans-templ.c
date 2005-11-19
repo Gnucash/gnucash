@@ -23,7 +23,8 @@
 #include "config.h"
 
 #include "gnc-hbci-trans-templ.h"
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 struct _trans_data 
 {

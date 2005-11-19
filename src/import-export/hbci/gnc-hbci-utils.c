@@ -23,7 +23,8 @@
 #include "config.h"
 #include "gnc-hbci-utils.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <errno.h>
 #include <iconv.h>
 #include <langinfo.h>

@@ -24,7 +24,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include <popt.h>
 #include <stdlib.h>
@@ -39,7 +40,6 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-transfer.h"
 #include "dialog-totd.h"
-#include "dialog-utils.h"
 #include "druid-hierarchy.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
@@ -70,7 +70,6 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "top-level.h"
 #include "window-report.h"
 

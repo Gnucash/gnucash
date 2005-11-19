@@ -35,6 +35,7 @@
 
 #include "config.h"
 
+#include <gnome.h> 
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */
@@ -44,7 +45,6 @@
 #include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "messages.h"
 
 
 enum {

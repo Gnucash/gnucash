@@ -61,7 +61,6 @@
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 
-#include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-date.h"
 #include "gnc-trace.h"

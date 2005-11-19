@@ -31,7 +31,6 @@
 #include <glib.h>
 #include <string.h>
 
-#include "messages.h"
 #include "gncInvoice.h"
 #include "gncJob.h"
 #include "gncJobP.h"

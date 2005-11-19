@@ -23,7 +23,6 @@
 #ifndef GNC_REPORT_WINDOW_H
 #define GNC_REPORT_WINDOW_H
 
-#include <gnome.h>
 #include <libguile.h>
 
 #include "gnc-html.h"

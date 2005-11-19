@@ -22,9 +22,10 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
 #include <errno.h>
-#include <glib.h>
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -32,8 +33,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "Transaction.h"
 
 #include "Account.h"
 #include "gnc-book.h"
@@ -45,7 +44,6 @@
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
 

@@ -49,9 +49,9 @@
 
 #include "config.h"
 
-#include <limits.h>
 #include <gnome.h>
-#include <glib.h>
+#include <glib/gi18n.h>
+#include <limits.h>
 
 #include "Account.h"
 #include "Group.h"
@@ -81,7 +81,6 @@
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
-#include "messages.h"
 
 #include "dialog-sxsincelast.h"
 #include "dialog-scheduledxaction.h"

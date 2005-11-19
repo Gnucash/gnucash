@@ -55,6 +55,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
+#include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -69,8 +70,6 @@
 #include "window-reconcile.h"
 #include "window-report.h"
 
-#include "messages.h"
-#include "gnc-engine.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

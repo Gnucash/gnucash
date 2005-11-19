@@ -23,14 +23,14 @@
 
 #include "config.h"
 
-#include "gnc-plugin-qif-import.h"
-#include "gnc-plugin-manager.h"
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-preferences.h"
 #include "druid-qif-import.h"
-#include "messages.h"
-
 #include "gnc-druid-test.h"
+#include "gnc-plugin-manager.h"
+#include "gnc-plugin-qif-import.h"
 
 static void gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass);
 static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);

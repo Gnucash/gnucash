@@ -44,7 +44,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "option-util.h"
 #include "gdk/gdkfont.h"
 #include "guile-mappings.h"

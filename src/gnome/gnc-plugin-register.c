@@ -30,7 +30,6 @@
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-page-register.h"
 
-#include "messages.h"
 
 static void gnc_plugin_register_class_init (GncPluginRegisterClass *klass);
 static void gnc_plugin_register_init (GncPluginRegister *plugin);

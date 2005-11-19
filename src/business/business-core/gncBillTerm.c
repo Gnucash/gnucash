@@ -30,7 +30,6 @@
 
 #include <glib.h>
 
-#include "messages.h"
 #include "gnc-engine.h"
 #include "gncBillTermP.h"
 

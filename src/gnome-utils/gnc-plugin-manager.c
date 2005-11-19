@@ -24,9 +24,9 @@
 
 #include "config.h"
 
-#include "gnc-plugin-manager.h"
+#include <glib.h>
 
-#include "messages.h"
+#include "gnc-plugin-manager.h"
 #include "gnc-engine.h"
 #include "gnc-hooks.h"
 

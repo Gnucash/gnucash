@@ -21,7 +21,6 @@
 #ifndef _GNCSEARCH_CORE_TYPE_H
 #define _GNCSEARCH_CORE_TYPE_H
 
-#include <gnome.h>
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "search-param.h"

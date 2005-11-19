@@ -24,7 +24,6 @@
 #define HBCI_INTERACTION_H
 
 #include <aqbanking/banking.h>
-#include <gnome.h>
 
 #define GCONF_SECTION "dialogs/import/hbci"
 #define KEY_CLOSE_ON_FINISH "close_on_finish"

@@ -30,10 +30,10 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Transaction.h"
 #include "Account.h"
-#include "messages.h"
 #include "gncBillTermP.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"

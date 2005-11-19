@@ -25,6 +25,8 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
@@ -42,7 +44,6 @@
 #include "gnc-engine.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
-#include "messages.h"
 
 /*
  * Design notes on event-generation: transaction-modified-events 

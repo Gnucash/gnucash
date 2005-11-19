@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <locale.h>
 #include <time.h>
 
@@ -36,7 +37,6 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
-#include "messages.h"
 
 
 #define DIALOG_FINCALC_CM_CLASS "dialog-fincalc"

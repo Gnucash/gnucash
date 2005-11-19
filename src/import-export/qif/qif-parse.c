@@ -27,6 +27,7 @@
 #endif
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 /* For regex */
@@ -35,7 +36,6 @@
 
 #include <stdarg.h>
 
-#include "messages.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 

@@ -39,7 +39,6 @@ libgncmod_engine_la_SOURCES = \
   gnc-pricedb.c \
   gnc-session-scm.c \
   gncmod-engine.c \
-  messages.c \
   policy.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
@@ -80,7 +79,6 @@ gncinclude_HEADERS = \
   gnc-session-scm.h \
   gncObject.h \
   kvp-scm.h \
-  messages.h \
   policy.h
 
 noinst_HEADERS = \

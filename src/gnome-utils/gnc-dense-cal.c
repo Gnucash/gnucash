@@ -22,12 +22,10 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <gnome.h>
+#include <glib/gi18n.h>
+#include <math.h>
+
 #include "gnc-dense-cal.h"
 
 /* For PERR, only... */

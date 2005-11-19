@@ -29,12 +29,14 @@
     @author David Hampton <hampton@employees.org>
 */
 
-#include <config.h>
+#include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-date.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-period-select.h"
-#include "messages.h"
 
 enum {
   PROP_0,

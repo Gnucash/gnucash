@@ -29,7 +29,7 @@
 #include "config.h"
 
 #include <glib.h>
-#include "dialog-utils.h"
+
 #include "import-settings.h"
 #include "gnc-gconf-utils.h"
 

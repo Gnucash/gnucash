@@ -55,7 +55,9 @@
  *  user from typing in random data.
  */
 
-#include <config.h>
+#include "config.h"
+
+#include <gtk/gtk.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -63,7 +65,6 @@
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
 static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);

@@ -35,9 +35,8 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include <string.h>
-#include <glib/gprintf.h>
-#include <libgnome/libgnome.h>
 #include <g-wrap-wct.h>
 
 #include "guile-util.h"
@@ -46,7 +45,6 @@
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-window.h"
 #include "gnc-trace.h"
-#include "messages.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-menu-extensions.h"

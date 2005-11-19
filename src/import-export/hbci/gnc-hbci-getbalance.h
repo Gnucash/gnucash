@@ -23,9 +23,8 @@
 #ifndef GNC_HBCI_GETBALANCE_H
 #define GNC_HBCI_GETBALANCE_H
 
-#include <gnome.h>
-#include "Account.h"
 #include <aqbanking/jobgetbalance.h>
+#include "Account.h"
 
 /** Starts a GetBalance job, adds the job to the AB_BANKING, and
  * (currently) calls executeOutbox. */

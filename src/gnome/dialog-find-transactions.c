@@ -24,7 +24,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 
 #include "gnc-ui-util.h"
@@ -37,7 +38,6 @@
 #include "dialog-find-transactions.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
-#include "messages.h"
 #include "search-param.h"
 
 #define GCONF_SECTION "dialogs/find"

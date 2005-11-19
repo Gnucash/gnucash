@@ -34,7 +34,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <libgnome/libgnome.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"

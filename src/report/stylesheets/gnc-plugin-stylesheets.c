@@ -22,13 +22,14 @@
 
 #include "config.h"
 
-#include "dialog-style-sheet.h"
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
+#include "dialog-style-sheet.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-stylesheets.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 static void gnc_plugin_stylesheets_class_init (GncPluginStylesheetsClass *klass);
 static void gnc_plugin_stylesheets_init (GncPluginStylesheets *plugin);

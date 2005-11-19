@@ -22,10 +22,11 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 #include <sys/types.h>
 #include <regex.h>
-#include <gtk/gtk.h>
 
 #include "search-string.h"
 #include "QueryCore.h"

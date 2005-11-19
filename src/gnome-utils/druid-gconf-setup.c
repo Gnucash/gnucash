@@ -32,9 +32,10 @@
 
 #include "config.h"
 
+#include <gnome.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <gnome.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
@@ -46,7 +47,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 #define WHO_DOES		"who_does"
 #define WHO_GNUCASH		1

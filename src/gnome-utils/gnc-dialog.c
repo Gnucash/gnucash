@@ -26,6 +26,7 @@
 #include "gnc-dialog.h"
 #include "gnc-gobject-utils.h"
 #include "dialog-utils.h"  // for gnc_glade_xml_new
+#include "gnc-engine.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

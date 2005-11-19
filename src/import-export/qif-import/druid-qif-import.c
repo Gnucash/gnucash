@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "Account.h"
 #include "Transaction.h"
@@ -46,7 +45,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "guile-mappings.h"
 
 #include <g-wrap-wct.h>

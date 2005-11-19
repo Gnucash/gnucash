@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 
 #include "Account.h"
@@ -34,7 +35,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 #include "recncell.h"
 
 #include "business-options.h"

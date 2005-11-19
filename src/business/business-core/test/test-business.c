@@ -28,7 +28,6 @@
 
 #include "qof.h"
 #include "gnc-module.h"
-#include "messages.h"
 
 #include "gncBusiness.h"
 #include "test-stuff.h"

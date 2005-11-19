@@ -55,8 +55,6 @@
 #ifndef GNC_CURRENCY_EDIT_H
 #define GNC_CURRENCY_EDIT_H
 
-#include <gnome.h>
-
 #include "gnc-commodity.h"
 
 /** @name Basic Object Implementation */

@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <math.h>
 #include <string.h>
 
@@ -43,7 +44,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"

@@ -26,16 +26,16 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib.h>
 #include <regex.h>
 
 #include "gnc-commodity.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_COMMODITY; 
 

@@ -29,7 +29,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */

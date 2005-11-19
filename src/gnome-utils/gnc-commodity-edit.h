@@ -32,7 +32,6 @@
 #ifndef GNC_COMMODITY_EDIT_H
 #define GNC_COMMODITY_EDIT_H
 
-#include <gnome.h>
 #include "gnc-commodity.h"
 
 /* Callback function to return the printable string of a commodity */

@@ -39,9 +39,8 @@
 
 #include "config.h"
 
-#include <glib.h>
-#include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "cap-gains.h"
@@ -49,7 +48,6 @@
 #include "gnc-date.h"
 #include "gnc-event.h"
 #include "gnc-lot.h"
-#include "messages.h"
 #include "Scrub3.h"
 #include "Transaction.h"
 

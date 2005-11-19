@@ -23,10 +23,12 @@
 \********************************************************************/
 
 #include "config.h"
-#include "gnc-hbci-transfer.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <aqbanking/banking.h>
 
+#include "gnc-hbci-transfer.h"
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
 #include "dialog-transfer.h"

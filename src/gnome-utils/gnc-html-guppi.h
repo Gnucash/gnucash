@@ -23,7 +23,6 @@
 #ifndef GNC_HTML_GUPPI_H
 #define GNC_HTML_GUPPI_H
 
-#include <gnome.h>
 #include "gnc-html.h"
 
 void        gnc_html_guppi_init(void);

@@ -30,11 +30,11 @@
  */
 
 #include "config.h"
+
+#include <gtk/gtk.h>
 #include <string.h>
-#include <gtk/gtkmain.h>
 
 #include "gnc-tree-model-commodity.h"
-
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gobject-utils.h"

@@ -29,8 +29,6 @@
 #ifndef GNC_DATE_FORMAT_H
 #define GNC_DATE_FORMAT_H 
 
-#include <gnome.h>
-#include <glib.h>
 #include "gnc-date.h"
 
 #define GNC_TYPE_DATE_FORMAT         (gnc_date_format_get_type ())

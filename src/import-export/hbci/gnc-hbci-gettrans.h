@@ -23,7 +23,6 @@
 #ifndef GNC_HBCI_GETTRANS_H
 #define GNC_HBCI_GETTRANS_H
 
-#include <gnome.h>
 #include <aqbanking/jobgettransactions.h>
 #include "Account.h"
 

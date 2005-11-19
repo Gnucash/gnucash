@@ -24,11 +24,13 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "dialog-account.h"
 #include "GNCId.h"
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"

@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -30,23 +31,9 @@
 #include "druid-hbci-utils.h"
 #include "gnc-hbci-kvp.h"
 #include "gnc-hbci-utils.h"
-
-#include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-/* #include "Group.h" */
-/* #include "glade/glade-xml.h" */
-/* #include "gnc-amount-edit.h" */
-/* #include "gnc-commodity-edit.h" */
-/* #include "gnc-general-select.h" */
-/* #include "gnc-component-manager.h" */
-/* #include "../gnome-utils/gnc-dir.h" */
-/* #include "gnc-gui-query.h" */
-/* #include "io-example-account.h" */
-/* #include "top-level.h" */
-
-#include "gnc-hbci-utils.h"
 
 /**
  * Save the reference strings to the HBCI accounts in the kvp's of the

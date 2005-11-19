@@ -25,7 +25,6 @@
 
 #include <gnome.h>
 #include <libguile.h>
-
 #include <gconf/gconf.h>
 
 #ifdef USE_GUPPI
@@ -42,7 +41,6 @@
 #include "gnc-engine.h"
 #include "gnc-ui.h"
 
-#include <libgnomeui/gnome-window-icon.h>
 #include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;

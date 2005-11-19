@@ -26,8 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
-
-#include "messages.h"
+#include <glib/gi18n.h>
 
 #include "gncEntryLedgerP.h"
 #include "gncEntryLedgerLayout.h"

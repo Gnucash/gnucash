@@ -25,7 +25,6 @@
 #define HBCI_INTERACTIONP_H
 
 #include <aqbanking/banking.h>
-#include <gnome.h>
 #include <iconv.h>
 
 

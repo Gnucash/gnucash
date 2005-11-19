@@ -30,7 +30,6 @@
 #ifndef GNC_ACCOUNT_SEL_H
 #define GNC_ACCOUNT_SEL_H
 
-#include <gnome.h>
 #include "Account.h"
 
 #define GNC_TYPE_ACCOUNT_SEL          (gnc_account_sel_get_type())	

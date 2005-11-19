@@ -25,10 +25,7 @@
 
 #include "config.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <glib.h>
+#include <gnome.h>
 
 #include "Scrub.h"
 #include "dialog-commodity.h"

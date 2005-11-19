@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "FreqSpec.h"
@@ -34,7 +35,6 @@
 #include "SchedXactionP.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_SX;
 

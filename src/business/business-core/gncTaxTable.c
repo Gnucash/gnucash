@@ -30,7 +30,6 @@
 
 #include <glib.h>
 
-#include "messages.h"
 #include "gncTaxTableP.h"
 
 struct _gncTaxTable 

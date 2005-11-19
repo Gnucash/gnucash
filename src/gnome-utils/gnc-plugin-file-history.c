@@ -31,16 +31,16 @@
 
 #include "config.h"
 
-#include <string.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glib/gprintf.h>
-#include <libgnome/libgnome.h>
+#include <string.h>
 
 #include "gnc-file.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-window.h"
 #include "gnc-engine.h"
-#include "messages.h"
 #include "gnc-gconf-utils.h"
 
 static GObjectClass *parent_class = NULL;

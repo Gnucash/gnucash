@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "QuickFill.h"
-#include "dialog-utils.h"
 #include "gnc-engine.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"

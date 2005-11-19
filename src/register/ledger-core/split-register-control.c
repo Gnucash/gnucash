@@ -22,12 +22,14 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
+
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "pricecell.h"
 #include "datecell.h"
 #include "split-register-control.h"

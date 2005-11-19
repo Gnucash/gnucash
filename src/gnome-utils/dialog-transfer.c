@@ -25,6 +25,8 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <glib/gi18n.h>
 
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -40,7 +42,6 @@
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "Account.h"
 

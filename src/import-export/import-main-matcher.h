@@ -27,7 +27,6 @@
 #ifndef GNC_IMPORT_MAIN_MATCHER_H
 #define GNC_IMPORT_MAIN_MATCHER_H
 
-#include <gnome.h>
 #include "Transaction.h"
 
 typedef struct _main_matcher_info GNCImportMainMatcher;

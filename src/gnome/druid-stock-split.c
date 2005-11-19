@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "Transaction.h"
@@ -42,7 +41,6 @@
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"

@@ -23,6 +23,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-amount-edit.h"
 #include "QueryCore.h"

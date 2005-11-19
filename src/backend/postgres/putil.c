@@ -32,12 +32,13 @@
  */
 
 #include <glib.h> 
+#include <glib/gi18n.h>
 #include <libpq-fe.h>  
 #include <stdlib.h>  
 #include <string.h>
+
 #include "qofbackend.h"
 #include "qofbackend-p.h"
-#include "messages.h"
 #include "gnc-engine-util.h" 
 #include "PostgresBackend.h"
 

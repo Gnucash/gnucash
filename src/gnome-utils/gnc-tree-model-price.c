@@ -30,8 +30,10 @@
  */
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
-#include <gtk/gtkmain.h>
 
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -40,7 +42,6 @@
 #include "gnc-tree-model-price.h"
 #include "gnc-trace.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 #define ITER_IS_NAMESPACE GINT_TO_POINTER(1)
 #define ITER_IS_COMMODITY GINT_TO_POINTER(2)

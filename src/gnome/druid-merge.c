@@ -27,7 +27,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "dialog-utils.h"
 #include "druid-merge.h"

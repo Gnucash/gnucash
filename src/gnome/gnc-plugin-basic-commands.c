@@ -31,6 +31,9 @@
 */
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-plugin-basic-commands.h"
@@ -49,7 +52,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
-#include "messages.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

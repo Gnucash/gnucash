@@ -33,12 +33,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-plugin-account-tree.h"
 #include "gnc-plugin-page-account-tree.h"
-
-#include "messages.h"
 
 static void gnc_plugin_account_tree_class_init (GncPluginAccountTreeClass *klass);
 static void gnc_plugin_account_tree_init (GncPluginAccountTree *plugin);

@@ -31,7 +31,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-ui.h"
 

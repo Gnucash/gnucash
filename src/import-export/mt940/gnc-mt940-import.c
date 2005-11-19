@@ -27,12 +27,10 @@
 
 #include "config.h"
 
+#include <glib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
-
-#include <glib.h>
-#include <gmodule.h>
 
 #include <openhbci/swiftparser.h>
 

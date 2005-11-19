@@ -27,9 +27,10 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <libguile.h>
-#include <glib.h>
 
 #include "gnc-hooks.h"
 #include "gnc-module.h"

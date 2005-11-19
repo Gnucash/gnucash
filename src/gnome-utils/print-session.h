@@ -31,13 +31,8 @@
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
 */
 
-#include "config.h"
-
-#include <gnome.h>
 #include <libgnomeprint/gnome-print.h>
-
 #include <libgnomeprint/gnome-print-job.h>
-
 #include <libgnomeprintui/gnome-print-dialog.h>
 #include <libgnomeprintui/gnome-print-preview.h>
 

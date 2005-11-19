@@ -29,7 +29,6 @@
 
 #include <glib.h>
 
-#include "messages.h"
 #include "gnc-commodity.h"
 
 #include "gncEntry.h"

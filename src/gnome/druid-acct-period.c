@@ -24,9 +24,8 @@
 
 #include "config.h"
 
-#include <glib.h>
 #include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <glib/gi18n.h>
 
 #include "FreqSpec.h"
 #include "Group.h"
@@ -47,7 +46,6 @@
 #include "gnc-trace.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
-#include "messages.h"
 #include "qof.h"
 
 

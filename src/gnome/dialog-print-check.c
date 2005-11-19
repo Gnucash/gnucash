@@ -24,12 +24,12 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
-#include <gnome.h>
 #include <libguile.h>
 
 #include "gnc-date.h"
-#include "messages.h"
 #include "gnc-numeric.h"
 #include "gnc-plugin-page-register.h"
 #include "dialog-print-check.h"

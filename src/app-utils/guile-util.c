@@ -20,17 +20,17 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <string.h>
+#include <g-wrap-wct.h>
+#include <libguile.h>
 
 #include "qof.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
 #include "gnc-gconf-utils.h"
 #include "guile-util.h"
-#include "messages.h"
-
-#include <g-wrap-wct.h>
-#include <libguile.h>
 #include "guile-mappings.h"
 
 /* This static indicates the debugging module this .o belongs to.  */

@@ -24,9 +24,9 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "gnc-engine.h"
-#include "messages.h"
 #include "split-register-layout.h"
 
 

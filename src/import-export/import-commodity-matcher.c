@@ -27,22 +27,17 @@
 
 #include "config.h"
 
-
-#include <glib.h>
-#include <gmodule.h>
-
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <glade/glade.h>
-
 #include <stdlib.h>
 #include <math.h>
+
 #include "import-commodity-matcher.h"
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-commodity.h"
-#include "dialog-utils.h"
-
 #include "gnc-engine.h"
-
 #include "gnc-ui-util.h"
 
 /********************************************************************\

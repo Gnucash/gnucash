@@ -23,13 +23,10 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <glade/glade.h>
 #include <gnome.h>
+#include <string.h>
+#include <glade/glade.h>
 #include <math.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "druid-loan.h"
 

@@ -1,5 +1,11 @@
 2005-11-19  David Hampton  <hampton@employees.org>
 
+	* numerous: Include file cleanup.  Remove the messages.[ch] files
+	in favor of the glib supplied gi18n.h file.  Replace includes of
+	gnome.h with gtk.h (or better yet glib.h) wherever possible.
+	Don't include gnome.h from any header files.  Remove some
+	extraneous includes.
+
 	* src/gnome-utils/gnc-date-format.[ch]: Remove unused function.
 
 2005-11-18  David Hampton  <hampton@employees.org>

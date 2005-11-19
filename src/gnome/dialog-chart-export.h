@@ -26,8 +26,6 @@
 #ifndef _DIALOG_CHART_EXPORT_H
 #define _DIALOG_CHART_EXPORT_H
 
-#include <gnome.h>
-
 #define _GNU_SOURCE
 
 

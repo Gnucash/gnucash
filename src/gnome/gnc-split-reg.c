@@ -29,7 +29,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <time.h>
 
 #include "gnc-split-reg.h"
@@ -52,7 +53,6 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnucash-sheet.h"
-#include "messages.h"
 #include "table-allgui.h"
 
 #include <libguile.h>

@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 
 #include "combocell.h"
@@ -37,7 +38,6 @@
 #include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "quickfillcell.h"

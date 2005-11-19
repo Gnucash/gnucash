@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Account.h"
 #include "combocell.h"
@@ -34,7 +35,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
-#include "messages.h"
 #include "table-allgui.h"
 #include "pricecell.h"
 #include "dialog-tax-table.h"

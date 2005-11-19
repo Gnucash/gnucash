@@ -25,8 +25,9 @@
 
 #include "config.h"
 
-#include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
+#include <string.h>
 #include <libguile.h>
 
 #include "dialog-billterms.h"
@@ -40,7 +41,6 @@
 #include "gnc-plugin-business.h"
 #include "gnc-plugin-page-invoice.h"
 #include "gncOwner.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
 #include "gnc-date.h"
 #include "gnc-file.h"

@@ -22,7 +22,8 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "QueryCore.h"
 #include "gnc-ui-util.h"

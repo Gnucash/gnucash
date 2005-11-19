@@ -25,12 +25,12 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <libpq-fe.h> 
 #include <stdlib.h>  
-#include <glib.h>
 
 #include "PostgresBackend.h"
-#include "messages.h"
 #include "qofbackend.h"
 #include "upgrade.h"
 

@@ -33,7 +33,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 
 #include "dialog-commodity.h"
@@ -42,7 +43,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

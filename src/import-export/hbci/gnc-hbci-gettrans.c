@@ -21,6 +21,9 @@
 \********************************************************************/
 
 #include "config.h"
+
+#include <gnome.h>
+
 #include "gnc-hbci-gettrans.h"
 
 #include "gnc-ui.h"

@@ -27,10 +27,9 @@
 #endif
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "gnc-helpers.h"
-#include "messages.h"
-
 #include "qif-import-p.h"
 #include "qif-objects-p.h"
 #include "qif-defaults.h"

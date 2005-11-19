@@ -22,13 +22,12 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
 #include "gnc-component-manager.h"
-#include "messages.h"
 #include "gnc-query-list.h"
 #include "search-param.h"
 #include "QueryCore.h"

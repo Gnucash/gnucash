@@ -30,6 +30,8 @@
 
 #define _GNU_SOURCE
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -49,7 +51,6 @@
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-#include "messages.h"
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 

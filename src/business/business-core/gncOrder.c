@@ -28,8 +28,8 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
-#include "messages.h"
 #include "gncEntry.h"
 #include "gncEntryP.h"
 #include "gncOrder.h"

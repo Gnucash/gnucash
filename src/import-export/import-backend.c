@@ -29,20 +29,16 @@
 
 #include "config.h"
 
-
 #include <glib.h>
-
 #include <stdlib.h> 
 #include <math.h>
+
 #include "gnc-gconf-utils.h"
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
-#include "dialog-utils.h"
 #include "Query.h"
-
 #include "gnc-engine.h"
-
 #include "gnc-ui-util.h"
 
 #define GCONF_SECTION "dialogs/import/generic_matcher"

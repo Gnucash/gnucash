@@ -29,7 +29,6 @@
 #include "dialog-column-view.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
-#include "messages.h"
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"

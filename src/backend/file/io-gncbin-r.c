@@ -86,10 +86,11 @@
  *   nanoseconds ::== signed 32 bit int                             * 
 \********************************************************************/
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-#include <glib.h>
 
 #include "config.h"
 
@@ -98,7 +99,6 @@
 #include "io-gncbin.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"

@@ -25,8 +25,9 @@
 
 #include "config.h"
 
-#include <ctype.h>
 #include <glib.h>
+#include <glib/gi18n.h>
+#include <ctype.h>
 #include <netdb.h>
 #include <pwd.h>
 #include <stdio.h>  
@@ -55,7 +56,6 @@
 #include "events.h"
 #include "gncquery.h"
 #include "kvp-sql.h"
-#include "messages.h"
 #include "PostgresBackend.h"
 #include "price.h"
 #include "txn.h"
