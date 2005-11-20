@@ -460,13 +460,13 @@ fi
 AM_CONDITIONAL(HAVE_PANGO18, test "x$HAVE_PANGO18" = "xyes" )
 
 
-# @@fixme 
-# use both PKG_CHECK_MODULES and `$PKG_CONFIG`; the first importantly sets
-# MUMBLE_{LIBS,CFLAGS}...
-# Q: What does PKG_CHECK_MODULES create?
-# A: Just _CFLAGS and _LIBS, apparently [pkg.m4]
+dnl @@fixme 
+dnl use both PKG_CHECK_MODULES and `$PKG_CONFIG`; the first importantly sets
+dnl MUMBLE_{LIBS,CFLAGS}...
+dnl Q: What does PKG_CHECK_MODULES create?
+dnl A: Just _CFLAGS and _LIBS, apparently [pkg.m4]
 
-# $4=true => don't die in case of failure.
+dnl $4=true => don't die in case of failure.
 PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.12.2
                        libgsf-gnome-1 >= 1.12.2,,true)
 if $PKG_CONFIG 'libgsf-1 >= 1.12.2'
@@ -477,12 +477,13 @@ else
   AC_MSG_NOTICE(using internally-packaged libgsf)
   GSF_CFLAGS='-I${top_srcdir}/lib/libgsf-1.12.3'
   GSF_LIBS='${top_builddir}/lib/libgsf-1.12.3/gsf/libgsf-1.la'
+  NEED_LIBGSF=yes
 fi
 AM_CONDITIONAL(HAVE_LIBGSF, test "x$HAVE_LIBGSF" = "xyes")
 AC_SUBST(GSF_CFLAGS)
 AC_SUBST(GSF_LIBS)
 
-# $4=true => don't die if failure.
+dnl $4=true => don't die if failure.
 PKG_CHECK_MODULES(GOFFICE, libgoffice-1 >= 0.0.4,,true)
 if $PKG_CONFIG 'libgoffice-1 >= 0.0.4'
 then
@@ -492,6 +493,7 @@ else
   AC_MSG_NOTICE(using internally-packaged goffice)
   GOFFICE_CFLAGS='-I${top_srcdir}/lib/goffice-0.0.4'
   GOFFICE_LIBS='${top_builddir}/lib/goffice-0.0.4/goffice/libgoffice-1.la'
+  NEED_GOFFICE=yes
 fi
 AM_CONDITIONAL(HAVE_GOFFICE, test "x$HAVE_GOFFICE" = "xyes")
 AC_SUBST(GOFFICE_CFLAGS)
@@ -500,6 +502,7 @@ AC_SUBST(GOFFICE_LIBS)
 ### ----------
 
 ### +libgsf-1.12.3
+if test "x$HAVE_LIBGSF" != xyes; then
 AC_MSG_NOTICE('internal libgsf configuration...')
 
 m4_define([libgsf_version_major], [1])
@@ -520,7 +523,10 @@ AC_SUBST(VERSION_INFO,
 m4_eval(libgsf_version_major + libgsf_version_minor)[]dnl
 :libgsf_version_micro:libgsf_version_minor)
 
-AC_CONFIG_HEADERS(lib/libgsf-1.12.3/gsf-config.h)
+dnl 2005-11-19,jsled, this doesn't seem to work... :(
+dnl ifelse(x$HAVE_LIBGSF, xyes,,
+  AC_CONFIG_HEADERS(lib/libgsf-1.12.3/gsf-config.h)
+dnl)
 
 AC_FUNC_FSEEKO
 AC_SYS_LARGEFILE
@@ -810,9 +816,23 @@ LDFLAGS="-no-undefined $LDFLAGS"
 # turn off unneeded python support
 AM_CONDITIONAL(WITH_PYTHON, false)
 
+else
+
+AM_CONDITIONAL(OS_WIN32, false)
+AM_CONDITIONAL(PLATFORM_WIN32, false)
+AM_CONDITIONAL(GTK_DOC_INSTALLED, false)
+ AM_CONDITIONAL(ENABLE_GTK_DOC, false)
+ AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, false)
+AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
+AM_CONDITIONAL(WITH_GCONF, false)
+AM_CONDITIONAL(WITH_PYTHON, false)
+
+fi
 # -libgsf-1.12.3
 
 # +goffice-0.0.4
+if test "x$HAVE_GOFFICE" != xyes; then
+
 AC_MSG_NOTICE('internal goffice configuration...')
 
 m4_define([goffice_version_epoch], [0])
@@ -1218,10 +1238,17 @@ AC_DEFINE(GO_VERSION_MINOR, goffice_version_minor,
 AC_DEFINE(GO_VERSION_EXTRA, "goffice_version_extra",
 	[Extra, possibly empty tag for this release])
 
+else
+
+AM_CONDITIONAL(WITH_CAIRO, false)
+AM_CONDITIONAL(WITH_GTK,   false)
+AM_CONDITIONAL(WITH_GNOME, false)
+AM_CONDITIONAL(WITH_WIN32, false)
+
+fi
 # -goffice-0.0.4
 
 # -gog2
-
 
 ### --------------------------------------------------------------------------
 ### Variables
