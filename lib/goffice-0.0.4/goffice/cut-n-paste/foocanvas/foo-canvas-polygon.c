@@ -700,7 +700,7 @@ foo_canvas_polygon_realize (FooCanvasItem *item)
 
 	poly->fill_gc = gdk_gc_new (item->canvas->layout.bin_window);
 	poly->outline_gc = gdk_gc_new (item->canvas->layout.bin_window);
-#warning "FIXME: Need to recalc pixel values, set colours, etc."
+//#warning "FIXME: Need to recalc pixel values, set colours, etc."
 
 #ifdef OLD_XFORM
 	(* FOO_CANVAS_ITEM_CLASS (item->object.klass)->update) (item, NULL, NULL, 0);

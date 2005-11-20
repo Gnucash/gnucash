@@ -1400,7 +1400,7 @@ graph_guru_init (GraphGuruState *s)
 	s->button_navigate = graph_guru_init_button (s, "button_navigate");
 	s->button_ok	   = graph_guru_init_ok_button (s);
 
-#warning FIXME move the docs down to libgoffice
+//#warning FIXME move the docs down to libgoffice
 	go_gtk_help_button_init	(glade_xml_get_widget (s->gui, "help_button"),
 				 go_sys_data_dir (), "gnumeric",
 				 "sect-graphics-plots");

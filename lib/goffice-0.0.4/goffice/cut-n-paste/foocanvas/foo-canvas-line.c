@@ -983,7 +983,7 @@ foo_canvas_line_realize (FooCanvasItem *item)
 		(* parent_class->realize) (item);
 
 	line->gc = gdk_gc_new (item->canvas->layout.bin_window);
-#warning "FIXME: Need to recalc pixel values, set colours, etc."
+//#warning "FIXME: Need to recalc pixel values, set colours, etc."
 
 #if 0
 	(* FOO_CANVAS_ITEM_CLASS (item->object.klass)->update) (item, NULL, NULL, 0);

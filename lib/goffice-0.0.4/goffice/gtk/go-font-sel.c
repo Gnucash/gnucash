@@ -162,7 +162,7 @@ gfs_fill_font_name_list (GOFontSel *gfs)
 	GtkTreeIter iter;
 	PangoContext *context;
 
-#warning "FIXME: We need to do this when we realize the widget as we don't have a screen until then."
+//#warning "FIXME: We need to do this when we realize the widget as we don't have a screen until then."
 	context = gtk_widget_get_pango_context (GTK_WIDGET (gfs));
 	gfs->family_names = go_fonts_list_families (context);
 
@@ -514,7 +514,7 @@ go_font_sel_set_style (GOFontSel *gfs, gboolean is_bold, gboolean is_italic)
 	go_font_sel_add_attr (gfs, 
 		pango_attr_weight_new (is_bold ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL),
 		pango_attr_style_new (is_italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL));
-#warning "Do we really need the following line?"
+//#warning "Do we really need the following line?"
 	go_font_sel_emit_changed (gfs);
 }
 

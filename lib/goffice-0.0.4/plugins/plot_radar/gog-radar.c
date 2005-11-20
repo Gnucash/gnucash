@@ -386,7 +386,8 @@ GSF_DYNAMIC_CLASS (GogPolarPlot, gog_polar_plot,
 typedef GogPlotView		GogRTView;
 typedef GogPlotViewClass	GogRTViewClass;
 
-static double
+//static double
+double
 fmin (double a, double b)
 {
 	return (a < b) ? a : b;

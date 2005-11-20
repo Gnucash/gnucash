@@ -147,7 +147,7 @@ go_pattern_get_pattern (GOPattern const *pat)
  * If width != NULL, returns pattern width.
  * If height != NULL, returns pattern height.
  **/
-#warning This result is actually an xmlChar we could run into trouble with g_free vs xmlFree.  Can we change the interface ?
+//#warning This result is actually an xmlChar we could run into trouble with g_free vs xmlFree.  Can we change the interface ?
 char *
 go_pattern_get_svg_path (GOPattern const *pattern, double *width, double *height)
 {

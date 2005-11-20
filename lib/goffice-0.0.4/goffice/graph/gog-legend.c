@@ -267,7 +267,7 @@ gog_legend_view_size_request (GogView *v, GogViewRequisition *avail)
 	GogLegend *l = GOG_LEGEND (v->model);
 	unsigned n, mult = 1;
 
-#warning TODO : make this smarter (multiple columns and shrinking text)
+//#warning TODO : make this smarter (multiple columns and shrinking text)
 	dat.view = v;
 	dat.maximum.w = 0.;
 	dat.maximum.h = gog_renderer_pt2r_y (v->renderer, l->swatch_size_pts);

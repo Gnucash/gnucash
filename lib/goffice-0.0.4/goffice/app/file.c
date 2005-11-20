@@ -370,7 +370,7 @@ go_file_saver_setup (GOFileSaver *fs, gchar const *id,
 	fs->id = g_strdup (id);
 	fs->mime_type = NULL;
 
-#warning mime disabled
+//#warning mime disabled
 #if 0
 	gchar *tmp = g_strdup_printf ("SomeFile.%s", extension);
 	gnome_mime_type_or_default (tmp,

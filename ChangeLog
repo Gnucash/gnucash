@@ -1,3 +1,33 @@
+2005-11-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* lib/goffice-0.0.4/plugins/plot_radar/gog-radar.c :
+		Mac OSX fix: comment out #warning
+	* lib/goffice-0.0.4/plugins/plot_xy/gog-bubble-prefs.c :
+	* lib/goffice-0.0.4/plugins/plot_xy/gog-xy.c :
+	* lib/goffice-0.0.4/goffice/app/file.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-pixmaps.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-action-combo-color.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-font-sel.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-color-palette.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-color.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-box.c :
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/foo-canvas-line.c
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/foo-canvas-polygon.c
+	* lib/goffice-0.0.4/goffice/utils/go-pattern.c
+	* lib/goffice-0.0.4/goffice/graph/gog-guru.c
+	* lib/goffice-0.0.4/goffice/graph/gog-legend.c
+	* lib/goffice-0.0.4/goffice/graph/gog-graph.c
+	* lib/goffice-0.0.4/goffice/graph/gog-error-bar.c
+	* lib/goffice-0.0.4/goffice/graph/gog-style.c
+	* lib/goffice-0.0.4/goffice/graph/gog-theme.c
+	* lib/libgsf-1.12.3/gsf-gnome/gsf-input-bonobo.c :
+
+	* lib/goffice-0.0.4/goffice.mk :
+	Adding AM_LDFLAGS for OSX build
+
+	* lib/goffice-0.0.4/ : setting svn:ignore
+	* lib/libgsf-1.12.3/ : setting svn:ignore
+
 2005-11-09  David Hampton  <hampton@employees.org>
 
 	* doc/README.dependencies: Document the devel packages needed to

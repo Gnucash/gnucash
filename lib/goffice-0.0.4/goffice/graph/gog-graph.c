@@ -370,7 +370,7 @@ gog_graph_set_theme (GogGraph *graph, GogTheme *theme)
 {
 	g_return_if_fail (GOG_GRAPH (graph) != NULL);
 	g_return_if_fail (GOG_THEME (theme) != NULL);
-#warning TODO
+//#warning TODO
 }
 
 /**

@@ -260,7 +260,7 @@ go_combo_color_get_color (GOComboColor *cc, gboolean *is_default)
 void
 go_combo_color_set_color_gdk (GOComboColor *cc, GdkColor *color)
 {
-#warning convert to GOColor
+//#warning convert to GOColor
 	g_return_if_fail (IS_GO_COMBO_COLOR (cc));
 
 	if (color != NULL)

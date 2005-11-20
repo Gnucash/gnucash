@@ -470,7 +470,7 @@ gog_error_bar_persist_sax_save (GogPersist const *gp, GsfXMLOut *output)
 	}
 	if (str != NULL)
 		gsf_xml_out_add_cstr_unchecked (output, "display", str);
-#warning Why 5.0 and why 1.0 ?
+//#warning Why 5.0 and why 1.0 ?
 	if (bar->width != 5.)
 		gsf_xml_out_add_float (output, "width", bar->width, 2);
 	if (bar->style->line.width != 1.)
