@@ -1,5 +1,7 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* AUTHORS: Convert to utf-8.
+
 	* src/backend/file/gnc-backend-file.c: Need to include locale.h to
 	compile without optimization.
 

@@ -1,4 +1,3 @@
--*-text-*-
 
 Main Developers:
 ----------------
@@ -78,7 +77,7 @@ Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
    concepts and tutorial written by Carol Champagne. Looks after
    releasing new GnuCash versions and updating the website.
 
-Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
+Benoit GrÃ©goire <bock@step.polymtl.ca> coded a long awaited OFX module
    for GnuCash and wrote the external libOFX library that it uses.
 
 Neil Williams <linux@codehelp.co.uk> finished conversion from GncBook
@@ -97,7 +96,7 @@ Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
-Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
+Dennis BjÃ¶rklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
@@ -139,17 +138,17 @@ Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
-Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Jon KÃ¥re Hellan <hellan@acm.org> misc core dump fixes
 Hendrik-Jan Heins <hjh@passys.nl> Dutch translation
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
-Péter Hosszú <hosszu@web.de> Hungarian translation
+PÃ©ter HosszÃº <hosszu@web.de> Hungarian translation
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
 Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
-Andreas Köhler <KoehlerAndreas@web.de> German translation
+Andreas KÃ¶hler <KoehlerAndreas@web.de> German translation
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Eneko Lacunza <enlar@enlar.net> Spanish Translation
@@ -170,7 +169,7 @@ Lionel Elie Mamane <lionel@mamane.lu> Patches for gcc2.95 macro compatibility
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
-Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
+Juan Manuel GarcÃ­a Molina <juanmagm@mail.com> messages Spanish translation
 Orestes Mas <orestes@tsc.upc.es> Catalan translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
@@ -182,7 +181,7 @@ Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Christian Neumair <chris@gnome-de.org> Various gnome2 fixes/HIG work.
 Johnny Ernst Nielsen <j.e.nielsen@iname.com> messages Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
-Martin Norbäck <d95mback@dtek.chalmers.se> Swedish translation
+Martin NorbÃ¤ck <d95mback@dtek.chalmers.se> Swedish translation
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
@@ -194,7 +193,7 @@ Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
-Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
+Zdenko PodobnÃ½ <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches
