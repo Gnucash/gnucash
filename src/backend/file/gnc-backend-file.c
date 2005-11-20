@@ -30,8 +30,11 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <libintl.h>
 #include <locale.h>
 #include <stdio.h>
 #include <fcntl.h>

@@ -29,6 +29,7 @@
 
 #include <gnome.h>
 #include <glade/glade.h>
+#include <gmodule.h>
 #include <dlfcn.h>
 
 #include "dialog-utils.h"

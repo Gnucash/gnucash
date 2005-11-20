@@ -1,3 +1,9 @@
+2005-11-20  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-backend-file.c:
+	* src/gnome-utils/dialog-utils.c: Fix some build problems on FC3
+	related to the include file changes.
+
 2005-11-20  Neil Williams  <linux@codehelp.co.uk>
 
 	* src/core-utils/gnc-gkeyfile-utils.c : Modifying Scott's
