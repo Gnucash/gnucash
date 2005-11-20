@@ -525,7 +525,7 @@ m4_eval(libgsf_version_major + libgsf_version_minor)[]dnl
 
 dnl 2005-11-19,jsled, this doesn't seem to work... :(
 dnl ifelse(x$HAVE_LIBGSF, xyes,,
-  AC_CONFIG_HEADERS(lib/libgsf-1.12.3/gsf-config.h)
+  AC_CONFIG_HEADERS(gsf-config.h)
 dnl)
 
 AC_FUNC_FSEEKO
@@ -811,7 +811,7 @@ else
 fi
 AM_CONDITIONAL(WITH_GCONF, test "x$GCONFTOOL" != "xno")
 
-LDFLAGS="-no-undefined $LDFLAGS"
+dnl # LDFLAGS="-no-undefined $LDFLAGS"
 
 # turn off unneeded python support
 AM_CONDITIONAL(WITH_PYTHON, false)
@@ -849,11 +849,11 @@ m4_eval(goffice_version_epoch + goffice_version_major)[]dnl
 :goffice_version_minor:goffice_version_major)
 
 dnl This one is created by autoheader, ...
-AC_CONFIG_HEADERS(lib/goffice-0.0.4/goffice/goffice-config.h)
+AC_CONFIG_HEADERS(goffice-config.h)
 
 dnl ... and this one is a small subset, maintained manually,
 dnl which will be installed.
-AC_CONFIG_HEADERS(lib/goffice-0.0.4/goffice/goffice-features.h)
+AC_CONFIG_HEADERS(goffice-features.h)
 dnl
 dnl Make sure these two won't clash.  Put the following to goffice-config.h:
 AH_BOTTOM([/* Don't include goffice-features.h, it's a subset of goffice-config.h. */

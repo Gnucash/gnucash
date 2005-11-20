@@ -1,5 +1,22 @@
 2005-11-20  Neil Williams  <linux@codehelp.co.uk>
 
+	* goffice-config.h.in : svn moved from 
+		lib/goffice-0.0.4/goffice to prevent unnecessary
+		subdirectory inclusion in make outside lib.
+	* goffice-features.h.in : svn moved from
+		lib/goffice-0.0.4/goffice.
+	* gsf-config.h.in : svn moved from lib/libsf-1.12.3
+	* configure.in : Create AC_CONFIG_HEADERS only in
+		$(top_srcdir) and stop using LDFLAGS = -no-undeclared
+	* lib/goffice-0.0.4/goffice-plugins.mk : handle new config
+		header location.
+	* lib/goffice-0.0.4/tests/Makefile.am : Don't overwrite AM_LDFLAGS
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/Makefile.am :
+		handle new config header location.
+  * lib/goffice-0.0.4/goffice.mk : Handle new config header location.
+
+2005-11-20  Neil Williams  <linux@codehelp.co.uk>
+
 	* lib/goffice-0.0.4/plugins/plot_radar/gog-radar.c :
 		Mac OSX fix: comment out #warning
 	* lib/goffice-0.0.4/plugins/plot_xy/gog-bubble-prefs.c :
