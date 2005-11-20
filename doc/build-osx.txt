@@ -9,7 +9,7 @@ in preference to the newly installed GNU version.
 
 To avoid these problems, you are advised to change your PATH variable
 in ~/.bashrc to put the Fink binaries ahead of the main OSX binaries
-in your path:
+in your path or export a new PATH in the script that calls autogen.sh.
 Instead of:
 \verbatim
 PATH=/usr/bin/:/sbin/:/usr/sbin/:/bin:/opt/local/bin:/sw/bin
@@ -19,7 +19,7 @@ use:
 PATH=/sw/bin:/usr/bin/:/sbin/:/usr/sbin/:/bin:/opt/local/bin
 /endverbatim
 
-Then, when calling ./autogen.sh and ./configure, it may be necessary
+Then, when calling ./autogen.sh and ./configure, it is necessary
 to direct OSX to the correct Guile installation environment using:
 
 \verbatim
@@ -28,18 +28,15 @@ guile16-build env LIBRARY_PATH=/sw/lib CPATH=/sw/include \
 ./autogen.sh
 guile16-build env LIBRARY_PATH=/sw/lib CPATH=/sw/include \
 ./configure <your configure options>
-\endverbatim
-
-You may also need to specify the same environment to the first
-make command:
-
-\verbatim
 guile16-build env LIBRARY_PATH=/sw/lib CPATH=/sw/include \
 make
 \endverbatim
 
 If (when) you do a 'make distclean', this whole process will have to
 be done again.
+
+If you have to change automake or autoconf versions, make sure you
+remove the autom4te.cache/ directory before running autogen.sh again.
 
 \section osxtools OSX tools
 

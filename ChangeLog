@@ -1,3 +1,9 @@
+2005-11-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* src/core-utils/gnc-gkeyfile-utils.c : Modifying Scott's
+	64bit patch to retain compatibility with OSX.
+	* doc/build-osx.txt : Updating build advice for OSX.
+
 2005-11-20  David Hampton  <hampton@employees.org>
 
 	* TRANSLATORS:
