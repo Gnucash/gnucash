@@ -1,3 +1,8 @@
+2005-11-20  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/no.po: Updated Norwegian/Bokmaal glossary
+	translation by Tor Harald Thorland <linux@strigen.com>.
+
 2005-11-19  David Hampton  <hampton@employees.org>
 
 	* various: More include file tweaking.  Don't include gtk.h from
