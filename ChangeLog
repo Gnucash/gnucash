@@ -1,5 +1,10 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* TRANSLATORS:
+	* LICENSE:
+	* DOCUMENTERS:
+	* Makefile.am: Add new files.
+
 	* AUTHORS: Convert to utf-8.
 
 	* src/backend/file/gnc-backend-file.c: Need to include locale.h to
