@@ -1,3 +1,8 @@
+2005-11-20  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/gnc-backend-file.c: Need to include locale.h to
+	compile without optimization.
+
 2005-11-20  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/no.po: Updated Norwegian/Bokmaal glossary

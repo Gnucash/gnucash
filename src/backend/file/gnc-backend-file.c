@@ -32,6 +32,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <locale.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
