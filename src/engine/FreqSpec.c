@@ -284,7 +284,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
    case DAILY: {
       guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-      julian_in_date = g_date_julian( in_date );
+      julian_in_date = g_date_get_julian( in_date );
       complete_intervals =
          (julian_in_date - fs->s.daily.offset_from_epoch) /
          fs->s.daily.interval_days;
@@ -300,7 +300,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
        * It is very similar to the daily repeat representation. */
       guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-      julian_in_date = g_date_julian( in_date );
+      julian_in_date = g_date_get_julian( in_date );
       complete_intervals =
          (julian_in_date - fs->s.weekly.offset_from_epoch) /
          (fs->s.weekly.interval_weeks * 7);
@@ -314,18 +314,18 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
       guint32 in_months_from_epoch, after_repeat_in_month_interval,
          complete_intervals, next_repeat_months_from_epoch, month, year;
 
-      in_months_from_epoch = (g_date_year( in_date )-1) * 12 +
-         g_date_month( in_date ) - 1;
+      in_months_from_epoch = (g_date_get_year( in_date )-1) * 12 +
+         g_date_get_month( in_date ) - 1;
       complete_intervals =
          (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
          fs->s.monthly.interval_months;
       after_repeat_in_month_interval =
-         (g_date_day( in_date ) >= fs->s.monthly.day_of_month ||
+         (g_date_get_day( in_date ) >= fs->s.monthly.day_of_month ||
           (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
           fs->s.monthly.interval_months > 0 ||
-          g_date_day( in_date ) >=
-          g_date_days_in_month( g_date_month( in_date ),
-                      g_date_year( in_date ) ) )  ? 1 : 0;
+          g_date_get_day( in_date ) >=
+          g_date_get_days_in_month( g_date_get_month( in_date ),
+                      g_date_get_year( in_date ) ) )  ? 1 : 0;
       next_repeat_months_from_epoch =
          fs->s.monthly.offset_from_epoch +
          (complete_intervals + after_repeat_in_month_interval) *
@@ -341,7 +341,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
       year = next_repeat_months_from_epoch / 12 + 1;
       g_date_set_dmy( out_date,
             min( fs->s.monthly.day_of_month,
-                 g_date_days_in_month( month, year ) ),
+                 g_date_get_days_in_month( month, year ) ),
             month,
             year );
    } break;
@@ -352,20 +352,20 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
          wday_of_1st, day_of_repeat;
 
       GDate date1;
-      in_months_from_epoch = (g_date_year( in_date )-1) * 12 +
-         g_date_month( in_date ) - 1;
+      in_months_from_epoch = (g_date_get_year( in_date )-1) * 12 +
+         g_date_get_month( in_date ) - 1;
       complete_intervals =
          (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
          fs->s.month_relative.interval_months;
-      month = g_date_month( in_date );
-      year = g_date_year( in_date );
+      month = g_date_get_month( in_date );
+      year = g_date_get_year( in_date );
       g_date_set_dmy( &date1, 1, month, year );
       wday_of_1st = g_date_get_weekday( &date1 );
       day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
          ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
       after_repeat_in_month_interval =
-         (g_date_day( in_date ) >= day_of_repeat ||
-          day_of_repeat > g_date_days_in_month( month, year ) ||
+         (g_date_get_day( in_date ) >= day_of_repeat ||
+          day_of_repeat > g_date_get_days_in_month( month, year ) ||
           (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
           fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
       next_repeat_months_from_epoch =
@@ -382,7 +382,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
        * that month... */
       day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
          ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
-      while( day_of_repeat > g_date_days_in_month( month, year ) ) {
+      while( day_of_repeat > g_date_get_days_in_month( month, year ) ) {
          /* If the repeat occurs after the end of the month, then find
           * the next month containing a day which satisfies the
           * request.  Each candiate month separated by interval_months
@@ -420,7 +420,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
                (FreqSpec*) list->data,
                in_date,
                &next_repeat );
-            this_julian = g_date_julian( &next_repeat );
+            this_julian = g_date_get_julian( &next_repeat );
                
             min_julian = min( min_julian, this_julian );
 
@@ -474,7 +474,7 @@ xaccFreqSpecSetDaily( FreqSpec *fs,
    fs->type = DAILY;
    fs->s.daily.interval_days = interval_days;
 
-   julian_days_since_epoch = g_date_julian( initial_date );
+   julian_days_since_epoch = g_date_get_julian( initial_date );
    fs->s.daily.offset_from_epoch = julian_days_since_epoch % interval_days;
 }
 
@@ -503,7 +503,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = DAILY;
    fs->s.daily.interval_days = 7 * interval_weeks;
 
-   julian_days_since_epoch = g_date_julian( initial_date );
+   julian_days_since_epoch = g_date_get_julian( initial_date );
    fs->s.daily.offset_from_epoch = julian_days_since_epoch % (7*interval_weeks);
 #endif
 #if 1
@@ -517,7 +517,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = WEEKLY;
    fs->s.weekly.interval_weeks = interval_weeks;
 
-   julian_days_since_epoch = g_date_julian( initial_date );
+   julian_days_since_epoch = g_date_get_julian( initial_date );
    fs->s.weekly.offset_from_epoch = julian_days_since_epoch % (7*interval_weeks);
 #endif
 #if 0
@@ -535,7 +535,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = WEEKLY;
    fs->s.weekly.interval_weeks = interval_weeks;
 
-   julian_day_initial = g_date_julian( initial_date );
+   julian_day_initial = g_date_get_julian( initial_date );
    weeks_since_epoch = (julian_day_initial-1) / 7;
    fs->s.weekly.day_of_week = (julian_day_initial-1) % 7;
    fs->s.weekly.offset_from_epoch = weeks_since_epoch % interval_weeks;
@@ -559,10 +559,10 @@ xaccFreqSpecSetMonthly( FreqSpec *fs,
    fs->type = MONTHLY;
    fs->s.monthly.interval_months = interval_months;
 
-   months_since_epoch = (g_date_year( initial_date )-1) * 12 +
-      g_date_month( initial_date ) - 1;
+   months_since_epoch = (g_date_get_year( initial_date )-1) * 12 +
+      g_date_get_month( initial_date ) - 1;
    fs->s.monthly.offset_from_epoch = months_since_epoch % interval_months;
-   fs->s.monthly.day_of_month = g_date_day( initial_date );
+   fs->s.monthly.day_of_month = g_date_get_day( initial_date );
 
    g_return_if_fail( fs->s.monthly.offset_from_epoch <
       fs->s.monthly.interval_months );
@@ -580,12 +580,12 @@ xaccFreqSpecSetMonthRelative( FreqSpec *fs,
    fs->type = MONTH_RELATIVE;
    fs->s.month_relative.interval_months = interval_months;
 
-   months_since_epoch = (g_date_year( initial_date )-1) * 12 +
-      g_date_month( initial_date ) - 1;
+   months_since_epoch = (g_date_get_year( initial_date )-1) * 12 +
+      g_date_get_month( initial_date ) - 1;
    fs->s.month_relative.offset_from_epoch = months_since_epoch % interval_months;
    
    fs->s.month_relative.weekday = g_date_get_weekday( initial_date );
-   fs->s.month_relative.occurrence = (g_date_day( initial_date )-1) / 7 + 1;
+   fs->s.month_relative.occurrence = (g_date_get_day( initial_date )-1) / 7 + 1;
    
    g_return_if_fail( fs->s.month_relative.weekday > 0 );
    g_return_if_fail( fs->s.month_relative.weekday <= 7 );
@@ -682,11 +682,11 @@ get_dom_string(guint dom)
   if(dom > 31)
   {
     /* This is displayed instead of the number of the day of month. */
-    g_string_sprintf(str, _( "last day"));
+    g_string_printf(str, _( "last day"));
   }
   else
   {
-    g_string_sprintf(str, "%u", dom);
+    g_string_printf(str, "%u", dom);
   }
 
   return str;
@@ -982,7 +982,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
       snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Unknown") );
       break;
    }
-   g_string_sprintf( str, "%s", freqStrBuf );
+   g_string_printf( str, "%s", freqStrBuf );
 }
 
 static

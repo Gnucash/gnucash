@@ -69,14 +69,14 @@ test_daily (void)
 
    g_date_set_dmy( &date1, 1, 1, 2000 );
 
-   start_julian = g_date_julian( &date1 );
+   start_julian = g_date_get_julian( &date1 );
    for( interval = 1; interval < 400; ++interval ) {
       xaccFreqSpecSetDaily( fs, &date1, interval );
       for( i = 0; i <= 2 * interval; ++i ) {
          g_date_set_julian( &date2, start_julian + i );
          xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
          do_test_args(
-            g_date_julian( &next_date ) - g_date_julian( &date2 ) ==
+            g_date_get_julian( &next_date ) - g_date_get_julian( &date2 ) ==
                interval - (i%interval),
             "daily repeats",
             __FILE__, __LINE__,
@@ -96,7 +96,7 @@ test_daily (void)
             xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
             date2 = next_date;
          }
-         do_test_args( g_date_julian( &date2 ) - g_date_julian( &date1 ) == interval*j,
+         do_test_args( g_date_get_julian( &date2 ) - g_date_get_julian( &date1 ) == interval*j,
             "daily repeats end up in the right place",
             __FILE__, __LINE__, "interval = %d days, iters = %d",
             interval, j );
@@ -121,7 +121,7 @@ test_weekly (void)
 /*
    g_date_set_dmy( &date1, 2, 1, 1 );
    xaccFreqSpecSetWeekly( fs, &date1, 1 );
-   start_julian = g_date_julian( &date1 );
+   start_julian = g_date_get_julian( &date1 );
    g_date_set_julian( &date2, start_julian + 6 );
    xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
 */
@@ -129,14 +129,14 @@ test_weekly (void)
 
    for( weekday = 1; weekday <= 7; ++weekday ) {
       g_date_set_dmy( &date1, weekday, 1, 1 );
-      start_julian = g_date_julian( &date1 );
+      start_julian = g_date_get_julian( &date1 );
       for( interval = 1; interval <= 52; ++interval ) {
          xaccFreqSpecSetWeekly( fs, &date1, interval );
          for( i = 0; i <= 2 * 7 * interval; ++i ) {
             g_date_set_julian( &date2, start_julian + i );
             xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
             do_test_args(
-               g_date_julian( &next_date ) - g_date_julian( &date2 ) ==
+               g_date_get_julian( &next_date ) - g_date_get_julian( &date2 ) ==
                   interval*7 - (i%(interval*7)),
                "weekly repeats",
                __FILE__, __LINE__,
@@ -157,7 +157,7 @@ test_weekly (void)
             xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
             date2 = next_date;
          }
-         do_test_args( g_date_julian( &date2 ) - g_date_julian( &date1 ) == interval*7*j,
+         do_test_args( g_date_get_julian( &date2 ) - g_date_get_julian( &date1 ) == interval*7*j,
             "weekly repeats end up in the right place",
             __FILE__, __LINE__, "interval = %d weeks, iters = %d",
             interval, j );
@@ -183,7 +183,7 @@ test_monthly (void)
 /*
    g_date_set_dmy( &date1, 1, 1, 1 );
    xaccFreqSpecSetMonthly( fs, &date1, 2 );
-   start_julian = g_date_julian( &date1 );
+   start_julian = g_date_get_julian( &date1 );
    g_date_set_julian( &date2, start_julian + 0 );
    xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
 */
@@ -191,20 +191,20 @@ test_monthly (void)
    for( monthday = 1; monthday <= 28; ++monthday ) {
       for( month = 1; month <= 12; ++month ) {
          g_date_set_dmy( &date1, monthday, month, 1 );
-         start_julian = g_date_julian( &date1 );
+         start_julian = g_date_get_julian( &date1 );
          for( interval = 1; interval <= 24; ++interval ) {
             xaccFreqSpecSetMonthly( fs, &date1, interval );
             for( i = 0; i <= 2 * 31 * interval; ++i ) {
                g_date_set_julian( &date2, start_julian + i );
                xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
                do_test_args(
-                  g_date_day( &next_date ) == g_date_day( &date1 ),
+                  g_date_get_day( &next_date ) == g_date_get_day( &date1 ),
                   "monthly repeats - check day",
                   __FILE__, __LINE__,
                   "monthday = %d, month = %d, interval = %d months, days from start = %d",
                   monthday, month, interval, i );
                do_test_args(
-                  ( g_date_month( &next_date ) + 12 * (g_date_year( &next_date )-1) - 1) %
+                  ( g_date_get_month( &next_date ) + 12 * (g_date_get_year( &next_date )-1) - 1) %
                      interval == (month-1) % interval,
                   "monthly repeats - check month",
                   __FILE__, __LINE__,
@@ -219,7 +219,7 @@ test_monthly (void)
     * and end up in the right place. */
    g_date_set_dmy( &date0, 1, 1, 2000 );
    for( day_of_year = 1; day_of_year <= 365*5; ++day_of_year ) {
-      g_date_set_julian( &date1, g_date_julian( &date0 ) + day_of_year-1 );
+      g_date_set_julian( &date1, g_date_get_julian( &date0 ) + day_of_year-1 );
       for( interval = 1; interval < 20; ++interval ) {
          xaccFreqSpecSetMonthly( fs, &date1, interval );
          for( j = 1; j < 20; ++j ) {
@@ -257,7 +257,7 @@ test_month_relative (void)
 /*
    g_date_set_dmy( &date1, 1, 1, 1 );
    xaccFreqSpecSetMonthRelative( fs, &date1, 2 );
-   start_julian = g_date_julian( &date1 );
+   start_julian = g_date_get_julian( &date1 );
    g_date_set_julian( &date2, start_julian + 0 );
    xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
 */
@@ -267,7 +267,7 @@ test_month_relative (void)
    for( monthday = 1; monthday <= 28; ++monthday ) {
       for( month = 1; month <= 12; ++month ) {
          g_date_set_dmy( &date1, monthday, month, 1 );
-         start_julian = g_date_julian( &date1 );
+         start_julian = g_date_get_julian( &date1 );
          for( interval = 1; interval <= 24; ++interval ) {
             xaccFreqSpecSetMonthRelative( fs, &date1, interval );
             for( i = 0; i <= 2 * 31 * interval; ++i ) {
@@ -280,13 +280,13 @@ test_month_relative (void)
                   "monthday = %d, month = %d, interval = %d months, days from start = %d, weekday = %d",
                   monthday, month, interval, i, g_date_get_weekday( &date1 ) );
                do_test_args(
-                  (g_date_day( &next_date )-1)/7 == (g_date_day( &date1 )-1)/7,
+                  (g_date_get_day( &next_date )-1)/7 == (g_date_get_day( &date1 )-1)/7,
                   "month relative repeats - check occurrence",
                   __FILE__, __LINE__,
                   "monthday = %d, month = %d, interval = %d months, days from start = %d, occurrence = %d",
-                  monthday, month, interval, i, (g_date_day( &date1 )-1)/7 );
+                  monthday, month, interval, i, (g_date_get_day( &date1 )-1)/7 );
                do_test_args(
-                  ( g_date_month( &next_date ) + 12 * (g_date_year( &next_date )-1) - 1) %
+                  ( g_date_get_month( &next_date ) + 12 * (g_date_get_year( &next_date )-1) - 1) %
                      interval == (month-1) % interval,
                   "month relative repeats - check month",
                   __FILE__, __LINE__,
@@ -314,7 +314,7 @@ test_month_relative (void)
          }
          date2 = date1;
          g_date_add_months( &date2, interval * j );
-         do_test_args( g_date_month( &date2 ) == g_date_month( &next_date ),
+         do_test_args( g_date_get_month( &date2 ) == g_date_get_month( &next_date ),
             "month_relative repeats end up in the right place - month",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
             interval, j, g_date_get_weekday( &date1 ) );
@@ -322,7 +322,7 @@ test_month_relative (void)
             "month_relative repeats end up in the right place - weekday",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
             interval, j, g_date_get_weekday( &date1 ) );
-         do_test_args( (g_date_day( &date2 )-1)/7 == (g_date_day( &next_date )-1)/7,
+         do_test_args( (g_date_get_day( &date2 )-1)/7 == (g_date_get_day( &next_date )-1)/7,
             "month_relative repeats end up in the right place - occurrence",
             __FILE__, __LINE__, "interval = %d months, iters = %d, weekday = %d",
             interval, j, g_date_get_weekday( &date1 ) );
@@ -392,7 +392,7 @@ test_composite (void)
 /*
    g_date_set_dmy( &date1, 1, 1, 1 );
    xaccFreqSpecSetMonthly( fs, &date1, 2 );
-   start_julian = g_date_julian( &date1 );
+   start_julian = g_date_get_julian( &date1 );
    g_date_set_julian( &date2, start_julian + 0 );
    xaccFreqSpecGetNextInstance( fs, &date2, &next_date );
 */

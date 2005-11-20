@@ -778,10 +778,10 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                 GString *errStr;
 
                                                 errStr = g_string_sized_new( 32 );
-                                                g_string_sprintf( errStr,
-                                                                  _( "Couldn't parse credit formula for "
-                                                                     "split \"%s\"." ),
-                                                                  xaccSplitGetMemo( s ) );
+                                                g_string_printf( errStr,
+                                                                 _( "Couldn't parse credit formula for "
+                                                                    "split \"%s\"." ),
+                                                                 xaccSplitGetMemo( s ) );
                                                 gnc_error_dialog( GTK_WIDGET(sxed->dialog),
                                                                   errStr->str );
                                                 g_string_free( errStr, TRUE );
@@ -804,10 +804,10 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                 GString *errStr;
 
                                                 errStr = g_string_sized_new( 32 );
-                                                g_string_sprintf( errStr,
-                                                                  _( "Couldn't parse debit formula for "
-                                                                     "split \"%s\"." ),
-                                                                  xaccSplitGetMemo( s ) );
+                                                g_string_printf( errStr,
+                                                                 _( "Couldn't parse debit formula for "
+                                                                    "split \"%s\"." ),
+                                                                 xaccSplitGetMemo( s ) );
                                                 gnc_error_dialog( GTK_WIDGET(sxed->dialog),
                                                                   (gchar*)errStr->str );
                                                 g_string_free( errStr, TRUE );
@@ -1654,12 +1654,12 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 gtk_toggle_button_set_active( sxed->optEndCount, TRUE );
 
                 tmpgStr = g_string_sized_new(5);
-                g_string_sprintf( tmpgStr, "%d", numOccur );
+                g_string_printf( tmpgStr, "%d", numOccur );
                 gtk_entry_set_text( sxed->endCountEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
                 tmpgStr = g_string_sized_new(5);
-                g_string_sprintf( tmpgStr, "%d", numRemain );
+                g_string_printf( tmpgStr, "%d", numRemain );
                 gtk_entry_set_text( sxed->endRemainEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
@@ -1821,14 +1821,14 @@ delete_button_clicked( GtkButton *b, gpointer d )
         beingEditedList = NULL;
         for ( ; sel ; sel = sel->next ) {
                 sx = (SchedXaction*)gtk_clist_get_row_data( cl, GPOINTER_TO_INT(sel->data));
-                g_string_sprintfa( realConfDeleteMsg, "\n\"%s\"",
-                                   xaccSchedXactionGetName( sx ) );
+                g_string_append_printf( realConfDeleteMsg, "\n\"%s\"",
+                                        xaccSchedXactionGetName( sx ) );
                 if ( (l = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                                    editor_component_sx_equality,
                                                    sx )) ) {
                         beingEditedList = g_list_append( beingEditedList, (gpointer)l );
-                        g_string_sprintfa( realConfDelOpenMsg, "\n\"%s\"",
-                                           xaccSchedXactionGetName( sx ) );
+                        g_string_append_printf( realConfDelOpenMsg, "\n\"%s\"",
+                                                xaccSchedXactionGetName( sx ) );
                 }
         }
 
@@ -2050,14 +2050,14 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
         }
 
         if ( instList == NULL ) {
-                g_string_sprintf( nextDate, _("Not scheduled") );
+                g_string_printf( nextDate, _("Not scheduled") );
         } else {
                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
                 char dowBuf[ 25 ]; /* <- FIXME: appropriate length? */
                 nextInstDate = (GDate*)instList->data;
                 qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, nextInstDate );
                 g_date_strftime( dowBuf, 25, "%A", nextInstDate );
-                g_string_sprintf( nextDate, "%s (%s)", tmpBuf, dowBuf );
+                g_string_printf( nextDate, "%s (%s)", tmpBuf, dowBuf );
         }
 
         /* Add markings to GncDenseCal */
@@ -2383,8 +2383,8 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
         }
 
         i = 0;
-        gnc_dense_cal_set_month( sxed->example_cal, g_date_month( &d ) );
-        gnc_dense_cal_set_year(  sxed->example_cal, g_date_year( &d ) );
+        gnc_dense_cal_set_month( sxed->example_cal, g_date_get_month( &d ) );
+        gnc_dense_cal_set_year(  sxed->example_cal, g_date_get_year( &d ) );
         while ( (i < EX_CAL_NUM_MONTHS * 31)
                 && g_date_valid( &d )
                 /* Restrict based on end date */

@@ -287,7 +287,7 @@ static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
     /* Number. We use the "customer reference", if there is one. */
     const char *custref = AB_Transaction_GetCustomerReference (h_trans);
     if (custref && (strlen (custref) > 0) && 
-	(g_strncasecmp (custref, "NONREF", 6) != 0))
+	(g_ascii_strncasecmp (custref, "NONREF", 6) != 0))
       xaccTransSetNum (gnc_trans, custref);
   }
     

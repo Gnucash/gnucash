@@ -1,5 +1,21 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/core-utils/gnc-gdate-utils.c:
+	* src/backend/postgres/test/test-db.c:
+	* src/import-export/hbci/gnc-hbci-gettrans.c:
+	* src/engine/gnc-filepath-utils.c:
+	* src/engine/FreqSpec.c:
+	* src/engine/test/test-freq-spec.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/druid-acct-period.c:
+	* src/gnome/dialog-sx-from-trans.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/app-utils/gnc-exp-parser.c:
+	* lib/libqof/qof/qofquery.c:
+	* lib/libqof/qof/gnc-date.c: Andreas Köhler's patch to replace
+	some deprecated glib functions.
+	
 	* src/backend/file/gnc-backend-file.c:
 	* src/gnome-utils/dialog-utils.c: Fix some build problems on FC3
 	related to the include file changes.

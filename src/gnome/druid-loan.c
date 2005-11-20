@@ -638,8 +638,8 @@ gnc_ui_sx_loan_druid_create(void)
 
                                 /* Translators: %s is "Taxes",
                                  * "Insurance", or similar. */
-                                g_string_sprintf( str, _("... pay \"%s\"?"),
-                                                  rouid->optData->name );
+                                g_string_printf( str, _("... pay \"%s\"?"),
+                                                 rouid->optData->name );
                                 rouid->optCb =
                                         GTK_CHECK_BUTTON(
                                                 gtk_check_button_new_with_label(
@@ -938,11 +938,11 @@ ld_get_pmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_sprintfa( gstr, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
-                           (ldd->ld.interestRate / 100),
-                           ( ldd->ld.numPer
-                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
-                           gnc_numeric_to_double(ldd->ld.principal) );
+        g_string_append_printf( gstr, "pmt( %.5f / 12 : %d : %0.2f : 0 : 0 )",
+                                (ldd->ld.interestRate / 100),
+                                ( ldd->ld.numPer
+                                  * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                                gnc_numeric_to_double(ldd->ld.principal) );
 }
 
 static
@@ -951,11 +951,11 @@ ld_get_ppmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_sprintf( gstr, "ppmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
-                          (ldd->ld.interestRate / 100),
-                          ( ldd->ld.numPer
-                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
-                          gnc_numeric_to_double(ldd->ld.principal));
+        g_string_printf( gstr, "ppmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
+                         (ldd->ld.interestRate / 100),
+                         ( ldd->ld.numPer
+                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                         gnc_numeric_to_double(ldd->ld.principal));
 }
 
 static
@@ -964,11 +964,11 @@ ld_get_ipmt_formula( LoanDruidData *ldd, GString *gstr )
 {
         g_assert( ldd != NULL );
         g_assert( gstr != NULL );
-        g_string_sprintf( gstr, "ipmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
-                          (ldd->ld.interestRate / 100),
-                          ( ldd->ld.numPer
-                             * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
-                          gnc_numeric_to_double( ldd->ld.principal ) );
+        g_string_printf( gstr, "ipmt( %.5f / 12 : i : %d : %0.2f : 0 : 0 )",
+                         (ldd->ld.interestRate / 100),
+                         ( ldd->ld.numPer
+                           * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) ),
+                         gnc_numeric_to_double( ldd->ld.principal ) );
 }
 
 static
@@ -1445,13 +1445,13 @@ ld_pay_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         rod = ldd->ld.repayOpts[ldd->currentIdx];
         str = g_string_sized_new( 32 );
         /* Translators: %s is "Taxes", or "Insurance", or similar */
-        g_string_sprintf( str, _("Payment: \"%s\""), rod->name );
+        g_string_printf( str, _("Payment: \"%s\""), rod->name );
         gnome_druid_page_standard_set_title( GNOME_DRUID_PAGE_STANDARD(gdp),
                                              str->str );
         /* copy in the relevant data from the currently-indexed
          * option. */
         gtk_entry_set_text( ldd->payTxnName, rod->txnMemo );
-        g_string_sprintf( str, "%0.2f", rod->amount );
+        g_string_printf( str, "%0.2f", rod->amount );
         gtk_entry_set_text( ldd->payAmtEntry, str->str );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payUseEscrow),
@@ -2108,7 +2108,7 @@ ld_setup_repayment_sx( LoanDruidData *ldd,
                         ttsi = (TTSplitInfo*)elt->data;
                         g_assert( ttsi );
                         gstr = g_string_new( gnc_ttsplitinfo_get_debit_formula( ttsi ) );
-                        g_string_sprintfa( gstr, " + %s", amtBuf );
+                        g_string_append_printf( gstr, " + %s", amtBuf );
                         gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
                         g_string_free( gstr, TRUE );
                         gstr = NULL;
@@ -2144,9 +2144,9 @@ ld_setup_repayment_sx( LoanDruidData *ldd,
                                  * create a split, then we need to add our
                                  * amount in rather than replace. */
                                 gstr = g_string_new( str );
-                                g_string_sprintfa( gstr, " + " );
+                                g_string_append_printf( gstr, " + " );
                         }
-                        g_string_sprintfa( gstr, "%s", amtBuf );
+                        g_string_append_printf( gstr, "%s", amtBuf );
                         gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
                         g_string_free( gstr, TRUE );
                         gstr = NULL;
@@ -2191,7 +2191,7 @@ ld_setup_repayment_sx( LoanDruidData *ldd,
         if ( fromSplit != NULL ) {
                 /* Update the existing from-split. */
                 gstr = g_string_new( gnc_ttsplitinfo_get_credit_formula( fromSplit ) );
-                g_string_sprintfa( gstr, " + %s", amtBuf );
+                g_string_append_printf( gstr, " + %s", amtBuf );
                 gnc_ttsplitinfo_set_credit_formula( fromSplit, gstr->str );
                 g_string_free( gstr, TRUE );
                 gstr = NULL;
@@ -2277,12 +2277,12 @@ ld_create_sxes( LoanDruidData *ldd )
                                  gnc_default_currency() );
         {
                 GString *payMainTxnDesc = g_string_sized_new( 32 );
-                g_string_sprintf( payMainTxnDesc,
-                                  "%s - %s%s",
-                                  ldd->ld.repMemo,
-                                  ( ldd->ld.escrowAcct == NULL
-                                    ? "" : _("Escrow ") ),
-                                  _("Payment") );
+                g_string_printf( payMainTxnDesc,
+                                 "%s - %s%s",
+                                 ldd->ld.repMemo,
+                                 ( ldd->ld.escrowAcct == NULL
+                                   ? "" : _("Escrow ") ),
+                                 _("Payment") );
                 
                 gnc_ttinfo_set_description( paymentSX->mainTxn,
                                             payMainTxnDesc->str );
@@ -2345,7 +2345,7 @@ ld_create_sxes( LoanDruidData *ldd )
                         {
                                 GString *escrowTxnDesc;
                                 escrowTxnDesc = g_string_new( ldd->ld.repMemo );
-                                g_string_sprintfa( escrowTxnDesc, " - %s", _("Payment") );
+                                g_string_append_printf( escrowTxnDesc, " - %s", _("Payment") );
                                 gnc_ttinfo_set_description( paymentSX->escrowTxn,
                                                             escrowTxnDesc->str );
                                 g_string_free( escrowTxnDesc, TRUE );
@@ -2358,8 +2358,8 @@ ld_create_sxes( LoanDruidData *ldd )
                         ttsi = gnc_ttsplitinfo_malloc();
                         {
                                 gstr = g_string_new( ldd->ld.repMemo );
-                                g_string_sprintfa( gstr, " - %s",
-                                                   _("Payment") );
+                                g_string_append_printf( gstr, " - %s",
+                                                        _("Payment") );
                                 gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
                                 g_string_free( gstr, TRUE );
                                 gstr = NULL;
@@ -2379,8 +2379,8 @@ ld_create_sxes( LoanDruidData *ldd )
                         ttsi = gnc_ttsplitinfo_malloc();
                         {
                                 gstr = g_string_new( ldd->ld.repMemo );
-                                g_string_sprintfa( gstr, " - %s",
-                                                   _("Principal") );
+                                g_string_append_printf( gstr, " - %s",
+                                                        _("Principal") );
                                 gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
                                 g_string_free( gstr, TRUE );
                                 gstr = NULL;
@@ -2400,8 +2400,8 @@ ld_create_sxes( LoanDruidData *ldd )
                         ttsi = gnc_ttsplitinfo_malloc();
                         {
                                 gstr = g_string_new( ldd->ld.repMemo );
-                                g_string_sprintfa( gstr, " - %s",
-                                                   _("Interest") );
+                                g_string_append_printf( gstr, " - %s",
+                                                        _("Interest") );
                                 gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
                                 g_string_free( gstr, TRUE );
                                 gstr = NULL;
@@ -2426,8 +2426,8 @@ ld_create_sxes( LoanDruidData *ldd )
                 if ( rod->fs != NULL ) {
                         tcSX = g_new0( toCreateSX, 1 );
                         gstr = g_string_new( ldd->ld.repMemo );
-                        g_string_sprintfa( gstr, " - %s",
-                                           rod->name );
+                        g_string_append_printf( gstr, " - %s",
+                                                rod->name );
                         tcSX->name    = g_strdup(gstr->str);
                         tcSX->start   = *ldd->ld.startDate;
                         tcSX->last    = *ldd->ld.repStartDate;
@@ -2571,8 +2571,8 @@ ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
         switch ( range ) {
         case CURRENT_YEAR:
                 g_date_set_time( start, time(NULL) );
-                g_date_set_dmy( start, 1, G_DATE_JANUARY, g_date_year( start ) );
-                g_date_set_dmy( end, 31, G_DATE_DECEMBER, g_date_year( start ) );
+                g_date_set_dmy( start, 1, G_DATE_JANUARY, g_date_get_year( start ) );
+                g_date_set_dmy( end, 31, G_DATE_DECEMBER, g_date_get_year( start ) );
                 break;
         case NOW_PLUS_ONE:
                 g_date_set_time( start, time(NULL) );

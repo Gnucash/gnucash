@@ -512,9 +512,9 @@ size_t
 qof_print_gdate( char *buf, size_t len, GDate *gd )
 {
   return qof_print_date_dmy_buff( buf, len,
-             g_date_day(gd),
-             g_date_month(gd),
-             g_date_year(gd) );
+             g_date_get_day(gd),
+             g_date_get_month(gd),
+             g_date_get_year(gd) );
 }
 
 char * 
@@ -1328,9 +1328,9 @@ gnc_timet_get_day_start_gdate (GDate *date)
   struct tm stm;
   time_t secs;
 
-  stm.tm_year = g_date_year (date) - 1900;
-  stm.tm_mon = g_date_month (date) - 1;
-  stm.tm_mday = g_date_day (date);
+  stm.tm_year = g_date_get_year (date) - 1900;
+  stm.tm_mon = g_date_get_month (date) - 1;
+  stm.tm_mday = g_date_get_day (date);
   gnc_tm_set_day_start(&stm);
 
   /* Compute number of seconds */
@@ -1344,9 +1344,9 @@ gnc_timet_get_day_end_gdate (GDate *date)
   struct tm stm;
   time_t secs;
 
-  stm.tm_year = g_date_year (date) - 1900;
-  stm.tm_mon = g_date_month (date) - 1;
-  stm.tm_mday = g_date_day (date);
+  stm.tm_year = g_date_get_year (date) - 1900;
+  stm.tm_mon = g_date_get_month (date) - 1;
+  stm.tm_mday = g_date_get_day (date);
   gnc_tm_set_day_end(&stm);
 
   /* Compute number of seconds */

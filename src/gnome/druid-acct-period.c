@@ -237,9 +237,9 @@ prepare_remarks (AcctPeriodInfo *info)
   {
     nperiods ++;
     PINFO ("period=%d end date=%d/%d/%d", nperiods,
-                      g_date_month(&period_end),
-                      g_date_day(&period_end),
-                      g_date_year(&period_end));
+                      g_date_get_month(&period_end),
+                      g_date_get_day(&period_end),
+                      g_date_get_year(&period_end));
     period_begin = period_end;
     xaccFreqSpecGetNextInstance (info->period, &period_begin, &period_end);
   } 
@@ -281,9 +281,9 @@ show_book_details (AcctPeriodInfo *info)
       "Click on 'Back' to adjust the dates.\n");
 
   qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
-                           g_date_day(&info->closing_date),
-                           g_date_month(&info->closing_date),
-                           g_date_year(&info->closing_date));
+                           g_date_get_day(&info->closing_date),
+                           g_date_get_month(&info->closing_date),
+                           g_date_get_year(&info->closing_date));
 
   currbook = gnc_get_current_book();
   ntrans = get_num_xactions_before_date(currbook,
@@ -301,9 +301,9 @@ show_book_details (AcctPeriodInfo *info)
 
   /* Create default settings for the title, notes fields */
   qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH, 
-                           g_date_day(&info->prev_closing_date),
-                           g_date_month(&info->prev_closing_date),
-                           g_date_year(&info->prev_closing_date));
+                           g_date_get_day(&info->prev_closing_date),
+                           g_date_get_month(&info->prev_closing_date),
+                           g_date_get_year(&info->prev_closing_date));
 
   str = g_strdup_printf (_("Period %s - %s"), prev_close_date_str, close_date_str);
   gtk_entry_set_text (info->book_title, str);

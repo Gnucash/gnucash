@@ -1942,8 +1942,8 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         rowText[1] = "";
                         rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size? */
                         sprintf( rowText[2], "%d",
-                                 (g_date_julian(rit->occurDate)
-                                  - g_date_julian(rit->endDate)) );
+                                 (g_date_get_julian(rit->occurDate)
+                                  - g_date_get_julian(rit->endDate)) );
 
                         instNode = gtk_ctree_insert_node( ctree, sxNode, NULL,
                                                           rowText,
@@ -2460,9 +2460,9 @@ create_each_transaction_helper( Transaction *t, void *d )
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );
 
         xaccTransSetDate( newT,
-                          g_date_day( tci->date ),
-                          g_date_month( tci->date ),
-                          g_date_year( tci->date ) );
+                          g_date_get_day( tci->date ),
+                          g_date_get_month( tci->date ),
+                          g_date_get_year( tci->date ) );
 
         /* the accounts and amounts are in the kvp_frames of the splits. */
         osList = xaccTransGetSplitList( t );
@@ -2800,7 +2800,7 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         ent = GTK_ENTRY(widget);
         num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(ent), "numeric" );
         str = g_string_new("");
-        g_string_sprintf( str, "%0.2f", gnc_numeric_to_double( *num ) );
+        g_string_printf( str, "%0.2f", gnc_numeric_to_double( *num ) );
         gtk_entry_set_text( ent, str->str );
         g_string_free( str, TRUE );
 
@@ -2931,7 +2931,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 }
 
                 gstr = g_string_sized_new(16);
-                g_string_sprintf( gstr, "%s: ", varName );
+                g_string_printf( gstr, "%s: ", varName );
                 label = gtk_label_new( gstr->str );
                 gtk_label_set_justify( GTK_LABEL(label), GTK_JUSTIFY_RIGHT );
                 g_string_free( gstr, TRUE );
@@ -3493,8 +3493,8 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
         rit = (reminderInstanceTuple*)data;
         msg = (GString*)ud;
         qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, rit->occurDate );
-        g_string_sprintfa( msg, tmpBuf );
-        g_string_sprintfa( msg, "\n" );
+        g_string_append_printf( msg, tmpBuf );
+        g_string_append_printf( msg, "\n" );
 }
 
 static gboolean
@@ -3523,12 +3523,12 @@ inform_or_add( sxSinceLastData *sxsld, reminderTuple *rt, gboolean okFlag,
                 /* [Add to list for later] dialog issuance to user. */
 
                 userMsg = g_string_sized_new( 128 );
-                g_string_sprintf( userMsg,
-                                  "You cannot skip instances of "
-                                  "Scheduled Transactions.\n"
-                                  "The following instances of \"%s\"\n"
-                                  "must be selected as well:\n\n",
-                                  xaccSchedXactionGetName( rt->sx ) );
+                g_string_printf( userMsg,
+                                 "You cannot skip instances of "
+                                 "Scheduled Transactions.\n"
+                                 "The following instances of \"%s\"\n"
+                                 "must be selected as well:\n\n",
+                                 xaccSchedXactionGetName( rt->sx ) );
                 g_list_foreach( badList, create_bad_reminders_msg, userMsg );
                 gnc_error_dialog( sxsld->sincelast_window, userMsg->str );
                 g_string_free( userMsg, TRUE );

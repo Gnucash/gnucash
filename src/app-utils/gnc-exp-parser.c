@@ -331,7 +331,7 @@ func_op( const char *fname,
   GString *realFnName;
 
   realFnName = g_string_sized_new( strlen(fname) + 5 );
-  g_string_sprintf( realFnName, "gnc:%s", fname );
+  g_string_printf( realFnName, "gnc:%s", fname );
   scmFn = gh_eval_str_with_standard_handler( realFnName->str );
   g_string_free( realFnName, TRUE );
   if ( ! SCM_PROCEDUREP( scmFn ) ) {

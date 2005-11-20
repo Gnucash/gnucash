@@ -748,9 +748,9 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   if ( i > 0 ) {
     GtkWidget *w;
     gnc_dense_cal_set_month( sxfti->example_cal,
-                             g_date_month( &startDate ) );
+                             g_date_get_month( &startDate ) );
     gnc_dense_cal_set_year( sxfti->example_cal,
-                            g_date_year( &startDate ) );
+                            g_date_get_year( &startDate ) );
     w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
     name = gtk_editable_get_chars( GTK_EDITABLE(w), 0, -1 );
     info = g_string_sized_new( 16 );

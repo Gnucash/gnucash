@@ -46,9 +46,9 @@ g_date_equals( gconstpointer gda, gconstpointer gdb )
 guint
 g_date_hash( gconstpointer gd )
 {
-  gint val = (g_date_year( (GDate*)gd ) * 10000)
-    + (g_date_month( (GDate*)gd ) * 100)
-    + g_date_day( (GDate*)gd );
+  gint val = (g_date_get_year( (GDate*)gd ) * 10000)
+    + (g_date_get_month( (GDate*)gd ) * 100)
+    + g_date_get_day( (GDate*)gd );
   return g_int_hash( &val );
 }
 

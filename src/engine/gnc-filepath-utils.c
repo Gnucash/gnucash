@@ -199,7 +199,7 @@ xaccResolveFilePath (const char * filefrag)
   if (*filefrag == '/')
     return g_strdup (filefrag);
 
-  if (!g_strncasecmp(filefrag, "file:", 5))
+  if (!g_ascii_strncasecmp(filefrag, "file:", 5))
   {
       char *ret = g_new(char, strlen(filefrag) - 5 + 1);
       strcpy(ret, filefrag + 5);
@@ -290,15 +290,15 @@ xaccResolveURL (const char * pathfrag)
    * to make sure the uri is in good form.
    */
 
-  if (!g_strncasecmp (pathfrag, "http://", 7)      ||
-      !g_strncasecmp (pathfrag, "https://", 8)     ||
-      !g_strncasecmp (pathfrag, "postgres://", 11) ||
-      !g_strncasecmp (pathfrag, "rpc://", 6))
+  if (!g_ascii_strncasecmp (pathfrag, "http://", 7)      ||
+      !g_ascii_strncasecmp (pathfrag, "https://", 8)     ||
+      !g_ascii_strncasecmp (pathfrag, "postgres://", 11) ||
+      !g_ascii_strncasecmp (pathfrag, "rpc://", 6))
   {
     return g_strdup(pathfrag);
   }
 
-  if (!g_strncasecmp (pathfrag, "file:", 5)) {
+  if (!g_ascii_strncasecmp (pathfrag, "file:", 5)) {
     return (xaccResolveFilePath (pathfrag));
   }
 
