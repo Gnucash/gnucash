@@ -30,6 +30,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <string.h>
 
 #include "quickfillcell.h"
 #include "quickfillcell-gnome.h"

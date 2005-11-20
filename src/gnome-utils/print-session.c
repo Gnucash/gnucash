@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <libgnomeprint/gnome-font.h>
 #include <libgnomeprintui/gnome-print-job-preview.h>
 #include <stdio.h>

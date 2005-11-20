@@ -35,6 +35,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif

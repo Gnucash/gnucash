@@ -27,7 +27,6 @@
 #ifndef TRANSACTION_MATCHER_H
 #define TRANSACTION_MATCHER_H
 
-#include <gtk/gtk.h>
 #include "Transaction.h"
 #include "import-match-map.h"
 #include "import-settings.h"

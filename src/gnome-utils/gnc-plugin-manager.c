@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "gnc-plugin-manager.h"
 #include "gnc-engine.h"

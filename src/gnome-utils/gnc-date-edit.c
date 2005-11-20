@@ -36,6 +36,7 @@
 #include "config.h"
 
 #include <gnome.h> 
+#include <glib/gi18n.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */

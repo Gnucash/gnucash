@@ -27,6 +27,7 @@
 #endif
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <aqbanking/version.h>
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>

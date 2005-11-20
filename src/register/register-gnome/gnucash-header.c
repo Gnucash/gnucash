@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
 #include "gnucash-style.h"

@@ -32,7 +32,6 @@
 #ifndef GNC_PERIOD_SELECT_H
 #define GNC_PERIOD_SELECT_H
 
-#include <gtk/gtk.h>
 #include "gnc-accounting-period.h"
 
 G_BEGIN_DECLS

@@ -23,7 +23,6 @@
 #ifndef GNC_MENU_EXTENSIONS_H
 #define GNC_MENU_EXTENSIONS_H
 
-#include <gtk/gtk.h>
 #include <libguile.h>
 
 typedef struct _ExtensionInfo

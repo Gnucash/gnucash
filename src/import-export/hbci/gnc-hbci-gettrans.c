@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 
 #include "gnc-hbci-gettrans.h"
 

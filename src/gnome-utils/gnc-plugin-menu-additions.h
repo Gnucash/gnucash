@@ -38,7 +38,6 @@
 #ifndef __GNC_PLUGIN_MENU_ADDITIONS_H
 #define __GNC_PLUGIN_MENU_ADDITIONS_H
 
-#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS

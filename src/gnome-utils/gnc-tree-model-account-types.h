@@ -37,8 +37,6 @@
 #ifndef __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 #define __GNC_TREE_MODEL_ACCOUNT_TYPES_H
 
-#include <gtk/gtk.h>
-
 G_BEGIN_DECLS
 
 /* type macros */

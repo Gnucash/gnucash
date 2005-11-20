@@ -20,8 +20,6 @@
 #ifndef __GTT_UTIL_H__
 #define __GTT_UTIL_H__
 
-#include <gtk/gtk.h>
-
 /* Some gtk-like utilities */
 void xxxgtk_textview_set_text (GtkTextView *text, const char *str);
 char * xxxgtk_textview_get_text (GtkTextView *text);

@@ -1,5 +1,9 @@
 2005-11-19  David Hampton  <hampton@employees.org>
 
+	* various: More include file tweaking.  Don't include gtk.h from
+	any header files.  Add in some includes that are currently
+	pulled in by deprecated parts of the gnome library.
+
 	* numerous: Include file cleanup.  Remove the messages.[ch] files
 	in favor of the glib supplied gi18n.h file.  Replace includes of
 	gnome.h with gtk.h (or better yet glib.h) wherever possible.

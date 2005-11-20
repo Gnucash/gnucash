@@ -23,6 +23,9 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "gnc-plugin.h"
 #include "dialog-invoice.h"
 #include "gnc-plugin-page-invoice.h"

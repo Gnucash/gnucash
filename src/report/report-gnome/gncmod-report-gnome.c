@@ -9,9 +9,9 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
 #include <stdio.h>
 #include <libguile.h>
-#include <glib.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"

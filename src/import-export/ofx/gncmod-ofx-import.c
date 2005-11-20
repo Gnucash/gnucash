@@ -24,7 +24,8 @@
  @author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
  */
 #include "config.h"
-#include <glib.h>
+
+#include <gtk/gtk.h>
 
 #include "gnc-ofx-import.h"
 #include "gnc-module.h"

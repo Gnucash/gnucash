@@ -23,6 +23,9 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "druid-hbci-initial.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-gnome-utils.h"

@@ -23,6 +23,8 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <gdk/gdk.h>
+#include <glib/gi18n.h>
 #include <g-wrap-wct.h>
 
 #include "gnc-tree-model-budget.h" //FIXME?
@@ -45,7 +47,6 @@
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "option-util.h"
-#include "gdk/gdkfont.h"
 #include "guile-mappings.h"
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"

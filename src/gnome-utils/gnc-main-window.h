@@ -36,8 +36,6 @@
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
 
-#include <gtk/gtk.h>
-
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS

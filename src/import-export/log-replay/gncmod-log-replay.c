@@ -24,7 +24,8 @@
  @author Copyright (c) 2003 Benoit Grégoire bock@step.polymtl.ca
  */
 #include "config.h"
-#include <glib.h>
+
+#include <gtk/gtk.h>
 #include <libguile.h>
 
 #include "gnc-log-replay.h"

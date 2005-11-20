@@ -3,6 +3,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 
 #include "gnc-druid-gnome-ui.h"
 #include "gnc-import-format-gnome.h"

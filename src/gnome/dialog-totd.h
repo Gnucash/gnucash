@@ -24,8 +24,6 @@
 #ifndef DIALOG_TOTD_H
 #define DIALOG_TOTD_H
 
-#include <gtk/gtk.h>
-
 void gnc_totd_dialog (GtkWindow *parent, gboolean startup);
 
 #endif 

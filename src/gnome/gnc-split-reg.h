@@ -68,8 +68,6 @@
 #define GNC_SPLIT_REG_H
 
 #include <libguile.h>
-#include <gtk/gtk.h>
-#include "config.h"
 
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"

@@ -35,6 +35,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <string.h>
 
 #include "QuickFill.h"
 #include "combocell.h"

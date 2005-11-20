@@ -29,6 +29,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gnucash-sheet.h"
 #include "gnucash-grid.h"
 #include "gnucash-color.h"

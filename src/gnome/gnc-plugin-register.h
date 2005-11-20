@@ -25,8 +25,6 @@
 #ifndef __GNC_PLUGIN_REGISTER_H
 #define __GNC_PLUGIN_REGISTER_H
 
-#include <gtk/gtkwindow.h>
-
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS

@@ -25,9 +25,11 @@
  */
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+
 #include "gnc-trace.h"
 #include "gnc-tree-model-account-types.h"
-
 #include "Account.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;

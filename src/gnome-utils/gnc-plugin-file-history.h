@@ -35,7 +35,6 @@
 #ifndef __GNC_PLUGIN_FILE_HISTORY_H
 #define __GNC_PLUGIN_FILE_HISTORY_H
 
-#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS

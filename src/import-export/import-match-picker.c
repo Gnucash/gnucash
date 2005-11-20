@@ -29,7 +29,7 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "import-backend.h"
 #include "import-match-picker.h"

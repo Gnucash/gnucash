@@ -31,6 +31,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <string.h>
 
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"

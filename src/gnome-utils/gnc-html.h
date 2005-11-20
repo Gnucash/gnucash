@@ -23,10 +23,7 @@
 #ifndef GNC_HTML_H
 #define GNC_HTML_H
 
-#include <glib.h>
 #include <gtkhtml/gtkhtml.h>
-#include <gdk/gdk.h>
-#include <gtk/gtk.h>
 
 typedef char * URLType;
 

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 #include <string.h>
 
 #include "gnc-html-history.h"

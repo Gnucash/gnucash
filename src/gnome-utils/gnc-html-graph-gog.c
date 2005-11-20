@@ -23,10 +23,10 @@
 
 #include "config.h"
 
-#include <string.h>
-
+#include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
+#include <string.h>
 
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
