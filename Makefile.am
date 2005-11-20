@@ -12,11 +12,14 @@ doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  DOCUMENTERS \
   HACKING \
   INSTALL \
+  LICENSE \
   NEWS \
   README \
-  README.patches
+  README.patches \
+  TRANSLATORS
 
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gnucash.m4
