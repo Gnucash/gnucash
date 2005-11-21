@@ -1,5 +1,7 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-gui-query.[ch]: Remove unused functions.
+
 	* src/gnome/gnc-split-reg.c: Update dialogs to give them a Gtk2
 	HIG look and feel.
 
