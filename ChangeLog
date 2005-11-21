@@ -1,5 +1,10 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome-utils/dialog-utils.[ch]: Convert the "file locked"
+	message to a GtkMessageDialog.  Add a utility function for
+	creating buttons with images attached.
+
 	* src/gnome-utils/gnc-main-window.c: Use the new GtkAboutDialog
 	when compiling with gtk2.6.
 

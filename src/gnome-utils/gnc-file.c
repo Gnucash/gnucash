@@ -28,6 +28,7 @@
 #include <string.h>
 #include <g-wrap-wct.h>
 
+#include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -517,6 +518,10 @@ gnc_file_query_save (void)
 
 /* private utilities for file open; done in two stages */
 
+#define RESPONSE_NEW  1
+#define RESPONSE_OPEN 2
+#define RESPONSE_QUIT 3
+
 static gboolean
 gnc_post_file_open (const char * filename)
 {
@@ -560,37 +565,63 @@ gnc_post_file_open (const char * filename)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err)
   {
-    const char *buttons[] = { GTK_STOCK_QUIT, GTK_STOCK_OPEN,
-			      GTK_STOCK_NEW, NULL };
-    char *fmt = ((ERR_BACKEND_LOCKED == io_err) ?
-                 _("GnuCash could not obtain the lock for\n"
-                   "   %s.\n"
-                   "That database may be in use by another user,\n"
-                   "in which case you should not open the database.\n"
-                   "\nWhat would you like to do?") :
-                 _("WARNING!!!  GnuCash could not obtain the lock for\n"
-                   "   %s.\n"
-                   "That database may be on a read-only file system,\n"
-                   "or you may not have write permission for the directory.\n"
-                   "If you proceed you may not be able to save any changes.\n"
-                   "\nWhat would you like to do?")
+    GtkWidget *dialog;
+    char *fmt1 = _("GnuCash could not obtain the lock for %s.");
+    char *fmt2 = ((ERR_BACKEND_LOCKED == io_err) ?
+                 _("That database may be in use by another user, "
+                   "in which case you should not open the database. "
+                   "What would you like to do?") :
+                 _("That database may be on a read-only file system, "
+                   "or you may not have write permission for the directory. "
+                   "If you proceed you may not be able to save any changes. "
+                   "What would you like to do?")
                  );
     int rc;
 
     gnc_destroy_splash_screen(); /* Just in case */
-    if (shutdown_cb) {
-      rc = gnc_generic_question_dialog (NULL, buttons, fmt, newfile);
-    } else {
-      rc = gnc_generic_question_dialog (NULL, buttons+1, fmt, newfile)+1;
-    }
 
-    if (rc == 0)
+#ifdef HAVE_GLIB26
+    dialog = gtk_message_dialog_new(NULL,
+				    0,
+				    GTK_MESSAGE_WARNING,
+				    GTK_BUTTONS_NONE,
+				    fmt1, newfile);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), fmt2);
+#else
+    {
+      gchar *tmp;
+
+      tmp = g_strdup_printf("<b>%s</b>\n\n%s", fmt1, fmt2);
+      dialog = gtk_message_dialog_new_with_markup(NULL,
+						  0,
+						  GTK_MESSAGE_WARNING,
+						  GTK_BUTTONS_NONE,
+						  tmp, newfile);
+      g_free(tmp);
+    }
+#endif
+
+    gnc_gtk_dialog_add_button(dialog, _("_Open Anyway"),
+			      GTK_STOCK_OPEN, RESPONSE_OPEN);
+    gnc_gtk_dialog_add_button(dialog, _("_Create New File"),
+			      GTK_STOCK_NEW, RESPONSE_NEW);
+    if (shutdown_cb)
+      gtk_dialog_add_button(GTK_DIALOG(dialog), 
+			    GTK_STOCK_QUIT, RESPONSE_QUIT);
+    rc = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+
+    if (rc == GTK_RESPONSE_DELETE_EVENT)
+    {
+      rc = shutdown_cb ? RESPONSE_QUIT : RESPONSE_NEW;
+    }
+    if (rc == RESPONSE_QUIT)
     {
       if (shutdown_cb)
         shutdown_cb(0);
       g_assert(1);
     }
-    else if (rc == 1)
+    else if (rc == RESPONSE_OPEN)
     {
       /* user told us to ignore locks. So ignore them. */
       qof_session_begin (new_session, newfile, TRUE, FALSE);

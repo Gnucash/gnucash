@@ -963,3 +963,23 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
       g_signal_connect(signal_object, signal_name, func, user_data);
   }
 }
+
+void
+gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_label(label);
+#ifdef HAVE_GLIB26
+  if (stock_id) {
+    GtkWidget *image;
+
+    image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image(GTK_BUTTON(button), image);
+  }
+#else
+  gtk_button_set_use_underline(GTK_BUTTON(button), TRUE);
+#endif
+  gtk_widget_show_all(button);
+  gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
+}

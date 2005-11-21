@@ -136,5 +136,22 @@ void gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				     gboolean after,
 				     gpointer user_data);
 
+/** This function generates a button with icon and adds it to a
+ *  GtkDialog.  This is similar to just adding a stock button to the
+ *  dialog, only you can add an arbitrary pairing of button and label,
+ *  which the stock system doesn't provide.
+ *
+ *  @param dialog The dialog where the button should be added.
+ *
+ *  @param label The text of the button.
+ * 
+ *  @param stock_id The name of the stock button to use.
+ *
+ *  @param response The response id to return if this button is
+ *  clicked.*/
+void gnc_gtk_dialog_add_button (GtkWidget *dialog,
+				const gchar *label,
+				const gchar *stock_id,
+				guint response);
 
 #endif
