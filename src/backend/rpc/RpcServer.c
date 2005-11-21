@@ -31,7 +31,7 @@
 
 #include "config.h"
 
-#include "gnc-engine-util.h"
+#include "qof"
 
 #include "RpcServer.h"
 #include "RpcServerP.h"

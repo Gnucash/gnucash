@@ -26,7 +26,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-component-manager.h"
 #include "gnc-query-list.h"
 #include "search-param.h"

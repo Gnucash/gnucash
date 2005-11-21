@@ -35,7 +35,7 @@ struct gncTimespec {
 	int tv_nsec;
 };
 typedef struct gncTimespec gncTimespec;
-#include "kvp_frame.h"
+#include "qof.h"
 
 struct gncNumeric {
 	int64_t num;

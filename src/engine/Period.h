@@ -34,8 +34,6 @@
 #define XACC_PERIOD_H
 
 #include "gnc-engine.h"
-#include "qofquery.h"
-#include "qofbook.h"
 
 
 /** The gnc_book_close_period() routine will 'close' a book at

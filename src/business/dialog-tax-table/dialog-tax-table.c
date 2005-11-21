@@ -31,10 +31,9 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-amount-edit.h"
 #include "gnc-tree-view-account.h"
-#include "gnc-numeric.h"
 
 #include "gncTaxTable.h"
 #include "dialog-tax-table.h"

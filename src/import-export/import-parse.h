@@ -27,8 +27,7 @@
 #ifndef IMPORT_PARSE_H
 #define IMPORT_PARSE_H
 
-#include "gnc-numeric.h"
-#include "gnc-date.h"
+#include "qof.h"
 
 typedef enum {
   GNCIF_NONE		= 0,

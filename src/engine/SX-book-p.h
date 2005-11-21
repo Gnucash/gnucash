@@ -34,8 +34,7 @@
 #ifndef GNC_SX_BOOK_P_H
 #define GNC_SX_BOOK_P_H
 
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 
 /* ====================================================================== */
 

@@ -24,7 +24,7 @@
 #define GNC_HBCI_KVP_H
 
 #include <glib.h>
-#include "kvp_frame.h"
+#include "qof.h"
 #include "Account.h"
 #include "gnc-book.h"
 

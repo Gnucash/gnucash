@@ -29,7 +29,6 @@
 
 #include "FreqSpec.h"
 #include "SchedXaction.h"
-#include "qofbook.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
 #include "gnc-budget.h"

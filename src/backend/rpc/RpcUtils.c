@@ -31,7 +31,7 @@
 #include "AccountP.h"
 #include "GroupP.h"
 #include "TransactionP.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 struct _txnlistinfo {
   gnc_txnlist **end;

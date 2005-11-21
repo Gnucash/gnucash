@@ -30,7 +30,7 @@
 #include <libguile.h>
 
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "option-util.h"
 #include "gnc-general-search.h"
 

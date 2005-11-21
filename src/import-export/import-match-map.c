@@ -30,7 +30,6 @@
 #include <string.h>
 #include <glib.h>
 #include "import-match-map.h"
-#include "kvp_frame.h"
 #include "Group.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"

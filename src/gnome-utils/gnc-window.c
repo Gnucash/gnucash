@@ -26,10 +26,9 @@
 
 #include <gtk/gtk.h>
 
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnc-plugin-page.h"
 #include "gnc-window.h"
-#include "gnc-engine.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

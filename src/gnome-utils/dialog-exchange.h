@@ -26,8 +26,7 @@
 
 #include "gnc-pricedb.h"
 #include "gnc-commodity.h"
-#include "gnc-numeric.h"
-#include "gnc-date.h"
+#include "qof.h"
 
 /* Create a dialog to enter/modify an Split's exchange rate.  Look in
  * the pricedb for potential entries if exchange_rate points to a

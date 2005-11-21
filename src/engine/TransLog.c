@@ -34,7 +34,7 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 /* 
  * Some design philosphy that I think would be good to keep in mind:

@@ -31,7 +31,7 @@
 #include "gnc-plugin-page-budget.h"
 #include "gnc-tree-model-budget.h"
 
-#include "gnc-trace.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"

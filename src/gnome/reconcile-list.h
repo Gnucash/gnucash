@@ -25,7 +25,7 @@
 #define GNC_RECONCILE_LIST_H
 
 #include "gnc-query-list.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 
 G_BEGIN_DECLS
 

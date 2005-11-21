@@ -32,8 +32,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 
 #include "gncBillTerm.h"
 #include "dialog-billterms.h"

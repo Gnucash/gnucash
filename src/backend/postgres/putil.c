@@ -37,9 +37,7 @@
 #include <stdlib.h>  
 #include <string.h>
 
-#include "qofbackend.h"
-#include "qofbackend-p.h"
-#include "gnc-engine-util.h" 
+#include "qof.h"
 #include "PostgresBackend.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;

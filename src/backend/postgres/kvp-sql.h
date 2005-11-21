@@ -34,8 +34,7 @@
 #ifndef KVP_SQL_H
 #define KVP_SQL_H
 
-#include "kvp_frame.h"
-#include "guid.h"
+#include "qof.h"
 #include "PostgresBackend.h"
 
 /*

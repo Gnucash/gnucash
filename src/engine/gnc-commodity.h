@@ -48,7 +48,6 @@
 
 #include <glib.h>
 #include "gnc-engine.h"
-#include "qofbook.h"
 
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 

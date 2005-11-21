@@ -30,7 +30,7 @@
 
 #include "Account.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"	/* for safe_strcmp */
+#include "qof.h"	/* for safe_strcmp */
 
 #include "datecell.h"
 #include "checkboxcell.h"

@@ -47,10 +47,7 @@
 #include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-pricedb.h"
-#include "guid.h"
 #include "TransactionP.h"
 
 #include "gncRpc.h"
@@ -95,7 +92,7 @@ struct _rpcend {
 
 static void rpcendInit (RPCBackend *);
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = MOD_BACKEND;
 
 /*******************************************************************/
 /* Internal helper functions                                       */

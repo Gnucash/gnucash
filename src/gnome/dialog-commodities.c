@@ -31,7 +31,7 @@
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-tree-view-commodity.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

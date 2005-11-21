@@ -42,11 +42,10 @@
 #include <glib.h>
 #include <string.h>
 
-#include "gnc-date.h"
+#include "qof.h"
 #include "escape.h"
 #include "builder.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND; 
 

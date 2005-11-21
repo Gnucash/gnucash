@@ -32,11 +32,10 @@
 
 #include <stdlib.h>
 #include "import-utilities.h"
-#include "kvp_frame.h"
+#include "qof.h"
 #include "Account.h"
 #include "Transaction.h"
 
-#include "gnc-engine-util.h"
 
 /********************************************************************\
  * Setter and getter functions for the online_id kvp frame in

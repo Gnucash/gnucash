@@ -32,9 +32,6 @@
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
-#include "guid.h"
-#include "qofbook.h"
-#include "qofsession.h"
 
 Timespec gnc_transaction_get_date_posted(Transaction *t);
 Timespec gnc_transaction_get_date_entered(Transaction *t);

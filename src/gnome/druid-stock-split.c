@@ -36,7 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-view-account.h"

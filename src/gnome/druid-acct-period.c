@@ -38,15 +38,13 @@
 #include "druid-acct-period.h"
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
+#include "qof.h"
 #include "gnc-file.h"
 #include "gnc-frequency.h"
 #include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
-#include "gnc-trace.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
-#include "qof.h"
 
 
 #define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"

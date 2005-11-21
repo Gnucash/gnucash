@@ -1249,7 +1249,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
   if (NULL == s->acc) 
   {
-    PERR ("split must have a parent\n");
+    PERR ("split must have a parent account");
     return;
   }
 

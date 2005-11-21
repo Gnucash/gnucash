@@ -26,8 +26,7 @@
 #ifndef IO_GNCBIN_H
 #define IO_GNCBIN_H
 
-#include "qofbackend.h"
-#include "qofbook.h"
+#include "qof.h"
 
 /* @file io-gncbin.h
  * @brief read (old X-Accountant format) binary datafile

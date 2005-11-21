@@ -39,7 +39,6 @@
 
 #include "escape.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
 #include "putil.h"

@@ -31,7 +31,7 @@
 #include <stdlib.h>  
 
 #include "PostgresBackend.h"
-#include "qofbackend.h"
+#include "qof.h"
 #include "upgrade.h"
 
 #include "putil.h"

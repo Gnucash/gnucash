@@ -14,7 +14,6 @@
 #ifndef HAVE_SETENV
 #include "setenv.h"
 #endif
-#include "qofbook.h"
 #include "gnc-engine.h"
 #include "TransLog.h"
 

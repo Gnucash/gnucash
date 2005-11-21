@@ -26,7 +26,7 @@
 #define QIF_IMPORT_H
 
 #include <stdio.h>
-#include "gnc-numeric.h"
+#include "qof.h"
 
 typedef enum {
   QIF_TYPE_BANK = 1,

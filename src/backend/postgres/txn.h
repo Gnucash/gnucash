@@ -37,7 +37,7 @@
 #include <glib.h>
 
 #include "Group.h"
-#include "guid.h"
+#include "qof.h"
 #include "Transaction.h"
 
 #include "PostgresBackend.h"

@@ -23,22 +23,15 @@
    (list
     "#include <config.h>\n"
     "#include <glib.h>\n"
-    "#include <guid.h>\n"
+    "#include <qof.h>\n"
     "#include <Group.h>\n"
     "#include <Query.h>\n"
     "#include <gnc-budget.h>\n"
     "#include <gnc-commodity.h>\n"
-    "#include <gnc-date.h>\n"
     "#include <gnc-engine.h>\n"
-    "#include <gnc-event.h>\n"
-    "#include <gnc-numeric.h>\n"
     "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
-    "#include <gnc-trace.h>\n"
     "#include <gnc-session-scm.h>\n"
-    "#include <qofbackend.h>\n"
-    "#include <qofbook.h>\n"
-    "#include <qofsession.h>\n"
     "#include <gnc-hooks-scm.h>\n"
     "#include <engine-helpers.h>\n")))
 

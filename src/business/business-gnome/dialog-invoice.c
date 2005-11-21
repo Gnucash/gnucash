@@ -38,7 +38,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"

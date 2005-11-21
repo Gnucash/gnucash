@@ -23,7 +23,7 @@
 /********************************************************************
  * 3/11/03 TomF Gnome2 changes for Gnome2                           * 
  * gnc_http.c Disable all functions to bypass missing ghttp	    *
- *   include "gnc-engine-util.h" to allow PERR warnings		    *
+ *   include "qof.h" to allow PERR warnings		    *
  *   Use long if 0 to make it easy to go back to the original to    *
  *   start developing a ghttp replacement.                          *
 *********************************************************************/

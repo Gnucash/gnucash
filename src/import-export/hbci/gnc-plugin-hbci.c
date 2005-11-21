@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "gnc-engine.h"
 #include "druid-hbci-initial.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-gnome-utils.h"
@@ -36,8 +37,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
-#include "gnc-trace.h"
-#include "gnc-engine.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnucash-hbci";

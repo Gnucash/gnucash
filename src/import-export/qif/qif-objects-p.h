@@ -25,11 +25,10 @@
 #ifndef QIF_OBJECTS_P_H
 #define QIF_OBJECTS_P_H
 
-#include "gnc-date.h"
+#include "qof.h"
 
 #include "qif-import.h"
 #include "qif-objects.h"
-#include "gnc-numeric.h"
 
 struct _QifAccount {
   struct _QifObject obj;

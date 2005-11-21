@@ -44,7 +44,6 @@
 #include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"

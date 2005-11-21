@@ -27,7 +27,7 @@
  
 #include "dialog-utils.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 

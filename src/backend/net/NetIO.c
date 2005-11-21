@@ -47,10 +47,10 @@
 #include "BackendP.h"
 #include "NetIO.h"
 #include "gnc-book.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "io-gncxml.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = MOD_BACKEND;
 
 typedef struct _xmlend XMLBackend;
 

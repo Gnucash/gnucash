@@ -24,9 +24,7 @@
 #ifndef POSTGRES_BOOK_H
 #define POSTGRES_BOOK_H
 
-#include "qofbook.h"
 #include "gnc-engine.h"
-#include "guid.h"
 
 #include "PostgresBackend.h"
 

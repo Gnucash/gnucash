@@ -28,7 +28,7 @@
 
 #include <gtk/gtk.h>
 
-#include "gnc-trace.h"
+#include "qof.h"
 #include "gnc-tree-model-account-types.h"
 #include "Account.h"
 

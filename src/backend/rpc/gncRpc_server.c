@@ -35,9 +35,9 @@
 #include "RpcUtils.h"
 #include "TransactionP.h"
 #include "AccountP.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
-static short module = MOD_BACKEND;
+static QofLogModule log_module = MOD_BACKEND;
 
 static bool_t gncrpc_get_state (struct svc_req *req, TXPRT **xprt,
 				GncRpcSvc **cl)

@@ -24,8 +24,6 @@
 #include <glib.h>
 #include <stdio.h>
 #include "qof.h"
-#include "guid.h"
-#include "gnc-engine-util.h"
 #include "cashobjects.h"
 #include "test-stuff.h"
 

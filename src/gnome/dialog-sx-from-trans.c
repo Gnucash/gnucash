@@ -37,7 +37,7 @@
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"

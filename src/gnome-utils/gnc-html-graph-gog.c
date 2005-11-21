@@ -30,8 +30,8 @@
 
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
-#include "gnc-trace.h"
 #include "gnc-engine.h"
+
 #ifdef HAVE_GOFFICE
 #include <goffice/goffice.h>
 #include <goffice/graph/gog-graph.h>

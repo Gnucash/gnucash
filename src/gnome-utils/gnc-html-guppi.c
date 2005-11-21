@@ -33,7 +33,7 @@
 #include <libguppi/guppi-version.h>
 #include <libguppitank/guppi-tank.h>
 
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-html.h"
 #include "gnc-html-guppi.h"
 #include "gnc-ui-util.h"

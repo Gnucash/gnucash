@@ -29,8 +29,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "kvp_frame.h"
+#include "qof.h"
 #include "GNCId.h"
 #include "gnc-ui-common.h"
 

@@ -24,7 +24,7 @@
 #ifndef GNC_BACKEND_API_H
 #define GNC_BACKEND_API_H
 
-#include "qofbackend.h"
+#include "qof.h"
 
 QofBackend * gnc_backend_new (void);
 

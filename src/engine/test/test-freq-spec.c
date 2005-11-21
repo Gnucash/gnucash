@@ -27,7 +27,6 @@
 #include "test-stuff.h"
 #include "FreqSpec.h"
 #include "gnc-engine.h"
-#include "qofbook.h"
 
 static QofBook *book;
 

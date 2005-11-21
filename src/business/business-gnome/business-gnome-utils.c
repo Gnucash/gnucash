@@ -30,7 +30,7 @@
 #include "Group.h"
 #include "Account.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-component-manager.h"
 
 #include "gncCustomer.h"

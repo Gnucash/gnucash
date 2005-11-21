@@ -40,7 +40,7 @@
 #include "druid-qif-import.h"
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"

@@ -6,7 +6,7 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#include "kvp_frame.h"
+#include "qof.h"
 
 #include "sixtp-dom-generators.h"
 #include "sixtp-dom-parsers.h"

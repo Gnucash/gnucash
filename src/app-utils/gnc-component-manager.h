@@ -25,7 +25,7 @@
 #include "guile-mappings.h"
 
 #include "GNCId.h"
-#include "gnc-event.h"
+#include "qof.h"
 
 
 #define NO_COMPONENT (-1)

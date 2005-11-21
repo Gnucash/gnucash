@@ -45,7 +45,7 @@
 #define PRICE_CELL_H
 
 #include "basiccell.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 
 typedef struct

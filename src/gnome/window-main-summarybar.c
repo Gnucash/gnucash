@@ -35,7 +35,7 @@
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "qofbook.h"
+#include "qof.h"
 #include "window-main-summarybar.h"
 
 typedef struct {

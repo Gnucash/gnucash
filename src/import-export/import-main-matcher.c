@@ -21,7 +21,7 @@
 /** @internal
     @file import-main-matcher.c
     @brief Transaction matcher main window
-    @author Copyright (C) 2002 Benoit Grégoire
+    @author Copyright (C) 2002 Benoit GrÃ©goire
     @author Christian Stimming    
 */
 #include "config.h"
@@ -35,7 +35,6 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
-#include "gnc-trace.h"
 #include "import-settings.h"
 #include "import-match-map.h"
 #include "import-match-picker.h"

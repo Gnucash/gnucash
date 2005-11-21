@@ -26,7 +26,7 @@
 
 #include "Account.h"
 #include "gnc-book.h"
-#include "gnc-date.h"
+#include "qof.h"
 #include "gncBillTerm.h"
 
 gboolean

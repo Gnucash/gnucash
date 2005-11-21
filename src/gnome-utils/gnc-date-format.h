@@ -29,7 +29,7 @@
 #ifndef GNC_DATE_FORMAT_H
 #define GNC_DATE_FORMAT_H 
 
-#include "gnc-date.h"
+#include "qof.h"
 
 #define GNC_TYPE_DATE_FORMAT         (gnc_date_format_get_type ())
 #define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)

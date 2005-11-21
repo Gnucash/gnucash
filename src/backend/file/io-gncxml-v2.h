@@ -33,9 +33,8 @@
 
 #include <glib.h>
 
-#include "qofbook.h"
-#include "gnc-backend-file.h"
 #include "gnc-engine.h"
+#include "gnc-backend-file.h"
 
 #include "sixtp.h"
 

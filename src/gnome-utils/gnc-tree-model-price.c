@@ -40,7 +40,6 @@
 #include "gnc-gobject-utils.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-model-price.h"
-#include "gnc-trace.h"
 #include "gnc-ui-util.h"
 
 #define ITER_IS_NAMESPACE GINT_TO_POINTER(1)

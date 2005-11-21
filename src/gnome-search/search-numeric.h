@@ -22,7 +22,7 @@
 #define _GNCSEARCH_NUMERIC_H
 
 #include "search-core-type.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "QueryNew.h"
 
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())

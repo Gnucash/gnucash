@@ -28,8 +28,7 @@
 #include <libguile.h>
 
 #include "gnc-book.h"
-#include "gnc-date.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "Group.h"
 
 

@@ -27,8 +27,7 @@
 
 typedef struct _invoice_window InvoiceWindow;
 
-#include "qofbook.h"
-#include "qofsession.h"
+#include "qof.h"
 #include "gncInvoice.h"
 #include "gncOwner.h"
 #include "dialog-search.h"

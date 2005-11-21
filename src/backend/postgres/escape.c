@@ -35,7 +35,6 @@
 #include <string.h>
 
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
 #include "escape.h"
 
 static QofLogModule log_module = GNC_MOD_BACKEND; 

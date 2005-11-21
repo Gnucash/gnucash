@@ -62,9 +62,7 @@
 #include "gnc-main-window.h"
 #include "gnc-component-manager.h"
 
-#include "gnc-engine-util.h"
-#include "gnc-date.h"
-#include "gnc-trace.h"
+#include "qof.h"
 
 #include "gnc-dialog.h"
 #include "gnc-recurrence.h"

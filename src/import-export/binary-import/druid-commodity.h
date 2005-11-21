@@ -26,7 +26,6 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "qofsession.h"
 
 typedef struct _commoditydruid CommodityDruid;
 

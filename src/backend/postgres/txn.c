@@ -38,10 +38,7 @@
 #include "GroupP.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-pricedb.h"
-#include "guid.h"
 #include "Transaction.h"
 #include "TransactionP.h"
  

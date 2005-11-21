@@ -37,8 +37,7 @@
 #define __GNC_PLUGIN_PAGE_H
 
 #include <glib.h>
-#include "guid.h"
-#include "qofbook.h"
+#include "qof.h"
 
 G_BEGIN_DECLS
 

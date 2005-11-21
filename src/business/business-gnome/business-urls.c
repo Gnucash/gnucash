@@ -29,7 +29,7 @@
 
 #include "gnc-html.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "gncCustomer.h"
 #include "gncJob.h"

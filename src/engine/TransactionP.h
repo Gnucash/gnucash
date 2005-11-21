@@ -51,14 +51,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"   /* for typedefs */
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
-#include "qofbackend.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofid-p.h"
-#include "qofinstance.h"
-#include "qofinstance-p.h"
+#include "qof.h"
 
 
 /** STRUCTS *********************************************************/

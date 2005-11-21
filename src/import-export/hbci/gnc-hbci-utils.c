@@ -35,7 +35,7 @@
 #include "gnc-hbci-kvp.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h" 
+#include "qof.h" 
 
 #include "hbci-interaction.h"
 #include <aqbanking/version.h>

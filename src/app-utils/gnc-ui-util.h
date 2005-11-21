@@ -39,8 +39,7 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "qofbook.h"
-#include "qofsession.h"
+#include "qof.h"
 
 
 typedef QofSession * (*QofSessionCB) (void);

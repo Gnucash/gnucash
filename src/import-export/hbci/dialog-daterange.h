@@ -23,7 +23,7 @@
 #ifndef DIALOG_DATERANGE_H
 #define DIALOG_DATERANGE_H
 
-#include "gnc-date.h"
+#include "qof.h"
 
 gboolean
 gnc_hbci_enter_daterange (GtkWidget *parent,

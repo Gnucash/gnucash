@@ -28,7 +28,7 @@
 #include "account-quickfill.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include "numcell.h"
 #include "quickfillcell.h"

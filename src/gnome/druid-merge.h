@@ -23,7 +23,7 @@
 
 #ifndef DRUID_MERGE_H
 #define DRUID_MERGE_H
-#include "qofsession.h"
+#include "qof.h"
 
 /** @addtogroup GUI
 	@{ */

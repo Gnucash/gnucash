@@ -40,7 +40,7 @@
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 
 /* Signal codes */

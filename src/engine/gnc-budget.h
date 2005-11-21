@@ -63,8 +63,7 @@
 /** The budget data.*/
 typedef struct gnc_budget_private GncBudget;
 
-#include "guid.h"
-#include "qofbook.h"
+#include "qof.h"
 #include "Account.h"
 #include "Recurrence.h"
 

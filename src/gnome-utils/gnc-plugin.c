@@ -38,7 +38,6 @@
 #include <glib/gi18n.h>
 
 #include "gnc-plugin.h"
-#include "gnc-trace.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"

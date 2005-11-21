@@ -30,7 +30,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui.h"
 
 

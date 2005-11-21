@@ -89,12 +89,7 @@ Splits plus the value of all of its sub-Accounts.
 #include <time.h>
 
 #include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
-#include "guid.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofinstance.h"
 
 /** @name Split Reconciled field values
 

@@ -36,7 +36,6 @@
 
 #include <gtk/gtk.h>
 #include "gnc-engine.h"
-#include "gnc-trace.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page.h"
 #include "gnc-gobject-utils.h"

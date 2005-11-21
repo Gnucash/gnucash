@@ -44,7 +44,7 @@
 #include "gncBillTermP.h"
 #include "gncInvoice.h"
 #include "gnc-bill-term-xml-v2.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "xml-helpers.h"
 

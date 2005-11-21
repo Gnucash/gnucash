@@ -34,7 +34,7 @@
 #include "import-backend.h"
 #include "import-match-picker.h"
 
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include <glade/glade.h>
 #include "dialog-utils.h"

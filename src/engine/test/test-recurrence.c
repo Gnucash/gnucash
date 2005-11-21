@@ -28,7 +28,6 @@
 #include "FreqSpec.h"
 #include "Recurrence.h"
 #include "gnc-engine.h"
-#include "qofbook.h"
 
 static QofBook *book;
 static FreqSpec *fs;

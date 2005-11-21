@@ -32,11 +32,8 @@
 
 #include "sixtp-dom-generators.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "Recurrence.h"
-#include "kvp_frame.h"
-#include "qofid.h"
 
 xmlNodePtr text_to_dom_tree(const char *tag, const char *str);
 xmlNodePtr int_to_dom_tree(const char *tag, gint64 val);

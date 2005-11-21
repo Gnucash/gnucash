@@ -97,7 +97,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "gnc-date.h"
+#include "qof.h"
 
 
 typedef struct date_cell

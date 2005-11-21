@@ -44,7 +44,7 @@
 #include "io-utils.h"
 
 #include "sixtp-dom-parsers.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "Group.h"
 
 /* non-static because it's used in io-gncxml-v2.c */

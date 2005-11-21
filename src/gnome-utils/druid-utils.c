@@ -28,7 +28,7 @@
 
 #include "dialog-utils.h"
 #include "druid-utils.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gnome-utils.h"
 
 void

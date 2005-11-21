@@ -40,11 +40,7 @@
 
 #include <libpq-fe.h>  
 
-#include "qofbackend.h"
-#include "qofbackend-p.h"
-#include "gnc-engine-util.h"
-#include "guid.h"
-#include "qofid.h"
+#include "qof.h"
 
 #include "PostgresBackend.h"
 

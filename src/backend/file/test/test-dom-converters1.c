@@ -42,7 +42,6 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-commodity.h"
-#include "guid.h"
 
 static void
 test_dom_tree_to_commodity_ref(void)

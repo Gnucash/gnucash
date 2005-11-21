@@ -32,8 +32,7 @@
 #include "gnc-account-sel.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
-#include "gnc-event.h"
+#include "qof.h"
 
 #define ACCT_DATA_TAG "gnc-account-sel_acct"
 

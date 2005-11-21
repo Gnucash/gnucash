@@ -10,11 +10,9 @@
 #include <glib.h>
 #include <stdlib.h>
 
+#include "qof.h"
 #include "Query.h"
-#include "gnc-date.h"
 #include "gnc-pricedb.h"
-#include "qofbook.h"
-#include "qofsession.h"
 
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);

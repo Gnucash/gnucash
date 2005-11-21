@@ -30,7 +30,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "dialog-search.h"
 #include "search-param.h"
 

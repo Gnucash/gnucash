@@ -29,7 +29,7 @@
 #ifndef GNC_AMOUNT_EDIT_H
 #define GNC_AMOUNT_EDIT_H 
 
-#include "gnc-numeric.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 
 #define GNC_TYPE_AMOUNT_EDIT          (gnc_amount_edit_get_type())

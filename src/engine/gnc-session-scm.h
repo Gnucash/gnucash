@@ -41,7 +41,6 @@
 
 #include <libguile.h>
 #include "gnc-engine.h"
-#include "qofsession.h"
 
 void gnc_session_scm_load (QofSession *session);
 gboolean gnc_session_scm_export (QofSession *tmp_session,

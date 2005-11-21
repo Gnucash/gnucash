@@ -28,10 +28,8 @@
 #include "gnc-hbci-gettrans.h"
 
 #include "gnc-ui.h"
-#include "gnc-numeric.h"
-#include "gnc-date.h"
+#include "qof.h"
 #include "Transaction.h"
-#include "gnc-engine-util.h" 
 
 #include "import-main-matcher.h"
 

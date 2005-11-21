@@ -34,7 +34,7 @@
 #define IO_GNCXML_H
 
 #include <glib.h>
-#include "qofbook.h"
+#include "qof.h"
 
 /* FIXME: eventually, we probably need to add an error stack
    accessable via gnc_book_get_xml_io_error() a la binfile. */

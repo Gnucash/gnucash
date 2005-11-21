@@ -32,10 +32,7 @@
 
 #include "FreqSpec.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 #include "gnc-budget.h"
 
 GUID* dom_tree_to_guid(xmlNodePtr node);

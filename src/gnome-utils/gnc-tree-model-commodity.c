@@ -38,7 +38,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gobject-utils.h"
-#include "gnc-trace.h"
 #include "gnc-ui-util.h"
 
 #define ITER_IS_NAMESPACE GINT_TO_POINTER(1)

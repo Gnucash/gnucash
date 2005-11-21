@@ -22,8 +22,7 @@
 
 /** @file gnc-hbci-trans-templ.h Templates for HBCI transactions */
 
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
+#include "qof.h"
 
 /** A template for a HBCI transaction */
 typedef struct _trans_data GNCTransTempl;
