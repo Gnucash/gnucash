@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "gnc-hbci-gettrans.h"
@@ -194,19 +194,12 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 			const AB_JOB *trans_job,
 			gboolean run_until_done)
 {
+  GtkWidget *dialog;
+
   /* Now add the retrieved transactions to the gnucash account. */
   AB_TRANSACTION_LIST2 *trans_list;
 
   trans_list = AB_JobGetTransactions_GetTransactions(trans_job);
-  if (!trans_list) {
-    /* printf("gnc_hbci_gettrans_final: No transactions section. Response was:\n"); */
-
-    gnome_ok_dialog_parented 
-      (_("The HBCI import returned no transactions for the selected time period."),
-       GTK_WINDOW (parent));
-    return TRUE;
-  }
-  
   if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
     struct trans_list_data data;
     GNCImportMainMatcher *importer_generic_gui = 
@@ -219,14 +212,18 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 
     if (run_until_done)
       return gnc_gen_trans_list_run (importer_generic_gui);
-
-  }
-  else {
-    gnome_ok_dialog_parented 
-      (_("The HBCI import returned no transactions for the selected time period."),
-       GTK_WINDOW (parent));
+    return TRUE;
   }
 
+  dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				  GTK_DIALOG_MODAL
+				  | GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_INFO,
+				  GTK_BUTTONS_OK,
+				  _("The HBCI import returned no transactions "
+				    "for the selected time period."));
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy(GTK_WIDGET(dialog));
   return TRUE;
 }
 

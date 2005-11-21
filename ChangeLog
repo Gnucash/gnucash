@@ -1,5 +1,11 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/import-export/hbci/gnc-hbci-gettrans.c:
+	* src/import-export/hbci/hbci-interaction.c:
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Convert a couple
+	of dialogs from the deprecated gnome_ok_dialog to a
+	gtk_message_dialog.
+
 	* src/import-export/import-account-matcher.c:
 	* src/import-export/generic-import.glade: Put the account tree
 	into a scrolled window so the dialog buttons don't get pushed

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
@@ -531,10 +531,17 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
 
   /* Create new dialog */
-  dialog = gnome_ok_dialog_parented (text, GTK_WINDOW (data->parent));
+  dialog = gtk_message_dialog_new(GTK_WINDOW(data->parent),
+				  0,
+				  GTK_MESSAGE_INFO,
+				  GTK_BUTTONS_OK,
+				  text);
+
   if (title && (strlen(title) > 0))
     gtk_window_set_title (GTK_WINDOW (dialog), title);
-  gnome_dialog_close_hides (GNOME_DIALOG(dialog), TRUE);
+
+  g_signal_connect(G_OBJECT(dialog), "response",
+		   (GCallback)gtk_widget_hide, NULL);
   gtk_widget_show_all (dialog);
 
   result = data->showbox_id;

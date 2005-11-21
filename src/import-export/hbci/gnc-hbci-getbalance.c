@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <aqbanking/banking.h>
 
@@ -198,6 +198,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   gboolean dialogres;
   double booked_value, noted_value;
   gnc_numeric value;
+  GtkWidget *dialog;
 
   response = AB_JobGetBalance_GetAccountStatus((AB_JOB*)job);
   if (!response) {
@@ -248,18 +249,23 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 				 GNC_RND_ROUND);
   if ((noted_value == 0.0) && (booked_value == 0.0))
     {
-      gnome_ok_dialog_parented 
-	/* Translators: Strings from this file are really only
-	 * needed inside Germany (HBCI is not supported anywhere
-	 * else). You may safely ignore strings from the
-	 * import-export/hbci subdirectory in other countries.
-	 */
-	(_("The downloaded HBCI Balance was zero.\n"
+      dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				      GTK_DIALOG_MODAL
+				      | GTK_DIALOG_DESTROY_WITH_PARENT,
+				      GTK_MESSAGE_INFO,
+				      GTK_BUTTONS_OK,
+	 /* Translators: Strings from this file are really only
+	  * needed inside Germany (HBCI is not supported anywhere
+	  * else). You may safely ignore strings from the
+	  * import-export/hbci subdirectory in other countries.
+	  */
+	 _("The downloaded HBCI Balance was zero.\n"
 	   "Either this is the correct balance, or your bank does not \n"
 	   "support Balance download in this HBCI version. In the latter \n"
 	   "case you should choose a higher HBCI version number in the HBCI \n"
-	   "Setup. After that, try again to download the HBCI Balance.\n"),
-	 GTK_WINDOW (parent));
+	   "Setup. After that, try again to download the HBCI Balance.\n"));
+      gtk_dialog_run(GTK_DIALOG(dialog));
+      gtk_widget_destroy(GTK_WIDGET(dialog));
       dialogres = FALSE;
     }
   else
@@ -283,9 +289,15 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       if (gnc_numeric_equal(value, reconc_balance)) {
 	const char *message3 = _("The booked balance is identical to the current \n"
 				 "reconciled balance of the account.");
-	char *msg = g_strdup_printf ("%s%s\n%s", message1, message2, message3);
-	gnome_ok_dialog_parented (msg, GTK_WINDOW (parent));
-	g_free (msg);
+	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+					GTK_DIALOG_MODAL
+					| GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_INFO,
+					GTK_BUTTONS_OK,
+					"%s%s\n%s",
+					message1, message2, message3);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(GTK_WIDGET(dialog));
 	dialogres = FALSE;
 
       } else {
