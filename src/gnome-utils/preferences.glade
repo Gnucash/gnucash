@@ -2898,7 +2898,7 @@
 	      </child>
 
 	      <child>
-		<widget class="Custom" id="gconf/winow/pages/account_tree/summary/start_date">
+		<widget class="Custom" id="gconf/window/pages/account_tree/summary/start_date">
 		  <property name="visible">True</property>
 		  <property name="creation_function">gnc_date_edit_new_glade</property>
 		  <property name="int1">0</property>

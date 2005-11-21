@@ -1,5 +1,7 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	*/src/gnome-utils/preferences.glade: Fix a typo.
+
 	* src/report/report-gnome/window-report.c: Use a GtkMessageDialog
 	instead of the deprecated gnome_ok_dialog function.
 
