@@ -1,5 +1,8 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-split-reg.c: Update dialogs to give them a Gtk2
+	HIG look and feel.
+
 	*src/gnome-utils/dialog-reset-warnings.c: Make a function
 	static. Remove extraneous printf.
 

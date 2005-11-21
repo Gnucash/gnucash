@@ -1111,18 +1111,13 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   SplitRegister *reg;
   Transaction *trans;
   Split *split;
-  char *buf = NULL;
+  GtkWidget *dialog;
   gint result;
-  const char *two_choices[] = { N_(GTK_STOCK_CANCEL),
-                                N_("Remove Transaction Splits"),
-                                NULL };
-  const char *message = _("Are you sure you want to remove the "
-                          "Splits of this transaction?");
 
-  const char *recn_warn = _("You would be modifying a "
-                            "transaction with reconciled splits!\n"
-                            "This is not a good idea as it will cause your "
-                            "reconciled balance to be off.");
+  const char *message = _("Remove the splits from this transaction?");
+  const char *recn_warn = _("This transaction contains reconciled splits. "
+                            "Modifying it is not a good idea because that will "
+			    "cause your reconciled balance to be off.");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1130,16 +1125,31 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   if (xaccTransWarnReadOnly(trans))
     return;
   if (xaccTransHasReconciledSplits (trans)) {
-    buf = g_strconcat (message, "\n\n", recn_warn, NULL);
-    result =
-      gnc_generic_warning_dialog(gsr->window, two_choices, buf);
+    dialog =
+      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					 GTK_DIALOG_MODAL
+					 | GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_NONE,
+					 "<b>%s</b>\n\n%s",
+					 message, recn_warn);
   } else {
-      buf = g_strdup (message);
-      result =
-        gnc_generic_question_dialog(gsr->window, two_choices,buf);
+    dialog =
+      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					 GTK_DIALOG_MODAL
+					 | GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_QUESTION,
+					 GTK_BUTTONS_NONE,
+					 "<b>%s</b>", message);
   }
-  g_free(buf);
-  if (!result)
+
+  gtk_dialog_add_button(GTK_DIALOG(dialog),
+			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  gnc_gtk_dialog_add_button(dialog, N_("_Remove Splits"),
+			    GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+  result =  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy (dialog);
+  if (result != GTK_RESPONSE_ACCEPT)
     return;
 
   /*
@@ -1171,12 +1181,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   CursorClass cursor_class;
   SplitRegister *reg;
   Transaction *trans;
-  char *buf = NULL;
   Split *split;
+  GtkWidget *dialog;
   gint result;
-  const char *two_choices[] = { N_(GTK_STOCK_DELETE),
-                                N_(GTK_STOCK_CANCEL),
-                                NULL };
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1212,20 +1219,33 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   /* On a split cursor, just delete the one split. */
   if (cursor_class == CURSOR_CLASS_SPLIT)
   {
-    const char *format = _("Are you sure you want to delete\n   %s\n"
-                           "from the transaction\n   %s ?");
-    const char *recn_warn = _("You would be deleting a reconciled split!\n"
+    const char *format = _("Delete the split '%s' from the transaction '%s'?");
+    const char *recn_warn = _("You would be deleting a reconciled split! "
                               "This is not a good idea as it will cause your "
                               "reconciled balance to be off.");
+    const char *anchor_error = _("You cannot delete this split.");
     const char *anchor_split = _("This is the split anchoring this transaction "
                                  "to the register. You may not delete it from "
-                                 "this register window.");
+                                 "this register window.  You may delete the "
+				 "entire transaction from this window, or you "
+				 "may navigate to a register that shows "
+				 "another side of this same transaction and "
+				 "delete the split from that register.");
+    char *buf = NULL;
     const char *memo;
     const char *desc;
     char recn;
 
     if (split == gnc_split_register_get_current_trans_split (reg, NULL)) {
-      gnc_error_dialog(gsr->window, anchor_split);
+      dialog =
+	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					   GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_ERROR,
+					   GTK_BUTTONS_OK,
+					   "<b>%s</b>\n\n%s",
+					   anchor_error, anchor_split);
+      gtk_dialog_run(GTK_DIALOG(dialog));
+      gtk_widget_destroy (dialog);
       return;
     }
 
@@ -1241,20 +1261,31 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     recn = xaccSplitGetReconcile (split);
     if (recn == YREC || recn == FREC)
     {
-      char *new_buf;
-
-      new_buf = g_strconcat (buf, "\n\n", recn_warn, NULL);
-      g_free (buf);
-      buf = new_buf;
-      result =
-        gnc_generic_warning_dialog(gsr->window, two_choices, "%s", buf);
+      dialog =
+	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					   GTK_DIALOG_MODAL
+					   | GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_WARNING,
+					   GTK_BUTTONS_NONE,
+					   "<b>%s</b>\n\n%s", buf, recn_warn);
     } else {
-      result =
-        gnc_generic_question_dialog(gsr->window, two_choices, "%s", buf);
+      dialog =
+	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					   GTK_DIALOG_MODAL
+					   | GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_QUESTION,
+					   GTK_BUTTONS_NONE,
+					   "<b>%s</b>", buf);
     }
     g_free(buf);
 
-    if (result != 0)
+    gtk_dialog_add_button(GTK_DIALOG(dialog),
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+    gnc_gtk_dialog_add_button(dialog, N_("_Delete Split"),
+			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy (dialog);
+    if (result != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_split (reg);
@@ -1266,27 +1297,36 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
   {
-    const char *message = _("Are you sure you want to delete the current "
-                            "transaction?");
+    const char *message = _("Delete the current transaction?");
     const char *recn_warn = _("You would be deleting a transaction "
-                              "with reconciled splits!\n"
+                              "with reconciled splits! "
                               "This is not a good idea as it will cause your "
                               "reconciled balance to be off.");
-    char *buf;
 
     if (xaccTransHasReconciledSplits (trans)) {
-      buf = g_strconcat (message, "\n\n", recn_warn, NULL);
-      result =
-        gnc_generic_warning_dialog(gsr->window, two_choices, buf);
+      dialog =
+	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					   GTK_DIALOG_MODAL |
+					   GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_WARNING,
+					   GTK_BUTTONS_NONE,
+					   "<b>%s</b>\n\n%s", message, recn_warn);
     } else {
-      buf = g_strdup (message);
-      result =
-        gnc_generic_question_dialog(gsr->window, two_choices, buf);
+      dialog =
+	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
+					   GTK_DIALOG_MODAL
+					   | GTK_DIALOG_DESTROY_WITH_PARENT,
+					   GTK_MESSAGE_QUESTION,
+					   GTK_BUTTONS_NONE,
+					   "<b>%s</b>", message);
     }
-
-    g_free (buf);
-
-    if (result != 0)
+    gtk_dialog_add_button(GTK_DIALOG(dialog),
+			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+    gnc_gtk_dialog_add_button(dialog, N_("_Delete Transaction"),
+			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
+    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy (dialog);
+    if (result != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_trans (reg);
@@ -2144,8 +2184,18 @@ gint
 gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
+  const gchar *read_only = "This account register is read-only.";
+  GtkWidget *dialog;
 
-  gnc_warning_dialog(args->gsr->window, "%s", args->string);
+  dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(args->gsr->window),
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
+					      GTK_MESSAGE_WARNING,
+					      GTK_BUTTONS_CLOSE,
+					      "<b>%s</b>\n\n%s",
+					      read_only,
+					      args->string);
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy(dialog);
   g_free(args);
   return FALSE;
 }
@@ -2176,18 +2226,18 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
       return;
 
     case PLACEHOLDER_THIS:
-      args->string = _("This account may not be edited.  If you want\n"
-                       "to edit transactions in this register, please\n"
-                       "open the account options and turn off the\n"
+      args->string = _("This account may not be edited.  If you want "
+                       "to edit transactions in this register, please "
+                       "open the account options and turn off the "
                        "placeholder checkbox.");
       break;
 
     default:
-      args->string = _("One of the sub-accounts selected may not be\n"
-                       "edited.  If you want to edit transactions in\n"
-                       "this register, please open the sub-account\n"
-                       "options and turn off the placeholder checkbox.\n"
-                       "You may also open an individual account instead\n"
+      args->string = _("One of the sub-accounts selected may not be "
+                       "edited.  If you want to edit transactions in "
+                       "this register, please open the sub-account "
+                       "options and turn off the placeholder checkbox. "
+                       "You may also open an individual account instead "
                        "of a set of accounts.");
       break;
     }
