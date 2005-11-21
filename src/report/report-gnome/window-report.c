@@ -108,7 +108,18 @@ static void
 gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
                            gpointer user_data)
 {
-  gnome_ok_dialog(_("Set the report options you want using this dialog."));
+  GtkWidget *dialog, *parent;
+  struct report_default_params_data * prm = user_data;
+
+  parent = gnc_options_dialog_widget(prm->win);
+  dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_INFO,
+				  GTK_BUTTONS_OK,
+				  _("Set the report options you want using this dialog."));
+  g_signal_connect(G_OBJECT(dialog), "response",
+		   (GCallback)gtk_widget_destroy, NULL);
+  gtk_widget_show(dialog);
 }
 
 static void

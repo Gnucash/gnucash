@@ -1,5 +1,8 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/window-report.c: Use a GtkMessageDialog
+	instead of the deprecated gnome_ok_dialog function.
+
 	* src/gnome-utils/dialog-options.c: Convert the font picker and
 	color picker from deprecated gnome widgets to their gtk
 	counterparts.  Also convert the image picker when compiled with
