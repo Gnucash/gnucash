@@ -1,5 +1,10 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/import-export/import-account-matcher.c:
+	* src/import-export/generic-import.glade: Put the account tree
+	into a scrolled window so the dialog buttons don't get pushed
+	off-screen when you expand the accounts.
+
 	* src/gnome-utils/gnc-gui-query.[ch]: Remove unused functions.
 
 	* src/gnome/gnc-split-reg.c: Update dialogs to give them a Gtk2

@@ -123,22 +123,16 @@
       </child>
 
       <child>
-	<widget class="GtkFrame" id="frame1">
+	<widget class="GtkScrolledWindow" id="account_tree_sw">
 	  <property name="visible">True</property>
-	  <property name="label_xalign">0</property>
-	  <property name="label_yalign">0.5</property>
-	  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+	  <property name="can_focus">True</property>
+	  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	  <child>
-	    <widget class="GtkHBox" id="account_tree_box">
-	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
-
-	      <child>
-		<placeholder/>
-	      </child>
-	    </widget>
+	    <placeholder/>
 	  </child>
 	</widget>
 	<packing>
