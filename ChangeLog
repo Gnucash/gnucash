@@ -1,5 +1,10 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-options.c: Convert the font picker and
+	color picker from deprecated gnome widgets to their gtk
+	counterparts.  Also convert the image picker when compiled with
+	gtk2.6 or better.
+
 	* src/report/report-gnome/dialog-style-sheet.c: Close stylesheet
 	edit dialog when the stylesheet picker dialog is closed.  Prevents
 	a crash.

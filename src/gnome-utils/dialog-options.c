@@ -22,7 +22,11 @@
 
 #include "config.h"
 
+#ifdef HAVE_GLIB26 
+#include <gtk/gtk.h>
+#else
 #include <gnome.h>
+#endif
 #include <gdk/gdk.h>
 #include <glib/gi18n.h>
 #include <g-wrap-wct.h>
@@ -63,6 +67,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
  * notebook tabs to a list.
  */
 #define MAX_TAB_COUNT 4
+
+/* A pointer to the last selected filename */
+#define LAST_SELECTION "last-selection"
 
 /* A Hash-table of GNCOptionDef_t keyed with option names. */
 static GHashTable *optionTable = NULL;
@@ -106,6 +113,18 @@ static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
 				       gpointer data);
 
+
+static inline gint
+color_d_to_i16 (double d)
+{
+  return (d * 0xFFFF);
+}
+
+static inline double
+color_i16_to_d (gint i16)
+{
+  return ((double)i16 / 0xFFFF);
+}
 
 static void
 gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
@@ -199,6 +218,56 @@ gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
   gnc_option_changed_option_cb(widget, option);
   return;
 }
+
+#ifdef HAVE_GLIB26
+static void
+gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
+				    GNCOption *option)
+{
+  gchar *filename;
+  GtkImage *image;
+  GdkPixbuf *pixbuf;
+  gboolean have_preview;
+
+  g_return_if_fail(chooser != NULL);
+
+  ENTER("chooser %p, option %p", chooser, option);
+  filename = gtk_file_chooser_get_preview_filename(chooser);
+  DEBUG("chooser preview name is %s.", filename);
+  if (filename == NULL) {
+    filename = g_strdup(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION));
+    DEBUG("using last selection of %s", filename);
+    if (filename == NULL) {
+      LEAVE("no usable name");
+      return;
+    }
+  }
+
+  image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
+  pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
+  g_free(filename);
+  have_preview = (pixbuf != NULL);
+
+  gtk_image_set_from_pixbuf(image, pixbuf);
+  if (pixbuf)
+    gdk_pixbuf_unref(pixbuf);
+
+  gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
+  LEAVE("preview visible is %d", have_preview);
+}
+
+static void
+gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
+				       GNCOption *option)
+{
+  gchar *filename;
+
+  filename = gtk_file_chooser_get_preview_filename(chooser);
+  if (!filename)
+    return;
+  g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
+}
+#endif
 
 /********************************************************************\
  * gnc_option_set_ui_value_internal                                 *
@@ -799,17 +868,15 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
 }
 
 static void
-gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
-                            guint arg3, guint arg4, GNCOption *option)
+gnc_option_color_changed_cb(GtkColorButton *color_button, GNCOption *option)
 {
-  gnc_option_changed_widget_cb(GTK_WIDGET(picker), option);
+  gnc_option_changed_widget_cb(GTK_WIDGET(color_button), option);
 }
 
 static void
-gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
-                           GNCOption *option)
+gnc_option_font_changed_cb(GtkFontButton *font_button, GNCOption *option)
 {
-  gnc_option_changed_widget_cb(GTK_WIDGET(picker), option);
+  gnc_option_changed_widget_cb(GTK_WIDGET(font_button), option);
 }
 
 static void
@@ -1723,9 +1790,9 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
 
   use_alpha = gnc_option_use_alpha(option);
 
-  value = gnome_color_picker_new();
-  gnome_color_picker_set_title(GNOME_COLOR_PICKER(value), name);
-  gnome_color_picker_set_use_alpha(GNOME_COLOR_PICKER(value), use_alpha);
+  value = gtk_color_button_new();
+  gtk_color_button_set_title(GTK_COLOR_BUTTON(value), name);
+  gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(value), use_alpha);
 
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
@@ -1756,9 +1823,12 @@ gnc_option_set_ui_widget_font (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
-  value = gnome_font_picker_new();
-  gnome_font_picker_set_mode(GNOME_FONT_PICKER(value),
-			     GNOME_FONT_PICKER_MODE_FONT_INFO);
+  value = gtk_font_button_new();
+  g_object_set(G_OBJECT(value),
+	       "use-font", TRUE,
+	       "show-style", TRUE,
+	       "show-size", TRUE,
+	       (char *)NULL);
 
   gnc_option_set_widget (option, value);
 
@@ -1782,7 +1852,9 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 {
   GtkWidget *value;
   GtkWidget *label;
+#ifndef HAVE_GLIB26
   GtkWidget *entry;
+#endif
   gchar *colon_name;
 
   ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
@@ -1792,6 +1864,20 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
+#ifdef HAVE_GLIB26
+  value = gtk_file_chooser_button_new(_("Select image"),
+				      GTK_FILE_CHOOSER_ACTION_OPEN);
+  g_object_set(G_OBJECT(value),
+	       "width-chars", 30,
+	       "preview-widget", gtk_image_new(),
+	       (char *)NULL);
+  g_signal_connect(G_OBJECT (value), "selection-changed",
+		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+  g_signal_connect(G_OBJECT (value), "selection-changed",
+		   G_CALLBACK(gnc_image_option_selection_changed_cb), option);
+  g_signal_connect(G_OBJECT (value), "update-preview",
+		   G_CALLBACK(gnc_image_option_update_preview_cb), option);
+#else
   value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
 				 FALSE);
   gnome_pixmap_entry_set_preview(GNOME_PIXMAP_ENTRY(value), FALSE);
@@ -1799,6 +1885,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   entry = gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY(value));
   g_signal_connect(G_OBJECT (entry), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+#endif
     
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
@@ -2169,15 +2256,22 @@ gnc_option_set_ui_value_color (GNCOption *option, gboolean use_default,
   if (gnc_option_get_color_info(option, use_default,
 				&red, &green, &blue, &alpha))
   {
-    GnomeColorPicker *picker;
+    GtkColorButton *color_button;
+    GdkColor color;
 
-    picker = GNOME_COLOR_PICKER(widget);
+    DEBUG("red %f, green %f, blue %f, alpha %f", red, green, blue, alpha);
+    color_button = GTK_COLOR_BUTTON(widget);
 
-    gnome_color_picker_set_d(picker, red, green, blue, alpha);
+    color.red   = color_d_to_i16(red);
+    color.green = color_d_to_i16(green);
+    color.blue  = color_d_to_i16(blue);
+    gtk_color_button_set_color(color_button, &color);
+    gtk_color_button_set_alpha(color_button, color_d_to_i16(alpha));
     return FALSE;
   }
-  else
-    return TRUE;
+
+  LEAVE("TRUE");
+  return TRUE;
 }
 
 static gboolean
@@ -2189,8 +2283,8 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
     const gchar *string = SCM_STRING_CHARS(value);
     if ((string != NULL) && (*string != '\0'))
     {
-      GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
-      gnome_font_picker_set_font_name(picker, string);
+      GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
+      gtk_font_button_set_font_name(font_button, string);
     }
     return FALSE;
   }
@@ -2209,10 +2303,21 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
+#ifdef HAVE_GLIB26
+      gchar *test;
+      DEBUG("string = %s", string);
+      gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(widget), string);
+      test = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+      g_object_set_data_full(G_OBJECT(widget), LAST_SELECTION,
+			     g_strdup(string), g_free);
+      DEBUG("Set %s, retrieved %s", string, test);
+      gnc_image_option_update_preview_cb(GTK_FILE_CHOOSER(widget), option);
+#else
       GtkEntry *entry;
       DEBUG("string = %s", string);
       entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
       gtk_entry_set_text(entry, string);
+#endif
     }
     LEAVE("FALSE");
     return FALSE;
@@ -2530,13 +2635,20 @@ static SCM
 gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 {
   SCM result;
-  GnomeColorPicker *picker;
+  GtkColorButton *color_button;
+  GdkColor color;
   gdouble red, green, blue, alpha;
   gdouble scale;
 
-  picker = GNOME_COLOR_PICKER(widget);
+  ENTER("option %p(%s), widget %p",
+	option, gnc_option_name(option), widget);
 
-  gnome_color_picker_get_d(picker, &red, &green, &blue, &alpha);
+  color_button = GTK_COLOR_BUTTON(widget);
+  gtk_color_button_get_color(color_button, &color);
+  red   = color_i16_to_d(color.red);
+  green = color_i16_to_d(color.green);
+  blue  = color_i16_to_d(color.blue);
+  alpha = color_i16_to_d(gtk_color_button_get_alpha(color_button));
 
   scale = gnc_option_color_range(option);
 
@@ -2551,20 +2663,32 @@ gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 {
-  GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
+  GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
   const gchar * string;
 
-  string = gnome_font_picker_get_font_name(picker);
+  string = gtk_font_button_get_font_name(font_button);
   return (scm_makfrom0str(string));
 }
 
 static SCM
 gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 {
+#ifdef HAVE_GLIB26
+  gchar *string;
+  SCM result;
+
+  string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+  DEBUG("filename %s", string);
+  result = scm_makfrom0str(string ? string : "");
+  if (string)
+    g_free(string);
+  return result;
+#else
   GnomePixmapEntry * p = GNOME_PIXMAP_ENTRY(widget);
   char             * string = gnome_pixmap_entry_get_filename(p);
 
   return (scm_makfrom0str(string ? string : ""));
+#endif
 }
 
 static SCM
