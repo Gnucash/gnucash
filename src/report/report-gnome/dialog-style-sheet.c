@@ -126,6 +126,9 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
                                     gnc_style_sheet_options_close_cb,
                                     ssinfo);
     window = gnc_options_dialog_widget(ssinfo->odialog);
+    gtk_window_set_transient_for(GTK_WINDOW(window),
+				 GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
     gtk_window_present(GTK_WINDOW(window));
 
     return(ssinfo);

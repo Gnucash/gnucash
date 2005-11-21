@@ -1,5 +1,9 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/dialog-style-sheet.c: Close stylesheet
+	edit dialog when the stylesheet picker dialog is closed.  Prevents
+	a crash.
+
 	* src/gnome-utils/gnc-file.c:
 	* src/gnome-utils/dialog-utils.[ch]: Convert the "file locked"
 	message to a GtkMessageDialog.  Add a utility function for
