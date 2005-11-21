@@ -1,5 +1,8 @@
 2005-11-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Use the new GtkAboutDialog
+	when compiling with gtk2.6.
+
 	* src/core-utils/gnc-gdate-utils.c:
 	* src/backend/postgres/test/test-db.c:
 	* src/import-export/hbci/gnc-hbci-gettrans.c:

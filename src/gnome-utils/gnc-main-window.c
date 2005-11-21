@@ -2779,6 +2779,106 @@ gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
         gtk_widget_show_all( GTK_WIDGET(w) );
 }
 
+#ifdef HAVE_GLIB26
+/** This is a helper function to find a data file and suck it into
+ *  memory.
+ *
+ *  @param partial The name of the file relative to the gnucash
+ *  specific shared data directory.
+ *
+ *  @return The text of the file or NULL. The caller is responsible
+ *  for freeing this string.
+ */
+static gchar *
+get_file (const gchar *partial)
+{
+  gchar *filename, *text = NULL;
+
+  filename = gnc_gnome_locate_data_file(partial);
+  g_file_get_contents(filename, &text, NULL, NULL);
+  g_free(filename);
+
+  /* Anything there? */
+  if (text && *text)
+    return text;
+
+  /* Just a empty string or no string at all. */
+  if (text)
+    g_free(text);
+  return NULL;
+}
+
+
+/** This is a helper function to find a data file, suck it into
+ *  memory, and split it into an array of strings.
+ *
+ *  @param partial The name of the file relative to the gnucash
+ *  specific shared data directory.
+ *
+ *  @return The text of the file as an array of strings, or NULL. The
+ *  caller is responsible for freeing all the strings and the array.
+ */
+static gchar **
+get_file_strsplit (const gchar *partial)
+{
+  gchar *text, **lines;
+
+  text = get_file(partial);
+  if (!text)
+    return NULL;
+
+  lines = g_strsplit_set(text, "\r\n", -1);
+  g_free(text);
+  return lines;
+}
+
+
+/** Create and display the "about" dialog for gnucash.
+ *
+ *  @param action The GtkAction for the "about" menu item.
+ *
+ *  @param window The main window whose menu item was activated.
+ */
+static void
+gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
+{
+	const gchar *message = _("The GnuCash personal finance manager.\n"
+				 "The GNU way to manage your money!\n");
+	const gchar *copyright = "© 1998-2005 Linas Vepstas";
+	gchar **authors, **documenters, **translators, *license;
+	GdkPixbuf *logo;
+	GtkWidget *dialog;
+
+	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
+
+	authors = get_file_strsplit("doc/AUTHORS");
+	documenters = get_file_strsplit("doc/DOCUMENTERS");
+	translators = get_file_strsplit("doc/TRANSLATORS");
+	license = get_file("doc/LICENSE");
+
+	dialog = gtk_about_dialog_new();
+	g_object_set (G_OBJECT(dialog),
+		      "authors", authors,
+		      "documenters", documenters,
+		      "comments", message,
+		      "copyright", copyright,
+		      "license", license,
+		      "logo", logo,
+		      "name", "GnuCash",
+		      "translator-credits", translators,
+		      "version", VERSION,
+		      "website", "http://www.gnucash.org",
+		      (gchar *)NULL);
+
+	if (license)     g_free(license);
+	if (translators) g_strfreev(translators);
+	if (documenters) g_strfreev(documenters);
+	if (authors)     g_strfreev(authors);
+	gdk_pixbuf_unref (logo);
+
+	gtk_widget_show(dialog);
+}
+#else
 static void
 gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
@@ -2786,7 +2886,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	const gchar *message = _("The GnuCash personal finance manager.\n"
 				 "The GNU way to manage your money!\n"
 				 "http://www.gnucash.org/");
-	const gchar *copyright = "\xc2\xa9 1998-2002 Linas Vepstas";
+	const gchar *copyright = "© 1998-2002 Linas Vepstas";
 	const gchar *authors[] = {
 		"Derek Atkins <derek@ihtfp.com>",
 		"Rob Browning <rlb@cs.utexas.edu>",
@@ -2815,6 +2915,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	gdk_pixbuf_unref (logo);
 	gtk_dialog_run (GTK_DIALOG (about));
 }
+#endif
 
 
 /************************************************************
