@@ -321,6 +321,11 @@ gnc-svninfo.h: .gnc-svninfo.h
 	fi ; \
 	if [ -d $$s/.svn ] ; then \
 		svninfo=`svn info $$s |grep '^Revision: '|sed 's/Revision: //'` ; \
+		if [ -z "$$svninfo" ] ; then \
+			echo "svn info failed.  figure out why." ; \
+			echo "can't determine svn revision from $$s." ; \
+			exit 1 ; \
+		fi ; \
 		echo "#define GNUCASH_SVN_REV $$svninfo" > gnc-svninfo.h ; \
 	fi
 
