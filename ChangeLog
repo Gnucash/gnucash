@@ -1,5 +1,10 @@
 2005-11-21  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/report.glade:
+	* src/report/report-gnome/dialog-column-view.c: Give the dialogs a
+	gtk2 look.  Add accelerator keys.  Use the gtk dialog functions.
+	Take care of some resizing problems.
+
 	* src/import-export/import-main-matcher.c:
 	* src/register/register-gnome/gnucash-sheet.c: Use gtk version of
 	various functions instead of gnome versions.  Rest of the file was
