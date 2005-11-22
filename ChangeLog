@@ -1,5 +1,10 @@
 2005-11-22  Neil Williams <linux@codehelp.co.uk>
 
+	* src/backend/postgres/PostgresBackend.c : Correct
+	postgres access_method.
+
+2005-11-22  Neil Williams <linux@codehelp.co.uk>
+
 	* configure.in : Remove net and RPC backends,
 	Tidy up --with and --enable output to --help
 	* po/POTFILES.in : Remove RPC and net related files.
