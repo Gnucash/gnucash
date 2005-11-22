@@ -1,5 +1,9 @@
 2005-11-22  Neil Williams <linux@codehelp.co.uk>
 
+	* src/backend/Makefile.am : Remove redundant variable. 
+
+2005-11-22  Neil Williams <linux@codehelp.co.uk>
+
 	* src/backend/postgres/PostgresBackend.c : Correct
 	postgres access_method.
 
