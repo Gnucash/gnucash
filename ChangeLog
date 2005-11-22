@@ -1,3 +1,9 @@
+2005-11-21  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/userpass.glade:
+	* src/gnome/dialog-userpass.c: Finish conversion to a
+	GtkDialog. Redo dialog as a table instead of boxes in boxes.
+
 2005-11-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/Makefile.am: exit if "svn info" fails.
