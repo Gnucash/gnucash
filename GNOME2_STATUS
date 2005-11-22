@@ -76,6 +76,8 @@ Resources
   - Open pages are no longer open after reopening file.
     - Account tree, register and report pages are restored.
     - Budget and busines pages are not restored.
+    - Trying to reopen a multi-column report spits lots of
+      warning. Trying to edit that pages options crashes gnucash.
 
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
     
