@@ -320,7 +320,7 @@ gnc-svninfo.h: .gnc-svninfo.h
 		s="${srcdir}/`dirname $$d`" ; \
 	fi ; \
 	if [ -d $$s/.svn ] ; then \
-		svninfo=`LANG=en_US svn info $$s |grep '^Revision: '|sed 's/Revision: //'` ; \
+		svninfo=`LANG=C svn info $$s |grep '^Revision: '|sed 's/Revision: //'` ; \
 		if [ -z "$$svninfo" ] ; then \
 			echo "svn info failed.  figure out why." ; \
 			echo "can't determine svn revision from $$s." ; \
