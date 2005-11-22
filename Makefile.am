@@ -58,7 +58,7 @@ EXTRA_DIST = ChangeLog.1 \
   po/glossary/gnc-glossary.txt \
   po/glossary/it.po \
   po/glossary/nl.po \
-  po/glossary/no.po \
+  po/glossary/nb.po \
   po/glossary/pl.po \
   po/glossary/pt.po \
   po/glossary/pt_BR.po \

@@ -1,3 +1,11 @@
+2005-11-22  Christian Stimming  <stimming@tuhh.de>
+
+	* po/nb.po: Updated Norwegian (bokmaal) translation by Tor Harald
+	Thorland <linux@strigen.com>.
+
+	* po/glossary/nb.po: New filename for Norwegian (bokmaal) glossary
+	-- it used to be stored under no.po but that is no longer.
+
 2005-11-21  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/report.glade:
