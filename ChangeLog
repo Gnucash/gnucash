@@ -1,3 +1,20 @@
+2005-11-22  Neil Williams <linux@codehelp.co.uk>
+
+	* configure.in : Remove net and RPC backends,
+	Tidy up --with and --enable output to --help
+	* po/POTFILES.in : Remove RPC and net related files.
+	* src/backend/Makefile.am : Remove net and RPPC
+	* src/backend/net : Removed all files.
+	* src/backend/qsf : Removed stub. 
+	* src/backend/rpc : Removed all files. 
+	* src/engine/gnc-engine.c : Remove gnc_run_rpc_server
+	function.
+	* src/engine/gnc-engine.h : Remove -gnc_run_rpc_server
+	definition.
+	* src/engine/gnc-filepath-utils.c : Remove rpc://
+	* src/engine/gw-engine-spec.scm : Remove g-wrapper
+	* src/README.modules : Document removal of RPC.
+
 2005-11-22  Christian Stimming  <stimming@tuhh.de>
 
 	* po/nb.po: Updated Norwegian (bokmaal) translation by Tor Harald

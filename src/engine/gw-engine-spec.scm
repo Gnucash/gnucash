@@ -240,13 +240,6 @@
   
   ;;     (gw:enum-add-value! we "ERR_SQL_MISSING_DATA" 'sql-missing-data)
 
-  ;;     (gw:enum-add-value! we "ERR_RPC_HOST_UNK" 'rpc_host_unk)
-  ;;     (gw:enum-add-value! we "ERR_RPC_CANT_BIND" 'rpc_cant_bind)
-  ;;     (gw:enum-add-value! we "ERR_RPC_CANT_ACCEPT" 'rpc_cant_accept)
-  ;;     (gw:enum-add-value! we "ERR_RPC_NO_CONNECTION" 'rpc_no_connection)
-  ;;     (gw:enum-add-value! we "ERR_RPC_BAD_VERSION" 'rpc_bad_version)
-  ;;     (gw:enum-add-value! we "ERR_RPC_FAILED" 'rpc_failed)
-  ;;     (gw:enum-add-value! we "ERR_RPC_NOT_ADDED" 'rpc_not_added)
   #t)
 
 ;
@@ -2414,14 +2407,6 @@ of having a parent transaction with which one is working...")
  "gnc_numeric_to_string"
  '((<gnc:numeric> arg))
  "Convert gnc_numeric to a printable string")
-
-(gw:wrap-function
- ws
- 'gnc:run-rpc-server
- '<gw:void>
- "gnc_run_rpc_server"
- '()
- "Run the RPC Server") 
 
 ;; gnc-date.h
 

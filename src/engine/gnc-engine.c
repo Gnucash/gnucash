@@ -190,39 +190,3 @@ qof_session_export (QofSession *tmp_session,
   return TRUE;
 }
 
-void
-gnc_run_rpc_server (void)
-{
-  const char * dll_err;
-  void * dll_handle;
-  int (*rpc_run)(short);
-  int ret;
-
-  /* open and resolve all symbols now (we don't want mystery 
-   * failure later) */
-#ifndef RTLD_NOW
-# ifdef RTLD_LAZY
-#  define RTLD_NOW RTLD_LAZY
-# endif
-#endif
-  dll_handle = dlopen ("libgnc_rpc.so", RTLD_NOW);
-  if (! dll_handle) 
-  {
-    dll_err = dlerror();
-    PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
-    return;
-  }
-  
-  rpc_run = dlsym (dll_handle, "rpc_server_run");
-  dll_err = dlerror();
-  if (dll_err) 
-  {
-    dll_err = dlerror();
-    PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
-    return;
-  }
-  
-  ret = (*rpc_run)(0);
-
-  /* XXX How do we force an exit? */
-}

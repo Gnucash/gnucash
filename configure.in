@@ -388,7 +388,7 @@ dnl *************************************
 dnl QOF
 dnl *************************************
 
-AC_ARG_WITH(qof, [  --with-qof=path         prefix for Query Object Framework - QOF (auto)])
+AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)])
 QOF_REQUIRED=0.6.0
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test pkg-config = no; then
@@ -580,7 +580,7 @@ AC_ARG_ENABLE( profile,
        LDFLAGS="${LDFLAGS} -pg")
 
 AC_ARG_ENABLE( ref-counts-dumps,
-  [  --enable-ref-counts-dumps     compile with ref count dumps],
+  [  --enable-ref-counts-dumps    compile with ref count dumps],
        AC_DEFINE(DEBUG_REFERENCE_COUNTING,1,Enable reference count dumps),
        AC_DEFINE(DEBUG_REFERENCE_COUNTING,0,Enable reference count dumps) )
 
@@ -674,21 +674,7 @@ AC_SUBST(SQL_DIR)
 
 
 ### --------------------------------------------------------------------------
-### RPC
-AC_ARG_ENABLE( rpc,
-  [  --enable-rpc                 compile with rpc support],
-  [
-       AC_MSG_WARN([
-
-       The RPC Backend is depricated.  You should not use it.
-       It may go away in the future.  If you need it, please
-       contact gnucash-devel@gnucash.org and let the developers
-       know.
-       ])
-       RPC_DIR=rpc
-  ])
-
-AC_SUBST(RPC_DIR)
+### RPC has been removed in gnucash 1.9.0
 
 ### --------------------------------------------------------------------------
 ### OFX
@@ -828,7 +814,7 @@ AC_SUBST(HBCI_DIR)
 ### i18n
 
 AC_ARG_WITH( locale-dir, 
-  [  --with-locale-dir=PATH       specify where to look for locale-specific information],
+  [  --with-locale-dir=PATH    specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
   LOCALE_DIR="\${prefix}/share/locale")
 
@@ -847,7 +833,7 @@ AC_ARG_ENABLE( locale-specific-tax,
 
 # Used to initialize doc-path.
 AC_ARG_WITH( help-prefix,
-  [  --with-help-prefix=PATH      specify where to store the help files],
+  [  --with-help-prefix=PATH   specify where to store the help files],
   GNC_HELPDIR="$with_help_prefix",
   GNC_HELPDIR="\${datadir}")
 
@@ -891,7 +877,7 @@ AM_CONDITIONAL(GNC_CTAGS_FILE, test x${GNC_CTAGS_FILE} = xtags)
 
 # Check for perl, force version 5
 AC_ARG_WITH(perl,
-  [  --with-perl=FILE             which perl executable to use ],
+  [  --with-perl=FILE          which perl executable to use ],
   PERL="${with_perl}")
 
 # If the user didn't specify a perl, then go fetch.
@@ -921,7 +907,7 @@ AC_SUBST(PERL)
 #
 PERLINCL=`$PERL -MConfig -e 'print $Config{"archlibexp"}'`
 AC_ARG_WITH( perl-includes, 
-  [  --with-perl-includes=DIR     specify where to look for perl includes],
+  [  --with-perl-includes=DIR  specify where to look for perl includes],
        PERLINCL="$with_perl_includes" )
 AC_SUBST(PERLINCL)
 
@@ -929,10 +915,10 @@ AC_SUBST(PERLINCL)
 # ----------------------------------------------------------------------------
 AC_DEFUN([BB_ENABLE_DOXYGEN],
 [
-AC_ARG_ENABLE(doxygen, [  --enable-doxygen        enable documentation generation with doxygen (auto)])
-AC_ARG_ENABLE(dot, [  --enable-dot            use 'dot' to generate graphs in doxygen (auto)])              
-AC_ARG_ENABLE(html-docs, [  --enable-html-docs      enable HTML generation with doxygen (yes)], [], [ enable_html_docs=yes])              
-AC_ARG_ENABLE(latex-docs, [  --enable-latex-docs     enable LaTeX documentation generation with doxygen (no)], [], [ enable_latex_docs=no])              
+AC_ARG_ENABLE(doxygen, [  --enable-doxygen             enable documentation generation with doxygen (auto)])
+AC_ARG_ENABLE(dot, [  --enable-dot                 use 'dot' to generate graphs in doxygen (auto)])              
+AC_ARG_ENABLE(html-docs, [  --enable-html-docs           enable HTML generation with doxygen (yes)], [], [ enable_html_docs=yes])              
+AC_ARG_ENABLE(latex-docs, [  --enable-latex-docs          enable LaTeX documentation generation with doxygen (no)], [], [ enable_latex_docs=no])              
 if test "x$enable_doxygen" = xno; then
         enable_doc=no
 else 
@@ -1081,7 +1067,7 @@ esac
     ### ----------------------------------------------------------------------
     ### XIM
     AC_ARG_ENABLE(xim,
-      [  --enable-xim                 support XIM [default=yes]],
+      [  --enable-xim                  support XIM [default=yes]],
       , enable_xim="yes")
     
     if test "x$enable_xim" = "xyes"; then
@@ -1296,14 +1282,12 @@ AC_CONFIG_FILES(po/Makefile.in
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
-          src/backend/net/Makefile
           src/backend/file/Makefile
           src/backend/file/test/Makefile
           src/backend/file/test/test-files/Makefile
           src/backend/file/test/test-files/xml2/Makefile
           src/backend/postgres/Makefile
           src/backend/postgres/test/Makefile
-          src/backend/rpc/Makefile
           src/bin/Makefile
           src/bin/overrides/Makefile
           src/bin/test/Makefile
@@ -1408,16 +1392,6 @@ AC_CONFIG_FILES(po/Makefile.in
           dnl # commands go here, but we don't have any right now
 )
 AC_OUTPUT
-
-if test x$RPC_DIR = xrpc ; then
-       AC_MSG_WARN([
-
-       The RPC Backend is deprecated.  You should not use it.
-       It may go away in the future.  If you need it, please
-       contact gnucash-devel@gnucash.org and let the developers
-       know.
-       ])
-fi
 
 AC_MSG_RESULT([
   Options detected/selected

@@ -47,7 +47,6 @@ src/backend/file/sixtp-dom-parsers.c
 src/backend/file/sixtp-stack.c
 src/backend/file/sixtp-to-dom-parser.c
 src/backend/file/sixtp-utils.c
-src/backend/net/NetIO.c
 src/backend/postgres/account.c
 src/backend/postgres/book.c
 src/backend/postgres/builder.c
@@ -63,18 +62,6 @@ src/backend/postgres/putil.c
 src/backend/postgres/txn.c
 src/backend/postgres/txnmass.c
 src/backend/postgres/upgrade.c
-src/backend/rpc/clnt_thrd.c
-src/backend/rpc/gncmod-backend-rpc.c
-src/backend/rpc/gncRpc_clnt.c
-src/backend/rpc/gncRpc_server.c
-src/backend/rpc/gncRpc_server_stubs.c
-src/backend/rpc/gncRpc_svc.c
-src/backend/rpc/RpcBackend.c
-src/backend/rpc/RpcServer.c
-src/backend/rpc/RpcSock.c
-src/backend/rpc/RpcUtils.c
-src/backend/rpc/svc_thrd.c
-src/backend/rpc/xprt_thrd.c
 src/business/business-core/businessmod-core.c
 src/business/business-core/file/gnc-address-xml-v2.c
 src/business/business-core/file/gnc-bill-term-xml-v2.c

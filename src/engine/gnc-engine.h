@@ -250,7 +250,6 @@ qof_session_export (QofSession *tmp_session,
                     QofSession *real_session,
                     QofPercentageFunc percentage_func);
 
-void gnc_run_rpc_server(void);
 
 #endif
 /** @} */
