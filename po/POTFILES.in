@@ -171,7 +171,6 @@ src/engine/gnc-session-scm.c
 src/engine/Group.c
 src/engine/iso-4217-currencies.c
 src/engine/kvp-scm.c
-src/engine/messages.c
 src/engine/Period.c
 src/engine/policy.c
 src/engine/Query.c
