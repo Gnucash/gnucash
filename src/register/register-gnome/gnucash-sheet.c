@@ -1326,9 +1326,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                           extend_selection);
 
                 if (do_popup)
-                        gnome_popup_menu_do_popup_modal
-                                (sheet->popup, NULL, NULL, event,
-                                 sheet->popup_data, widget);
+                        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
+				       sheet->popup_data, event->button, event->time);
 
                 return TRUE;
         }
@@ -1356,9 +1355,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                   new_virt_loc, event->x, changed_cells, FALSE);
 
         if (do_popup)
-                gnome_popup_menu_do_popup_modal
-                        (sheet->popup, NULL, NULL, event, sheet->popup_data, widget);
-
+		gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
+			       sheet->popup_data, event->button, event->time);
         return TRUE;
 }
 

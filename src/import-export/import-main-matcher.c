@@ -403,9 +403,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   heading_label = glade_xml_get_widget (xml, "heading_label");
   g_assert (heading_label != NULL);
 
-  /*if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (info->dialog), 
-			     GTK_WINDOW (parent));*/
+  /* if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (info->dialog), 
+				  GTK_WINDOW (parent));*/
 
   /* Connect signals */
   glade_xml_signal_connect_data(xml, "downloaded_transaction_select_cb",
@@ -486,7 +486,6 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   
   /* Hide on close instead of destroy since we still need the values
      from the boxes. */
-  /*gnome_dialog_close_hides (GNOME_DIALOG (info->dialog), TRUE);*/
   gtk_widget_show_all (GTK_WIDGET (info->dialog));
   return info;
 }
@@ -497,7 +496,7 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
   
   /* DEBUG("Begin"); */
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (info->dialog));
+  result = gtk_dialog_run (GTK_DIALOG (info->dialog));
 
   /* DEBUG("Result was %d", result); */
 

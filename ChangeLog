@@ -1,5 +1,10 @@
 2005-11-21  David Hampton  <hampton@employees.org>
 
+	* src/import-export/import-main-matcher.c:
+	* src/register/register-gnome/gnucash-sheet.c: Use gtk version of
+	various functions instead of gnome versions.  Rest of the file was
+	converted long ago.
+
 	* src/gnome/glade/userpass.glade:
 	* src/gnome/dialog-userpass.c: Finish conversion to a
 	GtkDialog. Redo dialog as a table instead of boxes in boxes.
