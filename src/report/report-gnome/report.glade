@@ -280,7 +280,6 @@
 
 	      <child>
 		<widget class="GtkLabel" id="label847725">
-		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Report</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -296,7 +295,6 @@
 
 	      <child>
 		<widget class="GtkLabel" id="label847726">
-		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Cols</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -312,7 +310,6 @@
 
 	      <child>
 		<widget class="GtkLabel" id="label847727">
-		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Rows</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
@@ -591,7 +588,6 @@
 
 	      <child>
 		<widget class="GtkLabel" id="label847735">
-		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">label847735</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
