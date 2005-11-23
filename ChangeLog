@@ -1,3 +1,20 @@
+2005-11-22  David Hampton  <hampton@employees.org>
+
+	* src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas:
+	* src/import-export/import-main-matcher.c:
+	* src/import-export/generic-import.glade:
+	* src/import-export/import-match-picker.c:
+	* src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas:
+	* src/import-export/hbci/hbci-interaction.c:
+	* src/import-export/hbci/glade/hbci.glade:
+	* src/import-export/hbci/glade/hbcipass.glade: Dialog makeovers.
+	Split the generic matcher transaction list help out into a
+	separate window so it doesn't blow out the dialog or get cut off.
+	Update some of the dialogs for the new HIG styles.  Make a couple
+	of dialogs start smaller.  Remember dialog sizes (add schema
+	entries too).  Fix a couple of gtk2 conversion problems.  Remove
+	some lines added by glade 2.10.
+	
 2005-11-22  Neil Williams <linux@codehelp.co.uk>
 
 	* src/backend/Makefile.am : Remove redundant variable. 
