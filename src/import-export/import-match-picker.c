@@ -42,6 +42,8 @@
  *   Constants   *
 \********************************************************************/
 
+#define GCONF_SECTION "dialogs/import/generic_matcher/match_picker"
+
 #define NUM_COLUMNS_DOWNLOADED_CLIST 6
 static const int DOWNLOADED_CLIST_ACCOUNT = 0;
 static const int DOWNLOADED_CLIST_DATE = 1;
@@ -322,6 +324,8 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
      ", add_threshold:",matcher->add_threshold,
      ", display_threshold:",matcher->display_threshold); */
   
+  gnc_restore_window_size(GCONF_SECTION,
+			  GTK_WINDOW (matcher->transaction_matcher));
   gtk_widget_show(matcher->transaction_matcher);  
   
 }/* end init_match_picker_gui */
@@ -363,6 +367,8 @@ gnc_import_match_picker_run_and_close (GNCImportTransInfo *transaction_info)
   /*DEBUG("Right before run and close");*/
   gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
   response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+  gnc_save_window_size(GCONF_SECTION,
+		       GTK_WINDOW (matcher->transaction_matcher));
   gtk_widget_destroy (matcher->transaction_matcher);
   /*DEBUG("Right after run and close");*/
   /* DEBUG("Response was %d.", response); */

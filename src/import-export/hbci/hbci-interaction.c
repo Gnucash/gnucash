@@ -44,6 +44,8 @@
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
 
+#define GCONF_SECTION_CONNECTION GCONF_SECTION "/connection_dialog"
+
 gchar *gnc__extractText(const char *text);
 
 /** Adds the interactor and progressmonitor classes to the api. */
@@ -80,6 +82,7 @@ void GNCInteractor_delete(GNCInteractor *data)
 		       gtk_toggle_button_get_active 
 		       (GTK_TOGGLE_BUTTON (data->close_checkbutton)),
 		       NULL);
+    gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (data->dialog));
     gtk_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
@@ -175,6 +178,7 @@ void GNCInteractor_hide(GNCInteractor *i)
 		     gtk_toggle_button_get_active 
 		     (GTK_TOGGLE_BUTTON (i->close_checkbutton)),
 		     NULL);
+  gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (i->dialog));
 }
 
 gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i)
@@ -587,11 +591,6 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 					b3 ? b3text : NULL,
 					3,
 					NULL);
-  /* Ensure that the dialog box is destroyed when the user responds. */
-  g_signal_connect_swapped (dialog,
-			    "response", 
-			    G_CALLBACK (gtk_widget_destroy),
-			    dialog);
   /* Add the label, and show everything we've added to the dialog. */
   label = gtk_label_new (text);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
@@ -600,6 +599,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   gtk_widget_show_all (dialog);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
   if (result<1 || result>3) {
     printf("messageBoxCB: Bad result %d", result);
     result = 0;
@@ -806,7 +806,7 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
 
   if (data->parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
-  /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
+  gnc_restore_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (dialog));
 
   gtk_object_ref (GTK_OBJECT (dialog));
   gtk_widget_hide_all (dialog);

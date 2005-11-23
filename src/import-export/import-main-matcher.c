@@ -41,6 +41,8 @@
 #include "import-backend.h"
 #include "import-account-matcher.h"
 
+#define GCONF_SECTION "dialogs/import/generic_matcher/transaction_list"
+
 struct _main_matcher_info
 {
   GtkWidget *dialog;
@@ -224,6 +226,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
   if (info == NULL) 
     return;
 
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
   gnc_import_Settings_delete (info->user_settings);
   gtk_widget_destroy (GTK_WIDGET (info->dialog));
   g_free (info);
@@ -248,6 +251,43 @@ on_matcher_cancel_clicked (GtkButton *button,
 {
   GNCImportMainMatcher *info = user_data;
   gnc_gen_trans_list_delete (info);
+}
+
+static void 
+on_matcher_help_close_clicked (GtkButton *button,
+			       gpointer user_data)
+{
+  GtkWidget *help_dialog = user_data;
+
+  gtk_widget_destroy(help_dialog);
+}
+
+static void 
+on_matcher_help_clicked (GtkButton *button,
+			 gpointer user_data)
+{
+  GNCImportMainMatcher *info = user_data;
+  GladeXML *xml;
+  GtkWidget *help_dialog, *box;
+  
+  xml = gnc_glade_xml_new ("generic-import.glade", "matcher_help");
+
+  box = glade_xml_get_widget (xml, "red");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_red);
+  box = glade_xml_get_widget (xml, "yellow");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_yellow);
+  box = glade_xml_get_widget (xml, "green");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_green);
+
+  help_dialog = glade_xml_get_widget (xml, "matcher_help");
+  gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
+			       GTK_WINDOW(info->dialog));
+
+  glade_xml_signal_connect_data(xml, "on_matcher_help_close_clicked",
+				GTK_SIGNAL_FUNC(on_matcher_help_close_clicked), 
+				help_dialog);
+
+  gtk_widget_show(help_dialog);
 }
 
 static void 
@@ -417,6 +457,9 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   glade_xml_signal_connect_data(xml, "on_matcher_cancel_clicked", 
 				GTK_SIGNAL_FUNC(on_matcher_cancel_clicked),
 				info);
+  glade_xml_signal_connect_data(xml, "on_matcher_help_clicked", 
+				GTK_SIGNAL_FUNC(on_matcher_help_clicked),
+				info);
 
   /*Initialise pixmaps*/
   info->fleche_pixmap =  gdk_pixmap_colormap_create_from_xpm_d (NULL,
@@ -484,8 +527,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
   
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
   gtk_widget_show_all (GTK_WIDGET (info->dialog));
   return info;
 }
