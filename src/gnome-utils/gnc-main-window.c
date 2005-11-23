@@ -117,6 +117,7 @@ static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindo
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_edit_accelerator_keys (GtkToggleAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
@@ -294,6 +295,9 @@ static guint gnc_menu_n_actions = G_N_ELEMENTS (gnc_menu_actions);
  *  code. */
 static GtkToggleActionEntry toggle_actions [] =
 {
+	{ "EditAcceleratorKeysAction", NULL, N_("Learn Accelerator Keys"), NULL,
+	  N_("Learn new accelerator key settings."),
+	  G_CALLBACK (gnc_main_window_cmd_edit_accelerator_keys), FALSE },
 	{ "ViewToolbarAction", NULL, N_("_Toolbar"), NULL,
 	  N_("Show/hide the toolbar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_toolbar), TRUE },
@@ -2583,6 +2587,17 @@ static void
 gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
 {
 	gnc_preferences_dialog ();
+}
+
+static void
+gnc_main_window_cmd_edit_accelerator_keys( GtkToggleAction *action, GncMainWindow *window )
+{
+  GtkSettings* settings;
+
+  settings = gtk_settings_get_default();
+  g_object_set(G_OBJECT(settings),
+	       "gtk-can-change-accels", gtk_toggle_action_get_active(action),
+	       (gchar*)NULL);
 }
 
 static void

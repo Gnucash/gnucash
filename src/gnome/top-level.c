@@ -46,6 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
@@ -73,6 +74,8 @@
 #include "top-level.h"
 #include "window-report.h"
 
+
+#define ACCEL_MAP_NAME "accelerator-map"
 
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format(void);
@@ -263,6 +266,7 @@ gnc_gui_init (SCM command_line)
 {
   SCM ret = command_line;
   GncMainWindow *main_window;
+  gchar *map;
 
   ENTER (" ");
 
@@ -302,6 +306,10 @@ gnc_gui_init (SCM command_line)
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));
 
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_load(map);
+    g_free(map);
+
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
@@ -337,9 +345,15 @@ gnc_gui_init (SCM command_line)
 void
 gnc_gui_shutdown (void)
 {
+  gchar *map;
+
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_save(map);
+    g_free(map);
 
     gtk_main_quit();
 

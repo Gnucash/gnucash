@@ -1,5 +1,10 @@
 2005-11-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/top-level.c: Restore long lost functionality to
+	customize the accelerator keys on menu items.
+
 	* src/gnome-utils/druid-gconf-setup.c:
 	* src/engine/test/test-resolve-file-path.c:
 	* src/app-utils/gnc-ui-util.c:
