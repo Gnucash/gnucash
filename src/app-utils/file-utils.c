@@ -32,6 +32,7 @@
 
 #include "file-utils.h"
 #include "gnc-engine.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
  
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -186,8 +187,7 @@ gnc_find_state_file (const gchar *url,
 
   basename = g_path_get_basename(url);
   DEBUG("Basename %s", basename);
-  original = g_build_filename(g_get_home_dir(), ".gnucash",
-			      "books", basename, NULL);
+  original = gnc_build_book_path(basename);
   g_free(basename);
   DEBUG("Original %s", original);
 
