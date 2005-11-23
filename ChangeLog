@@ -1,5 +1,12 @@
 2005-11-23  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/druid-gconf-setup.c:
+	* src/engine/test/test-resolve-file-path.c:
+	* src/app-utils/gnc-ui-util.c:
+	* lib/libqof/qof/guid.c: Use the g_get_home_dir() function instead
+	of getenv("HOME").  The former tries multiple places to get the
+	path to the users home directory.
+	
 	* src/import-export/qif-import/qif-guess-map.scm:
 	* src/scm/command-line.scm:
 	* src/scm/main.scm:
@@ -8,6 +15,7 @@
 	* src/engine/gnc-filepath-utils.c:
 	* src/engine/gnc-filepath-utils.h:
 	* src/engine/gw-engine-spec.scm:
+	* src/app-utils/file-utils.c:
 	* src/app-utils/gnc-exp-parser.c: Consolidate the creation of all
 	file names under ~/.gnucash, and also consolidate checks for the
 	existence of ~/.gnucash and ~/.gnucash/books.  Add better error

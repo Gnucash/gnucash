@@ -168,7 +168,7 @@ void
 gnc_init_default_directory (char **dirname)
 {
   if (*dirname == NULL)
-    *dirname = g_strdup_printf("%s/", getenv("HOME"));
+    *dirname = g_strdup_printf("%s/", g_get_home_dir());
 }
 
 void

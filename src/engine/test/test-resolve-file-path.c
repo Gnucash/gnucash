@@ -46,12 +46,6 @@ test_strings strs[] = {
     { NULL, NULL, 0 },
 };
 
-static const char*
-get_home_dir()
-{
-    return getenv("HOME");
-}
-
 int
 main(int argc, char **argv)
 {
@@ -65,14 +59,14 @@ main(int argc, char **argv)
         
         if(strs[i].prefix_home == 1) 
         {
-            dain = g_strdup_printf("%s/%s", get_home_dir(), strs[i].input);
-            wantout = g_strdup_printf("%s/%s", get_home_dir(),
+            dain = g_strdup_printf("%s/%s", g_get_home_dir(), strs[i].input);
+            wantout = g_strdup_printf("%s/%s", g_get_home_dir(),
                                       strs[i].output);
         }
         else if(strs[i].prefix_home == 2)
         {
             dain = g_strdup(strs[i].input);
-            wantout = g_strdup_printf("%s%s", get_home_dir(),
+            wantout = g_strdup_printf("%s%s", g_get_home_dir(),
                                       strs[i].output);
         }
          else

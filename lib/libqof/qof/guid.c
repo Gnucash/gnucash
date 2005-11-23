@@ -350,7 +350,7 @@ guid_init(void)
     for (i = 0; dirs[i] != NULL; i++)
       bytes += init_from_dir(dirs[i], 32);
 
-    dirname = getenv("HOME");
+    dirname = g_get_home_dir();
     if (dirname != NULL)
       bytes += init_from_dir(dirname, 32);
   }

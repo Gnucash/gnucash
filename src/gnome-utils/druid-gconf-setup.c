@@ -115,8 +115,8 @@ druid_gconf_update_path (GError **error)
   gboolean found_user_dir = FALSE;
   FILE *output;
 
-  data_filename = g_strjoin("/", g_getenv("HOME"), ".gconf", (char *)NULL);
-  path_filename = g_strjoin("/", g_getenv("HOME"), ".gconf.path", (char *)NULL);
+  data_filename = g_build_filename(g_get_home_dir(), ".gconf", (char *)NULL);
+  path_filename = g_build_filename(g_get_home_dir(), ".gconf.path", (char *)NULL);
   if (g_file_test(path_filename, G_FILE_TEST_EXISTS)) {
     if (!g_file_get_contents(path_filename, &contents, NULL, error)) {
       g_free(path_filename);
