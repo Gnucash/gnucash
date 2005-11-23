@@ -32,13 +32,18 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <glib/gprintf.h>
+
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
-#include <glib.h>
 #include "gnc-engine.h"
 #include "gnc-filepath-utils.h"
 
@@ -302,6 +307,120 @@ xaccResolveURL (const char * pathfrag)
   }
 
   return (xaccResolveFilePath (pathfrag));
+}
+
+/* ====================================================================== */
+
+static void
+gnc_validate_directory (const gchar *dirname)
+{
+  struct stat statbuf;
+  gint rc;
+
+  rc = stat (dirname, &statbuf);
+  if (rc) {
+    switch (errno) {
+    case ENOENT:
+      rc = mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+      if (rc) {
+	g_fprintf(stderr,
+		  _("An error occurred wile creating the directory:\n"
+		    "  %s\n"
+		    "Please correct the problem and restart gnucash\n"
+		    "The reported error was '%s' (errno %d).\n"),
+		  dirname, strerror(errno), errno);
+	exit(1);
+      }
+      stat (dirname, &statbuf);
+      break;
+
+    case EACCES:
+      g_fprintf(stderr,
+		_("The directory\n"
+		  "  %s\n"
+		  "exists but cannot be accessed.  This program \n"
+		  "must have full access (read/write/execute) to \n"
+		  "the directory in order to function properly.\n"),
+		dirname);
+      exit(1);
+
+    case ENOTDIR:
+      g_fprintf(stderr,
+		_("The path\n"
+		  "  %s\n"
+		  "exists but it is not a directory. Please delete\n"
+		  "the file and start gnucash again.\n"),
+		dirname);
+      exit(1);
+      
+    default:
+      g_fprintf(stderr,
+		_("An unknown error occurred when validating that the\n"
+		  "  %s\n"
+		  "directory exists and is usable. Please correct the\n"
+		  "problem and restart gnucash.  The reported error \n"
+		  "was '%s' (errno %d)."),
+		dirname, strerror(errno), errno);
+      exit(1);
+    }
+  }
+
+  if ((statbuf.st_mode & S_IFDIR) != S_IFDIR) {
+    g_fprintf(stderr,
+	      _("The path\n"
+		"  %s\n"
+		"exists but it is not a directory. Please delete\n"
+		"the file and start gnucash again.\n"),
+	      dirname);
+    exit(1);
+  }
+  if ((statbuf.st_mode & S_IRWXU) != S_IRWXU) {
+    g_fprintf(stderr,
+	      _("The permissions are wrong on the directory\n"
+		"  %s\n"
+		"They must be at least 'rwx' for the user.\n"),
+	      dirname);
+    exit(1);
+  }
+}
+
+const gchar *
+gnc_dotgnucash_dir (void)
+{
+  static gchar *dotgnucash = NULL, *books_dir;
+  const gchar *home;
+
+  if (dotgnucash)
+    return dotgnucash;
+
+  home = g_get_home_dir();
+  if (!home) {
+    g_warning("Cannot find home directory. Using tmp directory instead.");
+    home = g_get_tmp_dir();
+  }
+  g_assert(home);
+
+  dotgnucash = g_build_filename(home, ".gnucash", (gchar *)NULL);
+  gnc_validate_directory(dotgnucash);
+
+  /* Since we're in code that is only executed once.... */
+  books_dir = g_build_filename(dotgnucash, "books", (gchar *)NULL);
+  gnc_validate_directory(books_dir);
+  g_free(books_dir);
+
+  return dotgnucash;
+}
+
+gchar *
+gnc_build_dotgnucash_path (const gchar *filename)
+{
+  return g_build_filename(gnc_dotgnucash_dir(), filename, (gchar *)NULL);
+}
+
+gchar *
+gnc_build_book_path (const gchar *filename)
+{
+  return g_build_filename(gnc_dotgnucash_dir(), "books", filename, (gchar *)NULL);
 }
 
 /* =============================== END OF FILE ========================== */

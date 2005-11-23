@@ -101,20 +101,10 @@ the account instead of opening a register.") #f))
 (define (gnc:main-window-save-state session)
   (let* ((book-url (gnc:session-get-url session))
 	 (conf-file-name (gnc:html-encode-string book-url))
-	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
-         (file-dir (build-path dotgnucash-dir "books"))
-         (save-file? #f)
          (book-path #f))
 
-    ;; make sure ~/.gnucash/books is there
-    (set! save-file? (and (gnc:make-dir dotgnucash-dir)
-                         (gnc:make-dir file-dir)))
-
-    (if (not save-file?) (gnc:warn (_ "Can't save window state")))
-
-    (if (and save-file? conf-file-name)
-        (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
-                                     conf-file-name)))
+    (if (conf-file-name)
+        (let ((book-path (gnc:build-book-path conf-file-name)))
           (with-output-to-port (open-output-file book-path)
             (lambda ()
               (hash-fold 
@@ -148,7 +138,7 @@ the account instead of opening a register.") #f))
 
 (define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
-    (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))
+    (let ((file (gnc:build-book-path file-suffix)))
       ;; make sure the books directory is there 
       (if (access? file F_OK)
           (if (not (false-if-exception (primitive-load file)))

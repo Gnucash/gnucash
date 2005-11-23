@@ -46,4 +46,8 @@
 char * xaccResolveFilePath (const char * filefrag);
 char * xaccResolveURL (const char * pathfrag);
 
+const gchar *gnc_dotgnucash_dir (void);
+gchar *gnc_build_dotgnucash_path (const gchar *filename);
+gchar *gnc_build_book_path (const gchar *filename);
+
 #endif /* GNC_FILEPATH_UTILS_H */

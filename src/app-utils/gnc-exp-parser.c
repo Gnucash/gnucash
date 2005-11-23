@@ -29,6 +29,7 @@
 
 #include "finproto.h"
 #include "fin_spl_protos.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
@@ -56,7 +57,7 @@ static gboolean      parser_inited     = FALSE;
 static gchar *
 gnc_exp_parser_filname (void)
 {
-  return g_build_filename(g_get_home_dir(), ".gnucash", "expressions-2.0", NULL);
+  return gnc_build_dotgnucash_path("expressions-2.0");
 }
 
 void

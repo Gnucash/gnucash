@@ -29,6 +29,7 @@
     "#include <gnc-budget.h>\n"
     "#include <gnc-commodity.h>\n"
     "#include <gnc-engine.h>\n"
+    "#include <gnc-filepath-utils.h>\n"
     "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
     "#include <gnc-session-scm.h>\n"
@@ -2418,6 +2419,26 @@ of having a parent transaction with which one is working...")
  '((<gnc:time-pair> tp))
  "Convert a timepair on a certain day (localtime) to\
 the timepair representing midday on that day")
+
+;;
+;; gnc-filepath-utils.h
+;;
+
+(gw:wrap-function
+ ws
+ 'gnc:build-dotgnucash-path
+ '(<gw:mchars> caller-owned)
+ "gnc_build_dotgnucash_path"
+ '(((<gw:mchars> caller-owned) filename))
+ "Convert a relative path name into a full path name in the .gnucash directory")
+
+(gw:wrap-function
+ ws
+ 'gnc:build-book-path
+ '(<gw:mchars> caller-owned)
+ "gnc_build_book_path"
+ '(((<gw:mchars> caller-owned) filename))
+ "Convert a relative path name into a full path name in the .gnucash/books directory")
 
 ;;
 ;; gnc-lot.h
