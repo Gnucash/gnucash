@@ -1,5 +1,18 @@
 2005-11-23  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/report-gnome.scm:
+	* src/gnome-utils/gnc-menu-extensions.c:
+	* src/gnome-utils/gnc-menu-extensions.h:
+	* src/gnome-utils/gnc-plugin-menu-additions.c:
+	* src/gnome-utils/gnome-utils.scm:
+	* src/gnome-utils/gnc-menu-extensions.scm: Rewrite the code that
+	assigns accelerator keys to the names of menu extensions.  The new
+	C language implementation is now called as late as possible (when
+	menus are populated), and rewritten understands utf8 strings.  The
+	code now also translates the menu extension path components as it
+	goes so that sub-menus will appear properly in non-English
+	languages.
+
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
 	* src/gnome-utils/gnc-main-window.c:
 	* src/gnome/top-level.c: Restore long lost functionality to

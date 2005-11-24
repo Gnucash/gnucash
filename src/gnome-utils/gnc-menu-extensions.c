@@ -149,7 +149,10 @@ gnc_extension_path (SCM extension, char **fullpath)
 
     if (SCM_STRINGP(item))
     {
-      strings[i] = g_strdup(SCM_STRING_CHARS(item));
+      if (i == 1)
+	strings[i] = g_strdup(SCM_STRING_CHARS(item));
+      else
+	strings[i] = g_strdup(gettext(SCM_STRING_CHARS(item)));
     }
     else
     {
@@ -219,6 +222,7 @@ gnc_create_extension_info (SCM extension)
 {
   ExtensionInfo *ext_info;
   gchar *typeStr, *tmp;
+  const gchar *name;
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
@@ -230,8 +234,9 @@ gnc_create_extension_info (SCM extension)
   }
 
   /* Get all the pieces */
-  ext_info->ae.label = gnc_extension_name(extension);
-  ext_info->ae.name = gnc_ext_gen_action_name(ext_info->ae.label);
+  name = gnc_extension_name(extension);
+  ext_info->ae.label = g_strdup(gettext(name));
+  ext_info->ae.name = gnc_ext_gen_action_name(name);
   ext_info->ae.tooltip = gnc_extension_documentation(extension);
   ext_info->ae.stock_id = "";
   ext_info->ae.accelerator = NULL;

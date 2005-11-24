@@ -62,7 +62,6 @@ static void gnc_plugin_menu_additions_remove_from_window (GncPlugin *plugin, Gnc
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"
 
 /** Private data for this plugin.  This data structure is unused. */
@@ -244,6 +243,140 @@ gnc_menu_additions_alpha_sort (ExtensionInfo *a, ExtensionInfo *b)
 }
 
 
+/** Initialize the hash table of accelerator key maps.
+ *
+ *  @param unused Unused.
+ *
+ *  @return an empty hash table. */
+static gpointer
+gnc_menu_additions_init_accel_table (gpointer unused)
+{
+  return g_hash_table_new_full(g_str_hash, g_str_equal, NULL, g_free);
+}
+
+
+/** Examine an extension menu item and see if it already has an
+ *  accelerator key defined (in the source).  If so, add this key to
+ *  the map of already used accelerator keys.  These maps are
+ *  maintained per path, so accelerator keys may be duplicated across
+ *  different menus but are guaranteed to be unique within any given
+ *  menu.
+ *
+ *  @param info A menu extension.
+ *
+ *  @param table A hash table of accelerator maps. */
+static void
+gnc_menu_additions_do_preassigned_accel (ExtensionInfo *info, GHashTable *table)
+{
+  gchar *map, *new_map, *accel_key;
+  const gchar *ptr;
+
+  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+  if (info->accel_assigned) {
+    LEAVE("Already processed");
+    return;
+  }
+
+  if (!g_utf8_validate(info->ae.label, -1, NULL)) {
+    g_warning("Extension menu label '%s' is not valid utf8.", info->ae.label);
+    info->accel_assigned = TRUE;
+    LEAVE("Label is invalid utf8");
+    return;
+  }
+
+  /* Was an accelerator pre-assigned in the source? */
+  ptr = g_utf8_strchr(info->ae.label, -1, '_');
+  if (ptr == NULL) {
+    LEAVE("not preassigned");
+    return;
+  }
+
+  accel_key = g_utf8_strdown(g_utf8_next_char(ptr), 1);
+  DEBUG("Accelerator preassigned: '%s'", accel_key);
+
+  /* Now build a new map. Old one freed automatically. */
+  map = g_hash_table_lookup(table, info->path);
+  if (map == NULL)
+    map = "";
+  new_map = g_strconcat(map, accel_key, (gchar *)NULL);
+  DEBUG("path '%s', map '%s' -> '%s'", info->path, map, new_map);
+  g_hash_table_replace(table, info->path, new_map);
+
+  info->accel_assigned = TRUE;
+  g_free(accel_key);
+  LEAVE("preassigned");
+}
+
+
+/** Examine an extension menu item and see if it needs to have an
+ *  accelerator key assigned to it.  If so, find the first character
+ *  in the menu name that isn't already assigned as an accelerator in
+ *  the same menu, assign it to this item, and add it to the map of
+ *  already used accelerator keys.  These maps are maintained per
+ *  path, so accelerator keys may be duplicated across different menus
+ *  but are guaranteed to be unique within any given menu.
+ *
+ *  @param info A menu extension.
+ *
+ *  @param table A hash table of accelerator maps. */
+static void
+gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
+{
+  gchar *map, *new_map, *new_label, *start, buf[16];
+  const gchar *ptr;
+  gunichar uni;
+  gint len;
+
+  ENTER("Checking %s/%s [%s]", info->path, info->ae.label, info->ae.name);
+  if (info->accel_assigned) {
+    LEAVE("Already processed");
+    return;
+  }
+
+  /* Get map of used keys */
+  map = g_hash_table_lookup(table, info->path);
+  if (map == NULL)
+    map = g_strdup("");
+  DEBUG("map '%s', path %s", map, info->path);
+
+  for (ptr = info->ae.label; *ptr; ptr = g_utf8_next_char(ptr)) {
+    uni = g_utf8_get_char(ptr);
+    if (!g_unichar_isalpha(uni))
+      continue;
+    uni = g_unichar_tolower(uni);
+    len = g_unichar_to_utf8(uni, buf);
+    buf[len] = '\0';
+    DEBUG("Testing character '%s'", buf);
+    if (!g_utf8_strchr(map, -1, uni))
+      break;
+  }
+
+  if (ptr == NULL) {
+    /* Ran out of characters. Nothing to do. */
+    info->accel_assigned = TRUE;
+    LEAVE("All characters already assigned");
+    return;
+  }
+
+  /* Now build a new string in the form "<start>_<end>". */
+  start = g_strndup(info->ae.label, ptr - info->ae.label);
+  DEBUG("start %p, len %ld, text '%s'", start, g_utf8_strlen(start, -1), start);
+  new_label = g_strconcat(start, "_", ptr, (gchar *)NULL);
+  g_free(start);
+  DEBUG("label '%s' -> '%s'", info->ae.label, new_label);
+  g_free((gchar *)info->ae.label);
+  info->ae.label = new_label;
+
+  /* Now build a new map. Old one freed automatically. */
+  new_map = g_strconcat(map, buf, (gchar *)NULL);
+  DEBUG("map '%s' -> '%s'", map, new_map);
+  g_hash_table_replace(table, info->path, new_map);
+
+  info->accel_assigned = TRUE;
+  LEAVE("assigned");
+}
+
+
 /** Add one extension item to the UI manager.  This function creates a
  *  per-callback data structure for easy access to the opaque Scheme
  *  data block in the callback.  It then adds the action to the UI
@@ -296,6 +429,8 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 					 GQuark type)
 {
   GncPluginMenuAdditionsPerWindow per_window;
+  static GOnce accel_table_init = G_ONCE_INIT;
+  static GHashTable *table;
   GSList *menu_list;
 
   ENTER(" ");
@@ -309,6 +444,14 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 
   menu_list = g_slist_sort(gnc_extensions_get_menu_list(),
 			   (GCompareFunc)gnc_menu_additions_alpha_sort);
+
+  /* Assign accelerators */
+  table = g_once(&accel_table_init, gnc_menu_additions_init_accel_table, NULL);
+  g_slist_foreach(menu_list,
+		  (GFunc)gnc_menu_additions_do_preassigned_accel, table);
+  g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
+
+  /* Add to window. */
   g_slist_foreach(menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
 		  &per_window);
 

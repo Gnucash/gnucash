@@ -34,6 +34,7 @@ typedef struct _ExtensionInfo
   gchar *sort_key;
   const gchar *typeStr;
   GtkUIManagerItemType type;
+  gboolean accel_assigned;
 } ExtensionInfo;
 
 
