@@ -878,7 +878,7 @@ dnl The first call to PKG_CHECK_MODULES is inside an `if.'
 dnl We have to call PKG_PROG_PKG_CONFIG explicitly; otherwise it would
 dnl get expanded just before the first occurence of PKG_CHECK_MODULES
 dnl and might escape execution.
-PKG_PROG_PKG_CONFIG
+dnl PKG_PROG_PKG_CONFIG
 
 dnl *****************************
 #	libgsf-1		>= 1.12.2
@@ -896,7 +896,7 @@ goffice_cairo_reqs="
 goffice_gtk_reqs="
 	gtk+-2.0		>= 2.4.14
 	libglade-2.0		>= 2.3.6
-	libgnomeprint-2.2	>= 2.8.2
+	libgnomeprint-2.2	>= 2.8.0
 	libart-2.0		>= 2.3.11
 "
 goffice_gnome_reqs="

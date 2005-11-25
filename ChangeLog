@@ -1,3 +1,21 @@
+2005-11-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:
+	  add GSF_CFLAGS
+	* lib/goffice-0.0.4/goffice/utils/go-libxml-extras.c
+	  lib/goffice-0.0.4/goffice/utils/datetime.c:
+	  lib/goffice-0.0.4/goffice/graph/gog-chart.c
+	  lib/goffice-0.0.4/goffice/graph/gog-plot.c
+	  lib/goffice-0.0.4/goffice/graph/gog-object.c
+	  lib/goffice-0.0.4/goffice/gtk/goffice-gtk.c:
+	  look for goffice/glib24_26-compat.h
+	* lib/goffice-0.0.4/goffice/Makefile.am:
+	  don't deal with goffice-features.h anymore
+	* configure.in:
+	  fix for FC3 dependencies
+	* Makefile.am:
+	  create goffice -> , symlink when building internal goffice
+
 2005-11-20  Neil Williams  <linux@codehelp.co.uk>
 
 	* goffice-config.h.in : svn moved from 

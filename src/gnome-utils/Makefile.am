@@ -26,7 +26,8 @@ AM_CFLAGS = \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${QOF_CFLAGS} \
-  ${GOFFICE_CFLAGS}
+  ${GOFFICE_CFLAGS} \
+  ${GSF_CFLAGS}
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \

@@ -54,7 +54,7 @@
 #endif
 
 #ifndef HAVE_GLIB26
-#include "glib24_26-compat.h"
+#include "goffice/glib24_26-compat.h"
 #endif
 
 #define PREVIEW_HSIZE 150

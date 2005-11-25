@@ -33,7 +33,6 @@ endif
 
 libgoffice_1_ladir = $(goffice_include_dir)
 libgoffice_1_la_HEADERS = 	\
-	goffice-features.h	\
 	goffice.h
 if !HAVE_GLIB26
   libgoffice_1_la_HEADERS += glib24_26-compat.h
