@@ -1,3 +1,12 @@
+2005-11-25  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-page-account-tree.c: Update default
+	accelerator keys as per the HIG.
+
 2005-11-23  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/report-gnome.scm:

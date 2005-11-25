@@ -172,7 +172,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 
 	/* Actions menu */
-	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), "<control>r",
+	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile) },
 	{ "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",

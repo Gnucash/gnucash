@@ -99,7 +99,7 @@ static GtkActionEntry gnc_plugin_page_invoice_actions [] =
 	{ "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New _Account..."), NULL,
 	  N_("Create a new account"),
 	  G_CALLBACK (gnc_plugin_page_invoice_cmd_new_account) },
-	{ "FilePrintAction", GTK_STOCK_PRINT, N_("Print Invoice"), NULL,
+	{ "FilePrintAction", GTK_STOCK_PRINT, N_("Print Invoice"), "<control>p",
 	  N_("Make a printable invoice"),
 	  G_CALLBACK (gnc_plugin_page_invoice_cmd_print) },
 

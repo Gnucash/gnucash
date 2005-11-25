@@ -820,7 +820,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 
 static GtkActionEntry report_actions[] =
 {
-        { "FilePrintAction", GTK_STOCK_PRINT, N_("Print Report..."), NULL, NULL,
+        { "FilePrintAction", GTK_STOCK_PRINT, N_("Print Report..."), "<control>p", NULL,
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
         { "ReportSaveAction", GTK_STOCK_SAVE, N_("Save Report"), NULL, 
 	  N_("Save the current report for later use in "
