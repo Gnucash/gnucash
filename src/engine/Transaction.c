@@ -213,7 +213,7 @@ xaccSplitClone (Split *s)
   split->gains_split = NULL;
 
   col = qof_book_get_collection (s->book, GNC_ID_SPLIT);
-  qof_entity_init (&s->entity, GNC_ID_SPLIT, col);
+  qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
 
   xaccAccountInsertSplit(s->acc, split);
   if (s->lot) 
