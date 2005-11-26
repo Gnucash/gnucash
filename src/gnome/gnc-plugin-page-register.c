@@ -197,7 +197,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction) },
 	{ "UnvoidTransactionAction", NULL, N_("_Unvoid Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_unvoid_transaction) },
-	{ "ReverseTransactionAction", NULL, N_("_Reverse Transaction"), NULL, NULL,
+	{ "ReverseTransactionAction", NULL, N_("Add _Reversing Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction) },
 
 	/* View menu */
