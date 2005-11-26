@@ -745,8 +745,12 @@ gnc_date_edit_new_glade (gchar *widget_name,
 			 gchar *string1, gchar *string2,
 			 gint int1, gint int2)
 {
+	GtkWidget *widget;
+
 	/* None of the standard glade arguments are used. */
-        return gnc_date_edit_new(time(NULL), FALSE, FALSE);
+	widget = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+	gtk_widget_show(widget);
+	return widget;
 }
 
 

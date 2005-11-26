@@ -1,5 +1,8 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-date-edit.c: Show widget by default when its
+	created for a glade dialog.
+
 	* src/gnome-utils/gnc-file.c: Shouldn't still be calling the old
 	save state functions.
 
