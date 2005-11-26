@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 11:41+0100\n"
-"PO-Revision-Date: 2005-11-26 11:47+0100\n"
+"POT-Creation-Date: 2005-11-26 12:37+0100\n"
+"PO-Revision-Date: 2005-11-26 12:43+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2795,6 +2795,8 @@ msgid ""
 "Commodity or Trading Accounts\n"
 "that haven't been recorded elsewhere.\n"
 msgstr ""
+"Realisierter Gewinn/Verlust von Aktienkonten, die nicht woanders\n"
+"gespeichert worden sind.\n"
 
 #: ../src/engine/cap-gains.c:570
 msgid "Lot"
@@ -2945,11 +2947,16 @@ msgstr "Jährlich: %2$u. %1$s"
 #: ../src/engine/gnc-filepath-utils.c:327
 #, c-format
 msgid ""
-"An error occurred wile creating the directory:\n"
+"An error occurred while creating the directory:\n"
 "  %s\n"
-"Please correct the problem and restart gnucash\n"
+"Please correct the problem and restart gnucash.\n"
 "The reported error was '%s' (errno %d).\n"
 msgstr ""
+"Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
+"  %s\n"
+"gesucht wurde. Bitte berichten Sie den Fehler an die Programmierer und\n"
+"starten Sie GnuCash neu. \n"
+"Nennen Sie bitte diesen Fehlertext: \"%s\" (errno %d)\n"
 
 #: ../src/engine/gnc-filepath-utils.c:339
 #, c-format
@@ -2960,6 +2967,11 @@ msgid ""
 "must have full access (read/write/execute) to \n"
 "the directory in order to function properly.\n"
 msgstr ""
+"Das Verzeichnis\n"
+"  %s\n"
+"existiert, aber es kann nicht darauf zugegriffen werden. Dieses\n"
+"Programm muss alle Zugriffrechte (Lesen/Schreiben/Ausführen) zu diesem\n"
+"Verzeichnis besitzen, um korrekt zu funktionieren.  \n"
 
 #: ../src/engine/gnc-filepath-utils.c:349
 #: ../src/engine/gnc-filepath-utils.c:370
@@ -2970,6 +2982,10 @@ msgid ""
 "exists but it is not a directory. Please delete\n"
 "the file and start gnucash again.\n"
 msgstr ""
+"Der Pfad\n"
+"  %s\n"
+"existiert, ist aber kein Verzeichnis. Bitte löschen Sie diese Datei\n"
+"oder wählen einen anderen Pfad. Starten Sie dann GnuCash neu.\n"
 
 #: ../src/engine/gnc-filepath-utils.c:358
 #, c-format
@@ -2980,6 +2996,12 @@ msgid ""
 "problem and restart gnucash.  The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
+"Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
+"  %s\n"
+"\n"
+"gesucht wurde. Bitte berichten Sie den Fehler an die Programmierer und\n"
+"starten Sie GnuCash neu. \n"
+"Nennen Sie bitte diesen Fehlertext: \"%s\" (errno %d)"
 
 #: ../src/engine/gnc-filepath-utils.c:379
 #, c-format
@@ -2988,6 +3010,10 @@ msgid ""
 "  %s\n"
 "They must be at least 'rwx' for the user.\n"
 msgstr ""
+"Die Zugriffsrechte im Verzeichnis\n"
+"  %s\n"
+"sind nicht korrekt. Die Zugriffsrechte müssen \"rwx\"\n"
+"(Lesen/Schreiben/Ausführen) für den aktuellen Benutzer erlauben.\n"
 
 #: ../src/engine/Scrub.c:103
 msgid "Orphan"
@@ -3089,6 +3115,7 @@ msgstr "Alle Konten"
 #. src/business/business-reports/owner-report.scm
 #: ../src/gnome/dialog-find-transactions.c:105
 #: ../src/gnome/glade/stocks.glade.h:2 ../src/gnome-utils/dialog-account.c:626
+#: ../src/gnome-utils/gnc-icons.c:13
 #: ../src/import-export/generic-import.glade.h:11
 #: ../src/import-export/hbci/gnc-hbci-utils.c:621
 #: ../src/import-export/qif-import/qif.glade.h:2
@@ -4031,7 +4058,7 @@ msgstr "Titel:"
 
 #: ../src/gnome/glade/acctperiod.glade.h:17
 msgid "xxx"
-msgstr ""
+msgstr "xxx"
 
 #: ../src/gnome/glade/budget.glade.h:2
 msgid "Account Types to Show"
@@ -4869,27 +4896,27 @@ msgstr "In Arbeit..."
 
 #: ../src/gnome/glade/reconcile.glade.h:1
 msgid "$1,234.50"
-msgstr ""
+msgstr "$1,234.50"
 
 #: ../src/gnome/glade/reconcile.glade.h:2
 msgid "$14,650.24"
-msgstr ""
+msgstr "$14,650.24"
 
 #: ../src/gnome/glade/reconcile.glade.h:3
 msgid "$15.00"
-msgstr ""
+msgstr "$15.00"
 
 #: ../src/gnome/glade/reconcile.glade.h:4
 msgid "-$15.00"
-msgstr ""
+msgstr "-$15.00"
 
 #: ../src/gnome/glade/reconcile.glade.h:5
 msgid "-$86,764.29"
-msgstr ""
+msgstr "-$86,764.29"
 
 #: ../src/gnome/glade/reconcile.glade.h:6
 msgid "-72,114.05"
-msgstr ""
+msgstr "-72,114.05"
 
 #. difference title/value
 #: ../src/gnome/glade/reconcile.glade.h:7 ../src/gnome/window-reconcile.c:1844
@@ -5101,7 +5128,7 @@ msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
 
 #: ../src/gnome/glade/register.glade.h:31
 msgid "Filter register by..."
-msgstr ""
+msgstr "Kontofenster filtern durch..."
 
 #. src/business/business-gnome/business-gnome.scm
 #: ../src/gnome/glade/register.glade.h:32 ../intl-scm/guile-strings.c:3668
@@ -5154,7 +5181,7 @@ msgstr "Drucken"
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Reason for voiding transaction:"
-msgstr ""
+msgstr "Begründung für Buchung stornieren:"
 
 #: ../src/gnome/glade/register.glade.h:45
 msgid "Reconcile the main account for this register"
@@ -6619,7 +6646,7 @@ msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
-#: ../src/gnome/window-reconcile.c:1223
+#: ../src/gnome-utils/gnc-icons.c:15 ../src/gnome/window-reconcile.c:1223
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
@@ -6629,6 +6656,7 @@ msgid "Edit the selected account"
 msgstr "Ausgewähltes Konto bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:167
+#: ../src/gnome-utils/gnc-icons.c:14
 msgid "_Delete Account"
 msgstr "_Konto löschen"
 
@@ -8660,6 +8688,14 @@ msgstr ""
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
 
+#: ../src/gnome-utils/gnc-icons.c:16
+msgid "_New Account"
+msgstr "_Neues Konto"
+
+#: ../src/gnome-utils/gnc-icons.c:17 ../src/gnome/window-reconcile.c:1216
+msgid "_Open Account"
+msgstr "_Konto öffnen"
+
 #. Toplevel
 #: ../src/gnome-utils/gnc-main-window.c:210
 msgid "_File"
@@ -8882,6 +8918,10 @@ msgid ""
 "\n"
 "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
+"<b>Änderungen in Datei %s vor dem Schließen speichern?</b>\n"
+"\n"
+"Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
+"verloren."
 
 #: ../src/gnome-utils/gnc-main-window.c:938
 #, c-format
@@ -8890,29 +8930,31 @@ msgid ""
 "\n"
 "If you don't save, changes will be discarded."
 msgstr ""
+"<b>Änderungen in Datei %s vor dem Schließen speichern?</b>\n"
+"\n"
+"Wenn Sie nicht speichern, gehen die Änderungen verloren."
 
 #: ../src/gnome-utils/gnc-main-window.c:945
 msgid "Close _without Saving"
 msgstr "Schli_eßen ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:994
+#: ../src/gnome-utils/gnc-main-window.c:995
+msgid "Quit Gnucash?"
+msgstr "GnuCash beenden?"
+
+#: ../src/gnome-utils/gnc-main-window.c:996
 msgid ""
-"<b>Quit Gnucash?</b>\n"
-"\n"
 "You are attempting to close the last Gnucash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
 msgstr ""
-"<b>Gnucash beenden?</b>\n"
-"\n"
-"Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster\n"
-"zu schließen. Dies wird Gnucash beenden.\n"
-"Sind Sie sich sicher, dass Sie das wollen?"
+"Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster zu schließen. Dies "
+"wird Gnucash beenden. Sind Sie sich sicher, dass Sie das wollen?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1095
+#: ../src/gnome-utils/gnc-main-window.c:1096
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:2860
+#: ../src/gnome-utils/gnc-main-window.c:2861
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -8921,7 +8963,7 @@ msgstr ""
 "Die freie Lösung zur Finanzverwaltung.\n"
 "http://www.gnucash.org\n"
 
-#: ../src/gnome-utils/gnc-main-window.c:2901
+#: ../src/gnome-utils/gnc-main-window.c:2902
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -8931,7 +8973,7 @@ msgstr ""
 "Die freie Lösung zur Finanzverwaltung.\n"
 "http://www.gnucash.org"
 
-#: ../src/gnome-utils/gnc-main-window.c:2921
+#: ../src/gnome-utils/gnc-main-window.c:2922
 msgid "translator_credits"
 msgstr ""
 
@@ -9959,10 +10001,6 @@ msgstr "Das Abgleichen des Kontos unterbrechen"
 msgid "Cancel the reconciliation of this account"
 msgstr "Die Abstimmung dieses Kontos abbrechen"
 
-#: ../src/gnome/window-reconcile.c:1216
-msgid "_Open Account"
-msgstr "_Konto öffnen"
-
 #: ../src/gnome/window-reconcile.c:1216 ../src/gnome/window-reconcile.c:1423
 msgid "Open the account"
 msgstr "Konto öffnen"
@@ -10131,11 +10169,13 @@ msgid ""
 "\"Select Import Action\" allows you to change the matching transaction to "
 "reconcile, or the destination account of the auto-balance split (if "
 "required)."
-msgstr "Mit \"Import-Aktion auswählen\" können Sie das Gegenkonto dieser neuen Buchung wählen oder die abzugleichende existierende Buchung auswählen."
+msgstr ""
+"Mit \"Import-Aktion auswählen\" können Sie das Gegenkonto dieser neuen "
+"Buchung wählen oder die abzugleichende existierende Buchung auswählen."
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
-msgstr "(kein(e))"
+msgstr "(keine)"
 
 #: ../src/import-export/generic-import.glade.h:6
 msgid "<b>Colors</b>"
@@ -10343,7 +10383,8 @@ msgstr ""
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
-msgstr "Diese Buchung benötigt Ihre Auswahl oder sie würde unausgeglichen importiert."
+msgstr ""
+"Diese Buchung benötigt Ihre Auswahl oder sie würde unausgeglichen importiert."
 
 #: ../src/import-export/generic-import.glade.h:57
 msgid "This transaction requires your intervention or it will NOT be imported."
@@ -10366,7 +10407,9 @@ msgstr "_Bayes-Algorithmus verwenden"
 #: ../src/import-export/generic-import.glade.h:61
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
-msgstr "Bayes-Algorithmus verwenden, um importierte Buchungen mit existierenden abzugleichen."
+msgstr ""
+"Bayes-Algorithmus verwenden, um importierte Buchungen mit existierenden "
+"abzugleichen."
 
 #: ../src/import-export/generic-import.glade.h:62
 msgid "Yellow"
