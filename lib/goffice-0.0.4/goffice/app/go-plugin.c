@@ -866,7 +866,7 @@ static void
 plugin_get_loader_if_needed (GOPlugin *plugin, ErrorInfo **ret_error)
 {
 	GType loader_type;
-	ErrorInfo *error;
+	ErrorInfo *error = NULL;
 
 	g_return_if_fail (IS_GO_PLUGIN (plugin));
 
@@ -1336,7 +1336,7 @@ go_plugin_list_read_for_subdirs_of_dir (const gchar *dir_name, ErrorInfo **ret_e
 
 	while ((d_name = g_dir_read_name (dir)) != NULL) {
 		gchar *full_entry_name;
-		ErrorInfo *error;
+		ErrorInfo *error = NULL;
 		GOPlugin *plugin;
 
 		if (strcmp (d_name, ".") == 0 || strcmp (d_name, "..") == 0)
@@ -1373,7 +1373,7 @@ go_plugin_list_read_for_subdirs_of_dir_list (GSList *dir_list, ErrorInfo **ret_e
 	GO_INIT_RET_ERROR_INFO (ret_error);
 	for (dir_iterator = dir_list; dir_iterator != NULL; dir_iterator = dir_iterator->next) {
 		gchar *dir_name;
-		ErrorInfo *error;
+		ErrorInfo *error = NULL;
 		GSList *dir_plugin_info_list;
 
 		dir_name = (gchar *) dir_iterator->data;
