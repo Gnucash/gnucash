@@ -1,5 +1,7 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/scm/main-window.scm: Fix crash when saving files.
+
 	* src/report/report-gnome/gnc-plugin-page-report.c:
 	* src/business/business-gnome/gnc-plugin-page-invoice.c:
 	* src/gnome-utils/gnc-main-window.c:

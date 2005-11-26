@@ -103,7 +103,7 @@ the account instead of opening a register.") #f))
 	 (conf-file-name (gnc:html-encode-string book-url))
          (book-path #f))
 
-    (if (conf-file-name)
+    (if conf-file-name
         (let ((book-path (gnc:build-book-path conf-file-name)))
           (with-output-to-port (open-output-file book-path)
             (lambda ()
