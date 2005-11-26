@@ -521,6 +521,14 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
     case DIAG_COMM_ALL:
       namespaces =
 	gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
+
+      /* Replace the string "ISO4217" with "CURRENCY". */
+      node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
+      if (node) {
+	namespaces = g_list_remove_link (namespaces, node);
+	g_list_free_1 (node);
+      }
+      namespaces = g_list_prepend (namespaces, "CURRENCY");
       break;
 
    case DIAG_COMM_NON_CURRENCY:

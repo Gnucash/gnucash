@@ -1,5 +1,9 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-commodity.c: Consistently use the string
+	"currency" in the commodity picker window instead of the string
+	ISO4217.  Previous behavior wasn't consistent. Fixes 167388.
+
 	* src/gnome/dialog-price-edit-db.c: Allow selection of multiple
 	prices at once.  Multiple prices can be deleted at the same time,
 	but not edited. implements 147557.
