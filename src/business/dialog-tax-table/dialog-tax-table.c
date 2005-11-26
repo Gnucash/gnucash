@@ -542,6 +542,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     gncTaxTableBeginEdit (ttw->current_table);
     gncTaxTableDestroy (ttw->current_table);
     ttw->current_table = NULL;
+    ttw->current_entry = NULL;
     gnc_resume_gui_refresh ();
   }
 }
