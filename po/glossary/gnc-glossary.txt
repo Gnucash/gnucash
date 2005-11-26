@@ -139,6 +139,7 @@
 "register: transaction journal"	"another form of register"
 "reload, to"	"reload the current document"
 "Retained Earnings"	"name of an equity account (?); to be distinguished from the opening balance."
+"reverse transaction, to (Action in the register)"	"Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 "save, to (to a file)"	"To write data (typically a file) to a storage medium, such as a disk or tape."
 "Scheduled Transaction"	"A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 "scrub, to"	"DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."

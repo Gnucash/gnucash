@@ -1863,7 +1863,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     if ( kvp_val ) {
       // GUID *fromSXId = kvp_value_get_guid( kvp_val );
       gnc_error_dialog(GNC_PLUGIN_PAGE(page)->window,
-		       _("This transaction has already been reversed."));
+		       _("A reversing entry has already been created for this transaction."));
       return;
     }
   }

@@ -1054,7 +1054,7 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
     if ( kvp_val ) {
       // GUID *fromSXId = kvp_value_get_guid( kvp_val );
       gnc_error_dialog(gsr->window,
-		       _("This transaction has already been reversed."));
+		       _("A reversing entry has already been created for this transaction."));
       return;
     }
   }
