@@ -1,5 +1,10 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-date-edit.[ch]:
+	* src/gnome/window-reconcile.c:
+	* src/gnome-search/search-date.c: Update function name to match
+	its g2 implementation.
+
 	* src/gnome-utils/dialog-commodity.c: Consistently use the string
 	"currency" in the commodity picker window instead of the string
 	ISO4217.  Previous behavior wasn't consistent. Fixes 167388.

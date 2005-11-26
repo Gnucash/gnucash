@@ -253,7 +253,7 @@ editable_enters (GNCSearchCoreType *fe)
 
   priv = _PRIVATE(fi);
   if (priv->entry)
-    gnc_date_editable_enters (GNC_DATE_EDIT (priv->entry), TRUE);
+    gnc_date_activates_default (GNC_DATE_EDIT (priv->entry), TRUE);
 }
 
 static GtkWidget *

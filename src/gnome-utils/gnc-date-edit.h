@@ -128,5 +128,5 @@ void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
                                          GNCDateEditFlags flags);
 int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
-void      gnc_date_editable_enters (GNCDateEdit *gde, gboolean state);
+void      gnc_date_activates_default    (GNCDateEdit *gde, gboolean state);
 #endif

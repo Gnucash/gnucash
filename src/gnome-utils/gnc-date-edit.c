@@ -980,7 +980,7 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
  * clicking the button that has the default.
  **/
 void
-gnc_date_editable_enters (GNCDateEdit *gde, gboolean state)
+gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
 {
 	if (!gde)
 		return;
