@@ -1,5 +1,9 @@
 2005-11-26  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c: Eliminate extra redrawing
+	of the register by suspending events around the entire reverse
+	transaction operation.  Speed up the command significantly.
+
 	* src/engine/Transaction.c: Initialize the qof entity in the new
 	split, not the old one.
 
