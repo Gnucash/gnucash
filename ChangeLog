@@ -1,3 +1,9 @@
+2005-11-26  David Hampton  <hampton@employees.org>
+
+	* lib/goffice-0.0.4/plugins/plot_radar/gog-radar.c:
+	* lib/goffice-0.0.4/goffice/app/go-plugin.c: Compile cleanly using
+	gcc4.
+
 2005-11-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/Makefile.am:
