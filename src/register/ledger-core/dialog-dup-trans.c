@@ -112,6 +112,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     GtkWidget *hbox;
 
     date_edit = gnc_date_edit_new (date, FALSE, FALSE);
+    gnc_date_activates_default(GNC_DATE_EDIT(date_edit), TRUE);
     hbox = glade_xml_get_widget (xml, "date_hbox");
     gtk_widget_show (date_edit);
 
@@ -126,6 +127,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     num_spin = glade_xml_get_widget (xml, "num_spin");
     dt_dialog->num_edit = num_spin;
 
+    gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
     gtk_signal_connect(GTK_OBJECT(num_spin), "output",
                        GTK_SIGNAL_FUNC(gnc_dup_trans_output_cb), dt_dialog);
 

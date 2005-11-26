@@ -296,6 +296,7 @@
 	    <widget class="GtkButton" id="button77">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
@@ -415,7 +416,7 @@
 		      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
-		      <property name="adjustment">0 0 1e+09 1 10 10</property>
+		      <property name="adjustment">0 0 1000000000 1 10 10</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -1627,7 +1628,7 @@
 	      <property name="max_length">0</property>
 	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="invisible_char">*</property>
 	      <property name="activates_default">True</property>
 	    </widget>
 	    <packing>

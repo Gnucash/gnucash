@@ -1,5 +1,10 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/dialog-dup-trans.c:
+	* src/gnome/glade/register.glade: Fix the duplicate transaction
+	dialog so that the "Enter" key activates the dialog box.  Fixes
+	104496.
+
 	* src/gnome-utils/gnc-date-edit.[ch]:
 	* src/gnome/window-reconcile.c:
 	* src/gnome-search/search-date.c: Update function name to match
