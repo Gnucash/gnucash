@@ -1,5 +1,13 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-price-edit-db.c: Allow selection of multiple
+	prices at once.  Multiple prices can be deleted at the same time,
+	but not edited. implements 147557.
+
+	* src/gnome-utils/gnc-tree-view-price.c: Fix the
+	gnc_tree_view_price_set_selected_price function to ignore exchange
+	and commodity entries.
+
 	* src/gnome/dialog-price-edit-db.c: Enhance the "remove old
 	prices" code to have options to retain the last price entered, and
 	to retain any user entered prices.  The "remove old" button should

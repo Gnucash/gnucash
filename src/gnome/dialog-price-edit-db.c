@@ -72,7 +72,6 @@ typedef struct
   GtkWidget * remove_button;
 
   GNCPriceDB *price_db;
-  GNCPrice  * price;		/* Currently selected price */
 } PricesDialog;
 
 
@@ -83,12 +82,6 @@ gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data)
 
   ENTER(" ");
   gnc_unregister_gui_component_by_data (DIALOG_PRICE_DB_CM_CLASS, pdb_dialog);
-
-  if (pdb_dialog->price)
-  {
-    gnc_price_unref (pdb_dialog->price);
-    pdb_dialog->price = NULL;
-  }
 
   if (pdb_dialog->dialog) {
     gtk_widget_destroy(pdb_dialog->dialog);
@@ -123,37 +116,58 @@ void
 gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
+  GList *price_list;
 
   ENTER(" ");
-  if (!pdb_dialog->price) {
+  price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
+  if (!price_list) {
     LEAVE("no price selected");
     return;
   }
+  if (g_list_next(!price_list)) {
+    LEAVE("soo many prices selected");
+    return;
+  }
 
-  gnc_price_edit_dialog (pdb_dialog->dialog, pdb_dialog->price, GNC_PRICE_EDIT);
+  gnc_price_edit_dialog (pdb_dialog->dialog, price_list->data, GNC_PRICE_EDIT);
+  g_list_free(price_list);
   LEAVE(" ");
+}
+
+static void
+remove_helper(GNCPrice *price, GNCPriceDB *pdb)
+{
+  gnc_pricedb_remove_price (pdb, price);
 }
 
 void
 gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-  const char *message = _("Are you sure you want to delete the\n"
-                          "selected price?");
+  GList *price_list;
+  gint length;
+  const char *message_sg = N_("Are you sure you want to delete the %d "
+			      "selected price?");
+  const char *message_pl = N_("Are you sure you want to delete the %d "
+			      "selected prices?");
 
   ENTER(" ");
-  if (!pdb_dialog->price) {
+  price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
+  if (!price_list) {
     LEAVE("no price selected");
     return;
   }
 
-  if (gnc_verify_dialog (pdb_dialog->dialog, TRUE, message))
+  length = g_list_length(price_list);
+  if (gnc_verify_dialog (pdb_dialog->dialog, TRUE,
+			 ngettext(message_sg, message_pl, length), length))
   {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
 
-    gnc_pricedb_remove_price (pdb, pdb_dialog->price);
+    g_list_foreach(price_list, (GFunc)remove_helper, pdb);
   }
+  g_list_free(price_list);
   LEAVE(" ");
 }
 
@@ -200,9 +214,16 @@ void
 gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
+  GNCPrice *price = NULL;
+  GList *price_list;
 
   ENTER(" ");
-  gnc_price_edit_dialog (pdb_dialog->dialog, pdb_dialog->price, GNC_PRICE_NEW);
+  price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
+  if (price_list) {
+    price = price_list->data;
+    g_list_free(price_list);
+  }
+  gnc_price_edit_dialog (pdb_dialog->dialog, price, GNC_PRICE_NEW);
   LEAVE(" ");
 }
 
@@ -238,22 +259,18 @@ gnc_prices_dialog_selection_changed (GtkTreeSelection *treeselection,
 				     gpointer data)
 {
   PricesDialog *pdb_dialog = data;
+  GList *price_list;
+  gint length;
 
   ENTER(" ");
-  if (pdb_dialog->price)
-    gnc_price_unref (pdb_dialog->price);
-
-  pdb_dialog->price =
-    gnc_tree_view_price_get_selected_price (pdb_dialog->price_tree);
-
-  if (pdb_dialog->price)
-    gnc_price_ref (pdb_dialog->price);
+  price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
+  length = g_list_length(price_list);
 
   gtk_widget_set_sensitive (pdb_dialog->edit_button,
-                            pdb_dialog->price != NULL);
+                            length == 1);
   gtk_widget_set_sensitive (pdb_dialog->remove_button,
-                            pdb_dialog->price != NULL);
-  LEAVE(" ");
+                            length >= 1);
+  LEAVE("%d prices selected", length);
 }
 
 
@@ -347,6 +364,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 				  pdb_dialog, NULL);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
+  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
   g_signal_connect (G_OBJECT (selection), "changed",
 		    G_CALLBACK (gnc_prices_dialog_selection_changed), pdb_dialog);
 

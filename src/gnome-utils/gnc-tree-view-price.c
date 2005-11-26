@@ -924,7 +924,8 @@ get_selected_prices_helper (GtkTreeModel *s_model,
   model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   price = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model),
 						      &iter);
-  *return_list = g_list_append(*return_list, price);
+  if (price)
+    *return_list = g_list_append(*return_list, price);
 }
 
 /*
