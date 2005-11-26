@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 16:01+0100\n"
-"PO-Revision-Date: 2005-11-26 16:01+0100\n"
+"POT-Creation-Date: 2005-11-26 21:49+0100\n"
+"PO-Revision-Date: 2005-11-26 21:50+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,7 +84,7 @@ msgstr "frozen:f"
 #. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:498
 msgid "void:v"
-msgstr "void:s"
+msgstr "void:u"
 
 #. src/scm/help-topics-index.scm
 #: ../src/app-utils/gnc-ui-util.c:539 ../src/gnome/dialog-chart-export.c:39
@@ -159,6 +159,8 @@ msgid ""
 "GnuCash keeps backups of old files. This setting specifies how long each is "
 "kept."
 msgstr ""
+"GnuCash bewahrt Backup-Kopien der Dateien auf. Mit dieser Einstellung wird "
+"festgelegt, wie viele Tage diese Kopien aufbewahrt werden."
 
 #: ../src/backend/file/gnc-backend-file.c:103
 msgid "Compress output files?"
@@ -188,15 +190,15 @@ msgstr ""
 #: ../src/backend/postgres/putil.c:146
 #, c-format
 msgid "From the Postgresql Server: %s"
-msgstr ""
+msgstr "Fehlermeldung vom Postgresql Server: %s"
 
 #: ../src/backend/postgres/putil.c:56 ../src/backend/postgres/upgrade.c:401
 msgid "Backend connection is not available"
-msgstr ""
+msgstr "Postgresql-Verbindung nicht verfügbar"
 
 #: ../src/backend/postgres/putil.c:65
 msgid "Query could not be executed"
-msgstr ""
+msgstr "SQL-Abfrage konnte nicht ausgeführt werden"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/register.scm
@@ -3046,11 +3048,11 @@ msgstr "Vollständig"
 
 #: ../src/engine/Transaction.c:3160
 msgid "Voided transaction"
-msgstr "Stornierte Buchung"
+msgstr "Ungültige Buchung"
 
 #: ../src/engine/Transaction.c:3185
 msgid "Transaction Voided"
-msgstr "Buchung storniert"
+msgstr "Buchung ungültig gemacht"
 
 #: ../src/gnome/dialog-chart-export.c:238
 msgid "Export Chart of Accounts to QSF XML"
@@ -4210,7 +4212,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:44
 msgid "This is Sample2."
-msgstr ""
+msgstr "This is Sample2."
 
 #: ../src/gnome/glade/budget.glade.h:45
 msgid "Track Budget"
@@ -4233,11 +4235,11 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:50
 msgid "button1"
-msgstr ""
+msgstr "button1"
 
 #: ../src/gnome/glade/budget.glade.h:51
 msgid "checkbutton1"
-msgstr ""
+msgstr "checkbutton1"
 
 #: ../src/gnome/glade/budget.glade.h:52
 msgid ""
@@ -4246,6 +4248,10 @@ msgid ""
 "month(s)\n"
 "year(s)"
 msgstr ""
+"Tag(e)\n"
+"Woche(n)\n"
+"Monat(e)\n"
+"Jahr(e)"
 
 #: ../src/gnome/glade/budget.glade.h:56
 msgid "last of month"
@@ -4258,7 +4264,7 @@ msgstr "Monate"
 
 #: ../src/gnome/glade/budget.glade.h:58
 msgid "radiobutton1"
-msgstr ""
+msgstr "radiobutton1"
 
 #: ../src/gnome/glade/budget.glade.h:59
 msgid "same week & day"
@@ -4266,7 +4272,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:60
 msgid "togglebutton1"
-msgstr ""
+msgstr "togglebutton1"
 
 #: ../src/gnome/glade/budget.glade.h:61
 #: ../src/gnome/glade/sched-xact.glade.h:227
@@ -5069,11 +5075,11 @@ msgstr "Schließen"
 
 #: ../src/gnome/glade/register.glade.h:10
 msgid "Copy Transaction"
-msgstr "Buchungssatz kopieren"
+msgstr "Buchung kopieren"
 
 #: ../src/gnome/glade/register.glade.h:11
 msgid "Copy the selected transaction"
-msgstr "Ausgewählten Buchungssatz kopieren"
+msgstr "Ausgewählte Buchung kopieren"
 
 #: ../src/gnome/glade/register.glade.h:12
 msgid ""
@@ -5082,7 +5088,7 @@ msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
 
 #: ../src/gnome/glade/register.glade.h:13
 msgid "Cut Transaction"
-msgstr "Buchungssatz ausschneiden"
+msgstr "Buchung ausschneiden"
 
 #: ../src/gnome/glade/register.glade.h:14
 msgid "Cut the selected transaction"
@@ -5091,7 +5097,7 @@ msgstr "Ausgewählten Buchungssatz ausschneiden"
 #: ../src/gnome/glade/register.glade.h:18
 #: ../src/gnome/gnc-plugin-page-register.c:184
 msgid "Delete Transaction"
-msgstr "Buchungssatz löschen"
+msgstr "Buchung löschen"
 
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Delete all the other splits"
@@ -5108,7 +5114,7 @@ msgstr "Den gesamten Buchungssatz löschen"
 
 #: ../src/gnome/glade/register.glade.h:23
 msgid "Dup_licate Transaction..."
-msgstr "Buchungssatz duplizieren..."
+msgstr "Buchung duplizieren..."
 
 #: ../src/gnome/glade/register.glade.h:25
 msgid "Duplicate this Transaction"
@@ -5172,7 +5178,7 @@ msgstr "Nummer:"
 
 #: ../src/gnome/glade/register.glade.h:41
 msgid "Paste Transaction"
-msgstr "Buchungssatz einfügen"
+msgstr "Buchung einfügen"
 
 #: ../src/gnome/glade/register.glade.h:42
 msgid "Paste the transaction from the clipboard"
@@ -5185,7 +5191,7 @@ msgstr "Drucken"
 
 #: ../src/gnome/glade/register.glade.h:44
 msgid "Reason for voiding transaction:"
-msgstr "Begründung für Buchung stornieren:"
+msgstr "Begründung für Buchung ungültig machen:"
 
 #: ../src/gnome/glade/register.glade.h:45
 msgid "Reconcile the main account for this register"
@@ -5366,7 +5372,7 @@ msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
 #: ../src/gnome/glade/register.glade.h:84
 msgid "Void Transaction"
-msgstr "Buchung stornieren"
+msgstr "Buchung ungültig machen"
 
 #: ../src/gnome/glade/register.glade.h:85
 msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
@@ -5468,7 +5474,7 @@ msgstr "_Nicht abgeglichen"
 
 #: ../src/gnome/glade/register.glade.h:117
 msgid "_Voided"
-msgstr "_Storniert"
+msgstr "_Ungültig"
 
 #: ../src/gnome/glade/sched-xact.glade.h:1
 msgid " days"
@@ -5600,7 +5606,7 @@ msgstr "<b>Seit-letztem-Aufruf Fenster</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:35
 msgid "<b>Transaction Editor Defaults</b>"
-msgstr ""
+msgstr "<b>Voreinstellungen Buchungseditor</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:36
 msgid "Advanced..."
@@ -6511,7 +6517,7 @@ msgstr "Kontenhierarchie exportieren"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:115
 msgid "Export the chart of accounts for a date with balances"
-msgstr ""
+msgstr "Kontenhierarchie mit Salden eines bestimmten Tages exportieren"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:120
@@ -6567,7 +6573,7 @@ msgstr "_Buchabschluß"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:140
 msgid "Archive old data using accounting periods"
-msgstr ""
+msgstr "Alte Daten abschließen und in vorigen Buchführungsperioden speichern."
 
 #. Tools menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:145
@@ -6630,7 +6636,7 @@ msgstr "Neue Konten_hierarchie..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
 msgid "Extend the current book by merging with new account type categories"
-msgstr ""
+msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
 msgid "Open _Account"
@@ -6694,7 +6700,7 @@ msgstr "_Posten anzeigen..."
 #: ../src/gnome/gnc-plugin-page-account-tree.c:185
 #: ../src/gnome/gnc-plugin-page-register.c:222
 msgid "Bring up the lot viewer/editor window"
-msgstr ""
+msgstr "Den Editor für die Posten dieses Kontos öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:187
 msgid "Check & Repair A_ccount"
@@ -6797,7 +6803,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1094
 msgid "Account Tree Options"
-msgstr ""
+msgstr "Optionen Kontenansicht"
 
 #. TODO: maybe there should be menu entries, too?
 #. Toolbar buttons
@@ -6823,7 +6829,7 @@ msgstr "Budget abschätzen"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:123
 msgid "Estimate a budget value for the selected cells"
-msgstr ""
+msgstr "Budget für die gewählten Felder abschätzen"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:155
@@ -6838,15 +6844,15 @@ msgstr "Konto bearbeiten"
 #. Transaction menu
 #: ../src/gnome/gnc-plugin-page-register.c:175
 msgid "Cu_t Transaction"
-msgstr "Buchungssatz auss_chneiden"
+msgstr "Buchung auss_chneiden"
 
 #: ../src/gnome/gnc-plugin-page-register.c:177
 msgid "_Copy Transaction"
-msgstr "Buchungssatz _kopieren"
+msgstr "Buchung _kopieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:179
 msgid "_Paste Transaction"
-msgstr "Buchungssatz _einfügen"
+msgstr "Buchung _einfügen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 msgid "Du_plicate Transaction"
@@ -6862,7 +6868,7 @@ msgstr "Alle Buchungsteile im aktuellen Buchungssatz entfernen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:190
 msgid "_Enter Transaction"
-msgstr "Buchungssatz eingeben"
+msgstr "Buchung eingeben"
 
 #: ../src/gnome/gnc-plugin-page-register.c:193
 msgid "Ca_ncel Transaction"
@@ -6874,15 +6880,15 @@ msgstr "Aktuelle Buchung abbrechen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:196
 msgid "_Void Transaction"
-msgstr "Buchung stornieren"
+msgstr "Buchung _ungültig machen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
 msgid "_Unvoid Transaction"
-msgstr "Buchung wieder_herstellen"
+msgstr "Ungültige Buchung wieder_herstellen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:200
-msgid "_Reverse Transaction"
-msgstr "Buchung _umkehren"
+msgid "Add _Reversing Transaction"
+msgstr "Stornierungsbuchung _hinzufügen"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:205
@@ -6992,29 +6998,31 @@ msgstr "und Unterkonten"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1788
 msgid "This transaction has already been voided."
-msgstr ""
+msgstr "Diese Buchung ist bereits ungültig."
 
 #: ../src/gnome/gnc-plugin-page-register.c:1792
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
+"Sie können eine Buchung mit abgeglichenen oder bestätigten Buchungsteilen "
+"nicht ungültig machen."
 
 #: ../src/gnome/gnc-plugin-page-register.c:1830
 msgid "This transaction is not voided."
-msgstr ""
+msgstr "Diese Buchung ist nicht ungültig gemacht."
 
 #: ../src/gnome/gnc-plugin-page-register.c:1866
 #: ../src/gnome/gnc-split-reg.c:1057
-msgid "This transaction has already been reversed."
-msgstr ""
+msgid "A reversing entry has already been created for this transaction."
+msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
 #. Translations: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:1921
+#: ../src/gnome/gnc-plugin-page-register.c:1923
 #, c-format
 msgid "Sort %s by..."
 msgstr "%s sortieren nach..."
 
 #. Translators: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:1973
+#: ../src/gnome/gnc-plugin-page-register.c:1975
 #, c-format
 msgid "Filter %s by..."
 msgstr "%s filtern nach..."
@@ -7052,10 +7060,14 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
+"Diese Buchung kann nicht verändert oder gelöscht werden. Diese Buchung\n"
+"ist als Nur-Lesen markiert mit folgender Begründung:\n"
+"\n"
+"\"%s\""
 
 #: ../src/gnome/gnc-split-reg.c:1117
 msgid "Remove the splits from this transaction?"
-msgstr ""
+msgstr "Buchungsteile von dieser Buchung entfernen?"
 
 #: ../src/gnome/gnc-split-reg.c:1118
 msgid ""
@@ -7072,7 +7084,7 @@ msgstr "Buchungsteile entfernen"
 #: ../src/gnome/gnc-split-reg.c:1222
 #, c-format
 msgid "Delete the split '%s' from the transaction '%s'?"
-msgstr ""
+msgstr "Den Buchungsteil \"%s\" von der Buchung \"%s\" entfernen?"
 
 #: ../src/gnome/gnc-split-reg.c:1223
 msgid ""
@@ -7084,7 +7096,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1226
 msgid "You cannot delete this split."
-msgstr ""
+msgstr "Sie können diesen Buchungsteil nicht löschen."
 
 #: ../src/gnome/gnc-split-reg.c:1227
 msgid ""
@@ -7093,6 +7105,12 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
+"Dieser Buchungsteil verankert die Buchung in diesem Konto. Sie können den "
+"Buchungsteil nicht von diesem Kontofenster aus löschen. Sie können entweder "
+"die ganze Buchung von diesem Kontofenster aus löschen, oder Sie öffnen ein "
+"Kontofenster für einen anderen Buchungsteil dieser Buchung (zum Beispiel mit "
+"dem Knopf \"Gegenbuchung\") und löschen diesen Buchungsteil von jenem "
+"anderen Kontofenster."
 
 #: ../src/gnome/gnc-split-reg.c:1253
 msgid "(no memo)"
@@ -7104,7 +7122,7 @@ msgstr "(Keine Beschreibung)"
 
 #: ../src/gnome/gnc-split-reg.c:1284
 msgid "_Delete Split"
-msgstr ""
+msgstr "Buchungsteil _löschen"
 
 #: ../src/gnome/gnc-split-reg.c:1300
 msgid "Delete the current transaction?"
@@ -7120,7 +7138,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-split-reg.c:1325
 msgid "_Delete Transaction"
-msgstr "_Buchungssatz löschen"
+msgstr "_Buchung löschen"
 
 #: ../src/gnome/gnc-split-reg.c:1978
 msgid "Present:"
@@ -7182,7 +7200,7 @@ msgstr "GnuCash"
 
 #: ../src/gnome/gnucash.desktop.in.h:2
 msgid "Manage your finances, accounts, and investments"
-msgstr ""
+msgstr "Der Finanzmanager für Buchführung, Online-Banking und Investments"
 
 #: ../src/gnome/gnucash.desktop.in.h:3
 msgid "Money Management"
@@ -7507,7 +7525,7 @@ msgstr "CUSIP oder anderer Code:"
 
 #: ../src/gnome-utils/commodity.glade.h:4
 msgid "Commodity Information"
-msgstr ""
+msgstr "Informationen Währung/Aktie"
 
 #: ../src/gnome-utils/commodity.glade.h:5
 msgid "Currency/security:"
@@ -7566,7 +7584,7 @@ msgstr "Börsenkurse online abrufen"
 
 #: ../src/gnome-utils/commodity.glade.h:14
 msgid "Multiple Sources"
-msgstr ""
+msgstr "Mehrere Kursquellen"
 
 #: ../src/gnome-utils/commodity.glade.h:15
 msgid "New Commodity"
@@ -7574,7 +7592,7 @@ msgstr "Neue Währung/Aktie"
 
 #: ../src/gnome-utils/commodity.glade.h:16
 msgid "Quote Source Information"
-msgstr ""
+msgstr "Börsenkursquelle"
 
 #: ../src/gnome-utils/commodity.glade.h:17
 msgid "Select currency/security "
@@ -7606,7 +7624,7 @@ msgstr "Warnung: Modul Finance::Quote ist nicht korrekt installiert."
 
 #: ../src/gnome-utils/commodity.glade.h:25
 msgid "single source"
-msgstr ""
+msgstr "Eine Kursquelle"
 
 #: ../src/gnome-utils/dialog-account.c:385
 msgid "Could not create opening balance."
@@ -7786,6 +7804,9 @@ msgid ""
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
+"Die folgenden Warnungen sollen nicht angezeigt werden. Um einzelne wieder zu "
+"aktivieren, klicken Sie auf das Häkchen neben den Warnungsbeschreibungen und "
+"klicken dann \"Ok\"."
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:6
 msgid "_Select All"
@@ -7869,6 +7890,8 @@ msgid ""
 "When you click Appply, Gnucash will modify your ~/.gconf.path file and "
 "restart the gconf backend."
 msgstr ""
+"Wenn Sie \"Anwenden\" klicken, wird GnuCash Ihre ~/.gconf.path Datei "
+"anpassen und den gconf-Server neu starten."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:407
 #, c-format
@@ -7877,6 +7900,9 @@ msgid ""
 "~/.gconf file and restart the gconf backend.  The %s script must be found in "
 "your search path for this to work correctly."
 msgstr ""
+"Wenn Sie \"Anwenden\" klicken, wird GnuCash die gconf-Daten in Ihre lokale "
+"~/.gconf Datei schreiben und den gconf-Server neu starten. Das Skript %s muß "
+"dazu in Ihrem Suchpfad zu finden sein, damit dies korrekt funktioniert."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:411
 msgid ""
@@ -7886,6 +7912,11 @@ msgid ""
 "have not already done so, you can click the Back button and copy the "
 "necessary text from the dialog."
 msgstr ""
+"Sie haben ausgewählt, dieses Problem selber zu beheben. Wenn Sie \"Anwenden"
+"\" klicken, wird sich GnuCash beenden. Bitte beheben Sie das Problem und "
+"starten den gconf-Server neu vor einem Neustart von GnuCash, und zwar mit "
+"dem Kommando \"gconftool-2 --shutdown\". Sie können noch den Knopf \"Zurück"
+"\" klicken, um den notwendigen Text zu kopieren."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:417
 #, c-format
@@ -7894,6 +7925,9 @@ msgid ""
 "Gnucash will exit.  Please run the %s script which will install the "
 "configuration data and restart the gconf backend."
 msgstr ""
+"Sie haben ausgewählt, dieses Problem selber zu beheben. Wenn Sie \"Anwenden"
+"\" klicken, wird sich GnuCash beenden. Bitte starten Sie das Skript %s was "
+"die notwendigen Daten schreibt und den gconf-Server neu startet."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:421
 msgid ""
@@ -7901,6 +7935,9 @@ msgid ""
 "the command 'gconftool-2 --shutdown'.  When you click Apply, Gnucash will "
 "continue loading."
 msgstr ""
+"Sie haben das Problem bereits selber korrigiert und den gconf-Server mit dem "
+"Kommando \"gconftool-2 --shutdown\" neu gestartet. Wenn Sie \"Anwenden\" "
+"klicken, wird GnuCash mit dem Programmstart fortsetzen."
 
 #. * @}
 #. * @}
@@ -7916,45 +7953,37 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:4
 msgid "Choose Method"
-msgstr "Sortierreihenfolge"
+msgstr "Einrichtungsmethode wählen"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:5
 msgid "Finish changes"
-msgstr "Änderungen fertigmachen"
+msgstr "Änderungen durchführen"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:6
-msgid "Gnucash will add the appropriate text here.\n"
-msgstr ""
+msgid "Gnucash will install the data for you."
+msgstr "GnuCash installiert die benötigten Daten für Sie."
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:7
+msgid "Gnucash will update the system path for you."
+msgstr "GnuCash aktualisiert den Systempfad für Sie."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:8
-msgid "Gnucash will install the data for you."
-msgstr ""
+msgid "Install into home directory"
+msgstr "Im Benutzerverzeichnis (\"home\") installieren"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:9
-msgid "Gnucash will update the system path for you."
-msgstr ""
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:10
-msgid "I _already did this in another window"
-msgstr ""
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:11
-msgid "Install into home directory"
-msgstr ""
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:12
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:13
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
-msgstr ""
+msgstr "Bitte rufen Sie die folgenden Kommandos auf der Kommandozeile auf:"
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:14
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:11
 msgid "S_kip"
-msgstr ""
+msgstr "Ü_berspringen"
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:15
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:12
 msgid ""
 "The configuration data is stored in a non-standard location.  There are two "
 "methods that can be used to make this data visible to GnuCash.  The first is "
@@ -7962,14 +7991,22 @@ msgid ""
 "to copy the data into your home directory."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:16
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:13
 msgid ""
 "The configuration data used by Gnucash to specify its default values cannot "
 "be found in the default system locations.  Without this data Gnucash will "
 "still operate properly, but it may require some extra time to set up."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:17
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:14
+msgid "The data has _already been installed in another window"
+msgstr ""
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:15
+msgid "The search path has _already been updated in another window"
+msgstr ""
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:16
 msgid ""
 "This method will install the Gnucash default settings and descriptions into "
 "the .gconf directory within your home directory.  The disadvantage to this "
@@ -7977,62 +8014,70 @@ msgid ""
 "to add in new keys."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:18
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:17
 msgid ""
 "This method will modify the file .gconf.path in your home directory.  It "
 "will add the Gnucash install directory to this path so that Gnucash can find "
 "its default settings and their descriptions."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:19
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:18
 msgid "Update Gnucash configuration data"
-msgstr ""
+msgstr "GnuCash Konfigurationsdaten aktualisieren"
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:19
+msgid "Update gconf settings - Gnucash"
+msgstr "Gconf Einstellungen aktualisieren für GnuCash"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:20
-msgid "Update gconf settings - Gnucash"
-msgstr ""
+msgid "Update search path"
+msgstr "Suchpfad aktualisieren"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:21
-msgid "Update search path"
-msgstr ""
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:22
 msgid ""
 "You have chosen to install the configuration data used by Gnucash into the "
 "~/.gconf directory.  GnuCash can do this for you, or tell you how to do it "
 "yourself."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:23
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:22
 msgid ""
 "You have chosen to update the system search path.  GnuCash can do this for "
 "you, or it can tell you how to do it yourself."
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:24
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:23
 msgid ""
 "You will then need to restart the gconf backend with the\n"
 "command 'gconftool-2 --shutdown'."
 msgstr ""
 
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:25
+msgid "_GnuCash installs the data"
+msgstr "GnuCash installiert die benötigten Daten für Sie."
+
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:26
-msgid "_Do it for me"
-msgstr ""
+msgid "_GnuCash updates the search path"
+msgstr "_GnuCash aktualisiert den Suchpfad"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:27
-msgid "_I'll do it myself"
-msgstr ""
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:28
 msgid "_Install into home directory"
 msgstr ""
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:29
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:28
 msgid "_Setup"
 msgstr "_Einrichtung"
 
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:30
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:29
 msgid "_Update search path"
+msgstr ""
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:30
+msgid "_You install the data yourself"
+msgstr ""
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:31
+msgid "_You update the search path yourself"
 msgstr ""
 
 #: ../src/gnome-utils/druid-provider-multifile.glade.h:1
@@ -8118,7 +8163,7 @@ msgstr "Kalender"
 #: ../src/gnome-utils/gnc-date-format.glade.h:2
 #, no-c-format
 msgid "%Y-%m-%d"
-msgstr ""
+msgstr "%Y-%m-%d"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:4
 msgid "Abbreviation"
@@ -8126,7 +8171,7 @@ msgstr "Abkürzung"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:6
 msgid "December 31, 2000"
-msgstr ""
+msgstr "December 31, 2000"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:7
 #: ../src/import-export/generic-import.glade.h:32
@@ -8135,7 +8180,7 @@ msgstr "Format:"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:8
 msgid "Include Century"
-msgstr ""
+msgstr "Jahrhundert angeben"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:9
 msgid "Months:"
@@ -8155,6 +8200,13 @@ msgid ""
 "Locale\n"
 "Custom\n"
 msgstr ""
+"USA (12/31/2001)\n"
+"GB (31/12/2001)\n"
+"Europäisch (31.12.2001)\n"
+"ISO (2001-12-31)\n"
+"UTC\n"
+"Länderspezifisch (Locale)\n"
+"Benutzerdefiniert\n"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:21
 msgid "Years:"
@@ -8174,7 +8226,7 @@ msgstr "(unbenannt)"
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:97
 #, c-format
 msgid "Failed to process file: %s"
-msgstr ""
+msgstr "Kann Datei nicht verarbeiten: %s"
 
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:129
 #, c-format
@@ -8202,6 +8254,8 @@ msgid ""
 "No suitable backend was found for\n"
 "%s."
 msgstr ""
+"Kein passendes Dateimodul wurde gefunden für \n"
+"  %s"
 
 #: ../src/gnome-utils/gnc-file.c:199
 #, c-format
@@ -9229,7 +9283,7 @@ msgstr "Preis"
 #. ===================== END OF FILE ============================
 #: ../src/gnome-utils/preferences.glade.h:1
 msgid "'_Enter' moves to blank transaction"
-msgstr "Mit 'Eingabe' gehen Sie zum leeren Buchungssatz"
+msgstr "Mit 'Eingabe' gehen Sie zur leeren Buchung"
 
 #: ../src/gnome-utils/preferences.glade.h:2
 msgid "- (_Dash)"
@@ -9294,7 +9348,7 @@ msgstr "<b>Enddatum</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:17
 msgid "<b>Fancy Date Format</b>"
-msgstr "<b>Verschnörkeltes Datumsformat</b>"
+msgstr "<b>Ausführliches Datumsformat</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:18
 msgid "<b>Files</b>"
@@ -12197,7 +12251,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:1716
 msgid "Recalculate Transaction"
-msgstr "Buchungssatz neu kalkulieren"
+msgstr "Buchung neu kalkulieren"
 
 #: ../src/register/ledger-core/split-register.c:1717
 msgid ""
@@ -12337,7 +12391,7 @@ msgstr "-- Aktienteilung --"
 
 #: ../src/register/ledger-core/split-register-control.c:59
 msgid "Rebalance Transaction"
-msgstr "Buchungssatz neu kalkulieren"
+msgstr "Buchung neu kalkulieren"
 
 #: ../src/register/ledger-core/split-register-control.c:60
 msgid "The current transaction is not balanced."
@@ -18164,7 +18218,7 @@ msgstr ""
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3684
 msgid "Fancy Date Format"
-msgstr ""
+msgstr "Ausführliches Datumsformat"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3686
