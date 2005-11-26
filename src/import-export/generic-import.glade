@@ -1757,7 +1757,7 @@ click &quot;Ok&quot;.</property>
 	  <child>
 	    <widget class="GtkLabel" id="label847796">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">'A'</property>
+	      <property name="label" translatable="yes">&quot;A&quot;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1781,7 +1781,7 @@ click &quot;Ok&quot;.</property>
 	  <child>
 	    <widget class="GtkLabel" id="label847797">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">'R'</property>
+	      <property name="label" translatable="yes">&quot;R&quot;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1922,7 +1922,7 @@ click &quot;Ok&quot;.</property>
 		  <property name="left_margin">0</property>
 		  <property name="right_margin">0</property>
 		  <property name="indent">0</property>
-		  <property name="text" translatable="yes">Select Import Action&quot; allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
+		  <property name="text" translatable="yes">&quot;Select Import Action&quot; allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required).</property>
 		</widget>
 	      </child>
 	    </widget>
