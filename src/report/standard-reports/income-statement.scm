@@ -468,10 +468,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering")
-				 " %s "
-				 (N_ "to")
-				 " %s")
+				 (N_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -506,12 +503,9 @@
 	       (terse-period? #t)
 	       (period-for (if terse-period?
 			       (string-append " " (N_ "for Period"))
-			       (string-append
-				", "
-				(gnc:print-date start-date-printable) " "
-				(N_ "to") " "
-				(gnc:print-date end-date-tp)
-				)
+			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+					(gnc:print-date start-date-printable)
+					(gnc:print-date end-date-tp))
 			       )
 			   )
 	       )

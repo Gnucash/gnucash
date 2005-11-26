@@ -175,10 +175,10 @@
       "c" opthelp-bottom-behavior
       'summarize
       (list (vector 'summarize
-		    (N_ "Recursive balance")
+		    (N_ "Recursive Balance")
 		    (N_ "Show the total balance, including balances in subaccounts, of any account at the depth limit"))
 	    (vector 'flatten
-		    (N_ "Raise accounts")
+		    (N_ "Raise Accounts")
 		    (N_ "Shows accounts deeper than the depth limit at the depth limit"))
 	    (vector 'truncate
 		    (N_ "Omit Accounts")

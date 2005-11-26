@@ -1536,11 +1536,11 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
   SplitRegister *reg = data;
   gint response;
+  const gchar *title = _("Mark split as unreconciled?");
   const gchar *message =
-    _("<b>Mark split as unreconciled?</b>\n\n"
-      "You are about to mark a reconciled split as unreconciled.  Doing "
+    _("You are about to mark a reconciled split as unreconciled.  Doing "
       "so might make future reconciliation difficult!  Continue "
-      "with this change?\n");
+      "with this change?");
 
   if (old_flag != YREC)
     return TRUE;
@@ -1549,7 +1549,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
   response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
 					 "mark_split_unreconciled",
 					 "_Unreconcile", GTK_STOCK_CANCEL,
-					 message);
+					 "<b>%s</b>\n\n%s\n",
+					 title, message);
 
   return (response == GTK_RESPONSE_YES);
 }

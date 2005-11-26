@@ -386,12 +386,10 @@
 	 (terse-period? #t)
 	 (period-for (if terse-period?
 			 (string-append " " (N_ "for Period"))
-			 (string-append
-			  ", "
-			  (gnc:print-date start-date-printable) " "
-			  (N_ "to") " "
-			  (gnc:print-date end-date-tp)
-			  )))
+			 (sprintf #f (string-append ", " (N_ "%s to %s"))
+				  (gnc:print-date start-date-printable)
+				  (gnc:print-date end-date-tp))
+			 ))
 	 )
     
     (gnc:html-document-set-title! 
@@ -400,10 +398,7 @@
 		      company-name report-title
 		      (gnc:print-date end-date-tp))
 	     (sprintf #f (string-append "%s %s "
-					(N_ "For Period Covering")
-					" %s "
-					(N_ "to")
-					" %s")
+					(N_ "For Period Covering %s to %s"))
 		      company-name report-title
 		      (gnc:print-date start-date-printable)
 		      (gnc:print-date end-date-tp))
@@ -652,7 +647,7 @@
 		   "th" (N_ "CREDIT")))
 		 (row (append
 		       (list (gnc:make-html-table-cell/markup
-			      "total-label-cell" (N_ "Account Title")))
+			      "total-label-cell" (N_ "Account Name")))
 		       (gnc:html-make-empty-cells (- account-cols 1))
 		       (list debit-cell)
 		       (list credit-cell))

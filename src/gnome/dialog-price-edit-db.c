@@ -146,10 +146,6 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
   PricesDialog *pdb_dialog = data;
   GList *price_list;
   gint length;
-  const char *message_sg = N_("Are you sure you want to delete the %d "
-			      "selected price?");
-  const char *message_pl = N_("Are you sure you want to delete the %d "
-			      "selected prices?");
 
   ENTER(" ");
   price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
@@ -160,7 +156,13 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 
   length = g_list_length(price_list);
   if (gnc_verify_dialog (pdb_dialog->dialog, TRUE,
-			 ngettext(message_sg, message_pl, length), length))
+			 /* Translators: %d is the number of prices. This is a
+			    ngettext(3) message. */
+			 ngettext("Are you sure you want to delete the %d "
+				  "selected price?",
+				  "Are you sure you want to delete the %d "
+				  "selected prices?", length),
+			 length))
   {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
