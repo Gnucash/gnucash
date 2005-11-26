@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 12:37+0100\n"
-"PO-Revision-Date: 2005-11-26 12:43+0100\n"
+"POT-Creation-Date: 2005-11-26 16:01+0100\n"
+"PO-Revision-Date: 2005-11-26 16:01+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../src/app-utils/gnc-exp-parser.c:136
 msgid " Variables are in the form 'name=value'"
-msgstr ""
+msgstr " Variables are in the form 'name=value'"
 
 #: ../src/app-utils/gnc-exp-parser.c:618
 msgid "Illegal variable in expression."
@@ -147,6 +147,8 @@ msgid ""
 "There is a problem with option %s:%s.\n"
 "%s"
 msgstr ""
+"Es gibt ein Problem mit der Einstellung %s:%s.\n"
+"%s"
 
 #: ../src/backend/file/gnc-backend-file.c:94
 msgid "Number of days to retain old files"
@@ -3115,7 +3117,7 @@ msgstr "Alle Konten"
 #. src/business/business-reports/owner-report.scm
 #: ../src/gnome/dialog-find-transactions.c:105
 #: ../src/gnome/glade/stocks.glade.h:2 ../src/gnome-utils/dialog-account.c:626
-#: ../src/gnome-utils/gnc-icons.c:13
+#: ../src/gnome-utils/gnc-icons.c:14
 #: ../src/import-export/generic-import.glade.h:11
 #: ../src/import-export/hbci/gnc-hbci-utils.c:621
 #: ../src/import-export/qif-import/qif.glade.h:2
@@ -3236,7 +3238,7 @@ msgstr "A_ktionen"
 #: ../src/gnome-utils/gnc-main-window.c:214
 #: ../src/gnome/window-reconcile.c:1291
 msgid "_Transaction"
-msgstr "_Buchungssatz"
+msgstr "_Buchung"
 
 #. Edit menu
 #: ../src/gnome/dialog-scheduledxaction.c:248
@@ -4139,7 +4141,7 @@ msgstr "Allgemeines"
 
 #: ../src/gnome/glade/budget.glade.h:23
 msgid "In Flow"
-msgstr ""
+msgstr "Einnahmen"
 
 #: ../src/gnome/glade/budget.glade.h:24
 msgid "January 1, 2004"
@@ -4153,7 +4155,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:26
 msgid "Modify Category"
-msgstr ""
+msgstr "Kategorie bearbeiten"
 
 #: ../src/gnome/glade/budget.glade.h:27
 #: ../src/gnome/glade/sched-xact.glade.h:115
@@ -4183,11 +4185,11 @@ msgstr "Optionen"
 
 #: ../src/gnome/glade/budget.glade.h:32
 msgid "Outflow"
-msgstr ""
+msgstr "Ausgaben"
 
 #: ../src/gnome/glade/budget.glade.h:33
 msgid "Regenerate From Defaults"
-msgstr ""
+msgstr "Aus Voreinstellungen erneut berechnen"
 
 #: ../src/gnome/glade/budget.glade.h:34
 msgid "Related Accounts:"
@@ -4287,11 +4289,11 @@ msgstr "Kontenhierarchie exportieren"
 
 #: ../src/gnome/glade/chart-export.glade.h:4
 msgid "Filename for exported XML"
-msgstr ""
+msgstr "Dateiname für exportiertes XML"
 
 #: ../src/gnome/glade/chart-export.glade.h:5
 msgid "Future dates are not supported"
-msgstr ""
+msgstr "Ein Datum in der Zukunft wird nicht unterstützt"
 
 #: ../src/gnome/glade/chart-export.glade.h:6
 msgid ""
@@ -4491,15 +4493,15 @@ msgstr "<b>_Posten in diesem Konto</b>"
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Mini-Viewer</b>"
-msgstr ""
+msgstr "<b>_Mini-Anzeige</b>"
 
 #: ../src/gnome/glade/lots.glade.h:4
 msgid "<b>_Notes</b>"
-msgstr ""
+msgstr "<b>Be_schreibung</b>"
 
 #: ../src/gnome/glade/lots.glade.h:5
 msgid "<b>_Title</b>"
-msgstr ""
+msgstr "<b>_Name</b>"
 
 #: ../src/gnome/glade/lots.glade.h:6
 msgid "A list of all of the lots in this account."
@@ -4555,7 +4557,7 @@ msgstr ""
 
 #: ../src/gnome/glade/lots.glade.h:22
 msgid "Scrub _Account"
-msgstr ""
+msgstr "K_onto überprüfen"
 
 #: ../src/gnome/glade/lots.glade.h:23
 msgid "Scrub the highlighted lot"
@@ -4570,7 +4572,7 @@ msgstr "Titel"
 
 #: ../src/gnome/glade/lots.glade.h:26
 msgid "_Scrub"
-msgstr ""
+msgstr "Über_prüfen"
 
 #: ../src/gnome/glade/merge.glade.h:1
 msgid "1. Update your existing book with the import data"
@@ -4721,17 +4723,19 @@ msgstr "Währung:"
 
 #: ../src/gnome/glade/price.glade.h:7
 msgid "Delete _last price for a stock"
-msgstr ""
+msgstr "Auch _letzten Preis einer Aktie löschen"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _manually entered prices too"
-msgstr ""
+msgstr "Auch _manuell eingegebene Preise löschen"
 
 #: ../src/gnome/glade/price.glade.h:9
 msgid ""
 "Delete all downloaded prices\n"
 "dated earlier than this date."
 msgstr ""
+"Alle abgerufenen Preise löschen, \n"
+"die älter als dieses Datum sind:"
 
 #: ../src/gnome/glade/price.glade.h:11
 msgid "Edit the current price."
@@ -6646,7 +6650,7 @@ msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
-#: ../src/gnome-utils/gnc-icons.c:15 ../src/gnome/window-reconcile.c:1223
+#: ../src/gnome-utils/gnc-icons.c:16 ../src/gnome/window-reconcile.c:1223
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
@@ -6656,7 +6660,7 @@ msgid "Edit the selected account"
 msgstr "Ausgewähltes Konto bearbeiten"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:167
-#: ../src/gnome-utils/gnc-icons.c:14
+#: ../src/gnome-utils/gnc-icons.c:15
 msgid "_Delete Account"
 msgstr "_Konto löschen"
 
@@ -6846,7 +6850,7 @@ msgstr "Buchungssatz _einfügen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 msgid "Du_plicate Transaction"
-msgstr ""
+msgstr "Buchung dupli_zieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:187
 msgid "Remo_ve Transaction Splits"
@@ -6862,7 +6866,7 @@ msgstr "Buchungssatz eingeben"
 
 #: ../src/gnome/gnc-plugin-page-register.c:193
 msgid "Ca_ncel Transaction"
-msgstr ""
+msgstr "Buchung _abbrechen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:194
 msgid "_Cancel the current transaction"
@@ -6874,11 +6878,11 @@ msgstr "Buchung stornieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:198
 msgid "_Unvoid Transaction"
-msgstr ""
+msgstr "Buchung wieder_herstellen"
 
 #: ../src/gnome/gnc-plugin-page-register.c:200
 msgid "_Reverse Transaction"
-msgstr ""
+msgstr "Buchung _umkehren"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:205
@@ -7762,11 +7766,11 @@ msgstr "Bild auswählen"
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:1
 msgid "No warnings to reset."
-msgstr ""
+msgstr "Keine Warnungen, die zurückgesetzt werden können."
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:2
 msgid "Permanent Warnings"
-msgstr ""
+msgstr "Dauerhafte Warnungen"
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:3
 msgid "Reset Warnings"
@@ -7774,7 +7778,7 @@ msgstr "Warnung zurücksetzen"
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:4
 msgid "Temporary Warnings"
-msgstr ""
+msgstr "Zeitweise Warnungen"
 
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:5
 msgid ""
@@ -8688,11 +8692,11 @@ msgstr ""
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
 
-#: ../src/gnome-utils/gnc-icons.c:16
+#: ../src/gnome-utils/gnc-icons.c:17
 msgid "_New Account"
 msgstr "_Neues Konto"
 
-#: ../src/gnome-utils/gnc-icons.c:17 ../src/gnome/window-reconcile.c:1216
+#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:1216
 msgid "_Open Account"
 msgstr "_Konto öffnen"
 
@@ -8830,11 +8834,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:298
 msgid "Learn Accelerator Keys"
-msgstr ""
+msgstr "Tastaturkürzel ändern"
 
 #: ../src/gnome-utils/gnc-main-window.c:299
 msgid "Learn new accelerator key settings."
-msgstr ""
+msgstr "Tastaturkürzel neu setzen oder ändern."
 
 #: ../src/gnome-utils/gnc-main-window.c:301
 msgid "_Toolbar"
@@ -9166,11 +9170,11 @@ msgstr "Steuerrelevante Information"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:480
 msgid "Namespace"
-msgstr "Namensdefinition"
+msgstr "Namensstandard"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:495
 msgid "Print Name"
-msgstr ""
+msgstr "Voller Name"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:500
 msgid "Unique Name"
@@ -12787,7 +12791,7 @@ msgstr "Kontenhierarchie"
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:4
 msgid "Double click expands parent accounts"
-msgstr "Doppelklick vergrössert die 'Haupt'-Konten"
+msgstr "Doppelklick klappt die 'Haupt'-Konten aus"
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:6
