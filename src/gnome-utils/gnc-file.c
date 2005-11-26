@@ -905,13 +905,6 @@ gnc_file_save (void)
   }
 
   gnc_add_history (session);
-
-  /* save the main window state */
-  scm_call_1 (scm_c_eval_string("gnc:main-window-save-state"),
-              (session ?
-               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-               SCM_BOOL_F));
-
   LEAVE (" ");
 }
 

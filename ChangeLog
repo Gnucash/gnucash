@@ -1,5 +1,8 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.c: Shouldn't still be calling the old
+	save state functions.
+
 	* src/scm/main-window.scm: Fix crash when saving files.
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:
