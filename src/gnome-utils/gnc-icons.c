@@ -5,6 +5,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-icons.h"
 #include "gnc-gnome-utils.h"
