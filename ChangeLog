@@ -1,5 +1,12 @@
 2005-11-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-price-edit-db.c: Enhance the "remove old
+	prices" code to have options to retain the last price entered, and
+	to retain any user entered prices.  The "remove old" button should
+	always be active.  Group the "Add/Edit/Remove" buttons for a
+	single price.  Allow the prices dialog to be closed with the
+	escape key.
+
 	* src/gnome-utils/gnc-date-edit.c: Show widget by default when its
 	created for a glade dialog.
 

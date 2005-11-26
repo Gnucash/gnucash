@@ -964,6 +964,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 typedef struct {
   GNCPriceDB *db;
   Timespec cutoff;
+  gboolean delete_user;
+  gboolean delete_last;
   GSList *list;
 } remove_info;
 
@@ -971,27 +973,96 @@ static gboolean
 check_one_price_date (GNCPrice *price, gpointer user_data)
 {
   remove_info *data = user_data;
+  const gchar *source;
   Timespec pt;
 
+  ENTER("price %p (%s), data %p", price,
+	gnc_commodity_get_mnemonic(gnc_price_get_commodity(price)),
+	user_data);
+  if (!data->delete_user) {
+    source = gnc_price_get_source (price);
+    if (strcmp(source, "Finance::Quote") != 0) {
+      LEAVE("Not an automatic quote");
+      return TRUE;
+    }
+  }
+
   pt = gnc_price_get_time (price);
-  if (timespec_cmp (&pt, &data->cutoff) < 0)
+  {
+    gchar buf[40];
+    gnc_timespec_to_iso8601_buff(pt , buf);
+    DEBUG("checking date %s", buf);
+  }
+  if (timespec_cmp (&pt, &data->cutoff) < 0) {
     data->list = g_slist_prepend(data->list, price);
+    DEBUG("will delete");
+  }
+  LEAVE(" ");
   return TRUE;
 }
 
+static void
+pricedb_remove_foreach_pricelist (gpointer key,
+				  gpointer val,
+				  gpointer user_data)
+{
+  GList *price_list = (GList *) val;
+  GList *node = price_list;
+  remove_info *data = (remove_info *) user_data;
+
+  ENTER("key %p, value %p, data %p", key, val, user_data);
+
+  /* The most recent price is the first in the list */
+  if (!data->delete_last)
+    node = g_list_next(node);
+
+  /* now check each item in the list */
+  g_list_foreach(node, (GFunc)check_one_price_date, data);
+
+  LEAVE(" ");
+}
+
+static void
+pricedb_remove_foreach_currencies_hash (gpointer key,
+					gpointer val,
+					gpointer user_data)
+{
+  GHashTable *currencies_hash = (GHashTable *) val;
+
+  ENTER("key %p, value %p, data %p", key, val, user_data);
+  g_hash_table_foreach(currencies_hash,
+		       pricedb_remove_foreach_pricelist, user_data);
+  LEAVE(" ");
+}
+
+
 gboolean
-gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
+gnc_pricedb_remove_old_prices(GNCPriceDB *db,
+			      Timespec cutoff,
+			      gboolean delete_user,
+			      gboolean delete_last)
 {
   remove_info data;
   GSList *item;
 
   data.db = db;
   data.cutoff = cutoff;
+  data.delete_user = delete_user;
+  data.delete_last = delete_last;
   data.list = NULL;
+
+  ENTER("db %p, delet_user %d, delete_last %d", db, delete_user, delete_last);
+  {
+    gchar buf[40];
+    gnc_timespec_to_iso8601_buff(cutoff, buf);
+    DEBUG("checking date %s", buf);
+  }
 
   /* Traverse the database once building up an external list of prices
    * to be deleted */
-  gnc_pricedb_foreach_price(db, check_one_price_date, &data, FALSE);
+  g_hash_table_foreach(db->commodity_hash,
+                       pricedb_remove_foreach_currencies_hash,
+                       &data);
 
   if (data.list == NULL)
     return FALSE;
@@ -1002,6 +1073,7 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff)
   }
 
   g_slist_free(data.list);
+  LEAVE(" ");
   return TRUE;
 }
 

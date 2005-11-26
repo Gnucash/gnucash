@@ -279,7 +279,8 @@ gboolean     gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p);
      pricedb.   Returns TRUE if successful, FALSE otherwise. */
 gboolean     gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p);
 
-gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff);
+gboolean     gnc_pricedb_remove_old_prices(GNCPriceDB *db, Timespec cutoff,
+					   gboolean delete_user, gboolean delete_last);
 
 /** gnc_pricedb_lookup_latest - find the most recent price for the
      given commodity in the given currency.  Returns NULL on
