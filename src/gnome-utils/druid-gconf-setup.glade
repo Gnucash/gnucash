@@ -559,7 +559,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 		    <widget class="GtkRadioButton" id="program1">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">_Do it for me</property>
+		      <property name="label" translatable="yes">_GnuCash updates the search path</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -582,7 +582,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 		    <widget class="GtkRadioButton" id="user1">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">_I'll do it myself</property>
+		      <property name="label" translatable="yes">_You update the search path yourself</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -606,7 +606,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 		    <widget class="GtkRadioButton" id="done1">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">I _already did this in another window</property>
+		      <property name="label" translatable="yes">The search path has _already been updated in another window</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -677,7 +677,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 			      <property name="left_margin">0</property>
 			      <property name="right_margin">0</property>
 			      <property name="indent">0</property>
-			      <property name="text" translatable="yes">Gnucash will add the appropriate text here.
+			      <property name="text">Gnucash will add the appropriate text here.
 </property>
 			    </widget>
 			  </child>
@@ -838,7 +838,7 @@ command 'gconftool-2 --shutdown'.</property>
 		    <widget class="GtkRadioButton" id="program2">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">_Do it for me</property>
+		      <property name="label" translatable="yes">_GnuCash installs the data</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -861,7 +861,7 @@ command 'gconftool-2 --shutdown'.</property>
 		    <widget class="GtkRadioButton" id="user2">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">_I'll do it myself</property>
+		      <property name="label" translatable="yes">_You install the data yourself</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -885,7 +885,7 @@ command 'gconftool-2 --shutdown'.</property>
 		    <widget class="GtkRadioButton" id="done2">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">I _already did this in another window</property>
+		      <property name="label" translatable="yes">The data has _already been installed in another window</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
@@ -1019,7 +1019,7 @@ command 'gconftool-2 --shutdown'.</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">Finish changes</property>
-	  <property name="text">Gnucash will fill this in based upon the previous choices.</property>
+	  <property name="text">Gnucash will fill this text in based upon the previous choices.</property>
 	  <signal name="prepare" handler="druid_gconf_finish_page_prepare" last_modification_time="Thu, 14 Jul 2005 04:54:49 GMT"/>
 	  <signal name="back" handler="druid_gconf_finish_page_back" last_modification_time="Thu, 14 Jul 2005 04:54:55 GMT"/>
 	  <signal name="finish" handler="druid_gconf_finish_page_finish" last_modification_time="Thu, 14 Jul 2005 04:55:11 GMT"/>
