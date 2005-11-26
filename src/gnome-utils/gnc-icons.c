@@ -10,11 +10,11 @@
 #include "gnc-gnome-utils.h"
 
 static GtkStockItem items[] = {
-  { GNC_STOCK_ACCOUNT,        "Account",         0, 0, NULL },
-  { GNC_STOCK_DELETE_ACCOUNT, "_Delete Account", 0, 0, NULL },
-  { GNC_STOCK_EDIT_ACCOUNT,   "_Edit Account",   0, 0, NULL },
-  { GNC_STOCK_NEW_ACCOUNT,    "_New Account",    0, 0, NULL },
-  { GNC_STOCK_OPEN_ACCOUNT,   "_Open Account",   0, 0, NULL },
+  { GNC_STOCK_ACCOUNT,        N_("Account"),         0, 0, NULL },
+  { GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account"), 0, 0, NULL },
+  { GNC_STOCK_EDIT_ACCOUNT,   N_("_Edit Account"),   0, 0, NULL },
+  { GNC_STOCK_NEW_ACCOUNT,    N_("_New Account"),    0, 0, NULL },
+  { GNC_STOCK_OPEN_ACCOUNT,   N_("_Open Account"),   0, 0, NULL },
 };
 
 static void

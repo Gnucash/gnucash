@@ -324,9 +324,9 @@ gnc_validate_directory (const gchar *dirname)
       rc = mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
       if (rc) {
 	g_fprintf(stderr,
-		  _("An error occurred wile creating the directory:\n"
+		  _("An error occurred while creating the directory:\n"
 		    "  %s\n"
-		    "Please correct the problem and restart gnucash\n"
+		    "Please correct the problem and restart gnucash.\n"
 		    "The reported error was '%s' (errno %d).\n"),
 		  dirname, strerror(errno), errno);
 	exit(1);

@@ -991,8 +991,9 @@ gnc_main_window_delete_event (GtkWidget *window,
 				   GTK_DIALOG_MODAL,
 				   GTK_MESSAGE_WARNING,
 				   GTK_BUTTONS_NONE,
-				   _("<b>Quit Gnucash?</b>\n\n"
-				     "You are attempting to close the last "
+					       "<b>%s</b>\n\n%s",
+					       _("Quit Gnucash?"),
+					       _("You are attempting to close the last "
 				     "Gnucash window.  Doing so will quit the "
 				     "application.  Are you sure that this is "
 				     "what you want to do?"));
