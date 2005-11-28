@@ -1,3 +1,8 @@
+2005-11-28  David Hampton  <hampton@hampton-lnx.cisco.com>
+
+	* src/gnome-utils/gnc-gui-query.glade: Mark a couple of strings as
+	not needing translation.
+
 2005-11-27  David Hampton  <hampton@employees.org>
 
 	*src/gnome-utils/druid-gconf-setup.glade: Make the capitalization
