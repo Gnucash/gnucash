@@ -2899,6 +2899,7 @@ static void
 gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
 	GtkWidget *about;
+	/* Translators: This is the "About" message. */
 	const gchar *message = _("The GnuCash personal finance manager.\n"
 				 "The GNU way to manage your money!\n"
 				 "http://www.gnucash.org/");
@@ -2919,6 +2920,8 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	const gchar *documenters[] = {
 		NULL
 	};
+	/* Translators: Insert your translator's credits here so that
+	   they will be shown in the "About" dialog. */
 	const gchar *translator_credits = _("translator_credits");
 	GdkPixbuf *logo;
 
