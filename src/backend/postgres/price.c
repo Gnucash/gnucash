@@ -440,10 +440,6 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    SEND_QUERY (be, be->buff, );
    pgendGetResults (be, get_price_cb, NULL);
 
-   /* insertion into the price db will mark it dirty;
-    * but it really isn't at this point. */
-   gnc_pricedb_mark_clean (look->prdb);
-
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();

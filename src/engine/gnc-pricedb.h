@@ -245,10 +245,6 @@ gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
 /** Data type */
 typedef struct gnc_price_db_s GNCPriceDB;
 
-/** gnc_pricedb_create - create a new pricedb.  Normally you won't need
-     this; you will get the pricedb via gnc_pricedb_get_db. */
-GNCPriceDB * gnc_pricedb_create(QofBook *book);
-
 /* XXX backwards-compat defines, remove these someday */
 #define gnc_book_get_pricedb  gnc_pricedb_get_db
 
@@ -380,10 +376,6 @@ gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
                                                      gpointer user_data),
                                        gpointer user_data,
                                        gboolean stable_order);
-
-/** gnc_pricedb_dirty - return FALSE if the database has not been
-   modified. */
-#define gnc_pricedb_dirty(db) qof_instance_is_dirty(QOF_INSTANCE(db))
 
 /** gnc_pricedb_get_num_prices - return the number of prices
    in the database. */

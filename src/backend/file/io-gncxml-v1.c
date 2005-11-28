@@ -1142,7 +1142,6 @@ ledger_data_after_child_handler(gpointer data_for_children,
       return FALSE;
     }
     status->pricedb = pdb;
-    gnc_pricedb_mark_clean(pdb);
     child_result->should_cleanup = FALSE;
   }
   return(TRUE);
@@ -3704,7 +3703,7 @@ pricedb_start_handler(GSList* sibling_data,
                       gchar **attrs)
 {
   GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
-  GNCPriceDB *db = gnc_pricedb_create(pstatus->book);
+  GNCPriceDB *db = gnc_book_get_pricedb(pstatus->book);
   g_return_val_if_fail(db, FALSE);
   *result = db;
   return(TRUE);
