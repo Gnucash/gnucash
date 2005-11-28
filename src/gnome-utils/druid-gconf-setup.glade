@@ -292,7 +292,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 	<widget class="GnomeDruidPageEdge" id="start_page">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Update Gnucash configuration data</property>
+	  <property name="title" translatable="yes">Update gnucash configuration data</property>
 	  <property name="text" translatable="yes">The configuration data used by Gnucash to specify its default values cannot be found in the default system locations.  Without this data Gnucash will still operate properly, but it may require some extra time to set up.</property>
 	</widget>
       </child>
@@ -300,7 +300,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
       <child>
 	<widget class="GnomeDruidPageStandard" id="choose_page">
 	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Choose Method</property>
+	  <property name="title" translatable="yes">Choose method</property>
 	  <property name="contents_background">#e6e6e6e6e6e6</property>
 	  <signal name="next" handler="druid_gconf_choose_page_next" last_modification_time="Thu, 14 Jul 2005 04:52:59 GMT"/>
 	  <signal name="prepare" handler="druid_gconf_choose_page_prepare" last_modification_time="Thu, 14 Jul 2005 18:24:15 GMT"/>

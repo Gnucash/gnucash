@@ -1,5 +1,8 @@
 2005-11-27  David Hampton  <hampton@employees.org>
 
+	*src/gnome-utils/druid-gconf-setup.glade: Make the capitalization
+	consistent across the titles of all pages.
+
 	* src/backend/file/io-gncbin-r.c:
 	* src/backend/file/gnc-pricedb-xml-v2.c:
 	* src/backend/file/io-gncxml-v1.c:
