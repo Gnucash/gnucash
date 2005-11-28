@@ -1665,7 +1665,7 @@
 	* src/engine/Period.h: Doxygen tweak.
 	* src/engine/Transaction.c: qof_begin_edit changes.
 	* src/engine/gnc-engine.c: Load the two default GModules.
-	* src/engine/gnc-pricedb.c: Pair up the ENTER printf c%s: alls.
+	* src/engine/gnc-pricedb.c: Pair up the ENTER and LEAVE calls.
 	* src/engine/gnc-trace.c: QOF sync.
 	* src/engine/gnc-trace.h: QOF Sync
 	* src/engine/qof-be-utils.h: qof_begin_edit changes.
@@ -1893,7 +1893,7 @@
 	* src/report/standard-reports/transaction.scm: 
 	* src/app-utils/date-utilities.scm: 
 	* src/app-utils/app-utils.scm: 
-	Add "Q __FUNCTION__,uarterly" option to transaction report. Add support
+	Add "Quarterly" option to transaction report. Add support
 	functions to app-utils.scm and date-utilities.scm to support
 	finding the quarter of a given date, and to format it as Q1, Q2,
 	Q3, or Q4.  Fix a bug in the as-yet-unused function
@@ -2053,8 +2053,8 @@
 	applications.
 	* src/engine/qofbook.h
 	* src/engine/qofbook.c: New trace subsystem, qof.h
-	fixes and test-period fixes. Balance ENTER printf
-	%s: in log output.
+	fixes and test-period fixes. Balance ENTER and LEAVE
+	in log output.
 	* src/engine/qofquery.c: Balance ENTER and LEAVE.
 	* src/engine/qofsession.c: Balance ENTER and LEAVE
 	and new trace subsystem changes.
@@ -2227,7 +2227,7 @@
 2005-09-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-options.c: Remove remnants of the old
-	"A __FUNCTION__,dvanced Preferences" page.
+	"Advanced Preferences" page.
 	
 	* src/app-utils/prefs.scm:
 	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
@@ -3468,7 +3468,7 @@
 	  Handle new (private) header file, gnc-hooks-scm.h
 
 	* src/engine/gnc-hooks.c:
-	  Use printf m%s: acros instead of commented printfs
+	  Use ENTER/LEAVE macros instead of commented printfs
 
 	* src/engine/gw-engine-spec.scm:
 	  use gnc-hooks-scm.h header
