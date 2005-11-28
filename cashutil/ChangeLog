@@ -1,3 +1,16 @@
+2005-11-28  Neil Williams <linux@codehelp.co.uk>
+
+	Standardise qof-main.c|h so that it can
+	be updated centrally for pilot-qof, 
+	cashutil, gpe-expenses and gpe-cash.
+	* src/cashutil.c : 
+	* src/Makefile.am : Add new files. 
+	* src/qof-main.c : 
+	* src/qof-main.h : 
+	* src/qof-shell.c : New file for QOF shell.
+	* src/qof-shell.h : New file.
+
+
 2005-11-05  Neil Williams <linux@codehelp.co.uk>
 
 	* cashutil/src/qof-main.c : Skip objects not registered

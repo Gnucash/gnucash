@@ -18,7 +18,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
 /** @addtogroup QOFCLI
@@ -88,14 +88,100 @@ It will not be possible to support CREATE, AMEND or DROP for understandable reas
 #include <sys/stat.h>
 #include "config.h"
 #include "qof-main.h"
+#include "qof-shell.h"
 #include "cashutil.h"
 #include "cashobjects.h"
 #include "gncla-dir.h"
 #include "qofundo-p.h"
 #include "backend-bus.h"
 
-static gchar* log_module = CU_MOD_CLI;
+static QofLogModule log_module = CU_MOD_CLI;
 static gboolean debug_on = FALSE;
+static GHashTable *backend_extensions;
+#define GNC_LIB_NAME "libgnc-backend-file.la"
+#define GNC_LIB_INIT "gnc_provider_init"
+
+/** \brief command line command options.*/
+typedef enum {
+	qof_op_noop = 0,
+	qof_op_input,
+	qof_op_offline,
+	qof_op_list,
+	qof_op_shell,
+	qof_op_vers,
+	qof_op_database,
+	qof_op_timespec,
+	qof_op_exclude,
+	qof_op_sql,
+	qof_op_sql_file,
+	qof_op_write,
+	qof_op_explain,
+	qof_op_compress,
+	qof_op_category,
+	qof_op_debug
+}qof_op_type;
+
+qof_shell_context*
+qof_create(void)
+{
+	qof_shell_context *context;
+
+	context = g_new0(qof_shell_context, 1);
+	return context;
+}
+
+/*static void
+print_config_cb (QofBackendOption *option, gpointer data)
+{
+	fprintf (stdout, "option name=%s\n", option->option_name);
+	fprintf (stdout, "option desc=%s\n", option->description);
+	fprintf (stdout, "option tip =%s\n", option->tooltip);
+	switch(option->type) {
+		case KVP_TYPE_GINT64   : {
+			fprintf (stdout, "option value=%" G_GINT64_FORMAT,
+				*(gint64*)option->value);
+			fprintf (stdout, "\noption type=%s\n", QOF_TYPE_INT64);
+			break;
+		}
+		case KVP_TYPE_DOUBLE   : {
+			break; 
+		}
+		case KVP_TYPE_NUMERIC  : {
+			break; 
+		}
+		case KVP_TYPE_STRING   : {
+			fprintf (stdout, "option value=%s\n", (char*)option->value);
+			fprintf (stdout, "option type=%s\n", QOF_TYPE_STRING);
+			break;
+		}
+		case KVP_TYPE_GUID     : { break; } // unsupported
+		case KVP_TYPE_TIMESPEC : {
+			break;
+		}
+		case KVP_TYPE_BINARY   : { break; } // unsupported
+		case KVP_TYPE_GLIST    : { break; } // unsupported
+		case KVP_TYPE_FRAME    : { break; } // unsupported
+	}		
+}*/
+
+void extensions_init(void)
+{
+	backend_extensions = g_hash_table_new(g_str_hash, g_str_equal);
+}
+
+void qof_backend_extension_add(char *IDstring, gpointer data)
+{
+	g_hash_table_insert(backend_extensions, IDstring, data);
+}
+
+gpointer qof_backend_extension(const char* IDstring)
+{
+	gpointer func;
+
+	func = g_hash_table_lookup(backend_extensions, IDstring);
+	if(func) { return func; }
+	return NULL;
+}
 
 static gboolean
 load_bus_backend (const char *directory)
@@ -129,11 +215,10 @@ load_bus_backend (const char *directory)
 int
 main (int argc, const char *argv[])
 {
-	const char *exclude, *date_time, *database;
-	const char *sql_file, *write_file, *sql_query, *filename;
+	QOF_OP_VARS;
 	const char *help_header_text;
 	gboolean use_stdin;
-	qof_data *context;
+	qof_shell_context *context;
 	int optc, gz_level;
 	poptContext pc;
 	qof_op_type command;
@@ -142,8 +227,8 @@ main (int argc, const char *argv[])
 
 	struct poptOption options[] = {
 		QOF_CLI_OPTIONS
-		{"input", 'i', POPT_ARG_STRING, &filename, qof_op_input,
-		 _("Load a GnuCash or QSF book from <filename>"), "filename"},
+        {"shell", 0, POPT_ARG_NONE, NULL, qof_op_shell,
+         _("Enter the QOF interactive shell"), NULL},
 		POPT_TABLEEND
 	};
 	#ifdef ENABLE_NLS
@@ -236,37 +321,37 @@ main (int argc, const char *argv[])
 			/* optional modifiers - store to act on later. */
 			case qof_op_database:
 			{
-				qof_mod_database (database, context);
+				qof_mod_database (database, &context->qof);
 				break;
 			}
 			case qof_op_timespec:
 			{
-				qof_mod_timespec (date_time, context);
+				qof_mod_timespec (date_time, &context->qof);
 				break;
 			}
 			case qof_op_exclude:
 			{
-				qof_mod_exclude (exclude, context);
+				qof_mod_exclude (exclude, &context->qof);
 				break;
 			}
 			case qof_op_sql:
 			{
-				qof_mod_sql (sql_query, context);
+				qof_mod_sql (sql_query, &context->qof);
 				break;
 			}
 			case qof_op_sql_file:
 			{
-				qof_mod_sql_file (sql_file, context);
+				qof_mod_sql_file (sql_file, &context->qof);
 				break;
 			}
 			case qof_op_write:
 			{
-				qof_mod_write (write_file, context);
+				qof_mod_write (write_file, &context->qof);
 				break;
 			}
 			case qof_op_compress:
 			{
-				context->gz_level = gz_level;
+				context->qof.gz_level = gz_level;
 				break;
 			}
 			case qof_op_debug:
@@ -309,22 +394,21 @@ main (int argc, const char *argv[])
 		gnc_log_init();
 		qof_log_set_default(GNC_LOG_DETAIL);
 		gnc_set_log_level(CU_MOD_CLI, GNC_LOG_DETAIL);
-		gnc_set_log_level(CU_MOD_ENGINE, GNC_LOG_DETAIL);
+		gnc_set_log_level(QOF_MAIN_CLI, GNC_LOG_DETAIL);
 	}
 	g_return_val_if_fail((qof_load_backend_library 
 		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")), -1);
 	g_return_val_if_fail((qof_load_backend_library
 		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)), -1);
 	g_return_val_if_fail(load_bus_backend(GNC_LIBDIR), -1);
-	context->input_session = session;
+	context->qof.input_session = session;
 	qof_book_clear_undo(context->book);
-	qof_object_foreach_type(qof_select_all, context);
 	switch (command)
 	{
 		case qof_op_input:
 		{
-			context->filename = g_strdup(filename);
-			qof_cmd_offline (context);
+			context->qof.filename = g_strdup(filename);
+			qof_cmd_xmlfile (&context->qof);
 			break;
 		}
 		case qof_op_list:
@@ -334,14 +418,14 @@ main (int argc, const char *argv[])
 		}
 		case qof_op_explain:
 		{
-			if(!context->database)
+			if(!context->qof.database)
 			{
 				fprintf (stderr, 
 					_("%s: Error. please specify the database to explain.\n\n"), 
 					PACKAGE);
 				break;
 			}
-			qof_cmd_explain(context);
+			qof_cmd_explain(&context->qof);
 			break;
 		}
 		case qof_op_shell:
@@ -356,7 +440,7 @@ main (int argc, const char *argv[])
 		}
 	}
 	poptFreeContext(pc);
-	qof_data_free(context);
+	qof_shell_free(context);
 	qof_close();
 	if(f) { fclose(f); }
 	return 0;

@@ -14,11 +14,13 @@ bin_PROGRAMS= \
 
 cashutil_SOURCES = \
   qof-main.c \
+  qof-shell.c \
   qofundo.c \
   cashutil.c 
 
 EXTRA_DIST = \
   qof-main.h \
+  qof-shell.h \
   qofundo.h
 
 noinst_HEADERS = qofundo-p.h
