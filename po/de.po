@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 21:49+0100\n"
-"PO-Revision-Date: 2005-11-26 21:50+0100\n"
+"POT-Creation-Date: 2005-11-28 21:46+0100\n"
+"PO-Revision-Date: 2005-11-28 21:47+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7950,9 +7950,15 @@ msgid ""
 "operate properly but it may require some extra time to setup.  Do you wish "
 "to setup the configuration data?"
 msgstr ""
+"<b>Voreinstellungen konnten nicht gefunden werden</b>\n"
+"\n"
+"Die Konfigurationsdaten für die Voreinstellungen in GnuCash konnten nicht an "
+"den erwarteten Systemorten gefunden werden. Ohne diese kann GnuCash zwar "
+"trotzdem funktionieren, würde aber zusätzliche Zeit zur Einrichtung "
+"benötigen. Möchten Sie die Konfigurationsdaten jetzt einrichten?"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:4
-msgid "Choose Method"
+msgid "Choose method"
 msgstr "Einrichtungsmethode wählen"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:5
@@ -7974,6 +7980,8 @@ msgstr "Im Benutzerverzeichnis (\"home\") installieren"
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:9
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
 msgstr ""
+"Bitte fügen Sie die folgenden Zeilen an das Ende Ihrer ~/.gconf.path Datei "
+"an:"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
@@ -7990,6 +7998,11 @@ msgid ""
 "to modify a system search path to include the data location.  The second is "
 "to copy the data into your home directory."
 msgstr ""
+"Die Konfigurationsdaten sind an einem nicht-standarisierten Ort gespeichert. "
+"Es gibt zwei Möglichkeiten, um sie trotzdem für GnuCash erreichbar zu "
+"halten. Entweder der systemweite Suchpfad wird geändert, um den Datenort zu "
+"beinhalten. Alternativ können die Daten in Ihr persönliches Verzeichnis "
+"(Home-Verzeichnis) kopiert werden."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:13
 msgid ""
@@ -7997,14 +8010,18 @@ msgid ""
 "be found in the default system locations.  Without this data Gnucash will "
 "still operate properly, but it may require some extra time to set up."
 msgstr ""
+"Die Konfigurationsdaten für die Voreinstellungen in GnuCash konnten nicht an "
+"den erwarteten Systemorten gefunden werden. Ohne diese kann GnuCash zwar "
+"trotzdem funktionieren, würde aber zusätzliche Zeit zur Einrichtung "
+"benötigen."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:14
 msgid "The data has _already been installed in another window"
-msgstr ""
+msgstr "Die Daten wurden _bereits in einem anderen Fenster installiert"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:15
 msgid "The search path has _already been updated in another window"
-msgstr ""
+msgstr "Der Suchpfad wurde _bereits in einem anderen Fenster aktualisiert"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:16
 msgid ""
@@ -8013,6 +8030,10 @@ msgid ""
 "method is that future updates to GnuCash will not update your local settings "
 "to add in new keys."
 msgstr ""
+"Diese Methode wird die GnuCash-Einstellungen und deren Beschreibung in das "
+"~/.gconf Verzeichnis in Ihrem persönlichen Verzeichnis (Home) installieren. "
+"Der Nachteil hierbei ist, dass zukünftige Aktualisierungen von GnuCash Ihre "
+"persönlichen Einstellungen dann nicht gleichzeitig aktualisieren kann."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:17
 msgid ""
@@ -8020,14 +8041,18 @@ msgid ""
 "will add the Gnucash install directory to this path so that Gnucash can find "
 "its default settings and their descriptions."
 msgstr ""
+"Diese Methode wird den Suchpfad ~/.gconf.path in Ihrem persönlichen "
+"Verzeichnis (Home) ergänzen. Der Installationspfad von GnuCash wird zu jenem "
+"Suchpfad hinzugefügt, so dass GnuCash die Voreinstellungen und deren "
+"Beschreibung finden kann."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:18
-msgid "Update Gnucash configuration data"
-msgstr "GnuCash Konfigurationsdaten aktualisieren"
-
-#: ../src/gnome-utils/druid-gconf-setup.glade.h:19
 msgid "Update gconf settings - Gnucash"
 msgstr "Gconf Einstellungen aktualisieren für GnuCash"
+
+#: ../src/gnome-utils/druid-gconf-setup.glade.h:19
+msgid "Update gnucash configuration data"
+msgstr "GnuCash Konfigurationsdaten aktualisieren"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:20
 msgid "Update search path"
@@ -8039,18 +8064,25 @@ msgid ""
 "~/.gconf directory.  GnuCash can do this for you, or tell you how to do it "
 "yourself."
 msgstr ""
+"Sie haben ausgewählt, dass die Konfigurationsdaten in das ~/.gconf "
+"Verzeichnis installiert werden. Dieser Schritt kann entweder von GnuCash "
+"oder von Ihnen selber durchgeführt werden."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:22
 msgid ""
 "You have chosen to update the system search path.  GnuCash can do this for "
 "you, or it can tell you how to do it yourself."
 msgstr ""
+"Sie haben ausgewählt, den System-Suchpfad zu ergänzen. Dieser Schritt kann "
+"entweder von GnuCash oder von Ihnen selber durchgeführt werden."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:23
 msgid ""
 "You will then need to restart the gconf backend with the\n"
 "command 'gconftool-2 --shutdown'."
 msgstr ""
+"Sie müssen anschließend den gconf-Server neustarten und \n"
+"zwar mit dem Kommando 'gconftool-2 --shutdown'."
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:25
 msgid "_GnuCash installs the data"
@@ -8062,7 +8094,7 @@ msgstr "_GnuCash aktualisiert den Suchpfad"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:27
 msgid "_Install into home directory"
-msgstr ""
+msgstr "Ins persönliche Verzeichnis (Home-Verzeichnis) _installieren"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:28
 msgid "_Setup"
@@ -8070,15 +8102,15 @@ msgstr "_Einrichtung"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:29
 msgid "_Update search path"
-msgstr ""
+msgstr "Such_pfad aktualisieren"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:30
 msgid "_You install the data yourself"
-msgstr ""
+msgstr "_Sie installieren die Daten selber"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:31
 msgid "_You update the search path yourself"
-msgstr ""
+msgstr "_Sie aktualisieren den Suchpfad selber"
 
 #: ../src/gnome-utils/druid-provider-multifile.glade.h:1
 msgid ""
@@ -8094,7 +8126,7 @@ msgstr ""
 
 #: ../src/gnome-utils/druid-provider-multifile.glade.h:4
 msgid "File List"
-msgstr ""
+msgstr "Dateiliste"
 
 #: ../src/gnome-utils/druid-provider-multifile.glade.h:5
 #: ../src/import-export/qif-import/qif.glade.h:83
@@ -8379,7 +8411,7 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
-"Sie haben keine Leseberechtigung für die Datei\n"
+"Sie haben keine Zugriffsberechtigung für die Datei\n"
 "    %s\n"
 
 #: ../src/gnome-utils/gnc-file.c:270
@@ -8602,7 +8634,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:569
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
-msgstr ""
+msgstr "GnuCash konnte keine exklusive Schreibberechtigung für %s erreichen."
 
 #: ../src/gnome-utils/gnc-file.c:571
 msgid ""
@@ -8682,28 +8714,20 @@ msgid "View..."
 msgstr "Ansicht..."
 
 #: ../src/gnome-utils/gnc-gui-query.glade.h:1
-msgid ""
-"<b>Primary text</b>\n"
-"\n"
-"Secondary text.  Multiple\n"
-"lines are acceptable"
-msgstr ""
-
-#: ../src/gnome-utils/gnc-gui-query.glade.h:5
 msgid "Don't tell me again this session."
-msgstr ""
+msgstr "In dieser Sitzung nicht wieder anzeigen."
 
-#: ../src/gnome-utils/gnc-gui-query.glade.h:6
+#: ../src/gnome-utils/gnc-gui-query.glade.h:2
 msgid "Don't tell me again."
-msgstr ""
+msgstr "Nicht wieder anzeigen."
 
-#: ../src/gnome-utils/gnc-gui-query.glade.h:7
+#: ../src/gnome-utils/gnc-gui-query.glade.h:3
 msgid "Remember the answer and don't tell me again this session."
-msgstr ""
+msgstr "Antwort speichern und in dieser Sitzung nicht wieder anzeigen."
 
-#: ../src/gnome-utils/gnc-gui-query.glade.h:8
+#: ../src/gnome-utils/gnc-gui-query.glade.h:4
 msgid "Remember the answer and don't tell me again."
-msgstr ""
+msgstr "Antwort speichern und nicht wieder anzeigen."
 
 #: ../src/gnome-utils/gnc-html.c:108
 msgid "Not found"
@@ -8830,6 +8854,8 @@ msgstr "_Warnungen zurücksetzen..."
 #: ../src/gnome-utils/gnc-main-window.c:258
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
+"Den gespeicherten Status aller Warnungsmeldungen zurücksetzen, so dass alle "
+"wieder angezeigt werden."
 
 #: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Rename Page"
@@ -8837,7 +8863,7 @@ msgstr "Seite umbenennen"
 
 #: ../src/gnome-utils/gnc-main-window.c:261
 msgid "Rename this page."
-msgstr ""
+msgstr "Diese Seite umbenennen"
 
 #. Windows menu
 #: ../src/gnome-utils/gnc-main-window.c:266
@@ -8880,7 +8906,7 @@ msgstr "_Info"
 #. Misc menu
 #: ../src/gnome-utils/gnc-main-window.c:287
 msgid "TEST"
-msgstr ""
+msgstr "TEST"
 
 #: ../src/gnome-utils/gnc-main-window.c:288
 msgid "Testing stuff"
@@ -8964,6 +8990,8 @@ msgid ""
 "Error: Failure saving state file.\n"
 "  %s"
 msgstr ""
+"Fehler beim Speichern des Status-file.\n"
+"  %s"
 
 #: ../src/gnome-utils/gnc-main-window.c:901
 msgid "<unknown>"
@@ -9021,7 +9049,8 @@ msgstr ""
 "Die freie Lösung zur Finanzverwaltung.\n"
 "http://www.gnucash.org\n"
 
-#: ../src/gnome-utils/gnc-main-window.c:2902
+#. Translators: This is the "About" message.
+#: ../src/gnome-utils/gnc-main-window.c:2903
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -9031,9 +9060,11 @@ msgstr ""
 "Die freie Lösung zur Finanzverwaltung.\n"
 "http://www.gnucash.org"
 
-#: ../src/gnome-utils/gnc-main-window.c:2922
+#. Translators: Insert your translator's credits here so that
+#. they will be shown in the "About" dialog.
+#: ../src/gnome-utils/gnc-main-window.c:2925
 msgid "translator_credits"
-msgstr ""
+msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. CY Strings
 #. src/app-utils/date-utilities.scm
@@ -9163,7 +9194,7 @@ msgstr "Kontonummer"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:419
 msgid "Last Num"
-msgstr ""
+msgstr "Letzte Nummer"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:424
 msgid "Present"
@@ -9425,6 +9456,8 @@ msgstr ""
 #: ../src/gnome-utils/preferences.glade.h:36
 msgid "All transactions are expanded to show all splits."
 msgstr ""
+"Alle Buchungen werden vollständig angezeigt, so dass alle Buchungszeilen "
+"sichtbar sind."
 
 #: ../src/gnome-utils/preferences.glade.h:37
 msgid ""
@@ -9514,6 +9547,8 @@ msgstr "Negative Beträge in rot anzeigen"
 #: ../src/gnome-utils/preferences.glade.h:55
 msgid "Display this many rows when a register is created."
 msgstr ""
+"Anzahl der Zeilen, die beim Öffnen eines neuen Kontofensters angezeigt "
+"werden."
 
 #: ../src/gnome-utils/preferences.glade.h:56
 msgid "Display toolbar items as icons only."
@@ -9546,11 +9581,11 @@ msgstr "Zweizeilenstil: Farben abwechselnd pro Buchungssatz"
 
 #: ../src/gnome-utils/preferences.glade.h:62
 msgid "Draw _vertical lines between cells"
-msgstr ""
+msgstr "_Vertikale Linien zwischen Zellen zeichnen"
 
 #: ../src/gnome-utils/preferences.glade.h:63
 msgid "Draw hori_zontal lines between cells"
-msgstr ""
+msgstr "_Horizontale Linien zwischen Zellen zeichnen"
 
 #: ../src/gnome-utils/preferences.glade.h:64
 msgid "Enables support for the European Union EURO currency."
@@ -9605,11 +9640,11 @@ msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:74
 msgid "Include _grand total"
-msgstr "Gesamtsumme anzeigen"
+msgstr "_Gesamtsumme anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:75
 msgid "Include _non-currency totals"
-msgstr ""
+msgstr "_Aktien-Gesamtsumme anzeigen"
 
 #: ../src/gnome-utils/preferences.glade.h:76
 msgid "Income-Salary-Taxable"
