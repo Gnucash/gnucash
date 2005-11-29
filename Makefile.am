@@ -18,8 +18,7 @@ doc_DATA = \
   LICENSE \
   NEWS \
   README \
-  README.patches \
-  TRANSLATORS
+  README.patches
 
 m4datadir = $(datadir)/aclocal
 m4data_DATA = gnucash.m4

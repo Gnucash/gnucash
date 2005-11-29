@@ -1,4 +1,9 @@
-2005-11-28  David Hampton  <hampton@hampton-lnx.cisco.com>
+2005-11-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c:
+	* Makefile.am:
+	* TRANSLATORS: Fix the translator credits in the gtk2.6 about box.
+	They should come from the translation, not a static file.
 
 	* src/gnome-utils/gnc-gui-query.glade: Mark a couple of strings as
 	not needing translation.

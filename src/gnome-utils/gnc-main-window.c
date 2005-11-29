@@ -2861,7 +2861,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	const gchar *message = _("The GnuCash personal finance manager.\n"
 				 "The GNU way to manage your money!\n");
 	const gchar *copyright = "© 1998-2005 Linas Vepstas";
-	gchar **authors, **documenters, **translators, *license;
+	gchar **authors, **documenters, *license;
 	GdkPixbuf *logo;
 	GtkWidget *dialog;
 
@@ -2869,7 +2869,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 
 	authors = get_file_strsplit("doc/AUTHORS");
 	documenters = get_file_strsplit("doc/DOCUMENTERS");
-	translators = get_file_strsplit("doc/TRANSLATORS");
 	license = get_file("doc/LICENSE");
 
 	dialog = gtk_about_dialog_new();
@@ -2881,13 +2880,12 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 		      "license", license,
 		      "logo", logo,
 		      "name", "GnuCash",
-		      "translator-credits", translators,
+		      "translator-credits", _("translator_credits"),
 		      "version", VERSION,
 		      "website", "http://www.gnucash.org",
 		      (gchar *)NULL);
 
 	if (license)     g_free(license);
-	if (translators) g_strfreev(translators);
 	if (documenters) g_strfreev(documenters);
 	if (authors)     g_strfreev(authors);
 	gdk_pixbuf_unref (logo);
