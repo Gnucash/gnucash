@@ -1,5 +1,8 @@
 2005-11-28  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/druid-qif-import.c: Need to escape
+	user input string to prevent errors from gtk.
+
 	* src/gnome-utils/gnc-main-window.c:
 	* Makefile.am:
 	* TRANSLATORS: Fix the translator credits in the gtk2.6 about box.

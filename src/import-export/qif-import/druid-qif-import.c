@@ -1529,7 +1529,7 @@ make_qif_druid_page(gnc_commodity * comm)
   /* save the old commodity name */
   str = gnc_commodity_get_mnemonic(comm);
   str = str ? str : "";
-  title = g_strdup_printf(_("Enter information about \"%s\""), str);
+  title = g_markup_printf_escaped(_("Enter information about \"%s\""), str);
 
   gnome_druid_page_standard_set_background(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
