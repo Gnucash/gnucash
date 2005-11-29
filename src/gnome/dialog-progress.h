@@ -47,15 +47,6 @@ void gnc_progress_dialog_set_title (GNCProgressDialog *progress,
 void gnc_progress_dialog_set_heading (GNCProgressDialog *progress,
                                       const char *heading);
 
-/* Set the upper and lower bound of the progress meter. */
-void gnc_progress_dialog_set_limits (GNCProgressDialog *progress,
-                                     gfloat min, gfloat max);
-
-/* Set the activity mode. If TRUE, the dialog just indicates
- * that stuff is happening, rather than a percentage complete. */
-void gnc_progress_dialog_set_activity_mode (GNCProgressDialog *progress,
-                                            gboolean activity_mode);
-
 /* Set the C function which will be called if the user hits the
  * 'cancel' button. The cancel function returns a boolean value.
  * If the value is TRUE, the window is hidden. */
@@ -71,7 +62,7 @@ void gnc_progress_dialog_set_cancel_scm_func (GNCProgressDialog *progress,
                                               SCM cancel_scm_func);
 
 /* Set the value of the progress dialog. */
-void gnc_progress_dialog_set_value (GNCProgressDialog *progress, gfloat value);
+void gnc_progress_dialog_set_value (GNCProgressDialog *progress, gdouble value);
 
 /* Update the GUI of the progress dialog, and call any pending cancel
  * callbacks. This function will be called automatically by the other

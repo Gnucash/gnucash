@@ -1,5 +1,13 @@
 2005-11-28  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/qif-to-gnc.scm:
+	* src/import-export/qif-import/qif-merge-groups.scm:
+	* src/import-export/qif-import/qif-file.scm:
+	* src/import-export/hbci/hbci-interaction.c:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/dialog-progress.[ch]: Migrate from the deprecated
+	gtk_progress interface to the supported gtk_progress_bar.
+	
 	* src/import-export/qif-import/druid-qif-import.c: Need to escape
 	user input string to prevent errors from gtk.
 

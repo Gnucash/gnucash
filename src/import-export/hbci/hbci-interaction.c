@@ -640,8 +640,7 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
 
   /* Set progress bar */
   gtk_widget_set_sensitive (data->action_progress, TRUE);
-  gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-			       0.0);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(data->action_progress), 0.0);
   data->action_max = total;
   GNCInteractor_setRunning(data);
   /* printf("progressStartCB: Action \"%s\" started, total %d.\n",
@@ -672,8 +671,8 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
     /* printf("progressLogCB: Progress set to %d out of %f.\n", 
        progress, data->action_max); */
     if (progress <= data->action_max) 
-      gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-				   progress/data->action_max);
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (data->action_progress),
+				     progress/data->action_max);
   }
 
   return !keepAlive(data);

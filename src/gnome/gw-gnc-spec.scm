@@ -160,25 +160,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:progress-dialog-set-limits
-   '<gw:void>
-   "gnc_progress_dialog_set_limits"
-   '((<gnc:ProgressDialog*> progress)
-     (<gw:float> min)
-     (<gw:float> max))
-   "Set the mininum and maximum range of 'progress'.")
-
-  (gw:wrap-function
-   ws
-   'gnc:progress-dialog-set-activity-mode
-   '<gw:void>
-   "gnc_progress_dialog_set_activity_mode"
-   '((<gnc:ProgressDialog*> progress)
-     (<gw:bool> activity-mode))
-   "Set the mininum and maximum range of 'progress'.")
-
-  (gw:wrap-function
-   ws
    'gnc:progress-dialog-set-cancel-scm-func
    '<gw:void>
    "gnc_progress_dialog_set_cancel_scm_func"
@@ -193,7 +174,7 @@ returns #t, the dialog is closed, but not destroyed.")
    'gnc:progress-dialog-set-value
    '<gw:void>
    "gnc_progress_dialog_set_value"
-   '((<gnc:ProgressDialog*> progress) (<gw:float> value))
+   '((<gnc:ProgressDialog*> progress) (<gw:double> value))
    "Set the value of the progress dialog to 'value'.")
 
   (gw:wrap-function

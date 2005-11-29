@@ -180,9 +180,6 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
   gtk_widget_hide(progress->heading_label);
 
   progress->progress_bar = glade_xml_get_widget (xml, "progress_bar");
-  gtk_progress_set_show_text (GTK_PROGRESS(progress->progress_bar), TRUE);
-  gtk_progress_configure (GTK_PROGRESS(progress->progress_bar),
-                          0.0, 0.0, 100.0);
 
   progress->ok_button = glade_xml_get_widget (xml, "ok_button");
 
@@ -261,32 +258,6 @@ gnc_progress_dialog_set_heading (GNCProgressDialog *progress,
 }
 
 void
-gnc_progress_dialog_set_limits (GNCProgressDialog *progress,
-                                gfloat min, gfloat max)
-{
-  if (progress == NULL)
-    return;
-
-  gtk_progress_configure (GTK_PROGRESS (progress->progress_bar),
-                          min, min, max);
-
-  gnc_progress_dialog_update (progress);
-}
-
-void
-gnc_progress_dialog_set_activity_mode (GNCProgressDialog *progress,
-                                       gboolean activity_mode)
-{
-  if (progress == NULL)
-    return;
-
-  gtk_progress_set_activity_mode (GTK_PROGRESS (progress->progress_bar),
-                                  activity_mode);
-
-  gnc_progress_dialog_update (progress);
-}
-
-void
 gnc_progress_dialog_set_cancel_func (GNCProgressDialog *progress,
                                      GNCProgressCancelFunc cancel_func,
                                      gpointer user_data)
@@ -322,12 +293,12 @@ gnc_progress_dialog_set_cancel_scm_func (GNCProgressDialog *progress,
 }
 
 void
-gnc_progress_dialog_set_value (GNCProgressDialog *progress, gfloat value)
+gnc_progress_dialog_set_value (GNCProgressDialog *progress, gdouble value)
 {
   if (progress == NULL)
     return;
 
-  gtk_progress_set_value (GTK_PROGRESS (progress->progress_bar), value);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress->progress_bar), value);
 
   gnc_progress_dialog_update (progress);
 }
@@ -351,7 +322,7 @@ gnc_progress_dialog_finish (GNCProgressDialog *progress)
     progress->closed = TRUE;
   }
 
-  gtk_progress_set_percentage (GTK_PROGRESS (progress->progress_bar), 1.0);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress->progress_bar), 1.0);
 
   gtk_widget_set_sensitive (progress->ok_button, TRUE);
   gtk_widget_set_sensitive (progress->cancel_button, FALSE);
