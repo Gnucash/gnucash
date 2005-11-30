@@ -1029,8 +1029,8 @@ movedown_template_cb(GtkButton       *button,
 static gint comparefunc(const gconstpointer e1,
                  const gconstpointer e2)
 {
-  return g_strcasecmp(gnc_trans_templ_get_name((GNCTransTempl*)e1),
-        gnc_trans_templ_get_name((GNCTransTempl*)e2));
+  return strcmp(gnc_trans_templ_get_name_key((GNCTransTempl*)e1),
+        gnc_trans_templ_get_name_key((GNCTransTempl*)e2));
   
 }  
                  

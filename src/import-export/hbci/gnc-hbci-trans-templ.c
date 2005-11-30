@@ -30,6 +30,7 @@ struct _trans_data
 {
   /* Name of this Template */
   gchar *name;
+  gchar *name_key;	/* Collation key */
   
   /* Recipient */
   gchar *recp_name;
@@ -61,6 +62,7 @@ GNCTransTempl *gnc_trans_templ_new_full(const char *name,
 {
   GNCTransTempl *r = g_new0(GNCTransTempl, 1);
   r->name = g_strdup(name);
+  r->name_key = g_utf8_collate_key(name, -1);
   r->recp_name = g_strdup(recp_name);
   r->recp_account = g_strdup(recp_account);
   r->recp_bankcode = g_strdup(recp_bankcode);
@@ -74,6 +76,7 @@ void gnc_trans_templ_delete(GNCTransTempl *t)
 {
   if (!t) return;
   if (t->name) g_free(t->name);
+  if (t->name_key) g_free(t->name_key);
   if (t->recp_name) g_free(t->recp_name);
   if (t->recp_account) g_free(t->recp_account);
   if (t->recp_bankcode) g_free(t->recp_bankcode);
@@ -110,6 +113,7 @@ GNCTransTempl *gnc_trans_templ_from_kvp(kvp_frame *k)
 
   res->name = g_strdup(kvp_value_get_string
 		       (kvp_frame_get_slot(k, TT_NAME)));
+  res->name_key = g_utf8_collate_key(res->name, -1);
   res->recp_name = g_strdup(kvp_value_get_string
 			    (kvp_frame_get_slot(k, TT_RNAME)));
   res->recp_account = g_strdup(kvp_value_get_string
@@ -192,6 +196,11 @@ const char *gnc_trans_templ_get_name(const GNCTransTempl *t)
   g_assert(t);
   return t->name;
 }
+const char *gnc_trans_templ_get_name_key(const GNCTransTempl *t)
+{
+  g_assert(t);
+  return t->name_key;
+}
 const char *gnc_trans_templ_get_recp_name(const GNCTransTempl *t)
 {
   g_assert(t);
@@ -233,7 +242,10 @@ void gnc_trans_templ_set_name(GNCTransTempl *t, const char *c)
   g_assert(t);
   if (t->name)
     g_free(t->name);
+  if (t->name_key)
+    g_free(t->name_key);
   t->name = g_strdup(c);
+  t->name_key = g_utf8_collate_key(c, -1);
 }
 void gnc_trans_templ_set_recp_name(GNCTransTempl *t, const char *c)
 {

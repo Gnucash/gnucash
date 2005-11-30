@@ -60,6 +60,7 @@ GList *gnc_trans_templ_kvp_glist_from_glist(GList *k);
 /** @name GNCTransTempl value access */
 /*@{*/
 const char *gnc_trans_templ_get_name(const GNCTransTempl *t);
+const char *gnc_trans_templ_get_name_key(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_name(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_account(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_bankcode(const GNCTransTempl *t);

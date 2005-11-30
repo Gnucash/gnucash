@@ -473,11 +473,14 @@ static int getTanCB(AB_BANKING *ab,
 static int keepAlive(void *user_data)
 {
   GNCInteractor *data = user_data;
+  GMainContext *context;
+
   g_assert(data);
   /*fprintf(stdout, "my-keepAlive: returning 1\n");*/
 
   /* Let the widgets be redrawn */
-  while (g_main_iteration (FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 
   return data->keepAlive;
 }
@@ -745,6 +748,7 @@ on_button_clicked (GtkButton *button,
 		   gpointer user_data)
 {
   GNCInteractor *data = user_data;
+  GMainContext *context;
   const char *name;
   g_assert(data);
   
@@ -762,7 +766,8 @@ on_button_clicked (GtkButton *button,
 	   name);
   }
   /* Let the widgets be redrawn */
-  while (g_main_iteration (FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 }
 
 GWEN_INHERIT(AB_BANKING, GNCInteractor)

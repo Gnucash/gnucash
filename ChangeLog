@@ -1,3 +1,18 @@
+2005-11-29  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif/qif-parse.c:
+	* src/import-export/hbci/druid-hbci-initial.c:
+	* src/import-export/hbci/hbci-interaction.c:
+	* src/import-export/hbci/druid-hbci-utils.c:
+	* src/import-export/hbci/dialog-hbcitrans.c:
+	* src/import-export/hbci/gnc-hbci-trans-templ.[ch]:
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome/dialog-sx-from-trans.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* configure.in: Eliminate all remaining use of deprecated glib
+	functions.  Enable the compile time flag to prevent any of these
+	deprecated routines from creeping back into the source.
+
 2005-11-28  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif-to-gnc.scm:

@@ -618,6 +618,7 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   guint sx_error = sxftd_compute_sx(sxfti);
   SchedXactionDialog *adv_dlg;
   SchedXactionEditorDialog *adv_edit_dlg;
+  GMainContext *context;
 
   if ( sx_error != 0
        && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
@@ -629,7 +630,8 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   }
   gtk_widget_hide( sxfti->dialog );
   /* force a gui update. */
-  while (g_main_iteration(FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 
   adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
   adv_edit_dlg =

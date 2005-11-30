@@ -855,7 +855,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
         /* read out data back into SchedXaction object. */
         /* FIXME: this is getting too deep; split out. */
         {
-                char *name;
+                gchar *name, *nameKey;
                 gboolean nameExists, nameHasChanged;
                 GList *sxList;
 
@@ -870,6 +870,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 }
 
                 nameExists = FALSE;
+                nameKey = g_utf8_collate_key(name, -1);
                 nameHasChanged =
                         (xaccSchedXactionGetName(sxed->sx) == NULL)
                         || (strcmp( xaccSchedXactionGetName(sxed->sx), name ) != 0);
@@ -877,11 +878,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                           gnc_book_get_schedxactions( gnc_get_current_book() );
                       nameHasChanged && !nameExists && sxList ;
                       sxList = sxList->next ) {
-                        char *existingName;
+                        char *existingName, *existingNameKey;
                         existingName =
                                 xaccSchedXactionGetName( (SchedXaction*)sxList->
                                                          data );
-                        nameExists |= ( g_strcasecmp(name, existingName) == 0 );
+                        existingNameKey = g_utf8_collate_key(existingName, -1);
+                        nameExists |= ( strcmp(nameKey, existingNameKey) == 0 );
+                        g_free( existingNameKey );
                 }
                 if ( nameHasChanged && nameExists ) {
                         const char *sx_has_existing_name_msg =
@@ -892,10 +895,12 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
 						  sx_has_existing_name_msg,
 						  name) ) {
+                                g_free( nameKey );
                                 g_free( name );
                                 return FALSE;
                         }
                 }
+                g_free( nameKey );
                 g_free( name );
         }
 

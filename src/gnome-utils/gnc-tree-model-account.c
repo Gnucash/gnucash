@@ -642,13 +642,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetPresentBalanceInCurrency,
 									 account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
 			g_value_init (value, G_TYPE_STRING);
@@ -662,13 +662,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
 									 account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
 			g_value_init (value, G_TYPE_STRING);
@@ -682,13 +682,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetClearedBalanceInCurrency,
 									 account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED:
 			g_value_init (value, G_TYPE_STRING);
@@ -702,13 +702,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetReconciledBalanceInCurrency,
 									 account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED:
 			g_value_init (value, G_TYPE_STRING);
@@ -722,13 +722,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
 									 account, FALSE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN:
 			g_value_init (value, G_TYPE_STRING);
@@ -742,13 +742,13 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, TRUE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT:
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_report_balance(xaccAccountGetBalanceInCurrency,
 									 account, TRUE, &negative);
-			g_value_set_string_take_ownership (value, string);
+			g_value_take_string (value, string);
 			break;
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL:
 			g_value_init (value, G_TYPE_STRING);

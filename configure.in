@@ -142,6 +142,9 @@ else
   AC_MSG_RESULT(no)
 fi
 AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
+AC_DEFINE(G_DISABLE_DEPRECATED,1,[Don't use any deprecated glib functions.])
+#AC_DEFINE(GTK_DISABLE_DEPRECATED,1,[Don't use any deprecated gtk functions.])
+#AC_DEFINE(GNOME_DISABLE_DEPRECATED,1,[Don't use any deprecated gnome functions.])
 
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 

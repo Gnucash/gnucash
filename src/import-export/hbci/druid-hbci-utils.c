@@ -163,7 +163,7 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
 gboolean
 gnc_test_dir_exist_error (GtkWindow *parent, const char *filename) 
 {
-  char *dirname = g_dirname (filename);
+  char *dirname = g_path_get_dirname (filename);
   gboolean dirtest = g_file_test (dirname, G_FILE_TEST_IS_DIR);
   g_free (dirname);
   if (!dirtest) {
