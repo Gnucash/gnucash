@@ -151,8 +151,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${QOF_CFLAGS} \
-  ${GUPPI_CFLAGS} 
+  ${QOF_CFLAGS}
 
 # We build this in an earlier directory.
 

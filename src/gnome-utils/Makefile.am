@@ -18,7 +18,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/lib/glib26 \
-  ${LIBGUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
@@ -46,7 +45,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/goffice/split \
   -I${top_srcdir}/lib/glib26 \
   -I${top_srcdir}/lib \
-  ${LIBGUPPI_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLIB_CFLAGS} \
@@ -93,7 +91,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
   gnc-html-graph-gog.c \
-  gnc-html-guppi.c \
   gnc-html-history.c \
   gnc-html.c \
   gnc-icons.c \
@@ -157,7 +154,6 @@ gncinclude_HEADERS = \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
   gnc-html-graph-gog.h \
-  gnc-html-guppi.h \
   gnc-html-history.h \
   gnc-html.h \
   gnc-icons.h \
@@ -208,7 +204,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
-  ${LIBGUPPI_LIBS} \
   ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \
@@ -232,7 +227,6 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/lib/goffice/libgoffice.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
-  ${LIBGUPPI_LIBS} \
   ${GNOME_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GTKHTML_LIBS} \

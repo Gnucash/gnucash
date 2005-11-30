@@ -38,9 +38,6 @@
 
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
-#ifdef USE_GUPPI
-#include <libguppitank/guppi-tank.h>
-#endif
 
 #include "Account.h"
 #include "Group.h"

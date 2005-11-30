@@ -12,5 +12,5 @@ else
 SUBDIRS +=
 endif
 
-EXTRA_DIST = README guppi-legend.patch
+EXTRA_DIST = README
 

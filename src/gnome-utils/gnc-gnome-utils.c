@@ -27,10 +27,6 @@
 #include <libguile.h>
 #include <gconf/gconf.h>
 
-#ifdef USE_GUPPI
-#include "gnc-html-guppi.h"
-#endif
-
 #include "gnc-html-graph-gog.h"
 
 #include "argv-list-converters.h"
@@ -192,11 +188,6 @@ gnc_gnome_init (const char * arg0,
     }
   }
 
-#ifdef USE_GUPPI    
-  /* initialize guppi handling in gnc-html */
-  gnc_html_guppi_init ();
-#endif
-
   druid_gconf_install_check_schemas();
 
   return ret;
@@ -205,9 +196,6 @@ gnc_gnome_init (const char * arg0,
 void
 gnc_gnome_shutdown (void)
 {
-#ifdef USE_GUPPI    
-  gnc_html_guppi_shutdown();
-#endif
 }
 
 void

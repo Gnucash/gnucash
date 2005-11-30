@@ -1,5 +1,15 @@
 2005-11-29  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/gnc-html-guppi.[ch]:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome/Makefile.am:
+	* lib/Makefile.am:
+	* lib/README:
+	* lib/guppi-legend.patch:
+	* configure.in: Remove all remaining references to guppi.
+
 	* rpm/gnucash.spec.in: Quick update for 2.0 requirements.  Needs
 	to actually be tested.
 
