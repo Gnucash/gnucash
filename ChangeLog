@@ -1,5 +1,8 @@
 2005-11-29  David Hampton  <hampton@employees.org>
 
+	* rpm/gnucash.spec.in: Quick update for 2.0 requirements.  Needs
+	to actually be tested.
+
 	* src/import-export/qif/qif-parse.c:
 	* src/import-export/hbci/druid-hbci-initial.c:
 	* src/import-export/hbci/hbci-interaction.c:
