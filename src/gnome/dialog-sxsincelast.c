@@ -372,7 +372,7 @@ static void gnc_sxsld_free_toCreateTuple_list( GList *l );
 static void gnc_sxsld_free_sxState( gpointer key,
                                     gpointer value,
                                     gpointer userdata );
-static void gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud );
+static void gnc_sxsld_free_entry_numeric( GObject *o, gpointer ud );
 
 static gint sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                                               toCreateInstance *tci );
@@ -2275,11 +2275,11 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
 
         sxsld = (sxSinceLastData*)ud;
 
-        tci = (toCreateInstance*)gtk_object_get_data( GTK_OBJECT(e), "tci" );
+        tci = (toCreateInstance*)g_object_get_data( G_OBJECT(e), "tci" );
         g_assert( tci == sxsld->curSelTCI );
 
-        varName = (gchar*)gtk_object_get_data( GTK_OBJECT(e), "varName" );
-        num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(e), "numeric" );
+        varName = (gchar*)g_object_get_data( G_OBJECT(e), "varName" );
+        num = (gnc_numeric*)g_object_get_data( G_OBJECT(e), "numeric" );
         entryText = gtk_editable_get_chars( e, 0, -1 );
         dummyVarHash = g_hash_table_new( NULL, NULL );
         /* FIXME?: Should be using xaccParseAmount instead of
@@ -2798,7 +2798,7 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         /* First, deal with formulas in these cells, replacing their
          * contents with the eval'd value. */
         ent = GTK_ENTRY(widget);
-        num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(ent), "numeric" );
+        num = (gnc_numeric*)g_object_get_data( G_OBJECT(ent), "numeric" );
         str = g_string_new("");
         g_string_printf( str, "%0.2f", gnc_numeric_to_double( *num ) );
         gtk_entry_set_text( ent, str->str );
@@ -2937,18 +2937,16 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 g_string_free( gstr, TRUE );
 
                 entry = gtk_entry_new();
-                gtk_object_set_data( GTK_OBJECT(entry), "varName",
-                                     varName );
-                gtk_object_set_data( GTK_OBJECT(entry), "tci", tci );
+                g_object_set_data( G_OBJECT(entry), "varName", varName );
+                g_object_set_data( G_OBJECT(entry), "tci", tci );
                 tmpNumValue = g_new0( gnc_numeric, 1 );
                 *tmpNumValue = gnc_numeric_create( 0, 1 );
-                gtk_object_set_data( GTK_OBJECT(entry), "numeric",
-                                     tmpNumValue );
+                g_object_set_data( G_OBJECT(entry), "numeric", tmpNumValue );
                 if ( tableIdx == varHashSize ) {
                         /* Set a flag so we can know if we're the last row of
                          * the table. */
-                        gtk_object_set_data( GTK_OBJECT(entry), "lastVisualElt",
-                                             (gpointer)1 );
+                        g_object_set_data( G_OBJECT(entry), "lastVisualElt",
+					   (gpointer)1 );
                 }
 
                 gtk_widget_set_usize( entry, 64, 0 );
@@ -3896,10 +3894,10 @@ gnc_sxsld_free_sxState( gpointer key,
 
 static
 void
-gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud )
+gnc_sxsld_free_entry_numeric( GObject *o, gpointer ud )
 {
         gnc_numeric *num;
-        num = (gnc_numeric*)gtk_object_get_data( o, "numeric" );
+        num = (gnc_numeric*)g_object_get_data( o, "numeric" );
         g_free( num );
 }
 

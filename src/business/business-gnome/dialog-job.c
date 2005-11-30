@@ -291,7 +291,6 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
   JobWindow *jw;
   GladeXML *xml;
   GtkWidget *owner_box, *owner_label;
-  GtkObject *jwo;
 
   /*
    * Find an existing window for this job.  If found, bring it to
@@ -321,9 +320,7 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
 
   /* Find the dialog */
   jw->dialog = glade_xml_get_widget (xml, "Job Dialog");
-  jwo = GTK_OBJECT (jw->dialog);
-
-  gtk_object_set_data (jwo, "dialog_info", jw);
+  g_object_set_data (G_OBJECT (jw->dialog), "dialog_info", jw);
 
   /* Get entry points */
   jw->id_entry  = glade_xml_get_widget (xml, "id_entry");

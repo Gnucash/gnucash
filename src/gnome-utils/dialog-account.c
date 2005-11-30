@@ -1837,8 +1837,8 @@ gnc_ui_new_account_with_types( AccountGroup *unused,
   if ( validTypesCopy != NULL ) {
     /* Attach it with "[...]_full" so we can set the appropriate
      * GtkDestroyNotify func. */
-    gtk_object_set_data_full( GTK_OBJECT(aw->dialog), "validTypesListCopy",
-                              validTypesCopy, (GDestroyNotify)g_list_free );
+    g_object_set_data_full( G_OBJECT(aw->dialog), "validTypesListCopy",
+			    validTypesCopy, (GDestroyNotify)g_list_free );
   }
 }
 

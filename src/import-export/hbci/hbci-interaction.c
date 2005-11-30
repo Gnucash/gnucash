@@ -83,7 +83,7 @@ void GNCInteractor_delete(GNCInteractor *data)
 		       (GTK_TOGGLE_BUTTON (data->close_checkbutton)),
 		       NULL);
     gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (data->dialog));
-    gtk_object_unref (GTK_OBJECT (data->dialog));
+    g_object_unref (G_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
   
@@ -812,7 +812,7 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
   gnc_restore_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (dialog));
 
-  gtk_object_ref (GTK_OBJECT (dialog));
+  g_object_ref (G_OBJECT (dialog));
   gtk_widget_hide_all (dialog);
 
   GWEN_INHERIT_SETDATA(AB_BANKING, GNCInteractor,

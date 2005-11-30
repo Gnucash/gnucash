@@ -54,6 +54,8 @@
 #  include <ktoblzcheck.h>
 #endif
 
+#define TEMPLATE_LABEL "template"
+
 /* -------------------------------------- */
 /* Data structure */
 /* -------------------------------------- */
@@ -213,7 +215,7 @@ static void fill_template_list_func(gpointer data, gpointer user_data)
   item = gtk_list_item_new_with_label(gnc_trans_templ_get_name(templ));
   g_assert(item);
   
-  gtk_object_set_user_data(GTK_OBJECT(item), templ);
+  g_object_set_data(G_OBJECT(item), TEMPLATE_LABEL, templ);
   gtk_container_add(GTK_CONTAINER(list), item );
 }
 
@@ -814,7 +816,7 @@ on_template_list_select_child          (GtkList         *list,
                                         gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *templ = gtk_object_get_user_data (GTK_OBJECT(widget)) ;
+  GNCTransTempl *templ = g_object_get_data (G_OBJECT(widget), TEMPLATE_LABEL);
 
   g_assert(td);
 
@@ -937,7 +939,7 @@ void add_template_cb(GtkButton *b,
        gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = 1+gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
     }
@@ -971,7 +973,7 @@ moveup_template_cb(GtkButton       *button,
   g_assert(td);
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
@@ -1004,7 +1006,7 @@ movedown_template_cb(GtkButton       *button,
   g_assert(td);
 
   if (td->selected_template) {
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
@@ -1073,7 +1075,7 @@ del_template_cb(GtkButton       *button,
 
   if (td->selected_template) {
 
-    t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
+    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
 
     index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 

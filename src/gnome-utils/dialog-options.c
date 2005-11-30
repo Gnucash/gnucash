@@ -405,17 +405,17 @@ gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
 
   widget = gnc_option_get_widget (option);
 
-  _current = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
   current = GPOINTER_TO_INT (_current);
 
-  _new_value = gtk_object_get_data (GTK_OBJECT(w), "gnc_radiobutton_index");
+  _new_value = g_object_get_data (G_OBJECT(w), "gnc_radiobutton_index");
   new_value = GPOINTER_TO_INT (_new_value);
 
   if (current == new_value)
     return;
 
-  gtk_object_set_data (GTK_OBJECT(widget), "gnc_radiobutton_index",
-		       GINT_TO_POINTER(new_value));
+  g_object_set_data (G_OBJECT(widget), "gnc_radiobutton_index",
+		     GINT_TO_POINTER(new_value));
   gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -598,8 +598,8 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 						   GTK_RADIO_BUTTON (widget) :
 						   NULL,
 						   label ? _(label) : "");
-    gtk_object_set_data (GTK_OBJECT (widget), "gnc_radiobutton_index",
-			 GINT_TO_POINTER (i));
+    g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
+		       GINT_TO_POINTER (i));
     gtk_tooltips_set_tip(tooltips, widget, tip ? _(tip) : "", NULL);
     g_signal_connect(G_OBJECT(widget), "toggled",
 		     G_CALLBACK(gnc_option_radiobutton_cb), option);
@@ -1002,7 +1002,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   reset_button = gtk_button_new_with_label (_("Defaults"));
   g_signal_connect(G_OBJECT(reset_button), "clicked",
 		   G_CALLBACK(gnc_options_dialog_reset_cb), propertybox);
-  gtk_object_set_data(GTK_OBJECT(reset_button), "section", section);
+  g_object_set_data(G_OBJECT(reset_button), "section", section);
   gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
   gtk_widget_show_all(page_content_box);
   gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
@@ -1030,9 +1030,9 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 	gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
 				  page_count);
 
-      gtk_object_set_data(GTK_OBJECT(notebook_page), "listitem", listitem);
-      gtk_object_set_data(GTK_OBJECT(notebook_page), "advanced",
-			  GINT_TO_POINTER(advanced));
+      g_object_set_data(G_OBJECT(notebook_page), "listitem", listitem);
+      g_object_set_data(G_OBJECT(notebook_page), "advanced",
+			GINT_TO_POINTER(advanced));
     }
   }
 
@@ -1166,7 +1166,7 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
   GNCOptionSection *section;
   gpointer val;
 
-  val = gtk_object_get_data(GTK_OBJECT(w), "section");
+  val = g_object_get_data(G_OBJECT(w), "section");
   g_return_if_fail (val);
   g_return_if_fail (win);
 
@@ -2376,11 +2376,11 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
     g_return_val_if_fail (list, TRUE);
 
     button = list->data;
-    val = gtk_object_get_data (GTK_OBJECT (button), "gnc_radiobutton_index");
+    val = g_object_get_data (G_OBJECT (button), "gnc_radiobutton_index");
     g_return_val_if_fail (GPOINTER_TO_INT (val) == index, TRUE);
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    //    gtk_object_set_data(GTK_OBJECT(widget), "gnc_radiobutton_index",
+    //    g_object_set_data(G_OBJECT(widget), "gnc_radiobutton_index",
     //			GINT_TO_POINTER(index));
     return FALSE;
   }
@@ -2696,7 +2696,7 @@ gnc_option_get_ui_value_radiobutton (GNCOption *option, GtkWidget *widget)
   gpointer _index;
   int index;
 
-  _index = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  _index = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
   index = GPOINTER_TO_INT(_index);
 
   return (gnc_option_permissible_value(option, index));

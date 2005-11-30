@@ -243,7 +243,7 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   /* make the page widget */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
-  gtk_object_set_data(GTK_OBJECT(retval->page), "page_struct", retval);
+  g_object_set_data(G_OBJECT(retval->page), "page_struct", retval);
 
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
 
@@ -394,9 +394,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
                                      gpointer user_data) 
 {
   CommodityDruid * cd = user_data;
-  CommodityDruidPage * dpage = 
-    (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
-                                              "page_struct");
+  CommodityDruidPage * dpage = g_object_get_data(G_OBJECT(page), "page_struct");
   const char * new_type;
   const char * new_name;
   const char * new_mnemonic;

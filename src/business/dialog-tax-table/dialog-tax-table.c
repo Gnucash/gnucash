@@ -175,8 +175,7 @@ static void
 optionmenu_changed (GtkWidget *widget, NewTaxTable *ntt)
 {
   g_return_if_fail (ntt);
-  ntt->type = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (widget),
-						    "option"));
+  ntt->type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(widget), "option"));
 }
 
 static GtkWidget *

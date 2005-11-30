@@ -1,5 +1,8 @@
 2005-11-29  David Hampton  <hampton@employees.org>
 
+	* various: More syntactic sugar converting from gtk_object_xxx
+	functions to g_object_xxx functions.
+
 	* various: Syntactic sugar converting from gtk_signal_xxx
 	functions to g_signal_yyy functions.
 

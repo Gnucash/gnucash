@@ -463,7 +463,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   xml = gnc_glade_xml_new ("customer.glade", "Customer Dialog");
   cw->dialog = glade_xml_get_widget (xml, "Customer Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (cw->dialog), "dialog_info", cw);
+  g_object_set_data (G_OBJECT (cw->dialog), "dialog_info", cw);
 
   /* Get entry points */
   cw->id_entry = glade_xml_get_widget (xml, "id_entry");

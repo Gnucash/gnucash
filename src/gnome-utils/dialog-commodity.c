@@ -748,8 +748,6 @@ gnc_ui_quote_tz_menu_create(void)
   gtk_widget_show(GTK_WIDGET(menu));
 
   item = gtk_menu_item_new_with_label(_("Use local time"));
-  /* set user data to non NULL so we can detect this item specially. */
-  gtk_object_set_user_data(GTK_OBJECT(item), (gpointer) 1);
   gtk_widget_show(item);
   gtk_menu_append(menu, item);
  

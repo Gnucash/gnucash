@@ -1130,7 +1130,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   /* get any changes to the imported stocks */
   for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
     gtkpage   = GNOME_DRUID_PAGE(pageptr->data); 
-    page      = gtk_object_get_data(GTK_OBJECT(gtkpage), "page_struct");
+    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
     namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
@@ -1365,8 +1365,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
                                 gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  QIFDruidPage    * qpage = 
-    gtk_object_get_data(GTK_OBJECT(page), "page_struct");
+  QIFDruidPage    * qpage = g_object_get_data(G_OBJECT(page), "page_struct");
   
   const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
@@ -1521,8 +1520,7 @@ make_qif_druid_page(gnc_commodity * comm)
   /* make the page widget */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
   retval->commodity = comm;
-  gtk_object_set_data(GTK_OBJECT(retval->page),
-                      "page_struct", (gpointer)retval);
+  g_object_set_data(G_OBJECT(retval->page), "page_struct", retval);
 
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
 

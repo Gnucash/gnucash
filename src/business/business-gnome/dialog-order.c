@@ -662,7 +662,7 @@ gnc_order_window_new_order (GNCBook *bookp, GncOwner *owner)
   xml = gnc_glade_xml_new ("order.glade", "New Order Dialog");
   ow->dialog = glade_xml_get_widget (xml, "New Order Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (ow->dialog), "dialog_info", ow);
+  g_object_set_data (G_OBJECT (ow->dialog), "dialog_info", ow);
 
   /* Grab the widgets */
   ow->id_entry = glade_xml_get_widget (xml, "id_entry");

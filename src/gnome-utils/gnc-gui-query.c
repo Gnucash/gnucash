@@ -31,6 +31,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 
+#define INDEX_LABEL "index"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -455,7 +456,7 @@ gnc_choose_radio_button_cb(GtkWidget *w, gpointer data)
   int *result = data;
 
   if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w)))
-    *result = GPOINTER_TO_INT(gtk_object_get_user_data(GTK_OBJECT(w)));
+    *result = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w), INDEX_LABEL));
 }
 
 /********************************************************************
@@ -516,7 +517,7 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
 
     gtk_widget_show(radio_button);
     gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
-    gtk_object_set_user_data(GTK_OBJECT(radio_button), GINT_TO_POINTER(i));
+    g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
     g_signal_connect(radio_button, "clicked",
 		     G_CALLBACK(gnc_choose_radio_button_cb),
 		     &radio_result);

@@ -44,6 +44,7 @@
 #include "gnc-date.h"
 #include "gnc-date-delta.h"
 
+#define GDD_LABEL "gdd"
 
 enum
 {
@@ -199,7 +200,7 @@ set_units (GtkWidget *widget, gpointer data)
   GNCDateDelta *gdd;
 
   units = GPOINTER_TO_INT(data);
-  gdd = GNC_DATE_DELTA(gtk_object_get_user_data(GTK_OBJECT(widget)));
+  gdd = GNC_DATE_DELTA(g_object_get_data(G_OBJECT(widget), GDD_LABEL));
 
   gdd->units = units;
 
@@ -227,7 +228,7 @@ fill_units_menu(GNCDateDelta *gdd)
   for (i = 0; strings[i] != NULL; i++)
   {
     item = gtk_menu_item_new_with_label (strings[i]);
-    gtk_object_set_user_data(GTK_OBJECT(item), gdd);
+    g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
     gtk_menu_append (GTK_MENU (menu), item);
     gtk_widget_show(item);
 
@@ -245,7 +246,7 @@ set_polarity (GtkWidget *widget, gpointer data)
   GNCDateDelta *gdd;
 
   polarity = GPOINTER_TO_INT(data);
-  gdd = GNC_DATE_DELTA(gtk_object_get_user_data(GTK_OBJECT(widget)));
+  gdd = GNC_DATE_DELTA(g_object_get_data(G_OBJECT(widget), GDD_LABEL));
 
   gdd->polarity = polarity;
 
@@ -271,7 +272,7 @@ fill_polarity_menu(GNCDateDelta *gdd)
   for (i = 0; strings[i] != NULL; i++)
   {
     item = gtk_menu_item_new_with_label (strings[i]);
-    gtk_object_set_user_data(GTK_OBJECT(item), gdd);
+    g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
     gtk_menu_append (GTK_MENU (menu), item);
     gtk_widget_show(item);
 

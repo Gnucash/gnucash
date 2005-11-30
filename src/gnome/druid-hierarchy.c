@@ -808,7 +808,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 	  xaccGroupForEachAccount (our_final_group, (AccountCallback)starting_balance_helper,
 				   data, TRUE);
 	ENTER (" ");
-	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
+	qof_book_merge_window = g_object_get_data (G_OBJECT (hierarchy_window), "Merge Druid");
 	if(qof_book_merge_window) {
 		DEBUG ("qof_book_merge_window found");
 		if (our_final_group) 

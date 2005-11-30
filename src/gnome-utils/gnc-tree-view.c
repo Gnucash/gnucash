@@ -267,9 +267,10 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
    * column, but have it take up any extra space in the window. */
   column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
 					  -1, -1, NULL);
-  gtk_object_set(GTK_OBJECT(column),
-		 "fixed-width", 1,
-		 "expand", TRUE, NULL);
+  g_object_set(G_OBJECT(column),
+	       "fixed-width", 1,
+	       "expand", TRUE,
+	       (gchar *)NULL);
 
   /* Create the last column which contains the column selection
    * widget.  gnc_tree_view_add_text_column will do most of the
@@ -280,11 +281,11 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
   gtk_widget_size_request(icon, &requisition);
   column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
 					  -1, -1, NULL);
-  gtk_object_set(GTK_OBJECT(column),
-		 "clickable", TRUE,
-		 "widget", icon,
-		 "fixed-width", requisition.width + 10,
-		 NULL);
+  g_object_set(G_OBJECT(column),
+	       "clickable", TRUE,
+	       "widget", icon,
+	       "fixed-width", requisition.width + 10,
+	       (gchar *)NULL);
   g_signal_connect(G_OBJECT(column), "clicked",
 		   G_CALLBACK (gnc_tree_view_select_column_cb),
 		   view);

@@ -424,7 +424,7 @@ gnc_ui_qof_book_merge_druid (void)
 	gnc_ui_hierarchy_druid();
 	druid_hierarchy_window = gnc_ui_hierarchy_running();
 	gtk_widget_hide (druid_hierarchy_window);
-	gtk_object_set_data (GTK_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
+	g_object_set_data (G_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
 	gtk_widget_show_all (qof_book_merge_window);
 	g_return_if_fail(targetBook != NULL);
 	g_return_if_fail(mergeBook != NULL);

@@ -417,7 +417,7 @@ gnc_employee_new_window (GNCBook *bookp,
   xml = gnc_glade_xml_new ("employee.glade", "Employee Dialog");
   ew->dialog = glade_xml_get_widget (xml, "Employee Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (ew->dialog), "dialog_info", ew);
+  g_object_set_data (G_OBJECT (ew->dialog), "dialog_info", ew);
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");

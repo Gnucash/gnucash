@@ -59,9 +59,9 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
   gpointer _index;
   gint index;
 
-  cb = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_cb");
+  cb = g_object_get_data(G_OBJECT(w), "gnc_option_cb");
 
-  _index = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_index");
+  _index = g_object_get_data(G_OBJECT(w), "gnc_option_index");
   index = GPOINTER_TO_INT(_index);
 
   cb(w, index, data);
@@ -109,17 +109,17 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
     gtk_tooltips_set_tip(tooltips, menu_item, option_info[i].tip, NULL);
     gtk_widget_show(menu_item);
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_cb",
-                        option_info[i].callback);
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_cb",
+		      option_info[i].callback);
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_index",
-                        GINT_TO_POINTER(i));
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_index",
+		      GINT_TO_POINTER(i));
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_menu",
-                        omenu);
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_menu",
+		      omenu);
 
     if (option_info[i].callback != NULL)
       g_signal_connect(menu_item, "activate",
@@ -359,9 +359,9 @@ gnc_option_menu_init(GtkWidget * w)
   {
     gtk_option_menu_set_history(GTK_OPTION_MENU(w), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), 
-                        "option_index",
-                        GINT_TO_POINTER(i));
+    g_object_set_data(G_OBJECT(active), 
+		      "option_index",
+		      GINT_TO_POINTER(i));
   }
 
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
@@ -410,8 +410,8 @@ gnc_option_menu_get_active(GtkWidget * w)
   menu     = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
   menuitem = gtk_menu_get_active(GTK_MENU(menu));
 
-  return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
-                                             "option_index"));
+  return GPOINTER_TO_INT(g_object_get_data(G_OBJECT(menuitem),
+					   "option_index"));
 }
 
 
@@ -763,11 +763,11 @@ static GNCCListCheckInfo *
 gnc_clist_add_check (GtkCList *list)
 {
   GNCCListCheckInfo *check_info;
-  GtkObject *object;
+  GObject *object;
 
-  object = GTK_OBJECT (list);
+  object = G_OBJECT (list);
 
-  check_info = gtk_object_get_data (object, "gnc-check-info");
+  check_info = g_object_get_data (object, "gnc-check-info");
   if (check_info)
   {
     PWARN ("clist already has check");
@@ -776,7 +776,7 @@ gnc_clist_add_check (GtkCList *list)
 
   check_info = g_new0 (GNCCListCheckInfo, 1);
 
-  gtk_object_set_data (object, "gnc-check-info", check_info);
+  g_object_set_data (object, "gnc-check-info", check_info);
 
   g_signal_connect (object, "realize",
 		    G_CALLBACK (check_realize), check_info);
@@ -800,7 +800,7 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
 
   g_return_if_fail (GTK_IS_CLIST (list));
 
-  check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check-info");
+  check_info = g_object_get_data (G_OBJECT (list), "gnc-check-info");
   if (!check_info)
     check_info = gnc_clist_add_check (list);
 

@@ -1131,7 +1131,7 @@ advance_toggle( GtkButton *o, SchedXactionEditorDialog *sxed )
         gchar *spinName;
         GtkWidget *spin;
 
-        spinName = (gchar*)gtk_object_get_data( GTK_OBJECT(o), "whichOneAmI" );
+        spinName = (gchar*)g_object_get_data( G_OBJECT(o), "whichOneAmI" );
         spin = glade_xml_get_widget( sxed->gxml, spinName );
         if ( !spin ) {
                 PERR( "Error getting widget with name \"%s\"", spinName );
@@ -1481,9 +1481,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         for ( i=0; widgets[i].name != NULL; i++ ) {
                 button = glade_xml_get_widget( sxed->gxml, widgets[i].name );
                 if ( widgets[i].objectData != NULL ) {
-                        gtk_object_set_data( GTK_OBJECT(button),
-                                             "whichOneAmI",
-                                             widgets[i].objectData );
+                        g_object_set_data( G_OBJECT(button), "whichOneAmI",
+					   widgets[i].objectData );
                 }
                 g_signal_connect( button, widgets[i].signal,
                                   G_CALLBACK( widgets[i].fn ), sxed );
@@ -1929,8 +1928,7 @@ endgroup_rb_toggled( GtkButton *b, gpointer d )
         gint id;
 
         sxed = (SchedXactionEditorDialog*)d;
-        id = GPOINTER_TO_INT(gtk_object_get_data( GTK_OBJECT(b),
-                                                  "whichOneAmI" ));
+        id = GPOINTER_TO_INT(g_object_get_data( G_OBJECT(b), "whichOneAmI" ));
 
         switch (id) {
         case END_NEVER_OPTION:
