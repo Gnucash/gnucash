@@ -232,7 +232,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     gnc_amount_edit_set_amount (gae, gnc_numeric_zero ());
 
     if (!gnc_numeric_equal (gnc_numeric_zero (), old_amount))
-      gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
+      g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
     return TRUE;
   }
@@ -251,7 +251,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     gnc_amount_edit_set_amount (gae, amount);
 
     if (!gnc_numeric_equal (amount, old_amount))
-      gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
+      g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
     return TRUE;
   }

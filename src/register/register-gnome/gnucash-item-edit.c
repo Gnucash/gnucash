@@ -1028,7 +1028,7 @@ key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
 
-	gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
+	g_signal_stop_emission_by_name (widget, "key_press_event");
 
 	gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
 
@@ -1053,13 +1053,15 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 
                 if (!gnc_table_confirm_change (table, virt_loc))
                 {
-                        gtk_signal_handler_block_by_data
-                                (GTK_OBJECT (button), data);
+                        g_signal_handlers_block_matched
+                                (button, G_SIGNAL_MATCH_DATA,
+				 0, 0, NULL, NULL, data);
 
                         gtk_toggle_button_set_active (button, FALSE);
 
-                        gtk_signal_handler_unblock_by_data
-                                (GTK_OBJECT (button), data);
+                        g_signal_handlers_unblock_matched
+                                (button, G_SIGNAL_MATCH_DATA,
+				 0, 0, NULL, NULL, data);
 
                         return;
                 }
@@ -1084,7 +1086,8 @@ block_toggle_signals(GncItemEdit *item_edit)
 
         obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_handler_block_by_data (obj, item_edit);
+        g_signal_handlers_block_matched (obj, G_SIGNAL_MATCH_DATA,
+					 0, 0, NULL, NULL, item_edit);
 }
 
 
@@ -1098,7 +1101,8 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 
         obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_handler_unblock_by_data (obj, item_edit);
+        g_signal_handlers_unblock_matched (obj, G_SIGNAL_MATCH_DATA,
+					   0, 0, NULL, NULL, item_edit);
 }
 
 
@@ -1114,13 +1118,13 @@ connect_popup_toggle_signals (GncItemEdit *item_edit)
 
         object = GTK_OBJECT(item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_connect (object, "toggled",
-                            GTK_SIGNAL_FUNC(gnc_item_edit_popup_toggled),
-                            item_edit);
+        g_signal_connect (object, "toggled",
+			  G_CALLBACK(gnc_item_edit_popup_toggled),
+			  item_edit);
 
-	gtk_signal_connect (object, "key_press_event",
-                            GTK_SIGNAL_FUNC(key_press_popup_cb),
-                            item_edit);
+	g_signal_connect (object, "key_press_event",
+			  G_CALLBACK(key_press_popup_cb),
+			  item_edit);
 
 	item_edit->popup_toggle.signals_connected = TRUE;
 }
@@ -1134,8 +1138,9 @@ disconnect_popup_toggle_signals (GncItemEdit *item_edit)
 	if (!item_edit->popup_toggle.signals_connected)
 		return;
 
-	gtk_signal_disconnect_by_data
-                (GTK_OBJECT(item_edit->popup_toggle.toggle_button), item_edit);
+	g_signal_handlers_disconnect_matched
+                (item_edit->popup_toggle.toggle_button, G_SIGNAL_MATCH_DATA,
+		 0, 0, NULL, NULL, item_edit);
 
 	item_edit->popup_toggle.signals_connected = FALSE;
 }

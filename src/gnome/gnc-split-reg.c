@@ -261,26 +261,26 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
     const char *signal_name;
     guint defaultOffset;
   } signals[] = {
-    { ENTER_ENT_SIGNAL,    "enter_ent",    GTK_SIGNAL_OFFSET( GNCSplitRegClass, enter_ent_cb ) },
-    { CANCEL_ENT_SIGNAL,   "cancel_ent",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, cancel_ent_cb ) },
-    { DELETE_ENT_SIGNAL,   "delete_ent",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, delete_ent_cb ) },
-    { REINIT_ENT_SIGNAL,   "reinit_ent",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, reinit_ent_cb ) },
-    { DUP_ENT_SIGNAL,      "dup_ent",      GTK_SIGNAL_OFFSET( GNCSplitRegClass, dup_ent_cb ) },
-    { SCHEDULE_ENT_SIGNAL, "schedule_ent", GTK_SIGNAL_OFFSET( GNCSplitRegClass, schedule_ent_cb ) },
-    { EXPAND_ENT_SIGNAL,   "expand_ent",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, expand_ent_cb ) },
-    { BLANK_SIGNAL,        "blank",        GTK_SIGNAL_OFFSET( GNCSplitRegClass, blank_cb ) },
-    { JUMP_SIGNAL,         "jump",         GTK_SIGNAL_OFFSET( GNCSplitRegClass, jump_cb ) },
-    { CUT_SIGNAL,          "cut",          GTK_SIGNAL_OFFSET( GNCSplitRegClass, cut_cb ) },
-    { CUT_TXN_SIGNAL,      "cut_txn",      GTK_SIGNAL_OFFSET( GNCSplitRegClass, cut_txn_cb ) },
-    { COPY_SIGNAL,         "copy",         GTK_SIGNAL_OFFSET( GNCSplitRegClass, copy_cb ) },
-    { COPY_TXN_SIGNAL,     "copy_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, copy_txn_cb ) },
-    { PASTE_SIGNAL,        "paste",        GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_cb ) },
-    { PASTE_TXN_SIGNAL,    "paste_txn",    GTK_SIGNAL_OFFSET( GNCSplitRegClass, paste_txn_cb ) },
-    { VOID_TXN_SIGNAL,     "void_txn",     GTK_SIGNAL_OFFSET( GNCSplitRegClass, void_txn_cb ) },
-    { UNVOID_TXN_SIGNAL,   "unvoid_txn",   GTK_SIGNAL_OFFSET( GNCSplitRegClass, unvoid_txn_cb ) },
-    { REVERSE_TXN_SIGNAL,  "reverse_txn",  GTK_SIGNAL_OFFSET( GNCSplitRegClass, reverse_txn_cb ) },
-    { HELP_CHANGED_SIGNAL, "help-changed", GTK_SIGNAL_OFFSET( GNCSplitRegClass, help_changed_cb ) },
-    { INCLUDE_DATE_SIGNAL, "include-date", GTK_SIGNAL_OFFSET( GNCSplitRegClass, include_date_cb ) },
+    { ENTER_ENT_SIGNAL,    "enter_ent",    G_STRUCT_OFFSET( GNCSplitRegClass, enter_ent_cb ) },
+    { CANCEL_ENT_SIGNAL,   "cancel_ent",   G_STRUCT_OFFSET( GNCSplitRegClass, cancel_ent_cb ) },
+    { DELETE_ENT_SIGNAL,   "delete_ent",   G_STRUCT_OFFSET( GNCSplitRegClass, delete_ent_cb ) },
+    { REINIT_ENT_SIGNAL,   "reinit_ent",   G_STRUCT_OFFSET( GNCSplitRegClass, reinit_ent_cb ) },
+    { DUP_ENT_SIGNAL,      "dup_ent",      G_STRUCT_OFFSET( GNCSplitRegClass, dup_ent_cb ) },
+    { SCHEDULE_ENT_SIGNAL, "schedule_ent", G_STRUCT_OFFSET( GNCSplitRegClass, schedule_ent_cb ) },
+    { EXPAND_ENT_SIGNAL,   "expand_ent",   G_STRUCT_OFFSET( GNCSplitRegClass, expand_ent_cb ) },
+    { BLANK_SIGNAL,        "blank",        G_STRUCT_OFFSET( GNCSplitRegClass, blank_cb ) },
+    { JUMP_SIGNAL,         "jump",         G_STRUCT_OFFSET( GNCSplitRegClass, jump_cb ) },
+    { CUT_SIGNAL,          "cut",          G_STRUCT_OFFSET( GNCSplitRegClass, cut_cb ) },
+    { CUT_TXN_SIGNAL,      "cut_txn",      G_STRUCT_OFFSET( GNCSplitRegClass, cut_txn_cb ) },
+    { COPY_SIGNAL,         "copy",         G_STRUCT_OFFSET( GNCSplitRegClass, copy_cb ) },
+    { COPY_TXN_SIGNAL,     "copy_txn",     G_STRUCT_OFFSET( GNCSplitRegClass, copy_txn_cb ) },
+    { PASTE_SIGNAL,        "paste",        G_STRUCT_OFFSET( GNCSplitRegClass, paste_cb ) },
+    { PASTE_TXN_SIGNAL,    "paste_txn",    G_STRUCT_OFFSET( GNCSplitRegClass, paste_txn_cb ) },
+    { VOID_TXN_SIGNAL,     "void_txn",     G_STRUCT_OFFSET( GNCSplitRegClass, void_txn_cb ) },
+    { UNVOID_TXN_SIGNAL,   "unvoid_txn",   G_STRUCT_OFFSET( GNCSplitRegClass, unvoid_txn_cb ) },
+    { REVERSE_TXN_SIGNAL,  "reverse_txn",  G_STRUCT_OFFSET( GNCSplitRegClass, reverse_txn_cb ) },
+    { HELP_CHANGED_SIGNAL, "help-changed", G_STRUCT_OFFSET( GNCSplitRegClass, help_changed_cb ) },
+    { INCLUDE_DATE_SIGNAL, "include-date", G_STRUCT_OFFSET( GNCSplitRegClass, include_date_cb ) },
     { LAST_SIGNAL, NULL, 0 }
   };
 
@@ -288,20 +288,24 @@ gnc_split_reg_class_init( GNCSplitRegClass *class )
 
   for ( i=0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ ) {
     gnc_split_reg_signals[ signals[i].s ] =
-      gtk_signal_new( signals[i].signal_name,
-                      GTK_RUN_LAST,
-                      GTK_CLASS_TYPE(object_class), signals[i].defaultOffset,
-                      gtk_signal_default_marshaller, GTK_TYPE_NONE, 0 );
+      g_signal_new( signals[i].signal_name,
+                    G_TYPE_FROM_CLASS(object_class),
+                    G_SIGNAL_RUN_LAST,
+                    signals[i].defaultOffset,
+                    NULL, NULL, 
+                    g_cclosure_marshal_VOID__VOID,
+                    G_TYPE_NONE, 0 );
   }
   /* Setup the non-default-marshalled signals; 'i' is still valid, here. */
   /* "include-date" */
   gnc_split_reg_signals[ INCLUDE_DATE_SIGNAL ] =
-    gtk_signal_new( "include-date",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE(object_class),
-                    signals[i++].defaultOffset,
-                    gtk_marshal_NONE__INT, /* time_t == int */
-                    GTK_TYPE_NONE, 1, GTK_TYPE_INT );
+    g_signal_new( "include-date",
+                  G_TYPE_FROM_CLASS(object_class),
+                  G_SIGNAL_RUN_LAST,
+                  signals[i++].defaultOffset,
+                  NULL, NULL, 
+                  g_cclosure_marshal_VOID__INT, /* time_t == int */
+                  G_TYPE_NONE, 1, G_TYPE_INT );
 
   g_assert( i == LAST_SIGNAL );
 
@@ -376,8 +380,8 @@ gnc_split_reg_init( GNCSplitReg *gsr )
    */
   //gtk_container_set_resize_mode( GTK_CONTAINER(gsr), GTK_RESIZE_QUEUE );
 
-  gtk_signal_connect( GTK_OBJECT(gsr), "destroy",
-                      GTK_SIGNAL_FUNC (gnc_split_reg_destroy_cb), gsr );
+  g_signal_connect( gsr, "destroy",
+                    G_CALLBACK (gnc_split_reg_destroy_cb), gsr );
 }
 
 static void 
@@ -533,12 +537,12 @@ gsr_create_table( GNCSplitReg *gsr )
   gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
   GNUCASH_SHEET(gsr->reg->sheet)->window = gsr->window;
   gtk_widget_show ( GTK_WIDGET(gsr->reg) );
-  gtk_signal_connect (GTK_OBJECT(gsr->reg), "activate_cursor",
-                      GTK_SIGNAL_FUNC(gnc_split_reg_record_cb), gsr);
-  gtk_signal_connect (GTK_OBJECT(gsr->reg), "redraw_all",
-                      GTK_SIGNAL_FUNC(gsr_redraw_all_cb), gsr);
-  gtk_signal_connect (GTK_OBJECT(gsr->reg), "redraw_help",
-                      GTK_SIGNAL_FUNC(gsr_emit_help_changed), gsr);
+  g_signal_connect (gsr->reg, "activate_cursor",
+                    G_CALLBACK(gnc_split_reg_record_cb), gsr);
+  g_signal_connect (gsr->reg, "redraw_all",
+                    G_CALLBACK(gsr_redraw_all_cb), gsr);
+  g_signal_connect (gsr->reg, "redraw_help",
+                    G_CALLBACK(gsr_emit_help_changed), gsr);
 }
 
 static
@@ -561,15 +565,13 @@ gsr_setup_status_widgets( GNCSplitReg *gsr )
 
   check = GTK_CHECK_MENU_ITEM( gsr->double_line_check );
 
-  gtk_signal_handler_block_by_func
-    ( GTK_OBJECT(check),
-      GTK_SIGNAL_FUNC(gnc_split_reg_double_line_cb), gsr );
+  g_signal_handlers_block_by_func( check,
+                                   gnc_split_reg_double_line_cb, gsr );
 
   gtk_check_menu_item_set_active(check, use_double_line);
 
-  gtk_signal_handler_unblock_by_func
-    ( GTK_OBJECT(check),
-      GTK_SIGNAL_FUNC(gnc_split_reg_double_line_cb), gsr );
+  g_signal_handlers_unblock_by_func( check,
+                                     gnc_split_reg_double_line_cb, gsr );
 }
 
 void
@@ -2063,9 +2065,11 @@ gsr_setup_menu_widgets(GNCSplitReg *gsr, GladeXML *xml)
     }
 
   widget = glade_xml_get_widget(xml, widget_name);
-  gtk_signal_handler_block_by_data(GTK_OBJECT(widget), gsr);
+  g_signal_handlers_block_matched(widget, G_SIGNAL_MATCH_DATA,
+				  0, 0, NULL, NULL, gsr);
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
-  gtk_signal_handler_unblock_by_data(GTK_OBJECT(widget), gsr);
+  g_signal_handlers_unblock_matched(widget, G_SIGNAL_MATCH_DATA,
+				    0, 0, NULL, NULL, gsr);
 }
 
 static
@@ -2277,14 +2281,14 @@ static
 void
 gsr_emit_include_date_signal( GNCSplitReg *gsr, time_t date )
 {
-  gtk_signal_emit_by_name( GTK_OBJECT(gsr), "include-date", date, NULL );
+  g_signal_emit_by_name( gsr, "include-date", date, NULL );
 }
 
 static
 void
 gsr_emit_simple_signal( GNCSplitReg *gsr, const char *sigName )
 {
-  gtk_signal_emit_by_name( GTK_OBJECT(gsr), sigName, NULL );
+  g_signal_emit_by_name( gsr, sigName, NULL );
 }
 
 GnucashRegister*

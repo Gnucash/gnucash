@@ -90,10 +90,10 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
 
   gtk_widget_set_sensitive (info.from_dateedit, FALSE);
   gtk_widget_set_sensitive (info.to_dateedit, FALSE);
-  gtk_signal_connect (GTK_OBJECT (info.enter_from_button), "toggled", 
-		      GTK_SIGNAL_FUNC (on_button_toggled), &info);
-  gtk_signal_connect (GTK_OBJECT (info.enter_to_button), "toggled", 
-		      GTK_SIGNAL_FUNC (on_button_toggled), &info);
+  g_signal_connect (info.enter_from_button, "toggled", 
+		    G_CALLBACK (on_button_toggled), &info);
+  g_signal_connect (info.enter_to_button, "toggled", 
+		    G_CALLBACK (on_button_toggled), &info);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 

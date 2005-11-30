@@ -803,10 +803,10 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
     (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
      gnc_gconf_get_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH, NULL));
 
-  gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
-		      GTK_SIGNAL_FUNC (on_button_clicked), data);
-  gtk_signal_connect (GTK_OBJECT (data->close_button), "clicked", 
-		      GTK_SIGNAL_FUNC (on_button_clicked), data);
+  g_signal_connect (data->abort_button, "clicked", 
+		    G_CALLBACK (on_button_clicked), data);
+  g_signal_connect (data->close_button, "clicked", 
+		    G_CALLBACK (on_button_clicked), data);
 
   if (data->parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));

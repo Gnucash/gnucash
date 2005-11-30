@@ -185,7 +185,7 @@ create_chart_export ( void )
 	xml = gnc_glade_xml_new ("chart-export.glade", "chart-export");
 	data = g_new0(chart_data, 1);
 	glade_xml_signal_connect_data(xml, "on_dateok_clicked",
-		GTK_SIGNAL_FUNC (on_dateok_clicked), data);
+		G_CALLBACK (on_dateok_clicked), data);
 	dialog = glade_xml_get_widget (xml, "chart-export");
 	return dialog;	
 }

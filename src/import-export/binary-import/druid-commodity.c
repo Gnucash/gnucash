@@ -144,8 +144,8 @@ gnc_ui_commodity_druid_create(const char * filename)
   d->window = glade_xml_get_widget (xml, "New Commodity Format Druid");
   dobj = GTK_OBJECT(d->window);
 
-  gtk_signal_connect (dobj, "delete_event",
-                      GTK_SIGNAL_FUNC (window_delete_cb), d);
+  g_signal_connect (dobj, "delete_event",
+		    G_CALLBACK (window_delete_cb), d);
 
   d->druid           = glade_xml_get_widget (xml, "commodity_druid");
   d->intro_page      = glade_xml_get_widget (xml, "start_page");
@@ -156,11 +156,11 @@ gnc_ui_commodity_druid_create(const char * filename)
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_commodity_druid_cancel_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_commodity_druid_cancel_cb), d);
+     G_CALLBACK (gnc_ui_commodity_druid_cancel_cb), d);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_commodity_druid_finish_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_commodity_druid_finish_cb), d);
+     G_CALLBACK (gnc_ui_commodity_druid_finish_cb), d);
 
   d->new_map = g_hash_table_new(g_str_hash, g_str_equal);
   d->old_map = g_hash_table_new(g_str_hash, g_str_equal);
@@ -196,13 +196,13 @@ gnc_ui_commodity_druid_create(const char * filename)
     new_page = make_commodity_druid_page(found);
 
     /* set up next/back signal handlers */
-    gtk_signal_connect(GTK_OBJECT (new_page->page), "next",
-                       GTK_SIGNAL_FUNC(gnc_ui_commodity_druid_comm_check_cb),
-                       d);
+    g_signal_connect(new_page->page, "next",
+		     G_CALLBACK(gnc_ui_commodity_druid_comm_check_cb),
+		     d);
     
-    gtk_signal_connect(GTK_OBJECT(new_page->page), "cancel",
-                       GTK_SIGNAL_FUNC(gnc_ui_commodity_druid_cancel_cb),
-                       d);
+    g_signal_connect(new_page->page, "cancel",
+		     G_CALLBACK(gnc_ui_commodity_druid_cancel_cb),
+		     d);
 
     d->pages = g_list_append(d->pages, new_page);
 

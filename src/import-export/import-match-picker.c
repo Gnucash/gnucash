@@ -284,11 +284,11 @@ init_match_picker_gui(GNCImportMatchPicker * matcher)
   /* connect the signals in the interface */
   glade_xml_signal_connect_data(xml,
 				"match_transaction_select_cb", 
-				GTK_SIGNAL_FUNC(match_transaction_select_cb),
+				G_CALLBACK(match_transaction_select_cb),
 				matcher);
   glade_xml_signal_connect_data(xml,
 				"match_transaction_unselect_cb", 
-				GTK_SIGNAL_FUNC(match_transaction_unselect_cb),
+				G_CALLBACK(match_transaction_unselect_cb),
 				matcher);
   
   matcher->transaction_matcher = glade_xml_get_widget (xml, "match_picker");

@@ -293,12 +293,12 @@ gnc_query_list_init_clist (GNCQueryList *list)
       gtk_clist_set_column_resizeable (clist, i, FALSE);
   }
 
-  gtk_signal_connect (GTK_OBJECT (clist), "click_column",
-		      GTK_SIGNAL_FUNC(gnc_query_list_click_column_cb),
-		      NULL);
-  gtk_signal_connect (GTK_OBJECT (clist), "size_allocate",
-		      GTK_SIGNAL_FUNC(gnc_query_list_size_allocate_cb),
-		      NULL);
+  g_signal_connect (clist, "click_column",
+		    G_CALLBACK(gnc_query_list_click_column_cb),
+		    NULL);
+  g_signal_connect (clist, "size_allocate",
+		    G_CALLBACK(gnc_query_list_size_allocate_cb),
+		    NULL);
 
   style = gtk_widget_get_style (GTK_WIDGET(list));
 
@@ -388,7 +388,7 @@ gnc_query_list_toggle (GNCQueryList *list)
   entry = gtk_clist_get_row_data (GTK_CLIST(list), row);
   list->current_entry = entry;
 
-  gtk_signal_emit (GTK_OBJECT (list), query_list_signals[LINE_TOGGLED], entry);
+  g_signal_emit (list, query_list_signals[LINE_TOGGLED], 0, entry);
 
   update_booleans (list, row);
 }
@@ -416,8 +416,7 @@ gnc_query_list_select_row (GtkCList *clist, gint row, gint column,
 
     entry = gtk_clist_get_row_data (clist, row);
 
-    gtk_signal_emit(GTK_OBJECT(list),
-		    query_list_signals[DOUBLE_CLICK_ENTRY], entry);
+    g_signal_emit(list, query_list_signals[DOUBLE_CLICK_ENTRY], 0, entry);
   }
 }
 
@@ -446,8 +445,7 @@ gnc_query_list_unselect_row (GtkCList *clist, gint row, gint column,
 
     entry = gtk_clist_get_row_data (clist, row);
 
-    gtk_signal_emit (GTK_OBJECT(list),
-		     query_list_signals[DOUBLE_CLICK_ENTRY], entry);
+    g_signal_emit (list, query_list_signals[DOUBLE_CLICK_ENTRY], 0, entry);
   }
 }
 

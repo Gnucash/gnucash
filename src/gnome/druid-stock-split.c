@@ -575,8 +575,8 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_clist_set_selection_mode (clist, GTK_SELECTION_BROWSE);
 
-    gtk_signal_connect (GTK_OBJECT (clist), "select_row",
-                        GTK_SIGNAL_FUNC (clist_select_row), info);
+    g_signal_connect (clist, "select_row",
+		      G_CALLBACK (clist_select_row), info);
   }
 
   /* info widgets */

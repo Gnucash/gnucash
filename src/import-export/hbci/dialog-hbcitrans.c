@@ -403,36 +403,36 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     
     /* Connect signals */
 /*    gnc_option_menu_init_w_signal (td->template_option, 
-				   GTK_SIGNAL_FUNC(template_selection_cb),
+				   G_CALLBACK(template_selection_cb),
 				   td);   */
     /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
     /*
-    gtk_signal_connect (GTK_OBJECT (td->template_gtktreeview), "select_child",
-                      GTK_SIGNAL_FUNC (on_template_list_select_child),
+    g_signal_connect (td->template_gtktreeview, "select_child",
+                      G_CALLBACK (on_template_list_select_child),
                       td);
                       
-    gtk_signal_connect(GTK_OBJECT (add_templ_button), "clicked",
-		       GTK_SIGNAL_FUNC(add_template_cb), td);
+    g_signal_connect (add_templ_button, "clicked",
+		      G_CALLBACK(add_template_cb), td);
 
-    gtk_signal_connect (GTK_OBJECT (moveup_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (moveup_template_cb),
+    g_signal_connect (moveup_templ_button, "clicked",
+                      G_CALLBACK (moveup_template_cb),
                       td);
                       
-    gtk_signal_connect (GTK_OBJECT (movedown_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (movedown_template_cb),
+    g_signal_connect (movedown_templ_button, "clicked",
+                      G_CALLBACK (movedown_template_cb),
                       td);
 
-     gtk_signal_connect (GTK_OBJECT (sort_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (sort_template_cb),
+     g_signal_connect (sort_templ_button, "clicked",
+                      G_CALLBACK (sort_template_cb),
                       td);
 
-     gtk_signal_connect (GTK_OBJECT (del_templ_button), "clicked",
-                      GTK_SIGNAL_FUNC (del_template_cb),
+     g_signal_connect (del_templ_button, "clicked",
+                      G_CALLBACK (del_template_cb),
                       td);
     */
 
-    gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
-		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
+    g_signal_connect (td->recp_bankcode_entry, "changed",
+		      G_CALLBACK(blz_changed_cb), td);
 
     /* Default button */
     gtk_dialog_set_default_response (GTK_DIALOG (td->dialog), GTK_RESPONSE_OK);

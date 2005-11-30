@@ -128,8 +128,8 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     dt_dialog->num_edit = num_spin;
 
     gtk_entry_set_activates_default(GTK_ENTRY(num_spin), TRUE);
-    gtk_signal_connect(GTK_OBJECT(num_spin), "output",
-                       GTK_SIGNAL_FUNC(gnc_dup_trans_output_cb), dt_dialog);
+    g_signal_connect(num_spin, "output",
+		     G_CALLBACK(gnc_dup_trans_output_cb), dt_dialog);
 
     if (num_str && parse_num (num_str, &num))
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (num_spin), num + 1);

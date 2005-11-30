@@ -1149,32 +1149,33 @@ gnc_html_new( GtkWindow *parent )
   gtk_object_sink (GTK_OBJECT (retval->container));
 
   /* signals */
-  gtk_signal_connect(GTK_OBJECT(retval->html), "url_requested",
-                     GTK_SIGNAL_FUNC(gnc_html_url_requested_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "url_requested",
+		   G_CALLBACK(gnc_html_url_requested_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "on_url",
-                     GTK_SIGNAL_FUNC(gnc_html_on_url_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "on_url",
+		   G_CALLBACK(gnc_html_on_url_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "set_base",
-                     GTK_SIGNAL_FUNC(gnc_html_set_base_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "set_base",
+		   G_CALLBACK(gnc_html_set_base_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "link_clicked",
-                     GTK_SIGNAL_FUNC(gnc_html_link_clicked_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "link_clicked",
+		   G_CALLBACK(gnc_html_link_clicked_cb),
+		   retval);
   
-  gtk_signal_connect (GTK_OBJECT (retval->html), "object_requested",
-                      GTK_SIGNAL_FUNC (gnc_html_object_requested_cb), 
-                      (gpointer)retval);
+  g_signal_connect (retval->html, "object_requested",
+		    G_CALLBACK (gnc_html_object_requested_cb), 
+		    retval);
 
-  gtk_signal_connect (GTK_OBJECT (retval->html), "button_press_event",
-                      GTK_SIGNAL_FUNC (gnc_html_button_press_cb), 
-                      (gpointer)retval);
+  g_signal_connect (retval->html, "button_press_event",
+		    G_CALLBACK (gnc_html_button_press_cb), 
+		    retval);
 
-  gtk_signal_connect (GTK_OBJECT(retval->html), "submit", 
-                      GTK_SIGNAL_FUNC(gnc_html_submit_cb), (gpointer)retval);
+  g_signal_connect (retval->html, "submit", 
+		    G_CALLBACK(gnc_html_submit_cb),
+		    retval);
   
   gtk_html_load_empty(GTK_HTML(retval->html));
   

@@ -570,33 +570,33 @@ ap_druid_create (AcctPeriodInfo *info)
         GTK_TEXT_VIEW (glade_xml_get_widget (xml, "book notes text"));
 
   /* generic finished/close/abort signals */
-  gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
-                      GTK_SIGNAL_FUNC (ap_window_destroy_cb), info);
+  g_signal_connect (info->window, "destroy",
+		    G_CALLBACK (ap_window_destroy_cb), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
-                      GTK_SIGNAL_FUNC (ap_druid_cancel), info);
+  g_signal_connect (info->druid, "cancel",
+		    G_CALLBACK (ap_druid_cancel), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->menu_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_menu), info);
+  g_signal_connect (info->menu_page, "prepare",
+		    G_CALLBACK (ap_show_menu), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->menu_page), "next",
-                      GTK_SIGNAL_FUNC (ap_validate_menu), info);
+  g_signal_connect (info->menu_page, "next",
+		    G_CALLBACK (ap_validate_menu), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->book_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_book), info);
+  g_signal_connect (info->book_page, "prepare",
+		    G_CALLBACK (ap_show_book), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->book_page), "next",
-                      GTK_SIGNAL_FUNC (ap_close_period), info);
+  g_signal_connect (info->book_page, "next",
+		    G_CALLBACK (ap_close_period), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->finish_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_done), info);
+  g_signal_connect (info->finish_page, "prepare",
+		    G_CALLBACK (ap_show_done), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->finish_page), "finish",
-                      GTK_SIGNAL_FUNC (ap_finish), info);
+  g_signal_connect (info->finish_page, "finish",
+		    G_CALLBACK (ap_finish), info);
 
   /* User changes the accouting period or date signals */
-  gtk_signal_connect (GTK_OBJECT (info->period_menu), "changed",
-                      GTK_SIGNAL_FUNC (ap_changed), info);
+  g_signal_connect (info->period_menu, "changed",
+		    G_CALLBACK (ap_changed), info);
 }
 
 

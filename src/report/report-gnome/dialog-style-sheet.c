@@ -345,10 +345,10 @@ gnc_style_sheet_select_dialog_create(void)
   selection = gtk_tree_view_get_selection (ss->list_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  gtk_signal_connect(GTK_OBJECT(ss->toplevel), "response",
-                     GTK_SIGNAL_FUNC(gnc_style_sheet_select_dialog_response_cb), ss); 
-  gtk_signal_connect(GTK_OBJECT(ss->list_view), "event-after",
-                     GTK_SIGNAL_FUNC(gnc_style_sheet_select_dialog_event_cb), ss); 
+  g_signal_connect(ss->toplevel, "response",
+		   G_CALLBACK(gnc_style_sheet_select_dialog_response_cb), ss); 
+  g_signal_connect(ss->list_view, "event-after",
+		   G_CALLBACK(gnc_style_sheet_select_dialog_event_cb), ss); 
   
   gnc_style_sheet_select_dialog_fill(ss);
 

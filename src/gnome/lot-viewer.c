@@ -619,11 +619,11 @@ lv_create (GNCLotViewer *lv)
                                      gnc_glade_autoconnect_full_func,
                                      lv);
 
-   gtk_signal_connect (GTK_OBJECT (lv->lot_clist), "select_row",
-                      GTK_SIGNAL_FUNC (lv_select_row_cb), lv);
+   g_signal_connect (lv->lot_clist, "select_row",
+                     G_CALLBACK (lv_select_row_cb), lv);
 
-   gtk_signal_connect (GTK_OBJECT (lv->lot_clist), "unselect_row",
-                      GTK_SIGNAL_FUNC (lv_unselect_row_cb), lv);
+   g_signal_connect (lv->lot_clist, "unselect_row",
+                     G_CALLBACK (lv_unselect_row_cb), lv);
 
    gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(lv->window));
 }

@@ -116,13 +116,13 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 	parent_class = gtk_type_class (gtk_hbox_get_type ());
 
 	general_search_signals[SELECTION_CHANGED] =
-		gtk_signal_new("changed",
-			       GTK_RUN_FIRST,
-			       GTK_CLASS_TYPE(object_class),
-			       GTK_SIGNAL_OFFSET(GNCGeneralSearchClass,
-						 changed),
-			       gtk_marshal_NONE__NONE,
-			       GTK_TYPE_NONE, 0);
+		g_signal_new("changed",
+			     G_TYPE_FROM_CLASS(object_class),
+			     G_SIGNAL_RUN_FIRST,
+			     G_STRUCT_OFFSET(GNCGeneralSearchClass, changed),
+			     NULL, NULL,
+			     g_cclosure_marshal_VOID__VOID,
+			     G_TYPE_NONE, 0);
 
 	object_class->destroy = gnc_general_search_destroy;
 
@@ -245,7 +245,7 @@ search_cb(GtkButton * button, gpointer user_data)
 	priv->sw = sw;
 
 	/* Catch when the search dialog closes */
-	gnc_search_dialog_connect_on_close (sw, GTK_SIGNAL_FUNC (on_close_cb),
+	gnc_search_dialog_connect_on_close (sw, G_CALLBACK (on_close_cb),
 					    gsl);
 
 	/* Catch the selection */
@@ -327,8 +327,8 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 	if (selection != gsl->selected_item) {
 		gsl->selected_item = selection;
 		reset_selection_text (gsl);
-		gtk_signal_emit(GTK_OBJECT(gsl),
-			      general_search_signals[SELECTION_CHANGED]);
+		g_signal_emit(gsl,
+			      general_search_signals[SELECTION_CHANGED], 0);
 	}
 
 	gnc_gui_component_clear_watches (priv->component_id);

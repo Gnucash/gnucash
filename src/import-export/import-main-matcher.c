@@ -284,7 +284,7 @@ on_matcher_help_clicked (GtkButton *button,
 			       GTK_WINDOW(info->dialog));
 
   glade_xml_signal_connect_data(xml, "on_matcher_help_close_clicked",
-				GTK_SIGNAL_FUNC(on_matcher_help_close_clicked), 
+				G_CALLBACK(on_matcher_help_close_clicked), 
 				help_dialog);
 
   gtk_widget_show(help_dialog);
@@ -449,16 +449,16 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
 
   /* Connect signals */
   glade_xml_signal_connect_data(xml, "downloaded_transaction_select_cb",
-				GTK_SIGNAL_FUNC(clist_select_row_cb), 
+				G_CALLBACK(clist_select_row_cb), 
 				info);
   glade_xml_signal_connect_data(xml, "on_matcher_ok_clicked", 
-				GTK_SIGNAL_FUNC(on_matcher_ok_clicked),
+				G_CALLBACK(on_matcher_ok_clicked),
 				info);
   glade_xml_signal_connect_data(xml, "on_matcher_cancel_clicked", 
-				GTK_SIGNAL_FUNC(on_matcher_cancel_clicked),
+				G_CALLBACK(on_matcher_cancel_clicked),
 				info);
   glade_xml_signal_connect_data(xml, "on_matcher_help_clicked", 
-				GTK_SIGNAL_FUNC(on_matcher_help_clicked),
+				G_CALLBACK(on_matcher_help_clicked),
 				info);
 
   /*Initialise pixmaps*/

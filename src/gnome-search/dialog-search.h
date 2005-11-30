@@ -98,7 +98,7 @@ void gnc_search_dialog_raise (GNCSearchWindow *sw);
 
 /* Register an on-close signal with the Search Dialog */
 guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
-					  GtkSignalFunc func,
+					  GCallback func,
 					  gpointer user_data);
 
 /* Un-register the signal handlers with the Search Dialog */

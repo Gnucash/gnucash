@@ -501,9 +501,11 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
    * without having to read the strftime man page. Prevent recursive
    * signals.
    */
-  gtk_signal_handler_block_by_data(GTK_OBJECT(priv->custom_entry), gdf);
+  g_signal_handlers_block_matched(priv->custom_entry, G_SIGNAL_MATCH_DATA,
+				  0, 0, NULL, NULL, gdf);
   gtk_entry_set_text(GTK_ENTRY(priv->custom_entry), format);
-  gtk_signal_handler_unblock_by_data(GTK_OBJECT(priv->custom_entry), gdf);
+  g_signal_handlers_unblock_matched(priv->custom_entry, G_SIGNAL_MATCH_DATA,
+				    0, 0, NULL, NULL, gdf);
   
   /* Visual feedback on what the date will look like. */
   secs_now = time(NULL);

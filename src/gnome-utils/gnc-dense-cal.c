@@ -687,7 +687,7 @@ recompute_mark_storage( GncDenseCal *dcal )
  createNew:
         dcal->numMarks = num_weeks(dcal) * 7;
         dcal->marks = g_new0( GList*, dcal->numMarks );
-        gtk_signal_emit_by_name( GTK_OBJECT(dcal), MARKS_LOST_SIGNAL_NAME, NULL );
+        g_signal_emit_by_name( dcal, MARKS_LOST_SIGNAL_NAME, NULL );
 }
 
 static void

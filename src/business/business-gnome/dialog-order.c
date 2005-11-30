@@ -432,9 +432,9 @@ gnc_order_update_window (OrderWindow *ow)
       break;
     }
 
-  gtk_signal_connect (GTK_OBJECT (ow->owner_choice), "changed",
-		      GTK_SIGNAL_FUNC (gnc_order_owner_changed_cb),
-		      ow);
+  g_signal_connect (ow->owner_choice, "changed",
+		    G_CALLBACK (gnc_order_owner_changed_cb),
+		    ow);
 
   gtk_widget_show_all (ow->dialog);
 

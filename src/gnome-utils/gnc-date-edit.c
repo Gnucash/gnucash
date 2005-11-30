@@ -590,7 +590,7 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if (!date_accel_key_press(widget, event, data))
 		return FALSE;
 
-	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+	g_signal_stop_emission_by_name (widget, "key_press_event");
 	return TRUE;
 }
 
@@ -607,8 +607,8 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
-	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
-	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
+	g_signal_emit (gde, date_edit_signals [DATE_CHANGED], 0);
+	g_signal_emit (gde, date_edit_signals [TIME_CHANGED], 0);
 
         return FALSE;
 }
@@ -675,15 +675,15 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_set_events (GTK_WIDGET(gde->cal_popup),
 			       gtk_widget_get_events (GTK_WIDGET(gde->cal_popup)) |
                                GDK_KEY_PRESS_MASK);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "delete_event",
-			    (GtkSignalFunc) delete_popup,
-			    gde);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "key_press_event",
-			    (GtkSignalFunc) key_press_popup,
-			    gde);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "button_press_event",
-			    (GtkSignalFunc) button_press_popup,
-			    gde);
+	g_signal_connect (gde->cal_popup, "delete_event",
+			  G_CALLBACK(delete_popup),
+			  gde);
+	g_signal_connect (gde->cal_popup, "key_press_event",
+			  G_CALLBACK(key_press_popup),
+			  gde);
+	g_signal_connect (gde->cal_popup, "button_press_event",
+			  G_CALLBACK(button_press_popup),
+			  gde);
 	gtk_window_set_resizable (GTK_WINDOW (gde->cal_popup), FALSE);
 
 	frame = gtk_frame_new (NULL);

@@ -342,8 +342,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         gnc_html_show_url(priv->html, type, url_location, url_label, 0);
         gnc_window_set_progressbar_window( NULL );
 
-        gtk_signal_connect(GTK_OBJECT(priv->container), "expose_event",
-                           GTK_SIGNAL_FUNC(gnc_plugin_page_report_expose_event_cb), report);
+        g_signal_connect(priv->container, "expose_event",
+			 G_CALLBACK(gnc_plugin_page_report_expose_event_cb), report);
   
         gtk_widget_show_all( GTK_WIDGET(priv->container) );
 

@@ -56,8 +56,8 @@ gnc_show_splash_screen (void)
   gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
-  gtk_signal_connect (GTK_OBJECT (splash), "destroy",
-                      GTK_SIGNAL_FUNC (splash_destroy_cb), NULL);
+  g_signal_connect (splash, "destroy",
+		    G_CALLBACK (splash_destroy_cb), NULL);
 
   gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);

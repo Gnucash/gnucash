@@ -241,23 +241,23 @@ gnc_column_view_edit_options(SCM options, SCM view) {
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_add_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_add_cb), r);
+       G_CALLBACK (gnc_column_view_edit_add_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_remove_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_remove_cb), r);
+       G_CALLBACK (gnc_column_view_edit_remove_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_edit_column_view_move_up_cb",
-       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_up_cb), r);
+       G_CALLBACK (gnc_edit_column_view_move_up_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_edit_column_view_move_down_cb",
-       GTK_SIGNAL_FUNC (gnc_edit_column_view_move_down_cb), r);
+       G_CALLBACK (gnc_edit_column_view_move_down_cb), r);
 
     glade_xml_signal_connect_data
       (xml, "gnc_column_view_edit_size_cb",
-       GTK_SIGNAL_FUNC (gnc_column_view_edit_size_cb), r);
+       G_CALLBACK (gnc_column_view_edit_size_cb), r);
 
     editor       = glade_xml_get_widget (xml, "view_contents_table");
     r->available = GTK_CLIST (glade_xml_get_widget (xml, "available_list"));

@@ -57,7 +57,7 @@ void gnc_xfer_dialog_set_information_label( XferDialog *,
  */
 void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
                                                 const gchar *label,
-                                                GtkSignalFunc callback,
+                                                GCallback callback,
                                                 gpointer user_data );
 
 void gnc_xfer_dialog_toggle_currency_table ( XferDialog *xferData,

@@ -171,10 +171,10 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
   if (parent != NULL)
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(parent));
 
-  gtk_signal_connect (tdo, "delete_event",
-                      GTK_SIGNAL_FUNC (delete_cb), progress);
+  g_signal_connect (tdo, "delete_event",
+		    G_CALLBACK (delete_cb), progress);
 
-  gtk_signal_connect (tdo, "destroy", GTK_SIGNAL_FUNC (destroy_cb), progress);
+  g_signal_connect (tdo, "destroy", G_CALLBACK (destroy_cb), progress);
 
   progress->heading_label = glade_xml_get_widget (xml, "heading_label");
   gtk_widget_hide(progress->heading_label);
@@ -183,16 +183,16 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
 
   progress->ok_button = glade_xml_get_widget (xml, "ok_button");
 
-  gtk_signal_connect(GTK_OBJECT(progress->ok_button), "clicked",
-                     GTK_SIGNAL_FUNC(ok_cb), progress);
+  g_signal_connect(progress->ok_button, "clicked",
+		   G_CALLBACK(ok_cb), progress);
 
   if (!progress->use_ok_button)
     gtk_widget_hide (progress->ok_button);
 
   progress->cancel_button = glade_xml_get_widget (xml, "cancel_button");
 
-  gtk_signal_connect(GTK_OBJECT(progress->cancel_button), "clicked",
-                     GTK_SIGNAL_FUNC(cancel_cb), progress);
+  g_signal_connect(progress->cancel_button, "clicked",
+		   G_CALLBACK(cancel_cb), progress);
 
   progress->cancel_func = NULL;
   progress->user_data = NULL;

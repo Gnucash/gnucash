@@ -122,17 +122,17 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
                         omenu);
 
     if (option_info[i].callback != NULL)
-      gtk_signal_connect(GTK_OBJECT(menu_item), "activate",
-                         GTK_SIGNAL_FUNC(gnc_option_menu_cb),
-                         option_info[i].user_data);
+      g_signal_connect(menu_item, "activate",
+		       G_CALLBACK(gnc_option_menu_cb),
+		       option_info[i].user_data);
 
     gtk_menu_append(GTK_MENU(menu), menu_item);
   }
 
   gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
 
-  gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
-                      GTK_SIGNAL_FUNC (option_menu_destroy_cb), tooltips);
+  g_signal_connect (omenu, "destroy",
+		    G_CALLBACK (option_menu_destroy_cb), tooltips);
 
   return omenu;
 }
@@ -778,12 +778,12 @@ gnc_clist_add_check (GtkCList *list)
 
   gtk_object_set_data (object, "gnc-check-info", check_info);
 
-  gtk_signal_connect (object, "realize",
-                      GTK_SIGNAL_FUNC (check_realize), check_info);
-  gtk_signal_connect (object, "unrealize",
-                      GTK_SIGNAL_FUNC (check_unrealize), check_info);
-  gtk_signal_connect (object, "destroy",
-                      GTK_SIGNAL_FUNC (check_destroy), check_info);
+  g_signal_connect (object, "realize",
+		    G_CALLBACK (check_realize), check_info);
+  g_signal_connect (object, "unrealize",
+		    G_CALLBACK (check_unrealize), check_info);
+  g_signal_connect (object, "destroy",
+		    G_CALLBACK (check_destroy), check_info);
 
   if (GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
     check_realize (GTK_WIDGET (list), check_info);
@@ -934,7 +934,7 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gpointer user_data)
 {
   GCallback func;
-  GtkSignalFunc *p_func = &func;
+  GCallback *p_func = &func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */

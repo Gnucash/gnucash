@@ -296,8 +296,7 @@ gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
 
         gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
 
-        gtk_signal_emit(GTK_OBJECT(gsl),
-                        general_select_signals[SELECTION_CHANGED]);
+        g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
 }
 
 /**

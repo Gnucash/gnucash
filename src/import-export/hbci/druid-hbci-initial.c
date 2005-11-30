@@ -645,9 +645,9 @@ void gnc_hbci_initial_druid (void)
   gnc_druid_set_colors (GNOME_DRUID (info->druid));
   
   glade_xml_signal_connect_data (xml, "on_finish", 
-				 GTK_SIGNAL_FUNC (on_finish), info);
+				 G_CALLBACK (on_finish), info);
   glade_xml_signal_connect_data (xml, "on_cancel", 
-				 GTK_SIGNAL_FUNC (on_cancel), info);
+				 G_CALLBACK (on_cancel), info);
   
   info->api = gnc_AB_BANKING_new_currentbook(info->window, &(info->interactor));
   g_assert(info->api);
@@ -656,36 +656,33 @@ void gnc_hbci_initial_druid (void)
     /* Page with config file entry widget */
     page = glade_xml_get_widget(xml, "configfile_page");
     info->filepage = page;
-    gtk_signal_connect (GTK_OBJECT (page), "prepare",
-			GTK_SIGNAL_FUNC (on_aqbutton_prepare), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "aqhbci_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_aqhbci_button), info);
+    g_signal_connect (page, "prepare",
+		      G_CALLBACK (on_aqbutton_prepare), info);
+    g_signal_connect (glade_xml_get_widget (xml, "aqhbci_button"),
+		      "clicked",
+		      G_CALLBACK (on_aqhbci_button), info);
   }
   {
     page = glade_xml_get_widget(xml, "account_match_page");
     info->accountpage = page;
     info->accountlist = glade_xml_get_widget(xml, "account_page_list");
-    gtk_signal_connect (GTK_OBJECT (info->accountlist), "select_row",
-			GTK_SIGNAL_FUNC (on_accountlist_select_row), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "aqhbci_again_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_aqhbci_button), info);
-    gtk_signal_connect (GTK_OBJECT 
-			(glade_xml_get_widget (xml, "updatelist_button")), 
-			"clicked",
-			GTK_SIGNAL_FUNC (on_button_clicked), info);
-    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
-			GTK_SIGNAL_FUNC (on_accountlist_prepare), info);
-    gtk_signal_connect (GTK_OBJECT (page), "back", 
-			GTK_SIGNAL_FUNC (on_accountlist_back), info);
+    g_signal_connect (info->accountlist, "select_row",
+		      G_CALLBACK (on_accountlist_select_row), info);
+    g_signal_connect (glade_xml_get_widget (xml, "aqhbci_again_button"), 
+		      "clicked",
+		      G_CALLBACK (on_aqhbci_button), info);
+    g_signal_connect (glade_xml_get_widget (xml, "updatelist_button"),
+		      "clicked",
+		      G_CALLBACK (on_button_clicked), info);
+    g_signal_connect (page, "prepare", 
+		      G_CALLBACK (on_accountlist_prepare), info);
+    g_signal_connect (page, "back", 
+		      G_CALLBACK (on_accountlist_back), info);
   }
 
 
-  /*gtk_signal_connect (GTK_OBJECT(dialog), "destroy",*/
-  /*                   GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);*/
+  /*g_signal_connect (dialog, "destroy",*/
+  /*                  G_CALLBACK(gnc_hierarchy_destroy_cb), NULL);*/
 
   gtk_widget_show_all (info->window);
 }

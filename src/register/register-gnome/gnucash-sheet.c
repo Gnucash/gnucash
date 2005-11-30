@@ -546,7 +546,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
         gnome_canvas_request_redraw (GNOME_CANVAS (sheet), 0, 0,
                                      sheet->width + 1, sheet->height + 1);
 
-        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_all");
+        g_signal_emit_by_name (sheet->reg, "redraw_all");
 }
 
 void
@@ -555,7 +555,7 @@ gnucash_sheet_redraw_help (GnucashSheet *sheet)
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
-        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_help");
+        g_signal_emit_by_name (sheet->reg, "redraw_help");
 }
 
 void
@@ -1588,8 +1588,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         switch (event->keyval) {
                 case GDK_Return:
                 case GDK_KP_Enter:
-                        gtk_signal_emit_by_name(GTK_OBJECT(sheet->reg),
-                                                "activate_cursor");
+                        g_signal_emit_by_name(sheet->reg, "activate_cursor");
                         return TRUE;
                         break;
 		case GDK_Tab:

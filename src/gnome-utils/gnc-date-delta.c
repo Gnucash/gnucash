@@ -188,8 +188,8 @@ value_changed(GtkEditable *editable, gpointer data)
 {
   GNCDateDelta *gdd = GNC_DATE_DELTA(data);
 
-  gtk_signal_emit(GTK_OBJECT (gdd), date_delta_signals [VALUE_CHANGED]);
-  gtk_signal_emit(GTK_OBJECT (gdd), date_delta_signals [DELTA_CHANGED]);
+  g_signal_emit(gdd, date_delta_signals [VALUE_CHANGED], 0);
+  g_signal_emit(gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
@@ -231,8 +231,8 @@ fill_units_menu(GNCDateDelta *gdd)
     gtk_menu_append (GTK_MENU (menu), item);
     gtk_widget_show(item);
 
-    gtk_signal_connect (GTK_OBJECT (item), "activate",
-                        GTK_SIGNAL_FUNC (set_units), GINT_TO_POINTER(i));
+    g_signal_connect (item, "activate",
+		      G_CALLBACK (set_units), GINT_TO_POINTER(i));
   }
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (gdd->units_menu), menu);
@@ -249,8 +249,8 @@ set_polarity (GtkWidget *widget, gpointer data)
 
   gdd->polarity = polarity;
 
-  gtk_signal_emit (GTK_OBJECT (gdd), date_delta_signals [POLARITY_CHANGED]);
-  gtk_signal_emit (GTK_OBJECT (gdd), date_delta_signals [DELTA_CHANGED]);
+  g_signal_emit (gdd, date_delta_signals [POLARITY_CHANGED], 0);
+  g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
@@ -275,8 +275,8 @@ fill_polarity_menu(GNCDateDelta *gdd)
     gtk_menu_append (GTK_MENU (menu), item);
     gtk_widget_show(item);
 
-    gtk_signal_connect (GTK_OBJECT (item), "activate",
-                        GTK_SIGNAL_FUNC (set_polarity), GINT_TO_POINTER(i));
+    g_signal_connect (item, "activate",
+		      G_CALLBACK (set_polarity), GINT_TO_POINTER(i));
   }
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (gdd->polarity_menu), menu);
@@ -293,8 +293,8 @@ create_children (GNCDateDelta *gdd)
   gtk_box_pack_start(GTK_BOX(gdd), gdd->value_spin, FALSE, FALSE, 0);
   gtk_widget_show(gdd->value_spin);
 
-  gtk_signal_connect(GTK_OBJECT(gdd->value_spin), "changed",
-                     GTK_SIGNAL_FUNC(value_changed), gdd);
+  g_signal_connect(gdd->value_spin, "changed",
+		   G_CALLBACK(value_changed), gdd);
 
   gdd->units_menu = gtk_option_menu_new();
   fill_units_menu(gdd);

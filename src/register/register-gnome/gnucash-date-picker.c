@@ -77,7 +77,7 @@ gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
                               gpointer data)
 {
   /* So the sheet doesn't use it. */
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "button_press_event");
+  g_signal_stop_emission_by_name (widget, "button_press_event");
 
   return TRUE;
 }
@@ -91,10 +91,8 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
   {
     case GDK_Return:
     case GDK_KP_Enter:
-      gtk_signal_emit (GTK_OBJECT (date_picker),
-                       gnc_date_picker_signals[DATE_PICKED]);
-
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+      g_signal_emit (date_picker, gnc_date_picker_signals[DATE_PICKED], 0);
+      g_signal_stop_emission_by_name (widget, "key_press_event");
 
       return TRUE;
 
@@ -111,10 +109,10 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
   }
 
   /* These go to the sheet */
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+  g_signal_stop_emission_by_name (widget, "key_press_event");
 
-  gtk_signal_emit (GTK_OBJECT (date_picker),
-                   gnc_date_picker_signals[KEY_PRESS_EVENT], event);
+  g_signal_emit (date_picker,
+		 gnc_date_picker_signals[KEY_PRESS_EVENT], 0, event);
 
   return TRUE;
 }
@@ -130,32 +128,32 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   object_class = GTK_OBJECT_CLASS (date_picker_class);
 
   gnc_date_picker_signals[DATE_SELECTED] =
-    gtk_signal_new("date_selected",
-                   GTK_RUN_LAST,
-                   GTK_CLASS_TYPE(object_class),
-                   GTK_SIGNAL_OFFSET(GNCDatePickerClass,
-                                     date_selected),
-                   gtk_signal_default_marshaller,
-                   GTK_TYPE_NONE, 0);
+    g_signal_new("date_selected",
+		 G_TYPE_FROM_CLASS(object_class),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(GNCDatePickerClass, date_selected),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 
   gnc_date_picker_signals[DATE_PICKED] =
-    gtk_signal_new("date_picked",
-                   GTK_RUN_LAST,
-                   GTK_CLASS_TYPE(object_class),
-                   GTK_SIGNAL_OFFSET(GNCDatePickerClass,
-                                     date_picked),
-                   gtk_signal_default_marshaller,
-                   GTK_TYPE_NONE, 0);
+    g_signal_new("date_picked",
+		 G_TYPE_FROM_CLASS(object_class),
+		 G_SIGNAL_RUN_LAST,
+		 G_STRUCT_OFFSET(GNCDatePickerClass, date_picked),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__VOID,
+		 G_TYPE_NONE, 0);
 
   gnc_date_picker_signals[KEY_PRESS_EVENT] =
-    gtk_signal_new ("key_press_event",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE(object_class),
-                    GTK_SIGNAL_OFFSET(GNCDatePickerClass,
-                                      key_press_event),
-                    gtk_marshal_NONE__POINTER,
-                    GTK_TYPE_NONE, 1,
-                    GDK_TYPE_EVENT);
+    g_signal_new ("key_press_event",
+		  G_TYPE_FROM_CLASS(object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET(GNCDatePickerClass, key_press_event),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_EVENT);
 
   date_picker_class->date_selected = NULL;
   date_picker_class->date_picked = NULL;
@@ -193,13 +191,13 @@ gnc_date_picker_get_type (void)
 static void
 day_selected (GtkCalendar *calendar, GNCDatePicker *gdp)
 {
-  gtk_signal_emit (GTK_OBJECT (gdp), gnc_date_picker_signals [DATE_SELECTED]);
+  g_signal_emit (gdp, gnc_date_picker_signals [DATE_SELECTED], 0);
 }
 
 static void
 day_selected_double_click (GtkCalendar *calendar, GNCDatePicker *gdp)
 {
-  gtk_signal_emit (GTK_OBJECT (gdp), gnc_date_picker_signals [DATE_PICKED]);
+  g_signal_emit (gdp, gnc_date_picker_signals [DATE_PICKED], 0);
 }
 
 
@@ -243,21 +241,21 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
 
   date_picker->calendar = GTK_CALENDAR (calendar);
 
-  gtk_signal_connect_after (GTK_OBJECT (calendar), "button_press_event",
-                            GTK_SIGNAL_FUNC (gnc_date_picker_button_event),
-                            date_picker);
+  g_signal_connect_after (calendar, "button_press_event",
+			  G_CALLBACK (gnc_date_picker_button_event),
+			  date_picker);
 
-  gtk_signal_connect (GTK_OBJECT (calendar), "key_press_event",
-                      GTK_SIGNAL_FUNC (gnc_date_picker_key_event),
-                      date_picker);
+  g_signal_connect (calendar, "key_press_event",
+		    G_CALLBACK (gnc_date_picker_key_event),
+		    date_picker);
 
-  gtk_signal_connect (GTK_OBJECT (calendar), "day_selected",
-                      GTK_SIGNAL_FUNC (day_selected),
-                      date_picker);
+  g_signal_connect (calendar, "day_selected",
+		    G_CALLBACK (day_selected),
+		    date_picker);
 
-  gtk_signal_connect (GTK_OBJECT (calendar), "day_selected_double_click",
-                      GTK_SIGNAL_FUNC (day_selected_double_click),
-                      date_picker);
+  g_signal_connect (calendar, "day_selected_double_click",
+		    G_CALLBACK (day_selected_double_click),
+		    date_picker);
 
   return item;
 }

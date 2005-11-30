@@ -1962,7 +1962,7 @@ gnc_xfer_dialog_set_to_show_button_active( XferDialog *xferData,
 /* Add a button with a user-specified label and "clicked" callback */
 void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
                                                 const gchar *label,
-                                                GtkSignalFunc callback,
+                                                GCallback callback,
                                                 gpointer user_data )
 {
   if( xferData && label && callback )

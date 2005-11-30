@@ -2962,15 +2962,15 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 }
 
                 /* fixme::2002.02.10 jsled testing */
-                gtk_signal_connect( GTK_OBJECT(entry), "key-press-event",
-                                    GTK_SIGNAL_FUNC( tct_table_entry_key_handle ),
-                                    NULL );
-                gtk_signal_connect( GTK_OBJECT(entry), "changed",
-                                    GTK_SIGNAL_FUNC( sxsincelast_entry_changed ),
-                                    sxsld );
-                gtk_signal_connect( GTK_OBJECT(entry), "destroy",
-                                    GTK_SIGNAL_FUNC(gnc_sxsld_free_entry_numeric),
-                                    sxsld );
+                g_signal_connect( entry, "key-press-event",
+				  G_CALLBACK( tct_table_entry_key_handle ),
+				  NULL );
+                g_signal_connect( entry, "changed",
+				  G_CALLBACK( sxsincelast_entry_changed ),
+				  sxsld );
+                g_signal_connect( entry, "destroy",
+				  G_CALLBACK(gnc_sxsld_free_entry_numeric),
+				  sxsld );
 
                 gtk_table_attach( varTable, label,
                                   0, 1, tableIdx, tableIdx + 1,
@@ -3706,7 +3706,7 @@ sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
 		gnc_split_reg_jump_to_split(gsr, split);
         }
         
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(gsr), "jump" );
+        g_signal_stop_emission_by_name(gsr, "jump");
 }
 
 static void

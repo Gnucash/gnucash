@@ -1228,28 +1228,28 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gnc_dense_cal_set_num_months( sxd->gdcal, 12 );
         gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxd->gdcal) );
 
-        gtk_signal_connect( sxdo, "destroy",
-                            GTK_SIGNAL_FUNC(scheduledxaction_dialog_destroy),
-                            sxd );
+        g_signal_connect( sxdo, "destroy",
+                          G_CALLBACK(scheduledxaction_dialog_destroy),
+                          sxd );
 
         button = glade_xml_get_widget( sxd->gxml, "new_button" );
-        gtk_signal_connect( GTK_OBJECT(button), "clicked",
-                            GTK_SIGNAL_FUNC(new_button_clicked), sxd );
+        g_signal_connect( button, "clicked",
+                          G_CALLBACK(new_button_clicked), sxd );
         button = glade_xml_get_widget( sxd->gxml, "edit_button" );
-        gtk_signal_connect( GTK_OBJECT(button), "clicked",
-                            GTK_SIGNAL_FUNC(edit_button_clicked), sxd );
+        g_signal_connect( button, "clicked",
+                          G_CALLBACK(edit_button_clicked), sxd );
         button = glade_xml_get_widget( sxd->gxml, "delete_button" );
-        gtk_signal_connect( GTK_OBJECT(button), "clicked",
-                            GTK_SIGNAL_FUNC(delete_button_clicked), sxd );
+        g_signal_connect( button, "clicked",
+                          G_CALLBACK(delete_button_clicked), sxd );
         button = glade_xml_get_widget( sxd->gxml, "close_button" );
-        gtk_signal_connect( GTK_OBJECT(button), "clicked",
-                            GTK_SIGNAL_FUNC(close_button_clicked), sxd );
+        g_signal_connect( button, "clicked",
+                          G_CALLBACK(close_button_clicked), sxd );
 
         w = glade_xml_get_widget( sxd->gxml, SX_LIST );
-        gtk_signal_connect(GTK_OBJECT(w), "select-row",
-                           GTK_SIGNAL_FUNC(row_select_handler), sxd );
-        gtk_signal_connect( GTK_OBJECT(w), "click-column",
-                            GTK_SIGNAL_FUNC(gnc_sxd_row_click_handler), sxd );
+        g_signal_connect( w, "select-row",
+                          G_CALLBACK(row_select_handler), sxd );
+        g_signal_connect( w, "click-column",
+                          G_CALLBACK(gnc_sxd_row_click_handler), sxd );
 
         // gtk_clist_column_titles_active( GTK_CLIST( w ) );
 
@@ -1452,10 +1452,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 sxed->endDateEntry =
                         GNC_DATE_EDIT(gnc_date_edit_new( time(NULL),
                                                          FALSE, FALSE ));
-                gtk_signal_connect( GTK_OBJECT(sxed->endDateEntry),
-                                    "date-changed",
-                                    GTK_SIGNAL_FUNC( sxed_excal_update_adapt ),
-                                    sxed );
+                g_signal_connect( sxed->endDateEntry,
+                                  "date-changed",
+                                  G_CALLBACK( sxed_excal_update_adapt ),
+                                  sxed );
                 gtk_box_pack_start( GTK_BOX(endDateBox),
                                     GTK_WIDGET(sxed->endDateEntry),
                                     TRUE, TRUE, 0 );
@@ -1472,11 +1472,11 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                                            close handler */
                                     sxed );
 
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "close",
-                            GTK_SIGNAL_FUNC(sxed_close_event), sxed );
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "destroy",
-                            GTK_SIGNAL_FUNC(scheduledxaction_editor_dialog_destroy),
-                            sxed );
+        g_signal_connect( sxed->dialog, "close",
+                          G_CALLBACK(sxed_close_event), sxed );
+        g_signal_connect( sxed->dialog, "destroy",
+                          G_CALLBACK(scheduledxaction_editor_dialog_destroy),
+                          sxed );
 
         for ( i=0; widgets[i].name != NULL; i++ ) {
                 button = glade_xml_get_widget( sxed->gxml, widgets[i].name );
@@ -1485,9 +1485,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                              "whichOneAmI",
                                              widgets[i].objectData );
                 }
-                gtk_signal_connect( GTK_OBJECT(button),
-                                    widgets[i].signal,
-                                    GTK_SIGNAL_FUNC( widgets[i].fn ), sxed );
+                g_signal_connect( button, widgets[i].signal,
+                                  G_CALLBACK( widgets[i].fn ), sxed );
         }
 
         /* For some reason the Glade-specified sensitivity settings are not
@@ -1545,9 +1544,9 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
                 GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx),
                                                   xaccSchedXactionGetStartDate(sxed->sx) ) );
         g_assert( sxed->gncfreq );
-        gtk_signal_connect( GTK_OBJECT(sxed->gncfreq), "changed",
-                            GTK_SIGNAL_FUNC(gnc_sxed_freq_changed),
-                            sxed );
+        g_signal_connect( sxed->gncfreq, "changed",
+                          G_CALLBACK(gnc_sxed_freq_changed),
+                          sxed );
         gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->gncfreq) );
 
         f = GTK_FRAME(glade_xml_get_widget( sxed->gxml, "example_cal_frame" ));

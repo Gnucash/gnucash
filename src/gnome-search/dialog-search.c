@@ -842,25 +842,25 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   /* Connect XML signals */
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_type_cb",
-				 GTK_SIGNAL_FUNC (search_type_cb), sw);
+				 G_CALLBACK (search_type_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_active_cb",
-				 GTK_SIGNAL_FUNC (search_active_only_cb), sw);
+				 G_CALLBACK (search_active_only_cb), sw);
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_new_cb",
-				 GTK_SIGNAL_FUNC (search_new_item_cb), sw);
+				 G_CALLBACK (search_new_item_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_find_cb",
-				 GTK_SIGNAL_FUNC (search_find_cb), sw);
+				 G_CALLBACK (search_find_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_cancel_cb",
-				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
+				 G_CALLBACK (search_cancel_cb), sw);
 
   glade_xml_signal_connect_data (xml, "gnc_ui_search_close_cb",
-				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
+				 G_CALLBACK (search_cancel_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_help_cb",
-				 GTK_SIGNAL_FUNC (search_help_cb), sw);
+				 G_CALLBACK (search_help_cb), sw);
 
   /* Register ourselves */
   sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
@@ -963,7 +963,8 @@ void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
   g_return_if_fail (sw);
   g_return_if_fail (user_data);
 
-  gtk_signal_disconnect_by_data (GTK_OBJECT (sw->dialog), user_data);  
+  g_signal_handlers_disconnect_matched (sw->dialog, G_SIGNAL_MATCH_DATA,
+					0, 0, NULL, NULL, user_data);  
 }
 
 /* Clear all callbacks with this Search Window */

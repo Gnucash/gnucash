@@ -257,7 +257,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_account_picker_new_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
+     G_CALLBACK (gnc_ui_qif_account_picker_new_cb), wind);
 
   wind->dialog     = glade_xml_get_widget (xml, "QIF Import Account Picker");
   wind->treeview   = glade_xml_get_widget (xml, "account_tree");
@@ -270,17 +270,17 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   scm_gc_protect_object(wind->map_entry);
 
-  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
-                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
-                     wind);
+  g_signal_connect(wind->treeview, "tree_select_row",
+		   G_CALLBACK(gnc_ui_qif_account_picker_select_cb),
+		   wind);
 
-  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_unselect_row",
-                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_unselect_cb),
-                     wind);
+  g_signal_connect(wind->treeview, "tree_unselect_row",
+		   G_CALLBACK(gnc_ui_qif_account_picker_unselect_cb),
+		   wind);
 
-  gtk_signal_connect_after(GTK_OBJECT(wind->dialog), "map",
-                           GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_map_cb),
-                           wind);
+  g_signal_connect_after(wind->dialog, "map",
+			 G_CALLBACK(gnc_ui_qif_account_picker_map_cb),
+			 wind);
   
   button = glade_xml_get_widget (xml, "newbutton");
   gtk_button_set_use_stock(GTK_BUTTON(button), TRUE);

@@ -479,7 +479,7 @@ recnInterestXferWindow( startRecnWindowData *data)
     ( account_type_has_auto_interest_payment( data->account_type ) ?
         _("No Auto Interest Payments for this Account")
        : _("No Auto Interest Charges for this Account") ),
-    GTK_SIGNAL_FUNC(gnc_recn_interest_xfer_no_auto_clicked_cb),
+    G_CALLBACK(gnc_recn_interest_xfer_no_auto_clicked_cb),
     (gpointer) data );
 
   /* no currency frame */
@@ -867,7 +867,7 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
       return FALSE;
   }
 
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+  g_signal_stop_emission_by_name (widget, "key_press_event");
 
   this_list = widget;
 
@@ -931,18 +931,18 @@ gnc_reconcile_window_create_list_box(Account *account,
   list = gnc_reconcile_list_new(account, type);
   *list_save = list;
 
-  gtk_signal_connect(GTK_OBJECT(list), "toggle_reconciled",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_list_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "double_click_split",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_double_click_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "focus_in_event",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_window_focus_cb),
-                     recnData);
-  gtk_signal_connect(GTK_OBJECT(list), "key_press_event",
-                     GTK_SIGNAL_FUNC(gnc_reconcile_key_press_cb),
-                     recnData);
+  g_signal_connect(list, "toggle_reconciled",
+                   G_CALLBACK(gnc_reconcile_window_list_cb),
+                   recnData);
+  g_signal_connect(list, "double_click_split",
+                   G_CALLBACK(gnc_reconcile_window_double_click_cb),
+                   recnData);
+  g_signal_connect(list, "focus_in_event",
+                   G_CALLBACK(gnc_reconcile_window_focus_cb),
+                   recnData);
+  g_signal_connect(list, "key_press_event",
+                   G_CALLBACK(gnc_reconcile_key_press_cb),
+                   recnData);
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
@@ -1699,8 +1699,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   statusbar = gnc_recn_create_status_bar(recnData);
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
 
-  gtk_signal_connect (GTK_OBJECT (recnData->window), "destroy",
-                      GTK_SIGNAL_FUNC(recn_destroy_cb), recnData);
+  g_signal_connect (recnData->window, "destroy",
+                    G_CALLBACK(recn_destroy_cb), recnData);
 
   /* The menu bar */
   {

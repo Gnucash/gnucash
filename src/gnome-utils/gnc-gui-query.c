@@ -517,9 +517,9 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
     gtk_widget_show(radio_button);
     gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
     gtk_object_set_user_data(GTK_OBJECT(radio_button), GINT_TO_POINTER(i));
-    gtk_signal_connect(GTK_OBJECT(radio_button), "clicked",
-		       GTK_SIGNAL_FUNC(gnc_choose_radio_button_cb),
-		       &radio_result);
+    g_signal_connect(radio_button, "clicked",
+		     G_CALLBACK(gnc_choose_radio_button_cb),
+		     &radio_result);
   }
 
   dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),

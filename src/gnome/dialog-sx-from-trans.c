@@ -396,9 +396,9 @@ sxftd_init( SXFromTransInfo *sxfti )
                       (GTK_EXPAND | GTK_FILL),
                       GTK_FILL,
                       0, 0 );
-    gtk_signal_connect( GTK_OBJECT( sxfti->startDateGDE ), "date-changed",
-                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
-                        sxfti );
+    g_signal_connect( sxfti->startDateGDE, "date-changed",
+                      G_CALLBACK( sxftd_update_excal_adapt ),
+                      sxfti );
   }
   {
     GtkWidget *endDateBox = glade_xml_get_widget( sxfti->gxml,
@@ -409,9 +409,9 @@ sxftd_init( SXFromTransInfo *sxfti )
     gtk_box_pack_start( GTK_BOX( endDateBox ),
                         GTK_WIDGET( sxfti->endDateGDE ),
                         FALSE, TRUE, 0 );
-    gtk_signal_connect( GTK_OBJECT( sxfti->endDateGDE ), "date-changed",
-                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
-                        sxfti );
+    g_signal_connect( sxfti->endDateGDE, "date-changed",
+                      G_CALLBACK( sxftd_update_excal_adapt ),
+                      sxfti );
   }
 
   /* Get the name from the transaction, try that as the initial SX name. */
