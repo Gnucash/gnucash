@@ -423,14 +423,6 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:clist-columns-autosize
-   '<gw:void>
-   "gnc_clist_columns_autosize"
-   '((<gnc:GtkCList> clist))
-   "Autosize the columns of a clist including the titles.")
-
-  (gw:wrap-function
-   ws
    'gnc:set-busy-cursor
    '<gw:void>
    "gnc_set_busy_cursor"

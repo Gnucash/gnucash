@@ -122,10 +122,6 @@ gboolean gnc_handle_date_accelerator (GdkEventKey *event,
 void gnc_clist_set_check (GtkCList *list, int row, int col, 
 			  gboolean checked);
 
-/* This function is similar to gtk_clist_columns_autosize, but
- * also takes into account the column titles. */
-void gnc_clist_columns_autosize (GtkCList *list);
-
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
 void gnc_glade_autoconnect_full_func(const gchar *handler_name,

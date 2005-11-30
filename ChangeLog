@@ -1,5 +1,8 @@
 2005-11-29  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/dialog-utils.[ch]: Remove unused function.
+
 	* various: More syntactic sugar converting from gtk_object_xxx
 	functions to g_object_xxx functions.
 
