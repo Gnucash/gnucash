@@ -204,8 +204,8 @@ set_units (GtkWidget *widget, gpointer data)
 
   gdd->units = units;
 
-  gtk_signal_emit (GTK_OBJECT (gdd), date_delta_signals [UNITS_CHANGED]);
-  gtk_signal_emit (GTK_OBJECT (gdd), date_delta_signals [DELTA_CHANGED]);
+  g_signal_emit (gdd, date_delta_signals [UNITS_CHANGED], 0);
+  g_signal_emit (gdd, date_delta_signals [DELTA_CHANGED], 0);
 }
 
 static void
@@ -229,7 +229,7 @@ fill_units_menu(GNCDateDelta *gdd)
   {
     item = gtk_menu_item_new_with_label (strings[i]);
     g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
-    gtk_menu_append (GTK_MENU (menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show(item);
 
     g_signal_connect (item, "activate",
@@ -273,7 +273,7 @@ fill_polarity_menu(GNCDateDelta *gdd)
   {
     item = gtk_menu_item_new_with_label (strings[i]);
     g_object_set_data(G_OBJECT(item), GDD_LABEL, gdd);
-    gtk_menu_append (GTK_MENU (menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show(item);
 
     g_signal_connect (item, "activate",
@@ -326,7 +326,7 @@ gnc_date_delta_new (gboolean show_polarity)
 {
   GNCDateDelta *gdd;
 
-  gdd = gtk_type_new (gnc_date_delta_get_type ());
+  gdd = g_object_new (gnc_date_delta_get_type (), NULL);
 
   gdd->show_polarity = show_polarity;
 

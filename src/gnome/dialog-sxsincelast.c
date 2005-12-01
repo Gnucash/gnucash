@@ -1791,7 +1791,6 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         for ( l = autoCreateList; l; l = l->next ) {
                 total += g_list_length( ((toCreateTuple*)l->data)->instanceList );
         }
-        gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0, total );
         gnc_suspend_gui_refresh();
 
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {

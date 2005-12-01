@@ -122,7 +122,7 @@ gnc_http_cancel_requests(gnc_http * http) {
   }  
 }
 
-static gint
+static gboolean
 ghttp_check_callback(gpointer data) {
   gnc_http            * http = data;
   GList               * current = NULL; 
@@ -241,7 +241,7 @@ gnc_http_start_request(gnc_http * http, const gchar * uri,
   if(!http->callback_enabled) {
     
     http->callback_tag = 
-      gtk_timeout_add(100, ghttp_check_callback, (gpointer)http);
+      g_timeout_add(100, ghttp_check_callback, http);
     http->callback_enabled = TRUE;
   }
 }
@@ -281,7 +281,7 @@ gnc_http_start_post(gnc_http * http, const char * uri,
   /* start the gtk timeout if not started */
   if(!http->callback_enabled) {
     http->callback_tag = 
-      gtk_timeout_add(100, ghttp_check_callback, (gpointer)http);
+      g_timeout_add(100, ghttp_check_callback, http);
     http->callback_enabled = TRUE;
   }  
 }

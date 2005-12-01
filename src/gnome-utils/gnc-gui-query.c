@@ -486,7 +486,7 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   int i;
 
   main_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_container_border_width(GTK_CONTAINER(main_vbox), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 5);
   gtk_widget_show(main_vbox);
 
   label = gtk_label_new(msg);
@@ -495,19 +495,19 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   gtk_widget_show(label);
 
   frame = gtk_frame_new(NULL);
-  gtk_container_border_width(GTK_CONTAINER(frame), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
   gtk_box_pack_start(GTK_BOX(main_vbox), frame, FALSE, FALSE, 0);
   gtk_widget_show(frame);
 
   vbox = gtk_vbox_new(TRUE, 3);
-  gtk_container_border_width(GTK_CONTAINER(vbox), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
   gtk_container_add(GTK_CONTAINER(frame), vbox);
   gtk_widget_show(vbox);
 
   for (node = radio_list, i = 0; node; node = node->next, i++)
   {
     radio_button = gtk_radio_button_new_with_label(group, node->data);
-    group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio_button));
+    group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
 
     if (i == default_value) /* default is first radio button */
     {

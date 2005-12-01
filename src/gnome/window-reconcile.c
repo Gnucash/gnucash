@@ -528,7 +528,7 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
     gtk_widget_grab_focus(GTK_WIDGET(entry));
-    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     data->original_value = after;
     data->user_set_value = FALSE;
   }
@@ -699,7 +699,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (end_value), *new_ending);
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
-    gtk_entry_select_region (GTK_ENTRY(entry), 0, -1);
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     g_signal_connect(G_OBJECT(entry), "focus-out-event",
 		     G_CALLBACK(gnc_start_recn_update_cb), (gpointer) &data);
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);

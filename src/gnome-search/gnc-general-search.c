@@ -258,7 +258,7 @@ static void
 create_children (GNCGeneralSearch *gsl, const char *label)
 {
 	gsl->entry = gtk_entry_new ();
-	gtk_entry_set_editable (GTK_ENTRY (gsl->entry), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
 	gtk_widget_show (gsl->entry);
 

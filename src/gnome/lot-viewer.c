@@ -244,7 +244,7 @@ lv_select_row_cb (GtkCList       *clist,
    str = gnc_lot_get_title (lot);
    if (!str) str = "";
    gtk_entry_set_text (lv->title_entry, str);
-   gtk_entry_set_editable (lv->title_entry, TRUE);
+   gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
    
    /* Set the notes field */
    str = gnc_lot_get_notes (lot);
@@ -274,7 +274,7 @@ lv_unset_lot (GNCLotViewer *lv)
 
    /* Blank the title widget */
    gtk_entry_set_text (lv->title_entry, "");
-   gtk_entry_set_editable (lv->title_entry, FALSE);
+   gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), FALSE);
 
    /* Blank the notes area */
    xxxgtk_textview_set_text (lv->lot_notes, "");

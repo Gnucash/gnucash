@@ -279,7 +279,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
         }
         g_assert( page != -1 );
 
-        gtk_notebook_set_page( gf->nb, page );
+        gtk_notebook_set_current_page( gf->nb, page );
         gtk_option_menu_set_history( gf->freqOpt, page );
 
         switch ( uift ) 
@@ -579,7 +579,7 @@ gnc_frequency_setup_default( GNCFrequency *gf, FreqSpec *fs, GDate *date )
       }
       g_assert( page != -1 );
    
-      gtk_notebook_set_page( gf->nb, page );
+      gtk_notebook_set_current_page( gf->nb, page );
       gtk_option_menu_set_history( gf->freqOpt, page );
    }
 
@@ -623,7 +623,7 @@ GtkWidget *
 gnc_frequency_new( FreqSpec *fs, GDate *date )
 {
         GNCFrequency  *toRet;
-        toRet = gtk_type_new( gnc_frequency_get_type() );
+        toRet = g_object_new( gnc_frequency_get_type(), NULL );
         gnc_frequency_setup_default( toRet, fs, date );
         return GTK_WIDGET(toRet);
 }
@@ -1015,7 +1015,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
 
         /* Set the new page. */
         optIdx = gnc_option_menu_get_active( GTK_WIDGET(((GNCFrequency*)d)->freqOpt) );
-        gtk_notebook_set_page( ((GNCFrequency*)d)->nb, optIdx );
+        gtk_notebook_set_current_page( ((GNCFrequency*)d)->nb, optIdx );
 
         /* setup initial values for new page, as possible. */
         uift = PAGES[optIdx].uiFTVal;

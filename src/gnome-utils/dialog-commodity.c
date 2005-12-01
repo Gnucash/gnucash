@@ -679,7 +679,7 @@ gnc_ui_source_menu_create(QuoteSourceType type)
     item = gtk_menu_item_new_with_label(gnc_quote_source_get_user_name(source));
     gtk_widget_set_sensitive(item, gnc_quote_source_get_supported(source));
     gtk_widget_show(item);
-    gtk_menu_append(menu, item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   }
 
   omenu = gtk_option_menu_new();
@@ -749,12 +749,12 @@ gnc_ui_quote_tz_menu_create(void)
 
   item = gtk_menu_item_new_with_label(_("Use local time"));
   gtk_widget_show(item);
-  gtk_menu_append(menu, item);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
  
   for(itemstr = &known_timezones[0]; *itemstr; itemstr++) {
     item = gtk_menu_item_new_with_label(*itemstr);
     gtk_widget_show(item);
-    gtk_menu_append(menu, item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   }
 
   omenu = gtk_option_menu_new();

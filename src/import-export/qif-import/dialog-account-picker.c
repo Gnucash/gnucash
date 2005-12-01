@@ -165,7 +165,8 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 				GTK_BUTTONS_OK_CANCEL,
 				_("Enter a name for the account"));
 
-  entry = gtk_entry_new_with_max_length (250);
+  entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
   gtk_widget_show(entry);
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dlg)->vbox), entry);
 

@@ -1122,12 +1122,12 @@ ld_opt_consistency( GtkToggleButton *tb, gpointer ud )
         rouid = (RepayOptUIData*)ud;
         escrowCb = GTK_TOGGLE_BUTTON(rouid->escrowCb);
         /* make sure the escrow option is only selected if we're active. */
-        gtk_toggle_button_set_state( escrowCb,
-                                     gtk_toggle_button_get_active(
+        gtk_toggle_button_set_active( escrowCb,
+				      gtk_toggle_button_get_active(
                                              GTK_TOGGLE_BUTTON(
                                                      rouid->ldd->optEscrowCb) )
-                                     && rouid->optData->throughEscrowP
-                                     && gtk_toggle_button_get_active(tb) );
+				      && rouid->optData->throughEscrowP
+				      && gtk_toggle_button_get_active(tb) );
         /* make sure the escrow option is only sensitive if we're active, and
          * the escrow account is enabled  */
         gtk_widget_set_sensitive( GTK_WIDGET(escrowCb),
@@ -1164,8 +1164,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 ldd->ld.repPriAcct = ldd->ld.primaryAcct;
         }
         ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
-        ldd->ld.interestRate =
-                gtk_spin_button_get_value_as_float( ldd->prmIrateSpin );
+        ldd->ld.interestRate = gtk_spin_button_get_value( ldd->prmIrateSpin );
         ldd->ld.type = gnc_option_menu_get_active( GTK_WIDGET(ldd->prmType) );
         if ( ldd->ld.type != FIXED ) {
                 gnc_frequency_save_state( ldd->prmVarGncFreq,

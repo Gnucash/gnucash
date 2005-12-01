@@ -175,7 +175,7 @@ gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
 
   widget = gnc_option_get_widget (option);
 
-  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
   ab_button = g_list_nth_data(widget_list, GNC_RD_WID_AB_BUTTON_POS);
   ab_widget = g_list_nth_data(widget_list, GNC_RD_WID_AB_WIDGET_POS);
   rel_button = g_list_nth_data(widget_list, GNC_RD_WID_REL_BUTTON_POS);
@@ -710,7 +710,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
                                  GTK_POLICY_AUTOMATIC);
 
   gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
-  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
   gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
   bbox = gtk_hbutton_box_new();
@@ -836,7 +836,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
   gtk_widget_set_usize(scroll_win, width + 50, 0);
 
   gtk_box_pack_start(GTK_BOX(hbox), scroll_win, FALSE, FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
   gtk_container_add(GTK_CONTAINER(scroll_win), clist);
 
   bbox = gtk_vbutton_box_new();
@@ -1424,7 +1424,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
 				 GTK_POLICY_NEVER, 
 				 GTK_POLICY_AUTOMATIC);
-  gtk_container_border_width(GTK_CONTAINER(scroll), 2);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
 
   gtk_container_add(GTK_CONTAINER(frame), scroll);
 
@@ -1980,8 +1980,8 @@ gnc_option_set_ui_value_boolean (GNCOption *option, gboolean use_default,
 {
   if (SCM_BOOLP(value))
   {
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),
-				SCM_NFALSEP(value));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+				 SCM_NFALSEP(value));
     return FALSE;
   }
   else
@@ -2101,7 +2101,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  GList *widget_list;
 	  GtkWidget *rel_date_widget;
 
-	  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+	  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
 	  rel_date_widget = g_list_nth_data(widget_list,
 					    GNC_RD_WID_REL_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, FALSE, TRUE);
@@ -2127,7 +2127,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  GList *widget_list;
 	  GtkWidget *ab_widget;
 
-	  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+	  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
 	  ab_widget = g_list_nth_data(widget_list,
 				      GNC_RD_WID_AB_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, TRUE, TRUE);
@@ -2367,10 +2367,10 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
     int i;
     gpointer val;
 
-    list = gtk_container_children (GTK_CONTAINER (widget));
+    list = gtk_container_get_children (GTK_CONTAINER (widget));
     box = list->data;
 
-    list = gtk_container_children (GTK_CONTAINER (box));
+    list = gtk_container_get_children (GTK_CONTAINER (box));
     for (i = 0; i < index && list; i++)
       list = list->next;
     g_return_val_if_fail (list, TRUE);
@@ -2520,7 +2520,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     GList *widget_list;
     GtkWidget *ab_button, *rel_widget, *ab_widget;
 
-    widget_list = gtk_container_children(GTK_CONTAINER(widget));
+    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     ab_button = g_list_nth_data(widget_list,  GNC_RD_WID_AB_BUTTON_POS);
     ab_widget = g_list_nth_data(widget_list,  GNC_RD_WID_AB_WIDGET_POS);
     rel_widget = g_list_nth_data(widget_list, GNC_RD_WID_REL_WIDGET_POS);
@@ -2625,7 +2625,7 @@ gnc_option_get_ui_value_number_range (GNCOption *option, GtkWidget *widget)
 
   spinner = GTK_SPIN_BUTTON(widget);
 
-  value = gtk_spin_button_get_value_as_float(spinner);
+  value = gtk_spin_button_get_value(spinner);
 
   return (scm_make_real(value));
 }

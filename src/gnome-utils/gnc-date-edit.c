@@ -338,7 +338,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 		hit->gde  = gde;
 
 		item = gtk_menu_item_new_with_label (buffer);
-		gtk_menu_append (GTK_MENU (menu), item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 #if 0
 		g_signal_connect (G_OBJECT (item), "activate",
 				  G_CALLBACK  (set_time), hit);
@@ -364,7 +364,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 			hit->gde  = gde;
 
 			mins = gtk_menu_item_new_with_label (buffer);
-			gtk_menu_append (GTK_MENU (submenu), mins);
+			gtk_menu_shell_append (GTK_MENU_SHELL (submenu), mins);
 			g_signal_connect (G_OBJECT (mins), "activate",
 					  G_CALLBACK  (set_time), hit);
 			g_signal_connect (G_OBJECT (item), "destroy",
@@ -652,7 +652,8 @@ create_children (GNCDateEdit *gde)
 
 	gtk_widget_show (GTK_WIDGET(gde->date_button));
 
-	gde->time_entry = gtk_entry_new_with_max_length (12);
+	gde->time_entry = gtk_entry_new ();
+	gtk_entry_set_max_length (GTK_ENTRY(gde->time_entry), 12);
 	gtk_widget_set_usize (GTK_WIDGET(gde->time_entry), 88, 0);
 	gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
 

@@ -136,7 +136,7 @@ gnc_search_owner_finalize (GObject *obj)
 GNCSearchOwner *
 gnc_search_owner_new (void)
 {
-  GNCSearchOwner *o = (GNCSearchOwner *)gtk_type_new(gnc_search_owner_get_type ());
+  GNCSearchOwner *o = g_object_new(gnc_search_owner_get_type (), NULL);
   return o;
 }
 
@@ -219,7 +219,7 @@ add_type_menu_item (GtkWidget *menu, gpointer user_data, char *label,
   g_object_set_data (G_OBJECT (item), "option", (gpointer) type);
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (type_option_changed),
 		    user_data);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
   return item;
 }
@@ -274,7 +274,7 @@ add_how_menu_item (GtkWidget *menu, gpointer user_data, char *label,
   g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (how_option_changed),
 		    user_data);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
   return item;
 }

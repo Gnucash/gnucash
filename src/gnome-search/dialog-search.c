@@ -311,7 +311,7 @@ match_any (GtkWidget *widget, GNCSearchWindow *sw)
 static void
 search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
-  GSList * buttongroup = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
+  GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
     sw->search_type =
@@ -637,7 +637,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     item = gtk_menu_item_new_with_label (_(param->title));
     g_object_set_data (G_OBJECT (item), "param", param);
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_activate), data);
-    gtk_menu_append (GTK_MENU (menu), item);
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     gtk_widget_show (item);
 
     if (param == sw->last_param) /* is this the right parameter to start? */
@@ -781,12 +781,12 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   item = gtk_menu_item_new_with_label (_("all criteria are met"));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_all), sw);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 	
   item = gtk_menu_item_new_with_label (_("any criteria are met"));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_any), sw);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 	
   omenu = gtk_option_menu_new ();

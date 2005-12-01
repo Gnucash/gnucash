@@ -677,7 +677,7 @@ extra_change_verify (AccountWindow *aw,
                                    GTK_POLICY_AUTOMATIC);
 
     gtk_container_add(GTK_CONTAINER(frame), scroll);
-    gtk_container_border_width(GTK_CONTAINER(scroll), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(scroll), 5);
     gtk_container_add(GTK_CONTAINER(scroll), GTK_WIDGET(list));
 
     gtk_widget_show_all(vbox);
@@ -1107,7 +1107,7 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
   gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
   if (!sensitive)
   {
-    gtk_notebook_set_page (GTK_NOTEBOOK (aw->notebook), 0);
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (aw->notebook), 0);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                 gnc_numeric_zero ());
   }

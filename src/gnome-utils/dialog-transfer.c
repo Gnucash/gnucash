@@ -756,8 +756,9 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
       ( xferData->desc_start_selection != xferData->desc_end_selection ||
         xferData->desc_start_selection == 0 ) )
   {
-    gtk_entry_select_region( entry, xferData->desc_start_selection,
-                                    xferData->desc_end_selection );
+    gtk_editable_select_region( GTK_EDITABLE(entry),
+				xferData->desc_start_selection,
+				xferData->desc_end_selection );
 #if DRH_NEEDS_INVESTIGATION
     gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
 #endif
@@ -822,7 +823,8 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
         /* NOT done with input, though, since we need to focus to the next
          * field.  Unselect the current field, though.
          */
-        gtk_entry_select_region( GTK_ENTRY(xferData->description_entry), 0, 0 );
+        gtk_editable_select_region( GTK_EDITABLE(xferData->description_entry),
+				    0, 0 );
 #if DRH_NEEDS_INVESTIGATION
         gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
                                           FALSE, event->time );

@@ -175,7 +175,6 @@ gnc_gnome_init (const char * arg0,
   /* initialization required for gtkhtml */
   gdk_rgb_init ();    
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
-  gtk_widget_set_default_visual (gdk_rgb_get_visual ());
 
   /* use custom icon */
   fullname = gnc_gnome_locate_pixmap ("gnucash-icon.png");

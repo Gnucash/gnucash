@@ -342,7 +342,7 @@ gnc_split_reg_new( GNCLedgerDisplay *ld,
 {
   GNCSplitReg *gsrToRet;
 
-  gsrToRet = GNC_SPLIT_REG( gtk_type_new( gnc_split_reg_get_type() ) );
+  gsrToRet = g_object_new( gnc_split_reg_get_type(), NULL );
 
   gsrToRet->disallowedCaps = disallowCaps;
   gsrToRet->numRows        = numberOfLines;
@@ -2184,7 +2184,7 @@ typedef struct dialog_args  {
  * the data path with the problem.
  **/
 static
-gint
+gboolean
 gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
@@ -2248,7 +2248,7 @@ gnc_split_reg_determine_read_only( GNCSplitReg *gsr )
     gsr->read_only = TRUE;
     /* Put up a warning dialog */
     args->gsr = gsr;
-    gtk_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
+    g_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
   }
 
   /* Make the contents immutable */
@@ -2394,17 +2394,17 @@ gnc_split_reg_use_extended_popup( GNCSplitReg *gsr )
 
   popup = gsr->popup_menu;
 
-  gtk_menu_append( GTK_MENU(popup), gtk_menu_item_new() );
+  gtk_menu_shell_append( GTK_MENU_SHELL(popup), gtk_menu_item_new() );
 
   tmpMenu = gnc_split_reg_get_edit_menu( gsr );
   tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
-  gtk_menu_append( GTK_MENU(popup), tmpMI );
+  gtk_menu_shell_append( GTK_MENU_SHELL(popup), tmpMI );
 
   tmpMenu = gnc_split_reg_get_view_menu( gsr );
   tmpMI = gtk_menu_item_new_with_label( N_("View") );
   gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
-  gtk_menu_append( GTK_MENU(popup), tmpMI );
+  gtk_menu_shell_append( GTK_MENU_SHELL(popup), tmpMI );
 
   gtk_widget_show_all( popup );
 }

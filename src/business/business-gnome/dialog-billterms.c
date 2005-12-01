@@ -148,7 +148,7 @@ set_numeric (GtkWidget *widget, GncBillTerm *term,
   gnc_numeric val;
   gdouble fl = 0.0;
 
-  fl = gtk_spin_button_get_value_as_float (GTK_SPIN_BUTTON (widget));
+  fl = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
   val = double_to_gnc_numeric (fl, 100000, GNC_RND_ROUND);
   func (term, val);
 }
@@ -326,7 +326,8 @@ static void
 show_notebook (BillTermNB *notebook)
 {
   g_return_if_fail (notebook->type > 0);
-  gtk_notebook_set_page (GTK_NOTEBOOK (notebook->notebook), notebook->type-1);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook->notebook),
+				 notebook->type-1);
 }
 
 static void

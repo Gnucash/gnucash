@@ -68,7 +68,7 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
   g_object_set_data(G_OBJECT(item), "option", (gpointer) option);
   g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(gnc_ifg_option_changed),
 		   user_data);
-  gtk_menu_append(GTK_MENU(menu), item);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   gtk_widget_show(item);
   return item;
 }

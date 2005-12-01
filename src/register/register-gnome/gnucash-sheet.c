@@ -2429,7 +2429,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     activate_cursor),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_ALL] =
@@ -2439,7 +2439,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     redraw_all),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_HELP] =
@@ -2449,7 +2449,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     redraw_help),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         class->activate_cursor = NULL;

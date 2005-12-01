@@ -126,7 +126,7 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
 		       G_CALLBACK(gnc_option_menu_cb),
 		       option_info[i].user_data);
 
-    gtk_menu_append(GTK_MENU(menu), menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
   }
 
   gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);

@@ -187,7 +187,7 @@ add_menu_item (GtkWidget *menu, NewTaxTable *ntt, char *label, gint type)
   item = gtk_menu_item_new_with_label (label);
   g_object_set_data (G_OBJECT (item), "option", GINT_TO_POINTER (type));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (optionmenu_changed), ntt);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
   return item;
 }

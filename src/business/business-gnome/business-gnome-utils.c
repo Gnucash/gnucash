@@ -292,7 +292,7 @@ add_menu_item (GtkWidget *menu, const char *label, OpMenuData *omd,
   g_object_set_data (G_OBJECT (item), "this_item", this_item);
   g_signal_connect (G_OBJECT (item), "activate",
 		    G_CALLBACK (business_option_changed), omd);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 }
 
