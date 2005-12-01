@@ -71,17 +71,21 @@ gnc_search_owner_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchOwner",
-      sizeof(GNCSearchOwner),
-      sizeof(GNCSearchOwnerClass),
-      (GtkClassInitFunc)gnc_search_owner_class_init,
-      (GtkObjectInitFunc)gnc_search_owner_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchOwnerClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_owner_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchOwner),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_owner_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchOwner",
+				   &type_info, 0);
   }
 	
   return type;

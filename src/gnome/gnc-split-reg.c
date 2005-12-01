@@ -206,19 +206,21 @@ gnc_split_reg_get_type( void )
 
   if (!gnc_split_reg_type)
     {
-      GtkTypeInfo gnc_split_reg_info =
-      {
-        "GNCSplitReg",
-        sizeof (GNCSplitReg),
-        sizeof (GNCSplitRegClass),
-        (GtkClassInitFunc) gnc_split_reg_class_init,
-        (GtkObjectInitFunc) gnc_split_reg_init,
-        NULL, /* reserved_1 */
-        NULL, /* reserved_2 */
-        (GtkClassInitFunc) NULL
+      GTypeInfo type_info = {
+	sizeof(GNCSplitRegClass),      /* class_size */
+	NULL,   			/* base_init */
+	NULL,				/* base_finalize */
+	(GClassInitFunc)gnc_split_reg_class_init,
+	NULL,				/* class_finalize */
+	NULL,				/* class_data */
+	sizeof(GNCSplitReg),		/* */
+	0,				/* n_preallocs */
+	(GInstanceInitFunc)gnc_split_reg_init,
       };
 
-      gnc_split_reg_type = gtk_type_unique( GTK_TYPE_VBOX, &gnc_split_reg_info );
+      gnc_split_reg_type = g_type_register_static( GTK_TYPE_VBOX,
+						   "GNCSplitReg",
+						   &type_info, 0 );
     }
 
   return gnc_split_reg_type;

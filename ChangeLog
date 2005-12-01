@@ -1,5 +1,11 @@
 2005-11-30  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-date-picker.c:
+	* src/business/business-gnome/search-owner.c:
+	* src/gnome-utils/gnc-query-list.c:
+	* src/gnome/gnc-split-reg.c: Finish converting type creation over
+	from gtk_type_unique() to g_type_register_static().
+
 	* various: More trivial conversions from deprecated gtk/gnome
 	functions to supported functions.
 

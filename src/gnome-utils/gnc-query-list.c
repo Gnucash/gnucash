@@ -88,20 +88,21 @@ gnc_query_list_get_type (void)
 
   if (!gnc_query_list_type)
   {
-    static const GtkTypeInfo gnc_query_list_info =
-    {
-      "GNCQueryList",
-      sizeof (GNCQueryList),
-      sizeof (GNCQueryListClass),
-      (GtkClassInitFunc) gnc_query_list_class_init,
-      (GtkObjectInitFunc) gnc_query_list_init,
-      /* reserved_1 */ NULL,
-      /* reserved_2 */ NULL,
-      (GtkClassInitFunc) NULL
+    GTypeInfo type_info = {
+      sizeof(GNCQueryListClass),        /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_query_list_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof (GNCQueryList),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_query_list_init,
     };
 
-    gnc_query_list_type = gtk_type_unique(GTK_TYPE_CLIST,
-					      &gnc_query_list_info);
+    gnc_query_list_type = g_type_register_static(GTK_TYPE_CLIST,	
+						 "GNCQueryList",
+						 &type_info, 0);
   }
 
   return gnc_query_list_type;

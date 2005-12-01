@@ -167,21 +167,23 @@ gnc_date_picker_get_type (void)
 
   if (gnc_date_picker_type == 0)
   {
-    GtkTypeInfo gnc_date_picker_info =
+    GTypeInfo type_info =
     {
-      "GNCDatePicker",
-      sizeof(GNCDatePicker),
-      sizeof(GNCDatePickerClass),
-      (GtkClassInitFunc)  gnc_date_picker_class_init,
-      (GtkObjectInitFunc) gnc_date_picker_init,
-      NULL, /* reserved_1 */
-      NULL, /* reserved_2 */
-      (GtkClassInitFunc) NULL
+      sizeof(GNCDatePickerClass),       /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_date_picker_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCDatePicker),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_date_picker_init,
     };
 
     gnc_date_picker_type =
-      gtk_type_unique (gnome_canvas_widget_get_type(),
-                       &gnc_date_picker_info);
+      g_type_register_static (gnome_canvas_widget_get_type(),
+			      "GNCDatePicker",
+			      &type_info, 0);
   }
 
   return gnc_date_picker_type;
