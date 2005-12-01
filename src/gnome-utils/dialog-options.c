@@ -833,7 +833,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
                                  GTK_POLICY_AUTOMATIC);
 
   width = gtk_clist_columns_autosize(GTK_CLIST(clist));
-  gtk_widget_set_usize(scroll_win, width + 50, 0);
+  gtk_widget_set_size_request(scroll_win, width + 50, -1);
 
   gtk_box_pack_start(GTK_BOX(hbox), scroll_win, FALSE, FALSE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
@@ -1606,7 +1606,7 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_option_account_cb), option);
 
   //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  //  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
+  //  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * 10);
   gtk_widget_show_all(*enclosing);
   return value;
 }
@@ -1679,7 +1679,7 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
   num_lines = MIN(num_lines, 9) + 1;
 
   gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * num_lines);
+  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * num_lines);
   gtk_widget_show_all(*enclosing);
   return value;
 }
@@ -1752,7 +1752,7 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 
       g_free(string);
 
-      gtk_widget_set_usize(value, width, 0);
+      gtk_widget_set_size_request(value, width, -1);
     }
   }
 

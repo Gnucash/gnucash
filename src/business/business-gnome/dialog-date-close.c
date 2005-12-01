@@ -141,7 +141,7 @@ build_date_close_window (GtkWidget *hbox, const char *message)
   /* Add some extra space on the right to balance the pixmap */
   if (pixmap) {
     alignment = gtk_alignment_new (0., 0., 0., 0.);
-    gtk_widget_set_usize (alignment, GNOME_PAD, -1);
+    gtk_widget_set_size_request (alignment, GNOME_PAD, -1);
     gtk_widget_show (alignment);
     
     gtk_box_pack_start (GTK_BOX (hbox), alignment, FALSE, FALSE, 0);

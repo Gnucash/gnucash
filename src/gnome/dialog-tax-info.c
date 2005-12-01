@@ -674,7 +674,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         font = gdk_font_from_description (style->font_desc);
 
       if (font)
-        gtk_widget_set_usize (text, 0, (font->ascent + font->descent) * 5 + 6);
+        gtk_widget_set_size_request (text, -1, (font->ascent + font->descent) * 5 + 6);
     }
 
     clist = glade_xml_get_widget (xml, "txf_category_clist");

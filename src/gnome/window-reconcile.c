@@ -1761,7 +1761,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     bonobo_dock_set_client_area(BONOBO_DOCK(dock), frame);
 
     /* Force a reasonable starting size */
-    gtk_widget_set_usize(GTK_WIDGET(recnData->window), 800, 600);
+    gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
 
     gtk_container_add(GTK_CONTAINER(frame), main_area);
     gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
@@ -1872,8 +1872,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
       rlist = GNC_RECONCILE_LIST(recnData->credit);
       height = gnc_reconcile_list_get_needed_height(rlist, num_show);
 
-      gtk_widget_set_usize(recnData->credit, 0, height);
-      gtk_widget_set_usize(recnData->debit, 0, height);
+      gtk_widget_set_size_request(recnData->credit, -1, height);
+      gtk_widget_set_size_request(recnData->debit, -1, height);
     }
   }
 

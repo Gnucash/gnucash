@@ -2948,7 +2948,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
 					   (gpointer)1 );
                 }
 
-                gtk_widget_set_usize( entry, 64, 0 );
+                gtk_widget_set_size_request( entry, 64, -1 );
                 numValue = (gnc_numeric*)g_hash_table_lookup( tci->varBindings,
                                                               varName );
                 if ( numValue != NULL ) {

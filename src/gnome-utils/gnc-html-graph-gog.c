@@ -196,7 +196,7 @@ addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
   gtk_container_add( GTK_CONTAINER(eb), widget );
 
   // blindly copied from gnc-html-guppi.c..
-  gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+  gtk_widget_set_size_request(GTK_WIDGET(eb), eb->width, eb->height);
 }
 
 static gboolean

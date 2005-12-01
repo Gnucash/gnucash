@@ -1,5 +1,17 @@
 2005-11-30  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-header.c:
+	* src/business/business-gnome/dialog-date-close.c:
+	* src/gnome-utils/gnc-date-edit.c:
+	* src/gnome-utils/gnc-html-graph-gog.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome-search/search-account.c:
+	* src/gnome-search/dialog-search.c: Eliminate the deprecated
+	function gtk_widget_set_usize().
+
 	* src/register/register-gnome/gnucash-date-picker.c:
 	* src/business/business-gnome/search-owner.c:
 	* src/gnome-utils/gnc-query-list.c:

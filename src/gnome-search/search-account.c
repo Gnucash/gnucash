@@ -263,7 +263,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
   /* Create the account scroller and put the tree in it */
   accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add(GTK_CONTAINER(accounts_scroller), account_tree);
-  gtk_widget_set_usize(GTK_WIDGET(accounts_scroller), 300, 300);
+  gtk_widget_set_size_request(GTK_WIDGET(accounts_scroller), 300, 300);
 
   /* Create the label */
   label = gtk_label_new (_("Select Accounts to Match"));

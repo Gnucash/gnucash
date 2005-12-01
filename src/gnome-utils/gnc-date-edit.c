@@ -654,7 +654,7 @@ create_children (GNCDateEdit *gde)
 
 	gde->time_entry = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY(gde->time_entry), 12);
-	gtk_widget_set_usize (GTK_WIDGET(gde->time_entry), 88, 0);
+	gtk_widget_set_size_request (GTK_WIDGET(gde->time_entry), 88, -1);
 	gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
 
 	gde->time_popup = gtk_option_menu_new ();
