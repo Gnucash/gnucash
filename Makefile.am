@@ -152,7 +152,15 @@ distclean-local:
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
-ChangeLog:
-	svn log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
-  xsltproc --stringparam strip-prefix "gnucash" \
-  --stringparam include-rev "yes" ./macros/svn2cl.xsl - > ./ChangeLog.svn
+pot:
+	rm -f intl-scm/guile-strings.c
+	make -C intl-scm
+	rm -f po/$(PACKAGE).pot
+	make -C po $(PACKAGE).pot
+
+SVN = svn
+XSLTPROC = xsltproc
+ChangeLog.svn:
+	$(SVN) log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
+	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@

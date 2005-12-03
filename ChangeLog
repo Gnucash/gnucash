@@ -1,3 +1,9 @@
+2005-12-03  Christian Stimming  <stimming@tuhh.de>
+
+	* Makefile.am: Add convenience makefile rule "make pot" for
+	updating the translation template. Rename the rule for
+	auto-generation of ChangeLog.svn from svn to "ChangeLog.svn".
+
 2005-12-03  Joshua Sled  <jsled@asynchronous.org>
 
 	* GNOME2_STATUS: remove GOG-porting notes, spelling fixes.
