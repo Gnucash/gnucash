@@ -245,6 +245,7 @@ struct split_register
 
   gboolean use_double_line;
   gboolean is_template;
+  gboolean do_auto_complete;
 
   SRInfo * sr_info;   /**< \internal private data; outsiders should not access this */
 };
@@ -266,6 +267,10 @@ void gnc_split_register_config (SplitRegister *reg,
                                 SplitRegisterType type,
                                 SplitRegisterStyle style,
                                 gboolean use_double_line);
+
+/** Change the auto-completion behavior. **/
+void gnc_split_register_set_auto_complete(SplitRegister *reg,
+                                          gboolean do_auto_complete);
 
 /** Destroy the split register. */
 void gnc_split_register_destroy (SplitRegister *reg);

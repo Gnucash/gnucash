@@ -6,6 +6,15 @@
 
 2005-12-03  Joshua Sled  <jsled@asynchronous.org>
 
+	* split-register-control.c (gnc_split_register_auto_completion):
+	Fail fast if no auto-complete requested.
+	* split-register.c (gnc_split_register_set_auto_complete): Add new
+	configuration option to turn off auto-completion.
+	* dialog-scheduledxaction.c (schedXact_editor_create_ledger): Turn
+	off auto-complete on the SX template register.
+
+2005-12-03  Joshua Sled  <jsled@asynchronous.org>
+
 	* GNOME2_STATUS: remove GOG-porting notes, spelling fixes.
 	
 	* sched-xact.glade: 

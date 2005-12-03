@@ -1604,6 +1604,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         gnc_split_register_config(splitreg,
                                   splitreg->type, splitreg->style,
                                   FALSE);
+        gnc_split_register_set_auto_complete(splitreg, FALSE);
 
         /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );

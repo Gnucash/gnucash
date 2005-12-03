@@ -623,6 +623,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   BasicCell *cell;
   Split *split;
 
+  g_return_val_if_fail(reg->do_auto_complete, FALSE);
+
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
   blank_trans = xaccSplitGetParent (blank_split);

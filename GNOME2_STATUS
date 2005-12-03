@@ -13,10 +13,6 @@ and will disappear in a future release.  Its important to get this
 release out the door and not stall it until all the deprecated
 functionality has been removed.
 
-+--------------------------------------+
-|  Last sync with HEAD on 2005-10-31   |
-+--------------------------------------+
-
 ========================================
               DONE
 ========================================
@@ -38,7 +34,7 @@ Stock Split Dialog
 
     +-----
     | Can someone who comes across this note and wants to help please go
-    | through 1.8.9 and create a list of stuff missing from 2.0?
+    | through 1.8.x and create a list of stuff missing from 2.0?
     +------------
 
 ========================================
@@ -59,23 +55,9 @@ Resources
     - Printing text reports works.
     - Printing pie/bar charts fails.
 
-  - Startup CRITICAL errors...
-
-    [jsled@phoenix:~/stuff/proj/gnucash/src-g2/gnucash]$ /opt/gnc-g2-unstable/bin/gnucash
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
-    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
-    Use of deprecated SAXv1 function getLineNumber
-
   - Open pages are no longer open after reopening file.
     - Account tree, register and report pages are restored.
-    - Budget and busines pages are not restored.
+    - Budget and business pages are not restored.
     - Trying to reopen a multi-column report spits lots of
       warning. Trying to edit that pages options crashes gnucash.
 
@@ -108,7 +90,6 @@ Resources
 
   - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
     to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
-
 
 - Budgeting
 
@@ -188,20 +169,12 @@ Resources
 
   - SX Editor
 
-    - When tabbing from memo to account on the second split with the same
-      name as the first, the account will be auto-populated with a GUID
-      (instead of an account name), but not a valid one.
-
     - Template-register Cut/Copy/Paste not connected.
 
     - Template-register View > {Basic, Auto-Split} options have no effect.
 
   - Open SX Editor, close it; open Register Preferences, change "Draw
     {horiz,vert} lines" => crash.
-
-  - Entering a value (e.g. '20.00') without entering an account or a memo for
-    the first split causes everything else entered so far to be reset when
-    tabbing to the second split.
 
 ========================================
               ENHANCEMENTS
@@ -233,4 +206,11 @@ Resources
   - Change Notebook tabs to include an 'x' to act as the "close tab" method,
     and then remove the "Close" button from the toolbar.  Then we can also
     decide if we want to allow a user to 'close' the account tree.
+
+- Scheduled Transactions
+
+  - Entering a value (e.g. '20.00') without entering an account or a memo for
+    the first split causes everything else entered so far to be reset when
+    tabbing to the second split.
+
 
