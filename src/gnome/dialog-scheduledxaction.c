@@ -1594,8 +1594,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 	gnc_plugin_page_set_ui_description (sxed->plugin_page,
 					    "gnc-plugin-page-sxregister-ui.xml");
 	gnc_plugin_page_register_set_options (sxed->plugin_page,
-					      SXED_GCONF_SECTION,
-					      KEY_NUMBER_OF_ROWS,
+					      NULL, NULL,
 					      NUM_LEDGER_LINES_DEFAULT,
 					      (CAP_JUMP | CAP_SCHEDULE) );
 	gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);

@@ -1,5 +1,15 @@
 2005-12-03  Joshua Sled  <jsled@asynchronous.org>
 
+	* GNOME2_STATUS: remove GOG-porting notes, spelling fixes.
+	
+	* sched-xact.glade: 
+	* apps_gnucash_dialog_scheduled_transctions.schemas: 
+	* dialog-scheduledxaction.c (schedXact_editor_create_ledger):
+	Remove the not-really-respected-anyways option to change the
+	number of register lines in the SX editor dialog.
+
+2005-12-03  Joshua Sled  <jsled@asynchronous.org>
+
 	* gnc-dense-cal.c (gnc_dense_cal_init): Don't use a hardcoded
 	font; get both fonts from the style.
 
