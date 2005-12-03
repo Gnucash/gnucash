@@ -279,7 +279,6 @@ src/gnome-utils/gnc-gui-query.c
 src/gnome-utils/gnc-gui-query.glade
 src/gnome-utils/gnc-html.c
 src/gnome-utils/gnc-html-graph-gog.c
-src/gnome-utils/gnc-html-guppi.c
 src/gnome-utils/gnc-html-history.c
 src/gnome-utils/gnc-icons.c
 src/gnome-utils/gnc-main-window.c
