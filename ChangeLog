@@ -1,3 +1,8 @@
+2005-12-03  Joshua Sled  <jsled@asynchronous.org>
+
+	* gnc-dense-cal.c (gnc_dense_cal_init): Don't use a hardcoded
+	font; get both fonts from the style.
+
 2005-11-30  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-header.c:

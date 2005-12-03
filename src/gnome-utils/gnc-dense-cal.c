@@ -82,7 +82,6 @@ static const gchar* MONTH_THIS_COLOR = "lavender";
 static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
 static const gchar* MARK_COLOR = "Yellow";
-static const gchar* LABEL_FONT_NAME = "-adobe-helvetica-bold-r-normal--*-100-*-*-p-*-iso8859-1";
 
 static const gchar* MARKS_LOST_SIGNAL_NAME = "marks_lost";
 
@@ -320,14 +319,16 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 gint lbearing, rbearing, width, ascent, descent;
 		GtkStyle *style;
 
-                dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
-                g_assert( dcal->monthLabelFont );
-
 		/* FIXME GNOME 2 port (rework the complete font code) */
                 style = gtk_widget_get_style(GTK_WIDGET(dcal));
+
                 dcal->dayLabelFont = gtk_style_get_font(style);
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
+
+                dcal->monthLabelFont = gtk_style_get_font(style);
+                g_assert(dcal->monthLabelFont);
+                gdk_font_ref(dcal->monthLabelFont);
 
                 maxWidth = maxHeight = maxAscent = maxLBearing = 0;
                 for ( i=0; i<12; i++ ) {

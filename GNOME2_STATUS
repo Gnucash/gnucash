@@ -205,10 +205,6 @@ Resources
     the first split causes everything else entered so far to be reset when
     tabbing to the second split.
 
-  - Font hard-coded (dense-cal), especially broken for non-ISO8859-1 locales.
-
-    - http://bugzilla.gnome.org/show_bug.cgi?id=303180
-
 ========================================
               ENHANCEMENTS
 ========================================
