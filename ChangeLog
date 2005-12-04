@@ -1,3 +1,9 @@
+2005-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: don't warn the user about running
+	  configure with zero arguments.  Autogen doesn't run
+	  configure anymore.  This confused a user.
+
 2005-12-04  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Fix crash when
