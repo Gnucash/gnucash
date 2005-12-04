@@ -71,6 +71,8 @@ Resources
 
   - doesn't remember custom check formats.
 
+  - Edit > {Cut,Copy,Paste} not functioning on first invocation.
+
 - Reporting / Graphing [mostly functional]
 
   - Graphing working, with some known issue; see top
@@ -169,12 +171,21 @@ Resources
 
   - SX Editor
 
-    - Template-register Cut/Copy/Paste not connected.
+    - Template-register View > {Basic, Auto-Split} options have no effect
 
-    - Template-register View > {Basic, Auto-Split} options have no effect.
+      - Note: they *shouldn't* have any effect, as they don't apply to
+        General Ledgers.  That means, however, they should either not appear
+        or be disabled.
 
   - Open SX Editor, close it; open Register Preferences, change "Draw
     {horiz,vert} lines" => crash.
+
+- Misc
+
+  - Test ... "No pie for you!"
+
+    - jsled to figure out why this doesn't work, then remove this test menu
+      item.
 
 ========================================
               ENHANCEMENTS
