@@ -1,3 +1,13 @@
+2005-12-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/test/test-gnc-recurrence.c:
+	* src/engine/test-core/test-engine-stuff.c:
+	* src/engine/gnc-associate-account.c:
+	* lib/libqof/qof/qofquery.c: Don't ignore the return value of glib
+	list functions.  This will likely become a warning in future
+	version of glib, which translates to an error for gnucash since it
+	compiles with the -Werror flag.
+
 2005-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/autogen.sh: don't warn the user about running

@@ -172,7 +172,7 @@ de_kvp_account_list(KvpValue *kvpd_list, QofBook *book)
     GList *expense_acc_list= NULL;
     for(; guid_account_list; guid_account_list=g_list_next(guid_account_list))
     {
-      g_list_prepend(expense_acc_list,
+      expense_acc_list = g_list_prepend(expense_acc_list,
                      xaccAccountLookup(guid_account_list->data, book));
     }
     
@@ -382,7 +382,7 @@ gnc_tracking_find_all_income_accounts(Account *stock_account)
 
   for(i = 0; i < GNC_TR_EXP_N_CATEGORIES; i++)
   {
-    g_list_concat(complete_list, 
+    complete_list = g_list_concat(complete_list, 
 		  gnc_tracking_find_expense_accounts(stock_account,
 						     i));
   }
