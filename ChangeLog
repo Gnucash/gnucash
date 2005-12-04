@@ -8,6 +8,14 @@
 	  make _g_compute_locale_variants static because it's
 	  not needed outside this file.
 
+	* src/gnome-utils/Makefile.am: Grab svn version using
+	  svnversion instead of parsing "svn info".  Also make it
+	  so that it doesn't force a rebuild if the version does
+	  not change.
+	* src/gnome-utils/gnc-splash.c: changed svn version
+	  from an integer into a string.  Handle that in the
+	  splash screen.
+
 2005-12-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* All: Fold branches/goffice-update/ back into trunk/.
