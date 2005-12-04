@@ -138,8 +138,6 @@ struct _SchedXactionEditorDialog
 
         /* The various widgets in the dialog */
         GNCLedgerDisplay *ledger;
-        GNCSplitReg *gsr;
-        GnucashRegister *reg;
 
         GNCFrequency *gncfreq;
         GncDenseCal *example_cal;
@@ -240,21 +238,16 @@ static GtkActionEntry gnc_sxed_menu_entries [] =
 	/* Toplevel */
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
-	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
 	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
 
 	/* Edit menu */
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
-	  NULL,
-	  G_CALLBACK (gnc_sxed_cmd_edit_cut) },
+	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_cut) },
 	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
-	  NULL,
-	  G_CALLBACK (gnc_sxed_cmd_edit_copy) },
+	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_copy) },
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
-	  NULL,
-	  G_CALLBACK (gnc_sxed_cmd_edit_paste) },
-
+	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_paste) },
 };
 static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
 
@@ -1580,12 +1573,12 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         main_vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
 	sxed->embed_window =
 	  gnc_embedded_window_new("SXWindowActions",
-				     gnc_sxed_menu_entries,
-				     gnc_sxed_menu_n_entries,
-				     "gnc-sxed-window-ui.xml",
-				     sxed->dialog,
-				     FALSE, /* no accelerators */
-				     sxed);
+                                  gnc_sxed_menu_entries,
+                                  gnc_sxed_menu_n_entries,
+                                  "gnc-sxed-window-ui.xml",
+                                  sxed->dialog,
+                                  FALSE, /* no accelerators */
+                                  sxed);
 	gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(sxed->embed_window),
 			    TRUE, TRUE, 0);
 
@@ -2444,21 +2437,33 @@ sxed_excal_update_adapt( GtkObject *o, gpointer ud )
 }
 
 /* Command callbacks */
+
+/**
+ * Note that these don't actually need to be implemented...  since these map
+ * to conventional menu action names "EditCutAction", "EditCopyAction" and
+ * "EditPasteAction".  Specifically, ones that the register plugin page in
+ * the gnc-embedded-window in this page is going to bind it's own handlers to
+ * shortly after the menu is created.  BUT, these symbols need to be defined
+ * for the action structure above, and at runtime when we merge the ui
+ * partially in place...
+ **/
 static void
 gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
+  // nop
 }
 
 static void
 gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
+  // nop
 }
 
 static void
 gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
+  // nop
 }
-
 
 void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);
 
