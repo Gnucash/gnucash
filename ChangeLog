@@ -1,3 +1,8 @@
+2005-12-04  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Fix crash when
+	clicking on "start aqbanking-wizard" with gwenhywfar>=1.99.x.
+
 2005-12-03  Christian Stimming  <stimming@tuhh.de>
 
 	* Makefile.am: Add convenience makefile rule "make pot" for

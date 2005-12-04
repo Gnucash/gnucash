@@ -46,6 +46,7 @@
 
 #include <aqbanking/banking.h>
 #include <gwenhywfar/stringlist.h>
+#include <gwenhywfar/version.h>
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
@@ -530,7 +531,13 @@ on_aqhbci_button (GtkButton *button,
      be freed */
   backend_name = g_strdup (backend_name_nc);
   GWEN_PluginDescription_List2_freeAll (pluginlist);
+#if ((GWENHYWFAR_VERSION_MAJOR < 1) || \
+     ((GWENHYWFAR_VERSION_MAJOR == 1) && \
+      ((GWENHYWFAR_VERSION_MINOR < 98))))
+  /* Memory cleanup needed for gwenhywfar<1.98.x but not for
+     gwenhywfar>=1.98.x */
   GWEN_PluginDescription_List2_free (pluginlist);
+#endif
 
   /* ***** */
 
