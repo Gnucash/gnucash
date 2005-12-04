@@ -77,7 +77,7 @@ struct _GFilenameCharsetCache {
  * 
  * Since: 2.6
  */
-gboolean
+static gboolean
 g_get_filename_charsets (G_CONST_RETURN gchar ***filename_charsets) 
 {
   static const gchar *charsets[] = {

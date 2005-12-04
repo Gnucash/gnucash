@@ -1,3 +1,13 @@
+2005-12-04  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fix some of the output strings
+	* lib/libgsf-1.12.3/gsf/glib24_26-compat.c:
+	  make g_get_filename_charsets static because it's not
+	  needed outside this file.
+	* lib/goffice-0.0.4/goffice/glib24_26-compat.c:
+	  make _g_compute_locale_variants static because it's
+	  not needed outside this file.
+
 2005-12-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* All: Fold branches/goffice-update/ back into trunk/.
