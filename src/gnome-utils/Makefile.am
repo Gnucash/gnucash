@@ -4,7 +4,7 @@ PWD := $(shell pwd)
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
 # Note that src/gnome-utils CANNOT depend on src/gnome!
-if USE_LIBGOFFICE
+
 AM_CFLAGS = \
   -DPREFIX=\"${prefix}\" \
   -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
@@ -25,36 +25,9 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
-  ${GSF_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${LIBGOFFICE_CFLAGS}
-else
-AM_CFLAGS = \
-  -DPREFIX=\"${prefix}\" \
-  -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
-  -DDATADIR=\"${GNC_SHAREDIR}\" \
-  -DLIBDIR=\"${GNC_LIBDIR}\" \
-  -I${top_srcdir}/src/core-utils \
-  -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/backend/file \
-  -I${top_srcdir}/src/network-utils \
-  -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src \
-  -I${top_srcdir}/lib/goffice \
-  -I${top_srcdir}/lib/goffice/split \
-  -I${top_srcdir}/lib/glib26 \
-  -I${top_srcdir}/lib \
-  ${GNOME_CFLAGS} \
-  ${GTKHTML_CFLAGS} \
-  ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
-  ${GUILE_INCS} \
-  ${GNOME_PRINT_CFLAGS} \
-  ${G_WRAP_COMPILE_ARGS} \
-  ${QOF_CFLAGS} \
+  ${GOFFICE_CFLAGS} \
   ${GSF_CFLAGS}
-endif
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
@@ -195,7 +168,6 @@ noinst_HEADERS = \
   gw-gnome-utils.h \
   search-param.h
 
-if USE_LIBGOFFICE
 libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
@@ -215,31 +187,8 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${DB_LIBS} \
   ${GSF_LIBS} \
   ${QOF_LIBS} \
-  ${LIBGOFFICE_LIBS} \
+  ${GOFFICE_LIBS} \
   ${XML_LIBS}
-else
-libgncmod_gnome_utils_la_LIBADD = \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/calculation/libgncmod-calculation.la \
-  ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
-  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
-  ${top_builddir}/lib/goffice/libgoffice.la \
-  ${top_builddir}/lib/glib26/libgncglib.la \
-  ${GNOME_LIBS} \
-  ${GNOME_PRINT_LIBS} \
-  ${GTKHTML_LIBS} \
-  ${GUILE_LIBS} \
-  ${GDK_PIXBUF_LIBS} \
-  ${GLADE_LIBS} \
-  ${GUILE_LIBS} \
-  ${GLIB_LIBS} \
-  ${DB_LIBS} \
-  ${GSF_LIBS} \
-  ${QOF_LIBS} \
-  ${XML_LIBS}
-endif
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
 

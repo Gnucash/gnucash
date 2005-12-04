@@ -1,3 +1,7 @@
+2005-12-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* All: Fold branches/goffice-update/ back into trunk/.
+
 2005-12-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/test/test-gnc-recurrence.c:
@@ -155,6 +159,12 @@
 	* src/engine/Transaction.c: Initialize the qof entity in the new
 	split, not the old one.
 
+2005-11-26  David Hampton  <hampton@employees.org>
+
+	* lib/goffice-0.0.4/plugins/plot_radar/gog-radar.c:
+	* lib/goffice-0.0.4/goffice/app/go-plugin.c: Compile cleanly using
+	gcc4.
+
 2005-11-25  David Hampton  <hampton@employees.org>
 
 	* src/business/dialog-tax-table/dialog-tax-table.c: Andreas
@@ -204,6 +214,24 @@
 	* src/gnome/gnc-plugin-page-register.c:
 	* src/gnome/gnc-plugin-page-account-tree.c: Update default
 	accelerator keys as per the HIG.
+
+2005-11-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am:
+	  add GSF_CFLAGS
+	* lib/goffice-0.0.4/goffice/utils/go-libxml-extras.c
+	  lib/goffice-0.0.4/goffice/utils/datetime.c:
+	  lib/goffice-0.0.4/goffice/graph/gog-chart.c
+	  lib/goffice-0.0.4/goffice/graph/gog-plot.c
+	  lib/goffice-0.0.4/goffice/graph/gog-object.c
+	  lib/goffice-0.0.4/goffice/gtk/goffice-gtk.c:
+	  look for goffice/glib24_26-compat.h
+	* lib/goffice-0.0.4/goffice/Makefile.am:
+	  don't deal with goffice-features.h anymore
+	* configure.in:
+	  fix for FC3 dependencies
+	* Makefile.am:
+	  create goffice -> , symlink when building internal goffice
 
 2005-11-23  David Hampton  <hampton@employees.org>
 
@@ -560,6 +588,53 @@
 	* po/glossary/no.po: Updated Norwegian/Bokmaal glossary
 	translation by Tor Harald Thorland <linux@strigen.com>.
 
+2005-11-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* goffice-config.h.in : svn moved from 
+		lib/goffice-0.0.4/goffice to prevent unnecessary
+		subdirectory inclusion in make outside lib.
+	* goffice-features.h.in : svn moved from
+		lib/goffice-0.0.4/goffice.
+	* gsf-config.h.in : svn moved from lib/libsf-1.12.3
+	* configure.in : Create AC_CONFIG_HEADERS only in
+		$(top_srcdir) and stop using LDFLAGS = -no-undeclared
+	* lib/goffice-0.0.4/goffice-plugins.mk : handle new config
+		header location.
+	* lib/goffice-0.0.4/tests/Makefile.am : Don't overwrite AM_LDFLAGS
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/Makefile.am :
+		handle new config header location.
+  * lib/goffice-0.0.4/goffice.mk : Handle new config header location.
+
+2005-11-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* lib/goffice-0.0.4/plugins/plot_radar/gog-radar.c :
+		Mac OSX fix: comment out #warning
+	* lib/goffice-0.0.4/plugins/plot_xy/gog-bubble-prefs.c :
+	* lib/goffice-0.0.4/plugins/plot_xy/gog-xy.c :
+	* lib/goffice-0.0.4/goffice/app/file.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-pixmaps.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-action-combo-color.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-font-sel.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-color-palette.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-color.c :
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-box.c :
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/foo-canvas-line.c
+	* lib/goffice-0.0.4/goffice/cut-n-paste/foocanvas/foo-canvas-polygon.c
+	* lib/goffice-0.0.4/goffice/utils/go-pattern.c
+	* lib/goffice-0.0.4/goffice/graph/gog-guru.c
+	* lib/goffice-0.0.4/goffice/graph/gog-legend.c
+	* lib/goffice-0.0.4/goffice/graph/gog-graph.c
+	* lib/goffice-0.0.4/goffice/graph/gog-error-bar.c
+	* lib/goffice-0.0.4/goffice/graph/gog-style.c
+	* lib/goffice-0.0.4/goffice/graph/gog-theme.c
+	* lib/libgsf-1.12.3/gsf-gnome/gsf-input-bonobo.c :
+
+	* lib/goffice-0.0.4/goffice.mk :
+	Adding AM_LDFLAGS for OSX build
+
+	* lib/goffice-0.0.4/ : setting svn:ignore
+	* lib/libgsf-1.12.3/ : setting svn:ignore
+
 2005-11-19  David Hampton  <hampton@employees.org>
 
 	* various: More include file tweaking.  Don't include gtk.h from
@@ -912,6 +987,11 @@
 	Use the same x_offset logic regardless of how we enter the cell.
 
 	Make sure x_offset gets reset when changing cells via the keyboard.
+
+2005-11-09  Josh Sled  <jsled@asynchronous.org>
+
+	* lib/goffice-0.0.4/, lib/libgsf-1.12.3/: imported with changes to
+	update previously hacked-together versions.
 	
 2005-11-09  David Hampton  <hampton@employees.org>
 

@@ -1,12 +1,12 @@
 
-SUBDIRS = doc lib src intl-scm po rpm accounts
+SUBDIRS = . doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles .goffice-links
 
 doc_DATA = \
   AUTHORS \
@@ -93,10 +93,19 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
+
+.goffice-links: 
+	rm -f goffice
+if !HAVE_GOFFICE
+	ln -sf . goffice
+endif
+	touch .goffice-links
+
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
-  make-gnucash-potfiles po/.intltool-merge-cache
+  make-gnucash-potfiles po/.intltool-merge-cache \
+  goffice .goffice-links
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
