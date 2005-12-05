@@ -218,7 +218,7 @@ prepare_remarks (AcctPeriodInfo *info)
     _("The earliest transaction date found in this book is %s.\n"
       "Based on the selection made above, this book will be split\n"
       "into %d books.  Click on 'Next' to start closing the\n"
-      "earliest book.\n");
+      "earliest book.");
 
   /* Pull info from widget, push into freq spec */
   gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
@@ -276,7 +276,7 @@ show_book_details (AcctPeriodInfo *info)
       "will contain all transactions up to midnight %s\n"
       "(for a total of %d transactions spread over %d accounts).\n"
       "Click on 'Next' to create this book.\n"
-      "Click on 'Back' to adjust the dates.\n");
+      "Click on 'Back' to adjust the dates.");
 
   qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
                            g_date_get_day(&info->closing_date),
