@@ -1,3 +1,9 @@
+2005-12-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/backend/file/gnc-backend-file.c: Don't chown() the owner,
+	only root can do that. Ignore errors on chown() since that means
+	the save completed successful anyway.
+
 2005-12-04  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: fix some of the output strings
