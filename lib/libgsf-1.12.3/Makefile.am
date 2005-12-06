@@ -8,7 +8,8 @@ if PLATFORM_WIN32
   pkgconfig_DATA += libgsf-win32-1.pc
 endif
 
-SUBDIRS = gsf gsf-gnome gsf-win32 doc tests
+SUBDIRS = gsf gsf-gnome gsf-win32 tests
+# doc (before tests)
 # po 
 
 if WITH_PYTHON
@@ -27,4 +28,4 @@ EXTRA_DIST = BUGS HACKING	\
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
 
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+#DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc

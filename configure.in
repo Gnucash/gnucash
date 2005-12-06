@@ -691,12 +691,12 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = yes)
 ##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
-gtk_doc_installed=true
+# gtk_doc_installed=true
 #ifdef([GTK_DOC_CHECK],[GTK_DOC_CHECK([1.0])],[gtk_doc_installed=false])
 # I would have liked to conditionalize this, but 
 # that appears to break other things http://bugzilla.gnome.org/show_bug.cgi?id=156399
-GTK_DOC_CHECK([1.0])
-AM_CONDITIONAL(GTK_DOC_INSTALLED, $gtk_doc_installed)
+# dnl GTK_DOC_CHECK([1.0])
+# dnl AM_CONDITIONAL(GTK_DOC_INSTALLED, $gtk_doc_installed)
 
 dnl ***********************************************************************************
 # Check for zlib.
@@ -827,9 +827,9 @@ else
 
 AM_CONDITIONAL(OS_WIN32, false)
 AM_CONDITIONAL(PLATFORM_WIN32, false)
-AM_CONDITIONAL(GTK_DOC_INSTALLED, false)
- AM_CONDITIONAL(ENABLE_GTK_DOC, false)
- AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, false)
+# dnl AM_CONDITIONAL(GTK_DOC_INSTALLED, false)
+# dnl  AM_CONDITIONAL(ENABLE_GTK_DOC, false)
+# dnl  AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, false)
 AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
 AM_CONDITIONAL(WITH_GCONF, false)
 AM_CONDITIONAL(WITH_PYTHON, false)
@@ -1994,7 +1994,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/srfi/Makefile
           lib/libc/Makefile
           lib/libgsf-1.12.3/Makefile
-          lib/libgsf-1.12.3/doc/Makefile
           lib/libgsf-1.12.3/gsf/Makefile
           lib/libgsf-1.12.3/gsf-gnome/Makefile
           lib/libgsf-1.12.3/gsf-win32/Makefile
@@ -2002,7 +2001,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libgsf-1.12.3/python/Makefile
           lib/libgsf-1.12.3/thumbnailer/Makefile
           lib/libgsf-1.12.3/gsf/version.c
-          lib/libgsf-1.12.3/doc/version.xml
           lib/libgsf-1.12.3/libgsf-1.pc
           lib/libgsf-1.12.3/libgsf-1.spec
           lib/libgsf-1.12.3/libgsf-gnome-1.pc

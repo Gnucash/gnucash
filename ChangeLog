@@ -3,6 +3,12 @@
 	* configure.in: remove libgsf/po/Makefile and goffice/po/Makefile
 	  because we never build these directories.
 
+	* configure.in:
+	  - remove libgsf/doc*
+	  - remove GTK_DOC checks
+	* lib/libgsf/Makefile.am: remove 'doc' from SUBDIRS and
+	  remove distcheck extra flags.
+	
 2005-12-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/backend/file/gnc-backend-file.c: Don't chown() the owner,
