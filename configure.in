@@ -2001,7 +2001,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libgsf-1.12.3/tests/Makefile
           lib/libgsf-1.12.3/python/Makefile
           lib/libgsf-1.12.3/thumbnailer/Makefile
-          lib/libgsf-1.12.3/po/Makefile.in
           lib/libgsf-1.12.3/gsf/version.c
           lib/libgsf-1.12.3/doc/version.xml
           lib/libgsf-1.12.3/libgsf-1.pc
@@ -2032,7 +2031,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/goffice-0.0.4/plugins/plot_boxes/Makefile
           lib/goffice-0.0.4/plugins/reg_linear/Makefile
           lib/goffice-0.0.4/pixmaps/Makefile
-          lib/goffice-0.0.4/po/Makefile.in
           lib/goffice-0.0.4/tests/Makefile
           lib/libqof/Makefile
           lib/libqof/qof/Makefile
