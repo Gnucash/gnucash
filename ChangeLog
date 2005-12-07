@@ -1,3 +1,10 @@
+2005-12-06  Joshua Sled  <jsled@asynchronous.org>
+
+	* gog-graph-impl.h: 
+	* gog-graph.c (gog_graph_unref_data), (gog_graph_ref_data): Don't
+	misuse the Quark storage for pointers, especially because they're
+	not integer-sized on a 64-bit platform.
+
 2005-12-06  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: remove libgsf/po/Makefile and goffice/po/Makefile

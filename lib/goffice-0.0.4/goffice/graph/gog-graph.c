@@ -118,6 +118,11 @@ gog_graph_finalize (GObject *obj)
 	g_slist_foreach (tmp, (GFunc) g_object_unref, NULL);
 	g_slist_free (tmp);
 
+	if (graph->ref_counts != NULL) {
+		g_hash_table_destroy(graph->ref_counts);
+		graph->ref_counts = NULL;
+	}
+
 	/* on exit the role remove routines are not called */
 	g_slist_free (graph->charts);
 
@@ -238,6 +243,7 @@ gog_graph_init (GogGraph *graph)
 
 	graph->data = NULL;
 	graph->num_cols = graph->num_rows = 0;
+	graph->ref_counts = g_hash_table_new(NULL, NULL);
 	graph->width = GOG_GRAPH_DEFAULT_WIDTH;
 	graph->height = GOG_GRAPH_DEFAULT_HEIGHT;
 	graph->idle_handler = 0;
@@ -411,7 +417,8 @@ gog_graph_ref_data (GogGraph *graph, GOData *dat)
 
 	/* Does it already exist in the graph ? */
 	g_obj = G_OBJECT (graph);
-	res = g_object_get_qdata (g_obj, (GQuark)dat);
+	//res = g_object_get_qdata (g_obj, (GQuark)dat);
+	res = g_hash_table_lookup(GOG_GRAPH(graph)->ref_counts, dat);
 	if (res == NULL) {
 
 		/* is there something like it already */
@@ -426,12 +433,14 @@ gog_graph_ref_data (GogGraph *graph, GOData *dat)
 			g_object_ref (dat);
 		} else {
 			dat = existing->data;
-			res = g_object_get_qdata (g_obj, (GQuark)dat);
+			//res = g_object_get_qdata (g_obj, (GQuark)dat);
+			res = g_hash_table_lookup(GOG_GRAPH(graph)->ref_counts, dat);
 		}
 	}
 
 	count = GPOINTER_TO_UINT (res) + 1;
-	g_object_set_qdata (g_obj, (GQuark)dat, GUINT_TO_POINTER (count));
+	//g_object_set_qdata (g_obj, (GQuark)dat, GUINT_TO_POINTER (count));
+	g_hash_table_insert(GOG_GRAPH(graph)->ref_counts, dat, GUINT_TO_POINTER (count));
 	g_object_ref (dat);
 	return dat;
 }
@@ -466,7 +475,8 @@ gog_graph_unref_data (GogGraph *graph, GOData *dat)
 		return;
 
 	g_obj = G_OBJECT (graph);
-	res = g_object_get_qdata (g_obj, (GQuark)dat);
+	//res = g_object_get_qdata (g_obj, (GQuark)dat);
+	res = g_hash_table_lookup(GOG_GRAPH(graph)->ref_counts, dat);
 
 	g_return_if_fail (res != NULL);
 
@@ -477,10 +487,13 @@ gog_graph_unref_data (GogGraph *graph, GOData *dat)
 			gog_graph_signals [GRAPH_REMOVE_DATA], 0, dat);
 		graph->data = g_slist_remove (graph->data, dat);
 		g_object_unref (dat);
-		g_object_set_qdata (g_obj, (GQuark)dat, NULL);
-	} else
+		//g_object_set_qdata (g_obj, (GQuark)dat, NULL);
+		g_hash_table_remove(GOG_GRAPH(graph)->ref_counts, dat);
+	} else {
 		/* store the decremented count */
-		g_object_set_qdata (g_obj, (GQuark)dat, GUINT_TO_POINTER (count));
+		//g_object_set_qdata (g_obj, (GQuark)dat, GUINT_TO_POINTER (count));
+		g_hash_table_insert(GOG_GRAPH(graph)->ref_counts, dat, GUINT_TO_POINTER (count));
+	}
 }
 
 static gboolean
