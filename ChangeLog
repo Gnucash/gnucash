@@ -1,5 +1,8 @@
 2005-12-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-price-edit-db.c: Fix the edit price to properly
+	check the number of selected prices.
+
 	* lib/goffice-0.0.4/goffice/gtk/go-combo-text.c: Comment out
 	function that does nothing except generate a compiler warning.
 

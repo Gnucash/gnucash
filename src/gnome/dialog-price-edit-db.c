@@ -124,8 +124,9 @@ gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data)
     LEAVE("no price selected");
     return;
   }
-  if (g_list_next(!price_list)) {
-    LEAVE("soo many prices selected");
+  if (g_list_next(price_list)) {
+    g_list_free(price_list);
+    LEAVE("too many prices selected");
     return;
   }
 
