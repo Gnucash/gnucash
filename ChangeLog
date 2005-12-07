@@ -1,3 +1,8 @@
+2005-12-06  David Hampton  <hampton@employees.org>
+
+	* lib/goffice-0.0.4/goffice/gtk/go-combo-text.c: Comment out
+	function that does nothing except generate a compiler warning.
+
 2005-12-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* gog-graph-impl.h: 
