@@ -898,11 +898,16 @@ gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
     GtkTreeModel *f_model, *s_model;
     GtkTreeIter iter, f_iter, s_iter;
     Account *account;
+    GtkSelectionMode mode;
 
     ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+    mode = gtk_tree_selection_get_mode(selection);
+    if ((mode != GTK_SELECTION_SINGLE) && (mode != GTK_SELECTION_BROWSE)) {
+      return NULL;
+    }
     if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter)) {
       LEAVE("no account, get_selected failed");
       return FALSE;
