@@ -131,8 +131,6 @@ static void gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow 
 static void gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window);
 
-static void gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window );
-
 static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
 static gboolean gnc_main_window_popup_menu_cb (GtkWidget *widget, GncPluginPage *page);
 
@@ -217,7 +215,6 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "ExtensionsAction", NULL, N_("E_xtensions"), NULL, NULL, NULL },
 	{ "WindowsAction", NULL, N_("_Windows"), NULL, NULL, NULL },
 	{ "HelpAction", NULL, N_("_Help"), NULL, NULL, NULL },
-	{ "MiscAction", NULL, N_("_Misc"), NULL, NULL, NULL },
 
 	/* File menu */
 
@@ -281,12 +278,6 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "HelpAboutAction", GNOME_STOCK_ABOUT, N_("_About"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_help_about) },
-
-        /* Misc menu */
-
-        { "MiscTestAction", NULL, N_("TEST"), NULL,
-          N_("Testing stuff"), G_CALLBACK (gnc_main_window_cmd_test) },
-
 };
 /** The number of actions provided by the main window. */
 static guint gnc_menu_n_actions = G_N_ELEMENTS (gnc_menu_actions);
@@ -2776,23 +2767,6 @@ static void
 gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 {
 	gnc_gnome_help (HF_HELP, NULL);
-}
-
-static void
-gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
-{
-        GtkWindow *w = GTK_WINDOW(gtk_window_new( GTK_WINDOW_TOPLEVEL ));
-        gnc_html *gnchtml = gnc_html_new( w );
-        gchar *html = "<html><head><title>testing</title></head>"
-	  "<body><h1>testing</h1><h2>testing 2</h2> <p>Tes<br />ting"
-	  "<object classid=\"gnc-guppi-pie\" width=\"300\" height=\"200\">"
-	  "No pie for you!</object></p></body></html>";
-        gtk_container_add( GTK_CONTAINER(w),
-			   GTK_WIDGET(gnc_html_get_widget(gnchtml)) );
-
-        gnc_html_show_data( gnchtml, html, strlen( html ) );
-        
-        gtk_widget_show_all( GTK_WIDGET(w) );
 }
 
 #ifdef HAVE_GLIB26

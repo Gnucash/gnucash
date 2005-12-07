@@ -133,9 +133,6 @@
       <menuitem name="HelpAbout" action="HelpAboutAction"/>
     </menu>
 
-    <menu name="Misc" action="MiscAction">
-      <menuitem name="MiscTest" action="MiscTestAction"/>
-    </menu>
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">

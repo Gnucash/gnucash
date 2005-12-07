@@ -180,13 +180,6 @@ Resources
   - Open SX Editor, close it; open Register Preferences, change "Draw
     {horiz,vert} lines" => crash.
 
-- Misc
-
-  - Test ... "No pie for you!"
-
-    - jsled to figure out why this doesn't work, then remove this test menu
-      item.
-
 ========================================
               ENHANCEMENTS
 ========================================
