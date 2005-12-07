@@ -357,10 +357,10 @@ static int inputBoxCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the PIN must \n"
+	g_strdup_printf (  _("You entered %ld characters, but the PIN must \n"
 			     "be no longer than %d characters. \n"
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -438,10 +438,10 @@ static int getTanCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the TAN must \n"
+	g_strdup_printf (  _("You entered %ld characters, but the TAN must \n"
 			     "be no longer than %d characters. \n"
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -509,14 +509,14 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
   g_assert(data);
 
   if (id > 0) {
-    dialog = g_hash_table_lookup(data->showbox_hash, (gpointer)id);
+    dialog = g_hash_table_lookup(data->showbox_hash, GUINT_TO_POINTER(id));
   } else {
     dialog = data->showbox_last;
   }
   if (dialog) {
     gtk_widget_hide (dialog);
     gtk_widget_destroy (dialog);
-    g_hash_table_remove(data->showbox_hash, (gpointer)id);
+    g_hash_table_remove(data->showbox_hash, GUINT_TO_POINTER(id));
   }
 }
 
@@ -552,7 +552,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   gtk_widget_show_all (dialog);
 
   result = data->showbox_id;
-  g_hash_table_insert(data->showbox_hash, (gpointer)result, dialog);
+  g_hash_table_insert(data->showbox_hash, GUINT_TO_POINTER(result), dialog);
   data->showbox_id++;
   data->showbox_last = dialog;
 

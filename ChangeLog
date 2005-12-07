@@ -1,3 +1,9 @@
+2005-12-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* hbci-interaction.c (inputBoxCB, getTanCB): printf(%d, size_t)
+	casting for 64-bit arch.
+	* hbci-interaction.c (showBoxCB, hideBoxCB): uint32->pointer(64) casting.
+
 2005-12-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-budget.c:
