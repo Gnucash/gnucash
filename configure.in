@@ -807,16 +807,16 @@ else
 fi
 AM_CONDITIONAL(WITH_LIBGSF_GNOME, test $have_gnome = yes)
 
-# GConf configuration
-dnl Don't publish the GCONFTOOL variable, AM_GCONF_SOURCE_2 has ``gconftool-2'' hardwired.
-GCONFTOOL=
-AC_CHECK_PROG([GCONFTOOL], [gconftool-2], [gconftool-2], [no])
-if test "x$GCONFTOOL" = "xno"; then
-    AC_MSG_WARN([thumbnailer will not be built, unable to find gconftool-2])
-else
-    AM_GCONF_SOURCE_2
-fi
-AM_CONDITIONAL(WITH_GCONF, test "x$GCONFTOOL" != "xno")
+##  # GConf configuration
+##  dnl Don't publish the GCONFTOOL variable, AM_GCONF_SOURCE_2 has ``gconftool-2'' hardwired.
+##  GCONFTOOL=
+##  AC_CHECK_PROG([GCONFTOOL], [gconftool-2], [gconftool-2], [no])
+##  if test "x$GCONFTOOL" = "xno"; then
+##      AC_MSG_WARN([thumbnailer will not be built, unable to find gconftool-2])
+##  else
+##      AM_GCONF_SOURCE_2
+##  fi
+##  AM_CONDITIONAL(WITH_GCONF, test "x$GCONFTOOL" != "xno")
 
 dnl # LDFLAGS="-no-undefined $LDFLAGS"
 
@@ -831,7 +831,7 @@ AM_CONDITIONAL(PLATFORM_WIN32, false)
 # dnl  AM_CONDITIONAL(ENABLE_GTK_DOC, false)
 # dnl  AM_CONDITIONAL(GTK_DOC_USE_LIBTOOL, false)
 AM_CONDITIONAL(WITH_LIBGSF_GNOME, false)
-AM_CONDITIONAL(WITH_GCONF, false)
+# dnl AM_CONDITIONAL(WITH_GCONF, false)
 AM_CONDITIONAL(WITH_PYTHON, false)
 
 fi
