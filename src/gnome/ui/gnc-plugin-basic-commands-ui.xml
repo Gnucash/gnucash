@@ -76,10 +76,6 @@
       </placeholder>
     </menu>
 
-    <menu name="Misc" action="MiscAction">
-      <menuitem name="MiscTest" action="MiscTestAction"/>
-    </menu>
-
   </menubar>
 
   <toolbar name="DefaultToolbar">
