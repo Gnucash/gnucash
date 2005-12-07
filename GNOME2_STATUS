@@ -61,12 +61,6 @@ Resources
     - Trying to reopen a multi-column report spits lots of
       warning. Trying to edit that pages options crashes gnucash.
 
-  - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
-    
-    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012797.html
-
-    - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
-
 - Register Core - mostly functional
 
   - doesn't remember custom check formats.
