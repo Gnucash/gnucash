@@ -375,9 +375,6 @@ gnc_html_initialize (void)
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
 
-  PINFO( "initializing gnc_html..." );
-  printf( "initializing gnc_html...\n" );
-
   for (i = 0; types[i].type; i++)
     gnc_html_register_urltype (types[i].type, types[i].protocol);
 
