@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-05 22:14+0100\n"
-"PO-Revision-Date: 2005-12-05 22:26+0100\n"
+"POT-Creation-Date: 2005-12-08 22:34+0100\n"
+"PO-Revision-Date: 2005-12-08 22:36+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1077,7 +1077,7 @@ msgstr "Stichtag Monatswechsel: "
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:2
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-account-tree.c:227
-#: ../src/gnome/gnc-plugin-page-budget.c:147
+#: ../src/gnome/gnc-plugin-page-budget.c:151
 #: ../src/gnome/gnc-plugin-page-register.c:293
 #: ../src/gnome/window-reconcile.c:1415
 #: ../src/import-export/hbci/glade/hbci.glade.h:17
@@ -2093,7 +2093,7 @@ msgstr "Kopieren"
 #: ../src/gnome/dialog-scheduledxaction.c:249
 #: ../src/gnome/dialog-sxsincelast.c:403
 #: ../src/gnome/gnc-plugin-page-register.c:166
-#: ../src/gnome-utils/gnc-main-window.c:243
+#: ../src/gnome-utils/gnc-main-window.c:240
 msgid "_Paste"
 msgstr "E_infügen"
 
@@ -3184,7 +3184,7 @@ msgstr "Nummer"
 
 #. Translators: %d is the number of prices. This is a
 #. ngettext(3) message.
-#: ../src/gnome/dialog-price-edit-db.c:161
+#: ../src/gnome/dialog-price-edit-db.c:162
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
@@ -3214,7 +3214,7 @@ msgstr "Komplett"
 #: ../src/gnome/glade/reconcile.glade.h:28
 #: ../src/gnome/glade/register.glade.h:98
 #: ../src/gnome/glade/sched-xact.glade.h:205
-#: ../src/gnome-utils/gnc-main-window.c:211
+#: ../src/gnome-utils/gnc-main-window.c:209
 #: ../src/gnome/window-reconcile.c:1260 ../src/gnome/window-reconcile.c:1333
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
@@ -3223,20 +3223,20 @@ msgstr "_Bearbeiten"
 #: ../src/gnome/dialog-scheduledxaction.c:240
 #: ../src/gnome/dialog-sxsincelast.c:393 ../src/gnome/glade/lots.glade.h:27
 #: ../src/gnome/glade/register.glade.h:116
-#: ../src/gnome-utils/gnc-main-window.c:212
+#: ../src/gnome-utils/gnc-main-window.c:210
 msgid "_View"
 msgstr "_Ansicht"
 
 #: ../src/gnome/dialog-scheduledxaction.c:241
 #: ../src/gnome/dialog-sxsincelast.c:394
 #: ../src/gnome/glade/register.glade.h:88
-#: ../src/gnome-utils/gnc-main-window.c:213
+#: ../src/gnome-utils/gnc-main-window.c:211
 msgid "_Actions"
 msgstr "A_ktionen"
 
 #: ../src/gnome/dialog-scheduledxaction.c:242
 #: ../src/gnome/glade/reconcile.glade.h:35
-#: ../src/gnome-utils/gnc-main-window.c:214
+#: ../src/gnome-utils/gnc-main-window.c:212
 #: ../src/gnome/window-reconcile.c:1291
 msgid "_Transaction"
 msgstr "_Buchung"
@@ -3245,14 +3245,14 @@ msgstr "_Buchung"
 #: ../src/gnome/dialog-scheduledxaction.c:245
 #: ../src/gnome/dialog-sxsincelast.c:397
 #: ../src/gnome/gnc-plugin-page-register.c:160
-#: ../src/gnome-utils/gnc-main-window.c:241
+#: ../src/gnome-utils/gnc-main-window.c:238
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
 #: ../src/gnome/dialog-scheduledxaction.c:247
 #: ../src/gnome/dialog-sxsincelast.c:400
 #: ../src/gnome/gnc-plugin-page-register.c:163
-#: ../src/gnome-utils/gnc-main-window.c:242
+#: ../src/gnome-utils/gnc-main-window.c:239
 msgid "_Copy"
 msgstr "_Kopieren"
 
@@ -4081,7 +4081,7 @@ msgstr "Budget ausgleichen"
 
 #. src/report/standard-reports/budget.scm
 #: ../src/gnome/glade/budget.glade.h:5
-#: ../src/gnome/gnc-plugin-page-budget.c:255 ../intl-scm/guile-strings.c:3208
+#: ../src/gnome/gnc-plugin-page-budget.c:260 ../intl-scm/guile-strings.c:3208
 #: ../intl-scm/guile-strings.c:3210
 msgid "Budget"
 msgstr "Budget"
@@ -4189,6 +4189,7 @@ msgstr ""
 #: ../src/gnome/glade/budget.glade.h:31 ../src/gnome/glade/print.glade.h:17
 #: ../src/gnome/glade/sched-xact.glade.h:126
 #: ../src/gnome/gnc-plugin-page-account-tree.c:225
+#: ../src/gnome/gnc-plugin-page-budget.c:152
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:851
 msgid "Options"
 msgstr "Optionen"
@@ -4332,7 +4333,7 @@ msgstr ""
 "werden."
 
 #: ../src/gnome/glade/chart-export.glade.h:9
-#: ../src/gnome-utils/gnc-main-window.c:227
+#: ../src/gnome-utils/gnc-main-window.c:224
 msgid "_Export"
 msgstr "E_xportieren"
 
@@ -4608,7 +4609,9 @@ msgstr "3. Importiere Daten als neue Objekte"
 
 #: ../src/gnome/glade/merge.glade.h:4
 msgid "Add the import as a new object, leave original in place"
-msgstr "Importierte Konten als neue Objekte einfügen und die existerenden unangetastet lassen"
+msgstr ""
+"Importierte Konten als neue Objekte einfügen und die existerenden "
+"unangetastet lassen"
 
 #: ../src/gnome/glade/merge.glade.h:5
 msgid "Commit Merged Account Hierachy to data file"
@@ -4641,15 +4644,18 @@ msgstr ""
 "\n"
 "Drücken Sie \"Zurück\", um Ihre Auswahl zu überprüfen.\n"
 "\n"
-"Drücken Sie \"Abbrechen\", um den Assistenten zu schließen, ohne neue Konten zu erstellen.\n"
+"Drücken Sie \"Abbrechen\", um den Assistenten zu schließen, ohne neue Konten "
+"zu erstellen.\n"
 "\n"
-"Beachten Sie: Dieser Schritt kann nicht rückgängig gemacht werden! Denken Sie daran, dass Sie vorher ein Backup erstellt haben sollten."
+"Beachten Sie: Dieser Schritt kann nicht rückgängig gemacht werden! Denken "
+"Sie daran, dass Sie vorher ein Backup erstellt haben sollten."
 
 #: ../src/gnome/glade/merge.glade.h:16
 msgid ""
 "The next screen will allow you to resolve any conflicts in merging your new "
 "account tree into your current GnuCash file."
-msgstr "Im nächsten Schritt können Sie die Konflikte beim Importieren auflösen."
+msgstr ""
+"Im nächsten Schritt können Sie die Konflikte beim Importieren auflösen."
 
 #: ../src/gnome/glade/merge.glade.h:17
 msgid ""
@@ -4670,13 +4676,18 @@ msgid ""
 "\n"
 "Click 'Cancel'  if you do not wish to merge your new account types now."
 msgstr ""
-"Dieser Assistent kann einen neuen Kontenrahmen in die momentan geöffnete GnuCash Datei hinzufügen.\n"
+"Dieser Assistent kann einen neuen Kontenrahmen in die momentan geöffnete "
+"GnuCash Datei hinzufügen.\n"
 "\n"
-"Falls dabei Kontennamen identisch sind und daher Konflikte auftreten, werden Sie gefragt, wie diese Konflikte gelöst werden sollen.\n"
+"Falls dabei Kontennamen identisch sind und daher Konflikte auftreten, werden "
+"Sie gefragt, wie diese Konflikte gelöst werden sollen.\n"
 "\n"
-"Vorsicht: Wenn Sie \"Anwenden\" klicken, kann dieser Schritt nicht mehr rückgängig gemacht werden. Bitte achten Sie darauf, eine Backup-Datei erstellt zu haben.\n"
+"Vorsicht: Wenn Sie \"Anwenden\" klicken, kann dieser Schritt nicht mehr "
+"rückgängig gemacht werden. Bitte achten Sie darauf, eine Backup-Datei "
+"erstellt zu haben.\n"
 "\n"
-"Klicken Sie \"Abbrechen\", wenn Sie jetzt keinen Kontenrahmen importieren möchten."
+"Klicken Sie \"Abbrechen\", wenn Sie jetzt keinen Kontenrahmen importieren "
+"möchten."
 
 #: ../src/gnome/glade/merge.glade.h:26
 msgid ""
@@ -4685,7 +4696,13 @@ msgid ""
 "The import object can be ignored - use this if the import is a duplicate of "
 "an object in the existing book. 3. The import object can be created as a new "
 "object in the existing book."
-msgstr "Sie haben drei Möglichkeiten, die Konflikte zu lösen: 1. Das importierte Konto kann das existierende überschreiben. Benutzen Sie dies, um Ihre GnuCash-Datei zu aktualisieren. 2. Das importierte Konto kann ignoriert werden. Benutzen Sie dies, wenn der importierte Anteil ein Duplikat der existierenden GnuCash-Datei ist. 3. Das importierte Konto kann als neues Objekt in der GnuCash-Datei erstellt werden."
+msgstr ""
+"Sie haben drei Möglichkeiten, die Konflikte zu lösen: 1. Das importierte "
+"Konto kann das existierende überschreiben. Benutzen Sie dies, um Ihre "
+"GnuCash-Datei zu aktualisieren. 2. Das importierte Konto kann ignoriert "
+"werden. Benutzen Sie dies, wenn der importierte Anteil ein Duplikat der "
+"existierenden GnuCash-Datei ist. 3. Das importierte Konto kann als neues "
+"Objekt in der GnuCash-Datei erstellt werden."
 
 #: ../src/gnome/glade/merge.glade.h:27
 msgid "Your new accounts are ready to merge"
@@ -5000,7 +5017,7 @@ msgstr "Neue Datei"
 
 #: ../src/gnome/glade/reconcile.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:223
-#: ../src/gnome/gnc-plugin-page-budget.c:143 ../src/gnome/lot-viewer.c:430
+#: ../src/gnome/gnc-plugin-page-budget.c:150 ../src/gnome/lot-viewer.c:430
 #: ../src/gnome-utils/gnc-file.c:94 ../src/gnome-utils/gnc-file.c:755
 #: ../src/gnome/window-reconcile.c:1423
 msgid "Open"
@@ -5049,13 +5066,13 @@ msgstr "_Fertig"
 
 #. File menu
 #: ../src/gnome/glade/reconcile.glade.h:30
-#: ../src/gnome-utils/gnc-main-window.c:224
+#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1253 ../src/gnome/window-reconcile.c:1326
 msgid "_New"
 msgstr "_Neu"
 
 #: ../src/gnome/glade/reconcile.glade.h:31
-#: ../src/gnome-utils/gnc-main-window.c:225
+#: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_Open"
 msgstr "Ö_ffnen"
 
@@ -6440,8 +6457,10 @@ msgid ""
 "If you are looking for a stable personal finance application, you should use "
 "the latest release of GnuCash 1.8"
 msgstr ""
-"Vorsicht: Das ist eine Entwicklungsversion von GnuCash. Hier können sich alle möglichen Fehler drin rumtreiben. \n"
-"Wenn Sie eine stabile Version suchen, sollten sie die letzte Version von GnuCash 1.8.x benutzen!"
+"Vorsicht: Das ist eine Entwicklungsversion von GnuCash. Hier können sich "
+"alle möglichen Fehler drin rumtreiben. \n"
+"Wenn Sie eine stabile Version suchen, sollten sie die letzte Version von "
+"GnuCash 1.8.x benutzen!"
 
 #: ../src/gnome/glade/totd.glade.h:5
 msgid "_Show tips at startup"
@@ -6635,19 +6654,24 @@ msgstr "Neue Konten_hierarchie..."
 msgid "Extend the current book by merging with new account type categories"
 msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
 
+#. File menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:156
+#: ../src/gnome/gnc-plugin-page-budget.c:119
 msgid "Open _Account"
 msgstr "_Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:157
+#: ../src/gnome/gnc-plugin-page-budget.c:120
 msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:159
+#: ../src/gnome/gnc-plugin-page-budget.c:122
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
+#: ../src/gnome/gnc-plugin-page-budget.c:123
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
@@ -6739,11 +6763,8 @@ msgstr ""
 msgid "_Options"
 msgstr "_Optionen"
 
-#. { "EditBudgetAction", 	    N_("Edit") },
-#. { "EditBudgetOptionsAction",      N_("Options") },
 #. src/business/business-gnome/business-gnome.scm
 #: ../src/gnome/gnc-plugin-page-account-tree.c:226
-#: ../src/gnome/gnc-plugin-page-budget.c:146
 #: ../src/gnome/window-reconcile.c:1401 ../intl-scm/guile-strings.c:3666
 msgid "New"
 msgstr "Neu"
@@ -6802,31 +6823,34 @@ msgstr ""
 msgid "Account Tree Options"
 msgstr "Optionen Kontenansicht"
 
-#. TODO: maybe there should be menu entries, too?
-#. Toolbar buttons
-#: ../src/gnome/gnc-plugin-page-budget.c:115
+#. Edit menu
+#: ../src/gnome/gnc-plugin-page-budget.c:127
 msgid "_Delete Budget"
 msgstr "Budget _löschen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:116
+#: ../src/gnome/gnc-plugin-page-budget.c:128
 msgid "Delete the budget"
 msgstr "Das Budget löschen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:118
+#: ../src/gnome/gnc-plugin-page-budget.c:130
 msgid "Budget Options"
 msgstr "Budget Optionen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:119
+#: ../src/gnome/gnc-plugin-page-budget.c:131
 msgid "Edit the budget view options"
 msgstr "Budget Ansichts-Optionen ändern"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:121
+#: ../src/gnome/gnc-plugin-page-budget.c:133
 msgid "Estimate Budget"
 msgstr "Budget abschätzen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:123
+#: ../src/gnome/gnc-plugin-page-budget.c:135
 msgid "Estimate a budget value for the selected cells"
 msgstr "Budget für die gewählten Felder abschätzen"
+
+#: ../src/gnome/gnc-plugin-page-budget.c:153
+msgid "Estimate"
+msgstr "Abschätzen"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:155
@@ -8744,7 +8768,7 @@ msgstr "Beim Laden der URL ist ein Fehler aufgetreten."
 msgid "Error message"
 msgstr "Fehlermeldung"
 
-#: ../src/gnome-utils/gnc-html.c:606 ../src/gnome-utils/gnc-html.c:1065
+#: ../src/gnome-utils/gnc-html.c:603 ../src/gnome-utils/gnc-html.c:1062
 msgid ""
 "Secure HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -8754,7 +8778,7 @@ msgstr ""
 "Um ihn zu aktivieren, wählen Sie den Netzwerk Abschnitt der\n"
 "Einstellungen und aktivieren die entsprechende Option."
 
-#: ../src/gnome-utils/gnc-html.c:615 ../src/gnome-utils/gnc-html.c:1075
+#: ../src/gnome-utils/gnc-html.c:612 ../src/gnome-utils/gnc-html.c:1072
 msgid ""
 "Network HTTP access is disabled.\n"
 "You can enable it in the Network section of\n"
@@ -8764,7 +8788,7 @@ msgstr ""
 "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
 
 #. %s is a URL (some location somewhere).
-#: ../src/gnome-utils/gnc-html.c:1006
+#: ../src/gnome-utils/gnc-html.c:1003
 #, c-format
 msgid "There was an error accessing %s."
 msgstr "Beim Zugriff auf %s ist ein Fehler aufgetreten."
@@ -8778,212 +8802,199 @@ msgid "_Open Account"
 msgstr "_Konto öffnen"
 
 #. Toplevel
-#: ../src/gnome-utils/gnc-main-window.c:210
+#: ../src/gnome-utils/gnc-main-window.c:208
 msgid "_File"
 msgstr "_Datei"
 
-#: ../src/gnome-utils/gnc-main-window.c:215
+#: ../src/gnome-utils/gnc-main-window.c:213
 msgid "_Reports"
 msgstr "Be_richte"
 
-#: ../src/gnome-utils/gnc-main-window.c:216
+#: ../src/gnome-utils/gnc-main-window.c:214
 msgid "_Tools"
 msgstr "_Werkzeuge"
 
-#: ../src/gnome-utils/gnc-main-window.c:217
+#: ../src/gnome-utils/gnc-main-window.c:215
 msgid "E_xtensions"
 msgstr "Er_weiterungen"
 
-#: ../src/gnome-utils/gnc-main-window.c:218
+#: ../src/gnome-utils/gnc-main-window.c:216
 msgid "_Windows"
 msgstr "_Fenster"
 
-#: ../src/gnome-utils/gnc-main-window.c:219
+#: ../src/gnome-utils/gnc-main-window.c:217
 #: ../src/gnome/window-reconcile.c:1279
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: ../src/gnome-utils/gnc-main-window.c:220
-msgid "_Misc"
-msgstr "_Sonstiges"
-
-#: ../src/gnome-utils/gnc-main-window.c:226
+#: ../src/gnome-utils/gnc-main-window.c:223
 msgid "_Import"
 msgstr "_Importieren"
 
-#: ../src/gnome-utils/gnc-main-window.c:228
+#: ../src/gnome-utils/gnc-main-window.c:225
 msgid "_Print..."
 msgstr "_Drucken..."
 
-#: ../src/gnome-utils/gnc-main-window.c:229
+#: ../src/gnome-utils/gnc-main-window.c:226
 msgid "Proper_ties"
 msgstr "Ei_genschaften"
 
-#: ../src/gnome-utils/gnc-main-window.c:232
+#: ../src/gnome-utils/gnc-main-window.c:229
 msgid "_Close"
 msgstr "S_chließen"
 
-#: ../src/gnome-utils/gnc-main-window.c:235
+#: ../src/gnome-utils/gnc-main-window.c:232
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: ../src/gnome-utils/gnc-main-window.c:244
+#: ../src/gnome-utils/gnc-main-window.c:241
 msgid "Pr_eferences"
 msgstr "_Einstellungen"
 
 #. View menu
-#: ../src/gnome-utils/gnc-main-window.c:250
+#: ../src/gnome-utils/gnc-main-window.c:247
 msgid "_Refresh"
 msgstr "A_ktualisieren"
 
-#: ../src/gnome-utils/gnc-main-window.c:251
+#: ../src/gnome-utils/gnc-main-window.c:248
 msgid "Refresh this window"
 msgstr "Dieses Fenster aktualisieren"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-main-window.c:256
+#: ../src/gnome-utils/gnc-main-window.c:253
 #: ../src/gnome/window-reconcile.c:1239
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
-#: ../src/gnome-utils/gnc-main-window.c:257
+#: ../src/gnome-utils/gnc-main-window.c:254
 msgid "_Reset Warnings..."
 msgstr "_Warnungen zurücksetzen..."
 
-#: ../src/gnome-utils/gnc-main-window.c:258
+#: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
 "Den gespeicherten Status aller Warnungsmeldungen zurücksetzen, so dass alle "
 "wieder angezeigt werden."
 
-#: ../src/gnome-utils/gnc-main-window.c:260
+#: ../src/gnome-utils/gnc-main-window.c:257
 msgid "Rename Page"
 msgstr "Seite umbenennen"
 
-#: ../src/gnome-utils/gnc-main-window.c:261
+#: ../src/gnome-utils/gnc-main-window.c:258
 msgid "Rename this page."
 msgstr "Diese Seite umbenennen"
 
 #. Windows menu
-#: ../src/gnome-utils/gnc-main-window.c:266
+#: ../src/gnome-utils/gnc-main-window.c:263
 msgid "_New Window"
 msgstr "_Neues Fenster"
 
-#: ../src/gnome-utils/gnc-main-window.c:267
+#: ../src/gnome-utils/gnc-main-window.c:264
 msgid "Open a new top-level GnuCash window."
 msgstr "Ein neues Top-Level GnuCash Fenster öffnen."
 
-#: ../src/gnome-utils/gnc-main-window.c:269
+#: ../src/gnome-utils/gnc-main-window.c:266
 msgid "New Window with _Page"
 msgstr "Neues Fenster mit _Seite"
 
-#: ../src/gnome-utils/gnc-main-window.c:270
+#: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Aktuelle Seite in ein neues Top-Level GnuCash Fenster verschieben."
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:275
+#: ../src/gnome-utils/gnc-main-window.c:272
 msgid "Tutorial and Concepts _Guide"
 msgstr "GnuCash-_Kurs und Konzepte"
 
-#: ../src/gnome-utils/gnc-main-window.c:276
+#: ../src/gnome-utils/gnc-main-window.c:273
 msgid "Open the GnuCash Tutorial"
 msgstr "Den GnuCash-Online-Kurs öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:278
+#: ../src/gnome-utils/gnc-main-window.c:275
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: ../src/gnome-utils/gnc-main-window.c:279
+#: ../src/gnome-utils/gnc-main-window.c:276
 msgid "Open the GnuCash Help"
 msgstr "Die GnuCash-Hilfe öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:281
+#: ../src/gnome-utils/gnc-main-window.c:278
 msgid "_About"
 msgstr "_Info"
 
-#. Misc menu
-#: ../src/gnome-utils/gnc-main-window.c:287
-msgid "TEST"
-msgstr "TEST"
-
-#: ../src/gnome-utils/gnc-main-window.c:288
-msgid "Testing stuff"
-msgstr ""
-
-#: ../src/gnome-utils/gnc-main-window.c:298
+#: ../src/gnome-utils/gnc-main-window.c:289
 msgid "Learn Accelerator Keys"
 msgstr "Tastaturkürzel ändern"
 
-#: ../src/gnome-utils/gnc-main-window.c:299
+#: ../src/gnome-utils/gnc-main-window.c:290
 msgid "Learn new accelerator key settings."
 msgstr "Tastaturkürzel neu setzen oder ändern."
 
-#: ../src/gnome-utils/gnc-main-window.c:301
+#: ../src/gnome-utils/gnc-main-window.c:292
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:302
+#: ../src/gnome-utils/gnc-main-window.c:293
 msgid "Show/hide the toolbar on this window"
 msgstr "Die Werkzeugleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:304
+#: ../src/gnome-utils/gnc-main-window.c:295
 msgid "Su_mmary Bar"
 msgstr "_Zusammenfassungsleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:305
+#: ../src/gnome-utils/gnc-main-window.c:296
 msgid "Show/hide the summary bar on this window"
 msgstr "Die Zusammenfassungs-Leiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:307
+#: ../src/gnome-utils/gnc-main-window.c:298
 msgid "Stat_us Bar"
 msgstr "_Statusleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:308
+#: ../src/gnome-utils/gnc-main-window.c:299
 msgid "Show/hide the status bar on this window"
 msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:318
+#: ../src/gnome-utils/gnc-main-window.c:309
 msgid "Window _1"
 msgstr "Fenster _1"
 
-#: ../src/gnome-utils/gnc-main-window.c:319
+#: ../src/gnome-utils/gnc-main-window.c:310
 msgid "Window _2"
 msgstr "Fenster _2"
 
-#: ../src/gnome-utils/gnc-main-window.c:320
+#: ../src/gnome-utils/gnc-main-window.c:311
 msgid "Window _3"
 msgstr "Fenster _3"
 
-#: ../src/gnome-utils/gnc-main-window.c:321
+#: ../src/gnome-utils/gnc-main-window.c:312
 msgid "Window _4"
 msgstr "Fenster _4"
 
-#: ../src/gnome-utils/gnc-main-window.c:322
+#: ../src/gnome-utils/gnc-main-window.c:313
 msgid "Window _5"
 msgstr "Fenster _5"
 
-#: ../src/gnome-utils/gnc-main-window.c:323
+#: ../src/gnome-utils/gnc-main-window.c:314
 msgid "Window _6"
 msgstr "Fenster _6"
 
-#: ../src/gnome-utils/gnc-main-window.c:324
+#: ../src/gnome-utils/gnc-main-window.c:315
 msgid "Window _7"
 msgstr "Fenster _7"
 
-#: ../src/gnome-utils/gnc-main-window.c:325
+#: ../src/gnome-utils/gnc-main-window.c:316
 msgid "Window _8"
 msgstr "Fenster _8"
 
-#: ../src/gnome-utils/gnc-main-window.c:326
+#: ../src/gnome-utils/gnc-main-window.c:317
 msgid "Window _9"
 msgstr "Fenster _9"
 
-#: ../src/gnome-utils/gnc-main-window.c:327
+#: ../src/gnome-utils/gnc-main-window.c:318
 msgid "Window _0"
 msgstr "Fenster _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:837
+#: ../src/gnome-utils/gnc-main-window.c:828
 #, c-format
 msgid ""
 "Error: Failure saving state file.\n"
@@ -8992,11 +9003,11 @@ msgstr ""
 "Fehler beim Speichern des Status-file.\n"
 "  %s"
 
-#: ../src/gnome-utils/gnc-main-window.c:901
+#: ../src/gnome-utils/gnc-main-window.c:892
 msgid "<unknown>"
 msgstr "<unbekannt>"
 
-#: ../src/gnome-utils/gnc-main-window.c:927
+#: ../src/gnome-utils/gnc-main-window.c:918
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9008,7 +9019,7 @@ msgstr ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:938
+#: ../src/gnome-utils/gnc-main-window.c:929
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9019,15 +9030,15 @@ msgstr ""
 "\n"
 "Wenn Sie nicht speichern, gehen die Änderungen verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:945
+#: ../src/gnome-utils/gnc-main-window.c:936
 msgid "Close _without Saving"
 msgstr "Schli_eßen ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:995
+#: ../src/gnome-utils/gnc-main-window.c:986
 msgid "Quit Gnucash?"
 msgstr "GnuCash beenden?"
 
-#: ../src/gnome-utils/gnc-main-window.c:996
+#: ../src/gnome-utils/gnc-main-window.c:987
 msgid ""
 "You are attempting to close the last Gnucash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
@@ -9035,11 +9046,11 @@ msgstr ""
 "Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster zu schließen. Dies "
 "wird Gnucash beenden. Sind Sie sich sicher, dass Sie das wollen?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1096
+#: ../src/gnome-utils/gnc-main-window.c:1087
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:2861
+#: ../src/gnome-utils/gnc-main-window.c:2835
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -9050,13 +9061,13 @@ msgstr ""
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:2883
-#: ../src/gnome-utils/gnc-main-window.c:2923
+#: ../src/gnome-utils/gnc-main-window.c:2857
+#: ../src/gnome-utils/gnc-main-window.c:2897
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:2901
+#: ../src/gnome-utils/gnc-main-window.c:2875
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -11390,11 +11401,11 @@ msgstr ""
 #: ../src/import-export/hbci/hbci-interaction.c:360
 #, c-format
 msgid ""
-"You entered %d characters, but the PIN must \n"
+"You entered %ld characters, but the PIN must \n"
 "be no longer than %d characters. \n"
 "Do you want to try again?"
 msgstr ""
-"Sie haben %d Zeichen eingegeben, aber die PIN darf nicht \n"
+"Sie haben %ld Zeichen eingegeben, aber die PIN darf nicht \n"
 "länger als %d Zeichen sein.  Erneut versuchen?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:428
@@ -11409,11 +11420,11 @@ msgstr ""
 #: ../src/import-export/hbci/hbci-interaction.c:441
 #, c-format
 msgid ""
-"You entered %d characters, but the TAN must \n"
+"You entered %ld characters, but the TAN must \n"
 "be no longer than %d characters. \n"
 "Do you want to try again?"
 msgstr ""
-"Sie haben %d Zeichen eingegeben, aber die TAN darf nicht \n"
+"Sie haben %ld Zeichen eingegeben, aber die TAN darf nicht \n"
 "länger als %d Zeichen sein.  Erneut versuchen?"
 
 #: ../src/import-export/import-account-matcher.c:78
@@ -14838,7 +14849,7 @@ msgstr " Stilvorlage"
 #: ../intl-scm/guile-strings.c:1284 ../intl-scm/guile-strings.c:1916
 #: ../intl-scm/guile-strings.c:2134 ../intl-scm/guile-strings.c:2652
 msgid "Closing Entries"
-msgstr ""
+msgstr "Abschlussbuchungen"
 
 #. src/report/report-system/html-acct-table.scm
 #. src/report/standard-reports/trial-balance.scm
@@ -15951,7 +15962,7 @@ msgid "Difference"
 msgstr "Differenz"
 
 #. src/report/standard-reports/trial-balance.scm
-#: ../intl-scm/guile-strings.c:1808
+#: ../intl-scm/guile-strings.c:1808 ../intl-scm/guile-strings.c:1924
 msgid "Trial Balance"
 msgstr ""
 
@@ -16038,7 +16049,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2274 ../intl-scm/guile-strings.c:2416
 #: ../intl-scm/guile-strings.c:2610
 msgid "Accounts to include"
-msgstr "Konten zum einberechnen"
+msgstr "Einbezogene Konten"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/transaction.scm
@@ -16105,33 +16116,36 @@ msgstr "Einträge"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1850
 msgid "Adjusting Entries pattern"
-msgstr ""
+msgstr "Muster für Anpassungseinträge"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1852
 msgid "Any text in the Description column which identifies adjusting entries"
 msgstr ""
+"Textmuster in der Buchungsbeschreibung, das Anpassungseinträge identifiziert"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1854
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Muster für Anpassungseinträge unterscheidet Groß-/Kleinschreibung"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1856
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive"
 msgstr ""
+"Lässt das Muster für Anpassungseinträge nach Groß-/Kleinschreibung "
+"unterscheiden"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1858
 msgid "Adjusting Entries Pattern is regular expression"
-msgstr ""
+msgstr "Muster für Anpassungseinträge ist ein regulärer Ausdruck"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1860
 msgid ""
 "Causes the Adjusting Entries Pattern to be treated as a regular expression"
-msgstr ""
+msgstr "Lässt das Muster für Anpassungseinträge ein regulärer Ausdruck sein"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16139,7 +16153,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1862 ../intl-scm/guile-strings.c:2096
 #: ../intl-scm/guile-strings.c:2634
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "Muster für Abschlussbuchungen"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16148,6 +16162,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2636
 msgid "Any text in the Description column which identifies closing entries"
 msgstr ""
+"Textmuster in der Buchungsbeschreibung, das Abschlussbuchungen identifiziert"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16155,7 +16170,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1866 ../intl-scm/guile-strings.c:2100
 #: ../intl-scm/guile-strings.c:2638
 msgid "Closing Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Muster für Abschlussbuchungen unterscheidet Groß-/Kleinschreibung"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16164,6 +16179,8 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2640
 msgid "Causes the Closing Entries Pattern match to be case-sensitive"
 msgstr ""
+"Lässt das Muster für Abschlussbuchungen nach Groß-/Kleinschreibung "
+"unterscheiden"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16171,7 +16188,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1870 ../intl-scm/guile-strings.c:2104
 #: ../intl-scm/guile-strings.c:2642
 msgid "Closing Entries Pattern is regular expression"
-msgstr ""
+msgstr "Muster für Abschlussbuchungen ist ein regulärer Ausdruck"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16180,7 +16197,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2644
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression"
-msgstr ""
+msgstr "Lässt das Muster für Abschlussbuchungen ein regulärer Ausdruck sein"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16217,6 +16234,8 @@ msgstr "Kontonamen anklickbar anzeigen"
 #: ../intl-scm/guile-strings.c:2308 ../intl-scm/guile-strings.c:2450
 msgid "Shows each account in the table as a hyperlink to its register window"
 msgstr ""
+"Konto als klickbaren Hyperlink anzeigen, der beim Anklicken das Kontofenster "
+"öffnet"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16276,7 +16295,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1918 ../intl-scm/guile-strings.c:2138
 #: ../intl-scm/guile-strings.c:2656
 msgid "for Period"
-msgstr ""
+msgstr "für Buchungszeitraum"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16288,29 +16307,26 @@ msgid "For Period Covering %s to %s"
 msgstr "Für Periode %s bis %s"
 
 #. src/report/standard-reports/trial-balance.scm
-#: ../intl-scm/guile-strings.c:1924
-msgid "TRIAL BALANCE"
-msgstr ""
-
-#. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1926
-msgid "ADJUSTMENTS"
-msgstr ""
+msgid "Adjustments"
+msgstr "Anpassungsbuchungen"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1928
-msgid "ADJUSTED TRIAL BALANCE"
+msgid "Adjusted Trial Balance"
 msgstr ""
 
 #. src/report/standard-reports/trial-balance.scm
-#: ../intl-scm/guile-strings.c:1930
-msgid "INCOME STATEMENT"
-msgstr ""
+#. src/report/standard-reports/income-statement.scm
+#: ../intl-scm/guile-strings.c:1930 ../intl-scm/guile-strings.c:2010
+msgid "Income Statement"
+msgstr "Einnahmeüberschussrechnung"
 
 #. src/report/standard-reports/trial-balance.scm
-#: ../intl-scm/guile-strings.c:1932
-msgid "BALANCE SHEET"
-msgstr ""
+#. src/report/standard-reports/balance-sheet.scm
+#: ../intl-scm/guile-strings.c:1932 ../intl-scm/guile-strings.c:2256
+msgid "Balance Sheet"
+msgstr "Bilanz"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1934
@@ -16472,41 +16488,44 @@ msgid "Secondary Sort Order"
 msgstr "Sekundäre Sortierreihenfolge"
 
 #. src/report/standard-reports/income-statement.scm
-#: ../intl-scm/guile-strings.c:2010
-msgid "Income Statement"
-msgstr ""
-
-#. src/report/standard-reports/income-statement.scm
-#: ../intl-scm/guile-strings.c:2020
-msgid "Income Statement Start Date"
-msgstr ""
+#. src/report/standard-reports/equity-statement.scm
+#: ../intl-scm/guile-strings.c:2020 ../intl-scm/guile-strings.c:2602
+msgid "Start Date"
+msgstr "Anfangsdatum"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2022
 msgid "Start of the period this income statement will cover"
 msgstr ""
+"Anfangsdatum des Zeitraumes, der in dieser Einnahmeüberschussrechnung "
+"betrachtet wird"
 
 #. src/report/standard-reports/income-statement.scm
-#: ../intl-scm/guile-strings.c:2024
-msgid "Income Statement End Date"
-msgstr ""
+#. src/report/standard-reports/equity-statement.scm
+#: ../intl-scm/guile-strings.c:2024 ../intl-scm/guile-strings.c:2606
+msgid "End Date"
+msgstr "Enddatum"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2026
 msgid "End of the period this income statement will cover"
 msgstr ""
+"Enddatum des Zeitraumes, der in dieser Einnahmeüberschussrechnung betrachtet "
+"wird"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2036 ../intl-scm/guile-strings.c:2282
 msgid "Flatten list to depth limit"
-msgstr ""
+msgstr "Baumstruktur ab Tiefenlimit flach darstellen"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2038 ../intl-scm/guile-strings.c:2284
 msgid "Displays accounts which exceed the depth limit at the depth limit"
 msgstr ""
+"Konten, die tiefer als das gegebene Tiefenlimit in der Baumstruktur stehen, "
+"am Tiefenlimit darstellen"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -16546,7 +16565,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:2052 ../intl-scm/guile-strings.c:2298
 #: ../intl-scm/guile-strings.c:2440
 msgid "Omit zero balance figures"
-msgstr ""
+msgstr "Salden ignorieren, die Null betragen"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/balance-sheet.scm
@@ -16597,12 +16616,12 @@ msgstr ""
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2072
 msgid "Label the expense section"
-msgstr ""
+msgstr "Aufwendungsabschnitt beschriften"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2074
 msgid "Whether or not to include a label for the expense section"
-msgstr ""
+msgstr "Ob eine Beschriftung für den Abschnitt mit Aufwandskonten angezeigt wird"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2076
@@ -16924,11 +16943,6 @@ msgid "Units"
 msgstr "Maßeinheiten"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../intl-scm/guile-strings.c:2256
-msgid "Balance Sheet"
-msgstr "Bilanz"
-
-#. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2266
 msgid "Balance Sheet Date"
 msgstr "Bilanzdatum"
@@ -17052,12 +17066,14 @@ msgstr "Kontenübersicht zu diesem Datum"
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2424
 msgid "Depth limit behavior"
-msgstr ""
+msgstr "Tiefenlimit Verwendung"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2426
 msgid "How to treat accounts which exceed the specified depth limit (if any)"
 msgstr ""
+"Festlegen, wie das Tiefenlimit für Konten in der Baumstruktur verwendet "
+"werden soll"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2452
@@ -17172,27 +17188,20 @@ msgstr "Gesamter Ertrag"
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2592
 msgid "Equity Statement"
-msgstr ""
-
-#. src/report/standard-reports/equity-statement.scm
-#: ../intl-scm/guile-strings.c:2602
-msgid "Equity Statement Start Date"
-msgstr ""
+msgstr "Eigenkapitalbilanz"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2604
 msgid "Start of the period this equity statement will cover"
 msgstr ""
-
-#. src/report/standard-reports/equity-statement.scm
-#: ../intl-scm/guile-strings.c:2606
-msgid "Equity Statement End Date"
-msgstr ""
+"Anfangsdatum des Zeitraums, der in dieser Eigenkapitalbilanz berücksichtigt "
+"wird"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2608
 msgid "End of the period this equity statement will cover"
 msgstr ""
+"Enddatum des Zeitraums, der in dieser Eigenkapitalbilanz berücksichtigt wird"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2612
@@ -17212,12 +17221,12 @@ msgstr "Abhebungen"
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2674
 msgid "Increase in capital"
-msgstr ""
+msgstr "Kapitalerhöhung"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2676
 msgid "Decrease in capital"
-msgstr ""
+msgstr "Kapitalreduzierung"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2680
@@ -18232,8 +18241,8 @@ msgstr "Die Anschrift Ihres Geschäfts"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3674
-msgid "The ID for your company (eg 'Tax-ID: 00-000000"
-msgstr ""
+msgid "The ID for your company (eg 'Tax-ID: 00-000000)"
+msgstr "Eine Nummer ihrer Firma (z.B. Tax-ID: 00-000000)"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3676
@@ -18856,7 +18865,10 @@ msgid ""
 "Warning!! This is a DEVELOPMENT version of GnuCash. It probably has lots of "
 "bugs and unstable features! If you are looking for a stable personal finance "
 "application, you should use the latest release of GnuCash 1.8."
-msgstr "Vorsicht: Das ist eine Entwicklungsversion von GnuCash. Hier können sich alle möglichen Fehler drin rumtreiben. Wenn Sie eine stabile Version suchen, sollten sie die letzte Version von GnuCash 1.8.x benutzen!"
+msgstr ""
+"Vorsicht: Das ist eine Entwicklungsversion von GnuCash. Hier können sich "
+"alle möglichen Fehler drin rumtreiben. Wenn Sie eine stabile Version suchen, "
+"sollten sie die letzte Version von GnuCash 1.8.x benutzen!"
 
 #: ../doc/tip_of_the_day.list.in:6
 msgid ""
