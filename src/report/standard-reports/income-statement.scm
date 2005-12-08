@@ -58,10 +58,10 @@
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual"))
 
-(define optname-start-date (N_ "Income Statement Start Date"))
+(define optname-start-date (N_ "Start Date"))
 (define opthelp-start-date
   (N_ "Start of the period this income statement will cover"))
-(define optname-end-date (N_ "Income Statement End Date"))
+(define optname-end-date (N_ "End Date"))
 (define opthelp-end-date
   (N_ "End of the period this income statement will cover"))
 ;; FIXME this could use an indent option

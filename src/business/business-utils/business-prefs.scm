@@ -36,7 +36,7 @@
   (reg-option
    (gnc:make-string-option
     gnc:*business-label* gnc:*company-id*
-    "b2" (N_ "The ID for your company (eg 'Tax-ID: 00-000000")
+    "b2" (N_ "The ID for your company (eg 'Tax-ID: 00-000000)")
     ""))
 
   (reg-option

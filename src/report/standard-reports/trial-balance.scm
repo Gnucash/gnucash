@@ -597,11 +597,11 @@
 	  (if (equal? report-variant 'work-sheet)
 	      (let* ((headings
 		      (list
-		       (N_ "TRIAL BALANCE")
-		       (N_ "ADJUSTMENTS")
-		       (N_ "ADJUSTED TRIAL BALANCE")
-		       (N_ "INCOME STATEMENT")
-		       (N_ "BALANCE SHEET")
+		       (N_ "Trial Balance")
+		       (N_ "Adjustments")
+		       (N_ "Adjusted Trial Balance")
+		       (N_ "Income Statement")
+		       (N_ "Balance Sheet")
 		       ))
 		     (parent-headings #f)
 		     )
