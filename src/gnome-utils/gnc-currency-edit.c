@@ -59,6 +59,7 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
+#include <strings.h>  /* for index() on Solaris */
 #include <ctype.h>
 #include <stdio.h>
 

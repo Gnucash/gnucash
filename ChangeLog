@@ -1,3 +1,13 @@
+2005-12-09  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: g-wrap 1.9.6 can define the module-dir as
+	  share/guile/site -- we want to make sure to get rid of
+	  the /site when computing the libdir from this.  Otherwise
+	  the runtime will fail to find the g-wrap runtime libraries.
+	* src/gnome-utils/gnc-currency-edit.c:
+	* src/business/business-gnome/business-urls.c:
+	  include <strings.h> to compile on Solaris.
+
 2005-12-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/income-statement.scm, *.scm:

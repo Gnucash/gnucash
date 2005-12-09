@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <strings.h>  /* index() on Solaris */
 
 #include "gnc-html.h"
 #include "gnc-ui-util.h"
