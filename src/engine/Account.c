@@ -935,6 +935,87 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
   LEAVE ("(acc=%p, split=%p)", acc, split);
 }
 
+/********************************************************************\
+\********************************************************************/
+
+static void
+xaccPreSplitMove (Split *split, gpointer dummy)
+{
+  xaccTransBeginEdit (xaccSplitGetParent (split));
+}
+
+static void
+xaccPostSplitMove (Split *split, Account *accto)
+{
+  Transaction *trans;
+
+  split->acc = accto;
+  split->amount = gnc_numeric_convert (split->amount,
+				       xaccAccountGetCommoditySCU(accto),
+				       GNC_HOW_RND_ROUND);
+  trans = xaccSplitGetParent (split);
+  xaccTransCommitEdit (trans);
+  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
+}
+
+void
+xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
+{
+  /* Handle special cases. */
+  if (!accfrom) return;
+  if (!accto) return;
+  if (!accfrom->splits) return;
+  if (accfrom == accto) return;
+
+  ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
+
+  /* check for book mix-up */
+  g_return_if_fail (accfrom->inst.book == accto->inst.book);
+
+  /* Begin editing both accounts and all transactions in accfrom. */
+  g_list_foreach(accfrom->splits, (GFunc)xaccPreSplitMove, NULL);
+  xaccAccountBeginEdit(accfrom);
+  xaccAccountBeginEdit(accto);
+
+  /* Concatenate accfrom's lists of splits and lots to accto's lists. */
+  accto->splits = g_list_concat(accto->splits, accfrom->splits);
+  accto->lots = g_list_concat(accto->lots, accfrom->lots);
+
+  /* Set appropriate flags. */
+  accfrom->balance_dirty = TRUE;
+  accfrom->sort_dirty = FALSE;
+  accto->balance_dirty = TRUE;
+  accto->sort_dirty = TRUE;
+
+  /*
+   * Change each split's account back pointer to accto.
+   * Convert each split's amount to accto's commodity.
+   * Commit to editing each transaction.
+   */
+  g_list_foreach(accfrom->splits, (GFunc)xaccPostSplitMove, (gpointer)accto);
+
+  /* Finally empty accfrom. */
+  accfrom->splits = NULL;
+  accto->lots = NULL;
+
+  /*
+   * DNJ - I don't really understand why this is necessary,
+   *       but xaccAccountInsertSplit does it.
+   */
+  if (accto->inst.editlevel == 1)
+  {
+    accto->splits = g_list_sort(accto->splits, split_sort_func);
+    accto->sort_dirty = FALSE;
+  }
+
+  /* Commit to editing both accounts. */
+  mark_account (accfrom);
+  mark_account (accto);
+  xaccAccountCommitEdit(accfrom);
+  xaccAccountCommitEdit(accto);
+  LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
+}
+
 
 /********************************************************************\
  * xaccAccountRecomputeBalance                                      *

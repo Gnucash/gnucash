@@ -1,5 +1,12 @@
 2005-12-10  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/account.glade:
+	* src/engine/Account.[ch]: David Jafferian's account deletion
+	patch that queries the user about whether to delete or move any
+	contained transactions and sub-accounts.
+
 	* src/gnome-utils/dialog-utils.c: Fix the glade auto-connect code
 	so it doesn't swap the callback arguments when an explicit
 	"object" is provided to the callback.  (This is an unused code

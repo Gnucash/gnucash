@@ -512,6 +512,10 @@ void         xaccAccountInsertSplit (Account *account, Split *split);
  *    pointer. */
 SplitList*      xaccAccountGetSplitList (Account *account);
 
+/** The xaccAccountMoveAllSplits() routine reassigns each of the splits
+ *  in accfrom to accto. */
+void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
+
 /** \warning  Unimplemented */
 gpointer xaccAccountForEachSplit(Account *account,
                                  SplitCallback,
