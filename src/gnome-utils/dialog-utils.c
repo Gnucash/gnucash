@@ -913,9 +913,9 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
   if (other_object) {
     if (signal_after)
       g_signal_connect_object (signal_object, signal_name, func,
-			       other_object, G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+			       other_object, G_CONNECT_AFTER);
     else
-      g_signal_connect_swapped (signal_object, signal_name, func, other_object);
+      g_signal_connect_object (signal_object, signal_name, func, other_object, 0);
   } else {
     if (signal_after)
       g_signal_connect_after(signal_object, signal_name, func, user_data);

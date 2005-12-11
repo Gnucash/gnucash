@@ -1,5 +1,10 @@
 2005-12-10  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-utils.c: Fix the glade auto-connect code
+	so it doesn't swap the callback arguments when an explicit
+	"object" is provided to the callback.  (This is an unused code
+	path that is about to be used.)
+
 	* src/register/register-gnome/gnucash-grid.c: Andreas Köhler's
 	patch to fix the alignment of cells in the register.
 
