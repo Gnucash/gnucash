@@ -251,7 +251,7 @@ gnc_hbci_maketrans_final(HBCITransDialog *td, Account *gnc_acc,
     gnc_xfer_dialog_set_amount (transdialog, gnc_numeric_neg (amount));
     case SINGLE_TRANSFER:
     default:*/
-  gnc_xfer_dialog_set_amount (transdialog, amount);
+  gnc_xfer_dialog_set_amount (transdialog, gnc_numeric_neg (amount));
   /*}*/
   /* gnc_xfer_dialog_toggle_currency_frame (transdialog, FALSE); */
 
