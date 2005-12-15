@@ -2864,7 +2864,7 @@ and placeholder accounts may have an opening balance.</property>
 		      <child>
 			<widget class="GtkLabel" id="sa_trans_rw">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">One or more sub- accounts contain transactions. What would you like to do with these transactions?</property>
+			  <property name="label" translatable="yes">One or more sub-accounts contain transactions. What would you like to do with these transactions?</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>

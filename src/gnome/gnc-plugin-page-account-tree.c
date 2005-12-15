@@ -1121,7 +1121,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, dialog);
 
     label = glade_xml_get_widget (xml, "header");
-    message = g_strdup_printf("Deleting account %s", acct_name);
+    message = g_strdup_printf(_("Deleting account %s"), acct_name);
     gtk_label_set_text(GTK_LABEL(label), message);
     g_free(message);
 
@@ -1228,7 +1228,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	lines[++i] = g_strdup_printf(format, name);
       } else if (splits) {
 	format = _("All transactions in this account will be deleted.");
-	lines[++i] = g_strdup_printf(format);
+	lines[++i] = g_strdup_printf("%s", format);
       }
     }
     if (children) {
@@ -1239,7 +1239,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	lines[++i] = g_strdup_printf(format, name);
       } else {
 	format = _("All of its subaccounts will be deleted.");
-	lines[++i] = g_strdup_printf(format);
+	lines[++i] = g_strdup_printf("%s", format);
 	if (dta) {
 	  name = xaccAccountGetFullName(ta, gnc_get_account_separator ());
 	  format = _("All sub-account transactions will be moved to "
@@ -1247,11 +1247,11 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	  lines[++i] = g_strdup_printf(format, name);
 	} else if (delete_res.has_splits) {
 	  format = _("All sub-account transactions will be deleted.");
-	  lines[++i] = g_strdup_printf(format);
+	  lines[++i] = g_strdup_printf("%s", format);
 	}
       }
     }
-    lines[++i] = _("Are you sure you want to do this ?");
+    lines[++i] = _("Are you sure you want to do this?");
     lines[i] = NULL;
     i--; /* Don't try to free the constant question. */
     message = g_strjoinv(" ", lines);
