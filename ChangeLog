@@ -1,3 +1,10 @@
+2005-12-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/*.scm: I18n string cleanup: Fix
+	"(N_" for "(_" where applicable.
+
+	* po/glossary/gnc-glossary.txt: Add explanation for trial balance.
+
 2005-12-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c: The amount of the
@@ -4823,3 +4830,286 @@
 
 	* GNOME2_STATUS: Update from Paul Kronenwetter comparing g2 to HEAD/1.8.
 
+-=-=-=- cvs gnome2 branch ChangeLog is above this line -=-=-=-
+
+
+2005-10-26  Christian Stimming  <stimming@tuhh.de>
+
+	* po/eu.po: Add Basque translation by Mikel Olasagasti
+	<hey_neken@mundurat.net>.
+
+2005-10-16  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/pl.po: Added polish glossary by A. Tokarski
+	<szczur@malinablue.punkt.pl>
+
+2005-10-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/Transaction.c: Remove misleading (char*) casts by
+	Linas Vepstas from 2003-09-14, but nevertheless the code doesn't
+	have any errorneous double-free's at this point.
+
+2005-10-07  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/iso-4217-currencies.scm: Fix spelling of TJS
+	currency. Fixes #310697.
+
+2005-10-06  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/date-utilities.scm: Patch from Yves-Eric Martin
+	<yem_lists.gnucash.org@filter.yve.net> to make it easier for users
+	to change the financial year end date.  They still have to edit a
+	scheme file though.
+
+2005-08-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c (inputBoxCB): Aaarg,
+	fix extremely stupid bug that occasionally crashes the PIN entry.
+
+2005-08-15  David Hampton  <hampton@employees.org>
+
+	* src/engine/Query.c: Todd T. Fries patch for compilation on
+	OpenBSD 64bit architectures.
+
+2005-08-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm:  need to
+	  properly recurse in gnc:owner-get-owner-id.  there is no
+	  gnc:owner-get-id API.
+
+2005-07-17  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/openhbci.m4: Remove old unused macros. Add macro name
+	quotations as required by newer automake.
+
+2005-07-10  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm: Add the new Romanian Leu.
+
+2005-05-23  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Fix handling of debit
+	notes -- they were broken at all times since the aqbanking
+	transition, oops.
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Add sanity checks and
+	ask user when there are no purpose lines.
+
+2005-05-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
+	Finally generalize the AqBanking setup call. Now the setup wizard
+	for OFX-DirectConnect can be called by Tools -> HBCI Setup as
+	well.
+
+2005-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Improve debugging
+	messages.
+
+2005-04-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix forgotten NULL
+	check as reported by Martin Preuss <aquamaniac@gmx.de>.
+
+2005-04-14  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm:
+	* src/engine/gnc-commodity.c: Update the Bulgarian Lev and add the
+	Malagasy Ariary.
+
+2005-04-06  Christian Stimming  <stimming@tuhh.de>
+
+	* po/rw.po, po/glossary/rw.po: Add Kinyarwanda translation by
+	Steven Michael Murphy <murf@e-tools.com>
+
+2005-04-06  David Hampton  <hampton@employees.org>
+
+	* src/bin/generate-gnc-script: Be vocal when using deprecated
+	guile functions.
+
+	* src/report/report-system/report-system.scm:
+
+	* src/report/utility-reports/utility-reports.scm:
+	* src/business/business-reports/business-reports.scm: Use
+	re-export instead of export for one function.
+
+2005-04-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Fix warning about
+	deprecated aqbanking function in aqbanking-1.0.7
+
+2005-03-20  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Retrieve the current
+	book's character encoding which so far is identical to the
+	locale's encoding by nl_langinfo().
+
+	* src/import-export/hbci/hbci-interaction.c: Fixed ignored 'abort'
+	button.
+
+2005-03-19  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c (gnc_hbci_descr_tognc):
+	Correctly convert imported transaction description from utf-8 to
+	the local encoding.
+
+2005-03-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Improve user
+	message when downloaded balance is already identical to reconciled
+	balance.
+
+2005-03-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c, hbci-interaction.h:
+	Improve error handling in HBCI operations.
+
+2005-02-26  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-kvp.c (force_account_dirty):
+	Force account 'dirty' after modifying the kvp_frame. Hopefully
+	fixes #165096.
+
+2005-02-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c, import-backend.h,
+	import-main-matcher.h: Revert the change in December about date
+	matching thresholds that broke some OFX import. Now, the hard
+	limit days interval is set by the importing sub-module when
+	creating the dialog. This way, HBCI and OFX can set their
+	different requirements. (Note: QIF does not use this code at all.)
+
+2005-02-20  Neil Williams  <linux@codehelp.co.uk>
+	* src/engine/qof_book_merge.c: Fix double free of the targetList
+	entities that cause xaccGroupGetNumSubAccounts to generate a
+	segmentation fault.
+	* src/engine/kvp_frame.c:
+	* src/engine/kvp_frame.h:
+	Add kvp_value_to_bare_string to
+	generate strings without debug information.
+	* src/engine/qofsession.h:
+	* src/engine/qofsession.c:
+	Documentation tweaks to bring them into line with QOF and the
+	gnucash-gnome2-dev branch.
+
+2005-02-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/dialog-utils.c: When trying to load the symbol
+	  from a glade file, Fall back to dlsym() if g_module_symbol()
+	  fails.  This is necessary to find the symbols on on certain *BSD
+	  systems.
+
+	* acinclude.m4: Add mips, mipsel, arm, and m68k for Debian.
+
+2005-02-06  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.11 release
+
+2005-02-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/date.c: Fix the last-day-of-month computation for
+	  leap years.  Need to use modulo, not divide.  (Patch by
+	  Neil Williams.
+
+2005-02-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix HBCI date range
+	for statement download.
+
+2005-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/locale-specific/us/Makefile.am: make sure the
+	  scheme reports are part of the DIST.
+
+2005-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Account.c:
+	  This patch fixes: (QofAccessFunc)xaccAccountSetNonStdSCU in
+	  src/engine/Account.c - that's a Set routine allocated as a
+	  QofAccessFunc - the patch changes it to the appropriate Get
+	  routine - the QofSetterFunc is OK.
+
+	Neil Williams' QOF sync patch:
+	* This patch updates the QOF merge code to current QOF to bring
+	  the HEAD branch into sync. This update also makes
+	  qof_book_merge_param_as_string output strings that are
+	  compatible with QSF: using false instead of FALSE in string
+	  output and using the QSF_XSD_TIME for the datestrings.
+
+	* src/engine/Account.c:
+	  - updated implementation of qofAccountSetParent().
+
+	* src/engine/Scrub.c:
+	* src/engine/Transaction.c:
+	  Add the transaction guid to some error warning messages.
+	  Fixes #165571.
+
+2005-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	David Montenegro's patch for bugs #95551, #124367.
+	* src/report/standard-reports/account-summary.scm:
+	  Rewrote account summary report. Now has fields for
+	  more account metadata. Properly handles mixed
+	  asset/liability subaccounts.
+	* src/report/standard-reports/html-acct-table.scm:
+	  Added functionality (account-type &c) and bug fixes
+	  (lone zb subtotals, spurious 'recursive-bal, typos)
+	  needed to make the new account-summary.scm work.
+
+	Thomas Bushnell's patch to protect non-backup pruning (#164875)
+	* src/backend/file/gnc-backend-file.c:
+	  When working on the file foo.xac, backups are named
+	  foo.DATE.xac.  But the backup file pruner will prune any old
+	  file named foo.DATE.anything.
+
+2005-01-29  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, src/tax/us/gncmod-tax-us.c,
+	src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	src/app-utils/gnc-ui-util.c: Make localized tax categories
+	disabled by default; can be enabled by
+	--enable-locale-specific-tax switch.
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Enable debit notes
+	again. Various other improvements.
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button),
+	configure.in: Adapt to latest changes in aqbanking; external
+	wizard name is no longer hard-coded here but is asked from
+	aqbanking.
+
+2005-01-23  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c: Properly accumulate
+	  splits (bug #165053).  Also fixes a (related) memory leak
+	  (caused by the same lack-of-reference to accumulated splits).
+
+2005-01-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/app-utils/gnc-ui-util.c: Modify tax option code to load
+	tax-de_DE module in the appropriate locale.
+
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	de_DE.scm: Add scheme module for locale-report/us
+	resp. locale-report/de_DE again because it seems to be required.
+
+2005-01-15  Derek Atkins  <derek@ihtfp.com>
+
+	* Neil William's patch to remove static mergeData context.
+
+2005-01-12  Christian Stimming  <stimming@tuhh.de>
+
+	* rpm/gnucash.spec.in, rpm/README: Remove obsolete package
+	requirements from rpm spec file. Add warnings about using these
+	spec files with caution.
+
+2005-01-10  Christian Stimming  <stimming@tuhh.de>
+
+	* src/engine/guid.h: Fix gcc4 warnings as pointed out by bug
+	#162635
+
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c,
+	src/tax/us/gncmod-tax-us.c: For German tax categories, make sure
+	the module name will match the de_DE locale or will fall back to
+	us module name all the time.
