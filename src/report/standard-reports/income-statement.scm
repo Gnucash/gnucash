@@ -186,7 +186,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
@@ -468,7 +468,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering %s to %s"))
+				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -502,8 +502,8 @@
 	       
 	       (terse-period? #t)
 	       (period-for (if terse-period?
-			       (string-append " " (N_ "for Period"))
-			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+			       (string-append " " (_ "for Period"))
+			       (sprintf #f (string-append ", " (_ "%s to %s"))
 					(gnc:print-date start-date-printable)
 					(gnc:print-date end-date-tp))
 			       )
@@ -644,8 +644,8 @@
 	  
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Net income") period-for)
-	   (string-append (N_ "Net loss") period-for)
+	   (string-append (_ "Net income") period-for)
+	   (string-append (_ "Net loss") period-for)
 	   net-income
 	   (* 2 (- tree-depth 1)) exchange-fn #f #f
 	   )

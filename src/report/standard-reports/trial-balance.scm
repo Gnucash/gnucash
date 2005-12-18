@@ -151,7 +151,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     
     ;; the period over which to collect adjusting/closing entries and
@@ -385,8 +385,8 @@
 	  (gnc:case-exchange-fn price-source report-commodity end-date-tp))
 	 (terse-period? #t)
 	 (period-for (if terse-period?
-			 (string-append " " (N_ "for Period"))
-			 (sprintf #f (string-append ", " (N_ "%s to %s"))
+			 (string-append " " (_ "for Period"))
+			 (sprintf #f (string-append ", " (_ "%s to %s"))
 				  (gnc:print-date start-date-printable)
 				  (gnc:print-date end-date-tp))
 			 ))
@@ -398,7 +398,7 @@
 		      company-name report-title
 		      (gnc:print-date end-date-tp))
 	     (sprintf #f (string-append "%s %s "
-					(N_ "For Period Covering %s to %s"))
+					(_ "For Period Covering %s to %s"))
 		      company-name report-title
 		      (gnc:print-date start-date-printable)
 		      (gnc:print-date end-date-tp))
@@ -597,11 +597,11 @@
 	  (if (equal? report-variant 'work-sheet)
 	      (let* ((headings
 		      (list
-		       (N_ "Trial Balance")
-		       (N_ "Adjustments")
-		       (N_ "Adjusted Trial Balance")
-		       (N_ "Income Statement")
-		       (N_ "Balance Sheet")
+		       (_ "Trial Balance")
+		       (_ "Adjustments")
+		       (_ "Adjusted Trial Balance")
+		       (_ "Income Statement")
+		       (_ "Balance Sheet")
 		       ))
 		     (parent-headings #f)
 		     )
@@ -641,13 +641,13 @@
 	  ;; add the DEBIT/CREDIT headers
 	  (let* ((debit-cell
 		  (gnc:make-html-table-cell/markup
-		   "th" (N_ "DEBIT")))
+		   "th" (_ "Debit")))
 		 (credit-cell
 		  (gnc:make-html-table-cell/markup
-		   "th" (N_ "CREDIT")))
+		   "th" (_ "Credit")))
 		 (row (append
 		       (list (gnc:make-html-table-cell/markup
-			      "total-label-cell" (N_ "Account Name")))
+			      "total-label-cell" (_ "Account Name")))
 		       (gnc:html-make-empty-cells (- account-cols 1))
 		       (list debit-cell)
 		       (list credit-cell))
@@ -827,7 +827,7 @@
 				  acct-table)))
 		      )
 		 (add-line
-		  build-table (N_ "Unrealized Gains")
+		  build-table (_ "Unrealized Gains")
 		  neg-unrealized-gain-collector)
 		 ;; make table line wide enough
 		 (gnc:html-table-set-cell!
@@ -1057,7 +1057,7 @@
 		       exchange-fn show-fcur?))
 		(gnc:html-table-add-labeled-amount-line!
 		 build-table tbl-width "primary-subheading" #f
-		 (if is-credit? (N_ "Net Income") (N_ "Net Loss"))
+		 (if is-credit? (_ "Net Income") (_ "Net Loss"))
 		 0 1 "total-label-cell"
 		 is-entry
 		 (+ account-cols (* 2 is-col) (if is-credit? 0 1))

@@ -142,7 +142,7 @@
     (add-option
       (gnc:make-string-option
       gnc:pagename-general optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
 
@@ -467,10 +467,10 @@
 	  (gnc:html-table-append-row!
 	   build-table
 	   (append
-	    (if show-account-code? (list (N_ "Code")) '())
-	    (if show-account-type? (list (N_ "Type")) '())
-	    (if show-account-desc? (list (N_ "Description")) '())
-	    (list (N_ "Account title"))
+	    (if show-account-code? (list (_ "Code")) '())
+	    (if show-account-type? (list (_ "Type")) '())
+	    (if show-account-desc? (list (_ "Description")) '())
+	    (list (_ "Account title"))
 	    )
 	   )
 	  ;; add any fields to be displayed before the account name
@@ -486,7 +486,7 @@
 		)
 	  (if show-account-bals?
 	      (gnc:html-table-set-cell!
-	       build-table 0 (+ cur-col account-cols) (N_ "Balance"))
+	       build-table 0 (+ cur-col account-cols) (_ "Balance"))
 	      )
 	  (let ((row 0))
 	    (while (< row table-rows)
@@ -506,7 +506,7 @@
 	  (if show-account-notes?
 	      (begin
 		(gnc:html-table-set-cell!
-		 build-table 0 cur-col (N_ "Notes"))
+		 build-table 0 cur-col (_ "Notes"))
 		(add-col 'account-notes)
 		)
 	      )

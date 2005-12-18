@@ -155,7 +155,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
@@ -319,7 +319,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering %s to %s"))
+				 (_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -383,8 +383,8 @@
 		   account end-date-tp #f)))
 	       (terse-period? #t)
 	       (period-for (if terse-period?
-			       (string-append " " (N_ "for Period"))
-			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+			       (string-append " " (_ "for Period"))
+			       (sprintf #f (string-append ", " (_ "%s to %s"))
 					(gnc:print-date start-date-printable)
 					(gnc:print-date end-date-tp))
 			       ))
@@ -628,28 +628,28 @@
 	  
 	  (report-line
 	   build-table
-	   (string-append (N_ "Capital") ", "
+	   (string-append (_ "Capital") ", "
 			  (gnc:print-date start-date-printable))
 	   #f start-total-equity
 	   1 start-exchange-fn #f "primary-subheading"
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Net income") period-for)
-	   (string-append (N_ "Net loss") period-for)
+	   (string-append (_ "Net income") period-for)
+	   (string-append (_ "Net loss") period-for)
 	   net-income
 	   0 end-exchange-fn #f #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Investments") period-for)
+	   (string-append (_ "Investments") period-for)
 	   #f
 	   investments
 	   0 end-exchange-fn #f #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Withdrawals") period-for)
+	   (string-append (_ "Withdrawals") period-for)
 	   #f
 	   withdrawals
 	   0 end-exchange-fn #f #f
@@ -657,22 +657,22 @@
 	  (or (gnc:commodity-collector-allzero? net-unrealized-gains)
 	      (report-line
 	       build-table 
-	       (N_ "Unrealized Gains")
-	       (N_ "Unrealized Losses")
+	       (_ "Unrealized Gains")
+	       (_ "Unrealized Losses")
 	       net-unrealized-gains
 	       0 end-exchange-fn #f #f
 	       )
 	   )
 	  (report-line
 	   build-table 
-	   (N_ "Increase in capital")
-	   (N_ "Decrease in capital")
+	   (_ "Increase in capital")
+	   (_ "Decrease in capital")
 	   capital-increase
 	   1 end-exchange-fn use-rules? #f
 	   )
 	  (report-line
 	   build-table 
-	   (string-append (N_ "Capital") ", "
+	   (string-append (_ "Capital") ", "
 			  (gnc:print-date end-date-tp))
 	   #f
 	   end-total-equity

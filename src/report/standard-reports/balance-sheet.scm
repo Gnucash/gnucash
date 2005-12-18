@@ -83,9 +83,9 @@
 
 (define optname-date (N_ "Balance Sheet Date"))
 (define opthelp-date (N_ "Balance sheet as-of date"))
-(define optname-report-form (N_ "Report form Balance Sheet"))
+(define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
-  (N_ "Create report in report (as opposed to report) form"))
+  (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -201,7 +201,7 @@
     (add-option
       (gnc:make-string-option
       (N_ "General") optname-party-name
-      "b" opthelp-party-name (N_ "")))
+      "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
@@ -721,14 +721,14 @@
 	  (and (not (gnc:commodity-collector-allzero?
 		     retained-earnings))
 	       (add-subtotal-line right-table
-				  (N_ "Retained Earnings")
-				  (N_ "Retained Losses")
+				  (_ "Retained Earnings")
+				  (_ "Retained Losses")
 				  retained-earnings))
 	  (and (not (gnc:commodity-collector-allzero?
 		     unrealized-gain-collector))
 	       (add-subtotal-line right-table
-				  (N_ "Unrealized Gains")
-				  (N_ "Unrealized Losses")
+				  (_ "Unrealized Gains")
+				  (_ "Unrealized Losses")
 				  unrealized-gain-collector))
 	  (if total-equity?
 	      (add-subtotal-line
