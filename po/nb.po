@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 10:24+0100\n"
-"PO-Revision-Date: 2005-12-17 16:34+0800\n"
+"PO-Revision-Date: 2005-12-18 16:58+0800\n"
 "Last-Translator: Tor Harald Thorland <tortho@strigen.com>\n"
 "Language-Team: Norwegian/Bokmaal\n"
 "MIME-Version: 1.0\n"
@@ -594,7 +594,7 @@ msgstr "Navn"
 #: ../src/business/business-gnome/dialog-invoice.c:333
 #: ../src/business/business-gnome/dialog-order.c:174
 msgid "You need to supply Billing Information."
-msgstr ""
+msgstr "Du må fylle inn Regnings Informasjon."
 
 #: ../src/business/business-gnome/dialog-invoice.c:487
 msgid "Are you sure you want to delete the selected entry?"
@@ -1349,7 +1349,7 @@ msgstr "Kunde Nummer: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:14
 msgid "Discount: "
-msgstr "Rabat: "
+msgstr "Rabatt: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:15
 #: ../src/business/business-gnome/glade/employee.glade.h:11
@@ -1587,7 +1587,8 @@ msgstr ""
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
+msgstr "Faktura ID nummer.  Hvis feltet er blankt vil et fornuftig nummer bli valgt for "
+"deg"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:27
 msgid ""
@@ -1618,7 +1619,8 @@ msgstr "Eier Informasjon"
 #: ../src/business/business-gnome/glade/job.glade.h:11
 msgid ""
 "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
+msgstr "Jobb·ID·nummer.··Hvis·feltet·er·blankt·vil·et·fornuftig·nummer·bli·valgt·for·"
+"deg"
 
 #: ../src/business/business-gnome/glade/order.glade.h:5
 msgid "Close Order"
@@ -1657,7 +1659,8 @@ msgstr "Referanse"
 msgid ""
 "The order ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr ""
+msgstr "Ordre·ID·nummer.··Hvis·feltet·er·blankt·vil·et·fornuftig·nummer·bli·valgt·for·"
+"deg"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/portfolio.scm
@@ -2089,7 +2092,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:127
 #: ../src/gnome/glade/register.glade.h:99
 msgid "_Enter"
-msgstr "_Oppgi"
+msgstr "_Før Inn"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:128
 msgid "Record the current entry"
@@ -2183,7 +2186,7 @@ msgstr "Beskriv_else"
 #: ../src/gnome/glade/register.glade.h:29
 #: ../src/gnome/gnc-plugin-page-register.c:291
 msgid "Enter"
-msgstr "Poster"
+msgstr "Før Inn"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:192
 #: ../src/gnome/glade/register.glade.h:5
@@ -2427,7 +2430,7 @@ msgstr "Utgifts Konto"
 #: ../intl-scm/guile-strings.c:3726 ../intl-scm/guile-strings.c:3914
 #: ../intl-scm/guile-strings.c:4078
 msgid "Action"
-msgstr "Handling"
+msgstr "Type"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -2437,11 +2440,11 @@ msgstr "Handling"
 #: ../intl-scm/guile-strings.c:3888 ../intl-scm/guile-strings.c:3930
 #: ../intl-scm/guile-strings.c:4052 ../intl-scm/guile-strings.c:4094
 msgid "Discount"
-msgstr ""
+msgstr "Rabatt"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:87
 msgid "Discount Type"
-msgstr ""
+msgstr "Rabatt Type"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:92
 msgid "Discount How"
@@ -2473,7 +2476,7 @@ msgstr "MVA Koder"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:112
 msgid "Taxable?"
-msgstr ""
+msgstr "Momspliktig?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:117
 msgid "Tax Included?"
@@ -2490,7 +2493,7 @@ msgstr "Fakturert?"
 #: ../intl-scm/guile-strings.c:3796 ../intl-scm/guile-strings.c:3850
 #: ../intl-scm/guile-strings.c:4008 ../intl-scm/guile-strings.c:4172
 msgid "Subtotal"
-msgstr ""
+msgstr "Delsum"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -2517,7 +2520,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:581
 msgid "Enter the Entry Description"
-msgstr ""
+msgstr "Fyll inn beskrivelse av innføringen"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:596
 msgid "Enter the Discount Amount"
@@ -2573,7 +2576,7 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:696
 msgid "Is this entry taxable?"
-msgstr ""
+msgstr "Er denne anførselen momspliktig?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:705
 msgid "Is the tax already included in the price of this entry?"
@@ -8703,12 +8706,12 @@ msgstr ""
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:81 ../intl-scm/guile-strings.c:4336
 msgid "End of this month"
-msgstr ""
+msgstr "Slutten av denne måneden"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:82 ../intl-scm/guile-strings.c:4344
 msgid "End of previous month"
-msgstr ""
+msgstr "Slutten av forrige måned"
 
 #: ../src/gnome-utils/gnc-period-select.c:83
 msgid "End of this quarter"
@@ -8725,7 +8728,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-period-select.c:86
 msgid "End of previous year"
-msgstr ""
+msgstr "Slutten av forrige år"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:89
@@ -8958,7 +8961,7 @@ msgstr ""
 
 #: ../src/gnome-utils/preferences.glade.h:14
 msgid "<b>Default Report Currency</b>"
-msgstr ""
+msgstr "<b>Standard Rapport Valuta</b>"
 
 #: ../src/gnome-utils/preferences.glade.h:15
 msgid "<b>Default Style</b>"
@@ -9585,7 +9588,7 @@ msgstr "%s:"
 
 #: ../src/gnome/window-main-summarybar.c:491
 msgid "Assets:"
-msgstr ""
+msgstr "Aktiva:"
 
 #: ../src/gnome/window-main-summarybar.c:493
 msgid "Profits:"
@@ -12954,7 +12957,7 @@ msgstr "Rapportens valuta"
 #: ../intl-scm/guile-strings.c:2016 ../intl-scm/guile-strings.c:2158
 #: ../intl-scm/guile-strings.c:2232 ../intl-scm/guile-strings.c:3640
 msgid "Price Source"
-msgstr ""
+msgstr "Pris Kilde"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/daily-reports.scm
@@ -13215,7 +13218,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1278 ../intl-scm/guile-strings.c:1956
 #: ../intl-scm/guile-strings.c:2094
 msgid "Accounts to include"
-msgstr ""
+msgstr "Inkluder følgende kontoer"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/transaction.scm
@@ -13384,7 +13387,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:660 ../intl-scm/guile-strings.c:946
 #: ../intl-scm/guile-strings.c:1988 ../intl-scm/guile-strings.c:2126
 msgid "Display accounts as hyperlinks"
-msgstr ""
+msgstr "Vis kontoer som hyperlenker"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -13429,7 +13432,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1364 ../intl-scm/guile-strings.c:2022
 #: ../intl-scm/guile-strings.c:2164
 msgid "Show Exchange Rates"
-msgstr ""
+msgstr "Vis Vekslings Kurs"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -13744,7 +13747,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:854 ../intl-scm/guile-strings.c:1060
 #: ../intl-scm/guile-strings.c:2200 ../intl-scm/guile-strings.c:2940
 msgid "Assets"
-msgstr ""
+msgstr "Aktiva"
 
 #. src/report/standard-reports/net-barchart.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -13753,7 +13756,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:856 ../intl-scm/guile-strings.c:1062
 #: ../intl-scm/guile-strings.c:2204 ../intl-scm/guile-strings.c:2942
 msgid "Liabilities"
-msgstr ""
+msgstr "Gjeld"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:858
@@ -14036,7 +14039,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1008 ../intl-scm/guile-strings.c:2052
 #: ../intl-scm/guile-strings.c:2188
 msgid "Show subtotals"
-msgstr ""
+msgstr "Vis delsummer"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/account-summary.scm
@@ -14052,7 +14055,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:1012 ../intl-scm/guile-strings.c:2056
 #: ../intl-scm/guile-strings.c:2192
 msgid "Do not show subtotals"
-msgstr ""
+msgstr "Ikke vis delsummer"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/account-summary.scm
@@ -14349,7 +14352,7 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1180 ../intl-scm/guile-strings.c:1216
 msgid "Report Currency"
-msgstr ""
+msgstr "Rapport Valuta"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -14394,7 +14397,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1220 ../intl-scm/guile-strings.c:2818
 msgid "Most recent"
-msgstr ""
+msgstr "Nyeste"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/report-system/options-utilities.scm
@@ -14406,7 +14409,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1224 ../intl-scm/guile-strings.c:2822
 msgid "Nearest in time"
-msgstr ""
+msgstr "Nærmeste i tid"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #. src/report/report-system/options-utilities.scm
@@ -15244,7 +15247,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2130
 msgid "Label the assets section"
-msgstr ""
+msgstr "Overskrift på aktiva delen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2132
@@ -15254,7 +15257,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2134
 msgid "Include assets total"
-msgstr ""
+msgstr "Ta med totale aktiva"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2136
@@ -15264,7 +15267,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2138
 msgid "Label the liabilities section"
-msgstr ""
+msgstr "Overskrift·på·gjeld·delen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2140
@@ -15274,7 +15277,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2142
 msgid "Include liabilities total"
-msgstr ""
+msgstr "Ta med total gjeld"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2144
@@ -15284,7 +15287,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2146
 msgid "Label the equity section"
-msgstr ""
+msgstr "Overskrift·på·egenkapital·delen"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2148
@@ -15294,7 +15297,7 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2150
 msgid "Include equity total"
-msgstr ""
+msgstr "Ta med total egenkapital"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2152
@@ -15304,12 +15307,12 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2202
 msgid "Total Assets"
-msgstr ""
+msgstr "Totale Aktiva"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2206
 msgid "Total Liabilities"
-msgstr ""
+msgstr "Total Gjeld"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2212
@@ -15319,12 +15322,12 @@ msgstr ""
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2218
 msgid "Total Equity"
-msgstr ""
+msgstr "Total Egenkapital"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2220
 msgid "Total Liabilities & Equity"
-msgstr ""
+msgstr "Total Gjeld & Egenkapital"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2222 ../intl-scm/guile-strings.c:2256
@@ -15463,7 +15466,7 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:2320 ../intl-scm/guile-strings.c:2510
 msgid "Enable hyperlinks in reports"
-msgstr ""
+msgstr "Aktiver hyperlenker i rapporter"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -15583,7 +15586,7 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:2374 ../intl-scm/guile-strings.c:2582
 msgid "Default color for subtotal rows."
-msgstr ""
+msgstr "Standard farge for delsum rader."
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -15596,7 +15599,7 @@ msgstr ""
 #. src/report/stylesheets/stylesheet-easy.scm
 #: ../intl-scm/guile-strings.c:2380 ../intl-scm/guile-strings.c:2588
 msgid "Color for subsubtotals"
-msgstr ""
+msgstr "Farge for delsummer"
 
 #. src/report/stylesheets/stylesheet-fancy.scm
 #. src/report/stylesheets/stylesheet-easy.scm
@@ -17204,7 +17207,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3844 ../intl-scm/guile-strings.c:4002
 #: ../intl-scm/guile-strings.c:4166
 msgid "Today Date Format"
-msgstr ""
+msgstr "\"Dagens Dato\" format"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -17213,7 +17216,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3578 ../intl-scm/guile-strings.c:3846
 #: ../intl-scm/guile-strings.c:4004 ../intl-scm/guile-strings.c:4168
 msgid "The format for the date->string conversion for today's date."
-msgstr ""
+msgstr "Formatet for dato->streng konvertering for dagens dato"
 
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3584
@@ -17369,7 +17372,7 @@ msgstr "Faktura Nummer"
 #: ../intl-scm/guile-strings.c:3694 ../intl-scm/guile-strings.c:3882
 #: ../intl-scm/guile-strings.c:4046
 msgid "Charge Type"
-msgstr ""
+msgstr "Type"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17378,7 +17381,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3890 ../intl-scm/guile-strings.c:3936
 #: ../intl-scm/guile-strings.c:4054 ../intl-scm/guile-strings.c:4100
 msgid "Taxable"
-msgstr ""
+msgstr "Momspliktig"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17403,7 +17406,7 @@ msgstr "T"
 #: ../intl-scm/guile-strings.c:3728 ../intl-scm/guile-strings.c:3916
 #: ../intl-scm/guile-strings.c:4080
 msgid "Display the action?"
-msgstr ""
+msgstr "Vis type?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17411,7 +17414,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3734 ../intl-scm/guile-strings.c:3922
 #: ../intl-scm/guile-strings.c:4086
 msgid "Display the quantity of items?"
-msgstr ""
+msgstr "Vis antall?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17419,7 +17422,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3744 ../intl-scm/guile-strings.c:3932
 #: ../intl-scm/guile-strings.c:4096
 msgid "Display the entry's discount"
-msgstr ""
+msgstr "Vis anførselens rabatt"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17427,7 +17430,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3750 ../intl-scm/guile-strings.c:3938
 #: ../intl-scm/guile-strings.c:4102
 msgid "Display the entry's taxable status"
-msgstr ""
+msgstr "Vis anføringenes MVA status"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17443,7 +17446,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3762 ../intl-scm/guile-strings.c:3950
 #: ../intl-scm/guile-strings.c:4114
 msgid "Display the entry's value"
-msgstr ""
+msgstr "Vis anføringens total sum"
 
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:3766
@@ -17489,7 +17492,7 @@ msgstr ""
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:3798
 msgid "Display the subtotals?"
-msgstr ""
+msgstr "Vis delsummer?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17497,7 +17500,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3802 ../intl-scm/guile-strings.c:3966
 #: ../intl-scm/guile-strings.c:4130
 msgid "References"
-msgstr ""
+msgstr "Referanser"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17505,7 +17508,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3804 ../intl-scm/guile-strings.c:3968
 #: ../intl-scm/guile-strings.c:4132
 msgid "Display the invoice references?"
-msgstr ""
+msgstr "Vis referanser for fakturaen?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17529,7 +17532,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3816 ../intl-scm/guile-strings.c:3980
 #: ../intl-scm/guile-strings.c:4144
 msgid "Display the billing id?"
-msgstr ""
+msgstr "Vis regnings id?"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17576,7 +17579,7 @@ msgstr "Tekst"
 #: ../intl-scm/guile-strings.c:3838 ../intl-scm/guile-strings.c:3996
 #: ../intl-scm/guile-strings.c:4160
 msgid "Extra Notes"
-msgstr ""
+msgstr "Ekstra Notater"
 
 #. src/business/business-reports/easy-invoice.scm
 #: ../intl-scm/guile-strings.c:3840
@@ -17589,7 +17592,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3854 ../intl-scm/guile-strings.c:4012
 #: ../intl-scm/guile-strings.c:4176
 msgid "Amount Due"
-msgstr ""
+msgstr "Å Betale"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17635,7 +17638,7 @@ msgstr ""
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:4024
 msgid "Due&nbsp;Date"
-msgstr ""
+msgstr "Forfalls&nbsp;Dato"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:4026
@@ -17651,12 +17654,12 @@ msgstr ""
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:4186
 msgid "Invoice Date"
-msgstr ""
+msgstr "Faktura Dato"
 
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:4190
 msgid "Invoice in progress...."
-msgstr ""
+msgstr "Faktura under utvikling..."
 
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:4198 ../intl-scm/guile-strings.c:4200
@@ -17980,7 +17983,9 @@ msgid ""
 "Click the right mouse button in the main window to bring up the account menu "
 "options. Within each register, clicking the right mouse button brings up the "
 "transaction menu options."
-msgstr ""
+msgstr "Bruk høyre musetast i et hovedvindu for å få frem konto meny "
+"valgene. I hvert registrerings vindu for å få frem transaksjon"
+"meny valgene."
 
 #: ../doc/tip_of_the_day.list.in:31
 msgid ""
@@ -18063,7 +18068,9 @@ msgid ""
 "Style Sheets affect how reports are displayed.  Choose a style sheet for "
 "your report as a report option, and use the Edit -> Style Sheets menu to "
 "customize style sheets."
-msgstr ""
+msgstr "Stilark har innvirkning på utseende på dine rapporter.  Velg et stilark for "
+"din rapport som under rapport oppsett, og bruk Rediger -> Stilark menyen for "
+"å tilpasse stilarkene."
 
 #: ../doc/tip_of_the_day.list.in:82
 msgid ""
