@@ -1,3 +1,9 @@
+2005-12-19  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Andreas Köhler's patches to
+	remember/restore maximized windows, and to shrink the size of the
+	close button on notebook tabs.
+
 2005-12-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/standard-reports/*.scm: I18n string cleanup: Fix

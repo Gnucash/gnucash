@@ -366,6 +366,7 @@ static const gchar *multiple_page_actions[] = {
 #define WINDOW_STRING		"Window %d"
 #define WINDOW_GEOMETRY		"Window Geometry"
 #define WINDOW_POSITION		"Window Position"
+#define WINDOW_MAXIMIZED	"Window Maximized"
 #define WINDOW_FIRSTPAGE	"First Page"
 #define WINDOW_PAGECOUNT	"Page Count"
 #define PAGE_TYPE		"Page Type"
@@ -472,6 +473,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   GncMainWindowPrivate *priv;
   gint *pos, *geom;
   gsize length;
+  gboolean max;
   gchar *window_group;
   gint page_start, page_count, i;
   GError *error = NULL;
@@ -511,6 +513,17 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   } else {
     gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
     DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
+  }
+
+  max = g_key_file_get_boolean(data->key_file, window_group,
+			       WINDOW_MAXIMIZED, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_MAXIMIZED, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (max) {
+    gtk_window_maximize(GTK_WINDOW(window));
   }
 
   /* Get this window's notebook info */
@@ -716,6 +729,7 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
   gint num_pages, coords[4];
+  gboolean maximized;
   gchar *window_group;
 
   /* Setup */
@@ -727,12 +741,17 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   /* Save the window coordinates, etc. */
   gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
   gtk_window_get_size(GTK_WINDOW(window), &coords[2], &coords[3]);
+  maximized = (gdk_window_get_state((GTK_WIDGET(window))->window)
+	       & GDK_WINDOW_STATE_MAXIMIZED) != 0;
   g_key_file_set_integer_list(data->key_file, window_group,
 			      WINDOW_POSITION, &coords[0], 2);
   g_key_file_set_integer_list(data->key_file, window_group,
 			      WINDOW_GEOMETRY, &coords[2], 2);
-  DEBUG("window (%p) position %dx%d, size %dx%d", window,  coords[0], coords[1],
-	coords[2], coords[3]);
+  g_key_file_set_boolean(data->key_file, window_group,
+			 WINDOW_MAXIMIZED, maximized);
+  DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
+	coords[2], coords[3],
+	maximized ? "maximized" : "not maximized");
 
   /* Save this window's notebook info */
   num_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(priv->notebook));
@@ -1963,11 +1982,16 @@ gnc_main_window_open_page (GncMainWindow *window,
 	/* Add close button - Not for immutable pages */
 	if (!immutable) {
 	  GtkWidget *close_image, *close_button;
+	  GtkRequisition requisition;
 	  
 	  close_button = gtk_button_new();
 	  gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-	  close_image=gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+	  close_image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 	  gtk_widget_show(close_image);
+	  gtk_widget_size_request(close_image, &requisition);
+	  gtk_widget_set_size_request(close_button, requisition.width + 4,
+				      requisition.height + 2);
+	  gtk_button_set_alignment(GTK_BUTTON(close_button), 0.5, 0.5);
 	  gtk_container_add(GTK_CONTAINER(close_button), close_image);
 	  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_SHOW_CLOSE_BUTTON, NULL))
 	    gtk_widget_show (close_button);
