@@ -1,3 +1,11 @@
+2005-12-22  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/g-wrap.m4: Copy macro file from gwrap-1.3.4 package
+	because it is missing in the gwrap-1.9.x packages. May be removed
+	if we switch to a different package detection code, potentially
+	via pkgconfig, but for now copying this macro is the easiest
+	solution.
+
 2005-12-19  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Andreas Köhler's patches to
