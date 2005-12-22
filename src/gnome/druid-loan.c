@@ -549,11 +549,12 @@ gnc_ui_sx_loan_druid_create(void)
                         GtkAlignment *a;
                         GNCOptionInfo typeOptInfo[] = {
 			        { _("Fixed"), _("A Fixed-Rate loan"), ld_prm_type_changed, ldd },
+                                { _("3/1 Year"),
                         /* Translators: ARM = Adjustable Rate Mortgage; that is a
 			   loan where the rate is constant for the period before
 			   the '/', e.g. 5 years, and then may change. See also
 			   http://www.fanniemae.com/tools/glossary.jhtml */
-                                { _("3/1 Year"),   _("A 3/1 Year ARM"),         ld_prm_type_changed, ldd },
+				  _("A 3/1 Year ARM"),         ld_prm_type_changed, ldd },
                                 { _("5/1 Year"),   _("A 5/1 Year ARM"),         ld_prm_type_changed, ldd },
                                 { _("7/1 Year"),   _("A 7/1 Year ARM"),         ld_prm_type_changed, ldd },
                                 { _("10/1 Year"),  _("A 10/1 Year ARM"),        ld_prm_type_changed, ldd },
