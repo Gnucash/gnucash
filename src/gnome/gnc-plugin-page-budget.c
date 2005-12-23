@@ -642,7 +642,8 @@ gnc_plugin_page_budget_options_help_cb (GncDialog *d,
 				   GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_OK,
-				   "Set the budget options using this dialog.");
+				   "%s",
+				   _("Set the budget options using this dialog."));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -692,7 +693,7 @@ gnc_budget_gui_show_options(GncDialog *pw, GncBudget *budget,
     tm = gnc_tree_model_account_types_master();
     gtk_tree_view_set_model(tv, tm);
     gtk_tree_view_insert_column_with_attributes(
-        tv, -1, "Account Types", gtk_cell_renderer_text_new(),
+       tv, -1, _("Account Types"), gtk_cell_renderer_text_new(),
         "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
     sel = gtk_tree_view_get_selection(tv);
     gtk_tree_selection_set_mode(sel, GTK_SELECTION_MULTIPLE);
@@ -715,7 +716,7 @@ gnc_plugin_page_budget_cmd_view_options (GtkAction *action,
 
     if (!priv->d) {
         priv->d = gnc_dialog_new(GNC_BUDGET_GUI_FILE, "BudgetOptions");
-        gtk_window_set_title(GTK_WINDOW(priv->d), "Budget Options");
+        gtk_window_set_title(GTK_WINDOW(priv->d), _("Budget Options"));
         gnc_dialog_set_cb(priv->d,
                           gnc_plugin_page_budget_options_apply_cb,
                           gnc_plugin_page_budget_options_close_cb,
@@ -736,10 +737,10 @@ gnc_budget_gui_delete_budget(GncBudget *budget)
     g_return_if_fail(GNC_IS_BUDGET(budget));
     name = gnc_budget_get_name (budget);
     if (!name)
-        name = "Unnamed Budget";
+       name = _("Unnamed Budget");
 
 
-    if (gnc_verify_dialog (NULL, FALSE, "Delete %s?", name)) {
+    if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name)) {
         gnc_suspend_gui_refresh ();
         gnc_budget_free(budget);
         // Views should close themselves because the CM will notify them.

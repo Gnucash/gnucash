@@ -1920,7 +1920,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   /* Translations: The %s is the name of the plugin page */
-  title = g_strdup_printf(N_("Sort %s by..."),
+  title = g_strdup_printf(_("Sort %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
@@ -1972,7 +1972,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   /* Translators: The %s is the name of the plugin page */
-  title = g_strdup_printf(N_("Filter %s by..."),
+  title = g_strdup_printf(_("Filter %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);

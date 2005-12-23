@@ -13,7 +13,7 @@
         <short>Change contents of reconciled split.</short>
         <long>
 	  This dialog is presented before allowing you to change the
-	  contents of a reconciled split.  Allowing these chagnes can
+	  contents of a reconciled split.  Allowing these changes can
 	  make it hard to perform future reconciliations.
 	</long>
       </locale>
