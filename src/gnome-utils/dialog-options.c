@@ -543,8 +543,12 @@ gnc_option_create_multichoice_widget(GNCOption *option)
   widget = gtk_combo_box_new_text();
   for (i = 0; i < num_values; i++) {
     string = gnc_option_permissible_value_name(option, i);
-    gtk_combo_box_append_text(GTK_COMBO_BOX(widget), string);
-    g_free(string);
+    if (string) {
+      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), _(string));
+      g_free(string);
+    } else {
+      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), "");
+    }
   }
   g_signal_connect(G_OBJECT(widget), "changed",
         	   G_CALLBACK(gnc_option_multichoice_cb), option);
