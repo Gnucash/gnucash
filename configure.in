@@ -135,9 +135,6 @@ else
   AC_MSG_RESULT(no)
 fi
 AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
-AC_DEFINE(G_DISABLE_DEPRECATED,1,[Don't use any deprecated glib functions.])
-#AC_DEFINE(GTK_DISABLE_DEPRECATED,1,[Don't use any deprecated gtk functions.])
-#AC_DEFINE(GNOME_DISABLE_DEPRECATED,1,[Don't use any deprecated gnome functions.])
 
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
@@ -1260,6 +1257,31 @@ fi
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
+AC_ARG_ENABLE(deprecated-glib,
+  [  --disable-deprecated-glib    don't use deprecated glib functions],
+  [case "${enableval}" in
+        no) AC_DEFINE(G_DISABLE_DEPRECATED,1,
+          [Don't use deprecated glib functions]) ;;
+        yes) ;;
+        *) AC_MSG_ERROR(bad value ${enableval} for --enable-deprecated-glib) ;;
+        esac])
+AC_ARG_ENABLE(deprecated-gtk,
+  [  --disable-deprecated-gtk     don't use deprecated gtk functions],
+  [case "${enableval}" in
+        no) AC_DEFINE(GTK_DISABLE_DEPRECATED,1,
+          [Don't use deprecated gtk functions]) ;;
+        yes) ;;
+        *) AC_MSG_ERROR(bad value ${enableval} for --enable-deprecated-gtk) ;;
+        esac])
+AC_ARG_ENABLE(deprecated-gnome,
+  [  --disable-deprecated-gnome   don't use deprecated gnome functions],
+  [case "${enableval}" in
+        no) AC_DEFINE(GNOME_DISABLE_DEPRECATED,1,
+          [Don't use deprecated gnome functions]) ;;
+        yes) ;;
+        *) AC_MSG_ERROR(bad value ${enableval} for --enable-deprecated-gnome) ;;
+        esac])
+
 
 AC_ARG_ENABLE(opt-style-install,
   [  --enable-opt-style-install   install everything in subdirs of --prefix],
