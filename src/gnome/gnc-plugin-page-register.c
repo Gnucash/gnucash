@@ -231,7 +231,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Jump to the corresponding transaction in the other account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_jump) },
 	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
-	  N_("Edit scheduled transactions"),
+	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
 	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
