@@ -166,7 +166,7 @@
 		      <child>
 			<widget class="GtkEntry" id="id_entry">
 			  <property name="visible">True</property>
-			  <property name="tooltip" translatable="yes">The invoice ID number.  If left blank a reasonable number will be chosen for you</property>
+			  <property name="tooltip" translatable="yes">The invoice ID number.  If left blank a reasonable number will be chosen for you.</property>
 			  <property name="can_focus">True</property>
 			  <property name="has_focus">True</property>
 			  <property name="editable">True</property>
@@ -1781,7 +1781,7 @@ Are you sure you want to unpost it?</property>
 	      <child>
 		<widget class="GtkLabel" id="label33">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Reset Tax Tables to present Values? </property>
+		  <property name="label" translatable="yes">Reset Tax Tables to present Values?</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
