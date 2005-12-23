@@ -24,6 +24,7 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <glib/gi18n.h>
 
 #include "qof.h"
 
@@ -58,7 +59,7 @@ gnc_budget_new(QofBook *book)
 
     recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, NULL);
 
-    gnc_budget_set_name(budget, "Unnamed Budget");
+    gnc_budget_set_name(budget, _("Unnamed Budget"));
     gnc_budget_set_description(budget, "");
     gnc_budget_set_num_periods(budget, 12);
 
