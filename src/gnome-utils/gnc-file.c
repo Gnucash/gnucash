@@ -289,22 +289,22 @@ show_session_error (QofBackendError io_error, const char *newfile)
 		break; 
 	}
 	case ERR_QSF_BAD_QOF_VERSION: {
-		fmt = _("The QSF Map file\n%s\nwas written for a different version of QOF\n"
+		fmt = _("The QSF Map file\n%s\nwas written for a different version of QOF.\n"
 			"It may need to be modified to work with your current QOF installation.");
 		gnc_error_dialog(parent, fmt, newfile);
 		break; 
 	}
 	case ERR_QSF_BAD_MAP: {
-		fmt = _("The selected QSF map\n%s\ncontains unusable data."
-			"  This is usually because not all the required parameters for "
-			" the defined objects have calculations described in the map.");
+		fmt = _("The selected QSF map\n%s\ncontains unusable data. "
+			"This is usually because not all the required parameters for "
+			"the defined objects have calculations described in the map.");
 		gnc_error_dialog(parent, fmt, newfile);
 		break; 
 	}
 	case ERR_QSF_BAD_OBJ_GUID: {
-		fmt = _("The selected QSF object file\n%s\n contains one or more invalid GUIDs."
-				"The file cannot be processed - please check the source of the file"
-				" and try again.");
+		fmt = _("The selected QSF object file\n%s\n contains one or more invalid GUIDs. "
+			"The file cannot be processed - please check the source of the file "
+			"and try again.");
 		gnc_error_dialog(parent, fmt, newfile);
 		break;
 	}
@@ -315,16 +315,16 @@ show_session_error (QofBackendError io_error, const char *newfile)
 	}
 	case ERR_QSF_WRONG_MAP: {
 		fmt = _("Wrong QSF map selected.\n"
-			"The selected map,\n%s\n validates but was written"
+			"The selected map,\n%s\n validates but was written "
 			"for different QOF objects.\n The list of objects defined in "
-			"this map does not include all the objects described in"
+			"this map does not include all the objects described in "
 			"the current QSF object file.");
 	  gnc_error_dialog(parent, fmt, newfile);
 	  break; 
 	}
 	case ERR_QSF_MAP_NOT_OBJ: {
 	  fmt = _("The selected file \n  %s\n is a QSF map and cannot be "
-			"opened as a QSF object.");
+		  "opened as a QSF object.");
 	  gnc_error_dialog(parent, fmt, newfile);
 	  break; 
 	}
