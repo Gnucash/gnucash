@@ -103,10 +103,14 @@ utf8_caseequal (const char *s1, const char *s2)
 static gboolean
 utf8_caseequal_len (const char *s1, const char *s2, guint len)
 {   
-   char *s1new;
-   char *s2new;
+   gchar *s1new;
+   gchar *s2new;
+   const gchar *s1_offset;
+   const gchar *s2_offset;
    glong s1chars;
    glong s2chars;
+   glong s1_bytes_len;
+   glong s2_bytes_len;
    gboolean equal = FALSE;
     
    if (len == 0)
@@ -118,19 +122,30 @@ utf8_caseequal_len (const char *s1, const char *s2, guint len)
    if (!s1 || !s2)
       return FALSE;
 
-   s1chars = g_utf8_strlen (s1, -1);
-   s2chars = g_utf8_strlen (s2, -1);
-   
+   /* Obtain the number of bytes for the given number of characters */
+   s1_offset = g_utf8_offset_to_pointer (s1, len);
+   s2_offset = g_utf8_offset_to_pointer (s2, len);
+   s1_bytes_len = s1_offset - s1;
+   s2_bytes_len = s2_offset - s2;
+
+   /* Test whether the number of characters might be too small anyway
+      (dont need to examine more than bytes_len bytes to check that) */
+   s1chars = g_utf8_strlen (s1, s1_bytes_len);
+   s2chars = g_utf8_strlen (s2, s2_bytes_len);
    if ( (s1chars < len) || (s2chars < len) )
        return FALSE;
-   
-   s1new = g_new0 (gchar, strlen (s1));
-   s2new = g_new0 (gchar, strlen (s2));
 
-   g_utf8_strncpy (s1new, s1, len);
-   g_utf8_strncpy (s2new, s2, len);
+   /* Allocate new strings that are case-independent. */
+   s1new = g_utf8_casefold (s1, s1_bytes_len);
+   s2new = g_utf8_casefold (s2, s2_bytes_len);
 
-   equal = utf8_caseequal (s1new, s2new);
+   /* equal = utf8_caseequal (s1new, s2new); */
+   /* ^^ don't call this to save one string allocation; we used
+      g_utf8_casefold here already. */
+
+   /* Now really compare the two strings */
+   if (g_utf8_collate(s1new, s2new) == 0)
+      equal = TRUE;
    
    g_free (s1new);
    g_free (s2new);
