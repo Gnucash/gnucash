@@ -387,8 +387,7 @@ typedef GogPlotView		GogRTView;
 typedef GogPlotViewClass	GogRTViewClass;
 
 static double
-//double
-fmin (double a, double b)
+gogi_fmin (double a, double b)
 {
 	return (a < b) ? a : b;
 }
@@ -519,7 +518,7 @@ gog_rt_view_info_at_point (GogView *view, double x, double y,
 			      GogObject const *cur_selection,
 			      GogObject **obj, char **name)
 {
-	double radius = fmin (view->allocation.h, view->allocation.w)/2.0;
+	double radius = gogi_fmin (view->allocation.h, view->allocation.w)/2.0;
 
 	x -= view->allocation.x + view->allocation.w/2.;
 	y -= view->allocation.y + view->allocation.h/2.;
