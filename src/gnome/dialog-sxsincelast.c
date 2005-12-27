@@ -2131,7 +2131,11 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                         sx_state = NULL;
                 }
 
-                g_date_set_time( &end, time(NULL) );
+#ifdef HAVE_GLIB29
+		g_date_set_time_t( &end, time(NULL) );
+#else
+		g_date_set_time( &end, time(NULL) );
+#endif
                 daysInAdvance = xaccSchedXactionGetAdvanceCreation( sx );
                 g_date_add_days( &end, daysInAdvance );
                 

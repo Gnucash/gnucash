@@ -63,10 +63,15 @@ recurrenceSet(Recurrence *r, guint16 mult, PeriodType pt, const GDate *_start)
     r->ptype = VALID_PERIOD_TYPE(pt) ? pt : PERIOD_MONTH;
     r->mult = (pt == PERIOD_ONCE) ? 0 : (mult > 0 ? mult : 1);
 
-    if (_start && g_date_valid(_start))
+    if (_start && g_date_valid(_start)) {
         r->start = *_start;
-    else
+    } else {
+#ifdef HAVE_GLIB29
+        g_date_set_time_t(&r->start, time(NULL));
+#else
         g_date_set_time(&r->start, time(NULL));
+#endif
+    }
 
     /* Some of the unusual period types also specify phase.  For those
        types, we ensure that the start date agrees with that phase. */

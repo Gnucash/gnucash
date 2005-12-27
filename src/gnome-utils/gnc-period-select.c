@@ -320,7 +320,11 @@ gnc_period_select_set_show_date (GncPeriodSelect *period, const gboolean show_da
 
   if (show_date) {
     g_date_clear(&date, 1);
+#ifdef HAVE_GLIB29
+    g_date_set_time_t(&date, time (NULL));
+#else
     g_date_set_time(&date, time (NULL));
+#endif
     gnc_period_select_set_date_common(period, &date);
   } else {
     gnc_period_select_set_date_common(period, NULL);

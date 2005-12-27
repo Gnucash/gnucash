@@ -58,7 +58,11 @@ gnc_accounting_period_start_gdate (GncAccountingPeriod which,
 			  g_date_get_year(contains));
   } else {
     date = g_date_new();
+#ifdef HAVE_GLIB29
+    g_date_set_time_t(date, time(NULL));
+#else
     g_date_set_time(date, time(NULL));
+#endif
   }
 
   switch (which) {
@@ -146,7 +150,11 @@ gnc_accounting_period_end_gdate (GncAccountingPeriod which,
 			  g_date_get_year(contains));
   } else {
     date = g_date_new();
+#ifdef HAVE_GLIB29
+    g_date_set_time_t(date, time(NULL));
+#else
     g_date_set_time(date, time(NULL));
+#endif
   }
 
   switch (which) {

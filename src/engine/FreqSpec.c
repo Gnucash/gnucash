@@ -1296,7 +1296,11 @@ qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec start_date)
 	when = g_date_new();
 	type = xaccFreqSpecGetType(fs);
 	start_t = timespecToTime_t(start_date);
+#ifdef HAVE_GLIB29
+	g_date_set_time_t(when, start_t);
+#else
 	g_date_set_time(when, (GTime)start_t);
+#endif
 	/* QOF sets this before a type is assigned. */
 	if(type == INVALID) {
 		fs->type = ONCE;

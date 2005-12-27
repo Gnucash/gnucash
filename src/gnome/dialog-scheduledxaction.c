@@ -471,9 +471,15 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                                 return TRUE;
                         }
                         sxEndDate = *xaccSchedXactionGetEndDate( sxed->sx );
+#ifdef HAVE_GLIB29
+                        g_date_set_time_t( &dlgEndDate,
+					   gnc_date_edit_get_date( sxed->
+								   endDateEntry ) );
+#else
                         g_date_set_time( &dlgEndDate,
                                          gnc_date_edit_get_date( sxed->
                                                                  endDateEntry ) );
+#endif
 
                         if ( g_date_compare( &sxEndDate, &dlgEndDate ) != 0 ) {
                                 return TRUE;
@@ -970,9 +976,15 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 g_date_clear( &endDate, 1 );
                 if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
+#ifdef HAVE_GLIB29
+                        g_date_set_time_t( &endDate,
+					   gnc_date_edit_get_date( sxed->
+								   endDateEntry ) );
+#else
                         g_date_set_time( &endDate,
                                          gnc_date_edit_get_date( sxed->
                                                                  endDateEntry ) );
+#endif
                 }
 
                 /* Now, see if the user is attempting to create a SX that can't exist
@@ -1027,9 +1039,15 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndDate) ) {
                         /* get the end date data */
+#ifdef HAVE_GLIB29
+                        g_date_set_time_t( &gdate,
+					   gnc_date_edit_get_date(
+                                                 sxed->endDateEntry ) );
+#else
                         g_date_set_time( &gdate,
                                          gnc_date_edit_get_date(
                                                  sxed->endDateEntry ) );
+#endif
                         xaccSchedXactionSetEndDate( sxed->sx, &gdate );
                         /* set the num occurances data */
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
@@ -1755,7 +1773,11 @@ new_button_clicked( GtkButton *b, gpointer d )
         /* Give decent initial FreqSpec for SX */
         fs = xaccSchedXactionGetFreqSpec( tmpSX );
         gd = g_date_new();
+#ifdef HAVE_GLIB29
+        g_date_set_time_t( gd, time(NULL) );
+#else
         g_date_set_time( gd, time(NULL) );
+#endif
         xaccFreqSpecSetMonthly( fs, gd, 1 );
         xaccFreqSpecSetUIType ( fs, UIFREQ_MONTHLY );
         g_date_free( gd );

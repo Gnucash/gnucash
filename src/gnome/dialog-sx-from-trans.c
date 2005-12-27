@@ -185,7 +185,11 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     retval.type = END_ON_DATE;
     g_date_clear( &(retval.end_date), 1 );
     end_tt = gnc_date_edit_get_date(sxfti->endDateGDE);
+#ifdef HAVE_GLIB29
+    g_date_set_time_t( &(retval.end_date), end_tt);
+#else
     g_date_set_time( &(retval.end_date), end_tt);
+#endif
     return retval;
   }
     
@@ -421,7 +425,11 @@ sxftd_init( SXFromTransInfo *sxfti )
   /* Setup the initial start date for user display/confirmation */
   /* compute good initial date. */
   start_tt = xaccTransGetDate( sxfti->trans );
+#ifdef HAVE_GLIB29
+  g_date_set_time_t( &date, start_tt );
+#else
   g_date_set_time( &date, start_tt );
+#endif
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &nextDate );
@@ -474,7 +482,11 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
   xaccSchedXactionSetName(sx, name);
   g_free(name);
 
+#ifdef HAVE_GLIB29
+  g_date_set_time_t( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
+#else
   g_date_set_time( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
+#endif
  
   fs = xaccFreqSpecMalloc(gnc_get_current_book ());
   sxftd_update_fs( sxfti, &date, fs );
@@ -596,7 +608,11 @@ sxftd_freq_option_changed( GtkWidget *w, gpointer user_data )
   FreqSpec *fs;
 
   tmp_tt = xaccTransGetDate( sxfti->trans );
+#ifdef HAVE_GLIB29
+  g_date_set_time_t( &date, tmp_tt );
+#else
   g_date_set_time( &date, tmp_tt );
+#endif
   
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   sxftd_update_fs( sxfti, &date, fs );
