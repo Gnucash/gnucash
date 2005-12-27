@@ -1,5 +1,44 @@
-GnuCash Dependency Policy
--------------------------
+GnuCash Compiler Dependency
+---------------------------
+
+The GnuCash developers use gcc (http://gcc.gnu.org) for developing and
+testing GnuCash.  For convenience, we have relied on certain features
+of gcc that are not part of any official standard and may not be
+available with other standard-compliant compilers.  Anyone desiring to
+compile GnuCash with some other compiler may have to remove these
+"gcc-isms", some of which are documented here.
+
+  Pointer-typed NULL sentinel values
+  ----------------------------------
+
+  Gcc provides an implementation of `stddef.h' that defines NULL to
+always expand to a pointer-typed null constant.  This is precisely
+what is needed in order to make sentinel value arguments to variadic
+functions correct for both 32 and 64 bit platforms.  However, another
+implementation may define NULL to expand to `0'.  In that case, all
+sentinel value arguments must have an explicit `(void *)' cast.
+
+  C++ style comments
+  ------------------
+
+  C++ style comments (`// comment to end of line') are discouraged but
+not actively eradicated.
+
+  Variadic Macros
+  ---------------
+
+  GnuCash uses variadic macros for debugging and logging support (via
+qof).
+
+  Declarations after Code
+  -----------------------
+
+  The use of declarations after code (`int i; i = 0; char *foo;') is
+strongly discouraged and actively removed whenever it's caught.
+
+
+GnuCash Library Dependency Policy
+---------------------------------
 
 GnuCash desires to only depend on library versions and packages that are
 practically available.  Specifically, we choose to depend only on versions
