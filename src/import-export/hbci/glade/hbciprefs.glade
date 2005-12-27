@@ -51,7 +51,7 @@
       </child>
 
       <child>
-	<widget class="GtkCheckButton" id="checkbutton15">
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/remember_pin">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Remember the PIN for HBCI in memory during a session.</property>
 	  <property name="can_focus">True</property>
@@ -75,7 +75,7 @@
       </child>
 
       <child>
-	<widget class="GtkCheckButton" id="checkbutton33">
+	<widget class="GtkCheckButton" id="gconf/dialogs/import/hbci/verbose_debug">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Activate verbose debug messages for HBCI Online Banking.</property>
 	  <property name="can_focus">True</property>

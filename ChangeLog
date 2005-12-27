@@ -1,3 +1,8 @@
+2005-12-26  David Hampton  <hampton@employees.org>
+
+	* src/import-export/hbci/glade/hbciprefs.glade: Remember value of
+	HCBI preferences.
+
 2005-12-23  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-options.c: Translate strings for
