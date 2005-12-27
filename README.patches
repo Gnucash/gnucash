@@ -14,15 +14,27 @@ Submitting a Patch:
 
   Once you have done some work that you would like to submit, you need
   to send a patch.  There are two ways to submit a patch.  First, if
-  you're using CVS and only made changes to existing CVS files you
+  you're using SVN and only made changes to existing SVN files you
   can generate the patch using:
 
-      cvs -q diff -u > /tmp/mypatch
+      svn diff > /tmp/mypatch
 
-  and send /tmp/mypatch into the developers.  Note that this ONLY WORKS
-  if you have NOT added any new files to the source tree.  If you've
-  added new files then you should use a script called "make-gnucash-patch"
-  to help you create the patch for submission.
+  and send /tmp/mypatch to gnucash-devel@gnucash.org with `[PATCH]'
+  prefixed to the Subject: of the email.  Note that this
+  ONLY WORKS if you have NOT added any new files to the source tree.
+
+  If your patch adds new files, use the `-N' flag to diff between a
+  clean directory and your development directory.  E.g.
+  
+  $ diff -urN {gnucash-pristine} {gnucash-mydevel} > /tmp/mypatch
+
+*******************************************************************
+NOTE: The rest of this file describes an out-of-date utility that has
+not been adapted to SVN.  Don't use it.  
+*******************************************************************
+
+  If you've added new files then you should use a script called
+  "make-gnucash-patch" to help you create the patch for submission.
 
   The script make-gnucash-patch is a perl script provided with the
   gnucash distribution that you can use to create your patch.  The

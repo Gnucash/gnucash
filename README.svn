@@ -45,12 +45,12 @@ When making changes to GnuCash and trying to commit to the repository:
    to ask. But when in doubt, ask. Even if your change is correct,
    somebody may know a better way to do things.
 
-   If you want other people to review your code before it goes in,
-   you can submit your changes as a patch to gnucash-patches@gnucash.org.
+   Since you want other people to review your code before it goes in,
+   you can submit your changes as a patch to gnucash-devel@gnucash.org.
    See README.patches for details.
 
    If you are making changes to gnucash SVN, you should be subscribed
-   to gnucash-devel@gnucash.org and to gnucash-patches@gnucash.org.
+   to gnucash-devel@gnucash.org and to gnucash-changes@gnucash.org.
    (Subscription address: http://www.gnucash.org/en/lists.phtml)
    gnucash-devel@gnucash.org is a good place to ask about intended
    changes.
