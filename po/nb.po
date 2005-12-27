@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-07 10:24+0100\n"
-"PO-Revision-Date: 2005-12-22 16:06+0800\n"
+"PO-Revision-Date: 2005-12-27 16:07+0800\n"
 "Last-Translator: Tor Harald Thorland <tortho@strigen.com>\n"
 "Language-Team: Norwegian/Bokmaal\n"
 "MIME-Version: 1.0\n"
@@ -265,7 +265,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:4250 ../intl-scm/guile-strings.c:4266
 #: ../intl-scm/guile-strings.c:4296
 msgid "Payment"
-msgstr "Avdrag"
+msgstr "Innbetaling"
 
 #: ../src/business/business-core/gncInvoice.c:1355
 msgid "Pre-Payment"
@@ -558,7 +558,7 @@ msgstr "Vis/Rediger Arbeidstaker"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
 msgid "Expense Vouchers"
-msgstr ""
+msgstr "Utgifts Bilag"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
 msgid "Employee ID"
@@ -686,15 +686,15 @@ msgstr "Vis Regning"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1559
 msgid "New Expense Voucher"
-msgstr ""
+msgstr "Nytt Utgifts Bilag"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1563
 msgid "Edit Expense Voucher"
-msgstr ""
+msgstr "Rediger Utgifts Bilag"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1566
 msgid "View Expense Voucher"
-msgstr ""
+msgstr "Vis Utgifts Bilag"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2072
 msgid "View/Edit Invoice"
@@ -829,7 +829,7 @@ msgstr "Forfall"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2268
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "PÂminner For Forfalte Regninger"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2270
 msgid "The following bills are due"
@@ -1890,19 +1890,19 @@ msgstr "≈pne \"Finn Arbeidstaker\" dialog"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:205
 msgid "New _Expense Voucher..."
-msgstr ""
+msgstr "Nytt U_tgifts Bilag..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:206
 msgid "Open the New Expense Voucher dialog"
-msgstr ""
+msgstr "≈pne Nytt Utgifts Bilag Dialogen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:208
 msgid "Find Expense _Voucher..."
-msgstr ""
+msgstr "Finn Utgifts _Bilag..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
 msgid "Open the Find Expense Voucher dialog"
-msgstr ""
+msgstr "≈pne finn utgifts bilag dialogen"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:216
@@ -1923,11 +1923,11 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:222
 msgid "Bills _Due Reminder"
-msgstr ""
+msgstr "PÂmin_ner For Forfalte Regninger"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
 msgid "Open the Bills Due Reminder dialog"
-msgstr ""
+msgstr "≈pne PÂminner For Forfalte Regninger dialogen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:225
 msgid "E_xport"
@@ -1972,7 +1972,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:244
 msgid "Reload invoice report"
-msgstr ""
+msgstr "Gjenles faktura rapport"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:245
 msgid "Reload invoice report scheme file"
@@ -1980,7 +1980,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:247
 msgid "Reload owner report"
-msgstr ""
+msgstr "Gjenles eier rapport"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:248
 msgid "Reload owner report scheme file"
@@ -1997,7 +1997,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-business.c:253
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 msgid "Initialize Test Data"
-msgstr ""
+msgstr "Initialisere Test Data"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:723
 msgid "Export Invoices to XML"
@@ -2045,7 +2045,7 @@ msgstr "Skriv ut Faktura"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:103
 msgid "Make a printable invoice"
-msgstr ""
+msgstr "Lag en utskrivbar faktura"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:107
@@ -2126,7 +2126,7 @@ msgstr "_Blank"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:137
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr ""
+msgstr "Flytt til blankt omrÂde i bunnen av fakturaen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
 msgid "Dup_licate Entry"
@@ -3032,7 +3032,8 @@ msgstr ""
 msgid ""
 "Are you sure you want to delete the\n"
 "selected commodity?"
-msgstr ""
+msgstr "Er du sikker pÂ at du vil slette den\n"
+"valgte varen?"
 
 #: ../src/gnome/dialog-fincalc.c:339
 msgid "You must enter values for the other quantities."
@@ -3090,7 +3091,7 @@ msgstr "Balansert"
 #: ../src/gnome/window-reconcile.c:1099 ../intl-scm/guile-strings.c:3186
 #: ../intl-scm/guile-strings.c:3474
 msgid "Reconcile"
-msgstr ""
+msgstr "Avstemme"
 
 #: ../src/gnome/dialog-find-transactions.c:113
 msgid "Share Price"
@@ -3140,7 +3141,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-price-editor.c:170
 msgid "You must select a commodity."
-msgstr ""
+msgstr "Du mÂ velge en vare."
 
 #: ../src/gnome/dialog-price-editor.c:175
 msgid "You must select a currency."
@@ -3241,7 +3242,8 @@ msgstr ""
 msgid ""
 "Scheduled Transactions with variables\n"
 "cannot be automatically created."
-msgstr ""
+msgstr "Planlagte transaksjoner med variabler\n"
+"kan ikke bli opprettet automatisk."
 
 #: ../src/gnome/dialog-scheduledxaction.c:921
 msgid ""
@@ -3365,7 +3367,7 @@ msgstr "Utsatt"
 
 #: ../src/gnome/dialog-sxsincelast.c:1982
 msgid "Obsolete"
-msgstr ""
+msgstr "Foreldet"
 
 #: ../src/gnome/druid-acct-period.c:169
 msgid "The book was closed successfully."
@@ -3438,7 +3440,7 @@ msgstr "Kontotyper"
 
 #: ../src/gnome/druid-loan.c:551
 msgid "Fixed"
-msgstr ""
+msgstr "Fastforrentet"
 
 #: ../src/gnome/druid-loan.c:551
 msgid "A Fixed-Rate loan"
@@ -3487,7 +3489,7 @@ msgstr "... betal \"%s\"?"
 
 #: ../src/gnome/druid-loan.c:651
 msgid "via Escrow account?"
-msgstr ""
+msgstr "via en sperret konto?"
 
 #: ../src/gnome/druid-loan.c:815
 #: ../src/register/ledger-core/split-register.c:2039
@@ -3496,15 +3498,15 @@ msgstr "LÅÂn"
 
 #: ../src/gnome/druid-loan.c:1043
 msgid "Are you sure you want to cancel the Mortgage/Loan Setup Druid?"
-msgstr ""
+msgstr "Er du sikker pÂ at du vil avbryte veiviseren for Opsett av LÂn"
 
 #: ../src/gnome/druid-loan.c:1160
 msgid "Please select a valid loan account."
-msgstr ""
+msgstr "Vennligst oppgi en guldig lÂne konto"
 
 #: ../src/gnome/druid-loan.c:1246
 msgid "Please select a valid Escrow Account."
-msgstr ""
+msgstr "Vennligst velg en gylidig sperret konto."
 
 #: ../src/gnome/druid-loan.c:1312 ../src/gnome/druid-loan.c:1531
 msgid "Please select a valid \"from\" account."
@@ -3516,7 +3518,7 @@ msgstr "Vennligst velg en gyldig \"til\" konto."
 
 #: ../src/gnome/druid-loan.c:1326
 msgid "Please select a valid \"interest\" account."
-msgstr ""
+msgstr "Vennlist velg en gyldig \"rente\" konto."
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: ../src/gnome/druid-loan.c:1438
@@ -3796,7 +3798,10 @@ msgid ""
 "and enter the starting balance in the box on the right. All accounts except "
 "Equity\n"
 "and placeholder accounts may have an opening balance."
-msgstr ""
+msgstr "Hvis du vil at en konto skal ha en inngÂende balanse, klikk pÂ kontoen\n"
+"og fyll inn den inngÂende balansen i feltet til h¯yre. Alle kontoer untatt "
+"egenkapital\n"
+"og plassholder kontoer kan ha en inngÂende balanse."
 
 #: ../src/gnome/glade/account.glade.h:37
 #: ../src/gnome-utils/dialog-account.c:1454
@@ -3891,7 +3896,9 @@ msgid ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
-msgstr ""
+msgstr "Denne kontoen er tilstede utelukkende som en plassholder i hierarkiet.  "
+"Transaksjoner kan ikke f¯res til denne kontoen, men de kan f¯res til underkontoer "
+"av denne."
 
 #: ../src/gnome/glade/account.glade.h:61
 msgid ""
@@ -4094,11 +4101,11 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:33
 msgid "Regenerate From Defaults"
-msgstr ""
+msgstr "Regenerer Fra Standard"
 
 #: ../src/gnome/glade/budget.glade.h:34
 msgid "Related Accounts:"
-msgstr ""
+msgstr "Beslektede Kontoer:"
 
 #: ../src/gnome/glade/budget.glade.h:35
 msgid ""
@@ -4512,11 +4519,11 @@ msgstr ""
 
 #: ../src/gnome/glade/merge.glade.h:7
 msgid "Number of reports still to be reconciled."
-msgstr ""
+msgstr "Antall rapporter igjen Â avstemme."
 
 #: ../src/gnome/glade/merge.glade.h:8
 msgid "Please resolve any conflicts in the merge"
-msgstr ""
+msgstr "Vennligst l¯s opp enhver konflikt i sammenslÂingen"
 
 #: ../src/gnome/glade/merge.glade.h:9
 msgid ""
@@ -4534,7 +4541,8 @@ msgstr ""
 msgid ""
 "The next screen will allow you to resolve any conflicts in merging your new "
 "account tree into your current GnuCash file."
-msgstr ""
+msgstr "Den neste siden vil gi deg muligheten til Â l¯se enhver konflikt i integreringen av "
+"ditt nye kontotre i den eksisterende GnuCash filen."
 
 #: ../src/gnome/glade/merge.glade.h:17
 msgid ""
@@ -4889,11 +4897,11 @@ msgstr "_≈pne Fil"
 #. src/scm/help-topics-index.scm
 #: ../src/gnome/glade/reconcile.glade.h:18 ../intl-scm/guile-strings.c:3400
 msgid "Reconcile Information"
-msgstr ""
+msgstr "Avstemmings Informasjon"
 
 #: ../src/gnome/glade/reconcile.glade.h:19
 msgid "Reconciled balance:"
-msgstr ""
+msgstr "Avstemmings balanse:"
 
 #: ../src/gnome/glade/reconcile.glade.h:20
 msgid "Save File"
@@ -4943,12 +4951,12 @@ msgstr "_Utsett"
 #: ../src/gnome/glade/reconcile.glade.h:33
 #: ../src/gnome/window-reconcile.c:1289
 msgid "_Reconcile"
-msgstr ""
+msgstr "_Avstemme"
 
 #: ../src/gnome/glade/reconcile.glade.h:34
 #: ../src/gnome/window-reconcile.c:1177
 msgid "_Reconcile Information..."
-msgstr ""
+msgstr "_Avstemmings Informasjon..."
 
 #: ../src/gnome/glade/reconcile.glade.h:36
 msgid "_Transfer"
@@ -5176,7 +5184,7 @@ msgstr ""
 
 #: ../src/gnome/glade/register.glade.h:60
 msgid "Show two lines of information for each transaction"
-msgstr ""
+msgstr "Vis to linjer med informasjon for hver transaksjon"
 
 #: ../src/gnome/glade/register.glade.h:62
 msgid "Sort by Amount"
@@ -5335,11 +5343,11 @@ msgstr "_Nummer"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:175
 #: ../src/gnome/gnc-plugin-page-register.c:215
 msgid "_Reconcile..."
-msgstr ""
+msgstr "_Avstemme..."
 
 #: ../src/gnome/glade/register.glade.h:106
 msgid "_Reconciled"
-msgstr ""
+msgstr "_Avstemt"
 
 #: ../src/gnome/glade/register.glade.h:108
 msgid "_Standard Order"
@@ -5387,7 +5395,7 @@ msgstr " dager"
 
 #: ../src/gnome/glade/sched-xact.glade.h:4
 msgid "... utilize an escrow account for payments?"
-msgstr ""
+msgstr "... bruke en sperret konto for tilbakebetalinger?"
 
 #: ../src/gnome/glade/sched-xact.glade.h:5
 msgid "10th"
@@ -5503,7 +5511,7 @@ msgstr "9de"
 
 #: ../src/gnome/glade/sched-xact.glade.h:33
 msgid "<b>Since Last Run Dialog</b>"
-msgstr ""
+msgstr "<b>Siden Sist Kj¯ring Dialog</b>"
 
 #: ../src/gnome/glade/sched-xact.glade.h:34
 msgid "<b>Transaction Editor Defaults</b>"
@@ -5517,7 +5525,7 @@ msgstr "Avansert..."
 #: ../src/gnome-utils/exchange-dialog.glade.h:2
 #: ../src/gnome-utils/transfer.glade.h:6
 msgid "Amount:"
-msgstr "Mengde:"
+msgstr "Bel¯p:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:37
 msgid "Apr, Jul, Dec"
@@ -5565,7 +5573,7 @@ msgstr "Opprett Automatisk"
 
 #: ../src/gnome/glade/sched-xact.glade.h:48
 msgid "Create as scheduled"
-msgstr ""
+msgstr "Opprett som planlagt"
 
 #: ../src/gnome/glade/sched-xact.glade.h:49
 msgid "Create in advance:"
@@ -5620,7 +5628,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:64
 msgid "Do you..."
-msgstr ""
+msgstr "Vil du..."
 
 #: ../src/gnome/glade/sched-xact.glade.h:65
 msgid "Edit Scheduled Transaction"
@@ -5648,7 +5656,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:71
 msgid "Escrow Account:"
-msgstr ""
+msgstr "Sperret Konto:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:72
 msgid "Every"
@@ -5694,11 +5702,11 @@ msgstr "Ignorer"
 
 #: ../src/gnome/glade/sched-xact.glade.h:83
 msgid "Interest Rate Change Frequency"
-msgstr ""
+msgstr "Renteforandrings Hyppighet"
 
 #: ../src/gnome/glade/sched-xact.glade.h:84
 msgid "Interest Rate:"
-msgstr ""
+msgstr "Rente:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:85
 msgid "Interest To:"
@@ -5738,15 +5746,15 @@ msgstr "Siste Hendelse: "
 
 #: ../src/gnome/glade/sched-xact.glade.h:94
 msgid "Length:"
-msgstr ""
+msgstr "Lengde:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:95
 msgid "Loan Account:"
-msgstr ""
+msgstr "LÂne Konto:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:96
 msgid "Loan Information"
-msgstr ""
+msgstr "Informasjon Om LÂnet"
 
 #: ../src/gnome/glade/sched-xact.glade.h:97
 msgid "Make Scheduled transaction"
@@ -5793,11 +5801,11 @@ msgstr "MÂneder Igjen:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:108
 msgid "Mortgage/Loan Druid"
-msgstr ""
+msgstr "Opsett av LÂn"
 
 #: ../src/gnome/glade/sched-xact.glade.h:109
 msgid "Mortgage/Loan Repayment Setup"
-msgstr ""
+msgstr "Oppsett For Tilbakebetaling Av LÂn"
 
 #: ../src/gnome/glade/sched-xact.glade.h:112
 msgid "Never End"
@@ -5864,7 +5872,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:130
 msgid "Payment From (Escrow):"
-msgstr ""
+msgstr "Betaling Fra (Sperret Konto):"
 
 #: ../src/gnome/glade/sched-xact.glade.h:131
 msgid "Payment From:"
@@ -5872,7 +5880,7 @@ msgstr "Betaling Fra:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:132
 msgid "Payment To (Escrow):"
-msgstr ""
+msgstr "Betaling Til (Sperret Konto):"
 
 #: ../src/gnome/glade/sched-xact.glade.h:133
 msgid "Payment To:"
@@ -5888,7 +5896,7 @@ msgstr "Trykk bruk for Â legge til disse forandringene"
 
 #: ../src/gnome/glade/sched-xact.glade.h:137
 msgid "Press apply to create these transactions."
-msgstr ""
+msgstr "Trykk bruk for Â opprette disse transaksjonene."
 
 #: ../src/gnome/glade/sched-xact.glade.h:138
 msgid "Principal To:"
@@ -5969,11 +5977,11 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:160
 msgid "Show the \"since last run\" window when a file is opened."
-msgstr ""
+msgstr "Vis \"Siden Sist Kj¯ring\" vindu nÂr en fil blir Âpnet."
 
 #: ../src/gnome/glade/sched-xact.glade.h:161
 msgid "Since Last Run"
-msgstr ""
+msgstr "Siden Sist Kj¯ring"
 
 #: ../src/gnome/glade/sched-xact.glade.h:162
 msgid "Specify Source Account"
@@ -6008,7 +6016,8 @@ msgstr ""
 msgid ""
 "The following scheduled transactions have expired.\n"
 "Select those you wish to delete."
-msgstr ""
+msgstr "F¯lgende planlagte transaksjoner er utl¯pt.\n"
+"Velg de du vil slette."
 
 #: ../src/gnome/glade/sched-xact.glade.h:171
 msgid ""
@@ -6023,7 +6032,8 @@ msgstr "Viste planlagte transaksjoner skal snart opprettes.\n"
 msgid ""
 "This druid will walk you through any scheduled transactions that should be "
 "created."
-msgstr ""
+msgstr "Denne veiviseren vil ta deg igjennom enhver planlagt transaksjon som skal "
+"opprettes"
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid ""
@@ -6035,7 +6045,12 @@ msgid ""
 "\n"
 "If you make a mistake or want to make changes later, you can edit\n"
 "the created Scheduled Transactions directly."
-msgstr ""
+msgstr "Dette er en steg for steg metode for Â sette opp en tilbakebetaling av et lÂn i GnuCash.\n"
+"I denne veiviseren kan du fylle inn verdiene som du har om ditt lÂn og dets tilbakebetaling.\n"
+"Ved hjelp av den informasjonen, vil de aktuelle Planlagte Transakjsoner\n"
+"bli oprettet.\n"
+"\n"
+"Hvis du gj¯r en feil, eller vil endre noe senere, kan du redigere den opprettede planlagte transaksjonen direkte."
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:183 ../intl-scm/guile-strings.c:582
@@ -6048,7 +6063,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:185
 msgid "Transaction Reminders"
-msgstr ""
+msgstr "Transaksjons PÂminnelser"
 
 #: ../src/gnome/glade/sched-xact.glade.h:186
 msgid "Tri-Yearly"
@@ -6061,7 +6076,7 @@ msgstr "Tirsdag"
 
 #: ../src/gnome/glade/sched-xact.glade.h:189
 msgid "Unselect All"
-msgstr ""
+msgstr "T¯m alle"
 
 #: ../src/gnome/glade/sched-xact.glade.h:190
 msgid "Upcoming"
@@ -6069,7 +6084,7 @@ msgstr "Kommende"
 
 #: ../src/gnome/glade/sched-xact.glade.h:191
 msgid "Use Escrow Account"
-msgstr ""
+msgstr "Bruk en sperret konto"
 
 #: ../src/gnome/glade/sched-xact.glade.h:194
 msgid "Variable"
@@ -6344,7 +6359,7 @@ msgstr "Eksporter _kontoer"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:111
 msgid "Export the account hierarchy to a new file"
-msgstr ""
+msgstr "Eksporter konto hierarki til en ny fil"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:114
 msgid "Export _Chart of Accounts"
@@ -6382,11 +6397,11 @@ msgstr "Planlagt Tran_saksjon Redigering"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:131
 msgid "The list of Scheduled Transactions"
-msgstr ""
+msgstr "Listen over planlagte transaksjoner"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:133
 msgid "_Since Last Run..."
-msgstr ""
+msgstr "_Siden Sist Kj¯ring..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:134
 msgid "Create Scheduled Transactions since the last time run"
@@ -6398,7 +6413,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:137
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr ""
+msgstr "Oppsett av planlagte transaksjoner for tilbakebetaling av lÂn"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Close _Books"
@@ -6464,7 +6479,7 @@ msgstr "Opprett en ny konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:153
 msgid "New Account _Hierarchy..."
-msgstr ""
+msgstr "Nytt Konto _Hierarki..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
 msgid "Extend the current book by merging with new account type categories"
@@ -6489,7 +6504,7 @@ msgstr "Å≈pne _underkontoer"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:160
 #: ../src/gnome/gnc-plugin-page-budget.c:123
 msgid "Open the selected account and all its subaccounts"
-msgstr ""
+msgstr "≈pne valgte konto og alle dens underkontoer"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:164
@@ -6513,17 +6528,17 @@ msgstr "Slett valgt konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 msgid "Account Tree _Options..."
-msgstr ""
+msgstr "Kontotre _Instillinger"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 #: ../src/gnome/gnc-plugin-page-account-tree.c:201
 msgid "Edit the account view options"
-msgstr ""
+msgstr "Endre kontoens instillinger"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:176
 #: ../src/gnome/gnc-plugin-page-register.c:216
 msgid "Reconcile the selected account"
-msgstr ""
+msgstr "Avstemme valgte konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:218
@@ -6592,6 +6607,8 @@ msgid ""
 "Are you sure you want to delete the %s\n"
 "account and all its children?"
 msgstr ""
+"Er du sikker pÂ at du vil slette %s\n"
+"kontoen og alle dens underkontoer?"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:964
 #, c-format
@@ -6599,6 +6616,8 @@ msgid ""
 "This account contains transactions.  Are you sure you\n"
 "want to delete the %s account?"
 msgstr ""
+"Denne kontoen inneholder transaksjoner.  Er du sikker pÂ at du\n"
+"vil slette %s kontoen?"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:967
 #, c-format
@@ -6607,6 +6626,9 @@ msgid ""
 "transactions.  Are you sure you want to delete the\n"
 "%s account and all its children?"
 msgstr ""
+"En (eller flere) underkontoer av denne kontoen inneholder\n"
+"transaksjoner.  Er du sikker pÂ at du vil slette\n"
+"%s kontoen og alle dens underkontoer?"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:971
 #, c-format
@@ -6622,7 +6644,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1094
 msgid "Account Tree Options"
-msgstr ""
+msgstr "Kontotre Instillinger"
 
 #. Edit menu
 #: ../src/gnome/gnc-plugin-page-budget.c:127
@@ -6816,7 +6838,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-register.c:1524
 msgid "and subaccounts"
-msgstr ""
+msgstr "og underkontoer"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1788
 msgid "This transaction has already been voided."
@@ -7411,7 +7433,7 @@ msgstr "En kilde"
 
 #: ../src/gnome-utils/dialog-account.c:385
 msgid "Could not create opening balance."
-msgstr ""
+msgstr "Kan ikke opprette den inngÂende balansen."
 
 #: ../src/gnome-utils/dialog-account.c:627
 msgid "Field"
@@ -7450,7 +7472,7 @@ msgstr "Du mÅÂ velge en gyldig opphavskonto."
 #: ../src/gnome-utils/dialog-account.c:773
 #: ../src/gnome-utils/dialog-account.c:933
 msgid "You must choose a commodity."
-msgstr ""
+msgstr "Du mÂ velge en vare."
 
 #: ../src/gnome-utils/dialog-account.c:911
 msgid "There is already an account with that name."
@@ -7458,7 +7480,7 @@ msgstr "Det finnes allerede en konto med det navnet."
 
 #: ../src/gnome-utils/dialog-account.c:941
 msgid "You must enter a valid opening balance or leave it blank."
-msgstr ""
+msgstr "Du mÂ fylle inn en gyldig inngÂende balanse, eller la feltet vÊre blankt."
 
 #: ../src/gnome-utils/dialog-account.c:965
 msgid ""
@@ -7482,6 +7504,8 @@ msgid ""
 "\n"
 "Commodity: "
 msgstr ""
+"\n"
+"Vare: "
 
 #: ../src/gnome-utils/dialog-commodity.c:162
 msgid ""
@@ -7511,7 +7535,8 @@ msgstr "Velg valuta"
 msgid ""
 "You must select a commodity.\n"
 "To create a new one, click \"New\""
-msgstr ""
+msgstr "Du mÂ velge en vare.\n"
+"Trykk \"Ny\" for Â opprette en ny vare."
 
 #: ../src/gnome-utils/dialog-commodity.c:750
 msgid "Use local time"
@@ -7519,11 +7544,11 @@ msgstr "Bruk lokal tid"
 
 #: ../src/gnome-utils/dialog-commodity.c:1080
 msgid "You may not create a new national currency."
-msgstr ""
+msgstr "Du kan ikke oprette en ny nasjonal valuta."
 
 #: ../src/gnome-utils/dialog-commodity.c:1092
 msgid "That commodity already exists."
-msgstr ""
+msgstr "Den varen eksisterer allerede."
 
 #: ../src/gnome-utils/dialog-commodity.c:1132
 msgid ""
@@ -7772,7 +7797,7 @@ msgstr "Oppdater gnucash konfigurasjons data"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:20
 msgid "Update search path"
-msgstr ""
+msgstr "Oppdater s¯kesti"
 
 #: ../src/gnome-utils/druid-gconf-setup.glade.h:21
 msgid ""
@@ -7916,7 +7941,7 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:8
 msgid "Include Century"
-msgstr ""
+msgstr "Inkluder ≈rhundre"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:9
 msgid "Months:"
@@ -8009,6 +8034,9 @@ msgid ""
 "   %s\n"
 "The host, username or password were incorrect."
 msgstr ""
+"Kan ikke koble til\n"
+"   %s\n"
+"Verten, brukernavn eller passord var feil."
 
 #: ../src/gnome-utils/gnc-file.c:216
 #, c-format
@@ -8017,6 +8045,9 @@ msgid ""
 "   %s\n"
 "Connection was lost, unable to send data."
 msgstr ""
+"Kan ikke koble til\n"
+"   %s\n"
+"Tilkoblingen ble brutt, kan ikke sende data."
 
 #: ../src/gnome-utils/gnc-file.c:222
 msgid ""
@@ -8084,6 +8115,8 @@ msgid ""
 "You do not have permission to access\n"
 "    %s\n"
 msgstr ""
+"Du har ikke tillatelse til Â aksessere\n"
+"    %s\n"
 
 #: ../src/gnome-utils/gnc-file.c:270
 #, c-format
@@ -8167,6 +8200,9 @@ msgid ""
 "  %s\n"
 " is a QSF map and cannot be opened as a QSF object."
 msgstr ""
+"Den valgte filen \n"
+"  %s\n"
+" er en QSF map og kan ikke Âpnes som et QSF object."
 
 #: ../src/gnome-utils/gnc-file.c:332
 #, c-format
@@ -8287,11 +8323,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:410
 msgid "An unknown I/O error occurred."
-msgstr ""
+msgstr "En ukjent inn-ut feil oppstod."
 
 #: ../src/gnome-utils/gnc-file.c:495
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr ""
+msgstr "Endringer har blitt gjort siden sist lagring. Vil du lagre dataene?"
 
 #: ../src/gnome-utils/gnc-file.c:569
 #, c-format
@@ -8683,7 +8719,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-main-window.c:2857
 #: ../src/gnome-utils/gnc-main-window.c:2897
 msgid "translator_credits"
-msgstr ""
+msgstr "Norsk BokmÂl Oversettelse av Tor Harald Thorland <tortho@strigen.com>"
 
 #. Translators: This is the "About" message.
 #: ../src/gnome-utils/gnc-main-window.c:2875
@@ -8711,7 +8747,7 @@ msgstr "Denne mÂnedens start"
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:67 ../intl-scm/guile-strings.c:4340
 msgid "Start of previous month"
-msgstr ""
+msgstr "Forrige mÂneds start"
 
 #: ../src/gnome-utils/gnc-period-select.c:68
 msgid "Start of this quarter"
@@ -8720,7 +8756,7 @@ msgstr "Dette kvartals start"
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:69 ../intl-scm/guile-strings.c:4356
 msgid "Start of previous quarter"
-msgstr ""
+msgstr "Forrige kvartals start"
 
 #: ../src/gnome-utils/gnc-period-select.c:70
 msgid "Start of this year"
@@ -8728,16 +8764,16 @@ msgstr "Dette Ârs start"
 
 #: ../src/gnome-utils/gnc-period-select.c:71
 msgid "Start of previous year"
-msgstr ""
+msgstr "Forrige Ârs start"
 
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:74
 msgid "Start of this fiscal year"
-msgstr ""
+msgstr "Dette regnskapsÂrs start"
 
 #: ../src/gnome-utils/gnc-period-select.c:75
 msgid "Start of previous fiscal year"
-msgstr ""
+msgstr "Forrige regnskapsÂrs start"
 
 #. src/app-utils/date-utilities.scm
 #: ../src/gnome-utils/gnc-period-select.c:81 ../intl-scm/guile-strings.c:4336
@@ -8769,11 +8805,11 @@ msgstr "Slutten av forrige Âr"
 #. FY Strings
 #: ../src/gnome-utils/gnc-period-select.c:89
 msgid "End of this fiscal year"
-msgstr ""
+msgstr "Dette regnskapsÂrs slutt"
 
 #: ../src/gnome-utils/gnc-period-select.c:90
 msgid "End of previous fiscal year"
-msgstr ""
+msgstr "Forrige regnskapsÂrs slutt"
 
 #: ../src/gnome-utils/gnc-splash.c:77
 #, c-format
@@ -9673,7 +9709,7 @@ msgstr "Kreditt"
 
 #: ../src/gnome/window-reconcile.c:1052
 msgid "Are you sure you want to delete the selected transaction?"
-msgstr ""
+msgstr "Er du sikker pÂ at du vil slette den valgte transaksjonen?"
 
 #: ../src/gnome/window-reconcile.c:1178
 msgid ""
@@ -10261,7 +10297,7 @@ msgstr "Bank Kode"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:11
 msgid "Choose a HBCI Version to use with the selected bank:"
-msgstr ""
+msgstr "Velg en HBCI Versjon som skal brukes til den valgte banken:"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:12
 msgid ""
@@ -10336,11 +10372,11 @@ msgstr "HBCI kontonavn"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:30
 msgid "Initial HBCI Setup"
-msgstr ""
+msgstr "Innledende HBCI Oppsett"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:31
 msgid "Match HBCI accounts with GnuCash accounts"
-msgstr ""
+msgstr "Avstemme HBCI kontoer med GnuCash kontoer"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:33
 msgid ""
@@ -10400,18 +10436,20 @@ msgstr "Sorter"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:48
 msgid "Start AqHBCI Setup Wizard"
-msgstr ""
+msgstr "Start AqHBCI Oppsetts Veiviser"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:49
 msgid "Start AqHBCI Wizard"
-msgstr ""
+msgstr "Start AqHBCI Veiviser"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:50
 msgid ""
 "The Setup of your HBCI connection is handled by the external program "
 "\"AqHBCI Setup Wizard\". Please press the button below to start this program."
 "\t"
-msgstr ""
+msgstr "Oppsett av din HBCI tilkopling blir hÂndtert av det eksterne programmet"
+"\"AqHBCI Setup Wizard\". Vennligs trykk knappen under for Â starte dette programmet."
+"\t"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:51
 msgid ""
@@ -10554,7 +10592,7 @@ msgstr ""
 
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:221
 msgid "The HBCI import returned no transactions for the selected time period."
-msgstr ""
+msgstr "HBCI import returnerte ingen transaksjoner for det valgte tidsrom."
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:123
 msgid ""
@@ -10982,7 +11020,7 @@ msgstr ""
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:572
 msgid "Unknown OFX investment account"
-msgstr ""
+msgstr "Ukjent OFX investerings konto"
 
 #: ../src/import-export/ofx/gnc-ofx-import.c:622
 msgid "Select an OFX/QFX file to process"
@@ -12169,7 +12207,7 @@ msgstr ""
 #. src/report/utility-reports/test-graphing.scm
 #: ../intl-scm/guile-strings.c:74
 msgid "Sample graphs:"
-msgstr ""
+msgstr "Diagramutvalg:"
 
 #. src/report/utility-reports/test-graphing.scm
 #: ../intl-scm/guile-strings.c:76
@@ -12184,7 +12222,7 @@ msgstr ""
 #. src/report/utility-reports/test-graphing.scm
 #: ../intl-scm/guile-strings.c:80 ../intl-scm/guile-strings.c:82
 msgid "Sample graphs."
-msgstr ""
+msgstr "Diagramutvalg."
 
 #. src/report/utility-reports/iframe-url.scm
 #: ../intl-scm/guile-strings.c:86 ../intl-scm/guile-strings.c:92
@@ -12234,7 +12272,7 @@ msgstr ""
 #. src/report/utility-reports/view-column.scm
 #: ../intl-scm/guile-strings.c:118
 msgid "Custom Multicolumn Report"
-msgstr ""
+msgstr "Egendefinert Flerkolonnes Rapport"
 
 #. src/report/utility-reports/hello-world.scm
 #: ../intl-scm/guile-strings.c:120 ../intl-scm/guile-strings.c:126
@@ -13309,7 +13347,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:618 ../intl-scm/guile-strings.c:920
 #: ../intl-scm/guile-strings.c:1962 ../intl-scm/guile-strings.c:2100
 msgid "Maximum number of levels in the account tree displayed"
-msgstr ""
+msgstr "Maksimum antall nivÂer i kontotreet som skal vises"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:620
@@ -13436,7 +13474,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:656 ../intl-scm/guile-strings.c:934
 #: ../intl-scm/guile-strings.c:1976 ../intl-scm/guile-strings.c:2114
 msgid "Include accounts with zero total balances"
-msgstr ""
+msgstr "Inkluder kontoer med null i total balanse"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -13763,7 +13801,7 @@ msgstr "Ingen data"
 msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
-msgstr ""
+msgstr "Det er ingen priser tilgjengelig for den valgte varen i valgte tidsrom."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:804
@@ -14015,22 +14053,22 @@ msgstr ""
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:950
 msgid "Label the revenue section"
-msgstr ""
+msgstr "Merke utgifts seksjonen"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:952
 msgid "Whether or not to include a label for the revenue section"
-msgstr ""
+msgstr "Om du skal eller ikke skal ta med merke pÂ utgifts seksjonen"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:954
 msgid "Include revenue total"
-msgstr ""
+msgstr "Ta med sum utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:956
 msgid "Whether or not to include a line indicating total revenue"
-msgstr ""
+msgstr "Om du skal eller ikke skal ta med en linje som indikerer sum utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:958
@@ -14050,7 +14088,7 @@ msgstr ""
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:964
 msgid "Whether or not to include a line indicating total expense"
-msgstr ""
+msgstr "Om du skal eller ikke skal ha med en linje som indikerer totale utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/account-summary.scm
@@ -14152,12 +14190,12 @@ msgstr ""
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1028
 msgid "Revenues"
-msgstr ""
+msgstr "Utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1030
 msgid "Total Revenue"
-msgstr ""
+msgstr "Sum Utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/report-system/report-utilities.scm
@@ -14168,7 +14206,7 @@ msgstr "Utgifter"
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:1034
 msgid "Total Expenses"
-msgstr ""
+msgstr "Sum Utgifter"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -14268,7 +14306,7 @@ msgstr "Annuller Transaksjonene?"
 #: ../intl-scm/guile-strings.c:1632 ../intl-scm/guile-strings.c:1732
 #: ../intl-scm/guile-strings.c:1820
 msgid "Reconciled Date"
-msgstr ""
+msgstr "Avstemmings Dato"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -14401,7 +14439,7 @@ msgstr ""
 #. src/report/standard-reports/portfolio.scm
 #: ../intl-scm/guile-strings.c:1170
 msgid "Investment Portfolio"
-msgstr ""
+msgstr "Investerings Portef¯lje"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -14413,7 +14451,7 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1176 ../intl-scm/guile-strings.c:1210
 msgid "Include accounts with no shares"
-msgstr ""
+msgstr "Inkluder kontoer uten aksjer"
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -14551,7 +14589,7 @@ msgstr "Kapital"
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:1334 ../intl-scm/guile-strings.c:3272
 msgid "Investments"
-msgstr "Investering"
+msgstr "Investeringer"
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:1336
@@ -14577,7 +14615,7 @@ msgstr ""
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1348
 msgid "Cash Flow"
-msgstr ""
+msgstr "Pengestr¯m"
 
 #. src/report/standard-reports/cash-flow.scm
 #: ../intl-scm/guile-strings.c:1372
@@ -14949,7 +14987,7 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:1734
 msgid "Sort by the Reconciled Date"
-msgstr ""
+msgstr "Sorter etter Avstemmings Dato"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:1736
@@ -15044,7 +15082,7 @@ msgstr ""
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:1822
 msgid "Display the reconciled date?"
-msgstr ""
+msgstr "Vis avstemmings dato?"
 
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:1834
@@ -15399,7 +15437,7 @@ msgstr "Total Gjeld & Egenkapital"
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2222 ../intl-scm/guile-strings.c:2256
 msgid "Average Balance"
-msgstr ""
+msgstr "Gjennomsnitts Balanse"
 
 #. src/report/standard-reports/average-balance.scm
 #: ../intl-scm/guile-strings.c:2240
@@ -16126,7 +16164,8 @@ msgstr "Du mÂ velge kontoer for Â bruke denne rapporten."
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
-msgstr ""
+msgstr "Valgte kontoer inneholder ingen data (eller bare nuller) for det "
+"valgte tidsrom"
 
 #. src/report/report-system/report-utilities.scm
 #: ../intl-scm/guile-strings.c:2944
@@ -16445,7 +16484,7 @@ msgstr "Laster moduler... "
 #. src/scm/main.scm
 #: ../intl-scm/guile-strings.c:3090
 msgid "Checking Finance::Quote..."
-msgstr "Checking Finance::Quote..."
+msgstr "Sjekker Finans::Noteringer..."
 
 #. src/scm/main.scm
 #: ../intl-scm/guile-strings.c:3092
@@ -16564,7 +16603,7 @@ msgstr "Dagens tips"
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3164 ../intl-scm/guile-strings.c:3330
 msgid "Account Tree Window"
-msgstr ""
+msgstr "Kontotre Vindu"
 
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3166 ../intl-scm/guile-strings.c:3342
@@ -16918,7 +16957,7 @@ msgstr "Planlagt Transaksjons Vindu"
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3366 ../intl-scm/guile-strings.c:3402
 msgid "Reconcile Window"
-msgstr ""
+msgstr "Avstemmings Vindu"
 
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3370
@@ -17058,7 +17097,7 @@ msgstr "Planlagt Transaksjons Redigering"
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3434
 msgid "Since Last Run Druid"
-msgstr ""
+msgstr "Siden Sist Kj¯ring Veiviser"
 
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3436
@@ -17676,7 +17715,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3862 ../intl-scm/guile-strings.c:4020
 #: ../intl-scm/guile-strings.c:4184
 msgid "Expense Voucher"
-msgstr ""
+msgstr "Utgifts Bilag"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm
@@ -17885,7 +17924,7 @@ msgstr "InnevÊrende finans Ârs/bokf¯ringsperiodes start"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:4320
 msgid "Previous Financial Year Start"
-msgstr ""
+msgstr "Forrige Finans ≈rs Start"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:4322
