@@ -1,3 +1,10 @@
+2005-12-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/dialog-options.c: Improve tooltip display for
+	almost all option types. Add tooltips for buttons where they were
+	missing. Pack option widgets into GtkEventBox so that tooltips are
+	really shown. Fix various string i18n bugs.
+
 2005-12-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/register/register-core/quickfillcell.c (utf8_caseequal_len):
