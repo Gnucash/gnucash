@@ -28,7 +28,7 @@ gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
-${gnc_common_scripts}: generate-gnc-script
+${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
 CLEANFILES = ${gnc_common_scripts} update-gnucash-gconf
