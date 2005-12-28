@@ -1,6 +1,582 @@
 Version history:
 ------- -------
 
+ 1.8.12 - 19 Oct 2005
+ 	 o Online Banking/HBCI improvements: Debit notes are fixed
+ 	 again; Bank-internal money transfers are now supported, if
+ 	 the HBCI bank offers them; Setup wizard can now works with
+ 	 HBCI, OFX-Connect, and other AqBanking backends; Fix
+ 	 character encoding issues in utf-8 locales; Fix date interval
+ 	 in the import transaction matcher for OFX and HBCI import;
+ 	 Fix PIN entry bug.
+ 	 o New currencies added: Romanian Leu, Bulgarian Lev, Malagasy Ariary
+ 	 o Fix problem with long date formats in some locales (bug#170444)
+ 	 o Add configure macros for mips, mipsel, arm, and m68k; Fix
+ 	 compilation on OpenBSD 64bit architectures
+ 	 o Updated translations: German, Italian, Kinyarwanda
+
+ 1.8.11 - 06 Feb 2005
+ 	 o Add extra sanity checks and verbose error message if the setup
+	 wizard of aqhbci cannot be found.
+	 o Fix potentially missing initialization of gwenhywfar library, as
+	 reported by Peter O'Gorman on Max OS X.
+	 o Properly accumulate splits (bug #165053).  Also fixes a (related)
+	 memory leak
+	 o Add explicit dependency on business-utils.
+	 o Adapt to latest changes in aqbanking; external wizard name is no
+	 longer hard-coded here but is asked from aqbanking.
+	 o Enable debit notes again in HBCI.
+	 o Update German translation.
+	 o Thomas Bushnell's patch to protect non-backup pruning (#164875)
+	 o Add the transaction guid to some error warning messages.
+	 o Fix HBCI date range for statement download.
+	 o Fix the last-day-of-month computation for leap years.
+	 
+ 1.8.10 - 11 Dec 2004
+ 	 o Don't use C++/C99 declarations.  Declare variables at the top of
+	 the function.
+	 o Updated British English, Czech, Italian, Russian, German,
+	 Brazilian Portugese, Dutch, French, Spanish, translations.
+	 o Fabien COELHO's zero-balance patch to remove accounts of zero
+	 balance from the report.
+	 o Fix a broken recursion problem.  Don't call show-acct? from
+	 use-acct? so we don't recurse ad flictum.  This recursive call isn't
+	 necessary, just have use-acct? recurse unto itself.
+	 o look in ${srcdir} for build-config.scm.in
+	 o Work around problems with libltdl3.
+	 o don't automatically try to (require 'format), so gnucash will build
+	 on an slib-3 system.
+	 o Added quote sources for Indian Mutual Funds.
+	 o Skip the case when a token is the empty string. This caused many
+	 warnings about a NULL kvp_frame lookup.
+	 o Luigi Ballabio's automake patch to gnucash.m4
+	 o guile-1.6 complains about string->symbol when passed a symbol.
+	 o applied Vasil's patch to improve the transaction report for HTML
+	 export purposes.
+	 o Backport of CVS-head changes to improve register open performance
+	 when working with large account trees (>500 accounts).  The new code
+	 caches the quickfill tree so that it is shared by all register
+	 windows.
+	 o create gnc:current-saved-reports, as the file to store saved
+	 reports from cstim.  Autoload the saved-reports file at startup
+	 (after config.user/config.auto is loaded).
+	 o Added gnc:report-generate-saved-forms that will generate the scheme
+	 code necessary to create a new report from the saved options of an
+	 old report.
+	 o Added example Menu item "File -> Save all reports" that will call
+	 the new report saving function for all reports. This would need more
+	 work so that not all reports are saved but only the currently
+	 selected one -- any volunteer may feel free to add that.
+	 o Fix saving of report: It now appends to
+	 ~/.gnucash/saved-reports-1.8 Statusbar tip is now more verbose.
+	 o Add toolbar element for saving the current report.
+	 o Add function for saving one particular report to the
+	 ~/.gnucash/saved-reports-1.8 file. Add extra menu only for customized
+	 reports.
+	 o Remove the previous function for saving all reports since it is no
+	 longer necessary.
+	 o Apply David Reiser's patch for Quicken(tm) cheques with stub.
+	 o Apply David Grant's patch to add TD Efunds.
+	 o make the desktop file HIG compliant.
+	 o change the gtkhtml order to search for >= 1.1 before < 1.1, in
+	 order to try to fix #84707 on systems with multiple versions of
+	 gtkhtml.
+	 o Perry Smith's Null Account Patch.  Make sure the security is a real
+	 string before appending an account separator, so we don't try to
+	 create a "null" account.
+	 o Add option to include zero-amount splits in computations.
+	 o fix xaccAccountGetBalanceAsOfDate() to properly compute the balance
+	 at the end of the split list.
+	 o Major change for HBCI, back-ported from HEAD. The HBCI online
+	 banking is no longer based on the openhbci library but instead on the
+	 aqbanking library http://sf.net/projects/aqbanking which is Martin
+	 Preuss' successor of openhbci. This means that now aqbanking-0.9.5 is
+	 required instead of any openhbci package.
+	 o Fixes for x86_64
+	 o Update for new LibOfx, this among other things, gives gnucash
+	 Microsoft OFC support.
+	 o Duplicate match tweaks in import code
+	 o Andreas Rottmann's patch to support g-wrap 1.9.
+	 o provide a default account name so we don't crash when someone
+	 imports a broken QIF that has a !Account without an account name.
+	 o Daniel Lindenaar's patch to implement a check-box in the Invoice
+	 Post Dialog (with a default in the File Preferences) to choose to
+	 accumulate splits when posting an invoice, or post a 1:1 mapping.
+	 o Phil Longstaff's patch to prevent duplicate pricedb entries.
+	 o Heath Martin's x86_64 patch
+	 o Mark search criteria for translation -- somehow this had been
+	 missed all the time.
+	 o Change currency mnemonic for "New Israeli Shekel" from "ILS" to
+	 "NIS".
+	 o Identified and fixed several places with untranslated strings.
+	 o Add configure check for libofx version 0.7.0 and respective error
+	 message. Update docs.
+	 o Improve importer performance by matching imported transactions only
+	 against transactions in the proper time interval.
+	 o send an event when a payment is processed so the invoice gets
+	 updated as "paid" in the search window.
+	 o Make sure we set the proper search-type when we create the query,
+	 otherwise the search will fail later.
+
+ 1.8.9  - 11 Apr 2004
+ 	 o Updated Polish translation by GNOME PL Team, updated French, Czech,
+	   Spanish, Russian, Dutch, German and Italian translations.
+	 o dump-finance-quote - Be more explicit when a lookup fails.
+	 o log-replay - Increase read buffer size.
+	 o Make sure to verify that the items in the reconcile hash are still
+	   around after a refresh.
+	 o When the commodity is changed, then set the currency to the
+	   currency of the last price entered for this commodity.
+	 o Add Hungarian account templates by Sulyok Peter
+	 o Patch by Geoff Kassel to work on OpenBSD (allow user to set
+	   diffcmd).
+	 o Don't test double KVPs, on the theory that they will soon be
+	   deprecated.
+	 o  When computing the aging report, ignore splits that belong to
+	   closed lots.  This way we wont get the wrong values when the invoice
+	   falls outside the 360-day window but its payment falls inside the
+	   window.
+	 o Add gnc_getline() function to read an unlimited line-length from a
+	   file (so you're not limited to a buffer size with fgets() and the
+	   like). It is similar to the getline(3) on Linux except the API is
+	   different and it will always set the return string.
+	 o Add workaround code for openhbci/chipcard problem.
+	 o Add gnc_lookup_date_option() function.
+	 o Add gnc_ui_account_get_balance_in_currency() function.
+	 o Add preferences for summarybar.
+	 o Add xaccAccountConvertBalanceToCurrencyAsOfDate() function
+	 o Summarybar can now display a grand total of all commodities,
+	   profits of a period of time and net assets at the end of the period;
+	   summarybar can be configured with some options under
+	   edit->preferences.
+	 o Create two new functions to centralize date-selection option
+	   creation.
+	 o Export the new scheme functions.
+	 o Modify Herbert's patch to centralize the date-selection option
+	   code.
+	 o Use the new centralized date-selection option-creation code.
+	 o Fix a typo in the help (was --diable-gui).
+	 o Add db-4.2 to the list of databases we search.
+	 o Fix a problem with opt style installs.
+	 o Rename from_xxx and to_xxx account tree widgets to left_xxx and
+	   right_xxx.
+	 o If in "accountant mode" call "transfer from" "credit account" and
+	   "transfer to" "debit account" and interchange account trees.
+	 o Remove the RECN cell from payable/receivable to stop confusing
+	   people.
+	 o Change Ukrainian "UAG" into "UAH"
+	 o Commented out setting the memo always to "Auto-created split" due
+	   to popular request.
+	 o Fix for part of bug only allow auto-create SXes which have splits 
+	   to be created.
+	 o HBCI transfer template management GUI added by Bernd Wagner.
+	 o Added instructions about running under valgrind.
+	 o Added a large set of valgrind suppressions for both guile and
+	   gnucash.
+	 o Change the reg_type to SEARCH_LEDGER so all the 'action' types
+	   appear.
+	 o Remove unused 'ledger_status' widget.
+	 o At least be consistent about the background coloring of the month
+	   labels, even if we're still not using GTK themeage correctly.
+	 o Destroy the transient window when the widget is destroyed.
+	 o Make the advance and remind spin-buttons editable.
+	 o Change the upper bound on the advance and remind spins to 365
+	   [days], with a page-size of 30 [days].
+	 o Disallow the Scheduling of being-editing transactions in the
+	   Register, preventing a class of unbalacned SX template transactions
+	   from being entered and propogated through the system.
+	 o Fix nasty memory-corruption issue; insufficent bounds checking on
+	   array index.
+	 o Better handling of various error cases in transaction-creation.
+	 o When we have a problem parsing a credit/debit cell, indicate to the
+	   user what occurred.
+	 o Use the account-list filtering capability of the GncAccountSel to
+	   only show/allow-creation-of valid account-types in the loan-druid.
+	 o Add ':' to the token list of allowable characters in the formula
+	   cell.
+	 o Fix precedence bug screwing up loan review page.
+	 o Don't need to require format; main.scm handles it, and the default
+	   "format" (simple-format) is sufficient to handle everything we need.
+	   This allows gnucash to work with slib3.
+	 o Add code to remove "intl/Makefile po/Makefile" from AC_OUTPUT in
+	   configure.in prior to calling gettextize to make sure that you can
+	   build from CVS with recent versions of gettextize.  Tested with both
+	   RH9 and RH7.3 to make sure it works with both old and new.
+	 o Move variable declaration to the top of the block.
+	 o Make sure we always have intl and po Makefiles in the configure
+	   script.  Sometimes it was ripped out without being replaced.
+
+ 1.8.8  - 17 Nov 2003
+ 	 o HBCI - Improve error message when receiving zero balance from bank.
+	 o Add account template for Swiss German businesses "KMU" by Tom
+	   Winterhalder
+	 o Add *big* account template for German businesses "SKR04" by Betina
+	   Schmidt
+	 o Add Catalan and Turkish translation, Updated German, Italian,
+	   Czech, Greek and Dutch translations.
+	 o Add Turkish account template. Updated Greek account templates.
+	 o Remove debian scripts
+	 o Add a comment about minimum string length
+	 o Fix the ISO_DATELEN to be "long enough"
+	 o Fix handling of HBCI direct debits (fix wrong textkey). Fix and
+	   initially implement handling of multiple banks/users/customers.
+	 o Fixed extremly stupid, old bug that causes weird HBCI errors.
+	   Improved user messages.
+	 o Refactor some GUI code. Improve user messages.
+	 o BillTermDecRef should have been BillTermIncRef when setting new
+	   bill term.
+	 o Applied Frank Pavageau's patch regarding capital gains to handle
+	   split transactions.
+	 o Don't make a timespec with tv_sec == 0.  Fixes some tests on the
+	   alpha platform.
+	 
+ 1.8.7  - 14 Sept 2003
+ 	 o Use <libofx/libofx.h> instead of "libofx/libofx.h" as it's not part
+	   of our system. Fixes a dependency problem in 1.8.6 release.
+	 o Small fix from hawkfan to get tests to work when building outside
+	   srcdir.
+	 o Fix a bug introduced by Matthew -- ANSI C does not allow you to
+	   declare a variable in the middle of an expression.  Move the
+	   declaration to the top of the function.
+	 o We don't need the trailing semi-colon because the #include adds
+	   one.  The double semi-colon causes build failures in some cases.
+
+ 1.8.6  - 11 Sept 2003
+ 	 o Updated Spanish, Greek, French, Czech, Slovak translations
+	 o Fixed extremely stupid bug in the import value setting workaround.
+	 o Fixed problem with SX formula_cell calls
+	 o Merge missing part of 2003-05-28 commit.  The log format changes
+	   didn't get commited for some reason, making the log replayer 
+	   completely unusable.
+	 o Fixed crash during dialog startup on Solaris.
+	 o Turn off scheme garbage collection during query->scm and scm->query
+	   conversion.  It shaves about 50% off the test-scm-query-string tests.
+	 o Make test-scm-query-string test deterministic by seeding the RNG
+	   with a known value.
+	 o Add a "slots" parameter to allow for future expansion.  Right now
+	   this is completely ignored.
+
+ 1.8.5  - 17 Aug 2003
+ 	 o Add IS_PAID column and the ability to search for paid/not-paid
+	   invoices.
+	 o Add HBCI online transfer templates and make usable
+	 o Fix a bug where if you unpost an invoice and don't bring the
+	   TaxTables up to date, the total value shown in the register is
+	   different depending on whether the cursor is on the current line
+	   or not.
+	 o Don't constantly resize the invoice window every time we update
+	   ourselves.
+	 o Updated Italian, Brazilian Portugese, German, Czech, Dutch and
+	   British English translation.
+	 o Add Subtotal and Tax labels in the summary bar to print the
+	   Invoice's total amounts.
+	 o Change the log format to use GUID instead of C pointers, use
+	   ISO8601 instead of proprietary form and log the Notes field.
+	 o Port new log replay module from HEAD.
+	 o Re-enable reversed legend in stacked barcharts. Needs Guppi 0.40.4
+	   a.k.a. Guppi CVS, though, to actually work.
+	 o Update the Polish Zloty for its new ISO currency code.
+	 o Add ability to sort by Action and Notes.
+	 o Fix the vendor window title to use the company name, not the
+	   contact name. Change the message when the company name is left blank.
+	 o Create a new "date format" widget to let the user choose a date
+	   format (and see the results of what the date would look like).
+	 o Add "Deluxe Personal Check" type. Add support for printing to
+	   "deluxe" personal checks.  This prints the check "sideways" on a
+	   US-Letter configuration.
+	 o Backport the QueryList widget and associated usage (this allows
+	   more places to have sortable column displays for query results)
+	 o Improve HBCI error handling. Add more user feedback functions.
+	 o Add support for KtoBlzCheck, a small checking package for
+	   destination account numbers for German banks. Very small, very useful
+	   http://sourceforge.net/projects/ktoblzcheck
+	 o TRANSLATION_HOWTO: Added, by Jon Lapham
+	 o Add API to the plugin modules to allow post-processing (scrubbing)
+	   of the book after it is loaded from XML.  This allows a plug-in to
+	   post-process the complete book.
+	 o Create a scrub function to clear up bogus tax tables due to a bug
+	   which could cause tax tables to get created ad-nausium if you post
+	   and then unpost an invoice.
+	 o Create a scrub function to clear up bogus bill terms due to a bug
+	   which could cause bill terms to get created due to post/unpost of
+	   invoices.
+	 o Enable the exchange-rate dialog on "search ledger" registers.
+	 o Raise the import window after choosing a file.
+	 o Change dialog statements to allow for embedded percent signs in the
+	   messages.  In other words, don't allow user input into the format
+	   string of a printf.
+	 o Change how the billterms option menu is used so it will change
+	   properly if you change the invoice's owner.
+	 o Don't use gnc:reverse-account-balance? to determine whether to
+	   reverse the balance -- base it purely on the report type.
+	 o Fix gncBillTermCopy() so it PROPERLY copies the bill term.
+	 o Tolerate some HBCI banks failure of the GetSystemId-job.
+	 o Don't allow selection of directory for save file.
+	 o Add fancy-invoice report, to show what else is possible.  It's not
+	   really useful per se, but it is another example for users.  To be
+	   useful it requires some custom editing.
+	 o Limit the commodity choices based upon the current account type.
+	 o Add a new argument to the dialog creation functions to specify what
+	   types of commodities should be presented.Also tweak the title of the
+	   dialog based upon this argument.  Remove the "new" button when the
+	   dialog is limited strictly to currencies.
+	 o Show the running balance column by default in the register report.
+	 o Annotate the window title to indicate whether a register is for a
+	   single account or it includes all subaccounts.
+	 o Change the register close dialog to include a cancel option.
+	 o Don't close the register if the user cancelled.
+	 o If the user has manually entered an amount, then stop automatically
+	   updated the amount when the date is changed.
+	 o Refactor many HBCI functions to eventually enable queued processing
+	   of several HBCI jobs.
+	 o Add a "retained earnings" item under equity, and change the title
+	   to include the start date (Balance Sheet report).
+	 o Don't print the "handling-request" messages when getting stock
+	   quotes.
+	 o Display selected pixmap when opening an options window.
+	 o Fix 'Save As' so it can write to non-existing files.
+	 o New data file should have same uid/gids original file.
+	 o Added Italian account templates by Lorenzo Cappelletti
+	 o Change HBCI online transfer action so that first the gnucash
+	   Transaction is created and only after that the HBCI connection is
+	   started. Necessary for later implementation of offline queueing and
+	   multi-job execution.
+	 o Clarify the part of the HBCI setup about potentially adding HBCI
+	   accounts manually.
+	 o Add a couple of extra checks to prevent crashing if the commodity
+	   attached to a price quote has disappeared.
+	 o Provide a new warning message before deletion if a commodity has
+	   any price quotes.  If the user deletes the commodity anyway, removed
+	   any quotes are based on the commodity
+	 o Enhance the get prices routine to handle a request with a NULL
+	   currency.
+	 o Fix a crash where removing items in the wrong order could cause
+	   "Bad Things" to happen
+	 o Sort the bills before displaying them, so they appear in a
+	   consistent order (by date due).
+	 o Fix a bunch more rounding errors, and add more precision to the
+	   price.
+	 o Change the description and action of Invoice and Payement
+	   Transactions/Splits, to make it easier to print a check off the
+	   posted transactions.
+	 o Add Debit and Credit totals to Register report.
+	 o Differentiate between "file is already locked" and "we can't create
+	   the lockfile" so we can let the user know.
+	 o Fix the message to be more appropriate when we hit a READONLY
+	   error.
+	 o Various Postgres backend fixes
+	 o Add button for manual adding of HBCI accounts. Requires latest
+	   OpenHBCI 0.9.13
+	 o Add saving of the HBCI_API so that bank's status changes will now
+	   be remembered immediately.
+	 o Add "(Report)" strings to the various columns displayed in the
+	   report currency.
+	 o Set the date-entered on invoice transactions to "now" instead of
+	   the post date.  Thi lets us know when an invoice was actually posted,
+	   or a payment was actually made.
+	 o Support "gain/loss" balancing splits on stocks
+	 o Apply patch to fix a number of off-by-one bugs in the loan druid.
+	 o Adapted to latest gnucash-docs changes, by Jon Lapham
+	 o Add code to read XML files with real namespace declarations.
+	 o Make sure we define PWD, as not all shells define it properly.
+	 o Workaround for multi-currency importing bug.
+	 
+ 1.8.4  - 25 May 2003
+ 	 o Fix transfer dialog to nothang if OK button is clicked w/o filling
+	   in dialog properly.
+	 o Add HTML::Parser to the list of items checked/installed.
+	 o Updated translations:  Brazilian Portugese, Czech, Italian, German
+	 o Fix the "View xxxbar" menu items to track properly when a new data
+	   file is opened. Consolidate the code for manipulating the
+	   View/Statusbar and View/Summarybar menu items.  Work around a Gnome
+	   MDI bug as best as possible.
+	 o The numeric test regex was broken and would fail on ALL numerics,
+	   causing all imports to be of value zero.
+	 o Fix for creating new template transactions [from Scheduling
+	   existing transactions], such that they have valid Posted dates.
+	 o Fix for existing/old data without posted dates.  If we encounter
+	   the condition, fixup the transaction's Posted date to that of the
+	   Entered date.
+	 o Add LOT_IS_CLOSED and LOT_BALANCE query parameter methods
+	 o Fixes for 64-bit architectures.
+	 o Add gncQueryGetBooks() API to return list of books in a query.
+	 o Add INVOICE_POST_LOT query parameter methods
+	 o Add an api to force an event even when events are suspended.
+	   Without such an API, events can be lost if the event system is
+	   suspended when the event comes in.
+	 o Added gnucash wrappers around gnome-print's rotate, translate,
+	   gsave, and grestore APIs.  All to allow sideways printing (by
+	   rotating the image).
+	 o Wrap the new print-session apis.
+	 o Modify the AC_GWRAP_CHECK_GUILE() macro to take an argument, the
+	   g-wrap module directory.  Then actually test that the g-wrap module
+	   loads.  This should detect systems without slib installed.
+	 o New gwrap check macro
+	 o Deal properly when there are no prices for a commodity.
+	 o Supply a start date (as well as an end date) and don't print
+	   invoices that occur prior to the start date or after the end date.
+	   The aging information ignores the start date, but not the end date.
+	   This means the aging information will always be acurate through the
+	   end date (even if all the invoices and payments are not displayed).
+	 o Limit the itemized invoices/payments to the start/end date range,
+	   but print out a "Balance" line if there is a non-zero balance as of
+	   the start date.
+	 o Nikos Charonitakis's account chart updates: added new carloan
+	   account chart, updated account chart.
+	 o Use the correct columns when printing the Gain column, don't reuse
+	   the same column as profit; we want to report different values.
+	 o Don't let the user do anything with the options dialog until
+	   Apply() finishes.
+	 o Had the wrong number of arguments in gnc:account-get-balance-at-date
+	 o Add some (commented out) code to support a start date for computing
+	   the Net Income (aka Net Profit) in the Balance Sheet.
+	 o Move the instantiation of File -> Properties into main-window.scm
+	   (out of business-gnome.scm) for future cases where we might decide to
+	   ship the business modules separately.
+	 o Fix the ofx test program to make sure it links on many weird
+	   platforms.
+	 o When we are asked to reload the report, queue the request, queue a
+	   draw event, and then return immediately.  When the draw event
+	   happens, load the report then.  This lets you hit Apply and then OK
+	   before the report finishes loading.
+	 o Make sure we can find libofx/libofx.h
+	 o Include split transactions in the filtering of the transaction
+	   report.
+	 o Use a 'from' date to better compute the Net Income on the report.
+	 o Change the default Search Operation for numerics from "less than"
+	   to "equals" -- so by default you would search for an exact value.
+	 o "eval" changed API on guile-1.6.  Use the existing API to convert a
+	   delta symbol to a delta time.
+	 o Call eval with the right number of arguments based on early or late
+	   versions.
+	 o Change the date format string to be consistent with other places
+	   (e.g. the check print dialog) and use '%' instead of '~'.
+	 o Make the Bill Due Days option selectable based on the setting of
+	   Notify Bills Due?
+	 o Don't crash if you remove the last entry and then add another one.
+	 o Deal with the case where the first transaction found for a
+	   particular company is a payment
+	 o Also print out any overpayment in the total column.
+	 o Catch errors when running the child reports so we display the
+	   failed report backtrace but also display an error and continue with
+	   the multicolumn report.
+	 
+ 1.8.3  - 03 May 2003
+ 	 o Updated translations: Italian, Swedish, Danish, British,
+	   Traditional Chinese, French, German, Tamil, Brazilian Portugese.
+	 o Turn off the report-total by default
+	 o The Euroland currency rates were inverted in the transfer dialog.
+	 o Chris Morgan's Baysian Matching code, to match transactions based
+	   on Bayesian filtering of previously matched transactions.
+	 o Fix a bug in the account name list when you you filtered down to no
+	   accounts it would ignore the filter.
+	 o The Account Separator option was moved to the Accounts page,
+	   reference correctly.
+	 o Fix the keypress handlers so they work properly for both the text
+	   entry widget and the calendar popup widget.
+	 o Force the cursor to the first line of a transaction split before
+	   disabling "double line" mode in the register.  This prevents the
+	   register refresh code from trying to update a cell that is no longer
+	   visible.
+	 o Fix HBCI close-on-finished checkbutton.
+	 o Add descriptions of new HBCI actions.
+	 o OpenBSD fixes by Todd T. Fries
+	 o New report "income vs. day of week" by Andy Wingo
+	 o Fix a couple strings to improve comments when owners and accounts
+	   are missing.  Direct the user to select them in the report options.
+	 o When building the "name + address" string, check if the company
+	   name and contact name are the same and, if so, only print one of
+	   them.
+	 o Fix the glade settings so resizing the window will properly resize
+	   the widgets.
+	 o Save the entry cells before adding an it to the invoice, otherwise
+	   it wont get sorted properly.
+	 o Add support in business code for the to-charge amount.
+	 o Don't ask the user in the general case when making changes to
+	   entries.  Generally the user should be allowed to make whatever
+	   changes they want without being pestered.
+	 o Guile-1.6 requires empty lists to be quoted.
+	 o Symbols are not strings in guile-1.6.
+	 o Fix "WeekDelta" and add TwoWeekDelta.
+	 o Pop up a dialog if the user tries to transfer from a non-currency
+	   account, and don't let them do it.
+	 o Evaluate the date during get_predicate() in case the user just "hit
+	   return" (and the auto-evaluate didn't happen).
+	 o Fix crash during import of investment accounts.
+	 o Fixes for GCC 3.3 warnings
+	 o Fix HBCI user messages where chip cards were confused with key
+	   files.
+	 o Adapt to latest changes in OpenHBCI CVS.
+	 o Applied Tomas Pospisek's patch to the transaction report.
+	 o Fix the description of gnc:mdi-show-progress.
+	 o Enable changing the "ID" for different business objects.
+	 o Fix the percentage calculations so we don't get GtkCritical
+	   warnings.
+	 o Disable the test-scm-query-import test, since it breaks on
+	   guile-1.6
+	 o Move currency conversion to gnc-pricedb.c
+	 o Improve report for stocks and funds not denominated in report
+	   currency.
+	 o QIF imports don't assume that a date of the form XXXXXXXX is always
+	   YYYYMMDD. Make sure a 4-digit year "makes sense"
+	 o Fix hbci and ofx test for handling --disable correctly.
+	 o Fix openhbci macro again so that it uses a C check program.
+
+ 1.8.2  - 09 March 2003
+ 	 o Updated translations: German, Slovak, Spanish
+	 o Updated HBCI requirement to 0.9.6
+	 o Postgres fix for PG-7.3.x
+	 o More fixes for guile-1.6 support
+	 o Fix QIF Import for split transactions (#105139)
+	 o Remove "display balance in Euro" columns from the main window
+	 o Add "display balance in Report Currency" columns to the main window
+	 o Fix the transfer dialog / exchange-rate dialog so it doesn't round
+	   the values input by the user. (#106332)
+	 o Fix configure so tests wont fail on GCC 3.2.2
+	 o HBCI: avoid sending online transfers twice
+	 o Dont override the user's toolbar style (#102041)
+	 o Import: don't punish transactions with an online ID
+	 o Add engine support for employee expense vouchers
+
+ 1.8.1  - 09 February 2003
+	 o Release of new stable version 1.8.1
+	 o Fixes for qif import crashes
+	 o Update translation po/it.po by Lorenzo Cappelletti
+	 o Remove the tip that says that this is a development version.
+	 o Remove the "development version" string when running "gnucash
+	   --version"
+	 o Add heuristic for duplicate matching by check number.
+	 o Various bug fixes, remove Finance::Quote requirement for rpms
+	   built on RH 8.0
+	 
+ 1.8.0  - 02 February 2003
+ 	 o Release of new stable version 1.8.0
+	 o Fix problem getting quotes from trustnet.
+	 o Add new script that dumps all the data returned by F::Q for a
+	   stock.
+	 o Apply Bill Nottingham's patch to use db4/db_185.h
+	 o Updated translations, po/en_GB.po by Nigel Titley, po/it.po by
+	   Lorenzo Cappelletti
+	 o Fix HBCI problem with negative account balances.
+	 o Add preference (on advanced tab) to enable HBCI debug messages.
+	 o Fix the Recurrence-Frequency example-calendar date calculation to
+	   show upcoming instances correctly.
+	 o Add HBCI user messages about what is supported by the bank.
+	 o Fixes for gcc 3.x build problems with postgresql backend
+	 o Many more fixes for the postgresql backend
+	 o Fix the "bill reminder" so it doesn't create a query if there are
+	   no payables accounts.
+	 o Fix some of the accounts in the tree to be more accurate to the
+	   real world.
+	 o Only set ReadOnly status for Invoices, not Payments.
+	 o Fix several bugs in QIF importer
+	 o Recognize even more error codes from OpenHBCI.
+	 o No longer assume that transaction with type OFX_OTHER are
+	   investment transactions.
+	 o Don't add income accounts to bills, or expense accounts to
+	   invoices.  This should help further reduce user confusion with what
+	   to do when entering invoices.
+	 
  1.7.8  - 20 January 2003
  	 o Welcome to Release Canidate 3
 	 o Fixed build issues introduced in last release
