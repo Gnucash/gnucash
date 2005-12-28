@@ -48,7 +48,7 @@ the account instead of opening a register.") #f))
     (add-option
      (gnc:make-list-option
       (N_ "Account Tree") (N_ "Account types to display")
-      "b" ""
+      "b" (N_ "Select the account types that should be displayed.")
       (list 'bank 'cash 'credit 'asset 'liability 'stock
             'mutual 'currency 'income 'expense 'equity 'payable 'receivable)
       (list (list->vector (list 'bank      (N_ "Bank") ""))
