@@ -25,6 +25,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <string.h>
 #include <glade/glade.h>
 #include <math.h>
@@ -810,11 +811,7 @@ gnc_loan_druid_data_init( LoanDruidData *ldd )
         ldd->ld.principal = gnc_numeric_zero();
         ldd->ld.startDate = g_date_new();
         ldd->ld.varStartDate = g_date_new();
-#ifdef HAVE_GLIB29
         g_date_set_time_t( ldd->ld.startDate, time(NULL) );
-#else
-        g_date_set_time( ldd->ld.startDate, time(NULL) );
-#endif
         ldd->ld.loanFreq  = xaccFreqSpecMalloc( gnc_get_current_book() );
         ldd->ld.repFreq   = xaccFreqSpecMalloc( gnc_get_current_book() );
         xaccFreqSpecSetMonthly( ldd->ld.repFreq, ldd->ld.startDate, 1 );
@@ -2488,13 +2485,8 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
 
         g_date_clear( &start, 1 );
         g_date_clear( &now, 1 );
-#ifdef HAVE_GLIB29
         g_date_set_time_t( &start, gnc_date_edit_get_date( ldd->prmStartDateGDE ) );
         g_date_set_time_t( &now, time(NULL) );
-#else
-        g_date_set_time( &start, gnc_date_edit_get_date( ldd->prmStartDateGDE ) );
-        g_date_set_time( &now, time(NULL) );
-#endif
         for ( i=0; g_date_compare( &start, &now ) < 0; i++ ) {
                 g_date_add_months( &start, 1 );
         }
@@ -2562,11 +2554,7 @@ ld_get_loan_range( LoanDruidData *ldd, GDate *start, GDate *end )
         monthsTotal = ( (ldd->ld.numPer - 1)
                         * ( ldd->ld.perSize == MONTHS ? 1 : 12 ) );
         endDateMath->tm_mon += monthsTotal;
-#ifdef HAVE_GLIB29
         g_date_set_time_t( end, mktime( endDateMath ) );
-#else
-        g_date_set_time( end, mktime( endDateMath ) );
-#endif
         g_free( endDateMath );
 }
 
@@ -2577,20 +2565,12 @@ ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
         int range = gnc_option_menu_get_active( GTK_WIDGET(ldd->revRangeOpt) );
         switch ( range ) {
         case CURRENT_YEAR:
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( start, time(NULL) );
-#else
-                g_date_set_time( start, time(NULL) );
-#endif
                 g_date_set_dmy( start, 1, G_DATE_JANUARY, g_date_get_year( start ) );
                 g_date_set_dmy( end, 31, G_DATE_DECEMBER, g_date_get_year( start ) );
                 break;
         case NOW_PLUS_ONE:
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( start, time(NULL) );
-#else
-                g_date_set_time( start, time(NULL) );
-#endif
                 *end = *start;
                 g_date_add_years( end, 1 );
                 break;
@@ -2598,17 +2578,10 @@ ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
                 ld_get_loan_range( ldd, start, end );
                 break;
         case CUSTOM:
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( start,
 				   gnc_date_edit_get_date( ldd->revStartDate ) );
                 g_date_set_time_t( end,
 				   gnc_date_edit_get_date( ldd->revEndDate ) );
-#else
-                g_date_set_time( start,
-                                 gnc_date_edit_get_date( ldd->revStartDate ) );
-                g_date_set_time( end,
-                                 gnc_date_edit_get_date( ldd->revEndDate ) );
-#endif
                 break;
         default:
                 PERR( "Unknown review date range option %d", range );

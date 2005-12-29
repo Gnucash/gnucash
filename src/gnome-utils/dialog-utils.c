@@ -28,6 +28,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include "glib-compat.h"
 #include <glade/glade.h>
 #include <gmodule.h>
 #include <dlfcn.h>
@@ -596,11 +597,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
         GTime gtime;
 
         gtime = time (NULL);
-#ifdef HAVE_GLIB29
         g_date_set_time_t (&gdate, gtime);
-#else
-        g_date_set_time (&gdate, gtime);
-#endif
         break;
       }
 

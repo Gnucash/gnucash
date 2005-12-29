@@ -26,6 +26,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 
 #include "FreqSpec.h"
 #include "Group.h"
@@ -223,11 +224,7 @@ prepare_remarks (AcctPeriodInfo *info)
   g_date_clear (&date_now, 1);
   nperiods = 0;
   period_end = info->closing_date;
-#ifdef HAVE_GLIB29
   g_date_set_time_t (&date_now, time(NULL));
-#else
-  g_date_set_time (&date_now, time(NULL));
-#endif
 
   while (0 > g_date_compare(&period_end, &date_now ))
   {
@@ -364,11 +361,7 @@ ap_validate_menu (GnomeDruidPage *druidpage,
   }
 
   g_date_clear (&date_now, 1);
-#ifdef HAVE_GLIB29
   g_date_set_time_t (&date_now, time(NULL));
-#else
-  g_date_set_time (&date_now, time(NULL));
-#endif
   if (0 < g_date_compare(&info->closing_date, &date_now))
   {
     const char *msg = _("You must select closing date "
@@ -538,11 +531,7 @@ ap_druid_create (AcctPeriodInfo *info)
                   info->earliest, ctime (&info->earliest));
 
   g_date_clear (&info->closing_date, 1);
-#ifdef HAVE_GLIB29
   g_date_set_time_t (&info->closing_date, info->earliest);
-#else
-  g_date_set_time (&info->closing_date, info->earliest);
-#endif
   g_date_clear (&info->prev_closing_date, 1);
   info->prev_closing_date = info->closing_date;
   g_date_add_years (&info->closing_date, 1);

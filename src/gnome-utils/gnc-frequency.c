@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include "glib-compat.h"
 #include <math.h>
 #include <time.h>
 
@@ -644,11 +645,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         tmpTimeT = gnc_date_edit_get_date( gf->startDate );
         if ( NULL != outDate ) 
         {
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( outDate, tmpTimeT );
-#else
-                g_date_set_time( outDate, tmpTimeT );
-#endif
         }
 
         if (NULL == fs) return;
@@ -661,11 +658,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
         gnc_suspend_gui_refresh();
 
         g_date_clear (&gd, 1);
-#ifdef HAVE_GLIB29
         g_date_set_time_t( &gd, tmpTimeT );
-#else
-        g_date_set_time( &gd, tmpTimeT );
-#endif
 
         /*uift = xaccFreqSpecGetUIType( fs );*/
         uift = PAGES[page].uiFTVal;
@@ -703,11 +696,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                         /*  month-day += (week-day - current-week-day ) % 7 */
                         /*  week-day <- 0 */
                         stm.tm_mday -= ( stm.tm_wday ) % 7;
-#ifdef HAVE_GLIB29
                         g_date_set_time_t( &gd, mktime(&stm) );
-#else
-                        g_date_set_time( &gd, mktime(&stm) );
-#endif
                 }
 
                 /*  1 == "mon", 5 == "fri" */
@@ -731,11 +720,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 /*  for-now hack: normalize to Sunday. */
                 g_date_to_struct_tm( &gd, &stm);
                 stm.tm_mday -= stm.tm_wday % 7;
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( &gd, mktime(&stm) );
-#else
-                g_date_set_time( &gd, mktime(&stm) );
-#endif
 
                 /*  now, go through the check boxes and add composites based on that date. */
                 for ( i=0; CHECKBOX_NAMES[i]!=NULL; i++ ) {
@@ -781,11 +766,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 }
                 /* else, this month */
                 stm.tm_mday = day;
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( &gd, mktime( &stm) );
-#else
-                g_date_set_time( &gd, mktime( &stm) );
-#endif
                 xaccFreqSpecSetMonthly( tmpFS, &gd, tmpInt );
                 xaccFreqSpecCompositeAdd( fs, tmpFS );
 
@@ -793,11 +774,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
                 tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
                 tmpTimeT = gnc_date_edit_get_date( gf->startDate );
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( &gd, tmpTimeT );
-#else
-                g_date_set_time( &gd, tmpTimeT );
-#endif
                 g_date_to_struct_tm( &gd, &stm);
                 if ( day >= stm.tm_mday ) {
                         /* next month */
@@ -805,11 +782,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 }
                 /* else, this month */
                 stm.tm_mday = day;
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( &gd, mktime( &stm ) );
-#else
-                g_date_set_time( &gd, mktime( &stm ) );
-#endif
                 xaccFreqSpecSetMonthly( tmpFS, &gd, tmpInt );
                 xaccFreqSpecCompositeAdd( fs, tmpFS );
 
@@ -825,11 +798,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
                 o = glade_xml_get_widget( gf->gxml, "monthly_day" );
                 day = gnc_option_menu_get_active( GTK_WIDGET(o) ) + 1;
                 stm.tm_mday = day;
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( &gd, mktime( &stm ) );
-#else
-                g_date_set_time( &gd, mktime( &stm ) );
-#endif
                 xaccFreqSpecSetMonthly( fs, &gd, tmpInt );
                 xaccFreqSpecSetUIType( fs, uift );
                 break;

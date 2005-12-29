@@ -21,6 +21,7 @@
 #include "config.h"
 #include <time.h>
 #include <glib.h>
+#include "glib-compat.h"
 #include <string.h>
 #include "Recurrence.h"
 #include "gnc-date.h"
@@ -66,11 +67,7 @@ recurrenceSet(Recurrence *r, guint16 mult, PeriodType pt, const GDate *_start)
     if (_start && g_date_valid(_start)) {
         r->start = *_start;
     } else {
-#ifdef HAVE_GLIB29
         g_date_set_time_t(&r->start, time(NULL));
-#else
-        g_date_set_time(&r->start, time(NULL));
-#endif
     }
 
     /* Some of the unusual period types also specify phase.  For those

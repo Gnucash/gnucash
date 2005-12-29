@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <math.h>
 
 #include "gnc-dense-cal.h"
@@ -362,11 +363,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 GDate *tmpDate;
 
                 tmpDate = g_date_new();
-#ifdef HAVE_GLIB29
                 g_date_set_time_t( tmpDate, time(NULL) );
-#else
-                g_date_set_time( tmpDate, time(NULL) );
-#endif
                 gnc_dense_cal_set_month( dcal, g_date_get_month(tmpDate) );
                 gnc_dense_cal_set_year( dcal, g_date_get_year(tmpDate) );
                 g_date_free( tmpDate );

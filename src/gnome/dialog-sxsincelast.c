@@ -51,6 +51,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include "glib-compat.h"
 #include <limits.h>
 
 #include "Account.h"
@@ -2131,11 +2132,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                         sx_state = NULL;
                 }
 
-#ifdef HAVE_GLIB29
 		g_date_set_time_t( &end, time(NULL) );
-#else
-		g_date_set_time( &end, time(NULL) );
-#endif
                 daysInAdvance = xaccSchedXactionGetAdvanceCreation( sx );
                 g_date_add_days( &end, daysInAdvance );
                 

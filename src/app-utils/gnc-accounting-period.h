@@ -45,6 +45,7 @@
 #define GNC_ACCOUNTING_PERIOD_H
 
 #include <glib.h>
+#include "glib-compat.h"
 #include <time.h>
 
 /**

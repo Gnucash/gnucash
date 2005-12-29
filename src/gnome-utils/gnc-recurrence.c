@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include "glib-compat.h"
 #include <glade/glade.h>
 
 #include "dialog-utils.h"
@@ -131,11 +132,7 @@ something_changed( GtkWidget *wid, gpointer d )
 
     pt = get_pt_ui(gr);
     t = gnome_date_edit_get_time(gr->gde_start);
-#ifdef HAVE_GLIB29
     g_date_set_time_t(&start, t);
-#else
-    g_date_set_time(&start, t);
-#endif
 
     if (pt == GNCR_MONTH)
         g_object_set(G_OBJECT(gr->nth_weekday), "visible", TRUE, NULL);
@@ -243,11 +240,7 @@ gnc_recurrence_get(GncRecurrence *gr)
 
     mult = (guint) gtk_spin_button_get_value_as_int(gr->gsb_mult);
     t = gnome_date_edit_get_time(gr->gde_start);
-#ifdef HAVE_GLIB29
     g_date_set_time_t(&start, t);
-#else
-    g_date_set_time(&start, t);
-#endif
     period = get_pt_ui(gr);
 
     switch (period) {

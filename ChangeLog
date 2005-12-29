@@ -1,3 +1,22 @@
+2005-12-28  David Hampton  <hampton@employees.org>
+
+	* src/glib-compat.h:
+	* src/gnome-utils/gnc-recurrence.c:
+	* src/gnome-utils/gnc-period-select.c:
+	* src/gnome-utils/gnc-dense-cal.c:
+	* src/gnome-utils/dialog-utils.c:
+	* src/gnome-utils/gnc-frequency.c:
+	* src/engine/FreqSpec.c:
+	* src/engine/Recurrence.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/druid-acct-period.c:
+	* src/gnome/dialog-sx-from-trans.c:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/app-utils/gnc-accounting-period.[ch]: Better fix for
+	compiling cleanly on a glib 2.9/2.10 system without using
+	deprecated functions.
+
 2005-12-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/dialog-options.c: Improve tooltip display for
