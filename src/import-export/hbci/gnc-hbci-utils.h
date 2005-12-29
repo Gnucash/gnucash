@@ -153,7 +153,7 @@ char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v);
 
 /** Returns a newly allocated gchar, converted according to the given
    handler */
-gchar *gnc_call_iconv(iconv_t handler, const char* input);
+gchar *gnc_call_iconv(GIConv handler, const gchar* input);
 
 /** Returns the encoding of the current book in the format as required
     by iconv_open(3). */

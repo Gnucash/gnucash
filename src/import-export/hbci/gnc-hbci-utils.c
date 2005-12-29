@@ -498,7 +498,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 
 struct cb_struct {
   gchar **result;
-  iconv_t gnc_iconv_handler;
+  GIConv gnc_iconv_handler;
 };
 
 /* Needed for the gnc_hbci_descr_tognc and gnc_hbci_memo_tognc. */
@@ -540,8 +540,8 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   struct cb_struct cb_object;
 
   cb_object.gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (GIConv)(-1));
 
   /* Get othername */
   cb_object.result = &othername;
@@ -564,7 +564,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
-  iconv_close(cb_object.gnc_iconv_handler);
+  g_iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
   return g_descr;
@@ -579,8 +579,8 @@ char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
   struct cb_struct cb_object;
 
   cb_object.gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (GIConv)(-1));
 
   cb_object.result = &h_descr;
   if (h_purpose)
@@ -590,7 +590,7 @@ char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
 
   g_descr = g_strdup (h_descr ? h_descr : "");
 
-  iconv_close(cb_object.gnc_iconv_handler);
+  g_iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   return g_descr;
 }
@@ -898,19 +898,26 @@ char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
   return g_strdup(tmp);
 }
 
+/* Note: In the gnome2-branch we don't need the iconv(3) conversion
+   and gnc_call_iconv() anymore since the gnc_book has an UTF-8
+   encoding and the AqBanking library also expects all strings in
+   UTF-8. Nevertheless we keep all these functions for now, just in
+   case they might be needed later.
+*/
+
 /* Returns a newly allocated gchar, converted according to the given
    handler */
-gchar *gnc_call_iconv(iconv_t handler, const char* input)
+gchar *gnc_call_iconv(GIConv handler, const gchar* input)
 {
-  char *inbuffer = (char*)input;
-  char *outbuffer, *outbufferstart;
-  size_t inbytes, outbytes;
+  gchar *inbuffer = (gchar*)input;
+  gchar *outbuffer, *outbufferstart;
+  gsize inbytes, outbytes;
 
   inbytes = strlen(inbuffer);
   outbytes = inbytes + 2;
   outbufferstart = g_strndup(inbuffer, outbytes);
   outbuffer = outbufferstart;
-  iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
+  g_iconv(handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
   if (outbytes > 0) 
     *outbuffer = '\0';
   return outbufferstart;

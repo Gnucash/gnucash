@@ -581,9 +581,9 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
      to be fixed for the gnome2 version; the source encoding is then
      probably utf-8 as well. iconv is also used in
      gnc_AB_BANKING_interactors() in hbci-interaction.c. */
-  iconv_t gnc_iconv_handler =
-    iconv_open(gnc_hbci_AQBANKING_encoding(), gnc_hbci_book_encoding());
-  g_assert(gnc_iconv_handler != (iconv_t)(-1));
+  GIConv gnc_iconv_handler =
+    g_iconv_open(gnc_hbci_AQBANKING_encoding(), gnc_hbci_book_encoding());
+  g_assert(gnc_iconv_handler != (GIConv)(-1));
 	
   /* OpenHBCI newer than 0.9.8: use account's bankCode values
    * instead of the bank's ones since this is what some banks
@@ -649,7 +649,7 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
     AB_Transaction_SetTextKey (trans, 51);
   }
 
-  iconv_close(gnc_iconv_handler);
+  g_iconv_close(gnc_iconv_handler);
   return trans;
 }
 

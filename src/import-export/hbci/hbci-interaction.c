@@ -60,8 +60,8 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
      then probably utf-8 as well. iconv is also used in
      gnc_hbci_descr_tognc() in gnc-hbci-utils.c. */
   data->gnc_iconv_handler = 
-    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
-  g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
+    g_iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(data->gnc_iconv_handler != (GIConv)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
     gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
@@ -90,7 +90,7 @@ void GNCInteractor_delete(GNCInteractor *data)
   data->dialog = NULL;
 
   g_hash_table_destroy(data->showbox_hash);
-  iconv_close(data->gnc_iconv_handler);
+  g_iconv_close(data->gnc_iconv_handler);
 
   g_free (data);
 }

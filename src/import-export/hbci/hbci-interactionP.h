@@ -60,7 +60,7 @@ struct _inter_data
   const char *format_pin_min_char;
 
   /* The iconv handler for utf8 -> latin1 conversion */
-  iconv_t gnc_iconv_handler;
+  GIConv gnc_iconv_handler;
 
   /* Flags to keep track on whether an HBCI action is running or
      not. */

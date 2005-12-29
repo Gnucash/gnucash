@@ -1,3 +1,9 @@
+2005-12-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.h, gnc-hbci-utils.c: Use
+	glib's g_iconv functions instead of the system's iconv(3)
+	functions to improve portability.
+
 2005-12-28  David Hampton  <hampton@employees.org>
 
 	* src/glib-compat.h:
