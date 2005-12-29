@@ -649,7 +649,6 @@ xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
   }
 
   s->kvp_data = frm;
-  qof_commit_edit(&s->parent->inst);
 }
 
 /********************************************************************\
