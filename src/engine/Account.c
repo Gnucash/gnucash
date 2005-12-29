@@ -47,17 +47,17 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
  * of the internals of the Account in one file.                     *
 \********************************************************************/
 
-static void xaccAccountBringUpToDate (Account *);
+static void xaccAccountBringUpToDate (Account *ac);
 
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void mark_account (Account *account);
+G_INLINE_FUNC void mark_account (Account *acc);
 void
-mark_account (Account *account)
+mark_account (Account *acc)
 {
-  if (account->parent) account->parent->saved = FALSE;
-  account->inst.dirty = TRUE;
+  if (acc->parent) acc->parent->saved = FALSE;
+  acc->inst.dirty = TRUE;
 }
 
 /********************************************************************\
@@ -88,7 +88,7 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->idata = 0;
 
-  acc->commodity     = NULL;
+  acc->commodity = NULL;
   acc->commodity_scu = 0;
   acc->non_standard_scu = FALSE;
 
@@ -274,7 +274,7 @@ xaccFreeAccount (Account *acc)
    * pointers are pointing here. */
 
   acc->commodity = NULL;
-  acc->parent   = NULL;
+  acc->parent = NULL;
   acc->children = NULL;
 
   acc->balance  = gnc_numeric_zero();
@@ -284,7 +284,7 @@ xaccFreeAccount (Account *acc)
   acc->type = NO_TYPE;
   acc->accountName = NULL;
   acc->description = NULL;
-  acc->commodity   = NULL;
+  acc->commodity = NULL;
 
   acc->version = 0;
   acc->balance_dirty = FALSE;
@@ -650,16 +650,16 @@ xaccAccountBringUpToDate(Account *acc)
 \********************************************************************/
 
 void 
-xaccAccountSetGUID (Account *account, const GUID *guid)
+xaccAccountSetGUID (Account *acc, const GUID *guid)
 {
-  if (!account || !guid) return;
+  if (!acc || !guid) return;
 
   /* XXX this looks fishy and weird to me ... */
-  PINFO("acct=%p", account);
-  xaccAccountBeginEdit (account);
-  qof_entity_set_guid (&account->inst.entity, guid);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  PINFO("acct=%p", acc);
+  xaccAccountBeginEdit (acc);
+  qof_entity_set_guid (&acc->inst.entity, guid);
+  acc->inst.dirty = TRUE;
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
@@ -766,13 +766,14 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 void
 xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 {
-  if (!acc || !lot) return;
-   ENTER ("(acc=%p, lot=%p)", acc, lot);
+    if (!acc || !lot || !acc->lots) return;
+    ENTER ("(acc=%p, lot=%p)", acc, lot);
 
-   xaccAccountBeginEdit (acc);
-   acc->lots = g_list_remove (acc->lots, lot);
-   xaccAccountCommitEdit (acc);
-   LEAVE ("(acc=%p, lot=%p)", acc, lot);
+    xaccAccountBeginEdit (acc);
+    acc->lots = g_list_remove (acc->lots, lot);
+    mark_account(acc);
+    xaccAccountCommitEdit (acc);
+    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
 void
@@ -781,42 +782,35 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    GList *sl;
    Account * old_acc = NULL;
 
-   if (!acc || !lot) return;
+   if (!acc || !lot || lot->account == acc) return;
    ENTER ("(acc=%p, lot=%p)", acc, lot);
 
+
    /* pull it out of the old account */
-   if (lot->account && lot->account != acc)
-   {
+   if (lot->account) {
       old_acc = lot->account;
       xaccAccountBeginEdit (old_acc);
       old_acc->lots = g_list_remove (old_acc->lots, lot);
-      
+      mark_account(old_acc);
    }
-   
+
    xaccAccountBeginEdit(acc);
 
-   /* Avoid inserting into list more than once */
-   if (lot->account != acc)
-   {
-      acc->lots = g_list_prepend (acc->lots, lot);
-      lot->account = acc;
-   }
+   acc->lots = g_list_prepend (acc->lots, lot);
+   mark_account(acc);
+   lot->account = acc;
 
    /* Move all splits over to the new account.  At worst,
     * this is a no-op. */
-   if (lot->splits)
-   {
-      for (sl = lot->splits; sl; sl=sl->next)
-      {
-         Split *s = sl->data;
-         if (s->acc != acc)
-         {
+   for (sl = lot->splits; sl; sl=sl->next) {
+       Split *s = sl->data;
+       if (s->acc != acc)
             xaccAccountInsertSplit (acc, s);
-         }
-      }
    }
    xaccAccountCommitEdit(acc);
-   if(old_acc) { xaccAccountCommitEdit(old_acc); }
+
+   if (old_acc)
+       xaccAccountCommitEdit(old_acc);
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
@@ -827,63 +821,56 @@ void
 xaccAccountInsertSplit (Account *acc, Split *split)
 {
   Transaction *trans;
-  gnc_numeric old_amt;
 
-  if (!acc) return;
-  if (!split) return;
-  ENTER ("(acc=%p, split=%p)", acc, split);
-
+  if (!acc || !split || split->acc == acc) return;
   /* check for book mix-up */
   g_return_if_fail (acc->inst.book == split->book);
 
   trans = xaccSplitGetParent (split);
-  old_amt = xaccSplitGetAmount (split);
+  ENTER ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
 
   xaccAccountBeginEdit(acc);
-  if(trans) { xaccTransBeginEdit(trans); }
+  if (trans)
+      xaccTransBeginEdit(trans);
 
-  acc->balance_dirty = TRUE;
-  acc->sort_dirty = TRUE;
 
   /* If this split belongs to another account, remove it from there
    * first.  We don't want to ever leave the system in an inconsistent
-   * state.  Note that it might belong to the current account if we're
-   * just using this call to re-order.  */
-  if (split->acc && split->acc != acc)
-  {
-    xaccAccountRemoveSplit (split->acc, split);
-  }
+   * state.  */
+  xaccAccountRemoveSplit(split->acc, split);
 
-  split->acc = acc;
+  split->acc = acc;  /* BUG? Doesn't actually dirty split. */
+
+  /* If the split's lot belonged to some other account, we leave it so. */
   if (split->lot && (NULL == split->lot->account))
-  {
       xaccAccountInsertLot (acc, split->lot);
-  }
 
-  if (g_list_index(acc->splits, split) == -1)
-  {
+  if (!g_list_find(acc->splits, split)) {
+      /* BUG? condition sort based on editlevel==1? What about editlevel==2? */
       if (acc->inst.editlevel == 1)
       {
           acc->splits = g_list_insert_sorted(acc->splits, split,
                                              split_sort_func);
-          acc->sort_dirty = FALSE;
       }
       else
       {
           acc->splits = g_list_prepend(acc->splits, split);
+          acc->sort_dirty = TRUE;
       }
 
+      acc->balance_dirty = TRUE;
       mark_account (acc);
   }
 
   /* Setting the amount causes a conversion to the new account's
    * denominator AKA 'SCU Smallest Currency Unit'. */
-  /* xaccSplitSetAmount(split, old_amt); */
-  split->amount = gnc_numeric_convert (old_amt,
-                xaccAccountGetCommoditySCU(acc), GNC_HOW_RND_ROUND);
-  if(trans) { xaccTransCommitEdit(trans); }
+  xaccSplitSetAmount(split, xaccSplitGetAmount(split));
+
+  if (trans)
+      xaccTransCommitEdit(trans);
+
   xaccAccountCommitEdit(acc);
-  LEAVE ("(acc=%p, split=%p)", acc, split);
+  LEAVE ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
 }
 
 /********************************************************************\
@@ -892,46 +879,41 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 void
 xaccAccountRemoveSplit (Account *acc, Split *split)
 {
-  if (!acc) return;
-  if (!split) return;
-  if (split->acc && split->acc != acc) return;
+  GList *node;
+  if (!acc || !split || split->acc != acc) return;
 
   ENTER ("(acc=%p, split=%p)", acc, split);
 
-  xaccAccountBeginEdit(acc);
-  {
-    GList *node;
-
-    node = g_list_find (acc->splits, split);
-    if (!node)
-    {
-      PERR ("split not in account");
-    }
-    else
-    {
+  
+  node = g_list_find (acc->splits, split);
+  if (node) {
       Transaction *trans = xaccSplitGetParent (split);
 
-      acc->splits = g_list_remove_link (acc->splits, node);
-      g_list_free_1 (node);
+      xaccAccountBeginEdit(acc);
+      acc->splits = g_list_delete_link (acc->splits, node);
 
       acc->balance_dirty = TRUE;
+      mark_account (acc);
 
       xaccTransBeginEdit (trans);
       split->acc = NULL;
 
-      /* Remove from lot (but only if it hasn't been moved to new lot already) */
+      /* Remove from lot (but only if it hasn't been moved to new lot
+         already) */
       if (split->lot && split->lot->account == acc)
-      {
-        gnc_lot_remove_split (split->lot, split);
-      }
+          gnc_lot_remove_split (split->lot, split);
+      
       xaccTransCommitEdit (trans);
 
-      mark_account (acc);
+      /* BUG? Umm... trans IS the split parent so didn't we just
+         generate the event when we called CommitEdit? I think this
+         gen_event can be removed. */
       if (split->parent)
         gnc_engine_gen_event (&split->parent->inst.entity, GNC_EVENT_MODIFY);
-    }
-  }
-  xaccAccountCommitEdit(acc);
+      xaccAccountCommitEdit(acc);
+
+  } else PERR ("split is not in account, but it thinks it is!");
+  
   LEAVE ("(acc=%p, split=%p)", acc, split);
 }
 
@@ -950,11 +932,13 @@ xaccPostSplitMove (Split *split, Account *accto)
   Transaction *trans;
 
   split->acc = accto;
+  /* Better? xaccSplitSetAmount(split, split->ammount); */
   split->amount = gnc_numeric_convert (split->amount,
 				       xaccAccountGetCommoditySCU(accto),
 				       GNC_HOW_RND_ROUND);
   trans = xaccSplitGetParent (split);
   xaccTransCommitEdit (trans);
+  /* BUG? again, extra events? */
   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -962,20 +946,18 @@ void
 xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 {
   /* Handle special cases. */
-  if (!accfrom) return;
-  if (!accto) return;
-  if (!accfrom->splits) return;
-  if (accfrom == accto) return;
-
-  ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
+  if (!accfrom || !accto || !accfrom->splits || accfrom == accto) return;
 
   /* check for book mix-up */
   g_return_if_fail (accfrom->inst.book == accto->inst.book);
+  ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
 
   /* Begin editing both accounts and all transactions in accfrom. */
   g_list_foreach(accfrom->splits, (GFunc)xaccPreSplitMove, NULL);
   xaccAccountBeginEdit(accfrom);
   xaccAccountBeginEdit(accto);
+  mark_account (accfrom);
+  mark_account (accto);
 
   /* Concatenate accfrom's lists of splits and lots to accto's lists. */
   accto->splits = g_list_concat(accto->splits, accfrom->splits);
@@ -996,7 +978,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
   /* Finally empty accfrom. */
   accfrom->splits = NULL;
-  accto->lots = NULL;
+  accfrom->lots = NULL;
 
   /*
    * DNJ - I don't really understand why this is necessary,
@@ -1009,8 +991,6 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
   }
 
   /* Commit to editing both accounts. */
-  mark_account (accfrom);
-  mark_account (accto);
   xaccAccountCommitEdit(accfrom);
   xaccAccountCommitEdit(accto);
   LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
@@ -1248,20 +1228,13 @@ xaccAccountOrder (Account **aa, Account **ab)
 void 
 xaccAccountSetType (Account *acc, GNCAccountType tip) 
 {
-
-  if (!acc) return;
+  /* refuse invalid account types, and don't bother if not new type. */
+  if (!acc || NUM_ACCOUNT_TYPES <= tip || acc->type == tip) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    /* refuse invalid account types, and don't bother if not new type. */
-    if((NUM_ACCOUNT_TYPES > tip) && (acc->type != tip)) {
-      acc->type = tip;
-      acc->balance_dirty = TRUE; /* new type may affect balance computation */
-    }
-
-    mark_account (acc);
-  }
-  acc->inst.dirty = TRUE;
+  acc->type = tip;
+  acc->balance_dirty = TRUE; /* new type may affect balance computation */
+  mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
 
@@ -1270,18 +1243,15 @@ xaccAccountSetName (Account *acc, const char *str)
 {
    char * tmp;
 
-   if ((!acc) || (!str)) return;
+   if (!acc || !str || str == acc->accountName) return;
 
    xaccAccountBeginEdit(acc);
-   {
-     /* make strdup before freeing (just in case str==accountName !!) */
-     tmp = g_strdup (str);
-     g_free (acc->accountName);
-     acc->accountName = tmp;
-
-     mark_account (acc);
-   }
-   acc->inst.dirty = TRUE;
+   /* make strdup before freeing (just in case str==accountName !!) */
+   tmp = g_strdup (str);
+   g_free (acc->accountName);
+   acc->accountName = tmp;  /* TODO: use string cache */
+   mark_account (acc);
+   
    xaccAccountCommitEdit(acc);
 }
 
@@ -1289,18 +1259,15 @@ void
 xaccAccountSetCode (Account *acc, const char *str) 
 {
    char * tmp;
-   if ((!acc) || (!str)) return;
+   if (!acc || !str || str == acc->accountCode) return;
 
    xaccAccountBeginEdit(acc);
-   {
-     /* make strdup before freeing */
-     tmp = g_strdup (str);
-     g_free (acc->accountCode);
-     acc->accountCode = tmp;
+   /* make strdup before freeing */
+   tmp = g_strdup (str);
+   g_free (acc->accountCode);
+   acc->accountCode = tmp;  /* TODO: use string cache */
+   mark_account (acc);
 
-     mark_account (acc);
-   }
-   acc->inst.dirty = TRUE;
    xaccAccountCommitEdit(acc);
 }
 
@@ -1308,18 +1275,15 @@ void
 xaccAccountSetDescription (Account *acc, const char *str) 
 {
    char * tmp;
-   if ((!acc) || (!str)) return;
+   if (!acc || !str || str == acc->description) return;
 
    xaccAccountBeginEdit(acc);
-   {
-     /* make strdup before freeing (just in case str==description !!) */
-     tmp = g_strdup (str);
-     g_free (acc->description);
-     acc->description = tmp;
-
-     mark_account (acc);
-   }
-   acc->inst.dirty = TRUE;
+   /* make strdup before freeing (just in case str==description !!) */
+   tmp = g_strdup (str);
+   g_free (acc->description);
+   acc->description = tmp;  /* TODO: use string cache */
+   mark_account (acc);
+   
    xaccAccountCommitEdit(acc);
 }
 
@@ -1328,7 +1292,7 @@ qofAccountSetParent (Account *acc, QofEntity *parent)
 {
 	Account *parent_acc;
 	
-	if((!acc)||(!parent)) { return; }
+	if (!acc || !parent) return;
 	parent_acc = (Account*)parent;
 	xaccAccountBeginEdit(acc);
 	xaccAccountBeginEdit(parent_acc);
@@ -1342,66 +1306,43 @@ qofAccountSetParent (Account *acc, QofEntity *parent)
 void
 xaccAccountSetNotes (Account *acc, const char *str) 
 {
-  if ((!acc) || (!str)) return;
+  if (!acc || !str) return;
 
   xaccAccountBeginEdit(acc);
   kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", 
                         kvp_value_new_string(str));
-  mark_account (acc);
-  acc->inst.dirty = TRUE;
+  mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
-
-/* FIXME : is this the right way to do this? Uhh, I think so ?? */
-static void
-update_split_commodity(Account * acc) 
-{
-  GList *lp;
-
-  if(!acc) return;
-
-  xaccAccountBeginEdit(acc);
-
-  /* iterate over splits */
-  for (lp = acc->splits; lp; lp = lp->next)
-  {
-    Split *s = (Split *) lp->data;
-    Transaction *trans = xaccSplitGetParent (s);
-    gnc_numeric amt;
-
-    amt = xaccSplitGetAmount (s);
-    xaccTransBeginEdit (trans);
-    xaccSplitSetAmount (s, amt);
-    xaccTransCommitEdit (trans);
-  }
-
-  xaccAccountCommitEdit(acc);
-}
-
-/********************************************************************\
-\********************************************************************/
 
 void 
 xaccAccountSetCommodity (Account * acc, gnc_commodity * com) 
 {
-  if ((!acc) || (!com)) return;
+  GList *lp;
+  if (!acc || !com || com == acc->commodity) return;
 
   xaccAccountBeginEdit(acc);
+
+  acc->commodity = com;
+  acc->commodity_scu = gnc_commodity_get_fraction(com);
+  acc->non_standard_scu = FALSE;
+
+  /* iterate over splits */
+  for (lp = acc->splits; lp; lp = lp->next)
   {
-    acc->commodity    = com;
-    acc->commodity_scu = gnc_commodity_get_fraction(com);
-    acc->non_standard_scu = FALSE;
-    update_split_commodity(acc);
+      Split *s = (Split *) lp->data;
+      Transaction *trans = xaccSplitGetParent (s);
 
-    acc->sort_dirty = TRUE;
-    acc->balance_dirty = TRUE;
-
-    mark_account (acc);
+      xaccTransBeginEdit (trans);
+      xaccSplitSetAmount (s, xaccSplitGetAmount(s));
+      xaccTransCommitEdit (trans);
   }
-  acc->inst.dirty = TRUE;
 
-  if (gnc_commodity_is_iso(com)) 
-  {
+  acc->sort_dirty = TRUE;  /* Not needed. */
+  acc->balance_dirty = TRUE;
+  mark_account (acc);
+
+  if (gnc_commodity_is_iso(com)) {
     /* compatability hack - Gnucash 1.8 gets currency quotes when a
        non-default currency is assigned to an account.  */
     gnc_commodity_set_quote_flag(com, TRUE);
@@ -1421,22 +1362,17 @@ xaccAccountSetCommoditySCU (Account *acc, int scu)
   if (!acc) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    acc->commodity_scu = scu;
-    if (scu != gnc_commodity_get_fraction(acc->commodity))
+  acc->commodity_scu = scu;
+  if (scu != gnc_commodity_get_fraction(acc->commodity))
       acc->non_standard_scu = TRUE;
-    mark_account (acc);
-  }
-  acc->inst.dirty = TRUE;
+  mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
 
 int
 xaccAccountGetCommoditySCUi (const Account * acc)
 {
-  if (!acc) return 0;
-
-  return acc->commodity_scu;
+  return acc ? acc->commodity_scu : 0;
 }
 
 int
@@ -1452,23 +1388,18 @@ xaccAccountGetCommoditySCU (const Account * acc)
 void
 xaccAccountSetNonStdSCU (Account *acc, gboolean flag)
 {
-  if (!acc) return;
+  if (!acc || acc->non_standard_scu == flag) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    acc->non_standard_scu = flag;
-    mark_account (acc);
-  }
-  acc->inst.dirty = TRUE;
+  acc->non_standard_scu = flag;
+  mark_account (acc);
   xaccAccountCommitEdit(acc);
 }
 
 gboolean
 xaccAccountGetNonStdSCU (const Account * acc)
 {
-  if (!acc) return 0;
-
-  return acc->non_standard_scu;
+  return acc ? acc->non_standard_scu : 0;
 }
 
 /********************************************************************\
@@ -1504,62 +1435,49 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 AccountGroup *
 xaccAccountGetChildren (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->children);
+   return acc ? acc->children : NULL;
 }
 
 AccountGroup *
 xaccAccountGetParent (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->parent);
+   return acc ? acc->parent : NULL;
 }
 
 Account *
 xaccAccountGetParentAccount (Account * acc)
 {
-  if (!acc) return NULL;
-  return xaccGroupGetParentAccount(acc->parent);
+  return acc ? xaccGroupGetParentAccount(acc->parent) : NULL;
 }
 
 GList *
 xaccAccountGetDescendants (Account *acc)
 {
-   GList *accounts;
-
-   if (!acc) return NULL;
-   accounts = xaccGroupGetSubAccounts(acc->children);
-   return (accounts);
+   return acc ? xaccGroupGetSubAccounts(acc->children) : NULL;
 }
 
 GNCAccountType
 xaccAccountGetType (Account *acc)
 {
-   if (!acc) return NO_TYPE;
-   return (acc->type);
+   return acc ? acc->type : NO_TYPE;
 }
 
 static const char*
 qofAccountGetTypeString (Account *acc)
 {
-	if(!acc) { return NULL; }
-	return (xaccAccountTypeEnumAsString(acc->type));
+   return acc ? xaccAccountTypeEnumAsString(acc->type) : NULL;
 }
 
 static void
 qofAccountSetType (Account *acc, const char *type_string)
 {
-	GNCAccountType type;
-
-	type = xaccAccountStringToEnum(type_string);
-	xaccAccountSetType(acc, type);
+   xaccAccountSetType(acc, xaccAccountStringToEnum(type_string));
 }
 
 const char *
 xaccAccountGetName (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->accountName);
+   return acc ? acc->accountName : NULL;
 }
 
 char *
@@ -1569,13 +1487,12 @@ xaccAccountGetFullName(Account *account, const char separator)
   char *fullname;
   const char *name;
   char *p;
-  int length;
+  int length = 0;
 
   if (account == NULL)
     return g_strdup("");
 
   /* Figure out how much space is needed */
-  length = 0;
   a = account;
   while (a != NULL)
   {
@@ -1621,26 +1538,19 @@ xaccAccountGetFullName(Account *account, const char separator)
 const char *
 xaccAccountGetCode (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->accountCode);
+   return acc ? acc->accountCode : NULL;
 }
 
 const char * 
 xaccAccountGetDescription (Account *acc)
 {
-   if (!acc) return NULL;
-   return (acc->description);
+   return acc ? acc->description : NULL;
 }
 
 const char * 
 xaccAccountGetNotes (Account *acc) 
 {
-  KvpValue *v;
-
-  if (!acc) return NULL;
-  v = kvp_frame_get_slot(acc->inst.kvp_data, "notes");
-  if(v) return(kvp_value_get_string(v));
-  return(NULL);
+   return acc ? kvp_frame_get_string(acc->inst.kvp_data, "notes") : NULL;
 }
 
 gnc_commodity * 
@@ -1666,45 +1576,39 @@ DxaccAccountGetCurrency (const Account *acc)
 gnc_commodity * 
 xaccAccountGetCommodity (const Account *acc)
 {
-  if (!acc) return NULL;
-
-  return (acc->commodity);
+  return acc ? acc->commodity : NULL;
 }
 
 gnc_numeric
 xaccAccountGetBalance (Account *acc) 
 {
-  if (!acc) return gnc_numeric_zero();
-  return acc->balance;
+  return acc ? acc->balance : gnc_numeric_zero();
 }
 
 gnc_numeric
 xaccAccountGetClearedBalance (Account *acc)
 {
-   if (!acc) return gnc_numeric_zero();
-   return acc->cleared_balance;
+  return acc ? acc->cleared_balance : gnc_numeric_zero();
 }
 
 gnc_numeric
 xaccAccountGetReconciledBalance (Account *acc)
 {
-   if (!acc) return gnc_numeric_zero();
-   return acc->reconciled_balance;
+  return acc ? acc->reconciled_balance : gnc_numeric_zero();
 }
 
 gnc_numeric
-xaccAccountGetProjectedMinimumBalance (Account *account)
+xaccAccountGetProjectedMinimumBalance (Account *acc)
 {
   GList *node;
   time_t today;
   gnc_numeric lowest = gnc_numeric_zero ();
   int seen_a_transaction = 0;
 
-  if (!account)
-    return gnc_numeric_zero ();
+  if (!acc) return gnc_numeric_zero ();
 
   today = gnc_timet_get_today_end();
-  for (node = g_list_last (account->splits); node; node = node->prev)
+  for (node = g_list_last (acc->splits); node; node = node->prev)
   {
     Split *split = node->data;
 
@@ -1803,15 +1707,15 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
  * one that walks from the tail of the split list.
  */
 gnc_numeric
-xaccAccountGetPresentBalance (Account *account)
+xaccAccountGetPresentBalance (Account *acc)
 {
   GList *node;
   time_t today;
 
-  g_return_val_if_fail(account, gnc_numeric_zero());
+  g_return_val_if_fail(acc, gnc_numeric_zero());
 
   today = gnc_timet_get_today_end();
-  for (node = g_list_last (account->splits); node; node = node->prev)
+  for (node = g_list_last (acc->splits); node; node = node->prev)
   {
     Split *split = node->data;
 
@@ -1891,29 +1795,28 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for book */
  * currency.
  */
 static gnc_numeric
-xaccAccountGetXxxBalanceInCurrency (Account *account,
+xaccAccountGetXxxBalanceInCurrency (Account *acc,
 				    xaccGetBalanceFn fn,
 				    gnc_commodity *report_currency)
 {
   gnc_numeric balance;
 
-  if (!account || !fn || !report_currency) return gnc_numeric_zero ();
-  balance = fn(account);
-  balance = xaccAccountConvertBalanceToCurrency(account, balance,
-                                                account->commodity,
+  if (!acc || !fn || !report_currency) return gnc_numeric_zero ();
+  balance = fn(acc);
+  balance = xaccAccountConvertBalanceToCurrency(acc, balance,
+                                                acc->commodity,
                                                 report_currency);
   return balance;
 }
 
 static gnc_numeric
-xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *account, time_t date,
+xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
                                            xaccGetBalanceAsOfDateFn fn,
                                            gnc_commodity *report_commodity)
 {
-    g_return_val_if_fail(account && fn && report_commodity,
-                         gnc_numeric_zero());
+    g_return_val_if_fail(acc && fn && report_commodity, gnc_numeric_zero());
     return xaccAccountConvertBalanceToCurrency(
-        account, fn(account, date), account->commodity, report_commodity);
+        acc, fn(acc, date), acc->commodity, report_commodity);
 }
 
 /*
@@ -1935,21 +1838,21 @@ typedef struct
  * values of all these accounts.
  */
 static gpointer
-xaccAccountBalanceHelper (Account *account, gpointer data)
+xaccAccountBalanceHelper (Account *acc, gpointer data)
 {
   CurrencyBalance *cb = data;
   gnc_numeric balance;
 
   if (!cb->fn || !cb->currency)
     return NULL;
-  balance = xaccAccountGetXxxBalanceInCurrency (account, cb->fn, cb->currency);
+  balance = xaccAccountGetXxxBalanceInCurrency (acc, cb->fn, cb->currency);
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
                                  GNC_HOW_RND_ROUND);
   return NULL;
 }
 static gpointer
-xaccAccountBalanceAsOfDateHelper (Account *account, gpointer data)
+xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
 {
     CurrencyBalance *cb = data;
     gnc_numeric balance;
@@ -1957,7 +1860,7 @@ xaccAccountBalanceAsOfDateHelper (Account *account, gpointer data)
     g_return_val_if_fail (cb->asOfDateFn && cb->currency, NULL);
 
     balance = xaccAccountGetXxxBalanceAsOfDateInCurrency (
-        account, cb->date, cb->asOfDateFn, cb->currency);
+        acc, cb->date, cb->asOfDateFn, cb->currency);
     cb->balance = gnc_numeric_add (cb->balance, balance,
                                    gnc_commodity_get_fraction (cb->currency),
                                    GNC_HOW_RND_ROUND);
@@ -1977,19 +1880,18 @@ xaccAccountBalanceAsOfDateHelper (Account *account, gpointer data)
  * If 'include_children' is FALSE, this function doesn't recurse at all.
  */
 static gnc_numeric
-xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
+xaccAccountGetXxxBalanceInCurrencyRecursive (Account *acc,
 					     xaccGetBalanceFn fn,
 					     gnc_commodity *report_commodity,
 					     gboolean include_children)
 {
   gnc_numeric balance;
 
-  if (account == NULL)
-    return gnc_numeric_zero ();
+  if (!acc) return gnc_numeric_zero ();
   if (!report_commodity)
-    report_commodity = xaccAccountGetCommodity (account);
+    report_commodity = xaccAccountGetCommodity (acc);
 
-  balance = xaccAccountGetXxxBalanceInCurrency (account, fn, report_commodity);
+  balance = xaccAccountGetXxxBalanceInCurrency (acc, fn, report_commodity);
 
   /* If needed, sum up the children converting to the *requested*
      commodity. */
@@ -1997,7 +1899,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
   {
     CurrencyBalance cb = { report_commodity, balance, fn, NULL, 0 };
 
-    xaccGroupForEachAccount (account->children, xaccAccountBalanceHelper,
+    xaccGroupForEachAccount (acc->children, xaccAccountBalanceHelper,
                              &cb, TRUE);
     balance = cb.balance;
   }
@@ -2007,24 +1909,24 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
 
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
-    Account *account, time_t date, xaccGetBalanceAsOfDateFn fn,
+    Account *acc, time_t date, xaccGetBalanceAsOfDateFn fn,
     gnc_commodity *report_commodity, gboolean include_children)
 {
   gnc_numeric balance;
 
-  g_return_val_if_fail(account, gnc_numeric_zero());
+  g_return_val_if_fail(acc, gnc_numeric_zero());
   if (!report_commodity)
-      report_commodity = xaccAccountGetCommodity (account);
+      report_commodity = xaccAccountGetCommodity (acc);
 
   balance = xaccAccountGetXxxBalanceAsOfDateInCurrency(
-      account, date, fn, report_commodity);
+      acc, date, fn, report_commodity);
 
   /* If needed, sum up the children converting to the *requested*
      commodity. */
   if (include_children) {
     CurrencyBalance cb = { report_commodity, balance, NULL, fn, date };
 
-    xaccGroupForEachAccount (account->children,
+    xaccGroupForEachAccount (acc->children,
                              xaccAccountBalanceAsOfDateHelper, &cb, TRUE);
     balance = cb.balance;
   }
@@ -2033,67 +1935,65 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
 }
 
 gnc_numeric
-xaccAccountGetBalanceInCurrency (Account *account,
-				 gnc_commodity *report_commodity,
+xaccAccountGetBalanceInCurrency (Account *acc, gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
   gnc_numeric rc;
-  rc = xaccAccountGetXxxBalanceInCurrencyRecursive (account, 
-                   xaccAccountGetBalance,
-						 report_commodity, include_children);
-  PINFO (" baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, rc.num, rc.denom);
+  rc = xaccAccountGetXxxBalanceInCurrencyRecursive (
+      acc, xaccAccountGetBalance, report_commodity, include_children);
+  PINFO(" baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, rc.num, rc.denom);
   return rc;
 }
 
 
 gnc_numeric
-xaccAccountGetClearedBalanceInCurrency (Account *account,
-					gnc_commodity *report_commodity,
-					gboolean include_children)
+xaccAccountGetClearedBalanceInCurrency (Account *acc,
+                                        gnc_commodity *report_commodity,
+                                        gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
-      account, xaccAccountGetClearedBalance, report_commodity,
+      acc, xaccAccountGetClearedBalance, report_commodity,
       include_children);
 }
 
 
 gnc_numeric
-xaccAccountGetReconciledBalanceInCurrency (Account *account,
+xaccAccountGetReconciledBalanceInCurrency (Account *acc,
 				 gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
-      account, xaccAccountGetReconciledBalance, report_commodity,
+      acc, xaccAccountGetReconciledBalance, report_commodity,
       include_children);
 }
 
 gnc_numeric
-xaccAccountGetPresentBalanceInCurrency (Account *account,
+xaccAccountGetPresentBalanceInCurrency (Account *acc,
 					gnc_commodity *report_commodity,
 					gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
-      account, xaccAccountGetPresentBalance, report_commodity,
+      acc, xaccAccountGetPresentBalance, report_commodity,
       include_children);
 }
 
 gnc_numeric
 xaccAccountGetProjectedMinimumBalanceInCurrency (
-    Account *account, gnc_commodity *report_commodity,
+    Account *acc, gnc_commodity *report_commodity,
     gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
-      account, xaccAccountGetProjectedMinimumBalance, report_commodity,
+      acc, xaccAccountGetProjectedMinimumBalance, report_commodity,
       include_children);
 }
 
 gnc_numeric
 xaccAccountGetBalanceAsOfDateInCurrency(
-    Account *account, time_t date, gnc_commodity *report_commodity,
+    Account *acc, time_t date, gnc_commodity *report_commodity,
     gboolean include_children)
 {
     return xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
-        account, date, xaccAccountGetBalanceAsOfDate, report_commodity,
+        acc, date, xaccAccountGetBalanceAsOfDate, report_commodity,
         include_children);
 }
 
@@ -2103,15 +2003,13 @@ xaccAccountGetBalanceAsOfDateInCurrency(
 SplitList *
 xaccAccountGetSplitList (Account *acc) 
 {
-  if (!acc) return NULL;
-  return (acc->splits);
+  return acc ? acc->splits : NULL;
 }
 
 LotList *
 xaccAccountGetLotList (Account *acc) 
 {
-  if (!acc) return NULL;
-  return (acc->lots);
+  return acc ? acc->lots : NULL;
 }
 
 LotList *
@@ -2148,49 +2046,37 @@ xaccAccountFindOpenLots (Account *acc,
 }
 
 gpointer
-xaccAccountForEachLot(Account *acc,
-                              gpointer (*proc)(GNCLot *lot, void *data),
-                              void *data) 
+xaccAccountForEachLot(Account *acc, 
+                      gpointer (*proc)(GNCLot *lot, void *data), void *data) 
 {
   LotList *node;
+  gpointer result = NULL;
 
-  if (!acc) return(NULL);
-  if (!proc) return(NULL);
+  if (!acc || !proc) return NULL;
   
-  for (node = acc->lots; node; node=node->next)
-  {
-    GNCLot *lot = node->data;
-    gpointer result = proc (lot, data);
-    if (result) return result;
-  }
+  for (node = acc->lots; node; node = node->next)
+      if ((result = proc((GNCLot *)node->data, data))) 
+          break;
   
-  return(NULL);
+  return result;
 }
 
 /********************************************************************\
 \********************************************************************/
 
+/* These functions use interchange gint64 and gboolean.  Is that right? */
 gboolean
-xaccAccountGetTaxRelated (Account *account)
+xaccAccountGetTaxRelated (Account *acc)
 {
-  KvpValue *kvp;
-
-  if (!account)
-    return FALSE;
-
-  kvp = kvp_frame_get_slot (account->inst.kvp_data, "tax-related");
-  if (!kvp)
-    return FALSE;
-
-  return kvp_value_get_gint64 (kvp);
+  return acc ? kvp_frame_get_gint64(acc->inst.kvp_data, "tax-related") : FALSE;
 }
 
 void
-xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
+xaccAccountSetTaxRelated (Account *acc, gboolean tax_related)
 {
   KvpValue *new_value;
 
-  if (!account)
+  if (!acc)
     return;
 
   if (tax_related)
@@ -2198,139 +2084,107 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
   else
     new_value = NULL;
 
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_slot_nc(account->inst.kvp_data, "tax-related", new_value);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_slot_nc(acc->inst.kvp_data, "tax-related", new_value);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 const char *
-xaccAccountGetTaxUSCode (Account *account)
+xaccAccountGetTaxUSCode (Account *acc)
 {
-  KvpValue *value;
-
-  if (!account)
-    return FALSE;
-
-  value = kvp_frame_get_slot_path (account->inst.kvp_data, "tax-US", "code", NULL);
-  if (!value)
-    return NULL;
-
-  return kvp_value_get_string (value);
+  return acc ? kvp_frame_get_string(acc->inst.kvp_data, "tax-US/code") : NULL;
 }
 
 void
-xaccAccountSetTaxUSCode (Account *account, const char *code)
+xaccAccountSetTaxUSCode (Account *acc, const char *code)
 {
-  if (!account) return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_str (account->inst.kvp_data, "/tax-US/code", code);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_string (acc->inst.kvp_data, "/tax-US/code", code);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 const char *
-xaccAccountGetTaxUSPayerNameSource (Account *account)
+xaccAccountGetTaxUSPayerNameSource (Account *acc)
 {
-  if (!account) return NULL;
-  return kvp_frame_get_string (account->inst.kvp_data, "/tax-US/payer-name-source");
+  return acc ? kvp_frame_get_string(acc->inst.kvp_data, 
+                                    "tax-US/payer-name-source") : NULL;
 }
 
 void
-xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
+xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 {
-  if (!account) return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_str (account->inst.kvp_data, "/tax-US/payer-name-source", source);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_string (acc->inst.kvp_data, 
+                        "/tax-US/payer-name-source", source);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountGetPlaceholder (Account *account)
+xaccAccountGetPlaceholder (Account *acc)
 {
-  KvpValue *kvp;
-  char *setting;
-
-  if ( ( account )                                      &&
-       ( kvp = kvp_frame_get_slot (account->inst.kvp_data, "placeholder" ) ) &&
-       ( kvp_value_get_type (kvp) == KVP_TYPE_STRING ) && 
-       ( setting = kvp_value_get_string(kvp) ) &&
-       ( !strcmp( setting, "true" ) ) )
-      return TRUE;
-
-  return FALSE;
+  char *str;
+  if (!acc) return FALSE;
+  
+  str = kvp_frame_get_string(acc->inst.kvp_data, "placeholder");
+  return (str && !strcmp(str, "true"));
 }
 
 void
-xaccAccountSetPlaceholder (Account *account, gboolean option)
+xaccAccountSetPlaceholder (Account *acc, gboolean val)
 {
-  if (!account)
-    return;
-
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_slot_nc(account->inst.kvp_data, "placeholder",
-			kvp_value_new_string (option ? "true" : "false"));
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  if (!acc) return;
+  
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_string (acc->inst.kvp_data, 
+                        "placeholder", val ? "true" : "false");
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 GNCPlaceholderType
-xaccAccountGetDescendantPlaceholder (Account *account)
+xaccAccountGetDescendantPlaceholder (Account *acc)
 {
   GList *descendants, *node;
+  GNCPlaceholderType ret = PLACEHOLDER_NONE;
 
-  if (!account)
-    return PLACEHOLDER_NONE;
+  if (!acc) return PLACEHOLDER_NONE;
+  if (xaccAccountGetPlaceholder(acc)) return PLACEHOLDER_THIS;
 
-  if (xaccAccountGetPlaceholder(account))
-    return PLACEHOLDER_THIS;
+  descendants = xaccGroupGetSubAccounts(acc->children);
+  for (node = descendants; node; node = node->next) 
+      if (xaccAccountGetPlaceholder((Account *) node->data)) {
+          ret = PLACEHOLDER_CHILD;
+          break;
+      }
 
-  descendants = xaccGroupGetSubAccounts(account->children);
-  node = g_list_first(descendants);
-  for ( ; node ; node = g_list_next(node) ) 
-  {
-    account = (Account *)node->data;
-    if (xaccAccountGetPlaceholder(account)) return(PLACEHOLDER_CHILD);
-  }
-
-  return PLACEHOLDER_NONE;
+  g_list_free(descendants);
+  return ret;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountHasAncestor (Account *account, Account * ancestor)
+xaccAccountHasAncestor (Account *acc, Account * ancestor)
 {
-  Account *parent;
+  Account *parent = acc;
 
-  if ((account == NULL) || (ancestor == NULL))
-    return FALSE;
+  if (!acc || !ancestor) return FALSE;
 
-  parent = xaccAccountGetParentAccount(account);
-  while (parent != NULL)
-  {
-    if (parent == ancestor)
-      return TRUE;
+  while (parent && parent != ancestor)
+      parent = xaccAccountGetParentAccount(parent);
 
-    parent = xaccAccountGetParentAccount(parent);
-  }
-
-  return FALSE;
+  return (parent == ancestor);
 }
 
 /********************************************************************\
@@ -2446,8 +2300,7 @@ account_type_name[NUM_ACCOUNT_TYPES] = {
 
 const char *
 xaccAccountGetTypeStr(GNCAccountType type) {
-  if (0 > type) return "";
-  if (NUM_ACCOUNT_TYPES <= type) return "";
+  if (type < 0 || NUM_ACCOUNT_TYPES <= type ) return "";
   return _(account_type_name [type]);
 }
 
@@ -2521,69 +2374,20 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
+xaccAccountGetReconcileLastDate (Account *acc, time_t *last_date)
 {
-  KvpValue *value;
+  KvpValue *v;
 
-  if (!account)
-    return FALSE;
+  if (!acc) return FALSE;
 
-  value = kvp_frame_get_slot_path (account->inst.kvp_data,
-                                   "reconcile-info", "last-date", NULL);
-  if (!value)
-    return FALSE;
+  v = kvp_frame_get_value(acc->inst.kvp_data, "reconcile-info/last-date");
+  
+  if (!v || kvp_value_get_type(v) != KVP_TYPE_GINT64)
+      return FALSE;
 
-  if (kvp_value_get_type (value) == KVP_TYPE_GINT64)
-  {
-    if (last_date)
-      *last_date = kvp_value_get_gint64 (value);
+  if (last_date)
+      *last_date = kvp_value_get_gint64(v);
 
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
-{
-  if (!account) return;
-
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_gint64 (account->inst.kvp_data, 
-                 "/reconcile-info/last-date", last_date);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-gboolean
-xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
-{
-  KvpValue *value1, *value2;
-
-  if (!account)
-    return FALSE;
-
-  value1 = kvp_frame_get_slot_path (account->inst.kvp_data, "reconcile-info",
-				    "last-interval", "months", NULL);
-  value2 = kvp_frame_get_slot_path (account->inst.kvp_data, "reconcile-info",
-				    "last-interval", "days", NULL);
-  if (!value1 || (kvp_value_get_type (value1) != KVP_TYPE_GINT64) ||
-      !value2 || (kvp_value_get_type (value2) != KVP_TYPE_GINT64))
-    return FALSE;
-
-  if (months)
-    *months = kvp_value_get_gint64 (value1);
-  if (days)
-    *days = kvp_value_get_gint64 (value2);
   return TRUE;
 }
 
@@ -2591,118 +2395,135 @@ xaccAccountGetReconcileLastInterval (Account *account, int *months, int *days)
 \********************************************************************/
 
 void
-xaccAccountSetReconcileLastInterval (Account *account, int months, int days)
+xaccAccountSetReconcileLastDate (Account *acc, time_t last_date)
+{
+  if (!acc) return;
+
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_gint64 (acc->inst.kvp_data, 
+                        "/reconcile-info/last-date", last_date);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+gboolean
+xaccAccountGetReconcileLastInterval (Account *acc, int *months, int *days)
+{
+  KvpValue *v1, *v2;
+
+  if (!acc) return FALSE;
+
+  v1 = kvp_frame_get_value(acc->inst.kvp_data, 
+                           "reconcile-info/last-interval/months");
+  v2 = kvp_frame_get_value(acc->inst.kvp_data, 
+                           "reconcile-info/last-interval/days");
+  if (!v1 || (kvp_value_get_type (v1) != KVP_TYPE_GINT64) ||
+      !v2 || (kvp_value_get_type (v2) != KVP_TYPE_GINT64))
+    return FALSE;
+
+  if (months)
+    *months = kvp_value_get_gint64 (v1);
+  if (days)
+    *days = kvp_value_get_gint64 (v2);
+  return TRUE;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountSetReconcileLastInterval (Account *acc, int months, int days)
 {
   KvpFrame *frame;
-  if (!account) return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (acc);
 
-  frame = kvp_frame_get_frame_slash (account->inst.kvp_data, 
+  frame = kvp_frame_get_frame_slash (acc->inst.kvp_data, 
          "/reconcile-info/last-interval");
   g_assert(frame);
 
   kvp_frame_set_gint64 (frame, "months", months);
   kvp_frame_set_gint64 (frame, "days", days);
 
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcilePostponeDate (Account *account,
-                                     time_t *postpone_date)
+xaccAccountGetReconcilePostponeDate (Account *acc, time_t *postpone_date)
 {
-  KvpValue *value;
+  KvpValue *v;
 
-  if (!account)
-    return FALSE;
+  if (!acc) return FALSE;
 
-  value = kvp_frame_get_slot_path (account->inst.kvp_data,
-                                   "reconcile-info", "postpone", "date", NULL);
-  if (!value)
-    return FALSE;
+  v = kvp_frame_get_value(acc->inst.kvp_data, "reconcile-info/postpone/date");
+  if (!v || kvp_value_get_type (v) != KVP_TYPE_GINT64)
+      return FALSE;
 
-  if (kvp_value_get_type (value) == KVP_TYPE_GINT64)
-  {
-    if (postpone_date)
-      *postpone_date = kvp_value_get_gint64 (value);
+  if (postpone_date)
+      *postpone_date = kvp_value_get_gint64 (v);
 
-    return TRUE;
-  }
-
-  return FALSE;
+  return TRUE;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void
-xaccAccountSetReconcilePostponeDate (Account *account,
-                                     time_t postpone_date)
+xaccAccountSetReconcilePostponeDate (Account *acc, time_t postpone_date)
 {
-  if (!account) return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (acc);
 
   /* XXX this should be using timespecs, not gints !! */
-  kvp_frame_set_gint64 (account->inst.kvp_data,
-            "/reconcile-info/postpone/date", postpone_date);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  kvp_frame_set_gint64 (acc->inst.kvp_data,
+            "reconcile-info/postpone/date", postpone_date);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcilePostponeBalance (Account *account,
-                                        gnc_numeric *balance)
+xaccAccountGetReconcilePostponeBalance (Account *acc, gnc_numeric *balance)
 {
-  KvpValue *value;
+  KvpValue *v;
 
-  if (!account)
-    return FALSE;
+  if (!acc) return FALSE;
 
-  value = kvp_frame_get_slot_path (account->inst.kvp_data,
-                                   "reconcile-info", "postpone", "balance",
-                                   NULL);
-  if (!value)
-    return FALSE;
+  v = kvp_frame_get_value(acc->inst.kvp_data, 
+                          "reconcile-info/postpone/balance");
+  if (!v || kvp_value_get_type (v) != KVP_TYPE_NUMERIC)
+      return FALSE;
 
-  if (kvp_value_get_type (value) == KVP_TYPE_NUMERIC)
-  {
-    if (balance)
-      *balance = kvp_value_get_numeric (value);
+  if (balance)
+      *balance = kvp_value_get_numeric (v);
 
-    return TRUE;
-  }
-
-  return FALSE;
+  return TRUE;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void
-xaccAccountSetReconcilePostponeBalance (Account *account,
-                                        gnc_numeric balance)
+xaccAccountSetReconcilePostponeBalance (Account *acc, gnc_numeric balance)
 {
-  if (!account) return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_gnc_numeric (account->inst.kvp_data,
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_gnc_numeric (acc->inst.kvp_data,
            "/reconcile-info/postpone/balance", balance);
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
@@ -2710,20 +2531,14 @@ xaccAccountSetReconcilePostponeBalance (Account *account,
 \********************************************************************/
 
 void
-xaccAccountClearReconcilePostpone (Account *account)
+xaccAccountClearReconcilePostpone (Account *acc)
 {
-  if (!account)
-    return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-  {
-    kvp_frame_set_slot_path (account->inst.kvp_data, NULL,
-                             "reconcile-info", "postpone", NULL);
-
-    mark_account (account);
-  }
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_value (acc->inst.kvp_data, "reconcile-info/postpone", NULL);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
@@ -2734,83 +2549,54 @@ xaccAccountClearReconcilePostpone (Account *account)
  * If it is not defined for the account, return the default value.
  */
 gboolean
-xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value)
+xaccAccountGetAutoInterestXfer (Account *acc, gboolean default_value)
 {
-  KvpValue *value = NULL;
-  char *setting = NULL;
-  gboolean result = default_value;
+  char *str = NULL;
+  if (!acc) return default_value;
 
-  if ( ( account )                                      &&
-       ( value = kvp_frame_get_slot_path (account->inst.kvp_data,
-                                          "reconcile-info",
-                                          "auto-interest-transfer",
-                                          NULL) )        &&
-       ( kvp_value_get_type (value) == KVP_TYPE_STRING ) && 
-       ( setting = kvp_value_get_string(value) ) )
-  {
-    if( !strcmp( setting, "true" ) )
-      result = TRUE;
-    else if( !strcmp( setting, "false" ) )
-      result = FALSE;
-  }
-
-  return (result);
+  str = kvp_frame_get_string(acc->inst.kvp_data, 
+                             "reconcile-info/auto-interest-transfer");
+  return str ? !strcmp(str, "true") : default_value;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void
-xaccAccountSetAutoInterestXfer (Account *account, gboolean option)
+xaccAccountSetAutoInterestXfer (Account *acc, gboolean option)
 {
-  if (!account)
-    return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-
+  xaccAccountBeginEdit (acc);
   /* FIXME: need KVP_TYPE_BOOLEAN for this someday */
-  kvp_frame_set_str (account->inst.kvp_data,
-       "/reconcile-info/auto-interest-transfer",
-       (option ? "true" : "false"));
-
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  kvp_frame_set_string (acc->inst.kvp_data,
+                        "/reconcile-info/auto-interest-transfer",
+                        (option ? "true" : "false"));
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 const char *
-xaccAccountGetLastNum (Account *account)
+xaccAccountGetLastNum (Account *acc)
 {
-  KvpValue *value;
-
-  if (!account)
-    return FALSE;
-
-  value = kvp_frame_get_slot (account->inst.kvp_data, "last-num");
-  if (!value)
-    return FALSE;
-
-  return kvp_value_get_string (value);
+  return acc ? kvp_frame_get_string(acc->inst.kvp_data, "last-num") : NULL;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 void
-xaccAccountSetLastNum (Account *account, const char *num)
+xaccAccountSetLastNum (Account *acc, const char *num)
 {
-  if (!account)
-    return;
+  if (!acc) return;
 
-  xaccAccountBeginEdit (account);
-  kvp_frame_set_slot_nc (account->inst.kvp_data, "last-num", 
-                                            kvp_value_new_string (num));
-  mark_account (account);
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  xaccAccountBeginEdit (acc);
+  kvp_frame_set_string(acc->inst.kvp_data, "last-num", num);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
@@ -2819,13 +2605,13 @@ xaccAccountSetLastNum (Account *account, const char *num)
 void
 dxaccAccountSetPriceSrc(Account *acc, const char *src)
 {
-  if(!acc) return;
+  if (!acc) return;
 
   xaccAccountBeginEdit(acc);
   {
     GNCAccountType t = acc->type;
 
-    if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
+    if ((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
       kvp_frame_set_slot_nc(acc->inst.kvp_data,
                             "old-price-source",
                             src ? kvp_value_new_string(src) : NULL);
@@ -2899,51 +2685,41 @@ dxaccAccountGetQuoteTZ(Account *acc)
 \********************************************************************/
 
 void
-xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status)
+xaccAccountSetReconcileChildrenStatus(Account *acc, gboolean status)
 { 
-  if (!account) return;
+  if (!acc) return;
   
-  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (acc);
   
   /* XXX FIXME: someday this should use KVP_TYPE_BOOLEAN */
-  kvp_frame_set_gint64 (account->inst.kvp_data, 
-        "/reconcile-info/include-children", status);
-
-  account->inst.dirty = TRUE;
-  xaccAccountCommitEdit (account);
+  kvp_frame_set_gint64 (acc->inst.kvp_data, 
+                        "/reconcile-info/include-children", status);
+  mark_account(acc);
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gboolean
-xaccAccountGetReconcileChildrenStatus(Account *account)
+xaccAccountGetReconcileChildrenStatus(Account *acc)
 {
-  KvpValue *status;
-  if (!account)
-    return FALSE;
   /* access the account's kvp-data for status and return that, if no value
    * is found then we can assume not to include the children, that being
    * the default behaviour 
    */
-  status = kvp_frame_get_slot_path (account->inst.kvp_data,
-				    "reconcile-info",
-				    "include-children",
-				    NULL);
-  if (!status)
-    return FALSE;
-  return kvp_value_get_gint64 (status);
+  return acc ? kvp_frame_get_gint64(acc->inst.kvp_data, 
+                                    "reconcile-info/include-children") : FALSE;
 }
 
 /********************************************************************\
 \********************************************************************/
 
 gint
-xaccAccountForEachTransaction(Account *acc,
-                              TransactionCallback proc,
+xaccAccountForEachTransaction(Account *acc, TransactionCallback proc,
                               void *data) 
 {
-  if(!acc || !proc) return 0;
+  if (!acc || !proc) return 0;
   xaccAccountBeginStagedTransactionTraversals (acc);
   return xaccAccountStagedTransactionTraversal(acc, 42, proc, data);
 }
@@ -2957,10 +2733,8 @@ xaccAccountForEachTransaction(Account *acc,
  * passed.
  */
 static void
-finder_help_function(Account *account,
-                     const char *description,
-                     Split **split,
-                     Transaction **trans )
+finder_help_function(Account *acc, const char *description,
+                     Split **split, Transaction **trans )
 {
   GList *slp;
 
@@ -2969,51 +2743,47 @@ finder_help_function(Account *account,
   if (trans) *trans = NULL;
 
   /* Then see if we have any work to do */
-  if (account == NULL) return;
+  if (acc == NULL) return;
 
   /* Why is this loop iterated backwards ?? Presumably because the split
    * list is in date order, and the most recent matches should be 
    * returned!?  */
-  for (slp = g_list_last (account->splits);
-       slp;
-       slp = slp->prev)
-  {
+  for (slp = g_list_last (acc->splits); slp; slp = slp->prev) {
     Split *lsplit = slp->data;
     Transaction *ltrans = xaccSplitGetParent(lsplit);
 
     if (safe_strcmp (description, xaccTransGetDescription (ltrans)) == 0)
     {
-      if( split ) *split = lsplit;
-      if( trans ) *trans = ltrans;
+      if (split) *split = lsplit;
+      if (trans) *trans = ltrans;
       return;
     }
   }
 }
 
 Split *
-xaccAccountFindSplitByDesc(Account *account, const char *description)
+xaccAccountFindSplitByDesc(Account *acc, const char *description)
 {
   Split *split;
 
   /* Get the split which has a transaction matching the description. */
-  finder_help_function(account, description, &split, NULL );
-
-  return( split );
+  finder_help_function(acc, description, &split, NULL);
+  return split;
 }
 
 /* This routine is for finding a matching transaction in an account by
- * matching on the description field. This routine is used for auto-filling
- * in registers with a default leading account. The dest_trans is a
- * transaction used for currency checking. */
+ * matching on the description field. [CAS: The rest of this comment
+ * seems to belong somewhere else.] This routine is used for
+ * auto-filling in registers with a default leading account. The
+ * dest_trans is a transaction used for currency checking. */
 Transaction *
-xaccAccountFindTransByDesc(Account *account, const char *description)
+xaccAccountFindTransByDesc(Account *acc, const char *description)
 {
   Transaction *trans;
 
   /* Get the transation matching the description. */
-  finder_help_function(account, description, NULL, &trans );
-
-  return( trans );
+  finder_help_function(acc, description, NULL, &trans);
+  return trans;
 }
 
 /* ================================================================ */

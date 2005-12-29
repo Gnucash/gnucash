@@ -441,10 +441,10 @@ void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean
 /** DOCUMENT ME! */
 gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
 
-/** Returns true if the account has 'ancestor' as an ancestor.
- *  An ancestor account my be the accounts parent, its parent's parent,
- * its parent,s parent's parent, etc.
- *  Returns false if either one is NULL. 
+/** Returns true if the account is 'ancestor' or has 'ancestor' as an
+ *  ancestor.  An ancestor account may be the accounts parent, its
+ *  parent's parent, its parent's parent's parent, etc.  Returns false
+ *  if either one is NULL.
  */
 gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 
