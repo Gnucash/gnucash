@@ -76,7 +76,7 @@ GType gnc_tree_model_account_types_get_type (void);
    account types while showing all account types, use
    gnc_tree_model_account_types_master() to get the treemodel.
    Connect it to your tree view and use
-   gnc_tree_view_account_types_{sg}et_selection() to convert between
+   gnc_tree_model_account_types_{sg}et_selection() to convert between
    bitmasks and GtkTreeView states.  No need to free the treemodel.
 
    Method 2: If you must store selection state in the model for some
