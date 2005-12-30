@@ -1,3 +1,9 @@
+2005-12-29  David Hampton  <hampton@employees.org>
+
+	* src/engine/gw-engine-spec.scm: Comment out unused function that
+	won't compile with g-wrap 1.9 after the const-ifying of the
+	account functions.
+
 2005-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.h, gnc-hbci-utils.c: Use

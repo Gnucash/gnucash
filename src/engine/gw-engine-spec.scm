@@ -740,20 +740,20 @@ to the other splits in account a.")
  "Check to see if all of the splits in transaction t are in proper
 date order.")
 
-(gw:wrap-function
- ws
- 'gnc:account-order
- '<gw:int>
- "xaccAccountOrder"
- '(
-   ((<gnc:Account**> const) a1)
-   ((<gnc:Account**> const) a2)
-   )
- "Defines a sorting order on accounts.  Returns -1 if a1 is \"less
-than\" the second, +1 if the a1 is \"greater than\" the second, and 0
-if they are equal.  To determine the sort order, the account codes are
-compared, and if these are equal, then account types, and, if these
-are equal, then account names.")
+;; (gw:wrap-function
+;;  ws
+;;  'gnc:account-order
+;;  '<gw:int>
+;;  "xaccAccountOrder_gwrap"
+;;  '(
+;;    (<gnc:Account**> a1)
+;;    (<gnc:Account**> a2)
+;;    )
+;;  "Defines a sorting order on accounts.  Returns -1 if a1 is \"less
+;; than\" the second, +1 if the a1 is \"greater than\" the second, and 0
+;; if they are equal.  To determine the sort order, the account codes are
+;; compared, and if these are equal, then account types, and, if these
+;; are equal, then account names.")
 
 (gw:wrap-function
  ws
