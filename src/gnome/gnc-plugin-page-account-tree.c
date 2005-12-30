@@ -83,17 +83,7 @@ typedef struct GncPluginPageAccountTreePrivate
 	GtkWidget   *widget;
 	GtkTreeView *tree_view;
 	gint         component_id;
-
-	struct {
-	  GtkWidget    *dialog;
-	  GtkTreeModel *model;
-	  guint32    	visible_types;
-	  guint32    	original_visible_types;
-	  gboolean   	hide_zero_total;
-	  gboolean   	original_hide_zero_total;
-	  gulong        selection_changed_cb_id;
-	} fd;
-
+	AccountFilterDialog fd;
 } GncPluginPageAccountTreePrivate;
 
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
@@ -1297,7 +1287,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 /** This function tells the account tree view whether or not to filter
  *  out a particular account.  Accounts may be filtered if the user
  *  has decided not to display that particular account type, or if the
- *  user has requested taht accoutns with a zero total not be shown.
+ *  user has requested that accounts with a zero total not be shown.
  *
  *  @param account The account that was toggled.
  *
@@ -1495,6 +1485,7 @@ gppat_filter_response_cb (GtkWidget *dialog,
   gtk_widget_destroy(dialog);
   LEAVE("types 0x%x", types);
 }
+
 
 static void
 gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action,
