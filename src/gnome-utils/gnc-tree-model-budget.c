@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-
+#include <glib/gi18n.h>
 #include "gnc-tree-model-budget.h"
 #include "gnc-budget.h"
 #include "gnc-ui-util.h"
@@ -93,13 +93,13 @@ gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm)
     /* column for name */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (
-        "Name", renderer, "text", BUDGET_NAME_COLUMN, NULL);
+        N_("Name"), renderer, "text", BUDGET_NAME_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
     /* column for description */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (
-        "Description", renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
+        N_("Description"), renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
 }

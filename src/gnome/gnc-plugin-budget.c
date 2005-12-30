@@ -216,7 +216,7 @@ gnc_budget_gui_select_budget(QofBook *book)
     gboolean ok;
 
     dlg = GTK_DIALOG(gtk_dialog_new_with_buttons(
-                         "Select a Budget", NULL, GTK_DIALOG_MODAL,
+                         N_("Select a Budget"), NULL, GTK_DIALOG_MODAL,
                          GTK_STOCK_OK, GTK_RESPONSE_OK,
                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL));
 
