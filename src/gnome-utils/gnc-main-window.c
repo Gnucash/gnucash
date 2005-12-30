@@ -244,6 +244,8 @@ static GtkActionEntry gnc_menu_actions [] =
 
 	/* View menu */
 
+	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL, NULL },
+	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL, NULL },
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },
@@ -339,6 +341,17 @@ static const gchar *always_insensitive_actions[] = {
 	"EditCutAction",
 	"EditCopyAction",
 	"EditPasteAction",
+	NULL
+};
+
+
+/** The following are in the main window so they will always be
+ *  present in the menu structure, but they are always hidden.
+ *  These actions should be overridden in child windows where they
+ *  have meaning. */
+static const gchar *always_hidden_actions[] = {
+	"ViewSortByAction",
+	"ViewFilterByAction",
 	NULL
 };
 
@@ -2368,6 +2381,9 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gnc_plugin_update_actions(priv->action_group,
 				  always_insensitive_actions,
 				  "sensitive", FALSE);
+	gnc_plugin_update_actions(priv->action_group,
+				  always_hidden_actions,
+				  "visible", FALSE);
 	gnc_plugin_set_important_actions (priv->action_group,
 					  gnc_menu_important_actions);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);

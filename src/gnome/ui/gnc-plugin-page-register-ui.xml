@@ -30,10 +30,6 @@
         <separator name="ViewSep44"/>
         <menuitem name="ViewStyleDoubleLine"   	action="ViewStyleDoubleLineAction"/>
       </placeholder>
-      <placeholder name="ViewSortPlaceholder">
-        <menuitem name="ViewSortBy"             action="ViewSortByAction"/>
-        <menuitem name="ViewFilterBy"           action="ViewFilterByAction"/>
-      </placeholder>
     </menu>
 
     <menu name="Actions" action="ActionsAction">

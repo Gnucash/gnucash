@@ -58,7 +58,9 @@
       <separator name="ViewSep1"/>
       <placeholder name="ViewContentPlaceholder"/>
       <separator name="ViewSep2"/>
+      <menuitem name="ViewSortBy" action="ViewSortByAction"/>
       <placeholder name="ViewSortPlaceholder"/>
+      <menuitem name="ViewFilterBy" action="ViewFilterByAction"/>
       <placeholder name="ViewFilterPlaceholder"/>
       <separator name="ViewSep3"/>
       <placeholder name="ViewZoomPlaceholder"/>

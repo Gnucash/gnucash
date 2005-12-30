@@ -1,5 +1,12 @@
 2005-12-29  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Move the "Sort By"
+	and "Filter By" menu items to the main window so they will always
+	appear in the same place in the menus.  Hide them so they don't
+	actually appear until a page provides them.
+
 	* src/engine/gw-engine-spec.scm: Comment out unused function that
 	won't compile with g-wrap 1.9 after the const-ifying of the
 	account functions.
