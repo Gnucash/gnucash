@@ -45,7 +45,6 @@
 #include "Scrub.h"
 #include "Transaction.h"
 #include "dialog-account.h"
-#include "dialog-options.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "druid-merge.h"
@@ -59,10 +58,10 @@
 #include "gnc-session.h"
 #include "gnc-split-reg.h"
 #include "gnc-tree-view-account.h"
+#include "gnc-tree-model-account-types.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "lot-viewer.h"
-#include "option-util.h"
 #include "window-reconcile.h"
 #include "window-main-summarybar.h"
 
@@ -72,6 +71,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 #define GCONF_SECTION "window/pages/account_tree"
 
+#define FILTER_TREE_VIEW "types_tree_view"
+
 enum {
   ACCOUNT_SELECTED,
   LAST_SIGNAL
@@ -79,16 +80,20 @@ enum {
 
 typedef struct GncPluginPageAccountTreePrivate
 {
-	GtkWidget *widget;
+	GtkWidget   *widget;
 	GtkTreeView *tree_view;
+	gint         component_id;
 
-	GNCOptionDB * odb;
-	SCM         options; 
-	int         options_id;
-	GNCOptionWin * editor_dialog;
+	struct {
+	  GtkWidget    *dialog;
+	  GtkTreeModel *model;
+	  guint32    	visible_types;
+	  guint32    	original_visible_types;
+	  gboolean   	hide_zero_total;
+	  gboolean   	original_hide_zero_total;
+	  gulong        selection_changed_cb_id;
+	} fd;
 
-	GtkWidget *options_db;
-	gint       component_id;
 } GncPluginPageAccountTreePrivate;
 
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
@@ -123,6 +128,15 @@ static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection 
 void gppat_populate_tmas_list(GtkToggleButton *dmrb, gpointer tmas);
 void gppat_set_insensitive_iff_rb_active(GtkToggleButton *b, GtkWidget *widget);
 
+/* "Filter By" dialog callbacks */
+gboolean gnc_plugin_page_account_tree_filter_accounts(Account *account, gpointer user_data);
+void gppat_filter_hide_zero_toggled_cb (GtkToggleButton *togglebutton, GncPluginPageAccountTree *page);
+void gppat_filter_clear_all_cb (GtkWidget *button, GncPluginPageAccountTree *page);
+void gppat_filter_select_all_cb (GtkWidget *button, GncPluginPageAccountTree *page);
+void gppat_filter_select_default_cb (GtkWidget *button, GncPluginPageAccountTree *page);
+void gppat_filter_response_cb (GtkWidget *dialog, gint response, GncPluginPageAccountTree *page);
+
+
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (GtkAction *action, GncPluginPageAccountTree *plugin_page);
@@ -130,7 +144,7 @@ static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, Gn
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
@@ -138,9 +152,6 @@ static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginP
 static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
-
-
-static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -171,9 +182,10 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
-	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree _Options..."), NULL,
-	  N_("Edit the account view options"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
+
+	/* View menu */
+	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_filter_by) },
 
 	/* Actions menu */
 	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
@@ -198,12 +210,6 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ScrubAllAction", NULL, N_("Check & Repair A_ll"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all) },
-
-        /* Popup menu */
-
-	{ "PopupOptionsAction", GTK_STOCK_PROPERTIES, N_("_Options"), NULL,
-	  N_("Edit the account view options"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
@@ -226,7 +232,6 @@ static const gchar *actions_requiring_account[] = {
 static action_toolbar_labels toolbar_labels[] = {
   { "FileOpenAccountAction", 	    N_("Open") },
   { "EditEditAccountAction", 	    N_("Edit") },
-  { "EditAccountViewOptionsAction", N_("Options") },
   { "FileNewAccountAction",    	    N_("New") },
   { "EditDeleteAccountAction", 	    N_("Delete") },
   { NULL, NULL },
@@ -308,11 +313,6 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	GtkActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
 	GncPluginPage *parent;
-	const gchar *url = NULL;
-	int options_id;
-	SCM find_options;
-	SCM temp;
-	URLType type;
 
 	ENTER("page %p", plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
@@ -338,47 +338,10 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 				     plugin_page);
 	gnc_plugin_init_short_names (action_group, toolbar_labels);
 
+	/* Visisble types */
+	priv->fd.visible_types = -1; /* Start with all types */
+	priv->fd.hide_zero_total = FALSE;
 	
-	/* get the options and the window ID */ 
-	priv->options = SCM_BOOL_F;
-	scm_gc_protect_object(priv->options);
-	priv->editor_dialog = NULL;
-
-	if(!url) {
-	  gnc_plugin_page_acct_tree_options_new(priv);
-	} else {
-	  char * location = NULL;
-	  char * label = NULL;
-
-	  /* if an URL is specified, it should look like 
-	   * gnc-acct-tree:id=17 .  We want to get the number out,
-	   * then look up the options in the global DB. */
-	  type = gnc_html_parse_url(NULL, url, &location, &label);
-	  if (!safe_strcmp (type, URL_TYPE_ACCTTREE) &&
-	      location && (strlen(location) > 3) && 
-	      !strncmp("id=", location, 3)) {
-	    sscanf(location+3, "%d", &options_id);
-	    find_options = scm_c_eval_string("gnc:find-acct-tree-window-options");
-	    temp = scm_call_1(find_options, scm_int2num(options_id));
-
-	    if(temp != SCM_BOOL_F) {
-	      scm_gc_unprotect_object(priv->options);
-	      priv->options = temp;
-	      scm_gc_protect_object(priv->options);
-	      priv->options_id = options_id;
-	    } else {
-	      gnc_plugin_page_acct_tree_options_new(priv);
-	    }
-	  } else {
-	    gnc_plugin_page_acct_tree_options_new(priv);
-	  }
-
-	  g_free (location);
-	  g_free (label);
-	}
-
-	priv->odb     = gnc_option_db_new(priv->options);
-
 	LEAVE("page %p, priv %p, action group %p",
 	      plugin_page, priv, action_group);
 }
@@ -388,26 +351,12 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 {
 	GncPluginPageAccountTree *page;
 	GncPluginPageAccountTreePrivate *priv;
-	SCM  free_tree;
 
 	ENTER("object %p", object);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	g_return_if_fail (priv != NULL);
-
-	if (priv->editor_dialog) {
-	  gnc_options_dialog_destroy(priv->editor_dialog);
-	  priv->editor_dialog = NULL;
-	}
-
-	gnc_option_db_destroy(priv->odb);
-
-	free_tree = scm_c_eval_string("gnc:free-acct-tree-window");
-	scm_call_1(free_tree, scm_int2num(priv->options_id));
-	priv->options_id = 0;
-
-	scm_gc_unprotect_object(priv->options);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -508,6 +457,10 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
+	gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view),
+					  gnc_plugin_page_account_tree_filter_accounts,
+					  plugin_page, NULL);
+
 	priv->component_id =
 	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
 				     gnc_plugin_page_account_refresh_cb,
@@ -548,9 +501,11 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 	LEAVE("widget destroyed");
 }
 
-#define ACCT_COUNT "Number of Open Accounts"
-#define ACCT_OPEN  "Open Account %d"
-#define ACCT_SELECTED  "Selected Account"
+#define ACCT_COUNT    "Number of Open Accounts"
+#define ACCT_OPEN     "Open Account %d"
+#define ACCT_SELECTED "Selected Account"
+#define HIDE_ZERO     "Hide Zero Total"
+#define ACCT_TYPES    "Account Types"
 
 typedef struct foo {
   GKeyFile *key_file;
@@ -655,6 +610,9 @@ gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page,
 	account_page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(account_page);
 
+	g_key_file_set_integer(key_file, group_name, ACCT_TYPES, priv->fd.visible_types);
+	g_key_file_set_boolean(key_file, group_name, HIDE_ZERO, priv->fd.hide_zero_total);
+	
 	bar.key_file = key_file;
 	bar.group_name = group_name;
 	bar.count = 0;
@@ -736,6 +694,7 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 	GError *error = NULL;
 	gchar *key, *value;
 	gint i, count;
+	gboolean hide;
 	
 	g_return_val_if_fail(key_file, NULL);
 	g_return_val_if_fail(group_name, NULL);
@@ -749,27 +708,47 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 	/* Install it now so we can them manipulate the created widget */
 	gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
 
-	/* Expanded accounts */
-	count = g_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
+	/* Filter information. Ignore missing keys. */
+	hide = g_key_file_get_boolean(key_file, group_name, HIDE_ZERO, &error);
 	if (error) {
+	  g_warning("error reading group %s key %s: %s",
+		    group_name, HIDE_ZERO, error->message);
+	  g_error_free(error);
+	  error = NULL;
+	  hide = FALSE;
+	}
+	priv->fd.hide_zero_total = hide;
+
+	i = g_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
+	if (error) {
+	  g_warning("error reading group %s key %s: %s",
+		    group_name, ACCT_TYPES, error->message);
+	  g_error_free(error);
+	  error = NULL;
+	  i = -1;
+	}
+	priv->fd.visible_types = i;
+
+	/* Expanded accounts. Skip if count key missing. */
+	count = g_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
+	if (error == NULL) {
+	  for (i = 1; i <= count; i++) {
+	    key = g_strdup_printf(ACCT_OPEN, i);
+	    value = g_key_file_get_string(key_file, group_name, key, &error);
+	    if (error) {
+	      g_warning("error reading group %s key %s: %s",
+			group_name, key, error->message);
+	      g_error_free(error);
+	      error = NULL;
+	    } else {
+	      tree_restore_expanded_row(priv->tree_view, value);
+	      g_free(value);
+	    }
+	  }
+	} else {
 	  g_warning("error reading group %s key %s: %s",
 		    group_name, ACCT_COUNT, error->message);
 	  g_error_free(error);
-	  LEAVE("bad value");
-	  return page;
-	}
-	for (i = 1; i <= count; i++) {
-	  key = g_strdup_printf(ACCT_OPEN, i);
-	  value = g_key_file_get_string(key_file, group_name, key, &error);
-	  if (error) {
-	    g_warning("error reading group %s key %s: %s",
-		      group_name, key, error->message);
-	    g_error_free(error);
-	    error = NULL;
-	  } else {
-	    tree_restore_expanded_row(priv->tree_view, value);
-	    g_free(value);
-	  }
 	}
 
 	/* Selected account (if any) */
@@ -778,6 +757,10 @@ gnc_plugin_page_account_tree_recreate_page (GtkWidget *window,
 	  tree_restore_selected_row(priv->tree_view, value);
 	  g_free(value);
 	}
+
+	/* Update tree view for any changes */
+	gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+
 	LEAVE(" ");
 	return page;
 }
@@ -813,6 +796,7 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
 					      GtkTreeViewColumn  *col,
 					      GncPluginPageAccountTree *page)
 {
+	GncPluginPageAccountTreePrivate *priv;
 	GtkWidget *window;
 	GncPluginPage *new_page;
 	Account *account;
@@ -822,6 +806,7 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
 	if (account == NULL)
 	  return;
 
+	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	window = GNC_PLUGIN_PAGE (page)->window;
 	new_page = gnc_plugin_page_register_new (account, FALSE);
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
@@ -1307,90 +1292,272 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
   g_free(acct_name);
 }
 
-/******************************/
-/*       Options Dialog       */
-/******************************/
-
-static void
-gnc_plugin_page_account_tree_options_apply_cb (GNCOptionWin * propertybox,
-					       gpointer user_data)
-{
-  GncPluginPageAccountTreePrivate *priv = user_data;
-  if(!priv)
-    return;
-
-  ENTER(" ");
-  gnc_option_db_commit(priv->odb);
-  LEAVE(" ");
-}
-
-static void
-gnc_plugin_page_account_tree_options_help_cb (GNCOptionWin * propertybox,
-					      gpointer user_data)
-{
-  GtkWidget *dialog;
-
-  dialog = gtk_message_dialog_new (NULL,
-				   GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_INFO,
-				   GTK_BUTTONS_OK,
-				   "Set the account tree options you want using this dialog.");
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-}
-
-static void
-gnc_plugin_page_account_tree_options_close_cb (GNCOptionWin * propertybox,
-					       gpointer user_data)
-{
-  GncPluginPageAccountTreePrivate *priv = user_data;
-  if(!priv)
-    return;
-
-  gnc_options_dialog_destroy(priv->editor_dialog);
-  priv->editor_dialog = NULL;
-}
-
-static void
-gnc_plugin_page_acct_tree_options_new (GncPluginPageAccountTreePrivate *priv)
-{
-  SCM func, opts_and_id;
-
-  scm_gc_unprotect_object(priv->options);
-  func = scm_c_eval_string("gnc:make-new-acct-tree-window");
-  opts_and_id = scm_call_0(func);
-  priv->options = SCM_CAR(opts_and_id);
-  scm_gc_protect_object(priv->options);
-  priv->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
-}
-
 /*********************/
 
-static void
-gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageAccountTree *page)
+/** This function tells the account tree view whether or not to filter
+ *  out a particular account.  Accounts may be filtered if the user
+ *  has decided not to display that particular account type, or if the
+ *  user has requested taht accoutns with a zero total not be shown.
+ *
+ *  @param account The account that was toggled.
+ *
+ *  @param user_data A pointer to the account tree page.
+ *
+ *  @return TRUE if the account should be visible.  FALSE if the
+ *  account should be hidden. */
+gboolean
+gnc_plugin_page_account_tree_filter_accounts (Account *account, gpointer user_data)
+{
+  
+  GncPluginPageAccountTree *page = user_data;
+  GncPluginPageAccountTreePrivate *priv;
+  GNCAccountType acct_type;
+  gnc_numeric total;
+  gboolean result;
+
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page), TRUE);
+
+  ENTER("account %p:%s, page %p", account, xaccAccountGetName(account), page);
+
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  if (priv->fd.hide_zero_total) {
+    total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
+    if (gnc_numeric_zero_p(total)) {
+      LEAVE(" hide: zero balance");
+      return FALSE;
+    }
+  }
+  
+  acct_type = xaccAccountGetType(account);
+  result = (priv->fd.visible_types & (1 << acct_type)) ? TRUE : FALSE;
+  LEAVE(" %s", result ? "show" : "hide");
+  return result;
+}
+
+/** The "hide zero totals" button in the Filter dialog changed state.
+ *  Update the page to reflect these changes.
+ *
+ *  @param button The GtkCheckButton that was toggled.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_hide_zero_toggled_cb (GtkToggleButton *button,
+				   GncPluginPageAccountTree *page)
 {
   GncPluginPageAccountTreePrivate *priv;
 
-  g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
-  if (!priv->editor_dialog) {
-    priv->editor_dialog = gnc_options_dialog_new(_("Account Tree Options"));
-    gnc_build_options_dialog_contents(priv->editor_dialog, 
-				      priv->odb);
-    
-    gnc_options_dialog_set_apply_cb(priv->editor_dialog, 
-				    gnc_plugin_page_account_tree_options_apply_cb,
-				    priv);
-    gnc_options_dialog_set_help_cb(priv->editor_dialog, 
-				   gnc_plugin_page_account_tree_options_help_cb,
-				   priv);
-    gnc_options_dialog_set_close_cb(priv->editor_dialog, 
-				    gnc_plugin_page_account_tree_options_close_cb,
-				    priv);
+  ENTER("button %p, page %p", button, page);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  priv->fd.hide_zero_total = gtk_toggle_button_get_active(button);
+  gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+  LEAVE("hide_zero %d", priv->fd.hide_zero_total);
+}
+
+/** The "clear all account types" button in the Filter dialog was
+ *  clicked.  Clear all account types shown, and update the visible
+ *  page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_clear_all_cb (GtkWidget *button,
+			   GncPluginPageAccountTree *page)
+{
+  GncPluginPageAccountTreePrivate *priv;
+  GtkTreeSelection *selection;
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_BUTTON(button));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+  ENTER("button %p, page %p", button, page);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_handler_block(selection, priv->fd.selection_changed_cb_id);
+  priv->fd.visible_types = 0;
+  gnc_tree_model_account_types_set_selection(view, priv->fd.visible_types);
+  g_signal_handler_unblock(selection, priv->fd.selection_changed_cb_id);
+  gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+  LEAVE("types 0x%x", priv->fd.visible_types);
+}
+
+/** The "select all account types" button in the Filter dialog was
+ *  clicked.  Make all account types visible, and update the page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_select_all_cb (GtkWidget *button,
+			    GncPluginPageAccountTree *page)
+{
+  GncPluginPageAccountTreePrivate *priv;
+  GtkTreeSelection *selection;
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_BUTTON(button));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+  ENTER("button %p, page %p", button, page);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_handler_block(selection, priv->fd.selection_changed_cb_id);
+  priv->fd.visible_types = -1;
+  gnc_tree_model_account_types_set_selection(view, priv->fd.visible_types);
+  g_signal_handler_unblock(selection, priv->fd.selection_changed_cb_id);
+  gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+  LEAVE("types 0x%x", priv->fd.visible_types);
+}
+
+/** The "select default account types" button in the Filter dialog was
+ *  clicked.  Set all account types to their default visibility (which
+ *  happens to be visible for all of them), and update the page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_select_default_cb (GtkWidget *button,
+				GncPluginPageAccountTree *page)
+{
+  ENTER("button %p, page %p", button, page);
+  gppat_filter_select_all_cb(button, page);
+  LEAVE(" ");
+}
+
+/** The account type selection in the Filter dialog was changed.
+ *  Reread the set of selected (i.e. visible) accounts and update the
+ *  page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param page A pointer to the account tree page to update. */
+static void
+gppat_filter_selection_changed_cb  (GtkTreeSelection *selection,
+				    GncPluginPageAccountTree *page)
+{
+  GncPluginPageAccountTreePrivate *priv;
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+  ENTER("selection %p, page %p", selection, page);
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  view = gtk_tree_selection_get_tree_view(selection);
+  priv->fd.visible_types = gnc_tree_model_account_types_get_selection(view);
+  gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
+  LEAVE("types 0x%x", priv->fd.visible_types);
+}
+
+/** The Filter dialog was closed.  CHeck to see if this was done via
+ *  the OK button.  If so, make the changes permanent.  If not, revert
+ *  any changes.
+ *
+ *  @param dialog A pointer to the "Filter By" dialog.
+ *
+ *  @param response The response code from closing the dialog.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_response_cb (GtkWidget *dialog,
+			  gint       response,
+			  GncPluginPageAccountTree *page)
+{
+  GncPluginPageAccountTreePrivate *priv;
+  GtkWidget *view;
+  guint32 types;
+
+  g_return_if_fail(GTK_IS_DIALOG(dialog));
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+  ENTER("dialog %p, response %d, page %p", dialog, response, page);
+  view = gnc_glade_lookup_widget(dialog, FILTER_TREE_VIEW);
+
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  if (response != GTK_RESPONSE_OK) {
+    priv->fd.visible_types = priv->fd.original_visible_types;
+    priv->fd.hide_zero_total = priv->fd.original_hide_zero_total;
+    gnc_tree_view_account_refilter(GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
   }
-  gtk_window_present(GTK_WINDOW(gnc_options_dialog_widget(priv->editor_dialog)));
+  types = gnc_tree_model_account_types_get_selection(GTK_TREE_VIEW(view));
+
+  /* Clean up and delete dialog */
+  priv->fd.selection_changed_cb_id = 0;
+  g_atomic_pointer_compare_and_exchange((gpointer *)&priv->fd.dialog,
+					dialog, NULL);
+  gtk_widget_destroy(dialog);
+  LEAVE("types 0x%x", types);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action,
+						 GncPluginPageAccountTree *page)
+{
+  GncPluginPageAccountTreePrivate *priv;
+  GtkWidget *dialog, *button;
+  GtkTreeView *view;
+  GtkTreeSelection *selection;
+  GladeXML *xml;
+  gchar *title;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+  ENTER("(action %p, page %p)", action, page);
+
+  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
+  if (priv->fd.dialog) {
+    gtk_window_present(GTK_WINDOW(priv->fd.dialog));
+    LEAVE("existing dialog");
+    return;
+  }
+
+  /* Create the dialog */
+  xml = gnc_glade_xml_new ("account.glade", "Filter By");
+  dialog = glade_xml_get_widget (xml, "Filter By");
+  priv->fd.dialog = dialog;
+  gtk_window_set_transient_for(GTK_WINDOW(dialog),
+			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+  /* Translators: The %s is the name of the plugin page */
+  title = g_strdup_printf(_("Filter %s by..."),
+			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
+  gtk_window_set_title(GTK_WINDOW(dialog), title);
+  g_free(title);
+
+  /* Remember current state */
+  priv->fd.original_visible_types = priv->fd.visible_types;
+  priv->fd.original_hide_zero_total = priv->fd.hide_zero_total;
+
+  /* Update the dialog widgets for the current state */
+  button = glade_xml_get_widget (xml, "hide_zero");
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
+			       priv->fd.hide_zero_total);
+
+  view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
+  priv->fd.model = gnc_tree_model_account_types_master();
+  gtk_tree_view_set_model(view, priv->fd.model);
+  gtk_tree_view_insert_column_with_attributes
+    (view,
+     -1, _("Account Types"), gtk_cell_renderer_text_new(),
+     "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
+  selection = gtk_tree_view_get_selection(view);
+  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+  gnc_tree_model_account_types_set_selection(view, priv->fd.visible_types);
+  priv->fd.selection_changed_cb_id =
+    g_signal_connect(G_OBJECT(selection), "changed",
+		     G_CALLBACK(gppat_filter_selection_changed_cb), page);
+
+  /* Wire up the rest of the callbacks */
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, page);
+
+  /* Show it */
+  gtk_widget_show_all(dialog);
+  LEAVE(" ");
 }
 
 static void

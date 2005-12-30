@@ -19,7 +19,6 @@
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
 	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
       </placeholder>
-      <menuitem name="EditAccountViewOptions" action="EditAccountViewOptionsAction"/>
     </menu>
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
@@ -39,9 +38,6 @@
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">
-    <placeholder name="PopupPlaceholder1">
-      <menuitem name="PopupOptions" action="PopupOptionsAction"/>
-    </placeholder>
     <placeholder name="PopupPlaceholder2">
       <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
       <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
@@ -71,8 +67,6 @@
       <toolitem name="ToolbarOpenAccount" action="FileOpenAccountAction"/>
       <toolitem name="ToolbarEditAccount" action="EditEditAccountAction"/>
       <separator name="ToolbarSep3"/>
-      <toolitem name="ToolbarAccountViewOptions" action="EditAccountViewOptionsAction"/>
-      <separator name="ToolbarSep4"/>
       <toolitem name="ToolbarNewAccount" action="FileNewAccountAction"/>
       <toolitem name="ToolbarDeleteAccount" action="EditDeleteAccountAction"/>
     </placeholder>

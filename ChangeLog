@@ -1,5 +1,14 @@
 2005-12-29  David Hampton  <hampton@employees.org>
 
+	* src/scm/main.scm:
+	* src/scm/main-window.scm:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml: Migrate the
+	account page options to a new "Filter By" dialog.  Add a new
+	option to filter out accounts with zero total balances.  Remember
+	the current filter state across invocations of GnuCash.
+
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
 	* src/gnome-utils/gnc-main-window.c:
 	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Move the "Sort By"

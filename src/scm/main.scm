@@ -76,9 +76,6 @@
 (export gnc:load-help-topics)
 
 ;; from main-window.scm
-(export gnc:find-acct-tree-window-options)
-(export gnc:make-new-acct-tree-window)  
-(export gnc:free-acct-tree-window)
 (export gnc:main-window-save-state)
 (export gnc:main-window-properties-cb)
 

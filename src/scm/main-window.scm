@@ -21,77 +21,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; account tree options 
-;; like reports, we have an integer tree id that is the index into a
-;; global hash table, and URLs of the form gnc-acct-tree:id=%d will
-;; open to the right window.
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define gnc:*acct-tree-options* (make-hash-table 11))
-(define gnc:*acct-tree-id* 0)
-
-(define (gnc:find-acct-tree-window-options id)
-  (hash-ref gnc:*acct-tree-options* id))
-
-(define (gnc:make-acct-tree-window-options) 
-  (let* ((options (gnc:new-options))
-         (add-option 
-          (lambda (opt)
-            (gnc:register-option options opt))))
-
-    (add-option
-     (gnc:make-simple-boolean-option
-      (N_ "Account Tree") (N_ "Double click expands parent accounts")
-      "a" (N_ "Double clicking on an account with children expands \
-the account instead of opening a register.") #f))
-
-    (add-option
-     (gnc:make-list-option
-      (N_ "Account Tree") (N_ "Account types to display")
-      "b" (N_ "Select the account types that should be displayed.")
-      (list 'bank 'cash 'credit 'asset 'liability 'stock
-            'mutual 'currency 'income 'expense 'equity 'payable 'receivable)
-      (list (list->vector (list 'bank      (N_ "Bank") ""))
-            (list->vector (list 'cash      (N_ "Cash") ""))
-            (list->vector (list 'credit    (N_ "Credit") ""))
-            (list->vector (list 'asset     (N_ "Asset") ""))
-            (list->vector (list 'liability (N_ "Liability") ""))
-            (list->vector (list 'stock     (N_ "Stock") ""))
-            (list->vector (list 'mutual    (N_ "Mutual Fund") ""))
-            (list->vector (list 'currency  (N_ "Currency") ""))
-            (list->vector (list 'income    (N_ "Income") ""))
-            (list->vector (list 'expense   (N_ "Expense") ""))
-            (list->vector (list 'equity    (N_ "Equity") ""))
-	    (list->vector (list 'payable   (N_ "Accounts Payable") ""))
-	    (list->vector (list 'receivable (N_ "Accounts Receivable") "")))))
-
-    options))
-
-(define (gnc:make-new-acct-tree-window)  
-  (let ((options (gnc:make-acct-tree-window-options))
-        (id gnc:*acct-tree-id*))
-    (hash-set! gnc:*acct-tree-options* id options)
-    (set! gnc:*acct-tree-id* (+ 1 id))
-    (cons options id)))
-
-(define (gnc:free-acct-tree-window id) 
-  (hash-remove! gnc:*acct-tree-options* id))
-
-
-(define (gnc:acct-tree-generate-restore-forms optobj id)
-  (string-append
-   ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n"
-   (simple-format #f ";; options for account tree id=~S\n" id)
-   "(let ((options (gnc:make-acct-tree-window-options)))\n"
-   (gnc:generate-restore-forms optobj "options")
-   (simple-format
-    #f "  (hash-set! gnc:*acct-tree-options* ~A options)\n" id)
-   "  \""
-   (gnc:html-build-url gnc:url-type-accttree (sprintf #f "%a" id) #f)
-   "\")\n\n"))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; book open and close hooks for mdi 
 ;; 
 ;; we need to save all the active report and acct tree info during
@@ -112,11 +41,6 @@ the account instead of opening a register.") #f))
                  (if (gnc:report-needs-save? v)
                      (display (gnc:report-generate-restore-forms v))))
                #t *gnc:_reports_*)
-
-              (hash-fold 
-               (lambda (k v p)
-                 (display (gnc:acct-tree-generate-restore-forms v k)) #t)
-               #t gnc:*acct-tree-options*)
 
               (force-output)))
 	  ))))
