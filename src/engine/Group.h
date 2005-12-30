@@ -212,7 +212,7 @@ AccountGroup * xaccGroupGetRoot (AccountGroup *grp);
 /** The xaccGetAccountRoot() subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */
-AccountGroup * xaccAccountGetRoot (Account *account);
+AccountGroup * xaccAccountGetRoot (const Account *account);
 
 /** The xaccGroupGetParentAccount() subroutine returns the parent
  * account of the group, or NULL.
@@ -260,7 +260,7 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
  @{
 */
 
-typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
+typedef gpointer (*AccountCallback) (Account *a, gpointer data);
 
 /** The xaccGroupMapAccounts() routine will traverse the account 
       group, returning a list of accounts.  If the callback
@@ -344,7 +344,7 @@ void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
  *    marker for each transaction which is a parent of one of the
  *    splits in the account.
  */
-void xaccAccountBeginStagedTransactionTraversals(Account *account);
+void xaccAccountBeginStagedTransactionTraversals(const Account *account);
 
 /** xaccTransactionTraverse() checks the stage of the given transaction.
  *    If the transaction hasn't reached the given stage, the transaction
@@ -387,7 +387,7 @@ int xaccGroupStagedTransactionTraversal(AccountGroup *grp,
  *    a traversal is undefined, so don't do that. 
  */
 
-int xaccAccountStagedTransactionTraversal(Account *a,
+int xaccAccountStagedTransactionTraversal(const Account *a,
                                           unsigned int stage,
                                           TransactionCallback thunk,
                                           void *data);

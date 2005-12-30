@@ -140,7 +140,7 @@ struct account_s
  *    it should be immediately destroyed, or it should be inserted into  
  *    an account.
  */
-void         xaccAccountRemoveSplit (Account *, Split *);
+void xaccAccountRemoveSplit (Account *, Split *);
 
 /* The xaccAccountSortSplits() routine will resort the account's 
  * splits if the sort is dirty. If 'force' is true, the account 
@@ -151,12 +151,12 @@ void xaccAccountSortSplits (Account *acc, gboolean force);
 /* The following recompute the partial balances (stored with the
  * transaction) and the total balance, for this account 
  */
-void         xaccAccountRecomputeBalance (Account *);
+void xaccAccountRecomputeBalance (Account *);
 
 /* Set the account's GUID. This should only be done when reading
  * an account from a datafile, or some other external source. Never
  * call this on an existing account! */
-void         xaccAccountSetGUID (Account *account, const GUID *guid);
+void xaccAccountSetGUID (Account *account, const GUID *guid);
 
 /* The xaccAccountSetStartingBalance() routine will set the starting
  *    commodity balance for this account.  This routine is intended for
@@ -189,7 +189,7 @@ void xaccFreeAccount (Account *account);
  *    want anyone except the backend to mess with them.
  */
 void xaccAccountSetVersion (Account*, gint32);
-gint32 xaccAccountGetVersion (Account*);
+gint32 xaccAccountGetVersion (const Account* acc);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);

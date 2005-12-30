@@ -745,7 +745,10 @@ date order.")
  'gnc:account-order
  '<gw:int>
  "xaccAccountOrder"
- '((<gnc:Account**> a1) (<gnc:Account**> a2))
+ '(
+   ((<gnc:Account**> const) a1)
+   ((<gnc:Account**> const) a2)
+   )
  "Defines a sorting order on accounts.  Returns -1 if a1 is \"less
 than\" the second, +1 if the a1 is \"greater than\" the second, and 0
 if they are equal.  To determine the sort order, the account codes are

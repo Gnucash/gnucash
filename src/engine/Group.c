@@ -452,10 +452,9 @@ xaccGroupGetRoot (AccountGroup * grp)
 }
 
 AccountGroup *
-xaccAccountGetRoot (Account * acc) 
+xaccAccountGetRoot (const Account * acc) 
 {
-  if (!acc) return NULL;
-  return xaccGroupGetRoot (acc->parent);
+  return acc ? xaccGroupGetRoot (acc->parent) : NULL;
 }
 
 /********************************************************************\
@@ -710,8 +709,8 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 static int
 group_sort_helper (gconstpointer a, gconstpointer b)
 {
-  Account *aa = (Account *) a;
-  Account *bb = (Account *) b;
+  const Account *aa = (const Account *) a;
+  const Account *bb = (const Account *) b;
 
   /* return > 1 if aa should come after bb */
   return xaccAccountOrder (&aa, &bb);
@@ -1024,10 +1023,10 @@ xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 }
 
 void
-xaccAccountBeginStagedTransactionTraversals (Account *account)
+xaccAccountBeginStagedTransactionTraversals (const Account *account)
 {
-  if (account == NULL) return;
-  xaccSplitsBeginStagedTransactionTraversals (account->splits);
+  if (account)
+      xaccSplitsBeginStagedTransactionTraversals (account->splits);
 }
 
 gboolean
@@ -1077,7 +1076,7 @@ xaccGroupBeginStagedTransactionTraversals (AccountGroup *grp)
 }
 
 int
-xaccAccountStagedTransactionTraversal (Account *acc,
+xaccAccountStagedTransactionTraversal (const Account *acc,
                                        unsigned int stage,
                                        int (*callback)(Transaction *t,
                                                        void *cb_data),
@@ -1170,8 +1169,7 @@ xaccGroupMapAccounts (AccountGroup *grp,
   GList *result = NULL;
   GList *node;
 
-  if (!grp) return(NULL);
-  if (!thunk) return(NULL);
+  if (!grp || !thunk) return NULL;
 
   for (node = grp->accounts; node; node = node->next)
   {
@@ -1195,8 +1193,7 @@ xaccGroupForEachAccount (AccountGroup *grp,
 {
   GList *node;
 
-  if (!grp) return(NULL);
-  if (!thunk) return(NULL);
+  if (!grp || !thunk) return(NULL);
 
   for (node = grp->accounts; node; node = node->next)
   {
