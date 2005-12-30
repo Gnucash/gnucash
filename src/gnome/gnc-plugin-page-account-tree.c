@@ -447,9 +447,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
-	gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view),
-					  gnc_plugin_page_account_tree_filter_accounts,
-					  plugin_page, NULL);
+	gnc_tree_view_account_set_filter (
+            GNC_TREE_VIEW_ACCOUNT(tree_view),
+            gnc_plugin_page_account_tree_filter_accounts, &priv->fd, NULL);
 
 	priv->component_id =
 	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
@@ -1291,26 +1291,22 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
  *
  *  @param account The account that was toggled.
  *
- *  @param user_data A pointer to the account tree page.
+ *  @param user_data A pointer to the AccountFilterDialog struct.
  *
  *  @return TRUE if the account should be visible.  FALSE if the
  *  account should be hidden. */
 gboolean
-gnc_plugin_page_account_tree_filter_accounts (Account *account, gpointer user_data)
+gnc_plugin_page_account_tree_filter_accounts (Account *account, 
+                                              gpointer user_data)
 {
-  
-  GncPluginPageAccountTree *page = user_data;
-  GncPluginPageAccountTreePrivate *priv;
+  AccountFilterDialog *fd = user_data;
   GNCAccountType acct_type;
   gnc_numeric total;
   gboolean result;
 
-  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page), TRUE);
+  ENTER("account %p:%s", account, xaccAccountGetName(account));
 
-  ENTER("account %p:%s, page %p", account, xaccAccountGetName(account), page);
-
-  priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
-  if (priv->fd.hide_zero_total) {
+  if (fd->hide_zero_total) {
     total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
     if (gnc_numeric_zero_p(total)) {
       LEAVE(" hide: zero balance");
@@ -1319,7 +1315,7 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account, gpointer user_da
   }
   
   acct_type = xaccAccountGetType(account);
-  result = (priv->fd.visible_types & (1 << acct_type)) ? TRUE : FALSE;
+  result = (fd->visible_types & (1 << acct_type)) ? TRUE : FALSE;
   LEAVE(" %s", result ? "show" : "hide");
   return result;
 }
