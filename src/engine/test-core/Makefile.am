@@ -19,7 +19,7 @@ libgncmod_test_engine_la_LIBADD = \
   ${QOF_LIBS} \
   ${GLIB_LIBS}
 
-noinst_HEADERS=test-engine-stuff.h
+noinst_HEADERS=test-engine-stuff.h test-engine-strings.h
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
