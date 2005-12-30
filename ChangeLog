@@ -1,5 +1,8 @@
 2005-12-30  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/budget.glade: Remove gtk2.6 properties from the
+	file.
+
 	* src/gnome-utils/search-param.c: Remember and use the
 	justification specified in the code instead of just left
 	justifying everything.  Fixes #126546.
