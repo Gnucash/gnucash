@@ -66,24 +66,6 @@ typedef struct {
 
 } GncPluginPageAccountTreeClass;
 
-typedef	struct {
-    GtkWidget    *dialog;
-    GtkTreeModel *model;
-    GtkTreeView  *tree_view;
-    guint32      visible_types;
-    guint32      original_visible_types;
-    gboolean     hide_zero_total;
-    gboolean     original_hide_zero_total;
-    gulong       selection_changed_cb_id;
-} AccountFilterDialog;
-
-void
-account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page);
-gboolean
-gnc_plugin_page_account_tree_filter_accounts (Account *account, 
-                                              gpointer user_data);
-
-
 /* function prototypes */
 
 /** Retrieve the type number for an "account tree" plugin page.

@@ -40,6 +40,7 @@
 
 #include "Group.h"
 #include "gnc-ui-util.h"
+#include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
 
@@ -70,6 +71,41 @@ typedef struct {
 	GncTreeViewClass gnc_tree_view;
 } GncTreeViewAccountClass;
 
+typedef	struct {
+    GtkWidget    *dialog;
+    GtkTreeModel *model;
+    GncTreeViewAccount  *tree_view;
+    guint32      visible_types;
+    guint32      original_visible_types;
+    gboolean     hide_zero_total;
+    gboolean     original_hide_zero_total;
+    gulong       selection_changed_cb_id;
+} AccountFilterDialog;
+
+void account_filter_dialog_create(AccountFilterDialog *fd, 
+                                  GncPluginPage *page);
+
+gboolean gnc_plugin_page_account_tree_filter_accounts (Account *account, 
+                                                       gpointer user_data);
+
+/* "Filter By" dialog callbacks */
+void gppat_filter_hide_zero_toggled_cb (GtkToggleButton *togglebutton, 
+                                        AccountFilterDialog *fd);
+void gppat_filter_clear_all_cb (GtkWidget *button, AccountFilterDialog *fd);
+void gppat_filter_select_all_cb (GtkWidget *button, AccountFilterDialog *fd);
+void gppat_filter_select_default_cb (GtkWidget *button, 
+                                     AccountFilterDialog *fd);
+void gppat_filter_response_cb (GtkWidget *dialog, gint response, 
+                               AccountFilterDialog *fd);
+
+/* Saving/Restoring */
+void gnc_tree_view_account_save(GncTreeViewAccount *tree_view, 
+                                AccountFilterDialog *fd, 
+                                GKeyFile *key_file, const gchar *group_name);
+void gnc_tree_view_account_restore(GncTreeViewAccount *view, 
+                                   AccountFilterDialog *fd, 
+                                   GKeyFile *key_file, 
+                                   const gchar *group_name);
 
 
 /* Get the GType for an GncTreeViewAccount object. */
@@ -436,7 +472,6 @@ void gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
  *  @param account A pointer to the account to show.
  */
 void gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view, Account *account);
-
 
 /** @} */
 

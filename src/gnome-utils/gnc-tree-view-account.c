@@ -30,6 +30,7 @@
 
 #include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-tree-model-account-types.h"
 #include "gnc-tree-view-account.h"
 
 #include "Account.h"
@@ -39,7 +40,7 @@
 #include "gnc-engine.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-
+#include "dialog-utils.h"
 
 #define SAMPLE_ACCOUNT_VALUE "$1,000,000.00"
 
@@ -1339,4 +1340,471 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
                                              col_source_cb, NULL);
     gnc_tree_view_append_column (GNC_TREE_VIEW(account_view), column);
     return column;
+}
+
+
+/* BEGIN FILTER FUNCTIONS */
+#define FILTER_TREE_VIEW "types_tree_view"
+
+/** This function tells the account tree view whether or not to filter
+ *  out a particular account.  Accounts may be filtered if the user
+ *  has decided not to display that particular account type, or if the
+ *  user has requested that accounts with a zero total not be shown.
+ *
+ *  @param account The account that was toggled.
+ *
+ *  @param user_data A pointer to the AccountFilterDialog struct.
+ *
+ *  @return TRUE if the account should be visible.  FALSE if the
+ *  account should be hidden. */
+gboolean
+gnc_plugin_page_account_tree_filter_accounts (Account *account, 
+                                              gpointer user_data)
+{
+  AccountFilterDialog *fd = user_data;
+  GNCAccountType acct_type;
+  gnc_numeric total;
+  gboolean result;
+
+  ENTER("account %p:%s", account, xaccAccountGetName(account));
+
+  if (fd->hide_zero_total) {
+    total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
+    if (gnc_numeric_zero_p(total)) {
+      LEAVE(" hide: zero balance");
+      return FALSE;
+    }
+  }
+  
+  acct_type = xaccAccountGetType(account);
+  result = (fd->visible_types & (1 << acct_type)) ? TRUE : FALSE;
+  LEAVE(" %s", result ? "show" : "hide");
+  return result;
+}
+
+/** The "hide zero totals" button in the Filter dialog changed state.
+ *  Update the page to reflect these changes.
+ *
+ *  @param button The GtkCheckButton that was toggled.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+void
+gppat_filter_hide_zero_toggled_cb (GtkToggleButton *button,
+				   AccountFilterDialog *fd)
+{
+  g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
+
+  ENTER("button %p", button);
+  fd->hide_zero_total = gtk_toggle_button_get_active(button);
+  gnc_tree_view_account_refilter(fd->tree_view);
+  LEAVE("hide_zero %d", fd->hide_zero_total);
+}
+
+/** The "clear all account types" button in the Filter dialog was
+ *  clicked.  Clear all account types shown, and update the visible
+ *  page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+void
+gppat_filter_clear_all_cb (GtkWidget *button,
+			   AccountFilterDialog *fd)
+{
+  GtkTreeSelection *selection;
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_BUTTON(button));
+
+  ENTER("button %p", button);
+  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_handler_block(selection, fd->selection_changed_cb_id);
+  fd->visible_types = 0;
+  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
+  g_signal_handler_unblock(selection, fd->selection_changed_cb_id);
+  gnc_tree_view_account_refilter(fd->tree_view);
+  LEAVE("types 0x%x", fd->visible_types);
+}
+
+/** The "select all account types" button in the Filter dialog was
+ *  clicked.  Make all account types visible, and update the page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+void
+gppat_filter_select_all_cb (GtkWidget *button,
+			    AccountFilterDialog *fd)
+{
+  GtkTreeSelection *selection;
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_BUTTON(button));
+
+  ENTER("button %p", button);
+  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
+  selection = gtk_tree_view_get_selection(view);
+  g_signal_handler_block(selection, fd->selection_changed_cb_id);
+  fd->visible_types = -1;
+  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
+  g_signal_handler_unblock(selection, fd->selection_changed_cb_id);
+  gnc_tree_view_account_refilter(fd->tree_view);
+  LEAVE("types 0x%x", fd->visible_types);
+}
+
+/** The "select default account types" button in the Filter dialog was
+ *  clicked.  Set all account types to their default visibility (which
+ *  happens to be visible for all of them), and update the page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param page A pointer to the account tree page to update. */
+void
+gppat_filter_select_default_cb (GtkWidget *button,
+				AccountFilterDialog *fd)
+{
+  ENTER("button %p", button);
+  gppat_filter_select_all_cb(button, fd);
+  LEAVE(" ");
+}
+
+/** The account type selection in the Filter dialog was changed.
+ *  Reread the set of selected (i.e. visible) accounts and update the
+ *  page.
+ *
+ *  @param button The button that was clicked.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+static void
+gppat_filter_selection_changed_cb  (GtkTreeSelection *selection,
+				    AccountFilterDialog *fd)
+{
+  GtkTreeView *view;
+
+  g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
+
+  ENTER("selection %p", selection);
+  view = gtk_tree_selection_get_tree_view(selection);
+  fd->visible_types = gnc_tree_model_account_types_get_selection(view);
+  gnc_tree_view_account_refilter(fd->tree_view);
+  LEAVE("types 0x%x", fd->visible_types);
+}
+
+/** The Filter dialog was closed.  Check to see if this was done via
+ *  the OK button.  If so, make the changes permanent.  If not, revert
+ *  any changes.
+ *
+ *  @param dialog A pointer to the "Filter By" dialog.
+ *
+ *  @param response The response code from closing the dialog.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+void
+gppat_filter_response_cb (GtkWidget *dialog,
+			  gint       response,
+			  AccountFilterDialog *fd)
+{
+  GtkWidget *view;
+  guint32 types;
+
+  g_return_if_fail(GTK_IS_DIALOG(dialog));
+
+  ENTER("dialog %p, response %d", dialog, response);
+  view = gnc_glade_lookup_widget(dialog, FILTER_TREE_VIEW);
+
+  if (response != GTK_RESPONSE_OK) {
+    fd->visible_types = fd->original_visible_types;
+    fd->hide_zero_total = fd->original_hide_zero_total;
+    gnc_tree_view_account_refilter(fd->tree_view);
+  }
+  types = gnc_tree_model_account_types_get_selection(GTK_TREE_VIEW(view));
+
+  /* Clean up and delete dialog */
+  fd->selection_changed_cb_id = 0;
+  g_atomic_pointer_compare_and_exchange((gpointer *)&fd->dialog,
+					dialog, NULL);
+  gtk_widget_destroy(dialog);
+  LEAVE("types 0x%x", types);
+}
+
+void
+account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
+{
+  GtkWidget *dialog, *button;
+  GtkTreeView *view;
+  GtkTreeSelection *selection;
+  GladeXML *xml;
+  gchar *title;
+
+  ENTER("(fd %p, page %p)", fd, page);
+
+  if (fd->dialog) {
+    gtk_window_present(GTK_WINDOW(fd->dialog));
+    LEAVE("existing dialog");
+    return;
+  }
+
+  /* Create the dialog */
+  xml = gnc_glade_xml_new ("account.glade", "Filter By");
+  dialog = glade_xml_get_widget (xml, "Filter By");
+  fd->dialog = dialog;
+  gtk_window_set_transient_for(GTK_WINDOW(dialog),
+			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+  /* Translators: The %s is the name of the plugin page */
+  title = g_strdup_printf(_("Filter %s by..."),
+			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
+  gtk_window_set_title(GTK_WINDOW(dialog), title);
+  g_free(title);
+
+  /* Remember current state */
+  fd->original_visible_types = fd->visible_types;
+  fd->original_hide_zero_total = fd->hide_zero_total;
+
+  /* Update the dialog widgets for the current state */
+  button = glade_xml_get_widget (xml, "hide_zero");
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
+			       fd->hide_zero_total);
+
+  view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
+  fd->model = gnc_tree_model_account_types_master();
+  gtk_tree_view_set_model(view, fd->model);
+  gtk_tree_view_insert_column_with_attributes
+    (view,
+     -1, _("Account Types"), gtk_cell_renderer_text_new(),
+     "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
+  selection = gtk_tree_view_get_selection(view);
+  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
+  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
+  fd->selection_changed_cb_id =
+    g_signal_connect(G_OBJECT(selection), "changed",
+		     G_CALLBACK(gppat_filter_selection_changed_cb), fd);
+
+  /* Wire up the rest of the callbacks */
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, 
+                                    fd);
+
+  /* Show it */
+  gtk_widget_show_all(dialog);
+  LEAVE(" ");
+}
+
+#define ACCT_COUNT    "Number of Open Accounts"
+#define ACCT_OPEN     "Open Account %d"
+#define ACCT_SELECTED "Selected Account"
+#define HIDE_ZERO     "Hide Zero Total"
+#define ACCT_TYPES    "Account Types"
+
+typedef struct foo {
+  GKeyFile *key_file;
+  const gchar *group_name;
+  int count;
+} bar_t;
+
+/** Save information about an expanded row.  This function is called
+ *  via a gtk_tree_view_map_expanded_rows, which calls it once per
+ *  expanded row.  Its job is to write the full account name of the
+ *  row out to the state file.
+ *
+ *  @param view A pointer to the GncTreeViewAccount
+ *
+ *  @param path A pointer to a particular entry in the tree.
+ *
+ *  @param data A pointer to a data structure holding the information
+ *  related to the state file. */
+static void
+tree_save_expanded_row (GncTreeViewAccount *view,
+			GtkTreePath *path,
+			gpointer user_data)
+{
+    Account *account;
+    bar_t *bar = user_data;
+    gchar *key;
+    gchar *account_name;
+    
+    account = gnc_tree_view_account_get_account_from_path (view, path);
+    if (account == NULL)
+        return;
+    
+    account_name = xaccAccountGetFullName(account, 
+                                          gnc_get_account_separator());
+    if (account_name == NULL)
+        return;
+
+    key = g_strdup_printf(ACCT_OPEN, ++bar->count);
+    g_key_file_set_string(bar->key_file, bar->group_name, key, account_name);
+    g_free(key);
+    g_free(account_name);
+}
+
+
+/** Save information about the selected row.  Its job is to write the
+ *  full account name of the row out to the state file.
+ *
+ *  @param view A pointer to the GtkTreeView embedded in an
+ *  account tree page.
+ *
+ *  @param path A pointer to a particular entry in the tree.
+ *
+ *  @param data A pointer to a data structure holding the information
+ *  related to the state file. */
+static void
+tree_save_selected_row (GncTreeViewAccount *view,
+			gpointer user_data)
+{
+    Account *account;
+    bar_t *bar = user_data;
+    gchar *account_name;
+
+    account = gnc_tree_view_account_get_selected_account(view);
+    if (account == NULL)
+        return;
+
+    account_name = xaccAccountGetFullName (account, 
+                                           gnc_get_account_separator ());
+    if (account_name == NULL)
+        return;
+
+    g_key_file_set_string(bar->key_file, bar->group_name, ACCT_SELECTED, 
+                          account_name);
+    g_free(account_name);
+}
+
+void
+gnc_tree_view_account_save(GncTreeViewAccount *view, 
+                           AccountFilterDialog *fd, 
+                           GKeyFile *key_file, const gchar *group_name)
+{
+    bar_t bar;
+    
+    g_return_if_fail (key_file != NULL);
+    g_return_if_fail (group_name != NULL);
+    
+    ENTER("view %p, key_file %p, group_name %s", view, key_file,
+          group_name);
+    
+    g_key_file_set_integer(key_file, group_name, ACCT_TYPES, 
+                           fd->visible_types);
+    g_key_file_set_boolean(key_file, group_name, HIDE_ZERO, 
+                           fd->hide_zero_total);
+	
+    bar.key_file = key_file;
+    bar.group_name = group_name;
+    bar.count = 0;
+    tree_save_selected_row(view, &bar);
+    gtk_tree_view_map_expanded_rows(
+        GTK_TREE_VIEW(view), (GtkTreeViewMappingFunc) tree_save_expanded_row, 
+        &bar);
+    g_key_file_set_integer(key_file, group_name, ACCT_COUNT, bar.count);
+    LEAVE(" ");
+    
+}
+
+/** Expand a row in the tree that was expanded when the user last quit
+ *  gnucash.  Its job is to map from account name to tree row and
+ *  expand the row.
+ *
+ *  @param view A pointer to the GncTreeViewAccount.
+ *
+ *  @param account_name A pointer to the full account name. */
+static void
+tree_restore_expanded_row (GncTreeViewAccount *view,
+			   const gchar *account_name)
+{
+  Account *account;
+  QofBook *book;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
+				       account_name,
+				       gnc_get_account_separator());
+  if (account)
+    gnc_tree_view_account_expand_to_account(view, account);
+}
+
+
+/** Select the row in the tree that was selected when the user last
+ *  quit gnucash.  Its job is to map from account name to tree row and
+ *  select the row.
+ *
+ *  @param tree A pointer to the GncTreeViewAccount embedded.
+ *
+ *  @param account_name A pointer to the full account name. */
+static void
+tree_restore_selected_row (GncTreeViewAccount *view,
+			   const gchar *account_name)
+{
+  Account *account;
+  QofBook *book;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+  account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
+				       account_name,
+				       gnc_get_account_separator());
+  if (account)
+      gnc_tree_view_account_set_selected_account(view, account);
+}
+
+void
+gnc_tree_view_account_restore(GncTreeViewAccount *view, 
+                              AccountFilterDialog *fd, 
+                              GKeyFile *key_file, const gchar *group_name)
+{
+    GError *error = NULL;
+    gchar *key, *value;
+    gint i, count;
+    gboolean hide;	
+
+    /* Filter information. Ignore missing keys. */
+    hide = g_key_file_get_boolean(key_file, group_name, HIDE_ZERO, &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, HIDE_ZERO, error->message);
+        g_error_free(error);
+        error = NULL;
+        hide = FALSE;
+    }
+    fd->hide_zero_total = hide;
+    
+    i = g_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, ACCT_TYPES, error->message);
+        g_error_free(error);
+        error = NULL;
+        i = -1;
+    }
+    fd->visible_types = i;
+    
+    /* Expanded accounts. Skip if count key missing. */
+    count = g_key_file_get_integer(key_file, group_name, ACCT_COUNT, &error);
+    if (error == NULL) {
+        for (i = 1; i <= count; i++) {
+	    key = g_strdup_printf(ACCT_OPEN, i);
+	    value = g_key_file_get_string(key_file, group_name, key, &error);
+	    if (error) {
+                g_warning("error reading group %s key %s: %s",
+                          group_name, key, error->message);
+                g_error_free(error);
+                error = NULL;
+	    } else {
+                tree_restore_expanded_row(view, value);
+                g_free(value);
+	    }
+        }
+    } else {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, ACCT_COUNT, error->message);
+        g_error_free(error);
+    }
+    
+    /* Selected account (if any) */
+    value = g_key_file_get_string(key_file, group_name, ACCT_SELECTED, NULL);
+    if (value) {
+        tree_restore_selected_row(view, value);
+        g_free(value);
+    }
+
+    /* Update tree view for any changes */
+    gnc_tree_view_account_refilter(view);
 }
