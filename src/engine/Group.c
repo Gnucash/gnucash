@@ -126,8 +126,8 @@ xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
 \********************************************************************/
 
 gboolean
-xaccGroupEqual(AccountGroup *ga,
-               AccountGroup *gb,
+xaccGroupEqual(const AccountGroup *ga,
+               const AccountGroup *gb,
                gboolean check_guids)
 {
   GList *na;
@@ -250,7 +250,7 @@ xaccAccountGroupDestroy (AccountGroup *grp)
 \********************************************************************/
 
 QofBook *
-xaccGroupGetBook (AccountGroup *group)
+xaccGroupGetBook (const AccountGroup *group)
 {
   if (!group) return NULL;
   return group->book;
@@ -341,7 +341,7 @@ xaccGroupMarkNotSaved (AccountGroup *grp)
 \********************************************************************/
 
 gboolean
-xaccGroupNotSaved (AccountGroup *grp)
+xaccGroupNotSaved (const AccountGroup *grp)
 {
   GList *node;
 
@@ -365,7 +365,7 @@ xaccGroupNotSaved (AccountGroup *grp)
 \********************************************************************/
 
 int
-xaccGroupGetNumSubAccounts (AccountGroup *grp)
+xaccGroupGetNumSubAccounts (const AccountGroup *grp)
 {
   GList *node;
   int num_acc;
@@ -389,7 +389,7 @@ xaccGroupGetNumSubAccounts (AccountGroup *grp)
 \********************************************************************/
 
 static void
-xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
+xaccPrependAccounts (const AccountGroup *grp, GList **accounts_p)
 {
   GList *node;
 
@@ -406,7 +406,7 @@ xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
 }
 
 AccountList *
-xaccGroupGetSubAccounts (AccountGroup *grp)
+xaccGroupGetSubAccounts (const AccountGroup *grp)
 {
   GList *accounts = NULL;
 
@@ -418,7 +418,7 @@ xaccGroupGetSubAccounts (AccountGroup *grp)
 }
 
 AccountList *
-xaccGroupGetAccountList (AccountGroup *grp)
+xaccGroupGetAccountList (const AccountGroup *grp)
 {
   if (!grp) return NULL;
 
@@ -430,9 +430,9 @@ xaccGroupGetAccountList (AccountGroup *grp)
 \********************************************************************/
 
 AccountGroup *
-xaccGroupGetRoot (AccountGroup * grp) 
+xaccGroupGetRoot (const AccountGroup * grp) 
 {
-  AccountGroup * root = NULL;
+  const AccountGroup * root = NULL;
 
   /* find the root of the account group structure */
   while (grp)
@@ -448,7 +448,7 @@ xaccGroupGetRoot (AccountGroup * grp)
       grp = NULL;
   }
 
-  return root;
+  return (AccountGroup*)root;
 }
 
 AccountGroup *
@@ -462,7 +462,7 @@ xaccAccountGetRoot (const Account * acc)
 \********************************************************************/
 
 Account *
-xaccGetAccountFromName (AccountGroup *grp, const char * name)
+xaccGetAccountFromName (const AccountGroup *grp, const char * name)
 {
   GList *node;
 
@@ -499,7 +499,7 @@ xaccGetAccountFromName (AccountGroup *grp, const char * name)
 \********************************************************************/
 
 Account *
-xaccGetAccountFromFullName (AccountGroup *grp,
+xaccGetAccountFromFullName (const AccountGroup *grp,
                             const char *name,
                             const char separator)
 {
@@ -577,7 +577,7 @@ xaccGetAccountFromFullName (AccountGroup *grp,
 \********************************************************************/
 
 Account *
-xaccGetPeerAccountFromName (Account *acc, const char * name)
+xaccGetPeerAccountFromName (const Account *acc, const char * name)
 {
   AccountGroup * root;
   Account *peer_acc;
@@ -599,7 +599,7 @@ xaccGetPeerAccountFromName (Account *acc, const char * name)
 \********************************************************************/
 
 Account *
-xaccGetPeerAccountFromFullName (Account *acc, const char * name,
+xaccGetPeerAccountFromFullName (const Account *acc, const char * name,
                                 const char separator)
 {
   AccountGroup * root;
@@ -955,7 +955,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
 \********************************************************************/
 
 int     
-xaccGroupGetNumAccounts (AccountGroup *grp)
+xaccGroupGetNumAccounts (const AccountGroup *grp)
 {
    if (!grp) return 0;
 
@@ -963,7 +963,7 @@ xaccGroupGetNumAccounts (AccountGroup *grp)
 }
 
 Account *
-xaccGroupGetAccount (AccountGroup *grp, int i)
+xaccGroupGetAccount (const AccountGroup *grp, int i)
 {
    if (!grp) return NULL;
 
@@ -971,7 +971,7 @@ xaccGroupGetAccount (AccountGroup *grp, int i)
 }
 
 Account *
-xaccGroupGetParentAccount (AccountGroup * grp)
+xaccGroupGetParentAccount (const AccountGroup * grp)
 {
   if (!grp) return NULL;
 
@@ -982,7 +982,7 @@ xaccGroupGetParentAccount (AccountGroup * grp)
 \********************************************************************/
 
 int     
-xaccGroupGetDepth (AccountGroup *grp)
+xaccGroupGetDepth (const AccountGroup *grp)
 {
   GList *node;
   int depth = 0;
@@ -1217,7 +1217,7 @@ xaccGroupForEachAccount (AccountGroup *grp,
 /* ============================================================== */
 
 QofBackend *
-xaccGroupGetBackend (AccountGroup *grp)
+xaccGroupGetBackend (const AccountGroup *grp)
 {
   grp = xaccGroupGetRoot (grp);
   if (!grp || !grp->book) return NULL;

@@ -96,7 +96,7 @@ void     xaccCollSetAccountGroup (QofCollection *col, AccountGroup *grp);
  * The xaccGroupGetBackend() subroutine will find the
  *    persistent-data storage backend associated with this account group.
  */
-QofBackend * xaccGroupGetBackend (AccountGroup *group);
+QofBackend * xaccGroupGetBackend (const AccountGroup *group);
 
 gboolean      xaccGroupRegister (void);
 
