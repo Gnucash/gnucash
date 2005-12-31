@@ -1,5 +1,8 @@
 2005-12-30  David Hampton  <hampton@employees.org>
 
+	* glade-fixup: New script that will remove all post-gtk24
+	attributes from all glade files under the 'src' directory.
+
 	* src/gnome/glade/register.glade: Fix the 'sort by number' and
 	'sort by statement date' choices in the register sort dialog.
 

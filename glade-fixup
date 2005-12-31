@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Remove entries that are for post-gtk2.4 attributes.  Glade on a
+# gtk2.4 system will complain when unknown attributes are present on a
+# widget.
+#
+# This script should be run from the top-level source directory before
+# committing changed glade files.
+#
+
+find src -name \*.glade | xargs \
+  sed -i -e '/name="focus_on_map"/d' \
+         -e '/name="ellipsize"/d' \
+         -e '/name="width_chars"/d' \
+         -e '/name="single_line_mode"/d' \
+         -e '/name="angle"/d'
