@@ -77,6 +77,9 @@ typedef	struct {
     gulong       selection_changed_cb_id;
 } AccountFilterDialog;
 
+void
+account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page);
+
 /* function prototypes */
 
 /** Retrieve the type number for an "account tree" plugin page.
