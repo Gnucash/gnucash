@@ -30,10 +30,6 @@
  * basis, instead of a whole row (account) at one time.  But, that
  * would require some major coding.
  *
- * *) Right now, the account-type filter is not saved anywhere.  Where
- * should it be saved?  Per budget?  Gconf?
- *
- *
  */
 
 #include "config.h"
@@ -68,14 +64,13 @@
 #include "gnc-recurrence.h"
 #include "Recurrence.h"
 #include "gnc-tree-model-account-types.h"
-#include "gnc-plugin-page-account-tree.h" // just until filter funcs find a home
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "plugin-page-budget"
-//#define GCONF_SECTION "window/pages/budget"
+#define GCONF_SECTION "window/pages/budget"
 
 /************************************************************
  *                        Prototypes                        *
@@ -263,11 +258,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     GtkActionGroup *action_group;
     GncPluginPageBudgetPrivate *priv;
     GncPluginPage *parent;
-    const gchar *url = NULL;
-    //int options_id;
-    //SCM find_options;
-    //SCM temp;
-    URLType type;
 
     ENTER("page %p", plugin_page);
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
@@ -292,20 +282,6 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
                                   gnc_plugin_page_budget_n_actions,
                                   plugin_page);
     gnc_plugin_init_short_names (action_group, toolbar_labels);
-
-    // FIXME: need to test this url case
-    if(!url) {
-    } else {
-        char * location = NULL;
-        char * label = NULL;
-
-        /* if an URL is specified, it should look like
-         * gnc-budget:id=17 .  We want to get the number out,
-         * then look up the options in the global DB. */
-        type = gnc_html_parse_url(NULL, url, &location, &label);
-        g_free (location);
-        g_free (label);
-    }
 
     /* Visisble types */
     priv->fd.visible_types = -1; /* Start with all types */
@@ -398,8 +374,9 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
                         TRUE, TRUE, 0);
 
     tree_view = gnc_tree_view_account_new(FALSE);
-    gnc_tree_view_configure_columns(
-        GNC_TREE_VIEW(tree_view), "Name", NULL);
+    g_object_set(G_OBJECT(tree_view), "gconf-section", GCONF_SECTION, NULL);
+
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view), "Name", NULL);
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
