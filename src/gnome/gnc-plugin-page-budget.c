@@ -89,6 +89,11 @@ static void gnc_plugin_page_budget_finalize (GObject *object);
 static GtkWidget *
 gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_budget_save_page (
+    GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage *gnc_plugin_page_budget_recreate_page (
+    GtkWidget *window, GKeyFile *file, const gchar *group);
+
 
 static gboolean gnc_plugin_page_budget_button_press_cb(
     GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
@@ -246,6 +251,8 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
     gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_BUDGET_NAME;
     gnc_plugin_class->create_widget   = gnc_plugin_page_budget_create_widget;
     gnc_plugin_class->destroy_widget  = gnc_plugin_page_budget_destroy_widget;
+    gnc_plugin_class->save_page       = gnc_plugin_page_budget_save_page;
+    gnc_plugin_class->recreate_page   = gnc_plugin_page_budget_recreate_page;
 
     g_type_class_add_private(klass, sizeof(GncPluginPageBudgetPrivate));
 }
@@ -412,7 +419,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (GTK_WIDGET (tree_view));
     gtk_container_add (GTK_CONTAINER (scrolled_window),
                        GTK_WIDGET(tree_view));
-    priv->fd.tree_view = priv->tree_view;
+    priv->fd.tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter(
         GNC_TREE_VIEW_ACCOUNT(tree_view),
         gnc_plugin_page_account_tree_filter_accounts,
@@ -459,6 +466,104 @@ gnc_plugin_page_budget_destroy_widget (GncPluginPage *plugin_page)
     }
 
     LEAVE("widget destroyed");
+}
+
+#define BUDGET_GUID "Budget GUID"
+
+/** Save enough information about this plugin page that it can
+ *  be recreated next time the user starts gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+static void
+gnc_plugin_page_budget_save_page (GncPluginPage *plugin_page,
+                                  GKeyFile *key_file, const gchar *group_name)
+{
+    GncPluginPageBudget *budget_page;
+    GncPluginPageBudgetPrivate *priv;
+    char guid_str[GUID_ENCODING_LENGTH+1];
+    
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(plugin_page));
+    g_return_if_fail (key_file != NULL);
+    g_return_if_fail (group_name != NULL);
+
+    ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
+          group_name);
+
+    budget_page = GNC_PLUGIN_PAGE_BUDGET(plugin_page);
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(budget_page);
+    
+    guid_to_string_buff(gnc_budget_get_guid(priv->budget), guid_str);
+    g_key_file_set_string(key_file, group_name, BUDGET_GUID, guid_str);
+    
+    //FIXME
+    gnc_tree_view_account_save(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
+                               &priv->fd, key_file, group_name);
+    LEAVE(" ");
+}
+
+
+
+/** Create a new plugin page based on the information saved
+ *  during a previous instantiation of gnucash.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static GncPluginPage *
+gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file, 
+                                      const gchar *group_name)
+{
+    GncPluginPageBudget *budget_page;
+    GncPluginPageBudgetPrivate *priv;
+    GncPluginPage *page;
+    GError *error = NULL;
+    char *guid_str;
+    GUID guid;
+    GncBudget *bgt;
+    QofBook *book;
+
+    g_return_val_if_fail(key_file, NULL);
+    g_return_val_if_fail(group_name, NULL);
+    ENTER("key_file %p, group_name %s", key_file, group_name);
+
+    guid_str = g_key_file_get_string(key_file, group_name, BUDGET_GUID, 
+                                     &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, BUDGET_GUID, error->message);
+        g_error_free(error);
+        error = NULL;
+        return NULL;
+    }
+    if (!string_to_guid(guid_str, &guid)) 
+        return NULL;
+  
+    book = qof_session_get_book(qof_session_get_current_session());
+    bgt = gnc_budget_lookup(&guid, book);
+    if (!bgt) 
+        return NULL;
+
+    /* Create the new page. */
+    page = gnc_plugin_page_budget_new(bgt);
+    budget_page = GNC_PLUGIN_PAGE_BUDGET(page);
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(budget_page);
+
+    /* Install it now so we can then manipulate the created widget */
+    gnc_main_window_open_page(GNC_MAIN_WINDOW(window), page);
+
+    //FIXME
+    gnc_tree_view_account_restore(GNC_TREE_VIEW_ACCOUNT(priv->tree_view), 
+                                  &priv->fd, key_file, group_name);
+    LEAVE(" ");
+    return page;
 }
 
 /** This button press handler calls the common button press handler
@@ -945,7 +1050,6 @@ gnc_plugin_page_budget_cmd_view_filter_by (GtkAction *action,
     ENTER("(action %p, page %p)", action, page);
     
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
-    priv->fd.tree_view = priv->tree_view;
     account_filter_dialog_create(&priv->fd, GNC_PLUGIN_PAGE(page));
 
     LEAVE(" ");
