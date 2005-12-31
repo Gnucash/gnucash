@@ -625,7 +625,7 @@ xaccSplitAssign (Split *split)
 /* ============================================================== */
 
 Split *
-xaccSplitGetCapGainsSplit (Split *split)
+xaccSplitGetCapGainsSplit (const Split *split)
 {
    KvpValue *val;
    GUID *gains_guid;

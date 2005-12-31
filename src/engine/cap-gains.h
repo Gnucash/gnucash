@@ -147,9 +147,8 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
  *  that records the cap gains for this split.  It returns NULL
  *  if not found.  This routine does nothing more than search for
  *  the split recorded in the KVP key "/gains-split"
- */
-                                                                                
-Split * xaccSplitGetCapGainsSplit (Split *);
+ */                                       
+Split * xaccSplitGetCapGainsSplit (const Split *);
 
 /** The`xaccSplitAssign() routine will take the indicated
  *  split and, if it doesn't already belong to a lot, it will attempt 

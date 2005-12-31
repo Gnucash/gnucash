@@ -140,7 +140,7 @@ void          xaccTransDestroy (Transaction *trans);
  The xaccTransClone() method will create a complete copy of an
  existing transaction.
  */
-Transaction * xaccTransClone (Transaction *t);
+Transaction * xaccTransClone (const Transaction *t);
 
 /** Equality.
  *
@@ -729,18 +729,18 @@ int  xaccSplitDateOrder (const Split *sa, const Split *sb);
 
 /** Compare two splits by full name of account. Returns similar to
  * strcmp. */
-int xaccSplitCompareAccountFullNames(Split *sa, Split *sb);
+int xaccSplitCompareAccountFullNames(const Split *sa, const Split *sb);
 /** Compare two splits by code of account. Returns similar to
  * strcmp. */
-int xaccSplitCompareAccountCodes(Split *sa, Split *sb);
+int xaccSplitCompareAccountCodes(const Split *sa, const Split *sb);
 /** Compare two splits by full name of the other account. Returns
  * similar to strcmp. This function attempts to find the split on the
  * other side of a transaction and compare on it. */
-int xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb);
+int xaccSplitCompareOtherAccountFullNames(const Split *sa, const Split *sb);
 /** Compare two splits by code of the other account. Returns similar
  * to strcmp. This function attempts to find the split on the
  * other side of a transaction and compare on it. */
-int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
+int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
 
 
 /**
@@ -782,10 +782,10 @@ void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
 /** The xaccGetAccountByName() is a convenience routine that 
  *  is essentially identical to xaccGetPeerAccountFromName(),
  *  except that it accepts the handy transaction as root.*/
-Account * xaccGetAccountByName (Transaction *trans, const char *name);
+Account * xaccGetAccountByName (const Transaction *trans, const char *name);
 /** The xaccGetAccountByFullName routine is similar to xaccGetAccountByName, but uses
  *  full names using the given separator.*/
-Account * xaccGetAccountByFullName (Transaction *trans,
+Account * xaccGetAccountByFullName (const Transaction *trans,
                                     const char *name,
                                     const char separator);
 

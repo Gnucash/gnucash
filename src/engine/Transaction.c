@@ -78,8 +78,8 @@ const char *void_former_notes_str = "void-former-notes";
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
-G_INLINE_FUNC void check_open (Transaction *trans);
-void check_open (Transaction *trans)
+G_INLINE_FUNC void check_open (const Transaction *trans);
+void check_open (const Transaction *trans)
 {
   if (trans && 0 >= trans->inst.editlevel)
   {
@@ -152,7 +152,7 @@ xaccMallocSplit(QofBook *book)
  */
 
 static Split *
-xaccDupeSplit (Split *s)
+xaccDupeSplit (const Split *s)
 {
   Split *split = g_new0 (Split, 1);
 
@@ -190,7 +190,7 @@ xaccDupeSplit (Split *s)
 }
 
 static Split *
-xaccSplitClone (Split *s)
+xaccSplitClone (const Split *s)
 {
   QofCollection *col;
   Split *split = g_new0 (Split, 1);
@@ -218,6 +218,7 @@ xaccSplitClone (Split *s)
   xaccAccountInsertSplit(s->acc, split);
   if (s->lot) 
   {
+      /* FIXME: Doesn't look right.  */
     s->lot->splits = g_list_append (s->lot->splits, split);
     s->lot->is_closed = -1;
   }
@@ -226,7 +227,7 @@ xaccSplitClone (Split *s)
 
 #ifdef DUMP_FUNCTIONS
 static void
-xaccSplitDump (Split *split, const char *tag)
+xaccSplitDump (const Split *split, const char *tag)
 {
   printf("  %s Split %p", tag, split);
   printf("    GUID:     %s\n", guid_to_string(&split->guid));
@@ -538,8 +539,8 @@ void mark_trans (Transaction *trans)
   }
 }
 
-G_INLINE_FUNC void gen_event (Split *split);
-void gen_event (Split *split)
+G_INLINE_FUNC void gen_event (const Split *split);
+void gen_event (const Split *split)
 {
   Account *account = split->acc;
   Transaction *trans = split->parent;
@@ -866,7 +867,7 @@ xaccMallocTransaction (QofBook *book)
 
 #ifdef DUMP_FUNCTIONS
 void
-xaccTransDump (Transaction *trans, const char *tag)
+xaccTransDump (const Transaction *trans, const char *tag)
 {
   GList *node;
 
@@ -932,7 +933,7 @@ xaccTransSortSplits (Transaction *trans)
  */
 
 Transaction *
-xaccDupeTransaction (Transaction *t)
+xaccDupeTransaction (const Transaction *t)
 {
   Transaction *trans;
   GList *node;
@@ -976,7 +977,7 @@ xaccDupeTransaction (Transaction *t)
  * a full fledged transaction with unique guid, splits, etc.
  */
 Transaction *
-xaccTransClone (Transaction *t)
+xaccTransClone (const Transaction *t)
 {
   Transaction *trans;
   Split *split;
@@ -1079,8 +1080,8 @@ xaccFreeTransaction (Transaction *trans)
 static gint
 compare_split_guids (gconstpointer a, gconstpointer b)
 {
-  Split *sa = (Split *) a;
-  Split *sb = (Split *) b;
+  const Split *sa = a;
+  const Split *sb = b;
 
   if (sa == sb) return 0;
   if (!sa || !sb) return 1;
@@ -1945,7 +1946,7 @@ xaccTransGetVersion (const Transaction *trans)
 \********************************************************************/
 
 static void
-xaccTransRemoveSplit (Transaction *trans, Split *split) 
+xaccTransRemoveSplit (Transaction *trans, const Split *split) 
 {
   if (trans == NULL)
     return;
@@ -2285,7 +2286,7 @@ xaccSplitGetCorrAccountCode(const Split *sa)
 }
 
 int 
-xaccSplitCompareAccountFullNames(Split *sa, Split *sb)
+xaccSplitCompareAccountFullNames(const Split *sa, const Split *sb)
 {
   Account *aa, *ab;
   char *full_a, *full_b;
@@ -2308,7 +2309,7 @@ xaccSplitCompareAccountFullNames(Split *sa, Split *sb)
 
 
 int 
-xaccSplitCompareAccountCodes(Split *sa, Split *sb)
+xaccSplitCompareAccountCodes(const Split *sa, const Split *sb)
 {
   Account *aa, *ab;
   if (!sa && !sb) return 0;
@@ -2322,7 +2323,7 @@ xaccSplitCompareAccountCodes(Split *sa, Split *sb)
 }
 
 int 
-xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb)
+xaccSplitCompareOtherAccountFullNames(const Split *sa, const Split *sb)
 {
   char *ca, *cb; 
   int retval;
@@ -2343,7 +2344,7 @@ xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb)
 }
 
 int
-xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb)
+xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb)
 {
   const char *ca, *cb;
   if (!sa && !sb) return 0;
@@ -3016,7 +3017,7 @@ gnc_book_count_transactions(QofBook *book)
 \********************************************************************/
 
 Account *
-xaccGetAccountByName (Transaction *trans, const char * name)
+xaccGetAccountByName (const Transaction *trans, const char * name)
 {
    Account *acc = NULL;
    GList *node;
@@ -3043,7 +3044,7 @@ xaccGetAccountByName (Transaction *trans, const char * name)
 \********************************************************************/
 
 Account *
-xaccGetAccountByFullName (Transaction *trans, const char * name,
+xaccGetAccountByFullName (const Transaction *trans, const char * name,
                           const char separator)
 {
    Account *acc = NULL;

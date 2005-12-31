@@ -230,7 +230,7 @@ void  xaccFreeSplit (Split *split);    /* frees memory */
  * Another 'feature': the splits point at the old transaction
  * as the parent, not the new transaction.  
  */
-Transaction * xaccDupeTransaction (Transaction *t);
+Transaction * xaccDupeTransaction (const Transaction *t);
 
 /* Compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
