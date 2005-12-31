@@ -199,12 +199,6 @@ Resources
   - There's no way to edit/refine a search.
     [There's no way to do so in 1.8, either...]
 
-- Main Window
-
-  - Change Notebook tabs to include an 'x' to act as the "close tab" method,
-    and then remove the "Close" button from the toolbar.  Then we can also
-    decide if we want to allow a user to 'close' the account tree.
-
 - Scheduled Transactions
 
   - Entering a value (e.g. '20.00') without entering an account or a memo for
