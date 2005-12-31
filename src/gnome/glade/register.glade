@@ -1793,7 +1793,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkRadioButton" id="BY_DATE_RECONDILED">
+	    <widget class="GtkRadioButton" id="BY_DATE_RECONCILED">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Sort by the statement date (unreconciled items last)</property>
 	      <property name="can_focus">True</property>
@@ -1815,7 +1815,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkRadioButton" id="BY_NUMBER">
+	    <widget class="GtkRadioButton" id="BY_NUM">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Sort by number</property>
 	      <property name="can_focus">True</property>

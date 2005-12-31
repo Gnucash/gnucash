@@ -1,5 +1,8 @@
 2005-12-30  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/register.glade: Fix the 'sort by number' and
+	'sort by statement date' choices in the register sort dialog.
+
 	* src/gnome-utils/dialog-transfer.c: Enhance the dialog so that
 	pressing the Enter key in any field will activate the dialog.
 	Fixes bug 125565.
