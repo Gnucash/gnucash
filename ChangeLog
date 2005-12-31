@@ -1,3 +1,103 @@
+2005-12-31  Chris Shoemaker <c.shoemaker@cox.net>
+
+	* [r12224] trunk/src/gnome/gnc-plugin-page-budget.c: Turn on gconf
+	  for the budget plugin page's tree view account. Doesn't seem to
+	  work quite yet. It does save the settings in the user's gconf
+	  directory, but the tree view doesn't remember things like sort
+	  order, which the account-tree page's account treeview does
+	  remember. There must be something else needed...
+
+	* [r12223] trunk/src/gnome-utils/gnc-tree-model-budget.c,
+	  trunk/src/gnome/gnc-plugin-budget.c: *really* mark strings for
+	  runtime translation, not just translatable.
+
+	* [r12222] trunk/src/gnome/glade/budget.glade: Remove GUI for old
+	  attempt at account type filtering.
+
+	* [r12221] trunk/src/gnome/gnc-plugin-page-budget.c: Remember what
+	  the Budget views looked like last time we were running Most of
+	  the work is delegated to GncTreeViewAccount, just as for
+	  GncPluginPageAccountTree. One difference is that the Budget page
+	  has to also remember which Budget it was showing. For that, we
+	  encode the GUID to a string in the keyfile.
+
+	* [r12220] trunk/src/gnome-utils/gnc-plugin-page.h: whitespace
+	  line-wrap cleanup
+
+	* [r12219] trunk/src/gnome-utils/gnc-tree-view-account.c,
+	  trunk/src/gnome-utils/gnc-tree-view-account.h,
+	  trunk/src/gnome/gnc-plugin-page-account-tree.c,
+	  trunk/src/gnome/gnc-plugin-page-account-tree.h: Move functions
+	  from GncPluginPageAccountTree to GncTreeViewAccount The reason
+	  GncPluginPageBudget keeps wanting to use functions in
+	  GncPluginPageAccountTree is that they both use
+	  GncTreeViewAccount. So, we're moving those functions (the
+	  account view filter functions and the account view save/restore
+	  functions) into gnc-tree-view-account. Along the way, we're also
+	  narrowing the argument types from GtkTreeView to
+	  GncTreeViewAccount to avoid unnecessary down-casting.
+
+	* [r12214] trunk/src/gnome/gnc-plugin-page-account-tree.c,
+	  trunk/src/gnome/gnc-plugin-page-account-tree.h,
+	  trunk/src/gnome/gnc-plugin-page-budget.c: Generalizing Account
+	  Filter By... (step 5) export the account-tree's account filter
+	  function populate the account-tree's account filter struct with
+	  the right tree-view. And finally... reuse all this generalized
+	  functionality in the budget plugin page. Nice!
+
+	* [r12213] trunk/src/gnome/gnc-plugin-page-account-tree.c,
+	  trunk/src/gnome/gnc-plugin-page-account-tree.h: Generalize
+	  Account Filter By... (step 4) Fixup comments forgotten in step
+	  3. Factor out and export most of the account filter dialog
+	  creation. Eventually this function should live somewhere else.
+
+2005-12-30  Chris Shoemaker <c.shoemaker@cox.net>
+
+	* [r12212] trunk/src/gnome/gnc-plugin-page-account-tree.c:
+	  Generalize Account Filter By... (step 3) Narrow all the account
+	  filter dialog callbacks to use only the AccountFilterDialog
+	  struct. Now they're multi-purpose.
+
+	* [r12211] trunk/src/gnome/gnc-plugin-page-account-tree.c:
+	  Generalize Account Filter By... (step 2) Narrow the account
+	  filter function to use only the AccountFilterDialog. Now it's
+	  multi-purpose.
+
+	* [r12210] trunk/src/gnome/gnc-plugin-page-account-tree.c,
+	  trunk/src/gnome/gnc-plugin-page-account-tree.h: Generalize
+	  Account Filter By... (step 1) Export AccountFilterDialog type
+
+	* [r12208] trunk/AUTHORS,
+	  trunk/src/gnome-utils/gnc-tree-model-budget.c,
+	  trunk/src/gnome/glade/budget.glade,
+	  trunk/src/gnome/gnc-plugin-budget.c: Mark budget strings for
+	  i18n Remove obsolete budget glade dialogs
+
+	* [r12202] trunk/src/engine/test-core/Makefile.am,
+	  trunk/src/engine/test-core/test-engine-strings.h,
+	  trunk/src/engine/test-core/test-engine-stuff.c: Minor
+	  improvements to engine testing infrastructure
+	     - add some arrays of realistic string values for various
+	  Account and Transaction fields 
+	     - use the arrays to generate slightly more human-readable
+	  random books 
+	     - pull some hardcoded constants out into static knobs 
+	     - wrap Transaction creation in begin/commit
+
+	* [r12201] trunk/src/engine/Account.c, trunk/src/engine/Account.h,
+	  trunk/src/engine/AccountP.h, trunk/src/engine/Group.c,
+	  trunk/src/engine/Group.h, trunk/src/engine/gw-engine-spec.scm:
+	  Add 'const' qualifier to Account pointers in the Account api.
+	  Including necessary related changes to functions passed accounts
+	  from the account functions. Interestingly, the only g-wrap
+	  function that complained about the new const function arguments
+	  was xaccAccountOrder(), the only one using const Account **
+	  types. It seems very uncommon to express const-ness in g-wrap
+	  for any types other than gw:mchar. Actually I couldn't find any
+	  other examples, anywhere, so I had to guess at the syntax, but
+	  it works. Oh, and one or two minor tweaks like my last commit
+	  snuck in, too.
+
 2005-12-30  David Hampton  <hampton@employees.org>
 
 	* glade-fixup: New script that will remove all post-gtk24
@@ -44,6 +144,51 @@
 	* src/import-export/hbci/gnc-hbci-utils.h, gnc-hbci-utils.c: Use
 	glib's g_iconv functions instead of the system's iconv(3)
 	functions to improve portability.
+
+2005-12-29  Chris Shoemaker <c.shoemaker@cox.net>
+
+	* [r12199] trunk/src/engine/Account.c, trunk/src/engine/Account.h:
+	  Single-pass audit/cleanup of Account.c
+
+	  - standardize on 'acc' as variable name for Account. 
+	  - removed 'acc->inst.dirty = TRUE' when preceeded by mark_account. 
+	  - slightly more consistent whitespace. 
+	  - short-circuit no-op in many cases where we thought we were
+	  changing state but we really weren't. Don't dirty Accounts in
+	  these cases.
+	  - fix a couple cases where we dirtied the account without
+	  dirtying the parent
+	  - fix one BUG where we just blew away the account's Lots for no
+	  reason.
+	  - comment possible bug where we don't dirty a split.
+	  - comment two possible buglets where we generate double CM
+	  events.
+	  - comment on possible bugs related to conditional sorting of the
+	  Split list.
+	, - heavy conversion from lower-level to higher-level KVP api.
+	  - plug mem leak of entire GList of splits. 
+	  - document minor change to corner-case behavior of
+	  xaccAccountHasAncestor().
+          - several control flow simplifications. 
+	  - fixed one case where we were changing the Account without
+	  dirtying it. (Can't find this one now. Maybe I imagined it.)	
+	  - Please note where I've marked 'BUG'. I think there are still
+	  (at least) 2 medium and 2 minor bugs remaining in this
+	  file. I'll have another look some other day.
+
+	* [r12197] trunk/src/engine/Transaction.c: remove random
+	  qof_commit_edit from xaccSplitSetSlots_nc fixes unbalanced
+	  begins/commits
+
+	* [r12196] trunk/lib/libqof/qof/qof-be-utils.h: spelling fix
+
+2005-12-28  Chris Shoemaker <c.shoemaker@cox.net>
+
+	* [r12191] trunk/src/bin/Makefile.am: trigger regeneration of
+	  gnucash scripts when the configuration changes pulled from 1.8
+
+	* [r12190] trunk/NEWS: Pulled NEWS history from 1.8 branch into
+	  trunk.
 
 2005-12-28  David Hampton  <hampton@employees.org>
 
@@ -100,6 +245,15 @@
 	flags.  Change the default so that glib deprecated functions are
 	not allowed with glib <= 2.10.  Add arguments to allow disabling
 	deprecated gdk functions.
+
+2005-12-27  Chris Shoemaker <c.shoemaker@cox.net>
+
+	* [r12188] trunk/README.dependencies: Document our dependency on
+	  gcc as a compiler.
+
+	* [r12186] trunk/README.patches, trunk/README.svn,
+	  trunk/make-gnucash-patch.in: Update patch submitting
+	  instructions.
 
 2005-12-27  Derek Atkins  <derek@ihtfp.com>
 
