@@ -123,7 +123,8 @@ typedef struct {
 	 *
 	 *  @param group_name The group name to use when writing data.
 	 *  The name is specific to this page instance. */
-	void (* save_page) (GncPluginPage *page, GKeyFile *file, const gchar *group);
+	void (* save_page) (GncPluginPage *page, GKeyFile *file, 
+                            const gchar *group);
 
 	/** Create a new page based on the information saved during a
 	 *  previous instantiation of gnucash.  This function may or
@@ -142,7 +143,8 @@ typedef struct {
 	 *  data.  The name is specific to this page instance.
 	 *
 	 *  @return A pointer to the new page. */
-        GncPluginPage * (* recreate_page) (GtkWidget *window, GKeyFile *file, const gchar *group);
+        GncPluginPage * (* recreate_page) (GtkWidget *window, GKeyFile *file, 
+                                           const gchar *group);
 
 	/** Perform plugin specific actions when a page is added to a
 	 *  window (or has been removed from one window and added to a
@@ -161,7 +163,8 @@ typedef struct {
 	 *  @param page The page to update.
 	 *  
 	 *  @param name The new name for this page. */
-	void (* page_name_changed) (GncPluginPage *plugin_page, const gchar *name);
+	void (* page_name_changed) (GncPluginPage *plugin_page, 
+                                    const gchar *name);
 } GncPluginPageClass;
 
 
@@ -244,7 +247,8 @@ GncPluginPage *gnc_plugin_page_recreate_page (GtkWidget *window,
  *
  *  @param merge A pointer to the UI manager data structure for a
  *  window. */
-void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page, GtkUIManager *merge);
+void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page, 
+                                    GtkUIManager *merge);
 
 
 /** Remove the actions for a content page from the specified window.
@@ -254,7 +258,8 @@ void gnc_plugin_page_merge_actions (GncPluginPage *plugin_page, GtkUIManager *me
  *
  *  @param merge A pointer to the UI manager data structure for a
  *  window. */
-void gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *merge);
+void gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page, 
+                                      GtkUIManager *merge);
 
 
 /** Retrieve the textual name of a plugin.
@@ -365,7 +370,8 @@ const gchar *gnc_plugin_page_get_statusbar_text (GncPluginPage *page);
  *
  *  @param name The new statusbar text for the page.
  */
-void gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const char *name);
+void gnc_plugin_page_set_statusbar_text (GncPluginPage *page, 
+                                         const char *name);
 
 
 /** Retrieve the "use new window" setting associated with this page.
@@ -386,7 +392,8 @@ gboolean gnc_plugin_page_get_use_new_window (GncPluginPage *page);
  *
  *  @param use_new The new value for this setting.
  */
-void gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new);
+void gnc_plugin_page_set_use_new_window (GncPluginPage *page, 
+                                         gboolean use_new);
 
 
 /** Retrieve the name of the XML UI file associated with this page.
@@ -409,7 +416,8 @@ const char *gnc_plugin_page_get_ui_description (GncPluginPage *page);
  *
  *  @param ui_filename The filename (no path) of the alternate UI.
  */
-void gnc_plugin_page_set_ui_description (GncPluginPage *page, const char *ui_filename);
+void gnc_plugin_page_set_ui_description (GncPluginPage *page, 
+                                         const char *ui_filename);
 
 
 /** Retrieve the GtkUIManager object associated with this page.
@@ -440,14 +448,15 @@ GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
  *
  *  @return A pointer to the newly created GtkActionGroup object for
  *  this page. */
-GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_name);
+GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page, 
+                                                      const gchar *group_name);
 
 
 /* Signals */
-void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
-void                  gnc_plugin_page_removed         (GncPluginPage *plugin_page);
-void                  gnc_plugin_page_selected        (GncPluginPage *plugin_page);
-void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_page);
+void gnc_plugin_page_inserted (GncPluginPage *plugin_page);
+void gnc_plugin_page_removed (GncPluginPage *plugin_page);
+void gnc_plugin_page_selected (GncPluginPage *plugin_page);
+void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
 
 
 G_END_DECLS
