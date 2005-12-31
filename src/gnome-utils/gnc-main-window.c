@@ -245,7 +245,8 @@ static GtkActionEntry gnc_menu_actions [] =
 	/* View menu */
 
 	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL, NULL },
-	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL, NULL },
+	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, 
+	  N_("Select the account types that should be displayed."), NULL },
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },

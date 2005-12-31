@@ -3020,6 +3020,7 @@ and placeholder accounts may have an opening balance.</property>
 	      <child>
 		<widget class="GtkTreeView" id="types_tree_view">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Select the account types that should be displayed.</property>
 		  <property name="can_focus">True</property>
 		  <property name="headers_visible">False</property>
 		  <property name="rules_hint">True</property>
@@ -3046,6 +3047,7 @@ and placeholder accounts may have an opening balance.</property>
 		  <child>
 		    <widget class="GtkButton" id="select_all">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Select all types.</property>
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">_Select All</property>
@@ -3059,6 +3061,7 @@ and placeholder accounts may have an opening balance.</property>
 		  <child>
 		    <widget class="GtkButton" id="clear_all">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Clear the selection and unselect all types.</property>
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">C_lear All</property>
@@ -3072,6 +3075,7 @@ and placeholder accounts may have an opening balance.</property>
 		  <child>
 		    <widget class="GtkButton" id="default_types">
 		      <property name="visible">True</property>
+		      <property name="tooltip" translatable="yes">Select the default selection.</property>
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">_Default</property>
@@ -3160,7 +3164,7 @@ and placeholder accounts may have an opening balance.</property>
 	  <child>
 	    <widget class="GtkLabel" id="Balance">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Balances</property>
+	      <property name="label" translatable="yes">Balance</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
