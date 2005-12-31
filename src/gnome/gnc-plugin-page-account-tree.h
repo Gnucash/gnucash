@@ -79,6 +79,10 @@ typedef	struct {
 
 void
 account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page);
+gboolean
+gnc_plugin_page_account_tree_filter_accounts (Account *account, 
+                                              gpointer user_data);
+
 
 /* function prototypes */
 

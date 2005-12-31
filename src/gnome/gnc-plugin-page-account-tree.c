@@ -451,6 +451,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
+	priv->fd.tree_view = priv->tree_view;
 	gnc_tree_view_account_set_filter (
             GNC_TREE_VIEW_ACCOUNT(tree_view),
             gnc_plugin_page_account_tree_filter_accounts, &priv->fd, NULL);
@@ -1433,7 +1434,7 @@ gppat_filter_selection_changed_cb  (GtkTreeSelection *selection,
   LEAVE("types 0x%x", fd->visible_types);
 }
 
-/** The Filter dialog was closed.  CHeck to see if this was done via
+/** The Filter dialog was closed.  Check to see if this was done via
  *  the OK button.  If so, make the changes permanent.  If not, revert
  *  any changes.
  *

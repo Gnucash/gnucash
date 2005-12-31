@@ -68,11 +68,14 @@
 #include "gnc-recurrence.h"
 #include "Recurrence.h"
 #include "gnc-tree-model-account-types.h"
+#include "gnc-plugin-page-account-tree.h" // just until filter funcs find a home
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_BUDGET;
 
 #define PLUGIN_PAGE_BUDGET_CM_CLASS "plugin-page-budget"
+//#define GCONF_SECTION "window/pages/budget"
 
 /************************************************************
  *                        Prototypes                        *
@@ -96,6 +99,8 @@ static void gnc_plugin_page_budget_selection_changed_cb(
     GtkTreeSelection *selection, GncPluginPageBudget *page);
 
 static void gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page);
+static void gnc_plugin_page_budget_cmd_view_filter_by (
+    GtkAction *action, GncPluginPageBudget *page);
 
 /* Command Callbacks */
 static void gnc_plugin_page_budget_cmd_open_account(
@@ -134,6 +139,11 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] = {
       NULL,
       N_("Estimate a budget value for the selected cells"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_estimate_budget) },
+
+    /* View menu */
+    { "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
+      G_CALLBACK (gnc_plugin_page_budget_cmd_view_filter_by) },
+
 };
 
 static guint gnc_plugin_page_budget_n_actions =
@@ -171,6 +181,7 @@ typedef struct GncPluginPageBudgetPrivate
 
     GList *period_col_list;
     guint32 acct_types;
+    AccountFilterDialog fd;
 } GncPluginPageBudgetPrivate;
 
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
@@ -289,6 +300,10 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
         g_free (label);
     }
 
+    /* Visisble types */
+    priv->fd.visible_types = -1; /* Start with all types */
+    priv->fd.hide_zero_total = FALSE;
+
     LEAVE("page %p, priv %p, action group %p",
           plugin_page, priv, action_group);
 }
@@ -397,6 +412,11 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     gtk_widget_show (GTK_WIDGET (tree_view));
     gtk_container_add (GTK_CONTAINER (scrolled_window),
                        GTK_WIDGET(tree_view));
+    priv->fd.tree_view = priv->tree_view;
+    gnc_tree_view_account_set_filter(
+        GNC_TREE_VIEW_ACCOUNT(tree_view),
+        gnc_plugin_page_account_tree_filter_accounts,
+        &priv->fd, NULL);
 
     priv->component_id =
         gnc_register_gui_component(PLUGIN_PAGE_BUDGET_CM_CLASS,
@@ -624,10 +644,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
                            d, "AccountTypesTreeView"));
     sel_mask = gnc_tree_model_account_types_get_selection(tv);
     priv->acct_types = sel_mask;
-    gnc_tree_view_account_set_filter(
-        GNC_TREE_VIEW_ACCOUNT(priv->tree_view),
-        gnc_tree_view_account_filter_by_type_selection,
-        GUINT_TO_POINTER(sel_mask), NULL);
     LEAVE(" ");
     return TRUE;
 }
@@ -917,4 +933,20 @@ gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page)
     priv->period_col_list = col_list;
 
     gnc_plugin_page_budget_refresh_col_titles(page);
+}
+
+static void
+gnc_plugin_page_budget_cmd_view_filter_by (GtkAction *action,
+                                           GncPluginPageBudget *page)
+{
+    GncPluginPageBudgetPrivate *priv;
+
+    g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
+    ENTER("(action %p, page %p)", action, page);
+    
+    priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
+    priv->fd.tree_view = priv->tree_view;
+    account_filter_dialog_create(&priv->fd, GNC_PLUGIN_PAGE(page));
+
+    LEAVE(" ");
 }
