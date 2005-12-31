@@ -213,6 +213,23 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (data));
 }
 
+static gboolean
+gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
+			      GdkEventKey *event,
+			      gpointer     unused)
+{
+  GtkWidget *toplevel;
+
+  if ((event->keyval == GDK_Return) || (event->keyval == GDK_KP_Enter)) {
+    toplevel = gtk_widget_get_toplevel (widget);
+    if (GTK_WIDGET_TOPLEVEL(toplevel) && GTK_IS_WINDOW(toplevel)) {
+      gtk_window_activate_default(GTK_WINDOW(toplevel));
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
 static void
 gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
                                 gboolean currency_active,
@@ -480,6 +497,8 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
  /* Have to force the filter once. Alt is to show income/expense by default. */
   gnc_tree_view_account_refilter (GNC_TREE_VIEW_ACCOUNT (tree_view));
   gtk_widget_show(GTK_WIDGET(tree_view));
+  g_signal_connect (G_OBJECT (tree_view), "key-press-event",
+		    G_CALLBACK (gnc_xfer_dialog_key_press_cb), NULL);
 
   selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
@@ -1668,10 +1687,12 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
     xferData->amount_edit = amount;
 
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
+    gtk_entry_set_activates_default (GTK_ENTRY(entry), TRUE);
     g_signal_connect (G_OBJECT (entry), "focus-out-event",
 		      G_CALLBACK (gnc_xfer_amount_update_cb), xferData);
 
     date = gnc_date_edit_new(time (NULL), FALSE, FALSE);
+    gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
     hbox = glade_xml_get_widget (xml, "date_hbox");
 
     gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);

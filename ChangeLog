@@ -1,5 +1,9 @@
 2005-12-30  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-transfer.c: Enhance the dialog so that
+	pressing the Enter key in any field will activate the dialog.
+	Fixes bug 125565.
+
 	* src/gnome/glade/budget.glade: Remove gtk2.6 properties from the
 	file.
 
