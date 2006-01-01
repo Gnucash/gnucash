@@ -613,9 +613,8 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
 /** Depending on the base_currency, return either the value or the
  * amount of this split: If the base_curreny is the transaction's
  * commodity, return the value. If it is the account's commodity,
- * return the amount. If it is neither and the force_double_entry flag
- * is false, return the value. If is is neither and force_double_entry
- * is true, print a warning message and return gnc_numeric_zero(). 
+ * return the amount. If it is neither print a warning message and
+ * return gnc_numeric_zero().
  */
 gnc_numeric xaccSplitGetBaseValue (const Split *split, 
                                    const gnc_commodity * base_currency);
