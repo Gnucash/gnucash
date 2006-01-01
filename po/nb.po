@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-12-29 15:12+0800\n"
-"PO-Revision-Date: 2005-12-30 14:09+0800\n"
+"PO-Revision-Date: 2006-01-01 16:44+0800\n"
 "Last-Translator: Tor Harald Thorland <tortho@strigen.com>\n"
 "Language-Team: Norwegian/Bokmaal\n"
 "MIME-Version: 1.0\n"
@@ -618,7 +618,7 @@ msgstr ""
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:604
 msgid "Do you really want to post the invoice?"
-msgstr ""
+msgstr "Vil du virkelig postere fakturaen?"
 
 #. src/business/business-reports/owner-report.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -974,6 +974,9 @@ msgid ""
 "If this vendor is an individual (and not a company) you should set the "
 "\"company name\" and \"contact name\" the same."
 msgstr ""
+"Du m� velge et firma navn.\n"
+"Hvis denne leverand�ren er en enkeltperson (og ikke et firma) burde du sette "
+"\"firma navn\" likt \"kontakt navn\"."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
@@ -1261,7 +1264,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
 msgid "Whether to display the list of Bills Due at startup."
-msgstr ""
+msgstr "Om du vil vise listen over forfallte regninger ved oppstart."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
 msgid "_Accumulate splits on post"
@@ -1596,7 +1599,7 @@ msgstr ""
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you."
-msgstr ""
+msgstr "Fakturaens ID nummer. Hvis feltet er tomt vil et fornuftig nummer bli generert."
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:27
 msgid ""
@@ -1808,7 +1811,7 @@ msgstr "Finn Fak_tura..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
 msgid "Open the Find Invoice dialog"
-msgstr ""
+msgstr "�pne Finn Faktura dialogen"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:163
 #: ../src/business/business-gnome/gnc-plugin-business.c:187
@@ -1931,7 +1934,7 @@ msgstr "_Regnings Betingelse Redigering"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
 msgid "View and edit the list of Billing Terms"
-msgstr ""
+msgstr "Vis og rediger listen over Regnings Betingelser"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:222
 msgid "Bills _Due Reminder"
@@ -3391,7 +3394,7 @@ msgstr "Foreldet"
 
 #: ../src/gnome/druid-acct-period.c:170
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "Perioden ble opprettet og lukket."
 
 #: ../src/gnome/druid-acct-period.c:242
 #, c-format
@@ -3400,6 +3403,9 @@ msgid ""
 "selection made above, this book will be split into %d books.  Click on "
 "'Next' to start closing the earliest book."
 msgstr ""
+"Den tidligste transaksjonen som ble funnet i dette regnskapet er %s. Basert p� "
+"valget over, vil dette regnskapet bli delt i %d perioder.  velg "
+"'Framover' for � starte avsluttningen av den f�rste perioden."
 
 #: ../src/gnome/druid-acct-period.c:287
 #, c-format
@@ -3409,6 +3415,10 @@ msgid ""
 "d accounts).\n"
 "Click on 'Next' to create this book. Click on 'Back' to adjust the dates."
 msgstr ""
+"Du har bedt om � opprette og lukke en regnskaps periode.  Denne perioden vil inneholde alle "
+"transaksjoner frem til midnatt %s (inneholder totalt %d transaksjoner fordelt p� %"
+"d kontoer).\n"
+"Trykk 'Framover' for � opprette og lukke denne perioden. Trykk 'Tilbake' for � endre datoene."
 
 #: ../src/gnome/druid-acct-period.c:305
 #, c-format
@@ -3419,11 +3429,12 @@ msgstr "Periode %s - %s"
 msgid ""
 "You must select closing date that is greater than the closing date of the "
 "previous book."
-msgstr ""
+msgstr "Du m� velge en avsluttnings dato som er st�rre/senere enn avsluttnings datoen for "
+"den forrige perioden."
 
 #: ../src/gnome/druid-acct-period.c:367
 msgid "You must select closing date that is not in the future."
-msgstr ""
+msgstr "Du m� velge en avsluttnings dato som ikke er i fremtiden."
 
 #. Translation FIXME: Can this %s-containing message please be
 #. replaced by one single message? Either this closing went
@@ -3435,6 +3446,8 @@ msgid ""
 "%s\n"
 "Congratulations! You are done closing books!"
 msgstr ""
+"%s\n"
+"Gratulerer! Du har fullf�rt periode avsluttningen(e)!"
 
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:547
@@ -3693,7 +3706,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:17
 msgid "<b>Transactions</b>"
-msgstr ""
+msgstr "<b>Transaksjoner</b>"
 
 #: ../src/gnome/glade/account.glade.h:18
 msgid "Account code:"
@@ -3761,15 +3774,15 @@ msgstr "Dato:"
 
 #: ../src/gnome/glade/account.glade.h:28
 msgid "Delete Account"
-msgstr ""
+msgstr "Slett Konto"
 
 #: ../src/gnome/glade/account.glade.h:29
 msgid "Delete all _subaccounts"
-msgstr ""
+msgstr "_Slett alle underkontoer"
 
 #: ../src/gnome/glade/account.glade.h:30
 msgid "Delete all _transactions"
-msgstr ""
+msgstr "Slett alle _transaksjoner"
 
 #: ../src/gnome/glade/account.glade.h:31 ../src/gnome/glade/budget.glade.h:18
 #: ../src/gnome/glade/stocks.glade.h:8 ../src/gnome-utils/transfer.glade.h:9
@@ -3849,7 +3862,7 @@ msgstr ""
 
 #: ../src/gnome/glade/account.glade.h:43
 msgid "M_ove to:"
-msgstr ""
+msgstr "_Flytt til:"
 
 #: ../src/gnome/glade/account.glade.h:44
 #: ../src/gnome-utils/dialog-account.c:1454
@@ -4009,11 +4022,11 @@ msgstr ""
 
 #: ../src/gnome/glade/acctperiod.glade.h:2
 msgid "Book Closing Dates"
-msgstr ""
+msgstr "Dato For Periode Avsluttning"
 
 #: ../src/gnome/glade/acctperiod.glade.h:3
 msgid "Close Book"
-msgstr ""
+msgstr "Aslutt Periode"
 
 #: ../src/gnome/glade/acctperiod.glade.h:4
 msgid "Enter a title for this book."
@@ -4025,17 +4038,19 @@ msgstr ""
 
 #: ../src/gnome/glade/acctperiod.glade.h:6
 msgid "Finish Closing Books"
-msgstr ""
+msgstr "Fullf�rt Periode Avsluttning"
 
 #: ../src/gnome/glade/acctperiod.glade.h:8
 msgid ""
 "Select an accounting period and the closing date for the period. \n"
 "Books will be closed on midnight of the selected date."
 msgstr ""
+"Velg en regnskaps periode og datoen for avsluttning av perioden. \n"
+"Regnskapet vil bli lukket ved midnatt p� den valgte datoen."
 
 #: ../src/gnome/glade/acctperiod.glade.h:10
 msgid "Setup Accounting Periods"
-msgstr ""
+msgstr "Oppsett Av Regnskaps Perioder"
 
 #: ../src/gnome/glade/acctperiod.glade.h:11
 msgid ""
@@ -4045,6 +4060,11 @@ msgid ""
 "it is still under development.  It will probably damage your\n"
 "data in such a way that it cannot be repaired!"
 msgstr ""
+"Denne veiviseren vil hjelpe deg med � sette opp regnskaps perioder. \n"
+" \n"
+"Advarsel: denne funksjonen virker ikke tilfredstillende p� det n�v�rende tidspunkt; \n"
+"den er fortsatt under utvikling.  Den vil mest sannsynlig �delegge dine data\n"
+"slik at de ikke kan gjenopprettes!"
 
 #: ../src/gnome/glade/acctperiod.glade.h:16
 msgid "Title:"
@@ -6347,7 +6367,7 @@ msgstr "Aktiv konto"
 
 #: ../src/gnome/glade/tax.glade.h:7
 msgid "Form"
-msgstr "Fra"
+msgstr "Blankett"
 
 #: ../src/gnome/glade/tax.glade.h:9
 msgid "Parent Account"
@@ -6502,7 +6522,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:136
 msgid "_Mortgage & Loan Repayment..."
-msgstr ""
+msgstr "_Tilbakebetaling Av L�n..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:137
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -6510,7 +6530,7 @@ msgstr "Oppsett av planlagte transaksjoner for tilbakebetaling av l�n"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:139
 msgid "Close _Books"
-msgstr ""
+msgstr "Periode _Avsluttning"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:140
 msgid "Archive old data using accounting periods"
@@ -6612,7 +6632,7 @@ msgstr "Rediger valgt konto"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:171
 msgid "_Delete Account..."
-msgstr ""
+msgstr "_Slett Konto..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:172
 msgid "Delete selected account"
@@ -6690,26 +6710,26 @@ msgstr "Ny"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1102
 msgid "(no name)"
-msgstr ""
+msgstr "(uten navn)"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1124
 #, c-format
 msgid "Deleting account %s"
-msgstr ""
+msgstr "Sletter konto %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1216
 #, c-format
 msgid "The account %s will be deleted."
-msgstr ""
+msgstr "Konto %s vil bli slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1226
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr ""
+msgstr "Alle transaksjoner i denne kontoen vil bli flyttet til konto %s"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1230
 msgid "All transactions in this account will be deleted."
-msgstr ""
+msgstr "Alle transaksjoner i denne kontoen vil bli slettet."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1237
 #, c-format
@@ -6731,7 +6751,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1254
 msgid "Are you sure you want to do this?"
-msgstr ""
+msgstr "Er du sikker p� at du vil gj�re dette?"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:1379
 msgid "Account Tree Options"
@@ -6774,7 +6794,7 @@ msgstr ""
 #: ../src/gnome/gnc-plugin-page-budget.c:743
 #, c-format
 msgid "Delete %s?"
-msgstr ""
+msgstr "Slette %s?"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-register.c:155
@@ -7661,7 +7681,7 @@ msgstr ""
 
 #: ../src/gnome-utils/dialog-options.c:742
 msgid "Select all accounts."
-msgstr ""
+msgstr "Velg alle kontoer."
 
 #: ../src/gnome-utils/dialog-options.c:749
 msgid "Clear the selection and unselect all accounts."
@@ -7704,7 +7724,7 @@ msgstr "Velg bilde"
 #: ../src/gnome-utils/dialog-options.c:1914
 #: ../src/gnome-utils/dialog-options.c:1928
 msgid "Select an image file."
-msgstr ""
+msgstr "Velg en bilde fil."
 
 #: ../src/gnome-utils/dialog-options.c:1926
 msgid "Select pixmap"
@@ -7762,6 +7782,8 @@ msgid ""
 "The account %s\n"
 "does not allow transactions.\n"
 msgstr ""
+"Kontoen %s\n"
+"tillater ikke transaksjoner.\n"
 
 #: ../src/gnome-utils/dialog-transfer.c:1381
 msgid ""
@@ -8073,7 +8095,7 @@ msgstr "Desember 31, 2000"
 #: ../src/gnome-utils/gnc-date-format.glade.h:7
 #: ../src/import-export/generic-import.glade.h:32
 msgid "Format:"
-msgstr ""
+msgstr "Format:"
 
 #: ../src/gnome-utils/gnc-date-format.glade.h:8
 msgid "Include Century"
@@ -9644,7 +9666,7 @@ msgstr "Bruk den valgte valuta for alle nyopprettede kontoer."
 
 #: ../src/gnome-utils/preferences.glade.h:124
 msgid "Use the specified currency for all newly created reports."
-msgstr ""
+msgstr "Bruk den spesifiserte valuta for alle nyopprettede rapporter."
 
 #: ../src/gnome-utils/preferences.glade.h:125
 msgid ""
@@ -17175,7 +17197,7 @@ msgstr "Siden Sist Kj�ring Veiviser"
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3368
 msgid "Mortgage & Loan Repayment Druid"
-msgstr ""
+msgstr "Veiviser For Tilbakebetaling Av L�n"
 
 #. src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:3370
@@ -18305,13 +18327,13 @@ msgid ""
 msgstr ""
 
 #~ msgid "Are you sure you want to delete the %s account?"
-#~ msgstr "Er du sikker pÃÂÃÂÃÂÃÂ¥ at du ÃÂÃÂÃÂÃÂ¸nsker ÃÂÃÂÃÂÃÂ¥ slette kontoen %s?"
+#~ msgstr "Er du sikker pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¥ at du ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¸nsker ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¥ slette kontoen %s?"
 
 #~ msgid ""
 #~ "Are you sure you want to delete the %s\n"
 #~ "account and all its children?"
 #~ msgstr ""
-#~ "Er du sikker pÃÂÃÂ¥ at du vil slette %s\n"
+#~ "Er du sikker pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¥ at du vil slette %s\n"
 #~ "kontoen og alle dens underkontoer?"
 
 #~ msgid "Edit scheduled transactions"
@@ -18327,10 +18349,10 @@ msgstr ""
 #~ msgstr "Diagramutvalg."
 
 #~ msgid "TRIAL BALANCE"
-#~ msgstr "RÃÂÃÂBALANSE"
+#~ msgstr "RÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂBALANSE"
 
 #~ msgid "ADJUSTED TRIAL BALANCE"
-#~ msgstr "JUSTERT RÃÂÃÂBALANSE"
+#~ msgstr "JUSTERT RÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂBALANSE"
 
 #~ msgid "INCOME STATEMENT"
 #~ msgstr "KONTOUTDRAG INNTEKT"
