@@ -870,10 +870,10 @@ gnc_tree_view_update_visibility (GtkTreeViewColumn *column,
     key = g_strdup_printf("%s_%s", name, GCONF_KEY_VISIBLE);
     gnc_gconf_set_bool(priv->gconf_section, key, visible, NULL);
     g_free(key);
-    LEAVE("made visible, set gconf key");
+    LEAVE("made %s, set gconf key", visible ? "visible" : "invisible");
     return;
   }
-  LEAVE("made visible");
+  LEAVE("made %s", visible ? "visible" : "invisible");
 }
 
 /** This function is called via the gconf notification callback when
@@ -1421,8 +1421,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
   if (priv->show_column_menu && priv->gconf_section) {
     /* Show the menu popup button */
     if (priv->column_menu_column)
-      g_object_set(G_OBJECT(priv->column_menu_column),
-		   "visible", TRUE, NULL);
+      gtk_tree_view_column_set_visible(priv->column_menu_column, TRUE);
 
     /* Now build a new menu */
     column_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
@@ -1431,8 +1430,7 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
   } else {
     /* Hide the menu popup button */
     if (priv->column_menu_column)
-      g_object_set(G_OBJECT(priv->column_menu_column),
-		   "visible", FALSE, NULL);
+      gtk_tree_view_column_set_visible(priv->column_menu_column, FALSE);
   }
   LEAVE("menu: show %d, section %s", priv->show_column_menu,
 	priv->gconf_section);

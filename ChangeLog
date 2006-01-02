@@ -1,5 +1,8 @@
 2006-01-02  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view.c: Use the right function to hide
+	a tree column. Update a couple of debugging messages.
+
 	* src/engine/gw-engine-spec.scm:
 	* src/engine/gnc-commodity.[ch]: Initialize the qof instances in
 	commodity namespaces.
