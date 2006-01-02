@@ -38,6 +38,10 @@
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
+
 #include "gnc-plugin-page-register.h"
 #include "gnc-budget.h"
 

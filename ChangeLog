@@ -1,3 +1,9 @@
+2006-01-02  Derek Atkine  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome/gnc-plugin-page-budget.c:
+	  need to #include gkeyfile.h if we don't have glib26.
+
 2006-01-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view.c: Use the right function to hide
