@@ -2145,7 +2145,8 @@ of having a parent transaction with which one is working...")
  '<gnc:commodity-namespace*>
  "gnc_commodity_table_add_namespace"
  '((<gnc:commodity-table*> table)
-   ((<gw:mchars> caller-owned const) namespace))
+   ((<gw:mchars> caller-owned const) namespace)
+   (<gnc:Book*> book))
  "Add a new namespace to the commodity table")
 
 (gw:wrap-function

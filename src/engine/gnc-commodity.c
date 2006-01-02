@@ -499,7 +499,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   if (namespace) {
     retval->namespace = gnc_commodity_table_find_namespace(table, namespace);
     if (!retval->namespace)
-      retval->namespace = gnc_commodity_table_add_namespace(table, namespace);
+      retval->namespace = gnc_commodity_table_add_namespace(table, namespace, book);
   } else {
     retval->namespace = NULL;
   }
@@ -764,7 +764,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
   if(!cm) return;
   book = qof_instance_get_book (&cm->inst);
   table = gnc_commodity_table_get_table(book);
-  nsp = gnc_commodity_table_add_namespace(table, namespace);
+  nsp = gnc_commodity_table_add_namespace(table, namespace, book);
   if (cm->namespace == nsp)
     return;
 
@@ -1172,6 +1172,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   gnc_commodity_namespace * nsp = NULL;
   gnc_commodity *c;
   const char *ns_name;
+  QofBook *book;
 
   if (!table) return NULL;
   if (!comm) return NULL;
@@ -1191,8 +1192,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     return c;
   }
 
-  nsp = gnc_commodity_table_add_namespace(table, ns_name);
-  
+  book = qof_instance_get_book (&comm->inst);
+  nsp = gnc_commodity_table_add_namespace(table, ns_name, book);
+
   PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic,
          nsp->cm_table, nsp->name);
   g_hash_table_insert(nsp->cm_table, 
@@ -1418,7 +1420,8 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
 
 gnc_commodity_namespace * 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-                                  const char * namespace) 
+                                  const char * namespace,
+				  QofBook *book) 
 {
   gnc_commodity_namespace * ns = NULL; 
   
@@ -1430,6 +1433,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
     ns->name = gnc_string_cache_insert((gpointer)namespace);
+    qof_instance_init (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
     gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_CREATE);
     
     g_hash_table_insert(table->ns_table,
@@ -1654,11 +1658,11 @@ gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 {
   ENTER ("table=%p", table);
-  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX);
-  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE);
-  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ);
-  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX);
-  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX, book);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE, book);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NASDAQ, book);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_EUREX, book);
+  gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL, book);
 
   #include "iso-4217-currencies.c"
 

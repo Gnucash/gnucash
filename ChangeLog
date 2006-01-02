@@ -1,0 +1,7 @@
+2006-01-02  David Hampton  <hampton@employees.org>
+
+	* src/engine/gw-engine-spec.scm:
+	* src/engine/gnc-commodity.[ch]: Initialize the qof instances in
+	commodity namespaces.
+
+

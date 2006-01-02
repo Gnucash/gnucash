@@ -726,7 +726,8 @@ GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
  *
  *  @return A pointer to the newly created namespace. */
 gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-							    const char * namespace);
+							    const char * namespace,
+							    QofBook *book);
 
 /** This function finds a commodity namespace in the set of existing commodity namespaces.
  *
