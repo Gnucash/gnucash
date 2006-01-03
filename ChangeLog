@@ -1,5 +1,7 @@
 2006-01-02  David Hampton  <hampton@employees.org>
 
+	* src/engine/Transaction.c: Fix test inverted by commit 12231.
+
 	* src/gnome-utils/Makefile.am
 	* src/gnome-utils/gnc-tree-model-example-account.[ch]: Remove
 	unused files.

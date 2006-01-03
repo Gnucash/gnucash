@@ -1916,7 +1916,7 @@ xaccTransGetVersion (const Transaction *trans)
 static void
 xaccTransRemoveSplit (Transaction *trans, const Split *split) 
 {
-  if (!trans)
+  if (trans)
       trans->splits = g_list_remove (trans->splits, split);
 }
 
