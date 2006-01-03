@@ -165,6 +165,7 @@ libtool: $(LIBTOOL_DEPS)
 pot:
 	rm -f intl-scm/guile-strings.c
 	make -C intl-scm
+	${top_srcdir}/make-gnucash-potfiles > po/POTFILES.in
 	rm -f po/$(PACKAGE).pot
 	make -C po $(PACKAGE).pot
 
