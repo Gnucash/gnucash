@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  */
 /*
@@ -35,6 +35,8 @@
 
 #include "config.h"
 
+#include <gnome.h> 
+#include <glib/gi18n.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */
@@ -44,7 +46,6 @@
 #include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "messages.h"
 
 
 enum {
@@ -337,7 +338,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 		hit->gde  = gde;
 
 		item = gtk_menu_item_new_with_label (buffer);
-		gtk_menu_append (GTK_MENU (menu), item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 #if 0
 		g_signal_connect (G_OBJECT (item), "activate",
 				  G_CALLBACK  (set_time), hit);
@@ -363,7 +364,7 @@ fill_time_popup (GtkWidget *widget, GNCDateEdit *gde)
 			hit->gde  = gde;
 
 			mins = gtk_menu_item_new_with_label (buffer);
-			gtk_menu_append (GTK_MENU (submenu), mins);
+			gtk_menu_shell_append (GTK_MENU_SHELL (submenu), mins);
 			g_signal_connect (G_OBJECT (mins), "activate",
 					  G_CALLBACK  (set_time), hit);
 			g_signal_connect (G_OBJECT (item), "destroy",
@@ -589,7 +590,7 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	if (!date_accel_key_press(widget, event, data))
 		return FALSE;
 
-	gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+	g_signal_stop_emission_by_name (widget, "key_press_event");
 	return TRUE;
 }
 
@@ -606,8 +607,8 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
                                    1900 + tm.tm_year);
         gtk_calendar_select_day (GTK_CALENDAR (gde->calendar), tm.tm_mday);
 
-	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
-	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
+	g_signal_emit (gde, date_edit_signals [DATE_CHANGED], 0);
+	g_signal_emit (gde, date_edit_signals [TIME_CHANGED], 0);
 
         return FALSE;
 }
@@ -651,8 +652,9 @@ create_children (GNCDateEdit *gde)
 
 	gtk_widget_show (GTK_WIDGET(gde->date_button));
 
-	gde->time_entry = gtk_entry_new_with_max_length (12);
-	gtk_widget_set_usize (GTK_WIDGET(gde->time_entry), 88, 0);
+	gde->time_entry = gtk_entry_new ();
+	gtk_entry_set_max_length (GTK_ENTRY(gde->time_entry), 12);
+	gtk_widget_set_size_request (GTK_WIDGET(gde->time_entry), 88, -1);
 	gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
 
 	gde->time_popup = gtk_option_menu_new ();
@@ -674,17 +676,16 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_set_events (GTK_WIDGET(gde->cal_popup),
 			       gtk_widget_get_events (GTK_WIDGET(gde->cal_popup)) |
                                GDK_KEY_PRESS_MASK);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "delete_event",
-			    (GtkSignalFunc) delete_popup,
-			    gde);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "key_press_event",
-			    (GtkSignalFunc) key_press_popup,
-			    gde);
-	g_signal_connect (G_OBJECT (gde->cal_popup), "button_press_event",
-			    (GtkSignalFunc) button_press_popup,
-			    gde);
-	gtk_window_set_policy (GTK_WINDOW (gde->cal_popup),
-                               FALSE, FALSE, TRUE);
+	g_signal_connect (gde->cal_popup, "delete_event",
+			  G_CALLBACK(delete_popup),
+			  gde);
+	g_signal_connect (gde->cal_popup, "key_press_event",
+			  G_CALLBACK(key_press_popup),
+			  gde);
+	g_signal_connect (gde->cal_popup, "button_press_event",
+			  G_CALLBACK(button_press_popup),
+			  gde);
+	gtk_window_set_resizable (GTK_WINDOW (gde->cal_popup), FALSE);
 
 	frame = gtk_frame_new (NULL);
 	gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
@@ -745,8 +746,12 @@ gnc_date_edit_new_glade (gchar *widget_name,
 			 gchar *string1, gchar *string2,
 			 gint int1, gint int2)
 {
+	GtkWidget *widget;
+
 	/* None of the standard glade arguments are used. */
-        return gnc_date_edit_new(time(NULL), FALSE, FALSE);
+	widget = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+	gtk_widget_show(widget);
+	return widget;
 }
 
 
@@ -976,7 +981,7 @@ gnc_date_edit_get_flags (GNCDateEdit *gde)
  * clicking the button that has the default.
  **/
 void
-gnc_date_editable_enters (GNCDateEdit *gde, gboolean state)
+gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
 {
 	if (!gde)
 		return;

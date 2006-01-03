@@ -55,7 +55,7 @@ static void show_gnc_recurrence()
     rw = GNC_RECURRENCE(gnc_recurrence_new());
 
     r = g_new(Recurrence, 1);
-    g_list_append(rl, r);
+    rl = g_list_append(rl, r);
     g_date_set_dmy(&d, 17, 4, 2005);
     recurrenceSet(r, 1, PERIOD_WEEK, &d);
 

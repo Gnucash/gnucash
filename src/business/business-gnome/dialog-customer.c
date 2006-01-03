@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-amount-edit.h"
@@ -32,7 +33,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "dialog-search.h"
 #include "search-param.h"
@@ -365,12 +366,12 @@ gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_entry_get_text (GTK_ENTRY (cw->id_entry));
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (cw->dialog_type == EDIT_CUSTOMER)
-    title = g_strconcat (_("Edit Customer"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Customer"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Customer"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Customer"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (cw->dialog), title);
 
@@ -462,7 +463,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   xml = gnc_glade_xml_new ("customer.glade", "Customer Dialog");
   cw->dialog = glade_xml_get_widget (xml, "Customer Dialog");
 
-  gtk_object_set_data (GTK_OBJECT (cw->dialog), "dialog_info", cw);
+  g_object_set_data (G_OBJECT (cw->dialog), "dialog_info", cw);
 
   /* Get entry points */
   cw->id_entry = glade_xml_get_widget (xml, "id_entry");

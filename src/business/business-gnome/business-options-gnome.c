@@ -18,18 +18,19 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <g-wrap-wct.h>
 #include <libguile.h>
 
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "option-util.h"
 #include "gnc-general-search.h"
 
@@ -77,7 +78,7 @@ make_name_label (char *name)
   GtkWidget *label;
   gchar *colon_name;
 
-  colon_name = g_strconcat (name, ":", NULL);
+  colon_name = g_strconcat (name, ":", (char *)NULL);
   label = gtk_label_new (colon_name);
   gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
   g_free (colon_name);

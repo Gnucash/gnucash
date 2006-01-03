@@ -20,15 +20,16 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
 
 #include "config.h"
 
-#include <errno.h>
 #include <gnome.h>
+#include <glib/gi18n.h>
+#include <errno.h>
 #include <libguile.h>
 #include <sys/stat.h>
 
@@ -107,7 +108,18 @@ static void
 gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
                            gpointer user_data)
 {
-  gnome_ok_dialog(_("Set the report options you want using this dialog."));
+  GtkWidget *dialog, *parent;
+  struct report_default_params_data * prm = user_data;
+
+  parent = gnc_options_dialog_widget(prm->win);
+  dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_INFO,
+				  GTK_BUTTONS_OK,
+				  _("Set the report options you want using this dialog."));
+  g_signal_connect(G_OBJECT(dialog), "response",
+		   (GCallback)gtk_widget_destroy, NULL);
+  gtk_widget_show(dialog);
 }
 
 static void
@@ -293,6 +305,10 @@ gnc_html_help_url_cb (const char *location, const char *label,
 void
 gnc_report_init (void)
 {
+  /* Reference the report page plugin to ensure it exists in the gtk
+   * type system. */
+  GNC_TYPE_PLUGIN_PAGE_REPORT;
+
   gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
   gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
   gnc_html_register_stream_handler (URL_TYPE_REPORT, gnc_html_report_stream_cb);

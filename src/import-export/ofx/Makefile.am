@@ -17,6 +17,7 @@ libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgncgnome.la \
+  ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${LIBOFX_LIBS}
 
@@ -33,6 +34,7 @@ AM_CFLAGS = \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
+  ${QOF_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${LIBOFX_CFLAGS} 
 

@@ -26,10 +26,9 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
-      "#include <kvp_frame.h>\n"
+      "#include <qof.h>\n"
       "#include <kvp-scm.h>\n"
-      "#include <Transaction.h>\n"
-      "#include <qofbook.h>\n")))
+      "#include <Transaction.h>\n")))
 
   (gw:wrap-as-wct ws '<gnc:kvp-frame*> "KvpFrame*" "const KvpFrame*")
 

@@ -31,6 +31,7 @@ TESTS = \
   test-vendor
 
 GNC_TEST_DEPS := \
+  --gnc-module-dir ${top_builddir}/src/core-utils \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/business/business-core \

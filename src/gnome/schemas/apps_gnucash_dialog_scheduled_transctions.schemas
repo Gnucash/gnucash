@@ -79,22 +79,5 @@
       </locale>
     </schema>
 
-    <schema>
-      <key>/schemas/apps/gnucash/dialogs/scheduled_trans/transaction_editor/number_of_rows</key>
-      <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_editor/number_of_rows</applyto>
-      <owner>gnucash</owner>
-      <type>float</type>
-      <default>6.0</default>
-      <locale name="C">
-        <short>The number of rows in an scheduled transaction.</short>
-        <long>
-	  This field sets the number of rows to show in a scheduled
-	  transaction.  It does not actually affect the display of the
-	  contents of the window.  It is only used to set the size of
-	  the dialog when first opened.
-	</long>
-      </locale>
-    </schema>
-
   </schemalist>
 </gconfschemafile>

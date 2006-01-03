@@ -18,12 +18,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -31,20 +33,14 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <regex.h>
+#include <libguile.h>
 
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
-#ifdef USE_GUPPI
-#include <libguppitank/guppi-tank.h>
-#endif
-#include <gnome.h>
-#include <regex.h>
-#include <glib.h>
-#include <libguile.h>
 
 #include "Account.h"
 #include "Group.h"
-#include "dialog-utils.h"
 #include "print-session.h"
 #include "gnc-engine.h"
 #include "gnc-gpg.h"
@@ -55,7 +51,6 @@
 #include "gnc-html-graph-gog.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 struct gnc_html_struct {
@@ -379,9 +374,6 @@ gnc_html_initialize (void)
     { URL_TYPE_BUDGET, "gnc-budget" },
     { URL_TYPE_OTHER, "" },
     { NULL, NULL }};
-
-  PINFO( "initializing gnc_html..." );
-  printf( "initializing gnc_html...\n" );
 
   for (i = 0; types[i].type; i++)
     gnc_html_register_urltype (types[i].type, types[i].protocol);
@@ -1154,32 +1146,33 @@ gnc_html_new( GtkWindow *parent )
   gtk_object_sink (GTK_OBJECT (retval->container));
 
   /* signals */
-  gtk_signal_connect(GTK_OBJECT(retval->html), "url_requested",
-                     GTK_SIGNAL_FUNC(gnc_html_url_requested_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "url_requested",
+		   G_CALLBACK(gnc_html_url_requested_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "on_url",
-                     GTK_SIGNAL_FUNC(gnc_html_on_url_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "on_url",
+		   G_CALLBACK(gnc_html_on_url_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "set_base",
-                     GTK_SIGNAL_FUNC(gnc_html_set_base_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "set_base",
+		   G_CALLBACK(gnc_html_set_base_cb),
+		   retval);
   
-  gtk_signal_connect(GTK_OBJECT(retval->html), "link_clicked",
-                     GTK_SIGNAL_FUNC(gnc_html_link_clicked_cb),
-                     (gpointer)retval);
+  g_signal_connect(retval->html, "link_clicked",
+		   G_CALLBACK(gnc_html_link_clicked_cb),
+		   retval);
   
-  gtk_signal_connect (GTK_OBJECT (retval->html), "object_requested",
-                      GTK_SIGNAL_FUNC (gnc_html_object_requested_cb), 
-                      (gpointer)retval);
+  g_signal_connect (retval->html, "object_requested",
+		    G_CALLBACK (gnc_html_object_requested_cb), 
+		    retval);
 
-  gtk_signal_connect (GTK_OBJECT (retval->html), "button_press_event",
-                      GTK_SIGNAL_FUNC (gnc_html_button_press_cb), 
-                      (gpointer)retval);
+  g_signal_connect (retval->html, "button_press_event",
+		    G_CALLBACK (gnc_html_button_press_cb), 
+		    retval);
 
-  gtk_signal_connect (GTK_OBJECT(retval->html), "submit", 
-                      GTK_SIGNAL_FUNC(gnc_html_submit_cb), (gpointer)retval);
+  g_signal_connect (retval->html, "submit", 
+		    G_CALLBACK(gnc_html_submit_cb),
+		    retval);
   
   gtk_html_load_empty(GTK_HTML(retval->html));
   

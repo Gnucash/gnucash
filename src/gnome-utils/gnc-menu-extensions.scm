@@ -12,8 +12,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (define (gnc:make-extension
 	 ;; The type of extension item, either 'menu, 'menu-item, or 'separator
@@ -63,42 +63,3 @@
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*ui-startup-hook*
                           gnc:extensions-menu-setup))
-
-;; Automatically pick accelerators for menu names
-(define (gnc:new-menu-namer)
-
-  (define letter-hash (make-hash-table 23))
-  (define name-hash (make-hash-table 23))
-
-  (define (add-name raw-name)
-    (let* ((name (_ raw-name))
-           (length (string-length name)))
-
-      (define (try-at-k k)
-        (if (>= k length)
-            (begin
-              (hash-set! name-hash raw-name name)
-              name)
-            (let* ((char (char-upcase (string-ref name k)))
-                   (used (hash-ref letter-hash char)))
-              (if (not used)
-                  (let ((new-name (string-append
-                                   (substring name 0 k)
-                                   "_"
-                                   (substring name k length))))
-                    (hash-set! letter-hash char #t)
-                    (hash-set! name-hash raw-name new-name)
-                    new-name)
-                  (try-at-k (+ k 1))))))
-
-      (try-at-k 0)))
-
-  (define (lookup name)
-    (hash-ref name-hash name))
-
-  (define (dispatch key)
-    (case key
-      ((add-name) add-name)
-      ((lookup) lookup)))
-
-  dispatch)

@@ -58,8 +58,10 @@
     </menu>
 
     <menu name="Reports" action="ReportsAction">
-      <menuitem name="ReportsAccountReport"      action="ReportsAccountReportAction"/>
-      <menuitem name="ReportsTransactionReport"  action="ReportsTransactionReportAction"/>
+      <placeholder name="AccountReports">
+        <menuitem name="ReportsAccountReport"      action="ReportsAccountReportAction"/>
+        <menuitem name="ReportsAcctTransReport"    action="ReportsAcctTransReportAction"/>
+      </placeholder>
     </menu>
   </menubar>
 

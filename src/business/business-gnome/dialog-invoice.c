@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <g-wrap-wct.h>
 #include <libguile.h>
 
@@ -37,7 +38,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-date-edit.h"
 #include "gnc-amount-edit.h"
 #include "gnucash-sheet.h"
@@ -491,7 +492,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
     gboolean result;
 
     if (gncEntryGetOrder (entry))
-      msg = g_strconcat (message, "\n\n", order_warn, NULL);
+      msg = g_strconcat (message, "\n\n", order_warn, (char *)NULL);
     else
       msg = g_strdup (message);
 
@@ -1573,7 +1574,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
   if (iw->id_entry)
     id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
   if (id && *id)
-    return g_strconcat (wintitle, " - ", id, NULL);
+    return g_strconcat (wintitle, " - ", id, (char *)NULL);
   return g_strdup (wintitle);
 }
 

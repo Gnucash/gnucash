@@ -20,18 +20,18 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <guile/gh.h>
 #include <ctype.h>
 #include <locale.h>
 #include <string.h>
 
-#include <glib.h>
-#include <guile/gh.h>
-
 #include "finproto.h"
 #include "fin_spl_protos.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-gkeyfile-utils.h"
 #include "gnc-exp-parser.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
 #include "guile-mappings.h"
 
@@ -57,7 +57,7 @@ static gboolean      parser_inited     = FALSE;
 static gchar *
 gnc_exp_parser_filname (void)
 {
-  return g_build_filename(g_get_home_dir(), ".gnucash", "expressions-2.0", NULL);
+  return gnc_build_dotgnucash_path("expressions-2.0");
 }
 
 void
@@ -135,7 +135,7 @@ gnc_exp_parser_shutdown (void)
   g_key_file_set_comment(key_file, GROUP_NAME, NULL,
 			 _(" Variables are in the form 'name=value'"),
 			 NULL);
-  gnc_key_file_save_to_file(filename, key_file);
+  gnc_key_file_save_to_file(filename, key_file, NULL);
   g_key_file_free(key_file);
   g_free(filename);
 
@@ -332,7 +332,7 @@ func_op( const char *fname,
   GString *realFnName;
 
   realFnName = g_string_sized_new( strlen(fname) + 5 );
-  g_string_sprintf( realFnName, "gnc:%s", fname );
+  g_string_printf( realFnName, "gnc:%s", fname );
   scmFn = gh_eval_str_with_standard_handler( realFnName->str );
   g_string_free( realFnName, TRUE );
   if ( ! SCM_PROCEDUREP( scmFn ) ) {

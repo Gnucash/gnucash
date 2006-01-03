@@ -30,6 +30,9 @@
 #define GNC_FILE_UTILS_H
 
 #include <stdio.h>		/* for FILE* */
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
 
 char * gncFindFile (const char * filename);
 
@@ -58,5 +61,25 @@ int gncReadFile (const char * file, char ** data);
  */
 gint64 gnc_getline (gchar **line, FILE *file);
 
+
+/* Definitions shared by file-utils.c and gnc-main-window.c */
+#define STATE_FILE_TOP		"Top"
+#define STATE_FILE_BOOK_GUID	"Book Guid"
+
+/** Find the state file that corresponds to this URL and guid.  The
+ *  URL is used to compute the base name of the file (which will be in
+ *  ~/.gnucash/books) and the guid is used to differentiate when the
+ *  user has multiple data files with the same name.
+ *
+ *  @param url The usrl of the data file being used.
+ *
+ *  @param guid The guid of the book associated with this data file.
+ *
+ *  @param next_filename Return the next available file name if the
+ *  data file cannot be found.
+ *
+ *  @return The name of the data file that was located.
+ */
+GKeyFile *gnc_find_state_file (const gchar *url, const gchar *guid, gchar **filename);
 
 #endif /* GNC_FILE_UTILS_H */

@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
 
@@ -26,16 +26,16 @@
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib.h>
 #include <regex.h>
 
 #include "gnc-commodity.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_COMMODITY; 
 

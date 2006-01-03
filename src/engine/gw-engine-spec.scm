@@ -23,22 +23,16 @@
    (list
     "#include <config.h>\n"
     "#include <glib.h>\n"
-    "#include <guid.h>\n"
+    "#include <qof.h>\n"
     "#include <Group.h>\n"
     "#include <Query.h>\n"
     "#include <gnc-budget.h>\n"
     "#include <gnc-commodity.h>\n"
-    "#include <gnc-date.h>\n"
     "#include <gnc-engine.h>\n"
-    "#include <gnc-event.h>\n"
-    "#include <gnc-numeric.h>\n"
+    "#include <gnc-filepath-utils.h>\n"
     "#include <gnc-pricedb.h>\n"
     "#include <gnc-lot.h>\n"
-    "#include <gnc-trace.h>\n"
     "#include <gnc-session-scm.h>\n"
-    "#include <qofbackend.h>\n"
-    "#include <qofbook.h>\n"
-    "#include <qofsession.h>\n"
     "#include <gnc-hooks-scm.h>\n"
     "#include <engine-helpers.h>\n")))
 
@@ -247,13 +241,6 @@
   
   ;;     (gw:enum-add-value! we "ERR_SQL_MISSING_DATA" 'sql-missing-data)
 
-  ;;     (gw:enum-add-value! we "ERR_RPC_HOST_UNK" 'rpc_host_unk)
-  ;;     (gw:enum-add-value! we "ERR_RPC_CANT_BIND" 'rpc_cant_bind)
-  ;;     (gw:enum-add-value! we "ERR_RPC_CANT_ACCEPT" 'rpc_cant_accept)
-  ;;     (gw:enum-add-value! we "ERR_RPC_NO_CONNECTION" 'rpc_no_connection)
-  ;;     (gw:enum-add-value! we "ERR_RPC_BAD_VERSION" 'rpc_bad_version)
-  ;;     (gw:enum-add-value! we "ERR_RPC_FAILED" 'rpc_failed)
-  ;;     (gw:enum-add-value! we "ERR_RPC_NOT_ADDED" 'rpc_not_added)
   #t)
 
 ;
@@ -2422,14 +2409,6 @@ of having a parent transaction with which one is working...")
  '((<gnc:numeric> arg))
  "Convert gnc_numeric to a printable string")
 
-(gw:wrap-function
- ws
- 'gnc:run-rpc-server
- '<gw:void>
- "gnc_run_rpc_server"
- '()
- "Run the RPC Server") 
-
 ;; gnc-date.h
 
 (gw:wrap-function
@@ -2440,6 +2419,26 @@ of having a parent transaction with which one is working...")
  '((<gnc:time-pair> tp))
  "Convert a timepair on a certain day (localtime) to\
 the timepair representing midday on that day")
+
+;;
+;; gnc-filepath-utils.h
+;;
+
+(gw:wrap-function
+ ws
+ 'gnc:build-dotgnucash-path
+ '(<gw:mchars> caller-owned)
+ "gnc_build_dotgnucash_path"
+ '(((<gw:mchars> caller-owned) filename))
+ "Convert a relative path name into a full path name in the .gnucash directory")
+
+(gw:wrap-function
+ ws
+ 'gnc:build-book-path
+ '(<gw:mchars> caller-owned)
+ "gnc_build_book_path"
+ '(((<gw:mchars> caller-owned) filename))
+ "Convert a relative path name into a full path name in the .gnucash/books directory")
 
 ;;
 ;; gnc-lot.h

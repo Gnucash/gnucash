@@ -17,13 +17,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <libguile.h>
 
@@ -91,7 +92,7 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
 
     /* set some row data */ 
     if(base_name && (strlen(base_name) > 0)) {
-      acctname =  g_strjoin(sep, base_name, acctinfo[0], NULL);
+      acctname =  g_strjoin(sep, base_name, acctinfo[0], (char *)NULL);
     }
     else {
       acctname = g_strdup(acctinfo[0]);
@@ -164,7 +165,8 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 				GTK_BUTTONS_OK_CANCEL,
 				_("Enter a name for the account"));
 
-  entry = gtk_entry_new_with_max_length (250);
+  entry = gtk_entry_new();
+  gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
   gtk_widget_show(entry);
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dlg)->vbox), entry);
 
@@ -173,7 +175,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     name = gtk_entry_get_text(GTK_ENTRY(entry));
     if(wind->selected_name && (strlen(wind->selected_name) > 0)) {
       sep[0] = gnc_get_account_separator();
-      fullname = g_strjoin(sep, wind->selected_name, name, NULL);
+      fullname = g_strjoin(sep, wind->selected_name, name, (char *)NULL);
     }
     else {
       fullname = g_strdup(name);
@@ -256,7 +258,7 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_account_picker_new_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
+     G_CALLBACK (gnc_ui_qif_account_picker_new_cb), wind);
 
   wind->dialog     = glade_xml_get_widget (xml, "QIF Import Account Picker");
   wind->treeview   = glade_xml_get_widget (xml, "account_tree");
@@ -269,17 +271,17 @@ qif_account_picker_dialog(QIFImportWindow * qif_wind, SCM map_entry)
 
   scm_gc_protect_object(wind->map_entry);
 
-  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_select_row",
-                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_select_cb),
-                     wind);
+  g_signal_connect(wind->treeview, "tree_select_row",
+		   G_CALLBACK(gnc_ui_qif_account_picker_select_cb),
+		   wind);
 
-  gtk_signal_connect(GTK_OBJECT(wind->treeview), "tree_unselect_row",
-                     GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_unselect_cb),
-                     wind);
+  g_signal_connect(wind->treeview, "tree_unselect_row",
+		   G_CALLBACK(gnc_ui_qif_account_picker_unselect_cb),
+		   wind);
 
-  gtk_signal_connect_after(GTK_OBJECT(wind->dialog), "map",
-                           GTK_SIGNAL_FUNC(gnc_ui_qif_account_picker_map_cb),
-                           wind);
+  g_signal_connect_after(wind->dialog, "map",
+			 G_CALLBACK(gnc_ui_qif_account_picker_map_cb),
+			 wind);
   
   button = glade_xml_get_widget (xml, "newbutton");
   gtk_button_set_use_stock(GTK_BUTTON(button), TRUE);

@@ -21,8 +21,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  * */
 /*
   @NOTATION@
@@ -128,5 +128,5 @@ void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
                                          GNCDateEditFlags flags);
 int       gnc_date_edit_get_flags       (GNCDateEdit *gde);
 
-void      gnc_date_editable_enters (GNCDateEdit *gde, gboolean state);
+void      gnc_date_activates_default    (GNCDateEdit *gde, gboolean state);
 #endif

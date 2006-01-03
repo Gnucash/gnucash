@@ -13,8 +13,8 @@ AM_CFLAGS = \
 LDADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/test-core/libgncmod-test.la \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ../libgncmod-engine.la \
-  ../libcashobjects.la \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \

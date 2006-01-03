@@ -9,7 +9,7 @@
 #include "gnc-module.h"
 #include "gnc-xml-helper.h"
 #include "gnc-xml.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"

@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #define _GNU_SOURCE
@@ -26,11 +26,11 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "Account.h"
 #include "Transaction.h"
@@ -40,13 +40,12 @@
 #include "druid-qif-import.h"
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
@@ -1131,7 +1130,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   /* get any changes to the imported stocks */
   for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
     gtkpage   = GNOME_DRUID_PAGE(pageptr->data); 
-    page      = gtk_object_get_data(GTK_OBJECT(gtkpage), "page_struct");
+    page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
     namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
@@ -1366,8 +1365,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
                                 gpointer user_data)
 {
   QIFImportWindow * wind = user_data;
-  QIFDruidPage    * qpage = 
-    gtk_object_get_data(GTK_OBJECT(page), "page_struct");
+  QIFDruidPage    * qpage = g_object_get_data(G_OBJECT(page), "page_struct");
   
   const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
@@ -1486,9 +1484,9 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
     
     new_page = make_qif_druid_page(commodity);
 
-    gtk_signal_connect(GTK_OBJECT(new_page->page), "next",
-                       GTK_SIGNAL_FUNC(gnc_ui_qif_import_comm_check_cb),
-                       wind);
+    g_signal_connect(new_page->page, "next",
+		     G_CALLBACK(gnc_ui_qif_import_comm_check_cb),
+		     wind);
 
     wind->commodity_pages = g_list_append(wind->commodity_pages, 
                                           new_page->page);
@@ -1522,15 +1520,14 @@ make_qif_druid_page(gnc_commodity * comm)
   /* make the page widget */
   retval->page = gnome_druid_page_standard_new_with_vals("", NULL, NULL);
   retval->commodity = comm;
-  gtk_object_set_data(GTK_OBJECT(retval->page),
-                      "page_struct", (gpointer)retval);
+  g_object_set_data(G_OBJECT(retval->page), "page_struct", retval);
 
   page = GNOME_DRUID_PAGE_STANDARD(retval->page);
 
   /* save the old commodity name */
   str = gnc_commodity_get_mnemonic(comm);
   str = str ? str : "";
-  title = g_strdup_printf(_("Enter information about \"%s\""), str);
+  title = g_markup_printf_escaped(_("Enter information about \"%s\""), str);
 
   gnome_druid_page_standard_set_background(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_background(page, & std_logo_bg_color);
@@ -1817,103 +1814,103 @@ gnc_ui_qif_import_druid_make(void)
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_cancel_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_cancel_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_cancel_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_generic_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_generic_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_generic_back_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_generic_back_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_generic_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_select_file_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_select_file_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_select_file_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_load_file_back_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_load_file_back_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_load_file_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_load_file_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_load_file_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_load_file_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_date_format_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_date_format_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_date_format_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_select_loaded_file_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_select_loaded_file_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_select_loaded_file_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_loaded_files_prepare_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_loaded_files_prepare_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_loaded_files_prepare_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_load_another_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_load_another_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_load_another_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_unload_file_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_unload_file_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_unload_file_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_default_acct_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_default_acct_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_default_acct_back_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_default_acct_back_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_default_acct_back_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_account_line_select_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_account_line_select_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_account_line_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_category_line_select_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_category_line_select_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_category_line_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_line_select_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_line_select_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_memo_line_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_accounts_prepare_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_accounts_prepare_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_accounts_prepare_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_categories_prepare_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_categories_prepare_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_categories_prepare_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_prepare_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_prepare_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_memo_prepare_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_memo_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_memo_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_memo_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_currency_next_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_currency_next_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_currency_next_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_commodity_prepare_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_commodity_prepare_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_commodity_prepare_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_duplicate_new_select_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_duplicate_new_select_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_duplicate_new_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_duplicate_old_select_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_duplicate_old_select_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_duplicate_old_select_cb), retval);
 
   glade_xml_signal_connect_data
     (xml, "gnc_ui_qif_import_finish_cb",
-     GTK_SIGNAL_FUNC (gnc_ui_qif_import_finish_cb), retval);
+     G_CALLBACK (gnc_ui_qif_import_finish_cb), retval);
 
   retval->window = glade_xml_get_widget (xml, "QIF Import Druid");
 
@@ -2017,7 +2014,6 @@ gnc_ui_qif_import_druid_make(void)
 
   gnc_register_gui_component(DRUID_QIF_IMPORT_CM_CLASS, NULL, NULL, retval);
 
-  gnome_window_icon_set_from_default(GTK_WINDOW(retval->window));
   gtk_widget_show_all(retval->window);
   gtk_window_present (GTK_WINDOW(retval->window));
 

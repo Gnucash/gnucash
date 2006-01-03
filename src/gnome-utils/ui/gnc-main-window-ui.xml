@@ -45,6 +45,7 @@
       <placeholder name="EditFindPlaceholder"/>
       <separator name="EditSep4"/>
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
+      <menuitem name="EditAcceleratorKeys" action="EditAcceleratorKeysAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
       <separator name="EditSep5"/>
       <placeholder name="EditStyleSheetsPlaceholder"/>
@@ -82,12 +83,22 @@
       <menu name="ScrubMenu" action="ScrubMenuAction"/>
       <separator name="ActionSepE"/>
       <menuitem name="ActionsForgetWarnings" action="ActionsForgetWarningsAction"/>
+      <menuitem name="ActionsRenamePage" action="ActionsRenamePageAction"/>
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>
 
     <menu name="Reports" action="ReportsAction">
-      <placeholder name="ReportsPlaceholder"/>
+      <placeholder name="StandardReports"/>
+      <separator   name="ReportSep1"/>
+      <placeholder name="CustomReports"/>
+      <separator   name="ReportSep2"/>
+      <placeholder name="CustomReports"/>
+      <separator   name="ReportSep3"/>
+      <placeholder name="AccountReports"/>
+      <separator   name="ReportSep4"/>
+      <placeholder name="OtherReports"/>
+      <separator   name="ReportSep5"/>
     </menu>
 
     <menu name="Tools" action="ToolsAction">
@@ -122,14 +133,12 @@
       <menuitem name="HelpAbout" action="HelpAboutAction"/>
     </menu>
 
-    <menu name="Misc" action="MiscAction">
-      <menuitem name="MiscTest" action="MiscTestAction"/>
-    </menu>
   </menubar>
 
   <popup name="MainPopup" action="FakeToplevel">
     <separator name="PopupSep1"/>
     <placeholder name="PopupPlaceholder1"/>
+    <menuitem name="ActionsRenamePage" action="ActionsRenamePageAction"/>
     <separator name="PopupSep2"/>
     <placeholder name="PopupPlaceholder2"/>
     <separator name="PopupSep3"/>

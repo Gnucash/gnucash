@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup MenuPlugins
@@ -34,25 +34,34 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "gnc-plugin.h"
-#include "gnc-trace.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
-#include "messages.h"
 
-static gpointer parent_class = NULL;
+/** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
+/** A pointer to the parent class of a plugin. */
+static gpointer parent_class = NULL;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
 static void gnc_plugin_init       (GncPlugin *plugin_page,
 				   GncPluginClass *klass);
 static void gnc_plugin_finalize   (GObject *object);
 
-struct  GncPluginPrivate {
+
+/** The instance private data for a menu-only plugin.  This data
+ *  structure is unused. */
+typedef struct GncPluginPrivate {
 	gpointer dummy;
-};
+} GncPluginPrivate;
+
+#define GNC_PLUGIN_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN, GncPluginPrivate))
 
 
 /** Get the type of a gnc window plugin.
@@ -90,8 +99,6 @@ gnc_plugin_get_type (void)
  *  class.
  *
  *  @param klass The new class structure created by the object system.
- *
- *  @internal
  */
 static void
 gnc_plugin_class_init (GncPluginClass *klass)
@@ -100,23 +107,22 @@ gnc_plugin_class_init (GncPluginClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 	gobject_class->finalize = gnc_plugin_finalize;
+
+	g_type_class_add_private(klass, sizeof(GncPluginPrivate));
 }
 
 
-/** Initialize a new instance of a gnucash plugin object.  This
- *  function allocates and initializes the object private storage
- *  space.
+/** Initialize a new instance of a gnucash menu-only plugin.  This
+ *  function adds the object to the tracking system.
  *
- *  @param view The new object instance created by the object system.
+ *  @param plugin_page The new object instance created by the object
+ *  system.
  *
- *  @internal
- */
+ *  @param klass A pointer to the class data structure for this
+ *  object. */
 static void
 gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
 {
-	GncPluginPrivate *priv;
-
-	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
 	gnc_gobject_tracking_remember(G_OBJECT(plugin_page),\
 				      G_OBJECT_CLASS(klass));
 }
@@ -128,21 +134,17 @@ gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
  *  function (i.e. the private data structure), then chain up to the
  *  parent's destroy function.
  *
- *  @param object The object being destroyed.
- *
- *  @internal
- */
+ *  @param object The object being destroyed. */
 static void
 gnc_plugin_finalize (GObject *object)
 {
 	GncPlugin *plugin;
+	GncPluginPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN (object));
 
 	plugin = GNC_PLUGIN (object);
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_GET_PRIVATE (plugin);
 
 	gnc_gobject_tracking_forget(object);
 	G_OBJECT_CLASS (parent_class)->finalize (object);
@@ -153,7 +155,8 @@ gnc_plugin_finalize (GObject *object)
  *  will add the page's user interface from the window, set up gconf
  *  notifications if the page uses gconf, and call the plugin to
  *  perform any plugin specific actions.
- */
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_add_to_window (GncPlugin *plugin,
 			  GncMainWindow *window,
@@ -210,7 +213,8 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
  *  function will call the plugin to perform any plugin specific
  *  actions, remove any gconf notifications that were set up for the
  *  page, and remove the page's user interface from the window.
- */
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_remove_from_window (GncPlugin *plugin,
 			       GncMainWindow *window,
@@ -252,19 +256,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 }
 
 
-GncPluginPage *
-gnc_plugin_create_page (GncPlugin *plugin,
-			const gchar *uri)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
-
-	if (!GNC_PLUGIN_GET_CLASS (plugin)->create_page)
-	  return NULL;
-	return GNC_PLUGIN_GET_CLASS (plugin)->create_page (plugin, uri);
-}
-
-
-/** Retrieve the name of a plugin.
+/** Retrieve the textual name of a plugin.
  */
 const gchar *
 gnc_plugin_get_name (GncPlugin *plugin)
@@ -280,10 +272,12 @@ gnc_plugin_get_name (GncPlugin *plugin)
 
 
 /** Add "short" labels to existing actions.  The "short" label is the
- *  string used on toolbar buttons when the action is visible.*/
+ *  string used on toolbar buttons when the action is visible.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_init_short_names (GtkActionGroup *action_group,
-			     action_short_labels *short_labels)
+			     action_toolbar_labels *toolbar_labels)
 {
   GtkAction *action;
   GValue value = { 0, };
@@ -291,11 +285,11 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
 
   g_value_init (&value, G_TYPE_STRING);
 
-  for (i = 0; short_labels[i].action_name; i++) {
+  for (i = 0; toolbar_labels[i].action_name; i++) {
     /* Add a couple of short labels for the toolbar */
     action = gtk_action_group_get_action (action_group,
-					  short_labels[i].action_name);
-    g_value_set_static_string (&value, gettext(short_labels[i].label));
+					  toolbar_labels[i].action_name);
+    g_value_set_static_string (&value, gettext(toolbar_labels[i].label));
     g_object_set_property (G_OBJECT(action), "short_label", &value);
   }
 }
@@ -303,7 +297,9 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
 
 /** Mark certain actions as "important".  This means that their labels
  *  will appear when the toolbar is set to "Icons and important text"
- *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
+ *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_set_important_actions (GtkActionGroup *action_group,
 				  const gchar **name)
@@ -322,9 +318,11 @@ gnc_plugin_set_important_actions (GtkActionGroup *action_group,
 }
 
 
-/** Update the status of existing UI actions.  This function can
+/*  Update a property of existing UI actions.  This function can
  *  modify actions making them visible, invisible, sensitive, or
- *  insensitive. */
+ *  insensitive.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 void
 gnc_plugin_update_actions (GtkActionGroup *action_group,
 			   const gchar **action_names,
@@ -345,7 +343,9 @@ gnc_plugin_update_actions (GtkActionGroup *action_group,
 }
 
 
-/** Load a new set of actions into an existing UI. */
+/** Load a new set of actions into an existing UI.
+ *
+ *  See gnc-plugin.h for documentation on the function arguments. */
 gint
 gnc_plugin_add_actions (GtkUIManager *ui_merge,
 			GtkActionGroup *action_group,

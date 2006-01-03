@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_ACCOUNT_H
@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "QueryNew.h"
 
-#define GNCSEARCH_ACCOUNT(obj)	GTK_CHECK_CAST (obj, gnc_search_account_get_type (), GNCSearchAccount)
-#define GNCSEARCH_ACCOUNT_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_account_get_type (), GNCSearchAccountClass)
-#define IS_GNCSEARCH_ACCOUNT(obj)      GTK_CHECK_TYPE (obj, gnc_search_account_get_type ())
+#define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
+#define GNCSEARCH_ACCOUNT(obj)		GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccount)
+#define GNCSEARCH_ACCOUNT_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_ACCOUNT, GNCSearchAccountClass)
+#define IS_GNCSEARCH_ACCOUNT(obj)	GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_ACCOUNT)
 
 typedef struct _GNCSearchAccount	GNCSearchAccount;
 typedef struct _GNCSearchAccountClass	GNCSearchAccountClass;
 
 struct _GNCSearchAccount {
   GNCSearchCoreType parent;
-  struct _GNCSearchAccountPrivate *priv;
 
   guid_match_t	how;
 };

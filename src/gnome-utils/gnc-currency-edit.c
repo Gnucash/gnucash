@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  */
 
@@ -55,15 +55,17 @@
  *  user from typing in random data.
  */
 
-#include <config.h>
+#include "config.h"
+
+#include <gtk/gtk.h>
 #include <string.h>
+#include <strings.h>  /* for index() on Solaris */
 #include <ctype.h>
 #include <stdio.h>
 
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
 static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);

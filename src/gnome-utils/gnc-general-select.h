@@ -20,8 +20,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  */
 /*
@@ -30,9 +30,6 @@
 
 #ifndef GNC_GENERAL_SELECT_H
 #define GNC_GENERAL_SELECT_H
-
-#include <gnome.h>
-#include <glib.h>
 
 #define GNC_TYPE_GENERAL_SELECT          (gnc_general_select_get_type ())
 #define GNC_GENERAL_SELECT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_general_select_get_type(), GNCGeneralSelect)

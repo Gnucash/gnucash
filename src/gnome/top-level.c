@@ -17,14 +17,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 #include <popt.h>
 #include <stdlib.h>
@@ -39,13 +40,13 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-transfer.h"
 #include "dialog-totd.h"
-#include "dialog-utils.h"
 #include "druid-hierarchy.h"
 #include "file-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-file.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
@@ -70,10 +71,11 @@
 #include "gnucash-sheet.h"
 #include "gnucash-style.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "top-level.h"
 #include "window-report.h"
 
+
+#define ACCEL_MAP_NAME "accelerator-map"
 
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format(void);
@@ -264,6 +266,7 @@ gnc_gui_init (SCM command_line)
 {
   SCM ret = command_line;
   GncMainWindow *main_window;
+  gchar *map;
 
   ENTER (" ");
 
@@ -303,6 +306,10 @@ gnc_gui_init (SCM command_line)
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));
 
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_load(map);
+    g_free(map);
+
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
@@ -338,9 +345,15 @@ gnc_gui_init (SCM command_line)
 void
 gnc_gui_shutdown (void)
 {
+  gchar *map;
+
   if (gnome_is_running && !gnome_is_terminating)
   {
     gnome_is_terminating = TRUE;
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_save(map);
+    g_free(map);
 
     gtk_main_quit();
 

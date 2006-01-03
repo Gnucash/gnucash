@@ -17,14 +17,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"
@@ -38,7 +39,6 @@
 #include "gnc-engine.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define SAMPLE_ACCOUNT_VALUE "$1,000,000.00"
@@ -58,14 +58,17 @@ static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
 
-struct GncTreeViewAccountPrivate
+typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;
 
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
     GtkDestroyNotify                  filter_destroy;
-};
+} GncTreeViewAccountPrivate;
+
+#define GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountPrivate))
 
 
 /************************************************************/
@@ -110,6 +113,8 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 	o_class = G_OBJECT_CLASS (klass);
 	o_class->finalize = gnc_tree_view_account_finalize;
         o_class->dispose = gnc_tree_view_account_dispose;
+
+	g_type_class_add_private(klass, sizeof(GncTreeViewAccountPrivate));
 }
 
 /********************************************************************\
@@ -131,9 +136,10 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 static void
 gnc_tree_view_account_init (GncTreeViewAccount *view)
 {
-  view->priv = g_new0 (GncTreeViewAccountPrivate, 1);
+  GncTreeViewAccountPrivate *priv;
 
-  gnc_init_account_view_info(&view->priv->avi);
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gnc_init_account_view_info(&priv->avi);
 }
 
 static void
@@ -148,14 +154,12 @@ gnc_tree_view_account_finalize (GObject *object)
 
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
 
-  priv = account_view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
   if (priv->filter_destroy) {
       priv->filter_destroy(priv->filter_data);
       priv->filter_destroy = NULL;
   }
   priv->filter_fn = NULL;
-
-  g_free (account_view->priv);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
@@ -541,7 +545,6 @@ gnc_tree_view_account_new (gboolean show_root)
     g_free(path_string);				\
   }
 
-#if 0
 static GtkTreePath *
 gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
 					     Account *account)
@@ -575,12 +578,11 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   }
 
   /* convert back to a sorted path */
-  s_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
+  s_path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
   gtk_tree_path_free(f_path);
   debug_path(LEAVE, s_path);
   return s_path;
 }
-#endif
 
 static gboolean
 gnc_tree_view_account_get_iter_from_account (GncTreeViewAccount *view,
@@ -660,7 +662,7 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
   g_return_if_fail(avi != NULL);
 
-  priv = account_view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
 
   *avi = priv->avi;
 }
@@ -683,6 +685,7 @@ void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 				     AccountViewInfo *avi)
 {
+  GncTreeViewAccountPrivate *priv;
   gint i;
   guint sel_bits = 0;
 
@@ -690,7 +693,8 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
   g_return_if_fail(avi != NULL);
 
-  account_view->priv->avi = *avi;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(account_view);
+  priv->avi = *avi;
   
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++) {
       sel_bits |= avi->include_type[i] ? (1 << i): 0;
@@ -714,6 +718,7 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
 {
   Account *account;
   GncTreeViewAccount *view = data;
+  GncTreeViewAccountPrivate *priv;
 
   g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -721,8 +726,9 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
   account = gnc_tree_model_account_get_account (
       GNC_TREE_MODEL_ACCOUNT(model), iter);
   
-  if (view->priv->filter_fn)
-      return view->priv->filter_fn(account, view->priv->filter_data);
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  if (priv->filter_fn)
+      return priv->filter_fn(account, priv->filter_data);
   else return TRUE;
 }
 
@@ -746,7 +752,7 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
 
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
 
-  priv = view->priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
   if (priv->filter_destroy) {
       priv->filter_destroy(priv->filter_data);
   }
@@ -892,11 +898,16 @@ gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
     GtkTreeModel *f_model, *s_model;
     GtkTreeIter iter, f_iter, s_iter;
     Account *account;
+    GtkSelectionMode mode;
 
     ENTER("view %p", view);
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
+    mode = gtk_tree_selection_get_mode(selection);
+    if ((mode != GTK_SELECTION_SINGLE) && (mode != GTK_SELECTION_BROWSE)) {
+      return NULL;
+    }
     if (!gtk_tree_selection_get_selected (selection, &s_model, &s_iter)) {
       LEAVE("no account, get_selected failed");
       return FALSE;
@@ -1153,6 +1164,25 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   LEAVE(" ");
   return;
 }
+
+void
+gnc_tree_view_account_expand_to_account (GncTreeViewAccount *view,
+					 Account *account)
+{
+  GtkTreePath *path;
+
+  g_return_if_fail(view != NULL);
+  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
+  ENTER("view %p, account %p", view, account);
+
+  path = gnc_tree_view_account_get_path_from_account(view, account);
+  if (path) {
+    gtk_tree_view_expand_to_path(GTK_TREE_VIEW(view), path);
+    gtk_tree_path_free(path);
+  }
+  LEAVE(" ");
+}
+
 
 /*
  * Retrieve the account currently under the cursor.

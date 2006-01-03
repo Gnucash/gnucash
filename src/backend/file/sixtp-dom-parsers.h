@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  ********************************************************************/
 
@@ -32,10 +32,7 @@
 
 #include "FreqSpec.h"
 #include "gnc-commodity.h"
-#include "gnc-date.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
+#include "qof.h"
 #include "gnc-budget.h"
 
 GUID* dom_tree_to_guid(xmlNodePtr node);

@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #ifndef QUERY_USER_H
@@ -38,13 +38,5 @@ gnc_error_dialog_va(const char *format, va_list args);
 extern void
 gnc_error_dialog(GtkWidget *parent,
 		 const char *format, ...) G_GNUC_PRINTF (2, 3);
-
-extern int
-gnc_generic_question_dialog(GtkWidget *parent, const char **buttons,
-			    const char *format, ...) G_GNUC_PRINTF (3, 4);
-
-extern int
-gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
-			   const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 #endif

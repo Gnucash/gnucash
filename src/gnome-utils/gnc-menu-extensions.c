@@ -16,14 +16,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
-#include <gnome.h>
 
 #include "guile-util.h"
 #include "gnc-engine.h"
@@ -49,7 +50,7 @@ static Getters getters = {0, 0, 0, 0, 0};
 GSList *
 gnc_extensions_get_menu_list (void)
 {
-  return extension_list;
+  return g_slist_copy(extension_list);
 }
 
 static void
@@ -148,7 +149,10 @@ gnc_extension_path (SCM extension, char **fullpath)
 
     if (SCM_STRINGP(item))
     {
-      strings[i] = g_strdup(SCM_STRING_CHARS(item));
+      if (i == 1)
+	strings[i] = g_strdup(SCM_STRING_CHARS(item));
+      else
+	strings[i] = g_strdup(gettext(SCM_STRING_CHARS(item)));
     }
     else
     {
@@ -217,7 +221,8 @@ static gboolean
 gnc_create_extension_info (SCM extension)
 {
   ExtensionInfo *ext_info;
-  gchar *typeStr;
+  gchar *typeStr, *tmp;
+  const gchar *name;
 
   ext_info = g_new0(ExtensionInfo, 1);
   ext_info->extension = extension;
@@ -229,12 +234,17 @@ gnc_create_extension_info (SCM extension)
   }
 
   /* Get all the pieces */
-  ext_info->ae.label = gnc_extension_name(extension);
-  ext_info->ae.name = gnc_ext_gen_action_name(ext_info->ae.label);
+  name = gnc_extension_name(extension);
+  ext_info->ae.label = g_strdup(gettext(name));
+  ext_info->ae.name = gnc_ext_gen_action_name(name);
   ext_info->ae.tooltip = gnc_extension_documentation(extension);
   ext_info->ae.stock_id = "";
   ext_info->ae.accelerator = NULL;
   ext_info->ae.callback = NULL;
+
+  tmp = g_strdup_printf("%s/%s", ext_info->path, ext_info->ae.label);
+  ext_info->sort_key = g_utf8_collate_key(tmp, -1);
+  g_free(tmp);
 
   switch (ext_info->type) {
     case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;
@@ -279,45 +289,6 @@ gnc_add_scm_extension (SCM extension)
     PERR("bad extension");
     return;
   }
-}
-
-/******************** Install Menus ********************/
-
-typedef struct {
-  GtkUIManager *uiMerge;
-  GtkActionGroup *group;
-  guint merge_id;
-} setup_data;
-
-static void
-gnc_extensions_menu_setup_one (ExtensionInfo *ext_info,
-			       setup_data *data)
-{
-  DEBUG("Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
-        ext_info->ae.name, ext_info->typeStr);
-
-  gtk_action_group_add_actions(data->group, &ext_info->ae, 1,
-			       ext_info->extension);
-  gtk_ui_manager_add_ui(data->uiMerge, data->merge_id, ext_info->path,
-			ext_info->ae.label, ext_info->ae.name,
-			ext_info->type, FALSE);
-  gtk_ui_manager_ensure_update(data->uiMerge);
-}
-
-void
-gnc_extensions_menu_setup (GtkUIManager *uiMerge )
-{
-  setup_data data;
-
-  ENTER(" ");
-
-  data.uiMerge = uiMerge;
-  data.group = gtk_action_group_new("MainWindowActionsN");
-  gtk_ui_manager_insert_action_group(uiMerge, data.group, 0);
-  data.merge_id = gtk_ui_manager_new_merge_id(uiMerge);
-
-  g_slist_foreach(extension_list, (GFunc)gnc_extensions_menu_setup_one, &data);
-  LEAVE(" ");
 }
 
 /******************** Shutdown ********************/

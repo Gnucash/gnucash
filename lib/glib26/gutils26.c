@@ -751,10 +751,10 @@ _g_compute_locale_variants (const gchar *locale)
 {
   GSList *retval = NULL;
 
-  gchar *language;
-  gchar *territory;
-  gchar *codeset;
-  gchar *modifier;
+  gchar *language = NULL;
+  gchar *territory = NULL;
+  gchar *codeset = NULL;
+  gchar *modifier = NULL;
 
   guint mask;
   guint i;

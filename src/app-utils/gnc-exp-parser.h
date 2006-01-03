@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-#include "gnc-numeric.h"
+#include "qof.h"
 
 /**
  * The errors which can be determined at the gnc-exp-parser level.

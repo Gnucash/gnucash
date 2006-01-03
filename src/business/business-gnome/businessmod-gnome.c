@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  *********************************************************************/
 
@@ -27,9 +27,10 @@
 #include <config.h>
 #endif
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <libguile.h>
-#include <glib.h>
 
 #include "gnc-hooks.h"
 #include "gnc-module.h"
@@ -118,7 +119,7 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 			 (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
 
     gnc_preferences_add_page("businessprefs.glade", "business_prefs",
-			     "Business");
+			     _("Business"));
   }
 
   return TRUE;

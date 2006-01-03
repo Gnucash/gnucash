@@ -24,7 +24,7 @@ EXTRA_DIST = \
   gnucash/foo.scm
 
 foo-gwrap.c foo-gwrap.h: foo-gwrap.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (primitive-load \"${srcdir}/foo-gwrap.scm\") \
            (gw:generate-wrapset \"foo-gwrap\")"

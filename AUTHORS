@@ -1,4 +1,3 @@
--*-text-*-
 
 Main Developers:
 ----------------
@@ -67,19 +66,26 @@ Derek Atkins <derek@ihtfp.com> wrote the business-accounting package
    modularized the Book object storage, and modularized the backend
    to allow pluggable objects.
 
-David Hampton <hampton@employees.org> is an all-around
-   making-things-better guy. He is working on cleaning up the GUI and
-   on fleshing out support for stocks. David has picked up Dave's
-   previous tendency to hacks obsessively on GnuCash. (Something in
-   the name?)
+David Hampton <hampton@employees.org> is an all-around hacker. He
+   implemented a large porting of the gtk2 conversion.  He generally
+   works on cleaning up the GUI and on fleshing out support for
+   stocks. David has picked up Dave Peticolas's previous tendency to
+   hack obsessively on GnuCash. (Something in the name?)
 
 Chris Lyttle <chris@wilddev.net> Administers the GnuCash bug list.
    Is currently writing new help and integrating and finishing a
    concepts and tutorial written by Carol Champagne. Looks after
    releasing new GnuCash versions and updating the website.
 
-Benoit Grégoire <bock@step.polymtl.ca> coded a long awaited OFX module
+Benoit GrÃ©goire <bock@step.polymtl.ca> coded a long awaited OFX module
    for GnuCash and wrote the external libOFX library that it uses.
+
+Neil Williams <linux@codehelp.co.uk> finished conversion from GncBook
+   to QofBook and the separation of QoF into a standalone library.
+   Lots of Doxygen fixes and updates.
+
+Chris Shoemaker <c.shoemaker@cox.net> implemented budgeting support
+   for GnuCash. He is also an all around hacker.
 
 Other Contributors:
 ----------------
@@ -90,18 +96,20 @@ Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
-Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
+Dennis BjÃ¶rklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
 Terry Boldt <tboldt@attglobal.net> financial calculator and expression parser
 Richard Braakman <dark@xs4all.nl> xml version configure patch
 Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
+Johan Buret <johanburet@free.fr> french translation
+Thomas Bushnell <tb@becket.net> fix for file backups
 Paul Campbell <kemitix@users.sourceforge.net> reconcile children patch
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix
 Bill Carlson <wwc@wwcnet.nu> performance improvements
 David Mar?n Carre?o <davefx@aspl.f2s.com> Spanish translation of account setup.
-Tomas Cernaj <tcernaj@gmx.de> GType consistency changes
+Tomas Cernaj <tcernaj@gmx.de> GType consistency changes, register fixes
 Carol Champagne <carol@io.com> documentation & a patient GUI usability critic
 Nikos Charonitakis <charosn@her.forthnet.gr> Greek translation
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
@@ -116,6 +124,8 @@ Glen Ditchfield <gjditchfield@acm.org> updated documentation
 Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
+Volker Englisch <Volker@englisch.us> QA and testing
+Stephen Evanchik <evanchsa@clarkson.edu> Logging improvements; gtk2 conversions
 Paul Fenwick <pjf@schools.net.au> ASX support, Finance::Quote
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
 Valek Filippov <frob@df.ru> messages Russian translation
@@ -132,37 +142,46 @@ Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
-Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
+Jon KÃ¥re Hellan <hellan@acm.org> misc core dump fixes
 Hendrik-Jan Heins <hjh@passys.nl> Dutch translation
 Claus Hindsgaul <claus_h@image.dk> messages Danish translation
-Péter Hosszú <hosszu@web.de> Hungarian translation
+PÃ©ter HosszÃº <hosszu@web.de> Hungarian translation
+Edward J. Huff <ejhuff@huff20may77.us> Date handling in reports, quarterly option
 Tomokazu Iwashita <iwashita@center.nitech.ac.jp> Japanese translation of xea
+David Jafferian <david.jafferian@east.sun.com> Delete account query code.
 Miquel Jordana Vilamitjana <jjvmjv@mundomail.net> Spanish translation of manual
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for Cyrillic
 Ben Kelly <ben.kelly@ieee.org> for Motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
+Andreas KÃ¶hler <KoehlerAndreas@web.de> German translation
 Matt Kraai <kraai@alumni.carnegiemellon.edu> date accelerator bug fix
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Eneko Lacunza <enlar@enlar.net> Spanish Translation
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
+Geert Jan Janssens <janssens.geert@advalvas.be> GUI fixes for Lots
 Rich Johnson <rich@dogstar-interactive.com> Mac OS X patch
 Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Georg Lehner <Jorge.Lehner@gmx.net> Nicaraguan Spanish translation
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Yannick Le Ny <y-le-ny@ifrance.com> French translations
+Frederic Leroy <> 64bit fixes, GUI improvements
 Frederic Lespez <frederic.lespez@wanadoo.fr> French account templates fixes.
 Chao-Hsiung Liao <pesder.liao@msa.hinet.net> Traditional Chinese translation
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
+Vitaly Lipatov <lav@altlinux.ru> complete Russian translation, build tweaks, code cleanup
 Volodymyr M. Lisivka <lvm@mystery.lviv.net> Ukrainian translation
+Phil Longstaff <plongstaff@newearth.org> fixes for pricedb
 Duarte Loreto <happyguy_pt@hotmail.com> message and documentation Portuguese translations
 Lionel Elie Mamane <lionel@mamane.lu> Patches for gcc2.95 macro compatibility
 Kjartan Maraas <kmaraas@gnome.org> Norwegian translations
-Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
+Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work, x86_64 support
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
-Juan Manuel García Molina <juanmagm@mail.com> messages Spanish translation
+Yves-Eric Martin <yem_lists.gnucash.org@filter.yve.net> work on financial year end work
+Juan Manuel GarcÃ­a Molina <juanmagm@mail.com> messages Spanish translation
+David Montenegro <sunrise2000@comcast.net> all sorts of Scheme reports
 Orestes Mas <orestes@tsc.upc.es> Catalan translation
 Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
@@ -174,25 +193,26 @@ Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Christian Neumair <chris@gnome-de.org> Various gnome2 fixes/HIG work.
 Johnny Ernst Nielsen <j.e.nielsen@iname.com> messages Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
-Martin Norbäck <d95mback@dtek.chalmers.se> Swedish translation
+Martin NorbÃ¤ck <d95mback@dtek.chalmers.se> Swedish translation
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Bill Nottingham <notting@redhat.com> guile configure patch
 Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
-Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> utf-8 changes.
+Scott Oonk <s.oonk@comcast.net>, <scott.oonk@gmail.com> register changes for utf-8 and pango.
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
 Myroslav Opyr <mopyr@IPM.Lviv.UA> for misc patches
 Laurent P{'e}lecq <laurent.pelecq@wanadoo.fr> i18n patches with gettext
 Sulyok Peter <sp@elte.hu> Hungarian account templates
 Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
-Zdenko Podobný <zdpo@mailbox.sk> Slovak translations
+Zdenko PodobnÃ½ <zdpo@mailbox.sk> Slovak translations
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches
 Paul Poulain <famille.p.poulain@free.fr> French translations
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
+Andreas Rottmann <a.rottmann@gmx.at> fixes for g-wrap 1.9
 Betina Schmidt <betina-s@gmx.de> German account template
 Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
 Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
@@ -202,20 +222,23 @@ Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Keld Simonsen <keld@dkuug.dk> messages Danish translation
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Thomas Vander Stichele <thomas@urgent.rug.ac.be> Macro for filtering system directories
+James Strandboge <jstrand1@rochester.rr.com> "Easy" Invoice report
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Ben Stanley <bds02@uow.edu.au> test infrastructure
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
 Michael T. Garrison Stuber <garrisonstuber@bellsouth.net> report patch
 Bartek Szady <bszx@bszxdomain.edu.eu.org> engine and build system patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
+Tor Harald Thorland <linux@strigen.com> Norwegian translation
 James A. Treacy <treacy@debian.org> doc patch
 Arnold Troeger <troeger@samart.co.th> Mandrake packager
 Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
-Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
+Matthew Vanecek <mevanecek@yahoo.com> lots of postgres backend work
 Didier Vidal <didier-devel@9online.fr> various G2 fixes.
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
+Darin Willits <darin@blueyonder.co.uk> initial budgeting prototype
 Andy Wingo <wingo@pobox.com> income per day-of-week report
 Tom Winterhalder <t.winterhalder@freesurf.ch> Swiss German account template
 David Woodhouse <dwmw2@infradead.org> messages  British translations

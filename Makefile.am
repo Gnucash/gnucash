@@ -11,15 +11,16 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles .goffice-links
 
 doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
-  ChangeLog.1 \
+  DOCUMENTERS \
   HACKING \
   INSTALL \
+  LICENSE \
   NEWS \
   README \
   README.patches
@@ -55,10 +56,22 @@ EXTRA_DIST = ChangeLog.1 \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
+  po/glossary/el.po \
   po/glossary/es.po \
   po/glossary/es_NI-policy.txt \
   po/glossary/gnc-glossary.txt \
+  po/glossary/it.po \
+  po/glossary/nl.po \
+  po/glossary/nb.po \
+  po/glossary/pl.po \
+  po/glossary/pt.po \
+  po/glossary/pt_BR.po \
+  po/glossary/rw.po \
+  po/glossary/sk.po \
+  po/glossary/sv.po \
   po/glossary/txt-to-pot.sh \
+  po/glossary/vi.po \
+  po/glossary/zh_TW.po \
   intltool-extract.in \
   intltool-merge.in \
   intltool-update.in
@@ -85,10 +98,19 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
+
+.goffice-links: 
+	rm -f goffice
+if !HAVE_GOFFICE
+	ln -sf . goffice
+endif
+	touch .goffice-links
+
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
-  make-gnucash-potfiles po/.intltool-merge-cache
+  make-gnucash-potfiles po/.intltool-merge-cache \
+  goffice .goffice-links
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -137,14 +159,22 @@ doc:
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
 
-# ack this is stupid
 distcheck-hook:
-	: > "$(distdir)/=build/distcleancheck1.5-is-stupid"
 
 distclean-local:
-	-test -f distcleancheck1.5-is-stupid \
-	&& rm -f distcleancheck1.5-is-stupid \
-	&& find . -type f -exec sh -c 'test -f ${srcdir}/{} && rm -f {}' ';'
 
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
+
+pot:
+	rm -f intl-scm/guile-strings.c
+	make -C intl-scm
+	rm -f po/$(PACKAGE).pot
+	make -C po $(PACKAGE).pot
+
+SVN = svn
+XSLTPROC = xsltproc
+ChangeLog.svn:
+	$(SVN) log -v --xml -r HEAD:11782 http://svn.gnucash.org/repo/gnucash | \
+	  $(XSLTPROC) --stringparam strip-prefix "gnucash" \
+	  --stringparam include-rev "yes" $(srcdir)/macros/svn2cl.xsl - > $@

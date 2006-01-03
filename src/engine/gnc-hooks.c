@@ -17,8 +17,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
@@ -56,7 +56,7 @@ gnc_hook_create (const gchar *name, gint num_args, const gchar *desc)
   g_return_val_if_fail(num_args <= 1, NULL);
   g_return_val_if_fail(desc != NULL, NULL);
 
-  ENTER("name %s", name);
+  ENTER(" name %s", name);
   if (gnc_hooks_list == NULL) {
     gnc_hooks_list = g_hash_table_new(g_str_hash, g_str_equal);
 
@@ -67,7 +67,7 @@ gnc_hook_create (const gchar *name, gint num_args, const gchar *desc)
 
   hook_list = g_hash_table_lookup(gnc_hooks_list, name);
   if (hook_list) {
-    LEAVE("List %s(%p) already exists", name, hook_list);
+    LEAVE(" List %s(%p) already exists", name, hook_list);
     return((gchar*)name);
   }
 
@@ -80,7 +80,7 @@ gnc_hook_create (const gchar *name, gint num_args, const gchar *desc)
   g_hook_list_init(hook_list->scm_danglers, sizeof(GHook));
   g_hash_table_insert(gnc_hooks_list, (gchar *)name, hook_list);
 
-  LEAVE("created list %s(%p)", name, hook_list);
+  LEAVE(" created list %s(%p)", name, hook_list);
   return (gchar *)name;
 }
 
@@ -89,14 +89,14 @@ gnc_hook_lookup (const gchar *name)
 {
   GncHook *hook;
 
-  ENTER("name %s", name);
+  ENTER(" name %s", name);
   if (gnc_hooks_list == NULL) {
     LEAVE("no hook lists");
     gnc_hooks_init();
   }
 
   hook = g_hash_table_lookup(gnc_hooks_list, name);
-  LEAVE("hook list %p", hook);
+  LEAVE(" hook list %p", hook);
   return(hook);
 }
 
@@ -104,15 +104,15 @@ gchar *
 gnc_hook_get_description(const gchar *name)
 {
   GncHook *hook;
-  ENTER("name %s", name);
+  ENTER(" name %s", name);
 
   hook = gnc_hook_lookup(name);
   if (!hook) {
-    LEAVE("No hook found");
+    LEAVE(" No hook found");
     return "";
   }
 
-  LEAVE("desc: %s", hook->desc);
+  LEAVE(" desc: %s", hook->desc);
   return (gchar*) hook->desc;
 }
 
@@ -122,7 +122,7 @@ gnc_hook_add_dangler (const gchar *name, GFunc callback, gpointer cb_arg)
   GncHook *gnc_hook;
   GHook *hook;
 
-  ENTER("list %s, function %p, cbarg %p", name, callback, cb_arg);
+  ENTER(" list %s, function %p, cbarg %p", name, callback, cb_arg);
   gnc_hook = gnc_hook_lookup(name);
   g_return_if_fail(gnc_hook != NULL);
   hook = g_hook_alloc(gnc_hook->c_danglers);
@@ -130,7 +130,7 @@ gnc_hook_add_dangler (const gchar *name, GFunc callback, gpointer cb_arg)
   hook->data = cb_arg;
   hook->destroy = NULL;
   g_hook_append(gnc_hook->c_danglers, hook);
-  LEAVE("");
+  LEAVE(" ");
 }
 
 static gboolean
@@ -145,21 +145,21 @@ gnc_hook_remove_dangler (const gchar *name, GFunc callback)
   GncHook *gnc_hook;
   GHook *hook;
 
-  ENTER("name %s, function %p", name, callback);
+  ENTER(" name %s, function %p", name, callback);
   gnc_hook = gnc_hook_lookup(name);
   if (gnc_hook == NULL) {
-    LEAVE("Unknown hook list %s", name);
+    LEAVE(" Unknown hook list %s", name);
     return;
   }
 
   hook = g_hook_find(gnc_hook->c_danglers, TRUE, hook_remove_runner, callback);
   if (hook == NULL) {
-    LEAVE("Hook %p not found in %s", callback, name);
+    LEAVE(" Hook %p not found in %s", callback, name);
     return;
   }
 
   g_hook_destroy_link(gnc_hook->c_danglers, hook);
-  LEAVE("Removed %p from %s", hook, name);
+  LEAVE(" Removed %p from %s", hook, name);
 }
 
 static void
@@ -175,11 +175,11 @@ call_scm_hook (GHook *hook, gpointer data)
 {
   GncScmDangler *scm = hook->data;
 
-  ENTER("hook %p, data %p, cbarg %p", hook, data, hook->data);
+  ENTER(" hook %p, data %p, cbarg %p", hook, data, hook->data);
 
   scm_call_0 (scm->proc);
 
-  LEAVE("");
+  LEAVE(" ");
 }
 
 static void
@@ -187,14 +187,14 @@ call_scm_hook_1 (GHook *hook, gpointer data)
 {
   GncScmDangler *scm = hook->data;
 
-  ENTER("hook %p, data %p, cbarg %p", hook, data, hook->data);
+  ENTER(" hook %p, data %p, cbarg %p", hook, data, hook->data);
 
   // XXX: FIXME: We really should make sure this is a session!!! */
   scm_call_1 (scm->proc,
 	      gw_wcp_assimilate_ptr (data,
 				     scm_c_eval_string("<gnc:Session*>")));
 
-  LEAVE("");
+  LEAVE(" ");
 }
 
 void
@@ -204,7 +204,7 @@ gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
   GHook *hook;
   GncScmDangler *scm;
 
-  ENTER("list %s, proc ???", name);
+  ENTER(" list %s, proc ???", name);
   gnc_hook = gnc_hook_lookup(name);
   g_return_if_fail(gnc_hook != NULL);
   scm = g_new0(GncScmDangler, 1);
@@ -215,7 +215,7 @@ gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
   hook->data = scm;
   hook->destroy = delete_scm_hook;
   g_hook_append(gnc_hook->scm_danglers, hook);
-  LEAVE("");
+  LEAVE(" ");
 }
 
 static gboolean
@@ -236,32 +236,32 @@ gnc_hook_del_scm_dangler (const gchar *name, SCM proc)
   GHook *hook;
   GncScmDangler scm;
 
-  ENTER("name %s, proc ???", name);
+  ENTER(" name %s, proc ???", name);
 
   scm.proc = proc;
   gnc_hook = gnc_hook_lookup(name);
   if (gnc_hook == NULL) {
-    LEAVE("Unknown hook list %s", name);
+    LEAVE(" Unknown hook list %s", name);
     return;
   }
 
   hook = g_hook_find(gnc_hook->scm_danglers, TRUE, hook_remove_scm_runner, &scm);
   if (hook == NULL) {
-    LEAVE("Hook dangler not found");
+    LEAVE(" Hook dangler not found");
     return;
   }
 
   g_hook_destroy_link(gnc_hook->scm_danglers, hook);
-  LEAVE("Removed dangler from %s", name);
+  LEAVE(" Removed dangler from %s", name);
 }
 
 static void
 call_c_hook (GHook *hook, gpointer data)
 {
-  ENTER("hook %p (func %p), data %p, cbarg %p", hook, hook->func, data,
+  ENTER(" hook %p (func %p), data %p, cbarg %p", hook, hook->func, data,
 	hook->data);
   ((GFunc)hook->func)(data, hook->data);
-  LEAVE("");
+  LEAVE(" ");
 }
 
 void
@@ -269,10 +269,10 @@ gnc_hook_run (const gchar *name, gpointer data)
 {
   GncHook *hook;
 
-  ENTER("list %s, data %p", name, data);
+  ENTER(" list %s, data %p", name, data);
   hook = gnc_hook_lookup(name);
   if (!hook) {
-    LEAVE("No such hook list");
+    LEAVE(" No such hook list");
     return;
   }
   g_hook_list_marshal(hook->c_danglers, TRUE, call_c_hook, data);
@@ -280,16 +280,16 @@ gnc_hook_run (const gchar *name, gpointer data)
     g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook, data);
   else
     g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook_1, data);
-  LEAVE("");
+  LEAVE(" ");
 }
 
 void
 gnc_hooks_init(void)
 {
-  ENTER("");
+  ENTER(" ");
 
   if (gnc_hooks_initialized) {
-    LEAVE("Hooks already initialized");
+    LEAVE(" Hooks already initialized");
     return;
   }
 
@@ -322,5 +322,5 @@ gnc_hooks_init(void)
   gnc_hook_create(HOOK_BOOK_CLOSED, 1,
 		  "Run before file close.  Hook args: <gnc:Session*>");
 
-  LEAVE("");
+  LEAVE(" ");
 }

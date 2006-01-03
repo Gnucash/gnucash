@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
@@ -27,25 +27,22 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
-
-#include <glib.h>
 #include <libguile.h>
-#include <gmodule.h>
 
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-
-#include "dialog-utils.h"
 
 
 #define GCONF_SECTION "dialogs/log_replay"
@@ -514,14 +511,12 @@ void gnc_file_log_replay (void)
 				      NULL,
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
-  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
       gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
-      g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
@@ -562,7 +557,7 @@ void gnc_file_log_replay (void)
 	}
       g_free(selected_filename);
     }
-  
+  g_free(default_dir);
 }
 
 

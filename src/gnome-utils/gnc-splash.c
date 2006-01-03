@@ -16,13 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-gnome-utils.h"
 #include "gnc-splash.h"
@@ -55,8 +56,8 @@ gnc_show_splash_screen (void)
   gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
-  gtk_signal_connect (GTK_OBJECT (splash), "destroy",
-                      GTK_SIGNAL_FUNC (splash_destroy_cb), NULL);
+  g_signal_connect (splash, "destroy",
+		    G_CALLBACK (splash_destroy_cb), NULL);
 
   gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
@@ -73,7 +74,7 @@ gnc_show_splash_screen (void)
   frame = gtk_frame_new (NULL);
   vbox = gtk_vbox_new (FALSE, 3);
 #ifdef GNUCASH_SVN
-  ver_string = g_strdup_printf(_("Version: Gnucash-%s svn (r%d built %s)"),
+  ver_string = g_strdup_printf(_("Version: Gnucash-%s svn (r%s built %s)"),
 			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #else
   ver_string =  g_strdup_printf(_("Version: Gnucash-%s"), VERSION);

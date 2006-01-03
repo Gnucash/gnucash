@@ -16,18 +16,16 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <gnome.h>
+#include <glib/gi18n.h>
+#include <math.h>
+
 #include "gnc-dense-cal.h"
 
 /* For PERR, only... */
@@ -84,7 +82,6 @@ static const gchar* MONTH_THIS_COLOR = "lavender";
 static const gchar* MONTH_THAT_COLOR = "SlateGray1";
 
 static const gchar* MARK_COLOR = "Yellow";
-static const gchar* LABEL_FONT_NAME = "-adobe-helvetica-bold-r-normal--*-100-*-*-p-*-iso8859-1";
 
 static const gchar* MARKS_LOST_SIGNAL_NAME = "marks_lost";
 
@@ -288,8 +285,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 l = gtk_label_new( _("Date: ") );
                 gtk_container_add( GTK_CONTAINER(hbox), l );
                 l = gtk_label_new( "YY/MM/DD" );
-                gtk_object_set_data( GTK_OBJECT(dcal->transPopup),
-                                     "dateLabel", (gpointer)l );
+                g_object_set_data( G_OBJECT(dcal->transPopup), "dateLabel", l );
                 gtk_container_add( GTK_CONTAINER(hbox), l );
                 gtk_container_add( GTK_CONTAINER(vbox), hbox );
 
@@ -298,8 +294,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 cl = GTK_CLIST(gtk_clist_new_with_titles(2, (gchar**)CLIST_TITLES));
                 gtk_clist_set_column_auto_resize( cl, 0, TRUE );
                 gtk_clist_set_column_auto_resize( cl, 1, TRUE );
-                gtk_object_set_data( GTK_OBJECT(dcal->transPopup),
-                                     "clist", (gpointer)cl );
+                g_object_set_data( G_OBJECT(dcal->transPopup), "clist", cl );
                 gtk_container_add( GTK_CONTAINER(vbox), GTK_WIDGET(cl) );
 
                 gtk_container_add( GTK_CONTAINER(dcal->transPopup), vbox );
@@ -324,14 +319,16 @@ gnc_dense_cal_init (GncDenseCal *dcal)
                 gint lbearing, rbearing, width, ascent, descent;
 		GtkStyle *style;
 
-                dcal->monthLabelFont = gdk_font_load( LABEL_FONT_NAME );
-                g_assert( dcal->monthLabelFont );
-
 		/* FIXME GNOME 2 port (rework the complete font code) */
                 style = gtk_widget_get_style(GTK_WIDGET(dcal));
+
                 dcal->dayLabelFont = gtk_style_get_font(style);
                 gdk_font_ref( dcal->dayLabelFont );
                 g_assert( dcal->dayLabelFont );
+
+                dcal->monthLabelFont = gtk_style_get_font(style);
+                g_assert(dcal->monthLabelFont);
+                gdk_font_ref(dcal->monthLabelFont);
 
                 maxWidth = maxHeight = maxAscent = maxLBearing = 0;
                 for ( i=0; i<12; i++ ) {
@@ -689,7 +686,7 @@ recompute_mark_storage( GncDenseCal *dcal )
  createNew:
         dcal->numMarks = num_weeks(dcal) * 7;
         dcal->marks = g_new0( GList*, dcal->numMarks );
-        gtk_signal_emit_by_name( GTK_OBJECT(dcal), MARKS_LOST_SIGNAL_NAME, NULL );
+        g_signal_emit_by_name( dcal, MARKS_LOST_SIGNAL_NAME, NULL );
 }
 
 static void
@@ -1040,15 +1037,15 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
         gchar strftimeBuf[MAX_STRFTIME_BUF_LEN];
 
         if ( doc >= 0 ) {
-                GtkObject *o;
+                GObject *o;
                 GtkCList *cl;
                 GList *l;
                 gchar *rowText[2];
                 gint row = 0;
                 gdc_mark_data *gdcmd;
 
-                w = GTK_WIDGET( gtk_object_get_data( GTK_OBJECT(dcal->transPopup),
-                                                     "dateLabel" ) );
+                w = GTK_WIDGET( g_object_get_data( G_OBJECT(dcal->transPopup),
+						   "dateLabel" ) );
                 date = g_date_new_dmy( 1, dcal->month, dcal->year );
                 g_date_add_days( date, doc );
 		/* Note: the ISO date format (%F or equivalently
@@ -1059,8 +1056,8 @@ populate_hover_window( GncDenseCal *dcal, gint doc )
                 g_date_strftime( strftimeBuf, MAX_STRFTIME_BUF_LEN-1, "%x", date );
                 gtk_label_set_text( GTK_LABEL(w), strftimeBuf );
 
-                o = GTK_OBJECT(dcal->transPopup);
-                cl = GTK_CLIST( gtk_object_get_data(o, "clist" ) );
+                o = G_OBJECT(dcal->transPopup);
+                cl = GTK_CLIST( g_object_get_data(o, "clist" ) );
                 gtk_clist_clear( cl );
                 for ( l = dcal->marks[doc]; l; l = l->next ) {
                         gdcmd = (gdc_mark_data*)l->data;

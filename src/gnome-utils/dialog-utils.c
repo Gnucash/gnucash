@@ -18,8 +18,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -27,14 +27,13 @@
 
 #include "config.h"
 
-#include <glade/glade.h>
 #include <gnome.h>
+#include <glade/glade.h>
 #include <gmodule.h>
 #include <dlfcn.h>
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
-#include "messages.h"
 #include "Group.h"
 #include "gnc-dir.h"
 #include "gnc-engine.h"
@@ -60,9 +59,9 @@ gnc_option_menu_cb(GtkWidget *w, gpointer data)
   gpointer _index;
   gint index;
 
-  cb = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_cb");
+  cb = g_object_get_data(G_OBJECT(w), "gnc_option_cb");
 
-  _index = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_index");
+  _index = g_object_get_data(G_OBJECT(w), "gnc_option_index");
   index = GPOINTER_TO_INT(_index);
 
   cb(w, index, data);
@@ -110,30 +109,30 @@ gnc_build_option_menu(GNCOptionInfo *option_info, gint num_options)
     gtk_tooltips_set_tip(tooltips, menu_item, option_info[i].tip, NULL);
     gtk_widget_show(menu_item);
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_cb",
-                        option_info[i].callback);
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_cb",
+		      option_info[i].callback);
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_index",
-                        GINT_TO_POINTER(i));
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_index",
+		      GINT_TO_POINTER(i));
 
-    gtk_object_set_data(GTK_OBJECT(menu_item),
-                        "gnc_option_menu",
-                        omenu);
+    g_object_set_data(G_OBJECT(menu_item),
+		      "gnc_option_menu",
+		      omenu);
 
     if (option_info[i].callback != NULL)
-      gtk_signal_connect(GTK_OBJECT(menu_item), "activate",
-                         GTK_SIGNAL_FUNC(gnc_option_menu_cb),
-                         option_info[i].user_data);
+      g_signal_connect(menu_item, "activate",
+		       G_CALLBACK(gnc_option_menu_cb),
+		       option_info[i].user_data);
 
-    gtk_menu_append(GTK_MENU(menu), menu_item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
   }
 
   gtk_option_menu_set_menu(GTK_OPTION_MENU(omenu), menu);
 
-  gtk_signal_connect (GTK_OBJECT (omenu), "destroy",
-                      GTK_SIGNAL_FUNC (option_menu_destroy_cb), tooltips);
+  g_signal_connect (omenu, "destroy",
+		    G_CALLBACK (option_menu_destroy_cb), tooltips);
 
   return omenu;
 }
@@ -360,9 +359,9 @@ gnc_option_menu_init(GtkWidget * w)
   {
     gtk_option_menu_set_history(GTK_OPTION_MENU(w), i);
     active = gtk_menu_get_active(GTK_MENU(menu));
-    gtk_object_set_data(GTK_OBJECT(active), 
-                        "option_index",
-                        GINT_TO_POINTER(i));
+    g_object_set_data(G_OBJECT(active), 
+		      "option_index",
+		      GINT_TO_POINTER(i));
   }
 
   gtk_option_menu_set_history(GTK_OPTION_MENU(w), 0);
@@ -411,8 +410,8 @@ gnc_option_menu_get_active(GtkWidget * w)
   menu     = gtk_option_menu_get_menu(GTK_OPTION_MENU(w));
   menuitem = gtk_menu_get_active(GTK_MENU(menu));
 
-  return GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(menuitem),
-                                             "option_index"));
+  return GPOINTER_TO_INT(g_object_get_data(G_OBJECT(menuitem),
+					   "option_index"));
 }
 
 
@@ -764,11 +763,11 @@ static GNCCListCheckInfo *
 gnc_clist_add_check (GtkCList *list)
 {
   GNCCListCheckInfo *check_info;
-  GtkObject *object;
+  GObject *object;
 
-  object = GTK_OBJECT (list);
+  object = G_OBJECT (list);
 
-  check_info = gtk_object_get_data (object, "gnc-check-info");
+  check_info = g_object_get_data (object, "gnc-check-info");
   if (check_info)
   {
     PWARN ("clist already has check");
@@ -777,14 +776,14 @@ gnc_clist_add_check (GtkCList *list)
 
   check_info = g_new0 (GNCCListCheckInfo, 1);
 
-  gtk_object_set_data (object, "gnc-check-info", check_info);
+  g_object_set_data (object, "gnc-check-info", check_info);
 
-  gtk_signal_connect (object, "realize",
-                      GTK_SIGNAL_FUNC (check_realize), check_info);
-  gtk_signal_connect (object, "unrealize",
-                      GTK_SIGNAL_FUNC (check_unrealize), check_info);
-  gtk_signal_connect (object, "destroy",
-                      GTK_SIGNAL_FUNC (check_destroy), check_info);
+  g_signal_connect (object, "realize",
+		    G_CALLBACK (check_realize), check_info);
+  g_signal_connect (object, "unrealize",
+		    G_CALLBACK (check_unrealize), check_info);
+  g_signal_connect (object, "destroy",
+		    G_CALLBACK (check_destroy), check_info);
 
   if (GTK_WIDGET_REALIZED (GTK_WIDGET (list)))
     check_realize (GTK_WIDGET (list), check_info);
@@ -801,7 +800,7 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
 
   g_return_if_fail (GTK_IS_CLIST (list));
 
-  check_info = gtk_object_get_data (GTK_OBJECT (list), "gnc-check-info");
+  check_info = g_object_get_data (G_OBJECT (list), "gnc-check-info");
   if (!check_info)
     check_info = gnc_clist_add_check (list);
 
@@ -827,46 +826,6 @@ gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked)
     gtk_clist_set_pixmap (list, row, col, pixmap, check_info->mask);
   else
     gtk_clist_set_text (list, row, col, "");
-}
-
-void
-gnc_clist_columns_autosize (GtkCList *list)
-{
-  GtkStyle *style;
-  GdkFont *font;
-  gint i;
-
-  if (!list) return;
-  g_return_if_fail (GTK_IS_CLIST (list));
-
-  style = gtk_widget_get_style (GTK_WIDGET(list));
-  if (!style)
-    return;
-
-  font = gdk_font_from_description (style->font_desc);
-  if (!font)
-    return;
-
-  for (i = 0; TRUE; i++)
-  {
-    GtkWidget *widget;
-    char *title;
-    gint width;
-
-    widget = gtk_clist_get_column_widget (list, i);
-    if (!widget)
-      break;
-
-    if (!GTK_IS_LABEL (widget))
-      continue;
-
-    gtk_label_get (GTK_LABEL (widget), &title);
-
-    width = gdk_string_width (font, title);
-    gtk_clist_set_column_min_width (list, i, width + 5);
-  }
-
-  gtk_clist_columns_autosize (list);
 }
 
 /*   Glade Stuff
@@ -895,7 +854,7 @@ gnc_glade_xml_new (const char *filename, const char *root)
     glade_inited = TRUE;
   }
 
-  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, NULL);
+  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, (char *)NULL);
 
   xml = glade_xml_new (fname, root, NULL);
 
@@ -935,7 +894,7 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 				gpointer user_data)
 {
   GCallback func;
-  GtkSignalFunc *p_func = &func;
+  GCallback *p_func = &func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */
@@ -954,13 +913,33 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
   if (other_object) {
     if (signal_after)
       g_signal_connect_object (signal_object, signal_name, func,
-			       other_object, G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+			       other_object, G_CONNECT_AFTER);
     else
-      g_signal_connect_swapped (signal_object, signal_name, func, other_object);
+      g_signal_connect_object (signal_object, signal_name, func, other_object, 0);
   } else {
     if (signal_after)
       g_signal_connect_after(signal_object, signal_name, func, user_data);
     else
       g_signal_connect(signal_object, signal_name, func, user_data);
   }
+}
+
+void
+gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *stock_id, guint response)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_label(label);
+#ifdef HAVE_GLIB26
+  if (stock_id) {
+    GtkWidget *image;
+
+    image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
+    gtk_button_set_image(GTK_BUTTON(button), image);
+  }
+#else
+  gtk_button_set_use_underline(GTK_BUTTON(button), TRUE);
+#endif
+  gtk_widget_show_all(button);
+  gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }

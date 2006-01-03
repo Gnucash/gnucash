@@ -19,8 +19,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup Windows
@@ -36,13 +36,9 @@
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
 
-#include <gtk/gtk.h>
-
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
-
-#define PLUGIN_PAGE_LABEL "plugin-page"
 
 /* type macros */
 #define GNC_TYPE_MAIN_WINDOW            (gnc_main_window_get_type ())
@@ -53,18 +49,18 @@ G_BEGIN_DECLS
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
 
 /* typedefs & structures */
-typedef struct GncMainWindowPrivate GncMainWindowPrivate;
 
+/** The instance data structure for a main window object. */
 typedef struct GncMainWindow {
-	GtkWindow parent;
-
-	GtkUIManager *ui_merge;
-
-	GncMainWindowPrivate *priv;
+	GtkWindow gtk_window;	/**< The parent object for a main window. */
+	GtkUIManager *ui_merge; /**< A pointer to the UI Manager data
+				   structure for the whole window. */
 } GncMainWindow;
 
+/** The class data structure for a main window object. */
 typedef struct {
-	GtkWindowClass parent;
+	GtkWindowClass gtk_window;	/**< The parent class for a
+					   main window. */
 
 	/* callbacks */
 	void (*page_added)   (GncMainWindow *window,
@@ -184,7 +180,7 @@ void gnc_main_window_manual_merge_actions (GncMainWindow *window,
  *  should be unique among all groups added to the window, and will be
  *  needed to remove the actions from this window.
  *
- *  @param entries A pointer to an array of GtkActionEntries.  These
+ *  @param entries A pointer to an array of GtkActionEntry.  These
  *  are the actions that will be added to the user interface.
  *
  *  @param n_entries The number of actions in the array.
@@ -261,7 +257,7 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
  *  any Gnucash window.  If this was a "right-click" then Gnucash will
  *  popup the contextual menu.
  *
- *  @param widget Whatever widget had focus when the user issued the
+ *  @param whatever Whatever widget had focus when the user issued the
  *  keyboard context-menu request.
  *
  *  @param event The event parameter describing where on the screen

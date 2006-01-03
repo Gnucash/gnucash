@@ -17,23 +17,23 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-amount-edit.h"
 #include "gnc-tree-view-account.h"
-#include "gnc-numeric.h"
 
 #include "gncTaxTable.h"
 #include "dialog-tax-table.h"
@@ -175,8 +175,7 @@ static void
 optionmenu_changed (GtkWidget *widget, NewTaxTable *ntt)
 {
   g_return_if_fail (ntt);
-  ntt->type = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (widget),
-						    "option"));
+  ntt->type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(widget), "option"));
 }
 
 static GtkWidget *
@@ -188,7 +187,7 @@ add_menu_item (GtkWidget *menu, NewTaxTable *ntt, char *label, gint type)
   item = gtk_menu_item_new_with_label (label);
   g_object_set_data (G_OBJECT (item), "option", GINT_TO_POINTER (type));
   g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (optionmenu_changed), ntt);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
   return item;
 }
@@ -542,6 +541,7 @@ tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw)
     gncTaxTableBeginEdit (ttw->current_table);
     gncTaxTableDestroy (ttw->current_table);
     ttw->current_table = NULL;
+    ttw->current_entry = NULL;
     gnc_resume_gui_refresh ();
   }
 }

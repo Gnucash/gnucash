@@ -18,18 +18,19 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "Group.h"
 #include "Account.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-component-manager.h"
 
 #include "gncCustomer.h"
@@ -272,7 +273,7 @@ business_option_changed (GtkWidget *widget, gpointer data)
   OpMenuData *omd = data;
 
   g_return_if_fail (omd);
-  omd->result = gtk_object_get_data (GTK_OBJECT (widget), "this_item");
+  omd->result = g_object_get_data (G_OBJECT (widget), "this_item");
 
   if (!omd->building_menu) {
     if (omd->result_p)
@@ -291,7 +292,7 @@ add_menu_item (GtkWidget *menu, const char *label, OpMenuData *omd,
   g_object_set_data (G_OBJECT (item), "this_item", this_item);
   g_signal_connect (G_OBJECT (item), "activate",
 		    G_CALLBACK (business_option_changed), omd);
-  gtk_menu_append (GTK_MENU (menu), item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 }
 
@@ -352,7 +353,7 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
 {
   OpMenuData *omd;
 
-  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  omd = g_object_get_data (G_OBJECT (omenu), "menu-data");
 
   /* If this is the first time we've been called, then build the
    * Option Menu Data object, register with the component manager, and
@@ -367,7 +368,7 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
     omd->none_ok = none_ok;
     omd->get_name = get_name;
     omd->get_list = get_list;
-    gtk_object_set_data (GTK_OBJECT (omenu), "menu-data", omd);
+    g_object_set_data (G_OBJECT (omenu), "menu-data", omd);
 
     if (result)
       omd->result = *result;
@@ -402,7 +403,7 @@ gnc_ui_optionmenu_set_changed_callback (GtkWidget *omenu,
 
   if (!omenu) return;
 
-  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  omd = g_object_get_data (G_OBJECT (omenu), "menu-data");
   g_return_if_fail (omd);
 
   omd->changed_cb = changed_cb;
@@ -416,7 +417,7 @@ gnc_ui_optionmenu_get_value (GtkWidget *omenu)
 
   if (!omenu) return NULL;
 
-  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  omd = g_object_get_data (G_OBJECT (omenu), "menu-data");
   g_return_val_if_fail (omd, NULL);
 
   return omd->result;
@@ -432,7 +433,7 @@ gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data)
 
   if (!omenu) return;
 
-  omd = gtk_object_get_data (GTK_OBJECT (omenu), "menu-data");
+  omd = g_object_get_data (G_OBJECT (omenu), "menu-data");
   g_return_if_fail (omd);
 
   menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (omenu));
@@ -443,8 +444,8 @@ gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data)
        node;
        node = node->next, counter++)
   {
-    GtkObject *menuitem = node->data;
-    gpointer this_object = gtk_object_get_data (menuitem, "this_item");
+    GObject *menuitem = node->data;
+    gpointer this_object = g_object_get_data (menuitem, "this_item");
 
     if (this_object == data) {
       gtk_option_menu_set_history (GTK_OPTION_MENU (omd->omenu), counter);

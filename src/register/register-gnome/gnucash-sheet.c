@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -546,7 +546,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
         gnome_canvas_request_redraw (GNOME_CANVAS (sheet), 0, 0,
                                      sheet->width + 1, sheet->height + 1);
 
-        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_all");
+        g_signal_emit_by_name (sheet->reg, "redraw_all");
 }
 
 void
@@ -555,7 +555,7 @@ gnucash_sheet_redraw_help (GnucashSheet *sheet)
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
-        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_help");
+        g_signal_emit_by_name (sheet->reg, "redraw_help");
 }
 
 void
@@ -664,9 +664,6 @@ compute_optimal_height (GnucashSheet *sheet)
         style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
         if (!style)
                 return DEFAULT_REGISTER_HEIGHT;
-
-	if (sheet->window_height >= 0)
-	  return sheet->window_height;
 
         cd = gnucash_style_get_cell_dimensions (style, 0, 0);
         if (cd == NULL)
@@ -1329,9 +1326,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                           extend_selection);
 
                 if (do_popup)
-                        gnome_popup_menu_do_popup_modal
-                                (sheet->popup, NULL, NULL, event,
-                                 sheet->popup_data, widget);
+                        gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
+				       sheet->popup_data, event->button, event->time);
 
                 return TRUE;
         }
@@ -1359,9 +1355,8 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                   new_virt_loc, event->x, changed_cells, FALSE);
 
         if (do_popup)
-                gnome_popup_menu_do_popup_modal
-                        (sheet->popup, NULL, NULL, event, sheet->popup_data, widget);
-
+		gtk_menu_popup(GTK_MENU(sheet->popup), NULL, NULL, NULL,
+			       sheet->popup_data, event->button, event->time);
         return TRUE;
 }
 
@@ -1570,7 +1565,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	CellBlock *header;
 	gboolean pass_on = FALSE;
         gboolean abort_move;
-        gboolean set_selection = TRUE;
         VirtualLocation cur_virt_loc;
         VirtualLocation new_virt_loc;
 	gncTableTraversalDir direction = 0;
@@ -1594,8 +1588,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
         switch (event->keyval) {
                 case GDK_Return:
                 case GDK_KP_Enter:
-                        gtk_signal_emit_by_name(GTK_OBJECT(sheet->reg),
-                                                "activate_cursor");
+                        g_signal_emit_by_name(sheet->reg, "activate_cursor");
                         return TRUE;
                         break;
 		case GDK_Tab:
@@ -1670,7 +1663,6 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 		case GDK_Alt_L:
 		case GDK_Alt_R:
                         pass_on = TRUE;
-                        set_selection = FALSE;
                         break;
 		default:
                         if (gnucash_sheet_clipboard_event(sheet, event))
@@ -1691,64 +1683,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                         break;
                         }
 
-                        if (event->length > 0)
-                                set_selection = FALSE;
-
 			break;
         }
 
 	/* Forward the keystroke to the input line */
 	if (pass_on)
-        {
-                GtkEditable *editable;
-                gboolean extend_selection;
-                gboolean result;
-                gint current_pos;
-                gint start_sel;
-                gint end_sel;
-                gint new_pos;
-
-                editable = GTK_EDITABLE(sheet->entry);
-
-                current_pos = gtk_editable_get_position (editable);
-
-                extend_selection = event->state & GDK_SHIFT_MASK;
-                if (extend_selection && set_selection)
-                {
-			gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-                }
-                else
-                {
-                        start_sel = 0;
-                        end_sel = 0;
-                }
-
-                sheet->input_cancelled = FALSE;
-
-		result = gtk_widget_event (sheet->entry, (GdkEvent *) event);
-
-                sheet->input_cancelled = FALSE;
-
-                new_pos = gtk_editable_get_position (editable);
-
-                if (extend_selection && set_selection)
-                {
-                        if (start_sel == end_sel)
-                        {
-                                start_sel = current_pos;
-                                end_sel = new_pos;
-                        }
-                        else if (current_pos == start_sel)
-                                start_sel = new_pos;
-                        else
-                                end_sel = new_pos;
-                }
-
-                if (set_selection && (start_sel != end_sel))
-                        gtk_editable_select_region(editable, start_sel, end_sel);
-
-                return result;
-        }
+		return gtk_widget_event (sheet->entry, (GdkEvent *) event);
 
 	abort_move = gnc_table_traverse_update (table, cur_virt_loc,
                                                 direction, &new_virt_loc);
@@ -2489,7 +2429,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     activate_cursor),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_ALL] =
@@ -2499,7 +2439,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     redraw_all),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         register_signals[REDRAW_HELP] =
@@ -2509,7 +2449,7 @@ gnucash_register_class_init (GnucashRegisterClass *class)
 			     G_STRUCT_OFFSET(GnucashRegisterClass,
 					     redraw_help),
 			     NULL, NULL,
-			     gtk_marshal_NONE__NONE,
+			     g_cclosure_marshal_VOID__VOID,
 			     G_TYPE_NONE, 0);
 
         class->activate_cursor = NULL;

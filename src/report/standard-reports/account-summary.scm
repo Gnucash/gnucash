@@ -44,8 +44,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash report account-summary))
@@ -175,10 +175,10 @@
       "c" opthelp-bottom-behavior
       'summarize
       (list (vector 'summarize
-		    (N_ "Recursive balance")
+		    (N_ "Recursive Balance")
 		    (N_ "Show the total balance, including balances in subaccounts, of any account at the depth limit"))
 	    (vector 'flatten
-		    (N_ "Raise accounts")
+		    (N_ "Raise Accounts")
 		    (N_ "Shows accounts deeper than the depth limit at the depth limit"))
 	    (vector 'truncate
 		    (N_ "Omit Accounts")

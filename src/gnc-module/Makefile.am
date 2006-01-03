@@ -14,7 +14,7 @@ libgncmodule_la_SOURCES = gnc-module.c
 libgncmodule_la_LIBADD = \
   ../core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
- ${top_builddir}/lib/libc/libc-missing.la \
+  ${top_builddir}/lib/libc/libc-missing.la \
   ${GLIB_LIBS} \
   -lltdl
 
@@ -65,7 +65,7 @@ endif
 
 gw-gnc-module.scm gw-gnc-module.c gw-gnc-module.h: \
   .scm-links gw-gnc-module-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"./gw-gnc-module-spec.scm\") \
 	  (gw:generate-wrapset \"gw-gnc-module\")"

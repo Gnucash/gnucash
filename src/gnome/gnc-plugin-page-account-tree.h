@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup ContentPlugins
@@ -27,7 +27,7 @@
 /** @addtogroup GncPluginPageAccountTree An Account Tree Plugin
     @{ */
 /** @file gnc-plugin-page-account-tree.h 
-    @brief  utility functions for the GnuCash UI
+    @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003 David Hampton <hampton@employees.org>
 */
@@ -50,19 +50,15 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE))
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_ACCOUNT_TREE, GncPluginPageAccountTreeClass))
 
-#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "gnc-plugin-page-account-tree"
+#define GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME "GncPluginPageAccountTree"
 
 /* typedefs & structures */
-typedef struct GncPluginPageAccountTreePrivate GncPluginPageAccountTreePrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageAccountTreePrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageAccountTree;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 
 	/* callbacks */
 	void (*account_selected) (GncPluginPage	 *page,

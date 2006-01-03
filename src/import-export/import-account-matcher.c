@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
@@ -26,6 +26,9 @@
 #define _GNU_SOURCE
 
 #include "config.h"
+
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "import-account-matcher.h"
 #include "import-utilities.h"
@@ -47,7 +50,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 struct _accountpickerdialog {
   GtkWidget       * dialog;
   GncTreeViewAccount *account_tree;
-  GtkWidget       * account_tree_box;
+  GtkWidget       * account_tree_sw;
   const gchar * account_human_description;
   gchar * account_online_id_value;
   gnc_commodity * new_account_default_commodity;
@@ -74,7 +77,7 @@ build_acct_tree(struct _accountpickerdialog * picker)
   gnc_tree_view_account_add_kvp_column (picker->account_tree,
 					_("Account ID"), "online_id");
 
-  gtk_container_add(GTK_CONTAINER(picker->account_tree_box),
+  gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
 		    GTK_WIDGET(picker->account_tree));
 
   /* Configure the columns */
@@ -163,7 +166,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	}
       
       picker->dialog     = glade_xml_get_widget (xml, "Generic Import Account Picker");
-      picker->account_tree_box   = glade_xml_get_widget (xml, "account_tree_box");
+      picker->account_tree_sw   = glade_xml_get_widget (xml, "account_tree_sw");
       online_id_label = glade_xml_get_widget (xml, "online_id_label");
       button = glade_xml_get_widget (xml, "newbutton");
       gtk_button_set_use_stock (GTK_BUTTON(button), TRUE);

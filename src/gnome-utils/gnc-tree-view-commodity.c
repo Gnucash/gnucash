@@ -17,14 +17,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"
@@ -38,8 +39,6 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
-//#include "messages.h"
-#include <libgnome/libgnome.h>
 
 
 /** Static Globals *******************************************************/
@@ -53,10 +52,13 @@ static void gnc_tree_view_commodity_init (GncTreeViewCommodity *view);
 static void gnc_tree_view_commodity_finalize (GObject *object);
 static void gnc_tree_view_commodity_destroy (GtkObject *object);
 
-struct GncTreeViewCommodityPrivate
+typedef struct GncTreeViewCommodityPrivate
 {
-  gboolean show_currencies;
-};
+  gpointer dummy;
+} GncTreeViewCommodityPrivate;
+
+#define GNC_TREE_VIEW_COMMODITY_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityPrivate))
 
 
 /************************************************************/
@@ -107,26 +109,27 @@ gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_view_commodity_destroy;
+
+	g_type_class_add_private(klass, sizeof(GncTreeViewCommodityPrivate));
 }
 
 static void
 gnc_tree_view_commodity_init (GncTreeViewCommodity *view)
 {
-  view->priv = g_new0 (GncTreeViewCommodityPrivate, 1);
 }
 
 static void
 gnc_tree_view_commodity_finalize (GObject *object)
 {
   GncTreeViewCommodity *view;
+  GncTreeViewCommodityPrivate *priv;
 
   ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
   view = GNC_TREE_VIEW_COMMODITY (object);
-
-  g_free (view->priv);
+  priv = GNC_TREE_VIEW_COMMODITY_GET_PRIVATE (view);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);

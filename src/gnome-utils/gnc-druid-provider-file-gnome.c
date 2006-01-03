@@ -1,13 +1,16 @@
 
 
 #include "config.h"
+
+#include <gnome.h>
+#include <glib/gi18n.h>
+
 #include "gnc-druid-gnome-ui.h"
 #include "gnc-druid-provider-file-gnome.h"
 #include "gnc-druid-provider-desc-file.h"
 
 #include "gnc-basic-gobject.h"
 
-#include "messages.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 

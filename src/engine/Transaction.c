@@ -18,13 +18,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
@@ -42,7 +44,6 @@
 #include "gnc-engine.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
-#include "messages.h"
 
 /*
  * Design notes on event-generation: transaction-modified-events 
@@ -212,7 +213,7 @@ xaccSplitClone (Split *s)
   split->gains_split = NULL;
 
   col = qof_book_get_collection (s->book, GNC_ID_SPLIT);
-  qof_entity_init (&s->entity, GNC_ID_SPLIT, col);
+  qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
 
   xaccAccountInsertSplit(s->acc, split);
   if (s->lot) 
@@ -668,6 +669,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 void 
@@ -684,6 +686,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 static void
@@ -709,6 +712,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 void 
@@ -740,6 +744,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 static void
@@ -765,6 +770,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
   SET_GAINS_ADIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 static void
@@ -790,6 +796,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
+  LEAVE (" ");
 }
 
 /********************************************************************\
@@ -845,6 +852,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 
   trans->idata = 0;
   qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
+  LEAVE (" ");
 }
 
 /********************************************************************\
@@ -1028,6 +1036,7 @@ xaccFreeTransaction (Transaction *trans)
   if (((char *) 1) == trans->num)
   {
     PERR ("double-free %p", trans);
+    LEAVE (" ");
     return;
   }
 
@@ -1248,7 +1257,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
   if (NULL == s->acc) 
   {
-    PERR ("split must have a parent\n");
+    PERR ("split must have a parent account");
     return;
   }
 

@@ -12,8 +12,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
 (use-modules (srfi srfi-2))
 
@@ -145,7 +145,7 @@ Each element must be a string representing a directory or a symbol \
 where 'default expands to the default path, and 'current expands to \
 the current value of the path.")
          (let ((result (cons
-                        (build-path (getenv "HOME") ".gnucash" "html")
+                        (gnc:build-dotgnucash-path "html")
                         gnc:_install-doc-path_)))
          (lambda () result))))
 

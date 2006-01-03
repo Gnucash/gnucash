@@ -16,8 +16,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
@@ -36,7 +36,7 @@
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
-(define gnc:menuname-reports "Reports")
+(define gnc:menuname-reports "Reports/StandardReports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
@@ -269,7 +269,8 @@
             template-name id options #t #t #f #f)))
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
-    (hash-set! *gnc:_reports_* id r)))
+    (hash-set! *gnc:_reports_* id r)
+    id))
 
 
 (define (gnc:make-report-options template-name)

@@ -16,13 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -30,23 +31,9 @@
 #include "druid-hbci-utils.h"
 #include "gnc-hbci-kvp.h"
 #include "gnc-hbci-utils.h"
-
-#include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-/* #include "Group.h" */
-/* #include "glade/glade-xml.h" */
-/* #include "gnc-amount-edit.h" */
-/* #include "gnc-commodity-edit.h" */
-/* #include "gnc-general-select.h" */
-/* #include "gnc-component-manager.h" */
-/* #include "../gnome-utils/gnc-dir.h" */
-/* #include "gnc-gui-query.h" */
-/* #include "io-example-account.h" */
-/* #include "top-level.h" */
-
-#include "gnc-hbci-utils.h"
 
 /**
  * Save the reference strings to the HBCI accounts in the kvp's of the
@@ -176,7 +163,7 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
 gboolean
 gnc_test_dir_exist_error (GtkWindow *parent, const char *filename) 
 {
-  char *dirname = g_dirname (filename);
+  char *dirname = g_path_get_dirname (filename);
   gboolean dirtest = g_file_test (dirname, G_FILE_TEST_IS_DIR);
   g_free (dirname);
   if (!dirtest) {

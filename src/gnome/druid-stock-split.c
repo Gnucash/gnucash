@@ -17,14 +17,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <glib/gi18n.h>
 
 #include "Group.h"
 #include "Transaction.h"
@@ -36,13 +36,12 @@
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-exp-parser.h"
 #include "gnc-gui-query.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "messages.h"
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
@@ -576,8 +575,8 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_clist_set_selection_mode (clist, GTK_SELECTION_BROWSE);
 
-    gtk_signal_connect (GTK_OBJECT (clist), "select_row",
-                        GTK_SIGNAL_FUNC (clist_select_row), info);
+    g_signal_connect (clist, "select_row",
+		      G_CALLBACK (clist_select_row), info);
   }
 
   /* info widgets */
@@ -723,7 +722,6 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     return;
   }
 
-  gnome_window_icon_set_from_default(GTK_WINDOW(info->window));
   gtk_widget_show_all (info->window);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(info->window));

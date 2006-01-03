@@ -15,8 +15,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -236,7 +236,8 @@ date_picker_disconnect_signals (DateCell *cell)
   if (!box->signals_connected)
     return;
 
-  gtk_signal_disconnect_by_data (GTK_OBJECT (box->date_picker), cell);
+  g_signal_handlers_disconnect_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
+					0, 0, NULL, NULL, cell);
 
   box->signals_connected = FALSE;
 }
@@ -249,14 +250,14 @@ date_picker_connect_signals (DateCell *cell)
   if (box->signals_connected)
     return;
 
-  gtk_signal_connect (GTK_OBJECT(box->date_picker), "date_selected",
-                      GTK_SIGNAL_FUNC(date_selected_cb), cell);
+  g_signal_connect (box->date_picker, "date_selected",
+		    G_CALLBACK(date_selected_cb), cell);
 
-  gtk_signal_connect(GTK_OBJECT(box->date_picker), "date_picked",
-                     GTK_SIGNAL_FUNC(date_picked_cb), cell);
+  g_signal_connect(box->date_picker, "date_picked",
+		   G_CALLBACK(date_picked_cb), cell);
 
-  gtk_signal_connect(GTK_OBJECT(box->date_picker), "key_press_event",
-                     GTK_SIGNAL_FUNC(key_press_item_cb), cell);
+  g_signal_connect(box->date_picker, "key_press_event",
+		   G_CALLBACK(key_press_item_cb), cell);
 
   box->signals_connected = TRUE;
 }
@@ -269,7 +270,8 @@ block_picker_signals (DateCell *cell)
   if (!box->signals_connected)
     return;
 
-  gtk_signal_handler_block_by_data (GTK_OBJECT (box->date_picker), cell);
+  g_signal_handlers_block_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
+				   0, 0, NULL, NULL, cell);
 }
 
 static void
@@ -280,7 +282,8 @@ unblock_picker_signals (DateCell *cell)
   if (!box->signals_connected)
     return;
 
-  gtk_signal_handler_unblock_by_data (GTK_OBJECT (box->date_picker), cell);
+  g_signal_handlers_unblock_matched (box->date_picker, G_SIGNAL_MATCH_DATA,
+				     0, 0, NULL, NULL, cell);
 }
 
 static void

@@ -16,17 +16,17 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "Group.h"
 #include "dialog-new-user.h"
@@ -639,7 +639,7 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 
 	g_object_set (G_OBJECT (cell),
 		      "text", string,
-		      NULL);
+		      (char *)NULL);
 }
 
 static void
@@ -740,7 +740,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer),
 		"xalign", 1.0,
-		NULL);
+		(char *)NULL);
   column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
 						     renderer,
 						     NULL);
@@ -808,7 +808,7 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 	  xaccGroupForEachAccount (our_final_group, (AccountCallback)starting_balance_helper,
 				   data, TRUE);
 	ENTER (" ");
-	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
+	qof_book_merge_window = g_object_get_data (G_OBJECT (hierarchy_window), "Merge Druid");
 	if(qof_book_merge_window) {
 		DEBUG ("qof_book_merge_window found");
 		if (our_final_group) 
@@ -850,7 +850,6 @@ gnc_create_hierarchy_druid (void)
 	xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
 	
 	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
 	data->dialog = dialog;
 	
 	druid = glade_xml_get_widget (xml, "hierarchy_druid");

@@ -1456,7 +1456,7 @@ get_random_guids(int max)
   num_guids = get_random_int_in_range (1, max);
 
   while (num_guids-- > 0)
-    g_list_prepend (guids, get_random_guid ());
+    guids = g_list_prepend (guids, get_random_guid ());
 
   return guids;
 }

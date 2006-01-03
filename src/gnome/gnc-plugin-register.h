@@ -18,14 +18,12 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #ifndef __GNC_PLUGIN_REGISTER_H
 #define __GNC_PLUGIN_REGISTER_H
-
-#include <gtk/gtkwindow.h>
 
 #include "gnc-plugin.h"
 
@@ -42,16 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_REGISTER_NAME "gnc-plugin-register"
 
 /* typedefs & structures */
-typedef struct GncPluginRegisterPrivate GncPluginRegisterPrivate;
-
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginRegisterPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginRegister;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginRegisterClass;
 
 /* function prototypes */

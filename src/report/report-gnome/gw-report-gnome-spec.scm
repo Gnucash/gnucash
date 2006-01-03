@@ -27,8 +27,8 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <gtk/gtk.h>\n"
       "#include <dialog-column-view.h>\n"
-      "#include <dialog-style-sheet.h>\n"
       "#include <gnc-plugin-page-report.h>\n"
       "#include <window-report.h>\n")))
 

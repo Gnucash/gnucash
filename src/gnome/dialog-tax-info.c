@@ -17,13 +17,13 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include <libguile.h>
 
 #include "Account.h"
@@ -31,9 +31,8 @@
 #include "dialog-utils.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-component-manager.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
@@ -675,7 +674,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
         font = gdk_font_from_description (style->font_desc);
 
       if (font)
-        gtk_widget_set_usize (text, 0, (font->ascent + font->descent) * 5 + 6);
+        gtk_widget_set_size_request (text, -1, (font->ascent + font->descent) * 5 + 6);
     }
 
     clist = glade_xml_get_widget (xml, "txf_category_clist");

@@ -16,13 +16,13 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -90,10 +90,10 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
 
   gtk_widget_set_sensitive (info.from_dateedit, FALSE);
   gtk_widget_set_sensitive (info.to_dateedit, FALSE);
-  gtk_signal_connect (GTK_OBJECT (info.enter_from_button), "toggled", 
-		      GTK_SIGNAL_FUNC (on_button_toggled), &info);
-  gtk_signal_connect (GTK_OBJECT (info.enter_to_button), "toggled", 
-		      GTK_SIGNAL_FUNC (on_button_toggled), &info);
+  g_signal_connect (info.enter_from_button, "toggled", 
+		    G_CALLBACK (on_button_toggled), &info);
+  g_signal_connect (info.enter_to_button, "toggled", 
+		    G_CALLBACK (on_button_toggled), &info);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
@@ -102,9 +102,6 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
 
   gtk_widget_grab_focus (glade_xml_get_widget (xml, "ok_button"));
 
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
-  /* gnome_dialog_close_hides (GTK_DIALOG (dialog), TRUE); */
   gtk_widget_show_all (GTK_WIDGET (dialog));
   
   result = gtk_dialog_run (GTK_DIALOG (dialog));

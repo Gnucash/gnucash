@@ -10,12 +10,9 @@
 #include <glib.h>
 
 #include "gnc-commodity.h"
-#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-xml-helper.h"
-#include "guid.h"
 #include "io-gncxml-gen.h"
-#include "kvp_frame.h"
 #include "sixtp.h"
 
 

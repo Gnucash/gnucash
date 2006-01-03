@@ -46,8 +46,7 @@
 	  (set! progress-dialog (gnc:progress-dialog-new #f #f))
 	  (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
 	  (gnc:progress-dialog-set-heading progress-dialog
-					   (_ "Finding duplicate transactions..."))
-	  (gnc:progress-dialog-set-limits progress-dialog 0.0 100.0)))
+					   (_ "Finding duplicate transactions..."))))
 
     ;; for each transaction in the new group, build a query that could
     ;; match possibly similar transactions.
@@ -58,7 +57,7 @@
 	 (if progress-dialog 
 	     (begin 
 	       (gnc:progress-dialog-set-value 
-		progress-dialog (* 100 (/ work-done work-to-do)))
+		progress-dialog (/ work-done work-to-do))
 	       (gnc:progress-dialog-update progress-dialog))) 
 
 	 (gnc:query-set-book query (gnc:group-get-book old-group))

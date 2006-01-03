@@ -36,8 +36,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -58,10 +58,10 @@
 (define optname-party-name (N_ "Company name"))
 (define opthelp-party-name (N_ "Name of company/individual"))
 
-(define optname-start-date (N_ "Income Statement Start Date"))
+(define optname-start-date (N_ "Start Date"))
 (define opthelp-start-date
   (N_ "Start of the period this income statement will cover"))
-(define optname-end-date (N_ "Income Statement End Date"))
+(define optname-end-date (N_ "End Date"))
 (define opthelp-end-date
   (N_ "End of the period this income statement will cover"))
 ;; FIXME this could use an indent option
@@ -468,10 +468,7 @@
     (gnc:html-document-set-title! 
      doc (sprintf #f
 		  (string-append "%s %s "
-				 (N_ "For Period Covering")
-				 " %s "
-				 (N_ "to")
-				 " %s")
+				 (N_ "For Period Covering %s to %s"))
 		  company-name report-title
                   (gnc:print-date start-date-printable)
                   (gnc:print-date end-date-tp)))
@@ -506,12 +503,9 @@
 	       (terse-period? #t)
 	       (period-for (if terse-period?
 			       (string-append " " (N_ "for Period"))
-			       (string-append
-				", "
-				(gnc:print-date start-date-printable) " "
-				(N_ "to") " "
-				(gnc:print-date end-date-tp)
-				)
+			       (sprintf #f (string-append ", " (N_ "%s to %s"))
+					(gnc:print-date start-date-printable)
+					(gnc:print-date end-date-tp))
 			       )
 			   )
 	       )

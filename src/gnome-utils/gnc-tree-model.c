@@ -19,19 +19,18 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
-#include <string.h>
+
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "gnc-tree-model.h"
-
 #include "gnc-gobject-utils.h"
 #include "gnc-engine.h"
-#include "messages.h"
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -42,16 +41,21 @@ static void gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass);
 static void gnc_tree_model_finalize (GObject *object);
 static void gnc_tree_model_destroy (GtkObject *object);
 
-struct GncTreeModelPrivate
+/** The instance private data for a generic tree model. */
+typedef struct GncTreeModelPrivate
 {
   gpointer dummy;
-};
+} GncTreeModelPrivate;
+
+#define GNC_TREE_MODEL_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL, GncTreeModelPrivate))
 
 
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
 
+/** A pointer to the parent class of a generic tree model. */
 static GtkObjectClass *parent_class = NULL;
 
 GType
@@ -108,6 +112,8 @@ gnc_tree_model_class_init (GncTreeModelClass *klass)
 
   /* GtkObject signals */
   object_class->destroy = gnc_tree_model_destroy;
+
+  g_type_class_add_private(klass, sizeof(GncTreeModelPrivate));
 }
 
 static void
@@ -116,17 +122,21 @@ gnc_tree_model_init (GncTreeModel *model, GncTreeModelClass *klass)
   ENTER("model %p", model);
   gnc_gobject_tracking_remember(G_OBJECT(model), G_OBJECT_CLASS(klass));
 
-  model->priv = g_new0 (GncTreeModelPrivate, 1);
-
   LEAVE(" ");
 }
 
 static void
 gnc_tree_model_finalize (GObject *object)
 {
+  GncTreeModel *model;
+  GncTreeModelPrivate *priv;
+
   ENTER("model %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_MODEL (object));
+
+  model = GNC_TREE_MODEL(object);
+  priv = GNC_TREE_MODEL_GET_PRIVATE(model);
 
   gnc_gobject_tracking_forget(object);
 
@@ -145,8 +155,6 @@ gnc_tree_model_destroy (GtkObject *object)
   g_return_if_fail (GNC_IS_TREE_MODEL (object));
 
   model = GNC_TREE_MODEL (object);
-  g_free (model->priv);
-  model->priv = NULL;
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);

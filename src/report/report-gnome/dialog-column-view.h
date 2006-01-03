@@ -16,15 +16,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #ifndef GNC_DIALOG_COLUMN_VIEW_H
 #define GNC_DIALOG_COLUMN_VIEW_H
 
 #include <libguile.h>
-#include <gtk/gtk.h>
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 

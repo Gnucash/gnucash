@@ -17,13 +17,14 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-utils.h"
 #include "gnc-currency-edit.h"
@@ -31,7 +32,7 @@
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "dialog-search.h"
 #include "search-param.h"
 
@@ -287,12 +288,12 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
 
   id = gtk_editable_get_chars (GTK_EDITABLE (vw->id_entry), 0, -1);
 
-  fullname = g_strconcat (name, " (", id, ")", NULL);
+  fullname = g_strconcat (name, " (", id, ")", (char *)NULL);
 
   if (vw->dialog_type == EDIT_VENDOR)
-    title = g_strconcat (_("Edit Vendor"), " - ", fullname, NULL);
+    title = g_strconcat (_("Edit Vendor"), " - ", fullname, (char *)NULL);
   else
-    title = g_strconcat (_("New Vendor"), " - ", fullname, NULL);
+    title = g_strconcat (_("New Vendor"), " - ", fullname, (char *)NULL);
 
   gtk_window_set_title (GTK_WINDOW (vw->dialog), title);
 

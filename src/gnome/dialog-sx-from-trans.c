@@ -18,13 +18,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-engine.h"
 #include "SX-book.h"
@@ -36,7 +37,7 @@
 #include "dialog-sx-from-trans.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -395,9 +396,9 @@ sxftd_init( SXFromTransInfo *sxfti )
                       (GTK_EXPAND | GTK_FILL),
                       GTK_FILL,
                       0, 0 );
-    gtk_signal_connect( GTK_OBJECT( sxfti->startDateGDE ), "date-changed",
-                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
-                        sxfti );
+    g_signal_connect( sxfti->startDateGDE, "date-changed",
+                      G_CALLBACK( sxftd_update_excal_adapt ),
+                      sxfti );
   }
   {
     GtkWidget *endDateBox = glade_xml_get_widget( sxfti->gxml,
@@ -408,9 +409,9 @@ sxftd_init( SXFromTransInfo *sxfti )
     gtk_box_pack_start( GTK_BOX( endDateBox ),
                         GTK_WIDGET( sxfti->endDateGDE ),
                         FALSE, TRUE, 0 );
-    gtk_signal_connect( GTK_OBJECT( sxfti->endDateGDE ), "date-changed",
-                        GTK_SIGNAL_FUNC( sxftd_update_excal_adapt ),
-                        sxfti );
+    g_signal_connect( sxfti->endDateGDE, "date-changed",
+                      G_CALLBACK( sxftd_update_excal_adapt ),
+                      sxfti );
   }
 
   /* Get the name from the transaction, try that as the initial SX name. */
@@ -617,6 +618,7 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   guint sx_error = sxftd_compute_sx(sxfti);
   SchedXactionDialog *adv_dlg;
   SchedXactionEditorDialog *adv_edit_dlg;
+  GMainContext *context;
 
   if ( sx_error != 0
        && sx_error != SXFTD_ERRNO_UNBALANCED_XACTION )
@@ -628,7 +630,8 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
   }
   gtk_widget_hide( sxfti->dialog );
   /* force a gui update. */
-  while (g_main_iteration(FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 
   adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
   adv_edit_dlg =
@@ -747,9 +750,9 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   if ( i > 0 ) {
     GtkWidget *w;
     gnc_dense_cal_set_month( sxfti->example_cal,
-                             g_date_month( &startDate ) );
+                             g_date_get_month( &startDate ) );
     gnc_dense_cal_set_year( sxfti->example_cal,
-                            g_date_year( &startDate ) );
+                            g_date_get_year( &startDate ) );
     w = glade_xml_get_widget( sxfti->gxml, SXFTD_NAME_ENTRY );
     name = gtk_editable_get_chars( GTK_EDITABLE(w), 0, -1 );
     info = g_string_sized_new( 16 );

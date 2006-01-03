@@ -18,8 +18,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  *
  */
 /*
@@ -34,11 +34,13 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+
 #include "gnc-amount-edit.h"
 #include "gnc-exp-parser.h"
-#include "messages.h"
 #include "gnc-ui-util.h"
-#include "gnc-engine-util.h"
+#include "qof.h"
 
 
 /* Signal codes */
@@ -230,7 +232,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     gnc_amount_edit_set_amount (gae, gnc_numeric_zero ());
 
     if (!gnc_numeric_equal (gnc_numeric_zero (), old_amount))
-      gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
+      g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
     return TRUE;
   }
@@ -249,7 +251,7 @@ gnc_amount_edit_evaluate (GNCAmountEdit *gae)
     gnc_amount_edit_set_amount (gae, amount);
 
     if (!gnc_numeric_equal (amount, old_amount))
-      gtk_signal_emit (GTK_OBJECT (gae), amount_edit_signals [AMOUNT_CHANGED]);
+      g_signal_emit (gae, amount_edit_signals [AMOUNT_CHANGED], 0);
 
     return TRUE;
   }

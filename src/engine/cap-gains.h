@@ -15,8 +15,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 /** @addtogroup Engine
@@ -81,7 +81,6 @@ ToDo:
 #define XACC_CAP_GAINS_H
 
 #include "gnc-engine.h"
-#include "gnc-numeric.h"
 
 /** The xaccSplitGetCapGains() method returns the value of 
  *    capital gains (if any) associated with the indicated 

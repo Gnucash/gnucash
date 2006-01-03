@@ -17,22 +17,20 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
-#include <string.h>
-
+#include <gtk/gtk.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
+#include <string.h>
 
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
-#include "gnc-trace.h"
 #include "gnc-engine.h"
-#ifdef HAVE_GOFFICE
 #include <goffice/goffice.h>
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
@@ -45,21 +43,8 @@
 #include <goffice/graph/gog-data-set.h>
 #include <goffice/graph/gog-renderer-svg.h>
 #include <goffice/data/go-data-simple.h>
-#else
-#include "goffice.h"
-#include "graph/gog-graph.h"
-#include "graph/gog-object.h"
-#include "graph/gog-plot.h"
-#include "graph/gog-series.h"
-#include "graph/go-data-simple.h"
-#include "utils/go-color.h"
-#include "utils/go-pattern.h"
-#include "graph/gog-renderer-pixbuf.h"
-#include "graph/gog-renderer-svg.h"
-#include "graph/gog-data-set.h"
-#include "graph/gog-styled-object.h"
-#include "graph/gog-style.h"
-#endif
+#include <goffice/app/go-plugin.h>
+#include <goffice/app/go-plugin-loader-module.h>
 #include <gsf/gsf.h>
 #include <gsf/gsf-output-memory.h>
 
@@ -96,6 +81,9 @@ gnc_html_graph_gog_init(void)
   PINFO( "init gog graphing" );
   
   libgoffice_init();
+  
+  /* Initialize plugins manager */
+  go_plugins_init (NULL, NULL, NULL, NULL, TRUE, GO_PLUGIN_LOADER_MODULE_TYPE);
 
   gnc_html_register_object_handler( "gnc-guppi-pie", handle_piechart );
   gnc_html_register_object_handler( "gnc-guppi-bar", handle_barchart );
@@ -196,7 +184,7 @@ addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
   gtk_container_add( GTK_CONTAINER(eb), widget );
 
   // blindly copied from gnc-html-guppi.c..
-  gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
+  gtk_widget_set_size_request(GTK_WIDGET(eb), eb->width, eb->height);
 }
 
 static gboolean
@@ -242,9 +230,6 @@ set_chart_titles(GogObject *chart, const char *title, const char* sub_title)
   }
 
   tmp = gog_object_add_by_name(chart, "Title", NULL);
-#ifndef HAVE_GOFFICE
-  gog_object_set_pos(tmp, GOG_POSITION_N | GOG_POSITION_ALIGN_START);
-#endif
   titleScalar = go_data_scalar_str_new(totalTitle->str, FALSE);
   gog_dataset_set_dim(GOG_DATASET(tmp), 0, titleScalar, NULL);
 
@@ -345,19 +330,11 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
 
   series = gog_plot_new_series(plot);
-#ifdef HAVE_GOFFICE
   labelData = go_data_vector_str_new((char const * const *)labels, datasize, NULL);
-#else
-  labelData = go_data_vector_str_new((char const * const *)labels, datasize);
-#endif
   gog_series_set_dim(series, 0, labelData, NULL);
   go_data_emit_changed(GO_DATA(labelData));
 
-#ifdef HAVE_GOFFICE
   sliceData = go_data_vector_val_new(data, datasize, NULL);
-#else
-  sliceData = go_data_vector_val_new(data, datasize);
-#endif
   gog_series_set_dim(series, 1, sliceData, NULL);
   go_data_emit_changed(GO_DATA(sliceData));
 
@@ -449,11 +426,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                 "type",                         barType,
                 "overlap_percentage",           barOverlap, 
 		NULL);
-#ifdef HAVE_GOFFICE
   labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols, NULL );
-#else
-  labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols );
-#endif
   {
     // foreach row:
     //   series = row
@@ -474,11 +447,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
       gog_series_set_dim( series, 0, labelData, NULL );
       go_data_emit_changed (GO_DATA (labelData));
 
-#ifdef HAVE_GOFFICE
       sliceData = go_data_vector_val_new( data + (i*datarows), datarows, NULL );
-#else
-      sliceData = go_data_vector_val_new( data + (i*datarows), datarows );
-#endif
       gog_series_set_dim( series, 1, sliceData, NULL );
       
       /*
@@ -539,19 +508,11 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 
   series = gog_plot_new_series( plot );
 
-#ifdef HAVE_GOFFICE
   sliceData = go_data_vector_val_new( xData, datasize, NULL );
-#else
-  sliceData = go_data_vector_val_new( xData, datasize );
-#endif
   gog_series_set_dim( series, 0, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
 
-#ifdef HAVE_GOFFICE
   sliceData = go_data_vector_val_new( yData, datasize, NULL );
-#else
-  sliceData = go_data_vector_val_new( yData, datasize );
-#endif
   gog_series_set_dim( series, 1, sliceData, NULL );
   go_data_emit_changed (GO_DATA (sliceData));
 

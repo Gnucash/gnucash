@@ -6,6 +6,8 @@ pkglib_LTLIBRARIES = \
   libgw-kvp.la \
   libgncmod-engine.la
 
+lib_LTLIBRARIES = libcashobjects.la
+
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
 	-I${top_srcdir}/src/core-utils \
@@ -14,104 +16,6 @@ AM_CFLAGS = \
 	-I${top_srcdir}/src/business/business-core/ \
 	${QOF_CFLAGS} \
 	${GNUCASH_ENGINE_CFLAGS}
-
-qof_library = \
-   gnc-date.c        \
-   gnc-engine-util.c \
-   gnc-numeric.c     \
-   gnc-event.c       \
-   gnc-trace.c       \
-   guid.c            \
-   kvp_frame.c       \
-   kvp-util.c        \
-   md5.c             \
-   qofbackend.c      \
-   qofclass.c        \
-   qofchoice.c       \
-   qofid.c           \
-   qofinstance.c     \
-   qofquery.c        \
-   qofbook.c         \
-   qofobject.c       \
-   qofquerycore.c    \
-   qofsession.c      \
-   qof_book_merge.c
-
-qof_headers =  \
-   gnc-date.h        \
-   gnc-engine-util.h \
-   gnc-numeric.h     \
-   gnc-event.h       \
-   gnc-trace.h       \
-   guid.h            \
-   kvp_frame.h       \
-   kvp-util.h        \
-   kvp-util-p.h      \
-   qof.h             \
-   qof-be-utils.h    \
-   qofbackend.h      \
-   qofbackend-p.h    \
-   qofclass.h        \
-   qofchoice.h       \
-   qofid.h           \
-   qofid-p.h         \
-   qofinstance-p.h   \
-   qofinstance.h     \
-   qofquery.h        \
-   qofbook.h         \
-   qofobject.h       \
-   qofquerycore.h    \
-   qofsession.h      \
-   qof_book_merge.h
-
-qof_noinst_headers = \
-   gnc-event-p.h \
-   md5.h  \
-   qofclass-p.h  \
-   qofmath128.h  \
-   qofquery-p.h  \
-   qofbook-p.h  \
-   qofobject-p.h  \
-   qofquerycore-p.h \
-   qofsession-p.h \
-   qofsql.h
-				 
-if USE_LIBQOF
-
-lib_LTLIBRARIES = libqof.la libcashobjects.la
-
-libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION) 
-
-libqof_la_SOURCES =  ${qof_library}
-
-qofincludedir = ${pkgincludedir}
-
-qofinclude_HEADERS = ${qof_headers} \
-   qofla-dir.h
-
-QOFLIBdir = $(libdir)
-
-qofla-dir.h: qofla-dir.h.in
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-                -e 's:@-libdir-@:${QOFLIBdir}:g'
-	mv $@.tmp $@
-
-qof_builds = qofla-dir.h
-
-else
-
-lib_LTLIBRARIES = libcashobjects.la
-
-libqof_la_SOURCES =
-
-qofincludedir = ${pkgincludedir}
-
-qofinclude_HEADERS = 
-
-qof_builds =
-
-endif
 
 libcashobjects_la_SOURCES =  \
   Account.c \
@@ -124,7 +28,6 @@ libcashobjects_la_SOURCES =  \
   gnc-commodity.c \
   gnc-pricedb.c \
   Group.c \
-  messages.c \
   Period.c \
   policy.c \
   Query.c \
@@ -145,7 +48,8 @@ libgncmod_engine_la_SOURCES = \
   gnc-hooks.c \
   gnc-lot.c \
   gnc-session-scm.c \
-  gncmod-engine.c
+  gncmod-engine.c \
+  policy.c
 
 EXTRA_libcashobjects_la_SOURCES = iso-4217-currencies.c
 
@@ -190,7 +94,6 @@ gncinclude_HEADERS = \
   gnc-session-scm.h \
   gncObject.h \
   kvp-scm.h \
-  messages.h \
   policy.h
 
 noinst_HEADERS = \
@@ -209,8 +112,7 @@ noinst_HEADERS = \
   gnc-pricedb-p.h \
   gw-engine.h \
   gw-kvp.h \
-  policy-p.h \
-  ${qof_noinst_headers}
+  policy-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 
@@ -252,12 +154,9 @@ EXTRA_DIST = \
   extensions.txt \
   iso-4217-currencies.scm \
   iso-currencies-to-c \
-  qofla-dir.h.in \
   gncla-dir.h.in \
   kvp_doc.txt \
   SX-book-p.h \
-  ${qof_library} \
-  ${qof_headers} \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
   ${gwmod_DATA}
@@ -286,7 +185,7 @@ iso-4217-currencies.c: iso-4217-currencies.scm iso-currencies-to-c
 
 gw-engine.scm gw-engine.c gw-engine.h: \
   .scm-links gw-engine-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
@@ -294,20 +193,19 @@ gw-engine.scm gw-engine.c gw-engine.h: \
 
 gw-kvp.scm gw-kvp.c gw-kvp.h: \
   .scm-links gw-kvp-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-wrapset \"gw-kvp\")"
 
 BUILT_SOURCES = \
-  ${qof_builds} \
   iso-4217-currencies.c \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
 
 DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-engine.html gw-kvp.html qofla-dir.h gncla-dir.h
+                 gw-engine.html gw-kvp.html gncla-dir.h
 
 gncla-dir.h: gncla-dir.h.in
 	rm -f $@.tmp

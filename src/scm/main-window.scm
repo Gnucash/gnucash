@@ -16,8 +16,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -38,12 +38,6 @@
          (add-option 
           (lambda (opt)
             (gnc:register-option options opt))))
-
-    (add-option
-     (gnc:make-string-option
-      (N_ "Account Tree") (N_ "Name of account view")
-      "a" (N_ "If you keep multiple account views open, it may be helpful \
-to give each one a descriptive name") (_ "Accounts")))
 
     (add-option
      (gnc:make-simple-boolean-option
@@ -107,20 +101,10 @@ the account instead of opening a register.") #f))
 (define (gnc:main-window-save-state session)
   (let* ((book-url (gnc:session-get-url session))
 	 (conf-file-name (gnc:html-encode-string book-url))
-	 (dotgnucash-dir (build-path (getenv "HOME") ".gnucash"))
-         (file-dir (build-path dotgnucash-dir "books"))
-         (save-file? #f)
          (book-path #f))
 
-    ;; make sure ~/.gnucash/books is there
-    (set! save-file? (and (gnc:make-dir dotgnucash-dir)
-                         (gnc:make-dir file-dir)))
-
-    (if (not save-file?) (gnc:warn (_ "Can't save window state")))
-
-    (if (and save-file? conf-file-name)
-        (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
-                                     conf-file-name)))
+    (if conf-file-name
+        (let ((book-path (gnc:build-book-path conf-file-name)))
           (with-output-to-port (open-output-file book-path)
             (lambda ()
               (hash-fold 
@@ -138,8 +122,6 @@ the account instead of opening a register.") #f))
 	  ))))
 
 (define (gnc:main-window-book-close-handler session)
-  (gnc:main-window-save-state session)
-
   (let ((dead-reports '()))
     ;; get a list of the reports we'll be needing to nuke     
     (hash-fold 
@@ -156,7 +138,7 @@ the account instead of opening a register.") #f))
 
 (define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
-    (let ((file (build-path (getenv "HOME") ".gnucash" "books" file-suffix)))
+    (let ((file (gnc:build-book-path file-suffix)))
       ;; make sure the books directory is there 
       (if (access? file F_OK)
           (if (not (false-if-exception (primitive-load file)))
@@ -169,7 +151,6 @@ the account instead of opening a register.") #f))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
-    (gnc:new-account-tree #f)
 
     ;; the reports have only been created at this point; create their ui component.
     (hash-fold (lambda (key val prior-result)
@@ -189,11 +170,6 @@ the account instead of opening a register.") #f))
     (gnc:kvp-option-dialog gnc:id-book
 			   slots (_ "Book Options")
 			   changed_cb)))
-
-(gnc:hook-remove-dangler gnc:*book-opened-hook* 
-                         gnc:main-window-book-open-handler)
-(gnc:hook-add-dangler gnc:*book-opened-hook* 
-                      gnc:main-window-book-open-handler)
 
 (gnc:hook-remove-dangler gnc:*book-closed-hook* 
                          gnc:main-window-book-close-handler)

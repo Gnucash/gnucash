@@ -255,8 +255,7 @@
 		      <child>
 			<widget class="GtkMenuItem" id="buyand2">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Quicken(tm) Wallet Checks w/ side stub
-</property>
+			  <property name="label" translatable="yes">Quicken(tm) Wallet Checks w/ side stub</property>
 			  <property name="use_underline">True</property>
 			</widget>
 		      </child>
@@ -890,7 +889,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label746">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">                                  </property>
+			      <property name="label" translatable="no">                                  </property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -911,7 +910,7 @@
 			  <child>
 			    <widget class="GtkLabel" id="label747">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">                    </property>
+			      <property name="label" translatable="no">                    </property>
 			      <property name="use_underline">False</property>
 			      <property name="use_markup">False</property>
 			      <property name="justify">GTK_JUSTIFY_CENTER</property>

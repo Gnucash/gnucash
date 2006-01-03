@@ -18,15 +18,14 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <glib.h>
 #include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
+#include <glib/gi18n.h>
 
 #include "FreqSpec.h"
 #include "Group.h"
@@ -39,16 +38,13 @@
 #include "druid-acct-period.h"
 #include "druid-utils.h"
 #include "gnc-component-manager.h"
-#include "gnc-date.h"
+#include "qof.h"
 #include "gnc-file.h"
 #include "gnc-frequency.h"
 #include "gnc-gdate-utils.h"
 #include "gnc-gui-query.h"
-#include "gnc-trace.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
-#include "messages.h"
-#include "qof.h"
 
 
 #define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"
@@ -170,7 +166,7 @@ get_close_status_str (AcctPeriodInfo *info)
   switch (info->close_status)
   {
     case -1: str = ""; break;
-    case 0: str = _("The book was closed suscessfully\n"); break;
+    case 0: str = _("The book was closed successfully."); break;
     default: str = "";
   }
   return str;
@@ -222,7 +218,7 @@ prepare_remarks (AcctPeriodInfo *info)
     _("The earliest transaction date found in this book is %s.\n"
       "Based on the selection made above, this book will be split\n"
       "into %d books.  Click on 'Next' to start closing the\n"
-      "earliest book.\n");
+      "earliest book.");
 
   /* Pull info from widget, push into freq spec */
   gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
@@ -239,9 +235,9 @@ prepare_remarks (AcctPeriodInfo *info)
   {
     nperiods ++;
     PINFO ("period=%d end date=%d/%d/%d", nperiods,
-                      g_date_month(&period_end),
-                      g_date_day(&period_end),
-                      g_date_year(&period_end));
+                      g_date_get_month(&period_end),
+                      g_date_get_day(&period_end),
+                      g_date_get_year(&period_end));
     period_begin = period_end;
     xaccFreqSpecGetNextInstance (info->period, &period_begin, &period_end);
   } 
@@ -280,12 +276,12 @@ show_book_details (AcctPeriodInfo *info)
       "will contain all transactions up to midnight %s\n"
       "(for a total of %d transactions spread over %d accounts).\n"
       "Click on 'Next' to create this book.\n"
-      "Click on 'Back' to adjust the dates.\n");
+      "Click on 'Back' to adjust the dates.");
 
   qof_print_date_dmy_buff (close_date_str, MAX_DATE_LENGTH, 
-                           g_date_day(&info->closing_date),
-                           g_date_month(&info->closing_date),
-                           g_date_year(&info->closing_date));
+                           g_date_get_day(&info->closing_date),
+                           g_date_get_month(&info->closing_date),
+                           g_date_get_year(&info->closing_date));
 
   currbook = gnc_get_current_book();
   ntrans = get_num_xactions_before_date(currbook,
@@ -303,9 +299,9 @@ show_book_details (AcctPeriodInfo *info)
 
   /* Create default settings for the title, notes fields */
   qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH, 
-                           g_date_day(&info->prev_closing_date),
-                           g_date_month(&info->prev_closing_date),
-                           g_date_year(&info->prev_closing_date));
+                           g_date_get_day(&info->prev_closing_date),
+                           g_date_get_month(&info->prev_closing_date),
+                           g_date_get_year(&info->prev_closing_date));
 
   str = g_strdup_printf (_("Period %s - %s"), prev_close_date_str, close_date_str);
   gtk_entry_set_text (info->book_title, str);
@@ -490,7 +486,11 @@ ap_show_done (GnomeDruidPageEdge *druidpage,
   AcctPeriodInfo *info = user_data;
   ENTER ("info=%p", info);
 
-  msg = _("%s\nCongradulations! You are done closing books!");
+  /* Translation FIXME: Can this %s-containing message please be
+     replaced by one single message? Either this closing went
+     successfully ("success", "congratulations") or something else
+     should be displayed anyway. */
+  msg = _("%s\nCongratulations! You are done closing books!");
 
   str = g_strdup_printf (msg, get_close_status_str (info));
   gnome_druid_page_edge_set_text (druidpage, str);
@@ -570,33 +570,33 @@ ap_druid_create (AcctPeriodInfo *info)
         GTK_TEXT_VIEW (glade_xml_get_widget (xml, "book notes text"));
 
   /* generic finished/close/abort signals */
-  gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
-                      GTK_SIGNAL_FUNC (ap_window_destroy_cb), info);
+  g_signal_connect (info->window, "destroy",
+		    G_CALLBACK (ap_window_destroy_cb), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
-                      GTK_SIGNAL_FUNC (ap_druid_cancel), info);
+  g_signal_connect (info->druid, "cancel",
+		    G_CALLBACK (ap_druid_cancel), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->menu_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_menu), info);
+  g_signal_connect (info->menu_page, "prepare",
+		    G_CALLBACK (ap_show_menu), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->menu_page), "next",
-                      GTK_SIGNAL_FUNC (ap_validate_menu), info);
+  g_signal_connect (info->menu_page, "next",
+		    G_CALLBACK (ap_validate_menu), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->book_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_book), info);
+  g_signal_connect (info->book_page, "prepare",
+		    G_CALLBACK (ap_show_book), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->book_page), "next",
-                      GTK_SIGNAL_FUNC (ap_close_period), info);
+  g_signal_connect (info->book_page, "next",
+		    G_CALLBACK (ap_close_period), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->finish_page), "prepare",
-                      GTK_SIGNAL_FUNC (ap_show_done), info);
+  g_signal_connect (info->finish_page, "prepare",
+		    G_CALLBACK (ap_show_done), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->finish_page), "finish",
-                      GTK_SIGNAL_FUNC (ap_finish), info);
+  g_signal_connect (info->finish_page, "finish",
+		    G_CALLBACK (ap_finish), info);
 
   /* User changes the accouting period or date signals */
-  gtk_signal_connect (GTK_OBJECT (info->period_menu), "changed",
-                      GTK_SIGNAL_FUNC (ap_changed), info);
+  g_signal_connect (info->period_menu, "changed",
+		    G_CALLBACK (ap_changed), info);
 }
 
 
@@ -630,7 +630,6 @@ gnc_acct_period_dialog (void)
                                              NULL, ap_close_handler,
                                              info);
 
-  gnome_window_icon_set_from_default(GTK_WINDOW(info->window));
   gtk_widget_show_all (info->window);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(info->window));

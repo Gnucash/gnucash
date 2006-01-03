@@ -17,9 +17,18 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
+
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup GncPluginAccountTree An Account Tree Plugin
+    @{ */
+/** @file gnc-plugin-basic-commands.h
+    @brief Functions providing a basic set of menu items.
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
+*/
 
 #ifndef __GNC_PLUGIN_BASIC_COMMANDS_H
 #define __GNC_PLUGIN_BASIC_COMMANDS_H
@@ -41,25 +50,37 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_BASIC_COMMANDS_NAME "gnc-plugin-basic-commands"
 
 /* typedefs & structures */
-typedef struct GncPluginBasicCommandsPrivate GncPluginBasicCommandsPrivate;
 
+/** The instance data structure for an basic commands menu plugin. */
 typedef struct {
-	GncPlugin parent;
-
-	GncPluginBasicCommandsPrivate *priv;
+  /** The parent object for this widget */
+  GncPlugin gnc_plugin;
 } GncPluginBasicCommands;
 
+
+/** The class data structure for a basic commands menu plugin. */
 typedef struct {
-	GncPluginClass parent;
+  /** The parent class for this widget. */
+  GncPluginClass gnc_plugin;
 } GncPluginBasicCommandsClass;
 
-/* function prototypes */
-GType      gnc_plugin_basic_commands_get_type (void);
 
-GncPlugin *gnc_plugin_basic_commands_new      (void);
+/** Get the type of the basic commands menu plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_plugin_basic_commands_get_type (void);
 
-void       gnc_new_basic_commands             (GncMainWindow *window);
+
+/** Create a new basic commands menu plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncPlugin *gnc_plugin_basic_commands_new (void);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_BASIC_COMMANDS_H */
+
+/** @} */
+/** @} */

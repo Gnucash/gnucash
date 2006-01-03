@@ -12,6 +12,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -142,6 +143,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
+  -I${top_srcdir}/lib/glib26 \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
@@ -149,8 +151,7 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \
-  ${QOF_CFLAGS} \
-  ${GUPPI_CFLAGS} 
+  ${QOF_CFLAGS}
 
 # We build this in an earlier directory.
 
@@ -188,7 +189,7 @@ endif
 
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
   gw-gnc-spec.scm .scm-links ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \
            (set! %load-path (cons \"../app-utils\" %load-path)) \

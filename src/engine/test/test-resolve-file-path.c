@@ -17,7 +17,8 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ *  02110-1301, USA.
  */
 
 #include <stdlib.h>
@@ -45,12 +46,6 @@ test_strings strs[] = {
     { NULL, NULL, 0 },
 };
 
-static const char*
-get_home_dir()
-{
-    return getenv("HOME");
-}
-
 int
 main(int argc, char **argv)
 {
@@ -64,14 +59,14 @@ main(int argc, char **argv)
         
         if(strs[i].prefix_home == 1) 
         {
-            dain = g_strdup_printf("%s/%s", get_home_dir(), strs[i].input);
-            wantout = g_strdup_printf("%s/%s", get_home_dir(),
+            dain = g_strdup_printf("%s/%s", g_get_home_dir(), strs[i].input);
+            wantout = g_strdup_printf("%s/%s", g_get_home_dir(),
                                       strs[i].output);
         }
         else if(strs[i].prefix_home == 2)
         {
             dain = g_strdup(strs[i].input);
-            wantout = g_strdup_printf("%s%s", get_home_dir(),
+            wantout = g_strdup_printf("%s%s", g_get_home_dir(),
                                       strs[i].output);
         }
          else

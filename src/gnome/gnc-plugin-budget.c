@@ -23,18 +23,18 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-budget.h"
 #include "gnc-tree-model-budget.h"
 
-#include "gnc-trace.h"
+#include "qof.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "gnc-component-manager.h"
-
-#include "messages.h"
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-budget-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-budget-ui.xml"
@@ -51,12 +51,6 @@ static void gnc_plugin_budget_cmd_new_budget (GtkAction *action,
 static void gnc_plugin_budget_cmd_open_budget (GtkAction *action,
 					      GncMainWindowActionData *data);
 
-#if 0
-/* plugin window interface */
-static GncPluginPage *gnc_plugin_budget_create_page (GncPlugin *plugin,
-						     const gchar *uri);
-#endif
-
 static GtkActionEntry gnc_plugin_actions [] = {
     { "NewBudgetAction", NULL, N_("New Budget"), NULL,
       N_("Create a new Budget"),
@@ -68,9 +62,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginBudgetPrivate {
+typedef struct GncPluginBudgetPrivate {
     gpointer dummy;
-};
+} GncPluginBudgetPrivate;
+
+#define GNC_PLUGIN_BUDGET_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudgetPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -103,6 +100,11 @@ GncPlugin * gnc_plugin_budget_new (void)
 {
     GncPluginBudget *plugin;
     ENTER(" ");
+
+    /* Reference the budget page plugin to ensure it exists in the gtk
+     * type system. */
+    GNC_TYPE_PLUGIN_PAGE_BUDGET;
+
     plugin = g_object_new (GNC_TYPE_PLUGIN_BUDGET, NULL);
     LEAVE(" ");
     return GNC_PLUGIN (plugin);
@@ -118,63 +120,37 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_plugin_budget_finalize;
 
-    /* CAS: I'm still unsure how much needs to be overridden here. */
-
-    /* function overrides */
-    //plugin_class->create_page  = gnc_plugin_budget_create_page;
-
     plugin_class->plugin_name  = GNC_PLUGIN_BUDGET_NAME;
     plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
     plugin_class->actions      = gnc_plugin_actions;
     plugin_class->n_actions    = gnc_plugin_n_actions;
     plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
 
+    g_type_class_add_private(klass, sizeof(GncPluginBudgetPrivate));
     LEAVE (" ");
 }
 
 static void
 gnc_plugin_budget_init(GncPluginBudget *plugin)
 {
-    plugin->priv = g_new0(GncPluginBudgetPrivate, 1);
 }
 
 static void
 gnc_plugin_budget_finalize(GObject *object)
 {
-    GncPluginBudget *plugin = GNC_PLUGIN_BUDGET(object);
+    GncPluginBudget *plugin;
+    GncPluginBudgetPrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_BUDGET (object));
-    g_return_if_fail(plugin->priv != NULL);
+
     ENTER(" ");
-    g_free (plugin->priv);
+    plugin = GNC_PLUGIN_BUDGET(object);
+    priv = GNC_PLUGIN_BUDGET_GET_PRIVATE(plugin);
+
     (parent_class->finalize)(object);
-    ENTER(" ");
+    LEAVE(" ");
 
 }
-
-/************************************************************
- *              Plugin Function Implementation              *
- ************************************************************/
-
-#if 0
-static GncPluginPage *
-gnc_plugin_budget_create_page (GncPlugin *plugin,
-			       const gchar *uri)
-{
-    g_return_val_if_fail (GNC_IS_PLUGIN_BUDGET (plugin), NULL);
-    g_return_val_if_fail (uri != NULL, NULL);
-
-    ENTER("");
-    LEAVE("");
-    /* FIXME add better URI handling */
-    if (strcmp ("default:", uri)) {
-        return NULL;
-    }
-
-    return NULL;
-}
-#endif
-
 
 /************************************************************
  *                    Command Callbacks                     *
@@ -195,12 +171,6 @@ gnc_plugin_budget_cmd_new_budget (GtkAction *action,
     gnc_main_window_open_page (data->window, page);
 }
 
-static void just_get_one(QofEntity *ent, gpointer data)
-{
-    GncBudget **bgt = (GncBudget**)data;
-    if (bgt && !*bgt) *bgt = GNC_BUDGET(ent);
-}
-
 /* If only one budget exists, open it; otherwise user selects one to open */
 static void
 gnc_plugin_budget_cmd_open_budget (GtkAction *action,
@@ -208,7 +178,7 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
 {
     guint count;
     QofBook *book;
-    GncBudget *bgt;
+    GncBudget *bgt = NULL;
     QofCollection *col;
     g_return_if_fail (data != NULL);
 
@@ -217,7 +187,7 @@ gnc_plugin_budget_cmd_open_budget (GtkAction *action,
     count = qof_collection_count(col);
     if (count > 0) {
         if (count == 1) {
-            qof_collection_foreach(col, just_get_one, &bgt);
+            bgt = gnc_budget_get_default(book);
         } else {
             bgt = gnc_budget_gui_select_budget(book);
         }

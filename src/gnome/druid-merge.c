@@ -17,17 +17,17 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "dialog-utils.h"
 #include "druid-merge.h"
@@ -260,37 +260,35 @@ gnc_create_import_druid ( void )
 	xml = gnc_glade_xml_new ("merge.glade", "Merge Druid");
 
 	glade_xml_signal_connect(xml, "on_start_page_next",
-		GTK_SIGNAL_FUNC (on_import_start_page_next));
+		G_CALLBACK (on_import_start_page_next));
 	
 	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
-		GTK_SIGNAL_FUNC (on_merge_prepare));
+		G_CALLBACK (on_merge_prepare));
 
 	glade_xml_signal_connect(xml, "on_qof_book_merge_next",
-		GTK_SIGNAL_FUNC (on_import_next));
+		G_CALLBACK (on_import_next));
 
 	glade_xml_signal_connect (xml, "on_finish", 
-		GTK_SIGNAL_FUNC (on_merge_finish));
+		G_CALLBACK (on_merge_finish));
 
 	glade_xml_signal_connect (xml, "on_cancel", 
-		GTK_SIGNAL_FUNC (on_merge_cancel));
+		G_CALLBACK (on_merge_cancel));
 	
 	glade_xml_signal_connect (xml, "on_MergeUpdate_clicked",
-		GTK_SIGNAL_FUNC (on_MergeUpdate_clicked));
+		G_CALLBACK (on_MergeUpdate_clicked));
 		
 	glade_xml_signal_connect (xml, "on_MergeDuplicate_clicked",
-		GTK_SIGNAL_FUNC (on_MergeDuplicate_clicked));
+		G_CALLBACK (on_MergeDuplicate_clicked));
 		
 	glade_xml_signal_connect (xml, "on_MergeNew_clicked",
-		GTK_SIGNAL_FUNC (on_MergeNew_clicked));
+		G_CALLBACK (on_MergeNew_clicked));
 
 	dialog = glade_xml_get_widget (xml, "Merge Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-
 	druid = glade_xml_get_widget (xml, "merge_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
 
-	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
-                      GTK_SIGNAL_FUNC(qof_book_merge_destroy_cb), NULL);
+	g_signal_connect (dialog, "destroy",
+			  G_CALLBACK(qof_book_merge_destroy_cb), NULL);
 	return dialog;
 }
 
@@ -304,37 +302,35 @@ gnc_create_merge_druid ( void )
 	xml = gnc_glade_xml_new ("merge.glade", "Merge Druid");
 
 	glade_xml_signal_connect(xml, "on_start_page_next",
-		GTK_SIGNAL_FUNC (on_qof_start_page_next));
+		G_CALLBACK (on_qof_start_page_next));
 	
 	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
-		GTK_SIGNAL_FUNC (on_merge_prepare));
+		G_CALLBACK (on_merge_prepare));
 
 	glade_xml_signal_connect(xml, "on_qof_book_merge_next",
-		GTK_SIGNAL_FUNC (on_qof_book_merge_next));
+		G_CALLBACK (on_qof_book_merge_next));
 
 	glade_xml_signal_connect (xml, "on_finish", 
-		GTK_SIGNAL_FUNC (on_merge_finish));
+		G_CALLBACK (on_merge_finish));
 
 	glade_xml_signal_connect (xml, "on_cancel", 
-		GTK_SIGNAL_FUNC (on_merge_cancel));
+		G_CALLBACK (on_merge_cancel));
 	
 	glade_xml_signal_connect (xml, "on_MergeUpdate_clicked",
-		GTK_SIGNAL_FUNC (on_MergeUpdate_clicked));
+		G_CALLBACK (on_MergeUpdate_clicked));
 		
 	glade_xml_signal_connect (xml, "on_MergeDuplicate_clicked",
-		GTK_SIGNAL_FUNC (on_MergeDuplicate_clicked));
+		G_CALLBACK (on_MergeDuplicate_clicked));
 		
 	glade_xml_signal_connect (xml, "on_MergeNew_clicked",
-		GTK_SIGNAL_FUNC (on_MergeNew_clicked));
+		G_CALLBACK (on_MergeNew_clicked));
 
 	dialog = glade_xml_get_widget (xml, "Merge Druid");
-	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-
 	druid = glade_xml_get_widget (xml, "merge_druid");
 	gnc_druid_set_colors (GNOME_DRUID (druid));
 
 	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
-                      GTK_SIGNAL_FUNC(qof_book_merge_destroy_cb), NULL);
+                      G_CALLBACK(qof_book_merge_destroy_cb), NULL);
 	return dialog;
 }
 
@@ -428,7 +424,7 @@ gnc_ui_qof_book_merge_druid (void)
 	gnc_ui_hierarchy_druid();
 	druid_hierarchy_window = gnc_ui_hierarchy_running();
 	gtk_widget_hide (druid_hierarchy_window);
-	gtk_object_set_data (GTK_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
+	g_object_set_data (G_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
 	gtk_widget_show_all (qof_book_merge_window);
 	g_return_if_fail(targetBook != NULL);
 	g_return_if_fail(mergeBook != NULL);

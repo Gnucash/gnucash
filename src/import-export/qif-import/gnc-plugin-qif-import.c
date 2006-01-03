@@ -17,20 +17,20 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
-#include "gnc-plugin-qif-import.h"
-#include "gnc-plugin-manager.h"
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-preferences.h"
 #include "druid-qif-import.h"
-#include "messages.h"
-
 #include "gnc-druid-test.h"
+#include "gnc-plugin-manager.h"
+#include "gnc-plugin-qif-import.h"
 
 static void gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass);
 static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);
@@ -53,10 +53,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginQifImportPrivate
+typedef struct GncPluginQifImportPrivate
 {
 	gpointer dummy;
-};
+} GncPluginQifImportPrivate;
+
+#define GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_QIF_IMPORT, GncPluginQifImportPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -110,26 +113,25 @@ gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+	g_type_class_add_private(klass, sizeof(GncPluginQifImportPrivate));
 }
 
 static void
 gnc_plugin_qif_import_init (GncPluginQifImport *plugin)
 {
-	plugin->priv = g_new0 (GncPluginQifImportPrivate, 1);
 }
 
 static void
 gnc_plugin_qif_import_finalize (GObject *object)
 {
 	GncPluginQifImport *plugin;
+	GncPluginQifImportPrivate *priv;
 
 	g_return_if_fail (GNC_IS_PLUGIN_QIF_IMPORT (object));
 
 	plugin = GNC_PLUGIN_QIF_IMPORT (object);
-
-	g_return_if_fail (plugin->priv != NULL);
-
-	g_free (plugin->priv);
+	priv = GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

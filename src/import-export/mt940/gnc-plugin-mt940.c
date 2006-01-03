@@ -16,17 +16,18 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
 #include "gnc-plugin-mt940.h"
 #include "gnc-plugin-manager.h"
-
 #include "gnc-mt940-import.h"
-#include "messages.h"
 
 static void gnc_plugin_mt940_class_init (GncPluginMt940Class *klass);
 static void gnc_plugin_mt940_init (GncPluginMt940 *plugin);
@@ -46,10 +47,13 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
-struct GncPluginMt940Private
+typedef struct GncPluginMt940Private
 {
   gpointer dummy;
-};
+} GncPluginMt940Private;
+
+#define GNC_PLUGIN_MT940_GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_MT940, GncPluginMt940Private))
 
 static GObjectClass *parent_class = NULL;
 
@@ -103,26 +107,25 @@ gnc_plugin_mt940_class_init (GncPluginMt940Class *klass)
   plugin_class->actions      = gnc_plugin_actions;
   plugin_class->n_actions    = gnc_plugin_n_actions;
   plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+  g_type_class_add_private(klass, sizeof(GncPluginMt940Private));
 }
 
 static void
 gnc_plugin_mt940_init (GncPluginMt940 *plugin)
 {
-  plugin->priv = g_new0 (GncPluginMt940Private, 1);
 }
 
 static void
 gnc_plugin_mt940_finalize (GObject *object)
 {
   GncPluginMt940 *plugin;
+  GncPluginMt940Private *priv;
 
   g_return_if_fail (GNC_IS_PLUGIN_MT940 (object));
 
   plugin = GNC_PLUGIN_MT940 (object);
-
-  g_return_if_fail (plugin->priv != NULL);
-
-  g_free (plugin->priv);
+  priv = GNC_PLUGIN_MT940_GET_PRIVATE(plugin);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }

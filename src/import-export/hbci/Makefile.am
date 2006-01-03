@@ -46,9 +46,10 @@ libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgncgnome.la \
-  ${GLADE_LIBS} \
-  ${GLIB_LIBS} \
   ${GNOME_LIBS} \
+  ${GLADE_LIBS} \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS} \
   ${HBCI_LIBS}
 
 AM_CFLAGS = \
@@ -66,10 +67,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/ledger-core \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GLIB_CFLAGS} \
   ${HBCI_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)

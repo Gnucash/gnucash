@@ -16,14 +16,13 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 /** @file gnc-hbci-trans-templ.h Templates for HBCI transactions */
 
-#include "gnc-numeric.h"
-#include "kvp_frame.h"
+#include "qof.h"
 
 /** A template for a HBCI transaction */
 typedef struct _trans_data GNCTransTempl;
@@ -61,6 +60,7 @@ GList *gnc_trans_templ_kvp_glist_from_glist(GList *k);
 /** @name GNCTransTempl value access */
 /*@{*/
 const char *gnc_trans_templ_get_name(const GNCTransTempl *t);
+const char *gnc_trans_templ_get_name_key(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_name(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_account(const GNCTransTempl *t);
 const char *gnc_trans_templ_get_recp_bankcode(const GNCTransTempl *t);

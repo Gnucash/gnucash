@@ -45,8 +45,8 @@
 ;; along with this program; if not, contact:
 ;;
 ;; Free Software Foundation           Voice:  +1-617-542-5942
-;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
-;; Boston, MA  02111-1307,  USA       gnu@gnu.org
+;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -386,12 +386,10 @@
 	 (terse-period? #t)
 	 (period-for (if terse-period?
 			 (string-append " " (N_ "for Period"))
-			 (string-append
-			  ", "
-			  (gnc:print-date start-date-printable) " "
-			  (N_ "to") " "
-			  (gnc:print-date end-date-tp)
-			  )))
+			 (sprintf #f (string-append ", " (N_ "%s to %s"))
+				  (gnc:print-date start-date-printable)
+				  (gnc:print-date end-date-tp))
+			 ))
 	 )
     
     (gnc:html-document-set-title! 
@@ -400,10 +398,7 @@
 		      company-name report-title
 		      (gnc:print-date end-date-tp))
 	     (sprintf #f (string-append "%s %s "
-					(N_ "For Period Covering")
-					" %s "
-					(N_ "to")
-					" %s")
+					(N_ "For Period Covering %s to %s"))
 		      company-name report-title
 		      (gnc:print-date start-date-printable)
 		      (gnc:print-date end-date-tp))
@@ -602,11 +597,11 @@
 	  (if (equal? report-variant 'work-sheet)
 	      (let* ((headings
 		      (list
-		       (N_ "TRIAL BALANCE")
-		       (N_ "ADJUSTMENTS")
-		       (N_ "ADJUSTED TRIAL BALANCE")
-		       (N_ "INCOME STATEMENT")
-		       (N_ "BALANCE SHEET")
+		       (N_ "Trial Balance")
+		       (N_ "Adjustments")
+		       (N_ "Adjusted Trial Balance")
+		       (N_ "Income Statement")
+		       (N_ "Balance Sheet")
 		       ))
 		     (parent-headings #f)
 		     )
@@ -652,7 +647,7 @@
 		   "th" (N_ "CREDIT")))
 		 (row (append
 		       (list (gnc:make-html-table-cell/markup
-			      "total-label-cell" (N_ "Account Title")))
+			      "total-label-cell" (N_ "Account Name")))
 		       (gnc:html-make-empty-cells (- account-cols 1))
 		       (list debit-cell)
 		       (list credit-cell))

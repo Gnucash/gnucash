@@ -17,14 +17,15 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -35,7 +36,6 @@
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
-#include "messages.h"
 #include "policy.h"
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
@@ -933,6 +933,87 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
   }
   xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, split=%p)", acc, split);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static void
+xaccPreSplitMove (Split *split, gpointer dummy)
+{
+  xaccTransBeginEdit (xaccSplitGetParent (split));
+}
+
+static void
+xaccPostSplitMove (Split *split, Account *accto)
+{
+  Transaction *trans;
+
+  split->acc = accto;
+  split->amount = gnc_numeric_convert (split->amount,
+				       xaccAccountGetCommoditySCU(accto),
+				       GNC_HOW_RND_ROUND);
+  trans = xaccSplitGetParent (split);
+  xaccTransCommitEdit (trans);
+  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
+}
+
+void
+xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
+{
+  /* Handle special cases. */
+  if (!accfrom) return;
+  if (!accto) return;
+  if (!accfrom->splits) return;
+  if (accfrom == accto) return;
+
+  ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
+
+  /* check for book mix-up */
+  g_return_if_fail (accfrom->inst.book == accto->inst.book);
+
+  /* Begin editing both accounts and all transactions in accfrom. */
+  g_list_foreach(accfrom->splits, (GFunc)xaccPreSplitMove, NULL);
+  xaccAccountBeginEdit(accfrom);
+  xaccAccountBeginEdit(accto);
+
+  /* Concatenate accfrom's lists of splits and lots to accto's lists. */
+  accto->splits = g_list_concat(accto->splits, accfrom->splits);
+  accto->lots = g_list_concat(accto->lots, accfrom->lots);
+
+  /* Set appropriate flags. */
+  accfrom->balance_dirty = TRUE;
+  accfrom->sort_dirty = FALSE;
+  accto->balance_dirty = TRUE;
+  accto->sort_dirty = TRUE;
+
+  /*
+   * Change each split's account back pointer to accto.
+   * Convert each split's amount to accto's commodity.
+   * Commit to editing each transaction.
+   */
+  g_list_foreach(accfrom->splits, (GFunc)xaccPostSplitMove, (gpointer)accto);
+
+  /* Finally empty accfrom. */
+  accfrom->splits = NULL;
+  accto->lots = NULL;
+
+  /*
+   * DNJ - I don't really understand why this is necessary,
+   *       but xaccAccountInsertSplit does it.
+   */
+  if (accto->inst.editlevel == 1)
+  {
+    accto->splits = g_list_sort(accto->splits, split_sort_func);
+    accto->sort_dirty = FALSE;
+  }
+
+  /* Commit to editing both accounts. */
+  mark_account (accfrom);
+  mark_account (accto);
+  xaccAccountCommitEdit(accfrom);
+  xaccAccountCommitEdit(accto);
+  LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
 }
 
 
@@ -2955,27 +3036,53 @@ static QofObject account_object_def = {
 gboolean xaccAccountRegister (void)
 {
   static QofParam params[] = {
-    { ACCOUNT_NAME_, 			QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, 			(QofSetterFunc) xaccAccountSetName },
-    { ACCOUNT_CODE_, 			QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, 			(QofSetterFunc) xaccAccountSetCode },
-    { ACCOUNT_DESCRIPTION_, 	QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, 		(QofSetterFunc) xaccAccountSetDescription },
-    { ACCOUNT_NOTES_, 			QOF_TYPE_STRING,  (QofAccessFunc)xaccAccountGetNotes, 			(QofSetterFunc) xaccAccountSetNotes },
-    { ACCOUNT_PRESENT_, 		QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetPresentBalance, 	NULL },
-    { ACCOUNT_BALANCE_, 		QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetBalance, 		NULL },
-    { ACCOUNT_CLEARED_, 		QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetClearedBalance, 	NULL },
-    { ACCOUNT_RECONCILED_,	 	QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetReconciledBalance, NULL },
-   { ACCOUNT_TYPE_,          QOF_TYPE_STRING,  (QofAccessFunc)qofAccountGetTypeString,   (QofSetterFunc)qofAccountSetType },
-   { ACCOUNT_FUTURE_MINIMUM_,QOF_TYPE_NUMERIC, (QofAccessFunc)xaccAccountGetProjectedMinimumBalance, NULL },
-    { ACCOUNT_TAX_RELATED, 		QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, 		(QofSetterFunc) xaccAccountSetTaxRelated },
-   { ACCOUNT_SCU,            QOF_TYPE_INT32,   (QofAccessFunc)xaccAccountGetCommoditySCU,(QofSetterFunc)xaccAccountSetCommoditySCU },
-	{ ACCOUNT_NSCU, 			QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetNonStdSCU, 		(QofSetterFunc)xaccAccountSetNonStdSCU },
-   { ACCOUNT_PARENT,         GNC_ID_ACCOUNT,   (QofAccessFunc)xaccAccountGetParentAccount,(QofSetterFunc)qofAccountSetParent },
-    { QOF_PARAM_BOOK, 			QOF_ID_BOOK, 	  (QofAccessFunc)qof_instance_get_book, 		NULL },
-    { QOF_PARAM_GUID, 			QOF_TYPE_GUID,    (QofAccessFunc)qof_instance_get_guid, 		NULL },
-    { ACCOUNT_KVP, 				QOF_TYPE_KVP, 	  (QofAccessFunc)qof_instance_get_slots, 		NULL },
+    { ACCOUNT_NAME_, QOF_TYPE_STRING, 
+      (QofAccessFunc) xaccAccountGetName,
+      (QofSetterFunc) xaccAccountSetName },
+    { ACCOUNT_CODE_, QOF_TYPE_STRING, 
+      (QofAccessFunc) xaccAccountGetCode,
+      (QofSetterFunc) xaccAccountSetCode },
+    { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, 
+      (QofAccessFunc) xaccAccountGetDescription,
+      (QofSetterFunc) xaccAccountSetDescription },
+    { ACCOUNT_NOTES_, QOF_TYPE_STRING, 
+      (QofAccessFunc) xaccAccountGetNotes,
+      (QofSetterFunc) xaccAccountSetNotes },
+    { ACCOUNT_PRESENT_, QOF_TYPE_NUMERIC, 
+      (QofAccessFunc) xaccAccountGetPresentBalance, NULL },
+    { ACCOUNT_BALANCE_, QOF_TYPE_NUMERIC, 
+      (QofAccessFunc) xaccAccountGetBalance, NULL },
+    { ACCOUNT_CLEARED_, QOF_TYPE_NUMERIC, 
+      (QofAccessFunc) xaccAccountGetClearedBalance, NULL },
+    { ACCOUNT_RECONCILED_, QOF_TYPE_NUMERIC, 
+      (QofAccessFunc) xaccAccountGetReconciledBalance, NULL },
+    { ACCOUNT_TYPE_, QOF_TYPE_STRING, 
+      (QofAccessFunc) qofAccountGetTypeString,
+      (QofSetterFunc) qofAccountSetType },
+    { ACCOUNT_FUTURE_MINIMUM_, QOF_TYPE_NUMERIC, 
+      (QofAccessFunc) xaccAccountGetProjectedMinimumBalance, NULL },
+    { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, 
+      (QofAccessFunc) xaccAccountGetTaxRelated, 
+      (QofSetterFunc) xaccAccountSetTaxRelated },
+    { ACCOUNT_SCU, QOF_TYPE_INT32, 
+      (QofAccessFunc) xaccAccountGetCommoditySCU,
+      (QofSetterFunc) xaccAccountSetCommoditySCU },
+    { ACCOUNT_NSCU, QOF_TYPE_BOOLEAN, 
+      (QofAccessFunc) xaccAccountGetNonStdSCU, 
+      (QofSetterFunc) xaccAccountSetNonStdSCU },
+    { ACCOUNT_PARENT, GNC_ID_ACCOUNT,
+      (QofAccessFunc) xaccAccountGetParentAccount, 
+      (QofSetterFunc) qofAccountSetParent },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK, 
+      (QofAccessFunc) qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, 
+      (QofAccessFunc) qof_instance_get_guid, NULL },
+    { ACCOUNT_KVP, QOF_TYPE_KVP, 
+      (QofAccessFunc) qof_instance_get_slots, NULL },
     { NULL },
   };
 
-  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc)xaccAccountOrder, params);
+  qof_class_register (GNC_ID_ACCOUNT, (QofSortFunc) xaccAccountOrder, params);
 
   return qof_object_register (&account_object_def);
 }

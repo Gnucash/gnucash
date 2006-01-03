@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
  *******************************************************************/
 
@@ -229,7 +229,7 @@ pricedb_start_handler(GSList* sibling_data,
 {
   gxpf_data *gdata = global_data;
   QofBook *book = gdata->bookdata;
-  GNCPriceDB *db = gnc_pricedb_create(book);
+  GNCPriceDB *db = gnc_book_get_pricedb(book);
   g_return_val_if_fail(db, FALSE);
   gnc_pricedb_set_bulk_update(db, TRUE);
   *result = db;

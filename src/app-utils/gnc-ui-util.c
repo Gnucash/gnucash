@@ -16,15 +16,16 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <ctype.h>
 #include <errno.h>
-#include <glib.h>
 #include <limits.h>
 #include <locale.h>
 #include <math.h>
@@ -32,8 +33,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
-#include "Transaction.h"
 
 #include "Account.h"
 #include "gnc-book.h"
@@ -45,7 +44,6 @@
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
 
@@ -170,7 +168,7 @@ void
 gnc_init_default_directory (char **dirname)
 {
   if (*dirname == NULL)
-    *dirname = g_strdup_printf("%s/", getenv("HOME"));
+    *dirname = g_strdup_printf("%s/", g_get_home_dir());
 }
 
 void

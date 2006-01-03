@@ -17,8 +17,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 /** @addtogroup GUI
@@ -33,7 +33,8 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 
 #include "dialog-commodity.h"
@@ -42,7 +43,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -521,6 +521,14 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
     case DIAG_COMM_ALL:
       namespaces =
 	gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
+
+      /* Replace the string "ISO4217" with "CURRENCY". */
+      node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
+      if (node) {
+	namespaces = g_list_remove_link (namespaces, node);
+	g_list_free_1 (node);
+      }
+      namespaces = g_list_prepend (namespaces, "CURRENCY");
       break;
 
    case DIAG_COMM_NON_CURRENCY:
@@ -671,7 +679,7 @@ gnc_ui_source_menu_create(QuoteSourceType type)
     item = gtk_menu_item_new_with_label(gnc_quote_source_get_user_name(source));
     gtk_widget_set_sensitive(item, gnc_quote_source_get_supported(source));
     gtk_widget_show(item);
-    gtk_menu_append(menu, item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   }
 
   omenu = gtk_option_menu_new();
@@ -740,15 +748,13 @@ gnc_ui_quote_tz_menu_create(void)
   gtk_widget_show(GTK_WIDGET(menu));
 
   item = gtk_menu_item_new_with_label(_("Use local time"));
-  /* set user data to non NULL so we can detect this item specially. */
-  gtk_object_set_user_data(GTK_OBJECT(item), (gpointer) 1);
   gtk_widget_show(item);
-  gtk_menu_append(menu, item);
+  gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
  
   for(itemstr = &known_timezones[0]; *itemstr; itemstr++) {
     item = gtk_menu_item_new_with_label(*itemstr);
     gtk_widget_show(item);
-    gtk_menu_append(menu, item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   }
 
   omenu = gtk_option_menu_new();

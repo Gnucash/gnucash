@@ -16,8 +16,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #ifndef __GNC_PLUGIN_MT940_H
@@ -40,15 +40,12 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_MT940_NAME "gnc-plugin-mt940"
 
 /* typedefs & structures */
-typedef struct GncPluginMt940Private GncPluginMt940Private;
-
 typedef struct {
-	GncPlugin parent;
-	GncPluginMt940Private *priv;
+	GncPlugin gnc_plugin;
 } GncPluginMt940;
 
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginMt940Class;
 
 /* function prototypes */

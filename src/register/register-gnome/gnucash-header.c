@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -27,6 +27,8 @@
  */
 
 #include "config.h"
+
+#include <string.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
@@ -324,7 +326,7 @@ gnc_header_reconfigure (GncHeader *header)
                                                 0, 0, w, h);
 
                 if (old_height != h)
-                        gtk_widget_set_usize (GTK_WIDGET(canvas), -1, h);
+                        gtk_widget_set_size_request (GTK_WIDGET(canvas), -1, h);
 
                 gnc_header_request_redraw (header);
         }

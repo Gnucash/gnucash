@@ -13,20 +13,21 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @addtogroup Import_Export
     @{ */
 /** @internal
     @file import-main-matcher.c
     @brief Transaction matcher main window
-    @author Copyright (C) 2002 Benoit Grégoire
+    @author Copyright (C) 2002 Benoit GrÃ©goire
     @author Christian Stimming    
 */
 #include "config.h"
 
 #include <gnome.h>
+#include <glib/gi18n.h>
 
 #include "import-main-matcher.h"
 
@@ -34,12 +35,13 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
-#include "gnc-trace.h"
 #include "import-settings.h"
 #include "import-match-map.h"
 #include "import-match-picker.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
+
+#define GCONF_SECTION "dialogs/import/generic_matcher/transaction_list"
 
 struct _main_matcher_info
 {
@@ -224,6 +226,7 @@ void gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
   if (info == NULL) 
     return;
 
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
   gnc_import_Settings_delete (info->user_settings);
   gtk_widget_destroy (GTK_WIDGET (info->dialog));
   g_free (info);
@@ -248,6 +251,43 @@ on_matcher_cancel_clicked (GtkButton *button,
 {
   GNCImportMainMatcher *info = user_data;
   gnc_gen_trans_list_delete (info);
+}
+
+static void 
+on_matcher_help_close_clicked (GtkButton *button,
+			       gpointer user_data)
+{
+  GtkWidget *help_dialog = user_data;
+
+  gtk_widget_destroy(help_dialog);
+}
+
+static void 
+on_matcher_help_clicked (GtkButton *button,
+			 gpointer user_data)
+{
+  GNCImportMainMatcher *info = user_data;
+  GladeXML *xml;
+  GtkWidget *help_dialog, *box;
+  
+  xml = gnc_glade_xml_new ("generic-import.glade", "matcher_help");
+
+  box = glade_xml_get_widget (xml, "red");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_red);
+  box = glade_xml_get_widget (xml, "yellow");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_yellow);
+  box = glade_xml_get_widget (xml, "green");
+  gtk_widget_modify_bg(box, GTK_STATE_NORMAL, &info->color_back_green);
+
+  help_dialog = glade_xml_get_widget (xml, "matcher_help");
+  gtk_window_set_transient_for(GTK_WINDOW(help_dialog),
+			       GTK_WINDOW(info->dialog));
+
+  glade_xml_signal_connect_data(xml, "on_matcher_help_close_clicked",
+				G_CALLBACK(on_matcher_help_close_clicked), 
+				help_dialog);
+
+  gtk_widget_show(help_dialog);
 }
 
 static void 
@@ -403,19 +443,22 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   heading_label = glade_xml_get_widget (xml, "heading_label");
   g_assert (heading_label != NULL);
 
-  /*if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (info->dialog), 
-			     GTK_WINDOW (parent));*/
+  /* if (parent)
+    gtk_window_set_transient_for (GTK_WINDOW (info->dialog), 
+				  GTK_WINDOW (parent));*/
 
   /* Connect signals */
   glade_xml_signal_connect_data(xml, "downloaded_transaction_select_cb",
-				GTK_SIGNAL_FUNC(clist_select_row_cb), 
+				G_CALLBACK(clist_select_row_cb), 
 				info);
   glade_xml_signal_connect_data(xml, "on_matcher_ok_clicked", 
-				GTK_SIGNAL_FUNC(on_matcher_ok_clicked),
+				G_CALLBACK(on_matcher_ok_clicked),
 				info);
   glade_xml_signal_connect_data(xml, "on_matcher_cancel_clicked", 
-				GTK_SIGNAL_FUNC(on_matcher_cancel_clicked),
+				G_CALLBACK(on_matcher_cancel_clicked),
+				info);
+  glade_xml_signal_connect_data(xml, "on_matcher_help_clicked", 
+				G_CALLBACK(on_matcher_help_clicked),
 				info);
 
   /*Initialise pixmaps*/
@@ -484,9 +527,7 @@ GNCImportMainMatcher *gnc_gen_trans_list_new (GtkWidget *parent,
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
   
-  /* Hide on close instead of destroy since we still need the values
-     from the boxes. */
-  /*gnome_dialog_close_hides (GNOME_DIALOG (info->dialog), TRUE);*/
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(info->dialog));
   gtk_widget_show_all (GTK_WIDGET (info->dialog));
   return info;
 }
@@ -497,7 +538,7 @@ gboolean gnc_gen_trans_list_run (GNCImportMainMatcher *info)
   
   /* DEBUG("Begin"); */
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (info->dialog));
+  result = gtk_dialog_run (GTK_DIALOG (info->dialog));
 
   /* DEBUG("Result was %d", result); */
 

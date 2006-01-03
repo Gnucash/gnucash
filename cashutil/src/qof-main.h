@@ -361,6 +361,8 @@ QofParam for the QofObject set in context->database.
 void
 qof_cmd_explain (qof_main_context *context);
 
+void qof_main_select(qof_main_context *context);
+
 /** \brief Common QOF CLI options
  *
  * These are definitions for popt support in the CLI. Every program's
@@ -377,9 +379,9 @@ qof_cmd_explain (qof_main_context *context);
 	{"explain", 0, POPT_ARG_NONE, NULL, qof_op_explain, \
 	 _("List the fields within the specified database and exit, requires -d."), \
 	 NULL}, \
-    {"xml-file", 'x', POPT_ARG_STRING, &filename, qof_op_offline, \
-     _("Query the QSF XML data in <filename>"), \
-     "filename"}, \
+	{"xml-file", 'x', POPT_ARG_STRING, &filename, qof_op_xmlfile, \
+	_("Query the QSF XML data in <filename>"), \
+	"filename"}, \
 	{"date", 't', POPT_ARG_STRING, &date_time, qof_op_timespec, \
 	 _("Shorthand to only query objects that contain the specified date."), \
 	 "string"}, \
@@ -411,7 +413,7 @@ qof_cmd_explain (qof_main_context *context);
 #define QOF_MAIN_OP \
  	_(qof_op_noop, = 0) \
 	_(qof_op_list,)     \
-    _(qof_op_xmlfile,)  \
+	_(qof_op_xmlfile,)  \
 	_(qof_op_category,) \
 	_(qof_op_database,) \
 	_(qof_op_timespec,) \

@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
  /*
@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <libguile.h>
 
 #include "combocell.h"
@@ -37,7 +38,6 @@
 #include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "numcell.h"
 #include "pricecell.h"
 #include "quickfillcell.h"
@@ -2186,6 +2186,7 @@ gnc_split_register_init (SplitRegister *reg,
                          SplitRegisterType type,
                          SplitRegisterStyle style,
                          gboolean use_double_line,
+                         gboolean do_auto_complete,
                          gboolean is_template)
 {
   TableLayout *layout;
@@ -2203,6 +2204,7 @@ gnc_split_register_init (SplitRegister *reg,
   reg->type = type;
   reg->style = style;
   reg->use_double_line = use_double_line;
+  reg->do_auto_complete = do_auto_complete;
   reg->is_template = is_template;
 
   layout = gnc_split_register_layout_new (reg);
@@ -2261,6 +2263,7 @@ gnc_split_register_new (SplitRegisterType type,
                         gboolean is_template)
 {
   SplitRegister * reg;
+  gboolean default_do_auto_complete = TRUE;
 
   reg = g_new0 (SplitRegister, 1);
 
@@ -2271,6 +2274,7 @@ gnc_split_register_new (SplitRegisterType type,
                            type,
                            style,
                            use_double_line,
+                           default_do_auto_complete,
                            is_template);
 
   return reg;
@@ -2311,6 +2315,14 @@ gnc_split_register_config (SplitRegister *reg,
   reg->use_double_line = use_double_line;
 
   gnc_table_realize_gui (reg->table);
+}
+
+void
+gnc_split_register_set_auto_complete(SplitRegister *reg,
+                                     gboolean do_auto_complete)
+{
+  g_return_if_fail(reg);
+  reg->do_auto_complete = do_auto_complete;
 }
 
 static void

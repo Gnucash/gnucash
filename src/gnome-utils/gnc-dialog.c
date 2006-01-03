@@ -21,7 +21,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include "gnc-trace.h"
+#include "gnc-engine.h"
 #include "gnome.h"         // for gnome_date_edit
 #include "gnc-dialog.h"
 #include "gnc-gobject-utils.h"

@@ -3,10 +3,9 @@
 
 DIE=0
 
-#GETTEXTIZE=${GETTEXTIZE:-gettextize}
-INTLTOOLIZE=${INTLTOOLIZE:-intltoolize}
-LIBTOOLIZE=${LIBTOOLIZE:-libtoolize}
-LIBTOOL=${LIBTOOL:-libtool}
+: ${GLIB_GETTEXTIZE=glib-gettextize}
+: ${INTLTOOLIZE=intltoolize}
+: ${LIBTOOLIZE=libtoolize}
 
 if [ -n "$GNOME2_PATH" ]; then
 	for dir in `echo $GNOME2_PATH | sed 's/:/ /g'`; do
@@ -127,9 +126,9 @@ case $gettext_version in
 esac
 
 (grep "^AM_PROG_LIBTOOL" $srcdir/configure.ac >/dev/null) && {
-  (${LIBTOOL} --version) < /dev/null > /dev/null 2>&1 || {
+  (${LIBTOOLIZE} --version) < /dev/null > /dev/null 2>&1 || {
     echo
-    echo "**Error**: You must have \`libtool' installed to compile GnuCash."
+    echo "**Error**: You must have \`libtoolize' installed to compile GnuCash."
     echo "Get ftp://ftp.gnu.org/pub/gnu/libtool-1.4.2.tar.gz"
     echo "(or a newer version if it is available)"
     DIE=1
@@ -182,12 +181,13 @@ if test "$DIE" -eq 1; then
   exit 1
 fi
 
-if test -z "$*"; then
-  echo "**Warning**: I am going to run \`configure' with no arguments."
-  echo "If you wish to pass any to it, please specify them on the"
-  echo \`$0"' command line."
-  echo
-fi
+# We don't call configure so we don't need to warn the user here.
+#if test -z "$*"; then
+#  echo "**Warning**: I am going to run \`configure' with no arguments."
+#  echo "If you wish to pass any to it, please specify them on the"
+#  echo \`$0"' command line."
+#  echo
+#fi
 
 case $CC in
 xlc )
@@ -228,61 +228,30 @@ do
         fi
       done
 
-      if grep "^AM_GNU_GETTEXT" configure.ac >/dev/null; then
-	if grep "sed.*POTFILES" configure.ac >/dev/null; then
-	  : do nothing -- we still have an old unmodified configure.ac
-	else
-	  echo "Creating $dr/aclocal.m4 ..."
-	  test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	  echo "(1) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
-	  echo "no" | ${GETTEXTIZE} --force --copy $INTL
-	  echo "Making $dr/aclocal.m4 writable ..."
-	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
-        fi
-        grep "intl/Makefile" configure.ac > /dev/null ||
-        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
-  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
-      fi
-      if grep "^AM_GNOME_GETTEXT" configure.ac >/dev/null; then
-        echo "Creating $dr/aclocal.m4 ..."
-        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-	echo "(2) Running ${GETTEXTIZE}...  Ignore non-fatal messages."
-        echo "no" | gettextize --force --copy $INTL
-        echo "Making $dr/aclocal.m4 writable ..."
-        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
-        grep "intl/Makefile" configure.ac > /dev/null ||
-        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
-  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
-      fi
-      if grep "^AM_GLIB_GNU_GETTEXT" configure.ac >/dev/null; then
-        echo "Creating $dr/aclocal.m4 ..."
-        test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
-        echo "(3) Running gettextize...  Ignore non-fatal messages."
-        echo "no" | glib-gettextize --force --copy
-        echo "Making $dr/aclocal.m4 writable ..."
-        test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
-        grep "po/Makefile.in" configure.ac > /dev/null ||
-        ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( po/Makefile.in#' \
-  	configure.ac >configure.ac.new && mv configure.ac.new configure.ac )
-      fi
-      if grep "^AC_PROG_INTLTOOL" configure.ac >/dev/null; then
-        echo "Running intltoolize ..."
-        intltoolize --force --copy
-      fi
-      if grep "^A[CM]_PROG_LIBTOOL" configure.ac >/dev/null; then
-        echo "Running libtoolize..."
-        libtoolize --force --copy
-      fi
-      echo "Running $ACLOCAL $aclocalinclude ..."
-      $ACLOCAL $aclocalinclude
-      if grep "^AC_CONFIG_HEADER" configure.ac >/dev/null; then
-	echo "Running ${AUTOHEADER}..."
-	${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
-      fi
-      echo "Running $AUTOMAKE --gnu $am_opt ..."
-      $AUTOMAKE --add-missing --gnu $am_opt
-      echo "Running autoconf ..."
-      autoconf
+      echo "Creating $dr/aclocal.m4 ..."
+      test -r $dr/aclocal.m4 || touch $dr/aclocal.m4
+      echo "(3) Running gettextize...  Ignore non-fatal messages."
+      echo "no" | ${GLIB_GETTEXTIZE} --force --copy
+      echo "Making $dr/aclocal.m4 writable ..."
+      test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
+
+      echo "Running ${INTLTOOLIZE} ..."
+      ${INTLTOOLIZE} --force --copy
+
+      echo "Running ${LIBTOOLIZE}..."
+      ${LIBTOOLIZE} --force --copy
+
+      echo "Running ${ACLOCAL} $aclocalinclude ..."
+      ${ACLOCAL} $aclocalinclude
+
+      echo "Running ${AUTOHEADER}..."
+      ${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
+
+      echo "Running ${AUTOMAKE} --gnu $am_opt ..."
+      ${AUTOMAKE} --add-missing --gnu $am_opt
+
+      echo "Running ${AUTOCONF} ..."
+      ${AUTOCONF}
     )
   fi
 done
@@ -352,7 +321,7 @@ do
   fi
 done
 
-conf_flags="--enable-maintainer-mode --enable-error-on-warning --enable-compile-warnings" # --enable-iso-c
+conf_flags="--enable-error-on-warning --enable-compile-warnings" # --enable-iso-c
 
 if test x$NOCONFIGURE = x; then
   echo Running $srcdir/configure $conf_flags "$@" ...

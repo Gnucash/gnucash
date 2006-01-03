@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 /**
@@ -49,9 +49,9 @@
 
 #include "config.h"
 
-#include <limits.h>
 #include <gnome.h>
-#include <glib.h>
+#include <glib/gi18n.h>
+#include <limits.h>
 
 #include "Account.h"
 #include "Group.h"
@@ -81,7 +81,6 @@
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
 #include "gnc-split-reg.h"
-#include "messages.h"
 
 #include "dialog-sxsincelast.h"
 #include "dialog-scheduledxaction.h"
@@ -373,7 +372,7 @@ static void gnc_sxsld_free_toCreateTuple_list( GList *l );
 static void gnc_sxsld_free_sxState( gpointer key,
                                     gpointer value,
                                     gpointer userdata );
-static void gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud );
+static void gnc_sxsld_free_entry_numeric( GObject *o, gpointer ud );
 
 static gint sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                                               toCreateInstance *tci );
@@ -1792,7 +1791,6 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         for ( l = autoCreateList; l; l = l->next ) {
                 total += g_list_length( ((toCreateTuple*)l->data)->instanceList );
         }
-        gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0, total );
         gnc_suspend_gui_refresh();
 
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
@@ -1943,8 +1941,8 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         rowText[1] = "";
                         rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size? */
                         sprintf( rowText[2], "%d",
-                                 (g_date_julian(rit->occurDate)
-                                  - g_date_julian(rit->endDate)) );
+                                 (g_date_get_julian(rit->occurDate)
+                                  - g_date_get_julian(rit->endDate)) );
 
                         instNode = gtk_ctree_insert_node( ctree, sxNode, NULL,
                                                           rowText,
@@ -2276,11 +2274,11 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
 
         sxsld = (sxSinceLastData*)ud;
 
-        tci = (toCreateInstance*)gtk_object_get_data( GTK_OBJECT(e), "tci" );
+        tci = (toCreateInstance*)g_object_get_data( G_OBJECT(e), "tci" );
         g_assert( tci == sxsld->curSelTCI );
 
-        varName = (gchar*)gtk_object_get_data( GTK_OBJECT(e), "varName" );
-        num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(e), "numeric" );
+        varName = (gchar*)g_object_get_data( G_OBJECT(e), "varName" );
+        num = (gnc_numeric*)g_object_get_data( G_OBJECT(e), "numeric" );
         entryText = gtk_editable_get_chars( e, 0, -1 );
         dummyVarHash = g_hash_table_new( NULL, NULL );
         /* FIXME?: Should be using xaccParseAmount instead of
@@ -2461,9 +2459,9 @@ create_each_transaction_helper( Transaction *t, void *d )
         gnc_copy_trans_onto_trans( t, newT, FALSE, FALSE );
 
         xaccTransSetDate( newT,
-                          g_date_day( tci->date ),
-                          g_date_month( tci->date ),
-                          g_date_year( tci->date ) );
+                          g_date_get_day( tci->date ),
+                          g_date_get_month( tci->date ),
+                          g_date_get_year( tci->date ) );
 
         /* the accounts and amounts are in the kvp_frames of the splits. */
         osList = xaccTransGetSplitList( t );
@@ -2799,9 +2797,9 @@ tct_table_entry_key_handle( GtkWidget *widget, GdkEventKey *event, gpointer ud )
         /* First, deal with formulas in these cells, replacing their
          * contents with the eval'd value. */
         ent = GTK_ENTRY(widget);
-        num = (gnc_numeric*)gtk_object_get_data( GTK_OBJECT(ent), "numeric" );
+        num = (gnc_numeric*)g_object_get_data( G_OBJECT(ent), "numeric" );
         str = g_string_new("");
-        g_string_sprintf( str, "%0.2f", gnc_numeric_to_double( *num ) );
+        g_string_printf( str, "%0.2f", gnc_numeric_to_double( *num ) );
         gtk_entry_set_text( ent, str->str );
         g_string_free( str, TRUE );
 
@@ -2932,27 +2930,25 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 }
 
                 gstr = g_string_sized_new(16);
-                g_string_sprintf( gstr, "%s: ", varName );
+                g_string_printf( gstr, "%s: ", varName );
                 label = gtk_label_new( gstr->str );
                 gtk_label_set_justify( GTK_LABEL(label), GTK_JUSTIFY_RIGHT );
                 g_string_free( gstr, TRUE );
 
                 entry = gtk_entry_new();
-                gtk_object_set_data( GTK_OBJECT(entry), "varName",
-                                     varName );
-                gtk_object_set_data( GTK_OBJECT(entry), "tci", tci );
+                g_object_set_data( G_OBJECT(entry), "varName", varName );
+                g_object_set_data( G_OBJECT(entry), "tci", tci );
                 tmpNumValue = g_new0( gnc_numeric, 1 );
                 *tmpNumValue = gnc_numeric_create( 0, 1 );
-                gtk_object_set_data( GTK_OBJECT(entry), "numeric",
-                                     tmpNumValue );
+                g_object_set_data( G_OBJECT(entry), "numeric", tmpNumValue );
                 if ( tableIdx == varHashSize ) {
                         /* Set a flag so we can know if we're the last row of
                          * the table. */
-                        gtk_object_set_data( GTK_OBJECT(entry), "lastVisualElt",
-                                             (gpointer)1 );
+                        g_object_set_data( G_OBJECT(entry), "lastVisualElt",
+					   (gpointer)1 );
                 }
 
-                gtk_widget_set_usize( entry, 64, 0 );
+                gtk_widget_set_size_request( entry, 64, -1 );
                 numValue = (gnc_numeric*)g_hash_table_lookup( tci->varBindings,
                                                               varName );
                 if ( numValue != NULL ) {
@@ -2963,15 +2959,15 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 }
 
                 /* fixme::2002.02.10 jsled testing */
-                gtk_signal_connect( GTK_OBJECT(entry), "key-press-event",
-                                    GTK_SIGNAL_FUNC( tct_table_entry_key_handle ),
-                                    NULL );
-                gtk_signal_connect( GTK_OBJECT(entry), "changed",
-                                    GTK_SIGNAL_FUNC( sxsincelast_entry_changed ),
-                                    sxsld );
-                gtk_signal_connect( GTK_OBJECT(entry), "destroy",
-                                    GTK_SIGNAL_FUNC(gnc_sxsld_free_entry_numeric),
-                                    sxsld );
+                g_signal_connect( entry, "key-press-event",
+				  G_CALLBACK( tct_table_entry_key_handle ),
+				  NULL );
+                g_signal_connect( entry, "changed",
+				  G_CALLBACK( sxsincelast_entry_changed ),
+				  sxsld );
+                g_signal_connect( entry, "destroy",
+				  G_CALLBACK(gnc_sxsld_free_entry_numeric),
+				  sxsld );
 
                 gtk_table_attach( varTable, label,
                                   0, 1, tableIdx, tableIdx + 1,
@@ -3494,8 +3490,8 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
         rit = (reminderInstanceTuple*)data;
         msg = (GString*)ud;
         qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, rit->occurDate );
-        g_string_sprintfa( msg, tmpBuf );
-        g_string_sprintfa( msg, "\n" );
+        g_string_append_printf( msg, tmpBuf );
+        g_string_append_printf( msg, "\n" );
 }
 
 static gboolean
@@ -3524,12 +3520,12 @@ inform_or_add( sxSinceLastData *sxsld, reminderTuple *rt, gboolean okFlag,
                 /* [Add to list for later] dialog issuance to user. */
 
                 userMsg = g_string_sized_new( 128 );
-                g_string_sprintf( userMsg,
-                                  "You cannot skip instances of "
-                                  "Scheduled Transactions.\n"
-                                  "The following instances of \"%s\"\n"
-                                  "must be selected as well:\n\n",
-                                  xaccSchedXactionGetName( rt->sx ) );
+                g_string_printf( userMsg,
+                                 "You cannot skip instances of "
+                                 "Scheduled Transactions.\n"
+                                 "The following instances of \"%s\"\n"
+                                 "must be selected as well:\n\n",
+                                 xaccSchedXactionGetName( rt->sx ) );
                 g_list_foreach( badList, create_bad_reminders_msg, userMsg );
                 gnc_error_dialog( sxsld->sincelast_window, userMsg->str );
                 g_string_free( userMsg, TRUE );
@@ -3707,7 +3703,7 @@ sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
 		gnc_split_reg_jump_to_split(gsr, split);
         }
         
-        gtk_signal_emit_stop_by_name( GTK_OBJECT(gsr), "jump" );
+        g_signal_stop_emission_by_name(gsr, "jump");
 }
 
 static void
@@ -3897,10 +3893,10 @@ gnc_sxsld_free_sxState( gpointer key,
 
 static
 void
-gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud )
+gnc_sxsld_free_entry_numeric( GObject *o, gpointer ud )
 {
         gnc_numeric *num;
-        num = (gnc_numeric*)gtk_object_get_data( o, "numeric" );
+        num = (gnc_numeric*)g_object_get_data( o, "numeric" );
         g_free( num );
 }
 

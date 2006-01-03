@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 
@@ -439,10 +439,6 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 
    SEND_QUERY (be, be->buff, );
    pgendGetResults (be, get_price_cb, NULL);
-
-   /* insertion into the price db will mark it dirty;
-    * but it really isn't at this point. */
-   gnc_pricedb_mark_clean (look->prdb);
 
    /* re-enable events */
    pgendEnable(be);

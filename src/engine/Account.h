@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 /** @addtogroup Engine
@@ -511,6 +511,10 @@ void         xaccAccountInsertSplit (Account *account, Split *split);
  *    modify this list directly, and could leave you with a corrupted 
  *    pointer. */
 SplitList*      xaccAccountGetSplitList (Account *account);
+
+/** The xaccAccountMoveAllSplits() routine reassigns each of the splits
+ *  in accfrom to accto. */
+void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);
 
 /** \warning  Unimplemented */
 gpointer xaccAccountForEachSplit(Account *account,

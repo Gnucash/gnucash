@@ -29,8 +29,7 @@
 
 #include "gnc-xml.h"
 #include "gnc-xml-helper.h"
-#include "gnc-engine-util.h"
-#include "gnc-trace.h"
+#include "qof.h"
 
 #include "sixtp.h"
 #include "sixtp-utils.h"

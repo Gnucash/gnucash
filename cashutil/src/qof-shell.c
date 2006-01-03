@@ -188,7 +188,6 @@ qof_check_sql(const char *sql)
 	regex_t *r;
 	int reg_exp_check;
 	static char *pattern = QOF_SQL_SUPPORTED;
-//	QofSqlQuery *q;
 	gboolean result;
 
 	result = FALSE;
@@ -545,11 +544,11 @@ static int delete_fcn(qof_shell_context *context)
 	return 0;
 }
 
-/*static void
-qof_main_list(QofObject *obj, gpointer data)
+static void
+qof_list_cb(QofObject *obj, gpointer data)
 {
-	fprintf(stdout, "%s\t%s\n", obj->e_type, obj->type_label);
-}*/
+	fprintf(stdout, "%-20s%s\n", obj->e_type, obj->type_label);
+}
 
 static int list_fcn(qof_shell_context *context)
 {
@@ -558,7 +557,7 @@ static int list_fcn(qof_shell_context *context)
 	"and in SQL queries (as the table name) with 'sql'\n"
 	"Descriptions are shown only for readability.\n\n"));
 	fprintf (stdout, "%-20s%s", _("Object Name"), _("Description\n"));
-//	qof_object_foreach_type(qof_list_cb, NULL);
+	qof_object_foreach_type(qof_list_cb, NULL);
 	fprintf (stdout, _("\nUse 'explain <database>' to see the list of fields within\n"
 	"any supported database.\n"));
 	return 0;
@@ -653,7 +652,7 @@ static int load_fcn(qof_shell_context *context)
 	}
 	if(context->qof.filename) {
 		qof_session_begin(context->qof.input_session, context->qof.filename, FALSE, TRUE);
-//		qof_mod_compression(context->gz_level, context);
+		qof_mod_compression(context->qof.gz_level, &context->qof);
 	}
 	else {
 		qof_session_begin(context->qof.input_session, QOF_STDOUT, FALSE, FALSE);
@@ -1118,6 +1117,10 @@ qof_cmd_shell(qof_shell_context *context)
 	if(!context->shortname) { context->shortname = g_strndup(PACKAGE, 4); }
 	context->argc = 0;
 	fprintf (stdout, _("\nWelcome to the QOF interactive shell ...\n"));
+	fprintf (stdout, " %s is free software; see the source for copying conditions.\n", 
+		PACKAGE);
+	fprintf (stdout, " There is NO warranty; not even MERCHANTABILITY or FITNESS\n");
+	fprintf (stdout, " FOR A PARTICULAR PURPOSE.\n\n");
 	fprintf (stdout, _(" Type 'help' for additional information\n\n"));
 
 	for (;;) {

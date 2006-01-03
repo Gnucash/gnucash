@@ -16,8 +16,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 #include "config.h"
@@ -250,9 +250,7 @@ gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
 }
 
 
-void
- gnc_reset_warnings_add_section (const gchar *section, GtkWidget *box);
-void
+static void
 gnc_reset_warnings_add_section (const gchar *section, GtkWidget *box)
 {
   GSList *entries, *tmp;
@@ -355,7 +353,6 @@ gnc_reset_warnings_dialog (GtkWidget *main_window)
   DEBUG("Opening dialog-reset-warnings.glade:");
   xml = gnc_glade_xml_new("dialog-reset-warnings.glade", "Reset Warnings");
   dialog = glade_xml_get_widget(xml, "Reset Warnings");
-  printf("autoconnect\n");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
 

@@ -88,7 +88,6 @@ qof_main_free (qof_main_context *context)
 	g_free(context->write_file);
 	g_free(context->sql_file);
 	g_free(context->database);
-//	g_free(context->shortname);
 	g_free(context->category);
 }
 
@@ -286,13 +285,6 @@ qof_cmd_xmlfile (qof_main_context *context)
 	book = qof_session_get_book(input_session);
 	be = qof_book_get_backend(book);
 	backend_config = qof_backend_get_config(be);
-	PINFO (" trying to get backend config");
-	if(backend_config) 
-	{
-/*		qof_backend_option_foreach(backend_config, 
-			print_config_cb, context);*/
-	}
-	else { PINFO (" failed"); }
 	export_session = qof_session_new();
 	context->export_session = export_session;
 	if(context->write_file != NULL) {

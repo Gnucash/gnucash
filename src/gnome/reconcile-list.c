@@ -18,23 +18,21 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "gnc-date.h"
 #include "QueryCore.h"
 #include "QueryNew.h"
 #include "Transaction.h"
-
-#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-#include "messages.h"
 #include "reconcile-list.h"
 #include "search-param.h"
 #include "gnc-component-manager.h"
@@ -84,7 +82,7 @@ gnc_reconcile_list_get_type (void)
       (GInstanceInitFunc) gnc_reconcile_list_init
     };
 
-    gnc_reconcile_list_type = g_type_register_static (GTK_TYPE_GNC_QUERY_LIST,
+    gnc_reconcile_list_type = g_type_register_static (GNC_TYPE_QUERY_LIST,
 						      "GncReconcileList",
 						      &gnc_reconcile_list_info, 0);
   }

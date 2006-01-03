@@ -15,19 +15,21 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
 #include "config.h"
+
+#include <glib.h>
+#include <glib/gi18n.h>
 
 #include "Group.h"
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
-#include "messages.h"
 #include "pricecell.h"
 #include "datecell.h"
 #include "split-register-control.h"
@@ -620,6 +622,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   gnc_numeric amount;
   BasicCell *cell;
   Split *split;
+
+  if (!reg->do_auto_complete)
+    return FALSE;
 
   blank_split = xaccSplitLookup (&info->blank_split_guid,
                                  gnc_get_current_book ());
@@ -1534,11 +1539,11 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
   SplitRegister *reg = data;
   gint response;
+  const gchar *title = _("Mark split as unreconciled?");
   const gchar *message =
-    _("<b>Mark split as unreconciled?</b>\n\n"
-      "You are about to mark a reconciled split as unreconciled.  Doing "
+    _("You are about to mark a reconciled split as unreconciled.  Doing "
       "so might make future reconciliation difficult!  Continue "
-      "with this change?\n");
+      "with this change?");
 
   if (old_flag != YREC)
     return TRUE;
@@ -1547,7 +1552,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
   response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
 					 "mark_split_unreconciled",
 					 "_Unreconcile", GTK_STOCK_CANCEL,
-					 message);
+					 "<b>%s</b>\n\n%s\n",
+					 title, message);
 
   return (response == GTK_RESPONSE_YES);
 }

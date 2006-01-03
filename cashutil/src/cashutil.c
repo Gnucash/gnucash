@@ -98,13 +98,13 @@ It will not be possible to support CREATE, AMEND or DROP for understandable reas
 static QofLogModule log_module = CU_MOD_CLI;
 static gboolean debug_on = FALSE;
 static GHashTable *backend_extensions;
-#define GNC_LIB_NAME "libgnc-backend-file.la"
+#define GNC_LIB_NAME "libgnc-backend-file"
 #define GNC_LIB_INIT "gnc_provider_init"
 
 /** \brief command line command options.*/
 typedef enum {
 	qof_op_noop = 0,
-	qof_op_input,
+	qof_op_xmlfile,
 	qof_op_offline,
 	qof_op_list,
 	qof_op_shell,
@@ -129,40 +129,6 @@ qof_create(void)
 	context = g_new0(qof_shell_context, 1);
 	return context;
 }
-
-/*static void
-print_config_cb (QofBackendOption *option, gpointer data)
-{
-	fprintf (stdout, "option name=%s\n", option->option_name);
-	fprintf (stdout, "option desc=%s\n", option->description);
-	fprintf (stdout, "option tip =%s\n", option->tooltip);
-	switch(option->type) {
-		case KVP_TYPE_GINT64   : {
-			fprintf (stdout, "option value=%" G_GINT64_FORMAT,
-				*(gint64*)option->value);
-			fprintf (stdout, "\noption type=%s\n", QOF_TYPE_INT64);
-			break;
-		}
-		case KVP_TYPE_DOUBLE   : {
-			break; 
-		}
-		case KVP_TYPE_NUMERIC  : {
-			break; 
-		}
-		case KVP_TYPE_STRING   : {
-			fprintf (stdout, "option value=%s\n", (char*)option->value);
-			fprintf (stdout, "option type=%s\n", QOF_TYPE_STRING);
-			break;
-		}
-		case KVP_TYPE_GUID     : { break; } // unsupported
-		case KVP_TYPE_TIMESPEC : {
-			break;
-		}
-		case KVP_TYPE_BINARY   : { break; } // unsupported
-		case KVP_TYPE_GLIST    : { break; } // unsupported
-		case KVP_TYPE_FRAME    : { break; } // unsupported
-	}		
-}*/
 
 void extensions_init(void)
 {
@@ -267,15 +233,15 @@ main (int argc, const char *argv[])
 	if (argc < 2)
 	{
 		poptPrintUsage (pc, stderr, 0);
-		return 1;
+		return EXIT_FAILURE;
 	}
 	qof_init();
 	g_return_val_if_fail(cashobjects_register(), -1);
-        g_return_val_if_fail(bus_cashobjects_register(), -1);
+	g_return_val_if_fail(bus_cashobjects_register(), -1);
 	context = qof_create();
 	if(!context) {
 		fprintf(stderr, _("Fatal error: Cannot initialise QOF.\n\n"));
-		return -1; 
+		return EXIT_FAILURE; 
 	}
 	session = qof_session_new ();
 	context->book = qof_session_get_book(session);
@@ -288,7 +254,7 @@ main (int argc, const char *argv[])
 		switch (optc)
 		{
 			/* commands - mutually exclusive */
-			case qof_op_input:
+			case qof_op_xmlfile:
 			case qof_op_list:
 			case qof_op_explain:
 			case qof_op_shell:
@@ -310,13 +276,10 @@ main (int argc, const char *argv[])
 				fprintf (stdout, _(" GnuCash Command Line Interface.\n"));
 				fprintf (stdout, _(" Build date....: %s %s\n\n"), __DATE__, __TIME__);
 				fprintf (stdout, " Copyright 2005 Neil Williams <linux@codehelp.co.uk>\n");
-				fprintf (stdout, " %s is free software; see the source for copying conditions.\n", PACKAGE);
-				fprintf (stdout, " There is NO warranty; not even MERCHANTABILITY or FITNESS\n");
-				fprintf (stdout, " FOR A PARTICULAR PURPOSE.\n\n");
 				fprintf (stdout, _(" For CashUtil support, join the QOF-devel mailing list at\n"));
 				fprintf (stdout, " http://lists.sourceforge.net/mailman/listinfo/qof-devel\n");
 				fprintf (stdout, _("   Please use --help for more detailed options.\n\n"));
-				return 0;
+				return EXIT_SUCCESS;
 			}
 			/* optional modifiers - store to act on later. */
 			case qof_op_database:
@@ -363,7 +326,7 @@ main (int argc, const char *argv[])
 			{
 				fprintf (stderr, _("%s: ERROR. Unknown option %d, argument: %s\n"),
 					 PACKAGE, optc, poptGetOptArg (pc));
-				return 1;
+				return EXIT_FAILURE;
 			}
 		}
 	}
@@ -371,13 +334,13 @@ main (int argc, const char *argv[])
 		fprintf (stderr, _("%s: Please specify only one command out of -i, -l."), PACKAGE);
 		fprintf (stderr, _("--explain or --shell\n"));
 		poptPrintUsage(pc, stderr, 0);
-		return 1;
+		return EXIT_FAILURE;
 
 	}
 	if (use_stdin) {
 		fprintf (stderr, _("%s: Sorry, %s cannot yet read STDIN.\n"), PACKAGE, PACKAGE);
 		poptPrintUsage(pc, stderr, 0);
-		return 1;
+		return EXIT_FAILURE;
 	}
 	if (optc < -1)
 	{
@@ -385,7 +348,7 @@ main (int argc, const char *argv[])
 		poptBadOption(pc, POPT_BADOPTION_NOALIAS),
 		poptStrerror(optc));
 		poptPrintUsage(pc, stderr, 0);
-		return 1;
+		return EXIT_FAILURE;
 	}
 	/* If we get this far, we should have sensible options: start the work. */
 	if(debug_on) {
@@ -395,9 +358,10 @@ main (int argc, const char *argv[])
 		qof_log_set_default(GNC_LOG_DETAIL);
 		gnc_set_log_level(CU_MOD_CLI, GNC_LOG_DETAIL);
 		gnc_set_log_level(QOF_MAIN_CLI, GNC_LOG_DETAIL);
+		gnc_set_log_level(QOF_MOD_QSF, GNC_LOG_DETAIL);
 	}
 	g_return_val_if_fail((qof_load_backend_library 
-		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")), -1);
+		(QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT)), -1);
 	g_return_val_if_fail((qof_load_backend_library
 		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)), -1);
 	g_return_val_if_fail(load_bus_backend(GNC_LIBDIR), -1);
@@ -405,7 +369,7 @@ main (int argc, const char *argv[])
 	qof_book_clear_undo(context->book);
 	switch (command)
 	{
-		case qof_op_input:
+		case qof_op_xmlfile:
 		{
 			context->qof.filename = g_strdup(filename);
 			qof_cmd_xmlfile (&context->qof);
@@ -443,7 +407,7 @@ main (int argc, const char *argv[])
 	qof_shell_free(context);
 	qof_close();
 	if(f) { fclose(f); }
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 /** @} */

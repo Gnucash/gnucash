@@ -13,8 +13,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -28,6 +28,8 @@
  */
 
 #include "config.h"
+
+#include <string.h>
 
 #include "gnucash-sheet.h"
 #include "gnucash-grid.h"
@@ -364,7 +366,7 @@ draw_cell (GnucashGrid *grid,
 	PangoLayout *layout;
 	PangoContext *context;
 	PangoFontDescription *font;
-	PangoRectangle ink_rect;
+	PangoRectangle logical_rect;
         GdkColor *bg_color;
         GdkColor *fg_color;
 /*        gint x_offset, y_offset;*/
@@ -489,8 +491,8 @@ draw_cell (GnucashGrid *grid,
         y_offset++;*/
 
 	pango_layout_get_pixel_extents(layout,
-				       &ink_rect,
-				       NULL);
+				       NULL,
+				       &logical_rect);
 
         rect.x      = x + CELL_HPADDING;
         rect.y      = y + CELL_VPADDING;
@@ -508,15 +510,15 @@ draw_cell (GnucashGrid *grid,
                         break;
 
                 case CELL_ALIGN_RIGHT:
-			x_offset = width - 2 * CELL_HPADDING - ink_rect.width;
+			x_offset = width - 2 * CELL_HPADDING - logical_rect.width + 1;
                         break;
 
                 case CELL_ALIGN_CENTER:
-			if (ink_rect.width > width - 2 * CELL_HPADDING)
+			if (logical_rect.width > width - 2 * CELL_HPADDING)
 				x_offset = 0;
 			else
 				x_offset = (width - 2 * CELL_HPADDING - 
-					    ink_rect.width) / 2;
+					    logical_rect.width) / 2;
                         break;
 	}
 

@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_OWNER_H
@@ -24,6 +24,7 @@
 #include "search-core-type.h"
 #include "QueryNew.h"
 
+#define GNC_TYPE_SEARCH_OWNER (gnc_search_owner_get_type ())
 #define GNCSEARCH_OWNER(obj)	GTK_CHECK_CAST (obj, gnc_search_owner_get_type (), GNCSearchOwner)
 #define GNCSEARCH_OWNER_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_owner_get_type (), GNCSearchOwnerClass)
 #define IS_GNCSEARCH_OWNER(obj)      GTK_CHECK_TYPE (obj, gnc_search_owner_get_type ())
@@ -33,7 +34,6 @@ typedef struct _GNCSearchOwnerClass	GNCSearchOwnerClass;
 
 struct _GNCSearchOwner {
   GNCSearchCoreType parent;
-  struct _GNCSearchOwnerPrivate *priv;
 
   guid_match_t	how;
 };

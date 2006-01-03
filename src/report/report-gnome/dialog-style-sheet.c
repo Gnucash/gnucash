@@ -17,19 +17,19 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  ********************************************************************/
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-ui.h"
-#include "messages.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
 
@@ -126,6 +126,9 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
                                     gnc_style_sheet_options_close_cb,
                                     ssinfo);
     window = gnc_options_dialog_widget(ssinfo->odialog);
+    gtk_window_set_transient_for(GTK_WINDOW(window),
+				 GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
+    gtk_window_set_destroy_with_parent(GTK_WINDOW(window), TRUE);
     gtk_window_present(GTK_WINDOW(window));
 
     return(ssinfo);
@@ -342,10 +345,10 @@ gnc_style_sheet_select_dialog_create(void)
   selection = gtk_tree_view_get_selection (ss->list_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  gtk_signal_connect(GTK_OBJECT(ss->toplevel), "response",
-                     GTK_SIGNAL_FUNC(gnc_style_sheet_select_dialog_response_cb), ss); 
-  gtk_signal_connect(GTK_OBJECT(ss->list_view), "event-after",
-                     GTK_SIGNAL_FUNC(gnc_style_sheet_select_dialog_event_cb), ss); 
+  g_signal_connect(ss->toplevel, "response",
+		   G_CALLBACK(gnc_style_sheet_select_dialog_response_cb), ss); 
+  g_signal_connect(ss->list_view, "event-after",
+		   G_CALLBACK(gnc_style_sheet_select_dialog_event_cb), ss); 
   
   gnc_style_sheet_select_dialog_fill(ss);
 

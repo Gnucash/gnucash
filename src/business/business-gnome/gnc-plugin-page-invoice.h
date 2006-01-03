@@ -17,8 +17,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup ContentPlugins
@@ -49,19 +49,15 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_INVOICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_INVOICE))
 #define GNC_PLUGIN_PAGE_INVOICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_INVOICE, GncPluginPageInvoiceClass))
 
-#define GNC_PLUGIN_PAGE_INVOICE_NAME "gnc-plugin-page-invoice"
+#define GNC_PLUGIN_PAGE_INVOICE_NAME "GncPluginPageInvoice"
 
 /* typedefs & structures */
-typedef struct GncPluginPageInvoicePrivate GncPluginPageInvoicePrivate;
-
 typedef struct {
-	GncPluginPage parent;
-
-	GncPluginPageInvoicePrivate *priv;
+	GncPluginPage gnc_plugin_page;
 } GncPluginPageInvoice;
 
 typedef struct {
-	GncPluginPageClass parent;
+	GncPluginPageClass gnc_plugin_page;
 } GncPluginPageInvoiceClass;
 
 /* function prototypes */

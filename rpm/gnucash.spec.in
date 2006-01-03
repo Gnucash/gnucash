@@ -29,13 +29,14 @@ Group:     	Applications/Finance
 URL:            http://www.gnucash.org
 Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{version}.tar.gz
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
-Requires:  	gnome-libs >= 1.2.0, gdk-pixbuf >= 0.2.5, gnome-print >= 0.21
-Requires:	guile >= 1.3.4, gtkhtml >= 0.8, Guppi >= 0.35.3
-Requires:	g-wrap >= 1.3.4, gal >= 0.8
-BuildPrereq: 	g-wrap-devel >= 1.3.4, gtkhtml-devel >= 0.8
-BuildPrereq: 	Guppi-devel, gal-devel, libxml-devel
-BuildPrereq: 	libglade-devel, libghttp-devel, libtermcap-devel
-BuildPrereq: 	readline-devel
+Requires:  	libgnomeui >= 2.2.0, libgnomeprintui22 >= 2.2.0
+Requires:	guile >= 1.6.0, gtkhtml3 >= 3.1,
+Requires:	g-wrap >= 1.3.4
+BuildPrereq: 	libgnomeui-devel >= 2.2.0, libgnomeprintui22 >= 2.2.0
+BuildPrereq: 	g-wrap-devel >= 1.3.4, gtkhtml3-devel >= 3.1
+BuildPrereq: 	bzip2-devel, expat-devel, guile-devel
+BuildPrereq: 	libglade2-devel, libgsf-devel
+BuildPrereq: 	libjpeg-devel, openssl-devel
 Prereq: 	/sbin/ldconfig /sbin/install-info
 
 %description

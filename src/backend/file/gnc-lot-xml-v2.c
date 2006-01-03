@@ -18,8 +18,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -60,7 +60,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     xmlNodePtr ret;
     kvp_frame *kf;
 
-	 ENTER("(lot=%p)", lot);
+    ENTER("(lot=%p)", lot);
     ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
@@ -75,7 +75,7 @@ gnc_lot_dom_tree_create(GNCLot *lot)
             xmlAddChild(ret, kvpnode);
         }
     }
-
+    LEAVE (" ");
     return ret;
 }
 
@@ -93,12 +93,12 @@ lot_id_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     GUID *guid;
 
-	 ENTER("(lot=%p)", pdata->lot);
+    ENTER("(lot=%p)", pdata->lot);
     guid = dom_tree_to_guid(node);
     gnc_lot_set_guid(pdata->lot, *guid);
 
     g_free(guid);
-    
+    LEAVE (" ");
     return TRUE;
 }
 
@@ -108,12 +108,12 @@ lot_slots_handler (xmlNodePtr node, gpointer p)
     struct lot_pdata *pdata = p;
     gboolean success;
 
-	 ENTER("(lot=%p)", pdata->lot);
+    ENTER("(lot=%p)", pdata->lot);
     success = dom_tree_to_kvp_frame_given
       (node, gnc_lot_get_slots (pdata->lot));
 
     g_return_val_if_fail(success, FALSE);
-    
+    LEAVE (" ");
     return TRUE;
 }
 
@@ -160,7 +160,7 @@ gnc_lot_end_handler(gpointer data_for_children,
     }
 
     xmlFreeNode(tree);
-
+    LEAVE (" ");
     return lot != NULL;
 }
 
@@ -185,7 +185,7 @@ dom_tree_to_lot (xmlNodePtr node, QofBook *book)
         gnc_lot_destroy (lot);
         lot = NULL;
     }
-
+    LEAVE (" ");
     return lot;
 }
 

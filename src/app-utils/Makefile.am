@@ -71,6 +71,7 @@ noinst_HEADERS = \
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libcashobjects.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
@@ -140,7 +141,7 @@ endif
 
 gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
   .scm-links gw-app-utils-spec.scm ${top_builddir}/config.status
-	FLAVOR=gnome guile -c \
+	FLAVOR=gnome $(GUILE) -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \

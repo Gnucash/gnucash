@@ -15,20 +15,26 @@
  *                                                                         *
  *   You should have received a copy of the GNU Lesser General Public      *
  *   License along with this library; if not, write to the Free Software   *
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston,                 *
- *   MA  02111-1307  USA                                                   *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,            *
+ *   MA  02110-1301  USA                                                   *
  *                                                                         *
  ***************************************************************************/
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <iconv.h>
+#include <aqbanking/banking.h>
+#include <gwenhywfar/bio_buffer.h>
+#include <gwenhywfar/xml.h>
+
 #include "hbci-interaction.h"
 #include "hbci-interactionP.h"
 
-#include <aqbanking/banking.h>
 #include "dialog-utils.h"
 #include "druid-utils.h"
 #include "gnc-ui-util.h"
@@ -38,10 +44,7 @@
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
 
-#include <gwenhywfar/bio_buffer.h>
-#include <gwenhywfar/xml.h>
-
-#include <iconv.h>
+#define GCONF_SECTION_CONNECTION GCONF_SECTION "/connection_dialog"
 
 gchar *gnc__extractText(const char *text);
 
@@ -79,7 +82,8 @@ void GNCInteractor_delete(GNCInteractor *data)
 		       gtk_toggle_button_get_active 
 		       (GTK_TOGGLE_BUTTON (data->close_checkbutton)),
 		       NULL);
-    gtk_object_unref (GTK_OBJECT (data->dialog));
+    gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (data->dialog));
+    g_object_unref (G_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
   
@@ -174,6 +178,7 @@ void GNCInteractor_hide(GNCInteractor *i)
 		     gtk_toggle_button_get_active 
 		     (GTK_TOGGLE_BUTTON (i->close_checkbutton)),
 		     NULL);
+  gnc_save_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (i->dialog));
 }
 
 gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i)
@@ -352,10 +357,10 @@ static int inputBoxCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the PIN must \n"
+	g_strdup_printf (  _("You entered %ld characters, but the PIN must \n"
 			     "be no longer than %d characters. \n"
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -433,10 +438,10 @@ static int getTanCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %d characters, but the TAN must \n"
+	g_strdup_printf (  _("You entered %ld characters, but the TAN must \n"
 			     "be no longer than %d characters. \n"
 			     "Do you want to try again?"),
-			   strlen(passwd), maxLen);
+			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
 					   TRUE,
 					   msg);
@@ -468,11 +473,14 @@ static int getTanCB(AB_BANKING *ab,
 static int keepAlive(void *user_data)
 {
   GNCInteractor *data = user_data;
+  GMainContext *context;
+
   g_assert(data);
   /*fprintf(stdout, "my-keepAlive: returning 1\n");*/
 
   /* Let the widgets be redrawn */
-  while (g_main_iteration (FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 
   return data->keepAlive;
 }
@@ -501,14 +509,14 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
   g_assert(data);
 
   if (id > 0) {
-    dialog = g_hash_table_lookup(data->showbox_hash, (gpointer)id);
+    dialog = g_hash_table_lookup(data->showbox_hash, GUINT_TO_POINTER(id));
   } else {
     dialog = data->showbox_last;
   }
   if (dialog) {
     gtk_widget_hide (dialog);
     gtk_widget_destroy (dialog);
-    g_hash_table_remove(data->showbox_hash, (gpointer)id);
+    g_hash_table_remove(data->showbox_hash, GUINT_TO_POINTER(id));
   }
 }
 
@@ -530,14 +538,21 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   title = gnc_hbci_utf8ToLatin1(data, utf8title);
 
   /* Create new dialog */
-  dialog = gnome_ok_dialog_parented (text, GTK_WINDOW (data->parent));
+  dialog = gtk_message_dialog_new(GTK_WINDOW(data->parent),
+				  0,
+				  GTK_MESSAGE_INFO,
+				  GTK_BUTTONS_OK,
+				  text);
+
   if (title && (strlen(title) > 0))
     gtk_window_set_title (GTK_WINDOW (dialog), title);
-  gnome_dialog_close_hides (GNOME_DIALOG(dialog), TRUE);
+
+  g_signal_connect(G_OBJECT(dialog), "response",
+		   (GCallback)gtk_widget_hide, NULL);
   gtk_widget_show_all (dialog);
 
   result = data->showbox_id;
-  g_hash_table_insert(data->showbox_hash, (gpointer)result, dialog);
+  g_hash_table_insert(data->showbox_hash, GUINT_TO_POINTER(result), dialog);
   data->showbox_id++;
   data->showbox_last = dialog;
 
@@ -579,11 +594,6 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 					b3 ? b3text : NULL,
 					3,
 					NULL);
-  /* Ensure that the dialog box is destroyed when the user responds. */
-  g_signal_connect_swapped (dialog,
-			    "response", 
-			    G_CALLBACK (gtk_widget_destroy),
-			    dialog);
   /* Add the label, and show everything we've added to the dialog. */
   label = gtk_label_new (text);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
@@ -592,6 +602,7 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   gtk_widget_show_all (dialog);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
   if (result<1 || result>3) {
     printf("messageBoxCB: Bad result %d", result);
     result = 0;
@@ -632,8 +643,7 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
 
   /* Set progress bar */
   gtk_widget_set_sensitive (data->action_progress, TRUE);
-  gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-			       0.0);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(data->action_progress), 0.0);
   data->action_max = total;
   GNCInteractor_setRunning(data);
   /* printf("progressStartCB: Action \"%s\" started, total %d.\n",
@@ -664,8 +674,8 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
     /* printf("progressLogCB: Progress set to %d out of %f.\n", 
        progress, data->action_max); */
     if (progress <= data->action_max) 
-      gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
-				   progress/data->action_max);
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (data->action_progress),
+				     progress/data->action_max);
   }
 
   return !keepAlive(data);
@@ -738,6 +748,7 @@ on_button_clicked (GtkButton *button,
 		   gpointer user_data)
 {
   GNCInteractor *data = user_data;
+  GMainContext *context;
   const char *name;
   g_assert(data);
   
@@ -755,7 +766,8 @@ on_button_clicked (GtkButton *button,
 	   name);
   }
   /* Let the widgets be redrawn */
-  while (g_main_iteration (FALSE));
+  context = g_main_context_default();
+  while (g_main_context_iteration(context, FALSE));
 }
 
 GWEN_INHERIT(AB_BANKING, GNCInteractor)
@@ -791,16 +803,16 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
     (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
      gnc_gconf_get_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH, NULL));
 
-  gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
-		      GTK_SIGNAL_FUNC (on_button_clicked), data);
-  gtk_signal_connect (GTK_OBJECT (data->close_button), "clicked", 
-		      GTK_SIGNAL_FUNC (on_button_clicked), data);
+  g_signal_connect (data->abort_button, "clicked", 
+		    G_CALLBACK (on_button_clicked), data);
+  g_signal_connect (data->close_button, "clicked", 
+		    G_CALLBACK (on_button_clicked), data);
 
   if (data->parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
-  /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
+  gnc_restore_window_size(GCONF_SECTION_CONNECTION, GTK_WINDOW (dialog));
 
-  gtk_object_ref (GTK_OBJECT (dialog));
+  g_object_ref (G_OBJECT (dialog));
   gtk_widget_hide_all (dialog);
 
   GWEN_INHERIT_SETDATA(AB_BANKING, GNCInteractor,

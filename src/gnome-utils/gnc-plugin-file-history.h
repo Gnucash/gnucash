@@ -16,8 +16,8 @@
  * along with this program; if not, contact:
  *
  * Free Software Foundation           Voice:  +1-617-542-5942
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
- * Boston, MA  02111-1307,  USA       gnu@gnu.org
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
 /** @addtogroup MenuPlugins
@@ -25,14 +25,16 @@
 /** @addtogroup PluginFileHistory File History Menu Items
     @{ */
 /** @file gnc-plugin-file-history.h
-    @brief Utility functions for writing import modules.
+    @brief Functions providing the file history menu.
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+
+    This plugin handles the file history information that appears in
+    the application menus.
 */
 
 #ifndef __GNC_PLUGIN_FILE_HISTORY_H
 #define __GNC_PLUGIN_FILE_HISTORY_H
 
-#include <gtk/gtk.h>
 #include "gnc-plugin.h"
 
 G_BEGIN_DECLS
@@ -52,15 +54,16 @@ G_BEGIN_DECLS
 #define HISTORY_STRING_FILE_N   "file%d"
 
 /* typedefs & structures */
-typedef struct GncPluginFileHistoryPrivate GncPluginFileHistoryPrivate;
 
+/** The instance data structure for a file history plugin. */
 typedef struct {
-	GncPlugin parent;
-	GncPluginFileHistoryPrivate *priv;
+	GncPlugin gnc_plugin;
 } GncPluginFileHistory;
 
+
+/** The class data structure for a file history plugin. */
 typedef struct {
-	GncPluginClass parent;
+	GncPluginClass gnc_plugin;
 } GncPluginFileHistoryClass;
 
 /* function prototypes */

@@ -15,8 +15,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 /** @file gnc-backend-file.c
  *  @brief load and save data to files 
@@ -30,6 +30,12 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
+#include <glib.h>
+#include <glib/gi18n.h>
+#include <libintl.h>
+#include <locale.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -49,7 +55,6 @@
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-#include "messages.h"
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 
@@ -87,8 +92,8 @@ gnc_file_be_get_config(QofBackend *be)
 	option = g_new0(QofBackendOption, 1);
 	option->option_name = GNC_BE_DAYS;
 	option->description = _("Number of days to retain old files");
-	option->tooltip = _("GnuCash keeps backups of old files, "
-		"this setting dictates how long each is kept");
+	option->tooltip = _("GnuCash keeps backups of old files. "
+		"This setting specifies how long each is kept.");
 	option->type = KVP_TYPE_GINT64;
 	option->value = (gpointer)&file_retention_days;
 	qof_backend_prepare_option(be, option);
@@ -547,23 +552,32 @@ gnc_file_be_write_to_file(FileBackend *fbe,
             if(chmod(tmp_name, statbuf.st_mode) != 0)
             {
                 qof_backend_set_error(be, ERR_BACKEND_PERM);
+		/* FIXME: Even if the chmod did fail, the save
+		   nevertheless completed successfully. It is
+		   therefore wrong to signal the ERR_BACKEND_PERM
+		   error here which implies that the saving itself
+		   failed! What should we do? */
                 PWARN("unable to chmod filename %s: %s",
-                        datafile ? datafile : "(null)", 
+                        tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
 #if VFAT_DOESNT_SUCK  /* chmod always fails on vfat fs */
                 g_free(tmp_name);
                 return FALSE;
 #endif
             }
-            if(chown(tmp_name, statbuf.st_uid, statbuf.st_gid) != 0)
+	    /* Don't try to change the owner. Only root can do
+	       that. */
+            if(chown(tmp_name, -1, statbuf.st_gid) != 0)
             {
-                qof_backend_set_error(be, ERR_BACKEND_PERM);
+	        /* qof_backend_set_error(be, ERR_BACKEND_PERM); */
+	        /* A failed chown doesn't mean that the saving itself
+		   failed. So don't abort with an error here! */
                 PWARN("unable to chown filename %s: %s",
-                        datafile ? datafile : "(null)", 
+                        tmp_name ? tmp_name : "(null)", 
                         strerror(errno) ? strerror(errno) : ""); 
 #if VFAT_DOESNT_SUCK /* chown always fails on vfat fs */
-                g_free(tmp_name);
-                return FALSE;
+                /* g_free(tmp_name);
+		   return FALSE; */
 #endif
             }
         }

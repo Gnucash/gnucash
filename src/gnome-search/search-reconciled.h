@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
 
 #ifndef _GNCSEARCH_RECONCILED_H
@@ -24,16 +24,16 @@
 #include "search-core-type.h"
 #include "Query.h"		/* for cleared_match_t */
 
-#define GNCSEARCH_RECONCILED(obj)	GTK_CHECK_CAST (obj, gnc_search_reconciled_get_type (), GNCSearchReconciled)
-#define GNCSEARCH_RECONCILED_CLASS(klass)	GTK_CHECK_CLASS_CAST (klass, gnc_search_reconciled_get_type (), GNCSearchReconciledClass)
-#define IS_GNCSEARCH_RECONCILED(obj)      GTK_CHECK_TYPE (obj, gnc_search_reconciled_get_type ())
+#define GNC_TYPE_SEARCH_RECONCILED	  (gnc_search_reconciled_get_type ())
+#define GNCSEARCH_RECONCILED(obj)	  GTK_CHECK_CAST (obj, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciled)
+#define GNCSEARCH_RECONCILED_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciledClass)
+#define IS_GNCSEARCH_RECONCILED(obj)      GTK_CHECK_TYPE (obj, GNC_TYPE_SEARCH_RECONCILED)
 
 typedef struct _GNCSearchReconciled	GNCSearchReconciled;
 typedef struct _GNCSearchReconciledClass	GNCSearchReconciledClass;
 
 struct _GNCSearchReconciled {
   GNCSearchCoreType parent;
-  struct _GNCSearchReconciledPrivate *priv;
 
   char_match_t		how;
   cleared_match_t	value;

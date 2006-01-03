@@ -19,10 +19,14 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ *  02110-1301, USA.
  */
  
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <time.h>
+
 #include "qof.h"
 #include "AccountP.h"
 #include "Transaction.h"
@@ -181,7 +185,7 @@ create_chart_export ( void )
 	xml = gnc_glade_xml_new ("chart-export.glade", "chart-export");
 	data = g_new0(chart_data, 1);
 	glade_xml_signal_connect_data(xml, "on_dateok_clicked",
-		GTK_SIGNAL_FUNC (on_dateok_clicked), data);
+		G_CALLBACK (on_dateok_clicked), data);
 	dialog = glade_xml_get_widget (xml, "chart-export");
 	return dialog;	
 }

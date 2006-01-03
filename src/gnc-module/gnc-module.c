@@ -152,7 +152,7 @@ gnc_module_system_init(void)
   if(loaded_modules == NULL) 
   {
     loaded_modules = g_hash_table_new(g_direct_hash, g_direct_equal);
-    
+	
     if(lt_dlinit() == 0)
     {
       gnc_module_system_setup_load_path();
@@ -231,6 +231,21 @@ gnc_module_system_refresh(void)
   g_list_free(current);
 }
 
+void
+gnc_module_load_all(gint interface)
+{
+	GList *iter;
+	GNCModuleInfo *info;
+
+	gnc_module_system_refresh();
+	iter = g_list_copy(module_info);
+	for(iter = g_list_reverse(iter); iter; iter=iter->next)
+	{
+		info = (GNCModuleInfo*)iter->data;
+		gnc_module_load(info->module_path, interface);
+	}
+	g_list_free(iter);
+}
 
 /*************************************************************
  *  gnc_module_system_modinfo 
@@ -415,7 +430,7 @@ gnc_module_check_loaded(const char * module_name, gint interface)
  *************************************************************/
 
 static GNCModule 
-gnc_module_load_common(char * module_name, gint interface, gboolean optional)
+gnc_module_load_common(const gchar * module_name, gint interface, gboolean optional)
 {
 
   GNCLoadedModule * info;
@@ -457,9 +472,10 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
   {
     GNCModuleInfo * modinfo = gnc_module_locate(module_name, interface);
     lt_dlhandle   handle = NULL;
-    
-    //if(modinfo) 
-    //printf("(load) dlopening %s\n", modinfo->module_filepath);
+
+	if(modinfo) {
+      g_message("(load) dlopening %s\n", modinfo->module_filepath);
+	}
 
     if(modinfo && ((handle = lt_dlopen(modinfo->module_filepath)) != NULL)) 
     {
@@ -512,13 +528,13 @@ gnc_module_load_common(char * module_name, gint interface, gboolean optional)
 
 
 GNCModule 
-gnc_module_load(char * module_name, gint interface) 
+gnc_module_load(const gchar * module_name, gint interface) 
 {
   return gnc_module_load_common(module_name, interface, FALSE);
 }
 
 GNCModule 
-gnc_module_load_optional(char * module_name, gint interface) 
+gnc_module_load_optional(const gchar * module_name, gint interface) 
 {
   return gnc_module_load_common(module_name, interface, TRUE);
 }

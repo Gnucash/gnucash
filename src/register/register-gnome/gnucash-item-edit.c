@@ -15,8 +15,8 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
 
@@ -31,6 +31,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <string.h>
 
 #include "gnucash-color.h"
 #include "gnucash-cursor.h"
@@ -71,6 +72,7 @@ struct _TextDrawInfo
         GdkRectangle bg_rect;
         GdkRectangle text_rect;
         GdkRectangle hatch_rect;
+        GdkRectangle cursor_rect;
 
         GdkColor *fg_color;
         GdkColor *bg_color;
@@ -79,8 +81,6 @@ struct _TextDrawInfo
         GdkColor *bg_color2;
 
         gboolean hatching;
-
-        PangoRectangle cursor;
 };
 
 
@@ -132,7 +132,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 
         int xd, yd, wd, hd, dx, dy;
         int start_pos, end_pos;
-        int toggle_space, cursor_pos;
+        int toggle_space, cursor_pos, cursor_byte_pos;
         const gchar *text;
 	PangoRectangle strong_pos;
 	PangoAttribute *attr;
@@ -162,28 +162,37 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         info->fg_color2 = &gn_white;
 
         editable = GTK_EDITABLE (item_edit->editor);
-        cursor_pos = gtk_editable_get_position (editable);
-	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
-
         text = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
+        cursor_pos = gtk_editable_get_position (editable);
+        cursor_byte_pos = g_utf8_offset_to_pointer (text, cursor_pos) - text;
+
+	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
 	info->layout = gtk_widget_create_pango_layout (GTK_WIDGET (item_edit->sheet), text);
 
 	/* Selection */
-	attr_list = pango_attr_list_new ();
+        if (start_pos != end_pos)
+        {
+                gint start_byte_pos, end_byte_pos;
 
-	attr = pango_attr_foreground_new (0xffff, 0xffff, 0xffff);
-	attr->start_index = start_pos;
-	attr->end_index = end_pos;
-	pango_attr_list_insert (attr_list, attr);
-	
-	attr = pango_attr_background_new (0x0, 0x0, 0x0);
-	attr->start_index = start_pos;
-	attr->end_index = end_pos;
-	pango_attr_list_insert (attr_list, attr);
+                start_byte_pos = g_utf8_offset_to_pointer (text, start_pos) - text;
+                end_byte_pos = g_utf8_offset_to_pointer (text, end_pos) - text;
 
-	pango_layout_set_attributes (info->layout, attr_list);
-	pango_attr_list_unref (attr_list);
+                attr_list = pango_attr_list_new ();
+
+                attr = pango_attr_foreground_new (0xffff, 0xffff, 0xffff);
+                attr->start_index = start_byte_pos;
+                attr->end_index = end_byte_pos;
+                pango_attr_list_insert (attr_list, attr);
+
+                attr = pango_attr_background_new (0x0, 0x0, 0x0);
+                attr->start_index = start_byte_pos;
+                attr->end_index = end_byte_pos;
+                pango_attr_list_insert (attr_list, attr);
+
+                pango_layout_set_attributes (info->layout, attr_list);
+                pango_attr_list_unref (attr_list);
+       }
 
         gnc_item_edit_get_pixel_coords (item_edit, &xd, &yd, &wd, &hd);
 
@@ -209,24 +218,19 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         // pango_layout_set_ellipsize(...) as of pango 1.6 may be useful for
         // strings longer than the field width.
 
-        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        // Default x_offset based on cell alignment
+        if (item_edit->reset_pos)
         {
-                default:
-                case CELL_ALIGN_LEFT:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_LEFT);
-                        break;
+                gnc_item_edit_reset_offset (item_edit);
+                item_edit->reset_pos = FALSE;
+        }
 
-                case CELL_ALIGN_RIGHT:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_RIGHT);
-                        break;
+	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
 
-                case CELL_ALIGN_CENTER:
-			pango_layout_set_alignment (info->layout, PANGO_ALIGN_CENTER);
-                        break;
-	}
-
-	pango_layout_get_cursor_pos (info->layout, cursor_pos, NULL, &strong_pos);
-        info->cursor = strong_pos;
+        info->cursor_rect.x = dx + PANGO_PIXELS (strong_pos.x);
+        info->cursor_rect.y = dy + PANGO_PIXELS (strong_pos.y);
+        info->cursor_rect.width = PANGO_PIXELS (strong_pos.width);
+        info->cursor_rect.height = PANGO_PIXELS (strong_pos.height);
 
         if (info->hatching)
         {
@@ -249,15 +253,17 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
 static void
 gnc_item_edit_update_scroll_offset(GncItemEdit *item_edit,
 				   TextDrawInfo *info) {
-	gint cursor_margin = CELL_HPADDING + 3;
-	if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
-	    > info->text_rect.width - cursor_margin) {
-		item_edit->x_offset = info->text_rect.width
-			- PANGO_PIXELS (info->cursor.x) - cursor_margin;
-	} else if (PANGO_PIXELS (info->cursor.x) + item_edit->x_offset 
-		   < 0) {
-		item_edit->x_offset = - PANGO_PIXELS (info->cursor.x);
-	}
+        if (info->cursor_rect.x + item_edit->x_offset >
+                info->text_rect.x + info->text_rect.width - CELL_HPADDING)
+        {
+                item_edit->x_offset =
+                        (info->text_rect.x + info->text_rect.width - CELL_HPADDING)
+                        - info->cursor_rect.x;
+        }
+        else if (info->cursor_rect.x + item_edit->x_offset < info->text_rect.x)
+        {
+                item_edit->x_offset = - info->cursor_rect.x;
+        }
 }
 
 static void
@@ -274,8 +280,6 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         /* Get the measurements for drawing */
         gnc_item_edit_draw_info (item_edit, x, y, &info);
-
-        item_edit->reset_pos = FALSE;
 
         /* Draw the background */
         gdk_gc_set_foreground (item_edit->gc, info.bg_color);
@@ -306,12 +310,10 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_draw_line (drawable,
                        item_edit->gc,
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING 
-		       + item_edit->x_offset,
-                       PANGO_PIXELS (info.cursor.y),
-                       PANGO_PIXELS (info.cursor.x) + CELL_HPADDING
-		       + item_edit->x_offset,
-                       PANGO_PIXELS (info.cursor.y + info.cursor.height));
+                       info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
+                       info.cursor_rect.y,
+                       info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
+                       info.cursor_rect.y + info.cursor_rect.height);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 
@@ -566,10 +568,41 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
 void
 gnc_item_edit_reset_offset (GncItemEdit *item_edit)
 {
+        Table *table;
+        PangoRectangle ink_rect;
+        PangoLayout *layout;
+        gint x, y, width, height;
+
         g_return_if_fail (item_edit != NULL);
         g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-        item_edit->reset_pos = TRUE;
+        table = item_edit->sheet->table;
+        layout = gtk_entry_get_layout (GTK_ENTRY(item_edit->editor));
+        pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+        gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &width, &height);
+
+        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        {
+                default:
+                case CELL_ALIGN_LEFT:
+                        item_edit->x_offset = 0;
+                        break;
+
+                case CELL_ALIGN_RIGHT:
+                        item_edit->x_offset = width 
+                                - 2 * CELL_HPADDING
+                                - ink_rect.width;
+                        break;
+
+                case CELL_ALIGN_CENTER:
+                        if (ink_rect.width > width - 2 * CELL_HPADDING)
+                                item_edit->x_offset = 0;
+                        else
+                                item_edit->x_offset = (width
+                                        - 2 * CELL_HPADDING
+                                        - ink_rect.width) / 2;
+                        break;
+        }
 }
 
 /*
@@ -716,35 +749,7 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         editable = GTK_EDITABLE (item_edit->editor);
 
         if (changed_cells)
-        {
-                CellAlignment align;
-
-                align = gnc_table_get_align (table, item_edit->virt_loc);
-
-                if (align == CELL_ALIGN_RIGHT) {
-			PangoRectangle ink_rect;
-			PangoLayout *layout;
-
-                        gtk_editable_set_position(editable, -1);
-
-			layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->
-								 editor) );
-			pango_layout_get_pixel_extents(layout,
-						       &ink_rect,
-						       NULL);
-
-			item_edit->x_offset = 
-				cd->pixel_width - ink_rect.width -
-				2* CELL_HPADDING;
-		}
-                else {
-			gtk_editable_set_position(editable, 0);
-			item_edit->x_offset = 0;
-		}
-
-                if (item_edit->is_popup)
-                        x -= item_edit->popup_toggle.toggle_offset;
-        }
+                gnc_item_edit_reset_offset (item_edit);
 
         o_x = cd->origin_x + item_edit->x_offset;
         o_y = cd->origin_y;
@@ -753,80 +758,27 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         // get the text index for the mouse position into pos
         {
                 PangoLayout *layout;
-                int textIndex, textTrailing;
+                int textByteIndex, textIndex, textTrailing;
                 gboolean insideText;
+                const gchar *text;
 
                 layout = gtk_entry_get_layout( GTK_ENTRY(item_edit->editor) );
+                text = pango_layout_get_text (layout);
                 insideText = pango_layout_xy_to_index( layout,
-                                                       (x - o_x) * PANGO_SCALE, 10 * PANGO_SCALE,
-                                                       &textIndex, &textTrailing );
-                pos = textIndex;
+                                                       ((x - o_x) - CELL_HPADDING) * PANGO_SCALE, 10 * PANGO_SCALE,
+                                                       &textByteIndex, &textTrailing );
+                textIndex = (int) g_utf8_pointer_to_offset (text, text + textByteIndex);
+                pos = textIndex + textTrailing;
         }
 
         if (extend_selection)
         {
-                // Setting the selection-range on the GtkEditable implicitly
-                // sets the `position` to the end of the range; this is
-                // unfortunate if you're setting and using the `position` to
-                // be at the end or beginning of the selection range to
-                // discriminate the forward- or reverse- nature of the
-                // dragging.  Now we just keep even-more-explicit enumeration
-                // of the selection-direction. -- jsled, Mar 2005, Gnome2 port
-
-                gboolean selection_exists;
-                gint current_pos, start_sel, end_sel, orig_start, orig_end;
-
-                current_pos = gtk_editable_get_position (editable);
-		selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-                orig_start = start_sel;
-                orig_end = end_sel;
-
-                if ( item_edit->selection_dir == UNKNOWN && start_sel == end_sel )
-                {
-                        start_sel = current_pos;
-                        end_sel = pos;
-                }
-
-                // determine direction
-                if ( item_edit->selection_dir == UNKNOWN )
-                {
-                        if ( pos < start_sel )
-                        {
-                                item_edit->selection_dir = REVERSE;
-                        }
-                        else if ( pos > end_sel )
-                        {
-                                item_edit->selection_dir = FORWARD;
-                        }
-                }
-
-                // act accordingly
-                if ( item_edit->selection_dir == FORWARD )
-                {
-                        end_sel = pos;
-                }
-                else if ( item_edit->selection_dir == REVERSE )
-                {
-                        start_sel = pos;
-                }
-                else
-                {
-                        // @@FIXME : don't printf... so ghetto.
-                        printf( "unknown, but with movement\n" );
-                }
-
-                gtk_editable_set_position (editable, pos);
-
-                gtk_editable_select_region(editable, start_sel, end_sel);
-
-                pos = gtk_editable_get_position (editable);
-                selection_exists = gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
+                gtk_editable_select_region (editable, item_edit->anchor_pos, pos);
         }
         else
         {
-                gtk_editable_select_region(editable, 0, 0);
                 gtk_editable_set_position (editable, pos);
-                item_edit->selection_dir = UNKNOWN;
+                item_edit->anchor_pos = pos;
         }
 
         queue_sync (item_edit);
@@ -1076,7 +1028,7 @@ key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	GncItemEdit *item_edit = GNC_ITEM_EDIT (data);
 
-	gtk_signal_emit_stop_by_name (GTK_OBJECT(widget), "key_press_event");
+	g_signal_stop_emission_by_name (widget, "key_press_event");
 
 	gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
 
@@ -1101,13 +1053,15 @@ gnc_item_edit_popup_toggled (GtkToggleButton *button, gpointer data)
 
                 if (!gnc_table_confirm_change (table, virt_loc))
                 {
-                        gtk_signal_handler_block_by_data
-                                (GTK_OBJECT (button), data);
+                        g_signal_handlers_block_matched
+                                (button, G_SIGNAL_MATCH_DATA,
+				 0, 0, NULL, NULL, data);
 
                         gtk_toggle_button_set_active (button, FALSE);
 
-                        gtk_signal_handler_unblock_by_data
-                                (GTK_OBJECT (button), data);
+                        g_signal_handlers_unblock_matched
+                                (button, G_SIGNAL_MATCH_DATA,
+				 0, 0, NULL, NULL, data);
 
                         return;
                 }
@@ -1132,7 +1086,8 @@ block_toggle_signals(GncItemEdit *item_edit)
 
         obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_handler_block_by_data (obj, item_edit);
+        g_signal_handlers_block_matched (obj, G_SIGNAL_MATCH_DATA,
+					 0, 0, NULL, NULL, item_edit);
 }
 
 
@@ -1146,7 +1101,8 @@ unblock_toggle_signals(GncItemEdit *item_edit)
 
         obj = GTK_OBJECT (item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_handler_unblock_by_data (obj, item_edit);
+        g_signal_handlers_unblock_matched (obj, G_SIGNAL_MATCH_DATA,
+					   0, 0, NULL, NULL, item_edit);
 }
 
 
@@ -1162,13 +1118,13 @@ connect_popup_toggle_signals (GncItemEdit *item_edit)
 
         object = GTK_OBJECT(item_edit->popup_toggle.toggle_button);
 
-        gtk_signal_connect (object, "toggled",
-                            GTK_SIGNAL_FUNC(gnc_item_edit_popup_toggled),
-                            item_edit);
+        g_signal_connect (object, "toggled",
+			  G_CALLBACK(gnc_item_edit_popup_toggled),
+			  item_edit);
 
-	gtk_signal_connect (object, "key_press_event",
-                            GTK_SIGNAL_FUNC(key_press_popup_cb),
-                            item_edit);
+	g_signal_connect (object, "key_press_event",
+			  G_CALLBACK(key_press_popup_cb),
+			  item_edit);
 
 	item_edit->popup_toggle.signals_connected = TRUE;
 }
@@ -1182,8 +1138,9 @@ disconnect_popup_toggle_signals (GncItemEdit *item_edit)
 	if (!item_edit->popup_toggle.signals_connected)
 		return;
 
-	gtk_signal_disconnect_by_data
-                (GTK_OBJECT(item_edit->popup_toggle.toggle_button), item_edit);
+	g_signal_handlers_disconnect_matched
+                (item_edit->popup_toggle.toggle_button, G_SIGNAL_MATCH_DATA,
+		 0, 0, NULL, NULL, item_edit);
 
 	item_edit->popup_toggle.signals_connected = FALSE;
 }
@@ -1778,5 +1735,3 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
   c-basic-offset: 8
   End:
 */
-
-

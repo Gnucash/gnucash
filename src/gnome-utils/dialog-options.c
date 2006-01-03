@@ -16,13 +16,19 @@
  * along with this program; if not, contact:                        *
  *                                                                  *
  * Free Software Foundation           Voice:  +1-617-542-5942       *
- * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
- * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
 #include "config.h"
 
+#ifdef HAVE_GLIB26 
+#include <gtk/gtk.h>
+#else
 #include <gnome.h>
+#endif
+#include <gdk/gdk.h>
+#include <glib/gi18n.h>
 #include <g-wrap-wct.h>
 
 #include "gnc-tree-model-budget.h" //FIXME?
@@ -38,15 +44,12 @@
 #include "gnc-general-select.h"
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
-#include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
-#include "messages.h"
 #include "option-util.h"
-#include "gdk/gdkfont.h"
 #include "guile-mappings.h"
 #include "gnc-date-format.h"
 #include "misc-gnome-utils.h"
@@ -63,6 +66,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
  * notebook tabs to a list.
  */
 #define MAX_TAB_COUNT 4
+
+/* A pointer to the last selected filename */
+#define LAST_SELECTION "last-selection"
 
 /* A Hash-table of GNCOptionDef_t keyed with option names. */
 static GHashTable *optionTable = NULL;
@@ -106,6 +112,18 @@ static void gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data);
 void gnc_options_dialog_list_select_cb(GtkWidget * list, GtkWidget * item,
 				       gpointer data);
 
+
+static inline gint
+color_d_to_i16 (double d)
+{
+  return (d * 0xFFFF);
+}
+
+static inline double
+color_i16_to_d (gint i16)
+{
+  return ((double)i16 / 0xFFFF);
+}
 
 static void
 gnc_options_dialog_changed_internal (GtkWidget *widget, gboolean sensitive)
@@ -157,7 +175,7 @@ gnc_date_option_set_select_method(GNCOption *option, gboolean use_absolute,
 
   widget = gnc_option_get_widget (option);
 
-  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
   ab_button = g_list_nth_data(widget_list, GNC_RD_WID_AB_BUTTON_POS);
   ab_widget = g_list_nth_data(widget_list, GNC_RD_WID_AB_WIDGET_POS);
   rel_button = g_list_nth_data(widget_list, GNC_RD_WID_REL_BUTTON_POS);
@@ -199,6 +217,56 @@ gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
   gnc_option_changed_option_cb(widget, option);
   return;
 }
+
+#ifdef HAVE_GLIB26
+static void
+gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
+				    GNCOption *option)
+{
+  gchar *filename;
+  GtkImage *image;
+  GdkPixbuf *pixbuf;
+  gboolean have_preview;
+
+  g_return_if_fail(chooser != NULL);
+
+  ENTER("chooser %p, option %p", chooser, option);
+  filename = gtk_file_chooser_get_preview_filename(chooser);
+  DEBUG("chooser preview name is %s.", filename);
+  if (filename == NULL) {
+    filename = g_strdup(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION));
+    DEBUG("using last selection of %s", filename);
+    if (filename == NULL) {
+      LEAVE("no usable name");
+      return;
+    }
+  }
+
+  image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
+  pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
+  g_free(filename);
+  have_preview = (pixbuf != NULL);
+
+  gtk_image_set_from_pixbuf(image, pixbuf);
+  if (pixbuf)
+    gdk_pixbuf_unref(pixbuf);
+
+  gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
+  LEAVE("preview visible is %d", have_preview);
+}
+
+static void
+gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
+				       GNCOption *option)
+{
+  gchar *filename;
+
+  filename = gtk_file_chooser_get_preview_filename(chooser);
+  if (!filename)
+    return;
+  g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
+}
+#endif
 
 /********************************************************************\
  * gnc_option_set_ui_value_internal                                 *
@@ -337,17 +405,17 @@ gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
 
   widget = gnc_option_get_widget (option);
 
-  _current = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  _current = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
   current = GPOINTER_TO_INT (_current);
 
-  _new_value = gtk_object_get_data (GTK_OBJECT(w), "gnc_radiobutton_index");
+  _new_value = g_object_get_data (G_OBJECT(w), "gnc_radiobutton_index");
   new_value = GPOINTER_TO_INT (_new_value);
 
   if (current == new_value)
     return;
 
-  gtk_object_set_data (GTK_OBJECT(widget), "gnc_radiobutton_index",
-		       GINT_TO_POINTER(new_value));
+  g_object_set_data (G_OBJECT(widget), "gnc_radiobutton_index",
+		     GINT_TO_POINTER(new_value));
   gnc_option_changed_widget_cb(widget, option);
 }
 
@@ -530,8 +598,8 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
 						   GTK_RADIO_BUTTON (widget) :
 						   NULL,
 						   label ? _(label) : "");
-    gtk_object_set_data (GTK_OBJECT (widget), "gnc_radiobutton_index",
-			 GINT_TO_POINTER (i));
+    g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
+		       GINT_TO_POINTER (i));
     gtk_tooltips_set_tip(tooltips, widget, tip ? _(tip) : "", NULL);
     g_signal_connect(G_OBJECT(widget), "toggled",
 		     G_CALLBACK(gnc_option_radiobutton_cb), option);
@@ -642,7 +710,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
                                  GTK_POLICY_AUTOMATIC);
 
   gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
-  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
   gtk_container_add(GTK_CONTAINER(scroll_win), tree);
 
   bbox = gtk_hbutton_box_new();
@@ -765,10 +833,10 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
                                  GTK_POLICY_AUTOMATIC);
 
   width = gtk_clist_columns_autosize(GTK_CLIST(clist));
-  gtk_widget_set_usize(scroll_win, width + 50, 0);
+  gtk_widget_set_size_request(scroll_win, width + 50, -1);
 
   gtk_box_pack_start(GTK_BOX(hbox), scroll_win, FALSE, FALSE, 0);
-  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
   gtk_container_add(GTK_CONTAINER(scroll_win), clist);
 
   bbox = gtk_vbutton_box_new();
@@ -799,17 +867,15 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
 }
 
 static void
-gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
-                            guint arg3, guint arg4, GNCOption *option)
+gnc_option_color_changed_cb(GtkColorButton *color_button, GNCOption *option)
 {
-  gnc_option_changed_widget_cb(GTK_WIDGET(picker), option);
+  gnc_option_changed_widget_cb(GTK_WIDGET(color_button), option);
 }
 
 static void
-gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
-                           GNCOption *option)
+gnc_option_font_changed_cb(GtkFontButton *font_button, GNCOption *option)
 {
-  gnc_option_changed_widget_cb(GTK_WIDGET(picker), option);
+  gnc_option_changed_widget_cb(GTK_WIDGET(font_button), option);
 }
 
 static void
@@ -936,7 +1002,7 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   reset_button = gtk_button_new_with_label (_("Defaults"));
   g_signal_connect(G_OBJECT(reset_button), "clicked",
 		   G_CALLBACK(gnc_options_dialog_reset_cb), propertybox);
-  gtk_object_set_data(GTK_OBJECT(reset_button), "section", section);
+  g_object_set_data(G_OBJECT(reset_button), "section", section);
   gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
   gtk_widget_show_all(page_content_box);
   gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
@@ -964,9 +1030,9 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 	gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
 				  page_count);
 
-      gtk_object_set_data(GTK_OBJECT(notebook_page), "listitem", listitem);
-      gtk_object_set_data(GTK_OBJECT(notebook_page), "advanced",
-			  GINT_TO_POINTER(advanced));
+      g_object_set_data(G_OBJECT(notebook_page), "listitem", listitem);
+      g_object_set_data(G_OBJECT(notebook_page), "advanced",
+			GINT_TO_POINTER(advanced));
     }
   }
 
@@ -1100,7 +1166,7 @@ gnc_options_dialog_reset_cb(GtkWidget * w, gpointer data)
   GNCOptionSection *section;
   gpointer val;
 
-  val = gtk_object_get_data(GTK_OBJECT(w), "section");
+  val = g_object_get_data(G_OBJECT(w), "section");
   g_return_if_fail (val);
   g_return_if_fail (win);
 
@@ -1358,7 +1424,7 @@ gnc_option_set_ui_widget_text (GNCOption *option, GtkBox *page_box,
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
 				 GTK_POLICY_NEVER, 
 				 GTK_POLICY_AUTOMATIC);
-  gtk_container_border_width(GTK_CONTAINER(scroll), 2);
+  gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
 
   gtk_container_add(GTK_CONTAINER(frame), scroll);
 
@@ -1540,7 +1606,7 @@ gnc_option_set_ui_widget_account_list (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_option_account_cb), option);
 
   //  gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  //  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * 10);
+  //  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * 10);
   gtk_widget_show_all(*enclosing);
   return value;
 }
@@ -1613,7 +1679,7 @@ gnc_option_set_ui_widget_list (GNCOption *option, GtkBox *page_box,
   num_lines = MIN(num_lines, 9) + 1;
 
   gtk_clist_set_row_height(GTK_CLIST(value), 0);
-  gtk_widget_set_usize(value, 0, GTK_CLIST(value)->row_height * num_lines);
+  gtk_widget_set_size_request(value, -1, GTK_CLIST(value)->row_height * num_lines);
   gtk_widget_show_all(*enclosing);
   return value;
 }
@@ -1686,7 +1752,7 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
 
       g_free(string);
 
-      gtk_widget_set_usize(value, width, 0);
+      gtk_widget_set_size_request(value, width, -1);
     }
   }
 
@@ -1723,9 +1789,9 @@ gnc_option_set_ui_widget_color (GNCOption *option, GtkBox *page_box,
 
   use_alpha = gnc_option_use_alpha(option);
 
-  value = gnome_color_picker_new();
-  gnome_color_picker_set_title(GNOME_COLOR_PICKER(value), name);
-  gnome_color_picker_set_use_alpha(GNOME_COLOR_PICKER(value), use_alpha);
+  value = gtk_color_button_new();
+  gtk_color_button_set_title(GTK_COLOR_BUTTON(value), name);
+  gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(value), use_alpha);
 
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
@@ -1756,9 +1822,12 @@ gnc_option_set_ui_widget_font (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
-  value = gnome_font_picker_new();
-  gnome_font_picker_set_mode(GNOME_FONT_PICKER(value),
-			     GNOME_FONT_PICKER_MODE_FONT_INFO);
+  value = gtk_font_button_new();
+  g_object_set(G_OBJECT(value),
+	       "use-font", TRUE,
+	       "show-style", TRUE,
+	       "show-size", TRUE,
+	       (char *)NULL);
 
   gnc_option_set_widget (option, value);
 
@@ -1782,7 +1851,9 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 {
   GtkWidget *value;
   GtkWidget *label;
+#ifndef HAVE_GLIB26
   GtkWidget *entry;
+#endif
   gchar *colon_name;
 
   ENTER("option %p(%s), name %s", option, gnc_option_name(option), name);
@@ -1792,6 +1863,20 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
+#ifdef HAVE_GLIB26
+  value = gtk_file_chooser_button_new(_("Select image"),
+				      GTK_FILE_CHOOSER_ACTION_OPEN);
+  g_object_set(G_OBJECT(value),
+	       "width-chars", 30,
+	       "preview-widget", gtk_image_new(),
+	       (char *)NULL);
+  g_signal_connect(G_OBJECT (value), "selection-changed",
+		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+  g_signal_connect(G_OBJECT (value), "selection-changed",
+		   G_CALLBACK(gnc_image_option_selection_changed_cb), option);
+  g_signal_connect(G_OBJECT (value), "update-preview",
+		   G_CALLBACK(gnc_image_option_update_preview_cb), option);
+#else
   value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
 				 FALSE);
   gnome_pixmap_entry_set_preview(GNOME_PIXMAP_ENTRY(value), FALSE);
@@ -1799,6 +1884,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   entry = gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY(value));
   g_signal_connect(G_OBJECT (entry), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+#endif
     
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
@@ -1894,8 +1980,8 @@ gnc_option_set_ui_value_boolean (GNCOption *option, gboolean use_default,
 {
   if (SCM_BOOLP(value))
   {
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),
-				SCM_NFALSEP(value));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+				 SCM_NFALSEP(value));
     return FALSE;
   }
   else
@@ -2015,7 +2101,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  GList *widget_list;
 	  GtkWidget *rel_date_widget;
 
-	  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+	  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
 	  rel_date_widget = g_list_nth_data(widget_list,
 					    GNC_RD_WID_REL_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, FALSE, TRUE);
@@ -2041,7 +2127,7 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  GList *widget_list;
 	  GtkWidget *ab_widget;
 
-	  widget_list = gtk_container_children(GTK_CONTAINER(widget));
+	  widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
 	  ab_widget = g_list_nth_data(widget_list,
 				      GNC_RD_WID_AB_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, TRUE, TRUE);
@@ -2169,15 +2255,22 @@ gnc_option_set_ui_value_color (GNCOption *option, gboolean use_default,
   if (gnc_option_get_color_info(option, use_default,
 				&red, &green, &blue, &alpha))
   {
-    GnomeColorPicker *picker;
+    GtkColorButton *color_button;
+    GdkColor color;
 
-    picker = GNOME_COLOR_PICKER(widget);
+    DEBUG("red %f, green %f, blue %f, alpha %f", red, green, blue, alpha);
+    color_button = GTK_COLOR_BUTTON(widget);
 
-    gnome_color_picker_set_d(picker, red, green, blue, alpha);
+    color.red   = color_d_to_i16(red);
+    color.green = color_d_to_i16(green);
+    color.blue  = color_d_to_i16(blue);
+    gtk_color_button_set_color(color_button, &color);
+    gtk_color_button_set_alpha(color_button, color_d_to_i16(alpha));
     return FALSE;
   }
-  else
-    return TRUE;
+
+  LEAVE("TRUE");
+  return TRUE;
 }
 
 static gboolean
@@ -2189,8 +2282,8 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
     const gchar *string = SCM_STRING_CHARS(value);
     if ((string != NULL) && (*string != '\0'))
     {
-      GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
-      gnome_font_picker_set_font_name(picker, string);
+      GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
+      gtk_font_button_set_font_name(font_button, string);
     }
     return FALSE;
   }
@@ -2209,10 +2302,21 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
+#ifdef HAVE_GLIB26
+      gchar *test;
+      DEBUG("string = %s", string);
+      gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(widget), string);
+      test = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+      g_object_set_data_full(G_OBJECT(widget), LAST_SELECTION,
+			     g_strdup(string), g_free);
+      DEBUG("Set %s, retrieved %s", string, test);
+      gnc_image_option_update_preview_cb(GTK_FILE_CHOOSER(widget), option);
+#else
       GtkEntry *entry;
       DEBUG("string = %s", string);
       entry = GTK_ENTRY(gnome_pixmap_entry_gtk_entry(GNOME_PIXMAP_ENTRY(widget)));
       gtk_entry_set_text(entry, string);
+#endif
     }
     LEAVE("FALSE");
     return FALSE;
@@ -2263,20 +2367,20 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
     int i;
     gpointer val;
 
-    list = gtk_container_children (GTK_CONTAINER (widget));
+    list = gtk_container_get_children (GTK_CONTAINER (widget));
     box = list->data;
 
-    list = gtk_container_children (GTK_CONTAINER (box));
+    list = gtk_container_get_children (GTK_CONTAINER (box));
     for (i = 0; i < index && list; i++)
       list = list->next;
     g_return_val_if_fail (list, TRUE);
 
     button = list->data;
-    val = gtk_object_get_data (GTK_OBJECT (button), "gnc_radiobutton_index");
+    val = g_object_get_data (G_OBJECT (button), "gnc_radiobutton_index");
     g_return_val_if_fail (GPOINTER_TO_INT (val) == index, TRUE);
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    //    gtk_object_set_data(GTK_OBJECT(widget), "gnc_radiobutton_index",
+    //    g_object_set_data(G_OBJECT(widget), "gnc_radiobutton_index",
     //			GINT_TO_POINTER(index));
     return FALSE;
   }
@@ -2416,7 +2520,7 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     GList *widget_list;
     GtkWidget *ab_button, *rel_widget, *ab_widget;
 
-    widget_list = gtk_container_children(GTK_CONTAINER(widget));
+    widget_list = gtk_container_get_children(GTK_CONTAINER(widget));
     ab_button = g_list_nth_data(widget_list,  GNC_RD_WID_AB_BUTTON_POS);
     ab_widget = g_list_nth_data(widget_list,  GNC_RD_WID_AB_WIDGET_POS);
     rel_widget = g_list_nth_data(widget_list, GNC_RD_WID_REL_WIDGET_POS);
@@ -2521,7 +2625,7 @@ gnc_option_get_ui_value_number_range (GNCOption *option, GtkWidget *widget)
 
   spinner = GTK_SPIN_BUTTON(widget);
 
-  value = gtk_spin_button_get_value_as_float(spinner);
+  value = gtk_spin_button_get_value(spinner);
 
   return (scm_make_real(value));
 }
@@ -2530,13 +2634,20 @@ static SCM
 gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 {
   SCM result;
-  GnomeColorPicker *picker;
+  GtkColorButton *color_button;
+  GdkColor color;
   gdouble red, green, blue, alpha;
   gdouble scale;
 
-  picker = GNOME_COLOR_PICKER(widget);
+  ENTER("option %p(%s), widget %p",
+	option, gnc_option_name(option), widget);
 
-  gnome_color_picker_get_d(picker, &red, &green, &blue, &alpha);
+  color_button = GTK_COLOR_BUTTON(widget);
+  gtk_color_button_get_color(color_button, &color);
+  red   = color_i16_to_d(color.red);
+  green = color_i16_to_d(color.green);
+  blue  = color_i16_to_d(color.blue);
+  alpha = color_i16_to_d(gtk_color_button_get_alpha(color_button));
 
   scale = gnc_option_color_range(option);
 
@@ -2551,20 +2662,32 @@ gnc_option_get_ui_value_color (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 {
-  GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
+  GtkFontButton *font_button = GTK_FONT_BUTTON(widget);
   const gchar * string;
 
-  string = gnome_font_picker_get_font_name(picker);
+  string = gtk_font_button_get_font_name(font_button);
   return (scm_makfrom0str(string));
 }
 
 static SCM
 gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 {
+#ifdef HAVE_GLIB26
+  gchar *string;
+  SCM result;
+
+  string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+  DEBUG("filename %s", string);
+  result = scm_makfrom0str(string ? string : "");
+  if (string)
+    g_free(string);
+  return result;
+#else
   GnomePixmapEntry * p = GNOME_PIXMAP_ENTRY(widget);
   char             * string = gnome_pixmap_entry_get_filename(p);
 
   return (scm_makfrom0str(string ? string : ""));
+#endif
 }
 
 static SCM
@@ -2573,7 +2696,7 @@ gnc_option_get_ui_value_radiobutton (GNCOption *option, GtkWidget *widget)
   gpointer _index;
   int index;
 
-  _index = gtk_object_get_data(GTK_OBJECT(widget), "gnc_radiobutton_index");
+  _index = g_object_get_data(G_OBJECT(widget), "gnc_radiobutton_index");
   index = GPOINTER_TO_INT(_index);
 
   return (gnc_option_permissible_value(option, index));
