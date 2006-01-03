@@ -1,5 +1,9 @@
 2006-01-02  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/Makefile.am
+	* src/gnome-utils/gnc-tree-model-example-account.[ch]: Remove
+	unused files.
+
 	* src/gnome/glade/account.glade:
 	* src/gnome/druid-hierarchy.c: Use a GtkListStore for the example
 	account categories instead of layering a custom selection model on
