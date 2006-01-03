@@ -1002,7 +1002,7 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 }
 
 static int
-get_commodity_denom (GncEntry *entry)
+get_entry_commodity_denom (GncEntry *entry)
 {
   gnc_commodity *c;
   if (!entry)
@@ -1070,7 +1070,7 @@ gncEntryRecomputeValues (GncEntry *entry)
 			gnc_numeric_zero(), GNC_AMT_TYPE_VALUE, GNC_DISC_PRETAX,
 			&(entry->b_value), NULL, &(entry->b_tax_values));
 
-  denom = get_commodity_denom (entry);
+  denom = get_entry_commodity_denom (entry);
   entry->i_value_rounded = gnc_numeric_convert (entry->i_value, denom,
 						GNC_RND_ROUND);
   entry->i_disc_value_rounded = gnc_numeric_convert (entry->i_disc_value, denom,
