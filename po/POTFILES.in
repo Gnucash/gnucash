@@ -210,7 +210,6 @@ src/gnome/glade/stocks.glade
 src/gnome/glade/tax.glade
 src/gnome/glade/totd.glade
 src/gnome/glade/userpass.glade
-src/gnome/gncmod-budget.c
 src/gnome/gnc-plugin-account-tree.c
 src/gnome/gnc-plugin-basic-commands.c
 src/gnome/gnc-plugin-budget.c
@@ -298,7 +297,6 @@ src/gnome-utils/gnc-tree-model-account-types.c
 src/gnome-utils/gnc-tree-model-budget.c
 src/gnome-utils/gnc-tree-model.c
 src/gnome-utils/gnc-tree-model-commodity.c
-src/gnome-utils/gnc-tree-model-example-account.c
 src/gnome-utils/gnc-tree-model-price.c
 src/gnome-utils/gnc-tree-model-selection.c
 src/gnome-utils/gnc-tree-view-account.c
