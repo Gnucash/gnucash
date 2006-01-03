@@ -93,7 +93,7 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-
+	./make-gnucash-potfiles > ./po/POTFILES.in
 
 .goffice-links: 
 	rm -f goffice
@@ -116,10 +116,10 @@ cscope.out: cscope.files
 
 if GNC_ETAGS_FILE
 
+# make sure etags.files is up to date.
+# and use the contents of etags.files to re-make TAGS if needed.
 etags:
-        # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
-        # now use the contents of etags.files to re-make TAGS if needed.
 	${MAKE} -f Makefile.TAGS TAGS
 
 else
@@ -131,10 +131,10 @@ endif
 
 if GNC_CTAGS_FILE
 
+# make sure etags.files is up to date.
+# and use the contents of etags.files to re-make TAGS if needed.
 ctags:
-        # make sure etags.files is up to date.
 	${MAKE} -f Makefile.TAGS etags.files
-        # now use the contents of etags.files to re-make TAGS if needed.
 	${MAKE} -f Makefile.TAGS tags
 
 else
@@ -162,10 +162,7 @@ distclean-local:
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
-buildpo : make-gnucash-potfiles Makefile
-	${top_srcdir}/make-gnucash-potfiles > po/POTFILES.in
-
-pot: buildpo
+pot: Makefile
 	rm -f intl-scm/guile-strings.c
 	make -C intl-scm
 	rm -f po/$(PACKAGE).pot
