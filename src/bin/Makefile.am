@@ -1,7 +1,33 @@
 # Order is important here.
 SUBDIRS = . overrides test
 
-AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
+AM_CFLAGS = \
+ -I${top_builddir} \
+ -I${top_builddir}/src/business/business-core \
+ -I${top_builddir}/src/gnc-module \
+ -I${top_builddir}/src/engine \
+ -I${top_builddir}/src/gnome-utils \
+ -DLOCALE_DIR=\""$(datadir)/locale"\" \
+ ${QOF_CFLAGS} \
+ ${GTK_CFLAGS} \
+ ${GNOME_CFLAGS} \
+ ${GLIB_CFLAGS}
+
+bin_PROGRAMS = gnucash2
+
+gnucash2_SOURCES=\
+  gnucash2.c \
+  qof-main.c
+
+gnucash2_LDADD=\
+  ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_srcdir}/src/business/business-core/libcashbusobjects.la \
+  ${QOF_LIBS} \
+  ${GUILE_LIBS} \
+  ${GTK_LIBS} \
+  ${GNOME_LIBS} \
+  ${GLIB_LIBS}
+
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
