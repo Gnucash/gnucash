@@ -3,6 +3,25 @@ SUBDIRS = . overrides test
 
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 
+bin_PROGRAMS = gnucash-bin
+gnucash_bin_SOURCES = gnucash-bin.c
+gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS}
+
+gnucash: gnucash.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's:@-BIN_DIR-@:${bindir}:g' \
+	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
+	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
+	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
+	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
+	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
+	mv $@.tmp $@
+	chmod u+x $@
+CLEANFILES = gnucash
+
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
 # directories in their path can still invoke these commands via their
@@ -18,9 +37,9 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 # For testing and other reasons, overrides/* scripts should not modify
 # the path to re-insert the overrides dir.  This should only be done
 # by these top-level "common" scripts.
-gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
+gnc_common_scripts = gnucash-env gnucash-run-script gnucash-make-guids
 
-bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf
+bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
@@ -31,7 +50,7 @@ EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
-CLEANFILES = ${gnc_common_scripts} update-gnucash-gconf
+CLEANFILES += ${gnc_common_scripts} update-gnucash-gconf
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
