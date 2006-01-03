@@ -23,6 +23,17 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+/*
+ * This file creates a GtkTreeModel that extends an existing
+ * GtkTreeModel by a single column.  This new column holds a single
+ * boolean value per row.
+ *
+ * GtkTreeViews allow the creation of columns in any order, not just
+ * the order they appear in the underlying model.  The most likely use
+ * of this code will have the first view column mapped to this extra
+ * boolean model column, and the column value diaplayed by a checkbox.
+ */
+
 #ifndef __GNC_TREE_MODEL_SELECTION_H
 #define __GNC_TREE_MODEL_SELECTION_H
 
@@ -62,7 +73,7 @@ void               gnc_tree_model_selection_convert_iter_to_child_iter (GncTreeM
                                                                         GtkTreeIter *child_iter,
  									GtkTreeIter *selection_iter);
 
-gint               gnc_tree_model_selection_get_selection_row          (GncTreeModelSelection *model);
+gint               gnc_tree_model_selection_get_selection_column       (GncTreeModelSelection *model);
 GtkTreeViewColumn *gnc_tree_model_selection_create_tree_view_column    (GncTreeModelSelection *model,
 									const gchar *title);
 
