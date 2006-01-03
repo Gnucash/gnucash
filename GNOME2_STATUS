@@ -44,8 +44,7 @@ Stock Split Dialog
 Resources
 ---------
 - Porting applications to the GNOME 2.0 Platform -- http://developer.gnome.org/dotplan/porting/
-  - Should switch from `gnome_config` to gconf...
-    - Introduction to GConf -- http://developer.gnome.org/feature/archive/gconf/gconf.html
+- Introduction to GConf -- http://developer.gnome.org/feature/archive/gconf/gconf.html
 
 - General
 
@@ -123,18 +122,8 @@ Resources
 
   - Sometimes crashes when loading account data.
 
-  - Main account selection layout is too (visually) compressed
- 
-    - Should have two columns: left={category(80%) + detailed-description(20%)}, right={category-accounts(100%)}
+  - 2006-01-02: do these problems still exist?
 
-    - See 'relayout Hierarchy' in src/gnome/glade/account.glade.
-
-  - Account tree's only column (account name) is relatively thin, truncating
-    some titles.
-
-    - It seems that gnc_tree_view_add_text_column sets column-width based on
-      an example string, whereas in this use-case the best would be to set to
-      '0'(=autosize).
 
 - Account Hierarchy Merge - BROKEN
 

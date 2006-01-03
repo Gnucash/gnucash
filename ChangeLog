@@ -1,3 +1,15 @@
+2006-01-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/account.glade:
+	* src/gnome/druid-hierarchy.c: Use a GtkListStore for the example
+	account categories instead of layering a custom selection model on
+	a custom example account model.  The code is a lot simpler and has
+	additional sorting capability. Do some rework on the druid
+	layout.
+
+	* src/gnome-utils/gnc-tree-model-selection.[ch]: Correct function
+	name.  Add a comment.
+
 2006-01-02  Derek Atkine  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-tree-view-account.c:
