@@ -106,7 +106,7 @@ DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice .goffice-links
+  goffice .goffice-links po/POTFILES.in
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -170,9 +170,6 @@ pot: buildpo
 	make -C intl-scm
 	rm -f po/$(PACKAGE).pot
 	make -C po $(PACKAGE).pot
-
-pot_DATA=buildpo
-potdir=po
 
 SVN = svn
 XSLTPROC = xsltproc
