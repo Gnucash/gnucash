@@ -1,5 +1,10 @@
 2006-01-02  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-totd.c: Use the component manager to ensure
+	there is only one totd dialog at a time.  Don't mark the dialog as
+	transient (or type GTK_WINDOW_DIALOG) so that window managers
+	won't make it float above all other GnuCash windows.
+
 	* src/engine/Transaction.c: Fix test inverted by commit 12231.
 
 	* src/gnome-utils/Makefile.am

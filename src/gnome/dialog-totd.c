@@ -1,7 +1,7 @@
 /*
  * dialog-totd.c : dialog to display a "tip of the day"
  *
- * Copyright (c) 2005 David Hampton <hampton@employees.org>
+ * Copyright (c) 2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,6 +29,7 @@
 
 #include "dialog-totd.h"
 #include "dialog-utils.h"
+#include "gnc-component-manager.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-engine.h"
@@ -37,12 +38,13 @@
 #define GCONF_SECTION   "dialogs/tip_of_the_day"
 #define KEY_CURRENT_TIP "current_tip"
 #define KEY_SHOW_TIPS   "show_at_startup"
+#define DIALOG_TOTD_CM_CLASS	"dialog-totd"
 
+#define GNC_RESPONSE_FORWARD 1
+#define GNC_RESPONSE_BACK    2
 
 /* Callbacks */
-void gnc_totd_dialog_close(GtkButton *button, gpointer user_data);
-void gnc_totd_dialog_next(GtkButton *button, gpointer user_data);
-void gnc_totd_dialog_previous(GtkButton *button, gpointer user_data);
+void gnc_totd_dialog_response (GtkDialog *dialog, gint reponse, gpointer user_data);
 void gnc_totd_dialog_startup_toggled (GtkToggleButton *button, gpointer user_data);
 
 /* The Tips */
@@ -98,31 +100,27 @@ gnc_new_tip_number (GtkWidget *widget,
 /*    Callbacks     */
 /********************/
 
-void
-gnc_totd_dialog_close (GtkButton *button,
-		       gpointer user_data)
+void gnc_totd_dialog_response (GtkDialog *dialog,
+			       gint       response,
+			       gpointer   user_data)
 {
-  GtkWidget *dialog;
+  ENTER("dialog %p, response %d, user_data %p", dialog, response, user_data);
+  switch (response) {
+    case GNC_RESPONSE_FORWARD:
+      gnc_new_tip_number(GTK_WIDGET(dialog), 1);
+      break;
 
-  ENTER("button %p, dialog %p", button, user_data);
-  dialog = GTK_WIDGET(user_data);
-  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
-  gtk_widget_destroy(dialog);
+    case GNC_RESPONSE_BACK:
+      gnc_new_tip_number(GTK_WIDGET(dialog), -1);
+      break;
+
+    default:
+      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+      gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
+      gtk_widget_destroy(GTK_WIDGET(dialog));
+      break;
+  }
   LEAVE("");
-}
-
-void
-gnc_totd_dialog_next (GtkButton *button,
-		      gpointer user_data)
-{
-  gnc_new_tip_number(GTK_WIDGET(button), 1);
-}
-
-void
-gnc_totd_dialog_previous (GtkButton *button,
-			  gpointer user_data)
-{
-  gnc_new_tip_number(GTK_WIDGET(button), -1);
 }
 
 void
@@ -165,7 +163,6 @@ gnc_totd_initialize (void)
   /* Convert any escaped characters while counting the strings */
   for (tip_count = 0; tip_list[tip_count] != NULL; tip_count++) {
 
-//  new = g_strdelimit(string, "\n", ' ');
     new = g_strcompress(g_strdelimit(tip_list[tip_count], "\n", ' '));
     g_free(tip_list[tip_count]);
     tip_list[tip_count] = new;
@@ -175,6 +172,52 @@ gnc_totd_initialize (void)
   g_free(filename);
   return TRUE;
 }
+
+/** Raise the totd dialog to the top of the window stack.  This
+ *  function is called if the user attempts to create a second totd
+ *  dialog.
+ *
+ *  @internal
+ *
+ *  @param class Unused.
+ *
+ *  @param component_id Unused.
+ *
+ *  @param user_data A pointer to the totd dialog.
+ *
+ *  @param iter_data Unused.
+ */
+static gboolean
+show_handler (const char *class, gint component_id,
+	      gpointer user_data, gpointer iter_data)
+{
+  GtkWidget *dialog;
+
+  ENTER(" ");
+  dialog = GTK_WIDGET(user_data);
+  gtk_window_present(GTK_WINDOW(dialog));
+  LEAVE(" ");
+  return(TRUE);
+}
+
+/** Close the totd dialog.
+ *
+ *  @internal
+ *
+ *  @param user_data A pointer to the totd dialog.
+ */
+static void
+close_handler (gpointer user_data)
+{
+  GtkWidget *dialog;
+
+  ENTER(" ");
+  dialog = GTK_WIDGET(user_data);
+  gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
+  gtk_widget_destroy(dialog);
+  LEAVE(" ");
+}
+
 
 /********************/
 /*      Main        */
@@ -197,9 +240,12 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     current_tip_number =  gnc_gconf_get_int(GCONF_SECTION, KEY_CURRENT_TIP, NULL);
   }
 
+  if (gnc_forall_gui_components(DIALOG_TOTD_CM_CLASS, show_handler, NULL)) {
+    return;
+  }
+
   xml = gnc_glade_xml_new ("totd.glade", "totd_dialog");
   dialog  = glade_xml_get_widget (xml, "totd_dialog");
-  gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
 
@@ -210,4 +256,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
   gtk_widget_show(GTK_WIDGET (dialog));
+
+  gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
+			     NULL, close_handler, dialog);
 }
