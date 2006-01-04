@@ -1,3 +1,10 @@
+2006-01-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome/top-level.c:
+	* src/gnome/dialog-totd.c:
+	* src/gnome/glade/totd.glade: Revert the previous change and make
+	the totd always float above all other GnuCash windows.
+
 2006-01-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-totd.c: Use the component manager to ensure

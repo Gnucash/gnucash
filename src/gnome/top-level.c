@@ -300,11 +300,12 @@ gnc_gui_init (SCM command_line)
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
-    gnc_totd_dialog(NULL, TRUE);
     gnc_ui_sx_initialize();
 
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));
+
+    gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
     gtk_accel_map_load(map);

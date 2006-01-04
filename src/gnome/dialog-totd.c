@@ -246,6 +246,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
   xml = gnc_glade_xml_new ("totd.glade", "totd_dialog");
   dialog  = glade_xml_get_widget (xml, "totd_dialog");
+  gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
 
