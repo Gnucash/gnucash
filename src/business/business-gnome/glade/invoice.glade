@@ -1767,6 +1767,7 @@ Are you sure you want to unpost it?</property>
 		      <property name="active">True</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
+		      <property name="group">yes_tt_reset</property>
 		      <signal name="toggled" handler="on_no_tt_reset_toggled" object="Invoice Entry Window" last_modification_time="Wed, 16 Jul 2003 07:23:29 GMT"/>
 		    </widget>
 		    <packing>

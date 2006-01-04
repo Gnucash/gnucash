@@ -1,5 +1,8 @@
 2006-01-03  David Hampton  <hampton@employees.org>
 
+	* src/business/business-gnome/glade/invoice.glade: Couple the
+	radio buttons in the unpost dialog.
+
 	* src/gnome/top-level.c:
 	* src/gnome/dialog-totd.c:
 	* src/gnome/glade/totd.glade: Revert the previous change and make
