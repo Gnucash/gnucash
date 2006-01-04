@@ -1,5 +1,9 @@
 2006-01-03  David Hampton  <hampton@employees.org>
 
+	* src/engine/Transaction.c: When setting the amount of a split,
+	don't call gnc_numeric_convert on it if the split isn't assigned
+	to an account. This reduces the time spent loading a data file.
+
 	* src/business/business-gnome/glade/invoice.glade: Couple the
 	radio buttons in the unpost dialog.
 

@@ -756,8 +756,11 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 	 s->amount.num, s->amount.denom, amt.num, amt.denom);
 
   check_open (s->parent);
-  s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), 
-                                  GNC_HOW_RND_ROUND);
+  if (s->acc)
+    s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), 
+				    GNC_HOW_RND_ROUND);
+  else
+    s->amount = amt;
 
   SET_GAINS_ADIRTY(s);
   mark_split (s);
