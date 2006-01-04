@@ -107,7 +107,7 @@ gnc_style_sheet_dialog_create(StyleSheetDialog * ss,
     GtkWidget      * window;
     gchar          * title;
 
-    title = g_strdup_printf("HTML Style Sheet Properties: %s", name);
+    title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
     ssinfo->odialog = gnc_options_dialog_new(title);
     ssinfo->odb     = gnc_option_db_new(scm_options);
     ssinfo->stylesheet = sheet_info;

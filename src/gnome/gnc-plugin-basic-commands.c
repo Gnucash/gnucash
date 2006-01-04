@@ -94,10 +94,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
     N_("Create a new file"),
     G_CALLBACK (gnc_main_window_cmd_file_new) },
   { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
-    NULL,
+    N_("Open an existing GnuCash file"),
     G_CALLBACK (gnc_main_window_cmd_file_open) },
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
-    NULL,
+    N_("Save the current file"),
     G_CALLBACK (gnc_main_window_cmd_file_save) },
   { "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
     NULL,
@@ -361,7 +361,7 @@ gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData 
   g_return_if_fail (data != NULL);
 
   gnc_window_set_progressbar_window(GNC_WINDOW(data->window));
-  file_select = gtk_file_selection_new("Select the QSF file to import into GnuCash");
+  file_select = gtk_file_selection_new(_("Select the QSF file to import into GnuCash"));
   g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
 		    "clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
   g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
