@@ -5997,7 +5997,7 @@ Select any which you would like to create now, and click
 				    <widget class="GtkStatusbar" id="to_create_status">
 				      <property name="border_width">3</property>
 				      <property name="visible">True</property>
-				      <property name="has_resize_grip">True</property>
+				      <property name="has_resize_grip">False</property>
 				    </widget>
 				    <packing>
 				      <property name="padding">0</property>

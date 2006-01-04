@@ -11,9 +11,6 @@
       <placeholder name="ViewPlaceholder"/>
     </menu>
 
-    <menu name="Transaction" action="TransactionAction">
-    </menu>
-
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder"/>
     </menu>

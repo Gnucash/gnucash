@@ -1,3 +1,11 @@
+2006-01-03  Joshua Sled  <jsled@asynchronous.org>
+
+	* gnc-sxed-window-ui.xml: Remove unreferenced `TransactionAction`.
+
+	* dialog-sxsincelast.c (sxsld_disposition_changed): change the
+	assertion into a simple return-if-fail due to apparent change in
+	the calling order in gtk 2.x...
+
 2006-01-03  David Hampton  <hampton@employees.org>
 
 	* src/engine/Transaction.c: When setting the amount of a split,

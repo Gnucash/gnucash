@@ -531,7 +531,7 @@ dialog_widgets_attach_handlers(GladeXML *dialog_xml,
         int i;
         GtkWidget *w;
 
-        for(i = 0; handler_info[i].name != NULL; i++)
+        for (i = 0; handler_info[i].name != NULL; i++)
         {
                 w = glade_xml_get_widget(dialog_xml, handler_info[i].name);
                 g_signal_connect( G_OBJECT(w), handler_info[i].signal, 
@@ -3418,7 +3418,9 @@ sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
                         glade_xml_get_widget( sxsld->gxml,
                                               SX_DISPOSITION_OPT ));
         /* Change the state of the TCI */
-        g_assert( sxsld->curSelTCI != NULL );
+        //g_assert( sxsld->curSelTCI != NULL );
+        g_return_if_fail(sxsld->curSelTCI != NULL);
+
         sxsld->curSelTCI->state = newState;
 
         newSensitivity = TRUE;

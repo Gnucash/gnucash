@@ -124,6 +124,12 @@ Resources
 
   - 2006-01-02: do these problems still exist?
 
+    - [jsled, 2006-01-03] yes...
+
+      - After opening, mousing over the existing account-tree changes all my
+        '$'s to 'USD'.
+
+      - I'm unable to cancel this dialog.
 
 - Account Hierarchy Merge - BROKEN
 
@@ -150,7 +156,10 @@ Resources
 
 - Scheduled Transactions
 
-  - Since Last Run dialog spews console-crap on init, generally broken?
+  - Since Last Run dialog should be audited for menus and ledger capabilities.
+
+    - e.g. The To-Create-Transaction read-only review ledger doesn't need any
+      menus or editing functionality.
 
   - SX Editor
 
