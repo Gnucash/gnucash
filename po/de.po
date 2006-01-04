@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-31 12:26+0100\n"
-"PO-Revision-Date: 2005-12-31 12:30+0100\n"
+"POT-Creation-Date: 2006-01-04 22:52+0100\n"
+"PO-Revision-Date: 2006-01-04 22:55+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Eigenkapital"
 
 #. src/scm/help-topics-index.scm
 #: ../src/app-utils/gnc-ui-util.c:675 ../src/gnome/dialog-chart-export.c:40
-#: ../src/gnome/druid-hierarchy.c:744 ../src/gnome/glade/account.glade.h:57
+#: ../src/gnome/druid-hierarchy.c:707 ../src/gnome/glade/account.glade.h:55
 #: ../src/gnome-utils/dialog-account.c:244 ../intl-scm/guile-strings.c:376
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
@@ -771,7 +771,7 @@ msgstr "Rechnungsnummer"
 #. src/report/standard-reports/account-summary.scm
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/dialog-invoice.c:2106
-#: ../src/gnome-utils/gnc-tree-view-account.c:401
+#: ../src/gnome-utils/gnc-tree-view-account.c:405
 #: ../src/gnome-utils/gnc-tree-view-price.c:441
 #: ../src/register/ledger-core/split-register-model.c:208
 #: ../intl-scm/guile-strings.c:2462 ../intl-scm/guile-strings.c:3814
@@ -1076,7 +1076,7 @@ msgstr "Stichtag Monatswechsel: "
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:2
 #: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
-#: ../src/gnome/gnc-plugin-page-budget.c:161
+#: ../src/gnome/gnc-plugin-page-budget.c:165
 #: ../src/gnome/gnc-plugin-page-register.c:293
 #: ../src/gnome/window-reconcile.c:1415
 #: ../src/import-export/hbci/glade/hbci.glade.h:17
@@ -1408,7 +1408,7 @@ msgstr "Identifizierung"
 #: ../src/business/business-gnome/glade/order.glade.h:10
 #: ../src/business/business-gnome/glade/vendor.glade.h:14
 #: ../src/gnome/dialog-find-transactions.c:122
-#: ../src/gnome-utils/gnc-tree-view-account.c:497
+#: ../src/gnome-utils/gnc-tree-view-account.c:501
 #: ../src/register/ledger-core/split-register-model.c:320
 #: ../intl-scm/guile-strings.c:2470
 msgid "Notes"
@@ -1470,10 +1470,10 @@ msgstr "Welche Steuertabelle soll bei diesem Kunden angewandt werden?"
 #: ../src/business/business-gnome/glade/date-close.glade.h:2
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:77
 #: ../src/gnome/dialog-find-transactions.c:130
-#: ../src/gnome/druid-hierarchy.c:363 ../src/gnome/glade/lots.glade.h:13
-#: ../src/gnome/glade/tax.glade.h:5 ../src/gnome/reconcile-list.c:216
+#: ../src/gnome/glade/lots.glade.h:13 ../src/gnome/glade/tax.glade.h:5
+#: ../src/gnome/reconcile-list.c:216
 #: ../src/gnome-utils/gnc-tree-model-budget.c:102
-#: ../src/gnome-utils/gnc-tree-view-account.c:415
+#: ../src/gnome-utils/gnc-tree-view-account.c:419
 #: ../src/import-export/generic-import.glade.h:19
 #: ../src/import-export/qif-import/qif.glade.h:27
 #: ../src/register/ledger-core/split-register-model.c:149
@@ -1760,7 +1760,7 @@ msgid "Post To"
 msgstr "Buchen nach"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:9
-#: ../src/gnome/glade/account.glade.h:86
+#: ../src/gnome/glade/account.glade.h:80
 msgid "Transfer Account"
 msgstr "Herkunftskonto"
 
@@ -2950,7 +2950,7 @@ msgstr "Jährlich (%1$u Mal): %3$u. %2$s"
 msgid "Yearly: %s/%u"
 msgstr "Jährlich: %2$u. %1$s"
 
-#: ../src/engine/gnc-budget.c:62 ../src/gnome/gnc-plugin-page-budget.c:838
+#: ../src/engine/gnc-budget.c:62 ../src/gnome/gnc-plugin-page-budget.c:842
 msgid "Unnamed Budget"
 msgstr "Unbenanntes Budget"
 
@@ -3036,7 +3036,7 @@ msgstr "Ausgleichskonto"
 #. If 'name' is "-- Split Transaction --" then return NULL or the register acct
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Transaction.c:2234 ../src/engine/Transaction.c:2255
+#: ../src/engine/Transaction.c:2183 ../src/engine/Transaction.c:2200
 #: ../src/register/ledger-core/split-register.c:2101
 #: ../src/register/ledger-core/split-register-control.c:991
 #: ../intl-scm/guile-strings.c:3014 ../intl-scm/guile-strings.c:3036
@@ -3044,7 +3044,7 @@ msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Transaction.c:2276 ../src/gnome/druid-stock-split.c:432
+#: ../src/engine/Transaction.c:2216 ../src/gnome/druid-stock-split.c:432
 #: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-register.c:295
 #: ../src/register/ledger-core/split-register.c:2085
@@ -3052,11 +3052,11 @@ msgstr "-- Mehrteilige Buchung --"
 msgid "Split"
 msgstr "Vollständig"
 
-#: ../src/engine/Transaction.c:3159
+#: ../src/engine/Transaction.c:3037
 msgid "Voided transaction"
 msgstr "Ungültige Buchung"
 
-#: ../src/engine/Transaction.c:3184
+#: ../src/engine/Transaction.c:3060
 msgid "Transaction Voided"
 msgstr "Buchung ungültig gemacht"
 
@@ -3527,15 +3527,19 @@ msgstr "Periode:"
 msgid "Closing Date:"
 msgstr "Abschlußdatum:"
 
-#: ../src/gnome/druid-hierarchy.c:353
+#: ../src/gnome/druid-hierarchy.c:309
 msgid "Selected"
 msgstr "Ausgewähltes"
 
-#: ../src/gnome/druid-hierarchy.c:357
-#: ../src/gnome/gnc-plugin-page-budget.c:794
-#: ../src/gnome-utils/gnc-tree-view-account.c:1574
+#: ../src/gnome/druid-hierarchy.c:321
+#: ../src/gnome/gnc-plugin-page-budget.c:798
+#: ../src/gnome-utils/gnc-tree-view-account.c:1578
 msgid "Account Types"
 msgstr "Kontoarten"
+
+#: ../src/gnome/druid-hierarchy.c:616
+msgid "zero"
+msgstr "Null"
 
 #: ../src/gnome/druid-loan.c:552
 msgid "Fixed"
@@ -3751,85 +3755,58 @@ msgid "<b>Categories</b>"
 msgstr "<b>Kategorien</b>"
 
 #: ../src/gnome/glade/account.glade.h:10
+msgid "<b>Category Description</b>"
+msgstr "<b>Kategorie-Beschreibung</b>"
+
+#: ../src/gnome/glade/account.glade.h:11
 msgid "<b>Contained Accounts</b>"
 msgstr "<b>Enthaltene Konten</b>"
 
-#: ../src/gnome/glade/account.glade.h:11
+#: ../src/gnome/glade/account.glade.h:12
 msgid "<b>Description</b>"
 msgstr "<b>Beschreibung</b>"
 
-#: ../src/gnome/glade/account.glade.h:12
+#: ../src/gnome/glade/account.glade.h:13
 msgid "<b>Identification</b>"
 msgstr "<b>Identifizierung</b>"
 
-#: ../src/gnome/glade/account.glade.h:13
+#: ../src/gnome/glade/account.glade.h:14
+msgid "<b>Included Accounts</b>"
+msgstr "<b>Enthaltene Konten</b>"
+
+#: ../src/gnome/glade/account.glade.h:15
 msgid "<b>New Account Currency</b>"
 msgstr "<b>Standardwährung für neue Konten</b>"
 
-#: ../src/gnome/glade/account.glade.h:14
+#: ../src/gnome/glade/account.glade.h:16
 msgid "<b>Parent Account</b>"
 msgstr "<b>Hauptkonto</b>"
 
-#: ../src/gnome/glade/account.glade.h:15
+#: ../src/gnome/glade/account.glade.h:17
 msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>Buchungen in Unterkonten"
 
-#: ../src/gnome/glade/account.glade.h:16
+#: ../src/gnome/glade/account.glade.h:18
 msgid "<b>Sub-accounts</b>"
 msgstr "<b>Unterkonten</b>"
 
-#: ../src/gnome/glade/account.glade.h:17
+#: ../src/gnome/glade/account.glade.h:19
 msgid "<b>Transactions</b>"
 msgstr "<b>Buchungen</b>"
 
 #. src/report/standard-reports/account-summary.scm
-#: ../src/gnome/glade/account.glade.h:18 ../intl-scm/guile-strings.c:2398
+#: ../src/gnome/glade/account.glade.h:20 ../intl-scm/guile-strings.c:2398
 msgid "Account Type"
 msgstr "Kontoart"
 
-#: ../src/gnome/glade/account.glade.h:19
+#: ../src/gnome/glade/account.glade.h:21
 msgid "Account code:"
 msgstr "Kontonummer:"
 
-#: ../src/gnome/glade/account.glade.h:20
+#: ../src/gnome/glade/account.glade.h:22
 #: ../src/import-export/qif-import/qif.glade.h:3
 msgid "Account name:"
 msgstr "Kontobezeichnung:"
-
-#. src/scm/help-topics-index.scm
-#. src/report/report-system/report.scm
-#. src/report/standard-reports/net-barchart.scm
-#. src/report/standard-reports/category-barchart.scm
-#. src/report/standard-reports/portfolio.scm
-#. src/report/standard-reports/advanced-portfolio.scm
-#. src/report/standard-reports/average-balance.scm
-#. src/report/standard-reports/daily-reports.scm
-#. src/report/standard-reports/account-piecharts.scm
-#: ../src/gnome/glade/account.glade.h:21 ../src/gnome/glade/tax.glade.h:2
-#: ../src/gnome/gnc-plugin-page-account-tree.c:302
-#: ../src/gnome-utils/preferences.glade.h:34 ../intl-scm/guile-strings.c:164
-#: ../intl-scm/guile-strings.c:452 ../intl-scm/guile-strings.c:1228
-#: ../intl-scm/guile-strings.c:1630 ../intl-scm/guile-strings.c:2128
-#: ../intl-scm/guile-strings.c:2176 ../intl-scm/guile-strings.c:2500
-#: ../intl-scm/guile-strings.c:3166 ../intl-scm/guile-strings.c:3214
-#: ../intl-scm/guile-strings.c:3246 ../intl-scm/guile-strings.c:3320
-msgid "Accounts"
-msgstr "Konten"
-
-#. src/report/report-system/html-utilities.scm
-#. src/report/standard-reports/account-summary.scm
-#. src/report/standard-reports/transaction.scm
-#. src/report/standard-reports/register.scm
-#. src/business/business-reports/owner-report.scm
-#: ../src/gnome/glade/account.glade.h:22 ../src/gnome/glade/lots.glade.h:9
-#: ../src/gnome-utils/gnc-tree-view-account.c:437
-#: ../src/register/ledger-core/split-register-model.c:173
-#: ../src/register/ledger-core/split-register-model.c:313
-#: ../intl-scm/guile-strings.c:1296 ../intl-scm/guile-strings.c:2468
-#: ../intl-scm/guile-strings.c:2732 ../intl-scm/guile-strings.c:3034
-#: ../intl-scm/guile-strings.c:3832
-msgid "Balance"
-msgstr "Saldo"
 
 #: ../src/gnome/glade/account.glade.h:23
 msgid "Balance Information"
@@ -3840,32 +3817,26 @@ msgid "Balance:"
 msgstr "Saldo:"
 
 #: ../src/gnome/glade/account.glade.h:25
+msgid "Balances"
+msgstr "Salden"
+
+#: ../src/gnome/glade/account.glade.h:26
 msgid "C_lear All"
 msgstr "_Keine auswählen"
 
-#: ../src/gnome/glade/account.glade.h:26
+#: ../src/gnome/glade/account.glade.h:27
 msgid "Choose Currency"
 msgstr "Währung wählen"
 
-#: ../src/gnome/glade/account.glade.h:27
+#: ../src/gnome/glade/account.glade.h:28
 msgid "Choose accounts to create"
 msgstr "Zu erstellende Konten wählen"
 
-#: ../src/gnome/glade/account.glade.h:28
-#: ../src/gnome-utils/dialog-options.c:783
-#: ../src/gnome-utils/dialog-options.c:910
-msgid "Clear All"
-msgstr "Keine auswählen"
-
-#: ../src/gnome/glade/account.glade.h:29
-msgid "Clear the selection and unselect all types."
-msgstr "Auswahl löschen und gar keine Kontoarten auswählen."
-
-#: ../src/gnome/glade/account.glade.h:30 ../src/gnome/glade/price.glade.h:4
+#: ../src/gnome/glade/account.glade.h:29 ../src/gnome/glade/price.glade.h:4
 msgid "Commodity:"
 msgstr "Währung/Aktie:"
 
-#: ../src/gnome/glade/account.glade.h:31 ../src/gnome/glade/price.glade.h:6
+#: ../src/gnome/glade/account.glade.h:30 ../src/gnome/glade/price.glade.h:6
 #: ../src/gnome/glade/print.glade.h:11 ../src/gnome/glade/register.glade.h:16
 #: ../src/gnome/glade/stocks.glade.h:7
 #: ../src/gnome-utils/exchange-dialog.glade.h:3
@@ -3873,36 +3844,32 @@ msgstr "Währung/Aktie:"
 msgid "Date:"
 msgstr "Datum:"
 
-#: ../src/gnome/glade/account.glade.h:32
+#: ../src/gnome/glade/account.glade.h:31
 msgid "Delete Account"
 msgstr "Konto löschen"
 
-#: ../src/gnome/glade/account.glade.h:33
+#: ../src/gnome/glade/account.glade.h:32
 msgid "Delete all _subaccounts"
 msgstr "Alle _Unterkonten löschen"
 
-#: ../src/gnome/glade/account.glade.h:34
+#: ../src/gnome/glade/account.glade.h:33
 msgid "Delete all _transactions"
 msgstr "Alle _Buchungen löschen"
 
-#: ../src/gnome/glade/account.glade.h:35 ../src/gnome/glade/budget.glade.h:5
+#: ../src/gnome/glade/account.glade.h:34 ../src/gnome/glade/budget.glade.h:5
 #: ../src/gnome/glade/stocks.glade.h:8 ../src/gnome-utils/transfer.glade.h:9
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: ../src/gnome/glade/account.glade.h:36
-msgid "Detailed Description"
-msgstr "Ausführliche Beschreibung"
-
-#: ../src/gnome/glade/account.glade.h:37
+#: ../src/gnome/glade/account.glade.h:35
 msgid "Enter opening balances"
 msgstr "Anfangsbestände eingeben"
 
-#: ../src/gnome/glade/account.glade.h:38
+#: ../src/gnome/glade/account.glade.h:36
 msgid "Filter By..."
 msgstr "Filtern nach..."
 
-#: ../src/gnome/glade/account.glade.h:39
+#: ../src/gnome/glade/account.glade.h:37
 msgid "Finish Account Setup"
 msgstr "Konteneinrichten fertigstellen"
 
@@ -3917,7 +3884,7 @@ msgstr "Konteneinrichten fertigstellen"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/report/standard-reports/equity-statement.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/glade/account.glade.h:40
+#: ../src/gnome/glade/account.glade.h:38
 #: ../src/gnome-utils/preferences.glade.h:65 ../intl-scm/guile-strings.c:168
 #: ../intl-scm/guile-strings.c:456 ../intl-scm/guile-strings.c:478
 #: ../intl-scm/guile-strings.c:486 ../intl-scm/guile-strings.c:650
@@ -3940,27 +3907,15 @@ msgstr "Konteneinrichten fertigstellen"
 msgid "General"
 msgstr "Allgemein"
 
-#: ../src/gnome/glade/account.glade.h:41
+#: ../src/gnome/glade/account.glade.h:39
 msgid "Hide _zero totals"
 msgstr "Kontostand _Null nicht anzeigen"
 
-#: ../src/gnome/glade/account.glade.h:42
+#: ../src/gnome/glade/account.glade.h:40
 msgid "Hide accounts which have a zero total value."
 msgstr "Konten nicht anzeigen, die Kontostand Null haben."
 
-#: ../src/gnome/glade/account.glade.h:43
-msgid ""
-"If you would like an account to have an opening balance, click on the\n"
-"account and enter the starting balance in the box on the right. All\n"
-"accounts except Equity and placeholder accounts may have an\n"
-"opening balance."
-msgstr ""
-"Wenn Sie einen Anfangsbestand für die neuen Konten einrichten möchten,\n"
-"klicken Sie auf die jeweilige Zeile und geben Sie einen Betrag in den\n"
-"rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter\n"
-"kann einen Anfangsbestand haben."
-
-#: ../src/gnome/glade/account.glade.h:47
+#: ../src/gnome/glade/account.glade.h:41
 msgid ""
 "If you would like an account to have an opening balance, click on the "
 "account\n"
@@ -3968,35 +3923,53 @@ msgid ""
 "Equity\n"
 "and placeholder accounts may have an opening balance."
 msgstr ""
-"Wenn Sie einen Anfangsbestand für die neuen Konten einrichten möchten,\n"
-"klicken Sie auf die jeweilige Zeile und geben Sie einen Betrag in den\n"
-"rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter\n"
-"kann einen Anfangsbestand haben."
+"Wenn Sie einen Anfangsbestand für die neuen Konten einrichten möchten, "
+"klicken Sie auf die jeweilige Zeile und geben Sie einen Betrag in den "
+"rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter kann "
+"einen Anfangsbestand haben."
 
-#: ../src/gnome/glade/account.glade.h:50
+#: ../src/gnome/glade/account.glade.h:44
+msgid ""
+"If you would like an account to have an opening balance, click on the row "
+"containing the account, click again in the opening balances column, and then "
+"enter the starting balance. All accounts except Equity and placeholder "
+"accounts may have an opening balance.\n"
+"\n"
+"If you would like an account to be a placeholder account, just click the "
+"checkbox for that account.\n"
+msgstr ""
+"Wenn Sie einen Anfangsbestand für die neuen Konten einrichten möchten, "
+"klicken Sie auf die jeweilige Zeile und geben Sie einen Betrag in den "
+"rechten Kasten ein. Jede Kontoart außer Eigenkapital und Platzhalter kann "
+"einen Anfangsbestand haben.\n"
+"\n"
+"Wenn Sie ein Konto als Platzhalter verwenden wollen, klicken Sie auf das "
+"entsprechende Häkchen in der Kontozeile.\n"
+
+#: ../src/gnome/glade/account.glade.h:48
 msgid "M_ove to:"
 msgstr "_Verschieben nach:"
 
-#: ../src/gnome/glade/account.glade.h:51
+#: ../src/gnome/glade/account.glade.h:49
 #: ../src/gnome-utils/dialog-account.c:1454
 msgid "New Account"
 msgstr "_Neues Konto"
 
-#: ../src/gnome/glade/account.glade.h:52
+#: ../src/gnome/glade/account.glade.h:50
 msgid "New Account (not implemented)"
 msgstr "Neues Konto (unfertig)"
 
 #. src/scm/help-topics-index.scm
-#: ../src/gnome/glade/account.glade.h:53 ../intl-scm/guile-strings.c:306
+#: ../src/gnome/glade/account.glade.h:51 ../intl-scm/guile-strings.c:306
 msgid "New Account Hierarchy Setup"
 msgstr "Neuen Kontenrahmen erstellen"
 
-#: ../src/gnome/glade/account.glade.h:54
+#: ../src/gnome/glade/account.glade.h:52
 #: ../src/gnome/glade/acctperiod.glade.h:7
 msgid "Notes:"
 msgstr "Bemerkung:"
 
-#: ../src/gnome/glade/account.glade.h:55
+#: ../src/gnome/glade/account.glade.h:53
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
@@ -4004,7 +3977,7 @@ msgstr ""
 "Ein Unterkonto (oder mehrere) dieses Kontos enthalten schreibgeschützte "
 "Buchungen. Sie können diese nicht löschen. "
 
-#: ../src/gnome/glade/account.glade.h:56
+#: ../src/gnome/glade/account.glade.h:54
 msgid ""
 "One or more sub-accounts contain transactions. What would you like to do "
 "with these transactions?"
@@ -4012,16 +3985,16 @@ msgstr ""
 "Ein Unterkonto (oder mehrere) dieses Kontos enthalten Buchungen. Was wollen "
 "Sie mit diesen Buchungen machen?"
 
-#: ../src/gnome/glade/account.glade.h:58
-#: ../src/gnome-utils/gnc-tree-view-account.c:507
+#: ../src/gnome/glade/account.glade.h:56
+#: ../src/gnome-utils/gnc-tree-view-account.c:511
 msgid "Placeholder"
 msgstr "Platzhalter"
 
-#: ../src/gnome/glade/account.glade.h:59
+#: ../src/gnome/glade/account.glade.h:57
 msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für neue Konten."
 
-#: ../src/gnome/glade/account.glade.h:60
+#: ../src/gnome/glade/account.glade.h:58
 msgid ""
 "Press `Apply' to create your new accounts.\n"
 "\n"
@@ -4036,28 +4009,17 @@ msgstr ""
 "Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten "
 "zu erstellen."
 
-#: ../src/gnome/glade/account.glade.h:65
+#: ../src/gnome/glade/account.glade.h:63
 #: ../src/import-export/generic-import.glade.h:51
 #: ../src/import-export/qif-import/qif.glade.h:129
 msgid "Select Account"
 msgstr "Konto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:66
-#: ../src/gnome/glade/sched-xact.glade.h:152
-#: ../src/gnome-utils/dialog-options.c:776
-#: ../src/gnome-utils/dialog-options.c:903
-msgid "Select All"
-msgstr "Alle auswählen"
-
-#: ../src/gnome/glade/account.glade.h:67
+#: ../src/gnome/glade/account.glade.h:64
 msgid "Select Transfer Account"
 msgstr "Herkunftskonto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:68
-msgid "Select all types."
-msgstr "Alle Kontoarten auswählen."
-
-#: ../src/gnome/glade/account.glade.h:69
+#: ../src/gnome/glade/account.glade.h:65
 msgid ""
 "Select categories that correspond to the ways that you will use GnuCash.  \n"
 "Each category you select will cause several accounts to be created.  \n"
@@ -4069,52 +4031,42 @@ msgstr ""
 "\n"
 "Sie können jederzeit auch später Konten anlegen. "
 
-#: ../src/gnome/glade/account.glade.h:73
+#: ../src/gnome/glade/account.glade.h:69
 #: ../src/import-export/qif-import/qif.glade.h:131
 msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
-#: ../src/gnome/glade/account.glade.h:74
-#: ../src/gnome-utils/gnc-main-window.c:249
-msgid "Select the account types that should be displayed."
-msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
-
-#: ../src/gnome/glade/account.glade.h:75
-#: ../src/gnome-utils/dialog-options.c:919
-msgid "Select the default selection."
-msgstr "Die voreingestellte Auswahl auswählen."
-
-#: ../src/gnome/glade/account.glade.h:76
+#: ../src/gnome/glade/account.glade.h:70
 msgid "Smallest Fraction:"
 msgstr "Kleinste Stückelung:"
 
-#: ../src/gnome/glade/account.glade.h:77
+#: ../src/gnome/glade/account.glade.h:71
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr "Kleinste Stückelung, in der diese Währung/Aktie gehandelt werden kann."
 
-#: ../src/gnome/glade/account.glade.h:78 ../src/gnome/glade/tax.glade.h:14
+#: ../src/gnome/glade/account.glade.h:72 ../src/gnome/glade/tax.glade.h:14
 msgid "Tax Related"
 msgstr "Steuerrelevant"
 
-#: ../src/gnome/glade/account.glade.h:79
+#: ../src/gnome/glade/account.glade.h:73
 msgid "This account contains read-only transactions which may not be deleted."
 msgstr ""
 "Dieses Konto enthält schreibgeschützte Buchungen.  Sie können diese nicht "
 "löschen."
 
-#: ../src/gnome/glade/account.glade.h:80
+#: ../src/gnome/glade/account.glade.h:74
 msgid ""
 "This account contains sub-accounts.  What would you like to do with these "
 "sub-accounts?"
 msgstr "Dieses Konto enthält Unterkonten. Was möchten Sie mit diesen machen?"
 
-#: ../src/gnome/glade/account.glade.h:81
+#: ../src/gnome/glade/account.glade.h:75
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
 msgstr "Dieses Konto enthält Buchungen. Was möchten Sie mit diesen machen?"
 
-#: ../src/gnome/glade/account.glade.h:82
+#: ../src/gnome/glade/account.glade.h:76
 msgid ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
@@ -4123,7 +4075,7 @@ msgstr ""
 "Dieses Konto dient als Platzhalter in der Kontenhierarchie. Buchungen können "
 "nicht auf dieses Konto gebucht werden, sondern nur auf Unterkonten davon."
 
-#: ../src/gnome/glade/account.glade.h:83
+#: ../src/gnome/glade/account.glade.h:77
 msgid ""
 "This druid will help you create a set of GnuCash accounts for your assets "
 "(such as investments, checking or savings accounts), liabilities (such as "
@@ -4137,27 +4089,27 @@ msgstr ""
 "\n"
 "Drücken Sie 'Abbrechen', wenn Sie keine neuen Konten erstellen möchten."
 
-#: ../src/gnome/glade/account.glade.h:87
+#: ../src/gnome/glade/account.glade.h:81
 msgid "Transfer Type"
 msgstr "Buchungsart"
 
-#: ../src/gnome/glade/account.glade.h:88
+#: ../src/gnome/glade/account.glade.h:82
 msgid "Use Commodity Value"
 msgstr "Währungseinstellung benutzen"
 
-#: ../src/gnome/glade/account.glade.h:89
+#: ../src/gnome/glade/account.glade.h:83
 msgid "Use Opening Balances Equity account"
 msgstr "Benutze Ausgleichskonto für Anfangsbestand"
 
-#: ../src/gnome/glade/account.glade.h:90
+#: ../src/gnome/glade/account.glade.h:84
 msgid "_Default"
 msgstr "_Voreinstellung"
 
-#: ../src/gnome/glade/account.glade.h:91
+#: ../src/gnome/glade/account.glade.h:85
 msgid "_Move to:"
 msgstr "_Verschieben nach:"
 
-#: ../src/gnome/glade/account.glade.h:92
+#: ../src/gnome/glade/account.glade.h:86
 #: ../src/gnome-utils/dialog-reset-warnings.glade.h:6
 msgid "_Select All"
 msgstr "_Alle auswählen"
@@ -4222,7 +4174,7 @@ msgstr "Immer den letzten Tag (oder Wochentag) des Monats verwenden?"
 
 #. src/report/standard-reports/budget.scm
 #: ../src/gnome/glade/budget.glade.h:2
-#: ../src/gnome/gnc-plugin-page-budget.c:268 ../intl-scm/guile-strings.c:3142
+#: ../src/gnome/gnc-plugin-page-budget.c:272 ../intl-scm/guile-strings.c:3142
 #: ../intl-scm/guile-strings.c:3144
 msgid "Budget"
 msgstr "Budget"
@@ -4268,7 +4220,7 @@ msgstr ""
 
 #: ../src/gnome/glade/budget.glade.h:11 ../src/gnome/glade/print.glade.h:17
 #: ../src/gnome/glade/sched-xact.glade.h:126
-#: ../src/gnome/gnc-plugin-page-budget.c:162
+#: ../src/gnome/gnc-plugin-page-budget.c:166
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:851
 msgid "Options"
 msgstr "Optionen"
@@ -4559,6 +4511,21 @@ msgstr "Eine Liste der Posten in diesem Konto."
 #: ../src/gnome/glade/lots.glade.h:7
 msgid "A summary of all of the transactions in the selected lot"
 msgstr "Eine Zusammenfassung aller Buchungen in dem gewählten Posten"
+
+#. src/report/report-system/html-utilities.scm
+#. src/report/standard-reports/account-summary.scm
+#. src/report/standard-reports/transaction.scm
+#. src/report/standard-reports/register.scm
+#. src/business/business-reports/owner-report.scm
+#: ../src/gnome/glade/lots.glade.h:9
+#: ../src/gnome-utils/gnc-tree-view-account.c:441
+#: ../src/register/ledger-core/split-register-model.c:173
+#: ../src/register/ledger-core/split-register-model.c:313
+#: ../intl-scm/guile-strings.c:1296 ../intl-scm/guile-strings.c:2468
+#: ../intl-scm/guile-strings.c:2732 ../intl-scm/guile-strings.c:3034
+#: ../intl-scm/guile-strings.c:3832
+msgid "Balance"
+msgstr "Saldo"
 
 #: ../src/gnome/glade/lots.glade.h:12
 msgid "Delete the highlighted lot"
@@ -5031,7 +4998,7 @@ msgstr "Neue Datei"
 
 #: ../src/gnome/glade/reconcile.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:212
-#: ../src/gnome/gnc-plugin-page-budget.c:160 ../src/gnome/lot-viewer.c:430
+#: ../src/gnome/gnc-plugin-page-budget.c:164 ../src/gnome/lot-viewer.c:430
 #: ../src/gnome-utils/gnc-file.c:94 ../src/gnome-utils/gnc-file.c:755
 #: ../src/gnome/window-reconcile.c:1423
 msgid "Open"
@@ -6103,6 +6070,12 @@ msgstr "Samstag"
 msgid "Scheduled Transaction"
 msgstr "Terminierte Buchung"
 
+#: ../src/gnome/glade/sched-xact.glade.h:152
+#: ../src/gnome-utils/dialog-options.c:776
+#: ../src/gnome-utils/dialog-options.c:903
+msgid "Select All"
+msgstr "Alle auswählen"
+
 #: ../src/gnome/glade/sched-xact.glade.h:153
 msgid "Select initial date, above."
 msgstr "Wählen Sie oben ein Anfangsdatum."
@@ -6437,6 +6410,26 @@ msgstr ""
 msgid "0"
 msgstr "0"
 
+#. src/scm/help-topics-index.scm
+#. src/report/report-system/report.scm
+#. src/report/standard-reports/net-barchart.scm
+#. src/report/standard-reports/category-barchart.scm
+#. src/report/standard-reports/portfolio.scm
+#. src/report/standard-reports/advanced-portfolio.scm
+#. src/report/standard-reports/average-balance.scm
+#. src/report/standard-reports/daily-reports.scm
+#. src/report/standard-reports/account-piecharts.scm
+#: ../src/gnome/glade/tax.glade.h:2
+#: ../src/gnome/gnc-plugin-page-account-tree.c:302
+#: ../src/gnome-utils/preferences.glade.h:34 ../intl-scm/guile-strings.c:164
+#: ../intl-scm/guile-strings.c:452 ../intl-scm/guile-strings.c:1228
+#: ../intl-scm/guile-strings.c:1630 ../intl-scm/guile-strings.c:2128
+#: ../intl-scm/guile-strings.c:2176 ../intl-scm/guile-strings.c:2500
+#: ../intl-scm/guile-strings.c:3166 ../intl-scm/guile-strings.c:3214
+#: ../intl-scm/guile-strings.c:3246 ../intl-scm/guile-strings.c:3320
+msgid "Accounts"
+msgstr "Konten"
+
 #: ../src/gnome/glade/tax.glade.h:3
 msgid "Accounts Selected:"
 msgstr "Gewählte Konten:"
@@ -6530,9 +6523,17 @@ msgstr "Eine neue Datei anlegen"
 msgid "_Open..."
 msgstr "Ö_ffnen..."
 
+#: ../src/gnome/gnc-plugin-basic-commands.c:97
+msgid "Open an existing GnuCash file"
+msgstr "Eine existierende GnuCash-Datei öffnen"
+
 #: ../src/gnome/gnc-plugin-basic-commands.c:99
 msgid "_Save"
 msgstr "_Speichern"
+
+#: ../src/gnome/gnc-plugin-basic-commands.c:100
+msgid "Save the current file"
+msgstr "Aktuelle Datei speichern"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:102
 msgid "Save _As..."
@@ -6653,6 +6654,10 @@ msgstr "_Tipp des Tages"
 msgid "View the Tips of the Day"
 msgstr "Anzeigen des \"Tipp des Tages?\""
 
+#: ../src/gnome/gnc-plugin-basic-commands.c:364
+msgid "Select the QSF file to import into GnuCash"
+msgstr "Zu ladende QIF-Datei auswählen"
+
 #: ../src/gnome/gnc-plugin-basic-commands.c:417
 msgid "There are no Scheduled Transactions to be entered at this time."
 msgstr "Es gibt keine terminierten Buchungen, die gebucht werden sollten."
@@ -6691,22 +6696,22 @@ msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
 
 #. File menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:150
-#: ../src/gnome/gnc-plugin-page-budget.c:124
+#: ../src/gnome/gnc-plugin-page-budget.c:128
 msgid "Open _Account"
 msgstr "_Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:151
-#: ../src/gnome/gnc-plugin-page-budget.c:125
+#: ../src/gnome/gnc-plugin-page-budget.c:129
 msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:153
-#: ../src/gnome/gnc-plugin-page-budget.c:127
+#: ../src/gnome/gnc-plugin-page-budget.c:131
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:154
-#: ../src/gnome/gnc-plugin-page-budget.c:128
+#: ../src/gnome/gnc-plugin-page-budget.c:132
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
@@ -6731,7 +6736,7 @@ msgstr "Ausgewähltes Konto löschen"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
-#: ../src/gnome/gnc-plugin-page-budget.c:144
+#: ../src/gnome/gnc-plugin-page-budget.c:148
 #: ../src/gnome/gnc-plugin-page-register.c:207
 #: ../src/gnome-utils/gnc-main-window.c:248
 msgid "_Filter By..."
@@ -6843,40 +6848,40 @@ msgid "Are you sure you want to do this?"
 msgstr "Soll diese Aktion durchgeführt werden?"
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-page-budget.c:132
+#: ../src/gnome/gnc-plugin-page-budget.c:136
 msgid "_Delete Budget"
 msgstr "Budget _löschen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:133
+#: ../src/gnome/gnc-plugin-page-budget.c:137
 msgid "Delete the budget"
 msgstr "Das Budget löschen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:135
-#: ../src/gnome/gnc-plugin-page-budget.c:817
+#: ../src/gnome/gnc-plugin-page-budget.c:139
+#: ../src/gnome/gnc-plugin-page-budget.c:821
 msgid "Budget Options"
 msgstr "Budget Optionen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:136
+#: ../src/gnome/gnc-plugin-page-budget.c:140
 msgid "Edit the budget view options"
 msgstr "Budget Ansichts-Optionen ändern"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:138
+#: ../src/gnome/gnc-plugin-page-budget.c:142
 msgid "Estimate Budget"
 msgstr "Budget abschätzen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:140
+#: ../src/gnome/gnc-plugin-page-budget.c:144
 msgid "Estimate a budget value for the selected cells"
 msgstr "Budget für die gewählten Felder abschätzen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:163
+#: ../src/gnome/gnc-plugin-page-budget.c:167
 msgid "Estimate"
 msgstr "Abschätzen"
 
-#: ../src/gnome/gnc-plugin-page-budget.c:744
+#: ../src/gnome/gnc-plugin-page-budget.c:748
 msgid "Set the budget options using this dialog."
 msgstr "Mit diesem Dialog können Sie die Budgetoptionen bearbeiten."
 
-#: ../src/gnome/gnc-plugin-page-budget.c:841
+#: ../src/gnome/gnc-plugin-page-budget.c:845
 #, c-format
 msgid "Delete %s?"
 msgstr "\"%s\" löschen?"
@@ -7068,7 +7073,7 @@ msgstr "%s sortieren nach..."
 
 #. Translators: The %s is the name of the plugin page
 #: ../src/gnome/gnc-plugin-page-register.c:1975
-#: ../src/gnome-utils/gnc-tree-view-account.c:1555
+#: ../src/gnome-utils/gnc-tree-view-account.c:1559
 #, c-format
 msgid "Filter %s by..."
 msgstr "%s filtern nach..."
@@ -7490,12 +7495,12 @@ msgid "Not Cleared"
 msgstr "Unbestätigt"
 
 #: ../src/gnome-search/search-reconciled.c:254
-#: ../src/gnome-utils/gnc-tree-view-account.c:449
+#: ../src/gnome-utils/gnc-tree-view-account.c:453
 msgid "Cleared"
 msgstr "Bestätigt"
 
 #: ../src/gnome-search/search-reconciled.c:257
-#: ../src/gnome-utils/gnc-tree-view-account.c:461
+#: ../src/gnome-utils/gnc-tree-view-account.c:465
 msgid "Reconciled"
 msgstr "Abgeglichen"
 
@@ -7814,6 +7819,11 @@ msgstr ""
 msgid "Select all accounts."
 msgstr "Alle Konten auswählen."
 
+#: ../src/gnome-utils/dialog-options.c:783
+#: ../src/gnome-utils/dialog-options.c:910
+msgid "Clear All"
+msgstr "Keine auswählen"
+
 #: ../src/gnome-utils/dialog-options.c:785
 msgid "Clear the selection and unselect all accounts."
 msgstr "Auswahl löschen und gar keine Konten auswählen."
@@ -7834,6 +7844,10 @@ msgstr "Alle Einträge auswählen."
 #: ../src/gnome-utils/dialog-options.c:912
 msgid "Clear the selection and unselect all entries."
 msgstr "Auswahl löschen und gar keine Einträge auswählen."
+
+#: ../src/gnome-utils/dialog-options.c:919
+msgid "Select the default selection."
+msgstr "Die voreingestellte Auswahl auswählen."
 
 #. The reset button on each option page
 #: ../src/gnome-utils/dialog-options.c:1071
@@ -8954,6 +8968,10 @@ msgstr "_Beenden"
 msgid "Pr_eferences"
 msgstr "_Einstellungen"
 
+#: ../src/gnome-utils/gnc-main-window.c:249
+msgid "Select the account types that should be displayed."
+msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
+
 #: ../src/gnome-utils/gnc-main-window.c:250
 msgid "_Refresh"
 msgstr "Aktualisie_ren"
@@ -9281,7 +9299,7 @@ msgstr "Neues Top-Level-Konto"
 #. src/report/standard-reports/transaction.scm
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:396
+#: ../src/gnome-utils/gnc-tree-view-account.c:400
 #: ../intl-scm/guile-strings.c:1880 ../intl-scm/guile-strings.c:1906
 #: ../intl-scm/guile-strings.c:2658 ../intl-scm/guile-strings.c:2794
 #: ../intl-scm/guile-strings.c:2914 ../intl-scm/guile-strings.c:3418
@@ -9289,7 +9307,7 @@ msgstr "Neues Top-Level-Konto"
 msgid "Account Name"
 msgstr "Kontobezeichnung"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:405
+#: ../src/gnome-utils/gnc-tree-view-account.c:409
 #: ../src/gnome-utils/gnc-tree-view-price.c:420
 msgid "Commodity"
 msgstr "Währung/Aktie"
@@ -9298,42 +9316,42 @@ msgstr "Währung/Aktie"
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/account-summary.scm
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:410
+#: ../src/gnome-utils/gnc-tree-view-account.c:414
 #: ../intl-scm/guile-strings.c:1204 ../intl-scm/guile-strings.c:1910
 #: ../intl-scm/guile-strings.c:2394 ../intl-scm/guile-strings.c:2690
 #: ../intl-scm/guile-strings.c:2798 ../intl-scm/guile-strings.c:2922
 msgid "Account Code"
 msgstr "Kontonummer"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:420
+#: ../src/gnome-utils/gnc-tree-view-account.c:424
 msgid "Last Num"
 msgstr "Letzte Nummer"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:425
+#: ../src/gnome-utils/gnc-tree-view-account.c:429
 msgid "Present"
 msgstr "Aktuell"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:431
+#: ../src/gnome-utils/gnc-tree-view-account.c:435
 msgid "Present (Report)"
 msgstr "Aktuell (als Bericht)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:443
+#: ../src/gnome-utils/gnc-tree-view-account.c:447
 msgid "Balance (Report)"
 msgstr "Bilanz (als Bericht)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:455
+#: ../src/gnome-utils/gnc-tree-view-account.c:459
 msgid "Cleared (Report)"
 msgstr "Bestätigt (als Bericht)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:467
+#: ../src/gnome-utils/gnc-tree-view-account.c:471
 msgid "Reconciled (Report)"
 msgstr "Abgeglichen (als Bericht)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:473
+#: ../src/gnome-utils/gnc-tree-view-account.c:477
 msgid "Future Minimum"
 msgstr "Zukünftiges Minimum"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:479
+#: ../src/gnome-utils/gnc-tree-view-account.c:483
 msgid "Future Minimum (Report)"
 msgstr "Zukünftiges Minimum (als Bericht)"
 
@@ -9347,7 +9365,7 @@ msgstr "Zukünftiges Minimum (als Bericht)"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/aging.scm
 #. src/business/business-reports/invoice.scm
-#: ../src/gnome-utils/gnc-tree-view-account.c:485
+#: ../src/gnome-utils/gnc-tree-view-account.c:489
 #: ../intl-scm/guile-strings.c:1252 ../intl-scm/guile-strings.c:1292
 #: ../intl-scm/guile-strings.c:2194 ../intl-scm/guile-strings.c:2526
 #: ../intl-scm/guile-strings.c:3420 ../intl-scm/guile-strings.c:3510
@@ -9358,11 +9376,11 @@ msgstr "Zukünftiges Minimum (als Bericht)"
 msgid "Total"
 msgstr "Betrag"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:491
+#: ../src/gnome-utils/gnc-tree-view-account.c:495
 msgid "Total (Report)"
 msgstr "Saldo (als Bericht)"
 
-#: ../src/gnome-utils/gnc-tree-view-account.c:502
+#: ../src/gnome-utils/gnc-tree-view-account.c:506
 msgid "Tax Info"
 msgstr "Steuerrelevante Information"
 
@@ -12777,6 +12795,11 @@ msgstr "Liste"
 msgid "Contents"
 msgstr "Inhalt"
 
+#: ../src/report/report-gnome/dialog-style-sheet.c:110
+#, c-format
+msgid "HTML Style Sheet Properties: %s"
+msgstr "Eigenschaften HTML-Stilvorlage %s"
+
 #: ../src/report/report-gnome/dialog-style-sheet.c:341
 msgid "Style Sheet Name"
 msgstr "Name der Stilvorlage"
@@ -14142,7 +14165,7 @@ msgstr "Anfang des vorherigen Kalenderjahres"
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:574
 msgid "Previous Year End"
-msgstr "Vorheriger Jahres-Saldo"
+msgstr "Ende des vorherigen Jahres"
 
 #. src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:576
