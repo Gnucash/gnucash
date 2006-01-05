@@ -85,7 +85,6 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 void
 gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled)
 {
-	printf("%s: item_list %p, sort enabled %d\n", __FUNCTION__, item_list, enabled);
 	if (enabled) {
 		gtk_tree_sortable_set_sort_column_id
 			(GTK_TREE_SORTABLE (item_list->list_store),
