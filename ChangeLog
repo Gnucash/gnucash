@@ -1,3 +1,15 @@
+2006-01-04  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/combocell-gnome.c:
+	* src/register/register-gnome/gnucash-item-list.[ch]:
+	* src/register/ledger-core/split-register-load.c:
+	* src/register/register-core/combocell.h: Load the entire data set
+	into the combocell before enabling sorting.  Saves a tremendous
+	amount of time.
+	
+	* src/backend/file/gnc-transaction-xml-v2.c:
+	* lib/libqof/qof/gnc-numeric.c: A couple of performance tweaks.
+
 2006-01-03  Joshua Sled  <jsled@asynchronous.org>
 
 	* gnc-sxed-window-ui.xml: Remove unreferenced `TransactionAction`.

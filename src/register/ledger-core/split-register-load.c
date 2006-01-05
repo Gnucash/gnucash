@@ -587,15 +587,19 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
+  gnc_combo_cell_set_sort_enabled (cell, FALSE);
   gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
   xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
+  gnc_combo_cell_set_sort_enabled (cell, TRUE);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
+  gnc_combo_cell_set_sort_enabled (cell, FALSE);
   gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
   xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
+  gnc_combo_cell_set_sort_enabled (cell, TRUE);
 }
 
 /* ====================== END OF FILE ================================== */

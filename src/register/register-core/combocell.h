@@ -64,6 +64,10 @@ void         gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr);
  *  ignore the characters normally used to separate account names. */
 void         gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr);
 
+/** Enable sorting of the menu item's contents. Loading the item is
+ *  much faster with sorting disabled. */
+void         gnc_combo_cell_set_sort_enabled (ComboCell *cell, gboolean enabled);
+
 /** Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
 void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);

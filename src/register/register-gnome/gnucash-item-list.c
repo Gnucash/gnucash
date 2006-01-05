@@ -82,6 +82,24 @@ gnc_item_list_append (GncItemList *item_list, char *string)
 }
 
 
+void
+gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled)
+{
+	printf("%s: item_list %p, sort enabled %d\n", __FUNCTION__, item_list, enabled);
+	if (enabled) {
+		gtk_tree_sortable_set_sort_column_id
+			(GTK_TREE_SORTABLE (item_list->list_store),
+			 0,
+			 GTK_SORT_ASCENDING);
+	} else {
+		gtk_tree_sortable_set_sort_column_id
+			(GTK_TREE_SORTABLE (item_list->list_store),
+			 GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+			 GTK_SORT_ASCENDING);
+	}
+}
+
+
 typedef struct _findSelectionData
 {
         GncItemList *item_list;
@@ -403,9 +421,8 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 
 	list_store = gtk_list_store_new (1, G_TYPE_STRING);
 	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
-        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
-                                              0,
-                                              GTK_SORT_ASCENDING);
+	/* Removed code to enable sorting. Enable it after the list is
+	 * fully populated by calling gnc_item_list_finished_loading(). */
  
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
