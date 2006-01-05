@@ -26,4 +26,4 @@ export GUILE_LOAD_PATH
 export LD_LIBRARY_PATH
 export LTDL_LIBRARY_PATH
 
-gnucash-bin "$@"
+exec gnucash-bin "$@"
