@@ -15,9 +15,15 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aktiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachanlagen</act:name>
@@ -25,9 +31,15 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sachanlagen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -36,7 +48,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Auto</act:description>
   <act:parent type="new">f7b3424631deed453984e6f5c5569669</act:parent>
@@ -47,9 +59,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aufwendungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fahrtkosten</act:name>
@@ -57,9 +75,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Fahrtkosten</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -68,9 +92,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Auto</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">d4aa7c28431fc2bb69a289bc62c952f1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -79,9 +109,9 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>KFZ Steuer/Geb&#252;hren</act:description>
+  <act:description>KFZ Steuer/Gebühren</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -90,20 +120,20 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Benzin/Diesel</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Parkgeb&#252;hren</act:name>
+  <act:name>Parkgebühren</act:name>
   <act:id type="new">f8fba4deb2b88b950cfec0761860caa0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Parkplatzgeb&#252;hren</act:description>
+  <act:description>Parkplatzgebühren</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -112,7 +142,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Reparaturen und Inspektion</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>
@@ -123,7 +153,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>KFZ Versicherungen</act:description>
   <act:parent type="new">8fc4ba994d32d90d7a9a9112ee37f3f6</act:parent>

@@ -12,7 +12,7 @@
   <gnc-act:start-selected>0</gnc-act:start-selected>
 <gnc:account version="2.0.0">
   <act:name>100 KASA</act:name>
-  <act:id type="guid">d7ed89788e0d79481613caaacc07214a</act:id>
+  <act:id type="new">d7ed89788e0d79481613caaacc07214a</act:id>
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -33,7 +33,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>101 ALINAN &#199;EKLER</act:name>
-  <act:id type="guid">69ab3dd595f3838a1586534d13ef8d09</act:id>
+  <act:id type="new">69ab3dd595f3838a1586534d13ef8d09</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -54,7 +54,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>102 BANKALAR</act:name>
-  <act:id type="guid">0c502b84e04c2f37613f17e539eaf10e</act:id>
+  <act:id type="new">0c502b84e04c2f37613f17e539eaf10e</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -75,7 +75,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>103 VER. &#199;EKLER ve &#214;DE. EM&#221;R. (-)</act:name>
-  <act:id type="guid">6304fd50b897811d00a59a7c28cd68d5</act:id>
+  <act:id type="new">6304fd50b897811d00a59a7c28cd68d5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -96,7 +96,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>108 D&#221;&#208;ER HAZIR DE&#208;.</act:name>
-  <act:id type="guid">2d6de3b6046b58384fe6b0ff5705969a</act:id>
+  <act:id type="new">2d6de3b6046b58384fe6b0ff5705969a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -117,7 +117,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>110 H&#221;SSE SENETLER&#221;</act:name>
-  <act:id type="guid">624415b5e1c95e240463ca581ff7fd31</act:id>
+  <act:id type="new">624415b5e1c95e240463ca581ff7fd31</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -138,7 +138,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>111 &#214;ZEL KES. TAH. SEN. ve BONO.</act:name>
-  <act:id type="guid">05127874bae06609087c88a8be87e3cf</act:id>
+  <act:id type="new">05127874bae06609087c88a8be87e3cf</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -159,7 +159,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>112 KAMU KES. TAH. SEN. ve BONO.</act:name>
-  <act:id type="guid">eb5804fb93030d7d8c48cb8d54c70f2e</act:id>
+  <act:id type="new">eb5804fb93030d7d8c48cb8d54c70f2e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -180,7 +180,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>118 D&#221;&#208;ER MEN. KIYMETLER</act:name>
-  <act:id type="guid">b2a03ec2486727b5153c89a8b7e0f9ce</act:id>
+  <act:id type="new">b2a03ec2486727b5153c89a8b7e0f9ce</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -201,7 +201,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>119 MEN. KIYM. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">36e4e484291b9010d6bbd832fdf90e4a</act:id>
+  <act:id type="new">36e4e484291b9010d6bbd832fdf90e4a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -222,7 +222,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>120 ALICILAR</act:name>
-  <act:id type="guid">7baeeac42e61381823432bfc0725e7c4</act:id>
+  <act:id type="new">7baeeac42e61381823432bfc0725e7c4</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -243,7 +243,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>121 ALACAK SENETLER&#221;</act:name>
-  <act:id type="guid">62283b65ba4ce46bedaf342c7d011607</act:id>
+  <act:id type="new">62283b65ba4ce46bedaf342c7d011607</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -264,7 +264,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>122 ALACAK SENETLER&#221; REES. (-)</act:name>
-  <act:id type="guid">098dcf7441957508e40b061a200dcb50</act:id>
+  <act:id type="new">098dcf7441957508e40b061a200dcb50</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -285,7 +285,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>126 VER. DEPOZ&#221;TO ve TEM&#221;N.</act:name>
-  <act:id type="guid">3d192a3ee0cf2e51f9bfcacf33032f68</act:id>
+  <act:id type="new">3d192a3ee0cf2e51f9bfcacf33032f68</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -306,7 +306,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>127 D&#221;&#208;ER T&#221;C. ALACAKLAR</act:name>
-  <act:id type="guid">a33200c14c7e786fe49f05782b684c07</act:id>
+  <act:id type="new">a33200c14c7e786fe49f05782b684c07</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -327,7 +327,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>128 &#222;&#220;P. T&#221;C. ALACAKLAR</act:name>
-  <act:id type="guid">69d1be91d1b5d559bc9a235852dbcc18</act:id>
+  <act:id type="new">69d1be91d1b5d559bc9a235852dbcc18</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -348,7 +348,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>129 &#222;&#220;P. T&#221;C. ALACAKLAR KAR&#222;. (-)</act:name>
-  <act:id type="guid">8a86b7282708dd1300ef0d88f5b464ce</act:id>
+  <act:id type="new">8a86b7282708dd1300ef0d88f5b464ce</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -369,7 +369,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>131 ORTAKL. ALACAKLAR</act:name>
-  <act:id type="guid">45907b5ef105779427ba1fb4d41c813b</act:id>
+  <act:id type="new">45907b5ef105779427ba1fb4d41c813b</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -390,7 +390,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>132 &#221;&#222;T&#221;RAK. ALACAKLAR</act:name>
-  <act:id type="guid">c4a2a35bbea43e1183a712d97bf8e217</act:id>
+  <act:id type="new">c4a2a35bbea43e1183a712d97bf8e217</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -411,7 +411,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>133 BA&#208;LI ORTAKLIK. ALACAKLAR</act:name>
-  <act:id type="guid">91a697268bba79e26f6a1f91aa660980</act:id>
+  <act:id type="new">91a697268bba79e26f6a1f91aa660980</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -432,7 +432,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>135 PERSONELDEN ALACAKLAR</act:name>
-  <act:id type="guid">93d9b4518539d47e9e6d506d4709143a</act:id>
+  <act:id type="new">93d9b4518539d47e9e6d506d4709143a</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -453,7 +453,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>136 D&#221;&#208;ER &#199;E&#222;. ALACAKLAR</act:name>
-  <act:id type="guid">d997137e325de88c0585859415182f5d</act:id>
+  <act:id type="new">d997137e325de88c0585859415182f5d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -474,7 +474,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>137 D&#221;&#208;ER ALACAK SEN. REES. (-)</act:name>
-  <act:id type="guid">a57f85d64ea4cad99f58d097e75d1016</act:id>
+  <act:id type="new">a57f85d64ea4cad99f58d097e75d1016</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -495,7 +495,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>138 &#222;&#220;P. D&#221;&#208;ER ALACAK.</act:name>
-  <act:id type="guid">facbdb818612ec1f312ad1e7afaab871</act:id>
+  <act:id type="new">facbdb818612ec1f312ad1e7afaab871</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -516,7 +516,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>139 &#222;&#220;P. D&#221;&#208;ER ALACAK. KAR&#222;. (-)</act:name>
-  <act:id type="guid">79c12b739f362b7de3b194f5bc93469a</act:id>
+  <act:id type="new">79c12b739f362b7de3b194f5bc93469a</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -537,7 +537,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>150 &#221;LK MADDE ve MALZEME</act:name>
-  <act:id type="guid">fbad522ecc54d8be743dec99edc32527</act:id>
+  <act:id type="new">fbad522ecc54d8be743dec99edc32527</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -558,7 +558,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>151 YARI MAMUL. - &#220;RET&#221;M</act:name>
-  <act:id type="guid">461a0f1cc80f934e269767405c4171ce</act:id>
+  <act:id type="new">461a0f1cc80f934e269767405c4171ce</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -579,7 +579,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>152 MAMULLER</act:name>
-  <act:id type="guid">3af0a5ff90452901f74bfe3fb992a6c6</act:id>
+  <act:id type="new">3af0a5ff90452901f74bfe3fb992a6c6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -600,7 +600,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>153 T&#221;CAR&#221; MALLAR</act:name>
-  <act:id type="guid">1e1b2d1c1cf6ad91484e21a1e9288f53</act:id>
+  <act:id type="new">1e1b2d1c1cf6ad91484e21a1e9288f53</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -621,7 +621,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>157 D&#221;&#208;ER STOKLAR</act:name>
-  <act:id type="guid">76ba4d1890dfc5a5ae4dfb8ff9b5d222</act:id>
+  <act:id type="new">76ba4d1890dfc5a5ae4dfb8ff9b5d222</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -642,7 +642,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>158 STOK DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">3f16294a18fb0a889d9140179f877243</act:id>
+  <act:id type="new">3f16294a18fb0a889d9140179f877243</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -663,7 +663,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>159 VER. S&#221;PAR&#221;&#222; AVANS.</act:name>
-  <act:id type="guid">553ba5932502b520077d3d1005f6fa6d</act:id>
+  <act:id type="new">553ba5932502b520077d3d1005f6fa6d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -684,7 +684,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>170 Y.Y. &#221;N&#222;. ve ONAR. MAAL&#221;YET.</act:name>
-  <act:id type="guid">f9ccb73819fd1807bc6854920bd6af38</act:id>
+  <act:id type="new">f9ccb73819fd1807bc6854920bd6af38</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -705,7 +705,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>179 TA&#222;ERON. VER. AVANSLAR</act:name>
-  <act:id type="guid">a878dec3668990a5e581c633658fbce8</act:id>
+  <act:id type="new">a878dec3668990a5e581c633658fbce8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -726,7 +726,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>180 GEL. AYLARA A&#221;T G&#221;DERLER</act:name>
-  <act:id type="guid">d8f9ce7c6a92cd6e143b5407ad511e0f</act:id>
+  <act:id type="new">d8f9ce7c6a92cd6e143b5407ad511e0f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -747,7 +747,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>181 GEL&#221;R TAHAKKUKLARI</act:name>
-  <act:id type="guid">6675252a5f9d561c860219e86cd516fe</act:id>
+  <act:id type="new">6675252a5f9d561c860219e86cd516fe</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -768,7 +768,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>190 DEVREDEN KDV</act:name>
-  <act:id type="guid">90467764ad9fc85cecc167522a158383</act:id>
+  <act:id type="new">90467764ad9fc85cecc167522a158383</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -789,7 +789,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>191 &#221;ND&#221;R&#221;LECEK KDV</act:name>
-  <act:id type="guid">77b4172e2962a6a839c079d85e04431c</act:id>
+  <act:id type="new">77b4172e2962a6a839c079d85e04431c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -810,7 +810,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>192 D&#221;&#208;ER KDV</act:name>
-  <act:id type="guid">cd1de637fcba4c7acfef02a680632ecd</act:id>
+  <act:id type="new">cd1de637fcba4c7acfef02a680632ecd</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -831,7 +831,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>193 PE&#222;. &#214;DE. VERG. ve FONLAR</act:name>
-  <act:id type="guid">805cc493c9cd33c11de11f100e214a27</act:id>
+  <act:id type="new">805cc493c9cd33c11de11f100e214a27</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -852,7 +852,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>195 &#221;&#222; AVANSLARI</act:name>
-  <act:id type="guid">8895fbff2da3b2c037cbddce08904dd3</act:id>
+  <act:id type="new">8895fbff2da3b2c037cbddce08904dd3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -873,7 +873,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>196 PERSONEL AVANSLARI</act:name>
-  <act:id type="guid">a355038028fd2a02c95d3ffdd2dcbe35</act:id>
+  <act:id type="new">a355038028fd2a02c95d3ffdd2dcbe35</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -894,7 +894,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>197 SAYIM ve TESEL. NOKS.</act:name>
-  <act:id type="guid">0cff261bf6682348ffb60a961b069beb</act:id>
+  <act:id type="new">0cff261bf6682348ffb60a961b069beb</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -915,7 +915,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>198 D&#221;&#208;ER &#199;E&#222;. D&#214;N. VARLIK.</act:name>
-  <act:id type="guid">380ecec41ed14ca7041daad497ff37a6</act:id>
+  <act:id type="new">380ecec41ed14ca7041daad497ff37a6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -936,7 +936,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>199 D&#221;&#208;ER D&#214;N. VARLIK. KAR&#222;. (-)</act:name>
-  <act:id type="guid">e4a8a358111c46738b3cfc76680f2640</act:id>
+  <act:id type="new">e4a8a358111c46738b3cfc76680f2640</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -957,7 +957,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>220 ALICILAR</act:name>
-  <act:id type="guid">cd16caa3cb9356b14912ea03a6048c0b</act:id>
+  <act:id type="new">cd16caa3cb9356b14912ea03a6048c0b</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -978,7 +978,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>221 ALACAK SENETLER&#221;</act:name>
-  <act:id type="guid">1a6ce6d6f4b91d7bdf53e10fdce69cf2</act:id>
+  <act:id type="new">1a6ce6d6f4b91d7bdf53e10fdce69cf2</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -999,7 +999,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>222 ALACAK SENETLER&#221; REES. (-)</act:name>
-  <act:id type="guid">0b5d92330dce142cc943dc36435a64e7</act:id>
+  <act:id type="new">0b5d92330dce142cc943dc36435a64e7</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1020,7 +1020,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>226 VER. DEPOZ&#221;TO ve TEM&#221;N.</act:name>
-  <act:id type="guid">2db30a79210b8bf4c7f25e62a4071aa2</act:id>
+  <act:id type="new">2db30a79210b8bf4c7f25e62a4071aa2</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1041,7 +1041,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>229 &#222;&#220;P. T&#221;C. ALACAKLAR KAR&#222;. (-)</act:name>
-  <act:id type="guid">cb7811ba126afdcc1dfefebff5640285</act:id>
+  <act:id type="new">cb7811ba126afdcc1dfefebff5640285</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1062,7 +1062,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>231 ORTAKL. ALACAKLAR</act:name>
-  <act:id type="guid">13b4cead8869cf5b327b68b015acae2a</act:id>
+  <act:id type="new">13b4cead8869cf5b327b68b015acae2a</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1083,7 +1083,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>232 &#221;&#222;T&#221;RAKL. ALACAKLAR</act:name>
-  <act:id type="guid">801d74413694ad9375a5b263bdf428a2</act:id>
+  <act:id type="new">801d74413694ad9375a5b263bdf428a2</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1104,7 +1104,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>233 BA&#208;LI ORTAKL. ALACAKLAR</act:name>
-  <act:id type="guid">7e9359d9537adb6ee1baa62399978aa3</act:id>
+  <act:id type="new">7e9359d9537adb6ee1baa62399978aa3</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1125,7 +1125,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>235 PERSONELDEN ALACAKLAR</act:name>
-  <act:id type="guid">9a6e9e599686244a5760a8652843882a</act:id>
+  <act:id type="new">9a6e9e599686244a5760a8652843882a</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1146,7 +1146,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>236 D&#221;&#208;ER &#199;E&#222;. ALACAKLAR</act:name>
-  <act:id type="guid">0f0ccaae8f26b8a8e41e1542f067167d</act:id>
+  <act:id type="new">0f0ccaae8f26b8a8e41e1542f067167d</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1167,7 +1167,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>237 D&#221;&#208;ER ALACAK SEN. REES. (-)</act:name>
-  <act:id type="guid">701f6ba4dffd5913fdb185a19066c9de</act:id>
+  <act:id type="new">701f6ba4dffd5913fdb185a19066c9de</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1188,7 +1188,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>239 &#222;&#220;P. D&#221;&#208;ER ALACAK. KAR&#222;. (-)</act:name>
-  <act:id type="guid">7047888dcbfdbbc22ffab691104f33d6</act:id>
+  <act:id type="new">7047888dcbfdbbc22ffab691104f33d6</act:id>
   <act:type>RECEIVABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1209,7 +1209,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>240 BA&#208;LI MEN. KIYMETLER</act:name>
-  <act:id type="guid">503b146e8594026a1449beeee522eeb7</act:id>
+  <act:id type="new">503b146e8594026a1449beeee522eeb7</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1230,7 +1230,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>241 BA&#208;. MEN. KIYM. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">48ca4d69d1c38df76c747984afbc83bf</act:id>
+  <act:id type="new">48ca4d69d1c38df76c747984afbc83bf</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1251,7 +1251,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>242 &#221;&#222;T&#221;RAKLER</act:name>
-  <act:id type="guid">4da33ddfdcaabe157ff54e7024f4826d</act:id>
+  <act:id type="new">4da33ddfdcaabe157ff54e7024f4826d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1272,7 +1272,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>243 &#221;&#222;T&#221;RAKLERE SERMAYE TAAH. (-)</act:name>
-  <act:id type="guid">f6f9c137e40bcd993ccda6b3b5161874</act:id>
+  <act:id type="new">f6f9c137e40bcd993ccda6b3b5161874</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1293,7 +1293,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>244 &#221;&#222;T. SERM. PAY. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">ae6955700c5aa601c305545e6043d3d0</act:id>
+  <act:id type="new">ae6955700c5aa601c305545e6043d3d0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1314,7 +1314,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>245 BA&#208;LI ORTAKLIKLAR</act:name>
-  <act:id type="guid">507bd171bd1e50e98e692c5a534cd706</act:id>
+  <act:id type="new">507bd171bd1e50e98e692c5a534cd706</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1335,7 +1335,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>246 BA&#208;. ORTAKL. SERM. TAAH. (-)</act:name>
-  <act:id type="guid">78abe5247a4bf9646764810f83637f6d</act:id>
+  <act:id type="new">78abe5247a4bf9646764810f83637f6d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1356,7 +1356,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>247 BA&#208;. ORT. SERM. PAY. DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">f0f2271a18bfcb1264102d80012f510c</act:id>
+  <act:id type="new">f0f2271a18bfcb1264102d80012f510c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1377,7 +1377,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>248 D&#221;&#208;. MAL&#221; DURAN VARLIK.</act:name>
-  <act:id type="guid">b72208de93e56a617c3223a23577be3c</act:id>
+  <act:id type="new">b72208de93e56a617c3223a23577be3c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1398,7 +1398,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>249 D&#221;&#208;. MAL&#221; DURAN VARLIK. KAR&#222;. (-)</act:name>
-  <act:id type="guid">40af9d674ed2e000f1b31ea1929879d2</act:id>
+  <act:id type="new">40af9d674ed2e000f1b31ea1929879d2</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1419,7 +1419,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>250 ARAZ&#221; ve ARSALAR</act:name>
-  <act:id type="guid">713d9999acf1a9f0286bdfe9b0d0695f</act:id>
+  <act:id type="new">713d9999acf1a9f0286bdfe9b0d0695f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1440,7 +1440,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>251 YER ALTI ve YER &#220;ST&#220; D&#220;ZEN.</act:name>
-  <act:id type="guid">6bfb0975736a2327d6df3dcc8dcd1e8f</act:id>
+  <act:id type="new">6bfb0975736a2327d6df3dcc8dcd1e8f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1461,7 +1461,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>252 B&#221;NALAR</act:name>
-  <act:id type="guid">ed3700ab5efe0f616739c1def279aa5b</act:id>
+  <act:id type="new">ed3700ab5efe0f616739c1def279aa5b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1482,7 +1482,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>253 TES&#221;S, MAK. ve C&#221;HAZLAR</act:name>
-  <act:id type="guid">d99fb9a191d4de4e6658dfb6ec7f3baa</act:id>
+  <act:id type="new">d99fb9a191d4de4e6658dfb6ec7f3baa</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1503,7 +1503,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>254 TA&#222;ITLAR</act:name>
-  <act:id type="guid">59125375d4a7d2af87e8f7cf259264ea</act:id>
+  <act:id type="new">59125375d4a7d2af87e8f7cf259264ea</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1524,7 +1524,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>255 DEM&#221;RBA&#222;LAR</act:name>
-  <act:id type="guid">ade90dd590a73d07f8bf2f26db14d5bb</act:id>
+  <act:id type="new">ade90dd590a73d07f8bf2f26db14d5bb</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1545,7 +1545,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>256 D&#221;&#208;. MADD&#221; DURAN VARLIK.</act:name>
-  <act:id type="guid">ce725d4b0c7d04eca0ec9953464a901e</act:id>
+  <act:id type="new">ce725d4b0c7d04eca0ec9953464a901e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1566,7 +1566,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>257 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
-  <act:id type="guid">53783d51ba77977bc18ed28404e2f913</act:id>
+  <act:id type="new">53783d51ba77977bc18ed28404e2f913</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1587,7 +1587,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>258 YAPILM. OLAN YATIRIMLAR</act:name>
-  <act:id type="guid">05580ed9b0dd456d7ab0759f8110e03e</act:id>
+  <act:id type="new">05580ed9b0dd456d7ab0759f8110e03e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1608,7 +1608,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>259 VER&#221;LEN AVANSLAR</act:name>
-  <act:id type="guid">1b366c5f6c2972e2b4b122cca28539b5</act:id>
+  <act:id type="new">1b366c5f6c2972e2b4b122cca28539b5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1629,7 +1629,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>260 HAKLAR</act:name>
-  <act:id type="guid">bee456e4ea160a50470634d19a62f63b</act:id>
+  <act:id type="new">bee456e4ea160a50470634d19a62f63b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1650,7 +1650,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>261 &#222;EREF&#221;YE</act:name>
-  <act:id type="guid">e82a46e55200ebc1bfecdaab3a043902</act:id>
+  <act:id type="new">e82a46e55200ebc1bfecdaab3a043902</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1671,7 +1671,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>262 KUR. ve &#214;RG&#220;T. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">4d7ef9cd8f5c2b9f23a5452c89b2837f</act:id>
+  <act:id type="new">4d7ef9cd8f5c2b9f23a5452c89b2837f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1692,7 +1692,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>263 ARA&#222;. ve GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">71ff8147e1c428595d90ca69cfcb373b</act:id>
+  <act:id type="new">71ff8147e1c428595d90ca69cfcb373b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1713,7 +1713,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>264 &#214;ZEL MAL&#221;YETLER</act:name>
-  <act:id type="guid">d210ef82fb15e692d8edc0ebccf00626</act:id>
+  <act:id type="new">d210ef82fb15e692d8edc0ebccf00626</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1734,7 +1734,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>267 D&#221;&#208;. MADD&#221; OLM. DURAN VARLIK.</act:name>
-  <act:id type="guid">189d23296491626c05aa89327ba7db0f</act:id>
+  <act:id type="new">189d23296491626c05aa89327ba7db0f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1755,7 +1755,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>268 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
-  <act:id type="guid">dae68ee3ba8cff905b57ba579271a600</act:id>
+  <act:id type="new">dae68ee3ba8cff905b57ba579271a600</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1776,7 +1776,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>269 VER&#221;LEN AVANSLAR</act:name>
-  <act:id type="guid">4b4c352b0b1c67a5ff5c9eabc23d527b</act:id>
+  <act:id type="new">4b4c352b0b1c67a5ff5c9eabc23d527b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1797,7 +1797,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>271 ARAMA G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">f1ba0ebaace86946502666f1a947f75e</act:id>
+  <act:id type="new">f1ba0ebaace86946502666f1a947f75e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1818,7 +1818,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>272 HAZ. ve GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">5967a4630abd8b521f1a605e600ad10c</act:id>
+  <act:id type="new">5967a4630abd8b521f1a605e600ad10c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1839,7 +1839,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>277 D&#221;&#208;. &#214;ZEL T&#220;KEN. TAB&#221; VARLIK.</act:name>
-  <act:id type="guid">7cd591bd635f30a1b6a7125522eb5be1</act:id>
+  <act:id type="new">7cd591bd635f30a1b6a7125522eb5be1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1860,7 +1860,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>278 B&#221;R&#221;KM&#221;&#222; T&#220;KEN. PAYLARI (-)</act:name>
-  <act:id type="guid">dd92e3344deedbd765a3cef7b433ccb5</act:id>
+  <act:id type="new">dd92e3344deedbd765a3cef7b433ccb5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1881,7 +1881,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>279 VER&#221;LEN AVANSLAR</act:name>
-  <act:id type="guid">33aa2c1baf021f7f91480973aa3a8ac8</act:id>
+  <act:id type="new">33aa2c1baf021f7f91480973aa3a8ac8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1902,7 +1902,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>280 GEL. YILLARA A&#221;T G&#221;DERLER</act:name>
-  <act:id type="guid">4f70656c201cbf3654cf4fc7d1f0b3f6</act:id>
+  <act:id type="new">4f70656c201cbf3654cf4fc7d1f0b3f6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1923,7 +1923,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>281 GEL&#221;R TAHAKKUKLARI</act:name>
-  <act:id type="guid">75e16ca160fb049b13aebde96c2c4dfc</act:id>
+  <act:id type="new">75e16ca160fb049b13aebde96c2c4dfc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1944,7 +1944,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>291 GEL. YILLARDA &#221;ND. KDV</act:name>
-  <act:id type="guid">9014b9f3d1d003ab8844cad696df199d</act:id>
+  <act:id type="new">9014b9f3d1d003ab8844cad696df199d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1965,7 +1965,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>292 D&#221;&#208;ER KDV</act:name>
-  <act:id type="guid">e2d648d9ad7119e6892c72087ac54f89</act:id>
+  <act:id type="new">e2d648d9ad7119e6892c72087ac54f89</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1986,7 +1986,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>293 GEL. YILLAR &#221;HT&#221;. STOK.</act:name>
-  <act:id type="guid">955a52f26c5109a1ecc606a03abcf94d</act:id>
+  <act:id type="new">955a52f26c5109a1ecc606a03abcf94d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2007,7 +2007,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>294 ELDEN &#199;IK. STOK. ve MAD. DUR. VARLIK.</act:name>
-  <act:id type="guid">880f2dd3ff9f8c1ed1e166577ae67300</act:id>
+  <act:id type="new">880f2dd3ff9f8c1ed1e166577ae67300</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2028,7 +2028,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>295 PE&#222;&#221;N &#214;DE. VERG&#221;. ve FONLAR</act:name>
-  <act:id type="guid">80dde20aa1ab57c857d91b2bb53c268a</act:id>
+  <act:id type="new">80dde20aa1ab57c857d91b2bb53c268a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2049,7 +2049,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>297 D&#221;&#208;. &#199;E&#222;. DURAN VARLIK.</act:name>
-  <act:id type="guid">eff64bd6884709e5eb6a18dd936b56a1</act:id>
+  <act:id type="new">eff64bd6884709e5eb6a18dd936b56a1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2070,7 +2070,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>298 STOK DE&#208;. D&#220;&#222;. KAR&#222;. (-)</act:name>
-  <act:id type="guid">cda26cabc4efbe78e402383f869f89f2</act:id>
+  <act:id type="new">cda26cabc4efbe78e402383f869f89f2</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2091,7 +2091,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>299 B&#221;R&#221;KM&#221;&#222; AMORT&#221;SMAN. (-)</act:name>
-  <act:id type="guid">8332e78f44c029006d86372866be8821</act:id>
+  <act:id type="new">8332e78f44c029006d86372866be8821</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2112,7 +2112,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>300 BANKA KRED&#221;LER&#221;</act:name>
-  <act:id type="guid">bb5b948aa57fee2682d5a0b99678cce3</act:id>
+  <act:id type="new">bb5b948aa57fee2682d5a0b99678cce3</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2133,7 +2133,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>303 UZ. VAD. KRED. ANAP. TAK. ve FA&#221;Z.</act:name>
-  <act:id type="guid">d873148ab24203c135adf06e0eb06e14</act:id>
+  <act:id type="new">d873148ab24203c135adf06e0eb06e14</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2154,7 +2154,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>304 TAHV. ANAP. BOR&#199; TAK. ve FA&#221;Z.</act:name>
-  <act:id type="guid">77de2a89b28899a8007ad4d65f82f572</act:id>
+  <act:id type="new">77de2a89b28899a8007ad4d65f82f572</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2175,7 +2175,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>305 &#199;IKA. BONO. ve SENETLER</act:name>
-  <act:id type="guid">1308ad5eafd908f1b06ca62fc405c532</act:id>
+  <act:id type="new">1308ad5eafd908f1b06ca62fc405c532</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2196,7 +2196,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>306 &#199;IKA. D&#221;&#208;. MEN. KIYMETLER</act:name>
-  <act:id type="guid">dee6717ac149e8c2ece88e26fe69b858</act:id>
+  <act:id type="new">dee6717ac149e8c2ece88e26fe69b858</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2217,7 +2217,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>308 MEN. KIYM. &#221;HRA&#199; FARKI (-)</act:name>
-  <act:id type="guid">b11754068123bd3b1bd6d71abaa854ed</act:id>
+  <act:id type="new">b11754068123bd3b1bd6d71abaa854ed</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2238,7 +2238,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>309 D&#221;&#208;. MAL&#221; BOR&#199;LAR</act:name>
-  <act:id type="guid">dd4ec5b548e346a652e4fd0cb3202b36</act:id>
+  <act:id type="new">dd4ec5b548e346a652e4fd0cb3202b36</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2259,7 +2259,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>320 SATICILAR</act:name>
-  <act:id type="guid">512d7c29527425fe20d64f9cb26f302f</act:id>
+  <act:id type="new">512d7c29527425fe20d64f9cb26f302f</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2280,7 +2280,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>321 BOR&#199; SENETLER&#221;</act:name>
-  <act:id type="guid">019d84fdc30fa2771d74a41df85c5909</act:id>
+  <act:id type="new">019d84fdc30fa2771d74a41df85c5909</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2301,7 +2301,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>322 BOR&#199; SENETLER&#221; REES. (-)</act:name>
-  <act:id type="guid">64429fc2c26f5019b619f0d06fd481cf</act:id>
+  <act:id type="new">64429fc2c26f5019b619f0d06fd481cf</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2322,7 +2322,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>326 ALINAN DEPOZ&#221;TO ve TEM&#221;N.</act:name>
-  <act:id type="guid">9d41cadc940a759efbdcba0f6420c573</act:id>
+  <act:id type="new">9d41cadc940a759efbdcba0f6420c573</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2343,7 +2343,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>329 D&#221;&#208;ER T&#221;C. BOR&#199;LAR</act:name>
-  <act:id type="guid">a4e49599d39ebc6e667059738f90bcdc</act:id>
+  <act:id type="new">a4e49599d39ebc6e667059738f90bcdc</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2364,7 +2364,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>331 ORTAKL. BOR&#199;LAR</act:name>
-  <act:id type="guid">1b9467a664053565d88b890d35651886</act:id>
+  <act:id type="new">1b9467a664053565d88b890d35651886</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2385,7 +2385,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>332 &#221;&#222;T&#221;RAK. BOR&#199;LAR</act:name>
-  <act:id type="guid">06ec5636fdaf5545d2dd1fd497230db9</act:id>
+  <act:id type="new">06ec5636fdaf5545d2dd1fd497230db9</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2406,7 +2406,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>333 BA&#208;LI ORTAKL. BOR&#199;LAR</act:name>
-  <act:id type="guid">a82538388f946157b31510df300ce7e5</act:id>
+  <act:id type="new">a82538388f946157b31510df300ce7e5</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2427,7 +2427,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>335 PERSONELE BOR&#199;LAR</act:name>
-  <act:id type="guid">328e895d50bdebf5d6025d38a7b8c065</act:id>
+  <act:id type="new">328e895d50bdebf5d6025d38a7b8c065</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2448,7 +2448,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>336 D&#221;&#208;ER &#199;E&#222;. BOR&#199;LAR</act:name>
-  <act:id type="guid">3153bd59ddc8bba352864aeb9f040d48</act:id>
+  <act:id type="new">3153bd59ddc8bba352864aeb9f040d48</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2469,7 +2469,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>337 D&#221;&#208;ER BOR&#199; SEN. REES. (-)</act:name>
-  <act:id type="guid">f95fac3ebaccaca04e40c0793337586f</act:id>
+  <act:id type="new">f95fac3ebaccaca04e40c0793337586f</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2490,7 +2490,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>340 ALINAN S&#221;PAR&#221;&#222; AVANSLARI</act:name>
-  <act:id type="guid">b3d729183f5073c526b0d7ac028cf42e</act:id>
+  <act:id type="new">b3d729183f5073c526b0d7ac028cf42e</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2511,7 +2511,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>349 ALINAN D&#221;&#208;ER AVANSLAR</act:name>
-  <act:id type="guid">5e78b581959a265b88c7e39cc4bc3ec4</act:id>
+  <act:id type="new">5e78b581959a265b88c7e39cc4bc3ec4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2532,7 +2532,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>350 Y.Y. &#221;N&#222;. ve ONAR. HAKED. BEDEL.</act:name>
-  <act:id type="guid">0f3fa67a937f35d6f0686f518573e85c</act:id>
+  <act:id type="new">0f3fa67a937f35d6f0686f518573e85c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2553,7 +2553,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>360 &#214;DENECEK VERG&#221; ve FONLAR</act:name>
-  <act:id type="guid">8e79e7bad044a118c207184b17b5c3a2</act:id>
+  <act:id type="new">8e79e7bad044a118c207184b17b5c3a2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2578,7 +2578,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>361 &#214;DENECEK SOSYAL G&#220;V.</act:name>
-  <act:id type="guid">2bee22879f364edc9535a3d8ca20d7af</act:id>
+  <act:id type="new">2bee22879f364edc9535a3d8ca20d7af</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2603,7 +2603,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>368 VAD. GE&#199;. ERT. TAK. VERG&#221; ve D&#221;&#208;. Y&#220;K.</act:name>
-  <act:id type="guid">16fa44ee51ddf5cbe23c0f00ff28f06a</act:id>
+  <act:id type="new">16fa44ee51ddf5cbe23c0f00ff28f06a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2628,7 +2628,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>369 &#214;DENECEK D&#221;&#208;. Y&#220;K.</act:name>
-  <act:id type="guid">716d4cbc698cb710dd760887574dbed9</act:id>
+  <act:id type="new">716d4cbc698cb710dd760887574dbed9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2653,7 +2653,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>370 D&#214;N. K&#194;RI VERG&#221; ve D&#221;&#208;. YAS. Y&#220;K. KAR&#222;.</act:name>
-  <act:id type="guid">04d15fd7e487eafc15d1cfdc6260fe90</act:id>
+  <act:id type="new">04d15fd7e487eafc15d1cfdc6260fe90</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2674,7 +2674,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>371 D&#214;N. K&#194;R. PE&#222;. &#214;DE. VERG&#221; ve D&#221;&#208;. Y&#220;K.</act:name>
-  <act:id type="guid">5881ef5860a47224393705d817351b0c</act:id>
+  <act:id type="new">5881ef5860a47224393705d817351b0c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2695,7 +2695,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>372 KIDEM TAZM&#221;N. KAR&#222;.</act:name>
-  <act:id type="guid">643604ef5d0d9fdda2fb730707881d34</act:id>
+  <act:id type="new">643604ef5d0d9fdda2fb730707881d34</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2716,7 +2716,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>373 MAL&#221;YET G&#221;DER. KAR&#222;.</act:name>
-  <act:id type="guid">713e5e6feb0216a42188c09fb87c2c89</act:id>
+  <act:id type="new">713e5e6feb0216a42188c09fb87c2c89</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2737,7 +2737,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>379 D&#221;&#208;. BOR&#199; ve G&#221;DER KAR&#222;.</act:name>
-  <act:id type="guid">8c1b61a0f6b4973cc7b5d3c60e4763f3</act:id>
+  <act:id type="new">8c1b61a0f6b4973cc7b5d3c60e4763f3</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2758,7 +2758,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>380 GEL. AYLARA A&#221;T GEL&#221;RLER</act:name>
-  <act:id type="guid">d567e9a357821a96e966cd7393e91de9</act:id>
+  <act:id type="new">d567e9a357821a96e966cd7393e91de9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2779,7 +2779,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>381 G&#221;DER TAHAKKULARI</act:name>
-  <act:id type="guid">42e59bfe90a2ddf002614abb423a4200</act:id>
+  <act:id type="new">42e59bfe90a2ddf002614abb423a4200</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2800,7 +2800,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>391 HESAPLANAN KDV</act:name>
-  <act:id type="guid">da1da552fa91a4caa9119af19d80dd71</act:id>
+  <act:id type="new">da1da552fa91a4caa9119af19d80dd71</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2821,7 +2821,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>392 D&#221;&#208;ER KDV</act:name>
-  <act:id type="guid">923e72fdaf24d5da0890d9a4ac30381c</act:id>
+  <act:id type="new">923e72fdaf24d5da0890d9a4ac30381c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2842,7 +2842,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>393 MERKEZ ve &#222;B. CAR&#221; HESABI</act:name>
-  <act:id type="guid">85141d93919707c59c81f2c0b06fe388</act:id>
+  <act:id type="new">85141d93919707c59c81f2c0b06fe388</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2863,7 +2863,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>397 SAYIM ve TESELL&#220;M FAZLA.</act:name>
-  <act:id type="guid">6bcf7a9ff8606c6eb747d7cc955dc88a</act:id>
+  <act:id type="new">6bcf7a9ff8606c6eb747d7cc955dc88a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2884,7 +2884,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>399 D&#221;&#208;ER &#199;E&#222;. YAB. KAYNAKLAR</act:name>
-  <act:id type="guid">a0799cfd697879a9ee36d37e96d3577e</act:id>
+  <act:id type="new">a0799cfd697879a9ee36d37e96d3577e</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2905,7 +2905,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>400 BANKA KRED&#221;LER&#221;</act:name>
-  <act:id type="guid">03291c181991c74774a9eeb500fe9c22</act:id>
+  <act:id type="new">03291c181991c74774a9eeb500fe9c22</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2926,7 +2926,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>405 &#199;IKA. TAHV&#221;LLER</act:name>
-  <act:id type="guid">b9a98c2f18a3ea101402447423d6b4e6</act:id>
+  <act:id type="new">b9a98c2f18a3ea101402447423d6b4e6</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2947,7 +2947,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>407 &#199;IKA. D&#221;&#208;. MEN. KIYMETLER</act:name>
-  <act:id type="guid">2746165dbf72d28d8f24d7e08cfbf947</act:id>
+  <act:id type="new">2746165dbf72d28d8f24d7e08cfbf947</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2968,7 +2968,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>408 MEN. KIYM. &#221;HRA&#199; FARK. (-)</act:name>
-  <act:id type="guid">ed2999ec4113d107c1feee9b2dc1c959</act:id>
+  <act:id type="new">ed2999ec4113d107c1feee9b2dc1c959</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2989,7 +2989,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>409 D&#221;&#208;. MAL&#221; BOR&#199;LAR</act:name>
-  <act:id type="guid">cf25a75cfc031954b767c865f301c798</act:id>
+  <act:id type="new">cf25a75cfc031954b767c865f301c798</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3010,7 +3010,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>420 SATICILAR</act:name>
-  <act:id type="guid">191678349b3f952ef7f903599ef9ca53</act:id>
+  <act:id type="new">191678349b3f952ef7f903599ef9ca53</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3031,7 +3031,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>421 BOR&#199; SENETLER&#221;</act:name>
-  <act:id type="guid">a3fc0705793407a9eb867fab63b74bdd</act:id>
+  <act:id type="new">a3fc0705793407a9eb867fab63b74bdd</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3052,7 +3052,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>422 BOR&#199; SENETLER&#221; REES. (-)</act:name>
-  <act:id type="guid">8ffed0e11b5e0f10a5f00d856e68542c</act:id>
+  <act:id type="new">8ffed0e11b5e0f10a5f00d856e68542c</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3073,7 +3073,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>426 ALINAN DEPOZ&#221;TO ve TEM&#221;N.</act:name>
-  <act:id type="guid">d9ce3481ca19379f4ceeb0de8a217615</act:id>
+  <act:id type="new">d9ce3481ca19379f4ceeb0de8a217615</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3094,7 +3094,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>429 D&#221;&#208;ER T&#221;C. BOR&#199;LAR</act:name>
-  <act:id type="guid">71952a666fdb1924c4b60e55bee36d09</act:id>
+  <act:id type="new">71952a666fdb1924c4b60e55bee36d09</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3115,7 +3115,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>431 ORTAKL. BOR&#199;LAR</act:name>
-  <act:id type="guid">11ea3f3ca61c5bcb0751a1444f00f118</act:id>
+  <act:id type="new">11ea3f3ca61c5bcb0751a1444f00f118</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3136,7 +3136,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>432 &#221;&#222;T&#221;RAKL. BOR&#199;LAR</act:name>
-  <act:id type="guid">db5dfa0bcf3669c72bd5f07d07fcfc55</act:id>
+  <act:id type="new">db5dfa0bcf3669c72bd5f07d07fcfc55</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3157,7 +3157,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>433 BA&#208;LI ORTAKLIK. BOR&#199;LAR</act:name>
-  <act:id type="guid">57e9ff1ca0cfd395c7834f6019a2131c</act:id>
+  <act:id type="new">57e9ff1ca0cfd395c7834f6019a2131c</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3178,7 +3178,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>436 D&#221;&#208;ER &#199;E&#222;. BOR&#199;LAR</act:name>
-  <act:id type="guid">9a2925403508557df3be90733211e6fc</act:id>
+  <act:id type="new">9a2925403508557df3be90733211e6fc</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3199,7 +3199,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>437 D&#221;&#208;ER BOR&#199; SEN. REES. (-)</act:name>
-  <act:id type="guid">f4c9fc27d571c29a31f26a5519ff4f0e</act:id>
+  <act:id type="new">f4c9fc27d571c29a31f26a5519ff4f0e</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3220,7 +3220,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>438 KAMUYA OLAN ERT. TAK. BOR&#199;LAR</act:name>
-  <act:id type="guid">2d4d310bb40ad62f7791230de2552339</act:id>
+  <act:id type="new">2d4d310bb40ad62f7791230de2552339</act:id>
   <act:type>PAYABLE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3241,7 +3241,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>440 ALINAN S&#221;PAR&#221;&#222; AVANS.</act:name>
-  <act:id type="guid">082aa217c86fd808f0d2a5696b6b34a9</act:id>
+  <act:id type="new">082aa217c86fd808f0d2a5696b6b34a9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3262,7 +3262,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>449 ALINAN G&#221;DER AVANS.</act:name>
-  <act:id type="guid">858491aa3817c68f728a4c34bfad1c9d</act:id>
+  <act:id type="new">858491aa3817c68f728a4c34bfad1c9d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3283,7 +3283,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>472 KIDEM TAZM&#221;NATI KAR&#222;.</act:name>
-  <act:id type="guid">d8a1286d3f21b6ea019b278d7e4706ea</act:id>
+  <act:id type="new">d8a1286d3f21b6ea019b278d7e4706ea</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3304,7 +3304,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>479 D&#221;&#208;. BOR&#199; ve G&#221;DER KAR&#222;.</act:name>
-  <act:id type="guid">f1a1b68dbf43bada63fc82e087760ca0</act:id>
+  <act:id type="new">f1a1b68dbf43bada63fc82e087760ca0</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3325,7 +3325,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>480 GEL. YIL. A&#221;T GEL&#221;RLER</act:name>
-  <act:id type="guid">56ca29b63eb4837f38059012469a95f6</act:id>
+  <act:id type="new">56ca29b63eb4837f38059012469a95f6</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3346,7 +3346,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>481 G&#221;DER TAHAKKUKLARI</act:name>
-  <act:id type="guid">43efc4983199d6dd615f9182e2719ef6</act:id>
+  <act:id type="new">43efc4983199d6dd615f9182e2719ef6</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3367,7 +3367,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>492 GEL. YIL. ERT. TERK&#221;N ED&#221;L. KDV</act:name>
-  <act:id type="guid">3a382697e342af3f6689af191c6e7e9c</act:id>
+  <act:id type="new">3a382697e342af3f6689af191c6e7e9c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3388,7 +3388,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>493 TES&#221;SE KATILMA PAYLARI</act:name>
-  <act:id type="guid">c4096313300503dd7ee2abe4350e67dd</act:id>
+  <act:id type="new">c4096313300503dd7ee2abe4350e67dd</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3409,7 +3409,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>499 D&#221;&#208;. &#199;E&#222;. UZUN VAD. YAB. KAYNAK.</act:name>
-  <act:id type="guid">e3409eddac742676fe2aaffde9edb4b8</act:id>
+  <act:id type="new">e3409eddac742676fe2aaffde9edb4b8</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3430,7 +3430,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>500 SERMAYE</act:name>
-  <act:id type="guid">3b14a02c644fa57f3c229074a022028a</act:id>
+  <act:id type="new">3b14a02c644fa57f3c229074a022028a</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3451,7 +3451,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A&#231;&#253;l&#253;&#254; Bakiyeleri</act:name>
-  <act:id type="guid">5067680440fe318161b4099394e9558b</act:id>
+  <act:id type="new">5067680440fe318161b4099394e9558b</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3469,11 +3469,11 @@
       <slot:value type="string"></slot:value>
     </slot>
   </act:slots>
-  <act:parent type="guid">3b14a02c644fa57f3c229074a022028a</act:parent>
+  <act:parent type="new">3b14a02c644fa57f3c229074a022028a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>501 &#214;DENMEM&#221;&#222; SERMAYE (-)</act:name>
-  <act:id type="guid">082630110ad7095316b301ccd6f9bd49</act:id>
+  <act:id type="new">082630110ad7095316b301ccd6f9bd49</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3494,7 +3494,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>520 H&#221;SSE SEN. &#221;HRA&#199; PR&#221;M.</act:name>
-  <act:id type="guid">8a68543849053f458395a336ebd9e3e0</act:id>
+  <act:id type="new">8a68543849053f458395a336ebd9e3e0</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3515,7 +3515,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>521 H&#221;SSE SEN. &#221;PTAL K&#194;RLARI</act:name>
-  <act:id type="guid">cae027d3d0ed477037a4fbdde867e833</act:id>
+  <act:id type="new">cae027d3d0ed477037a4fbdde867e833</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3536,7 +3536,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>522 M.D.V. YEN&#221;DEN DE&#208;ER. ARTI&#222;.</act:name>
-  <act:id type="guid">59d7ba7e0da033cb9c789ea7ade67b27</act:id>
+  <act:id type="new">59d7ba7e0da033cb9c789ea7ade67b27</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3557,7 +3557,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>523 &#221;&#222;T&#221;RAK. YEN&#221;DEN DE&#208;ER. ARTI&#222;.</act:name>
-  <act:id type="guid">eeb59f51117b3df881da1541bedf1bf0</act:id>
+  <act:id type="new">eeb59f51117b3df881da1541bedf1bf0</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3578,7 +3578,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>524 MAL&#221;YET ARTI&#222;. FONU</act:name>
-  <act:id type="guid">8d05d5b82239d459d7da67cc44a848ed</act:id>
+  <act:id type="new">8d05d5b82239d459d7da67cc44a848ed</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3599,7 +3599,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>529 D&#221;&#208;ER SERMAYE YEDEK.</act:name>
-  <act:id type="guid">35302a2c622070aee82ca4ff9d66e2b6</act:id>
+  <act:id type="new">35302a2c622070aee82ca4ff9d66e2b6</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3620,7 +3620,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>540 YASAL YEDEKLER</act:name>
-  <act:id type="guid">0bb0cd9a4bb7b28b2be4a8f3a59f3e92</act:id>
+  <act:id type="new">0bb0cd9a4bb7b28b2be4a8f3a59f3e92</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3641,7 +3641,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>541 STAT&#220; YEDEKLER&#221;</act:name>
-  <act:id type="guid">b2438c5aeafa5f68aa2c0a73bd153228</act:id>
+  <act:id type="new">b2438c5aeafa5f68aa2c0a73bd153228</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3662,7 +3662,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>542 OLA&#208;AN&#220;ST&#220; YEDEKLER</act:name>
-  <act:id type="guid">fd7d33efaa0a32a7870b235c568dc3b9</act:id>
+  <act:id type="new">fd7d33efaa0a32a7870b235c568dc3b9</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3683,7 +3683,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>548 D&#221;&#208;ER K&#194;R YEDEKLER&#221;</act:name>
-  <act:id type="guid">dd4c66c855f6d9201507aa8306cbd34e</act:id>
+  <act:id type="new">dd4c66c855f6d9201507aa8306cbd34e</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3704,7 +3704,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>549 &#214;ZEL FONLAR</act:name>
-  <act:id type="guid">b82e9d440216c75f96c778b8ef16e2c4</act:id>
+  <act:id type="new">b82e9d440216c75f96c778b8ef16e2c4</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3725,7 +3725,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>570 GE&#199;M&#221;&#222; YILLAR K&#194;RLARI</act:name>
-  <act:id type="guid">19f1b6f355bcdc78dfacf3bebbcbc735</act:id>
+  <act:id type="new">19f1b6f355bcdc78dfacf3bebbcbc735</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3746,7 +3746,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>580 GE&#199;M&#221;&#222; YILLAR ZARARLARI (-)</act:name>
-  <act:id type="guid">1a972253fbf1d4355cb366ae3e61be51</act:id>
+  <act:id type="new">1a972253fbf1d4355cb366ae3e61be51</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3767,7 +3767,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>590 D&#214;NEM NET K&#194;RI</act:name>
-  <act:id type="guid">1c7da9a7d8cabbab2c5c604b5dd69692</act:id>
+  <act:id type="new">1c7da9a7d8cabbab2c5c604b5dd69692</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3788,7 +3788,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>591 D&#214;NEM NET ZARARI (-)</act:name>
-  <act:id type="guid">0494e7bd85bb6c7835b6f4f2a898be77</act:id>
+  <act:id type="new">0494e7bd85bb6c7835b6f4f2a898be77</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3809,7 +3809,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>600 YURT&#221;&#199;&#221; SATI&#222;LAR</act:name>
-  <act:id type="guid">87d8d1e8916b5b3ab884ba0b558722de</act:id>
+  <act:id type="new">87d8d1e8916b5b3ab884ba0b558722de</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3830,7 +3830,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>601 YURTDI&#222;I SATI&#222;LAR</act:name>
-  <act:id type="guid">d09e91e949e931c7407fb925c51b219f</act:id>
+  <act:id type="new">d09e91e949e931c7407fb925c51b219f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3851,7 +3851,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>602 D&#221;&#208;ER GEL&#221;RLER</act:name>
-  <act:id type="guid">934bd7d98bab6e652915ac4279db7c72</act:id>
+  <act:id type="new">934bd7d98bab6e652915ac4279db7c72</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3872,7 +3872,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>610 SATI&#222;TAN &#221;ADELER (-)</act:name>
-  <act:id type="guid">f242217766edd328ec6cd24a435e8b52</act:id>
+  <act:id type="new">f242217766edd328ec6cd24a435e8b52</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3893,7 +3893,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>611 SATI&#222; &#221;SKONTOLARI (-)</act:name>
-  <act:id type="guid">48cda4f99b8b8687f05a3b209e46184e</act:id>
+  <act:id type="new">48cda4f99b8b8687f05a3b209e46184e</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3914,7 +3914,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>612 D&#221;&#208;ER &#221;ND&#221;R&#221;MLER (-)</act:name>
-  <act:id type="guid">a764e950affcafe4622b3060acff410c</act:id>
+  <act:id type="new">a764e950affcafe4622b3060acff410c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3935,7 +3935,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>620 SATILAN MAMUL. MAL&#221;YET&#221; (-)</act:name>
-  <act:id type="guid">852f2b984065ccb526dfd2b0475f7d9f</act:id>
+  <act:id type="new">852f2b984065ccb526dfd2b0475f7d9f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3956,7 +3956,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>621 SATILAN T&#221;C. MAL. MAL&#221;YET&#221; (-)</act:name>
-  <act:id type="guid">3ed92186fa0dd82c33c5669c9d6dd448</act:id>
+  <act:id type="new">3ed92186fa0dd82c33c5669c9d6dd448</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3977,7 +3977,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>622 SATILAN H&#221;ZMET MAL&#221;YET&#221; (-)</act:name>
-  <act:id type="guid">c9a47075ff9f6d9dca9a274e2728e50f</act:id>
+  <act:id type="new">c9a47075ff9f6d9dca9a274e2728e50f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3998,7 +3998,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>623 D&#221;&#208;ER SATI&#222;. MAL&#221;YET&#221; (-)</act:name>
-  <act:id type="guid">d6a4e13998678d76b31db6f1fd3d54e9</act:id>
+  <act:id type="new">d6a4e13998678d76b31db6f1fd3d54e9</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4019,7 +4019,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>630 ARA&#222;. GEL&#221;&#222;. G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">ba84302317cc371ccc2c4f7a44655189</act:id>
+  <act:id type="new">ba84302317cc371ccc2c4f7a44655189</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4040,7 +4040,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>631 PAZ. SATI&#222; DA&#208;IT. G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">de281769fd7b12aa5cb94e678dd0ca98</act:id>
+  <act:id type="new">de281769fd7b12aa5cb94e678dd0ca98</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4061,7 +4061,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>632 GENEL Y&#214;N. G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">b821deb6919ffe4a0fba287a746d7ea3</act:id>
+  <act:id type="new">b821deb6919ffe4a0fba287a746d7ea3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4082,7 +4082,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>640 &#221;&#222;T&#221;RAK. TEMETT&#220; GEL&#221;RLER&#221;</act:name>
-  <act:id type="guid">655cd30d663d101ab0cc3a27a10bb8e5</act:id>
+  <act:id type="new">655cd30d663d101ab0cc3a27a10bb8e5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4103,7 +4103,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>641 BA&#208;LI ORTAKL. TEMETT&#220; GEL&#221;R.</act:name>
-  <act:id type="guid">40c672a5164d67b5d945f0a7fef742b5</act:id>
+  <act:id type="new">40c672a5164d67b5d945f0a7fef742b5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4124,7 +4124,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>642 FA&#221;Z GEL&#221;RLER&#221;</act:name>
-  <act:id type="guid">39cff002a0b4d1efe09fc92ea685b5f2</act:id>
+  <act:id type="new">39cff002a0b4d1efe09fc92ea685b5f2</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4145,7 +4145,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>643 KOM&#221;SYON GEL&#221;RLER&#221;</act:name>
-  <act:id type="guid">71edcd5974bc83460941fc455ace7b1f</act:id>
+  <act:id type="new">71edcd5974bc83460941fc455ace7b1f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4166,7 +4166,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>644 KONUSU KALMAYAN KAR&#222;.</act:name>
-  <act:id type="guid">1b5e3d1b7a535122e4d5a27dbe872596</act:id>
+  <act:id type="new">1b5e3d1b7a535122e4d5a27dbe872596</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4187,7 +4187,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>645 MEN. KIYM. SATI&#222; K&#194;RLARI</act:name>
-  <act:id type="guid">1342d3821861802ae58db32929c14f40</act:id>
+  <act:id type="new">1342d3821861802ae58db32929c14f40</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4208,7 +4208,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>646 KAMB&#221;YO K&#194;RLARI</act:name>
-  <act:id type="guid">7d7af59a48a9383768f6aeb3cfd4cf0f</act:id>
+  <act:id type="new">7d7af59a48a9383768f6aeb3cfd4cf0f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4229,7 +4229,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>647 REES. FA&#221;Z GEL&#221;RLER&#221;</act:name>
-  <act:id type="guid">a84a1e3e7ff3ad6e8166757ef21d6414</act:id>
+  <act:id type="new">a84a1e3e7ff3ad6e8166757ef21d6414</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4250,7 +4250,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>649 D&#221;&#208;. OLA&#208;AN GEL&#221;R ve K&#194;RLAR</act:name>
-  <act:id type="guid">a7d78cc1f46d0c9876af22909d3877a0</act:id>
+  <act:id type="new">a7d78cc1f46d0c9876af22909d3877a0</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4271,7 +4271,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>653 KOM&#221;SYON G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">c818d75620f7f4129ddc0e4cb97d129d</act:id>
+  <act:id type="new">c818d75620f7f4129ddc0e4cb97d129d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4292,7 +4292,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>654 KAR&#222;ILIK G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">6798abbc357ee1efdfb7215dba3f9058</act:id>
+  <act:id type="new">6798abbc357ee1efdfb7215dba3f9058</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4313,7 +4313,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>655 MEN. KIYM. SATI&#222; ZARAR. (-)</act:name>
-  <act:id type="guid">cdfb5a9dcc035c2d1fc1d726a58cffa4</act:id>
+  <act:id type="new">cdfb5a9dcc035c2d1fc1d726a58cffa4</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4334,7 +4334,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>656 KAMB&#221;YO ZARARLARI (-)</act:name>
-  <act:id type="guid">c0a263bf4001f219ccadbe9a449c510a</act:id>
+  <act:id type="new">c0a263bf4001f219ccadbe9a449c510a</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4355,7 +4355,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>657 REES. FA&#221;Z G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">2634ef469a1d33bb59cdfd0efb029f9b</act:id>
+  <act:id type="new">2634ef469a1d33bb59cdfd0efb029f9b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4376,7 +4376,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>659 D&#221;&#208;. OLA&#208;AN G&#221;DER ve ZARAR. (-)</act:name>
-  <act:id type="guid">1da7d9a3bd469b98a862fda0c5116416</act:id>
+  <act:id type="new">1da7d9a3bd469b98a862fda0c5116416</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4397,7 +4397,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>660 KISA VADE. BOR&#199;L. G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">f813a24480a09c94c216a0d34f2734c5</act:id>
+  <act:id type="new">f813a24480a09c94c216a0d34f2734c5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4418,7 +4418,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>661 UZUN VADE. BOR&#199;L. G&#221;DERLER&#221; (-)</act:name>
-  <act:id type="guid">8b523672df06360bd5642052475a6e2c</act:id>
+  <act:id type="new">8b523672df06360bd5642052475a6e2c</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4439,7 +4439,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>671 &#214;NC. D&#214;NEM GEL&#221;R ve K&#194;RLAR</act:name>
-  <act:id type="guid">a3ad4b49c756aaf480b33a31bc5ea25f</act:id>
+  <act:id type="new">a3ad4b49c756aaf480b33a31bc5ea25f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4460,7 +4460,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>679 D&#221;&#208;. OLA&#208;ANDI&#222;I GEL&#221;R ve K&#194;RLAR</act:name>
-  <act:id type="guid">573ec5e58ae76b3e64f4f6a2a9d50757</act:id>
+  <act:id type="new">573ec5e58ae76b3e64f4f6a2a9d50757</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4481,7 +4481,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>680 &#199;ALI&#222;M. KISIM G&#221;DER ve ZARAR. (-)</act:name>
-  <act:id type="guid">e7957abac077e96c0054c85b70e53db1</act:id>
+  <act:id type="new">e7957abac077e96c0054c85b70e53db1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4502,7 +4502,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>681 &#214;NC. D&#214;NEM G&#221;DER ve ZARAR. (-)</act:name>
-  <act:id type="guid">021c4a00c857674618d8ebc0ab5fdc1f</act:id>
+  <act:id type="new">021c4a00c857674618d8ebc0ab5fdc1f</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4523,7 +4523,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>689 D&#221;&#208;. OLA&#208;ANDI&#222;I G&#221;DER ve ZARAR. (-)</act:name>
-  <act:id type="guid">1a023837c8e8c297ff2a274f2c4fa9a6</act:id>
+  <act:id type="new">1a023837c8e8c297ff2a274f2c4fa9a6</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4544,7 +4544,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>690 D&#214;NEM K&#194;RI veya ZARARI</act:name>
-  <act:id type="guid">2ba2f58bf124042b99f38b5eb6363cb6</act:id>
+  <act:id type="new">2ba2f58bf124042b99f38b5eb6363cb6</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4565,7 +4565,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>691 D&#214;N. K&#194;RI VRG. D&#221;&#208;. YAS. Y&#220;K. KAR&#222;. (-)</act:name>
-  <act:id type="guid">544be1d6d5b67692e4ed7702908bc472</act:id>
+  <act:id type="new">544be1d6d5b67692e4ed7702908bc472</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4586,7 +4586,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>692 D&#214;NEM NET K&#194;RI veya ZARARI</act:name>
-  <act:id type="guid">d53f73c4d96c19a60cbd071c20f9d2a9</act:id>
+  <act:id type="new">d53f73c4d96c19a60cbd071c20f9d2a9</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4607,7 +4607,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>700 MAL&#221;. MUH. BA&#208;LA. HESABI</act:name>
-  <act:id type="guid">33e62f7c5dd17b29058d53af0faae5e5</act:id>
+  <act:id type="new">33e62f7c5dd17b29058d53af0faae5e5</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4628,7 +4628,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>701 MAL&#221;. MUH. YANSIT. HESABI</act:name>
-  <act:id type="guid">9f047955bac7f666be8bf5b1ab2befa0</act:id>
+  <act:id type="new">9f047955bac7f666be8bf5b1ab2befa0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4649,7 +4649,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>710 D&#221;R. &#221;LK MADDE ve MALZ. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">b665907de1c1efc93b42b016ec898dbc</act:id>
+  <act:id type="new">b665907de1c1efc93b42b016ec898dbc</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4670,7 +4670,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>711 D&#221;R. &#221;LK MADDE ve MALZ. YANS. HES.</act:name>
-  <act:id type="guid">7e2b4ab23df3a4c648ed561ab546c181</act:id>
+  <act:id type="new">7e2b4ab23df3a4c648ed561ab546c181</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4691,7 +4691,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>712 D&#221;R. &#221;LK MADDE ve MALZ. F&#221;YAT FARKI</act:name>
-  <act:id type="guid">6a9ed26d83fe4cb6cc594b21a1a10f0c</act:id>
+  <act:id type="new">6a9ed26d83fe4cb6cc594b21a1a10f0c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4712,7 +4712,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>713 D&#221;R. &#221;LK MADDE ve MALZ. M&#221;K. FARKI</act:name>
-  <act:id type="guid">8cb0c7243d2a9a503e681f4a1ef9c77d</act:id>
+  <act:id type="new">8cb0c7243d2a9a503e681f4a1ef9c77d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4733,7 +4733,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>720 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">2cdcfdc00cbf8be369efff7aa3c519b1</act:id>
+  <act:id type="new">2cdcfdc00cbf8be369efff7aa3c519b1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4754,7 +4754,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>721 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K G&#221;DERLER&#221; YANS. HES.</act:name>
-  <act:id type="guid">7546fbc6e22ec03d4ad7e7cfaea2c8fa</act:id>
+  <act:id type="new">7546fbc6e22ec03d4ad7e7cfaea2c8fa</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4775,7 +4775,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>722 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K &#220;CRET FARKLARI</act:name>
-  <act:id type="guid">827c397468c92d38ced24d9f773ad75d</act:id>
+  <act:id type="new">827c397468c92d38ced24d9f773ad75d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4796,7 +4796,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>723 D&#221;R. &#221;&#222;&#199;&#221;L&#221;K S&#220;RE FARKLARI</act:name>
-  <act:id type="guid">77dfdc3495430fa1c3ed3fcccebd7b85</act:id>
+  <act:id type="new">77dfdc3495430fa1c3ed3fcccebd7b85</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4817,7 +4817,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>730 GEN. &#220;RET&#221;M G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">3de154c793d9fdd9fb9af4bf6def012e</act:id>
+  <act:id type="new">3de154c793d9fdd9fb9af4bf6def012e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4838,7 +4838,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>731 GEN. &#220;RET&#221;M G&#221;DER. YANS. HES.</act:name>
-  <act:id type="guid">07705be8d1977063154cd5f6ad395abf</act:id>
+  <act:id type="new">07705be8d1977063154cd5f6ad395abf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4859,7 +4859,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>732 GEN. &#220;RET&#221;M G&#221;DER. B&#220;T&#199;E FARK.</act:name>
-  <act:id type="guid">0534e39aa5ea8e5e3fe237ddbac2b664</act:id>
+  <act:id type="new">0534e39aa5ea8e5e3fe237ddbac2b664</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4880,7 +4880,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>733 GEN. &#220;RET&#221;M G&#221;DER. VER&#221;ML. FARK.</act:name>
-  <act:id type="guid">8ae10fa72b536586651554e33445c988</act:id>
+  <act:id type="new">8ae10fa72b536586651554e33445c988</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4901,7 +4901,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>734 GEN. &#220;RET&#221;M G&#221;DER. KAPAS. FARK.</act:name>
-  <act:id type="guid">1d548b34be7a48ed80c4e819835e358f</act:id>
+  <act:id type="new">1d548b34be7a48ed80c4e819835e358f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4922,7 +4922,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>740 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221;</act:name>
-  <act:id type="guid">c15b50bda4b1f2f41331f1dafda000f1</act:id>
+  <act:id type="new">c15b50bda4b1f2f41331f1dafda000f1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4943,7 +4943,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>741 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221; YANS. HES.</act:name>
-  <act:id type="guid">f4d2210f4fed6a3e761ab094f70af381</act:id>
+  <act:id type="new">f4d2210f4fed6a3e761ab094f70af381</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4964,7 +4964,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>742 H&#221;Z. &#220;RET&#221;M MAL&#221;YET&#221; FARK HES.</act:name>
-  <act:id type="guid">fe76e4fc1d9ebe997d3a6e6efa9e0d67</act:id>
+  <act:id type="new">fe76e4fc1d9ebe997d3a6e6efa9e0d67</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4985,7 +4985,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>750 ARA&#222;. GEL&#221;&#222;. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">93bf3edd10a78ddba32cc9eff02b268b</act:id>
+  <act:id type="new">93bf3edd10a78ddba32cc9eff02b268b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5006,7 +5006,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>751 ARA&#222;. GEL&#221;&#222;. G&#221;DER. YANS. HES.</act:name>
-  <act:id type="guid">f8889ee3d2ab3fca5c53d94b236ee617</act:id>
+  <act:id type="new">f8889ee3d2ab3fca5c53d94b236ee617</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5027,7 +5027,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>752 ARA&#222;. GEL&#221;&#222;. G&#221;DER FARKLARI</act:name>
-  <act:id type="guid">bb79f7882adb2820f93ab196b74bd221</act:id>
+  <act:id type="new">bb79f7882adb2820f93ab196b74bd221</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5048,7 +5048,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>760 PAZ. SAT. DA&#208;. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">6fefa2d9783eead120a19f0e6aed2f87</act:id>
+  <act:id type="new">6fefa2d9783eead120a19f0e6aed2f87</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5069,7 +5069,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>761 PAZ. SAT. DA&#208;. G&#221;DER. YANS. HES.</act:name>
-  <act:id type="guid">f4fd1b61f60c3a4419d8217ee548dfd0</act:id>
+  <act:id type="new">f4fd1b61f60c3a4419d8217ee548dfd0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5090,7 +5090,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>762 PAZ. SAT. DA&#208;. G&#221;DER. FARK HES.</act:name>
-  <act:id type="guid">be55f2dbe63774645611446601b58b20</act:id>
+  <act:id type="new">be55f2dbe63774645611446601b58b20</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5111,7 +5111,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>770 GEN. Y&#214;NET. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">e66f58704afcdcbd665c505427eae27f</act:id>
+  <act:id type="new">e66f58704afcdcbd665c505427eae27f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5132,7 +5132,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>771 GEN. Y&#214;NET. G&#221;DER. YANS. HES.</act:name>
-  <act:id type="guid">cab730f53f233364475c64d57d3021c2</act:id>
+  <act:id type="new">cab730f53f233364475c64d57d3021c2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5153,7 +5153,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>772 GEN. Y&#214;NET. G&#221;DER. FARK. HES.</act:name>
-  <act:id type="guid">1ac67d8a5d555db91551546cf44169e0</act:id>
+  <act:id type="new">1ac67d8a5d555db91551546cf44169e0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5174,7 +5174,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>780 F&#221;NANSMAN G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">7c901d643a6880f78b9398582c06aa39</act:id>
+  <act:id type="new">7c901d643a6880f78b9398582c06aa39</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5195,7 +5195,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>781 F&#221;NANSMAN G&#221;DER. YANS. HES.</act:name>
-  <act:id type="guid">f75e5cbbc4476519179f86524c44e422</act:id>
+  <act:id type="new">f75e5cbbc4476519179f86524c44e422</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5216,7 +5216,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>782 F&#221;NANSMAN G&#221;DER. FARK HES.</act:name>
-  <act:id type="guid">1c1c92d5cfdf5ae99ba977f19c318d5c</act:id>
+  <act:id type="new">1c1c92d5cfdf5ae99ba977f19c318d5c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5237,7 +5237,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>790 &#221;LK MADDE ve MALZ. G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">a907cd80319ccf88c6be0f31c9a6088f</act:id>
+  <act:id type="new">a907cd80319ccf88c6be0f31c9a6088f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5258,7 +5258,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>791 &#221;&#222;&#199;&#221; &#220;CRET ve G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">533cd7c1fccfee4eca1ae7fba2de5a48</act:id>
+  <act:id type="new">533cd7c1fccfee4eca1ae7fba2de5a48</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5279,7 +5279,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>792 MEMUR &#220;CRET ve G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">cc67068e7f07ab29e48e9b794a14bab0</act:id>
+  <act:id type="new">cc67068e7f07ab29e48e9b794a14bab0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5300,7 +5300,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>793 DI&#222;. SA&#208;LA. FAYDA ve H&#221;Z.</act:name>
-  <act:id type="guid">b1f148edcc9e69b89990b58b4a4a0417</act:id>
+  <act:id type="new">b1f148edcc9e69b89990b58b4a4a0417</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5321,7 +5321,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>794 &#199;E&#222;&#221;TL&#221; G&#221;DERLER</act:name>
-  <act:id type="guid">17fb5df5606b128ffe49ba8a03088237</act:id>
+  <act:id type="new">17fb5df5606b128ffe49ba8a03088237</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5342,7 +5342,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>795 VERG&#221;, RES&#221;M ve HAR&#199;LAR</act:name>
-  <act:id type="guid">0fd13f053b6f09c6e0f009e0707eb645</act:id>
+  <act:id type="new">0fd13f053b6f09c6e0f009e0707eb645</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5363,7 +5363,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>796 AMORT&#221;S. ve T&#220;KEN. PAYL.</act:name>
-  <act:id type="guid">68584993059e46adcd89fc6dbcc6036f</act:id>
+  <act:id type="new">68584993059e46adcd89fc6dbcc6036f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5384,7 +5384,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>797 F&#221;NANSMAN G&#221;DERLER&#221;</act:name>
-  <act:id type="guid">4024c12237a11069344818d19a181dc9</act:id>
+  <act:id type="new">4024c12237a11069344818d19a181dc9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5405,7 +5405,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>798 G&#221;DER &#199;E&#222;&#221;TLER&#221; YANS. HES.</act:name>
-  <act:id type="guid">53cef30119334af3dea8cd4e47670b31</act:id>
+  <act:id type="new">53cef30119334af3dea8cd4e47670b31</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5426,7 +5426,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>799 &#220;RET&#221;M MAL&#221;YET HESABI</act:name>
-  <act:id type="guid">cd9ae516f49d4b6842cf0b89bb68c664</act:id>
+  <act:id type="new">cd9ae516f49d4b6842cf0b89bb68c664</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>

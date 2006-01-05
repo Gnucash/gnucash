@@ -18,6 +18,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Aktiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geldanlagen</act:name>
@@ -28,6 +34,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Geldanlagen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -39,6 +51,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Aktiendepot</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -83,6 +101,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Einkommen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Dividenden</act:name>
@@ -104,6 +128,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Aufwendungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstiges</act:name>
@@ -114,6 +144,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Sonstiges</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

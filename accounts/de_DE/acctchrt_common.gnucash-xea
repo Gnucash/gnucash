@@ -15,19 +15,31 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aktiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Barverm&#246;gen</act:name>
+  <act:name>Barvermögen</act:name>
   <act:id type="new">12862aa943c3475761754a838a21460c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Barverm&#246;gen</act:description>
+  <act:description>Barvermögen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -36,7 +48,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Girokonto</act:description>
   <act:parent type="new">12862aa943c3475761754a838a21460c</act:parent>
@@ -47,7 +59,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sparkonto</act:description>
   <act:parent type="new">12862aa943c3475761754a838a21460c</act:parent>
@@ -58,7 +70,7 @@
   <act:type>CASH</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bargeld</act:description>
   <act:parent type="new">12862aa943c3475761754a838a21460c</act:parent>
@@ -69,9 +81,15 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Passiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Barverbindlichkeiten</act:name>
@@ -79,9 +97,15 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Barverbindlichkeiten (noch offenstehende Rechnungen)</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -90,7 +114,7 @@
   <act:type>CREDIT</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kreditkarte</act:description>
   <act:parent type="new">265c29e7f9adb75346f96a4f7e79654e</act:parent>
@@ -101,9 +125,15 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Einkommen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gehalt</act:name>
@@ -111,9 +141,15 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Gehalt und Zulagen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -122,7 +158,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Gehalt</act:description>
   <act:parent type="new">e49717ff2ec00bf21e657e2d950ac8a9</act:parent>
@@ -133,7 +169,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Zulagen und Bonus zum Gehalt</act:description>
   <act:parent type="new">e49717ff2ec00bf21e657e2d950ac8a9</act:parent>
@@ -144,7 +180,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Empfangene Geschenke</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
@@ -155,7 +191,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sonstiges Einkommen</act:description>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
@@ -166,9 +202,15 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Zinseinkommen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -177,7 +219,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Girokonto Zinsen</act:description>
   <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
@@ -188,7 +230,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sonstige Zinsen</act:description>
   <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
@@ -199,7 +241,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sparkonto Zinsen</act:description>
   <act:parent type="new">fbbab8b9f9b46ea19754b9861ac5b6f3</act:parent>
@@ -210,9 +252,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Aufwendungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bildung</act:name>
@@ -220,10 +268,16 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Bildung</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abonnements</act:name>
@@ -231,31 +285,31 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Abonnements</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B&#252;cher</act:name>
+  <act:name>Bücher</act:name>
   <act:id type="new">74b282047c3191ba045fb23f66f9b375</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>B&#252;cher</act:description>
+  <act:description>Bücher</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>B&#252;roartikel</act:name>
+  <act:name>Büroartikel</act:name>
   <act:id type="new">137ab9fbb95b59f8116de159eb319e28</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>B&#252;roartikel</act:description>
+  <act:description>Büroartikel</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -264,7 +318,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Zeitungen</act:description>
   <act:parent type="new">5416a78a11e81e963990cd6a398e5022</act:parent>
@@ -275,7 +329,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Computer</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -286,9 +340,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Fahrtkosten</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -297,7 +357,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Fahrkarten Bus, Bahn, Flugzeug</act:description>
   <act:parent type="new">d4aa7c28431fc2bb69a289bc62c952f1</act:parent>
@@ -308,7 +368,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Geschenke</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -319,7 +379,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Hobbies</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -330,7 +390,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Kleidung</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -341,7 +401,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Lebensmittel</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -352,7 +412,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Medikamente</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
@@ -363,20 +423,26 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sonstiges</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Bankgeb&#252;hren</act:name>
+  <act:name>Bankgebühren</act:name>
   <act:id type="new">12a5ccccdded86ec783e61c8a059ee96</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Konto- und Bankgeb&#252;hren</act:description>
+  <act:description>Konto- und Bankgebühren</act:description>
   <act:parent type="new">18ca785b6fcd2895427459c233a47c57</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -385,7 +451,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>nicht aufgegliederte Ausgaben</act:description>
   <act:parent type="new">18ca785b6fcd2895427459c233a47c57</act:parent>
@@ -396,9 +462,9 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Wohlt&#228;tige Spenden</act:description>
+  <act:description>Wohltätige Spenden</act:description>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -407,9 +473,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Steuern und Sozialabgaben</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -418,7 +490,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Einkommenssteuer</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -429,7 +501,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Pflegeversicherung</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -440,7 +512,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Rentenversicherung</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -451,7 +523,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Solidarzuschlag</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -462,7 +534,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sonstige Steuern</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -473,7 +545,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sonstige Sozialabgaben</act:description>
   <act:parent type="new">71ddd513f73ad0920520766c57c1258e</act:parent>
@@ -484,9 +556,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Telekommunikation</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -495,7 +573,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>GEZ und Kabelfernsehen</act:description>
   <act:parent type="new">0fd4cdbe70e00af47923607109799db0</act:parent>
@@ -506,7 +584,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Online-Dienste</act:description>
   <act:parent type="new">0fd4cdbe70e00af47923607109799db0</act:parent>
@@ -517,7 +595,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Telefon</act:description>
   <act:parent type="new">0fd4cdbe70e00af47923607109799db0</act:parent>
@@ -528,9 +606,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Unterhaltung</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -539,9 +623,9 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Ausw&#228;rts Essen</act:description>
+  <act:description>Auswärts Essen</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -550,7 +634,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Musik/Kino</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
@@ -561,7 +645,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Reisen</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
@@ -572,7 +656,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Sport</act:description>
   <act:parent type="new">ff32de8068e74431e95f79acb373de12</act:parent>
@@ -583,9 +667,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Versicherungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -594,7 +684,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Haftpflichtversicherung</act:description>
   <act:parent type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:parent>
@@ -605,7 +695,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Krankenversicherung</act:description>
   <act:parent type="new">b0dbf43ea99f54e0a9f94a535b10941b</act:parent>
@@ -616,9 +706,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Ausgaben f&#252;r Wohnung/Haus</act:description>
+  <act:description>Ausgaben für Wohnung/Haus</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -627,7 +723,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Miete</act:description>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
@@ -638,9 +734,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Wohnnebenkosten</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">b413c76bf6939070b97f7fed1c4fd367</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -649,7 +751,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Abfallentsorgung</act:description>
   <act:parent type="new">e5f75b06803605449a4a5b389b6f4553</act:parent>
@@ -660,7 +762,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Gas</act:description>
   <act:parent type="new">e5f75b06803605449a4a5b389b6f4553</act:parent>
@@ -671,7 +773,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Strom</act:description>
   <act:parent type="new">e5f75b06803605449a4a5b389b6f4553</act:parent>
@@ -682,7 +784,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Wasser</act:description>
   <act:parent type="new">e5f75b06803605449a4a5b389b6f4553</act:parent>
@@ -693,7 +795,7 @@
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Anfangsbestand</act:description>
 </gnc:account>
