@@ -577,18 +577,14 @@ gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 }
 
 static void
-gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
-					      GtkTreePath        *path,
-					      GtkTreeViewColumn  *col,
-					      GncPluginPageAccountTree *page)
+gppat_open_account_common (GncPluginPageAccountTree *page,
+			   Account *account,
+			   gboolean include_subs)
 {
 	GncPluginPageAccountTreePrivate *priv;
 	GtkWidget *window;
 	GncPluginPage *new_page;
-	Account *account;
 
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
-	account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
 	if (account == NULL)
 	  return;
 
@@ -596,6 +592,19 @@ gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
 	window = GNC_PLUGIN_PAGE (page)->window;
 	new_page = gnc_plugin_page_register_new (account, FALSE);
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
+}
+
+static void
+gnc_plugin_page_account_tree_double_click_cb (GtkTreeView        *treeview,
+					      GtkTreePath        *path,
+					      GtkTreeViewColumn  *col,
+					      GncPluginPageAccountTree *page)
+{
+	Account *account;
+
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+	account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT(treeview), path);
+	gppat_open_account_common (page, account, FALSE);
 }
 
 static void
@@ -646,36 +655,22 @@ static void
 gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
 					       GncPluginPageAccountTree *page)
 {
-	GtkWidget *window;
-	GncPluginPage *new_page;
 	Account *account;
 
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
 	account = gnc_plugin_page_account_tree_get_current_account (page);
-	if (account == NULL)
-	  return;
-
-	window = GNC_PLUGIN_PAGE (page)->window;
-	new_page = gnc_plugin_page_register_new (account, FALSE);
-	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
+	gppat_open_account_common (page, account, FALSE);
 }
 
 static void
 gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
 						   GncPluginPageAccountTree *page)
 {
-	GtkWidget *window;
-	GncPluginPage *new_page;
 	Account *account;
 
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
 	account = gnc_plugin_page_account_tree_get_current_account (page);
-	if (account == NULL)
-	  return;
-
-	window = GNC_PLUGIN_PAGE (page)->window;
-	new_page = gnc_plugin_page_register_new (account, TRUE);
-	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
+	gppat_open_account_common (page, account, TRUE);
 }
 
 static void
