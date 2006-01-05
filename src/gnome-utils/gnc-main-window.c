@@ -40,6 +40,9 @@
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
+#ifdef HAVE_VALGRIND_CALLGRIND_H
+#include <valgrind/callgrind.h>
+#endif
 
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -122,6 +125,7 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_actions_rename_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
@@ -301,6 +305,9 @@ static GtkToggleActionEntry toggle_actions [] =
 	{ "ViewStatusbarAction", NULL, N_("Stat_us Bar"), NULL,
 	  N_("Show/hide the status bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
+	{ "ExtensionsCallgrindAction", NULL, "Use Callgrind", NULL,
+	  "Enable/disable the Valgrind/Callgrind profiling tool.",
+	  G_CALLBACK (gnc_main_window_cmd_extensions_callgrind), FALSE },
 };
 /** The number of toggle actions provided by the main window. */
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
@@ -353,6 +360,9 @@ static const gchar *always_insensitive_actions[] = {
 static const gchar *always_hidden_actions[] = {
 	"ViewSortByAction",
 	"ViewFilterByAction",
+#ifndef HAVE_VALGRIND_CALLGRIND_H
+	"ExtensionsCallgrindAction",
+#endif
 	NULL
 };
 
@@ -2719,6 +2729,34 @@ gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 	} else {
 		gtk_widget_hide (priv->statusbar);
 	}
+}
+
+static void
+gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window)
+{
+#ifdef HAVE_VALGRIND_CALLGRIND_H
+	GncMainWindowPrivate *priv;
+	static struct timeval start, end;
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
+	  printf("Start timing.\n");
+	  gettimeofday(&start, NULL);
+	  CALLGRIND_START_INSTRUMENTATION();
+	  CALLGRIND_TOGGLE_COLLECT();
+	} else {
+	  CALLGRIND_TOGGLE_COLLECT();
+	  CALLGRIND_STOP_INSTRUMENTATION();
+	  gettimeofday(&end, NULL);
+	  if (start.tv_usec > end.tv_usec) {
+	    end.tv_usec += 1000000;
+	    end.tv_sec  -= 1;
+	  }
+	  printf("Callgrind enabled for %d.%6d seconds.\n",
+		 (int)(end.tv_sec - start.tv_sec),
+		 (int)(end.tv_usec - start.tv_usec));
+	}
+#endif
 }
 
 static void

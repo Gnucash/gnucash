@@ -1711,6 +1711,10 @@ AC_SUBST(enable_latex_docs)
 BB_ENABLE_DOXYGEN
 
 
+# check for callgrind
+# ----------------------------------------------------------------------------
+AC_CHECK_HEADERS(valgrind/callgrind.h)
+
 ### --------------------------------------------------------------------------
 ### Libraries
 LIBS="$LIBS -lm"
