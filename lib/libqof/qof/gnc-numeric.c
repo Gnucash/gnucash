@@ -785,6 +785,11 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   if(in.denom == denom) {
     return in;
   }
+  if(in.num == 0) {
+    out.num = 0;
+    out.denom = denom;
+    return out;
+  }
   
   /* If the denominator of the input value is negative, get rid of that. */
   if(in.denom < 0) {
