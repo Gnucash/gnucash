@@ -180,7 +180,7 @@ typedef struct {
 } BCE;
 
 static gpointer
-load_xfer_cell_cb (Account *account, gpointer data)
+load_entry_xfer_cell_cb (Account *account, gpointer data)
 {
   BCE *bce = data;
   GNCAccountType type;
@@ -272,7 +272,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
 
   bce.cell = cell;
   bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
+  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
@@ -281,7 +281,7 @@ load_xfer_type_cells (GncEntryLedger *ledger)
 
   bce.cell = cell;
   bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, &bce, TRUE);
+  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
 }
 
 /* ===================================================================== */
