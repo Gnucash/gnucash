@@ -18,3 +18,7 @@ account_DATA = \
   acctchrt_retiremt.gnucash-xea \
   acctchrt_spouseinc.gnucash-xea \
   acctchrt_spouseretire.gnucash-xea
+
+EXTRA_DIST = \
+  ${account_DATA} \
+  acctchrt_full.gnucash-xea 

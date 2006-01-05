@@ -13,3 +13,8 @@ account_DATA = \
   acctchrt_otherloan.gnucash-xea \
   acctchrt_studium.gnucash-xea \
   acctchrt_skr04.gnucash-xea
+
+
+EXTRA_DIST = \
+  ${account_DATA} \
+  acctchrt_full.gnucash-xea 
