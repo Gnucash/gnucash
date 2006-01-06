@@ -8,7 +8,13 @@
 # committing changed glade files.
 #
 
-find src -name \*.glade | xargs \
+if test -d src ; then
+    SEARCHDIRS=src
+else
+    SEARCHDIRS=.
+fi
+
+find ${SEARCHDIRS} -name \*.glade | xargs \
   sed -i -e '/name="focus_on_map"/d' \
          -e '/name="ellipsize"/d' \
          -e '/name="width_chars"/d' \
