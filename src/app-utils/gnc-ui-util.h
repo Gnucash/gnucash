@@ -295,6 +295,9 @@ GNCPrintAmountInfo gnc_default_price_print_info (void);
 
 GNCPrintAmountInfo gnc_integral_print_info (void);
 
+/* WARNING: Garbage in, garbage out.  You must check the validity of
+   the supplied gnc_numeric.  If it's invalid, the returned string
+   could point to ANYTHING. */
 const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
 
