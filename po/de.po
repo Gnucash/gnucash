@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-04 22:52+0100\n"
-"PO-Revision-Date: 2006-01-04 22:55+0100\n"
+"POT-Creation-Date: 2006-01-06 23:07+0100\n"
+"PO-Revision-Date: 2006-01-06 23:08+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -823,7 +823,7 @@ msgstr "Rechnung anzeigen/bearbeiten"
 #: ../src/business/business-gnome/glade/payment.glade.h:3
 #: ../src/gnome/glade/lots.glade.h:8 ../src/gnome/reconcile-list.c:212
 #: ../src/import-export/generic-import.glade.h:12
-#: ../src/import-export/hbci/glade/hbci.glade.h:7
+#: ../src/import-export/hbci/glade/hbci.glade.h:8
 #: ../src/import-export/qif-import/qif.glade.h:5
 #: ../intl-scm/guile-strings.c:1212 ../intl-scm/guile-strings.c:1704
 #: ../intl-scm/guile-strings.c:1922 ../intl-scm/guile-strings.c:2674
@@ -1079,7 +1079,6 @@ msgstr "Stichtag Monatswechsel: "
 #: ../src/gnome/gnc-plugin-page-budget.c:165
 #: ../src/gnome/gnc-plugin-page-register.c:293
 #: ../src/gnome/window-reconcile.c:1415
-#: ../src/import-export/hbci/glade/hbci.glade.h:17
 msgid "Delete"
 msgstr "Löschen"
 
@@ -2105,7 +2104,7 @@ msgstr "Kopieren"
 #: ../src/gnome/dialog-scheduledxaction.c:250
 #: ../src/gnome/dialog-sxsincelast.c:404
 #: ../src/gnome/gnc-plugin-page-register.c:166
-#: ../src/gnome-utils/gnc-main-window.c:240
+#: ../src/gnome-utils/gnc-main-window.c:244
 msgid "_Paste"
 msgstr "E_infügen"
 
@@ -2739,7 +2738,7 @@ msgid "Value: "
 msgstr "Wert: "
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2276 ../src/import-export/hbci/gnc-hbci-utils.c:622
+#: ../src/engine/Account.c:2276 ../src/import-export/hbci/gnc-hbci-utils.c:604
 #: ../intl-scm/guile-strings.c:1254
 msgid "Bank"
 msgstr "Bank"
@@ -3127,7 +3126,7 @@ msgstr "Alle Konten"
 #: ../src/gnome/glade/stocks.glade.h:2 ../src/gnome-utils/dialog-account.c:626
 #: ../src/gnome-utils/gnc-icons.c:14
 #: ../src/import-export/generic-import.glade.h:11
-#: ../src/import-export/hbci/gnc-hbci-utils.c:621
+#: ../src/import-export/hbci/gnc-hbci-utils.c:603
 #: ../src/import-export/qif-import/qif.glade.h:2
 #: ../src/register/ledger-core/split-register-model.c:187
 #: ../intl-scm/guile-strings.c:1698 ../intl-scm/guile-strings.c:1720
@@ -3220,7 +3219,7 @@ msgstr "Komplett"
 #: ../src/gnome/glade/reconcile.glade.h:28
 #: ../src/gnome/glade/register.glade.h:98
 #: ../src/gnome/glade/sched-xact.glade.h:205
-#: ../src/gnome-utils/gnc-main-window.c:209
+#: ../src/gnome-utils/gnc-main-window.c:213
 #: ../src/gnome/window-reconcile.c:1260 ../src/gnome/window-reconcile.c:1333
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
@@ -3229,20 +3228,20 @@ msgstr "_Bearbeiten"
 #: ../src/gnome/dialog-scheduledxaction.c:241
 #: ../src/gnome/dialog-sxsincelast.c:394 ../src/gnome/glade/lots.glade.h:27
 #: ../src/gnome/glade/register.glade.h:116
-#: ../src/gnome-utils/gnc-main-window.c:210
+#: ../src/gnome-utils/gnc-main-window.c:214
 msgid "_View"
 msgstr "_Ansicht"
 
 #: ../src/gnome/dialog-scheduledxaction.c:242
 #: ../src/gnome/dialog-sxsincelast.c:395
 #: ../src/gnome/glade/register.glade.h:88
-#: ../src/gnome-utils/gnc-main-window.c:211
+#: ../src/gnome-utils/gnc-main-window.c:215
 msgid "_Actions"
 msgstr "A_ktionen"
 
 #: ../src/gnome/dialog-scheduledxaction.c:243
 #: ../src/gnome/glade/reconcile.glade.h:35
-#: ../src/gnome-utils/gnc-main-window.c:212
+#: ../src/gnome-utils/gnc-main-window.c:216
 #: ../src/gnome/window-reconcile.c:1291
 msgid "_Transaction"
 msgstr "_Buchung"
@@ -3251,14 +3250,14 @@ msgstr "_Buchung"
 #: ../src/gnome/dialog-scheduledxaction.c:246
 #: ../src/gnome/dialog-sxsincelast.c:398
 #: ../src/gnome/gnc-plugin-page-register.c:160
-#: ../src/gnome-utils/gnc-main-window.c:238
+#: ../src/gnome-utils/gnc-main-window.c:242
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
 #: ../src/gnome/dialog-scheduledxaction.c:248
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/gnc-plugin-page-register.c:163
-#: ../src/gnome-utils/gnc-main-window.c:239
+#: ../src/gnome-utils/gnc-main-window.c:243
 msgid "_Copy"
 msgstr "_Kopieren"
 
@@ -4314,7 +4313,7 @@ msgstr ""
 "werden."
 
 #: ../src/gnome/glade/chart-export.glade.h:9
-#: ../src/gnome-utils/gnc-main-window.c:224
+#: ../src/gnome-utils/gnc-main-window.c:228
 msgid "_Export"
 msgstr "E_xportieren"
 
@@ -5047,13 +5046,13 @@ msgstr "_Fertig"
 
 #. File menu
 #: ../src/gnome/glade/reconcile.glade.h:30
-#: ../src/gnome-utils/gnc-main-window.c:221
+#: ../src/gnome-utils/gnc-main-window.c:225
 #: ../src/gnome/window-reconcile.c:1253 ../src/gnome/window-reconcile.c:1326
 msgid "_New"
 msgstr "_Neu"
 
 #: ../src/gnome/glade/reconcile.glade.h:31
-#: ../src/gnome-utils/gnc-main-window.c:222
+#: ../src/gnome-utils/gnc-main-window.c:226
 msgid "_Open"
 msgstr "Ö_ffnen"
 
@@ -6738,7 +6737,7 @@ msgstr "Ausgewähltes Konto löschen"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
 #: ../src/gnome/gnc-plugin-page-budget.c:148
 #: ../src/gnome/gnc-plugin-page-register.c:207
-#: ../src/gnome-utils/gnc-main-window.c:248
+#: ../src/gnome-utils/gnc-main-window.c:252
 msgid "_Filter By..."
 msgstr "_Filtern nach..."
 
@@ -6802,48 +6801,48 @@ msgstr ""
 msgid "New"
 msgstr "Neu"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:873
+#: ../src/gnome/gnc-plugin-page-account-tree.c:868
 msgid "(no name)"
 msgstr "(unbenannt)"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:895
+#: ../src/gnome/gnc-plugin-page-account-tree.c:890
 #, c-format
 msgid "Deleting account %s"
 msgstr "Konto %s löschen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:987
+#: ../src/gnome/gnc-plugin-page-account-tree.c:982
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Das Konto %s wird gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:997
+#: ../src/gnome/gnc-plugin-page-account-tree.c:992
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Alle Buchungen in diesem Konto werden in das Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1001
+#: ../src/gnome/gnc-plugin-page-account-tree.c:996
 msgid "All transactions in this account will be deleted."
 msgstr "Alle Buchungen in diesem Konto werden gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1008
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1003
 #, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
 msgstr "Alle Unterkonten werden zum Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1012
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1007
 msgid "All of its subaccounts will be deleted."
 msgstr "Alle Unterkonten werden ebenfalls gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1016
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1011
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Alle Buchungen in Unterkonten werden in das Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1020
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1015
 msgid "All sub-account transactions will be deleted."
 msgstr "Alle Buchungen in Unterkonten werden ebenfalls gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1025
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1020
 msgid "Are you sure you want to do this?"
 msgstr "Soll diese Aktion durchgeführt werden?"
 
@@ -6947,7 +6946,7 @@ msgstr "Stornierungsbuchung _hinzufügen"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:205
-#: ../src/gnome-utils/gnc-main-window.c:247
+#: ../src/gnome-utils/gnc-main-window.c:251
 msgid "_Sort By..."
 msgstr "_Sortieren nach..."
 
@@ -6999,8 +6998,8 @@ msgstr "Journal"
 
 #: ../src/gnome/gnc-plugin-page-register.c:930
 #: ../src/gnome/gnc-plugin-page-register.c:962
-#: ../src/import-export/hbci/gnc-hbci-utils.c:609
-#: ../src/import-export/hbci/gnc-hbci-utils.c:611
+#: ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/import-export/hbci/gnc-hbci-utils.c:593
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -8919,202 +8918,202 @@ msgid "_Open Account"
 msgstr "_Konto öffnen"
 
 #. Toplevel
-#: ../src/gnome-utils/gnc-main-window.c:208
+#: ../src/gnome-utils/gnc-main-window.c:212
 msgid "_File"
 msgstr "_Datei"
 
-#: ../src/gnome-utils/gnc-main-window.c:213
+#: ../src/gnome-utils/gnc-main-window.c:217
 msgid "_Reports"
 msgstr "Be_richte"
 
-#: ../src/gnome-utils/gnc-main-window.c:214
+#: ../src/gnome-utils/gnc-main-window.c:218
 msgid "_Tools"
 msgstr "_Werkzeuge"
 
-#: ../src/gnome-utils/gnc-main-window.c:215
+#: ../src/gnome-utils/gnc-main-window.c:219
 msgid "E_xtensions"
 msgstr "Er_weiterungen"
 
-#: ../src/gnome-utils/gnc-main-window.c:216
+#: ../src/gnome-utils/gnc-main-window.c:220
 msgid "_Windows"
 msgstr "_Fenster"
 
-#: ../src/gnome-utils/gnc-main-window.c:217
+#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1279
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: ../src/gnome-utils/gnc-main-window.c:223
+#: ../src/gnome-utils/gnc-main-window.c:227
 msgid "_Import"
 msgstr "_Importieren"
 
-#: ../src/gnome-utils/gnc-main-window.c:225
+#: ../src/gnome-utils/gnc-main-window.c:229
 msgid "_Print..."
 msgstr "_Drucken..."
 
-#: ../src/gnome-utils/gnc-main-window.c:226
+#: ../src/gnome-utils/gnc-main-window.c:230
 msgid "Proper_ties"
 msgstr "_Eigenschaften"
 
-#: ../src/gnome-utils/gnc-main-window.c:229
+#: ../src/gnome-utils/gnc-main-window.c:233
 msgid "_Close"
 msgstr "S_chließen"
 
-#: ../src/gnome-utils/gnc-main-window.c:232
+#: ../src/gnome-utils/gnc-main-window.c:236
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: ../src/gnome-utils/gnc-main-window.c:241
+#: ../src/gnome-utils/gnc-main-window.c:245
 msgid "Pr_eferences"
 msgstr "_Einstellungen"
 
-#: ../src/gnome-utils/gnc-main-window.c:249
+#: ../src/gnome-utils/gnc-main-window.c:253
 msgid "Select the account types that should be displayed."
 msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
 
-#: ../src/gnome-utils/gnc-main-window.c:250
+#: ../src/gnome-utils/gnc-main-window.c:254
 msgid "_Refresh"
 msgstr "Aktualisie_ren"
 
-#: ../src/gnome-utils/gnc-main-window.c:251
+#: ../src/gnome-utils/gnc-main-window.c:255
 msgid "Refresh this window"
 msgstr "Dieses Fenster aktualisieren"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-main-window.c:256
+#: ../src/gnome-utils/gnc-main-window.c:260
 #: ../src/gnome/window-reconcile.c:1239
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
-#: ../src/gnome-utils/gnc-main-window.c:257
+#: ../src/gnome-utils/gnc-main-window.c:261
 msgid "_Reset Warnings..."
 msgstr "_Warnungen zurücksetzen..."
 
-#: ../src/gnome-utils/gnc-main-window.c:258
+#: ../src/gnome-utils/gnc-main-window.c:262
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
 "Den gespeicherten Status aller Warnungsmeldungen zurücksetzen, so dass alle "
 "wieder angezeigt werden."
 
-#: ../src/gnome-utils/gnc-main-window.c:260
+#: ../src/gnome-utils/gnc-main-window.c:264
 msgid "Rename Page"
 msgstr "Seite umbe_nennen"
 
-#: ../src/gnome-utils/gnc-main-window.c:261
+#: ../src/gnome-utils/gnc-main-window.c:265
 msgid "Rename this page."
 msgstr "Diese Seite umbenennen."
 
 #. Windows menu
-#: ../src/gnome-utils/gnc-main-window.c:266
+#: ../src/gnome-utils/gnc-main-window.c:270
 msgid "_New Window"
 msgstr "_Neues Fenster"
 
-#: ../src/gnome-utils/gnc-main-window.c:267
+#: ../src/gnome-utils/gnc-main-window.c:271
 msgid "Open a new top-level GnuCash window."
 msgstr "Ein neues Top-Level GnuCash Fenster öffnen."
 
-#: ../src/gnome-utils/gnc-main-window.c:269
+#: ../src/gnome-utils/gnc-main-window.c:273
 msgid "New Window with _Page"
 msgstr "Neues Fenster mit _Seite"
 
-#: ../src/gnome-utils/gnc-main-window.c:270
+#: ../src/gnome-utils/gnc-main-window.c:274
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Aktuelle Seite in ein neues Top-Level GnuCash Fenster verschieben."
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:275
+#: ../src/gnome-utils/gnc-main-window.c:279
 msgid "Tutorial and Concepts _Guide"
 msgstr "GnuCash-_Kurs und Konzepte"
 
-#: ../src/gnome-utils/gnc-main-window.c:276
+#: ../src/gnome-utils/gnc-main-window.c:280
 msgid "Open the GnuCash Tutorial"
 msgstr "Den GnuCash-Online-Kurs öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:278
+#: ../src/gnome-utils/gnc-main-window.c:282
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: ../src/gnome-utils/gnc-main-window.c:279
+#: ../src/gnome-utils/gnc-main-window.c:283
 msgid "Open the GnuCash Help"
 msgstr "Die GnuCash-Hilfe öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:281
+#: ../src/gnome-utils/gnc-main-window.c:285
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/gnome-utils/gnc-main-window.c:292
+#: ../src/gnome-utils/gnc-main-window.c:296
 msgid "Learn Accelerator Keys"
 msgstr "_Tastaturkürzel ändern"
 
-#: ../src/gnome-utils/gnc-main-window.c:293
+#: ../src/gnome-utils/gnc-main-window.c:297
 msgid "Learn new accelerator key settings."
 msgstr "Tastaturkürzel neu setzen oder ändern."
 
-#: ../src/gnome-utils/gnc-main-window.c:295
+#: ../src/gnome-utils/gnc-main-window.c:299
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:296
+#: ../src/gnome-utils/gnc-main-window.c:300
 msgid "Show/hide the toolbar on this window"
 msgstr "Die Werkzeugleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:298
+#: ../src/gnome-utils/gnc-main-window.c:302
 msgid "Su_mmary Bar"
 msgstr "_Zusammenfassungsleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:299
+#: ../src/gnome-utils/gnc-main-window.c:303
 msgid "Show/hide the summary bar on this window"
 msgstr "Die Zusammenfassungs-Leiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:301
+#: ../src/gnome-utils/gnc-main-window.c:305
 msgid "Stat_us Bar"
 msgstr "_Statusleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:302
+#: ../src/gnome-utils/gnc-main-window.c:306
 msgid "Show/hide the status bar on this window"
 msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:312
+#: ../src/gnome-utils/gnc-main-window.c:319
 msgid "Window _1"
 msgstr "Fenster _1"
 
-#: ../src/gnome-utils/gnc-main-window.c:313
+#: ../src/gnome-utils/gnc-main-window.c:320
 msgid "Window _2"
 msgstr "Fenster _2"
 
-#: ../src/gnome-utils/gnc-main-window.c:314
+#: ../src/gnome-utils/gnc-main-window.c:321
 msgid "Window _3"
 msgstr "Fenster _3"
 
-#: ../src/gnome-utils/gnc-main-window.c:315
+#: ../src/gnome-utils/gnc-main-window.c:322
 msgid "Window _4"
 msgstr "Fenster _4"
 
-#: ../src/gnome-utils/gnc-main-window.c:316
+#: ../src/gnome-utils/gnc-main-window.c:323
 msgid "Window _5"
 msgstr "Fenster _5"
 
-#: ../src/gnome-utils/gnc-main-window.c:317
+#: ../src/gnome-utils/gnc-main-window.c:324
 msgid "Window _6"
 msgstr "Fenster _6"
 
-#: ../src/gnome-utils/gnc-main-window.c:318
+#: ../src/gnome-utils/gnc-main-window.c:325
 msgid "Window _7"
 msgstr "Fenster _7"
 
-#: ../src/gnome-utils/gnc-main-window.c:319
+#: ../src/gnome-utils/gnc-main-window.c:326
 msgid "Window _8"
 msgstr "Fenster _8"
 
-#: ../src/gnome-utils/gnc-main-window.c:320
+#: ../src/gnome-utils/gnc-main-window.c:327
 msgid "Window _9"
 msgstr "Fenster _9"
 
-#: ../src/gnome-utils/gnc-main-window.c:321
+#: ../src/gnome-utils/gnc-main-window.c:328
 msgid "Window _0"
 msgstr "Fenster _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:861
+#: ../src/gnome-utils/gnc-main-window.c:871
 #, c-format
 msgid ""
 "Error: Failure saving state file.\n"
@@ -9123,11 +9122,11 @@ msgstr ""
 "Fehler beim Speichern des Status-file.\n"
 "  %s"
 
-#: ../src/gnome-utils/gnc-main-window.c:925
+#: ../src/gnome-utils/gnc-main-window.c:935
 msgid "<unknown>"
 msgstr "<unbekannt>"
 
-#: ../src/gnome-utils/gnc-main-window.c:951
+#: ../src/gnome-utils/gnc-main-window.c:961
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9139,7 +9138,7 @@ msgstr ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:962
+#: ../src/gnome-utils/gnc-main-window.c:972
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9150,15 +9149,15 @@ msgstr ""
 "\n"
 "Wenn Sie nicht speichern, gehen die Änderungen verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:969
+#: ../src/gnome-utils/gnc-main-window.c:979
 msgid "Close _without Saving"
 msgstr "Schli_eßen ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:1019
+#: ../src/gnome-utils/gnc-main-window.c:1029
 msgid "Quit Gnucash?"
 msgstr "GnuCash beenden?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1020
+#: ../src/gnome-utils/gnc-main-window.c:1030
 msgid ""
 "You are attempting to close the last Gnucash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
@@ -9166,11 +9165,11 @@ msgstr ""
 "Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster zu schließen. Dies "
 "wird Gnucash beenden. Sind Sie sich sicher, dass Sie das wollen?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1120
+#: ../src/gnome-utils/gnc-main-window.c:1130
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:2876
+#: ../src/gnome-utils/gnc-main-window.c:2914
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -9181,13 +9180,13 @@ msgstr ""
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:2898
-#: ../src/gnome-utils/gnc-main-window.c:2938
+#: ../src/gnome-utils/gnc-main-window.c:2936
+#: ../src/gnome-utils/gnc-main-window.c:2976
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:2916
+#: ../src/gnome-utils/gnc-main-window.c:2954
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -10562,7 +10561,7 @@ msgid "Match _display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 
 #: ../src/import-export/generic-import.glade.h:41
-#: ../src/import-export/hbci/glade/hbci.glade.h:32
+#: ../src/import-export/hbci/glade/hbci.glade.h:38
 #: ../src/import-export/qif-import/qif.glade.h:88
 msgid "New?"
 msgstr "Neu?"
@@ -10695,41 +10694,41 @@ msgstr "Jahr-Tag-Monat"
 #. * needed inside Germany (HBCI is not supported anywhere
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
-#: ../src/import-export/hbci/dialog-hbcitrans.c:361
+#: ../src/import-export/hbci/dialog-hbcitrans.c:370
 msgid "Enter an Online Direct Debit Note"
 msgstr "Online-Lastschrift eingeben"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:364
+#: ../src/import-export/hbci/dialog-hbcitrans.c:373
 msgid "Debited Account Owner"
 msgstr "Zahlungspflichtiger"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:366
+#: ../src/import-export/hbci/dialog-hbcitrans.c:375
 msgid "Debited Account Number"
 msgstr "Konto-Nr. des Zahlungspflichtigen"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:368
+#: ../src/import-export/hbci/dialog-hbcitrans.c:377
 msgid "Debited Account Bank Code"
 msgstr "BLZ des Zahlungspflichtigen"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:371
+#: ../src/import-export/hbci/dialog-hbcitrans.c:380
 msgid "Credited Account Owner"
 msgstr "Auftraggeber"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:373
+#: ../src/import-export/hbci/dialog-hbcitrans.c:382
 msgid "Credited Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:375
+#: ../src/import-export/hbci/dialog-hbcitrans.c:384
 msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:394
-#: ../src/import-export/hbci/dialog-hbcitrans.c:883
-#: ../src/import-export/hbci/dialog-hbcitrans.c:893
+#: ../src/import-export/hbci/dialog-hbcitrans.c:403
+#: ../src/import-export/hbci/dialog-hbcitrans.c:877
+#: ../src/import-export/hbci/dialog-hbcitrans.c:887
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:521
+#: ../src/import-export/hbci/dialog-hbcitrans.c:534
 msgid ""
 "The amount is zero or the amount field could not be \n"
 "interpreted correctly. You might have mixed up decimal \n"
@@ -10747,7 +10746,7 @@ msgstr ""
 "Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag\n"
 "erneut eingeben?"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:543
+#: ../src/import-export/hbci/dialog-hbcitrans.c:556
 msgid ""
 "You did not enter any transaction purpose. A purpose is \n"
 "required for an online transfer.\n"
@@ -10760,7 +10759,7 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:678
+#: ../src/import-export/hbci/dialog-hbcitrans.c:691
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -10773,7 +10772,7 @@ msgstr ""
 "einen Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser\n"
 "Kontonummer abschicken?"
 
-#: ../src/import-export/hbci/dialog-hbcitrans.c:784
+#: ../src/import-export/hbci/dialog-hbcitrans.c:797
 msgid ""
 "The job was sent to the bank successfully, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -10790,19 +10789,6 @@ msgstr ""
 "9000 ist.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:925
-msgid "Enter name for new template:"
-msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:1047
-msgid "Do you really want to sort the list of templates?"
-msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
-
-#: ../src/import-export/hbci/dialog-hbcitrans.c:1083
-#, c-format
-msgid "Do you really want to delete the template '%s'?"
-msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"
 
 #: ../src/import-export/hbci/dialog-pass.c:145
 msgid ""
@@ -10909,7 +10895,11 @@ msgstr "<b>Bis</b>"
 msgid "Add current"
 msgstr "Aktuelle hinzufügen"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:8
+#: ../src/import-export/hbci/glade/hbci.glade.h:7
+msgid "Add the current online transaction as a new transaction template"
+msgstr "Aktuelle Online-Buchung als neue Überweisungsvorlage hinzufügen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:9
 msgid ""
 "AqHBCI \n"
 "Setup"
@@ -10917,15 +10907,15 @@ msgstr ""
 "AqHBCI \n"
 "Einrichtung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:10
+#: ../src/import-export/hbci/glade/hbci.glade.h:11
 msgid "Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:11
+#: ../src/import-export/hbci/glade/hbci.glade.h:12
 msgid "Choose a HBCI Version to use with the selected bank:"
 msgstr "Wählen Sie eine HBCI-Version, die benutzt werden soll:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:12
+#: ../src/import-export/hbci/glade/hbci.glade.h:13
 msgid ""
 "Click on the line of a HBCI account name if you want to match it to a "
 "GnuCash account. Click \"Forward\" when all desired accounts are matching."
@@ -10934,80 +10924,104 @@ msgstr ""
 "GnuCash-Konto zuzuordnen. Klicken Sie \"Vor\", wenn alle gewünschten Konten "
 "zugeordnet sind."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:13
+#: ../src/import-export/hbci/glade/hbci.glade.h:14
 msgid "Close when finished"
 msgstr "Fenster nach Verbindungsende schließen"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:14
+#: ../src/import-export/hbci/glade/hbci.glade.h:15
 msgid "Current Action"
 msgstr "Momentane Aktion"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:15
+#: ../src/import-export/hbci/glade/hbci.glade.h:16
 msgid "Current Job"
 msgstr "Momentaner Auftrag"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:16
+#: ../src/import-export/hbci/glade/hbci.glade.h:17
 msgid "Date range of transactions to retrieve:"
 msgstr "Datumsbereich der abzurufenden Buchungen:"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:18
+msgid "Delete the currently selected transaction template"
+msgstr "Ausgewählte Überweisungsvorlage löschen"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:19
 msgid "E_nter date:"
 msgstr "D_atum eingeben:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:19
+#: ../src/import-export/hbci/glade/hbci.glade.h:20
 msgid "Ente_r date:"
 msgstr "Datum _eingeben:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:20
+#: ../src/import-export/hbci/glade/hbci.glade.h:21
 msgid "Enter an Online Transaction"
 msgstr "Online-Überweisung eingeben"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:21
-msgid "Execute Later (unimpl.)"
-msgstr "Später ausführen (unfertig)"
-
 #: ../src/import-export/hbci/glade/hbci.glade.h:22
+msgid "Enter name for new template:"
+msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:23
 msgid "Execute Now"
 msgstr "Jetzt ausführen"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:23
+#: ../src/import-export/hbci/glade/hbci.glade.h:24
+msgid "Execute later (unimpl.)"
+msgstr "Später ausführen (unfertig)"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:25
+msgid "Execute this online transaction now"
+msgstr "Diesen Auftrag jetzt online abschicken"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:26
 msgid "Get Transactions Online"
 msgstr "Online Kontoumsätze abfragen"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:24
+#: ../src/import-export/hbci/glade/hbci.glade.h:27
 #: ../src/import-export/qif-import/qif.glade.h:30
 msgid "GnuCash account name"
 msgstr "GnuCash Kontobezeichnung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:25
+#: ../src/import-export/hbci/glade/hbci.glade.h:28
 msgid "HBCI Connection Window"
 msgstr "HBCI Verbindungsfenster"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:26
+#: ../src/import-export/hbci/glade/hbci.glade.h:29
 msgid "HBCI Setup"
 msgstr "HBCI Einrichtung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:27
+#: ../src/import-export/hbci/glade/hbci.glade.h:30
 msgid "HBCI Setup Finished"
 msgstr "HBCI Einrichtung beendet"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:28
+#: ../src/import-export/hbci/glade/hbci.glade.h:31
 msgid "HBCI Version"
 msgstr "HBCI Version"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:29
+#: ../src/import-export/hbci/glade/hbci.glade.h:32
 msgid "HBCI account name"
 msgstr "HBCI Kontobezeichnung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:30
+#: ../src/import-export/hbci/glade/hbci.glade.h:33
 msgid "Initial HBCI Setup"
 msgstr "Grundlegende HBCI Einrichtung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:31
+#: ../src/import-export/hbci/glade/hbci.glade.h:34
 msgid "Match HBCI accounts with GnuCash accounts"
 msgstr "HBCI Konten mit GnuCash Konten zuordnen"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:33
+#: ../src/import-export/hbci/glade/hbci.glade.h:35
+msgid "Move the selected transaction template one row down"
+msgstr "Gewählte Überweisungsvorlage eine Zeile nach unten umsortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:36
+msgid "Move the selected transaction template one row up"
+msgstr "Gewählte Überweisungsvorlage eine Zeile nach oben umsortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:37
+msgid "Name for new template"
+msgstr "Namen für neue Überweisungsvorlage"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:39
 msgid ""
 "Now the setup for all HBCI accounts that are matching to a Gnucash account "
 "is finished. You can now invoke HBCI actions on those accounts.\n"
@@ -11027,60 +11041,64 @@ msgstr ""
 "\n"
 "Klicken Sie jetzt \"Anwenden\"."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:38
+#: ../src/import-export/hbci/glade/hbci.glade.h:44
 msgid "Online Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:39
+#: ../src/import-export/hbci/glade/hbci.glade.h:45
 msgid "Originator Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:40
+#: ../src/import-export/hbci/glade/hbci.glade.h:46
 msgid "Originator Name"
 msgstr "Auftraggeber: Name, Vorname"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:41
+#: ../src/import-export/hbci/glade/hbci.glade.h:47
 msgid "Payment Purpose (only for recipient)"
 msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:42
+#: ../src/import-export/hbci/glade/hbci.glade.h:48
 msgid "Payment Purpose continued"
 msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
 #. src/import-export/qif-import/qif-file.scm
 #. src/import-export/qif-import/qif-to-gnc.scm
 #. src/import-export/qif-import/qif-merge-groups.scm
-#: ../src/import-export/hbci/glade/hbci.glade.h:43
+#: ../src/import-export/hbci/glade/hbci.glade.h:49
 #: ../intl-scm/guile-strings.c:3578 ../intl-scm/guile-strings.c:3584
 #: ../intl-scm/guile-strings.c:3592
 msgid "Progress"
 msgstr "Verlauf"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:44
+#: ../src/import-export/hbci/glade/hbci.glade.h:50
 msgid "Recipient Account Number"
 msgstr "Konto-Nr. des Empfängers"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:45
+#: ../src/import-export/hbci/glade/hbci.glade.h:51
 msgid "Recipient Bank Code"
 msgstr "Bankleitzahl"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:46
+#: ../src/import-export/hbci/glade/hbci.glade.h:52
 msgid "Recipient Name"
 msgstr "Empfänger: Name, Vorname / Firma"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:47
+#: ../src/import-export/hbci/glade/hbci.glade.h:53
 msgid "Sort"
 msgstr "Sortieren"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:48
+#: ../src/import-export/hbci/glade/hbci.glade.h:54
+msgid "Sort the list of transaction templates alphabetically"
+msgstr "Die Liste der Überweisungsvorlagen alphabetisch sortieren"
+
+#: ../src/import-export/hbci/glade/hbci.glade.h:55
 msgid "Start AqHBCI Setup Wizard"
 msgstr "AqHBCI Einrichtungs-Assistent starten"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:49
+#: ../src/import-export/hbci/glade/hbci.glade.h:56
 msgid "Start AqHBCI Wizard"
 msgstr "AqHBCI Einrichtungs-Assistenten starten"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:50
+#: ../src/import-export/hbci/glade/hbci.glade.h:57
 msgid ""
 "The Setup of your HBCI connection is handled by the external program "
 "\"AqHBCI Setup Wizard\". Please press the button below to start this program."
@@ -11090,7 +11108,7 @@ msgstr ""
 "\"AqHBCI Einrichtungs-Assistent\" durchgeführt. Bitte klicken Sie den Knopf, "
 "um dieses Programm zu starten."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:51
+#: ../src/import-export/hbci/glade/hbci.glade.h:58
 msgid ""
 "This druid helps you setting up your HBCI connection with your bank.\n"
 "\n"
@@ -11137,7 +11155,7 @@ msgstr ""
 "Klicken Sie \"Abbrechen\", wenn Sie jetzt keine HBCI Verbindung einrichten "
 "möchten."
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:65
+#: ../src/import-export/hbci/glade/hbci.glade.h:72
 msgid ""
 "Update \n"
 "account list"
@@ -11145,31 +11163,31 @@ msgstr ""
 "Kontoliste\n"
 "aktualisieren"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:67
+#: ../src/import-export/hbci/glade/hbci.glade.h:74
 msgid "Use Transaction Template"
 msgstr "Überweisungsvorlage:"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:68
+#: ../src/import-export/hbci/glade/hbci.glade.h:75
 msgid "Version"
 msgstr "Version"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:69
+#: ../src/import-export/hbci/glade/hbci.glade.h:76
 msgid "_Earliest possible date"
 msgstr "_Frühestes mögliches Datum"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:70
+#: ../src/import-export/hbci/glade/hbci.glade.h:77
 msgid "_Last retrieval date"
 msgstr "_Letztes Abrufdatum"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:71
+#: ../src/import-export/hbci/glade/hbci.glade.h:78
 msgid "_Now"
 msgstr "_Jetzt"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:72
+#: ../src/import-export/hbci/glade/hbci.glade.h:79
 msgid "at Bank"
 msgstr "der Bank"
 
-#: ../src/import-export/hbci/glade/hbci.glade.h:73
+#: ../src/import-export/hbci/glade/hbci.glade.h:80
 msgid "something"
 msgstr "irgendwas"
 
@@ -11222,32 +11240,29 @@ msgstr "Ausführliche _Fehlermeldungen"
 #. * else). You may safely ignore strings from the
 #. * import-export/hbci subdirectory in other countries.
 #.
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:262
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:263
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
-"Either this is the correct balance, or your bank does not \n"
-"support Balance download in this HBCI version. In the latter \n"
-"case you should choose a higher HBCI version number in the HBCI \n"
-"Setup. After that, try again to download the HBCI Balance.\n"
+"\n"
+"Either this is the correct balance, or your bank does not support Balance "
+"download in this HBCI version. In the latter case you should choose a higher "
+"HBCI version number in the HBCI Setup. After that, try again to download the "
+"HBCI Balance."
 msgstr ""
 "Der abgefragte Saldo war Null. \n"
 "\n"
-"Entweder war dies der korrekte Saldo, oder Ihre Bank bietet\n"
-"anscheinend keine Saldenabfrage in der gewählten HBCI-Version an. Im\n"
-"letzteren Fall können Sie im HBCI-Einrichtungs-Assistent eine höhere\n"
-"HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo\n"
-"abzufragen.  \n"
+"Entweder war dies der korrekte Saldo, oder Ihre Bank bietet anscheinend keine Saldenabfrage in der gewählten HBCI-Version an. Im letzteren Fall können Sie im HBCI-Einrichtungs-Assistent eine höhere HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:278
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:279
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
-"Account booked balance is %s\n"
+"Account booked balance is %s"
 msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
-"Gebuchter Saldo des Kontos ist %s\n"
+"Gebuchter Saldo des Kontos ist %s"
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:285
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:286
 #, c-format
 msgid ""
 "For your information: This account also \n"
@@ -11256,15 +11271,15 @@ msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden \n"
 "Saldo an zur Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:290
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:291
 msgid ""
-"The booked balance is identical to the current \n"
-"reconciled balance of the account."
+"The booked balance is identical to the current reconciled balance of the "
+"account."
 msgstr ""
-"Dieser gebuchte Saldo stimmt mit dem aktuellen\n"
-"abgeglichenen Saldo Ihres Kontos überein."
+"Dieser gebuchte Saldo stimmt mit dem aktuellen abgeglichenen Saldo Ihres "
+"Kontos überein."
 
-#: ../src/import-export/hbci/gnc-hbci-getbalance.c:304
+#: ../src/import-export/hbci/gnc-hbci-getbalance.c:305
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
@@ -11272,47 +11287,38 @@ msgstr "Konto jetzt abgleichen?"
 msgid "The HBCI import returned no transactions for the selected time period."
 msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:123
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:132
 msgid ""
-"The backend found an error during the preparation \n"
-"of the job. It is not possible to execute this job. \n"
+"The backend found an error during the preparation of the job. It is not "
+"possible to execute this job. \n"
 "\n"
-"Most probable the bank does not support your chosen \n"
-"job or your HBCI account does not have the permission \n"
-"to execute this job. More error messages might be \n"
-"visible on your console log.\n"
+"Most probable the bank does not support your chosen job or your HBCI account "
+"does not have the permission to execute this job. More error messages might "
+"be visible on your console log.\n"
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
-"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des\n"
-"Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
-"Wahrscheinlich wird dieser HBCI Geschäftsvorfall von Ihrer Bank leider\n"
-"nicht unterstützt oder ist für Ihren HBCI-Zugang nicht\n"
-"freigeschaltet. Weitere Fehlermeldungen könnten auf dem Console-Log\n"
-"sichtbar sein.\n"
+"Wahrscheinlich wird dieser HBCI Geschäftsvorfall von Ihrer Bank leider nicht unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:205
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:215
 msgid ""
-"You have changed the list of online transfer templates,\n"
-"but you cancelled the transfer dialog.\n"
-"Do you nevertheless want to store the changes?"
-msgstr ""
-"Sie haben die Liste der Überweisungsvorlagen geändert, aber Sie haben\n"
-"den Überweisungsdialog abgebrochen. Möchten Sie die Liste der\n"
-"Überweisungsvorlagen trotzdem speichern?"
+"You have changed the list of online transfer templates, but you cancelled "
+"the transfer dialog. Do you nevertheless want to store the changes?"
+msgstr "Sie haben die Liste der Überweisungsvorlagen geändert, aber Sie haben den Überweisungsdialog abgebrochen. Möchten Sie die Liste der Überweisungsvorlagen trotzdem speichern?"
 
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:236
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:246
 msgid "Online HBCI Direct Debit Note"
 msgstr "Online-Auftrag Einzellastschrift"
 
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:238
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:248
 msgid "Online HBCI Bank-Internal Transfer"
 msgstr "Online-Auftrag Einzelumbuchung"
 
-#: ../src/import-export/hbci/gnc-hbci-transfer.c:241
+#: ../src/import-export/hbci/gnc-hbci-transfer.c:251
 msgid "Online HBCI Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
@@ -11372,61 +11378,34 @@ msgstr ""
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:328
 msgid ""
-"No chip card has been found in the chip card reader.\n"
-"Do you want to try again?"
-msgstr ""
-"Im Kartenleser wurde keine Chipkarte erkannt.\n"
-"Möchten Sie erneut versuchen?"
+"No chip card has been found in the chip card reader. Do you want to try "
+"again?"
+msgstr "Im Kartenleser wurde keine Chipkarte erkannt. Möchten Sie erneut versuchen?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:334
 msgid ""
-"Unfortunately this HBCI job is not supported \n"
-"by your bank or for your account. Aborting."
-msgstr ""
-"Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
-"unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
+"Unfortunately this HBCI job is not supported by your bank or for your "
+"account. Aborting."
+msgstr "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:342
 msgid ""
-"The server of your bank refused the HBCI connection.\n"
-"Please try again later. Aborting."
-msgstr ""
-"Der HBCI Server der Bank hat die Verbindung abgewiesen. Bitte\n"
-"versuchen Sie es später noch einmal. Aktion wird abgebrochen."
-
-#: ../src/import-export/hbci/gnc-hbci-utils.c:349
-msgid ""
-"There was an error when loading the plugin for your security medium \n"
-"(see log window). Probably the versions of your currently installed \n"
-"OpenHBCI library and of the plugin do not match. In that case you need \n"
-"to recompile and reinstall the plugin again. Aborting now."
-msgstr ""
-"Beim Laden des Plugins für Ihr Sicherheitsmedium ist ein Fehler\n"
-"aufgetreten (siehe Verlaufs-Fenster). Wahrscheinlich passen die\n"
-"Versionen der installierten OpenHBCI-Bibliothek und des Plugins nicht\n"
-"zusammen. In diesem Fall müssten Sie das Plugin neu kompilieren und\n"
-"neu installieren. Aktion wird abgebrochen."
-
-#: ../src/import-export/hbci/gnc-hbci-utils.c:358
-msgid ""
-"Your security medium is not supported. No appropriate plugin \n"
-"has been found for that medium. Aborting."
-msgstr ""
-"Ihr Sicherheitsmedium wird nicht unterstützt. Es konnte kein passendes\n"
-"Plugin für dieses Medium gefunden werden. Aktion wird abgebrochen."
+"The server of your bank refused the HBCI connection. Please try again later. "
+"Aborting."
+msgstr "Der HBCI Server der Bank hat die Verbindung abgewiesen. Bitte versuchen Sie es später noch einmal. Aktion wird abgebrochen."
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/import-export/hbci/gnc-hbci-utils.c:565
+#: ../src/import-export/hbci/gnc-hbci-utils.c:547
 #: ../intl-scm/guile-strings.c:3554 ../intl-scm/guile-strings.c:3576
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:704
+#: ../src/import-export/hbci/gnc-hbci-utils.c:686
 msgid "Choose HBCI bank"
 msgstr "HBCI Bank auswählen"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:705
+#: ../src/import-export/hbci/gnc-hbci-utils.c:687
 msgid ""
 "More than one HBCI bank is available for \n"
 "the requested operation. Please choose \n"
@@ -11439,17 +11418,17 @@ msgstr ""
 #. * customer. %s is the id of the customer. %s
 #. * is the name of the bank. %s is the bank
 #. * code.
-#: ../src/import-export/hbci/gnc-hbci-utils.c:774
-#: ../src/import-export/hbci/gnc-hbci-utils.c:850
+#: ../src/import-export/hbci/gnc-hbci-utils.c:756
+#: ../src/import-export/hbci/gnc-hbci-utils.c:832
 #, c-format
 msgid "%s (%s) at bank %s (%s)"
 msgstr "%s (%s) bei Bank %s (BLZ %s)"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:784
+#: ../src/import-export/hbci/gnc-hbci-utils.c:766
 msgid "Choose HBCI customer"
 msgstr "HBCI Kundennummer wählen"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:785
+#: ../src/import-export/hbci/gnc-hbci-utils.c:767
 msgid ""
 "More than one HBCI customer is available for \n"
 "the requested operation. Please choose \n"
@@ -11459,11 +11438,11 @@ msgstr ""
 "Verfügung, unterschieden nach Kundennummer. Bitte wählen Sie, welcher\n"
 "benutzt werden soll."
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:860
+#: ../src/import-export/hbci/gnc-hbci-utils.c:842
 msgid "Choose HBCI user"
 msgstr "HBCI Benutzerkennung wählen"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:861
+#: ../src/import-export/hbci/gnc-hbci-utils.c:843
 msgid ""
 "More than one HBCI user is available for \n"
 "the requested operation. Please choose \n"
@@ -12787,7 +12766,7 @@ msgstr ""
 msgid "Enter credit formula for real transaction"
 msgstr "Geben Sie die Formel zur Soll-Berechnung der tatsächlichen Buchung ein"
 
-#: ../src/register/register-gnome/gnucash-item-list.c:415
+#: ../src/register/register-gnome/gnucash-item-list.c:431
 msgid "List"
 msgstr "Liste"
 
@@ -16176,6 +16155,9 @@ msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
 msgstr ""
+"Keine Anpassung durchführen (FIXME: ungenaue Übersetzung), aber brutto "
+"Aktiva/Passiva Anpassungen zu diesen Konten anzeigen. Handelsunternehmen "
+"werden hier normalerweise ihre Sachanlagen-Konten wählen."
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1788
@@ -16189,6 +16171,9 @@ msgid ""
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
 msgstr ""
+"Anpassungsbuchung für diese Konten (FIXME: ungenaue Übersetzung) werden in "
+"den Spalten Anpassung, Rohbilanz und Einnahmerechnung ausgerechnet. Dies ist "
+"vor allem nützlich für Handelsunternehmen."
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
