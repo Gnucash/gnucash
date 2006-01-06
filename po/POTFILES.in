@@ -1,9 +1,0 @@
-# POTFILES.in: This file is overwritten my the `make pot` target or by
-# the make-gnucash-potfiles script.  
-# 
-# The reason why we version-control this generated file is because the
-# Makefile in this directory is not under our control (but instead
-# gettext's) and it doesn't contain any rules for creating this
-# file. The gettext setup assumes by convention that this file exists
-# and doesn't need to be generated, so as long as we use the gettext
-# build system in the po directory, we need to follow that convention.

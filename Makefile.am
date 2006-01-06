@@ -93,7 +93,6 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
-	./make-gnucash-potfiles > ./po/POTFILES.in
 
 .goffice-links: 
 	rm -f goffice
@@ -162,11 +161,20 @@ distclean-local:
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status --recheck
 
-pot: Makefile
+.PHONY: pot
+pot: Makefile po/POTFILES.in
 	rm -f intl-scm/guile-strings.c
-	make -C intl-scm
+	${MAKE} -C intl-scm
 	rm -f po/$(PACKAGE).pot
-	make -C po $(PACKAGE).pot
+	${MAKE} -C po $(PACKAGE).pot
+
+
+BUILT_SOURCES = po/POTFILES.in
+
+po/POTFILES.in: make-gnucash-potfiles .potfiles
+	./make-gnucash-potfiles > ./po/POTFILES.in
+
+.potfiles:
 
 SVN = svn
 XSLTPROC = xsltproc
