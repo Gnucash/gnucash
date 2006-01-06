@@ -254,16 +254,17 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 				      | GTK_DIALOG_DESTROY_WITH_PARENT,
 				      GTK_MESSAGE_INFO,
 				      GTK_BUTTONS_OK,
+				      "%s",
 	 /* Translators: Strings from this file are really only
 	  * needed inside Germany (HBCI is not supported anywhere
 	  * else). You may safely ignore strings from the
 	  * import-export/hbci subdirectory in other countries.
 	  */
-	 _("The downloaded HBCI Balance was zero.\n"
-	   "Either this is the correct balance, or your bank does not \n"
-	   "support Balance download in this HBCI version. In the latter \n"
-	   "case you should choose a higher HBCI version number in the HBCI \n"
-	   "Setup. After that, try again to download the HBCI Balance.\n"));
+	 _("The downloaded HBCI Balance was zero.\n\n"
+	   "Either this is the correct balance, or your bank does not "
+	   "support Balance download in this HBCI version. In the latter "
+	   "case you should choose a higher HBCI version number in the HBCI "
+	   "Setup. After that, try again to download the HBCI Balance."));
       gtk_dialog_run(GTK_DIALOG(dialog));
       gtk_widget_destroy(GTK_WIDGET(dialog));
       dialogres = FALSE;
@@ -276,7 +277,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
       char *message1 = g_strdup_printf
 	(
 	 _("Result of HBCI job: \n"
-	   "Account booked balance is %s\n"),
+	   "Account booked balance is %s"),
 	 booked_str);
       char *message2 = 
 	((noted_value == 0.0) ?
@@ -287,14 +288,14 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	  noted_val));
 
       if (gnc_numeric_equal(value, reconc_balance)) {
-	const char *message3 = _("The booked balance is identical to the current \n"
+	const char *message3 = _("The booked balance is identical to the current "
 				 "reconciled balance of the account.");
 	dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 					GTK_DIALOG_MODAL
 					| GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_INFO,
 					GTK_BUTTONS_OK,
-					"%s%s\n%s",
+					"%s\n%s\n%s",
 					message1, message2, message3);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(GTK_WIDGET(dialog));

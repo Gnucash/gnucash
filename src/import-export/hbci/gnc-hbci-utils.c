@@ -324,14 +324,14 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     return FALSE;
   case AB_ERROR_NO_CARD:
     return gnc_verify_dialog (parent,
-				       TRUE,
-				       _("No chip card has been found in the chip card reader.\n"
-					 "Do you want to try again?"));
+			      TRUE,
+			      _("No chip card has been found in the chip card reader. "
+				"Do you want to try again?"));
   case AB_ERROR_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("Unfortunately this HBCI job is not supported \n"
+       _("Unfortunately this HBCI job is not supported "
 	 "by your bank or for your account. Aborting."));
     return FALSE;
 #endif
@@ -339,27 +339,9 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     GNCInteractor_hide (inter);
     gnc_error_dialog 
       (parent,
-       _("The server of your bank refused the HBCI connection.\n"
+       _("The server of your bank refused the HBCI connection. "
 	 "Please try again later. Aborting."));
     return FALSE;
-#if 0
-  case AB_ERROR_MEDIUM:
-    gnc_error_dialog 
-      (parent,
-       _("There was an error when loading the plugin for your security medium \n"
-	 "(see log window). Probably the versions of your currently installed \n"
-	 "OpenHBCI library and of the plugin do not match. In that case you need \n"
-	 "to recompile and reinstall the plugin again. Aborting now."));
-    GNCInteractor_hide (inter);
-    return FALSE;
-  case AB_ERROR_BAD_MEDIUM:
-    gnc_error_dialog 
-      (parent,
-       _("Your security medium is not supported. No appropriate plugin \n"
-	 "has been found for that medium. Aborting."));
-    GNCInteractor_hide (inter);
-    return FALSE;
-#endif
       
   default:
     return FALSE;

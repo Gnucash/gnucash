@@ -129,12 +129,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	      (parent, 
 	       FALSE,
 	       "%s",
-	       _("The backend found an error during the preparation \n"
+	       _("The backend found an error during the preparation "
 		 "of the job. It is not possible to execute this job. \n"
 		 "\n"
-		 "Most probable the bank does not support your chosen \n"
-		 "job or your HBCI account does not have the permission \n"
-		 "to execute this job. More error messages might be \n"
+		 "Most probable the bank does not support your chosen "
+		 "job or your HBCI account does not have the permission "
+		 "to execute this job. More error messages might be "
 		 "visible on your console log.\n"
 		 "\n"
 		 "Do you want to enter the job again?")))
@@ -212,8 +212,8 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
       (parent, 
        FALSE,
        "%s",
-       _("You have changed the list of online transfer templates,\n"
-	 "but you cancelled the transfer dialog.\n"
+       _("You have changed the list of online transfer templates, "
+	 "but you cancelled the transfer dialog. "
 	 "Do you nevertheless want to store the changes?"))) {
     GList *kvp_list = gnc_trans_templ_kvp_glist_from_glist (template_list);
     /*printf ("Now having %d templates. List: '%s'\n", 
