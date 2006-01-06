@@ -88,6 +88,11 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* Create new HBCIDialogTrans */
     td = gnc_hbci_dialog_new(parent, h_acc, gnc_acc, 
 			     trans_type, template_list);
+
+    /* Delete the list.  The data is still pointed to by the
+     *  GtkListStore in the dialog. */
+    g_list_free(template_list);
+    template_list = NULL;
 	
     /* Repeat until HBCI action was successful or user pressed cancel */
     do {
@@ -96,12 +101,16 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       result = gnc_hbci_dialog_run_until_ok(td, h_acc);
 
       /* Set the template list in case it got modified. */
+      if (template_list)
+	g_list_free(template_list);
       template_list = gnc_hbci_dialog_get_templ(td);
+
       /* templates changed? If yes, store them */
       if (gnc_hbci_dialog_get_templ_changed(td) )
-	       maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
+	       maketrans_save_templates(parent, gnc_acc, template_list,
+					(result == GNC_RESPONSE_NOW));
 
-      if (result < 0) {
+      if ((result != GNC_RESPONSE_NOW) && (result != GNC_RESPONSE_LATER)) {
 	break;
       } 
 	
@@ -146,10 +155,12 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	  continue;
 	}
 
-	/* Result of run_until_ok: 1 == execute now, 3 == scheduled
-	   for later execution (currently unimplemented); 2 ==
-	   cancel */
-	if (result == 1) {
+	/* Result of run_until_ok:
+	 *  GNC_RESPONSE_NOW == execute now
+	 *  GNC_RESPONSE_LATER == scheduled for later execution (currently unimplemented)
+	 *  GTK_RESPONSE_CANCEL == cancel
+	 *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
+	if (result == GNC_RESPONSE_NOW) {
 
 	  /* If the user pressed "execute now", then execute this job
 	     now. This function already delete()s the job. */
@@ -165,12 +176,11 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	  }
 	  
 	  gnc_hbci_cleanup_job(api, job);
-	} /* result == 1 */
+	} /* result == GNC_RESPONSE_NOW */
 	else {
-	  /* huh? Only result == 0 should be possible. Simply ignore
-	     this case. */
+	  /* Simply ignore any other case. */
 	  break;
-	} /* result == 1 */
+	} /* result == GNC_RESPONSE_NOW */
 	  
       } /* Create a do-transaction (transfer) job */
 	

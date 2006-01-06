@@ -41,6 +41,8 @@ typedef enum GNC_HBCI_Transtype {
   SINGLE_INTERNAL_TRANSFER
 } GNC_HBCI_Transtype;
 
+#define GNC_RESPONSE_NOW GTK_RESPONSE_YES
+#define GNC_RESPONSE_LATER 3
 
 /*AB_TRANSACTION *
 gnc_hbci_trans (GtkWidget *parent,

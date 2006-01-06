@@ -56,6 +56,12 @@
 
 #define TEMPLATE_LABEL "template"
 
+typedef enum {
+	TEMPLATE_NAME,
+	TEMPLATE_POINTER,
+	TEMPLATE_NUM_COLUMNS
+} TemplateListColumns;
+
 /* -------------------------------------- */
 /* Data structure */
 /* -------------------------------------- */
@@ -85,14 +91,9 @@ struct _trans_data
   /* Recipient's bank name (may be filled in automatically sometime later) */
   GtkWidget *recp_bankname_label;
 
-  /* The template choosing GtkList */
-  GtkWidget *template_gtktreeview;
-
-  /* The selected template in the list */
-  GtkWidget *selected_template;
-  
-  /* GList of GNCTransTempl */
-  GList *templ;
+  /* The template choosing GtkTreeView/GtkListStore */
+  GtkTreeView *template_gtktreeview;
+  GtkListStore *template_list_store;
 
   /* Flag, if template list has been changed */
   gboolean templ_changed;
@@ -122,8 +123,6 @@ void gnc_hbci_dialog_delete(HBCITransDialog *td)
   if (td->hbci_trans)
     AB_Transaction_free (td->hbci_trans);
 
-  td->selected_template = NULL;
-
   if (td->dialog)
     gtk_widget_destroy (GTK_WIDGET (td->dialog));
 #if HAVE_KTOBLZCHECK_H
@@ -131,10 +130,30 @@ void gnc_hbci_dialog_delete(HBCITransDialog *td)
 #endif    
 }
 
+static gboolean
+get_templ_helper (GtkTreeModel *model,
+		  GtkTreePath *path,
+		  GtkTreeIter *iter,
+		  gpointer data)
+{
+  GList **list = data;
+  GNCTransTempl *templ;
+
+  gtk_tree_model_get (model, iter,
+		      TEMPLATE_POINTER, &templ,
+		      -1);
+  *list = g_list_append(*list, templ);
+  return FALSE; /* continue */
+}
+
 GList *gnc_hbci_dialog_get_templ(const HBCITransDialog *td)
 {
+  GList *list = NULL;
+
   g_assert(td);
-  return td->templ;
+  gtk_tree_model_foreach(GTK_TREE_MODEL(td->template_list_store),
+			 get_templ_helper, &list);
+ return list;
 }
 GtkWidget *gnc_hbci_dialog_get_parent(const HBCITransDialog *td)
 {
@@ -178,9 +197,7 @@ gboolean
 check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td, 
 		  const AB_TRANSACTION *trans);
 
-void on_template_list_select_child(GtkList  *list, GtkWidget  *widget, gpointer  user_data);
-void on_template_list_selection_changed(GtkList *list, gpointer  user_data);
-void on_template_list_unselect_child(GtkList  *list, GtkWidget  *widget, gpointer  user_data);
+void on_template_list_selection_changed(GtkTreeSelection *selection, gpointer user_data);
 
 void template_selection_cb(GtkButton *b, gpointer user_data);
 void add_template_cb(GtkButton *b, gpointer user_data);
@@ -206,17 +223,17 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data);
 static void fill_template_list_func(gpointer data, gpointer user_data)
 {
   GNCTransTempl *templ = data;
-  GtkTreeView *list = user_data;
-  GtkWidget *item;
-
+  GtkListStore *list_store = user_data;
+  GtkTreeIter iter;
+  
   g_assert(templ);
-  g_assert(list);
+  g_assert(list_store);
   
-  item = gtk_list_item_new_with_label(gnc_trans_templ_get_name(templ));
-  g_assert(item);
-  
-  g_object_set_data(G_OBJECT(item), TEMPLATE_LABEL, templ);
-  gtk_container_add(GTK_CONTAINER(list), item );
+  gtk_list_store_append(list_store, &iter);
+  gtk_list_store_set(list_store, &iter,
+		     TEMPLATE_NAME, gnc_trans_templ_get_name(templ),
+		     TEMPLATE_POINTER, templ,
+		     -1);
 }
 
 HBCITransDialog *
@@ -229,11 +246,13 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   GladeXML *xml;
   const char *hbci_bankid, *hbci_bankname;
   HBCITransDialog *td;
+  GtkTreeSelection *selection;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
 
   td = g_new0(HBCITransDialog, 1);
   
   td->parent = parent;
-  td->templ = templates;
   td->trans_type = trans_type;
   g_assert (h_acc);
   hbci_bankid = AB_Account_GetBankCode(h_acc);
@@ -316,7 +335,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     g_assert
       ((exec_later_button = glade_xml_get_widget (xml, "exec_later_button")) != NULL);
     g_assert
-      ((td->template_gtktreeview = glade_xml_get_widget (xml, "template_list")) != NULL);
+      ((td->template_gtktreeview = GTK_TREE_VIEW(glade_xml_get_widget (xml, "template_list"))) != NULL);
     g_assert
       ((add_templ_button = glade_xml_get_widget (xml, "add_templ_button")) != NULL);
     g_assert
@@ -334,16 +353,6 @@ gnc_hbci_dialog_new (GtkWidget *parent,
       TRUE);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td->amount_edit),
 				  xaccAccountGetCommoditySCU (gnc_acc));
-
-    /* FIXME: Greyed out the template widgets because they are not yet
-       implemented -- need to change the GTK_LIST code to
-       GTK_TREE_VIEW */
-    gtk_widget_set_sensitive (td->template_gtktreeview, FALSE);
-    gtk_widget_set_sensitive (add_templ_button, FALSE);
-    gtk_widget_set_sensitive (moveup_templ_button, FALSE);
-    gtk_widget_set_sensitive (movedown_templ_button, FALSE);
-    gtk_widget_set_sensitive (sort_templ_button, FALSE);
-    gtk_widget_set_sensitive (del_templ_button, FALSE);
 
     /* Check for what kind of transaction this should be, and change
        the labels accordingly. */
@@ -381,7 +390,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     }
     
     /* Make this button insensitive since it's still unimplemented. */
-    gtk_widget_set_sensitive (GTK_WIDGET (exec_later_button), FALSE);
+    gtk_widget_destroy (exec_later_button);
     
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 
@@ -396,26 +405,31 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 			hbci_bankid);
 
     /* fill list for choosing a transaction template */
-    /* g_list_foreach(td->templ, fill_template_list_func, 
-       GTK_TREE_VIEW (td->template_gtktreeview)); */
-    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
+     gtk_tree_view_set_headers_visible(td->template_gtktreeview, FALSE);
+    td->template_list_store = gtk_list_store_new(TEMPLATE_NUM_COLUMNS,
+						 G_TYPE_STRING,
+						 G_TYPE_POINTER);
+    gtk_tree_view_set_model(td->template_gtktreeview,
+			    GTK_TREE_MODEL(td->template_list_store));
+    g_list_foreach(templates, fill_template_list_func, td->template_list_store);
 
-    td->selected_template = NULL;
+    renderer = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes ("Template Name",
+                                                      renderer,
+                                                      "text", TEMPLATE_NAME,
+                                                      NULL);
+    gtk_tree_view_append_column(td->template_gtktreeview, column);
+
     td->templ_changed = FALSE;
     
     /* Connect signals */
-/*    gnc_option_menu_init_w_signal (td->template_option, 
-				   G_CALLBACK(template_selection_cb),
-				   td);   */
-    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
-    /*
-    g_signal_connect (td->template_gtktreeview, "select_child",
-                      G_CALLBACK (on_template_list_select_child),
+    selection = gtk_tree_view_get_selection(td->template_gtktreeview);
+    g_signal_connect (selection, "changed",
+                      G_CALLBACK (on_template_list_selection_changed),
                       td);
                       
     g_signal_connect (add_templ_button, "clicked",
 		      G_CALLBACK(add_template_cb), td);
-
     g_signal_connect (moveup_templ_button, "clicked",
                       G_CALLBACK (moveup_template_cb),
                       td);
@@ -431,14 +445,10 @@ gnc_hbci_dialog_new (GtkWidget *parent,
      g_signal_connect (del_templ_button, "clicked",
                       G_CALLBACK (del_template_cb),
                       td);
-    */
 
     g_signal_connect (td->recp_bankcode_entry, "changed",
 		      G_CALLBACK(blz_changed_cb), td);
 
-    /* Default button */
-    gtk_dialog_set_default_response (GTK_DIALOG (td->dialog), GTK_RESPONSE_OK);
-    
   } /* GtkWidget declarations/definitions */
   
   return td;
@@ -460,7 +470,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     AB_JOB *job = AB_JobSingleTransfer_new((AB_ACCOUNT *)h_acc);
     if (AB_Job_CheckAvailability(job)) {
       printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
-      return -1;
+      return GTK_RESPONSE_CANCEL;
     }
 #if ((AQBANKING_VERSION_MAJOR > 1) || \
      ((AQBANKING_VERSION_MAJOR == 1) && \
@@ -497,12 +507,15 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     /* The dialog gets hidden anyway as soon as any button is pressed. */
     gtk_widget_hide_all (td->dialog);
 
-    /* Was cancel pressed or dialog closed? 1 == execute now, 3 ==
-       scheduled for later execution (currently unimplemented); 2 == cancel */
-    if (result != 1 ) { /* <- currently hard-coded response-id from glade */
+    /* Was cancel pressed or dialog closed?
+     *  GNC_RESPONSE_NOW == execute now
+     *  GNC_RESPONSE_LATER == scheduled for later execution (currently unimplemented)
+     *  GTK_RESPONSE_CANCEL == cancel
+     *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
+    if ((result != GNC_RESPONSE_NOW) && (result != GNC_RESPONSE_LATER)) {
       gtk_widget_destroy (GTK_WIDGET (td->dialog));
       td->dialog = NULL;
-      return -1;
+      return GTK_RESPONSE_CANCEL;
     }
 
     /* Now fill in the values from the entry fields into a new
@@ -527,7 +540,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       if (values_ok) {
 	AB_Transaction_free (td->hbci_trans);
 	td->hbci_trans = NULL;
-	return -1;
+	return GTK_RESPONSE_CANCEL;
       }
       continue;
     } /* check Transaction_value */
@@ -547,7 +560,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	if (values_ok) {
 	  AB_Transaction_free (td->hbci_trans);
 	  td->hbci_trans = NULL;
-	  return -1;
+	  return GTK_RESPONSE_CANCEL;
 	}
 	continue;
       } /* check Transaction_purpose */
@@ -811,16 +824,19 @@ static void fill_entry(const char *str, GtkWidget *entry) {
 
 
 void
-on_template_list_select_child          (GtkList         *list,
-                                        GtkWidget       *widget,
-                                        gpointer         user_data)
+on_template_list_selection_changed (GtkTreeSelection *selection,
+				    gpointer          user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *templ = g_object_get_data (G_OBJECT(widget), TEMPLATE_LABEL);
+  GNCTransTempl *templ;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
 
   g_assert(td);
 
-  td->selected_template = widget;
+  if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    return;
+  gtk_tree_model_get(model, &iter, TEMPLATE_POINTER, &templ, -1);
 
       fill_entry(gnc_trans_templ_get_recp_name(templ), td->recp_name_entry);
       fill_entry(gnc_trans_templ_get_recp_account(templ), td->recp_account_entry);
@@ -832,28 +848,6 @@ on_template_list_select_child          (GtkList         *list,
 				  gnc_trans_templ_get_amount (templ));
 
 }
-
-
-void
-on_template_list_selection_changed     (GtkList         *list,
-                                        gpointer         user_data)
-{
-
-}
-
-
-void
-on_template_list_unselect_child        (GtkList         *list,
-                                        GtkWidget       *widget,
-                                        gpointer         user_data)
-{
-  HBCITransDialog *td = user_data;
-  g_assert(td);
-
-  td->selected_template = NULL;
-
-}
-
 
 
 void blz_changed_cb(GtkEditable *e, gpointer user_data)
@@ -898,68 +892,62 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
 
 /* -------------------------------------- */
 /* -------------------------------------- */
-/* Copied from window-help.c */
-static void
-goto_string_cb(char * string, gpointer data)
-{
-  if(!data) return;
-  if(!string) {
-    *(char **)data = NULL;
-  }
-  else {
-    *(char **)data = g_strdup(string);
-  }
-}
+
 void add_template_cb(GtkButton *b,
 		     gpointer user_data)
 {
   HBCITransDialog *td = user_data;
   GtkWidget *dlg;
-  char *name;
+  const gchar *name;
   int retval = -1;
-  GNCTransTempl *t;
-  gint index;
+  GladeXML *xml;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter cur_iter, new_iter;
+  GtkWidget *entry;
+
   g_assert(td);
 
-  dlg = gnome_request_dialog(FALSE,
-			     _("Enter name for new template:"), "", 250,
-			     &goto_string_cb, &name, GTK_WINDOW(td->parent));
-  retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
+  xml = gnc_glade_xml_new ("hbci.glade", "HBCI_template_name_dialog");
 
-  if ((retval == 0) && name && (strlen(name) > 0)) {
-    GNCTransTempl *r;
-    /*printf("add_template_cb: adding template '%s'\n", name);*/
-    r = gnc_trans_templ_new_full
-      (name, 
-       gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)),
-       gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)),
-       gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)),
-       gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (td->amount_edit)),
-       gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)),
-       gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+  dlg = glade_xml_get_widget (xml, "HBCI_template_name_dialog");
+  entry = glade_xml_get_widget (xml, "template_name");
+  gtk_entry_set_text(GTK_ENTRY(entry),
+		     gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
-  if (td->selected_template) {
-    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
+  retval = gtk_dialog_run(GTK_DIALOG(dlg));
 
-    index = 1+gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
+  if (retval == GTK_RESPONSE_OK) {
+    name = gtk_entry_get_text(GTK_ENTRY(entry));
+
+    if (name && (strlen(name) > 0)) {
+      GNCTransTempl *r;
+      /*printf("add_template_cb: adding template '%s'\n", name);*/
+      r = gnc_trans_templ_new_full
+	(name, 
+	 gtk_entry_get_text (GTK_ENTRY (td->recp_name_entry)),
+	 gtk_entry_get_text (GTK_ENTRY (td->recp_account_entry)),
+	 gtk_entry_get_text (GTK_ENTRY (td->recp_bankcode_entry)),
+	 gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (td->amount_edit)),
+	 gtk_entry_get_text (GTK_ENTRY (td->purpose_entry)),
+	 gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
+
+      selection = gtk_tree_view_get_selection(td->template_gtktreeview);
+      if (gtk_tree_selection_get_selected(selection, &model, &cur_iter)) {
+	gtk_list_store_insert_after(td->template_list_store,
+				    &new_iter, &cur_iter);
+      } else {
+	gtk_list_store_append(GTK_LIST_STORE(model), &new_iter);
+      }
+      gtk_list_store_set(td->template_list_store, &new_iter,
+			 TEMPLATE_NAME, name,
+			 TEMPLATE_POINTER, r,
+			 -1);
+      td->templ_changed = TRUE;
     }
-  else index = 0;
-  
-  td->templ = g_list_insert(td->templ, r, index);
-    
-  td->templ_changed = TRUE;
-
-  gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
-
-  /* fill list for choosing a transaction template */
-  g_list_foreach(td->templ, fill_template_list_func,
-		 GTK_TREE_VIEW (td->template_gtktreeview));
-
-  gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index);
-
-  /* the show_all is necessary since otherwise the new item doesn't show up */
-  gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
   }
+  gtk_widget_destroy(dlg);
+  //  g_object_unref(xml);
 }
 
 
@@ -968,31 +956,26 @@ moveup_template_cb(GtkButton       *button,
                   gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *t;
-  gint index;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter, prev_iter;
+  GtkTreePath *prev_path;
+
   g_assert(td);
 
-  if (td->selected_template) {
-    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
+  selection = gtk_tree_view_get_selection(td->template_gtktreeview);
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return;
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
-
-    if (index > 0) {
-      td->templ =  g_list_remove( td->templ, t);
-      td->templ =  g_list_insert( td->templ, t, index-1);
-
+  prev_path = gtk_tree_model_get_path(model, &iter);
+  if (gtk_tree_path_prev(prev_path)) {
+    if (gtk_tree_model_get_iter(model, &prev_iter, prev_path)) {
+      gtk_list_store_move_before(GTK_LIST_STORE(model), &iter, &prev_iter);
       td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
-
-      /* fill list for choosing a transaction template */
-      g_list_foreach(td->templ, fill_template_list_func,
-		     GTK_TREE_VIEW (td->template_gtktreeview));
-
-      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index-1);
-
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
-      }
     }
+  }
+
+  gtk_tree_path_free(prev_path);
 }
 
 
@@ -1001,41 +984,23 @@ movedown_template_cb(GtkButton       *button,
                     gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *t;
-  gint index;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter, next_iter;
+
   g_assert(td);
 
-  if (td->selected_template) {
-    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
+  selection = gtk_tree_view_get_selection(td->template_gtktreeview);
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return;
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
-
-    if (index < g_list_length(td->templ)-1) {
-      td->templ =  g_list_remove( td->templ, t);
-      td->templ =  g_list_insert( td->templ, t, index+1);
-
-      td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
-
-      /* fill list for choosing a transaction template */
-      g_list_foreach(td->templ, fill_template_list_func,
-		     GTK_TREE_VIEW (td->template_gtktreeview));
-
-      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index+1);
-
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
-      }
-    }
+  next_iter = iter;
+  if (gtk_tree_model_iter_next(model, &next_iter)) {
+    gtk_list_store_move_after(GTK_LIST_STORE(model), &iter, &next_iter);
+    td->templ_changed = TRUE;
+  }
 }
 
-static gint comparefunc(const gconstpointer e1,
-                 const gconstpointer e2)
-{
-  return strcmp(gnc_trans_templ_get_name_key((GNCTransTempl*)e1),
-        gnc_trans_templ_get_name_key((GNCTransTempl*)e2));
-  
-}  
-                 
 void
 sort_template_cb(GtkButton       *button,
                  gpointer         user_data)
@@ -1043,23 +1008,14 @@ sort_template_cb(GtkButton       *button,
   HBCITransDialog *td = user_data;
   g_assert(td);
 
-  if (gnc_verify_dialog (td->parent,
-       FALSE, "%s", _("Do you really want to sort the list of templates?"))) {
-
-    td->templ =  g_list_sort( td->templ, comparefunc);
-  
-    td->templ_changed = TRUE;
-
-    gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
-
-    /* fill list for choosing a transaction template */
-    g_list_foreach(td->templ, fill_template_list_func,
-		   GTK_TREE_VIEW (td->template_gtktreeview));
-
-    gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
-   
-    gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
-  }
+  gtk_tree_sortable_set_sort_column_id
+    (GTK_TREE_SORTABLE(td->template_list_store),
+     TEMPLATE_NAME, GTK_SORT_ASCENDING);
+  gtk_tree_sortable_set_sort_column_id
+    (GTK_TREE_SORTABLE(td->template_list_store),
+     GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+     GTK_SORT_ASCENDING);
+  td->templ_changed = TRUE;
 }
 
 
@@ -1069,32 +1025,18 @@ del_template_cb(GtkButton       *button,
                gpointer         user_data)
 {
   HBCITransDialog *td = user_data;
-  GNCTransTempl *t;
-  gint index;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
   g_assert(td);
 
-  if (td->selected_template) {
+  selection = gtk_tree_view_get_selection(td->template_gtktreeview);
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return;
 
-    t = g_object_get_data(G_OBJECT(td->selected_template), TEMPLATE_LABEL);
-
-    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
-
-    if (gnc_verify_dialog (td->parent,
-          FALSE, _("Do you really want to delete the template '%s'?"),
-          gnc_trans_templ_get_name(g_list_nth_data(td->templ, index)))) {
-      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), index, index+1);
-            
-      td->templ =  g_list_remove( td->templ, t);
-      td->templ_changed = TRUE;
-
-      gnc_trans_templ_delete(t);
-
-      gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
-
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
-    
-      }
-    }
+  gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+  td->templ_changed = TRUE;
 }
 
 
@@ -1118,4 +1060,3 @@ void gnc_hbci_dialog_xfer_cb(Transaction *trans, gpointer user_data)
   }
   return;
 }
-
