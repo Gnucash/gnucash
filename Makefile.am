@@ -6,7 +6,7 @@ docdir = ${GNC_DOC_INSTALL_DIR}
 GNC_CTAGS_FILE = @GNC_CTAGS_FILE@
 GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
-noinst_DATA = make-gnucash-patch make-gnucash-potfiles .goffice-links
+noinst_DATA = make-gnucash-patch make-gnucash-potfiles .links
 
 doc_DATA = \
   AUTHORS \
@@ -94,18 +94,21 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-.goffice-links: 
-	rm -f goffice
+.links: 
+	rm -f goffice gsf
 if !HAVE_GOFFICE
 	ln -sf . goffice
 endif
-	touch .goffice-links
+if !HAVE_LIBGSF
+	ln -sf lib/libgsf-1.12.3/gsf gsf
+endif
+	touch .links
 
 DISTCLEANFILES = \
   intltool-extract intltool-update intltool-merge\
   cscope.files cscope.out etags.files make-gnucash-patch \
   make-gnucash-potfiles po/.intltool-merge-cache \
-  goffice .goffice-links po/POTFILES.in
+  goffice gsf .links po/POTFILES.in
 
 cscope.files:
 	find . -name '*.[ch]' > cscope.files
@@ -113,34 +116,26 @@ cscope.files:
 cscope.out: cscope.files
 	cscope -b
 
-if GNC_ETAGS_FILE
 
 # make sure etags.files is up to date.
 # and use the contents of etags.files to re-make TAGS if needed.
 etags:
+if GNC_ETAGS_FILE
 	${MAKE} -f Makefile.TAGS etags.files
 	${MAKE} -f Makefile.TAGS TAGS
-
 else
-
-etags:
 	@echo "You must ./configure with --enable-etags to use etags."
-
 endif
 
-if GNC_CTAGS_FILE
 
 # make sure etags.files is up to date.
-# and use the contents of etags.files to re-make TAGS if needed.
+# and use the contents of etags.files to re-make tags if needed.
 ctags:
+if GNC_CTAGS_FILE
 	${MAKE} -f Makefile.TAGS etags.files
 	${MAKE} -f Makefile.TAGS tags
-
 else
-
-ctags:
 	@echo "You must ./configure with --enable-ctags to use ctags."
-
 endif
 
 .PHONY: etags ctags
@@ -175,6 +170,10 @@ po/POTFILES.in: make-gnucash-potfiles .potfiles
 	./make-gnucash-potfiles > ./po/POTFILES.in
 
 .potfiles:
+
+dist-hook:
+	./make-gnucash-potfiles > $(distdir)/po/POTFILES.in
+
 
 SVN = svn
 XSLTPROC = xsltproc
