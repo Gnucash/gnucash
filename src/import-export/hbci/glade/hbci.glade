@@ -460,6 +460,7 @@ Press &quot;Apply&quot; now.</property>
 	  <child>
 	    <widget class="GtkButton" id="exec_now_button">
 	      <property name="visible">True</property>
+	      <property name="tooltip" translatable="yes">Execute this online transaction now</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
@@ -505,7 +506,7 @@ Press &quot;Apply&quot; now.</property>
 		      <child>
 			<widget class="GtkLabel" id="label8877454">
 			  <property name="visible">True</property>
-			  <property name="label">Execute Now</property>
+			  <property name="label" translatable="yes">Execute Now</property>
 			  <property name="use_underline">True</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1092,6 +1093,7 @@ Press &quot;Apply&quot; now.</property>
 			<widget class="GtkButton" id="add_templ_button">
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Add the current online transaction as a new transaction template</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -1163,6 +1165,7 @@ Press &quot;Apply&quot; now.</property>
 			<widget class="GtkButton" id="moveup_templ_button">
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Move the selected transaction template one row up</property>
 			  <property name="can_focus">True</property>
 			  <property name="label">gtk-go-up</property>
 			  <property name="use_stock">True</property>
@@ -1176,6 +1179,7 @@ Press &quot;Apply&quot; now.</property>
 			<widget class="GtkButton" id="movedown_templ_button">
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Move the selected transaction template one row down</property>
 			  <property name="can_focus">True</property>
 			  <property name="label">gtk-go-down</property>
 			  <property name="use_stock">True</property>
@@ -1189,6 +1193,7 @@ Press &quot;Apply&quot; now.</property>
 			<widget class="GtkButton" id="sort_templ_button">
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Sort the list of transaction templates alphabetically</property>
 			  <property name="can_focus">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="focus_on_click">True</property>
@@ -1260,6 +1265,7 @@ Press &quot;Apply&quot; now.</property>
 			<widget class="GtkButton" id="del_templ_button">
 			  <property name="border_width">2</property>
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">Delete the currently selected transaction template</property>
 			  <property name="can_focus">True</property>
 			  <property name="label">gtk-delete</property>
 			  <property name="use_stock">True</property>
@@ -2350,7 +2356,7 @@ Press &quot;Apply&quot; now.</property>
 
 <widget class="GtkDialog" id="HBCI_template_name_dialog">
   <property name="visible">True</property>
-  <property name="title" translatable="yes"></property>
+  <property name="title" translatable="yes">Name for new template</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
