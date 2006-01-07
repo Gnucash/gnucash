@@ -461,6 +461,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
     lc = gnc_localeconv();
 
+    gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
     gtk_list_store_clear(summary->datamodel);
     for (current = g_list_first(currency_list); current; current = g_list_next(current)) {
       const char *mnemonic;
@@ -494,6 +495,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
                          COLUMN_PROFITS_VALUE, profit_amount_string,
                          -1);
     }
+    gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
+			    GTK_TREE_MODEL(summary->datamodel));
 
     gtk_combo_box_set_active( GTK_COMBO_BOX(summary->totals_combo), 0 );
   }

@@ -1,3 +1,9 @@
+2006-01-07  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-main-summarybar.c: Performance enhancements.
+	Remove the model from the combo box before clearing and
+	repopulating it.
+
 2006-01-06  David Hampton  <hampton@employees.org>
 
 	* src/import-export/hbci/dialog-hbcitrans.[ch]: 
