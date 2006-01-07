@@ -140,8 +140,9 @@
                                 total-gain)
 
    (let ((share-print-info
-	  (gnc:share-print-info-places (get-option gnc:pagename-general
-						   optname-shares-digits))))
+	  (gnc:share-print-info-places
+	   (inexact->exact (get-option gnc:pagename-general
+				       optname-shares-digits)))))
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) total-value
