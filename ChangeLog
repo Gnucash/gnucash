@@ -1,5 +1,10 @@
 2006-01-07  David Hampton  <hampton@employees.org>
 
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-gnome/dialog-date-close.c:
+	* src/gnome-utils/gnc-druid-provider-file-gnome.[ch]: Remove some
+	deprecated gnome functions.
+
 	* src/bin/gnucash-valgrind.in:
 	* src/bin/Makefile.am: Add a script to invoke the new gnucash.bin
 	executable via valgrind.

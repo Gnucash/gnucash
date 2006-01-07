@@ -138,7 +138,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
   gncOrderSetReference (order, gtk_editable_get_chars
 			(GTK_EDITABLE (ow->ref_entry), 0, -1));
 
-  tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->opened_date));
+  tt = gnome_date_edit_get_time (GNOME_DATE_EDIT (ow->opened_date));
   timespecFromTime_t (&ts, tt);
   gncOrderSetDateOpened (order, ts);
 

@@ -116,9 +116,6 @@ build_date_close_window (GtkWidget *hbox, const char *message)
   GtkWidget *alignment;
   char *s;
 
-  /* Make noises, basically */
-  gnome_triggers_vdo(message, GNOME_MESSAGE_BOX_QUESTION, NULL);
-
   s = gnome_program_locate_file (NULL,
 				 GNOME_FILE_DOMAIN_PIXMAP,
 				 "gnome-question.png", TRUE, NULL);

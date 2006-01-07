@@ -29,7 +29,7 @@ struct _GNCDruidProviderFileGnome
   GNCDruidProvider parent;
 
   GnomeDruidPage*	page;
-  GnomeFileEntry*	file_entry;
+  GtkFileChooser*       file_entry;
 
   GNCDruidProviderFileCB* cb;
 

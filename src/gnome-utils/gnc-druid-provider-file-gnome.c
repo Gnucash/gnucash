@@ -170,7 +170,7 @@ gnc_dp_file_gnome_next_page(GNCDruidProvider* prov)
   gchar *filename;
   gboolean res;
 
-  filename = gnome_file_entry_get_full_path(prov_f->file_entry, FALSE);
+  filename = gtk_file_chooser_get_filename(prov_f->file_entry);
 
   if (desc_f->glob)
     res = gnc_dpfg_start_glob(prov, filename);
@@ -222,7 +222,8 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   GNCDruidProviderDescFile *desc_f;
   GNCDruidProviderFileCB *cb;
   GnomeDruidPageStandard *page;
-  GnomeFileEntry *file_entry;
+  GtkFileChooser *file_entry;
+  GtkWidget *label;
 
   /* verify that this is the correct provider descriptor */
   g_return_val_if_fail(IS_GNC_DRUID_PROVIDER_DESC_FILE(desc), NULL);
@@ -251,19 +252,20 @@ gnc_druid_pf_gnome_build(GNCDruid* druid, GNCDruidProviderDesc* desc)
   prov->page = GNOME_DRUID_PAGE(page);
   prov_base->pages = g_list_prepend(NULL, page);
 
+  /* Build the label */
+  label = gtk_label_new(desc_f->text);
+  gtk_box_pack_start(GTK_BOX(page->vbox), label, FALSE, FALSE, 0);
+
   /* Build the file entry */
-  file_entry = GNOME_FILE_ENTRY(gnome_file_entry_new(desc_f->history_id, desc->title));
+  file_entry = GTK_FILE_CHOOSER(gtk_file_chooser_widget_new(GTK_FILE_CHOOSER_ACTION_OPEN));
   g_assert(file_entry);
   prov->file_entry = file_entry;
-  gnome_file_entry_set_modal(file_entry, TRUE);
-  gnome_file_entry_set_default_path(file_entry, desc_f->last_dir);
+  gtk_file_chooser_set_current_folder(file_entry, desc_f->last_dir);
+  gtk_box_pack_start(GTK_BOX(page->vbox), GTK_WIDGET(file_entry), TRUE, TRUE, 0);
 
   /* Set the page properties */
   if (desc->title)
     gnome_druid_page_standard_set_title(page, desc->title);
-
-  gnome_druid_page_standard_append_item(page, desc_f->text, GTK_WIDGET(file_entry),
-					NULL);
 
   /* Show the page */
   gtk_widget_show_all(GTK_WIDGET(page));
