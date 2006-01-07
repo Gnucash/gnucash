@@ -20,14 +20,19 @@ EXTRA_LIBS="${EXTRA_LIBS}:@-G_WRAP_LIB_DIR-@"
 
 LD_LIBRARY_PATH="${EXTRA_LIBS}:${LD_LIBRARY_PATH}"
 LTDL_LIBRARY_PATH="${EXTRA_LIBS}:${LTDL_LIBRARY_PATH}"
+TOP_SRC_DIR="@-TOP_SRC_DIR-@"
 
 export GNC_MODULE_PATH
 export GUILE_LOAD_PATH
 export LD_LIBRARY_PATH
 export LTDL_LIBRARY_PATH
 
+#
+# Other potentially useful options, particularly for valgrind-2.x:
+# --tool=memcheck --trace-children=yes
+#
 exec valgrind -v \
-    --suppressions=./src/valgrind-gnucash.supp  \
+    --suppressions=${TOP_SRC_DIR}/src/valgrind-gnucash.supp  \
     --error-limit=no \
     --tool=callgrind \
     --instr-atstart=no \
