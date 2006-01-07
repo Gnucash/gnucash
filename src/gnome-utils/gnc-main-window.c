@@ -2158,7 +2158,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	entry = g_new0 (MergedActionEntry, 1);
 	entry->action_group = gtk_action_group_new (group_name);
-	gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
+	gnc_gtk_action_group_set_translation_domain (entry->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (entry->action_group, actions, n_actions, data);
 	gtk_ui_manager_insert_action_group (window->ui_merge, entry->action_group, 0);
 	entry->merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, pathname, &error);
@@ -2323,6 +2323,94 @@ gnc_main_window_gconf_changed (GConfClient *client,
 	}
 }
 
+/* CS: This callback functions will set the statusbar text to the
+ * "tooltip" property of the currently selected GtkAction.
+ *
+ * This code is directly copied from gtk+/test/testmerge.c. 
+ * Thanks to (L)GPL! */
+typedef struct _ActionStatus ActionStatus;
+struct _ActionStatus {
+  GtkAction *action;
+  GtkWidget *statusbar;
+};
+
+static void
+action_status_destroy (gpointer data)
+{
+  ActionStatus *action_status = data;
+
+  g_object_unref (action_status->action);
+  g_object_unref (action_status->statusbar);
+
+  g_free (action_status);
+}
+
+static void
+set_tip (GtkWidget *widget)
+{
+  ActionStatus *data;
+  gchar *tooltip;
+  
+  data = g_object_get_data (G_OBJECT (widget), "action-status");
+  
+  if (data) 
+    {
+      g_object_get (data->action, "tooltip", &tooltip, NULL);
+      
+      gtk_statusbar_push (GTK_STATUSBAR (data->statusbar), 0, 
+			  tooltip ? tooltip : "");
+      
+      g_free (tooltip);
+    }
+}
+
+static void
+unset_tip (GtkWidget *widget)
+{
+  ActionStatus *data;
+
+  data = g_object_get_data (G_OBJECT (widget), "action-status");
+
+  if (data)
+    gtk_statusbar_pop (GTK_STATUSBAR (data->statusbar), 0);
+}
+		    
+static void
+connect_proxy (GtkUIManager *merge,
+	       GtkAction    *action,
+	       GtkWidget    *proxy,
+	       GtkWidget    *statusbar)
+{
+  if (GTK_IS_MENU_ITEM (proxy)) 
+    {
+      ActionStatus *data;
+
+      data = g_object_get_data (G_OBJECT (proxy), "action-status");
+      if (data)
+	{
+	  g_object_unref (data->action);
+	  g_object_unref (data->statusbar);
+
+	  data->action = g_object_ref (action);
+	  data->statusbar = g_object_ref (statusbar);
+	}
+      else
+	{
+	  data = g_new0 (ActionStatus, 1);
+
+	  data->action = g_object_ref (action);
+	  data->statusbar = g_object_ref (statusbar);
+
+	  g_object_set_data_full (G_OBJECT (proxy), "action-status", 
+				  data, action_status_destroy);
+	  
+	  g_signal_connect (proxy, "select",  G_CALLBACK (set_tip), NULL);
+	  g_signal_connect (proxy, "deselect", G_CALLBACK (unset_tip), NULL);
+	}
+    }
+}
+/* CS: end copied code from gtk+/test/testmerge.c */
+
 static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
@@ -2378,7 +2466,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	/* Create menu and toolbar information */
 	priv->action_group = gtk_action_group_new ("MainWindowActions");
-	gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
+	gnc_gtk_action_group_set_translation_domain (priv->action_group, GETTEXT_PACKAGE);
 	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
 				      gnc_menu_n_actions, window);
 	gtk_action_group_add_toggle_actions (priv->action_group, 
@@ -2401,6 +2489,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
 			  G_CALLBACK (gnc_main_window_add_widget), window);
+	/* Use the "connect-proxy" signal for tooltip display in the
+	   status bar */
+	g_signal_connect (G_OBJECT (window->ui_merge), "connect-proxy",
+			  G_CALLBACK (connect_proxy), priv->statusbar);
+
 	filename = gnc_gnome_locate_ui_file("gnc-main-window-ui.xml");
 
 	/* Can't do much without a ui. */
