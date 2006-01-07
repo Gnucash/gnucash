@@ -81,11 +81,6 @@ Resources
 
     - warlord reports this was true in 1.8 as well.
 
-- Importing
-
-  - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
-    to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
-
 - Budgeting
 
   - Budget Report
