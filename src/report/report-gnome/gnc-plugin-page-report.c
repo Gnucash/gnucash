@@ -820,26 +820,33 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 
 static GtkActionEntry report_actions[] =
 {
-        { "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p", NULL,
+        { "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p",
+	  N_("Print the current report"),
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
-        { "ReportSaveAction", GTK_STOCK_SAVE, N_("Save _Report"), NULL, 
-	  N_("Save the current report for later use in "
-	     "~/.gnucash/saved-reports-2.0 so that they are accessible as "
-	     "menu entries in the report menu. Will go into effect at the "
+        { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), NULL, 
+	  N_("Add the current report to the `Custom' menu for later use. "
+	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
+	     "It will be accessible as menu entry in the report menu at the "
 	     "next startup of gnucash."),
           G_CALLBACK(gnc_plugin_page_report_save_cb) },
-        { "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL, NULL,
+        { "ReportExportAction", GTK_STOCK_CONVERT, N_("Export _Report"), NULL,
+	  N_("Export HTML-formatted report to file"),
           G_CALLBACK(gnc_plugin_page_report_export_cb) },
-        { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL, NULL,
+        { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("_Report Options"), NULL,
+	  N_("Edit report options"),
           G_CALLBACK(gnc_plugin_page_report_options_cb) },
 
-        { "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL, NULL,
+        { "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL,
+	  N_("Move back one step in the history"),
           G_CALLBACK(gnc_plugin_page_report_back_cb) },
-        { "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL, NULL,
+        { "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL,
+	  N_("Move forward one step in the history"),
           G_CALLBACK(gnc_plugin_page_report_forw_cb) },
-        { "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL, NULL,
+        { "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL,
+	  N_("Reload the current page"),
           G_CALLBACK(gnc_plugin_page_report_reload_cb) },
-        { "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL, NULL,
+        { "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL,
+	  N_("Cancel outstanding HTML requests"),
           G_CALLBACK(gnc_plugin_page_report_stop_cb) },
 };
 static guint num_report_actions = G_N_ELEMENTS( report_actions );

@@ -172,11 +172,14 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 
 	/* Transaction menu */
 
-	{ "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "", NULL,
+	{ "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "",
+	  N_("Cut the selected transaction into clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction) },
-	{ "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "", NULL,
+	{ "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "",
+	  N_("Copy the selected transaction into clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction) },
-	{ "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "", NULL,
+	{ "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "",
+	  N_("Paste the transaction from the clipboard"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction) },
 	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("Du_plicate Transaction"), "",
 	  N_("Make a copy of the current transaction"),
@@ -233,22 +236,27 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
 	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
-	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL, NULL,
+	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL,
+	  NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_all) },
-	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL, NULL,
+	{ "ScrubCurrentAction", NULL, N_("_This transaction"), NULL,
+	  NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_scrub_current) },
 
 	/* Reports menu */
 
-	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL, NULL,
+	{ "ReportsAccountReportAction", NULL, N_("Account Report"), NULL,
+	  N_("Open a register report window for this transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
-	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL, NULL,
+	{ "ReportsAcctTransReportAction", NULL, N_("Account Transaction Report"), NULL,
+	  N_("Open a register report window for this transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
 static GtkToggleActionEntry toggle_entries[] = {
-	{ "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL, NULL,
+	{ "ViewStyleDoubleLineAction", NULL, N_("_Double Line"), NULL,
+	  N_("Show two lines of information for each transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE },
 
 	{ "SplitTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("S_plit Transaction"), NULL,
@@ -259,9 +267,15 @@ static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
 static GtkRadioActionEntry radio_entries_2 [] =
 {
-	{ "ViewStyleBasicAction", NULL, N_("_Basic Ledger"), NULL, NULL, REG_STYLE_LEDGER },
-	{ "ViewStyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL, NULL, REG_STYLE_AUTO_LEDGER },
-	{ "ViewStyleJournalAction", NULL, N_("Transaction _Journal"), NULL, NULL, REG_STYLE_JOURNAL }
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleBasicAction", NULL, N_("_Basic Ledger"), NULL,
+	  N_("Show transactions on one or two lines"), REG_STYLE_LEDGER },
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL,
+	  N_("Show transactions on one or two lines and expand the current transaction"), REG_STYLE_AUTO_LEDGER },
+	/* Translators: This is a menu item in the View menu */
+	{ "ViewStyleJournalAction", NULL, N_("Transaction _Journal"), NULL,
+	  N_("Show expanded transactions with all splits"), REG_STYLE_JOURNAL }
 };
 static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 

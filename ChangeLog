@@ -1,5 +1,21 @@
 2006-01-07  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/gnc-plugin-page-register.c,
+	src/report/report-gnome/gnc-plugin-page-report.c: Add more
+	tooltips to actions.
+
+	* src/gnome-utils/gnc-main-window.c: Add display of a GtkAction's
+	tooltip in the statusbar when the mouse is selection its menu
+	item. Code copied from gtk+'s test/testmerge.c. Works fine, except
+	that in non-C locales some "" tooltips are translated in a weird
+	way. Maybe because "" is errorneously passed through gettext(),
+	which will accidentally catch a wrong string from the po
+	files. This needs to be fixed.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Rename "Save
+	report" menu item to "Add report" according to IRC discussion with
+	warlord.
+	
 	* autogen.sh: Move code from macros/autogen.sh to here to make it
 	more obvious what happens. Add checks for all programs that are
 	called, fixes bug#325721. However in principle the code wasn't
