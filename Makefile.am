@@ -44,7 +44,6 @@ EXTRA_DIST = ChangeLog.1 \
   make-gnucash-potfiles.in \
   macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
-  macros/autogen.sh \
   macros/compiler-flags.m4 \
   macros/g-wrap.m4 \
   macros/gnome-guile-checks.m4 \

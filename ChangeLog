@@ -1,3 +1,10 @@
+2006-01-07  Christian Stimming  <stimming@tuhh.de>
+
+	* autogen.sh: Move code from macros/autogen.sh to here to make it
+	more obvious what happens. Add checks for all programs that are
+	called, fixes bug#325721. However in principle the code wasn't
+	changed, only cleaned up.
+
 2006-01-07  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/dialog-order.c:
