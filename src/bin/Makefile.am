@@ -20,7 +20,22 @@ gnucash: gnucash.in ${top_builddir}/config.status
 	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
 	mv $@.tmp $@
 	chmod u+x $@
-CLEANFILES = gnucash
+
+gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's:@-BIN_DIR-@:${bindir}:g' \
+	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
+	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
+	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
+	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
+            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
+	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
+	mv $@.tmp $@
+	chmod u+x $@
+
+CLEANFILES = gnucash gnucash-valgrind
 
 # We handle gnucash scripts in a somewhat unexpected way, but we do
 # this so that a user who doesn't necessarily have the right
@@ -39,7 +54,7 @@ CLEANFILES = gnucash
 # by these top-level "common" scripts.
 gnc_common_scripts = gnucash-env gnucash-run-script gnucash-make-guids
 
-bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash
+bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrind
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides

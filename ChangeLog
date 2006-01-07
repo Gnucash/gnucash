@@ -1,5 +1,9 @@
 2006-01-07  David Hampton  <hampton@employees.org>
 
+	* src/bin/gnucash-valgrind.in:
+	* src/bin/Makefile.am: Add a script to invoke the new gnucash.bin
+	executable via valgrind.
+
 	* src/gnome/window-main-summarybar.c: Performance enhancements.
 	Remove the model from the combo box before clearing and
 	repopulating it.
