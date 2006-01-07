@@ -490,6 +490,8 @@
 	      )
 	  (let ((row 0))
 	    (while (< row table-rows)
+		   (gnc:html-table-set-row-markup! build-table (+ row 1)
+						   (gnc:html-table-row-markup hold-table row))
 		   (let ((col 0))
 		     (while (< col hold-table-width)
 			    (gnc:html-table-set-cell!

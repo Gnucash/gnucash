@@ -1,5 +1,12 @@
 2006-01-07  David Hampton  <hampton@employees.org>
 
+	* src/report/standard-reports/account-summary.scm: Copy the table
+	markup from an intermediate table to the final displayed table.
+	
+	* src/report/report-system/html-acct-table.scm: When building a
+	html table from an account tree, apply markup to the "total" lines
+	so that they use the right stylesheet colors.
+
 	* src/report/standard-reports/portfolio.scm:
 	* src/report/standard-reports/advanced-portfolio.scm: Fix the
 	"share decimal places" option.
