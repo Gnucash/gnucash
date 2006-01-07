@@ -95,7 +95,7 @@ gnc_file_dialog (const char * title,
 		  break;
 	case GNC_FILE_DIALOG_IMPORT:
 		  action = GTK_FILE_CHOOSER_ACTION_OPEN;
-		  okbutton = _("Import");
+		  okbutton = _("_Import");
 		  if (title == NULL)
 			  title = _("Import");
 		  break;
@@ -107,7 +107,7 @@ gnc_file_dialog (const char * title,
 		  break;
 	case GNC_FILE_DIALOG_EXPORT:
 		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
-		  okbutton = _("Export");
+		  okbutton = _("_Export");
 		  if (title == NULL)
 			  title = _("Export");
 		  break;
