@@ -1,3 +1,10 @@
+2006-01-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome-utils/gnc-main-window.c: Add gnc workaround function
+	for errorneous gtk_action_group_set_translation_domain. Fixes the
+	statusbar-tooltip error mentioned on 2006-01-07. Filed in gtk as
+	bug#326200.
+
 2006-01-07  David Hampton  <hampton@employees.org>
 
 	* src/report/standard-reports/account-summary.scm: Copy the table

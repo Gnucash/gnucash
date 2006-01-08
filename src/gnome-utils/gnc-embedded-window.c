@@ -369,7 +369,7 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
   /* Create menu and toolbar information */
   priv->action_group = gtk_action_group_new (action_group_name);
-  gtk_action_group_set_translation_domain(priv->action_group, GETTEXT_PACKAGE);
+  gnc_gtk_action_group_set_translation_domain(priv->action_group, GETTEXT_PACKAGE);
   gtk_action_group_add_actions (priv->action_group, action_entries,
 				n_action_entries, user_data);
   gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);

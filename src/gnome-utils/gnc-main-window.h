@@ -273,6 +273,28 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
 gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
 					  GdkEventButton *event,
 					  GncPluginPage *page);
+
+/**
+ * gnc_gtk_action_group_set_translation_domain:
+ * @action_group: a #GtkActionGroup
+ * @domain: the translation domain to use for dgettext() calls
+ * 
+ * Sets the translation domain and uses dgettext() for translating the 
+ * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
+ * gtk_action_group_add_actions().
+ *
+ * This is copied from gtk's gtk_action_group_set_translation_domain()
+ * into GnuCash in order to fix problems when empty msgids were passed
+ * through gettext().
+ *
+ * See http://bugzilla.gnome.org/show_bug.cgi?id=326200 . If that bug
+ * is fixed in the gtk that we can rely open, then
+ * gnc_gtk_action_group_set_translation_domain can be replaced by
+ * gtk_action_group_set_translation_domain again.
+ **/
+void 
+gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
+					     const gchar    *domain);
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */
