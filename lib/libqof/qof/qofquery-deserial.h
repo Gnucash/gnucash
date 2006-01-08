@@ -40,6 +40,9 @@ author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
     Unfinished. XXX Why is this easier than reading a text/sql
     file? 
 
+NOTE: Development of this idea has ceased and this file is
+no longer included in the QOF library. It remains in CVS for now.
+
  */
 /* Given an XML tree, reconstruct and return the equivalent query. */
 QofQuery *qof_query_from_xml (xmlNodePtr);

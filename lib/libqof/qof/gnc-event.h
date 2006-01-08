@@ -26,6 +26,7 @@
 */
 /** @file gnc-event.h
     @brief engine event handling interface
+	(to be renamed qofevent.h in libqof2)
 	@author Copyright 2000 Dave Peticolas <dave@krondo.com>
 */
 

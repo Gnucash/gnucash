@@ -313,7 +313,7 @@ struct QofBackend_s
   gboolean (*process_events) (QofBackend *);
 
   QofBePercentageFunc percentage;
-
+  
   QofBackendProvider *provider;
 
   /** Document Me !!! what is this supposed to do ?? */
@@ -329,8 +329,7 @@ struct QofBackend_s
    */
   char * fullpath;
 
-#ifdef GNUCASH_MAJOR_VERSION
-  /** XXX price_lookup should be removed during the redesign
+  /** \deprecated price_lookup should be removed during the redesign
    * of the SQL backend... prices can now be queried using
    * the generic query mechanism.
    *
@@ -340,13 +339,12 @@ struct QofBackend_s
    */
   void (*price_lookup) (QofBackend *, gpointer);
 
-  /** XXX Export should really _NOT_ be here, but is left here for now.
+  /** \deprecated Export should really _NOT_ be here, but is left here for now.
    * I'm not sure where this should be going to. It should be
    * removed ASAP.   This is a temporary hack-around until period-closing
    * is fully implemented.
    */
   void (*export) (QofBackend *, QofBook *);
-#endif
 
 };
 

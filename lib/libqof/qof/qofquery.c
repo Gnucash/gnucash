@@ -29,18 +29,11 @@
 #include <regex.h>
 #include <string.h>
 
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
-
+#include "qof.h"
 #include "qofbackend-p.h"
-#include "qofbook.h"
 #include "qofbook-p.h"
-#include "qofclass.h"
 #include "qofclass-p.h"
-#include "qofobject.h"
-#include "qofquery.h"
 #include "qofquery-p.h"
-#include "qofquerycore.h"
 #include "qofquerycore-p.h"
 
 static QofLogModule log_module = QOF_MOD_QUERY;
@@ -370,9 +363,6 @@ check_object (QofQuery *q, gpointer object)
   QofQueryTerm * qt;
   int       and_terms_ok=1;
   
-  ENTER (" object=%p terms=%p name=%s", 
-          object, q->terms, qof_object_printable (q->search_for, object));
-
   for(or_ptr = q->terms; or_ptr; or_ptr = or_ptr->next) 
   {
     and_terms_ok = 1;
@@ -407,11 +397,7 @@ check_object (QofQuery *q, gpointer object)
         /* XXX: Don't know how to do this conversion -- do we care? */
       }
     }
-    if (and_terms_ok) 
-    {
-      LEAVE (" (terms are OK)");
-      return 1;
-    }
+    if (and_terms_ok) { return 1; }
   }
 
   /* If there are no terms, assume a "match any" applies.
@@ -419,7 +405,6 @@ check_object (QofQuery *q, gpointer object)
    * may want to get all objects, but in a particular sorted 
    * order.
    */
-  LEAVE (" ");
   if (NULL == q->terms) return 1;
   return 0;
 }
@@ -950,7 +935,7 @@ QofQuery * qof_query_copy (QofQuery *q)
   return copy;
 }
 
-/********************************************************************
+/* *******************************************************************
  * qof_query_invert 
  * return a newly-allocated Query object which is the 
  * logical inverse of the original.
@@ -1033,7 +1018,7 @@ QofQuery * qof_query_invert (QofQuery *q)
   return retval;
 }
 
-/********************************************************************
+/* *******************************************************************
  * qof_query_merge
  * combine 2 Query objects by the logical operation in "op".
  ********************************************************************/
@@ -1273,6 +1258,7 @@ void qof_query_init (void)
   ENTER (" ");
   qof_query_core_init ();
   qof_class_init ();
+  LEAVE ("Completed initialization of QofQuery");
 }
 
 void qof_query_shutdown (void)
@@ -1414,12 +1400,8 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2)
   return TRUE;
 }
 
-/***************************************************************************/
-/***************************************************************************/
-/* Query Print functions.  qof_query_print is public; everthing else supports
- * that.
- * Just call qof_query_print(QofQuery *q), and it will print out the query 
- * contents to stderr.
+/* **************************************************************************/
+/* Query Print functions for use with qof_log_set_level.
 */
 
 /* Static prototypes */
@@ -1434,14 +1416,18 @@ static gchar *qof_query_printDateMatch (QofDateMatch d);
 static gchar *qof_query_printNumericMatch (QofNumericMatch n);
 static gchar *qof_query_printGuidMatch (QofGuidMatch g);
 static gchar *qof_query_printCharMatch (QofCharMatch c);
-static GString *qof_query_printPredData (QofQueryPredData *pd);
+static GList *qof_query_printPredData (QofQueryPredData *pd, GList *lst);
 static GString *qof_query_printParamPath (GSList * parmList);
 static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
 static void qof_query_printOutput (GList * output);
 
-/*
-        This function cycles through a QofQuery object, and
-        prints out the values of the various members of the query
+/** \deprecated access via qof_log instead.
+ The query will be logged automatically if qof_log_set_default
+ or qof_log_set_level(QOF_MOD_QUERY, ...) are set to QOF_LOG_DEBUG
+ or higher.
+
+ This function cycles through a QofQuery object, and
+ prints out the values of the various members of the query
 */
 void
 qof_query_print (QofQuery * query)
@@ -1489,7 +1475,7 @@ qof_query_printOutput (GList * output)
   {
     GString *line = (GString *) lst->data;
 
-    fprintf (stderr, "%s\n", line->str);
+    DEBUG (" %s", line->str);
     g_string_free (line, TRUE);
     line = NULL;
   }
@@ -1511,7 +1497,7 @@ qof_query_printSearchFor (QofQuery * query, GList * output)
   output = g_list_append (output, gs);
 
   return output;
-}                               /* qof_query_printSearchFor */
+}       /* qof_query_printSearchFor */
 
 /*
         Run through the terms of the query.  This is a outer-inner
@@ -1542,7 +1528,7 @@ qof_query_printTerms (QofQuery * query, GList * output)
   }
 
   return output;
-}                               /* qof_query_printTerms */
+}       /* qof_query_printTerms */
 
 /*
         Process the sort parameters
@@ -1554,7 +1540,7 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
 {
   GSList *gsl, *n = NULL;
   gint curSort;
-  GString *gs = g_string_new ("  Sort Parameters:\n");
+  GString *gs = g_string_new ("Sort Parameters:   ");
 
   for (curSort = 0; curSort < numSorts; curSort++)
   {
@@ -1566,24 +1552,24 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
     increasing = qof_query_sort_get_increasing (s[curSort]);
 
     gsl = qof_query_sort_get_param_path (s[curSort]); 
-    if (gsl) g_string_append_printf (gs, "    Param: ");
+    if (gsl) g_string_append_printf (gs, " Param: ");
     for (n=gsl; n; n = n->next)
     {
       QofIdType param_name = n->data;
-      if (gsl != n)g_string_append_printf (gs, "\n           ");
+      if (gsl != n) g_string_append_printf (gs, " ");
       g_string_append_printf (gs, "%s", param_name);
     }
     if (gsl) 
     {
-      g_string_append_printf (gs, " %s\n", increasing ? "DESC" : "ASC");
-      g_string_append_printf (gs, "    Options: 0x%x\n", s[curSort]->options);
+      g_string_append_printf (gs, " %s ", increasing ? "DESC" : "ASC");
+      g_string_append_printf (gs, " Options: 0x%x ", s[curSort]->options);
     }
   }
 
   output = g_list_append (output, gs);
   return output;
 
-}                               /* qof_query_printSorts */
+}      /* qof_query_printSorts */
 
 /*
         Process the AND terms of the query.  This is a GList
@@ -1592,7 +1578,7 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
 static GList *
 qof_query_printAndTerms (GList * terms, GList * output)
 {
-  const char *prefix = "  AND Terms:";
+  const char *prefix = "AND Terms:";
   QofQueryTerm *qt;
   QofQueryPredData *pd;
   GSList *path;
@@ -1608,14 +1594,14 @@ qof_query_printAndTerms (GList * terms, GList * output)
     invert = qof_query_term_is_inverted (qt);
 
     if (invert) output = g_list_append (output, 
-                                        g_string_new("    INVERT SENSE "));
+                                     g_string_new(" INVERT SENSE "));
     output = g_list_append (output, qof_query_printParamPath (path));
-    output = g_list_append (output, qof_query_printPredData (pd));
-    output = g_list_append (output, g_string_new("\n"));
+    output = qof_query_printPredData (pd, output);
+//    output = g_list_append (output, g_string_new(" "));
   }
 
   return output;
-}                               /* qof_query_printAndTerms */
+}        /* qof_query_printAndTerms */
 
 /*
         Process the parameter types of the predicate data
@@ -1624,8 +1610,8 @@ static GString *
 qof_query_printParamPath (GSList * parmList)
 {
   GSList *list = NULL;
-  GString *gs = g_string_new ("    Param List:\n");
-  g_string_append (gs, "      ");
+  GString *gs = g_string_new ("Param List: ");
+  g_string_append (gs, " ");
   for (list = parmList; list; list = list->next)
   {
     g_string_append (gs, (gchar *) list->data);
@@ -1634,31 +1620,32 @@ qof_query_printParamPath (GSList * parmList)
   }
 
   return gs;
-}                               /* qof_query_printParamPath */
+}        /* qof_query_printParamPath */
 
 /*
         Process the PredData of the AND terms
 */
-static GString *
-qof_query_printPredData (QofQueryPredData *pd)
+static GList *
+qof_query_printPredData (QofQueryPredData *pd, GList *lst)
 {
   GString *gs;
 
-  gs = g_string_new ("    Pred Data:\n      ");
+  gs = g_string_new ("Pred Data: ");
   g_string_append (gs, (gchar *) pd->type_name);
 
   /* Char Predicate and GUID predicate don't use the 'how' field. */
   if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
       safe_strcmp (pd->type_name, QOF_TYPE_GUID))
   {
-    g_string_append_printf (gs, "\n      how: %s",
-                            qof_query_printStringForHow (pd->how));
+    g_string_append_printf (gs, " how: %s",
+                       qof_query_printStringForHow (pd->how));
   }
-
+  lst = g_list_append(lst, gs);
+  gs = g_string_new ("");
   qof_query_printValueForParam (pd, gs);
-
-  return gs;
-}                               /* qof_query_printPredData */
+  lst = g_list_append(lst, gs);
+  return lst;
+} /* qof_query_printPredData */
 
 /*
         Get a string representation for the
@@ -1685,7 +1672,7 @@ qof_query_printStringForHow (QofQueryCompare how)
   }
 
   return "INVALID HOW";
-}                               /* qncQueryPrintStringForHow */
+}         /* qncQueryPrintStringForHow */
 
 
 static void
@@ -1696,47 +1683,46 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   {
     GList *node;
     query_guid_t pdata = (query_guid_t) pd;
-    g_string_append_printf (gs, "\n      Match type %s",
-                            qof_query_printGuidMatch (pdata->options));
+    g_string_append_printf (gs, "Match type %s",
+                       qof_query_printGuidMatch (pdata->options));
     for (node = pdata->guids; node; node = node->next)
     {
-        /* THREAD-UNSAFE */
+	  /* THREAD-UNSAFE */
       g_string_append_printf (gs, ", guids: %s",
-                              guid_to_string ((GUID *) node->data));
+			 guid_to_string ((GUID *) node->data));
     }
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_STRING))
   {
     query_string_t pdata = (query_string_t) pd;
-    g_string_append_printf (gs, "\n      Match type %s",
-                            qof_query_printStringMatch (pdata->options));
+    g_string_append_printf (gs, " Match type %s",
+                       qof_query_printStringMatch (pdata->options));
     g_string_append_printf (gs, " %s string: %s",
-                            pdata->is_regex ? "Regex" : "Not regex",
-                            pdata->matchstring);
+                       pdata->is_regex ? "Regex" : "Not regex",
+                       pdata->matchstring);
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_NUMERIC))
   {
     query_numeric_t pdata = (query_numeric_t) pd;
-    g_string_append_printf (gs, "\n      Match type %s",
-                            qof_query_printNumericMatch (pdata->options));
+    g_string_append_printf (gs, " Match type %s",
+                       qof_query_printNumericMatch (pdata->options));
     g_string_append_printf (gs, " gnc_numeric: %s",
-                            gnc_num_dbg_to_string (pdata->amount));
+                       gnc_num_dbg_to_string (pdata->amount));
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_KVP))
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
-    g_string_append_printf (gs, "\n      kvp path: ");
+    g_string_append_printf (gs, " kvp path: ");
     for (node = pdata->path; node; node = node->next)
     {
       g_string_append_printf (gs, "/%s", (gchar *) node->data);
     }
-    g_string_append_printf (gs, "\n");
-    g_string_append_printf (gs, "      kvp value: %s\n", 
-                            kvp_value_to_string (pdata->value));
+    g_string_append_printf (gs, " kvp value: %s ", 
+                         kvp_value_to_string (pdata->value));
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
@@ -1760,16 +1746,16 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
   {
     query_date_t pdata = (query_date_t) pd;
-    g_string_append_printf (gs, "\n      Match type %s",
-                            qof_query_printDateMatch (pdata->options));
+    g_string_append_printf (gs, " Match type %s",
+                       qof_query_printDateMatch (pdata->options));
     g_string_append_printf (gs, " query_date: %s", gnc_print_date (pdata->date));
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_CHAR))
   {
     query_char_t pdata = (query_char_t) pd;
-    g_string_append_printf (gs, "\n      Match type %s",
-                            qof_query_printCharMatch (pdata->options));
+    g_string_append_printf (gs, " Match type %s",
+                       qof_query_printCharMatch (pdata->options));
     g_string_append_printf (gs, " char list: %s", pdata->char_list);
     return;
   }
@@ -1781,7 +1767,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   }
   /** \todo QOF_TYPE_COLLECT */
   return;
-}                               /* qof_query_printValueForParam */
+}        /* qof_query_printValueForParam */
 
 /*
  * Print out a string representation of the
@@ -1798,7 +1784,7 @@ qof_query_printStringMatch (QofStringMatch s)
       return "QOF_STRING_MATCH_CASEINSENSITIVE";
   }
   return "UNKNOWN MATCH TYPE";
-}                               /* qof_query_printStringMatch */
+}           /* qof_query_printStringMatch */
 
 /*
  * Print out a string representation of the
@@ -1815,7 +1801,7 @@ qof_query_printDateMatch (QofDateMatch d)
       return "QOF_DATE_MATCH_DAY";
   }
   return "UNKNOWN MATCH TYPE";
-}                               /* qof_query_printDateMatch */
+}            /* qof_query_printDateMatch */
 
 /*
  * Print out a string representation of the
@@ -1834,7 +1820,7 @@ qof_query_printNumericMatch (QofNumericMatch n)
       return "QOF_NUMERIC_MATCH_ANY";
   }
   return "UNKNOWN MATCH TYPE";
-}                               /* qof_query_printNumericMatch */
+}        /* qof_query_printNumericMatch */
 
 /*
  * Print out a string representation of the
@@ -1858,7 +1844,7 @@ qof_query_printGuidMatch (QofGuidMatch g)
   }
 
   return "UNKNOWN MATCH TYPE";
-}                               /* qof_query_printGuidMatch */
+}         /* qof_query_printGuidMatch */
 
 /*
  * Print out a string representation of the
@@ -1875,6 +1861,6 @@ qof_query_printCharMatch (QofCharMatch c)
       return "QOF_CHAR_MATCH_NONE";
   }
   return "UNKNOWN MATCH TYPE";
-}                               /* qof_query_printGuidMatch */
+}         /* qof_query_printGuidMatch */
 
 /* ======================== END OF FILE =================== */

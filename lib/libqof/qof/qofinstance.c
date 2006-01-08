@@ -23,18 +23,14 @@
 /*
  * Object instance holds many common fields that most
  * gnucash objects use.
- * 
+ *
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
 
-#include "gnc-trace.h"
-
+#include "qof.h"
 #include "kvp-util-p.h"
-#include "qofbook.h"
 #include "qofbook-p.h"
-#include "qofid.h"
 #include "qofid-p.h"
-#include "qofinstance.h"
 #include "qofinstance-p.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
@@ -51,7 +47,7 @@ qof_instance_create (QofIdType type, QofBook *book)
 	return inst;
 }
 
-void 
+void
 qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 {
 	QofCollection *col;
@@ -68,7 +64,7 @@ qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 	qof_entity_init (&inst->entity, type, col);
 }
 
-void 
+void
 qof_instance_release (QofInstance *inst)
 {
 	kvp_frame_delete (inst->kvp_data);
@@ -85,14 +81,14 @@ qof_instance_get_guid (QofInstance *inst)
 	return &inst->entity.guid;
 }
 
-QofBook * 
+QofBook *
 qof_instance_get_book (QofInstance *inst)
 {
 	if (!inst) return NULL;
 	return inst->book;
 }
 
-KvpFrame* 
+KvpFrame*
 qof_instance_get_slots (QofInstance *inst)
 {
   if (!inst) return NULL;
@@ -102,15 +98,15 @@ qof_instance_get_slots (QofInstance *inst)
 Timespec
 qof_instance_get_last_update (QofInstance *inst)
 {
-	if (!inst) 
+	if (!inst)
 	{
-		Timespec ts = {0,-1}; 
+		Timespec ts = {0,-1};
 		return ts;
 	}
 	return inst->last_update;
 }
 
-int 
+int
 qof_instance_version_cmp (QofInstance *left, QofInstance *right)
 {
 	if (!left && !right) return 0;
@@ -174,7 +170,7 @@ qof_instance_mark_clean (QofInstance *inst)
   inst->dirty = FALSE;
 }
 
-void 
+void
 qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
 {
   if (!inst) return;

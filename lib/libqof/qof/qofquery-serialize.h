@@ -25,6 +25,9 @@
    Copyright (C) 2001,2002,2004 Linas Vepstas <linas@linas.org>
  */
 
+/* NOTE: Development of this idea has ceased and this file is
+no longer included in the QOF library. It remains in CVS for now.*/
+
 #ifndef QOF_QUERY_SERIALIZE_H
 #define QOF_QUERY_SERIALIZE_H
 

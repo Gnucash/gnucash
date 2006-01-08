@@ -84,4 +84,3 @@ void qof_gobject_register_instance (QofBook *book, QofType, GObject *);
 #endif /* QOF_GOBJ_H */
 /** @} */
 /** @} */
-

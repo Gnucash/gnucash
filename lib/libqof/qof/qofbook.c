@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofbook.c -- dataset access (set of accounting books)            *
+ * qofbook.c -- dataset access (set of books of entities)           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,8 +24,7 @@
  * qofbook.c
  *
  * FUNCTION:
- * Encapsulate all the information about a gnucash dataset.
- * See src/doc/books.txt for design overview.
+ * Encapsulate all the information about a QOF dataset.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
@@ -40,18 +39,12 @@
 
 #include <glib.h>
 
-#include "gnc-event.h"
+#include "qof.h"
 #include "gnc-event-p.h"
-#include "gnc-trace.h"
 #include "qofbackend-p.h"
-#include "qofbook.h"
 #include "qofbook-p.h"
-#include "qofclass.h"
 #include "qofid-p.h"
 #include "qofobject-p.h"
-#include "gnc-engine-util.h"
-
-#include "guid.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -117,7 +110,7 @@ qof_book_destroy (QofBook *book)
   book->shutting_down = TRUE;
   gnc_engine_force_event (&book->inst.entity, GNC_EVENT_DESTROY);
 
-  /* Call the list of finalizers, let them do their thing.
+  /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.
    */
   g_hash_table_foreach (book->data_table_finalizers, book_final, book);
@@ -290,32 +283,32 @@ void qof_book_mark_closed (QofBook *book)
 
 gchar qof_book_get_open_marker(QofBook *book)
 {
-       if(!book) { return 'n'; }
-       return book->book_open;
+	if(!book) { return 'n'; }
+	return book->book_open;
 }
 
 gint32 qof_book_get_version (QofBook *book)
 {
-       if(!book) { return -1; }
-       return book->version;
+	if(!book) { return -1; }
+	return book->version;
 }
 
 guint32 qof_book_get_idata (QofBook *book)
 {
-       if(!book) { return 0; }
-       return book->idata;
+	if(!book) { return 0; }
+	return book->idata;
 }
 
 void qof_book_set_version (QofBook *book, gint32 version)
 {
-       if(!book && version < 0) { return; }
-       book->version = version;
+	if(!book && version < 0) { return; }
+	book->version = version;
 }
 
 void qof_book_set_idata(QofBook *book, guint32 idata)
 {
-       if(!book && idata < 0) { return; }
-       book->idata = idata;
+	if(!book && idata < 0) { return; }
+	book->idata = idata;
 }
 
 gint64

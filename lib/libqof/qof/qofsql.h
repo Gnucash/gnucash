@@ -1,5 +1,5 @@
 /********************************************************************\
- * qofsql.h -- QOF client-side SQL parser                           *
+ * qofsql.h -- QOF client-side SQL parser using libgda              *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,7 +24,7 @@
 @{ */
 /**
     @file qofsql.h
-    @brief QOF client-side SQL parser.
+    @brief QOF client-side SQL parser, interfacing with libgda.
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
@@ -197,5 +197,5 @@ GList * qof_sql_query_rerun (QofSqlQuery *query);
 void qof_sql_query_set_kvp (QofSqlQuery *, KvpFrame *);
 
 /** @} */
-#endif /* QOF_SQL_QUERY_H */
 /** @} */
+#endif /* QOF_SQL_QUERY_H */

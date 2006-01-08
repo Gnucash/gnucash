@@ -75,7 +75,7 @@ typedef struct _KvpFrame KvpFrame;
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
 typedef struct _KvpValue KvpValue;
-
+ 
 /** \brief possible types in the union KvpValue 
  * \todo : People have asked for boolean values, 
  *  e.g. in xaccAccountSetAutoInterestXfer
@@ -99,12 +99,14 @@ typedef enum {
   KVP_TYPE_FRAME       /**< no QOF equivalent. */
 } KvpValueType;
 
-/** \deprecated Deprecated backwards compat tokens
+/** \deprecated Deprecated backwards compat token
 
-do \b not use these in new code.
+do \b not use these in new code. 
 */
 #define kvp_frame KvpFrame
+/** \deprecated Deprecated backwards compat token */
 #define kvp_value KvpValue
+/** \deprecated Deprecated backwards compat token */
 #define kvp_value_t KvpValueType
   
 /** @name KvpFrame Constructors
@@ -241,7 +243,7 @@ KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const char * slot,
  *  'November', respectively.  This routine also handles % encoding.
  *
  *  This routine treats all values as strings; it does *not* attempt
- *    to perform any type-conversion.
+ *  to perform any type-conversion.
  * */
 void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /** @} */

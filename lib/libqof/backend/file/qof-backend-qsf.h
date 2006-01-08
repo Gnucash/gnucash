@@ -18,8 +18,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- *  02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
 /** @addtogroup Backend
@@ -101,11 +100,6 @@ GNU GPL licence and QSF is free software.
 	- Adding more map support, some parts of the map are still not coded. equals, 
 		variables and the conditional logic may not be up to the task of the
 		datebook repetition calculations.
-	- Rationalise the API - remove functions that shouldn't be public.
-
-\todo QOF contains numerous g_string_sprintf and g_string_sprintfa calls.
-	These are deprecated and should be renamed to g_string_printf and g_string_append_printf
-	respectively.
 
 QSF is in three sections:
 	- QSF Backend : a QofBackend for file:/ QSF objects and maps.
@@ -114,36 +108,93 @@ QSF is in three sections:
 		qsf-xml.c
 	- QSF Map : Validation, processing and conversion routines.
 		qsf-xml-map.c
+		
+To work with QSF, your QOF objects must have:
+	- a create: function in the QofObject definition
+	- a foreach: function in the QofObject definition
+	- QofParam params[] registered with QOF using
+		qof_class_register and containing all necessary parameters
+		to reconstruct this object without any further information.
+	- Logical distinction between those parameters that should be
+		set (have a QofAccessFunc and QofSetterFunc) and those that 
+		should only be calculated (only a QofAccessFunc).
+
+If you begin your QSF session with ::QOF_STDOUT as the book_id,
+QSF will write to STDOUT - usually a terminal. This is used by QOF
+applications to provide data streaming. If you don't want terminal
+output, take care to check the path given to 
+::qof_session_begin - don't try to change it later!
+
+The XML is validated against the QSF object schema before being
+written (to file or stdout).
+
+Check the QofBackendError - don't assume the file is OK.
 
     @{ */
 /** @file qof-backend-qsf.h
-    @brief  QSF API - Backend, maps and objects.
+    @brief  QSF API - Backend, maps, objects and configuration.
     @author Copyright (C) 2004-2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef _QOF_BACKEND_QSF_H
 #define _QOF_BACKEND_QSF_H
 
-#include "gnc-trace.h"
+#include "qoflog.h"
 #include "qofbackend.h"
 #include "qof-be-utils.h"
 
-#define QOF_MOD_QSF "qof-backend-qsf"
-
 /** \brief Describe this backend to the application. 
 
-Sets QSF Backend Version 0.1, access method = file:
+Sets QSF Backend Version 0.2, access method = file:
 
-This is the QOF backend interface, not a GnuCash module.
+The version number only changes if:
+-# The map schema is modified, or
+-# The object schema is modified, or
+-# The QofBackendProvider struct is modified in QOF to
+support new members and QSF can support the new function, or
+-# The QofBackendOption settings are modified.
+
+v0.2 introduces the QSF_MAP_FILES QofBackendOption.
+
+Initialises the backend and provides access to the
+functions that will load and save the data. Initialises
+default values for the QofBackendOption KvpFrame.
+
+Calls gettext because QofBackendOption
+strings are translatable.
 */
 void qsf_provider_init(void);
 
-/** \brief Create a new QSF backend.
-
-	Initialises the backend and provides access to the
-	functions that will load and save the data.
+/** \name Supported backend configurations
+@{
 */
-QofBackend* qsf_backend_new(void);
+
+/** \brief compression level
+
+\b Type: gint (KVP_TYPE_GINT64)
+
+Use GINT_TO_POINTER() to set a integer value between 0 and 9.
+*/
+#define QSF_COMPRESS    "compression_level"
+
+/** \brief selected QSF maps 
+
+\b Type: GList* (KVP_TYPE_GLIST) of const char* (QOF_TYPE_STRING) values.
+
+Defaults to the pre-installed QSF map(s) but may be overridden
+by the application to pass full path(s) of user selected 
+QSF map file(s).
+
+If you override the list, it is advisable to only specify the single
+map file for this QSF object to reduce the amount of error checking
+required within the backend. Simply reset the QofBackendOption before
+another file is to be opened. It is up to the application to decide how
+to offer multiple map selections to the user.
+
+*/
+#define QSF_MAP_FILES   "selected_map_files"
+
+/** @} */
 
 /** @} */
 /** @} */

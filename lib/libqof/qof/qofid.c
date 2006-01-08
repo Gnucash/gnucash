@@ -27,10 +27,8 @@
 #include <string.h>
 #include <glib.h>
 
-#include "qofid.h"
+#include "qof.h"
 #include "qofid-p.h"
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
@@ -53,11 +51,11 @@ qof_entity_init (QofEntity *ent, QofIdType type, QofCollection * tab)
   g_return_if_fail (NULL != tab);
   
   /* XXX We passed redundant info to this routine ... but I think that's
-	* OK, it might eliminate programming errors. */
+   * OK, it might eliminate programming errors. */
   if (safe_strcmp(tab->e_type, type))
   {
     PERR ("attempt to insert \"%s\" into \"%s\"", type, tab->e_type);
-	 return;
+    return;
   }
   ent->e_type = CACHE_INSERT (type);
 
@@ -289,7 +287,7 @@ qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
   QofEntity *ent;
   g_return_val_if_fail (col, NULL);
   if (guid == NULL) return NULL;
-  ent = g_hash_table_lookup (col->hash_of_entities, guid->data);
+  ent = g_hash_table_lookup (col->hash_of_entities, guid);
   return ent;
 }
 
@@ -326,22 +324,19 @@ qof_collection_count (QofCollection *col)
 gboolean 
 qof_collection_is_dirty (QofCollection *col)
 {
-   if (!col) return FALSE;
-   return col->is_dirty;
+   return col ? col->is_dirty : FALSE;
 }
 
 void 
 qof_collection_mark_clean (QofCollection *col)
 {
-   if (!col) return;
-   col->is_dirty = FALSE;
+   if (col) { col->is_dirty = FALSE; }
 }
 
 void 
 qof_collection_mark_dirty (QofCollection *col)
 {
-   if (!col) return;
-   col->is_dirty = TRUE;
+   if (col) { col->is_dirty = TRUE; }
 }
 
 /* =============================================================== */
@@ -349,15 +344,13 @@ qof_collection_mark_dirty (QofCollection *col)
 gpointer 
 qof_collection_get_data (QofCollection *col)
 {
-   if (!col) return NULL;
-   return col->data;
+   return col ? col->data : NULL;
 }
 
 void 
 qof_collection_set_data (QofCollection *col, gpointer user_data)
 {
-   if (!col) return;
-   col->data = user_data;
+   if (col) { col->data = user_data; }
 }
 
 /* =============================================================== */
@@ -376,8 +369,8 @@ static void foreach_cb (gpointer key, gpointer item, gpointer arg)
 }
 
 void
-qof_collection_foreach (QofCollection *col, 
-                   QofEntityForeachCB cb_func, gpointer user_data)
+qof_collection_foreach (QofCollection *col, QofEntityForeachCB cb_func, 
+                        gpointer user_data)
 {
   struct _iterate iter;
 

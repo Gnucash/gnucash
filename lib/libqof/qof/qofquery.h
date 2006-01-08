@@ -63,13 +63,6 @@ the canonical form, and the same predicate may be evaluated multiple
 times per split for complex queries.  This is a place where we could
 probably optimize.
 
-Evaluation of a Query (see qof_query_run()) is optimized as much as
-possible by short-circuited evaluation.  The predicates in each
-AND-chain are sorted by predicate type, with Account queries sorted
-first to allow the evaluator to completely eliminate accounts from the
-search if there's no chance of them having splits that match.
-(XXX above no longer applies)
-
  @{ */
 /** @file qofquery.h
     @brief find objects that match a certain expression.
@@ -77,7 +70,6 @@ search if there's no chance of them having splits that match.
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 
 */
-
 
 #ifndef QOF_QUERYNEW_H
 #define QOF_QUERYNEW_H
@@ -101,7 +93,7 @@ typedef enum {
   QOF_QUERY_XOR
 } QofQueryOp;
 
-/* First/only term is same as 'and' */
+/** First/only term is same as 'and' */
 #define QOF_QUERY_FIRST_TERM QOF_QUERY_AND
 
 /** Default sort object type */
@@ -151,16 +143,14 @@ QofQuery * qof_query_create_for (QofIdTypeConst obj_type);
 void qof_query_destroy (QofQuery *q);
 
 /** Set the object type to be searched for.  The results of 
- *  performuing the query will be a list of this obj_type.
+ *  performing the query will be a list of this obj_type.
  */
 void qof_query_search_for (QofQuery *query, QofIdTypeConst obj_type);
 
-/** Set the book to be searched.  Books contain/identify collections
+/** Set the book to be searched.  Books contain/identify collections 
  *  of objects; the search will be performed over those books
- *  specified with this function.  If no books are set, no results
- *  will be returned (since there is nothing to search over). (CAS:
- *  Apparently, if no books are set, you'll actually get a critical
- *  assertion failure.)
+ *  specified with this function.  If no books are set, no results 
+ *  will be returned (since there is nothing to search over).
  *
  *  You can search multiple books.  To specify multiple books, call 
  *  this function multiple times with different arguments.  
@@ -359,8 +349,11 @@ void qof_query_set_max_results (QofQuery *q, int n);
  */
 gboolean qof_query_equal (QofQuery *q1, QofQuery *q2);
 
-/** Print the Query in human-readable format.
- * Useful for debugging and development.
+/** Log the Query 
+ *
+ * \deprecated Do not call directly, use the standard log
+ * module code: ::qof_log_set_level(QOF_MOD_QUERY, QOF_LOG_DEBUG);
+ * or ::qof_log_set_default(QOF_LOG_DEBUG);
  */
 void qof_query_print (QofQuery *query);
 

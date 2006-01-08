@@ -23,7 +23,7 @@
 
 /** @addtogroup Query
     @{ */
-                                                                                
+
 /** @file qofquerycore.h
     @brief API for providing core Query data types
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
@@ -42,7 +42,7 @@
 /**
  * PREDICATE DATA TYPES: All the predicate data types are rolled up into
  * the union type PredicateData.  The "type" field specifies which type
- * the union is.  
+ * the union is.
  */
 typedef struct _QofQueryPredData QofQueryPredData;
 
@@ -58,7 +58,7 @@ typedef enum {
   QOF_COMPARE_NEQ
 } QofQueryCompare;
 
-/** List of known core query data-types... 
+/** List of known core query data-types...
  *  Each core query type defines it's set of optional "comparitor qualifiers".
  */
 /* Comparisons for QOF_TYPE_STRING */
@@ -67,15 +67,13 @@ typedef enum {
   QOF_STRING_MATCH_CASEINSENSITIVE
 } QofStringMatch;
 
-/** Comparisons for QOF_TYPE_DATE	
+/** Comparisons for QOF_TYPE_DATE
  * The QOF_DATE_MATCH_DAY comparison rounds the two time
  *     values to mid-day and then compares these rounded values.
  * The QOF_DATE_MATCH_NORMAL comparison matches the time values,
  *     down to the second.
  */
-/* XXX remove these deprecated old names .. */
-//#define QOF_DATE_MATCH_ROUNDED QOF_DATE_MATCH_DAY
-//#define QOF_DATE_MATCH_NORMAL  QOF_DATE_MATCH_TIME
+
 typedef enum {
   QOF_DATE_MATCH_NORMAL = 1,
   QOF_DATE_MATCH_DAY
@@ -83,11 +81,11 @@ typedef enum {
 
 /** Comparisons for QOF_TYPE_NUMERIC, QOF_TYPE_DEBCRED
  *
- * XXX Should be deprecated, or at least wrapped up as a convnience
- * function,  this is based on the old bill gribble code, which assumed 
- * the amount was always positive, and then specified a funds-flow 
+ * XXX Should be deprecated, or at least wrapped up as a convenience
+ * function,  this is based on the old bill gribble code, which assumed
+ * the amount was always positive, and then specified a funds-flow
  * direction (credit, debit, or either).
- * 
+ *
  * The point being that 'match credit' is equivalent to the compound
  * predicate (amount >= 0) && (amount 'op' value) while the  'match
  * debit' predicate is equivalent to (amount <= 0) && (abs(amount) 'op' value)
@@ -101,7 +99,7 @@ typedef enum {
 
 /* Comparisons for QOF_TYPE_GUID */
 typedef enum {
-  /** These expect a single object and expect the 
+  /** These expect a single object and expect the
    * QofAccessFunc returns GUID* */
   QOF_GUID_MATCH_ANY = 1,
   QOF_GUID_MATCH_NONE,
@@ -114,12 +112,12 @@ typedef enum {
   QOF_GUID_MATCH_LIST_ANY,
 } QofGuidMatch;
 
-/** A CHAR type is for a RECNCell, Comparisons for QOF_TYPE_CHAR 
+/** A CHAR type is for a RECNCell, Comparisons for QOF_TYPE_CHAR
  *  'ANY' will match any charagter in the string.
  *
- * Match 'ANY' is a convenience/performance-enhanced predicate 
+ * Match 'ANY' is a convenience/performance-enhanced predicate
  * for the compound statement (value==char1) || (value==char2) || etc.
- * Match 'NONE' is equivalent to 
+ * Match 'NONE' is equivalent to
  * (value != char1) && (value != char2) && etc.
  */
 typedef enum {
@@ -138,15 +136,15 @@ struct _QofQueryPredData {
 };
 
 
-/** @name Core Data Type Predicates 
+/** @name Core Data Type Predicates
     @{ */
-QofQueryPredData *qof_query_string_predicate (QofQueryCompare how, 
+QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
                                               const char *str,
                                               QofStringMatch options,
                                               gboolean is_regex);
 
 QofQueryPredData *qof_query_date_predicate (QofQueryCompare how,
-                                            QofDateMatch options, 
+                                            QofDateMatch options,
                                             Timespec date);
 
 QofQueryPredData *qof_query_numeric_predicate (QofQueryCompare how,
@@ -169,13 +167,13 @@ QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guid
  *  sense, the 'path' is handled as if it were a paramter.
  */
 QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
-                                           GSList *path, 
+                                           GSList *path,
                                            const KvpValue *value);
 
-/** Same predicate as above, except that 'path' is assumed to be 
+/** Same predicate as above, except that 'path' is assumed to be
  * a string containing slash-separated pathname. */
 QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
-                                                const char *path, 
+                                                const char *path,
                                                 const KvpValue *value);
 
 /** Copy a predicate. */

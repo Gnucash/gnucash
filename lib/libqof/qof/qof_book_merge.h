@@ -16,8 +16,8 @@
  * along with this program; if not, contact:                         *
  *                                                                   *
  * Free Software Foundation           Voice:  +1-617-542-5942        *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                   *
  ********************************************************************/
 
@@ -68,6 +68,7 @@ any error values to the calling process. ::qof_book_mergeInit returns a
 pointer to the ::qof_book_mergeData struct - the calling process needs to
 make sure this is non-NULL to know that the Init has been successful.
 
+(to be renamed qofbookmerge.h in libqof2)
  @{
 */
 /** @file  qof_book_merge.h
@@ -81,7 +82,7 @@ make sure this is non-NULL to know that the Init has been successful.
 #include "qofclass.h"
 #include "qofobject.h"
 #include "qofinstance.h"
-#include "gnc-trace.h"
+#include "qoflog.h"
 
 /** \brief Results of collisions and user resolution.
 

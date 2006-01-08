@@ -24,7 +24,7 @@
     @{ 
 */
 /** @file kvp-util.h 
-    @brief GnuCash KVP utility functions 
+    @brief QOF KVP utility functions 
  */
 /**  @name Hash Utilities
  @{ 

@@ -59,7 +59,7 @@
  *    to and open this datastore?
  *
  * A brief note about books & sessions:
- * A book encapsulates the datasets manipulated by GnuCash.  A book
+ * A book encapsulates the datasets manipulated by QOF.  A book
  * holds the actual data.  By contrast, the session mediates the
  * connection between a book (the thing that lives in virtual memory
  * in the local process) and the datastore (the place where book
@@ -75,6 +75,8 @@
  * make that assumption, in order to store the different accounting
  * periods in a clump so that one can be found, given another.
  *
+   If you want multiple books that are unrelated to each other,
+   use multiple sessions.
 
    The session now calls QofBackendProvider->check_data_type
    to check that the incoming path contains data that the
@@ -119,21 +121,12 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
 
 /** The qof_session_begin () method begins a new session.
  *    It takes as an argument the book id. The book id must be a string
- *    in the form of a URI/URL.
- *    In the current implementation, the following URL's are supported
- *    -- File URI of the form 
- *       "file:/home/somewhere/somedir/file.xac"
- *       The path part must be a valid path.  The file-part must be 
- *       a valid old-style-xacc or new-style-gnucash-format file. Paths
- *       may be relative or absolute. If the path is relative; that is, 
- *       if the argument is  "file:somefile.xac" then a sequence of 
- *       search paths are checked for a file of this name.
- *
- *    -- Postgres URI of the form
- *       "postgres://hostname.com/dbname"
- *       See the src/backend/postgres subdirectory for more info.
- *
- *    -- RPC URI of the form rpc://hostname.com/rpcserver.
+ *    in the form of a URI/URL. The access method specified depends
+ *    on the loaded backends. In the absence of a customised backend,
+ *    only QSF XML would be accepted). Paths may be relative or absolute.
+ *    If the path is relative; that is, if the argument is "file:somefile.xml"
+ *    then the current working directory is assumed. Customised backends can
+ *    choose to search other, application-specific, directories as well.
  *
  *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
  *    to ignore any global-datastore locks (e.g. file locks) that it finds. 
@@ -216,7 +209,7 @@ QofBook * qof_session_get_book (QofSession *session);
  *    filepath is derived from the url by substituting commas for
  *    slashes).
  *
- * The qof_session_get_url() routine returns the url that was opened.
+ *    The qof_session_get_url() routine returns the url that was opened.
  *    URL's for local files take the form of 
  *    file:/some/where/some/file.gml
  */
@@ -243,7 +236,7 @@ void     qof_session_save (QofSession *session,
 			   QofPercentageFunc percentage_func);
 /**
  * The qof_session_end() method will release the session lock. For the
- *    file backend, it will *not* save the account group to a file. Thus, 
+ *    file backend, it will *not* save the data to a file. Thus, 
  *    this method acts as an "abort" or "rollback" primitive.  However,
  *    for other backends, such as the sql backend, the data would have
  *    been written out before this, and so this routines wouldn't 
@@ -347,9 +340,7 @@ no support for handling collisions - instead, use \ref BookMerge
 Objects can be defined solely in terms of QOF data types or
 as a mix of data types and other objects, which may in turn
 include other objects. These references can be copied recursively
-down to the third level. e.g. ::GncInvoice refers to ::GncOwner which
-refers to ::GncCustomer which refers to ::GncAddress. See
-::QofEntityReference.
+down to the third level. See ::QofEntityReference.
 
 \note This is a deep recursive copy - every referenced entity is copied
 to the new session, including all parameters. The starting point is all
@@ -402,12 +393,12 @@ QofIdType and GUID so that when the book is written out, the
 reference can be included. See ::qof_book_get_data. 
 
 When the file is imported back in, the list needs to be rebuilt.
-The QSF backend rebuilds the references by linking to real entities. Other
-backends can process the hash table in similar ways.
+The QSF backend rebuilds the references by linking to real entities.
+Other backends can process the hash table in similar ways.
 
 The list stores the QofEntityReference to the referenced entity -
-a struct that contains the GUID and the QofIdType of the referenced entity 
-as well as the parameter used to obtain the reference.
+a struct that contains the GUID and the QofIdType of the referenced
+entity as well as the parameter used to obtain the reference.
 
 Partial books need to be differentiated in the backend, the 
 flag in the book data is used by qof_session_save to prevent a partial
@@ -425,8 +416,8 @@ repeated references for a single entity.
 */
 typedef struct qof_entity_reference {
 	QofIdType       choice_type;/**< When the reference is a different type.*/
-	QofIdType        type;       /**< The type of entity */
-	GUID             *ref_guid;  /**< The GUID of the REFERENCE entity */
+	QofIdType       type;       /**< The type of entity */
+	GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
 	const QofParam  *param;      /**< The parameter name and type. */
 	const GUID      *ent_guid;   /**< The GUID of the original entity. */
 }QofEntityReference;
@@ -465,7 +456,8 @@ qof_entity_get_reference_from(QofEntity *ent, const QofParam *param);
 
 Retrieves any existing reference list and appends the new reference.
 
-If the book is not already marked as partial, it will be marked as partial.
+If the book is not already marked as partial, it will be marked as
+partial.
 */
 void
 qof_session_update_reference_list(QofSession *session, QofEntityReference *reference);
@@ -512,33 +504,18 @@ backends may return a ::QofBackendError.
 /** @name Event Handling
 
   @{ */
-/** The qof_session_events_pending() method will return TRUE if the backend
- *    has pending events which must be processed to bring the engine
- *    up to date with the backend.
+/** The qof_session_events_pending() method will return TRUE if the
+ *  backend has pending events which must be processed to bring 
+ *  the engine up to date with the backend.
  */
 gboolean qof_session_events_pending (QofSession *session);
 
-/**  The qof_session_process_events() method will process any events indicated
- *    by the qof_session_events_pending() method. It returns TRUE if the
- *    engine was modified while engine events were suspended.
+/**  The qof_session_process_events() method will process any events
+ *   indicated by the qof_session_events_pending() method. It returns 
+ *   TRUE if the engine was modified while engine events were suspended.
  */
 gboolean qof_session_process_events (QofSession *session);
 /** @} */
-
-#ifdef GNUCASH_MAJOR_VERSION
-/** Run the RPC Server 
- *  @deprecated  will go away */
-void gnc_run_rpc_server (void);
-
-/** XXX session_export really doesn't belong here .
- * This functino exports the list of accounts to a file.  Its a stop-gap 
- * measure until full book-closing is implemented.
- */
-gboolean qof_session_export (QofSession *tmp_session,
-			     QofSession *real_session,
-			     QofPercentageFunc percentage_func);
-
-#endif /* GNUCASH_MAJOR_VERSION */
 
 /** Register a function to be called just before a session is closed.
  *

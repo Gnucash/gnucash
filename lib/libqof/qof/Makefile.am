@@ -7,11 +7,11 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS}
 
 libqof_la_SOURCES =  \
+   deprecated.c      \
    gnc-date.c        \
    gnc-engine-util.c \
    gnc-numeric.c     \
    gnc-event.c       \
-   gnc-trace.c       \
    guid.c            \
    kvp_frame.c       \
    kvp-util.c        \
@@ -23,6 +23,7 @@ libqof_la_SOURCES =  \
    qofinstance.c     \
    qofquery.c        \
    qofbook.c         \
+   qoflog.c          \
    qofobject.c       \
    qofquerycore.c    \
    qofsession.c      \
@@ -31,11 +32,11 @@ libqof_la_SOURCES =  \
 qofincludedir = ${pkgincludedir}
 
 qofinclude_HEADERS = \
+   deprecated.h      \
    gnc-date.h        \
    gnc-engine-util.h \
    gnc-numeric.h     \
    gnc-event.h       \
-   gnc-trace.h       \
    guid.h            \
    kvp_frame.h       \
    kvp-util.h        \
@@ -53,6 +54,7 @@ qofinclude_HEADERS = \
    qofinstance.h     \
    qofquery.h        \
    qofbook.h         \
+   qoflog.h          \
    qofobject.h       \
    qofquerycore.h    \
    qofsession.h      \
@@ -72,7 +74,7 @@ noinst_HEADERS = \
    qofquerycore-p.h \
    qofsession-p.h
 
-QOFLIBdir = $(libdir)
+QOFLIBdir = $(QOF_LIB_DIR)
 
 EXTRA_DIST = \
   qofla-dir.h.in \

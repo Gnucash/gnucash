@@ -23,6 +23,8 @@
     @{ */
 /** @file gnc-engine-util.h 
     @brief QOF utility functions
+	(This file is due to be renamed qofutil.h in libqof2.
+	It will remain as a placeholder during libqof1.)
     @author Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
     @author Copyright (C) 1997-2002,2004 Linas Vepstas <linas@linas.org>
@@ -36,14 +38,17 @@
 #include "config.h"
 #include "qof.h"
 
-/** Macros *****************************************************/
+/* Macros *****************************************************/
 
-/* CAS: Notice that this macro does nothing if pointer args are equal.
-   Otherwise, it returns an integer.  Actually, perhaps these macro
-   should be private.  They are NOT good substitutes for the function
-   versions like safe_strcmp().  Maybe external users of these 3
-   macros should be converted to use safe_strcmp().  Actually, THESE
-   MACROS AFFECT CONTROL FLOW.  YUCK!  */
+/** \deprecated Use the function versions, safe_strcmp() and
+safe_strcasecmp(). These macros will be made private in libqof2.
+
+If the pointer arguments are equal, the macro does nothing and
+safe_strcmp / safe_strcasecmp return 0.
+
+These macros change program control flow and are not good 
+substitutes for the function equivalents.
+*/
 #define SAFE_STRCMP_REAL(fcn,da,db) {    \
   if ((da) && (db)) {                    \
     if ((da) != (db)) {                  \
@@ -60,7 +65,9 @@
   }                                      \
 }
 
+/** \deprecated use safe_strcmp() */
 #define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
+/** \deprecated use safe_strcasecmp() */
 #define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 
 /** \name typedef enum as string macros
@@ -85,7 +92,7 @@
     const char* name##asString(name n);
 
 #define AS_STRING_FUNC(name, list)       \
-    const char* name##asString(name n) {       \
+    const char* name##asString(name n) { \
         switch (n) {                     \
             list(AS_STRING_CASE)         \
             default: return "";  } }
@@ -107,10 +114,19 @@
 @{
 
   Similar but used when the enum is NOT a typedef
- note the LACK of a define_enum macro - don't use one!
+  Make sure you use the DEFINE_ENUM_NON_TYPEDEF macro.
 
+ You can precede the FROM_STRING_FUNC_NON_TYPEDEF 
+ and AS_STRING_FUNC_NON_TYPEDEF macros with the 
+ keyword static if appropriate.
+  
  ENUM_BODY is used in both types.
  */
+
+#define DEFINE_ENUM_NON_TYPEDEF(name, list)   \
+    enum name {                               \
+        list(ENUM_BODY)                       \
+    };
 
 #define FROM_STRING_DEC_NON_TYPEDEF(name, list)   \
    void name##fromString                          \
@@ -129,9 +145,9 @@
    const char* name##asString(enum name n);
 
 #define AS_STRING_FUNC_NON_TYPEDEF(name, list)    \
-   const char* name##asString(enum name n) {     \
-       switch (n) {                              \
-           list(AS_STRING_CASE_NON_TYPEDEF)      \
+   const char* name##asString(enum name n) {      \
+       switch (n) {                               \
+           list(AS_STRING_CASE_NON_TYPEDEF)       \
            default: return ""; } }
 
 #define AS_STRING_CASE_NON_TYPEDEF(name, value)   \
@@ -139,11 +155,14 @@
 
 /** @} */
 
-/* Define the long long int conversion for scanf */
+/** \deprecated Define the long long int conversion for scanf 
+ * HAVE_SCANF_LLD will be removed from libqof2
+ * */
 #if HAVE_SCANF_LLD
-# define GNC_SCANF_LLD "%lld"
+# define GNC_SCANF_LLD "%lld" /**< \deprecated 
+	use G_GINT64_FORMAT instead. */
 #else
-# define GNC_SCANF_LLD "%qd"
+# define GNC_SCANF_LLD "%qd"  /**< \deprecated */
 #endif
 
 /** @name Convenience wrappers
@@ -152,25 +171,50 @@
    
 /** \brief Initialise the Query Object Framework 
 
-Used for non-Guile applications or test routines.
+Use in place of separate init functions (like guid_init()
+and qof_query_init() etc.) to protect against future changes.
 */
 void qof_init (void);
 
 /** \brief Safely close down the Query Object Framework 
 
-Used for non-Guile applications or test routines.
+Use in place of separate close / shutdown functions 
+(like guid_shutdown(), qof_query_shutdown() etc.) to protect
+against future changes.
 */
 void qof_close (void);
 
 /** @} */
 
-/** Prototypes *************************************************/
+/* **** Prototypes *********************************************/
 
-/** The safe_strcmp compares strings a and b the same way that strcmp()
- * does, except that either may be null.  This routine assumes that
- * a non-null string is always greater than a null string.
- */
+/** The safe_strcmp compares strings da and db the same way that strcmp()
+ does, except that either may be null.  This routine assumes that
+ a non-null string is always greater than a null string.
+ 
+ @param da string 1.
+ @param db string 2.
+ 
+ @return If da == NULL && db != NULL, returns -1.
+         If da != NULL && db == NULL, returns +1.
+         If da != NULL && db != NULL, returns the result of 
+                   strcmp(da, db).
+         If da == NULL && db == NULL, returns 0. 
+*/
 int safe_strcmp (const char * da, const char * db);
+
+/** case sensitive comparison of strings da and db - either
+may be NULL. A non-NULL string is greater than a NULL string.
+ 
+ @param da string 1.
+ @param db string 2.
+ 
+ @return If da == NULL && db != NULL, returns -1.
+         If da != NULL && db == NULL, returns +1.
+         If da != NULL && db != NULL, returns the result of 
+                   strcmp(da, db).
+         If da == NULL && db == NULL, returns 0. 
+*/
 int safe_strcasecmp (const char * da, const char * db);
 
 /** The null_strcmp compares strings a and b the same way that strcmp()
@@ -212,10 +256,12 @@ const char * qof_util_whitespace_filter (const char * val);
 int qof_util_bool_to_int (const char * val);
 
 
-/** Gnucash's String Cache:
+/** The QOF String Cache:
  *
- * Many strings used throughout the engine are likely to be duplicated.
- * So we provide a reference counted cache system for the strings, which
+ * Many strings used throughout QOF and QOF applications are likely to
+ * be duplicated.
+ *
+ * QOF provides a reference counted cache system for the strings, which
  * shares strings whenever possible.
  *
  * Use gnc_string_cache_insert to insert a string into the cache (it
@@ -242,19 +288,21 @@ int qof_util_bool_to_int (const char * val);
 
 /** \deprecated use qof_init instead.
 
-Get the gnc_string_cache.  Create it if it doesn't exist already
+Get the gnc_string_cache.  Create it if it doesn't exist already.
 */
 GCache* gnc_engine_get_string_cache(void);
 
 /** Destroy the gnc_string_cache */
 void gnc_engine_string_cache_destroy (void);
 
-/* You can use this function as a destroy notifier for a GHashTable
-   that uses common strings as keys (or values, for that matter.) */
+/** You can use this function as a destroy notifier for a GHashTable
+   that uses common strings as keys (or values, for that matter.)
+*/
 void gnc_string_cache_remove(gconstpointer key);
 
-/* You can use this function with g_hash_table_insert(), or the key
-   (or value), as long as you use the destroy notifier above. */
+/** You can use this function with g_hash_table_insert(), or the key
+   (or value), as long as you use the destroy notifier above.
+*/
 gpointer gnc_string_cache_insert(gpointer key);
 
 #define CACHE_INSERT(str) gnc_string_cache_insert((gpointer)(str));

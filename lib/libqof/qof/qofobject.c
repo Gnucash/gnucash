@@ -28,11 +28,8 @@
 
 #include <glib.h>
 
-#include "gnc-trace.h"
-#include "gnc-engine-util.h"
-#include "qofobject.h"
+#include "qof.h"
 #include "qofobject-p.h"
-#include "qofbook.h"
 
 static QofLogModule log_module = QOF_MOD_OBJECT;
 
@@ -140,6 +137,23 @@ void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data)
   }
 }
 
+gboolean 
+qof_object_compliance (QofIdTypeConst type_name, gboolean warn)
+{
+	const QofObject *obj;
+
+	obj = qof_object_lookup(type_name);
+	if((obj->create == NULL)||(obj->foreach == NULL)){
+		if(warn) 
+		{
+			PINFO (" Object type %s is not fully QOF compliant", obj->e_type);
+		}
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
 void 
 qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
                     QofEntityForeachCB cb, gpointer user_data)
@@ -147,8 +161,8 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
   QofCollection *col;
   const QofObject *obj;
 
-  if (!book || !type_name) return;
-  ENTER ("type=%s", type_name);
+  if (!book || !type_name) { return; }
+  PINFO ("type=%s", type_name);
 
   obj = qof_object_lookup (type_name);
   if (!obj)
@@ -157,16 +171,11 @@ qof_object_foreach (QofIdTypeConst type_name, QofBook *book,
     return;
   }
   col = qof_book_get_collection (book, obj->e_type);
-  PINFO ("lookup obj=%p for type=%s", obj, type_name);
-  if (!obj) return;
-
-  PINFO ("type=%s foreach=%p", type_name, obj->foreach);
+  if (!obj) { return; }
   if (obj->foreach) 
   {
     obj->foreach (col, cb, user_data);
   }
-  LEAVE ("type=%s", type_name);
-
   return;
 }
 

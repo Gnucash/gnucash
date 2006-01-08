@@ -38,8 +38,10 @@
     or beyond.
 
     QOF GUID's can be used independently of any other subsystem
-    in QOF.   In particular, they do not require the use of
-    other parts of the object subsystem.
+    in QOF. In particular, they do not require the use of
+    other parts of the object subsystem. New GUID's are usually
+    created by initialising a new entity using qof_instance_init,
+    rather than calling GUID functions directly.
 
     @{ */
 /** @file guid.h
@@ -127,19 +129,13 @@ void guid_new(GUID *guid);
 /** Generate a new id. If no initialization function has been called,
  *  guid_init() will be called before the id is created.
  *
- *  @return guid A pointer to a data structure containing a new GUID.
- *  The memory pointed to is owned by this routine and the guid must
- *  be copied out. 
- * 
- *  CAS: huh? make that: @return guid A data structure containing a newly
- * allocated GUID.  Caller is responsible for calling guid_free().
+ * @return guid A data structure containing a newly allocated GUID.
+ *  Caller is responsible for calling guid_free().
  */
 GUID guid_new_return(void);
 
-/** Returns a GUID which is guaranteed to never reference any entity. */
-/* CAS: AFAICT: this isn't really guaranteed, but it's only as likely
-   as any other md5 collision. This could be guaranteed if GUID
-   contained a validity flag. */
+/** Returns a GUID which is guaranteed
+to never reference any entity. */
 const GUID * guid_null (void);
 
 /** Efficiently allocate & free memory for GUIDs */

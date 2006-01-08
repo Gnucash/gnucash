@@ -46,13 +46,18 @@
     Identifiers can be encoded as hex strings. 
    
     GUID Identifiers are 'typed' with strings.  The native ids used 
-    by QOF are defined below. An id with type QOF_ID_NONE does not 
-    refer to any entity, although that may change (???). An id with 
-    type QOF_ID_NULL does not refer to any entity, and will never refer
-    to any entity. An identifier with any other type may refer to an
-    actual entity, but that is not guaranteed (??? Huh?).  If an id 
-    does refer to an entity, the type of the entity will match the 
-    type of the identifier. 
+    by QOF are defined below.
+	-# An id with type QOF_ID_NONE does not 
+    refer to any entity.
+	-# An id with type QOF_ID_NULL does not refer
+	to any entity, and will never refer to any entity.
+	=# An identifier with any other type may refer to an
+    actual entity, but that is not guaranteed as that entity does
+	not have to exist within the current book. (See ::PARTIAL_QOFBOOK).
+	Also, creating a new entity from a data source involves creating
+	a temporary GUID and then setting the value from the data source.
+	If an id does refer to an entity, the type of the entity will match
+	the type of the identifier. 
 
     If you have a type name, and you want to have a way of finding
     a collection that is associated with that type, then you must use
@@ -105,9 +110,11 @@ typedef const gchar* QofLogModule;
 })
 
 /** return TRUE if object is of the given type */
-#define QOF_CHECK_TYPE(obj,type) (0 == QSTRCMP((type),(((QofEntity *)(obj))->e_type)))
+#define QOF_CHECK_TYPE(obj,type) (((obj) != NULL) && \
+  (0 == QSTRCMP((type),(((QofEntity *)(obj))->e_type))))
 
-/** cast object to the indicated type, print error message if its bad  */
+/** cast object to the indicated type,
+print error message if its bad  */
 #define QOF_CHECK_CAST(obj,e_type,c_type) (                   \
   QOF_CHECK_TYPE((obj),(e_type)) ?                            \
   (c_type *) (obj) :                                          \
@@ -138,7 +145,7 @@ typedef struct QofCollection_s QofCollection;
 
 struct QofEntity_s
 {
-   QofIdType        e_type;
+	QofIdType        e_type;
 	GUID             guid;
 	QofCollection  * collection;
 };
@@ -178,8 +185,8 @@ QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
 typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
-void qof_collection_foreach (QofCollection *, 
-                       QofEntityForeachCB, gpointer user_data);
+void qof_collection_foreach (QofCollection *, QofEntityForeachCB, 
+                             gpointer user_data);
 
 /** Store and retreive arbitrary object-defined data 
  *

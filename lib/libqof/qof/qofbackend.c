@@ -31,8 +31,8 @@
 #include <glib.h>
 #include <gmodule.h>
 #include <dlfcn.h>
-#include <sys/stat.h>
 #include <errno.h>
+#include "qof.h"
 #include "qofbackend-p.h"
 
 static QofLogModule log_module = QOF_MOD_BACKEND;
@@ -40,7 +40,7 @@ static QofLogModule log_module = QOF_MOD_BACKEND;
 #define QOF_CONFIG_DESC    "desc"
 #define QOF_CONFIG_TIP     "tip"
 
-/********************************************************************\
+/* *******************************************************************\
  * error handling                                                   *
 \********************************************************************/
 
@@ -89,7 +89,6 @@ qof_backend_set_message (QofBackend *be, const char *format, ...)
    be->error_msg = buffer;
 }
 
-/* This should always return a valid char * */
 char *
 qof_backend_get_message (QofBackend *be) 
 {
@@ -100,9 +99,9 @@ qof_backend_get_message (QofBackend *be)
 
    /* 
     * Just return the contents of the error_msg and then set it to
-    * NULL.  This is necessary, because the Backends don't seem to
-    * have a destroy_backend function to take care if freeing stuff
-    * up.  The calling function should free the copy.
+    * NULL. This is necessary, because the Backends don't seem to
+    * have a destroy_backend function to take care of freeing stuff
+    * up. The calling function should free the copy.
     * Also, this is consistent with the qof_backend_get_error() popping.
     */
 
@@ -141,13 +140,10 @@ qof_backend_init(QofBackend *be)
     be->error_msg = NULL;
     be->percentage = NULL;
 	be->backend_configuration = kvp_frame_new();
-
-#ifdef GNUCASH_MAJOR_VERSION
-    /* XXX remove these */
-    be->fullpath = NULL;
-    be->price_lookup = NULL;
-    be->export = NULL;
-#endif
+	
+	/* to be removed */
+	be->price_lookup = NULL;
+	be->export = NULL;
 }
 
 void
@@ -195,11 +191,10 @@ void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
 	count = be->config_count;
 	count++;
 	value = NULL;
-	ENTER (" %d", count);
 	switch (option->type)
 	{
 		case KVP_TYPE_GINT64   : {
-			value = kvp_value_new_gint64(*(gint64*)option->value);
+			value = kvp_value_new_gint64(GPOINTER_TO_INT(option->value));
 			break; 
 		}
 		case KVP_TYPE_DOUBLE   : { 
@@ -226,22 +221,16 @@ void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
 	if(value) {
 		temp = g_strdup_printf("/%s", option->option_name);
 		kvp_frame_set_value(be->backend_configuration, temp, value);
-		PINFO (" setting value at %s", temp);
 		g_free(temp);
 		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_DESC, option->option_name);
-		PINFO (" setting description %s at %s", option->description, temp);
 		kvp_frame_set_string(be->backend_configuration, temp, option->description);
-		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
 		g_free(temp);
 		temp = g_strdup_printf("/%s/%s", QOF_CONFIG_TIP, option->option_name);
-		PINFO (" setting tooltip %s at %s", option->tooltip, temp);
 		kvp_frame_set_string(be->backend_configuration, temp, option->tooltip);
-		PINFO (" check= %s", kvp_frame_get_string(be->backend_configuration, temp));
 		g_free(temp);
 		/* only increment the counter if successful */
 		be->config_count = count;
 	}
-	LEAVE (" ");
 }
 
 KvpFrame* qof_backend_complete_frame(QofBackend *be)
@@ -397,7 +386,6 @@ gboolean
 qof_load_backend_library (const char *directory, 
 				const char* filename, const char* init_fcn)
 {
-	struct stat sbuf;
 	gchar *fullpath;
 	typedef void (* backend_init) (void);
 	GModule *backend;
@@ -406,8 +394,6 @@ qof_load_backend_library (const char *directory,
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
 	fullpath = g_module_build_path(directory, filename);
-	PINFO (" fullpath=%s", fullpath);
-	g_return_val_if_fail((stat(fullpath, &sbuf) == 0), FALSE);
 	backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
 	if(!backend) { 
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());

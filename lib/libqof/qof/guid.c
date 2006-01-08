@@ -38,23 +38,20 @@
 #include <sys/times.h>
 #include <time.h>
 #include <unistd.h>
-
-#include "guid.h"
+#include "qof.h"
 #include "md5.h"
-#include "qofid.h"
-#include "gnc-trace.h"
 
 # ifndef P_tmpdir
 #  define P_tmpdir "/tmp"
 # endif
 
-/** Constants *******************************************************/
+/* Constants *******************************************************/
 #define DEBUG_GUID 0
 #define BLOCKSIZE 4096
 #define THRESHOLD (2 * BLOCKSIZE)
 
 
-/** Static global variables *****************************************/
+/* Static global variables *****************************************/
 static gboolean guid_initialized = FALSE;
 static struct md5_ctx guid_context;
 #ifndef HAVE_GLIB29
@@ -64,7 +61,7 @@ static GMemChunk *guid_memchunk = NULL;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
-/** Memory management routines ***************************************/
+/* Memory management routines ***************************************/
 #ifdef HAVE_GLIB29
 GUID *
 guid_malloc (void)
@@ -81,6 +78,7 @@ guid_free (GUID *guid)
   g_slice_free(GUID, guid);
 }
 #else /* !HAVE_GLIB29 */
+
 static void
 guid_memchunk_init (void)
 {
@@ -127,8 +125,8 @@ guid_null(void)
     int i;
     char *tmp = "NULLGUID.EMPTY.";
 
-    /* 16th space for '\O' */
-    for (i = 0; i < 16; i++)
+      /* 16th space for '\O' */
+	  for (i = 0; i < 16; i++)
       null_guid.data[i] = tmp[i];
 
     null_inited = 1;
@@ -137,7 +135,7 @@ guid_null(void)
   return &null_guid;
 }
 
-/** Function implementations ****************************************/
+/* Function implementations ****************************************/
 
 /* This code is based on code in md5.c in GNU textutils. */
 static size_t
@@ -495,16 +493,16 @@ guid_new(GUID *guid)
   init_from_time();
 
   /* Make it a little extra salty.  I think init_from_time was buggy,
-   * or something, since duplicate id's actually happened. Or something
-   * like that.  I think this is because init_from_time kept returning
-   * the same values too many times in a row.  So we'll do some 'block
-   * chaining', and feed in the old guid as new random data.
-   *
-   * Anyway, I think the whole fact that I saw a bunch of duplicate 
-   * id's at one point, but can't reproduce the bug is rather alarming.
-   * Something must be broken somewhere, and merely adding more salt
-   * is just hiding the problem, not fixing it.
-   */
+	* or something, since duplicate id's actually happened. Or something
+	* like that.  I think this is because init_from_time kept returning
+	* the same values too many times in a row.  So we'll do some 'block
+	* chaining', and feed in the old guid as new random data.
+	*
+	* Anyway, I think the whole fact that I saw a bunch of duplicate 
+	* id's at one point, but can't reproduce the bug is rather alarming.
+	* Something must be broken somewhere, and merely adding more salt
+	* is just hiding the problem, not fixing it.
+	*/
   init_from_int (433781*counter);
   init_from_buff (guid->data, 16);
 

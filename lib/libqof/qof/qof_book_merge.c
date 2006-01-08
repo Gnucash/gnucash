@@ -16,16 +16,12 @@
  * along with this program; if not, contact:                         *
  *                                                                   *
  * Free Software Foundation           Voice:  +1-617-542-5942        *
- * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652        *
- * Boston, MA  02110-1301,  USA       gnu@gnu.org                    *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
  *                                                                   *
  ********************************************************************/
 
-#include "gnc-trace.h"
-#include "qof_book_merge.h"
-#include "qofinstance-p.h"
-#include "qofchoice.h"
-#include "qofid-p.h"
+#include "qof.h"
 
 static QofLogModule log_module = QOF_MOD_MERGE;
 
@@ -698,7 +694,7 @@ qof_book_mergeCommitRuleLoop(
 			registered_type = TRUE;
 		}
 		if(safe_strcmp(rule->mergeType, QOF_TYPE_CHOICE) == 0) {
-				referenceEnt = cm_param->param_getfcn(rule->importEnt, cm_param);
+			referenceEnt = cm_param->param_getfcn(rule->importEnt, cm_param);
 			reference_setter = (void(*)(QofEntity*, QofEntity*))cm_param->param_setfcn;
 			if(reference_setter != NULL) 
 			{ 
@@ -795,6 +791,11 @@ reformat to QSF_XSD_TIME or the QSF XML will
 FAIL the schema validation and QSF exports will become invalid.
 
 The QOF_TYPE_BOOLEAN is lowercase for the same reason.
+
+\todo deprecate and replace with
+gchar* qof_instance_param_as_string(const QofParam*, QofInstance*);
+and then add
+gchar* qof_class_get_param_as_string(QofIdTypeConst, QofInstance*); ?
 */
 char*
 qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)

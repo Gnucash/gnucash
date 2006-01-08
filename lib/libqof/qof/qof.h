@@ -74,7 +74,7 @@
 /** @} */
 
 #include "qofid.h"
-#include "gnc-trace.h"
+#include "qoflog.h"
 #include "gnc-date.h"
 #include "gnc-numeric.h"
 #include "gnc-event.h"
@@ -97,5 +97,13 @@
 #include "qof_book_merge.h"
 #include "qof-be-utils.h"
 #include "qofla-dir.h"
+#include "deprecated.h"
+
+/** allow easy logging of QSF debug messages */
+#define QOF_MOD_QSF "qof-backend-qsf"
+/** allow easy loading of the QSF backend */
+#define QSF_BACKEND_LIB "libqof-backend-qsf"
+/** allow easy loading of the QSF backend */
+#define QSF_MODULE_INIT "qsf_provider_init"
 
 #endif /* QOF_H_ */

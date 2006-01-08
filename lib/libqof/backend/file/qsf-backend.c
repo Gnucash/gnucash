@@ -5,7 +5,6 @@
  *  Copyright  2005  Neil Williams
  *  linux@codehelp.co.uk
  ****************************************************************************/
-
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,12 +18,12 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- *  02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
 #define _GNU_SOURCE
 
+#include "qof.h"
 #include "qof-backend-qsf.h"
 #include "qsf-xml.h"
 #include "qsf-dir.h"
@@ -32,46 +31,13 @@
 #include <sys/stat.h>
 
 #define QSF_TYPE_BINARY "binary"
-#define QSF_TYPE_GLIST "glist"
-#define QSF_TYPE_FRAME "frame"
-#define QSF_COMPRESS "compression_level"
+#define QSF_TYPE_GLIST  "glist"
+#define QSF_TYPE_FRAME  "frame"
 
 static QofLogModule log_module = QOF_MOD_QSF;
-static int use_gz_level = 0;
+static void qsf_object_commitCB(gpointer key, gpointer value, gpointer data);
 
-static void option_cb (QofBackendOption *option, gpointer data)
-{
-	if(0 == safe_strcmp(QSF_COMPRESS, option->option_name)) {
-		use_gz_level = *(gint*)option->value;
-	}
-}
-
-static void
-qsf_load_config(QofBackend *be, KvpFrame *config)
-{
-  qof_backend_option_foreach(config, option_cb, NULL);
-}
-
-static KvpFrame*
-qsf_get_config(QofBackend *be)
-{
-	QofBackendOption *option;
-
-	if(!be) { return NULL; }
-	qof_backend_prepare_frame(be);
-	option = g_new0(QofBackendOption, 1);
-	option->option_name = QSF_COMPRESS;
-	option->description = _("Level of compression to use: 0 for none, 9 for highest.");
-	option->tooltip = _("QOF can compress QSF XML files using gzip. "
-		"Note that compression is not used when outputting to STDOUT.");
-	option->type = KVP_TYPE_GINT64;
-	option->value = (gpointer)&use_gz_level;
-	qof_backend_prepare_option(be, option);
-	g_free(option);
-	return qof_backend_complete_frame(be);
-}
-
-struct QSFBackend_s 
+struct QSFBackend_s
 {
 	QofBackend be;
 	qsf_param *params;
@@ -80,7 +46,73 @@ struct QSFBackend_s
 
 typedef struct QSFBackend_s QSFBackend;
 
-void
+static void option_cb (QofBackendOption *option, gpointer data)
+{
+	qsf_param *params;
+
+	params = (qsf_param*)data;
+	g_return_if_fail(params);
+	if(0 == safe_strcmp(QSF_COMPRESS, option->option_name)) {
+		params->use_gz_level = GPOINTER_TO_INT(option->value);
+	}
+	if (0 == safe_strcmp(QSF_MAP_FILES, option->option_name)) {
+		params->map_files = g_list_copy(option->value);
+	}
+}
+
+static void
+qsf_load_config(QofBackend *be, KvpFrame *config)
+{
+	QSFBackend *qsf_be;
+	qsf_param  *params;
+
+	qsf_be = (QSFBackend*)be;
+	g_return_if_fail(qsf_be->params);
+	params = qsf_be->params;
+	qof_backend_option_foreach(config, option_cb, params);
+}
+
+static KvpFrame*
+qsf_get_config(QofBackend *be)
+{
+	QofBackendOption *option;
+	QSFBackend *qsf_be;
+	qsf_param *params;
+
+	if(!be) { return NULL; }
+	qsf_be = (QSFBackend*)be;
+	g_return_val_if_fail(qsf_be->params, NULL);
+	params = qsf_be->params;
+	qof_backend_prepare_frame(be);
+	option = g_new0(QofBackendOption, 1);
+	option->option_name = QSF_COMPRESS;
+	option->description = _("Level of compression to use: 0 for none, 9 for highest.");
+	option->tooltip = _("QOF can compress QSF XML files using gzip. "
+		"Note that compression is not used when outputting to STDOUT.");
+	option->type = KVP_TYPE_GINT64;
+	option->value = GINT_TO_POINTER(params->use_gz_level);
+	qof_backend_prepare_option(be, option);
+	g_free(option);
+	option = g_new0(QofBackendOption, 1);
+	option->option_name = QSF_MAP_FILES;
+	option->description = _("List of QSF map files to use for this session.");
+	option->tooltip = _("QOF can convert objects within QSF XML files "
+		"using a map of the changes required.");
+	option->type = KVP_TYPE_GLIST;
+	option->value = params->map_files;
+	qof_backend_prepare_option(be, option);
+	g_free(option);
+	return qof_backend_complete_frame(be);
+}
+
+GList**
+qsf_map_prepare_list(GList **maps)
+{
+	*maps = g_list_prepend(*maps, "pilot-qsf-GnuCashInvoice.xml");
+	return maps;
+}
+
+static void
 qsf_param_init(qsf_param *params)
 {
 	Timespec *qsf_ts;
@@ -93,13 +125,16 @@ qsf_param_init(qsf_param *params)
 
 	g_return_if_fail(params != NULL);
 	params->count = 0;
+	params->use_gz_level = 0;
 	params->supported_types = NULL;
 	params->file_type = QSF_UNDEF;
 	params->qsf_ns = NULL;
 	params->output_doc = NULL;
 	params->output_node = NULL;
 	params->lister = NULL;
+	params->full_kvp_path = NULL;
 	params->map_ns = NULL;
+	params->map_files = NULL;
 	params->qsf_object_list = NULL;
 	params->qsf_parameter_hash = g_hash_table_new(g_str_hash, g_str_equal);
 	params->qsf_default_hash = g_hash_table_new(g_str_hash, g_str_equal);
@@ -129,6 +164,8 @@ qsf_param_init(qsf_param *params)
 	g_hash_table_insert(params->qsf_default_hash, "qsf_enquiry_date", qsf_enquiry_date);
 	g_hash_table_insert(params->qsf_default_hash, "qsf_time_now", &qsf_time_now_t);
 	g_hash_table_insert(params->qsf_default_hash, "qsf_time_string", qsf_time_string);
+	/* default map files */
+	params->map_files = *qsf_map_prepare_list(&params->map_files);
 }
 
 static gboolean 
@@ -136,7 +173,6 @@ qsf_determine_file_type(const char *path)
 {
 	struct stat sbuf;
 
-	PINFO (" %s", path);
 	if (!path) { return TRUE; }
 	if (0 == safe_strcmp(path, QOF_STDOUT)) { return TRUE; }
 	if (stat(path, &sbuf) <0)    { return FALSE; }
@@ -148,8 +184,7 @@ qsf_determine_file_type(const char *path)
 }
 
 /* GnuCash does LOTS of filesystem work, QSF is going to leave most of it to libxml2. :-)
-Just strip the file: from the start of the book_path URL. Locks and file
-creation are not implemented.
+Just strip the file: from the start of the book_path URL. Locks are not implemented.
 */
 static void
 qsf_session_begin(QofBackend *be, QofSession *session, const char *book_path,
@@ -165,6 +200,7 @@ qsf_session_begin(QofBackend *be, QofSession *session, const char *book_path,
 	qsf_be->fullpath = NULL;
 	if(book_path == NULL)
 	{
+		/* use stdout */
 		qof_backend_set_error(be, ERR_BACKEND_NO_ERR);
 		return;
 	}
@@ -181,7 +217,31 @@ qsf_session_begin(QofBackend *be, QofSession *session, const char *book_path,
 	else {
 		qsf_be->fullpath = g_strdup(book_path);
 	}
+	if(create_if_nonexistent)
+	{
+        FILE *f;
+
+        f = fopen(qsf_be->fullpath, "a+");
+        if(f) {fclose(f); }
+		else
+		{
+			qof_backend_set_error(be, ERR_BACKEND_READONLY);
+			return;
+		}
+	}
 	qof_backend_set_error(be, ERR_BACKEND_NO_ERR);
+}
+
+static void 
+qsf_free_params(qsf_param *params)
+{
+	g_hash_table_destroy(params->qsf_calculate_hash);
+	g_hash_table_destroy(params->qsf_default_hash);
+	if(params->referenceList) {
+		g_list_free(params->referenceList);
+	}
+	g_slist_free(params->supported_types);
+	if(params->map_ns) { xmlFreeNs(params->map_ns); }
 }
 
 static void
@@ -197,68 +257,10 @@ qsf_session_end( QofBackend *be)
 	xmlCleanupParser();
 }
 
-static void 
+static void
 qsf_destroy_backend (QofBackend *be)
 {
 	g_free(be);
-}
-
-QofBackendError 
-qof_session_load_our_qsf_object(QofSession *first_session, const char *path)
-{
-	QofSession *qsf_session;
-	
-	qsf_session = qof_session_new();
-	qof_session_begin(qsf_session, path, FALSE, FALSE);
-	qof_session_load(qsf_session, NULL);
-	/* FIXME: This needs to return success and set the open not merge error in file_open */
-	return ERR_QSF_OPEN_NOT_MERGE;
-}
-
-QofBackendError 
-qof_session_load_qsf_object(QofSession *first_session, const char *path)
-{
-	PINFO ("%s = ERR_QSF_NO_MAP", path);
-	return ERR_QSF_NO_MAP;
-}
-
-void
-qsf_file_type(QofBackend *be, QofBook *book)
-{
-	QSFBackend *qsf_be;
-	qsf_param *params;
-	char *path;
-	gboolean result;
-
-	g_return_if_fail(be != NULL);
-	g_return_if_fail(book != NULL);
-	qsf_be = (QSFBackend*) be;
-	g_return_if_fail(qsf_be != NULL);
-	g_return_if_fail(qsf_be->fullpath != NULL);
-	g_return_if_fail(qsf_be->params != NULL);
-	params = qsf_be->params;
-	params->book = book;
-	path = g_strdup(qsf_be->fullpath);
-	params->filepath = g_strdup(path);
-	qof_backend_get_error(be);
-	result = is_our_qsf_object_be(params);
-	if(result) {
-		params->file_type = OUR_QSF_OBJ;
-		result = load_our_qsf_object(book, path, params);
-		if(!result) { qof_backend_set_error(be, ERR_FILEIO_PARSE_ERROR); }
-		return;
-	} 
-	else if(is_qsf_object_be(params)) {
-		params->file_type = IS_QSF_OBJ;
-		result = load_qsf_object(book, path, params);
-		if(!result) { qof_backend_set_error(be, ERR_FILEIO_PARSE_ERROR); }
-	}
-	if(result == FALSE) {
-		if(is_qsf_map_be(params)) {
-		params->file_type = IS_QSF_MAP;
-		qof_backend_set_error(be, ERR_QSF_MAP_NOT_OBJ);
-		}
-	}
 }
 
 static void
@@ -307,7 +309,7 @@ insert_ref_cb(QofObject *obj, gpointer user_data)
 	Load QofEntity into QofBook from XML in memory
 ==================================================*/
 
-static gboolean 
+static gboolean
 qsfdoc_to_qofbook(xmlDocPtr doc, qsf_param *params)
 {
 	QofInstance *inst;
@@ -344,6 +346,124 @@ qsfdoc_to_qofbook(xmlDocPtr doc, qsf_param *params)
 	qof_object_foreach_type(insert_ref_cb, params);
 	qof_book_set_data(book, ENTITYREFERENCE, params->referenceList);
 	return TRUE;
+}
+
+/* QofBackend routine to load from file - needs a map.
+*/
+static gboolean
+load_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
+{
+	xmlNodePtr qsf_root, map_root;
+	xmlDocPtr mapDoc, foreign_doc;
+	gchar *map_path, *map_file;
+	GList *maps;
+
+	maps = params->map_files;
+	map_path = NULL;
+	mapDoc = NULL;
+	if(!maps) {
+		qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
+		return FALSE;
+	}
+	/* use default maps */
+	map_file = g_strdup(maps->data);
+	foreign_doc = xmlParseFile(fullpath);
+	if (foreign_doc == NULL) {
+		qof_backend_set_error(params->be, ERR_FILEIO_PARSE_ERROR);
+		return FALSE;
+	}
+	qsf_root = NULL;
+	qsf_root = xmlDocGetRootElement(foreign_doc);
+	params->qsf_ns = qsf_root->ns;
+	params->book = book;
+	map_path = g_strdup_printf("%s/%s", QSF_SCHEMA_DIR, map_file);
+	if(!map_path) {
+		qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
+		return FALSE; 
+	}
+	mapDoc = xmlParseFile(map_path);
+	if(!mapDoc) {
+		qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
+		return FALSE;
+	}
+	map_root = xmlDocGetRootElement(mapDoc);
+	params->map_ns = map_root->ns;
+	params->input_doc = qsf_object_convert(mapDoc, qsf_root, params);
+	qsfdoc_to_qofbook(params->input_doc, params);
+	g_free(map_file);
+	return TRUE;
+}
+
+static gboolean
+load_our_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
+{
+	xmlNodePtr qsf_root;
+
+	params->input_doc = xmlParseFile(fullpath);
+	if (params->input_doc == NULL) {
+		qof_backend_set_error(params->be, ERR_FILEIO_PARSE_ERROR);
+		return FALSE;
+	}
+	qsf_root = NULL;
+	qsf_root = xmlDocGetRootElement(params->input_doc);
+	params->qsf_ns = qsf_root->ns;
+	return qsfdoc_to_qofbook(params->input_doc, params);
+}
+
+/* Determine the type of QSF and load it into the QofBook
+
+- is_our_qsf_object, OUR_QSF_OBJ, QSF object file using only QOF objects known
+	to the calling process.	No map is required.
+- is_qsf_object, IS_QSF_OBJ, QSF object file that may or may not have a QSF map
+	to convert external objects. This temporary type will be set to HAVE_QSF_MAP 
+	if a suitable map exists, or an error value returned: ERR_QSF_NO_MAP, 
+	ERR_QSF_BAD_MAP or ERR_QSF_WRONG_MAP. This allows the calling process to inform 
+	the user that the QSF itself is valid but a suitable map cannot be found.
+- is_qsf_map, IS_QSF_MAP, QSF map file. In the backend, this generates 
+	ERR_QSF_MAP_NOT_OBJ but	it can be used internally when processing maps to 
+	match a QSF object.
+
+returns NULL on error, otherwise a pointer to the QofBook. Use
+	the qof_book_merge API to merge the new data into the current
+	QofBook. 
+*/
+static void
+qsf_file_type(QofBackend *be, QofBook *book)
+{
+	QSFBackend *qsf_be;
+	qsf_param *params;
+	char *path;
+	gboolean result;
+
+	g_return_if_fail(be != NULL);
+	g_return_if_fail(book != NULL);
+	qsf_be = (QSFBackend*) be;
+	g_return_if_fail(qsf_be != NULL);
+	g_return_if_fail(qsf_be->fullpath != NULL);
+	g_return_if_fail(qsf_be->params != NULL);
+	params = qsf_be->params;
+	params->book = book;
+	path = g_strdup(qsf_be->fullpath);
+	params->filepath = g_strdup(path);
+	qof_backend_get_error(be);
+	result = is_our_qsf_object_be(params);
+	if(result) {
+		params->file_type = OUR_QSF_OBJ;
+		result = load_our_qsf_object(book, path, params);
+		if(!result) { qof_backend_set_error(be, ERR_FILEIO_PARSE_ERROR); }
+		return;
+	}
+	else if(is_qsf_object_be(params)) {
+		params->file_type = IS_QSF_OBJ;
+		result = load_qsf_object(book, path, params);
+		if(!result) { qof_backend_set_error(be, ERR_FILEIO_PARSE_ERROR); }
+	}
+	if(result == FALSE) {
+		if(is_qsf_map_be(params)) {
+		params->file_type = IS_QSF_MAP;
+		qof_backend_set_error(be, ERR_QSF_MAP_NOT_OBJ);
+		}
+	}
 }
 
 static void
@@ -399,16 +519,36 @@ qsf_supported_parameters(gpointer type, gpointer user_data)
 static KvpValueType
 qsf_to_kvp_helper(const char *type_string)
 {
-	if(0 == safe_strcmp(QOF_TYPE_STRING, type_string))  { return KVP_TYPE_STRING; }
-	if(0 == safe_strcmp(QOF_TYPE_GUID, type_string))    { return KVP_TYPE_GUID; }
-	if(0 == safe_strcmp(QOF_TYPE_INT64, type_string))   { return KVP_TYPE_GINT64; }
-	if(0 == safe_strcmp(QOF_TYPE_DOUBLE, type_string))  { return KVP_TYPE_DOUBLE; }
-	if(0 == safe_strcmp(QOF_TYPE_NUMERIC, type_string)) { return KVP_TYPE_NUMERIC; }
-	if(0 == safe_strcmp(QSF_TYPE_BINARY, type_string))  { return KVP_TYPE_BINARY; }
-	if(0 == safe_strcmp(QSF_TYPE_GLIST, type_string))   { return KVP_TYPE_GLIST; }
-	if(0 == safe_strcmp(QSF_TYPE_FRAME, type_string))   { return KVP_TYPE_FRAME; }
+	if(0 == safe_strcmp(QOF_TYPE_INT64,   type_string)) { return KVP_TYPE_GINT64;   }
+	if(0 == safe_strcmp(QOF_TYPE_DOUBLE,  type_string)) { return KVP_TYPE_DOUBLE;   }
+	if(0 == safe_strcmp(QOF_TYPE_NUMERIC, type_string)) { return KVP_TYPE_NUMERIC;  }
+	if(0 == safe_strcmp(QOF_TYPE_STRING,  type_string)) { return KVP_TYPE_STRING;   }
+	if(0 == safe_strcmp(QOF_TYPE_GUID,    type_string)) { return KVP_TYPE_GUID;     }
+	if(0 == safe_strcmp(QOF_TYPE_DATE,    type_string)) { return KVP_TYPE_TIMESPEC; }
+	if(0 == safe_strcmp(QSF_TYPE_BINARY,  type_string)) { return KVP_TYPE_BINARY;   }
+	if(0 == safe_strcmp(QSF_TYPE_GLIST,   type_string)) { return KVP_TYPE_GLIST;    }
+	if(0 == safe_strcmp(QSF_TYPE_FRAME,   type_string)) { return KVP_TYPE_FRAME;    }
 	return 0;
 }
+
+static QofIdTypeConst
+kvp_value_to_qof_type_helper(KvpValueType n)
+{
+	switch(n)
+	{
+		case KVP_TYPE_GINT64   : { return QOF_TYPE_INT64;   break; }
+		case KVP_TYPE_DOUBLE   : { return QOF_TYPE_DOUBLE;  break; }
+		case KVP_TYPE_NUMERIC  : { return QOF_TYPE_NUMERIC; break; }
+		case KVP_TYPE_STRING   : { return QOF_TYPE_STRING;  break; }
+		case KVP_TYPE_GUID     : { return QOF_TYPE_GUID;    break; }
+		case KVP_TYPE_TIMESPEC : { return QOF_TYPE_DATE;    break; }
+		case KVP_TYPE_BINARY   : { return QSF_TYPE_BINARY;  break; }
+		case KVP_TYPE_GLIST    : { return QSF_TYPE_GLIST;   break; }
+		case KVP_TYPE_FRAME    : { return QSF_TYPE_FRAME;   break; }
+		default : { return NULL; }
+	}
+}
+
 
 static void
 qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
@@ -416,95 +556,56 @@ qsf_from_kvp_helper(const char *path, KvpValue *content, gpointer data)
 	qsf_param *params;
 	QofParam *qof_param;
 	xmlNodePtr node;
+	KvpValueType n;
+	gchar *full_path;
 
 	params = (qsf_param*)data;
 	qof_param = params->qof_param;
+	full_path = NULL;
 	g_return_if_fail(params && path && content);
-	ENTER (" path=%s", path);
-	switch(kvp_value_get_type(content))
+	ENTER (" ");
+	n = kvp_value_get_type(content);
+	switch(n)
 	{
-		case KVP_TYPE_STRING:
+		case KVP_TYPE_GINT64   :
+		case KVP_TYPE_DOUBLE   :
+		case KVP_TYPE_NUMERIC  :
+		case KVP_TYPE_STRING   :
+		case KVP_TYPE_GUID     :
+		case KVP_TYPE_TIMESPEC :
+		case KVP_TYPE_BINARY   :
+		case KVP_TYPE_GLIST    :
 		{
 			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 				BAD_CAST qof_param->param_type));
 			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_STRING);
-			break;
-		}
-		case KVP_TYPE_GUID:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_GUID);
-			break;
-		}
-		case KVP_TYPE_BINARY:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_BINARY);
-			break;
-		}
-		case KVP_TYPE_GLIST:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_GLIST);
+			full_path = g_strconcat(params->full_kvp_path, "/", path, NULL);
+			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST full_path);
+			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, 
+				BAD_CAST kvp_value_to_qof_type_helper(n));
+			PINFO (" set %s", kvp_value_to_qof_type_helper(n));
 			break;
 		}
 		case KVP_TYPE_FRAME:
 		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QSF_TYPE_FRAME);
-			break;
-		}
-		case KVP_TYPE_GINT64:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_INT64);
-			break;
-		}
-		case KVP_TYPE_DOUBLE:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_DOUBLE);
-			break;
-		}
-		case KVP_TYPE_NUMERIC:
-		{
-			node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
-				BAD_CAST qof_param->param_type));
-			xmlNodeAddContent(node, BAD_CAST kvp_value_to_bare_string(content));
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_KVP, BAD_CAST path);
-			xmlNewProp(node, BAD_CAST QSF_OBJECT_VALUE, BAD_CAST QOF_TYPE_NUMERIC);
+			if(!params->full_kvp_path) { params->full_kvp_path = g_strdup(path); }
+			else { 
+				params->full_kvp_path = g_strconcat(params->full_kvp_path, 
+					"/", path, NULL);
+			}
+			PINFO (" full=%s, path=%s ", params->full_kvp_path, path);
+			kvp_frame_for_each_slot(kvp_value_get_frame(content), 
+				qsf_from_kvp_helper, params);
+			g_free(params->full_kvp_path);
+			params->full_kvp_path = NULL;
 			break;
 		}
 		default:
-		{ break; }
+		{
+			PERR (" unsupported value = %d", kvp_value_get_type(content));
+			break;
+		}
 	}
 	LEAVE (" ");
 }
@@ -693,14 +794,15 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		}
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_KVP))
 		{
-			qsf_kvp = kvp_frame_copy(qof_param->param_getfcn(ent,qof_param));
+			qsf_kvp = (KvpFrame*)qof_param->param_getfcn(ent,qof_param);
+			if(kvp_frame_is_empty(qsf_kvp))	{ LEAVE(" "); return; }
 			params->qof_param = qof_param;
 			params->output_node = object_node;
 			kvp_frame_for_each_slot(qsf_kvp, qsf_from_kvp_helper, params);
 		}
 		if((qof_param->param_setfcn != NULL) && (qof_param->param_getfcn != NULL))
 		{
-			for( supported = g_slist_copy(params->supported_types); 
+			for( supported = g_slist_copy(params->supported_types);
 				supported != NULL; supported = g_slist_next(supported))
 			{
 				if(0 == safe_strcmp((const char*)supported->data, (const char*)qof_param->param_type))
@@ -722,7 +824,7 @@ qsf_foreach_obj_type(QofObject *qsf_obj, gpointer data)
 	qsf_param *params;
 	QofBook *book;
 	GSList *support;
-	
+
 	g_return_if_fail(data != NULL);
 	params = (qsf_param*) data;
 	/* Skip unsupported objects */
@@ -749,10 +851,11 @@ qofbook_to_qsf(QofBook *book, qsf_param *params)
 	xmlDocPtr doc;
 	gchar buffer[GUID_ENCODING_LENGTH + 1];
 	const GUID *book_guid;
-	
+
 	g_return_val_if_fail(book != NULL, NULL);
 	params->book = book;
-	params->referenceList = g_list_copy((GList*)qof_book_get_data(book, ENTITYREFERENCE));
+	params->referenceList = 
+		g_list_copy((GList*)qof_book_get_data(book, ENTITYREFERENCE));
 	doc = xmlNewDoc(BAD_CAST QSF_XML_VERSION);
 	top_node = xmlNewNode(NULL, BAD_CAST QSF_ROOT_TAG);
 	xmlDocSetRootElement(doc, top_node);
@@ -763,7 +866,8 @@ qofbook_to_qsf(QofBook *book, qsf_param *params)
 	xmlNewProp(node, BAD_CAST QSF_BOOK_COUNT, BAD_CAST "1");
 	book_guid = qof_book_get_guid(book);
 	guid_to_string_buff(book_guid, buffer);
-	xmlNewChild(params->book_node, params->qsf_ns, BAD_CAST QSF_BOOK_GUID, BAD_CAST buffer);
+	xmlNewChild(params->book_node, params->qsf_ns, 
+		BAD_CAST QSF_BOOK_GUID, BAD_CAST buffer);
 	params->output_doc = doc;
 	params->book_node = node;
 	qof_object_foreach_type(qsf_foreach_obj_type, params);
@@ -780,9 +884,9 @@ write_qsf_from_book(const char *path, QofBook *book, qsf_param *params)
 	be = qof_book_get_backend(book);
 	qsf_doc = qofbook_to_qsf(book, params);
 	write_result = 0;
-	if((use_gz_level > 0) && (use_gz_level <= 9)) 
+	if((params->use_gz_level > 0) && (params->use_gz_level <= 9)) 
 	{
-		xmlSetDocCompressMode(qsf_doc, use_gz_level); 
+		xmlSetDocCompressMode(qsf_doc, params->use_gz_level); 
 	}
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
 	write_result = xmlSaveFormatFileEnc(path, qsf_doc, "UTF-8", 1);
@@ -804,10 +908,9 @@ write_qsf_to_stdout(QofBook *book, qsf_param *params)
 	xmlSaveFormatFileEnc("-", qsf_doc, "UTF-8", 1);
 	fprintf(stdout, "\n");
 	xmlFreeDoc(qsf_doc);
-	LEAVE (" ");
 }
 
-void
+static void
 qsf_write_file(QofBackend *be, QofBook *book)
 {
 	QSFBackend *qsf_be;
@@ -826,51 +929,6 @@ qsf_write_file(QofBackend *be, QofBook *book)
 	g_free(path);
 }
 
-/* QofBackend routine to load from file - needs a map.
-*/
-gboolean
-load_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
-{
-	xmlNodePtr qsf_root, map_root;
-	xmlDocPtr mapDoc, foreign_doc;
-	gchar *map_path, *map_file;
-
-	map_file = g_strdup("pilot-qsf-GnuCashInvoice.xml");
-	foreign_doc = xmlParseFile(fullpath);
-	if (foreign_doc == NULL) {
-		qof_backend_set_error(params->be, ERR_FILEIO_PARSE_ERROR);
-		return FALSE;
-	}
-	qsf_root = NULL;
-	qsf_root = xmlDocGetRootElement(foreign_doc);
-	params->qsf_ns = qsf_root->ns;
-	params->book = book;
-	map_path = g_strdup_printf("%s/%s", QSF_SCHEMA_DIR, map_file);
-	if(map_path == NULL) { return FALSE; }
-	mapDoc = xmlParseFile(map_path);
-	map_root = xmlDocGetRootElement(mapDoc);
-	params->map_ns = map_root->ns;
-	params->input_doc = qsf_object_convert(mapDoc, qsf_root, params);
-	qsfdoc_to_qofbook(params->input_doc, params);
-	return TRUE;
-}
-
-gboolean
-load_our_qsf_object(QofBook *book, const char *fullpath, qsf_param *params)
-{
-	xmlNodePtr qsf_root;
-	
-	params->input_doc = xmlParseFile(fullpath);
-	if (params->input_doc == NULL) {
-		qof_backend_set_error(params->be, ERR_FILEIO_PARSE_ERROR);
-		return FALSE;
-	}
-	qsf_root = NULL;
-	qsf_root = xmlDocGetRootElement(params->input_doc);
-	params->qsf_ns = qsf_root->ns;
-	return qsfdoc_to_qofbook(params->input_doc, params);
-}
-
 KvpValue*
 string_to_kvp_value(const char *content, KvpValueType type)
 {
@@ -882,7 +940,7 @@ string_to_kvp_value(const char *content, KvpValueType type)
 	struct tm   kvp_time;
 	time_t      kvp_time_t;
 	Timespec    cm_date;
-	
+
 	switch(type) {
 	  case KVP_TYPE_GINT64:
 		errno = 0;
@@ -932,9 +990,9 @@ string_to_kvp_value(const char *content, KvpValueType type)
 	return NULL;
 }
 
-/*======================================================
+/* ======================================================
 	Commit XML data from file to QofEntity in a QofBook
-========================================================*/
+========================================================= */
 void
 qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 {
@@ -971,10 +1029,8 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	void (*i32_setter)       (QofEntity*, gint32);
 	void (*i64_setter)       (QofEntity*, gint64);
 	void (*char_setter)      (QofEntity*, char);
-	void (*kvp_frame_setter) (QofEntity*, KvpFrame*);
 
-	g_return_if_fail(data != NULL);
-	g_return_if_fail(value != NULL);
+	g_return_if_fail(data && value && key);
 	params = (qsf_param*)data;
 	node = (xmlNodePtr)value;
 	parameter_name = (const char*)key;
@@ -989,11 +1045,11 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	cm_setter = qof_class_get_parameter_setter(obj_type, parameter_name);
 	cm_param = qof_class_get_parameter(obj_type, parameter_name);
 	object_set = params->object_set;
-	if(safe_strcmp(qof_type, QOF_TYPE_STRING) == 0)  { 
+	if(safe_strcmp(qof_type, QOF_TYPE_STRING) == 0)  {
 		string_setter = (void(*)(QofEntity*, const char*))cm_setter;
 		if(string_setter != NULL) { string_setter(qsf_ent, (char*)xmlNodeGetContent(node)); }
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_DATE) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_DATE) == 0) {
 		date_setter = (void(*)(QofEntity*, Timespec))cm_setter;
 		timechk = NULL;
 		timechk = strptime((char*)xmlNodeGetContent(node), QSF_XSD_TIME, &qsf_time);
@@ -1003,12 +1059,12 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		if(date_setter != NULL) { date_setter(qsf_ent, cm_date); }
 	}
 	if((safe_strcmp(qof_type, QOF_TYPE_NUMERIC) == 0)  ||
-	(safe_strcmp(qof_type, QOF_TYPE_DEBCRED) == 0)) { 
+	(safe_strcmp(qof_type, QOF_TYPE_DEBCRED) == 0)) {
 		numeric_setter = (void(*)(QofEntity*, gnc_numeric))cm_setter;
 		string_to_gnc_numeric((char*)xmlNodeGetContent(node), &cm_numeric);
 		if(numeric_setter != NULL) { numeric_setter(qsf_ent, cm_numeric); }
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_GUID) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_GUID) == 0) {
 		cm_guid = g_new(GUID, 1);
 		if(TRUE != string_to_guid((char*)xmlNodeGetContent(node), cm_guid))
 		{
@@ -1018,7 +1074,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 			return;
 		}
 		reference_type = (char*)xmlGetProp(node, BAD_CAST QSF_OBJECT_TYPE);
-		if(0 == safe_strcmp(QOF_PARAM_GUID, reference_type)) 
+		if(0 == safe_strcmp(QOF_PARAM_GUID, reference_type))
 		{
 			qof_entity_set_guid(qsf_ent, cm_guid);
 		}
@@ -1029,7 +1085,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 			}
 		}
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_INT32) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_INT32) == 0) {
 		errno = 0;
 		cm_i32 = (gint32)strtol ((char*)xmlNodeGetContent(node), &tail, 0);
 		if(errno == 0) {
@@ -1038,7 +1094,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		}
 		else { qof_backend_set_error(params->be, ERR_QSF_OVERFLOW); }
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_INT64) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_INT64) == 0) {
 		errno = 0;
 		cm_i64 = strtoll((char*)xmlNodeGetContent(node), &tail, 0);
 		if(errno == 0) {
@@ -1047,7 +1103,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		}
 		else { qof_backend_set_error(params->be, ERR_QSF_OVERFLOW); }
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_DOUBLE) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_DOUBLE) == 0) {
 		errno = 0;
 		cm_double = strtod((char*)xmlNodeGetContent(node), &tail);
 		if(errno == 0) {
@@ -1055,22 +1111,22 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 			if(double_setter != NULL) { double_setter(qsf_ent, cm_double); }
 		}
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_BOOLEAN) == 0){ 
-		if(0 == safe_strcasecmp((char*)xmlNodeGetContent(node), QSF_XML_BOOLEAN_TEST)) {
+	if(safe_strcmp(qof_type, QOF_TYPE_BOOLEAN) == 0){
+		if(0 == safe_strcasecmp((char*)xmlNodeGetContent(node), 
+				QSF_XML_BOOLEAN_TEST)) {
 			cm_boolean = TRUE;
 		}
 		else { cm_boolean = FALSE; }
 		boolean_setter = (void(*)(QofEntity*, gboolean))cm_setter;
 		if(boolean_setter != NULL) { boolean_setter(qsf_ent, cm_boolean); }
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_KVP) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_KVP) == 0) {
 		cm_type = qsf_to_kvp_helper((char*)xmlGetProp(node, BAD_CAST QSF_OBJECT_VALUE));
 		if(!cm_type) { return; }
 		cm_value = string_to_kvp_value((char*)xmlNodeGetContent(node), cm_type);
-		cm_kvp = kvp_frame_copy(cm_param->param_getfcn(qsf_ent, cm_param));
-		cm_kvp = kvp_frame_set_value(cm_kvp, (char*)xmlGetProp(node, BAD_CAST QSF_OBJECT_KVP), cm_value);
-		kvp_frame_setter = (void(*)(QofEntity*, KvpFrame*))cm_setter;
-		if(kvp_frame_setter != NULL) { kvp_frame_setter(qsf_ent, cm_kvp); }
+		cm_kvp = (KvpFrame*)cm_param->param_getfcn(qsf_ent, cm_param);
+		cm_kvp = kvp_frame_set_value(cm_kvp, (char*)xmlGetProp(node, 
+			BAD_CAST QSF_OBJECT_KVP), cm_value);
 	}
 	if(safe_strcmp(qof_type, QOF_TYPE_COLLECT) == 0) {
 		QofCollection *qsf_coll;
@@ -1087,10 +1143,10 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 			PINFO (" string to guid collect failed for %s", xmlNodeGetContent(node));
 			return;
 		}
-		// create a QofEntityReference with this type and GUID.
-		// there is only one entity each time.
-		// cm_guid contains the GUID of the reference.
-		// type is the type of the reference.
+		/* create a QofEntityReference with this type and GUID.
+		 there is only one entity each time.
+		 cm_guid contains the GUID of the reference.
+		 type is the type of the reference. */
 		reference = g_new0(QofEntityReference, 1);
 		reference->type = g_strdup(qsf_ent->e_type);
 		reference->ref_guid = cm_guid;
@@ -1101,7 +1157,7 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		reference->param = copy_param;
 		params->referenceList = g_list_append(params->referenceList, reference);
 	}
-	if(safe_strcmp(qof_type, QOF_TYPE_CHAR) == 0) { 
+	if(safe_strcmp(qof_type, QOF_TYPE_CHAR) == 0) {
 		char_getter = (char (*)(xmlNodePtr))xmlNodeGetContent;
 		cm_char = char_getter(node);
 		char_setter = (void(*)(QofEntity*, char))cm_setter;
@@ -1109,12 +1165,12 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 	}
 }
 
-QofBackend*
+static QofBackend*
 qsf_backend_new(void)
 {
 	QSFBackend *qsf_be;
 	QofBackend *be;
-	
+
 	qsf_be = g_new0(QSFBackend, 1);
 	be = (QofBackend*) qsf_be;
 	qof_backend_init(be);
@@ -1139,7 +1195,7 @@ qsf_backend_new(void)
 	/* The QSF backend is not multi-user. */
 	be->events_pending = NULL;
 	be->process_events = NULL;
-	
+
 	be->sync = qsf_write_file;
 	/* use for maps, later. */
 	be->load_config = qsf_load_config;
@@ -1149,12 +1205,10 @@ qsf_backend_new(void)
 	return be;
 }
 
-/** \brief The QOF method of loading each backend.
-
-QSF does not use a GnuCash module, it is loaded using the QOF
-method - QofBackendProvider.
+/* The QOF method of loading each backend.
+QSF is loaded as a GModule using the QOF method - QofBackendProvider.
 */
-static void 
+static void
 qsf_provider_free (QofBackendProvider *prov)
 {
 	prov->provider_name = NULL;
@@ -1162,8 +1216,6 @@ qsf_provider_free (QofBackendProvider *prov)
 	g_free (prov);
 }
 
-/* although we call gettext here, none of the
-QofBackendProvider strings are translatable. */
 void
 qsf_provider_init(void)
 {
@@ -1176,7 +1228,7 @@ qsf_provider_init(void)
 	textdomain (GETTEXT_PACKAGE);
 	#endif
 	prov = g_new0 (QofBackendProvider, 1);
-	prov->provider_name = "QSF Backend Version 0.1";
+	prov->provider_name = "QSF Backend Version 0.2";
 	prov->access_method = "file";
 	prov->partial_book_supported = TRUE;
 	prov->backend_new = qsf_backend_new;

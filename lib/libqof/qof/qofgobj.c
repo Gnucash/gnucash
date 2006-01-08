@@ -121,7 +121,7 @@ qof_gobject_getter (gpointer data, QofParam *getter)
   else
   if (G_IS_PARAM_SPEC_INT(gps))
   {
-    int ival;
+    long ival;
     
     GValue gval = {G_TYPE_INVALID};
     g_value_init (&gval, G_TYPE_INT);
@@ -133,7 +133,7 @@ qof_gobject_getter (gpointer data, QofParam *getter)
   else
   if (G_IS_PARAM_SPEC_UINT(gps))
   {
-    int ival;
+    long ival;
     GValue gval = {G_TYPE_INVALID};
     g_value_init (&gval, G_TYPE_UINT);
     g_object_get_property (gob, getter->param_name, &gval);
@@ -144,14 +144,14 @@ qof_gobject_getter (gpointer data, QofParam *getter)
   else
   if (G_IS_PARAM_SPEC_BOOLEAN(gps))
   {
-    int ival;
+    gboolean ival;
     
     GValue gval = {G_TYPE_INVALID};
     g_value_init (&gval, G_TYPE_BOOLEAN);
     g_object_get_property (gob, getter->param_name, &gval);
 
     ival = g_value_get_boolean (&gval);
-    return (gpointer) ival;
+    return GINT_TO_POINTER( ival);
   }
 
   PWARN ("unhandled parameter type %s for paramter %s", 
@@ -164,7 +164,7 @@ qof_gobject_double_getter (gpointer data, QofParam *getter)
 {
   GObject *gob = data;
    double fval;
-
+   
   GParamSpec *gps = getter->param_userdata;
 
   /* Note that the return type must actually be of type

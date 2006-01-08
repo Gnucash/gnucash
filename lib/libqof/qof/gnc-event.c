@@ -22,12 +22,10 @@
  ********************************************************************/
 
 #include "config.h"
-
+#include "qof.h"
 #include "gnc-event-p.h"
-#include "gnc-trace.h"
 
-
-/** Declarations ****************************************************/
+/* Declarations ****************************************************/
 
 typedef struct
 {
@@ -37,8 +35,7 @@ typedef struct
   gint handler_id;
 } HandlerInfo;
 
-
-/** Static Variables ************************************************/
+/* Static Variables ************************************************/
 static guint  suspend_counter = 0;
 static gint   next_handler_id = 1;
 static GList *handlers = NULL;
@@ -46,8 +43,7 @@ static GList *handlers = NULL;
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
-
-/** Implementations *************************************************/
+/* Implementations *************************************************/
 
 gint
 gnc_engine_register_event_handler (GNCEngineEventHandler handler,

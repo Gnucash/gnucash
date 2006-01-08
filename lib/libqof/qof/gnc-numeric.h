@@ -53,7 +53,7 @@ this may not be good enough. For example,
 
 @verbatim
 #include <glib.h>
-#include "gnc-numeric.h"
+#include <qof.h>
 #include <math.h>
 
 int
@@ -85,6 +85,7 @@ main(int argc, char ** argv)
 @{ */
 /** @file gnc-numeric.h
     @brief An exact-rational-number library for gnucash.
+	(to be renamed qofnumeric.h in libqof2)
     @author Copyright (C) 2000 Bill Gribble
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
@@ -264,7 +265,7 @@ typedef enum {
 
 /** Values that can be passed as the 'denom' argument.  
  *  The include a positive number n to be used as the 
- *  denominator of the output value.  Other possibilities
+ *  denominator of the output value.  Other possibilities 
  *  include the list below:
  */
 

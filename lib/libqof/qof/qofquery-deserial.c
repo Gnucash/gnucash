@@ -23,6 +23,9 @@
 
 // #include "config.h"
 
+/* NOTE: Development of this idea has ceased and this file is
+no longer included in the QOF library. It remains in CVS for now.*/
+
 #include <stdlib.h>
 #include <glib.h>
 #include <libxml/parser.h>
@@ -371,7 +374,7 @@ qof_query_pred_numeric_from_xml (xmlNodePtr root)
 	xmlNodePtr node;
 	QofQueryCompare how;
 	QofNumericMatch sm;
-   gnc_numeric num;
+	gnc_numeric num;
 	xmlNodePtr xp;
 	
 	xp = root->xmlChildrenNode;
@@ -478,7 +481,6 @@ qof_query_param_path_from_xml (xmlNodePtr root)
 		if (0 == strcmp (node->name, "qofquery:param"))
 		{
 			const char *str = GET_TEXT (node);
-                        /* BUG? I can't find the matching cache removal. */
 			plist = g_slist_append (plist, CACHE_INSERT(str));
 		}
 	}
@@ -631,15 +633,15 @@ qof_query_from_xml (xmlNodePtr root)
 	xmlChar *version;
 	xmlNodePtr qpart;
 	xmlNodePtr node;
-
+	
 	if (!root) return NULL;
-
+	
 	version = xmlGetProp(root, "version");
-   if (!root->name || strcmp ("qof:qofquery", root->name))
-   {
+    if (!root->name || strcmp ("qof:qofquery", root->name))
+    {
 		// XXX something is wrong. warn ... 
       return NULL;
-   }
+    }
 
 	q = qof_query_create ();
 

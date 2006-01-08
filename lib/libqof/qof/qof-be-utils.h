@@ -35,7 +35,7 @@
 #ifndef QOF_BE_UTILS_H
 #define QOF_BE_UTILS_H
 
-#include "gnc-trace.h"
+#include "qoflog.h"
 #include "gnc-engine-util.h"
 #include "qofbackend-p.h"
 #include "qofbook.h"
@@ -46,13 +46,12 @@
  * @param  inst: an instance of QofInstance
  *
  * The caller should use this macro first and then perform any other operations.
-
+ 
  Uses newly created functions to allow the macro to be used
  when QOF is linked as a library. qofbackend-p.h is a private header.
  */
 
 #define QOF_BEGIN_EDIT(inst)                                        \
-  QofBackend * be;                                                  \
   if (!(inst)) return;                                              \
                                                                     \
   (inst)->editlevel++;                                              \
@@ -66,12 +65,15 @@
   ENTER ("(inst=%p)", (inst));                                      \
                                                                     \
   /* See if there's a backend.  If there is, invoke it. */          \
-  be = qof_book_get_backend ((inst)->book);                         \
-    if (be && qof_backend_begin_exists((be))) {                     \
-     qof_backend_run_begin((be), (inst));                           \
-  } else {                                                          \
-     /* We tried and failed to start transaction! */                \
-     (inst)->dirty = TRUE;                                          \
+  {                                                                 \
+    QofBackend * be;                                                \
+    be = qof_book_get_backend ((inst)->book);                       \
+      if (be && qof_backend_begin_exists(be)) {                     \
+         qof_backend_run_begin(be, (inst));                         \
+    } else {                                                        \
+      /* We tried and failed to start transaction! */               \
+      (inst)->dirty = TRUE;                                         \
+    }                                                               \
   }                                                                 \
   LEAVE (" ");
 
@@ -102,15 +104,15 @@ gboolean qof_begin_edit(QofInstance *inst);
   (inst)->editlevel--;                                           \
   if (0 < (inst)->editlevel) return;                             \
                                                                  \
-  /* The pricedb suffers from delayed update...     */           \
+  /* The pricedb suffers from delayed update...     */          \
   /* This may be setting a bad precedent for other types, I fear. */ \
   /* Other types probably really should handle begin like this. */ \
   if ((-1 == (inst)->editlevel) && (inst)->dirty)                \
   {                                                              \
     QofBackend * be;                                             \
     be = qof_book_get_backend ((inst)->book);                    \
-    if (be && qof_backend_begin_exists((be))) {                  \
-     qof_backend_run_begin((be), (inst));                        \
+    if (be && qof_backend_begin_exists(be)) {                    \
+      qof_backend_run_begin(be, (inst));                         \
     }                                                            \
     (inst)->editlevel = 0;                                       \
   }                                                              \
@@ -148,7 +150,7 @@ gboolean qof_commit_edit(QofInstance *inst);
                                                                  \
   /* See if there's a backend.  If there is, invoke it. */       \
   be = qof_book_get_backend ((inst)->book);                      \
-  if (be && qof_backend_commit_exists((be)))                     \
+  if (be && qof_backend_commit_exists(be))                       \
   {                                                              \
     QofBackendError errcode;                                     \
                                                                  \
@@ -157,7 +159,7 @@ gboolean qof_commit_edit(QofInstance *inst);
       errcode = qof_backend_get_error (be);                      \
     } while (ERR_BACKEND_NO_ERR != errcode);                     \
                                                                  \
-    qof_backend_run_commit((be), (inst));                        \
+    qof_backend_run_commit(be, (inst));                          \
     errcode = qof_backend_get_error (be);                        \
     if (ERR_BACKEND_NO_ERR != errcode)                           \
     {                                                            \
