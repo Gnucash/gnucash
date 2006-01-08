@@ -148,7 +148,7 @@ gnc_plugin_budget_finalize(GObject *object)
     priv = GNC_PLUGIN_BUDGET_GET_PRIVATE(plugin);
 
     (parent_class->finalize)(object);
-    ENTER(" ");
+    LEAVE(" ");
 
 }
 

@@ -401,10 +401,10 @@ druid_gconf_finish_page_prepare (GnomeDruidPage *druidpage,
   gint who, how;
   gchar *text;
   const gchar *pgm_path =
-    _("When you click Appply, Gnucash will modify your ~/.gconf.path file "
+    _("When you click Apply, Gnucash will modify your ~/.gconf.path file "
       "and restart the gconf backend.");
   const gchar *pgm_install =
-    _("When you click Appply, Gnucash will install the gconf data into your "
+    _("When you click Apply, Gnucash will install the gconf data into your "
       "local ~/.gconf file and restart the gconf backend.  The %s script "
       "must be found in your search path for this to work correctly.");
   const gchar *user_path =

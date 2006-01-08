@@ -1,3 +1,12 @@
+2006-01-08  Neil Williams <linux@codehelp.co.uk>
+
+	* src/engine/Transaction.c : Even up ENTER and LEAVE
+	calls.
+	* src/gnome-utils/druid-gconf-setup.c : Typo fix.
+	* src/gnome-utils/gnc-tree-model-budget.h : Doxygen tweak.
+	* src/gnome/gnc-plugin-budget.c : Match ENTER with LEAVE
+	* src/gnome/gnc-plugin-page-budget.h : Doxygen tweak.
+
 2006-01-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome-utils/gnc-main-window.c: Add gnc workaround function

@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @addtogroup gnome-util
+/** @addtogroup budget
  *     @{ */
 
 /* This file provides some utilities for working with the list of

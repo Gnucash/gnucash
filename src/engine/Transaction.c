@@ -842,6 +842,7 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 
   trans->idata = 0;
   qof_instance_init (&trans->inst, GNC_ID_TRANS, book);
+  LEAVE (" ");
 }
 
 /********************************************************************\
@@ -1026,6 +1027,7 @@ xaccFreeTransaction (Transaction *trans)
   if (((char *) 1) == trans->num)
   {
     PERR ("double-free %p", trans);
+    LEAVE (" ");
     return;
   }
 
