@@ -148,6 +148,8 @@ doc:
 distcleancheck_listfiles = \
   find -type f -exec sh -c 'test -f ${srcdir}/{} || echo {}' ';'
 
+dist-hook: po/POTFILES.in
+
 distcheck-hook:
 
 distclean-local:
@@ -169,10 +171,6 @@ po/POTFILES.in: make-gnucash-potfiles .potfiles
 	./make-gnucash-potfiles > ./po/POTFILES.in
 
 .potfiles:
-
-dist-hook:
-	./make-gnucash-potfiles > $(distdir)/po/POTFILES.in
-
 
 SVN = svn
 XSLTPROC = xsltproc

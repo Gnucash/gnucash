@@ -1,3 +1,7 @@
+2006-01-08  Derek Atkins  <derek@ihtfp.com>
+
+	* Makefile.am: fix the dist-hook macro for po/POTFILES.in
+
 2006-01-08  Neil Williams <linux@codehelp.co.uk>
 
 	* src/import-export/qif-import/test/Makefile.am : OSX fix.
