@@ -226,29 +226,34 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "FileOpenMenuAction", GTK_STOCK_OPEN, N_("_Open"), "", NULL, NULL },
 	{ "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
 	{ "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
-	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p", NULL, NULL },
+	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p", 
+	  N_("Print the currently active page"), NULL },
 	{ "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), "<Alt>Return",
-	  NULL,
+	  N_("Edit the properties of the current file"),
 	  G_CALLBACK (gnc_main_window_cmd_file_properties) },
 	{ "FileCloseAction", GTK_STOCK_CLOSE, N_("_Close"), NULL,
-	  NULL,
+	  N_("Close the currently active page"),
 	  G_CALLBACK (gnc_main_window_cmd_file_close) },
 	{ "FileQuitAction", GTK_STOCK_QUIT, N_("_Quit"), NULL,
-	  NULL,
+	  N_("Quit this application"),
 	  G_CALLBACK (gnc_main_window_cmd_file_quit) },
 
 	/* Edit menu */
 
-	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL, NULL, NULL },
-	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL, NULL, NULL },
-	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL, NULL, NULL },
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL, 
+	  N_("Cut the current selection and copy it to clipboard"), NULL },
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL, 
+	  N_("Copy the current selection to clipboard"), NULL },
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+	  N_("Paste the clipboard content at the cursor position"), NULL },
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
-	  NULL,
+	  N_("Edit the global preferences of GnuCash"),
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
 
 	/* View menu */
 
-	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL, NULL },
+	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, 
+	  N_("Select sorting criteria for this page view"), NULL },
 	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, 
 	  N_("Select the account types that should be displayed."), NULL },
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
@@ -283,7 +288,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	  N_("Open the GnuCash Help"),
 	  G_CALLBACK (gnc_main_window_cmd_help_contents) },
 	{ "HelpAboutAction", GNOME_STOCK_ABOUT, N_("_About"), NULL,
-	  NULL,
+	  N_("About GnuCash"),
 	  G_CALLBACK (gnc_main_window_cmd_help_about) },
 };
 /** The number of actions provided by the main window. */

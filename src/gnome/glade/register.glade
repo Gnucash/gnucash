@@ -1305,8 +1305,8 @@
       <child>
 	<widget class="GtkToolButton" id="gnc_register_close_b">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
-	  <property name="label" translatable="yes">Close</property>
+	  <property name="tooltip">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label">Close</property>
 	  <property name="use_underline">True</property>
 	  <property name="stock_id">gtk-close</property>
 	  <property name="visible_horizontal">True</property>
@@ -1336,8 +1336,8 @@
       <child>
 	<widget class="GtkToolButton" id="gnc_register_xfer_b">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
-	  <property name="label" translatable="yes">Transfer</property>
+	  <property name="tooltip">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label">Transfer</property>
 	  <property name="use_underline">True</property>
 	  <property name="stock_id">gtk-convert</property>
 	  <property name="visible_horizontal">True</property>
@@ -1367,8 +1367,8 @@
       <child>
 	<widget class="GtkToolButton" id="gnc_register_find_b">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
-	  <property name="label" translatable="yes">Find</property>
+	  <property name="tooltip">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label">Find</property>
 	  <property name="use_underline">True</property>
 	  <property name="stock_id">gtk-find</property>
 	  <property name="visible_horizontal">True</property>
@@ -1385,8 +1385,8 @@
       <child>
 	<widget class="GtkToolButton" id="gnc_register_report_b">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
-	  <property name="label" translatable="yes">Report</property>
+	  <property name="tooltip">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label">Report</property>
 	  <property name="use_underline">True</property>
 	  <property name="stock_id">gnome-stock-book-green</property>
 	  <property name="visible_horizontal">True</property>
@@ -1403,8 +1403,8 @@
       <child>
 	<widget class="GtkToolButton" id="gnc_register_print_b">
 	  <property name="visible">True</property>
-	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
-	  <property name="label" translatable="yes">Print</property>
+	  <property name="tooltip">NOTUSED: Defined in src/gnome/window-register.c</property>
+	  <property name="label">Print</property>
 	  <property name="use_underline">True</property>
 	  <property name="stock_id">gtk-print</property>
 	  <property name="visible_horizontal">True</property>
