@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-07 17:48+0100\n"
-"PO-Revision-Date: 2006-01-07 17:48+0100\n"
+"POT-Creation-Date: 2006-01-08 22:37+0100\n"
+"PO-Revision-Date: 2006-01-08 22:40+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1074,7 +1074,7 @@ msgstr "Stichtag Monatswechsel: "
 #: ../src/business/business-gnome/glade/billterms.glade.h:11
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:193
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:2
-#: ../src/gnome/glade/register.glade.h:17
+#: ../src/gnome/glade/register.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-budget.c:165
 #: ../src/gnome/gnc-plugin-page-register.c:307
@@ -2060,7 +2060,7 @@ msgid "Export Employees to XML"
 msgstr "Mitarbeiter nach XML exportieren"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:93
-#: ../src/gnome/glade/register.glade.h:61
+#: ../src/gnome/glade/register.glade.h:56
 msgid "Sort _Order"
 msgstr "S_ortierreihenfolge"
 
@@ -2104,7 +2104,7 @@ msgstr "Kopieren"
 #: ../src/gnome/dialog-scheduledxaction.c:250
 #: ../src/gnome/dialog-sxsincelast.c:404
 #: ../src/gnome/gnc-plugin-page-register.c:166
-#: ../src/gnome-utils/gnc-main-window.c:244
+#: ../src/gnome-utils/gnc-main-window.c:247
 msgid "_Paste"
 msgstr "E_infügen"
 
@@ -2136,7 +2136,7 @@ msgstr ""
 
 #. Actions menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:127
-#: ../src/gnome/glade/register.glade.h:99
+#: ../src/gnome/glade/register.glade.h:93
 msgid "_Enter"
 msgstr "Übernehmen"
 
@@ -2146,7 +2146,7 @@ msgstr "Aktuellen Posten speichern"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
 #: ../src/gnome/glade/reconcile.glade.h:25
-#: ../src/gnome/glade/register.glade.h:93 ../src/gnome/window-reconcile.c:1203
+#: ../src/gnome/glade/register.glade.h:87 ../src/gnome/window-reconcile.c:1203
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -2156,7 +2156,7 @@ msgstr "Aktuellen Posten abbrechen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
 #: ../src/gnome/glade/reconcile.glade.h:27
-#: ../src/gnome/glade/register.glade.h:95 ../src/gnome/window-reconcile.c:1267
+#: ../src/gnome/glade/register.glade.h:89 ../src/gnome/window-reconcile.c:1267
 #: ../src/gnome/window-reconcile.c:1340
 msgid "_Delete"
 msgstr "_Löschen"
@@ -2166,7 +2166,7 @@ msgid "Delete the current entry"
 msgstr "Aktuellen Posten löschen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
-#: ../src/gnome/glade/register.glade.h:92
+#: ../src/gnome/glade/register.glade.h:86
 msgid "_Blank"
 msgstr "_Neue Buchung"
 
@@ -2201,17 +2201,17 @@ msgid "Open a company report window for the owner of this Invoice"
 msgstr "Einen Firmenbericht für den Mandant dieser Rechnung öffnen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:157
-#: ../src/gnome/glade/register.glade.h:107
+#: ../src/gnome/glade/register.glade.h:101
 msgid "_Standard"
 msgstr "_Standardreihenfolge"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:158
-#: ../src/gnome/glade/register.glade.h:94
+#: ../src/gnome/glade/register.glade.h:88
 msgid "_Date"
 msgstr "_Datum"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:159
-#: ../src/gnome/glade/register.glade.h:15
+#: ../src/gnome/glade/register.glade.h:14
 msgid "Date of _Entry"
 msgstr "_Eingabe-Datum"
 
@@ -2224,12 +2224,12 @@ msgid "_Price"
 msgstr "_Preis"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:162
-#: ../src/gnome/glade/register.glade.h:22
+#: ../src/gnome/glade/register.glade.h:21
 msgid "Descri_ption"
 msgstr "Be_schreibung"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:191
-#: ../src/gnome/glade/register.glade.h:29
+#: ../src/gnome/glade/register.glade.h:28
 #: ../src/gnome/gnc-plugin-page-register.c:305
 msgid "Enter"
 msgstr "Eingeben"
@@ -2241,7 +2241,7 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:194
-#: ../src/gnome/glade/register.glade.h:24
+#: ../src/gnome/glade/register.glade.h:23
 #: ../src/gnome/gnc-plugin-page-register.c:308
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -3035,7 +3035,7 @@ msgstr "Ausgleichskonto"
 #. If 'name' is "-- Split Transaction --" then return NULL or the register acct
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Transaction.c:2183 ../src/engine/Transaction.c:2200
+#: ../src/engine/Transaction.c:2185 ../src/engine/Transaction.c:2202
 #: ../src/register/ledger-core/split-register.c:2101
 #: ../src/register/ledger-core/split-register-control.c:991
 #: ../intl-scm/guile-strings.c:3014 ../intl-scm/guile-strings.c:3036
@@ -3043,19 +3043,19 @@ msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Transaction.c:2216 ../src/gnome/druid-stock-split.c:432
-#: ../src/gnome/glade/register.glade.h:77
+#: ../src/engine/Transaction.c:2218 ../src/gnome/druid-stock-split.c:432
+#: ../src/gnome/glade/register.glade.h:72
 #: ../src/gnome/gnc-plugin-page-register.c:309
 #: ../src/register/ledger-core/split-register.c:2085
 #: ../intl-scm/guile-strings.c:2634
 msgid "Split"
 msgstr "Vollständig"
 
-#: ../src/engine/Transaction.c:3037
+#: ../src/engine/Transaction.c:3039
 msgid "Voided transaction"
 msgstr "Ungültige Buchung"
 
-#: ../src/engine/Transaction.c:3060
+#: ../src/engine/Transaction.c:3062
 msgid "Transaction Voided"
 msgstr "Buchung ungültig gemacht"
 
@@ -3217,7 +3217,7 @@ msgstr "Komplett"
 #: ../src/gnome/dialog-scheduledxaction.c:240
 #: ../src/gnome/dialog-sxsincelast.c:393 ../src/gnome/glade/price.glade.h:25
 #: ../src/gnome/glade/reconcile.glade.h:28
-#: ../src/gnome/glade/register.glade.h:98
+#: ../src/gnome/glade/register.glade.h:92
 #: ../src/gnome/glade/sched-xact.glade.h:205
 #: ../src/gnome-utils/gnc-main-window.c:213
 #: ../src/gnome/window-reconcile.c:1260 ../src/gnome/window-reconcile.c:1333
@@ -3227,14 +3227,14 @@ msgstr "_Bearbeiten"
 
 #: ../src/gnome/dialog-scheduledxaction.c:241
 #: ../src/gnome/dialog-sxsincelast.c:394 ../src/gnome/glade/lots.glade.h:27
-#: ../src/gnome/glade/register.glade.h:116
+#: ../src/gnome/glade/register.glade.h:110
 #: ../src/gnome-utils/gnc-main-window.c:214
 msgid "_View"
 msgstr "_Ansicht"
 
 #: ../src/gnome/dialog-scheduledxaction.c:242
 #: ../src/gnome/dialog-sxsincelast.c:395
-#: ../src/gnome/glade/register.glade.h:88
+#: ../src/gnome/glade/register.glade.h:82
 #: ../src/gnome-utils/gnc-main-window.c:215
 msgid "_Actions"
 msgstr "A_ktionen"
@@ -3250,14 +3250,14 @@ msgstr "_Buchung"
 #: ../src/gnome/dialog-scheduledxaction.c:246
 #: ../src/gnome/dialog-sxsincelast.c:398
 #: ../src/gnome/gnc-plugin-page-register.c:160
-#: ../src/gnome-utils/gnc-main-window.c:242
+#: ../src/gnome-utils/gnc-main-window.c:243
 msgid "Cu_t"
 msgstr "_Ausschneiden"
 
 #: ../src/gnome/dialog-scheduledxaction.c:248
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/gnc-plugin-page-register.c:163
-#: ../src/gnome-utils/gnc-main-window.c:243
+#: ../src/gnome-utils/gnc-main-window.c:245
 msgid "_Copy"
 msgstr "_Kopieren"
 
@@ -3399,13 +3399,13 @@ msgstr ""
 
 #. Actions menu
 #: ../src/gnome/dialog-sxsincelast.c:409
-#: ../src/gnome/glade/register.glade.h:101
+#: ../src/gnome/glade/register.glade.h:95
 #: ../src/gnome/gnc-plugin-page-register.c:233
 msgid "_Jump"
 msgstr "Gegenbuchung"
 
 #: ../src/gnome/dialog-sxsincelast.c:410
-#: ../src/gnome/glade/register.glade.h:34
+#: ../src/gnome/glade/register.glade.h:32
 #: ../src/gnome/gnc-plugin-page-register.c:234
 msgid "Jump to the corresponding transaction in the other account"
 msgstr "Zur passenden Gegenbuchung im Gegenkonto gehen"
@@ -3836,7 +3836,7 @@ msgid "Commodity:"
 msgstr "Währung/Aktie:"
 
 #: ../src/gnome/glade/account.glade.h:30 ../src/gnome/glade/price.glade.h:6
-#: ../src/gnome/glade/print.glade.h:11 ../src/gnome/glade/register.glade.h:16
+#: ../src/gnome/glade/print.glade.h:11 ../src/gnome/glade/register.glade.h:15
 #: ../src/gnome/glade/stocks.glade.h:7
 #: ../src/gnome-utils/exchange-dialog.glade.h:3
 #: ../src/gnome-utils/transfer.glade.h:8
@@ -5100,201 +5100,175 @@ msgid "Check Register"
 msgstr "Kontobuch überprüfen"
 
 #: ../src/gnome/glade/register.glade.h:9
-msgid "Close"
-msgstr "Schließen"
-
-#: ../src/gnome/glade/register.glade.h:10
 msgid "Copy Transaction"
 msgstr "Buchung kopieren"
 
-#: ../src/gnome/glade/register.glade.h:11
+#: ../src/gnome/glade/register.glade.h:10
 msgid "Copy the selected transaction"
 msgstr "Ausgewählte Buchung kopieren"
 
-#: ../src/gnome/glade/register.glade.h:12
+#: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:237
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
 msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
 
-#: ../src/gnome/glade/register.glade.h:13
+#: ../src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
 msgstr "Buchung ausschneiden"
 
-#: ../src/gnome/glade/register.glade.h:14
+#: ../src/gnome/glade/register.glade.h:13
 msgid "Cut the selected transaction"
 msgstr "Ausgewählten Buchungssatz ausschneiden"
 
-#: ../src/gnome/glade/register.glade.h:18
+#: ../src/gnome/glade/register.glade.h:17
 #: ../src/gnome/gnc-plugin-page-register.c:187
 msgid "Delete Transaction"
 msgstr "Buchung löschen"
 
-#: ../src/gnome/glade/register.glade.h:19
+#: ../src/gnome/glade/register.glade.h:18
 msgid "Delete all the other splits"
 msgstr "Alle Gegen-Buchungen löschen"
 
-#: ../src/gnome/glade/register.glade.h:20
+#: ../src/gnome/glade/register.glade.h:19
 #: ../src/gnome/gnc-plugin-page-register.c:188
 msgid "Delete the current transaction"
 msgstr "Aktuellen Buchungssatz löschen"
 
-#: ../src/gnome/glade/register.glade.h:21
+#: ../src/gnome/glade/register.glade.h:20
 msgid "Delete the whole transaction"
 msgstr "Den gesamten Buchungssatz löschen"
 
-#: ../src/gnome/glade/register.glade.h:23
+#: ../src/gnome/glade/register.glade.h:22
 msgid "Dup_licate Transaction..."
 msgstr "Buchung duplizieren..."
 
-#: ../src/gnome/glade/register.glade.h:25
+#: ../src/gnome/glade/register.glade.h:24
 msgid "Duplicate this Transaction"
 msgstr "Diesen Buchungssatz duplizieren"
 
-#: ../src/gnome/glade/register.glade.h:26
+#: ../src/gnome/glade/register.glade.h:25
 msgid "Edit Exchange Rate"
 msgstr "Wechselkurs bearbeiten"
 
-#: ../src/gnome/glade/register.glade.h:27
+#: ../src/gnome/glade/register.glade.h:26
 msgid "Edit the exchange rate for the current split"
 msgstr "Den Wechselkurs für die gewählte Buchung bearbeiten"
 
-#: ../src/gnome/glade/register.glade.h:28
+#: ../src/gnome/glade/register.glade.h:27
 msgid "End:"
 msgstr "Ende:"
 
-#: ../src/gnome/glade/register.glade.h:30
+#: ../src/gnome/glade/register.glade.h:29
 msgid "Erase all splits except the one for this account."
 msgstr "Alle Buchungen löschen, außer jene in diesem Konto."
 
-#: ../src/gnome/glade/register.glade.h:31
+#: ../src/gnome/glade/register.glade.h:30
 msgid "Filter register by..."
 msgstr "Kontofenster filtern durch..."
 
-#. src/business/business-gnome/business-gnome.scm
-#: ../src/gnome/glade/register.glade.h:32 ../intl-scm/guile-strings.c:3602
-msgid "Find"
-msgstr "Suche"
-
-#: ../src/gnome/glade/register.glade.h:33
+#: ../src/gnome/glade/register.glade.h:31
 msgid "Jump"
 msgstr "Gegen"
 
-#: ../src/gnome/glade/register.glade.h:35
+#: ../src/gnome/glade/register.glade.h:33
 msgid "Keep normal account order"
 msgstr "Beibehalten der normalen Kontoreihenfolge"
 
-#: ../src/gnome/glade/register.glade.h:36
+#: ../src/gnome/glade/register.glade.h:34
 #: ../src/gnome/gnc-plugin-page-register.c:185
 msgid "Make a copy of the current transaction"
 msgstr "Eine Kopie des aktuellen Buchungssatze erstellen"
 
-#: ../src/gnome/glade/register.glade.h:37
+#: ../src/gnome/glade/register.glade.h:35
 #: ../src/gnome/gnc-plugin-page-register.c:228
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "Zur freien Buchungszeile am Ende dieses Kontobuchs gehen"
 
-#: ../src/gnome/glade/register.glade.h:38
-msgid "NOTUSED: Defined in src/gnome/window-register.c"
-msgstr "NOTUSED: Defined in src/gnome/window-register.c"
-
-#: ../src/gnome/glade/register.glade.h:39
+#: ../src/gnome/glade/register.glade.h:36
 msgid "N_otes"
 msgstr "Bemerkung"
 
-#: ../src/gnome/glade/register.glade.h:40
+#: ../src/gnome/glade/register.glade.h:37
 #: ../src/gnome-utils/transfer.glade.h:12
 msgid "Num:"
 msgstr "Nummer:"
 
-#: ../src/gnome/glade/register.glade.h:41
+#: ../src/gnome/glade/register.glade.h:38
 msgid "Paste Transaction"
 msgstr "Buchung einfügen"
 
-#: ../src/gnome/glade/register.glade.h:42
+#: ../src/gnome/glade/register.glade.h:39
 #: ../src/gnome/gnc-plugin-page-register.c:182
 msgid "Paste the transaction from the clipboard"
 msgstr "Den Buchungssatz von der Zwischenablage einfügen"
 
-#: ../src/gnome/glade/register.glade.h:43
-#: ../src/report/report-gnome/gnc-plugin-page-report.c:856
-msgid "Print"
-msgstr "Drucken"
-
-#: ../src/gnome/glade/register.glade.h:44
+#: ../src/gnome/glade/register.glade.h:40
 msgid "Reason for voiding transaction:"
 msgstr "Begründung für Buchung ungültig machen:"
 
-#: ../src/gnome/glade/register.glade.h:45
+#: ../src/gnome/glade/register.glade.h:41
 msgid "Reconcile the main account for this register"
 msgstr "Abgleichen des Hauptkontos für dieses Kontobuch"
 
-#: ../src/gnome/glade/register.glade.h:46
+#: ../src/gnome/glade/register.glade.h:42
 #: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:222
 msgid "Record a stock split or a stock merger"
 msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
-#: ../src/gnome/glade/register.glade.h:47
+#: ../src/gnome/glade/register.glade.h:43
 #: ../src/gnome/gnc-plugin-page-register.c:194
 msgid "Record the current transaction"
 msgstr "Änderungen des aktuellen Buchungssatzes übernehmen"
 
-#: ../src/gnome/glade/register.glade.h:48
+#: ../src/gnome/glade/register.glade.h:44
 msgid "Remove Transaction Splits"
 msgstr "Buchungsteile entfernen"
 
-#. src/scm/help-topics-index.scm
-#. src/report/report-gnome/report-gnome.scm
-#: ../src/gnome/glade/register.glade.h:49
-#: ../src/report/report-gnome/report.glade.h:14
-#: ../intl-scm/guile-strings.c:348 ../intl-scm/guile-strings.c:1326
-msgid "Report"
-msgstr "Bericht"
-
-#: ../src/gnome/glade/register.glade.h:50
+#: ../src/gnome/glade/register.glade.h:45
 #: ../src/gnome/gnc-plugin-page-register.c:262
 msgid "S_plit Transaction"
 msgstr "Mehrteilige Buchung"
 
-#: ../src/gnome/glade/register.glade.h:51
+#: ../src/gnome/glade/register.glade.h:46
 #: ../src/gnome/gnc-plugin-page-register.c:310
 msgid "Schedule"
 msgstr "Terminiert"
 
-#: ../src/gnome/glade/register.glade.h:52
+#: ../src/gnome/glade/register.glade.h:47
 #: ../src/gnome/gnc-plugin-page-register.c:236
 msgid "Schedule..."
 msgstr "Terminiert..."
 
-#: ../src/gnome/glade/register.glade.h:53
+#: ../src/gnome/glade/register.glade.h:48
 msgid "Select _All"
 msgstr "Alle auswählen"
 
-#: ../src/gnome/glade/register.glade.h:54
+#: ../src/gnome/glade/register.glade.h:49
 msgid "Select _Range:"
 msgstr "_Bereich festlegen:"
 
-#: ../src/gnome/glade/register.glade.h:55
+#: ../src/gnome/glade/register.glade.h:50
 msgid "Show _All"
 msgstr "_Alle anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:56
+#: ../src/gnome/glade/register.glade.h:51
 #: ../src/gnome/gnc-plugin-page-register.c:263
 msgid "Show all splits in the current transaction"
 msgstr "Alle Buchungen im aktuellen Buchungssatz anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:57
+#: ../src/gnome/glade/register.glade.h:52
 #: ../src/gnome/gnc-plugin-page-register.c:278
 msgid "Show expanded transactions with all splits"
 msgstr "Alle Buchungssätze vollständig mit allen Teilen anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:58
+#: ../src/gnome/glade/register.glade.h:53
 #: ../src/gnome/gnc-plugin-page-register.c:272
 msgid "Show transactions on one or two lines"
 msgstr "Alle Buchungssätze einzeilig anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:59
+#: ../src/gnome/glade/register.glade.h:54
 #: ../src/gnome/gnc-plugin-page-register.c:275
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
@@ -5302,215 +5276,205 @@ msgstr ""
 "Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen "
 "Buchungssatz vollständig anzeigen."
 
-#: ../src/gnome/glade/register.glade.h:60
+#: ../src/gnome/glade/register.glade.h:55
 #: ../src/gnome/gnc-plugin-page-register.c:259
 msgid "Show two lines of information for each transaction"
 msgstr "Alle Buchungssätze mit Bemerkung anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:62
+#: ../src/gnome/glade/register.glade.h:57
 msgid "Sort by Amount"
 msgstr "Sortiere nach Betrag"
 
-#: ../src/gnome/glade/register.glade.h:63
+#: ../src/gnome/glade/register.glade.h:58
 msgid "Sort by Date"
 msgstr "Sortiere nach Datum"
 
-#: ../src/gnome/glade/register.glade.h:64
+#: ../src/gnome/glade/register.glade.h:59
 msgid "Sort by Description"
 msgstr "Sortiere nach Beschreibung"
 
-#: ../src/gnome/glade/register.glade.h:65
+#: ../src/gnome/glade/register.glade.h:60
 msgid "Sort by Memo"
 msgstr "Sortiere nach Buchungstext"
 
-#: ../src/gnome/glade/register.glade.h:66
+#: ../src/gnome/glade/register.glade.h:61
 msgid "Sort by Number"
 msgstr "Sortiere nach Nummer"
 
-#: ../src/gnome/glade/register.glade.h:67
+#: ../src/gnome/glade/register.glade.h:62
 msgid "Sort by action field"
 msgstr "Sortiere nach Aktion"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome/glade/register.glade.h:68 ../intl-scm/guile-strings.c:2828
+#: ../src/gnome/glade/register.glade.h:63 ../intl-scm/guile-strings.c:2828
 msgid "Sort by amount"
 msgstr "Sortieren nach Summe"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome/glade/register.glade.h:69 ../intl-scm/guile-strings.c:2804
+#: ../src/gnome/glade/register.glade.h:64 ../intl-scm/guile-strings.c:2804
 msgid "Sort by date"
 msgstr "Nach Datum sortieren"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome/glade/register.glade.h:70 ../intl-scm/guile-strings.c:2832
+#: ../src/gnome/glade/register.glade.h:65 ../intl-scm/guile-strings.c:2832
 msgid "Sort by description"
 msgstr "Sortieren nach Beschreibung"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/gnome/glade/register.glade.h:71 ../intl-scm/guile-strings.c:2840
+#: ../src/gnome/glade/register.glade.h:66 ../intl-scm/guile-strings.c:2840
 msgid "Sort by memo"
 msgstr "Sortiere nach Buchungstext"
 
-#: ../src/gnome/glade/register.glade.h:72
+#: ../src/gnome/glade/register.glade.h:67
 msgid "Sort by notes field"
 msgstr "Sortiere nach Bemerkung"
 
-#: ../src/gnome/glade/register.glade.h:73
+#: ../src/gnome/glade/register.glade.h:68
 msgid "Sort by number"
 msgstr "Sortiere nach Nummer"
 
-#: ../src/gnome/glade/register.glade.h:74
+#: ../src/gnome/glade/register.glade.h:69
 msgid "Sort by the date of entry"
 msgstr "Sortiere nach Datum der Einträge"
 
-#: ../src/gnome/glade/register.glade.h:75
+#: ../src/gnome/glade/register.glade.h:70
 msgid "Sort by the statement date (unreconciled items last)"
 msgstr ""
 "Nach Datum des Abgleichens/Kontoauszugs sortieren (nicht abgeglichene "
 "Einträge zuletzt)"
 
-#: ../src/gnome/glade/register.glade.h:76
+#: ../src/gnome/glade/register.glade.h:71
 msgid "Sort register by..."
 msgstr "Kontofenster sortieren nach..."
 
-#: ../src/gnome/glade/register.glade.h:78
+#: ../src/gnome/glade/register.glade.h:73
 msgid "St_yle"
 msgstr "_Buchung"
 
-#: ../src/gnome/glade/register.glade.h:79
+#: ../src/gnome/glade/register.glade.h:74
 msgid "Start:"
 msgstr "Start:"
 
-#: ../src/gnome/glade/register.glade.h:80
+#: ../src/gnome/glade/register.glade.h:75
 msgid "Toda_y"
 msgstr "_Heute"
 
-#: ../src/gnome/glade/register.glade.h:81
+#: ../src/gnome/glade/register.glade.h:76
 msgid "Transaction Information"
 msgstr "Buchungsinformation"
 
-#. src/report/standard-reports/register.scm
-#: ../src/gnome/glade/register.glade.h:82
-#: ../src/gnome/gnc-plugin-page-register.c:304
-#: ../src/register/ledger-core/split-register.c:2016
-#: ../src/register/ledger-core/split-register-layout.c:571
-#: ../src/register/ledger-core/split-register-model.c:194
-#: ../intl-scm/guile-strings.c:3028
-msgid "Transfer"
-msgstr "Buchen"
-
-#: ../src/gnome/glade/register.glade.h:83
+#: ../src/gnome/glade/register.glade.h:77
 #: ../src/gnome/gnc-plugin-page-account-tree.c:174
 #: ../src/gnome/gnc-plugin-page-register.c:216
 #: ../src/gnome/window-reconcile.c:1231
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
-#: ../src/gnome/glade/register.glade.h:84
+#: ../src/gnome/glade/register.glade.h:78
 msgid "Void Transaction"
 msgstr "Buchung ungültig machen"
 
-#: ../src/gnome/glade/register.glade.h:85
+#: ../src/gnome/glade/register.glade.h:79
 msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
 msgstr "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
 
-#: ../src/gnome/glade/register.glade.h:86
+#: ../src/gnome/glade/register.glade.h:80
 msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
 msgstr "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
 
-#: ../src/gnome/glade/register.glade.h:87
+#: ../src/gnome/glade/register.glade.h:81
 msgid "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
 msgstr "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
 
-#: ../src/gnome/glade/register.glade.h:89
+#: ../src/gnome/glade/register.glade.h:83
 msgid "_Amount"
 msgstr "Betrag"
 
 #. Translators: This is a menu item in the View menu
-#: ../src/gnome/glade/register.glade.h:90
+#: ../src/gnome/glade/register.glade.h:84
 #: ../src/gnome/gnc-plugin-page-register.c:274
 msgid "_Auto-Split Ledger"
 msgstr "_Aktive vollständig"
 
 #. Translators: This is a menu item in the View menu
-#: ../src/gnome/glade/register.glade.h:91
+#: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/gnc-plugin-page-register.c:271
 msgid "_Basic Ledger"
 msgstr "_Einzeilig"
 
-#: ../src/gnome/glade/register.glade.h:96
+#: ../src/gnome/glade/register.glade.h:90
 #: ../src/gnome/gnc-plugin-page-register.c:258
 msgid "_Double Line"
 msgstr "_Bemerkung anzeigen"
 
-#: ../src/gnome/glade/register.glade.h:97
+#: ../src/gnome/glade/register.glade.h:91
 msgid "_Earliest"
 msgstr "Zeige den _ersten"
 
-#: ../src/gnome/glade/register.glade.h:100
+#: ../src/gnome/glade/register.glade.h:94
 msgid "_Frozen"
 msgstr "_Fixiert"
 
-#: ../src/gnome/glade/register.glade.h:102
+#: ../src/gnome/glade/register.glade.h:96
 msgid "_Latest"
 msgstr "Zeige den _letzten"
 
-#: ../src/gnome/glade/register.glade.h:103
+#: ../src/gnome/glade/register.glade.h:97
 msgid "_Memo"
 msgstr "Buchungstext"
 
-#: ../src/gnome/glade/register.glade.h:104
+#: ../src/gnome/glade/register.glade.h:98
 msgid "_Number"
 msgstr "Nummer"
 
 #. Actions menu
-#: ../src/gnome/glade/register.glade.h:105
+#: ../src/gnome/glade/register.glade.h:99
 #: ../src/gnome/gnc-plugin-page-account-tree.c:170
 #: ../src/gnome/gnc-plugin-page-register.c:218
 msgid "_Reconcile..."
 msgstr "Ab_gleichen..."
 
-#: ../src/gnome/glade/register.glade.h:106
+#: ../src/gnome/glade/register.glade.h:100
 msgid "_Reconciled"
 msgstr "Ab_geglichen"
 
-#: ../src/gnome/glade/register.glade.h:108
+#: ../src/gnome/glade/register.glade.h:102
 msgid "_Standard Order"
 msgstr "_Standardreihenfolge"
 
-#: ../src/gnome/glade/register.glade.h:109
+#: ../src/gnome/glade/register.glade.h:103
 msgid "_Statement Date"
 msgstr "Datum des Kontoauszugs"
 
-#: ../src/gnome/glade/register.glade.h:110
+#: ../src/gnome/glade/register.glade.h:104
 msgid "_Status"
 msgstr "_Status"
 
-#: ../src/gnome/glade/register.glade.h:111
+#: ../src/gnome/glade/register.glade.h:105
 msgid "_Stock Split..."
 msgstr "Aktienteilung..."
 
-#: ../src/gnome/glade/register.glade.h:112
+#: ../src/gnome/glade/register.glade.h:106
 msgid "_Today"
 msgstr "_Heute"
 
-#: ../src/gnome/glade/register.glade.h:113
+#: ../src/gnome/glade/register.glade.h:107
 msgid "_Transaction Journal"
 msgstr "_Vollständig"
 
 #. Actions menu
-#: ../src/gnome/glade/register.glade.h:114
+#: ../src/gnome/glade/register.glade.h:108
 #: ../src/gnome/gnc-plugin-page-account-tree.c:173
 #: ../src/gnome/gnc-plugin-page-register.c:215
 #: ../src/gnome/window-reconcile.c:1231
 msgid "_Transfer..."
 msgstr "_Buchen..."
 
-#: ../src/gnome/glade/register.glade.h:115
+#: ../src/gnome/glade/register.glade.h:109
 msgid "_Unreconciled"
 msgstr "_Nicht abgeglichen"
 
-#: ../src/gnome/glade/register.glade.h:117
+#: ../src/gnome/glade/register.glade.h:111
 msgid "_Voided"
 msgstr "_Ungültig"
 
@@ -6746,7 +6710,7 @@ msgstr "Ausgewähltes Konto löschen"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
 #: ../src/gnome/gnc-plugin-page-budget.c:148
 #: ../src/gnome/gnc-plugin-page-register.c:210
-#: ../src/gnome-utils/gnc-main-window.c:252
+#: ../src/gnome-utils/gnc-main-window.c:257
 msgid "_Filter By..."
 msgstr "_Filtern nach..."
 
@@ -6963,7 +6927,7 @@ msgstr "Stornierungsbuchung _hinzufügen"
 
 #. View menu
 #: ../src/gnome/gnc-plugin-page-register.c:208
-#: ../src/gnome-utils/gnc-main-window.c:251
+#: ../src/gnome-utils/gnc-main-window.c:255
 msgid "_Sort By..."
 msgstr "_Sortieren nach..."
 
@@ -7009,6 +6973,15 @@ msgstr "Buchungsbericht"
 #: ../src/gnome/gnc-plugin-page-register.c:277
 msgid "Transaction _Journal"
 msgstr "_Vollständig"
+
+#. src/report/standard-reports/register.scm
+#: ../src/gnome/gnc-plugin-page-register.c:304
+#: ../src/register/ledger-core/split-register.c:2016
+#: ../src/register/ledger-core/split-register-layout.c:571
+#: ../src/register/ledger-core/split-register-model.c:194
+#: ../intl-scm/guile-strings.c:3028
+msgid "Transfer"
+msgstr "Buchen"
 
 #. src/scm/help-topics-index.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -8010,7 +7983,7 @@ msgstr "zum Betrag:"
 
 #: ../src/gnome-utils/druid-gconf-setup.c:404
 msgid ""
-"When you click Appply, Gnucash will modify your ~/.gconf.path file and "
+"When you click Apply, Gnucash will modify your ~/.gconf.path file and "
 "restart the gconf backend."
 msgstr ""
 "Wenn Sie \"Anwenden\" klicken, wird GnuCash Ihre ~/.gconf.path Datei "
@@ -8019,8 +7992,8 @@ msgstr ""
 #: ../src/gnome-utils/druid-gconf-setup.c:407
 #, c-format
 msgid ""
-"When you click Appply, Gnucash will install the gconf data into your local "
-"~/.gconf file and restart the gconf backend.  The %s script must be found in "
+"When you click Apply, Gnucash will install the gconf data into your local ~/."
+"gconf file and restart the gconf backend.  The %s script must be found in "
 "your search path for this to work correctly."
 msgstr ""
 "Wenn Sie \"Anwenden\" klicken, wird GnuCash die gconf-Daten in Ihre lokale "
@@ -8991,168 +8964,208 @@ msgid "_Print..."
 msgstr "_Drucken..."
 
 #: ../src/gnome-utils/gnc-main-window.c:230
+msgid "Print the currently active page"
+msgstr "Aktuelle Seite drucken"
+
+#: ../src/gnome-utils/gnc-main-window.c:231
 msgid "Proper_ties"
 msgstr "_Eigenschaften"
 
-#: ../src/gnome-utils/gnc-main-window.c:233
+#: ../src/gnome-utils/gnc-main-window.c:232
+msgid "Edit the properties of the current file"
+msgstr "Eigenschaften dieser Datei anzeigen und bearbeiten."
+
+#: ../src/gnome-utils/gnc-main-window.c:234
 msgid "_Close"
 msgstr "S_chließen"
 
-#: ../src/gnome-utils/gnc-main-window.c:236
+#: ../src/gnome-utils/gnc-main-window.c:235
+msgid "Close the currently active page"
+msgstr "Aktuelle Seite schließen"
+
+#: ../src/gnome-utils/gnc-main-window.c:237
 msgid "_Quit"
 msgstr "_Beenden"
 
-#: ../src/gnome-utils/gnc-main-window.c:245
+#: ../src/gnome-utils/gnc-main-window.c:238
+msgid "Quit this application"
+msgstr "GnuCash beenden"
+
+#: ../src/gnome-utils/gnc-main-window.c:244
+msgid "Cut the current selection and copy it to clipboard"
+msgstr "Auswahl ausschneiden und in die Zwischenablage kopieren"
+
+#: ../src/gnome-utils/gnc-main-window.c:246
+msgid "Copy the current selection to clipboard"
+msgstr "Auswahl in die Zwischenablage kopieren"
+
+#: ../src/gnome-utils/gnc-main-window.c:248
+msgid "Paste the clipboard content at the cursor position"
+msgstr "Zwischenablage an Cursor-Position einfügen"
+
+#: ../src/gnome-utils/gnc-main-window.c:249
 msgid "Pr_eferences"
 msgstr "_Einstellungen"
 
-#: ../src/gnome-utils/gnc-main-window.c:253
+#: ../src/gnome-utils/gnc-main-window.c:250
+msgid "Edit the global preferences of GnuCash"
+msgstr "Die globalen Einstellungen von GnuCash bearbeiten"
+
+#: ../src/gnome-utils/gnc-main-window.c:256
+msgid "Select sorting criteria for this page view"
+msgstr "Sortierungskriterien für die aktuelle Ansicht wählen"
+
+#: ../src/gnome-utils/gnc-main-window.c:258
 msgid "Select the account types that should be displayed."
 msgstr "Wählen Sie die Kontoarten, die in der Kontenansicht angezeigt werden."
 
-#: ../src/gnome-utils/gnc-main-window.c:254
+#: ../src/gnome-utils/gnc-main-window.c:259
 msgid "_Refresh"
 msgstr "Aktualisie_ren"
 
-#: ../src/gnome-utils/gnc-main-window.c:255
+#: ../src/gnome-utils/gnc-main-window.c:260
 msgid "Refresh this window"
 msgstr "Dieses Fenster aktualisieren"
 
 #. Actions menu
-#: ../src/gnome-utils/gnc-main-window.c:260
+#: ../src/gnome-utils/gnc-main-window.c:265
 #: ../src/gnome/window-reconcile.c:1239
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
-#: ../src/gnome-utils/gnc-main-window.c:261
+#: ../src/gnome-utils/gnc-main-window.c:266
 msgid "_Reset Warnings..."
 msgstr "_Warnungen zurücksetzen..."
 
-#: ../src/gnome-utils/gnc-main-window.c:262
+#: ../src/gnome-utils/gnc-main-window.c:267
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr ""
 "Den gespeicherten Status aller Warnungsmeldungen zurücksetzen, so dass alle "
 "wieder angezeigt werden."
 
-#: ../src/gnome-utils/gnc-main-window.c:264
+#: ../src/gnome-utils/gnc-main-window.c:269
 msgid "Rename Page"
 msgstr "Seite umbe_nennen"
 
-#: ../src/gnome-utils/gnc-main-window.c:265
+#: ../src/gnome-utils/gnc-main-window.c:270
 msgid "Rename this page."
 msgstr "Diese Seite umbenennen."
 
 #. Windows menu
-#: ../src/gnome-utils/gnc-main-window.c:270
+#: ../src/gnome-utils/gnc-main-window.c:275
 msgid "_New Window"
 msgstr "_Neues Fenster"
 
-#: ../src/gnome-utils/gnc-main-window.c:271
+#: ../src/gnome-utils/gnc-main-window.c:276
 msgid "Open a new top-level GnuCash window."
 msgstr "Ein neues Top-Level GnuCash Fenster öffnen."
 
-#: ../src/gnome-utils/gnc-main-window.c:273
+#: ../src/gnome-utils/gnc-main-window.c:278
 msgid "New Window with _Page"
 msgstr "Neues Fenster mit _Seite"
 
-#: ../src/gnome-utils/gnc-main-window.c:274
+#: ../src/gnome-utils/gnc-main-window.c:279
 msgid "Move the current page to a new top-level GnuCash window."
 msgstr "Aktuelle Seite in ein neues Top-Level GnuCash Fenster verschieben."
 
 #. Help menu
-#: ../src/gnome-utils/gnc-main-window.c:279
+#: ../src/gnome-utils/gnc-main-window.c:284
 msgid "Tutorial and Concepts _Guide"
 msgstr "GnuCash-_Kurs und Konzepte"
 
-#: ../src/gnome-utils/gnc-main-window.c:280
+#: ../src/gnome-utils/gnc-main-window.c:285
 msgid "Open the GnuCash Tutorial"
 msgstr "Den GnuCash-Online-Kurs öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:282
+#: ../src/gnome-utils/gnc-main-window.c:287
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: ../src/gnome-utils/gnc-main-window.c:283
+#: ../src/gnome-utils/gnc-main-window.c:288
 msgid "Open the GnuCash Help"
 msgstr "Die GnuCash-Hilfe öffnen"
 
-#: ../src/gnome-utils/gnc-main-window.c:285
+#: ../src/gnome-utils/gnc-main-window.c:290
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/gnome-utils/gnc-main-window.c:296
+#: ../src/gnome-utils/gnc-main-window.c:291
+msgid "About GnuCash"
+msgstr "Info zu GnuCash"
+
+#: ../src/gnome-utils/gnc-main-window.c:301
 msgid "Learn Accelerator Keys"
 msgstr "_Tastaturkürzel ändern"
 
-#: ../src/gnome-utils/gnc-main-window.c:297
+#: ../src/gnome-utils/gnc-main-window.c:302
 msgid "Learn new accelerator key settings."
 msgstr "Tastaturkürzel neu setzen oder ändern."
 
-#: ../src/gnome-utils/gnc-main-window.c:299
+#: ../src/gnome-utils/gnc-main-window.c:304
 msgid "_Toolbar"
 msgstr "_Werkzeugleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:300
+#: ../src/gnome-utils/gnc-main-window.c:305
 msgid "Show/hide the toolbar on this window"
 msgstr "Die Werkzeugleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:302
+#: ../src/gnome-utils/gnc-main-window.c:307
 msgid "Su_mmary Bar"
 msgstr "_Zusammenfassungsleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:303
+#: ../src/gnome-utils/gnc-main-window.c:308
 msgid "Show/hide the summary bar on this window"
 msgstr "Die Zusammenfassungs-Leiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:305
+#: ../src/gnome-utils/gnc-main-window.c:310
 msgid "Stat_us Bar"
 msgstr "_Statusleiste"
 
-#: ../src/gnome-utils/gnc-main-window.c:306
+#: ../src/gnome-utils/gnc-main-window.c:311
 msgid "Show/hide the status bar on this window"
 msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
-#: ../src/gnome-utils/gnc-main-window.c:319
+#: ../src/gnome-utils/gnc-main-window.c:324
 msgid "Window _1"
 msgstr "Fenster _1"
 
-#: ../src/gnome-utils/gnc-main-window.c:320
+#: ../src/gnome-utils/gnc-main-window.c:325
 msgid "Window _2"
 msgstr "Fenster _2"
 
-#: ../src/gnome-utils/gnc-main-window.c:321
+#: ../src/gnome-utils/gnc-main-window.c:326
 msgid "Window _3"
 msgstr "Fenster _3"
 
-#: ../src/gnome-utils/gnc-main-window.c:322
+#: ../src/gnome-utils/gnc-main-window.c:327
 msgid "Window _4"
 msgstr "Fenster _4"
 
-#: ../src/gnome-utils/gnc-main-window.c:323
+#: ../src/gnome-utils/gnc-main-window.c:328
 msgid "Window _5"
 msgstr "Fenster _5"
 
-#: ../src/gnome-utils/gnc-main-window.c:324
+#: ../src/gnome-utils/gnc-main-window.c:329
 msgid "Window _6"
 msgstr "Fenster _6"
 
-#: ../src/gnome-utils/gnc-main-window.c:325
+#: ../src/gnome-utils/gnc-main-window.c:330
 msgid "Window _7"
 msgstr "Fenster _7"
 
-#: ../src/gnome-utils/gnc-main-window.c:326
+#: ../src/gnome-utils/gnc-main-window.c:331
 msgid "Window _8"
 msgstr "Fenster _8"
 
-#: ../src/gnome-utils/gnc-main-window.c:327
+#: ../src/gnome-utils/gnc-main-window.c:332
 msgid "Window _9"
 msgstr "Fenster _9"
 
-#: ../src/gnome-utils/gnc-main-window.c:328
+#: ../src/gnome-utils/gnc-main-window.c:333
 msgid "Window _0"
 msgstr "Fenster _0"
 
-#: ../src/gnome-utils/gnc-main-window.c:871
+#: ../src/gnome-utils/gnc-main-window.c:876
 #, c-format
 msgid ""
 "Error: Failure saving state file.\n"
@@ -9161,11 +9174,11 @@ msgstr ""
 "Fehler beim Speichern des Status-file.\n"
 "  %s"
 
-#: ../src/gnome-utils/gnc-main-window.c:935
+#: ../src/gnome-utils/gnc-main-window.c:940
 msgid "<unknown>"
 msgstr "<unbekannt>"
 
-#: ../src/gnome-utils/gnc-main-window.c:961
+#: ../src/gnome-utils/gnc-main-window.c:966
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9177,7 +9190,7 @@ msgstr ""
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:972
+#: ../src/gnome-utils/gnc-main-window.c:977
 #, c-format
 msgid ""
 "<b>Save changes to file %s before closing?</b>\n"
@@ -9188,15 +9201,15 @@ msgstr ""
 "\n"
 "Wenn Sie nicht speichern, gehen die Änderungen verloren."
 
-#: ../src/gnome-utils/gnc-main-window.c:979
+#: ../src/gnome-utils/gnc-main-window.c:984
 msgid "Close _without Saving"
 msgstr "Schli_eßen ohne zu speichern"
 
-#: ../src/gnome-utils/gnc-main-window.c:1029
+#: ../src/gnome-utils/gnc-main-window.c:1034
 msgid "Quit Gnucash?"
 msgstr "GnuCash beenden?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1030
+#: ../src/gnome-utils/gnc-main-window.c:1035
 msgid ""
 "You are attempting to close the last Gnucash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
@@ -9204,11 +9217,11 @@ msgstr ""
 "Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster zu schließen. Dies "
 "wird Gnucash beenden. Sind Sie sich sicher, dass Sie das wollen?"
 
-#: ../src/gnome-utils/gnc-main-window.c:1130
+#: ../src/gnome-utils/gnc-main-window.c:1135
 msgid "<no file>"
 msgstr "<Keine Datei>"
 
-#: ../src/gnome-utils/gnc-main-window.c:3007
+#: ../src/gnome-utils/gnc-main-window.c:3012
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -9219,13 +9232,13 @@ msgstr ""
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3029
-#: ../src/gnome-utils/gnc-main-window.c:3069
+#: ../src/gnome-utils/gnc-main-window.c:3034
+#: ../src/gnome-utils/gnc-main-window.c:3074
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3047
+#: ../src/gnome-utils/gnc-main-window.c:3052
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -12913,6 +12926,10 @@ msgstr "Abbrechen"
 msgid "Cancel outstanding HTML requests"
 msgstr "Unbeantwortete HTML-Anfragen abbrechen "
 
+#: ../src/report/report-gnome/gnc-plugin-page-report.c:856
+msgid "Print"
+msgstr "Drucken"
+
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1126
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1162
 msgid "HTML"
@@ -13018,6 +13035,13 @@ msgstr "Nach _unten"
 msgid "New Style Sheet"
 msgstr "Neue Stilvorlage"
 
+#. src/scm/help-topics-index.scm
+#. src/report/report-gnome/report-gnome.scm
+#: ../src/report/report-gnome/report.glade.h:14
+#: ../intl-scm/guile-strings.c:348 ../intl-scm/guile-strings.c:1326
+msgid "Report"
+msgstr "Bericht"
+
 #: ../src/report/report-gnome/report.glade.h:15
 msgid "Report Size"
 msgstr "Berichtsgröße"
@@ -13086,17 +13110,27 @@ msgstr "_Stilvorlagen"
 msgid "Edit report style sheets."
 msgstr "Stilvorlagen für Berichte bearbeiten."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:64
+#: ../lib/libqof/backend/file/qsf-backend.c:89
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr "Kompressionsaufwand: 0 für gar keinen, 9 für höchsten."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:65
+#: ../lib/libqof/backend/file/qsf-backend.c:90
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
 msgstr ""
 "QOF kann die QSF XML-Dateien mit gzip komprimieren. Dies wird aber nicht "
 "gemacht, wenn die Ausgabe nach STDOUT geleitet ist."
+
+#: ../lib/libqof/backend/file/qsf-backend.c:98
+msgid "List of QSF map files to use for this session."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:99
+msgid ""
+"QOF can convert objects within QSF XML files using a map of the changes "
+"required."
+msgstr ""
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:2
@@ -18376,6 +18410,11 @@ msgstr "Duplizierte Buchungen finden..."
 #: ../intl-scm/guile-strings.c:3596
 msgid "Extensions"
 msgstr "Erweiterungen"
+
+#. src/business/business-gnome/business-gnome.scm
+#: ../intl-scm/guile-strings.c:3602
+msgid "Find"
+msgstr "Suche"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3604
