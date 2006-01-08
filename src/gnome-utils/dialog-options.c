@@ -266,6 +266,13 @@ gnc_image_option_selection_changed_cb (GtkFileChooser *chooser,
     return;
   g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
 }
+#else
+static void
+gnc_image_option_clear_selection_cb (GtkButton *button,
+				     GtkEntry *entry)
+{
+   gtk_entry_set_text(entry, "");
+}
 #endif
 
 /********************************************************************\
@@ -1896,6 +1903,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 {
   GtkWidget *value;
   GtkWidget *label;
+  GtkWidget *button;
 #ifndef HAVE_GLIB26
   GtkWidget *entry;
 #endif
@@ -1908,6 +1916,9 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
+
+  button = gtk_button_new_with_label(_("Clear"));
+
 #ifdef HAVE_GLIB26
   value = gtk_file_chooser_button_new(_("Select image"),
 				      GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -1922,6 +1933,8 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
 		   G_CALLBACK(gnc_image_option_selection_changed_cb), option);
   g_signal_connect(G_OBJECT (value), "update-preview",
 		   G_CALLBACK(gnc_image_option_update_preview_cb), option);
+  g_signal_connect_swapped(G_OBJECT (button), "clicked",
+		   G_CALLBACK(gtk_file_chooser_unselect_all), value);
 #else
   value = gnome_pixmap_entry_new(NULL, _("Select pixmap"),
 				 FALSE);
@@ -1931,13 +1944,16 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   entry = gnome_pixmap_entry_gtk_entry (GNOME_PIXMAP_ENTRY(value));
   g_signal_connect(G_OBJECT (entry), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
+  g_signal_connect(G_OBJECT (button), "clicked",
+		   G_CALLBACK(gnc_image_option_clear_selection_cb), entry);
 #endif
     
   gnc_option_set_widget (option, value);
   gnc_option_set_ui_value(option, FALSE);
 
   gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
-  gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(*enclosing), button, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
 
   gtk_widget_show(value);
   gtk_widget_show(label);

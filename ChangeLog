@@ -1,3 +1,15 @@
+2006-01-08  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-options.c: Add a button to clear the name
+	of the currently selected file in a file chooser.
+
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/import-export/hbci/dialog-hbcitrans.c: The GTK2.4 headers
+	are missing a named constant.
+
+	* lib/goffice-0.0.4/goffice/glib24_26-compat.c: Fix a couple of
+	compiler version issues.
+
 2006-01-08  Derek Atkins  <derek@ihtfp.com>
 
 	* Makefile.am: fix the dist-hook macro for po/POTFILES.in
