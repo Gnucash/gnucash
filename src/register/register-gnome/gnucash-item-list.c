@@ -43,6 +43,9 @@ enum {
   LAST_SIGNAL
 };
 
+#ifndef HAVE_GLIB26
+#define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID -2
+#endif
 
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
