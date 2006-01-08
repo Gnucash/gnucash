@@ -1,5 +1,13 @@
 2006-01-08  Neil Williams <linux@codehelp.co.uk>
 
+	* src/import-export/qif-import/test/Makefile.am : OSX fix.
+	* po/en_GB.po : (To assist the TP project,
+	with help from Nigel Titley, GNU translator.)
+	Remaining: 92 fuzzy translations, 1 untranslated message
+	* . : Adding *.prj.bak to svn:ignore.
+
+2006-01-08  Neil Williams <linux@codehelp.co.uk>
+
 	* src/engine/Transaction.c : Even up ENTER and LEAVE
 	calls.
 	* src/gnome-utils/druid-gconf-setup.c : Typo fix.
