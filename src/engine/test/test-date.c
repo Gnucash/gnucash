@@ -400,6 +400,10 @@ run_test (void)
     ts.tv_nsec /= 1000;
     ts.tv_nsec *= 1000;
 
+    /* We just can't handle dates whose time_t doesn't fit in int. */
+    if (ts.tv_sec > (0x7fffffff - 3600*25))
+        continue;
+
     if (!check_time (ts, FALSE))
       return;
   }
