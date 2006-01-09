@@ -1918,6 +1918,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   *enclosing = gtk_hbox_new(FALSE, 5);
 
   button = gtk_button_new_with_label(_("Clear"));
+  gtk_tooltips_set_tip(tooltips, button, _("Clear any selected image file."), NULL);
 
 #ifdef HAVE_GLIB26
   value = gtk_file_chooser_button_new(_("Select image"),
