@@ -1488,7 +1488,8 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
   /* hack alert -- this is not thread safe ... */
   static char buf[1024];
 
-  xaccSPrintAmount (buf, val, info);
+  if (!xaccSPrintAmount (buf, val, info))
+      buf[0] = '\0';
 
   /* its OK to return buf, since we declared it static */
   return buf;
