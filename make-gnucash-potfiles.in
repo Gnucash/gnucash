@@ -70,6 +70,9 @@ foreach my $file (@possible_files) {
   }
   next if $ignores{$path . $name};
 
+  # Ignore unreadable files, e.g. dangling symlinks
+  next unless (-r $path . $name);
+
   print $path . $name . "\n";
 }
 
