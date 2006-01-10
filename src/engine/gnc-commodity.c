@@ -1515,6 +1515,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   gnc_string_cache_remove(ns->name);
 
   gnc_engine_gen_event (&ns->inst.entity, GNC_EVENT_DESTROY);
+  qof_instance_release(&ns->inst);
   g_free(ns);
 }
 
