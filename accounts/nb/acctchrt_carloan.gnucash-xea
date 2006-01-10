@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<gnc-account-example>
+    <title>
+      Billån 
+    </title>
+    <short-description>
+      Kontoer for billån med dertilhørende utgifter
+    </short-description>
+    <long-description>
+Du vil velge denne kontoen hvis du har billån.
+  </long-description>    
+<account version="2.0.0">
+  <name>Gjeld</name>
+  <id type="new">33a326fe16ae360f777a94b3f5bdfbdc</id>
+  <type>LIABILITY</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Gjeld</description>
+</account>
+<account version="2.0.0">
+  <name>Lån</name>
+  <id type="new">023e2343114b3d695feaeb96904e0da6</id>
+  <type>LIABILITY</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Lån</description>
+  <parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</parent>
+</account>
+<account version="2.0.0">
+  <name>Billån</name>
+  <id type="new">3e5f44fd7bfaa9cae737a4113a749e36</id>
+  <type>LIABILITY</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Billån</description>
+  <parent type="new">023e2343114b3d695feaeb96904e0da6</parent>
+</account>
+<account version="2.0.0">
+  <name>Utgifter</name>
+  <id type="new">acacdcb998e45fb741766622e8542f0b</id>
+  <type>EXPENSE</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Utgifter</description>
+</account>
+<account version="2.0.0">
+  <name>Renter</name>
+  <id type="new">9e8495e80ebfb762089be917dff7ab72</id>
+  <type>EXPENSE</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Renter</description>
+  <parent type="new">acacdcb998e45fb741766622e8542f0b</parent>
+</account>
+<account version="2.0.0">
+  <name>Billån Renter</name>
+  <id type="new">e9bd8477e27361238d2f53c4fe7594ab</id>
+  <type>EXPENSE</type>
+  <commodity>
+    <space>ISO4217</space>
+    <id>USD</id>
+  </commodity>
+  <description>Billån Renter</description>
+  <parent type="new">9e8495e80ebfb762089be917dff7ab72</parent>
+</account>
+</gnc-account-example>
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

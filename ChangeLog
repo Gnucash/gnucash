@@ -1,3 +1,9 @@
+2006-01-10  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/nb/*, configure.in: Add account templates for Norwegian
+	(Bokmal) language; by Tor Harald Thorland <linux@strigen.com>; not
+	fully functional so far.
+
 2006-01-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-options.c: Add a button to clear the name
