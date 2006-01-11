@@ -19,7 +19,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
-/** @addtogroup gnome-util
+/** @addtogroup budget
  *     @{ */
 
 #include "config.h"
@@ -142,3 +142,6 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
             return;
     }
 }
+
+/** @} */
+
