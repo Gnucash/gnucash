@@ -48,10 +48,10 @@ int
 libgncmod_hbci_LTX_gnc_module_init(int refcount) 
 {
   /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
+/*  if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
   }
-
+*/
   /* load the app-utils (we depend on it) */
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;

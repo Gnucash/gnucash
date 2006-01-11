@@ -95,6 +95,7 @@ It will not be possible to support CREATE, AMEND or DROP for understandable reas
 #include "qofundo-p.h"
 #include "backend-bus.h"
 
+#define GNC_MODULE_LOG "gnucash-modules"
 static QofLogModule log_module = CU_MOD_CLI;
 static gboolean debug_on = FALSE;
 static GHashTable *backend_extensions;
@@ -155,13 +156,11 @@ load_bus_backend (const char *directory)
 	typedef void (* bus_backend_init) (void);
 	GModule *bus_backend;
 	gchar *fullpath;
-	struct stat sbuf;
 	bus_backend_init bus_init;
 	gpointer g;
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
-	fullpath = g_module_build_path(directory, "libgnc-backend-bus.la");
-	g_return_val_if_fail((stat(fullpath, &sbuf) == 0), FALSE);
+	fullpath = g_module_build_path(directory, "libgnc-backend-bus");
 	bus_backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
 	if(!bus_backend) { 
 		PWARN ("%s: %s\n", PACKAGE, g_module_error ()); 
@@ -359,6 +358,7 @@ main (int argc, const char *argv[])
 		gnc_set_log_level(CU_MOD_CLI, GNC_LOG_DETAIL);
 		gnc_set_log_level(QOF_MAIN_CLI, GNC_LOG_DETAIL);
 		gnc_set_log_level(QOF_MOD_QSF, GNC_LOG_DETAIL);
+		qof_log_set_level(GNC_MODULE_LOG, QOF_LOG_DETAIL);
 	}
 	g_return_val_if_fail((qof_load_backend_library 
 		(QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT)), -1);

@@ -43,13 +43,10 @@ libcashobjects_la_SOURCES =  \
 
 libgncmod_engine_la_SOURCES = \
   gnc-associate-account.c \
-  gnc-budget.c \
   gnc-engine.c \
   gnc-hooks.c \
-  gnc-lot.c \
   gnc-session-scm.c \
-  gncmod-engine.c \
-  policy.c
+  gncmod-engine.c
 
 EXTRA_libcashobjects_la_SOURCES = iso-4217-currencies.c
 

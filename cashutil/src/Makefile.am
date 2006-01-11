@@ -5,6 +5,7 @@ AM_CFLAGS = \
   -I../../src/backend/file \
   -I../../src/business/business-core \
   -I../../src/engine \
+  -I../../src/gnc-module \
   ${GOBJECT_CFLAGS} \
   ${GLIB_CFLAGS}  \
   ${QOF_CFLAGS}

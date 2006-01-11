@@ -13,6 +13,7 @@
 #include <guile/gh.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <qof.h>
 
 #ifndef HAVE_SETENV
 #include "setenv.h"
@@ -22,6 +23,10 @@
 
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
+
+/* now that engine is not a gnc-module, we can use the
+engine to debug the modules! */
+static QofLogModule log_module = GNC_MODULE_LOG;
 
 typedef struct 
 {
@@ -135,7 +140,7 @@ gnc_module_system_setup_load_path(void)
     
     if(setenv("LD_LIBRARY_PATH", envt, 1) != 0)
     {
-      g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
+      PERR ("gnc-module failed to set LD_LIBRARY_PATH");
     }
     g_free(envt);
   }
@@ -162,8 +167,7 @@ gnc_module_system_init(void)
     }
     else
     {
-      /* FIXME: there's no way to report this error to the caller. */
-      g_warning ("gnc module system couldn't initialize libltdl");
+      PERR ("gnc module system couldn't initialize libltdl");
     }
   }
 }
@@ -237,6 +241,7 @@ gnc_module_load_all(gint interface)
 	GList *iter;
 	GNCModuleInfo *info;
 
+	ENTER (" ");
 	gnc_module_system_refresh();
 	iter = g_list_copy(module_info);
 	for(iter = g_list_reverse(iter); iter; iter=iter->next)
@@ -245,6 +250,7 @@ gnc_module_load_all(gint interface)
 		gnc_module_load(info->module_path, interface);
 	}
 	g_list_free(iter);
+	LEAVE (" ");
 }
 
 /*************************************************************

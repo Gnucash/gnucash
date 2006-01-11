@@ -62,6 +62,9 @@ typedef struct {
 /** the current gnc-module interface version. */
 #define GNC_MOD_INTERFACE_VERSION 0
 
+/** the QofLogModule for the gnc_modules */
+#define GNC_MODULE_LOG "gnucash-modules"
+
 /** the basics: initialize the module system, refresh its module 
  * database, and get a list of all known modules */
 void            gnc_module_system_init(void);

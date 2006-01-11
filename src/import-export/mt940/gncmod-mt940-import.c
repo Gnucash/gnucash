@@ -62,10 +62,10 @@ libgncmod_mt940_LTX_gnc_module_description(void)
 int
 libgncmod_mt940_LTX_gnc_module_init(int refcount)
 {
-  if(!gnc_module_load("gnucash/engine", 0))
+/*  if(!gnc_module_load("gnucash/engine", 0))
   {
     return FALSE;
-  }
+  }*/
   if(!gnc_module_load("gnucash/app-utils", 0))
   {
     return FALSE;

@@ -43,10 +43,10 @@ libgncmod_binary_import_LTX_gnc_module_description(void) {
 int
 libgncmod_binary_import_LTX_gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
+/*  if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
   }
-
+*/
   /* load the calculation module (we depend on it) */
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;

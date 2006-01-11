@@ -48,6 +48,7 @@
 #define GNC_QOF_LOG "/tmp/gnucash.trace"
 #define GNC_LIB_NAME "libgnc-backend-file.la"
 #define GNC_LIB_INIT "gnc_provider_init"
+#define GNC_MODULE_LOG "gnucash-modules"
 
 /* used to print debug logs. */
 static QofLogModule log_module = GNC_MOD_CLI;
@@ -80,13 +81,11 @@ load_bus_backend (const char *directory)
 	typedef void (* bus_backend_init) (void);
 	GModule *bus_backend;
 	gchar *fullpath;
-	struct stat sbuf;
 	bus_backend_init bus_init;
 	gpointer g;
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
-	fullpath = g_module_build_path(directory, "libgnc-backend-bus.la");
-	g_return_val_if_fail((stat(fullpath, &sbuf) == 0), FALSE);
+	fullpath = g_module_build_path(directory, "libgnc-backend-bus");
 	bus_backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
 	if(!bus_backend) { 
 		PWARN ("%s: %s\n", PACKAGE, g_module_error ()); 
@@ -126,14 +125,14 @@ gnc_cli_init(void)
 static void
 build_environment(void)
 {
-	gchar *gmp, *llp, *glp, *ltdlp;
+	gchar *gmp, *llp, *glibp, *ltdlp;
 
 	gmp = g_strconcat(LIBDIR, "/gnucash:", 
 		DATADIR, "/guile-modules:",
 		DATADIR, "/scm:", 
 		getenv("GNC_MODULE_PATH"), 
 		NULL);
-	glp = g_strconcat(DATADIR, "/guile-modules:",
+	glibp = g_strconcat(DATADIR, "/guile-modules:",
 		DATADIR, "/scm:",
 		getenv("GUILE_LOAD_PATH"), 
 		NULL);
@@ -144,23 +143,32 @@ build_environment(void)
 		getenv("LTDL_LIBRARY_PATH"), NULL);
 	setenv("GNC_MODULE_PATH", gmp, 1);
 	setenv("LD_LIBRARY_PATH", llp, 1);
-	setenv("GUILE_LOAD_PATH", glp, 1);
+	setenv("GUILE_LOAD_PATH", glibp, 1);
 	setenv("LTDL_LIBRARY_PATH", ltdlp, 1);
 	g_message ("set GNC_MODULE_PATH %s LD_LIBRARY_PATH %s"
-		" GUILE_LOAD_PATH %s LTDL_LIBRARY_PATH %s", gmp, llp, glp, ltdlp);
+		" GUILE_LOAD_PATH %s LTDL_LIBRARY_PATH %s", gmp, llp, glibp, ltdlp);
 }
 
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
-	GnomeProgram *gnucash2;
 
-	build_environment();
-	gtk_set_locale ();
+}
+
+static int
+qof_cmd_gui(int argc, char ** argv)
+{
+	GnomeProgram *gnucash2;
+	GncMainWindow *gnc_win2;
+
 	gtk_init (&argc, &argv);
+	build_environment();
 	gnucash2 = gnome_program_init(PACKAGE, VERSION,
 		LIBGNOMEUI_MODULE, argc, argv, 
-		GNOME_PROGRAM_STANDARD_PROPERTIES, 
+		GNOME_PARAM_APP_PREFIX, PREFIX,
+		GNOME_PARAM_APP_SYSCONFDIR, SYSCONFDIR,
+		GNOME_PARAM_APP_DATADIR, DATADIR,
+		GNOME_PARAM_APP_LIBDIR, GNC_LIBDIR,
 		GNOME_PARAM_NONE);
 	gnome_program_postinit(gnucash2);
 	gnc_module_system_init();
@@ -200,6 +208,7 @@ guile_main(void *closure, int argc, char ** argv)
 		gchar *last_file;
 
 		last_file = gnc_history_get_last();
+		gnc_update_splash_screen(_("Loading data... "));
 		gnc_file_open_file(last_file);
 	}
 	/** \todo Replace this scheme:
@@ -215,12 +224,12 @@ guile_main(void *closure, int argc, char ** argv)
              (begin
                 (gnc:destroy-splash-screen)
                 (gnc:new-user-dialog))
-              (begin
-                (gnc:destroy-splash-screen)
-                (gnc:main-window-set-progressbar-window main-window)
-                (gnc:load-account-file)
 	*/
+	gnc_win2 = gnc_main_window_new();
+	gnc_main_window_set_progressbar_window(gnc_win2);
 	gnc_destroy_splash_screen();
+	scm_boot_guile(argc, (char **)argv, guile_main, NULL);
+	return 0;
 }
 
 int
@@ -358,6 +367,7 @@ main (int argc, const char *argv[])
 				qof_log_set_level(QOF_MAIN_CLI, QOF_LOG_DETAIL);
 				qof_log_set_level(QOF_MOD_QSF, QOF_LOG_DETAIL);
 				qof_log_set_level(GNC_MOD_CLI, QOF_LOG_DETAIL);
+				qof_log_set_level(GNC_MODULE_LOG, QOF_LOG_DETAIL);
 				debug_on = TRUE;
 				break;
 			}
@@ -415,7 +425,7 @@ main (int argc, const char *argv[])
 		case qof_op_guile :
 		{
 			/* load guile here */
-			scm_boot_guile(argc, (char **)argv, guile_main, NULL);
+			qof_cmd_gui(argc, (char**)argv);
 			break;
 		}
 		default:
@@ -430,6 +440,3 @@ main (int argc, const char *argv[])
 	qof_close();
 	return EXIT_SUCCESS;
 }
-
-
-

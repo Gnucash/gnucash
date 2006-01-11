@@ -4,6 +4,7 @@ AM_CFLAGS = \
    -I${top_srcdir}/lib/libc \
    -I${top_srcdir}/src \
    -I${top_srcdir}/src/core-utils \
+   ${QOF_CFLAGS} \
    ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_INCS}
 
 lib_LTLIBRARIES = libgncmodule.la 
@@ -16,6 +17,7 @@ libgncmodule_la_LIBADD = \
   ${G_WRAP_LINK_ARGS} \
   ${top_builddir}/lib/libc/libc-missing.la \
   ${GLIB_LIBS} \
+  ${QOF_LIBS} \
   -lltdl
 
 libgw_gnc_module_la_SOURCES = gw-gnc-module.c

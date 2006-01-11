@@ -52,10 +52,10 @@ int
 libgncmod_app_utils_LTX_gnc_module_init(int refcount)
 {
   /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
+/*  if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
   }
-
+*/
   /* load the calculation module (we depend on it) */
   if(!gnc_module_load("gnucash/calculation", 0)) {
     return FALSE;

@@ -49,10 +49,10 @@ lmod(char * mn)
 int
 libgncmod_report_system_LTX_gnc_module_init(int refcount) {
   /* load the engine (we depend on it) */
-  if(!gnc_module_load("gnucash/engine", 0)) {
+/*  if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
   }
-
+*/
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;
   }
