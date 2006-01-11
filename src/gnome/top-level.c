@@ -62,7 +62,6 @@
 #include "gnc-splash.h"
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-gpg.h"
 #include "gnc-report.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"

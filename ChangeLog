@@ -1,5 +1,10 @@
 2006-01-10  David Hampton  <hampton@employees.org>
 
+	* src/network-utils/Makefile.am:
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome/top-level.c: The gnucash gpg networking code isn't
+	called from anywhere.  No need to compile it as part of the build.
+
 	* src/register/register-gnome/gnucash-cursor.c:
 	* src/register/register-gnome/gnucash-item-edit.c:
 	* src/register/register-gnome/gnucash-grid.c:

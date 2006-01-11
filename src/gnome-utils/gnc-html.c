@@ -43,7 +43,6 @@
 #include "Group.h"
 #include "print-session.h"
 #include "gnc-engine.h"
-#include "gnc-gpg.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
 #include "gnc-http.h"
