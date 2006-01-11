@@ -251,7 +251,7 @@ gnc_header_unrealize (GnomeCanvasItem *item)
         GncHeader *header = GNC_HEADER (item);
 
         if (header->gc != NULL) {
-                gdk_gc_unref (header->gc);
+                g_object_unref (header->gc);
                 header->gc = NULL;
         }
 

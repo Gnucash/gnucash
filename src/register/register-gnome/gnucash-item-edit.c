@@ -709,7 +709,7 @@ gnc_item_edit_finalize (GObject *object)
 	}
 
 	if (item_edit->gc) {
-		gdk_gc_destroy (item_edit->gc);
+		g_object_unref (item_edit->gc);
 		item_edit->gc = NULL;
 	}
 

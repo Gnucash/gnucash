@@ -710,7 +710,7 @@ check_realize (GtkWidget *widget, gpointer user_data)
                  check_size / 3, check_size - 4,
                  check_size - 3, 1);
 
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   clist = GTK_CLIST (widget);
 
@@ -736,13 +736,13 @@ check_unrealize (GtkWidget *widget, gpointer user_data)
   GNCCListCheckInfo *check_info = user_data;
 
   if (check_info->mask)
-    gdk_bitmap_unref (check_info->mask);
+    g_object_unref (check_info->mask);
 
   if (check_info->on_pixmap)
-    gdk_pixmap_unref (check_info->on_pixmap);
+    g_object_unref (check_info->on_pixmap);
 
   if (check_info->off_pixmap)
-    gdk_pixmap_unref (check_info->off_pixmap);
+    g_object_unref (check_info->off_pixmap);
 
   check_info->mask = NULL;
   check_info->on_pixmap = NULL;

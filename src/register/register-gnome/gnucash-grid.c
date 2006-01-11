@@ -85,17 +85,17 @@ gnucash_grid_unrealize (GnomeCanvasItem *item)
         GnucashGrid *gnucash_grid = GNUCASH_GRID (item);
 
 	if (gnucash_grid->grid_gc != NULL) {
-		gdk_gc_unref(gnucash_grid->grid_gc);
+		g_object_unref(gnucash_grid->grid_gc);
 		gnucash_grid->grid_gc = NULL;
 	}
 
 	if (gnucash_grid->fill_gc != NULL) {
-		gdk_gc_unref(gnucash_grid->fill_gc);
+		g_object_unref(gnucash_grid->fill_gc);
 		gnucash_grid->fill_gc = NULL;
 	}
 
 	if (gnucash_grid->gc != NULL) {
-		gdk_gc_unref(gnucash_grid->gc);
+		g_object_unref(gnucash_grid->gc);
 		gnucash_grid->gc = NULL;
 	}
 

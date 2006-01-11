@@ -249,7 +249,7 @@ gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 
   gtk_image_set_from_pixbuf(image, pixbuf);
   if (pixbuf)
-    gdk_pixbuf_unref(pixbuf);
+    g_object_unref(pixbuf);
 
   gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
   LEAVE("preview visible is %d", have_preview);

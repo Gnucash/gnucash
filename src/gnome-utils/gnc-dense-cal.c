@@ -492,7 +492,7 @@ gnc_dense_cal_dispose (GObject *object)
         }
 
         if ( dcal->drawbuf ) {
-                gdk_pixmap_unref( dcal->drawbuf );
+                g_object_unref( dcal->drawbuf );
 		dcal->drawbuf = NULL;
 	}
 
@@ -509,7 +509,7 @@ gnc_dense_cal_dispose (GObject *object)
         /* month labels */
 	if ( dcal->monthLabels[0] ) {
         	for ( i=0; i < 12; i++ ) {
-                	gdk_pixmap_unref( dcal->monthLabels[i] );
+                	g_object_unref( dcal->monthLabels[i] );
                 	dcal->monthLabels[i] = NULL;
 		}
         }
@@ -582,7 +582,7 @@ gdc_reconfig( GncDenseCal *dcal )
         GtkWidget *widget = GTK_WIDGET(dcal);
 
         if ( dcal->drawbuf ) {
-                gdk_pixmap_unref( dcal->drawbuf );
+                g_object_unref( dcal->drawbuf );
         }
         dcal->drawbuf = gdk_pixmap_new( widget->window,
                                         widget->allocation.width,

@@ -3039,7 +3039,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	if (license)     g_free(license);
 	if (documenters) g_strfreev(documenters);
 	if (authors)     g_strfreev(authors);
-	gdk_pixbuf_unref (logo);
+	g_object_unref (logo);
 
 	gtk_widget_show(dialog);
 }
@@ -3080,7 +3080,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 				 strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
 				 logo);
 
-	gdk_pixbuf_unref (logo);
+	g_object_unref (logo);
 	gtk_dialog_run (GTK_DIALOG (about));
 }
 #endif
