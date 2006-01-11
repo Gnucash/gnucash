@@ -305,8 +305,22 @@ void gnc_string_cache_remove(gconstpointer key);
 */
 gpointer gnc_string_cache_insert(gconstpointer key);
 
-#define CACHE_INSERT(str) gnc_string_cache_insert((gconstpointer)(str));
-#define CACHE_REMOVE(str) gnc_string_cache_remove((str));
+#define CACHE_INSERT(str) gnc_string_cache_insert((gconstpointer)(str))
+#define CACHE_REMOVE(str) gnc_string_cache_remove((str))
+
+/* Replace cached string currently in 'dst' with string in 'src'. 
+ * Typical usage: 
+ *     void foo_set_name(Foo *f, const char *str) {
+ *        CACHE_REPLACE(f->name, str);
+ *     }
+ * It avoids unnecessary ejection by doing INSERT before REMOVE. 
+*/          
+#define CACHE_REPLACE(dst, src) do {               \
+        gpointer tmp = CACHE_INSERT((src));        \
+        CACHE_REMOVE((dst));                       \
+        (dst) = tmp;                               \
+    } while (0)
+
 
 #endif /* QOF_UTIL_H */
 /** @} */
