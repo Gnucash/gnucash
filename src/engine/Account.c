@@ -82,9 +82,9 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->type = NO_TYPE;
 
-  acc->accountName = g_strdup("");
-  acc->accountCode = g_strdup("");
-  acc->description = g_strdup("");
+  acc->accountName = CACHE_INSERT("");
+  acc->accountCode = CACHE_INSERT("");
+  acc->description = CACHE_INSERT("");
 
   acc->idata = 0;
 
@@ -139,11 +139,11 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
      * Also let caller issue the generate_event (EVENT_CREATE) */
     ret->type = from->type;
 
-    ret->accountName = g_strdup(from->accountName);
-    ret->accountCode = g_strdup(from->accountCode);
-    ret->description = g_strdup(from->description);
+    ret->accountName = CACHE_INSERT(from->accountName);
+    ret->accountCode = CACHE_INSERT(from->accountCode);
+    ret->description = CACHE_INSERT(from->description);
 
-    ret->inst.kvp_data    = kvp_frame_copy(from->inst.kvp_data);
+    ret->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
 
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
@@ -157,6 +157,7 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
     return ret;
 }
 
+//TODO: Factor from xaccCloneAccount and xaccCloneAccountSimple.
 Account *
 xaccCloneAccount (const Account *from, QofBook *book)
 {
@@ -175,11 +176,11 @@ xaccCloneAccount (const Account *from, QofBook *book)
      * Also let caller issue the generate_event (EVENT_CREATE) */
     ret->type = from->type;
 
-    ret->accountName = g_strdup(from->accountName);
-    ret->accountCode = g_strdup(from->accountCode);
-    ret->description = g_strdup(from->description);
+    ret->accountName = CACHE_INSERT(from->accountName);
+    ret->accountCode = CACHE_INSERT(from->accountCode);
+    ret->description = CACHE_INSERT(from->description);
 
-    ret->inst.kvp_data    = kvp_frame_copy(from->inst.kvp_data);
+    ret->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
 
     /* The new book should contain a commodity that matches
      * the one in the old book. Find it, use it. */
@@ -263,12 +264,9 @@ xaccFreeAccount (Account *acc)
     acc->splits = NULL;
   }
 
-  if (acc->accountName) g_free (acc->accountName);
-  acc->accountName = NULL;
-  if (acc->accountCode) g_free (acc->accountCode);
-  acc->accountCode = NULL;
-  if (acc->description) g_free (acc->description);
-  acc->description = NULL;
+  CACHE_REPLACE(acc->accountName, NULL);
+  CACHE_REPLACE(acc->accountCode, NULL);
+  CACHE_REPLACE(acc->description, NULL);
 
   /* zero out values, just in case stray 
    * pointers are pointing here. */
@@ -282,8 +280,6 @@ xaccFreeAccount (Account *acc)
   acc->reconciled_balance = gnc_numeric_zero();
 
   acc->type = NO_TYPE;
-  acc->accountName = NULL;
-  acc->description = NULL;
   acc->commodity = NULL;
 
   acc->version = 0;
@@ -1105,32 +1101,28 @@ xaccAccountSetStartingBalance(Account *acc,
 \********************************************************************/
 /* CAS: Umm, we say we're checking the split, but we're actually
    resorting all the splits.  Why not just leave the split out of
-   it? */
+   it? FIXME. */
 void
 xaccAccountFixSplitDateOrder (Account * acc, Split *split) 
 {
-  if (NULL == acc) return;
-  if (NULL == split) return;
+  if (!acc || !split || acc->inst.do_free) return;
 
-  if (acc->inst.do_free) return;
-
+  /* FIXME: This looks wrong, too.  Why force it dirty if it's not? */
   acc->sort_dirty = TRUE;
   acc->balance_dirty = TRUE;
 
-  if (acc->inst.editlevel > 0) return;
-
-  xaccAccountBringUpToDate (acc);
+  if (acc->inst.editlevel <= 0)
+      xaccAccountBringUpToDate (acc);
 }
 
 /********************************************************************\
- * xaccCheckTransDateOrder                                          *
+ * xaccTransFixSplitDateOrder                                       *
  *   check this transaction to see if the date is in correct order  *
  *   If it is not, reorder the transactions.                        *
  *   This routine perfroms the check for both of the double-entry   *
  *   transaction entries.                                           *
  *                                                                  *
  * Args:   trans -- the transaction to check                        *
- * Return: int -- non-zero if out of order                          *
 \********************************************************************/
 
 void
@@ -1138,7 +1130,7 @@ xaccTransFixSplitDateOrder (Transaction *trans)
 {
   GList *node;
 
-  if (trans == NULL) return;
+  if (!trans) return;
 
   gnc_engine_suspend_events();
   for (node = trans->splits; node; node = node->next)
@@ -1237,15 +1229,10 @@ xaccAccountSetType (Account *acc, GNCAccountType tip)
 void 
 xaccAccountSetName (Account *acc, const char *str) 
 {
-   char * tmp;
-
    if (!acc || !str || str == acc->accountName) return;
 
    xaccAccountBeginEdit(acc);
-   /* make strdup before freeing (just in case str==accountName !!) */
-   tmp = g_strdup (str);
-   g_free (acc->accountName);
-   acc->accountName = tmp;  /* TODO: use string cache */
+   CACHE_REPLACE(acc->accountName, str);
    mark_account (acc);
    
    xaccAccountCommitEdit(acc);
@@ -1254,14 +1241,10 @@ xaccAccountSetName (Account *acc, const char *str)
 void 
 xaccAccountSetCode (Account *acc, const char *str) 
 {
-   char * tmp;
    if (!acc || !str || str == acc->accountCode) return;
 
    xaccAccountBeginEdit(acc);
-   /* make strdup before freeing */
-   tmp = g_strdup (str);
-   g_free (acc->accountCode);
-   acc->accountCode = tmp;  /* TODO: use string cache */
+   CACHE_REPLACE(acc->accountCode, str);
    mark_account (acc);
 
    xaccAccountCommitEdit(acc);
@@ -1270,14 +1253,10 @@ xaccAccountSetCode (Account *acc, const char *str)
 void
 xaccAccountSetDescription (Account *acc, const char *str) 
 {
-   char * tmp;
    if (!acc || !str || str == acc->description) return;
 
    xaccAccountBeginEdit(acc);
-   /* make strdup before freeing (just in case str==description !!) */
-   tmp = g_strdup (str);
-   g_free (acc->description);
-   acc->description = tmp;  /* TODO: use string cache */
+   CACHE_REPLACE(acc->description, str);
    mark_account (acc);
    
    xaccAccountCommitEdit(acc);
