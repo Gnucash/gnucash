@@ -121,8 +121,8 @@ xaccMallocAccount (QofBook *book)
   return acc;
 }
 
-Account *
-xaccCloneAccountSimple(const Account *from, QofBook *book)
+static Account *
+xaccCloneAccountCommon(const Account *from, QofBook *book)
 {
     Account *ret;
 
@@ -151,47 +151,24 @@ xaccCloneAccountSimple(const Account *from, QofBook *book)
 
     ret->commodity_scu = from->commodity_scu;
     ret->non_standard_scu = from->non_standard_scu;
-    ret->inst.dirty   = TRUE;
 
     LEAVE (" ");
     return ret;
 }
 
-//TODO: Factor from xaccCloneAccount and xaccCloneAccountSimple.
 Account *
 xaccCloneAccount (const Account *from, QofBook *book)
 {
-    Account *ret;
-
-    if (!from || !book) return NULL;
-    ENTER (" ");
-
-    ret = g_new (Account, 1);
-    g_return_val_if_fail (ret, NULL);
-
-    xaccInitAccount (ret, book);
-
-    /* Do not Begin/CommitEdit() here; give the caller 
-     * a chance to fix things up, and let them do it.
-     * Also let caller issue the generate_event (EVENT_CREATE) */
-    ret->type = from->type;
-
-    ret->accountName = CACHE_INSERT(from->accountName);
-    ret->accountCode = CACHE_INSERT(from->accountCode);
-    ret->description = CACHE_INSERT(from->description);
-
-    ret->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
-
-    /* The new book should contain a commodity that matches
-     * the one in the old book. Find it, use it. */
-    ret->commodity = gnc_commodity_obtain_twin (from->commodity, book);
-
-    ret->commodity_scu = from->commodity_scu;
-    ret->non_standard_scu = from->non_standard_scu;
-
+    Account *ret = xaccCloneAccountCommon(from, book);
     qof_instance_gemini (&ret->inst, (QofInstance *) &from->inst);
+    return ret;
+}
 
-    LEAVE (" ");
+Account *
+xaccCloneAccountSimple (const Account *from, QofBook *book)
+{
+    Account *ret = xaccCloneAccountCommon(from, book);    
+    ret->inst.dirty = TRUE;
     return ret;
 }
 
