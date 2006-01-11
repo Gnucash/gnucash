@@ -447,15 +447,6 @@ gnc_quote_source_set_fq_installed (GList *sources_list)
  * gnc_commodity_new
  ********************************************************************/
 
-/* TODO: convert these to their more conventional form */
-#undef CACHE_INSERT
-#undef CACHE_REMOVE
-#define CACHE_INSERT(dest,src)       \
-  if(src) { dest = gnc_string_cache_insert((gpointer)src); }
-
-#define CACHE_REMOVE(str)     \
-  if(str) { gnc_string_cache_remove(str); str=NULL; }
-
 static void
 mark_commodity_dirty (gnc_commodity *cm)
 {
@@ -503,15 +494,15 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   } else {
     retval->namespace = NULL;
   }
-
-  CACHE_INSERT (retval->fullname, fullname);
-  CACHE_INSERT (retval->mnemonic, mnemonic);
-  CACHE_INSERT (retval->exchange_code, exchange_code);
+  
+  retval->fullname = CACHE_INSERT(fullname);
+  retval->mnemonic = CACHE_INSERT(mnemonic);
+  retval->exchange_code = CACHE_INSERT(exchange_code);
   retval->fraction = fraction;
   retval->mark = 0;
   retval->quote_flag = 0;
   retval->quote_source = NULL;
-  retval->quote_tz = NULL;
+  retval->quote_tz = CACHE_INSERT("");
 
   reset_printname(retval);
   reset_unique_name(retval);
@@ -534,10 +525,10 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   /* Set at creation */
   CACHE_REMOVE (cm->fullname);
-  cm->namespace = NULL;
   CACHE_REMOVE (cm->exchange_code);
   CACHE_REMOVE (cm->mnemonic);
   CACHE_REMOVE (cm->quote_tz);
+  cm->namespace = NULL;
 
   /* Set through accessor functions */
   cm->quote_source = NULL;
@@ -572,11 +563,12 @@ gnc_commodity_clone(gnc_commodity *src)
 {
   gnc_commodity * dest = g_new0(gnc_commodity, 1);
 
-  CACHE_INSERT (dest->fullname, src->fullname);
+  dest->fullname = CACHE_INSERT(src->fullname);
+  dest->mnemonic = CACHE_INSERT(src->mnemonic);
+  dest->exchange_code = CACHE_INSERT(src->exchange_code);
+  dest->quote_tz = CACHE_INSERT(src->quote_tz);
+
   dest->namespace = src->namespace;
-  CACHE_INSERT (dest->mnemonic, src->mnemonic);
-  CACHE_INSERT (dest->exchange_code, src->exchange_code);
-  CACHE_INSERT (dest->quote_tz, src->quote_tz);
 
   dest->mark = 0;
   dest->fraction = src->fraction;
@@ -743,7 +735,7 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
   if(cm->mnemonic == mnemonic) return;
 
   CACHE_REMOVE (cm->mnemonic);
-  CACHE_INSERT (cm->mnemonic, mnemonic);
+  cm->mnemonic = CACHE_INSERT(mnemonic);
 
   mark_commodity_dirty (cm);
   reset_printname(cm);
@@ -785,7 +777,7 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
   if(cm->fullname == fullname) return;
 
   CACHE_REMOVE (cm->fullname);
-  CACHE_INSERT (cm->fullname, fullname);
+  cm->fullname = CACHE_INSERT (fullname);
 
   mark_commodity_dirty(cm);
   reset_printname(cm);
@@ -803,7 +795,7 @@ gnc_commodity_set_exchange_code(gnc_commodity * cm,
   if(cm->exchange_code == exchange_code) return;
 
   CACHE_REMOVE (cm->exchange_code);
-  CACHE_INSERT (cm->exchange_code, exchange_code);
+  cm->exchange_code = CACHE_INSERT (exchange_code);
   mark_commodity_dirty(cm);
 }
 
@@ -869,11 +861,10 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 {
   ENTER ("(cm=%p, tz=%s)", cm, tz);
 
-  if(!cm) return;
+  if(!cm || tz == cm->quote_tz) return;
 
   CACHE_REMOVE (cm->quote_tz);
-  if (tz && *tz)
-    CACHE_INSERT (cm->quote_tz, tz);
+  cm->quote_tz = CACHE_INSERT (tz);
 
   mark_commodity_dirty(cm);
   LEAVE(" ");
