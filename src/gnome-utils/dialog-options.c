@@ -1769,7 +1769,6 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
   gtk_spin_button_set_numeric(GTK_SPIN_BUTTON(value), TRUE);
 
   {
-    GtkStyle *style;
     gdouble biggest;
     gint num_digits;
 
@@ -1786,26 +1785,9 @@ gnc_option_set_ui_widget_number_range (GNCOption *option, GtkBox *page_box,
     if (num_digits == 0)
       num_digits = 1;
 
-    num_digits += num_decimals + 1;
+    num_digits += num_decimals;
 
-    style = gtk_widget_get_style(value);
-    if (style != NULL)
-    {
-      gchar *string;
-      gint width;
-
-      string = g_strnfill(num_digits, '8');
-      
-      width = gdk_text_measure(gdk_font_from_description (style->font_desc), 
-                 string, num_digits);
-
-      /* sync with gtkspinbutton.c. why doesn't it do this itself? */
-      width += 11 + (2 * style->xthickness);
-
-      g_free(string);
-
-      gtk_widget_set_size_request(value, width, -1);
-    }
+    gtk_entry_set_width_chars(GTK_ENTRY(value), num_digits);
   }
 
   gnc_option_set_widget (option, value);

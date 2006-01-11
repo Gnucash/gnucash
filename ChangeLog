@@ -1,5 +1,8 @@
 2006-01-10  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-options.c: Use newer function for setting
+	the width of a GtkSpinButton.
+
 	* src/network-utils/Makefile.am:
 	* src/gnome-utils/gnc-html.c:
 	* src/gnome/top-level.c: The gnucash gpg networking code isn't
