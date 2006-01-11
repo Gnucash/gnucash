@@ -1,3 +1,37 @@
+2006-01-11  Neil Williams  <linux@codehelp.co.uk>
+
+	Preparing the gnucash2 binary and shutting
+	off gnucash/engine gnc-module.
+	* src/backend/file/gncmod-backend-file.c :
+	* src/import-export/qif-io-core/gncmod-qifiocore.c :
+	* src/bin/gnucash2.c :
+	* src/business/business-core/file/gncmod-business-backend-file.c :
+	* src/engine/gncmod-engine.c :
+	* src/gnc-module/gnc-module.c :
+	* cashutil/src/Makefile.am :
+	* cashutil/src/cashutil.c :
+	* cashutil/configure.ac :
+	* cashutil/src/Makefile.am :
+	* src/app-utils/Makefile.am :
+	* src/app-utils/gncmod-app-utils.c :
+	* src/engine/Makefile.am :
+	* src/engine/test/Makefile.am :
+	* src/gnc-module/Makefile.am :
+	* src/gnc-module/gnc-module.h :
+	* src/gnome-search/gncmod-gnome-search.c :
+	* src/gnome-utils/gncmod-gnome-utils.c :
+	* src/gnome/gncmod-budget.c :
+	* src/import-export/binary-import/gncmod-binary-import.c :
+	* src/import-export/gncmod-generic-import.c :
+	* src/import-export/hbci/gncmod-hbci.c :
+	* src/import-export/log-replay/gncmod-log-replay.c :
+	* src/import-export/mt940/gncmod-mt940-import.c :
+	* src/import-export/ofx/gncmod-ofx-import.c :
+	* src/import-export/qif-import/gncmod-qif-import.c :
+	* src/register/ledger-core/gncmod-ledger-core.c :
+	* src/register/register-core/gncmod-register-core.c :
+	* src/report/report-system/gncmod-report-system.c :
+
 2005-12-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-model-account.c:

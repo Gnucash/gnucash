@@ -145,7 +145,7 @@ build_environment(void)
 	setenv("LD_LIBRARY_PATH", llp, 1);
 	setenv("GUILE_LOAD_PATH", glibp, 1);
 	setenv("LTDL_LIBRARY_PATH", ltdlp, 1);
-	g_message ("set GNC_MODULE_PATH %s LD_LIBRARY_PATH %s"
+	PINFO ("set GNC_MODULE_PATH %s LD_LIBRARY_PATH %s"
 		" GUILE_LOAD_PATH %s LTDL_LIBRARY_PATH %s", gmp, llp, glibp, ltdlp);
 }
 

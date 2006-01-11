@@ -282,10 +282,10 @@ gnc_module_get_info(const char * fullpath)
   lt_dlhandle handle;
   lt_ptr modsysver;
 
-  //printf("(init) dlopening %s\n", fullpath);
+  PINFO ("(init) dlopening %s\n", fullpath);
   handle = lt_dlopen(fullpath);
   if (handle == NULL) {
-      g_warning ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
+      PWARN ("Failed to dlopen() '%s': %s\n", fullpath, lt_dlerror());
       return NULL;
   }
 
@@ -294,15 +294,15 @@ gnc_module_get_info(const char * fullpath)
   /* the modsysver tells us what the expected symbols and their
    * types are */
   if (!modsysver) {
-      //printf("(init) closing %s\n", fullpath);
+      PINFO ("(init) closing %s\n", fullpath);
       //lt_dlclose(handle);
       return NULL;
   }
 
   if (*(int *)modsysver != 0) {
       /* unsupported module system interface version */
-      /* printf("\n** WARNING ** : module '%s' requires newer module system\n",
-         fullpath); */
+      PERR("\n** WARNING ** : module '%s' requires newer module system\n",
+         fullpath);
       //lt_dlclose(handle);
       return NULL;
   }
@@ -317,7 +317,7 @@ gnc_module_get_info(const char * fullpath)
       
       if (!(initfunc && pathfunc && descripfunc && interface &&
             revision && age)) {
-          g_warning ("module '%s' does not match module signature\n",
+          PWARN ("module '%s' does not match module signature\n",
                      fullpath);
           //lt_dlclose(handle);
           return NULL;
@@ -334,7 +334,7 @@ gnc_module_get_info(const char * fullpath)
           info->module_interface   = *(int *)interface;
           info->module_age         = *(int *)age;
           info->module_revision    = *(int *)revision;
-          //printf("(init) closing %s\n", fullpath);
+          PINFO ("(init) closing %s\n", fullpath);
           //lt_dlclose(handle);
           return info;
       }
@@ -465,12 +465,12 @@ gnc_module_load_common(const gchar * module_name, gint interface, gboolean optio
       }
       else
       {
-        g_warning ("module init failed: %s", module_name);
+        PERR ("module init failed: %s", module_name);
         return NULL;
       }
     }
     else {
-      g_warning ("module has no init func: %s", module_name);
+      PERR ("module has no init func: %s", module_name);
       return NULL;
     }
   }
@@ -480,7 +480,7 @@ gnc_module_load_common(const gchar * module_name, gint interface, gboolean optio
     lt_dlhandle   handle = NULL;
 
 	if(modinfo) {
-      g_message("(load) dlopening %s\n", modinfo->module_filepath);
+      PINFO("(load) dlopening %s\n", modinfo->module_filepath);
 	}
 
     if(modinfo && ((handle = lt_dlopen(modinfo->module_filepath)) != NULL)) 
@@ -502,7 +502,7 @@ gnc_module_load_common(const gchar * module_name, gint interface, gboolean optio
         if(!info->init_func(0)) 
         {
           /* init failed. unload the module. */
-          g_warning ("Initialization failed for module %s\n", module_name);
+          PERR ("Initialization failed for module %s\n", module_name);
           g_hash_table_remove(loaded_modules, info);
           g_free(info->filename);
           g_free(info);
@@ -514,7 +514,7 @@ gnc_module_load_common(const gchar * module_name, gint interface, gboolean optio
       }
       else 
       {
-        g_warning ("Module %s (%s) is not a gnc-module.\n", module_name,
+        PWARN ("Module %s (%s) is not a gnc-module.\n", module_name,
                    modinfo->module_filepath);
         //lt_dlclose(handle);
       }
@@ -522,9 +522,9 @@ gnc_module_load_common(const gchar * module_name, gint interface, gboolean optio
     }
     else if (!optional)
     {
-      g_warning ("Failed to open module %s", module_name);
+      PWARN ("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
-      else g_warning (": could not locate %s interface v.%d\n",
+      else PWARN (": could not locate %s interface v.%d\n",
                       module_name, interface);
       return NULL;
     }
@@ -585,7 +585,7 @@ gnc_module_unload(GNCModule module)
   }
   else 
   {
-    g_warning ("Failed to unload module %p (it is not loaded)\n", module);
+    PWARN ("Failed to unload module %p (it is not loaded)\n", module);
     return 0;
   }
 }
