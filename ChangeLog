@@ -1,5 +1,9 @@
 2006-01-10  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/dialog-utils.c: A couple of simple substitutions
+	for deprecated functions.
+
 	* src/gnome-utils/dialog-options.c: Use newer function for setting
 	the width of a GtkSpinButton.
 
