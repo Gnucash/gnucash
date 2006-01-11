@@ -28,7 +28,7 @@ check_time (Timespec ts, gboolean always_print)
   /* The time, in seconds, everywhere on the planet, is always
    * the same, and is independent of location.  In particular,
    * the time, in seconds, is identical to the local time in 
-	* Greewich (GMT).
+   * Greenwich (GMT).
    */
   ts_2 = gnc_iso8601_to_timespec_gmt (str);
 
@@ -337,6 +337,12 @@ run_test (void)
 
   ts = gnc_iso8601_to_timespec_gmt ("2008-02-28 23:23:23.000000 -0000");
   check_time (ts, do_print);
+
+  /* Here's a date ten days after the 2038 rollover that should work
+     if/when we support it. */
+  ts.tv_nsec = 0;
+  ts.tv_sec = (long long int) 0x7fffffff + 3600*24*10;
+  //check_time(ts, do_print);
 
   /* Various 'special' times. What makes these so special? */
   ts.tv_sec = 152098136;
