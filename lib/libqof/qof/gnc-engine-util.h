@@ -300,12 +300,12 @@ void gnc_engine_string_cache_destroy (void);
 */
 void gnc_string_cache_remove(gconstpointer key);
 
-/** You can use this function with g_hash_table_insert(), or the key
+/** You can use this function with g_hash_table_insert(), for the key
    (or value), as long as you use the destroy notifier above.
 */
-gpointer gnc_string_cache_insert(gpointer key);
+gpointer gnc_string_cache_insert(gconstpointer key);
 
-#define CACHE_INSERT(str) gnc_string_cache_insert((gpointer)(str));
+#define CACHE_INSERT(str) gnc_string_cache_insert((gconstpointer)(str));
 #define CACHE_REMOVE(str) gnc_string_cache_remove((str));
 
 #endif /* QOF_UTIL_H */

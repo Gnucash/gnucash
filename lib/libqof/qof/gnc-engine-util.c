@@ -273,14 +273,19 @@ gnc_engine_string_cache_destroy (void)
 void
 gnc_string_cache_remove(gconstpointer key)
 {
-    g_cache_remove(gnc_engine_get_string_cache(), key);
+    if (key) 
+        g_cache_remove(gnc_engine_get_string_cache(), key);
 }
 
-
+/* TODO: It would be better if this returned gpointerconst.  The
+   returned strings really should be treated as const.  Callers must
+   not modify them. */
 gpointer
-gnc_string_cache_insert(gpointer key)
+gnc_string_cache_insert(gconstpointer key)
 {
-    return g_cache_insert(gnc_engine_get_string_cache(), key);
+    if (key) 
+        return g_cache_insert(gnc_engine_get_string_cache(), (gpointer)key);
+    return NULL;
 }
 
 void
