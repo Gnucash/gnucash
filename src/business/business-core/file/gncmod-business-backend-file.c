@@ -76,7 +76,7 @@ libgncmod_business_backend_file_LTX_gnc_module_description(void)
 int
 libgncmod_business_backend_file_LTX_gnc_module_init(int refcount) 
 {  
-  if(!gnc_engine_is_initialized()) { return FALSE; }
+/*  if(!gnc_engine_is_initialized()) { return FALSE; }*/
 
   bus_core = gnc_module_load("gnucash/business-core", 0);
   if(!bus_core) return FALSE;

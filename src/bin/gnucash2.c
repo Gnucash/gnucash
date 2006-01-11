@@ -152,28 +152,8 @@ build_environment(void)
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
-
-}
-
-static int
-qof_cmd_gui(int argc, char ** argv)
-{
-	GnomeProgram *gnucash2;
 	GncMainWindow *gnc_win2;
 
-	gtk_init (&argc, &argv);
-	build_environment();
-	gnucash2 = gnome_program_init(PACKAGE, VERSION,
-		LIBGNOMEUI_MODULE, argc, argv, 
-		GNOME_PARAM_APP_PREFIX, PREFIX,
-		GNOME_PARAM_APP_SYSCONFDIR, SYSCONFDIR,
-		GNOME_PARAM_APP_DATADIR, DATADIR,
-		GNOME_PARAM_APP_LIBDIR, GNC_LIBDIR,
-		GNOME_PARAM_NONE);
-	gnome_program_postinit(gnucash2);
-	gnc_module_system_init();
-	gnc_show_splash_screen();
-	gnc_update_splash_screen(_("Loading modules... "));
 	/** autoloading.
 	Some may need to be loaded in sequence but each should
 	handle this internally - by calling it's own dependencies.
@@ -184,24 +164,6 @@ qof_cmd_gui(int argc, char ** argv)
 	calling the old engine.
 	*/
 	gnc_module_load_all(GNC_MOD_INTERFACE_VERSION);
-/*	gnc_module_load("gnucash/app-utils", 0);
-	gnc_module_load("gnucash/import-export", 0);
-	gnc_module_load("gnucash/register/ledger-core", 0);
-	gnc_module_load("gnucash/register/register-core", 0);
-	gnc_module_load("gnucash/register/register-gnome", 0);
-	gnc_module_load("gnucash/import-export/binary-import", 0);
-	gnc_module_load("gnucash/import-export/qif-import", 0);
-	gnc_module_load("gnucash/import-export/ofx", 0);
-	gnc_module_load("gnucash/import-export/mt940", 0);
-	gnc_module_load("gnucash/import-export/log-replay", 0);
-	gnc_module_load("gnucash/import-export/hbci", 0);
-	gnc_module_load("gnucash/report/report-system", 0);
-	gnc_module_load("gnucash/report/stylesheets", 0);
-	gnc_module_load("gnucash/report/standard-reports", 0);
-	gnc_module_load("gnucash/report/utility-reports", 0);
-	gnc_module_load("gnucash/report/locale-specific/us", 0);
-	gnc_module_load("gnucash/report/report-gnome", 0);
-	gnc_module_load("gnucash/business-gnome", 0);*/
 	/* handle --no-file */
 	if(!skip_auto)
 	{
@@ -228,6 +190,27 @@ qof_cmd_gui(int argc, char ** argv)
 	gnc_win2 = gnc_main_window_new();
 	gnc_main_window_set_progressbar_window(gnc_win2);
 	gnc_destroy_splash_screen();
+}
+
+static int
+qof_cmd_gui(int argc, char ** argv)
+{
+	GnomeProgram *gnucash2;
+
+	gtk_init (&argc, &argv);
+	build_environment();
+	gnucash2 = gnome_program_init(PACKAGE, VERSION,
+		LIBGNOMEUI_MODULE, argc, argv, 
+		GNOME_PARAM_APP_PREFIX, PREFIX,
+		GNOME_PARAM_APP_SYSCONFDIR, SYSCONFDIR,
+		GNOME_PARAM_APP_DATADIR, DATADIR,
+		GNOME_PARAM_APP_LIBDIR, GNC_LIBDIR,
+		GNOME_PARAM_NONE);
+	gnome_program_postinit(gnucash2);
+	gnc_module_system_init();
+	gnc_show_splash_screen();
+	gnc_update_splash_screen(_("Loading modules... "));
+	/* I only do this here because a module may call scm */
 	scm_boot_guile(argc, (char **)argv, guile_main, NULL);
 	return 0;
 }

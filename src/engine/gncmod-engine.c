@@ -44,9 +44,9 @@ libgncmod_engine_LTX_gnc_module_description(void)
 int
 libgncmod_engine_LTX_gnc_module_init(int refcount) 
 {
-  if(refcount == 0) 
+/*  if(refcount == 0) 
   {
-    /* initialize the engine on the first load */
+//   initialize the engine on the first load 
     gnc_engine_init(0, NULL);
   }
   
@@ -56,7 +56,7 @@ libgncmod_engine_LTX_gnc_module_init(int refcount)
 
   scm_c_eval_string("(use-modules (g-wrapped gw-kvp))");
   scm_c_eval_string("(use-modules (g-wrapped gw-engine))");
-
+*/
   return TRUE;
 }
 
