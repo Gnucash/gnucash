@@ -20,10 +20,13 @@
  */
 
 /** @addtogroup budget
- *     @{ */
+   @{ */
 
-/* This file provides some utilities for working with the list of
- * budgets in a book.  TODO: This file is poorly named, since it
+/** @file gnc-tree-model-budget.h
+ * @brief provides some utilities for working with the list of
+ * budgets in a book.*/
+
+/** @todo This file is poorly named, since it
  * covers both model and view.*/
 
 #ifndef __GNC_TREE_MODEL_BUDGET_H__
@@ -49,5 +52,5 @@ GncBudget *gnc_tree_model_budget_get_budget(GtkTreeModel *tm,
 void gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
                                                GtkTreeIter *iter,
                                                GncBudget *bgt);
-
+/** @} */
 #endif // __GNC_TREE_MODEL_BUDGET_H__
