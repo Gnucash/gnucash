@@ -322,43 +322,21 @@ grab_file_doc(const char *filename)
 }
     
 static void
-test_load_file(const char *filename, gxpf_callback cb,
-               sixtp *parser, const char *parser_tag,
+test_load_file(const char *filename, gxpf_callback cb, sixtp *top_parser, 
                QofBook *book)
 {
     xmlNodePtr node;
-    sixtp *main_parser;
-    sixtp *top_parser;
     
     node = grab_file_doc(filename);
 
-    if(!node)
+    if (!node)
     {
         failure_args("failure of libxml to parse file", __FILE__, __LINE__,
                      "%s", filename);
         return;
     }
 
-    top_parser = sixtp_new();
-    main_parser = sixtp_new();
-
-    if(!sixtp_add_some_sub_parsers(
-        top_parser, TRUE,
-        "gnc-v2", main_parser,
-        NULL, NULL))
-    {
-        return;
-    }
-    
-    if(!sixtp_add_some_sub_parsers(
-           main_parser, TRUE,
-           parser_tag, parser,
-           NULL, NULL))
-    {
-        return;
-    }
-
-    if(!gnc_xml_parse_file(top_parser, filename, cb, node->children, book))
+    if (!gnc_xml_parse_file(top_parser, filename, cb, node->children, book))
     {
         failure_args("failure to parse file", __FILE__, __LINE__,
                      "%s", filename);
@@ -373,6 +351,21 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
                   QofBook *book)
 {
     int count;
+    sixtp *main_parser;
+    sixtp *top_parser;
+
+
+    top_parser = sixtp_new();
+    main_parser = sixtp_new();
+
+    if (!sixtp_add_some_sub_parsers(top_parser, TRUE, "gnc-v2", main_parser,
+                                    NULL, NULL))
+        return;
+    
+    if (!sixtp_add_some_sub_parsers(main_parser, TRUE, parser_tag, parser,
+                                    NULL, NULL))
+        return;
+
 
     for(count = 1; count < argc; count++)
     {
@@ -380,6 +373,7 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
         const char *to_open = argv[count];
         if(stat(to_open, &file_info) != 0)
         {
+            printf("cannot stat %s.\n", to_open);
             failure("unable to stat file");
         }
         else
@@ -389,8 +383,10 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
 #if 0
                 printf( "testing load of file \"%s\":\n", argv[count] );
 #endif
-                test_load_file(to_open, cb, parser, parser_tag, book);
+                test_load_file(to_open, cb, top_parser, book);
             }
         }
     }
+    
+    sixtp_destroy(top_parser);
 }
