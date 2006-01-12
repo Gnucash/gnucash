@@ -2,6 +2,12 @@
 
 	* configure.in:  add --enable-qof so build defaults to internal qof.
 
+	* configure.in: fixes to make configure more quiet
+	  - move PKG_CONFIG check early in the process
+	  - use --silence-errors more
+	* macros/pkg.m4: work around a pkg-config bug that outputs
+	  errors to stderr even when you tell it to output to stdout.
+
 2006-01-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-gnome-utils.c:
