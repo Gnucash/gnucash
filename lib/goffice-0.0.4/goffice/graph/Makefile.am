@@ -75,11 +75,6 @@ libgoffice_graph_la_HEADERS = \
 	gog-renderer-gnome-print.h	\
 	gog-renderer-svg.h
 
-if WITH_CAIRO
-  libgoffice_graph_la_SOURCES += gog-renderer-cairo.c	
-  libgoffice_graph_la_HEADERS += gog-renderer-cairo.h
-endif
-
 gladedir = $(goffice_datadir)/glade
 dist_glade_DATA = \
 	gog-guru.glade			\

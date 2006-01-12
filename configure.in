@@ -932,9 +932,6 @@ goffice_reqs="
 	pango			>= 1.6.0
 	pangoft2		>= 1.6.0
 "
-goffice_cairo_reqs="
-	cairo			>= 0.5.0
-"
 goffice_gtk_reqs="
 	gtk+-2.0		>= 2.4.14
 	libglade-2.0		>= 2.3.6
@@ -946,21 +943,9 @@ goffice_gnome_reqs="
 	libgnomeui-2.0		>= 2.0.0
 	libgsf-gnome-1		>= 1.12.2
 "
-dnl *********************
-dnl Should we use cairo ?
-dnl *********************
+dnl Should we use cairo ? no
 goffice_with_cairo=false
-AC_ARG_WITH(cairo, [  --{with,without}-cairo  Use cairo for graph rendering])
-if test "x$with_cairo" = xyes; then
-	cairo_msg="Enabled"
-	PKG_CHECK_MODULES(CAIRO, [$goffice_cairo_reqs])
-	AC_DEFINE(WITH_CAIRO, 1, [Define if goffice is build with cairo])
-	goffice_reqs="$goffice_reqs $goffice_cairo_reqs"
-	goffice_with_cairo=true
-else
-	cairo_msg="Disabled"
-	goffice_with_cairo=false
-fi 
+cairo_msg="Disabled"
 
 dnl *******************
 dnl Should we use gtk ?
