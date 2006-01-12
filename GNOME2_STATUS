@@ -81,6 +81,24 @@ Resources
 
     - warlord reports this was true in 1.8 as well.
 
+  - Tax Report / TXF Export
+
+    - incorrect "Sub-4 Sub-3 Sub-2 Sub-1 Total" supposed-to-be-column-header lines?
+      [http://lists.gnucash.org/pipermail/gnucash-devel/2006-January/015337.html]
+
+  - Assets Barchart
+    [http://lists.gnucash.org/pipermail/gnucash-devel/2006-January/015337.html]
+
+    - With stacked barchart, 13 bars @ 1200x800 sorted by amount, the graph
+      is very compressed; with >13 bars, nothing is displayed.
+
+    - Legend uses a huge font.
+
+- Importing
+
+  - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
+    to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
+
 - Budgeting
 
   - Budget Report
