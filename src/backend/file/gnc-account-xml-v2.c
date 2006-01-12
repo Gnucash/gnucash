@@ -276,15 +276,16 @@ account_non_standard_scu_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 /* ============================================================== */
-/* The following depricated routines are here only to service 
+/* The following deprecated routines are here only to service 
  * older XML files. */
 
 static gboolean
-depricated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
+    PWARN("Obsolete xml tag will not be preserved."); 
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     DxaccAccountSetCurrency(pdata->account, ref);
 
@@ -292,31 +293,38 @@ depricated_account_currency_handler (xmlNodePtr node, gpointer act_pdata)
 }
 
 static gboolean
-depricated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_currency_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
+    PWARN("Obsolete xml tag will not be preserved."); 
     return TRUE;
 }
 
 static gboolean
-depricated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
-    xaccAccountSetCommodity(pdata->account, ref);
+    PWARN("Obsolete xml tag will not be preserved."); 
+    if (!xaccAccountGetCommodity(pdata->account)) {
+        ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
+        xaccAccountSetCommodity(pdata->account, ref);
+    }
 
     return TRUE;
 }
 
 static gboolean
-depricated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
+deprecated_account_security_scu_handler (xmlNodePtr node, gpointer act_pdata)
 {
     struct account_pdata *pdata = act_pdata;
     gint64 val;
 
-    dom_tree_to_integer(node, &val);
-    xaccAccountSetCommoditySCU(pdata->account, val);
+    PWARN("Obsolete xml tag will not be preserved."); 
+    if (!xaccAccountGetCommoditySCU(pdata->account)) {
+        dom_tree_to_integer(node, &val);
+        xaccAccountSetCommoditySCU(pdata->account, val);
+    }
 
     return TRUE;
 }
@@ -418,10 +426,10 @@ static struct dom_tree_handler account_handlers_v2[] = {
     /* These should not appear in  newer xml files; only in old
      * (circa gnucash-1.6) xml files. We maintain them for backward 
      * compatibility. */
-    { act_currency_string, depricated_account_currency_handler, 0, 0 },
-    { act_currency_scu_string, depricated_account_currency_scu_handler, 0, 0 },
-    { act_security_string, depricated_account_security_handler, 0, 0 },
-    { act_security_scu_string, depricated_account_security_scu_handler, 0, 0 },
+    { act_currency_string, deprecated_account_currency_handler, 0, 0 },
+    { act_currency_scu_string, deprecated_account_currency_scu_handler, 0, 0 },
+    { act_security_string, deprecated_account_security_handler, 0, 0 },
+    { act_security_scu_string, deprecated_account_security_scu_handler, 0, 0 },
     { NULL, 0, 0, 0 }
 };
 
