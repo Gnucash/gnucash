@@ -401,15 +401,30 @@ dnl *************************************
 dnl QOF
 dnl *************************************
 
+dnl XXX: FIXME: RELEASE HACK
+dnl This makes sure that we default to using internal QOF for SVN.
+dnl Make sure to enable this be default for stable releases!
+dnl
+AC_ARG_ENABLE(qof,
+  [  --enable-qof     enable the search for an external QOF library (disabled)],
+  [case "${enableval}" in
+     yes) gnc_enable_qof=true ;;
+     no)  gnc_enable_qof=false ;;
+     *) AC_MSG_ERROR(bad value ${enableval} for --enable-qof) ;;
+   esac],
+   [gnc_enable_qof=false])
+
 AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)])
+
 QOF_REQUIRED=0.6.0
 AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 if test pkg-config = no; then
         AC_MSG_ERROR([Please install pkgconfig])
         exit 1
 fi
-AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
-if test "$withval" != "yes"; then
+if test "$gnc_enable_qof" = yes ; then
+  AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
+  if test "$withval" != "yes"; then
         QOF=`$PKG_CONFIG --silence-errors --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
         QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $withval/lib/pkgconfig/qof-1.pc`
         QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $withval/lib/pkgconfig/qof-1.pc`
@@ -417,7 +432,7 @@ if test "$withval" != "yes"; then
         QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
         QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
         QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
-else
+  else
         QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
         QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`
         QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags qof-1`
@@ -425,9 +440,16 @@ else
         QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix qof-1`
         QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir qof-1`
         QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir qof-1`
+  fi
+  if test x$QOF_XML_DIR = x; then
+        AC_MSG_RESULT([no, will use internal QOF code])
+  else
+        AC_MSG_RESULT([yes])
+  fi
+else
+  AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
 fi
 if test x$QOF_XML_DIR = x; then
-        AC_MSG_RESULT([no, will use internal QOF code])
 	QOF_LIB_DIR=`eval echo $libdir | sed "s%^NONE%$prefix%"`
 	QOF_LIB_DIR=`eval echo $QOF_LIB_DIR | sed "s%^NONE%$prefix%"`  
 	QOF_CFLAGS="-I\${top_srcdir}/lib/libqof/qof"
@@ -442,8 +464,6 @@ if test x$QOF_XML_DIR = x; then
 	AC_SUBST(LIBQOF_BACKEND_QSF_LIBRARY_VERSION)
   	AC_DEFINE(HAVE_LIBQOF,,[We will use the internal QOF code])
 	HAVE_LIBQOF="use_internal"
-else
-        AC_MSG_RESULT([yes])
 fi
 AM_CONDITIONAL(USE_LIBQOF, [test x$HAVE_LIBQOF != x])
 AM_CONDITIONAL(USE_LIBQOF, [test "$HAVE_LIBQOF" = "use_internal"])
