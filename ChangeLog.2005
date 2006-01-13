@@ -1,3 +1,12 @@
+r12228 | chris | 2005-12-31 17:28:42 -0500 (Sat, 31 Dec 2005) | 2 lines
+
+   M /trunk/src/engine/Group.c
+   M /trunk/src/engine/Group.h
+   M /trunk/src/engine/GroupP.h
+
+   Constify the AccountGroup variables where possible in Group.[ch]
+
+
 2005-12-31  Chris Shoemaker <c.shoemaker@cox.net>
 
 	* [r12224] trunk/src/gnome/gnc-plugin-page-budget.c: Turn on gconf

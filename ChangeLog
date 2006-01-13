@@ -1,3 +1,38 @@
+r12337 | chris | 2006-01-12 20:25:12 -0500 (Thu, 12 Jan 2006) | 5 lines
+
+   M /trunk/src/app-utils/Makefile.am
+   M /trunk/src/app-utils/gnc-gettext-util.c
+   M /trunk/src/app-utils/gnc-gettext-util.h
+   M /trunk/src/app-utils/gw-app-utils-spec.scm
+   D /trunk/src/app-utils/i18n.h.in
+   M /trunk/src/bin/Makefile.am
+   M /trunk/src/bin/gnucash-bin.c
+   A /trunk/src/bin/i18n.h.in (from /trunk/src/app-utils/i18n.h.in:12334)
+   M /trunk/src/scm/main.scm
+
+   Move gnu-module init and gettext init from scm to C.
+   Move i18n.h.in from src/app-utils to src/bin, where it is used.
+   Remove unneeded gettext init code in src/app-utils
+
+r12330 | chris | 2006-01-12 16:26:01 -0500 (Thu, 12 Jan 2006) | 6 lines
+
+   M /trunk/src/backend/file/gnc-account-xml-v2.c
+   M /trunk/src/backend/file/test/test-real-data.sh
+   M /trunk/src/backend/file/test/test-xml-account.c
+
+   Don't let deprecated tags overwrite data from newer tags.
+   Avoid testing for match of deprecated tags.
+   Warn about deprecated tags not being preserved.
+   Plug another leak in test case.
+   Make successful test-xml-account less verbose.
+
+r12329 | chris | 2006-01-12 16:22:03 -0500 (Thu, 12 Jan 2006) | 3 lines
+
+   M /trunk/src/backend/file/test/test-file-stuff.c
+
+   Avoid creating new xml parser for each test file.
+   This plugs a mem leak in the test case.
+
 2006-01-12  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.c: Remove the unnecessary
@@ -49,6 +84,65 @@
 	* accounts/nb/*, configure.in: Add account templates for Norwegian
 	(Bokmal) language; by Tor Harald Thorland <linux@strigen.com>; not
 	fully functional so far.
+
+r12322 | chris | 2006-01-10 23:39:12 -0500 (Tue, 10 Jan 2006) | 2 lines
+
+   M /trunk/src/engine/Account.c
+
+   Factor-out cut-n-paste job from xaccCloneAccount{Simple}.
+
+r12321 | chris | 2006-01-10 23:30:20 -0500 (Tue, 10 Jan 2006) | 3 lines
+
+   M /trunk/src/engine/Account.c
+
+   Convert account name, code and description to use string cache.
+   Plus minor comments and tweaks.
+
+r12319 | chris | 2006-01-10 23:27:02 -0500 (Tue, 10 Jan 2006) | 2 lines
+
+   M /trunk/lib/libqof/qof/gnc-engine-util.h
+
+   Add CACHE_REPLACE(dst, src) macro for common case in string setters.
+
+r12316 | chris | 2006-01-10 21:58:59 -0500 (Tue, 10 Jan 2006) | 2 lines
+
+   M /trunk/src/engine/gnc-commodity.c
+
+   Convert gnc-commodity to use vanilla string cache macros.
+
+r12315 | chris | 2006-01-10 21:56:02 -0500 (Tue, 10 Jan 2006) | 3 lines
+
+   M /trunk/lib/libqof/qof/gnc-engine-util.c
+   M /trunk/lib/libqof/qof/gnc-engine-util.h
+
+   Add const to gnc_string_cache_insert argument.
+   Handle NULL values gracefully.
+
+r12313 | chris | 2006-01-10 21:19:42 -0500 (Tue, 10 Jan 2006) | 2 lines
+
+   M /trunk/src/engine/test/test-date.c
+
+   Add commented-out test case demonstrating lack of year 2038 support.
+
+r12311 | chris | 2006-01-10 16:42:55 -0500 (Tue, 10 Jan 2006) | 2 lines
+
+   M /trunk/src/engine/gnc-commodity.c
+
+   Plug memory leak of gnc_commodity_namespace->QofInstance; found w/ valgrind.
+
+r12308 | chris | 2006-01-09 16:06:45 -0500 (Mon, 09 Jan 2006) | 2 lines
+
+   M /trunk/src/engine/test/test-date.c
+
+   Avoid testing dates near or after 2038, because the qof parsing
+   functions fail.
+
+r12306 | chris | 2006-01-08 22:33:46 -0500 (Sun, 08 Jan 2006) | 2 lines
+
+   M /trunk/src/app-utils/gnc-ui-util.c
+   M /trunk/src/app-utils/test/test-print-parse-amount.c
+
+   Don't test numeric parsing for numbers that overflow, we'd fail.
 
 2006-01-08  David Hampton  <hampton@employees.org>
 
@@ -148,6 +242,42 @@
 	* src/import-export/hbci/gnc-hbci-transfer.c: Make the HBCI
 	Transfer dialog work again using a GtkListStore.
 
+r12278 | chris | 2006-01-06 17:28:38 -0500 (Fri, 06 Jan 2006) | 2 lines
+
+   M /trunk/src/app-utils/gnc-ui-util.c
+   M /trunk/src/app-utils/gnc-ui-util.h
+
+   Fix floating point exception by checking for overflow.
+
+r12273 | chris | 2006-01-06 16:31:22 -0500 (Fri, 06 Jan 2006) | 10 lines
+
+   M /trunk/Makefile.am
+
+   Fixes for `make check' in toplevel Makefile.am.
+
+   Conditionally add symlink from ./gsf to ./lib/libgsf-1.12.3/gsf.
+
+   Also, silence warning:
+     /usr/share/automake-1.9/am/tags.am: ctags was already defined in
+     condition !GNC_CTAGS_FILE, which is included in condition TRUE ...
+     Makefile.am:138: ... `ctags' previously defined here
+
+   and avoid possible `make dist' failure by added po/POTFILES.in to
+   dist-hook.
+
+r12271 | chris | 2006-01-05 21:49:27 -0500 (Thu, 05 Jan 2006) | 8 lines
+
+   M /trunk/Makefile.am
+   D /trunk/po/POTFILES.in
+
+   Yet more build tweaks for .pot file generation.
+
+   Remove po/POTFILES.in (again) from svn.  Since po/POTFILES.in is added
+   to BUILT_SOURCES, it's auto-generated now whenever the `make all',
+   `make check', or `make install' targets are processed, (but not
+   recreated every time).  And `make pot' forces the recreation of
+   po/POTFILES.in.  Hopefully, this will works even on OSX.
+
 2006-01-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
@@ -166,6 +296,17 @@
 	
 	* src/backend/file/gnc-transaction-xml-v2.c:
 	* lib/libqof/qof/gnc-numeric.c: A couple of performance tweaks.
+
+r12252 | chris | 2006-01-03 18:49:39 -0500 (Tue, 03 Jan 2006) | 5 lines
+
+   M /trunk/src/bin/Makefile.am
+   A /trunk/src/bin/gnucash-bin.c
+   A /trunk/src/bin/gnucash.in
+
+   Invert the program entry point.
+
+   'gnucash' is now a shell script that calls the executable
+   'gnucash-bin' which uses libguile to load guile modules.
 
 2006-01-03  Joshua Sled  <jsled@asynchronous.org>
 
@@ -227,4 +368,22 @@
 	* src/engine/gnc-commodity.[ch]: Initialize the qof instances in
 	commodity namespaces.
 
+r12232 | chris | 2006-01-01 19:37:02 -0500 (Sun, 01 Jan 2006) | 2 lines
 
+   D /trunk/src/gnome/gncmod-budget.c
+
+   Delete unused gncmod-budget.c.
+
+r12231 | chris | 2006-01-01 17:26:15 -0500 (Sun, 01 Jan 2006) | 9 lines
+
+   M /trunk/src/engine/Transaction.c
+   M /trunk/src/engine/Transaction.h
+
+  General clean-up in Transaction.[ch].
+
+    * Regularization of 'trans' as variable name.
+    * Whitespace and linewraps
+    * lots of control-flow simplification
+    * factor one chunk out into get_any_account()
+    * Comment some things that are bogus or need improvement
+	
