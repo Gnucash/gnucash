@@ -1,3 +1,5 @@
 #!/bin/sh
+PATH="../overrides/:$PATH"
+export PATH
 
-exec ../gnucash --version
+exec gnucash-build-env gnucash --version

@@ -1,3 +1,8 @@
+2006-02-13  Neil Williams <linux@codehelp.co.uk>
+
+	* src/bin/test/test-version : Using Derek's fix to
+	resolve the test failure.
+
 2006-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/overrides/gnucash-build-env.in:
