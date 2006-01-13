@@ -1,3 +1,10 @@
+2006-01-12  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-view-account.c: Remove the unnecessary
+	explicit removal of the tree model and let the core GtkTreeView
+	code do its thing.  Prevents a weird crash when canceling the
+	transfer code.
+
 2006-01-12  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in:  add --enable-qof so build defaults to internal qof.

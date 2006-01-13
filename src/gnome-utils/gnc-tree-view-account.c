@@ -57,7 +57,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
 static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
-static void gnc_tree_view_account_dispose (GObject *object);
 
 static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
@@ -117,7 +116,6 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 	/* GObject signals */
 	o_class = G_OBJECT_CLASS (klass);
 	o_class->finalize = gnc_tree_view_account_finalize;
-        o_class->dispose = gnc_tree_view_account_dispose;
 
 	g_type_class_add_private(klass, sizeof(GncTreeViewAccountPrivate));
 }
@@ -168,23 +166,6 @@ gnc_tree_view_account_finalize (GObject *object)
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
-  LEAVE(" ");
-}
-
-static void
-gnc_tree_view_account_dispose (GObject *object)
-{
-  GncTreeViewAccount *view;
-
-  ENTER("view %p", object);
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
-
-  view = GNC_TREE_VIEW_ACCOUNT (object);
-  gnc_tree_view_set_model(GNC_TREE_VIEW(view), NULL);
-
-  if (G_OBJECT_CLASS (parent_class)->dispose)
-    (* G_OBJECT_CLASS (parent_class)->dispose) (object);
   LEAVE(" ");
 }
 
