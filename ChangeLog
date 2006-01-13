@@ -1,4 +1,11 @@
-2006-02-13  Neil Williams <linux@codehelp.co.uk>
+2006-01-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/Makefile.am: revert 12296 and handle the
+	  case of an svn checkout without .svn subdirs (gentoo ebuild).
+	  In particular, we want to use $(srcdir)/gnc-svninfo.h
+	  so that a build from a dist tarball has the svn version.
+
+2006-01-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/bin/test/test-version : Using Derek's fix to
 	resolve the test failure.
