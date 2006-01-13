@@ -1,5 +1,7 @@
 #!/bin/sh
 PATH="../overrides/:$PATH"
 export PATH
+GUILE_WARN_DEPRECATED="no"
+export GUILE_WARN_DEPRECATED
 
 exec gnucash-build-env gnucash --version
