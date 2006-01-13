@@ -1,3 +1,9 @@
+2006-01-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/overrides/gnucash-build-env.in:
+	  Change core-utils to a gnc-module-dir so it loads both
+	  the .scm and the .so properly.
+
 r12337 | chris | 2006-01-12 20:25:12 -0500 (Thu, 12 Jan 2006) | 5 lines
 
    M /trunk/src/app-utils/Makefile.am
