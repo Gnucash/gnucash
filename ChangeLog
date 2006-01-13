@@ -5,6 +5,11 @@
 	  In particular, we want to use $(srcdir)/gnc-svninfo.h
 	  so that a build from a dist tarball has the svn version.
 
+	* src/bin/overrides/gnucash
+	* src/bin/overrides/gnucash-valgrind
+	* src/bin/overrides/Makefile.am:
+	  remove unnecessary override files that are no longer useful.
+
 2006-01-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/bin/test/test-version : Using Derek's fix to
