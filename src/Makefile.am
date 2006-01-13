@@ -43,4 +43,5 @@ EXTRA_DIST = \
   README.modules \
   gnc-test-env \
   valgrind-gnucash.supp \
-  guile-mappings.h
+  guile-mappings.h \
+  glib-compat.h

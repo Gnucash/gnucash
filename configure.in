@@ -2104,7 +2104,6 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libgsf-1.12.3/gsf-win32/Makefile
           lib/libgsf-1.12.3/tests/Makefile
           lib/libgsf-1.12.3/python/Makefile
-          lib/libgsf-1.12.3/thumbnailer/Makefile
           lib/libgsf-1.12.3/gsf/version.c
           lib/libgsf-1.12.3/libgsf-1.pc
           lib/libgsf-1.12.3/libgsf-1.spec

@@ -58,6 +58,7 @@ qofinclude_HEADERS = \
    qofobject.h       \
    qofquerycore.h    \
    qofsession.h      \
+   qofsql.h          \
    qofla-dir.h       \
    qof_book_merge.h
 

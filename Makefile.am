@@ -35,8 +35,7 @@ m4data_DATA = gnucash.m4
 # CVS dirs.
 
 EXTRA_DIST = ChangeLog.1 \
-  HACKING \
-  README.patches \
+  ${doc_DATA} \
   gnucash.lsm \
   gnucash.m4 \
   gnucash-config.in \
