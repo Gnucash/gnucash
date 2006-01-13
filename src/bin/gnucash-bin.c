@@ -24,7 +24,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <libguile.h>
+#include <gtk/gtk.h>
 #include "glib.h"
+#include "gnc-module.h"
+#include "i18n.h"
 
 static void
 inner_main (void *closure, int argc, char **argv)
@@ -38,6 +41,16 @@ inner_main (void *closure, int argc, char **argv)
 
 int main(int argc, char ** argv)
 {
+
+#ifdef HAVE_GETTEXT
+    bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
+    textdomain (TEXT_DOMAIN);
+    bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
+#endif
+
+    gtk_init (&argc, &argv);
+    gnc_module_system_init();
+
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
 }

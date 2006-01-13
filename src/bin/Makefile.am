@@ -1,11 +1,13 @@
 # Order is important here.
 SUBDIRS = . overrides test
 
-AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
+AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+-I${top_builddir}/src/gnc-module
 
 bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c
-gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS}
+gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
+${top_srcdir}/src/gnc-module/libgncmodule.la
 
 gnucash: gnucash.in ${top_builddir}/config.status
 	rm -f $@.tmp
@@ -20,6 +22,16 @@ gnucash: gnucash.in ${top_builddir}/config.status
 	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g'
 	mv $@.tmp $@
 	chmod u+x $@
+
+BUILT_SOURCES = i18n.h
+
+i18n.h: i18n.h.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
+            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
+	mv $@.tmp $@
+
 
 gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status
 	rm -f $@.tmp
@@ -60,7 +72,7 @@ bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrin
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 
-EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in
+EXTRA_DIST = generate-gnc-script update-gnucash-gconf.in i18n.h.in
 
 ## Gnucash scripts -- real code is in overrides, these just get you there.
 ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status

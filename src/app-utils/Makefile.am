@@ -62,8 +62,7 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
-  option-util.h \
-  i18n.h
+  option-util.h
 
 noinst_HEADERS = \
   gw-app-utils.h
@@ -102,23 +101,7 @@ noinst_DATA = .scm-links
 EXTRA_DIST = \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
-  ${gwmod_DATA} \
-  i18n.h.in 
-
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
-i18n.h: i18n.h.in ${top_builddir}/config.status
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
-            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
-	mv $@.tmp $@
-
-# This has to be in BUILT_SOURCES because other files depend on it,
-# but it's never a target itself.
-BUILT_SOURCES = i18n.h
+  ${gwmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
@@ -147,6 +130,6 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: \
 	  (primitive-load \"./gw-app-utils-spec.scm\") \
 	  (gw:generate-wrapset \"gw-app-utils\")"
 
-BUILT_SOURCES += gw-app-utils.scm gw-app-utils.c gw-app-utils.h
+BUILT_SOURCES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h
 DISTCLEANFILES = ${SCM_FILE_LINKS} gnucash g-wrapped .scm-links \
                  gw-app-utils.html

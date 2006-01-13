@@ -22,7 +22,6 @@
 #ifndef GNC_GETTEXT_UTIL_H
 #define GNC_GETTEXT_UTIL_H
 
-void gnc_setup_gettext(void);
 char * gnc_gettext_helper(const char * str);
 
 #endif

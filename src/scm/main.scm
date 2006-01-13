@@ -365,12 +365,6 @@ string and 'directories' must be a list of strings."
   (gnc:debug "starting up (1).")
   (gnc:setup-debugging)
 
-  ;; before doing ANYTHING, set the locale!
-  (false-if-exception (setlocale LC_ALL ""))
-
-  ;; initialize the gnucash module system 
-  (gnc:module-system-init)
-  
   ;; SUPER UGLY HACK -- this should go away when I come back for the
   ;; second cleanup pass...
   (let ((original-module (current-module))
@@ -379,20 +373,21 @@ string and 'directories' must be a list of strings."
     (set-current-module bootstrap)
     
     (gnc:module-load "gnucash/app-utils" 0)
-    (gnc:setup-gettext)
     ;; Now we can load a bunch of files.
     (load-from-path "path.scm")
     (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
     )
 
-  (gnc:initialize-config-vars)
+  (gnc:initialize-config-vars) ;; in command-line.scm
+  ;; handle unrecognized command line args
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
+  ;; handle --version
   (if (gnc:config-var-value-get gnc:*arg-show-version*)
       (begin
         (gnc:prefs-show-version)
         (gnc:shutdown 0)))
-
+  ;; handle --help
   (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
           (gnc:config-var-value-get gnc:*arg-show-help*))
       (begin
@@ -402,9 +397,6 @@ string and 'directories' must be a list of strings."
 (define (gnc:startup-pass-2)
   (gnc:debug "starting up (2).")
 
-  ;; initialize the gnucash module system 
-  (gnc:module-system-init)
-  
   ;; SUPER UGLY HACK -- this should go away when I come back for the
   ;; second cleanup pass...
   (let ((original-module (current-module))
@@ -585,9 +577,12 @@ string and 'directories' must be a list of strings."
   ;; Now the fun begins.
   (gnc:startup-pass-1)
   (gnc:print-unstable-message)
+
   (if (null? gnc:*batch-mode-things-to-do*)
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
+        ;; We init splash before gui-init, but gui-init will do the
+        ;; splash itself.
         (set! gnc:*command-line-remaining*
               (gnc:gui-init-splash gnc:*command-line-remaining*))))
   (gnc:startup-pass-2)
@@ -595,8 +590,10 @@ string and 'directories' must be a list of strings."
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
+        ;; Why are we doing this again?
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        (let* ((init-window-cons-rest (gnc:gui-init gnc:*command-line-remaining*))
+        (let* ((init-window-cons-rest
+                (gnc:gui-init gnc:*command-line-remaining*))
                (main-window (car init-window-cons-rest)))
           (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
           (if (and
@@ -611,9 +608,10 @@ string and 'directories' must be a list of strings."
                 (gnc:main-window-set-progressbar-window main-window)
                 (gnc:load-account-file)
                 ))
-          ;; no matter how or what we loaded, ensure the main-window title is valid...
+          ;; no matter how or what we loaded, ensure the main-window
+          ;; title is valid...
           (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-          (gnc:start-ui-event-loop)
+          (gnc:start-ui-event-loop) ;; this won't return until we're exiting
           (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
         
       ;; else: we're in batch mode.  Just do what the user said on the

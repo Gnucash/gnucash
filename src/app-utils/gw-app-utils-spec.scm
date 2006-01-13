@@ -101,14 +101,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:setup-gettext
-   '<gw:void>
-   "gnc_setup_gettext"
-   '()
-   "Runs bindtextdomain and textdomain.")
-
-  (gw:wrap-function
-   ws
    'gnc:gettext-helper
    '(<gw:mchars> caller-owned const)
    "gnc_gettext_helper"
