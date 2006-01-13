@@ -43,6 +43,8 @@ int main(int argc, char ** argv)
 {
 
 #ifdef HAVE_GETTEXT
+    /* setlocale (LC_ALL, ""); is already called by gtk_set_locale()
+       via gtk_init(). */
     bindtextdomain (TEXT_DOMAIN, LOCALE_DIR);
     textdomain (TEXT_DOMAIN);
     bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
