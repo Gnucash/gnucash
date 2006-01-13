@@ -21,7 +21,7 @@ libfoocanvas_la_LIBADD = \
 
 libfoocanvasincludedir = $(includedir)/libgoffice-1/goffice/cut-n-paste/foocanvas/
 
-libfoocanvasinclude_HEADERS =			\
+noinst_HEADERS =			\
 	foo-canvas-line.h			\
 	foo-canvas-pixbuf.h			\
 	foo-canvas-polygon.h			\
@@ -33,7 +33,6 @@ libfoocanvasinclude_HEADERS =			\
 	libfoocanvas.h
 
 libfoocanvas_la_SOURCES =			\
-	$(libfoocanvasinclude_HEADERS)		\
 	foo-canvas-marshal.list			\
 	foo-canvas-i18n.h			\
 	foo-canvas-line.c			\

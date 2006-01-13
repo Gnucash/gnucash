@@ -19,7 +19,7 @@ endif
 
 ## But headers are installed always:
 libgsf_gnome_1_includedir = $(includedir)/libgsf-1/gsf-gnome
-libgsf_gnome_1_include_HEADERS =  \
+noinst_HEADERS =  \
 	gsf-input-gnomevfs.h	\
 	gsf-output-gnomevfs.h	\
 	gsf-input-bonobo.h 	\

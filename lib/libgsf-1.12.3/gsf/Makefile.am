@@ -75,7 +75,7 @@ if !HAVE_GLIB26
 endif
 
 libgsf_1_includedir = $(includedir)/libgsf-1/gsf
-libgsf_1_include_HEADERS = 	\
+noinst_HEADERS = 	\
 	gsf.h			\
 	gsf-utils.h		\
 	gsf-libxml.h		\
@@ -126,7 +126,7 @@ libgsf_1_include_HEADERS = 	\
 #	gsf-io-context.h
 
 if !HAVE_GLIB26
-  libgsf_1_include_HEADERS += glib24_26-compat.h
+  noinst_HEADERS += glib24_26-compat.h
 endif
 
 install-data-local: install-libtool-import-lib

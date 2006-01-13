@@ -14,6 +14,6 @@ endif
 
 ## But headers are installed on all systems:
 libgsf_win32_1_includedir = $(includedir)/libgsf-1/gsf-win32
-libgsf_win32_1_include_HEADERS =  \
+noinst_HEADERS =  \
 	gsf-input-win32.h	\
 	gsf-output-win32.h

@@ -5,7 +5,7 @@ libgoffice_data_la_SOURCES =	\
 	go-data-simple.c
 
 libgoffice_data_ladir = $(goffice_include_dir)/data
-libgoffice_data_la_HEADERS = 	\
+noinst_HEADERS = 	\
 	goffice-data.h		\
 	go-data.h 		\
 	go-data-impl.h 		\

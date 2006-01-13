@@ -26,7 +26,7 @@ libgoffice_gtk_la_SOURCES =		\
 
 
 libgoffice_gtk_ladir = $(goffice_include_dir)/gtk
-libgoffice_gtk_la_HEADERS = 		\
+noinst_HEADERS = 		\
 	goffice-gtk.h			\
 	\
 	go-font-sel.h			\

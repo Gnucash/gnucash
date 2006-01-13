@@ -15,7 +15,7 @@ libgoffice_drawing_la_SOURCES = 	\
 	god-text-model.c
 
 libgoffice_drawing_ladir = $(goffice_include_dir)/drawing
-libgoffice_drawing_la_HEADERS = 	\
+noinst_HEADERS = 	\
 	god-anchor.h			\
 	god-default-attributes.h	\
 	god-drawing-group.h		\

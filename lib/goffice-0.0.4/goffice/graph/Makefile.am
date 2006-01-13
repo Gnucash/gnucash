@@ -37,7 +37,7 @@ libgoffice_graph_la_SOURCES = \
 	gog-renderer-svg.c
 
 libgoffice_graph_ladir = $(goffice_include_dir)/graph
-libgoffice_graph_la_HEADERS = \
+noinst_HEADERS = \
 	goffice-graph.h			\
 	gog-object.h			\
 	gog-object-xml.h		\

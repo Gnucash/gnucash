@@ -10,6 +10,10 @@
 	* src/bin/overrides/Makefile.am:
 	  remove unnecessary override files that are no longer useful.
 
+	* goffice/*/Makefile.am:
+	* libgsf/*/Makefile.am:
+	  don't install goffice and gsf headers.
+
 2006-01-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/bin/test/test-version : Using Derek's fix to
