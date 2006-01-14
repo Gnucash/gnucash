@@ -2058,7 +2058,6 @@ AC_MSG_RESULT($warnFLAGS)
 
 chmod u+x ${srcdir}/src/gnc-test-env
 chmod u+x ${srcdir}/src/bin/generate-gnc-script
-chmod u+x ${srcdir}/src/bin/overrides/gnucash
 chmod u+x ${srcdir}/src/bin/overrides/gnucash-run-script
 chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 

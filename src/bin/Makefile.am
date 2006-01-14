@@ -9,7 +9,7 @@ gnucash_bin_SOURCES = gnucash-bin.c
 gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
 ${top_srcdir}/src/gnc-module/libgncmodule.la
 
-gnucash: gnucash.in ${top_builddir}/config.status
+gnucash: gnucash.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-BIN_DIR-@:${bindir}:g' \
@@ -25,7 +25,7 @@ gnucash: gnucash.in ${top_builddir}/config.status
 
 BUILT_SOURCES = i18n.h
 
-i18n.h: i18n.h.in ${top_builddir}/config.status
+i18n.h: i18n.h.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PACKAGE-@:${PACKAGE}:g' \
@@ -33,7 +33,7 @@ i18n.h: i18n.h.in ${top_builddir}/config.status
 	mv $@.tmp $@
 
 
-gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status
+gnucash-valgrind: gnucash-valgrind.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-BIN_DIR-@:${bindir}:g' \
@@ -85,7 +85,8 @@ CLEANFILES += ${gnc_common_scripts} update-gnucash-gconf
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-update-gnucash-gconf: update-gnucash-gconf.in ${top_builddir}/config.status
+update-gnucash-gconf: update-gnucash-gconf.in \
+		${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GCONF_SCHEMA_FILE_DIR-@:${GCONF_SCHEMA_FILE_DIR}:g'

@@ -162,7 +162,7 @@ AM_CFLAGS = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnucash.keys: gnucash.keys.in ${top_builddir}/config.status
+gnucash.keys: gnucash.keys.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-icondir-@:${appicondir}:g'
@@ -188,7 +188,7 @@ endif
 	touch .scm-links
 
 gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
-  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status
+  gw-gnc-spec.scm .scm-links ${top_builddir}/config.status Makefile
 	FLAVOR=gnome $(GUILE) -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (set! %load-path (cons \"../engine\" %load-path)) \

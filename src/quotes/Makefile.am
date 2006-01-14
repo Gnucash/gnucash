@@ -17,7 +17,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-finance-quote-helper: finance-quote-helper.in
+finance-quote-helper: finance-quote-helper.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
@@ -25,7 +25,7 @@ finance-quote-helper: finance-quote-helper.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-finance-quote-check: finance-quote-check.in
+finance-quote-check: finance-quote-check.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
@@ -33,7 +33,7 @@ finance-quote-check: finance-quote-check.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-update-finance-quote: update-finance-quote.in
+update-finance-quote: update-finance-quote.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \

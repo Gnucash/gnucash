@@ -23,7 +23,7 @@ PWD := $(shell pwd)
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
 
-guile: guile.in ${top_builddir}/config.status
+guile: guile.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GUILE-@:${GUILE}:'
@@ -31,7 +31,7 @@ guile: guile.in ${top_builddir}/config.status
 	chmod u+x $@
 CLEANFILES = guile
 
-gnucash-env: gnucash-env.in ${top_builddir}/config.status
+gnucash-env: gnucash-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
@@ -46,7 +46,7 @@ gnucash-env: gnucash-env.in ${top_builddir}/config.status
 	chmod u+x $@
 CLEANFILES += gnucash-env
 
-gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status
+gnucash-build-env: gnucash-build-env.in ${top_builddir}/config.status Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-GNC_TEST_SRFI_LOAD_CMD-@:@GNC_TEST_SRFI_LOAD_CMD@:g' \

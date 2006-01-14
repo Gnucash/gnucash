@@ -31,7 +31,7 @@ EXTRA_DIST = \
   qof-backend-qsf.h \
   qsf-xml.h
 
-qsf-dir.h: qsf-dir.h.in
+qsf-dir.h: qsf-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	        -e 's:@-QSF_SCHEMA_DIR-@:${QOF_XML_DIR}:g'

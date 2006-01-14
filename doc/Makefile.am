@@ -37,7 +37,7 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-gnc-prices.1: gnc-prices.1.in
+gnc-prices.1: gnc-prices.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
@@ -45,7 +45,7 @@ gnc-prices.1: gnc-prices.1.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-gnucash.1: gnucash.1.in
+gnucash.1: gnucash.1.in Makefile
 	rm -f $@.tmp
 	${SED} < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:g' \
@@ -53,7 +53,7 @@ gnucash.1: gnucash.1.in
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-tip_of_the_day.list: tip_of_the_day.list.in
+tip_of_the_day.list: tip_of_the_day.list.in Makefile
 	gcc -E -P -x c -D'N_(x)=x' -o $@.tmp $<
 	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
 	rm -f $@.tmp
