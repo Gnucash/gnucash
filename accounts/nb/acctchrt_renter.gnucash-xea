@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <gnc-account-example>
     <gnc-act:title>
-      Renter Expenses
+      Husleie Utgifter
     </gnc-act:title>
     <gnc-act:short-description>
-      Expenses associated with renting a home
+      Utgifter ved leie av bolig
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you rent a home or apartment (rent, renter's insurance).
+    Du vil nok velge dette oppsettet hvis du leier et hus eller en leilighet (leie, leie forsikring).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Expenses</act:name>
+  <act:name>Utgifter</act:name>
   <act:id type="new">9a2b4520f113372f4e576f5b6dc129c6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Expenses</act:description>
+  <act:description>Utgifter</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Insurance</act:name>
+  <act:name>Forsikring</act:name>
   <act:id type="new">b79b231807a98cd562c46cf0454e9f25</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Insurance</act:description>
+  <act:description>Forsikring</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Rental Insurance</act:name>
+  <act:name>Leie Forsikring</act:name>
   <act:id type="new">a4c93c964b8322d534e35b7054cbda4d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Rental Insurance</act:description>
+  <act:description>Leie Forsikring</act:description>
   <act:parent type="new">b79b231807a98cd562c46cf0454e9f25</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Rent</act:name>
+  <act:name>Leie</act:name>
   <act:id type="new">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Rent</act:description>
+  <act:description>Leie</act:description>
   <act:parent type="new">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
 </gnc:account>
 </gnc-account-example>

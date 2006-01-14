@@ -15,7 +15,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Assets</act:description>
 </gnc:account>
@@ -25,7 +25,7 @@
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Investments</act:description>
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
@@ -36,7 +36,7 @@
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Brokerage Account</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
@@ -47,7 +47,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Bond</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
@@ -58,7 +58,7 @@
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Stock</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
@@ -69,7 +69,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Market Index</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
@@ -80,7 +80,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
@@ -91,7 +91,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Income</act:description>
 </gnc:account>
@@ -101,7 +101,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Dividend Income</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
@@ -112,7 +112,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Interest Income</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
@@ -123,7 +123,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Bond Interest</act:description>
   <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
@@ -134,7 +134,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Expenses</act:description>
 </gnc:account>
@@ -144,7 +144,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Commissions</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>

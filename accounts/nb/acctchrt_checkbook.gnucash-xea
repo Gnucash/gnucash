@@ -1,70 +1,70 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
       A Simple Checkbook
     </gnc-act:title>
     <gnc-act:short-description>
-     The minimal set of accounts to use GnuCash.
+     Dette er et minimums sett av kontoer for å bruke GnuCash.
     </gnc-act:short-description>
     <gnc-act:long-description>
      Use this if you just want to balance your checkbook.  Later on, you can start tracking income and expenses in more detail if you feel the need.
     </gnc-act:long-description>
 <gnc:account version="2.0.0">
-  <act:name>Assets</act:name>
+  <act:name>Aktiva</act:name>
   <act:id type="new">bde24bbbe01829aff3dac8d038e174cc</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Assets</act:description>
+  <act:description>Aktiva</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Current Assets</act:name>
+  <act:name>Nåværende Aktiva</act:name>
   <act:id type="new">d90864ec1d660176244b05a0e43e621a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Current Assets</act:description>
+  <act:description>Nåværende Aktiva</act:description>
   <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Checking Account</act:name>
+  <act:name>Sjekk Konto</act:name>
   <act:id type="new">ab2dc28552256b8d1ef4fdea4ba45717</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Checking Account</act:description>
+  <act:description>Sjekk Konto</act:description>
   <act:parent type="new">d90864ec1d660176244b05a0e43e621a</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Income</act:name>
+  <act:name>Inntekt</act:name>
   <act:id type="new">e96c0691c219f5f55590e20fb9a3309b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Income</act:description>
+  <act:description>Inntekt</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Expenses</act:name>
+  <act:name>Utgifter</act:name>
   <act:id type="new">3b95fbbcc06ef20d61aa082b84938287</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Expenses</act:description>
+  <act:description>Utgifter</act:description>
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
@@ -77,26 +77,26 @@
   </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Equity</act:name>
+  <act:name>Egenkapital</act:name>
   <act:id type="new">b8b72887da1adf889f171923d23efbdd</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Equity</act:description>
+  <act:description>Egenkapital</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Opening Balances</act:name>
+  <act:name>Inngående Balanse</act:name>
   <act:id type="new">bdb4dd9be2b98f03a0b400036452232c</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
-  <act:description>Opening Balances</act:description>
+  <act:description>Inngående Balanse</act:description>
   <act:parent type="new">b8b72887da1adf889f171923d23efbdd</act:parent>
 </gnc:account>
 </gnc-account-example>

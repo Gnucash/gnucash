@@ -12,7 +12,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Assets</act:description>
 </gnc:account>
@@ -22,7 +22,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Current Assets</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -33,7 +33,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bank CD</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -44,7 +44,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Checking Account</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -55,7 +55,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Money Market</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -66,7 +66,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Savings Account</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -77,7 +77,7 @@
   <act:type>CASH</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Cash in Wallet</act:description>
   <act:parent type="new">f23dcf070835b376a95a7a06dbb62e59</act:parent>
@@ -88,7 +88,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Fixed Assets</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -99,7 +99,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>House</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -110,7 +110,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Asset</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -121,7 +121,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Vehicle</act:description>
   <act:parent type="new">c188686b29b9104da292aed8c2ca8541</act:parent>
@@ -132,7 +132,7 @@
   <act:type>ASSET</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Investments</act:description>
   <act:parent type="new">c942789c77cfdd65bc6e4c12900f0805</act:parent>
@@ -143,7 +143,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Brokerage Account</act:description>
   <act:parent type="new">0efa7e60042a8d5e4f07a2e6f76bb66d</act:parent>
@@ -154,7 +154,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bond</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -165,7 +165,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Stock</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -176,7 +176,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Market Index</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -187,7 +187,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">c7ba76a2c51c691ecb4e6c80fcaa71f9</act:parent>
@@ -198,7 +198,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Retirement</act:description>
   <act:slots>
@@ -215,7 +215,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bond</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -226,7 +226,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Stock</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -237,7 +237,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Market Index</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -248,7 +248,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">82ec8dc2b06e06eea619fd2e3aa79781</act:parent>
@@ -259,7 +259,7 @@
   <act:type>BANK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Spouse Retirement</act:description>
   <act:slots>
@@ -276,7 +276,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bond</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -287,7 +287,7 @@
   <act:type>STOCK</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Stock</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -298,7 +298,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Market Index</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -309,7 +309,7 @@
   <act:type>MUTUAL</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Mutual Fund</act:description>
   <act:parent type="new">eacb6de7f8896665d150d7dcb0a0b521</act:parent>
@@ -331,7 +331,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Liabilities</act:description>
 </gnc:account>
@@ -341,7 +341,7 @@
   <act:type>CREDIT</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Credit Card</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -352,7 +352,7 @@
   <act:type>CREDIT</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Line of Credit</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -363,7 +363,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Loans</act:description>
   <act:parent type="new">eeb68231aa8330bb6e3a747ffd94c07f</act:parent>
@@ -374,7 +374,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Education Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -385,7 +385,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Mortgage Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -396,7 +396,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -407,7 +407,7 @@
   <act:type>LIABILITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Vehicle Loan</act:description>
   <act:parent type="new">c24e85723783d9ec27d9042c61b1673e</act:parent>
@@ -418,7 +418,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Income</act:description>
 </gnc:account>
@@ -428,7 +428,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bonus</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -439,7 +439,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Dividend Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -450,7 +450,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Gifts Received</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -461,7 +461,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Interest Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -472,7 +472,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bond Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -483,7 +483,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>CD Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -494,7 +494,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Checking Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -505,7 +505,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Money Market Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -516,7 +516,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -527,7 +527,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Savings Interest</act:description>
   <act:parent type="new">0b849fdbc4a52072e7323a86ec6e56d0</act:parent>
@@ -538,7 +538,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Income</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -549,7 +549,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Salary</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -560,7 +560,7 @@
   <act:type>INCOME</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Salary (Spouse)</act:description>
   <act:parent type="new">dcf25b179583108b12c1c36f044f2bf7</act:parent>
@@ -571,7 +571,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Expenses</act:description>
 </gnc:account>
@@ -581,7 +581,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Adjustment</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -592,7 +592,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Auto</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -603,7 +603,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Fees</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -614,7 +614,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Gas</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -625,7 +625,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Parking</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -636,7 +636,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Repair and Maintenance</act:description>
   <act:parent type="new">ad1b57f1fc9c02566ba67fc8c371f461</act:parent>
@@ -647,7 +647,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Bank Service Charge</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -658,7 +658,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Books</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -669,7 +669,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Cable</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -680,7 +680,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Charity</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -691,7 +691,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Childcare</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -702,7 +702,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Clothes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -713,7 +713,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Commissions</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -724,7 +724,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Computer</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -735,7 +735,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Dining</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -746,7 +746,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Education</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -757,7 +757,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Entertainment</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -768,7 +768,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Music/Movies</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -779,7 +779,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Recreation</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -790,7 +790,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Travel</act:description>
   <act:parent type="new">f8194ec13425c8d3adb62a87e48dbe42</act:parent>
@@ -801,7 +801,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Gifts</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -812,7 +812,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Groceries</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -823,7 +823,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Hobbies</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -834,7 +834,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Home Repair</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -845,7 +845,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Insurance</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -856,7 +856,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Auto Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -867,7 +867,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Health Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -878,7 +878,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Home Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -889,7 +889,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Life Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -900,7 +900,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Rental Insurance</act:description>
   <act:parent type="new">165046096e7e0979a0470bfe28de4cf3</act:parent>
@@ -911,7 +911,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Interest</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -922,7 +922,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Education Loan Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -933,7 +933,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Mortgage Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -944,7 +944,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -955,7 +955,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Vehicle Loan Interest</act:description>
   <act:parent type="new">cb8676e3c31dfda73936ca3d3ebcbdfc</act:parent>
@@ -966,7 +966,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Laundry/Dry Cleaning</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -977,7 +977,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Medical Expenses</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -988,7 +988,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Miscellaneous</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -999,7 +999,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Online Services</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1010,7 +1010,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Phone</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1021,7 +1021,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Public Transportation</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1032,7 +1032,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Rent</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1043,7 +1043,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Subscriptions</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1054,7 +1054,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Supplies</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1065,7 +1065,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Taxes</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1076,7 +1076,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Federal</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1087,7 +1087,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Medicare</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1098,7 +1098,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Tax</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1109,7 +1109,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Property Tax</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1120,7 +1120,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Social Security</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1131,7 +1131,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>State/Province</act:description>
   <act:parent type="new">c0ad45e7b335ee715b26ee11457da5cc</act:parent>
@@ -1142,7 +1142,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Taxes (Spouse)</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1153,7 +1153,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Federal</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1164,7 +1164,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Medicare</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1175,7 +1175,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Other Tax</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1186,7 +1186,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Social Security</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1197,7 +1197,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>State/Province</act:description>
   <act:parent type="new">63427014f39c577ee7aaeac3603d3d1f</act:parent>
@@ -1208,7 +1208,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Utilities</act:description>
   <act:parent type="new">d971e6172c344b6ce569f1af76b5dce1</act:parent>
@@ -1219,7 +1219,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Electric</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1230,7 +1230,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Garbage collection</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1241,7 +1241,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Gas</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1252,7 +1252,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Water</act:description>
   <act:parent type="new">7eecc2df800a0b8854343703d9cfae00</act:parent>
@@ -1263,7 +1263,7 @@
   <act:type>EQUITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Equity</act:description>
 </gnc:account>
@@ -1273,7 +1273,7 @@
   <act:type>EQUITY</act:type>
   <act:commodity
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity
   <act:description>Opening Balances</act:description>
   <act:parent type="new">68d4074f91295062c0b773b4ae8de6bd</act:parent>

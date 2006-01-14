@@ -1,76 +1,76 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Home Mortgage Loan
+      Huslån - Pantegjeld
     </gnc-act:title>
     <gnc-act:short-description>
-     Accounts for home loan and associated interest 
+     Konto oppsett for Huslån - Pantegjeld 
     </gnc-act:short-description>
     <gnc-act:long-description>
-    You would want to select this set of accounts if you have a home loan (mortgage loan, mortgage interest).
+    Du vil nok velge dette oppsettet dersom du har et huslån (pantegjeld, rente).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Liabilities</act:name>
+  <act:name>Gjeld</act:name>
   <act:id type="new">6664763bd1ea41462cba5ef856d9c00c</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Liabilities</act:description>
+  <act:description>Gjeld</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Loans</act:name>
+  <act:name>Lån</act:name>
   <act:id type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Loans</act:description>
+  <act:description>Lån</act:description>
   <act:parent type="new">6664763bd1ea41462cba5ef856d9c00c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Mortgage Loan</act:name>
+  <act:name>Pantegjeld</act:name>
   <act:id type="new">4df1b393c218d9047dd22d33d2737e83</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Mortgage Loan</act:description>
+  <act:description>Pantegjeld</act:description>
   <act:parent type="new">2e6e2d91551cff7b1fd8d6eb34c12117</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Expenses</act:name>
+  <act:name>Utgifter</act:name>
   <act:id type="new">2f076f5ae073173a11d33420cd39fa4d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Expenses</act:description>
+  <act:description>Utgifter</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Interest</act:name>
+  <act:name>Renter</act:name>
   <act:id type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Interest</act:description>
+  <act:description>Renter</act:description>
   <act:parent type="new">2f076f5ae073173a11d33420cd39fa4d</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Mortgage Interest</act:name>
+  <act:name>Pantegjeld Rente</act:name>
   <act:id type="new">c1e23fa813d3c8c4a8ea1228a7615b79</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
-  <act:description>Mortgage Interest</act:description>
+  <act:description>Pantegjeld Rente</act:description>
   <act:parent type="new">3dc58d8a51b5deaa22e0c65d81e90346</act:parent>
 </gnc:account>
 </gnc-account-example>

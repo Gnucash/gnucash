@@ -15,7 +15,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Income</act:description>
 </gnc:account>
@@ -25,7 +25,7 @@
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Salary (Spouse)</act:description>
   <act:parent type="new">b4fadf6188d7f1ae7e7aa4fa27f5cc95</act:parent>
@@ -36,7 +36,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Expenses</act:description>
 </gnc:account>
@@ -46,7 +46,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Taxes (Spouse)</act:description>
   <act:parent type="new">1884bbd7394883ebafec8b9e2eb091a4</act:parent>
@@ -57,7 +57,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Federal</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
@@ -68,7 +68,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Medicare</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
@@ -79,7 +79,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Other Tax</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
@@ -90,7 +90,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>Social Security</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
@@ -101,7 +101,7 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>NOK</cmdty:id>
   </act:commodity>
   <act:description>State/Province</act:description>
   <act:parent type="new">3cd0ca7d6b0e5f44e4cde2851c3ff387</act:parent>
