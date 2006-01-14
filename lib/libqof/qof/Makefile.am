@@ -81,7 +81,7 @@ EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
 
-qofla-dir.h: qofla-dir.h.in
+qofla-dir.h: qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${QOFLIBdir}:g'

@@ -16,6 +16,12 @@
 
 	* configure.in: Properly set QOF_LIB_DIR et. al. for internal qof.
 
+	* lib/libqof/qof/Makefile.am: qofla-dir.h depends on Makefile.
+	  Make sure you rebuild qofla-dir.h when the Makefile changes,
+	  which would imply re-configuration.  You never know, the
+	  user might have changed --prefix which means you want to
+	  rebuild the header.
+
 2006-01-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/bin/test/test-version : Using Derek's fix to
