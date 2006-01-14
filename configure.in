@@ -451,14 +451,12 @@ else
   AC_MSG_NOTICE([External QOF Disabled.  Using Internal QOF Code.])
 fi
 if test x$QOF_XML_DIR = x; then
-	QOF_LIB_DIR=`eval echo $libdir | sed "s%^NONE%$prefix%"`
-	QOF_LIB_DIR=`eval echo $QOF_LIB_DIR | sed "s%^NONE%$prefix%"`  
-	QOF_CFLAGS="-I\${top_srcdir}/lib/libqof/qof"
-	QOF_LIBS="\${top_srcdir}/lib/libqof/qof/libqof.la"
-#	QOF_LIB_DIR=`eval echo ${libdir}`
+	QOF_LIB_DIR='${libdir}'
+	QOF_CFLAGS='-I${top_srcdir}/lib/libqof/qof'
+	QOF_LIBS='${top_srcdir}/lib/libqof/qof/libqof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
-	QOF_XML_DIR=`eval echo ${datadir}/xml/qsf`
+	QOF_XML_DIR='${datadir}/xml/qsf'
 	LIBQOF_LIBRARY_VERSION=1:2:0
 	LIBQOF_BACKEND_QSF_LIBRARY_VERSION=0:1:0
 	AC_SUBST(LIBQOF_LIBRARY_VERSION)

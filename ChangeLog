@@ -14,6 +14,8 @@
 	* libgsf/*/Makefile.am:
 	  don't install goffice and gsf headers.
 
+	* configure.in: Properly set QOF_LIB_DIR et. al. for internal qof.
+
 2006-01-13  Neil Williams <linux@codehelp.co.uk>
 
 	* src/bin/test/test-version : Using Derek's fix to
