@@ -29,8 +29,9 @@ noinst_HEADERS = \
   gw-dialog-tax-table.h
 
 libgncmod_dialog_tax_table_la_LIBADD = \
-  ../../gnc-module/libgncmodule.la \
-  ../../core-utils/libcore-utils.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
