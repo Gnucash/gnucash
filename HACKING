@@ -95,23 +95,17 @@ way to get trace messages into a file:
 
 Starting GnuCash in GDB
 -----------------------
-To run gdb on an installed version of gnucash (installed in /usr/local/bin:)
+To run gdb on an installed version of gnucash (installed in /opt/gnc/unstable:)
 
-    % gnucash-env gdb /usr/bin/guile
+    % /opt/gnc/unstable/bin/gnucash-env gdb /opt/gnc/unstable/bin/gnucash-bin
     [gdb output]
-    % gdb> run -e main -s /usr/local/libexec/gnucash/overrides/gnucash --g-fatal-warnings
+    % gdb> run [--g-fatal-warnings]
     
 To run gdb on the version in your build tree:
 
     % ./src/bin/overrides/gnucash-build-env gdb /usr/bin/guile
     [gdb output]
     % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
-
-To run gdb on an opt-style-install from your build tree:
-
-   $ ./gnucash-env gdb /usr/bin/guile
-   [gdb output]
-   gdb> run -e main -s ../libexec/overrides/gnucash --g-fatal-warning
 
 You'll also probably want to know about these:
 
@@ -122,7 +116,7 @@ You'll also probably want to know about these:
 It may be the case that running GDB from within emacs doesn't work for you,
 with the following error:
 
-[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-env gdb /usr/bin/guile...
+[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-env gdb /opt/gnucash-cvs/bin/gnucash-bin
  ...in buffer *gud-gdb*:]
 
 /opt/gnucash-cvs/libexec/gnucash/overrides/gnucash-env: line 28: exec: -d: invalid option
