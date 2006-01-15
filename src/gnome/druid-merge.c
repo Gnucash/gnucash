@@ -88,16 +88,6 @@ on_import_start_page_next(GnomeDruidPage  *gnomedruidpage,
 
 
 
-static gboolean
-on_qof_start_page_next(GnomeDruidPage  *gnomedruidpage,
-                       gpointer         arg1,
-                       gpointer         user_data)
-{
-	gtk_widget_show(druid_hierarchy_window);
-	gtk_widget_hide(qof_book_merge_window);
-	return FALSE;
-}
-
 static void
 on_MergeUpdate_clicked 	(GtkButton       *button,
               		    gpointer         user_data)
@@ -151,25 +141,6 @@ on_import_next (GnomeDruidPage  *gnomedruidpage,
                        gpointer         arg1,
                        gpointer         user_data)
 {
-	return FALSE;
-}
-
-static gboolean
-on_qof_book_merge_next (GnomeDruidPage  *gnomedruidpage,
-                       gpointer         arg1,
-                       gpointer         user_data)
-{
-    GtkWidget *top;
-    const char *message = _("You must resolve all collisions.");
-
-	ENTER (" count=%d", count);
-	if(count > 0) {
-		top = gtk_widget_get_toplevel (GTK_WIDGET (gnomedruidpage));
-	    gnc_error_dialog(top, message);
-		return TRUE;
-	}
-	buffer = "";
-	LEAVE (" ");
 	return FALSE;
 }
 
@@ -292,48 +263,6 @@ gnc_create_import_druid ( void )
 	return dialog;
 }
 
-static GtkWidget *
-gnc_create_merge_druid ( void )
-{
-  GtkWidget *dialog;
-  GtkWidget *druid;
-  GladeXML *xml;
-
-	xml = gnc_glade_xml_new ("merge.glade", "Merge Druid");
-
-	glade_xml_signal_connect(xml, "on_start_page_next",
-		G_CALLBACK (on_qof_start_page_next));
-	
-	glade_xml_signal_connect(xml, "on_qof_book_merge_prepare",
-		G_CALLBACK (on_merge_prepare));
-
-	glade_xml_signal_connect(xml, "on_qof_book_merge_next",
-		G_CALLBACK (on_qof_book_merge_next));
-
-	glade_xml_signal_connect (xml, "on_finish", 
-		G_CALLBACK (on_merge_finish));
-
-	glade_xml_signal_connect (xml, "on_cancel", 
-		G_CALLBACK (on_merge_cancel));
-	
-	glade_xml_signal_connect (xml, "on_MergeUpdate_clicked",
-		G_CALLBACK (on_MergeUpdate_clicked));
-		
-	glade_xml_signal_connect (xml, "on_MergeDuplicate_clicked",
-		G_CALLBACK (on_MergeDuplicate_clicked));
-		
-	glade_xml_signal_connect (xml, "on_MergeNew_clicked",
-		G_CALLBACK (on_MergeNew_clicked));
-
-	dialog = glade_xml_get_widget (xml, "Merge Druid");
-	druid = glade_xml_get_widget (xml, "merge_druid");
-	gnc_druid_set_colors (GNOME_DRUID (druid));
-
-	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
-                      G_CALLBACK(qof_book_merge_destroy_cb), NULL);
-	return dialog;
-}
-
 void collision_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule, guint remainder)
 {
 	GSList *user_reports;
@@ -402,31 +331,4 @@ gnc_ui_qsf_import_merge_druid (QofSession *original, QofSession *import)
 	merge_session = import;
 	mergeBook = qof_session_get_book(merge_session);
 	gtk_widget_show(qsf_import_merge_window);
-}
-
-void
-gnc_ui_qof_book_merge_druid (void)
-{
-	if (qof_book_merge_window) return;
-	/*	QofSession changes to avoid using current book */
-	gnc_engine_suspend_events ();
-	previous_session = qof_session_get_current_session();
-	targetBook = qof_session_get_book(previous_session);
-	merge_session = qof_session_new();
-	qof_session_set_current_session(merge_session);
-	mergeBook = qof_session_get_book(merge_session);
-	gnc_engine_resume_events ();
-	g_return_if_fail(targetBook != NULL);
-	g_return_if_fail(mergeBook != NULL);
-	g_return_if_fail(merge_session != NULL);
-	qof_book_merge_window = gnc_create_merge_druid();
-	g_return_if_fail(qof_book_merge_window != NULL);
-	gnc_ui_hierarchy_druid();
-	druid_hierarchy_window = gnc_ui_hierarchy_running();
-	gtk_widget_hide (druid_hierarchy_window);
-	g_object_set_data (G_OBJECT (druid_hierarchy_window), "Merge Druid", qof_book_merge_window);
-	gtk_widget_show_all (qof_book_merge_window);
-	g_return_if_fail(targetBook != NULL);
-	g_return_if_fail(mergeBook != NULL);
-	g_return_if_fail(merge_session != NULL);
 }

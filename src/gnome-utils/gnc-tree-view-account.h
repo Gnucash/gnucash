@@ -180,7 +180,21 @@ GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
     GncTreeViewAccountColumnSource source_cb, 
     GncTreeViewAccountColumnTextEdited edited_cb);
 
+void gnc_tree_view_account_set_name_edited(GncTreeViewAccount *view,
+                                           GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_name_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_name);
 
+void gnc_tree_view_account_set_code_edited(GncTreeViewAccount *view,
+                                           GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_code);
+
+void gnc_tree_view_account_set_description_edited(GncTreeViewAccount *view,
+                                                  GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_desc);
+
+void gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
+                                            GncTreeViewAccountColumnTextEdited edited_cb);
+void gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_notes);
 
 /** Add a new column to the set of columns in an account tree view.
  *  This column will be visible as soon as it is added and will
@@ -197,6 +211,7 @@ GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
 void gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
 					   const gchar *column_title,
 					   const gchar *kvp_key);
+
 /** @} */
 
 

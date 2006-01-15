@@ -19,6 +19,7 @@ AM_CFLAGS = \
 libgncmod_app_utils_la_SOURCES = \
   file-utils.c \
   gfec.c \
+  gnc-account-merge.c \
   gnc-accounting-period.c \
   gnc-component-manager.c \
   gnc-druid.c \
@@ -37,13 +38,14 @@ libgncmod_app_utils_la_SOURCES = \
   gncmod-app-utils.c \
   gnc-ui-util.c \
   guile-util.c \
-  option-util.c 
+  option-util.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   file-utils.h \
   gfec.h \
   gnc-basic-gobject.h \
+  gnc-account-merge.h \
   gnc-accounting-period.h \
   gnc-component-manager.h \
   gnc-druid.h \

@@ -33,6 +33,8 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-ui.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page-account-tree.h"
 
 #define GCONF_SECTION "dialogs/new_user"
 #define FIRST_STARTUP "first_startup"
@@ -43,9 +45,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /* function to open a qif import druid */
 static void (*qifImportDruidFcn)(void) = NULL;
 
-
 static void gnc_ui_new_user_cancel_dialog (void);
-
 
 void
 gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
@@ -58,6 +58,18 @@ void
 gnc_set_first_startup (gboolean first_startup)
 {
   gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
+}
+
+void
+after_hierarchy_druid(void)
+{
+  GncPluginPage *page;
+
+  gncp_new_user_finish ();
+  gnc_set_first_startup (FALSE);
+  
+  page = gnc_plugin_page_account_tree_new();
+  gnc_main_window_open_page(NULL, page);
 }
 
 void
@@ -91,10 +103,10 @@ gnc_ui_new_user_dialog (void)
 		break;
 	  case GTK_RESPONSE_OK:
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button))) {
-			gnc_ui_hierarchy_druid ();
+			gnc_ui_hierarchy_druid_with_callback(after_hierarchy_druid);
 			break;
-		} else if ((qifImportDruidFcn != NULL) &&
-				gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {
+		} else if ((qifImportDruidFcn != NULL)
+                           && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {
 			qifImportDruidFcn();
 			gncp_new_user_finish ();
 			break;

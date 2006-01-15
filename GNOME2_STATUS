@@ -1,4 +1,4 @@
-# -*- reStructuredText -*-
+# -*- rst -*-
 
 Intro
 -----
@@ -124,24 +124,11 @@ Resources
 
     - Still a lot of dead legacy code hanging around
 
-- New Account Hierarchy - somewhat works
+- New Account Hierarchy... - mostly works
 
-  - Placeholder status should be set on relevant (non-leaf) accounts?
+  - Better text on opening/balance merge druid-page needed.
 
-  - Sometimes crashes when loading account data.
-
-  - 2006-01-02: do these problems still exist?
-
-    - [jsled, 2006-01-03] yes...
-
-      - After opening, mousing over the existing account-tree changes all my
-        '$'s to 'USD'.
-
-      - I'm unable to cancel this dialog.
-
-- Account Hierarchy Merge - BROKEN
-
-  - Bad integration with Account Hierarchy druid
+- Import QSF
 
   - Static variables used for process/window state.
 
@@ -151,43 +138,7 @@ Resources
 
     - (gnucash:27485): Gtk-CRITICAL **: gtk_widget_event: assertion `WIDGET_REALIZED_FOR_EVENT (widget, event)' failed
 
-  - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
-
-    - (jsled) actually, it just doesn't display the 1-conflict -> 0-conflict
-      transition in the UI correctly, but it does allow you to finish.
-
   - conflict-resolution process/display issues.
-
-  - weird...
-
-    - Merge Druid -forward-> Account Druid -cancel-| => book commodity (?) changes
-
-  - conflict resolution
-
-<jsled> hampton: hmm.  trying to figure out the ui here; I think it's:
-<jsled> 1/ make the account-name directly-editable in the account-tree view.
-<jsled> 2/ Change the "add opening balance" page to "edit accounts".
-<jsled> 3/ Add a "existing?" column next to the account name.
-<jsled> 4/ the accounts and editing becomes stateful in a semi-complex way:
-<hampton> That sounds like a plan.  #2 will also make account names editable anywhere where an account tree is used which is good (accounts page, budgets page) and bad (transfer dialog, etc.)
-<jsled> there's a 2-bit state space: placeholder-account? and shares-name-woth-existing?
-<jsled> re: editable names: ah, noted; configurably editable, then.
-<jsled> s/woth/with/
-<jsled> placeholder=true, shares=true: use existing, no problem.
-<jsled> placeholder=true, shares=false: create new, no problem
-<jsled> placeholder=false, shares=true: existing account with same name exists, problem (blocks druid close)
-<jsled> placeholder=false, shares=false: create new, no problem.
-<hampton> I would state it differently.
-<jsled> Maybe ... another Messages column to indicate the problem case...
-<hampton> shares=false, placeholder=don't care: create new, no problem.
-<hampton> shares=true, placeholder=same as existing: use existing, no problem
-<hampton> shares=true, placeholder=diff from existing: problem
-<jsled> Ah.  Yup.
-<jsled> Well, kinda.
-<jsled> Ignoring the placeholders for a moment, there are really two types of example-accounts: those that expect the name to be edited, and those that don't.
-<jsled> Those roughly correlate with the placeholder setting.
-<jsled> But if you're re-running the account-hierarchy druid to add another credit card, you should be encouraged to enter a different name for the leaf account.
-<hampton> Its more a question of where the dialog was called from. If from the new user code, you really don't need to edit names.  If called from the merge druid, the user should be encouraged to edit leaf names.
 
 - Backend
 
@@ -204,7 +155,11 @@ Resources
 
   - SX Editor
 
-    - bug/crash: http://lists.gnucash.org/pipermail/gnucash-devel/2006-January/015300.html
+    - bugs/crashes:
+
+      - http://lists.gnucash.org/pipermail/gnucash-devel/2005-December/015097.html
+
+      - http://lists.gnucash.org/pipermail/gnucash-devel/2006-January/015300.html
 
     - Template-register View > {Basic, Auto-Split} options have no effect
 
@@ -229,11 +184,9 @@ Resources
 
     - "Report options", especially, since it often confuses users.
 
-- In-place editing
+- Example accounts should have relevant placeholder status.
 
-  - Provide in-place editing where feasable.  Eg.  Editing the account code
-    or the account name, but not being able to re-parent the account.  (Maybe
-    add DND support for this in long-term?)
+- Account tree drag-and-drop reparenting.
 
 - Find
 

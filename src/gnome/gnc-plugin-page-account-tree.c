@@ -47,7 +47,7 @@
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "druid-merge.h"
+#include "druid-hierarchy.h"
 #include "gnc-account-sel.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -118,7 +118,7 @@ void gppat_set_insensitive_iff_rb_active(GtkToggleButton *b, GtkWidget *widget);
 
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (GtkAction *action, GncPluginPageAccountTree *plugin_page);
+static void gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
@@ -146,7 +146,7 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account) },
 	{ "FileAddAccountHierarchyDruidAction", GNC_STOCK_NEW_ACCOUNT, N_("New Account _Hierarchy..."), NULL,
 	  N_("Extend the current book by merging with new account type categories"),
-	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_hierarchy_merge) },
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_new_hierarchy) },
 	{ "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
 	  N_("Open the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account) },
@@ -422,6 +422,15 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		     "show-column-menu", TRUE,
 		     NULL);
 
+        gnc_tree_view_account_set_name_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
+                                              gnc_tree_view_account_name_edited_cb);
+        gnc_tree_view_account_set_code_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
+                                              gnc_tree_view_account_code_edited_cb);
+        gnc_tree_view_account_set_description_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
+                                                     gnc_tree_view_account_description_edited_cb);
+        gnc_tree_view_account_set_notes_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
+                                               gnc_tree_view_account_notes_edited_cb);
+
 	priv->tree_view = tree_view;
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
@@ -646,9 +655,9 @@ gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAc
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (GtkAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *page)
 {
-	gnc_ui_qof_book_merge_druid();
+        gnc_ui_hierarchy_druid();
 }
 
 static void

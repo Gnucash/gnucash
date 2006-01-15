@@ -1,3 +1,63 @@
+2006-01-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-tree-view-account.c
+	(gnc_tree_view_account_new_with_group):
+	Record editable text columns in private data structure.
+	(gtva_set_column_editor)
+	(gtva_setup_column_renderer_edited_cb) 
+	(gnc_tree_view_account_set_name_edited) 
+	(gnc_tree_view_account_set_code_edited) 
+	(gnc_tree_view_account_set_description_edited) 
+	(gnc_tree_view_account_set_notes_edited):
+	Add support for setting up column-edited callbacks.
+	(gnc_tree_view_account_name_edited_cb) 
+	(gnc_tree_view_account_code_edited_cb) 
+	(gnc_tree_view_account_description_edited_cb) 
+	(gnc_tree_view_account_notes_edited_cb):
+	Provide stock editable-column handlers.
+
+	* src/gnome/gnc-plugin-page-account-tree.c
+	(gnc_plugin_page_account_tree_create_widget): Setup default
+	editing callbacks for text columns.
+
+	* src/app-utils/gnc-account-merge.[ch]: Non-ui-specific utility
+	routines from account-hierarchy druid regarding account-hierarchy
+	merge logic and constraints.
+
+	* src/gnome/druid-hierarchy.c: Remove static variables describing
+	dialog and dialog-in-interaction-with the druid-merge.c code.
+	(gnc_create_hierarchy_druid, get_final_balance)
+	(set_final_balance): simplify to Map<Account*,
+	balance:gnc_numeric*>, which is more tolerant of Account-name
+	changes.
+	(gnc_ui_hierarchy_druid_with_callback): Add callback support for
+	caller to have calling-specific work done.
+	(use_existing_account_data_func): Conditionally add column
+	detailing the status of how this new hierarchy merges into the
+	existing one.
+	(on_final_account_next): Check to ensure there are no
+	account-hierarchy merge conflicts before allowing Next to final
+	page.
+	(balance_cell_data_func): Add new subtlety around opening-balance
+	editing in the face of hierarachy-merging.
+	(on_finish): Reorder dialog finishing to work around account-tree
+	model bug, starting-balance-transaction creation, data-merging,
+	when-completed callback creation.
+	(gnc_ui_hierarchy_druid_hook): Add callback to create new
+	account-page as consequence of new-file hook run.
+
+	* src/gnome/dialog-new-user.c (after_hierarchy_druid): Create+use
+	callback for new-user-dialog specific code.
+
+	* src/gnome/glade/account.glade: Change "opening balances" page
+	title, default dialog positioning hint (from none to parent-center).
+
+	* src/gnome/druid-merge.[ch]
+	(gnc_ui_qof_book_merge_druid): Remove hierarchy-druid wrapper.
+	: remove un-used qof_book_merge_druid.
+
+	* accounts/C/*: Add placeholder flag on relevant accounts.
+
 2006-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/Makefile.am: revert 12296 and handle the

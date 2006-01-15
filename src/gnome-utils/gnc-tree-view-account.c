@@ -62,6 +62,11 @@ static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
 
+static void gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
+                                                 GtkTreeViewColumn *column,
+                                                 GtkCellRenderer *renderer,
+                                                 GncTreeViewAccountColumnTextEdited col_edited_cb);
+
 typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;
@@ -69,6 +74,11 @@ typedef struct GncTreeViewAccountPrivate
     gnc_tree_view_account_filter_func filter_fn;
     gpointer                          filter_data;
     GtkDestroyNotify                  filter_destroy;
+
+  GtkTreeViewColumn *name_column;
+  GtkTreeViewColumn *code_column;
+  GtkTreeViewColumn *desc_column;
+  GtkTreeViewColumn *notes_column;
 } GncTreeViewAccountPrivate;
 
 #define GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(o)  \
@@ -345,11 +355,14 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   GtkTreeModel *model, *f_model, *s_model;
   GtkTreePath *virtual_root_path = NULL;
   const gchar *sample_type, *sample_commodity;
+  GncTreeViewAccountPrivate *priv;
 
   ENTER(" ");
   /* Create our view */
   view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT,
                        "name", "account_tree", NULL);
+
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
 
   /* Create/get a pointer to the existing model for this set of books. */
   model = gnc_tree_model_account_new (group);
@@ -378,11 +391,12 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   sample_type = xaccAccountGetTypeStr(CREDIT);
   sample_commodity = gnc_commodity_get_fullname(gnc_default_currency());
 
-  gnc_tree_view_add_text_column(view, N_("Account Name"), "name",
-				GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
-				GNC_TREE_MODEL_ACCOUNT_COL_NAME,
-				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+  priv->name_column 
+    = gnc_tree_view_add_text_column(view, N_("Account Name"), "name",
+                                    GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
+                                    GNC_TREE_MODEL_ACCOUNT_COL_NAME,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    NULL);
   gnc_tree_view_add_text_column(view, N_("Type"), "type", NULL, sample_type,
 				GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
@@ -392,16 +406,18 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				NULL);
-  gnc_tree_view_add_text_column(view, N_("Account Code"), "account-code", NULL,
-				"1-123-1234",
-				GNC_TREE_MODEL_ACCOUNT_COL_CODE,
-				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
-  gnc_tree_view_add_text_column(view, N_("Description"), "description", NULL,
-				"Sample account description.",
-				GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
-				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+  priv->code_column
+    = gnc_tree_view_add_text_column(view, N_("Account Code"), "account-code", NULL,
+                                    "1-123-1234",
+                                    GNC_TREE_MODEL_ACCOUNT_COL_CODE,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    NULL);
+  priv->desc_column
+    = gnc_tree_view_add_text_column(view, N_("Description"), "description", NULL,
+                                    "Sample account description.",
+                                    GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    NULL);
   gnc_tree_view_add_numeric_column(view, N_("Last Num"), "lastnum", "12345",
 				   GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
 				   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
@@ -479,11 +495,12 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
 				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				   sort_by_total_value);
-  gnc_tree_view_add_text_column(view, N_("Notes"), "notes", NULL,
-				"Sample account notes.",
-				GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
-				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+  priv->notes_column
+    = gnc_tree_view_add_text_column(view, N_("Notes"), "notes", NULL,
+                                    "Sample account notes.",
+                                    GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
+                                    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+                                    NULL);
   gnc_tree_view_add_text_column(view, N_("Tax Info"), "tax-info", NULL,
 				"Sample tax info.",
 				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
@@ -1291,6 +1308,37 @@ static void col_source_helper(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     g_free(text);
 }
 
+/**
+ * If col_edited_cb is null, the editing callback (helper) will be
+ * effectively disconnected.
+ **/
+void
+gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
+                                     GtkTreeViewColumn *column,
+                                     GtkCellRenderer *renderer,
+                                     GncTreeViewAccountColumnTextEdited col_edited_cb)
+{
+  GtkTreeModel *s_model;
+
+  if (col_edited_cb == NULL)
+  {
+    g_object_set(G_OBJECT(renderer), "editable", FALSE, NULL);
+    g_object_set_data(G_OBJECT(renderer), "column_edited_callback", col_edited_cb);
+    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+    g_signal_handlers_disconnect_by_func(G_OBJECT(renderer), col_edited_cb, s_model);
+    g_object_set_data(G_OBJECT(renderer), "column_view", column);
+  }
+  else
+  {
+    g_object_set(G_OBJECT(renderer), "editable", TRUE, NULL);
+    g_object_set_data(G_OBJECT(renderer), "column_edited_callback",
+                      col_edited_cb);
+    s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+    g_signal_connect(G_OBJECT(renderer), "edited", 
+                     (GCallback) col_edited_helper, s_model);
+    g_object_set_data(G_OBJECT(renderer), "column_view", column);
+  }
+}
  
 GtkTreeViewColumn *
 gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
@@ -1302,7 +1350,6 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
 {
     GtkCellRenderer *renderer;
     GtkTreeViewColumn *column;
-    GtkTreeModel *s_model;
     
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (account_view), NULL);
     
@@ -1312,13 +1359,7 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
     column = gtk_tree_view_column_new_with_attributes (column_title,
                                                        renderer, NULL);
     if (col_edited_cb) {
-        g_object_set(G_OBJECT(renderer), "editable", TRUE, NULL);
-        g_object_set_data(G_OBJECT(renderer), "column_edited_callback",
-                          col_edited_cb);
-        s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
-        g_signal_connect(G_OBJECT(renderer), "edited", 
-                         (GCallback) col_edited_helper, s_model);
-        g_object_set_data(G_OBJECT(renderer), "column_view", column);
+      gtva_setup_column_renderer_edited_cb(account_view, column, renderer, col_edited_cb);
     }
     gtk_tree_view_column_set_cell_data_func (column, renderer, 
                                              col_source_helper,
@@ -1792,4 +1833,96 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
 
     /* Update tree view for any changes */
     gnc_tree_view_account_refilter(view);
+}
+
+// @@fixme -- factor this app-not-gui-specific-logic out.
+void
+gnc_tree_view_account_name_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_name)
+{
+  // check for accounts with the same name in our parent's group.
+  // should probably factor this consistency check out to the account
+  // itself... or maybe the account group.
+  {
+    AccountGroup *parent = xaccAccountGetParent(account);
+    Account *existing = xaccGetAccountFromName(parent, new_name);
+    if (existing != NULL && existing != account)
+    {
+      PERR("account with the same name [%s] already exists.", new_name);
+      return;
+    }
+  }
+  xaccAccountSetName(account, new_name);
+}
+
+void
+gnc_tree_view_account_code_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_code)
+{
+  xaccAccountSetCode(account, new_code);
+}
+
+void
+gnc_tree_view_account_description_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_desc)
+{
+  xaccAccountSetDescription(account, new_desc);
+}
+
+void
+gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *col, const gchar *new_notes)
+{
+  xaccAccountSetNotes(account, new_notes);
+}
+
+static void
+gtva_set_column_editor(GncTreeViewAccount *view,
+                       GtkTreeViewColumn *column,
+                       GncTreeViewAccountColumnTextEdited edited_cb)
+{
+  GList *renderers_orig, *renderers;
+  GtkCellRenderer *renderer;
+  
+  // look for the first text-renderer; on the 0th column of the account tree,
+  // there are two renderers: pixbuf and text.  So find the text one.
+  for (renderers_orig = renderers = gtk_tree_view_column_get_cell_renderers(column);
+       renderers && !GTK_IS_CELL_RENDERER_TEXT(renderers->data);
+       renderers = renderers->next);
+  renderer = GTK_CELL_RENDERER(renderers->data);
+  g_list_free(renderers_orig);
+  g_return_if_fail(renderer != NULL);
+  gtva_setup_column_renderer_edited_cb(GNC_TREE_VIEW_ACCOUNT(view), column, renderer, edited_cb);
+}
+
+void
+gnc_tree_view_account_set_name_edited(GncTreeViewAccount *view,
+                                      GncTreeViewAccountColumnTextEdited edited_cb)
+{
+  GncTreeViewAccountPrivate *priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gtva_set_column_editor(view, priv->name_column, edited_cb);
+}
+
+void
+gnc_tree_view_account_set_code_edited(GncTreeViewAccount *view,
+                                      GncTreeViewAccountColumnTextEdited edited_cb)
+{
+  GncTreeViewAccountPrivate *priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gtva_set_column_editor(view, priv->code_column, edited_cb);
+}
+
+void
+gnc_tree_view_account_set_description_edited(GncTreeViewAccount *view,
+                                             GncTreeViewAccountColumnTextEdited edited_cb)
+{
+  GncTreeViewAccountPrivate *priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gtva_set_column_editor(view, priv->desc_column, edited_cb);
+}
+
+void
+gnc_tree_view_account_set_notes_edited(GncTreeViewAccount *view,
+                                       GncTreeViewAccountColumnTextEdited edited_cb)
+{
+  GncTreeViewAccountPrivate *priv;
+  priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(view);
+  gtva_set_column_editor(view, priv->notes_column, edited_cb);
 }

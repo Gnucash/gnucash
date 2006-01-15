@@ -74,8 +74,6 @@ any error values to the calling process.
 	@author Copyright (c) 2004 Neil Williams <linux@codehelp.co.uk>
 */
 
-void gnc_ui_qof_book_merge_druid (void);
-
 void gnc_ui_qsf_import_merge_druid(QofSession *original, QofSession *import);
 
 GtkWidget* qof_book_merge_running (void);

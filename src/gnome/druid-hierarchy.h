@@ -23,7 +23,17 @@
 #ifndef DRUID_HIERARCHY_H
 #define DRUID_HIERARCHY_H
 
-void gnc_ui_hierarchy_druid (void);
-GtkWidget* gnc_ui_hierarchy_running (void);
+/**
+ * A callback (provided by the caller) to be invoked when the druid
+ * completes successfully.  I.e., the new-user druid can finish the GnuCash
+ * New-User Experience, create an account plugin-page, &c.
+ **/
+
+typedef void (*GncHierarchyDruidFinishedCallback)(void);
+
+GtkWidget* gnc_ui_hierarchy_druid (void);
+GtkWidget* gnc_ui_hierarchy_druid_with_callback(GncHierarchyDruidFinishedCallback when_finished);
+
 void gnc_ui_hierarchy_druid_initialize (void);
+
 #endif
