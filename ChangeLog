@@ -1,5 +1,9 @@
 2006-01-15  Joshua Sled  <jsled@asynchronous.org>
 
+	* accounts/C/*: add placeholder flags for relevant accounts.
+	
+2006-01-15  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome-utils/gnc-tree-view-account.c
 	(gnc_tree_view_account_new_with_group):
 	Record editable text columns in private data structure.
