@@ -19,6 +19,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Current Assets</act:name>
@@ -30,6 +36,12 @@
   </act:commodity>
   <act:description>Current Assets</act:description>
   <act:parent type="new">98f262dfab9a2b99ac42919dcf58d304</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Checking Account</act:name>
@@ -73,6 +85,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Liabilities</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Credit Card</act:name>
@@ -94,6 +112,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Income</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bonus</act:name>
@@ -192,6 +216,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Expenses</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Adjustment</act:name>
@@ -686,6 +716,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Equity</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Opening Balances</act:name>

@@ -19,6 +19,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Current Assets</act:name>
@@ -31,6 +37,12 @@
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Current Assets</act:description>
   <act:parent type="new">bde24bbbe01829aff3dac8d038e174cc</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Checking Account</act:name>
@@ -68,7 +80,7 @@
   <act:slots>
     <slot>
       <slot:key>placeholder</slot:key>
-      <slot:value type="string">false</slot:value>
+      <slot:value type="string">true</slot:value>
     </slot>
     <slot>
       <slot:key>notes</slot:key>
@@ -86,6 +98,12 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Equity</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Opening Balances</act:name>

@@ -18,6 +18,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Assets</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investments</act:name>
@@ -29,6 +35,12 @@
   </act:commodity>
   <act:description>Investments</act:description>
   <act:parent type="new">e67ef2c52a4eaf3b9d37d317848a5812</act:parent>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Retirement</act:name>
@@ -43,6 +55,10 @@
     <slot>
       <slot:key>notes</slot:key>
       <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
     </slot>
   </act:slots>
   <act:parent type="new">64cf99f6bafe0a539a5941ea713bdfcd</act:parent>
