@@ -1,5 +1,5 @@
 
-TESTS = test-version test-run-script test-guile-env-override
+TESTS = test-version test-run-script
 
 # Some of the things we do here may seem a little awkward, but we want
 # to make sure we're testing in a setup as close to the install
@@ -23,7 +23,6 @@ noinst_DATA = overrides.stamp
 overrides.stamp:
 	rm -rf overrides
 	mkdir overrides
-	cd overrides && ln -s ../${top_srcdir}/src/bin/overrides/gnucash .
 	cd overrides && ln -s ../${top_srcdir}/src/bin/overrides/gnucash-run-script .
 	cd overrides && ln -s ../../overrides/gnucash-make-guids .
 	cd overrides && ln -s ../../overrides/guile .
@@ -33,5 +32,4 @@ CLEANFILES = overrides.stamp
 
 clean-local:
 	rm -rf overrides
-EXTRA_DIST = \
-  fake-guile test-version test-run-script test-guile-env-override
+EXTRA_DIST = test-version test-run-script
