@@ -1,4 +1,4 @@
-"Term"	"English Definition"
+"Term (Dear translator: This file will never be visible to the user!)"	"English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 "account"	"A detailed record of money spent and received"
 "account code"	"-"
 "account hierarchy"	"the tree view of all accounts"
