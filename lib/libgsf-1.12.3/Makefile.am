@@ -15,9 +15,6 @@ SUBDIRS = gsf gsf-gnome gsf-win32 tests
 if WITH_PYTHON
   SUBDIRS += python
 endif
-#if WITH_GCONF
-#  SUBDIRS += thumbnailer
-#endif
 
 EXTRA_DIST = BUGS HACKING	\
 	intltool-extract.in	\

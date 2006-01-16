@@ -1,5 +1,11 @@
 2006-01-16  Joshua Sled  <jsled@asynchronous.org>
 
+	* lib/libgsf-1.12.3/thumbnailer/
+	* lib/libgsf-1.12.3/Makefile.am: Remove unused 'thumbnailer'
+	directory.
+
+2006-01-16  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/register/register-gnome/gnucash-sheet.c
 	(GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL): Compatibility with
 	gtk 2.8, as well, for selection of the auto-completed region.
