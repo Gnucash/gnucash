@@ -28,6 +28,8 @@
 #include "qof.h"
 #include "cashobjects.h"
 #include "gncCustomerP.h"
+#include "gncInvoiceP.h"
+#include "gncJobP.h"
 #include "test-stuff.h"
 
 static int count = 0;
@@ -210,6 +212,9 @@ main (int argc, char **argv)
   qof_object_initialize ();
   qof_book_register ();
   do_test (cashobjects_register(), "Cannot register cash objects");
+  do_test (gncInvoiceRegister(), "Cannot register GncInvoice");
+  do_test (gncJobRegister (),  "Cannot register GncJob");
+  do_test (gncCustomerRegister(), "Cannot register GncCustomer");
   test_customer();
   print_test_results();
   qof_query_shutdown();
