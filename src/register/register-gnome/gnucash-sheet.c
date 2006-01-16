@@ -47,7 +47,8 @@
 
 /* FIXME: at least broken on gtk 2.4.14 */
 /* jsled: and 2.6.8 */
-#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION > 6)
+/* jsled: and 2.8.8 */
+#define GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL (GTK_MINOR_VERSION > 8)
 
 static guint gnucash_register_initial_rows = 15;
 

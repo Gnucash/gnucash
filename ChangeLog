@@ -1,3 +1,9 @@
+2006-01-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-sheet.c
+	(GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL): Compatibility with
+	gtk 2.8, as well, for selection of the auto-completed region.
+
 2006-01-16  Derek Atkins <derek@ihtfp.com>
 
 	* configure.in: us AM_PATH_GWRAP properly. Exit configure on failure.
