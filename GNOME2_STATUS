@@ -55,8 +55,8 @@ Resources
     - Printing pie/bar charts fails.
 
   - Open pages are no longer open after reopening file.
-    - Account tree, register and report pages are restored.
-    - Budget and business pages are not restored.
+    - Account tree, budget, register and report pages are restored.
+    - Business pages are not restored.
     - Trying to reopen a multi-column report spits lots of
       warning. Trying to edit that pages options crashes gnucash.
 
@@ -99,30 +99,26 @@ Resources
   - Budget Report
 
     - the default account selection isn't very reasonable, Inc & Exp
-      would be better
+      would be better, and using the account type selection from the
+      budget page would just make too much sense.
 
     - sometimes negative numbers render on two lines in their table-cell
 
   - Budget GUI
 
-    - default account filter doesn't take effect until options are
-      opened, should take effect as soon as view is opened
+    - [RFE] it might be nice to disallow some of the more unusual recurrences
 
-    - it might be nice to disallow some of the more unusual recurrences
-
-    - better if budget list dialog allowed double click to open
+    - [RFE] better if budget list dialog allowed double click to open
 
     - need help text
 
-    - should displaying zero values be optional?
+    - [RFE] should displaying zero values be optional?
 
-    - it'd be nice if there was a summary column at the far right
+    - [RFE] it'd be nice if there was a summary column at the far right
 
   - Budget Engine
 
     - Do budgets play nice with QSF?
-
-    - Still a lot of dead legacy code hanging around
 
 - New Account Hierarchy... - mostly works
 
