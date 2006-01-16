@@ -1,3 +1,7 @@
+2006-01-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-new-user.c: some fixes to get file to compile.
+
 2006-01-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* accounts/C/*: add placeholder flags for relevant accounts.

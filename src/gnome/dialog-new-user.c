@@ -60,7 +60,7 @@ gnc_set_first_startup (gboolean first_startup)
   gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
 }
 
-void
+static void
 after_hierarchy_druid(void)
 {
   GncPluginPage *page;
