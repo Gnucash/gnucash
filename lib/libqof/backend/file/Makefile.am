@@ -14,7 +14,7 @@ libqof_backend_qsf_la_SOURCES = \
   qsf-xml-map.c \
   qsf-xml.c
 
-LIBADD = \
+libqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \
  ${LIBXML2_LIBS}
