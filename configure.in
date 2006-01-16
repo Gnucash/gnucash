@@ -251,7 +251,7 @@ AC_DEFINE_UNQUOTED(GNC_GUILE_MINOR_VERSION, ${guile_minor_version},
 AC_DEFINE_UNQUOTED(GNC_GUILE_MICRO_VERSION, ${guile_micro_version},
 	[Guile Micro version number])
 
-AM_PATH_GWRAP(1.3.3, , , [AC_MSG_ERROR([
+AM_PATH_GWRAP(1.3.3, , [AC_MSG_ERROR([
 
   g-wrap does not appear to be installed correctly, or is not new
   enough.  Right now gnucash requires at least version 1.3.3 to build.
