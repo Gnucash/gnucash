@@ -22,7 +22,6 @@
 (re-export gnc:module-load)
 (re-export gnc:module-load-optional)
 (re-export gnc:module-unload)
-(re-export gnc:module-lookup)
 
 (define (gnc:module-system-init)
   (let ((lib (if (or (string=? (version) "1.3")

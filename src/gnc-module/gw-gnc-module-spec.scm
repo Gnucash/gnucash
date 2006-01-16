@@ -44,10 +44,5 @@
    '((<gnc:module> module))
    "Unreference a gnc-module. Module will unload when refcount goes to 0")
 
-  (gw:wrap-function
-   ws 'gnc:module-lookup
-   '<gw:void*> "gnc_module_lookup"
-   '((<gnc:module> module) 
-     ((<gw:mchars> caller-owned) symbol))
-   "Look up a symbol in the module.  module must be loaded already."))
+)
 
