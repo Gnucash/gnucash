@@ -7,7 +7,6 @@ gncoverrides_SCRIPTS = \
   guile
 
 EXTRA_DIST = \
-  gnucash \
   gnucash-env.in \
   gnucash-build-env.in \
   gnucash-make-guids \
