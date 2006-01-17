@@ -370,9 +370,6 @@ string and 'directories' must be a list of strings."
   (let ((original-module (current-module))
         (bootstrap (resolve-module '(gnucash main))))
     
-    (set-current-module bootstrap)
-    
-    (gnc:module-load "gnucash/app-utils" 0)
     ;; Now we can load a bunch of files.
     (load-from-path "path.scm")
     (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...

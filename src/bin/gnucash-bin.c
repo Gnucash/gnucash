@@ -32,9 +32,15 @@
 static void
 inner_main (void *closure, int argc, char **argv)
 {
+    SCM main_mod;
+
+    main_mod = scm_c_resolve_module("gnucash main");
+    scm_set_current_module(main_mod);
+
     /* module initializations would go here */
-    //scm_c_eval_string("(display %load-path)");
-    scm_c_eval_string("(use-modules (gnucash main))");
+    gnc_module_load("gnucash/app-utils", 0);
+    gnc_module_load("gnucash/gw-engine", 0);
+
     scm_c_eval_string("(gnc:main)");
     return;
 }
