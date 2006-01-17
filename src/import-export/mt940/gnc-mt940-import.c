@@ -21,8 +21,9 @@
 /** @internal
      @file gnc-mt940-import.c
      @brief MT940 import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>
+     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel
  */
+ /* See aqbanking-1.6.0beta/src/tools/aqbanking-tool/import.c for hints */
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -32,7 +33,7 @@
 #include <string.h>
 #include <sys/time.h>
 
-#include <openhbci/swiftparser.h>
+#include <aqbanking/imexporter.h>
 
 #include "gnc-hbci-gettrans.h"
 #include "import-account-matcher.h"
@@ -55,6 +56,13 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 static void *trans_importer_cb (const HBCI_Transaction *h_trans, 
 			    void *user_data);
+
+
+/* Note: This file is broken. See
+   http://bugzilla.gnome.org/show_bug.cgi?id=325170 .  The patch from
+   there is already included, but the file still won't compile. */
+
+
 
 /********************************************************************\
  * gnc_file_mt940_import
@@ -110,18 +118,38 @@ void gnc_file_mt940_import (void)
       {
         int pos=0;
         int result;
-        HBCI_transactionReport *tr;
+	AB_BANKING *tr;
+	AB_IMEXPORTER *importer;
+	AB_IMEXPORTER_CONTEXT *ctx=0;
+	GWEN_DB_NODE *dbCtx;
         const list_HBCI_Transaction *transactions;
         /*list_HBCI_Transaction_iter *iter;*/
 
-        tr=HBCI_transactionReport_new();
-        
+        tr=AB_Banking_new();
+	/* get import module */
+	importer=AB_Banking_GetImExporter(tr, "swift"); /* possible values: csv, swift, dtaus, */
+  	if (!importer) {
+	  DEBUG("Import module swift not found");
+	}
+
+	/* load the import profile */
+	//dbProfiles=AB_Banking_GetImExporterProfiles(tr, "swift");
+	dbProfile="default";
+
+	/* import new context */
+	ctx=AB_ImExporterContext_new();
+	
         while(pos<filesize){
           DEBUG("Parsing mt940 string, pos=%d\n",pos);
 
-          result=HBCI_SWIFTparser_readMT940(mt940_records,tr,&pos);
+          result=AB_ImExporter_Import(importer,
+			  		ctx,
+					mt940_records,
+					dbProfile);
 
           DEBUG("Parsing result: %d\n", result);
+
+	  AB_ImExporterContext_toDb(ctx, dbCtx);
 
           transactions=HBCI_transactionReport_transactions(tr);
 
@@ -134,6 +162,11 @@ void gnc_file_mt940_import (void)
         }
         HBCI_transactionReport_delete(tr);
       }
+      AB_ImExporterContext_free(ctx);
+      /* that's is */
+      result=AB_Banking_Fini(ab);
+      if (result) {
+	      DEBUG("ERROR: Error on deinit (%d)\n",result);
       g_free(mt940_records);
       g_free(selected_filename);
     }
