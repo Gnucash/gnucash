@@ -1,3 +1,8 @@
+2006-01-17  Neil Williams <linux@codehelp.co.uk>
+
+	* src/engine/gnc-engine.c : Removing .la from
+	name of module to be loaded with GModule.
+
 2006-01-16  Joshua Sled  <jsled@asynchronous.org>
 
 	* lib/libgsf-1.12.3/thumbnailer/

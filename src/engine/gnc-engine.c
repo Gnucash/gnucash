@@ -40,7 +40,7 @@
 #include "gnc-pricedb-p.h"
 
 /** gnc file backend library name */
-#define GNC_LIB_NAME "libgnc-backend-file.la"
+#define GNC_LIB_NAME "libgnc-backend-file"
 /** init_fcn for gnc file backend library. */
 #define GNC_LIB_INIT "gnc_provider_init"
 /* gnc-backend-file location */
@@ -97,7 +97,7 @@ gnc_engine_init(int argc, char ** argv)
   cashobjects_register();
 
   g_return_if_fail((qof_load_backend_library 
-		(QOF_LIB_DIR, "libqof-backend-qsf.la", "qsf_provider_init")));
+		(QOF_LIB_DIR, "libqof-backend-qsf", "qsf_provider_init")));
   g_return_if_fail((qof_load_backend_library
 		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)));
 
