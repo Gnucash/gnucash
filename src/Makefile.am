@@ -7,8 +7,7 @@ NONGUI_SUBDIRS = \
   engine \
   backend \
   scm \
-  quotes \
-  bin
+  quotes
 
 GUI_SUBDIRS_1 = \
   network-utils \
@@ -23,7 +22,8 @@ GUI_SUBDIRS_2 = \
   gnome \
   import-export \
   business \
-  optional 
+  optional \
+  bin
 
 DIST_SUBDIRS = $(NONGUI_SUBDIRS) $(GUI_SUBDIRS_1) report $(GUI_SUBDIRS_2)
 

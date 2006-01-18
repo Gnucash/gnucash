@@ -1,3 +1,10 @@
+2006-01-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/Makefile.am:  Fix some srcdir/builddir issues
+	  with #includes and libraries.
+	* src/Makefile.am:  Move 'bin' last so that it's built
+	  after gnome-utils so Chris' change works.
+
 2006-01-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/mt940/gnc-mt940-import.c: Add initial work on
