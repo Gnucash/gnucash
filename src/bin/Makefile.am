@@ -2,11 +2,13 @@
 SUBDIRS = . overrides test
 
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
+-I${top_builddir}/src/gnome-utils \
 -I${top_builddir}/src/gnc-module
 
 bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c
 gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
+${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
 ${top_srcdir}/src/gnc-module/libgncmodule.la
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile

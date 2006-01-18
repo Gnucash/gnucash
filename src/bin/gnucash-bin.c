@@ -23,11 +23,47 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <popt.h>
 #include <libguile.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include "glib.h"
 #include "gnc-module.h"
 #include "i18n.h"
+#include "gnc-version.h"
+#include "config.h"
+
+static int gnucash_show_version;
+static int is_development_version = TRUE;
+
+void 
+gnucash_command_line(int argc, char **argv)
+{
+    poptContext pc;
+    int rc;
+
+    struct poptOption options[] = {
+        //POPT_AUTOHELP
+        {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
+         N_("Display GnuCash version"), NULL},
+        POPT_TABLEEND
+    };
+
+    pc = poptGetContext(NULL, argc, (const char **)argv, options, 0);
+    
+    while ((rc = poptGetNextOpt(pc)) > 0);
+
+    if (gnucash_show_version) {
+        printf("GnuCash %s %s\n", VERSION, 
+               is_development_version ? _("development version") : "");
+#ifdef GNUCASH_SVN
+        printf("built %s from svn r%s\n", GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
+#endif 
+        exit(0);
+    }
+    
+    poptFreeContext(pc);
+}
 
 static void
 inner_main (void *closure, int argc, char **argv)
@@ -58,6 +94,7 @@ int main(int argc, char ** argv)
 
     gtk_init (&argc, &argv);
     gnc_module_system_init();
+    gnucash_command_line(argc, argv);
 
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
