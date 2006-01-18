@@ -21,6 +21,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <popt.h>
@@ -31,12 +33,11 @@
 #include "gnc-module.h"
 #include "i18n.h"
 #include "gnc-version.h"
-#include "config.h"
 
 static int gnucash_show_version;
 static int is_development_version = TRUE;
 
-void 
+static void 
 gnucash_command_line(int argc, char **argv)
 {
     poptContext pc;
