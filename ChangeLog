@@ -1,3 +1,11 @@
+2006-01-18  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sx-from-trans.c (sxftd_update_fs): Propgate
+	bi-weekly ui-frequency in transition from "schedule transaction"
+	dialog to "Advanced..." (Scheduled Transaction Editor).
+	Patch from Robert Zaleski <rzaleski81@yahoo.com>.
+	<http://bugzilla.gnome.org/show_bug.cgi?id=327547>.
+
 2006-01-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/Makefile.am:  Fix some srcdir/builddir issues

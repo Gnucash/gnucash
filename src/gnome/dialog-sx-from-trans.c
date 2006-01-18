@@ -317,7 +317,7 @@ sxftd_update_fs( SXFromTransInfo *sxfti, GDate *date, FreqSpec *fs )
     tmpfs = xaccFreqSpecMalloc( gnc_get_current_book() );
     xaccFreqSpecSetComposite( fs );
     xaccFreqSpecSetWeekly( tmpfs, date, 2 );
-    xaccFreqSpecSetUIType( fs, UIFREQ_WEEKLY );
+    xaccFreqSpecSetUIType( fs, UIFREQ_BI_WEEKLY );
     xaccFreqSpecCompositeAdd( fs, tmpfs );
     break;
 
