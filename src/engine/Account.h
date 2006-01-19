@@ -96,8 +96,7 @@ typedef enum
 		 * three columns: price, number of shares, and
 		 * value. Note: Since version 1.7.0, this account is
 		 * no longer needed to exchange currencies between
-		 * accounts, so this type will probably become
-		 * deprecated sometime in the future.  */
+		 * accounts, so this type is DEPRECATED. */
   INCOME = 8, /**< Income accounts are used to denote income */
   
   EXPENSE = 9,/**< Expense accounts are used to denote expenses. */
@@ -495,6 +494,11 @@ GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
  * of type child_type as children. */
 gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
                                      GNCAccountType child_type);
+
+/* Returns the bitmask of the account type enums that are valid. */
+guint32 xaccAccountTypesValid(void);
+
+
 /** @} */
 
 /* ------------------ */

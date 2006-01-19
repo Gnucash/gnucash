@@ -2,9 +2,9 @@
  * gnc-tree-model-account-types.h -- GtkTreeModel implementation
  *	to display account types in a GtkTreeView.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2005, 2006 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2006 Eskil Bylund <eskil.bylund@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -28,7 +28,8 @@
 /** @addtogroup GuiTreeModel
  * @{ */
 /** @file gnc-tree-model-account-types.h
- *  @brief GtkTreeModel implementation to display account types in a GtkTreeView.
+ *  @brief GtkTreeModel implementation to display account types in a 
+ *     GtkTreeView.
  *  @author Copyright (C) 2003 Jan Arne Petersen
  *  @author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  *
@@ -93,8 +94,22 @@ GType gnc_tree_model_account_types_get_type (void);
 
 /* Get the static GtkTreeModel representing the list of all possible
    account types.  You may not modify this model, but you can use if
-   for multiple views. */
+   for multiple views.  You probably want gnc_tree_model_types_valid(). */
 GtkTreeModel * gnc_tree_model_account_types_master(void);
+
+/* Returns a GtkTreeModelFilter that wraps the model. Deprecated
+   account types will be filtered. Use this instead of
+   gnc_tree_model_account_types_master. Caller is responsible for
+   ref/unref. */
+GtkTreeModel * gnc_tree_model_account_types_valid (void);
+
+/* Returns a GtkTreeModelFilter that wraps the model. Only account
+   types specified by the 'types' bitmask are visible.  To force the
+   visibility of deprecated account types, pass
+   (xaccAccountTypesValid() & (1 << MY_DEPRECATED_ACCOUNT_TYPE)). 
+
+   Caller is responsible for ref/unref. */
+GtkTreeModel * gnc_tree_model_account_types_filter_using_mask (guint32 types);
 
 /* Return the bitmask of the account type enums reflecting the state
    of the tree selection */

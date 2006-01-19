@@ -2322,6 +2322,17 @@ xaccAccountTypesCompatible (GNCAccountType parent_type,
   return compatible;
 }
 
+guint32
+xaccAccountTypesValid(void)
+{
+    guint32 mask = (1 << NUM_ACCOUNT_TYPES) - 1;
+    mask &= ~(1 << CURRENCY);  /* DEPRECATED */
+
+    return mask;
+}
+
+
+
 /********************************************************************\
 \********************************************************************/
 

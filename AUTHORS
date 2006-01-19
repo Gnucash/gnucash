@@ -105,6 +105,7 @@ Simon Britnell <simon.britnell@peace.com> patch to RPM spec
 Christopher B. Browne <cbbrowne@hex.net> for perl, lots of scheme and documentation updates
 Johan Buret <johanburet@free.fr> french translation
 Thomas Bushnell <tb@becket.net> fix for file backups
+Eskil Bylund <eskil.bylund@gmail.com> account type deprecation
 Paul Campbell <kemitix@users.sourceforge.net> reconcile children patch
 Conrad Canterford <conrad@mail.watersprite.com.au> register bug fix
 Bill Carlson <wwc@wwcnet.nu> performance improvements

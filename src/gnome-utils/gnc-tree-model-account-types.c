@@ -2,9 +2,9 @@
  * gnc-tree-model-account-types.c -- GtkTreeModel implementation
  *	to display account types in a GtkTreeView.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Copyright (C) 2005, Chris Shoemaker <c.shoemaker@cox.net>
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2005, 2006 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2006 Eskil Bylund <eskil.bylund@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -47,54 +47,14 @@ gnc_tree_model_account_types_finalize (GObject * object);
 static void
 gnc_tree_model_account_types_tree_model_init (GtkTreeModelIface * iface);
 
-/*
-static guint
-gnc_tree_model_account_types_get_flags (GtkTreeModel * tree_model);
-static int
-gnc_tree_model_account_types_get_n_columns (GtkTreeModel * tree_model);
-static GType
-gnc_tree_model_account_types_get_column_type (GtkTreeModel * tree_model,
-                                              int index);
-static gboolean
-gnc_tree_model_account_types_get_iter (GtkTreeModel * tree_model,
-                                       GtkTreeIter * iter, GtkTreePath * path);
-static GtkTreePath *
-gnc_tree_model_account_types_get_path (GtkTreeModel * tree_model,
-                                       GtkTreeIter * iter);
-static void
-gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
-                                        GtkTreeIter * iter, int column,
-                                        GValue * value);
-static gboolean
-gnc_tree_model_account_types_iter_next (GtkTreeModel * tree_model,
-                                        GtkTreeIter * iter);
-static gboolean
-gnc_tree_model_account_types_iter_children (GtkTreeModel * tree_model,
-                                            GtkTreeIter * iter,
-                                            GtkTreeIter * parent);
-static gboolean
-gnc_tree_model_account_types_iter_has_child (GtkTreeModel * tree_model,
-                                             GtkTreeIter * iter);
-static int
-gnc_tree_model_account_types_iter_n_children (GtkTreeModel * tree_model,
-                                              GtkTreeIter * iter);
-static gboolean
-gnc_tree_model_account_types_iter_nth_child (GtkTreeModel * tree_model,
-                                             GtkTreeIter * iter,
-                                             GtkTreeIter * parent, int n);
-static gboolean
-gnc_tree_model_account_types_iter_parent (GtkTreeModel * tree_model,
-                                          GtkTreeIter * iter,
-                                          GtkTreeIter * child);
-*/
-
 typedef struct GncTreeModelAccountTypesPrivate
 {
     guint32 selected;
 } GncTreeModelAccountTypesPrivate;
 
 #define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypesPrivate))
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, \
+                                 GncTreeModelAccountTypesPrivate))
 
 static GObjectClass *parent_class = NULL;
 
@@ -192,6 +152,39 @@ gnc_tree_model_account_types_master(void)
     return account_types_tree_model;
 }
 
+
+static gboolean
+gnc_tree_model_account_types_is_valid (GtkTreeModel *model, 
+                                       GtkTreeIter *iter, gpointer data)
+{
+    GNCAccountType type;
+    guint32 valid_types = GPOINTER_TO_UINT (data);
+
+    gtk_tree_model_get (model, iter, 
+                        GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE, &type, -1);
+    return (valid_types & (1 << type)) ? TRUE : FALSE;
+}
+
+GtkTreeModel *
+gnc_tree_model_account_types_valid (void)
+{
+    return gnc_tree_model_account_types_filter_using_mask(
+        xaccAccountTypesValid());
+}
+
+GtkTreeModel *
+gnc_tree_model_account_types_filter_using_mask (guint32 types)
+{
+    GtkTreeModel *f_model;
+
+    f_model = gtk_tree_model_filter_new(gnc_tree_model_account_types_master(), 
+                                        NULL);
+    gtk_tree_model_filter_set_visible_func (
+        GTK_TREE_MODEL_FILTER (f_model), gnc_tree_model_account_types_is_valid,
+        GUINT_TO_POINTER (types), NULL);
+
+    return f_model;
+}
 
 guint32
 gnc_tree_model_account_types_get_selected (GncTreeModelAccountTypes * model)
