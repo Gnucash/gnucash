@@ -348,19 +348,6 @@ string and 'directories' must be a list of strings."
             (gnc:find-file file (list (car dirs)))
             (loop prefixes (cdr dirs))))))
 
-(define (gnc:print-unstable-message)
-  (if
-   gnc:*is-development-version?*
-   (display
-    (string-append
-     "\n\n"
-     (_ "This is a development version. It may or may not work.\n")
-     (_ "Report bugs and other problems to gnucash-devel@gnucash.org.\n")
-     (_ "You can also lookup and file bug reports at http://bugzilla.gnome.org\n")
-     (_ "The last stable version was ") "GnuCash 1.8.12" "\n"
-     (_ "The next stable version will be ") "GnuCash 2.0"
-     "\n\n"))))
-
 (define (gnc:startup-pass-1)
   (gnc:debug "starting up (1).")
   (gnc:setup-debugging)
@@ -535,7 +522,6 @@ string and 'directories' must be a list of strings."
 
   ;; Now the fun begins.
   (gnc:startup-pass-1)
-  (gnc:print-unstable-message)
 
   (if (null? gnc:*batch-mode-things-to-do*)
       (begin

@@ -22,9 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration variables
 
-(define gnc:*arg-show-version* #f)
-(define gnc:*arg-show-usage* #f)
-(define gnc:*arg-show-help* #f)
 (define gnc:*arg-no-file* #f)
 (define gnc:*loglevel* #f)
 
@@ -72,27 +69,6 @@
 
 (define (gnc:initialize-config-vars)
   ;; We use a function so we don't do this at file load time.
-  
-  (set! gnc:*arg-show-version*
-        (gnc:make-config-var
-         (N_ "Show version.")
-         (lambda (var value) (if (boolean? value) (list value) #f))
-         eq?
-         #f))
-  
-  (set! gnc:*arg-show-usage*
-        (gnc:make-config-var
-         (N_ "Generate an argument summary.")
-         (lambda (var value) (if (boolean? value) (list value) #f))
-         eq?
-         #f))
-  
-  (set! gnc:*arg-show-help*
-        (gnc:make-config-var
-         (N_ "Generate an argument summary.")
-         (lambda (var value) (if (boolean? value) (list value) #f))
-         eq?
-         #f))
   
   (set! gnc:*arg-no-file*
         (gnc:make-config-var
@@ -190,27 +166,6 @@ the current value of the path.")
 ;; for now since it doesn't depend on running any code.
 (define gnc:*arg-defs*
   (list
-   (list "version"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*arg-show-version* #f val))
-         #f
-         (N_ "Show GnuCash version"))
-
-   (list "usage"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*arg-show-usage* #f val))
-         #f
-         (N_ "Show GnuCash usage information"))
-
-   (list "help"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*arg-show-help* #f val))
-         #f
-         (N_ "Show this help message"))
-
    (list "debug"
          'boolean
          (lambda (val)
@@ -278,24 +233,6 @@ the current value of the path.")
          "DOCPATH"
          (N_ "Set the search path for documentation files"))
    
-   (list "evaluate"
-         'string
-         (lambda (val)
-           (set! gnc:*batch-mode-things-to-do*
-                 (cons val gnc:*batch-mode-things-to-do*)))
-         "COMMAND"
-         (N_ "Evaluate the guile command"))
-
-   ;; Given a string, --load will load the indicated file, if possible.
-   (list "load"
-         'string
-         (lambda (val)
-           (set! gnc:*batch-mode-things-to-do*
-                 (cons (lambda () (load val))
-                       gnc:*batch-mode-things-to-do*)))
-         "FILE"
-         (N_ "Load the given .scm file"))
-
    (list "add-price-quotes"
          'string
          (lambda (val)
@@ -334,13 +271,7 @@ the current value of the path.")
          gnc:load-system-config-if-needed
          #f
          (N_ "Load the system configuration"))
-
-   (list "rpc-server"
-	 'boolean
-	 (lambda (val)
-	   (if val (gnc:run-rpc-server)))
-	 #f
-	 (N_ "Run the RPC Server if GnuCash was configured with --enable-rpc"))))
+))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t
@@ -371,36 +302,6 @@ the current value of the path.")
   (if (pair? args)
       (list (car args) (cdr args))
       (begin (gnc:warn "no argument given where one expected") #f)))
-
-(define (gnc:prefs-show-usage)
-  (display "Usage: gnucash [ option ... ] [ datafile ]")
-  (newline) (newline)
-  (let ((max 0))
-    (map (lambda (arg-def)
-           (let* ((name (car arg-def))
-                  (arg (cadddr arg-def))
-                  (len (+ 4 (string-length name)
-                          (if arg (+ (string-length arg) 1) 0))))
-             (if (> len max)
-                 (set! max len))))
-         gnc:*arg-defs*)
-    (set! max (+ max 4))
-    (map (lambda (arg-def)
-           (let* ((name (car arg-def))
-                  (arg (cadddr arg-def))
-                  (len (+ 4 (string-length name)
-                          (if arg (+ (string-length arg) 1) 0)))
-                  (help (car (cddddr arg-def))))
-             (display "  --")
-             (display name)
-             (if arg
-                 (begin
-                   (display " ")
-                   (display arg)))
-             (display (make-string (- max len) #\ ))
-             (display (_ help))
-             (newline)))
-         gnc:*arg-defs*)))
 
 ;;(define (gnc:handle-command-line-args)
 ;;  (letrec ((internal

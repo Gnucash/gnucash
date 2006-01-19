@@ -34,9 +34,24 @@
 #include "gnc-module.h"
 #include "i18n.h"
 #include "gnc-version.h"
+#include "gnc-file.h"
 
 static int gnucash_show_version;
 static int is_development_version = TRUE;
+
+static void
+gnc_print_unstable_message(void)
+{
+    if (!is_development_version) return;
+
+    printf("\n\n%s%s%s%s%s\n%s%s\n\n",
+           _("This is a development version. It may or may not work.\n"),
+           _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
+           _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
+           _("The last stable version was "), "GnuCash 1.8.12",
+           _("The next stable version will be "), "GnuCash 2.0");
+}
+
 
 /* Note: Command-line argument parsing for Gtk+ applications has
  * evolved.  Gtk+-2.4 and before use the "popt" method.  We use that
@@ -80,10 +95,6 @@ gnucash_command_line(int argc, char **argv)
          _("Set shared data file search path"), _("SHAREPATH")},
         {"doc-path", '\0', POPT_ARG_STRING, NULL, 0,
          _("Set the search path for documentation files"), _("DOCPATH")},
-        {"evaluate", '\0', POPT_ARG_STRING, NULL, 0,
-         _("Evaluate the guile command"), _("COMMAND")},
-        {"load", '\0', POPT_ARG_STRING, NULL, 0,
-         _("Load the given .scm file"), _("FILE")},
         {"add-price-quotes", '\0', POPT_ARG_STRING, NULL, 0,
          _("Add price quotes to given FILE"), _("FILE")},
         {"namespace", '\0', POPT_ARG_STRING, NULL, 0, 
@@ -93,9 +104,6 @@ gnucash_command_line(int argc, char **argv)
          _("Load the user configuration"), NULL},
         {"load-system-config", '\0', POPT_ARG_NONE, NULL, 0,
          _("Load the system configuration"), NULL},
-        {"rpc-server", '\0', POPT_ARG_NONE, NULL, 0,
-         _("Run the RPC Server if GnuCash was configured with --enable-rpc"), 
-         NULL},
         POPT_TABLEEND
     };
     
@@ -166,6 +174,7 @@ int main(int argc, char ** argv)
     gtk_init (&argc, &argv);
     gnc_module_system_init();
     gnucash_command_line(argc, argv);
+    gnc_print_unstable_message();
 
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
