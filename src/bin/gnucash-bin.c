@@ -161,7 +161,6 @@ inner_main (void *closure, int argc, char **argv)
 
     /* module initializations go here */
     gnc_module_load("gnucash/app-utils", 0);
-    gnc_module_load("gnucash/gw-engine", 0);
     gnc_module_load("gnucash/engine", 0);
     gnc_module_load("gnucash/register/ledger-core", 0);
     gnc_module_load("gnucash/register/register-core", 0);
