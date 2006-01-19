@@ -1,3 +1,9 @@
+2006-01-18  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-query-list.c: The GtkObject destroy function
+	can be called multiple times. Protect from unregistering the
+	component multiple times.
+
 2006-01-18  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/gnc-account-merge.[ch]: C-style comment

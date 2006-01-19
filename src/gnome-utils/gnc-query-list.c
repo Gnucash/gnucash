@@ -457,8 +457,10 @@ gnc_query_list_destroy (GtkObject *object)
   GNCQueryListPriv *priv;
 
   priv = GNC_QUERY_LIST_GET_PRIVATE(list);
-  if (priv->component_id >= 0)
+  if (priv->component_id > 0) {
     gnc_unregister_gui_component (priv->component_id);
+    priv->component_id = 0;
+  }
   if (list->query)
   {
     xaccFreeQuery(list->query);
