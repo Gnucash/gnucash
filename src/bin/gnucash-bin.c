@@ -34,6 +34,7 @@
 #include "gnc-module.h"
 #include "i18n.h"
 #include "gnc-version.h"
+#include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
 #include "top-level.h"

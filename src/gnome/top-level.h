@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <libguile.h>
-#include "Account.h"  /* for GNCAccountType */
 
 gboolean      gnucash_ui_is_running (void);
 gboolean      gnucash_ui_is_terminating (void);
@@ -34,7 +33,5 @@ SCM           gnc_gui_init (SCM command_line);
 void          gnc_gui_shutdown (void);
 void          gnc_gui_destroy (void);
 int           gnc_ui_start_event_loop (void);
-gboolean      gnc_reverse_balance_type (GNCAccountType type);
-gboolean      gnc_reverse_balance (Account *account);
 
 #endif
