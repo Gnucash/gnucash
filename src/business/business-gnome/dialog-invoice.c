@@ -419,6 +419,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
 
   gnc_entry_ledger_destroy (iw->ledger);
   gnc_unregister_gui_component (iw->component_id);
+  gtk_widget_destroy(widget);
   gnc_resume_gui_refresh ();
 
   g_free (iw);
@@ -1907,9 +1908,6 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  g_signal_connect (G_OBJECT (dialog), "destroy",
-		    G_CALLBACK (gnc_invoice_window_destroy_cb), iw);
 
   /* Create the register */
   {

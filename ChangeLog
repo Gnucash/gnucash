@@ -1,5 +1,10 @@
 2006-01-19  David Hampton  <hampton@employees.org>
 
+	* src/business/business-gnome/dialog-invoice.c: Delete the invoice
+	page completely when closing it.  Prevents a crash when trying to
+	open a different data file is there is an invoice page in the
+	window.
+
 	* src/gnome-search/gnc-general-search.c: Finish the job. Make sure
 	this component isn't unregistered multiple times.
 
