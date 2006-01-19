@@ -422,8 +422,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 		     "show-column-menu", TRUE,
 		     NULL);
 
-        gnc_tree_view_account_set_name_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
-                                              gnc_tree_view_account_name_edited_cb);
+        /* No name handler; then the user can't click on the name of the
+           account to open its register. */
         gnc_tree_view_account_set_code_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),
                                               gnc_tree_view_account_code_edited_cb);
         gnc_tree_view_account_set_description_edited(GNC_TREE_VIEW_ACCOUNT(tree_view),

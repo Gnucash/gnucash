@@ -1,3 +1,9 @@
+2006-01-18  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-plugin-page-account-tree.c
+	(gnc_plugin_page_account_tree_create_widget): Remove name-editing
+	callback setup.
+
 2006-01-18  David Hampton  <hampton@employees.org>
 
 	* All xxx.schemas files renamed to xxx.schemas.in.
