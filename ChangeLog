@@ -1,5 +1,8 @@
 2006-01-18  David Hampton  <hampton@employees.org>
 
+	* src/gnome-search/gnc-general-search.c: Unregister this component
+	properly when destroying it.
+
 	* src/gnome-utils/gnc-query-list.c: The GtkObject destroy function
 	can be called multiple times. Protect from unregistering the
 	component multiple times.

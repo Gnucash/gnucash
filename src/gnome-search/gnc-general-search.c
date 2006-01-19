@@ -157,7 +157,8 @@ gnc_general_search_destroy (GtkObject *object)
 		gnc_search_dialog_set_select_cb (priv->sw, NULL, NULL, FALSE);
 		gnc_search_dialog_disconnect (priv->sw, gsl);
 		priv->sw = NULL;
-
+	}
+	if (priv->component_id) {
 		/* Unregister ourselves */
 		gnc_unregister_gui_component (priv->component_id);
 	}
