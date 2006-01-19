@@ -70,7 +70,7 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Accumulate Create a new window for each new invoice.</short>
+        <short>Accumulate multiple splits into one.</short>
         <long>
 	  If this field is TRUE then multiple entries in an invoice
 	  that transfer to the same account will be accumulated into a
