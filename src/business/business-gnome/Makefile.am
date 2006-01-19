@@ -27,7 +27,8 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/ledger-core
+  -I${top_srcdir}/src/register/ledger-core \
+  -I${top_srcdir}/lib/glib26
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
@@ -75,6 +76,7 @@ libgncmod_business_gnome_la_LIBADD = \
   ${G_WRAP_LINK_ARGS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${EFENCE_LIBS}
 
 

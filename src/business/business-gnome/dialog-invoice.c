@@ -51,6 +51,10 @@
 
 #include "gncEntryLedger.h"
 
+#ifndef HAVE_GLIB26
+#include "gkeyfile.h"
+#endif
+
 #include "gnc-plugin-page.h"
 #include "gnc-general-search.h"
 #include "dialog-date-close.h"
