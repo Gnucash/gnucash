@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <popt.h>
 #include <libguile.h>
 #include <gtk/gtk.h>
@@ -37,20 +38,72 @@
 static int gnucash_show_version;
 static int is_development_version = TRUE;
 
+/* Note: Command-line argument parsing for Gtk+ applications has
+ * evolved.  Gtk+-2.4 and before use the "popt" method.  We use that
+ * here for compatibility.  Gnome-2.4 has a way of wrapping the "popt"
+ * method (using GNOME_PARAM_POPT_CONTEXT).  Its advantages are that
+ * it adds help messages for sound and the crash-dialog.  Its
+ * disadvantages are that it prints a rather messy usage message
+ * with lots of '?v's and it doesn't allow us to describe the
+ * [DATAFILE] argument in the usage.  Weighing those factors, we're
+ * just going to use popt directly.
+ * 
+ * Glib-2.6 introduced GOptionContext and GOptionGroup, which are
+ * meant to replace popt usage.  In Gnome-2.14, the popt usage is
+ * offically deprecated, and the GNOME_PARAM_GOPTION_CONTEXT can be
+ * used.
+ */
+
 static void 
 gnucash_command_line(int argc, char **argv)
 {
     poptContext pc;
+    char *p;
     int rc;
 
     struct poptOption options[] = {
-        //POPT_AUTOHELP
+        POPT_AUTOHELP
         {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
-         N_("Display GnuCash version"), NULL},
+         _("Show GnuCash version"), NULL},
+        {"debug", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Enable debugging mode"), NULL},
+        {"devel", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Enable developers mode"), NULL},
+        {"loglevel", '\0', POPT_ARG_INT, NULL, 0,
+         _("Set the logging level from 0 (least) to 6 (most)"), 
+         _("LOGLEVEL")},
+        {"nofile", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Do not load the last file opened"), NULL},
+        {"config-path", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Set configuration path"), _("CONFIGPATH")},
+        {"share-path", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Set shared data file search path"), _("SHAREPATH")},
+        {"doc-path", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Set the search path for documentation files"), _("DOCPATH")},
+        {"evaluate", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Evaluate the guile command"), _("COMMAND")},
+        {"load", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Load the given .scm file"), _("FILE")},
+        {"add-price-quotes", '\0', POPT_ARG_STRING, NULL, 0,
+         _("Add price quotes to given FILE"), _("FILE")},
+        {"namespace", '\0', POPT_ARG_STRING, NULL, 0, 
+         _("Regular expression determining which namespace commodities will be retrieved"), 
+         _("REGEXP")},
+        {"load-user-config", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Load the user configuration"), NULL},
+        {"load-system-config", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Load the system configuration"), NULL},
+        {"rpc-server", '\0', POPT_ARG_NONE, NULL, 0,
+         _("Run the RPC Server if GnuCash was configured with --enable-rpc"), 
+         NULL},
         POPT_TABLEEND
     };
+    
+    /* Pretend that argv[0] is "gnucash" */
+    if ((p = strstr(argv[0], "-bin"))) *p = '\0';
 
     pc = poptGetContext(NULL, argc, (const char **)argv, options, 0);
+    poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
     
     while ((rc = poptGetNextOpt(pc)) > 0);
 
