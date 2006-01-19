@@ -161,6 +161,7 @@ gnc_general_search_destroy (GtkObject *object)
 	if (priv->component_id) {
 		/* Unregister ourselves */
 		gnc_unregister_gui_component (priv->component_id);
+		priv->component_id = 0;
 	}
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)

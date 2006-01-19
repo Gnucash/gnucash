@@ -1,3 +1,8 @@
+2006-01-19  David Hampton  <hampton@employees.org>
+
+	* src/gnome-search/gnc-general-search.c: Finish the job. Make sure
+	this component isn't unregistered multiple times.
+
 2006-01-18  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/gnucash-bin.c:
