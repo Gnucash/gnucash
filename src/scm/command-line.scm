@@ -33,6 +33,21 @@
 (define gnc:*doc-path* #f)
 (define gnc:*namespace-regexp* #f)
 
+(define (gnc:expand-path new-list current-list default-generator)
+  (define (expand-path-item item)
+    (cond ((string? item) (list item))
+          ((symbol? item)
+           (case item
+             ((default) (default-generator))
+             ((current) current-list)
+             (else
+              (gnc:warn "bad symbol " item " in gnc path. Ignoring.")
+              '())))
+          (else 
+           (gnc:warn "bad item " item " in gnc path. Ignoring.")
+           '())))
+  (apply append (map expand-path-item new-list)))
+
 ;; If command line args are present, then those dominate, and take
 ;; effect in order, left-to-right.  Otherwise, any envt var setting
 ;; dominates, otherwise, we use the default.  To effect this, we first
@@ -356,12 +371,6 @@ the current value of the path.")
   (if (pair? args)
       (list (car args) (cdr args))
       (begin (gnc:warn "no argument given where one expected") #f)))
-
-(define (gnc:prefs-show-version)
-  (display "GnuCash ")
-  (display gnc:version)
-  (if gnc:*is-development-version?* (display " development version"))
-  (newline))
 
 (define (gnc:prefs-show-usage)
   (display "Usage: gnucash [ option ... ] [ datafile ]")

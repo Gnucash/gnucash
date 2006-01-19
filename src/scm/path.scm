@@ -15,21 +15,6 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-(define (gnc:expand-path new-list current-list default-generator)
-  (define (expand-path-item item)
-    (cond ((string? item) (list item))
-          ((symbol? item)
-           (case item
-             ((default) (default-generator))
-             ((current) current-list)
-             (else
-              (gnc:warn "bad symbol " item " in gnc path. Ignoring.")
-              '())))
-          (else 
-           (gnc:warn "bad item " item " in gnc path. Ignoring.")
-           '())))
-  (apply append (map expand-path-item new-list)))
-
 (define (gnc:make-dir dir)
   (if (access? dir X_OK)
       #t

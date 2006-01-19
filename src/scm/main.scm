@@ -365,31 +365,14 @@ string and 'directories' must be a list of strings."
   (gnc:debug "starting up (1).")
   (gnc:setup-debugging)
 
-  ;; SUPER UGLY HACK -- this should go away when I come back for the
-  ;; second cleanup pass...
-  (let ((original-module (current-module))
-        (bootstrap (resolve-module '(gnucash main))))
-    
-    ;; Now we can load a bunch of files.
-    (load-from-path "path.scm")
-    (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
-    )
+  ;; Now we can load a bunch of files.
+  (load-from-path "path.scm")
+  (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
 
   (gnc:initialize-config-vars) ;; in command-line.scm
   ;; handle unrecognized command line args
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
-  ;; handle --version
-  (if (gnc:config-var-value-get gnc:*arg-show-version*)
-      (begin
-        (gnc:prefs-show-version)
-        (gnc:shutdown 0)))
-  ;; handle --help
-  (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
-          (gnc:config-var-value-get gnc:*arg-show-help*))
-      (begin
-        (gnc:prefs-show-usage)
-        (gnc:shutdown 0))))
 
 (define (gnc:startup-pass-2)
   (gnc:debug "starting up (2).")
@@ -447,11 +430,11 @@ string and 'directories' must be a list of strings."
 
   ;; Load the system configs
   (gnc:update-splash-screen (_ "Loading configs..."))
-  (if (not (gnc:load-system-config-if-needed))
+  (if (not (gnc:load-system-config-if-needed)) ;; from path.scm
       (gnc:shutdown 1))
 
   ;; Load the user configs
-  (gnc:load-user-config-if-needed)
+  (gnc:load-user-config-if-needed) ;; from path.scm
 
   (gnc:report-menu-setup)
 
