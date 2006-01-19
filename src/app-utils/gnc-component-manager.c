@@ -556,7 +556,7 @@ gnc_unregister_gui_component (gint component_id)
   ci = find_component (component_id);
   if (!ci)
   {
-    PERR ("component not found");
+    PERR ("component %d not found", component_id);
     return;
   }
 
