@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <libguile.h>
+#include "Account.h"  /* for GNCAccountType */
 
 gboolean      gnucash_ui_is_running (void);
 gboolean      gnucash_ui_is_terminating (void);
