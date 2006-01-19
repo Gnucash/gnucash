@@ -1247,7 +1247,7 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
 
   /* Show the new entry in all windows. */
   index = g_list_index(active_windows, window);
-  if (index > n_radio_entries) {
+  if (index >= n_radio_entries) {
     LEAVE("window %d, only %d actions", index, n_radio_entries);
     return;
   }
