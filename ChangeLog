@@ -1,5 +1,10 @@
 2006-01-18  David Hampton  <hampton@employees.org>
 
+	* src/business/business-core/gncOwner.[ch]:
+	* src/business/business-gnome/dialog-invoice.[ch]:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	Save/restore business invoice pages.
+
 	* src/app-utils/gnc-component-manager.c: Tweak a debugging
 	statement.
 

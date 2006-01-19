@@ -49,6 +49,8 @@ static void gnc_plugin_page_invoice_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
+static GncPluginPage *gnc_plugin_page_invoice_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 
 
@@ -290,6 +292,8 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
 	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_INVOICE_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_invoice_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_invoice_destroy_widget;
+	gnc_plugin_class->save_page       = gnc_plugin_page_invoice_save_page;
+	gnc_plugin_class->recreate_page   = gnc_plugin_page_invoice_recreate_page;
 	gnc_plugin_class->window_changed  = gnc_plugin_page_invoice_window_changed;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageInvoicePrivate));
@@ -428,6 +432,67 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 	gnc_invoice_window_destroy_cb(priv->widget, priv->iw);
 	priv->widget = NULL;
 }
+
+/** Save enough information about this invoice page that it can be
+ *  recreated next time the user starts gnucash.
+ *
+ *  @param page The page to save.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be written.
+ *
+ *  @param group_name The group name to use when saving data. */
+static void
+gnc_plugin_page_invoice_save_page (GncPluginPage *plugin_page,
+				   GKeyFile *key_file,
+				   const gchar *group_name)
+{
+	GncPluginPageInvoice *invoice;
+	GncPluginPageInvoicePrivate *priv;
+	
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
+	g_return_if_fail (key_file != NULL);
+	g_return_if_fail (group_name != NULL);
+
+	ENTER("page %p, key_file %p, group_name %s", plugin_page, key_file,
+	      group_name);
+
+	invoice = GNC_PLUGIN_PAGE_INVOICE(plugin_page);
+	priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice);
+
+        gnc_invoice_save_page(priv->iw, key_file, group_name);
+	LEAVE(" ");
+}
+
+
+
+/** Create a new invoice page based on the information saved during a
+ *  previous instantiation of gnucash.
+ *
+ *  @param window The window where this page should be installed.
+ *
+ *  @param key_file A pointer to the GKeyFile data structure where the
+ *  page information should be read.
+ *
+ *  @param group_name The group name to use when restoring data. */
+static GncPluginPage *
+gnc_plugin_page_invoice_recreate_page (GtkWidget *window,
+				       GKeyFile *key_file,
+				       const gchar *group_name)
+{
+	GncPluginPage *page;
+	
+	g_return_val_if_fail(key_file, NULL);
+	g_return_val_if_fail(group_name, NULL);
+	ENTER("key_file %p, group_name %s", key_file, group_name);
+
+	/* Create the new page. */
+        page = gnc_invoice_recreate_page(key_file, group_name);
+
+	LEAVE(" ");
+	return page;
+}
+
 
 static void
 gnc_plugin_page_invoice_window_changed (GncPluginPage *plugin_page,

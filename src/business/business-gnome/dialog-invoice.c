@@ -51,6 +51,7 @@
 
 #include "gncEntryLedger.h"
 
+#include "gnc-plugin-page.h"
 #include "gnc-general-search.h"
 #include "dialog-date-close.h"
 #include "dialog-invoice.h"
@@ -65,7 +66,6 @@
 #include "dialog-query-list.h"
 
 #include "gnc-plugin-business.h"
-#include "gnc-plugin-page.h"
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-main-window.h"
 
@@ -79,13 +79,18 @@ void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data);
 
-typedef enum
-{
-  NEW_INVOICE,
-  MOD_INVOICE,
-  EDIT_INVOICE,
-  VIEW_INVOICE
-} InvoiceDialogType;
+#define ENUM_INVOICE_TYPE(_) \
+  _(NEW_INVOICE, )  \
+  _(MOD_INVOICE, )  \
+  _(EDIT_INVOICE, ) \
+  _(VIEW_INVOICE, )
+
+DEFINE_ENUM(InvoiceDialogType, ENUM_INVOICE_TYPE)
+AS_STRING_DEC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+FROM_STRING_DEC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+
+FROM_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
+AS_STRING_FUNC(InvoiceDialogType, ENUM_INVOICE_TYPE)
 
 struct _invoice_select_window {
   GNCBook *	book;
@@ -1653,6 +1658,114 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   gnc_main_window_open_page (gnc_plugin_business_get_window(), new_page);
 
   return iw;
+}
+
+#define KEY_INVOICE_TYPE	"Invoice Type"
+#define KEY_INVOICE_GUID	"Invoice GUID"
+#define KEY_OWNER_TYPE		"Owner Type"
+#define KEY_OWNER_GUID		"Owner GUID"
+
+GncPluginPage *
+gnc_invoice_recreate_page (GKeyFile *key_file,
+			   const gchar *group_name)
+{
+  InvoiceWindow *iw;
+  GError *error = NULL;
+  char *tmp_string = NULL, *owner_type = NULL;
+  InvoiceDialogType type;
+  GncInvoice *invoice;
+  GUID guid;
+  QofBook *book;
+  GncOwner owner = { 0 };
+
+  /* Get Invoice Type */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_INVOICE_TYPE, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_INVOICE_TYPE, error->message);
+    goto give_up;
+  }
+  type = InvoiceDialogTypefromString(tmp_string);
+  g_free(tmp_string);
+
+  /* Get Invoice GUID */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_INVOICE_GUID, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_INVOICE_GUID, error->message);
+    goto give_up;
+  }
+  if (!string_to_guid(tmp_string, &guid)) {
+    g_warning("Invalid invoice guid: %s.", tmp_string);
+    goto give_up;
+  }
+  book = gnc_get_current_book();
+  invoice = gncInvoiceLookup(gnc_get_current_book(), &guid);
+  if (invoice == NULL) {
+    g_warning("Can't find invoice %s in current book.", tmp_string);
+    goto give_up;
+  }
+  g_free(tmp_string);
+
+  /* Get Owner Type */
+  owner_type = g_key_file_get_string(key_file, group_name,
+				     KEY_OWNER_TYPE, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_OWNER_TYPE, error->message);
+    goto give_up;
+  }
+
+  /* Get Owner GUID */
+  tmp_string = g_key_file_get_string(key_file, group_name,
+				     KEY_OWNER_GUID, &error);
+  if (error) {
+    g_warning("Error reading group %s key %s: %s.",
+	      group_name, KEY_OWNER_GUID, error->message);
+    goto give_up;
+  }
+  if (!string_to_guid(tmp_string, &guid)) {
+    g_warning("Invalid owner guid: %s.", tmp_string);
+    goto give_up;
+  }
+
+  if (!gncOwnerGetOwnerFromTypeGuid(book, &owner, owner_type, &guid)) {
+    g_warning("Can't find owner %s in current book.", tmp_string);
+    goto give_up;
+  }
+  g_free(tmp_string);
+  g_free(owner_type);
+
+  iw = gnc_invoice_new_page (book, type, invoice, &owner);
+  return iw->page;
+
+ give_up:
+  g_warning("Giving up on restoring '%s'.", group_name);
+  if (error)
+    g_error_free(error);
+  if (tmp_string)
+    g_free(tmp_string);
+  if (owner_type)
+    g_free(owner_type);
+  return NULL;
+}
+
+void
+gnc_invoice_save_page (InvoiceWindow *iw,
+		       GKeyFile *key_file,
+		       const gchar *group_name)
+{
+  g_key_file_set_string(key_file, group_name, KEY_INVOICE_TYPE,
+			InvoiceDialogTypeasString(iw->dialog_type));
+  g_key_file_set_string(key_file, group_name, KEY_INVOICE_GUID,
+			guid_to_string(&iw->invoice_guid));
+
+  g_key_file_set_string(key_file, group_name, KEY_OWNER_TYPE,
+			qofOwnerGetType(&iw->owner));
+  g_key_file_set_string(key_file, group_name, KEY_OWNER_GUID,
+			guid_to_string(gncOwnerGetGUID(&iw->owner)));
 }
 
 GtkWidget *

@@ -77,6 +77,11 @@ gchar *gnc_invoice_get_help (InvoiceWindow *iw);
 
 gchar *gnc_invoice_get_title (InvoiceWindow *iw);
 
+#ifdef __GNC_PLUGIN_PAGE_H
+GncPluginPage *gnc_invoice_recreate_page (GKeyFile *key_file, const gchar *group_name);
+void gnc_invoice_save_page (InvoiceWindow *iw, GKeyFile *key_file, const gchar *group_name);
+#endif
+
 GtkWidget * gnc_invoice_create_page (InvoiceWindow *iw, gpointer page);
 
 DialogQueryList *gnc_invoice_show_bills_due (QofBook *book, double days_in_advance);
