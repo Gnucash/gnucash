@@ -372,7 +372,7 @@ string and 'directories' must be a list of strings."
   (gnc:initialize-config-vars) ;; in command-line.scm
   ;; handle unrecognized command line args
   (if (not (gnc:handle-command-line-args))
-      (gnc:shutdown 1))
+      (gnc:shutdown 1)))
 
 (define (gnc:startup-pass-2)
   (gnc:debug "starting up (2).")
