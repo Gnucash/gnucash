@@ -1,4 +1,4 @@
-// Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
+/* Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org> */
 
 #include "gnc-account-merge.h"
 #include "Account.h"
@@ -33,22 +33,22 @@ determine_merge_disposition(AccountGroup *existing_root, Account *new_acct)
 }
 
 static void
-_account_merge_error_detection(AccountGroup *existing, AccountGroup *new, GList **error_accum)
+_account_merge_error_detection(AccountGroup *existing_grp, AccountGroup *new_grp, GList **error_accum)
 {
   AccountList *accts;
-  for (accts = xaccGroupGetAccountList(new); accts; accts = accts->next)
+  for (accts = xaccGroupGetAccountList(new_grp); accts; accts = accts->next)
   {
     Account *new_acct, *existing_acct;
     GncAccountMergeDisposition disp;
     
     new_acct = (Account*)accts->data;
-    existing_acct = xaccGetAccountFromName(existing, xaccAccountGetName(new_acct));
+    existing_acct = xaccGetAccountFromName(existing_grp, xaccAccountGetName(new_acct));
     disp = determine_account_merge_disposition(existing_acct, new_acct);
     if (disp == GNC_ACCOUNT_MERGE_DISPOSITION_ERROR)
     {
       GncAccountMergeError *err = g_new0(GncAccountMergeError, 1);
-      err->existing = existing_acct;
-      err->new = new_acct;
+      err->existing_acct = existing_acct;
+      err->new_acct = new_acct;
       err->disposition = disp;
       *error_accum = g_list_append(*error_accum, err);
     }
@@ -59,10 +59,10 @@ _account_merge_error_detection(AccountGroup *existing, AccountGroup *new, GList 
 }
 
 GList*
-account_merge_error_detection(AccountGroup *existing, AccountGroup *new)
+account_merge_error_detection(AccountGroup *existing_grp, AccountGroup *new_grp)
 {
   GList *errors = NULL;
-  _account_merge_error_detection(existing, new, &errors);
+  _account_merge_error_detection(existing_grp, new_grp, &errors);
   return errors;
 }
 
@@ -74,9 +74,9 @@ account_group_merge(AccountGroup *existing_grp, AccountGroup *new_grp)
   g_return_if_fail(new_grp != NULL);
   g_return_if_fail(existing_grp != NULL);
 
-  // since we're have a chance of mutating the list (via
-  // xaccGroupInsertAccount) while we're iterating over it, iterate over a
-  // copy.
+  /* since we're have a chance of mutating the list (via
+   * xaccGroupInsertAccount) while we're iterating over it, iterate over a
+   * copy. */
   accounts_copy = g_list_copy(xaccGroupGetAccountList(new_grp));
   for (accounts = accounts_copy; accounts; accounts = accounts->next)
   {
@@ -92,12 +92,12 @@ account_group_merge(AccountGroup *existing_grp, AccountGroup *new_grp)
       g_assert_not_reached();
       return;
     case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
-      // recurse
+      /* recurse */
       account_group_merge(xaccAccountGetChildren(existing_named),
                           xaccAccountGetChildren(new_acct));
       break;
     case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
-      // merge this one in.
+      /* merge this one in. */
       xaccGroupInsertAccount(existing_grp, new_acct);
       break;
     }

@@ -1,5 +1,10 @@
 2006-01-18  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/app-utils/gnc-account-merge.[ch]: C-style comment
+	conventions; rename identifiers that are C++ keywords.
+
+2006-01-18  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/gnc-plugin-page-account-tree.c
 	(gnc_plugin_page_account_tree_create_widget): Remove name-editing
 	callback setup.

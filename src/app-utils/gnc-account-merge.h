@@ -1,4 +1,4 @@
-// Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org>
+/* Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org> */
 
 #ifndef GNC_ACCOUNT_MERGE_H
 #define GNC_ACCOUNT_MERGE_H
@@ -13,17 +13,17 @@ typedef enum {
 } GncAccountMergeDisposition;
 
 typedef struct _merge_error {
-  Account *existing;
-  Account *new;
+  Account *existing_acct;
+  Account *new_acct;
   GncAccountMergeDisposition disposition;
 } GncAccountMergeError;
 
 GncAccountMergeDisposition determine_account_merge_disposition(Account *existing_acct, Account *new_acct);
 GncAccountMergeDisposition determine_merge_disposition(AccountGroup *existing_root, Account *new_acct);
 
-/** @return GList<GncAccountMergerError> **/
-GList* account_merge_error_detection(AccountGroup *existing, AccountGroup *new);
+/** @return GList<GncAccountMergeError> **/
+GList* account_merge_error_detection(AccountGroup *existing_grp, AccountGroup *new_grp);
 
 void account_group_merge(AccountGroup *existing_grp, AccountGroup *new_grp);
 
-#endif // GNC_ACCOUNT_MERGE_H
+#endif /* GNC_ACCOUNT_MERGE_H */
