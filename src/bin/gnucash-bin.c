@@ -127,9 +127,26 @@ inner_main (void *closure, int argc, char **argv)
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
-    /* module initializations would go here */
+    /* module initializations go here */
     gnc_module_load("gnucash/app-utils", 0);
     gnc_module_load("gnucash/gw-engine", 0);
+    gnc_module_load("gnucash/engine", 0);
+    gnc_module_load("gnucash/register/ledger-core", 0);
+    gnc_module_load("gnucash/register/register-core", 0);
+    gnc_module_load("gnucash/register/register-gnome", 0);
+    gnc_module_load("gnucash/import-export/binary-import", 0);
+    gnc_module_load("gnucash/import-export/qif-import", 0);
+    gnc_module_load_optional("gnucash/import-export/ofx", 0);
+    gnc_module_load_optional("gnucash/import-export/mt940", 0);
+    gnc_module_load_optional("gnucash/import-export/log-replay", 0);
+    gnc_module_load_optional("gnucash/import-export/hbci", 0);
+    gnc_module_load("gnucash/report/report-system", 0);
+    gnc_module_load("gnucash/report/stylesheets", 0);
+    gnc_module_load("gnucash/report/standard-reports", 0);
+    gnc_module_load("gnucash/report/utility-reports", 0);
+    gnc_module_load("gnucash/report/locale-specific/us", 0);
+    gnc_module_load("gnucash/report/report-gnome", 0);
+    gnc_module_load_optional("gnucash/business-gnome", 0);
 
     scm_c_eval_string("(gnc:main)");
     return;
