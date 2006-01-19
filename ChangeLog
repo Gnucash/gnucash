@@ -1,3 +1,12 @@
+2006-01-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/gnucash-bin.c:
+	* src/gnome-utils/gnc-splash.c:
+	  Always print the SVN version and build date.
+	  Make "development version" based on GNUCASH_SVN
+	* src/gnome-utils/Makefile.am:
+	  Define GNUCASH_SVN whenever the source is not a dist tarball.
+
 2006-01-18  David Hampton  <hampton@employees.org>
 
 	* src/business/business-core/gncOwner.[ch]:

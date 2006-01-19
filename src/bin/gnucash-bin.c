@@ -37,7 +37,12 @@
 #include "gnc-file.h"
 
 static int gnucash_show_version;
+/* GNUCASH_SVN is defined whenever we're building from an SVN tree */
+#ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
+#else
+static int is_development_version = FALSE;
+#endif
 
 static void
 gnc_print_unstable_message(void)
@@ -118,9 +123,7 @@ gnucash_command_line(int argc, char **argv)
     if (gnucash_show_version) {
         printf("GnuCash %s %s\n", VERSION, 
                is_development_version ? _("development version") : "");
-#ifdef GNUCASH_SVN
-        printf("built %s from svn r%s\n", GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
-#endif 
+        printf(_("built %s from r%s\n"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
         exit(0);
     }
     
