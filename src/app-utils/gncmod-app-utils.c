@@ -14,6 +14,8 @@
 #include "gnc-module-api.h"
 
 #include "gnc-component-manager.h"
+#include "gnc-hooks.h"
+#include "gnc-exp-parser.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_app_utils_LTX_gnc_module_system_interface = 0;
@@ -48,6 +50,13 @@ lmod(char * mn)
   g_free(form);
 }
 
+static void
+app_utils_shutdown(void)
+{
+    gnc_exp_parser_shutdown();
+    gnc_hook_run(HOOK_SAVE_OPTIONS, NULL);
+}
+
 int
 libgncmod_app_utils_LTX_gnc_module_init(int refcount)
 {
@@ -65,6 +74,9 @@ libgncmod_app_utils_LTX_gnc_module_init(int refcount)
   /* load the scheme code */
   lmod("(g-wrapped gw-app-utils)");
   lmod("(gnucash app-utils)");
+
+  gnc_hook_add_dangler(HOOK_STARTUP, (GFunc)gnc_exp_parser_init, NULL);
+  gnc_hook_add_dangler(HOOK_SHUTDOWN, (GFunc)app_utils_shutdown, NULL);
 
   if (refcount == 0)
     gnc_component_manager_init ();

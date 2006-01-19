@@ -266,21 +266,3 @@
 (load-from-path "date-utilities.scm")
 (load-from-path "simple-obj.scm")
 
-
-
-(gnc:hook-add-dangler gnc:*startup-hook*
-                      (lambda ()
-                        (begin
-                          ;; Initialize the expression parser.
-                          ;; Must come after the C side options initialization.
-                          (gnc:exp-parser-init))))
-
-;; add a hook to shut down the expression parser
-(gnc:hook-add-dangler gnc:*shutdown-hook*
-                      (lambda ()
-                        (begin
-                          ;; Shutdown the expression parser
-                          (gnc:exp-parser-shutdown)
-
-                          ;; This saves options. E.G. Stylesheets.
-			  (gnc:hook-run-danglers gnc:*save-options-hook*))))
