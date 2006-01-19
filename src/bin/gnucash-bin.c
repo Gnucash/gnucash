@@ -35,6 +35,8 @@
 #include "i18n.h"
 #include "gnc-version.h"
 #include "gnc-file.h"
+#include "gnc-hooks.h"
+#include "top-level.h"
 
 static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -131,6 +133,25 @@ gnucash_command_line(int argc, char **argv)
 }
 
 static void
+shutdown(int status) 
+{
+    if (gnucash_ui_is_running()) {
+        if (!gnucash_ui_is_terminating()) {
+            if (gnc_file_query_save()) {
+                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
+                gnc_gui_shutdown();
+            }
+        }
+    } else {
+        gnc_gui_destroy();
+        gnc_hook_run(HOOK_SHUTDOWN, NULL);
+        gnc_engine_shutdown();
+        exit(status);
+    }   
+}
+
+
+static void
 inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
@@ -160,6 +181,7 @@ inner_main (void *closure, int argc, char **argv)
     gnc_module_load_optional("gnucash/business-gnome", 0);
 
     scm_c_eval_string("(gnc:main)");
+    shutdown(0);
     return;
 }
 

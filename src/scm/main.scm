@@ -563,4 +563,5 @@ string and 'directories' must be a list of strings."
       ;; command line
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
 
-  (gnc:shutdown 0))
+  ;;return to C
+)
