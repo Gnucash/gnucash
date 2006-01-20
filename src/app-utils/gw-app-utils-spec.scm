@@ -76,22 +76,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:exp-parser-init
-   '<gw:void>
-   "gnc_exp_parser_init"
-   '()
-   "Initialize the expression parser.")
-
-  (gw:wrap-function
-   ws
-   'gnc:exp-parser-shutdown
-   '<gw:void>
-   "gnc_exp_parser_shutdown"
-   '()
-   "Shutdown the expression parser and free any associated memory.")
-
-  (gw:wrap-function
-   ws
    'gnc:parse-amount
    '<gw:scm>
    "gnc_parse_amount_helper"
