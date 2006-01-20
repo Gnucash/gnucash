@@ -499,7 +499,6 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
 static void
 gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
-  GncMainWindowPrivate *priv;
   gint *pos, *geom;
   gsize length;
   gboolean max;
@@ -510,10 +509,39 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   /* Setup */
   ENTER("window %p, data %p (key file %p, window %d)",
 	window, data, data->key_file, data->window_num);
-  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
-  /* Save the window coordinates, etc. */
+  /* Get this window's notebook info */
+  page_count = g_key_file_get_integer(data->key_file,
+				      window_group, WINDOW_PAGECOUNT, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_PAGECOUNT, error->message);
+    goto cleanup;
+  }
+  if (page_count == 0) {
+    /* Shound never happen, but has during alpha testing. Having this
+     * check doesn't hurt anything. */
+    goto cleanup;
+  }
+  page_start = g_key_file_get_integer(data->key_file,
+				      window_group, WINDOW_FIRSTPAGE, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+	      window_group, WINDOW_FIRSTPAGE, error->message);
+    goto cleanup;
+  }
+
+  /* Build a window if we don't already have one */
+  if (window == NULL) {
+    DEBUG("Window %d doesn't exist. Creating new window.", data->window_num);
+    DEBUG("active_windows %p.", active_windows);
+    if (active_windows)
+      DEBUG("first window %p.", active_windows->data);
+    window = gnc_main_window_new();
+  }
+
+  /* Get the window coordinates, etc. */
   pos = g_key_file_get_integer_list(data->key_file, window_group,
 				    WINDOW_POSITION, &length, &error);
   if (error) {
@@ -555,22 +583,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gtk_window_maximize(GTK_WINDOW(window));
   }
 
-  /* Get this window's notebook info */
-  page_start = g_key_file_get_integer(data->key_file,
-				      window_group, WINDOW_FIRSTPAGE, &error);
-  if (error) {
-    g_warning("error reading group %s key %s: %s",
-	      window_group, WINDOW_FIRSTPAGE, error->message);
-    goto cleanup;
-  }
-  page_count = g_key_file_get_integer(data->key_file,
-				      window_group, WINDOW_PAGECOUNT, &error);
-  if (error) {
-    g_warning("error reading group %s key %s: %s",
-	      window_group, WINDOW_PAGECOUNT, error->message);
-    goto cleanup;
-  }
-
+  /* Now populate the window with pages. */
   for (i = 0; i < page_count; i++) {
     data->page_offset = page_start;
     data->page_num = i;
@@ -695,13 +708,6 @@ gnc_main_window_restore_all_state (gpointer session, gpointer unused)
   for (i = 0; i < window_count; i++) {
     data.window_num = i;
     window = g_list_nth_data(active_windows, i);
-    if (window == NULL) {
-      DEBUG("Window %d doesn't exist. Creating new window.", i);
-      DEBUG("active_windows %p.", active_windows);
-      if (active_windows)
-	DEBUG("first window %p.", active_windows->data);
-      window = gnc_main_window_new();
-    }
     gnc_main_window_restore_window(window, &data);
   }
 
@@ -765,7 +771,20 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   ENTER("window %p, data %p (key file %p, window %d)",
 	window, data, data->key_file, data->window_num);
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+  /* Check for bogus window structures. */
+  num_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(priv->notebook));
+  if (0 == num_pages) {
+    LEAVE("empty window %p", window);
+    return;
+  }
+
+  /* Save this window's notebook info */
   window_group = g_strdup_printf(WINDOW_STRING, data->window_num++);
+  g_key_file_set_integer(data->key_file, window_group,
+			 WINDOW_PAGECOUNT, num_pages);
+  g_key_file_set_integer(data->key_file, window_group,
+			 WINDOW_FIRSTPAGE, data->page_num);
 
   /* Save the window coordinates, etc. */
   gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
@@ -781,13 +800,6 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
   DEBUG("window (%p) position %dx%d, size %dx%d, %s", window,  coords[0], coords[1],
 	coords[2], coords[3],
 	maximized ? "maximized" : "not maximized");
-
-  /* Save this window's notebook info */
-  num_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(priv->notebook));
-  g_key_file_set_integer(data->key_file, window_group,
-			 WINDOW_PAGECOUNT, num_pages);
-  g_key_file_set_integer(data->key_file, window_group,
-			 WINDOW_FIRSTPAGE, data->page_num);
 
   /* Save individual pages in this window */
   g_list_foreach(priv->installed_pages, (GFunc)gnc_main_window_save_page, data);
