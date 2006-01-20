@@ -533,76 +533,74 @@
   ;; account to do report on
   (gnc:register-trep-option
    (gnc:make-account-list-option
-        gnc:pagename-accounts (N_ "Report Accounts")
-        "a" (N_ "Report on these accounts")
-     ;; select, by default, all accounts...
-     (lambda ()
-       (gnc:filter-accountlist-type 
-	'(bank cash credit asset liability stock mutual-fund currency
-	       payable receivable equity income expense)
-	(gnc:group-get-subaccounts (gnc:get-current-group))))
-     #f #t))
-  
-      (gnc:register-trep-option
-       (gnc:make-account-list-option
-        gnc:pagename-accounts (N_ "Filter Accounts")
-        "b" (N_ "Filter on these accounts")
-        (lambda ()
-          ;; FIXME : gnc:get-current-accounts disappeared.
-          (let ((current-accounts '())
-                (num-accounts (gnc:group-get-num-accounts
-                               (gnc:get-current-group)))
-                (first-account (gnc:group-get-account
-                                (gnc:get-current-group) 0)))
-            (cond ((not (null? current-accounts))
-                   (list (car current-accounts)))
-                  ((> num-accounts 0) (list first-account))
-                  (else ()))))
-        #f #t))
+    gnc:pagename-accounts (N_ "Report Accounts")
+    "a" (N_ "Report on these accounts")
+    ;; select, by default, all accounts...
+    (lambda ()
+      (gnc:filter-accountlist-type 
+       '(bank cash credit asset liability stock mutual-fund currency
+	      payable receivable equity income expense)
+       (gnc:group-get-subaccounts (gnc:get-current-group))))
+    #f #t))
 
-      (gnc:register-trep-option
-       (gnc:make-multichoice-option
-        gnc:pagename-accounts (N_ "Filter Type")
-        "c" (N_ "Filter account")
-        'none
-        (list (vector 'none
-                      (N_ "None")
-                      (N_ "Do not do any filtering"))
-              (vector 'include
-                      (N_ "Include Transactions to/from Filter Accounts")
-                      (N_ "Include transactions to/from filter accounts only"))
-              (vector 'exclude
-                      (N_ "Exclude Transactions to/from Filter Accounts")
-                      (N_ "Exclude transactions to/from all filter accounts"))
-	      )))
+  (gnc:register-trep-option
+   (gnc:make-account-list-option
+    gnc:pagename-accounts (N_ "Filter Accounts")
+    "b" (N_ "Filter on these accounts")
+    (lambda ()
+      ;; FIXME : gnc:get-current-accounts disappeared.
+      (let ((current-accounts '())
+	    (num-accounts (gnc:group-get-num-accounts
+			   (gnc:get-current-group)))
+	    (first-account (gnc:group-get-account
+			    (gnc:get-current-group) 0)))
+	(cond ((not (null? current-accounts))
+	       (list (car current-accounts)))
+	      ((> num-accounts 0) (list first-account))
+	      (else ()))))
+    #f #t))
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    gnc:pagename-accounts (N_ "Filter Type")
+    "c" (N_ "Filter account")
+    'none
+    (list (vector 'none
+		  (N_ "None")
+		  (N_ "Do not do any filtering"))
+	  (vector 'include
+		  (N_ "Include Transactions to/from Filter Accounts")
+		  (N_ "Include transactions to/from filter accounts only"))
+	  (vector 'exclude
+		  (N_ "Exclude Transactions to/from Filter Accounts")
+		  (N_ "Exclude transactions to/from all filter accounts"))
+	  )))
+
+  ;;
+
+  (gnc:register-trep-option
+   (gnc:make-multichoice-option
+    gnc:pagename-accounts optname-void-transactions
+    "d" (N_ "How to handle void transactions")
+    'non-void-only
+    (list (vector
+	   'non-void-only
+	   (N_ "Non-void only")
+	   (N_ "Show only non-voided transactions"))
+	  (vector
+	   'void-only
+	   (N_ "Void only")
+	   (N_ "Show only voided transactions"))
+	  (vector 
+	   'both
+	   (N_ "Both")
+	   (N_ "Show both (and include void transactions in totals)")))))
 
 
-      ;;
+  'void-only
+  'all
 
-      (gnc:register-trep-option
-       (gnc:make-multichoice-option
-	gnc:pagename-accounts optname-void-transactions
-	"d" (N_ "How to handle void transactions")
-	'non-void-only
-	(list (vector
-	       'non-void-only
-	       (N_ "Non-void only")
-	       (N_ "Show only non-voided transactions"))
-	      (vector
-	       'void-only
-	       (N_ "Void only")
-	       (N_ "Show only voided transactions"))
-	      (vector 
-	       'both
-	       (N_ "Both")
-		(N_ "Show both (and include void transactions in totals)")))))
-	     
-	
-	'void-only
-	'all
   ;; Sorting options
-  
-
       
   (let ((options gnc:*transaction-report-options*)
 
@@ -667,6 +665,7 @@
           (vector 'descend
                   (N_ "Descending")
                   (N_ "largest to smallest, latest to earliest"))))
+
         (subtotal-choice-list
          (list
           (vector 'none (N_ "None") (N_ "None"))
