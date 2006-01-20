@@ -48,15 +48,17 @@
  *  qualified path.
  *
  *  @param ignore_error If true this function will ignore any problems
- *  reading the an existing file from disk and will return a GKeyFile
- *  structure.  Set to TRUE if performing a read/modify/write on a
- *  file that may or may not already exist.
+ *  reading the an existing file from disk.
  *
- *  @return A pointer to a GKeyFile data structure, or NULL if a
- *  (non-ignored) error occurred.
+ *  @param return_empty_struct If TRUE this function will always
+ *  return a GKeyFile structure.  Set to TRUE if performing a
+ *  read/modify/write on a file that may or may not already exist.
+ *
+ *  @return A pointer to a GKeyFile data structure, or NULL.
  */
 GKeyFile *gnc_key_file_load_from_file (const gchar *file,
-				       gboolean ignore_error);
+				       gboolean ignore_error,
+				       gboolean return_empty_struct);
 
 
 /** Write a key/value file from memory to disk.  If there is no data

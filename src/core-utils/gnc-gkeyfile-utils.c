@@ -46,7 +46,9 @@
 #include "gnc-gkeyfile-utils.h"
 
 GKeyFile *
-gnc_key_file_load_from_file (const gchar *filename, gboolean ignore_error)
+gnc_key_file_load_from_file (const gchar *filename,
+			     gboolean ignore_error,
+			     gboolean return_empty_struct)
 {
   GKeyFile *key_file;
   GError *error = NULL;
@@ -64,12 +66,13 @@ gnc_key_file_load_from_file (const gchar *filename, gboolean ignore_error)
     return key_file;
 
   /* An error occurred */
-  if (!ignore_error) {
+  if (!return_empty_struct) {
     g_key_file_free(key_file);
     key_file = NULL;
   }
 
-  g_warning("Unable to read file %s: %s\n", filename, error->message);
+  if (!ignore_error)
+    g_warning("Unable to read file %s: %s\n", filename, error->message);
   g_error_free(error);
   return key_file;
 }

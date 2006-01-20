@@ -1,5 +1,10 @@
 2006-01-19  David Hampton  <hampton@employees.org>
 
+	* src/core-utils/gnc-gkeyfile-utils.[ch]:
+	* src/app-utils/file-utils.c:
+	* src/app-utils/gnc-exp-parser.c: Provide better arguments for
+	specifying what to do when a key_file doesn't exist.
+
 	* src/gnome-utils/gnc-main-window.c: Check for bogus window
 	structures (i.e. empty) when reading/writing the state file.
 
