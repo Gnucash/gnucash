@@ -2,12 +2,17 @@
 SUBDIRS = . overrides test
 
 AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
-${QOF_CFLAGS} \
--I${top_srcdir}/src/gnome-utils \
--I${top_srcdir}/src/engine \
--I${top_srcdir}/src/gnome \
--I${top_builddir}/src/gnome-utils \
--I${top_srcdir}/src/gnc-module
+  ${QOF_CFLAGS} \
+  -DGNC_CONFIGDIR=\"${GNC_CONFIGDIR}\" \
+  -DGNC_SHAREDIR=\"${GNC_SHAREDIR}\" \
+  -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
+  -I${top_srcdir}/src \
+  -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/gnome \
+  -I${top_builddir}/src/gnome-utils \
+  -I${top_srcdir}/src/gnc-module
 
 bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c
@@ -16,6 +21,7 @@ ${QOF_LIBS} \
 ${top_builddir}/src/engine/libgncmod-engine.la \
 ${top_builddir}/src/gnome/libgncgnome.la \
 ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+${top_builddir}/src/app-utils/libgncmod-app-utils.la \
 ${top_builddir}/src/gnc-module/libgncmodule.la
 
 gnucash: gnucash.in ${top_builddir}/config.status Makefile

@@ -35,9 +35,11 @@
 #include "i18n.h"
 #include "gnc-version.h"
 #include "gnc-engine.h"
+#include "gnc-filepath-utils.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
 #include "top-level.h"
+#include "gfec.h"
 
 static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -60,6 +62,104 @@ gnc_print_unstable_message(void)
            _("The next stable version will be "), "GnuCash 2.0");
 }
 
+/* Priority of paths: The default is set at build time.  It may be
+   overridden by environment variables, which may, in turn, be
+   overridden by command line options.  */
+static char *config_path = GNC_CONFIGDIR;
+static char *share_path = GNC_SHAREDIR;
+static char *help_path = GNC_HELPDIR;
+
+static void
+envt_override()
+{
+    char *path;
+    
+    if ((path = getenv("GNC_CONFIG_PATH")))
+        config_path = path;
+    if ((path = getenv("GNC_SHARE_PATH")))
+        share_path = path;
+    if ((path = getenv("GNC_DOC_PATH")))
+        help_path = path;
+}
+
+static int error_in_scm_eval = FALSE;
+
+static void
+error_handler(const char *msg)
+{
+    g_warning(msg);
+    error_in_scm_eval = TRUE;
+}
+
+static gboolean
+try_load(gchar *fn)
+{    
+    g_message("looking for %s", fn);
+    if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
+        g_message("trying to load %s", fn);
+        error_in_scm_eval = FALSE;
+        gfec_eval_file(fn, error_handler);
+        return !error_in_scm_eval;
+    }
+    return FALSE;
+}
+
+static gboolean
+try_load_config_array(const gchar *fns[])
+{
+    gchar *filename;
+    int i;
+
+    for (i = 0; fns[i]; i++) {
+        filename = gnc_build_dotgnucash_path(fns[i]);
+        if (try_load(filename)) {
+            g_free(filename);
+            return TRUE;
+        }
+        g_free(filename);
+    }
+    return FALSE;
+}
+ 
+static void
+load_system_config(void)
+{
+    static int is_system_config_loaded = FALSE;
+    gchar *system_config;
+
+    if (is_system_config_loaded) return;
+
+    g_message("loading system configuration");
+    system_config = g_build_filename(config_path, "config", NULL);
+    is_system_config_loaded = try_load(system_config);
+    g_free(system_config);
+}
+
+static void
+load_user_config(void)
+{
+    /* Don't continue adding to this list. When 2.0 rolls around bump
+       the 1.4 (unnumbered) files off the list. */
+    static const gchar *user_config_files[] = {
+        "config-2.0.user", "config-1.8.user", "config-1.6.user", 
+        "config.user", "config-2.0.auto", "config-1.8.auto",
+        "config-1.6.auto", "config.auto", NULL};
+    static const gchar *saved_report_files[] = {
+        "saved-reports-2.0", "saved-reports-1.8", NULL};
+    static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
+    static int is_user_config_loaded = FALSE;
+
+    if (is_user_config_loaded) 
+        return;
+    else is_user_config_loaded = TRUE;
+
+    g_message("loading user configuration");
+    try_load_config_array(user_config_files);
+    g_message("loading saved reports");
+    try_load_config_array(saved_report_files);
+    g_message("loading stylesheets");
+    try_load_config_array(stylesheet_files);
+}
 
 /* Note: Command-line argument parsing for Gtk+ applications has
  * evolved.  Gtk+-2.4 and before use the "popt" method.  We use that
@@ -97,21 +197,17 @@ gnucash_command_line(int argc, char **argv)
          _("LOGLEVEL")},
         {"nofile", '\0', POPT_ARG_NONE, NULL, 0,
          _("Do not load the last file opened"), NULL},
-        {"config-path", '\0', POPT_ARG_STRING, NULL, 0,
+        {"config-path", '\0', POPT_ARG_STRING, &config_path, 0,
          _("Set configuration path"), _("CONFIGPATH")},
-        {"share-path", '\0', POPT_ARG_STRING, NULL, 0,
+        {"share-path", '\0', POPT_ARG_STRING, &share_path, 0,
          _("Set shared data file search path"), _("SHAREPATH")},
-        {"doc-path", '\0', POPT_ARG_STRING, NULL, 0,
+        {"doc-path", '\0', POPT_ARG_STRING, &help_path, 0,
          _("Set the search path for documentation files"), _("DOCPATH")},
         {"add-price-quotes", '\0', POPT_ARG_STRING, NULL, 0,
          _("Add price quotes to given FILE"), _("FILE")},
         {"namespace", '\0', POPT_ARG_STRING, NULL, 0, 
          _("Regular expression determining which namespace commodities will be retrieved"), 
          _("REGEXP")},
-        {"load-user-config", '\0', POPT_ARG_NONE, NULL, 0,
-         _("Load the user configuration"), NULL},
-        {"load-system-config", '\0', POPT_ARG_NONE, NULL, 0,
-         _("Load the system configuration"), NULL},
         POPT_TABLEEND
     };
     
@@ -180,6 +276,9 @@ inner_main (void *closure, int argc, char **argv)
     gnc_module_load("gnucash/report/report-gnome", 0);
     gnc_module_load_optional("gnucash/business-gnome", 0);
 
+    load_system_config();
+    load_user_config();
+
     scm_c_eval_string("(gnc:main)");
     shutdown(0);
     return;
@@ -198,6 +297,7 @@ int main(int argc, char ** argv)
 
     gtk_init (&argc, &argv);
     gnc_module_system_init();
+    envt_override();
     gnucash_command_line(argc, argv);
     gnc_print_unstable_message();
 

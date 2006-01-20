@@ -25,7 +25,6 @@
 (define gnc:*arg-no-file* #f)
 (define gnc:*loglevel* #f)
 
-(define gnc:*config-path* #f)
 (define gnc:*share-path* #f)
 (define gnc:*doc-path* #f)
 (define gnc:*namespace-regexp* #f)
@@ -112,14 +111,6 @@
          eq?
          #f))
   
-  (set! gnc:*config-path*
-        (gnc:make-path-config-var
-         (N_ "List of directories to search when looking for config files. \
-Each element must be a string representing a directory or a symbol \
-where 'default expands to the default path, and 'current expands to \
-the current value of the path.")
-         (lambda () gnc:_install-config-path_)))
-  
   (set! gnc:*share-path*
         (gnc:make-path-config-var
          (N_ "List of directories to search when looking for shared data files. \
@@ -143,11 +134,6 @@ the current value of the path.")
 
   ;; Now handle any envt var overrides.
 
-  (and-let* ((envdir (getenv "GNC_CONFIG_PATH"))
-             (data (gnc:read-from-string envdir))
-             ((list? data)))
-    (gnc:config-var-value-set! gnc:*config-path* #f (gnc:flatten data)))
-             
   (and-let* ((envdir (getenv "GNC_SHARE_PATH"))
              (data (gnc:read-from-string envdir))
              ((list? data)))
@@ -193,19 +179,6 @@ the current value of the path.")
            (gnc:config-var-value-set! gnc:*arg-no-file* #f val))
          #f
          (N_ "Do not load the last file opened"))
-
-   (list "config-path"
-         'string
-         (lambda (val)
-           (gnc:debug "parsing --config-path " val)
-           (let ((path-list (gnc:read-from-string val)))
-             (if (list? path-list)
-                 (gnc:config-var-value-set! gnc:*config-path* #f path-list)
-                 (begin
-                   (gnc:error "non-list given for --config-path: " val)
-                   (gnc:shutdown 1)))))
-         "CONFIGPATH"
-         (N_ "Set configuration path"))
 
    (list "share-path"
          'string
@@ -260,17 +233,6 @@ the current value of the path.")
          #f
          (N_ "Regular expression determining which namespace commodities will be retrieved"))
 
-   (list "load-user-config"
-         'boolean
-         gnc:load-user-config-if-needed
-         #f
-         (N_ "Load the user configuration"))
-
-   (list "load-system-config"
-         'boolean
-         gnc:load-system-config-if-needed
-         #f
-         (N_ "Load the system configuration"))
 ))
 
 (define (gnc:cmd-line-get-boolean-arg args)

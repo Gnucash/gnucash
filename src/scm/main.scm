@@ -66,7 +66,6 @@
 (export gnc:current-saved-stylesheets)
 
 ;; from command-line.scm
-(export gnc:*config-path*)
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
 (export gnc:*namespace-regexp*)
@@ -396,11 +395,6 @@ string and 'directories' must be a list of strings."
 
   ;; Load the system configs
   (gnc:update-splash-screen (_ "Loading configs..."))
-  (if (not (gnc:load-system-config-if-needed)) ;; from path.scm
-      (gnc:shutdown 1))
-
-  ;; Load the user configs
-  (gnc:load-user-config-if-needed) ;; from path.scm
 
   (gnc:report-menu-setup)
 
