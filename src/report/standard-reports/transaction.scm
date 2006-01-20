@@ -596,10 +596,6 @@
 	   (N_ "Both")
 	   (N_ "Show both (and include void transactions in totals)")))))
 
-
-  'void-only
-  'all
-
   ;; Sorting options
       
   (let ((options gnc:*transaction-report-options*)
@@ -656,7 +652,7 @@
                (vector 'memo
                        (N_ "Memo")
                        (N_ "Sort by memo"))))
-        ;;description))
+
         (ascending-choice-list 
          (list
           (vector 'ascend
