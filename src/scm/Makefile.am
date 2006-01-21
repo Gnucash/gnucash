@@ -13,7 +13,6 @@ gnc_regular_scm_files = \
   fin.scm \
   help-topics-index.scm \
   main-window.scm \
-  path.scm \
   substring-search.scm \
   xml-generator.scm
 

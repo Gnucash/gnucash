@@ -1,3 +1,9 @@
+2006-01-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/gnucash-bin.c: Load config.auto AND config.user files.
+	  Load the .user file first, and then load the .auto.
+	* src/scm/Makefile.am:  paths.scm was removed.
+	
 2006-01-19  David Hampton  <hampton@employees.org>
 
 	* src/core-utils/gnc-gkeyfile-utils.[ch]:

@@ -143,8 +143,10 @@ load_user_config(void)
        the 1.4 (unnumbered) files off the list. */
     static const gchar *user_config_files[] = {
         "config-2.0.user", "config-1.8.user", "config-1.6.user", 
-        "config.user", "config-2.0.auto", "config-1.8.auto",
-        "config-1.6.auto", "config.auto", NULL};
+        "config.user", NULL };
+    static const gchar *auto_config_files[] = {
+        "config-2.0.auto", "config-1.8.auto", "config-1.6.auto",
+	"config.auto", NULL};
     static const gchar *saved_report_files[] = {
         "saved-reports-2.0", "saved-reports-1.8", NULL};
     static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
@@ -156,6 +158,8 @@ load_user_config(void)
 
     g_message("loading user configuration");
     try_load_config_array(user_config_files);
+    g_message("loading auto configuration");
+    try_load_config_array(auto_config_files);
     g_message("loading saved reports");
     try_load_config_array(saved_report_files);
     g_message("loading stylesheets");
