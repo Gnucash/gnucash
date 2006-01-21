@@ -29,16 +29,11 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">Import currency and stock information </property>
-	  <property name="text" translatable="yes">The file you are loading is from an older version of GnuCash. 
-Information about currencies, stocks, and mutual funds needs to
-be updated for the new version. 
+	  <property name="text" translatable="yes">The file you are loading is from an older version of GnuCash. Information about currencies, stocks, and mutual funds needs to be updated for the new version. 
 
-This dialog will prompt you for some additional information about 
-each currency, stock, and mutual fund that appear in your
-accounts.  After you have entered this information, you can
-update your accounts for the new version of GnuCash.
+This dialog will prompt you for some additional information about each currency, stock, and mutual fund that appear in your accounts.  After you have entered this information, you can update your accounts for the new version of GnuCash.
 
-Hit &quot;Cancel&quot; now to stop loading the file. </property>
+Hit &quot;Cancel&quot; now to stop loading the file.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#9999bfbf9999</property>
@@ -53,8 +48,7 @@ Hit &quot;Cancel&quot; now to stop loading the file. </property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">Update your accounts with the new information</property>
-	  <property name="text" translatable="yes">Click &quot;Finish&quot; to update your accounts to use the new 
-information you have entered.
+	  <property name="text" translatable="yes">Click &quot;Finish&quot; to update your accounts to use the new information you have entered.
 
 Click &quot;Cancel&quot; to cancel the file-loading process.  
 
