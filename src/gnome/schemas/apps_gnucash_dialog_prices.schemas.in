@@ -25,7 +25,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the commodity column</short>
-        <long>Whether or not to show the commodity column.</long>
+        <long>Whether or not to show the commodity column</long>
       </locale>
     </schema>
     <schema>
@@ -36,7 +36,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the currency column</short>
-        <long>Whether or not to show the currency column.</long>
+        <long>Whether or not to show the currency column</long>
       </locale>
     </schema>
     <schema>
@@ -47,7 +47,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the date column</short>
-        <long>Whether or not to show the date column.</long>
+        <long>Whether or not to show the date column</long>
       </locale>
     </schema>
     <schema>
@@ -58,7 +58,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the Source column</short>
-        <long>Whether or not to show the Source column.</long>
+        <long>Whether or not to show the Source column</long>
       </locale>
     </schema>
     <schema>
@@ -69,7 +69,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the Type column</short>
-        <long>Whether or not to show the Type column.</long>
+        <long>Whether or not to show the Type column</long>
       </locale>
     </schema>
     <schema>
@@ -80,7 +80,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the Price column</short>
-        <long>Whether or not to show the Price column.</long>
+        <long>Whether or not to show the Price column</long>
       </locale>
     </schema>
 
