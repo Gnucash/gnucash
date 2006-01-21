@@ -1,3 +1,11 @@
+2006-01-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/bin/gnucash-bin.c:  update splash screen while loading modules.
+	  Granted, this has no effect because the splash screen isn't
+	  /UP/ when we're loading the modules.  But still, once we
+	  initialize the gnome application earlier this will let us
+	  update the splash screen.
+
 2006-01-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/*.glade: Move glade files to a new subdirectory.

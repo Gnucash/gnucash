@@ -41,6 +41,7 @@
 #include "top-level.h"
 #include "gfec.h"
 #include "gnc-main.h"
+#include "gnc-splash.h"
 
 static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -123,6 +124,13 @@ try_load_config_array(const gchar *fns[])
 }
  
 static void
+update_message(const gchar *msg)
+{
+    gnc_update_splash_screen(msg);
+    g_message(msg);
+}
+
+static void
 load_system_config(void)
 {
     static int is_system_config_loaded = FALSE;
@@ -130,7 +138,7 @@ load_system_config(void)
 
     if (is_system_config_loaded) return;
 
-    g_message("loading system configuration");
+    update_message("loading system configuration");
     system_config = g_build_filename(config_path, "config", NULL);
     is_system_config_loaded = try_load(system_config);
     g_free(system_config);
@@ -156,13 +164,13 @@ load_user_config(void)
         return;
     else is_user_config_loaded = TRUE;
 
-    g_message("loading user configuration");
+    update_message("loading user configuration");
     try_load_config_array(user_config_files);
-    g_message("loading auto configuration");
+    update_message("loading auto configuration");
     try_load_config_array(auto_config_files);
-    g_message("loading saved reports");
+    update_message("loading saved reports");
     try_load_config_array(saved_report_files);
-    g_message("loading stylesheets");
+    update_message("loading stylesheets");
     try_load_config_array(stylesheet_files);
 }
 
@@ -261,29 +269,47 @@ static void
 inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
+    int i, len;
+    struct {
+      gchar * name;
+      int version;
+      gboolean optional;
+    } modules[] = {
+      { "gnucash/app-utils", 0, FALSE },
+      { "gnucash/engine", 0, FALSE },
+      { "gnucash/register/ledger-core", 0, FALSE },
+      { "gnucash/register/register-core", 0, FALSE },
+      { "gnucash/register/register-gnome", 0, FALSE },
+      { "gnucash/import-export/binary-import", 0, FALSE },
+      { "gnucash/import-export/qif-import", 0, FALSE },
+      { "gnucash/import-export/ofx", 0, TRUE },
+      { "gnucash/import-export/mt940", 0, TRUE },
+      { "gnucash/import-export/log-replay", 0, TRUE },
+      { "gnucash/import-export/hbci", 0, TRUE },
+      { "gnucash/report/report-system", 0, FALSE },
+      { "gnucash/report/stylesheets", 0, FALSE },
+      { "gnucash/report/standard-reports", 0, FALSE },
+      { "gnucash/report/utility-reports", 0, FALSE },
+      { "gnucash/report/locale-specific/us", 0, FALSE },
+      { "gnucash/report/report-gnome", 0, FALSE },
+      { "gnucash/business-gnome", 0, TRUE }
+    };
 
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
+    /* Can't show splash screen here unless we init gnome first */
+    //gnc_show_splash_screen();
+
     /* module initializations go here */
-    gnc_module_load("gnucash/app-utils", 0);
-    gnc_module_load("gnucash/engine", 0);
-    gnc_module_load("gnucash/register/ledger-core", 0);
-    gnc_module_load("gnucash/register/register-core", 0);
-    gnc_module_load("gnucash/register/register-gnome", 0);
-    gnc_module_load("gnucash/import-export/binary-import", 0);
-    gnc_module_load("gnucash/import-export/qif-import", 0);
-    gnc_module_load_optional("gnucash/import-export/ofx", 0);
-    gnc_module_load_optional("gnucash/import-export/mt940", 0);
-    gnc_module_load_optional("gnucash/import-export/log-replay", 0);
-    gnc_module_load_optional("gnucash/import-export/hbci", 0);
-    gnc_module_load("gnucash/report/report-system", 0);
-    gnc_module_load("gnucash/report/stylesheets", 0);
-    gnc_module_load("gnucash/report/standard-reports", 0);
-    gnc_module_load("gnucash/report/utility-reports", 0);
-    gnc_module_load("gnucash/report/locale-specific/us", 0);
-    gnc_module_load("gnucash/report/report-gnome", 0);
-    gnc_module_load_optional("gnucash/business-gnome", 0);
+    len = sizeof(modules) / sizeof(*modules);
+    for (i = 0; i < len; i++) {
+      gnc_update_splash_screen(modules[i].name);
+      if (modules[i].optional)
+	gnc_module_load_optional(modules[i].name, modules[i].version);
+      else
+	gnc_module_load(modules[i].name, modules[i].version);
+    }
 
     load_system_config();
     load_user_config();
