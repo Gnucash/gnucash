@@ -1,5 +1,7 @@
 2006-01-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/*.glade: Move glade files to a new subdirectory.
+
 	* src/gnome-utils/commodity.glade:
 	* src/gnome-utils/exchange-dialog.glade:
 	* src/gnome-utils/druid-provider-multifile.glade:

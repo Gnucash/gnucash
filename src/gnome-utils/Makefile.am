@@ -1,4 +1,4 @@
-SUBDIRS = schemas . test ui
+SUBDIRS = glade schemas . test ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
@@ -197,23 +197,9 @@ gncmod_DATA = gnome-utils.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = gnc-menu-extensions.scm
 
-gladedir = $(GNC_GLADE_DIR)
-glade_DATA = \
-  commodity.glade \
-  dialog-query-list.glade \
-  dialog-reset-warnings.glade \
-  druid-provider-multifile.glade \
-  exchange-dialog.glade \
-  druid-gconf-setup.glade \
-  gnc-date-format.glade \
-  gnc-gui-query.glade \
-  preferences.glade \
-  transfer.glade
-
 EXTRA_DIST = \
   gnc-dir.h.in \
   gnc-svninfo.h \
-  ${glade_DATA} \
   ${gwmod_DATA} \
   ${gncmod_DATA} \
   ${gncscm_DATA}

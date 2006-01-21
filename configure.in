@@ -2169,6 +2169,7 @@ AC_CONFIG_FILES(po/Makefile.in
 	  src/gnome/schemas/Makefile
 	  src/gnome/ui/Makefile
           src/gnome-utils/Makefile
+	  src/gnome-utils/glade/Makefile
 	  src/gnome-utils/schemas/Makefile
 	  src/gnome-utils/test/Makefile
 	  src/gnome-utils/ui/Makefile
