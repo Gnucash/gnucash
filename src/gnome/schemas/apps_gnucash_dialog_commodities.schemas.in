@@ -25,7 +25,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the Namespace column</short>
-        <long>Whether or not to show the Namespace column.</long>
+        <long>Whether or not to show the Namespace column</long>
       </locale>
     </schema>
     <schema>
@@ -36,7 +36,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the symbol column</short>
-        <long>Whether or not to show the symbol column.</long>
+        <long>Whether or not to show the symbol column</long>
       </locale>
     </schema>
     <schema>
@@ -47,7 +47,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the name column</short>
-        <long>Whether or not to show the name column.</long>
+        <long>Whether or not to show the name column</long>
       </locale>
     </schema>
     <schema>
@@ -58,7 +58,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Full Name column</short>
-        <long>Whether or not to show the Full Name column.</long>
+        <long>Whether or not to show the Full Name column</long>
       </locale>
     </schema>
     <schema>
@@ -69,7 +69,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Print Name column</short>
-        <long>Whether or not to show the Print Name column.</long>
+        <long>Whether or not to show the Print Name column</long>
       </locale>
     </schema>
     <schema>
@@ -80,7 +80,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Unique Name column</short>
-        <long>Whether or not to show the Unique Name column.</long>
+        <long>Whether or not to show the Unique Name column</long>
       </locale>
     </schema>
     <schema>
@@ -91,7 +91,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the CUSIP Code (Exchange Specific Data) column</short>
-        <long>Whether or not to show the CUSIP Code (Exchange Specific Data) column.</long>
+        <long>Whether or not to show the CUSIP Code (Exchange Specific Data) column</long>
       </locale>
     </schema>
     <schema>
@@ -102,7 +102,7 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Whether or not to show the fraction column</short>
-        <long>Whether or not to show the fraction column.</long>
+        <long>Whether or not to show the fraction column</long>
       </locale>
     </schema>
     <schema>
@@ -113,7 +113,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Quote Flag column</short>
-        <long>Whether or not to show the Quote Flag column.</long>
+        <long>Whether or not to show the Quote Flag column</long>
       </locale>
     </schema>
     <schema>
@@ -124,7 +124,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Quote Source column</short>
-        <long>Whether or not to show the Quote Source column.</long>
+        <long>Whether or not to show the Quote Source column</long>
       </locale>
     </schema>
     <schema>
@@ -135,7 +135,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show the Quote Timezone column</short>
-        <long>Whether or not to show the Quote Timezone column.</long>
+        <long>Whether or not to show the Quote Timezone column</long>
       </locale>
     </schema>
 
@@ -147,7 +147,7 @@
       <default>FALSE</default>
       <locale name="C">
         <short>Whether or not to show currencies in this dialog</short>
-        <long>Whether or not to show currencies in this dialog.</long>
+        <long>Whether or not to show currencies in this dialog</long>
       </locale>
     </schema>
 
