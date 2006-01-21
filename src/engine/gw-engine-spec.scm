@@ -729,7 +729,7 @@ to another account, it will be removed from that account first.")
  "xaccAccountFixSplitDateOrder"
  '((<gnc:Account*> a) (<gnc:Split*> s))
  "Check to see if split s is in proper sorted date order with respect
-to the other splits in account a.")
+ to the other splits in account a.")
 
 (gw:wrap-function
  ws
@@ -2172,8 +2172,7 @@ of having a parent transaction with which one is working...")
  'gnc:commodity-table-get-quotable-commodities
  '(gw:glist-of <gnc:commodity*> caller-owned)
  "gnc_commodity_table_get_quotable_commodities"
- '((<gnc:commodity-table*> table)
-   ((<gw:mchars> caller-owned const) namespace))
+ '((<gnc:commodity-table*> table))
  "Return a list of all the quotable commodities in a given namespace in the table.")
 
 (gw:wrap-function

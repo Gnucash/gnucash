@@ -106,6 +106,7 @@ libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  libgw-engine.la \
  libgw-kvp.la \
  ../gnc-module/libgncmodule.la \
+ ${top_builddir}/src/core-utils/libcore-utils.la \
  ../../lib/libc/libc-missing.la
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c

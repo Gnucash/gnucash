@@ -40,6 +40,7 @@
 #include "gnc-hooks.h"
 #include "top-level.h"
 #include "gfec.h"
+#include "gnc-main.h"
 
 static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -149,7 +150,7 @@ load_user_config(void)
     static const gchar *stylesheet_files[] = { "stylesheets-2.0", NULL};
     static int is_user_config_loaded = FALSE;
 
-    if (is_user_config_loaded) 
+    if (is_user_config_loaded)
         return;
     else is_user_config_loaded = TRUE;
 
@@ -183,6 +184,7 @@ gnucash_command_line(int argc, char **argv)
     poptContext pc;
     char *p;
     int rc;
+    char *namespace_regexp = NULL;
 
     struct poptOption options[] = {
         POPT_AUTOHELP
@@ -205,7 +207,7 @@ gnucash_command_line(int argc, char **argv)
          _("Set the search path for documentation files"), _("DOCPATH")},
         {"add-price-quotes", '\0', POPT_ARG_STRING, NULL, 0,
          _("Add price quotes to given FILE"), _("FILE")},
-        {"namespace", '\0', POPT_ARG_STRING, NULL, 0, 
+        {"namespace", '\0', POPT_ARG_STRING, &namespace_regexp, 0, 
          _("Regular expression determining which namespace commodities will be retrieved"), 
          _("REGEXP")},
         POPT_TABLEEND
@@ -225,6 +227,9 @@ gnucash_command_line(int argc, char **argv)
         printf(_("built %s from r%s\n"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
         exit(0);
     }
+
+    if (namespace_regexp)
+        gnc_main_set_namespace_regexp(namespace_regexp);
     
     poptFreeContext(pc);
 }

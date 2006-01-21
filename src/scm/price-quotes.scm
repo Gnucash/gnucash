@@ -23,9 +23,9 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-(export gnc:fq-check-sources)
-(export gnc:book-add-quotes)
-(export gnc:add-quotes-to-book-at-url)
+(export gnc:fq-check-sources) ;; called in main.scm
+(export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
+(export gnc:add-quotes-to-book-at-url) ;; called in command-line.scm
 
 (use-modules (gnucash process))
 (use-modules (www main))
@@ -373,17 +373,16 @@
     (let* ((ct (gnc:book-get-commodity-table book))
 	   (big-list
 	    (gnc:commodity-table-get-quotable-commodities-info
-	     ct
-	     (gnc:config-var-value-get gnc:*namespace-regexp*)))
+	     ct))
 	   (commodity-list #f)
 	   (currency-list (filter
 			   (lambda (a) (not (equal? (cadr a) (caddr a))))
 			   (call-with-values 
-			   (lambda () (partition!
-				       (lambda (cmd)
-					 (not (string=? (car cmd) "currency")))
-				       big-list))
-			   (lambda (a b) (set! commodity-list a) b))))
+                               (lambda () (partition!
+                                           (lambda (cmd)
+                                             (not (string=? (car cmd) "currency")))
+                                           big-list))
+                             (lambda (a b) (set! commodity-list a) b))))
 	   (quote-hash (make-hash-table 31)))
 
       (if (null? big-list)

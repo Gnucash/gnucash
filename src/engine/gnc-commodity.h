@@ -784,22 +784,21 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
  *  should be retrieved.  It will scan the entire commodity table (or
  *  a subset) and check each commodity to see if the price_quote_flag
  *  field has been set.  All matching commodities are queued onto a
- *  list, and the head of that list is returned.
+ *  list, and the head of that list is returned.  Use the command-line
+ *  given expression as a filter on the commodities to be returned. If
+ *  non-null, only commodities in namespace that match the specified
+ *  regular expression are checked.  If none was given, all
+ *  commodities are checked.
  *
  *  @param table A pointer to the commodity table 
- *
- *  @param expression Use the given expression as a filter on the
- *  commodities to be returned. If non-null, only commodities in
- *  namespace that match the specified regular expression are checked.
- *  If null, all commodities are checked.
  *
  *  @return A pointer to a list of commodities.  NULL if invalid
  *  arguments were supplied or if there no commodities are flagged for
  *  quote retrieval.
  *
  *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
-						     const char * expression);
+GList * gnc_commodity_table_get_quotable_commodities(
+    const gnc_commodity_table * table);
 
 /** Call a function once for each commodity in the commodity table.
  *  This table walk returns whenever the end of the table is reached,
