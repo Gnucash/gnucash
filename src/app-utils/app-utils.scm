@@ -122,6 +122,7 @@
 ;; prefs.scm
 (export gnc:get-debit-string)
 (export gnc:get-credit-string)
+(export gnc:config-file-format-version)
 
 ;; gw-engine-spec.scm
 (re-export gnc:*save-options-hook*)
