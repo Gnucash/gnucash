@@ -1,3 +1,16 @@
+2006-01-21  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/glade/billterms.glade:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/business/dialog-tax-table/tax-tables.glade: HIG rework on a
+	couple of dialogs.
+
+	* src/import-export/qif-import/qif.glade:
+	* src/import-export/binary-import/binary-import.glade:
+	* src/import-export/import-provider-format.glade:
+	* src/import-export/hbci/glade/hbci.glade: Do some HIG cleanup.
+	Remove extraneous newline characters from strings.
+
 2006-01-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/glade/hbci.glade: Add field length limits

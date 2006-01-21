@@ -39,6 +39,7 @@
 #include "dialog-tax-table.h"
 
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
+#define GCONF_SECTION "dialogs/business/tax_tables"
 
 void tax_table_new_table_cb (GtkButton *button, TaxTableWindow *ttw);
 void tax_table_delete_table_cb (GtkButton *button, TaxTableWindow *ttw);
@@ -256,11 +257,18 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
   gtk_container_add (GTK_CONTAINER (box), ntt->acct_tree);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(ntt->acct_tree), NULL);
 
   /* Make 'enter' do the right thing */
   gtk_entry_set_activates_default(GTK_ENTRY (gnc_amount_edit_gtk_entry
 					     (GNC_AMOUNT_EDIT (ntt->amount_entry))),
 				  TRUE);
+
+  /* Fix mnemonics for generated target widgets */
+  widget = glade_xml_get_widget (xml, "value_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->amount_entry);
+  widget = glade_xml_get_widget (xml, "account_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL (widget), ntt->acct_tree);
 
   /* Fill in the widgets appropriately */
   if (entry) {
@@ -281,12 +289,22 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   /* Show what we should */
   gtk_widget_show_all (ntt->dialog);
   if (new_table == FALSE) {
-    widget = glade_xml_get_widget (xml, "table_frame");
-    gtk_widget_hide_all (widget);
+    gtk_widget_hide (glade_xml_get_widget (xml, "table_title"));
+    gtk_widget_hide (glade_xml_get_widget (xml, "table_name"));
+    gtk_widget_hide (glade_xml_get_widget (xml, "spacer"));
+    gtk_widget_hide (ntt->name_entry);
+    /* Tables are great for layout, but a pain when you hide widgets */
+    widget = glade_xml_get_widget (xml, "ttd_table");
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 0, 0);
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 1, 0);
+    gtk_table_set_row_spacing (GTK_TABLE(widget), 2, 0);
     gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
 			   (GNC_AMOUNT_EDIT (ntt->amount_entry)));
   } else
     gtk_widget_grab_focus (ntt->name_entry);
+
+  /* Display the dialog now that we're done manipulating it */
+  gtk_widget_show (ntt->dialog);
 
   done = FALSE;
   while (!done) {
@@ -615,6 +633,7 @@ tax_table_window_close (GtkWidget *widget, gpointer data)
 {
   TaxTableWindow *ttw = data;
 
+  gnc_save_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
   gnc_ui_tax_table_window_destroy (ttw);
 }
 
@@ -649,7 +668,7 @@ gnc_ui_tax_table_window_new (GNCBook *book)
   if (!book) return NULL;
 
   /*
-   * Find an existing tax-tab;e window.  If found, bring it to
+   * Find an existing tax-table window.  If found, bring it to
    * the front.  If we have an actual owner, then set it in
    * the window.
    */
@@ -683,6 +702,7 @@ gnc_ui_tax_table_window_new (GNCBook *book)
 				ttw);
 
   tax_table_window_refresh (ttw);
+  gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW (ttw->dialog));
   gtk_widget_show_all (ttw->dialog);
   return ttw;
 }
