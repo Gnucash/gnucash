@@ -65,7 +65,7 @@ struct select_commodity_window {
 
 struct commodity_window {
   GtkWidget * dialog;
-  GtkWidget * commodity_info_frame;
+  GtkWidget * table;
   GtkWidget * fullname_entry;
   GtkWidget * mnemonic_entry;
   GtkWidget * namespace_combo;
@@ -79,6 +79,10 @@ struct commodity_window {
   GtkWidget * quote_tz_menu;
   GtkWidget * ok_button;
 
+  guint comm_section_top;
+  guint comm_section_bottom;
+
+  gboolean     is_currency;
   gnc_commodity *edit_commodity;
 };
 
@@ -505,6 +509,36 @@ gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer
 #endif
 
 /********************************************************************
+ *
+ * Commodity Selector dialog routines are above this line.
+ *
+ * Commodity New/Edit dialog routines are below this line.
+ *
+ ********************************************************************/
+
+static void
+gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
+{
+  CommodityWindow *cw = user_data;
+  guint offset = 0;
+
+  gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
+			  "top-attach", &offset,
+			  NULL);
+
+  if ((offset < cw->comm_section_top) || (offset >= cw->comm_section_bottom))
+    return;
+  g_object_set(widget, "sensitive", !cw->is_currency, NULL);
+}
+
+static void
+gnc_ui_update_commodity_info (CommodityWindow *cw)
+{
+  gtk_container_foreach(GTK_CONTAINER(cw->table),
+			gnc_set_commodity_section_sensitivity, cw);
+}
+
+/********************************************************************
  * gnc_ui_update_namespace_picker
  ********************************************************************/
 
@@ -636,7 +670,7 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
   gboolean ok;
 
   ENTER("widget=%p, user_data=%p", dummy, user_data);
-  if (GTK_WIDGET_SENSITIVE(w->commodity_info_frame)) {
+  if (!w->is_currency) {
     namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
     fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
@@ -779,6 +813,7 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   GtkWidget *help_button;
   GtkWidget *box;
   GtkWidget *menu;
+  GtkWidget *widget;
   GladeXML *xml;
   gboolean include_iso;
 
@@ -798,9 +833,16 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   if (!help_callback)
     gtk_widget_hide (help_button);
 
+  /* Determine the commodity section of the dialog */
+  retval->table = glade_xml_get_widget (xml, "edit_table");
+  widget = glade_xml_get_widget (xml, "commodity_label");
+  gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+			  "bottom-attach", &retval->comm_section_top, NULL);
+  widget = glade_xml_get_widget (xml, "quote_label");
+  gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+			  "top-attach", &retval->comm_section_bottom, NULL);
 
   /* Get widget pointers */
-  retval->commodity_info_frame = glade_xml_get_widget (xml, "commodity_info_frame");
   retval->fullname_entry = glade_xml_get_widget (xml, "fullname_entry");
   retval->mnemonic_entry = glade_xml_get_widget (xml, "mnemonic_entry");
   retval->namespace_combo = glade_xml_get_widget (xml, "namespace_combo");
@@ -842,7 +884,8 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
 
   /* Commodity editing is next to nil */
   if (gnc_commodity_namespace_is_iso(selected_namespace)) {
-    gtk_widget_set_sensitive(retval->commodity_info_frame, FALSE);
+    retval->is_currency = TRUE;
+    gnc_ui_update_commodity_info (retval);
     include_iso = TRUE;
   } else {
     include_iso = FALSE;

@@ -1,5 +1,10 @@
 2006-01-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/commodity.glade:
+	* src/gnome-utils/exchange-dialog.glade:
+	* src/gnome-utils/druid-provider-multifile.glade:
+	* src/gnome-utils/dialog-commodity.c: HIG rework.
+
 	* src/business/business-gnome/glade/billterms.glade:
 	* src/business/dialog-tax-table/dialog-tax-table.c:
 	* src/business/dialog-tax-table/tax-tables.glade: HIG rework on a
