@@ -729,7 +729,7 @@ to another account, it will be removed from that account first.")
  "xaccAccountFixSplitDateOrder"
  '((<gnc:Account*> a) (<gnc:Split*> s))
  "Check to see if split s is in proper sorted date order with respect
- to the other splits in account a.")
+to the other splits in account a.")
 
 (gw:wrap-function
  ws

@@ -29,6 +29,8 @@
 (use-modules (srfi srfi-8))
 
 (use-modules (gnucash gnc-module))
+;;(use-modules (gnucash price-quotes))
+
 (use-modules (ice-9 slib))
 (require 'printf)
 
@@ -60,15 +62,9 @@
 (re-export hash-fold)
 (re-export string-split)
 
-;; from path.scm
-(export gnc:current-config-auto)
-(export gnc:current-saved-reports)
-(export gnc:current-saved-stylesheets)
-
 ;; from command-line.scm
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
-(export gnc:*namespace-regexp*)
 
 ;; from doc.scm
 (export gnc:find-doc-file)
@@ -352,7 +348,6 @@ string and 'directories' must be a list of strings."
   (gnc:setup-debugging)
 
   ;; Now we can load a bunch of files.
-  (load-from-path "path.scm")
   (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
 
   (gnc:initialize-config-vars) ;; in command-line.scm

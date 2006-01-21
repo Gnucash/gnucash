@@ -395,8 +395,7 @@ determines formatting details.")
    'gnc:commodity-table-get-quotable-commodities-info
    '(gw:glist-of <gnc:quote-info-scm> caller-owned)
    "gnc_commodity_table_get_quotable_commodities"
-   '((<gnc:commodity-table*> table)
-     ((<gw:mchars> caller-owned const) namespace))
+   '((<gnc:commodity-table*> table))
    "Return a list of all the quotable commodities in a given namespace in the table.")
 
 

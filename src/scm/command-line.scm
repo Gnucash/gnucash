@@ -27,7 +27,6 @@
 
 (define gnc:*share-path* #f)
 (define gnc:*doc-path* #f)
-(define gnc:*namespace-regexp* #f)
 
 (define (gnc:expand-path new-list current-list default-generator)
   (define (expand-path-item item)
@@ -73,13 +72,6 @@
         (gnc:make-config-var
          (N_ "Don't load any file, including autoloading the last file.")
          (lambda (var value) (if (boolean? value) (list value) #f))
-         eq?
-         #f))
-  
-  (set! gnc:*namespace-regexp*
-        (gnc:make-config-var
-         (N_ "Limit price quotes retrieved to commodities whose namespace matched this regexp.")
-         (lambda (var value) (if (string? value) (list value) #f))
          eq?
          #f))
   
@@ -212,6 +204,7 @@ the current value of the path.")
            (set! gnc:*batch-mode-things-to-do*
                  (cons
                   (lambda ()
+                    (gnc:debug "Beginning to add price-quote")
                     (gnc:use-guile-module-here! '(gnucash price-quotes))
                     (gnc:suspend-gui-refresh)
                     (gnc:engine-suspend-events)
@@ -225,13 +218,6 @@ the current value of the path.")
          "FILE"
          (N_ "Add price quotes to given FILE."))
 
-   (list "namespace"
-         'string
-         (lambda (val)
-           (gnc:debug "parsing --namespace " val)
-           (gnc:config-var-value-set! gnc:*namespace-regexp* #f val))
-         #f
-         (N_ "Regular expression determining which namespace commodities will be retrieved"))
 
 ))
 

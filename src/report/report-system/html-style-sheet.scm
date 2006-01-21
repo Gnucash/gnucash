@@ -125,6 +125,9 @@
 (define gnc:html-style-sheet-style
   (record-accessor <html-style-sheet> 'style))
 
+(define gnc:current-saved-stylesheets
+  (gnc:build-dotgnucash-path "stylesheets-2.0"))
+
 (define (gnc:save-style-sheet-options) 
   (let ((port (false-if-exception
                (open gnc:current-saved-stylesheets

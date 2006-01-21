@@ -397,6 +397,9 @@
     (gnc:report-name report)
     (gnc:report-type report))))
 
+(define gnc:current-saved-reports
+  (gnc:build-dotgnucash-path "saved-reports-2.0"))
+
 (define (gnc:report-save-to-savefile report)
   (let ((conf-file-name gnc:current-saved-reports))
     ;;(display conf-file-name)
