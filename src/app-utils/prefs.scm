@@ -58,6 +58,9 @@
 ;;    #f))
 
 
+;; Old-school config files depend on this API
+ (define (gnc:config-file-format-version version) #t)
+
 ;;;;;; Create config vars
 
 (define gnc:*debit-strings*

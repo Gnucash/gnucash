@@ -6,6 +6,9 @@
 	  initialize the gnome application earlier this will let us
 	  update the splash screen.
 
+	* src/app-utils/prefs.scm: replace an API needed by old scheme
+	  config files.  It was removed in r11565.  Replace it now.
+
 2006-01-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/*.glade: Move glade files to a new subdirectory.
