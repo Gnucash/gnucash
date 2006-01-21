@@ -1,3 +1,9 @@
+2006-01-20  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-item-list.c: Glib 2.9
+	requires GdkEvents to be marked as BOXED instead of POINTER.
+	Fixes #326056.
+
 2006-01-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/gnucash-bin.c: Load config.auto AND config.user files.
