@@ -283,7 +283,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	((noted_value == 0.0) ?
 	 g_strdup_printf("%s", "") :
 	 bal_print_balance
-	 (_("For your information: This account also \n"
+	 (_("For your information: This account also "
 	    "has a noted balance of %s\n"),
 	  noted_val));
 

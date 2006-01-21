@@ -535,11 +535,11 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	(td->dialog,
 	 TRUE,
 	 "%s",
-	 _("The amount is zero or the amount field could not be \n"
-	   "interpreted correctly. You might have mixed up decimal \n"
-	   "point and comma, compared to your locale settings. \n"
+	 _("The amount is zero or the amount field could not be "
+	   "interpreted correctly. You might have mixed up decimal "
+	   "point and comma, compared to your locale settings. "
+	   "This does not result in a valid online transfer job. \n"
 	   "\n"
-	   "This does not result in a valid online transfer job.\n"
 	   "Do you want to enter the job again?"));
       if (values_ok) {
 	AB_Transaction_free (td->hbci_trans);
@@ -557,7 +557,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	  (GTK_WIDGET (td->dialog),
 	   TRUE,
 	   "%s",
-	   _("You did not enter any transaction purpose. A purpose is \n"
+	   _("You did not enter any transaction purpose. A purpose is "
 	     "required for an online transfer.\n"
 	     "\n"
 	     "Do you want to enter the job again?"));
@@ -692,9 +692,9 @@ check_ktoblzcheck(GtkWidget *parent, const HBCITransDialog *td,
     values_ok = gnc_verify_dialog
       (parent,
        TRUE,
-       _("The internal check of the destination account number '%s' \n"
-	 "at the specified bank with bank code '%s' failed. This means \n"
-	 "the account number might contain an error. Should the online \n"
+       _("The internal check of the destination account number '%s' "
+	 "at the specified bank with bank code '%s' failed. This means "
+	 "the account number might contain an error. Should the online "
 	 "transfer job be sent with this account number anyway?"),
        AB_Transaction_GetRemoteAccountNumber (trans),
        AB_Transaction_GetRemoteBankCode (trans));
@@ -798,10 +798,10 @@ gnc_hbci_trans_dialog_execute(HBCITransDialog *td, AB_BANKING *api,
 	(td->parent, 
 	 FALSE,
 	 "%s",
-	 _("The job was sent to the bank successfully, but the \n"
-	   "bank is refusing to execute the job. Please check \n"
-	   "the log window for the exact error message of the \n"
-	   "bank. The line with the error message contains a \n"
+	 _("The job was sent to the bank successfully, but the "
+	   "bank is refusing to execute the job. Please check "
+	   "the log window for the exact error message of the "
+	   "bank. The line with the error message contains a "
 	   "code number that is greater than 9000.\n"
 	   "\n"
 	   "Do you want to enter the job again?"));

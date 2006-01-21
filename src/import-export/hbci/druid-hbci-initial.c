@@ -615,10 +615,10 @@ on_aqhbci_button (GtkButton *button,
       gnc_error_dialog
 	(info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
-	 _("The external program \"%s Setup Wizard\" returned a nonzero \n"
-	   "exit code which means it has not been finished successfully. \n"
-	   "The further HBCI setup can only be finished if the %s \n"
-	   "Setup Wizard is run successfully. Please try to start and \n"
+	 _("The external program \"%s Setup Wizard\" returned a nonzero "
+	   "exit code which means it has not been finished successfully. "
+	   "The further HBCI setup can only be finished if the %s "
+	   "Setup Wizard is run successfully. Please try to start and "
 	   "successfully finish the %s Setup Wizard program again."),
 	 backend_name, backend_name, backend_name);
       druid_disable_next_button(info);
@@ -629,7 +629,7 @@ on_aqhbci_button (GtkButton *button,
       (info->window,
        /* Each of the %s is the name of the backend, e.g. "aqhbci". */
        _("The external program \"%s Setup Wizard\" has not been found. \n\n"
-	 "The package aqbanking is supposed to install the program \n"
+	 "The package aqbanking is supposed to install the program "
 	 "\"%s-qt3-wizard\". Please check your installation of aqbanking."),
        backend_name, backend_name);
     druid_disable_next_button(info);

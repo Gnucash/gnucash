@@ -344,7 +344,7 @@ static int inputBoxCB(AB_BANKING *ab,
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"
+	g_strdup_printf (  _("The PIN needs to be at least %d characters "
 			     "long. Do you want to try again?"),
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
@@ -357,8 +357,8 @@ static int inputBoxCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %ld characters, but the PIN must \n"
-			     "be no longer than %d characters. \n"
+	g_strdup_printf (  _("You entered %ld characters, but the PIN must "
+			     "be no longer than %d characters. "
 			     "Do you want to try again?"),
 			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
@@ -425,7 +425,7 @@ static int getTanCB(AB_BANKING *ab,
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("This TAN needs to be at least %d characters \n"
+	g_strdup_printf (  _("This TAN needs to be at least %d characters "
 			     "long. Do you want to try again?"),
 			   minsize);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
@@ -438,8 +438,8 @@ static int getTanCB(AB_BANKING *ab,
     else if (strlen(passwd) >= (unsigned int)maxLen) {
       gboolean retval;
       char *msg = 
-	g_strdup_printf (  _("You entered %ld characters, but the TAN must \n"
-			     "be no longer than %d characters. \n"
+	g_strdup_printf (  _("You entered %ld characters, but the TAN must "
+			     "be no longer than %d characters. "
 			     "Do you want to try again?"),
 			   (long)strlen(passwd), maxLen);
       retval = gnc_verify_dialog (GTK_WIDGET (data->parent), 
