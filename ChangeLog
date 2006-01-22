@@ -23,7 +23,10 @@
 	* lib/libqof/qof/gnc-engine-util.c
 	* lib/libqof/qof/gnc-engine-util.h
 	  Thomas Klausner's NetBSD patch.
-	
+
+	* src/bin/test/Makefile.am:
+	  Need to add a PATH for the tests to succeed.
+
 2006-01-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/*.glade: Move glade files to a new subdirectory.
