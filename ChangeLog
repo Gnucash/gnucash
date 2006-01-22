@@ -1,3 +1,10 @@
+2006-01-21  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-amount-edit.c:
+	* src/gnome/dialog-fincalc.c:
+	* src/gnome/glade/fincalc.glade: Overhaul the financial calculator
+	dialog.
+
 2006-01-21  Derek Atkins  <derek@ihtfp.com>
 
 	* src/bin/gnucash-bin.c:  update splash screen while loading modules.
