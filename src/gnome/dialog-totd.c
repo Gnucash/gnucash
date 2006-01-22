@@ -114,8 +114,11 @@ void gnc_totd_dialog_response (GtkDialog *dialog,
       gnc_new_tip_number(GTK_WIDGET(dialog), -1);
       break;
 
-    default:
+    case GTK_RESPONSE_CLOSE:
       gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
+      /* fall through */
+
+    default:
       gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, dialog);
       gtk_widget_destroy(GTK_WIDGET(dialog));
       break;

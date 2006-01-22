@@ -203,7 +203,11 @@ static void
 refresh_details_page (StockSplitInfo *info)
 {
   GNCPrintAmountInfo print_info;
+  gnc_commodity *commodity, *currency;
   Account *account;
+  QofBook *book;
+  GNCPriceDB *db;
+  GList *prices;
 
   account = info->acct;
 
@@ -216,9 +220,23 @@ refresh_details_page (StockSplitInfo *info)
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->distribution_edit),
                                 xaccAccountGetCommoditySCU (account));
 
+  commodity = xaccAccountGetCommodity (account);
+  book = xaccAccountGetBook (account);
+  db = gnc_book_get_pricedb(book);
+
+  prices = gnc_pricedb_lookup_latest_any_currency(db, commodity);
+  if (prices) {
+    /* Use the first existing price */
+    currency = gnc_price_get_currency(prices->data);
+  } else {
+    /* Take a wild guess. */
+    currency = gnc_default_currency ();
+ }
+  gnc_price_list_destroy(prices);
+
   gnc_currency_edit_set_currency
     (GNC_CURRENCY_EDIT (info->price_currency_edit),
-     xaccAccountGetCommodity (account));
+     currency);
 }
 
 gboolean
@@ -585,6 +603,7 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *amount;
     GtkWidget *date;
     GtkWidget *ce;
+    GtkWidget *label;
 
     info->description_entry = glade_xml_get_widget (xml, "description_entry");
 
@@ -592,11 +611,15 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (box), date, TRUE, TRUE, 0);
     info->date_edit = date;
+    label = glade_xml_get_widget (xml, "date_label");
+    gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
 
     box = glade_xml_get_widget (xml, "distribution_box");
     amount = gnc_amount_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->distribution_edit = amount;
+    label = glade_xml_get_widget (xml, "distribution_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
     box = glade_xml_get_widget (xml, "price_box");
     amount = gnc_amount_edit_new ();
@@ -605,11 +628,15 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->price_edit = amount;
+    label = glade_xml_get_widget (xml, "price_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
     box = glade_xml_get_widget (xml, "price_currency_box");
     ce = gnc_currency_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), ce, TRUE, TRUE, 0);
     info->price_currency_edit = ce;
+    label = glade_xml_get_widget (xml, "currency_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), ce);
   }
 
   /* Cash in Lieu page */
@@ -617,17 +644,21 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     GtkWidget *box;
     GtkWidget *tree;
     GtkWidget *amount;
+    GtkWidget *label;
     GtkWidget *scroll;
 
     box = glade_xml_get_widget (xml, "cash_box");
     amount = gnc_amount_edit_new ();
     gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
     info->cash_edit = amount;
+    label = glade_xml_get_widget (xml, "cash_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), amount);
 
     info->memo_entry = glade_xml_get_widget (xml, "memo_entry");
 
     /* income tree */
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree), NULL);
     info->income_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_income,
@@ -636,12 +667,16 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     gtk_widget_show (tree);
 
+    label = glade_xml_get_widget (xml, "income_label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
+
     scroll = glade_xml_get_widget (xml, "income_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), tree);
 
 
     /* asset tree */
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree), NULL);
     info->asset_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_asset,
@@ -649,6 +684,9 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 				      NULL /* destroy callback */);
 
     gtk_widget_show (tree);
+
+    label = glade_xml_get_widget (xml, "asset_label");
+    gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
     scroll = glade_xml_get_widget (xml, "asset_scroll");
     gtk_container_add (GTK_CONTAINER (scroll), tree);

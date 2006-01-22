@@ -92,7 +92,7 @@ typedef struct _AccountWindow
   GtkWidget * opening_balance_page;
 
   GtkWidget * opening_equity_radio;
-  GtkWidget * transfer_account_frame;
+  GtkWidget * transfer_account_scroll;
   GtkWidget * transfer_tree;
 
   GtkWidget * tax_related_button;
@@ -1268,7 +1268,7 @@ opening_equity_cb (GtkWidget *w, gpointer data)
 
   use_equity = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
-  gtk_widget_set_sensitive (aw->transfer_account_frame, !use_equity);
+  gtk_widget_set_sensitive (aw->transfer_account_scroll, !use_equity);
 }
 
 /********************************************************************\
@@ -1285,6 +1285,7 @@ gnc_account_window_create(AccountWindow *aw)
   GtkWidget *amount;
   GObject *awo;
   GtkWidget *box;
+  GtkWidget *label;
   GladeXML  *xml;
   GtkTreeSelection *selection;
 
@@ -1296,9 +1297,6 @@ gnc_account_window_create(AccountWindow *aw)
   awd = GTK_DIALOG (awo);
 
   g_object_set_data (awo, "dialog_info", aw);
-
-  /* default to ok */
-  gtk_dialog_set_default_response (awd, GTK_RESPONSE_OK);
 
   g_signal_connect (awo, "destroy",
                     G_CALLBACK (gnc_account_window_destroy_cb), aw);
@@ -1327,6 +1325,9 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_box_pack_start(GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
   gtk_widget_show (aw->commodity_edit);
 
+  label = glade_xml_get_widget (xml, "commodity_label");
+  gnc_general_select_make_mnemonic_target (GNC_GENERAL_SELECT(aw->commodity_edit), label);
+
   g_signal_connect (G_OBJECT (aw->commodity_edit), "changed",
                     G_CALLBACK (commodity_changed_cb), aw);
 
@@ -1353,6 +1354,9 @@ gnc_account_window_create(AccountWindow *aw)
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
   gtk_widget_show (amount);
 
+  label = glade_xml_get_widget (xml, "balance_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL(label), amount);
+
   box = glade_xml_get_widget (xml, "opening_balance_date_box");
   aw->opening_balance_date_edit = glade_xml_get_widget (xml, "opening_balance_date_edit");
 
@@ -1364,10 +1368,8 @@ gnc_account_window_create(AccountWindow *aw)
   g_signal_connect (G_OBJECT (aw->opening_equity_radio), "toggled",
                     G_CALLBACK (opening_equity_cb), aw);
 
-  aw->transfer_account_frame =
-    glade_xml_get_widget (xml, "transfer_account_frame");
-
   box = glade_xml_get_widget (xml, "transfer_account_scroll");
+  aw->transfer_account_scroll = box;
 
   aw->transfer_tree = GTK_WIDGET(gnc_tree_view_account_new(FALSE));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(aw->transfer_tree));
@@ -1375,6 +1377,9 @@ gnc_account_window_create(AccountWindow *aw)
 
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
   gtk_widget_show (GTK_WIDGET(aw->transfer_tree));
+
+  label = glade_xml_get_widget (xml, "parent_label");
+  gtk_label_set_mnemonic_widget (GTK_LABEL(label), aw->transfer_tree);
 
   /* This goes at the end so the select callback has good data. */
   aw->type_list = glade_xml_get_widget (xml, "type_list");

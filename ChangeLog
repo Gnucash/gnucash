@@ -1,3 +1,21 @@
+2006-01-22  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/dialog-dup-trans.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome-utils/glade/exchange-dialog.glade:
+	* src/gnome/dialog-totd.c:
+	* src/gnome/glade/stocks.glade:
+	* src/gnome/glade/budget.glade:
+	* src/gnome/glade/totd.glade:
+	* src/gnome/glade/register.glade:
+	* src/gnome/glade/account.glade:
+	* src/gnome/druid-stock-split.c: More HIG changes.
+
+	* src/gnome-utils/gnc-date-edit.[ch]:
+	* src/gnome-utils/gnc-general-select.[ch]: Add support for setting
+	these widgets as the target of a GtkLabel access key.
+
 2006-01-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-amount-edit.c:
