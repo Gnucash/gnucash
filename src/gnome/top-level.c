@@ -249,8 +249,6 @@ gnc_gui_init_splash (SCM command_line)
   {
     splash_is_initialized = TRUE;
 
-    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
-
     /* put up splash screen */
     gnc_show_splash_screen ();
   }

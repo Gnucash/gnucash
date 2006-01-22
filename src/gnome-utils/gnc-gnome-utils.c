@@ -42,21 +42,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
 
-static char**
-gnc_scm2argv (SCM scm, int prelen, const char **prependargv)
-{
-  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */
-  return gnc_scheme_list_to_nulltermcharpp (prelen, prependargv, scm);
-}
-
-static SCM
-gnc_argv2scm (int len, const char **rest)
-{
-  return gnc_argvarr_to_scheme_list (len, rest);
-}
-
-static const char *default_argv[] = {"", 0};
-
 static const struct poptOption nullPoptTable[] = {
   { NULL, 0, 0, NULL, 0 }
 };
@@ -127,50 +112,17 @@ gnc_gtk_add_rc_file (void)
   }
 }
 
-SCM
-gnc_gnome_init (const char * arg0,
-                const char * progname,
-                const char * version,
-                SCM command_line)
+void
+gnc_gnome_init (int argc, char **argv, const char * version)
 {
-  poptContext returnedPoptContext; /* owned by the library */
-  int restargc;
   char *fullname;
-  char **restargv;
-  char **restargv2;
-  SCM ret = command_line;
   GError *error = NULL;
-  GValue value = { 0, };
-
-  if (arg0)
-    default_argv[0] = arg0;
-
-  restargv = gnc_scm2argv (command_line, 1, default_argv);
-  if (!restargv)
-  {
-    restargv = g_new (char*, 2);
-    restargv[0] = g_strdup (default_argv[0]);
-    restargv[1] = NULL;
-  }
-
-  restargc = argv_length (restargv);
 
   gnc_gtk_add_rc_file();
-  gnucash_program =
-    gnome_program_init("gnucash", version, LIBGNOMEUI_MODULE,
-		       restargc, restargv,
-		       GNOME_PARAM_POPT_TABLE, nullPoptTable,
-		       GNOME_PROGRAM_STANDARD_PROPERTIES,
-		       GNOME_PARAM_NONE);
-
-  g_value_init(&value, G_TYPE_POINTER);
-  g_object_get_property (G_OBJECT (gnucash_program),
-			 GNOME_PARAM_POPT_CONTEXT, &value);
-  returnedPoptContext = g_value_get_pointer (&value);
-  restargv2 = (char**) poptGetArgs (returnedPoptContext);
-  ret = gnc_argv2scm (argv_length (restargv2), (const char**)restargv2);
-
-  gnc_free_argv (restargv);
+  gnucash_program = gnome_program_init(
+      "gnucash", version, LIBGNOMEUI_MODULE,
+      argc, argv, GNOME_PARAM_POPT_TABLE, nullPoptTable,
+      GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
 
   /* initialization required for gtkhtml */
   gtk_widget_set_default_colormap (gdk_rgb_get_colormap ());
@@ -188,7 +140,7 @@ gnc_gnome_init (const char * arg0,
 
   druid_gconf_install_check_schemas();
 
-  return ret;
+  return;
 }
 
 void

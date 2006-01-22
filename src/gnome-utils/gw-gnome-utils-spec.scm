@@ -51,17 +51,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:gnome-init
-   '<gw:scm>
-   "gnc_gnome_init"
-   '(((<gw:mchars> caller-owned const) arg0)
-     ((<gw:mchars> caller-owned const) progname)
-     ((<gw:mchars> caller-owned const) version)
-     (<gw:scm> command-line))
-   "Initialize the GnuCash gnome system.")
-
-  (gw:wrap-function
-   ws
    'gnc:gnome-shutdown
    '<gw:void>
    "gnc_gnome_shutdown"

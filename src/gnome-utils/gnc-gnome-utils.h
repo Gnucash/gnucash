@@ -35,26 +35,8 @@
 #ifndef GNC_GNOME_UTILS_H
 #define GNC_GNOME_UTILS_H
 
-#ifdef LIBGUILEH
-/** Initialize the Gnome libraries.
- *
- *  @param arg0 The running application as it appears to a user.
- *
- *  @param program The compiled name of the application. "gnucash"
- *
- *  @param version The program version. (e.g. 1.8.7)
- *
- *  @param command_line A scheme list containing all of the command
- *  line arguments (or all of the arguments notyet pasrsed in scheme).
- *
- *  @return The initial command_line argument minus any arguments
- *  parsed by this function.
- */
-SCM gnc_gnome_init (const char * arg0,
-                    const char * progname,
-                    const char * version,
-                    SCM command_line);
-#endif
+/** Initialize the Gnome libraries. */
+void gnc_gnome_init (int argc, char **argv, const char * version);
 
 /** Shutdown/cleanup any gnome related libraries. */
 void gnc_gnome_shutdown (void);

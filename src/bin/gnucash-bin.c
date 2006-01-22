@@ -42,6 +42,7 @@
 #include "gfec.h"
 #include "gnc-main.h"
 #include "gnc-splash.h"
+#include "gnc-gnome-utils.h"
 
 static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
@@ -331,6 +332,7 @@ int main(int argc, char ** argv)
 #endif
 
     gtk_init (&argc, &argv);
+    gnc_gnome_init (argc, argv, VERSION);
     gnc_module_system_init();
     envt_override();
     gnucash_command_line(argc, argv);
