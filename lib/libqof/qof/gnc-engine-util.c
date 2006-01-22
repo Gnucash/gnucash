@@ -40,7 +40,7 @@
 /* Search for str2 in first nchar chars of str1, ignore case..  Return
  * pointer to first match, or null.  */
 char *
-strncasestr(const char *str1, const char *str2, size_t len) 
+strncasestr(const unsigned char *str1, const unsigned char *str2, size_t len) 
 {
   while (*str1 && len--) 
   {
@@ -145,7 +145,7 @@ ultostr (unsigned long val, int base)
 \********************************************************************/
 
 gboolean
-gnc_strisnum(const char *s)
+gnc_strisnum(const unsigned char *s)
 {
   if (s == NULL) return FALSE;
   if (*s == 0) return FALSE;

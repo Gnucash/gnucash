@@ -55,7 +55,7 @@ gnucash.1: gnucash.1.in Makefile
 
 tip_of_the_day.list: tip_of_the_day.list.in Makefile
 	gcc -E -P -x c -D'N_(x)=x' -o $@.tmp $<
-	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/m' > $@
+	cat -s $@.tmp | ${SED} -e 's/^ *\"\(.*\)\" *$$/\1/' > $@
 	rm -f $@.tmp
 
 DISTCLEANFILES = gnc-prices.1 gnucash.1 tip_of_the_day.list

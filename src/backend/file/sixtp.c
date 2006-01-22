@@ -750,7 +750,7 @@ sixtp_parse_buffer(sixtp *sixtp,
 
 /***********************************************************************/
 static gboolean
-eat_whitespace(char **cursor)
+eat_whitespace(unsigned char **cursor)
 {
     while(**cursor && isspace(**cursor))
     {
@@ -768,7 +768,7 @@ eat_whitespace(char **cursor)
 }
 
 static gboolean
-search_for(char marker, char **cursor)
+search_for(unsigned char marker, unsigned char **cursor)
 {
     while(**cursor && **cursor != marker)
     {
@@ -791,7 +791,7 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
 {
   FILE *f = NULL;
   char first_chunk[256];
-  char* cursor = NULL;
+  unsigned char* cursor = NULL;
   ssize_t num_read;
   
   g_return_val_if_fail(filename, FALSE);

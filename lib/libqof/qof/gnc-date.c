@@ -934,10 +934,10 @@ char dateSeparator (void)
         return locale_separator;
       else
       { /* Make a guess */
-        char string[256];
+        unsigned char string[256];
         struct tm *tm;
         time_t secs;
-        char *s;
+        unsigned char *s;
 
         secs = time(NULL);
         tm = localtime(&secs);
@@ -1055,7 +1055,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
 
     str +=3;
     if ('.' == *str) str++;
-    if (isdigit (*str) && isdigit (*(str+1)))
+    if (isdigit ((unsigned char)*str) && isdigit ((unsigned char)*(str+1)))
     {
       int cyn;
       /* copy sign from hour part */

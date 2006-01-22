@@ -327,8 +327,8 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
  */
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
-			 char negative_sign, char decimal_point,
-			 char group_separator, char *group, char *ignore_list,
+			 char negative_sign, unsigned char decimal_point,
+			 unsigned char group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr);
 
 /* Initialization ***************************************************/

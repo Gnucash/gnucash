@@ -226,7 +226,7 @@ int null_strcmp (const char * da, const char * db);
 /** Search for str2 in first nchar chars of str1, ignore case. Return
  * pointer to first match, or null. These are just like that strnstr
  * and the strstr functions, except that they ignore the case. */
-extern char *strncasestr(const char *str1, const char *str2, size_t len);
+extern char *strncasestr(const unsigned char *str1, const unsigned char *str2, size_t len);
 extern char *strcasestr(const char *str1, const char *str2);
 
 /** The ultostr() subroutine is the inverse of strtoul(). It accepts a
@@ -236,7 +236,7 @@ char * ultostr (unsigned long val, int base);
 
 /** Returns true if string s is a number, possibly surrounded by
  * whitespace. */
-gboolean gnc_strisnum(const char *s);
+gboolean gnc_strisnum(const unsigned char *s);
 
 /** Local copy of stpcpy, used wtih libc's that don't have one. */
 char * gnc_stpcpy (char *dest, const char *src);

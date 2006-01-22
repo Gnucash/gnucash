@@ -9,6 +9,21 @@
 	* src/app-utils/prefs.scm: replace an API needed by old scheme
 	  config files.  It was removed in r11565.  Replace it now.
 
+	* src/backend/file/io-example-account.c
+	* src/backend/file/sixtp-utils.c
+	* src/backend/file/sixtp.c
+	* src/calculation/expression_parser.c
+	* src/gnome-utils/gnc-date-edit.c
+	* src/gnome-utils/gnc-menu-extensions.c
+	* src/app-utils/gnc-ui-util.h
+	* src/app-utils/gnc-ui-util.c
+	* doc/Makefile.am
+	* lib/libqof/qof/guid.c
+	* lib/libqof/qof/gnc-date.c
+	* lib/libqof/qof/gnc-engine-util.c
+	* lib/libqof/qof/gnc-engine-util.h
+	  Thomas Klausner's NetBSD patch.
+	
 2006-01-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/*.glade: Move glade files to a new subdirectory.

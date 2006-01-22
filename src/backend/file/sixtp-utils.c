@@ -55,7 +55,7 @@ static QofLogModule log_module = GNC_MOD_IO;
 gboolean
 isspace_str(const gchar *str, int nomorethan)
 {
-  const gchar *cursor = str;
+  const guchar *cursor = str;
   while(*cursor && (nomorethan != 0)) {
     if(!isspace(*cursor)) {
       return(FALSE);
@@ -233,7 +233,7 @@ string_to_gint64(const gchar *str, gint64 *v)
    * is fixed in the next release 10.2 afaik
    */  
   while( (*((gchar*)str + num_read)!='\0') &&
-	 isspace(*((char*)str + num_read)))
+	 isspace(*((unsigned char*)str + num_read)))
     num_read++;
 
   if (v)
@@ -259,7 +259,7 @@ string_to_gint32(const gchar *str, gint32 *v)
     return(FALSE);
   }
   while( (*((gchar*)str + num_read)!='\0') &&
-	 isspace(*((char*)str + num_read)))
+	 isspace(*((unsigned char*)str + num_read)))
     num_read++;
 
   if (v)
@@ -277,7 +277,7 @@ gboolean
 hex_string_to_binary(const gchar *str,  void **v, guint64 *data_len)
 {
   /* Convert a hex string to binary.  No whitespace allowed. */
-  const gchar *cursor = str;
+  const guchar *cursor = str;
   guint64 str_len;
   gboolean error = FALSE;
   
@@ -501,7 +501,7 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 
   sscanf(str, " %ld%n", &nanosecs, &charcount);
   while( (*((gchar*)str + charcount)!='\0') &&
-	 isspace(*((char*)str + charcount)))
+	 isspace(*((unsigned char*)str + charcount)))
     charcount++;
 
   if(charcount != strlen(str)) return(FALSE);

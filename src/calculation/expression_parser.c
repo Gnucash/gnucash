@@ -760,7 +760,7 @@ static void
 next_token (parser_env_ptr pe)
 {
   char *nstr;
-  const char *str_parse = pe->parse_str;
+  const unsigned char *str_parse = pe->parse_str;
   void *number;
 
   while (isspace (*str_parse))

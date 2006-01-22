@@ -178,7 +178,7 @@ static gchar*
 gnc_ext_gen_action_name (const gchar *name)
 {
   //gchar *extName;
-  const gchar *extChar;
+  const guchar *extChar;
   GString *actionName;
 
   actionName = g_string_sized_new( strlen( name ) + 7 );

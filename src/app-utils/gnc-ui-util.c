@@ -1586,8 +1586,8 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
-			 char negative_sign, char decimal_point,
-			 char group_separator, char *group, char *ignore_list,
+			 char negative_sign, unsigned char decimal_point,
+			 unsigned char group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr)
 {
   gboolean is_negative;
@@ -1600,7 +1600,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
   ParseState state;
 
-  const char *in;
+  const unsigned char *in;
   char *out_str;
   char *out;
 
