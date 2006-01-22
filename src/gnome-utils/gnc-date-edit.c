@@ -992,6 +992,23 @@ gnc_date_activates_default (GNCDateEdit *gde, gboolean state)
 }
 
 
+/** Sets the editable field from a GNCDateEdit widget as the target
+ *  for the specified label's access key.
+ *
+ *  @param gde The date editor to set as the target.
+ *
+ *  @param label The label whose access key should set focus to this
+ *  widget. */
+void
+gnc_date_make_mnemonic_target (GNCDateEdit *gde, GtkWidget *label)
+{
+	if (!gde)
+		return;
+
+	gtk_label_set_mnemonic_widget (GTK_LABEL(label), gde->date_entry);
+}
+
+
 /*
   Local Variables:
   c-basic-offset: 8

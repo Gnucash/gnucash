@@ -314,6 +314,24 @@ gnc_general_select_get_selected (GNCGeneralSelect *gsl)
         return gsl->selected_item;
 }
 
+/** Sets the editable field from a general selection widget as the
+ *  target for the specified label's access key.
+ *
+ *  @param gde The date editor to set as the target.
+ *
+ *
+ *  @param label The label whose access key should set focus to this
+ *  widget. */
+void
+gnc_general_select_make_mnemonic_target (GNCGeneralSelect *gsl, GtkWidget *label)
+{
+        g_return_if_fail(gsl);
+        g_return_if_fail(GNC_IS_GENERAL_SELECT(gsl));
+        g_return_if_fail(label);
+
+	gtk_label_set_mnemonic_widget (GTK_LABEL(label), gsl->entry);
+}
+
 /*
   Local Variables:
   c-basic-offset: 8
