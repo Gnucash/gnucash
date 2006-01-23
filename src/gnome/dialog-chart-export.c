@@ -4,6 +4,7 @@
  *  Sun Feb 27 14:19:12 2005
  *  Copyright  2005  Neil Williams
  *  linux@codehelp.co.uk
+ *  Copyright (c) 2006 David Hampton <hampton@employees.org>
  ****************************************************************************/
 
 /*
@@ -35,15 +36,18 @@
 #include "dialog-utils.h"
 #include "gnc-engine.h"
 #include "gnc-file.h"
+#include "gnc-ui.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")
 #define OPENING_BALANCE_DESC _("Opening Balance")
 
-static GtkWidget *chart_export;
-void on_dateok_clicked (GtkButton *button, gpointer user_data);
+void chart_export_response_cb (GtkDialog *dialog, gint response, gpointer user_data);
 
 typedef struct chart_data_s
 {
+	GladeXML *xml;
+	GtkWidget *dialog;
+	GtkWidget *calendar;
 	time_t chart_time_t;
 	QofSession *chart_session;
 	Account *equity_account;
@@ -175,51 +179,41 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	g_list_free(ref);
 }
 
-static GtkWidget *
-create_chart_export ( void )
+void
+gnc_main_window_chart_export(void)
 {
-  GtkWidget *dialog;
-  GladeXML *xml;
+	GladeXML *xml;
 	chart_data *data;
 
 	xml = gnc_glade_xml_new ("chart-export.glade", "chart-export");
 	data = g_new0(chart_data, 1);
-	glade_xml_signal_connect_data(xml, "on_dateok_clicked",
-		G_CALLBACK (on_dateok_clicked), data);
-	dialog = glade_xml_get_widget (xml, "chart-export");
-	return dialog;	
+	data->xml = xml;
+	data->dialog = glade_xml_get_widget(xml, "chart-export");
+	data->calendar = glade_xml_get_widget(xml, "chart-calendar");
+	glade_xml_signal_autoconnect_full(xml,
+					  gnc_glade_autoconnect_full_func,
+					  data);
+	gtk_widget_show(data->dialog);
 }
 
-void
-gnc_main_window_chart_export(void)
-{
-	chart_export = create_chart_export ();
-	gtk_widget_show (chart_export);
-}
-
-void
-on_dateok_clicked (GtkButton *button, gpointer user_data)
+static void
+on_dateok_clicked (chart_data  *data)
 {
 	guint year, month, day;
-	chart_data  *data;
-	GtkCalendar *calendar;
 	struct tm *chart_tm;
-	GtkWindow   *parent;
 	gchar *filename;
 	QofSession *current_session, *chart_session;
 	QofBook *book;
 	QofCollection *coll;
 
-	calendar = (GtkCalendar*)gnc_glade_lookup_widget(chart_export, "chart-calendar");
-	parent = (GtkWindow*)gtk_widget_get_parent ((GtkWidget*)chart_export);
-	data = (chart_data*)user_data;
 	data->chart_time_t = time(NULL);
 	chart_tm = gmtime(&data->chart_time_t);
 	/* set today - calendar will omit any zero/NULL values */
 	year = chart_tm->tm_year + 1900;
 	month = chart_tm->tm_mon + 1;
 	day = chart_tm->tm_mday;
-	gtk_calendar_get_date(calendar, &year, &month, &day);
+	gtk_calendar_get_date(GTK_CALENDAR(data->calendar),
+			      &year, &month, &day);
 	if((year + 1900) != chart_tm->tm_year) { 
 	chart_tm->tm_year = year - 1900;
 	}
@@ -230,7 +224,6 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 		chart_tm->tm_mday = day; 
 	}
 	data->chart_time_t = mktime(chart_tm);
-	gtk_widget_destroy(chart_export);
 	current_session = qof_session_get_current_session();
 	book = qof_session_get_book(current_session);
 	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
@@ -239,21 +232,22 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 				   NULL, NULL, GNC_FILE_DIALOG_EXPORT);
 	if (filename)
 	{
+		gnc_set_busy_cursor(NULL, TRUE);
 		gnc_engine_suspend_events();
-	qof_session_begin(chart_session, filename, TRUE, TRUE);
+		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		data->chart_session = chart_session;
 		data->equity_account = NULL;
-	coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
+		coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
 		qof_collection_foreach(coll, chart_collection_cb, data);
 		if(data->equity_account == NULL)
-	{
+		  {
 			data->equity_account = xaccMallocAccount (qof_session_get_book(chart_session));
 			xaccAccountBeginEdit (data->equity_account);
 			xaccAccountSetName (data->equity_account, EQUITY_ACCOUNT_NAME);
 			xaccAccountSetDescription(data->equity_account, EQUITY_ACCOUNT_NAME);
 			xaccAccountSetType (data->equity_account, EQUITY);
 			xaccAccountSetCommodity (data->equity_account, gnc_default_currency());
-	}
+		  }
 		qof_object_foreach(GNC_ID_ACCOUNT, book, chart_entity_cb, data);
 		data->param_ref_list = qof_class_get_referenceList(GNC_ID_TRANS);
 		qof_object_foreach(GNC_ID_TRANS, book, chart_reference_cb, data);
@@ -261,11 +255,32 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 		data->param_ref_list = qof_class_get_referenceList(GNC_ID_SPLIT);
 		qof_object_foreach(GNC_ID_SPLIT, book, chart_reference_cb, data);
 		g_list_free(data->param_ref_list);
-	qof_session_save(chart_session, NULL);
+		qof_session_save(chart_session, NULL);
 		show_session_error(qof_session_get_error(chart_session), filename);
 		gnc_engine_resume_events();
+		gnc_unset_busy_cursor(NULL);
 	}
 	qof_session_end(chart_session);
-	g_free(data);
 	qof_session_set_current_session(current_session);
+}
+
+void
+chart_export_response_cb (GtkDialog *dialog, gint response, gpointer user_data)
+{
+	chart_data  *data;
+	data = (chart_data*)user_data;
+	switch (response) {
+	  case GTK_RESPONSE_OK:
+	    gtk_widget_hide(data->dialog);
+	    on_dateok_clicked(data);
+	    break;
+
+	  default:
+	    /* do nothing */
+	    break;
+	}
+
+	gtk_widget_destroy(data->dialog);
+	g_object_unref(data->xml);
+	g_free(data);
 }

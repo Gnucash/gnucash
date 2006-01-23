@@ -1,5 +1,8 @@
 2006-01-22  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-chart-export.c:
+	* src/gnome/glade/chart-export.glade: More HIG changes.
+
 	* src/gnome-utils/gnc-file.c: Add an icon to the export button in
 	the generic filename dialog.
 
