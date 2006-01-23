@@ -1,6 +1,7 @@
 /********************************************************************\
  * dialog-print-check.h : dialog to control check printing          *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,33 +30,7 @@
 
 #include "print-session.h"
 
-typedef struct {
-  GtkWidget * dialog;
-
-  GncPluginPageRegister *plugin_page;
-  const char    *payee;
-  gnc_numeric    amount;
-  time_t         date;
-  const char    *memo;
-
-  GtkWidget * format_picker;
-  GtkWidget * position_picker;
-  GtkWidget * payee_x,  * payee_y;
-  GtkWidget * date_x,   * date_y;
-  GtkWidget * words_x,  * words_y;
-  GtkWidget * number_x, * number_y;
-  GtkWidget * memo_x,   * memo_y;
-
-  GtkWidget * check_position;
-  GtkWidget * format_entry;
-
-  GtkWidget * units_picker;
-
-  GtkWidget * date_format;
-
-  gchar *format_string;
-
-} PrintCheckDialog;
+typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 				      const char    *payee,

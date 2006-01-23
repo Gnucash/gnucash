@@ -12,6 +12,7 @@
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_list/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/tax_info/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/print_checks/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_position</applyto>
       <owner>gnucash</owner>
@@ -36,6 +37,7 @@
       <applyto>/apps/gnucash/dialogs/scheduled_trans/transaction_list/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/tax_info/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/print_checks/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_geometry</applyto>
       <owner>gnucash</owner>

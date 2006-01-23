@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/check_format</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/check_format</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>The predefined check format to use.</short>
+        <long>This value specifies the predefined check format to use.  The number is the 0-based index into the list of known check formats.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/check_position</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/check_position</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Which check position to print.</short>
+        <long>On preprinted checks containing multiple checks per page, this key specifies which check position to print.  The legal values are 0, 1 and 2, correspongint to the top, middle and bottom checks on the page.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/date_format</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/date_format</applyto>
+      <owner>gnucash</owner>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>The date format to use.</short>
+        <long>This is the nimerical identifier of the predefined date format to use.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/date_format_user</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/date_format_user</applyto>
+      <owner>gnucash</owner>
+      <type>string</type>
+      <default>0</default>
+      <locale name="C">
+        <short>The custom date format.</short>
+        <long>If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_payee</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_payee</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to print the payee name.</short>
+        <long>This value contains the X,Y coordinates for the start of the payee line on the check.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_date</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_date</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to print the date.</short>
+        <long>This value contains the X,Y coordinates for the start of the date line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_amount_words</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_amount_words</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to print the check amount in words.</short>
+        <long>This value contains the X,Y coordinates for the start of the written amount line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_amount_number</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_amount_number</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to print the check amount in numbers.</short>
+        <long>This value contains the X,Y coordinates for the start of the numerical amount line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_memo</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_memo</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to print the memo line.</short>
+        <long>This value contains the X,Y coordinates for the start of the memo line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/print_checks/custom_posistion</key>
+      <applyto>/apps/gnucash/dialogs/print_checks/custom_position</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Where to place the check on the page.</short>
+        <long>This value contains the Y coordinate for the bottom edge of the check.  This coordinate is from the bottom edge of the sheet of paper.</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

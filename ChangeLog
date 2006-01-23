@@ -1,5 +1,15 @@
 2006-01-22  David Hampton  <hampton@employees.org>
 
+	* src/scm/printing/print-check.scm:
+	* src/gnome/glade/print.glade:
+	* src/gnome/schemas/Makefile.am:
+	* src/gnome/schemas/apps_gnucash_dialog_common.schemas.in:
+	* src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in:
+	* src/gnome/dialog-print-check.[ch]: Overhaul the print check
+	dialog.  Make HIG changes, and make the dialog remember its state
+	across invocations (including all the custom values).  Fix a crash
+	when canceling printing.
+
 	* src/register/ledger-core/dialog-dup-trans.c:
 	* src/gnome-utils/dialog-account.c:
 	* src/gnome-utils/glade/commodity.glade:

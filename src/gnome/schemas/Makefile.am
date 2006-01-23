@@ -3,6 +3,7 @@ schemas_in_files = \
   apps_gnucash_dialog_common.schemas.in \
   apps_gnucash_dialog_commodities.schemas.in \
   apps_gnucash_dialog_prices.schemas.in \
+  apps_gnucash_dialog_print_checks.schemas.in \
   apps_gnucash_dialog_reconcile.schemas.in \
   apps_gnucash_dialog_totd.schemas.in \
   apps_gnucash_general.schemas.in \

@@ -108,7 +108,7 @@
 	 (payee-stub-text "")
 	 (memo-stub-text ""))
 
-    (if (not (null? ps))
+    (if ps
      (begin
       (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
@@ -134,15 +134,8 @@
                            (print-check-format:custom-info format-info)))))
       
       (let ((fmt (print-check-format:date-format format-info)))
-        (if (string=? fmt "custom")
-            (let* ((custom-info (print-check-format:custom-info format-info))
-                   (date-fmt (assq 'date-format custom-info)))
-              (if date-fmt 
-                  (set! date-fmt (cdr date-fmt)))
-              (set! date-string
-                    (strftime date-fmt (localtime date))))
-            (begin 
-              (set! date-string (strftime fmt (localtime date))))))            
+	(begin 
+	  (set! date-string (strftime fmt (localtime date)))))
 
       (let ((translate-pos (assq 'translate format)))
 	(if translate-pos
