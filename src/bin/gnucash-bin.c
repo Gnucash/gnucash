@@ -51,6 +51,7 @@ static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
 #endif
+static char *add_quotes_file;
 
 static void
 gnc_print_unstable_message(void)
@@ -218,8 +219,8 @@ gnucash_command_line(int argc, char **argv)
          _("Set shared data file search path"), _("SHAREPATH")},
         {"doc-path", '\0', POPT_ARG_STRING, &help_path, 0,
          _("Set the search path for documentation files"), _("DOCPATH")},
-        {"add-price-quotes", '\0', POPT_ARG_STRING, NULL, 0,
-         _("Add price quotes to given FILE"), _("FILE")},
+        {"add-price-quotes", '\0', POPT_ARG_STRING, &add_quotes_file, 0,
+         _("Add price quotes to given GnuCash datafile"), _("FILE")},
         {"namespace", '\0', POPT_ARG_STRING, &namespace_regexp, 0, 
          _("Regular expression determining which namespace commodities will be retrieved"), 
          _("REGEXP")},
@@ -233,6 +234,7 @@ gnucash_command_line(int argc, char **argv)
     poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
     
     while ((rc = poptGetNextOpt(pc)) > 0);
+    poptFreeContext(pc);
 
     if (gnucash_show_version) {
         printf("GnuCash %s %s\n", VERSION, 
@@ -243,8 +245,6 @@ gnucash_command_line(int argc, char **argv)
 
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
-    
-    poptFreeContext(pc);
 }
 
 static void
@@ -265,53 +265,85 @@ shutdown(int status)
     }   
 }
 
+static void
+load_gnucash_modules()
+{
+    int i, len;
+    struct {
+        gchar * name;
+        int version;
+        gboolean optional;
+    } modules[] = {
+        { "gnucash/app-utils", 0, FALSE },
+        { "gnucash/engine", 0, FALSE },
+        { "gnucash/register/ledger-core", 0, FALSE },
+        { "gnucash/register/register-core", 0, FALSE },
+        { "gnucash/register/register-gnome", 0, FALSE },
+        { "gnucash/import-export/binary-import", 0, FALSE },
+        { "gnucash/import-export/qif-import", 0, FALSE },
+        { "gnucash/import-export/ofx", 0, TRUE },
+        { "gnucash/import-export/mt940", 0, TRUE },
+        { "gnucash/import-export/log-replay", 0, TRUE },
+        { "gnucash/import-export/hbci", 0, TRUE },
+        { "gnucash/report/report-system", 0, FALSE },
+        { "gnucash/report/stylesheets", 0, FALSE },
+        { "gnucash/report/standard-reports", 0, FALSE },
+        { "gnucash/report/utility-reports", 0, FALSE },
+        { "gnucash/report/locale-specific/us", 0, FALSE },
+        { "gnucash/report/report-gnome", 0, FALSE },
+        { "gnucash/business-gnome", 0, TRUE }
+    };
+    
+    /* module initializations go here */
+    len = sizeof(modules) / sizeof(*modules);
+    for (i = 0; i < len; i++) {
+        gnc_update_splash_screen(modules[i].name);
+        if (modules[i].optional)
+            gnc_module_load_optional(modules[i].name, modules[i].version);
+        else
+            gnc_module_load(modules[i].name, modules[i].version);
+    } 
+}
+
+static void
+inner_main_add_price_quotes(void *closure, int argc, char **argv)
+{
+    SCM mod, add_quotes, scm_filename, scm_result;
+    
+    mod = scm_c_resolve_module("gnucash price-quotes");
+    scm_set_current_module(mod);
+
+    load_gnucash_modules();
+
+    gnc_engine_suspend_events();
+    g_message("Beginning to install price-quote sources");
+    scm_c_eval_string("(gnc:price-quotes-install-sources)");
+
+    add_quotes = scm_c_eval_string("gnc:add-quotes-to-book-at-url");
+    scm_filename = scm_makfrom0str (add_quotes_file);
+    scm_result = scm_call_1(add_quotes, scm_filename);
+
+    if (!SCM_NFALSEP(scm_result)) {
+        g_error("Failed to add quotes to %s.", add_quotes_file);
+        shutdown(1);
+    }
+    gnc_engine_resume_events();
+    shutdown(0);
+    return;
+}
 
 static void
 inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
-    int i, len;
-    struct {
-      gchar * name;
-      int version;
-      gboolean optional;
-    } modules[] = {
-      { "gnucash/app-utils", 0, FALSE },
-      { "gnucash/engine", 0, FALSE },
-      { "gnucash/register/ledger-core", 0, FALSE },
-      { "gnucash/register/register-core", 0, FALSE },
-      { "gnucash/register/register-gnome", 0, FALSE },
-      { "gnucash/import-export/binary-import", 0, FALSE },
-      { "gnucash/import-export/qif-import", 0, FALSE },
-      { "gnucash/import-export/ofx", 0, TRUE },
-      { "gnucash/import-export/mt940", 0, TRUE },
-      { "gnucash/import-export/log-replay", 0, TRUE },
-      { "gnucash/import-export/hbci", 0, TRUE },
-      { "gnucash/report/report-system", 0, FALSE },
-      { "gnucash/report/stylesheets", 0, FALSE },
-      { "gnucash/report/standard-reports", 0, FALSE },
-      { "gnucash/report/utility-reports", 0, FALSE },
-      { "gnucash/report/locale-specific/us", 0, FALSE },
-      { "gnucash/report/report-gnome", 0, FALSE },
-      { "gnucash/business-gnome", 0, TRUE }
-    };
-
+ 
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
     /* Can't show splash screen here unless we init gnome first */
     //gnc_show_splash_screen();
 
-    /* module initializations go here */
-    len = sizeof(modules) / sizeof(*modules);
-    for (i = 0; i < len; i++) {
-      gnc_update_splash_screen(modules[i].name);
-      if (modules[i].optional)
-	gnc_module_load_optional(modules[i].name, modules[i].version);
-      else
-	gnc_module_load(modules[i].name, modules[i].version);
-    }
-
+    load_gnucash_modules();
     load_system_config();
     load_user_config();
 
@@ -337,6 +369,10 @@ int main(int argc, char ** argv)
     gnucash_command_line(argc, argv);
     gnc_print_unstable_message();
     gnc_gnome_init (argc, argv, VERSION);
+
+    if (add_quotes_file) {
+        scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
+    }
 
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */

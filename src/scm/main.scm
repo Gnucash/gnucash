@@ -29,7 +29,7 @@
 (use-modules (srfi srfi-8))
 
 (use-modules (gnucash gnc-module))
-;;(use-modules (gnucash price-quotes))
+(use-modules (gnucash price-quotes))
 
 (use-modules (ice-9 slib))
 (require 'printf)
@@ -130,22 +130,6 @@
       (require 'format)
       (export simple-format)
       (define simple-format format)))
-
-(define gnc:use-guile-module-here!
-  ;; FIXME: this should be a temporary fix.  We need to check to see
-  ;; if there's a more approved way to do this.  As I recall, there's
-  ;; not, but I belive a better way will be added to Guile soon.
-
-  ;; module arg must be something like '(ice-9 slib)
-  (cond
-   ((or (string=? "1.3" (version))
-        (string=? "1.3.4" (version))
-	(string=? "1.4" (substring (version) 0 3)))
-    (lambda (module)
-      (process-use-modules (list module))))
-   (else
-    (lambda (module)
-      (process-use-modules (list (list module)))))))
 
 (define (gnc:safe-strcmp a b)
   (cond
@@ -380,10 +364,7 @@ string and 'directories' must be a list of strings."
     (load-from-path "fin.scm")
 
     (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
-    (gnc:use-guile-module-here! '(gnucash price-quotes))
-    (let ((sources (gnc:fq-check-sources)))
-      (if (list? sources)
-	  (gnc:quote-source-set-fq-installed sources)))
+    (gnc:price-quotes-install-sources)
 
     (set-current-module original-module))
 

@@ -23,9 +23,10 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-(export gnc:fq-check-sources) ;; called in main.scm
+;;(export gnc:fq-check-sources) ;; called in main.scm
 (export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
 (export gnc:add-quotes-to-book-at-url) ;; called in command-line.scm
+(export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash process))
 (use-modules (www main))
@@ -711,19 +712,23 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 (define (gnc:add-quotes-to-book-at-url url)
   (let* ((session (gnc:url->loaded-session url #f #f))
          (quote-ok? #f))
+    (gnc:debug "in add-quotes-to-book-at-url")
     (if session
 	(begin
+          (gnc:debug "about to call gnc:book-add-quotes")
 	  (set! quote-ok? (and (gnc:book-add-quotes
 				(gnc:session-get-book session))))
 
-	  (if (not quote-ok?) (gnc:msg "book-add-quotes failed"))
+          (gnc:debug "done gnc:book-add-quotes:" quote-ok?)
+	  (if (not quote-ok?) (gnc:error "book-add-quotes failed"))
 	  (gnc:session-save session)
 	  (if (not (eq? 'no-err
 			(gw:enum-<gnc:BackendError>-val->sym
 			 (gnc:session-get-error session) #f)))
 	      (set! quote-ok? #f))
 	  (if (not quote-ok?)
-	      (gnc:msg "session-save failed " (gnc:session-get-error session)))
+	      (gnc:error "session-save failed " 
+                         (gnc:session-get-error session)))
 	  (gnc:session-destroy session))
 	(gnc:error "book-add-quotes unable to open file"))
     quote-ok?))
@@ -741,3 +746,8 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 ; 	   (close-input-port (cadr quoter))
 ; 	   (close-output-port (caddr quoter))
 ; 	   result))))
+
+(define (gnc:price-quotes-install-sources)
+  (let ((sources (gnc:fq-check-sources)))
+    (if (list? sources)
+        (gnc:quote-source-set-fq-installed sources))))
