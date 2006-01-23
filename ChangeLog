@@ -1,12 +1,26 @@
 2006-01-23  Neil Williams <linux@codehelp.co.uk>
 
-    * lib/libqof/backend/file/qsf-backend.c : Prevent 
-    bad time values from being passed to entity.
-    * lib/libqof/qof/qof_book_merge.c : Fix merge 
-    handling of	QOF_TYPE_CHAR to use gchar instead of 
-    casting	from a gchar*
-    * lib/libqof/qof/qof_book_merge.h : Use gchar 
-    consistently instead of mixing with char.
+	* src/engine/Transaction.c : Let the backend
+	work with splits without checking for the parent Trans
+	* src/gnome/glade/chart-export.glade : glade-fixup change.
+	* src/gnome/glade/merge.glade : Reviewed for QSF Import usage
+	* src/gnome/druid-merge.c : Fix QSF import and merge, closes
+	[Bug 327640]. r12961. 
+	* src/gnome/druid-merge.h : Remove unneeded function.
+	* src/gnome/druid-hierarchy.c : Expand on the error message,
+	should it still be required.
+	* configure.in : Increase QOF dependency to the next release
+	to ensure compatibility.
+
+2006-01-23  Neil Williams <linux@codehelp.co.uk>
+
+	* lib/libqof/backend/file/qsf-backend.c : Prevent 
+	bad time values from being passed to entity.
+	* lib/libqof/qof/qof_book_merge.c : Fix merge 
+	handling of QOF_TYPE_CHAR to use gchar instead of 
+	casting	from a gchar*
+	* lib/libqof/qof/qof_book_merge.h : Use gchar 
+	consistently instead of mixing with char.
 
 2006-01-22  David Hampton  <hampton@employees.org>
 

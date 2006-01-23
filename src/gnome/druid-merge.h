@@ -76,7 +76,7 @@ any error values to the calling process.
 
 void gnc_ui_qsf_import_merge_druid(QofSession *original, QofSession *import);
 
-GtkWidget* qof_book_merge_running (void);
+#define GNC_QSF_IMPORT "gnc-qsf-import-druid"
 
 /** \brief 	gncCommodity is not QOF enabled, need to set a default commodity before the merge */
 void currency_transfer_cb ( QofEntity* ent, gpointer user_data);

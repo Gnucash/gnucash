@@ -6,9 +6,9 @@
 
 <widget class="GtkWindow" id="Merge Druid">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Merge Account Hierarchy Setup</property>
+  <property name="title" translatable="yes">QSF Data Import Setup</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="window_position">GTK_WIN_POS_CENTER</property>
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -17,6 +17,7 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GnomeDruid" id="merge_druid">
@@ -29,62 +30,24 @@
 	<widget class="GnomeDruidPageEdge" id="start_page">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Merge Account Hierarchy Setup</property>
-	  <property name="text" translatable="yes">This druid will merge your new hierarchy into the currently open GnuCash file.
+	  <property name="title" translatable="yes">QSF Data Import Setup</property>
+	  <property name="text" translatable="yes">This druid will merge your QSF data into the currently open GnuCash file.
 
-You will be asked how to proceed if some accounts clash with the account tree in your existing GnuCash data file.
+You will be asked how to proceed if some QSF data clashes with the your existing GnuCash data file.
 
-There is NO way to undo this operation! Please ensure you have a backup of your file BEFORE continuing! You will be given the option to cancel the merge at all stages until the final merge operation. Once you click Finish, the new account tree will be committed to your current data file.
+There is NO way to undo this operation! Please ensure you have a backup of your file BEFORE continuing! You will be given the option to cancel the merge at all stages until the final merge operation. Once you click Finish, the new QSF data will be committed to your current data file.
 
-There is currently no currency or price support in the merge operation, the new accounts will inherit any default currency or you can change the currency after the merge is complete.
+There is currently no currency or price support in the merge operation, the new data will inherit any default currency or you can change the currency after the merge is complete.
 
-Click 'Cancel'  if you do not wish to merge your new account types now.</property>
+Your QSF data is ready to import
+
+Click 'Cancel'  if you do not wish to merge your QSF data now.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#191919197070</property>
 	  <property name="logo_background_color">#ffffffffffff</property>
 	  <property name="textbox_color">#ffffffffffff</property>
 	  <signal name="next" handler="on_start_page_next"/>
-	</widget>
-      </child>
-
-      <child>
-	<widget class="GnomeDruidPageStandard" id="summary_page">
-	  <property name="visible">True</property>
-	  <property name="title" translatable="yes">Your new accounts are ready to merge</property>
-	  <property name="title_foreground">#ffffffffffff</property>
-	  <property name="background">#191919197070</property>
-	  <property name="logo_background">#ffffffffffff</property>
-
-	  <child internal-child="vbox">
-	    <widget class="GtkVBox" id="druid-vbox7">
-	      <property name="border_width">16</property>
-	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
-
-	      <child>
-		<widget class="GtkLabel" id="label2">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The next screen will allow you to resolve any conflicts in merging your new account tree into your current GnuCash file.</property>
-		  <property name="use_underline">False</property>
-		  <property name="use_markup">False</property>
-		  <property name="justify">GTK_JUSTIFY_CENTER</property>
-		  <property name="wrap">True</property>
-		  <property name="selectable">False</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xpad">0</property>
-		  <property name="ypad">0</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-	    </widget>
-	  </child>
 	</widget>
       </child>
 
@@ -120,7 +83,7 @@ Click 'Cancel'  if you do not wish to merge your new account types now.</propert
 		      <child>
 			<widget class="GtkLabel" id="ResultsBox">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Number of reports still to be reconciled.</property>
+			  <property name="label"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -155,11 +118,14 @@ Click 'Cancel'  if you do not wish to merge your new account types now.</propert
 			      <child>
 				<widget class="GtkViewport" id="viewport1">
 				  <property name="border_width">5</property>
+				  <property name="height_request">51</property>
 				  <property name="visible">True</property>
+				  <property name="tooltip" translatable="yes">Shows how your QSF data conflicts with existing data in your file.</property>
 				  <property name="shadow_type">GTK_SHADOW_IN</property>
 
 				  <child>
 				    <widget class="GtkLabel" id="OutPut">
+				      <property name="height_request">50</property>
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes"></property>
 				      <property name="use_underline">False</property>
@@ -194,11 +160,14 @@ Click 'Cancel'  if you do not wish to merge your new account types now.</propert
 		      <child>
 			<widget class="GtkLabel" id="Static">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">You have three choices for each collision: 1. The import object can be allowed to overwrite the target - use this to update your existing book. 2. The import object can be ignored - use this if the import is a duplicate of an object in the existing book. 3. The import object can be created as a new object in the existing book.</property>
+			  <property name="label" translatable="yes">You have three choices for each collision: 
+1. The import object can be allowed to overwrite the target - use this to update your existing book. 
+2. The import object can be ignored - use this if the import is a duplicate of an object in the existing book. 
+3. The import object can be created as a new object in the existing book.</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">True</property>
+			  <property name="justify">GTK_JUSTIFY_FILL</property>
+			  <property name="wrap">False</property>
 			  <property name="selectable">False</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
@@ -292,14 +261,14 @@ Click 'Cancel'  if you do not wish to merge your new account types now.</propert
 	<widget class="GnomeDruidPageEdge" id="MergeDruidFinishPage">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
-	  <property name="title" translatable="yes">Commit Merged Account Hierachy to data file</property>
-	  <property name="text" translatable="yes">Press `Apply' to merge your new accounts into the current GnuCash file.
+	  <property name="title" translatable="yes">Commit QSF Import Data to data file</property>
+	  <property name="text" translatable="yes">Press `Apply' to merge your QSF data into the current GnuCash file.
 
 Press `Back' to review your selections.
 
-Press `Cancel' to close this dialog without creating any new accounts.
+Press `Cancel' to close this dialog without changing your current data file.
 
-REMEMBER: There is no way to undo this final operation! Make sure you have a backup before clicking Finish.</property>
+REMEMBER: There is no way to undo this final operation! Make sure you have a backup before clicking 'Apply'.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#191919197070</property>
