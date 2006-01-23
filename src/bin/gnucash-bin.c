@@ -30,6 +30,7 @@
 #include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <libgnome/libgnome.h>
 #include "glib.h"
 #include "gnc-module.h"
 #include "i18n.h"
@@ -76,8 +77,8 @@ gnc_print_unstable_message(void)
 /* Priority of paths: The default is set at build time.  It may be
    overridden by environment variables, which may, in turn, be
    overridden by command line options.  */
-static char *config_path = GNC_CONFIGDIR;
-static char *share_path = GNC_SHAREDIR;
+static char *config_path = SYSCONFDIR;
+static char *share_path = DATADIR;
 static char *help_path = GNC_HELPDIR;
 
 static void
@@ -403,17 +404,23 @@ int main(int argc, char ** argv)
     bind_textdomain_codeset (TEXT_DOMAIN, "UTF-8");
 #endif
 
-    gtk_init (&argc, &argv);
     gnc_module_system_init();
     envt_override();
     gnucash_command_line(argc, argv);
     gnc_print_unstable_message();
-    gnc_gnome_init (argc, argv, VERSION);
 
     if (add_quotes_file) {
+        /* This option needs to run without a display, so we can't
+           initialize any GUI libraries.  */
+        gnome_program_init(
+            "gnucash", VERSION, LIBGNOME_MODULE,
+            argc, argv,
+            GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
         scm_boot_guile(argc, argv, inner_main_add_price_quotes, 0);
+        exit(0);  /* never reached */
     }
 
+    gnc_gnome_init (argc, argv, VERSION);
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
 }
