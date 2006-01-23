@@ -686,10 +686,9 @@ static void
 qofSplitSetSharePrice (Split *split, gnc_numeric price)
 {
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	g_return_if_fail(qof_begin_edit(&split->parent->inst));
-	xaccSplitSetSharePrice (split, price);
-	qof_commit_edit(&split->parent->inst);
+	split->value = gnc_numeric_mul(xaccSplitGetAmount(split),
+		price, get_currency_denom(split),
+		GNC_HOW_RND_ROUND);
 }
 
 void 
@@ -742,10 +741,12 @@ static void
 qofSplitSetAmount (Split *split, gnc_numeric amt)
 {
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	g_return_if_fail(qof_begin_edit(&split->parent->inst));
-	xaccSplitSetAmount (split, amt);
-	qof_commit_edit(&split->parent->inst);
+	if (split->acc)
+	{
+		split->amount = gnc_numeric_convert(amt, 
+				get_commodity_denom(split), GNC_HOW_RND_ROUND);
+	}
+	else { split->amount = amt;	}
 }
 
 void 
@@ -771,10 +772,8 @@ static void
 qofSplitSetValue (Split *split, gnc_numeric amt)
 {
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	g_return_if_fail(qof_begin_edit(&split->parent->inst));
-	xaccSplitSetValue (split, amt);
-	qof_commit_edit(&split->parent->inst);
+	split->value = gnc_numeric_convert(amt, 
+			get_currency_denom(split), GNC_HOW_RND_ROUND);
 }
 
 void 
@@ -2675,11 +2674,12 @@ xaccTransHasSplitsInState (const Transaction *trans, const char state)
 static void
 qofSplitSetMemo (Split *split, const char* memo)
 {
+	gchar *tmp;
+
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	if (!qof_begin_edit(&split->parent->inst)) return;
-	xaccSplitSetMemo(split, memo);
-	qof_commit_edit(&split->parent->inst);
+	tmp = gnc_string_cache_insert((gpointer) memo);
+	gnc_string_cache_remove(split->memo);
+	split->memo = tmp;
 }
 
 void
@@ -2698,10 +2698,7 @@ static void
 qofSplitSetAction (Split *split, const char *actn)
 {
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	if (!qof_begin_edit(&split->parent->inst)) return;
-	xaccSplitSetAction (split, actn);
-	qof_commit_edit(&split->parent->inst);
+	split->action = g_strdup(actn);
 }
 
 void
@@ -2720,10 +2717,20 @@ static void
 qofSplitSetReconcile (Split *split, char recn)
 {
 	g_return_if_fail(split);
-	g_return_if_fail(split->parent);
-	if (!qof_begin_edit(&split->parent->inst)) return;
-	xaccSplitSetReconcile(split, recn);
-	qof_commit_edit(&split->parent->inst);
+	switch (recn)
+	{
+		case NREC:
+		case CREC:
+		case YREC:
+		case FREC:
+		case VREC:
+			split->reconciled = recn;
+			mark_split (split);
+			xaccAccountRecomputeBalance (split->acc);
+			break;
+		default:
+			PERR("Bad reconciled flag");
+	}
 }
 
 void
