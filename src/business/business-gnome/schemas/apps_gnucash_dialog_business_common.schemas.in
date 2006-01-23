@@ -88,7 +88,7 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Is tax included ion this type of business entry?</short>
+        <short>Is tax included in this type of business entry?</short>
         <long>
 	  If set to TRUE then tax is included by default in entries of
 	  this type.  This setting is inherited by new customers and

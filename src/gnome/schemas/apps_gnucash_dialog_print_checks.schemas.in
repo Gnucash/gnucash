@@ -34,7 +34,7 @@
       <default>0</default>
       <locale name="C">
         <short>The date format to use.</short>
-        <long>This is the nimerical identifier of the predefined date format to use.</long>
+        <long>This is the numerical identifier of the predefined date format to use.</long>
       </locale>
     </schema>
 
