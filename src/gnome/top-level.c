@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <libguile.h>
 #include <popt.h>
 #include <stdlib.h>
 #include <g-wrap-wct.h>
@@ -72,6 +71,7 @@
 #include "guile-util.h"
 #include "top-level.h"
 #include "window-report.h"
+#include "gnc-window.h"
 
 
 #define ACCEL_MAP_NAME "accelerator-map"
@@ -238,11 +238,9 @@ gnc_html_price_url_cb (const char *location, const char *label,
 
 /* ============================================================== */
 
-SCM
-gnc_gui_init_splash (SCM command_line)
+void
+gnc_gui_init_splash (void)
 {
-  SCM ret = command_line;
-
   ENTER (" ");
 
   if (!splash_is_initialized)
@@ -254,32 +252,33 @@ gnc_gui_init_splash (SCM command_line)
   }
 
   LEAVE (" ");
-
-  return ret;
 }
 
-SCM
-gnc_gui_init (SCM command_line)
+void
+gnc_gui_init (void)
 {
-  SCM ret = command_line;
-  GncMainWindow *main_window;
-  gchar *map;
+    GncMainWindow *main_window;
+    gchar *map;
 
-  ENTER (" ");
-
-  if (!gnome_is_initialized)
-  {
+    ENTER (" ");
+    
+    if (gnome_is_initialized) {
+        LEAVE("already initialized");
+        return;
+    }
+        
     /* Make sure the splash (and hense gnome) was initialized */
     if (!splash_is_initialized)
-      ret = gnc_gui_init_splash (ret);
+        gnc_gui_init_splash();
 
     gnome_is_initialized = TRUE;
 
     gnc_ui_util_init();
     gnc_configure_date_format();
-    gnc_gconf_general_register_cb(KEY_DATE_FORMAT,
-				  (GncGconfGeneralCb)gnc_configure_date_format, NULL);
-    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+    gnc_gconf_general_register_cb(
+        KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_any_cb(
+        (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -309,11 +308,16 @@ gnc_gui_init (SCM command_line)
     g_free(map);
 
     /* FIXME Remove this test code */
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
-    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_account_tree_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_basic_commands_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_file_history_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
+    gnc_plugin_manager_add_plugin (
+        gnc_plugin_manager_get (), gnc_plugin_register_new ());
     /* I'm not sure why the FIXME note says to remove this.  Maybe
        each module should be adding its own plugin to the manager?
        Anyway... Oh, maybe... nah */
@@ -325,17 +329,11 @@ gnc_gui_init (SCM command_line)
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
 
-    // return ( main_window . command_line )
-    {
-      SCM gncMainWindowType;
-      gncMainWindowType = scm_c_eval_string("<gnc:MainWindow*>");
-      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncMainWindowType), ret );
-    }
-  }
+    gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
 
-  LEAVE (" ");
+    LEAVE (" ");
 
-  return ret;
+    return;
 }
 
 /* ============================================================== */

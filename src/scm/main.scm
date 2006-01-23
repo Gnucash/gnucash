@@ -37,6 +37,8 @@
 ;; files we can load from the top-level because they're "well behaved"
 ;; (these should probably be in modules eventually)
 (load-from-path "doc.scm")
+(load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
+(load-from-path "fin.scm")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exports
@@ -318,56 +320,6 @@ string and 'directories' must be a list of strings."
             (gnc:find-file file (list (car dirs)))
             (loop prefixes (cdr dirs))))))
 
-(define (gnc:startup-pass-2)
-  (gnc:debug "starting up (2).")
-
-  ;; SUPER UGLY HACK -- this should go away when I come back for the
-  ;; second cleanup pass...
-  (let ((original-module (current-module))
-        (bootstrap (resolve-module '(gnucash main))))
-    
-    (define (load-module name vers optional?)
-      (let ((str (string-append (_ "Loading modules... ") name)))
-	(gnc:update-splash-screen str)
-	(if optional?
-	    (gnc:module-load-optional name vers)
-	    (gnc:module-load name vers))))
-
-    (set-current-module bootstrap)
-
-    ;; files we should be able to load from the top-level because
-    ;; they're "well behaved" (these should probably be in modules
-    ;; eventually)
-    (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
-    (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
-    ;; +jsled - 2002.07.08
-    (load-from-path "fin.scm")
-
-    (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
-    (gnc:price-quotes-install-sources)
-
-    (set-current-module original-module))
-
-  ;; Load the system configs
-  (gnc:update-splash-screen (_ "Loading configs..."))
-
-  (gnc:report-menu-setup)
-
-  ;; the Welcome to GnuCash "extravaganza" report
-  (gnc:add-extension 
-   (gnc:make-menu-item 
-    (N_ "Welcome Sample Report")
-    (N_ "Welcome-to-GnuCash report screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda (window)
-      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
-
-  (gnc:hook-run-danglers gnc:*startup-hook*)
-
-  (if (gnc:config-var-value-get gnc:*loglevel*)
-      (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*))))
-
-
 (define (gnc:shutdown exit-status)
   (gnc:debug "Shutdown -- exit-status: " exit-status)
 
@@ -458,37 +410,31 @@ string and 'directories' must be a list of strings."
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
 
-  (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-  ;; We init splash before gui-init, but gui-init will do the
-  ;; splash itself.
-  (set! gnc:*command-line-remaining*
-        (gnc:gui-init-splash gnc:*command-line-remaining*))
+  (gnc:hook-remove-dangler gnc:*book-closed-hook* 
+                           gnc:main-window-book-close-handler)
+  (gnc:hook-add-dangler gnc:*book-closed-hook* 
+                        gnc:main-window-book-close-handler)
   
-  (gnc:startup-pass-2)
-
-  ;; Why are we doing this again?
-  (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-  (let* ((init-window-cons-rest
-          (gnc:gui-init gnc:*command-line-remaining*))
-         (main-window (car init-window-cons-rest)))
-    (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
-    (if (and
-         (not (gnc:account-file-to-load))
-         (not (string? (gnc:history-get-last)))
-         (gnc:gconf-get-bool "dialogs/new_user" "first_startup"))
-        (begin
-          (gnc:destroy-splash-screen)
-          (gnc:new-user-dialog))
-        (begin
-          (gnc:destroy-splash-screen)
-          (gnc:main-window-set-progressbar-window main-window)
-          (gnc:load-account-file)
-          ))
-    ;; no matter how or what we loaded, ensure the main-window
-    ;; title is valid...
-    (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-    (gnc:start-ui-event-loop) ;; this won't return until we're exiting
-    (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
+  (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
   
+  (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
+  (gnc:price-quotes-install-sources)  
+  
+  (gnc:report-menu-setup)
+  
+  ;; the Welcome to GnuCash "extravaganza" report
+  (gnc:add-extension 
+   (gnc:make-menu-item 
+    (N_ "Welcome Sample Report")
+    (N_ "Welcome-to-GnuCash report screen")
+    (list gnc:menuname-reports gnc:menuname-utility "")
+    (lambda (window)
+      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
+  
+  (gnc:hook-run-danglers gnc:*startup-hook*)
+  
+  (if (gnc:config-var-value-get gnc:*loglevel*)
+      (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*)))
+    
   ;;return to C
   )

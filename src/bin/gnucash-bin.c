@@ -43,15 +43,22 @@
 #include "gnc-main.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-plugin-file-history.h"
+#include "gnc-gconf-utils.h"
+#include "dialog-new-user.h"
 
-static int gnucash_show_version;
 /* GNUCASH_SVN is defined whenever we're building from an SVN tree */
 #ifdef GNUCASH_SVN
 static int is_development_version = TRUE;
 #else
 static int is_development_version = FALSE;
 #endif
-static char *add_quotes_file;
+
+/* Command-line option variables */
+static int gnucash_show_version;
+static const char *add_quotes_file;
+static int nofile;
+static const char *file_to_load;
 
 static void
 gnc_print_unstable_message(void)
@@ -209,7 +216,7 @@ gnucash_command_line(int argc, char **argv)
         {"loglevel", '\0', POPT_ARG_INT, NULL, 0,
          _("Set the logging level from 0 (least) to 6 (most)"), 
          _("LOGLEVEL")},
-        {"nofile", '\0', POPT_ARG_NONE, NULL, 0,
+        {"nofile", '\0', POPT_ARG_NONE, &nofile, 0,
          _("Do not load the last file opened"), NULL},
         {"config-path", '\0', POPT_ARG_STRING, &config_path, 0,
          _("Set configuration path"), _("CONFIGPATH")},
@@ -232,6 +239,7 @@ gnucash_command_line(int argc, char **argv)
     poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
     
     while ((rc = poptGetNextOpt(pc)) > 0);
+    file_to_load = poptGetArg(pc);
     poptFreeContext(pc);
 
     if (gnucash_show_version) {
@@ -330,22 +338,56 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     return;
 }
 
+static char *
+get_file_to_load()
+{
+    if (file_to_load)
+        return g_strdup(file_to_load);
+    else
+        return gnc_history_get_last();
+}
+
 static void
 inner_main (void *closure, int argc, char **argv)
 {
     SCM main_mod;
+    char* fn;
+    GError *error = NULL;
  
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
-    /* Can't show splash screen here unless we init gnome first */
-    //gnc_show_splash_screen();
+    /* TODO: After some more guile-extraction, this should happen
+       even before booting guile. */
+    gnc_gui_init();
 
     load_gnucash_modules();
     load_system_config();
     load_user_config();
+    gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     scm_c_eval_string("(gnc:main)");
+
+    
+    if (!nofile && (fn = get_file_to_load())) {
+        gnc_update_splash_screen(_("Loading data..."));
+        gnc_destroy_splash_screen();
+        if (gnc_file_open_file(fn))
+            gnc_hook_run(HOOK_BOOK_OPENED, NULL);
+        g_free(fn);
+    } 
+    else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error) &&
+             !error) {
+        gnc_destroy_splash_screen();
+        gnc_ui_new_user_dialog();
+    }
+
+    gnc_destroy_splash_screen();
+
+    gnc_hook_run(HOOK_UI_POST_STARTUP, NULL);
+    gnc_ui_start_event_loop();
+    gnc_hook_remove_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);
+
     shutdown(0);
     return;
 }

@@ -44,8 +44,6 @@ build-config.scm: ${srcdir}/build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
-            -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 

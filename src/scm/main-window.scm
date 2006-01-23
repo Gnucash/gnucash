@@ -50,7 +50,8 @@
     ;; get a list of the reports we'll be needing to nuke     
     (hash-fold 
      (lambda (k v p)
-       (set! dead-reports (cons k dead-reports)) #t) #t *gnc:_reports_*)
+       (set! dead-reports (cons k dead-reports)) #t) 
+     #t *gnc:_reports_*)
 
     ;; actually remove them (if they're being displayed, the
     ;; window's reference will keep the report alive until the
@@ -95,7 +96,3 @@
 			   slots (_ "Book Options")
 			   changed_cb)))
 
-(gnc:hook-remove-dangler gnc:*book-closed-hook* 
-                         gnc:main-window-book-close-handler)
-(gnc:hook-add-dangler gnc:*book-closed-hook* 
-                      gnc:main-window-book-close-handler)
