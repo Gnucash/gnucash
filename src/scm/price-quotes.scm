@@ -214,8 +214,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (gnc:find-file "finance-quote-check"
-                 (gnc:config-var-value-get gnc:*share-path*)))
+  (gnc:gnome-locate-data-file "finance-quote-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program #f))
@@ -263,8 +262,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (gnc:find-file "finance-quote-helper"
-                 (gnc:config-var-value-get gnc:*share-path*)))
+  (gnc:gnome-locate-data-file "finance-quote-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form

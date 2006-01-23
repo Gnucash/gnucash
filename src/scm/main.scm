@@ -63,7 +63,6 @@
 (re-export string-split)
 
 ;; from command-line.scm
-(export gnc:*share-path*)
 (export gnc:*doc-path*)
 
 ;; from doc.scm

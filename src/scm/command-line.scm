@@ -25,7 +25,6 @@
 (define gnc:*arg-no-file* #f)
 (define gnc:*loglevel* #f)
 
-(define gnc:*share-path* #f)
 (define gnc:*doc-path* #f)
 
 (define (gnc:expand-path new-list current-list default-generator)
@@ -101,16 +100,7 @@
          (N_ "Logging level from 0 (least logging) to 5 (most logging).")
          (lambda (var value) (if (exact? value) (list value) #f))
          eq?
-         #f))
-  
-  (set! gnc:*share-path*
-        (gnc:make-path-config-var
-         (N_ "List of directories to search when looking for shared data files. \
-Each element must be a string representing a directory or a symbol \
-where 'default expands to the default path, and 'current expands to \
-the current value of the path.")
-         (lambda () gnc:_install-share-path_)))
-  
+         #f))  
 
   (set! gnc:*doc-path*
         (gnc:make-path-config-var
@@ -125,11 +115,6 @@ the current value of the path.")
 
 
   ;; Now handle any envt var overrides.
-
-  (and-let* ((envdir (getenv "GNC_SHARE_PATH"))
-             (data (gnc:read-from-string envdir))
-             ((list? data)))
-    (gnc:config-var-value-set! gnc:*share-path* #f (gnc:flatten data)))
 
   (and-let* ((envdir (getenv "GNC_DOC_PATH"))
              (data (gnc:read-from-string envdir))
@@ -171,19 +156,6 @@ the current value of the path.")
            (gnc:config-var-value-set! gnc:*arg-no-file* #f val))
          #f
          (N_ "Do not load the last file opened"))
-
-   (list "share-path"
-         'string
-         (lambda (val)
-           (gnc:debug "parsing --share-path " val)
-           (let ((path-list (gnc:read-from-string val)))
-             (if (list? path-list)
-                 (gnc:config-var-value-set! gnc:*share-path* #f path-list)
-                 (begin
-                   (gnc:error "non-list given for --share-path: " val)
-                   (gnc:shutdown 1)))))
-         "SHAREPATH"
-         (N_ "Set shared data file search path"))
 
    (list "doc-path"
          'string
