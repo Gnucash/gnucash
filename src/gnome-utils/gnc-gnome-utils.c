@@ -42,10 +42,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
 
-static const struct poptOption nullPoptTable[] = {
-  { NULL, 0, 0, NULL, 0 }
-};
-
 char *
 gnc_gnome_locate_pixmap (const char *name)
 {
@@ -61,6 +57,19 @@ gnc_gnome_locate_pixmap (const char *name)
     return NULL;
   }
 
+  return fullname;
+}
+
+char *
+gnc_gnome_locate_file (GnomeFileDomain domain, const char *name)
+{
+  char *fullname;
+
+  g_return_val_if_fail(name, NULL);
+  fullname = gnome_program_locate_file(gnucash_program,
+                                       domain, name, TRUE, NULL);
+  if (!fullname)
+      PERR ("Could not locate file %s", name);
   return fullname;
 }
 
@@ -121,7 +130,7 @@ gnc_gnome_init (int argc, char **argv, const char * version)
   gnc_gtk_add_rc_file();
   gnucash_program = gnome_program_init(
       "gnucash", version, LIBGNOMEUI_MODULE,
-      argc, argv, GNOME_PARAM_POPT_TABLE, nullPoptTable,
+      argc, argv,
       GNOME_PROGRAM_STANDARD_PROPERTIES, GNOME_PARAM_NONE);
 
   /* initialization required for gtkhtml */

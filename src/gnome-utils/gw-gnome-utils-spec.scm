@@ -493,4 +493,12 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    '(((<gw:mchars> caller-owned const) message)
      (<gw:double> percentage))
    "Set the progressbar window from the given GncWindow.")
+
+  (gw:wrap-function
+   ws
+   'gnc:gnome-locate-data-file
+   '(<gw:mchars> caller-owned)
+   "gnc_gnome_locate_data_file"
+   '(((<gw:mchars> caller-owned const) name))
+   "Find the file in the application data directory.")
 )
