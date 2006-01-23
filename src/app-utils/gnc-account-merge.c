@@ -13,7 +13,8 @@ determine_account_merge_disposition(Account *existing_acct, Account *new_acct)
     return GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW;
 
   if (xaccAccountGetPlaceholder(existing_acct) != xaccAccountGetPlaceholder(new_acct))
-    return GNC_ACCOUNT_MERGE_DISPOSITION_ERROR;
+/*    return GNC_ACCOUNT_MERGE_DISPOSITION_ERROR;*/
+    return GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING;
 
   return GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING;
 }
