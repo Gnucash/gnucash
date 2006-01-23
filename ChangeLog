@@ -22,6 +22,130 @@
 	* lib/libqof/qof/qof_book_merge.h : Use gchar 
 	consistently instead of mixing with char.
 
+r12964 | chris | 2006-01-23 14:29:57 -0500 (Mon, 23 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+  Avoid GUI initialization durring --add-price-quotes, fixes #327670
+
+  BTW, it turns out that we don't need to call gtk_init().  It's called 
+  during the LIBGNOMEUI_MODULE initializtion from gnome_program_init().
+
+r12956 | chris | 2006-01-23 12:38:13 -0500 (Mon, 23 Jan 2006) | 28 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/gnome/Makefile.am
+   M /gnucash/trunk/src/gnome/gw-gnc-spec.scm
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/gnome/top-level.h
+   M /gnucash/trunk/src/scm/Makefile.am
+   M /gnucash/trunk/src/scm/build-config.scm.in
+   M /gnucash/trunk/src/scm/main-window.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+  Major step in extraction of application startup from guile.
+
+  Details:
+    Remove the last bits of libguile from top-level.[ch].
+    Change the gui initialization funtions so they can be called from C.
+    Drop some gwrappers for gui initialization functions.
+    Process the --nofile and filename command-line options from C.
+    Drastic simpilification of main.scm.
+    Initialize the gui and enter the gtk event-loop from C.
+
+  Even though there's some more clean-up to do, this patch does mark
+  a certain milestone:  A developer seeking to understand and/or modify 
+  GnuCash's startup process can now essentially ignore the guile portion.
+  Most parts of our startup now look pretty typical for a gnome-2 app.
+  The parts that remain firmly in guile are initialization of the report
+  menus and the installation of price-quote sources.
+
+  Caveat: We have multiple mechanisms for handling the filename
+  argument string -- some in guile and some in C.  The C-side mechanisms
+  (in engine/gnc-filepath-utils.c) seem a little nicer than the guile
+  ones (in main.scm).  They have slightly different behavior (e.g. which
+  paths they'll search for data files.)  They both handle URIs and
+  making absolute paths out of relative ones.  This patch switches from
+  using the guile functions to the C function.  I've tested that the common
+  cases are handled the same way, but it wouldn't surprise me if some 
+  corner-cases are not.
+
+
+r12948 | chris | 2006-01-22 22:56:10 -0500 (Sun, 22 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/scm/main.scm
+
+  Remove "batch-mode" processing from main.scm.  It's no longer needed.
+
+r12947 | chris | 2006-01-22 22:43:55 -0500 (Sun, 22 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+  Remove --devel option, which aparently doesn't do anything.
+  Also remove now unused guile portion of --add-price-quote option.
+
+r12946 | chris | 2006-01-22 22:26:01 -0500 (Sun, 22 Jan 2006) | 18 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/price-quotes.scm
+
+  Process the --add-price-quotes command-line option from C.
+  This is done by booting guile with a custom inner_main.
+  Much of the work is still handled by price-quotes.scm, which
+  is now a true stand-alone guile module without the circular dependency
+  on the (gnucash main) module.
+
+  One caveat:  Since the initialization of guile-side debugging variables 
+  is in main.scm, and since main.scm is no longer executed when running
+  --add-price-quotes, the guile code that runs during --add-price-quote
+  isn't affected by the --debug option.  A work-around is to use the 
+  GNC_DEBUG environment variable: 
+    $ GNC_DEBUG=yes gnucash --add-price-quote myfile
+
+  In the longer term, we'll either move the debugging aids to a common place
+  where it can be used by both main.scm and price-quotes.scm, or we'll get
+  the debugging state from the C-side via gwrap.
+ 
+
+r12945 | chris | 2006-01-22 22:12:27 -0500 (Sun, 22 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.c
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.h
+   M /gnucash/trunk/src/gnome-utils/gw-gnome-utils-spec.scm
+
+  Introduced gwrapped gnc_gnome_locate_data_file().=
+  This was supposed to go with r12942.
+
+r12944 | chris | 2006-01-22 19:47:45 -0500 (Sun, 22 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+  Process gnome command-line arguments after our own, 
+  so we can provide our own AUTOHELP.
+
+r12943 | chris | 2006-01-22 19:46:22 -0500 (Sun, 22 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/price-quotes.scm
+
+  Remove processing of share-path from guile.
+  This is now handled by Gnome's gnome_program_locate_file() function.
+
+r12942 | chris | 2006-01-22 18:12:15 -0500 (Sun, 22 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.c
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.h
+   M /gnucash/trunk/src/gnome-utils/gw-gnome-utils-spec.scm
+
+ Initialize Gnome libraries before booting guile.
+
 2006-01-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-chart-export.c:
@@ -135,6 +259,102 @@
 	  Load the .user file first, and then load the .auto.
 	* src/scm/Makefile.am:  paths.scm was removed.
 	
+r12912 | chris | 2006-01-20 22:59:22 -0500 (Fri, 20 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/app-utils/gw-app-utils-spec.scm
+   M /gnucash/trunk/src/engine/gw-engine-spec.scm
+   M /gnucash/trunk/src/report/report-system/html-style-sheet.scm
+   M /gnucash/trunk/src/report/report-system/report.scm
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+   D /gnucash/trunk/src/scm/path.scm
+
+  Guile-side clean-up for --namespace option.
+  Also one bit of uncommitted code from gwrap change.
+
+r12911 | chris | 2006-01-20 22:50:25 -0500 (Fri, 20 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/core-utils/Makefile.am
+   A /gnucash/trunk/src/core-utils/gnc-main.c
+   A /gnucash/trunk/src/core-utils/gnc-main.h
+   M /gnucash/trunk/src/engine/Makefile.am
+   M /gnucash/trunk/src/engine/gnc-commodity.c
+   M /gnucash/trunk/src/engine/gnc-commodity.h
+   M /gnucash/trunk/src/engine/gw-engine-spec.scm
+   M /gnucash/trunk/src/scm/price-quotes.scm
+
+  Process the --namespace command-line option from C, not guile.
+
+r12910 | chris | 2006-01-20 09:52:57 -0500 (Fri, 20 Jan 2006) | 1 line
+
+   M /gnucash/trunk/src/gnome-utils/test/Makefile.am
+
+Fix linking for src/gnome-utils/test/
+
+r12909 | chris | 2006-01-20 00:19:15 -0500 (Fri, 20 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/path.scm
+
+  Move the loading of user and system config files from guile to C.
+
+  Remove the "load config" command line options, since they weren't doing 
+  anything different than the default. 
+
+r12902 | chris | 2006-01-19 13:43:59 -0500 (Thu, 19 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/gnome/top-level.h
+
+  Remove "reverse_balance" fucntions from top-level.h.
+  Add another #include for gnucash-bin.c
+
+r12900 | chris | 2006-01-19 13:02:18 -0500 (Thu, 19 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/AUTHORS
+   M /gnucash/trunk/src/engine/Account.c
+   M /gnucash/trunk/src/engine/Account.h
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account-types.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account-types.h
+
+  Filter out deprecated account types from the account types treemodel.
+
+  Patch by Eskil Bylund <eskil.bylund@gmail.com>
+
+r12899 | chris | 2006-01-19 12:58:02 -0500 (Thu, 19 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/app-utils/gncmod-app-utils.c
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+  Add hooks just once in app_utils module init.  
+  Also don't try to load imaginary module.
+
+r12886 | chris | 2006-01-19 09:16:58 -0500 (Thu, 19 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome/top-level.h
+
+  add missing #include
+
+r12882 | chris | 2006-01-19 00:54:16 -0500 (Thu, 19 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/main.scm
+
+   Exit gnucash from C, not guile.
+
+r12881 | chris | 2006-01-19 00:18:27 -0500 (Thu, 19 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/app-utils/app-utils.scm
+   M /gnucash/trunk/src/app-utils/gncmod-app-utils.c
+
+  move some app-util function hooks from guile to C
+
 2006-01-19  David Hampton  <hampton@employees.org>
 
 	* src/core-utils/gnc-gkeyfile-utils.[ch]:
@@ -222,6 +442,53 @@
 	* src/Makefile.am:  Move 'bin' last so that it's built
 	  after gnome-utils so Chris' change works.
 
+r12879 | chris | 2006-01-18 23:29:07 -0500 (Wed, 18 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+  Move "unstable development version" message from guile to C.
+  Remove crufty guile command-line options.
+
+r12874 | chris | 2006-01-18 21:34:23 -0500 (Wed, 18 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/main.scm
+
+  dlopen() modules from C, instead of from guile
+
+r12873 | chris | 2006-01-18 21:00:25 -0500 (Wed, 18 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/scm/main.scm
+
+  The Parenthesis!  My favorite punctuation.
+
+r12872 | chris | 2006-01-18 20:33:16 -0500 (Wed, 18 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/path.scm
+
+  Minor scheme cleanup.
+  Move one function from path.scm to command-line.scm.
+  Remove processing of arguments now handled in C.
+
+r12868 | chris | 2006-01-18 20:26:21 -0500 (Wed, 18 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+  Use popt to automatically generate pretty --usage and --help.
+
+r12838 | chris | 2006-01-17 22:46:53 -0500 (Tue, 17 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+  Catch --version argument before booting Guile.
+  Also show svn revision info if binary was built from svn.
+
 2006-01-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/mt940/gnc-mt940-import.c: Add initial work on
@@ -233,6 +500,81 @@
 
 	* src/engine/gnc-engine.c : Removing .la from
 	name of module to be loaded with GModule.
+
+r12817 | chris | 2006-01-16 21:28:13 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/engine/test/test-lots.c
+
+  sane indenting
+
+r12816 | chris | 2006-01-16 21:26:16 -0500 (Mon, 16 Jan 2006) | 12 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/main.scm
+
+  Pull the C inner_main into the environment of the guile (gnucash
+  main) module.
+
+  Strangely, symbols that are resolved during a dlopen() *before* calling 
+  scm_set_current_module() are not resolvable from guile code that is inside 
+  a module. 
+
+  In order for code in a guile module to see symbols from dlopen'ed libraries,
+  they must be dlopen'ed *while* that guile module is current.  I imagine this
+  is because the process of changing the current guile module purposely hides 
+  all symbols in the current symbol table - to create an illusion of an empty
+  table.  Kinda interesting... kinda scary...
+
+r12815 | chris | 2006-01-16 20:42:46 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/overrides/Makefile.am
+
+  Don't distribute non-existant 'gnucash'
+
+r12372 | chris | 2006-01-16 16:17:48 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/GNOME2_STATUS
+
+   update budget-related status
+
+r12368 | chris | 2006-01-16 11:30:12 -0500 (Mon, 16 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/gnc-module/gnc-module.c
+   M /gnucash/trunk/src/gnc-module/gnc-module.h
+   M /gnucash/trunk/src/gnc-module/gnc-module.scm
+   M /gnucash/trunk/src/gnc-module/gw-gnc-module-spec.scm
+   M /gnucash/trunk/src/gnc-module/test/test-load-c.c
+
+  Slight contraction of gnc-module API.
+
+  Privatize structures that aren't used externally.  Remove unused functions. 
+
+r12367 | chris | 2006-01-16 09:42:43 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/business/business-core/test/test-customer.c
+
+  Register business objects before testing them.
+
+r12366 | chris | 2006-01-16 09:24:57 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/lib/libgsf-1.12.3/tests/test-cp-zip.c
+
+  Allow a libgsf test to pass even with glib 2.4.
+
+r12365 | chris | 2006-01-16 00:30:34 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/test/Makefile.am
+
+  Remove unneeded testing environments.
+
+r12364 | chris | 2006-01-16 00:22:01 -0500 (Mon, 16 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/test/Makefile.am
+   D /gnucash/trunk/src/bin/test/fake-guile
+   D /gnucash/trunk/src/bin/test/test-guile-env-override
+
+  Remove obsolete test for starting GnuCash with a different guile.
+
 
 2006-01-16  Joshua Sled  <jsled@asynchronous.org>
 
@@ -318,6 +660,57 @@
 
 	* accounts/C/*: Add placeholder flag on relevant accounts.
 
+r12363 | chris | 2006-01-15 22:23:35 -0500 (Sun, 15 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/test/test-version
+
+  Fix src/bin/test/test-version for new gnucash executable.
+
+r12362 | chris | 2006-01-15 21:43:56 -0500 (Sun, 15 Jan 2006) | 6 lines
+
+   M /gnucash/trunk/lib/libqof/backend/file/Makefile.am
+
+   Specify that LIBADD libraries are for libqof_backend_qsf.la.
+   Solves:
+      libqof-backend-qsf.so: undefined symbol: xmlNodeGetContent
+
+      error during `make check'
+
+r12351 | chris | 2006-01-14 00:47:17 -0500 (Sat, 14 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/business/dialog-tax-table/Makefile.am
+
+   Declare library dependency for dialog-tax-table.
+
+   libtool 1.5.16 seems to not mind the dependency being undeclared but
+   libtool 1.5.6 on FC3 won't lt_dlopen() the .la file without it.
+
+r12350 | chris | 2006-01-13 22:56:53 -0500 (Fri, 13 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/configure.in
+   M /gnucash/trunk/doc/Makefile.am
+   M /gnucash/trunk/lib/libc/Makefile.am
+   M /gnucash/trunk/lib/libqof/backend/file/Makefile.am
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/overrides/Makefile.am
+   M /gnucash/trunk/src/gnome/Makefile.am
+   M /gnucash/trunk/src/gnome-utils/Makefile.am
+   M /gnucash/trunk/src/quotes/Makefile.am
+
+  Add 'Makefile' as a dependency for targets that are generated
+  from scriptlets in Makefile.  That way, if the generating scriptlet is
+  changed, (or the Makefile is regenerated) the target will also be remade.
+
+r12339 | chris | 2006-01-13 00:13:05 -0500 (Fri, 13 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/Makefile.am
+   M /gnucash/trunk/configure.in
+   M /gnucash/trunk/lib/libqof/qof/Makefile.am
+   M /gnucash/trunk/src/Makefile.am
+   M /gnucash/trunk/src/bin/Makefile.am
+
+  Various fixes to allow `make dist` and building from tarball.
+
 2006-01-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/Makefile.am: revert 12296 and handle the
@@ -352,6 +745,21 @@
 	* src/bin/overrides/gnucash-build-env.in:
 	  Change core-utils to a gnc-module-dir so it loads both
 	  the .scm and the .so properly.
+
+r12338 | chris | 2006-01-12 21:05:51 -0500 (Thu, 12 Jan 2006) | 10 lines
+
+   M /gnucash/trunk/ChangeLog
+   M /gnucash/trunk/ChangeLog.2005
+
+  ChangeLog entries from svn for past 12 days.
+
+  Hmm... A commit message for my commit messages... what to write?
+  Using this, format which is much closer to svn log, saved some time.  
+  This commit took about 10 min to prepare, and I estimate it would have 
+  taken another 20 to format like my last entries.  The main effort is 
+  moving the messages off of column 0.  I suspect that the non-uniform 
+  entry style might start to bother me enough to look at the xslt again.  
+  We'll see.
 
 r12337 | chris | 2006-01-12 20:25:12 -0500 (Thu, 12 Jan 2006) | 5 lines
 
