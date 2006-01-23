@@ -805,7 +805,9 @@ on_final_account_next (GnomeDruidPage  *gnomedruidpage,
   has_errors = (g_list_length(errors) > 0);
   if (has_errors)
   {
-    gnc_info_dialog(data->dialog, "%d accounts in error, please resolve.", g_list_length(errors));
+    gnc_info_dialog(data->dialog, 
+        "%d accounts have placeholdders that conflict "
+        "with existing accounts, please resolve.", g_list_length(errors));
   }
 
   {
@@ -971,5 +973,3 @@ gnc_ui_hierarchy_druid_initialize (void)
   gnc_hook_add_dangler(HOOK_NEW_BOOK,
 		       (GFunc)gnc_ui_hierarchy_druid_hook, NULL);
 }
-
-
