@@ -332,11 +332,11 @@ int main(int argc, char ** argv)
 #endif
 
     gtk_init (&argc, &argv);
-    gnc_gnome_init (argc, argv, VERSION);
     gnc_module_system_init();
     envt_override();
     gnucash_command_line(argc, argv);
     gnc_print_unstable_message();
+    gnc_gnome_init (argc, argv, VERSION);
 
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
