@@ -85,16 +85,6 @@
       #f))
     (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
   
-  (let ((current-value gnc:*develmode*))
-    (set! 
-     gnc:*develmode*
-     (gnc:make-config-var
-      (N_ "Enable developers mode.")
-      (lambda (var value) (if (boolean? value) (list value) #f))
-      eq?
-      #f))
-    (gnc:config-var-value-set! gnc:*develmode* #f current-value))
-  
   (set! gnc:*loglevel*
         (gnc:make-config-var
          (N_ "Logging level from 0 (least logging) to 5 (most logging).")
@@ -136,13 +126,6 @@ the current value of the path.")
          #f
          (N_ "Enable debugging mode"))
 
-   (list "devel"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*develmode* #f val))
-         #f
-         (N_ "Enable developers mode"))
-   
    (list "loglevel"
          'integer
          (lambda (val)
@@ -170,26 +153,6 @@ the current value of the path.")
          "DOCPATH"
          (N_ "Set the search path for documentation files"))
    
-   (list "add-price-quotes"
-         'string
-         (lambda (val)
-           (set! gnc:*batch-mode-things-to-do*
-                 (cons
-                  (lambda ()
-                    (gnc:debug "Beginning to add price-quote")
-                    (gnc:use-guile-module-here! '(gnucash price-quotes))
-                    (gnc:suspend-gui-refresh)
-                    (gnc:engine-suspend-events)
-                    (if (not (gnc:add-quotes-to-book-at-url val))
-                        (begin
-                          (gnc:error "Failed to add quotes to " val)
-                          (gnc:shutdown 1)))
-                    (gnc:engine-suspend-events)
-                    (gnc:resume-gui-refresh))
-                  gnc:*batch-mode-things-to-do*)))
-         "FILE"
-         (N_ "Add price quotes to given FILE."))
-
 
 ))
 

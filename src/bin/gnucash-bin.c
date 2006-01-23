@@ -206,8 +206,6 @@ gnucash_command_line(int argc, char **argv)
          _("Show GnuCash version"), NULL},
         {"debug", '\0', POPT_ARG_NONE, NULL, 0,
          _("Enable debugging mode"), NULL},
-        {"devel", '\0', POPT_ARG_NONE, NULL, 0,
-         _("Enable developers mode"), NULL},
         {"loglevel", '\0', POPT_ARG_INT, NULL, 0,
          _("Set the logging level from 0 (least) to 6 (most)"), 
          _("LOGLEVEL")},

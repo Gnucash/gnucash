@@ -110,7 +110,6 @@
 
 ;; These will be converted to config vars later (see command-line.scm)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
-(define gnc:*develmode* (if (getenv "GNC_DEVEL_MODE") #t #f))
 
 ;; Function to get debugging
 (define (gnc:debugging?)
@@ -326,18 +325,6 @@ string and 'directories' must be a list of strings."
             (gnc:find-file file (list (car dirs)))
             (loop prefixes (cdr dirs))))))
 
-(define (gnc:startup-pass-1)
-  (gnc:debug "starting up (1).")
-  (gnc:setup-debugging)
-
-  ;; Now we can load a bunch of files.
-  (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
-
-  (gnc:initialize-config-vars) ;; in command-line.scm
-  ;; handle unrecognized command line args
-  (if (not (gnc:handle-command-line-args))
-      (gnc:shutdown 1)))
-
 (define (gnc:startup-pass-2)
   (gnc:debug "starting up (2).")
 
@@ -490,7 +477,16 @@ string and 'directories' must be a list of strings."
   ;;  (statprof-start)
 
   ;; Now the fun begins.
-  (gnc:startup-pass-1)
+  (gnc:debug "starting up (1).")
+  (gnc:setup-debugging)
+
+  ;; Now we can load a bunch of files.
+  (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
+
+  (gnc:initialize-config-vars) ;; in command-line.scm
+  ;; handle unrecognized command line args
+  (if (not (gnc:handle-command-line-args))
+      (gnc:shutdown 1))
 
   (if (null? gnc:*batch-mode-things-to-do*)
       (begin
