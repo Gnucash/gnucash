@@ -179,7 +179,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
   GladeXML *xml;
-  GtkWidget *dialog, *button, *date;
+  GtkWidget *dialog, *button, *date, *label;
   gint result;
   gboolean delete_user, delete_last;
 
@@ -187,6 +187,8 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
   xml = gnc_glade_xml_new ("price.glade", "Deletion Date");
   dialog = glade_xml_get_widget (xml, "Deletion Date");
   date = glade_xml_get_widget (xml, "date");
+  label = glade_xml_get_widget (xml, "date_label");
+  gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pdb_dialog);
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (pdb_dialog->dialog));
 

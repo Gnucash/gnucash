@@ -1,5 +1,11 @@
 2006-01-22  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome/dialog-price-editor.c:
+	* src/gnome/glade/progress.glade:
+	* src/gnome/glade/price.glade:
+	* src/gnome/dialog-price-edit-db.c: More HIG changes.
+
 	* src/scm/printing/print-check.scm:
 	* src/gnome/glade/print.glade:
 	* src/gnome/schemas/Makefile.am:

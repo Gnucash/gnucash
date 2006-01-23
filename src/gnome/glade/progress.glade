@@ -5,12 +5,13 @@
 <requires lib="gnome"/>
 
 <widget class="GtkWindow" id="Progress Dialog">
+  <property name="border_width">6</property>
   <property name="visible">True</property>
   <property name="title" translatable="yes">Working...</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
-  <property name="resizable">True</property>
+  <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
   <property name="skip_taskbar_hint">False</property>
@@ -23,7 +24,7 @@
       <property name="border_width">5</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">5</property>
+      <property name="spacing">6</property>
 
       <child>
 	<widget class="GtkLabel" id="heading_label">
@@ -51,7 +52,7 @@
 	  <property name="visible">True</property>
 	  <property name="orientation">GTK_PROGRESS_LEFT_TO_RIGHT</property>
 	  <property name="fraction">0</property>
-	  <property name="pulse_step">0.1</property>
+	  <property name="pulse_step">0.10000000149</property>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>
@@ -64,7 +65,7 @@
 	<widget class="GtkHButtonBox" id="hbuttonbox3">
 	  <property name="visible">True</property>
 	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-	  <property name="spacing">30</property>
+	  <property name="spacing">6</property>
 
 	  <child>
 	    <widget class="GtkButton" id="cancel_button">

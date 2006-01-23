@@ -28,7 +28,7 @@
       <child internal-child="action_area">
 	<widget class="GtkHButtonBox" id="dialog-action_area12">
 	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_EDGE</property>
+	  <property name="layout_style">GTK_BUTTONBOX_END</property>
 
 	  <child>
 	    <widget class="GtkButton" id="new_button">
