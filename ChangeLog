@@ -1,3 +1,13 @@
+2006-01-23  Neil Williams <linux@codehelp.co.uk>
+
+    * lib/libqof/backend/file/qsf-backend.c : Prevent 
+    bad time values from being passed to entity.
+    * lib/libqof/qof/qof_book_merge.c : Fix merge 
+    handling of	QOF_TYPE_CHAR to use gchar instead of 
+    casting	from a gchar*
+    * lib/libqof/qof/qof_book_merge.h : Use gchar 
+    consistently instead of mixing with char.
+
 2006-01-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-chart-export.c:

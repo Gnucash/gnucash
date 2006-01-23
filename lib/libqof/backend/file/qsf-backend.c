@@ -1055,8 +1055,11 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		timechk = strptime((char*)xmlNodeGetContent(node), QSF_XSD_TIME, &qsf_time);
 		g_return_if_fail(timechk != NULL);
 		qsf_time_t = mktime(&qsf_time);
-		timespecFromTime_t(&cm_date, qsf_time_t);
-		if(date_setter != NULL) { date_setter(qsf_ent, cm_date); }
+		if(qsf_time_t != -3600)
+		{
+			timespecFromTime_t(&cm_date, qsf_time_t);
+			if(date_setter != NULL) { date_setter(qsf_ent, cm_date); }
+		}
 	}
 	if((safe_strcmp(qof_type, QOF_TYPE_NUMERIC) == 0)  ||
 	(safe_strcmp(qof_type, QOF_TYPE_DEBCRED) == 0)) {
