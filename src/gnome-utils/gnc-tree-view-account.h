@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-view-account.h -- GtkTreeView implementation to display *
  *                            accounts in a GtkTreeView.            *
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org> *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,7 +28,7 @@
  * @{ */
 /** @file gnc-tree-view-account.h
     @brief GtkTreeView implementation for gnucash account tree.
-    @author David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_TREE_VIEW_ACCOUNT_H

@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

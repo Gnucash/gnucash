@@ -27,6 +27,7 @@
     @brief Business Interface:  Object OWNERs
     @author Copyright (C) 2001,2002 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
+    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
 
 #ifndef GNC_OWNER_H_

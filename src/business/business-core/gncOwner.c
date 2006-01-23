@@ -24,6 +24,7 @@
  * Copyright (C) 2001, 2002 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 

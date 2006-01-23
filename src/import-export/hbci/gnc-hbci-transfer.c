@@ -1,8 +1,9 @@
 /********************************************************************\
  * gnc-hbci-transfer.c -- hbci transfer functions                   *
  * Copyright (C) 2002 Christian Stimming                            *
- * Copyright (C) 2004 Bernd Wagner (minor changes for                     *
+ * Copyright (C) 2004 Bernd Wagner (minor changes for               *
  *                     online transaction templates)                *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

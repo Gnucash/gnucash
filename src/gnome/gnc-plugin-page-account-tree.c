@@ -2,7 +2,7 @@
  * gnc-plugin-page-account-tree.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@
 /** @file gnc-plugin-page-account-tree.c
     @brief Functions providing a chart of account page.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-            Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
 #include "config.h"

@@ -2,6 +2,7 @@
  * gnc-commodity.c -- api for tradable commodities (incl. currency) *
  * Copyright (C) 2000 Bill Gribble                                  *
  * Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>          *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

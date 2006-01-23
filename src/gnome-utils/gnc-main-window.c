@@ -3,7 +3,7 @@
  *	GnuCash main window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@
 /** @file gnc-main-window.c
     @brief Functions for adding content to a window.
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
 */
 
 #include "config.h"

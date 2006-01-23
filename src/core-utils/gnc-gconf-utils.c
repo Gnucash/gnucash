@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-gconf-utils.c -- utility functions for storing/retrieving    *
  *              data in the GConf database for GnuCash              *
- * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2005,2006 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

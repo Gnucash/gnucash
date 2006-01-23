@@ -2,6 +2,7 @@
  * dialog-commodity.c -- "select" and "new" commodity windows       *
  *                       (GnuCash)                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +29,7 @@
 /** @file dialog-commodity.c
     @brief "select" and "new" commodity windows
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
+    @author Copyright (c) 2006 David Hampton <hampton@employees.org>
 */
 
 

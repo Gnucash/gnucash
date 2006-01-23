@@ -1,6 +1,7 @@
 /********************************************************************\
  * dialog-options.c -- GNOME option handling                        *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

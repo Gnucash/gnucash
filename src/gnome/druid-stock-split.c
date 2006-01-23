@@ -2,6 +2,7 @@
  * druid-stock-split.c -- stock split druid for GnuCash             *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Copyright (c) 2001 Dave Peticolas <dave@krondo.com>              *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

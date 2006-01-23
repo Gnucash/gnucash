@@ -1,6 +1,9 @@
 /********************************************************************\
  * gnucash-item-list.c -- A scrollable list box                     *
  *                                                                  *
+ * Initial copyright not recorded.                                  *
+ * Copyright (c) 2006 David Hampton <hampton@employees.org>         *
+ *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
