@@ -101,13 +101,6 @@
 ;;
 (define gnc:*is-development-version?* #t)
 
-;; A list of things to do when in batch mode after the initial
-;; startup.  List items may be strings, in which case they're read and
-;; evaluated or procedures, in which case they're just executed.
-;; The items will be done in reverse order.
-
-(define gnc:*batch-mode-things-to-do* '())
-
 ;; These will be converted to config vars later (see command-line.scm)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
 
@@ -450,29 +443,6 @@ string and 'directories' must be a list of strings."
 
 (define (gnc:main)
 
-  (define (handle-batch-mode-item item)
-    (let ((old-eval? (or (string=? "1.3" (version))
-			 (string=? "1.3.4" (version))
-			 (string=? "1.4" (substring (version) 0 3)))))
-      (cond
-       ((procedure? item) (item))
-       ((string? item)
-	(call-with-input-string
-	 item
-	 (lambda (port)
-	   (let loop ((next-form (read port)))
-	     (if (not (eof-object? next-form))
-		 (begin
-		   ;; FIXME: is this where we want to eval these?
-		   ;; should we perhaps have a (gnucash user)?
-		   (if old-eval?
-		       (eval next-form)
-		       (eval next-form (resolve-module '(gnucash main))))
-		   (loop (read port))))))))
-       (else
-	(display "gnucash: unknown batch-mode item - ignoring.")
-	(newline)))))
-
   ;;  (statprof-reset 0 50000) ;; 20 times/sec
   ;;  (statprof-start)
 
@@ -488,45 +458,37 @@ string and 'directories' must be a list of strings."
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
 
-  (if (null? gnc:*batch-mode-things-to-do*)
-      (begin
-        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        ;; We init splash before gui-init, but gui-init will do the
-        ;; splash itself.
-        (set! gnc:*command-line-remaining*
-              (gnc:gui-init-splash gnc:*command-line-remaining*))))
+  (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
+  ;; We init splash before gui-init, but gui-init will do the
+  ;; splash itself.
+  (set! gnc:*command-line-remaining*
+        (gnc:gui-init-splash gnc:*command-line-remaining*))
+  
   (gnc:startup-pass-2)
 
-  (if (null? gnc:*batch-mode-things-to-do*)
-      ;; We're not in batch mode; we can go ahead and do the normal thing.
-      (begin
-        ;; Why are we doing this again?
-        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        (let* ((init-window-cons-rest
-                (gnc:gui-init gnc:*command-line-remaining*))
-               (main-window (car init-window-cons-rest)))
-          (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
-          (if (and
-               (not (gnc:account-file-to-load))
-               (not (string? (gnc:history-get-last)))
-	       (gnc:gconf-get-bool "dialogs/new_user" "first_startup"))
-              (begin
-                (gnc:destroy-splash-screen)
-                (gnc:new-user-dialog))
-              (begin
-                (gnc:destroy-splash-screen)
-                (gnc:main-window-set-progressbar-window main-window)
-                (gnc:load-account-file)
-                ))
-          ;; no matter how or what we loaded, ensure the main-window
-          ;; title is valid...
-          (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-          (gnc:start-ui-event-loop) ;; this won't return until we're exiting
-          (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
-        
-      ;; else: we're in batch mode.  Just do what the user said on the
-      ;; command line
-      (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
-
+  ;; Why are we doing this again?
+  (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
+  (let* ((init-window-cons-rest
+          (gnc:gui-init gnc:*command-line-remaining*))
+         (main-window (car init-window-cons-rest)))
+    (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
+    (if (and
+         (not (gnc:account-file-to-load))
+         (not (string? (gnc:history-get-last)))
+         (gnc:gconf-get-bool "dialogs/new_user" "first_startup"))
+        (begin
+          (gnc:destroy-splash-screen)
+          (gnc:new-user-dialog))
+        (begin
+          (gnc:destroy-splash-screen)
+          (gnc:main-window-set-progressbar-window main-window)
+          (gnc:load-account-file)
+          ))
+    ;; no matter how or what we loaded, ensure the main-window
+    ;; title is valid...
+    (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
+    (gnc:start-ui-event-loop) ;; this won't return until we're exiting
+    (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
+  
   ;;return to C
-)
+  )
