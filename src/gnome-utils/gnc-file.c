@@ -81,6 +81,7 @@ gnc_file_dialog (const char * title,
   const char *internal_name;
   char *file_name = NULL;
   gchar * okbutton = GTK_STOCK_OPEN;
+  const gchar *ok_icon = NULL;
   GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN; 
   gint response;
 
@@ -108,6 +109,7 @@ gnc_file_dialog (const char * title,
 	case GNC_FILE_DIALOG_EXPORT:
 		  action = GTK_FILE_CHOOSER_ACTION_SAVE;
 		  okbutton = _("_Export");
+		  ok_icon = GTK_STOCK_CONVERT;
 		  if (title == NULL)
 			  title = _("Export");
 		  break;
@@ -119,8 +121,12 @@ gnc_file_dialog (const char * title,
 			  NULL,
 			  action,
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			  okbutton, GTK_RESPONSE_ACCEPT,
 			  NULL);
+  if (ok_icon)
+    gnc_gtk_dialog_add_button(file_box, okbutton, ok_icon, GTK_RESPONSE_ACCEPT);
+  else
+    gtk_dialog_add_button(GTK_DIALOG(file_box),
+			  okbutton, GTK_RESPONSE_ACCEPT);
 
   if (starting_dir) {
     gchar *dir_name;

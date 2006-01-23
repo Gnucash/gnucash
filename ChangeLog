@@ -1,5 +1,8 @@
 2006-01-22  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.c: Add an icon to the export button in
+	the generic filename dialog.
+
 	* src/gnome-utils/glade/commodity.glade:
 	* src/gnome/dialog-price-editor.c:
 	* src/gnome/glade/progress.glade:
