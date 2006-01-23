@@ -162,7 +162,7 @@ typedef struct
 	gboolean updated;        /**< prevent the mergeResult from being overwritten. */
 	/* rule objects set from or by external calls */
 	QofIdType mergeType;     /**< type of comparison required for check for collision */
-	const char* mergeLabel;  /**< Descriptive label for the object type, useful for the
+	const gchar* mergeLabel;  /**< Descriptive label for the object type, useful for the
                                  user intervention dialog. */
 	GSList *mergeParam;      /**< list of usable parameters for the object type */
 	GSList *linkedEntList;   /**< list of complex data types included in this object. 
@@ -331,7 +331,7 @@ also available to the dialog as qof_book_mergeRule::mergeLabel.
 This allows the dialog to display the description of the object and all parameter data.
 
 */
-char* qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt);
+gchar* qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt);
 
 /** \brief called by dialog callback to set the result of user intervention
 
