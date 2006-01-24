@@ -1,3 +1,11 @@
+2006-01-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.h: Factor out importing
+	functions that might be useful for mt940 importer.
+
+	* src/import-export/hbci/gnc-hbci-transfer.c: Fix wrong amount
+	sign.
+
 2006-01-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/Makefile.am: add explicit libdep on libcore-utils.la

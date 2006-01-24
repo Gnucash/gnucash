@@ -199,18 +199,8 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 
   trans_list = AB_JobGetTransactions_GetTransactions(trans_job);
   if (trans_list && (AB_Transaction_List2_GetSize(trans_list) > 0)) {
-    struct trans_list_data data;
-    GNCImportMainMatcher *importer_generic_gui = 
-      gnc_gen_trans_list_new(NULL, NULL, TRUE, 14);
-
-    data.importer_generic = importer_generic_gui;
-    data.gnc_acc = gnc_acc;
-	
-    AB_Transaction_List2_ForEach (trans_list, trans_list_cb, &data);
-
-    if (run_until_done)
-      return gnc_gen_trans_list_run (importer_generic_gui);
-    return TRUE;
+    /* Final importing part. */
+    return gnc_hbci_import_final(parent, gnc_acc, trans_list, run_until_done);
   }
 
   dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
@@ -222,6 +212,31 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 				    "for the selected time period."));
   gtk_dialog_run(GTK_DIALOG(dialog));
   gtk_widget_destroy(GTK_WIDGET(dialog));
+  return TRUE;
+}
+
+
+gboolean
+gnc_hbci_import_final(GtkWidget *parent, 
+		      Account *gnc_acc,
+		      AB_TRANSACTION_LIST2 *trans_list, 
+		      gboolean run_until_done)
+{
+  struct trans_list_data data;
+  GNCImportMainMatcher *importer_generic_gui;
+
+  if (!trans_list || (AB_Transaction_List2_GetSize(trans_list) == 0)) 
+    return TRUE;
+    
+  importer_generic_gui = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
+
+  data.importer_generic = importer_generic_gui;
+  data.gnc_acc = gnc_acc;
+	
+  AB_Transaction_List2_ForEach (trans_list, trans_list_cb, &data);
+
+  if (run_until_done)
+    return gnc_gen_trans_list_run (importer_generic_gui);
   return TRUE;
 }
 

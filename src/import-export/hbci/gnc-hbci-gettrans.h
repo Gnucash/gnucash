@@ -38,5 +38,13 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 			const AB_JOB *trans_job,
 			gboolean run_until_done);
 
+/** Finalize the final importing part of a GetTrans job.  Returns true
+ * if everything has been finished succesfully. */
+gboolean
+gnc_hbci_import_final(GtkWidget *parent, 
+		      Account *gnc_acc,
+		      AB_TRANSACTION_LIST2 *trans_list, 
+		      gboolean run_until_done);
+
 
 #endif /* GNC_HBCI_GETTRANS_H */
