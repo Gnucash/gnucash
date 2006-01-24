@@ -17,6 +17,7 @@ LDADD = \
   ../libgw-engine.la \
   ../libgw-kvp.la \
   ../test-core/libgncmod-test-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   -lltdl
