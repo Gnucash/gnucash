@@ -24,6 +24,8 @@
 #define GNC_HBCI_GETTRANS_H
 
 #include <aqbanking/jobgettransactions.h>
+
+#include "import-main-matcher.h"
 #include "Account.h"
 
 /** Start a GetTrans job. */
@@ -45,6 +47,18 @@ gnc_hbci_import_final(GtkWidget *parent,
 		      Account *gnc_acc,
 		      AB_TRANSACTION_LIST2 *trans_list, 
 		      gboolean run_until_done);
+
+/** user_data struct for the gnc_hbci_trans_list_cb() structure */
+struct trans_list_data 
+{
+  Account *gnc_acc;
+  GNCImportMainMatcher *importer_generic;
+};
+
+/** AB_TRANSACTION_LIST2_foreach callback. The Conversion from HBCI to
+   GNC transaction is done here, once for each AB_TRANSACTION.  */
+AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *imported_trans, 
+				       void *user_data);
 
 
 #endif /* GNC_HBCI_GETTRANS_H */

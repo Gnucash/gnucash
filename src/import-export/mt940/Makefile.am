@@ -14,10 +14,16 @@ noinst_HEADERS = \
 
 libgncmod_mt940_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
+  ${top_builddir}/src/import-export/hbci/libgncmod-hbci.la \
+  ${top_builddir}/src/gnome/libgncgnome.la \
+  ${GNOME_LIBS} \
+  ${GLADE_LIBS} \
+  ${QOF_LIBS} \
   ${GLIB_LIBS} \
-  $(HBCI_LIBS)
+  ${HBCI_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
@@ -28,12 +34,14 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
   -I$(top_srcdir)/src/import-export/hbci \
+  ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
-  ${GLIB_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  $(HBCI_CFLAGS)
+  ${GLADE_CFLAGS} \
+  ${QOF_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${HBCI_CFLAGS}
 
 uidir = $(GNC_UI_DIR)
 ui_DATA = \

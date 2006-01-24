@@ -46,13 +46,7 @@ gboolean
 gettrans_dates(GtkWidget *parent, Account *gnc_acc, 
 	       GWEN_TIME **from_date, GWEN_TIME **to_date);
 
-static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *reportn, void *user_data);
 
-struct trans_list_data 
-{
-  Account *gnc_acc;
-  GNCImportMainMatcher *importer_generic;
-};
 
 
 void
@@ -233,7 +227,7 @@ gnc_hbci_import_final(GtkWidget *parent,
   data.importer_generic = importer_generic_gui;
   data.gnc_acc = gnc_acc;
 	
-  AB_Transaction_List2_ForEach (trans_list, trans_list_cb, &data);
+  AB_Transaction_List2_ForEach (trans_list, gnc_hbci_trans_list_cb, &data);
 
   if (run_until_done)
     return gnc_gen_trans_list_run (importer_generic_gui);
@@ -243,7 +237,7 @@ gnc_hbci_import_final(GtkWidget *parent,
 
 /* list_AB_TRANSACTION_foreach callback. The Conversion from HBCI to
    GNC transaction is done here, once for each AB_TRANSACTION.  */
-static AB_TRANSACTION *trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
+AB_TRANSACTION *gnc_hbci_trans_list_cb(AB_TRANSACTION *h_trans, void *user_data)
 {
   time_t current_time;
   /* time_t tt1, tt2; */
