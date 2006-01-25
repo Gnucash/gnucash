@@ -2621,24 +2621,12 @@ the timepair representing midday on that day")
  "Run the danglers on a hook.")
 
 ; Now wrap all the 'known' hooks
-(gw:wrap-value ws 'gnc:*startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_STARTUP")
-(gw:wrap-value ws 'gnc:*shutdown-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_SHUTDOWN")
-(gw:wrap-value ws 'gnc:*ui-startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_UI_STARTUP")
-(gw:wrap-value ws 'gnc:*ui-post-startup-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_UI_POST_STARTUP")
-(gw:wrap-value ws 'gnc:*ui-shutdown-hook* 
-	       '(<gw:mchars> callee-owned) "HOOK_UI_SHUTDOWN")
 (gw:wrap-value ws 'gnc:*new-book-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_NEW_BOOK")
 (gw:wrap-value ws 'gnc:*report-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_REPORT")
 (gw:wrap-value ws 'gnc:*save-options-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_SAVE_OPTIONS")
-(gw:wrap-value ws 'gnc:*add-extension-hook*
-	       '(<gw:mchars> callee-owned) "HOOK_ADD_EXTENSION")
 (gw:wrap-value ws 'gnc:*book-opened-hook*
 	       '(<gw:mchars> callee-owned) "HOOK_BOOK_OPENED")
 (gw:wrap-value ws 'gnc:*book-closed-hook*

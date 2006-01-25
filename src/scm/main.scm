@@ -45,7 +45,6 @@
 
 ;; from main.scm
 (export gnc:version)
-(export gnc:debugging?)
 (export gnc:warn)
 (export gnc:error)
 (export gnc:msg)
@@ -88,15 +87,6 @@
 (debug-set! stack    2000000)
 
 ;;(use-modules (ice-9 statprof))
-
-;; These will be converted to config vars later (see command-line.scm)
-(define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
-
-;; Function to get debugging
-(define (gnc:debugging?)
-  (if (boolean? gnc:*debugging?*)
-      gnc:*debugging?*
-      (gnc:config-var-value-get gnc:*debugging?*)))
 
 (define (gnc:setup-debugging)
   (if (gnc:debugging?)

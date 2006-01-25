@@ -22,8 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration variables
 
-(define gnc:*loglevel* #f)
-
 (define gnc:*doc-path* #f)
 
 (define (gnc:expand-path new-list current-list default-generator)
@@ -67,23 +65,6 @@
   ;; We use a function so we don't do this at file load time.
   
   ;; Convert the temporary startup value into a config var.
-  (let ((current-value gnc:*debugging?*))
-    (set! 
-     gnc:*debugging?*
-     (gnc:make-config-var
-      (N_ "Enable debugging code.")
-      (lambda (var value) (if (boolean? value) (list value) #f))
-      eq?
-      #f))
-    (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
-  
-  (set! gnc:*loglevel*
-        (gnc:make-config-var
-         (N_ "Logging level from 0 (least logging) to 5 (most logging).")
-         (lambda (var value) (if (exact? value) (list value) #f))
-         eq?
-         #f))  
-
   (set! gnc:*doc-path*
         (gnc:make-path-config-var
          (N_ "A list of directories (strings) indicating where to look for html and parsed-html files. \
@@ -111,20 +92,6 @@ the current value of the path.")
 ;; for now since it doesn't depend on running any code.
 (define gnc:*arg-defs*
   (list
-   (list "debug"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*debugging?* #f val))
-         #f
-         (N_ "Enable debugging mode"))
-
-   (list "loglevel"
-         'integer
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*loglevel* #f val))
-         "LOGLEVEL"
-         (N_ "Set the logging level from 0 (least) to 6 (most)"))
-
    (list "doc-path"
          'string
          (lambda (val)

@@ -233,11 +233,6 @@
 (export gnc:hook-run-danglers)		;; from hooks.scm
 (re-export gnc:hook-add-dangler)
 (re-export gnc:hook-remove-dangler)
-(re-export gnc:*startup-hook*)
-(re-export gnc:*shutdown-hook*)
-(re-export gnc:*ui-startup-hook*)
-(re-export gnc:*ui-post-startup-hook*)
-(re-export gnc:*ui-shutdown-hook*)
 (re-export gnc:*book-opened-hook*)
 (re-export gnc:*new-book-hook*)
 (re-export gnc:*book-closed-hook*)

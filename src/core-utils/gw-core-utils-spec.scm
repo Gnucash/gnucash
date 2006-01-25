@@ -24,7 +24,8 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
-      "#include <gnc-gconf-utils.h>\n")))
+      "#include <gnc-gconf-utils.h>\n"
+      "#include <gnc-main.h>\n")))
 
   (gw:wrap-function
    ws
@@ -34,4 +35,13 @@
    '(((<gw:mchars> caller-owned) section)
      ((<gw:mchars> caller-owned) name))
    "Get a boolean value from gconf.")
+
+  (gw:wrap-function
+   ws
+   'gnc:debugging?
+   '<gw:bool>
+   "gnc_is_debugging"
+   '()
+   "Is debugging mode on?")
+
 )
