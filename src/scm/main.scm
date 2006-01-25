@@ -232,6 +232,7 @@
 
   ;; Now we can load a bunch of files.
   (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
+  (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
 
   (gnc:initialize-config-vars) ;; in command-line.scm
   ;; handle unrecognized command line args
@@ -242,11 +243,5 @@
                            gnc:main-window-book-close-handler)
   (gnc:hook-add-dangler gnc:*book-closed-hook* 
                         gnc:main-window-book-close-handler)
-  
-  (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
-  
-  (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
-  (gnc:price-quotes-install-sources)  
-  
   ;;return to C
   )

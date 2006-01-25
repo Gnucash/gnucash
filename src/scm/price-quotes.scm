@@ -23,9 +23,7 @@
 (define-module (gnucash price-quotes))
 
 (export yahoo-get-historical-quotes)
-;;(export gnc:fq-check-sources) ;; called in main.scm
 (export gnc:book-add-quotes) ;; called from gnome/dialog-price-edit-db.c
-(export gnc:add-quotes-to-book-at-url) ;; called in command-line.scm
 (export gnc:price-quotes-install-sources)
 
 (use-modules (gnucash process))

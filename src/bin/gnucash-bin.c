@@ -361,6 +361,12 @@ inner_main (void *closure, int argc, char **argv)
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     scm_c_eval_string("(gnc:main)");
+
+    /* Install Price Quote Sources */
+    gnc_update_splash_screen(_("Checking Finance::Quote..."));
+    scm_c_use_module("gnucash price-quotes");
+    scm_c_eval_string("(gnc:price-quotes-install-sources)");  
+
     gnc_hook_run(HOOK_STARTUP, NULL);
     
     if (!nofile && (fn = get_file_to_load())) {
