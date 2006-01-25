@@ -206,13 +206,14 @@ gnucash_command_line(int argc, char **argv)
     poptContext pc;
     char *p;
     int rc;
+    int debugging = 0;
     char *namespace_regexp = NULL;
 
     struct poptOption options[] = {
         POPT_AUTOHELP
         {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
          _("Show GnuCash version"), NULL},
-        {"debug", '\0', POPT_ARG_NONE, NULL, 0,
+        {"debug", '\0', POPT_ARG_NONE, &debugging, 0,
          _("Enable debugging mode"), NULL},
         {"loglevel", '\0', POPT_ARG_INT, NULL, 0,
          _("Set the logging level from 0 (least) to 6 (most)"), 
@@ -250,6 +251,7 @@ gnucash_command_line(int argc, char **argv)
         exit(0);
     }
 
+    gnc_set_debugging(debugging);
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
 }

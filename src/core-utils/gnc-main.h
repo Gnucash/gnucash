@@ -29,5 +29,7 @@
 void gnc_main_set_namespace_regexp(const char *str);
 const char *gnc_main_get_namespace_regexp(void);
 
+int gnc_is_debugging(void);
+void gnc_set_debugging(int d);
 
 #endif /* GNC_MAIN_H */

@@ -25,6 +25,7 @@
 #include "gnc-main.h"
 
 static char *namespace_regexp = NULL;
+static int is_debugging;
 
 void 
 gnc_main_set_namespace_regexp(const char *str)
@@ -36,8 +37,20 @@ gnc_main_set_namespace_regexp(const char *str)
         namespace_regexp = g_strdup(str);
 }
 
-const char *gnc_main_get_namespace_regexp(void)
+const char *
+gnc_main_get_namespace_regexp(void)
 {
     return namespace_regexp;
 }
 
+int 
+gnc_is_debugging(void)
+{
+    return is_debugging;
+}
+
+void
+gnc_set_debugging(int d)
+{
+    is_debugging = d;
+}

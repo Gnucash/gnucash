@@ -65,6 +65,7 @@
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
+#include "gnc-main.h"
 #include "gnc-gconf-utils.h"
 // +JSLED
 #include "gnc-html.h"
@@ -2438,7 +2439,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GList *plugins;
 	GError *error = NULL;
 	gchar *filename;
-	SCM debugging;
 
 	ENTER(" ");
 
@@ -2539,11 +2539,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
         /* Testing */
 	/* Now update the "eXtensions" menu */
-	debugging = scm_c_eval_string("(gnc:debugging?)");
-	if (debugging == SCM_BOOL_F) {
+	if (!gnc_is_debugging()) {
 	  GtkAction*  action;
 
-	  action = gtk_action_group_get_action(priv->action_group,"ExtensionsAction");
+	  action = gtk_action_group_get_action(priv->action_group, 
+                                               "ExtensionsAction");
 	  g_object_set(G_OBJECT(action), "visible", FALSE, (char *)NULL);
 	}
 
