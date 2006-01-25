@@ -19,6 +19,18 @@
 
 (define gnc:*command-line-remaining* #f)
 
+(define (gnc:flatten tree)
+  (let ((result '()))
+    (let loop ((remaining-items tree))
+      (cond
+       ((null? remaining-items) #t)
+       ((list? remaining-items)
+        (loop (car remaining-items))
+        (loop (cdr remaining-items)))
+       (else
+        (set! result (cons remaining-items result)))))
+    (reverse! result)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration variables
 

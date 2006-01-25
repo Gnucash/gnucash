@@ -343,11 +343,16 @@ inner_main (void *closure, int argc, char **argv)
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
+    load_gnucash_modules();
+
+    /* Setting-up the report menu must come after the module
+       loading but before the gui initialization. */
+    scm_c_use_module("gnucash report report-gnome");
+    scm_c_eval_string("(gnc:report-menu-setup)");
+
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */
     gnc_main_gui_init();
-
-    load_gnucash_modules();
     
     qof_log_set_level_global(loglevel);
 

@@ -51,8 +51,6 @@
 (export gnc:debug)
 (export string-join)
 (export gnc:backtrace-if-exception)
-(export gnc:find-file)
-(export gnc:find-localized-file)
 (export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
 
@@ -149,18 +147,6 @@
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
 
-;; only used by doc-path
-(define (gnc:flatten tree)
-  (let ((result '()))
-    (let loop ((remaining-items tree))
-      (cond
-       ((null? remaining-items) #t)
-       ((list? remaining-items)
-        (loop (car remaining-items))
-        (loop (cdr remaining-items)))
-       (else
-        (set! result (cons remaining-items result)))))
-    (reverse! result)))
 
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
@@ -214,55 +200,6 @@
     (gnc:msg stuff "-- Elapsed time: " delta "seconds.")
     (set! gnc:*last-time* now)))
 
-(define (build-path . elements)
-  (string-join elements "/"))
-
-(define (gnc:find-file file directories)
-  "Find file named 'file' anywhere in 'directories'.  'file' must be a
-string and 'directories' must be a list of strings."
-
-  (gnc:debug "gnc:find-file looking for " file " in " directories)
-
-  (do ((rest directories (cdr rest))
-       (finished? #f)
-       (result #f))
-      ((or (null? rest) finished?) result)
-
-    (let ((file-name (build-path (car rest) file)))
-      (gnc:debug "  checking for " file-name)
-      (if (access? file-name F_OK)
-          (begin
-            (gnc:debug "found file " file-name)
-            (set! finished? #t)
-            (set! result file-name))))))
-
-(define (gnc:find-localized-file file base-directories)
-  ;; Find file in path in base directories, or in any localized subdir
-  ;; thereof.
-
-  (define (locale-prefixes)
-    ;; Mac OS X. 10.1 and earlier don't have LC_MESSAGES. Fall back to
-    ;; LC_ALL for those systems.
-    (let* ((locale (or (false-if-exception (setlocale LC_MESSAGES))
-		       (setlocale LC_ALL)))
-           (strings (cond ((not (string? locale)) '())
-                          ((equal? locale "C") '())
-                          ((<= (string-length locale) 4) (list locale))
-                          (else (list (substring locale 0 2)
-                                      (substring locale 0 5)
-                                      locale)))))
-      (reverse (cons "C" strings))))
-
-  (let loop ((prefixes (locale-prefixes))
-             (dirs base-directories))
-    (if (null? dirs)
-        #f
-        (or (gnc:find-file file (map (lambda (prefix)
-                                       (build-path (car dirs) prefix))
-                                     prefixes))
-            (gnc:find-file file (list (car dirs)))
-            (loop prefixes (cdr dirs))))))
-
 (define (gnc:shutdown exit-status)
   (gnc:debug "Shutdown -- exit-status: " exit-status)
   (exit exit-status)) ;; Temporary Stub until command-line.scm dies
@@ -311,16 +248,5 @@ string and 'directories' must be a list of strings."
   (gnc:update-splash-screen (_ "Checking Finance::Quote..."))
   (gnc:price-quotes-install-sources)  
   
-  (gnc:report-menu-setup)
-  
-  ;; the Welcome to GnuCash "extravaganza" report
-  (gnc:add-extension 
-   (gnc:make-menu-item 
-    (N_ "Welcome Sample Report")
-    (N_ "Welcome-to-GnuCash report screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda (window)
-      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
-
   ;;return to C
   )
