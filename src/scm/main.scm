@@ -50,16 +50,12 @@
 (export gnc:error)
 (export gnc:msg)
 (export gnc:debug)
-(export build-path)
-(export gnc:use-module-here!)
-(export item-list->hash!)
 (export string-join)
 (export gnc:backtrace-if-exception)
 (export gnc:find-file)
 (export gnc:find-localized-file)
 (export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
-(export gnc:reload-module)
 
 (re-export hash-fold)
 (re-export string-split)
@@ -92,16 +88,6 @@
 (debug-set! stack    2000000)
 
 ;;(use-modules (ice-9 statprof))
-
-;;
-;; A flag: is this a development version?  This will flag whether or not
-;; to print out various 'development version' strings throughout the code.
-;; #t == development version, #f == stable version
-;;
-;; NOTE: You still need to comment out the message in
-;; tip_of_the_day.list.in by hand!
-;;
-(define gnc:*is-development-version?* #t)
 
 ;; These will be converted to config vars later (see command-line.scm)
 (define gnc:*debugging?* (if (getenv "GNC_DEBUG") #t #f))
@@ -137,11 +123,6 @@
         (b -1)
         (else 0)))))
 
-(define (gnc:reload-module name)
-  (let ((m (current-module)))
-    (load-from-path name)
-    (set-current-module m)))
-
 (if (not (defined? 'hash-fold))
     (define (hash-fold proc init table)
       (for-each 
@@ -151,35 +132,6 @@
             (set! init (proc (car elt) (cdr elt) init)))
           bin))
        (vector->list table))))
-
-(define (item-list->hash! lst hash
-			  getkey getval
-			  hashref hashset 
-			  list-duplicates?)
-  ;; Takes a list of the form (item item item item) and returns a hash
-  ;; formed by traversing the list, and getting the key and val from
-  ;; each item using the supplied get-key and get-val functions, and
-  ;; building a hash table from the result using the given hashref and
-  ;; hashset functions.  list-duplicates? determines whether or not in
-  ;; the resulting hash, the value for a given key is a list of all
-  ;; the values associated with that key in the input or just the
-  ;; first one encountered.
-
-  (define (handle-item item)
-    (let* ((key (getkey item))
-	   (val (getval item))
-	   (existing-val (hashref hash key)))
-
-      (if (not list-duplicates?)
-	  ;; ignore if not first value.
-	  (if (not existing-val) (hashset hash key val))
-	  ;; else result is list.
-	  (if existing-val
-	      (hashset hash key (cons val existing-val))
-	      (hashset hash key (list val))))))
-  
-  (for-each handle-item lst)
-  hash)
 
 (define (string-join lst joinstr)
   ;; This should avoid a bunch of unnecessary intermediate string-appends.
@@ -207,6 +159,7 @@
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
 
+;; only used by doc-path
 (define (gnc:flatten tree)
   (let ((result '()))
     (let loop ((remaining-items tree))
@@ -322,22 +275,7 @@ string and 'directories' must be a list of strings."
 
 (define (gnc:shutdown exit-status)
   (gnc:debug "Shutdown -- exit-status: " exit-status)
-
-  (cond ((gnc:ui-is-running?)
-	 (if (not (gnc:ui-is-terminating?))
-             (if (gnc:file-query-save)
-                 (begin
-                   (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
-                   (gnc:gui-shutdown)))))
-        (else
-	 (gnc:gui-destroy)
-	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
-         (gnc:engine-shutdown)
-	 (exit exit-status))))
-
-(define (gnc:gui-finish)
-  (gnc:debug "UI Shutdown hook.")
-  (gnc:file-quit))
+  (exit exit-status)) ;; Temporary Stub until command-line.scm dies
 
 (define (gnc:strip-path path)
   (let* ((parts-in (string-split path #\/))
@@ -355,43 +293,6 @@ string and 'directories' must be a list of strings."
 
     ;; Put it back together
     (string-join (reverse parts-out) "/")))
-
-(define (gnc:normalize-path file)
-  (let* ((parts-in (string-split file #\/))
-	 (parts-out '()))
-
-    ;; Convert to a path based at the root.  If the filename starts
-    ;; with a '/' then the first component of the list is a null
-    ;; string.  If the path starts with foo:// then the first
-    ;; component will contain a ':' and the second will be null.
-    (cond ((string-null? (car parts-in))
-	   (gnc:strip-path file))
-	  ((and (string=? (car parts-in) "file:")
-		(string-null? (cadr parts-in)))
-	   (gnc:strip-path file))
-	  ((and (string-index (car parts-in) #\:)
-		(string-null? (cadr parts-in)))
-	   file)
-	  (else
-	   (gnc:strip-path (string-append (getenv "PWD") "/" file))))
-  )
-)
-
-(define (gnc:account-file-to-load)
-  (let ((ok (not (gnc:config-var-value-get gnc:*arg-no-file*)))
-        (file (if (pair? gnc:*command-line-remaining*)
-                  (car gnc:*command-line-remaining*)
-                  (gnc:history-get-last))))
-    (and ok (string? file) (gnc:normalize-path file))))
-
-(define (gnc:load-account-file)
-  (let ((file (gnc:account-file-to-load)))
-      (if file 
-	(begin
-	  (gnc:update-splash-screen (_ "Loading data..."))
-	  (and (not (gnc:file-open-file file))
-	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))
-        (and (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))))
 
 (define (gnc:main)
 
@@ -430,11 +331,6 @@ string and 'directories' must be a list of strings."
     (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda (window)
       (gnc:main-window-open-report (gnc:make-welcome-report) window))))
-  
-  (gnc:hook-run-danglers gnc:*startup-hook*)
-  
-  (if (gnc:config-var-value-get gnc:*loglevel*)
-      (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*)))
-    
+
   ;;return to C
   )

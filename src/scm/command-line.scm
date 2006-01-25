@@ -22,7 +22,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Configuration variables
 
-(define gnc:*arg-no-file* #f)
 (define gnc:*loglevel* #f)
 
 (define gnc:*doc-path* #f)
@@ -66,13 +65,6 @@
 
 (define (gnc:initialize-config-vars)
   ;; We use a function so we don't do this at file load time.
-  
-  (set! gnc:*arg-no-file*
-        (gnc:make-config-var
-         (N_ "Don't load any file, including autoloading the last file.")
-         (lambda (var value) (if (boolean? value) (list value) #f))
-         eq?
-         #f))
   
   ;; Convert the temporary startup value into a config var.
   (let ((current-value gnc:*debugging?*))
@@ -132,13 +124,6 @@ the current value of the path.")
            (gnc:config-var-value-set! gnc:*loglevel* #f val))
          "LOGLEVEL"
          (N_ "Set the logging level from 0 (least) to 6 (most)"))
-
-   (list "nofile"
-         'boolean
-         (lambda (val)
-           (gnc:config-var-value-set! gnc:*arg-no-file* #f val))
-         #f
-         (N_ "Do not load the last file opened"))
 
    (list "doc-path"
          'string

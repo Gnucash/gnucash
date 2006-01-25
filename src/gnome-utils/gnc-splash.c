@@ -32,12 +32,21 @@
 
 static GtkWidget * splash = NULL;
 static GtkWidget * progress = NULL;
-
+static int splash_is_initialized = FALSE;
 
 static void
 splash_destroy_cb (GtkObject *object, gpointer user_data)
 {
   splash = NULL;
+}
+
+void
+gnc_gui_init_splash (void)
+{
+  if (!splash_is_initialized) {
+    splash_is_initialized = TRUE;
+    gnc_show_splash_screen ();
+  }
 }
 
 void

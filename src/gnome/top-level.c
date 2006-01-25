@@ -26,10 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <popt.h>
 #include <stdlib.h>
-#include <g-wrap-wct.h>
-#include <X11/Xlib.h>
 
 #include "TransLog.h"
 #include "combocell.h"
@@ -57,8 +54,6 @@
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
-#include "gnc-icons.h" /* FIXME Remove this line*/
-#include "gnc-splash.h"
 #include "gnc-html.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-report.h"
@@ -74,48 +69,12 @@
 #include "gnc-window.h"
 
 
-#define ACCEL_MAP_NAME "accelerator-map"
-
-/** PROTOTYPES ******************************************************/
-static void gnc_configure_date_format(void);
-
-
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static int gnome_is_running = FALSE;
-static int splash_is_initialized = FALSE;
-static int gnome_is_initialized = FALSE;
-static int gnome_is_terminating = FALSE;
-
-
-gboolean
-gnucash_ui_is_running(void)
-{
-  return gnome_is_running;
-}
-
-gboolean 
-gnucash_ui_is_terminating(void)
-{
-  return gnome_is_terminating;
-}
-
-static void
-gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
-{
-  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
-}
-
-static void
-gnc_commodity_help_cb (void)
-{
-  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
-}
-
 /* ============================================================== */
-/* HTML Hadler for reports. */
+/* HTML Handler for reports. */
 
 #define IF_TYPE(URL_TYPE_STR,ENTITY_TYPE)                                   \
   if (strncmp (URL_TYPE_STR, location, strlen (URL_TYPE_STR)) == 0)         \
@@ -236,49 +195,13 @@ gnc_html_price_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
-/* ============================================================== */
-
 void
-gnc_gui_init_splash (void)
-{
-  ENTER (" ");
-
-  if (!splash_is_initialized)
-  {
-    splash_is_initialized = TRUE;
-
-    /* put up splash screen */
-    gnc_show_splash_screen ();
-  }
-
-  LEAVE (" ");
-}
-
-void
-gnc_gui_init (void)
+gnc_main_gui_init (void)
 {
     GncMainWindow *main_window;
-    gchar *map;
 
-    ENTER (" ");
-    
-    if (gnome_is_initialized) {
-        LEAVE("already initialized");
-        return;
-    }
-        
-    /* Make sure the splash (and hense gnome) was initialized */
-    if (!splash_is_initialized)
-        gnc_gui_init_splash();
-
-    gnome_is_initialized = TRUE;
-
-    gnc_ui_util_init();
-    gnc_configure_date_format();
-    gnc_gconf_general_register_cb(
-        KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
-    gnc_gconf_general_register_any_cb(
-        (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+    ENTER(" ");
+    main_window = gnc_gui_init();
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -290,22 +213,9 @@ gnc_gui_init (void)
     gnc_html_register_url_handler (URL_TYPE_PRICE,
                                    gnc_html_price_url_cb);
 
-    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
-
-    gnc_file_set_shutdown_callback (gnc_shutdown);
-
-    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
-
     gnc_ui_sx_initialize();
 
-    main_window = gnc_main_window_new ();
-    gtk_widget_show (GTK_WIDGET (main_window));
-
     gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
-
-    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
-    gtk_accel_map_load(map);
-    g_free(map);
 
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (
@@ -323,162 +233,11 @@ gnc_gui_init (void)
        Anyway... Oh, maybe... nah */
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
                                    gnc_plugin_budget_new ());
-    gnc_load_stock_icons ();
     gnc_ui_hierarchy_druid_initialize();
 
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
-
-    gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
-
-    LEAVE (" ");
-
+    LEAVE(" ");
     return;
 }
-
-/* ============================================================== */
-
-void
-gnc_gui_shutdown (void)
-{
-  gchar *map;
-
-  if (gnome_is_running && !gnome_is_terminating)
-  {
-    gnome_is_terminating = TRUE;
-
-    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
-    gtk_accel_map_save(map);
-    g_free(map);
-
-    gtk_main_quit();
-
-    gnc_gnome_shutdown ();
-  }
-}
-
-/* ============================================================== */
-
-void
-gnc_gui_destroy (void)
-{
-  if (!gnome_is_initialized)
-    return;
-
-  gnc_extensions_shutdown ();
-}
-
-/* ============================================================== */
-
-static gboolean
-gnc_ui_check_events (gpointer not_used)
-{
-  QofSession *session;
-  gboolean force;
-
-  if (gtk_main_level() != 1)
-    return TRUE;
-
-  session = qof_session_get_current_session ();
-  if (!session)
-    return TRUE;
-
-  if (gnc_gui_refresh_suspended ())
-    return TRUE;
-
-  if (!qof_session_events_pending (session))
-    return TRUE;
-
-  gnc_suspend_gui_refresh ();
-
-  force = qof_session_process_events (session);
-
-  gnc_resume_gui_refresh ();
-
-  if (force)
-    gnc_gui_refresh_all ();
-
-  return TRUE;
-}
-
-static int
-gnc_x_error (Display        *display, XErrorEvent *error)
-{
-  if (error->error_code)
-  {
-    char buf[64];
-
-    XGetErrorText (display, error->error_code, buf, 63);
-
-    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
-               "request_code %d minor_code %d\n", 
-               buf, 
-               error->serial, 
-               error->error_code, 
-               error->request_code,
-               error->minor_code);
-  }
-
-  return 0;
-}
-
-int
-gnc_ui_start_event_loop (void)
-{
-  guint id;
-
-  gnome_is_running = TRUE;
-
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
-                           gnc_ui_check_events, NULL, NULL);
-
-  XSetErrorHandler (gnc_x_error);
-
-  /* Enter gnome event loop */
-  gtk_main ();
-
-  g_source_remove (id);
-
-  gnome_is_running = FALSE;
-  gnome_is_terminating = FALSE;
-
-  return 0;
-}
-
-/* ============================================================== */
-
-/* gnc_configure_date_format
- *    sets dateFormat to the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void 
-gnc_configure_date_format (void)
-{
-  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, KEY_DATE_FORMAT, NULL);
-
-  QofDateFormat df;
-
-  if (format_code == NULL)
-    format_code = g_strdup("locale");
-  if (*format_code == '\0') {
-    g_free(format_code);
-    format_code = g_strdup("locale");
-  }
-
-  if (gnc_date_string_to_dateformat(format_code, &df))
-  {
-    PERR("Incorrect date format code");
-    if (format_code != NULL)
-      free(format_code);
-    return;
-  }
-
-  qof_date_format_set(df);
-
-  if (format_code != NULL)
-    free(format_code);
-}
-
 /****************** END OF FILE **********************/

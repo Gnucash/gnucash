@@ -25,12 +25,6 @@
 
 #include <glib.h>
 
-gboolean gnucash_ui_is_running (void);
-gboolean gnucash_ui_is_terminating (void);
-void gnc_gui_init_splash (void);
-void gnc_gui_init (void);
-void gnc_gui_shutdown (void);
-void gnc_gui_destroy (void);
-int gnc_ui_start_event_loop (void);
+void gnc_main_gui_init(void);
 
 #endif

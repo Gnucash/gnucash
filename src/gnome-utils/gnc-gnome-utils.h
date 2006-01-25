@@ -36,13 +36,10 @@
 #define GNC_GNOME_UTILS_H
 
 #include <libgnome/libgnome.h>
+#include <gnc-main-window.h>
 
 /** Initialize the Gnome libraries. */
 void gnc_gnome_init (int argc, char **argv, const char * version);
-
-/** Shutdown/cleanup any gnome related libraries. */
-void gnc_gnome_shutdown (void);
-
 
 /** Given a pixmap/pixbuf file name, find the file in the pixmap
  *  directory associated with this application.  This routine will
@@ -139,14 +136,17 @@ GtkWidget * gnc_gnome_get_pixmap (const char *name);
 GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
 
 
-/** Shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
+/** Shutdown gnucash.  This function will initiate an orderly
+ *  shutdown, and when that has finished it will exit the program.
  *
  *  @param exit_status The exit status for the program.
  */
 void gnc_shutdown (int exit_status);
 
+void gnc_gui_init_splash (void);
+GncMainWindow *gnc_gui_init (void);
+int gnc_ui_start_event_loop (void);
+gboolean gnucash_ui_is_running (void);
 
 #endif
 /** @} */

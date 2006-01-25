@@ -46,16 +46,9 @@
       "#include <gnc-plugin-file-history.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
+      "#include <gnc-splash.h>\n"
       )))
 
-
-  (gw:wrap-function
-   ws
-   'gnc:gnome-shutdown
-   '<gw:void>
-   "gnc_gnome_shutdown"
-   '()
-   "Shutdown the GnuCash gnome system.")
 
   (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
   (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
@@ -501,4 +494,21 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    "gnc_gnome_locate_data_file"
    '(((<gw:mchars> caller-owned const) name))
    "Find the file in the application data directory.")
+
+  (gw:wrap-function
+   ws
+   'gnc:ui-is-running?
+   '<gw:bool>
+   "gnucash_ui_is_running"
+   '()
+   "Predicate to determine if the UI is running.")
+
+  (gw:wrap-function
+   ws
+   'gnc:update-splash-screen
+   '<gw:void>
+   "gnc_update_splash_screen"
+   '(((<gw:mchars> caller-owned const) string))
+   "Update the progress box on the splash screen dialog.")
+
 )

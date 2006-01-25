@@ -47,6 +47,35 @@
 
 ;; (use-modules (srfi srfi-19)) when available (see below).
 
+(define (item-list->hash! lst hash
+			  getkey getval
+			  hashref hashset 
+			  list-duplicates?)
+  ;; Takes a list of the form (item item item item) and returns a hash
+  ;; formed by traversing the list, and getting the key and val from
+  ;; each item using the supplied get-key and get-val functions, and
+  ;; building a hash table from the result using the given hashref and
+  ;; hashset functions.  list-duplicates? determines whether or not in
+  ;; the resulting hash, the value for a given key is a list of all
+  ;; the values associated with that key in the input or just the
+  ;; first one encountered.
+
+  (define (handle-item item)
+    (let* ((key (getkey item))
+	   (val (getval item))
+	   (existing-val (hashref hash key)))
+
+      (if (not list-duplicates?)
+	  ;; ignore if not first value.
+	  (if (not existing-val) (hashset hash key val))
+	  ;; else result is list.
+	  (if existing-val
+	      (hashset hash key (cons val existing-val))
+	      (hashset hash key (list val))))))
+  
+  (for-each handle-item lst)
+  hash)
+
 (define (yahoo-get-historical-quotes symbol
                                      start-year start-month start-day
                                      end-year end-month end-day)

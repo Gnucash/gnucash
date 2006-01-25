@@ -26,6 +26,7 @@
 #include <gnome.h>
 #include <libguile.h>
 #include <gconf/gconf.h>
+#include <X11/Xlib.h>
 
 #include "gnc-html-graph-gog.h"
 
@@ -36,11 +37,74 @@
 #include "gnc-html.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
-
+#include "gnc-file.h"
+#include "gnc-hooks.h"
+#include "gnc-filepath-utils.h"
+#include "gnc-menu-extensions.h"
+#include "gnc-component-manager.h"
+#include "gnc-splash.h"
+#include "gnc-window.h"
+#include "gnc-icons.h"
+#include "dialog-options.h"
+#include "dialog-commodity.h"
+#include "gnc-ui-util.h"
 #include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
 static GnomeProgram *gnucash_program = NULL;
+static int gnome_is_running = FALSE;
+static int gnome_is_terminating = FALSE;
+static int gnome_is_initialized = FALSE;
+
+
+#define ACCEL_MAP_NAME "accelerator-map"
+
+static void
+gnc_global_options_help_cb (GNCOptionWin *win, gpointer dat)
+{
+  gnc_gnome_help (HF_CUSTOM, HL_GLOBPREFS);
+}
+
+static void
+gnc_commodity_help_cb (void)
+{
+  gnc_gnome_help (HF_USAGE, HL_COMMODITY);
+}
+
+/* gnc_configure_date_format
+ *    sets dateFormat to the current value on the scheme side
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void 
+gnc_configure_date_format (void)
+{
+  char *format_code = gnc_gconf_get_string(GCONF_GENERAL, 
+                                           KEY_DATE_FORMAT, NULL);
+
+  QofDateFormat df;
+
+  if (format_code == NULL)
+    format_code = g_strdup("locale");
+  if (*format_code == '\0') {
+    g_free(format_code);
+    format_code = g_strdup("locale");
+  }
+
+  if (gnc_date_string_to_dateformat(format_code, &df))
+  {
+    PERR("Incorrect date format code");
+    if (format_code != NULL)
+      free(format_code);
+    return;
+  }
+
+  qof_date_format_set(df);
+
+  if (format_code != NULL)
+    free(format_code);
+}
 
 char *
 gnc_gnome_locate_pixmap (const char *name)
@@ -153,11 +217,6 @@ gnc_gnome_init (int argc, char **argv, const char * version)
 }
 
 void
-gnc_gnome_shutdown (void)
-{
-}
-
-void
 gnc_gnome_help (const char *file_name, const char *anchor)
 {
   GError *error = NULL;
@@ -233,27 +292,171 @@ gnc_gnome_get_gdkpixbuf (const char *name)
   return pixbuf;
 }
 
+static gboolean
+gnc_ui_check_events (gpointer not_used)
+{
+  QofSession *session;
+  gboolean force;
 
-/*  shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
+  if (gtk_main_level() != 1)
+    return TRUE;
+
+  session = qof_session_get_current_session ();
+  if (!session)
+    return TRUE;
+
+  if (gnc_gui_refresh_suspended ())
+    return TRUE;
+
+  if (!qof_session_events_pending (session))
+    return TRUE;
+
+  gnc_suspend_gui_refresh ();
+
+  force = qof_session_process_events (session);
+
+  gnc_resume_gui_refresh ();
+
+  if (force)
+    gnc_gui_refresh_all ();
+
+  return TRUE;
+}
+
+static int
+gnc_x_error (Display *display, XErrorEvent *error)
+{
+  if (error->error_code)
+  {
+    char buf[64];
+
+    XGetErrorText (display, error->error_code, buf, 63);
+
+    g_warning ("X-ERROR **: %s\n  serial %ld error_code %d "
+               "request_code %d minor_code %d\n", 
+               buf, 
+               error->serial, 
+               error->error_code, 
+               error->request_code,
+               error->minor_code);
+  }
+
+  return 0;
+}
+
+int
+gnc_ui_start_event_loop (void)
+{
+  guint id;
+
+  gnome_is_running = TRUE;
+
+  id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
+                           gnc_ui_check_events, NULL, NULL);
+
+  XSetErrorHandler (gnc_x_error);
+
+  /* Enter gnome event loop */
+  gtk_main ();
+
+  g_source_remove (id);
+
+  gnome_is_running = FALSE;
+  gnome_is_terminating = FALSE;
+
+  return 0;
+}
+
+GncMainWindow *
+gnc_gui_init(void)
+{
+    static GncMainWindow *main_window;
+    gchar *map;
+
+    if (gnome_is_initialized) {
+        return main_window;
+    }
+
+    gnc_gui_init_splash();
+
+    gnome_is_initialized = TRUE;
+
+    gnc_ui_util_init();
+    gnc_configure_date_format();
+
+    gnc_gconf_general_register_cb(
+        KEY_DATE_FORMAT, (GncGconfGeneralCb)gnc_configure_date_format, NULL);
+    gnc_gconf_general_register_any_cb(
+        (GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+
+    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
+    gnc_file_set_shutdown_callback (gnc_shutdown);
+
+    gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
+
+    main_window = gnc_main_window_new ();
+    gtk_widget_show (GTK_WIDGET (main_window));
+    gnc_window_set_progressbar_window (GNC_WINDOW(main_window));
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_load(map);
+    g_free(map);
+
+    gnc_load_stock_icons();
+
+    return main_window;
+}
+
+gboolean
+gnucash_ui_is_running(void)
+{
+  return gnome_is_running;
+}
+
+static void
+gnc_gui_destroy (void)
+{
+  if (!gnome_is_initialized)
+    return;
+
+  gnc_extensions_shutdown ();
+}
+
+static void
+gnc_gui_shutdown (void)
+{
+  gchar *map;
+
+  if (gnome_is_running && !gnome_is_terminating)
+  {
+    gnome_is_terminating = TRUE;
+
+    map = gnc_build_dotgnucash_path(ACCEL_MAP_NAME);
+    gtk_accel_map_save(map);
+    g_free(map);
+
+    gtk_main_quit();
+  }
+}
+
+/*  shutdown gnucash.  This function will initiate an orderly
+ *  shutdown, and when that has finished it will exit the program.
  */
 void
 gnc_shutdown (int exit_status)
 {
-  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
-  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
-
-  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
-  {
-    SCM scm_exit_code = scm_long2num(exit_status);    
-    scm_call_1(scm_shutdown, scm_exit_code);
-  }
-  else
-  {
-    /* Either guile is not running, or for some reason we
-       can't find gnc:shutdown. Either way, just exit. */
-    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
-    exit(exit_status);
-  }
+    if (gnucash_ui_is_running()) {
+        if (!gnome_is_terminating) {
+            if (gnc_file_query_save()) {
+                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
+                gnc_gui_shutdown();
+            }
+        }
+    } else {
+        gnc_gui_destroy();
+        gnc_hook_run(HOOK_SHUTDOWN, NULL);
+        gnc_engine_shutdown();
+        exit(exit_status);
+    }   
 }
+

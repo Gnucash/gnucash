@@ -50,59 +50,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:ui-is-running?
-   '<gw:bool>
-   "gnucash_ui_is_running"
-   '()
-   "Predicate to determine if the UI is running.")
-
-  (gw:wrap-function
-   ws
-   'gnc:ui-is-terminating?
-   '<gw:bool>
-   "gnucash_ui_is_terminating"
-   '()
-   "Predicate to determine if the UI is in the process of terminating.")
-
-  (gw:wrap-function
-   ws
    'gnc:new-user-dialog
    '<gw:void>
    "gnc_ui_new_user_dialog"
    '()
    "Show the new user dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:update-splash-screen
-   '<gw:void>
-   "gnc_update_splash_screen"
-   '(((<gw:mchars> caller-owned const) string))
-   "Update the progress box on the splash screen dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:destroy-splash-screen
-   '<gw:void>
-   "gnc_destroy_splash_screen"
-   '()
-   "Destroy the splash screen dialog.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-shutdown
-   '<gw:void>
-   "gnc_gui_shutdown"
-   '()
-   "Shutdown the UI.")
-
-  (gw:wrap-function
-   ws
-   'gnc:gui-destroy
-   '<gw:void>
-   "gnc_gui_destroy"
-   '()
-   "Destroy the UI.")
 
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>

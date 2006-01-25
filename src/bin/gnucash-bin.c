@@ -60,6 +60,7 @@ static int gnucash_show_version;
 static const char *add_quotes_file;
 static int nofile;
 static const char *file_to_load;
+static int loglevel;
 
 static void
 gnc_print_unstable_message(void)
@@ -215,7 +216,7 @@ gnucash_command_line(int argc, char **argv)
          _("Show GnuCash version"), NULL},
         {"debug", '\0', POPT_ARG_NONE, &debugging, 0,
          _("Enable debugging mode"), NULL},
-        {"loglevel", '\0', POPT_ARG_INT, NULL, 0,
+        {"loglevel", '\0', POPT_ARG_INT, &loglevel, 0,
          _("Set the logging level from 0 (least) to 6 (most)"), 
          _("LOGLEVEL")},
         {"nofile", '\0', POPT_ARG_NONE, &nofile, 0,
@@ -254,24 +255,6 @@ gnucash_command_line(int argc, char **argv)
     gnc_set_debugging(debugging);
     if (namespace_regexp)
         gnc_main_set_namespace_regexp(namespace_regexp);
-}
-
-static void
-shutdown(int status) 
-{
-    if (gnucash_ui_is_running()) {
-        if (!gnucash_ui_is_terminating()) {
-            if (gnc_file_query_save()) {
-                gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
-                gnc_gui_shutdown();
-            }
-        }
-    } else {
-        gnc_gui_destroy();
-        gnc_hook_run(HOOK_SHUTDOWN, NULL);
-        gnc_engine_shutdown();
-        exit(status);
-    }   
 }
 
 static void
@@ -334,10 +317,10 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
 
     if (!SCM_NFALSEP(scm_result)) {
         g_error("Failed to add quotes to %s.", add_quotes_file);
-        shutdown(1);
+        gnc_shutdown(1);
     }
     gnc_engine_resume_events();
-    shutdown(0);
+    gnc_shutdown(0);
     return;
 }
 
@@ -360,17 +343,20 @@ inner_main (void *closure, int argc, char **argv)
     main_mod = scm_c_resolve_module("gnucash main");
     scm_set_current_module(main_mod);
 
-    /* TODO: After some more guile-extraction, this should happen
-       even before booting guile. */
-    gnc_gui_init();
+    /* TODO: After some more guile-extraction, this should happen even
+       before booting guile.  */
+    gnc_main_gui_init();
 
     load_gnucash_modules();
+    
+    qof_log_set_level_global(loglevel);
+
     load_system_config();
     load_user_config();
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     scm_c_eval_string("(gnc:main)");
-
+    gnc_hook_run(HOOK_STARTUP, NULL);
     
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
@@ -391,7 +377,7 @@ inner_main (void *closure, int argc, char **argv)
     gnc_ui_start_event_loop();
     gnc_hook_remove_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit);
 
-    shutdown(0);
+    gnc_shutdown(0);
     return;
 }
 
