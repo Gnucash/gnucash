@@ -1,3 +1,9 @@
+2006-01-26  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fail if we find libgsf >= 1.12.2 but not libgsf-gnome.
+	  This is instead of configure succeeding and then failing the
+	  build later.
+
 2006-01-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.h: Factor out importing

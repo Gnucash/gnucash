@@ -508,14 +508,15 @@ dnl MUMBLE_{LIBS,CFLAGS}...
 dnl Q: What does PKG_CHECK_MODULES create?
 dnl A: Just _CFLAGS and _LIBS, apparently [pkg.m4]
 
-dnl $4=true => don't die in case of failure.
-PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.12.2 libgsf-gnome-1 >= 1.12.2,,true)
+AC_MSG_CHECKING([for libgsf >= 1.12.2])
 if $PKG_CONFIG --silence-errors 'libgsf-1 >= 1.12.2'
 then
+  AC_MSG_RESULT(found)
+  PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.12.2 libgsf-gnome-1 >= 1.12.2,,)
   AC_DEFINE(HAVE_LIBGSF,1,[System has libgsf-1.12.2 or better])
   HAVE_LIBGSF=yes
 else
-  AC_MSG_RESULT(using internally-packaged libgsf)
+  AC_MSG_RESULT(not found.  using internally-packaged libgsf)
   GSF_CFLAGS='-I${top_srcdir}/lib/libgsf-1.12.3'
   GSF_LIBS='${top_builddir}/lib/libgsf-1.12.3/gsf/libgsf-1.la'
   HAVE_LIBGSF=no
