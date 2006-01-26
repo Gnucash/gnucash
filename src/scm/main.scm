@@ -29,7 +29,6 @@
 (use-modules (srfi srfi-8))
 
 (use-modules (gnucash gnc-module))
-(use-modules (gnucash price-quotes))
 
 (use-modules (ice-9 slib))
 (require 'printf)

@@ -84,7 +84,7 @@ CLEANFILES = gnucash gnucash-valgrind
 # For testing and other reasons, overrides/* scripts should not modify
 # the path to re-insert the overrides dir.  This should only be done
 # by these top-level "common" scripts.
-gnc_common_scripts = gnucash-env gnucash-run-script gnucash-make-guids
+gnc_common_scripts = gnucash-env gnucash-make-guids
 
 bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf gnucash gnucash-valgrind
 

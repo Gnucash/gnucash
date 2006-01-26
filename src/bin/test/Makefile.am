@@ -1,7 +1,7 @@
 
-TESTS = test-version test-run-script
+TESTS = test-version
 
 TESTS_ENVIRONMENT := \
 	PATH="..:${PATH}"
 
-EXTRA_DIST = test-version test-run-script
+EXTRA_DIST = test-version

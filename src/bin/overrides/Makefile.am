@@ -3,14 +3,12 @@ gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
 gncoverrides_SCRIPTS = \
   gnucash-env \
   gnucash-make-guids \
-  gnucash-run-script \
   guile
 
 EXTRA_DIST = \
   gnucash-env.in \
   gnucash-build-env.in \
   gnucash-make-guids \
-  gnucash-run-script \
   guile.in 
 
 noinst_DATA = gnucash-build-env
