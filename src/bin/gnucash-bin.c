@@ -353,7 +353,7 @@ inner_main (void *closure, int argc, char **argv)
     /* TODO: After some more guile-extraction, this should happen even
        before booting guile.  */
     gnc_main_gui_init();
-    
+
     qof_log_set_level_global(loglevel);
 
     load_system_config();
@@ -420,6 +420,7 @@ int main(int argc, char ** argv)
     }
 
     gnc_gnome_init (argc, argv, VERSION);
+    gnc_gui_init();
     scm_boot_guile(argc, argv, inner_main, 0);
     exit(0); /* never reached */
 }

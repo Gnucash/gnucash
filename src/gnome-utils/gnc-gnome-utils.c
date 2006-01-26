@@ -47,6 +47,7 @@
 #include "gnc-icons.h"
 #include "dialog-options.h"
 #include "dialog-commodity.h"
+#include "dialog-totd.h"
 #include "gnc-ui-util.h"
 #include <gnc-dir.h>
 
@@ -403,6 +404,7 @@ gnc_gui_init(void)
     g_free(map);
 
     gnc_load_stock_icons();
+    gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     return main_window;
 }

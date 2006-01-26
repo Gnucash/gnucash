@@ -198,10 +198,7 @@ gnc_html_price_url_cb (const char *location, const char *label,
 void
 gnc_main_gui_init (void)
 {
-    GncMainWindow *main_window;
-
     ENTER(" ");
-    main_window = gnc_gui_init();
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -214,8 +211,6 @@ gnc_main_gui_init (void)
                                    gnc_html_price_url_cb);
 
     gnc_ui_sx_initialize();
-
-    gnc_totd_dialog(GTK_WINDOW(main_window), TRUE);
 
     /* FIXME Remove this test code */
     gnc_plugin_manager_add_plugin (

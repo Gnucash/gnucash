@@ -40,6 +40,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-preferences.c \
   dialog-query-list.c \
   dialog-reset-warnings.c \
+  dialog-totd.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
@@ -104,6 +105,7 @@ gncinclude_HEADERS = \
   dialog-options.h \
   dialog-query-list.h \
   dialog-reset-warnings.h \
+  dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
