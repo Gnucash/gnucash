@@ -274,6 +274,22 @@ gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
 					  GdkEventButton *event,
 					  GncPluginPage *page);
 
+/** Restore the persistent state of all windows.
+ *
+ *  @param keyfile The GKeyFile containing persistent window state.
+ */ 
+void gnc_main_window_restore_all_windows(const GKeyFile *keyfile);
+
+/** Save the persistent state of all windows.
+ *
+ *  @param keyfile The GKeyFile to contain persistent window state.
+ */ 
+void gnc_main_window_save_all_windows(GKeyFile *keyfile);
+
+/** Restore the persistent state of one window to a sane default.
+ */ 
+void gnc_main_window_restore_default_state(void);
+
 /**
  * gnc_gtk_action_group_set_translation_domain:
  * @action_group: a #GtkActionGroup
@@ -295,6 +311,7 @@ gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
 void 
 gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 					     const gchar    *domain);
+
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

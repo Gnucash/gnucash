@@ -67,6 +67,8 @@
 #include "top-level.h"
 #include "window-report.h"
 #include "gnc-window.h"
+#include "gnc-gkeyfile-utils.h"
+#include <g-wrap-wct.h>
 
 
 /** GLOBALS *********************************************************/
@@ -195,6 +197,184 @@ gnc_html_price_url_cb (const char *location, const char *label,
   return TRUE;
 }
 
+/** Restore all persistent program state.  This function finds the
+ *  "new" state file associated with a specific book guid.  It then
+ *  iterates through this state information, calling a helper function
+ *  to recreate each open window.
+ *
+ *  If the "new" state file cannot be found, this function will open
+ *  an account tree window and then attempt to invoke the old gnucash
+ *  1.x state routines.  This provides a fluid transition for users
+ *  from the old to the new state systems.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session A pointer to the current session.
+ *
+ *  @param unused An unused pointer. */
+static void
+gnc_restore_all_state (gpointer session, gpointer unused)
+{
+    GKeyFile *keyfile = NULL;
+    QofBook *book;
+    const GUID *guid;
+    const gchar *url, *guid_string;    
+    gchar *file_guid, *filename = NULL;
+    GError *error = NULL;
+    
+    url = qof_session_get_url(session);
+    ENTER("session %p (%s)", session, url);
+    if (!url) {
+        LEAVE("no url, nothing to do");
+        return;
+    }
+    
+    /* Get the book GUID */
+    book = qof_session_get_book(session);
+    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid_string = guid_to_string(guid);
+    
+    keyfile = gnc_find_state_file(url, guid_string, &filename);
+    if (filename)
+        g_free(filename);
+
+    if (!keyfile) {
+        gnc_main_window_restore_default_state();
+        
+#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
+        /* See if there's an old style state file to be found */
+        scm_call_1(scm_c_eval_string("gnc:main-window-book-open-handler"),
+                   (session ?
+                    gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
+                    SCM_BOOL_F));
+#endif
+        
+        LEAVE("old");
+        return;
+    }
+    
+#ifdef DEBUG
+    /*  Debugging: dump a copy to stdout and the trace log */
+    {
+        gchar *file_data;
+        gsize file_length;
+        file_data = g_key_file_to_data(keyfile, &file_length, NULL);
+        DEBUG("=== File Data Read===\n%s\n=== File End ===\n", file_data);
+        g_free(file_data);
+    }
+#endif
+    
+    /* validate top level info */
+    file_guid = g_key_file_get_string(keyfile, STATE_FILE_TOP, 
+                                      STATE_FILE_BOOK_GUID, &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  STATE_FILE_TOP, STATE_FILE_BOOK_GUID, error->message);
+        LEAVE("can't read guid");
+        goto cleanup;
+    }
+    if (!file_guid || strcmp(guid_string, file_guid)) {
+        g_warning("guid mismatch: book guid %s, state file guid %s",
+                  guid_string, file_guid);
+        LEAVE("guid values do not match");
+        goto cleanup;
+    }
+    
+    gnc_main_window_restore_all_windows(keyfile);
+    
+    /* Clean up */
+    LEAVE("ok");
+ cleanup:
+    if (error)
+        g_error_free(error);
+    if (file_guid)
+        g_free(file_guid);
+    g_key_file_free(keyfile);
+}
+
+
+/** Save all persistent program state to disk.  This function finds the
+ *  name of the "new" state file associated with a specific book guid.
+ *  It saves some top level data, then iterates through the list of
+ *  open windows calling a helper function to save each window.
+ *
+ *  @note The name of the state file is based on the name of the data
+ *  file, not the path name of the data file.  If there are multiple
+ *  data files with the same name, the state files will be suffixed
+ *  with a number.  E.G. test_account, test_account_2, test_account_3,
+ *  etc.
+ *
+ *  @param session The QofSession whose state should be saved.
+ *
+ *  @param unused */
+static void
+gnc_save_all_state (gpointer session, gpointer unused)
+{
+    QofBook *book;
+    const char *url, *guid_string;
+    gchar *filename;
+    const GUID *guid;
+    GError *error = NULL;
+    GKeyFile *keyfile = NULL;
+    
+    
+    url = qof_session_get_url(session);
+    ENTER("session %p (%s)", session, url);
+    if (!url) {
+        LEAVE("no url, nothing to do");
+        return;
+    }
+
+    /* Get the book GUID */
+    book = qof_session_get_book(session);
+    guid = qof_entity_get_guid(QOF_ENTITY(book));
+    guid_string = guid_to_string(guid);
+
+    /* Find the filename to use.  This returns the data from the
+     * file so its possible that we could reuse the data and
+     * maintain comments that were added to the data file, but
+     * that's not something we currently do. For now the existing
+     * data is dumped and completely regenerated.*/
+    keyfile = gnc_find_state_file(url, guid_string, &filename);
+    if (keyfile)
+        g_key_file_free(keyfile);
+
+    keyfile = g_key_file_new();
+    /* Store top level info in the data structure */
+    g_key_file_set_string(keyfile, STATE_FILE_TOP, STATE_FILE_BOOK_GUID,
+                          guid_string);
+
+    gnc_main_window_save_all_windows(keyfile);
+    
+#ifdef DEBUG
+    /*  Debugging: dump a copy to the trace log */
+    {
+        gchar *file_data;
+        gsize file_length;
+        file_data = g_key_file_to_data(keyfile, &file_length, NULL);
+        DEBUG("=== File Data Written===\n%s\n=== File End ===\n", file_data);
+        g_free(file_data);
+    }
+#endif
+
+    /* Write it all out to disk */
+    gnc_key_file_save_to_file(filename, keyfile, &error);
+    if (error) {
+        g_critical(_("Error: Failure saving state file.\n  %s"), 
+                   error->message);
+        g_error_free(error);
+    }
+    g_free(filename);
+    
+    /* Clean up */
+    g_key_file_free(keyfile);
+    LEAVE("");
+}
+
 void
 gnc_main_gui_init (void)
 {
@@ -232,7 +412,14 @@ gnc_main_gui_init (void)
 
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);
+
+    gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+                         gnc_restore_all_state, NULL);
+    gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
+                         gnc_save_all_state, NULL);
+
     LEAVE(" ");
     return;
 }
+
 /****************** END OF FILE **********************/
