@@ -1,13 +1,14 @@
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgsf-1.pc
+#pkgconfig_DATA = libgsf-1.pc
 
 if WITH_LIBGSF_GNOME
-  pkgconfig_DATA += libgsf-gnome-1.pc
+#  pkgconfig_DATA += libgsf-gnome-1.pc
 endif
 if PLATFORM_WIN32
-  pkgconfig_DATA += libgsf-win32-1.pc
+#  pkgconfig_DATA += libgsf-win32-1.pc
 endif
 
+DIST_SUBDIRS = gsf gsf-gnome gsf-win32 tests python
 SUBDIRS = gsf gsf-gnome gsf-win32 tests
 # doc (before tests)
 # po 

@@ -47,6 +47,7 @@ EXTRA_DIST = ChangeLog.1 \
   macros/g-wrap.m4 \
   macros/gnome-guile-checks.m4 \
   macros/legacy_macros.m4 \
+  po/POTFILES.in \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
@@ -98,7 +99,7 @@ if !HAVE_GOFFICE
 	ln -sf . goffice
 endif
 if !HAVE_LIBGSF
-	ln -sf lib/libgsf-1.12.3/gsf gsf
+	ln -sf $(srcdir)/lib/libgsf-1.12.3/gsf gsf
 endif
 	touch .links
 
@@ -149,7 +150,7 @@ distcleancheck_listfiles = \
 
 dist-hook: po/POTFILES.in
 
-distcheck-hook:
+distcheck-hook: po/POTFILES.in
 
 distclean-local:
 

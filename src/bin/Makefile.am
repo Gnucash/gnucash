@@ -99,6 +99,7 @@ ${gnc_common_scripts}: generate-gnc-script ${top_builddir}/config.status
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
 CLEANFILES += ${gnc_common_scripts} update-gnucash-gconf
+DISTCLEANFILES = i18n.h
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf

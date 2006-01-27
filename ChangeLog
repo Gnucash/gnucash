@@ -1,3 +1,26 @@
+2006-01-27  Derek Atkins  <derek@ihtfp.com>
+
+	Get "make distcheck" to work....
+	* src/import-export/test/Makefile.am:
+	  Added src/scm directory to test environment
+	* lib/goffice-0.0.4/Makefile.am:
+	  Don't install libgoffice-1.pc, but distribute it
+	* lib/libgsf-1.12.3/tests/Makefile.am:
+	  Link to the proper location of libgsf-1.la
+	* lib/libgsf-1.12.3/Makefile.am:
+	  Don't install the gsf .pc files, but distribute them.
+	* lib/Makefile.am:
+	  Use DIST_SUBDIRS to distribute qof, gsf, and goffice
+	* configure.in:
+	  fix QOF_LIBS to use builddir, not srcdir
+	* Makefile.am:
+	  add po/POTFILES.in to the dist
+	  link gsf into the srcdir, not the builddir
+	* src/report/report-system/Makefile.am:
+	  make sure we distribute gw-report-system.h
+	* src/bin/Makefile.am:
+	  clean i18n.h in distclean
+
 2006-01-26  David Hampton  <hampton@employees.org>
 
 	* configure.in: Default the --enable-compile-warnings argument to

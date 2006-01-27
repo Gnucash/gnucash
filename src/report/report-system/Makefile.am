@@ -48,7 +48,7 @@ libgw_report_system_la_SOURCES = gw-report-system.c
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
 
-
+noinst_HEADERS = gw-report-system.h
 noinst_DATA = .scm-links gw-report-system.h
 
 gncscmdir = ${GNC_SHAREDIR}/scm
