@@ -654,15 +654,19 @@ static void
 gnc_main_window_save_page (GncPluginPage *page, GncMainWindowSaveData *data)
 {
   gchar *page_group;
+  const gchar *plugin_name, *page_name;
 
   ENTER("page %p, data %p (key file %p, window %d, page %d)",
 	page, data, data->key_file, data->window_num, data->page_num);
+  plugin_name = gnc_plugin_page_get_plugin_name(page);
+  page_name = gnc_plugin_page_get_page_name(page);
+  if (!plugin_name || !page_name) {
+      LEAVE("not saving invalid page");
+      return;
+  }
   page_group = g_strdup_printf(PAGE_STRING, data->page_num++);
-  g_key_file_set_string(data->key_file, page_group, PAGE_TYPE,
-			GNC_PLUGIN_PAGE_GET_CLASS(page)->plugin_name);
-
-  g_key_file_set_string(data->key_file, page_group, PAGE_NAME,
-			gnc_plugin_page_get_page_name(page));
+  g_key_file_set_string(data->key_file, page_group, PAGE_TYPE, plugin_name);
+  g_key_file_set_string(data->key_file, page_group, PAGE_NAME, page_name);
 
   gnc_plugin_page_save_page(page, data->key_file, page_group);
   g_free(page_group);
