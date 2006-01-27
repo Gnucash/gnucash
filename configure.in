@@ -1754,6 +1754,10 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
+    if test x${enable_compile_warnings} = x ;
+    then
+      enable_compile_warnings="yes"
+    fi
     GNOME_COMPILE_WARNINGS
 
     PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4)

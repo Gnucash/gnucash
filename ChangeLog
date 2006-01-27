@@ -1,5 +1,8 @@
 2006-01-26  David Hampton  <hampton@employees.org>
 
+	* configure.in: Default the --enable-compile-warnings argument to
+	yes.
+
 	* src/gnome/window-reconcile.c:
 	* src/gnome/glade/tax.glade:
 	* src/gnome/glade/reconcile.glade:
