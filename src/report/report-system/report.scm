@@ -269,7 +269,7 @@
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
     (gnc:report-add id r)
-    id))
+    #f))
 
 
 (define (gnc:make-report-options template-name)
@@ -305,9 +305,11 @@
         #f)))
 
 (define (gnc:report-name report) 
-  (gnc:option-value
-   (gnc:lookup-option (gnc:report-options report)
-                      gnc:pagename-general gnc:optname-reportname)))
+  (let* ((opt (gnc:report-options report)))
+    (if opt
+        (gnc:option-value
+         (gnc:lookup-option opt gnc:pagename-general gnc:optname-reportname))
+        #f)))
 
 (define (gnc:report-stylesheet report)
   (gnc:html-style-sheet-find 
@@ -340,9 +342,8 @@
 (define (gnc:report-generate-restore-forms report)
   ;; clean up the options if necessary.  this is only needed 
   ;; in special cases.  
-  (let* ((template 
-          (hash-ref  *gnc:_report-templates_* 
-                     (gnc:report-type report)))
+  (let* ((report-type (gnc:report-type report))
+         (template (hash-ref *gnc:_report-templates_* report-type))
          (thunk (gnc:report-template-options-cleanup-cb template)))
     (if thunk 
         (thunk report)))

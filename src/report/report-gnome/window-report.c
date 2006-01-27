@@ -323,7 +323,13 @@ static gboolean
 remove_invalid_report(gpointer key, gpointer val, gpointer data)
 {
     SCM report = val;
-    return (NULL == gnc_report_name(report));
+    gchar *name = NULL;
+
+    if (NULL == (name = gnc_report_name(report)))
+        return TRUE;
+
+    g_free(name);
+    return FALSE;
 }
 
 static void
