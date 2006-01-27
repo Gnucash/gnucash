@@ -1,3 +1,9 @@
+2006-01-26  David Hampton  <hampton@employees.org>
+
+	* src/report/report-system/gnc-report.[ch]:
+	* src/report/report-gnome/window-report.[ch]:
+	* src/gnome/top-level.c: Fix compilation warnings.
+
 2006-01-26  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: fail if we find libgsf >= 1.12.2 but not libgsf-gnome.

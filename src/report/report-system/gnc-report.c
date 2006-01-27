@@ -81,14 +81,14 @@ yes_remove(gpointer key, gpointer val, gpointer data)
 }
 
 void
-gnc_reports_flush_global()
+gnc_reports_flush_global(void)
 {
     if (reports)
         g_hash_table_foreach_remove(reports, yes_remove, NULL);
 }
 
 GHashTable *
-gnc_reports_get_global()
+gnc_reports_get_global(void)
 {
     gnc_report_init_table();
     return reports;

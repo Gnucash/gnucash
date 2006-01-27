@@ -45,5 +45,5 @@ void       gnc_report_raise_editor(SCM report);
 // module[/plugin]-init
 void       gnc_report_init (void);
 
-void gnc_reports_show_all();
+void gnc_reports_show_all(void);
 #endif

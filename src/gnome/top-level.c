@@ -422,9 +422,9 @@ gnc_main_gui_init (void)
                          gnc_save_all_state, NULL);
 
     /* CAS: I'm not really sure why we remove before adding. */
-    gnc_hook_remove_dangler(HOOK_BOOK_CLOSED, gnc_reports_flush_global);
+    gnc_hook_remove_dangler(HOOK_BOOK_CLOSED, (GFunc)gnc_reports_flush_global);
     gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
-                         gnc_reports_flush_global, NULL);
+                         (GFunc)gnc_reports_flush_global, NULL);
 
 
     LEAVE(" ");

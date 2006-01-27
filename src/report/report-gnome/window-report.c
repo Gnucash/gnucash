@@ -325,7 +325,7 @@ show_report(gpointer key, gpointer val, gpointer data)
 }
 
 void
-gnc_reports_show_all()
+gnc_reports_show_all(void)
 {
     GHashTable *reports = gnc_reports_get_global();
     
