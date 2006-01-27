@@ -2,6 +2,7 @@
  * gnc-report.h -- C functions for reports.                         *
  *                                                                  *
  * Copyright (C) 2001 Linux Developers Group                        *
+ * Copyright (C) 2006 Chris Shoemaker <c.shoemaker@cox.net>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -24,6 +25,9 @@
 #ifndef GNC_REPORT_H
 #define GNC_REPORT_H
 
+#include <glib.h>
+#include <libguile.h>
+
 gboolean gnc_run_report (int report_id, char ** data);
 gboolean gnc_run_report_id_string (const char * id_string, char **data);
 
@@ -33,5 +37,12 @@ gboolean gnc_run_report_id_string (const char * id_string, char **data);
  * is invalid.
  **/
 gchar* gnc_report_name( SCM report );
+
+SCM gnc_report_find(gint id);
+void gnc_report_remove_by_id(gint id);
+void gnc_report_add(gint id, SCM report);
+
+void gnc_reports_flush_global();
+GHashTable *gnc_reports_get_global();
 
 #endif

@@ -64,7 +64,6 @@
 (export gnc:load-help-topics)
 
 ;; from main-window.scm
-(export gnc:main-window-save-state)
 (export gnc:main-window-properties-cb)
 
 ;; from printing/print-check.scm
@@ -238,9 +237,5 @@
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
 
-  (gnc:hook-remove-dangler gnc:*book-closed-hook* 
-                           gnc:main-window-book-close-handler)
-  (gnc:hook-add-dangler gnc:*book-closed-hook* 
-                        gnc:main-window-book-close-handler)
   ;;return to C
   )

@@ -64,6 +64,7 @@
 #include "gnc-window.h"
 #include "guile-util.h"
 #include "option-util.h"
+#include "window-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -373,7 +374,6 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
 {
         GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(ppage);
         GncPluginPageReportPrivate *priv;
-        SCM  find_report = scm_c_eval_string("gnc:find-report");
         SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
         SCM  inst_report;
         int  report_id;
@@ -394,8 +394,7 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         
         /* get the inst-report from the Scheme-side hash, and get its
          * options and editor thunk */
-        if ((inst_report = scm_call_1(find_report, scm_int2num(report_id)))
-            == SCM_BOOL_F) {
+        if ((inst_report = gnc_report_find(report_id)) == SCM_BOOL_F) {
                 return;
         }
         
@@ -422,7 +421,6 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(data);
         GncPluginPageReportPrivate *priv;
         int  report_id;
-        SCM  find_report    = scm_c_eval_string("gnc:find-report");
         SCM  get_options    = scm_c_eval_string("gnc:report-options");
         SCM  set_needs_save = scm_c_eval_string("gnc:report-set-needs-save?!");
         SCM  inst_report;
@@ -446,7 +444,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                  && (strlen(location) > 10)
                  && !strncmp("report-id=", location, 10)) {
                 sscanf(location+10, "%d", &report_id);
-                inst_report = scm_call_1(find_report, scm_int2num(report_id));
+                inst_report = gnc_report_find(report_id);
                 if (inst_report != SCM_BOOL_F) {
                         gnc_plugin_page_report_add_edited_report(priv, inst_report);
                 }
@@ -456,10 +454,9 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 return;
         }
         
-        /* get the inst-report from the Scheme-side hash, and get its
+        /* get the inst-report from the hash, and get its
          * options and editor thunk */
-        if ((inst_report = scm_call_1(find_report, scm_int2num(report_id)))
-            == SCM_BOOL_F) {
+        if ((inst_report = gnc_report_find(report_id)) == SCM_BOOL_F) {
                 LEAVE( "error getting inst_report" );
                 return;
         }
@@ -563,15 +560,17 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
         gnc_html_reload( priv->html );
 }
 
+/* FIXME: This function does... nothing.  */
 static void 
 gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node, 
                                           gpointer user_data)
 {
+#if 0  
         static SCM         remover = SCM_BOOL_F;
         int                report_id;
-  
+
         if (remover == SCM_BOOL_F) {
-                remover = scm_c_eval_string("gnc:report-remove-by-id");
+            remover = scm_c_eval_string("gnc:report-remove-by-id");
         }
   
         if (node
@@ -584,6 +583,7 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
         else {
                 return;
         }
+#endif
 }
 
 /* We got a draw event.  See if we need to reload the report */
@@ -626,18 +626,10 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
         GncPluginPageReportPrivate *priv;
 
         // FIXME: cleanup other resources.
-        static SCM         remover = SCM_BOOL_F;
-        int                report_id;
 
         PINFO("destroy widget");
-        if (remover == SCM_BOOL_F) {
-                remover = scm_c_eval_string("gnc:report-remove-by-id");
-        }
-
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
-        report_id = priv->reportId;
-        PINFO("unreffing report %d and children\n", report_id);
-        scm_call_1(remover, scm_int2num(report_id));
+        gnc_report_remove_by_id(priv->reportId);
 }
 
 

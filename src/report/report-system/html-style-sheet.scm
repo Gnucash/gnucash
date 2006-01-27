@@ -225,19 +225,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  html-style-sheet-apply-changes 
-;;  when options have been changed, rerun relevant reports 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(define (gnc:html-style-sheet-apply-changes ss)
-  (hash-fold 
-   (lambda (report-name report prior)
-     (if (eq? (gnc:report-stylesheet report) ss)
-         (gnc:report-set-dirty?! report #t))
-     #t) #t *gnc:_reports_*))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

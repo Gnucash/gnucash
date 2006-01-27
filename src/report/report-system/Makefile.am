@@ -1,6 +1,6 @@
 SUBDIRS = . test
 
-pkglib_LTLIBRARIES = libgncmod-report-system.la
+pkglib_LTLIBRARIES = libgncmod-report-system.la libgw-report-system.la
 
 libgncmod_report_system_la_SOURCES = \
   gncmod-report-system.c \
@@ -19,17 +19,19 @@ libgncmod_report_system_la_LIBADD = \
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
-  ${GLIB_CFLAGS} ${GUILE_INCS}
+  ${GLIB_CFLAGS} ${GUILE_INCS} \
+  ${G_WRAP_COMPILE_ARGS}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = report-system.scm
+SCM_FILE_LINKS = report-system.scm gw-report-system-spec.scm
 endif
 
 .scm-links:
-	rm -f gnucash report
+	rm -f gnucash report g-wrapped
 	ln -sf . gnucash
 	ln -sf . report 
+	ln -sf . g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  ln -sf ${srcdir}/$$X . ; \
@@ -37,10 +39,17 @@ if GNUCASH_SEPARATE_BUILDDIR
 endif
 	touch .scm-links
 
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
+
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = report-system.scm
 
-noinst_DATA = .scm-links
+libgw_report_system_la_SOURCES = gw-report-system.c
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
+
+
+noinst_DATA = .scm-links gw-report-system.h
 
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
@@ -59,6 +68,22 @@ gncscm_DATA = \
      report-utilities.scm \
      report.scm 
 
-EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA}
+EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA} ${gwmod_DATA}
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash report .scm-links
+
+
+gw-report-system.scm gw-report-system.c gw-report-system.h: \
+  .scm-links gw-report-system-spec.scm ${top_builddir}/config.status
+	FLAVOR=gnome $(GUILE) -c \
+	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
+	  (set! %load-path (cons \"${PWD}\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/gnome-utils\" %load-path)) \
+	  (primitive-load \"./gw-report-system-spec.scm\") \
+	  (gw:generate-wrapset \"gw-report-system\")"
+
+BUILT_SOURCES = gw-report-system.scm gw-report-system.c gw-report-system.h
+DISTCLEANFILES = gnucash g-wrapped report .scm-links ${SCM_FILE_LINKS} \
+                 gw-report-system.html

@@ -29,6 +29,7 @@
 #include "dialog-style-sheet.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
+#include "gnc-report.h"
 #include "gnc-ui.h"
 
 StyleSheetDialog * gnc_style_sheet_dialog = NULL;
@@ -60,13 +61,40 @@ enum {
  ************************************************************/
 
 static void
+dirty_same_stylesheet(gpointer key, gpointer val, gpointer data)
+{
+    SCM dirty_ss = data;
+    SCM rep_ss = NULL;
+    SCM report = val;
+    SCM func = NULL;
+
+    func = scm_c_eval_string("gnc:report-stylesheet");
+    if (SCM_PROCEDUREP(func))
+        rep_ss = scm_call_1(func, report);
+    else
+        return;
+
+    if (SCM_NFALSEP(scm_eq_p(rep_ss, dirty_ss))) {
+        func = scm_c_eval_string("gnc:report-set-dirty?!");
+        /* This makes _me_ feel dirty! */
+        if (SCM_PROCEDUREP(func))
+            scm_call_2(func, report, SCM_BOOL_T);
+    }
+}
+
+static void
 gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
                                  gpointer user_data)
 {
   ss_info * ssi = (ss_info *)user_data;
-  SCM    apply_changes = scm_c_eval_string("gnc:html-style-sheet-apply-changes");
+  GHashTable *reports = NULL;
+
+  /* FIXME: shouldn't be global */
+  reports = gnc_reports_get_global();
+  if (reports)
+      g_hash_table_foreach(reports, dirty_same_stylesheet, ssi->stylesheet);
+
   gnc_option_db_commit(ssi->odb);
-  scm_call_1(apply_changes, ssi->stylesheet);
 }
 
 

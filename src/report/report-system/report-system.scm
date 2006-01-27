@@ -106,7 +106,6 @@
 
 (export gnc:define-report)
 (export <report>)
-(export *gnc:_reports_*)
 (export gnc:report-template-new-options/name)
 (export gnc:report-template-menu-name/name)
 (export gnc:report-template-renderer/name)
@@ -147,8 +146,6 @@
 (export gnc:report-stylesheet)
 (export gnc:report-set-stylesheet!)
 (export gnc:all-report-template-names)
-(export gnc:report-remove-by-id)
-(export gnc:find-report)
 (export gnc:find-report-template)
 (export gnc:report-generate-restore-forms)
 (export gnc:report-generate-saved-forms)

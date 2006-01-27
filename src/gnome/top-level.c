@@ -251,6 +251,9 @@ gnc_restore_all_state (gpointer session, gpointer unused)
                    (session ?
                     gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
                     SCM_BOOL_F));
+        /* At this point the reports have only been loaded into
+           memory.  Now we create their ui component. */
+        gnc_reports_show_all();
 #endif
         
         LEAVE("old");
@@ -417,6 +420,12 @@ gnc_main_gui_init (void)
                          gnc_restore_all_state, NULL);
     gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
                          gnc_save_all_state, NULL);
+
+    /* CAS: I'm not really sure why we remove before adding. */
+    gnc_hook_remove_dangler(HOOK_BOOK_CLOSED, gnc_reports_flush_global);
+    gnc_hook_add_dangler(HOOK_BOOK_CLOSED,
+                         gnc_reports_flush_global, NULL);
+
 
     LEAVE(" ");
     return;

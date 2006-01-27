@@ -27,39 +27,6 @@
 ;; book close.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:main-window-save-state session)
-  (let* ((book-url (gnc:session-get-url session))
-	 (conf-file-name (gnc:html-encode-string book-url))
-         (book-path #f))
-
-    (if conf-file-name
-        (let ((book-path (gnc:build-book-path conf-file-name)))
-          (with-output-to-port (open-output-file book-path)
-            (lambda ()
-              (hash-fold 
-               (lambda (k v p)
-                 (if (gnc:report-needs-save? v)
-                     (display (gnc:report-generate-restore-forms v))))
-               #t *gnc:_reports_*)
-
-              (force-output)))
-	  ))))
-
-(define (gnc:main-window-book-close-handler session)
-  (let ((dead-reports '()))
-    ;; get a list of the reports we'll be needing to nuke     
-    (hash-fold 
-     (lambda (k v p)
-       (set! dead-reports (cons k dead-reports)) #t) 
-     #t *gnc:_reports_*)
-
-    ;; actually remove them (if they're being displayed, the
-    ;; window's reference will keep the report alive until the
-    ;; window is destroyed, but find-report will fail)
-    (for-each 
-     (lambda (dr)
-       (hash-remove! *gnc:_reports_* dr))
-     dead-reports)))
 
 (define (gnc:main-window-book-open-handler session)
   (define (try-load file-suffix)
@@ -71,18 +38,13 @@
                 (gnc:warn "failure loading " file)
                 #f))
           #f)))
+
   (let* ((book-url (gnc:session-get-url session))
 	 (conf-file-name (gnc:html-encode-string book-url))
 	 (dead-reports '()))
     (if conf-file-name 
         (try-load conf-file-name))
 
-    ;; the reports have only been created at this point; create their ui component.
-    (hash-fold (lambda (key val prior-result)
-                (gnc:main-window-open-report (gnc:report-id val)
-                                             #f ;; =window: #f/null => open in first window
-                                             ))
-               #t *gnc:_reports_*)
     ))
 
 (define (gnc:main-window-properties-cb)

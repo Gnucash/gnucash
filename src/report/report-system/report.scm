@@ -21,6 +21,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-modules (gnucash main))
+(use-modules (g-wrapped gw-report-system)) 
 
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
@@ -30,9 +31,6 @@
 ;; value is the report definition structure.
 (define *gnc:_report-templates_* (make-hash-table 23))
 
-;; this is a hash of 'report ID' to instantiated report.  the 
-;; report id is generated at report-record creation time. 
-(define *gnc:_reports_* (make-hash-table 23))
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
@@ -261,15 +259,16 @@
                (cb r))))
        options))
 
-    (hash-set! *gnc:_reports_* (gnc:report-id r) r)
+    (gnc:report-add (gnc:report-id r) r)
     id))
 
+;; This is the function that is called when saved reports are evaluated.
 (define (gnc:restore-report id template-name options)
   (let ((r ((record-constructor <report>)
             template-name id options #t #t #f #f)))
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
-    (hash-set! *gnc:_reports_* id r)
+    (gnc:report-add id r)
     id))
 
 
@@ -334,18 +333,6 @@
       (cons k p)) 
     '() *gnc:_report-templates_*)
    string<?))
-
-(define (gnc:report-remove-by-id id)
-  (let ((r (hash-ref *gnc:_reports_* id)))
-    ;; 2005.10.02, jsled: gnc:report-children doesn't appear defined anywhere?
-    ;; (for-each 
-     ;; (lambda (child)
-     ;;   (gnc:report-remove-by-id child))
-     ;; (gnc:report-children r))
-    (hash-remove! *gnc:_reports_* id)))
- 
-(define (gnc:find-report id)
-  (hash-ref *gnc:_reports_* id))
 
 (define (gnc:find-report-template report-type) 
   (hash-ref *gnc:_report-templates_* report-type))

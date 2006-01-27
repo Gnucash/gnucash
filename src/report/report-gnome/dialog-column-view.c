@@ -33,6 +33,7 @@
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
+#include "gnc-report.h"
 
 struct gncp_column_view_edit {
   GNCOptionWin * optwin;
@@ -92,7 +93,6 @@ update_display_lists(gnc_column_view_edit * view) {
   SCM   get_names = scm_c_eval_string("gnc:all-report-template-names");
   SCM   template_menu_name = scm_c_eval_string("gnc:report-template-menu-name/name");
   SCM   report_menu_name = scm_c_eval_string("gnc:report-menu-name");
-  SCM   find_report = scm_c_eval_string("gnc:find-report");
   SCM   names = scm_call_0(get_names);
   SCM   contents = 
     gnc_option_db_lookup_option(view->odb, "__general", "report-list",
@@ -100,7 +100,7 @@ update_display_lists(gnc_column_view_edit * view) {
   SCM   this_report, this_name;
   SCM   selection;
   char  * name[3];
-  int   row, i;
+  int   row, i, id;
 
   /* Update the list of available reports (left selection box). */
   row = view->available_selected;
@@ -153,7 +153,8 @@ update_display_lists(gnc_column_view_edit * view) {
       if (SCM_EQUALP (SCM_CAR(contents), selection))
         row = i;
 
-      this_report = scm_call_1(find_report, SCM_CAAR(contents));
+      id = scm_num2int(SCM_CAAR(contents), SCM_ARG1, __FUNCTION__);
+      this_report = gnc_report_find(id);
       /* this_name = scm_call_1(report_name, this_report); */
       this_name = scm_call_1(report_menu_name, this_report);
       name[0] = g_strdup(SCM_STRING_CHARS(this_name));
@@ -312,20 +313,20 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   gnc_column_view_edit * r = user_data;
   SCM make_report = scm_c_eval_string("gnc:make-report");
   SCM mark_report = scm_c_eval_string("gnc:report-set-needs-save?!");
-  SCM find_report = scm_c_eval_string("gnc:find-report");
   SCM template_name;
   SCM new_report;
   SCM newlist = SCM_EOL;
   SCM oldlist = r->contents_list;
   int count;
-  int oldlength; 
+  int oldlength, id;
   
   if(SCM_LISTP(r->available_list) && 
      (scm_ilength(r->available_list) > r->available_selected)) {
     template_name = scm_list_ref(r->available_list, 
                                 scm_int2num(r->available_selected));
     new_report = scm_call_1(make_report, template_name);
-    scm_call_2(mark_report, scm_call_1(find_report, new_report), SCM_BOOL_T);
+    id = scm_num2int(new_report, SCM_ARG1, __FUNCTION__);
+    scm_call_2(mark_report, gnc_report_find(id), SCM_BOOL_T);
     oldlength = scm_ilength(r->contents_list);
     
     if(oldlength > r->contents_selected) {

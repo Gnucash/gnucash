@@ -25,6 +25,7 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (g-wrapped gw-report-system))
 
 (gnc:module-load "gnucash/report/report-system" 0)
 

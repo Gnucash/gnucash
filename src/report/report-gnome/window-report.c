@@ -44,6 +44,7 @@
 #include "guile-mappings.h"
 
 #include "gnc-plugin-page-report.h"
+#include "gnc-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -222,7 +223,6 @@ static gboolean
 gnc_html_options_url_cb (const char *location, const char *label,
                          gboolean new_window, GNCURLResult *result)
 {
-  SCM find_report  = scm_c_eval_string ("gnc:find-report");
   SCM start_editor = scm_c_eval_string ("gnc:report-edit-options");
   SCM report;
   int report_id;
@@ -243,7 +243,7 @@ gnc_html_options_url_cb (const char *location, const char *label,
       return FALSE;
     }
 
-    report = scm_call_1 (find_report, scm_int2num (report_id));
+    report = gnc_report_find(report_id);
     if (report == SCM_UNDEFINED ||
         report == SCM_BOOL_F)
     {
@@ -316,4 +316,19 @@ gnc_report_init (void)
   gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
   gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
   gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
+}
+
+static void
+show_report(gpointer key, gpointer val, gpointer data)
+{
+    gnc_main_window_open_report(GPOINTER_TO_INT(key), NULL);
+}
+
+void
+gnc_reports_show_all()
+{
+    GHashTable *reports = gnc_reports_get_global();
+    
+    if (reports)
+        g_hash_table_foreach(reports, show_report, NULL);
 }
