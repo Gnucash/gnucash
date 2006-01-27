@@ -663,7 +663,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
   {
     GtkWidget *start_value, *box;
-    GtkWidget *entry;
+    GtkWidget *entry, *label;
     GtkWidget *interest = NULL;
 
     start_value = glade_xml_get_widget(xml, "start_value");
@@ -678,6 +678,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
     data.date_value = date_value;
     box = glade_xml_get_widget(xml, "date_value_box");
     gtk_box_pack_start(GTK_BOX(box), date_value, TRUE, TRUE, 0);
+    label = glade_xml_get_widget(xml, "date_label");
+    gnc_date_make_mnemonic_target(GNC_DATE_EDIT(date_value), label);
 
     end_value = gnc_amount_edit_new ();
     data.end_value = GNC_AMOUNT_EDIT(end_value);
@@ -685,6 +687,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
     data.user_set_value = FALSE;
     box = glade_xml_get_widget(xml, "ending_value_box");
     gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
+    label = glade_xml_get_widget(xml, "end_label");
+    gtk_label_set_mnemonic_widget(GTK_LABEL(label), end_value);
+
 
     /* need to get a callback on date changes to update the recn balance */
     g_signal_connect ( G_OBJECT (date_value), "date_changed",
@@ -710,9 +715,9 @@ startRecnWindow(GtkWidget *parent, Account *account,
      */
     interest = glade_xml_get_widget(xml, "interest_button");
     if( account_type_has_auto_interest_payment( data.account_type ) )
-      gtk_button_set_label(GTK_BUTTON(interest), _("Enter Interest Payment...") );
+      gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Payment...") );
     else if( account_type_has_auto_interest_charge( data.account_type ) )
-      gtk_button_set_label(GTK_BUTTON(interest), _("Enter Interest Charge...") );
+      gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge...") );
     else {
       gtk_widget_hide(interest);
       interest = NULL;

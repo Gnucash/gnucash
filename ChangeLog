@@ -1,5 +1,10 @@
 2006-01-26  David Hampton  <hampton@employees.org>
 
+	* src/gnome/window-reconcile.c:
+	* src/gnome/glade/tax.glade:
+	* src/gnome/glade/reconcile.glade:
+	* src/gnome/dialog-tax-info.c: More HIG changes.
+
 	* src/report/report-system/gnc-report.[ch]:
 	* src/report/report-gnome/window-report.[ch]:
 	* src/gnome/top-level.c: Fix compilation warnings.
