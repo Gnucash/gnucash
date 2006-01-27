@@ -37,9 +37,9 @@
   (gw:wrap-function
    ws
    'gnc:report-add
-   '<gw:void>
+   '<gw:int>
    "gnc_report_add"
-   '((<gw:int> id) (<gw:scm> report))
-   "Add report with id")
+   '((<gw:scm> report))
+   "Add report, returns id")
 
   )

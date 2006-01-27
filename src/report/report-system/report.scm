@@ -31,8 +31,6 @@
 ;; value is the report definition structure.
 (define *gnc:_report-templates_* (make-hash-table 23))
 
-(define *gnc:_report-next-serial_* 0)
-
 ;; Define those strings here to make changes easier and avoid typos.
 (define gnc:menuname-reports "Reports/StandardReports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
@@ -242,9 +240,7 @@
             #f            ;; ctext
             ))
         (template (hash-ref *gnc:_report-templates_* template-name))
-        (id *gnc:_report-next-serial_*))
-    (gnc:report-set-id! r id)
-    (set! *gnc:_report-next-serial_* (+ 1 id))
+        )
     (let ((options 
            (if (not (null? rest))
                (car rest)
@@ -259,17 +255,16 @@
                (cb r))))
        options))
 
-    (gnc:report-add (gnc:report-id r) r)
-    id))
+    (gnc:report-set-id! r (gnc:report-add r))
+    (gnc:report-id r))
+  )
 
 ;; This is the function that is called when saved reports are evaluated.
 (define (gnc:restore-report id template-name options)
   (let ((r ((record-constructor <report>)
             template-name id options #t #t #f #f)))
-    (if (>= id *gnc:_report-next-serial_*)
-        (set! *gnc:_report-next-serial_* (+ id 1)))
-    (gnc:report-add id r)
-    #f))
+    (gnc:report-add r))
+  )
 
 
 (define (gnc:make-report-options template-name)

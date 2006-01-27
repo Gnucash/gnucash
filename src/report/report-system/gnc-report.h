@@ -40,7 +40,7 @@ gchar* gnc_report_name( SCM report );
 
 SCM gnc_report_find(gint id);
 void gnc_report_remove_by_id(gint id);
-void gnc_report_add(gint id, SCM report);
+int gnc_report_add(SCM report);
 
 void gnc_reports_flush_global(void);
 GHashTable *gnc_reports_get_global(void);

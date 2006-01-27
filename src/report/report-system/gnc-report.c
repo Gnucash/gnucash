@@ -33,6 +33,7 @@
 
 /* Fow now, this is global, like it was in guile.  It _should_ be per-book. */
 static GHashTable *reports = NULL;
+static int report_next_serial_id = 0;
 
 static void
 gnc_report_init_table(void)
@@ -65,13 +66,14 @@ SCM gnc_report_find(gint id)
     return report;
 }
 
-void gnc_report_add(gint id, SCM report)
+int gnc_report_add(SCM report)
 {
     gint *key;
     gnc_report_init_table();
     key = g_new(gint, 1);
-    *key = id;
+    *key = report_next_serial_id++;
     g_hash_table_insert(reports, key, (gpointer)report);
+    return *key;
 }
 
 static gboolean 

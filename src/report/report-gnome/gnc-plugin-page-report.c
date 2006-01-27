@@ -706,6 +706,7 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 	gchar *option_string;
 	gint report_id;
 	SCM scm_id;
+	SCM report;
 	
 	g_return_val_if_fail(key_file, NULL);
 	g_return_val_if_fail(group_name, NULL);
@@ -716,20 +717,26 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 	if (error) {
 	  g_warning("error reading group %s key %s: %s",
 		    group_name, SCHEME_OPTIONS, error->message);
+	  g_error_free(error);
 	  LEAVE("bad value");
 	  return NULL;
 	}
 	scm_id = scm_c_eval_string(option_string);
+	g_free(option_string);
 	if (!scm_integer_p(scm_id)) {
-	  g_free(option_string);
 	  LEAVE("report id not an integer");
 	  return NULL;
 	}
 
 	report_id = scm_num2int(scm_id, SCM_ARG1, __FUNCTION__);
+	report = gnc_report_find(report_id);
+	if (!report) {
+	  LEAVE("report doesn't exist");
+	  return NULL;
+	}
+
 	page = gnc_plugin_page_report_new( report_id );
 
-	g_free(option_string);
 	LEAVE(" ");
 	return page;
 }
