@@ -318,10 +318,18 @@ gnc_report_init (void)
   gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
 }
 
+
+static gboolean
+remove_invalid_report(gpointer key, gpointer val, gpointer data)
+{
+    SCM report = val;
+    return (NULL == gnc_report_name(report));
+}
+
 static void
 show_report(gpointer key, gpointer val, gpointer data)
 {
-    gnc_main_window_open_report(GPOINTER_TO_INT(key), NULL);
+    gnc_main_window_open_report(*(gint *)key, NULL);
 }
 
 void
@@ -329,6 +337,8 @@ gnc_reports_show_all(void)
 {
     GHashTable *reports = gnc_reports_get_global();
     
-    if (reports)
+    if (reports) {
+        g_hash_table_foreach_remove(reports, remove_invalid_report, NULL);
         g_hash_table_foreach(reports, show_report, NULL);
+    }
 }

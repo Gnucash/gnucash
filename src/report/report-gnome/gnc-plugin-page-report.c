@@ -667,6 +667,11 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
 	report = GNC_PLUGIN_PAGE_REPORT(plugin_page);
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
 
+        if (!priv || !priv->cur_report || SCM_NULLP(priv->cur_report) || 
+            SCM_UNBNDP(priv->cur_report) || SCM_BOOL_F == priv->cur_report) {
+            LEAVE("not saving invalid report");
+            return;
+        }
         gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
         scm_text = scm_call_1(gen_save_text, priv->cur_report);
 
@@ -864,13 +869,14 @@ gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectC
         GncPluginPageReportClass *our_class;
         GObjectClass *parent_class;
         gint reportId = -42;
-        int i = 0;
+        int i;
 
-        our_class = GNC_PLUGIN_PAGE_REPORT_CLASS (g_type_class_peek (GNC_TYPE_PLUGIN_PAGE_REPORT));
+        our_class = GNC_PLUGIN_PAGE_REPORT_CLASS (
+            g_type_class_peek (GNC_TYPE_PLUGIN_PAGE_REPORT));
         parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (our_class));
         obj = parent_class->constructor(this_type, n_properties, properties);
 
-        for (; i < n_properties; i++)
+        for (i = 0; i < n_properties; i++)
         {
                 GObjectConstructParam prop = properties[i];
                 if (strcmp(prop.pspec->name,"report-id") == 0)
