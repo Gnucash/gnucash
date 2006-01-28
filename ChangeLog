@@ -1,5 +1,17 @@
 2006-01-28  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/gnc-plugin-page-register.c (gnc_plugin_page_register_cmd_reverse_transaction) 
+	(gnc_plugin_page_register_cmd_view_sort_by) 
+	(gnc_plugin_page_register_cmd_view_filter_by) 
+	(gnc_plugin_page_register_cmd_transfer) 
+	(gnc_plugin_page_register_cmd_reconcile) 
+	(gnc_plugin_page_register_cmd_jump): Treat
+	GNC_PLUGIN_PAGE(page)->window as a GncWindow, not necessarily and
+	immediately a GtkWindow; fixes issues with GTK cast warnings on
+	GncEmbeddedWindow usages of the register.
+
+2006-01-28  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/ui/gnc-sxed-window-ui-full.xml: Add.
 	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_menu_entries) 
 	(schedXact_editor_create_ledger)

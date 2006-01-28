@@ -1894,8 +1894,8 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
     if ( kvp_val ) {
       // GUID *fromSXId = kvp_value_get_guid( kvp_val );
-      gnc_error_dialog(GNC_PLUGIN_PAGE(page)->window,
-		       _("A reversing entry has already been created for this transaction."));
+      GtkWidget *win = GTK_WIDGET(gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
+      gnc_error_dialog(win, _("A reversing entry has already been created for this transaction."));
       return;
     }
   }
@@ -1950,7 +1950,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
   dialog = glade_xml_get_widget (xml, "Sort By");
   priv->sd.dialog = dialog;
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
-			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+			       gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
   /* Translations: The %s is the name of the plugin page */
   title = g_strdup_printf(_("Sort %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
@@ -2002,7 +2002,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
   dialog = glade_xml_get_widget (xml, "Filter By");
   priv->fd.dialog = dialog;
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
-			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
+			       gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window)));
   /* Translators: The %s is the name of the plugin page */
   title = g_strdup_printf(_("Filter %s by..."),
 			  gnc_plugin_page_get_page_name(GNC_PLUGIN_PAGE(page)));
@@ -2143,6 +2143,7 @@ gnc_plugin_page_register_cmd_transfer (GtkAction *action,
 				       GncPluginPageRegister *page)
 {
   Account *account;
+  GncWindow *gnc_window;
   GtkWidget *window;
 
   ENTER("(action %p, plugin_page %p)", action, page);
@@ -2150,7 +2151,8 @@ gnc_plugin_page_register_cmd_transfer (GtkAction *action,
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
 
   account = gnc_plugin_page_register_get_account (page);
-  window = GNC_PLUGIN_PAGE (page)->window;
+  gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
+  window = GTK_WIDGET(gnc_window_get_gtk_window(gnc_window));
   gnc_xfer_dialog (window, account);
   LEAVE(" ");
 }
@@ -2160,7 +2162,7 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
 					GncPluginPageRegister *page)
 {
   Account *account;
-  GtkWidget *window;
+  GtkWindow *window;
   RecnWindow * recnData;
 
   ENTER("(action %p, plugin_page %p)", action, page);
@@ -2169,8 +2171,8 @@ gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
 
   account = gnc_plugin_page_register_get_account (page);
 
-  window = GNC_PLUGIN_PAGE (page)->window;
-  recnData = recnWindow (window, account);
+  window = gnc_window_get_gtk_window(GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window));
+  recnData = recnWindow (GTK_WIDGET(window), account);
   gnc_ui_reconcile_window_raise (recnData);
   LEAVE(" ");
 }
@@ -2407,8 +2409,6 @@ gnc_plugin_page_register_cmd_jump (GtkAction *action,
   }
   new_reg_page = GNC_PLUGIN_PAGE_REGISTER(new_page);
 
-  /* DRH - This will be a problem when someone attempts to use the
-     'Jump' command from the scheduled transaction window. */
   gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
   gsr = gnc_plugin_page_register_get_gsr (new_page);
   gnc_split_reg_jump_to_split(gsr, split);
