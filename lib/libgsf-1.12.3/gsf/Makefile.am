@@ -13,7 +13,7 @@ endif
 AM_CPPFLAGS = -I$(top_srcdir)/lib/libgsf-1.12.3 $(LIBGSF_CFLAGS) $(Z_CPPFLAGS) \
 	-DGNOMELOCALEDIR=\"$(datadir)/locale\"
 
-lib_LTLIBRARIES = libgsf-1.la
+pkglib_LTLIBRARIES = libgsf-1.la
 
 libgsf_1_la_LIBADD  = $(LIBGSF_LIBS) $(Z_LIBS) $(BZ2_LIBS)
 libgsf_1_la_LDFLAGS = -version-info $(VERSION_INFO)

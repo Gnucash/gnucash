@@ -1,6 +1,6 @@
 SUBDIRS = utils data app graph gtk drawing ms-compat cut-n-paste
 
-lib_LTLIBRARIES = libgoffice-1.la
+pkglib_LTLIBRARIES = libgoffice-1.la
 
 libgoffice_1_la_LIBADD = 			\
 	cut-n-paste/pcre/libpcre.la		\

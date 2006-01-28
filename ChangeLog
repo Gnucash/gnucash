@@ -1,3 +1,12 @@
+2006-01-28  Joshua Sled  <jsled@asynchronous.org>
+
+	* lib/libgsf-1.12.3/gsf-gnome/Makefile.am (pkglib_LTLIBRARIES)
+	* lib/libgsf-1.12.3/gsf/Makefile.am (pkglib_LTLIBRARIES)
+	* lib/goffice-0.0.4/goffice/Makefile.am (pkglib_LTLIBRARIES)
+	* configure.in: Use pkglib automake variables to install in a
+	gnucash-specific hierearchy; change configure.in paths for goffice
+	for similar reasons.  Bug#328858.
+
 2006-01-25  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Bug#327775: consistency in

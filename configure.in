@@ -1245,9 +1245,9 @@ dnl * Config defaults
 dnl ******************
 dnl
 dnl These are changed in goffice.c for WIN32 packages
-AC_SUBST(goffice_datadir, '${datadir}/goffice/${GOFFICE_VERSION}')
-AC_SUBST(goffice_libdir, '${libdir}/goffice/${GOFFICE_VERSION}')
-AC_SUBST(goffice_icondir, '${datadir}/pixmaps/goffice')
+AC_SUBST(goffice_datadir, '${datadir}/gnucash/goffice/${GOFFICE_VERSION}')
+AC_SUBST(goffice_libdir, '${libdir}/gnucash/goffice/${GOFFICE_VERSION}')
+AC_SUBST(goffice_icondir, '${datadir}/gnucash/pixmaps/goffice')
 AC_SUBST(goffice_localedir, '${prefix}/${DATADIRNAME}/locale')
 dnl
 AC_SUBST(goffice_plugindir, '${goffice_libdir}/plugins')
