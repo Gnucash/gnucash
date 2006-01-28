@@ -121,26 +121,33 @@
 		    (if off (set! offset (cdr off)))))))
           (set! format (print-check-format:custom-info format-info)))
       
-      (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
+      (if (not (eq? (print-check-format:format format-info) 'custom))
           (begin 
-            (set! offset 
-                  (cdr (assq (print-check-format:position format-info)
-                          (cdr (assq (print-check-format:format format-info)
-                             gnc:*stock-check-formats*)))))
-            (if (pair? offset)
-                (set! offset (cdr offset))))
-          (set! offset
-                (cdr (assq 'position 
-                           (print-check-format:custom-info format-info)))))
+	    (if (not (or offset (eq? (print-check-format:position format-info) 'custom)))
+		(begin 
+		  (set! offset 
+			(cdr (assq (print-check-format:position format-info)
+				   (cdr (assq (print-check-format:format format-info)
+					      gnc:*stock-check-formats*)))))
+		  (if (pair? offset)
+		      (set! offset (cdr offset))))
+		(set! offset
+		      (caddr (assq 'translate 
+				   (print-check-format:custom-info format-info))))))
+	  (set! offset 0.0))
       
       (let ((fmt (print-check-format:date-format format-info)))
 	(begin 
 	  (set! date-string (strftime fmt (localtime date)))))
 
+      (display "offset is ") (display offset) (newline)
       (let ((translate-pos (assq 'translate format)))
 	(if translate-pos
-	    (gnc:print-session-translate ps (cadr translate-pos)
-					 (caddr translate-pos))))
+	    (begin
+	      (display "translate by ") (display (cadr translate-pos))
+	      (display " ") (display (caddr translate-pos)) (newline)
+	      (gnc:print-session-translate ps (cadr translate-pos)
+					   (caddr translate-pos)))))
 
       (let ((rotate-angle (assq 'rotate format)))
 	(if rotate-angle (gnc:print-session-rotate ps (cdr rotate-angle))))

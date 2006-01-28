@@ -40,7 +40,7 @@
 #include "gnc-ui.h"
 #include "gnc-date-format.h"
 
-#define CHECK_PRINT_NUM_FORMATS 3
+#define CHECK_PRINT_NUM_FORMATS 4
 #define CHECK_PRINT_NUM_POSITIONS 4
 #define CHECK_PRINT_NUM_UNITS 4
 
@@ -54,14 +54,15 @@
 #define KEY_CUSTOM_WORDS       "custom_amount_words"
 #define KEY_CUSTOM_NUMBER      "custom_amount_number"
 #define KEY_CUSTOM_MEMO        "custom_memo"
-#define KEY_CUSTOM_POSITION    "custom_position"
+#define KEY_CUSTOM_TRANSLATION "custom_translation"
+#define KEY_CUSTOM_ROTATION    "custom_rotation"
 #define KEY_CUSTOM_UNITS       "custom_units"
 
 /* Used by glade_xml_signal_autoconnect_full */
 void gnc_ui_print_check_response_cb(GtkDialog * dialog, gint response, PrintCheckDialog * pcd);
+void gnc_print_check_combobox_changed(GtkComboBox *widget, PrintCheckDialog * pcd);
 static void gnc_ui_print_save_dialog(PrintCheckDialog * pcd);
 static void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
-
 void gnc_ui_print_restore_dialog(PrintCheckDialog * pcd);
 
 struct _print_check_dialog {
@@ -76,13 +77,15 @@ struct _print_check_dialog {
 
   GtkWidget * format_combobox;
   GtkWidget * position_combobox;
+  GtkWidget * custom_table;
   GtkSpinButton * payee_x,  * payee_y;
   GtkSpinButton * date_x,   * date_y;
   GtkSpinButton * words_x,  * words_y;
   GtkSpinButton * number_x, * number_y;
   GtkSpinButton * memo_x,   * memo_y;
-
-  GtkSpinButton * check_position;
+  GtkSpinButton * translation_x, * translation_y;
+  GtkSpinButton * check_rotation;
+  GtkWidget * translation_label;
 
   GtkWidget * units_combobox;
 
@@ -157,8 +160,11 @@ gnc_ui_print_save_dialog(PrintCheckDialog * pcd)
   save_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO,
 		  gtk_spin_button_get_value(pcd->memo_x),
 		  gtk_spin_button_get_value(pcd->memo_y));
-  gnc_gconf_set_float(GCONF_SECTION, KEY_CUSTOM_POSITION,
-		      gtk_spin_button_get_value(pcd->check_position),
+  save_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION,
+		  gtk_spin_button_get_value(pcd->translation_x),
+		  gtk_spin_button_get_value(pcd->translation_y));
+  gnc_gconf_set_float(GCONF_SECTION, KEY_CUSTOM_ROTATION,
+		      gtk_spin_button_get_value(pcd->check_rotation),
 		      NULL);
   active = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->units_combobox));
   gnc_gconf_set_int(GCONF_SECTION, KEY_CUSTOM_UNITS, active, NULL);
@@ -203,8 +209,11 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
   get_float_pair(GCONF_SECTION, KEY_CUSTOM_MEMO, &x, &y);
   gtk_spin_button_set_value(pcd->memo_x, x);
   gtk_spin_button_set_value(pcd->memo_y, y);
-  x = gnc_gconf_get_float(GCONF_SECTION, KEY_CUSTOM_POSITION, NULL);
-  gtk_spin_button_set_value(pcd->check_position, x);
+  get_float_pair(GCONF_SECTION, KEY_CUSTOM_TRANSLATION, &x, &y);
+  gtk_spin_button_set_value(pcd->translation_x, x);
+  gtk_spin_button_set_value(pcd->translation_y, y);
+  x = gnc_gconf_get_float(GCONF_SECTION, KEY_CUSTOM_ROTATION, NULL);
+  gtk_spin_button_set_value(pcd->check_rotation, x);
   active = gnc_gconf_get_int(GCONF_SECTION, KEY_CUSTOM_UNITS, NULL);
   gtk_combo_box_set_active(GTK_COMBO_BOX(pcd->units_combobox), active);
 }
@@ -244,6 +253,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   pcd->format_combobox = glade_xml_get_widget (xml, "check_format_combobox");
   pcd->position_combobox = glade_xml_get_widget (xml, "check_position_combobox");
 
+  pcd->custom_table = glade_xml_get_widget (xml, "custom_table");
   pcd->payee_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_x_entry"));
   pcd->payee_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "payee_y_entry"));
   pcd->date_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "date_x_entry"));
@@ -258,8 +268,11 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "amount_numbers_y_entry"));
   pcd->memo_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_x_entry"));
   pcd->memo_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "memo_y_entry"));
-  pcd->check_position =
-    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "check_position_entry"));
+  pcd->translation_x = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_x_entry"));
+  pcd->translation_y = GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "translation_y_entry"));
+  pcd->translation_label = glade_xml_get_widget (xml, "translation_label");
+  pcd->check_rotation =
+    GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "check_rotation_entry"));
   pcd->units_combobox = glade_xml_get_widget (xml, "units_combobox");
 
   window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
@@ -315,7 +328,7 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
     (gnc_date_format_get_custom(GNC_DATE_FORMAT(pcd->date_format)));
   
   cust_format = 
-    SCM_LIST6
+    SCM_LIST7
     (scm_cons(scm_str2symbol("payee"),
 	      SCM_LIST2(scm_make_real(multip*gtk_spin_button_get_value(pcd->payee_x)),
 			scm_make_real(multip*gtk_spin_button_get_value(pcd->payee_y)))),
@@ -331,8 +344,11 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
      scm_cons(scm_str2symbol("memo"),
 	      SCM_LIST2(scm_make_real(multip*gtk_spin_button_get_value(pcd->memo_x)),
 			scm_make_real(multip*gtk_spin_button_get_value(pcd->memo_y)))),
-     scm_cons(scm_str2symbol("position"),
-	      scm_make_real(multip*gtk_spin_button_get_value(pcd->check_position))));
+     scm_cons(scm_str2symbol("translate"),
+	      SCM_LIST2(scm_make_real(multip*gtk_spin_button_get_value(pcd->translation_x)),
+			scm_make_real(multip*gtk_spin_button_get_value(pcd->translation_y)))),
+     scm_cons(scm_str2symbol("rotate"),
+	      scm_make_real(gtk_spin_button_get_value(pcd->check_rotation))));
 
   /* hide the window */
   gtk_widget_hide(pcd->dialog);
@@ -353,6 +369,40 @@ gnc_ui_print_check_dialog_ok_cb(PrintCheckDialog * pcd)
   
 }
 
+
+static void
+gnc_print_check_set_sensitive (GtkWidget *widget, gpointer data)
+{
+  gboolean sensitive = GPOINTER_TO_INT(data);
+  gtk_widget_set_sensitive(widget, sensitive);
+}
+
+
+void
+gnc_print_check_combobox_changed (GtkComboBox *widget,
+				  PrintCheckDialog * pcd)
+{
+  gboolean sensitive;
+  gint value;
+
+  value = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->format_combobox));
+  if (-1 == value)
+    return;
+  sensitive = (value == (CHECK_PRINT_NUM_FORMATS - 1));
+  gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
+			gnc_print_check_set_sensitive,
+			GINT_TO_POINTER(sensitive));
+  if (sensitive == TRUE)
+    return;
+  
+  value = gtk_combo_box_get_active(GTK_COMBO_BOX(pcd->position_combobox));
+  if (-1 == value)
+    return;
+  sensitive = (value == (CHECK_PRINT_NUM_POSITIONS - 1));
+  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_label), sensitive);
+  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_x), sensitive);
+  gtk_widget_set_sensitive(GTK_WIDGET(pcd->translation_y), sensitive);
+}
 
 void
 gnc_ui_print_check_response_cb(GtkDialog * dialog,

@@ -1,3 +1,11 @@
+2006-01-27  David Hampton  <hampton@employees.org>
+
+	* src/scm/printing/print-check.scm:
+	* src/gnome/glade/print.glade:
+	* src/gnome/dialog-print-check.c: Add translation and rotation to
+	the custom printing page.  Modify the code so that only the custom
+	widgets that have an effect for the current setting are sensitive.
+
 2006-01-27  Derek Atkins  <derek@ihtfp.com>
 
 	Get "make distcheck" to work....
