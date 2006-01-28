@@ -64,6 +64,8 @@
 #include "gnc-split-reg.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
+#include "gnc-main-window.h"
+#include "gnc-session.h"
 #include "gnucash-sheet.h"
 #include "lot-viewer.h"
 #include "Scrub.h"
@@ -340,6 +342,7 @@ typedef struct GncPluginPageRegisterPrivate
 	GtkWidget *widget;
 
 	gint component_manager_id;
+	GUID key;  /* The guid of the Account we're watching */
 
 	const char *lines_opt_section;
 	const char *lines_opt_name;
@@ -424,6 +427,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	register_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(register_page);
 	priv->ledger = ledger;
+	priv->key = *guid_null();
 
 	plugin_page = GNC_PLUGIN_PAGE(register_page);
 	label = gnc_plugin_page_register_get_tab_name(plugin_page);
@@ -444,13 +448,18 @@ GncPluginPage *
 gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 {
 	GNCLedgerDisplay *ledger;
+	GncPluginPage *page;
+	GncPluginPageRegisterPrivate *priv;
 
 	if (subaccounts)
 	  ledger = gnc_ledger_display_subaccounts (account);
 	else
 	  ledger = gnc_ledger_display_simple (account);
 
-	return gnc_plugin_page_register_new_common(ledger);
+	page = gnc_plugin_page_register_new_common(ledger);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+	priv->key = *xaccAccountGetGUID(account);
+	return page;
 }
 
 GncPluginPage *
@@ -620,6 +629,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	guint numRows;
 	GtkWidget *gsr;
 	SplitRegister *sr;
+	Account *acct;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
@@ -669,6 +679,14 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
 				     NULL, page);
+	gnc_gui_component_set_session (priv->component_manager_id,
+				       gnc_get_current_session());
+	acct = gnc_plugin_page_register_get_account(page);
+	if (acct)
+	    gnc_gui_component_watch_entity (
+		priv->component_manager_id, xaccAccountGetGUID(acct),
+		GNC_EVENT_DESTROY | GNC_EVENT_MODIFY);
+
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	LEAVE(" ");
@@ -2613,14 +2631,27 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
   GncPluginPageRegisterPrivate *priv;
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
-
-  /* We're only looking for forced updates here. */
-  if (changes)
-    return;
-
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-  gnucash_register_refresh_from_gconf(priv->gsr->reg);
-  gtk_widget_queue_draw(priv->widget);
+
+  if (changes) {
+      const EventInfo* ei;
+      ei = gnc_gui_get_entity_events(changes, &priv->key);
+      if (ei) {
+          if (ei->event_mask & GNC_EVENT_DESTROY) {
+              gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
+              return;
+          }
+          if (ei->event_mask & GNC_EVENT_MODIFY) {
+              /* CAS: We need to also handle account renames, but at
+                 least we don't crash for those. */
+          }
+      }
+  }
+  else {
+      /* forced updates */
+      gnucash_register_refresh_from_gconf(priv->gsr->reg);
+      gtk_widget_queue_draw(priv->widget);
+  }
 }
 
 /** @} */
