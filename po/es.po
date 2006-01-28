@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.8.10pre2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-27 12:03-0500\n"
-"PO-Revision-Date: 2004-11-23 23:26+0100\n"
+"PO-Revision-Date: 2006-01-28 20:07+0100\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7053,7 +7053,7 @@ msgstr ""
 
 #: src/gnome/gnc-plugin-page-account-tree.c:182
 msgid "Check & Repair A_ccount"
-msgstr "Comprobar y reparar _cuenta"
+msgstr "Comprobar y _reparar cuenta"
 
 #: src/gnome/gnc-plugin-page-account-tree.c:183
 #: src/gnome/window-reconcile.c:1245
