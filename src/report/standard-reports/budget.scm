@@ -90,7 +90,7 @@
      optname-accounts "a" 2
      (lambda ()
        (gnc:filter-accountlist-type
-        '(bank cash asset stock mutual-fund)
+        '(asset liability income expense)
         (gnc:group-get-subaccounts (gnc:get-current-group))))
      #f)
 
