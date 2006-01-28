@@ -1,3 +1,9 @@
+2006-01-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/file/gnc-owner-xml-v2.c:
+	  GncOwner is not a QOF_INSTANCE.  Get the GUID correctly.
+	  Fixes part of #328790 (but not all of it).
+
 2006-01-28  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: For HBCI, require aqbanking >= 1.3.0 (released

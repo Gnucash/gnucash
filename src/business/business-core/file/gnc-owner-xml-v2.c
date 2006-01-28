@@ -84,7 +84,7 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,
-					qof_instance_get_guid (QOF_INSTANCE(owner))));
+					gncOwnerGetGUID (owner)));
 
     return ret;
 }
