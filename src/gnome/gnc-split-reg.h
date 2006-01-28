@@ -5,7 +5,7 @@
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
  * Copyright (C) 1999-2000 Dave Peticolas <dave@krondo.com>         *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
- * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2002,2006 Joshua Sled <jsled@asynchronous.org>     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,44 +25,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-
-/**
- * Another take at the gnc-reg-widget.
- * 2002.10.27 -- jsled
- *
- * To be explained:
- * . inserting controls
- *   . menus, toolbar
- *     . gtk_{menu,toolbar}_{append,prepend,insert} is good; callers need to know indexes
- *       . gint gnc_reg_widget_get_toolbar_index( GNCRegWidget, GNC_REG_WIDGET_ITEM )
- *       . gint gnc_reg_widget_get_menu_index   ( GNCRegWidget, GNC_REG_WIDGET_ITEM )
- *       . gint gnc_reg_widget_get_popup_index  ( GNCRegWidget, GNC_REG_WIDGET_ITEM )
- *   
- * . created status-display widgets [checkboxes in menus, &c.]
- *   . i/f to changing?
- *     . gnc_reg_widget_set_split_state( GNCRegWidget, gboolean split )
- *     . gnc_reg_widget_set_double_line( GNCRegWidget, gboolean doubleLine )
- *
- * Questionable Features:
- * . File
- *   . new account
- *   . print
- *   . print check
- *   . save (as)...
- *   . close
- *   . exit
- * . view
- *   . date range
- * . edit
- *   . find
- * . actions
- *   . transfer
- *   . reconcile
- *   . stock split
- *   . check and repair
- * . reports
- * . tools
- **/
 
 #ifndef GNC_SPLIT_REG_H
 #define GNC_SPLIT_REG_H
@@ -120,8 +82,6 @@ struct _GNCSplitReg {
   GnucashRegister *reg;
 
   gint numRows;
-  gint createFlags;
-  gint disallowedCaps;
 
   guint sort_type;
 
@@ -197,23 +157,6 @@ AS_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
 FROM_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
 
 /**
- * Flags for creation-time selection of what subwidgets are to be created.
- **/
-#define CREATE_TOOLBAR    (1 << 0)
-#define CREATE_MENUS      (1 << 1)
-#define CREATE_POPUP      (1 << 2)
-#define CREATE_SUMMARYBAR (1 << 3)
-
-/**
- * Flags for various capabilities of the GNCSplitReg; these are used to
- * disable specific functionality.
- **/
-#define CAP_READ_ONLY (1 << 0)  /**< A read-only register. **/
-#define CAP_DELETE    (1 << 1)  /**< Deleting items. **/
-#define CAP_JUMP      (1 << 2)  /**< Jumping to the related transaction. **/
-#define CAP_SCHEDULE  (1 << 3)  /**< Scheduling transactions. **/
-
-/**
  * GTK-related; gets an identifier for the class of GNCSplitRegs.
  **/
 guint gnc_split_reg_get_type(void);
@@ -223,15 +166,12 @@ guint gnc_split_reg_get_type(void);
  * @param ld            The GNCLedgerDisplay to use for display.
  * @param parent        The containing window.
  * @param numberOfLines The initial number of lines for the register.
- * @param createFlags   A set of flags for the sub-widgets to create.
- * @param disallowCaps  A set of flags for capabilities which should be
- *                      disallowed.
+ * @param read_only      If the contained register should be setup read-only.
  **/
 GtkWidget* gnc_split_reg_new( GNCLedgerDisplay *ld,
                               GtkWindow *parent,
                               gint numberOfLines,
-                              gint createFlags,
-                              gint disallowCaps );
+                              gboolean read_only );
 
 /**
  * Returns the GnucashRegister in effect for this GNCSplitReg.
@@ -255,21 +195,9 @@ void gnc_split_reg_set_sort_type( GNCSplitReg *gsr, SortType t );
 void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 /**
- * Retreives the various menus created by the GNCSplitReg.  Callers may want
- * to put these in a more traditional menu bar, for instance.
- **/
-GtkWidget *gnc_split_reg_get_edit_menu       ( GNCSplitReg *gsr );
-GtkWidget *gnc_split_reg_get_view_menu       ( GNCSplitReg *gsr );
-GtkWidget *gnc_split_reg_get_style_menu      ( GNCSplitReg *gsr );
-GtkWidget *gnc_split_reg_get_sort_menu       ( GNCSplitReg *gsr );
-GtkWidget *gnc_split_reg_get_action_menu     ( GNCSplitReg *gsr );
-
-/**
  * Can return NULL if the indicated subwidget was not created.
  **/
-GtkWidget *gnc_split_reg_get_toolbar   ( GNCSplitReg *gsr );
 GtkWidget *gnc_split_reg_get_summarybar( GNCSplitReg *gsr );
-GtkWidget *gnc_split_reg_get_popup     ( GNCSplitReg *gsr );
 
 /**
  * These will manipulate the in-GNCSplitReg state-reflecting widgets as
@@ -277,17 +205,6 @@ GtkWidget *gnc_split_reg_get_popup     ( GNCSplitReg *gsr );
  **/
 void gnc_split_reg_set_split_state( GNCSplitReg *gsr, gboolean split );
 void gnc_split_reg_set_double_line( GNCSplitReg *gsr, gboolean doubleLine );
-
-/**
- * Convenience function for callers.  Sets up the popup menu to contain the
- * GNCSplitReg-provided menuswhat would normally be the menu-bar.  Callers
- * may not have a menu bar themselves, but wish to provide full
- * functionality via the popup menu.
- *
- * The menu-bar items will be at the bottom of the popup menu, seperated.
- * The menu-bar items will not be created if they were not originally created.
- **/
-void gnc_split_reg_use_extended_popup( GNCSplitReg *gsr );
 
 /**
  * Check if its OK to close this register window.  Gives the register

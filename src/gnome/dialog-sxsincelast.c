@@ -3570,8 +3570,7 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
 	gnc_plugin_page_set_ui_description (sxsld->ac_register,
 					    "gnc-plugin-page-sxregister-ui.xml");
 	gnc_plugin_page_register_set_options (sxsld->ac_register,
-					      NULL, NULL, 4,
-					      CAP_SCHEDULE);
+					      NULL, NULL, 4, FALSE);
 	gnc_embedded_window_open_page (sxsld->ac_window, sxsld->ac_register);
 
 	/* Now configure the register */
@@ -3613,8 +3612,7 @@ create_created_ledger( sxSinceLastData *sxsld )
 	gnc_plugin_page_set_ui_description (sxsld->created_register,
 					    "gnc-plugin-page-sxregister-ui.xml");
 	gnc_plugin_page_register_set_options (sxsld->created_register,
-					      NULL, NULL, 4,
-					      CAP_SCHEDULE);
+					      NULL, NULL, 4, FALSE);
 	gnc_embedded_window_open_page (sxsld->created_window, sxsld->created_register);
 
 	/* Now configure the register */
@@ -3722,9 +3720,8 @@ create_to_create_ledger( sxSinceLastData *sxsld )
 	sxsld->to_create_register = gnc_plugin_page_register_new_ledger(sxsld->to_create_ledger);
 	gnc_plugin_page_set_ui_description (sxsld->to_create_register,
 					    "gnc-sxed-to-create-window-ui.xml");
-	gnc_plugin_page_register_set_options (sxsld->to_create_register,
-					      NULL, NULL, 4,
-					      CAP_READ_ONLY);
+	gnc_plugin_page_register_set_options(sxsld->to_create_register,
+                                             NULL, NULL, 4, TRUE);
 	gnc_embedded_window_open_page (sxsld->to_create_window, sxsld->to_create_register);
 
 	/* Now configure the register */

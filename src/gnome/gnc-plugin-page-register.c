@@ -229,7 +229,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
-	{ "EditExchangeRateAction", GTK_STOCK_MISSING_IMAGE, N_("Edit E_xchange Rate"), NULL,
+	{ "EditExchangeRateAction", NULL, N_("Edit E_xchange Rate"), NULL,
 	  N_("Exit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
 	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
@@ -347,7 +347,7 @@ typedef struct GncPluginPageRegisterPrivate
 	const char *lines_opt_section;
 	const char *lines_opt_name;
 	gint lines_default;
-	gint disallowCaps;
+        gboolean read_only;
 
 	struct {
 	  GtkWidget *dialog;
@@ -539,7 +539,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;
 	priv->lines_opt_name    = DEFAULT_LINES_OPTION_NAME;
 	priv->lines_default     = DEFAULT_LINES_AMOUNT;
-	priv->disallowCaps      = 0;
+        priv->read_only         = FALSE;
 	priv->fd.cleared_match  = CLEARED_ALL;
 }
 
@@ -653,7 +653,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 	gsr = gnc_split_reg_new(priv->ledger,
 				gnc_window_get_gtk_window(gnc_window),
-				numRows, 0, priv->disallowCaps);
+				numRows, priv->read_only);
 	priv->gsr = (GNCSplitReg *)gsr;
 	gtk_widget_show (gsr);
 	gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
@@ -2570,7 +2570,7 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 				      const char *lines_opt_section,
 				      const char *lines_opt_name,
 				      gint lines_default,
-				      gint disallowCaps)
+                                      gboolean read_only)
 {
 	GncPluginPageRegister *page;
 	GncPluginPageRegisterPrivate *priv;
@@ -2582,7 +2582,7 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 	priv->lines_opt_section = lines_opt_section;
 	priv->lines_opt_name 	= lines_opt_name;
 	priv->lines_default  	= lines_default;
-	priv->disallowCaps   	= disallowCaps;
+        priv->read_only         = read_only;
 }
 
 GNCSplitReg *

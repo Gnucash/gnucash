@@ -118,15 +118,14 @@ GncPluginPage *gnc_plugin_page_register_new_gl (void);
  *  @param lines_default The number of lines to use if the specified
  *  options cannot be found or has never been set.
  *
- *  @param disallowCaps Capabilities to disable on this register.
- *  These include "read only", "jump", "schedule", et. al.
+ *  @param read_only True if the register should be read-only.
  */
 void
 gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 				      const char *lines_opt_page,
 				      const char *lines_opt_name,
 				      gint lines_default,
-				      gint disallowCaps);
+                                      gboolean read_only);
 
 
 /** Get the GNCSplitReg data structure associated with this register page.

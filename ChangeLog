@@ -1,3 +1,21 @@
+2006-01-28  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/gnc-split-reg.c: Remove a lot of dead code.
+	(gnc_split_reg_new): Remove create-flags and
+	disallowed-cap[abilitie]s; add simple "read-only" flag.
+
+	* src/gnome/gnc-plugin-page-register.c
+	(gnc_plugin_page_register_actions): remove stock-missing icon for
+	"edit exchange rate" action.
+	(GncPluginPageRegisterPrivate, gnc_plugin_page_register_init) 
+	(gnc_plugin_page_register_create_widget): Replace "disallow
+	cap[abilitie]s" with specific read-only flag.
+
+	* src/gnome/dialog-scheduledxaction.c (schedXact_editor_create_ledger): 
+	* src/gnome/dialog-sxsincelast.c (create_to_create_ledger) 
+	(create_autoCreate_ledger, create_created_ledger): Set read-only
+	flag on register.
+
 2006-01-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/print-session.h: Add an include so gnucash
