@@ -1,3 +1,10 @@
+2006-01-28  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Revert aqbanking dependency. We still stick to
+	1.0.0 because a) FC3 has AQBANKING 1.0.x, b) We can't find an
+	AQBANKING 1.3 tarball -- the earliest we can find is 1.6, c)
+	AQBANKING 1.6 doesn't build on FC3 because of dependencies
+
 2006-01-28  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/file/gnc-owner-xml-v2.c:
