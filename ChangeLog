@@ -1,3 +1,8 @@
+2006-01-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/print-session.h: Add an include so gnucash
+	compiles on gnome2.13 again.
+
 2006-01-28  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/gnc-plugin-page-register.c (gnc_plugin_page_register_cmd_reverse_transaction) 
