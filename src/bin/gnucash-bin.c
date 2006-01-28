@@ -217,20 +217,32 @@ gnucash_command_line(int argc, char **argv)
         {"debug", '\0', POPT_ARG_NONE, &debugging, 0,
          _("Enable debugging mode"), NULL},
         {"loglevel", '\0', POPT_ARG_INT, &loglevel, 0,
+	 /* Translators: This is the command line option autohelp
+	    text; see popt(3) */
          _("Set the logging level from 0 (least) to 6 (most)"), 
+	 /* Translators: Argument description for autohelp; see popt(3) */
          _("LOGLEVEL")},
         {"nofile", '\0', POPT_ARG_NONE, &nofile, 0,
          _("Do not load the last file opened"), NULL},
         {"config-path", '\0', POPT_ARG_STRING, &config_path, 0,
-         _("Set configuration path"), _("CONFIGPATH")},
+         _("Set configuration path"),
+	 /* Translators: Argument description for autohelp; see popt(3) */
+	 _("CONFIGPATH")},
         {"share-path", '\0', POPT_ARG_STRING, &share_path, 0,
-         _("Set shared data file search path"), _("SHAREPATH")},
+         _("Set shared data file search path"),
+	 /* Translators: Argument description for autohelp; see popt(3) */
+	 _("SHAREPATH")},
         {"doc-path", '\0', POPT_ARG_STRING, &help_path, 0,
-         _("Set the search path for documentation files"), _("DOCPATH")},
+         _("Set the search path for documentation files"),
+	 /* Translators: Argument description for autohelp; see popt(3) */
+	 _("DOCPATH")},
         {"add-price-quotes", '\0', POPT_ARG_STRING, &add_quotes_file, 0,
-         _("Add price quotes to given GnuCash datafile"), _("FILE")},
+         _("Add price quotes to given GnuCash datafile"),
+	 /* Translators: Argument description for autohelp; see popt(3) */
+	 _("FILE")},
         {"namespace", '\0', POPT_ARG_STRING, &namespace_regexp, 0, 
          _("Regular expression determining which namespace commodities will be retrieved"), 
+	 /* Translators: Argument description for autohelp; see popt(3) */
          _("REGEXP")},
         POPT_TABLEEND
     };
@@ -246,9 +258,17 @@ gnucash_command_line(int argc, char **argv)
     poptFreeContext(pc);
 
     if (gnucash_show_version) {
-        printf("GnuCash %s %s\n", VERSION, 
-               is_development_version ? _("development version") : "");
-        printf(_("built %s from r%s\n"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
+        if (is_development_version)
+	  /* Translators: %s is the version number */
+	  printf(_("GnuCash %s development version"), VERSION);
+	else
+	  /* Translators: %s is the version number */
+	  printf(_("GnuCash %s"), VERSION);
+	printf("\n");
+	/* Translators: 1st %s is the build date; 2nd %s is the SVN
+	   revision number */
+        printf(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
+	printf("\n");
         exit(0);
     }
 
