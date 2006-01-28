@@ -48,6 +48,7 @@ static gchar* function_buffer = NULL;
 static const int MAX_TRACE_FILENAME = 100;
 static GHashTable *log_table = NULL;
 static gint qof_log_num_spaces = 0;
+static QofLogLevel global_default_loglevel = 0;
 
 /* uses the enum_as_string macro.
 Lookups are done on the string. */
@@ -135,6 +136,7 @@ qof_log_set_level_global(QofLogLevel level)
 	gchar* level_string;
 
 	if(!log_table || level == 0) { return; }
+	global_default_loglevel = level;
 	level_string = g_strdup(QofLogLevelasString(level));
 	g_hash_table_foreach(log_table, log_module_foreach, level_string);
 }
@@ -310,9 +312,11 @@ qof_log_check(QofLogModule log_module, QofLogLevel log_level)
 	log_string = NULL;
 	if(!log_table || log_module == NULL || log_level == 0) { return FALSE; }
 	log_string = (gchar*)g_hash_table_lookup(log_table, log_module);
-	/* if log_module not found, do not log. */
-	if(!log_string) { return FALSE; }
-	maximum = QofLogLevelfromString(log_string);
+	/* if log_module not found, use default. */
+	if (log_string) 
+	    maximum = QofLogLevelfromString(log_string);
+	else
+	    maximum = global_default_loglevel;
 	if(log_level <= maximum) { return TRUE; }
 	return FALSE;
 }
