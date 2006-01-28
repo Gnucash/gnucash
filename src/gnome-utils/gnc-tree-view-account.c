@@ -1359,7 +1359,8 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
     column = gtk_tree_view_column_new_with_attributes (column_title,
                                                        renderer, NULL);
     if (col_edited_cb) {
-      gtva_setup_column_renderer_edited_cb(account_view, column, renderer, col_edited_cb);
+        gtva_setup_column_renderer_edited_cb(account_view, column, 
+                                             renderer, col_edited_cb);
     }
     gtk_tree_view_column_set_cell_data_func (column, renderer, 
                                              col_source_helper,

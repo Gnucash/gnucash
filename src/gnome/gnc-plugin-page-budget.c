@@ -184,7 +184,6 @@ typedef struct GncPluginPageBudgetPrivate
     GncDialog* d;
 
     GList *period_col_list;
-    guint32 acct_types;
     AccountFilterDialog fd;
 } GncPluginPageBudgetPrivate;
 
@@ -698,8 +697,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
     gint num_periods;
     GncRecurrence *gr;
     const Recurrence *r;
-    GtkTreeView *tv;
-    guint32 sel_mask;
 
     if(!priv)
         return TRUE;
@@ -710,7 +707,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
         gnc_budget_set_name(priv->budget, name);
         DEBUG("%s", name);
     }
-
 
     //FIXME: this is special broken case where we actually do need to
     //free because widget is a GtkTextView
@@ -725,11 +721,6 @@ gnc_plugin_page_budget_options_apply_cb (GncDialog * d,
     r = gnc_recurrence_get(gr);
     gnc_budget_set_recurrence(priv->budget, r);
 
-
-    tv = GTK_TREE_VIEW(gnc_dialog_get_widget(
-                           d, "AccountTypesTreeView"));
-    sel_mask = gnc_tree_model_account_types_get_selection(tv);
-    priv->acct_types = sel_mask;
     LEAVE(" ");
     return TRUE;
 }
@@ -770,9 +761,6 @@ static void
 gnc_budget_gui_show_options(GncDialog *pw, GncBudget *budget,
                             GncPluginPageBudget *page)
 {
-    GtkTreeView *tv;
-    GtkTreeModel *tm;
-    GtkTreeSelection *sel;
     GncRecurrence *gr;
     GncPluginPageBudgetPrivate *priv;
 
@@ -789,21 +777,6 @@ gnc_budget_gui_show_options(GncDialog *pw, GncBudget *budget,
     gr = GNC_RECURRENCE(gnc_dialog_get_widget(
                             pw, "BudgetRecurrenceEntry"));
     gnc_recurrence_set(gr, gnc_budget_get_recurrence(budget));
-
-    tv = GTK_TREE_VIEW(gnc_dialog_get_widget(
-                           pw, "AccountTypesTreeView"));
-    tm = gnc_tree_model_account_types_master();
-    gtk_tree_view_set_model(tv, tm);
-    gtk_tree_view_insert_column_with_attributes(
-       tv, -1, _("Account Types"), gtk_cell_renderer_text_new(),
-        "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
-    sel = gtk_tree_view_get_selection(tv);
-    gtk_tree_selection_set_mode(sel, GTK_SELECTION_MULTIPLE);
-
-    //FIXME: this is just a default, need to save and set actual value.
-    if (priv->acct_types == 0)
-        priv->acct_types = 1 << INCOME | 1 << EXPENSE;
-    gnc_tree_model_account_types_set_selection(tv, priv->acct_types);
 }
 
 
@@ -984,7 +957,6 @@ gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page)
     gint num_periods, num_periods_visible;
     GtkTreeViewColumn *col;
     GList *col_list;
-    gint i;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -994,28 +966,27 @@ gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page)
     num_periods_visible = g_list_length(col_list);
 
     /* Hide any unneeded extra columns */
-    for (i = num_periods_visible-1; i >= num_periods; i--) {
+    while (num_periods_visible > num_periods) {
         col = GTK_TREE_VIEW_COLUMN((g_list_last(col_list))->data);
-        //maybe better to just destroy it?
-        gtk_tree_view_column_set_visible(col, FALSE);
+        gtk_tree_view_remove_column(GTK_TREE_VIEW(priv->tree_view), col);
         col_list = g_list_delete_link(col_list, g_list_last(col_list));
+        num_periods_visible = g_list_length(col_list);
     }
 
     gnc_tree_view_configure_columns(
         GNC_TREE_VIEW(priv->tree_view), NULL);
 
     /* Create any needed columns */
-    num_periods_visible = g_list_length(col_list);
-    for (i = num_periods_visible; i < num_periods; i++) {
+    while (num_periods_visible < num_periods) {
         col = gnc_tree_view_account_add_custom_column(
             GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
-            budget_col_source,
-            budget_col_edited);
+            budget_col_source, budget_col_edited);
         g_object_set_data(G_OBJECT(col), "budget", priv->budget);
-        g_object_set_data(G_OBJECT(col), "period_num", GUINT_TO_POINTER(i));
+        g_object_set_data(G_OBJECT(col), "period_num", 
+                          GUINT_TO_POINTER(num_periods_visible));
         col_list = g_list_append(col_list, col);
+        num_periods_visible = g_list_length(col_list);
     }
-    num_periods_visible = num_periods;
     priv->period_col_list = col_list;
 
     gnc_plugin_page_budget_refresh_col_titles(page);
