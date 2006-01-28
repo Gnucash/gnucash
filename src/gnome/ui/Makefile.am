@@ -10,6 +10,7 @@ ui_DATA = \
 	gnc-plugin-page-register-ui.xml \
 	gnc-plugin-page-sxregister-ui.xml \
 	gnc-sxed-to-create-window-ui.xml \
-	gnc-sxed-window-ui.xml
+	gnc-sxed-window-ui.xml \
+	gnc-sxed-window-ui-full.xml
 
 EXTRA_DIST = $(ui_DATA)

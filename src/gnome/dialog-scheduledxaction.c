@@ -230,25 +230,12 @@ static SxRuntimeInfo* _new_sx_runtime_info( SchedXaction *sx );
 static void _clear_runtime_info_row( gpointer key, gpointer value, gpointer user_data );
 
 
-static void gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed);
-static void gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed);
-static void gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed);
-
 static GtkActionEntry gnc_sxed_menu_entries [] =
 {
-	/* Toplevel */
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
-	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
-
-	/* Edit menu */
-	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
-	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_cut) },
-	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
-	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_copy) },
-	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
-	  NULL, G_CALLBACK (gnc_sxed_cmd_edit_paste) },
 };
 static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
 
@@ -1586,7 +1573,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 	/* Now create the register plugin page. */
 	sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
 	gnc_plugin_page_set_ui_description (sxed->plugin_page,
-					    "gnc-plugin-page-sxregister-ui.xml");
+					    "gnc-sxed-window-ui-full.xml");
 	gnc_plugin_page_register_set_options (sxed->plugin_page,
 					      NULL, NULL,
 					      NUM_LEDGER_LINES_DEFAULT,
@@ -2435,35 +2422,6 @@ void
 sxed_excal_update_adapt( GtkObject *o, gpointer ud )
 {
         gnc_sxed_update_cal( (SchedXactionEditorDialog*)ud );
-}
-
-/* Command callbacks */
-
-/**
- * Note that these don't actually need to be implemented...  since these map
- * to conventional menu action names "EditCutAction", "EditCopyAction" and
- * "EditPasteAction".  Specifically, ones that the register plugin page in
- * the gnc-embedded-window in this page is going to bind it's own handlers to
- * shortly after the menu is created.  BUT, these symbols need to be defined
- * for the action structure above, and at runtime when we merge the ui
- * partially in place...
- **/
-static void
-gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed)
-{
-  // nop
-}
-
-static void
-gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed)
-{
-  // nop
-}
-
-static void
-gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
-{
-  // nop
 }
 
 void on_sx_check_toggled (GtkWidget *togglebutton, gpointer user_data);

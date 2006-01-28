@@ -1,5 +1,19 @@
 2006-01-28  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/ui/gnc-sxed-window-ui-full.xml: Add.
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_menu_entries) 
+	(schedXact_editor_create_ledger)
+	* src/gnome/dialog-sxsincelast.c (create_autoCreate_ledger) 
+	(create_created_ledger, create_to_create_ledger) 
+	(gnc_sxsld_menu_entries): Setup SX-related registers to only
+	display and allow relevant register functionality. Bug#327642.
+
+	* src/gnome/gnc-plugin-page-register.c
+	(gnc_plugin_page_register_actions): Change stock icons for
+	BlankTransaction and ScheduleTransaction Actions.
+
+2006-01-28  Joshua Sled  <jsled@asynchronous.org>
+
 	* lib/libgsf-1.12.3/gsf-gnome/Makefile.am (pkglib_LTLIBRARIES)
 	* lib/libgsf-1.12.3/gsf/Makefile.am (pkglib_LTLIBRARIES)
 	* lib/goffice-0.0.4/goffice/Makefile.am (pkglib_LTLIBRARIES)

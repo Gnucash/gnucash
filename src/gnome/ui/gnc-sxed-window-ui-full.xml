@@ -26,12 +26,10 @@
 
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
+        <separator name="ActionsSep1"/>
+	<menuitem name="ActionsTransfer"         action="ActionsTransferAction"/>
+        <separator name="ActionsSep4"/>
         <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
-        <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
-        <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
-        <menuitem name="ScheduleTransaction"     action="ScheduleTransactionAction"/>
-        <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
-	<separator name="ActionsSep5"/>
       </placeholder>
     </menu>
 
@@ -46,9 +44,22 @@
       <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
       <separator name="ToolbarSep67"/>
       <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
-      <toolitem name="ToolbarSplitTransaction"     action="SplitTransactionAction"/>
-      <toolitem name="ToolbarJumpTransaction"      action="JumpTransactionAction"/>
-      <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
+      <separator name="ToolbarSep68"/>
+      <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
     </placeholder>
   </toolbar>
+
+  <popup name="MainPopup"                    action="FakeToplevel">
+    <placeholder name="PopupPlaceholder2">
+      <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+      <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+      <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+      <separator name="PopupSep2"/>
+      <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
+      <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
+      <separator name="PopupSep3"/>
+      <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+    </placeholder>
+  </popup>
+
 </ui>

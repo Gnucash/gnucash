@@ -226,7 +226,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-	{ "BlankTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("_Blank Transaction"), NULL,
+	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
 	{ "EditExchangeRateAction", GTK_STOCK_MISSING_IMAGE, N_("Edit E_xchange Rate"), NULL,
@@ -235,7 +235,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_jump) },
-	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
+	{ "ScheduleTransactionAction", GTK_STOCK_REDO, N_("Schedule..."), NULL,
 	  N_("Create a Scheduled Transaction with the current transaction as a template"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
 	{ "ScrubAllAction", NULL, N_("_All transactions"), NULL,
@@ -869,7 +869,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
     DEBUG("Setting style: %d", i);
     action_group =
       gnc_plugin_page_get_action_group(page);
-    action= gtk_action_group_get_action(action_group, radio_entries_2[i].name);
+    action = gtk_action_group_get_action(action_group, radio_entries_2[i].name);
     gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
   }
 

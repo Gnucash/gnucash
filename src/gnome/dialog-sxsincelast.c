@@ -293,7 +293,10 @@ static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static void create_to_create_ledger( sxSinceLastData *sxsld );
 static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
+
+#if 0
 static void sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld );
+#endif
 
 static gint sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
@@ -383,32 +386,13 @@ static gint sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
 static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 
-static void gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld);
-static void gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld);
-static void gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld);
-
 static GtkActionEntry gnc_sxsld_menu_entries [] =
 {
 	/* Toplevel */
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
-
-	/* Edit menu */
-	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
-	  NULL,
-	  G_CALLBACK (gnc_sxsld_cmd_edit_cut) },
-	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
-	  NULL,
-	  G_CALLBACK (gnc_sxsld_cmd_edit_copy) },
-	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
-	  NULL,
-	  G_CALLBACK (gnc_sxsld_cmd_edit_paste) },
-
-	/* Actions menu */
-	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
-	  N_("Jump to the corresponding transaction in the other account"),
-	  G_CALLBACK (sxsld_jump_to_real_txn) },
 };
 static guint gnc_sxsld_menu_n_entries = G_N_ELEMENTS (gnc_sxsld_menu_entries);
 
@@ -1034,8 +1018,6 @@ to_create_prep( GnomeDruidPage *druid_page,
         clean_variable_table( sxsld );
         add_to_create_list_to_gui( sxsld->toCreateList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
-
-        
         
         gnome_druid_set_buttons_sensitive(
                 sxsld->sincelast_druid,
@@ -3643,6 +3625,7 @@ create_created_ledger( sxSinceLastData *sxsld )
         gnc_split_register_show_present_divider( splitreg, FALSE );
 }
 
+#if 0
 static
 void
 sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
@@ -3708,6 +3691,7 @@ sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
         
         g_signal_stop_emission_by_name(gsr, "jump");
 }
+#endif
 
 static void
 create_to_create_ledger( sxSinceLastData *sxsld )
@@ -3737,10 +3721,10 @@ create_to_create_ledger( sxSinceLastData *sxsld )
 	/* Then the register in it */
 	sxsld->to_create_register = gnc_plugin_page_register_new_ledger(sxsld->to_create_ledger);
 	gnc_plugin_page_set_ui_description (sxsld->to_create_register,
-					    "gnc-plugin-page-sxregister-ui.xml");
+					    "gnc-sxed-to-create-window-ui.xml");
 	gnc_plugin_page_register_set_options (sxsld->to_create_register,
 					      NULL, NULL, 4,
-					      CAP_READ_ONLY | CAP_SCHEDULE);
+					      CAP_READ_ONLY);
 	gnc_embedded_window_open_page (sxsld->to_create_window, sxsld->to_create_register);
 
 	/* Now configure the register */
@@ -3915,18 +3899,3 @@ gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
                 TRUE );
 }
 
-/* Command callbacks */
-static void
-gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld)
-{
-}
-
-static void
-gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld)
-{
-}
-
-static void
-gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld)
-{
-}
