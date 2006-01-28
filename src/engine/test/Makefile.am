@@ -93,7 +93,7 @@ EXTRA_DIST = \
   test-scm-query-import \
   test-scm-query-import.scm
 
-clean:
+clean-local:
 	rm -f translog.*
 
-distclean-local: clean
+distclean-local: clean-local
