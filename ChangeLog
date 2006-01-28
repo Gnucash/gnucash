@@ -1,3 +1,10 @@
+2006-01-25  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/glade/sched-xact.glade: Bug#327775: consistency in
+	case of dialog title.
+	Bug#327641: fix glade-spec'ed response-codes for OK/Cancel
+	buttons, thus letting logic work again.
+
 2006-01-28  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Revert aqbanking dependency. We still stick to
