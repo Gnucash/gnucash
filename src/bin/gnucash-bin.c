@@ -374,6 +374,8 @@ inner_main (void *closure, int argc, char **argv)
        before booting guile.  */
     gnc_main_gui_init();
 
+    /* set a log level before trying to change it globally */
+    gnc_log_default();
     qof_log_set_level_global(loglevel);
 
     load_system_config();

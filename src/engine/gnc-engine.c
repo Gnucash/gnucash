@@ -147,6 +147,38 @@ gnc_engine_is_initialized (void)
 	return (engine_is_initialized == 1) ? TRUE : FALSE;
 }
 
+/* replicate old gnc-trace enum behaviour
+ *
+ * these are only here as a convenience, they could be
+ * initialised elsewhere as appropriate.
+ * */
+void gnc_log_default(void)
+{
+	qof_log_set_default(QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_ACCOUNT, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_SX, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_QUERY, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_SCRUB, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_LOT, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_COMMODITY, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_BACKEND, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_BUSINESS, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_IO, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_BOOK, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_GUI, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_GUILE, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_LEDGER, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_REGISTER, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_HTML, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_PREFS, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DETAIL);
+	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_DETAIL);
+}
+
 /* ====================================================================== */
 /* XXX This exports the list of accounts to a file.  It does not export
  * any transactions.  Its a place-holder until full book-closing is implemented.
