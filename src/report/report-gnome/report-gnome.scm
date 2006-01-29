@@ -119,12 +119,4 @@
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items)
 
-  ;; the Welcome to GnuCash "extravaganza" report
-  (gnc:add-extension 
-   (gnc:make-menu-item 
-    (N_ "Welcome Sample Report")
-    (N_ "Welcome-to-GnuCash report screen")
-    (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda (window)
-      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
 )

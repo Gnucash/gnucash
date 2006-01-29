@@ -221,9 +221,12 @@ typedef struct toDeleteTuple_ {
 typedef struct creation_helper_userdata_ {
         /* the to-create tuple */
         toCreateInstance *tci;
-        /* a [pointer to a] GList to append the GUIDs of newly-created
+        /* a pointer to a GList to append the GUIDs of newly-created
          * Transactions to, or NULL */
         GList **createdGUIDs;
+        /* a pointer to a GList<GString*> of error-messages encountered while
+         * creating the transactions. **/
+        GList **creation_errors;
 } createData;
 
 /**
@@ -316,10 +319,11 @@ static gboolean gnc_sxsld_commit_appr( sxSinceLastData *sxsld );
 static void sxsincelast_entry_changed( GtkEditable *e, gpointer ud );
 static void sxsincelast_destroy( GtkObject *o, gpointer ud );
 static void sxsincelast_save_size( sxSinceLastData *sxsld );
-static void create_transactions_on( SchedXaction *sx,
-                                    GDate *gd,
-                                    toCreateInstance *tci,
-                                    GList **createdGUIDs );
+static void create_transactions_on(SchedXaction *sx,
+                                   GDate *gd,
+                                   toCreateInstance *tci,
+                                   GList **createdGUIDs,
+                                   GList **creation_errors);
 static gint create_each_transaction_helper( Transaction *t, void *d );
 /* External for what reason ... ? */
 void sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
@@ -334,7 +338,7 @@ void print_vars_helper( gpointer key,
 static void clean_sincelast_data( sxSinceLastData *sxsld );
 static void clean_variable_table( sxSinceLastData *sxsld );
 
-static void process_auto_create_list( GList *, sxSinceLastData *sxsld );
+static void process_auto_create_list(GList *, sxSinceLastData *sxsld, GList **creation_errors);
 static void add_to_create_list_to_gui( GList *, sxSinceLastData *sxsld );
 static void add_reminders_to_gui( GList *, sxSinceLastData *sxsld );
 static void add_dead_list_to_gui( GList *, sxSinceLastData *sxsld );
@@ -378,13 +382,17 @@ static void gnc_sxsld_free_sxState( gpointer key,
                                     gpointer userdata );
 static void gnc_sxsld_free_entry_numeric( GObject *o, gpointer ud );
 
-static gint sxsld_process_to_create_instance( sxSinceLastData *sxsld,
-                                              toCreateInstance *tci );
+static gint sxsld_process_to_create_instance(sxSinceLastData *sxsld,
+                                             toCreateInstance *tci,
+                                             GList **creation_errors);
 static void sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
-static gint sxsld_create_to_create_txns( sxSinceLastData *sxsld,
-                                         toCreateInstance *tci );
+static gint sxsld_create_to_create_txns(sxSinceLastData *sxsld,
+                                        toCreateInstance *tci,
+                                        GList **creation_errors);
 static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
+static void creation_errors_dialog(GList *creation_errors);
+static void creation_errors_free(GList *creation_errors);
 
 static GtkActionEntry gnc_sxsld_menu_entries [] =
 {
@@ -1068,8 +1076,9 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
  **/
 static
 gint
-sxsld_create_to_create_txns( sxSinceLastData *sxsld,
-                             toCreateInstance *tci )
+sxsld_create_to_create_txns(sxSinceLastData *sxsld,
+                            toCreateInstance *tci,
+                            GList **creation_errors)
 {
         gint toRet = 0;
         GList *l = NULL;
@@ -1092,10 +1101,11 @@ sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                 sxsld_revert_to_create_txns( sxsld, tci );
         }
 
-        create_transactions_on( tci->parentTCT->sx,
-                                tci->date,
-                                tci,
-                                &created );
+        create_transactions_on(tci->parentTCT->sx,
+                               tci->date,
+                               tci,
+                               &created,
+                               creation_errors);
         tci->dirty = FALSE;
 
         /* Add to the Query for that register. */
@@ -1122,8 +1132,9 @@ sxsld_create_to_create_txns( sxSinceLastData *sxsld,
  **/
 static
 gint
-sxsld_process_to_create_instance( sxSinceLastData *sxsld,
-                                  toCreateInstance *tci )
+sxsld_process_to_create_instance(sxSinceLastData *sxsld,
+                                 toCreateInstance *tci,
+                                 GList **creation_errors)
 {
         gint toRet = 0;
 
@@ -1189,7 +1200,7 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 break;
         case TO_CREATE:
                 /* Go ahead and create... */
-                toRet = sxsld_create_to_create_txns( sxsld, tci );
+                toRet = sxsld_create_to_create_txns(sxsld, tci, creation_errors);
                 break;
         default:
                 g_assert( FALSE );
@@ -1244,7 +1255,7 @@ gboolean
 sxsld_process_to_create_page( sxSinceLastData *sxsld )
 {
         GtkCTree *ct;
-        GList *tcList, *tcInstList;
+        GList *tcList, *tcInstList, *creation_errors;
         gboolean allVarsBound;
         toCreateTuple *tct;
         toCreateInstance *tci;
@@ -1294,6 +1305,7 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
         tcList = sxsld->toCreateList;
         g_assert( tcList != NULL );
 
+        creation_errors = NULL;
         gnc_suspend_gui_refresh();
         for ( ; tcList ; tcList = tcList->next ) {
                 tct = (toCreateTuple*)tcList->data;
@@ -1303,10 +1315,15 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
                       tcInstList = tcInstList->next ) {
 
                         tci = (toCreateInstance*)tcInstList->data;
-                        sxsld_process_to_create_instance( sxsld, tci );
+                        sxsld_process_to_create_instance(sxsld, tci, &creation_errors);
                 }
         }
         gnc_resume_gui_refresh();
+        if (g_list_length(creation_errors) > 0)
+        {
+                creation_errors_dialog(creation_errors);
+                creation_errors_free(creation_errors);
+        }
         return FALSE;
 }
 
@@ -1526,6 +1543,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
         GtkWidget *w;
         GObject *o;
         GnomeDruidPage *nextPage;
+        GList *creation_errors;
         int i;
         static widgetSignalHandlerTuple widgets[] = {
                 { SINCELAST_DRUID, "cancel",  sxsincelast_druid_cancelled },
@@ -1643,7 +1661,13 @@ sxsincelast_init( sxSinceLastData *sxsld )
 	/* Do not call show_all here. Screws up the gtkuimanager code */
         gtk_widget_show( sxsld->sincelast_window );
 
-        process_auto_create_list( sxsld->autoCreateList, sxsld );
+        creation_errors = NULL;
+        process_auto_create_list(sxsld->autoCreateList, sxsld, &creation_errors);
+        if (g_list_length(creation_errors) > 0)
+        {
+                creation_errors_dialog(creation_errors);
+                creation_errors_free(creation_errors);
+        }
 
         w = glade_xml_get_widget( sxsld->gxml, WHAT_TO_DO_PG );
         nextPage = gnc_sxsld_get_appropriate_page( sxsld,
@@ -1759,7 +1783,7 @@ _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
 }
 
 static void
-process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
+process_auto_create_list(GList *autoCreateList, sxSinceLastData *sxsld, GList **creation_errors)
 {
         GList *l;
         toCreateTuple *tct;
@@ -1784,7 +1808,7 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                       instances = instances->next ) {
                         tci = (toCreateInstance*)instances->data;
                         sxsld->autoCreatedCount +=
-                                sxsld_process_to_create_instance( sxsld, tci );
+                                sxsld_process_to_create_instance( sxsld, tci, creation_errors );
                 }
         }
         gnc_resume_gui_refresh();
@@ -1843,10 +1867,9 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                                                   andequal_numerics_set,
                                                   &allVarsBound );
                             rowText[1] = ( allVarsBound
-                                           ? _( "Ready to create" )
-                                           /* READY_TEXT */ 
-                                           : _( "Needs values for variables" )
-                                           /* NEEDS_BINDINGS_TEXT */ );
+                                           ? _( "Ready to create" ) /* READY_TEXT */ 
+                                           : _( "Needs values for variables" ) /* NEEDS_BINDINGS_TEXT */
+                                    );
                             break;
                         case IGNORE:
                             rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
@@ -2058,9 +2081,10 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                 
                 /* special auto-create-opt processing; process it now. */
                 if ( autoCreateOpt ) {
+                        GList *creation_errors = NULL;
                         list = NULL;
                         list = g_list_append( list, tct );
-                        process_auto_create_list( list, sxsld );
+                        process_auto_create_list( list, sxsld, &creation_errors );
                         list = NULL;
                 }
 
@@ -2216,7 +2240,13 @@ sxsincelast_populate( sxSinceLastData *sxsld )
         /* if we're about to return a negative value [indicating only
          * auto-create no-notify txns], then actually create them. */
         if ( toRet < 0 ) {
-                process_auto_create_list( sxsld->autoCreateList, sxsld );
+                GList *creation_errors = NULL;
+                process_auto_create_list( sxsld->autoCreateList, sxsld, &creation_errors );
+                if (g_list_length(creation_errors) > 0)
+                {
+                        creation_errors_dialog(creation_errors);
+                        creation_errors_free(creation_errors);
+                }
         }
 
         return toRet;
@@ -2474,8 +2504,8 @@ create_each_transaction_helper( Transaction *t, void *d )
          * keys, below. */
         g_hash_table_insert( actualVars, g_strdup("i"), varIValue );
 
-        for ( ; sList && osList ;
-              sList = sList->next, osList = osList->next ) {
+        for ( ; sList && osList; sList = sList->next, osList = osList->next)
+        {
                 Account *acct;
 
                 split = (Split*)sList->data;
@@ -2495,29 +2525,48 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                            GNC_SX_ID,
                                                            GNC_SX_ACCOUNT,
                                                            NULL );
-                        if ( kvp_val == NULL ) {
-                                PERR( "Null kvp_val for account" );
+                        if (kvp_val == NULL) {
+                                GString *err = g_string_new("");
+                                g_string_printf(err, "Null account kvp value for SX [%s], cancelling creation.",
+                                                xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
+                                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                errFlag = TRUE;
+                                break;
                         }
                         acct_guid = kvp_value_get_guid( kvp_val );
-                        acct = xaccAccountLookup( acct_guid,
-                                                  gnc_get_current_book ());
-#if 0 /* debug */
-                        DEBUG( "Got account with name \"%s\"",
-                                xaccAccountGetName( acct ) );
-#endif /* 0 -- debug */
+                        acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+                        if (acct == NULL)
+                        {
+                                const char *guidStr;
+                                GString *err;
+                                guidStr = guid_to_string((const GUID*)acct_guid);
+                                err = g_string_new("");
+                                g_string_printf(err, "Unknown account for guid [%s], cancelling SX [%s] creation.",
+                                                guidStr, xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
+                                g_free((char*)guidStr);
+                                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                errFlag = TRUE;
+                                break;
+                        }
+
                         if ( commonCommodity != NULL ) {
                                 if ( commonCommodity != xaccAccountGetCommodity( acct ) ) {
-                                        PERR( "Common-commodity difference: old=%s, new=%s\n",
-                                              gnc_commodity_get_mnemonic( commonCommodity ),
-                                              gnc_commodity_get_mnemonic( xaccAccountGetCommodity( acct ) ) );
+                                        GString *err = g_string_new("");
+                                        g_string_printf(err, "Common-commodity difference for SX [%s]: old=[%s], new=[%s]\n",
+                                                        xaccSchedXactionGetName(createUD->tci->parentTCT->sx),
+                                                        gnc_commodity_get_mnemonic(commonCommodity),
+                                                        gnc_commodity_get_mnemonic(xaccAccountGetCommodity(acct)));
+                                        *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
                                 }
                         }
-                        commonCommodity = xaccAccountGetCommodity( acct );
-                        xaccAccountBeginEdit( acct );
-                        xaccAccountInsertSplit( acct, split );
+                        else
+                        {
+                                commonCommodity = xaccAccountGetCommodity( acct );
+                        }
+                        xaccAccountBeginEdit(acct);
+                        xaccAccountInsertSplit(acct, split);
                 }
 
-                /* commonCommodity = xaccTransGetCurrency( t ); */
                 /* credit/debit formulas */
                 {
                         char *str, *parseErrorLoc;
@@ -2530,21 +2579,18 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                            NULL);
                         str = kvp_value_get_string( kvp_val );
                         credit_num = gnc_numeric_create( 0, 1 );
-                        if ( str != NULL
-                             && strlen(str) != 0 ) {
-                                if ( ! gnc_exp_parser_parse_separate_vars( str, &credit_num,
-                                                                           &parseErrorLoc,
-                                                                           actualVars ) ) {
-                                        PERR( "Error parsing credit formula \"%s\" at \"%s\": %s",
-                                              str, parseErrorLoc, gnc_exp_parser_error_string() );
-                                        errFlag = TRUE;
-                                        break;
+                        if (str != NULL && strlen(str) != 0) {
+                                if (!gnc_exp_parser_parse_separate_vars(str, &credit_num,
+                                                                        &parseErrorLoc,
+                                                                        actualVars))
+                                {
+                                        GString *err = g_string_new("");
+                                        g_string_printf(err, "Error parsing SX [%s] credit formula [%s] at [%s]: %s",
+                                                        xaccSchedXactionGetName(createUD->tci->parentTCT->sx),
+                                                        str, parseErrorLoc, gnc_exp_parser_error_string());
+                                        *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                        credit_num = gnc_numeric_create( 0, 1 );
                                 }
-#if 0 /* debug */
-                                DEBUG( "gnc_numeric::credit: \"%s\" -> %s [%s]",
-                                       str, gnc_numeric_to_string( credit_num ),
-                                       gnc_numeric_to_string( gnc_numeric_reduce( credit_num ) ) );
-#endif /* 0 -- debug */
                         }
                         
                         kvp_val = kvp_frame_get_slot_path( split_kvpf,
@@ -2554,57 +2600,39 @@ create_each_transaction_helper( Transaction *t, void *d )
                         str = kvp_value_get_string( kvp_val );
 
                         debit_num = gnc_numeric_create( 0, 1 );
-                        if ( str != NULL
-                             && strlen(str) != 0 ) {
-                                if ( ! gnc_exp_parser_parse_separate_vars( str, &debit_num,
-                                                                           &parseErrorLoc,
-                                                                           actualVars ) ) {
-                                        PERR( "Error parsing debit_formula \"%s\" at \"%s\": %s",
-                                              str, parseErrorLoc, gnc_exp_parser_error_string() );
-                                        errFlag = TRUE;
-                                        break;
+                        if (str != NULL && strlen(str) != 0) {
+                                if (!gnc_exp_parser_parse_separate_vars(str, &debit_num,
+                                                                        &parseErrorLoc,
+                                                                        actualVars))
+                                {
+                                        GString *err = g_string_new("");
+                                        g_string_printf(err, "Error parsing SX [%s] debit formula [%s] at [%s]: %s",
+                                                        xaccSchedXactionGetName(createUD->tci->parentTCT->sx),
+                                                        str, parseErrorLoc, gnc_exp_parser_error_string());
+                                        *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                        debit_num = gnc_numeric_create( 0, 1 );
                                 }
 
-#if 0 /* debug */
-                                DEBUG( "gnc_numeric::debit: \"%s\" -> %s [%s]",
-                                       str, gnc_numeric_to_string( debit_num ),
-                                       gnc_numeric_to_string( gnc_numeric_reduce( debit_num ) ) );
-#endif /* 0 -- debug */
                         }
                         
                         final = gnc_numeric_sub_fixed( debit_num, credit_num );
                         
-                        gncn_error = gnc_numeric_check( final );
-                        if ( gncn_error != GNC_ERROR_OK ) {
-                                PERR( "Error %d in final gnc_numeric value", gncn_error );
-                                errFlag = TRUE;
-                                break;
+                        gncn_error = gnc_numeric_check(final);
+                        if (gncn_error != GNC_ERROR_OK) {
+                                GString *err = g_string_new("");
+                                g_string_printf(err, "Error %d in SX [%s] final gnc_numeric value, using 0 instead.", 
+                                                gncn_error,                                                
+                                                xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
+                                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                final = gnc_numeric_create(0, 1);
                         }
-#if 0 /* debug */
-                        DEBUG( "gnc_numeric::final: \"%s\"",
-                               gnc_numeric_to_string( final ) );
-#endif /* 0 -- debug */
 
                         xaccSplitSetValue( split, final );
                         xaccSplitScrub( split );
                 }
 
-#if 0
-/* NOT [YET] USED */
-                kvp_val = kvp_frame_get_slot_path( split_kvpf,
-                                                   GNC_SX_ID,
-                                                   GNC_SX_SHARES,
-                                                   NULL);
-
-                kvp_val = kvp_frame_get_slot_path( split_kvpf,
-                                                   GNC_SX_ID,
-                                                   GNC_SX_AMNT,
-                                                   NULL);
-#endif /* 0 */
-
                 xaccAccountCommitEdit( acct );
         }
-
 
         /* Cleanup actualVars table. */
         {
@@ -2615,31 +2643,33 @@ create_each_transaction_helper( Transaction *t, void *d )
                 actualVars = NULL;
         }
 
-        /* set the balancing currency. */
-        if ( commonCommodity == NULL ) {
-                PERR( "Unable to find common currency/commodity." );
-        } else {
-                xaccTransSetCurrency( newT, commonCommodity );
+        if (commonCommodity == NULL) {
+                GString *err = g_string_new("");
+                g_string_printf(err, "Unable to find common currency/commodity for SX [%s]; using default.",
+                                xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
+                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                commonCommodity = gnc_default_currency();
+        }
+        xaccTransSetCurrency(newT, commonCommodity);
+
+        if (errFlag) {
+                PERR("Some error in new transaction creation...");
+                xaccTransRollbackEdit(newT);
+                xaccTransDestroy(newT);
+                xaccTransCommitEdit(newT);
+                return 13;
         }
 
         {
                 kvp_frame *txn_frame;
                 /* set a kvp-frame element in the transaction indicating and
                  * pointing-to the SX this was created from. */
-                txn_frame = xaccTransGetSlots( newT );
-                kvp_frame_set_guid ( txn_frame, "from-sched-xaction", 
-                              xaccSchedXactionGetGUID(tci->parentTCT->sx) );
+                txn_frame = xaccTransGetSlots(newT);
+                kvp_frame_set_guid(txn_frame, "from-sched-xaction", 
+                                   xaccSchedXactionGetGUID(tci->parentTCT->sx));
         }
 
-        if ( errFlag ) {
-                PERR( "Some error in new transaction creation..." );
-                xaccTransRollbackEdit( newT );
-                xaccTransDestroy( newT );
-                xaccTransCommitEdit( newT );
-                return 13;
-        }
-
-        xaccTransCommitEdit( newT );
+        xaccTransCommitEdit(newT);
 
         if ( createUD->createdGUIDs != NULL ) {
                 *createUD->createdGUIDs =
@@ -2655,34 +2685,39 @@ create_each_transaction_helper( Transaction *t, void *d )
  * will set the last occur date incorrectly.
  **/
 static void
-create_transactions_on( SchedXaction *sx,
-                        GDate *gd,
-                        toCreateInstance *tci,
-                        GList **createdGUIDs )
+create_transactions_on(SchedXaction *sx,
+                       GDate *gd,
+                       toCreateInstance *tci,
+                       GList **createdGUIDs,
+                       GList **creation_errors)
 {
         createData createUD;
         AccountGroup *ag;
         Account *acct;
         const char *id;
 
-        if ( tci ) {
-                g_assert( g_date_compare( gd, tci->date ) == 0 );
+        if (tci) {
+                g_assert(g_date_compare(gd, tci->date) == 0);
         }
 
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-        if ( ag && id ) {
-            /* This looks strange but it's right.  The account is
-               named after the guid string. */
-                acct = xaccGetAccountFromName( ag, id );
-                if ( acct ) {
-                        createUD.tci = tci;
-                        createUD.createdGUIDs = createdGUIDs;
-                        xaccAccountForEachTransaction( acct,
-                                                       create_each_transaction_helper,
-                                                       /*tct*/ &createUD );
-                }
+        if ( !(ag && id) ) {
+                return;
         }
+        /* This looks strange but it's right.  The account is
+           named after the guid string. */
+        acct = xaccGetAccountFromName( ag, id );
+        if (!acct) {
+                return;
+        }
+
+        createUD.tci = tci;
+        createUD.createdGUIDs = createdGUIDs;
+        createUD.creation_errors = creation_errors;
+        xaccAccountForEachTransaction(acct,
+                                      create_each_transaction_helper,
+                                      /*tct*/ &createUD);
 }
 
 static void
@@ -3050,15 +3085,9 @@ parse_vars_from_formula( const char *formula,
         toRet = 0;
         if ( ! gnc_exp_parser_parse_separate_vars( formula, num,
                                                    &errLoc, varHash ) ) {
-#if 0 /* just too verbose, as "Numeric errors" are acceptable in this
-       * context. */
-                PERR( "Error parsing at \"%s\": %s",
-                        errLoc, gnc_exp_parser_error_string() );
-#endif /* 0 */
                 toRet = -1;
         }
 
-        DEBUG( "result/num: %s", gnc_numeric_to_string( *num ) );
         if ( !result ) {
                 g_free( num );
         }
@@ -3896,3 +3925,34 @@ gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
                 TRUE );
 }
 
+static
+void
+_adderror(gpointer data, gpointer user_data)
+{
+        GString *dialog_text = (GString*)user_data;
+        g_string_append_printf(dialog_text, "- %s\n", ((GString*)data)->str);
+}
+
+static
+void
+creation_errors_dialog(GList *creation_errors)
+{
+        GString *dialog_text = g_string_new(_("The following errors were encountered while creating the Scheduled Transactions:\n"));
+        g_list_foreach(creation_errors, (GFunc)_adderror, dialog_text);
+        gnc_info_dialog(NULL, "%s", dialog_text->str);
+        g_string_free(dialog_text, TRUE);
+}
+
+static void
+_free_creation_errors(gpointer data, gpointer user_data_unused)
+{
+        g_string_free((GString*)data, TRUE);
+}
+
+static
+void
+creation_errors_free(GList *creation_errors)
+{
+        g_list_foreach(creation_errors, (GFunc)_free_creation_errors, NULL);
+        g_list_free(creation_errors);
+}

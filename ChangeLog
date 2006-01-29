@@ -1,3 +1,16 @@
+2006-01-29  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/utility-reports/welcome-to-gnucash.scm: register
+	menu item for self.
+
+	* src/report/report-gnome/report-gnome.scm
+	(gnc:report-menu-setup): Remove report menu-item creation.
+
+	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
+	Degrade more gracefully in the face of errors during scheduled-transaction
+	creation; record errors in-band rather than simply to the log, and
+	display them to the user.  Resolves bugs: 151157, 167858, 151487.
+
 2006-01-29  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register.c:
