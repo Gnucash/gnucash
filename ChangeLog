@@ -1,5 +1,7 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* README: Michael Wahlbrink's cvs to svn changes.
+
 	* src/import-export/qif-import/dialog-account-picker.c:
 	* src/import-export/hbci/gnc-hbci-gettrans.c:
 	* src/import-export/hbci/hbci-interaction.c:

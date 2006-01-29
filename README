@@ -407,23 +407,27 @@ SGI Irix
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
 
-#######################
-Getting Source with CVS
------------------------
-A read-only version of the cvs tree is available on the net.
-To access it, first, login, as so:
+##############################
+Getting Source with Subversion
+------------------------------
+A read-only version of the svn tree is available on the net at:
 
-  cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot login
+  http://svn.gnucash.org/repo/gnucash/
 
-The password is "guest"
+To get what used to be CVS HEAD (and now includes what used to be 
+gnucash-gnome2-dev), you will need to get the svn TRUNK:
 
-To get a copy of the source in the experimental development tree do a
+  svn checkout http://svn.gnucash.org/repo/gnucash/trunk gnucash
 
-  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r HEAD gnucash
+The argument "gnucash" above can be whatever you want your local 
+directory to be called, and is optional. If you leave it out,
+you'll have a directory called "trunk" created containing all the
+source code.
 
-To get a copy of the source in the gnucash-1.8 stable production tree do a
+If you want the latest 1.8.x code, you'd need to pull from the 
+1.8 branch, as follows:
 
-  cvs -z3 -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -r gnucash-1-8-branch gnucash
+  svn checkout http://svn.gnucash.org/repo/gnucash/branches/1.8 gnucash-1.8
 
 
 ##################
