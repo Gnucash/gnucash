@@ -154,29 +154,29 @@ gnc_engine_is_initialized (void)
  * */
 void gnc_log_default(void)
 {
-	qof_log_set_default(QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_ACCOUNT, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_SX, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_QUERY, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_SCRUB, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_LOT, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_COMMODITY, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_BACKEND, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_BUSINESS, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_IO, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_BOOK, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_GUI, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_GUILE, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_LEDGER, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_REGISTER, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_HTML, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_PREFS, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_DETAIL);
-	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_DETAIL);
+	qof_log_set_default(QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_ACCOUNT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_SX, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_QUERY, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_SCRUB, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_LOT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_COMMODITY, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BACKEND, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BUSINESS, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_BOOK, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_GUILE, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_LEDGER, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_REGISTER, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_HTML, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_PREFS, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_DRUID, QOF_LOG_WARNING);
+	qof_log_set_level(GNC_MOD_TEST, QOF_LOG_TRACE);
+	qof_log_set_level(GNC_MOD_BUDGET, QOF_LOG_WARNING);
 }
 
 /* ====================================================================== */
