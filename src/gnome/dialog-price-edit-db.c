@@ -168,14 +168,13 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 		"Are you sure you want to delete the %d selected prices?",
 		length),
        length);
-    dialog = gtk_message_dialog_new_with_markup
-      (GTK_WINDOW(pdb_dialog->dialog),
-       GTK_DIALOG_DESTROY_WITH_PARENT,
-       GTK_MESSAGE_QUESTION,
-       GTK_BUTTONS_NONE,
-       "<b>%s</b>\n\n%s",
-       _("Delete prices?"),
-       message);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(pdb_dialog->dialog),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", _("Delete prices?"));
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
     g_free(message);
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

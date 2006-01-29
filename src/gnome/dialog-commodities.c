@@ -147,13 +147,13 @@ remove_clicked (CommoditiesDialog *cd)
     warning = "delete_commodity";
   }
 
-  dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(cd->dialog),
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_MESSAGE_QUESTION,
-					      GTK_BUTTONS_NONE,
-					      "<b>%s</b>\n\n%s",
-					      _("Delete commodity?"),
-					      message);
+  dialog = gtk_message_dialog_new(GTK_WINDOW(cd->dialog),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_QUESTION,
+				  GTK_BUTTONS_NONE,
+				  "%s", _("Delete commodity?"));
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", message);
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			 GTK_STOCK_DELETE, GTK_RESPONSE_OK,

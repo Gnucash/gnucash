@@ -950,9 +950,9 @@ xaccTransWarnReadOnly (const Transaction *trans)
 {
   GtkWidget *dialog;
   const gchar *reason;
-  const gchar *format =
-    _("Cannot modify or delete this transaction. This transaction is "
-      "marked read-only because:\n\n'%s'");
+  const gchar *title = _("Cannot modify or delete this transaction.");
+  const gchar *message =
+    _("This transaction is marked read-only with the comment: '%s'");
 
   if (!trans) return FALSE;
 
@@ -962,8 +962,9 @@ xaccTransWarnReadOnly (const Transaction *trans)
 				    0,
 				    GTK_MESSAGE_ERROR,
 				    GTK_BUTTONS_OK,
-				    format,
-				    reason);
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     message, reason);
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
     return TRUE;
@@ -983,7 +984,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   gint response;
   const gchar *warning;
 
-  const char *message = _("Remove the splits from this transaction?");
+  const char *title = _("Remove the splits from this transaction?");
   const char *recn_warn = _("This transaction contains reconciled splits. "
                             "Modifying it is not a good idea because that will "
 			    "cause your reconciled balance to be off.");
@@ -993,24 +994,16 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   trans = gnc_split_register_get_current_trans (reg);
   if (xaccTransWarnReadOnly(trans))
     return;
+  dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_NONE,
+				  "%s", title);
   if (xaccTransHasReconciledSplits (trans)) {
-    dialog =
-      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					 GTK_DIALOG_MODAL
-					 | GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_WARNING,
-					 GTK_BUTTONS_NONE,
-					 "<b>%s</b>\n\n%s",
-					 message, recn_warn);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", recn_warn);
     warning = "register_remove_all_splits2";
   } else {
-    dialog =
-      gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					 GTK_DIALOG_MODAL
-					 | GTK_DIALOG_DESTROY_WITH_PARENT,
-					 GTK_MESSAGE_QUESTION,
-					 GTK_BUTTONS_NONE,
-					 "<b>%s</b>", message);
     warning = "register_remove_all_splits";
   }
 
@@ -1109,13 +1102,14 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
     char recn;
 
     if (split == gnc_split_register_get_current_trans_split (reg, NULL)) {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_OK,
-					   "<b>%s</b>\n\n%s",
-					   anchor_error, anchor_split);
+      dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				      GTK_DIALOG_MODAL
+				      | GTK_DIALOG_DESTROY_WITH_PARENT,
+				      GTK_MESSAGE_ERROR,
+				      GTK_BUTTONS_OK,
+				      "%s", anchor_error);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", anchor_split);
       gtk_dialog_run(GTK_DIALOG(dialog));
       gtk_widget_destroy (dialog);
       return;
@@ -1129,29 +1123,22 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 
     /* ask for user confirmation before performing permanent damage */
     buf = g_strdup_printf (format, memo, desc);
-
+    dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				    GTK_DIALOG_MODAL
+				    | GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    buf);
+    g_free(buf);
     recn = xaccSplitGetReconcile (split);
     if (recn == YREC || recn == FREC)
     {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_WARNING,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>\n\n%s", buf, recn_warn);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", recn_warn);
       warning = "register_delete_split2";
     } else {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_QUESTION,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>", buf);
       warning = "register_delete_split";
     }
-    g_free(buf);
 
     gtk_dialog_add_button(GTK_DIALOG(dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
@@ -1171,29 +1158,23 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
   {
-    const char *message = _("Delete the current transaction?");
+    const char *title = _("Delete the current transaction?");
     const char *recn_warn = _("You would be deleting a transaction "
                               "with reconciled splits! "
                               "This is not a good idea as it will cause your "
                               "reconciled balance to be off.");
 
+    dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				    GTK_DIALOG_MODAL
+				    | GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_WARNING,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
     if (xaccTransHasReconciledSplits (trans)) {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL |
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_WARNING,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>\n\n%s", message, recn_warn);
+      gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					       "%s", recn_warn);
       warning = "register_delete_trans2";
     } else {
-      dialog =
-	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
-					   GTK_DIALOG_MODAL
-					   | GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_QUESTION,
-					   GTK_BUTTONS_NONE,
-					   "<b>%s</b>", message);
       warning = "register_delete_trans";
     }
     gtk_dialog_add_button(GTK_DIALOG(dialog),
@@ -1935,13 +1916,13 @@ gtk_callback_bug_workaround (gpointer argp)
   const gchar *read_only = "This account register is read-only.";
   GtkWidget *dialog;
 
-  dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(args->gsr->window),
-					      GTK_DIALOG_DESTROY_WITH_PARENT,
-					      GTK_MESSAGE_WARNING,
-					      GTK_BUTTONS_CLOSE,
-					      "<b>%s</b>\n\n%s",
-					      read_only,
-					      args->string);
+  dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_CLOSE,
+				  "%s", read_only);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", args->string);
   gnc_dialog_run(GTK_DIALOG(dialog), "register_read_only");
   gtk_widget_destroy(dialog);
   g_free(args);

@@ -793,8 +793,15 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   GtkWidget *dialog;
   gint response;
   const gchar *filename, *tmp;
+  const gchar *title = _("Save changes to file %s before closing?");
 #ifdef HIG_COMPLIANT
   gint oldest_change, minutes;
+  const gchar *message =
+    _("If you don't save, changes from the past %d minutes will be discarded.");
+#else
+  const gchar *message =
+    _("Changes have been made since the last time it was saved. If you "
+      "continue without saving these changes will be discarded.");
 #endif
 
   session = qof_session_get_current_session();
@@ -819,32 +826,20 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
    * case scenario would be if QOF could provide a timestamp of the
    * oldest unsaved change.
    */
+  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+				  GTK_DIALOG_MODAL,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_NONE,
+				  title,
+				  filename);
 #ifdef HIG_COMPLIANT
   oldest_change = qof_book_time_changed(book);
   minutes = (time() - oldest_change) / 60 + 1;
-  dialog =
-    gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
-					GTK_DIALOG_MODAL,
-					GTK_MESSAGE_WARNING,
-					GTK_BUTTONS_NONE,
-					_("<b>Save changes to file %s before "
-					  "closing?</b>\n\nIf you don't save, "
-					  "changes from the past %d minutes "
-					  "will be discarded."),
-					filename, minutes);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   message, minutes);
 #else
-  dialog =
-    gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
-					GTK_DIALOG_MODAL,
-					GTK_MESSAGE_WARNING,
-					GTK_BUTTONS_NONE,
-					_("<b>Save changes to file %s before "
-					  "closing?</b>\n\nChanges have been "
-					  "made since the last time it was "
-					  "saved.  If you continue without "
-					  "saving these changes will be "
-					  "discarded."),
-					filename);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   message);
 #endif
 
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
@@ -879,6 +874,11 @@ gnc_main_window_delete_event (GtkWidget *window,
   QofSession *session;
   GtkWidget *dialog;
   gint response;
+  const gchar *title = _("Quit Gnucash?");
+  const gchar *message =_("You are attempting to close the last "
+			  "Gnucash window.  Doing so will quit the "
+			  "application.  Are you sure that this is "
+			  "what you want to do?");
 
   if (g_list_length(active_windows) > 1)
     return FALSE;
@@ -893,17 +893,13 @@ gnc_main_window_delete_event (GtkWidget *window,
     return TRUE;
   }
 
-  dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
-				   GTK_DIALOG_MODAL,
-				   GTK_MESSAGE_WARNING,
-				   GTK_BUTTONS_NONE,
-					       "<b>%s</b>\n\n%s",
-					       _("Quit Gnucash?"),
-					       _("You are attempting to close the last "
-				     "Gnucash window.  Doing so will quit the "
-				     "application.  Are you sure that this is "
-				     "what you want to do?"));
-
+  dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+				  GTK_DIALOG_MODAL,
+				  GTK_MESSAGE_WARNING,
+				  GTK_BUTTONS_NONE,
+				  "%s", title);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", message);
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			 GTK_STOCK_QUIT, GTK_RESPONSE_OK,
