@@ -235,6 +235,8 @@
                  doc))
         (headers? (if (null? rest) #f (if (car rest) #t #f))))
 
+    (gnc:html-document-set-title! newdoc (gnc:html-document-title doc))
+    
     ;; push the style sheet's default styles 
     (gnc:html-document-push-style newdoc (gnc:html-style-sheet-style sheet))
     

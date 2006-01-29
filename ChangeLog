@@ -1,5 +1,12 @@
 2006-01-28  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/report/report-system/html-style-sheet.scm
+	(gnc:html-style-sheet-render): Maintain the html-document title
+	while rendering so the progress bar is setup with the right name.
+	Bug#327650.
+
+2006-01-28  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/gnc-split-reg.c: Remove a lot of dead code.
 	(gnc_split_reg_new): Remove create-flags and
 	disallowed-cap[abilitie]s; add simple "read-only" flag.
