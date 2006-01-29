@@ -202,6 +202,7 @@ gnc_hbci_gettrans_final(GtkWidget *parent,
 				  | GTK_DIALOG_DESTROY_WITH_PARENT,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
+				  "%s",
 				  _("The HBCI import returned no transactions "
 				    "for the selected time period."));
   gtk_dialog_run(GTK_DIALOG(dialog));

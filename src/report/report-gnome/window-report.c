@@ -117,6 +117,7 @@ gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
 				  GTK_DIALOG_DESTROY_WITH_PARENT,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
+				  "%s",
 				  _("Set the report options you want using this dialog."));
   g_signal_connect(G_OBJECT(dialog), "response",
 		   (GCallback)gtk_widget_destroy, NULL);

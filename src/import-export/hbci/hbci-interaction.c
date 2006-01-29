@@ -542,7 +542,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 				  0,
 				  GTK_MESSAGE_INFO,
 				  GTK_BUTTONS_OK,
-				  text);
+				  "%s", text);
 
   if (title && (strlen(title) > 0))
     gtk_window_set_title (GTK_WINDOW (dialog), title);

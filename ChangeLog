@@ -1,4 +1,20 @@
-2006-01-28  David Hampton  <hampton@employees.org>
+2006-01-29  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/dialog-account-picker.c:
+	* src/import-export/hbci/gnc-hbci-gettrans.c:
+	* src/import-export/hbci/hbci-interaction.c:
+	* src/report/report-gnome/window-report.c:
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome-search/search-string.c: Use a format string of "%s"
+	when building a message dialog from a single string.
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-edit-db.c: Use the gtk2.6 secondary
+	message text function now that there is a 2.4 emulation routine
+	available.
 
 	* src/gnome-utils/gncmod-gnome-utils.c:
 	* src/app-utils/gnc-err-popup.[ch]:

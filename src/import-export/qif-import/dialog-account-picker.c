@@ -163,7 +163,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 				GTK_DIALOG_DESTROY_WITH_PARENT,
 				GTK_MESSAGE_QUESTION,
 				GTK_BUTTONS_OK_CANCEL,
-				_("Enter a name for the account"));
+				"%s", _("Enter a name for the account"));
 
   entry = gtk_entry_new();
   gtk_entry_set_max_length(GTK_ENTRY(entry), 250);

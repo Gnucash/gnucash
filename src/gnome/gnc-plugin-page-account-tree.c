@@ -1035,10 +1035,10 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     }
 
     dialog =  gtk_message_dialog_new(GTK_WINDOW(window),
-				       GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_MESSAGE_QUESTION,
-				       GTK_BUTTONS_NONE,
-				       message);
+				     GTK_DIALOG_DESTROY_WITH_PARENT,
+				     GTK_MESSAGE_QUESTION,
+				     GTK_BUTTONS_NONE,
+				     "%s", message);
     g_free(message);
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

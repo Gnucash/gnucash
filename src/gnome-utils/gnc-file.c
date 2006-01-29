@@ -653,7 +653,8 @@ gnc_post_file_open (const char * filename)
 				    GTK_MESSAGE_WARNING,
 				    GTK_BUTTONS_NONE,
 				    fmt1, newfile);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), fmt2);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", fmt2);
 
     gnc_gtk_dialog_add_button(dialog, _("_Open Anyway"),
 			      GTK_STOCK_OPEN, RESPONSE_OPEN);
