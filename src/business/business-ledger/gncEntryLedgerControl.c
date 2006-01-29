@@ -31,6 +31,7 @@
 #include "Account.h"
 #include "combocell.h"
 #include "dialog-account.h"
+#include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -272,7 +273,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 {
   GncEntryLedger *ledger = user_data;
   GncEntry *entry, *new_entry;
-  gint result;
+  gint response;
   VirtualLocation virt_loc;
   int changed;
   char const *cell_name;
@@ -482,35 +483,46 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
    * limited cases -- usually just let the change go through.
    */
   {
-    const char *message;
+    GtkWidget *dialog;
+    const char *title = _("Save the current entry?");
+    const char *message =
+      _("The current entry has been changed.  However, this entry is "
+	"part of an existing order. Would you like to record the change "
+	"and effectively change your order?");
 
     switch (ledger->type) {
     case GNCENTRY_INVOICE_ENTRY:
       if (gncEntryGetOrder (entry) != NULL) {
-	message = _("The current entry has been changed.\n"
-		    "However, this entry is part of an existing order.\n"
-		    "Would you like to record the change and\n"
-		    "effectively change your order?");
+	dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_QUESTION,
+					GTK_BUTTONS_NONE,
+					"%s", title);
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+						 "%s", message);
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			       _("_Don't Record"), GTK_RESPONSE_REJECT,
+			       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			       _("_Record"), GTK_RESPONSE_ACCEPT,
+			       NULL);
+	response = gnc_dialog_run(GTK_DIALOG(dialog), "invoice_entry_changed");
+	gtk_widget_destroy(dialog);
 	break;
       }
 
       /* FALLTHROUGH */
     default:
-      result = GTK_RESPONSE_YES;
-      goto dontask;
+      response = GTK_RESPONSE_ACCEPT;
+      break;
     }
-
-    result = gnc_verify_cancel_dialog(ledger->parent, GTK_RESPONSE_YES, message);
   }
 
-dontask:
-
-  switch (result)
+  switch (response)
   {
-    case GTK_RESPONSE_YES:
+    case GTK_RESPONSE_ACCEPT:
       break;
 
-    case GTK_RESPONSE_NO:
+    case GTK_RESPONSE_REJECT:
       {
         VirtualCellLocation vcell_loc;
 	GncEntry *new_entry;
@@ -531,10 +543,8 @@ dontask:
       break;
 
     case GTK_RESPONSE_CANCEL:
-      return TRUE;
-
     default:
-      break;
+      return TRUE;
   }
 
   return FALSE;

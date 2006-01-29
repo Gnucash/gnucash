@@ -96,6 +96,9 @@ remove_clicked (CommoditiesDialog *cd)
   gboolean do_delete;
   gboolean can_delete;
   gnc_commodity *commodity;
+  GtkWidget *dialog;
+  const gchar *message, *warning;
+  gint response;
   
   commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
   if (commodity == NULL)
@@ -134,21 +137,31 @@ remove_clicked (CommoditiesDialog *cd)
   prices = gnc_pricedb_get_prices(pdb, commodity, NULL);
   if (prices)
   {
-    const char *message = _("This commodity has price quotes. Are\n"
-			    "you sure you want to delete the selected\n"
-                            "commodity and its price quotes?");
-
-    do_delete = gnc_verify_dialog (cd->dialog, TRUE, message);
-  }
-  else
-  {
-    const char *message = _("Are you sure you want to delete the\n"
-                            "selected commodity?");
-
-    do_delete = gnc_verify_dialog (cd->dialog, TRUE, message);
+    message = _("This commodity has price quotes. Are "
+		"you sure you want to delete the selected "
+		"commodity and its price quotes?");
+    warning = "delete_commodity2";
+  } else {
+    message = _("Are you sure you want to delete the "
+		"selected commodity?");
+    warning = "delete_commodity";
   }
 
-  if (do_delete)
+  dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(cd->dialog),
+					      GTK_DIALOG_DESTROY_WITH_PARENT,
+					      GTK_MESSAGE_QUESTION,
+					      GTK_BUTTONS_NONE,
+					      "<b>%s</b>\n\n%s",
+					      _("Delete commodity?"),
+					      message);
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			 GTK_STOCK_DELETE, GTK_RESPONSE_OK,
+			 (gchar *)NULL);
+  response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
+  gtk_widget_destroy(dialog);
+
+  if (response == GTK_RESPONSE_OK)
   {
     gnc_commodity_table *ct;
 

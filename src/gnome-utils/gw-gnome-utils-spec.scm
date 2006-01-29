@@ -431,15 +431,6 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:file-query-save
-   '<gw:bool>
-   "gnc_file_query_save"
-   '()
-   "Query the user whether to save the current file, and save
-if they say 'Yes'. The return is false if the user says 'Cancel'.")
-
-  (gw:wrap-function
-   ws
    'gnc:file-quit
    '<gw:void>
    "gnc_file_quit"

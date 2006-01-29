@@ -27,9 +27,9 @@
 
 #include "Group.h"
 #include "datecell.h"
+#include "dialog-utils.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-err-popup.h"
 #include "gnc-ui.h"
 #include "pricecell.h"
 #include "recncell.h"
@@ -1783,15 +1783,24 @@ gnc_split_register_get_security_io_flags (VirtualLocation virt_loc,
 static gboolean
 xaccTransWarnReadOnly (const Transaction *trans)
 {
+  GtkWidget *dialog;
   const gchar *reason;
+  const gchar *format =
+    _("Cannot modify or delete this transaction. This transaction is "
+      "marked read-only because:\n\n'%s'");
                                                                                
   if (!trans) return FALSE;
                                                                                
   reason = xaccTransGetReadOnly (trans);
   if (reason) {
-    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
-                       "This transaction is marked read-only because:\n\n'%s'"),
-                       reason);
+    dialog = gtk_message_dialog_new(NULL,
+				    0,
+				    GTK_MESSAGE_ERROR,
+				    GTK_BUTTONS_OK,
+				    format,
+				    reason);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
     return TRUE;
   }
   return FALSE;
@@ -1827,17 +1836,25 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 
   if (recn == YREC)
   {
+    GtkWidget *dialog, *window;
     gint response;
+    const gchar *title = _("Change reconciled split?");
+    const gchar *message = _("You are about to change a reconciled split.  Doing so might make "
+			     "future reconciliation difficult!  Continue with this change?");
   
     /* Does the user want to be warned? */
-    response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
-					   "change_reconciled_split",
-					   _("Change _Split"), GTK_STOCK_CANCEL,
-					   "<b>%s</b>\n\n%s\n",
-					   _("Change reconciled split?"),
-					   _("You are about to change a reconciled split.  Doing so might make "
-					     "future reconciliation difficult!  Continue with this change?"));
-
+    window = gnc_split_register_get_parent(reg);
+    dialog =
+      gtk_message_dialog_new_with_markup(GTK_WINDOW(window),
+					 GTK_DIALOG_DESTROY_WITH_PARENT,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_CANCEL,
+					 "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Change _Split"), GTK_RESPONSE_YES);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "change_reconciled_split");
+    gtk_widget_destroy(dialog);
     if (response != GTK_RESPONSE_YES)
       return FALSE;
 

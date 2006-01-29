@@ -25,11 +25,12 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
 #include "Account.h"
 #include "dialog-account.h"
+#include "dialog-utils.h"
 #include "gnc-ui-util.h"
 #include "combocell.h"
 #include "pricecell.h"
@@ -801,13 +802,29 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
   /* If the cursor has been edited, we are going to have to commit
    * it before we can duplicate. Make sure the user wants to do that. */
   if (changed) {
-    const char *message = _("The current entry has been changed.\n"
-			  "Would you like to save it?");
-    gint result;
+    const char *title = _("Save the current entry?");
+    const char *message =
+      _("The current transaction has been changed. Would you like to "
+	"record the changes before duplicating this entry, or "
+	"cancel the duplication?");
+    GtkWidget *dialog;
+    gint response;
 
-    result = gnc_ok_cancel_dialog (ledger->parent, GTK_RESPONSE_OK, message);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(ledger->parent),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   _("_Record"), GTK_RESPONSE_ACCEPT,
+			   NULL);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "invoice_entry_duplicated");
+    gtk_widget_destroy(dialog);
 
-    if (result != GTK_RESPONSE_OK) {
+    if (response != GTK_RESPONSE_ACCEPT) {
       gnc_resume_gui_refresh ();
       return;
     }

@@ -735,7 +735,8 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 			qof_session_save(chart_session, NULL);
 		}
 	}
-	show_session_error(qof_session_get_error(chart_session), filename);
+	show_session_error(qof_session_get_error(chart_session), filename,
+			   GNC_FILE_DIALOG_EXPORT);
 	g_free(filename);
 	qof_session_end(chart_session);
 	qof_session_set_current_session(current_session);
@@ -766,7 +767,8 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 			qof_session_save(chart_session, NULL);
 		}
 	}
-	show_session_error(qof_session_get_error(chart_session), filename);
+	show_session_error(qof_session_get_error(chart_session), filename,
+			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);
@@ -797,7 +799,8 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 			qof_session_save(chart_session, NULL);
 		}
 	}
-	show_session_error(qof_session_get_error(chart_session), filename);
+	show_session_error(qof_session_get_error(chart_session), filename,
+			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);
@@ -828,7 +831,8 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 			qof_session_save(chart_session, NULL);
 		}
 	}
-	show_session_error(qof_session_get_error(chart_session), filename);
+	show_session_error(qof_session_get_error(chart_session), filename,
+			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);

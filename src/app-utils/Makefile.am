@@ -30,7 +30,6 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-provider-desc-file.c \
   gnc-druid-provider-desc-multifile.c \
   gnc-druid-provider-file-cb.c \
-  gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
   gnc-gettext-util.c \
@@ -56,7 +55,6 @@ gncinclude_HEADERS = \
   gnc-druid-provider-desc-file.h \
   gnc-druid-provider-desc-multifile.h \
   gnc-druid-provider-file-cb.h \
-  gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \
   gnc-gettext-util.h \

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <glib.h>
+#include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <time.h>
 #include <string.h>
@@ -32,7 +32,6 @@
 #include "glib-helpers.h"
 #include "guile-util.h"
 #include "qof.h"
-#include "gnc-err-popup.h"
 #include "guile-mappings.h"
 
 #include <g-wrap-wct.h>
@@ -1730,7 +1729,9 @@ gnc_commit_option(GNCOption *option)
   {
     SCM oops;
     char *section, *name;
+    GtkWidget *dialog;
     const gchar *message;
+    const gchar *format = _("There is a problem with option %s:%s.\n%s");
 
     /* Second element is error message */
     oops = SCM_CADR(result);
@@ -1744,10 +1745,16 @@ gnc_commit_option(GNCOption *option)
     name = gnc_option_name(option);
     section = gnc_option_section(option);
 
-    gnc_send_gui_error(_("There is a problem with option %s:%s.\n%s"),
-                           section ? section : "(null)",
-                           name ? name : "(null)",
-                           message ? message : "(null)");
+    dialog = gtk_message_dialog_new(NULL,
+				    0,
+				    GTK_MESSAGE_ERROR,
+				    GTK_BUTTONS_OK,
+				    format,
+				    section ? section : "(null)",
+				    name ? name : "(null)",
+				    message ? message : "(null)");
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
 
     if (name != NULL)
       free(name);

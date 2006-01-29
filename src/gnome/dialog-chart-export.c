@@ -256,7 +256,8 @@ on_dateok_clicked (chart_data  *data)
 		qof_object_foreach(GNC_ID_SPLIT, book, chart_reference_cb, data);
 		g_list_free(data->param_ref_list);
 		qof_session_save(chart_session, NULL);
-		show_session_error(qof_session_get_error(chart_session), filename);
+		show_session_error(qof_session_get_error(chart_session),
+				   filename, GNC_FILE_DIALOG_EXPORT);
 		gnc_engine_resume_events();
 		gnc_unset_busy_cursor(NULL);
 	}

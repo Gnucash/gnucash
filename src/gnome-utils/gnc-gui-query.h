@@ -29,13 +29,6 @@ gnc_info_dialog(GtkWidget *parent,
 
 
 extern void
-gnc_warning_dialog_va(const char *format, va_list args);
-
-
-extern void
-gnc_error_dialog_va(const char *format, va_list args);
-
-extern void
 gnc_error_dialog(GtkWidget *parent,
 		 const char *format, ...) G_GNUC_PRINTF (2, 3);
 

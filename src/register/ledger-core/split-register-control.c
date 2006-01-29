@@ -32,11 +32,12 @@
 #include "gnc-ui.h"
 #include "pricecell.h"
 #include "datecell.h"
+#include "dialog-transfer.h"
+#include "dialog-utils.h"
 #include "split-register-control.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
 #include "table-allgui.h"
-#include "dialog-transfer.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -1252,7 +1253,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   Transaction *pending_trans;
   VirtualLocation virt_loc;
   Transaction *trans, *new_trans;
-  gint result;
+  gint response;
   gboolean changed;
   SRInfo *info;
   Split *split;
@@ -1468,22 +1469,36 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   /* Ok, we are changing transactions and the current transaction has
    * changed. See what the user wants to do. */
   {
-    const char *message;
+    GtkWidget *dialog, *window;
+    const char *title = _("Save the current transaction?");
+    const char *message =
+      _("The current transaction has been changed.  Would you like to "
+	"record the changes before moving to a new transaction, move "
+	"without recording the changes, or cancel the move?");
 
-    message = _("The current transaction has been changed.\n"
-                "Would you like to record it?");
-
-    result = gnc_verify_cancel_dialog
-      (gnc_split_register_get_parent (reg),
-       GTK_RESPONSE_YES, message);
+    window = gnc_split_register_get_parent(reg);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   _("_Don't Record"), GTK_RESPONSE_REJECT,
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   _("_Record"), GTK_RESPONSE_ACCEPT,
+			   NULL);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
+    gtk_widget_destroy(dialog);
   }
 
-  switch (result)
+  switch (response)
   {
-    case GTK_RESPONSE_YES:
+    case GTK_RESPONSE_ACCEPT:
       break;
 
-    case GTK_RESPONSE_NO:
+    case GTK_RESPONSE_REJECT:
       {
         VirtualCellLocation vcell_loc;
         Split *new_split;
@@ -1512,10 +1527,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
       break;
 
     case GTK_RESPONSE_CANCEL:
-      return TRUE;
-
     default:
-      break;
+      return TRUE;
   }
 
   return FALSE;
@@ -1538,6 +1551,7 @@ gboolean
 gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
   SplitRegister *reg = data;
+  GtkWidget *dialog, *window;
   gint response;
   const gchar *title = _("Mark split as unreconciled?");
   const gchar *message =
@@ -1549,11 +1563,17 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
     return TRUE;
 
   /* Does the user want to be warned? */
-  response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
-					 "mark_split_unreconciled",
-					 "_Unreconcile", GTK_STOCK_CANCEL,
-					 "<b>%s</b>\n\n%s\n",
-					 title, message);
-
+  window = gnc_split_register_get_parent(reg);
+  dialog =
+    gtk_message_dialog_new_with_markup(GTK_WINDOW(window),
+				       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_WARNING,
+				       GTK_BUTTONS_CANCEL,
+				       "%s", title);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", message);
+  gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Unreconcile"), GTK_RESPONSE_YES);
+  response = gnc_dialog_run(GTK_DIALOG(dialog), "mark_split_unreconciled");
+  gtk_widget_destroy(dialog);
   return (response == GTK_RESPONSE_YES);
 }

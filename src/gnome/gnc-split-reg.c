@@ -44,7 +44,6 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
-#include "gnc-err-popup.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
@@ -702,30 +701,48 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
 gboolean
 gnc_split_reg_check_close( GNCSplitReg *gsr )
 {
-  gint result;
+  GtkWidget *dialog;
+  gint response;
   gboolean pending_changes;
   SplitRegister *reg;
-  const char *message = _("The current transaction has been changed.\n"
-			  "Would you like to record it?");
+  const char *title = _("Save transaction before closing?");
+  const char *message =
+    _("The current transaction has been changed.  Would you like to "
+      "record the changes before closing this page, close the page "
+      "without recording the changes, or cancel the close?");
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   pending_changes = gnc_split_register_changed( reg );
   if ( !pending_changes )
     return TRUE;
 
-  result = gnc_verify_cancel_dialog(gsr->window, GTK_RESPONSE_YES, message);
-  switch (result)
+  dialog = gtk_message_dialog_new(GTK_WINDOW(gsr->window),
+				  GTK_DIALOG_DESTROY_WITH_PARENT,
+				  GTK_MESSAGE_QUESTION,
+				  GTK_BUTTONS_NONE,
+				  "%s", title);
+  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					   "%s", message);
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 _("_Don't Record"), GTK_RESPONSE_REJECT,
+			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			 _("_Record"), GTK_RESPONSE_ACCEPT,
+			 NULL);
+  response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
+  gtk_widget_destroy(dialog);
+
+  switch (response)
   {
-    case GTK_RESPONSE_YES:
-    case GTK_RESPONSE_OK:
+    case GTK_RESPONSE_ACCEPT:
       gnc_split_reg_record_trans_cb( gsr->window, gsr );
       return TRUE;
 
-    case GTK_RESPONSE_NO:
+    case GTK_RESPONSE_REJECT:
       gnc_split_register_cancel_cursor_trans_changes( reg );
       return TRUE;
 
     case GTK_RESPONSE_CANCEL:
+    default:
       return FALSE;
   }
   return TRUE;
@@ -931,15 +948,24 @@ gnc_split_reg_reverse_trans_cb (GtkWidget *w, gpointer data)
 static gboolean
 xaccTransWarnReadOnly (const Transaction *trans)
 {
+  GtkWidget *dialog;
   const gchar *reason;
+  const gchar *format =
+    _("Cannot modify or delete this transaction. This transaction is "
+      "marked read-only because:\n\n'%s'");
 
   if (!trans) return FALSE;
 
   reason = xaccTransGetReadOnly (trans);
   if (reason) {
-    gnc_send_gui_error(_("Cannot modify or delete this transaction.\n"
-                       "This transaction is marked read-only because:\n\n'%s'"),
-                       reason);
+    dialog = gtk_message_dialog_new(NULL,
+				    0,
+				    GTK_MESSAGE_ERROR,
+				    GTK_BUTTONS_OK,
+				    format,
+				    reason);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
     return TRUE;
   }
   return FALSE;
@@ -954,7 +980,8 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
   Transaction *trans;
   Split *split;
   GtkWidget *dialog;
-  gint result;
+  gint response;
+  const gchar *warning;
 
   const char *message = _("Remove the splits from this transaction?");
   const char *recn_warn = _("This transaction contains reconciled splits. "
@@ -975,6 +1002,7 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 					 GTK_BUTTONS_NONE,
 					 "<b>%s</b>\n\n%s",
 					 message, recn_warn);
+    warning = "register_remove_all_splits2";
   } else {
     dialog =
       gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
@@ -983,15 +1011,16 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
 					 GTK_MESSAGE_QUESTION,
 					 GTK_BUTTONS_NONE,
 					 "<b>%s</b>", message);
+    warning = "register_remove_all_splits";
   }
 
   gtk_dialog_add_button(GTK_DIALOG(dialog),
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gnc_gtk_dialog_add_button(dialog, N_("_Remove Splits"),
 			    GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-  result =  gtk_dialog_run(GTK_DIALOG(dialog));
+  response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
   gtk_widget_destroy (dialog);
-  if (result != GTK_RESPONSE_ACCEPT)
+  if (response != GTK_RESPONSE_ACCEPT)
     return;
 
   /*
@@ -1025,7 +1054,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
   Transaction *trans;
   Split *split;
   GtkWidget *dialog;
-  gint result;
+  gint response;
+  const gchar *warning;
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
@@ -1110,6 +1140,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 					   GTK_MESSAGE_WARNING,
 					   GTK_BUTTONS_NONE,
 					   "<b>%s</b>\n\n%s", buf, recn_warn);
+      warning = "register_delete_split2";
     } else {
       dialog =
 	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
@@ -1118,6 +1149,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 					   GTK_MESSAGE_QUESTION,
 					   GTK_BUTTONS_NONE,
 					   "<b>%s</b>", buf);
+      warning = "register_delete_split";
     }
     g_free(buf);
 
@@ -1125,9 +1157,9 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
 			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
-    if (result != GTK_RESPONSE_ACCEPT)
+    if (response != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_split (reg);
@@ -1153,6 +1185,7 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 					   GTK_MESSAGE_WARNING,
 					   GTK_BUTTONS_NONE,
 					   "<b>%s</b>\n\n%s", message, recn_warn);
+      warning = "register_delete_trans2";
     } else {
       dialog =
 	gtk_message_dialog_new_with_markup(GTK_WINDOW(gsr->window),
@@ -1161,14 +1194,15 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
 					   GTK_MESSAGE_QUESTION,
 					   GTK_BUTTONS_NONE,
 					   "<b>%s</b>", message);
+      warning = "register_delete_trans";
     }
     gtk_dialog_add_button(GTK_DIALOG(dialog),
 			  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
     gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
 			      GTK_STOCK_DELETE, GTK_RESPONSE_ACCEPT);
-    result =  gtk_dialog_run(GTK_DIALOG(dialog));
+    response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
     gtk_widget_destroy (dialog);
-    if (result != GTK_RESPONSE_ACCEPT)
+    if (response != GTK_RESPONSE_ACCEPT)
       return;
 
     gnc_split_register_delete_current_trans (reg);
@@ -1908,7 +1942,7 @@ gtk_callback_bug_workaround (gpointer argp)
 					      "<b>%s</b>\n\n%s",
 					      read_only,
 					      args->string);
-  gtk_dialog_run(GTK_DIALOG(dialog));
+  gnc_dialog_run(GTK_DIALOG(dialog), "register_read_only");
   gtk_widget_destroy(dialog);
   g_free(args);
   return FALSE;

@@ -52,7 +52,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static GNCCanCancelSaveCB can_cancel_cb = NULL;
 static GNCShutdownCB shutdown_cb = NULL;
 
 
@@ -181,11 +180,15 @@ gnc_file_dialog (const char * title,
 
 
 gboolean
-show_session_error (QofBackendError io_error, const char *newfile)
+show_session_error (QofBackendError io_error,
+		    const char *newfile,
+		    GNCFileDialogType type)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
+  GtkWidget *dialog;
   gboolean uh_oh = TRUE;
-  const char *fmt;
+  const char *fmt, *label;
+  gint response;
 
   gnc_destroy_splash_screen(); /* Just in case */
   if (NULL == newfile) { newfile = _("(null)"); }
@@ -197,206 +200,244 @@ show_session_error (QofBackendError io_error, const char *newfile)
       break;
 	
 	case ERR_BACKEND_NO_HANDLER: {
-		fmt = _("No suitable backend was found for\n%s.");
+		fmt = _("No suitable backend was found for %s.");
 		gnc_error_dialog(parent, fmt, newfile);
 		break;
 	}
     case ERR_BACKEND_NO_BACKEND:
-      fmt = _("The URL \n    %s\n"
-              "is not supported by this version of GnuCash.");
+      fmt = _("The URL %s is not supported by this version of GnuCash.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_BAD_URL:
-      fmt = _("Can't parse the URL\n   %s\n");
+      fmt = _("Can't parse the URL %s.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_CANT_CONNECT:
-      fmt = _("Can't connect to\n   %s\n"
+      fmt = _("Can't connect to %s. "
               "The host, username or password were incorrect.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_CONN_LOST:
-      fmt = _("Can't connect to\n   %s\n"
+      fmt = _("Can't connect to %s. "
               "Connection was lost, unable to send data.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_TOO_NEW:
-      fmt = _("This file/URL appears to be from a newer version\n"
-              "of GnuCash. You must upgrade your version of GnuCash\n"
+      fmt = _("This file/URL appears to be from a newer version "
+              "of GnuCash. You must upgrade your version of GnuCash "
               "to work with this data.");
       gnc_error_dialog (parent, fmt);
       break;
 
     case ERR_BACKEND_NO_SUCH_DB:
-      fmt = _("The database\n"
-              "   %s\n"
-              "doesn't seem to exist. Do you want to create it?\n");
+      fmt = _("The database %s doesn't seem to exist. "
+	      "Do you want to create it?");
       if (gnc_verify_dialog (parent, TRUE, fmt, newfile)) { uh_oh = FALSE; }
       break;
 
     case ERR_BACKEND_LOCKED:
-      fmt = _("GnuCash could not obtain the lock for\n"
-              "   %s.\n"
-              "That database may be in use by another user,\n"
-              "in which case you should not open the database.\n"
-              "\nDo you want to proceed with opening the database?");
-      if (gnc_verify_dialog (parent, TRUE, fmt, newfile)) { uh_oh = FALSE; }
+      switch (type){
+        case GNC_FILE_DIALOG_OPEN:
+        default:
+	  label = GTK_STOCK_OPEN;
+	  fmt = _("GnuCash could not obtain the lock for %s."
+		  "That database may be in use by another user, "
+		  "in which case you should not open the database. "
+		  "Do you want to proceed with opening the database?");
+	  break;
+
+        case GNC_FILE_DIALOG_IMPORT:
+	  label = _("Import");
+	  fmt = _("GnuCash could not obtain the lock for %s."
+		  "That database may be in use by another user, "
+		  "in which case you should not import the database. "
+		  "Do you want to proceed with importing the database?");
+	  break;
+
+        case GNC_FILE_DIALOG_SAVE:
+	  label = GTK_STOCK_SAVE;
+	  fmt = _("GnuCash could not obtain the lock for %s."
+		  "That database may be in use by another user, "
+		  "in which case you should not save the database. "
+		  "Do you want to proceed with saving the database?");
+	  break;
+
+        case GNC_FILE_DIALOG_EXPORT:
+	  label = _("Export");
+	  fmt = _("GnuCash could not obtain the lock for %s."
+		  "That database may be in use by another user, "
+		  "in which case you should not export the database. "
+		  "Do you want to proceed with exporting the database?");
+	  break;
+      }
+
+      dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				      GTK_DIALOG_DESTROY_WITH_PARENT,
+				      GTK_MESSAGE_QUESTION,
+				      GTK_BUTTONS_NONE,
+				      fmt,
+				      newfile);
+      gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   label, GTK_RESPONSE_YES,
+			   NULL);
+      response = gtk_dialog_run(GTK_DIALOG(dialog));
+      gtk_widget_destroy(dialog);
+      uh_oh = (response != GTK_RESPONSE_YES);
       break;
 
     case ERR_BACKEND_READONLY:
-      fmt = _("GnuCash could not write to\n"
-              "   %s.\n"
-              "That database may be on a read-only file system,\n"
-              "or you may not have write permission for the directory.\n");
+      fmt = _("GnuCash could not write to %s. "
+              "That database may be on a read-only file system, "
+              "or you may not have write permission for the directory.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:
-      fmt = _("The file/URL \n    %s\n"
+      fmt = _("The file/URL %s"
               "does not contain GnuCash data or the data is corrupt.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_SERVER_ERR:
-      fmt = _("The server at URL \n    %s\n"
+      fmt = _("The server at URL %s "
               "experienced an error or encountered bad or corrupt data.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_PERM:
-      fmt = _("You do not have permission to access\n    %s\n");
+      fmt = _("You do not have permission to access %s.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_BACKEND_MISC:
-      fmt = _("An error occurred while processing\n    %s\n");
+      fmt = _("An error occurred while processing %s.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
-	/* QSF additions */
-	case ERR_QSF_INVALID_OBJ: {
-		fmt = _("Invalid QSF Object file!\n"
-			"The QSF object file\n%s\n failed to validate"
-			" against the QSF object schema.\nThe XML structure of the file"
-			" is either not well-formed or contains illegal data.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break; 
-	}
-	case ERR_QSF_INVALID_MAP: {
-		fmt = _("Invalid QSF Map file!\n"
-			"The QSF map file\n%s\n failed to validate "
-			" against the QSF map schema.\nThe XML structure of the file"
-			" is either not well-formed or contains illegal data.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break; 
-	}
-	case ERR_QSF_BAD_QOF_VERSION: {
-		fmt = _("The QSF Map file\n%s\nwas written for a different version of QOF.\n"
-			"It may need to be modified to work with your current QOF installation.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break; 
-	}
-	case ERR_QSF_BAD_MAP: {
-		fmt = _("The selected QSF map\n%s\ncontains unusable data. "
-			"This is usually because not all the required parameters for "
-			"the defined objects have calculations described in the map.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break; 
-	}
-	case ERR_QSF_BAD_OBJ_GUID: {
-		fmt = _("The selected QSF object file\n%s\n contains one or more invalid GUIDs. "
-			"The file cannot be processed - please check the source of the file "
-			"and try again.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break;
-	}
-	case ERR_QSF_NO_MAP: {
-		fmt = _("The selected QSF Object file\n%s\nrequires a map but it was not provided.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break; 
-	}
-	case ERR_QSF_WRONG_MAP: {
-		fmt = _("Wrong QSF map selected.\n"
-			"The selected map,\n%s\n validates but was written "
-			"for different QOF objects.\n The list of objects defined in "
-			"this map does not include all the objects described in "
-			"the current QSF object file.");
-	  gnc_error_dialog(parent, fmt, newfile);
-	  break; 
-	}
-	case ERR_QSF_MAP_NOT_OBJ: {
-	  fmt = _("The selected file \n  %s\n is a QSF map and cannot be "
-		  "opened as a QSF object.");
-	  gnc_error_dialog(parent, fmt, newfile);
-	  break; 
-	}
-	case ERR_QSF_OVERFLOW : {
-		fmt = _("When converting XML strings into numbers, an overflow "
-			"has been detected. The QSF object file\n  %s\ncontains invalid "
-			"data in a field that is meant to hold a number.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break;
-	}
-	case ERR_QSF_OPEN_NOT_MERGE : {
-		fmt = _("The QSF object file\n  %s\nis valid and contains GnuCash "
-			"objects. However, GnuCash cannot open the file directly because "
-			"the data needs to be merged into an existing GnuCash data book. "
-			"Please open a GnuCash file or create a new one, then import "
-			"this QSF object file so that the data can be merged into the "
-			"main data book.");
-		gnc_error_dialog(parent, fmt, newfile);
-		break;
-	}
+    /* QSF additions */
+    case ERR_QSF_INVALID_OBJ:
+      fmt = _("Invalid QSF Object file! The QSF object file %s failed to"
+	      " validate against the QSF object schema. The XML structure of"
+	      " the file is either not well-formed or contains illegal data.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_QSF_INVALID_MAP:
+      fmt = _("Invalid QSF Map file! The QSF map file %s failed to validate"
+	      " against the QSF map schema. The XML structure of the file"
+	      " is either not well-formed or contains illegal data.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_QSF_BAD_QOF_VERSION:
+      fmt = _("The QSF Map file %s was written for a different version of"
+	      " QOF.  It may need to be modified to work with your current"
+	      " QOF installation.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_QSF_BAD_MAP:
+      fmt = _("The selected QSF map %s contains unusable data. "
+	      "This is usually because not all the required parameters for "
+	      "the defined objects have calculations described in the map.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break; 
+
+    case ERR_QSF_BAD_OBJ_GUID:
+      fmt = _("The selected QSF object file %s contains one or more invalid "
+	      "GUIDs. The file cannot be processed - please check the source "
+	      "of the file and try again.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_QSF_NO_MAP:
+      fmt = _("The selected QSF Object file %s requires a map but it was "
+	      "not provided.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break; 
+
+    case ERR_QSF_WRONG_MAP:
+      fmt = _("Wrong QSF map selected. The selected map %s validates but was "
+	      "written for different QOF objects.  The list of objects defined "
+	      "in this map does not include all the objects described in "
+	      "the current QSF object file.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break; 
+
+    case ERR_QSF_MAP_NOT_OBJ:
+      fmt = _("The selected file %s is a QSF map and cannot be "
+	      "opened as a QSF object.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break; 
+
+    case ERR_QSF_OVERFLOW:
+      fmt = _("When converting XML strings into numbers, an overflow "
+	      "has been detected. The QSF object file %s contains invalid "
+	      "data in a field that is meant to hold a number.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_QSF_OPEN_NOT_MERGE:
+      fmt = _("The QSF object file %s is valid and contains GnuCash "
+	      "objects. However, GnuCash cannot open the file directly because "
+	      "the data needs to be merged into an existing GnuCash data book. "
+	      "Please open a GnuCash file or create a new one, then import "
+	      "this QSF object file so that the data can be merged into the "
+	      "main data book.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
     case ERR_FILEIO_FILE_BAD_READ:
-      fmt = _("There was an error reading the file.\n"
+      fmt = _("There was an error reading the file. "
               "Do you want to continue?");
       if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_PARSE_ERROR:
-      fmt = _("There was an error parsing the file\n  %s");
+      fmt = _("There was an error parsing the file %s.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_EMPTY:
-      fmt = _("The file \n  %s\nis empty.");
+      fmt = _("The file %s is empty.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_NOT_FOUND:
-      fmt = _("The file \n  %s\ncould not be found.");
+      fmt = _("The file %s could not be found.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_FILE_TOO_OLD:
-      fmt = _("This file is from an older version of GnuCash.\n"
+      fmt = _("This file is from an older version of GnuCash. "
               "Do you want to continue?");
       if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
       break;
 
     case ERR_FILEIO_UNKNOWN_FILE_TYPE:
-      fmt = _("The file type of file\n  %s\nis unknown.");
+      fmt = _("The file type of file %s is unknown.");
       gnc_error_dialog(parent, fmt, newfile);
       break;
       
     case ERR_FILEIO_BACKUP_ERROR:
-      fmt = _("Could not make a backup of the file\n  %s");
+      fmt = _("Could not make a backup of the file %s");
       gnc_error_dialog(parent, fmt, newfile);
       break;
 
     case ERR_FILEIO_WRITE_ERROR:
-      fmt = _("Could not write to file\n  %s\nCheck that you have "
+      fmt = _("Could not write to file %s Check that you have "
               "permission to write to this file and that "
               "there is sufficient space to create it.");
       gnc_error_dialog(parent, fmt, newfile);
       break;
 
     case ERR_SQL_DB_TOO_OLD:
-      fmt = _("This database is from an older version of GnuCash.\n"
+      fmt = _("This database is from an older version of GnuCash. "
               "Do you want to want to upgrade the database "
               "to the current version?");
       if (gnc_verify_dialog (parent, TRUE, fmt)) { uh_oh = FALSE; }
@@ -404,17 +445,17 @@ show_session_error (QofBackendError io_error, const char *newfile)
 
     case ERR_SQL_DB_BUSY:
       fmt = _("The SQL database is in use by other users, "
-              "and the upgrade cannot be performed until they logoff.\n"
-              "If there are currently no other users, consult the \n"
-              "documentation to learn how to clear out dangling login\n"
+              "and the upgrade cannot be performed until they logoff. "
+              "If there are currently no other users, consult the  "
+              "documentation to learn how to clear out dangling login "
               "sessions.");
       gnc_error_dialog (parent, fmt);
       break;
 
     default:
       PERR("FIXME: Unhandled error %d", io_error);
-      fmt = _("An unknown I/O error occurred.");
-      gnc_error_dialog (parent, fmt);
+      fmt = _("An unknown I/O error (%d) occurred.");
+      gnc_error_dialog (parent, fmt, io_error);
       break;
   }
 
@@ -456,7 +497,7 @@ gnc_file_new (void)
 
   /* If user attempts to start a new session before saving results of
    * the last one, prompt them to clean up their act. */
-  if (!gnc_file_query_save ())
+  if (!gnc_file_query_save (TRUE))
     return;
 
   session = qof_session_get_current_session ();
@@ -485,7 +526,7 @@ gnc_file_new (void)
 }
 
 gboolean
-gnc_file_query_save (void)
+gnc_file_query_save (gboolean can_cancel)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
 
@@ -497,26 +538,46 @@ gnc_file_query_save (void)
    */
   while (qof_book_not_saved(qof_session_get_book (qof_session_get_current_session ())))
   {
-    gint result;
-    const char *message = _("Changes have been made since the last "
-                            "Save. Save the data to file?");
+    GtkWidget *dialog;
+    gint response;
+    const char *title = _("Save changes to the file?");
+    const char *message =
+      _("Changes have been made since the last time it was saved.  If "
+	"you continue without saving these changes will be discarded.");
 
-    if (can_cancel_cb && can_cancel_cb ())
-      result = gnc_verify_cancel_dialog (parent, GTK_RESPONSE_YES, message);
-    else
-    {
-      gboolean do_save = gnc_verify_dialog (parent, TRUE, message);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_button(GTK_DIALOG(dialog),
+			  _("Continue _Without Saving"), GTK_RESPONSE_OK);
 
-      result = do_save ? GTK_RESPONSE_YES : GTK_RESPONSE_NO;
+    if (can_cancel)
+      gtk_dialog_add_button(GTK_DIALOG(dialog),
+			    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+    gtk_dialog_add_button(GTK_DIALOG(dialog),
+			  GTK_STOCK_SAVE, GTK_RESPONSE_YES);
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+
+    switch (response) {
+      case GTK_RESPONSE_YES:
+	gnc_file_save ();
+	/* Go check the loop condition. */
+	break;
+
+      case GTK_RESPONSE_CANCEL:
+      default:
+	if (can_cancel)
+	  return FALSE;
+	/* No cancel function available.  Fall through. */
+	  
+      case GTK_RESPONSE_OK:
+	return TRUE;
     }
-
-    if (result == GTK_RESPONSE_CANCEL)
-      return FALSE;
-
-    if (result == GTK_RESPONSE_NO)
-      return TRUE;
-
-    gnc_file_save ();
   }
 
   return TRUE;
@@ -541,7 +602,8 @@ gnc_post_file_open (const char * filename)
   newfile = xaccResolveURL (filename); 
   if (!newfile)
   {
-    show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
+    show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+			GNC_FILE_DIALOG_OPEN);
     return FALSE;
   }
 
@@ -586,26 +648,12 @@ gnc_post_file_open (const char * filename)
 
     gnc_destroy_splash_screen(); /* Just in case */
 
-#ifdef HAVE_GLIB26
     dialog = gtk_message_dialog_new(NULL,
 				    0,
 				    GTK_MESSAGE_WARNING,
 				    GTK_BUTTONS_NONE,
 				    fmt1, newfile);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog), fmt2);
-#else
-    {
-      gchar *tmp;
-
-      tmp = g_strdup_printf("<b>%s</b>\n\n%s", fmt1, fmt2);
-      dialog = gtk_message_dialog_new_with_markup(NULL,
-						  0,
-						  GTK_MESSAGE_WARNING,
-						  GTK_BUTTONS_NONE,
-						  tmp, newfile);
-      g_free(tmp);
-    }
-#endif
 
     gnc_gtk_dialog_add_button(dialog, _("_Open Anyway"),
 			      GTK_STOCK_OPEN, RESPONSE_OPEN);
@@ -649,7 +697,7 @@ gnc_post_file_open (const char * filename)
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
-    if (FALSE == show_session_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN))
     {
       /* user told us to create a new database. Do it. */
       qof_session_begin (new_session, newfile, FALSE, TRUE);
@@ -669,7 +717,7 @@ gnc_post_file_open (const char * filename)
   }
   else
   {
-    uh_oh = show_session_error (io_err, newfile);
+    uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
   }
 
   if (!uh_oh)
@@ -688,7 +736,7 @@ gnc_post_file_open (const char * filename)
 
     /* check for i/o error, put up appropriate error dialog */
     io_err = qof_session_get_error (new_session);
-    uh_oh = show_session_error (io_err, newfile);
+    uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
 
     new_group = gnc_book_get_group (qof_session_get_book (new_session));
     if (uh_oh) new_group = NULL;
@@ -697,7 +745,8 @@ gnc_post_file_open (const char * filename)
      * The backend forgot to set an error. So make one up. */
     if (!uh_oh && !new_group) 
     {
-      uh_oh = show_session_error (ERR_BACKEND_MISC, newfile);
+      uh_oh = show_session_error (ERR_BACKEND_MISC, newfile,
+				  GNC_FILE_DIALOG_OPEN);
     }
   }
 
@@ -754,7 +803,7 @@ gnc_file_open (void)
   char *lastfile;
   gboolean result;
 
-  if (!gnc_file_query_save ())
+  if (!gnc_file_query_save (TRUE))
     return FALSE;
 
   lastfile = gnc_history_get_last();
@@ -777,7 +826,7 @@ gnc_file_open_file (const char * newfile)
 {
   if (!newfile) return FALSE;
 
-  if (!gnc_file_query_save ())
+  if (!gnc_file_query_save (TRUE))
     return FALSE;
 
   return gnc_post_file_open (newfile);
@@ -820,7 +869,7 @@ gnc_file_export_file(const char * newfile)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
   {
-    if (FALSE == show_session_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_EXPORT))
     {
        /* user told us to ignore locks. So ignore them. */
       qof_session_begin (new_session, newfile, TRUE, FALSE);
@@ -901,7 +950,7 @@ gnc_file_save (void)
   io_err = qof_session_get_error (session);
   if (ERR_BACKEND_NO_ERR != io_err)
   {
-    show_session_error (io_err, newfile);
+    show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
 
     if (been_here_before) return;
     been_here_before = TRUE;
@@ -947,7 +996,8 @@ gnc_file_save_as (void)
   newfile = xaccResolveURL (filename);
   if (!newfile)
   {
-     show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename);
+     show_session_error (ERR_FILEIO_FILE_NOT_FOUND, filename,
+			 GNC_FILE_DIALOG_SAVE);
      return;
   }
 
@@ -970,7 +1020,7 @@ gnc_file_save_as (void)
   /* if file appears to be locked, ask the user ... */
   if (ERR_BACKEND_LOCKED == io_err || ERR_BACKEND_READONLY == io_err) 
   {
-    if (FALSE == show_session_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
     {
        /* user told us to ignore locks. So ignore them. */
       qof_session_begin (new_session, newfile, TRUE, FALSE);
@@ -981,7 +1031,7 @@ gnc_file_save_as (void)
   else if ((ERR_BACKEND_NO_SUCH_DB == io_err) ||
            (ERR_SQL_DB_TOO_OLD == io_err))
   {
-    if (FALSE == show_session_error (io_err, newfile))
+    if (FALSE == show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE))
     {
       /* user told us to create a new database. Do it. */
       qof_session_begin (new_session, newfile, FALSE, TRUE);
@@ -995,7 +1045,7 @@ gnc_file_save_as (void)
   io_err = qof_session_get_error (new_session);
   if (ERR_BACKEND_NO_ERR != io_err) 
   {
-    show_session_error (io_err, newfile);
+    show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
     xaccLogDisable();
     qof_session_destroy (new_session);
     xaccLogEnable();
@@ -1064,12 +1114,6 @@ gnc_file_quit (void)
 
   gnc_engine_resume_events ();
   gnc_unset_busy_cursor (NULL);
-}
-
-void
-gnc_file_set_can_cancel_callback (GNCCanCancelSaveCB cb)
-{
-  can_cancel_cb = cb;
 }
 
 void

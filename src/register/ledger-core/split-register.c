@@ -32,6 +32,7 @@
 
 #include "combocell.h"
 #include "datecell.h"
+#include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-gconf-utils.h"
 #include "split-register-p.h"
@@ -414,15 +415,28 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
    * it before we can duplicate. Make sure the user wants to do that. */
   if (changed)
   {
-    const char *message = _("The current transaction has been changed.\n"
-                            "Would you like to record it?");
-    gint result;
+    GtkWidget *dialog, *window;
+    gint response;
+    const char *title = _("Save transaction before duplicating?");
+    const char *message =
+      _("The current transaction has been changed. Would you like to "
+	"record the changes before duplicating the transaction, or "
+	"cancel the duplication?");
 
-    result = gnc_ok_cancel_dialog
-      (gnc_split_register_get_parent (reg),
-       GTK_RESPONSE_OK, message);
+    window = gnc_split_register_get_parent(reg);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_CANCEL,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_button(GTK_DIALOG(dialog),
+			  _("_Record"), GTK_RESPONSE_ACCEPT);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_duplicated");
+    gtk_widget_destroy(dialog);
 
-    if (result != GTK_RESPONSE_OK)
+    if (response != GTK_RESPONSE_ACCEPT)
     {
       gnc_resume_gui_refresh ();
       return NULL;

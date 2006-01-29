@@ -449,7 +449,7 @@ gnc_shutdown (int exit_status)
 {
     if (gnucash_ui_is_running()) {
         if (!gnome_is_terminating) {
-            if (gnc_file_query_save()) {
+            if (gnc_file_query_save(FALSE)) {
                 gnc_hook_run(HOOK_UI_SHUTDOWN, NULL);
                 gnc_gui_shutdown();
             }

@@ -142,7 +142,7 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
 
     /* strings didn't match */
     if (gnc_ok_cancel_dialog (parent, GTK_RESPONSE_OK,
-			      _("The two passwords didn't match. \n"
+			      _("The two passwords didn't match. "
 				"Please try again."))
 	!= GTK_RESPONSE_OK)
       break;

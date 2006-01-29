@@ -37,6 +37,7 @@
 #include "gnc-currency-edit.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
+#include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-price.h"
 #include "gnc-ui.h"
@@ -146,7 +147,8 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
   GList *price_list;
-  gint length;
+  gint length, response;
+  GtkWidget *dialog;
 
   ENTER(" ");
   price_list = gnc_tree_view_price_get_selected_prices(pdb_dialog->price_tree);
@@ -156,15 +158,37 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
   }
 
   length = g_list_length(price_list);
-  if (gnc_verify_dialog (pdb_dialog->dialog, TRUE,
-			 /* Translators: %d is the number of prices. This is a
-			    ngettext(3) message. */
-			 ngettext("Are you sure you want to delete the %d "
-				  "selected price?",
-				  "Are you sure you want to delete the %d "
-				  "selected prices?", length),
-			 length))
-  {
+  if (length > 1) {
+    gchar *message;
+
+    message = g_strdup_printf
+      (/* Translators: %d is the number of prices. This
+	  is a ngettext(3) message. */
+       ngettext("Are you sure you want to delete the selected price?",
+		"Are you sure you want to delete the %d selected prices?",
+		length),
+       length);
+    dialog = gtk_message_dialog_new_with_markup
+      (GTK_WINDOW(pdb_dialog->dialog),
+       GTK_DIALOG_DESTROY_WITH_PARENT,
+       GTK_MESSAGE_QUESTION,
+       GTK_BUTTONS_NONE,
+       "<b>%s</b>\n\n%s",
+       _("Delete prices?"),
+       message);
+    g_free(message);
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+			   (gchar *)NULL);
+    gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "pricedb_remove_multiple");
+    gtk_widget_destroy(dialog);
+  } else {
+    response = GTK_RESPONSE_YES;
+  }
+
+  if (response == GTK_RESPONSE_YES) {
     GNCBook *book = gnc_get_current_book ();
     GNCPriceDB *pdb = gnc_book_get_pricedb (book);
 

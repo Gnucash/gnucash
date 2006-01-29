@@ -839,13 +839,16 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 					GTK_MESSAGE_WARNING,
 					GTK_BUTTONS_NONE,
 					_("<b>Save changes to file %s before "
-					  "closing?</b>\n\nIf you don't save, "
-					  "changes will be discarded."),
+					  "closing?</b>\n\nChanges have been "
+					  "made since the last time it was "
+					  "saved.  If you continue without "
+					  "saving these changes will be "
+					  "discarded."),
 					filename);
 #endif
 
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			 _("Close _without Saving"), GTK_RESPONSE_CLOSE,
+			 _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
 			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			 GTK_STOCK_SAVE, GTK_RESPONSE_APPLY,
 			 NULL);

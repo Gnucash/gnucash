@@ -1,3 +1,33 @@
+2006-01-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gncmod-gnome-utils.c:
+	* src/app-utils/gnc-err-popup.[ch]:
+	* src/app-utils/Makefile.am: Remove deprecated files
+
+	* src/register/ledger-core/split-register-model.c:
+	* src/register/ledger-core/split-register.c:
+	* src/register/ledger-core/split-register-control.c:
+	* src/import-export/hbci/dialog-pass.c:
+	* src/business/business-ledger/gncEntryLedger.c:
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/gnome-utils/gnc-gnome-utils.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/gnc-file.[ch]:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/dialog-utils.[ch]:
+	* src/gnome-utils/gnc-gui-query.[ch]:
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/dialog-chart-export.c:
+	* src/gnome/schemas/apps_gnucash_warnings.schemas.in:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-edit-db.c:
+	* src/gnc-ui.h:
+	* src/app-utils/option-util.c: HIG rework. Remove newlines from
+	dialog message strings.  Give some dialogs more descriptive button
+	labels.  Clean up the code around the file save query dialog.
+
+
 2006-01-28  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-system/html-style-sheet.scm
