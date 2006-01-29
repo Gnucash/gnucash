@@ -107,8 +107,6 @@
   (define tax-menu 
     (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
-  (gnc:warn "report-menu-setup") ;; why do we do this?
-
   ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)
   (gnc:add-extension asset-liability-menu)
