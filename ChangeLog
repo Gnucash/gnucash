@@ -1,7 +1,11 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Andreas Köhler's patch to fix
+	a problem where switching windows repeatedly confusing the
+	Windows menu. Fixes #327943.
+
 	* gnc-tree-model-commodity.c: Andreas Köhler's patch to fix
-	commodity editor warnings/crash.
+	commodity editor warnings/crash. Fixes #328788.
 
 2006-01-29  Joshua Sled  <jsled@asynchronous.org>
 

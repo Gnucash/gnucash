@@ -1123,12 +1123,12 @@ gnc_main_window_update_radio_button (GncMainWindow *window)
    * bottom) on the screen */
   action_list = gtk_radio_action_get_group(GTK_RADIO_ACTION(action));
   first_action = g_slist_last(action_list)->data;
-  g_signal_handlers_block_by_func(first_action,
-				  gnc_main_window_cmd_window_raise, window);
+  g_signal_handlers_block_by_func(G_OBJECT(first_action),
+				  G_CALLBACK(gnc_main_window_cmd_window_raise), window);
   DEBUG("blocked signal on %p, set %p active, window %p", first_action, action, window);
   gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
-  g_signal_handlers_unblock_by_func(first_action,
-				    gnc_main_window_cmd_window_raise, window);
+  g_signal_handlers_unblock_by_func(G_OBJECT(first_action),
+				    G_CALLBACK(gnc_main_window_cmd_window_raise), window);
   g_free(action_name);
   LEAVE(" ");
 }
@@ -2775,19 +2775,23 @@ gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_window_raise (GtkAction *action,
 				  GtkRadioAction *current,
-				  GncMainWindow *unused)
+				  GncMainWindow *old_window)
 {
-	GncMainWindow *window;
+	GncMainWindow *new_window;
 	gint value;
 
 	g_return_if_fail(GTK_IS_ACTION(action));
 	g_return_if_fail(GTK_IS_RADIO_ACTION(current));
-	g_return_if_fail(GNC_IS_MAIN_WINDOW(unused));
+	g_return_if_fail(GNC_IS_MAIN_WINDOW(old_window));
 	
-	ENTER("action %p, current %p, window %p", action, current, unused);
+	ENTER("action %p, current %p, window %p", action, current, old_window);
 	value = gtk_radio_action_get_current_value(current);
-	window = g_list_nth_data(active_windows, value);
-	gtk_window_present(GTK_WINDOW(window));
+	new_window = g_list_nth_data(active_windows, value);
+	gtk_window_present(GTK_WINDOW(new_window));
+
+	/* revert the change in the radio group
+     * impossible while handling "changed" (G_SIGNAL_NO_RECURSE) */
+	g_idle_add((GSourceFunc)gnc_main_window_update_radio_button, old_window);
 	LEAVE(" ");
 }
 
