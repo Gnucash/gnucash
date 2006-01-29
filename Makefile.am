@@ -8,10 +8,13 @@ GNC_ETAGS_FILE = @GNC_ETAGS_FILE@
 
 noinst_DATA = make-gnucash-patch make-gnucash-potfiles .links
 
-doc_DATA = \
+dist_doc_DATA = \
   AUTHORS \
   COPYING \
   ChangeLog \
+  ChangeLog.2005 \
+  ChangeLog.2004 \
+  ChangeLog.2003 \
   DOCUMENTERS \
   HACKING \
   INSTALL \
@@ -34,8 +37,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = ChangeLog.1 \
-  ${doc_DATA} \
+EXTRA_DIST = \
   gnucash.lsm \
   gnucash.m4 \
   gnucash-config.in \
