@@ -238,6 +238,7 @@
    '((<gnc:UIWidget> parent)
      ((<gw:mchars> caller-owned const) title)
      ((<gw:mchars> caller-owned const) msg)
+     ((<gw:mchars> caller-owned const) button-name)
      (<gw:int> default-choice)
      ((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
    "Show a dialog offering different mutually exclusive choices

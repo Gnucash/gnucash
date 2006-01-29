@@ -1735,23 +1735,23 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     if (shares_changed)
       radio_list = g_list_append (radio_list,
                                   g_strdup_printf ("%s (%s)",
-                                                   _("Shares"), _("Changed")));
+                                                   _("_Shares"), _("Changed")));
     else
-      radio_list = g_list_append (radio_list, g_strdup (_("Shares")));
+      radio_list = g_list_append (radio_list, g_strdup (_("_Shares")));
 
     if (price_changed)
       radio_list = g_list_append (radio_list,
                                   g_strdup_printf ("%s (%s)",
-                                                   _("Price"), _("Changed")));
+                                                   _("_Price"), _("Changed")));
     else
-      radio_list = g_list_append (radio_list, g_strdup (_("Price")));
+      radio_list = g_list_append (radio_list, g_strdup (_("_Price")));
 
     if (amount_changed)
       radio_list = g_list_append (radio_list,
                                   g_strdup_printf ("%s (%s)",
-                                                   _("Value"), _("Changed")));
+                                                   _("_Value"), _("Changed")));
     else
-      radio_list = g_list_append (radio_list, g_strdup (_("Value")));
+      radio_list = g_list_append (radio_list, g_strdup (_("_Value")));
 
     if (price_changed) default_value = 2;  /* change the value */
     else  default_value = 1;  /* change the value */
@@ -1760,6 +1760,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
       (gnc_split_register_get_parent (reg),
        title,
        message,
+       _("_Recalculate"),
        default_value,
        radio_list);
 

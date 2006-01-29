@@ -1,5 +1,16 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register.c:
+	* src/register/ledger-core/split-register-control.c:
+	* src/import-export/hbci/druid-hbci-initial.c:
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/gnc-gui-query.c:
+	* src/gnc-ui.h: HIG changes for the "radio option" query dialog.
+
+	* src/engine/gnc-engine.c: Restore reasonable default logging
+	levels.
+
 	* README: Michael Wahlbrink's cvs to svn changes.
 
 	* src/import-export/qif-import/dialog-account-picker.c:

@@ -505,6 +505,7 @@ on_aqhbci_button (GtkButton *button,
 	(GTK_WIDGET(info->window),
 	 _("Choose AqBanking Backend"),
 	 _("Please choose an AqBanking backend to be configured"),
+	 _("Co_nfigure"),
 	 0,
 	 radio_list);
       g_list_free(radio_list);

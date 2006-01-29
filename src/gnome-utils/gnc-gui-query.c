@@ -272,6 +272,7 @@ int
 gnc_choose_radio_option_dialog(gncUIWidget parent,
 			       const char *title, 
 			       const char *msg,
+			       const char *button_name,
 			       int default_value,
 			       GList *radio_list)
 {
@@ -279,7 +280,7 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   GtkWidget *vbox;
   GtkWidget *main_vbox;
   GtkWidget *label;
-  GtkWidget *frame;
+  GtkWidget *alignment;
   GtkWidget *radio_button;
   GtkWidget *dialog;
   GtkWidget *dvbox;
@@ -288,7 +289,7 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   int i;
 
   main_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 5);
+  gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 6);
   gtk_widget_show(main_vbox);
 
   label = gtk_label_new(msg);
@@ -296,19 +297,19 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
   gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
   gtk_widget_show(label);
 
-  frame = gtk_frame_new(NULL);
-  gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
-  gtk_box_pack_start(GTK_BOX(main_vbox), frame, FALSE, FALSE, 0);
-  gtk_widget_show(frame);
+  alignment = gtk_alignment_new(0.0, 0.0, 1.0, 1.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT(alignment), 0, 0, 12, 0);
+  gtk_box_pack_start(GTK_BOX(main_vbox), alignment, FALSE, FALSE, 0);
+  gtk_widget_show(alignment);
 
   vbox = gtk_vbox_new(TRUE, 3);
-  gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-  gtk_container_add(GTK_CONTAINER(frame), vbox);
+  gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
+  gtk_container_add(GTK_CONTAINER(alignment), vbox);
   gtk_widget_show(vbox);
 
   for (node = radio_list, i = 0; node; node = node->next, i++)
   {
-    radio_button = gtk_radio_button_new_with_label(group, node->data);
+    radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
     group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
 
     if (i == default_value) /* default is first radio button */
@@ -325,11 +326,14 @@ gnc_choose_radio_option_dialog(gncUIWidget parent,
 		     &radio_result);
   }
 
+  if (!button_name)
+    button_name = GTK_STOCK_OK;
   dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					button_name, GTK_RESPONSE_OK,
 					NULL);
+  gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
 
   /* default to ok */
   gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);

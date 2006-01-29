@@ -92,6 +92,7 @@ gnc_gnome_help (const char *file_name, const char *target_link);
 int      gnc_choose_radio_option_dialog (gncUIWidget parent,
 					 const char *title,
 					 const char *msg,
+					 const char *button_name,
 					 int default_value,
 					 GList *radio_list);
 

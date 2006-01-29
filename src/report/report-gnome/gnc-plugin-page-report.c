@@ -1132,7 +1132,8 @@ gnc_get_export_type_choice (SCM export_types)
 
                 choice = gnc_choose_radio_option_dialog
                         (NULL, _("Choose export format"),
-                         _("Choose the export format for this report:"), 0, choices);
+                         _("Choose the export format for this report:"),
+			 NULL, 0, choices);
         }
         else
                 choice = -1;

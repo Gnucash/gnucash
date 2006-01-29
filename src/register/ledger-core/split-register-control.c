@@ -29,6 +29,7 @@
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "pricecell.h"
 #include "datecell.h"
@@ -101,20 +102,20 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
       two_accounts = FALSE;
 
     radio_list = g_list_append (radio_list,
-                                _("Balance it manually"));
+                                _("Balance it _manually"));
     radio_list = g_list_append (radio_list,
-                                _("Let GnuCash add an adjusting split"));
+                                _("Let GnuCash _add an adjusting split"));
 
     if (reg->type < NUM_SINGLE_REGISTER_TYPES)
     {
       radio_list = g_list_append (radio_list,
-                                  _("Adjust current account split total"));
+                                  _("Adjust current account _split total"));
 
       default_value = 2;
       if (two_accounts)
       {
         radio_list = g_list_append (radio_list,
-                                    _("Adjust other account split total"));
+                                    _("Adjust _other account split total"));
         default_value = 3;
       }
     }
@@ -125,6 +126,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
       (gnc_split_register_get_parent (reg),
        title,
        message,
+       _("_Rebalance"),
        default_value,
        radio_list);
 
