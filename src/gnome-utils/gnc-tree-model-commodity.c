@@ -1052,7 +1052,7 @@ gnc_tree_model_commodity_path_changed (GncTreeModelCommodity *model,
   GtkTreeIter iter;
 
   debug_path(ENTER, path);
-  if (gtk_tree_path_up (path)) {
+  if (gtk_tree_path_up (path) && gtk_tree_path_get_depth (path) > 0) {
     debug_path(DEBUG, path);
     gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
     DEBUG("iter %s", iter_to_string(&iter));

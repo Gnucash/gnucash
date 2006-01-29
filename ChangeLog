@@ -1,3 +1,8 @@
+2006-01-29  David Hampton  <hampton@employees.org>
+
+	* gnc-tree-model-commodity.c: Andreas Köhler's patch to fix
+	commodity editor warnings/crash.
+
 2006-01-29  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/utility-reports/welcome-to-gnucash.scm: register
