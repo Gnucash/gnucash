@@ -1,3 +1,11 @@
+2006-01-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c:
+	  Make sure to insert new splits into an account before we
+	  set the Base Value..  Otherwise it will fail to set the
+	  value properly.  Closer to fixing 325890, but it's still
+	  not completely fixed.
+
 2006-01-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Change since-last-run
