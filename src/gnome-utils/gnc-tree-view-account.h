@@ -79,7 +79,6 @@ typedef	struct {
     guint32      original_visible_types;
     gboolean     hide_zero_total;
     gboolean     original_hide_zero_total;
-    gulong       selection_changed_cb_id;
 } AccountFilterDialog;
 
 void account_filter_dialog_create(AccountFilterDialog *fd, 

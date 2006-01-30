@@ -1438,18 +1438,11 @@ void
 gppat_filter_clear_all_cb (GtkWidget *button,
 			   AccountFilterDialog *fd)
 {
-  GtkTreeSelection *selection;
-  GtkTreeView *view;
-
   g_return_if_fail(GTK_IS_BUTTON(button));
 
   ENTER("button %p", button);
-  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
-  selection = gtk_tree_view_get_selection(view);
-  g_signal_handler_block(selection, fd->selection_changed_cb_id);
   fd->visible_types = 0;
-  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
-  g_signal_handler_unblock(selection, fd->selection_changed_cb_id);
+  gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(fd->model));
   gnc_tree_view_account_refilter(fd->tree_view);
   LEAVE("types 0x%x", fd->visible_types);
 }
@@ -1464,18 +1457,11 @@ void
 gppat_filter_select_all_cb (GtkWidget *button,
 			    AccountFilterDialog *fd)
 {
-  GtkTreeSelection *selection;
-  GtkTreeView *view;
-
   g_return_if_fail(GTK_IS_BUTTON(button));
 
   ENTER("button %p", button);
-  view = GTK_TREE_VIEW(gnc_glade_lookup_widget(button, FILTER_TREE_VIEW));
-  selection = gtk_tree_view_get_selection(view);
-  g_signal_handler_block(selection, fd->selection_changed_cb_id);
   fd->visible_types = -1;
-  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
-  g_signal_handler_unblock(selection, fd->selection_changed_cb_id);
+  gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(fd->model));
   gnc_tree_view_account_refilter(fd->tree_view);
   LEAVE("types 0x%x", fd->visible_types);
 }
@@ -1496,25 +1482,58 @@ gppat_filter_select_default_cb (GtkWidget *button,
   LEAVE(" ");
 }
 
-/** The account type selection in the Filter dialog was changed.
- *  Reread the set of selected (i.e. visible) accounts and update the
- *  page.
+/** Set the renderer's properties.
  *
- *  @param button The button that was clicked.
+ *  @param column A GtkTreeColumn
+ *
+ *  @param renderer The GtkCellRendererToggle being rendered by @column
+ *
+ *  @param model The GtkTreeModel being rendered
+ *
+ *  @param iter A GtkTreeIter of the current row rendered
+ *
+ *  @param data A pointer to the account filter dialog struct. */
+static void
+gppat_filter_visible_set_func (GtkTreeViewColumn *column,
+                               GtkCellRenderer *renderer,
+                               GtkTreeModel *model,
+                               GtkTreeIter *iter,
+                               gpointer data)
+{
+  AccountFilterDialog *fd = data;
+  GNCAccountType type;
+  gboolean active;
+
+  gtk_tree_model_get(model, iter, GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE, &type, -1);
+
+  active = (fd->visible_types & (1 << type)) ? TRUE : FALSE;
+  g_object_set (G_OBJECT (renderer), "active", active, NULL);
+}
+
+/** A check box in the tree view was toggled.
+ *
+ *  @param renderer The GtkCellRendererToggle being toggled.
  *
  *  @param fd A pointer to the account filter dialog struct. */
 static void
-gppat_filter_selection_changed_cb  (GtkTreeSelection *selection,
-				    AccountFilterDialog *fd)
+gppat_filter_visible_toggled_cb (GtkCellRendererToggle *renderer,
+                                 gchar *path_str,
+                                 AccountFilterDialog *fd)
 {
-  GtkTreeView *view;
+  GtkTreeModel *model = fd->model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GNCAccountType type;
 
-  g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
+  ENTER("toggled %p", path_str);
+  path = gtk_tree_path_new_from_string(path_str);
 
-  ENTER("selection %p", selection);
-  view = gtk_tree_selection_get_tree_view(selection);
-  fd->visible_types = gnc_tree_model_account_types_get_selection(view);
-  gnc_tree_view_account_refilter(fd->tree_view);
+  if (gtk_tree_model_get_iter(model, &iter, path)) {
+    gtk_tree_model_get(model, &iter, GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE, &type, -1);
+    fd->visible_types ^= (1 << type);
+    gnc_tree_view_account_refilter(fd->tree_view);
+  }
+  gtk_tree_path_free(path);
   LEAVE("types 0x%x", fd->visible_types);
 }
 
@@ -1533,7 +1552,6 @@ gppat_filter_response_cb (GtkWidget *dialog,
 			  AccountFilterDialog *fd)
 {
   GtkWidget *view;
-  guint32 types;
 
   g_return_if_fail(GTK_IS_DIALOG(dialog));
 
@@ -1545,14 +1563,12 @@ gppat_filter_response_cb (GtkWidget *dialog,
     fd->hide_zero_total = fd->original_hide_zero_total;
     gnc_tree_view_account_refilter(fd->tree_view);
   }
-  types = gnc_tree_model_account_types_get_selection(GTK_TREE_VIEW(view));
 
   /* Clean up and delete dialog */
-  fd->selection_changed_cb_id = 0;
   g_atomic_pointer_compare_and_exchange((gpointer *)&fd->dialog,
 					dialog, NULL);
   gtk_widget_destroy(dialog);
-  LEAVE("types 0x%x", types);
+  LEAVE("types 0x%x", fd->visible_types);
 }
 
 void
@@ -1560,7 +1576,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 {
   GtkWidget *dialog, *button;
   GtkTreeView *view;
-  GtkTreeSelection *selection;
+  GtkCellRenderer *renderer;
   GladeXML *xml;
   gchar *title;
 
@@ -1593,19 +1609,27 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
 			       fd->hide_zero_total);
 
+  /* Set up the tree view and model */
   view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
-  fd->model = gnc_tree_model_account_types_master();
+
+  fd->model = gnc_tree_model_account_types_filter_using_mask(-1);
   gtk_tree_view_set_model(view, fd->model);
+  g_object_unref (fd->model);
+
+  renderer = gtk_cell_renderer_toggle_new();
+
+  g_signal_connect(renderer, "toggled",
+                   G_CALLBACK(gppat_filter_visible_toggled_cb), fd);
+
+  gtk_tree_view_insert_column_with_data_func
+    (view,
+     -1, NULL, renderer,
+     gppat_filter_visible_set_func, fd, NULL);
+
   gtk_tree_view_insert_column_with_attributes
     (view,
      -1, _("Account Types"), gtk_cell_renderer_text_new(),
      "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
-  selection = gtk_tree_view_get_selection(view);
-  gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
-  gnc_tree_model_account_types_set_selection(view, fd->visible_types);
-  fd->selection_changed_cb_id =
-    g_signal_connect(G_OBJECT(selection), "changed",
-		     G_CALLBACK(gppat_filter_selection_changed_cb), fd);
 
   /* Wire up the rest of the callbacks */
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, 
