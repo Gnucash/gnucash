@@ -678,7 +678,7 @@ billterm_scrub (QofBook *book)
   GncBillTerm *parent, *term;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  PDEBUG("scrubbing billterms...");
+  DEBUG("scrubbing billterms...");
   qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
   qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
   qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
@@ -743,13 +743,13 @@ gnc_billterm_xml_find_or_create(QofBook *book, GUID *guid)
   g_return_val_if_fail(book, NULL);
   g_return_val_if_fail(guid, NULL);
   term = gncBillTermLookup(book, guid);
-  PDEBUG("looking for billterm %s, found %p", guid_to_string(guid), term);
+  DEBUG("looking for billterm %s, found %p", guid_to_string(guid), term);
   if (!term) {
     term = gncBillTermCreate(book);
     gncBillTermBeginEdit(term);
     gncBillTermSetGUID(term, guid);
     gncBillTermCommitEdit(term);
-    PDEBUG("Created term: %p", term);
+    DEBUG("Created term: %p", term);
   } else
     gncBillTermDecRef(term);
 
