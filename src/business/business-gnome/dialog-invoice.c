@@ -178,7 +178,7 @@ struct _invoice_window {
 /* Forward definitions for CB functions */
 void gnc_invoice_window_closeCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
-void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
+gboolean gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
@@ -841,7 +841,7 @@ gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data)
 		       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 }
 
-void
+gboolean
 gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 				   gpointer data)
 {
@@ -851,12 +851,13 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
   GtkTextIter start, end;
   gchar *text;
 
-  if (!invoice) return;
+  if (!invoice) return FALSE;
 
   text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(iw->notes_text));
   gtk_text_buffer_get_bounds (text_buffer, &start, &end);
   text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
   gncInvoiceSetNotes (invoice, text);
+  return FALSE;
 }
 
 static gboolean
