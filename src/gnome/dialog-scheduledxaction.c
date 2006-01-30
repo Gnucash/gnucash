@@ -825,7 +825,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                      && !gnc_verify_dialog( sxed->dialog, FALSE,
 					    "%s",
 					    _("The Scheduled Transaction Editor "
-					      "cannot automatically\nbalance "
+					      "cannot automatically balance "
 					      "this transaction. "
 					      "Should it still be "
 					      "entered?") ) ) {
@@ -870,7 +870,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 if ( nameHasChanged && nameExists ) {
                         const char *sx_has_existing_name_msg =
                                 _( "A Scheduled Transaction with the "
-                                   "name \"%s\" already exists.\n"
+                                   "name \"%s\" already exists. "
                                    "Are you sure you want to name "
                                    "this one the same?" );
                         if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
@@ -897,7 +897,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 if ( (ttVarCount > 0) && autocreateState ) {
                         gnc_warning_dialog( sxed->dialog,
-					    _("Scheduled Transactions with variables\n"
+					    _("Scheduled Transactions with variables "
 					      "cannot be automatically created.") );
                         return FALSE;
                 }
@@ -906,7 +906,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                  * only valid if there's actually a transaction to create. */
                 if ( autocreateState && splitCount == 0 ) {
                         gnc_warning_dialog( sxed->dialog,
-                                            _("Scheduled Transactions without a template\n"
+                                            _("Scheduled Transactions without a template "
                                               "transaction cannot be automatically created.") );
                         return FALSE;
                 }
@@ -980,7 +980,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                          && (g_date_compare( &nextDate, &endDate ) > 0)) ) {
                         const char *invalid_sx_check_msg =
                                 _( "You have attempted to create a Scheduled "
-                                   "Transaction which will never run.\nDo you "
+                                   "Transaction which will never run. Do you "
                                    "really want to do this?" );
                         if ( ! gnc_verify_dialog( sxed->dialog, FALSE,
 						  invalid_sx_check_msg) ) {
@@ -1782,7 +1782,7 @@ delete_button_clicked( GtkButton *b, gpointer d )
         GList *sel, *sxList, *beingEditedList, *l;
         SchedXactionDialog *sxd;
         char *beingEditedMessage =
-          _( "The following transactions are presently being edited;\n"
+          _( "The following transactions are presently being edited; "
              "are you sure you want to delete them?" );
         char *confirmMessage =
           _( "Delete the selected Scheduled Transactions?" );
@@ -2127,7 +2127,7 @@ gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed)
         SplitRegister *reg;
         const char *message =
                 _("The current template transaction "
-                  "has been changed.\n"
+                  "has been changed. "
                   "Would you like to record the changes?");
         
         reg = gnc_ledger_display_get_split_register (sxed->ledger);

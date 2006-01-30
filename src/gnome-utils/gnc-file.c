@@ -882,7 +882,7 @@ gnc_file_export_file(const char * newfile)
   /* oops ... file already exists ... ask user what to do... */
   if (qof_session_save_may_clobber_data (new_session))
   {
-    const char *format = _("The file \n    %s\n already exists.\n"
+    const char *format = _("The file %s already exists. "
                            "Are you sure you want to overwrite it?");
 
     /* if user says cancel, we should break out */
@@ -1073,7 +1073,7 @@ gnc_file_save_as (void)
   /* oops ... file already exists ... ask user what to do... */
   if (qof_session_save_may_clobber_data (new_session))
   {
-    const char *format = _("The file \n    %s\n already exists.\n"
+    const char *format = _("The file %s already exists. "
                            "Are you sure you want to overwrite it?");
 
     /* if user says cancel, we should break out */

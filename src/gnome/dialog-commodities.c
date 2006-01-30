@@ -123,8 +123,8 @@ remove_clicked (CommoditiesDialog *cd)
 
   if (!can_delete)
   {
-    const char *message = _("That commodity is currently used by\n"
-                            "at least one of your accounts. You may\n"
+    const char *message = _("That commodity is currently used by "
+                            "at least one of your accounts. You may "
                             "not delete it.");
 
     gnc_warning_dialog (cd->dialog, message);

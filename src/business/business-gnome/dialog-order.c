@@ -284,8 +284,8 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
      * close this order!
      */
 
-    message = _("This order contains entries that have not been invoiced.\n"
-		"Are you sure you want to close it out before\n"
+    message = _("This order contains entries that have not been invoiced. "
+		"Are you sure you want to close it out before "
 		"you invoice all the entries?");
 
     if (gnc_verify_dialog (ow->dialog, FALSE, message) == FALSE)

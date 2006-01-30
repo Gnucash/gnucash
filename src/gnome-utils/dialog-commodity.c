@@ -477,7 +477,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer
       gnc_ui_select_commodity_destroy (w);
     } else {
       gnc_warning_dialog (dialog,
-			 _("You must select a commodity.\n"
+			 _("You must select a commodity. "
 			   "To create a new one, click \"New\""));
     }
     break;
@@ -1175,7 +1175,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
   else {
     gnc_warning_dialog(w->dialog,
 		       _("You must enter a non-empty \"Full name\", "
-			 "\"Symbol/abbreviation\",\n"
+			 "\"Symbol/abbreviation\", "
 			 "and \"Type\" for the commodity."));
     return FALSE;
   }

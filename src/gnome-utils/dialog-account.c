@@ -963,7 +963,7 @@ gnc_new_account_ok (AccountWindow *aw)
       if (!transfer)
       {
         const char *message = _("You must select a transfer account or choose"
-                                "\nthe opening balances equity account.");
+                                " the opening balances equity account.");
         gnc_error_dialog(aw->dialog, message);
 	LEAVE(" ");
         return;

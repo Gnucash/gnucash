@@ -80,8 +80,8 @@ Account *
 gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
 				      const char *name, gboolean *new)
 {
-  const char *placeholder = _("The account %s does not allow transactions.\n");
-  const char *missing = _("The account %s does not exist.\n"
+  const char *placeholder = _("The account %s does not allow transactions.");
+  const char *missing = _("The account %s does not exist. "
 			  "Would you like to create it?");
   char *fullname;
   ComboCell *cell = (ComboCell *) bcell;

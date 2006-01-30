@@ -726,7 +726,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
   if (cursor_class == CURSOR_CLASS_SPLIT)
   {
-    const char *message = _("You are about to overwrite an existing split.\n"
+    const char *message = _("You are about to overwrite an existing split. "
                             "Are you sure you want to do that?");
     gboolean result;
 
@@ -758,7 +758,7 @@ gnc_split_register_paste_current (SplitRegister *reg)
   else
   {
     const char *message = _("You are about to overwrite an existing "
-                            "transaction.\n"
+                            "transaction. "
                             "Are you sure you want to do that?");
     gboolean result;
 
@@ -1517,8 +1517,8 @@ Account *
 gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
 					const char *name, gboolean *refresh)
 {
-  const char *placeholder = _("The account %s does not allow transactions.\n");
-  const char *missing = _("The account %s does not exist.\n"
+  const char *placeholder = _("The account %s does not allow transactions.");
+  const char *missing = _("The account %s does not exist. "
 			  "Would you like to create it?");
   char *fullname;
   ComboCell *cell = (ComboCell *) bcell;
@@ -1729,7 +1729,7 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
     GList *radio_list = NULL;
     const char *title = _("Recalculate Transaction");
     const char *message = _("The values entered for this transaction "
-                            "are inconsistent.\nWhich value would you "
+                            "are inconsistent. Which value would you "
                             "like to have recalculated?");
 
     if (shares_changed)

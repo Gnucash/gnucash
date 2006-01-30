@@ -1206,7 +1206,7 @@ gnc_get_export_filename (SCM choice)
 
         if (rc == 0)
         {
-                const char *format = _("The file \n    %s\n already exists.\n"
+                const char *format = _("The file %s already exists. "
                                        "Are you sure you want to overwrite it?");
 
                 if (!gnc_verify_dialog (NULL, FALSE, format, filepath)) {
@@ -1278,8 +1278,8 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 
         if (!result)
         {
-                const char *fmt = _("Could not open the file\n"
-                                    "     %s\n%s");
+                const char *fmt = _("Could not open the file %s. "
+				    "The error is: %s");
                 gnc_error_dialog( NULL, fmt, filepath ? filepath : "(null)",
                                   strerror (errno) ? strerror (errno) : "" );
         }

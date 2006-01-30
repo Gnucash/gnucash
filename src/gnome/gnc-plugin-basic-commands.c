@@ -426,9 +426,9 @@ gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActi
     gnc_info_dialog (GTK_WIDGET(&window->gtk_window), ngettext
 		     /* Translators: %d is the number of transactions. This is a
 			ngettext(3) message. */
-		     ("There are no Scheduled Transactions to be entered at this time.\n"
+		     ("There are no Scheduled Transactions to be entered at this time. "
 		      "(%d transaction automatically created)",
-		      "There are no Scheduled Transactions to be entered at this time.\n"
+		      "There are no Scheduled Transactions to be entered at this time. "
 		      "(%d transactions automatically created)",
 		      -(ret)),
 		     -(ret));

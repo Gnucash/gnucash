@@ -1359,8 +1359,8 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
   {
     if ((from_account == NULL) || (to_account == NULL))
     {
-      const char *message = _("You must specify an account to transfer from,\n"
-			      "or to, or both, for this transaction.\n"
+      const char *message = _("You must specify an account to transfer from, "
+			      "or to, or both, for this transaction. "
 			      "Otherwise, it will not be recorded.");
       gnc_error_dialog(xferData->dialog, message);
       LEAVE("bad account");
@@ -1380,7 +1380,7 @@ gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 	xaccAccountGetPlaceholder(to_account))
     {
       const char *placeholder_format =
-	_("The account %s\ndoes not allow transactions.\n");
+	_("The account %s does not allow transactions.");
       char *name;
 
       if (xaccAccountGetPlaceholder(from_account))

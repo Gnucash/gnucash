@@ -310,7 +310,7 @@ gnc_stock_split_druid_details_next (GnomeDruidPage *druidpage,
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->price_edit)))
   {
     gnc_parse_error_dialog (info,
-                            _("You must either enter a valid price\n"
+                            _("You must either enter a valid price "
                               "or leave it blank."));
     return TRUE;
   }
@@ -357,7 +357,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
   if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (info->cash_edit)))
   {
     gnc_parse_error_dialog (info,
-                            _("You must either enter a valid cash amount\n"
+                            _("You must either enter a valid cash amount "
                               "or leave it blank."));
     return TRUE;
   }
@@ -378,7 +378,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
     account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->income_tree));
     if (!account)
     {
-      const char *message = _("You must select an income account\n"
+      const char *message = _("You must select an income account "
                               "for the cash distribution.");
       gnc_error_dialog (info->window, message);
       return TRUE;
@@ -387,7 +387,7 @@ gnc_stock_split_druid_cash_next (GnomeDruidPage *druidpage,
     account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
     if (!account)
     {
-      const char *message = _("You must select an asset account\n"
+      const char *message = _("You must select an asset account "
                               "for the cash distribution.");
       gnc_error_dialog (info->window, message);
       return TRUE;

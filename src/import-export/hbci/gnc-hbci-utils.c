@@ -298,7 +298,7 @@ gnc_hbci_Error_retry (GtkWidget *parent, int error,
     GNCInteractor_hide (inter);
     gnc_error_dialog
       (parent,
-       _("Unfortunately you entered a wrong PIN for too many times.\n"
+       _("Unfortunately you entered a wrong PIN for too many times. "
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
   case AB_ERROR_FILE_NOT_FOUND:

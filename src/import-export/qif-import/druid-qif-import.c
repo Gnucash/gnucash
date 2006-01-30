@@ -447,13 +447,13 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
     /* stay here if no file specified */
-    gnc_error_dialog(wind->window, _("Please select a file to load.\n"));
+    gnc_error_dialog(wind->window, _("Please select a file to load."));
     return TRUE;
   }
   else if ((strlen(path_to_load) > 0) && access(path_to_load, R_OK) < 0) {
     /* stay here if bad file */
     gnc_error_dialog(wind->window, 
-		     _("File not found or read permission denied.\n"
+		     _("File not found or read permission denied. "
 		       "Please select another file."));
     return TRUE;
   }
@@ -465,7 +465,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if(scm_call_2(qif_file_loaded, scm_filename, wind->imported_files)
        == SCM_BOOL_T) {
       gnc_error_dialog(wind->window,
-                                _("That QIF file is already loaded.\n"
+                                _("That QIF file is already loaded. "
                                   "Please select another file."));
       return TRUE;
     }
@@ -492,7 +492,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        (SCM_CAR(load_return) == SCM_BOOL_T)) {
       const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_warning_dialog(GTK_WIDGET(wind->window),
-			 _("QIF file load warning:\n%s"),
+			 _("QIF file load warning: %s"),
 			 warn_str ? warn_str : "(null)");
     }
 
@@ -507,7 +507,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
               (SCM_CAR(load_return) != SCM_BOOL_T))) {
       const gchar *warn_str = SCM_STRING_CHARS(SCM_CADR(load_return));
       gnc_error_dialog(wind->window,
-		       _("QIF file load failed:\n%s"),
+		       _("QIF file load failed: %s"),
 		       warn_str ? warn_str : "(null)");
 
       imported_files = 
@@ -575,7 +575,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
           (SCM_CAR(parse_return) != SCM_BOOL_T))) {
         const gchar *warn_str = SCM_STRING_CHARS(SCM_CDADR(parse_return));
         gnc_error_dialog(wind->window,
-			 _("QIF file parse failed:\n%s"),
+			 _("QIF file parse failed: %s"),
 			 warn_str ? warn_str : "(null)");
 
         imported_files = 

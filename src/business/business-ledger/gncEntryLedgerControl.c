@@ -373,7 +373,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
       break;
 
     {
-      const char *format = _("The tax table %s does not exist.\n"
+      const char *format = _("The tax table %s does not exist. "
                              "Would you like to create it?");
       if (!gnc_verify_dialog (ledger->parent, TRUE, format, name))
         break;
@@ -588,7 +588,7 @@ gnc_entry_ledger_check_close_internal (GtkWidget *parent,
 				       GncEntryLedger *ledger,
 				       gboolean dontask)
 {
-  const char *message = _("The current entry has been changed.\n"
+  const char *message = _("The current entry has been changed. "
 			  "Would you like to save it?");
   VirtualLocation virt_loc;
   

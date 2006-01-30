@@ -602,8 +602,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Secure HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Secure HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}
@@ -611,8 +611,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
 
       if(!http_allowed()) {
 	gnc_error_dialog( html->window,
-                          _("Network HTTP access is disabled.\n"
-                            "You can enable it in the Network section of\n"
+                          _("Network HTTP access is disabled. "
+                            "You can enable it in the Network section of "
                             "the Preferences dialog."));
       } else {
 	char *fullurl;
@@ -1061,8 +1061,8 @@ gnc_html_show_url(gnc_html * html, URLType type,
       if (!safe_strcmp (type, URL_TYPE_SECURE)) {
 	if(!https_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Secure HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Secure HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}
@@ -1071,8 +1071,8 @@ gnc_html_show_url(gnc_html * html, URLType type,
       if (safe_strcmp (type, URL_TYPE_FILE)) {
 	if(!http_allowed()) {
 	  gnc_error_dialog( html->window,
-                            _("Network HTTP access is disabled.\n"
-                              "You can enable it in the Network section of\n"
+                            _("Network HTTP access is disabled. "
+                              "You can enable it in the Network section of "
                               "the Preferences dialog."));
 	  break;
 	}

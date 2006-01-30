@@ -2029,7 +2029,7 @@ recnFinishCB (GtkWidget *w, gpointer data)
 
   if (!gnc_numeric_zero_p (recnRecalculateBalance(recnData)))
   {
-    const char *message = _("The account is not balanced.\n"
+    const char *message = _("The account is not balanced. "
                             "Are you sure you want to finish?");
     if (!gnc_verify_dialog (recnData->window, FALSE, message))
       return;
@@ -2121,7 +2121,7 @@ recnCancelCB (GtkWidget *w, gpointer data)
   if (changed)
   {
     const char *message = _("You have made changes to this reconcile "
-                            "window.\nAre you sure you want to cancel?");
+                            "window. Are you sure you want to cancel?");
     if (!gnc_verify_dialog(recnData->window, FALSE, message))
       return;
   }

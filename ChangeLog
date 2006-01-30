@@ -1,5 +1,8 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* various: Remove extraneous carriage returns from text that will
+	be put into a GtkLabel (since labels know how to wrap text).
+
 	* src/report/stylesheets/stylesheet-fancy.scm : Dave Herman's
 	patch to suppresses extraneous entries table entries in reports
 	when there are no files specified for the "logo pix" file or the

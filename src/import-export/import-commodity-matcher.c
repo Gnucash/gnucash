@@ -110,10 +110,14 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 
   if(retval==NULL && auto_create != 0)
     {
+      const gchar *message = 
+        _("Please select a commodity to match the following exchange "
+	  "specific code. Please note that the exchange code of the "
+	  "commodity you select will be overwritten.");
       retval=gnc_ui_select_commodity_modal_full(NULL,
 						NULL,
 						DIAG_COMM_ALL,
-						_("Please select a commodity to match the following exchange specific code.\nPlease note that the exchange code of the commodity you select will be overwritten.\n"),
+						message,
 						exchange_code,
 						default_fullname,
 						default_mnemonic);

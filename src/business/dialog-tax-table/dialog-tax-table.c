@@ -105,7 +105,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     }
     if (gncTaxTableLookupByName (ttw->book, name)) {
       message = g_strdup_printf(_(
-			 "You must provide a unique name for this Tax Table.\n"
+			 "You must provide a unique name for this Tax Table. "
 			 "Your choice \"%s\" is already in use."), name);
       gnc_error_dialog (ntt->dialog, "%s", message);
       g_free (message);
@@ -592,7 +592,7 @@ tax_table_delete_entry_cb (GtkButton *button, TaxTableWindow *ttw)
     return;
 
   if (g_list_length (gncTaxTableGetEntries (ttw->current_table)) <= 1) {
-    char *message = _("You cannot remove the last entry from the tax table.\n"
+    char *message = _("You cannot remove the last entry from the tax table. "
 		      "Try deleting the tax table if you want to do that.");
     gnc_error_dialog (ttw->dialog, message);
     return;

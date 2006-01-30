@@ -287,7 +287,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     }
     if (gncBillTermLookupByName (btw->book, name)) {
       message = g_strdup_printf(_(
-			 "You must provide a unique name for this Billing Term.\n"
+			 "You must provide a unique name for this Billing Term. "
 			 "Your choice \"%s\" is already in use."), name);
       gnc_error_dialog (nbt->dialog, "%s", message);
       g_free (message);

@@ -265,7 +265,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Check for valid company name */
   if (check_entry_nonempty (cw->dialog, cw->company_entry,
-		   _("You must enter a company name.\n"
+		   _("You must enter a company name. "
 		     "If this customer is an individual (and not a company) "
 		     "you should set the \"company name\" and \"contact name\" "
 		     "the same.")))

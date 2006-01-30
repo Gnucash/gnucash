@@ -239,9 +239,9 @@ GetOrMakeLotOrphanAccount (AccountGroup *root, gnc_commodity * currency)
     xaccAccountSetType (acc, INCOME);
     xaccAccountSetDescription (acc, _("Realized Gain/Loss"));
     xaccAccountSetNotes (acc, 
-         _("Realized Gains or Losses from\n"
-           "Commodity or Trading Accounts\n"
-           "that haven't been recorded elsewhere.\n"));
+         _("Realized Gains or Losses from "
+           "Commodity or Trading Accounts "
+           "that haven't been recorded elsewhere."));
 
     /* Hang the account off the root. */
     xaccGroupInsertAccount (root, acc);

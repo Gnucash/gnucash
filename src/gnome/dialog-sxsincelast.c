@@ -420,9 +420,9 @@ gnc_sx_sxsincelast_book_opened (void)
     gnc_info_dialog
       (NULL,
        ngettext 
-       ("There are no Scheduled Transactions to be entered at this time.\n"
+       ("There are no Scheduled Transactions to be entered at this time. "
         "(%d transaction automatically created)",
-        "There are no Scheduled Transactions to be entered at this time.\n"
+        "There are no Scheduled Transactions to be entered at this time. "
         "(%d transactions automatically created)",
         -(ret)),
        -(ret));
@@ -1435,7 +1435,7 @@ cancel_check( GnomeDruidPage *druid_page,
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
         char *lastrun_cancel_check_msg =
           _( "Cancelling the Since-Last-Run dialog "
-             "will revert all changes.\n"
+             "will revert all changes. "
              "Are you sure you want to lose all "
              "Scheduled Transaction changes?" );
 
@@ -3536,8 +3536,8 @@ inform_or_add( sxSinceLastData *sxsld, reminderTuple *rt, gboolean okFlag,
                 userMsg = g_string_sized_new( 128 );
                 g_string_printf( userMsg,
                                  "You cannot skip instances of "
-                                 "Scheduled Transactions.\n"
-                                 "The following instances of \"%s\"\n"
+                                 "Scheduled Transactions. "
+                                 "The following instances of \"%s\" "
                                  "must be selected as well:\n\n",
                                  xaccSchedXactionGetName( rt->sx ) );
                 g_list_foreach( badList, create_bad_reminders_msg, userMsg );

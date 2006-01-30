@@ -266,8 +266,8 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   info_label = 
     gtk_label_new(_("Pick the type of the currency or security. For "
-                    "national currencies, \nuse \"CURRENCY\". "
-                    "Enter a new type in the box if the ones in the\n"
+                    "national currencies, use \"CURRENCY\". "
+                    "Enter a new type in the box if the ones in the "
                     "pick list are inappropriate."));
 
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
@@ -288,7 +288,7 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   info_label = 
     gtk_label_new(_("Enter a descriptive name for the currency or stock, "
-                    "such as \n\"US Dollar\" or \"Red Hat Stock\""));
+                    "such as \"US Dollar\" or \"Red Hat Stock\""));
 
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
@@ -307,7 +307,7 @@ make_commodity_druid_page(gnc_commodity * comm)
 
   info_label = 
     gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\"), "
-                    "national currency symbol \n(such as \"USD\"), or "
+                    "national currency symbol (such as \"USD\"), or "
                     "other unique abbreviation for the name."));
 
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
@@ -326,7 +326,7 @@ make_commodity_druid_page(gnc_commodity * comm)
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
 
   next_label = gtk_label_new(_("Click \"Next\" to accept the information "
-                               "and move \nto the next currency or stock."));
+                               "and move to the next currency or stock."));
   gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_LEFT);
   gtk_box_pack_start(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
 
@@ -407,7 +407,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
      (strlen(new_name) == 0) ||
      (strlen(new_mnemonic) == 0)) {
     gnc_warning_dialog(cd->window,
-		       _("You must put values for the type, name,\n"
+		       _("You must put values for the type, name, "
 			 "and abbreviation of the currency/stock."));
 
     return TRUE;

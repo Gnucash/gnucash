@@ -286,7 +286,7 @@ show_book_details (AcctPeriodInfo *info)
   period_text = 
     _("You have asked for a book to be created.  This book "
       "will contain all transactions up to midnight %s "
-      "(for a total of %d transactions spread over %d accounts).\n"
+      "(for a total of %d transactions spread over %d accounts). "
       "Click on 'Next' to create this book. "
       "Click on 'Back' to adjust the dates.");
   str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
