@@ -1876,6 +1876,66 @@ gnc_tree_view_add_text_column (GncTreeView *view,
   return column;
 }
 
+#if HAVE_GTK26
+GtkTreeViewColumn *
+gnc_tree_view_add_combo_column (GncTreeView *view,
+                                const gchar *column_title,
+                                const gchar *pref_name,
+                                const gchar *sizing_text,
+                                gint model_data_column,
+                                gint model_visibility_column,
+                                GtkTreeModel *combo_tree_model,
+                                gint combo_model_text_column,
+                                GtkTreeIterCompareFunc column_sort_fn)
+{
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  PangoLayout* layout;
+  int default_width, title_width;
+
+  g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, gettext(column_title));
+
+  /* Set up a renderer and attributes */
+  renderer = gtk_cell_renderer_combo_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+
+  /* Set renderer attributes controlled by the model */
+  if (model_data_column != GNC_TREE_VIEW_COLUMN_DATA_NONE)
+    gtk_tree_view_column_add_attribute (column, renderer,
+					"text", model_data_column);
+  if (model_visibility_column != GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS)
+    gtk_tree_view_column_add_attribute (column, renderer,
+					"visible", model_visibility_column);
+
+  /* Default size is the larger of the column title and the sizing text */
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), column_title);
+  pango_layout_get_pixel_size(layout, &title_width, NULL);
+  g_object_unref(layout);
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET(view), sizing_text);
+  pango_layout_get_pixel_size(layout, &default_width, NULL);
+  g_object_unref(layout);
+  default_width = MAX(default_width, title_width);
+  if (default_width)
+    default_width += 10; /* padding on either side */
+
+  gnc_tree_view_column_properties (view, column, pref_name, model_data_column,
+				   default_width, TRUE, column_sort_fn);
+
+  /* Stuff specific to combo */
+  if (combo_tree_model) {
+      g_object_set(G_OBJECT(renderer), "model", combo_tree_model,
+                   "text-column", combo_model_text_column, NULL);
+  }
+  /* TODO: has-entry? */
+
+  gnc_tree_view_append_column (view, column);
+  return column;
+}
+#endif
+
 /** This function adds a new numeric column to a GncTreeView base
  *  view.  It takes all the parameters necessary to hook a
  *  GtkTreeModel column to a GtkTreeViewColumn.  If the tree has a
