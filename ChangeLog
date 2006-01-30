@@ -1,5 +1,10 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* src/report/stylesheets/stylesheet-fancy.scm : Dave Herman's
+	patch to suppresses extraneous entries table entries in reports
+	when there are no files specified for the "logo pix" file or the
+	"header pix" file.
+
 	* src/gnome-utils/gnc-main-window.c: Eskil Bylund's patch from
 	Epiphany to enable cut/paste.  Extended to support GtkTextView
 	widgets as well as GtkEditable widgets.

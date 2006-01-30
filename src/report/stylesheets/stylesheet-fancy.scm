@@ -289,16 +289,22 @@
 	    (gnc:html-markup-b 
 	     (gnc:html-document-title doc)))))
       
-      (gnc:html-table-set-cell!
-       t 0 0
-       (gnc:make-html-text
-	(gnc:html-markup-img logopixmap)))
-      
-      (gnc:html-table-set-cell!
-       t 0 1
-       (gnc:make-html-text
-	(gnc:html-markup-img headpixmap)))
-      
+      (if (and logopixmap
+	       (not (string=? logopixmap "")))
+	  ;; check for logo image file name non blank
+	  (gnc:html-table-set-cell!
+	   t 0 0
+           (gnc:make-html-text
+	    (gnc:html-markup-img logopixmap))) )
+
+      (if (and headpixmap
+	       (not (string=? headpixmap "")))
+	  ;; check for header image file name nonblank
+	  (gnc:html-table-set-cell!
+	   t 0 1
+	   (gnc:make-html-text
+	    (gnc:html-markup-img headpixmap))) )
+
       (apply 
        gnc:html-table-set-cell! 
        t 2 1
@@ -308,7 +314,7 @@
     ssdoc))
 
 (gnc:define-html-style-sheet 
- 'version 1
+ 'version 1.01
  'name (N_ "Fancy")
  'renderer fancy-renderer
  'options-generator fancy-options)
