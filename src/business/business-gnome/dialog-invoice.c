@@ -859,11 +859,12 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
   gncInvoiceSetNotes (invoice, text);
 }
 
-static void
+static gboolean
 gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
 				       gpointer data)
 {
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (widget));
+  return FALSE;
 }
 
 static void
