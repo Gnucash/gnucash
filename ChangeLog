@@ -1,5 +1,10 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* src/gtk-compat.h:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/Makefile.am: Make the cut/paste change compile on gtk 2.4
+	systems.
+
 	* various: Remove extraneous carriage returns from text that will
 	be put into a GtkLabel (since labels know how to wrap text).
 

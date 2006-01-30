@@ -40,6 +40,7 @@
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
+#include "gtk-compat.h"
 #ifdef HAVE_VALGRIND_CALLGRIND_H
 #include <valgrind/callgrind.h>
 #endif
