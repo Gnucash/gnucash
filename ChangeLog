@@ -1,3 +1,21 @@
+2006-01-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/file/gnc-bill-term-xml-v2.c:
+	* src/business/business-core/file/gnc-bill-term-xml-v2.h:
+	  Add a new API to "find-or-create" a billterm so all the
+	  code is collated in one location.
+	  Add more debugging during the scrub phases.
+	* src/business/business-core/file/gnc-invoice-xml-v2.c:
+	* src/business/business-core/file/gnc-vendor-xml-v2.c:
+	* src/business/business-core/file/gnc-customer-xml-v2.c:
+	  Use the new bill-term find-or-create API
+	* src/business/business-core/gncBillTerm.c:
+	  add some additional debugging
+	* src/business/business-core/gncBillTerm.h:
+	  The Billterm Type ENUM must start at 1, not zero.  The data file
+	  now appears to properly save itself without destroying data.
+	  Fixes rest of #328790.
+
 2006-01-29  David Hampton  <hampton@employees.org>
 
 	* src/gtk-compat.h:

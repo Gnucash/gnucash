@@ -46,6 +46,7 @@
 #include "gncTaxTableP.h"
 #include "gnc-customer-xml-v2.h"
 #include "gnc-address-xml-v2.h"
+#include "gnc-bill-term-xml-v2.h"
 
 #include "xml-helpers.h"
 
@@ -230,15 +231,8 @@ customer_terms_handler (xmlNodePtr node, gpointer cust_pdata)
 
     guid = dom_tree_to_guid(node);
     g_return_val_if_fail (guid, FALSE);
-    term = gncBillTermLookup (pdata->book, guid);
-    if (!term) {
-      term = gncBillTermCreate (pdata->book);
-      gncBillTermBeginEdit (term);
-      gncBillTermSetGUID (term, guid);
-      gncBillTermCommitEdit (term);
-    } else
-      gncBillTermDecRef (term);
-
+    term = gnc_billterm_xml_find_or_create(pdata->book, guid);
+    g_assert(term);
     g_free (guid);
     gncCustomerSetTerms (pdata->customer, term);
     

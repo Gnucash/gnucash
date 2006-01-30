@@ -45,6 +45,7 @@
 #include "gncInvoiceP.h"
 #include "gnc-invoice-xml-v2.h"
 #include "gnc-owner-xml-v2.h"
+#include "gnc-bill-term-xml-v2.h"
 
 #define _GNC_MOD_NAME	GNC_ID_INVOICE
 
@@ -290,15 +291,8 @@ invoice_terms_handler (xmlNodePtr node, gpointer invoice_pdata)
 
     guid = dom_tree_to_guid(node);
     g_return_val_if_fail (guid, FALSE);
-    term = gncBillTermLookup (pdata->book, guid);
-    if (!term) {
-      term = gncBillTermCreate (pdata->book);
-      gncBillTermBeginEdit (term);
-      gncBillTermSetGUID (term, guid);
-      gncBillTermCommitEdit (term);
-    } else
-      gncBillTermDecRef (term);
-
+    term = gnc_billterm_xml_find_or_create(pdata->book, guid);
+    g_assert(term);
     g_free (guid);
     gncInvoiceSetTerms (pdata->invoice, term);
     

@@ -629,6 +629,10 @@ billterm_scrub_cust (QofEntity * cust_p, gpointer ht_p)
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
     count++;
     g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+    if (billterm_is_grandchild(term))
+      PWARN("customer %s has grandchild billterm %s\n",
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(cust))),
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
   }
 }
 
@@ -645,6 +649,10 @@ billterm_scrub_vendor (QofEntity * vendor_p, gpointer ht_p)
     count = GPOINTER_TO_INT(g_hash_table_lookup(ht, term));
     count++;
     g_hash_table_insert(ht, term, GINT_TO_POINTER(count));
+    if (billterm_is_grandchild(term))
+      PWARN("vendor %s has grandchild billterm %s\n",
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(vendor))),
+	    guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
   }
 }
 
@@ -670,6 +678,7 @@ billterm_scrub (QofBook *book)
   GncBillTerm *parent, *term;
   GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
 
+  PDEBUG("scrubbing billterms...");
   qof_object_foreach (GNC_ID_INVOICE,  book, billterm_scrub_invoices, ht);
   qof_object_foreach (GNC_ID_CUSTOMER, book, billterm_scrub_cust, ht);
   qof_object_foreach (GNC_ID_VENDOR,   book, billterm_scrub_vendor, ht);
@@ -679,7 +688,7 @@ billterm_scrub (QofBook *book)
   for (node = list; node; node = node->next) {
     term = node->data;
 
-    PINFO ("deleting grandchild billterm: %s\n",
+    PWARN ("deleting grandchild billterm: %s\n",
 	   guid_to_string(qof_instance_get_guid(QOF_INSTANCE(term))));
 
     /* Make sure the parent has no children */
@@ -724,4 +733,25 @@ gnc_billterm_xml_initialize (void)
   qof_object_register_backend (_GNC_MOD_NAME,
 			    GNC_FILE_BACKEND,
 			    &be_data);
+}
+
+GncBillTerm *
+gnc_billterm_xml_find_or_create(QofBook *book, GUID *guid)
+{
+  GncBillTerm *term;
+
+  g_return_val_if_fail(book, NULL);
+  g_return_val_if_fail(guid, NULL);
+  term = gncBillTermLookup(book, guid);
+  PDEBUG("looking for billterm %s, found %p", guid_to_string(guid), term);
+  if (!term) {
+    term = gncBillTermCreate(book);
+    gncBillTermBeginEdit(term);
+    gncBillTermSetGUID(term, guid);
+    gncBillTermCommitEdit(term);
+    PDEBUG("Created term: %p", term);
+  } else
+    gncBillTermDecRef(term);
+
+  return term;
 }

@@ -148,6 +148,8 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
 void gncBillTermDestroy (GncBillTerm *term)
 {
   if (!term) return;
+  PDEBUG("destroying bill term %s (%p)",
+	    guid_to_string(qof_instance_get_guid(&term->inst)), term);
   term->inst.do_free = TRUE;
   qof_collection_mark_dirty (term->inst.entity.collection);
   gncBillTermCommitEdit (term);
