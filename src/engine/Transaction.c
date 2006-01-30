@@ -126,6 +126,36 @@ xaccInitSplit(Split * split, QofBook *book)
   qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
 }
 
+void
+xaccSplitReinit(Split * split)
+{
+  /* fill in some sane defaults */
+  split->acc         = NULL;
+  split->parent      = NULL;
+  split->lot         = NULL;
+
+  CACHE_REPLACE(split->action, "");
+  CACHE_REPLACE(split->memo, "");
+  split->reconciled  = NREC;
+  split->amount      = gnc_numeric_zero();
+  split->value       = gnc_numeric_zero();
+
+  split->date_reconciled.tv_sec  = 0;
+  split->date_reconciled.tv_nsec = 0;
+
+  split->balance             = gnc_numeric_zero();
+  split->cleared_balance     = gnc_numeric_zero();
+  split->reconciled_balance  = gnc_numeric_zero();
+
+  if (split->kvp_data)
+      kvp_frame_delete(split->kvp_data);
+  split->kvp_data = kvp_frame_new();
+  split->idata = 0;
+
+  split->gains = GAINS_STATUS_UNKNOWN;
+  split->gains_split = NULL;
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -135,7 +165,7 @@ xaccMallocSplit(QofBook *book)
   Split *split;
   g_return_val_if_fail (book, NULL);
 
-  split = g_new (Split, 1);
+  split = g_new0 (Split, 1);
   xaccInitSplit (split, book);
 
   return split;
@@ -188,7 +218,7 @@ xaccDupeSplit (const Split *s)
   return split;
 }
 
-static Split *
+Split *
 xaccSplitClone (const Split *s)
 {
   QofCollection *col;
@@ -430,6 +460,28 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   }
 
   return TRUE;
+}
+
+static void
+add_keys_to_list(gpointer key, gpointer val, gpointer list)
+{
+    *(GList **)list = g_list_prepend(*(GList **)list, key);
+}
+
+GList *
+xaccSplitListGetUniqueTransactions(const GList *splits)
+{
+    const GList *node;
+    GList *transList = NULL;
+    GHashTable *transHash = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+    for(node = splits; node; node = node->next) {
+        Transaction *trans = xaccSplitGetParent((Split *)(node->data));
+        g_hash_table_insert(transHash, trans, trans);
+    }
+    g_hash_table_foreach(transHash, add_keys_to_list, &transList);
+    g_hash_table_destroy(transHash);
+    return transList;
 }
 
 /********************************************************************
@@ -1407,6 +1459,154 @@ xaccTransGetAccountValue (const Transaction *trans,
                                GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
   }
   return total;
+}
+
+gnc_numeric
+xaccTransGetAccountAmount (const Transaction *trans, const Account *account)
+{
+  gnc_numeric total = gnc_numeric_zero ();
+  GList *splits;
+
+  if (!trans || !account)
+    return total;
+
+  total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (account),
+                               GNC_RND_ROUND);
+
+  for (splits = xaccTransGetSplitList (trans); splits; splits = splits->next) {
+      Split *s = splits->data;
+      Account *a = xaccSplitGetAccount (s);
+      if (a == account)
+          total = gnc_numeric_add_fixed (total, xaccSplitGetAmount (s));
+  }
+  return total;
+}
+
+gnc_numeric
+xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
+{
+  gnc_numeric amount, value, convrate;
+  GList *splits;
+  Split *s;
+  gboolean found_acc_match = FALSE;
+
+  /* We need to compute the conversion rate into _this account_.  So,
+   * find the first split into this account, compute the conversion
+   * rate (based on amount/value), and then return this conversion
+   * rate.
+   */
+  splits = xaccTransGetSplitList(txn);
+  for (; splits; splits = splits->next) {
+    s = splits->data;
+
+    if (xaccSplitGetAccount (s) != acc)
+      continue;
+
+    found_acc_match = TRUE;
+    amount = xaccSplitGetAmount (s);
+
+    /* Ignore splits with "zero" amount */
+    if (gnc_numeric_zero_p (amount))
+      continue;
+
+    value = xaccSplitGetValue (s);
+    if (gnc_numeric_zero_p (value))
+        PWARN("How can amount be nonzero and value be zero?");
+
+    convrate = gnc_numeric_div(amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    return convrate;
+  }
+
+  if (acc) {
+    /* If we did find a matching account but it's amount was zero,
+     * then perhaps this is a "special" income/loss transaction
+     */
+    if (found_acc_match)
+      return gnc_numeric_zero();
+    else
+      PERR("Cannot convert transaction -- no splits with proper conversion ratio");
+  }
+  return gnc_numeric_create (100, 100);
+}
+
+gnc_numeric
+xaccSplitConvertAmount (Split *split, Account * account)
+{
+  gnc_commodity *acc_com, *to_commodity;
+  Transaction *txn;
+  gnc_numeric amount, value, convrate;
+  Account * split_acc;
+
+  amount = xaccSplitGetAmount (split);
+
+  /* If this split is attached to this account, OR */
+  split_acc = xaccSplitGetAccount (split);
+  if (split_acc == account)
+    return amount;
+
+  /* If split->account->commodity == to_commodity, return the amount */
+  acc_com = xaccAccountGetCommodity (split_acc);
+  to_commodity = xaccAccountGetCommodity (account);
+  if (acc_com && gnc_commodity_equal (acc_com, to_commodity))
+    return amount;
+
+  /* Ok, this split is not for the viewed account, and the commodity
+   * does not match.  So we need to do some conversion.
+   *
+   * First, we can cheat.  If this transaction is balanced and has
+   * exactly two splits, then we can implicitly determine the exchange
+   * rate and just return the 'other' split amount.
+   */
+  txn = xaccSplitGetParent (split);
+  if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
+    Split *osplit = xaccSplitGetOtherSplit (split);
+
+    if (osplit)
+      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
+  }
+
+  /* ... otherwise, we need to compute the amount from the conversion
+   * rate into _this account_.  So, find the split into this account,
+   * compute the conversion rate (based on amount/value), and then multiply
+   * this times the split value.
+   */
+  convrate = xaccTransGetAccountConvRate(txn, account);
+  value = xaccSplitGetValue (split);
+  return gnc_numeric_mul (value, convrate,
+			  gnc_commodity_get_fraction (to_commodity),
+			  GNC_RND_ROUND);
+}
+
+gnc_numeric
+xaccTransGetAccountBalance (const Transaction *trans,
+                            const Account *account)
+{
+  GList *node;
+  Split *last_split = NULL;
+
+  // Not really the appropriate error value.
+  g_return_val_if_fail(account && trans, gnc_numeric_error(GNC_ERROR_ARG));
+
+  for (node = xaccTransGetSplitList(trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (xaccSplitGetAccount(split) != account)
+      continue;
+
+    if (!last_split)
+    {
+      last_split = split;
+      continue;
+    }
+
+    /* This test needs to correspond to the comparison function used when
+       sorting the splits for computing the running balance. */
+    if (xaccSplitDateOrder (last_split, split) < 0)
+      last_split = split;
+  }
+
+  return xaccSplitGetBalance (last_split);
 }
 
 /********************************************************************\

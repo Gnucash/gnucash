@@ -114,7 +114,6 @@ struct split_s
    * "extra" information in splits, transactions, and accounts. 
    * it's NULL until accessed. */
   KvpFrame * kvp_data;
-
   Timespec date_reconciled;  /* date split was reconciled                 */
   char    reconciled;        /* The reconciled field                      */
 
@@ -220,6 +219,8 @@ struct transaction_s
  * inconsistent state.  This *will* lead to crashes and hangs.
  */
 void  xaccFreeSplit (Split *split);    /* frees memory */
+
+Split * xaccSplitClone (const Split *s);
 
 /* This routine makes a 'duplicate' of the indicated transaction.
  * This routine cannot be exposed publically since the duplicate

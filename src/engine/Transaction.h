@@ -335,6 +335,30 @@ gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 gnc_numeric xaccTransGetAccountValue (const Transaction *trans, 
 				      const Account *account);
 
+/** Same as xaccTransGetAccountValue, but uses the Account's commodity. */
+gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
+                                       const Account *account);
+
+/* Compute the conversion rate for the transaction to this account.
+ * Any "split value" (which is in the transaction currency),
+ * multiplied by this conversion rate, will give you the value you
+ * should display for this account.
+ *
+ * If 'acc' is NULL, return unity.
+ */
+gnc_numeric xaccTransGetAccountConvRate(Transaction *txn, Account *acc);
+
+/* Convert the amount/value of the Split for viewing in the account --
+ * in particular we want to convert the Split to be in to_commodity.
+ * Returns the amount.
+ */
+gnc_numeric xaccSplitConvertAmount (Split *split, Account * account);
+
+/** Get the account balance for the specified account after the last
+    split in the specified transaction. */
+gnc_numeric xaccTransGetAccountBalance (const Transaction *trans,
+                                        const Account *account);
+
 /**
  * The xaccTransOrder(ta,tb) method is useful for sorting.
  *    Orders ta and tb
@@ -435,6 +459,12 @@ void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 
 /** Constructor. */
 Split       * xaccMallocSplit (QofBook *book);
+
+/* Reinit a previously malloc'd split. Split remains in the book it
+   was already in, and the QofEntity portions also remain unchanged.
+   It's basically the data elements that are reverted to default
+   values. */
+void xaccSplitReinit(Split * split);
 
 /** Destructor.
  *
@@ -651,6 +681,9 @@ gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 /** @name Split utility functions 
 @{
 */
+
+/* Get a GList of unique transactions containing the given list of Splits. */
+GList *xaccSplitListGetUniqueTransactions(const GList *splits);
 
 /** Equality.
  *
