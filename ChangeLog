@@ -1,5 +1,9 @@
 2006-01-29  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Eskil Bylund's patch from
+	Epiphany to enable cut/paste.  Extended to support GtkTextView
+	widgets as well as GtkEditable widgets.
+
 	* src/gnome-utils/gnc-main-window.c: Andreas Köhler's patch to fix
 	a problem where switching windows repeatedly confusing the
 	Windows menu. Fixes #327943.

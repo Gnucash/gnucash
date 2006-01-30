@@ -119,6 +119,9 @@ static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugi
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_accelerator_keys (GtkToggleAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
@@ -241,11 +244,14 @@ static GtkActionEntry gnc_menu_actions [] =
 	/* Edit menu */
 
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL, 
-	  N_("Cut the current selection and copy it to clipboard"), NULL },
+	  N_("Cut the current selection and copy it to clipboard"),
+	  G_CALLBACK (gnc_main_window_cmd_edit_cut) },
 	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL, 
-	  N_("Copy the current selection to clipboard"), NULL },
+	  N_("Copy the current selection to clipboard"),
+	  G_CALLBACK (gnc_main_window_cmd_edit_copy) },
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
-	  N_("Paste the clipboard content at the cursor position"), NULL },
+	  N_("Paste the clipboard content at the cursor position"),
+	  G_CALLBACK (gnc_main_window_cmd_edit_paste) },
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
 	  N_("Edit the global preferences of GnuCash"),
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
@@ -2161,6 +2167,108 @@ gnc_main_window_update_toolbar (GncMainWindow *window)
 	LEAVE("");
 }
 
+/*
+ * Based on code from Epiphany (src/ephy-window.c)
+ */
+static void
+gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean hide)
+{
+	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+	GtkAction *action;
+	gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
+
+	if (GTK_IS_EDITABLE (widget))
+	{
+		gboolean has_selection;
+
+		has_selection = gtk_editable_get_selection_bounds
+			(GTK_EDITABLE (widget), NULL, NULL);
+
+		can_copy = has_selection;
+		can_cut = has_selection;
+		can_paste = TRUE;
+	}
+	else if (GTK_IS_TEXT_VIEW (widget))
+	{
+		gboolean has_selection;
+		GtkTextBuffer *text_buffer;
+
+		text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+		has_selection = gtk_text_buffer_get_selection_bounds
+			(text_buffer, NULL, NULL);
+
+		can_copy = has_selection;
+		can_cut = has_selection;
+		can_paste = TRUE;
+	}
+	else
+	{
+#ifdef ORIGINAL_EPIPHANY_CODE
+		/* For now we assume all actions are possible */
+		can_copy = can_cut = can_paste = TRUE;
+#else
+		/* If its not a GtkEditable, we don't know what to do
+		 * with it. */
+		can_copy = can_cut = can_paste = FALSE;
+#endif
+	}
+
+	action = gnc_main_window_find_action (window, "EditCopyAction");
+	gtk_action_set_sensitive (action, can_copy);
+	gtk_action_set_visible (action, !hide || can_copy);
+	action = gnc_main_window_find_action (window, "EditCutAction");
+	gtk_action_set_sensitive (action, can_cut);
+	gtk_action_set_visible (action, !hide || can_cut);
+	action = gnc_main_window_find_action (window, "EditPasteAction");
+	gtk_action_set_sensitive (action, can_paste);
+	gtk_action_set_visible (action,  !hide || can_paste);
+}
+
+static void
+gnc_main_window_enable_edit_actions_sensitivity (GncMainWindow *window)
+{
+	GtkAction *action;
+
+	action = gnc_main_window_find_action (window, "EditCopyAction");
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
+	action = gnc_main_window_find_action (window, "EditCutAction");
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
+	action = gnc_main_window_find_action (window, "EditPasteAction");
+	gtk_action_set_sensitive (action, TRUE);
+	gtk_action_set_visible (action, TRUE);
+}
+
+static void
+gnc_main_window_edit_menu_show_cb (GtkWidget *menu,
+		   GncMainWindow *window)
+{
+	gnc_main_window_update_edit_actions_sensitivity (window, FALSE);
+}
+
+static void
+gnc_main_window_edit_menu_hide_cb (GtkWidget *menu,
+		   GncMainWindow *window)
+{
+	gnc_main_window_enable_edit_actions_sensitivity (window);
+}
+
+static void
+gnc_main_window_init_menu_updaters (GncMainWindow *window)
+{
+	GtkWidget *edit_menu_item, *edit_menu;
+
+	edit_menu_item = gtk_ui_manager_get_widget
+		(window->ui_merge, "/menubar/Edit");
+	edit_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (edit_menu_item));
+
+	g_signal_connect (edit_menu, "show",
+			  G_CALLBACK (gnc_main_window_edit_menu_show_cb), window);
+	g_signal_connect (edit_menu, "hide",
+			  G_CALLBACK (gnc_main_window_edit_menu_hide_cb), window);
+}
+
 static void
 gnc_main_window_gconf_changed (GConfClient *client,
 			       guint cnxn_id,
@@ -2382,6 +2490,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 				   gnc_main_window_gconf_changed);
 	gnc_main_window_update_toolbar(window);
 
+	gnc_main_window_init_menu_updaters(window);
+
         /* Testing */
 	/* Now update the "eXtensions" menu */
 	if (!gnc_is_debugging()) {
@@ -2579,6 +2689,61 @@ gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 	}
 
 	gnc_shutdown (0);
+}
+
+static void
+gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window)
+{
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+  GtkTextBuffer *text_buffer;
+  GtkClipboard *clipboard;
+  gboolean editable;
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_cut_clipboard (GTK_EDITABLE (widget));
+  } else if (GTK_IS_TEXT_VIEW (widget)) {
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
+					  GDK_SELECTION_CLIPBOARD);
+    editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (widget));
+    gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
+  }
+}
+
+static void
+gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window)
+{
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+  GtkTextBuffer *text_buffer;
+  GtkClipboard *clipboard;
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_copy_clipboard (GTK_EDITABLE (widget));
+  } else if (GTK_IS_TEXT_VIEW (widget)) {
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
+					  GDK_SELECTION_CLIPBOARD);
+    gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
+  }
+}
+
+static void
+gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
+{
+  GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
+  GtkTextBuffer *text_buffer;
+  GtkClipboard *clipboard;
+  gboolean editable;
+
+  if (GTK_IS_EDITABLE (widget)) {
+    gtk_editable_paste_clipboard (GTK_EDITABLE (widget));
+  } else if (GTK_IS_TEXT_VIEW (widget)) {
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+    clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
+					  GDK_SELECTION_CLIPBOARD);
+    editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (widget));
+    gtk_text_buffer_paste_clipboard (text_buffer, clipboard, NULL, FALSE);
+  }
 }
 
 static void
