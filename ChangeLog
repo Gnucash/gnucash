@@ -1,3 +1,8 @@
+2006-01-30  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/glade/sched-xact.glade: Change since-last-run
+	final-page text from "apply" to "Apply". Bug#329125.
+
 2006-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/file/gnc-bill-term-xml-v2.c:

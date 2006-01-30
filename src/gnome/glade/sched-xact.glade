@@ -6285,7 +6285,8 @@ Select those you wish to delete.</property>
 	<widget class="GnomeDruidPageEdge" id="commit_page">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
-	  <property name="text" translatable="yes">Press apply to create these transactions.</property>
+	  <property name="title" translatable="yes"></property>
+	  <property name="text" translatable="yes">Press Apply to create these transactions.</property>
 	  <property name="background_color">#666666669998</property>
 	  <property name="logo_background_color">#666666669998</property>
 	</widget>
