@@ -28,6 +28,7 @@
 #include <gtkhtml/gtkhtml-embedded.h>
 #include <string.h>
 
+#include "gnc-ui-util.h"
 #include "gnc-html-graph-gog.h"
 #include "gnc-html.h"
 #include "gnc-engine.h"
@@ -98,10 +99,17 @@ read_doubles(const char * string, int nvalues)
   int    accum = 0;
   double * retval = g_new0(double, nvalues);
 
-  for (n=0; n<nvalues; n++) {
-    sscanf(string + accum, "%le%n", &retval[n], &choffset);
-    accum += choffset;
+  // guile is going to (puts ...) the elements of the double array
+  // together. In non-POSIX locales, tthat will be in a format that
+  // the locale-specific sscanf will not be able to parse.
+  gnc_push_locale("C");
+  {
+    for (n=0; n<nvalues; n++) {
+      sscanf(string + accum, "%le%n", &retval[n], &choffset);
+      accum += choffset;
+    }
   }
+  gnc_pop_locale();
 
   return retval;
 }
@@ -318,6 +326,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     sscanf( datasizeStr, "%d", &datasize );
     data = read_doubles( dataStr, datasize );
     labels = read_strings( labelsStr, datasize );
+    _debug_print_array(labels, datasize);
     colors = read_strings( colorStr, datasize );
   }
 
