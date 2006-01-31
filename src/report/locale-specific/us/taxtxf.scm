@@ -781,7 +781,7 @@
              'attribute (list "align" "left"))
             
             (gnc:html-document-set-title! 
-             doc (gnc:html-markup "center" report-name))
+             doc report-name)
             
             (gnc:html-document-add-object! 
              doc (gnc:make-html-text         
