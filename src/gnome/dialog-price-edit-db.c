@@ -164,7 +164,7 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
     message = g_strdup_printf
       (/* Translators: %d is the number of prices. This
 	  is a ngettext(3) message. */
-       ngettext("Are you sure you want to delete the selected price?",
+       ngettext("Are you sure you want to delete the %d selected price?",
 		"Are you sure you want to delete the %d selected prices?",
 		length),
        length);
