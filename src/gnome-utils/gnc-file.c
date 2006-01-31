@@ -244,7 +244,7 @@ show_session_error (QofBackendError io_error,
         case GNC_FILE_DIALOG_OPEN:
         default:
 	  label = GTK_STOCK_OPEN;
-	  fmt = _("GnuCash could not obtain the lock for %s."
+	  fmt = _("GnuCash could not obtain the lock for %s. "
 		  "That database may be in use by another user, "
 		  "in which case you should not open the database. "
 		  "Do you want to proceed with opening the database?");
@@ -252,7 +252,7 @@ show_session_error (QofBackendError io_error,
 
         case GNC_FILE_DIALOG_IMPORT:
 	  label = _("Import");
-	  fmt = _("GnuCash could not obtain the lock for %s."
+	  fmt = _("GnuCash could not obtain the lock for %s. "
 		  "That database may be in use by another user, "
 		  "in which case you should not import the database. "
 		  "Do you want to proceed with importing the database?");
@@ -260,7 +260,7 @@ show_session_error (QofBackendError io_error,
 
         case GNC_FILE_DIALOG_SAVE:
 	  label = GTK_STOCK_SAVE;
-	  fmt = _("GnuCash could not obtain the lock for %s."
+	  fmt = _("GnuCash could not obtain the lock for %s. "
 		  "That database may be in use by another user, "
 		  "in which case you should not save the database. "
 		  "Do you want to proceed with saving the database?");
@@ -268,7 +268,7 @@ show_session_error (QofBackendError io_error,
 
         case GNC_FILE_DIALOG_EXPORT:
 	  label = _("Export");
-	  fmt = _("GnuCash could not obtain the lock for %s."
+	  fmt = _("GnuCash could not obtain the lock for %s. "
 		  "That database may be in use by another user, "
 		  "in which case you should not export the database. "
 		  "Do you want to proceed with exporting the database?");
