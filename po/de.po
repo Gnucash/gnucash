@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-30 20:57+0100\n"
-"PO-Revision-Date: 2006-01-30 22:00+0100\n"
+"POT-Creation-Date: 2006-01-31 21:48+0100\n"
+"PO-Revision-Date: 2006-01-31 22:03+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -513,7 +513,9 @@ msgstr "Sie müssen einen Namen für diese Zahlungsbedingungen angeben."
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
-msgstr "Sie müssen einen ein-eindeutigen Namen für diese Zahlungsbedingungen angeben. Ihre Auswahl \"%s\" wird bereits benutzt."
+msgstr ""
+"Sie müssen einen ein-eindeutigen Namen für diese Zahlungsbedingungen "
+"angeben. Ihre Auswahl \"%s\" wird bereits benutzt."
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../src/business/business-gnome/dialog-billterms.c:495
@@ -548,14 +550,13 @@ msgid "Are you sure you want to delete \"%s\"?"
 msgstr "Sind Sie sicher, dass Sie  \"%s\" löschen möchten?"
 
 #: ../src/business/business-gnome/dialog-customer.c:268
-#, fuzzy
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
-"Sie müssen einen Firmennamen eingeben.\n"
-"Wenn dieser Kunde eine Person ist (und keine Firma), sollten Sie\n"
-"bei \"Firmennamen\" und \"Kontaktadresse\" das gleiche eintragen."
+"Sie müssen einen Firmennamen eingeben. Wenn dieser Kunde eine Person ist "
+"(und keine Firma), sollten Sie bei \"Firmennamen\" und \"Kontaktadresse\" "
+"das gleiche eintragen."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
 msgid "You must enter a billing address."
@@ -1022,7 +1023,6 @@ msgstr "Diese Bestellung muß mindestens einen Posten enthalten."
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:287
-#, fuzzy
 msgid ""
 "This order contains entries that have not been invoiced. Are you sure you "
 "want to close it out before you invoice all the entries?"
@@ -1096,14 +1096,13 @@ msgid "Your selected post account, %s, does not exist"
 msgstr "Das gewählte Buchungskonto %s existiert nicht"
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
-#, fuzzy
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
-"Sie müssen einen Firmennamen eingeben.\n"
-"Wenn dieser Zulieferer eine Person ist (und keine Firma), sollten Sie\n"
-"bei \"Firmennamen\" und \"Kontaktadresse\" das gleiche eintragen."
+"Sie müssen einen Firmennamen eingeben. Wenn dieser Zulieferer eine Person "
+"ist (und keine Firma), sollten Sie bei \"Firmennamen\" und \"Kontaktadresse"
+"\" das gleiche eintragen."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
 msgid "You must enter a payment address."
@@ -2488,17 +2487,15 @@ msgstr "ist nicht"
 #: ../src/business/business-ledger/gncEntryLedger.c:83
 #: ../src/gnome-utils/dialog-transfer.c:1383
 #: ../src/register/ledger-core/split-register.c:1520
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s does not allow transactions."
-msgstr "Das Konto %s kann keine Buchungen enthalten.\n"
+msgstr "Das Konto %s kann keine Buchungen enthalten."
 
 #: ../src/business/business-ledger/gncEntryLedger.c:84
 #: ../src/register/ledger-core/split-register.c:1521
-#, fuzzy, c-format
+#, c-format
 msgid "The account %s does not exist. Would you like to create it?"
-msgstr ""
-"Das Konto %s existiert nicht.\n"
-"Möchten Sie es erstellen?"
+msgstr "Das Konto %s existiert nicht. Möchten Sie es erstellen?"
 
 #. XXX: change this based on the ledger type
 #: ../src/business/business-ledger/gncEntryLedger.c:231
@@ -2515,27 +2512,24 @@ msgstr "Material"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:805
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:487
-#, fuzzy
 msgid "Save the current entry?"
-msgstr "Aktuellen Posten abbrechen"
+msgstr "Aktueller Eintrag speichern?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:807
-#, fuzzy
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating this entry, or cancel the duplication?"
 msgstr ""
-"Die aktuelle Buchungsvorlage wurde verändert.\n"
-"Soll sie gespeichert werden?"
+"Der aktuelle Eintrag wurde verändert. Wollen Sie die Änderungen speichern, "
+"bevor Sie die Kopie erstellen, oder soll der Kopiervorgang abgebrochen "
+"werden?"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:822
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:506
 #: ../src/gnome/gnc-split-reg.c:729
 #: ../src/register/ledger-core/split-register.c:435
-#: ../src/register/ledger-core/split-register-control.c:1492
-#, fuzzy
 msgid "_Record"
-msgstr "Speichern"
+msgstr "_Speichern"
 
 #. Translators: %s is the string "an Account" i.e. its translation.
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:142
@@ -2549,36 +2543,28 @@ msgid "an Account"
 msgstr "ein Konto"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:376
-#, fuzzy, c-format
+#, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr ""
-"Die Steuertabelle %s existiert nicht.\n"
-"Möchten Sie sie erstellen?"
+msgstr "Die Steuertabelle %s existiert nicht. Möchten Sie sie erstellen?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:489
-#, fuzzy
 msgid ""
 "The current entry has been changed.  However, this entry is part of an "
 "existing order. Would you like to record the change and effectively change "
 "your order?"
 msgstr ""
-"Der gewählte Posten wurde verändert. Dieser Posten gehört zu einer\n"
-"existierenden Bestellungen. Wollen Sie die Änderung wirklich speichern\n"
-"und damit Ihre Bestellung ändern?"
+"Der gewählte Posten wurde verändert. Dieser Posten gehört zu einer "
+"existierenden Bestellungen. Wollen Sie die Änderung wirklich speichern und "
+"damit Ihre Bestellung ändern?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
 #: ../src/gnome/gnc-split-reg.c:727
-#: ../src/register/ledger-core/split-register-control.c:1490
-#, fuzzy
 msgid "_Don't Record"
-msgstr "Kontenbericht"
+msgstr "_Nicht speichern"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:591
-#, fuzzy
 msgid "The current entry has been changed. Would you like to save it?"
-msgstr ""
-"Der aktuelle Posten wurde verändert.\n"
-"Soll er gespeichert werden?"
+msgstr "Der aktuelle Posten wurde verändert. Soll er gespeichert werden?"
 
 #. Translators: The 'sample:' items are strings which are not
 #. displayed, but only used to estimate widths. Please only
@@ -2901,13 +2887,13 @@ msgid "You must provide a name for this Tax Table."
 msgstr "Sie müssen einen Namen für diese Steuertabelle angeben."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:108
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Sie müssen einen ein-eindeutigen Namen für diese Steuertabelle\n"
-"angeben. Ihre Wahl \"%s\" ist bereits in Benutzung."
+"Sie müssen einen ein-eindeutigen Namen für diese Steuertabelle angeben. Ihre "
+"Wahl \"%s\" ist bereits in Benutzung."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:134
 msgid "You must choose a Tax Account."
@@ -2928,14 +2914,13 @@ msgid "Tax table \"%s\" is in use.  You cannot delete it."
 msgstr "Steuertabelle \"%s\" ist in Benutzung. Sie können sie nicht löschen."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:595
-#, fuzzy
 msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
 msgstr ""
-"Sie können den allerletzten Eintrag in einer Steuertabelle nicht\n"
-"löschen. Stattdessen müssten Sie die ganze Steuertabelle löschen,\n"
-"falls Sie das möchten."
+"Sie können den allerletzten Eintrag in einer Steuertabelle nicht löschen. "
+"Stattdessen müssten Sie die ganze Steuertabelle löschen, falls Sie das "
+"möchten."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:602
 msgid "Are you sure you want to delete this entry?"
@@ -3044,13 +3029,12 @@ msgid "Realized Gain/Loss"
 msgstr "Realisierter Gewinn/Verlust"
 
 #: ../src/engine/cap-gains.c:242
-#, fuzzy
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
 msgstr ""
-"Realisierter Gewinn/Verlust von Aktienkonten, die nicht woanders\n"
-"gespeichert worden sind.\n"
+"Realisierter Gewinn/Verlust von Aktienkonten, die nicht woanders gespeichert "
+"worden sind."
 
 #: ../src/engine/cap-gains.c:570
 msgid "Lot"
@@ -3316,13 +3300,17 @@ msgstr "Kontenhierarchie nach QSF XML exportieren"
 msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
-msgstr "Diese Währung/Aktie wird von (mindestens) einem Konto benutzt. Sie können Sie daher nicht löschen."
+msgstr ""
+"Diese Währung/Aktie wird von (mindestens) einem Konto benutzt. Sie können "
+"Sie daher nicht löschen."
 
 #: ../src/gnome/dialog-commodities.c:140
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
-msgstr "Zu dieser Währung/Aktie existieren Kurswerte. Sind Sie sicher, dass Sie die gewählte Währung/Aktie und ihre Kurswerte löschen wollen?"
+msgstr ""
+"Zu dieser Währung/Aktie existieren Kurswerte. Sind Sie sicher, dass Sie die "
+"gewählte Währung/Aktie und ihre Kurswerte löschen wollen?"
 
 #: ../src/gnome/dialog-commodities.c:145
 msgid "Are you sure you want to delete the selected commodity?"
@@ -3432,11 +3420,11 @@ msgstr "Nummer"
 #. Translators: %d is the number of prices. This
 #. is a ngettext(3) message.
 #: ../src/gnome/dialog-price-edit-db.c:167
-#, fuzzy, c-format
-msgid "Are you sure you want to delete the selected price?"
+#, c-format
+msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Sind Sie sicher, dass Sie den gewählten Preis löschen wollen?"
-msgstr[1] "Sind Sie sicher, dass Sie den gewählten Preis löschen wollen?"
+msgstr[0] "Sind Sie sicher, dass Sie den %d gewählten Preis löschen wollen?"
+msgstr[1] "Sind Sie sicher, dass Sie die %d gewählten Preise löschen wollen?"
 
 #: ../src/gnome/dialog-price-edit-db.c:175
 msgid "Delete prices?"
@@ -3518,7 +3506,9 @@ msgstr ""
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
-msgstr "Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
+msgstr ""
+"Der Terminierte-Buchungen-Editor kann diese Buchung nicht automatisch "
+"ausgeglichen erstellen. Soll sie trotzdem erstellt werden?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:846
 msgid "Please name the Scheduled Transaction."
@@ -3529,17 +3519,22 @@ msgstr "Bitte geben Sie der terminierten Buchung einen Namen."
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
-msgstr "Eine terminierte Buchung mit dem Namen \"%s\" existiert bereits. Sind Sie sicher, daß die aktuelle den gleichen Namen erhalten soll?"
+msgstr ""
+"Eine terminierte Buchung mit dem Namen \"%s\" existiert bereits. Sind Sie "
+"sicher, daß die aktuelle den gleichen Namen erhalten soll?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:900
 msgid "Scheduled Transactions with variables cannot be automatically created."
-msgstr "Terminierte Buchungen mit Variablen können nicht automatisch erstellt werden."
+msgstr ""
+"Terminierte Buchungen mit Variablen können nicht automatisch erstellt werden."
 
 #: ../src/gnome/dialog-scheduledxaction.c:909
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "Terminierte Buchungen ohne Buchungsvorlage können nicht automatisch erstellt werden."
+msgstr ""
+"Terminierte Buchungen ohne Buchungsvorlage können nicht automatisch erstellt "
+"werden."
 
 #: ../src/gnome/dialog-scheduledxaction.c:923
 msgid "Please provide a valid end selection."
@@ -3562,7 +3557,9 @@ msgstr ""
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
-msgstr "Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie auftritt. Wollen Sie wirklich fortsetzen?"
+msgstr ""
+"Sie versuchen gerade, eine Terminierte Buchung zu erstellen, die nie "
+"auftritt. Wollen Sie wirklich fortsetzen?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:1617
 msgid "(never)"
@@ -3572,7 +3569,9 @@ msgstr "(niemals)"
 msgid ""
 "The following transactions are presently being edited; are you sure you want "
 "to delete them?"
-msgstr "Die folgenden Buchungssätze werden zur Zeit bearbeitet; wollen Sie diese wirklich löschen?"
+msgstr ""
+"Die folgenden Buchungssätze werden zur Zeit bearbeitet; wollen Sie diese "
+"wirklich löschen?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:1788
 msgid "Delete the selected Scheduled Transactions?"
@@ -3584,13 +3583,11 @@ msgid "Not scheduled"
 msgstr "Nicht vorgemerkt"
 
 #: ../src/gnome/dialog-scheduledxaction.c:2129
-#, fuzzy
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
-"Die aktuelle Buchungsvorlage wurde verändert.\n"
-"Soll sie gespeichert werden?"
+"Die aktuelle Buchungsvorlage wurde verändert. Soll sie gespeichert werden?"
 
 #. src/scm/help-topics-index.scm
 #: ../src/gnome/dialog-scheduledxaction.c:2453
@@ -3600,29 +3597,27 @@ msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
 
 #: ../src/gnome/dialog-sx-from-trans.c:566
-#, fuzzy
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
-"Diese Terminierte Buchung ist nicht ausgeglichen. Bitte korrigieren\n"
-"Sie diese Buchung."
+"Diese Terminierte Buchung ist nicht ausgeglichen. Bitte korrigieren Sie "
+"diese Buchung."
 
 #: ../src/gnome/dialog-sx-from-trans.c:808
-#, fuzzy
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
-"Es kann keine Terminierte Buchung von einer Buchung erstellt werden,\n"
-"die ihrerseits gerade bearbeitet wird. Bitte speichern Sie die\n"
-"Buchung, bevor Sie eine Terminierte Buchung daraus erstellen wollen."
+"Es kann keine Terminierte Buchung von einer Buchung erstellt werden, die "
+"ihrerseits gerade bearbeitet wird. Bitte speichern Sie die Buchung, bevor "
+"Sie eine Terminierte Buchung daraus erstellen wollen."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
 #: ../src/gnome/dialog-sxsincelast.c:423
 #: ../src/gnome/gnc-plugin-basic-commands.c:429
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transaction automatically created)"
@@ -3630,21 +3625,20 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Es gibt keine terminierten Buchungen, die erstellt werden sollen.\n"
-"(%d Buchung automatisch erstellt)"
+"Es gibt keine terminierten Buchungen, die erstellt werden sollen. (%d "
+"Buchung automatisch erstellt)"
 msgstr[1] ""
-"Es gibt keine terminierten Buchungen, die erstellt werden sollen.\n"
-"(%d Buchungen automatisch erstellt)"
+"Es gibt keine terminierten Buchungen, die erstellt werden sollen. (%d "
+"Buchungen automatisch erstellt)"
 
 #: ../src/gnome/dialog-sxsincelast.c:1437
-#, fuzzy
 msgid ""
 "Cancelling the Since-Last-Run dialog will revert all changes. Are you sure "
 "you want to lose all Scheduled Transaction changes?"
 msgstr ""
-"Wenn Sie den Seit-Letztem-Aufruf Dialog abbrechen, werden alle\n"
-"Änderungen rückgängig gemacht. Sind Sie sicher, daß Sie alle\n"
-"Änderungen in den Terminierten Buchungen verwerfen wollen?"
+"Wenn Sie den Seit-Letztem-Aufruf Dialog abbrechen, werden alle Änderungen "
+"rückgängig gemacht. Sind Sie sicher, daß Sie alle Änderungen in den "
+"Terminierten Buchungen verwerfen wollen?"
 
 #: ../src/gnome/dialog-sxsincelast.c:1870
 msgid "Ready to create"
@@ -3693,7 +3687,7 @@ msgstr ""
 "um mit dem ersten abgeteilten Buch zu beginnen."
 
 #: ../src/gnome/druid-acct-period.c:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created.  This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over %"
@@ -3702,9 +3696,8 @@ msgid ""
 msgstr ""
 "Sie haben ausgewählt, dass ein Buch erstellt werden soll. Das neue Buch wird "
 "alle Buchungen bis Mitternacht %s enthalten (insgesamt %d Buchungen in %d "
-"Konten).\n"
-"Klicken Sie \"Vor\", um dieses Buch zu erstellen. Klicken Sie \"Zurück\", um "
-"die Daten zu verändern."
+"Konten). Klicken Sie \"Vor\", um dieses Buch zu erstellen. Klicken Sie "
+"\"Zurück\", um die Daten zu verändern."
 
 #: ../src/gnome/druid-acct-period.c:305
 #, c-format
@@ -3941,40 +3934,31 @@ msgid "You must enter a distribution amount."
 msgstr "Sie müssen einen Betrag angeben."
 
 #: ../src/gnome/druid-stock-split.c:313
-#, fuzzy
 msgid "You must either enter a valid price or leave it blank."
 msgstr ""
-"Sie müssen entweder einen gültigen Preis angeben\n"
-"oder das Feld frei lassen."
+"Sie müssen entweder einen gültigen Preis angeben oder das Feld frei lassen."
 
 #: ../src/gnome/druid-stock-split.c:322
 msgid "The price must be positive."
 msgstr "Der Preis muß eine positive Zahl sein."
 
 #: ../src/gnome/druid-stock-split.c:360
-#, fuzzy
 msgid "You must either enter a valid cash amount or leave it blank."
 msgstr ""
-"Sie müssen entweder einen gültigen Betrag eingeben\n"
-"oder das Eingabefeld leer lassen."
+"Sie müssen entweder einen gültigen Betrag eingeben oder das Eingabefeld leer "
+"lassen."
 
 #: ../src/gnome/druid-stock-split.c:369
 msgid "The cash distribution must be positive."
 msgstr "Der Ausgleichsbetrag muß positiv sein."
 
 #: ../src/gnome/druid-stock-split.c:381
-#, fuzzy
 msgid "You must select an income account for the cash distribution."
-msgstr ""
-"Sie müssen ein Ertragskonto für\n"
-"den Ausgleichsbetrag angeben."
+msgstr "Sie müssen ein Ertragskonto für den Ausgleichsbetrag angeben."
 
 #: ../src/gnome/druid-stock-split.c:390
-#, fuzzy
 msgid "You must select an asset account for the cash distribution."
-msgstr ""
-"Sie müssen ein Aktiva-Konto für\n"
-"den Ausgleichsbetrag angeben."
+msgstr "Sie müssen ein Aktiva-Konto für den Ausgleichsbetrag angeben."
 
 #: ../src/gnome/druid-stock-split.c:482
 msgid "Error adding price."
@@ -8167,57 +8151,48 @@ msgid "Commit changes to a invoice_entry."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:3
-#, fuzzy
 msgid "Commit changes to a transaction."
-msgstr "Behandlung von stornierten Buchungssätzen"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
-#, fuzzy
 msgid "Delete a commodity and prices."
-msgstr "Auch _manuell eingegebene Preise löschen"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
-#, fuzzy
 msgid "Delete a commodity."
-msgstr "Sie müssen eine Währung/Aktie auswählen."
+msgstr "Eine Währung/Aktie löschen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
-#, fuzzy
 msgid "Delete a transaction."
-msgstr "Alle _Buchungen löschen"
+msgstr "Eine Buchung löschen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
-#, fuzzy
 msgid "Delete multiple price quotes."
-msgstr "Auch _manuell eingegebene Preise löschen"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
 msgid "Duplicating a changed invoice_entry."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:9
-#, fuzzy
 msgid "Duplicating a changed transaction."
-msgstr "Doppelte Buchung"
+msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
 msgid "Mark transaction split as unreconciled."
 msgstr "Buchungsteil als nicht abgeglichen markieren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
-#, fuzzy
 msgid "Read only register."
-msgstr "Bereit zum Erstellen"
+msgstr "Schreibgeschütztes Kontofenster."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
-#, fuzzy
 msgid "Remove a splits from a transaction."
-msgstr "Buchungsteile von dieser Buchung entfernen?"
+msgstr "Buchungsteile von einer Buchung entfernen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
-#, fuzzy
 msgid "Remove all the splits from a transaction."
-msgstr "Buchungsteile von dieser Buchung entfernen?"
+msgstr "Alle Buchungsteile von einer Buchung entfernen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
 msgid ""
@@ -8766,12 +8741,11 @@ msgstr ""
 "oder das Feld freilassen."
 
 #: ../src/gnome-utils/dialog-account.c:965
-#, fuzzy
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
 msgstr ""
-"Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den\n"
+"Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
 #: ../src/gnome-utils/dialog-account.c:1448
@@ -8824,11 +8798,10 @@ msgid "Select currency"
 msgstr "Bitte wählen Sie die Währung"
 
 #: ../src/gnome-utils/dialog-commodity.c:480
-#, fuzzy
 msgid "You must select a commodity. To create a new one, click \"New\""
 msgstr ""
-"Sie müssen eine Währung/Aktie auswählen.\n"
-"Wenn Sie eine neue anlegen möchten, klicken Sie auf \"Neu\"."
+"Sie müssen eine Währung/Aktie auswählen. Wenn Sie eine neue anlegen möchten, "
+"klicken Sie auf \"Neu\"."
 
 #: ../src/gnome-utils/dialog-commodity.c:786
 msgid "Use local time"
@@ -8843,12 +8816,11 @@ msgid "That commodity already exists."
 msgstr "Diese Währung/Aktie existiert bereits."
 
 #: ../src/gnome-utils/dialog-commodity.c:1177
-#, fuzzy
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
 msgstr ""
-"Sie müssen in den Feldern \"Voller Name\", \"Symbol/Abkürzung\" und \"Typ\"\n"
+"Sie müssen in den Feldern \"Voller Name\", \"Symbol/Abkürzung\" und \"Typ\" "
 "für die Währung/Aktie etwas angeben."
 
 #: ../src/gnome-utils/dialog-options.c:750
@@ -8923,7 +8895,9 @@ msgstr "Anzeige der Ertrags- und Aufwand-Konten"
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
-msgstr "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden soll. Andernfalls wird kein Buchungssatz gespeichert."
+msgstr ""
+"Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden soll. "
+"Andernfalls wird kein Buchungssatz gespeichert."
 
 #: ../src/gnome-utils/dialog-transfer.c:1372
 msgid "You can't transfer from and to the same account!"
@@ -10290,373 +10264,253 @@ msgid "No suitable backend was found for %s."
 msgstr "Kein passendes Dateimodul wurde gefunden für %s."
 
 #: ../src/gnome-utils/gnc-file.c:208
-#, fuzzy, c-format
+#, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr ""
-"Die URL \n"
-"    %s\n"
-"kann von dieser GnuCash Version nicht verarbeitet werden."
+"Die URL \"%s\" kann von dieser GnuCash Version nicht verarbeitet werden."
 
 #: ../src/gnome-utils/gnc-file.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "Can't parse the URL %s."
-msgstr ""
-"Folgende URL konnte nicht verarbeitet werden:\n"
-"     %s\n"
+msgstr "Folgende URL konnte nicht verarbeitet werden: %s"
 
 #: ../src/gnome-utils/gnc-file.c:218
-#, fuzzy, c-format
+#, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr ""
-"Verbindung konnte nicht aufgebaut werden zu Rechner\n"
-"   %s\n"
-"Der Rechnername, Benutzername oder Passwort waren falsch."
+"Verbindung konnte nicht aufgebaut werden zu Rechner \"%s\". Der Rechnername, "
+"Benutzername oder Passwort waren falsch."
 
 #: ../src/gnome-utils/gnc-file.c:224
-#, fuzzy, c-format
+#, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr ""
-"Verbindung konnte nicht aufgebaut werden zu Rechner\n"
-"   %s\n"
-"Verbindung verloren. Daten konnten nicht gesendet werden."
+"Verbindung konnte nicht aufgebaut werden zu Rechner \"%s\". Verbindung "
+"verloren. Daten konnten nicht gesendet werden."
 
 #: ../src/gnome-utils/gnc-file.c:230
-#, fuzzy
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
 msgstr ""
-"Diese Datei scheint von einer neueren Version von GnuCash zu sein.  \n"
-"Sie brauchen eine neuere Gnucash Version, um die Datei lesen zu können."
+"Diese Datei scheint von einer neueren Version von GnuCash zu sein. Sie "
+"brauchen eine neuere Gnucash Version, um die Datei lesen zu können."
 
 #: ../src/gnome-utils/gnc-file.c:237
-#, fuzzy, c-format
+#, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr ""
-"Die Datei \n"
-"    %s\n"
-"existiert noch nicht. Möchten Sie sie erstellen?\n"
+"Die Datenbank oder Datei \"%s\" existiert nicht. Möchten Sie sie erstellen?"
 
 #: ../src/gnome-utils/gnc-file.c:247
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"Für die Datei\n"
-"    %s\n"
-"konnte keine exklusive Schreibberechtigung erreicht werden.\n"
-"Diese Datei ist wahrscheinlich von jemand anderem in Benutzung.\n"
-"In diesem Fall sollten Sie die Datei nicht öffnen.\n"
+"Für die Datenbank \"%s\" konnte keine exklusive Schreibberechtigung erreicht werden.  Diese Datenbank ist wahrscheinlich von jemand anderem in Benutzung.  In diesem Fall sollten Sie die Datenbank nicht öffnen.\n"
 "\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
+"Möchten Sie trotzdem mit dem Öffnen der Datenbank fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:255
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not import the database. Do you want "
 "to proceed with importing the database?"
 msgstr ""
-"Für die Datei\n"
-"    %s\n"
-"konnte keine exklusive Schreibberechtigung erreicht werden.\n"
-"Diese Datei ist wahrscheinlich von jemand anderem in Benutzung.\n"
-"In diesem Fall sollten Sie die Datei nicht öffnen.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"Für die Datei\n"
-"    %s\n"
-"konnte keine exklusive Schreibberechtigung erreicht werden.\n"
-"Diese Datei ist wahrscheinlich von jemand anderem in Benutzung.\n"
-"In diesem Fall sollten Sie die Datei nicht öffnen.\n"
-"\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"Für die Datei\n"
-"    %s\n"
-"konnte keine exklusive Schreibberechtigung erreicht werden.\n"
-"Diese Datei ist wahrscheinlich von jemand anderem in Benutzung.\n"
-"In diesem Fall sollten Sie die Datei nicht öffnen.\n"
+"Für die Datei \"%s\" konnte keine exklusive Schreibberechtigung erreicht werden. Diese Datei ist wahrscheinlich von jemand anderem in Benutzung. In diesem Fall sollten Sie die Datei nicht öffnen.\n"
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:294
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
 "system, or you may not have write permission for the directory."
-msgstr ""
-"Die Datei\n"
-"  %s\n"
-"konnte nicht geschrieben werden. Diese Datei könnte sich auf einem\n"
-"schreibgeschützten Dateisystem befinden oder Sie haben keine\n"
-"Schreibberechtigung in das Verzeichnis.\n"
+msgstr "Die Datei \"%s\" konnte nicht geschrieben werden. Diese Datei könnte sich auf einem schreibgeschützten Dateisystem befinden oder Sie haben keine Schreibberechtigung in das Verzeichnis. "
 
 #: ../src/gnome-utils/gnc-file.c:301
-#, fuzzy, c-format
+#, c-format
 msgid "The file/URL %sdoes not contain GnuCash data or the data is corrupt."
-msgstr ""
-"Die Datei/URL\n"
-"    %s\n"
-"verweist nicht auf GnuCash-Daten oder diese Daten sind fehlerhaft."
+msgstr "Die Datei/URL \"%s\" verweist nicht auf GnuCash-Daten oder diese Daten sind fehlerhaft."
 
 #: ../src/gnome-utils/gnc-file.c:307
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr ""
-"Der Server unter der URL\n"
-"    %s\n"
-"stiess auf einen Fehler oder benutzte falsche oder fehlerhafte Daten."
+msgstr "Der Server unter der URL \"%s\" stiess auf einen Fehler oder benutzte falsche oder fehlerhafte Daten."
 
 #: ../src/gnome-utils/gnc-file.c:313
-#, fuzzy, c-format
+#, c-format
 msgid "You do not have permission to access %s."
-msgstr ""
-"Sie haben keine Zugriffsberechtigung für die Datei\n"
-"    %s\n"
+msgstr "Sie haben keine Zugriffsberechtigung für die Datei \"%s\"."
 
 #: ../src/gnome-utils/gnc-file.c:318
-#, fuzzy, c-format
+#, c-format
 msgid "An error occurred while processing %s."
-msgstr ""
-"Fehler aufgetreten beim Verarbeiten von\n"
-"    %s\n"
+msgstr "Fehler aufgetreten beim Verarbeiten von \"%s\"."
 
 #: ../src/gnome-utils/gnc-file.c:324
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid QSF Object file! The QSF object file %s failed to validate against "
 "the QSF object schema. The XML structure of the file is either not well-"
 "formed or contains illegal data."
-msgstr ""
-"Ungültige QSF-Objekt-Datei! Die Datei\n"
-"  %s\n"
-"hat ein falsches Format, verglichen mit dem QSF Objekt-Schema. Die XML-"
-"Struktur ist entweder nicht wohlgeformt oder enthält ungültige Daten."
+msgstr "Ungültige QSF-Objekt-Datei. Die Datei \"%s\" hat ein falsches Format, verglichen mit dem QSF Objekt-Schema. Die XML-Struktur ist entweder nicht wohlgeformt oder enthält ungültige Daten."
 
 #: ../src/gnome-utils/gnc-file.c:331
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid QSF Map file! The QSF map file %s failed to validate against the QSF "
 "map schema. The XML structure of the file is either not well-formed or "
 "contains illegal data."
-msgstr ""
-"Ungültige QSF-Zuordnungs-Datei (Map)! Die Datei\n"
-"  %s\n"
-"hat ein falsches Format, verglichen mit dem QSF Map-Schema. Die XML-Struktur "
-"ist entweder nicht wohlgeformt oder enthält ungültige Daten."
+msgstr "Ungültige QSF-Zuordnungs-Datei (Map). Die Datei \"%s\" hat ein falsches Format, verglichen mit dem QSF Map-Schema. Die XML-Struktur ist entweder nicht wohlgeformt oder enthält ungültige Daten."
 
 #: ../src/gnome-utils/gnc-file.c:338
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The QSF Map file %s was written for a different version of QOF.  It may need "
 "to be modified to work with your current QOF installation."
-msgstr ""
-"Die QSF-Zuordnungs-Datei (Map)\n"
-"  %s\n"
-"wurde für eine andere Version von QOF geschrieben. Sie kann nicht mit dieser "
-"Version gelesen werden. Bitte prüfen Sie in der Dokumentation der anderen "
-"Version, ob Sie Konvertierungsschritte durchführen müssen, um sie mit dieser "
-"Version zu lesen."
+msgstr "Die QSF-Zuordnungs-Datei (Map) \"%s\" wurde für eine andere Version von QOF geschrieben. Sie kann nicht mit dieser Version gelesen werden. Bitte prüfen Sie in der Dokumentation der anderen Version, ob Sie Konvertierungsschritte durchführen müssen, um sie mit dieser Version zu lesen."
 
 #: ../src/gnome-utils/gnc-file.c:345
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The selected QSF map %s contains unusable data. This is usually because not "
 "all the required parameters for the defined objects have calculations "
 "described in the map."
-msgstr ""
-"Die gewählte QSF-Zuordnung (Map)\n"
-"  %s\n"
-"enthält unbrauchbare Daten. Das kann sein, wenn nicht für alle "
-"erforderlichen Parameter für die gewünschten Objekte alle notwendigen "
-"Berechnungsformeln in der Zuordnung angegeben waren."
+msgstr "Die gewählte QSF-Zuordnung (Map) \"%s\" enthält unbrauchbare Daten. Das kann sein, wenn nicht für alle erforderlichen Parameter für die gewünschten Objekte alle notwendigen Berechnungsformeln in der Zuordnung angegeben waren."
 
 #: ../src/gnome-utils/gnc-file.c:352
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The selected QSF object file %s contains one or more invalid GUIDs. The file "
 "cannot be processed - please check the source of the file and try again."
-msgstr ""
-"Die gewählte QSF-Objekt-Datei\n"
-"  %s\n"
-"enthält eine oder mehrere ungültige GUIDs. Die Datei kann nicht verarbeitet "
-"werden. Versuchen Sie, eine korrigierte Datei zu erhalten."
+msgstr "Die gewählte QSF-Objekt-Datei \"%s\" enthält eine oder mehrere ungültige GUIDs. Die Datei kann nicht verarbeitet werden. Versuchen Sie, eine korrigierte Datei zu erhalten."
 
 #: ../src/gnome-utils/gnc-file.c:359
-#, fuzzy, c-format
+#, c-format
 msgid "The selected QSF Object file %s requires a map but it was not provided."
-msgstr ""
-"Die gewählte QSF-Objekt-Datei\n"
-"  %s\n"
-"erfordert eine QSF-Zuordnung (Map) aber es ist keine verfügbar."
+msgstr "Die gewählte QSF-Objekt-Datei \"%s\" erfordert eine QSF-Zuordnung (Map), aber es ist keine verfügbar."
 
 #: ../src/gnome-utils/gnc-file.c:365
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Wrong QSF map selected. The selected map %s validates but was written for "
 "different QOF objects.  The list of objects defined in this map does not "
 "include all the objects described in the current QSF object file."
-msgstr ""
-"Falsche QSF-Zuordnung (Map) ausgewählte. Die gewählte QSF-Datei\n"
-"  %s\n"
-"ist zwar korrekt, wurde aber für andere QOF-Objekte geschrieben. Die "
-"Objektliste in dieser Zuordnung enthält nicht alle Objekte, die in der "
-"aktuellen QSF-Objekt-Datei zu finden sind."
+msgstr "Falsche QSF-Zuordnung (Map) ausgewählte. Die gewählte QSF-Datei \"%s\" ist zwar korrekt, wurde aber für andere QOF-Objekte geschrieben. Die Objektliste in dieser Zuordnung enthält nicht alle Objekte, die in der aktuellen QSF-Objekt-Datei zu finden sind."
 
 #: ../src/gnome-utils/gnc-file.c:373
-#, fuzzy, c-format
+#, c-format
 msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
-msgstr ""
-"Die gewählte Datei\n"
-"  %s\n"
-"ist eine QSF-Zuordnung (Map) und kann nicht als QSF-Objekt geöffnet werden."
+msgstr "Die gewählte Datei \"%s\" ist eine QSF-Zuordnung (Map) und kann nicht als QSF-Objekt geöffnet werden."
 
 #: ../src/gnome-utils/gnc-file.c:379
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "When converting XML strings into numbers, an overflow has been detected. The "
 "QSF object file %s contains invalid data in a field that is meant to hold a "
 "number."
-msgstr ""
-"Als die XML-Datei geladen wurde, ist ein Zahlen-Überlauf aufgetreten. Die "
-"QSF-Datei\n"
-"  %s\n"
-"enthält ungültige Daten in einem Feld, das eine Zahl enthalten soll."
+msgstr "Als die XML-Datei geladen wurde, ist ein Zahlen-Überlauf aufgetreten. Die QSF-Datei \"%s\" enthält ungültige Daten in einem Feld, das eine Zahl enthalten soll."
 
 #: ../src/gnome-utils/gnc-file.c:386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The QSF object file %s is valid and contains GnuCash objects. However, "
 "GnuCash cannot open the file directly because the data needs to be merged "
 "into an existing GnuCash data book. Please open a GnuCash file or create a "
 "new one, then import this QSF object file so that the data can be merged "
 "into the main data book."
-msgstr ""
-"Die QSF-Datei\n"
-"  %s\n"
-"ist korrekt und enthält GnuCash-Objekte. Allerdings kann GnuCash die Datei "
-"nicht direkt öffnen, da die Objekte in ein existierendes GnuCash-Buch "
-"fusioniert werden muss. Bitte öffnen Sie eine GnuCash-Datei oder erstellen "
-"eine neue, und importieren dann diese QSF-Datei."
+msgstr "Die QSF-Datei \"%s\" ist korrekt und enthält GnuCash-Objekte. Allerdings kann GnuCash die Datei nicht direkt öffnen, da die Objekte in ein existierendes GnuCash-Buch fusioniert werden muss. Bitte öffnen Sie eine GnuCash-Datei oder erstellen eine neue, und importieren dann diese QSF-Datei."
 
 #: ../src/gnome-utils/gnc-file.c:396
-#, fuzzy
 msgid "There was an error reading the file. Do you want to continue?"
-msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
-"Möchten Sie fortfahren?"
+msgstr "Es gab einen Fehler beim Öffnen der Datei. Möchten Sie fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:402
-#, fuzzy, c-format
+#, c-format
 msgid "There was an error parsing the file %s."
-msgstr ""
-"Beim Leser der Datei\n"
-"   %s\n"
-"ist ein Fehler aufgetreten."
+msgstr "Beim Leser der Datei \"%s\" ist ein Fehler aufgetreten."
 
 #: ../src/gnome-utils/gnc-file.c:407
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s is empty."
-msgstr ""
-"Die Datei \n"
-"  %s\n"
-"ist leer."
+msgstr "Die Datei \"%s\" ist leer."
 
 #: ../src/gnome-utils/gnc-file.c:412
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s could not be found."
-msgstr ""
-"Die Datei \n"
-"  %s\n"
-"konnte nicht gefunden werden."
+msgstr "Die Datei \"%s\" konnte nicht gefunden werden."
 
 #: ../src/gnome-utils/gnc-file.c:417
-#, fuzzy
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr ""
-"Diese Datei ist von einer älteren Version von GnuCash.  \n"
-"Möchten Sie fortfahren?"
+msgstr "Diese Datei ist von einer älteren Version von GnuCash. Möchten Sie fortfahren?"
 
 #: ../src/gnome-utils/gnc-file.c:423
-#, fuzzy, c-format
+#, c-format
 msgid "The file type of file %s is unknown."
-msgstr ""
-"Der Dateityp der Datei \n"
-"  %s\n"
-"ist unbekannt."
+msgstr "Der Dateityp der Datei \"%s\" ist unbekannt."
 
 #: ../src/gnome-utils/gnc-file.c:428
-#, fuzzy, c-format
+#, c-format
 msgid "Could not make a backup of the file %s"
-msgstr ""
-"Von der Datei\n"
-"  %s\n"
-"konnte kein Backup erstellt werden."
+msgstr "Von der Datei \"%s\" konnte kein Backup erstellt werden."
 
 #: ../src/gnome-utils/gnc-file.c:433
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write to file %s Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
-msgstr ""
-"Es konnte nicht in die Datei\n"
-"  %s\n"
-"geschrieben werden. Stellen Sie sicher, dass Sie Schreibberechtigung für das "
-"Verzeichnis und diese Datei haben und dass genug Platz auf dem Datenträger "
-"frei ist."
+msgstr "Es konnte nicht in die Datei \"%s\" geschrieben werden. Stellen Sie sicher, dass Sie Schreibberechtigung für das Verzeichnis und diese Datei haben und dass genug Platz auf dem Datenträger frei ist."
 
 #: ../src/gnome-utils/gnc-file.c:440
-#, fuzzy
 msgid ""
 "This database is from an older version of GnuCash. Do you want to want to "
 "upgrade the database to the current version?"
 msgstr ""
-"Diese Datei ist von einer älteren Version von GnuCash.  \n"
-"Möchten Sie die Datei zur aktuellen GnuCash-Version aktualisieren?"
+"Diese Datei ist von einer älteren Version von GnuCash.  Möchten Sie die "
+"Datei zur aktuellen GnuCash-Version aktualisieren?"
 
 #: ../src/gnome-utils/gnc-file.c:447
-#, fuzzy
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
 "the  documentation to learn how to clear out dangling login sessions."
 msgstr ""
-"Die SQL-Datenbank ist von anderen Anwendern in Benutzung, und die\n"
-"Aktualisierung kann nicht durchgeführt werden, solange jene sich nicht\n"
+"Die SQL-Datenbank ist von anderen Anwendern in Benutzung, und die "
+"Aktualisierung kann nicht durchgeführt werden, solange jene sich nicht "
 "abmelden.  \n"
 "\n"
-"Wenn keine anderen Anwender mehr im System sind, konsultieren Sie\n"
-"bitte das Handbuch, um Anweisungen zum Löschen von 'dangling login\n"
-"sessions' zu finden."
+"Wenn keine anderen Anwender mehr im System sind, konsultieren Sie bitte das "
+"Handbuch, um Anweisungen zum Löschen von 'dangling login sessions' zu finden."
 
 #: ../src/gnome-utils/gnc-file.c:457
-#, fuzzy, c-format
+#, c-format
 msgid "An unknown I/O error (%d) occurred."
-msgstr "Ein unbekannter Eingabe/Ausgabefehler ist aufgetreten."
+msgstr "Ein unbekannter Eingabe/Ausgabefehler (%d) ist aufgetreten."
 
 #: ../src/gnome-utils/gnc-file.c:543
-#, fuzzy
 msgid "Save changes to the file?"
-msgstr "Eine weitere Datei öffnen"
+msgstr "Änderungen in Datei speichern?"
 
 #: ../src/gnome-utils/gnc-file.c:545
 msgid ""
@@ -10665,9 +10519,8 @@ msgid ""
 msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:556
-#, fuzzy
 msgid "Continue _Without Saving"
-msgstr "Schli_eßen ohne zu speichern"
+msgstr "Schließen _ohne zu speichern"
 
 #: ../src/gnome-utils/gnc-file.c:637
 #, c-format
@@ -10717,13 +10570,11 @@ msgstr "Datei lesen..."
 
 #: ../src/gnome-utils/gnc-file.c:885 ../src/gnome-utils/gnc-file.c:1076
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1209
-#, fuzzy, c-format
+#, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
-"Die Datei \n"
-"    %s\n"
-" existiert bereits.\n"
-"Sind Sie sicher, daß sie überschrieben werden soll?"
+"Die Datei \"%s\" existiert bereits. Sind Sie sicher, daß sie überschrieben "
+"werden soll?"
 
 #: ../src/gnome-utils/gnc-file.c:900
 msgid "Exporting file..."
@@ -10766,23 +10617,21 @@ msgid "Error message"
 msgstr "Fehlermeldung"
 
 #: ../src/gnome-utils/gnc-html.c:605 ../src/gnome-utils/gnc-html.c:1064
-#, fuzzy
 msgid ""
 "Secure HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"Der verschlüsselte HTTP Zugang ist deaktiviert.\n"
-"Um ihn zu aktivieren, wählen Sie den Netzwerk Abschnitt der\n"
-"Einstellungen und aktivieren die entsprechende Option."
+"Der verschlüsselte HTTP Zugang ist deaktiviert. Um ihn zu aktivieren, wählen "
+"Sie den Netzwerk Abschnitt der Einstellungen und aktivieren die "
+"entsprechende Option."
 
 #: ../src/gnome-utils/gnc-html.c:614 ../src/gnome-utils/gnc-html.c:1074
-#, fuzzy
 msgid ""
 "Network HTTP access is disabled. You can enable it in the Network section of "
 "the Preferences dialog."
 msgstr ""
-"Sie haben den \"HTTP Netzwerkzugang\" abgeschaltet.\n"
-"Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
+"Sie haben den \"HTTP Netzwerkzugang\" abgeschaltet. Sie können ihn wieder im "
+"Menü \"Voreinstellungen\"einschalten"
 
 #. %s is a URL (some location somewhere).
 #: ../src/gnome-utils/gnc-html.c:1005
@@ -11040,11 +10889,9 @@ msgid "Save changes to file %s before closing?"
 msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:807
-#, fuzzy, c-format
+#, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
 msgstr ""
-"<b>Änderungen in Datei %s vor dem Schließen speichern?</b>\n"
-"\n"
 "Wenn Sie nicht speichern, gehen die Änderungen der letzten %d Minuten "
 "verloren."
 
@@ -11059,9 +10906,8 @@ msgid "<unknown>"
 msgstr "<unbekannt>"
 
 #: ../src/gnome-utils/gnc-main-window.c:853
-#, fuzzy
 msgid "Close _Without Saving"
-msgstr "Schli_eßen ohne zu speichern"
+msgstr "Schließen _ohne zu speichern"
 
 #: ../src/gnome-utils/gnc-main-window.c:884
 msgid "Quit Gnucash?"
@@ -11514,11 +11360,10 @@ msgid "Reconciled Balance:"
 msgstr "Abgeglichener Saldo:"
 
 #: ../src/gnome/window-reconcile.c:2032
-#, fuzzy
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
-"Das Konto ist nicht ausgeglichen.\n"
-"Sind Sie sicher, daß Sie das Abgleichen beenden wollen?"
+"Das Konto ist nicht ausgeglichen. Sind Sie sicher, daß Sie das Abgleichen "
+"beenden wollen?"
 
 #: ../src/gnome/window-reconcile.c:2089
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -11526,13 +11371,12 @@ msgstr ""
 "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
 #: ../src/gnome/window-reconcile.c:2123
-#, fuzzy
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
-"Sie haben Veränderungen vorgenommen. \n"
-"Sind Sie sicher, daß Sie abbrechen wollen?"
+"Sie haben Veränderungen vorgenommen. Sind Sie sicher, daß Sie abbrechen "
+"wollen?"
 
 #: ../src/import-export/binary-import/binary-import.glade.h:1
 msgid ""
@@ -11586,49 +11430,45 @@ msgid "Update your accounts with the new information"
 msgstr "Konten mit neuen Informationen aktualisieren"
 
 #: ../src/import-export/binary-import/druid-commodity.c:268
-#, fuzzy
 msgid ""
 "Pick the type of the currency or security. For national currencies, use "
 "\"CURRENCY\". Enter a new type in the box if the ones in the pick list are "
 "inappropriate."
 msgstr ""
-"Wählen Sie die Währung oder Aktie. Für nationale Währungen benutzen\n"
-"Sie bitte \"WÄHRUNG\". Falls kein Vorschlag passt, können Sie einen\n"
-"beliebigen Namen eingeben. Es wird dann ein neuer Aktieneintrag\n"
-"erstellt."
+"Wählen Sie die Währung oder Aktie. Für nationale Währungen benutzen Sie "
+"bitte \"WÄHRUNG\". Falls kein Vorschlag passt, können Sie einen beliebigen "
+"Namen eingeben. Es wird dann ein neuer Aktieneintrag erstellt."
 
 #: ../src/import-export/binary-import/druid-commodity.c:290
-#, fuzzy
 msgid ""
 "Enter a descriptive name for the currency or stock, such as \"US Dollar\" or "
 "\"Red Hat Stock\""
 msgstr ""
-"Geben Sie eine Beschreibung für die Währung oder Aktien ein, zum\n"
-"Beispiel \"US Dollar\" oder \"Deutsche Telekom\""
+"Geben Sie eine Beschreibung für die Währung oder Aktien ein, zum Beispiel "
+"\"US Dollar\" oder \"Deutsche Telekom\""
 
 #: ../src/import-export/binary-import/druid-commodity.c:309
-#, fuzzy
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\"), national currency symbol (such "
 "as \"USD\"), or other unique abbreviation for the name."
 msgstr ""
-"Geben Sie das Ticker-Symbol (zum Beispiel \"DTE\"), das Währungssymbol\n"
-"(zum Beispiel \"EUR\") oder eine andere Abkürzung für den Namen ein."
+"Geben Sie das Ticker-Symbol (zum Beispiel \"DTE\"), das Währungssymbol (zum "
+"Beispiel \"EUR\") oder eine andere Abkürzung für den Namen ein."
 
 #: ../src/import-export/binary-import/druid-commodity.c:328
-#, fuzzy
 msgid ""
 "Click \"Next\" to accept the information and move to the next currency or "
 "stock."
 msgstr ""
-"Klicken Sie auf \"Weiter\", um die Information zu bestätigen und zur\n"
+"Klicken Sie auf \"Weiter\", um die Information zu bestätigen und zur "
 "nächsten Währung oder Aktie weiterzugehen."
 
 #: ../src/import-export/binary-import/druid-commodity.c:410
 msgid ""
 "You must put values for the type, name, and abbreviation of the currency/"
 "stock."
-msgstr "Sie müssen Werte für Typ, Name, und Abkürzung der Währung oder Aktie angeben."
+msgstr ""
+"Sie müssen Werte für Typ, Name, und Abkürzung der Währung oder Aktie angeben."
 
 #: ../src/import-export/binary-import/druid-commodity.c:421
 #: ../src/import-export/qif-import/druid-qif-import.c:1396
@@ -12085,14 +11925,17 @@ msgstr ""
 #: ../src/import-export/hbci/druid-hbci-utils.c:158
 #, c-format
 msgid "The file %s does not exist. Would you like to create it now?"
-msgstr "Die Datei \"%s\" existiert noch nicht. Möchten Sie sie jetzt erstellen?"
+msgstr ""
+"Die Datei \"%s\" existiert noch nicht. Möchten Sie sie jetzt erstellen?"
 
 #: ../src/import-export/hbci/druid-hbci-utils.c:171
 #, c-format
 msgid ""
 "The directory for file %s does not exist. Please choose another place for "
 "this file."
-msgstr "Das Verzeichnis für Datei \"%s\" existiert nicht. Bitte wählen Sie einen anderen Ort für diese Datei."
+msgstr ""
+"Das Verzeichnis für Datei \"%s\" existiert nicht. Bitte wählen Sie einen "
+"anderen Ort für diese Datei."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:1
 msgid "(filled in automatically)"
@@ -12576,7 +12419,9 @@ msgstr ""
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times. Your chip card is "
 "therefore destroyed. Aborting."
-msgstr "Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist damit leider unbrauchbar geworden. Aktion wird abgebrochen."
+msgstr ""
+"Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist damit "
+"leider unbrauchbar geworden. Aktion wird abgebrochen."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:310
 msgid ""
@@ -12713,15 +12558,14 @@ msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
 #: ../src/import-export/import-commodity-matcher.c:114
-#, fuzzy
 msgid ""
 "Please select a commodity to match the following exchange specific code. "
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
 msgstr ""
-"Bitte wählen Sie eine Währung/Aktie, die zum folgenden Aktiencode\n"
-"passt.  Achtung: Der Aktiencode der ausgewählten Währung/Aktie wird\n"
-"anschließend überschrieben.\n"
+"Bitte wählen Sie eine Währung/Aktie, die zum folgenden Aktiencode passt.  "
+"Achtung: Der Aktiencode der ausgewählten Währung/Aktie wird anschließend "
+"überschrieben."
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
@@ -12928,50 +12772,41 @@ msgstr "QIF-Datei auswählen"
 
 #. stay here if no file specified
 #: ../src/import-export/qif-import/druid-qif-import.c:450
-#, fuzzy
 msgid "Please select a file to load."
-msgstr "Sie müssen eine Datei angeben, die geladen werden soll\n"
+msgstr "Sie müssen eine Datei angeben, die geladen werden soll"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:456
-#, fuzzy
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
-"Datei nicht gefunden oder Zugriffsberechtigung liegt nicht vor. \n"
-"Bitte wählen Sie eine andere Datei."
+"Datei nicht gefunden oder Zugriffsberechtigung liegt nicht vor. Bitte wählen "
+"Sie eine andere Datei."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:468
-#, fuzzy
 msgid "That QIF file is already loaded. Please select another file."
-msgstr ""
-"Diese QIF Datei ist bereits geladen.\n"
-"Bitte wählen Sie eine andere."
+msgstr "Diese QIF Datei ist bereits geladen. Bitte wählen Sie eine andere."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:495
-#, fuzzy, c-format
+#, c-format
 msgid "QIF file load warning: %s"
-msgstr ""
-"Warnung beim Laden der QIF Datei\n"
-"%s"
+msgstr "Warnung beim Laden der QIF Datei: %s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:502
 msgid "An error occurred while loading the QIF file."
 msgstr "Beim Laden der QIF Datei ist ein Fehler aufgetreten."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:510
-#, fuzzy, c-format
+#, c-format
 msgid "QIF file load failed: %s"
-msgstr "Fehler beim Laden der Qif-Datei:%s"
+msgstr "Fehler beim Laden der QIF-Datei:%s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:568
 msgid "An error occurred while parsing the QIF file."
 msgstr "Beim Verarbeiten der QIF Datei ist ein Fehler aufgetreten."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:578
-#, fuzzy, c-format
+#, c-format
 msgid "QIF file parse failed: %s"
-msgstr ""
-"QIF-Datei Analyse fehlerhaft:\n"
-"%s"
+msgstr "QIF-Datei Analyse fehlerhaft: %s"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:810
 msgid "You must enter an account name."
@@ -13588,55 +13423,47 @@ msgid "Use bayesian matching."
 msgstr "Bayes-Algorithmus verwenden."
 
 #: ../src/register/ledger-core/split-register.c:420
-#, fuzzy
 msgid "Save transaction before duplicating?"
-msgstr "Importierte Buchungen mit Duplikaten"
+msgstr ""
 
 #: ../src/register/ledger-core/split-register.c:422
-#, fuzzy
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
-msgstr ""
-"Die aktuelle Buchungsvorlage wurde verändert.\n"
-"Soll sie gespeichert werden?"
+msgstr "Die aktuelle Buchung wurde geändert. Möchten Sie vor dem Kopieren die Änderungen in der Buchung speichern, oder möchten Sie abbrechen?"
 
 #: ../src/register/ledger-core/split-register.c:729
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
 msgstr ""
-"Sie sind dabei, einen bestehenden Buchungsteil zu überschreiben.\n"
-"Sind Sie sicher, daß Sie das möchten?"
+"Sie sind dabei, einen bestehenden Buchungsteil zu überschreiben. Möchten Sie "
+"das wirklich?"
 
 #: ../src/register/ledger-core/split-register.c:760
-#, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
 msgstr ""
-"Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. \n"
-"Sind Sie sicher, daß Sie das möchten?"
+"Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. Möchten Sie "
+"das wirklich?"
 
 #: ../src/register/ledger-core/split-register.c:1730
 msgid "Recalculate Transaction"
-msgstr "Buchung neu kalkulieren"
+msgstr "Buchung neu berechnen"
 
 #: ../src/register/ledger-core/split-register.c:1731
-#, fuzzy
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
-"Die eingegebenen Werte für diese Buchung sind inkonsistent.\n"
-"Welchen Wert möchten Sie neu kalkuliert haben?"
+"Die eingegebenen Werte für diese Buchung passen nicht zueinander. Welcher "
+"Wert soll neu berechnet werden?"
 
 #: ../src/register/ledger-core/split-register.c:1738
 #: ../src/register/ledger-core/split-register.c:1740
-#, fuzzy
 msgid "_Shares"
-msgstr "_Anteile:"
+msgstr "_Anteile"
 
 #: ../src/register/ledger-core/split-register.c:1738
 #: ../src/register/ledger-core/split-register.c:1745
@@ -13646,14 +13473,12 @@ msgstr "Geändert"
 
 #: ../src/register/ledger-core/split-register.c:1752
 #: ../src/register/ledger-core/split-register.c:1754
-#, fuzzy
 msgid "_Value"
-msgstr "Wert"
+msgstr "_Wert"
 
 #: ../src/register/ledger-core/split-register.c:1763
-#, fuzzy
 msgid "_Recalculate"
-msgstr "Berechnen"
+msgstr "_Berechnen"
 
 #. src/app-utils/prefs.scm
 #: ../src/register/ledger-core/split-register.c:2016
@@ -13786,29 +13611,24 @@ msgid "The current transaction is not balanced."
 msgstr "Der aktuelle Buchungssatz ist nicht ausgeglichen."
 
 #: ../src/register/ledger-core/split-register-control.c:105
-#, fuzzy
 msgid "Balance it _manually"
-msgstr "Per Hand ausgleichen"
+msgstr "Per _Hand ausgleichen"
 
 #: ../src/register/ledger-core/split-register-control.c:107
-#, fuzzy
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Automatisch eine ausgleichende Buchung einfügen"
+msgstr "Automatisch eine ausgleichende Buchung _einfügen"
 
 #: ../src/register/ledger-core/split-register-control.c:112
-#, fuzzy
 msgid "Adjust current account _split total"
-msgstr "Buchungsbetrag in diesem Konto anpassen"
+msgstr "Buchungsbetrag in _diesem Konto anpassen"
 
 #: ../src/register/ledger-core/split-register-control.c:118
-#, fuzzy
 msgid "Adjust _other account split total"
-msgstr "Buchungsbetrag im anderen Konto anpassen"
+msgstr "Buchungsbetrag im _anderen Konto anpassen"
 
 #: ../src/register/ledger-core/split-register-control.c:129
-#, fuzzy
 msgid "_Rebalance"
-msgstr "Ausgleichskonto"
+msgstr "_Anpassen"
 
 #: ../src/register/ledger-core/split-register-control.c:1077
 msgid ""
@@ -13818,19 +13638,23 @@ msgstr ""
 "die Wechselkurse zu bearbeiten."
 
 #: ../src/register/ledger-core/split-register-control.c:1475
-#, fuzzy
-msgid "Save the current transaction?"
-msgstr "Aktuelle Buchung abbrechen"
+msgid "Save the changed transaction?"
+msgstr "Geänderte Buchung speichern?"
 
 #: ../src/register/ledger-core/split-register-control.c:1477
-#, fuzzy
 msgid ""
 "The current transaction has been changed.  Would you like to record the "
-"changes before moving to a new transaction, move without recording the "
-"changes, or cancel the move?"
-msgstr ""
-"Die aktuelle Buchungsvorlage wurde verändert.\n"
-"Soll sie gespeichert werden?"
+"changes before moving to a new transaction, discard the changes, or return "
+"to the changed transaction?"
+msgstr "Die aktuelle Buchung wurde verändert. Möchten Sie die Änderungen verwerfen, abbrechen und zu der aktuellen Buchung zurückkehren, oder die Änderungen in dieser Buchung speichern?"
+
+#: ../src/register/ledger-core/split-register-control.c:1490
+msgid "_Discard Changes"
+msgstr "Änderungen ver_werfen"
+
+#: ../src/register/ledger-core/split-register-control.c:1492
+msgid "_Record Changes"
+msgstr "Änderungen _speichern"
 
 #: ../src/register/ledger-core/split-register-control.c:1558
 msgid "Mark split as unreconciled?"
@@ -13845,7 +13669,6 @@ msgstr ""
 "Dies kann das nächste Abgleichen erschweren.  Trotzdem fortsetzen?"
 
 #: ../src/register/ledger-core/split-register-control.c:1577
-#, fuzzy
 msgid "_Unreconcile"
 msgstr "_Nicht abgeglichen"
 
@@ -13997,15 +13820,15 @@ msgstr ""
 "Einzelheiten sehen zu können."
 
 #: ../src/register/ledger-core/split-register-model.c:1789
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
 "only because:\n"
 "\n"
 "'%s'"
 msgstr ""
-"Diese Buchung kann nicht verändert oder gelöscht werden. Diese Buchung\n"
-"ist als Nur-Lesen markiert mit folgender Begründung:\n"
+"Diese Buchung kann nicht verändert oder gelöscht werden. Diese Buchung ist "
+"als Nur-Lesen markiert mit folgender Begründung:\n"
 "\n"
 "\"%s\""
 
@@ -14169,13 +13992,9 @@ msgid "You cannot save to that file."
 msgstr "Sie können nicht in diese Datei speichern."
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1281
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open the file %s. The error is: %s"
-msgstr ""
-"Kann Datei\n"
-"     %s\n"
-" nicht öffnen.\n"
-"%s"
+msgstr "Kann Datei %s nicht öffnen. Fehlermeldung: %s"
 
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1303
 msgid "There are no options for this report."
