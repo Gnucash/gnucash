@@ -133,7 +133,7 @@ AM_PATH_GLIB_2_0(2.4.0,,AC_MSG_ERROR([
 *** GLIB >= 2.4 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
-	gthread gobject)
+	gthread gobject gmodule)
 
 if test ${no_glib}x = yesx
 then
