@@ -298,7 +298,7 @@ show_session_error (QofBackendError io_error,
       break;
 
     case ERR_BACKEND_DATA_CORRUPT:
-      fmt = _("The file/URL %s"
+      fmt = _("The file/URL %s "
               "does not contain GnuCash data or the data is corrupt.");
       gnc_error_dialog (parent, fmt, newfile);
       break;
