@@ -1472,11 +1472,11 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
    * changed. See what the user wants to do. */
   {
     GtkWidget *dialog, *window;
-    const char *title = _("Save the current transaction?");
+    const char *title = _("Save the changed transaction?");
     const char *message =
       _("The current transaction has been changed.  Would you like to "
-	"record the changes before moving to a new transaction, move "
-	"without recording the changes, or cancel the move?");
+	"record the changes before moving to a new transaction, discard the "
+	"changes, or return to the changed transaction?");
 
     window = gnc_split_register_get_parent(reg);
     dialog = gtk_message_dialog_new(GTK_WINDOW(window),
@@ -1487,9 +1487,9 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					     "%s", message);
     gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			   _("_Don't Record"), GTK_RESPONSE_REJECT,
+			   _("_Discard Changes"), GTK_RESPONSE_REJECT,
 			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			   _("_Record"), GTK_RESPONSE_ACCEPT,
+			   _("_Record Changes"), GTK_RESPONSE_ACCEPT,
 			   NULL);
     response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
     gtk_widget_destroy(dialog);
