@@ -937,17 +937,17 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
 	  xaccSplitSetAction (split, type);
 
-	  /* Need to insert this split into the account before
+	  /* Need to insert this split into the account AND txn before
 	   * we set the Base Value.  Otherwise SetBaseValue complains
-	   * that we don't have an account.
+	   * that we don't have an account and fails to set the value.
 	   */
 	  xaccAccountBeginEdit (this_acc);
 	  xaccAccountInsertSplit (this_acc, split);
 	  xaccAccountCommitEdit (this_acc);
+	  xaccTransAppendSplit (txn, split);
 	  xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (value)
 					 : value),
 				 invoice->currency);
-	  xaccTransAppendSplit (txn, split);
 	}
 
 	/* If there is a credit-card account, and this is a CCard
@@ -969,9 +969,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 	  xaccAccountBeginEdit (ccard_acct);
 	  xaccAccountInsertSplit (ccard_acct, split);
 	  xaccAccountCommitEdit (ccard_acct);
+	  xaccTransAppendSplit (txn, split);
 	  xaccSplitSetBaseValue (split, (reverse ? value : gnc_numeric_neg (value)),
 				 invoice->currency);
-	  xaccTransAppendSplit (txn, split);
 	  
 	} else
 	  total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
@@ -1005,10 +1005,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountBeginEdit (acc_val->account);
     xaccAccountInsertSplit (acc_val->account, split);
     xaccAccountCommitEdit (acc_val->account);
+    xaccTransAppendSplit (txn, split);
     xaccSplitSetBaseValue (split, (reverse ? gnc_numeric_neg (acc_val->value)
 				   : acc_val->value),
 			   invoice->currency);
-    xaccTransAppendSplit (txn, split);
   }
 
   /* If there is a ccard account, we may have an additional "to_card" payment.
@@ -1024,10 +1024,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountBeginEdit (ccard_acct);
     xaccAccountInsertSplit (ccard_acct, split);
     xaccAccountCommitEdit (ccard_acct);
+    xaccTransAppendSplit (txn, split);
     xaccSplitSetBaseValue (split, (reverse ? invoice->to_charge_amount :
 				   gnc_numeric_neg(invoice->to_charge_amount)),
 			   invoice->currency);
-    xaccTransAppendSplit (txn, split);
 
     total = gnc_numeric_sub (total, invoice->to_charge_amount,
 			     GNC_DENOM_AUTO, GNC_DENOM_LCD);
@@ -1044,9 +1044,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountBeginEdit (acc);
     xaccAccountInsertSplit (acc, split);
     xaccAccountCommitEdit (acc);
+    xaccTransAppendSplit (txn, split);
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
 			   invoice->currency);
-    xaccTransAppendSplit (txn, split);
 
     /* add this split to the lot */
     gnc_lot_add_split (lot, split);
@@ -1100,9 +1100,9 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccAccountInsertSplit (acc, split);
+    xaccTransAppendSplit (t2, split);
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total),
 			   invoice->currency);
-    xaccTransAppendSplit (t2, split);
     gnc_lot_add_split (lot, split);
 
     /* And apply the pre-payment to a new lot */
@@ -1110,8 +1110,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccSplitSetMemo (split, memo2);
     xaccSplitSetAction (split, action2);
     xaccAccountInsertSplit (acc, split);
-    xaccSplitSetBaseValue (split, total, invoice->currency);
     xaccTransAppendSplit (t2, split);
+    xaccSplitSetBaseValue (split, total, invoice->currency);
     gnc_lot_add_split (lot2, split);
 
     xaccTransCommitEdit (t2);
@@ -1271,9 +1271,9 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   xaccAccountBeginEdit (xfer_acc);
   xaccAccountInsertSplit (xfer_acc, split);
   xaccAccountCommitEdit (xfer_acc);
+  xaccTransAppendSplit (txn, split);
   xaccSplitSetBaseValue (split, reverse ? amount :
 			 gnc_numeric_neg (amount), commodity);
-  xaccTransAppendSplit (txn, split);
 
   /* Now, find all "open" lots in the posting account for this
    * company and apply the payment on a FIFO basis.  Create
@@ -1331,9 +1331,9 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
     xaccSplitSetMemo (split, memo);
     xaccSplitSetAction (split, _("Payment"));
     xaccAccountInsertSplit (posted_acc, split);
+    xaccTransAppendSplit (txn, split);
     xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (split_amt) :
 			   split_amt, commodity);
-    xaccTransAppendSplit (txn, split);
     gnc_lot_add_split (lot, split);
 
     /* Now send an event for the invoice so it gets updated as paid */
@@ -1358,9 +1358,9 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
     xaccSplitSetMemo (split, memo);
     xaccSplitSetAction (split, _("Pre-Payment"));
     xaccAccountInsertSplit (posted_acc, split);
+    xaccTransAppendSplit (txn, split);
     xaccSplitSetBaseValue (split, reverse ? gnc_numeric_neg (amount) :
 			   amount, commodity);
-    xaccTransAppendSplit (txn, split);
     gnc_lot_add_split (prepay_lot, split);
   }
 

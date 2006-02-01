@@ -1,3 +1,9 @@
+2006-02-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c:
+	  Need to put the new split into the txn as well as the acct
+	  before we call xaccSplitSetBaseValue().  Fixes #325890.
+
 2006-01-31  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: include gmodule in GLIB_LIBS
