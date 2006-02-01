@@ -16,6 +16,8 @@ my @possible_files = `find src -name '*.c' -o -name '*.glade'      \\
 ## For perl files add the following:
 # -o -name '*.pl'
 
+my @skipped_files = `grep -v \# po/POTFILES.skip`;
+
 chomp(my $cwd = `pwd`);
 
 # Since we don't have any cvsignore files anymore, add patterns here
@@ -57,9 +59,13 @@ foreach my $file (@possible_files) {
   my ($name, $path) = fileparse($file);
   $path =~ s/^\.\///;
 
-  foreach my $one_ignore (@ignorepatterns) {
+  foreach my $one_ignore (@ignorepatterns, @skipped_files) {
     chomp($one_ignore);
     next unless $one_ignore;
+
+    if ($file =~ m/$one_ignore/) {
+      $ignores{$path . $name} = 1;
+    }
 
     if ($name =~ m/$one_ignore/) {
       $ignores{$path . $name} = 1;
@@ -78,7 +84,7 @@ foreach my $file (@possible_files) {
   print $path . $name . "\n";
 }
 
-# These are additionally added in any case
+# These are also added, even though they are outside of src/
 print "lib/libqof/backend/file/qsf-backend.c\n";
 print "intl-scm/guile-strings.c\n";
 print "doc/tip_of_the_day.list.in\n"
