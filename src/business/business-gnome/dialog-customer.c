@@ -832,7 +832,7 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
   return gnc_search_dialog_create (type, params, columns,
 				   q, q2, buttons, NULL,
 				   new_customer_cb, sw, free_userdata_cb,
-				   GCONF_SECTION_SEARCH);
+				   GCONF_SECTION_SEARCH, NULL);
 }
 
 GNCSearchWindow *

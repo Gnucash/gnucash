@@ -82,7 +82,12 @@ typedef struct {
  *
  * The user_data becomes the property of the search dialog and will
  * be freed via the callback when the dialog is closed.
-  */
+ *
+ * the type_label (if non-null) is the TRANSLATED string to use for
+ * the type of object being searched.  This will be put in the Title
+ * as well as into the "New" button.  If this string is NULL then
+ * the dialog will use the obj_type instead.
+ */
 GNCSearchWindow *
 gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GList *display_list,
@@ -91,7 +96,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GNCSearchResultCB result_callback,
 			  GNCSearchNewItemCB new_item_cb,
 			  gpointer user_data, GNCSearchFree free_user_data,
-			  const gchar *gconf_section);
+			  const gchar *gconf_section,
+			  const gchar *type_label);
 
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_raise (GNCSearchWindow *sw);

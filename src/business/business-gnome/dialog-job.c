@@ -590,7 +590,7 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   return gnc_search_dialog_create (type, params, columns,
 				   q, q2, buttons, NULL,
 				   new_job_cb, sw, free_userdata_cb,
-				   GCONF_SECTION_SEARCH);
+				   GCONF_SECTION_SEARCH, NULL);
 }
 
 /* Functions for widgets for job selection */

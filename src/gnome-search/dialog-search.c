@@ -88,6 +88,7 @@ struct _GNCSearchWindow {
   gboolean		allow_clear;
 
   /* What we're searching for, and how */
+  const gchar *  type_label;
   GNCIdTypeConst search_for;
   GNCSearchType	grouping;	/* Match Any, Match All */
   const QofParam * get_guid;	/* Function to GetGUID from the object */
@@ -766,7 +767,10 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   /* Set the type label */
   label = glade_xml_get_widget (xml, "type_label");
-  type_label = _(gncObjectGetTypeLabel (sw->search_for));
+  if (sw->type_label)
+    type_label = sw->type_label;
+  else
+    type_label = _(gncObjectGetTypeLabel (sw->search_for));
   gtk_label_set_text (GTK_LABEL (label), type_label);
 
   /* Set the 'add criterion' button */
@@ -899,7 +903,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GNCSearchResultCB result_callback,
 			  GNCSearchNewItemCB new_item_cb,
 			  gpointer user_data, GNCSearchFree free_cb,
-			  const gchar *gconf_section)
+			  const gchar *gconf_section,
+			  const gchar *type_label)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
@@ -923,6 +928,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->user_data = user_data;
   sw->free_cb = free_cb;
   sw->gconf_section = gconf_section;
+  sw->type_label = type_label;
 
   /* Grab the get_guid function */
   sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);
@@ -1067,5 +1073,5 @@ gnc_search_dialog_test (void)
 
   sw = gnc_search_dialog_create (GNC_ID_SPLIT, params, display,
 				 NULL, NULL, buttons, NULL, NULL, NULL, NULL,
-				 NULL);
+				 NULL, NULL);
 }

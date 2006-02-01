@@ -727,7 +727,7 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_employee_cb,
 				   sw, free_employee_cb,
-				   GCONF_SECTION_SEARCH);
+				   GCONF_SECTION_SEARCH, NULL);
 }
 
 GNCSearchWindow *

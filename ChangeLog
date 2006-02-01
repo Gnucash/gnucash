@@ -12,6 +12,25 @@
 	  don't re-sort on the initial setting of the date).
 	  Fixes #320566.
 
+	* src/gnome-search/dialog-search.c:
+	* src/gnome-search/dialog-search.h:
+	  Modify the gnc_search_dialog_create() API to add an optional
+	  "type label" parameter, so you can manually set the string
+	  presented to the user for what they are searching for...
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/gnome/dialog-find-transactions.c:
+	  Pass NULL into new search API parameter
+	* src/business/business-gnome/dialog-invoice.c:
+	  Modify how we call the search dialog.  Send in different
+	  sets of parameters depending on whether we're searching for
+	  a Customer Invoice, Vendor Bill, or Employee Expense Voucher.
+	  Pass in a type_label as well so the dialog can properly label
+	  the "new" button.  This fixes the UI Bug #117354.
+
 2006-01-31  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: include gmodule in GLIB_LIBS

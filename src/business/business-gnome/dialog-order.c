@@ -883,7 +883,8 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_order_cb,
-				   sw, free_order_cb, GCONF_SECTION_SEARCH);
+				   sw, free_order_cb, GCONF_SECTION_SEARCH,
+				   NULL);
 }
 
 GNCSearchWindow *
