@@ -432,6 +432,14 @@ void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry)
   mark_invoice (bill);
 }
 
+void gncInvoiceSortEntries (GncInvoice *invoice)
+{
+  if (!invoice) return;
+  invoice->entries = g_list_sort(invoice->entries,
+				 (GCompareFunc)gncEntryCompare);
+  mark_invoice(invoice);
+}
+
 /* ================================================================== */
 /* Get Functions */
 

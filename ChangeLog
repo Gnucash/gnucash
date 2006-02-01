@@ -4,6 +4,14 @@
 	  Need to put the new split into the txn as well as the acct
 	  before we call xaccSplitSetBaseValue().  Fixes #325890.
 
+	* src/business/business-core/gncInvoice.[ch]:
+	  Add new API: gncInvoiceSortEntries()
+	* src/business/business-core/gncEntry.c:
+	  re-sort the parent when the entry date changes.
+	  Only re-sort when the existing date is non-zero (i.e.
+	  don't re-sort on the initial setting of the date).
+	  Fixes #320566.
+
 2006-01-31  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: include gmodule in GLIB_LIBS

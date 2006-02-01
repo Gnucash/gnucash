@@ -266,12 +266,25 @@ gncEntryObtainTwin (GncEntry *from, QofBook *book)
 
 void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
+  gboolean first_date = FALSE;
+  Timespec zero_time = { 0, 0 };
+
   if (!entry) return;
   if (timespec_equal (&entry->date, &date)) return;
+  if (timespec_equal (&entry->date, &zero_time))
+    first_date = TRUE;
   gncEntryBeginEdit (entry);
   entry->date = date;
   mark_entry (entry);
   gncEntryCommitEdit (entry);
+
+  /* Don't re-sort the first time we set the date on this entry */
+  if (!first_date) {
+    if (entry->invoice)
+      gncInvoiceSortEntries(entry->invoice);
+    if (entry->bill)
+      gncInvoiceSortEntries(entry->bill);
+  }
 }
 
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date)

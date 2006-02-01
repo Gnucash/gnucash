@@ -76,6 +76,11 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
+/** Call this function when an Entry is changed and you want to
+    re-sort the list of entries
+*/
+void gncInvoiceSortEntries (GncInvoice *invoice);
+
 /** @name Get Functions 
  @{ */
 const char * gncInvoiceGetID (GncInvoice *invoice);
