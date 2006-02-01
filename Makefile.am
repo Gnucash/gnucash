@@ -50,6 +50,7 @@ EXTRA_DIST = \
   macros/gnome-guile-checks.m4 \
   macros/legacy_macros.m4 \
   po/POTFILES.in \
+  po/POTFILES.skip \
   po/README \
   po/glossary/da.po \
   po/glossary/de.po \
