@@ -152,7 +152,15 @@ distcleancheck_listfiles = \
 
 dist-hook: po/POTFILES.in
 
-distcheck-hook: po/POTFILES.in
+distcheck-hook:
+	@e=''; \
+	for X in `grep -v \# ${distdir}/po/POTFILES.in` ; do \
+		if [ ! -f ${distdir}/$$X ] ; then \
+			echo $$X " is in POTFILES.in but not in the dist."; \
+			e='yes'; \
+		fi; \
+	done; \
+	if test "$$e" = "yes" ; then exit 1; fi;
 
 distclean-local:
 
