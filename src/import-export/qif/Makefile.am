@@ -1,4 +1,5 @@
-SUBDIRS = . test
+#SUBDIRS = . test
+DIST_SUBDIRS = test
 
 pkglib_LTLIBRARIES=libgncmod-qif.la
 
