@@ -92,6 +92,7 @@ make-gnucash-patch: make-gnucash-patch.in Makefile
 make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
+            -e 's:@-SRCDIR-@:${srcdir}:g' \
             -e 's:@-PERL-@:${PERL}:g'
 	chmod +x $@.tmp
 	mv $@.tmp $@
