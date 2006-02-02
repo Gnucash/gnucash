@@ -47,3 +47,4 @@ uidir = $(GNC_UI_DIR)
 ui_DATA = \
 	gnc-plugin-mt940-ui.xml
 
+EXTRA_DIST = $(ui_DATA)
