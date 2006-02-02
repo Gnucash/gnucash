@@ -1,4 +1,5 @@
-# These are files that we don't want to translate.
+# These are files that we don't want to translate, because they are
+# not distributed.
 src/network-utils/gnc-gpg.c
 src/import-export/csv/gnc-csv2glist.c
 src/business/business-core/gncBusPeriod.c

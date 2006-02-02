@@ -161,6 +161,12 @@ distcheck-hook:
 			e='yes'; \
 		fi; \
 	done; \
+	for X in `grep -v \# ${distdir}/po/POTFILES.skip` ; do \
+		if [ -f ${distdir}/$$X ] ; then \
+			echo $$X " is in POTFILES.skip but also in the dist.";\
+			e='yes'; \
+		fi; \
+	done; \
 	if test "$$e" = "yes" ; then exit 1; fi;
 
 distclean-local:
