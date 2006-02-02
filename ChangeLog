@@ -1,3 +1,8 @@
+2006-02-02  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/io-gncxml-v2.c:
+	  Specify the output xml encoding as utf8.
+
 2006-02-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c:

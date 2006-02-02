@@ -1102,7 +1102,7 @@ do_write_namespace_cb (const char *type, gpointer data_p, gpointer file_p)
 static void
 write_v2_header (FILE *out)
 {
-    fprintf(out, "<?xml version=\"1.0\"?>\n");
+    fprintf(out, "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
     fprintf(out, "<" GNC_V2_STRING);
     
     gnc_xml2_write_namespace_decl (out, "gnc");
