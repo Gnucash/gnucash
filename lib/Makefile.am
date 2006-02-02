@@ -10,8 +10,6 @@ endif
 
 if USE_LIBQOF
 SUBDIRS += libqof
-else
-SUBDIRS +=
 endif
 
 EXTRA_DIST = README
