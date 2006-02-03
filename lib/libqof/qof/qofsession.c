@@ -888,7 +888,13 @@ qof_session_load_backend(QofSession * session, char * access_method)
 				continue;
 			}
 			/* Use the providers creation callback */
-      	    session->backend = (*(prov->backend_new))();
+                        session->backend = (*(prov->backend_new))();
+                        /* Initialize be configuration. */
+                        {
+                                KvpFrame *config;
+                                config = qof_backend_get_config(session->backend);
+                                qof_backend_load_config(session->backend, config);
+                        }
 			session->backend->provider = prov;
 			/* Tell the books about the backend that they'll be using. */
 			for (node=session->books; node; node=node->next)

@@ -57,6 +57,7 @@
 #include "io-gncxml-v2.h"
 #include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
+#include "gnc-gconf-utils.h"
 
 #define GNC_BE_DAYS "file_retention_days"
 #define GNC_BE_ZIP  "file_compression"
@@ -66,49 +67,48 @@ static QofLogModule log_module = GNC_MOD_BACKEND;
 static gint file_retention_days = 0;
 static gboolean file_compression = FALSE;
 
-static void option_cb (QofBackendOption *option, gpointer data)
-{
-	if(0 == safe_strcmp(GNC_BE_DAYS, option->option_name)) {
-		file_retention_days = *(gint*)option->value;
-	}
-	if(0 == safe_strcmp(GNC_BE_ZIP, option->option_name)) {
-		file_compression = (gboolean)qof_util_bool_to_int(option->value);
-	}
-}
-
 /* lookup the options and modify the frame */
 static void
 gnc_file_be_set_config(QofBackend *be, KvpFrame *config)
 {
-	qof_backend_option_foreach(config, option_cb, NULL);
+     gchar *temp;
+     g_return_if_fail(be != NULL);
+     g_return_if_fail(config != NULL);
+     
+     file_retention_days = (gint)kvp_frame_get_gint64(config, GNC_BE_DAYS);
+     temp = kvp_frame_get_string(config, GNC_BE_ZIP);
+     file_compression = (gboolean)qof_util_bool_to_int(temp);
 }
 
 static KvpFrame*
 gnc_file_be_get_config(QofBackend *be)
 {
-	QofBackendOption *option;
+     QofBackendOption *option;
+     gboolean compression;
 
-	qof_backend_prepare_frame(be);
-	option = g_new0(QofBackendOption, 1);
-	option->option_name = GNC_BE_DAYS;
-	option->description = _("Number of days to retain old files");
-	option->tooltip = _("GnuCash keeps backups of old files. "
-		"This setting specifies how long each is kept.");
-	option->type = KVP_TYPE_GINT64;
-	option->value = (gpointer)&file_retention_days;
-	qof_backend_prepare_option(be, option);
-	g_free(option);
-	option = g_new0(QofBackendOption, 1);
-	option->option_name = GNC_BE_ZIP;
-	option->description = _("Compress output files?");
-	option->tooltip = _("GnuCash can save data files with compression."
-		" Enable this option to compress your data file. ");
-	option->type = KVP_TYPE_STRING;
-	if(file_compression) { option->value = (gpointer)"TRUE"; }
-	else { option->value = (gpointer)"FALSE"; }
-	qof_backend_prepare_option(be, option);
-	g_free(option);
-	return qof_backend_complete_frame(be);
+     qof_backend_prepare_frame(be);
+     option = g_new0(QofBackendOption, 1);
+     option->option_name = GNC_BE_DAYS;
+     option->description = _("Number of days to retain old files");
+     option->tooltip = _("GnuCash keeps backups of old files. "
+                         "This setting specifies how long each is kept.");
+     option->type = KVP_TYPE_GINT64;
+     option->value = GINT_TO_POINTER((int)gnc_gconf_get_float("general", "retain_days", NULL));
+     qof_backend_prepare_option(be, option);
+     g_free(option);
+
+     option = g_new0(QofBackendOption, 1);
+     option->option_name = GNC_BE_ZIP;
+     option->description = _("Compress output files?");
+     option->tooltip = _("GnuCash can save data files with compression."
+                         " Enable this option to compress your data file.");
+     option->type = KVP_TYPE_GINT64;
+     compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+     option->value = GINT_TO_POINTER(file_compression ? TRUE : FALSE);
+     qof_backend_prepare_option(be, option);
+     g_free(option);
+
+     return qof_backend_complete_frame(be);
 }
 
 /* ================================================================= */
@@ -425,15 +425,16 @@ is_gzipped_file(const gchar *name)
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
-	if(gnc_is_xml_data_file_v2(path)) {
-        return GNC_BOOK_XML2_FILE;
-    } else if(gnc_is_xml_data_file(path)) {
-        return GNC_BOOK_XML1_FILE;
-    } else if(is_gzipped_file(path)) {
-        return GNC_BOOK_XML2_FILE;
-	}
-	else if(gnc_is_bin_file(path)) { return GNC_BOOK_BIN_FILE; }
-	return GNC_BOOK_NOT_OURS;
+  if (gnc_is_xml_data_file_v2(path)) {
+    return GNC_BOOK_XML2_FILE;
+  } else if (gnc_is_xml_data_file(path)) {
+    return GNC_BOOK_XML1_FILE;
+  } else if (is_gzipped_file(path)) {
+    return GNC_BOOK_XML2_FILE;
+  } else if (gnc_is_bin_file(path)) {
+    return GNC_BOOK_BIN_FILE;
+  }
+  return GNC_BOOK_NOT_OURS;
 }
 
 static gboolean
@@ -728,13 +729,13 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 file_time = mktime(&file_tm);
                 days = (int)(difftime(now, file_time) / 86400);
 
-                /* Make sure this file actually has a date before unlinking */
-                if (res && res != name+pathlen+1 &&
-                    /* We consumed some but not all of the filename */
-		    !strcmp(res, ".xac") &&
-                    file_time > 0 &&
-                    /* we actually have a reasonable time and it is old enough */
-                    days > file_retention_days) 
+                
+                if (res
+                    && res != name+pathlen+1
+                    && (strcmp(res, ".xac") == 0
+                        || strcmp(res, ".log") == 0)
+                    && file_time > 0
+                    && days > file_retention_days)
                 {
                     PINFO ("unlink stale (%d days old) file: %s", days, name);
                     unlink(name);
@@ -877,7 +878,7 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
     gboolean rc;
     FileBackend *be = (FileBackend *) bend;
 
-	error = ERR_BACKEND_NO_ERR;
+    error = ERR_BACKEND_NO_ERR;
     be->primary_book = book;
 
     switch (gnc_file_be_determine_file_type(be->fullpath))
