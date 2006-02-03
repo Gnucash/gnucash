@@ -519,10 +519,11 @@ gnc_file_new (void)
 
   gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
-  gnc_book_opened ();
-
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
+
+  /* Call this after re-enabling events. */
+  gnc_book_opened ();
 }
 
 gboolean
@@ -773,6 +774,7 @@ gnc_post_file_open (const char * filename)
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();
 
+    /* Call this after re-enabling events. */
     gnc_book_opened ();
 
     return FALSE;
@@ -781,8 +783,6 @@ gnc_post_file_open (const char * filename)
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   qof_session_set_current_session(new_session);
-
-  gnc_book_opened ();
 
   /* --------------- END CORE SESSION CODE -------------- */
 
@@ -793,6 +793,9 @@ gnc_post_file_open (const char * filename)
 
   gnc_engine_resume_events ();
   gnc_gui_refresh_all ();
+
+  /* Call this after re-enabling events. */
+  gnc_book_opened ();
 
   return TRUE;
 }

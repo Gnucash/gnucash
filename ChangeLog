@@ -1,3 +1,10 @@
+2006-02-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-file.c: Re-enable events before processing
+	the book-opened hook.  Solves some strange problems in the account
+	tree which were caused by the Orphan account being created during
+	the callbacks, but no event being sent to the account tree model.
+
 2006-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/io-gncxml-v2.c:
