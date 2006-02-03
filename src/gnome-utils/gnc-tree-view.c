@@ -121,6 +121,10 @@ typedef struct GncTreeViewPrivate
   GtkTooltips       *title_tips;
   GSList            *default_visible;
 
+  /*  Spacer column */
+  GtkTreeViewColumn *spacer_column;
+  GtkTreeViewColumn *selection_column;
+
   /* Column selection menu related values */
   GtkTreeViewColumn *column_menu_column;
   GtkWidget         *column_menu;
@@ -271,6 +275,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 	       "fixed-width", 1,
 	       "expand", TRUE,
 	       (gchar *)NULL);
+  priv->spacer_column = column;
 
   /* Create the last column which contains the column selection
    * widget.  gnc_tree_view_add_text_column will do most of the
@@ -286,6 +291,7 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 	       "widget", icon,
 	       "fixed-width", requisition.width + 10,
 	       (gchar *)NULL);
+  priv->selection_column = column;
   g_signal_connect(G_OBJECT(column), "clicked",
 		   G_CALLBACK (gnc_tree_view_select_column_cb),
 		   view);
@@ -1518,6 +1524,52 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 		 NULL, NULL, 0, gtk_get_current_event_time());
 }
 
+
+void gnc_tree_view_expand_columns (GncTreeView *view,
+				   gchar *first_column_name,
+				   ...)
+{
+  GncTreeViewPrivate *priv;
+  GtkTreeViewColumn *column;
+  gboolean hide_spacer;
+  GList *columns, *tmp;
+  gchar *name, *pref_name;
+  va_list args;
+
+  g_return_if_fail (GNC_IS_TREE_VIEW (view));
+  ENTER(" ");
+  va_start (args, first_column_name);
+  priv = GNC_TREE_VIEW_GET_PRIVATE (view);
+  name = first_column_name;
+  hide_spacer = FALSE;
+
+  /* First disable the expand property on all (non-infrastructure) columns. */
+  columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
+  for (tmp = columns; tmp; tmp = g_list_next(tmp)) {
+    column = tmp->data;
+    pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
+    if (pref_name != NULL)
+      gtk_tree_view_column_set_expand(column, FALSE);
+  }
+  g_list_free(columns);
+
+  /* Now enable it on the requested columns. */
+  while (name != NULL) {
+    column = view_column_find_by_name (view, name);
+    if (column != NULL) {
+      gtk_tree_view_column_set_expand(column, TRUE);
+      hide_spacer = TRUE;
+    }
+    name = va_arg (args, gchar*);
+  }
+  va_end (args);
+
+  gtk_tree_view_column_set_visible (priv->spacer_column, !hide_spacer);
+  gtk_tree_view_column_set_visible (priv->selection_column, !hide_spacer);
+
+  LEAVE(" ");
+}
+
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
  *  "gconf-section" property has not been set.
@@ -1611,9 +1663,11 @@ gnc_tree_view_configure_columns (GncTreeView *view,
 				 ...)
 {
   GncTreeViewPrivate *priv;
+  GtkTreeViewColumn *column;
   GSList *slist;
   GList *columns;
   gchar *name;
+  gboolean hide_spacer;
   va_list args;
 
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
@@ -1645,6 +1699,15 @@ gnc_tree_view_configure_columns (GncTreeView *view,
 
   if (priv->gconf_section)
     priv->seen_gconf_visibility = TRUE;
+
+  /* If only the first column is visible, hide the spacer and make that
+   * column expand. */
+  hide_spacer = (first_column_name == NULL);
+  column = gtk_tree_view_get_column(GTK_TREE_VIEW(view), 0);
+  gtk_tree_view_column_set_expand(column, hide_spacer);
+  gtk_tree_view_column_set_visible(priv->spacer_column, !hide_spacer);
+  gtk_tree_view_column_set_visible(priv->selection_column, !hide_spacer);
+
   LEAVE(" ");
 }
 

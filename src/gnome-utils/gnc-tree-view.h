@@ -336,6 +336,10 @@ void gnc_tree_view_set_gconf_section (GncTreeView *view,
  */
 const gchar *gnc_tree_view_get_gconf_section (GncTreeView *view);
 
+void gnc_tree_view_expand_columns (GncTreeView *view,
+				   gchar *first_column_name,
+				   ...);
+
 /** This function is called to set the "show-column-menu" property on
  *  this view.  This function has no visible effect if the
  *  "gconf-section" property has not been set.
