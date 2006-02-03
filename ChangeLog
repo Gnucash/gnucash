@@ -1,5 +1,8 @@
 2006-02-02  David Hampton  <hampton@employees.org>
 
+	* src/register/register-core/numcell.c: Don't call g_utf8_strlen
+	with a NULL pointer.  Fixes 329556.
+
 	* src/gnome-utils/gnc-tree-model-commodity.c:
 	* src/gnome-utils/gnc-tree-model-account.c:
 	* src/gnome-utils/gnc-tree-model-price.c: Better handling in the
