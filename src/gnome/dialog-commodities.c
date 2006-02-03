@@ -48,6 +48,7 @@
 typedef struct
 {
   GtkWidget * dialog;
+  QofBook *book;
 
   GncTreeViewCommodity * commodity_tree;
   GtkWidget * edit_button;
@@ -88,7 +89,6 @@ edit_clicked (CommoditiesDialog *cd)
 static void
 remove_clicked (CommoditiesDialog *cd)
 {
-  QofBook *book;
   GNCPriceDB *pdb;
   GList *node;
   GList *prices;
@@ -131,9 +131,9 @@ remove_clicked (CommoditiesDialog *cd)
     g_list_free (accounts);
     return;
   }
+  g_list_free (accounts);
 
-  book = xaccGroupGetBook (xaccAccountGetRoot (accounts->data));
-  pdb = gnc_pricedb_get_db (book);
+  pdb = gnc_pricedb_get_db (cd->book);
   prices = gnc_pricedb_get_prices(pdb, commodity, NULL);
   if (prices)
   {
@@ -175,7 +175,6 @@ remove_clicked (CommoditiesDialog *cd)
   }
 
   gnc_price_list_destroy(prices);
-  g_list_free (accounts);
   gnc_gui_refresh_all ();
 }
 
@@ -288,6 +287,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   dialog = glade_xml_get_widget (xml, "Commodities Dialog");
 
   cd->dialog = dialog;
+  cd->book = gnc_get_current_book();
   cd->show_currencies = gnc_gconf_get_bool(GCONF_SECTION, "include_iso", NULL);
   
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, cd);
@@ -303,7 +303,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   /* commodity tree */
     
     scrolled_window = glade_xml_get_widget (xml, "commodity_list_window");
-    view = gnc_tree_view_commodity_new(gnc_get_current_book (),
+    view = gnc_tree_view_commodity_new(cd->book,
 				       "gconf-section", GCONF_SECTION,
 				       "show-column-menu", TRUE,
 				       NULL);
