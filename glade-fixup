@@ -19,4 +19,5 @@ find ${SEARCHDIRS} -name \*.glade | xargs \
          -e '/name="ellipsize"/d' \
          -e '/name="width_chars"/d' \
          -e '/name="single_line_mode"/d' \
+         -e '/name="urgency_hint"/d' \
          -e '/name="angle"/d'
