@@ -1407,6 +1407,7 @@ gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
 
   if (gtk_tree_path_up (path)) {
     if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
+      gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
       gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
   }
 

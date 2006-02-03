@@ -1030,12 +1030,60 @@ typedef struct _remove_data {
 
 static GSList *pending_removals = NULL;
 
+/** This function performs updating to the model after an commodity
+ *  has been added.  The parent entry needs to be tapped on the
+ *  shoulder so that it can correctly update the disclosure triangle
+ *  (first added child) or possibly rebuild its child list of that
+ *  level of accounts is visible.
+ *
+ *  @internal
+ *
+ *  @param model The commodity tree model containing the commodity
+ *  that has been added.
+ *
+ *  @param path The path to the newly added item.
+ */
+static void
+gnc_tree_model_commodity_path_added (GncTreeModelCommodity *model,
+				     GtkTreeIter *iter)
+{
+  gnc_commodity_namespace *namespace;
+  GtkTreePath *path;
+  GtkTreeIter ns_iter;
+  GList *list;
+
+  ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(iter));
+
+  if (iter->user_data == ITER_IS_COMMODITY) {
+    /* Reach out and touch the namespace first */
+    gnc_tree_model_commodity_iter_parent (GTK_TREE_MODEL(model), &ns_iter, iter);
+    namespace = gnc_tree_model_commodity_get_namespace (model, &ns_iter);
+    list = gnc_commodity_namespace_get_commodity_list(namespace);
+    if (g_list_length(list) == 1) {
+      path = gnc_tree_model_commodity_get_path (GTK_TREE_MODEL(model), &ns_iter);
+      gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &ns_iter);
+      gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &ns_iter);
+      gtk_tree_path_free(path);
+    }
+  }
+
+  /* Now for either namespace or commodity */
+  path = gnc_tree_model_commodity_get_path (GTK_TREE_MODEL(model), iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, iter);
+  gtk_tree_path_free(path);
+
+  do {
+    model->stamp++;
+  } while (model->stamp == 0);
+  LEAVE(" ");
+}
+
+
 /** This function performs common updating to the model after an
- *  commodity has been added or removed.  The parent entry needs to be
- *  tapped on the shoulder so that it can correctly update the
- *  disclosure triangle (first added child/last removed child) or
- *  possibly rebuild its child list of that level of accounts is
- *  visible.
+ *  commodity has been removed.  The parent entry needs to be tapped
+ *  on the shoulder so that it can correctly update the disclosure
+ *  triangle (last removed child) or possibly rebuild its child list
+ *  of that level of accounts is visible.
  *
  *  @internal
  *
@@ -1046,17 +1094,33 @@ static GSList *pending_removals = NULL;
  *  item.
  */
 static void
-gnc_tree_model_commodity_path_changed (GncTreeModelCommodity *model,
+gnc_tree_model_commodity_path_deleted (GncTreeModelCommodity *model,
 				       GtkTreePath *path)
 {
+  gnc_commodity_namespace *namespace;
   GtkTreeIter iter;
+  GList *list;
+  gint depth;
 
   debug_path(ENTER, path);
-  if (gtk_tree_path_up (path) && gtk_tree_path_get_depth (path) > 0) {
+
+  depth = gtk_tree_path_get_depth(path);
+  if (depth == 2) {
+    /* It seems sufficient to tell the model that the parent row
+     * changed. This appears to force a reload of all its child rows,
+     * which handles removing the now gone commodity. */
+    gtk_tree_path_up (path);
+    gnc_tree_model_commodity_get_iter (GTK_TREE_MODEL(model), &iter, path);
     debug_path(DEBUG, path);
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
     DEBUG("iter %s", iter_to_string(&iter));
     gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+    namespace = gnc_tree_model_commodity_get_namespace (model, &iter);
+    if (namespace) {
+      list = gnc_commodity_namespace_get_commodity_list(namespace);
+      if (g_list_length(list) == 0) {
+	 gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
+      }
+    }
   }
 
   do {
@@ -1094,7 +1158,7 @@ gnc_tree_model_commodity_do_deletions (gpointer unused)
     pending_removals = g_slist_delete_link (pending_removals, iter);
 
     gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
-    gnc_tree_model_commodity_path_changed (data->model, data->path);
+    gnc_tree_model_commodity_path_deleted (data->model, data->path);
     gtk_tree_path_free(data->path);
     g_free(data);
   }
@@ -1181,10 +1245,7 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add %s", name);
-	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-	  gnc_tree_model_commodity_path_changed (model, path);
-	  gtk_tree_path_free(path);
+	  gnc_tree_model_commodity_path_added (model, &iter);
 	  break;
 
 	 case GNC_EVENT_REMOVE:
@@ -1211,11 +1272,6 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
 	  if (path == NULL) {
 	    LEAVE("not in model");
-	    return;
-	  }
-	  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
-	    gtk_tree_path_free(path);
-	    LEAVE("can't find iter for path");
 	    return;
 	  }
 	  gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);

@@ -1325,54 +1325,31 @@ static GSList *pending_removals = NULL;
  */
 static void
 gnc_tree_model_price_path_added (GncTreeModelPrice *model,
-				 GtkTreePath *path)
+				 GtkTreeIter *iter)
 {
-  GtkTreeIter iter;
-  GtkTreePath *copy;
+  GtkTreePath *path, *tmp_path;
+  GtkTreeIter tmp_iter;
+  gint *indices;
+  gint depth, i;
 
-  /* Update the commodity */
-  debug_path(ENTER, path);
-#if AIEEE
-  do {
-    gtk_tree_path_up (path);
-    debug_path(DEBUG, path);
-    gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-    DEBUG("iter %s", iter_to_string(model, &iter));
-    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-  } while (gtk_tree_path_get_depth(path) > 1);
-#endif
-#if UPDATE_ROOT_ONLY
-  while (gtk_tree_path_get_depth(path) != 1)
-    gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-#endif
-#ifdef IM_FUCKED
-  gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-#endif
+  ENTER("model %p, iter (%p)%s", model, iter, iter_to_string(model, iter));
+  path = gnc_tree_model_price_get_path (GTK_TREE_MODEL(model), iter);
 
-  /* Poke the namespace first */
-  copy = gtk_tree_path_copy (path);
-  while (gtk_tree_path_get_depth(copy) != 1)
-    gtk_tree_path_up (copy);
-  debug_path(DEBUG, copy);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, copy);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), copy, &iter);
-  gtk_tree_path_free(copy);
-
-  /* Now poke the commodity */
-  gtk_tree_path_up (path);
-  debug_path(DEBUG, path);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path);
-  DEBUG("iter %s", iter_to_string(model, &iter));
-  gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+  /* Tag all the parent nodes as changed. */
+  depth = gtk_tree_path_get_depth (path);
+  indices = gtk_tree_path_get_indices (path);
+  tmp_path = gtk_tree_path_new();
+  for (i = 0; i <= depth - 1; i++) {
+    gtk_tree_path_append_index (tmp_path, indices[i]);
+    gnc_tree_model_price_get_iter (GTK_TREE_MODEL(model), &tmp_iter, tmp_path);
+    gtk_tree_model_row_changed(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
+    gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), tmp_path, &tmp_iter);
+  }
+  gtk_tree_path_free(tmp_path);
+    
+  /* Now tag the new item as inserted. */
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, iter);
+  gtk_tree_path_free(path);
 
   do {
     model->stamp++;
@@ -1528,9 +1505,7 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add %s", name);
-	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	  gnc_tree_model_price_path_added (model, path);
-	  gtk_tree_path_free(path);
+	  gnc_tree_model_price_path_added (model, &iter);
 	  break;
 
 	 case GNC_EVENT_REMOVE:

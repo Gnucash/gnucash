@@ -1,5 +1,14 @@
 2006-02-02  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-model-commodity.c:
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome-utils/gnc-tree-model-price.c: Better handling in the
+	model event handling functions.  Noticeable in the commodity and
+	price trees when adding/deleting the first/last item.
+
+	* src/gnome/dialog-commodities.c: Fix a crash when manipulating
+	commodities before crating the first account.
+
 	* src/gnome-utils/gnc-file.c: Re-enable events before processing
 	the book-opened hook.  Solves some strange problems in the account
 	tree which were caused by the Orphan account being created during
