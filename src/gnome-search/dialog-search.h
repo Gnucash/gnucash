@@ -89,7 +89,8 @@ typedef struct {
  * the dialog will use the obj_type instead.
  */
 GNCSearchWindow *
-gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
+gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
+			  GList *param_list,
 			  GList *display_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,

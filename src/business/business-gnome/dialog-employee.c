@@ -724,7 +724,8 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns, q, q2,
+  return gnc_search_dialog_create (type, _("Find Employee"),
+				   params, columns, q, q2,
 				   buttons, NULL, new_employee_cb,
 				   sw, free_employee_cb,
 				   GCONF_SECTION_SEARCH, NULL);

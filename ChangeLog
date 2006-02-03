@@ -1,3 +1,16 @@
+2006-02-03  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-gnome/dialog-vendor.c:
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/gnome/dialog-find-transactions.c:
+	* src/gnome-search/search.glade:
+	* src/gnome-search/dialog-search.[ch]: Re-title the search dialog
+	based upon the menu used to invoke it. Fixes #329538.
+
 2006-02-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view.[ch]: Andreas Köhler's patch to

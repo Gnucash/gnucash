@@ -744,7 +744,7 @@ close_handler (gpointer data)
 }
 
 static void
-gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
+gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 {
   GladeXML *xml;
   GtkWidget *label, *add, *box;
@@ -757,6 +757,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   /* Grab the dialog, save the dialog info */
   sw->dialog = glade_xml_get_widget (xml, "Search Dialog");
+  gtk_window_set_title(GTK_WINDOW(sw->dialog), title);
   g_object_set_data (G_OBJECT (sw->dialog), "dialog-info", sw);
 
   /* grab the result hbox */
@@ -896,7 +897,8 @@ gnc_search_dialog_raise (GNCSearchWindow *sw)
 }
 
 GNCSearchWindow *
-gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
+gnc_search_dialog_create (GNCIdTypeConst obj_type, const gchar *title,
+			  GList *param_list,
 			  GList *display_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,
@@ -936,7 +938,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
     sw->start_q = gncQueryCopy (start_query);
   sw->q = show_start_query;
 
-  gnc_search_dialog_init_widgets (sw);
+  gnc_search_dialog_init_widgets (sw, title);
   if (sw->gconf_section)
     gnc_restore_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
 
@@ -1071,7 +1073,8 @@ gnc_search_dialog_test (void)
   if (display == NULL)
     display = get_display_list (GNC_ID_SPLIT);
 
-  sw = gnc_search_dialog_create (GNC_ID_SPLIT, params, display,
+  sw = gnc_search_dialog_create (GNC_ID_SPLIT, _("Find Transaction"),
+				 params, display,
 				 NULL, NULL, buttons, NULL, NULL, NULL, NULL,
 				 NULL, NULL);
 }

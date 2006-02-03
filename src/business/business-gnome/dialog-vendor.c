@@ -691,8 +691,8 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type, params, columns, q, q2,
-				   buttons, NULL,
+  return gnc_search_dialog_create (type, _("Find Vendor"),
+				   params, columns, q, q2, buttons, NULL,
 				   new_vendor_cb, sw, free_vendor_cb,
 				   GCONF_SECTION_SEARCH, NULL);
 }

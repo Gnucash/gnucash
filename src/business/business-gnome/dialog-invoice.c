@@ -2186,8 +2186,10 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   struct _invoice_select_window *sw;
   QueryNew *q, *q2 = NULL;
   GncOwnerType owner_type = GNC_OWNER_CUSTOMER;
-  static GList *inv_params = NULL, *bill_params = NULL, *emp_params = NULL;
+  static GList *inv_params = NULL, *bill_params = NULL, *emp_params = NULL, *params;
   static GList *columns = NULL;
+  const gchar *title, *label;
+  static GNCSearchCallbackButton *buttons; 
   static GNCSearchCallbackButton inv_buttons[] = { 
     { N_("View/Edit Invoice"), edit_invoice_cb},
     { N_("Process Payment"), pay_invoice_cb},
@@ -2381,25 +2383,30 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
   sw->book = book;
   sw->q = q;
 
-  return gnc_search_dialog_create (type,
-				   (owner_type == GNC_OWNER_VENDOR ?
-				    bill_params :
-				    (owner_type == GNC_OWNER_EMPLOYEE ?
-				     emp_params :
-				     inv_params)),
-				   columns, q, q2,
-				   (owner_type == GNC_OWNER_VENDOR ?
-				    bill_buttons :
-				    (owner_type == GNC_OWNER_EMPLOYEE ?
-				     emp_buttons :
-				     inv_buttons)),
-				   NULL, new_invoice_cb,
+  switch (owner_type) {
+    case GNC_OWNER_VENDOR:
+      title = _("Find Bill");
+      label = _("Bill");
+      params = bill_params;
+      buttons = bill_buttons;
+      break;
+    case GNC_OWNER_EMPLOYEE:
+      title = _("Find Expense Voucher");
+      label = _("Expense Voucher");
+      params = emp_params;
+      buttons = emp_buttons;
+      break;
+    default:
+      title = _("Find Invoice");
+      label = _("Invoice");
+      params = inv_params;
+      buttons = inv_buttons;
+      break;
+  }
+  return gnc_search_dialog_create (type, title, params, columns, q, q2,
+				   buttons, NULL, new_invoice_cb,
 				   sw, free_invoice_cb, GCONF_SECTION_SEARCH,
-				   (owner_type == GNC_OWNER_VENDOR ?
-				    _("Bill") :
-				    (owner_type == GNC_OWNER_EMPLOYEE ?
-				     _("Expense Voucher") :
-				     _("Invoice"))));
+				   label);
 }
 
 GNCSearchWindow *
