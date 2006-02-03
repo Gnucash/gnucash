@@ -512,7 +512,8 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				  sort_by_placeholder,
 				  gnc_tree_view_account_placeholder_toggled);
 
-  gnc_tree_view_configure_columns(view, "description", "total", NULL);
+  /* By default only the first column is visible. */
+  gnc_tree_view_configure_columns(view, NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
 					  gnc_tree_view_account_filter_helper,
 					  view,

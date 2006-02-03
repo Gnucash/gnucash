@@ -659,7 +659,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     /* income tree */
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree), NULL);
     info->income_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_income,
@@ -677,7 +676,6 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
     /* asset tree */
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree), NULL);
     info->asset_tree = tree;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree),
 				      gnc_stock_split_druid_view_filter_asset,

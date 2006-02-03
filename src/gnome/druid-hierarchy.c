@@ -384,7 +384,6 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		gtk_text_buffer_set_text(buffer, gea->long_description, -1);
 
 		tree_view = gnc_tree_view_account_new_with_group (gea->group, FALSE);
-		gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view), NULL);
 		/* Override the normal fixed (user settable) sizing */
 		column = gtk_tree_view_get_column(GTK_TREE_VIEW(tree_view), 0);
 		gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);

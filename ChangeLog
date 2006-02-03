@@ -1,3 +1,15 @@
+2006-02-02  David Hampton  <hampton@employees.org>
+
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/druid-stock-split.c:
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome/druid-hierarchy.c: Change the default visibilities of
+	the GncTreeViewAccount widget to only show the account name
+	column.  This is the most commonly used case for this widget.
+
 2006-02-02  Joshua Sled  <jsled@asynchronous.org>
 
 	* lib/libqof/qof/qofsession.c (qof_session_load_backend): get+load

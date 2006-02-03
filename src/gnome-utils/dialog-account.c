@@ -1339,7 +1339,6 @@ gnc_account_window_create(AccountWindow *aw)
   //  group = gnc_book_get_group (gnc_get_current_book ());
   aw->parent_tree = gnc_tree_view_account_new(TRUE);
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
-  gnc_tree_view_configure_columns (GNC_TREE_VIEW(aw->parent_tree), NULL);
   gtk_widget_show(GTK_WIDGET(aw->parent_tree));
   aw->top_level_account =
     gnc_tree_view_account_get_top_level (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree));

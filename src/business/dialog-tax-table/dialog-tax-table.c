@@ -259,7 +259,6 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
   gtk_container_add (GTK_CONTAINER (box), ntt->acct_tree);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ntt->acct_tree), FALSE);
-  gnc_tree_view_configure_columns (GNC_TREE_VIEW(ntt->acct_tree), NULL);
 
   /* Make 'enter' do the right thing */
   gtk_entry_set_activates_default(GTK_ENTRY (gnc_amount_edit_gtk_entry

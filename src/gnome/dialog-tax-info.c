@@ -752,7 +752,6 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
     box = glade_xml_get_widget (xml, "account_hbox");
     tree_view = gnc_tree_view_account_new (FALSE);
-    gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view), NULL);
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT(tree_view), 
 				      gnc_tax_info_dialog_account_filter_func,
 				      ti_dialog, NULL);
