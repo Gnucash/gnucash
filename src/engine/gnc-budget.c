@@ -1,7 +1,7 @@
 /********************************************************************\
- * gnc-budget.c -- Implementation of the top level Budgeting API's. *
+ * gnc-budget.c -- Implementation of the top level Budgeting API.   *
  * Copyright (C) 04 sep 2003    Darin Willits <darin@willits.ca>    *
- * Copyright (C) 2005  Chris Shoemaker <c.shoemaker@cox.net>        *
+ * Copyright (C) 2005-2006 Chris Shoemaker <c.shoemaker@cox.net>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -69,32 +69,6 @@ gnc_budget_new(QofBook *book)
     return budget;
 }
 
-static void
-remove_bgt_line_items(QofEntity *act, gpointer bgt)
-{
-    KvpFrame *frame;
-    const GUID *guid;
-    gchar guidbuf[GUID_ENCODING_LENGTH+1];
-
-    frame = qof_instance_get_slots(QOF_INSTANCE(bgt));
-    guid = qof_entity_get_guid(QOF_ENTITY(act));
-    guid_to_string_buff(guid, guidbuf);
-    kvp_frame_delete(kvp_frame_get_frame(frame, guidbuf));
-}
-
-static void
-gnc_budget_remove_all_line_items(GncBudget *budget)
-{
-    QofBook *book;
-    QofCollection *col;
-
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-
-    book = qof_instance_get_book(QOF_INSTANCE(budget));
-    col = qof_book_get_collection(book, GNC_ID_ACCOUNT);
-    qof_collection_foreach(col, remove_bgt_line_items, (gpointer) budget);
-}
-
 void
 gnc_budget_free(GncBudget* budget)
 {
@@ -102,18 +76,15 @@ gnc_budget_free(GncBudget* budget)
         return;
 
     g_return_if_fail(GNC_IS_BUDGET(budget));
-    gnc_budget_remove_all_line_items(budget);
 
+    qof_collection_mark_dirty(budget->inst.entity.collection);
     /* We first send the message that this object is about to be
      * destroyed so that any GUI elements can remove it before it is
      * actually gone. */
     gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_DESTROY);
 
-    if (budget->name)
-        g_free(budget->name);
-
-    if (budget->description)
-        g_free(budget->description);
+    CACHE_REMOVE(budget->name);
+    CACHE_REMOVE(budget->description);
 
     qof_instance_release (&budget->inst);
     g_free(budget);
@@ -122,12 +93,11 @@ gnc_budget_free(GncBudget* budget)
 void
 gnc_budget_set_name(GncBudget* budget, const gchar* name)
 {
-    g_return_if_fail(GNC_IS_BUDGET(budget));
-    g_return_if_fail(name);
+    g_return_if_fail(GNC_IS_BUDGET(budget) && name);
 
-    if (budget->name)
-        g_free(budget->name);
-    budget->name = g_strdup(name);
+    CACHE_REPLACE(budget->name, name);
+    qof_collection_mark_dirty(budget->inst.entity.collection);
+
     gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -144,9 +114,9 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     g_return_if_fail(GNC_IS_BUDGET(budget));
     g_return_if_fail(description);
 
-    if (budget->description)
-        g_free( budget->description);
-    budget->description = g_strdup(description);
+    CACHE_REPLACE(budget->description, description);
+    qof_collection_mark_dirty(budget->inst.entity.collection);
+
     gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -162,6 +132,8 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 {
     g_return_if_fail(budget && r);
     budget->recurrence = *r;
+    qof_collection_mark_dirty(budget->inst.entity.collection);
+
     gnc_engine_gen_event(&budget->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -185,6 +157,8 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
     g_return_if_fail(GNC_IS_BUDGET(budget));
     budget->num_periods = num_periods;
+    qof_collection_mark_dirty(budget->inst.entity.collection);
+
     gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -215,6 +189,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     g_sprintf(bufend, "/%d", period_num);
 
     kvp_frame_set_numeric(frame, path, val);
+    qof_collection_mark_dirty(budget->inst.entity.collection);
+
     gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
 
 }
