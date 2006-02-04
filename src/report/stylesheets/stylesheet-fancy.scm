@@ -194,6 +194,16 @@
      'attribute (list "text" textcolor)
      'attribute (list "link" linkcolor))
 
+;;;;
+;;;;
+;;;;
+    (gnc:html-document-set-style!
+     ssdoc "number-header"
+     'tag "th"
+     'attribute (list "align" "right"))
+;;;;
+;;;;
+;;;;
     (gnc:html-document-set-style!
      ssdoc "number-cell"
      'tag "td"

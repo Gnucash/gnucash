@@ -1,5 +1,11 @@
 2006-02-04  David Hampton  <hampton@employees.org>
 
+	* src/report/stylesheets/stylesheet-fancy.scm:
+	* src/report/stylesheets/stylesheet-easy.scm: Dave Herman's
+	<dvherman@gmail.com> patch to fix #327630 by copying missing
+	"function" (gnc:html-document-set-style!) from the plain to both
+	the "fancy" and "easy" stylesheets.
+
 	* src/gnome-utils/gnc-tree-view-commodity.c:
 	* src/gnome-utils/gnc-tree-view-price.c:
 	* src/gnome-utils/gnc-tree-view-account.c:
