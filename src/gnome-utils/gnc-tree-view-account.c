@@ -506,7 +506,8 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				NULL);
-  gnc_tree_view_add_toggle_column(view, _("Placeholder"), _("P"), "placeholder",
+  gnc_tree_view_add_toggle_column(view, _("Placeholder"), Q_("Placeholder|P"),
+				  "placeholder",
 				  GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
 				  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				  sort_by_placeholder,

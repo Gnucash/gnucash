@@ -1,5 +1,9 @@
 2006-02-04  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-view-account.c: Add disambiguating
+	prefix to the single letter column titles.
+
 	* src/report/stylesheets/stylesheet-fancy.scm:
 	* src/report/stylesheets/stylesheet-easy.scm: Dave Herman's
 	<dvherman@gmail.com> patch to fix #327630 by copying missing
