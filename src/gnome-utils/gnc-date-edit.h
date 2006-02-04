@@ -33,6 +33,8 @@
 #define GNC_DATE_EDIT_H 
 
 #include <glib.h>
+#include <time.h>
+#include "gnc-date.h"
 
 typedef enum {
 	GNC_DATE_EDIT_SHOW_TIME             = 1 << 0,
@@ -119,6 +121,7 @@ void      gnc_date_edit_set_time_ts     (GNCDateEdit *gde, Timespec the_time);
 void      gnc_date_edit_set_popup_range (GNCDateEdit *gde,
                                          int low_hour, int up_hour);
 
+void      gnc_date_edit_get_gdate       (GNCDateEdit *gde, GDate *date);
 time_t    gnc_date_edit_get_date        (GNCDateEdit *gde);
 Timespec  gnc_date_edit_get_date_ts     (GNCDateEdit *gde);
 time_t    gnc_date_edit_get_date_end    (GNCDateEdit *gde);

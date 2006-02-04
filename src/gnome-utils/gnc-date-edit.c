@@ -46,7 +46,7 @@
 #include "gnc-date.h"
 #include "dialog-utils.h"
 #include "gnc-date-edit.h"
-
+#include "glib-compat.h"
 
 enum {
 	DATE_CHANGED,
@@ -861,6 +861,18 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
         if (mktime (&tm) == -1)
 		return gnc_timet_get_today_start();
 	return mktime (&tm);
+}
+
+void
+gnc_date_edit_get_gdate (GNCDateEdit *gde, GDate *date)
+{
+	time_t t;
+
+	g_return_if_fail (gde && date);
+	g_return_if_fail (GNC_IS_DATE_EDIT (gde));
+
+	t = gnc_date_edit_get_date(gde);
+	g_date_set_time_t(date, t);
 }
 
 Timespec
