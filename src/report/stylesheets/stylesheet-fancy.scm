@@ -276,28 +276,33 @@
        'attribute (list "border" 0)
        'inheritable? #f)
 
-      (gnc:html-table-set-cell! 
-       t 1 1
-       (if show-preparer? 
-	   ;; title plus preparer info 
-	   (gnc:make-html-text
-	    (gnc:html-markup-b 
-	     (gnc:html-document-title doc))  
-	    (gnc:html-markup-br)
-	    (_ "Prepared by: ")
-	    (gnc:html-markup-b preparer)
-	    (gnc:html-markup-br)
-	    (_ "Prepared for: ")
-	    (gnc:html-markup-b prepared-for)
-	    (gnc:html-markup-br)
-	    (_ "Date: ")
-	    (gnc:print-date 
-	     (cons (current-time) 0)))
+      (let* ((title (gnc:html-document-title doc))
+             (doc-headline (gnc:html-document-headline doc))
+             (headline (if (eq? doc-headline #f) title doc-headline)))
 
-	   ;; title only 
-	   (gnc:make-html-text
-	    (gnc:html-markup-b 
-	     (gnc:html-document-title doc)))))
+        (gnc:html-table-set-cell! 
+         t 1 1
+         (if show-preparer? 
+             ;; title plus preparer info 
+             (gnc:make-html-text
+              (gnc:html-markup-b 
+               (gnc:html-document-title doc))  
+              (gnc:html-markup-br)
+              (_ "Prepared by: ")
+              (gnc:html-markup-b preparer)
+              (gnc:html-markup-br)
+              (_ "Prepared for: ")
+              (gnc:html-markup-b prepared-for)
+              (gnc:html-markup-br)
+              (_ "Date: ")
+              (gnc:print-date 
+               (cons (current-time) 0)))
+
+             ;; title only 
+             (gnc:make-html-text
+              (gnc:html-markup-b 
+               (gnc:html-document-title doc)))))
+        )
       
       (if (and logopixmap
 	       (not (string=? logopixmap "")))

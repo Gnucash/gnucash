@@ -1,3 +1,21 @@
+2006-02-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-system/html-document.scm
+	(gnc:html-document-headline): Add a headline property to the
+	html-document record.
+
+	* src/report/report-system/html-style-sheet.scm
+	(gnc:html-style-sheet-render): Add headline-copy, better comment.
+
+	* src/report/stylesheets/stylesheet-plain.scm (plain-renderer) 
+	* src/report/stylesheets/stylesheet-fancy.scm (fancy-renderer) 
+	* src/report/stylesheets/stylesheet-easy.scm (easy-renderer):
+	Use headline if available, fallback to title. 
+
+	* src/business/business-reports/aging.scm (aging-renderer)
+	* src/business/business-reports/owner-report.scm (reg-renderer): 
+	Use strings in titles, markup for the richer headline. Bug#329369.
+
 2006-02-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-commodity.c:

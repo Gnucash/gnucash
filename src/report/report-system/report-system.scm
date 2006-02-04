@@ -213,6 +213,8 @@
 (export gnc:make-html-document)
 (export gnc:html-document-set-title!)
 (export gnc:html-document-title)
+(export gnc:html-document-set-headline!)
+(export gnc:html-document-headline)
 (export gnc:html-document-set-style-sheet!)
 (export gnc:html-document-style-sheet)
 (export gnc:html-document-set-style-stack!)

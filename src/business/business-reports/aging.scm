@@ -530,16 +530,22 @@ totals to report currency")
         (document (gnc:make-html-document)))
 ;    (gnc:debug "Account: " account)
 
-    (if account
-	(set! report-title (gnc:html-markup
-			    "!" 
-			    report-title
-			    ": "
-			    (gnc:html-markup-anchor
-			     (gnc:account-anchor-text account)
-			     (gnc:account-get-name account)))))
-
+    ;; set default title
     (gnc:html-document-set-title! document report-title)
+    ;; maybe redefine better...
+    (if account
+        (begin
+          (gnc:html-document-set-title!
+           document (string-append report-title ": " (gnc:account-get-name account)))
+          (gnc:html-document-set-headline! document
+                                           (gnc:html-markup
+                                            "!" 
+                                            report-title
+                                            ": "
+                                            (gnc:html-markup-anchor
+                                             (gnc:account-anchor-text account)
+                                             (gnc:account-get-name account))))))
+
     (gnc:html-table-set-col-headers! table heading-list)
 				     
     (if account

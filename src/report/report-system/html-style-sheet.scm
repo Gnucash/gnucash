@@ -235,7 +235,12 @@
                  doc))
         (headers? (if (null? rest) #f (if (car rest) #t #f))))
 
+    ;; Copy values over to stylesheet-produced document.  note that this is a
+    ;; bug that should probably better be fixed by having the stylesheets
+    ;; emit documents that are correct.  this, however, is a slightly easier
+    ;; place to enforce it. :p
     (gnc:html-document-set-title! newdoc (gnc:html-document-title doc))
+    (gnc:html-document-set-headline! newdoc (gnc:html-document-headline doc))
     
     ;; push the style sheet's default styles 
     (gnc:html-document-push-style newdoc (gnc:html-style-sheet-style sheet))

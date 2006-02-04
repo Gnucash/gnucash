@@ -780,8 +780,7 @@
              'tag "th"
              'attribute (list "align" "left"))
             
-            (gnc:html-document-set-title! 
-             doc report-name)
+            (gnc:html-document-set-title! doc report-name)
             
             (gnc:html-document-add-object! 
              doc (gnc:make-html-text         
