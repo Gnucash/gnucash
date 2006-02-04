@@ -1,3 +1,12 @@
+2006-02-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/doc/xml/gnucash-v2.rnc: Add reverse-engineered schema for
+	"v2" (1.8/2.0) XML files.
+
+	* src/backend/file/io-gncxml-v2.c (write_v2_header): Emit
+	'fs' (FreqSpec), 'bgt', 'recurrence' (Budgeting), and 'lot'
+	namespace decls.
+
 2006-02-04  David Hampton  <hampton@employees.org>
 
 	* src/import-export/schemas/Makefile.am:

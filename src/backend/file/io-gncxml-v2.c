@@ -1116,6 +1116,10 @@ write_v2_header (FILE *out)
     gnc_xml2_write_namespace_decl (out, "sx");
     gnc_xml2_write_namespace_decl (out, "trn");
     gnc_xml2_write_namespace_decl (out, "ts");
+    gnc_xml2_write_namespace_decl (out, "fs");
+    gnc_xml2_write_namespace_decl (out, "bgt");
+    gnc_xml2_write_namespace_decl (out, "recurrence");
+    gnc_xml2_write_namespace_decl (out, "lot");
 
     /* now cope with the plugins */
     qof_object_foreach_backend (GNC_FILE_BACKEND, do_write_namespace_cb, out);
