@@ -25,7 +25,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <glib/gi18n.h>
-
+#include <time.h>
 #include "qof.h"
 
 #include "Account.h"
@@ -50,14 +50,16 @@ GncBudget*
 gnc_budget_new(QofBook *book)
 {
     GncBudget* budget;
-
+    GDate date;
     g_return_val_if_fail(book, NULL);
 
     ENTER(" ");
     budget = g_new0(GncBudget, 1);
     qof_instance_init (&budget->inst, GNC_ID_BUDGET, book);
 
-    recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, NULL);
+    g_date_set_time(&date, time(NULL));
+    g_date_subtract_days(&date, g_date_get_day(&date)-1);
+    recurrenceSet(&budget->recurrence, 1, PERIOD_MONTH, &date);
 
     gnc_budget_set_name(budget, _("Unnamed Budget"));
     gnc_budget_set_description(budget, "");
@@ -249,52 +251,24 @@ gnc_budget_get_account_period_value(GncBudget *budget, Account *account,
     return numeric;
 }
 
-/* If 'end' is true, then get a time just before the beginning of the
-   next period */
-static time_t
-gnc_budget_get_period_time(GncBudget *budget, guint period_num, gboolean end)
-{
-    GDate date;
-    recurrenceNthInstance(&(budget->recurrence),
-                          period_num + (end ? 1 : 0), &date);
-    if (end) {
-        g_date_subtract_days(&date, 1);
-        return gnc_timet_get_day_end_gdate(&date);
-    } else {
-        return gnc_timet_get_day_start_gdate(&date);
-    }
-
-}
 
 Timespec
 gnc_budget_get_period_start_date(GncBudget *budget, guint period_num)
 {
     Timespec ts;
     timespecFromTime_t(
-        &ts,  gnc_budget_get_period_time(budget, period_num, FALSE));
+        &ts,  recurrenceGetPeriodTime(&budget->recurrence, period_num, FALSE));
     return ts;
 }
 
 gnc_numeric
 gnc_budget_get_account_period_actual_value(
-    GncBudget *budget, Account *account, guint period_num)
+    GncBudget *budget, Account *acc, guint period_num)
 {
-    gnc_numeric numeric, num1, num2;
-    time_t t1, t2;
-
     // FIXME: maybe zero is not best error return val.
-    g_return_val_if_fail(GNC_IS_BUDGET(budget) && account, gnc_numeric_zero());
-    t1 = gnc_budget_get_period_time(budget, period_num, FALSE);
-    t2 = gnc_budget_get_period_time(budget, period_num, TRUE);
-
-    num1 = xaccAccountGetBalanceAsOfDateInCurrency(
-        account, t1, NULL, TRUE);
-    num2 = xaccAccountGetBalanceAsOfDateInCurrency(
-        account, t2, NULL, TRUE);
-
-    numeric = gnc_numeric_sub(num2, num1, GNC_DENOM_AUTO,
-                              GNC_HOW_DENOM_FIXED);
-    return numeric;
+    g_return_val_if_fail(GNC_IS_BUDGET(budget) && acc, gnc_numeric_zero());
+    return recurrenceGetAccountPeriodValue(&budget->recurrence, 
+                                           acc, period_num);
 }
 
 QofBook*

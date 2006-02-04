@@ -45,6 +45,8 @@
 #define RECURRENCE_H
 
 #include <glib.h>
+#include "Account.h"
+#include "gnc-numeric.h"
 
 typedef enum {
     PERIOD_ONCE,         /* Not a true period at all, but convenient here. */
@@ -69,7 +71,7 @@ typedef struct {
 
 
 /* recurrenceSet() will enforce internal consistency by overriding
-   inconsistent inputs so that 'r' will _always_ end up being valid
+   inconsistent inputs so that 'r' will _always_ end up being a valid 
    recurrence.
 
      - if the period type is invalid, PERIOD_MONTH is used.
@@ -121,6 +123,15 @@ void recurrenceNextInstance(const Recurrence *r, const GDate *refDate,
 
 /* Zero-based.  n == 1 gets the instance after the start date. */
 void recurrenceNthInstance(const Recurrence *r, guint n, GDate *date);
+
+/* Get a time coresponding to the beginning (or end if 'end' is true)
+   of the nth instance of the recurrence. Also zero-based. */
+time_t recurrenceGetPeriodTime(const Recurrence *r, guint n, gboolean end);
+
+/* Get the amount that an Account's value changed between the
+   beginning and end of the nth instance of the recurrence. */
+gnc_numeric recurrenceGetAccountPeriodValue(const Recurrence *r, 
+                                            Account *acct, guint n);
 
 /* Get the earliest of the next occurances -- a "composite" recurrence */
 void recurrenceListNextInstance(const GList *r, const GDate *refDate,
