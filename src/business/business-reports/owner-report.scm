@@ -540,7 +540,7 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (title (string-append (_ type-str) (_ " Report"))))
+	 (title (string-append (_ type-str) (_ " Report")))
 	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
 	 (owner-type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
