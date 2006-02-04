@@ -1198,8 +1198,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* calculate the integer part and the remainder */
-  whole = gnc_numeric_create (val.num / val.denom, 1);
-  val = gnc_numeric_sub (val, whole, val.denom, GNC_RND_NEVER);
+  whole = gnc_numeric_convert(val, 1, GNC_HOW_RND_TRUNC);
+  val = gnc_numeric_sub (val, whole, GNC_DENOM_AUTO, GNC_HOW_RND_NEVER);
   if (gnc_numeric_check (val))
   {
     PWARN ("Problem with remainder.");
@@ -1282,9 +1282,12 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     {
       val = gnc_numeric_reduce (val);
 
-      sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
-               val.num,
-               val.denom);
+      if (val.denom > 0)
+          sprintf (temp_buf, " + %" G_GINT64_FORMAT " / %" G_GINT64_FORMAT,
+                   val.num, val.denom);
+      else
+          sprintf (temp_buf, " + %" G_GINT64_FORMAT " * %" G_GINT64_FORMAT,
+                   val.num, -val.denom);
 
       strcat (buf, temp_buf);
     }
