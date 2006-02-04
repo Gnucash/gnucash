@@ -1,3 +1,15 @@
+2006-02-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-view-price.c:
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/gnc-tree-view.c: Andreas Köhler's patch to
+	perform the i18n on column headers before calling the generic tree
+	view code instead of performing it a couple steps removed.  This
+	is a leftover from several years ago when the columns were defined
+	in an array. It also introduces the translatable strings
+	"P" (placeholder) and "Q" (quotes) used in toggle column headers.
+
 2006-02-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/glade/preferences.glade: Fix name of

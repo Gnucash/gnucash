@@ -477,52 +477,52 @@ gnc_tree_view_commodity_new (QofBook *book,
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-  gnc_tree_view_add_text_column (view, N_("Namespace"), "namespace", NULL,
+  gnc_tree_view_add_text_column (view, _("Namespace"), "namespace", NULL,
 				 "NASDAQ",
 				 GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
 				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				 sort_by_namespace);
-  gnc_tree_view_add_text_column (view, N_("Symbol"), "symbol", NULL,
+  gnc_tree_view_add_text_column (view, _("Symbol"), "symbol", NULL,
 				 "ACMEACME",
 				 GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_mnemonic);
-  gnc_tree_view_add_text_column (view, N_("Name"), "name", NULL,
+  gnc_tree_view_add_text_column (view, _("Name"), "name", NULL,
 				 "Acme Corporation, Inc.",
 				 GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_fullname);
-  gnc_tree_view_add_text_column (view, N_("Print Name"), "printname", NULL,
+  gnc_tree_view_add_text_column (view, _("Print Name"), "printname", NULL,
 				 "ACMEACME (Acme Corporation, Inc.)",
 				 GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_printname);
-  gnc_tree_view_add_text_column (view, N_("Unique Name"), "uniquename", NULL,
+  gnc_tree_view_add_text_column (view, _("Unique Name"), "uniquename", NULL,
 				 "NASDAQ::ACMEACME",
 				 GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_unique_name);
-  gnc_tree_view_add_text_column (view, N_("CUSIP code"), "cusip_code", NULL,
+  gnc_tree_view_add_text_column (view, _("CUSIP code"), "cusip_code", NULL,
 				 "QWERTYUIOP",
 				 GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_cusip_code);
-  gnc_tree_view_add_numeric_column (view, N_("Fraction"), "fraction", "10000",
+  gnc_tree_view_add_numeric_column (view, _("Fraction"), "fraction", "10000",
 				    GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
 				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
 				    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				    sort_by_fraction);
-  gnc_tree_view_add_toggle_column (view, N_("Get Quotes"), "Q", "quote_flag",
+  gnc_tree_view_add_toggle_column (view, _("Get Quotes"), _("Q"), "quote_flag",
 				   GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
 				   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				   sort_by_quote_flag,
 				   NULL);
-  gnc_tree_view_add_text_column (view, N_("Source"), "quote_source", NULL,
+  gnc_tree_view_add_text_column (view, _("Source"), "quote_source", NULL,
 				 "yahoo",
 				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_quote_source);
-  gnc_tree_view_add_text_column (view, N_("Timezone"), "quote_timezone", NULL,
+  gnc_tree_view_add_text_column (view, _("Timezone"), "quote_timezone", NULL,
 				 "America/New_York",
 				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,

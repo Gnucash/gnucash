@@ -1841,7 +1841,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   renderer = gtk_cell_renderer_toggle_new ();
   column =
-    gtk_tree_view_column_new_with_attributes (gettext(column_short_title),
+    gtk_tree_view_column_new_with_attributes (column_short_title,
 					      renderer,
 					      "active", model_data_column,
 					      NULL);
@@ -1901,7 +1901,7 @@ gnc_tree_view_add_text_column (GncTreeView *view,
   g_return_val_if_fail (GNC_IS_TREE_VIEW(view), NULL);
 
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, gettext(column_title));
+  gtk_tree_view_column_set_title (column, column_title);
 
   /* Set up an icon renderer if requested */
   if (stock_icon_name) {

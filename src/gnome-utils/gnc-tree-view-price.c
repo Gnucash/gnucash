@@ -417,32 +417,32 @@ gnc_tree_view_price_new (QofBook *book,
 
   sample_text = gnc_commodity_get_printname(gnc_default_currency());
   sample_text2 = g_strdup_printf("%s%s", sample_text, sample_text);
-  gnc_tree_view_add_text_column (view, N_("Commodity"), "commodity", NULL,
+  gnc_tree_view_add_text_column (view, _("Commodity"), "commodity", NULL,
 				 sample_text2,
 				 GNC_TREE_MODEL_PRICE_COL_COMMODITY,
 				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				 sort_by_name);
   g_free(sample_text2);
-  gnc_tree_view_add_text_column (view, N_("Currency"), "currency", NULL,
+  gnc_tree_view_add_text_column (view, _("Currency"), "currency", NULL,
 				 sample_text,
 				 GNC_TREE_MODEL_PRICE_COL_CURRENCY,
 				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
 				 sort_by_name);
-  gnc_tree_view_add_text_column (view, N_("Date"), "date", NULL,
+  gnc_tree_view_add_text_column (view, _("Date"), "date", NULL,
 				 "2005-05-20",
 				 GNC_TREE_MODEL_PRICE_COL_DATE,
 				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
 				 sort_by_date);
-  gnc_tree_view_add_text_column (view, N_("Source"), "source", NULL,
+  gnc_tree_view_add_text_column (view, _("Source"), "source", NULL,
 				 "Finance::Quote",
 				 GNC_TREE_MODEL_PRICE_COL_SOURCE,
 				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
 				 sort_by_source);
-  gnc_tree_view_add_text_column (view, N_("Type"), "type", NULL, "last",
+  gnc_tree_view_add_text_column (view, _("Type"), "type", NULL, "last",
 				 GNC_TREE_MODEL_PRICE_COL_TYPE,
 				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
 				 sort_by_type);
-  gnc_tree_view_add_numeric_column (view, N_("Price"), "price", "100.00000",
+  gnc_tree_view_add_numeric_column (view, _("Price"), "price", "100.00000",
 				    GNC_TREE_MODEL_PRICE_COL_VALUE,
 				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
 				    GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
