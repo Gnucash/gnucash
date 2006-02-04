@@ -1,3 +1,13 @@
+2006-02-04  David Hampton  <hampton@employees.org>
+
+	* src/import-export/schemas/Makefile.am:
+	* src/import-export/hbci/schemas/Makefile.am:
+	* src/business/business-gnome/schemas/Makefile.am:
+	* src/gnome-utils/schemas/Makefile.am:
+	* src/gnome/schemas/Makefile.am: Don't just install the schema
+	files, also install the gconf objects into the database. Reverts
+	accidental change made as part of r12863.
+
 2006-02-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/report-system/html-document.scm
