@@ -64,53 +64,6 @@
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
 
-static gint file_retention_days = 0;
-static gboolean file_compression = FALSE;
-
-/* lookup the options and modify the frame */
-static void
-gnc_file_be_set_config(QofBackend *be, KvpFrame *config)
-{
-     gchar *temp;
-     g_return_if_fail(be != NULL);
-     g_return_if_fail(config != NULL);
-     
-     file_retention_days = (gint)kvp_frame_get_gint64(config, GNC_BE_DAYS);
-     temp = kvp_frame_get_string(config, GNC_BE_ZIP);
-     file_compression = (gboolean)qof_util_bool_to_int(temp);
-}
-
-static KvpFrame*
-gnc_file_be_get_config(QofBackend *be)
-{
-     QofBackendOption *option;
-     gboolean compression;
-
-     qof_backend_prepare_frame(be);
-     option = g_new0(QofBackendOption, 1);
-     option->option_name = GNC_BE_DAYS;
-     option->description = _("Number of days to retain old files");
-     option->tooltip = _("GnuCash keeps backups of old files. "
-                         "This setting specifies how long each is kept.");
-     option->type = KVP_TYPE_GINT64;
-     option->value = GINT_TO_POINTER((int)gnc_gconf_get_float("general", "retain_days", NULL));
-     qof_backend_prepare_option(be, option);
-     g_free(option);
-
-     option = g_new0(QofBackendOption, 1);
-     option->option_name = GNC_BE_ZIP;
-     option->description = _("Compress output files?");
-     option->tooltip = _("GnuCash can save data files with compression."
-                         " Enable this option to compress your data file.");
-     option->type = KVP_TYPE_GINT64;
-     compression = gnc_gconf_get_bool("general", "file_compression", NULL);
-     option->value = GINT_TO_POINTER(file_compression ? TRUE : FALSE);
-     qof_backend_prepare_option(be, option);
-     g_free(option);
-
-     return qof_backend_complete_frame(be);
-}
-
 /* ================================================================= */
 
 static gboolean
@@ -543,7 +496,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
     }
   
-    if(gnc_book_write_to_xml_file_v2(book, tmp_name, file_compression)) 
+    if (gnc_book_write_to_xml_file_v2(book, tmp_name, fbe->file_compression))
     {
         /* Record the file's permissions before unlinking it */
         rc = stat(datafile, &statbuf);
@@ -714,14 +667,14 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 PINFO ("unlink lock file: %s", name);
                 unlink(name);
             } 
-            else if (file_retention_days > 0) 
+            else if (be->file_retention_days > 0) 
             {
                 time_t file_time;
                 struct tm file_tm;
                 int days;
                 const char* res;
 
-                PINFO ("file retention = %d days", file_retention_days);
+                PINFO ("file retention = %d days", be->file_retention_days);
 
                 /* Is the backup file old enough to delete */
                 memset(&file_tm, 0, sizeof(file_tm));
@@ -735,7 +688,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
                     && (strcmp(res, ".xac") == 0
                         || strcmp(res, ".log") == 0)
                     && file_time > 0
-                    && days > file_retention_days)
+                    && days > be->file_retention_days)
                 {
                     PINFO ("unlink stale (%d days old) file: %s", days, name);
                     unlink(name);
@@ -953,6 +906,23 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     return be;
 }
 #endif
+
+static void
+retain_changed_cb(GConfEntry *entry, gpointer user_data)
+{
+        FileBackend *be = (FileBackend*)user_data;
+        g_return_if_fail(be != NULL);
+        be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+}
+
+static void
+compression_changed_cb(GConfEntry *entry, gpointer user_data)
+{
+        FileBackend *be = (FileBackend*)user_data;
+        g_return_if_fail(be != NULL);
+        be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+}
+
 QofBackend*
 gnc_backend_new(void)
 {
@@ -987,8 +957,8 @@ gnc_backend_new(void)
 	be->process_events = NULL;
 
 	be->sync = file_sync_all;
-	be->load_config = gnc_file_be_set_config;
-	be->get_config = gnc_file_be_get_config;
+	be->load_config = NULL;
+	be->get_config = NULL;
 
 	gnc_be->export = gnc_file_be_write_accounts_to_file;
 	gnc_be->dirname = NULL;
@@ -998,6 +968,13 @@ gnc_backend_new(void)
 	gnc_be->lockfd = -1;
 
 	gnc_be->primary_book = NULL;
+
+        gnc_be->file_retention_days = (int)gnc_gconf_get_float("general", "retain_days", NULL);
+        gnc_be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
+          
+        gnc_gconf_general_register_cb("retain_days", retain_changed_cb, be);
+        gnc_gconf_general_register_cb("file_compression", compression_changed_cb, be);
+
 	return be;
 }
 

@@ -1385,7 +1385,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="gconf/general/compress_files">
+		<widget class="GtkCheckButton" id="gconf/general/file_compression">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Compress the data file with gzip when saving it to disk.</property>
 		  <property name="can_focus">True</property>

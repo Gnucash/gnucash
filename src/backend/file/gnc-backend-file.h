@@ -35,15 +35,15 @@
 
 struct FileBackend_struct
 {
-    QofBackend be;
+  QofBackend be;
 
-    char *dirname;
-    char *fullpath;  /* Fully qualified path to book */
-    char *lockfile;
-    char *linkfile;
-    int lockfd;
-   /** \deprecated 
-	XXX price_lookup should be removed during the redesign
+  char *dirname;
+  char *fullpath;  /* Fully qualified path to book */
+  char *lockfile;
+  char *linkfile;
+  int lockfd;
+  /** \deprecated 
+   * XXX price_lookup should be removed during the redesign
    * of the SQL backend... prices can now be queried using
    * the generic query mechanism.
    *
@@ -51,15 +51,19 @@ struct FileBackend_struct
    * void (*price_lookup) (QofBackend *, GNCPriceLookup *);
    * we use gpointer to avoid an unwanted include file dependency.
    */  
-    void (*price_lookup) (QofBackend *, gpointer);
-  /** XXX Export should really _NOT_ be here, but is left here for now.
+  void (*price_lookup) (QofBackend *, gpointer);
+  /**
+   * XXX Export should really _NOT_ be here, but is left here for now.
    * I'm not sure where this should be going to. It should be
    * removed ASAP.   This is a temporary hack-around until period-closing
    * is fully implemented.
    */
-    void (*export) (QofBackend *, QofBook *);
+  void (*export) (QofBackend *, QofBook *);
 
-    QofBook *primary_book;  /* The primary, main open book */
+  QofBook *primary_book;  /* The primary, main open book */
+  
+  int file_retention_days;
+  gboolean file_compression;
 };
 
 typedef struct FileBackend_struct FileBackend;

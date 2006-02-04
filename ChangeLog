@@ -1,3 +1,15 @@
+2006-02-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/glade/preferences.glade: Fix name of
+	file-compression option.
+
+	* src/backend/file/gnc-backend-file.c (gnc_backend_new): Setup
+	option initial values; register configuration-change notification.
+	(retain_changed_cb, compression_changed_cb): Add.
+
+	* src/backend/file/gnc-backend-file.h (struct FileBackend_struct):
+	Move backend options into backend struct.
+
 2006-02-03  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/dialog-order.c:
