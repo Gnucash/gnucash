@@ -135,9 +135,7 @@ gnc_tree_view_add_toggle_column (GncTreeView *view,
  *
  *  @param view A pointer to a generic GncTreeView.
  *
- *  @param column_title The title for this column.  This will be
- *  added as a tooltip what will be displayed when the mouse is
- *  hovered over the column title button.
+ *  @param column_title The title for this column.
  *
  *  @param pref_name The internal name of this column.  This name is
  *  used in several functions to look up the column, and it is also
@@ -208,9 +206,7 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
  *
  *  @param view A pointer to a generic GncTreeView.
  *
- *  @param column_title The title for this column.  This will be
- *  added as a tooltip what will be displayed when the mouse is
- *  hovered over the column title button.
+ *  @param column_title The title for this column.
  *
  *  @param pref_name The internal name of this column.  This name is
  *  used in several functions to look up the column, and it is also
