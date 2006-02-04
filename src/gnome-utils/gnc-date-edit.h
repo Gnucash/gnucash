@@ -115,6 +115,7 @@ GtkWidget *gnc_date_edit_new_glade (gchar *widget_name,
 GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
                                          GNCDateEditFlags flags);
 
+void      gnc_date_edit_set_gdate       (GNCDateEdit *gde, const GDate *date);
 void      gnc_date_edit_set_time        (GNCDateEdit *gde, time_t the_time);
 void      gnc_date_edit_set_time_ts     (GNCDateEdit *gde, Timespec the_time);
 

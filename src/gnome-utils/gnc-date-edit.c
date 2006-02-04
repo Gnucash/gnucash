@@ -491,28 +491,10 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
                                                     callback_data);
 }
 
-/**
- * gnc_date_edit_set_time:
- * @gde: the GNCDateEdit widget
- * @the_time: The time and date that should be set on the widget
- *
- * Changes the displayed date and time in the GNCDateEdit widget
- * to be the one represented by @the_time.
- */
-void
-gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
+static void
+gnc_date_edit_set_time_tm (GNCDateEdit *gde, struct tm *mytm) 
 {
-	struct tm *mytm;
 	char buffer [40];
-
-	g_return_if_fail (gde != NULL);
-        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
-
-	if (the_time == 0)
-		the_time = time (NULL);
-	gde->initial_time = the_time;
-
-	mytm = localtime (&the_time);
 
 	/* Set the date */
 	qof_print_date_dmy_buff (buffer, 40,
@@ -527,6 +509,44 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	else
 		strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
 	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
+}
+
+/**
+ * gnc_date_edit_set_time:
+ * @gde: the GNCDateEdit widget
+ * @the_time: The time and date that should be set on the widget
+ *
+ * Changes the displayed date and time in the GNCDateEdit widget
+ * to be the one represented by @the_time.
+ */
+void
+gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
+{
+	struct tm *mytm;
+
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
+
+	if (the_time == 0)
+		the_time = time (NULL);
+	gde->initial_time = the_time;
+
+	mytm = localtime (&the_time);
+	gnc_date_edit_set_time_tm(gde, mytm);
+}
+
+void
+gnc_date_edit_set_gdate (GNCDateEdit *gde, const GDate *date)
+{
+        struct tm mytm;
+        time_t t;
+        
+        g_return_if_fail(gde && GNC_IS_DATE_EDIT(gde) && 
+                         date && g_date_valid(date));
+        g_date_to_struct_tm(date, &mytm);
+        t = mktime(&mytm);
+        if (t != (time_t)(-1))
+                gnc_date_edit_set_time(gde, t);
 }
 
 void
