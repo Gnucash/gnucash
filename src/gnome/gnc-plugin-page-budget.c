@@ -1,7 +1,7 @@
 /*
  * gnc-plugin-page-budget.c --
  *
- * Copyright (C) 2005 Chris Shoemaker <c.shoemaker@cox.net>
+ * Copyright (C) 2005-2006 Chris Shoemaker <c.shoemaker@cox.net>
  *   (based on gnc-plugin-page-account-tree.c)
  *
  * This program is free software; you can redistribute it and/or
@@ -37,6 +37,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <glade/glade.h>
+#include "gnc-date-edit.h"
 
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
@@ -128,20 +129,21 @@ static GtkActionEntry gnc_plugin_page_budget_actions [] = {
     { "OpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Account"), NULL,
       N_("Open the selected account"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_open_account) },
-    { "OpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Subaccounts"), NULL,
+    { "OpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, 
+      N_("Open _Subaccounts"), NULL,
       N_("Open the selected account and all its subaccounts"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_open_subaccounts) },
 
     /* Edit menu */
     { "DeleteBudgetAction", GNC_STOCK_DELETE_BUDGET, N_("_Delete Budget"),
-      NULL, N_("Delete the budget"),
+      NULL, N_("Delete this budget"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_delete_budget) },
     { "OptionsBudgetAction", GTK_STOCK_PROPERTIES, N_("Budget Options"),
-      NULL, N_("Edit the budget view options"),
+      NULL, N_("Edit this budget's options"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_view_options) },
     { "EstimateBudgetAction", GTK_STOCK_EXECUTE, N_("Estimate Budget"),
       NULL,
-      N_("Estimate a budget value for the selected cells"),
+      N_("Estimate a budget value for the selected accounts from past transactions"),
       G_CALLBACK (gnc_plugin_page_budget_cmd_estimate_budget) },
 
     /* View menu */
@@ -185,6 +187,10 @@ typedef struct GncPluginPageBudgetPrivate
 
     GList *period_col_list;
     AccountFilterDialog fd;
+
+    /* For the estimation dialog */
+    Recurrence r;
+    gint sigFigs;
 } GncPluginPageBudgetPrivate;
 
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
@@ -289,6 +295,9 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
     /* Visisble types */
     priv->fd.visible_types = -1; /* Start with all types */
     priv->fd.hide_zero_total = FALSE;
+
+    priv->sigFigs = 1;
+    recurrenceSet(&priv->r, 1, PERIOD_MONTH, NULL); 
 
     LEAVE("page %p, priv %p, action group %p",
           plugin_page, priv, action_group);
@@ -824,7 +833,6 @@ gnc_budget_gui_delete_budget(GncBudget *budget)
 
 }
 
-
 static void
 estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
                        GtkTreeIter *iter, gpointer data)
@@ -835,7 +843,6 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     GncPluginPageBudgetPrivate *priv;
     GncPluginPageBudget *page = data;
 
-
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
 
@@ -845,17 +852,18 @@ estimate_budget_helper(GtkTreeModel *model, GtkTreePath *path,
     num_periods = g_list_length(priv->period_col_list);
 
     for (i = 0; i < num_periods; i++) {
-        num = gnc_budget_get_account_period_actual_value(
-            priv->budget, acct, i);
+        num = recurrenceGetAccountPeriodValue(&priv->r, acct, i);
         if (!gnc_numeric_check(num)) {
             if (gnc_reverse_balance (acct))
                 num = gnc_numeric_neg (num);
 
+            
+            num = gnc_numeric_convert(num, GNC_DENOM_AUTO, 
+                GNC_HOW_DENOM_SIGFIGS(priv->sigFigs) | GNC_HOW_RND_ROUND);
             gnc_budget_set_account_period_value(
                 priv->budget, acct, i, num);
         }
     }
-
 }
 
 static void
@@ -864,15 +872,58 @@ gnc_plugin_page_budget_cmd_estimate_budget(GtkAction *action,
 {
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
+    GtkWidget *dialog, *gde, *dtr;
+    gint result;
+    GDate date;
+    const Recurrence *r;
+    GladeXML *xml;
 
-    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET (page));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
 
     sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(priv->tree_view));
-    gtk_tree_selection_selected_foreach(sel, estimate_budget_helper, page);
 
+    if (gtk_tree_selection_count_selected_rows(sel) <= 0) {
+        dialog = gtk_message_dialog_new (
+            GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
+            GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+            GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+            _("You must select at least one account to estimate."));
+        gtk_dialog_run (GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        return;
+    }
 
+    xml = gnc_glade_xml_new ("budget.glade", "BudgetEstimate");
+    dialog = glade_xml_get_widget (xml, "BudgetEstimate");
+    gtk_window_set_transient_for(
+        GTK_WINDOW(dialog), 
+        GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))));
+    gde = glade_xml_get_widget(xml, "StartDate");
+    date = recurrenceGetDate(&priv->r);
+    gnc_date_edit_set_gdate(GNC_DATE_EDIT(gde), &date);
+    dtr = glade_xml_get_widget(xml, "DigitsToRound");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(dtr), 
+                              (gdouble)priv->sigFigs);
 
+    gtk_widget_show_all (dialog);
+    result = gtk_dialog_run(GTK_DIALOG(dialog));
+    switch (result) {
+    case GTK_RESPONSE_OK:
+        r = gnc_budget_get_recurrence(priv->budget);
+        
+        gnc_date_edit_get_gdate(GNC_DATE_EDIT(gde), &date);
+        recurrenceSet(&priv->r, recurrenceGetMultiplier(r), 
+                      recurrenceGetPeriodType(r), &date);
+        priv->sigFigs = 
+            gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(dtr));
+
+        gtk_tree_selection_selected_foreach(sel, estimate_budget_helper, page);
+        break;
+    default:
+        break;
+    }
+    gtk_widget_destroy(dialog);
 }
 
 static gchar *
