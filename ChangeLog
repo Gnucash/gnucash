@@ -1,3 +1,10 @@
+2006-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/libqof/qof/gnc-numeric.c:
+	  - Fixes for handling reciprocal values.
+	  - Mark a lot of places where potential overflow bugs
+	    are not handled.
+
 2006-02-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/doc/xml/gnucash-v2.rnc: Add reverse-engineered schema for

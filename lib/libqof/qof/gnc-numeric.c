@@ -243,6 +243,14 @@ gnc_numeric_compare(gnc_numeric a, gnc_numeric b)
     return cmp128 (l,r);
   }
 
+  if (a.denom < 0)
+      a.denom *= -1;
+  if (b.denom < 0)
+      b.denom *= -1;
+
+  /* BUG: Possible overflow here..  Also, doesn't properly deal with
+   * reciprocal denominators.
+   */
   aa = a.num * a.denom;
   bb = b.num * b.denom;
 
@@ -270,6 +278,7 @@ gnc_numeric_eq(gnc_numeric a, gnc_numeric b)
 gboolean
 gnc_numeric_equal(gnc_numeric a, gnc_numeric b) 
 {
+  qofint128 l, r;
   if ((a.denom == b.denom) && (a.denom > 0))
   {
     return (a.num == b.num);
@@ -277,8 +286,8 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
   if ((a.denom > 0) && (b.denom > 0))
   {
     // return (a.num*b.denom == b.num*a.denom);
-    qofint128 l = mult128 (a.num, b.denom);
-    qofint128 r = mult128 (b.num, a.denom);
+    l = mult128 (a.num, b.denom);
+    r = mult128 (b.num, a.denom);
     return equal128 (l, r);
 
 #if ALT_WAY_OF_CHECKING_EQUALITY
@@ -289,14 +298,24 @@ gnc_numeric_equal(gnc_numeric a, gnc_numeric b)
     return 1;
 #endif
   }
-  if ((a.denom < 0) && (b.denom < 0))
-  {    
-    return ((a.num * b.denom) == (a.denom * b.num));
+  if ((a.denom < 0) && (b.denom < 0)) {
+      l = mult128 (a.num, -a.denom);
+      r = mult128 (b.num, -b.denom);
+      return equal128 (l, r);
+  } else {
+      /* BUG: One of the numbers has a reciprocal denom, and the other
+         does not. I just don't know to handle this case in any
+         reasonably overflow-proof yet simple way.  So, this funtion
+         will simply get it wrong whenever the three multiplies
+         overflow 64-bits.  -CAS */
+      if (a.denom < 0) {
+          return ((a.num * -a.denom * b.denom) == b.num);
+      } else {
+          return (a.num == (b.num * a.denom * -b.denom));
+      }
   }
-  else 
-  {
-    return 0;
-  }
+
+  return ((a.num * b.denom) == (a.denom * b.num));
 }
 
 
@@ -355,20 +374,20 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
   
   if(a.denom < 0) 
   {
-    a.num *= a.denom;
+    a.num *= -a.denom;  /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) 
   {
-    b.num *= b.denom;
+    b.num *= -b.denom;  /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
   /* Get an exact answer.. same denominator is the common case. */ 
   if(a.denom == b.denom) 
   {
-    sum.num = a.num + b.num;
+    sum.num = a.num + b.num;  /* BUG: overflow not handled.  */
     sum.denom = a.denom;
   }
   else 
@@ -377,7 +396,7 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
      *    sum.num = a.num*b.denom + b.num*a.denom;
      *    sum.denom = a.denom*b.denom;
      * but the multiply could overflow.  
-     * Computing the LCD minimizes likelyhood of overflow
+     * Computing the LCD minimizes likelihood of overflow
      */
     gint64 lcd;
     qofint128 ca, cb, cab;
@@ -468,12 +487,12 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   }
 
   if(a.denom < 0) {
-    a.num *= a.denom;
+    a.num *= -a.denom;  /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) {
-    b.num *= b.denom;
+    b.num *= -b.denom;  /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
@@ -584,13 +603,13 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
 
   if(a.denom < 0) 
   {
-    a.num *= a.denom;
+    a.num *= -a.denom;   /* BUG: overflow not handled.  */
     a.denom = 1;
   }
 
   if(b.denom < 0) 
   {
-    b.num *= b.denom;
+    b.num *= -b.denom;   /* BUG: overflow not handled.  */
     b.denom = 1;
   }
 
@@ -793,7 +812,7 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   
   /* If the denominator of the input value is negative, get rid of that. */
   if(in.denom < 0) {
-    in.num = in.num * (- in.denom);
+    in.num = in.num * (- in.denom);  /* BUG: overflow not handled.  */
     in.denom = 1;
   }
   
@@ -808,9 +827,9 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
     denom     = - denom;
     denom_neg = 1;
     temp_a    = (in.num < 0) ? -in.num : in.num;
-    temp_bc   = in.denom * denom;
-    remainder = in.num % temp_bc;
-    out.num   = in.num / temp_bc;
+    temp_bc   = in.denom * denom;  /* BUG: overflow not handled.  */
+    remainder = temp_a % temp_bc;
+    out.num   = temp_a / temp_bc;
     out.denom = - denom;    
   }
   else 
@@ -1081,7 +1100,7 @@ gnc_numeric_to_double(gnc_numeric in)
   }
   else 
   {
-    return (double)(in.num * in.denom);
+    return (double)(in.num * -in.denom);
   }
 }
 
