@@ -226,7 +226,8 @@ int null_strcmp (const char * da, const char * db);
 /** Search for str2 in first nchar chars of str1, ignore case. Return
  * pointer to first match, or null. These are just like that strnstr
  * and the strstr functions, except that they ignore the case. */
-extern char *strncasestr(const unsigned char *str1, const unsigned char *str2, size_t len);
+extern char *strncasestr(const unsigned char *str1, const unsigned char *str2, 
+	size_t len);
 extern char *strcasestr(const char *str1, const char *str2);
 
 /** The ultostr() subroutine is the inverse of strtoul(). It accepts a
@@ -308,13 +309,13 @@ gpointer gnc_string_cache_insert(gconstpointer key);
 #define CACHE_INSERT(str) gnc_string_cache_insert((gconstpointer)(str))
 #define CACHE_REMOVE(str) gnc_string_cache_remove((str))
 
-/* Replace cached string currently in 'dst' with string in 'src'. 
- * Typical usage: 
+/* Replace cached string currently in 'dst' with string in 'src'.
+ * Typical usage:
  *     void foo_set_name(Foo *f, const char *str) {
  *        CACHE_REPLACE(f->name, str);
  *     }
- * It avoids unnecessary ejection by doing INSERT before REMOVE. 
-*/          
+ * It avoids unnecessary ejection by doing INSERT before REMOVE.
+*/
 #define CACHE_REPLACE(dst, src) do {               \
         gpointer tmp = CACHE_INSERT((src));        \
         CACHE_REMOVE((dst));                       \
