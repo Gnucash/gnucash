@@ -93,6 +93,8 @@ the object must return a single entity matching one of the choice types.
 #include "qofclass.h"
 #include "qofobject.h"
 
+#define QOF_MOD_CHOICE "qof-choice"
+
 /** \brief Identify an object as containing a choice. */
 #define QOF_TYPE_CHOICE "choice"
 
