@@ -1,3 +1,14 @@
+2006-02-05  Neil Williams <linux@codehelp.co.uk>
+
+	* lib/libqof/qof/qofbackend-p.h :
+	* lib/libqof/qof/qofbackend.h : Improving
+	documentation for QofBackendProvider
+	* lib/libqof/qof/qofchoice.c :
+	* lib/libqof/qof/qofchoice.h : Support logging.
+	* lib/libqof/qof/qoflog.c : Add qofchoice to default
+	log modules.
+	* lib/libqof/qof/gnc-engine-util.h : Line-wrapping tweak.	
+
 2006-02-04  David Hampton  <david@dhcp-15.rainbolthampton.net>
 
 	* src/register/ledger-core/split-register.c:

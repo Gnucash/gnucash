@@ -185,6 +185,10 @@ qof_backend_get_config, qof_backend_option_foreach and qof_backend_load_config
 are intended for either the backend or the frontend to retrieve the option data
 from the frame or set new data.
 
+Backends are loaded using QofBackendProvider via the function specified in
+prov->backend_new. Before backend_new returns, you should ensure that your
+backend is fully configured and ready for use.
+
 @{
 */
 
