@@ -39,6 +39,7 @@ TESTS = \
   test-period \
   test-querynew \
   test-query \
+  test-recursive \
   test-resolve-file-path \
   test-split-vs-account  \
   test-transaction-reversal \
@@ -78,6 +79,7 @@ noinst_PROGRAMS = \
   test-period \
   test-query \
   test-querynew \
+  test-recursive \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
