@@ -61,4 +61,5 @@ libgnc_backend_file_la_LDFLAGS = -module
 libgnc_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${XML_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
+   ${top_builddir}/src/core-utils/libcore-utils.la \
    ${QOF_LIBS}

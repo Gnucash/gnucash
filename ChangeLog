@@ -6,6 +6,8 @@
 	  use g_strdup -- cannot feed SCM_STRING_CHARS() back into guile.
 	  (fixes a weird test-case failure in some cases).
 
+	* src/backend/file/Makefile.am: link against libcore-utils.
+
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/qoflog.c :
