@@ -1,3 +1,9 @@
+2006-02-04  David Hampton  <david@dhcp-15.rainbolthampton.net>
+
+	* src/register/ledger-core/split-register.c:
+	* src/gnome-utils/gnc-tree-view-account.c: Get gnucash to compile
+	with gcc4.1.
+
 2006-02-04  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/qof/gnc-numeric.c:

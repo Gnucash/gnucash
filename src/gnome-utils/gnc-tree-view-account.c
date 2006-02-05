@@ -1554,6 +1554,7 @@ gppat_filter_response_cb (GtkWidget *dialog,
 			  AccountFilterDialog *fd)
 {
   GtkWidget *view;
+  gpointer gptemp;
 
   g_return_if_fail(GTK_IS_DIALOG(dialog));
 
@@ -1567,8 +1568,10 @@ gppat_filter_response_cb (GtkWidget *dialog,
   }
 
   /* Clean up and delete dialog */
-  g_atomic_pointer_compare_and_exchange((gpointer *)&fd->dialog,
+  gptemp = (gpointer *)fd->dialog;
+  g_atomic_pointer_compare_and_exchange(&gptemp,
 					dialog, NULL);
+  fd->dialog = gptemp;
   gtk_widget_destroy(dialog);
   LEAVE("types 0x%x", fd->visible_types);
 }

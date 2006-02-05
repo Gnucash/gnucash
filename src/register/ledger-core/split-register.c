@@ -1403,8 +1403,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      return FALSE;
 
    /* Validate the transfer account names */
-   (void *)gnc_split_register_get_account (reg, MXFRM_CELL);
-   (void *)gnc_split_register_get_account (reg, XFRM_CELL);
+   (void)gnc_split_register_get_account (reg, MXFRM_CELL);
+   (void)gnc_split_register_get_account (reg, XFRM_CELL);
 
    /* Maybe deal with exchange-rate transfers */
    if (gnc_split_register_handle_exchange (reg, FALSE))
