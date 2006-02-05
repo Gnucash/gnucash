@@ -8,6 +8,12 @@
 
 	* src/backend/file/Makefile.am: link against libcore-utils.
 
+	* src/engine/test/test-engine-stuff.c:
+	  - make sure a random group always has at least two accounts
+	  - fix "make random transaction" to tell us when we don't
+	    have at least two accounts.
+	  - free the results of xaccGroupGetSubAccounts().
+
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/qoflog.c :
