@@ -1,3 +1,7 @@
+2006-02-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/backend/file/test/Makefile.am: link against libcore-utils.
+
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/qoflog.c :

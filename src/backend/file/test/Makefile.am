@@ -217,6 +217,7 @@ LDADD = ${top_builddir}/src/test-core/libgncmod-test.la \
         ${top_builddir}/src/engine/libgw-engine.la \
         ${top_builddir}/src/engine/libgw-kvp.la \
         ${top_builddir}/src/engine/test-core/libgncmod-test-engine.la \
+        ${top_builddir}/src/core-utils/libcore-utils.la \
         ./libgnc-test-file-stuff.la \
         ${LIBXML2_LIBS} \
         ${QOF_LIBS} \
