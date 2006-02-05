@@ -181,8 +181,7 @@ msgstr "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
 
 #: src/bin/gnucash-bin.c:73
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
-"You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
+msgstr "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 
 #: src/bin/gnucash-bin.c:74
 msgid "The last stable version was "
@@ -616,9 +615,8 @@ msgid "ID #"
 msgstr "ID #"
 
 #: src/business/business-gnome/dialog-customer.c:832
-#, fuzzy
 msgid "Find Customer"
-msgstr "_Find Customer..."
+msgstr "Find Customer"
 
 #: src/business/business-gnome/dialog-date-close.c:72
 msgid "No Account selected.  Please try again."
@@ -680,9 +678,8 @@ msgid "Name"
 msgstr "Name"
 
 #: src/business/business-gnome/dialog-employee.c:727
-#, fuzzy
 msgid "Find Employee"
-msgstr "_Find Employee..."
+msgstr "Find Employee"
 
 #. Translators: In this context,
 #. * 'Billing information' maps to the
@@ -805,9 +802,8 @@ msgid "View/Edit Bill"
 msgstr "View/Edit Bill"
 
 #: src/business/business-gnome/dialog-invoice.c:2204
-#, fuzzy
 msgid "View/Edit Voucher"
-msgstr "View/Edit Vendor"
+msgstr "View/Edit Voucher"
 
 #: src/business/business-gnome/dialog-invoice.c:2214
 msgid "Invoice Owner"
@@ -879,39 +875,32 @@ msgid "Invoice ID"
 msgstr "Invoice ID"
 
 #: src/business/business-gnome/dialog-invoice.c:2244
-#, fuzzy
 msgid "Bill Owner"
-msgstr "Invoice Owner"
+msgstr "Bill Owner"
 
 #: src/business/business-gnome/dialog-invoice.c:2247
-#, fuzzy
 msgid "Bill Notes"
-msgstr "Notes"
+msgstr "Bill Notes"
 
 #: src/business/business-gnome/dialog-invoice.c:2269
-#, fuzzy
 msgid "Bill ID"
-msgstr "Billing ID"
+msgstr "Bill ID"
 
 #: src/business/business-gnome/dialog-invoice.c:2274
-#, fuzzy
 msgid "Voucher Owner"
-msgstr "Invoice Owner"
+msgstr "Voucher Owner"
 
 #: src/business/business-gnome/dialog-invoice.c:2277
-#, fuzzy
 msgid "Voucher Notes"
-msgstr "Invoice Notes"
+msgstr "Voucher Notes"
 
 #: src/business/business-gnome/dialog-invoice.c:2295
-#, fuzzy
 msgid "Employee Name "
-msgstr "Employee Name"
+msgstr "Employee Name "
 
 #: src/business/business-gnome/dialog-invoice.c:2299
-#, fuzzy
 msgid "Voucher ID"
-msgstr "Vendor ID"
+msgstr "Voucher ID"
 
 #. src/business/business-reports/owner-report.scm
 #. src/report/standard-reports/account-summary.scm
@@ -955,14 +944,12 @@ msgid "Num"
 msgstr "Num"
 
 #: src/business/business-gnome/dialog-invoice.c:2388
-#, fuzzy
 msgid "Find Bill"
-msgstr "Find Bi_ll..."
+msgstr "Find Bill"
 
 #: src/business/business-gnome/dialog-invoice.c:2394
-#, fuzzy
 msgid "Find Expense Voucher"
-msgstr "Find Expense _Voucher..."
+msgstr "Find Expense Voucher"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
@@ -974,9 +961,8 @@ msgid "Expense Voucher"
 msgstr "Expense Voucher"
 
 #: src/business/business-gnome/dialog-invoice.c:2400
-#, fuzzy
 msgid "Find Invoice"
-msgstr "Find In_voice..."
+msgstr "Find Invoice"
 
 #. src/business/business-reports/owner-report.scm
 #. src/report/report-system/options-utilities.scm
@@ -1058,9 +1044,8 @@ msgid "Job Name"
 msgstr "Job Name"
 
 #: src/business/business-gnome/dialog-job.c:590
-#, fuzzy
 msgid "Find Job"
-msgstr "Find Jo_b..."
+msgstr "Find Job"
 
 #: src/business/business-gnome/dialog-order.c:165
 msgid "The Order must be given an ID."
@@ -1122,9 +1107,8 @@ msgid "Closed"
 msgstr "Closed"
 
 #: src/business/business-gnome/dialog-order.c:884
-#, fuzzy
 msgid "Find Order"
-msgstr "View/Edit Order"
+msgstr "Find Order"
 
 #: src/business/business-gnome/dialog-payment.c:109
 msgid ""
@@ -1194,9 +1178,8 @@ msgid "Vendor ID"
 msgstr "Vendor ID"
 
 #: src/business/business-gnome/dialog-vendor.c:694
-#, fuzzy
 msgid "Find Vendor"
-msgstr "_Find Vendor..."
+msgstr "Find Vendor"
 
 #: src/business/business-gnome/glade/billterms.glade.h:1
 msgid "(type)"
@@ -3466,17 +3449,16 @@ msgstr "Number"
 
 #: src/gnome/dialog-find-transactions.c:171
 #: src/gnome-search/dialog-search.c:1076
-#, fuzzy
 msgid "Find Transaction"
-msgstr "Find Transactions"
+msgstr "Find Transaction"
 
 #. Translators: %d is the number of prices. This
 #. is a ngettext(3) message.
 #: src/gnome/dialog-price-edit-db.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Are you sure you want to delete the selected price?\""
+msgstr[0] "Are you sure you want to delete the selected price?"
 msgstr[1] "Are you sure you want to delete the %d selected prices?"
 
 #: src/gnome/dialog-price-edit-db.c:175
@@ -4467,9 +4449,8 @@ msgid "Budget List"
 msgstr "Budget List"
 
 #: src/gnome/glade/budget.glade.h:3
-#, fuzzy
 msgid "Budget Name:"
-msgstr "Budget"
+msgstr "Budget Name:"
 
 #: src/gnome/glade/budget.glade.h:4 src/gnome/gnc-plugin-page-budget.c:141
 #: src/gnome/gnc-plugin-page-budget.c:803
@@ -4477,40 +4458,36 @@ msgid "Budget Options"
 msgstr "Budget Options"
 
 #: src/gnome/glade/budget.glade.h:5
-#, fuzzy
 msgid "Budget Period:"
-msgstr "Budget Periods"
+msgstr "Budget Period:"
 
 #: src/gnome/glade/budget.glade.h:6
-#, fuzzy
 msgid "Close the Budget List"
-msgstr "Budget List"
+msgstr "Close the Budget List"
 
 #: src/gnome/glade/budget.glade.h:7
-#, fuzzy
 msgid "Create a New Budget"
-msgstr "Create a new budget"
+msgstr "Create a new Budget"
 
 #: src/gnome/glade/budget.glade.h:8
-#, fuzzy
 msgid "Delete the Selected Budget"
-msgstr "Delete the budget"
+msgstr "Delete the selected budget"
 
 #: src/gnome/glade/budget.glade.h:9
-#, fuzzy
 msgid "Estimate Budget Values"
-msgstr "Estimate Budget"
+msgstr "Estimate budget values"
 
 #: src/gnome/glade/budget.glade.h:10 src/gnome/glade/sched-xact.glade.h:73
 msgid "Every "
 msgstr "Every "
 
 #: src/gnome/glade/budget.glade.h:11
-#, fuzzy
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "Estimate a budget value for the selected cells"
+msgstr ""
+"GnuCash will estimate budget values for the selected accounts from past "
+"transactions."
 
 #: src/gnome/glade/budget.glade.h:12
 msgid ""
@@ -4525,18 +4502,16 @@ msgid "Number of Periods:"
 msgstr "Number of Periods:"
 
 #: src/gnome/glade/budget.glade.h:15
-#, fuzzy
 msgid ""
 "Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
 "Quarterly = every 3 months"
 msgstr ""
-"Number of calendar units in the recurrence:  E.g. Biweekly = every 2 weeks; "
-"Quarterly = every 3 month"
+"Number of calendar units in the recurrence:  e.g. Biweekly = every 2 weeks; "
+"Quarterly = every 3 months"
 
 #: src/gnome/glade/budget.glade.h:16
-#, fuzzy
 msgid "Open the Selected Budget"
-msgstr "Open the selected account"
+msgstr "Open the selected budget"
 
 #: src/gnome/glade/budget.glade.h:17 src/gnome/glade/print.glade.h:10
 #: src/gnome/glade/sched-xact.glade.h:126
@@ -4547,7 +4522,7 @@ msgstr "Options"
 
 #: src/gnome/glade/budget.glade.h:18
 msgid "Significant Digits:"
-msgstr ""
+msgstr "Significant digits:"
 
 #: src/gnome/glade/budget.glade.h:19 src/gnome/glade/sched-xact.glade.h:163
 msgid "Start Date:"
@@ -4555,7 +4530,7 @@ msgstr "Start Date:"
 
 #: src/gnome/glade/budget.glade.h:20
 msgid "The number of leading digits to keep when rounding"
-msgstr ""
+msgstr "The number of leading digits to keep when rounding"
 
 #: src/gnome/glade/budget.glade.h:21
 msgid "This is Sample2."
@@ -6263,9 +6238,8 @@ msgid "Postpone"
 msgstr "Postpone"
 
 #: src/gnome/glade/sched-xact.glade.h:136
-#, fuzzy
 msgid "Press Apply to create these transactions."
-msgstr "Press apply to create these transactions."
+msgstr "Press Apply to create these transactions."
 
 #: src/gnome/glade/sched-xact.glade.h:137
 msgid "Press apply to commit these changes."
@@ -7114,24 +7088,22 @@ msgid "_Delete Budget"
 msgstr "_Delete Budget"
 
 #: src/gnome/gnc-plugin-page-budget.c:139
-#, fuzzy
 msgid "Delete this budget"
-msgstr "Delete the budget"
+msgstr "Delete this budget"
 
 #: src/gnome/gnc-plugin-page-budget.c:142
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "Edit the account view options"
+msgstr "Edit the options for this budget"
 
 #: src/gnome/gnc-plugin-page-budget.c:144
 msgid "Estimate Budget"
 msgstr "Estimate Budget"
 
 #: src/gnome/gnc-plugin-page-budget.c:146
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "Estimate a budget value for the selected cells"
+msgstr ""
+"Estimate a budget value for the selected accounts from past transactions"
 
 #: src/gnome/gnc-plugin-page-budget.c:169
 msgid "Estimate"
@@ -7153,9 +7125,8 @@ msgid "Delete %s?"
 msgstr "Delete %s?"
 
 #: src/gnome/gnc-plugin-page-budget.c:891
-#, fuzzy
 msgid "You must select at least one account to estimate."
-msgstr "You must select an account type."
+msgstr "You must select at least one account to estimate."
 
 #. File menu
 #: src/gnome/gnc-plugin-page-register.c:157
@@ -10464,18 +10435,18 @@ msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr "The database %s doesn't seem to exist. Do you want to create it?"
 
 #: src/gnome-utils/gnc-file.c:247
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 msgstr ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not open the database. Do you want to "
 "proceed with opening the database?"
 
 #: src/gnome-utils/gnc-file.c:255
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not import the database. Do you want "
@@ -10486,24 +10457,24 @@ msgstr ""
 "to proceed with importing the database?"
 
 #: src/gnome-utils/gnc-file.c:263
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 msgstr ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not save the database. Do you want to "
 "proceed with saving the database?"
 
 #: src/gnome-utils/gnc-file.c:271
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 msgstr ""
-"GnuCash could not obtain the lock for %s.That database may be in use by "
+"GnuCash could not obtain the lock for %s. That database may be in use by "
 "another user, in which case you should not export the database. Do you want "
 "to proceed with exporting the database?"
 
@@ -10517,9 +10488,9 @@ msgstr ""
 "system, or you may not have write permission for the directory."
 
 #: src/gnome-utils/gnc-file.c:301
-#, fuzzy, c-format
+#, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
-msgstr "The file/URL %sdoes not contain GnuCash data or the data is corrupt."
+msgstr "The file/URL %s does not contain GnuCash data or the data is corrupt."
 
 #: src/gnome-utils/gnc-file.c:307
 #, c-format
@@ -13790,30 +13761,26 @@ msgstr ""
 "You need to expand the transaction in order to modify its exchange rates."
 
 #: src/register/ledger-core/split-register-control.c:1475
-#, fuzzy
 msgid "Save the changed transaction?"
-msgstr "Save the current transaction?"
+msgstr "Save the changed transaction?"
 
 #: src/register/ledger-core/split-register-control.c:1477
-#, fuzzy
 msgid ""
 "The current transaction has been changed.  Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
 "to the changed transaction?"
 msgstr ""
 "The current transaction has been changed.  Would you like to record the "
-"changes before moving to a new transaction, move without recording the "
-"changes, or cancel the move?"
+"changes before moving to a new transaction, discard the changes, or return "
+"to the changed transaction?"
 
 #: src/register/ledger-core/split-register-control.c:1490
-#, fuzzy
 msgid "_Discard Changes"
-msgstr "Finish changes"
+msgstr "_Discard changes"
 
 #: src/register/ledger-core/split-register-control.c:1492
-#, fuzzy
 msgid "_Record Changes"
-msgstr "Verify Changes"
+msgstr "_Record Changes"
 
 #: src/register/ledger-core/split-register-control.c:1558
 msgid "Mark split as unreconciled?"
@@ -15090,7 +15057,6 @@ msgstr "Expense Report"
 
 #. src/business/business-reports/owner-report.scm
 #: intl-scm/guile-strings.c:708
-#, fuzzy
 msgid " Report"
 msgstr "Report"
 
