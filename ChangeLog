@@ -14,6 +14,10 @@
 	    have at least two accounts.
 	  - free the results of xaccGroupGetSubAccounts().
 
+	* src/engine/test/test-engine-stuff.c:
+	  - better fix for #accounts
+	  - don't g_list_free the account_list
+
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/qoflog.c :

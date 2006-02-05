@@ -863,6 +863,7 @@ make_random_group_depth (QofBook *book, AccountGroup *group, int depth)
     Account *account = get_random_account (book);
 
     xaccGroupInsertAccount (group, account);
+    total_num_accounts++;
 
     account_add_subaccounts (book, account, depth - 1);
   }
@@ -872,7 +873,6 @@ static void
 make_random_group (QofBook *book, AccountGroup *group)
 {
   int depth;
-  GList *account_list;
 
   g_return_if_fail (book);
   g_return_if_fail (group);
@@ -883,10 +883,8 @@ make_random_group (QofBook *book, AccountGroup *group)
   make_random_group_depth (book, group, depth);
 
   /* Make sure we have at least two accounts! */
-  account_list = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
-  if (1 >= g_list_length (account_list))
+  if (total_num_accounts <= 1)
     make_random_group_depth (book, group, 1);
-  g_list_free(account_list);
 }
 
 AccountGroup *
@@ -1408,7 +1406,6 @@ get_random_transaction_with_currency(QofBook *book,
     if (1 >= g_list_length (account_list)) {
       failure_args("engine-stuff", __FILE__, __LINE__,
               "get_random_transaction_with_currency: account_list too short");
-      g_list_free(account_list);
       return NULL;
     }
 
@@ -1432,7 +1429,6 @@ get_random_transaction_with_currency(QofBook *book,
     xaccTransSetSlots_nc(trans, f);
 
     add_random_splits(book, trans, account_list);
-    g_list_free(account_list);
 
     if (get_random_int_in_range (1, 10) == 1)
     {
