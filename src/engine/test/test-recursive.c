@@ -25,8 +25,6 @@
 #include <glib/gprintf.h>
 #define _GNU_SOURCE
 
-#include "qofinstance-p.h"
-#include "gnc-event-p.h"
 #include "qof.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -47,6 +45,10 @@
 #define OBJ_ACTIVE "ofcourse"
 #define OBJ_FLAG   "tiny_flag"
 #define OBJ_RELATIVE "family"
+
+/* set to TRUE to get QSF XML output
+ * requires QSF available (i.e. make install) */
+static gboolean debug = FALSE; 
 
 /* simple object structure */
 typedef struct child_s
@@ -953,17 +955,15 @@ test_recursion (QofSession *original, guint counter)
 	QofCollection *grand_coll;
 	struct tally c;
 	QofBook *book;
-	gboolean debug;
 	guint d, e;
 
 	c.nulls = 0;
 	c.total = 0;
 	c.book = NULL;
-	debug = FALSE; /* switch to TRUE to see the XML output.*/
 	book = qof_session_get_book(original);
 	grand_coll = qof_book_get_collection(book, GRAND_MODULE_NAME);
 	copy = qof_session_new();
-	qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE);
+	if(debug) { qof_session_begin(copy, QOF_STDOUT, TRUE, FALSE); }
 	qof_entity_copy_coll_r(copy, grand_coll);
 	/* test the original */
 	qof_object_foreach(GRAND_MODULE_NAME, book, check_cb, &c);
@@ -993,7 +993,7 @@ main (int argc, const char *argv[])
 	myparentRegister();
 	mychildRegister();
 	original = qof_session_new();
-	qof_session_begin(original, QOF_STDOUT, TRUE, FALSE);
+	if(debug) { qof_session_begin(original, QOF_STDOUT, TRUE, FALSE); }
 	for(counter = 0; counter < 25; counter++)
 	{
 		create_data(original, (counter % 5));
