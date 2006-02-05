@@ -2,7 +2,7 @@
  *            qof-log.h
  *
  *  Mon Nov 21 14:35:26 2005
- *  Author: Rob Clark (rclark@cs.hmc.edu)                          *
+ *  Author: Rob Clark (rclark@cs.hmc.edu)
  *  Copyright (C) 1998-2003 Linas Vepstas <linas@linas.org>
  *  Copyright  2005  Neil Williams
  *  linux@codehelp.co.uk
@@ -89,16 +89,34 @@ logging subsystem in one operation.
 */
 void qof_log_init (void);
 
-/** Set the logging level of the given log_module. */
+/** Set the logging level of the given log_module.
+
+Registers the log_module with the qof_log hashtable and
+sets an initial value for the loglevel for that log_module.
+*/
 void qof_log_set_level(QofLogModule module, QofLogLevel level);
 
-/** Set the logging level for all known log_modules.
+/** Set the logging level for all registered log_modules.
 
 \note Unless a log_module has been registered using
-qof_log_set_level, it will be unaffected by this change.
+qof_log_set_level, it will be unaffected by this change because
+there will be no entry in the hashtable.
 
+"silent" log_modules are supported by the qof_log_set_level_registered
+function which only  moderates log_levels for those modules actually
+registered. The advantage is that a developer can omit existing
+log_modules from the init code and cut down the amount of unwanted logging. 
+
+e.g. if you are working in one section of the code and do not want
+the extra log information created by allowing the default modules
+to log as well. This makes the log itself easier to use when working
+in a small area of the codebase. Silent log_modules can also be
+useful where no default currently exists - again to isolate certain
+sections of the default log output - and using qof_log_set_level_registered
+allows these silent log_modules to be retained in the code without
+being logged by other developers etc.
 */
-void qof_log_set_level_global(QofLogLevel level);
+void qof_log_set_level_registered(QofLogLevel level);
 
 /** Specify an alternate log output, to pipe or file.
 By default, all logging goes to /tmp/qof.trace 

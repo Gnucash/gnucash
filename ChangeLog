@@ -1,5 +1,15 @@
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
+	* lib/libqof/qof/qoflog.c :
+	* lib/libqof/qof/qoflog.h :
+	* lib/libqof/qof/deprecated.c :
+	* lib/libqof/qof/deprecated.h : Deprecating qof_log_set_level_global
+	in favour of qof_log_set_level_registered. Documenting circumstances
+	under which _global could be modified and added as a new function.
+	Improve qof_log_check to handle out-of-bounds log_levels.
+
+2006-02-05  Neil Williams <linux@codehelp.co.uk>
+
 	* lib/libqof/qof/qofbackend-p.h :
 	* lib/libqof/qof/qofbackend.h : Improving
 	documentation for QofBackendProvider

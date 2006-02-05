@@ -38,8 +38,22 @@ void gnc_log_init (void);
 /** \deprecated use qof_log_set_level insead. */
 void gnc_set_log_level(QofLogModule module, gncLogLevel level);
 
-/** \deprecated use qof_log_set_level_global instead. */
+/** \deprecated use qof_log_set_level_registered instead. */
 void gnc_set_log_level_global(gncLogLevel level);
+
+/** \deprecated use qof_log_set_level_registered instead.
+
+This function has been deprecated because the function name
+is very misleading. It may, in future, be modified to be
+truly global (i.e. make changes to log modules where no
+log_level has been explicitly set) but, despite the name,
+it only ever modified known (gnucash) modules. Future changes
+would require that if this function is made truly global it must
+preserve the effect of qof_log_set_level_registered and the advantages
+of silent log_modules for those programs that do not use _global. Support
+could be required for removing log_modules from the hashtable.
+*/
+void qof_log_set_level_global(QofLogLevel level);
 
 /** \deprecated use qof_log_set_file instead. */
 void gnc_set_logfile (FILE *outfile);

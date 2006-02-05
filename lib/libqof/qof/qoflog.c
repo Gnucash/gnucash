@@ -2,7 +2,7 @@
  *            qoflog.c
  *
  *  Mon Nov 21 14:41:59 2005
- *  Author: Rob Clark (rclark@cs.hmc.edu)                          *
+ *  Author: Rob Clark (rclark@cs.hmc.edu)
  *  Copyright (C) 1997-2003 Linas Vepstas <linas@linas.org>
  *  Copyright  2005  Neil Williams
  *  linux@codehelp.co.uk
@@ -70,11 +70,8 @@ qof_log_get_indent(void)
 void
 qof_log_drop_indent(void)
 {
-	qof_log_num_spaces -= QOF_LOG_INDENT_WIDTH;
-	if(qof_log_num_spaces < 0)
-	{
-		qof_log_num_spaces = 0;
-	}
+	qof_log_num_spaces = (qof_log_num_spaces < QOF_LOG_INDENT_WIDTH) ?
+		0 : qof_log_num_spaces - QOF_LOG_INDENT_WIDTH;
 }
 
 static void
@@ -96,7 +93,7 @@ qof_log_init (void)
 	   fout = fopen ("/tmp/qof.trace", "w");
    }
 
-   if(!fout && (filename = (char *)g_malloc(MAX_TRACE_FILENAME))) {
+   if(!fout && (filename = (gchar *)g_malloc(MAX_TRACE_FILENAME))) {
       snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/qof.trace.%d", 
 	       getpid());
       fout = fopen (filename, "w");
@@ -130,7 +127,7 @@ log_module_foreach(gpointer key, gpointer value, gpointer data)
 }
 
 void
-qof_log_set_level_global(QofLogLevel level)
+qof_log_set_level_registered(QofLogLevel level)
 {
 	gchar* level_string;
 
@@ -173,7 +170,7 @@ qof_log_shutdown (void)
 const char *
 qof_log_prettify (const char *name)
 {
-  char *p, *buffer;
+  gchar *p, *buffer;
   gint length;
 
   if (!name) { return ""; }
@@ -205,7 +202,7 @@ struct timeval qof_clock_total[NUM_CLOCKS] = {
 
 void
 qof_start_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
-                 const char *function_name, const char *format, ...)
+                 const gchar *function_name, const gchar *format, ...)
 {
   struct timezone tz;
   va_list ap;
@@ -229,8 +226,8 @@ qof_start_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
 }
 
 void
-qof_report_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
-                  const char *function_name, const char *format, ...)
+qof_report_clock (gint clockno, QofLogModule log_module, QofLogLevel log_level,
+                  const gchar *function_name, const gchar *format, ...)
 {
   struct timezone tz;
   struct timeval now;
@@ -268,9 +265,9 @@ qof_report_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
 }
 
 void
-qof_report_clock_total (int clockno,
+qof_report_clock_total (gint clockno,
                         QofLogModule log_module, QofLogLevel log_level,
-                        const char *function_name, const char *format, ...)
+                        const gchar *function_name, const gchar *format, ...)
 {
   va_list ap;
 
@@ -305,10 +302,11 @@ gboolean
 qof_log_check(QofLogModule log_module, QofLogLevel log_level)
 {
 	gchar* log_string;
-	QofLogLevel maximum; /* Any log_level less than this will be logged. */
+	QofLogLevel maximum; /* Any positive log_level less than this will be logged. */
 
 	log_string = NULL;
-	if(!log_table || log_module == NULL || log_level == 0) { return FALSE; }
+	if (log_level > QOF_LOG_TRACE) log_level = QOF_LOG_TRACE;
+	if(!log_table || log_module == NULL || log_level < 0) { return FALSE; }
 	log_string = (gchar*)g_hash_table_lookup(log_table, log_module);
 	/* if log_module not found, do not log. */
 	if(!log_string) { return FALSE; }

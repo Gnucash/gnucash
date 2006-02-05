@@ -35,7 +35,11 @@ void gnc_set_log_level(QofLogModule log_module, gncLogLevel level)
 }
 void gnc_set_log_level_global(gncLogLevel level)
 {
-	qof_log_set_level_global((QofLogLevel)level);
+	qof_log_set_level_registered((QofLogLevel)level);
+}
+void qof_log_set_level_global(QofLogLevel level)
+{
+	qof_log_set_level_registered((QofLogLevel)level);
 }
 void gnc_set_logfile (FILE *outfile)
 {
