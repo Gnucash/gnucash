@@ -150,7 +150,7 @@ KvpSlot = element slot {
   ( element slot:value { attribute type { "frame" }, KvpSlot+ }
   | element slot:value { attribute type { "integer" }, xsd:int }
   | element slot:value { attribute type { "double" }, xsd:double }
-  | element slot:value { attribute type { "numeric" }, xsd:string { pattern = "-?[0-9]+/[0-9]+" } }
+  | element slot:value { attribute type { "numeric" }, xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } }
   | element slot:value { attribute type { "string" }, text }
   | element slot:value { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }}
   | element slot:value { attribute type { "timespec" }, TimeStamp }
@@ -219,8 +219,8 @@ Customer = element gnc:GncCustomer {
   # gncTaxTable.c:gncTaxIncludedTypeToString...
   element cust:taxincluded { "YES" | "NO" | "USEGLOBAL"},
   element cust:active { xsd:boolean { pattern = "[01]" } },
-  element cust:discount { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
-  element cust:credit { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
+  element cust:discount { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
+  element cust:credit { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
   element cust:currency {
     element cmdty:space { text },
     element cmdty:id { text }
@@ -244,8 +244,8 @@ Employee = element gnc:GncEmployee {
     element addr:email { text }?
   },
   element employee:active { xsd:boolean { pattern = "[01]" } },
-  element employee:workday { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
-  element employee:rate { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
+  element employee:workday { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
+  element employee:rate { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
   element employee:currency {
     element cmdty:space { text },
     element cmdty:id { text }
@@ -294,7 +294,7 @@ Invoice = element gnc:GncInvoice {
     element owner:type { "gncCustomer" },
     element owner:id { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }}
   }?,
-  element invoice:charge-amt { xsd:string { pattern = "-?[0-9]+/[0-9]+" } }?
+  element invoice:charge-amt { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } }?
 }
 
 Entry = element gnc:GncEntry {
@@ -304,10 +304,10 @@ Entry = element gnc:GncEntry {
   element entry:entered { TimeStamp },
   element entry:description { text },
   element entry:action { text }?, # probably constrained
-  element entry:qty { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
+  element entry:qty { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
 
   ( element entry:i-acct { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }},
-    element entry:i-price { xsd:string { pattern = "-?[0-9]+/[0-9]+" } },
+    element entry:i-price { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" } },
     element entry:invoice { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }},
     # gncTaxTable.c:gncAmountTypeToString...
     element entry:i-disc-type { "VALUE" | "PERCENT" },
@@ -317,7 +317,7 @@ Entry = element gnc:GncEntry {
     element entry:i-taxincluded { xsd:boolean { pattern = "[01]" } }
   )?,
   ( element entry:b-acct { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }},
-    element entry:b-price { xsd:string { pattern = "-?[0-9]+/[0-9]+" }},
+    element entry:b-price { xsd:string { pattern = "-?[0-9]+/-?[0-9]+" }},
     element entry:bill { attribute type { "guid" }, xsd:string { pattern = "[0-9a-f]{32}" }},
     element entry:billable { xsd:boolean { pattern = "[01]" } },
     element entry:b-taxable { xsd:boolean { pattern = "[01]" } },
