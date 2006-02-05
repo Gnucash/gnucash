@@ -925,15 +925,15 @@ dnl PKG_PROG_PKG_CONFIG
 dnl *****************************
 #	libgsf-1		>= 1.12.2
 goffice_reqs="
-	glib-2.0		>= 2.4.8
-	gobject-2.0		>= 2.4.8
-	gmodule-2.0		>= 2.4.8
+	glib-2.0		>= 2.4.7
+	gobject-2.0		>= 2.4.7
+	gmodule-2.0		>= 2.4.7
 	libxml-2.0		>= 2.4.12
 	pango			>= 1.6.0
 	pangoft2		>= 1.6.0
 "
 goffice_gtk_reqs="
-	gtk+-2.0		>= 2.4.14
+	gtk+-2.0		>= 2.4.13
 	libglade-2.0		>= 2.3.6
 	libgnomeprint-2.2	>= 2.8.0
 	libart-2.0		>= 2.3.11
@@ -2064,7 +2064,6 @@ AC_MSG_RESULT($warnFLAGS)
 
 chmod u+x ${srcdir}/src/gnc-test-env
 chmod u+x ${srcdir}/src/bin/generate-gnc-script
-chmod u+x ${srcdir}/src/bin/overrides/gnucash-run-script
 chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 
 ### --------------------------------------------------------------------------
