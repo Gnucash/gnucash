@@ -781,14 +781,14 @@ check_reciprocal(void)
     /* 2 + 3 = 5 */
     ans = gnc_numeric_add(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
     check_binary_op (gnc_numeric_create(5, -1),
-                     ans, a, b, "expected %s got %s = %s + %s for recirocal");
+                     ans, a, b, "expected %s got %s = %s + %s for reciprocal");
                    
     /* 2 + 3 = 5 */
     a = gnc_numeric_create(2, -1);
     b = gnc_numeric_create(300, 100);
     ans = gnc_numeric_add(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
     check_binary_op (gnc_numeric_create(5, -1),
-                     ans, a, b, "expected %s got %s = %s + %s for recirocal");
+                     ans, a, b, "expected %s got %s = %s + %s for reciprocal");
 
     /* check gnc_numeric_to_double */
     flo = gnc_numeric_to_double(gnc_numeric_create(5, -1));
@@ -818,7 +818,7 @@ check_reciprocal(void)
     b = gnc_numeric_create(3, -1);
     ans = gnc_numeric_mul(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
     check_binary_op (gnc_numeric_create(6, -1),
-                     ans, a, b, "expected %s got %s = %s * %s for recirocal");
+                     ans, a, b, "expected %s got %s = %s * %s for reciprocal");
     
     /* check gnc_numeric_div */
     /* -60 / 20 = -3 */
@@ -826,14 +826,14 @@ check_reciprocal(void)
     b = gnc_numeric_create(2, -10);
     ans = gnc_numeric_div(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
     check_binary_op (gnc_numeric_create(-3, -1),
-                     ans, a, b, "expected %s got %s = %s / %s for recirocal");
+                     ans, a, b, "expected %s got %s = %s / %s for reciprocal");
 
     /* 60 / 20 = 3 */
     a = gnc_numeric_create(60, 1);
     b = gnc_numeric_create(2, -10);
     ans = gnc_numeric_div(a, b, GNC_DENOM_RECIPROCAL(1), GNC_HOW_RND_NEVER);
     check_binary_op (gnc_numeric_create(3, -1),
-                     ans, a, b, "expected %s got %s = %s / %s for recirocal");
+                     ans, a, b, "expected %s got %s = %s / %s for reciprocal");
     
 
 }
