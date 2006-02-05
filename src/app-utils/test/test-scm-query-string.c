@@ -20,6 +20,7 @@ test_query (Query *q, SCM val2str)
   SCM args = SCM_EOL;
   Query *q2;
   const gchar * str;
+  gchar *str2 = NULL;
 
   scm_q = gnc_query2scm (q);
   args = scm_cons (scm_q, SCM_EOL);
@@ -29,9 +30,9 @@ test_query (Query *q, SCM val2str)
   str_q = scm_string_append (args);
 
   str = SCM_STRING_CHARS (str_q);
-
-  if (str) {
-    res_q = scm_c_eval_string (str);
+  if (str) str2 = g_strdup(str);
+  if (str2) {
+    res_q = scm_c_eval_string (str2);
   } else {
     res_q = SCM_BOOL_F;
   }
@@ -41,16 +42,18 @@ test_query (Query *q, SCM val2str)
   if (!xaccQueryEqual (q, q2))
   {
     failure ("queries don't match");
-    fprintf (stderr, "%s\n\n", str ? str : "(null)");
+    fprintf (stderr, "%s\n\n", str2 ? str2 : "(null)");
     scm_q = gnc_query2scm (q2);
     scm_display (scm_q, SCM_UNDEFINED);
     scm_newline (SCM_UNDEFINED);
+    if (str2) g_free(str2);
     exit (1);
   }
   else
   {
     success ("queries match");
   }
+  if (str2) g_free(str2);
   if (q2) xaccFreeQuery (q2);
 }
 

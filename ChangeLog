@@ -2,6 +2,10 @@
 
 	* src/backend/file/test/Makefile.am: link against libcore-utils.
 
+	* src/app-utils/test/test-scm-query-string.c:
+	  use g_strdup -- cannot feed SCM_STRING_CHARS() back into guile.
+	  (fixes a weird test-case failure in some cases).
+
 2006-02-05  Neil Williams <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/qoflog.c :
