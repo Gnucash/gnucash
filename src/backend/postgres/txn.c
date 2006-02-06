@@ -233,7 +233,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
          if (s->idata)
          {
            pgendKVPDelete (be, s->idata);
-           pgendKVPStore (be, s->idata, s->kvp_data);
+           pgendKVPStore (be, s->idata, s->inst.kvp_data);
          }
       }
 
@@ -822,13 +822,13 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       Split *s = node->data;
       if (0 != s->idata)
       {
-         if (!kvp_frame_is_empty (s->kvp_data))
+         if (!kvp_frame_is_empty (s->inst.kvp_data))
          {
-           kvp_frame_delete (s->kvp_data);
-           s->kvp_data = kvp_frame_new ();
+           kvp_frame_delete (s->inst.kvp_data);
+           s->inst.kvp_data = kvp_frame_new ();
          }
 
-         s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
       }
    }
 

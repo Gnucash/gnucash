@@ -575,7 +575,7 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
       for (snode = engine_splits; snode; snode=snode->next)
       {
          Split *s = snode->data;
-         s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+         s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
       }
 
       xaccTransCommitEdit (trans);

@@ -274,7 +274,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
          Split *s = snode->data;
          if (s->idata)
          {
-            s->kvp_data = pgendKVPFetch (be, s->idata, s->kvp_data);
+            s->inst.kvp_data = pgendKVPFetch (be, s->idata, s->inst.kvp_data);
          }
       }
 
