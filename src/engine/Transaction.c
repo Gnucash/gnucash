@@ -1044,6 +1044,7 @@ xaccTransClone (const Transaction *t)
     split->parent = trans;
     trans->splits = g_list_append (trans->splits, split);
   }
+  qof_instance_set_dirty(QOF_INSTANCE(trans));
   xaccTransCommitEdit(trans);
   gnc_engine_resume_events();
 
@@ -1630,6 +1631,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
     }
   }
 
+  qof_instance_set_dirty(QOF_INSTANCE(trans));
   mark_trans (trans);
   qof_commit_edit(QOF_INSTANCE(trans));
 }
@@ -2088,6 +2090,7 @@ xaccTransIsOpen (const Transaction *trans)
   return trans ? (0 < trans->inst.editlevel) : FALSE;
 }
 
+/* Only used by postgres backend. Not sure if they should dirty the trans. */
 void
 xaccTransSetVersion (Transaction *trans, gint32 vers)
 {
@@ -2109,8 +2112,10 @@ xaccTransGetVersion (const Transaction *trans)
 static void
 xaccTransRemoveSplit (Transaction *trans, const Split *split) 
 {
-  if (trans)
-      trans->splits = g_list_remove (trans->splits, split);
+    if (trans) {
+        trans->splits = g_list_remove (trans->splits, split);
+        qof_instance_set_dirty(QOF_INSTANCE(trans));
+    }
 }
 
 /********************************************************************\
@@ -2180,6 +2185,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    /* Now, insert the split into the array */
    split->parent = trans;
    trans->splits = g_list_append (trans->splits, split);
+   qof_instance_set_dirty(QOF_INSTANCE(trans));
 
    /* Convert the split to the new transaction's commodity denominator */
    /* If the denominator can't be exactly converted, it's an error */
@@ -2495,6 +2501,7 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
            ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
     
     *dadate = val;
+    qof_instance_set_dirty(QOF_INSTANCE(trans));
     mark_trans(trans);
     qof_commit_edit(QOF_INSTANCE(trans));
 
@@ -2585,7 +2592,10 @@ void
 xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
+   qof_begin_edit(QOF_INSTANCE(trans));
    kvp_frame_set_timespec (trans->inst.kvp_data, TRANS_DATE_DUE_KVP, *ts);
+   qof_instance_set_dirty(QOF_INSTANCE(trans));
+   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 void
@@ -2595,22 +2605,31 @@ xaccTransSetTxnType (Transaction *trans, char type)
   g_return_if_fail(trans);
   if (!qof_begin_edit(&trans->inst)) return;
   kvp_frame_set_str (trans->inst.kvp_data, TRANS_TXN_TYPE_KVP, s);
+  qof_instance_set_dirty(QOF_INSTANCE(trans));
   qof_commit_edit(&trans->inst);
 }
 
 void xaccTransClearReadOnly (Transaction *trans)
 {
-   if (trans)
-       kvp_frame_set_slot_path (trans->inst.kvp_data, NULL, 
-                                TRANS_READ_ONLY_REASON, NULL);
+    if (trans) {
+        qof_begin_edit(QOF_INSTANCE(trans));
+        kvp_frame_set_slot_path (trans->inst.kvp_data, NULL, 
+                                 TRANS_READ_ONLY_REASON, NULL);
+        qof_instance_set_dirty(QOF_INSTANCE(trans));
+        qof_commit_edit(QOF_INSTANCE(trans));
+    }
 }
 
 void
 xaccTransSetReadOnly (Transaction *trans, const char *reason)
 {
-   if (trans && reason)
-       kvp_frame_set_str (trans->inst.kvp_data, 
-                          TRANS_READ_ONLY_REASON, reason);
+    if (trans && reason) {
+        qof_begin_edit(QOF_INSTANCE(trans));
+        kvp_frame_set_str (trans->inst.kvp_data, 
+                           TRANS_READ_ONLY_REASON, reason);
+        qof_instance_set_dirty(QOF_INSTANCE(trans));
+        qof_commit_edit(QOF_INSTANCE(trans));
+    }
 }
 
 /********************************************************************\
@@ -2633,6 +2652,7 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
    qof_begin_edit(QOF_INSTANCE(trans));
 
    CACHE_REPLACE(trans->num, xnum);
+   qof_instance_set_dirty(QOF_INSTANCE(trans));
    qof_commit_edit(QOF_INSTANCE(trans));
 }
 
@@ -2651,6 +2671,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    qof_begin_edit(QOF_INSTANCE(trans));
 
    CACHE_REPLACE(trans->description, desc);
+   qof_instance_set_dirty(QOF_INSTANCE(trans));
    qof_commit_edit(QOF_INSTANCE(trans));
 }
 
@@ -2669,6 +2690,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   qof_begin_edit(QOF_INSTANCE(trans));
 
   kvp_frame_set_str (trans->inst.kvp_data, trans_notes_str, notes);
+  qof_instance_set_dirty(QOF_INSTANCE(trans));
   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
@@ -3255,6 +3277,7 @@ xaccTransVoid(Transaction *trans, const char *reason)
     xaccSplitSetReconcile(split, VREC);
   }
 
+  /* Dirtying taken care of by SetReadOnly */
   xaccTransSetReadOnly(trans, _("Transaction Voided"));
   xaccTransCommitEdit(trans);
 }
@@ -3340,6 +3363,7 @@ xaccTransUnvoid (Transaction *trans)
     xaccSplitSetReconcile(split, NREC);
   }
 
+  /* Dirtying taken care of by ClearReadOnly */
   xaccTransClearReadOnly(trans);
   xaccTransCommitEdit(trans);
 }
@@ -3365,6 +3389,8 @@ xaccTransReverse (Transaction *trans)
     xaccSplitSetDateReconciledSecs (split, 0);
   }
 
+  if (trans->splits)
+      qof_instance_set_dirty(QOF_INSTANCE(trans));
   xaccTransCommitEdit(trans);
 }
 
@@ -3506,8 +3532,8 @@ static QofObject trans_object_def = {
   create:              (gpointer)xaccMallocTransaction,
   book_begin:          NULL,
   book_end:            NULL,
-  is_dirty:            NULL,
-  mark_clean:          NULL,
+  is_dirty:            qof_collection_is_dirty,
+  mark_clean:          qof_collection_mark_clean,
   foreach:             qof_collection_foreach,
   printable:           (const char* (*)(gpointer)) xaccTransGetDescription,
   version_cmp:         (int (*)(gpointer,gpointer)) qof_instance_version_cmp,
