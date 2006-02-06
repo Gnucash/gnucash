@@ -1626,6 +1626,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   gint fraction, old_fraction;
 
   if (!trans || !curr || trans->common_currency == curr) return;
+  check_open (trans);
 
   old_fraction = gnc_commodity_get_fraction (trans->common_currency);
   trans->common_currency = curr;
@@ -1672,6 +1673,7 @@ void
 xaccTransDestroy (Transaction *trans)
 {
   if (!trans) return;
+  check_open (trans);
 
   if (xaccTransGetReadOnly (trans) &&
       !qof_book_shutting_down(trans->inst.book)) return;
@@ -2139,6 +2141,8 @@ xaccSplitDestroy (Split *split)
    if (acc && !acc->inst.do_free && xaccTransGetReadOnly (trans))
        return FALSE;
 
+   check_open (trans);
+
    mark_split (split);
 
    if (trans)
@@ -2177,6 +2181,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 {
    if (!trans || !split) return;
    g_return_if_fail (trans->inst.book == split->book);
+   check_open (trans);
 
    /* First, make sure that the split isn't already inserted 
     * elsewhere. If so, then remove it. */
@@ -2493,6 +2498,8 @@ xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb)
 static inline void
 xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
+    check_open(trans);
+
     PINFO ("addr=%p set date to %llu.%09ld %s",
            trans, val.tv_sec, val.tv_nsec, 
            ctime (({time_t secs = (time_t) val.tv_sec; &secs;})));
@@ -2633,6 +2640,7 @@ xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    char * tmp;
    if (!trans || !xnum) return;
+   check_open (trans);
 
    tmp = gnc_string_cache_insert((gpointer) xnum);
    gnc_string_cache_remove(trans->num);
@@ -2652,6 +2660,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    char * tmp;
    if (!trans || !desc) return;
+   check_open (trans);
 
    tmp = gnc_string_cache_insert((gpointer) desc);
    gnc_string_cache_remove(trans->description);
@@ -2670,6 +2679,7 @@ void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
   if (!trans || !notes) return;
+  check_open (trans);
 
   kvp_frame_set_str (trans->inst.kvp_data, trans_notes_str, notes);
 }
