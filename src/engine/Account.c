@@ -793,7 +793,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 
   if (!acc || !split || split->acc == acc) return;
   /* check for book mix-up */
-  g_return_if_fail (acc->inst.book == split->book);
+  g_return_if_fail (acc->inst.book == split->inst.book);
 
   trans = xaccSplitGetParent (split);
   ENTER ("(acc=%p, trans=%p, split=%p)", acc, trans, split);

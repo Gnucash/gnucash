@@ -94,8 +94,6 @@ void check_open (const Transaction *trans)
 static void
 xaccInitSplit(Split * split, QofBook *book)
 {
-  QofCollection *col;
-
   /* fill in some sane defaults */
   split->acc         = NULL;
   split->parent      = NULL;
@@ -114,16 +112,12 @@ xaccInitSplit(Split * split, QofBook *book)
   split->cleared_balance     = gnc_numeric_zero();
   split->reconciled_balance  = gnc_numeric_zero();
 
-  split->kvp_data = kvp_frame_new();
   split->idata = 0;
-
-  split->book = book;
 
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  col = qof_book_get_collection (book, GNC_ID_SPLIT);
-  qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
+  qof_instance_init(&split->inst, GNC_ID_SPLIT, book);
 }
 
 void
@@ -147,9 +141,9 @@ xaccSplitReinit(Split * split)
   split->cleared_balance     = gnc_numeric_zero();
   split->reconciled_balance  = gnc_numeric_zero();
 
-  if (split->kvp_data)
-      kvp_frame_delete(split->kvp_data);
-  split->kvp_data = kvp_frame_new();
+  if (split->inst.kvp_data)
+      kvp_frame_delete(split->inst.kvp_data);
+  split->inst.kvp_data = kvp_frame_new();
   split->idata = 0;
 
   split->gains = GAINS_STATUS_UNKNOWN;
@@ -189,10 +183,10 @@ xaccDupeSplit (const Split *s)
    * the cloned splits as something official.  If we ever use this
    * split, we'll have to fix this up.
    */
-  split->entity.e_type = NULL;
-  split->entity.guid = *guid_null();
-  split->entity.collection = NULL;
-  split->book = s->book;
+  split->inst.entity.e_type = NULL;
+  split->inst.entity.guid = *guid_null();
+  split->inst.entity.collection = NULL;
+  split->inst.book = s->inst.book;
 
   split->parent = s->parent;
   split->acc = s->acc;
@@ -201,7 +195,7 @@ xaccDupeSplit (const Split *s)
   split->memo = gnc_string_cache_insert(s->memo);
   split->action = gnc_string_cache_insert(s->action);
 
-  split->kvp_data = kvp_frame_copy (s->kvp_data);
+  split->inst.kvp_data = kvp_frame_copy (s->inst.kvp_data);
 
   split->reconciled = s->reconciled;
   split->date_reconciled = s->date_reconciled;
@@ -221,14 +215,11 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitClone (const Split *s)
 {
-  QofCollection *col;
   Split *split = g_new0 (Split, 1);
 
-  split->book                = s->book;
   split->parent              = NULL;
   split->memo                = gnc_string_cache_insert(s->memo);
   split->action              = gnc_string_cache_insert(s->action);
-  split->kvp_data            = kvp_frame_copy(s->kvp_data);
   split->reconciled          = s->reconciled;
   split->date_reconciled     = s->date_reconciled;
   split->value               = s->value;
@@ -241,8 +232,9 @@ xaccSplitClone (const Split *s)
   split->gains = GAINS_STATUS_UNKNOWN;
   split->gains_split = NULL;
 
-  col = qof_book_get_collection (s->book, GNC_ID_SPLIT);
-  qof_entity_init (&split->entity, GNC_ID_SPLIT, col);
+  qof_instance_init(&split->inst, GNC_ID_SPLIT, s->inst.book);
+  kvp_frame_delete(split->inst.kvp_data);
+  split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
   xaccAccountInsertSplit(s->acc, split);
   if (s->lot) 
@@ -260,13 +252,13 @@ xaccSplitDump (const Split *split, const char *tag)
 {
   printf("  %s Split %p", tag, split);
   printf("    GUID:     %s\n", guid_to_string(&split->guid));
-  printf("    Book:     %p\n", split->book);
+  printf("    Book:     %p\n", split->inst.book);
   printf("    Account:  %p\n", split->acc);
   printf("    Lot:      %p\n", split->lot);
   printf("    Parent:   %p\n", split->parent);
   printf("    Memo:     %s\n", split->memo ? split->memo : "(null)");
   printf("    Action:   %s\n", split->action ? split->action : "(null)");
-  printf("    KVP Data: %p\n", split->kvp_data);
+  printf("    KVP Data: %p\n", split->inst.kvp_data);
   printf("    Recncld:  %c (date %s)\n", split->reconciled, 
          gnc_print_date(split->date_reconciled));
   printf("    Value:    %s\n", gnc_numeric_to_string(split->value));
@@ -296,9 +288,6 @@ xaccFreeSplit (Split *split)
   gnc_string_cache_remove(split->memo);
   gnc_string_cache_remove(split->action);
 
-  kvp_frame_delete (split->kvp_data);
-  split->kvp_data    = NULL;
-
   /* Just in case someone looks up freed memory ... */
   split->memo        = (char *) 1;
   split->action      = NULL;
@@ -314,7 +303,7 @@ xaccFreeSplit (Split *split)
 
   // Is this right? 
   if (split->gains_split) split->gains_split->gains_split = NULL;
-  qof_entity_release (&split->entity);
+  qof_instance_release(&split->inst);
   g_free(split);
 }
 
@@ -360,7 +349,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if (sa == sb) return TRUE;
 
   if (check_guids) {
-    if (!guid_equal(&(sa->entity.guid), &(sb->entity.guid)))
+    if (!guid_equal(&(sa->inst.entity.guid), &(sb->inst.entity.guid)))
     {
       PWARN ("GUIDs differ");
       return FALSE;
@@ -381,13 +370,13 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return FALSE;
   }
 
-  if (kvp_frame_compare(sa->kvp_data, sb->kvp_data) != 0)
+  if (kvp_frame_compare(sa->inst.kvp_data, sb->inst.kvp_data) != 0)
   {
     char *frame_a;
     char *frame_b;
 
-    frame_a = kvp_frame_to_string (sa->kvp_data);
-    frame_b = kvp_frame_to_string (sb->kvp_data);
+    frame_a = kvp_frame_to_string (sa->inst.kvp_data);
+    frame_b = kvp_frame_to_string (sb->inst.kvp_data);
 
     PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
 
@@ -530,17 +519,17 @@ xaccSplitDetermineGainStatus (Split *split)
       return;
    }
 
-   val = kvp_frame_get_slot (split->kvp_data, "gains-source");
+   val = kvp_frame_get_slot (split->inst.kvp_data, "gains-source");
    if (!val)
    {  
        // FIXME: This looks bogus.  
       other = xaccSplitGetOtherSplit (split);
       if (other) 
-          val = kvp_frame_get_slot (other->kvp_data, "gains-source");
+          val = kvp_frame_get_slot (other->inst.kvp_data, "gains-source");
       split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
    } else {
       QofCollection *col;
-      col = qof_book_get_collection (split->book, GNC_ID_SPLIT);
+      col = qof_book_get_collection (split->inst.book, GNC_ID_SPLIT);
       split->gains = GAINS_STATUS_GAINS;
       other = (Split *) qof_collection_lookup_entity (col, 
                   kvp_value_get_guid (val));
@@ -684,19 +673,16 @@ get_commodity_denom(const Split * s)
 KvpFrame * 
 xaccSplitGetSlots (const Split * s)
 {
-  return s ? s->kvp_data : NULL;
+    return qof_instance_get_slots(QOF_INSTANCE(s));
 }
 
 void
 xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 {
-  if (!s || !frm || s->kvp_data == frm) return;
+  if (!s || !frm) return;
   check_open (s->parent);
 
-  if (s->kvp_data)
-      kvp_frame_delete(s->kvp_data);
-
-  s->kvp_data = frm;
+  qof_instance_set_slots(QOF_INSTANCE(s), frm);
 }
 
 /********************************************************************\
@@ -1956,11 +1942,11 @@ xaccTransRollbackEdit (Transaction *trans)
          s->memo = so->memo;
          so->memo = gnc_string_cache_insert("");
 
-         kvp_frame_delete (s->kvp_data);
-         s->kvp_data = so->kvp_data;
-         if (!s->kvp_data)
-           s->kvp_data = kvp_frame_new ();
-         so->kvp_data = kvp_frame_new ();
+         kvp_frame_delete (s->inst.kvp_data);
+         s->inst.kvp_data = so->inst.kvp_data;
+         if (!s->inst.kvp_data)
+           s->inst.kvp_data = kvp_frame_new ();
+         so->inst.kvp_data = kvp_frame_new ();
 
          s->reconciled  = so->reconciled;
          s->amount      = so->amount;
@@ -2182,7 +2168,7 @@ void
 xaccTransAppendSplit (Transaction *trans, Split *split) 
 {
    if (!trans || !split) return;
-   g_return_if_fail (trans->inst.book == split->book);
+   g_return_if_fail (trans->inst.book == split->inst.book);
 
    qof_begin_edit(QOF_INSTANCE(trans));
 
@@ -2303,7 +2289,7 @@ xaccSplitDateOrder (const Split *sa, const Split *sb)
   DATE_CMP(sa,sb,date_reconciled);
 
   /* else, sort on guid - keeps sort stable. */
-  retval = guid_compare(&(sa->entity.guid), &(sb->entity.guid));
+  retval = guid_compare(&(sa->inst.entity.guid), &(sb->inst.entity.guid));
   if (retval) return retval;
 
   return 0;
@@ -3083,7 +3069,7 @@ xaccSplitGetSharePrice (const Split * split)
 QofBook *
 xaccSplitGetBook (const Split *split)
 {
-  return split ? split->book : NULL;
+    return qof_instance_get_book(QOF_INSTANCE(split));
 }
 
 const char *
@@ -3092,7 +3078,7 @@ xaccSplitGetType(const Split *s)
   char *split_type;
 
   if (!s) return NULL;
-  split_type = kvp_frame_get_string(s->kvp_data, "split-type");
+  split_type = kvp_frame_get_string(s->inst.kvp_data, "split-type");
   return split_type ? split_type : "normal";
 }
 
@@ -3104,7 +3090,7 @@ xaccSplitMakeStockSplit(Split *s)
   check_open (s->parent);
 
   s->value = gnc_numeric_zero();
-  kvp_frame_set_str(s->kvp_data, "split-type", "stock-split");
+  kvp_frame_set_str(s->inst.kvp_data, "split-type", "stock-split");
   SET_GAINS_VDIRTY(s);
   mark_split(s);
 }
@@ -3202,14 +3188,14 @@ xaccSplitGetOtherSplit (const Split *split)
 #endif
 
   count = g_list_length (trans->splits);
-  sva = kvp_frame_get_slot (split->kvp_data, "lot-split");
+  sva = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
   if (!sva && (2 != count)) return NULL;
 
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
     if (s == split) { --count; continue; }
-    if (kvp_frame_get_slot (s->kvp_data, "lot-split")) { --count; continue; }
+    if (kvp_frame_get_slot (s->inst.kvp_data, "lot-split")) { --count; continue; }
     other = s;
   }
   return (1 == count) ? other : NULL;
@@ -3257,7 +3243,7 @@ xaccTransVoid(Transaction *trans, const char *reason)
   for (split_list = trans->splits; split_list; split_list = split_list->next)
   {
     Split * split = split_list->data;
-    frame = split->kvp_data;
+    frame = split->inst.kvp_data;
 
     kvp_frame_set_gnc_numeric(frame, void_former_amt_str, 
                   xaccSplitGetAmount(split));
@@ -3291,14 +3277,14 @@ gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)
 {
   g_return_val_if_fail(split, gnc_numeric_zero());
-  return kvp_frame_get_numeric(split->kvp_data, void_former_amt_str);
+  return kvp_frame_get_numeric(split->inst.kvp_data, void_former_amt_str);
 }
 
 gnc_numeric
 xaccSplitVoidFormerValue(const Split *split)
 {
   g_return_val_if_fail(split, gnc_numeric_zero());
-  return kvp_frame_get_numeric(split->kvp_data, void_former_val_str);
+  return kvp_frame_get_numeric(split->inst.kvp_data, void_former_val_str);
 }
 
 Timespec
@@ -3339,7 +3325,7 @@ xaccTransUnvoid (Transaction *trans)
   for (split_list = trans->splits; split_list; split_list = split_list->next)
   {
     split = split_list->data;
-    frame = split->kvp_data;
+    frame = split->inst.kvp_data;
     
     val = kvp_frame_get_slot(frame, void_former_amt_str);
     amt = kvp_value_get_numeric(val);

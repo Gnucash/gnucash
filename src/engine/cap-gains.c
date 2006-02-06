@@ -535,11 +535,11 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       /* Add kvp markup to indicate that these two splits used 
        * to be one before being 'split' 
        */
-      gnc_kvp_bag_add (split->kvp_data, "lot-split", now, 
+      gnc_kvp_bag_add (split->inst.kvp_data, "lot-split", now, 
                        "peer_guid", xaccSplitGetGUID (new_split), 
                        NULL);
 
-      gnc_kvp_bag_add (new_split->kvp_data, "lot-split", now, 
+      gnc_kvp_bag_add (new_split->inst.kvp_data, "lot-split", now, 
                        "peer_guid", xaccSplitGetGUID (split), 
                        NULL);
 
@@ -633,13 +633,13 @@ xaccSplitGetCapGainsSplit (const Split *split)
    
    if (!split) return NULL;
 
-   val = kvp_frame_get_slot (split->kvp_data, "gains-split");
+   val = kvp_frame_get_slot (split->inst.kvp_data, "gains-split");
    if (!val) return NULL;
    gains_guid = kvp_value_get_guid (val);
    if (!gains_guid) return NULL;
 
    /* Both splits will be in the same collection, so seearch there. */
-   gains_split = (Split*) qof_collection_lookup_entity (split->entity.collection, gains_guid);
+   gains_split = (Split*) qof_collection_lookup_entity (split->inst.entity.collection, gains_guid);
    PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }
@@ -921,9 +921,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           * that this is the gains transaction that corresponds
           * to the gains source.
           */
-         kvp_frame_set_guid (split->kvp_data, "gains-split", 
+         kvp_frame_set_guid (split->inst.kvp_data, "gains-split", 
                      xaccSplitGetGUID (lot_split));
-         kvp_frame_set_guid (lot_split->kvp_data, "gains-source", 
+         kvp_frame_set_guid (lot_split->inst.kvp_data, "gains-source", 
                      xaccSplitGetGUID (split));
 
       }

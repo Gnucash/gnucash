@@ -232,7 +232,7 @@ is_subsplit (Split *split)
    g_return_val_if_fail (split->parent, FALSE);
 
    /* If there are no sub-splits, then there's nothing to do. */
-   kval = kvp_frame_get_slot (split->kvp_data, "lot-split");
+   kval = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
    if (!kval) return FALSE;  
 
    return TRUE;
@@ -320,27 +320,27 @@ remove_guids (Split *sa, Split *sb)
    KvpFrame *ksub;
 
    /* Find and remove the matching guid's */
-   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
-                    "peer_guid", &sb->entity.guid);
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sa->inst.kvp_data, "lot-split",
+                    "peer_guid", &sb->inst.entity.guid);
    if (ksub) 
    {
-      gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
+      gnc_kvp_bag_remove_frame (sa->inst.kvp_data, "lot-split", ksub);
       kvp_frame_delete (ksub);
    }
 
    /* Now do it in the other direction */
-   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
-                    "peer_guid", &sa->entity.guid);
+   ksub = (KvpFrame*)gnc_kvp_bag_find_by_guid (sb->inst.kvp_data, "lot-split",
+                    "peer_guid", &sa->inst.entity.guid);
    if (ksub) 
    {
-      gnc_kvp_bag_remove_frame (sb->kvp_data, "lot-split", ksub);
+      gnc_kvp_bag_remove_frame (sb->inst.kvp_data, "lot-split", ksub);
       kvp_frame_delete (ksub);
    }
 
    /* Finally, merge b's lot-splits, if any, into a's */
    /* This is an important step, if it got busted into many pieces. */
-   gnc_kvp_bag_merge (sa->kvp_data, "lot-split",
-                      sb->kvp_data, "lot-split");
+   gnc_kvp_bag_merge (sa->inst.kvp_data, "lot-split",
+                      sb->inst.kvp_data, "lot-split");
 }
 
 /* The merge_splits() routine causes the amount & value of sb 

@@ -86,9 +86,7 @@
 
 struct split_s
 {
-  QofEntity entity;          /* globally unique id */
-
-  QofBook *book;             /* The enitity table where this split is stored. */
+  QofInstance inst;
 
   Account *acc;              /* back-pointer to debited/credited account  */
 
@@ -110,10 +108,6 @@ struct split_s
    */ 
   char  * action;            /* Buy, Sell, Div, etc.                      */
 
-  /* kvp_data is a key-value pair database for storing simple 
-   * "extra" information in splits, transactions, and accounts. 
-   * it's NULL until accessed. */
-  KvpFrame * kvp_data;
   Timespec date_reconciled;  /* date split was reconciled                 */
   char    reconciled;        /* The reconciled field                      */
 

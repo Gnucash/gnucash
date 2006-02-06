@@ -100,8 +100,8 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* move the split into the new book ... */
-      s->book = book;
-      qof_collection_insert_entity(col, &s->entity);
+      s->inst.book = book;
+      qof_collection_insert_entity(col, &s->inst.entity);
 
       /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
@@ -161,10 +161,10 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
       Split *s = node->data;
 
       /* Move the splits over (only if they haven't already been moved). */
-      if (s->book != book)
+      if (s->inst.book != book)
       {
-         s->book = book;
-         qof_collection_insert_entity (col, &s->entity);
+         s->inst.book = book;
+         qof_collection_insert_entity (col, &s->inst.entity);
       }
 
       /* Find the twin account, and re-parent to that. */
@@ -234,10 +234,10 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    for (snode = lot->splits; snode; snode=snode->next)
    {
       Split *s = snode->data;
-      if (s->book != book)
+      if (s->inst.book != book)
       {
-         s->book = book;
-         qof_collection_insert_entity (col, &s->entity);
+         s->inst.book = book;
+         qof_collection_insert_entity (col, &s->inst.entity);
       }
    }
 
