@@ -503,6 +503,8 @@ xaccSplitLookup (const GUID *guid, QofBook *book)
  * to send out a change event.
  */
 
+/* CHECKME: This function modifies the Split without dirtying or
+   checking its parent.  Is that correct? */
 void
 xaccSplitDetermineGainStatus (Split *split)
 {
@@ -1632,7 +1634,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   }
 
   qof_instance_set_dirty(QOF_INSTANCE(trans));
-  mark_trans (trans);
+  mark_trans(trans);  /* Dirty balance of every account in trans */
   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
@@ -2090,7 +2092,7 @@ xaccTransIsOpen (const Transaction *trans)
   return trans ? (0 < trans->inst.editlevel) : FALSE;
 }
 
-/* Only used by postgres backend. Not sure if they should dirty the trans. */
+/* Only used by postgres backend. Not sure if it should dirty the trans. */
 void
 xaccTransSetVersion (Transaction *trans, gint32 vers)
 {
@@ -2202,7 +2204,8 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 
      if (gnc_numeric_check (new_value) == GNC_ERROR_OK)
        split->value = new_value;
-       SET_GAINS_VDIRTY(split);
+     SET_GAINS_VDIRTY(split);  /* Is this right? Dirty gains even if error? */
+     mark_split(split);
    }
    qof_commit_edit(QOF_INSTANCE(trans));
 }
@@ -3387,6 +3390,7 @@ xaccTransReverse (Transaction *trans)
     SET_GAINS_A_VDIRTY(split);
     split->reconciled = NREC;
     xaccSplitSetDateReconciledSecs (split, 0);
+    mark_split(split);
   }
 
   if (trans->splits)
