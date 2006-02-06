@@ -1626,7 +1626,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   gint fraction, old_fraction;
 
   if (!trans || !curr || trans->common_currency == curr) return;
-  check_open (trans);
+  qof_begin_edit(QOF_INSTANCE(trans));
 
   old_fraction = gnc_commodity_get_fraction (trans->common_currency);
   trans->common_currency = curr;
@@ -1645,6 +1645,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   }
 
   mark_trans (trans);
+  qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 /********************************************************************\
@@ -1673,12 +1674,13 @@ void
 xaccTransDestroy (Transaction *trans)
 {
   if (!trans) return;
-  check_open (trans);
 
-  if (xaccTransGetReadOnly (trans) &&
-      !qof_book_shutting_down(trans->inst.book)) return;
-
-  trans->inst.do_free = TRUE;
+  if (!xaccTransGetReadOnly (trans) || 
+      qof_book_shutting_down(trans->inst.book)) {
+      qof_begin_edit(QOF_INSTANCE(trans));
+      trans->inst.do_free = TRUE;
+      qof_commit_edit(QOF_INSTANCE(trans));
+  }
 }
 
 static void
@@ -2181,7 +2183,8 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 {
    if (!trans || !split) return;
    g_return_if_fail (trans->inst.book == split->book);
-   check_open (trans);
+
+   qof_begin_edit(QOF_INSTANCE(trans));
 
    /* First, make sure that the split isn't already inserted 
     * elsewhere. If so, then remove it. */
@@ -2209,6 +2212,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
        split->value = new_value;
        SET_GAINS_VDIRTY(split);
    }
+   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 /********************************************************************\
@@ -2498,7 +2502,7 @@ xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb)
 static inline void
 xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
-    check_open(trans);
+    qof_begin_edit(QOF_INSTANCE(trans));
 
     PINFO ("addr=%p set date to %llu.%09ld %s",
            trans, val.tv_sec, val.tv_nsec, 
@@ -2506,6 +2510,7 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     
     *dadate = val;
     mark_trans(trans);
+    qof_commit_edit(QOF_INSTANCE(trans));
 
    /* Because the date has changed, we need to make sure that each of
     * the splits is properly ordered in each of their accounts. We
@@ -2638,13 +2643,11 @@ qofTransSetNum (Transaction *trans, const char *xnum)
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
-   char * tmp;
    if (!trans || !xnum) return;
-   check_open (trans);
+   qof_begin_edit(QOF_INSTANCE(trans));
 
-   tmp = gnc_string_cache_insert((gpointer) xnum);
-   gnc_string_cache_remove(trans->num);
-   trans->num = tmp;
+   CACHE_REPLACE(trans->num, xnum);
+   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 static void
@@ -2658,13 +2661,11 @@ qofTransSetDescription (Transaction *trans, const char *desc)
 void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
-   char * tmp;
    if (!trans || !desc) return;
-   check_open (trans);
+   qof_begin_edit(QOF_INSTANCE(trans));
 
-   tmp = gnc_string_cache_insert((gpointer) desc);
-   gnc_string_cache_remove(trans->description);
-   trans->description = tmp;
+   CACHE_REPLACE(trans->description, desc);
+   qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 static void
@@ -2679,9 +2680,10 @@ void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
   if (!trans || !notes) return;
-  check_open (trans);
+  qof_begin_edit(QOF_INSTANCE(trans));
 
   kvp_frame_set_str (trans->inst.kvp_data, trans_notes_str, notes);
+  qof_commit_edit(QOF_INSTANCE(trans));
 }
 
 /********************************************************************\
