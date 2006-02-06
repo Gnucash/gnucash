@@ -3112,8 +3112,8 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
   if(strcmp(child_result->tag, "slots") == 0) {
     kvp_frame *f = (kvp_frame *) child_result->data;
     g_return_val_if_fail(f, FALSE);
-    if(s->kvp_data) kvp_frame_delete(s->kvp_data);
-    s->kvp_data = f;
+    if(s->inst.kvp_data) kvp_frame_delete(s->inst.kvp_data);
+    s->inst.kvp_data = f;
     child_result->should_cleanup = FALSE;
   }
   else if(strcmp(child_result->tag, "quantity") == 0) {
