@@ -2201,6 +2201,8 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
     { NULL },
   };
   static GNCSearchCallbackButton emp_buttons[] = { 
+    /* Translators: The terms 'Voucher' and 'Expense Voucher' are used
+       interchangeably in gnucash and mean the same thing. */
     { N_("View/Edit Voucher"), edit_invoice_cb},
     { N_("Process Payment"), pay_invoice_cb},
     { NULL },
@@ -2292,7 +2294,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 					   _("Date Opened"), NULL, type,
 					   INVOICE_OPENED, NULL);
     emp_params = gnc_search_param_prepend (emp_params,
-					   _("Employee Name "), NULL, type,
+					   _("Employee Name"), NULL, type,
 					   INVOICE_OWNER, OWNER_PARENT,
 					   OWNER_NAME, NULL);
     emp_params = gnc_search_param_prepend (emp_params,
