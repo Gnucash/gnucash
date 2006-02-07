@@ -1303,8 +1303,6 @@ Press &quot;Apply&quot; now.</property>
 			      <property name="reorderable">False</property>
 			      <property name="enable_search">True</property>
 			      <property name="fixed_height_mode">False</property>
-			      <property name="hover_selection">False</property>
-			      <property name="hover_expand">False</property>
 			      <signal name="select_child" handler="on_template_list_select_child"/>
 			      <signal name="selection_changed" handler="on_template_list_selection_changed"/>
 			      <signal name="unselect_child" handler="on_template_list_unselect_child"/>

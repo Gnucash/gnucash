@@ -1,5 +1,12 @@
 2006-02-06  David Hampton  <hampton@employees.org>
 
+	* src/import-export/hbci/glade/hbci.glade:
+	* src/report/report-gnome/report.glade:
+	* src/gnome/glade/budget.glade:
+	* src/gnome/glade/tax.glade:
+	* src/gnome/glade/account.glade:
+	* glade-fixup: Filter out more post gtk2.4 properties.
+	
 	* src/bin/gnucash-bin.c: Fix some issues when invoking from a
 	non-utf8, non latin1 locale.  Use g_print to print to the
 	console. Convert from popt to g_options for glib >= 2.6.  Fixes
