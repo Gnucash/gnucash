@@ -487,6 +487,9 @@ int main(int argc, char ** argv)
     gnucash_command_line(argc, argv);
     gnc_print_unstable_message();
 
+    /* argv may have changed */
+    for (argc = 0; argv[argc]; argc++) ;
+
     if (add_quotes_file) {
         /* This option needs to run without a display, so we can't
            initialize any GUI libraries.  */
