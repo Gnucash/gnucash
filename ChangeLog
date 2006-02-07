@@ -1,3 +1,17 @@
+2006-02-06  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/register/register-gnome/gnucash-grid.c: Scott Oonk' patch to
+	fix a couple of problems with right justified cells in the
+	register.
+
+	- Make sure the text in the cell stays right justified when
+	deleting characters.
+	- Adjust the positioning of text to account for the popup toggle.
+	- Change gnucash-item-edit to use logical extents instead of ink
+	extents.  This syncs gnucash-item-edit.c with change made to
+	gnucash-grid.c in r12155.
+
 2006-02-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/backend/file/test/Makefile.am: link against libcore-utils.

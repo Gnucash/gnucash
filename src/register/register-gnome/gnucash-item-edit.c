@@ -118,6 +118,51 @@ gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
         *y += yd;
 }
 
+static void
+gnc_item_edit_update_offset (GncItemEdit *item_edit, TextDrawInfo *info)
+{
+        gint drawable_width;
+        gint visible_width;
+        PangoRectangle logical_rect;
+
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (GNC_IS_ITEM_EDIT (item_edit));
+
+        pango_layout_get_pixel_extents (info->layout, NULL, &logical_rect);
+
+        drawable_width = info->text_rect.width - 2 * CELL_HPADDING;
+
+        // Layout is smaller than drawable area, or we've entered a 
+        // new cell.  Use default x_offset.
+        if (logical_rect.width <= drawable_width || item_edit->reset_pos)
+        {
+                gnc_item_edit_reset_offset (item_edit);
+        } 
+
+        // Layout is wider than drawable area
+        if (logical_rect.width > drawable_width)
+        {
+                //Make sure cursor is inside the drawn area
+                if (info->cursor_rect.x + item_edit->x_offset >
+                    info->text_rect.x + drawable_width)
+                {
+                        item_edit->x_offset = (info->text_rect.x + drawable_width)
+                                            - info->cursor_rect.x;
+                }
+                else if (info->cursor_rect.x + item_edit->x_offset < info->text_rect.x)
+                {
+                        item_edit->x_offset = - info->cursor_rect.x;
+                }
+
+                // Make sure the entire drawable area is filled.
+                visible_width = logical_rect.width + item_edit->x_offset;
+
+                if (visible_width < drawable_width)
+                {
+                        item_edit->x_offset += (drawable_width - visible_width);
+                }
+        } 
+}
 
 static void
 gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *info)
@@ -218,13 +263,6 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         // pango_layout_set_ellipsize(...) as of pango 1.6 may be useful for
         // strings longer than the field width.
 
-        // Default x_offset based on cell alignment
-        if (item_edit->reset_pos)
-        {
-                gnc_item_edit_reset_offset (item_edit);
-                item_edit->reset_pos = FALSE;
-        }
-
 	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
 
         info->cursor_rect.x = dx + PANGO_PIXELS (strong_pos.x);
@@ -239,6 +277,8 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
                 info->hatch_rect.width = wd;
                 info->hatch_rect.height = hd;
         }
+
+        gnc_item_edit_update_offset (item_edit, info);
 }
 
 static void
@@ -248,22 +288,6 @@ gnc_item_edit_free_draw_info_members(TextDrawInfo *info)
                 return;
 
 	g_object_unref (info->layout);
-}
-
-static void
-gnc_item_edit_update_scroll_offset(GncItemEdit *item_edit,
-				   TextDrawInfo *info) {
-        if (info->cursor_rect.x + item_edit->x_offset >
-                info->text_rect.x + info->text_rect.width - CELL_HPADDING)
-        {
-                item_edit->x_offset =
-                        (info->text_rect.x + info->text_rect.width - CELL_HPADDING)
-                        - info->cursor_rect.x;
-        }
-        else if (info->cursor_rect.x + item_edit->x_offset < info->text_rect.x)
-        {
-                item_edit->x_offset = - info->cursor_rect.x;
-        }
 }
 
 static void
@@ -298,8 +322,6 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         gdk_gc_set_clip_rectangle (item_edit->gc, &info.text_rect);
 
         gdk_gc_set_foreground (item_edit->gc, info.fg_color);
-
-	gnc_item_edit_update_scroll_offset(item_edit, &info);
 
 	gdk_draw_layout (drawable,
 			 item_edit->gc,
@@ -569,17 +591,25 @@ void
 gnc_item_edit_reset_offset (GncItemEdit *item_edit)
 {
         Table *table;
-        PangoRectangle ink_rect;
+        PangoRectangle logical_rect;
         PangoLayout *layout;
         gint x, y, width, height;
+        gint drawable_width;
+        gint toggle_space;
 
         g_return_if_fail (item_edit != NULL);
         g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
         table = item_edit->sheet->table;
         layout = gtk_entry_get_layout (GTK_ENTRY(item_edit->editor));
-        pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+
+        pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
         gnc_item_edit_get_pixel_coords (item_edit, &x, &y, &width, &height);
+
+        toggle_space = item_edit->is_popup ? 
+                item_edit->popup_toggle.toggle_offset : 0;
+
+        drawable_width = width - 2 * CELL_HPADDING - toggle_space;
 
         switch (gnc_table_get_align (table, item_edit->virt_loc))
         {
@@ -589,20 +619,18 @@ gnc_item_edit_reset_offset (GncItemEdit *item_edit)
                         break;
 
                 case CELL_ALIGN_RIGHT:
-                        item_edit->x_offset = width 
-                                - 2 * CELL_HPADDING
-                                - ink_rect.width;
+                        item_edit->x_offset = drawable_width - logical_rect.width;
                         break;
 
                 case CELL_ALIGN_CENTER:
-                        if (ink_rect.width > width - 2 * CELL_HPADDING)
+                        if (logical_rect.width > drawable_width)
                                 item_edit->x_offset = 0;
                         else
-                                item_edit->x_offset = (width
-                                        - 2 * CELL_HPADDING
-                                        - ink_rect.width) / 2;
+                                item_edit->x_offset = (drawable_width - logical_rect.width) / 2;
                         break;
         }
+
+        item_edit->reset_pos = FALSE;
 }
 
 /*
@@ -754,6 +782,15 @@ gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
         o_x = cd->origin_x + item_edit->x_offset;
         o_y = cd->origin_y;
 
+        if (changed_cells)
+        {
+                CellAlignment align;
+
+                align = gnc_table_get_align (table, item_edit->virt_loc);
+
+                if (align == CELL_ALIGN_RIGHT && item_edit->is_popup)
+                        o_x += item_edit->popup_toggle.toggle_offset;
+        }
 
         // get the text index for the mouse position into pos
         {

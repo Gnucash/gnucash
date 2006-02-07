@@ -510,7 +510,7 @@ draw_cell (GnucashGrid *grid,
                         break;
 
                 case CELL_ALIGN_RIGHT:
-			x_offset = width - 2 * CELL_HPADDING - logical_rect.width + 1;
+			x_offset = width - 2 * CELL_HPADDING - logical_rect.width;
                         break;
 
                 case CELL_ALIGN_CENTER:
