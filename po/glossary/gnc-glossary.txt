@@ -171,4 +171,5 @@
 "URL"	"-"
 "value (in a split)"	"The worth of sth in terms of money or other commodities for which it can be exchanged"
 "vendor"	"In small business accounting: A person or company that sells items and is supplying goods"
+"voucher"	"The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 "withdraw (in the reconcile dialog)"	"see debit"

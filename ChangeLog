@@ -1,3 +1,8 @@
+2006-02-07  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/gnc-glossary.txt: Update glossary with new term
+	'voucher'.
+
 2006-02-06  David Hampton  <hampton@employees.org>
 
 	* src/import-export/hbci/glade/hbci.glade:
