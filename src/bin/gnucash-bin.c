@@ -42,6 +42,7 @@
 #include "top-level.h"
 #include "gfec.h"
 #include "gnc-main.h"
+#include "gnc-main-window.h"
 #include "gnc-splash.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-file-history.h"
@@ -67,12 +68,12 @@ gnc_print_unstable_message(void)
 {
     if (!is_development_version) return;
 
-    printf("\n\n%s%s%s%s%s\n%s%s\n\n",
-           _("This is a development version. It may or may not work.\n"),
-           _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
-           _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
-           _("The last stable version was "), "GnuCash 1.8.12",
-           _("The next stable version will be "), "GnuCash 2.0");
+    g_print("\n\n%s%s%s%s%s\n%s%s\n\n",
+	    _("This is a development version. It may or may not work.\n"),
+	    _("Report bugs and other problems to gnucash-devel@gnucash.org.\n"),
+	    _("You can also lookup and file bug reports at http://bugzilla.gnome.org\n"),
+	    _("The last stable version was "), "GnuCash 1.8.12",
+	    _("The next stable version will be "), "GnuCash 2.0");
 }
 
 /* Priority of paths: The default is set at build time.  It may be
@@ -204,12 +205,12 @@ load_user_config(void)
 static void 
 gnucash_command_line(int argc, char **argv)
 {
-    poptContext pc;
     char *p;
-    int rc;
     int debugging = 0;
     char *namespace_regexp = NULL;
-
+#ifndef HAVE_GLIB26
+    poptContext pc;
+    int rc;
     struct poptOption options[] = {
         POPT_AUTOHELP
         {"version", 'v', POPT_ARG_NONE, &gnucash_show_version, 1, 
@@ -256,19 +257,75 @@ gnucash_command_line(int argc, char **argv)
     while ((rc = poptGetNextOpt(pc)) > 0);
     file_to_load = poptGetArg(pc);
     poptFreeContext(pc);
+#else
+    GError *error = NULL;
+    GOptionContext *context;
+    GOptionEntry options[] = {
+        {"version", 'v', 0, G_OPTION_ARG_NONE, &gnucash_show_version,
+         _("Show GnuCash version"), NULL},
+        {"debug", '\0', 0, G_OPTION_ARG_NONE, &debugging,
+         _("Enable debugging mode"), NULL},
+        {"loglevel", '\0', 0, G_OPTION_ARG_INT, &loglevel,
+	 /* Translators: This is the command line option autohelp
+	    text; see popt(3) */
+         _("Set the logging level from 0 (least) to 6 (most)"), 
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+         _("LOGLEVEL")},
+        {"nofile", '\0', 0, G_OPTION_ARG_NONE, &nofile,
+         _("Do not load the last file opened"), NULL},
+        {"config-path", '\0', 0, G_OPTION_ARG_STRING, &config_path,
+         _("Set configuration path"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("CONFIGPATH")},
+        {"share-path", '\0', 0, G_OPTION_ARG_STRING, &share_path,
+         _("Set shared data file search path"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("SHAREPATH")},
+        {"doc-path", '\0', 0, G_OPTION_ARG_STRING, &help_path,
+         _("Set the search path for documentation files"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("DOCPATH")},
+        {"add-price-quotes", '\0', 0, G_OPTION_ARG_STRING, &add_quotes_file,
+         _("Add price quotes to given GnuCash datafile"),
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+	 _("FILE")},
+        {"namespace", '\0', 0, G_OPTION_ARG_STRING, &namespace_regexp,
+         _("Regular expression determining which namespace commodities will be retrieved"), 
+	 /* Translators: Argument description for autohelp; see
+	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
+         _("REGEXP")},
+    };
+    
+    /* Pretend that argv[0] is "gnucash" */
+    if ((p = strstr(argv[0], "-bin"))) *p = '\0';
+
+    context = g_option_context_new (" [datafile]");
+    g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+    g_option_context_add_group (context, gtk_get_option_group (TRUE));
+    g_option_context_parse (context, &argc, &argv, &error);
+    g_option_context_free (context);
+
+    if (argc > 0)
+      file_to_load = argv[1];
+#endif
 
     if (gnucash_show_version) {
         if (is_development_version)
 	  /* Translators: %s is the version number */
-	  printf(_("GnuCash %s development version"), VERSION);
+	  g_print(_("GnuCash %s development version"), VERSION);
 	else
 	  /* Translators: %s is the version number */
-	  printf(_("GnuCash %s"), VERSION);
-	printf("\n");
+	  g_print(_("GnuCash %s"), VERSION);
+	g_print("\n");
 	/* Translators: 1st %s is the build date; 2nd %s is the SVN
 	   revision number */
-        printf(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
-	printf("\n");
+        g_print(_("Built %s from r%s"), GNUCASH_BUILD_DATE, GNUCASH_SVN_REV);
+	g_print("\n");
         exit(0);
     }
 

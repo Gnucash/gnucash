@@ -1,5 +1,10 @@
 2006-02-06  David Hampton  <hampton@employees.org>
 
+	* src/bin/gnucash-bin.c: Fix some issues when invoking from a
+	non-utf8, non latin1 locale.  Use g_print to print to the
+	console. Convert from popt to g_options for glib >= 2.6.  Fixes
+	#328991.
+
 	* src/register/register-gnome/gnucash-item-edit.c:
 	* src/register/register-gnome/gnucash-grid.c: Scott Oonk' patch to
 	fix a couple of problems with right justified cells in the
