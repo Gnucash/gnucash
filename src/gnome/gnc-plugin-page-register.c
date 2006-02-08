@@ -584,7 +584,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	GtkActionGroup *action_group;
 	GtkAction *action;
 	Account *account;
-	SplitRegister *sr;
+	SplitRegister *reg;
 	int i;
 
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -594,10 +594,11 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 				  "sensitive", account != NULL);
 
 	/* Set "style" radio button */
-	sr = gnc_ledger_display_get_split_register(priv->ledger);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
 	for (i = n_radio_entries_2 - 1; i > 0; i--) {
-	  DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value, sr->style);
-	  if (radio_entries_2[i].value == sr->style) {
+	  DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value, 
+                reg->style);
+	  if (radio_entries_2[i].value == reg->style) {
 	    DEBUG("match");
 	    break;
 	  }
@@ -613,7 +614,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	action = gtk_action_group_get_action (action_group,
 					      "ViewStyleDoubleLineAction");
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), sr->use_double_line);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
@@ -628,7 +629,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	GncWindow *gnc_window;
 	guint numRows;
 	GtkWidget *gsr;
-	SplitRegister *sr;
+	SplitRegister *reg;
 	Account *acct;
 
 	ENTER("page %p", plugin_page);
@@ -662,8 +663,9 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 			  G_CALLBACK ( gnc_plugin_page_help_changed_cb ),
 			  page );
 
-	sr = gnc_ledger_display_get_split_register(priv->ledger);
-	gnc_split_register_config(sr, sr->type, sr->style, sr->use_double_line);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+	gnc_split_register_config(reg, reg->type, reg->style, 
+                                  reg->use_double_line);
 	gnc_ledger_display_refresh(priv->ledger);
 
 	gnc_plugin_page_register_update_menus (page);
