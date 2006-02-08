@@ -108,15 +108,19 @@ gnc_engine_unregister_event_handler (gint handler_id)
     if (hi->handler_id != handler_id)
       continue;
 
-    /* Found it, take out of list */ 
-    handlers = g_list_remove_link (handlers, node);
+    /* Normally, we could actually remove the handler's node from the
+       list, but we may be unregistering the event handler as a result
+       of a generated event, such as GNC_EVENT_DESTROY.  In that case,
+       we're in the middle of walking the GList and it is wrong to
+       modify the list. So, instead, we just NULL the handler. */ 
+    /* handlers = g_list_remove_link (handlers, node); */
 
     LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id, hi->handler, hi->user_data);
     /* safety */
     hi->handler = NULL;
 
-    g_list_free_1 (node);
-    g_free (hi);
+    /* g_list_free_1 (node);
+       g_free (hi); */
 
     return;
   }
