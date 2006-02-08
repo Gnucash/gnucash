@@ -130,14 +130,16 @@
                (push (lambda (l) (set! retval (cons l retval))))
 	       (objs (gnc:html-document-objects doc))
 	       (work-to-do (length objs))
-	       (work-done 0))
+	       (work-done 0)
+               (title (gnc:html-document-title doc)))
           ;; compile the doc style 
           (gnc:html-style-table-compile (gnc:html-document-style doc)
                                         (gnc:html-document-style-stack doc))
           ;; push it 
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
-
-          (gnc:report-render-starting (gnc:html-document-title doc))
+          (if (string-null? title)
+              (gnc:error "Null document title")
+              (gnc:report-render-starting (gnc:html-document-title doc)))
           (if (not (null? headers?))
               (begin 
                 (push "<html>\n")
