@@ -50,7 +50,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass);
 static void gnc_tree_model_commodity_init (GncTreeModelCommodity *model);
 static void gnc_tree_model_commodity_finalize (GObject *object);
-static void gnc_tree_model_commodity_destroy (GtkObject *object);
+static void gnc_tree_model_commodity_dispose (GObject *object);
 
 static void gnc_tree_model_commodity_tree_model_init (GtkTreeModelIface *iface);
 static guint gnc_tree_model_commodity_get_flags (GtkTreeModel *tree_model);
@@ -140,14 +140,11 @@ static void
 gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass)
 {
 	GObjectClass *o_class = G_OBJECT_CLASS (klass);
-	GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	o_class->finalize = gnc_tree_model_commodity_finalize;
-
-	/* GtkObject signals */
-	object_class->destroy = gnc_tree_model_commodity_destroy;
+	o_class->dispose = gnc_tree_model_commodity_dispose;
 
 	g_type_class_add_private(klass, sizeof(GncTreeModelCommodityPrivate));
 }
@@ -181,7 +178,7 @@ gnc_tree_model_commodity_finalize (GObject *object)
 }
 
 static void
-gnc_tree_model_commodity_destroy (GtkObject *object)
+gnc_tree_model_commodity_dispose (GObject *object)
 {
 	GncTreeModelCommodity *model;
 	GncTreeModelCommodityPrivate *priv;
@@ -198,8 +195,8 @@ gnc_tree_model_commodity_destroy (GtkObject *object)
 	  priv->event_handler_id = 0;
 	}
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-	  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+            G_OBJECT_CLASS (parent_class)->dispose (object);
 	LEAVE(" ");
 }
 
