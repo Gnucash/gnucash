@@ -48,7 +48,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);
 static void gnc_tree_model_account_init (GncTreeModelAccount *model);
 static void gnc_tree_model_account_finalize (GObject *object);
-static void gnc_tree_model_account_destroy (GtkObject *object);
+static void gnc_tree_model_account_dispose (GObject *object);
 
 /** Implementation of GtkTreeModel  **************************************/
 static void gnc_tree_model_account_tree_model_init (GtkTreeModelIface *iface);
@@ -177,18 +177,14 @@ static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 {
 	GObjectClass *o_class;
-	GtkObjectClass *object_class;
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	o_class = G_OBJECT_CLASS (klass);
-	object_class = GTK_OBJECT_CLASS (klass);
 
 	/* GObject signals */
 	o_class->finalize = gnc_tree_model_account_finalize;
-
-	/* GtkObject signals */
-	object_class->destroy = gnc_tree_model_account_destroy;
+	o_class->dispose = gnc_tree_model_account_dispose;
 
 	g_type_class_add_private(klass, sizeof(GncTreeModelAccountPrivate));
 }
@@ -239,12 +235,12 @@ gnc_tree_model_account_finalize (GObject *object)
 	priv->book = NULL;
 
 	if (G_OBJECT_CLASS (parent_class)->finalize)
-	  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+            G_OBJECT_CLASS(parent_class)->finalize (object);
 	LEAVE(" ");
 }
 
 static void
-gnc_tree_model_account_destroy (GtkObject *object)
+gnc_tree_model_account_dispose (GObject *object)
 {
 	GncTreeModelAccountPrivate *priv;
 	GncTreeModelAccount *model;
@@ -254,15 +250,19 @@ gnc_tree_model_account_destroy (GtkObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
-
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+
 	if (priv->event_handler_id) {
 	  gnc_engine_unregister_event_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-	  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+	gnc_gconf_general_remove_cb(KEY_NEGATIVE_IN_RED,
+                                    gnc_tree_model_account_update_color,
+                                    model);
+
+	if (G_OBJECT_CLASS (parent_class)->dispose)
+            G_OBJECT_CLASS (parent_class)->dispose (object);
 	LEAVE(" ");
 }
 
