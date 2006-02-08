@@ -1,3 +1,8 @@
+2006-02-08  David Hampton  <hampton@employees.org>
+
+	* src/gnome-search/search.glade: Set the default button. Fixes
+	#329539.
+
 2006-02-07  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/gnc-glossary.txt: Update glossary with new term
