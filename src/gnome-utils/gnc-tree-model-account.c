@@ -284,6 +284,7 @@ gnc_tree_model_account_new (AccountGroup *group)
 		model = (GncTreeModelAccount *)item->data;
 		priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 		if (priv->root == group) {
+			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
 		}

@@ -238,6 +238,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 		model = (GncTreeModelPrice *)item->data;
 		priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 		if (priv->price_db == price_db) {
+			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
 		}

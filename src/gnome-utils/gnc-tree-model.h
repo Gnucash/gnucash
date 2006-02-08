@@ -54,13 +54,13 @@ G_BEGIN_DECLS
 
 /** The instance data structure for a generic tree model. */
 typedef struct {
-	GtkObject gtk_object;		/**< The parent object data. */
+	GObject g_object;		/**< The parent object data. */
 } GncTreeModel;
 
 
 /** The class data structure for a generic tree model. */
 typedef struct {
-	GtkObjectClass gtk_object;	/**< The parent object data. */
+	GObjectClass g_object;	/**< The parent object data. */
 } GncTreeModelClass;
 
 

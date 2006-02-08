@@ -405,7 +405,7 @@ gnc_tree_view_price_new (QofBook *book,
 
   /* Set up the view private filter on the common model. */
   f_model = gtk_tree_model_filter_new (model, NULL);
-  gtk_object_sink(GTK_OBJECT(model));
+  g_object_unref(G_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
   gnc_tree_view_set_model (view, s_model);

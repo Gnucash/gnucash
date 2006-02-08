@@ -372,10 +372,8 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
     virtual_root_path = gtk_tree_path_new_first ();
   f_model = gtk_tree_model_filter_new (model, virtual_root_path);
   /* A GncTreeModelAccount is based on a GncTreeModel, which is a
-   * GtkObject that provides a GtkTreeModel interface.  This
-   * underlying model should probably be converted to a GObject at
-   * some point, eliminating the need for the call to sink().*/
-  gtk_object_sink(GTK_OBJECT(model));
+   * GObject that provides a GtkTreeModel interface. */
+  g_object_unref(G_OBJECT(model));
   if (virtual_root_path)
     gtk_tree_path_free(virtual_root_path);
 

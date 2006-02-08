@@ -321,10 +321,10 @@ gnc_tree_view_finalize (GObject *object)
   gnc_gobject_tracking_forget(object);
 
   view = GNC_TREE_VIEW (object);
-  priv= GNC_TREE_VIEW_GET_PRIVATE (view);
+  priv = GNC_TREE_VIEW_GET_PRIVATE (view);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
-    (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+      G_OBJECT_CLASS (parent_class)->finalize (object);
   LEAVE(" ");
 }
 
@@ -369,7 +369,7 @@ gnc_tree_view_destroy (GtkObject *object)
   }
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+      GTK_OBJECT_CLASS (parent_class)->destroy (object);
   LEAVE(" ");
 }
 

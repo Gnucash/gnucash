@@ -212,6 +212,7 @@ gnc_tree_model_commodity_new (QofBook *book, gnc_commodity_table *ct)
 		model = (GncTreeModelCommodity *)item->data;
 		priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 		if (priv->commodity_table == ct) {
+			g_object_ref(G_OBJECT(model));
 			LEAVE("returning existing model %p", model);
 			return GTK_TREE_MODEL(model);
 		}
