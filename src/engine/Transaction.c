@@ -1667,9 +1667,9 @@ xaccTransDestroy (Transaction *trans)
 
   if (!xaccTransGetReadOnly (trans) || 
       qof_book_shutting_down(trans->inst.book)) {
-      qof_begin_edit(QOF_INSTANCE(trans));
+      xaccTransBeginEdit(trans);
       trans->inst.do_free = TRUE;
-      qof_commit_edit(QOF_INSTANCE(trans));
+      xaccTransCommitEdit(trans);
   }
 }
 
