@@ -53,7 +53,6 @@ libgncgnome_la_SOURCES = \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
-  window-main-summarybar.c \
   window-reconcile.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
   ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
@@ -115,7 +114,6 @@ noinst_HEADERS = \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
-  window-main-summarybar.h \
   window-reconcile.h \
   gw-gnc.h
 

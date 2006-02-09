@@ -81,6 +81,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
+  gnc-tree-model-budget.c \
   gnc-tree-model-commodity.c \
   gnc-tree-model-price.c \
   gnc-tree-view-account.c \
@@ -93,7 +94,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   print-session.c \
   search-param.c \
   gnc-dialog.c \
-  gnc-tree-model-budget.c
+  window-main-summarybar.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
@@ -143,6 +144,7 @@ gncinclude_HEADERS = \
   gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
+  gnc-tree-model-budget.h \
   gnc-tree-model-commodity.h \
   gnc-tree-model-price.h \
   gnc-tree-view-account.h \
@@ -153,7 +155,7 @@ gncinclude_HEADERS = \
   misc-gnome-utils.h \
   print-session.h \
   gnc-dialog.h \
-  gnc-tree-model-budget.h
+  window-main-summarybar.h
 
 noinst_HEADERS = \
   argv-list-converters.h \
