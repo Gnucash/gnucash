@@ -25,5 +25,7 @@
 #define WINDOW_MAIN_SUMMARYBAR_H
 
 GtkWidget * gnc_main_window_summary_new(void);
+time_t gnc_main_window_summary_get_start(void);
+time_t gnc_main_window_summary_get_end(void);
 
 #endif

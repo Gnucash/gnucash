@@ -355,6 +355,10 @@ lookup_start_date_option(const gchar *section,
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_start_timet(which, fy_end, NULL);
   }
+  /* we will need the balance of the last transaction before the start
+     date, so subtract 1 from start date */
+  /* CAS: we don't actually do what this comment says.  I think that's
+     because a bug in the engine has been fixed. */
   return time;
 }
 
@@ -373,6 +377,7 @@ lookup_end_date_option(const gchar *section,
   choice = gnc_gconf_get_string(section, key_choice, NULL);
   if (choice && strcmp(choice, "absolute") == 0) {
     time = gnc_gconf_get_int(section, key_absolute, NULL);
+    time += 3600*24 - 1;  /* We want the _end_ of the day. */
   } else {
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_end_timet(which, fy_end, NULL);
@@ -382,6 +387,46 @@ lookup_end_date_option(const gchar *section,
   return time;
 }
 
+static GDate *
+get_fy_end(void) 
+{
+    QofBook *book;
+    KvpFrame *book_frame;
+    gint64 month, day;
+    
+    book = gnc_get_current_book();
+    book_frame = qof_book_get_slots(book);
+    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
+    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
+    if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
+        return g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
+    return NULL;
+}
+
+time_t
+gnc_main_window_summary_get_start(void)
+{
+    time_t t;
+    GDate *fy_end = get_fy_end();
+    t = lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
+                                 KEY_START_DATE, KEY_START_PERIOD, fy_end);
+    if (fy_end)
+        g_date_free(fy_end);
+    return t;
+}
+
+time_t
+gnc_main_window_summary_get_end(void)
+{
+    time_t t;
+    GDate *fy_end = get_fy_end();
+    
+    t = lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
+                               KEY_END_DATE, KEY_END_PERIOD, fy_end);
+    if (fy_end)
+        g_date_free(fy_end);
+    return t;
+}
 
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
@@ -410,17 +455,6 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
   GList *currency_list;
   GList *current;
   GNCSummarybarOptions options;
-  QofBook *book;
-  KvpFrame *book_frame;
-  gint64 month, day;
-  GDate *fy_end = NULL;
-
-  book = gnc_get_current_book();
-  book_frame = qof_book_get_slots(book);
-  month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
-  day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
-  if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
-    fy_end = g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
 
   options.default_currency = gnc_default_report_currency ();
 
@@ -429,16 +463,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
   options.non_currency =
     gnc_gconf_get_bool(GCONF_SECTION, KEY_NON_CURRENCY, NULL);
-  /* we will need the balance of the last transaction before the start
-     date, so subtract 1 from start date */
-  options.start_date =
-    lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
-			     KEY_START_DATE, KEY_START_PERIOD, fy_end);
-  options.end_date =
-    lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
-			   KEY_END_DATE, KEY_END_PERIOD, fy_end);
-  if (fy_end)
-    g_date_free(fy_end);
+  options.start_date = gnc_main_window_summary_get_start();
+  options.end_date = gnc_main_window_summary_get_end();
 
   currency_list = NULL;
 
