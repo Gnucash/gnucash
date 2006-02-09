@@ -358,7 +358,6 @@ cdf_period(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     
     if (t2 > t1) {
         gnc_numeric b1, b2, b3;  
-        g_value_init (value, G_TYPE_STRING);
 
         if (data == RECURSE) {
             b1 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t1, NULL, TRUE);
