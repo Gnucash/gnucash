@@ -451,13 +451,17 @@ gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionD
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
 {
+	gnc_set_busy_cursor(NULL, TRUE);
 	gnc_prices_dialog (NULL);
+	gnc_unset_busy_cursor(NULL);
 }
 
 static void
 gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindowActionData *data)
 {
+	gnc_set_busy_cursor(NULL, TRUE);
 	gnc_commodities_dialog (NULL);
+	gnc_unset_busy_cursor(NULL);
 }
 
 static void
