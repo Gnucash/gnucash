@@ -377,7 +377,7 @@ lookup_end_date_option(const gchar *section,
   choice = gnc_gconf_get_string(section, key_choice, NULL);
   if (choice && strcmp(choice, "absolute") == 0) {
     time = gnc_gconf_get_int(section, key_absolute, NULL);
-    time += 3600*24 - 1;  /* We want the _end_ of the day. */
+    time = gnc_timet_get_day_end(time);
   } else {
     which = gnc_gconf_get_int(section, key_relative, NULL);
     time = gnc_accounting_period_end_timet(which, fy_end, NULL);
