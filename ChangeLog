@@ -1,5 +1,9 @@
 2006-02-08  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register-control.c: Fix the code
+	that updates the buy/sell action based on the number of shares
+	entered in a transaction.
+
 	* src/gnome/dialog-price-edit-db.c:
 	* src/engine/gnc-pricedb.c: A couple of performance enhancements.
 
