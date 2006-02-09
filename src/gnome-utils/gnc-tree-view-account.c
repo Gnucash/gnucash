@@ -357,7 +357,6 @@ cdf_period(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     t2 = gnc_main_window_summary_get_end();
     
     if (t2 > t1) {
-        GValue *value;
         gnc_numeric b1, b2, b3;  
         g_value_init (value, G_TYPE_STRING);
 
