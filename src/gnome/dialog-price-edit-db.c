@@ -308,8 +308,8 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
 {
   PricesDialog *pdb_dialog = data;
   const gchar *name;
-  GList *cm_list, *price_list, *item;
-  gboolean result;
+  static GList *cm_list;
+  GList *item;
 
   /* Never show the template list */
   name = gnc_commodity_namespace_get_name (namespace);
@@ -321,12 +321,7 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *namespace,
   for (item = cm_list; item; item = g_list_next(item)) {
 
     /* For each commodity, see if there are prices */
-    price_list = gnc_pricedb_get_prices(pdb_dialog->price_db, item->data, NULL);
-    result = (price_list != NULL);
-    gnc_price_list_destroy(price_list);
-    if (result) {
-//      printf("Namespace %s visible because %s has prices\n",
-//	     name, gnc_commodity_get_mnemonic(item->data));
+    if (gnc_pricedb_has_prices(pdb_dialog->price_db, item->data, NULL)) {
       return TRUE;
     }
   }
@@ -340,17 +335,9 @@ gnc_price_dialog_filter_cm_func (gnc_commodity *commodity,
 				 gpointer data)
 {
   PricesDialog *pdb_dialog = data;
-  GList *list;
-  gboolean result;
 
   /* Show any commodity that has prices */
-  list = gnc_pricedb_get_prices(pdb_dialog->price_db, commodity, NULL);
-  result = (list != NULL);
-  gnc_price_list_destroy(list);
-//  printf("Commodity %s%s visible\n",
-//	 gnc_commodity_get_mnemonic(commodity),
-//	 result ? "" : " not");
-  return result;
+  return gnc_pricedb_has_prices(pdb_dialog->price_db, commodity, NULL);
 }
 
 static void

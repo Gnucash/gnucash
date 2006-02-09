@@ -87,10 +87,7 @@ void
 gnc_price_unref(GNCPrice *p)
 {
   if(!p) return;
-  ENTER("pr=%p refcount=%d", p, p->refcount);
   if(p->refcount == 0) {
-    PERR("refcount == 0 !!!!");
-    LEAVE (" ");
     return;
   }
 
@@ -102,7 +99,6 @@ gnc_price_unref(GNCPrice *p)
     }
     gnc_price_destroy (p);
   }
-  LEAVE (" ");
 }
 
 /* ==================================================================== */
