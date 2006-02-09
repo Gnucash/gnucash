@@ -1119,7 +1119,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet.  If that site is unavailable, you will not be able to retrieve quotes.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Sin_gle:</property>
+		  <property name="label" translatable="yes">Si_ngle:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
