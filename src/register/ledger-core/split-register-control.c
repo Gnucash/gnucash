@@ -968,12 +968,18 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *
     return;
   name = ((ComboCell *)cell)->cell.value;
 
-  if (buy && (safe_strcmp (name, ACTION_SELL_STR) == 0)) {
-    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_BUY_STR);
-    gnc_basic_cell_set_changed (cell, TRUE);
-  } else if (!buy && safe_strcmp (name, ACTION_BUY_STR) == 0) {
-    gnc_combo_cell_set_value((ComboCell *)cell, ACTION_SELL_STR);
-    gnc_basic_cell_set_changed (cell, TRUE);
+  if (buy) {
+    if ((safe_strcmp (name, "") == 0) ||
+	(safe_strcmp (name, ACTION_SELL_STR) == 0)) {
+      gnc_combo_cell_set_value((ComboCell *)cell, ACTION_BUY_STR);
+      gnc_basic_cell_set_changed (cell, TRUE);
+    }
+  } else {
+    if ((safe_strcmp (name, "") == 0) || 
+	(safe_strcmp (name, ACTION_BUY_STR) == 0)) {
+      gnc_combo_cell_set_value((ComboCell *)cell, ACTION_SELL_STR);
+      gnc_basic_cell_set_changed (cell, TRUE);
+    }
   }
 }
 

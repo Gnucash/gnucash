@@ -1,3 +1,9 @@
+2006-02-09  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register-control.c: Better fix
+	for the code that updates the buy/sell action based on the number
+	of shares entered in a transaction.
+
 2006-02-08  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c: Fix the code
