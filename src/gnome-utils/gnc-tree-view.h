@@ -359,6 +359,16 @@ gnc_tree_view_set_show_column_menu (GncTreeView *view,
 gboolean
 gnc_tree_view_get_show_column_menu (GncTreeView *view);
 
+/** Return the "main" cell renderer from a GtkTreeViewColumn added to
+ *  a GncTreeView my one of the convenience routines.
+ *
+ *  @param column The tree view column that was added to the GncTreeView
+ *
+ *  @returns The cell renderer in use in the column.
+ */
+GtkCellRenderer *
+gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column);
+
 /** @} */
 
 /** @} */

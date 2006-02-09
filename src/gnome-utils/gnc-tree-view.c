@@ -1999,6 +1999,23 @@ gnc_tree_view_add_combo_column (GncTreeView *view,
 }
 #endif
 
+GtkCellRenderer *
+gnc_tree_view_column_get_renderer(GtkTreeViewColumn *column)
+{
+  GList *renderers;
+  GtkCellRenderer *cr = NULL;
+
+  g_return_val_if_fail(GTK_TREE_VIEW_COLUMN(column), NULL);
+
+  /* Get the list of one renderer */
+  renderers = gtk_tree_view_column_get_cell_renderers(column);
+  if (g_list_length(renderers) > 0)
+      cr = GTK_CELL_RENDERER(renderers->data);
+  g_list_free(renderers);
+  
+  return cr;
+}
+
 /** This function adds a new numeric column to a GncTreeView base
  *  view.  It takes all the parameters necessary to hook a
  *  GtkTreeModel column to a GtkTreeViewColumn.  If the tree has a
@@ -2021,17 +2038,13 @@ gnc_tree_view_add_numeric_column (GncTreeView *view,
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  GList *renderers;
 
   column = gnc_tree_view_add_text_column (view, column_title, pref_name,
 					  NULL, sizing_text, model_data_column,
 					  model_visibility_column,
 					  column_sort_fn);
 
-  /* Get the list of one renderer */
-  renderers = gtk_tree_view_column_get_cell_renderers(column);
-  renderer = renderers->data;
-  g_list_free(renderers);
+  renderer = gnc_tree_view_column_get_renderer(column);
 
   /* Right align the column title and data */
   g_object_set(G_OBJECT(column), "alignment",   1.0, NULL);
