@@ -877,6 +877,16 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
     menu = gnc_ui_source_menu_create(SOURCE_UNKNOWN);
     retval->source_menu[SOURCE_UNKNOWN] = menu;
     gtk_box_pack_start(GTK_BOX(box), menu, TRUE, TRUE, 0);
+  } else {
+    guint row;
+
+    widget = glade_xml_get_widget (xml, "unknown_source_alignment");
+    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+			    "top-attach", &row, NULL);
+    gtk_table_set_row_spacing(GTK_TABLE(retval->table), row, 0);
+    gtk_widget_destroy(widget);
+    widget = glade_xml_get_widget (xml, "unknown_source_box");
+    gtk_widget_destroy(widget);
   }
 
   box = glade_xml_get_widget (xml, "quote_tz_box");

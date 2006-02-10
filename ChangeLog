@@ -1,3 +1,14 @@
+2006-02-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/engine/gnc-commodity.c: Update for known F::Q 1.11 quote
+	sources.
+
+	* src/quotes/finance-quote-check.in:
+	* src/scm/price-quotes.scm: Print out the installed F::Q version
+	at startup.
+	
 2006-02-09  Derek Atkins  <derek@ihtfp.com>
 
 	* macros/legacy_macros.m4: when the guile version check fails,
