@@ -552,7 +552,7 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
   for (i = 0; i < num_values; i++) {
     string = gnc_option_permissible_value_name(option, i);
     if (string) {
-      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), _(string));
+      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), *string ? _(string) : "");
       g_free(string);
     } else {
       gtk_combo_box_append_text(GTK_COMBO_BOX(widget), "");
@@ -564,7 +564,8 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
     */
     /* Old 1-8-branch code:
     string = gnc_option_permissible_value_description(option, i);
-    gnc_gtk_combo_box_set_tooltip(GTK_COMBO_BOX(widget), string ? _(string) : "");
+    gnc_gtk_combo_box_set_tooltip(GTK_COMBO_BOX(widget),
+    	string && *string ? _(string) : "");
     if (string)
       g_free(string);
     */
@@ -623,10 +624,10 @@ gnc_option_create_radiobutton_widget(char *name, GNCOption *option)
       gtk_radio_button_new_with_label_from_widget (widget ?
 						   GTK_RADIO_BUTTON (widget) :
 						   NULL,
-						   label ? _(label) : "");
+						   label && *label ? _(label) : "");
     g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
 		       GINT_TO_POINTER (i));
-    gtk_tooltips_set_tip(tooltips, widget, tip ? _(tip) : "", NULL);
+    gtk_tooltips_set_tip(tooltips, widget, tip && *tip ? _(tip) : "", NULL);
     g_signal_connect(G_OBJECT(widget), "toggled",
 		     G_CALLBACK(gnc_option_radiobutton_cb), option);
     gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
@@ -845,7 +846,7 @@ gnc_option_create_list_widget(GNCOption *option, char *name, GtkTooltips *toolti
     string = gnc_option_permissible_value_name(option, i);
     if (string != NULL)
     {
-      text[0] = _(string);
+      text[0] = *string ? _(string) : "";
       gtk_clist_append(GTK_CLIST(clist), text);
       gtk_clist_set_row_data(GTK_CLIST(clist), i, GINT_TO_POINTER(FALSE));
       free(string);
@@ -932,13 +933,13 @@ gnc_option_set_ui_widget(GNCOption *option,
   }
 
   raw_name = gnc_option_name(option);
-  if (raw_name != NULL)
+  if (raw_name && *raw_name)
     name = _(raw_name);
   else
     name = NULL;
 
   raw_documentation = gnc_option_documentation(option);
-  if (raw_documentation != NULL)
+  if (raw_documentation && *raw_documentation)
     documentation = _(raw_documentation);
   else
     documentation = NULL;
