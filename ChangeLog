@@ -6,6 +6,11 @@
 	* Makefile.am:
 	  added README.dependencies to the dist.  Fixes #330614.
 
+	* configure.in:
+	  check that we can find g-wrap-wct.h.
+	  detects that we're running on a "broken" system like Ubuntu.
+	  This is in response to #330539.
+
 2006-02-09  David Hampton  <hampton@employees.org>
 
 	* src/bin/gnucash-bin.c: Pass argc by reference instead of value

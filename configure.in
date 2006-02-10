@@ -277,6 +277,18 @@ AC_MSG_RESULT($G_WRAP_MODULE_DIR)
 
 AC_GWRAP_CHECK_GUILE($G_WRAP_MODULE_DIR)
 
+save_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $G_WRAP_COMPILE_ARGS"
+AC_CHECK_HEADER(g-wrap-wct.h,,
+	[AC_MSG_ERROR([
+
+   cannot find g-wrap-wct.h where g-wrap claims it should be.
+   are you on Debian or Ubuntu and still using g-wrap 1.9.6-2?
+   See:  http://bugzilla.gnome.org/show_bug.cgi?id=330539
+
+])])
+CPPFLAGS=$save_CPPFLAGS
+
 AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
