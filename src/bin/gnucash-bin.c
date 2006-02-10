@@ -306,7 +306,7 @@ gnucash_command_line(int argc, char **argv)
 
     context = g_option_context_new (" [datafile]");
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
-    g_option_context_add_group (context, gtk_get_option_group (TRUE));
+    g_option_context_add_group (context, gtk_get_option_group (FALSE));
     g_option_context_parse (context, &argc, &argv, &error);
     g_option_context_free (context);
 
