@@ -38,6 +38,8 @@ typedef struct
 /* Static Variables ************************************************/
 static guint  suspend_counter = 0;
 static gint   next_handler_id = 1;
+static guint  handler_run_level = 0;
+static guint  pending_deletes = 0;
 static GList *handlers = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -113,14 +115,20 @@ gnc_engine_unregister_event_handler (gint handler_id)
        of a generated event, such as GNC_EVENT_DESTROY.  In that case,
        we're in the middle of walking the GList and it is wrong to
        modify the list. So, instead, we just NULL the handler. */ 
-    /* handlers = g_list_remove_link (handlers, node); */
 
-    LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id, hi->handler, hi->user_data);
-    /* safety */
+    LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
+	   hi->handler, hi->user_data);
+
+    /* safety -- clear the handler in case we're running events now */
     hi->handler = NULL;
 
-    /* g_list_free_1 (node);
-       g_free (hi); */
+    if (handler_run_level == 0) {
+      handlers = g_list_remove_link (handlers, node);
+      g_list_free_1 (node);
+      g_free (hi);
+    } else {
+      pending_deletes++;
+    }
 
     return;
   }
@@ -177,6 +185,7 @@ gnc_engine_generate_event_internal (QofEntity *entity,
       return;
   }
 
+  handler_run_level++;
   for (node = handlers; node; node = next_node)
   {
     HandlerInfo *hi = node->data;
@@ -184,7 +193,29 @@ gnc_engine_generate_event_internal (QofEntity *entity,
     next_node = node->next;
     PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
     if (hi->handler)
-      hi->handler ((GUID *)&entity->guid, entity->e_type, event_type, hi->user_data);
+      hi->handler ((GUID *)&entity->guid, entity->e_type,
+		   event_type, hi->user_data);
+  }
+  handler_run_level--;
+
+  /* If we're the outtermost event runner and we have pending deletes
+   * then go delete the handlers now.
+   */
+  if (handler_run_level == 0 && pending_deletes)
+  {
+    for (node = handlers; node; node = next_node)
+    {
+      HandlerInfo *hi = node->data;
+      next_node = node->next;
+      if (hi->handler == NULL)
+      {
+	/* remove this node from the list, then free this node */
+	handlers = g_list_remove_link (handlers, node);
+	g_list_free_1 (node);
+	g_free (hi);
+      }
+    }
+    pending_deletes = 0;
   }
 }
 

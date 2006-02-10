@@ -11,6 +11,11 @@
 	  detects that we're running on a "broken" system like Ubuntu.
 	  This is in response to #330539.
 
+	* lib/libqof/qof/gnc-event.c:
+	  Better handling of event removal.  This allows us to actually
+	  clean up, but also makes sure we don't destroy the handler
+	  list out from under us as we're processing events.
+
 2006-02-09  David Hampton  <hampton@employees.org>
 
 	* src/bin/gnucash-bin.c: Pass argc by reference instead of value
