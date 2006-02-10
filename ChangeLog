@@ -3,6 +3,9 @@
 	* src/gnome-utils/dialog-options.c:
 	  Test for an empty string when translating.  (Fixes #330179)
 
+	* Makefile.am:
+	  added README.dependencies to the dist.  Fixes #330614.
+
 2006-02-09  David Hampton  <hampton@employees.org>
 
 	* src/bin/gnucash-bin.c: Pass argc by reference instead of value
