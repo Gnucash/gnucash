@@ -777,4 +777,6 @@ Run 'update-finance-quote' as root to install them.") "\n")))
 (define (gnc:price-quotes-install-sources)
   (let ((sources (gnc:fq-check-sources)))
     (if (list? sources)
-        (gnc:quote-source-set-fq-installed sources))))
+	(begin
+	  (gnc:msg "Found Finance::Quote version " (car sources))
+	  (gnc:quote-source-set-fq-installed (cdr sources))))))

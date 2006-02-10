@@ -84,7 +84,7 @@ my @sources = $quoter->sources();
 foreach my $source (@sources) {
   push(@qsources, "\"$source\"");
 }
-printf "(%s)\n", join(" ", qq/@qsources/);
+printf "(%s %s)\n", $Finance::Quote::VERSION, join(" ", qq/@qsources/);
 
 ## Local Variables:
 ## mode: perl
