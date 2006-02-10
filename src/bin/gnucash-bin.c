@@ -203,7 +203,7 @@ load_user_config(void)
  */
 
 static void 
-gnucash_command_line(int argc, char **argv)
+gnucash_command_line(int *argc, char **argv)
 {
     char *p;
     int debugging = 0;
@@ -251,7 +251,7 @@ gnucash_command_line(int argc, char **argv)
     /* Pretend that argv[0] is "gnucash" */
     if ((p = strstr(argv[0], "-bin"))) *p = '\0';
 
-    pc = poptGetContext(NULL, argc, (const char **)argv, options, 0);
+    pc = poptGetContext(NULL, *argc, (const char **)argv, options, 0);
     poptSetOtherOptionHelp(pc, "[OPTIONS...] [datafile]");
     
     while ((rc = poptGetNextOpt(pc)) > 0);
@@ -307,10 +307,10 @@ gnucash_command_line(int argc, char **argv)
     context = g_option_context_new (" [datafile]");
     g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
     g_option_context_add_group (context, gtk_get_option_group (FALSE));
-    g_option_context_parse (context, &argc, &argv, &error);
+    g_option_context_parse (context, argc, &argv, &error);
     g_option_context_free (context);
 
-    if (argc > 0)
+    if (*argc > 0)
       file_to_load = argv[1];
 #endif
 
@@ -484,11 +484,8 @@ int main(int argc, char ** argv)
 
     gnc_module_system_init();
     envt_override();
-    gnucash_command_line(argc, argv);
+    gnucash_command_line(&argc, argv);
     gnc_print_unstable_message();
-
-    /* argv may have changed */
-    for (argc = 0; argv[argc]; argc++) ;
 
     if (add_quotes_file) {
         /* This option needs to run without a display, so we can't

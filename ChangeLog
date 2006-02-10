@@ -1,5 +1,8 @@
 2006-02-09  David Hampton  <hampton@employees.org>
 
+	* src/bin/gnucash-bin.c: Pass argc by reference instead of value
+	so g_option_parse_context can update it.
+
 	* src/bin/gnucash-bin.c: Don't initialize the display at option
 	parsing time.  This way --add-price-quotes can run from a cron
 	job.
