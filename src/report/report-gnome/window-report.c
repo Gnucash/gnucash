@@ -167,7 +167,7 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
       title = SCM_STRING_CHARS(ptr);
     }
     /* Don't forget to translate the window title */
-    prm->win  = gnc_options_dialog_new((gchar*)_(title));
+    prm->win  = gnc_options_dialog_new((gchar*) (title && *title ? _(title) : ""));
     
     scm_gc_protect_object(prm->scm_options);
     scm_gc_protect_object(prm->cur_report);

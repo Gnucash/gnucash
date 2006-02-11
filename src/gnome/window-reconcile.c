@@ -383,7 +383,7 @@ gnc_recn_make_interest_window_name(Account *account, char *text)
   char *title;
 
   fullname = xaccAccountGetFullName(account, gnc_get_account_separator());
-  title = g_strconcat(fullname, " - ", _(text), NULL);
+  title = g_strconcat(fullname, " - ", text && *text ? _(text) : "", NULL);
 
   g_free(fullname);
 

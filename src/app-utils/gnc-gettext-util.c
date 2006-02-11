@@ -32,6 +32,6 @@
 char *
 gnc_gettext_helper(const char *string)
 {
-  return strdup(_(string));
+  return strdup(string && *string ? _(string) : "");
 }
 

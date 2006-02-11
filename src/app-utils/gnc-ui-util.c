@@ -572,7 +572,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   if (!account)
   {
-    base_name = _(base_name);
+    base_name = base_name && *base_name ? _(base_name) : "";
 
     account = xaccGetAccountFromName (group, base_name);
     if (account && xaccAccountGetType (account) != EQUITY)

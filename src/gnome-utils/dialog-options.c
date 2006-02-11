@@ -559,19 +559,12 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
     }
 
     /* FIXME: tooltip texts for each option are available but cannot
-       be set currently. See
-       https://lists.gnucash.org/pipermail/gnucash-devel/2005-December/015139.html 
+       be set currently. See http://wiki.gnucash.org/wiki/Tooltips.
+       The current idea is to revert the widget back to the
+       GtkOptionMenu code from 1.8-branch until
+       http://bugzilla.gnome.org/show_bug.cgi?id=303717 is implemented
+       in gtk.
     */
-    /* Old 1-8-branch code:
-    string = gnc_option_permissible_value_description(option, i);
-    gnc_gtk_combo_box_set_tooltip(GTK_COMBO_BOX(widget),
-    	string && *string ? _(string) : "");
-    if (string)
-      g_free(string);
-    */
-    /* New code needs to do something like this:
-       gtk_tooltips_set_tip(tooltips, widget, string ? _(string) : "", NULL);
-     */
   }
   g_signal_connect(G_OBJECT(widget), "changed",
         	   G_CALLBACK(gnc_option_multichoice_cb), option);
