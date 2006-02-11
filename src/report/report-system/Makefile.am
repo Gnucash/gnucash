@@ -12,6 +12,7 @@ gncinclude_HEADERS = \
 
 libgncmod_report_system_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
@@ -19,6 +20,7 @@ libgncmod_report_system_la_LIBADD = \
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/app-utils \
   ${GLIB_CFLAGS} ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS}
 

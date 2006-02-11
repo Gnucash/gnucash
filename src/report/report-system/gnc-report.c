@@ -28,6 +28,7 @@
 #include <libguile.h>
 #include <stdio.h>
 #include <string.h>
+#include "gfec.h"
 
 #include "gnc-report.h"
 
@@ -38,10 +39,10 @@ static int report_next_serial_id = 0;
 static void
 gnc_report_init_table(void)
 {
-    /* TODO: Right now the report-page handles the gc-protection, but
-       it probably makes more sense to do it here on insert and remove. */
     if (!reports) {
-        reports = g_hash_table_new_full(g_int_hash, g_int_equal, g_free, NULL);
+        reports = g_hash_table_new_full(
+            g_int_hash, g_int_equal, 
+            g_free, (GDestroyNotify) scm_gc_unprotect_object);
     }
 }
 
@@ -73,6 +74,7 @@ int gnc_report_add(SCM report)
     key = g_new(gint, 1);
     *key = report_next_serial_id++;
     g_hash_table_insert(reports, key, (gpointer)report);
+    scm_gc_protect_object(report);
     return *key;
 }
 
@@ -96,20 +98,26 @@ gnc_reports_get_global(void)
     return reports;
 }
 
+static void
+error_handler(const char *str)
+{
+    g_warning("Failure running report: %s", str);
+}
+
 gboolean
 gnc_run_report (int report_id, char ** data)
 {
   const gchar *free_data;
-  SCM run_report;
   SCM scm_text;
+  gchar *str;
 
   g_return_val_if_fail (data != NULL, FALSE);
   *data = NULL;
 
-  run_report = scm_c_eval_string ("gnc:report-run");
+  str = g_strdup_printf("(gnc:report-run %d)", report_id);
+  scm_text = gfec_eval_string(str, error_handler);
 
-  scm_text = scm_call_1 (run_report, scm_int2num (report_id));
-  if (!SCM_STRINGP (scm_text))
+  if (scm_text == SCM_UNDEFINED || !SCM_STRINGP (scm_text))
     return FALSE;
 
   free_data = SCM_STRING_CHARS (scm_text);
