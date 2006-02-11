@@ -1277,10 +1277,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	      <child>
 		<widget class="GtkLabel" id="pickAccountsDescriptionLabel">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Select categories that correspond to the ways that you will use GnuCash.  
-Each category you select will cause several accounts to be created.  
-Select the categories that are relevant to you.  You can always create 
-additional accounts by hand later.</property>
+		  <property name="label" translatable="yes">Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1928,10 +1925,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	      <child>
 		<widget class="GtkLabel" id="label8477407">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Select categories that correspond to the ways that you will use GnuCash.  
-Each category you select will cause several accounts to be created.  
-Select the categories that are relevant to you.  You can always create 
-additional accounts by hand later.</property>
+		  <property name="label" translatable="yes">Select categories that correspond to the ways that you will use GnuCash.  Each category you select will cause several accounts to be created.  Select the categories that are relevant to you.  You can always create additional accounts by hand later.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -2292,9 +2286,7 @@ EUR</property>
 	      <child>
 		<widget class="GtkLabel" id="label8477409">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">If you would like an account to have an opening balance, click on the account
-and enter the starting balance in the box on the right. All accounts except Equity
-and placeholder accounts may have an opening balance.</property>
+		  <property name="label" translatable="yes">If you would like an account to have an opening balance, click on the account and enter the starting balance in the box on the right. All accounts except Equity and placeholder accounts may have an opening balance.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>

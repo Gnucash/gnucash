@@ -5589,9 +5589,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label847862">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The listed Scheduled Transactions are to-be created soon. 
-Select any which you would like to create now, and click
-&quot;Next&quot; to create them.</property>
+		  <property name="label" translatable="yes">The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click &quot;Next&quot; to create them.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -6148,8 +6146,7 @@ Select any which you would like to create now, and click
 	      <child>
 		<widget class="GtkLabel" id="label847871">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The following scheduled transactions have expired.
-Select those you wish to delete.</property>
+		  <property name="label" translatable="yes">The following scheduled transactions have expired.  Select those you wish to delete.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -6320,14 +6317,9 @@ Select those you wish to delete.</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
 	  <property name="title" translatable="yes">Mortgage/Loan Repayment Setup</property>
-	  <property name="text" translatable="yes">This is a step-by-step method of creating a loan repayment setup
-within GnuCash.  In this Druid, you can input the parameters of
-your loan and its repayment and give the details of its payback.
-Using that information, the appropriate Scheduled Transactions
-will be created.
+	  <property name="text" translatable="yes">This is a step-by-step method of creating a loan repayment setup within GnuCash.  In this Druid, you can input the parameters of your loan and its repayment and give the details of its payback. Using that information, the appropriate Scheduled Transactions will be created.
 
-If you make a mistake or want to make changes later, you can edit
-the created Scheduled Transactions directly.</property>
+If you make a mistake or want to make changes later, you can edit the created Scheduled Transactions directly.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#666666669998</property>

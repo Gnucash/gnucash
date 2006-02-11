@@ -31,9 +31,7 @@
 	  <property name="title" translatable="yes">Setup Accounting Periods</property>
 	  <property name="text" translatable="yes">This druid will help you setup and use accouting periods. 
  
-Danger: this feature does not work correctly at this time; 
-it is still under development.  It will probably damage your
-data in such a way that it cannot be repaired!</property>
+Danger: this feature does not work correctly at this time; it is still under development.  It will probably damage your data in such a way that it cannot be repaired!</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#666666669999</property>
@@ -60,8 +58,7 @@ data in such a way that it cannot be repaired!</property>
 	      <child>
 		<widget class="GtkLabel" id="label847720">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Select an accounting period and the closing date for the period. 
-Books will be closed on midnight of the selected date.</property>
+		  <property name="label" translatable="yes">Select an accounting period and the closing date for the period.  Books will be closed on midnight of the selected date.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>

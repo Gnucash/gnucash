@@ -1,5 +1,10 @@
 2006-02-11  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/acctperiod.glade:
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/glade/account.glade: Patch from Tommi Vainikainen
+	<tvainika@niksula.hut.fi> to remove extraneous line breaks.
+
 	* src/backend/file/test/test-xml-commodity.c:
 	* src/backend/file/gnc-commodity-xml-v2.c:
 	* src/backend/postgres/table.m4:
