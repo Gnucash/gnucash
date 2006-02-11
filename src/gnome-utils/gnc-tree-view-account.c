@@ -564,12 +564,16 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				NULL);
-  gnc_tree_view_add_toggle_column(view, _("Placeholder"), Q_("Placeholder|P"),
-				  "placeholder",
-				  GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
-				  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				  sort_by_placeholder,
-				  gnc_tree_view_account_placeholder_toggled);
+  gnc_tree_view_add_toggle_column
+    (view, _("Placeholder"),
+     /* Translators: This string has a context prefix; the translation
+	must only contain the part after the | character. */
+     Q_("Column letter for 'Placeholder'|P"),
+     "placeholder",
+     GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
+     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+     sort_by_placeholder,
+     gnc_tree_view_account_placeholder_toggled);
 
   /* By default only the first column is visible. */
   gnc_tree_view_configure_columns(view, NULL);

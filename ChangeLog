@@ -1,3 +1,9 @@
+2006-02-11  Christian Stimming  <stimming@tuhh.de>
+
+	* po/Makevars: Add --keyword=Q_ to xgettext arguments so that
+	translations with context prefix/disambiguation prefix are
+	included as well.
+
 2006-02-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-account-tree.c: Correctly open an

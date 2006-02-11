@@ -512,12 +512,16 @@ gnc_tree_view_commodity_new (QofBook *book,
 				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
 				    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				    sort_by_fraction);
-  gnc_tree_view_add_toggle_column (view, _("Get Quotes"), Q_("Get Quotes|Q"),
-				   "quote_flag",
-				   GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
-				   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				   sort_by_quote_flag,
-				   NULL);
+  gnc_tree_view_add_toggle_column
+    (view, _("Get Quotes"),
+     /* Translators: This string has a context prefix; the translation
+	must only contain the part after the | character. */
+     Q_("Column letter for 'Get Quotes'|Q"),
+     "quote_flag",
+     GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+     GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+     sort_by_quote_flag,
+     NULL);
   gnc_tree_view_add_text_column (view, _("Source"), "quote_source", NULL,
 				 "yahoo",
 				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
