@@ -19,19 +19,19 @@ dnl Process this file with autoconf to produce a configure script.
 #   Footer    - Autoconf footer stuff
 
 # Autoconf initialization
-AC_INIT
+AC_PREREQ(2.59)
+AC_INIT([gnucash], [1.9.0], [gnucash-devel@gnucash.org])
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_SRCDIR(src/engine/Transaction.h)
-AC_PREREQ(2.53)
 
-# Define the version number
-GNUCASH_MAJOR_VERSION=1
-GNUCASH_MINOR_VERSION=9
-GNUCASH_MICRO_VERSION=0
-GNUCASH_VERSION_STRING="$GNUCASH_MAJOR_VERSION.$GNUCASH_MINOR_VERSION.$GNUCASH_MICRO_VERSION"
+# Initialize automake -- make sure we have at least version 1.9
+AM_INIT_AUTOMAKE(1.9)
 
-AM_INIT_AUTOMAKE(gnucash, $GNUCASH_VERSION_STRING)
-
+# Parse out the version number
+GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
+GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\1/'`
+GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/'`
+GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/'`
 
 ##  Do this first, because the other tests depend on it:
 

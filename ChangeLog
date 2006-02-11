@@ -6,6 +6,12 @@
 	* src/business/business-reports/owner-report.scm:
 	  set the document title properly AFTER type-str is set.
 
+	* configure.in:
+	  rework the initialization to require autoconf-2.59 and automake-1.9
+	  parse the version out of the AC_PACKAGE_VERSION macro, so
+	  we still only need to set it in one place.  This should
+	  solve a number of old-automake related problems people have seen.
+
 2006-02-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/acctperiod.glade:
