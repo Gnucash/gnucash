@@ -270,10 +270,10 @@ static GtkActionEntry gnc_menu_actions [] =
 	/* Actions menu */
 
 	{ "ScrubMenuAction", NULL, N_("_Check & Repair"), NULL, NULL, NULL },
-	{ "ActionsForgetWarningsAction", NULL, N_("_Reset Warnings..."), NULL,
+	{ "ActionsForgetWarningsAction", NULL, N_("Reset _Warnings..."), NULL,
 	  N_("Reset the state of all warning message so they will be shown again."),
 	  G_CALLBACK (gnc_main_window_cmd_actions_reset_warnings) },
-	{ "ActionsRenamePageAction", NULL, N_("Rename Page"), NULL,
+	{ "ActionsRenamePageAction", NULL, N_("Re_name Page"), NULL,
 	  N_("Rename this page."),
 	  G_CALLBACK (gnc_main_window_cmd_actions_rename_page) },
 
