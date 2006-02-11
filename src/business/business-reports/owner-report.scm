@@ -540,7 +540,6 @@
 	 (end-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
-	 (title (string-append (_ type-str) " " (_ "Report")))
 	 (book (gnc:get-current-book)) ;XXX Grab this from elsewhere
 	 (owner-type (opt-val "__reg" "owner-type"))
 	 (type-str ""))
@@ -553,7 +552,8 @@
       ((gnc-owner-employee)
        (set! type-str (N_ "Employee"))))
 
-    (gnc:html-document-set-title! document title)
+    (gnc:html-document-set-title!
+     document (string-append (_ type-str) " " (_ "Report")))
 
     (if (gnc:owner-is-valid? owner)
 	(begin
