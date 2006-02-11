@@ -196,7 +196,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Record the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
 	{ "CancelTransactionAction", GTK_STOCK_CANCEL, N_("Ca_ncel Transaction"), NULL,
-	  N_("_Cancel the current transaction"),
+	  N_("Cancel the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
 	{ "VoidTransactionAction", NULL, N_("_Void Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction) },

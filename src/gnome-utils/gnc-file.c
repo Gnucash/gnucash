@@ -543,7 +543,7 @@ gnc_file_query_save (gboolean can_cancel)
     gint response;
     const char *title = _("Save changes to the file?");
     const char *message =
-      _("Changes have been made since the last time it was saved.  If "
+      _("Changes have been made since the last time it was saved. If "
 	"you continue without saving these changes will be discarded.");
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
