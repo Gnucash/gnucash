@@ -81,9 +81,10 @@ void gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb);
  *  the dialog box as an instruction to the user.  If NULL, a generic
  *  instruction will be used.
  *
- *  @param exchange_code If present, a note will be added to the user
+ *  @param cusip If present, a note will be added to the user
  *  instruction providing this exchange specific code, and this will
- *  be the default exchange code for any newly created commodities.
+ *  be the default exchange specific data for any newly created
+ *  commodities.
  *
  *  @param fullname If present, a note will be added to the user
  *  instruction providing this commodity's full name, and this will be
@@ -104,7 +105,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 				   GtkWidget * parent,
 				   dialog_commodity_mode mode,
 				   const char * user_message,
-				   const char * exchange_code,
+				   const char * cusip,
 				   const char * fullname,
 				   const char * mnemonic);
 
@@ -149,8 +150,8 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
  *  the dialog box as an instruction to the user.  If NULL, a generic
  *  instruction will be used.
  *
- *  @param exchange_code If present, this will be the default exchange
- *  code for the new commodity.
+ *  @param cusip If present, this will be the default exchange
+ *  specific data for the new commodity.
  *
  *  @param fullname If present, this will be the default fullname for
  *  the new commodity.
@@ -166,7 +167,7 @@ gnc_ui_select_commodity_modal(gnc_commodity * orig_sel,
 gnc_commodity * 
 gnc_ui_new_commodity_modal_full(const char * namespace, 
 				GtkWidget * parent,
-				const char * exchange_code,
+				const char * cusip,
 				const char * fullname,
 				const char * mnemonic,
 				int fraction);

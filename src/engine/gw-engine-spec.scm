@@ -2065,9 +2065,9 @@ of having a parent transaction with which one is working...")
  ws
  'gnc:commodity-get-exchange-code
  '(<gw:mchars> callee-owned const)
- "gnc_commodity_get_exchange_code"
+ "gnc_commodity_get_cusip"
  '((<gnc:commodity*> comm))
- "Get the exchange code (ISO numeric code)")
+ "Get the cusip (exchange specific data, not the stock ticker)")
 
 (gw:wrap-function
  ws

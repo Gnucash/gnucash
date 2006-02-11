@@ -1,3 +1,19 @@
+2006-02-11  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/test/test-xml-commodity.c:
+	* src/backend/file/gnc-commodity-xml-v2.c:
+	* src/backend/postgres/table.m4:
+	* src/import-export/ofx/gnc-ofx-import.c:
+	* src/import-export/import-commodity-matcher.[ch]:
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-model-commodity.[ch]:
+	* src/gnome-utils/dialog-commodity.[ch]:
+	* src/engine/gw-engine-spec.scm:
+	* src/engine/test-core/test-engine-stuff.c:
+	* src/engine/test/test-commodities.c:
+	* src/engine/gnc-commodity.[ch]: Globally replace the words
+	"exchange_code" with cusip in the source. No user visible changes.
+
 2006-02-11  Christian Stimming  <stimming@tuhh.de>
 
 	* po/Makevars: Add --keyword=Q_ to xgettext arguments so that

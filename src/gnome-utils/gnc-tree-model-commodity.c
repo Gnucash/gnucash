@@ -389,7 +389,7 @@ gnc_tree_model_commodity_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE:
 		case GNC_TREE_MODEL_COMMODITY_COL_FULLNAME:
 		case GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME:
-		case GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE:
+		case GNC_TREE_MODEL_COMMODITY_COL_CUSIP:
 		case GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME:
 		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE:
 		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ:
@@ -580,10 +580,10 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
 
 			g_value_set_string (value, gnc_commodity_get_printname (commodity));
 			break;
-		case GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE:
+		case GNC_TREE_MODEL_COMMODITY_COL_CUSIP:
 			g_value_init (value, G_TYPE_STRING);
 
-			g_value_set_string (value, gnc_commodity_get_exchange_code (commodity));
+			g_value_set_string (value, gnc_commodity_get_cusip (commodity));
 			break;
 		case GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME:
 			g_value_init (value, G_TYPE_STRING);

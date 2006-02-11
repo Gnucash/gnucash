@@ -81,12 +81,12 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
                                           gnc_commodity_get_fullname(com)));
     }
 
-    if(gnc_commodity_get_exchange_code(com) &&
-       strlen(gnc_commodity_get_exchange_code(com)) > 0)
+    if(gnc_commodity_get_cusip(com) &&
+       strlen(gnc_commodity_get_cusip(com)) > 0)
     {
         xmlAddChild(ret, text_to_dom_tree(
                         cmdty_xcode,
-                        gnc_commodity_get_exchange_code(com)));
+                        gnc_commodity_get_cusip(com)));
     }
 
     xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
@@ -117,7 +117,7 @@ struct com_char_handler com_handlers[] = {
     { cmdty_namespace,    gnc_commodity_set_namespace },
     { cmdty_id,           gnc_commodity_set_mnemonic },
     { cmdty_name,         gnc_commodity_set_fullname },
-    { cmdty_xcode,        gnc_commodity_set_exchange_code },
+    { cmdty_xcode,        gnc_commodity_set_cusip },
     { cmdty_quote_tz,     gnc_commodity_set_quote_tz },
     { 0, 0 }
 };

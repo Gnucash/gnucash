@@ -53,7 +53,7 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 
 
 
-gnc_commodity * gnc_import_select_commodity(char * exchange_code,
+gnc_commodity * gnc_import_select_commodity(char * cusip,
 				    char auto_create,
 				    char * default_fullname,
 				    char * default_mnemonic)
@@ -67,7 +67,7 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
   DEBUG("Default fullname received: %s", default_fullname);
   DEBUG("Default mnemonic received: %s", default_mnemonic);
   
-  DEBUG("Looking for commodity with exchange_code: %s", exchange_code);
+  DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
   namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
@@ -88,9 +88,9 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 	  tmp_commodity=commodity_list->data;
 	  DEBUG("Looking at commodity %s",gnc_commodity_get_fullname(tmp_commodity));
 	  
-	  if(gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
-	     exchange_code != NULL &&
-	     strncmp(gnc_commodity_get_exchange_code(tmp_commodity),exchange_code,strlen(exchange_code))==0)
+	  if(gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
+	     cusip != NULL &&
+	     strncmp(gnc_commodity_get_cusip(tmp_commodity),cusip,strlen(cusip))==0)
 	    {
 	      retval = tmp_commodity;
 	      DEBUG("Commodity %s%s",gnc_commodity_get_fullname(retval)," matches.");
@@ -118,18 +118,17 @@ gnc_commodity * gnc_import_select_commodity(char * exchange_code,
 						NULL,
 						DIAG_COMM_ALL,
 						message,
-						exchange_code,
+						cusip,
 						default_fullname,
 						default_mnemonic);
       
     }
   if (retval != NULL&&
-      gnc_commodity_get_exchange_code(tmp_commodity)!=NULL &&
-      exchange_code != NULL &&
-      (strncmp(gnc_commodity_get_exchange_code(retval),exchange_code,strlen(exchange_code))!=0))
+      gnc_commodity_get_cusip(tmp_commodity)!=NULL &&
+      cusip != NULL &&
+      (strncmp(gnc_commodity_get_cusip(retval),cusip,strlen(cusip))!=0))
     {
-      gnc_commodity_set_exchange_code(retval,
-				      exchange_code);
+      gnc_commodity_set_cusip(retval, cusip);
     }
   return retval;
 };

@@ -248,9 +248,9 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *  match the stock ticker symbol used by the exchange where you want
  *  to get automatic stock quote updates.  E.G. ACME, ACME.US, etc.
  *
- *  @param exchange_code A string containing the CUSIP code or similar
+ *  @param cusip A string containing the CUSIP code or similar
  *  UNIQUE code for this commodity. The stock ticker is NOT
- *  appropriate.
+ *  appropriate as that goes in the mnemonic field.
  *
  *  @param fraction The smallest division of this commodity
  *  allowed. I.E. If this is 1, then the commodity must be traded in
@@ -263,7 +263,7 @@ gnc_commodity * gnc_commodity_new(QofBook *book,
 				  const char * fullname, 
                                   const char * namespace,
                                   const char * mnemonic,
-                                  const char * exchange_code,
+                                  const char * cusip,
                                   int fraction);
 
 /** Destroy a commodity.  Release all memory attached to this data structure.
@@ -356,7 +356,7 @@ const char * gnc_commodity_get_printname(const gnc_commodity * cm);
  *  string is owned by the engine and should not be freed by the
  *  caller.
  */
-const char * gnc_commodity_get_exchange_code(const gnc_commodity * cm);
+const char * gnc_commodity_get_cusip(const gnc_commodity * cm);
 
 /** Retrieve the 'unique' name for the specified commodity.  This will
  *  be a pointer to a null terminated string of the form "AMEX::ACME",
@@ -480,11 +480,11 @@ void  gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname);
  *
  *  @param cm A pointer to a commodity data structure.
  *
- *  @param exchange_code A pointer to the full name for this commodity.  This
- *  string belongs to the caller and will be duplicated by the engine.
+ *  @param cusip A pointer to the cusip or other exchange specific
+ *  data for this commodity.  This string belongs to the caller and
+ *  will be duplicated by the engine.
  */
-void  gnc_commodity_set_exchange_code(gnc_commodity * cm, 
-                                      const char * exchange_code);
+void  gnc_commodity_set_cusip(gnc_commodity * cm, const char * cusip);
 
 /** Set the fraction for the specified commodity.  This should be
  *  an integer value specifying the number of fractional units that

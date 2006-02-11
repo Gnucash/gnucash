@@ -229,8 +229,8 @@ default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
   SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
                gnc_commodity_get_fullname (comm_b));
 
-  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
-               gnc_commodity_get_exchange_code (comm_b));
+  SAFE_STRCMP (gnc_commodity_get_cusip (comm_a),
+               gnc_commodity_get_cusip (comm_b));
 
   fraction_a = gnc_commodity_get_fraction (comm_a);
   fraction_b = gnc_commodity_get_fraction (comm_b);
@@ -340,8 +340,8 @@ sort_by_cusip_code (GtkTreeModel *f_model,
   if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
     return sort_namespace (f_model, f_iter_a, f_iter_b);
 
-  SAFE_STRCMP (gnc_commodity_get_exchange_code (comm_a),
-               gnc_commodity_get_exchange_code (comm_b));
+  SAFE_STRCMP (gnc_commodity_get_cusip (comm_a),
+               gnc_commodity_get_cusip (comm_b));
 
   return default_sort(comm_a, comm_b);
 }
@@ -504,7 +504,7 @@ gnc_tree_view_commodity_new (QofBook *book,
 				 sort_by_unique_name);
   gnc_tree_view_add_text_column (view, _("CUSIP code"), "cusip_code", NULL,
 				 "QWERTYUIOP",
-				 GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
+				 GNC_TREE_MODEL_COMMODITY_COL_CUSIP,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
 				 sort_by_cusip_code);
   gnc_tree_view_add_numeric_column (view, _("Fraction"), "fraction", "10000",

@@ -587,7 +587,7 @@ make_random_changes_to_commodity (gnc_commodity *com)
   g_free (str);
 
   str = get_random_string ();
-  gnc_commodity_set_exchange_code (com, str);
+  gnc_commodity_set_cusip (com, str);
   g_free (str);
 
   gnc_commodity_set_fraction (com, get_random_int_in_range (1, 100000));

@@ -55,7 +55,7 @@ struct gnc_commodity_s
   char    * fullname;  
   char    * mnemonic;
   char    * printname;
-  char    * exchange_code;  /* CUSIP or other identifying code */
+  char    * cusip;          /* CUSIP or other identifying code */
   int       fraction;
   char    * unique_name;  
   gint16    mark;           /* user-defined mark, handy for traversals */
@@ -502,8 +502,7 @@ reset_unique_name(gnc_commodity *com)
 gnc_commodity *
 gnc_commodity_new(QofBook *book, const char * fullname, 
                   const char * namespace, const char * mnemonic, 
-                  const char * exchange_code, 
-                  int fraction)
+                  const char * cusip, int fraction)
 {
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
   gnc_commodity_table *table;
@@ -520,7 +519,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   
   retval->fullname = CACHE_INSERT(fullname);
   retval->mnemonic = CACHE_INSERT(mnemonic);
-  retval->exchange_code = CACHE_INSERT(exchange_code);
+  retval->cusip = CACHE_INSERT(cusip);
   retval->fraction = fraction;
   retval->mark = 0;
   retval->quote_flag = 0;
@@ -548,7 +547,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   /* Set at creation */
   CACHE_REMOVE (cm->fullname);
-  CACHE_REMOVE (cm->exchange_code);
+  CACHE_REMOVE (cm->cusip);
   CACHE_REMOVE (cm->mnemonic);
   CACHE_REMOVE (cm->quote_tz);
   cm->namespace = NULL;
@@ -575,7 +574,7 @@ gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
   gnc_commodity_set_fullname (dest, src->fullname);
   dest->namespace = src->namespace;
   gnc_commodity_set_fraction (dest, src->fraction);
-  gnc_commodity_set_exchange_code (dest, src->exchange_code);
+  gnc_commodity_set_cusip (dest, src->cusip);
   gnc_commodity_set_quote_flag (dest, src->quote_flag);
   gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
   gnc_commodity_set_quote_tz (dest, src->quote_tz);
@@ -588,7 +587,7 @@ gnc_commodity_clone(gnc_commodity *src)
 
   dest->fullname = CACHE_INSERT(src->fullname);
   dest->mnemonic = CACHE_INSERT(src->mnemonic);
-  dest->exchange_code = CACHE_INSERT(src->exchange_code);
+  dest->cusip = CACHE_INSERT(src->cusip);
   dest->quote_tz = CACHE_INSERT(src->quote_tz);
 
   dest->namespace = src->namespace;
@@ -671,14 +670,14 @@ gnc_commodity_get_unique_name(const gnc_commodity * cm)
 
 
 /********************************************************************
- * gnc_commodity_get_exchange_code
+ * gnc_commodity_get_cusip
  ********************************************************************/
 
 const char * 
-gnc_commodity_get_exchange_code(const gnc_commodity * cm) 
+gnc_commodity_get_cusip(const gnc_commodity * cm) 
 {
   if(!cm) return NULL;
-  return cm->exchange_code;
+  return cm->cusip;
 }
 
 /********************************************************************
@@ -807,18 +806,18 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
 }
 
 /********************************************************************
- * gnc_commodity_set_exchange_code
+ * gnc_commodity_set_cusip
  ********************************************************************/
 
 void
-gnc_commodity_set_exchange_code(gnc_commodity * cm, 
-                                const char * exchange_code) 
+gnc_commodity_set_cusip(gnc_commodity * cm, 
+			const char * cusip) 
 {
   if(!cm) return;
-  if(cm->exchange_code == exchange_code) return;
+  if(cm->cusip == cusip) return;
 
-  CACHE_REMOVE (cm->exchange_code);
-  cm->exchange_code = CACHE_INSERT (exchange_code);
+  CACHE_REMOVE (cm->cusip);
+  cm->cusip = CACHE_INSERT (cusip);
   mark_commodity_dirty(cm);
 }
 
@@ -943,10 +942,9 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
     return FALSE;
   }
 
-  if (safe_strcmp(a->exchange_code, b->exchange_code) != 0)
+  if (safe_strcmp(a->cusip, b->cusip) != 0)
   {
-    DEBUG ("exchange codes differ: %s vs %s",
-           a->exchange_code, b->exchange_code);
+    DEBUG ("cusips differ: %s vs %s", a->cusip, b->cusip);
     return FALSE;
   }
 

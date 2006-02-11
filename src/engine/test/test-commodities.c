@@ -51,7 +51,7 @@ test_commodity(void)
         char *fullname;
         const char *namespace;
         char *mnemonic;
-        char *exchange_code;
+        char *cusip;
         int fraction;
         gnc_commodity *com2;
         QofBook *book;
@@ -60,11 +60,11 @@ test_commodity(void)
         fullname = get_random_string();
         namespace = get_random_commodity_namespace();
         mnemonic = get_random_string();
-        exchange_code = get_random_string();
+        cusip = get_random_string();
         fraction = get_random_int_in_range(0, 10000);
 
         com = gnc_commodity_new(book, fullname, namespace, mnemonic,
-                                exchange_code, fraction);
+                                cusip, fraction);
 
         do_test(
             com != NULL, "commodity with data new and destroy");
@@ -82,8 +82,8 @@ test_commodity(void)
             "mnemonic equal test");
 
         do_test(
-            safe_strcmp(exchange_code, gnc_commodity_get_exchange_code(com)) == 0,
-            "exchange code equal test");
+            safe_strcmp(cusip, gnc_commodity_get_cusip(com)) == 0,
+            "cusip equal test");
 
         do_test(
             gnc_commodity_get_fraction(com) == fraction,
@@ -107,11 +107,11 @@ test_commodity(void)
             safe_strcmp(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "reset mnemonic equal test");
 
-        exchange_code = get_random_string();
-        gnc_commodity_set_exchange_code(com, exchange_code);
+        cusip = get_random_string();
+        gnc_commodity_set_cusip(com, cusip);
         do_test(
-            safe_strcmp(exchange_code, gnc_commodity_get_exchange_code(com)) == 0,
-            "reset exchange code equal test");
+            safe_strcmp(cusip, gnc_commodity_get_cusip(com)) == 0,
+            "reset cusip equal test");
 
         fraction = get_random_int_in_range(0, 10000);
         gnc_commodity_set_fraction(com, fraction);
@@ -120,7 +120,7 @@ test_commodity(void)
             "reset fraction code equal test");
 
         com2 = gnc_commodity_new(book, fullname, namespace, mnemonic,
-                                 exchange_code, fraction);
+                                 cusip, fraction);
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 

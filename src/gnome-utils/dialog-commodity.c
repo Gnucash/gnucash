@@ -59,7 +59,7 @@ struct select_commodity_window {
 
   gnc_commodity * selection;
 
-  const char * default_exchange_code;
+  const char * default_cusip;
   const char * default_fullname;
   const char * default_mnemonic;
   int          default_fraction;
@@ -134,7 +134,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 				   GtkWidget * parent,
 				   dialog_commodity_mode mode,
 				   const char * user_message,
-				   const char * code,
+				   const char * cusip,
 				   const char * fullname,
 				   const char * mnemonic)
 {
@@ -146,7 +146,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
   gint value;
   
   win = gnc_ui_select_commodity_create(orig_sel, mode);
-  win->default_exchange_code=code;
+  win->default_cusip=cusip;
   win->default_fullname=fullname;
   win->default_mnemonic=mnemonic;
   
@@ -155,7 +155,7 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 
   if (user_message != NULL)
     initial = user_message;
-  else if ((code != NULL) || (fullname != NULL) || (mnemonic != NULL))
+  else if ((cusip != NULL) || (fullname != NULL) || (mnemonic != NULL))
     initial = _("\nPlease select a commodity to match:");
   else
     initial = "";
@@ -165,8 +165,8 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
 		    initial,
 		    fullname ? _("\nCommodity: ") : "",
 		    fullname ? fullname : "",
-		    code     ? _("\nExchange code (CUSIP or similar): ") : "",
-		    code     ? code : "",
+		    cusip    ? _("\nExchange code (CUSIP or similar): ") : "",
+		    cusip    ? cusip : "",
 		    mnemonic ? _("\nMnemonic(Ticker symbol or similar): ") : "",
 		    mnemonic ? mnemonic : "");
    gtk_label_set_text ((GtkLabel *)(win->select_user_prompt),
@@ -303,7 +303,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
   const gnc_commodity * new_commodity = 
     gnc_ui_new_commodity_modal_full(namespace,
 				    w->dialog,
-				    w->default_exchange_code,
+				    w->default_cusip,
 				    w->default_fullname,
 				    w->default_mnemonic,
 				    w->default_fraction);
@@ -486,7 +486,7 @@ gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer
 
     commodity = gnc_ui_new_commodity_modal_full (namespace,
 						 w->dialog,
-						 w->default_exchange_code,
+						 w->default_cusip,
 						 w->default_fullname,
 						 w->default_mnemonic,
 						 w->default_fraction);
@@ -975,7 +975,7 @@ static gnc_commodity *
 gnc_ui_common_commodity_modal(gnc_commodity *commodity,
 			      GtkWidget * parent,
 			      const char * namespace,
-			      const char * code,
+			      const char * cusip,
 			      const char * fullname,
 			      const char * mnemonic,
 			      int fraction)
@@ -992,7 +992,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     namespace = gnc_commodity_get_namespace (commodity);
     fullname = gnc_commodity_get_fullname (commodity);
     mnemonic = gnc_commodity_get_mnemonic (commodity);
-    code = gnc_commodity_get_exchange_code (commodity);
+    cusip = gnc_commodity_get_cusip (commodity);
     fraction = gnc_commodity_get_fraction (commodity);
   } else {
     /* Not allowed to create new currencies */
@@ -1002,7 +1002,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
   }
 
   win = gnc_ui_new_commodity_dialog(namespace, parent, fullname,
-				    mnemonic, code, fraction);
+				    mnemonic, cusip, fraction);
 
   /* Update stock quote info based on existing commodity */
   gnc_ui_commodity_update_quote_info(win, commodity);
@@ -1047,7 +1047,7 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
 gnc_commodity * 
 gnc_ui_new_commodity_modal_full(const char * namespace, 
 				GtkWidget * parent,
-				const char * exchange_code,
+				const char * cusip,
 				const char * fullname,
 				const char * mnemonic,
 				int fraction)
@@ -1056,7 +1056,7 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
 
   ENTER(" ");
   result = gnc_ui_common_commodity_modal(NULL, parent, namespace, fullname,
-					 mnemonic, exchange_code, 10000);
+					 mnemonic, cusip, 10000);
   LEAVE(" ");
   return result;
 }
@@ -1160,7 +1160,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
       gnc_commodity_set_fullname (c, fullname);
       gnc_commodity_set_mnemonic (c, mnemonic);
       gnc_commodity_set_namespace (c, namespace);
-      gnc_commodity_set_exchange_code (c, code);
+      gnc_commodity_set_cusip (c, code);
       gnc_commodity_set_fraction (c, fraction);
     }
 

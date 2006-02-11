@@ -62,7 +62,7 @@ define(`modity', `gncCommodity, Commodity, gnc_commodity, c,
        namespace,    , char *, gnc_commodity_get_namespace(ptr),
        fullname,     , char *, gnc_commodity_get_fullname(ptr),
        mnemonic,     , char *, gnc_commodity_get_mnemonic(ptr),
-       code,         , char *, gnc_commodity_get_exchange_code(ptr),
+       code,         , char *, gnc_commodity_get_cusip(ptr),
        fraction,     , int32,  gnc_commodity_get_fraction(ptr),
        commodity, KEY, char *, gnc_commodity_get_unique_name(ptr),
        ')

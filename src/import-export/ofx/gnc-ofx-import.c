@@ -76,13 +76,13 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data);
 
 int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
 {
-  char * tmp_exchange_code=NULL;
+  char * tmp_cusip=NULL;
   char * tmp_default_fullname=NULL;
   char * tmp_default_mnemonic=NULL;
  
   if(data.unique_id_valid==true)
     {
-      tmp_exchange_code=(char *)data.unique_id;
+      tmp_cusip=(char *)data.unique_id;
     }
   if(data.secname_valid==true)
     {
@@ -93,7 +93,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
       tmp_default_mnemonic=(char *)data.ticker;
     }
   
-  gnc_import_select_commodity(tmp_exchange_code,
+  gnc_import_select_commodity(tmp_cusip,
 	        	      true,
 			      tmp_default_fullname,
 			      tmp_default_mnemonic);

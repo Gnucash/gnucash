@@ -76,7 +76,7 @@ node_and_commodity_equal(xmlNodePtr node, const gnc_commodity *com)
         else if(safe_strcmp((char*)mark->name, "cmdty:xcode") == 0)
         {
             if(!equals_node_val_vs_string(
-                   mark, gnc_commodity_get_exchange_code(com)))
+                   mark, gnc_commodity_get_cusip(com)))
             {
                 return "exchange codes differ";
             }

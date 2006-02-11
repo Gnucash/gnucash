@@ -29,18 +29,18 @@
 
 /**
   Must be called with a string containing a unique identifier for the
-  commodity.  If an commodity with a matching exchange_code is
+  commodity.  If an commodity with a matching cusip is
   found, the function immediately returns with a pointer to that
   commodity.  Otherwise, the user may be prompted to select a GnuCash
-  account or create a new one (in both cases, the exchange_code is written
-  written to the commodity's exchange_code field, overwriting anything that
+  account or create a new one (in both cases, the cusip is 
+  written to the commodity's cusip field, overwriting anything that
   was there before.
 
-    @param exchange_code The string containing the code for which you
+    @param cusip The string containing the code for which you
     want a matching commodity.  A CUISP code or similar UNIQUE code.
     The stock ticker is NOT appropriate, unless you have no other option.
 
-    @param auto_create If 0, if the exchange_code value in unknown,
+    @param auto_create If 0, if the cusip value in unknown,
     the function returns NULL, otherwise, the user will be asked to 
     create a new account.
 
@@ -58,7 +58,7 @@
   account was found or created.
 
 */
-gnc_commodity * gnc_import_select_commodity(char * exchange_code,
+gnc_commodity * gnc_import_select_commodity(char * cusip,
 				    char auto_create,
 				    char * default_fullname,
 				    char * default_mnemonic);
