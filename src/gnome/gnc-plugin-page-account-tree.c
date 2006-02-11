@@ -601,7 +601,7 @@ gppat_open_account_common (GncPluginPageAccountTree *page,
 
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
 	window = GNC_PLUGIN_PAGE (page)->window;
-	new_page = gnc_plugin_page_register_new (account, FALSE);
+	new_page = gnc_plugin_page_register_new (account, include_subs);
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
