@@ -1,3 +1,8 @@
+2006-02-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	  don't need to scm_gc_{un,}protect_object on SCM_BOOL_F.
+
 2006-02-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/acctperiod.glade:

@@ -384,10 +384,6 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         priv->edited_reports    = SCM_EOL;
         priv->name_change_cb_id = SCM_BOOL_F;
 
-        scm_gc_protect_object(priv->cur_report);
-        scm_gc_protect_object(priv->initial_report);
-        scm_gc_protect_object(priv->edited_reports);
-
         g_object_get( ppage, "report-id", &report_id, NULL );
 
         PINFO("report-id: %d\n", report_id);
@@ -399,7 +395,6 @@ gnc_plugin_page_report_setup( GncPluginPage *ppage )
         }
         
         if (priv->initial_report == SCM_BOOL_F) {
-                scm_gc_unprotect_object(priv->initial_report);
                 priv->initial_report = inst_report;
                 scm_gc_protect_object(priv->initial_report);
         }
@@ -462,7 +457,6 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
         }
 
         if (priv->initial_report == SCM_BOOL_F) {
-                scm_gc_unprotect_object(priv->initial_report);
                 priv->initial_report = inst_report;
                 scm_gc_protect_object(priv->initial_report);
                 
@@ -818,8 +812,10 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         priv->container     = NULL;
         priv->html          = NULL;
   
-        scm_gc_unprotect_object(priv->cur_report);
-        scm_gc_unprotect_object(priv->edited_reports);
+	if (priv->cur_report != SCM_BOOL_F)
+		scm_gc_unprotect_object(priv->cur_report);
+	if (priv->edited_reports != SCM_BOOL_F)
+	        scm_gc_unprotect_object(priv->edited_reports);
   }
 
 static GtkActionEntry report_actions[] =
@@ -957,7 +953,8 @@ gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate *priv,
                                             SCM report)
 { 
         SCM new_edited = scm_delete(priv->edited_reports, report);
-        scm_gc_unprotect_object(priv->edited_reports);
+	if (priv->edited_reports != SCM_BOOL_F)
+	        scm_gc_unprotect_object(priv->edited_reports);
         priv->edited_reports = new_edited;
         scm_gc_protect_object(priv->edited_reports);
 }
@@ -967,7 +964,8 @@ gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate *priv,
                                          SCM report)
 {
         SCM new_edited = scm_cons(report, priv->edited_reports);
-        scm_gc_unprotect_object(priv->edited_reports);
+	if (priv->edited_reports != SCM_BOOL_F)
+	        scm_gc_unprotect_object(priv->edited_reports);
         priv->edited_reports = new_edited;
         scm_gc_protect_object(priv->edited_reports);
 }
