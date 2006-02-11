@@ -32,6 +32,7 @@
       "#include <gnc-ui-util.h>\n"
       "#include <gnc-gettext-util.h>\n"
       "#include <gnc-helpers.h>\n"
+      "#include <gnc-accounting-period.h>\n"
       "#include <gnc-component-manager.h>\n")))
 
   (gw:wrap-simple-type ws '<gnc:print-amount-info-scm> "GNCPrintAmountInfo"
@@ -398,6 +399,21 @@ determines formatting details.")
    '((<gnc:commodity-table*> table))
    "Return a list of all the quotable commodities in a given namespace in the table.")
 
+  (gw:wrap-function
+   ws
+   'gnc:accounting-period-start
+   '<gw:int>
+   "gnc_accounting_period_fiscal_start"
+   '()
+   "Returns the beginning of the preferred accounting period")
+
+  (gw:wrap-function
+   ws
+   'gnc:accounting-period-end
+   '<gw:int>
+   "gnc_accounting_period_fiscal_end"
+   '()
+   "Returns the end of the preferred accounting period")
 
   (gw:wrap-function
    ws

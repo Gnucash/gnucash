@@ -20,14 +20,6 @@
 ;; 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 
-
-;; fin-year-start format: mm dd
-(define fin-year-start '(07 01))
-
-
-(define fin-year-start-month (- (car fin-year-start) 1)) ;; jan == 0
-(define fin-year-start-day (cadr fin-year-start))
-
 (define gnc:reldate-list '())
 
 (define (gnc:timepair->secs tp)
@@ -461,80 +453,11 @@
     (set-tm:isdst now -1)
     (gnc:date->timepair now)))
 
-;; FIXME:: Replace with option when it becomes available
-(define (gnc:get-start-cur-fin-year)
-  (let ((now (localtime (current-time))))
-    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-	  (set-tm:year now (- (tm:year now) 1))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now)))))
+(define (gnc:get-start-accounting-period)
+  (gnc:secs->timepair (gnc:accounting-period-start)))
 
-(define (gnc:get-start-prev-fin-year)
-  (let ((now (localtime (current-time))))
-    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-	  (set-tm:year now (- (tm:year now) 2))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-	  (set-tm:year now (- (tm:year now) 1))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now)))))
-
-(define (gnc:get-start-next-fin-year)
-  (let ((now (localtime (current-time))))
-    (if (or (< (tm:mon now) fin-year-start-month) (and (= (tm:mon now) fin-year-start-month) (< (tm:mday now) fin-year-start-day) ))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now))
-	(begin
-	  (set-tm:sec now 0)
-	  (set-tm:min now 0)
-	  (set-tm:hour now 0)
-	  (set-tm:mday now fin-year-start-day)
-	  (set-tm:mon now fin-year-start-month)
-	  (set-tm:year now (+ (tm:year now) 1))
-          (set-tm:isdst now -1)
-	  (gnc:date->timepair now)))))
-
-(define (gnc:get-end-prev-fin-year)
-  (let ((now (gnc:get-start-cur-fin-year)))
-      (gnc:secs->timepair (- (gnc:timepair->secs now) 1))
-      ))
-
-(define (gnc:get-end-cur-fin-year)
-  (let ((now (gnc:get-start-next-fin-year)))
-      (gnc:secs->timepair (- (gnc:timepair->secs now) 1))
-      ))
+(define (gnc:get-end-accounting-period)
+  (gnc:secs->timepair (gnc:accounting-period-end)))
 
 (define (gnc:get-start-this-month)
   (let ((now (localtime (current-time))))
@@ -734,32 +657,18 @@
    (N_ "End of the Previous Year"))
 
   (gnc:reldate-string-db 
-   'store 'start-cur-fin-year-string 
-   (N_ "Current Financial Year Start"))
+   'store 'start-accounting-period-string 
+   (N_ "Start of Financial Period"))
   (gnc:reldate-string-db 
-   'store 'start-cur-fin-year-desc 
-   (N_ "Start of the current financial year/accounting period"))
+   'store 'start-accounting-period-desc 
+   (N_ "Start of the accounting period, as set in the global preferences"))
 
   (gnc:reldate-string-db 
-   'store 'start-prev-fin-year-string 
-   (N_ "Previous Financial Year Start"))
+   'store 'end-accounting-period-string 
+   (N_ "End of Financial Period"))
   (gnc:reldate-string-db 
-   'store 'start-prev-fin-year-desc 
-   (N_ "The start of the previous financial year/accounting period"))
-
-  (gnc:reldate-string-db 
-   'store 'end-prev-fin-year-string 
-   (N_ "End Previous Financial Year"))
-  (gnc:reldate-string-db 
-   'store 'end-prev-fin-year-desc 
-   (N_ "End of the previous Financial year/Accounting Period"))
-
-  (gnc:reldate-string-db 
-   'store 'end-cur-fin-year-string 
-   (N_ "End Current Financial Year"))
-  (gnc:reldate-string-db 
-   'store 'end-cur-fin-year-desc 
-   (N_ "End of the current Financial year/Accounting Period"))
+   'store 'end-accounting-period-desc 
+   (N_ "End of the accounting period, as set in the global preferences"))
 
   (gnc:reldate-string-db 
    'store 'start-this-month-string 
@@ -870,22 +779,14 @@
 		 (gnc:reldate-string-db 'lookup 'end-prev-year-string)
 		 (gnc:reldate-string-db 'lookup 'end-prev-year-desc)
 		 gnc:get-end-prev-year)
-	 (vector 'start-cur-fin-year
-		 (gnc:reldate-string-db 'lookup 'start-cur-fin-year-string)
-		 (gnc:reldate-string-db 'lookup 'start-cur-fin-year-desc)
-		 gnc:get-start-cur-fin-year)
-	 (vector 'start-prev-fin-year
-		 (gnc:reldate-string-db 'lookup 'start-prev-fin-year-string)
-		 (gnc:reldate-string-db 'lookup 'start-prev-fin-year-desc)
-		 gnc:get-start-prev-fin-year)
-	 (vector 'end-prev-fin-year
-		 (gnc:reldate-string-db 'lookup 'end-prev-fin-year-string)
-		 (gnc:reldate-string-db 'lookup 'end-prev-fin-year-desc)
-		 gnc:get-end-prev-fin-year)
-	 (vector 'end-cur-fin-year
-		 (gnc:reldate-string-db 'lookup 'end-cur-fin-year-string)
-		 (gnc:reldate-string-db 'lookup 'end-cur-fin-year-desc)
-		 gnc:get-end-cur-fin-year)
+	 (vector 'start-accounting-period
+		 (gnc:reldate-string-db 'lookup 'start-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'start-accounting-period-desc)
+		 gnc:get-start-accounting-period)
+	 (vector 'end-accounting-period
+		 (gnc:reldate-string-db 'lookup 'end-accounting-period-string)
+		 (gnc:reldate-string-db 'lookup 'end-accounting-period-desc)
+		 gnc:get-end-accounting-period)
 	 (vector 'start-this-month
 		 (gnc:reldate-string-db 'lookup 'start-this-month-string)
 		 (gnc:reldate-string-db 'lookup 'start-this-month-desc)

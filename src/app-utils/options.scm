@@ -1533,9 +1533,8 @@
       end-current-quarter 
       end-prev-quarter
       end-cal-year 
-      end-prev-year 
-      end-cur-fin-year
-      end-prev-fin-year
+      end-prev-year
+      end-accounting-period
       ))))
 
 (define (gnc:options-make-date-interval! options pagename name-from info-from
@@ -1555,8 +1554,7 @@
       start-prev-quarter
       start-cal-year 
       start-prev-year
-      start-cur-fin-year 
-      start-prev-fin-year
+      start-accounting-period
       )))
   (gnc:options-make-end-date! options pagename name-to
 			      (string-append sort-tag "b") info-to))
