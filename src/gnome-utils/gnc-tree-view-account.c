@@ -32,6 +32,7 @@
 #include "gkeyfile.h"
 #endif
 
+#include "gnc-accounting-period.h"
 #include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-model-account-types.h"
@@ -353,8 +354,8 @@ cdf_period(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     g_return_if_fail(GTK_TREE_MODEL_SORT(s_model));
 
     acct = gnc_tree_view_account_get_account_from_iter(s_model, iter);
-    t1 = gnc_main_window_summary_get_start();
-    t2 = gnc_main_window_summary_get_end();
+    t1 = gnc_accounting_period_fiscal_start();
+    t2 = gnc_accounting_period_fiscal_end();
     
     if (t2 > t1) {
         gnc_numeric b1, b2, b3;  

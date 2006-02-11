@@ -35,7 +35,6 @@
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
-#include "qof.h"
 #include "window-main-summarybar.h"
 
 typedef struct {
@@ -51,12 +50,6 @@ typedef struct {
 #define GCONF_SECTION    "window/pages/account_tree/summary"
 #define KEY_GRAND_TOTAL  "grand_total"
 #define KEY_NON_CURRENCY "non_currency"
-#define KEY_START_CHOICE "start_choice"
-#define KEY_START_DATE   "start_date"
-#define KEY_START_PERIOD "start_period"
-#define KEY_END_CHOICE 	 "end_choice"
-#define KEY_END_DATE   	 "end_date"
-#define KEY_END_PERIOD 	 "end_period"
 
 /**
  * An accumulator for a given currency.
@@ -337,97 +330,6 @@ enum {
   N_COLUMNS,
 };
 
-static time_t
-lookup_start_date_option(const gchar *section,
-			 const gchar *key_choice,
-			 const gchar *key_absolute,
-			 const gchar *key_relative,
-			 GDate *fy_end)
-{
-  const gchar *choice;
-  time_t time;
-  int which;
-
-  choice = gnc_gconf_get_string(section, key_choice, NULL);
-  if (choice && strcmp(choice, "absolute") == 0) {
-    time = gnc_gconf_get_int(section, key_absolute, NULL);
-  } else {
-    which = gnc_gconf_get_int(section, key_relative, NULL);
-    time = gnc_accounting_period_start_timet(which, fy_end, NULL);
-  }
-  /* we will need the balance of the last transaction before the start
-     date, so subtract 1 from start date */
-  /* CAS: we don't actually do what this comment says.  I think that's
-     because a bug in the engine has been fixed. */
-  return time;
-}
-
-
-static time_t
-lookup_end_date_option(const gchar *section,
-		       const gchar *key_choice,
-		       const gchar *key_absolute,
-		       const gchar *key_relative,
-		       GDate *fy_end)
-{
-  const gchar *choice;
-  time_t time;
-  int which;
-
-  choice = gnc_gconf_get_string(section, key_choice, NULL);
-  if (choice && strcmp(choice, "absolute") == 0) {
-    time = gnc_gconf_get_int(section, key_absolute, NULL);
-    time = gnc_timet_get_day_end(time);
-  } else {
-    which = gnc_gconf_get_int(section, key_relative, NULL);
-    time = gnc_accounting_period_end_timet(which, fy_end, NULL);
-  }
-  if (time == 0)
-    time = -1;
-  return time;
-}
-
-static GDate *
-get_fy_end(void) 
-{
-    QofBook *book;
-    KvpFrame *book_frame;
-    gint64 month, day;
-    
-    book = gnc_get_current_book();
-    book_frame = qof_book_get_slots(book);
-    month = kvp_frame_get_gint64(book_frame, "/book/fyear_end/month");
-    day = kvp_frame_get_gint64(book_frame, "/book/fyear_end/day");
-    if (g_date_valid_dmy(day, month, 2005 /* not leap year */))
-        return g_date_new_dmy(day, month, G_DATE_BAD_YEAR);
-    return NULL;
-}
-
-time_t
-gnc_main_window_summary_get_start(void)
-{
-    time_t t;
-    GDate *fy_end = get_fy_end();
-    t = lookup_start_date_option(GCONF_SECTION, KEY_START_CHOICE,
-                                 KEY_START_DATE, KEY_START_PERIOD, fy_end);
-    if (fy_end)
-        g_date_free(fy_end);
-    return t;
-}
-
-time_t
-gnc_main_window_summary_get_end(void)
-{
-    time_t t;
-    GDate *fy_end = get_fy_end();
-    
-    t = lookup_end_date_option(GCONF_SECTION, KEY_END_CHOICE,
-                               KEY_END_DATE, KEY_END_PERIOD, fy_end);
-    if (fy_end)
-        g_date_free(fy_end);
-    return t;
-}
-
 /* The gnc_main_window_summary_refresh() subroutine redraws summary
  * information. The statusbar includes two fields, titled 'profits'
  * and 'assets'. The total assets equal the sum of all of the
@@ -463,8 +365,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     gnc_gconf_get_bool(GCONF_SECTION, KEY_GRAND_TOTAL, NULL);
   options.non_currency =
     gnc_gconf_get_bool(GCONF_SECTION, KEY_NON_CURRENCY, NULL);
-  options.start_date = gnc_main_window_summary_get_start();
-  options.end_date = gnc_main_window_summary_get_end();
+  options.start_date = gnc_accounting_period_fiscal_start();
+  options.end_date = gnc_accounting_period_fiscal_end();
 
   currency_list = NULL;
 

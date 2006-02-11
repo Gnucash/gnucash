@@ -165,6 +165,14 @@ GDate *gnc_accounting_period_end_gdate (GncAccountingPeriod which,
 time_t gnc_accounting_period_end_timet (GncAccountingPeriod which,
 					const GDate *fy_end,
 					const GDate *contains);
+
+
+/* Convenience routines that take care of getting the fiscal
+   accounting period from the preferences and returning the start and
+   end times. */
+time_t gnc_accounting_period_fiscal_start(void);
+time_t gnc_accounting_period_fiscal_end(void);
+
 /** @} */
 
 #endif /* GNC_ACCOUNTING_PERIOD_H */
