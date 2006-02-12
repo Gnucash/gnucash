@@ -72,7 +72,8 @@ typedef struct {
 GType gnc_reconcile_list_get_type (void);
 
 GtkWidget * gnc_reconcile_list_new (Account * account,
-				    GNCReconcileListType type);
+				    GNCReconcileListType type,
+                                    time_t date);
 
 gint gnc_reconcile_list_get_needed_height(GNCReconcileList *list,
                                           gint num_rows);

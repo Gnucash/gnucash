@@ -63,6 +63,14 @@
           Use price nearest to noon on the day specified.
 	Fixes bug #314554.
 
+	Mike Alexander's reconcile preselection patch (#112653).
+        * src/gnome/window-reconcile.c (gnc_reconcile_window_create_list_box):
+        * src/gnome/reconcile-list.c (gnc_reconcile_list_new):
+        * src/gnome/reconcile-list.h (gnc_reconcile_list_new):
+          Don't pre-select the reconciled status for transactions after the
+          statement date.
+	Fixes #112653.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

@@ -933,7 +933,7 @@ gnc_reconcile_window_create_list_box(Account *account,
 
   vbox = gtk_vbox_new(FALSE, 5);
 
-  list = gnc_reconcile_list_new(account, type);
+  list = gnc_reconcile_list_new(account, type, recnData->statement_date);
   *list_save = list;
 
   g_signal_connect(list, "toggle_reconciled",
