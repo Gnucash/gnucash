@@ -29,9 +29,9 @@ AM_INIT_AUTOMAKE(1.9)
 
 # Parse out the version number
 GNUCASH_VERSION_STRING=AC_PACKAGE_VERSION
-GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\1/'`
-GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/'`
-GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/'`
+GNUCASH_MAJOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\1/' ]`
+GNUCASH_MINOR_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\2/' ]`
+GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\([^.]*\)\.\(.*\)$/\3/' ]`
 
 ##  Do this first, because the other tests depend on it:
 
