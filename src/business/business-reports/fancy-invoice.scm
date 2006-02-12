@@ -566,17 +566,23 @@
   (line-helper (string->list string)))
 
 (define (make-client-table owner orders)
-;; oli-custom - FIXME: font for client company name should be at least size +1.
-  (let ((table (gnc:make-html-table)))
+  (let ((table (gnc:make-html-table))
+	(name-cell (gnc:make-html-table-cell)))
     (gnc:html-table-set-style!
      table "table"
      'attribute (list "border" 0)
      'attribute (list "cellspacing" 0)
      'attribute (list "cellpadding" 0))
+    (gnc:html-table-cell-append-objects!
+     name-cell (gnc:owner-get-name-dep owner))
+    (gnc:html-table-cell-set-style!
+     name-cell "td"
+     'font-size "+2")
+    (gnc:html-table-append-row! table (list name-cell #\newline "<br>"))
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
     (gnc:html-table-append-row!
      table
      (list "<br>"))

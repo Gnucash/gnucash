@@ -3,38 +3,6 @@
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/engine" 0)
 
-; return a string which is basically:
-;    name \n Attn: contact \n addr1 \n addr2 \n addr3 \n addr4
-;
-; But only include the strings that really exist.
-;
-(define (name-and-addr name addr)
-
-  (define (add-if-exists lst new)
-    (if (and new (> (string-length new) 0))
-	(cons new lst)
-	lst))
-
-  (define (build-string lst)
-    (cond
-     ((null? lst) "")
-     ((null? (cdr lst)) (car lst))
-     (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
-
-  (define (unique str)
-    (if (and name str (string=? name str)) #f str))
-
-  (let ((lst '()))
-
-    (set! lst (add-if-exists lst name))
-    (set! lst (add-if-exists lst (unique (gnc:address-get-name addr))))
-    (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
-    (set! lst (add-if-exists lst (gnc:address-get-addr4 addr)))
-
-    (build-string lst)))
-
 (define (gnc:owner-get-address owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
 	       (gnc:owner-get-type owner) #f)))
@@ -53,29 +21,53 @@
 			       (gnc:owner-get-job owner))))
       (else ""))))
 
-(define (gnc:owner-get-name-and-address-dep owner)
+;
+; The -dep functions return combined strings of the appropriate
+; content.  When multiple "lines" are included, separate them
+; by newlines.
+;
+; e.g.: return a string which is basically:
+;    name \n Attn: contact \n addr1 \n addr2 \n addr3 \n addr4
+;
+; But only include the strings that really exist.
+;
+
+(define (gnc:owner-get-name-dep owner)
+  (define (just-name name)
+    (if name name ""))
+
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
 	       (gnc:owner-get-type owner) #f)))
     (case type
-      ((gnc-owner-customer)
-       (let ((c (gnc:owner-get-customer owner)))
-	 (name-and-addr
-	  (gnc:customer-get-name c)
-	  (gnc:customer-get-addr c))))
-      ((gnc-owner-vendor)
-       (let ((v (gnc:owner-get-vendor owner)))
-	 (name-and-addr
-	  (gnc:vendor-get-name v)
-	  (gnc:vendor-get-addr v))))
-      ((gnc-owner-employee)
-       (let ((e (gnc:owner-get-employee owner)))
-	 (name-and-addr
-	  ""
-	  (gnc:employee-get-addr e))))
       ((gnc-owner-job)
-       (gnc:owner-get-name-and-address-dep (gnc:job-get-owner
-				   (gnc:owner-get-job owner))))
-      (else ""))))
+       (gnc:owner-get-dep-name (gnc:job-get-owner
+				(gnc:owner-get-job owner))))
+      (else (just-name (gnc:owner-get-name owner))))))
+
+(define (gnc:owner-get-address-dep owner)
+  (define (add-if-exists lst new)
+    (if (and new (> (string-length new) 0))
+	(cons new lst)
+	lst))
+  (define (build-string lst)
+    (cond
+     ((null? lst) "")
+     ((null? (cdr lst)) (car lst))
+     (else (string-append (build-string (cdr lst)) "\n" (car lst)))))
+  (let ((lst '())
+	(addr (gnc:owner-get-address owner)))
+    (set! lst (add-if-exists lst (gnc:address-get-addr1 addr)))
+    (set! lst (add-if-exists lst (gnc:address-get-addr2 addr)))
+    (set! lst (add-if-exists lst (gnc:address-get-addr3 addr)))
+    (set! lst (add-if-exists lst (gnc:address-get-addr4 addr)))
+    (build-string lst)))
+
+(define (gnc:owner-get-name-and-address-dep owner)
+  (let ((name (gnc:owner-get-name-dep owner))
+	(addr (gnc:owner-get-address-dep owner)))
+    (if (> (string-length name) 0)
+	(string-append name "\n" addr)
+	addr)))
 
 (define (gnc:owner-get-owner-id owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
@@ -134,6 +126,8 @@
 
 
 (export gnc:owner-get-address)
+(export gnc:owner-get-name-dep)
+(export gnc:owner-get-address-dep)
 (export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
 (export gnc:entry-type-percent-p)

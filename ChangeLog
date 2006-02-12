@@ -5,6 +5,12 @@
 	  gnc:owner-get-name-and-address-dep in preparation of
 	  some other patches.
 
+	* src/business/business-core/business-core.scm:
+	  add gnc:owner-get-name-dep and gnc:owner-get-address-dep APIs
+	* src/business/business-reports/fancy-invoice.scm:
+	  Change the font of the client company name to match the
+	  owner company name.  Fixes #327545.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:
