@@ -48,7 +48,6 @@ qof_book_mergeData      *mergeData = NULL;
 QofSession              *merge_session = NULL;
 QofBook                 *mergeBook = NULL;
 QofBook                 *targetBook = NULL;
-gchar                   *buffer = "";
 
 static QofLogModule log_module = GNC_QSF_IMPORT;
 
@@ -100,8 +99,7 @@ on_MergeUpdate_clicked 	(GtkButton       *button,
     if(count == 0)
     {
     	output = GTK_LABEL(merge_get_widget("OutPut"));
-		buffer = g_strdup_printf(_("No conflicts to be resolved."));
-    	gtk_label_set_text(output,buffer);
+    	gtk_label_set_text(output,_("No conflicts to be resolved."));
 	    gtk_widget_show(GTK_WIDGET(output));
     }
     LEAVE (" ");
@@ -129,8 +127,7 @@ on_MergeDuplicate_clicked 	(GtkButton       *button,
     if(count == 0)
     {
     	output = GTK_LABEL(merge_get_widget("OutPut"));
-		buffer = g_strdup_printf(_("No conflicts to be resolved."));
-    	gtk_label_set_text(output,buffer);
+    	gtk_label_set_text(output,_("No conflicts to be resolved."));
 	    gtk_widget_show(GTK_WIDGET(output));
     }
     LEAVE (" ");
@@ -155,8 +152,7 @@ on_MergeNew_clicked (GtkButton       *button,
     if(count == 0)
     {
     	output = GTK_LABEL(merge_get_widget("OutPut"));
-		buffer = g_strdup_printf(_("No conflicts to be resolved."));
-    	gtk_label_set_text(output,buffer);
+    	gtk_label_set_text(output,_("No conflicts to be resolved."));
 	    gtk_widget_show(GTK_WIDGET(output));
     }
     LEAVE (" ");
@@ -258,8 +254,7 @@ on_merge_prepare (GnomeDruidPage  *gnomedruidpage,
     if(count == 0)
     {
     	output = GTK_LABEL(merge_get_widget("OutPut"));
-		buffer = g_strdup_printf(_("No conflicts to be resolved."));
-    	gtk_label_set_text(output,buffer);
+    	gtk_label_set_text(output,_("No conflicts to be resolved."));
 	    gtk_widget_show(GTK_WIDGET(output));
     }
 	gnc_resume_gui_refresh ();
@@ -317,6 +312,7 @@ void collision_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule
 	QofParam *one_param;
 	gchar *importstring, *targetstring;
 	GtkLabel *output;
+	gchar *buffer, *buffer2, *buffer3;
 	
 	g_return_if_fail(rule != NULL);
 	buffer = "";
@@ -333,19 +329,27 @@ void collision_rule_loop(qof_book_mergeData *mergeData, qof_book_mergeRule *rule
 	count = 1; /* user display text counts from 1, not zero */
 	importstring = targetstring = NULL;
 	gnc_suspend_gui_refresh ();
- 	if(remainder == 1) {
-		buffer = g_strdup_printf(_("\n%i conflict needs to be resolved.\n"), 
-            remainder);
-	}
-	else {
-		buffer = g_strdup_printf(_("\n%i conflicts need to be resolved.\n"), 
-            remainder); 
-	}
-	buffer = g_strconcat(buffer, 
-		g_strdup_printf(_("\n%i parameter values for this \"%s\" object.\n"), 
-		g_slist_length(user_reports), rule->targetEnt->e_type), NULL);
+	/* Translators: %i is the number of conflicts. This is a
+	   ngettext(3) message. */
+	buffer2 = g_strdup_printf(ngettext("%i conflict needs to be resolved.", 
+					  "%i conflicts need to be resolved.", 
+					  remainder),
+				 remainder); 
+	/* Translators: %i is the number of values. This is a
+	   ngettext(3) message. */
+	buffer3 = g_strdup_printf(ngettext("%i parameter value for this \"%s\" object.",
+					   "%i parameter values for this \"%s\" object.",
+					   g_slist_length(user_reports)), 
+				  g_slist_length(user_reports), rule->targetEnt->e_type);
+	buffer = g_strconcat("\n", buffer2, "\n", "\n", buffer3, "\n", NULL);
+	g_free(buffer2);
+	g_free(buffer3);
 	while(user_reports != NULL) {
 		one_param = user_reports->data;
+		/* FIXME: each g_strdup_printf as well as g_strconcat
+		   will allocate a new string; all of these need to be
+		   freed later. Currently this causes a lot of memory
+		   leaks. */
 		buffer = g_strconcat(buffer, g_strdup_printf(_("%i:Parameter name: %s "), 
 			count, one_param->param_name), NULL);
 		importstring = qof_book_merge_param_as_string(one_param, rule->importEnt);
