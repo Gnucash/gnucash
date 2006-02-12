@@ -11,6 +11,15 @@
 	  Change the font of the client company name to match the
 	  owner company name.  Fixes #327545.
 
+	* src/business/business-utils/business-prefs.scm:
+	* src/business/business-utils/business-utils.scm:
+	  Add a bunch of new File -> Properties to describe the business.
+	* src/business/business-reports/fancy-invoice.scm:
+	  Parameterize all the various settings in the report so
+	  they can all be set through the options or file->properties
+	  settings.  Patch by "Brian", but slightly modified to not
+	  hard-code some strings.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

@@ -35,10 +35,35 @@
 
   (reg-option
    (gnc:make-string-option
-    gnc:*business-label* gnc:*company-id*
-    "b2" (N_ "The ID for your company (eg 'Tax-ID: 00-000000)")
-    ""))
+    gnc:*business-label* gnc:*company-contact*
+    "b2" (N_ "The contact person to print on invoices") ""))
 
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-phone*
+    "c1" (N_ "The phone number of your business") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-fax*
+    "c2" (N_ "The fax number of your business") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-email*
+    "c3" (N_ "The email address of your business") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-url*
+    "c4" (N_ "The URL address of your website") ""))
+
+  (reg-option
+   (gnc:make-string-option
+    gnc:*business-label* gnc:*company-id*
+    "c5" (N_ "The ID for your company (eg 'Tax-ID: 00-000000)")
+    ""))
+ 
   (reg-option
    (gnc:make-taxtable-option
     gnc:*business-label* (N_ "Default Customer TaxTable")

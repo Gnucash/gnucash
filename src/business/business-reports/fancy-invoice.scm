@@ -43,6 +43,9 @@
 ;; template. The most common used templates will be distributed with
 ;; gnucash.
 
+;; Modifed to use settable options instead of the hard coded ones.
+;; modified by Brian Dolbec <dol-sen at telus dot net> Feb. 6, 2006
+
 (define-module (gnucash report fancy-invoice))
 
 (use-modules (srfi srfi-1))
@@ -331,18 +334,49 @@
     "tc" (N_ "Display the payments applied to this invoice?") #f))
 
   (gnc:register-inv-option
+   (gnc:make-number-range-option
+    (N_ "Display") (N_ "Minimum # of entries")
+    "u" (N_ "The minimum number of invoice entries to display. (-1)") 23
+    4 23 3 1))
+
+  (gnc:register-inv-option
    (gnc:make-text-option
     (N_ "Display") (N_ "Extra Notes")
      "u" (N_ "Extra notes to put on the invoice")
-     ;; oli-custom - Extra notes to add on each invoice, invoice-independent
-     ;; yes, I was too lazy to (get-company-name) ;)
-     "Make all cheques payable to: Company Name Inc.\nDirect all inquiries to: Mr. Accounting Contact"))
+     ""))
+
+  (gnc:register-inv-option
+   (gnc:make-complex-boolean-option
+    (N_ "Display") (N_ "Payable to")
+     "ua1" (N_ "Display the Payable to: information") #t #f
+     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+		  gnc:*report-options* "Display" "Payable to string" x))))
 
   (gnc:register-inv-option
    (gnc:make-string-option
-    (N_ "Display") (N_ "Today Date Format")
-    "v" (N_ "The format for the date->string conversion for today's date.")
-    "%B %e, %Y"))
+    (N_ "Display") (N_ "Payable to string")
+    "ua2" (N_ "The phrase for specifying to whom payments should be made")
+    (_ "Make all cheques Payable to")))
+     
+  (gnc:register-inv-option
+   (gnc:make-complex-boolean-option
+    (N_ "Display") (N_ "Company contact")
+     "ub1" (N_ "Display the Company contact information") #t #f
+     (lambda (x) (gnc:option-db-set-option-selectable-by-name
+		  gnc:*report-options* "Display" "Company contact string" x))))
+
+  (gnc:register-inv-option
+   (gnc:make-string-option
+    (N_ "Display") (N_ "Company contact string")
+    "ub2" (N_ "The phrase used to introduce the company contact")
+    (_ "Direct all inquiries to")))
+
+; not used
+;  (gnc:register-inv-option
+;   (gnc:make-string-option
+;    (N_ "Display") (N_ "Today Date Format")
+;    "v" (N_ "The format for the date->string conversion for today's date.")
+;    "%B %e, %Y"))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -385,7 +419,8 @@
 		    (gnc:html-table-append-row/markup! 
 		     table
 		     subtotal-style
-		     ;; oli-custom modified to colspan the subtotal labels instead of the data fields
+		     ;; oli-custom modified to colspan the subtotal labels
+		     ;; instead of the data fields
 		     (append (cons (gnc:make-html-table-cell/size/markup
 				    0 (colspan currency used-columns)
 				    "total-label-cell" subtotal-label)
@@ -435,13 +470,16 @@
 				    acct-hash)
       (if (null? entries)
 	  (begin
-	    ;; oli-custom - modified to have a minimum of entries per table, currently at 24
-	    ;; currently doesn't count payment rows and stuff
+	    ;; oli-custom - modified to have a minimum of entries per table,
+	    ;; currently defaults to 24
+	    ;; also, doesn't count payment rows and stuff
 	    (do ((entries-added entries-added (+ entries-added 1))
 		 (odd-row? odd-row? (not odd-row?)))
-		;; oli-custom - here you put the minimum number of rows minus one
-		((> entries-added 23))
-		(gnc:html-table-append-row/markup! table (if odd-row? "normal-row" "alternate-row") (string->list (make-string (num-columns-required used-columns) #\space)))
+		((> entries-added (opt-val "Display" "Minimum # of entries" )))
+		(gnc:html-table-append-row/markup!
+		 table (if odd-row? "normal-row" "alternate-row")
+		 (string->list (make-string (num-columns-required used-columns)
+					    #\space)))
 		)
 	    (add-subtotal-row table used-columns value-collector
 			      "grand-total" (_ "Subtotal"))
@@ -454,7 +492,8 @@
 			 (name (gnc:account-get-name acct)))
 		     (collector 'add commodity value)
 		     (add-subtotal-row table used-columns collector
-				       "grand-total" (string-expand name #\space "&nbsp;"))))
+				       "grand-total" (string-expand
+						      name #\space "&nbsp;"))))
 		 acct-hash)
 
 		; nope, just show the total tax.
@@ -476,7 +515,8 @@
 		   splits)))
 
 	    (add-subtotal-row table used-columns total-collector
-			      "grand-total" (string-expand (_ "Amount Due") #\space "&nbsp;")))
+			      "grand-total" (string-expand (_ "Amount Due")
+							   #\space "&nbsp;")))
 
 	  ;;
 	  ;; End of BEGIN -- now here's the code to handle all the entries!
@@ -605,7 +645,8 @@
    table
    (list
     (string-append label ":&nbsp;")
-    ;; oli-custom - modified to display a custom format for the invoice date/due date fields
+    ;; oli-custom - modified to display a custom format
+    ;; for the invoice date/due date fields
     ;; I could have taken the format from the report options, but... ;)
     (string-expand (strftime "%B %e, %Y" (localtime (car date))) #\space "&nbsp;")
     ;;(string-expand (gnc:print-date date) #\space "&nbsp;")
@@ -628,15 +669,32 @@
 	 (name (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-name*))))
+;;	 (contact (gnc:kvp-frame-get-slot-path
+;;		slots (append gnc:*kvp-option-path*
+;;			      (list gnc:*business-label* gnc:*company-contact*))))
 	 (addy (gnc:kvp-frame-get-slot-path
 		slots (append gnc:*kvp-option-path*
 			      (list gnc:*business-label* gnc:*company-addy*))))
+	 (id (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-id*))))
+	 (phone (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-phone*))))
+	 (fax (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-fax*))))
+	 (url (gnc:kvp-frame-get-slot-path
+		slots (append gnc:*kvp-option-path*
+			      (list gnc:*business-label* gnc:*company-url*))))
 	 (invoice-cell (gnc:make-html-table-cell))
 	 (name-cell (gnc:make-html-table-cell))
 
 	)
-    ;; oli-custom - modified the name table to increase the font size of the company name
-    ;; and add an "INVOICE" title to the upper right, also, put some contact information in the middle
+    ;; oli-custom - modified the name table to increase the
+    ;; font size of the company name
+    ;; and add an "INVOICE" title to the upper right, also,
+    ;; put some contact information in the middle
     ;; FIXME: "INVOICE" should be translated and support bills/expense vouchers
     (gnc:html-table-set-style!
      table "table"
@@ -645,7 +703,7 @@
      'attribute (list "cellpadding" 0)
      'attribute (list "width" "100%"))
     (gnc:html-table-cell-append-objects!
-	invoice-cell "INVOICE")
+	invoice-cell (_"INVOICE"))
     (gnc:html-table-cell-set-style!
 	invoice-cell "td"
 	'font-size "+2")
@@ -663,10 +721,20 @@
 	table 2 "td"
 	'attribute (list "align" "right")
 	'attribute (list "width" "33%"))
-    (gnc:html-table-append-row! table (list (string-expand
-					     (if addy addy "")
-					     #\newline "<br>") "Phone: (111) 222-3333<br>Web: http://companysite.com" ""))
-;; oli-custom - I didn't want today's date on the invoice. The invoice already has a date.
+    (gnc:html-table-append-row!
+     table (list (string-expand (if addy addy "") #\newline "<br>")
+		 (string-expand
+		  (string-append (if phone
+				     (string-append (_ "Phone:") " " phone)
+				     "")
+				 (if fax (string-append (if phone "\n" "")
+							(_ "Fax:") " " fax)
+				     ""))
+		  #\newline "<br>" )
+		 (if url (string-append (_ "Web:") " " url) "")))
+
+;; oli-custom - I didn't want today's date on the invoice.
+;; The invoice already has a date.
 ;; Today's date can be in the email, fax or letter accompanying the invoice.
 ;;    (gnc:html-table-append-row! table (list
 ;;				       (strftime
@@ -713,11 +781,13 @@
 	       (set! title (_ "Expense Voucher")))))
 	  (set! title (string-append title " #"
 				     (gnc:invoice-get-id invoice)))))
-    ;; oli-custom - title redundant, "Invoice" moved to myname-table, invoice number moved below
+    ;; oli-custom - title redundant, "Invoice" moved to myname-table,
+    ;; invoice number moved below
     ;;(gnc:html-document-set-title! document title)
 
     (if invoice
-	(let ((book (gnc:invoice-get-book invoice))
+	(let* ((book (gnc:invoice-get-book invoice))
+	      (slots (gnc:book-get-slots book))
 	      (date-object #f)
 	      (helper-table (gnc:make-html-table)))
 	  (set! table (make-entry-table invoice
@@ -730,24 +800,33 @@
 	   'attribute (list "cellspacing" 0)
 	   'attribute (list "cellpadding" 4)
 	   ;; oli-custom - make table as wide as possible
-	   ;; works fine with simple style sheet templates, doesn't work quite right with fancy ones
-	   ;; probably supplying the style sheet with a wide image for the header (even if transparent/white) would fix it
+	   ;; works fine with simple style sheet templates,
+	   ;; doesn't work quite right with fancy ones
+	   ;; probably supplying the style sheet with a wide image
+	   ;; for the header (even if transparent/white) would fix it
 	   'attribute (list "width" "100%"))
 
 	  ;; oli-custom - make the description column big
-	  ;; 50% or 60%, depending on whether the first column is displayed or not
-	  ;; should actually be something more complicated, it's a really ugly hack right now :)
+	  ;; 50% or 60%, depending on whether the first column is
+	  ;; displayed or not
+	  ;; should actually be something more complicated,
+	  ;; it's a really ugly hack right now :)
 	  (gnc:html-table-set-col-style!
 	   table (if (opt-val "Display Columns" "Date") 1 0) "td"
-	   'attribute (list "width" (if (opt-val "Display Columns" "Date") "50%" "60%")))
+	   'attribute (list "width" (if (opt-val "Display Columns" "Date")
+					"50%" "60%")))
 
-	  (gnc:html-document-add-object! document (make-myname-table book (opt-val "Display" "Today Date Format")))
+	  (gnc:html-document-add-object!
+	   document (make-myname-table
+		     book ;;(opt-val "Display" "Today Date Format")))
+		     ""))
 
 	  (make-break! document)
 	  (make-break! document)
 	  (make-break! document)
 
-	  ;; oli-custom - client table and table with invoice number/date/due date both inserted into a table
+	  ;; oli-custom - client table and table with invoice
+	  ;; number/date/due date both inserted into a table
 	  (gnc:html-table-set-style!
 	   helper-table "table"
 	   'attribute (list "border" 0)
@@ -763,12 +842,15 @@
 		(begin
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
-		  (gnc:html-table-append-row! date-table (list "Invoice&nbsp;#&nbsp;" (gnc:invoice-get-id invoice)))
+		  (gnc:html-table-append-row!
+		   date-table (list "Invoice&nbsp;#&nbsp;"
+				    (gnc:invoice-get-id invoice)))
 		  (make-date-row! date-table (_ "Invoice&nbsp;Date") post-date)
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
 		  date-table)
 		(gnc:make-html-text
-		  ;; oli-custom - FIXME: I have a feeling I broke a translation by not using string-expand for &nbsp;
+		  ;; oli-custom - FIXME: I have a feeling I broke a
+		 ;; translation by not using string-expand for &nbsp;
 		  (string-append title (N_ "<br>Invoice&nbsp;in&nbsp;progress...."))))))
 	  
 	  (gnc:html-table-append-row!
@@ -783,7 +865,8 @@
 	  	helper-table 1 "td"
 		'attribute (list "valign" "top")
 		'attribute (list "align" "right")
-		;; oli-custom - "squeeze" the date table, or else it's spaced out
+		;; oli-custom - "squeeze" the date table,
+		;; or else it's spaced out
 		'attribute (list "width" "1%"))
 
 	  (gnc:html-document-add-object!
@@ -830,6 +913,34 @@
 		  (string-expand notes #\newline "<br>")))))
 	  
 	  (make-break! document)
+
+	  (if (opt-val "Display" "Payable to")
+	      (let* ((name (gnc:kvp-frame-get-slot-path
+			    slots (append gnc:*kvp-option-path*
+					  (list gnc:*business-label*
+						gnc:*company-name*))))
+		     (name-str (opt-val "Display" "Payable to string")))
+		(if (and name (> (string-length name) 0))
+		(gnc:html-document-add-object!
+		 document
+		 (gnc:make-html-text
+		  (string-append name-str  ":&nbsp;"
+		  (string-expand name #\newline "<br>")))))))
+
+	  (make-break! document)
+
+	  (if (opt-val "Display" "Company contact")
+	      (let* ((contact (gnc:kvp-frame-get-slot-path
+			       slots (append gnc:*kvp-option-path*
+					     (list gnc:*business-label*
+						   gnc:*company-contact*))))
+		     (contact-str (opt-val "Display" "Company contact string")))
+		(if (and contact (> (string-length contact) 0))
+	        (gnc:html-document-add-object!
+		 document
+		 (gnc:make-html-text
+		  (string-append contact-str  ":&nbsp;"
+		  (string-expand contact #\newline "<br>")))))))
 
 	  (gnc:html-document-add-object!
 	   document
