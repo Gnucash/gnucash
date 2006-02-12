@@ -42,6 +42,11 @@
           Try to fix transactions that have no currency, perhaps because
           of a log replay.  Workaround for bug #143720.
 
+	Boris Zbarsky's advanced-portfolio patch.
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  Apply dividend and brokerage to moneyin and moneyout to more
+	  accurately reflect account activity.  Fixes bug #311549.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

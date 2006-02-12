@@ -226,6 +226,8 @@
 ;;               (gnc:debug "totalunits" totalunits)
 ;;               (gnc:debug "totalunityears" totalunityears)
 
+               (moneyincoll 'minusmerge dividendcoll #f)
+               (moneyoutcoll 'minusmerge brokeragecoll #f)
                (gaincoll 'merge moneyoutcoll #f)
                (gaincoll 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
                (gaincoll 'merge moneyincoll #f)
