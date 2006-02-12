@@ -170,113 +170,123 @@
                  (price-list (price-fn commodity to-date))
                  (price      (if (> (length price-list) 0)
 				 (car price-list) #f))
-                 
-                 (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency to-date))
-               )
+		 (commod-currency (gnc:price-get-currency price))
+                 (value (exchange-fn (gnc:make-gnc-monetary commodity units)
+				     currency))
+		 )
 
-;;               (gnc:debug "---" name "---")
-               (for-each
-                 (lambda (split)
-                   (set! work-done (+ 1 work-done))
-                   (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-                   (let ((parent (gnc:split-get-parent split)))
-                     (if (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date)
-                       (for-each
-                         (lambda (s)
-                           (cond
-                             ((same-split? s split) 
-			      ;; (gnc:debug "amount" (gnc:numeric-to-double (gnc:split-get-amount s)) )
-                              (cond
-                              ((or include-gains (not (gnc:numeric-zero-p (gnc:split-get-amount s))))
-                                 (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
-                                 (if (< 0 (gnc:numeric-to-double
-                                           (gnc:split-get-amount s)))
-                                     (set! totalunits
-                                           (+ totalunits
-                                              (gnc:numeric-to-double (gnc:split-get-amount s)))))
-                                 (set! totalunityears
-                                       (+ totalunityears 
-                                          (* (gnc:numeric-to-double (gnc:split-get-amount s)) 
-                                             (gnc:date-year-delta 
-                                              (car (gnc:transaction-get-date-posted parent))
-                                              (current-time))))) 
-                                 (cond 
-                                  ((gnc:numeric-negative-p (gnc:split-get-value s))
-                                   (moneyoutcoll
-                                    'add currency
-                                    (gnc:numeric-neg (gnc:split-get-value s))))
-                                  (else (moneyincoll 
-                                         'add currency
-                                         (gnc:numeric-neg (gnc:split-get-value s))))))))
-
-                             ((split-account-type? s 'expense)
-			      (brokeragecoll 'add currency (gnc:split-get-value s)))
-
-                             ((split-account-type? s 'income)
-			      (dividendcoll 'add currency (gnc:split-get-value s)))
-                           )
-                         )
-                         (gnc:transaction-get-splits parent)
-                       )
+;;          (gnc:debug "---" name "---")
+	    (for-each
+	     (lambda (split)
+	       (set! work-done (+ 1 work-done))
+	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+	       (let ((parent (gnc:split-get-parent split)))
+		 (if (gnc:timepair-le (gnc:transaction-get-date-posted parent) to-date)
+		     (for-each
+		      (lambda (s)
+			(cond
+			 ((same-split? s split) 
+;;                       (gnc:debug "amount " (gnc:numeric-to-double (gnc:split-get-amount s))
+;;                                  " acct " (gnc:account-get-name (gnc:split-get-account s)) )
+;;                       (gnc:debug "value " (gnc:numeric-to-double (gnc:split-get-value s))
+;;                                  " in " (gnc:commodity-get-printname commod-currency)
+;;                                  " from " (gnc:transaction-get-description (gnc:split-get-parent s)))
+			  (cond
+			   ((or include-gains (not (gnc:numeric-zero-p (gnc:split-get-amount s))))
+			    (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
+			    (if (< 0 (gnc:numeric-to-double
+				      (gnc:split-get-amount s)))
+				(set! totalunits
+				      (+ totalunits
+					 (gnc:numeric-to-double (gnc:split-get-amount s)))))
+			    (set! totalunityears
+				  (+ totalunityears 
+				     (* (gnc:numeric-to-double (gnc:split-get-amount s)) 
+					(gnc:date-year-delta 
+					 (car (gnc:transaction-get-date-posted parent))
+					 (current-time))))) 
+			    (cond 
+			     ((gnc:numeric-negative-p (gnc:split-get-value s))
+			      (moneyoutcoll
+			       'add commod-currency
+			       (gnc:numeric-neg (gnc:split-get-value s))))
+			     (else (moneyincoll 
+				    'add commod-currency
+				    (gnc:numeric-neg (gnc:split-get-value s))))))))
+			 
+			 ((split-account-type? s 'expense)
+			  (brokeragecoll 'add commod-currency (gnc:split-get-value s)))
+			 
+			 ((split-account-type? s 'income)
+			  (dividendcoll 'add commod-currency (gnc:split-get-value s)))
+			 )
+			)
+		      (gnc:transaction-get-splits parent)
+		      )
                      )
-                   )
-                 )
-                 (gnc:account-get-split-list current)
-               )
-;;               (gnc:debug "totalunits" totalunits)
-;;               (gnc:debug "totalunityears" totalunityears)
+		 )
+	       )
+	     (gnc:account-get-split-list current)
+	     )
+;;          (gnc:debug "totalunits" totalunits)
+;;          (gnc:debug "totalunityears" totalunityears)
 
-               (moneyincoll 'minusmerge dividendcoll #f)
-               (moneyoutcoll 'minusmerge brokeragecoll #f)
-               (gaincoll 'merge moneyoutcoll #f)
-               (gaincoll 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
-               (gaincoll 'merge moneyincoll #f)
-
-	    (if (or include-empty (not (gnc:numeric-zero-p units)))
-		(begin (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
-                       (total-moneyin 'merge moneyincoll #f)
-                       (total-moneyout 'merge moneyoutcoll #f)
-                       (total-gain 'merge gaincoll #f)
-		       (gnc:html-table-append-row/markup!
-			table
-			row-style
-			(list (gnc:html-account-anchor current)
-			      ticker-symbol
-			      listing
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" (gnc:amount->string units share-print-info))
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell"
-			       (if price
-				   (gnc:html-price-anchor
-				    price
-				    (gnc:make-gnc-monetary
-				     (gnc:price-get-currency price)
-				     (gnc:price-get-value price)))
-				   #f))
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" value)
-                              (gnc:make-html-table-header-cell/markup
-                               "number-cell" (gnc:monetary-neg (gnc:sum-collector-commodity moneyincoll currency exchange-fn)))
-                              (gnc:make-html-table-header-cell/markup
-                               "number-cell" (gnc:sum-collector-commodity moneyoutcoll currency exchange-fn))
-                              (gnc:make-html-table-header-cell/markup
-                               "number-cell" (gnc:sum-collector-commodity gaincoll currency exchange-fn))
-                              (gnc:make-html-table-header-cell/markup
-                               "number-cell" (sprintf #f "%.2f%%" (* 100 (/ (gnc:numeric-to-double (cadr (gaincoll 'getpair currency #f)))
-                                                                            (gnc:numeric-to-double (cadr (moneyincoll 'getpair currency #t)))))))
-                        )
-                      )
-		      (table-add-stock-rows-internal rest (not odd-row?))
-                )
-		(table-add-stock-rows-internal rest odd-row?)
+	    (moneyincoll 'minusmerge dividendcoll #f)
+	    (moneyoutcoll 'minusmerge brokeragecoll #f)
+	    (gaincoll 'merge moneyoutcoll #f)
+	    (gaincoll 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
+	    (gaincoll 'merge moneyincoll #f)
+	    
+	    (let ((moneyin (gnc:monetary-neg
+			    (gnc:sum-collector-commodity moneyincoll currency exchange-fn)))
+		  (moneyout (gnc:sum-collector-commodity moneyoutcoll currency exchange-fn))
+		  (gain (gnc:sum-collector-commodity gaincoll currency exchange-fn))
+		  )
+	      (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
+	      (total-moneyin 'merge moneyincoll #f)
+	      (total-moneyout 'merge moneyoutcoll #f)
+	      (total-gain 'merge gaincoll #f)
+	      (gnc:html-table-append-row/markup!
+	       table
+	       row-style
+	       (list (gnc:html-account-anchor current)
+		     ticker-symbol
+		     listing
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell" (gnc:amount->string units share-print-info))
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell"
+		      (if price
+			  (gnc:html-price-anchor
+			   price
+			   (gnc:make-gnc-monetary
+			    (gnc:price-get-currency price)
+			    (gnc:price-get-value price)))
+			  #f))
+		     (gnc:make-html-table-header-cell/markup "number-cell" value)
+		     (gnc:make-html-table-header-cell/markup "number-cell" moneyin)
+		     (gnc:make-html-table-header-cell/markup "number-cell" moneyout)
+		     (gnc:make-html-table-header-cell/markup "number-cell" gain)
+		     (gnc:make-html-table-header-cell/markup
+		      "number-cell"
+		      (sprintf #f "%.2f%%"
+			       (* 100 (/ (gnc:numeric-to-double
+					  (gnc:gnc-monetary-amount gain))
+					 (gnc:numeric-to-double
+					  (gnc:gnc-monetary-amount moneyin))))
+			       ))
+		     )
+	       )
+	      (table-add-stock-rows-internal rest (not odd-row?))
+	      )
+	    (table-add-stock-rows-internal rest odd-row?)
             )
             (gnc:price-list-destroy price-list)
-          )))
+	    )))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
-    (table-add-stock-rows-internal accounts #t)))
-
+    (table-add-stock-rows-internal accounts #t))
+  
   ;; Tell the user that we're starting.
   (gnc:report-starting reportname)
 
@@ -309,15 +319,9 @@
                report-title
                (sprintf #f " %s" (gnc:print-date to-date))))
 
-;;    (gnc:debug "accounts" accounts)
     (if (not (null? accounts))
         ; at least 1 account selected
-        (let* ((exchange-fn
-                (case price-source
-                  ('pricedb-latest 
-                   (lambda (foreign domestic date)
-		    (gnc:exchange-by-pricedb-latest foreign domestic)))
-                  ('pricedb-nearest gnc:exchange-by-pricedb-nearest)))
+        (let* ((exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
                (price-fn
                 (case price-source
@@ -326,7 +330,8 @@
                     (gnc:pricedb-lookup-latest-any-currency pricedb foreign)))
                   ('pricedb-nearest 
                    (lambda (foreign date) 
-                    (gnc:pricedb-lookup-nearest-in-time-any-currency pricedb foreign date))))))
+                    (gnc:pricedb-lookup-nearest-in-time-any-currency
+		     pricedb foreign (gnc:timepair-canonical-day-time date)))))))
           
           (gnc:html-table-set-col-headers!
            table
@@ -341,6 +346,11 @@
                  (_ "Gain")
                  (_ "Total Return")))
           
+	  (set! accounts (sort accounts
+			       (lambda (a b)
+				 (string<? (gnc:account-get-name a)
+					   (gnc:account-get-name b)))))
+
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn
            include-empty include-gains total-value total-moneyin total-moneyout total-gain)

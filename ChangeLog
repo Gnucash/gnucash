@@ -47,6 +47,22 @@
 	  Apply dividend and brokerage to moneyin and moneyout to more
 	  accurately reflect account activity.  Fixes bug #311549.
 
+	Mike Alexander's patch to handle multiple currencies in reports.
+        * src/report/standard-reports/portfolio.scm:
+        * src/report/standard-reports/advanced-portfolio.scm:
+          Report currency option
+          Sort accounts
+          Handle "nearest price" option better
+        * src/report/standard-reports/cash-flow.scm:
+          Handle multiple currencies better
+        * src/report/standard-reports/transaction.scm:
+          Add common currency option.
+          Handle "nearest price" option better.
+        * src/report/report-system/commodity-utilities.scm
+          (gnc:exchange-by-pricedb-nearest):
+          Use price nearest to noon on the day specified.
+	Fixes bug #314554.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

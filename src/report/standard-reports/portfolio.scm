@@ -106,8 +106,8 @@
   (define (get-option section name)
     (gnc:option-value (get-op section name)))
   
-  (define (table-add-stock-rows table accounts to-date
-                                currency price-fn include-empty collector)
+  (define (table-add-stock-rows table accounts to-date currency
+                                exchange-fn price-fn include-empty collector)
 
    (let ((share-print-info
 	  (gnc:share-print-info-places
@@ -126,20 +126,14 @@
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
 
-                 (price-info (price-fn commodity currency to-date))
+                 (price-info (price-fn commodity to-date))
                  
-                 (value-num (gnc:numeric-mul
-                             units 
-                             (cdr price-info)
-                             (gnc:commodity-get-fraction currency)
-                             GNC-RND-ROUND))
-
-                 (value (gnc:make-gnc-monetary currency value-num)))
+		 (value (exchange-fn (gnc:make-gnc-monetary commodity units) currency)))
 
 	    (set! work-done (+ 1 work-done))
 	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 	    (if (or include-empty (not (gnc:numeric-zero-p units)))
-		(begin (collector 'add currency value-num)
+		(begin (collector 'add currency (gnc:gnc-monetary-amount value))
 		       (gnc:html-table-append-row/markup!
 			table
 			row-style
@@ -153,8 +147,8 @@
 			       "number-cell"
 			       (gnc:html-price-anchor
 				(car price-info)
-				(gnc:make-gnc-monetary currency
-						       (cdr price-info))))
+				(gnc:make-gnc-monetary (gnc:price-get-currency (car price-info))
+						       (gnc:price-get-value (car price-info)))))
 			      (gnc:make-html-table-header-cell/markup
 			       "number-cell" value)))
 		       ;;(display (sprintf #f "Shares: %6.6d  " (gnc:numeric-to-double units)))
@@ -199,32 +193,33 @@
                                  (gnc:acccounts-get-all-subaccounts 
                                   accounts) accounts) currency))
                (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
+	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source
                   ('weighted-average 
                    (let ((pricealist 
                           (gnc:get-commoditylist-totalavg-prices
-                           commodity-list currency to-date)))
-                     (lambda (foreign domestic date) 
+                           commodity-list currency to-date 0 0)))
+                     (lambda (foreign date) 
                        (cons #f (gnc:pricealist-lookup-nearest-in-time
 				 pricealist foreign date)))))
                   ('pricedb-latest 
-                   (lambda (foreign domestic date) 
+                   (lambda (foreign date) 
                      (let ((price
-                            (gnc:pricedb-lookup-latest
-                             pricedb foreign domestic)))
-                       (if price
-                           (let ((v (gnc:price-get-value price)))
-                             (cons price v))
+                            (gnc:pricedb-lookup-latest-any-currency
+                             pricedb foreign)))
+                       (if (and price (> (length price) 0))
+                           (let ((v (gnc:price-get-value (car price))))
+                             (cons (car price) v))
                            (cons #f (gnc:numeric-zero))))))
                   ('pricedb-nearest 
-                   (lambda (foreign domestic date) 
+                   (lambda (foreign date) 
                      (let ((price
-                            (gnc:pricedb-lookup-nearest-in-time 
-                             pricedb foreign domestic date)))
-                       (if price
-                           (let ((v (gnc:price-get-value price)))
-                             (cons price v))
+                            (gnc:pricedb-lookup-nearest-in-time-any-currency 
+                             pricedb foreign (gnc:timepair-canonical-day-time date))))
+                       (if (and price (> (length price) 0))
+                           (let ((v (gnc:price-get-value (car price))))
+                             (cons (car price) v))
                            (cons #f (gnc:numeric-zero)))))))))
           
           (gnc:html-table-set-col-headers!
@@ -236,9 +231,14 @@
                  (_ "Price")
                  (_ "Value")))
           
+	  (set! accounts (sort accounts
+			       (lambda (a b)
+				 (string<? (gnc:account-get-name a)
+					   (gnc:account-get-name b)))))
+
           (table-add-stock-rows
            table accounts to-date currency 
-           price-fn include-empty collector)
+           exchange-fn price-fn include-empty collector)
           
           (gnc:html-table-append-row/markup!
            table

@@ -56,6 +56,8 @@
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
 (define optname-void-transactions (N_ "Void Transactions?"))
 (define optname-table-export (N_ "Table for Exporting"))
+(define optname-common-currency (N_ "Common Currency"))
+(define optname-currency (N_ "Report Currency"))
 (define def:grand-total-style "grand-total")
 (define def:normal-row-style "normal-row")
 (define def:alternate-row-style "alternate-row")
@@ -401,8 +403,13 @@
         (addto! heading-list (_ "Balance")))
     (reverse heading-list)))
 
-(define (add-split-row table split column-vector
+(define (add-split-row table split column-vector options
                        row-style account-types-to-reverse transaction-row?)
+
+  (define (opt-val section name)
+    (gnc:option-value 
+     (gnc:lookup-option options section name)))
+
   (let* ((row-contents '())
 	 (dummy  (gnc:debug "split is originally" split))
          (parent (gnc:split-get-parent split))
@@ -412,14 +419,24 @@
          (currency (if account
                        (gnc:account-get-commodity account)
                        (gnc:default-currency)))
+	 (report-currency (if (opt-val gnc:pagename-general optname-common-currency)
+			       (opt-val gnc:pagename-general optname-currency)
+			       currency))
          (damount (if (gnc:split-voided? split)
 					 (gnc:split-void-former-amount split)
 					 (gnc:split-get-amount split)))
-         (split-value (gnc:make-gnc-monetary 
-                       currency 
-                       (if (member account-type account-types-to-reverse) 
-                           (gnc:numeric-neg damount)
-                           damount))))
+	 (trans-date (gnc:transaction-get-date-posted parent))
+	 (split-value (gnc:exchange-by-pricedb-nearest
+		       (gnc:make-gnc-monetary 
+			currency
+			(if (member account-type account-types-to-reverse) 
+			    (gnc:numeric-neg damount)
+			    damount))
+		       report-currency
+		       ;; Use midday as the transaction time so it matches a price
+		       ;; on the same day.  Otherwise it uses midnight which will
+		       ;; likely match a price on the previous day
+		       (gnc:timepair-canonical-day-time trans-date))))
     
     (if (used-date column-vector)
         (addto! row-contents
@@ -465,7 +482,7 @@
     (if (used-price column-vector)
         (addto! 
          row-contents 
-         (gnc:make-gnc-monetary currency
+         (gnc:make-gnc-monetary (gnc:transaction-get-currency parent)
                                 (gnc:split-get-share-price split))))
     (if (used-amount-single column-vector)
         (addto! row-contents
@@ -524,9 +541,24 @@
                   (N_ "Display 1 line")))))
 
   (gnc:register-trep-option
+   (gnc:make-complex-boolean-option
+    gnc:pagename-general optname-common-currency
+    "e" (N_ "Convert all transactions into a common currency") #f
+    #f
+    (lambda (x) (gnc:option-db-set-option-selectable-by-name
+		 gnc:*transaction-report-options*
+		 gnc:pagename-general
+		 optname-currency
+		 x))
+    ))
+
+  (gnc:options-add-currency!
+   gnc:*transaction-report-options* gnc:pagename-general optname-currency "f")
+
+  (gnc:register-trep-option
    (gnc:make-simple-boolean-option
     gnc:pagename-general optname-table-export
-    "e" (N_ "Formats the table suitable for cut & paste exporting with extra cells") #f))  
+    "g" (N_ "Formats the table suitable for cut & paste exporting with extra cells") #f))  
   
   ;; Accounts options
   
@@ -890,7 +922,7 @@ Credit Card, and Income accounts")))))
               ((equal? current split)
                (other-rows-driver split parent table used-columns (+ i 1)))
               (else (begin
-                      (add-split-row table current used-columns
+                      (add-split-row table current used-columns options
                                      row-style account-types-to-reverse #f)
                       (other-rows-driver split parent table used-columns
                                          (+ i 1)))))))
@@ -939,7 +971,8 @@ Credit Card, and Income accounts")))))
                (split-value (add-split-row 
                              table 
                              current 
-                             used-columns 
+                             used-columns
+			     options
                              current-row-style
                              account-types-to-reverse
                              #t)))

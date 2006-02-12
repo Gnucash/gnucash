@@ -778,7 +778,7 @@
              (gnc:book-get-pricedb (gnc:get-current-book))
 	     (gnc:gnc-monetary-amount foreign)
 	     (gnc:gnc-monetary-commodity foreign)
-	     domestic date)))
+	     domestic (gnc:timepair-canonical-day-time date))))
       #f))
 
 ;; Exchange by the nearest price from pricelist. This function takes
