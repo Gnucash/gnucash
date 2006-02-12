@@ -76,7 +76,7 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
 
 
-gnomeappdir = ${datadir}/gnome/apps/Applications
+gnomeappdir = ${datadir}/applications
 
 gnomeapp_in_files = gnucash.desktop.in
 gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)

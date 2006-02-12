@@ -71,6 +71,11 @@
           statement date.
 	Fixes #112653.
 
+	Christian Neumair's desktop patch (#145545)
+	* src/gnome/gnucash.desktop.in
+	* src/gnome/Makefile.am
+	  Make the desktop more HIG-compliant.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:
