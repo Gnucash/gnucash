@@ -137,6 +137,8 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   GList *list;
   GList *node;
   gboolean non_currency = FALSE;
+  Timespec end_timespec;
+  Timespec start_timespec;
 
 
   list = xaccGroupGetAccountList (group);
@@ -189,9 +191,11 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case PAYABLE:
       case RECEIVABLE:
 	end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-	end_amount_default_currency = xaccAccountConvertBalanceToCurrencyAsOfDate
-	  (account, end_amount, account_currency, options.default_currency,
-	   options.end_date);
+        timespecFromTime_t(&end_timespec, options.end_date);
+	end_amount_default_currency = 
+            xaccAccountConvertBalanceToCurrencyAsOfDate
+            (account, end_amount, account_currency, options.default_currency,
+             timespecToTime_t(timespecCanonicalDayTime(end_timespec)));
 
 	if(!non_currency || options.non_currency) {
 	  currency_accum->assets =
@@ -228,13 +232,17 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
       case INCOME:
       case EXPENSE:
 	start_amount = xaccAccountGetBalanceAsOfDate(account, options.start_date);
-	start_amount_default_currency = xaccAccountConvertBalanceToCurrencyAsOfDate
-	  (account, start_amount, account_currency, options.default_currency,
-	   options.start_date);
+        timespecFromTime_t(&start_timespec, options.start_date);
+	start_amount_default_currency = 
+            xaccAccountConvertBalanceToCurrencyAsOfDate
+            (account, start_amount, account_currency, options.default_currency,
+             timespecToTime_t(timespecCanonicalDayTime(start_timespec)));
 	end_amount = xaccAccountGetBalanceAsOfDate(account, options.end_date);
-	end_amount_default_currency = xaccAccountConvertBalanceToCurrencyAsOfDate
-	  (account, end_amount, account_currency, options.default_currency,
-	   options.end_date);
+        timespecFromTime_t(&end_timespec, options.end_date);
+	end_amount_default_currency = 
+            xaccAccountConvertBalanceToCurrencyAsOfDate
+            (account, end_amount, account_currency, options.default_currency,
+             timespecToTime_t(timespecCanonicalDayTime(end_timespec)));
 
 	if(!non_currency || options.non_currency) {
 	  currency_accum->profits =
