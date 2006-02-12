@@ -76,6 +76,81 @@
 	* src/gnome/Makefile.am
 	  Make the desktop more HIG-compliant.
 
+r13243 | chris | 2006-02-12 15:31:11 -0500 (Sun, 12 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/calculation/expression_parser.c
+
+   Don't continue to parse the expression if we've already reached the end.
+   Fixes http://bugzilla.gnome.org/show_bug.cgi?id=166840.
+
+
+r13229 | chris | 2006-02-12 00:21:09 -0500 (Sun, 12 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/window-main-summarybar.c
+
+   Use the price nearest to midday to get the value in the default currency.
+   Patch by Mike Alexander <mta.umich.edu>, closes bug #330361
+
+
+r13228 | chris | 2006-02-11 23:13:29 -0500 (Sat, 11 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/report/report-gnome/gnc-plugin-page-report.c
+
+   Take #2:  Fixups for two botched gnc-plugin-page-report.c commits tonight.
+   1) Correctly handle gc protection for non-boolean 'edited_reports' field.
+   2) Pass list argument instead of immediate to gfec_apply.
+
+
+r13227 | chris | 2006-02-11 21:40:35 -0500 (Sat, 11 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/report/report-gnome/gnc-plugin-page-report.c
+
+   Gracefully handle errors in report options.
+   This prevents the whole program from crashing when unrecognized report
+   options are used.
+
+
+r13223 | chris | 2006-02-11 16:07:32 -0500 (Sat, 11 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/report/report-system/Makefile.am
+   M /gnucash/trunk/src/report/report-system/gnc-report.c
+
+   gc_protect SCM reports while they are in the GHashTable.
+   Also, use gfec to be a bit more defensive about potential errors while 
+   running a report.
+
+
+r13200 | chris | 2006-02-11 00:23:12 -0500 (Sat, 11 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome-utils/glade/preferences.glade
+
+   Tweak the preferences labels for accounting periods.
+
+
+r13199 | chris | 2006-02-11 00:14:21 -0500 (Sat, 11 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/app-utils/app-utils.scm
+   M /gnucash/trunk/src/app-utils/date-utilities.scm
+   M /gnucash/trunk/src/app-utils/gnc-accounting-period.h
+   M /gnucash/trunk/src/app-utils/gw-app-utils-spec.scm
+   M /gnucash/trunk/src/app-utils/options.scm
+
+   Change the reports from using a hard-coded fiscal year to using the global
+   accounting period set in the preferences.  Both the start date and the end
+   date are used, so the user is free to choose any arbitrary period.
+
+
+r13198 | chris | 2006-02-11 00:00:02 -0500 (Sat, 11 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/app-utils/gnc-accounting-period.c
+   M /gnucash/trunk/src/app-utils/gnc-accounting-period.h
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+   M /gnucash/trunk/src/gnome-utils/window-main-summarybar.c
+   M /gnucash/trunk/src/gnome-utils/window-main-summarybar.h
+
+   Move the accounting period preference functions from window-main-summarybar
+   to gnc-accounting-period.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:
@@ -170,6 +245,95 @@
 	for the code that updates the buy/sell action based on the number
 	of shares entered in a transaction.
 
+r13167 | chris | 2006-02-09 00:23:51 -0500 (Thu, 09 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+
+   Remove forgotten unused variable.
+
+r13165 | chris | 2006-02-08 23:53:43 -0500 (Wed, 08 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+
+   Add two columns to the Accounts page: "Total (Period)" & "Balance (Period)"
+   These are the recursive and non-recursive, respectively, period balances,
+   where the accounting period is specified in the preferences.
+
+r13158 | chris | 2006-02-08 23:17:27 -0500 (Wed, 08 Feb 2006) | 5 lines
+
+   M /gnucash/trunk/src/gnome-utils/window-main-summarybar.c
+   M /gnucash/trunk/src/gnome-utils/window-main-summarybar.h
+
+   Fix an off-by-one (day) error in the dates used by the summarybar.
+   Factor out and publicize functions to get the start and end of the
+   accounting period in the preferences.
+   Mark one comment as probably obsolete.
+
+
+r13156 | chris | 2006-02-08 20:47:26 -0500 (Wed, 08 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.h
+
+   Factor out an "approved" method for getting the GtkCellRenderer from a 
+   GtkTreeViewColumn that's been added to a GncTreeView with one of the 
+   convenience functions.
+
+
+r13155 | chris | 2006-02-08 20:24:47 -0500 (Wed, 08 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome/Makefile.am
+   D /gnucash/trunk/src/gnome/window-main-summarybar.c
+   D /gnucash/trunk/src/gnome/window-main-summarybar.h
+   M /gnucash/trunk/src/gnome-utils/Makefile.am
+   A /gnucash/trunk/src/gnome-utils/window-main-summarybar.c (from /gnucash/trunk/src/gnome/window-main-summarybar.c:13154)
+   A /gnucash/trunk/src/gnome-utils/window-main-summarybar.h (from /gnucash/trunk/src/gnome/window-main-summarybar.h:13154)
+
+   Move window-main-summarybar.[ch] from gnome/ to gnome-utils/.
+   It doesn't depend on anything in gnome/.
+
+
+r13154 | chris | 2006-02-08 10:05:28 -0500 (Wed, 08 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome/gnc-plugin-page-register.c
+
+   Change name of SplitRegister variable name to 'reg' for consistency.
+
+
+r13153 | chris | 2006-02-08 10:00:24 -0500 (Wed, 08 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/report/report-system/html-document.scm
+
+   A little error checking for report titles.
+
+
+r13152 | chris | 2006-02-08 01:04:51 -0500 (Wed, 08 Feb 2006) | 6 lines
+
+   M /gnucash/trunk/lib/libqof/qof/gnc-event.c
+
+   Don't allow the event handler list to shrink while we're traversing it.
+   This change isn't ideal in the sense that the handler list is now a 
+   monotonically increasing resource, but it's better than crashing when the
+   handler in node N+1 happens to be deleted while servicing the handler in
+   node N.
+
+
+r13150 | chris | 2006-02-08 00:55:04 -0500 (Wed, 08 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-commodity.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-price.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model.h
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-commodity.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-price.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+
+   Convert GncTreeModel from a GtkObject to a GObject.
+   Replace gtk_object_sink calls on the models with g_object_unref calls.
+   Correctly increase the refcount of "remembered" models when we return them.
+
 2006-02-08  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c: Fix the code
@@ -201,6 +365,76 @@
 
 	* po/glossary/gnc-glossary.txt: Update glossary with new term
 	'voucher'.
+
+r13149 | chris | 2006-02-07 21:23:59 -0500 (Tue, 07 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-commodity.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-price.c
+
+   Convert GncTreeModelPrice and GncTreeModelCommodity to use GObject dispose
+   path instead of GtkObject destroy path.
+
+
+r13148 | chris | 2006-02-07 20:55:07 -0500 (Tue, 07 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account.c
+
+   Convert GncTreeModelAccount to use the GObject dispose path instead of 
+   the GtkObject destroy path.  Also, remove the gconf callback during dispose.
+
+r13140 | chris | 2006-02-07 14:52:29 -0500 (Tue, 07 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+
+   Recompute argc after argv may have changed.
+
+
+r13134 | chris | 2006-02-06 15:41:40 -0500 (Mon, 06 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Fix two places where we were letting the split values become incoherent
+   with account balances.
+   Comment two possible bugs related to capgains and dirtying (or not) Splits.
+
+
+r13133 | chris | 2006-02-06 13:31:49 -0500 (Mon, 06 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/backend/file/io-gncxml-v1.c
+
+   Fix breakage from missed case in Split QofEntity->QofInstance conversion.
+
+
+r13132 | chris | 2006-02-06 12:57:45 -0500 (Mon, 06 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Keep QOF aware of the dirty-state of Transactions.
+   Also, dirty transactions upon changing due date and read-only status, 
+   which didn't used to happen.
+
+
+r13131 | chris | 2006-02-06 12:12:39 -0500 (Mon, 06 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/backend/postgres/txn.c
+   M /gnucash/trunk/src/engine/Account.c
+   M /gnucash/trunk/src/engine/Period.c
+   M /gnucash/trunk/src/engine/Scrub2.c
+   M /gnucash/trunk/src/engine/Transaction.c
+   M /gnucash/trunk/src/engine/TransactionP.h
+   M /gnucash/trunk/src/engine/cap-gains.c
+
+   Convert Split from QofEntity to QofInstance.
+   Let QofInstance manage the book pointer and kvp frame instead of Split 
+   managing its own.
+
+
+r13130 | chris | 2006-02-06 11:18:52 -0500 (Mon, 06 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Replace check_open() in setter API with internal qof_{begin,commit}_edit().
+
 
 2006-02-06  David Hampton  <hampton@employees.org>
 
@@ -268,6 +502,85 @@
 	* lib/libqof/qof/qoflog.c : Add qofchoice to default
 	log modules.
 	* lib/libqof/qof/gnc-engine-util.h : Line-wrapping tweak.	
+
+r13128 | chris | 2006-02-05 23:50:02 -0500 (Sun, 05 Feb 2006) | 9 lines
+
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Remove check_open() calls from Transaction setters.
+
+   These calls were probably a copied idiom from the Split setters in this
+   same file, but Split and Transaction use completely different mechanisms
+   for managing dirty state.  Transactions inherit from QofInstance and so
+   use the .dirty field.  Splits inherit from QofEntity, so their
+   check_open(split->parent) calls are their way of letting someone know
+   they've changed.
+
+
+r13096 | chris | 2006-02-04 11:34:57 -0500 (Sat, 04 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome/gnc-plugin-page-budget.c
+
+   Hook-up the new budget value estimation dialog.
+
+
+r13095 | chris | 2006-02-04 11:32:30 -0500 (Sat, 04 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome/glade/budget.glade
+
+   New dialog for estimating budget values from past transactions.
+   Minor string and glade tweaks.
+
+
+r13094 | chris | 2006-02-04 11:29:00 -0500 (Sat, 04 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-date-edit.c
+   M /gnucash/trunk/src/gnome-utils/gnc-date-edit.h
+
+   gnc_date_edit_set_gdate(): A GDate setter for GNCDateEdit is useful, too. 
+
+
+r13093 | chris | 2006-02-04 10:17:51 -0500 (Sat, 04 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-date-edit.c
+   M /gnucash/trunk/src/gnome-utils/gnc-date-edit.h
+
+   Add getter gnc_date_edit_get_gdate() for getting the value of a GNCDateEdit
+   widget as a GDate.
+
+
+r13092 | chris | 2006-02-04 10:12:09 -0500 (Sat, 04 Feb 2006) | 5 lines
+
+   M /gnucash/trunk/src/engine/Recurrence.c
+   M /gnucash/trunk/src/engine/Recurrence.h
+   M /gnucash/trunk/src/engine/gnc-budget.c
+
+  Factor out some code from gnc-budget into Recurrence so that the budget
+  estimation code can use stand-alone recurrences to estimate budget values.
+  Also, tweak the initial budget so that it begins at the beginning of the 
+  current month.
+
+
+r13091 | chris | 2006-02-04 10:06:19 -0500 (Sat, 04 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/src/app-utils/gnc-ui-util.c
+
+   Teach PrintAmountInternal() to correctly handle a reciprocal denominator.
+
+
+r13090 | chris | 2006-02-04 00:37:50 -0500 (Sat, 04 Feb 2006) | 9 lines
+
+   M /gnucash/trunk/src/engine/test/test-numeric.c
+
+   Add some test-cases for gnc_numerics using the reciprocal denominator.
+   Even though we don't explicitly ask for this representation, certain
+   calculations (e.g. those involving GNC_HOW_DENOM_SIGFIGS in the loan    
+   druid and soon in budgets) will return numbers using this representation.
+
+   Unfortunately, these numbers aren't handled correctly by most of the
+   gnc_numeric functions, like the ones for comparison, equality testing,
+   arithmetic and conversion.
+
 
 2006-02-04  David Hampton  <david@dhcp-15.rainbolthampton.net>
 
@@ -366,6 +679,25 @@
 	* src/gnome-search/dialog-search.[ch]: Re-title the search dialog
 	based upon the menu used to invoke it. Fixes #329538.
 
+r13089 | chris | 2006-02-03 16:29:06 -0500 (Fri, 03 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/src/engine/gnc-budget.c
+
+   Use the string cache for budget name and description.
+   Dirty the book when the budget changes.
+   Remove some obsolete budget code.
+
+
+r13079 | chris | 2006-02-02 13:47:34 -0500 (Thu, 02 Feb 2006) | 4 lines
+
+   M /gnucash/trunk/Makefile.am
+   M /gnucash/trunk/make-gnucash-potfiles.in
+
+   Allow make-gnucash-potfiles to run from directories other than srcdir.
+   Better documentation of exactly what m-g-potfiles excludes, and a general
+   clean-up of the script.
+
+
 2006-02-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view.[ch]: Andreas Köhler's patch to
@@ -449,6 +781,43 @@
 	  Pass in a type_label as well so the dialog can properly label
 	  the "new" button.  This fixes the UI Bug #117354.
 
+r13072 | chris | 2006-02-01 19:07:58 -0500 (Wed, 01 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/Makefile.am
+   M /gnucash/trunk/po/POTFILES.skip
+
+   Check for any accidentally-distributed files not marked for translation.
+
+
+r13070 | chris | 2006-02-01 17:38:41 -0500 (Wed, 01 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/Makefile.am
+
+   Add POTFILES.skip to EXTRA_DIST.
+
+
+r13067 | chris | 2006-02-01 15:33:36 -0500 (Wed, 01 Feb 2006) | 2 lines
+
+   A /gnucash/trunk/po/POTFILES.skip
+
+   Don't translate obsolete files.
+
+
+r13066 | chris | 2006-02-01 15:32:11 -0500 (Wed, 01 Feb 2006) | 2 lines
+
+   M /gnucash/trunk/make-gnucash-potfiles.in
+
+   When generating POTFILES.in, don't include files we don't want to translate.
+
+
+r13065 | chris | 2006-02-01 15:30:14 -0500 (Wed, 01 Feb 2006) | 3 lines
+
+   M /gnucash/trunk/Makefile.am
+
+   Fail 'make distcheck' if POTFILES.in contains undistributed files.
+   The failure will also helpfully explain which files are the problem.
+
+
 2006-01-31  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: include gmodule in GLIB_LIBS
@@ -472,6 +841,43 @@
 
 	* src/gnome/glade/sched-xact.glade: Change since-last-run
 	final-page text from "apply" to "Apply". Bug#329125.
+
+r13056 | chris | 2006-01-30 22:41:01 -0500 (Mon, 30 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/report/locale-specific/us/taxtxf-de_DE.scm
+   M /gnucash/trunk/src/report/locale-specific/us/taxtxf.scm
+
+   Don't add markup to tax report titles.
+
+
+r13047 | chris | 2006-01-29 22:53:09 -0500 (Sun, 29 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.h
+
+   New function: gnc_tree_view_add_combo_column().
+   This function is only compiled when HAVE_GTK26 because it uses 
+   GtkCellRendererCombo.
+
+
+r13045 | chris | 2006-01-29 21:59:43 -0500 (Sun, 29 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/engine/Transaction.c
+   M /gnucash/trunk/src/engine/Transaction.h
+   M /gnucash/trunk/src/engine/TransactionP.h
+
+   Add some convenience functions for getting values from various combinations
+   of Accounts, Transactions, and Splits.
+
+
+r13040 | chris | 2006-01-29 19:59:25 -0500 (Sun, 29 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.h
+
+    Convert account types filter dialog to use checkboxes for selection.
+    Patch by Eskil Bylund <eskil.bylund@gmail.com>
+
 
 2006-01-29  Derek Atkins  <derek@ihtfp.com>
 
@@ -681,6 +1087,73 @@
 	really old versions had to deal with very different packaging
 	structure.
 
+r13010 | chris | 2006-01-28 15:30:23 -0500 (Sat, 28 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/gnome/gnc-plugin-page-register.c
+
+   Automatically close registers whose accounts are deleted.
+   We use the component manager to watch for the destruction of the account.
+   Previously, having an account's register open while deleting it would
+   just crash.
+
+r12999 | chris | 2006-01-28 12:17:49 -0500 (Sat, 28 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/lib/libqof/qof/qoflog.c
+
+   Re-enable logging for GnuCash modules that haven't explicitly set their
+   own levels.
+
+r12997 | chris | 2006-01-28 01:05:54 -0500 (Sat, 28 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome/gnc-plugin-page-budget.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view-account.c
+
+   Remove obsolete code to handle account-types filtering for budgets.
+   Really remove treeviewcolumns when we're done with them.
+
+r12995 | chris | 2006-01-27 23:14:56 -0500 (Fri, 27 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/report/standard-reports/budget.scm
+
+   Better default account selection when opening the budget report.
+
+
+r12994 | chris | 2006-01-27 21:23:38 -0500 (Fri, 27 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/gnucash.m4
+
+   Remove traces of old gnucash-run-script from gnucash.m4.
+
+
+r12993 | chris | 2006-01-27 18:03:23 -0500 (Fri, 27 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/report/report-gnome/gnc-plugin-page-report.c
+   M /gnucash/trunk/src/report/report-system/gnc-report.c
+   M /gnucash/trunk/src/report/report-system/gnc-report.h
+   M /gnucash/trunk/src/report/report-system/gw-report-system-spec.scm
+   M /gnucash/trunk/src/report/report-system/report.scm
+
+   Move generation of report serial ids from guile to C.
+   Try to gracefully handle more errors during report loading.
+
+
+r12989 | chris | 2006-01-27 01:15:31 -0500 (Fri, 27 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/report/report-gnome/window-report.c
+   M /gnucash/trunk/src/report/report-system/report.scm
+
+   Check for invalid options tables when loading reports.
+   Also, plug memory leak in my last commit.
+
+
+r12988 | chris | 2006-01-27 00:27:08 -0500 (Fri, 27 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/report/report-gnome/gnc-plugin-page-report.c
+   M /gnucash/trunk/src/report/report-gnome/window-report.c
+
+   Avoid showing any invalid reports.
+
+
 2006-01-27  David Hampton  <hampton@employees.org>
 
 	* src/scm/printing/print-check.scm:
@@ -731,6 +1204,163 @@
 	* configure.in: fail if we find libgsf >= 1.12.2 but not libgsf-gnome.
 	  This is instead of configure succeeding and then failing the
 	  build later.
+
+r12985 | chris | 2006-01-26 23:38:47 -0500 (Thu, 26 Jan 2006) | 2 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-main-window.c
+
+   Avoid saving invalid pages.
+
+
+r12984 | chris | 2006-01-26 21:12:41 -0500 (Thu, 26 Jan 2006) | 13 lines
+
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/report/report-gnome/dialog-column-view.c
+   M /gnucash/trunk/src/report/report-gnome/dialog-style-sheet.c
+   M /gnucash/trunk/src/report/report-gnome/gnc-plugin-page-report.c
+   M /gnucash/trunk/src/report/report-gnome/window-report.c
+   M /gnucash/trunk/src/report/report-gnome/window-report.h
+   M /gnucash/trunk/src/report/report-system/Makefile.am
+   M /gnucash/trunk/src/report/report-system/gnc-report.c
+   M /gnucash/trunk/src/report/report-system/gnc-report.h
+   A /gnucash/trunk/src/report/report-system/gw-report-system-spec.scm
+   M /gnucash/trunk/src/report/report-system/html-style-sheet.scm
+   M /gnucash/trunk/src/report/report-system/report-system.scm
+   M /gnucash/trunk/src/report/report-system/report.scm
+   M /gnucash/trunk/src/report/utility-reports/view-column.scm
+   M /gnucash/trunk/src/report/utility-reports/welcome-to-gnucash.scm
+   M /gnucash/trunk/src/scm/main-window.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+   Move the global report hash-table from guile to C.
+   Move the book-open/close hooks from guile to C.
+
+   There are several places where we do report-management from C already.
+   Those places no longer use libguile to access the hash-table of reports -
+   they can just call C functions.
+
+   For now, there's still some report-management happening in guile so guile
+   can access the global state through g-wrapped functions.  Eventually, 
+   all report-management should be in C and guile can just provide single
+   reports one-at-a-time.
+   
+
+r12982 | chris | 2006-01-26 12:38:26 -0500 (Thu, 26 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/gnome-utils/gnc-main-window.c
+   M /gnucash/trunk/src/gnome-utils/gnc-main-window.h
+
+   Register book open/close callbacks during gui init.
+   Split handling of persistent application state into book-level data 
+   and window-level data.
+
+
+r12980 | chris | 2006-01-25 23:02:47 -0500 (Wed, 25 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/Makefile.am
+   M /gnucash/trunk/src/bin/overrides/Makefile.am
+   D /gnucash/trunk/src/bin/overrides/gnucash-run-script
+   M /gnucash/trunk/src/bin/test/Makefile.am
+   D /gnucash/trunk/src/bin/test/test-run-script
+   M /gnucash/trunk/src/scm/main.scm
+
+   Remove the obsolete gnucash-run-script and its test.
+   Also, the (gnucash main) module no longer depends on (gnucash price-quotes).
+
+
+r12979 | chris | 2006-01-25 22:07:03 -0500 (Wed, 25 Jan 2006) | 4 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/gnome/Makefile.am
+   D /gnucash/trunk/src/gnome/dialog-totd.c
+   D /gnucash/trunk/src/gnome/dialog-totd.h
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/gnome-utils/Makefile.am
+   A /gnucash/trunk/src/gnome-utils/dialog-totd.c (from /gnucash/trunk/src/gnome/dialog-totd.c:12978)
+   A /gnucash/trunk/src/gnome-utils/dialog-totd.h (from /gnucash/trunk/src/gnome/dialog-totd.h:12978)
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.c
+
+   Move dialog-totd from gnome to gnome-utils.
+   Do low-level application initialization even before booting guile.
+   This means the splash and totd come up almost instantly. 
+
+
+r12978 | chris | 2006-01-24 23:54:12 -0500 (Tue, 24 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/price-quotes.scm
+
+   Install price quote sources without calling main.scm.
+   This makes the startup sequence a little clearer.
+
+
+r12977 | chris | 2006-01-24 23:32:56 -0500 (Tue, 24 Jan 2006) | 5 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/report/report-gnome/report-gnome.scm
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/doc.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+   Re-enable report menu setup.
+   The report menu setup is pretty fragile - it has to be done in a pretty
+   specific order, so I pulled it out of (gnc:main) and call it independently.
+   Also, move more bits of gnc:main into the modules where the bits are used.
+
+
+r12976 | chris | 2006-01-24 21:06:08 -0500 (Tue, 24 Jan 2006) | 6 lines
+
+   M /gnucash/trunk/src/app-utils/app-utils.scm
+   M /gnucash/trunk/src/core-utils/gw-core-utils-spec.scm
+   M /gnucash/trunk/src/engine/gw-engine-spec.scm
+   M /gnucash/trunk/src/gnome-utils/gnc-menu-extensions.scm
+   M /gnucash/trunk/src/gnome-utils/gnome-utils.scm
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+
+   Export debugging state from C to guile.
+   Remove obsolete guile command line options.
+   Remove guile setting of add-extension hooks that were apparently
+   obsoleted by C code a while ago.
+   Remove guile's access to application lifecycle function hooks.
+
+
+r12975 | chris | 2006-01-24 20:36:28 -0500 (Tue, 24 Jan 2006) | 8 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/business/business-gnome/business-gnome.scm
+   M /gnucash/trunk/src/gnome/gw-gnc-spec.scm
+   M /gnucash/trunk/src/gnome/top-level.c
+   M /gnucash/trunk/src/gnome/top-level.h
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.c
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.h
+   M /gnucash/trunk/src/gnome-utils/gnc-splash.c
+   M /gnucash/trunk/src/gnome-utils/gnc-splash.h
+   M /gnucash/trunk/src/gnome-utils/gw-gnome-utils-spec.scm
+   M /gnucash/trunk/src/scm/command-line.scm
+   M /gnucash/trunk/src/scm/main.scm
+   M /gnucash/trunk/src/scm/price-quotes.scm
+
+   Consolidate application lifecycle functions into src/gnome-utils,
+   leaving only the highest level of gui initialization in /gnome/top-level.c
+   Process --loglevel command-line option from C.
+   Move the running of the startup hook from guile to C.
+   Distrubute bits of scheme from main.scm to the modules they're used in.
+   Remove more obsoleted scheme.
+
+
+r12974 | chris | 2006-01-24 20:21:28 -0500 (Tue, 24 Jan 2006) | 3 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/core-utils/gnc-main.c
+   M /gnucash/trunk/src/core-utils/gnc-main.h
+   M /gnucash/trunk/src/gnome-utils/gnc-main-window.c
+
+   Process --debug command-line option from C instead of guile.
+   This re-enables the debugging "extensions" menu.
+
 
 2006-01-24  Christian Stimming  <stimming@tuhh.de>
 
