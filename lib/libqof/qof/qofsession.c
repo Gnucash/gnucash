@@ -305,6 +305,7 @@ qof_session_get_url (QofSession *session)
 typedef struct qof_entity_copy_data {
 	QofEntity *from;
 	QofEntity *to;
+	QofParam  *param;
 	GList  *referenceList;
 	GSList *param_list;
 	QofSession *new_session;
@@ -375,16 +376,45 @@ qof_entity_get_reference_from(QofEntity *ent, const QofParam *param)
 		guid_to_string_buff(cm_guid, cm_sa);
 		cm_string = g_strdup(cm_sa);
 		if(TRUE == string_to_guid(cm_string, reference->ref_guid)) {
+			g_free(cm_string);
 			return reference;
 		}
+		g_free(cm_string);
 	}
 	return NULL;
 }
 
 static void
+col_ref_cb (QofEntity* ref_ent, gpointer user_data)
+{
+	QofEntityReference *ref;
+	QofEntityCopyData  *qecd;
+	QofEntity *ent;
+	const GUID   *cm_guid;
+	char         cm_sa[GUID_ENCODING_LENGTH + 1];
+	gchar        *cm_string;
+
+	qecd = (QofEntityCopyData*)user_data;
+	ent = qecd->from;
+	ref = g_new0(QofEntityReference, 1);
+	ref->type = ent->e_type;
+	ref->ref_guid = g_new(GUID, 1);
+	ref->ent_guid = &ent->guid;
+	ref->param = qof_class_get_parameter(ent->e_type, 
+		qecd->param->param_name);
+	cm_guid = qof_entity_get_guid(ref_ent);
+	guid_to_string_buff(cm_guid, cm_sa);
+	cm_string = g_strdup(cm_sa);
+	if(TRUE == string_to_guid(cm_string, ref->ref_guid)) {
+		g_free(cm_string);
+		qof_session_update_reference_list(qecd->new_session, ref);
+	}
+}
+
+static void
 qof_entity_foreach_copy(gpointer data, gpointer user_data)
 {
-	QofEntity          *importEnt, *targetEnt, *referenceEnt;
+	QofEntity          *importEnt, *targetEnt/*, *referenceEnt*/;
 	QofEntityCopyData  *context;
 	QofEntityReference *reference;
 	gboolean           registered_type;
@@ -393,6 +423,7 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	gchar        *cm_string, *cm_char;
 	const GUID   *cm_guid;
 	KvpFrame     *cm_kvp;
+	QofCollection *cm_col;
 	/* function pointers and variables for parameter getters that don't use pointers normally */
 	gnc_numeric cm_numeric, (*numeric_getter) (QofEntity*, QofParam*);
 	double      cm_double,  (*double_getter)  (QofEntity*, QofParam*);
@@ -421,10 +452,13 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	registered_type = FALSE;
 	cm_param = (QofParam*) data;
 	g_return_if_fail(cm_param != NULL);
+	context->param = cm_param;
 	if(safe_strcmp(cm_param->param_type, QOF_TYPE_STRING) == 0)  { 
-		cm_string = g_strdup((gchar*)cm_param->param_getfcn(importEnt, cm_param));
-		string_setter = (void(*)(QofEntity*, const char*))cm_param->param_setfcn;
-		if(string_setter != NULL) { string_setter(targetEnt, cm_string); }
+		cm_string = (gchar*)cm_param->param_getfcn(importEnt, cm_param);
+		if(cm_string) {
+			string_setter = (void(*)(QofEntity*, const char*))cm_param->param_setfcn;
+			if(string_setter != NULL) { string_setter(targetEnt, cm_string); }
+		}
 		registered_type = TRUE;
 	}
 	if(safe_strcmp(cm_param->param_type, QOF_TYPE_DATE) == 0) { 
@@ -496,9 +530,17 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 		if(char_setter != NULL) { char_setter(targetEnt, cm_char); }
 		registered_type = TRUE;
 	}
+	if(safe_strcmp(cm_param->param_type, QOF_TYPE_COLLECT) == 0) {
+		cm_col = (QofCollection*)cm_param->param_getfcn(importEnt, cm_param);
+		if(cm_col)
+		{
+			qof_collection_foreach(cm_col, col_ref_cb, context);
+		}
+	}
 	if(registered_type == FALSE) {
-		referenceEnt = (QofEntity*)cm_param->param_getfcn(importEnt, cm_param);
-		if(!referenceEnt || !referenceEnt->e_type) { return; }
+/*		referenceEnt = (QofEntity*)cm_param->param_getfcn(importEnt, cm_param);
+		if(!referenceEnt) { return; }
+		if(!referenceEnt->e_type) { return; }*/
 		reference = qof_entity_get_reference_from(importEnt, cm_param);
 		if(reference) {
 			qof_session_update_reference_list(context->new_session, reference);
@@ -665,6 +707,8 @@ qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll)
 {
 	QofEntityCopyData qecd;
 
+	g_return_val_if_fail(new_session, FALSE);
+	if(!entity_coll) { return FALSE; }
 	gnc_engine_suspend_events();
 	qecd.param_list = NULL;
 	qecd.new_session = new_session;
@@ -727,10 +771,12 @@ recurse_ent_cb(QofEntity *ent, gpointer user_data)
 		if(i->data == NULL) { continue; }
 		ref_param = (QofParam*)i->data;
 		if(ref_param->param_name == NULL) { continue; }
-		if(ref_param->param_type == QOF_TYPE_COLLECT) {
+		if(0 == safe_strcmp(ref_param->param_type, QOF_TYPE_COLLECT)) {
 			QofCollection *col;
 			col = ref_param->param_getfcn(ent, ref_param);
-			qof_collection_foreach(col, recurse_collection_cb, store);
+			if(col) {
+				qof_collection_foreach(col, recurse_collection_cb, store);
+			}
 			continue;
 		}
 		ref_ent = (QofEntity*)ref_param->param_getfcn(ent, ref_param);
@@ -808,7 +854,7 @@ gboolean qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent)
 	success = qof_entity_copy_to_session(new_session, ent);
 	if(success == TRUE) {
 		coll = qof_book_get_collection(qof_session_get_book(new_session), ent->e_type);
-		qof_collection_foreach(coll, recurse_ent_cb, &store);
+		if(coll) { qof_collection_foreach(coll, recurse_ent_cb, &store); }
 	}
 	return success;
 }
@@ -888,7 +934,7 @@ qof_session_load_backend(QofSession * session, char * access_method)
 				continue;
 			}
 			/* Use the providers creation callback */
-                        session->backend = (*(prov->backend_new))();
+      	    session->backend = (*(prov->backend_new))();
 			session->backend->provider = prov;
 			/* Tell the books about the backend that they'll be using. */
 			for (node=session->books; node; node=node->next)
