@@ -35,7 +35,13 @@
 	* src/report/stylesheets/stylesheet-fancy.scm:
 	  Des Dougan's patch to let the user choose the fancy-stylesheet
 	  image alignment.  Fixes #314048.
-	
+
+	Mike Alexander's Currency Scrub patch.
+        * src/engine/Scrub.c:
+        * src/engine/Scrub.h:
+          Try to fix transactions that have no currency, perhaps because
+          of a log replay.  Workaround for bug #143720.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

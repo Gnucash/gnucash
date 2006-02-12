@@ -352,7 +352,70 @@ xaccAccountScrubImbalance (Account *acc)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent(split);
 
+    xaccTransScrubCurrencyFromSplits(trans);
+    
     xaccTransScrubImbalance (trans, xaccAccountGetRoot (acc), NULL);
+  }
+}
+
+void
+xaccTransScrubCurrencyFromSplits(Transaction *trans)
+{
+  GList *node;
+  gnc_commodity *common_currency = NULL;
+    
+  if (!trans) return;
+  
+  for (node = xaccTransGetSplitList (trans); node; node = node->next) {
+    Split *split = node->data;
+    if (gnc_numeric_equal(xaccSplitGetAmount (split),
+                          xaccSplitGetValue (split))) {
+
+      Account *s_account = xaccSplitGetAccount (split);
+      gnc_commodity *s_commodity = xaccAccountGetCommodity (s_account);
+      
+      if (s_commodity) {
+        const char * namespace = gnc_commodity_get_namespace (s_commodity);
+        if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
+            !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY)) {
+
+          /* Found a split where the amount is the same as the value and
+             the commodity is a currency.  If all splits in the transaction
+             that fit this description are in the same currency then the
+             transaction should be in that currency too. */
+
+          if (common_currency == NULL)
+            /* First one we've found, save the currency */
+            common_currency = s_commodity;
+          else if ( !gnc_commodity_equiv (common_currency, s_commodity)) {
+            /* Splits are inconsistent, more than one has a value equal to
+               the amount, but they aren't all in the same currency. */
+            common_currency = NULL;
+            break;
+          }
+        }
+      }
+    }
+  }
+    
+  if (common_currency &&
+      !gnc_commodity_equiv (common_currency, xaccTransGetCurrency (trans))) {
+
+    /* Found a common currency for the splits, and the transaction is not
+       in that currency */
+    gboolean trans_was_open;
+
+    PINFO ("transaction in wrong currency");
+      
+    trans_was_open = xaccTransIsOpen (trans);
+
+    if (!trans_was_open)
+      xaccTransBeginEdit (trans);
+
+    xaccTransSetCurrency (trans, common_currency);
+    
+    if (!trans_was_open)
+      xaccTransCommitEdit (trans);
   }
 }
 
