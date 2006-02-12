@@ -32,6 +32,10 @@
 	  settings.  Patch by "Brian", but slightly modified to not
 	  hard-code some strings.
 
+	* src/report/stylesheets/stylesheet-fancy.scm:
+	  Des Dougan's patch to let the user choose the fancy-stylesheet
+	  image alignment.  Fixes #314048.
+	
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

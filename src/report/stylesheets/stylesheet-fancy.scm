@@ -69,9 +69,24 @@
       (N_ "Heading Banner") "b" (N_ "Banner for top of report.")
       ""))
     (opt-register
+     (gnc:make-multichoice-option
+      (N_ "Images")
+      (N_ "Heading Alignment") "c" (N_ "Banner for top of report.")
+      'left
+      (list (vector 'left
+                     (N_ "Left")
+                     (N_ "Align the banner to the left"))
+            (vector 'center
+                     (N_ "Center")
+                     (N_ "Align the banner in the center"))
+            (vector 'right
+                     (N_ "Right")
+                     (N_ "Align the banner to the right"))
+            )))
+    (opt-register
      (gnc:make-pixmap-option
       (N_ "Images")
-      (N_ "Logo") "c" (N_ "Company logo image.")
+      (N_ "Logo") "d" (N_ "Company logo image.")
       ""))
 
     (opt-register
@@ -184,9 +199,15 @@
 	 (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
 	 (headpixmap (opt-val (N_ "Images") (N_ "Heading Banner")))
 	 (logopixmap (opt-val (N_ "Images") (N_ "Logo")))
+         (align (gnc:value->string(opt-val (N_ "Images") (N_ "Heading Alignment"))))
 	 (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
 	 (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
-	 (border (opt-val (N_ "Tables") (N_ "Table border width"))))
+	 (border (opt-val (N_ "Tables") (N_ "Table border width")))
+         (headcolumn 0))
+
+    ; center the document without elements inheriting anything
+    (gnc:html-document-add-object! ssdoc
+       (gnc:make-html-text "<center>"))
 
     (gnc:html-document-set-style! 
      ssdoc "body" 
@@ -280,8 +301,14 @@
              (doc-headline (gnc:html-document-headline doc))
              (headline (if (eq? doc-headline #f) title doc-headline)))
 
+	; set the header column to be the 2nd when we have a logo
+	; do this so that when logo is not present, the document
+	; is perfectly centered
+	(if (and logopixmap (> (string-length logopixmap) 0))
+	    (set! headcolumn 1))
+
         (gnc:html-table-set-cell! 
-         t 1 1
+         t 1 headcolumn
          (if show-preparer? 
              ;; title plus preparer info 
              (gnc:make-html-text
@@ -315,14 +342,24 @@
       (if (and headpixmap
 	       (not (string=? headpixmap "")))
 	  ;; check for header image file name nonblank
+	  (begin
+	    (gnc:html-table-set-cell!
+             t 0 headcolumn
+             (gnc:make-html-text
+	      ;; XX: isn't there some way to apply the alignment to
+	      ;; (gnc:html-markup-img headpixmap)?
+	      (string-append
+	       "<div align=\"" align "\">"
+	       "<img src=\"" headpixmap "\">"
+	       "</div>")))
+	    )
 	  (gnc:html-table-set-cell!
-	   t 0 1
-	   (gnc:make-html-text
-	    (gnc:html-markup-img headpixmap))) )
+           t 0 headcolumn
+           (gnc:make-html-text "&nbsp;")))
 
       (apply 
        gnc:html-table-set-cell! 
-       t 2 1
+       t 2 headcolumn
        (gnc:html-document-objects doc))
       
       (gnc:html-document-add-object! ssdoc t))
