@@ -1,3 +1,15 @@
+2006-02-12  Neil Williams <linux@codehelp.co.uk>
+
+	* lib/libqof/qof/qofbackend.h : Add error value for files that
+	cannot be opened. ERR_FILEIO_READ_ERROR.
+	* lib/libqof/qof/qofsession.c : Improve QOF_TYPE_COLLECT handling 
+	and recursive copies
+	* lib/libqof/backend/file/qsf-backend.c : Check that files can be opened before
+	trying to work out their type. Use new QofBackendError value
+	if open to read fails.
+	* src/engine/test-core/test-stuff.c : Ensuring get_random_double 
+	returns at least some decimal places more often than not.
+
 2006-02-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/*/*.scm:
