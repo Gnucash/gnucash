@@ -1,3 +1,10 @@
+2006-02-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/*/*.scm:
+	  rename gnc:owner-get-address-dep to
+	  gnc:owner-get-name-and-address-dep in preparation of
+	  some other patches.
+
 2006-02-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:

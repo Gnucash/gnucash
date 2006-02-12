@@ -53,7 +53,7 @@
 			       (gnc:owner-get-job owner))))
       (else ""))))
 
-(define (gnc:owner-get-address-dep owner)
+(define (gnc:owner-get-name-and-address-dep owner)
   (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
 	       (gnc:owner-get-type owner) #f)))
     (case type
@@ -73,7 +73,7 @@
 	  ""
 	  (gnc:employee-get-addr e))))
       ((gnc-owner-job)
-       (gnc:owner-get-address-dep (gnc:job-get-owner
+       (gnc:owner-get-name-and-address-dep (gnc:job-get-owner
 				   (gnc:owner-get-job owner))))
       (else ""))))
 
@@ -134,7 +134,7 @@
 
 
 (export gnc:owner-get-address)
-(export gnc:owner-get-address-dep)
+(export gnc:owner-get-name-and-address-dep)
 (export gnc:owner-get-owner-id)
 (export gnc:entry-type-percent-p)
 (export gnc:owner-from-split)

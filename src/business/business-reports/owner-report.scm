@@ -462,7 +462,7 @@
     (gnc:html-table-append-row!
      table
      (list
-      (string-expand (gnc:owner-get-address-dep owner) #\newline "<br>")))
+      (string-expand (gnc:owner-get-name-and-address-dep owner) #\newline "<br>")))
     (gnc:html-table-append-row!
      table
      (list "<br>"))
