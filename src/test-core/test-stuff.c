@@ -305,16 +305,13 @@ get_random_gint64(void)
 double
 get_random_double(void)
 {
-    union 
-    {
-        double d;
-        gint64 i;
-    } ret;
-    
+    double d;
+	guint  i;
 
-    ret.i = get_random_gint64();
-    
-    return ret.d;
+	i = (guint)get_random_int_in_range(8,13);
+	/* using 0.9 and 7 increases chances of getting lots of decimals */
+    d = ((double)get_random_int_in_range(8,999999) * i * 0.9 / 7);
+    return d;
 }
 
 const char*
