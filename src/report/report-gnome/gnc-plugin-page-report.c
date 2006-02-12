@@ -49,6 +49,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#include "gfec.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
@@ -1287,16 +1288,24 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 }
 
 static void
+error_handler(const char *str)
+{
+    g_warning("Report Error: %s", str);
+}
+
+static void
 gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
         GncPluginPageReportPrivate *priv;
         SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
+        SCM result;
         
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
         if (priv->cur_report == SCM_BOOL_F)
                 return;
 
-        if (scm_call_1(start_editor, priv->cur_report) == SCM_BOOL_F) {
+        result = gfec_apply(start_editor, priv->cur_report, error_handler);
+        if (result == SCM_BOOL_F || result == SCM_UNDEFINED) {
                 gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()),
                                    _("There are no options for this report."));
         }
