@@ -363,7 +363,7 @@
  * Note: The parser/evaluator uses a simple recursive descent
  * parser. I decided on this type for the simple reason that for a
  * simple four function calculator a recursive descent parser is, in
- * my opnion, the easiest to construct. I also think that recursive
+ * my opinion, the easiest to construct. I also think that recursive
  * descent parsers are easier for the human to understand and thus
  * maintain.
  *
@@ -751,8 +751,11 @@ free_var (var_store_ptr value, parser_env_ptr pe)
 static void
 add_token (parser_env_ptr pe, char token)
 {
-  *pe->token_tail = pe->Token = token;
-  pe->token_tail++;
+    pe->Token = token;
+    if ((token != EOS) || (*pe->token_tail != EOS)) {
+        *pe->token_tail = token;
+        pe->token_tail++;
+    }
 }
 
 /* parse next token from string */
