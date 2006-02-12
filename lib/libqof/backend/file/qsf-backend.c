@@ -432,6 +432,7 @@ qsf_file_type(QofBackend *be, QofBook *book)
 {
 	QSFBackend *qsf_be;
 	qsf_param *params;
+	FILE *f;
 	char *path;
 	gboolean result;
 
@@ -444,6 +445,9 @@ qsf_file_type(QofBackend *be, QofBook *book)
 	params = qsf_be->params;
 	params->book = book;
 	path = g_strdup(qsf_be->fullpath);
+	f = fopen(path, "r");
+	if(!f) { qof_backend_set_error(be, ERR_FILEIO_READ_ERROR); }
+	fclose(f);
 	params->filepath = g_strdup(path);
 	qof_backend_get_error(be);
 	result = is_our_qsf_object_be(params);
@@ -768,9 +772,13 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_COLLECT))
 		{
 			qsf_coll = qof_param->param_getfcn(ent, qof_param);
-			params->qof_param = qof_param;
-			params->output_node = object_node;
-			qof_collection_foreach(qsf_coll, qsf_from_coll_cb, params);
+			if(qsf_coll) { 
+				params->qof_param = qof_param;
+				params->output_node = object_node;
+				qof_collection_foreach(qsf_coll, qsf_from_coll_cb, params);
+			}
+			param_list = g_slist_next(param_list);
+			continue;
 		}
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_CHOICE))
 		{
@@ -810,6 +818,7 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 					node = xmlAddChild(object_node, xmlNewNode(ns, BAD_CAST qof_param->param_type));
 					string_buffer = g_strdup(qof_book_merge_param_as_string(qof_param, ent));
 					xmlNodeAddContent(node, BAD_CAST string_buffer);
+					g_free(string_buffer);
 					xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
 				}
 			}
