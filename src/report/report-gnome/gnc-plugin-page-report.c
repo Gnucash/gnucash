@@ -815,7 +815,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
   
 	if (priv->cur_report != SCM_BOOL_F)
 		scm_gc_unprotect_object(priv->cur_report);
-	if (priv->edited_reports != SCM_BOOL_F)
+	if (priv->edited_reports != SCM_EOL)
 	        scm_gc_unprotect_object(priv->edited_reports);
   }
 
@@ -954,10 +954,11 @@ gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate *priv,
                                             SCM report)
 { 
         SCM new_edited = scm_delete(priv->edited_reports, report);
-	if (priv->edited_reports != SCM_BOOL_F)
+	if (priv->edited_reports != SCM_EOL)
 	        scm_gc_unprotect_object(priv->edited_reports);
         priv->edited_reports = new_edited;
-        scm_gc_protect_object(priv->edited_reports);
+        if (new_edited != SCM_EOL)
+            scm_gc_protect_object(priv->edited_reports);
 }
 
 void
@@ -965,10 +966,11 @@ gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate *priv,
                                          SCM report)
 {
         SCM new_edited = scm_cons(report, priv->edited_reports);
-	if (priv->edited_reports != SCM_BOOL_F)
+	if (priv->edited_reports != SCM_EOL)
 	        scm_gc_unprotect_object(priv->edited_reports);
         priv->edited_reports = new_edited;
-        scm_gc_protect_object(priv->edited_reports);
+        if (new_edited != SCM_EOL)
+            scm_gc_protect_object(priv->edited_reports);
 }
 
 void
@@ -1290,7 +1292,7 @@ gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report
 static void
 error_handler(const char *str)
 {
-    g_warning("Report Error: %s", str);
+    PWARN("Report Error: %s", str);
 }
 
 static void
@@ -1304,7 +1306,8 @@ gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *repor
         if (priv->cur_report == SCM_BOOL_F)
                 return;
 
-        result = gfec_apply(start_editor, priv->cur_report, error_handler);
+        result = gfec_apply(start_editor, scm_cons(priv->cur_report, SCM_EOL), 
+                            error_handler);
         if (result == SCM_BOOL_F || result == SCM_UNDEFINED) {
                 gnc_warning_dialog(GTK_WIDGET(gnc_ui_get_toplevel()),
                                    _("There are no options for this report."));
