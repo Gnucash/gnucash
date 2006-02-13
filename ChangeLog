@@ -1,5 +1,8 @@
 2006-02-13  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c: Andreas Köhler's patch to
+	prevent crash when voiding a transaction.
+
 	* src/gnome/glade/sched-xact.glade:
 	* src/gnome/glade/account.glade: Andreas Köhler's patch to wrap
 	label text in a couple of dialogs.

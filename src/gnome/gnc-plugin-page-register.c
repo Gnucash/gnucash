@@ -1841,7 +1841,7 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
 
   /* All done. Get rid of it. */
   gtk_widget_destroy(dialog);
-  g_free(xml);
+  g_object_unref(xml);
 }
 
 
