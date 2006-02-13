@@ -1247,7 +1247,9 @@ _B (double eint, unsigned beg)
   if (eint == 0.0)
   {
     fprintf (stderr, "Zero Interest.\n");
-    exit (1);
+    fflush(stderr);
+    return 0.0;
+/*    exit (1);*/
   }				/* endif */
 
   return (1.0 + eint * (double) beg) / eint;
@@ -1257,7 +1259,9 @@ _B (double eint, unsigned beg)
 static double
 _C (double eint, double pmt, unsigned beg)
 {
-  return pmt * _B (eint, beg);
+  unsigned check = _B (eint, beg);
+  if(check) return pmt * check;
+  return 0.0;
 }				/* _C */
 
 /* compute Number of Periods from preset data */
@@ -1289,8 +1293,7 @@ _fi_calc_num_payments (double nint,	/* nominal interest rate    */
 {
   double eint = eff_int (nint / 100.0, CF, PF, disc);
   double CC = _C (eint, pmt, bep);
-
-  CC = (CC - fv) / (CC + pv);
+  if(CC)  CC = (CC - fv) / (CC + pv);
   return (CC > 0.0) ? log (CC) / log (1.0 + eint) : 0.0;
 }				/* _fi_calc_num_payments */
 
@@ -1431,6 +1434,7 @@ _fi_calc_payment (unsigned per,	/* number of periods        */
   double eint = eff_int (nint / 100.0, CF, PF, disc);
   double AA = _A (eint, per);
   double BB = _B (eint, bep);
+  if(BB == 0.0) return 0.0;
 
   return -(fv + pv * (AA + 1.0)) / (AA * BB);
 }				/* _fi_calc_payment */
@@ -1530,7 +1534,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
   double AA = _A (eint, per);
   double CC = _C (eint, pmt, bep);
   double D = (AA + 1.0) / (1.0 + eint);
-
+  if(CC == 0) return 0.0;
   return (double) per *(pv + CC) * D - (AA * CC) / eint;
 }				/* fip */
 
