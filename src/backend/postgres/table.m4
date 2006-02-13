@@ -365,7 +365,7 @@ define(`compare_version',
    p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
    p = stpcpy (p, "''`;");
    SEND_QUERY (be,be->buff, -1);
-   sql_version = (int) pgendGetResults (be, get_version_cb, (gpointer) -1);
+   sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));
 
    if (-1 == sql_version) return -1;
    return (sql_version - version_function($@));
@@ -395,7 +395,7 @@ define(`is_deleted',
    p = guid_to_string_buff (qof_entity_get_guid(QOF_ENTITY(ptr)), p);
    p = stpcpy (p, "''` AND change = ''`d''`;");
    SEND_QUERY (be,be->buff, -1);
-   sql_version = (int) pgendGetResults (be, get_version_cb, (gpointer) -1);
+   sql_version = GPOINTER_TO_INT(pgendGetResults (be, get_version_cb, (gpointer) -1));
 
    return sql_version;
 }

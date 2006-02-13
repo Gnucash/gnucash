@@ -6,6 +6,10 @@
 
 2006-02-13  Derek Atkins  <derek@ihtfp.com>
 
+	* src/backend/postgres/table.m4:
+	  use glib macro instead of cast to convert pointer to int.
+	  Fixes #330581.
+
 	* src/report/standard-reports/advanced-portfolio.scm:
 	  revert r13244 in this file because it's badly formed and
 	  breaks the report.  Reopened bug #314554.
