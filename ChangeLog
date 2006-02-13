@@ -1,5 +1,10 @@
 2006-02-13  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome/glade/account.glade: Andreas Köhler's patch to convert
+	the account types list in the account edit dialog to a
+	GtkTreeView/GtkListStore.
+
 	* src/gnome/gnc-plugin-page-register.c: Andreas Köhler's patch to
 	prevent crash when voiding a transaction.
 

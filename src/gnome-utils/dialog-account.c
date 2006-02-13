@@ -56,6 +56,12 @@ typedef enum
   EDIT_ACCOUNT
 } AccountDialogType;
 
+typedef enum
+{
+  COL_TYPE_TEXT,
+  COL_TYPE_ID,
+  NUM_TYPE_COLUMNS
+} AccountTypeColumns;
 
 typedef struct _AccountWindow
 {
@@ -84,7 +90,7 @@ typedef struct _AccountWindow
   GtkWidget * account_scu;
   
   GList * valid_types;
-  GtkWidget * type_list;
+  GtkWidget * type_view;
   GtkTreeView * parent_tree;
 
   GtkWidget * opening_balance_edit;
@@ -1077,82 +1083,71 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
   LEAVE(" ");
 }
 
-
-static void 
-gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
-                        GdkEventButton * event, gpointer data)
+static void
+gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
-  AccountWindow * aw = data;
+  AccountWindow *aw = data;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
   gboolean sensitive;
+  guint type_id;
 
-  if (aw == NULL)
-    return;
+  g_return_if_fail (aw != NULL);
 
-  if (!gtk_clist_get_selectable(type_list, row))
-  {
-    gtk_clist_unselect_row(type_list, row, 0);
-    return;
+  sensitive = FALSE;
+
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+    aw->type = BAD_TYPE;
+  } else {
+
+    gtk_tree_model_get (model, &iter, COL_TYPE_ID, &type_id, -1);
+    aw->type = type_id;
+    last_used_account_type = aw->type;
+
+    gnc_account_commodity_from_type (aw, TRUE);
+
+    sensitive = (aw->type != EQUITY &&
+		 aw->type != CURRENCY &&
+		 aw->type != STOCK &&
+		 aw->type != MUTUAL);
   }
 
-  aw->type = (GNCAccountType)gtk_clist_get_row_data(type_list, row);
+  gtk_widget_set_sensitive (aw->opening_balance_page, sensitive);
 
-  last_used_account_type = aw->type;
-
-  sensitive = (aw->type != EQUITY &&
-               aw->type != CURRENCY &&
-               aw->type != STOCK &&
-               aw->type != MUTUAL);
-
-  gnc_account_commodity_from_type (aw, TRUE);
-  gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
-  if (!sensitive)
-  {
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (aw->notebook), 0);
+  if (!sensitive) {
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                 gnc_numeric_zero ());
   }
 }
 
-
-static void 
-gnc_type_list_unselect_cb(GtkCList * type_list, gint row, gint column,
-                          GdkEventButton * event, gpointer data)
-{
-  AccountWindow * aw = data;
-
-  aw->type = BAD_TYPE;
-}
-
-
 static void
-gnc_account_list_fill(GtkCList *type_list, GList *types)
+gnc_account_type_store_fill (GtkListStore *store, GList *types)
 {
-  gint row, acct_type;
-  gchar *text[2] = { NULL, NULL };
+  GtkTreeIter iter;
+  gint acct_type;
+  gchar *text;
 
-  gtk_clist_freeze(type_list);
-  gtk_clist_clear(type_list);
+  gtk_list_store_clear (store);
 
-  if (types == NULL)
-  {
-    for (acct_type = 0; acct_type < NUM_ACCOUNT_TYPES; acct_type++) 
-    {
-      text[0] = (gchar *) xaccAccountGetTypeStr(acct_type);
-      row = gtk_clist_append(type_list, text);
-      gtk_clist_set_row_data(type_list, row, GINT_TO_POINTER(acct_type));
+  if (types == NULL) {
+    for (acct_type = 0; acct_type < NUM_ACCOUNT_TYPES; acct_type++) {
+      text = (gchar *) xaccAccountGetTypeStr (acct_type);
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+			  COL_TYPE_TEXT, text,
+			  COL_TYPE_ID, GINT_TO_POINTER(acct_type),
+			  -1);
+    }
+  } else {
+    for ( ; types != NULL; types = types->next ) {
+      text = (gchar *) xaccAccountGetTypeStr ((GNCAccountType) (types->data));
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+			  COL_TYPE_TEXT, text,
+			  COL_TYPE_ID, types->data,
+			  -1);
     }
   }
-  else
-  {
-    for ( ; types != NULL; types = types->next )
-    {
-      text[0] = (gchar *) xaccAccountGetTypeStr
-	((GNCAccountType) (types->data));
-      row = gtk_clist_append (type_list, text);
-      gtk_clist_set_row_data(type_list, row, (gpointer)types->data);
-    }
-  }
-  gtk_clist_thaw(type_list);
 }
 
 static GNCAccountType
@@ -1168,25 +1163,41 @@ gnc_account_choose_new_acct_type (AccountWindow *aw)
   return ((GNCAccountType)(aw->valid_types->data));
 }
 
-static void
-gnc_account_type_list_create(AccountWindow *aw)
+static gboolean
+gnc_account_type_get_iter (GtkTreeModel *model, GtkTreeIter *iter, GNCAccountType type)
 {
-  int row;
+  guint type_id;
 
-  gnc_account_list_fill(GTK_CLIST(aw->type_list), aw->valid_types);
+  gtk_tree_model_get_iter_first (model, iter);
 
-  gtk_clist_columns_autosize(GTK_CLIST(aw->type_list));
+  do {
+    gtk_tree_model_get (model, iter, COL_TYPE_ID, &type_id, -1);
+    if (type == type_id)
+      return TRUE;
+  } while (gtk_tree_model_iter_next (model, iter));
 
-  gtk_clist_sort(GTK_CLIST(aw->type_list));
+  return FALSE;
+}
 
-  g_signal_connect(GTK_OBJECT(aw->type_list), "select-row",
-		   G_CALLBACK(gnc_type_list_select_cb), aw);
+static void
+gnc_account_type_view_create (AccountWindow *aw)
+{
+  GtkTreeModel *model;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkCellRenderer *renderer;
+  GtkTreeView *view;
 
-  g_signal_connect(GTK_OBJECT(aw->type_list), "unselect-row",
-		   G_CALLBACK(gnc_type_list_unselect_cb), aw);
+  model = GTK_TREE_MODEL (gtk_list_store_new (NUM_TYPE_COLUMNS,
+					      G_TYPE_STRING,
+					      G_TYPE_UINT));
+  gnc_account_type_store_fill (GTK_LIST_STORE (model), aw->valid_types);
 
-  switch (aw->dialog_type)
-  {
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
+					COL_TYPE_TEXT, GTK_SORT_ASCENDING);
+
+  switch (aw->dialog_type) {
     case NEW_ACCOUNT:
       aw->type = gnc_account_choose_new_acct_type (aw);
       break;
@@ -1195,10 +1206,24 @@ gnc_account_type_list_create(AccountWindow *aw)
       break;
   }
 
-  row = gtk_clist_find_row_from_data(GTK_CLIST(aw->type_list),
-				     (gpointer)aw->type);
-  gtk_clist_select_row(GTK_CLIST(aw->type_list), row, 0);
-  gtk_clist_moveto(GTK_CLIST(aw->type_list), row, 0, 0.5, 0);
+  view = GTK_TREE_VIEW (aw->type_view);
+  gtk_tree_view_set_model (view, model);
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_insert_column_with_attributes (view, -1, NULL,
+					       renderer, "text", COL_TYPE_TEXT,
+					       NULL);
+
+  selection = gtk_tree_view_get_selection (view);
+  g_signal_connect (G_OBJECT (selection), "changed",
+		    G_CALLBACK (gnc_account_type_changed_cb), aw);
+
+  if (gnc_account_type_get_iter (model, &iter, aw->type)) {
+    gtk_tree_selection_select_iter (selection, &iter);
+
+    path = gtk_tree_model_get_path (model, &iter);
+    gtk_tree_view_scroll_to_cell (view, path, NULL, FALSE, 0.0, 0.0);
+    gtk_tree_path_free (path);
+  }
 }
 
 static void
@@ -1381,8 +1406,8 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_label_set_mnemonic_widget (GTK_LABEL(label), aw->transfer_tree);
 
   /* This goes at the end so the select callback has good data. */
-  aw->type_list = glade_xml_get_widget (xml, "type_list");
-  gnc_account_type_list_create (aw);
+  aw->type_view = glade_xml_get_widget (xml, "type_view");
+  gnc_account_type_view_create (aw);
 
   gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(aw->dialog));
 
