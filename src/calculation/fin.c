@@ -1246,8 +1246,7 @@ _B (double eint, unsigned beg)
 {
   /* if eint == 0.0, all processing _must_ stop or 
 	a recursive loop will start. */
-  g_return_val_if_fail(eint == 0.0, 0.0);
- 
+  g_return_val_if_fail(eint != 0.0, 0.0); 
   return (1.0 + eint * (double) beg) / eint;
 }				/* _B */
 
@@ -1255,8 +1254,8 @@ _B (double eint, unsigned beg)
 static double
 _C (double eint, double pmt, unsigned beg)
 {
-  g_return_val_if_fail(eint == 0.0, 0.0);
-  return pmt * _B (eint, beg);
+  g_return_val_if_fail(eint != 0.0, 0.0);
+  return pmt * _B(eint, beg);
 }				/* _C */
 
 /* compute Number of Periods from preset data */
@@ -1288,7 +1287,7 @@ _fi_calc_num_payments (double nint,	/* nominal interest rate    */
 {
   double eint = eff_int (nint / 100.0, CF, PF, disc);
   double CC = _C (eint, pmt, bep);
-  if(CC)  CC = (CC - fv) / (CC + pv);
+  CC = (CC - fv) / (CC + pv);
   return (CC > 0.0) ? log (CC) / log (1.0 + eint) : 0.0;
 }				/* _fi_calc_num_payments */
 
@@ -1426,12 +1425,11 @@ _fi_calc_payment (unsigned per,	/* number of periods        */
 		  unsigned disc,/* discrete/continuous compounding */
 		  unsigned bep)	/* beginning/end of period payment */
 {
-  double eint, AA, BB;
+  double eint = eff_int (nint / 100.0, CF, PF, disc);
+  double AA = _A (eint, per);
+  double BB = _B (eint, bep);
+  g_return_val_if_fail(BB != 0.0, 0.0);
 
-  eint = eff_int (nint / 100.0, CF, PF, disc);
-  g_return_val_if_fail(eint == 0.0, 0.0);
-  AA = _A (eint, per);
-  BB = _B (eint, bep);
   return -(fv + pv * (AA + 1.0)) / (AA * BB);
 }				/* _fi_calc_payment */
 
@@ -1530,7 +1528,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
   double AA = _A (eint, per);
   double CC = _C (eint, pmt, bep);
   double D = (AA + 1.0) / (1.0 + eint);
-  if(CC == 0.0) return 0.0;
+  g_return_val_if_fail(CC != 0.0, 0.0);
   return (double) per *(pv + CC) * D - (AA * CC) / eint;
 }				/* fip */
 
