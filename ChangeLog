@@ -1,3 +1,9 @@
+2006-02-13  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  revert r13244 in this file because it's badly formed and
+	  breaks the report.  Reopened bug #314554.
+
 2006-02-12  Neil Williams <linux@codehelp.co.uk>
 
 	* src/calculation/fin.c : Fix Bug 107876 - financial
