@@ -1,5 +1,11 @@
 2006-02-12  Neil Williams <linux@codehelp.co.uk>
 
+	* src/calculation/fin.c : Fix Bug 107876 - financial
+	calculator would call exit(1) if calculation resulted
+	in an interest rate of zero.
+
+2006-02-12  Neil Williams <linux@codehelp.co.uk>
+
 	* lib/libqof/qof/qofbackend.h : Add error value for files that
 	cannot be opened. ERR_FILEIO_READ_ERROR.
 	* lib/libqof/qof/qofsession.c : Improve QOF_TYPE_COLLECT handling 
