@@ -1243,15 +1243,10 @@ _A (double eint, unsigned per)
 static double
 _B (double eint, unsigned beg)
 {
-  /* the following should call an error routine to report the error */
-  if (eint == 0.0)
-  {
-    fprintf (stderr, "Zero Interest.\n");
-    fflush(stderr);
-    return 0.0;
-/*    exit (1);*/
-  }				/* endif */
-
+  /* if eint == 0.0, all processing _must_ stop or 
+	a recursive loop will start. */
+  if (eint == 0.0) { return 0.0; }
+ 
   return (1.0 + eint * (double) beg) / eint;
 }				/* _B */
 
@@ -1259,8 +1254,9 @@ _B (double eint, unsigned beg)
 static double
 _C (double eint, double pmt, unsigned beg)
 {
-  unsigned check = _B (eint, beg);
-  if(check) return pmt * check;
+  double temp = _B (eint, beg);
+  unsigned check = (int)temp;
+  if(check) return pmt * temp;
   return 0.0;
 }				/* _C */
 
@@ -1534,7 +1530,7 @@ fip (unsigned per, double eint, double pv, double pmt, double fv, unsigned bep)
   double AA = _A (eint, per);
   double CC = _C (eint, pmt, bep);
   double D = (AA + 1.0) / (1.0 + eint);
-  if(CC == 0) return 0.0;
+  if(CC == 0.0) return 0.0;
   return (double) per *(pv + CC) * D - (AA * CC) / eint;
 }				/* fip */
 
