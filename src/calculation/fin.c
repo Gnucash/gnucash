@@ -1199,6 +1199,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <glib.h>
 
 #define FIN_STATICS
 #include "finvar.h"
@@ -1245,7 +1246,7 @@ _B (double eint, unsigned beg)
 {
   /* if eint == 0.0, all processing _must_ stop or 
 	a recursive loop will start. */
-  if (eint == 0.0) { return 0.0; }
+  g_return_val_if_fail(eint == 0.0, 0.0);
  
   return (1.0 + eint * (double) beg) / eint;
 }				/* _B */
@@ -1254,10 +1255,8 @@ _B (double eint, unsigned beg)
 static double
 _C (double eint, double pmt, unsigned beg)
 {
-  double temp = _B (eint, beg);
-  unsigned check = (int)temp;
-  if(check) return pmt * temp;
-  return 0.0;
+  g_return_val_if_fail(eint == 0.0, 0.0);
+  return pmt * _B (eint, beg);
 }				/* _C */
 
 /* compute Number of Periods from preset data */
@@ -1427,11 +1426,12 @@ _fi_calc_payment (unsigned per,	/* number of periods        */
 		  unsigned disc,/* discrete/continuous compounding */
 		  unsigned bep)	/* beginning/end of period payment */
 {
-  double eint = eff_int (nint / 100.0, CF, PF, disc);
-  double AA = _A (eint, per);
-  double BB = _B (eint, bep);
-  if(BB == 0.0) return 0.0;
+  double eint, AA, BB;
 
+  eint = eff_int (nint / 100.0, CF, PF, disc);
+  g_return_val_if_fail(eint == 0.0, 0.0);
+  AA = _A (eint, per);
+  BB = _B (eint, bep);
   return -(fv + pv * (AA + 1.0)) / (AA * BB);
 }				/* _fi_calc_payment */
 
