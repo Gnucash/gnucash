@@ -200,23 +200,28 @@ echo "Ensure $dr/aclocal.m4 is writable ..."
 test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
 
 echo "Running ${INTLTOOLIZE} --force --copy ..."
-${INTLTOOLIZE} --force --copy
+${INTLTOOLIZE} --force --copy || \
+    { echo "**Error**: ${INTLTOOLIZE} failed."; exit 1; }
 
 echo "Running ${LIBTOOLIZE} --force --copy ..."
-${LIBTOOLIZE} --force --copy
+${LIBTOOLIZE} --force --copy || \
+    { echo "**Error**: ${LIBTOOLIZE} failed."; exit 1; }
 
 aclocalinclude="$ACLOCAL_FLAGS -I macros"
 echo "Running ${ACLOCAL} $aclocalinclude ..."
-${ACLOCAL} $aclocalinclude
+${ACLOCAL} $aclocalinclude || \
+    { echo "**Error**: ${ACLOCAL} failed."; exit 1; }
 
 echo "Running ${AUTOHEADER}..."
-${AUTOHEADER} || { echo "**Error**: autoheader failed."; exit 1; }
+${AUTOHEADER} || { echo "**Error**: ${AUTOHEADER} failed."; exit 1; }
 
 echo "Running ${AUTOMAKE} --add-missing --gnu $am_opt ..."
-${AUTOMAKE} --add-missing --gnu $am_opt
+${AUTOMAKE} --add-missing --gnu $am_opt || \
+    { echo "**Error**: ${AUTOMAKE} failed."; exit 1; }
 
 echo "Running ${AUTOCONF} ..."
-${AUTOCONF}
+${AUTOCONF} || \
+    { echo "**Error**: ${AUTOCONF} failed."; exit 1; }
 
 ############################################################
 # Done.
