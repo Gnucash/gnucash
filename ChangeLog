@@ -1,3 +1,9 @@
+2006-02-13  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/glade/account.glade: Andreas Köhler's patch to wrap
+	label text in a couple of dialogs.
+
 2006-02-13  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
