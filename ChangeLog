@@ -1,3 +1,9 @@
+2006-02-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	Andrew Sackville-West's patch to add display options and fix
+	the multicurrency patch.  Fixes #314554 and #330577.
+
 2006-02-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/schemas/*.schemas.in: Make the gconf key wordings
