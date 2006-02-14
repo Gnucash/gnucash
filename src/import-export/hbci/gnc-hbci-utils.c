@@ -21,7 +21,6 @@
 \********************************************************************/
 
 #include "config.h"
-#include "gnc-hbci-utils.h"
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -36,6 +35,9 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h" 
+
+#define AQBANKING_NOWARN_DEPRECATED
+#include "gnc-hbci-utils.h"
 
 #include "hbci-interaction.h"
 #include <aqbanking/version.h>

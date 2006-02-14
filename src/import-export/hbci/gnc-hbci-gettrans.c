@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#define AQBANKING_NOWARN_DEPRECATED
 #include "gnc-hbci-gettrans.h"
 
 #include "gnc-ui.h"

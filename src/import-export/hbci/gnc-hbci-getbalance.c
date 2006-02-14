@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+
+#define AQBANKING_NOWARN_DEPRECATED
 #include <aqbanking/banking.h>
 
 #include "RecnWindow.h"

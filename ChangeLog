@@ -1,3 +1,10 @@
+2006-02-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: For latest aqbanking
+	changes, define AQBANKING_NOWARN_DEPRECATED to disable aqbanking
+	compiler warnings because we will still use those functions for
+	some time to come.
+
 2006-02-13  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c:
