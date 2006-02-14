@@ -10,7 +10,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Change contents of reconciled split.</short>
+        <short>Change contents of reconciled split</short>
         <long>
 	  This dialog is presented before allowing you to change the
 	  contents of a reconciled split.  Allowing these changes can
@@ -27,7 +27,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Mark transaction split as unreconciled.</short>
+        <short>Mark transaction split as unreconciled</short>
         <long>
 	  This dialog is presented before allowing you to mark a
 	  transaction split as unreconciled.  Doing so will throw off
@@ -45,7 +45,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Read only register.</short>
+        <short>Read only register</short>
         <long>
 	  This dialog is presented when a read-only register is opened.
 	</long>
@@ -60,7 +60,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Delete a transaction.</short>
+        <short>Delete a transaction</short>
         <long>
 	  This dialog is presented before allowing you to delete a transaction.
 	</long>
@@ -75,7 +75,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Delete a transaction.</short>
+        <short>Delete a transaction</short>
         <long>
 	  This dialog is presented before allowing you to delete a 
 	  transaction that contains reconciled splits.  Doing so will
@@ -93,7 +93,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove a splits from a transaction.</short>
+        <short>Remove a splits from a transaction</short>
         <long>
 	  This dialog is presented before allowing you to remove a
 	  splits from a transaction.
@@ -109,7 +109,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove a splits from a transaction.</short>
+        <short>Remove a splits from a transaction</short>
         <long>
 	  This dialog is presented before allowing you to remove a
 	  reconciled splits from a transaction. Doing so will throw
@@ -127,7 +127,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove all the splits from a transaction.</short>
+        <short>Remove all the splits from a transaction</short>
         <long>
 	  This dialog is presented before allowing you to remove all
 	  splits from a transaction.
@@ -143,7 +143,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Remove all the splits from a transaction.</short>
+        <short>Remove all the splits from a transaction</short>
         <long>
 	  This dialog is presented before allowing you to remove all
 	  splits (including some reconciled splits) from a transaction.
@@ -161,7 +161,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Commit changes to a transaction.</short>
+        <short>Commit changes to a transaction</short>
         <long>
           This dialog is presented when you attempt to move out of a modified
           transaction.  The changed data must be either saved or discarded.
@@ -177,7 +177,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Duplicating a changed transaction.</short>
+        <short>Duplicating a changed transaction</short>
         <long>
           This dialog is presented when you attempt to duplicate a modified
           transaction.  The changed data must be saved or the duplication canceled.
@@ -193,7 +193,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Commit changes to a invoice_entry.</short>
+        <short>Commit changes to a invoice_entry</short>
         <long>
           This dialog is presented when you attempt to move out of a modified
           invoice entry.  The changed data must be either saved or discarded.
@@ -209,7 +209,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Duplicating a changed invoice_entry.</short>
+        <short>Duplicating a changed invoice_entry</short>
         <long>
           This dialog is presented when you attempt to duplicate a modified
           invoice entry.  The changed data must be saved or the duplication canceled.
@@ -225,7 +225,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Delete a commodity.</short>
+        <short>Delete a commodity</short>
         <long>
 	  This dialog is presented before allowing you to delete a commodity.
 	</long>
@@ -240,7 +240,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Delete a commodity and prices.</short>
+        <short>Delete a commodity and prices</short>
         <long>
 	  This dialog is presented before allowing you to delete a commodity
 	  that has price quotes attached.  Deleting the commodity will delete
@@ -257,7 +257,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Delete multiple price quotes.</short>
+        <short>Delete multiple price quotes</short>
         <long>
 	  This dialog is presented before allowing you to delete multiple price
 	  quotes at one time.

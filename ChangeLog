@@ -1,5 +1,9 @@
 2006-02-14  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/schemas/*.schemas.in: Make the gconf key wordings
+	consistent across all of our schemas files, as discussed and
+	prepared on http://wiki.gnucash.org/wiki/GConf_Wording .
+
 	* src/import-export/hbci/gnc-hbci-utils.c: For latest aqbanking
 	changes, define AQBANKING_NOWARN_DEPRECATED to disable aqbanking
 	compiler warnings because we will still use those functions for

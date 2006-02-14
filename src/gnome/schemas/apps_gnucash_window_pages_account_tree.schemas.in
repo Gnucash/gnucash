@@ -22,7 +22,8 @@
       <default>TRUE</default>
       <locale name="C">
         <short>Show non currency commodities</short>
-        <long>Show non currency commodities</long>
+        <long>If active, non currency commodities (stocks) will be
+        shown. Otherwise they will be hidden.</long>
       </locale>
     </schema>
 
@@ -51,10 +52,10 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Starting date (in seconds from Jan 1, 1970).</short>
+        <short>Starting date (in seconds from Jan 1, 1970)</short>
         <long>
 	  This setting controls the starting date sed in profit/loss
-	  calculations if the start_choice key is set to "absolute".
+	  calculations if the start_choice setting is set to "absolute".
 	  This field should contain a date as represented in seconds
 	  from January 1st, 1970.
         </long>
@@ -68,10 +69,10 @@
       <type>int</type>
       <default>5</default>
       <locale name="C">
-        <short>Starting time period identifier.</short>
+        <short>Starting time period identifier</short>
         <long>
 	  This setting controls the starting date sed in profit/loss
-	  calculations if the start_choice key is set to anything
+	  calculations if the start_choice setting is set to anything
 	  other than "absolute".  This field should contain a value
 	  between 0 and 8.
         </long>
@@ -103,10 +104,10 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Ending date (in seconds from Jan 1, 1970).</short>
+        <short>Ending date (in seconds from Jan 1, 1970)</short>
         <long>
 	  This setting controls the ending date sed in profit/loss
-	  calculations if the end_choice key is set to "absolute".
+	  calculations if the end_choice setting is set to "absolute".
 	  This field should contain a date as represented in seconds
 	  from January 1st, 1970.
         </long>
@@ -120,10 +121,10 @@
       <type>int</type>
       <default>5</default>
       <locale name="C">
-        <short>Ending time period identifier.</short>
+        <short>Ending time period identifier</short>
         <long>
 	  This setting controls the ending date sed in profit/loss
-	  calculations if the end_choice key is set to anything
+	  calculations if the end_choice setting is set to anything
 	  other than "absolute".  This field should contain a value
 	  between 0 and 8.
         </long>

@@ -40,8 +40,9 @@
       <locale name="C">
         <short>Close dialog when finished</short>
         <long>
-	  Set this key to TRUE to automatically close the window when
-	  you finish the HBCI import process.
+	  If active, the window will be closed automatically when you
+	  finish the HBCI/AqBanking import process. Otherwise it will
+	  stay open.
 	</long>
       </locale>
     </schema>
@@ -53,8 +54,11 @@
       <type>bool</type>
       <default>False</default>
       <locale name="C">
-        <short>Remember the PIN for HBCI in memory during a session.</short>
-        <long>Remember the PIN for HBCI in memory during a session.</long>
+        <short>Remember the PIN in memory</short>
+        <long>If active, the PIN for HBCI/AqBanking actions will be
+        remembered in memory during a session. Otherwise it will have
+        to be entered again each time during a session when it is
+        needed.</long>
       </locale>
     </schema>
 
@@ -66,8 +70,8 @@
       <type>bool</type>
       <default>False</default>
       <locale name="C">
-        <short>Activate verbose debug messages for HBCI Online Banking.</short>
-        <long>Activate verbose debug messages for HBCI Online Banking.</long>
+        <short>Verbose HBCI debug messages</short>
+        <long>Enables verbose debug messages for HBCI/AqBanking Online Banking.</long>
       </locale>
     </schema>
 

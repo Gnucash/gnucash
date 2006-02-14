@@ -15,7 +15,7 @@
       <locale name="C">
         <short>Width of a column in the dialog</short>
         <long>
-	  This key contains the width of the named column in the most
+	  This setting contains the width of the named column in the most
 	  recently closed register window.  Changing these values will
 	  change the sizes of the columns in the next opened register
 	</long>

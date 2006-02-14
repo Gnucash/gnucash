@@ -59,7 +59,7 @@
       <locale name="C">
         <short>Search only in active items</short>
         <long>
-	  This key indicates whether to search in all items in the
+	  This setting indicates whether to search in all items in the
 	  current class, or only in 'active' items in the current
 	  class.
 	</long>
@@ -78,9 +78,9 @@
       <locale name="C">
         <short>Last pathname used</short>
         <long>
-	  This key contains the last pathname used by this dialog.  It
-	  will be used as the initial filename/pathname the next time
-	  this dialog is opened.
+	  This field contains the last pathname used by this dialog.
+	  It will be used as the initial filename/pathname the next
+	  time this dialog is opened.
 	</long>
       </locale>
     </schema>
@@ -94,10 +94,10 @@
       <type>list</type>
       <list_type>string</list_type>
       <locale name="C">
-        <short>How is the key column sorted</short>
+        <short>Columns used for sorting</short>
         <long>
-	  This key indicates which column in the tree is used for
-	  sorting.  Legal values for this key are the name of any
+	  This setting indicates which column in the tree is used for
+	  sorting.  Possible values for this setting are the name of any
 	  column in this dialog (see the column_order key) or the
 	  keyword 'none'.
 	</long>
@@ -113,10 +113,10 @@
       <type>list</type>
       <list_type>string</list_type>
       <locale name="C">
-        <short>How is the key column sorted</short>
+        <short>Sort column ascending or descending</short>
         <long>
-	  This key indicates how the key column is sorted.  Legal
-	  values for this key are 'ascending' and 'descending'.
+	  This setting indicates how the key column is sorted.  Possible
+	  values for this setting are 'ascending' and 'descending'.
 	</long>
       </locale>
     </schema>
@@ -128,9 +128,10 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Show the new user dialog.</short>
+        <short>Show the new user dialog</short>
         <long>
-	 Show the new user dialog.
+	 If active, the new user dialog will be shown. Otherwise it
+	 will not be shown.
 	</long>
       </locale>
     </schema>
@@ -142,9 +143,11 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Show the new hierarchy dialog whenever the "New File" menu item is chosen.</short>
+        <short>New hierarchy dialog on "New File"</short>
         <long>
-	 Show the new hierarchy dialog whenever the "New File" menu item is chosen.
+	 If active, the new hierarchy dialog will be shown whenever
+	 the "New File" menu item is chosen. Otherwise it will not be
+	 shown.
 	</long>
       </locale>
     </schema>
@@ -156,7 +159,7 @@
       <type>float</type>
       <default>1.0</default>
       <locale name="C">
-        <short>Default to 'new search' if fewer than this number of items is returned.</short>
+        <short>Default to 'new search' if fewer than this number of items is returned</short>
         <long>Default to 'new search' if fewer than this number of items is returned.</long>
       </locale>
     </schema>

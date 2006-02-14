@@ -19,7 +19,7 @@
       <locale name="C">
         <short>Window position and size</short>
         <long>
-	  This key contains the coordinates describing the last
+	  This setting contains the coordinates describing the last
 	  location of the window.  The numbers are the X and Y
 	  coordinates of the top left corner of the window, and the
 	  width and height of the window.
@@ -40,9 +40,9 @@
       <locale name="C">
         <short>Search only in active items</short>
         <long>
-	  This key indicates whether to search in all items in the
-	  current class, or only in 'active' items in the current
-	  class.
+	  If active, only the 'active' items in the current class will
+	  be searched. Otherwise all items in the current class will
+	  be searched.
 	</long>
       </locale>
     </schema>
@@ -54,11 +54,11 @@
       <type>bool</type>
       <default>FALSE</default>
       <locale name="C">
-        <short>Create a new window for each new invoice.</short>
+        <short>Open new invoice in new window</short>
         <long>
-	  Set this value to TRUE to have gnucash open each new
-	  invoice in its own window.  Set to FALSE to have gnucash
-	  open new invoices as tabs in the front window.
+	  If active, each new invoice will be opened in a new
+	  window. Otherwise a new invoice will be opened as a tab in
+	  the main window.
 	</long>
       </locale>
     </schema>
@@ -70,9 +70,9 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Accumulate multiple splits into one.</short>
+        <short>Accumulate multiple splits into one</short>
         <long>
-	  If this field is TRUE then multiple entries in an invoice
+	  If this field is active then multiple entries in an invoice
 	  that transfer to the same account will be accumulated into a
 	  single split.  This field can be overridden per invoice in
 	  the Posting dialog.
@@ -90,7 +90,7 @@
       <locale name="C">
         <short>Is tax included in this type of business entry?</short>
         <long>
-	  If set to TRUE then tax is included by default in entries of
+	  If set to active then tax is included by default in entries of
 	  this type.  This setting is inherited by new customers and
 	  vendors.
 	</long>
@@ -104,7 +104,7 @@
       <type>float</type>
       <default>10.0</default>
       <locale name="C">
-        <short>The number of rows in an invoice.</short>
+        <short>The number of rows in an invoice</short>
         <long>
 	  This field sets the number of rows to show in an invoice.
 	  It does not actually affect the display of the contents of
@@ -121,12 +121,12 @@
       <type>bool</type>
       <default>TRUE</default>
       <locale name="C">
-        <short>Show bills due reminder at startup.</short>
+        <short>Show bills due reminder at startup</short>
         <long>
-	  If TRUE, at startup Gnucash will check to see whether any
+	  If active, at startup Gnucash will check to see whether any
 	  bills will become due soon.  If so, it will present the user
 	  with a reminder dialog.  The definition of "soon" is
-	  controlled by the "Days in Advance" setting.  If FALSE,
+	  controlled by the "Days in Advance" setting.  Otherwise
 	  gnucash does not check for due bills.
 	</long>
       </locale>
@@ -139,11 +139,11 @@
       <type>float</type>
       <default>7.0</default>
       <locale name="C">
-        <short>Show bills due within this many days.</short>
+        <short>Show bills due within this many days</short>
         <long>
 	  This field defines the number of days in advance that
 	  Gnucash will check for due bills.  Its value is only used if
-	  the "Notify when due" setting is TRUE.
+	  the "Notify when due" setting is active.
 	</long>
       </locale>
     </schema>

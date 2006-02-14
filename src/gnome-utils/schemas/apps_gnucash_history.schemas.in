@@ -9,7 +9,7 @@
       <locale name="C">
         <short>Number of files in history</short>
         <long>
-          This key contains the number of files to keep in the
+          This setting contains the number of files to keep in the
           Recently Opened Files menu. This value may be set to zero to
           disable the file history.  This number has a maximum value
           of 10.
@@ -26,7 +26,7 @@
       <locale name="C">
         <short>Most recently opened file</short>
         <long>
-          This key contains the full path of the most recently opened file.
+          This field contains the full path of the most recently opened file.
 	</long>
       </locale>
     </schema>
@@ -49,7 +49,7 @@
       <locale name="C">
         <short>Next most recently opened file</short>
         <long>
-          This key contains the full path of the next most recently opened file.
+          This field contains the full path of the next most recently opened file.
 	</long>
       </locale>
     </schema>

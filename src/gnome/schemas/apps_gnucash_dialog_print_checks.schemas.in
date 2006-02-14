@@ -9,7 +9,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>The predefined check format to use.</short>
+        <short>Index of predefined check format to use</short>
         <long>This value specifies the predefined check format to use.  The number is the 0-based index into the list of known check formats.</long>
       </locale>
     </schema>
@@ -21,8 +21,8 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Which check position to print.</short>
-        <long>On preprinted checks containing multiple checks per page, this key specifies which check position to print.  The legal values are 0, 1 and 2, correspongint to the top, middle and bottom checks on the page.</long>
+        <short>Which check position to print</short>
+        <long>On preprinted checks containing multiple checks per page, this setting specifies which check position to print.  The possible values are 0, 1 and 2, corresponding to the top, middle and bottom checks on the page.</long>
       </locale>
     </schema>
 
@@ -33,7 +33,7 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>The date format to use.</short>
+        <short>Date format to use</short>
         <long>This is the numerical identifier of the predefined date format to use.</long>
       </locale>
     </schema>
@@ -45,8 +45,8 @@
       <type>string</type>
       <default>0</default>
       <locale name="C">
-        <short>The custom date format.</short>
-        <long>If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string.</long>
+        <short>Custom date format</short>
+        <long>If the 'date_format' is set to indicate a custom date format, this value is used as an argument to strftime to produce the date to be printed.  It may be any valid strftime string; for more information about this format, read the manual page of strftime by "man 3 strftime".</long>
       </locale>
     </schema>
 
@@ -57,7 +57,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to print the payee name.</short>
+        <short>Position of payee name</short>
         <long>This value contains the X,Y coordinates for the start of the payee line on the check.</long>
       </locale>
     </schema>
@@ -69,7 +69,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to print the date.</short>
+        <short>Position of date line</short>
         <long>This value contains the X,Y coordinates for the start of the date line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
       </locale>
     </schema>
@@ -81,7 +81,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to print the check amount in words.</short>
+        <short>Position of check amount in words</short>
         <long>This value contains the X,Y coordinates for the start of the written amount line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
       </locale>
     </schema>
@@ -93,7 +93,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to print the check amount in numbers.</short>
+        <short>Position of check amount in numbers</short>
         <long>This value contains the X,Y coordinates for the start of the numerical amount line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
       </locale>
     </schema>
@@ -105,7 +105,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to print the memo line.</short>
+        <short>Position of memo line</short>
         <long>This value contains the X,Y coordinates for the start of the memo line on the check.  Coordinates are from the lower left corner of the specified check position.</long>
       </locale>
     </schema>
@@ -117,7 +117,7 @@
       <type>list</type>
       <list_type>int</list_type>
       <locale name="C">
-        <short>Where to place the check on the page.</short>
+        <short>Position of check on page</short>
         <long>This value contains the Y coordinate for the bottom edge of the check.  This coordinate is from the bottom edge of the sheet of paper.</long>
       </locale>
     </schema>

@@ -45,7 +45,7 @@
           Enable the SKIP action in the transaction matcher.  If
           enabled, a transaction whose best match's score is in the
           yellow zone (above the Auto-ADD threshold but below the
-          Auto-CLEAR threshold) will be SKIPed by default.
+          Auto-CLEAR threshold) will be skipped by default.
 	</long>
       </locale>
     </schema>
@@ -72,8 +72,11 @@
       <type>bool</type>
       <default>FALSE</default>
       <locale name="C">
-        <short>Use bayesian matching.</short>
-        <long>Use bayesian matching.</long>
+        <short>Use bayesian matching</short>
+        <long>Enables bayesian matching when matching imported
+        transaction against existing transactions. Otherwise a less
+        sophisticated rule-based matching mechanism will be
+        used.</long>
       </locale>
     </schema>
 
@@ -84,13 +87,11 @@
       <type>float</type>
       <default>1.0</default>
       <locale name="C">
-        <short>
-          The minimum score a potential match must have to be
-          displayed in the match list.
-        </short>
+        <short>Minimum score to be displayed</short>
         <long>
-          The minimum score a potential match must have to be
-          displayed in the match list.
+          This field specifies the minimum matching score a potential
+          matching transaction must have to be displayed in the match
+          list.
         </long>
       </locale>
     </schema>
@@ -102,13 +103,13 @@
       <type>float</type>
       <default>3.0</default>
       <locale name="C">
-        <short>
-          Score below this is automatically added.
-        </short>
+        <short>Add matching transactions below this score</short>
         <long>
-          A transaction whose best match's score is in the red zone
-          (above the display threshold but below or equal to the
-          Auto-ADD threshold) will be ADDed by default.
+          This field specifies the threshold below which a matching
+          transaction will be added automatically. A transaction whose
+          best match's score is in the red zone (above the display
+          minimum score but below or equal to the Add match score)
+          will be added to the gnucash file by default.
         </long>
       </locale>
     </schema>
@@ -120,13 +121,12 @@
       <type>float</type>
       <default>6.0</default>
       <locale name="C">
-        <short>
-          Score above this is automatically cleared.
-        </short>
+        <short>Clear matching transactions above this score</short>
         <long>
-          A transaction whose best match's score is in the green zone
-          (above or equal to the Auto-CLEAR threshold) will be CLEARed
-          by default.
+          This field specifies the threshold above which a matching
+          transaction will be cleared by default. A transaction whose
+          best match's score is in the green zone (above or equal to
+          this Clear threshold) will be cleared by default.
         </long>
       </locale>
     </schema>
@@ -138,20 +138,19 @@
       <type>float</type>
       <default>2.0</default>
       <locale name="C">
-        <short>
-          Maximum atm fees in your area.
-        </short>
+        <short>Maximum ATM fee amount in your area</short>
         <long>
-          In some places commercial ATMs (not belonging to a financial
-          institution) are installed in places like convienience
-          store.  These ATM add its fee directly to the amount instead
-          of showing up as a separate transaction or in your monthly
-          banking fees.  For example, you withdraw 100$, and you are
-          charged 101,50$ plus Interac fees.  If you manually entered
-          that 100$, the amounts won't match.  You should set this to
-          whatever is the maximum such fee in your area (in units of
-          your local currency), so the transaction will be recognised
-          as a match.
+          This field specifies the extra fee that is taken into
+          account when matching imported transactions. In some places
+          commercial ATMs (not belonging to a financial institution)
+          are installed in places like convienience store.  These ATM
+          add its fee directly to the amount instead of showing up as
+          a separate transaction or in your monthly banking fees.  For
+          example, you withdraw 100$, and you are charged 101,50$ plus
+          Interac fees.  If you manually entered that 100$, the
+          amounts won't match.  You should set this to whatever is the
+          maximum such fee in your area (in units of your local
+          currency), so the transaction will be recognised as a match.
         </long>
       </locale>
     </schema>
