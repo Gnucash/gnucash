@@ -60,8 +60,10 @@ qofinclude_HEADERS = \
    qofquerycore.h    \
    qofsession.h      \
    qofsql.h          \
-   qofla-dir.h       \
    qof_book_merge.h
+
+nodist_qofinclude_HEADERS = \
+   qofla-dir.h     
 
 noinst_HEADERS = \
    gnc-event-p.h \
@@ -82,7 +84,7 @@ EXTRA_DIST = \
   qofla-dir.h.in \
   qofmath128.c
 
-qofla-dir.h: qofla-dir.h.in Makefile
+qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${QOFLIBdir}:g'

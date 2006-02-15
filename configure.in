@@ -465,7 +465,7 @@ else
 fi
 if test x$QOF_XML_DIR = x; then
 	QOF_LIB_DIR='${libdir}'
-	QOF_CFLAGS='-I${top_srcdir}/lib/libqof/qof'
+	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
 	QOF_LIBS='${top_builddir}/lib/libqof/qof/libqof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
