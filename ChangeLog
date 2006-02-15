@@ -1,3 +1,15 @@
+2006-02-15  Neil Williams  <linux@codehelp.co.uk>
+
+	* autogen.sh : 
+	* configure.ac : Add notice:
+	CashUtil development within gnucash has halted.
+	It may or may not be revived after gnucash 2.0.0 -
+	development has restarted outside gnucash, see
+	http://www.linux.codehelp.co.uk/cashutil/
+
+	This branch is NOT suitable for merging back into
+	the svn trunk.
+
 2006-01-11  Neil Williams  <linux@codehelp.co.uk>
 
 	Preparing the gnucash2 binary and shutting
