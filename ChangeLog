@@ -1,3 +1,8 @@
+2006-02-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/business-core.scm: 
+	  Fix a typo; forgot one procedure name-change instance.
+
 2006-02-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:

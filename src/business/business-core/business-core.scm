@@ -40,7 +40,7 @@
 	       (gnc:owner-get-type owner) #f)))
     (case type
       ((gnc-owner-job)
-       (gnc:owner-get-dep-name (gnc:job-get-owner
+       (gnc:owner-get-name-dep (gnc:job-get-owner
 				(gnc:owner-get-job owner))))
       (else (just-name (gnc:owner-get-name owner))))))
 
