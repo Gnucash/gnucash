@@ -1292,33 +1292,13 @@ fi
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
-AC_ARG_ENABLE(opt-style-install,
-  [  --enable-opt-style-install   install everything in subdirs of --prefix],
-  [case "${enableval}" in
-     yes) gnc_opt_style_install=true ;;
-     no)  gnc_opt_style_install=false ;;
-     *) AC_MSG_ERROR(bad value ${enableval} for --enable-opt-style-install) ;;
-   esac],
-   [gnc_opt_style_install=false])
-
-if test x${gnc_opt_style_install} = xtrue
-then
-  GNC_CONFIGDIR='${sysconfdir}'
-  GNC_DOC_INSTALL_DIR='${datadir}/doc'
-  GNC_INCLUDE_DIR='${includedir}'
-  GNC_LIBDIR='${libdir}'
-  GNC_SCM_INSTALL_DIR='${datadir}/scm'
-  GNC_SHAREDIR='${datadir}'
-  GNC_LIBEXECDIR='${libexecdir}'
-else
-  GNC_CONFIGDIR='${sysconfdir}/gnucash'
-  GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
-  GNC_INCLUDE_DIR='${includedir}/gnucash'
-  GNC_LIBDIR='${pkglibdir}'
-  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
-  GNC_SHAREDIR='${pkgdatadir}'
-  GNC_LIBEXECDIR='${libexecdir}/gnucash'
-fi
+GNC_CONFIGDIR='${sysconfdir}/gnucash'
+GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
+GNC_INCLUDE_DIR='${includedir}/gnucash'
+GNC_LIBDIR='${pkglibdir}'
+GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
+GNC_SHAREDIR='${pkgdatadir}'
+GNC_LIBEXECDIR='${libexecdir}/gnucash'
 
 GNC_ACCOUNTS_DIR='${GNC_SHAREDIR}/accounts'
 GNC_GLADE_DIR='${GNC_SHAREDIR}/glade'
