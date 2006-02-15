@@ -41,6 +41,7 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
+#include "gnc-tree-model-account-types.h"
 #include "gnc-tree-view-account.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -55,13 +56,6 @@ typedef enum
   NEW_ACCOUNT,
   EDIT_ACCOUNT
 } AccountDialogType;
-
-typedef enum
-{
-  COL_TYPE_TEXT,
-  COL_TYPE_ID,
-  NUM_TYPE_COLUMNS
-} AccountTypeColumns;
 
 typedef struct _AccountWindow
 {
@@ -1087,22 +1081,19 @@ static void
 gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 {
   AccountWindow *aw = data;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
   gboolean sensitive;
-  guint type_id;
+  GNCAccountType type_id;
 
   g_return_if_fail (aw != NULL);
 
   sensitive = FALSE;
 
-  if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+  type_id = gnc_tree_model_account_types_get_selection_single(selection);
+  if (type_id == NO_TYPE) {
     aw->type = BAD_TYPE;
   } else {
-
-    gtk_tree_model_get (model, &iter, COL_TYPE_ID, &type_id, -1);
     aw->type = type_id;
-    last_used_account_type = aw->type;
+    last_used_account_type = type_id;
 
     gnc_account_commodity_from_type (aw, TRUE);
 
@@ -1120,36 +1111,6 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
   }
 }
 
-static void
-gnc_account_type_store_fill (GtkListStore *store, GList *types)
-{
-  GtkTreeIter iter;
-  gint acct_type;
-  gchar *text;
-
-  gtk_list_store_clear (store);
-
-  if (types == NULL) {
-    for (acct_type = 0; acct_type < NUM_ACCOUNT_TYPES; acct_type++) {
-      text = (gchar *) xaccAccountGetTypeStr (acct_type);
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter,
-			  COL_TYPE_TEXT, text,
-			  COL_TYPE_ID, GINT_TO_POINTER(acct_type),
-			  -1);
-    }
-  } else {
-    for ( ; types != NULL; types = types->next ) {
-      text = (gchar *) xaccAccountGetTypeStr ((GNCAccountType) (types->data));
-      gtk_list_store_append (store, &iter);
-      gtk_list_store_set (store, &iter,
-			  COL_TYPE_TEXT, text,
-			  COL_TYPE_ID, types->data,
-			  -1);
-    }
-  }
-}
-
 static GNCAccountType
 gnc_account_choose_new_acct_type (AccountWindow *aw)
 {
@@ -1163,39 +1124,15 @@ gnc_account_choose_new_acct_type (AccountWindow *aw)
   return ((GNCAccountType)(aw->valid_types->data));
 }
 
-static gboolean
-gnc_account_type_get_iter (GtkTreeModel *model, GtkTreeIter *iter, GNCAccountType type)
-{
-  guint type_id;
-
-  gtk_tree_model_get_iter_first (model, iter);
-
-  do {
-    gtk_tree_model_get (model, iter, COL_TYPE_ID, &type_id, -1);
-    if (type == type_id)
-      return TRUE;
-  } while (gtk_tree_model_iter_next (model, iter));
-
-  return FALSE;
-}
-
 static void
 gnc_account_type_view_create (AccountWindow *aw)
 {
   GtkTreeModel *model;
   GtkTreeSelection *selection;
-  GtkTreeIter iter;
-  GtkTreePath *path;
   GtkCellRenderer *renderer;
   GtkTreeView *view;
-
-  model = GTK_TREE_MODEL (gtk_list_store_new (NUM_TYPE_COLUMNS,
-					      G_TYPE_STRING,
-					      G_TYPE_UINT));
-  gnc_account_type_store_fill (GTK_LIST_STORE (model), aw->valid_types);
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					COL_TYPE_TEXT, GTK_SORT_ASCENDING);
+  GList *list;
+  guint32 types = 0;
 
   switch (aw->dialog_type) {
     case NEW_ACCOUNT:
@@ -1206,24 +1143,29 @@ gnc_account_type_view_create (AccountWindow *aw)
       break;
   }
 
+  if (aw->valid_types == NULL)
+      types = xaccAccountTypesValid () | (1 << aw->type);
+  else
+      for (list = aw->valid_types; list; list = list->next)
+          types |= (1 << (guint) list->data);
+
+  model = gnc_tree_model_account_types_filter_using_mask (types);
+
   view = GTK_TREE_VIEW (aw->type_view);
   gtk_tree_view_set_model (view, model);
+  g_object_unref (G_OBJECT (model));
+
   renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_insert_column_with_attributes (view, -1, NULL,
-					       renderer, "text", COL_TYPE_TEXT,
-					       NULL);
+  gtk_tree_view_insert_column_with_attributes (
+    view, -1, NULL, renderer,
+    "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
+    NULL);
 
   selection = gtk_tree_view_get_selection (view);
   g_signal_connect (G_OBJECT (selection), "changed",
 		    G_CALLBACK (gnc_account_type_changed_cb), aw);
-
-  if (gnc_account_type_get_iter (model, &iter, aw->type)) {
-    gtk_tree_selection_select_iter (selection, &iter);
-
-    path = gtk_tree_model_get_path (model, &iter);
-    gtk_tree_view_scroll_to_cell (view, path, NULL, FALSE, 0.0, 0.0);
-    gtk_tree_path_free (path);
-  }
+  
+  gnc_tree_model_account_types_set_selection(selection, 1 << aw->type);
 }
 
 static void
