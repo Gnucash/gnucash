@@ -560,6 +560,7 @@
 	  (setup-query query owner account end-date)
 
 	  (gnc:html-document-set-title!
+	   document
            (string-append (_ type-str ) " " (_ "Report:") " " (gnc:owner-get-name owner)))
 
            (gnc:html-document-set-headline!

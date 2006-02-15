@@ -6,6 +6,9 @@
 	* lib/libqof/qof/Makefile.am: keep qofla-dir.h out of the dist
 	* configure.in: look in builddir for qof includes.
 
+	* src/business/business-reports/owner-report.scm:
+	  set the document title properly.
+
 2006-02-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:
