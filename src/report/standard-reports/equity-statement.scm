@@ -101,46 +101,6 @@
 (define opthelp-closing-regexp
   (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <start-date> to <end-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist start-date end-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date start-date) " to "
-;;		  (gnc:print-date end-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account start-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account end-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
-
 ;; options generator
 (define (equity-statement-options-generator)
   (let* ((options (gnc:new-options))
@@ -484,11 +444,11 @@
 	  
 	  ;; start and end retained earnings (income - expenses)
 	  (set! neg-pre-start-retained-earnings
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 income-expense-accounts
 		 forever-ago start-date-tp)) ; OK
 	  (set! neg-pre-end-retained-earnings
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 income-expense-accounts
 		 forever-ago end-date-tp)) ; OK
 	  ;; neg-pre-end-retained-earnings is not used to calculate
@@ -503,7 +463,7 @@
 		)
 	  ;; find retained earnings for the period
 	  (set! neg-net-income
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 income-expense-accounts
 		 start-date-tp end-date-tp)) ; OK
 	  ;; revert the income/expense to its pre-closing balance

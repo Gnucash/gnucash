@@ -644,6 +644,18 @@
 		  account from to #t)) group))
     this-collector))
 
+;; This calculates the increase in the balance(s) of all accounts in
+;; <accountlist> over the period from <from-date> to <to-date>.
+;; Returns a commodity collector.
+(define (gnc:accountlist-get-comm-balance-interval accountlist from to)
+  (let ((collector (gnc:make-commodity-collector)))
+    (for-each (lambda (account)
+                (gnc:commodity-collector-merge 
+                 collector (gnc:account-get-comm-balance-interval 
+                            account from to #f)))
+              accountlist)
+    collector))
+
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))

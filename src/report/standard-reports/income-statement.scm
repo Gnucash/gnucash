@@ -132,46 +132,6 @@
 (define opthelp-closing-regexp
   (N_ "Causes the Closing Entries Pattern to be treated as a regular expression"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <from-date> to <to-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist from-date to-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date from-date) " to "
-;;		  (gnc:print-date to-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account from-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account to-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
-
 ;; options generator
 (define (income-statement-options-generator)
   (let* ((options (gnc:new-options))
@@ -557,12 +517,12 @@
 		 start-date-tp end-date-tp)
 		) ;; this is norm negative (credit)
 	  (set! expense-total
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 expense-accounts
 		 start-date-tp end-date-tp))
 	  (expense-total 'minusmerge expense-closing #f)
 	  (set! neg-revenue-total
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 revenue-accounts
 		 start-date-tp end-date-tp))
 	  (neg-revenue-total 'minusmerge revenue-closing #f)

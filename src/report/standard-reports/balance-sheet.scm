@@ -147,45 +147,6 @@
 (define optname-show-rates (N_ "Show Exchange Rates"))
 (define opthelp-show-rates (N_ "Show the exchange rates used"))
 
-;; This calculates the increase in the balance(s) of all accounts in
-;; <accountlist> over the period from <from-date> to <to-date>.
-;; Returns a commodity collector.
-;;
-;; Note: There is both a gnc:account-get-comm-balance-interval and
-;; gnc:group-get-comm-balance-interval which could replace this
-;; function....
-;;
-(define (accountlist-get-comm-balance-at-date accountlist from-date to-date)
-;;  (for-each (lambda (x) (display x))
-;;	    (list "computing from: " (gnc:print-date from-date) " to "
-;;		  (gnc:print-date to-date) "\n"))
-  (let ((collector (gnc:make-commodity-collector)))
-    (for-each (lambda (account)
-                (let* (
-		       (start-balance
-			(gnc:account-get-comm-balance-at-date
-			 account from-date #f))
-		       (sb (cadr (start-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       (end-balance
-			(gnc:account-get-comm-balance-at-date 
-			 account to-date #f))
-		       (eb (cadr (end-balance
-				  'getpair
-				  (gnc:account-get-commodity account)
-				  #f)))
-		       )
-;;		  (for-each (lambda (x) (display x))
-;;			    (list "Start balance: " sb " : "
-;;				  (gnc:account-get-name account) " : end balance: "
-;;				  eb "\n"))
-                  (collector 'merge end-balance #f)
-		  (collector 'minusmerge start-balance #f)
-		  ))
-              accountlist)
-    collector))
 
 ;; options generator
 (define (balance-sheet-options-generator)
@@ -556,7 +517,7 @@
 	  (gnc:report-percent-done 12)
 	  ;; sum any retained earnings
 	  (set! neg-retained-earnings
-		(accountlist-get-comm-balance-at-date
+		(gnc:accountlist-get-comm-balance-interval
 		 income-expense-accounts
 		 forever-ago date-tp))
 	  (set! retained-earnings (gnc:make-commodity-collector))
