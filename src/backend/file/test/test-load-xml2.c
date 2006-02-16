@@ -34,6 +34,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <glib.h>
+#include <glib-object.h>
 
 #include "cashobjects.h"
 #include "Group.h"
@@ -108,6 +109,7 @@ main (int argc, char ** argv)
     const char *location = getenv("GNC_TEST_FILES");
     DIR *xml2_dir;
 
+    g_type_init();
     qof_init();
     cashobjects_register();
     do_test(
@@ -118,7 +120,6 @@ main (int argc, char ** argv)
     {
         location = "test-files/xml2";
     }
-
 
     xaccLogDisable();
     

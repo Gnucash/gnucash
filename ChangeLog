@@ -19,6 +19,9 @@
 	  move jsled's g-type initialization into the module init
 	  this way we don't need to worry about it in every test app.
 
+	* src/backend/file/test/test-load/xml2.c:
+	  need g_type_init() because we don't actually "load" the file backend.
+
 2006-02-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/test/test-load-xml2.c (main): Initialize
