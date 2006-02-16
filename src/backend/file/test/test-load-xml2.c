@@ -26,7 +26,6 @@
  * @brief test the loading of a version-2 gnucash XML file
  */
 
-#include <glib.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -34,6 +33,9 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <string.h>
+#include <glib.h>
+#include <glib-object.h>
+
 #include "cashobjects.h"
 #include "Group.h"
 #include "TransLog.h"
@@ -107,11 +109,13 @@ main (int argc, char ** argv)
     const char *location = getenv("GNC_TEST_FILES");
     DIR *xml2_dir;
 
-	qof_init();
-	cashobjects_register();
-	do_test(
-		qof_load_backend_library ("../", GNC_LIB_NAME, GNC_LIB_INIT),
-		" loading gnc-backend-file GModule failed");
+    g_type_init();
+
+    qof_init();
+    cashobjects_register();
+    do_test(
+            qof_load_backend_library ("../", GNC_LIB_NAME, GNC_LIB_INIT),
+            " loading gnc-backend-file GModule failed");
 
     if (!location)
     {
