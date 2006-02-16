@@ -402,14 +402,8 @@ AC_SUBST(LIBXML2_CFLAGS)
 AC_SUBST(LIBXML2_LIBS)
 AC_SUBST(LIBXML_VERSION)
 
-# Silly us -- we have two Makefile macros for the same set of libraries!
-XML_CFLAGS=${LIBXML2_CFLAGS}
-XML_LIBS=${LIBXML2_LIBS}
-AC_SUBST(XML_CFLAGS)
-AC_SUBST(XML_LIBS)
-
 oLIBS="$LIBS"
-LIBS="$LIBS $XML_LIBS"
+LIBS="$LIBS $LIBXML2_LIBS"
 
 # Compile a test program to verify that the xml2 library works.
 AC_CHECK_LIB(xml2, xmlElemDump, [:], [

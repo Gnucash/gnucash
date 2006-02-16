@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -I$(top_srcdir) $(LIBGSF_CFLAGS) $(LIBXML_CFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir) $(LIBGSF_CFLAGS) $(LIBXML2_CFLAGS)
 LDADD = ../gsf/libgsf-1.la $(LIBGSF_LIBS)
 
 check_PROGRAMS = test-msole1 test-msole2 test-cp-msole test-msvba	\

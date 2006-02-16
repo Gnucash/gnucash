@@ -233,7 +233,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine/test-core \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/backend/qsf \
-  ${XML_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GUILE_INCS}

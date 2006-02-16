@@ -6,6 +6,14 @@
 	  - add a few more comments
 	  - no need to check for libxml2 twice  (more work to do here).
 
+	* src/backend/file/test/Makefile.am:
+	* src/backend/file/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	* src/gnome-utils/Makefile.am:
+	* lib/libgsf-1.12.3/tests/Makefile.am:
+	* configure.in:
+	  combine XML_{CFLAGS,LIBS} into LIBXML2_{CLFLAGS,LIBS}
+
 2006-02-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/test/test-load-xml2.c (main): Initialize

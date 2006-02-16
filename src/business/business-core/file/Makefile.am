@@ -9,7 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
-  ${XML_CFLAGS} \
+  ${LIBXML2_CFLAGS} \
   ${QOF_CFLAGS} \
   ${GLIB_CFLAGS}
 
@@ -43,5 +43,5 @@ noinst_HEADERS = \
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
 libgncmod_business_backend_file_la_LIBADD = \
-   ${GLIB_LIBS} ${XML_LIBS} ${QOF_LIBS} \
+   ${GLIB_LIBS} ${LIBXML2_LIBS} ${QOF_LIBS} \
    ${top_builddir}/src/business/business-core/libgncmod-business-core.la
