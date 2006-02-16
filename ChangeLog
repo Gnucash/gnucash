@@ -14,6 +14,11 @@
 	* configure.in:
 	  combine XML_{CFLAGS,LIBS} into LIBXML2_{CLFLAGS,LIBS}
 
+	* src/backend/file/test/test-load-xml2.c:
+	* src/backend/file/gncmod-file-backend.c:
+	  move jsled's g-type initialization into the module init
+	  this way we don't need to worry about it in every test app.
+
 2006-02-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/test/test-load-xml2.c (main): Initialize
