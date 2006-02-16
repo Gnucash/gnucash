@@ -91,5 +91,4 @@ qofla-dir.h: $(srcdir)/qofla-dir.h.in Makefile
 	 mv $@.tmp $@
 
 BUILT_SOURCES = qofla-dir.h
-
-
+DISTCLEANFILES = qofla-dir.h

@@ -22,6 +22,8 @@
 	* src/backend/file/test/test-load/xml2.c:
 	  need g_type_init() because we don't actually "load" the file backend.
 
+	* lib/libqof/qof/Makefile.am: add qofla-dir.h to DISTCLEANFILES
+
 2006-02-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/test/test-load-xml2.c (main): Initialize
