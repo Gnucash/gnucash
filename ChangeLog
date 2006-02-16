@@ -4,6 +4,11 @@
 	g_types before we can expect gconf (via the gnc file backend) to
 	work, as per the gconf API docs.
 
+	* src/gnome/dialog-hierarchy.c:
+	* src/gnome/glade/account.glade: Andreas Köhler's patch to not
+	scroll the tree view headers in the new-account hierarchy druid.
+	Bug#330850.
+
 2006-02-15  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/business-core.scm: 

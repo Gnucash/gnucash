@@ -74,12 +74,12 @@ typedef struct {
 
   GtkTreeView *categories_tree;
   GtkTextView *category_description;
-  GtkBox *category_accounts_box;
+  GtkWidget *category_accounts_container;
   GtkTreeView *category_accounts_tree;
   gboolean category_set_changed;
 
   GncTreeViewAccount *final_account_tree;
-  GtkWidget *final_account_tree_box;
+  GtkWidget *final_account_tree_container;
   Account *selected_account;
   /** Map<Account*,gnc_numeric*> **/
   GHashTable *balance_hash;
@@ -390,7 +390,7 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 
 		data->category_accounts_tree = tree_view;
 		gtk_tree_view_expand_all (tree_view);
-		gtk_container_add(GTK_CONTAINER(data->category_accounts_box), GTK_WIDGET(tree_view));
+		gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
 		gtk_widget_show(GTK_WIDGET(tree_view));
 	}
 }
@@ -763,7 +763,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   {
     GList *renderers;
     column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(tree_view),
-                                           _("use existing"),
+                                           _("Use Existing"),
                                            NULL,
                                            NULL,
                                            "yes",
@@ -777,7 +777,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
     g_list_free(renderers);
   }
 
-  gtk_container_add(GTK_CONTAINER(data->final_account_tree_box),
+  gtk_container_add(GTK_CONTAINER(data->final_account_tree_container),
 		    GTK_WIDGET(data->final_account_tree));
 
   /* Expand the entire tree */
@@ -917,13 +917,13 @@ gnc_create_hierarchy_druid (GncHierarchyDruidFinishedCallback when_completed)
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
 	data->categories_tree = tree_view;
 	
-	data->category_accounts_box = GTK_BOX(glade_xml_get_widget (xml, "accounts_in_category"));
+	data->category_accounts_container = glade_xml_get_widget (xml, "accounts_in_category");
 	data->category_description = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "account_types_description"));
 	color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
 	gtk_widget_modify_base(GTK_WIDGET(data->category_description), GTK_STATE_INSENSITIVE, color);
 	
 	/* Final Accounts Page */
-	data->final_account_tree_box = glade_xml_get_widget (xml, "final_account_tree_box");
+	data->final_account_tree_container = glade_xml_get_widget (xml, "final_account_tree_box");
 	data->final_account_tree = NULL;
 	
 	data->balance_hash = g_hash_table_new(NULL, NULL);

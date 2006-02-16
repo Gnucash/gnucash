@@ -1469,7 +1469,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 				  <property name="can_focus">True</property>
 				  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 				  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-				  <property name="shadow_type">GTK_SHADOW_NONE</property>
+				  <property name="shadow_type">GTK_SHADOW_IN</property>
 				  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 				  <child>
@@ -1555,30 +1555,15 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 			  <property name="right_padding">0</property>
 
 			  <child>
-			    <widget class="GtkScrolledWindow" id="scrolledwindow3">
+			    <widget class="GtkScrolledWindow" id="accounts_in_category">
 			      <property name="visible">True</property>
 			      <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
 			      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-			      <property name="shadow_type">GTK_SHADOW_NONE</property>
+			      <property name="shadow_type">GTK_SHADOW_IN</property>
 			      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			      <child>
-				<widget class="GtkViewport" id="viewport2">
-				  <property name="visible">True</property>
-				  <property name="shadow_type">GTK_SHADOW_IN</property>
-
-				  <child>
-				    <widget class="GtkHBox" id="accounts_in_category">
-				      <property name="visible">True</property>
-				      <property name="homogeneous">False</property>
-				      <property name="spacing">0</property>
-
-				      <child>
-					<placeholder/>
-				      </child>
-				    </widget>
-				  </child>
-				</widget>
+				<placeholder/>
 			      </child>
 			    </widget>
 			  </child>
@@ -1646,7 +1631,7 @@ If you would like an account to be a placeholder account, just click the checkbo
 	      </child>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow4">
+		<widget class="GtkScrolledWindow" id="final_account_tree_box">
 		  <property name="visible">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -1654,22 +1639,7 @@ If you would like an account to be a placeholder account, just click the checkbo
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkViewport" id="viewport3">
-		      <property name="visible">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
-
-		      <child>
-			<widget class="GtkHBox" id="final_account_tree_box">
-			  <property name="visible">True</property>
-			  <property name="homogeneous">False</property>
-			  <property name="spacing">0</property>
-
-			  <child>
-			    <placeholder/>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>
