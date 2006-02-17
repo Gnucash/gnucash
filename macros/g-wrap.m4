@@ -24,7 +24,7 @@ AC_DEFUN([AM_PATH_GWRAP],
 [dnl
 dnl
 dnl
-AC_ARG_WITH(g-wrap-prefix,[ --with-g-wrap-prefix=PFX  Prefix where g-wrap is installed (optional)], 
+AC_ARG_WITH(g-wrap-prefix,[  --with-g-wrap-prefix=PFX  Prefix where g-wrap is installed (optional)], 
     gwrap_prefix="$withval", g_wrap_prefix="")
 
 min_gwrap_version=ifelse([$1], , 0.9.1,$1)

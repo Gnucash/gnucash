@@ -1337,7 +1337,7 @@ then
   BZ2_LIBS=
   test_bz2=true
   AC_ARG_WITH(bz2,
-  	[--{with,without}-bz2   Build additional wrappers for BZ2],
+  	[  --without-bz2   Build additional libgsf wrappers for BZ2],
   	if test "x$withval" = xno; then
   		test_bz2=false
   	fi
@@ -1380,14 +1380,14 @@ then
   
   dnl gnome
   dnl
-  want_gnome=auto
-  AC_ARG_WITH(gnome,
-  	[--{with,without}-gnome   Build additional wrappers for GNOME-VFS and BONOBO],
-  	[case $withval in
-  	yes) want_gnome=yes;;
-  	no) want_gnome=no;;
-  	esac[]dnl
-  ])
+  want_gnome=yes
+  #dnl AC_ARG_WITH(gnome,
+  #dnl 	[--{with,without}-gnome   Build additional wrappers for GNOME-VFS and BONOBO],
+  #dnl	[case $withval in
+  #dnl	yes) want_gnome=yes;;
+  #dnl	no) want_gnome=no;;
+  #dnl	esac[]dnl
+  #dnl])
   have_gnome=no
   if  test $want_gnome = no ; then 
       AC_MSG_WARN([GNOME support disabled, as requested (Use --with-gnome to enable)])
@@ -1504,16 +1504,16 @@ then
   dnl Should we use gtk ?
   dnl *******************
   goffice_with_gtk=true
-  AC_ARG_WITH(gtk, [  --without-gtk           Build without UI])
-  if test "x$with_gtk" = xno; then
-  	ui_msg="None (Gtk disabled by request)"
-  	goffice_with_gtk=false
-  else
+  #dnl AC_ARG_WITH(gtk, [  --without-gtk           Build without UI])
+  #dnl if test "x$with_gtk" = xno; then
+  #dnl 	ui_msg="None (Gtk disabled by request)"
+  #dnl	goffice_with_gtk=false
+  #dnl else
   	dnl We shouldn't silently default to --without-gtk.
   	dnl If the requirements are not met, fail.
   	ui_msg="Gtk"
-  	PKG_CHECK_MODULES(GTK, [$goffice_gtk_reqs])
-  fi 
+  	PKG_CHECK_MODULES(GOFFICE_GTK, [$goffice_gtk_reqs])
+  #dnl fi 
   
   goffice_with_gnome=$goffice_with_gtk
   if test "x$goffice_with_gtk" = "xtrue" ; then
@@ -1525,13 +1525,13 @@ then
   	dnl ************************************
   
   	goffice_with_gnome=true
-  	AC_ARG_WITH(gnome,
-  		[  --{with,without}-gnome  Use GNOME extensions],
-  		[if test "x$withval" = xno; then
-  			goffice_with_gnome=false
-  			ui_msg="Gtk+ (Gnome disabled by request)"
-  		fi]
-  	)
+  	#dnl AC_ARG_WITH(gnome,
+  	#dnl	[  --{with,without}-gnome  Use GNOME extensions],
+  	#dnl	[if test "x$withval" = xno; then
+  	#dnl		goffice_with_gnome=false
+  	#dnl		ui_msg="Gtk+ (Gnome disabled by request)"
+  	#dnl	fi]
+  	#dnl)
   	if test "x$goffice_with_gnome" = "xtrue"; then
   		PKG_CHECK_MODULES(GOFFICE_GNOME, [$goffice_gnome_reqs],
   			[ui_msg="Gnome"],
