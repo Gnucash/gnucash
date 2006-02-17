@@ -523,7 +523,7 @@ void gnc_file_log_replay (void)
 
       DEBUG("Opening selected file");
       log_file = fopen(selected_filename, "r");
-      if(ferror(log_file)!=0)
+      if(!log_file || ferror(log_file)!=0)
 	{
 	  perror("File open failed");
 	}

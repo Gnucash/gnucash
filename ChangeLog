@@ -33,6 +33,9 @@
           so it's possible to run from it.
 	  Also fix "fin.scm installed twice", bug #168629.
 
+	* src/import-export/log-replay/gnc-log-replay.c:
+	  Don't pass NULL to ferror() (from bug #143720).
+
 2006-02-15  Derek Atkins <derek@ihtfp.com>
 
 	* configure.in:  get --disable-gui to actually do what we want.
