@@ -41,9 +41,20 @@ EXTRA_DIST = \
 
 noinst_DATA = .scm-links
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = business-utils.scm \
+  ${gncscm_DATA}
+endif
+
 .scm-links: 
 	rm -f gnucash
 	ln -sf ${srcdir} gnucash 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
 
-DISTCLEANFILES = gnucash .scm-links
+CLEANFILES = gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

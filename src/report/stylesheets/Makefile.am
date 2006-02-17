@@ -27,20 +27,30 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   ${GNOME_CFLAGS}
 
-.scm-links:
-	rm -f gnucash report
-	ln -sf . gnucash
-	ln -sf ${srcdir} report 
-	touch .scm-links
-
-noinst_DATA = .scm-links
-
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
   stylesheets.scm \
   stylesheet-plain.scm \
   stylesheet-fancy.scm \
   stylesheet-easy.scm
+
+if GNUCASH_SEPARATE_BUILDDIR
+#For executing test cases
+SCM_FILE_LINKS = ${gncscmmod_DATA}
+endif
+
+.scm-links:
+	rm -f gnucash report
+	ln -sf . gnucash
+	ln -sf ${srcdir} report 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+noinst_DATA = .scm-links
 
 uidir = $(GNC_UI_DIR)
 dist_ui_DATA = \
@@ -49,4 +59,4 @@ dist_ui_DATA = \
 EXTRA_DIST = ${gncscmmod_DATA}
 
 CLEANFILES = gnucash report .scm-links
-
+DISTCLEANFILES = ${SCM_FILE_LINKS}

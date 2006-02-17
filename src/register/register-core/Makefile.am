@@ -101,5 +101,5 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: \
 	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
-DISTCLEANFILES = gnucash g-wrapped register .scm-links ${SCM_FILE_LINKS} \
-                 gw-register-core.html
+CLEANFILES = gnucash g-wrapped register .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-register-core.html

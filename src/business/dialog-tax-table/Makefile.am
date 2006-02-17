@@ -61,7 +61,10 @@ EXTRA_DIST = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
+# for compline
 SCM_FILE_LINKS = gw-dialog-tax-table-spec.scm
+# for running
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
@@ -89,5 +92,5 @@ gw-dialog-tax-table.scm gw-dialog-tax-table.c gw-dialog-tax-table.h: \
 
 BUILT_SOURCES = gw-dialog-tax-table.scm gw-dialog-tax-table.c \
 	gw-dialog-tax-table.h
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-dialog-tax-table.html
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-dialog-tax-table.html

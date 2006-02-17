@@ -67,5 +67,5 @@ gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
            (gw:generate-wrapset \"gw-core-utils\")"
 
 BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-core-utils.html
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-core-utils.html

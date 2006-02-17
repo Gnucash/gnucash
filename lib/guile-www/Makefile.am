@@ -10,13 +10,23 @@ gncscm_DATA = cgi.scm http.scm main.scm url.scm
 
 noinst_DATA = .scm-links
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = ${gncscm_DATA}
+endif
+
 .scm-links: 
 	rm -f www
 	ln -sf . www
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
+
 CLEANFILES = www .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}
 
 endif # GNC_HAVE_GUILE_WWW (else clause)
 
 EXTRA_DIST = README README.gnucash wwwcat cgi.scm http.scm main.scm url.scm
-

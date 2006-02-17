@@ -107,7 +107,9 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-app-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += app-utils.scm
+SCM_FILE_LINKS += \
+  ${gncmod_DATA} \
+  ${gncscm_DATA}
 endif
 
 .scm-links: 

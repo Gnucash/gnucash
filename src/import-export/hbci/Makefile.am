@@ -82,5 +82,3 @@ ui_DATA = \
 	gnc-plugin-hbci-ui.xml
 
 EXTRA_DIST = ${gncscm_DATA} ${libgncmod_hbci_la_empty} ${ui_DATA}
-
-CLEANFILES = gnucash g-wrapped .scm-links

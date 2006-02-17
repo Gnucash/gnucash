@@ -280,7 +280,9 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-gnome-utils-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += gnome-utils-spec.scm gnome-utils.scm
+SCM_FILE_LINKS += \
+  ${gncmod_DATA} \
+  ${gncscm_DATA}
 endif
 
 .scm-links: 
@@ -305,8 +307,8 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: \
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-gnome-utils.html gnc-svninfo.h
+CLEANFILES = gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
 
 #
 # I hate inconsistent standards. Autotools puts help files into

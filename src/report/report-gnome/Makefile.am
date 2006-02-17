@@ -80,7 +80,10 @@ EXTRA_DIST = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
+#  for compiling
 SCM_FILE_LINKS = gw-report-gnome-spec.scm
+# for running
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
@@ -108,5 +111,5 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: \
 	  (gw:generate-wrapset \"gw-report-gnome\")"
 
 BUILT_SOURCES = gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h
-DISTCLEANFILES = gnucash g-wrapped report .scm-links ${SCM_FILE_LINKS} \
-                 gw-report-gnome.html
+CLEANFILES = gnucash g-wrapped report .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-report-gnome.html

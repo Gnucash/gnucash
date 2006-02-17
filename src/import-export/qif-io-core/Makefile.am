@@ -8,15 +8,6 @@ libgncmod_qifiocore_la_SOURCES = gncmod-qifiocore.c
 
 noinst_DATA = .scm-links
 
-.scm-links:
-	rm -f gnucash import-export 
-	ln -sf . gnucash
-	ln -sf . import-export
-	touch .scm-links
-
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export/
-gncscmmod_DATA = qif-io-core.scm
-
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
 	qif-acct-table.scm \
@@ -28,4 +19,24 @@ gncscm_DATA = \
 	qif-parse.scm \
 	qif-record-xform.scm 
 
-DISTCLEANFILES = gnucash import-export .scm-links
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = \
+  ${gncscm_DATA}
+endif
+
+.scm-links:
+	rm -f gnucash import-export 
+	ln -sf . gnucash
+	ln -sf . import-export
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/import-export/
+gncscmmod_DATA = qif-io-core.scm
+
+CLEANFILES = gnucash import-export .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

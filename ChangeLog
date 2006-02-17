@@ -1,3 +1,38 @@
+2006-02-17  Derek Atkins <derek@ihtfp.com>
+
+        * intl-scm/Makefile.am:
+        * lib/guile-www/Makefile.am:
+        * src/app-utils/Makefile.am:
+	* src/business/business-core/Makefile.am:
+        * src/business/business-gnome/Makefile.am:
+        * src/business/business-reports/Makefile.am:
+        * src/business/business-utils/Makefile.am:
+        * src/business/dialog-tax-table/Makefile.am:
+	* src/core-utils/Makefile.am:
+        * src/engine/Makefile.am:
+	* src/gnc-module/Makefile.am:
+	* src/gnome/Makefile.am:
+        * src/gnome-utils/Makefile.am:
+	* src/import-export/hbci/Makefile.am:
+        * src/import-export/Makefile.am:
+        * src/import-export/qif-import/Makefile.am:
+        * src/import-export/qif-io-core/Makefile.am:
+	* src/register/register-core/Makefile.am:
+	* src/report/locale-specific/us/Makefile.am:
+        * src/report/report-gnome/Makefile.am:
+        * src/report/report-system/Makefile.am:
+        * src/report/standard-reports/Makefile.am:
+        * src/report/stylesheets/Makefile.am:
+        * src/report/utility-reports/Makefile.am:
+        * src/scm/gnumeric/Makefile.am:
+        * src/scm/Makefile.am:
+        * src/scm/printing/Makefile.am:
+        * src/tax/us/Makefile.am:
+          Make the build work if the build directory is not the source
+          directory.  Also symlink .scm files into the build directory
+          so it's possible to run from it.
+	  Also fix "fin.scm installed twice", bug #168629.
+
 2006-02-15  Derek Atkins <derek@ihtfp.com>
 
 	* configure.in:  get --disable-gui to actually do what we want.

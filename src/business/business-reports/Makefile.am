@@ -1,11 +1,3 @@
-.scm-links:
-	rm -f gnucash report
-	ln -sf . gnucash
-	ln -sf ${srcdir} report 
-	touch .scm-links
-
-noinst_DATA = .scm-links
-
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncscmmod_DATA = \
    business-reports.scm \
@@ -17,7 +9,25 @@ gncscmmod_DATA = \
    invoice.scm \
    owner-report.scm
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = ${gncscmmod_DATA}
+endif
+
+.scm-links:
+	rm -f gnucash report
+	ln -sf . gnucash
+	ln -sf ${srcdir} report 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+noinst_DATA = .scm-links
+
 EXTRA_DIST = \
   ${gncscmmod_DATA}
 
 CLEANFILES = gnucash report .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

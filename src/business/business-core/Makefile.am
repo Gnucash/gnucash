@@ -85,7 +85,7 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-business-core-spec.scm
 #For executing test cases
-SCM_FILE_LINKS += business-core.scm
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 

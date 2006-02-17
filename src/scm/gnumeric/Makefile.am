@@ -1,9 +1,25 @@
-
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/gnumeric
-
 gncscm_DATA = \
   gnumeric-utilities.scm \
   table-utils.scm
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = \
+  ${gncscm_DATA}
+endif
+
+.scm-links:
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+noinst_DATA = .scm-links
+
 EXTRA_DIST = \
   ${gncscm_DATA}
+
+CLEANFILES = .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

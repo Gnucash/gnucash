@@ -195,6 +195,5 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gnucash.keys gnucash.desktop
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-gnc.html
+CLEANFILES = gnucash.keys gnucash.desktop gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc.html

@@ -104,7 +104,10 @@ EXTRA_DIST = \
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different
+#for compiling
 SCM_FILE_LINKS = gw-business-gnome-spec.scm
+#for running
+SCM_FILE_LINKS += ${gncmod_DATA}
 endif
 
 .scm-links: 
@@ -132,6 +135,5 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: \
 	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
-DISTCLEANFILES = g-wrapped gnucash .scm-links ${SCM_FILE_LINKS} \
-                 gw-business-gnome.html
-
+CLEANFILES = g-wrapped gnucash .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-business-gnome.html

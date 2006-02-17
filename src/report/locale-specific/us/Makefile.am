@@ -16,9 +16,18 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   ${GUILE_INCS} ${GLIB_CFLAGS}
 
+## This is unused and therefore no longer installed and/or loaded
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
+gncscmmod_DATA = us.scm de_DE.scm
+
+gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmothermod_DATA = taxtxf.scm taxtxf-de_DE.scm
+
 if GNUCASH_SEPARATE_BUILDDIR
 #For executing test cases
-SCM_FILE_LINKS = taxtxf.scm
+SCM_FILE_LINKS = \
+  ${gncscmmod_DATA} \
+  ${gncscmothermod_DATA}
 endif
 
 .scm-links:
@@ -36,15 +45,9 @@ endif
 
 noinst_DATA = .scm-links
 
-## This is unused and therefore no longer installed and/or loaded
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
-gncscmmod_DATA = us.scm de_DE.scm
-
-gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmothermod_DATA = taxtxf.scm taxtxf-de_DE.scm
-
 EXTRA_DIST = \
   ${gncscmothermod_DATA} \
   ${gncscmmod_DATA} 
 
-CLEANFILES = ${SCM_FILE_LINKS} gnucash report locale-specific us .scm-links
+CLEANFILES = gnucash report locale-specific us .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}

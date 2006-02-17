@@ -151,7 +151,9 @@ if GNUCASH_SEPARATE_BUILDDIR
 #For compiling
 SCM_FILE_LINKS = gw-engine-spec.scm gw-kvp-spec.scm iso-4217-currencies.scm
 #For executing test cases
-SCM_FILE_LINKS += engine.scm
+SCM_FILE_LINKS += \
+  ${gncmod_DATA} \
+  ${gncscm_DATA}
 endif
 
 .scm-links: 
@@ -190,8 +192,8 @@ BUILT_SOURCES = \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
 
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
-                 gw-engine.html gw-kvp.html gncla-dir.h
+CLEANFILES = gnucash g-wrapped .scm-links 
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-engine.html gw-kvp.html gncla-dir.h
 
 gncla-dir.h: gncla-dir.h.in
 	rm -f $@.tmp

@@ -24,35 +24,6 @@ AM_CFLAGS = \
   ${GLIB_CFLAGS} ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS}
 
-if GNUCASH_SEPARATE_BUILDDIR
-#For executing test cases
-SCM_FILE_LINKS = report-system.scm gw-report-system-spec.scm
-endif
-
-.scm-links:
-	rm -f gnucash report g-wrapped
-	ln -sf . gnucash
-	ln -sf . report 
-	ln -sf . g-wrapped
-if GNUCASH_SEPARATE_BUILDDIR
-	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
-	done
-endif
-	touch .scm-links
-
-gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
-
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmmod_DATA = report-system.scm
-
-libgw_report_system_la_SOURCES = gw-report-system.c
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
-
-noinst_HEADERS = gw-report-system.h
-noinst_DATA = .scm-links gw-report-system.h
-
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
      commodity-utilities.scm  \
@@ -69,6 +40,40 @@ gncscm_DATA = \
      options-utilities.scm \
      report-utilities.scm \
      report.scm 
+
+gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report-system
+
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmod_DATA = report-system.scm
+
+if GNUCASH_SEPARATE_BUILDDIR
+#For executing test cases
+# for compiling
+SCM_FILE_LINKS = gw-report-system-spec.scm
+# for running
+SCM_FILE_LINKS += \
+  ${gncscmmod_DATA} \
+  ${gncscm_DATA}
+endif
+
+.scm-links:
+	rm -f gnucash report g-wrapped
+	ln -sf . gnucash
+	ln -sf . report 
+	ln -sf . g-wrapped
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
+	touch .scm-links
+
+libgw_report_system_la_SOURCES = gw-report-system.c
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
+
+noinst_HEADERS = gw-report-system.h
+noinst_DATA = .scm-links gw-report-system.h
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA} ${gwmod_DATA}
 
@@ -87,5 +92,5 @@ gw-report-system.scm gw-report-system.c gw-report-system.h: \
 	  (gw:generate-wrapset \"gw-report-system\")"
 
 BUILT_SOURCES = gw-report-system.scm gw-report-system.c gw-report-system.h
-DISTCLEANFILES = gnucash g-wrapped report .scm-links ${SCM_FILE_LINKS} \
-                 gw-report-system.html
+CLEANFILES = gnucash g-wrapped report .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-report-system.html

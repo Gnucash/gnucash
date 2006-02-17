@@ -78,6 +78,11 @@ EXTRA_DIST = \
 
 CLEANFILES =
 
+if GNUCASH_SEPARATE_BUILDDIR
+SCM_FILE_LINKS = \
+  ${gncscm_DATA}
+endif
+
 noinst_DATA = .scm-links
 
 .scm-links: 
@@ -86,5 +91,12 @@ noinst_DATA = .scm-links
 	ln -sf . import-export
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+if GNUCASH_SEPARATE_BUILDDIR
+	for X in ${SCM_FILE_LINKS} ; do \
+	  ln -sf ${srcdir}/$$X . ; \
+	done
+endif
 	touch .scm-links
+
 CLEANFILES += qif-import import-export gnucash g-wrapped .scm-links
+DISTCLEANFILES = ${SCM_FILE_LINKS}
