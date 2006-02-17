@@ -1147,7 +1147,7 @@ gnc_account_type_view_create (AccountWindow *aw)
       types = xaccAccountTypesValid () | (1 << aw->type);
   else
       for (list = aw->valid_types; list; list = list->next)
-          types |= (1 << (guint) list->data);
+          types |= (1 << GPOINTER_TO_INT(list->data));
 
   model = gnc_tree_model_account_types_filter_using_mask (types);
 
