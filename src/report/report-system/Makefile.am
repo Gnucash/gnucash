@@ -77,9 +77,6 @@ noinst_DATA = .scm-links gw-report-system.h
 
 EXTRA_DIST = ${gncscmmod_DATA} ${gncscm_DATA} ${gwmod_DATA}
 
-CLEANFILES = ${SCM_FILE_LINKS} gnucash report .scm-links
-
-
 gw-report-system.scm gw-report-system.c gw-report-system.h: \
   .scm-links gw-report-system-spec.scm ${top_builddir}/config.status
 	FLAVOR=gnome $(GUILE) -c \
