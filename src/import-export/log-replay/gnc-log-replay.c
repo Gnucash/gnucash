@@ -37,6 +37,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "Scrub.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
 #include "qof.h"
@@ -485,6 +486,7 @@ static void  process_trans_record(  FILE *log_file)
 	  DEBUG("process_trans_record(): Record ended\n");
 	  if(trans!=NULL)/*If we played with a transaction, commit it here*/
 	    {
+	      xaccTransScrubCurrencyFromSplits(trans);
 	      xaccTransCommitEdit(trans);
 	    }
 	}
