@@ -26,7 +26,7 @@
       (loop (cdr chars) (cons (car chars) accum))))))
 
 (define (write-string string out-port filename line-number)
-  (display (string-append "/* " (substring filename 3)) out-port)
+  (display (string-append "/* " filename) out-port)
   ;;(display line-number out-port)
   (display " */\n" out-port)
   (display "_(" out-port)
