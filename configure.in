@@ -625,12 +625,21 @@ AC_SUBST(SQL_DIR)
 
 ### --------------------------------------------------------------------------
 ### OFX
+want_ofx=auto
 AC_ARG_ENABLE( ofx,
   [  --enable-ofx                 compile with ofx support (needs LibOFX)],
-  if test "x$enableval" != "xno" ; then
-    OFX_DIR=ofx
-  fi)
-if test x${OFX_DIR} = xofx ;
+  [ case "$enableval" in
+    yes) want_ofx=yes ;;
+    no)  want_ofx=no ;;
+    esac[]dnl
+  ] )
+AC_MSG_CHECKING(whether to use OFX)
+case "${want_ofx}" in
+  yes)  AC_MSG_RESULT(yes -- failure is fatal) ;;
+  no)   AC_MSG_RESULT(no) ;;
+  auto) AC_MSG_RESULT(yes -- automatic test) ;;
+esac
+if test x${want_ofx} != xno ;
 then
     AC_ARG_WITH( ofx-prefix, 
 	[  --with-ofx-prefix=DIR     specify where to look for libOFX],
@@ -666,42 +675,68 @@ then
 	# This is libofx >= 0.7.x
 	AC_MSG_RESULT([found ${LIBOFX_VERSION}])
     else
-	AC_MSG_ERROR([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
+        if x${want_ofx} = xyes ; then
+	    AC_MSG_ERROR([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
+        else
+	    AC_MSG_RESULT([found ${LIBOFX_VERSION}; Libofx 0.7.0 or newer needed for ofx support])
+            want_ofx=no
+        fi
     fi
 
-    # Version number verified. Now check header files.
-    AC_MSG_CHECKING(for libofx/libofx.h)
-    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
-    save_CPPFLAGS="${CPPFLAGS}"
-    CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
-    AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes), OFXfound=no )
-
-    if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
-    	LIBOFX_LIBS="-L$/usr/local/lib"
-	LIBOFX_CFLAGS="-I$/usr/local/include"
+    if test "x${want_ofx}" != xno ; then
+        # Version number verified. Now check header files.
+        AC_MSG_CHECKING(for libofx/libofx.h)
         AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
+        save_CPPFLAGS="${CPPFLAGS}"
         CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+        AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT(yes),
+	             OFXfound=no )
 
-        AC_TRY_CPP( [#include <libofx/libofx.h>], AC_MSG_RESULT([yes (in /usr/local)]),
-	  [ AC_MSG_ERROR([cannot find libofx header, needed for OFX support.]) ] )
+        if test x${OFXPREFIX} = x -a x${OFXfound} = no ; then
+            LIBOFX_LIBS="-L$/usr/local/lib"
+	    LIBOFX_CFLAGS="-I$/usr/local/include"
+            AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
+            CPPFLAGS="${CPPFLAGS} ${LIBOFX_CFLAGS}"
+
+            AC_TRY_CPP( [#include <libofx/libofx.h>],
+                        AC_MSG_RESULT([yes (in /usr/local)]),
+	      [ if test "x${want_ofx}" = xyes ; then
+                  AC_MSG_ERROR([cannot find libofx header, needed for OFX support.])
+                else
+                  AC_MSG_RESULT([cannot find libofx header, needed for OFX support.])
+                  want_ofx=no
+                fi
+              ] )
+        fi
+
+        if test "x${want_ofx}" != xno ; then 
+            LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
+            AC_MSG_CHECKING(for libofx)
+            save_LIBS="${LIBS}"
+            LIBS="${LIBS} ${LIBOFX_LIBS}"
+            AC_TRY_LINK( [
+                #include <libofx/libofx.h>
+	        ], [
+	        LibofxContextPtr libofx_context = libofx_get_new_context();
+	        libofx_free_context(libofx_context);
+	        ], AC_MSG_RESULT(yes),
+	        [ if test "x${want_ofx}" = xyes ; then
+                    AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
+                  else
+                    AC_MSG_RESULT([*** Cannot compile test program for libofx library. Please check config.log for the exact error.])
+                    want_ofx=no
+                  fi
+                 ] )
+
+            LIBS="${save_LIBS}"
+            CPPFLAGS="${save_CPPFLAGS}"
+            AC_SUBST(LIBOFX_CFLAGS)
+            AC_SUBST(LIBOFX_LIBS)
+        fi
     fi
-
-    LIBOFX_LIBS="${LIBOFX_LIBS} -lofx"
-    AC_MSG_CHECKING(for libofx)
-    save_LIBS="${LIBS}"
-    LIBS="${LIBS} ${LIBOFX_LIBS}"
-    AC_TRY_LINK( [
-#include <libofx/libofx.h>
-	], [
-	LibofxContextPtr libofx_context = libofx_get_new_context();
-	libofx_free_context(libofx_context);
-	], AC_MSG_RESULT(yes),
-	[ AC_MSG_ERROR([*** Cannot compile test program for libofx library. Please check config.log for the exact error.]) ] )
-
-    LIBS="${save_LIBS}"
-    CPPFLAGS="${save_CPPFLAGS}"
-    AC_SUBST(LIBOFX_CFLAGS)
-    AC_SUBST(LIBOFX_LIBS)
+fi
+if test "x${want_ofx}" != xno ; then
+  OFX_DIR=ofx
 fi
 AC_SUBST(OFX_DIR)
 
