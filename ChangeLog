@@ -3,6 +3,11 @@
 	* intl-scm/xgettext.scm: remove the absolute path from filenames
 	* intl-scm/Makefile.am: pass the absolute path to xgettext.scm
 
+	* src/import-export/log-replay/gnc-log-replay.c:
+	  display an error dialog when we fail to parse a log file
+	  due to EOF or a bad header parsing.  Fixes #331620 based
+	  on the test-case.
+
 2006-02-17  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.c:

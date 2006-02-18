@@ -44,7 +44,7 @@
 #include "gnc-book.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
-
+#include "gnc-gui-query.h"
 
 #define GCONF_SECTION "dialogs/log_replay"
 
@@ -534,6 +534,8 @@ void gnc_file_log_replay (void)
 	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL)
 	    {
 	      DEBUG("Read error or EOF");
+	      gnc_info_dialog(NULL, "%s",
+			      _("The log file you selected was empty."));
 	    }
 	  else
 	    {
@@ -541,6 +543,9 @@ void gnc_file_log_replay (void)
 		{
 		  PERR("File header not recognised:\n%s",read_buf);
 		  PERR("Expected:\n%s",expected_header);
+		  gnc_error_dialog(NULL, "%s",
+		   _("The log file you selected cannot be read.  "
+		     "The file header was not recognized."));
 		}
 	      else
 		{
