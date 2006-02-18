@@ -33,6 +33,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <libguile.h>
+#include <errno.h>
 
 #include "Account.h"
 #include "Transaction.h"
@@ -527,7 +528,16 @@ void gnc_file_log_replay (void)
       log_file = fopen(selected_filename, "r");
       if(!log_file || ferror(log_file)!=0)
 	{
+	  int err = errno;
 	  perror("File open failed");
+	  gnc_error_dialog(NULL,
+			   /* Translation note:
+			    * First argument is the filename,
+			    * second argument is the error.
+			    */
+			   _("Failed to open log file: %s: %s"),
+			   selected_filename,
+			   strerror(err));
 	}
       else
 	{
