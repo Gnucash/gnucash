@@ -217,6 +217,7 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
         GtkTreePath *path;
         GtkTreeModel *model;
         gchar *string;
+	gboolean success;
 
         g_return_val_if_fail(IS_GNC_ITEM_LIST (data), FALSE);
 
@@ -239,11 +240,14 @@ gnc_item_list_button_event(GtkWidget *widget, GdkEventButton *event,
                         gtk_tree_view_set_cursor (item_list->tree_view, path, NULL, FALSE);
 
                         model = GTK_TREE_MODEL (item_list->list_store);
-                        gtk_tree_model_get_iter (model, &iter, path);
+                        success = gtk_tree_model_get_iter (model, &iter, path);
 
                         gtk_tree_path_free (path);
 
-                        gtk_tree_model_get (model, &iter, 0, &string, -1);
+			if (!success)
+				return FALSE;
+
+			gtk_tree_model_get (model, &iter, 0, &string, -1);
 
 	                g_signal_emit (G_OBJECT (item_list), 
                                        gnc_item_list_signals[ACTIVATE_ITEM],

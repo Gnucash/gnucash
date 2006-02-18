@@ -1215,18 +1215,19 @@ gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view,
   gtk_tree_view_expand_row (GTK_TREE_VIEW(view), sp_account, TRUE);
 
   /* compute start/end paths */
-  gtk_tree_model_iter_nth_child (s_model, &si_start, &si_account, 0);
-  gtk_tree_model_iter_nth_child (s_model, &si_end, &si_account, num_children - 1);
-  sp_start = gtk_tree_model_get_path (s_model, &si_start);
-  sp_end = gtk_tree_model_get_path (s_model, &si_end);
+  if (gtk_tree_model_iter_nth_child(s_model, &si_start, &si_account, 0) &&
+      gtk_tree_model_iter_nth_child(s_model, &si_end, &si_account, num_children - 1)) {
+    sp_start = gtk_tree_model_get_path (s_model, &si_start);
+    sp_end = gtk_tree_model_get_path (s_model, &si_end);
 
-  /* select everything between */
-  selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
-  gtk_tree_selection_select_range (selection, sp_start, sp_end);
+    /* select everything between */
+    selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
+    gtk_tree_selection_select_range (selection, sp_start, sp_end);
 
-  /* clean up */
-  gtk_tree_path_free(sp_start);
-  gtk_tree_path_free(sp_end);
+    /* clean up */
+    gtk_tree_path_free(sp_start);
+    gtk_tree_path_free(sp_end);
+  }
   gtk_tree_path_free(sp_account);
   LEAVE(" ");
   return;

@@ -1247,8 +1247,8 @@ gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 
 	if (priv->toplevel != NULL) {
 		path = gtk_tree_path_new_first ();
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path);
-		gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+		if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
+		  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
 		gtk_tree_path_free (path);
 	}
 

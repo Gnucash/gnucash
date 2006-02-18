@@ -49,8 +49,8 @@ void gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm);
 GncBudget *gnc_tree_model_budget_get_budget(GtkTreeModel *tm,
                                             GtkTreeIter *iter);
 
-void gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
-                                               GtkTreeIter *iter,
-                                               GncBudget *bgt);
+gboolean gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm,
+						   GtkTreeIter *iter,
+						   GncBudget *bgt);
 /** @} */
 #endif // __GNC_TREE_MODEL_BUDGET_H__

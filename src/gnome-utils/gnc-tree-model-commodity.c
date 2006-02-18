@@ -1107,16 +1107,17 @@ gnc_tree_model_commodity_path_deleted (GncTreeModelCommodity *model,
     /* It seems sufficient to tell the model that the parent row
      * changed. This appears to force a reload of all its child rows,
      * which handles removing the now gone commodity. */
-    gtk_tree_path_up (path);
-    gnc_tree_model_commodity_get_iter (GTK_TREE_MODEL(model), &iter, path);
-    debug_path(DEBUG, path);
-    DEBUG("iter %s", iter_to_string(&iter));
-    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-    namespace = gnc_tree_model_commodity_get_namespace (model, &iter);
-    if (namespace) {
-      list = gnc_commodity_namespace_get_commodity_list(namespace);
-      if (g_list_length(list) == 0) {
-	 gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
+    if (gtk_tree_path_up (path)) {
+      gnc_tree_model_commodity_get_iter (GTK_TREE_MODEL(model), &iter, path);
+      debug_path(DEBUG, path);
+      DEBUG("iter %s", iter_to_string(&iter));
+      gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+      namespace = gnc_tree_model_commodity_get_namespace (model, &iter);
+      if (namespace) {
+	list = gnc_commodity_namespace_get_commodity_list(namespace);
+	if (g_list_length(list) == 0) {
+	  gtk_tree_model_row_has_child_toggled(GTK_TREE_MODEL(model), path, &iter);
+	}
       }
     }
   }

@@ -119,7 +119,7 @@ gnc_tree_model_budget_get_budget(GtkTreeModel *tm, GtkTreeIter *iter)
     return bgt;
 }
 
-void 
+gboolean
 gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
                                           GncBudget *bgt)
 {
@@ -127,20 +127,23 @@ gnc_tree_model_budget_get_iter_for_budget(GtkTreeModel *tm, GtkTreeIter *iter,
     const GUID *guid1;
     GUID *guid2;
 
-    g_return_if_fail(GNC_BUDGET(bgt));
+    g_return_val_if_fail(GNC_BUDGET(bgt), FALSE);
 
     guid1 = gnc_budget_get_guid(bgt);
-    for (gtk_tree_model_get_iter_first(tm, iter);
-         gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter);
-         gtk_tree_model_iter_next(tm, iter)) {
-
+    if (!gtk_tree_model_get_iter_first(tm, iter))
+      return FALSE;
+    while (gtk_list_store_iter_is_valid(GTK_LIST_STORE(tm), iter)) {
         gtk_tree_model_get_value(tm, iter, BUDGET_GUID_COLUMN, &gv);
         guid2 = (GUID *) g_value_get_pointer(&gv);
         g_value_unset(&gv);
 
         if (guid_equal(guid1, guid2))
-            return;
+            return TRUE;
+
+	if (!gtk_tree_model_iter_next(tm, iter))
+	  return FALSE;
     }
+    return FALSE;
 }
 
 /** @} */

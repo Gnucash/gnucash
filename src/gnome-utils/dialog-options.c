@@ -2383,8 +2383,8 @@ static gboolean gnc_option_set_ui_value_budget(
         bgt = gw_wcp_get_ptr(value);
         cb = GTK_COMBO_BOX(widget);
         tm = gtk_combo_box_get_model(cb);
-        gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt);
-        gtk_combo_box_set_active_iter(cb, &iter);
+        if (gnc_tree_model_budget_get_iter_for_budget(tm, &iter, bgt))
+	  gtk_combo_box_set_active_iter(cb, &iter);
     }
 
 

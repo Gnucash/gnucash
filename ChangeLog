@@ -1,3 +1,18 @@
+2006-02-17  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/report/report-gnome/dialog-style-sheet.c:
+	* src/gnome-utils/gnc-tree-model-commodity.c:
+	* src/gnome-utils/gnc-tree-model-budget.[ch]:
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome-utils/gnc-tree-model-price.c:
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/dialog-options.c:
+	* lib/goffice-0.0.4/goffice/graph/gog-guru.c:
+	* lib/goffice-0.0.4/goffice/gtk/go-format-sel.c: Prepare for gtk
+	change that will issue warnings if the return value of the
+	gtk_tree_model iter functions are not used.
+
 2006-02-17  Derek Atkins <derek@ihtfp.com>
 
         * intl-scm/Makefile.am:

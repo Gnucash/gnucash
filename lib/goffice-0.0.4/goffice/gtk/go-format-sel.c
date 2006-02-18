@@ -563,10 +563,12 @@ stays:
 				char *tmp = go_format_as_XL (gfs->format.spec, TRUE);
 				format_entry_set_text (gfs, tmp);
 				g_free (tmp);
-			} else if (select.stamp == 0)
-				gtk_tree_model_get_iter_first (
-					GTK_TREE_MODEL (gfs->format.formats.model),
-					&select);
+			} else if (select.stamp == 0) {
+				if (!gtk_tree_model_get_iter_first (
+					   GTK_TREE_MODEL (gfs->format.formats.model),
+					   &select))
+					select.stamp = 0;
+			}
 
 			if (select.stamp != 0) {
 				GtkTreePath *path = gtk_tree_model_get_path (
