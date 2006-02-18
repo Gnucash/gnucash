@@ -920,38 +920,6 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
 }
 
 
-void
-gnc_item_edit_claim_selection (GncItemEdit *item_edit, guint32 time)
-{
-        GtkEditable *editable;
-        gint start_sel, end_sel;
-
-        g_return_if_fail(item_edit != NULL);
-        g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
-
-        editable = GTK_EDITABLE (item_edit->editor);
-
-	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
-
-        if (start_sel != end_sel)
-        {
-                gtk_selection_owner_set (GTK_WIDGET(item_edit->sheet),
-                                         GDK_SELECTION_PRIMARY, time);
-                item_edit->has_selection = TRUE;
-        }
-        else
-        {
-                GdkWindow *owner;
-
-                owner = gdk_selection_owner_get (GDK_SELECTION_PRIMARY);
-                if (owner == GTK_WIDGET(item_edit->sheet)->window)
-                        gtk_selection_owner_set (NULL, GDK_SELECTION_PRIMARY,
-                                                 time);
-                item_edit->has_selection = FALSE;
-        }
-}
-
-
 static void
 gnc_item_edit_cut_copy_clipboard (GncItemEdit *item_edit, guint32 time, gboolean cut)
 {

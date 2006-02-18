@@ -1164,9 +1164,6 @@ gnucash_button_release_event (GtkWidget *widget, GdkEventButton *event)
         sheet->grabbed = FALSE;
 
         gnc_item_edit_set_has_selection(GNC_ITEM_EDIT(sheet->item_editor), FALSE);
-
-        gnc_item_edit_claim_selection(GNC_ITEM_EDIT(sheet->item_editor), event->time);
-
         return TRUE;
 }
 
@@ -1300,10 +1297,6 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 		editable = GTK_EDITABLE(sheet->entry);
                 gtk_editable_set_position(editable, -1);
                 gtk_editable_select_region(editable, 0, -1);
-
-                gnc_item_edit_claim_selection (GNC_ITEM_EDIT(sheet->item_editor),
-                                           event->time);
-
                 return TRUE;
         }
 

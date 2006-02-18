@@ -1,5 +1,11 @@
 2006-02-17  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-sheet.c:
+	* src/register/register-gnome/gnucash-item-edit.[ch]: Remove all
+	explicit claiming of the selection in these files.  The GtkEntry
+	they use already performs claims, and the additional just mess
+	things up.  Fixes #330153.
+
 	* src/register/register-gnome/gnucash-item-list.c:
 	* src/report/report-gnome/dialog-style-sheet.c:
 	* src/gnome-utils/gnc-tree-model-commodity.c:

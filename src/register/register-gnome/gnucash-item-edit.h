@@ -151,8 +151,6 @@ gboolean gnc_item_edit_set_cursor_pos (GncItemEdit *item_edit,
 
 void gnc_item_edit_redraw (GncItemEdit *item_edit);
 
-void gnc_item_edit_claim_selection (GncItemEdit *item_edit, guint32 time);
-
 void gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time);
