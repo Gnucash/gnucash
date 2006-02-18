@@ -16,5 +16,5 @@ SCMFILES = $(shell find ${abs_top_srcdir}/src -name test -prune -o -name '*.scm'
 guile-strings.c: $(SCMFILES)
 	rm -f guile-strings.c
 	cd ${srcdir} && rm -f guile-strings.c \
-	&& ${GUILE} -s ./xgettext.scm $(SCMFILES)
+	&& ${GUILE} -s ./xgettext.scm ${abs_top_srcdir} $(SCMFILES)
 

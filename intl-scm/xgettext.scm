@@ -1,4 +1,5 @@
 ;; Find translatable strings in guile files
+(define *base-dir-len* 0)
 
 (define (expand-newlines string out-port)
   (define (output-prefix-newlines chars)
@@ -26,7 +27,7 @@
       (loop (cdr chars) (cons (car chars) accum))))))
 
 (define (write-string string out-port filename line-number)
-  (display (string-append "/* " filename) out-port)
+  (display (string-append "/* " (substring filename *base-dir-len*)) out-port)
   ;;(display line-number out-port)
   (display " */\n" out-port)
   (display "_(" out-port)
@@ -66,7 +67,9 @@
     (find-strings-in-item item out-port filename line-no)))
 
 (let ((out-port (open "guile-strings.c" (logior O_WRONLY O_CREAT O_TRUNC)))
-      (in-files (cdr (command-line))))
+      (base-dir (cadr (command-line)))
+      (in-files (cddr (command-line))))
+  (set! *base-dir-len* (+ (string-length base-dir) 1))
   (for-each (lambda (file)
               (call-with-input-file file (lambda (port)
                                            (find-strings port out-port file))))
