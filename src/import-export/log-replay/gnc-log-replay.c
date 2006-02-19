@@ -501,8 +501,16 @@ void gnc_file_log_replay (void)
   char read_buf[256];
   char *read_retval;
   FILE *log_file;
-  char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
+  /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
+  char * expected_header_orig = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+  	"date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
+  	"notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
+  static char *expected_header = NULL;
+
+  /* Use g_strdup_printf so we don't get accidental tab -> space conversion */
+  if (!expected_header)
+    expected_header = g_strdup_printf(expected_header_orig);
 
   gnc_set_log_level(GNC_MOD_IMPORT, GNC_LOG_DEBUG);
   ENTER(" ");

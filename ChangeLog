@@ -1,3 +1,11 @@
+2006-02-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/TransLog.c:  use TABS not SPACES for column separators
+	* src/import-export/log-replay/gnc-log-replay.c: use printf
+	  so we don't have a tab->space conversion problem like we
+	  did in TransLog.c
+	  Fixes #331620.
+
 2006-02-18  Derek Atkins  <derek@ihtfp.com>
 
 	* intl-scm/xgettext.scm: remove the absolute path from filenames

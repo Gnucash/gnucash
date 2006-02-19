@@ -139,12 +139,12 @@ xaccOpenLog (void)
    g_free (filename);
    g_free (timestamp);
 
-   /* use tab-separated fields */
-   fprintf (trans_log, "mod        trans_guid        split_guid        time_now        " \
-                       "date_entered        date_posted        " \
-                       "acc_guid        acc_name        num        description        " \
-                       "notes        memo        action        reconciled        " \
-                       "amount        value        date_reconciled\n");
+   /*  Note: this must match src/import-export/log-replay/gnc-log-replay.c */
+   fprintf (trans_log, "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+                       "date_entered\tdate_posted\t"
+                       "acc_guid\tacc_name\tnum\tdescription\t"
+                       "notes\tmemo\taction\treconciled\t"
+                       "amount\tvalue\tdate_reconciled\n");
    fprintf (trans_log, "-----------------\n");
 }
 
