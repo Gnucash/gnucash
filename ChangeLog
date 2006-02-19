@@ -23,6 +23,13 @@
 	* src/business/business-reports/fancy-invoice.scm:
 	  Brian's patch to add company-id to the company address.
 
+	* src/business/business-core/gncOwner.[ch]: Add api to get owner
+	  kvp-slots abstractly.
+	* src/business/business-gnome/dialog-payment.c: Load/save the
+	  last-used transfer account whenever the owner changes or
+	  the dialog completes.
+	  Fixes #329725.
+
 2006-02-18  Derek Atkins  <derek@ihtfp.com>
 
 	* intl-scm/xgettext.scm: remove the absolute path from filenames

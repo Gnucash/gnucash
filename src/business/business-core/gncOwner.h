@@ -138,6 +138,9 @@ gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
 gboolean gncOwnerGetOwnerFromTypeGuid (QofBook *book, GncOwner *owner, QofIdType type, GUID *guid);
 
+/** Get the kvp-frame from the underlying owner object */
+KvpFrame* gncOwnerGetSlots(GncOwner* owner);
+
 #define OWNER_TYPE        "type"
 #define OWNER_TYPE_STRING "type-string"  /**< Allows the type to be handled externally. */
 #define OWNER_CUSTOMER    "customer"

@@ -87,9 +87,74 @@ gnc_payment_window_close_handler (gpointer data)
 }
 
 static void
+gnc_payment_dialog_owner_changed(PaymentWindow *pw)
+{
+  Account *last_acct;
+  GUID *guid;
+  KvpValue* value;
+  KvpFrame* slots = gncOwnerGetSlots(&pw->owner);
+
+  if (!slots) return;
+
+  value = kvp_frame_get_slot_path(slots, "payment", "last_acct", NULL);
+  if (!value) return;
+  
+  guid = kvp_value_get_guid(value);
+  if (!guid) return;
+
+  last_acct = xaccAccountLookup(guid, pw->book);
+
+  /* Set the last-used transfer account */
+  if (last_acct) {
+    gnc_tree_view_account_set_selected_account(GNC_TREE_VIEW_ACCOUNT(pw->acct_tree),
+					       last_acct);
+  }
+}
+
+static void
+gnc_payment_dialog_remember_account(PaymentWindow *pw, Account *acc)
+{
+  KvpValue* value;
+  KvpFrame* slots = gncOwnerGetSlots(&pw->owner);
+
+  if (!acc) return;
+  if (!slots) return;
+
+  value = kvp_value_new_guid(xaccAccountGetGUID(acc));
+  if (!value) return;
+  
+  kvp_frame_set_slot_path(slots, value, "payment", "last_acct", NULL);
+  kvp_value_delete(value);
+
+  /* XXX: FIXME:  Need a commit_edit here to save the data! */
+}
+
+
+static void
 gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
 {
   gnc_owner_set_owner (pw->owner_choice, owner);
+  gnc_payment_dialog_owner_changed(pw);
+}
+
+static int
+gnc_payment_dialog_owner_changed_cb (GtkWidget *widget, gpointer data)
+{
+  PaymentWindow *pw = data;
+  GncOwner owner;
+
+  if (!pw) return FALSE;
+
+  gncOwnerCopy (&(pw->owner), &owner);
+  gnc_owner_get_owner (pw->owner_choice, &owner);
+
+  /* If this owner really changed, then reset ourselves */
+  if (!gncOwnerEqual (&owner, &(pw->owner))) {
+    gncOwnerCopy (&owner, &(pw->owner));
+    gnc_payment_dialog_owner_changed(pw);
+  }
+
+  return FALSE;
 }
 
 void
@@ -163,6 +228,9 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
     gncOwnerApplyPayment (&pw->owner, post, acc, amount, date, memo, num);
   }
   gnc_resume_gui_refresh ();
+
+  /* Save the transfer account, acc */
+  gnc_payment_dialog_remember_account(pw, acc);
 
   gnc_ui_payment_window_destroy (pw);
 }
@@ -285,10 +353,16 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
   gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
+  /* Set the dialog for the 'new' owner */
+  gnc_payment_dialog_owner_changed(pw);
+
   /* Setup signals */
   glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
                                      pw);
+
+  g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
+		    G_CALLBACK (gnc_payment_dialog_owner_changed_cb), pw);
 
   /* Register with the component manager */
   pw->component_id =
