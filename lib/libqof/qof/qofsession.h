@@ -209,7 +209,7 @@ QofBook * qof_session_get_book (QofSession *session);
  *    filepath is derived from the url by substituting commas for
  *    slashes).
  *
- *    The qof_session_get_url() routine returns the url that was opened.
+ * The qof_session_get_url() routine returns the url that was opened.
  *    URL's for local files take the form of 
  *    file:/some/where/some/file.gml
  */
@@ -223,7 +223,7 @@ const char * qof_session_get_url (QofSession *session);
  */
 gboolean qof_session_not_saved(QofSession *session);
 
-/** FIXME: This isn't as thorough as we might want it to be... */
+/** Allows the backend to warn the user if a dataset already exists. */
 gboolean qof_session_save_may_clobber_data (QofSession *session);
 
 /** The qof_session_save() method will commit all changes that have been
@@ -253,7 +253,7 @@ between sessions - see the \ref QSF (QSF) documentation
 
 The recommended backend for the new session is QSF or a future
 SQL backend. Using any of these entity copy functions sets a 
-flag in the backend that this is now a partial QofBook.
+flag in the backend that this is now a partial QofBook. See \ref Reference.
 When you save a session containing a partial QofBook,
 the session will check that the backend is able to handle the
 partial book. If not, the backend will be replaced by one that
@@ -382,106 +382,6 @@ gboolean
 qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent);
 
 /** @} 
-*/
-
-/** @name Using a partial QofBook.
-
-Part of the handling for partial books requires a storage mechanism for
-references to entities that are not within reach of the partial book.
-This requires a GList in the book data to contain the reference 
-QofIdType and GUID so that when the book is written out, the
-reference can be included. See ::qof_book_get_data. 
-
-When the file is imported back in, the list needs to be rebuilt.
-The QSF backend rebuilds the references by linking to real entities.
-Other backends can process the hash table in similar ways.
-
-The list stores the QofEntityReference to the referenced entity -
-a struct that contains the GUID and the QofIdType of the referenced
-entity as well as the parameter used to obtain the reference.
-
-Partial books need to be differentiated in the backend, the 
-flag in the book data is used by qof_session_save to prevent a partial
-book being saved using a backend that requires a full book.
-
- @{ */
-
-
-/** \brief External references in a partial QofBook.
-
-For use by any session that deals with partial QofBooks.
-It is used by the entity copy functions and by the QSF backend.
-Creates a GList stored in the Book hashtable to contain
-repeated references for a single entity.
-*/
-typedef struct qof_entity_reference {
-	QofIdType       choice_type;/**< When the reference is a different type.*/
-	QofIdType       type;       /**< The type of entity */
-	GUID            *ref_guid;  /**< The GUID of the REFERENCE entity */
-	const QofParam  *param;      /**< The parameter name and type. */
-	const GUID      *ent_guid;   /**< The GUID of the original entity. */
-}QofEntityReference;
-
-/** \brief Get a reference from this entity to another entity.
-
-Used in the preparation of a partial QofBook when the known entity
-(the one currently being copied into the partial book) refers to
-any other entity, usually as a parent or child.
-The routine calls the param_getfcn of the supplied parameter,
-which must return an object (QofEntity*), not a known QOF data type, to
-retrieve the referenced entity and therefore the GUID. The GUID of
-both entities are stored in the reference which then needs to be added
-to the reference list which is added to the partial book data hash.
-The reference itself is used by the backend to preserve the relationship
-between entities within and outside the partial book.
-
-See also ::qof_class_get_referenceList to obtain the list of 
-parameters that provide references to the known entity whilst
-excluding parameters that return known QOF data types.
-
-Note that even if the referenced entity \b exists in the partial
-book (or will exist later), a reference must still be obtained and
-added to the reference list for the book itself. This maintains
-the integrity of the partial book during sequential copy operations.
-
-@param ent   The known entity.
-@param param  The parameter to use to get the referenced entity.
-
-@return FALSE on error, otherwise a pointer to the QofEntityReference.
-*/
-QofEntityReference*
-qof_entity_get_reference_from(QofEntity *ent, const QofParam *param);
-
-/** \brief Adds a new reference to the partial book data hash.
-
-Retrieves any existing reference list and appends the new reference.
-
-If the book is not already marked as partial, it will be marked as
-partial.
-*/
-void
-qof_session_update_reference_list(QofSession *session, QofEntityReference *reference);
-
-/** Used as the key value for the QofBook data hash.
- *
- * Retrieved later by QSF (or any other suitable backend) to
- * rebuild the references from the QofEntityReference struct
- * that contains the QofIdType and GUID of the referenced entity
- * of the original QofBook as well as the parameter data and the
- * GUID of the original entity.
- * */
-#define ENTITYREFERENCE "QofEntityReference"
-
-/** \brief Flag indicating a partial QofBook.
-
-When set in the book data with a gboolean value of TRUE,
-the flag denotes that only a backend that supports partial
-books can be used to save this session.
-*/
-
-#define PARTIAL_QOFBOOK "PartialQofBook"
-
-/** @}
 */
 
 /** \brief Allow session data to be printed to stdout

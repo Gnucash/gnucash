@@ -27,7 +27,7 @@
 /** @addtogroup Trace
     @{ */
 
-/** @file qof-log.h 
+/** @file qoflog.h 
  *  @brief QOF error logging and tracing facility 
 */
 
@@ -180,63 +180,63 @@ gint qof_log_module_count(void);
 /** Log a serious error */
 #define PERR(format, args...) do {                   \
   if (qof_log_check (log_module, GNC_LOG_ERROR)) {   \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,       \
-      "Error: %s(): " format, FUNK , ## args);       \
-  }                                                  \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
+      "Error: %s(): " format, FUNK , ## args);     \
+  }                                                \
 } while (0)
 
 /** Log a warning */
 #define PWARN(format, args...) do {                    \
   if (qof_log_check (log_module, GNC_LOG_WARNING)) {   \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,          \
-      "Warning: %s(): " format, FUNK , ## args);       \
-  }                                                    \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
+      "Warning: %s(): " format, FUNK , ## args);   \
+  }                                                \
 } while (0)
 
 /** Print an informational note */
 #define PINFO(format, args...) do {                 \
   if (qof_log_check (log_module, GNC_LOG_INFO)) {   \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,          \
-      "Info: %s(): " format,                        \
-      FUNK , ## args);                              \
-  }                                                 \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
+      "Info: %s(): " format,                       \
+      FUNK , ## args);                             \
+  }                                                \
 } while (0)
 
 /** Print a debugging message */
 #define DEBUG(format, args...) do {                 \
   if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,         \
-      "Debug: %s(): " format,                       \
-      FUNK , ## args);                              \
-  }                                                 \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Debug: %s(): " format,                      \
+      FUNK , ## args);                             \
+  }                                                \
 } while (0)
 
 /** Print a function entry debugging message */
 #define ENTER(format, args...) do {                 \
   if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,         \
-      "Enter in %s: %s()" format, __FILE__,         \
-      FUNK , ## args);                              \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Enter in %s: %s()" format, __FILE__,        \
+      FUNK , ## args);                             \
     qof_log_add_indent();                           \
-  }                                                 \
+  }                                                \
 } while (0)
 
 /** Print a function exit debugging message */
 #define LEAVE(format, args...) do {                 \
   if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
     qof_log_drop_indent();                          \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,         \
-      "Leave: %s()" format,                         \
-      FUNK , ## args);                              \
-  }                                                 \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Leave: %s()" format,                        \
+      FUNK , ## args);                             \
+  }                                                \
 } while (0)
 
 /** Print a function trace debugging message */
 #define TRACE(format, args...) do {                 \
   if (qof_log_check (log_module, GNC_LOG_TRACE)) {  \
-    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,         \
-      "Trace: %s(): " format, FUNK , ## args);      \
-  }                                                 \
+    g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
+      "Trace: %s(): " format, FUNK , ## args);     \
+  }                                                \
 } while (0)
 
 #define DEBUGCMD(x) do {                            \
@@ -269,21 +269,21 @@ void qof_report_clock_total (int clockno,
 #define START_CLOCK(clockno,format, args...) do {        \
   if (qof_log_check (log_module, GNC_LOG_INFO))          \
     qof_start_clock (clockno, log_module, GNC_LOG_INFO,  \
-             __FUNCTION__, format , ## args);            \
+             __FUNCTION__, format , ## args);               \
 } while (0)
 
 /** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) do {       \
   if (qof_log_check (log_module, GNC_LOG_INFO))          \
     qof_report_clock (clockno, log_module, GNC_LOG_INFO, \
-             __FUNCTION__, format , ## args);            \
+             __FUNCTION__, format , ## args);               \
 } while (0)
 
 /** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) do {       \
   if (qof_log_check (log_module, GNC_LOG_INFO))                \
     qof_report_clock_total (clockno, log_module, GNC_LOG_INFO, \
-             __FUNCTION__, format , ## args);                  \
+             __FUNCTION__, format , ## args);               \
 } while (0)
 
 

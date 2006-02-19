@@ -625,9 +625,9 @@ qsf_from_coll_cb (QofEntity *ent, gpointer user_data)
 	params = (qsf_param*)user_data;
 	if(!ent || !params) { return; }
 	qof_param = params->qof_param;
+	guid_to_string_buff(qof_entity_get_guid(ent), qsf_guid);
 	node = xmlAddChild(params->output_node, xmlNewNode(params->qsf_ns,
 		BAD_CAST qof_param->param_type));
-	guid_to_string_buff(qof_entity_get_guid(ent), qsf_guid);
 	xmlNodeAddContent(node, BAD_CAST qsf_guid);
 	xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
 }
@@ -678,6 +678,7 @@ reference_list_lookup(gpointer data, gpointer user_data)
 	QofParam *ref_param;
 	QofEntityReference *reference, *starter;
 	qsf_param  *params;
+	const GUID *guid;
 	xmlNodePtr node, object_node;
 	xmlNsPtr ns;
 	GList *copy_list;
@@ -708,6 +709,18 @@ reference_list_lookup(gpointer data, gpointer user_data)
 		xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST ref_name);
 		g_free(ref_name);
 	}
+	else {
+		ent = (QofEntity*)ref_param->param_getfcn(ent, ref_param);
+		if(!ent) { return; }
+		if((0 == safe_strcmp(ref_param->param_type, QOF_TYPE_COLLECT)) ||
+			(0 == safe_strcmp(ref_param->param_type, QOF_TYPE_CHOICE)))
+		{ return; }
+		node = xmlAddChild(object_node, xmlNewNode(ns, BAD_CAST QOF_TYPE_GUID));
+		guid = qof_entity_get_guid(ent);
+		guid_to_string_buff(guid, qsf_guid);
+		xmlNodeAddContent(node, BAD_CAST qsf_guid);
+		xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST ref_param->param_name);
+	}
 }
 
 /*=====================================
@@ -723,7 +736,6 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 	xmlNodePtr node, object_node;
 	xmlNsPtr   ns;
 	gchar      *string_buffer;
-	GString    *buffer;
 	QofParam   *qof_param;
 	QofEntity  *choice_ent;
 	KvpFrame   *qsf_kvp;
@@ -743,9 +755,9 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 	object_node = xmlNewChild(params->book_node, params->qsf_ns,
 		BAD_CAST QSF_OBJECT_TAG, NULL);
 	xmlNewProp(object_node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST ent->e_type);
-	buffer = g_string_new(" ");
-	g_string_printf(buffer, "%i", param_count);
-	xmlNewProp(object_node, BAD_CAST QSF_OBJECT_COUNT, BAD_CAST buffer->str);
+	string_buffer = g_strdup_printf("%i", param_count);
+	xmlNewProp(object_node, BAD_CAST QSF_OBJECT_COUNT, BAD_CAST string_buffer);
+	g_free(string_buffer);
 	param_list = g_slist_copy(params->qsf_sequence);
 	while(param_list != NULL) {
 		qof_param = (QofParam*)param_list->data;
@@ -760,6 +772,7 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 				string_buffer = g_strdup(cm_sa);
 				xmlNodeAddContent(node, BAD_CAST string_buffer);
 				xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE , BAD_CAST QOF_PARAM_GUID);
+				g_free(string_buffer);
 				own_guid = TRUE;
 			}
 			params->qsf_ent = ent;
@@ -775,7 +788,9 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 			if(qsf_coll) { 
 				params->qof_param = qof_param;
 				params->output_node = object_node;
-				qof_collection_foreach(qsf_coll, qsf_from_coll_cb, params);
+				if(qof_collection_count(qsf_coll) > 0) {
+					qof_collection_foreach(qsf_coll, qsf_from_coll_cb, params);
+				}
 			}
 			param_list = g_slist_next(param_list);
 			continue;
@@ -783,8 +798,6 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_CHOICE))
 		{
 			/** \todo use the reference list here. */
-			/* repeats due to use of reference list for GUID and CHOICE */
-			/* fix to allow COLLECT too */
 			choice_ent = (QofEntity*)qof_param->param_getfcn(ent, qof_param);
 			if(!choice_ent) {
 				param_list = g_slist_next(param_list);
@@ -797,6 +810,7 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 			xmlNodeAddContent(node, BAD_CAST string_buffer);
 			xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
 			xmlNewProp(node, BAD_CAST "name", BAD_CAST choice_ent->e_type);
+			g_free(string_buffer);
 			param_list = g_slist_next(param_list);
 			continue;
 		}
@@ -818,8 +832,8 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 					node = xmlAddChild(object_node, xmlNewNode(ns, BAD_CAST qof_param->param_type));
 					string_buffer = g_strdup(qof_book_merge_param_as_string(qof_param, ent));
 					xmlNodeAddContent(node, BAD_CAST string_buffer);
-					g_free(string_buffer);
 					xmlNewProp(node, BAD_CAST QSF_OBJECT_TYPE, BAD_CAST qof_param->param_name);
+					g_free(string_buffer);
 				}
 			}
 		}

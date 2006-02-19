@@ -27,6 +27,7 @@ libqof_la_SOURCES =  \
    qoflog.c          \
    qofobject.c       \
    qofquerycore.c    \
+   qofreference.c    \
    qofsession.c      \
    qof_book_merge.c
 
@@ -58,6 +59,7 @@ qofinclude_HEADERS = \
    qoflog.h          \
    qofobject.h       \
    qofquerycore.h    \
+   qofreference.h    \
    qofsession.h      \
    qofsql.h          \
    qof_book_merge.h

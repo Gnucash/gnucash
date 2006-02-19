@@ -50,9 +50,6 @@
     @addtogroup Object Object: Dynamic Object Class Framework
     @ingroup QOF
 */
-/** @addtogroup Choice Choice and collect : One to many links.
-	@ingroup QOF
-*/
 /**
     @addtogroup Query Query: Querying for Objects
     @ingroup QOF
@@ -61,11 +58,17 @@
     @addtogroup Trace Trace: Error Reporting and Debugging
     @ingroup QOF
 */
+/** @addtogroup Event Event: QOF event handlers.
+	@ingroup QOF
+*/
+/** @addtogroup Choice Choice and collect : One to many links.
+	@ingroup QOF
+*/
 /** @addtogroup BookMerge Merging QofBook structures
 	@ingroup QOF
 */
-/** @addtogroup Event Event: QOF event handlers.
-	@ingroup QOF
+/** \addtogroup Reference Referring to entities outside a partial book.
+	\ingroup QOF
 */
 /**
     @addtogroup Utilities Misc Utilities
@@ -96,6 +99,7 @@
 #include "qofchoice.h"
 #include "qof_book_merge.h"
 #include "qof-be-utils.h"
+#include "qofreference.h"
 #include "qofla-dir.h"
 #include "deprecated.h"
 
