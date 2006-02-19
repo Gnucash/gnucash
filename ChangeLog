@@ -6,6 +6,10 @@
 	  did in TransLog.c
 	  Fixes #331620.
 
+	* src/business/business-gnome/dialog-payment.c:
+	  Pop up a warning dialog if the user has no valid post-to accounts.
+	  Fixes #331730.
+
 2006-02-18  Derek Atkins  <derek@ihtfp.com>
 
 	* intl-scm/xgettext.scm: remove the absolute path from filenames

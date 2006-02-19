@@ -309,6 +309,26 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   /* Show it all */
   gtk_widget_show_all (pw->dialog);
 
+  /* Warn the user if they have no valid post-to accounts */
+  {
+    const gchar *text;
+    const char *acct_type;
+
+    text = gtk_entry_get_text(GTK_ENTRY((GTK_COMBO(pw->post_combo))->entry));
+    if (!text || safe_strcmp (text, "") == 0) {
+  
+      /* XXX: I know there's only one type here */
+      acct_type = xaccAccountGetTypeStr(GPOINTER_TO_INT(pw->acct_types->data));
+      gnc_warning_dialog(pw->dialog,
+			 _("You have no valid \"Post To\" accounts.  "
+			   "Please create an account of type \"%s\" "
+			   "before you continue to process this payment.  "
+			   "Perhaps you want to create an Invoice or "
+			   "Bill first?"),
+			 acct_type);
+    }
+  }
+
   return pw;
 }
 
