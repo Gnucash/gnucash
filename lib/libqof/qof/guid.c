@@ -126,7 +126,7 @@ guid_null(void)
     char *tmp = "NULLGUID.EMPTY.";
 
       /* 16th space for '\O' */
-	  for (i = 0; i < 16; i++)
+	  for (i = 0; i < GUID_DATA_SIZE; i++)
       null_guid.data[i] = tmp[i];
 
     null_inited = 1;
@@ -504,7 +504,7 @@ guid_new(GUID *guid)
 	* is just hiding the problem, not fixing it.
 	*/
   init_from_int (433781*counter);
-  init_from_buff (guid->data, 16);
+  init_from_buff (guid->data, GUID_DATA_SIZE);
 
   if (counter == 0)
   {
@@ -540,7 +540,7 @@ encode_md5_data(const unsigned char *data, char *buffer)
 {
   size_t count;
 
-  for (count = 0; count < 16; count++, buffer += 2)
+  for (count = 0; count < GUID_DATA_SIZE; count++, buffer += 2)
     sprintf(buffer, "%02x", data[count]);
 }
 
@@ -557,7 +557,7 @@ decode_md5_string(const unsigned char *string, unsigned char *data)
   if (NULL == data) return FALSE;
   if (NULL == string) goto badstring;
 
-  for (count = 0; count < 16; count++)
+  for (count = 0; count < GUID_DATA_SIZE; count++)
   {
     /* check for a short string e.g. null string ... */
     if ((0==string[2*count]) || (0==string[2*count+1])) goto badstring;
@@ -583,7 +583,7 @@ decode_md5_string(const unsigned char *string, unsigned char *data)
   return TRUE;
 
 badstring:
-  for (count = 0; count < 16; count++)
+  for (count = 0; count < GUID_DATA_SIZE; count++)
   {
     data[count] = 0;
   }
@@ -635,7 +635,7 @@ gboolean
 guid_equal(const GUID *guid_1, const GUID *guid_2)
 {
   if (guid_1 && guid_2)
-    return (memcmp(guid_1, guid_2, sizeof(GUID)) == 0);
+    return (memcmp(guid_1, guid_2, GUID_DATA_SIZE) == 0);
   else
     return FALSE;
 }
@@ -653,7 +653,7 @@ guid_compare(const GUID *guid_1, const GUID *guid_2)
   if (guid_1 && !guid_2)
     return 1;
 
-  return memcmp (guid_1, guid_2, sizeof (GUID));
+  return memcmp (guid_1, guid_2, GUID_DATA_SIZE);
 }
 
 guint
@@ -677,7 +677,7 @@ guid_hash_to_guint (gconstpointer ptr)
     unsigned int i, j;
 
     for (i = 0, j = 0; i < sizeof(guint); i++, j++) {
-      if (j == 16) j = 0;
+      if (j == GUID_DATA_SIZE) j = 0;
 
       hash <<= 4;
       hash |= guid->data[j];

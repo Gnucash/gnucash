@@ -50,9 +50,10 @@
 */
 
 /** The type used to store guids */
+#define GUID_DATA_SIZE	16
 typedef union _GUID
 {
-  unsigned char data[16];
+  unsigned char data[GUID_DATA_SIZE];
 
   int __align_me; /* this just ensures that GUIDs are 32-bit
                    * aligned on systems that need them to be. */
