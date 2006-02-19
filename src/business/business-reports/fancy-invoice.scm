@@ -722,7 +722,7 @@
 	'attribute (list "align" "right")
 	'attribute (list "width" "33%"))
     (gnc:html-table-append-row!
-     table (list (string-expand (if addy addy "") #\newline "<br>")
+     table (list (string-expand (string-append (if addy addy "") (if id (string-append "\n" id) "")) #\newline "<br>")
 		 (string-expand
 		  (string-append (if phone
 				     (string-append (_ "Phone:") " " phone)
