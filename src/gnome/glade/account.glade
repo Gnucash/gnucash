@@ -728,7 +728,6 @@
 			  <property name="rules_hint">False</property>
 			  <property name="reorderable">False</property>
 			  <property name="enable_search">True</property>
-			  <property name="fixed_height_mode">False</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -1350,7 +1349,6 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 				      <property name="rules_hint">True</property>
 				      <property name="reorderable">True</property>
 				      <property name="enable_search">True</property>
-				      <property name="fixed_height_mode">False</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -1597,7 +1595,6 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Setup new accounts</property>
 	  <signal name="prepare" handler="on_final_account_prepare"/>
-	  <signal name="next" handler="on_final_account_next" last_modification_time="Sun, 15 Jan 2006 16:54:20 GMT"/>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox3">
@@ -1931,8 +1928,6 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 			      <property name="items">USD
 GBP
 EUR</property>
-			      <property name="add_tearoffs">False</property>
-			      <property name="focus_on_click">True</property>
 			    </widget>
 			  </child>
 			</widget>
@@ -2025,7 +2020,6 @@ EUR</property>
 					  <property name="rules_hint">False</property>
 					  <property name="reorderable">False</property>
 					  <property name="enable_search">True</property>
-					  <property name="fixed_height_mode">False</property>
 					</widget>
 				      </child>
 				    </widget>
@@ -2177,7 +2171,6 @@ EUR</property>
 				      <property name="rules_hint">False</property>
 				      <property name="reorderable">False</property>
 				      <property name="enable_search">True</property>
-				      <property name="fixed_height_mode">False</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -2278,7 +2271,6 @@ EUR</property>
 		      <property name="rules_hint">False</property>
 		      <property name="reorderable">False</property>
 		      <property name="enable_search">True</property>
-		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -2998,7 +2990,6 @@ EUR</property>
 		  <property name="rules_hint">True</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">True</property>
-		  <property name="fixed_height_mode">False</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>

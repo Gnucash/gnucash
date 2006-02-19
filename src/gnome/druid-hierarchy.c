@@ -103,10 +103,6 @@ void clear_all_clicked (GtkButton       *button,
 void on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
 			       gpointer         arg1,
 			       hierarchy_data  *data);
-gboolean on_final_account_next (GnomeDruidPage  *gnomedruidpage,
-                                gpointer         arg1,
-                                hierarchy_data  *data);
-
 void on_cancel (GnomeDruid      *gnomedruid, hierarchy_data *data);
 void on_finish (GnomeDruidPage  *gnomedruidpage, gpointer arg1, hierarchy_data *data);
 
@@ -837,37 +833,6 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   gtk_tree_view_expand_all (tree_view);
   gtk_widget_show(GTK_WIDGET(data->final_account_tree));
   gnc_resume_gui_refresh ();
-}
-
-static void _glist_free_helper(gpointer elt, gpointer user_data)
-{
-  g_free(elt);
-}
-
-gboolean
-on_final_account_next (GnomeDruidPage  *gnomedruidpage,
-                       gpointer         arg1,
-                       hierarchy_data  *data)
-{
-  GList *errors;
-  gboolean has_errors;
-
-  errors  = account_merge_error_detection(gnc_book_get_group(gnc_get_current_book()),
-                                          data->our_final_group);
-  has_errors = (g_list_length(errors) > 0);
-  if (has_errors)
-  {
-    gnc_info_dialog(data->dialog, 
-        "%d accounts have placeholdders that conflict "
-        "with existing accounts, please resolve.", g_list_length(errors));
-  }
-
-  {
-    g_list_foreach(errors, _glist_free_helper, NULL);
-    g_list_free(errors);
-  }
-
-  return has_errors;
 }
 
 void
