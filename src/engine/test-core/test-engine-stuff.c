@@ -1547,6 +1547,8 @@ get_random_queryop(void)
   case 11:
     op = QOF_QUERY_XOR;
     break;
+  default:
+    g_assert_not_reached();
   };
   if (gnc_engine_debug_random) printf ("op = %d (int was %d), ", op, op_num);
   return op;
