@@ -461,6 +461,8 @@ get_random_gnc_numeric(void)
      * of avoiding overflow. */
     numer = get_random_gint64()/100000;
     if (0 == numer) numer = 1;
+    /* Make sure we have a non-zero denominator */
+    if (0 == deno) deno = 1;
     return gnc_numeric_create(numer, deno);
 }
 
@@ -1524,8 +1526,29 @@ free_random_guids(GList *guids)
 static QofQueryOp
 get_random_queryop(void)
 {
-  QofQueryOp op = get_random_int_in_range (1, QOF_QUERY_XOR);
-  if (gnc_engine_debug_random) printf ("op = %d, ", op);
+  int op_num = get_random_int_in_range(1,11);
+  QofQueryOp op;
+  /* = get_random_int_in_range (1, QOF_QUERY_XOR); */
+
+  /* Let's make it MUCH more likely to get AND and OR */
+  switch(op_num) {
+  case 1:  case 2:  case 3:  case 4:
+    op = QOF_QUERY_AND;
+    break;
+  case 5:  case 6:  case 7:  case 8:
+    op = QOF_QUERY_OR;
+    break;
+  case 9:
+    op = QOF_QUERY_NAND;
+    break;
+  case 10:
+    op = QOF_QUERY_NOR;
+    break;
+  case 11:
+    op = QOF_QUERY_XOR;
+    break;
+  };
+  if (gnc_engine_debug_random) printf ("op = %d (int was %d), ", op, op_num);
   return op;
 }
 
