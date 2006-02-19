@@ -53,6 +53,10 @@
 	  - Prefer QUERY_AND and QUERY_OR over NAND, NOR, XOR
 	  - Don't randomly generate a gnc_numeric with a 0 denominator.
 
+	* src/business/business-gnome/dialog-invoice.c:
+	  Don't let users post negative invoices.  (#166864)
+	  Pop up an error dialog and prevent the post.
+
 2006-02-18  Derek Atkins  <derek@ihtfp.com>
 
 	* intl-scm/xgettext.scm: remove the absolute path from filenames

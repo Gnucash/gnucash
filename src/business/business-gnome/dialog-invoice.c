@@ -610,6 +610,20 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
     return;
   }
 
+  /* Make sure that the invoice has a positive balance */
+  if (gnc_numeric_negative_p(gncInvoiceGetTotal(invoice))) {
+    gnc_error_dialog(iw_get_window(iw),
+		     _("You may not post an invoice with a negative total value."));
+    return;
+  }
+
+  if (iw->total_cash_label &&
+      gnc_numeric_negative_p(gncInvoiceGetTotalOf(invoice, GNC_PAYMENT_CASH))) {
+    gnc_error_dialog(iw_get_window(iw),
+		     _("You may not post an expense voucher with a negative total cash value."));
+    return;
+  }
+
   /* Ok, we can post this invoice.  Ask for verification, set the due date,
    * post date, and posted account
    */
