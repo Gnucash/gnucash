@@ -12,10 +12,6 @@ determine_account_merge_disposition(Account *existing_acct, Account *new_acct)
   if (existing_acct == NULL)
     return GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW;
 
-  if (xaccAccountGetPlaceholder(existing_acct) != xaccAccountGetPlaceholder(new_acct))
-/*    return GNC_ACCOUNT_MERGE_DISPOSITION_ERROR;*/
-    return GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING;
-
   return GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING;
 }
 
@@ -31,40 +27,6 @@ determine_merge_disposition(AccountGroup *existing_root, Account *new_acct)
   g_free(full_name);
 
   return determine_account_merge_disposition(existing_acct, new_acct);
-}
-
-static void
-_account_merge_error_detection(AccountGroup *existing_grp, AccountGroup *new_grp, GList **error_accum)
-{
-  AccountList *accts;
-  for (accts = xaccGroupGetAccountList(new_grp); accts; accts = accts->next)
-  {
-    Account *new_acct, *existing_acct;
-    GncAccountMergeDisposition disp;
-    
-    new_acct = (Account*)accts->data;
-    existing_acct = xaccGetAccountFromName(existing_grp, xaccAccountGetName(new_acct));
-    disp = determine_account_merge_disposition(existing_acct, new_acct);
-    if (disp == GNC_ACCOUNT_MERGE_DISPOSITION_ERROR)
-    {
-      GncAccountMergeError *err = g_new0(GncAccountMergeError, 1);
-      err->existing_acct = existing_acct;
-      err->new_acct = new_acct;
-      err->disposition = disp;
-      *error_accum = g_list_append(*error_accum, err);
-    }
-    _account_merge_error_detection(xaccAccountGetChildren(existing_acct),
-                                   xaccAccountGetChildren(new_acct),
-                                   error_accum);
-  }
-}
-
-GList*
-account_merge_error_detection(AccountGroup *existing_grp, AccountGroup *new_grp)
-{
-  GList *errors = NULL;
-  _account_merge_error_detection(existing_grp, new_grp, &errors);
-  return errors;
 }
 
 void
@@ -89,9 +51,6 @@ account_group_merge(AccountGroup *existing_grp, AccountGroup *new_grp)
     existing_named = xaccGetAccountFromName(existing_grp, name);
     switch (determine_account_merge_disposition(existing_named, new_acct))
     {
-    case GNC_ACCOUNT_MERGE_DISPOSITION_ERROR:
-      g_assert_not_reached();
-      return;
     case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
       /* recurse */
       account_group_merge(xaccAccountGetChildren(existing_named),

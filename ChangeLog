@@ -1,3 +1,13 @@
+2006-02-19  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/gnc-account-merge.[ch]: Remove placeholder-difference
+	"ERROR" merge state.
+
+	* src/gnome/druid-hierarchy.c (placeholder_cell_data_func)
+	(on_final_account_prepare): Remove use of default
+	account-tree-model placeholder column, and substitute a column
+	that reflects the post-merge value.
+
 2006-02-19  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/TransLog.c:  use TABS not SPACES for column separators

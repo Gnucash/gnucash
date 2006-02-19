@@ -651,6 +651,42 @@ balance_cell_edited (GtkCellRendererText *cell,
 }
 
 static void
+placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
+                            GtkCellRenderer *cell,
+                            GtkTreeModel *model,
+                            GtkTreeIter *iter,
+                            gpointer user_data)
+{
+	Account *account;
+	gboolean willbe_placeholder = FALSE;
+        GncAccountMergeDisposition disp;
+
+	g_return_if_fail (GTK_TREE_MODEL (model));
+	account = gnc_tree_view_account_get_account_from_iter (model, iter);
+        disp = determine_merge_disposition(gnc_book_get_group(gnc_get_current_book()), account);
+        switch (disp)
+        {
+        case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING: {
+                /* find the existing account, do whatever it is. */
+                const char sep_char = '.';
+                gchar *full_name;
+                Account *existing_acct;
+                AccountGroup *root_group = gnc_book_get_group(gnc_get_current_book());
+                full_name = xaccAccountGetFullName(account, sep_char);
+                existing_acct = xaccGetAccountFromFullName(root_group, full_name, sep_char);
+                willbe_placeholder = xaccAccountGetPlaceholder(existing_acct);
+                g_free(full_name);
+        } break;
+        case GNC_ACCOUNT_MERGE_DISPOSITION_CREATE_NEW:
+                willbe_placeholder = xaccAccountGetPlaceholder(account);
+                break;
+        }
+        
+        gtk_cell_renderer_toggle_set_active(GTK_CELL_RENDERER_TOGGLE(cell), willbe_placeholder);
+}
+
+
+static void
 use_existing_account_data_func(GtkTreeViewColumn *tree_column,
                                GtkCellRenderer *cell,
                                GtkTreeModel *tree_model,
@@ -674,9 +710,6 @@ use_existing_account_data_func(GtkTreeViewColumn *tree_column,
   disposition = determine_merge_disposition(real_root, new_acct);
   switch (disposition)
   {
-  case GNC_ACCOUNT_MERGE_DISPOSITION_ERROR:
-    to_user = "error: placeholders different";
-    break;
   case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING:
     to_user = "yes";
     break;
@@ -736,27 +769,47 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
 
   gtk_tree_view_set_headers_visible (tree_view, TRUE);
   gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree),
-				   "type", "placeholder", NULL);
+				   "type", /*"placeholder", */ NULL);
   gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW(data->final_account_tree),
 				      FALSE);
 
   selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (G_OBJECT (renderer),
-		"xalign", 1.0,
-		(char *)NULL);
-  g_signal_connect (G_OBJECT (renderer), "edited",
-		    G_CALLBACK (balance_cell_edited),
-		    data);
-  column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
-						     renderer,
-						     NULL);
-  gtk_tree_view_column_set_cell_data_func (column, renderer, 
-					   balance_cell_data_func,
-					   (gpointer)data, NULL);
-  gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
+  // This is a re-definition of the placeholder that the account-tree model
+  // provides, reflecting the to-be-created state of the account tree
+  // post-merge.
+  {
+    renderer = gtk_cell_renderer_toggle_new();
+    g_object_set(G_OBJECT (renderer),
+                 "activatable", FALSE,
+                 "sensitive", FALSE,
+                 NULL);
+    column = gtk_tree_view_column_new_with_attributes(_("Placeholder"),
+                                                      renderer, NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer, 
+                                             placeholder_cell_data_func,
+                                             (gpointer)data, NULL);
+    gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
+  }
+
+
+  {
+    renderer = gtk_cell_renderer_text_new ();
+    g_object_set (G_OBJECT (renderer),
+                  "xalign", 1.0,
+                  (char *)NULL);
+    g_signal_connect (G_OBJECT (renderer), "edited",
+                      G_CALLBACK (balance_cell_edited),
+                      data);
+    column = gtk_tree_view_column_new_with_attributes (_("Opening Balance"),
+                                                       renderer,
+                                                       NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer, 
+                                             balance_cell_data_func,
+                                             (gpointer)data, NULL);
+    gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
+  }
 
   // only in the case where there *are* existing accounts...
   if (xaccGroupGetNumSubAccounts(gnc_book_get_group(gnc_get_current_book())) > 0)
