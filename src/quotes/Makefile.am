@@ -1,23 +1,18 @@
-
-gncsharedir = ${GNC_SHAREDIR}
-
-bin_SCRIPTS = dump-finance-quote gnc-prices update-finance-quote
-gncshare_SCRIPTS = finance-quote-helper finance-quote-check
+bin_SCRIPTS = gnc-fq-check gnc-fq-dump gnc-fq-helper gnc-fq-update
 
 EXTRA_DIST = \
   Quote_example.pl \
-  finance-quote-check.in \
-  finance-quote-helper.in \
-  gnc-prices \
-  update-finance-quote.in \
-  value_portfolio \
-  dump-finance-quote
+  gnc-fq-check.in \
+  gnc-fq-dump \
+  gnc-fq-helper.in \
+  gnc-fq-update.in \
+  gnc-value-portfolio
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.
-finance-quote-helper: finance-quote-helper.in Makefile
+gnc-fq-helper: gnc-fq-helper.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
@@ -25,7 +20,7 @@ finance-quote-helper: finance-quote-helper.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-finance-quote-check: finance-quote-check.in Makefile
+gnc-fq-check: gnc-fq-check.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
@@ -33,7 +28,7 @@ finance-quote-check: finance-quote-check.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-update-finance-quote: update-finance-quote.in Makefile
+gnc-fq-update: gnc-fq-update.in Makefile
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
             -e 's:@-PERL-@:${PERL}:g' \
@@ -41,4 +36,4 @@ update-finance-quote: update-finance-quote.in Makefile
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-CLEANFILES = finance-quote-helper finance-quote-check update-finance-quote
+CLEANFILES = gnc-fq-helper gnc-fq-check gnc-fq-update

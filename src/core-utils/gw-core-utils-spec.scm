@@ -44,4 +44,12 @@
    '()
    "Is debugging mode on?")
 
+  (gw:wrap-function
+   ws
+   'g:find-program-in-path
+   '(<gw:mchars> callee-owned const)
+   "g_find_program_in_path"
+   '(((<gw:mchars> caller-owned) program))
+   "Get a boolean value from gconf.")
+
 )

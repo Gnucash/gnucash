@@ -31,6 +31,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-gnome-utils))
 
 (gnc:module-load "gnucash/app-utils" 0)
@@ -242,7 +243,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define gnc:*finance-quote-check*
-  (gnc:gnome-locate-data-file "finance-quote-check"))
+  (g:find-program-in-path "gnc-fq-check"))
 
 (define (gnc:fq-check-sources)
   (let ((program #f))
@@ -290,7 +291,7 @@
 ;; src/engine/gnc-pricedb.h
 
 (define gnc:*finance-quote-helper*
-  (gnc:gnome-locate-data-file "finance-quote-helper"))
+  (g:find-program-in-path "gnc-fq-helper"))
 
 (define (gnc:fq-get-quotes requests)
   ;; requests should be a list where each item is of the form
@@ -310,7 +311,7 @@
   ;; symbol if the corresponding method call fails, or a list
   ;; otherwise. A quote-result list will contain the symbol
   ;; representing the item being quoted, followed by an alist
-  ;; detailing the quote data from finance-quote-helper.
+  ;; detailing the quote data from gnc-fq-helper.
   ;;
   ;; Possible error symbols and their meanings are:
   ;;   missing-lib    One of the required perl libs is missing
@@ -327,7 +328,7 @@
   ;;
   ;; Also note that any given value in the alist might be
   ;; 'failed-conversion if the Finance::Quote result for that field
-  ;; was unparsable.  See the finance-quote-helper for more details
+  ;; was unparsable.  See the gnc-fq-helper for more details
   ;; about it's output.
 
   (let ((quoter #f))
@@ -387,7 +388,7 @@
     ;; Finance::Quote method.
     ;; 
     ;; Returns a list of the info needed for a set of calls to
-    ;; finance-quote-helper.  Each item will of the list will be of the
+    ;; gnc-fq-helper.  Each item will of the list will be of the
     ;; form:
     ;;
     ;; (("yahoo" (commodity-1 currency-1 tz-1)
@@ -418,7 +419,7 @@
 	    ;; Now collect symbols going to the same backend.
 	    (item-list->hash! commodity-list quote-hash car cdr hash-ref hash-set! #t)
 
-	    ;; Now translate to just what finance-quote-helper expects.
+	    ;; Now translate to just what gnc-fq-helper expects.
 	    (append
 	     (hash-fold
 	      (lambda (key value prior-result)
@@ -645,9 +646,9 @@
       (if (gnc:ui-is-running?)
           (gnc:error-dialog #f
            (_ "You are missing some needed Perl libraries.
-Run 'update-finance-quote' as root to install them."))
+Run 'gnc-fq-update' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
-Run 'update-finance-quote' as root to install them.") "\n")))
+Run 'gnc-fq-update' as root to install them.") "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)

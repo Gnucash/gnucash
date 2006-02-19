@@ -1,3 +1,19 @@
+2006-02-19  David Hampton  <hampton@employees.org>
+
+	* src/quotes/finance-quote-helper.in:
+	* src/quotes/dump-finance-quote:
+	* src/quotes/update-finance-quote.in:
+	* src/quotes/Makefile.am:
+	* src/quotes/value_portfolio:
+	* src/quotes/gnc-prices:
+	* src/quotes/README:
+	* src/quotes/finance-quote-check.in:
+	* src/core-utils/gw-core-utils-spec.scm:
+	* src/scm/price-quotes.scm: Regularize the naming of the
+	Finance::Quote auxiliary scripts. Remove the obsolete gnc-prices
+	script.  Move the to the bin directory the scripts that weren't
+	already there.
+
 2006-02-19  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/app-utils/gnc-account-merge.[ch]: Remove placeholder-difference
