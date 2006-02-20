@@ -1278,7 +1278,12 @@ raw_html_receiver (gpointer     engine,
                    gpointer     user_data)
 {
   FILE *fh = (FILE *) user_data;
-  fwrite (data, len, 1, fh);
+  size_t written;
+
+  do {
+    written = fwrite (data, 1, len, fh);
+    len -= written;
+  } while (len > 0);
   return TRUE;
 }
 
@@ -1528,9 +1533,11 @@ gnc_html_decode_string(const char * str)
     }
     else if(c == '%') {
       ptr++;
-      sscanf(ptr, "%02X", &hexval);
+      if (1 == sscanf(ptr, "%02X", &hexval))
+	decoded = g_string_append_c(decoded, (char)hexval);
+      else
+	decoded = g_string_append_c(decoded, ' ');
       ptr++;
-      decoded = g_string_append_c(decoded, (char)hexval);
     }
     ptr++;
   }

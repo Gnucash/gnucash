@@ -432,14 +432,14 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
             && location
             && (strlen(location) > 3)
             && !strncmp("id=", location, 3)) {
-                sscanf(location+3, "%d", &report_id);
+	        report_id = atoi(location+3);
                 DEBUG( "parsed id=%d", report_id );
         }
         else if (!safe_strcmp( type, URL_TYPE_OPTIONS)
                  && location
                  && (strlen(location) > 10)
                  && !strncmp("report-id=", location, 10)) {
-                sscanf(location+10, "%d", &report_id);
+                report_id = atoi(location+10);
                 inst_report = gnc_report_find(report_id);
                 if (inst_report != SCM_BOOL_F) {
                         gnc_plugin_page_report_add_edited_report(priv, inst_report);

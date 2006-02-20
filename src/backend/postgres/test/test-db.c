@@ -51,13 +51,11 @@ static void
 save_xml_file(QofSession * session, const char *filename_base)
 {
     QofBackendError io_err;
-    char cwd[1024];
-    char *filename;
+    gchar *cwd, *filename;
 
     g_return_if_fail(session && filename_base);
 
-    getcwd(cwd, sizeof(cwd));
-
+    cwd = g_get_current_dir();
     filename = g_strdup_printf("file:/%s/%s", cwd, filename_base);
 
     qof_session_begin(session, filename, FALSE, TRUE);
@@ -74,6 +72,7 @@ save_xml_file(QofSession * session, const char *filename_base)
     g_return_if_fail(io_err == ERR_BACKEND_NO_ERR);
 
     g_free(filename);
+    g_free(cwd);
 }
 
 static void

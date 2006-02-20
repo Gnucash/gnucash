@@ -1217,7 +1217,7 @@ rnd (double x, unsigned places)
   if (places >= 0)
   {
     sprintf (buf, "%.*f", (int) places, x);
-    sscanf (buf, "%lf", &r);
+    r = strtod(buf, NULL);
   }
   else
     r = x;

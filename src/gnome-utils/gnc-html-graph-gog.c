@@ -95,8 +95,7 @@ static double *
 read_doubles(const char * string, int nvalues)
 {
   int    n;
-  int    choffset=0;
-  int    accum = 0;
+  gchar *next;
   double * retval = g_new0(double, nvalues);
 
   // guile is going to (puts ...) the elements of the double array
@@ -105,9 +104,9 @@ read_doubles(const char * string, int nvalues)
   gnc_push_locale("C");
   {
     for (n=0; n<nvalues; n++) {
-      sscanf(string + accum, "%le%n", &retval[n], &choffset);
-      accum += choffset;
-    }
+      retval[n] = strtod(string, &next);
+      string = next;
+     }
   }
   gnc_pop_locale();
 
@@ -323,7 +322,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                           && dataStr != NULL
                           && labelsStr != NULL
                           && colorStr != NULL, FALSE );
-    sscanf( datasizeStr, "%d", &datasize );
+    datasize = atoi( datasizeStr );
     data = read_doubles( dataStr, datasize );
     labels = read_strings( labelsStr, datasize );
     colors = read_strings( colorStr, datasize );
@@ -398,7 +397,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     colColorsStr = g_hash_table_lookup(eb->params, "col_colors");
     stackedStr = NULL;
     stackedStr   = g_hash_table_lookup(eb->params, "stacked");
-    sscanf( stackedStr, "%d", &stackedInt );
+    stackedInt = atoi( stackedStr );
     stacked = (gboolean)stackedInt;
 
 #if 0 // too strong at the moment.
@@ -409,8 +408,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                           && rowLabelsStr != NULL
                           && colColorsStr != NULL, FALSE );
 #endif // 0
-    sscanf( datarowsStr, "%d", &datarows );
-    sscanf( datacolsStr, "%d", &datacols );
+    datarows = atoi( datarowsStr );
+    datacols = atoi( datacolsStr );
     data = read_doubles( dataStr, datarows*datacols );
     row_labels = read_strings( rowLabelsStr, datarows );
     col_labels = read_strings( colLabelsStr, datacols );
@@ -500,7 +499,7 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     char *datasizeStr, *xDataStr, *yDataStr;
 
     datasizeStr = g_hash_table_lookup( eb->params, "datasize" );
-    sscanf( datasizeStr, "%d", &datasize );
+    datasize = atoi( datasizeStr );
 
     xDataStr = g_hash_table_lookup( eb->params, "x_data" );
     xData = read_doubles( xDataStr, datasize );

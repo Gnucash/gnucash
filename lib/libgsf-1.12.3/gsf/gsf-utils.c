@@ -130,7 +130,7 @@ void
 gsf_input_dump (GsfInput *input, gboolean dump_as_hex)
 {
 	gsf_off_t offset = 0;
-	size_t size, count;
+	size_t size, count, count2, written;
 	guint8 const *data;
 
 	/* read in small blocks to excercise things */
@@ -143,8 +143,13 @@ gsf_input_dump (GsfInput *input, gboolean dump_as_hex)
 		g_return_if_fail (data != NULL);
 		if (dump_as_hex)
 			gsf_mem_dump_full (data, count, offset);
-		else
-			fwrite (data, 1, count, stdout);
+		else {
+			count2 = count;
+			do {
+				written = fwrite (data, 1, count2, stdout);
+				count2 -= written;
+			} while (count2 > 0);
+		}
 		size -= count;
 		offset += count;
 	}

@@ -499,7 +499,10 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts)
 
   if (!str || !ts) return FALSE;
 
-  sscanf(str, " %ld%n", &nanosecs, &charcount);
+  /* The '%n' doesn't count as a conversion. */
+  if (1 != sscanf(str, " %ld%n", &nanosecs, &charcount))
+    return FALSE;
+
   while( (*((gchar*)str + charcount)!='\0') &&
 	 isspace(*((unsigned char*)str + charcount)))
     charcount++;
