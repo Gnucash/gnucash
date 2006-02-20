@@ -21,17 +21,31 @@
  *                                                                  *
  ********************************************************************/
 
-#ifndef GNC_EVENT_P_H
-#define GNC_EVENT_P_H
+#ifndef QOF_EVENT_P_H
+#define QOF_EVENT_P_H
 
-#include "gnc-event.h"
+#include "qofevent.h"
 #include "qofid.h"
 
-/** \deprecated */
-void gnc_engine_generate_event (const GUID *, QofIdType, GNCEngineEventType);
+/* for backwards compatibility - to be moved back to qofevent.c in libqof2 */
+typedef struct
+{
+  GNCEngineEventHandler old_handler;
+  QofEventHandler handler;
+  gpointer user_data;
+
+  gint handler_id;
+} HandlerInfo;
+
+/** \deprecated Prevents handlers locating the QofCollection or casting
+to the QofInstance and locating the book, editlevel or dirty flag.
+Use qof_event_gen instead.
+*/
+void
+qof_event_generate (const GUID *guid, QofIdType e_type, 
+					QofEventId event_id);
 
 /* generates an event even when events are suspended! */
-void gnc_engine_force_event (QofEntity *entity,
-			     GNCEngineEventType event_type);
+void qof_event_force (QofEntity *entity, QofEventId event_id);
 
 #endif

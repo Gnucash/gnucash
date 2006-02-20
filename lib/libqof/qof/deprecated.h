@@ -86,4 +86,44 @@ void gnc_report_clock (int, QofLogModule, gncLogLevel, const char*, const char*,
 /** \deprecated use qof_report_clock_total */
 void gnc_report_clock_total (int, QofLogModule, gncLogLevel, const char*, const char*, ...);
 
+/** \deprecated use QOF_EVENT_NONE instead. */
+#define  GNC_EVENT_NONE   QOF_EVENT_NONE
+/** \deprecated use QOF_EVENT_CREATE instead. */
+#define  GNC_EVENT_CREATE QOF_EVENT_CREATE
+/** \deprecated use QOF_EVENT_MODIFY instead. */
+#define  GNC_EVENT_MODIFY QOF_EVENT_MODIFY
+/** \deprecated use QOF_EVENT_DESTROY instead. */
+#define  GNC_EVENT_DESTROY QOF_EVENT_DESTROY
+/** \deprecated use QOF_EVENT_ADD instead. */
+#define  GNC_EVENT_ADD    QOF_EVENT_ADD
+/** \deprecated use QOF_EVENT_REMOVE instead. */
+#define GNC_EVENT_REMOVE  QOF_EVENT_REMOVE
+/** \deprecated */
+#define GNC_EVENT_ALL     QOF_EVENT_ALL
+/** \deprecated use QofEventName instead. */
+#define GNCEngineEventType QofEventId
+/** \deprecated use QofEventHandler instead. */
+typedef void (*GNCEngineEventHandler) (GUID *entity, QofIdType type,
+                                       GNCEngineEventType event_type,
+                                       gpointer user_data);
+/** \deprecated For backwards compatibility - New code must not use
+this function. The function and the handler prototype will be remove
+from qofevent.c in libqoqf2 */
+gint qof_event_register_old_handler(GNCEngineEventHandler old_handler,
+									gpointer user_data);
+/** \deprecated use qof_event_register_handler instead. */
+gint gnc_engine_register_event_handler (GNCEngineEventHandler handler,
+                                   gpointer user_data);
+/** \deprecated use qof_event_unregister_handler instead. */
+void gnc_engine_unregister_event_handler (gint handler_id);
+/** \deprecated use qof_event_gen instead. */
+void gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type);
+/** \deprecated use qof_event_suspend instead. */
+void gnc_engine_suspend_events (void);
+/** \deprecated use qof_event_resume instead. */
+void gnc_engine_resume_events (void);
+/** \deprecated use qof_event_generate instead. */
+void gnc_engine_generate_event (const GUID *guid, QofIdType e_type, 
+         GNCEngineEventType event_type);
+
 #endif /* _DEPRECATED_H */

@@ -12,7 +12,6 @@ libqof_la_SOURCES =  \
    gnc-date.c        \
    gnc-engine-util.c \
    gnc-numeric.c     \
-   gnc-event.c       \
    guid.c            \
    kvp_frame.c       \
    kvp-util.c        \
@@ -24,6 +23,7 @@ libqof_la_SOURCES =  \
    qofinstance.c     \
    qofquery.c        \
    qofbook.c         \
+   qofevent.c        \
    qoflog.c          \
    qofobject.c       \
    qofquerycore.c    \
@@ -38,7 +38,6 @@ qofinclude_HEADERS = \
    gnc-date.h        \
    gnc-engine-util.h \
    gnc-numeric.h     \
-   gnc-event.h       \
    guid.h            \
    kvp_frame.h       \
    kvp-util.h        \
@@ -49,6 +48,7 @@ qofinclude_HEADERS = \
    qofbackend-p.h    \
    qofclass.h        \
    qofchoice.h       \
+   qofevent.h        \
    qofgobj.h         \
    qofid.h           \
    qofid-p.h         \
@@ -68,7 +68,6 @@ nodist_qofinclude_HEADERS = \
    qofla-dir.h     
 
 noinst_HEADERS = \
-   gnc-event-p.h \
    md5.h  \
    qofclass-p.h  \
    qofmath128.h  \
@@ -76,6 +75,7 @@ noinst_HEADERS = \
    qofquery-deserial.h \
    qofquery-serialize.h \
    qofbook-p.h  \
+   qofevent-p.h \
    qofobject-p.h  \
    qofquerycore-p.h \
    qofsession-p.h

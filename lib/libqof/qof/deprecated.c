@@ -56,3 +56,25 @@ gboolean gnc_should_log(QofLogModule log_module, gncLogLevel log_level)
 {
 	return qof_log_check(log_module, log_level);
 }
+gint
+gnc_engine_register_event_handler (GNCEngineEventHandler handler,
+                                   gpointer user_data)
+{
+	return qof_event_register_old_handler(handler, user_data);
+}
+void gnc_engine_unregister_event_handler (gint handler_id)
+{
+	qof_event_unregister_handler(handler_id);
+}
+void gnc_engine_suspend_events (void)
+{
+	qof_event_suspend();
+}
+void gnc_engine_resume_events (void)
+{
+	qof_event_resume();
+}
+void gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
+{
+	qof_event_gen(entity, event_type);
+}

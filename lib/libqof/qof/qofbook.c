@@ -40,7 +40,7 @@
 #include <glib.h>
 
 #include "qof.h"
-#include "gnc-event-p.h"
+#include "qofevent-p.h"
 #include "qofbackend-p.h"
 #include "qofbook-p.h"
 #include "qofid-p.h"
@@ -86,7 +86,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-  gnc_engine_gen_event (&book->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -108,7 +108,7 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  gnc_engine_force_event (&book->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY);
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.

@@ -1,6 +1,7 @@
 /********************************************************************
- * gnc-event.c -- engine event handling implementation              *
+ * qofevent.c -- QOF event handling implementation                  *
  * Copyright 2000 Dave Peticolas <dave@krondo.com>                  *
+ * Copyright 2006 Neil Williams  <linux@codehelp.co.uk>             *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,45 +24,26 @@
 
 #include "config.h"
 #include "qof.h"
-#include "gnc-event-p.h"
-
-/* Declarations ****************************************************/
-
-typedef struct
-{
-  GNCEngineEventHandler handler;
-  gpointer user_data;
-
-  gint handler_id;
-} HandlerInfo;
+#include "qofevent-p.h"
 
 /* Static Variables ************************************************/
-static guint  suspend_counter = 0;
-static gint   next_handler_id = 1;
-static guint  handler_run_level = 0;
-static guint  pending_deletes = 0;
-static GList *handlers = NULL;
+static guint   suspend_counter   = 0;
+static gint    next_handler_id   = 1;
+static guint   handler_run_level = 0;
+static guint   pending_deletes   = 0;
+static GList   *handlers  =   NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
 
 /* Implementations *************************************************/
 
-gint
-gnc_engine_register_event_handler (GNCEngineEventHandler handler,
-                                   gpointer user_data)
+static gint
+find_next_handler_id(void)
 {
   HandlerInfo *hi;
   gint handler_id;
   GList *node;
-
-  ENTER ("(handler=%p, data=%p)", handler, user_data);
-  /* sanity check */
-  if (!handler)
-  {
-    PERR ("no handler specified");
-    return 0;
-  }
 
   /* look for a free handler id */
   handler_id = next_handler_id;
@@ -80,6 +62,60 @@ gnc_engine_register_event_handler (GNCEngineEventHandler handler,
 
     node = node->next;
   }
+  /* Update id for next registration */
+  next_handler_id = handler_id + 1;
+  return handler_id;
+}
+
+/* support deprecated code with a private function*/
+gint
+qof_event_register_old_handler (GNCEngineEventHandler handler, gpointer user_data)
+{
+  HandlerInfo *hi;
+  gint handler_id;
+
+  ENTER ("(handler=%p, data=%p)", handler, user_data);
+
+  /* sanity check */
+  if (!handler)
+  {
+    PERR ("no handler specified");
+    return 0;
+  }
+  PWARN (" DEPRECATED handler specified!");
+
+  handler_id = find_next_handler_id();
+  /* Found one, add the handler */
+  hi = g_new0 (HandlerInfo, 1);
+
+  hi->old_handler = handler;
+  hi->user_data = user_data;
+  hi->handler_id = handler_id;
+
+  handlers = g_list_prepend (handlers, hi);
+
+  LEAVE (" (handler=%p, data=%p) handler_id=%d", handler, user_data, handler_id);
+  return handler_id;
+
+}
+
+gint
+qof_event_register_handler (QofEventHandler handler, gpointer user_data)
+{
+  HandlerInfo *hi;
+  gint handler_id;
+
+  ENTER ("(handler=%p, data=%p)", handler, user_data);
+
+  /* sanity check */
+  if (!handler)
+  {
+    PERR ("no handler specified");
+    return 0;
+  }
+
+  /* look for a free handler id */
+  handler_id = find_next_handler_id();
 
   /* Found one, add the handler */
   hi = g_new0 (HandlerInfo, 1);
@@ -90,15 +126,12 @@ gnc_engine_register_event_handler (GNCEngineEventHandler handler,
 
   handlers = g_list_prepend (handlers, hi);
 
-  /* Update id for next registration */
-  next_handler_id = handler_id + 1;
-
   LEAVE ("(handler=%p, data=%p) handler_id=%d", handler, user_data, handler_id);
   return handler_id;
 }
 
 void
-gnc_engine_unregister_event_handler (gint handler_id)
+qof_event_unregister_handler (gint handler_id)
 {
   GList *node;
 
@@ -115,12 +148,16 @@ gnc_engine_unregister_event_handler (gint handler_id)
        of a generated event, such as GNC_EVENT_DESTROY.  In that case,
        we're in the middle of walking the GList and it is wrong to
        modify the list. So, instead, we just NULL the handler. */ 
-
+    if(hi->handler) 
     LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
 	   hi->handler, hi->user_data);
+    if(hi->old_handler) 
+	LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
+	   hi->old_handler, hi->user_data);
 
     /* safety -- clear the handler in case we're running events now */
     hi->handler = NULL;
+	hi->old_handler = NULL;
 
     if (handler_run_level == 0) {
       handlers = g_list_remove_link (handlers, node);
@@ -137,7 +174,7 @@ gnc_engine_unregister_event_handler (gint handler_id)
 }
 
 void
-gnc_engine_suspend_events (void)
+qof_event_suspend (void)
 {
   suspend_counter++;
 
@@ -148,7 +185,7 @@ gnc_engine_suspend_events (void)
 }
 
 void
-gnc_engine_resume_events (void)
+qof_event_resume (void)
 {
   if (suspend_counter == 0)
   {
@@ -160,29 +197,31 @@ gnc_engine_resume_events (void)
 }
 
 static void
-gnc_engine_generate_event_internal (QofEntity *entity, 
-				    GNCEngineEventType event_type)
+qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
 {
   GList *node;
   GList *next_node = NULL;
+  gboolean use_old_handlers = FALSE;
 
   g_return_if_fail(entity);
 
-  switch (event_type)
+  if(event_id <= QOF_DEFAULT_LIMIT)
   {
-    case GNC_EVENT_NONE:
-      return;
-
-    case GNC_EVENT_CREATE:
-    case GNC_EVENT_MODIFY:
-    case GNC_EVENT_DESTROY:
-    case GNC_EVENT_ADD:
-    case GNC_EVENT_REMOVE:
-      break;
-
-    default:
-      PERR ("bad event type %d", event_type);
-      return;
+	  use_old_handlers = TRUE;
+  }
+	
+  switch (event_id)
+  {
+    case QOF_EVENT_NONE: { 
+		/* if none, don't log, just return. */
+		return;
+		}
+    case QOF_EVENT_CREATE :
+    case QOF_EVENT_MODIFY :
+    case QOF_EVENT_DESTROY :
+    case QOF_EVENT_ADD :
+    case QOF_EVENT_REMOVE :
+		break;
   }
 
   handler_run_level++;
@@ -191,10 +230,18 @@ gnc_engine_generate_event_internal (QofEntity *entity,
     HandlerInfo *hi = node->data;
 
     next_node = node->next;
-    PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
+    if ((hi->old_handler)&&(use_old_handlers))
+	{
+    PINFO (" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
+		   hi->old_handler);
+      hi->old_handler ((GUID *)&entity->guid, entity->e_type,
+		   event_id, hi->user_data);
+	}
     if (hi->handler)
-      hi->handler ((GUID *)&entity->guid, entity->e_type,
-		   event_type, hi->user_data);
+	{
+    PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
+      hi->handler (entity, event_id, hi->user_data);
+	}
   }
   handler_run_level--;
 
@@ -207,12 +254,12 @@ gnc_engine_generate_event_internal (QofEntity *entity,
     {
       HandlerInfo *hi = node->data;
       next_node = node->next;
-      if (hi->handler == NULL)
+      if ((hi->handler == NULL)&&(hi->old_handler == NULL))
       {
-	/* remove this node from the list, then free this node */
-	handlers = g_list_remove_link (handlers, node);
-	g_list_free_1 (node);
-	g_free (hi);
+          /* remove this node from the list, then free this node */
+          handlers = g_list_remove_link (handlers, node);
+          g_list_free_1 (node);
+          g_free (hi);
       }
     }
     pending_deletes = 0;
@@ -220,17 +267,16 @@ gnc_engine_generate_event_internal (QofEntity *entity,
 }
 
 void
-gnc_engine_force_event (QofEntity *entity, 
-			GNCEngineEventType event_type)
+qof_event_force (QofEntity *entity, QofEventId event_id)
 {
   if (!entity)
     return;
 
-  gnc_engine_generate_event_internal (entity, event_type);
+  qof_event_generate_internal (entity, event_id);
 }
 
 void
-gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
+qof_event_gen (QofEntity *entity, QofEventId event_id)
 {
   if (!entity)
     return;
@@ -238,18 +284,20 @@ gnc_engine_gen_event (QofEntity *entity, GNCEngineEventType event_type)
   if (suspend_counter)
     return;
 
-  gnc_engine_generate_event_internal (entity, event_type);
+  qof_event_generate_internal (entity, event_id);
 }
 
+/* deprecated */
 void 
-gnc_engine_generate_event (const GUID *guid, QofIdType e_type, 
-         GNCEngineEventType event_type)
+qof_event_generate (const GUID *guid, QofIdType e_type, 
+					QofEventId event_id)
 {
   QofEntity ent;
   ent.guid = *guid;
   ent.e_type = e_type;
   if (suspend_counter) return;
-  gnc_engine_generate_event_internal (&ent, event_type);
+  /* caution: this is an incomplete entity! */
+  qof_event_generate_internal (&ent, event_id);
 }
 
 /* =========================== END OF FILE ======================= */
