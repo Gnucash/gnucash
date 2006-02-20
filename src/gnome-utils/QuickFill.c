@@ -155,13 +155,6 @@ gnc_quickfill_get_char_match (QuickFill *qf, gunichar uc)
   if (NULL == qf) return NULL;
 
   DEBUG ("xaccGetQuickFill(): index = %u\n", key);
-#if DEBUG_ME
-  GdkWChar s[2];
-  s[0] = wc;
-  s[1] = 0;
-  char * r= gnc_wcstombs (s);
-  PINFO ("ascii char=%s (%d)\n", r, (int) r[0]);
-#endif
 
   return g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
 }
