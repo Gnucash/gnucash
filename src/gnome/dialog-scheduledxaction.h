@@ -44,6 +44,8 @@ SchedXactionDialog * gnc_ui_scheduled_xaction_dialog_create(void);
 void gnc_ui_scheduled_xaction_dialog_destroy(SchedXactionDialog *sxd);
 void row_select_handler( GtkCList *clist, gint row, gint col,
                          GdkEventButton *event, gpointer d );
+void row_unselect_handler( GtkCList *clist, gint row, gint col,
+                         GdkEventButton *event, gpointer d );
 
 void gnc_sxd_list_refresh( SchedXactionDialog *sxd );
 

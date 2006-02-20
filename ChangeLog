@@ -1,5 +1,9 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-scheduledxaction.[ch]:
+	* src/gnome/glade/sched-xact.glade: HIGify the scheduled
+	transaction dialogs.
+
 	* src/gnome/gnc-plugin-page-register.c: Remove forced screen
 	updates that are no longer necessary.
 

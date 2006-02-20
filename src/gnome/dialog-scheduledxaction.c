@@ -69,7 +69,9 @@ static QofLogModule log_module = GNC_MOD_SX;
 #define SX_LIST_WIN_PREFIX "sx_list_win"
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
 #define SX_LIST "sched_xact_list"
-#define SX_LIST_UPCOMING_FRAME "upcoming_cal_frame"
+#define SX_LIST_EDIT_BUTTON "edit_button"
+#define SX_LIST_DELETE_BUTTON "delete_button"
+#define SX_LIST_UPCOMING_BOX "upcoming_cal_hbox"
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
 
 #define SXED_WIN_PREFIX "sx_editor_win"
@@ -265,6 +267,12 @@ gnc_sxd_list_refresh( SchedXactionDialog *sxd )
 {
         GList *sxList;
         GtkCList *cl;
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_EDIT_BUTTON );
+	gtk_widget_set_sensitive(widget, FALSE);
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_DELETE_BUTTON );
+	gtk_widget_set_sensitive(widget, FALSE);
 
         /* Update the clist. */
         cl = GTK_CLIST( glade_xml_get_widget( sxd->gxml, SX_LIST ) );
@@ -1203,7 +1211,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxdo = GTK_OBJECT(sxd->dialog);
 
-        w = glade_xml_get_widget( sxd->gxml, SX_LIST_UPCOMING_FRAME );
+        w = glade_xml_get_widget( sxd->gxml, SX_LIST_UPCOMING_BOX );
         sxd->gdcal = GNC_DENSE_CAL( gnc_dense_cal_new() );
         gnc_dense_cal_set_months_per_col( sxd->gdcal, 4 );
         gnc_dense_cal_set_num_months( sxd->gdcal, 12 );
@@ -1229,6 +1237,8 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         w = glade_xml_get_widget( sxd->gxml, SX_LIST );
         g_signal_connect( w, "select-row",
                           G_CALLBACK(row_select_handler), sxd );
+        g_signal_connect( w, "unselect-row",
+                          G_CALLBACK(row_unselect_handler), sxd );
         g_signal_connect( w, "click-column",
                           G_CALLBACK(gnc_sxd_row_click_handler), sxd );
 
@@ -1270,8 +1280,14 @@ row_select_handler( GtkCList *clist,
 {
         SchedXactionDialog *sxd;
         SchedXaction *sx;
+	GtkWidget *widget;
        
         sxd   = (SchedXactionDialog*)d;
+
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_EDIT_BUTTON );
+	gtk_widget_set_sensitive(widget, TRUE);
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_DELETE_BUTTON );
+	gtk_widget_set_sensitive(widget, TRUE);
 
         if ( event == NULL ) {
                 /* it could be a keypress */
@@ -1287,6 +1303,24 @@ row_select_handler( GtkCList *clist,
                 /* noop */
                 break;
         }
+}
+
+void
+row_unselect_handler( GtkCList *clist,
+                    gint row,
+                    gint col,
+                    GdkEventButton *event,
+                    gpointer d )
+{
+        SchedXactionDialog *sxd;
+	GtkWidget *widget;
+       
+        sxd   = (SchedXactionDialog*)d;
+
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_EDIT_BUTTON );
+	gtk_widget_set_sensitive(widget, FALSE);
+	widget = glade_xml_get_widget( sxd->gxml, SX_LIST_DELETE_BUTTON );
+	gtk_widget_set_sensitive(widget, FALSE);
 }
 
 static
@@ -1433,6 +1467,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 sxed->endDateEntry =
                         GNC_DATE_EDIT(gnc_date_edit_new( time(NULL),
                                                          FALSE, FALSE ));
+                gtk_widget_show(GTK_WIDGET(sxed->endDateEntry));
                 g_signal_connect( sxed->endDateEntry,
                                   "date-changed",
                                   G_CALLBACK( sxed_excal_update_adapt ),
@@ -1514,12 +1549,9 @@ static
 void
 schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
 {
-        GtkFrame *f;
         GtkBox *b;
 
-        f = GTK_FRAME(glade_xml_get_widget( sxed->gxml, "gncfreq_frame" ));
-        b = GTK_BOX( glade_xml_get_widget( sxed->gxml,
-                                           "recur_box" ) );
+        b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "gncfreq_hbox" ));
         sxed->gncfreq =
                 GNC_FREQUENCY( gnc_frequency_new( xaccSchedXactionGetFreqSpec(sxed->sx),
                                                   xaccSchedXactionGetStartDate(sxed->sx) ) );
@@ -1527,14 +1559,14 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
         g_signal_connect( sxed->gncfreq, "changed",
                           G_CALLBACK(gnc_sxed_freq_changed),
                           sxed );
-        gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->gncfreq) );
+        gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->gncfreq) );
 
-        f = GTK_FRAME(glade_xml_get_widget( sxed->gxml, "example_cal_frame" ));
+        b = GTK_BOX(glade_xml_get_widget( sxed->gxml, "example_cal_hbox" ));
         sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new());
         g_assert( sxed->example_cal );
         gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxed->example_cal, EX_CAL_MO_PER_COL );
-        gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->example_cal) );
+        gtk_container_add( GTK_CONTAINER(b), GTK_WIDGET(sxed->example_cal) );
 	gtk_widget_show( GTK_WIDGET(sxed->example_cal) );
 }
 
@@ -1542,13 +1574,8 @@ static
 void
 schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
-        GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
         GtkWidget *main_vbox;
-
-        tempxaction_frame =
-                GTK_FRAME( glade_xml_get_widget( sxed->gxml,
-                                                 "tempxaction_frame" ) );
 
 	/* Create the ledger */
         /* THREAD-UNSAFE */
