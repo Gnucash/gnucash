@@ -1,3 +1,23 @@
+2006-02-20  Neil Williams  <linux@codehelp.co.uk>
+
+	* lib/libqof/qof/gnc-event.c :
+	* lib/libqof/qof/gnc-event-p.h :
+	* lib/libqof/qof/gnc-event.h : Removed files.
+
+	* lib/libqof/qof/qofevent.c :
+	* lib/libqof/qof/qofevent-p.h :
+	* lib/libqof/qof/qofevent.h : Replacement files using extensible
+	event identifiers.
+
+	* lib/libqof/qof/deprecated.c : Old functions now pointed to
+	replacements.
+	* lib/libqof/qof/deprecated.h : Old defines now pointed to
+	replacements.
+
+	* lib/libqof/qof/qof.h : Replace files.
+	* lib/libqof/qof/Makefile.am : Replace files.
+	
+
 2006-02-20  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-scheduledxaction.c:
