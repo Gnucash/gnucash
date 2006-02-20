@@ -343,6 +343,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
         VirtualCellLocation vcell_loc;
         gint height;
         gint cy;
+	gint old_visible_blocks, old_visible_rows;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
@@ -354,6 +355,8 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 
         sheet->top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
+	old_visible_blocks = sheet->num_visible_blocks;
+	old_visible_rows = sheet->num_visible_phys_rows;
         sheet->num_visible_blocks = 0;
         sheet->num_visible_phys_rows = 0;
 
@@ -380,6 +383,16 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
         /* FIXME */
         sheet->left_block = 0;
         sheet->right_block = 0;
+
+	if ((old_visible_blocks > sheet->num_visible_blocks) ||
+	    (old_visible_rows > sheet->num_visible_phys_rows)) {
+		/* Reach up and tell the parent widget to redraw as
+		 * well.  The sheet doesn't occupy all the visible
+		 * area in the notebook page, and this will cause the
+		 * parent to color in the empty grey space after the
+		 * area occupied by the sheet. */
+		gtk_widget_queue_draw(gtk_widget_get_parent(GTK_WIDGET(sheet)));
+	}
 }
 
 
