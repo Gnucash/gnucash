@@ -707,9 +707,9 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
                 return FALSE;
 
         find_pos = -1;
-        if (*cursor_position < bcell->value_chars)
+        if (*start_selection < bcell->value_chars)
         {
-                int i = *cursor_position;
+                int i = *start_selection;
                 const char *c;
                 gunichar uc;
               

@@ -1,3 +1,10 @@
+2006-02-19  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/combocell-gnome.c: When looking for
+	an matching account name, start at the beginning of the selected
+	region, not the end.  Problem created when the code stopped adding
+	placeholder accounts to the quickfill.  Fixes 328893.
+
 2006-02-19  Neil Williams  <linux@codehelp.co.uk>
 
 	* backend/file/qsf-backend.c : Correcting collect handling,
