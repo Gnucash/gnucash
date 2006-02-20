@@ -50,9 +50,8 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     struct lconv *lc;
     GString *newval_gs;
     gboolean is_return;
-    int i;
-    const char *c;
-    gunichar uc;
+    gint start, end;
+    gchar *buf;
 
     if (event->type != GDK_KEY_PRESS)
 	return FALSE;
@@ -67,6 +66,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
             if (!(event->state &
                   (GDK_CONTROL_MASK | GDK_MOD1_MASK | GDK_SHIFT_MASK)))
                 is_return = TRUE;
+	    /* fall through */
 
         case GDK_KP_Enter:
             {
@@ -113,6 +113,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
             return FALSE;
     }
 
+    /* This  point is only reached when the KP_Decimal key is pressed. */
     if (cell->print_info.monetary)
 	decimal_point = lc->mon_decimal_point[0];
     else
@@ -121,32 +122,23 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
     newval_gs = g_string_new("");
-    /* copy oldval up to the cursor position */
-    i = 0;
-    c = bcell->value;
-    while (*c && (i < *cursor_position))
-    {
-        uc = g_utf8_get_char (c);
-        g_string_append_unichar (newval_gs, uc);
-        c = g_utf8_next_char (c);
-        i++;
-    }
 
-    /* insert the decimal_point at cursor position */
-    g_string_append_c (newval_gs, decimal_point);
-    i++;
-    c = g_utf8_next_char (c);
-    
-    /* copy oldval after cursor position */
-    while (*c) 
-    {
-        uc = g_utf8_get_char (c);
-        g_string_append_unichar (newval_gs, uc);
-        c = g_utf8_next_char (c);
-    }
+    start = MIN(*start_selection, *end_selection);
+    end = MAX(*start_selection, *end_selection);
+
+    /* length in bytes, not chars. do not use g_utf8_strlen. */
+    buf = malloc(strlen(bcell->value));
+    g_utf8_strncpy(buf, bcell->value, start);
+    g_string_append(newval_gs, buf);
+    g_free(buf);
+
+    g_string_append_unichar(newval_gs, decimal_point);
+
+    buf = g_utf8_offset_to_pointer(bcell->value, end);
+    g_string_append(newval_gs, buf);
 
     /* update the cursor position */
-    (*cursor_position)++;
+    *cursor_position = start + 1;
 
     gnc_basic_cell_set_value_internal (bcell, newval_gs->str);
 

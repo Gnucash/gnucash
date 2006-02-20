@@ -1,5 +1,9 @@
 2006-02-19  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/pricecell-gnome.c: Take the
+	selection into account when handling the keypad decimal point key.
+	Fixes 314775.
+
 	* src/register/register-gnome/combocell-gnome.c: When looking for
 	an matching account name, start at the beginning of the selected
 	region, not the end.  Problem created when the code stopped adding
