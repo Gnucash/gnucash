@@ -1,5 +1,9 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/glade/sched-xact.glade: Use a spin_box instead of an
+	entry for the 'occurrences' and 'remaining' numeric fields.
+
 	* src/gnome/dialog-scheduledxaction.[ch]:
 	* src/gnome/glade/sched-xact.glade: HIGify the scheduled
 	transaction dialogs.

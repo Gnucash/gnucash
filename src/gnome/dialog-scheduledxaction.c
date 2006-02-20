@@ -84,8 +84,8 @@ static QofLogModule log_module = GNC_MOD_SX;
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
 #define END_DATE_BOX "end_date_hbox"
-#define END_ENTRY "end_nentry"
-#define REMAIN_ENTRY "remain_nentry"
+#define END_SPIN "end_spin"
+#define REMAIN_SPIN "remain_spin"
 
 #define SX_GLADE_FILE "sched-xact.glade"
 
@@ -161,8 +161,8 @@ struct _SchedXactionEditorDialog
         GtkToggleButton *optEndDate;
         GtkToggleButton *optEndNone;
         GtkToggleButton *optEndCount;
-        GtkEntry *endCountEntry;
-        GtkEntry *endRemainEntry;
+        GtkEntry *endCountSpin;
+        GtkEntry *endRemainSpin;
         GNCDateEdit *endDateEntry;
 
         char *sxGUIDstr;
@@ -479,17 +479,16 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                 /* dialog says... num occur */
                 if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                         gint sxNumOccur, sxNumRem, dlgNumOccur, dlgNumRem;
-			const gchar *text;
 
                         if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) ) {
                                 return TRUE;
                         }
 
-			text = gtk_entry_get_text (sxed->endCountEntry);
-			sscanf (text, "%d", &dlgNumOccur);
+			dlgNumOccur  =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endCountSpin) );
 
-			text = gtk_entry_get_text (sxed->endRemainEntry);
-			sscanf (text, "%d", &dlgNumRem);
+			dlgNumRem =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
 
                         sxNumOccur = xaccSchedXactionGetNumOccur( sxed->sx );
                         sxNumRem = xaccSchedXactionGetRemOccur( sxed->sx );
@@ -935,13 +934,12 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndCount)) {
                         gint occur, rem;
-			const gchar *text;
 
-			text = gtk_entry_get_text (sxed->endCountEntry);
-			sscanf (text, "%d", &occur);
+			occur  =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endCountSpin) );
 
-			text = gtk_entry_get_text (sxed->endRemainEntry);
-			sscanf (text, "%d", &rem);
+			rem =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
 
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
@@ -1031,15 +1029,14 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
                 } else if ( gtk_toggle_button_get_active(sxed->optEndCount) ) {
                         gint num;
-			const gchar *text;
 
                         /* get the occurances data */
-			text = gtk_entry_get_text (sxed->endCountEntry);
-			sscanf (text, "%d", &num);
+			num  =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endCountSpin) );
                         xaccSchedXactionSetNumOccur( sxed->sx, num );
 
-			text = gtk_entry_get_text (sxed->endRemainEntry);
-			sscanf (text, "%d", &num);
+			num =
+			  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
                         xaccSchedXactionSetRemOccur( sxed->sx, num );
 
                         g_date_clear( &gdate, 1 );
@@ -1391,11 +1388,11 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
         w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
         sxed->optEndCount = GTK_TOGGLE_BUTTON(w);
 
-        w = glade_xml_get_widget( sxed->gxml, END_ENTRY );
-        sxed->endCountEntry = GTK_ENTRY(w);
+        w = glade_xml_get_widget( sxed->gxml, END_SPIN );
+        sxed->endCountSpin = GTK_ENTRY(w);
 
-        w = glade_xml_get_widget( sxed->gxml, REMAIN_ENTRY );
-        sxed->endRemainEntry = GTK_ENTRY(w);
+        w = glade_xml_get_widget( sxed->gxml, REMAIN_SPIN );
+        sxed->endRemainSpin = GTK_ENTRY(w);
 
 }
 
@@ -1423,7 +1420,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(END_DATE_OPTION) },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,          GINT_TO_POINTER(NUM_OCCUR_OPTION) },
 
-                { REMAIN_ENTRY ,    "changed", sxed_excal_update_adapt, NULL },
+                { REMAIN_SPIN ,     "value-changed", sxed_excal_update_adapt, NULL },
 
                 { AUTOCREATE_OPT,   "toggled", autocreate_toggled,           NULL },
                 { ADVANCE_OPT,      "toggled", advance_toggle,               (gpointer)ADVANCE_DAYS_SPIN },
@@ -1509,8 +1506,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->notifyOpt), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->advanceSpin), FALSE );
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->remindSpin), FALSE );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountEntry), FALSE );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainEntry), FALSE );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountSpin), FALSE );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainSpin), FALSE );
 
         gtk_editable_set_editable( GTK_EDITABLE(sxed->advanceSpin), TRUE );
         gtk_editable_set_editable( GTK_EDITABLE(sxed->remindSpin), TRUE );
@@ -1624,7 +1621,6 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         char *name;
         time_t tmpDate;
         SplitRegister *splitReg;
-        GString *tmpgStr;
         struct tm *tmpTm;
         GDate *gd;
         gint daysInAdvance;
@@ -1663,15 +1659,8 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
 
                 gtk_toggle_button_set_active( sxed->optEndCount, TRUE );
 
-                tmpgStr = g_string_sized_new(5);
-                g_string_printf( tmpgStr, "%d", numOccur );
-                gtk_entry_set_text( sxed->endCountEntry, tmpgStr->str );
-                g_string_free( tmpgStr, TRUE );
-
-                tmpgStr = g_string_sized_new(5);
-                g_string_printf( tmpgStr, "%d", numRemain );
-                gtk_entry_set_text( sxed->endRemainEntry, tmpgStr->str );
-                g_string_free( tmpgStr, TRUE );
+		gtk_spin_button_set_value ( GTK_SPIN_BUTTON(sxed->endCountSpin), numOccur );
+		gtk_spin_button_set_value ( GTK_SPIN_BUTTON(sxed->endRemainSpin), numRemain );
 
                 set_endgroup_toggle_states( sxed, END_OCCUR );
         } else {
@@ -1751,8 +1740,8 @@ void
 set_endgroup_toggle_states( SchedXactionEditorDialog *sxed, EndType type )
 {
         gtk_widget_set_sensitive( GTK_WIDGET(sxed->endDateEntry),   (type == END_DATE) );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountEntry),  (type == END_OCCUR) );
-        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainEntry), (type == END_OCCUR) );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endCountSpin),  (type == END_OCCUR) );
+        gtk_widget_set_sensitive( GTK_WIDGET(sxed->endRemainSpin), (type == END_OCCUR) );
 }
 
 static
@@ -2333,7 +2322,6 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
         END_TYPE endType;
         GDate endDate;
         int numRemain;
-	gchar *text;
 
         endType = NO_END;
         numRemain = -1;
@@ -2353,10 +2341,9 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 endType = NO_END;
         } else if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                 endType = COUNT_END;
-		text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
-					       0, -1 );
-		sscanf (text, "%d", &numRemain);
-		g_free (text);
+		numRemain =
+		  gtk_spin_button_get_value_as_int ( GTK_SPIN_BUTTON(sxed->endRemainSpin) );
+
         } else {
                 g_assert( FALSE );
         }
