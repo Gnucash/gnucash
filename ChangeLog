@@ -1,3 +1,10 @@
+2006-02-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c:
+	  Allow nested begin/commit in xaccTransSetTxnType().  Fixes #331771.
+	  The old code wouldn't let you set the value if you were already
+	  within a BeginEdit/CommitEdit block.
+
 2006-02-19  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
