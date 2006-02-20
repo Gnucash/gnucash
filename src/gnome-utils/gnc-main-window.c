@@ -2973,7 +2973,7 @@ gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window)
 	gnc_gnome_help (HF_HELP, NULL);
 }
 
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
 /** This is a helper function to find a data file and suck it into
  *  memory.
  *

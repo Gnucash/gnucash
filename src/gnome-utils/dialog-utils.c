@@ -931,7 +931,7 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *s
   GtkWidget *button;
 
   button = gtk_button_new_with_label(label);
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
   if (stock_id) {
     GtkWidget *image;
 
@@ -1010,7 +1010,7 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *gconf_key)
     return response;
 }
 
-#ifndef HAVE_GLIB26
+#ifndef HAVE_GTK26
 
 /** Find the first GtkLabel in a container. When called on a gtk2.4
  *  message dialog, there is only one label in the dialog so theis

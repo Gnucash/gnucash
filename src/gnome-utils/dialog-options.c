@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_GLIB26 
+#ifdef HAVE_GTK26 
 #include <gtk/gtk.h>
 #else
 #include <gnome.h>
@@ -219,7 +219,7 @@ gnc_rd_option_rel_set_cb(GtkWidget *widget, gpointer *raw_option)
   return;
 }
 
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
 static void
 gnc_image_option_update_preview_cb (GtkFileChooser *chooser,
 				    GNCOption *option)
@@ -1881,7 +1881,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   GtkWidget *value;
   GtkWidget *label;
   GtkWidget *button;
-#ifndef HAVE_GLIB26
+#ifndef HAVE_GTK26
   GtkWidget *entry;
 #endif
   gchar *colon_name;
@@ -1897,7 +1897,7 @@ gnc_option_set_ui_widget_pixmap (GNCOption *option, GtkBox *page_box,
   button = gtk_button_new_with_label(_("Clear"));
   gtk_tooltips_set_tip(tooltips, button, _("Clear any selected image file."), NULL);
 
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
   value = gtk_file_chooser_button_new(_("Select image"),
 				      GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_tooltips_set_tip(tooltips, value, _("Select an image file."), NULL);
@@ -2343,7 +2343,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
 
     if (string && *string)
     {
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
       gchar *test;
       DEBUG("string = %s", string);
       gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(widget), string);
@@ -2713,7 +2713,7 @@ gnc_option_get_ui_value_font (GNCOption *option, GtkWidget *widget)
 static SCM
 gnc_option_get_ui_value_pixmap (GNCOption *option, GtkWidget *widget)
 {
-#ifdef HAVE_GLIB26
+#ifdef HAVE_GTK26
   gchar *string;
   SCM result;
 
