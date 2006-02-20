@@ -1,5 +1,8 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c: Remove forced screen
+	updates that are no longer necessary.
+
 	* src/register/register-gnome/gnucash-sheet.c: If the number of
 	"visible to the user" lines in the register has shrunk, force the
 	parent widget to redraw.  This fixes #328787.

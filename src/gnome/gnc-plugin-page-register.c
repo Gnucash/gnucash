@@ -1103,9 +1103,6 @@ gnc_ppr_update_status_query (GncPluginPageRegister *page)
     xaccQueryAddClearedMatch(query, priv->fd.cleared_match, QUERY_AND);
 
   gnc_ledger_display_refresh (priv->ledger);
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
   LEAVE(" ");
 }
 
@@ -1158,9 +1155,6 @@ gnc_ppr_update_date_query (GncPluginPageRegister *page)
   }
 
   gnc_ledger_display_refresh (priv->ledger);
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
   LEAVE(" ");
 }
 
@@ -2109,10 +2103,6 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
   value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_change_style(priv->gsr, value);
-
-  /* The register widget doesn't seem to clean up when it shrinks.
-   * Redraw the entire widget so the screen looks clean. */
-  gtk_widget_queue_draw(priv->widget);
   LEAVE(" ");
 }
 
