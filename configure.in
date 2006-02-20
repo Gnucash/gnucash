@@ -427,20 +427,21 @@ AC_ARG_ENABLE(qof,
    esac],
    [gnc_enable_qof=false])
 
-AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)])
+AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)],
+	[gnc_with_qof=$withval], [gnc_with_qof=yes])
 
 # bug fixes between 0.6.1 and 0.6.2 mean gnucash runs best with 0.6.2
 QOF_REQUIRED=0.6.2
 if test "$gnc_enable_qof" = true ; then
   AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
-  if test "$withval" != "yes"; then
-        QOF=`$PKG_CONFIG --silence-errors --exists '$withval/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
-        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $withval/lib/pkgconfig/qof-1.pc`
-        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $withval/lib/pkgconfig/qof-1.pc`
-        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $withval/lib/pkgconfig/qof-1.pc`
-        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $withval/lib/pkgconfig/qof-1.pc`
-        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $withval/lib/pkgconfig/qof-1.pc`
-        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $withval/lib/pkgconfig/qof-1.pc`
+  if test "$gnc_with_qof" != "yes"; then
+        QOF=`$PKG_CONFIG --silence-errors --exists '$gnc_with_qof/lib/pkgconfig/qof-1.pc >= $QOF_REQUIRED'`
+        QOF_LIBS=`$PKG_CONFIG --silence-errors --libs $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+        QOF_CFLAGS=`$PKG_CONFIG --silence-errors --cflags $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+        QOF_VERSION=`$PKG_CONFIG --silence-errors --modversion $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+        QOF_PREFIX=`$PKG_CONFIG --silence-errors --variable=prefix $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+        QOF_LIB_DIR=`$PKG_CONFIG --silence-errors --variable=libdir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
+        QOF_XML_DIR=`$PKG_CONFIG --silence-errors --variable=xmldir $gnc_with_qof/lib/pkgconfig/qof-1.pc`
   else
         QOF=`$PKG_CONFIG --silence-errors --exists 'qof-1 >= $QOF_REQUIRED'`
         QOF_LIBS=`$PKG_CONFIG --silence-errors --libs qof-1`

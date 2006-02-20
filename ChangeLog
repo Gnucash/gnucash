@@ -1,3 +1,7 @@
+2006-02-20  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: fix the qof configure test for OSX.
+
 2006-02-20  David Hampton  <hampton@employees.org>
 
 	* lib/libqof/qof/guid.c: Don't reference uninitialized memory.
