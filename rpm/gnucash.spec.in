@@ -1,14 +1,5 @@
 #
-# WATCH OUT: These spec file(s) might be heavily out of date and/or
-# absolutely NOT SUITED to your distribution! They are particularly
-# matched for the RedHat-8 distribution, but DO NOT USE THEM if you
-# don't have exactly that distribution! Your own distribution probably
-# has its own source RPM of gnucash, and this source RPM includes a
-# spec file that is much better suited to your distribution.
-#
-#  I repeat: DO NOT USE THIS SPEC file unless you either have Red Hat 8
-#  or you really know how you can modify it to suit your distribution.
-#
+# Spec file for FC4
 #
 # Check whether GnuCash should build optional modules.
 # To modify parameters, edit the .spec file, 0 is off, 1 is on
@@ -16,28 +7,47 @@
 %define _with_ofx 0
 %define _with_hbci 0
 
-%define rh_rel %(rpm -q --queryformat='%{VERSION}' redhat-release)
+%define fc_rel %(rpm -q --queryformat='%{VERSION}' fedora-release)
 %define version @-VERSION-@
 %define __libtoolize /bin/true
+
+%define libgnomeui_version 2.8.0
+%define libgnomeprintui_version 2.8.0
+%define guile_version 1.6.0
+%define gwrap_version 1.3.4
+%define gtkhtml3_version 3.1
+%define libofx_version 0.8.0
+%define aqbanking_version 1.3
+%define postgresql_version 7.1.3
 
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
 Version:   	%{version}
-Release:  	1.RH%{rh_rel}
-Copyright: 	Free Software Foundation
+Release:  	1.FC%{fc_rel}
+License:	GPL
 Group:     	Applications/Finance
 URL:            http://www.gnucash.org
 Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{version}.tar.gz
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
-Requires:  	libgnomeui >= 2.2.0, libgnomeprintui22 >= 2.2.0
-Requires:	guile >= 1.6.0, gtkhtml3 >= 3.1,
-Requires:	g-wrap >= 1.3.4
-BuildPrereq: 	libgnomeui-devel >= 2.2.0, libgnomeprintui22 >= 2.2.0
-BuildPrereq: 	g-wrap-devel >= 1.3.4, gtkhtml3-devel >= 3.1
-BuildPrereq: 	bzip2-devel, expat-devel, guile-devel
-BuildPrereq: 	libglade2-devel, libgsf-devel
-BuildPrereq: 	libjpeg-devel, openssl-devel
-Prereq: 	/sbin/ldconfig /sbin/install-info
+
+Prereq:         GConf2
+Prereq:         /usr/bin/gconftool-2
+Prereq: 	/sbin/ldconfig
+PreReq:		/sbin/install-info
+
+Requires:  	libgnomeui >= %{libgnomeui_version}
+Requires:	libgnomeprintui22 >= %{libgnomeprintui22_version}
+Requires:	guile >= %{guile_version}
+Requires:	gtkhtml3 >= %{gtkhtml3_version}
+Requires:	g-wrap >= %{g-wrap_version}
+
+BuildRequires: 	libgnomeui-devel >= %{libgnomeui_version}
+BuildRequires: 	libgnomeprintui22-devel >= %{libgnomeprintui22_version}
+BuildRequires: 	g-wrap-devel >= %{g-wrap_version}
+BuildRequires: 	gtkhtml3-devel >= %{gtkhtml3_version}
+BuildRequires: 	bzip2-devel, expat-devel, guile-devel
+BuildRequires: 	libglade2-devel, libgsf-devel
+BuildRequires: 	libjpeg-devel, openssl-devel
 
 %description
 GnuCash is a personal finance manager. A check-book like
@@ -62,8 +72,9 @@ in C programs.
 %package ofx
 Summary: Enables OFX importing in GnuCash
 Group: Applications/Finance
-Requires: gnucash = %{version} libofx >= 0.6.2
-BuildPrereq: libofx
+Requires: gnucash = %{version}
+Requires: libofx >= %{libofx_version}
+BuildRequires: libofx
 
 %description ofx
 This package adds OFX file import support to the base
@@ -75,8 +86,9 @@ import OFX files.
 %package hbci
 Summary: Enables HBCI importing in GnuCash
 Group: Applications/Finance
-Requires: gnucash = %{version} aqbanking >= 0.9.8
-BuildPrereq: aqbanking-devel
+Requires: gnucash = %{version}
+Requires: aqbanking >= %{aqbanking_version}
+BuildRequires: aqbanking-devel
 
 %description hbci
 This package adds HBCI file import support to the base
@@ -89,8 +101,8 @@ import HBCI files.
 Summary: Backend for storing GnuCash data in a PostgreSQL database.
 Group: Applications/Finance
 Requires: gnucash = %{version}
-Requires: postgresql >= 7.1.3
-BuildPrereq: postgresql-devel
+Requires: postgresql >= %{postgresql_version}
+BuildRequires: postgresql-devel
 
 %description backend-postgres
 
@@ -125,7 +137,9 @@ cp -p src/backend/postgres/README README.postgres
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
+export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$RPM_BUILD_ROOT%{_libdir}/gnucash make DESTDIR=$RPM_BUILD_ROOT install
+unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
 %find_lang %name
 
@@ -138,6 +152,22 @@ LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$RPM_BUILD_ROOT%{_libdir}/gnucash make DE
 /sbin/ldconfig
 /sbin/install-info %{_infodir}/gnucash-design.info.gz %{_infodir}/dir
 
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS=%{_sysconfdir}/gconf/schemas/apps_gnucash*.schemas
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-install-rule $S > /dev/null
+done
+
+%preun
+if [ "$1" -eq 0 ]; then
+     #deleting the schema on package removal
+     export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+     SCHEMAS=%{_sysconfdir}/gconf/schemas/apps_gnucash*.schemas
+     for S in $SCHEMAS; do
+       gconftool-2 --makefile-uninstall-rule $S > /dev/null
+     done
+fi
+
 %postun
 /sbin/ldconfig
 if [ $1 = 0 ]; then
@@ -148,29 +178,27 @@ fi
 %defattr(444,root,root,755)
 %attr(555,root,root) %{_bindir}/*
 %attr(555,root,root) %{_libexecdir}/gnucash
-%attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
-%attr(555,root,root) %{_datadir}/gnucash/finance-quote-check
 %{_mandir}/man*/*
 %{_infodir}/gnucash*info*
 %{_libdir}/*
 %{_datadir}/gnucash
-%{_datadir}/gnome/apps/Applications/*
-%{_datadir}/pixmaps/gnucash
+%{_datadir}/applications/*
 %{_datadir}/mime-info/gnucash.*
+%{_datadir}/xml/qsf/*
+%{_sysconfdir}/gconf/schemas/apps_gnucash*
 %if %{_with_ofx}
 %exclude %{_libdir}/gnucash/libgncmod-ofx*
-%exclude %{_datadir}/gnucash/scm/ofx/*
 %endif
 %if %{_with_hbci}
 %exclude %{_libdir}/gnucash/libgncmod-hbci*
 %exclude %{_datadir}/gnucash/glade/hbci*
-%exclude %{_datadir}/gnucash/scm/hbci/*
+%exclude %{_sysconfdir}/gconf/schemas/apps_gnucash_dialog_hbci.schemas
 %endif
 %if %{_with_postgres}
-%exclude %{_libdir}/gnucash/libgncmod-backend-postgres*
+%exclude %{_libdir}/libgnc-backend-postgres*
 %endif
 %config %{_sysconfdir}/gnucash
-%doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
+%doc AUTHORS COPYING ChangeLog* DOCUMENTERS HACKING LICENSE NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
 
 %files devel
@@ -182,7 +210,6 @@ fi
 %files ofx
 %defattr(444,root,root,755)
 %{_libdir}/gnucash/libgncmod-ofx*
-%{_datadir}/gnucash/scm/ofx/*
 %doc doc/README.OFX
 %endif
 
@@ -191,13 +218,13 @@ fi
 %defattr(444,root,root,755)
 %{_libdir}/gnucash/libgncmod-hbci*
 %{_datadir}/gnucash/glade/hbci*
-%{_datadir}/gnucash/scm/hbci/*
+%{_sysconfdir}/gconf/schemas/apps_gnucash_dialog_hbci.schemas
 %doc doc/README.HBCI
 %endif
 
 %if %{_with_postgres}
 %files backend-postgres
 %defattr(444,root,root,755)
-%{_libdir}/gnucash/libgncmod-backend-postgres*
+%{_libdir}/libgnc-backend-postgres*
 %doc README.postgres
 %endif

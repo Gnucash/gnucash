@@ -1,5 +1,8 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* rpm/gnucash.spec.in:
+	* rpm/README: Update spec file from RH8 to FC4.
+
 	* src/backend/file/sixtp-utils.c:
 	* src/backend/postgres/test/test-db.c:
 	* src/report/report-gnome/gnc-plugin-page-report.c:

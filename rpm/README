@@ -3,13 +3,15 @@ This directory contains spec files for building an RPM
 
   WATCH OUT: These spec file(s) might be heavily out of date and/or
   absolutely NOT SUITED to your distribution! They are particularly
-  matched for the RedHat-8 distribution, but DO NOT USE THEM if you
-  don't have exactly that distribution! Your own distribution probably
-  has its own source RPM of gnucash, and this source RPM includes a
-  spec file that is much better suited to your distribution.
+  matched for the Fedora Core 4 distribution, but DO NOT USE THEM if
+  you don't have exactly that distribution! Your own distribution
+  probably has its own source RPM of gnucash, and this source RPM
+  includes a spec file that is much better suited to your
+  distribution.
 
-  I repeat: DO NOT USE THIS SPEC file unless you either have Red Hat 8
-  or you really know how you can modify it to suit your distribution.
+  I repeat: DO NOT USE THIS SPEC file unless you either have Fedora
+  Core 4 or you really know how you can modify it to suit your
+  distribution.
 
   For German-speaking users, there are German build instructions for
   RPMs on http://linuxwiki.de/GnuCash/RpmInstallieren . 
