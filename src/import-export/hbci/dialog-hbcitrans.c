@@ -43,6 +43,7 @@
 #endif
 #include <iconv.h>
 
+#include "gtk-compat.h"
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 #include "gnc-amount-edit.h"
@@ -56,10 +57,6 @@
 #endif
 
 #define TEMPLATE_LABEL "template"
-
-#ifndef HAVE_GLIB26
-#define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID -2
-#endif
 
 typedef enum {
 	TEMPLATE_NAME,

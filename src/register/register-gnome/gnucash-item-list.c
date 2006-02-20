@@ -35,7 +35,7 @@
 #include "gnc-engine.h"
 #include "gnucash-item-list.h"
 #include "gnucash-scrolled-window.h"
-
+#include "gtk-compat.h"
 
 /* Item list signals */
 enum {
@@ -45,10 +45,6 @@ enum {
   KEY_PRESS_EVENT,
   LAST_SIGNAL
 };
-
-#ifndef HAVE_GLIB26
-#define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID -2
-#endif
 
 static GnomeCanvasWidgetClass *gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];

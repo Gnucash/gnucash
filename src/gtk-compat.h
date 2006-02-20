@@ -23,4 +23,7 @@
        g_object_set(action, "sensitive", xxx, NULL)
 #define	gtk_action_set_visible(action, xxx) \
        g_object_set(action, "visible", xxx, NULL)
+
+#define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID -2
 #endif
+
