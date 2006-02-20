@@ -1,3 +1,7 @@
+2006-02-20  David Hampton  <hampton@employees.org>
+
+	* lib/libqof/qof/guid.c: Don't reference uninitialized memory.
+
 2006-02-20  Neil Williams  <linux@codehelp.co.uk>
 
 	* lib/libqof/qof/gnc-event.c :
@@ -17,7 +21,6 @@
 	* lib/libqof/qof/qof.h : Replace files.
 	* lib/libqof/qof/Makefile.am : Replace files.
 	
-
 2006-02-20  David Hampton  <hampton@employees.org>
 
 	* src/gnome/dialog-scheduledxaction.c:
