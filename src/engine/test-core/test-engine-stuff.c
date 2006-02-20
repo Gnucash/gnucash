@@ -1527,7 +1527,7 @@ static QofQueryOp
 get_random_queryop(void)
 {
   int op_num = get_random_int_in_range(1,11);
-  QofQueryOp op;
+  QofQueryOp op = QOF_QUERY_AND;
   /* = get_random_int_in_range (1, QOF_QUERY_XOR); */
 
   /* Let's make it MUCH more likely to get AND and OR */
