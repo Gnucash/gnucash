@@ -82,7 +82,7 @@ qof_event_register_old_handler (GNCEngineEventHandler handler, gpointer user_dat
     PERR ("no handler specified");
     return 0;
   }
-  PWARN (" DEPRECATED handler specified!");
+  PINFO (" deprecated handler specified");
 
   handler_id = find_next_handler_id();
   /* Found one, add the handler */
