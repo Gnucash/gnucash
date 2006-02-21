@@ -921,32 +921,14 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
     Split *s;
-    gnc_commodity *com;
-    int scu;
     gnc_numeric num;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
 
-    /* Set up two splits whose values really are opposites. */
-    com = xaccTransGetCurrency (trn);
-    scu = gnc_commodity_get_fraction(com);
-    num = get_random_gnc_numeric();
-
     acc = get_random_list_element (account_list);
     xaccTransBeginEdit(trn);
     s = get_random_split(book, acc, trn);
-    if (!do_bork()) num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
-    xaccSplitSetValue(s, num);
-
-    /* If the currencies are the same, the split amount should equal
-     * the split value (unless we bork it on purpose) */
-    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(acc)) &&
-        (!do_bork()))
-    {
-      xaccSplitSetAmount(s, num);
-    }
 
     /* Occasionally leave a dangling split around */
     if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
@@ -963,6 +945,8 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
       }
     }
 
+    /* Set up two splits whose values really are opposites. */
+    num = xaccSplitGetValue(s);
     s = get_random_split(book, bcc, trn);
 
     /* Other split should have equal and opposite value */
@@ -976,7 +960,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
                              xaccAccountGetCommodity(bcc)) && 
         (!do_bork()))
     {
-      xaccSplitSetAmount(s, num);
+        xaccSplitSetAmount(s, gnc_numeric_neg(num));
     }
 
     if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
@@ -1290,8 +1274,13 @@ Split*
 get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
-    gnc_numeric num;
+    gnc_numeric amt, val;
     const gchar *str;
+    gnc_commodity *com;
+    int scu;
+
+    com = xaccTransGetCurrency (trn);
+    scu = gnc_commodity_get_fraction(com);
 
     ret = xaccMallocSplit(book);
 
@@ -1309,15 +1298,30 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     xaccTransBeginEdit(trn);
     xaccTransAppendSplit(trn, ret);
     xaccAccountInsertSplit (acct, ret);
-    num = get_random_gnc_numeric ();
-    xaccSplitSetAmount(ret, num);
 
-    if (num.num == 0)
-      fprintf(stderr, "get_random_split: Created split with zero amount: %p\n", ret);
+    do {
+        val = get_random_gnc_numeric ();
+        if (val.num == 0)
+            fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
-    num = get_random_gnc_numeric ();
-    xaccSplitSetValue(ret, num);
+        if (!do_bork()) 
+            val = gnc_numeric_convert (val, scu, GNC_HOW_RND_ROUND);
+    } while (gnc_numeric_check(val) != GNC_ERROR_OK);
+    xaccSplitSetValue(ret, val);
 
+    /* If the currencies are the same, the split amount should equal
+     * the split value (unless we bork it on purpose) */
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(acct)) &&
+        (!do_bork())) {
+        amt = val;
+    } else {
+        amt = get_random_gnc_numeric ();
+        if (gnc_numeric_negative_p(val) && !gnc_numeric_negative_p(amt))
+            amt = gnc_numeric_neg(amt);
+    }
+    xaccSplitSetAmount(ret, amt);
+    
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
     xaccTransCommitEdit(trn);
 
