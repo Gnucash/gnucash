@@ -1298,20 +1298,20 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail ((account != NULL), FALSE);
 	g_return_val_if_fail ((iter != NULL), FALSE);
 
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	if (priv->root != xaccAccountGetRoot (account)) {
-		LEAVE("Root doesn't match");
-		return FALSE;
-	}
-
 	iter->user_data = account;
 	iter->stamp = model->stamp;
 
+	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 	if (account == priv->toplevel) {
 		iter->user_data2 = NULL;
 		iter->user_data3 = GINT_TO_POINTER (0);
 		LEAVE("Matched top level");
 		return TRUE;
+	}
+
+	if (priv->root != xaccAccountGetRoot (account)) {
+		LEAVE("Root doesn't match");
+		return FALSE;
 	}
 
 	group = xaccAccountGetParent (account);
@@ -1407,9 +1407,10 @@ gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
   GtkTreeIter iter;
 
   if (gtk_tree_path_up (path)) {
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
+    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
       gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
       gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+    }
   }
 
   do {
