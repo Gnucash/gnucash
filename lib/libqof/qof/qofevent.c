@@ -205,23 +205,17 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
 
   g_return_if_fail(entity);
 
-  if(event_id <= QOF_DEFAULT_LIMIT)
+  if (event_id <= QOF_DEFAULT_EVENT_LIMIT)
   {
-	  use_old_handlers = TRUE;
+    use_old_handlers = TRUE;
   }
 	
   switch (event_id)
   {
-    case QOF_EVENT_NONE: { 
-		/* if none, don't log, just return. */
-		return;
-		}
-    case QOF_EVENT_CREATE :
-    case QOF_EVENT_MODIFY :
-    case QOF_EVENT_DESTROY :
-    case QOF_EVENT_ADD :
-    case QOF_EVENT_REMOVE :
-		break;
+  case QOF_EVENT_NONE: { 
+    /* if none, don't log, just return. */
+    return;
+  }
   }
 
   handler_run_level++;
@@ -230,18 +224,18 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
     HandlerInfo *hi = node->data;
 
     next_node = node->next;
-    if ((hi->old_handler)&&(use_old_handlers))
-	{
-    PINFO (" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
-		   hi->old_handler);
+    if ((hi->old_handler) && (use_old_handlers))
+    {
+      PINFO(" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
+            hi->old_handler);
       hi->old_handler ((GUID *)&entity->guid, entity->e_type,
-		   event_id, hi->user_data);
-	}
+                       event_id, hi->user_data);
+    }
     if (hi->handler)
-	{
-    PINFO ("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
+    {
+      PINFO("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
       hi->handler (entity, event_id, hi->user_data);
-	}
+    }
   }
   handler_run_level--;
 
@@ -256,10 +250,10 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
       next_node = node->next;
       if ((hi->handler == NULL)&&(hi->old_handler == NULL))
       {
-          /* remove this node from the list, then free this node */
-          handlers = g_list_remove_link (handlers, node);
-          g_list_free_1 (node);
-          g_free (hi);
+        /* remove this node from the list, then free this node */
+        handlers = g_list_remove_link (handlers, node);
+        g_list_free_1 (node);
+        g_free (hi);
       }
     }
     pending_deletes = 0;

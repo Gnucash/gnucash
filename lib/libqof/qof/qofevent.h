@@ -50,11 +50,12 @@ any process can define their own events.
 #define QOF_EVENT_DESTROY  (1 << 2)
 #define QOF_EVENT_ADD      (1 << 3)
 #define QOF_EVENT_REMOVE   (1 << 4)
+#define QOF_EVENT__LAST    QOF_EVENT_REMOVE 
 #define QOF_EVENT_ALL      (0xff)
 
 /** Allow scope for more defaults in future. Additional
 event identifiers must be larger than this. */
-#define QOF_DEFAULT_LIMIT  10
+#define QOF_DEFAULT_EVENT_LIMIT  QOF_EVENT__LAST
 
 /** \brief Handler invoked when an engine event occurs.
  *
