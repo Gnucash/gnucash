@@ -738,10 +738,7 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
     if (!acc || !lot || !acc->lots) return;
     ENTER ("(acc=%p, lot=%p)", acc, lot);
 
-    xaccAccountBeginEdit (acc);
     acc->lots = g_list_remove (acc->lots, lot);
-    mark_account(acc);
-    xaccAccountCommitEdit (acc);
     LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
@@ -758,15 +755,10 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    /* pull it out of the old account */
    if (lot->account) {
       old_acc = lot->account;
-      xaccAccountBeginEdit (old_acc);
       old_acc->lots = g_list_remove (old_acc->lots, lot);
-      mark_account(old_acc);
    }
 
-   xaccAccountBeginEdit(acc);
-
    acc->lots = g_list_prepend (acc->lots, lot);
-   mark_account(acc);
    lot->account = acc;
 
    /* Move all splits over to the new account.  At worst,
@@ -776,10 +768,6 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
        if (s->acc != acc)
             xaccAccountInsertSplit (acc, s);
    }
-   xaccAccountCommitEdit(acc);
-
-   if (old_acc)
-       xaccAccountCommitEdit(old_acc);
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 
@@ -798,7 +786,6 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   trans = xaccSplitGetParent (split);
   ENTER ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
 
-  xaccAccountBeginEdit(acc);
   if (trans)
       xaccTransBeginEdit(trans);
 
@@ -815,8 +802,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
       xaccAccountInsertLot (acc, split->lot);
 
   if (!g_list_find(acc->splits, split)) {
-      /* BUG? condition sort based on editlevel==1? What about editlevel==2? */
-      if (acc->inst.editlevel == 1)
+      if (acc->inst.editlevel == 0)
       {
           acc->splits = g_list_insert_sorted(acc->splits, split,
                                              split_sort_func);
@@ -838,7 +824,6 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   if (trans)
       xaccTransCommitEdit(trans);
 
-  xaccAccountCommitEdit(acc);
   LEAVE ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
 }
 
@@ -858,7 +843,6 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
   if (node) {
       Transaction *trans = xaccSplitGetParent (split);
 
-      xaccAccountBeginEdit(acc);
       acc->splits = g_list_delete_link (acc->splits, node);
 
       acc->balance_dirty = TRUE;
@@ -879,7 +863,6 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
          gen_event can be removed. */
       if (split->parent)
         gnc_engine_gen_event (&split->parent->inst.entity, GNC_EVENT_MODIFY);
-      xaccAccountCommitEdit(acc);
 
   } else PERR ("split is not in account, but it thinks it is!");
   
@@ -923,10 +906,6 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
   /* Begin editing both accounts and all transactions in accfrom. */
   g_list_foreach(accfrom->splits, (GFunc)xaccPreSplitMove, NULL);
-  xaccAccountBeginEdit(accfrom);
-  xaccAccountBeginEdit(accto);
-  mark_account (accfrom);
-  mark_account (accto);
 
   /* Concatenate accfrom's lists of splits and lots to accto's lists. */
   accto->splits = g_list_concat(accto->splits, accfrom->splits);
@@ -953,15 +932,12 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
    * DNJ - I don't really understand why this is necessary,
    *       but xaccAccountInsertSplit does it.
    */
-  if (accto->inst.editlevel == 1)
+  if (accto->inst.editlevel == 0)
   {
     accto->splits = g_list_sort(accto->splits, split_sort_func);
     accto->sort_dirty = FALSE;
   }
 
-  /* Commit to editing both accounts. */
-  xaccAccountCommitEdit(accfrom);
-  xaccAccountCommitEdit(accto);
   LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
 }
 
