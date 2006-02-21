@@ -44,13 +44,13 @@ typedef gint QofEventId;
 These defaults merely replicate previous behaviour,
 any process can define their own events. 
 */
-#define QOF_EVENT_NONE     0
-#define QOF_EVENT_CREATE   1
-#define QOF_EVENT_MODIFY   2
-#define QOF_EVENT_DESTROY  3
-#define QOF_EVENT_ADD      4
-#define QOF_EVENT_REMOVE   5
-#define QOF_EVENT_ALL      6 /**< unused */
+#define QOF_EVENT_NONE     (0)
+#define QOF_EVENT_CREATE   (1 << 1)
+#define QOF_EVENT_MODIFY   (1 << 2)
+#define QOF_EVENT_DESTROY  (1 << 3)
+#define QOF_EVENT_ADD      (1 << 4)
+#define QOF_EVENT_REMOVE   (1 << 5)
+#define QOF_EVENT_ALL      (0xff)
 
 /** Allow scope for more defaults in future. Additional
 event identifiers must be larger than this. */

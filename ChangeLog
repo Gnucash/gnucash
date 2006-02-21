@@ -1,3 +1,8 @@
+2006-02-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* lib/libqof/qof/qofevent.h (QOF_EVENT_CREATE):
+	Fix event values.
+
 2006-02-20  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-date-picker.c: Andreas
