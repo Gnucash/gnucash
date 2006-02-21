@@ -181,6 +181,7 @@ void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
    if (!lot) return;
+   qof_collection_mark_dirty(QOF_ENTITY(lot)->collection);
    return kvp_frame_set_str (lot->kvp_data, "/title", str);
 }
 
@@ -188,6 +189,7 @@ void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
    if (!lot) return;
+   qof_collection_mark_dirty(QOF_ENTITY(lot)->collection);
    return kvp_frame_set_str (lot->kvp_data, "/notes", str);
 }
 
@@ -243,6 +245,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
         gnc_num_dbg_to_string (split->amount),
         gnc_num_dbg_to_string (split->value));
    acc = xaccSplitGetAccount (split);
+   qof_collection_mark_dirty(QOF_ENTITY(lot)->collection);
    if (NULL == lot->account)
    {
       xaccAccountInsertLot (acc, lot);
@@ -277,6 +280,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    if (!lot || !split) return;
 
    ENTER ("(lot=%p, split=%p)", lot, split);
+   qof_collection_mark_dirty(QOF_ENTITY(lot)->collection);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
    lot->is_closed = -1;   /* force an is-closed computation */
