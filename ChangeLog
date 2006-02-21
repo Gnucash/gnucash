@@ -1,5 +1,9 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-date-picker.c: Andreas
+	Köhler's patch to prevent a crash in the register date picker
+	widget when using gtk 2.8..
+
 	* src/bin/gnucash-bin.c:
 	* src/gnome-utils/glade/commodity.glade:
 	* src/gnome-utils/dialog-commodity.c:

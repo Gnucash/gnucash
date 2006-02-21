@@ -151,7 +151,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET(GNCDatePickerClass, key_press_event),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__POINTER,
+		  g_cclosure_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_EVENT);
 
