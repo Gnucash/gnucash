@@ -182,6 +182,7 @@ qof_collection_remove_entity (QofEntity *ent)
   col = ent->collection;
   if (!col) return;
   g_hash_table_remove (col->hash_of_entities, &ent->guid);
+  qof_collection_mark_dirty(col);
   ent->collection = NULL;
 }
 
@@ -193,6 +194,7 @@ qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
   g_return_if_fail (col->e_type == ent->e_type);
   qof_collection_remove_entity (ent);
   g_hash_table_insert (col->hash_of_entities, &ent->guid, ent);
+  qof_collection_mark_dirty(col);
   ent->collection = col;
 }
 
@@ -208,6 +210,7 @@ qof_collection_add_entity (QofCollection *coll, QofEntity *ent)
 	e = qof_collection_lookup_entity(coll, &ent->guid);
 	if ( e != NULL ) { return FALSE; }
 	g_hash_table_insert (coll->hash_of_entities, &ent->guid, ent);
+	qof_collection_mark_dirty(coll);
 	return TRUE;
 }
 
