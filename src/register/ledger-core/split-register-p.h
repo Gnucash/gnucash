@@ -109,8 +109,6 @@ struct sr_info
   char *credit_str;
   char *tdebit_str;
   char *tcredit_str;
-
-  GList *saved_slist;
 };
 
 

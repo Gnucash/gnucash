@@ -129,6 +129,14 @@ gnc_split_register_add_transaction (SplitRegister *reg,
 
 }
 
+static gint
+_find_split_with_parent_txn(gconstpointer a, gconstpointer b)
+{
+  Split *split = (Split*)a;
+  Transaction *txn = (Transaction*)b;
+  return xaccSplitGetParent(split) == txn ? 0 : 1;
+}
+
 void
 gnc_split_register_load (SplitRegister *reg, GList * slist,
                          Account *default_account)
@@ -157,6 +165,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   gboolean has_last_num = FALSE;
   gboolean multi_line;
   gboolean dynamic;
+  gboolean we_own_slist = FALSE;
 
   VirtualCellLocation vcell_loc;
   VirtualLocation save_loc;
@@ -323,19 +332,29 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  /*
-   * Which split list to use?  If there is a transction pending, then
-   * use the saved list so that the transaction is guaranteed to
-   * remain in the register intil the user finishes editing
-   * it. Otherwise, the moment the user changes the account field of
-   * the split that is attached to the register, the transaction will
-   * be ripped out from underneath them.
-   */
-  if (pending_trans != NULL) {
-    slist = info->saved_slist;
-  } else {
-    g_list_free(info->saved_slist);
-    info->saved_slist = g_list_copy(slist);
+  // Ensure that the transaction and splits being edited are in the split
+  // list we're about to load.
+  if (pending_trans != NULL)
+  {
+    SplitList *splits;
+    for (splits = xaccTransGetSplitList(pending_trans); splits; splits = splits->next)
+    {
+      Split *pending_split = (Split*)splits->data;
+      if (g_list_find(slist, pending_split) != NULL)
+        continue;
+
+      //printf("pending_split [%s] not found\n", guid_to_string(xaccSplitGetGUID(pending_split)));
+      if (g_list_find_custom(slist, pending_trans, _find_split_with_parent_txn) != NULL)
+        continue;
+
+      //printf("transaction [%s] not found\n", guid_to_string(xaccTransGetGUID(pending_trans)));
+      if (!we_own_slist)
+      { // lazy-copy
+        slist = g_list_copy(slist);
+        we_own_slist = TRUE;
+      }
+      slist = g_list_append(slist, pending_split);
+    }
   }
 
   /* populate the table */
@@ -538,6 +557,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   /* enable callback for cursor user-driven moves */
   gnc_table_control_allow_move (table->control, TRUE);
+
+  if (we_own_slist)
+    g_list_free(slist);
 }
 
 /* ===================================================================== */
