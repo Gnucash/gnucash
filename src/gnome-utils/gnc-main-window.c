@@ -2677,10 +2677,26 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 	}
 }
 
+static gboolean
+gnc_main_window_timed_quit (gpointer dummy)
+{
+	if (gnc_file_save_in_progress())
+	  return TRUE;
+
+	gnc_shutdown (0);
+	return FALSE;
+}
+
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
 	QofSession *session;
+
+	if (gnc_file_save_in_progress()) {
+	  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+	  return;
+	}
+
 	session = qof_session_get_current_session();
 	if (qof_book_not_saved(qof_session_get_book(session))) {
 	  if (gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {

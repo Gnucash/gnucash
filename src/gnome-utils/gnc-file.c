@@ -52,6 +52,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static GNCShutdownCB shutdown_cb = NULL;
+static gint save_in_progress = 0;
 
 
 /********************************************************************\
@@ -941,11 +942,13 @@ gnc_file_save (void)
   }
 
   /* use the current session to save to file */
+  save_in_progress++;
   gnc_set_busy_cursor (NULL, TRUE);
   gnc_window_show_progress(_("Writing file..."), 0.0);
   qof_session_save (session, gnc_window_show_progress);
   gnc_window_show_progress(NULL, -1.0);
   gnc_unset_busy_cursor (NULL);
+  save_in_progress--;
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
@@ -1015,6 +1018,7 @@ gnc_file_save_as (void)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
+  save_in_progress++;
   new_session = qof_session_new ();
   qof_session_begin (new_session, newfile, FALSE, FALSE);
 
@@ -1053,6 +1057,7 @@ gnc_file_save_as (void)
     qof_session_destroy (new_session);
     xaccLogEnable();
     g_free (newfile);
+    save_in_progress--;
     return;
   }
 
@@ -1082,6 +1087,7 @@ gnc_file_save_as (void)
     if (!gnc_verify_dialog (NULL, FALSE, format, newfile))
     {
       g_free (newfile);
+      save_in_progress--;
       return;
     }
 
@@ -1089,6 +1095,7 @@ gnc_file_save_as (void)
   }
 
   gnc_file_save ();
+  save_in_progress--;
 
   g_free (newfile);
   LEAVE (" ");
@@ -1123,4 +1130,10 @@ void
 gnc_file_set_shutdown_callback (GNCShutdownCB cb)
 {
   shutdown_cb = cb;
+}
+
+gboolean
+gnc_file_save_in_progress (void)
+{
+  return (save_in_progress > 0);
 }

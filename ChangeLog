@@ -1,5 +1,10 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.[ch]:
+
+	* src/gnome-utils/gnc-main-window.c: Catch and defer the quit
+	command if a file save is in progress. Fixes 155327.
+
 	* rpm/gnucash.spec.in:
 	* rpm/README: Update spec file from RH8 to FC4.
 

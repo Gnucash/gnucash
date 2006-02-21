@@ -150,5 +150,6 @@ void gnc_file_quit (void);
 
 typedef void (*GNCShutdownCB) (int);
 void gnc_file_set_shutdown_callback (GNCShutdownCB cb);
+gboolean gnc_file_save_in_progress (void);
 
 #endif /* GNC_FILE_H */
