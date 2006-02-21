@@ -83,6 +83,8 @@ struct commodity_window {
 
   guint comm_section_top;
   guint comm_section_bottom;
+  guint fq_section_top;
+  guint fq_section_bottom;
 
   gboolean     is_currency;
   gnc_commodity *edit_commodity;
@@ -540,6 +542,28 @@ gnc_ui_update_commodity_info (CommodityWindow *cw)
 			gnc_set_commodity_section_sensitivity, cw);
 }
 
+static void
+gnc_set_fq_sensitivity (GtkWidget *widget, gpointer user_data)
+{
+  CommodityWindow *cw = user_data;
+  guint offset = 0;
+
+  gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
+			  "top-attach", &offset,
+			  NULL);
+
+  if ((offset < cw->fq_section_top) || (offset >= cw->fq_section_bottom))
+    return;
+  g_object_set(widget, "sensitive", FALSE, NULL);
+}
+
+static void
+gnc_ui_update_fq_info (CommodityWindow *cw)
+{
+  gtk_container_foreach(GTK_CONTAINER(cw->table),
+			gnc_set_fq_sensitivity, cw);
+}
+
 /********************************************************************
  * gnc_ui_update_namespace_picker
  ********************************************************************/
@@ -907,8 +931,14 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
   if (gnc_quote_source_fq_installed()) {
     gtk_widget_destroy(glade_xml_get_widget (xml, "finance_quote_warning"));
   } else {
-    gtk_widget_set_sensitive(glade_xml_get_widget (xml, "price_quote_frame"),
-			     FALSE);
+    /* Determine the price quote of the dialog */
+    widget = glade_xml_get_widget (xml, "fq_warning_alignment");
+    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+			    "bottom-attach", &retval->fq_section_top, NULL);
+    widget = glade_xml_get_widget (xml, "quote_tz_alignment");
+    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+			    "bottom-attach", &retval->fq_section_bottom, NULL);
+    gnc_ui_update_fq_info (retval);
   }
 
 

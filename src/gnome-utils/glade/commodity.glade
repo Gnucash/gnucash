@@ -981,7 +981,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkAlignment" id="alignment8">
+	    <widget class="GtkAlignment" id="fq_warning_alignment">
 	      <property name="visible">True</property>
 	      <property name="xalign">0.5</property>
 	      <property name="yalign">0.5</property>
@@ -1219,7 +1219,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkAlignment" id="alignment14">
+	    <widget class="GtkAlignment" id="quote_tz_alignment">
 	      <property name="visible">True</property>
 	      <property name="xalign">0.5</property>
 	      <property name="yalign">0.5</property>

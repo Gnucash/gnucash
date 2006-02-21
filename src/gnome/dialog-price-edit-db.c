@@ -392,6 +392,11 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     button = glade_xml_get_widget (xml, "remove_button");
     pdb_dialog->remove_button = button;
+
+    if (!gnc_quote_source_fq_installed()) {
+      button = glade_xml_get_widget (xml, "get_quotes_button");
+      gtk_widget_set_sensitive(button, FALSE);
+    }
   }
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));

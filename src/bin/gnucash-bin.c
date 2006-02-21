@@ -41,6 +41,7 @@
 #include "gnc-hooks.h"
 #include "top-level.h"
 #include "gfec.h"
+#include "gnc-commodity.h"
 #include "gnc-main.h"
 #include "gnc-main-window.h"
 #include "gnc-splash.h"
@@ -388,14 +389,19 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     g_message("Beginning to install price-quote sources");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
-    add_quotes = scm_c_eval_string("gnc:add-quotes-to-book-at-url");
-    scm_filename = scm_makfrom0str (add_quotes_file);
-    scm_result = scm_call_1(add_quotes, scm_filename);
+    if (gnc_quote_source_fq_installed()) {
+      add_quotes = scm_c_eval_string("gnc:add-quotes-to-book-at-url");
+      scm_filename = scm_makfrom0str (add_quotes_file);
+      scm_result = scm_call_1(add_quotes, scm_filename);
 
-    if (!SCM_NFALSEP(scm_result)) {
+      if (!SCM_NFALSEP(scm_result)) {
         g_error("Failed to add quotes to %s.", add_quotes_file);
         gnc_shutdown(1);
+      }
+    } else {
+      g_print(_("No quotes retrieved. Finance::Quote isn't installed properly.\n"));
     }
+
     gnc_engine_resume_events();
     gnc_shutdown(0);
     return;

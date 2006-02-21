@@ -1,7 +1,12 @@
 2006-02-20  David Hampton  <hampton@employees.org>
 
-	* src/gnome-utils/gnc-file.[ch]:
+	* src/bin/gnucash-bin.c:
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome/dialog-price-edit-db.c: Disable quote related
+	functionality when F::Q isn't installed.  Fixes 130347 and 314054.
 
+	* src/gnome-utils/gnc-file.[ch]:
 	* src/gnome-utils/gnc-main-window.c: Catch and defer the quit
 	command if a file save is in progress. Fixes 155327.
 
