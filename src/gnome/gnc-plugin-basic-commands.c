@@ -52,6 +52,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
+#include "gnc-session.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -343,7 +344,7 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
   gnc_engine_suspend_events();
   filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
   gtk_widget_destroy((GtkWidget*) fs);
-  first_session = qof_session_get_current_session();
+  first_session = gnc_get_current_session();
   original = qof_session_get_book(first_session);
   qsf_session = qof_session_new();
   qof_session_begin(qsf_session, filename, TRUE, FALSE);

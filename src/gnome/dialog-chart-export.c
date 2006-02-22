@@ -37,6 +37,7 @@
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-ui.h"
+#include "gnc-session.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")
 #define OPENING_BALANCE_DESC _("Opening Balance")
@@ -224,7 +225,7 @@ on_dateok_clicked (chart_data  *data)
 		chart_tm->tm_mday = day; 
 	}
 	data->chart_time_t = mktime(chart_tm);
-	current_session = qof_session_get_current_session();
+	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
 	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
 	chart_session = qof_session_new();
@@ -262,7 +263,7 @@ on_dateok_clicked (chart_data  *data)
 		gnc_unset_busy_cursor(NULL);
 	}
 	qof_session_end(chart_session);
-	qof_session_set_current_session(current_session);
+	gnc_set_current_session(current_session);
 }
 
 void

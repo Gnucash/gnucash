@@ -940,7 +940,7 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
     DEBUG("Include subs: %d", include_subs);
     acct_name = g_key_file_get_string(key_file, group_name,
 				      KEY_ACCOUNT_NAME, &error);
-    book = qof_session_get_book(qof_session_get_current_session());
+    book = qof_session_get_book(gnc_get_current_session());
     account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
 					 acct_name,
 					 gnc_get_account_separator());

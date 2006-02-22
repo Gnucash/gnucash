@@ -46,7 +46,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
-
+#include "gnc-session.h"
 
 #define DRUID_ACCT_PERIOD_CM_CLASS "druid-acct-period"
 
@@ -440,7 +440,7 @@ ap_close_period (GnomeDruidPage *druidpage,
     kvp_frame_set_str (book_frame, "/book/title", btitle);
     kvp_frame_set_str (book_frame, "/book/notes", bnotes);
 
-    qof_session_add_book (qof_session_get_current_session(), closed_book);
+    qof_session_add_book (gnc_get_current_session(), closed_book);
 
     /* We must save now; if we don't, and the user bails without saving,
      * then opening account balances will be incorrect, and this can only
