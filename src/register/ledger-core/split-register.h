@@ -240,6 +240,9 @@ struct split_register
 {
   Table * table;   /**< The table itself that implements the underlying GUI. */
 
+  GFunc expand_changed_cb;
+  gpointer expand_changed_cb_data;
+
   SplitRegisterType type;
   SplitRegisterStyle style;
 
@@ -409,6 +412,14 @@ void gnc_split_register_show_present_divider (SplitRegister *reg,
 /** Expand the current transaction if it is collapsed. */
 void gnc_split_register_expand_current_trans (SplitRegister *reg,
                                               gboolean expand);
+
+/** Mark the current transaction as collapsed, and do callbacks. */
+void gnc_split_register_collapse_current_trans (SplitRegister *reg);
+
+/** Register a callback function for when the register closes a
+ *  transaction without the user explicitly asking for this to
+ *  be changed. */
+void gnc_split_register_set_trans_collapsed_cb (SplitRegister *reg, GFunc cb, gpointer cb_data);
 
 /** Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
 gboolean gnc_split_register_current_trans_expanded (SplitRegister *reg);

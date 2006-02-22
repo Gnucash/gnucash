@@ -1,3 +1,13 @@
+2006-02-22  David Hampton  <hampton@employees.org>
+
+	* src/register/ledger-core/split-register.[ch]:
+	* src/register/ledger-core/split-register-control.c:
+	* src/gnome/gnc-plugin-page-register.c: Provide a callback whereby
+	the core register code can tell the upper layers that it has moved
+	from an expanded transaction to a collapsed transaction.  This
+	lets the upper layer adjust the "split" transaction toolbar button
+	properly.  Fixes 332165.
+
 2006-02-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c: Fix from Andreas Köhler to

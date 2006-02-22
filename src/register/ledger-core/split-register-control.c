@@ -448,7 +448,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
                                             reg->style == REG_STYLE_JOURNAL);
     }
 
-    info->trans_expanded = FALSE;
+    gnc_split_register_collapse_current_trans(reg);
 
     do_refresh = TRUE;
   }

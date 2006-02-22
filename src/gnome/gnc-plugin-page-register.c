@@ -146,6 +146,8 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
 
+static void gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page);
+
 /************************************************************/
 /*                          Actions                         */
 /************************************************************/
@@ -407,6 +409,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GncPluginPageRegisterPrivate *priv;
 	GncPluginPage *plugin_page;
 	GNCSplitReg *gsr;
+	SplitRegister *reg;
 	const GList *item;
 	GList *book_list;
 	gchar *label;
@@ -440,6 +443,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+	gnc_split_register_set_trans_collapsed_cb
+	  (reg, (GFunc)gnc_plugin_page_register_update_split_button, register_page);
+
 	priv->component_manager_id = 0;
 	return plugin_page;
 }
@@ -576,6 +583,26 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 	return NULL;
 }
 
+
+static void
+gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page)
+{
+	GtkActionGroup *action_group;
+	GtkAction *action;
+	gboolean expanded;
+
+	expanded = gnc_split_register_current_trans_expanded(reg);
+
+	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
+	action = gtk_action_group_get_action (action_group,
+					      "SplitTransactionAction");
+
+	g_signal_handlers_block_by_func
+	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), expanded);
+	g_signal_handlers_unblock_by_func
+	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+}
 
 static void
 gnc_plugin_page_register_update_toolbar (GncPluginPageRegister *page, SplitRegisterStyle style)
