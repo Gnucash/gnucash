@@ -532,6 +532,8 @@ gnc_file_query_save (gboolean can_cancel)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
 
+  if (!gnc_current_session_exist())
+      return TRUE;
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
    * Pose the question as a "while" loop, so that if user screws

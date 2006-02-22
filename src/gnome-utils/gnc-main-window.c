@@ -996,10 +996,11 @@ gnc_main_window_generate_title (GncMainWindow *window)
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
-  const gchar *filename;
+  const gchar *filename = NULL;
   gchar *title, *ptr;
 
-  filename = gnc_session_get_url (gnc_get_current_session ());
+  if (gnc_current_session_exist())
+      filename = gnc_session_get_url (gnc_get_current_session ());
 
   if (!filename)
     filename = _("<no file>");
