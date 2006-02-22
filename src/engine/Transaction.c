@@ -789,10 +789,12 @@ qofSplitSetAmount (Split *split, gnc_numeric amt)
 	else { split->amount = amt;	}
 }
 
+/* The amount of the split in the _account's_ commodity. */
 void 
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if (!s) return;
+  g_return_if_fail(gnc_numeric_check(amt) == GNC_ERROR_OK);
   ENTER ("(split=%p) old amt=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT
 	 " new amt=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
 	 s->amount.num, s->amount.denom, amt.num, amt.denom);
@@ -806,6 +808,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
   SET_GAINS_ADIRTY(s);
   mark_split (s);
+  LEAVE("");
 }
 
 static void
@@ -816,10 +819,13 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
 			get_currency_denom(split), GNC_HOW_RND_ROUND);
 }
 
+/* The value of the split in the _transaction's_ currency. */
 void 
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if (!s) return;
+  
+  g_return_if_fail(gnc_numeric_check(amt) == GNC_ERROR_OK);
   ENTER ("(split=%p) old val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT
 	 " new val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
 	 s->value.num, s->value.denom, amt.num, amt.denom);
@@ -830,6 +836,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
+  LEAVE ("");
 }
 
 /********************************************************************\
@@ -1484,6 +1491,10 @@ xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
    * rate (based on amount/value), and then return this conversion
    * rate.
    */
+  if (gnc_commodity_equal(xaccAccountGetCommodity(acc), 
+                          xaccTransGetCurrency(txn)))
+      return gnc_numeric_create(1, 1);
+
   splits = xaccTransGetSplitList(txn);
   for (; splits; splits = splits->next) {
     s = splits->data;
