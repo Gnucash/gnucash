@@ -1,5 +1,9 @@
 2006-02-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c: Fix from Andreas Köhler to
+	deactivate the toolbar split button in an auto-split register.
+	Fixes 330621.
+
 	* src/gnome-utils/gnc-tree-model-account.c: Two fixes from Andreas
 	Köhler.  One fixes 331183, the problem where editing a top-level
 	account doesn't set the current parent.
