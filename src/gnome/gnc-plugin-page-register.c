@@ -605,19 +605,19 @@ gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageR
 }
 
 static void
-gnc_plugin_page_register_update_toolbar (GncPluginPageRegister *page, SplitRegisterStyle style)
+gnc_plugin_page_register_update_toolbar (SplitRegister *reg, GncPluginPageRegister *page)
 {
 	GtkActionGroup *action_group;
 	GtkAction *action;
-	GValue gvalue = { 0 };
 
 	action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE (page));
-
-	g_value_init (&gvalue, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&gvalue, style == REG_STYLE_LEDGER);
 	action = gtk_action_group_get_action (action_group,
 					      "SplitTransactionAction");
-	g_object_set_property (G_OBJECT (action), "sensitive", &gvalue);
+	/* set sensitivity of split button */
+	gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
+
+	/* set activity of split button */
+	gnc_plugin_page_register_update_split_button (reg, page);
 }
 
 static void
@@ -660,7 +660,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 
-	gnc_plugin_page_register_update_toolbar (page, reg->style);
+	gnc_plugin_page_register_update_toolbar (reg, page);
 }
 
 
@@ -2136,6 +2136,7 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
 					    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
+  SplitRegister *reg;
   SplitRegisterStyle value;
 
   ENTER("(action %p, radio action %p, plugin_page %p)",
@@ -2148,7 +2149,9 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
   value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_change_style(priv->gsr, value);
-  gnc_plugin_page_register_update_toolbar (plugin_page, value);
+
+  reg = gnc_ledger_display_get_split_register(priv->ledger);
+  gnc_plugin_page_register_update_toolbar (reg, plugin_page);
   LEAVE(" ");
 }
 

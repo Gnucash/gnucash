@@ -1,5 +1,9 @@
 2006-02-22  David Hampton  <hampton@employees.org>
 
+	* src/gtk-compat.h:
+	* src/gnome/gnc-plugin-page-register.c: Cleanup patch from Andreas
+	Köhler.
+
 	* src/register/ledger-core/split-register.[ch]:
 	* src/register/ledger-core/split-register-control.c:
 	* src/gnome/gnc-plugin-page-register.c: Provide a callback whereby

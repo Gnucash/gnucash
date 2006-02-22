@@ -20,9 +20,9 @@
 
 #ifndef HAVE_GTK26
 #define	gtk_action_set_sensitive(action, xxx) \
-       g_object_set(action, "sensitive", xxx, NULL)
+    g_object_set((action), "sensitive", (xxx), NULL)
 #define	gtk_action_set_visible(action, xxx) \
-       g_object_set(action, "visible", xxx, NULL)
+    g_object_set((action), "visible", (xxx), NULL)
 
 #define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID -2
 #endif
