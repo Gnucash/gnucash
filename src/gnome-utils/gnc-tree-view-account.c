@@ -43,6 +43,7 @@
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-session.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
@@ -1833,7 +1834,7 @@ tree_restore_expanded_row (GncTreeViewAccount *view,
   Account *account;
   QofBook *book;
 
-  book = qof_session_get_book(qof_session_get_current_session());
+  book = qof_session_get_book(gnc_get_current_session());
   account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
 				       account_name,
 				       gnc_get_account_separator());
@@ -1856,7 +1857,7 @@ tree_restore_selected_row (GncTreeViewAccount *view,
   Account *account;
   QofBook *book;
 
-  book = qof_session_get_book(qof_session_get_current_session());
+  book = qof_session_get_book(gnc_get_current_session());
   account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
 				       account_name,
 				       gnc_get_account_separator());

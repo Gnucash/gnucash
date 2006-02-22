@@ -33,6 +33,7 @@
       "#include <gnc-gettext-util.h>\n"
       "#include <gnc-helpers.h>\n"
       "#include <gnc-accounting-period.h>\n"
+      "#include <gnc-session.h>\n"
       "#include <gnc-component-manager.h>\n")))
 
   (gw:wrap-simple-type ws '<gnc:print-amount-info-scm> "GNCPrintAmountInfo"
@@ -71,7 +72,7 @@
    ws
    'gnc:get-current-session
    '<gnc:Session*>
-   "qof_session_get_current_session"
+   "gnc_get_current_session"
    '()
    "Get the current session.")
 

@@ -45,6 +45,7 @@
 #include "gnc-date.h"
 #include "gnc-file.h"
 #include "guile-mappings.h"
+#include "gnc-session.h"
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
@@ -716,7 +717,7 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 	gchar *filename;
 	gboolean success;
 
-	current_session = qof_session_get_current_session();
+	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
 	chart_session = qof_session_new();
 	success = FALSE;
@@ -739,7 +740,7 @@ gnc_plugin_business_cmd_export_invoice (GtkAction *action, GncMainWindowActionDa
 			   GNC_FILE_DIALOG_EXPORT);
 	g_free(filename);
 	qof_session_end(chart_session);
-	qof_session_set_current_session(current_session);
+	gnc_set_current_session(current_session);
 }
 
 static void
@@ -751,7 +752,7 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 	gchar *filename;
 	gboolean success;
 
-	current_session = qof_session_get_current_session();
+	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
 	chart_session = qof_session_new();
 	success = FALSE;
@@ -771,7 +772,7 @@ gnc_plugin_business_cmd_export_customer (GtkAction *action, GncMainWindowActionD
 			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
-	qof_session_set_current_session(current_session);
+	gnc_set_current_session(current_session);
 }
 
 static void
@@ -783,7 +784,7 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 	gchar *filename;
 	gboolean success;
 
-	current_session = qof_session_get_current_session();
+	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
 	chart_session = qof_session_new();
 	success = FALSE;
@@ -803,7 +804,7 @@ gnc_plugin_business_cmd_export_vendor (GtkAction *action, GncMainWindowActionDat
 			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
-	qof_session_set_current_session(current_session);
+	gnc_set_current_session(current_session);
 }
 
 static void
@@ -815,7 +816,7 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 	gchar *filename;
 	gboolean success;
 
-	current_session = qof_session_get_current_session();
+	current_session = gnc_get_current_session();
 	book = qof_session_get_book(current_session);
 	chart_session = qof_session_new();
 	success = FALSE;
@@ -835,7 +836,7 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 			   GNC_FILE_DIALOG_EXPORT);
 	qof_session_end(chart_session);
 	g_free(filename);
-	qof_session_set_current_session(current_session);
+	gnc_set_current_session(current_session);
 }
 
 static void

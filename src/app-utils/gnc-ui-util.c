@@ -46,7 +46,7 @@
 #include "Group.h"
 #include "Transaction.h"
 #include "guile-mappings.h"
-
+#include "gnc-session.h"
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
@@ -193,7 +193,7 @@ gnc_extract_directory (char **dirname, const char *filename)
 QofBook *
 gnc_get_current_book (void)
 {
-  return qof_session_get_book (qof_session_get_current_session ());
+  return qof_session_get_book (gnc_get_current_session ());
 }
 
 AccountGroup *

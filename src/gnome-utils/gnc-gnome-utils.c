@@ -49,6 +49,7 @@
 #include "dialog-commodity.h"
 #include "dialog-totd.h"
 #include "gnc-ui-util.h"
+#include "gnc-session.h"
 #include <gnc-dir.h>
 
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -302,7 +303,7 @@ gnc_ui_check_events (gpointer not_used)
   if (gtk_main_level() != 1)
     return TRUE;
 
-  session = qof_session_get_current_session ();
+  session = gnc_get_current_session ();
   if (!session)
     return TRUE;
 

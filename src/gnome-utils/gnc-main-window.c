@@ -811,7 +811,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
       "continue without saving these changes will be discarded.");
 #endif
 
-  session = qof_session_get_current_session();
+  session = gnc_get_current_session();
   book = qof_session_get_book(session);
   filename = qof_session_get_file_path(session);
   if (filename == NULL)
@@ -890,7 +890,7 @@ gnc_main_window_delete_event (GtkWidget *window,
   if (g_list_length(active_windows) > 1)
     return FALSE;
 
-  session = qof_session_get_current_session();
+  session = gnc_get_current_session();
   if (qof_book_not_saved(qof_session_get_book(session))) {
     if (!gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
       /* Tell gnucash to shutdown cleanly */
@@ -2697,7 +2697,7 @@ gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 	  return;
 	}
 
-	session = qof_session_get_current_session();
+	session = gnc_get_current_session();
 	if (qof_book_not_saved(qof_session_get_book(session))) {
 	  if (gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
 	    /* User canceled */

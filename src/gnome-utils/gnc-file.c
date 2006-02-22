@@ -44,6 +44,7 @@
 #include "gnc-plugin-file-history.h"
 #include "qof.h"
 #include "TransLog.h"
+#include "gnc-session.h"
 
 #define GCONF_SECTION "dialogs/export_accounts"
 
@@ -487,7 +488,7 @@ gnc_add_history (QofSession * session)
 static void
 gnc_book_opened (void)
 {
-  gnc_hook_run(HOOK_BOOK_OPENED, qof_session_get_current_session());
+  gnc_hook_run(HOOK_BOOK_OPENED, gnc_get_current_session());
 }
 
 void
@@ -500,7 +501,7 @@ gnc_file_new (void)
   if (!gnc_file_query_save (TRUE))
     return;
 
-  session = qof_session_get_current_session ();
+  session = gnc_get_current_session ();
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -515,7 +516,7 @@ gnc_file_new (void)
   xaccLogEnable();
 
   /* start a new book */
-  qof_session_get_current_session ();
+  gnc_get_current_session ();
 
   gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
@@ -537,7 +538,7 @@ gnc_file_query_save (gboolean can_cancel)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while (qof_book_not_saved(qof_session_get_book (qof_session_get_current_session ())))
+  while (qof_book_not_saved(qof_session_get_book (gnc_get_current_session ())))
   {
     GtkWidget *dialog;
     gint response;
@@ -618,7 +619,7 @@ gnc_post_file_open (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
-  current_session  = qof_session_get_current_session();
+  current_session = gnc_get_current_session();
   qof_session_call_close_hooks(current_session);
   gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
   xaccLogDisable();
@@ -767,13 +768,14 @@ gnc_post_file_open (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    qof_session_get_current_session ();
+    gnc_get_current_session ();
 
     g_free (newfile);
 
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();
 
+    /* CAS: This doesn't seem right.  We failed. */
     /* Call this after re-enabling events. */
     gnc_book_opened ();
 
@@ -782,7 +784,7 @@ gnc_post_file_open (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  qof_session_set_current_session(new_session);
+  gnc_set_current_session(new_session);
 
   /* --------------- END CORE SESSION CODE -------------- */
 
@@ -820,7 +822,7 @@ gnc_file_open (void)
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  qof_session_get_current_session ();
+  gnc_get_current_session ();
 
   return result;
 }
@@ -899,7 +901,7 @@ gnc_file_export_file(const char * newfile)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
-  current_session = qof_session_get_current_session();
+  current_session = gnc_get_current_session();
   gnc_window_show_progress(_("Exporting file..."), 0.0);
   ok = qof_session_export (new_session, current_session,
 			   gnc_window_show_progress);
@@ -933,7 +935,7 @@ gnc_file_save (void)
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* If we don't have a filename/path to save to get one. */
-  session = qof_session_get_current_session ();
+  session = gnc_get_current_session ();
 
   if (!qof_session_get_file_path (session))
   {
@@ -1007,7 +1009,7 @@ gnc_file_save_as (void)
      return;
   }
 
-  session = qof_session_get_current_session ();
+  session = gnc_get_current_session ();
   oldfile = qof_session_get_file_path (session);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
@@ -1073,7 +1075,7 @@ gnc_file_save_as (void)
    * as being 'dirty', since we haven't saved it at all under the new
    * session. But I'm lazy...
    */
-  qof_session_set_current_session(new_session);
+  gnc_set_current_session(new_session);
 
   /* --------------- END CORE SESSION CODE -------------- */
 
@@ -1107,7 +1109,7 @@ gnc_file_quit (void)
   QofSession *session;
 
   gnc_set_busy_cursor (NULL, TRUE);
-  session = qof_session_get_current_session ();
+  session = gnc_get_current_session ();
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
@@ -1120,7 +1122,7 @@ gnc_file_quit (void)
   qof_session_destroy (session);
   xaccLogEnable();
 
-  qof_session_get_current_session ();
+  gnc_get_current_session ();
 
   gnc_engine_resume_events ();
   gnc_unset_busy_cursor (NULL);

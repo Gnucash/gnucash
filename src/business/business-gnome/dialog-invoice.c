@@ -47,7 +47,7 @@
 #include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
-
+#include "gnc-session.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 
@@ -2530,7 +2530,7 @@ gnc_invoice_remind_bills_due (void)
   GNCBook *book;
   gint days;
 
-  book = qof_session_get_book(qof_session_get_current_session());
+  book = qof_session_get_book(gnc_get_current_session());
   days = gnc_gconf_get_float(GCONF_SECTION_BILL, "days_in_advance", NULL);
 
   gnc_invoice_show_bills_due(book, days);
