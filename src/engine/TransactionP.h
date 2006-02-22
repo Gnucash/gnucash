@@ -51,6 +51,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"   /* for typedefs */
+#include "SplitP.h"
 #include "qof.h"
 
 
@@ -71,81 +72,6 @@
  *
  * A "split" is more commonly referred to as an "entry" in a "transaction".
  */
-
-/* Flags for handling cap-gains status */
-#define GAINS_STATUS_UNKNOWN        0xff
-#define GAINS_STATUS_CLEAN           0x0
-#define GAINS_STATUS_GAINS           0x3
-#define GAINS_STATUS_DATE_DIRTY     0x10
-#define GAINS_STATUS_AMNT_DIRTY     0x20
-#define GAINS_STATUS_VALU_DIRTY     0x40
-#define GAINS_STATUS_LOT_DIRTY      0x80
-#define GAINS_STATUS_ADIRTY    (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_LOT_DIRTY)
-#define GAINS_STATUS_VDIRTY    (GAINS_STATUS_VALU_DIRTY)
-#define GAINS_STATUS_A_VDIRTY  (GAINS_STATUS_AMNT_DIRTY|GAINS_STATUS_VALU_DIRTY|GAINS_STATUS_LOT_DIRTY)
-
-struct split_s
-{
-  QofInstance inst;
-
-  Account *acc;              /* back-pointer to debited/credited account  */
-
-  GNCLot *lot;               /* back-pointer to debited/credited lot */
-
-  Transaction *parent;       /* parent of split                           */
-
-  /* The memo field is an arbitrary user-assiged value. 
-   * It is intended to hold a short (zero to forty character) string 
-   * that is displayed by the GUI along with this split. 
-   */
-  char  * memo;
-
-  /* The action field is an arbitrary user-assigned value.
-   * It is meant to be a very short (one to ten character) string that
-   * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
-   * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
-   * can be used to create custom reports or graphs of data.
-   */ 
-  char  * action;            /* Buy, Sell, Div, etc.                      */
-
-  Timespec date_reconciled;  /* date split was reconciled                 */
-  char    reconciled;        /* The reconciled field                      */
-
-  /* gains is a flag used to track the relationship between 
-   * capital-gains splits. Depending on its value, this flag indicates
-   * if this split is the source of gains, if this split is a record
-   * of the gains, and if values are 'dirty' and need to be recomputed.
-   */
-  unsigned char  gains;      
-
-  /* 'gains_split' is a convenience pointer used to track down the
-   * other end of a cap-gains transaction pair.  NULL if this split
-   * doesn't involve cap gains.
-   */
-  Split *gains_split;
-
-  /* 'value' is the quantity of the transaction balancing commodity
-   * (i.e. currency) involved, 'amount' is the amount of the account's
-   * commodity involved. */
-  gnc_numeric  value;
-  gnc_numeric  amount;
-
-  /* -------------------------------------------------------------- */
-  /* Below follow some 'temporary' fields */
-
-  /* The various "balances" are the sum of all of the values of 
-   * all the splits in the account, up to and including this split.
-   * These balances apply to a sorting order by date posted
-   * (not by date entered). */
-  gnc_numeric  balance;
-  gnc_numeric  cleared_balance;
-  gnc_numeric  reconciled_balance;
-
-  /* -------------------------------------------------------------- */
-  /* Backend private expansion data */
-  guint32  idata;     /* used by the sql backend for kvp management */
-};
-
 
 struct transaction_s
 {
@@ -201,21 +127,6 @@ struct transaction_s
  * call this on an existing transaction! */
 #define xaccTransSetGUID(t,g) qof_entity_set_guid(QOF_ENTITY(t),g)
 
-/* Set the split's GUID. This should only be done when reading
- * a split from a datafile, or some other external source. Never
- * call this on an existing split! */
-#define xaccSplitSetGUID(s,g) qof_entity_set_guid(QOF_ENTITY(s),g)
-
-/* The xaccFreeSplit() method simply frees all memory associated
- * with the split.  It does not verify that the split isn't
- * referenced in some account.  If the split is referenced by an 
- * account, then calling this method will leave the system in an 
- * inconsistent state.  This *will* lead to crashes and hangs.
- */
-void  xaccFreeSplit (Split *split);    /* frees memory */
-
-Split * xaccSplitClone (const Split *s);
-
 /* This routine makes a 'duplicate' of the indicated transaction.
  * This routine cannot be exposed publically since the duplicate
  * is wrong in many ways: it is not issued a unique guid, and thus
@@ -227,11 +138,6 @@ Split * xaccSplitClone (const Split *s);
  */
 Transaction * xaccDupeTransaction (const Transaction *t);
 
-/* Compute the value of a list of splits in the given currency,
- * excluding the skip_me split. */
-gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
-                                    const gnc_commodity * base_currency);
-
 /* The xaccTransSet/GetVersion() routines set & get the version
  *    numbers on this transaction.  The version number is used to manage
  *    multi-user updates.  These routines are private because we don't
@@ -240,8 +146,7 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
 void xaccTransSetVersion (Transaction*, gint32);
 gint32 xaccTransGetVersion (const Transaction*);
 
-/* Code to register Split and Transaction types with the engine */
-gboolean xaccSplitRegister (void);
+/* Code to register Transaction type with the engine */
 gboolean xaccTransRegister (void);
 
 /* The xaccTransactionGetBackend() subroutine will find the
@@ -264,28 +169,15 @@ QofBackend * xaccTransactionGetBackend (Transaction *trans);
 void xaccEnableDataScrubbing(void);
 void xaccDisableDataScrubbing(void);
 
-/* The xaccSplitDetermineGainStatus() routine will analyze the 
- *   the split, and try to set the internal status flags 
- *   appropriately for the split.  These flags indicate if the split
- *   represents cap gains, and if the gains value/amount needs to be 
- *   recomputed.
- */
-void xaccSplitDetermineGainStatus (Split *split);
-
-/* ---------------------------------------------------------------- */
-/* Depricated routines */
-void         DxaccSplitSetSharePriceAndAmount (Split *split, 
-                                               double price,
-                                               double amount);
-void         DxaccSplitSetShareAmount (Split *split, double amount);
-
-
 /** Set the KvpFrame slots of this transaction to the given frm by
  *  * directly using the frm pointer (i.e. non-copying).
  *   * XXX this is wrong, nedds to be replaced with a transactional thingy
  *   in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
  *    */
 #define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
+
+void xaccTransRemoveSplit (Transaction *trans, const Split *split);
+G_INLINE_FUNC void check_open (const Transaction *trans);
 
 /*@}*/
 

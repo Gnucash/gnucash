@@ -25,6 +25,7 @@ libgncmod_engine_la_SOURCES = \
   Scrub.c \
   Scrub2.c \
   Scrub3.c \
+  Split.c \
   TransLog.c \
   Transaction.c \
   cap-gains.c \
@@ -62,6 +63,7 @@ gncinclude_HEADERS = \
   Scrub.h \
   Scrub2.h \
   Scrub3.h \
+  Split.h \
   TransLog.h \
   Transaction.h \
   cap-gains.h \
@@ -89,6 +91,7 @@ noinst_HEADERS = \
   QueryP.h \
   SchedXactionP.h \
   ScrubP.h \
+  SplitP.h \
   SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
