@@ -602,7 +602,7 @@ void gen_event (const Split *split)
   if (lot)
   {
     /* A change of value/amnt affects gains displat, etc. */
-    gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
+    gnc_engine_gen_event (&lot->inst.entity, GNC_EVENT_MODIFY);
   }
 }
 
@@ -624,7 +624,7 @@ void gen_event_trans (Transaction *trans)
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
-      gnc_engine_gen_event (&lot->entity, GNC_EVENT_MODIFY);
+      gnc_engine_gen_event (&lot->inst.entity, GNC_EVENT_MODIFY);
     }
   }
 

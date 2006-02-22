@@ -216,9 +216,10 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    if (!lot || !book) return;
    
    /* If this is the same book, its a no-op. */
-   if (lot->book == book) return;
+   if (gnc_lot_get_book(lot) == book) return;
 
-   if (qof_book_get_backend(book) != qof_book_get_backend(lot->book))
+   if (qof_book_get_backend(book) != 
+       qof_book_get_backend(gnc_lot_get_book(lot)))
    {
       gnc_book_insert_lot_clobber (book, lot);
       return;
@@ -226,8 +227,8 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
    ENTER ("lot=%p", lot);
 
    col = qof_book_get_collection (book, GNC_ID_LOT);
-   lot->book = book;
-   qof_collection_insert_entity (col, &lot->entity);
+   lot->inst.book = book;
+   qof_collection_insert_entity (col, &lot->inst.entity);
 
    /* Move the splits over (only if they haven't already been moved). */
    col = qof_book_get_collection (book, GNC_ID_SPLIT);
