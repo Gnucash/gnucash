@@ -777,10 +777,6 @@ gnc_post_file_open (const char * filename)
     gnc_engine_resume_events ();
     gnc_gui_refresh_all ();
 
-    /* CAS: This doesn't seem right.  We failed. */
-    /* Call this after re-enabling events. */
-    gnc_book_opened ();
-
     return FALSE;
   }
 

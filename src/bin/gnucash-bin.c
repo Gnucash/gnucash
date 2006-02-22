@@ -108,7 +108,7 @@ error_handler(const char *msg)
 
 static gboolean
 try_load(gchar *fn)
-{    
+{
     g_message("looking for %s", fn);
     if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
         g_message("trying to load %s", fn);
@@ -209,7 +209,7 @@ gnucash_command_line(int *argc, char **argv)
     char *p;
     int debugging = 0;
     char *namespace_regexp = NULL;
-#ifndef HAVE_GLIB26
+#ifndef HAVE_GTK26
     poptContext pc;
     int rc;
     struct poptOption options[] = {
@@ -457,8 +457,7 @@ inner_main (void *closure, int argc, char **argv)
     if (!nofile && (fn = get_file_to_load())) {
         gnc_update_splash_screen(_("Loading data..."));
         gnc_destroy_splash_screen();
-        if (gnc_file_open_file(fn))
-            gnc_hook_run(HOOK_BOOK_OPENED, NULL);
+        gnc_file_open_file(fn);
         g_free(fn);
     } 
     else if (gnc_gconf_get_bool("dialogs/new_user", "first_startup", &error) &&
