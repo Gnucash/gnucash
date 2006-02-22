@@ -29,9 +29,10 @@
  * src/doc/lots.txt for implmentation overview.
  *
  * XXX Lots are not currently treated in a correct transactional
- * manner.  There's no dirty flag, and, at this time, the backend
- * is not signalled about the fact that a lot has changed.  This
- * is true both in the Scrub2.c and in src/gnome/lot-viewer.c
+ * manner.  There's now a per-Lot dirty flag in the QofInstance, but
+ * this code still needs to emit the correct signals when a lot has
+ * changed.  This is true both in the Scrub2.c and in
+ * src/gnome/lot-viewer.c
  *
  * HISTORY:
  * Created by Linas Vepstas May 2002
@@ -171,7 +172,7 @@ void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
    if (!lot) return;
-   qof_instance_mark_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    return kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
 }
 
@@ -179,7 +180,7 @@ void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
    if (!lot) return;
-   qof_instance_mark_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    return kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
 }
 
@@ -235,7 +236,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
         gnc_num_dbg_to_string (split->amount),
         gnc_num_dbg_to_string (split->value));
    acc = xaccSplitGetAccount (split);
-   qof_instance_mark_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    if (NULL == lot->account)
    {
       xaccAccountInsertLot (acc, lot);
@@ -270,7 +271,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    if (!lot || !split) return;
 
    ENTER ("(lot=%p, split=%p)", lot, split);
-   qof_instance_mark_dirty(QOF_INSTANCE(lot));
+   qof_instance_set_dirty(QOF_INSTANCE(lot));
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
    lot->is_closed = -1;   /* force an is-closed computation */
