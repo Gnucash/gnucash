@@ -2654,7 +2654,6 @@ create_each_transaction_helper( Transaction *t, void *d )
 
         if (errFlag) {
                 PERR("Some error in new transaction creation...");
-                xaccTransRollbackEdit(newT);
                 xaccTransDestroy(newT);
                 xaccTransCommitEdit(newT);
                 return 13;

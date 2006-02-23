@@ -492,7 +492,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	else
 	  {
 	    PERR("The transaction doesn't have a valid amount");
-	    xaccTransRollbackEdit(transaction);
+	    xaccTransDestroy(transaction);
 	    xaccTransCommitEdit(transaction);
 	  }
 	
