@@ -73,6 +73,7 @@
 #include "window-reconcile.h"
 #include "window-report.h"
 
+#include "gtk-compat.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;

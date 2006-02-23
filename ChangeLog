@@ -1,3 +1,8 @@
+2006-02-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/gnc-plugin-page-register.c:
+	  include gtk-compat.h so we build against gtk-2.4.
+
 2006-02-22  David Hampton  <hampton@employees.org>
 
 	* src/gtk-compat.h:
