@@ -31,6 +31,7 @@ EXTRA_DIST = \
   gnome-hackers.txt \
   gnc-prices.1.in \
   gnucash.1.in \
+  gtkrc-2.0.gnucash \
   tip_of_the_day.list.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution
