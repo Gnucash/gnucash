@@ -68,8 +68,8 @@ xaccInitSplit(Split * split, QofBook *book)
   split->parent      = NULL;
   split->lot         = NULL;
 
-  split->action      = gnc_string_cache_insert("");
-  split->memo        = gnc_string_cache_insert("");
+  split->action      = CACHE_INSERT("");
+  split->memo        = CACHE_INSERT("");
   split->reconciled  = NREC;
   split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
@@ -161,8 +161,8 @@ xaccDupeSplit (const Split *s)
   split->acc = s->acc;
   split->lot = s->lot;
 
-  split->memo = gnc_string_cache_insert(s->memo);
-  split->action = gnc_string_cache_insert(s->action);
+  split->memo = CACHE_INSERT(s->memo);
+  split->action = CACHE_INSERT(s->action);
 
   split->inst.kvp_data = kvp_frame_copy (s->inst.kvp_data);
 
@@ -187,8 +187,8 @@ xaccSplitClone (const Split *s)
   Split *split = g_new0 (Split, 1);
 
   split->parent              = NULL;
-  split->memo                = gnc_string_cache_insert(s->memo);
-  split->action              = gnc_string_cache_insert(s->action);
+  split->memo                = CACHE_INSERT(s->memo);
+  split->action              = CACHE_INSERT(s->action);
   split->reconciled          = s->reconciled;
   split->date_reconciled     = s->date_reconciled;
   split->value               = s->value;
@@ -254,8 +254,8 @@ xaccFreeSplit (Split *split)
     PERR ("double-free %p", split);
     return;
   }
-  gnc_string_cache_remove(split->memo);
-  gnc_string_cache_remove(split->action);
+  CACHE_REMOVE(split->memo);
+  CACHE_REMOVE(split->action);
 
   /* Just in case someone looks up freed memory ... */
   split->memo        = (char *) 1;
@@ -619,6 +619,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 void 
@@ -635,6 +636,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 static void
@@ -659,6 +661,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 void 
@@ -690,6 +693,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 static void
@@ -723,6 +727,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 
   SET_GAINS_ADIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
   LEAVE("");
 }
 
@@ -751,6 +756,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
   LEAVE ("");
 }
 
@@ -822,6 +828,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 gnc_numeric
@@ -848,7 +855,7 @@ xaccSplitGetBaseValue (const Split *s, const gnc_commodity * base_currency)
 \********************************************************************/
 
 gnc_numeric
-xaccSplitsComputeValue (GList *splits, Split * skip_me,
+xaccSplitsComputeValue (GList *splits, const Split * skip_me,
                         const gnc_commodity * base_currency)
 {
   GList *node;
@@ -860,7 +867,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 
   for (node = splits; node; node = node->next)
   {
-    Split *s = node->data;
+    const Split *s = node->data;
     const gnc_commodity *currency;
     const gnc_commodity *commodity;
 
@@ -910,7 +917,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 }
 
 gnc_numeric
-xaccSplitConvertAmount (Split *split, Account * account)
+xaccSplitConvertAmount (const Split *split, Account * account)
 {
   gnc_commodity *acc_com, *to_commodity;
   Transaction *txn;
@@ -939,7 +946,7 @@ xaccSplitConvertAmount (Split *split, Account * account)
    */
   txn = xaccSplitGetParent (split);
   if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
-    Split *osplit = xaccSplitGetOtherSplit (split);
+    const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
       return gnc_numeric_neg (xaccSplitGetAmount (osplit));
@@ -1057,10 +1064,10 @@ xaccSplitDateOrder (const Split *sa, const Split *sb)
 }
 
 static gboolean
-get_corr_account_split(const Split *sa, Split **retval)
+get_corr_account_split(const Split *sa, const Split **retval)
 {
  
-  Split *current_split;
+  const Split *current_split;
   GList *node;
   gnc_numeric sa_value, current_value;
   gboolean sa_value_positive, current_value_positive, seen_different = FALSE;
@@ -1097,7 +1104,7 @@ const char *
 xaccSplitGetCorrAccountName(const Split *sa)
 {
   static const char *split_const = NULL;
-  Split *other_split;
+  const Split *other_split;
 
   if (get_corr_account_split(sa, &other_split))
   {
@@ -1114,7 +1121,7 @@ char *
 xaccSplitGetCorrAccountFullName(const Split *sa, char separator)
 {
   static const char *split_const = NULL;
-  Split *other_split;
+  const Split *other_split;
 
   if (get_corr_account_split(sa, &other_split))
   {
@@ -1130,7 +1137,7 @@ const char *
 xaccSplitGetCorrAccountCode(const Split *sa)
 {
   static const char *split_const = NULL;
-  Split *other_split;
+  const Split *other_split;
 
   if (get_corr_account_split(sa, &other_split))
   {
@@ -1216,43 +1223,35 @@ xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb)
 static void
 qofSplitSetMemo (Split *split, const char* memo)
 {
-	gchar *tmp;
-
-	g_return_if_fail(split);
-	tmp = gnc_string_cache_insert((gpointer) memo);
-	gnc_string_cache_remove(split->memo);
-	split->memo = tmp;
+    g_return_if_fail(split);
+    CACHE_REPLACE(split->memo, memo);
 }
 
 void
 xaccSplitSetMemo (Split *split, const char *memo)
 {
-   char * tmp;
    if (!split || !memo) return;
    check_open (split->parent);
 
-   tmp = gnc_string_cache_insert((gpointer) memo);
-   gnc_string_cache_remove(split->memo);
-   split->memo = tmp;
+   CACHE_REPLACE(split->memo, memo);
+   qof_instance_set_dirty(QOF_INSTANCE(split));
 }
 
 static void
 qofSplitSetAction (Split *split, const char *actn)
 {
 	g_return_if_fail(split);
-	split->action = g_strdup(actn);
+        CACHE_REPLACE(split->action, actn);
 }
 
 void
 xaccSplitSetAction (Split *split, const char *actn)
 {
-   char * tmp;
    if (!split || !actn) return;
    check_open (split->parent);
 
-   tmp = gnc_string_cache_insert((gpointer) actn);
-   gnc_string_cache_remove(split->action);
-   split->action = tmp;
+   CACHE_REPLACE(split->action, actn);
+   qof_instance_set_dirty(QOF_INSTANCE(split));
 }
 
 static void
@@ -1290,6 +1289,7 @@ xaccSplitSetReconcile (Split *split, char recn)
    case VREC: 
      split->reconciled = recn;
      mark_split (split);
+     qof_instance_set_dirty(QOF_INSTANCE(split));
      xaccAccountRecomputeBalance (split->acc);
      break;
    default:
@@ -1305,6 +1305,7 @@ xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 
    split->date_reconciled.tv_sec = secs;
    split->date_reconciled.tv_nsec = 0;
+   qof_instance_set_dirty(QOF_INSTANCE(split));
 }
 
 void
@@ -1314,6 +1315,7 @@ xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
    check_open (split->parent);
 
    split->date_reconciled = *ts;
+   qof_instance_set_dirty(QOF_INSTANCE(split));
 }
 
 void
@@ -1447,6 +1449,7 @@ xaccSplitMakeStockSplit(Split *s)
   kvp_frame_set_str(s->inst.kvp_data, "split-type", "stock-split");
   SET_GAINS_VDIRTY(s);
   mark_split(s);
+  qof_instance_set_dirty(QOF_INSTANCE(s));
 }
 
 
@@ -1565,8 +1568,8 @@ static QofObject split_object_def = {
   create:            (gpointer)xaccMallocSplit,
   book_begin:        NULL,
   book_end:          NULL,
-  is_dirty:          NULL,
-  mark_clean:        NULL,
+  is_dirty:          qof_collection_is_dirty,
+  mark_clean:        qof_collection_mark_clean,
   foreach:           qof_collection_foreach,
   printable:         (const char* (*)(gpointer)) xaccSplitGetMemo,
   version_cmp:       (int (*)(gpointer, gpointer)) qof_instance_version_cmp,

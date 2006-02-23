@@ -157,7 +157,7 @@ void xaccSplitUnvoid(Split *split);
 
 /* Compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */
-gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
+gnc_numeric xaccSplitsComputeValue (GList *splits, const Split * skip_me,
                                     const gnc_commodity * base_currency);
 
 /* Code to register Split type with the engine */
