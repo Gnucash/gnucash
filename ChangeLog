@@ -1,7 +1,7 @@
 2006-02-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-html-graph-gog.c (handle_barchart): fix
-	x-axis labeling.  Patch from Andreas Köhler.
+	x-axis labeling.  Patch from Andreas Köhler.  Bug#332359.
 
 2006-02-23  Derek Atkins  <derek@ihtfp.com>
 
