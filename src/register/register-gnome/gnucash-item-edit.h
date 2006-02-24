@@ -157,6 +157,7 @@ void gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time);
 void gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time);
 
 void gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection);
+gboolean gnc_item_edit_get_has_selection (GncItemEdit *item_edit);
 
 gboolean gnc_item_edit_selection_clear (GncItemEdit       *item_edit,
 					GdkEventSelection *event);

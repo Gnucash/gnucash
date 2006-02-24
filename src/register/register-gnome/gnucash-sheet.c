@@ -1367,6 +1367,21 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
         return TRUE;
 }
 
+gboolean
+gnucash_register_has_selection (GnucashRegister *reg)
+{
+        GnucashSheet *sheet;
+        GncItemEdit *item_edit;
+
+        g_return_val_if_fail((reg != NULL), FALSE);
+        g_return_val_if_fail(GNUCASH_IS_REGISTER(reg), FALSE);
+
+        sheet = GNUCASH_SHEET(reg->sheet);
+        item_edit = GNC_ITEM_EDIT(sheet->item_editor);
+
+        return gnc_item_edit_get_has_selection(item_edit);
+}
+
 void
 gnucash_register_cut_clipboard (GnucashRegister *reg)
 {

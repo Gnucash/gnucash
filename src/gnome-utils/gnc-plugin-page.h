@@ -165,6 +165,16 @@ typedef struct {
 	 *  @param name The new name for this page. */
 	void (* page_name_changed) (GncPluginPage *plugin_page, 
                                     const gchar *name);
+
+	/** This function vector allows page specific actions to
+	 *  override the generic code for setting the sensitivity of
+	 *  items in the Edit menu.
+	 *  
+	 *  @param page The front page in a main window..
+	 *  
+	 *  @param hide Whether the widgets should be shown or
+	 *  hidden. */
+	void (* update_edit_menu_actions) (GncPluginPage *plugin_page, gboolean hide);
 } GncPluginPageClass;
 
 

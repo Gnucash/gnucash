@@ -1542,6 +1542,18 @@ gnc_item_edit_set_has_selection (GncItemEdit *item_edit, gboolean has_selection)
 }
 
 gboolean
+gnc_item_edit_get_has_selection (GncItemEdit *item_edit)
+{
+        GtkEditable *editable;
+
+        g_return_val_if_fail ((item_edit != NULL), FALSE);
+        g_return_val_if_fail (GNC_IS_ITEM_EDIT (item_edit), FALSE);
+
+        editable = GTK_EDITABLE (item_edit->editor);
+	return gtk_editable_get_selection_bounds(editable, NULL, NULL);
+}
+
+gboolean
 gnc_item_edit_selection_clear (GncItemEdit          *item_edit,
                            GdkEventSelection *event)
 {

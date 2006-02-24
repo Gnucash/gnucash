@@ -354,9 +354,6 @@ static const gchar *gnc_menu_important_actions[] = {
  *  have meaning. */
 static const gchar *always_insensitive_actions[] = {
 	"FilePrintAction",
-	"EditCutAction",
-	"EditCopyAction",
-	"EditPasteAction",
 	NULL
 };
 
@@ -2171,10 +2168,19 @@ gnc_main_window_update_toolbar (GncMainWindow *window)
 static void
 gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean hide)
 {
+	GncMainWindowPrivate *priv;
+	GncPluginPage *page;
 	GtkWidget *widget = gtk_window_get_focus (GTK_WINDOW (window));
 	GtkAction *action;
 	gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
 
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	page = priv->current_page;
+	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions) {
+	  (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions)(page, hide);
+	  return;
+	}
+	
 	if (GTK_IS_EDITABLE (widget))
 	{
 		gboolean has_selection;

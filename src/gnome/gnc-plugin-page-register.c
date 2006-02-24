@@ -93,6 +93,7 @@ static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 static void gnc_plugin_page_register_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_register_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
+static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 
@@ -502,6 +503,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
 	gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
 	gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
+	gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
 }
@@ -987,7 +989,39 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
   return page;
 }
 
-	
+
+/*
+ * Based on code from Epiphany (src/ephy-window.c)
+ */
+static void
+gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GncPluginPageRegister *reg_page;
+	GtkAction *action;
+	gboolean can_copy = FALSE, can_cut = FALSE, can_paste = FALSE;
+	gboolean has_selection;
+
+	reg_page = GNC_PLUGIN_PAGE_REGISTER(page);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
+	has_selection = gnucash_register_has_selection (priv->gsr->reg);
+
+	can_copy = has_selection;
+	can_cut = has_selection;
+	can_paste = TRUE;
+
+	action = gnc_plugin_page_get_action (page, "EditCopyAction");
+	gtk_action_set_sensitive (action, can_copy);
+	gtk_action_set_visible (action, !hide || can_copy);
+	action = gnc_plugin_page_get_action (page, "EditCutAction");
+	gtk_action_set_sensitive (action, can_cut);
+	gtk_action_set_visible (action, !hide || can_cut);
+	action = gnc_plugin_page_get_action (page, "EditPasteAction");
+	gtk_action_set_sensitive (action, can_paste);
+	gtk_action_set_visible (action,  !hide || can_paste);
+}
+
+
 static gchar *
 gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 {

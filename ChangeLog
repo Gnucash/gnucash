@@ -1,5 +1,15 @@
 2006-02-24  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-sheet.[ch]:
+	* src/register/register-gnome/gnucash-item-edit.[ch]:
+	* src/gnome/gnc-plugin-page-register.c: Override the generic edit
+	menu sensitivity code to provide the right sensitivity for the
+	entry widget buried in the register.
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-plugin-page.h: Provide a hook for pages to
+	override the generic edit menu sensitivity code.
+
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
 	* src/gnome-utils/gnc-main-window.c: Remove unnecessary menu
 	item. The same functionality exists in the "Menus & Toolbars"
