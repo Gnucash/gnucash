@@ -1,5 +1,7 @@
 2006-02-23  Joshua Sled  <jsled@asynchronous.org>
 
+	* gentoo/gnucash-1.9.x.ebuild: Add ebuild for gnucash 1.9/2.0 series.
+
 	* src/gnome-utils/dialog-totd.c (gnc_totd_dialog): Increment TOTD
 	index on dialog init.
 
