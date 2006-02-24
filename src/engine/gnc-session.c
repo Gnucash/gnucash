@@ -25,6 +25,7 @@
 #include "qof.h"
 #include "gnc-session.h"
 #include "gnc-engine.h"
+#include "TransLog.h"
 
 static QofSession * current_session = NULL;
 static QofLogModule log_module = GNC_MOD_ENGINE;
@@ -53,4 +54,14 @@ gnc_set_current_session (QofSession *session)
     if (current_session)
         PINFO("Leak of current session.");
     current_session = session;
+}
+
+void gnc_clear_current_session()
+{
+    if (current_session) {
+        xaccLogDisable();
+        qof_session_destroy(current_session);
+        xaccLogEnable();
+        current_session = NULL;
+    }
 }

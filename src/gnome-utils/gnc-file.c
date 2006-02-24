@@ -501,26 +501,26 @@ gnc_file_new (void)
   if (!gnc_file_query_save (TRUE))
     return;
 
-  session = gnc_get_current_session ();
+  if (gnc_current_session_exist()) {
+      session = gnc_get_current_session ();
 
-  /* close any ongoing file sessions, and free the accounts.
-   * disable events so we don't get spammed by redraws. */
-  gnc_engine_suspend_events ();
+      /* close any ongoing file sessions, and free the accounts.
+       * disable events so we don't get spammed by redraws. */
+      gnc_engine_suspend_events ();
   
-  qof_session_call_close_hooks(session);
-  gnc_hook_run(HOOK_BOOK_CLOSED, session);
-
-  gnc_close_gui_component_by_session (session);
-  xaccLogDisable();
-  qof_session_destroy (session);
-  xaccLogEnable();
+      qof_session_call_close_hooks(session);
+      gnc_hook_run(HOOK_BOOK_CLOSED, session);
+      
+      gnc_close_gui_component_by_session (session);
+      gnc_clear_current_session();
+      gnc_engine_resume_events ();
+  }
 
   /* start a new book */
   gnc_get_current_session ();
-
+  
   gnc_hook_run(HOOK_NEW_BOOK, NULL);
-
-  gnc_engine_resume_events ();
+  
   gnc_gui_refresh_all ();
 
   /* Call this after re-enabling events. */
@@ -624,9 +624,7 @@ gnc_post_file_open (const char * filename)
   current_session = gnc_get_current_session();
   qof_session_call_close_hooks(current_session);
   gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
-  xaccLogDisable();
-  qof_session_destroy (current_session);
-  xaccLogEnable();
+  gnc_clear_current_session();
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a session going. */
@@ -1064,9 +1062,7 @@ gnc_file_save_as (void)
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
   qof_session_swap_data (session, new_session);
-  xaccLogDisable();
-  qof_session_destroy (session);
-  xaccLogEnable();
+  gnc_clear_current_session();
   session = NULL;
 
   /* XXX At this point, we should really mark the data in the new session
@@ -1116,9 +1112,7 @@ gnc_file_quit (void)
   qof_session_call_close_hooks(session);
   gnc_hook_run(HOOK_BOOK_CLOSED, session);
   
-  xaccLogDisable();
-  qof_session_destroy (session);
-  xaccLogEnable();
+  gnc_clear_current_session();
 
   gnc_get_current_session ();
 

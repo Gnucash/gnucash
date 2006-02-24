@@ -2530,6 +2530,7 @@ gnc_invoice_remind_bills_due (void)
   GNCBook *book;
   gint days;
 
+  if (!gnc_current_session_exist()) return;
   book = qof_session_get_book(gnc_get_current_session());
   days = gnc_gconf_get_float(GCONF_SECTION_BILL, "days_in_advance", NULL);
 
