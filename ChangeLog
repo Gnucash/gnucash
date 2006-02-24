@@ -1,5 +1,9 @@
 2006-02-23  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/html-utilities.scm: Andrew
+	Sackville-West's to pass the rignt number of arguments to
+	gnc:register-guid.
+
 	* src/report/report-gnome/gnc-plugin-page-report.c:
 	* src/gnome-utils/gnc-recurrence.c:
 	* src/gnome-utils/gnc-plugin-file-history.c:
