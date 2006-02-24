@@ -1,5 +1,9 @@
 2006-02-24  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/mt940/gnc-mt940-import.c: Get MT940 importer
+	compile again (experimental; requires aqbanking-1.9.7). It is not
+	yet tested with actual files. Bug#325170.
+
 	* src/import-export/import-account-matcher.h: Make gchar argument
 	const because it is only used as a const.
 

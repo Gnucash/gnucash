@@ -21,7 +21,7 @@
 /** @internal
      @file gnc-mt940-import.c
      @brief MT940 import module code
-     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel
+     @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel, 2006 Christian Stimming.
  */
  /* See aqbanking-1.6.0beta/src/tools/aqbanking-tool/import.c for hints */
 #define _GNU_SOURCE
@@ -29,10 +29,13 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
+#include <fcntl.h>
 
+#include <aqbanking/banking.h>
 #include <aqbanking/imexporter.h>
 
 #include "gnc-ui.h"
@@ -43,6 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 
 #include "gnc-hbci-gettrans.h"
 
@@ -56,11 +60,14 @@
 
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
+/* Callback declarations */
+static const AB_TRANSACTION *
+translist_cb (const AB_TRANSACTION *element, void *user_data);
+static AB_IMEXPORTER_ACCOUNTINFO *
+accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *element, void *user_data);
 
-/* Note: This file is broken. See
-   http://bugzilla.gnome.org/show_bug.cgi?id=325170 .  The patch from
-   there is already included, but the file still won't compile. */
-
+/* Note: This is not yet tested,  see
+   http://bugzilla.gnome.org/show_bug.cgi?id=325170 . */
 
 
 /********************************************************************\
@@ -72,7 +79,7 @@ void gnc_file_mt940_import (void)
 {
   char *selected_filename;
   char *default_dir;
-  FILE *mt940_file;
+  int mt940_fd;
   GNCImportMainMatcher *gnc_mt940_importer_gui = NULL;
 
   /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
@@ -97,38 +104,59 @@ void gnc_file_mt940_import (void)
     DEBUG("Filename found: %s",selected_filename);
 
     /* Create the Generic transaction importer GUI. */
-    gnc_mt940_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE);
+    gnc_mt940_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
 
     DEBUG("Opening selected file");
-    mt940_file = fopen(selected_filename, "r");
+    mt940_fd = open(selected_filename, O_RDONLY);
 
     {
       int result;
-      AB_BANKING *tr;
+      AB_BANKING *ab;
       AB_IMEXPORTER *importer;
       AB_IMEXPORTER_CONTEXT *ctx=0;
       GWEN_BUFFEREDIO *buffio;
-      const list_HBCI_Transaction *transactions;
-      /*list_HBCI_Transaction_iter *iter;*/
+      GWEN_DB_NODE *dbProfiles;
+      GWEN_DB_NODE *dbProfile;
+      const char *importerName = "swift"; /* possible values: csv, swift, dtaus, */
+      const char *profileName = "default";
 
-      tr=AB_Banking_new();
+      ab = AB_Banking_new("gnucash", 0);
       /* get import module */
-      importer=AB_Banking_GetImExporter(tr, "swift"); /* possible values: csv, swift, dtaus, */
+      importer=AB_Banking_GetImExporter(ab, importerName);
       if (!importer) {
 	DEBUG("Import module swift not found");
       }
+      g_assert(importer);
 
       /* load the import profile */
-      //dbProfiles=AB_Banking_GetImExporterProfiles(tr, "swift");
-      dbProfile="default";
+      dbProfiles=AB_Banking_GetImExporterProfiles(ab, importerName);
+
+      /* select profile */
+      dbProfile=GWEN_DB_GetFirstGroup(dbProfiles);
+      while(dbProfile) {
+	const char *name;
+
+	name=GWEN_DB_GetCharValue(dbProfile, "name", 0, 0);
+	g_assert(name);
+	if (strcasecmp(name, profileName)==0)
+	  break;
+	dbProfile=GWEN_DB_GetNextGroup(dbProfile);
+      }
+      g_assert(dbProfile);
+      /*if (!dbProfile) {
+	DBG_ERROR(AQT_LOGDOMAIN,
+		  "Profile \"%s\" for importer \"%s\" not found",
+		  profileName, importerName);
+	return 3;
+	}*/
 
       /* import new context */
       ctx=AB_ImExporterContext_new();
 
       /* Wrap file in gwen_bufferedio */
-      buffio = GWEN_BufferedIO_File_new(mt940_file);
+      buffio = GWEN_BufferedIO_File_new(mt940_fd);
 
-      result=AB_ImExporter_Import(importer,
+      result = AB_ImExporter_Import(importer,
 				  ctx,
 				  buffio,
 				  dbProfile);
@@ -137,42 +165,20 @@ void gnc_file_mt940_import (void)
 
       GWEN_BufferedIO_Close(buffio);
       GWEN_BufferedIO_free(buffio);
+      GWEN_DB_Group_free(dbProfiles);
 
       {
 	/* Now get all accountinfos */
-	AB_TRANSACTION *ab_trans;
 	struct trans_list_data data;
-	Account *gnc_acc;
-	AB_IMEXPORTER_ACCOUNTINFO * accinfo;
+	GNCImportMainMatcher *importer_generic_gui;
+	GtkWidget *parent = NULL;
 
 	/* Create importer GUI */
 	importer_generic_gui = gnc_gen_trans_list_new(parent, NULL, TRUE, 14);
 	data.importer_generic = importer_generic_gui;
 
 	/* Iterate through all accounts */
-	accinfo = AB_ImExporterContext_GetFirstAccountInfo(ctx);
-	while (accinfo) {
-	  /* FIXME: need to get account name from accinfo
-	     structure here */
-	  gnc_acc = gnc_import_select_account(account_name, 1, NULL, NULL, 
-					      NO_TYPE, NULL, NULL);
-	  /* Store chosen gnucash account in callback data */
-	  data.gnc_acc = gnc_acc;
-
-	  /* Iterate through all transactions */
-	  ab_trans = 
-	    AB_ImExporterAccountInfo_GetFirstTransaction (accinfo);
-	  while (ab_trans) {
-	    /* This callback in the hbci module will add the
-	       imported transaction to gnucash's importer */
-	    gnc_hbci_trans_list_cb(ab_trans, &data);
-	    ab_trans = 
-	      AB_ImExporterAccountInfo_GetNextTransaction (accinfo);
-	  }
-	  /* all transaction finished. */
-
-	  accinfo = AB_ImExporterContext_GetNextAccountInfo(ctx);
-	}
+	AB_ImExporterContext_AccountInfoForEach(ctx, accountinfolist_cb, &data);
 	/* all accounts finished. */
 	      
 	AB_ImExporterContext_free(ctx);
@@ -183,6 +189,7 @@ void gnc_file_mt940_import (void)
 	  DEBUG("ERROR: Error on deinit (%d)\n",result);
 
 	g_free(selected_filename);
+	AB_Banking_free(ab);
 
 
 	/* and run the gnucash importer. */
@@ -191,5 +198,41 @@ void gnc_file_mt940_import (void)
     }
   }
 }
+
+static AB_IMEXPORTER_ACCOUNTINFO *
+accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
+  Account *gnc_acc;
+  struct trans_list_data *data = user_data;
+  const char *bank_code =
+    AB_ImExporterAccountInfo_GetBankCode(accinfo);
+  const char *account_number = 
+    AB_ImExporterAccountInfo_GetAccountNumber(accinfo);
+  const char *account_name = 
+    AB_ImExporterAccountInfo_GetAccountName(accinfo);
+  gchar *online_id = g_strconcat (bank_code, account_number, NULL);
+  
+  gnc_acc = gnc_import_select_account(online_id, 1, account_name, NULL, 
+				      NO_TYPE, NULL, NULL);
+  g_free(online_id);
+  if (gnc_acc) {
+    /* Store chosen gnucash account in callback data */
+    data->gnc_acc = gnc_acc;
+  
+    /* Iterate through all transactions.  */
+    AB_ImExporterAccountInfo_TransactionsForEach (accinfo, translist_cb, data);
+    /* all transactions finished. */
+  }
+  return NULL;
+}
+
+static const AB_TRANSACTION *
+translist_cb (const AB_TRANSACTION *element, void *user_data) {
+  /* This callback in the hbci module will add the imported
+     transaction to gnucash's importer. */
+  /* The call will use "element" only as const* */
+  gnc_hbci_trans_list_cb( (AB_TRANSACTION*) element, user_data);
+  return NULL;
+}
+
 
 /** @} */
