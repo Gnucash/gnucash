@@ -1,3 +1,8 @@
+2006-02-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-account-matcher.h: Make gchar argument
+	const because it is only used as a const.
+
 2006-02-23  David Hampton  <hampton@employees.org>
 
 	* src/report/report-system/html-utilities.scm: Andrew

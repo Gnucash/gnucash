@@ -52,7 +52,7 @@ struct _accountpickerdialog {
   GncTreeViewAccount *account_tree;
   GtkWidget       * account_tree_sw;
   const gchar * account_human_description;
-  gchar * account_online_id_value;
+  const gchar * account_online_id_value;
   gnc_commodity * new_account_default_commodity;
   GNCAccountType new_account_default_type;
 };
@@ -121,9 +121,9 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     }
 }
 
-Account * gnc_import_select_account(char * account_online_id_value,
+Account * gnc_import_select_account(const gchar * account_online_id_value,
 				    gboolean auto_create,
-				    const char * account_human_description,
+				    const gchar * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type,
 				    Account * default_selection,
@@ -152,7 +152,9 @@ Account * gnc_import_select_account(char * account_online_id_value,
     {
       retval = xaccGroupForEachAccount(gnc_get_current_group (),
 				       test_acct_online_id_match,
-				       account_online_id_value,
+				       /* This argument will only be
+					  used as a "const char*" */
+				       (void*)account_online_id_value,
 				       TRUE);
     }
   if(retval==NULL && auto_create != 0)
