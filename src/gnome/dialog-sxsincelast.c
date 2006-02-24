@@ -1434,7 +1434,7 @@ cancel_check( GnomeDruidPage *druid_page,
         GList *l;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
         char *lastrun_cancel_check_msg =
-          _( "Cancelling the Since-Last-Run dialog "
+          _( "Canceling the Since-Last-Run dialog "
              "will revert all changes. "
              "Are you sure you want to lose all "
              "Scheduled Transaction changes?" );
