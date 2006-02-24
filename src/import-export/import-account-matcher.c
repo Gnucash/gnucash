@@ -121,7 +121,8 @@ static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_i
     }
 }
 
-Account * gnc_import_select_account(const gchar * account_online_id_value,
+Account * gnc_import_select_account(gncUIWidget parent,
+				    const gchar * account_online_id_value,
 				    gboolean auto_create,
 				    const gchar * account_human_description,
 				    gnc_commodity * new_account_default_commodity,
@@ -168,6 +169,9 @@ Account * gnc_import_select_account(const gchar * account_online_id_value,
 	}
       
       picker->dialog     = glade_xml_get_widget (xml, "Generic Import Account Picker");
+      if (parent)
+	gtk_window_set_transient_for (GTK_WINDOW (picker->dialog), 
+				      GTK_WINDOW (parent));
       picker->account_tree_sw   = glade_xml_get_widget (xml, "account_tree_sw");
       online_id_label = glade_xml_get_widget (xml, "online_id_label");
       button = glade_xml_get_widget (xml, "newbutton");
@@ -205,9 +209,11 @@ Account * gnc_import_select_account(const gchar * account_online_id_value,
 
 	  /* See if the selected account is a placeholder. */
 	  if (xaccAccountGetPlaceholder (retval)) {
-	    gnc_error_dialog (/* FIXME: add parent*/ NULL,
-			      _("The account %s does not allow transactions."),
-			      xaccAccountGetName (retval));
+	    gnc_error_dialog
+	      (picker->dialog,
+	       _("The account %s is a placeholder account and does not allow "
+		 "transactions. Please choose a different account."),
+	       xaccAccountGetName (retval));
 	    response = GNC_RESPONSE_NEW;
 	    break;
 	  }

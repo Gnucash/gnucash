@@ -122,7 +122,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
   g_assert(gnc_ofx_importer_gui);
 
   if(data.account_id_valid==true){
-    account = gnc_import_select_account(data.account_id, 0, NULL, NULL, NO_TYPE, NULL, NULL);
+    account = gnc_import_select_account(NULL,
+					data.account_id, 0, NULL, NULL, NO_TYPE, NULL, NULL);
     if(account!=NULL)
       {
 	/********** Create the transaction and setup transaction data ************/
@@ -347,7 +348,8 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								  in any translations.  */
 							      _("Stock account for security \"%s\""),
 							      data.security_data_ptr->secname);
-		    investment_account = gnc_import_select_account(data.unique_id,
+		    investment_account = gnc_import_select_account(NULL,
+								   data.unique_id,
 								   1,
 								   investment_account_text, 
 								   investment_commodity,
@@ -413,6 +415,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 								      _("Income account for security \"%s\""),
 								      data.security_data_ptr->secname);
 			    income_account=gnc_import_select_account(NULL,
+								     NULL,
 								     1,
 								     investment_account_text, 
 								     currency,
@@ -582,7 +585,10 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
 					  "%s \"%s\"",
 					  account_type_name,
 					  data.account_name);
-    selected_account = gnc_import_select_account(data.account_id, 1, account_description, default_commodity, default_type, NULL, NULL);
+    selected_account = gnc_import_select_account(NULL,
+						 data.account_id, 1,
+						 account_description, default_commodity,
+						 default_type, NULL, NULL);
     g_free(account_description);
     g_free(account_type_name);
   }

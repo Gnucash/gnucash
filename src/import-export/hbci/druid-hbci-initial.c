@@ -399,7 +399,8 @@ on_accountlist_select_row (GtkCList *clist, gint row,
 	 GNC_COMMODITY_NS_ISO, AB_Account_GetCurrency (hbci_acc));
     }
 
-    gnc_acc = gnc_import_select_account(NULL, TRUE, longname, currency, BANK,
+    gnc_acc = gnc_import_select_account(info->window,
+					NULL, TRUE, longname, currency, BANK,
 					old_value, NULL);
     g_free(longname);
 

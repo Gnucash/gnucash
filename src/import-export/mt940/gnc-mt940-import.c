@@ -211,7 +211,8 @@ accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *accinfo, void *user_data) {
     AB_ImExporterAccountInfo_GetAccountName(accinfo);
   gchar *online_id = g_strconcat (bank_code, account_number, NULL);
   
-  gnc_acc = gnc_import_select_account(online_id, 1, account_name, NULL, 
+  gnc_acc = gnc_import_select_account(NULL, 
+				      online_id, 1, account_name, NULL, 
 				      NO_TYPE, NULL, NULL);
   g_free(online_id);
   if (gnc_acc) {

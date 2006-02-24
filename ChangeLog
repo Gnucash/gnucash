@@ -1,5 +1,9 @@
 2006-02-24  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/import-account-matcher.h: Let the account
+	matcher accept a parent widget to avoid windows that are lost
+	behind other windows. Adapt importer modules accordingly.
+
 	* src/import-export/import-account-matcher.c: Don't allow
 	placeholder be selected for importing transactions. Fixes
 	bug#327891.
