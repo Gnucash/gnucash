@@ -1,5 +1,8 @@
 2006-02-23  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome-utils/dialog-totd.c (gnc_totd_dialog): Increment TOTD
+	index on dialog init.
+
 	* src/gnome-utils/gnc-html-graph-gog.c (handle_barchart): fix
 	x-axis labeling.  Patch from Andreas Köhler.  Bug#332359.
 

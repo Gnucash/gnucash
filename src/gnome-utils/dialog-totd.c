@@ -254,7 +254,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
 
-  gnc_new_tip_number(dialog, 0);
+  gnc_new_tip_number(dialog, 1);
 
   button = glade_xml_get_widget(xml, "show_checkbutton");
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
