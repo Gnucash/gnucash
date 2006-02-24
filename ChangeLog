@@ -1,3 +1,8 @@
+2006-02-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-html-graph-gog.c (handle_barchart): fix
+	x-axis labeling.  Patch from Andreas Köhler.
+
 2006-02-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/test/Makefile.am:

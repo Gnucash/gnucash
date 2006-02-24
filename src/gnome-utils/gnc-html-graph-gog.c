@@ -433,7 +433,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
                 "type",                         barType,
                 "overlap_percentage",           barOverlap, 
 		NULL);
-  labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols, NULL );
+  labelData = go_data_vector_str_new((char const * const *)row_labels, datacols, NULL);
   {
     // foreach row:
     //   series = row
@@ -450,8 +450,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
              col_labels[i], i, err->message);
       }
 
-      g_object_ref( labelData );
-      gog_series_set_dim( series, 0, labelData, NULL );
+      g_object_ref(labelData);
+      gog_series_set_dim(series, 0, labelData, NULL);
       go_data_emit_changed (GO_DATA (labelData));
 
       sliceData = go_data_vector_val_new( data + (i*datarows), datarows, NULL );
