@@ -45,7 +45,6 @@
       <placeholder name="EditFindPlaceholder"/>
       <separator name="EditSep4"/>
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
-      <menuitem name="EditAcceleratorKeys" action="EditAcceleratorKeysAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
       <separator name="EditSep5"/>
       <placeholder name="EditStyleSheetsPlaceholder"/>
