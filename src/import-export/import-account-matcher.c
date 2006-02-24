@@ -202,6 +202,16 @@ Account * gnc_import_select_account(const gchar * account_online_id_value,
 	 case GTK_RESPONSE_OK:
 	  retval = gnc_tree_view_account_get_selected_account(picker->account_tree);
 	  DEBUG("Selected account %p, %s", retval, xaccAccountGetName(retval));
+
+	  /* See if the selected account is a placeholder. */
+	  if (xaccAccountGetPlaceholder (retval)) {
+	    gnc_error_dialog (/* FIXME: add parent*/ NULL,
+			      _("The account %s does not allow transactions."),
+			      xaccAccountGetName (retval));
+	    response = GNC_RESPONSE_NEW;
+	    break;
+	  }
+
 	  if( account_online_id_value != NULL)
 	    {
 	      gnc_import_set_acc_online_id(retval, account_online_id_value);

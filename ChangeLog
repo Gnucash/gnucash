@@ -1,5 +1,9 @@
 2006-02-24  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/import-account-matcher.c: Don't allow
+	placeholder be selected for importing transactions. Fixes
+	bug#327891.
+
 	* src/import-export/mt940/gnc-mt940-import.c: Get MT940 importer
 	compile again (experimental; requires aqbanking-1.9.7). It is not
 	yet tested with actual files. Bug#325170.
