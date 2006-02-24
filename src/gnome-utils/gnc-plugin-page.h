@@ -451,6 +451,15 @@ GtkActionGroup *gnc_plugin_page_get_action_group (GncPluginPage *page);
 GtkActionGroup * gnc_plugin_page_create_action_group (GncPluginPage *page, 
                                                       const gchar *group_name);
 
+/** Retrieve a GtkAction object associated with this page.
+ *
+ *  @param page The page whose menu/toolbar action group should be
+ *  retrieved.
+ *
+ *  @param name The name of the GtkAction to find.
+ *
+ *  @return A pointer to the retuested GtkAction object or NULL. */
+GtkAction *gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name);
 
 /* Signals */
 void gnc_plugin_page_inserted (GncPluginPage *plugin_page);

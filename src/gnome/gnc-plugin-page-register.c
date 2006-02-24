@@ -588,15 +588,12 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 static void
 gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page)
 {
-	GtkActionGroup *action_group;
 	GtkAction *action;
 	gboolean expanded;
 
 	expanded = gnc_split_register_current_trans_expanded(reg);
-
-	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(page));
-	action = gtk_action_group_get_action (action_group,
-					      "SplitTransactionAction");
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "SplitTransactionAction");
 
 	g_signal_handlers_block_by_func
 	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
@@ -608,12 +605,10 @@ gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageR
 static void
 gnc_plugin_page_register_update_toolbar (SplitRegister *reg, GncPluginPageRegister *page)
 {
-	GtkActionGroup *action_group;
 	GtkAction *action;
 
-	action_group = gnc_plugin_page_get_action_group (GNC_PLUGIN_PAGE (page));
-	action = gtk_action_group_get_action (action_group,
-					      "SplitTransactionAction");
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "SplitTransactionAction");
 	/* set sensitivity of split button */
 	gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
 
@@ -890,7 +885,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
 					    const gchar *group_name)
 {
   GncPluginPageRegisterPrivate *priv;
-  GtkActionGroup *action_group;
   GtkAction *action;
   GError *error = NULL;
   gchar *style_name;
@@ -899,7 +893,6 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
 
   ENTER(" ");
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
-  action_group = gnc_plugin_page_get_action_group(page);
 
   /* Convert the style name to an index */
   style_name = g_key_file_get_string(key_file, group_name,
@@ -915,9 +908,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
   /* Update the style menu action for this page */
   if (i <= REG_STYLE_JOURNAL) {
     DEBUG("Setting style: %d", i);
-    action_group =
-      gnc_plugin_page_get_action_group(page);
-    action = gtk_action_group_get_action(action_group, radio_entries_2[i].name);
+    action = gnc_plugin_page_get_action(page, radio_entries_2[i].name);
     gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
   }
 
@@ -925,8 +916,7 @@ gnc_plugin_page_register_restore_edit_menu (GncPluginPage *page,
   use_double_line =
     g_key_file_get_boolean(key_file, group_name, KEY_DOUBLE_LINE, &error);
   DEBUG("Setting double_line_mode: %d", use_double_line);
-  action = gtk_action_group_get_action(action_group,
-				       "ViewStyleDoubleLineAction");
+  action = gnc_plugin_page_get_action(page, "ViewStyleDoubleLineAction");
   gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), use_double_line);
 
   LEAVE(" ");

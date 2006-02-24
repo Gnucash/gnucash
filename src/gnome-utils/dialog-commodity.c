@@ -532,7 +532,7 @@ gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
 
   if ((offset < cw->comm_section_top) || (offset >= cw->comm_section_bottom))
     return;
-  g_object_set(widget, "sensitive", !cw->is_currency, NULL);
+  gtk_widget_set_sensitive(widget, !cw->is_currency);
 }
 
 static void

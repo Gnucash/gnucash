@@ -393,8 +393,7 @@ static void addRecurrence(GncRecurrenceComp *grc, GncRecurrence *gr)
                       G_CALLBACK(grc_changed), grc );
     grc->num_rec++;
 
-    g_object_set(G_OBJECT(grc->buttRemove), "sensitive",
-                 (grc->num_rec > 1), NULL);
+    gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));
     g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
 
 
@@ -412,8 +411,7 @@ static void removeRecurrence(GncRecurrenceComp *grc)
     g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
 
 
-    g_object_set(G_OBJECT(grc->buttRemove), "sensitive",
-                 (grc->num_rec > 1), NULL);
+    gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));
 
 }
 

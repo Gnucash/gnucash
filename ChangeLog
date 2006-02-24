@@ -1,3 +1,14 @@
+2006-02-23  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/gnome-utils/gnc-recurrence.c:
+	* src/gnome-utils/gnc-plugin-file-history.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome/gnc-plugin-page-register.c: Minor code cleanup and
+	consolidations.
+
 2006-02-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* gentoo/gnucash-1.9.x.ebuild: Add ebuild for gnucash 1.9/2.0 series.

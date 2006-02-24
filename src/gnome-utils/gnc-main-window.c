@@ -2501,7 +2501,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	  action = gtk_action_group_get_action(priv->action_group, 
                                                "ExtensionsAction");
-	  g_object_set(G_OBJECT(action), "visible", FALSE, (char *)NULL);
+	  gtk_action_set_visible(action, FALSE);
 	}
 
 	/* GncPluginManager stuff */

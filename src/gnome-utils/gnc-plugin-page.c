@@ -300,6 +300,21 @@ gnc_plugin_page_unmerge_actions (GncPluginPage *page,
 }
 
 
+GtkAction *
+gnc_plugin_page_get_action (GncPluginPage *page, const gchar *name)
+{
+  GncPluginPagePrivate *priv;
+  
+  g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), NULL);
+  g_return_val_if_fail(name != NULL, NULL);
+
+  priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+  if (!priv->action_group)
+    return NULL;
+  return gtk_action_group_get_action (priv->action_group, name);
+}
+
+
 /*  Retrieve the textual name of a plugin. */
 const gchar *
 gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)

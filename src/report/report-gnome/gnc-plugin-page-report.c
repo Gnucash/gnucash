@@ -41,6 +41,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include "gtk-compat.h"
 #ifndef HAVE_GLIB26
 #include "gkeyfile.h"
 #endif
@@ -992,29 +993,21 @@ close_handler (gpointer user_data)
 static void
 gnc_plugin_page_report_set_fwd_button(GncPluginPageReport *report, int enabled)
 {
-        GtkActionGroup *action_group;
-        GValue value = { 0 };
         GtkAction *act;
 
-	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
-        act = gtk_action_group_get_action( action_group, "ReportForwAction" );
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, enabled);
-        g_object_set_property( G_OBJECT(act), "sensitive", &value );
+	act = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(report),
+					    "ReportForwAction" );
+	gtk_action_set_sensitive(act, enabled);
 }
 
 static void
 gnc_plugin_page_report_set_back_button(GncPluginPageReport *report, int enabled)
 {
-        GtkActionGroup *action_group;
-        GValue value = { 0 };
         GtkAction *act;
 
-	action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
-        act = gtk_action_group_get_action( action_group, "ReportBackAction" );
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, enabled);
-        g_object_set_property( G_OBJECT(act), "sensitive", &value );
+	act = gnc_plugin_page_get_action(GNC_PLUGIN_PAGE(report),
+					    "ReportBackAction" );
+	gtk_action_set_sensitive(act, enabled);
 }
 
 // ------------------------------------------------------------
