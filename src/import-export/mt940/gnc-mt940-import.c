@@ -23,7 +23,6 @@
      @brief MT940 import module code
      @author Copyright (c) 2002 Benoit Grégoire <bock@step.polymtl.ca>, Copyright (c) 2003 Jan-Pascal van Best <janpascal@vanbest.org>, Copyright (c) 2006 Florian Steinel, 2006 Christian Stimming.
  */
- /* See aqbanking-1.6.0beta/src/tools/aqbanking-tool/import.c for hints */
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -35,6 +34,7 @@
 #include <sys/time.h>
 #include <fcntl.h>
 
+#include <aqbanking/version.h>
 #include <aqbanking/banking.h>
 #include <aqbanking/imexporter.h>
 
@@ -66,9 +66,60 @@ translist_cb (const AB_TRANSACTION *element, void *user_data);
 static AB_IMEXPORTER_ACCOUNTINFO *
 accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *element, void *user_data);
 
-/* Note: This is not yet tested,  see
+
+/* If aqbanking is older than 1.9.7, use our own copies of these
+   foreach functions */
+#if ((AQBANKING_VERSION_MAJOR == 1) && \
+     ((AQBANKING_VERSION_MINOR < 9) || \
+      ((AQBANKING_VERSION_MINOR == 9) && \
+       ((AQBANKING_VERSION_PATCHLEVEL < 7)))))
+static AB_IMEXPORTER_ACCOUNTINFO *
+AB_ImExporterContext_AccountInfoForEach(AB_IMEXPORTER_CONTEXT *iec,
+					AB_IMEXPORTER_ACCOUNTINFO_LIST2_FOREACH func,
+					void* user_data)
+{
+  AB_IMEXPORTER_ACCOUNTINFO *it;
+  AB_IMEXPORTER_ACCOUNTINFO *retval;
+  g_assert(iec);
+
+  it = AB_ImExporterContext_GetFirstAccountInfo (iec);
+  while (it) {
+    retval = func(it, user_data);
+    if (retval) {
+      return retval;
+    }
+    it = AB_ImExporterContext_GetNextAccountInfo (iec);
+  }
+  return 0;
+
+}
+static const AB_TRANSACTION *
+AB_ImExporterAccountInfo_TransactionsForEach(AB_IMEXPORTER_ACCOUNTINFO *iea,
+					     AB_TRANSACTION_CONSTLIST2_FOREACH func,
+					     void* user_data)
+{
+  const AB_TRANSACTION *it;
+  const AB_TRANSACTION *retval;
+  g_assert(iea);
+
+  it = AB_ImExporterAccountInfo_GetFirstTransaction (iea);
+  while (it) {
+    retval = func(it, user_data);
+    if (retval) {
+      return retval;
+    }
+    it = AB_ImExporterAccountInfo_GetNextTransaction (iea);
+  }
+  return 0;
+}
+#endif /* aqbanking < 1.9.7 */
+
+
+/* Note: The importing here is not yet tested with actual files, see
    http://bugzilla.gnome.org/show_bug.cgi?id=325170 . */
 
+/* See aqbanking-1.6.0beta/src/tools/aqbanking-tool/import.c for hints
+   on how to program aqbanking. */
 
 /********************************************************************\
  * gnc_file_mt940_import
