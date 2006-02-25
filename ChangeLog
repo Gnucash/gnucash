@@ -1,3 +1,10 @@
+2006-02-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Remember the order in which
+	the notebook tabs are referenced. When closing a tab, switch to
+	the tab that was previously in front, not the first tab in the
+	notebook. Fixes 332355.
+
 2006-02-24  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-sheet.[ch]:

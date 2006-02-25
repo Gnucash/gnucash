@@ -173,6 +173,8 @@ typedef struct GncMainWindowPrivate
 
 	/** A list of all pages that are installed in this window. */
 	GList *installed_pages;
+	/** A list of pages in order of use (most recent -> least recent) */
+	GList *usage_order;
 	/** The currently selected page. */
 	GncPluginPage *current_page;
 	/** The identifier for this window's engine event handler. */
@@ -398,6 +400,7 @@ static const gchar *multiple_page_actions[] = {
 #define WINDOW_MAXIMIZED	"Window Maximized"
 #define WINDOW_FIRSTPAGE	"First Page"
 #define WINDOW_PAGECOUNT	"Page Count"
+#define WINDOW_PAGEORDER	"Page Order"
 #define PAGE_TYPE		"Page Type"
 #define PAGE_NAME		"Page Name"
 #define PAGE_STRING		"Page %d"
@@ -499,7 +502,8 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
 static void
 gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
-  gint *pos, *geom;
+  GncMainWindowPrivate *priv;
+  gint *pos, *geom, *order;
   gsize length;
   gboolean max;
   gchar *window_group;
@@ -509,6 +513,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   /* Setup */
   ENTER("window %p, data %p (key file %p, window %d)",
 	window, data, data->key_file, data->window_num);
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
   /* Get this window's notebook info */
@@ -556,6 +561,9 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gtk_window_move(GTK_WINDOW(window), pos[0], pos[1]);
     DEBUG("window (%p) position %dx%d", window, pos[0], pos[1]);
   }
+  if (pos) {
+    g_free(pos);
+  }
 
   geom = g_key_file_get_integer_list(data->key_file, window_group,
 				     WINDOW_GEOMETRY, &length, &error);
@@ -570,6 +578,9 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   } else {
     gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
     DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
+  }
+  if (geom) {
+    g_free(geom);
   }
 
   max = g_key_file_get_boolean(data->key_file, window_group,
@@ -588,6 +599,41 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     data->page_offset = page_start;
     data->page_num = i;
     gnc_main_window_restore_page(window, data);
+
+    /* give the page a chance to display */
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
+  }
+
+  /* Restore page ordering within the notebook. Use +1 notation so the
+   * numbers in the page order match the page sections, at least for
+   * the one window case. */
+  order = g_key_file_get_integer_list(data->key_file, window_group,
+ 				      WINDOW_PAGEORDER, &length, &error);
+  if (error) {
+    g_warning("error reading group %s key %s: %s",
+ 	      window_group, WINDOW_PAGEORDER, error->message);
+    g_error_free(error);
+    error = NULL;
+  } else if (length != page_count) {
+    g_warning("%s key %s length %d differs from window page count %d",
+ 	      window_group, WINDOW_PAGEORDER, length, page_count);
+  } else {
+    /* Dump any list that might exist */
+    g_list_free(priv->usage_order);
+    priv->usage_order = NULL;
+    /* Now rebuild the list from the key file. */
+    for (i = 0; i < length; i++) {
+      gpointer page = g_list_nth_data(priv->installed_pages, order[i] - 1);
+      if (page) {
+ 	priv->usage_order = g_list_append(priv->usage_order, page);
+      }
+    }
+    gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook),
+ 				   order[0] - 1);
+  }
+  if (order) {
+    g_free(order);
   }
 
   LEAVE("window %p", window);
@@ -620,11 +666,13 @@ gnc_main_window_restore_all_windows(const GKeyFile *keyfile)
 
   /* Restore all state information on the open windows.  Window
      numbers in state file are 1-based. GList indices are 0-based. */
+  gnc_set_busy_cursor (NULL, TRUE);
   for (i = 0; i < window_count; i++) {
     data.window_num = i;
     window = g_list_nth_data(active_windows, i);
     gnc_main_window_restore_window(window, &data);
   }
+  gnc_unset_busy_cursor (NULL);
 }
 
 void
@@ -686,7 +734,7 @@ static void
 gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 {
   GncMainWindowPrivate *priv;
-  gint num_pages, coords[4];
+  gint i, num_pages, coords[4], *order;
   gboolean maximized;
   gchar *window_group;
 
@@ -708,6 +756,18 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 			 WINDOW_PAGECOUNT, num_pages);
   g_key_file_set_integer(data->key_file, window_group,
 			 WINDOW_FIRSTPAGE, data->page_num);
+
+  /* Save page ordering within the notebook. Use +1 notation so the
+   * numbers in the page order match the page sections, at least for
+   * the one window case. */
+  order = malloc(sizeof(gint) * num_pages);
+  for (i = 0; i < num_pages; i++) {
+    gpointer page = g_list_nth_data(priv->usage_order, i);
+    order[i] = g_list_index(priv->installed_pages, page) + 1;
+  }
+  g_key_file_set_integer_list(data->key_file, window_group,
+			      WINDOW_PAGEORDER, order, num_pages);
+  g_free(order);
 
   /* Save the window coordinates, etc. */
   gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
@@ -1690,6 +1750,7 @@ gnc_main_window_connect (GncMainWindow *window,
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	notebook = GTK_NOTEBOOK (priv->notebook);
 	priv->installed_pages = g_list_append (priv->installed_pages, page);
+	priv->usage_order = g_list_prepend (priv->usage_order, page);
 	gtk_notebook_append_page_menu (notebook, page->notebook_page,
 				       tab_hbox, menu_label);
 	gnc_plugin_page_inserted (page);
@@ -1724,6 +1785,7 @@ gnc_main_window_disconnect (GncMainWindow *window,
 {
 	GncMainWindowPrivate *priv;
 	GtkNotebook *notebook;
+	GncPluginPage *new_page;
 	gint page_num;
 
 	/* Disconnect the callbacks */
@@ -1742,10 +1804,17 @@ gnc_main_window_disconnect (GncMainWindow *window,
 
 	/* Remove it from the list of pages in the window */
 	priv->installed_pages = g_list_remove (priv->installed_pages, page);
+	priv->usage_order = g_list_remove (priv->usage_order, page);
 
+	/* Switch to the last recently used page */
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	new_page = g_list_nth_data (priv->usage_order, 0);
+	if (new_page) {
+	  page_num =  gtk_notebook_page_num(notebook, new_page->notebook_page);
+	  gtk_notebook_set_current_page(notebook, page_num);
+	}
 
 	/* Remove the page from the notebook */
-	notebook = GTK_NOTEBOOK (priv->notebook);
 	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
 	gtk_notebook_remove_page (notebook, page_num);
 
@@ -2612,6 +2681,10 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 		/* Allow page specific actions */
 		gnc_plugin_page_selected (page);
 		gnc_window_update_status (GNC_WINDOW(window), page);
+
+		/* Update the page reference info */
+		priv->usage_order = g_list_remove (priv->usage_order, page);
+		priv->usage_order = g_list_prepend (priv->usage_order, page);
 	}
 
 	/* Update the menus based upon whether this is an "immutable" page. */
