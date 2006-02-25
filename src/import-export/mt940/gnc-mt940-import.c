@@ -75,7 +75,9 @@ accountinfolist_cb(AB_IMEXPORTER_ACCOUNTINFO *element, void *user_data);
        ((AQBANKING_VERSION_PATCHLEVEL < 7)))))
 static AB_IMEXPORTER_ACCOUNTINFO *
 AB_ImExporterContext_AccountInfoForEach(AB_IMEXPORTER_CONTEXT *iec,
-					AB_IMEXPORTER_ACCOUNTINFO_LIST2_FOREACH func,
+					AB_IMEXPORTER_ACCOUNTINFO *
+					(* func)(AB_IMEXPORTER_ACCOUNTINFO *element,
+						 void *user_data),
 					void* user_data)
 {
   AB_IMEXPORTER_ACCOUNTINFO *it;
@@ -95,7 +97,9 @@ AB_ImExporterContext_AccountInfoForEach(AB_IMEXPORTER_CONTEXT *iec,
 }
 static const AB_TRANSACTION *
 AB_ImExporterAccountInfo_TransactionsForEach(AB_IMEXPORTER_ACCOUNTINFO *iea,
-					     AB_TRANSACTION_CONSTLIST2_FOREACH func,
+					     const AB_TRANSACTION *
+					     (* func)(const AB_TRANSACTION *element,
+						      void *user_data),
 					     void* user_data)
 {
   const AB_TRANSACTION *it;
