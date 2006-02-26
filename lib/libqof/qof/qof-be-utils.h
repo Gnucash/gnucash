@@ -157,8 +157,47 @@ qof_commit_edit_part2(QofInstance *inst,
                       void (*on_done)(QofInstance *), 
                       void (*on_free)(QofInstance *));
 
-#define QOF_COMMIT_EDIT_PART2(inst, on_error, on_done, on_free)         \
-    qof_commit_edit_part2((inst), (on_error), (on_done), (on_free))
+/** \brief Macro version of ::qof_commit_edit_part2
+
+\note This macro changes programme flow if the instance is freed.
+*/
+#define QOF_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
+  QofBackend * be;                                               \
+                                                                 \
+  /* See if there's a backend.  If there is, invoke it. */       \
+  be = qof_book_get_backend ((inst)->book);                      \
+  if (be && qof_backend_commit_exists(be))                       \
+  {                                                              \
+    QofBackendError errcode;                                     \
+                                                                 \
+    /* clear errors */                                           \
+    do {                                                         \
+      errcode = qof_backend_get_error (be);                      \
+    } while (ERR_BACKEND_NO_ERR != errcode);                     \
+                                                                 \
+    qof_backend_run_commit(be, (inst));                          \
+    errcode = qof_backend_get_error (be);                        \
+    if (ERR_BACKEND_NO_ERR != errcode)                           \
+    {                                                            \
+      /* XXX Should perform a rollback here */                   \
+      (inst)->do_free = FALSE;                                   \
+                                                                 \
+      /* Push error back onto the stack */                       \
+      qof_backend_set_error (be, errcode);                       \
+      (on_error)((inst), errcode);                               \
+    }                                                            \
+    /* XXX the backend commit code should clear dirty!! */       \
+    (inst)->dirty = FALSE;                                       \
+  }                                                              \
+  (on_done)(inst);                                               \
+                                                                 \
+  LEAVE ("inst=%p, dirty=%d do-free=%d",                         \
+            (inst), (inst)->dirty, (inst)->do_free);             \
+  if ((inst)->do_free) {                                         \
+     (on_free)(inst);                                            \
+     return;                                                     \
+  }                                                              \
+}
 
 #endif /* QOF_BE_UTILS_H */
 /** @} */
