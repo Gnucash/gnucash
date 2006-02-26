@@ -616,7 +616,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     g_error_free(error);
     error = NULL;
   } else if (length != page_count) {
-    g_warning("%s key %s length %d differs from window page count %d",
+    g_warning("%s key %s length %" G_GSIZE_FORMAT " differs from window page count %d",
  	      window_group, WINDOW_PAGEORDER, length, page_count);
   } else {
     /* Dump any list that might exist */
