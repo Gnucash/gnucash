@@ -1,3 +1,18 @@
+2006-02-26  Neil Williams <linux@codehelp.co.uk>
+
+	* qof/qof-be-utils.h : Replace macro to restore
+	programme flow.
+	* qof/qofevent.c : 
+	* qof/qofevent.h : Outline method to make application 
+	events easier to use.
+
+	* qof/deprecated.c : Define deprecated event functions
+	that call new QofEvents with a NULL event_data argument.
+	* qof/qofbook.c : Use new qof_event arguments.
+	* qof/qofevent.c : Allow events to be generated with an
+	optional event_data argument.
+	* qof/qofevent.h : Doxygen tweaks.
+
 2006-02-26  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/utility-reports/Makefile.am (SCM_FILE_LINKS):
@@ -3006,4 +3021,3 @@ r12231 | chris | 2006-01-01 17:26:15 -0500 (Sun, 01 Jan 2006) | 9 lines
     * lots of control-flow simplification
     * factor one chunk out into get_any_account()
     * Comment some things that are bogus or need improvement
-	

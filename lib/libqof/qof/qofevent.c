@@ -125,7 +125,6 @@ qof_event_register_handler (QofEventHandler handler, gpointer user_data)
   hi->handler_id = handler_id;
 
   handlers = g_list_prepend (handlers, hi);
-
   LEAVE ("(handler=%p, data=%p) handler_id=%d", handler, user_data, handler_id);
   return handler_id;
 }
@@ -197,7 +196,8 @@ qof_event_resume (void)
 }
 
 static void
-qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
+qof_event_generate_internal (QofEntity *entity, QofEventId event_id, 
+                            gpointer event_data)
 {
   GList *node;
   GList *next_node = NULL;
@@ -212,10 +212,10 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
 	
   switch (event_id)
   {
-  case QOF_EVENT_NONE: { 
-    /* if none, don't log, just return. */
-    return;
-  }
+	  case QOF_EVENT_NONE: { 
+		/* if none, don't log, just return. */
+		return;
+	  }
   }
 
   handler_run_level++;
@@ -233,8 +233,9 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
     }
     if (hi->handler)
     {
-      PINFO("id=%d hi=%p han=%p", hi->handler_id, hi, hi->handler);
-      hi->handler (entity, event_id, hi->user_data);
+      PINFO("id=%d hi=%p han=%p data=%p", hi->handler_id, hi, 
+            hi->handler, event_data);
+      hi->handler (entity, event_id, hi->user_data, event_data);
     }
   }
   handler_run_level--;
@@ -261,16 +262,16 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id)
 }
 
 void
-qof_event_force (QofEntity *entity, QofEventId event_id)
+qof_event_force (QofEntity *entity, QofEventId event_id, gpointer event_data)
 {
   if (!entity)
     return;
 
-  qof_event_generate_internal (entity, event_id);
+  qof_event_generate_internal (entity, event_id, event_data);
 }
 
 void
-qof_event_gen (QofEntity *entity, QofEventId event_id)
+qof_event_gen (QofEntity *entity, QofEventId event_id, gpointer event_data)
 {
   if (!entity)
     return;
@@ -278,7 +279,7 @@ qof_event_gen (QofEntity *entity, QofEventId event_id)
   if (suspend_counter)
     return;
 
-  qof_event_generate_internal (entity, event_id);
+  qof_event_generate_internal (entity, event_id, event_data);
 }
 
 /* deprecated */
@@ -291,7 +292,7 @@ qof_event_generate (const GUID *guid, QofIdType e_type,
   ent.e_type = e_type;
   if (suspend_counter) return;
   /* caution: this is an incomplete entity! */
-  qof_event_generate_internal (&ent, event_id);
+  qof_event_generate_internal (&ent, event_id, NULL);
 }
 
 /* =========================== END OF FILE ======================= */

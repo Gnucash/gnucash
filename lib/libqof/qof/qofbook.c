@@ -86,7 +86,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE);
+  qof_event_gen (&book->inst.entity, QOF_EVENT_CREATE, NULL);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -108,7 +108,7 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY);
+  qof_event_force (&book->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   /* Call the list of finalizers, let them do their thing. 
    * Do this before tearing into the rest of the book.

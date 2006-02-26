@@ -30,7 +30,7 @@
 /* for backwards compatibility - to be moved back to qofevent.c in libqof2 */
 typedef struct
 {
-  GNCEngineEventHandler old_handler;
+  GNCEngineEventHandler old_handler;        /** \deprecated */
   QofEventHandler handler;
   gpointer user_data;
 
@@ -46,6 +46,6 @@ qof_event_generate (const GUID *guid, QofIdType e_type,
 					QofEventId event_id);
 
 /* generates an event even when events are suspended! */
-void qof_event_force (QofEntity *entity, QofEventId event_id);
+void qof_event_force (QofEntity *entity, QofEventId event_id, gpointer event_data);
 
 #endif

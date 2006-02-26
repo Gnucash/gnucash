@@ -1,6 +1,7 @@
 /********************************************************************
  * qofevent.h -- QOF event handling interface                       *
  * Copyright 2000 Dave Peticolas <dave@krondo.com>                  *
+ * Copyright 2006 Neil Williams  <linux@codehelp.co.uk>             *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -57,26 +58,27 @@ any process can define their own events.
 event identifiers must be larger than this. */
 #define QOF_DEFAULT_EVENT_LIMIT  QOF_EVENT__LAST
 
-/** \brief Handler invoked when an engine event occurs.
+/** \brief Handler invoked when an event is generated.
  *
  * @param ent:      Entity generating the event
- * @param event_type:  The name of the event, including additional names and
+ * @param event_type:  The id of the event, including additional identifiers and
  	the older defaults.
- * @param user_data:   user_data supplied when handler was registered.
+ * @param handler_data:   data supplied when handler was registered.
+ * @param event_data:   data to be supplied when handler is invoked.
  */
 typedef void (*QofEventHandler) (QofEntity *ent,  QofEventId event_type,
-                                 gpointer user_data);
+                               gpointer handler_data, gpointer event_data);
 
-/** \brief Register a handler for engine events.
+/** \brief Register a handler for events.
  *
  * @param handler:   handler to register
- * @param user_data: data provided when handler is invoked
+ * @param handler_data: data provided when handler is invoked
  *
  * @return id identifying handler
  */
-gint qof_event_register_handler (QofEventHandler handler, gpointer user_data);
+gint qof_event_register_handler (QofEventHandler handler, gpointer handler_data);
 
-/** \brief Unregister an engine event handler.
+/** \brief Unregister an event handler.
  *
  * @param handler_id: the id of the handler to unregister
  */
@@ -100,8 +102,11 @@ void qof_event_unregister_handler (gint handler_id);
 
  @param entity:     the entity generating the event
  @param event_type: the name of the event.
+ @param event_data: Data to be passed to the event handler just for
+ this one event. Can be NULL.
 */
-void qof_event_gen (QofEntity *entity, QofEventId event_type);
+void qof_event_gen (QofEntity *entity, QofEventId event_type, 
+                    gpointer event_data);
 
 /** \brief  Suspend all engine events.
  *
