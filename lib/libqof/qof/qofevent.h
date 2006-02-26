@@ -40,23 +40,36 @@
 /** Define the type of events allowed. */
 typedef gint QofEventId;
 
+/** \brief Allow application-specific events to be created.
+
+Used together with QOF_EVENT_BASE to simplify creation
+of application events without interfering with any new
+events added within QOF.
+
+/verbatim
+#define APP_EVENT_A QOF_MAKE_EVENT(QOF_EVENT_BASE+0)
+#define APP_EVENT_B QOF_MAKE_EVENT(QOF_EVENT_BASE+1)
+/endverbatim
+*/
+#define QOF_MAKE_EVENT(x)    (1<<x)
+
 /** \brief Default events for backwards compatibility.
 
 These defaults merely replicate previous behaviour,
 any process can define their own events. 
 */
 #define QOF_EVENT_NONE     (0)
-#define QOF_EVENT_CREATE   (1 << 0)
-#define QOF_EVENT_MODIFY   (1 << 1)
-#define QOF_EVENT_DESTROY  (1 << 2)
-#define QOF_EVENT_ADD      (1 << 3)
-#define QOF_EVENT_REMOVE   (1 << 4)
+#define QOF_EVENT_CREATE   QOF_MAKE_EVENT(0)
+#define QOF_EVENT_MODIFY   QOF_MAKE_EVENT(1)
+#define QOF_EVENT_DESTROY  QOF_MAKE_EVENT(2)
+#define QOF_EVENT_ADD      QOF_MAKE_EVENT(3)
+#define QOF_EVENT_REMOVE   QOF_MAKE_EVENT(4)
 #define QOF_EVENT__LAST    QOF_EVENT_REMOVE 
 #define QOF_EVENT_ALL      (0xff)
 
 /** Allow scope for more defaults in future. Additional
 event identifiers must be larger than this. */
-#define QOF_DEFAULT_EVENT_LIMIT  QOF_EVENT__LAST
+#define QOF_EVENT_BASE  QOF_EVENT__LAST
 
 /** \brief Handler invoked when an event is generated.
  *

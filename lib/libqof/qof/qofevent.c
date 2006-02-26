@@ -205,7 +205,7 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
 
   g_return_if_fail(entity);
 
-  if (event_id <= QOF_DEFAULT_EVENT_LIMIT)
+  if (event_id <= QOF_EVENT_BASE)
   {
     use_old_handlers = TRUE;
   }
