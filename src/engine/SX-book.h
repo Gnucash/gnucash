@@ -45,15 +45,13 @@
 
 typedef struct xaccSchedXactionsDef SchedXactions;
 
-SchedXactions * gnc_collection_get_schedxaction_list( QofCollection *col);
-GList * gnc_collection_get_schedxactions( QofCollection *col);
-GList * gnc_book_get_schedxactions( QofBook *book );
+SchedXactions * gnc_collection_get_schedxaction_list(QofCollection *col);
+GList * gnc_collection_get_schedxactions(QofCollection *col);
+GList * gnc_book_get_schedxactions(QofBook *book);
 
-/** Returns the template group from the book.
- **/
-AccountGroup * gnc_book_get_template_group (QofBook *book);
-AccountGroup * gnc_collection_get_template_group( QofCollection *col );
-
+/** Returns the template group from the book. **/
+AccountGroup * gnc_book_get_template_group(QofBook *book);
+AccountGroup * gnc_collection_get_template_group(QofCollection *col);
 
 #endif /* GNC_SX_BOOK_H */
 /** @} */
