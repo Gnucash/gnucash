@@ -129,7 +129,6 @@ sxtg_mark_clean(QofCollection *col)
   xaccGroupMarkSaved(gnc_collection_get_template_group(col));
 }
 
-
 static QofObject sxtg_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
@@ -146,13 +145,13 @@ static QofObject sxtg_object_def =
 /* ====================================================================== */
 
 SchedXactions *
-gnc_collection_get_schedxaction_list( QofCollection *col)
+gnc_collection_get_schedxaction_list(QofCollection *col)
 {
   return qof_collection_get_data (col);
 }
 
 GList *
-gnc_collection_get_schedxactions( QofCollection *col)
+gnc_collection_get_schedxactions(QofCollection *col)
 {
   SchedXactions *list;
   list = qof_collection_get_data (col);
@@ -161,7 +160,7 @@ gnc_collection_get_schedxactions( QofCollection *col)
 }
 
 GList *
-gnc_book_get_schedxactions( QofBook *book )
+gnc_book_get_schedxactions(QofBook *book)
 {
   QofCollection *col;
   col = qof_book_get_collection (book, GNC_ID_SXTT);
@@ -278,6 +277,30 @@ gnc_sxtt_register (void)
 {
   return qof_object_register (&sxtg_object_def);
   return qof_object_register (&sxtt_object_def);
+}
+
+GList*
+gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
+{
+  GList *rtn = NULL;
+  const GUID *acct_guid = xaccAccountGetGUID(acct);
+  GList *sx_list = gnc_book_get_schedxactions(book);
+  for (; sx_list != NULL; sx_list = sx_list->next)
+  {
+    SchedXaction *sx = (SchedXaction*)sx_list->data;
+    GList *splits = xaccSchedXactionGetSplits(sx);
+    for (; splits != NULL; splits = splits->next)
+    {
+      Split *s = (Split*)splits->data;
+      KvpFrame *frame = kvp_frame_get_frame(xaccSplitGetSlots(s), GNC_SX_ID);
+      GUID *sx_split_acct_guid = kvp_frame_get_guid(frame, GNC_SX_ACCOUNT);
+      if (guid_equal(acct_guid, sx_split_acct_guid))
+      {
+        rtn = g_list_append(rtn, sx);
+      }
+    }
+  }
+  return rtn;
 }
 
 /* ========================== END OF FILE =============================== */

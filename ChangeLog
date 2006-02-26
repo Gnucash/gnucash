@@ -15,6 +15,11 @@
 
 2006-02-26  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/engine/SX-book.c (gnc_sx_get_sxes_referencing_account): 
+	* src/gnome/dialog-scheduledxaction.c: Add handler for
+	account-deleted events, determine and display editors for SXes
+	referencing those accounts.  Fixes Bug#312730.
+
 	* src/report/utility-reports/Makefile.am (SCM_FILE_LINKS):
 	* src/report/utility-reports/utility-reports.scm: 
 	* src/report/utility-reports/iframe-url.scm:

@@ -1,7 +1,7 @@
 /********************************************************************\
  * dialog-scheduledxaction.c : dialog for scheduled transaction     *
  *    list and editor                                               *
- * Copyright (C) 2001,2002 Joshua Sled <jsled@asynchronous.org>     *
+ * Copyright (C) 2001,2002,2006 Joshua Sled <jsled@asynchronous.org>*
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -29,6 +29,9 @@
 #include <locale.h>
 #include <time.h>
 
+#include "qof.h"
+#include "gnc-book.h"
+#include "Account.h"
 #include "FreqSpec.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
@@ -64,6 +67,8 @@
 #endif
 
 static QofLogModule log_module = GNC_MOD_SX;
+
+static gint _sx_engine_event_handler_id = -1;
 
 #define SX_LIST_GCONF_SECTION "dialogs/scheduled_trans/transaction_list"
 #define SX_LIST_WIN_PREFIX "sx_list_win"
@@ -2456,10 +2461,99 @@ on_sx_check_toggled (GtkWidget *togglebutton,
   gtk_widget_set_sensitive(widget, create);
 }
 
+typedef struct _acct_deletion_handler_data
+{
+  GList *affected_sxes;
+  GtkWidget *dialog;
+} acct_deletion_handler_data;
+
+static void
+_open_editors(GtkDialog *dialog, gint response_code, gpointer data)
+{
+  acct_deletion_handler_data *adhd = (acct_deletion_handler_data *)data;
+  gtk_widget_hide_all(adhd->dialog);
+  {
+    GList *sx_iter;
+    for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)
+    {
+      gnc_ui_scheduled_xaction_editor_dialog_create(NULL, 
+                                                    (SchedXaction*)sx_iter->data,
+                                                    FALSE);
+    }
+  }
+  g_list_free(adhd->affected_sxes);
+  gtk_widget_destroy(GTK_WIDGET(adhd->dialog));
+  g_free(adhd);
+}
+
+static void
+_sx_engine_event_handler(QofEntity *ent, QofEventId event_type, gpointer user_data)
+{
+  Account *acct;
+  QofBook *book;
+  GList *affected_sxes;
+
+  if (!(event_type & QOF_EVENT_DESTROY))
+    return;
+  if (!GNC_IS_ACCOUNT(ent))
+    return;
+  acct = GNC_ACCOUNT(ent);
+  book = qof_instance_get_book(QOF_INSTANCE(acct));
+  affected_sxes = gnc_sx_get_sxes_referencing_account(book, acct);
+
+  if (g_list_length(affected_sxes) == 0)
+     return;
+
+  {
+    GList *sx_iter;
+    acct_deletion_handler_data *data;
+    GladeXML *xml;
+    GtkWidget *dialog;
+    GtkListStore *name_list;
+    GtkTreeView *list;
+    GtkTreeViewColumn *name_column;
+    GtkCellRenderer *renderer;
+
+    xml = gnc_glade_xml_new("sched-xact.glade", "Account Deletion");
+    dialog = glade_xml_get_widget(xml, "Account Deletion");
+    list = GTK_TREE_VIEW(glade_xml_get_widget(xml, "sx_list"));
+
+    data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
+    data->dialog = dialog;
+    data->affected_sxes = affected_sxes;
+    name_list = gtk_list_store_new(1, G_TYPE_STRING);
+    for (sx_iter = affected_sxes; sx_iter != NULL; sx_iter = sx_iter->next)
+    {
+      SchedXaction *sx;
+      GtkTreeIter iter;
+      gchar *sx_name;
+
+      sx = (SchedXaction*)sx_iter->data;
+      sx_name = xaccSchedXactionGetName(sx);
+      gtk_list_store_append(name_list, &iter);
+      gtk_list_store_set(name_list, &iter, 0, sx_name, -1);
+    }
+    gtk_tree_view_set_model(list, GTK_TREE_MODEL(name_list));
+    g_object_unref(G_OBJECT(name_list));
+
+    renderer = gtk_cell_renderer_text_new();
+    name_column = gtk_tree_view_column_new_with_attributes(_("Name"),
+                                                           renderer,
+                                                           "text", 0, NULL);
+    gtk_tree_view_append_column(list, name_column);
+
+    g_signal_connect(G_OBJECT(dialog), "response",
+                     G_CALLBACK(_open_editors), data);
+
+    gtk_widget_show_all(GTK_WIDGET(dialog));
+  }
+}
 
 void
 gnc_ui_sx_initialize (void)
 {
+  _sx_engine_event_handler_id = qof_event_register_handler(_sx_engine_event_handler, NULL);
+
   gnc_hook_add_dangler(HOOK_BOOK_OPENED,
 		       (GFunc)gnc_sx_sxsincelast_book_opened, NULL);
   gnc_preferences_add_page (SX_GLADE_FILE,
