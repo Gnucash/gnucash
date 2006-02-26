@@ -138,50 +138,27 @@ gboolean qof_commit_edit(QofInstance *inst);
  * @param inst: an instance of QofInstance
  * @param on_error: a function called if there is a backend error.
  *                void (*on_error)(inst, QofBackendError)
- * @param on_done: a function called after the commit is complete 
- *                but before the instect is freed. Perform any other 
- *                operations after the commit.
+ * @param on_done: a function called after the commit is completed 
+ *                successfully for an object which remained valid.
  *                void (*on_done)(inst)
- * @param on_free: a function called if inst->do_free is TRUE. 
+ * @param on_free: a function called if the commit succeeded and the instance
+ *                 is to be freed. 
  *                void (*on_free)(inst)
+ * 
+ * Note that only *one* callback will be called (or zero, if that
+ * callback is NULL).  In particular, 'on_done' will not be called for
+ * an object which is to be freed.
+ *
+ * Returns TRUE, if the commit succeeded, FALSE otherwise.
  */
-#define QOF_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
-  QofBackend * be;                                               \
-                                                                 \
-  /* See if there's a backend.  If there is, invoke it. */       \
-  be = qof_book_get_backend ((inst)->book);                      \
-  if (be && qof_backend_commit_exists(be))                       \
-  {                                                              \
-    QofBackendError errcode;                                     \
-                                                                 \
-    /* clear errors */                                           \
-    do {                                                         \
-      errcode = qof_backend_get_error (be);                      \
-    } while (ERR_BACKEND_NO_ERR != errcode);                     \
-                                                                 \
-    qof_backend_run_commit(be, (inst));                          \
-    errcode = qof_backend_get_error (be);                        \
-    if (ERR_BACKEND_NO_ERR != errcode)                           \
-    {                                                            \
-      /* XXX Should perform a rollback here */                   \
-      (inst)->do_free = FALSE;                                   \
-                                                                 \
-      /* Push error back onto the stack */                       \
-      qof_backend_set_error (be, errcode);                       \
-      (on_error)((inst), errcode);                               \
-    }                                                            \
-    /* XXX the backend commit code should clear dirty!! */       \
-    (inst)->dirty = FALSE;                                       \
-  }                                                              \
-  (on_done)(inst);                                               \
-                                                                 \
-  LEAVE ("inst=%p, dirty=%d do-free=%d",                         \
-            (inst), (inst)->dirty, (inst)->do_free);             \
-  if ((inst)->do_free) {                                         \
-     (on_free)(inst);                                            \
-     return;                                                     \
-  }                                                              \
-}
+gboolean
+qof_commit_edit_part2(QofInstance *inst, 
+                      void (*on_error)(QofInstance *, QofBackendError), 
+                      void (*on_done)(QofInstance *), 
+                      void (*on_free)(QofInstance *));
+
+#define QOF_COMMIT_EDIT_PART2(inst, on_error, on_done, on_free)         \
+    qof_commit_edit_part2((inst), (on_error), (on_done), (on_free))
 
 #endif /* QOF_BE_UTILS_H */
 /** @} */
