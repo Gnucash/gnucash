@@ -15,7 +15,6 @@ AM_CFLAGS = \
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA = \
   hello-world.scm \
-  iframe-url.scm \
   utility-reports.scm \
   view-column.scm \
   welcome-to-gnucash.scm \

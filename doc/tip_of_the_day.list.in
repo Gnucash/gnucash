@@ -71,10 +71,6 @@ providing all the financial information you want at a glance. \
 To do so, use the Sample & Custom -> \"Custom Multicolumn Report\" \
 report.")
 
- N_( "GnuCash can act as a simple web browser!  To display \
-a web page as a report, use the Sample & Custom -> \
-\"Custom Web Report\" report.")
-
  N_( "Style Sheets affect how reports are displayed.  Choose \
 a style sheet for your report as a report option, and use \
 the Edit -> Style Sheets menu to customize style sheets.")

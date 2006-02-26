@@ -9,7 +9,6 @@
 
 (use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash report hello-world))
-(use-modules (gnucash report iframe-url))
 (use-modules (gnucash report view-column))
 (use-modules (gnucash report welcome-to-gnucash))
 
