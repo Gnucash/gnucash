@@ -1,5 +1,5 @@
 
-SUBDIRS = . doc lib src intl-scm po rpm accounts
+SUBDIRS = . doc lib src intl-scm packaging po accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 

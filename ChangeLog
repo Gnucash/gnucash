@@ -1,5 +1,8 @@
 2006-02-26  David Hampton  <hampton@employees.org>
 
+	* packaging: Create a consolidated directory for distribution
+	specific scripts.
+
 	* src/gnome-utils/dialog-utils.[ch]:
 	* src/app-utils/option-util.c: Restore GtkOptionMenu support
 	because the newer GtkComboBox doesn't support per item tooltips.
