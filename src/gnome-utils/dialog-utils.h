@@ -30,8 +30,13 @@
 #include "qof.h"
 
 /* option button callback function */
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
+typedef void (*GNCOptionCallback) (GtkWidget *,
+                                   gpointer user_data);
+#else
 typedef void (*GNCOptionCallback) (GtkWidget *, gint index,
                                    gpointer user_data);
+#endif
 
 /* Structure for building option buttons */
 typedef struct _GNCOptionInfo GNCOptionInfo;

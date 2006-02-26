@@ -963,7 +963,7 @@ gnc_option_permissible_value_description(GNCOption *option, int index)
                     scm_int2num(index));
   if (help == SCM_UNDEFINED)
     return NULL;
-  if (!SCM_SYMBOLP(help))
+  if (!SCM_STRINGP(help))
     return NULL;
 
   return g_strdup(SCM_STRING_CHARS(help));

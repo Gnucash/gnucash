@@ -1,3 +1,10 @@
+2006-02-26  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-utils.[ch]:
+	* src/app-utils/option-util.c: Restore GtkOptionMenu support
+	because the newer GtkComboBox doesn't support per item tooltips.
+	Fixes bug 332569.
+
 2006-02-26  Neil Williams <linux@codehelp.co.uk>
 
 	* qof/qof-be-utils.h : Replace macro to restore

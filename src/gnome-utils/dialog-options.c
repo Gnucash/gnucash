@@ -396,12 +396,43 @@ gnc_option_default_cb(GtkWidget *widget, GNCOption *option)
   gnc_options_dialog_changed_internal (widget, TRUE);
 }
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 static void
 gnc_option_multichoice_cb(GtkWidget *widget, gpointer data)
 {
   GNCOption *option = data;
   gnc_option_changed_widget_cb(widget, option);
 }
+#else
+static void
+gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
+{
+  GNCOption *option = data;
+  GtkWidget *widget;
+  GtkWidget *omenu;
+  gpointer _current;
+  gint current;
+
+  widget = gnc_option_get_widget (option);
+
+  _current = gtk_object_get_data(GTK_OBJECT(widget), "gnc_multichoice_index");
+  current = GPOINTER_TO_INT(_current);
+
+  if (current == index)
+    return;
+
+  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+  gtk_object_set_data(GTK_OBJECT(widget), "gnc_multichoice_index",
+                      GINT_TO_POINTER(index));
+
+  gnc_option_set_changed (option, TRUE);
+
+  gnc_option_call_option_widget_changed_proc(option);
+
+  omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
+  gnc_options_dialog_changed_internal (omenu, TRUE);
+}
+#endif
 
 static void
 gnc_option_radiobutton_cb(GtkWidget *w, gpointer data)
@@ -436,7 +467,6 @@ gnc_option_create_date_widget (GNCOption *option)
   GtkWidget *entry;
   gboolean show_time, use24;
   char *type;
-  char *string;
   int num_values;
 
   type = gnc_option_date_option_get_subtype(option);
@@ -464,16 +494,69 @@ gnc_option_create_date_widget (GNCOption *option)
     
     g_return_val_if_fail(num_values >= 0, NULL);
     
-    rel_widget = gtk_combo_box_new_text();
-    for (i = 0; i < num_values; i++)
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     {
-      string = gnc_option_permissible_value_name(option, i);
-      gtk_combo_box_append_text(GTK_COMBO_BOX(rel_widget), string);
-      g_free(string);
-    }
+      /* New code for GtkComboBox. Is not used because it is missing
+       * the feature of per-item tooltips. Not yet implemented in gtk,
+       * see http://bugzilla.gnome.org/show_bug.cgi?id=303717 , see
+       * also gnc_option_create_multichoice_widget() below. */
+      char *string;
+      rel_widget = gtk_combo_box_new_text();
+      for (i = 0; i < num_values; i++)
+      {
+	string = gnc_option_permissible_value_name(option, i);
+	gtk_combo_box_append_text(GTK_COMBO_BOX(rel_widget), string);
+	g_free(string);
+      }
 
-    g_signal_connect(G_OBJECT(rel_widget), "changed",
-		     G_CALLBACK(gnc_option_multichoice_cb), option);
+      g_signal_connect(G_OBJECT(rel_widget), "changed",
+		       G_CALLBACK(gnc_option_multichoice_cb), option);
+    }
+#else
+    {
+      /* Old 1-8-branch code for a GtkOptionMenu. We use this one
+       * because it has a per-item tooltip which the GtkComboBox still
+       * doesn't have. - cstim, 2006-02-25 */
+      GNCOptionInfo *info;
+      char **raw_strings;
+      char **raw;
+      
+      info = g_new0(GNCOptionInfo, num_values);
+      raw_strings = g_new0(char *, num_values * 2);
+      raw = raw_strings;
+    
+      for (i = 0; i < num_values; i++)
+      {
+	*raw = gnc_option_permissible_value_name(option, i);
+	info[i].name = *raw; /* (*raw && **raw) ? _(*raw) : ""; */
+      
+	raw++;
+
+	*raw = gnc_option_permissible_value_description(option, i);
+	info[i].tip = *raw; /* (*raw && **raw) ? _(*raw) : ""; */
+
+	if(safe_strcmp(type, "both") == 0)
+	{
+	  info[i].callback = gnc_option_multichoice_cb; /* gnc_option_rd_combo_cb */
+	}
+	else 
+        {
+	  info[i].callback = gnc_option_multichoice_cb;
+	}
+	info[i].user_data = option;
+	raw++;
+      }
+
+      rel_widget = gnc_build_option_menu(info, num_values);
+
+      for (i = 0; i < num_values * 2; i++)
+	if (raw_strings[i])
+	  free(raw_strings[i]);
+  
+      g_free(raw_strings);
+      g_free(info);
+    }
+#endif
   }
 
   if(safe_strcmp(type, "absolute") == 0)
@@ -541,33 +624,74 @@ gnc_option_create_multichoice_widget(GNCOption *option, GtkTooltips *tooltips)
 {
   GtkWidget *widget;
   int num_values;
-  char *string;
   int i;
 
   num_values = gnc_option_num_permissible_values(option);
 
   g_return_val_if_fail(num_values >= 0, NULL);
 
-  widget = gtk_combo_box_new_text();
-  for (i = 0; i < num_values; i++) {
-    string = gnc_option_permissible_value_name(option, i);
-    if (string) {
-      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), *string ? _(string) : "");
-      g_free(string);
-    } else {
-      gtk_combo_box_append_text(GTK_COMBO_BOX(widget), "");
+#ifndef GTKCOMBOBOX_TOOLTIPS_WORK
+  {
+    /* Old 1-8-branch code for a GtkOptionMenu. We use this one
+       because it has a per-item tooltip which the GtkComboBox still
+       doesn't have. - cstim, 2006-02-25 */
+    GNCOptionInfo *info;
+    char **raw_strings;
+    char **raw;
+
+    info = g_new0(GNCOptionInfo, num_values);
+    raw_strings = g_new0(char *, num_values * 2);
+    raw = raw_strings;
+
+    for (i = 0; i < num_values; i++)
+    {
+      *raw = gnc_option_permissible_value_name(option, i);
+      info[i].name = (*raw && **raw) ? _(*raw) : "";
+      
+      raw++;
+
+      *raw = gnc_option_permissible_value_description(option, i);
+      info[i].tip = (*raw && **raw) ? _(*raw) : "";
+
+      info[i].callback = gnc_option_multichoice_cb;
+      info[i].user_data = option;
+      raw++;
     }
 
-    /* FIXME: tooltip texts for each option are available but cannot
-       be set currently. See http://wiki.gnucash.org/wiki/Tooltips.
-       The current idea is to revert the widget back to the
-       GtkOptionMenu code from 1.8-branch until
-       http://bugzilla.gnome.org/show_bug.cgi?id=303717 is implemented
-       in gtk.
-    */
+    widget = gnc_build_option_menu(info, num_values);
+
+    for (i = 0; i < num_values * 2; i++)
+      if (raw_strings[i])
+	free(raw_strings[i]);
+  
+    g_free(raw_strings);
+    g_free(info);
   }
-  g_signal_connect(G_OBJECT(widget), "changed",
-        	   G_CALLBACK(gnc_option_multichoice_cb), option);
+#else
+  {
+    
+    /* New code for GtkComboBox. Is still unused because it is missing
+       the feature of per-item tooltips. Not yet implemented in gtk,
+       see http://bugzilla.gnome.org/show_bug.cgi?id=303717 */
+    char *itemstring;
+    /* char *description; */
+    widget = gtk_combo_box_new_text();
+    for (i = 0; i < num_values; i++) {
+      itemstring = gnc_option_permissible_value_name(option, i);
+      /* description = gnc_option_permissible_value_description(option, i); */
+      gtk_combo_box_append_text(GTK_COMBO_BOX(widget),
+				(itemstring && *itemstring) ? _(itemstring) : "");
+      /*, (description && *description) ? _(description) : "" */
+      /* Maybe the per-item tooltip will simply be added as such an
+	 additional argument as shown above, but we'll see. */
+      if (itemstring)
+	g_free(itemstring);
+      /* if (description) g_free(description); */
+    }
+    g_signal_connect(G_OBJECT(widget), "changed",
+		     G_CALLBACK(gnc_option_multichoice_cb), option);
+  }
+#endif
 
   return widget;
 }
@@ -2107,7 +2231,13 @@ gnc_option_set_ui_value_multichoice (GNCOption *option, gboolean use_default,
     return TRUE;
   else
   {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
+#else
+    gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+    gtk_object_set_data(GTK_OBJECT(widget), "gnc_multichoice_index",
+			GINT_TO_POINTER(index));
+#endif 	 
     return FALSE;
   }
 }
@@ -2135,7 +2265,14 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	index = gnc_option_permissible_value_index(option, relative);
 	if (safe_strcmp(date_option_type, "relative") == 0)
 	{
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
+#else
+	  gtk_object_set_data(GTK_OBJECT(widget),
+			      "gnc_multichoice_index",
+			      GINT_TO_POINTER(index));
+	  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
+#endif
 	}
 	else if (safe_strcmp(date_option_type, "both") == 0)
 	{
@@ -2146,7 +2283,15 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 	  rel_date_widget = g_list_nth_data(widget_list,
 					    GNC_RD_WID_REL_WIDGET_POS);
 	  gnc_date_option_set_select_method(option, FALSE, TRUE);
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(rel_date_widget), index);
+#else
+          gtk_object_set_data(GTK_OBJECT(rel_date_widget),
+			      "gnc_multichoice_index",
+			      GINT_TO_POINTER(index));
+	  gtk_option_menu_set_history(GTK_OPTION_MENU(rel_date_widget),
+				      index);
+#endif
 	}
 	else
 	{
@@ -2526,7 +2671,14 @@ gnc_option_get_ui_value_multichoice (GNCOption *option, GtkWidget *widget)
 {
   int index;
 
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
   index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+#else
+  {
+    gpointer _index = gtk_object_get_data(GTK_OBJECT(widget), "gnc_multichoice_index");
+    index = GPOINTER_TO_INT(_index);
+  }
+#endif 	 
   return (gnc_option_permissible_value(option, index));
 }
 
@@ -2539,7 +2691,12 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 
   if(safe_strcmp(subtype, "relative") == 0)
   {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+#else
+    index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(widget),
+						"gnc_multichoice_index"));
+#endif
     type = scm_str2symbol("relative");
     val = gnc_option_permissible_value(option, index);
     result = scm_cons(type, val);
@@ -2575,7 +2732,12 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
     }
     else 
     {
+#ifdef GTKCOMBOBOX_TOOLTIPS_WORK
       index = gtk_combo_box_get_active(GTK_COMBO_BOX(rel_widget));
+#else
+      index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(rel_widget),
+						  "gnc_multichoice_index"));
+#endif
       val = gnc_option_permissible_value(option, index);
       result = scm_cons(scm_str2symbol("relative"), val);
     }
