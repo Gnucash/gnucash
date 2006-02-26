@@ -51,7 +51,7 @@ typedef QofSession * (*QofSessionCB) (void);
  */
 char gnc_get_account_separator (void);
 
-gboolean gnc_reverse_balance(Account *account);
+gboolean gnc_reverse_balance(const Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
@@ -102,7 +102,7 @@ gnc_commodity_table * gnc_get_current_commodities (void);
  */
 gnc_numeric
 gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
-				 Account *account,
+				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
 				 gnc_commodity *commodity);

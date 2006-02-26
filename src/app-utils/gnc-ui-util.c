@@ -146,7 +146,7 @@ gnc_reverse_balance_type (GNCAccountType type)
 }
 
 gboolean
-gnc_reverse_balance (Account *account)
+gnc_reverse_balance (const Account *account)
 {
   int type;
 
@@ -228,7 +228,7 @@ gnc_get_current_commodities (void)
  */
 gnc_numeric
 gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
-				 Account *account,
+				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
 				 gnc_commodity *commodity)
