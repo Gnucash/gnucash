@@ -2128,7 +2128,7 @@ AC_CONFIG_FILES(po/Makefile.in
           lib/libqof/qof/Makefile
           lib/libqof/backend/Makefile
           lib/libqof/backend/file/Makefile
-          rpm/Makefile
+          packaging/Makefile
           src/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
