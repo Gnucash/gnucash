@@ -27,11 +27,16 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "qof.h"
+
 #include "FreqSpec.h"
+#include "Account.h"
+#include "gnc-book.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "SX-book.h"
 #include "SX-ttinfo.h"
+#include "SchedXaction.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
 #include "gnc-engine.h"
@@ -43,7 +48,7 @@ static QofLogModule log_module = GNC_MOD_SX;
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
+xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
 {
    AccountGroup        *ag;
 
@@ -740,7 +745,8 @@ static QofObject SXDesc =
 	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
 };
 
-gboolean SXRegister (void)
+gboolean
+SXRegister(void)
 {
 	static QofParam params[] = {
 	 { GNC_SX_FREQ_SPEC, QOF_ID_FREQSPEC, (QofAccessFunc)xaccSchedXactionGetFreqSpec,
