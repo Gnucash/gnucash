@@ -152,7 +152,7 @@ void
 gnc_price_commit_edit (GNCPrice *p)
 {
   QOF_COMMIT_EDIT_PART1 (&p->inst);
-  QOF_COMMIT_EDIT_PART2 (&p->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&p->inst, commit_err, noop, noop);
 }
 
 /* ==================================================================== */
@@ -167,7 +167,7 @@ void
 gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 {
   QOF_COMMIT_EDIT_PART1 (&pdb->inst);
-  QOF_COMMIT_EDIT_PART2 (&pdb->inst, commit_err, noop, noop);
+  qof_commit_edit_part2 (&pdb->inst, commit_err, noop, noop);
 }
 
 /* ==================================================================== */

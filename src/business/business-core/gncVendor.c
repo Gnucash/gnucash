@@ -443,7 +443,7 @@ static inline void vendor_free (QofInstance *inst)
 void gncVendorCommitEdit (GncVendor *vendor)
 {
   QOF_COMMIT_EDIT_PART1 (&vendor->inst);
-  QOF_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
+  qof_commit_edit_part2 (&vendor->inst, gncVendorOnError,
                          gncVendorOnDone, vendor_free);
 }
 

@@ -342,9 +342,8 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  QOF_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
-
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  if (qof_commit_edit_part2(&acc->inst, on_err, noop, acc_free))
+      gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void 

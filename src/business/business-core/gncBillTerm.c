@@ -418,7 +418,7 @@ static inline void on_done (QofInstance *inst) {}
 void gncBillTermCommitEdit (GncBillTerm *term)
 {
   QOF_COMMIT_EDIT_PART1 (&term->inst);
-  QOF_COMMIT_EDIT_PART2 (&term->inst, gncBillTermOnError,
+  qof_commit_edit_part2 (&term->inst, gncBillTermOnError,
                          on_done, bill_free);
 }
 
