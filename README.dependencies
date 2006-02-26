@@ -57,7 +57,6 @@ release (or an official package-upgrade path)
 Libraries/Deps
 --------------
 aqbanking
-cairo
 gconf2
 glib2
 gtk+2
