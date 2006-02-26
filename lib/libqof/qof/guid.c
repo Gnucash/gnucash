@@ -257,8 +257,8 @@ init_from_dir(const char *dirname, unsigned int max_files)
     if (de == NULL)
       break;
 
-    md5_process_bytes(de, strlen(de->d_name), &guid_context);
-    total += sizeof(struct dirent);
+    md5_process_bytes(de->d_name, strlen(de->d_name), &guid_context);
+    total += strlen(de->d_name);
 
     result = snprintf(filename, sizeof(filename),
                       "%s/%s", dirname, de->d_name);
