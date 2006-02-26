@@ -25,6 +25,10 @@
 
 2006-02-26  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome-utils/gnc-html-graph-gog.c:
+	Andreas Köhler's patch for barchart improvements: segment color
+	setting, axis rotation and formatting.
+
 	* src/engine/SX-book.c (gnc_sx_get_sxes_referencing_account): 
 	* src/gnome/dialog-scheduledxaction.c: Add handler for
 	account-deleted events, determine and display editors for SXes
