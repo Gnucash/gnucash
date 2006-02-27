@@ -1,5 +1,11 @@
 2006-02-27  David Hampton  <hampton@employees.org>
 
+	* src/engine/gnc-pricedb.[ch]:
+	* src/engine/gnc-pricedb-p.h:
+	* src/engine/Account.[ch]:
+	* src/app-utils/gnc-ui-util.[ch]: Add 'const' qualifiers to
+	various functions.
+
 	* src/gnome-utils/gnc-main-window.c: Check for the existence of a
 	page before dereferencing it. Fixes 332680.
 

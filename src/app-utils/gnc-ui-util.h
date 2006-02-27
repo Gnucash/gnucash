@@ -105,7 +105,7 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
 				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
-				 gnc_commodity *commodity);
+				 const gnc_commodity *commodity);
 
 /**
  * This routine retrives the total balance in an account, possibly
@@ -114,11 +114,11 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
  * @param account           The account to retrieve data about.
  * @param include_children  Include all sub-accounts of this account.
  */
-gnc_numeric gnc_ui_account_get_balance (Account *account,
+gnc_numeric gnc_ui_account_get_balance (const Account *account,
                                         gboolean include_children);
 
-gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
-						    gnc_commodity *currency,
+gnc_numeric gnc_ui_account_get_balance_in_currency (const Account *account,
+						    const gnc_commodity *currency,
 						    gboolean recurse);
 /**
  * This routine retrives the reconciled balance in an account,
@@ -127,7 +127,7 @@ gnc_numeric gnc_ui_account_get_balance_in_currency (Account *account,
  * @param account           The account to retrieve data about.
  * @param include_children  Include all sub-accounts of this account.
  */
-gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
+gnc_numeric gnc_ui_account_get_reconciled_balance(const Account *account,
                                                   gboolean include_children);
 
 /**
@@ -145,7 +145,7 @@ gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
  */
 gchar *
 gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
-				  Account *account,
+				  const Account *account,
 				  gboolean recurse,
 				  gboolean *negative);
 
@@ -165,11 +165,11 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
  */
 gchar *
 gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
-					 Account *account,
+					 const Account *account,
 					 gboolean recurse,
 					 gboolean *negative);
 
-char *gnc_ui_account_get_tax_info_string (Account *account);
+char *gnc_ui_account_get_tax_info_string (const Account *account);
 
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
@@ -195,7 +195,7 @@ gboolean gnc_account_create_opening_balance (Account *account,
                                              time_t date,
                                              QofBook *book);
 
-char * gnc_account_get_full_name (Account *account);
+char * gnc_account_get_full_name (const Account *account);
 
 
 /* Locale functions *************************************************/
@@ -281,7 +281,7 @@ GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
                                              gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_account_print_info (Account *account,
+GNCPrintAmountInfo gnc_account_print_info (const Account *account,
                                            gboolean use_symbol);
 
 GNCPrintAmountInfo gnc_split_amount_print_info (Split *split,

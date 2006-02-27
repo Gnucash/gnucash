@@ -51,7 +51,7 @@
 typedef gnc_numeric (*xaccGetBalanceFn)( const Account *account );
 
 typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (
-    const Account *account, gnc_commodity *report_commodity,
+    const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 
 typedef gnc_numeric (*xaccGetBalanceAsOfDateFn) (
@@ -366,8 +366,9 @@ gnc_numeric xaccAccountGetBalanceAsOfDate (Account *account,
 */
 gnc_numeric xaccAccountConvertBalanceToCurrency(
     const Account *account, /* for book */
-    gnc_numeric balance, gnc_commodity *balance_currency,
-    gnc_commodity *new_currency);
+    gnc_numeric balance,
+    const gnc_commodity *balance_currency,
+    const gnc_commodity *new_currency);
 gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
     const Account *account, /* for book */
     gnc_numeric balance, gnc_commodity *balance_currency,
@@ -376,19 +377,19 @@ gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(
 /* These functions get some type of balance in the desired commodity.
    'report_commodity' may be NULL to use the account's commodity. */
 gnc_numeric xaccAccountGetBalanceInCurrency (
-    const Account *account, gnc_commodity *report_commodity,
+    const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetClearedBalanceInCurrency (
-    const Account *account, gnc_commodity *report_commodity, 
+    const Account *account, const gnc_commodity *report_commodity, 
     gboolean include_children);
 gnc_numeric xaccAccountGetReconciledBalanceInCurrency (
-    const Account *account, gnc_commodity *report_commodity,
+    const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetPresentBalanceInCurrency (
-    const Account *account, gnc_commodity *report_commodity,
+    const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
-    const Account *account, gnc_commodity *report_commodity,
+    const Account *account, const gnc_commodity *report_commodity,
     gboolean include_children);
 
 /* This function gets the balance as of the given date in the desired

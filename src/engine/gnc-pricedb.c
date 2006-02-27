@@ -1092,8 +1092,8 @@ gnc_pricedb_remove_old_prices(GNCPriceDB *db,
 
 GNCPrice *
 gnc_pricedb_lookup_latest(GNCPriceDB *db,
-                          gnc_commodity *commodity,
-                          gnc_commodity *currency)
+                          const gnc_commodity *commodity,
+                          const gnc_commodity *currency)
 {
   GList *price_list;
   GNCPrice *result;
@@ -1148,7 +1148,7 @@ lookup_latest(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
-                                       gnc_commodity *commodity)
+                                       const gnc_commodity *commodity)
 {
   GList *result;
   GHashTable *currency_hash;
@@ -1195,8 +1195,8 @@ hash_values_helper(gpointer key, gpointer value, gpointer data)
 
 gboolean
 gnc_pricedb_has_prices(GNCPriceDB *db,
-                       gnc_commodity *commodity,
-                       gnc_commodity *currency)
+                       const gnc_commodity *commodity,
+                       const gnc_commodity *currency)
 {
   GList *price_list;
   GHashTable *currency_hash;
@@ -1243,8 +1243,8 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
 
 GList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
-                       gnc_commodity *commodity,
-                       gnc_commodity *currency)
+                       const gnc_commodity *commodity,
+                       const gnc_commodity *currency)
 {
   GList *price_list;
   GList *result;
@@ -1289,8 +1289,8 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 
 GList *
 gnc_pricedb_lookup_day(GNCPriceDB *db,
-                       gnc_commodity *c,
-                       gnc_commodity *currency,
+                       const gnc_commodity *c,
+                       const gnc_commodity *currency,
                        Timespec t)
 {
   GList *price_list;
@@ -1362,7 +1362,7 @@ lookup_day(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
-                                     gnc_commodity *c,
+				    const gnc_commodity *c,
                                     Timespec t)
 {
   GList *result = NULL;
@@ -1407,8 +1407,8 @@ gnc_pricedb_lookup_day_any_currency(GNCPriceDB *db,
 
 GList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
-                           gnc_commodity *c,
-                           gnc_commodity *currency,
+                           const gnc_commodity *c,
+                           const gnc_commodity *currency,
                            Timespec t)
 {
   GList *price_list;
@@ -1477,7 +1477,7 @@ lookup_time(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
-                                         gnc_commodity *c,
+					const gnc_commodity *c,
                                         Timespec t)
 {
   GList *result = NULL;
@@ -1520,8 +1520,8 @@ gnc_pricedb_lookup_at_time_any_currency(GNCPriceDB *db,
 
 GNCPrice *
 gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
-                                   gnc_commodity *c,
-                                   gnc_commodity *currency,
+                                   const gnc_commodity *c,
+                                   const gnc_commodity *currency,
                                    Timespec t)
 {
   GList *price_list;
@@ -1652,7 +1652,7 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
 
 GList *
 gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
-                                                 gnc_commodity *c,
+                                                const gnc_commodity *c,
                                                 Timespec t)
 {
   GList *result = NULL;
@@ -1699,8 +1699,8 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
 gnc_numeric
 gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
                                          gnc_numeric balance,
-                                         gnc_commodity *balance_currency,
-                                         gnc_commodity *new_currency)
+                                         const gnc_commodity *balance_currency,
+                                         const gnc_commodity *new_currency)
 {
   GNCPrice *price, *currency_price;
   GList *price_list, *list_helper;
@@ -1774,8 +1774,8 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 gnc_numeric
 gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
                                           gnc_numeric balance,
-                                          gnc_commodity *balance_currency,
-                                          gnc_commodity *new_currency,
+                                          const gnc_commodity *balance_currency,
+                                          const gnc_commodity *new_currency,
                                           Timespec t)
 {
   GNCPrice *price, *currency_price;
@@ -2028,7 +2028,7 @@ gnc_price_fixup_legacy_commods(gpointer data, gpointer user_data)
 
 void
 gnc_pricedb_substitute_commodity(GNCPriceDB *db,
-                                 gnc_commodity *old_c,
+				 gnc_commodity *old_c,
                                  gnc_commodity *new_c)
 {
   GNCPriceFixupData data;

@@ -1666,8 +1666,8 @@ xaccAccountGetPresentBalance (const Account *acc)
 gnc_numeric
 xaccAccountConvertBalanceToCurrency(const Account *acc, /* for book */
 				    gnc_numeric balance,
-				    gnc_commodity *balance_currency,
-				    gnc_commodity *new_currency)
+				    const gnc_commodity *balance_currency,
+				    const gnc_commodity *new_currency)
 {
   QofBook *book;
   GNCPriceDB *pdb;
@@ -1724,7 +1724,7 @@ xaccAccountConvertBalanceToCurrencyAsOfDate(const Account *acc, /* for book */
 static gnc_numeric
 xaccAccountGetXxxBalanceInCurrency (const Account *acc,
 				    xaccGetBalanceFn fn,
-				    gnc_commodity *report_currency)
+				    const gnc_commodity *report_currency)
 {
   gnc_numeric balance;
 
@@ -1739,7 +1739,7 @@ xaccAccountGetXxxBalanceInCurrency (const Account *acc,
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
                                            xaccGetBalanceAsOfDateFn fn,
-                                           gnc_commodity *report_commodity)
+                                           const gnc_commodity *report_commodity)
 {
     g_return_val_if_fail(acc && fn && report_commodity, gnc_numeric_zero());
     return xaccAccountConvertBalanceToCurrency(
@@ -1751,7 +1751,7 @@ xaccAccountGetXxxBalanceAsOfDateInCurrency(Account *acc, time_t date,
  */
 typedef struct
 {
-  gnc_commodity *currency;
+  const gnc_commodity *currency;
   gnc_numeric balance;
   xaccGetBalanceFn fn;
   xaccGetBalanceAsOfDateFn asOfDateFn;
@@ -1809,7 +1809,7 @@ xaccAccountBalanceAsOfDateHelper (Account *acc, gpointer data)
 static gnc_numeric
 xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 					     xaccGetBalanceFn fn,
-					     gnc_commodity *report_commodity,
+					     const gnc_commodity *report_commodity,
 					     gboolean include_children)
 {
   gnc_numeric balance;
@@ -1862,7 +1862,7 @@ xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
 
 gnc_numeric
 xaccAccountGetBalanceInCurrency (const Account *acc, 
-                                 gnc_commodity *report_commodity,
+                                 const gnc_commodity *report_commodity,
 				 gboolean include_children)
 {
   gnc_numeric rc;
@@ -1875,7 +1875,7 @@ xaccAccountGetBalanceInCurrency (const Account *acc,
 
 gnc_numeric
 xaccAccountGetClearedBalanceInCurrency (const Account *acc,
-                                        gnc_commodity *report_commodity,
+                                        const gnc_commodity *report_commodity,
                                         gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
@@ -1886,7 +1886,7 @@ xaccAccountGetClearedBalanceInCurrency (const Account *acc,
 
 gnc_numeric
 xaccAccountGetReconciledBalanceInCurrency (const Account *acc,
-                                           gnc_commodity *report_commodity,
+                                           const gnc_commodity *report_commodity,
                                            gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
@@ -1896,7 +1896,7 @@ xaccAccountGetReconciledBalanceInCurrency (const Account *acc,
 
 gnc_numeric
 xaccAccountGetPresentBalanceInCurrency (const Account *acc,
-					gnc_commodity *report_commodity,
+					const gnc_commodity *report_commodity,
 					gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (
@@ -1906,7 +1906,8 @@ xaccAccountGetPresentBalanceInCurrency (const Account *acc,
 
 gnc_numeric
 xaccAccountGetProjectedMinimumBalanceInCurrency (
-    const Account *acc, gnc_commodity *report_commodity,
+    const Account *acc, 
+    const gnc_commodity *report_commodity,
     gboolean include_children)
 {
   return xaccAccountGetXxxBalanceInCurrencyRecursive (

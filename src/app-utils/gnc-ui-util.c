@@ -231,7 +231,7 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
 				 const Account *account,
 				 gboolean recurse,
 				 gboolean *negative,
-				 gnc_commodity *commodity)
+				 const gnc_commodity *commodity)
 {
   gnc_numeric balance;
 
@@ -253,7 +253,7 @@ gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
  * including all sub-accounts under the specified account.
  */
 gnc_numeric
-gnc_ui_account_get_balance (Account *account, gboolean recurse)
+gnc_ui_account_get_balance (const Account *account, gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetBalanceInCurrency,
 					  account, recurse, NULL, NULL);
@@ -265,7 +265,8 @@ gnc_ui_account_get_balance (Account *account, gboolean recurse)
  * specified account.
  */
 gnc_numeric
-gnc_ui_account_get_balance_in_currency (Account *account, gnc_commodity *currency,
+gnc_ui_account_get_balance_in_currency (const Account *account,
+					const gnc_commodity *currency,
 					gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetBalanceInCurrency,
@@ -277,7 +278,7 @@ gnc_ui_account_get_balance_in_currency (Account *account, gnc_commodity *currenc
  * possibly including all sub-accounts under the specified account.
  */
 gnc_numeric
-gnc_ui_account_get_reconciled_balance (Account *account,
+gnc_ui_account_get_reconciled_balance (const Account *account,
                                        gboolean recurse)
 {
   return gnc_ui_account_get_balance_full (xaccAccountGetReconciledBalanceInCurrency,
@@ -301,7 +302,7 @@ gnc_ui_account_get_reconciled_balance (Account *account,
  */
 gchar *
 gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
-				  Account *account,
+				  const Account *account,
 				  gboolean recurse,
 				  gboolean *negative)
 {
@@ -331,7 +332,7 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
  */
 gchar *
 gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
-					 Account *account,
+					 const Account *account,
 					 gboolean recurse,
 					 gboolean *negative)
 {
@@ -348,7 +349,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
 
 
 gnc_numeric
-gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
+gnc_ui_account_get_balance_as_of_date (Account *account,
+				       time_t date,
                                        gboolean include_children)
 {
   gnc_numeric balance;
@@ -392,7 +394,7 @@ gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
 
 /* Caller is responsible for g_free'ing returned memory */
 char *
-gnc_ui_account_get_tax_info_string (Account *account)
+gnc_ui_account_get_tax_info_string (const Account *account)
 {
   static SCM get_form = SCM_UNDEFINED;
   static SCM get_desc = SCM_UNDEFINED;
@@ -700,7 +702,7 @@ gnc_account_create_opening_balance (Account *account,
 }
 
 char *
-gnc_account_get_full_name (Account *account)
+gnc_account_get_full_name (const Account *account)
 {
   if (!account) return NULL;
 
@@ -1000,7 +1002,7 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
 }
 
 static GNCPrintAmountInfo
-gnc_account_print_info_helper(Account *account, gboolean use_symbol,
+gnc_account_print_info_helper(const Account *account, gboolean use_symbol,
                               gnc_commodity * (*efffunc)(const Account *),
                               int (*scufunc)(const Account*))
 {
@@ -1038,7 +1040,7 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 }
 
 GNCPrintAmountInfo
-gnc_account_print_info (Account *account, gboolean use_symbol)
+gnc_account_print_info (const Account *account, gboolean use_symbol)
 {
     return gnc_account_print_info_helper(account, use_symbol,
                                          xaccAccountGetCommodity,
