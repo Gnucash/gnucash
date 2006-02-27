@@ -2245,7 +2245,7 @@ gnc_main_window_update_edit_actions_sensitivity (GncMainWindow *window, gboolean
 
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	page = priv->current_page;
-	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions) {
+	if (page && GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions) {
 	  (GNC_PLUGIN_PAGE_GET_CLASS(page)->update_edit_menu_actions)(page, hide);
 	  return;
 	}
