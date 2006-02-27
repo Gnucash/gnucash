@@ -2,7 +2,7 @@
  * business-gnome-utils.c -- General GUI Utilities for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
- * Copyright (C) 2001, 2002 Derek Atkins
+ * Copyright (C) 2001,2002,2006 Derek Atkins
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -37,6 +37,7 @@
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncOwner.h"
+#include "gncInvoice.h"
 
 #include "gnc-general-search.h"
 #include "gncObject.h"
@@ -45,6 +46,7 @@
 #include "dialog-job.h"
 #include "dialog-vendor.h"
 #include "dialog-employee.h"
+#include "dialog-invoice.h"
 
 typedef enum {
   GNCSEARCH_TYPE_SELECT,
@@ -168,6 +170,135 @@ void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
 				   owner->owner.undefined);
 }
 
+typedef struct _invoice_select_info {
+  GtkWidget *label;
+  GNCBook *book;
+  GncOwner owner;
+  gboolean have_owner;
+} GncISI;
+
+static GNCSearchWindow *
+gnc_invoice_select_search_cb (gpointer start, gpointer isip)
+{
+  GncISI *isi = isip;
+
+  if (!isi) return NULL;
+  g_assert(isi->book);
+
+  return gnc_invoice_search (start,
+			     isi->have_owner ? &isi->owner : NULL,
+			     isi->book);
+}
+
+static void
+gnc_invoice_select_search_set_label(GncISI* isi)
+{
+  GncOwnerType owner_type;
+  GncOwner *tmp;
+  char *label;
+
+  g_assert(isi);
+  if (!isi->label) return;
+
+  tmp = &isi->owner;
+  owner_type = gncOwnerGetType(tmp);
+  while (owner_type == GNC_OWNER_JOB) {
+    tmp = gncOwnerGetEndOwner(tmp);
+    owner_type = gncOwnerGetType(tmp);
+  }
+
+  /* Translators:  See comments in dialog-invoice.c:gnc_invoice_search() */
+  switch (owner_type) {
+  case GNC_OWNER_VENDOR:
+    label = _("Bill");
+    break;
+  case GNC_OWNER_EMPLOYEE:
+    label = _("Voucher");
+    break;
+  default:
+    label = _("Invoice");
+  }
+
+  gtk_label_set_text(GTK_LABEL(isi->label), label);
+}
+
+GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, GNCBook *book,
+				       const GncOwner *owner,
+				       GncInvoice *invoice,
+				       GtkWidget *label)
+{
+  GtkWidget *edit;
+  GncISI *isi;
+
+  g_return_val_if_fail (hbox != NULL, NULL);
+  g_return_val_if_fail (book != NULL, NULL);
+  /* Note: it is legal to have no owner or invoice */
+
+  isi = g_new0(GncISI, 1);
+  if (!isi)
+    return NULL;
+
+  if (owner) {
+    gncOwnerCopy(owner, &isi->owner);
+    isi->have_owner = TRUE;
+  } else {
+    gncOwnerInitCustomer(&isi->owner, NULL);
+  }
+  isi->book = book;
+  isi->label = label;
+
+  edit = gnc_general_search_new (GNC_INVOICE_MODULE_NAME, _("Select..."),
+				 gnc_invoice_select_search_cb, isi);
+  if (!edit) {
+    g_free(isi);
+    return NULL;
+  }
+
+  gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit), invoice);
+  gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
+  g_object_set_data_full(G_OBJECT(edit), "isi-state", isi, g_free);
+
+  /* Set the label */
+  gnc_invoice_select_search_set_label(isi);
+
+  return edit;
+}
+
+GncInvoice * gnc_invoice_get_invoice (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+
+  return gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
+}
+
+void gnc_invoice_set_invoice (GtkWidget *widget, GncInvoice *invoice)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (invoice != NULL);
+
+  gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget), invoice);
+}
+
+void gnc_invoice_set_owner (GtkWidget *widget, GncOwner *owner)
+{
+  GncISI *isi;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (owner != NULL);
+
+  isi = g_object_get_data(G_OBJECT(widget), "isi-state");
+  g_assert(isi);
+
+  if (isi->owner.owner.undefined == owner->owner.undefined)
+    return;
+
+  gncOwnerCopy(owner, &isi->owner);
+  isi->have_owner = TRUE;
+  gnc_general_search_set_selected(GNC_GENERAL_SEARCH(widget), NULL);
+
+  /* Reset the label */
+  gnc_invoice_select_search_set_label(isi);
+}
 
 void
 gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,

@@ -1,3 +1,30 @@
+2006-02-26  Derek Atkins  <derek@ihtfp.com>
+
+	Apply a re-work of Titi Ala'ilima's patch to apply payments
+	directly to invoices.  This fixes bug #121420.
+	* src/business/business-core/gncInvoice.[ch]:
+	  Add argument to the ProcessPayment API to allow the caller
+	  to specify an invoice to post to first.
+	* src/business/business-gnome/business-gnome-utils.[ch]:
+	  Create an invoice-select API that lets you select an invoice
+	  based on an owner (or not).  I.e., you can limit the invoice
+	  search based on a selected owner.  If you change the owner
+	  it invalidates the invoice search.
+	* src/business/business-gnome/dialog-payment.[ch]:
+	  Change the API from ..new_with_value() to ..new_with_invoice().
+	  Pull the default amount from the invoice (if one exists).
+	  Allow the user to select an invoice and apply payments there.
+	  If the user changes the owner, invalidate the invoice.
+	* src/business/business-gnome/business-options-gnome.c:
+	  use the new invoice-select API instead of calling general_search
+	  API directly.
+	* src/business/business-gnome/dialog-invoice.c:
+	  call the new dialog-payment API.  No need to compute the initial
+	  value here; the payment dialog will compute it from the invoice
+	  (instead of computing it from the invoice here).
+	* src/business/business-gnome/glade/payment.glade:
+	  Add invoice-selector label and box.
+
 2006-02-26  David Hampton  <hampton@employees.org>
 
 	* packaging: Create a consolidated directory for distribution

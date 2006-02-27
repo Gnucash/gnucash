@@ -1,6 +1,6 @@
 /*
  * dialog-payment.h -- Dialog to enter payments
- * Copyright (C) 2002 Derek Atkins
+ * Copyright (C) 2002,2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
  * This program is free software; you can redistribute it and/or
@@ -28,11 +28,13 @@ typedef struct _payment_window PaymentWindow;
 
 #include "gnc-book.h"
 #include "gncOwner.h"
+#include "gncInvoice.h"
 
 /* Create a payment window */
 PaymentWindow * gnc_ui_payment_new (GncOwner *owner, GNCBook *book);
-PaymentWindow * gnc_ui_payment_new_with_value (GncOwner *owner, GNCBook *book,
-					       gnc_numeric initial_payment);
+PaymentWindow * gnc_ui_payment_new_with_invoice (GncOwner *owner,
+						 GNCBook *book,
+						 GncInvoice *invoice);
 
 /* Destroy a payment window */
 void gnc_ui_payment_window_destroy (PaymentWindow *pw);

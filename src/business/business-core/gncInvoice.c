@@ -21,7 +21,7 @@
 \********************************************************************/
 
 /*
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001,2002,2006 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  * Author: Derek Atkins <warlord@MIT.EDU>
@@ -1236,20 +1236,22 @@ gnc_lot_sort_func (GNCLot *a, GNCLot *b)
  * in gncInvoice...
  */
 Transaction *
-gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
+gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
+		      Account *posted_acc, Account *xfer_acc,
 		      gnc_numeric amount, Timespec date,
 		      const char *memo, const char *num)
 {
   QofBook *book;
+  Account *inv_posted_acc;
   Transaction *txn;
   Split *split;
   GList *lot_list, *fifo = NULL;
-  GNCLot *lot, *prepay_lot = NULL;
-  GncInvoice *invoice;
+  GNCLot *lot, *inv_posted_lot = NULL, *prepay_lot = NULL;
+  GncInvoice *this_invoice;
   const char *name;
   gnc_commodity *commodity;
   gnc_numeric split_amt;
-  gboolean reverse;
+  gboolean reverse, inv_passed = TRUE;
 
   /* Verify our arguments */
   if (!owner || !posted_acc || !xfer_acc) return NULL;
@@ -1292,6 +1294,23 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
 				  owner,
 				  (GCompareFunc)gnc_lot_sort_func);
 
+  /* Check if an invoice was passed in, and if so, does it match the
+   * account, and is it an open lot?  If so, put it at the beginning
+   * of the lot list fifo so we post to this invoice's lot first.
+   */
+  if (invoice) {
+    inv_posted_acc = gncInvoiceGetPostedAcc(invoice);
+    inv_posted_lot = gncInvoiceGetPostedLot(invoice);
+    if (inv_posted_acc && inv_posted_lot &&
+	guid_equal(xaccAccountGetGUID(inv_posted_acc),
+		   xaccAccountGetGUID(posted_acc)) &&
+	!gnc_lot_is_closed(inv_posted_lot)) {
+      /* Put this invoice at the beginning of the FIFO */
+      fifo = g_list_prepend (fifo, inv_posted_lot);
+      inv_passed = FALSE;
+    }
+  }
+
   xaccAccountBeginEdit (posted_acc);
 
   /* Now iterate over the fifo until the payment is fully applied
@@ -1301,6 +1320,21 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
     gnc_numeric balance;
 
     lot = lot_list->data;
+
+    /* Skip this lot if it matches the invoice that was passed in and
+     * we've seen it already.  This way we post to it the first time
+     * (from the beginning of the lot-list) but not when we reach it
+     * the second time.
+     */
+    if (inv_posted_lot &&
+	guid_equal(qof_instance_get_guid(QOF_INSTANCE(lot)),
+		   qof_instance_get_guid(QOF_INSTANCE(inv_posted_lot)))) {
+      if (inv_passed)
+	continue;
+      else
+	inv_passed = TRUE;
+    }
+
     balance = gnc_lot_get_balance (lot);
 
     if (!reverse)
@@ -1345,9 +1379,9 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
     gnc_lot_add_split (lot, split);
 
     /* Now send an event for the invoice so it gets updated as paid */
-    invoice = gncInvoiceGetInvoiceFromLot(lot);
-    if (invoice)
-      gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_MODIFY);
+    this_invoice = gncInvoiceGetInvoiceFromLot(lot);
+    if (this_invoice)
+      gnc_engine_gen_event (&this_invoice->inst.entity, GNC_EVENT_MODIFY);
 
     if (gnc_numeric_zero_p (amount))
       break;

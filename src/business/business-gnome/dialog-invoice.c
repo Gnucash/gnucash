@@ -1,6 +1,6 @@
 /*
  * dialog-invoice.c -- Dialog for Invoice entry
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001,2002,2006 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  *
  * Copyright (c) 2005,2006 David Hampton <hampton@employees.org>
@@ -783,13 +783,11 @@ void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice = iw_get_invoice(iw);
-  GNCLot *lot = gncInvoiceGetPostedLot (invoice);
-  gnc_numeric val = gnc_numeric_abs (gnc_lot_get_balance (lot));
 
   if (gncOwnerGetJob (&iw->job))
-    gnc_ui_payment_new_with_value (&iw->job, iw->book, val);
+    gnc_ui_payment_new_with_invoice (&iw->job, iw->book, invoice);
   else
-    gnc_ui_payment_new_with_value (&iw->owner, iw->book, val);
+    gnc_ui_payment_new_with_invoice (&iw->owner, iw->book, invoice);
 }
 
 /* Sorting callbacks */
@@ -2150,15 +2148,10 @@ static void
 pay_invoice_direct (gpointer inv, gpointer user_data)
 {
   GncInvoice *invoice = inv;
-  GNCLot *lot;
-  gnc_numeric val;
 
   g_return_if_fail (invoice);
-
-  lot = gncInvoiceGetPostedLot (invoice);
-  val = gnc_numeric_abs (gnc_lot_get_balance (lot));
-  gnc_ui_payment_new_with_value (gncInvoiceGetOwner (invoice),
-				 gncInvoiceGetBook (invoice), val);
+  gnc_ui_payment_new_with_invoice (gncInvoiceGetOwner (invoice),
+				   gncInvoiceGetBook (invoice), invoice);
 }
 
 static void
