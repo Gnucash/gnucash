@@ -261,7 +261,7 @@
 		      <child>
 			<widget class="GtkLabel" id="owner_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">(owner)</property>
+			  <property name="label" translatable="no">(owner)</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_RIGHT</property>
@@ -422,7 +422,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="convertwidget2">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">(terms)</property>
+				  <property name="label" translatable="no">(terms)</property>
 				  <property name="use_underline">True</property>
 				</widget>
 			      </child>
@@ -1228,7 +1228,7 @@
 			      <child>
 				<widget class="GtkMenuItem" id="convertwidget8">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">(terms)</property>
+				  <property name="label" translatable="no">(terms)</property>
 				  <property name="use_underline">True</property>
 				</widget>
 			      </child>

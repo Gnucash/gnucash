@@ -966,7 +966,7 @@
 				  <child>
 				    <widget class="GtkMenuItem" id="convertwidget4">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">(terms)</property>
+				      <property name="label" translatable="no">(terms)</property>
 				      <property name="use_underline">True</property>
 				    </widget>
 				  </child>
@@ -1027,7 +1027,7 @@
 				  <child>
 				    <widget class="GtkMenuItem" id="convertwidget6">
 				      <property name="visible">True</property>
-				      <property name="label" translatable="yes">(taxincluded)</property>
+				      <property name="label" translatable="no">(taxincluded)</property>
 				      <property name="use_underline">True</property>
 				    </widget>
 				  </child>
@@ -1082,7 +1082,7 @@
 				      <child>
 					<widget class="GtkMenuItem" id="convertwidget8">
 					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">(taxtables)</property>
+					  <property name="label" translatable="no">(taxtables)</property>
 					  <property name="use_underline">True</property>
 					</widget>
 				      </child>

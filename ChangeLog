@@ -1,3 +1,14 @@
+2006-02-27  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/glade/job.glade
+	* src/business/business-gnome/glade/order.glade
+	* src/business/business-gnome/glade/invoice.glade
+	* src/business/business-gnome/glade/billterms.glade
+	* src/business/business-gnome/glade/payment.glade
+	* src/business/business-gnome/glade/vendor.glade
+	* src/business/business-gnome/glade/customer.glade
+	  Don't need to translate placeholder labels.
+
 2006-02-26  Derek Atkins  <derek@ihtfp.com>
 
 	Apply a re-work of Titi Ala'ilima's patch to apply payments
