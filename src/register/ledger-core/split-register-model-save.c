@@ -419,7 +419,7 @@ gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
      * Otherwise, we _can_ use the rate_cell!
      */
     if (sd->reg_expanded && ! gnc_commodity_equal (reg_com, xfer_com))
-      amtconv = gnc_split_register_get_conv_rate (sd->trans, acc);
+      amtconv = xaccTransGetAccountConvRate(sd->trans, acc);
     else
       amtconv = convrate;
 
@@ -534,8 +534,8 @@ gnc_split_register_save_cells (gpointer save_data,
        * _both_ accounts -- so grab the other exchange rate.
        */
       if (gnc_numeric_zero_p (rate) || split_needs_amount)
-	rate = gnc_split_register_get_conv_rate (xaccSplitGetParent (other_split),
-						 acc);
+          rate = xaccTransGetAccountConvRate(xaccSplitGetParent (other_split),
+                                             acc);
 
       amount = gnc_numeric_mul (value, rate, xaccAccountGetCommoditySCU (acc),
 				GNC_RND_ROUND);

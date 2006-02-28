@@ -1154,7 +1154,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     /* UGGH -- we're not in either.  That means we need to convert 'amount'
      * from the register commodity to the txn currency.
      */
-    gnc_numeric rate = gnc_split_register_get_conv_rate (txn, reg_acc);
+    gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
 
     /* XXX: should we tell the user we've done the conversion? */
     amount = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),

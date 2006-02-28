@@ -1413,56 +1413,6 @@ gnc_split_register_needs_conv_rate (SplitRegister *reg,
   return TRUE;
 }
 
-/* Compute the conversion rate for the transaction to this account.
- * Any "split value" (which is in the transaction currency),
- * multiplied by this conversion rate, will give you the value you
- * should display for this account.
- */
-gnc_numeric
-gnc_split_register_get_conv_rate (Transaction *txn, Account *acc)
-{
-  gnc_numeric amount, value, convrate;
-  GList *splits;
-  Split *s;
-  gboolean found_acc_match = FALSE;
-
-  /* We need to compute the conversion rate into _this account_.  So,
-   * find the first split into this account, compute the conversion
-   * rate (based on amount/value), and then return this conversion
-   * rate.
-   */
-  splits = xaccTransGetSplitList(txn);
-  for (; splits; splits = splits->next) {
-    s = splits->data;
-    
-    if (xaccSplitGetAccount (s) != acc)
-      continue;
-
-    found_acc_match = TRUE;
-    amount = xaccSplitGetAmount (s);
-
-    /* Ignore splits with "zero" amount */
-    if (gnc_numeric_zero_p (amount))
-      continue;
-
-    value = xaccSplitGetValue (s);
-    convrate = gnc_numeric_div (amount, value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-    return convrate;
-  }
-
-  /* Don't error if we're in a GENERAL_LEDGER and have no account */
-  if (acc) {
-    /* If we did find a matching account but it's amount was zero,
-     * then perhaps this is a "special" income/loss transaction
-     */
-    if (found_acc_match)
-      return gnc_numeric_zero();
-    else
-      PERR ("Cannot convert transaction -- no splits with proper conversion ratio");
-  }
-  return gnc_numeric_create (100, 100);
-}
-
 /* Convert the amount/value of the Split for viewing in the account --
  * in particular we want to convert the Split to be in to_commodity.
  * Returns the amount.
@@ -1508,7 +1458,7 @@ gnc_split_register_convert_amount (Split *split, Account * account,
    * compute the conversion rate (based on amount/value), and then multiply
    * this times the split value.
    */
-  convrate = gnc_split_register_get_conv_rate (txn, account);
+  convrate = xaccTransGetAccountConvRate(txn, account);
   value = xaccSplitGetValue (split);
   return gnc_numeric_mul (value, convrate,
 			  gnc_commodity_get_fraction (to_commodity),
@@ -1563,7 +1513,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
     acc = gnc_split_register_get_default_account (reg);
     if (gnc_split_register_needs_conv_rate (reg, trans, acc)) {
       imbalance = gnc_numeric_mul (imbalance,
-				   gnc_split_register_get_conv_rate (trans, acc),
+				   xaccTransGetAccountConvRate(trans, acc),
 				   gnc_commodity_get_fraction (currency),
 				   GNC_RND_ROUND);
     } else {
