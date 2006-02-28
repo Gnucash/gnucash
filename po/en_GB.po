@@ -1,19 +1,22 @@
+# translation of en_GB.po to British English
 # Messages for Gnucash in British English
-# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
-# Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006.
+# Copyright (C) 2002, 2003, 2004, 2006 Free Software Foundation, Inc.
 #
+# Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006.
+# Neil Williams <linux@codehelp.co.uk>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.10pre1\n"
+"Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-02-18 10:53+0100\n"
-"PO-Revision-Date: 2006-01-17 10:48+0000\n"
-"Last-Translator: Nigel Titley <nigel@titley.com>\n"
-"Language-Team: English (British) <en_gb@li.org>\n"
+"PO-Revision-Date: 2006-02-28 11:38+0000\n"
+"Last-Translator: Neil Williams <linux@codehelp.co.uk>\n"
+"Language-Team: British English <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.2\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:136
 msgid " Variables are in the form 'name=value'"
@@ -182,8 +185,7 @@ msgstr "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
 
 #: ../src/bin/gnucash-bin.c:74
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
-"You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
+msgstr "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
 
 #: ../src/bin/gnucash-bin.c:75
 msgid "The last stable version was "
@@ -265,10 +267,8 @@ msgid "FILE"
 msgstr "FILE"
 
 #: ../src/bin/gnucash-bin.c:245 ../src/bin/gnucash-bin.c:298
-msgid ""
-"Regular expression determining which namespace commodities will be retrieved"
-msgstr ""
-"Regular expression determining which namespace commodities will be retrieved"
+msgid "Regular expression determining which namespace commodities will be retrieved"
+msgstr "Regular expression determining which namespace commodities will be retrieved"
 
 #. Translators: Argument description for autohelp; see popt(3)
 #. Translators: Argument description for autohelp; see
@@ -717,10 +717,8 @@ msgid "Are you sure you want to delete the selected entry?"
 msgstr "Are you sure you want to delete the selected entry?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:501
-msgid ""
-"This entry is attached to an order and will be deleted from that as well!"
-msgstr ""
-"This entry is attached to an order and will be deleted from that as well!"
+msgid "This entry is attached to an order and will be deleted from that as well!"
+msgstr "This entry is attached to an order and will be deleted from that as well!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:609
 msgid "The Invoice must have at least one Entry."
@@ -1814,10 +1812,8 @@ msgid "Owner Information"
 msgstr "Owner Information"
 
 #: ../src/business/business-gnome/glade/job.glade.h:11
-msgid ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
+msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "The job ID number.  If left blank a reasonable number will be chosen for you"
 
 #: ../src/business/business-gnome/glade/order.glade.h:5
 msgid "Close Order"
@@ -2423,58 +2419,52 @@ msgid "Unpost"
 msgstr "Unpost"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
-#, fuzzy
 msgid "Accumulate multiple splits into one"
-msgstr "Accumulate multiple splits into one."
+msgstr "Accumulate multiple splits into one"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
-#, fuzzy
 msgid ""
 "If active, at startup Gnucash will check to see whether any bills will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise gnucash does not check for due bills."
 msgstr ""
-"If TRUE, at startup Gnucash will check to see whether any bills will become "
-"due soon. If so, it will present the user with a reminder dialog. The "
-"definition of \"soon\" is controlled by the \"Days in Advance\" setting. If "
-"FALSE, gnucash does not check for due bills."
+"If active, at startup Gnucash will check to see whether any bills will "
+"become due soon. If so, it will present the user with a reminder dialogue. The "
+"definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
+"Otherwise gnucash does not check for due bills."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
-#, fuzzy
 msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
 msgstr ""
-"If checked, each invoice will be opened in its own top level window.  If "
-"clear, the invoice will be opened in the current window."
+"If active, each new invoice will be opened in a new window. Otherwise a new "
+"invoice will be opened as a tab in the main window."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
-#, fuzzy
 msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
-"This key indicates whether to search in all items in the current class, or "
-"only in 'active' items in the current class."
+"If active, only the 'active' items in the current class will be searched. "
+"Otherwise all items in the current class will be searched."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
-#, fuzzy
 msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
-"If set to TRUE then tax is included by default in entries of this type. This "
-"setting is inherited by new customers and vendors."
+"If set to active then tax is included by default in entries of this type. "
+"This setting is inherited by new customers and vendors."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
-#, fuzzy
 msgid ""
 "If this field is active then multiple entries in an invoice that transfer to "
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"If this field is TRUE then multiple entries in an invoice that transfer to "
+"If this field is active then multiple entries in an invoice that transfer to "
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 
@@ -2483,9 +2473,8 @@ msgid "Is tax included in this type of business entry?"
 msgstr "Is tax included in this type of business entry?"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
-#, fuzzy
 msgid "Open new invoice in new window"
-msgstr "_Open in a new window"
+msgstr "Open new invoice in new window"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
@@ -2493,30 +2482,27 @@ msgid "Search only in active items"
 msgstr "Search only in active items"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:10
-#, fuzzy
 msgid "Show bills due reminder at startup"
-msgstr "Show bills due reminder at startup."
+msgstr "Show bills due reminder at startup"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:11
-#, fuzzy
 msgid "Show bills due within this many days"
-msgstr "Show bills due within this many days."
+msgstr "Show bills due within this many days"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
-#, fuzzy
 msgid "The number of rows in an invoice"
-msgstr "The number of rows in an invoice."
+msgstr "The number of rows in an invoice"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that Gnucash will check for "
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
 "This field defines the number of days in advance that Gnucash will check for "
-"due bills. Its value is only used if the \"Notify when due\" setting is TRUE."
+"due bills. Its value is only used if the \"Notify when due\" setting is "
+"active."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid ""
@@ -2529,13 +2515,12 @@ msgstr ""
 "to set the size of the window when first opened."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
-#, fuzzy
 msgid ""
 "This setting contains the coordinates describing the last location of the "
 "window. The numbers are the X and Y coordinates of the top left corner of "
 "the window, and the width and height of the window."
 msgstr ""
-"This key contains the coordinates describing the last location of the "
+"This setting contains the coordinates describing the last location of the "
 "window. The numbers are the X and Y coordinates of the top left corner of "
 "the window, and the width and height of the window."
 
@@ -2854,10 +2839,8 @@ msgid "Billable?"
 msgstr "Billable?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:532
-msgid ""
-"Enter the income/expense account for the Entry, or choose one from the list"
-msgstr ""
-"Enter the income/expense account for the Entry, or choose one from the list"
+msgid "Enter the income/expense account for the Entry, or choose one from the list"
+msgstr "Enter the income/expense account for the Entry, or choose one from the list"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:545
 msgid "Enter the type of Entry"
@@ -3829,9 +3812,8 @@ msgid "existing account"
 msgstr "existing account"
 
 #: ../src/gnome/druid-hierarchy.c:766
-#, fuzzy
 msgid "Use Existing"
-msgstr "use existing"
+msgstr "Use Existing"
 
 #: ../src/gnome/druid-loan.c:552
 msgid "Fixed"
@@ -3948,10 +3930,8 @@ msgstr "No conflicts to be resolved."
 
 #: ../src/gnome/druid-merge.c:171
 #, c-format
-msgid ""
-"Error: Please resolve all %d conflicts before trying to commit the data."
-msgstr ""
-"Error: Please resolve all %d conflicts before trying to commit the data."
+msgid "Error: Please resolve all %d conflicts before trying to commit the data."
+msgstr "Error: Please resolve all %d conflicts before trying to commit the data."
 
 #: ../src/gnome/druid-merge.c:223
 msgid "Error: the Commit operation failed."
@@ -3960,28 +3940,20 @@ msgstr "Error: the Commit operation failed."
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
 #: ../src/gnome/druid-merge.c:334
-#, fuzzy, c-format
+#, c-format
 msgid "%i conflict needs to be resolved."
 msgid_plural "%i conflicts need to be resolved."
-msgstr[0] ""
-"\n"
-"%i conflict needs to be resolved.\n"
-msgstr[1] ""
-"\n"
-"%i conflict needs to be resolved.\n"
+msgstr[0] "%i conflict needs to be resolved."
+msgstr[1] "%i conflicts needs to be resolved."
 
 #. Translators: %i is the number of values. This is a
 #. ngettext(3) message.
 #: ../src/gnome/druid-merge.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "%i parameter value for this \"%s\" object."
 msgid_plural "%i parameter values for this \"%s\" object."
-msgstr[0] ""
-"\n"
-"%i parameter values for this \"%s\" object.\n"
-msgstr[1] ""
-"\n"
-"%i parameter values for this \"%s\" object.\n"
+msgstr[0] "%i parameter value for this \"%s\" object."
+msgstr[1] "%i parameter values for this \"%s\" object."
 
 #. FIXME: each g_strdup_printf as well as g_strconcat
 #. will allocate a new string; all of these need to be
@@ -4223,17 +4195,14 @@ msgid "Hide accounts which have a zero total value."
 msgstr "Hide accounts which have a zero total value."
 
 #: ../src/gnome/glade/account.glade.h:37
-#, fuzzy
 msgid ""
 "If you would like an account to have an opening balance, click on the "
 "account and enter the starting balance in the box on the right. All accounts "
 "except Equity and placeholder accounts may have an opening balance."
 msgstr ""
 "If you would like an account to have an opening balance, click on the "
-"account\n"
-"and enter the starting balance in the box on the right. All accounts except "
-"Equity\n"
-"and placeholder accounts may have an opening balance."
+"account and enter the starting balance in the box on the right. All accounts "
+"except Equity and placeholder accounts may have an opening balance."
 
 #: ../src/gnome/glade/account.glade.h:38
 msgid ""
@@ -4320,17 +4289,16 @@ msgid "Select Account"
 msgstr "Select Account"
 
 #: ../src/gnome/glade/account.glade.h:58
-#, fuzzy
 msgid ""
 "Select categories that correspond to the ways that you will use GnuCash.  "
 "Each category you select will cause several accounts to be created.  Select "
 "the categories that are relevant to you.  You can always create additional "
 "accounts by hand later."
 msgstr ""
-"Select categories that correspond to the ways that you will use GnuCash.  \n"
-"Each category you select will cause several accounts to be created.  \n"
-"Select the categories that are relevant to you.  You can always create \n"
-"additional accounts by hand later."
+"Select categories that correspond to the ways that you will use GnuCash.  "
+"Each category you select will cause several accounts to be created.  Select "
+"the categories that are relevant to you.  You can always create additional "
+"accounts by hand later."
 
 #: ../src/gnome/glade/account.glade.h:59
 #: ../src/import-export/qif-import/qif.glade.h:75
@@ -4467,20 +4435,18 @@ msgid "Notes:"
 msgstr "Notes:"
 
 #: ../src/gnome/glade/acctperiod.glade.h:8
-#, fuzzy
 msgid ""
 "Select an accounting period and the closing date for the period.  Books will "
 "be closed on midnight of the selected date."
 msgstr ""
-"Select an accounting period and the closing date for the period. \n"
-"Books will be closed on midnight of the selected date."
+"Select an accounting period and the closing date for the period.  Books will "
+"be closed on midnight of the selected date."
 
 #: ../src/gnome/glade/acctperiod.glade.h:9
 msgid "Setup Accounting Periods"
 msgstr "Setup Accounting Periods"
 
 #: ../src/gnome/glade/acctperiod.glade.h:10
-#, fuzzy
 msgid ""
 "This druid will help you setup and use accouting periods. \n"
 " \n"
@@ -4488,11 +4454,11 @@ msgid ""
 "development.  It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
-"This druid will help you setup and use accouting periods. \n"
+"This druid will help you setup and use accounting periods. \n"
 " \n"
-"Danger: this feature does not work correctly at this time; \n"
-"it is still under development.  It will probably damage your\n"
-"data in such a way that it cannot be repaired!"
+"Danger: this feature does not work correctly at this time; it is still under "
+"development.  It will probably damage your data in such a way that it cannot "
+"be repaired!"
 
 #: ../src/gnome/glade/acctperiod.glade.h:13
 msgid "Title:"
@@ -4654,10 +4620,8 @@ msgid "Future dates are not supported"
 msgstr "Future dates are not supported"
 
 #: ../src/gnome/glade/chart-export.glade.h:4
-msgid ""
-"Select the date to use and click Export to choose the filename and location."
-msgstr ""
-"Select the date to use and click Export to choose the filename and location."
+msgid "Select the date to use and click Export to choose the filename and location."
+msgstr "Select the date to use and click Export to choose the filename and location."
 
 #: ../src/gnome/glade/chart-export.glade.h:5
 msgid ""
@@ -5086,10 +5050,8 @@ msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
 msgstr "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:2
-msgid ""
-"<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
-msgstr ""
-"<span weight=\"bold\" size=\"larger\">Display Welcome Dialogue Again?</span>"
+msgid "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
+msgstr "<span weight=\"bold\" size=\"larger\">Display Welcome Dialogue Again?</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:3
 msgid "C_reate a new set of accounts"
@@ -5492,10 +5454,8 @@ msgstr "Copy the selected transaction"
 
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:239
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
-msgstr ""
-"Create a Scheduled Transaction with the current transaction as a template"
+msgid "Create a Scheduled Transaction with the current transaction as a template"
+msgstr "Create a Scheduled Transaction with the current transaction as a template"
 
 #: ../src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
@@ -5630,10 +5590,8 @@ msgstr "Show transactions on one or two lines"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:277
-msgid ""
-"Show transactions on one or two lines and expand the current transaction"
-msgstr ""
-"Show transactions on one or two lines and expand the current transaction"
+msgid "Show transactions on one or two lines and expand the current transaction"
+msgstr "Show transactions on one or two lines and expand the current transaction"
 
 #: ../src/gnome/glade/register.glade.h:50
 #: ../src/gnome/gnc-plugin-page-register.c:261
@@ -6448,23 +6406,20 @@ msgid "Template Transaction (Read-Only)"
 msgstr "Template Transaction (Read-Only)"
 
 #: ../src/gnome/glade/sched-xact.glade.h:169
-#, fuzzy
 msgid ""
 "The following scheduled transactions have expired.  Select those you wish to "
 "delete."
 msgstr ""
-"The following scheduled transactions have expired.\n"
-"Select those you wish to delete."
+"The following scheduled transactions have expired.  Select those you wish to "
+"delete."
 
 #: ../src/gnome/glade/sched-xact.glade.h:170
-#, fuzzy
 msgid ""
 "The listed Scheduled Transactions are to-be created soon.  Select any which "
 "you would like to create now, and click \"Next\" to create them."
 msgstr ""
-"The listed Scheduled Transactions are to be created soon. \n"
-"Select any which you would like to create now, and click\n"
-"\"Next\" to create them."
+"The listed Scheduled Transactions are to-be created soon.  Select any which "
+"you would like to create now, and click \"Next\" to create them."
 
 #: ../src/gnome/glade/sched-xact.glade.h:171
 msgid ""
@@ -6475,7 +6430,6 @@ msgstr ""
 "created."
 
 #: ../src/gnome/glade/sched-xact.glade.h:172
-#, fuzzy
 msgid ""
 "This is a step-by-step method of creating a loan repayment setup within "
 "GnuCash.  In this Druid, you can input the parameters of your loan and its "
@@ -6485,14 +6439,13 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"This is a step-by-step method of creating a loan repayment setup\n"
-"within GnuCash.  In this Druid, you can input the parameters of\n"
-"your loan and its repayment and give the details of its payback.\n"
-"Using that information, the appropriate Scheduled Transactions\n"
-"will be created.\n"
+"This is a step-by-step method of creating a loan repayment setup within "
+"GnuCash.  In this Druid, you can input the parameters of your loan and its "
+"repayment and give the details of its payback. Using that information, the "
+"appropriate Scheduled Transactions will be created.\n"
 "\n"
-"If you make a mistake or want to make changes later, you can edit\n"
-"the created Scheduled Transactions directly."
+"If you make a mistake or want to make changes later, you can edit the "
+"created Scheduled Transactions directly."
 
 #. ../src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:175 ../intl-scm/guile-strings.c:3246
@@ -6679,10 +6632,8 @@ msgid "New _Price:"
 msgstr "New _Price:"
 
 #: ../src/gnome/glade/stocks.glade.h:12
-msgid ""
-"Select the account for which you want to record a stock split or merger."
-msgstr ""
-"Select the account for which you want to record a stock split or merger."
+msgid "Select the account for which you want to record a stock split or merger."
+msgstr "Select the account for which you want to record a stock split or merger."
 
 #: ../src/gnome/glade/stocks.glade.h:14
 msgid "Stock Account"
@@ -7191,10 +7142,8 @@ msgid "Estimate Budget"
 msgstr "Estimate Budget"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:146
-msgid ""
-"Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
-"Estimate a budget value for the selected accounts from past transactions"
+msgid "Estimate a budget value for the selected accounts from past transactions"
+msgstr "Estimate a budget value for the selected accounts from past transactions"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:169
 msgid "Estimate"
@@ -7262,9 +7211,8 @@ msgid "_Paste Transaction"
 msgstr "_Paste Transaction"
 
 #: ../src/gnome/gnc-plugin-page-register.c:186
-#, fuzzy
 msgid "Dup_licate Transaction"
-msgstr "Duplicate Transaction"
+msgstr "Dup_licate Transaction"
 
 #: ../src/gnome/gnc-plugin-page-register.c:189
 #: ../src/gnome/gnc-split-reg.c:1182
@@ -7322,9 +7270,8 @@ msgid "Exit the exchange rate for the current transaction"
 msgstr "Exit the exchange rate for the current transaction"
 
 #: ../src/gnome/gnc-plugin-page-register.c:238
-#, fuzzy
 msgid "Sche_dule..."
-msgstr "Schedule..."
+msgstr "Sche_dule..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:241
 msgid "_All transactions"
@@ -7606,9 +7553,8 @@ msgstr ""
 "instead of a set of accounts."
 
 #: ../src/gnome/gnucash.desktop.in.h:1
-#, fuzzy
 msgid "GnuCash Finance Management"
-msgstr "GnuCash account name"
+msgstr "GnuCash Finance Management"
 
 #: ../src/gnome/gnucash.desktop.in.h:2
 msgid "Manage your finances, accounts, and investments"
@@ -7631,106 +7577,88 @@ msgid "Order of columns in the dialog"
 msgstr "Order of columns in the dialogue"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:2
-#, fuzzy
 msgid "Show currencies in this dialog"
-msgstr "Whether or not to show currencies in this dialogue."
+msgstr "Show currencies in this dialogue"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:3
-#, fuzzy
 msgid "Show the CUSIP Code (Exchange Specific Data) column"
-msgstr "Whether or not to show the CUSIP Code (Exchange Specific Data) column"
+msgstr "Show the CUSIP Code (Exchange Specific Data) column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:4
-#, fuzzy
 msgid "Show the Full Name column"
-msgstr "Whether or not to show the Full Name column"
+msgstr "Show the Full Name column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:5
-#, fuzzy
 msgid "Show the Namespace column"
-msgstr "Whether or not to show the Namespace column"
+msgstr "Show the Namespace column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:6
-#, fuzzy
 msgid "Show the Print Name column"
-msgstr "Whether or not to show the Print Name column"
+msgstr "Show the Print Name column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:7
-#, fuzzy
 msgid "Show the Quote Flag column"
-msgstr "Whether or not to show the Quote Flag column"
+msgstr "Show the Quote Flag column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:8
-#, fuzzy
 msgid "Show the Quote Source column"
-msgstr "Whether or not to show the Quote Source column"
+msgstr "Show the Quote Source column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:9
-#, fuzzy
 msgid "Show the Quote Timezone column"
-msgstr "Whether or not to show the Quote Timezone column"
+msgstr "Show the Quote Timezone column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:10
-#, fuzzy
 msgid "Show the Unique Name column"
-msgstr "Whether or not to show the Unique Name column"
+msgstr "Show the Unique Name column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:11
-#, fuzzy
 msgid "Show the fraction column"
-msgstr "Whether or not to show the fraction column"
+msgstr "Show the fraction column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:12
-#, fuzzy
 msgid "Show the name column"
-msgstr "Whether or not to show the name column"
+msgstr "Show the name column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:13
-#, fuzzy
 msgid "Show the symbol column"
-msgstr "Whether or not to show the symbol column"
+msgstr "Show the symbol column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_commodities.schemas.in.h:14
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:8
-#, fuzzy
 msgid ""
 "This setting contains a list of name which control the order in which the "
 "columns are listed in the dialog. Names may be reordered or removed from "
 "this list to control which columns appear in the dialog and in what order."
 msgstr ""
-"This key contains a list of name which control the order in which the "
-"columns are listed in the dialogue. Names may be reordered or removed from "
-"this list to control which columns appear in the dialogue and in what order."
+"This setting contains a list of name which control the order in which the "
+"columns are listed in the dialog. Names may be reordered or removed from "
+"this list to control which columns appear in the dialog and in what order."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:1
-#, fuzzy
 msgid "Columns used for sorting"
-msgstr "Table for Exporting"
+msgstr "Columns used for sorting"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:2
-#, fuzzy
 msgid "Default to 'new search' if fewer than this number of items is returned"
-msgstr ""
-"Default to 'new search' if fewer than this number of items is returned."
+msgstr "Default to 'new search' if fewer than this number of items is returned"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:3
 #: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Default to 'new search' if fewer than this number of items is returned."
-msgstr ""
-"Default to 'new search' if fewer than this number of items is returned."
+msgstr "Default to 'new search' if fewer than this number of items is returned."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:4
-#, fuzzy
 msgid ""
 "If active, the new hierarchy dialog will be shown whenever the \"New File\" "
 "menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Show the new hierarchy dialog whenever the \"New File\" menu item is chosen."
+"If active, the new hierarchy dialogue will be shown whenever the \"New File\" "
+"menu item is chosen. Otherwise it will not be shown."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
-msgid ""
-"If active, the new user dialog will be shown. Otherwise it will not be shown."
-msgstr ""
+msgid "If active, the new user dialog will be shown. Otherwise it will not be shown."
+msgstr "If active, the new user dialogue will be shown. Otherwise it will not be shown."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:6
 msgid "Last pathname used"
@@ -7738,16 +7666,15 @@ msgstr "Last pathname used"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:7
 msgid "New hierarchy dialog on \"New File\""
-msgstr ""
+msgstr "New hierarchy dialogue on \"New File\""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:9
-#, fuzzy
 msgid "Show the new user dialog"
 msgstr "Show the new user dialogue"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:10
 msgid "Sort column ascending or descending"
-msgstr ""
+msgstr "Sort column ascending or descending"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:11
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:6
@@ -7766,42 +7693,38 @@ msgid "The width and size of the dialog when it was last closed."
 msgstr "The width and size of the dialogue when it was last closed."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:13
-#, fuzzy
 msgid ""
 "This field contains the last pathname used by this dialog. It will be used "
 "as the initial filename/pathname the next time this dialog is opened."
 msgstr ""
-"This key contains the last pathname used by this dialogue. It will be used "
+"This field contains the last pathname used by this dialogue. It will be used "
 "as the initial filename/pathname the next time this dialogue is opened."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:14
-#, fuzzy
 msgid ""
 "This setting indicates how the key column is sorted. Possible values for "
 "this setting are 'ascending' and 'descending'."
 msgstr ""
-"This key indicates how the key column is sorted. Legal values for this key "
-"are 'ascending' and 'descending'."
+"This setting indicates how the key column is sorted. Possible values for "
+"this setting are 'ascending' and 'descending'."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:15
-#, fuzzy
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
-"This key indicates whether to search in all items in the current class, or "
-"only in 'active' items in the current class."
+"This setting indicates whether to search in all items in the current class, "
+"or only in 'active' items in the current class."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
-#, fuzzy
 msgid ""
 "This setting indicates which column in the tree is used for sorting. "
 "Possible values for this setting are the name of any column in this dialog "
 "(see the column_order key) or the keyword 'none'."
 msgstr ""
-"This key indicates which column in the tree is used for sorting. Legal "
-"values for this key are the name of any column in this dialogue (see the "
-"column_order key) or the keyword 'none'."
+"This setting indicates which column in the tree is used for sorting. "
+"Possible values for this setting are the name of any column in this dialogue "
+"(see the column_order key) or the keyword 'none'."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:17
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
@@ -7816,74 +7739,62 @@ msgid "Window position"
 msgstr "Window position"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:2
-#, fuzzy
 msgid "Show the Price column"
-msgstr "Whether or not to show the Price column"
+msgstr "Show the Price column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:3
-#, fuzzy
 msgid "Show the Source column"
-msgstr "Whether or not to show the Source column"
+msgstr "Show the Source column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:4
-#, fuzzy
 msgid "Show the Type column"
-msgstr "Whether or not to show the Type column"
+msgstr "Show the Type column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:5
-#, fuzzy
 msgid "Show the commodity column"
-msgstr "Whether or not to show the commodity column"
+msgstr "Show the commodity column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:6
-#, fuzzy
 msgid "Show the currency column"
-msgstr "Whether or not to show the currency column"
+msgstr "Show the currency column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:7
-#, fuzzy
 msgid "Show the date column"
-msgstr "Whether or not to show the date column"
+msgstr "Show the date column"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:9
 msgid "This setting enables the Price column."
-msgstr ""
+msgstr "This setting enables the Price column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:10
-#, fuzzy
 msgid "This setting enables the Source column."
-msgstr "Whether or not to show the Source column"
+msgstr "This setting enables the Source column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:11
 msgid "This setting enables the Type column."
-msgstr ""
+msgstr "This setting enables the Type column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
-#, fuzzy
 msgid "This setting enables the commodity column."
-msgstr "Whether or not to show the commodity column"
+msgstr "This setting enables the commodity column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
-#, fuzzy
 msgid "This setting enables the currency column."
-msgstr "Whether or not to show the currency column"
+msgstr "This setting enables the currency column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:14
 msgid "This setting enables the date column."
-msgstr ""
+msgstr "This setting enables the date column."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:1
-#, fuzzy
 msgid "Custom date format"
-msgstr "Custom format"
+msgstr "Custom date format"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:2
-#, fuzzy
 msgid "Date format to use"
-msgstr "The date format to use."
+msgstr "Date format to use"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:3
-#, fuzzy
 msgid ""
 "If the 'date_format' is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
@@ -7892,49 +7803,46 @@ msgid ""
 msgstr ""
 "If the 'date_format' is set to indicate a custom date format, this value is "
 "used as an argument to strftime to produce the date to be printed. It may be "
-"any valid strftime string."
+"any valid strftime string; for more information about this format, read the "
+"manual page of strftime by \"man 3 strftime\"."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
-#, fuzzy
 msgid "Index of predefined check format to use"
-msgstr "The predefined cheque format to use"
+msgstr "Index of predefined check format to use"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:5
-#, fuzzy
 msgid ""
 "On preprinted checks containing multiple checks per page, this setting "
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
 msgstr ""
-"On preprinted cheques containing multiple cheques per page, this key "
-"specifies which cheque position to print. The legal values are 0, 1 and 2, "
+"On preprinted cheques containing multiple cheques per page, this setting "
+"specifies which cheque position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom cheques on the page."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:6
-#, fuzzy
 msgid "Position of check amount in numbers"
-msgstr "Where to print the cheque amount in numbers."
+msgstr "Position of cheque amount in numbers"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:7
-#, fuzzy
 msgid "Position of check amount in words"
-msgstr "Where to print the cheque amount in words."
+msgstr "Position of cheque amount in words"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:8
 msgid "Position of check on page"
-msgstr ""
+msgstr "Position of check on page"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:9
 msgid "Position of date line"
-msgstr ""
+msgstr "Position of date line"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:10
 msgid "Position of memo line"
-msgstr ""
+msgstr "Position of memo line"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:11
 msgid "Position of payee name"
-msgstr ""
+msgstr "Position of payee name"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:12
 msgid "This is the numerical identifier of the predefined date format to use."
@@ -8005,35 +7913,30 @@ msgstr ""
 "0-based index into the list of known cheque formats."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:20
-#, fuzzy
 msgid "Which check position to print"
-msgstr "Which cheque position to print."
+msgstr "Which cheque position to print"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:1
-#, fuzzy
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"After reconciling a credit card account, prompt the user to enter a credit "
-"card payment."
+"If active, after reconciling a credit card account, prompt the user to enter "
+"a credit card payment. Otherwise do not prompt the user for this."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
-#, fuzzy
 msgid ""
 "If active, all transactions marked as cleared in the register will appear "
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
-"This setting controls whether or not any transactions are selected when a "
-"reconciliation dialog is created. If set to TRUE, then all transactions "
-"marked as cleared in the register will appear already selected in this "
-"dialog. If FALSE, then no transactions will be initially selected."
+"If active, all transactions marked as cleared in the register will appear "
+"already selected in the reconcile dialogue. Otherwise no transactions will be "
+"initially selected."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
-#, fuzzy
 msgid "Pre-select cleared transactions"
-msgstr "Pre-select cleared transactions."
+msgstr "Pre-select cleared transactions"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:4
 #: ../src/gnome-utils/glade/preferences.glade.h:89
@@ -8049,20 +7952,20 @@ msgstr ""
 "Liability accounts."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
-#, fuzzy
 msgid "Prompt for credit card payment"
 msgstr "Prompt for credit card payment"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:6
-#, fuzzy
 msgid "Prompt for interest charges"
-msgstr "Prompt for interest charges."
+msgstr "Prompt for interest charges"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:1
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
+"Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialogue "
+"will be shown. Otherwise it will not be shown."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_totd.schemas.in.h:2
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -8073,77 +7976,64 @@ msgid "The next tip to show."
 msgstr "The next tip to show."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:1
-#, fuzzy
 msgid "\"Enter\" key moves to bottom of register"
-msgstr "\"Enter\" key moves to bottom of register."
+msgstr "\"Enter\" key moves to bottom of register"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:2
 msgid "Accounts to reverse the balance"
 msgstr "Accounts to reverse the balance"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:3
-#, fuzzy
 msgid "Automatically insert a decimal point"
-msgstr "Automatically insert a decimal point."
+msgstr "Automatically insert a decimal point"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
-#, fuzzy
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "Automatically raise the list of accounts or actions during input."
+msgstr "Automatically raise the list of accounts or actions during input"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:5
-#, fuzzy
 msgid "Character to use as separator between account names"
-msgstr "Which character to use between account names"
+msgstr "Character to use as separator between account names"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:6
-#, fuzzy
 msgid "Color all lines of a transaction the same"
-msgstr "Colour all lines of a transaction the same."
+msgstr "Colour all lines of a transaction the same"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:7
 msgid "Color the register as specified by the system theme"
 msgstr "Colour the register as specified by the system theme"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:8
-#, fuzzy
 msgid "Compress the data file"
-msgstr "Compress the data files."
+msgstr "Compress the data file"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:9
-#, fuzzy
 msgid "Create a new window for each new register"
-msgstr "Create a new window for each new register."
+msgstr "Create a new window for each new register"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:10
-#, fuzzy
 msgid "Create a new window for each new report"
-msgstr "Create a new window for each new report."
+msgstr "Create a new window for each new report"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:11
-#, fuzzy
 msgid "Date format choice"
-msgstr "Date format:"
+msgstr "Date format choice"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:12
-#, fuzzy
 msgid "Default currency for new accounts"
-msgstr "Enter the currency used for new accounts"
+msgstr "Default currency for new accounts"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:13
-#, fuzzy
 msgid "Default currency for new reports"
-msgstr "Default currency."
+msgstr "Default currency for new reports"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:14
-#, fuzzy
 msgid "Default view style for new register"
-msgstr "Create a new window for each new register."
+msgstr "Default view style for new register"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:15
-#, fuzzy
 msgid "Delete old log/backup files after this many days (0 = never)"
-msgstr "Delete old log/backup files after this many days (0 = never)."
+msgstr "Delete old log/backup files after this many days (0 = never)"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:16
 #: ../src/gnome-utils/glade/preferences.glade.h:55
@@ -8151,156 +8041,138 @@ msgid "Display negative amounts in red"
 msgstr "Display negative amounts in red"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:17
-#, fuzzy
 msgid "Enables Euro support"
-msgstr "_Enable EURO support"
+msgstr "Enables Euro support"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:18
-#, fuzzy
 msgid "Enables additional support for the European Union EURO currency."
-msgstr "Enables support for the European Union EURO currency"
+msgstr "Enables additional support for the European Union EURO currency."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:19
 msgid "Enables file compression when writing the data file."
-msgstr ""
+msgstr "Enables file compression when writing the data file."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:20
-#, fuzzy
 msgid ""
 "If active all lines that make up a single transaction will use the same "
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
-"If TRUE all lines that make up a single transaction will use the same colour "
-"for their background. If FALSE, the background colours are alternated on "
-"each line."
+"If active all lines that make up a single transaction will use the same "
+"colour for their background. Otherwise the background colours are alternated "
+"on each line."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
-#, fuzzy
 msgid ""
 "If active, Gnucash will automatically insert a decimal point into values "
 "that are entered without one. Otherwise Gnucash will not modify entered "
 "numbers."
 msgstr ""
-"If TRUE, Gnucash will automatically insert a decimal point into values that "
-"are entered without one. If FALSE, Gnucash will not modify entered numbers."
+"If active, Gnucash will automatically insert a decimal point into values "
+"that are entered without one. Otherwise Gnucash will not modify entered "
+"numbers."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
-#, fuzzy
 msgid ""
 "If active, a \"close\" button will be displayed on any notebook tab that may "
 "be closed. Otherwise, no such button will be shown on the tab. Regardless of "
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
-"Setting this value to TRUE tells Gnucash to show a \"close\" button on any "
-"notebook tab that may be closed. If FALSE, pages must be closed via the "
-"\"close\" menu item or the \"close\" button on toolbar."
+"If active, a \"close\" button will be displayed on any notebook tab that may "
+"be closed. Otherwise, no such button will be shown on the tab. Regardless of "
+"this setting, pages can always be closed via the \"close\" menu item or the "
+"\"close\" button on toolbar."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
-#, fuzzy
 msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"If checked, each register will be opened in its own top level window.  If "
-"clear, the register will be opened in the current window."
+"If active, each new register will be opened in a new window. Otherwise each "
+"new register will be opened as a tab in the main window."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:24
-#, fuzzy
 msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
 msgstr ""
-"If checked, each report will be opened in its own top level window.  If "
-"clear, the report will be opened in the current window."
+"If active, each new report will be opened in its own window. Otherwise new "
+"reports will be opened as tabs in the main window."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:25
-#, fuzzy
 msgid ""
 "If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
-"Setting this value to TRUE tells Gnucash to use the formal accounting labels "
-"\"Credit\" and \"Debit\" when designating fields on screen. If false, "
-"Gnucash will use informal labels such as Increase/Decrease, \"Funds In\"/"
-"\"Funds Out\", etc."
+"If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
+"when designating fields on screen. Otherwise, informal labels such as "
+"Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
-#, fuzzy
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
 msgstr ""
-"If checked, pressing the 'Enter' key will move to the blank transaction at "
-"the bottom of the register.  If clear, pressing the 'Enter' key will move "
-"down one row."
+"If active, pressing the enter key will move to the bottom of the register. "
+"Otherwise pressing the enter key will move to the next transaction line."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
-#, fuzzy
 msgid ""
 "If active, the register will be colored as specified by the system theme. "
 "This can be overridden to provide custom colors by editing the gtkrc file in "
 "the users home directory. Otherwise the standard register colors will be "
 "used that GnuCash has always used."
 msgstr ""
-"A value of TRUE says to colour the register as specified by the system "
-"theme. This can be overridden to provide custom colours by editing the gtkrc "
-"file in the users home directory. A value of FALSE says to show the standard "
-"register colours that GnuCash has always used."
+"If active, the register will be coloured as specified by the system theme. "
+"This can be overridden to provide custom colours by editing the gtkrc file in "
+"the users home directory. Otherwise the standard register colours will be "
+"used that GnuCash has always used."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit gnucash. Otherwise the sizes will not be saved."
 msgstr ""
-"Save the size and location of each dialog window when it is closed. The "
-"sizes and locations of content windows will be remembered when you quit "
-"gnucash."
+"If active, the size and location of each dialog window will be saved when it "
+"is closed. The sizes and locations of content windows will be remembered "
+"when you quit gnucash. Otherwise the sizes will not be saved."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
-#, fuzzy
-msgid ""
-"If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Use a 24 hour (instead of a 12 hour) time format."
+msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
+msgstr "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid "Labels on toolbar buttons"
-msgstr ""
+msgstr "Labels on toolbar buttons"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:31
-#, fuzzy
 msgid "Number of automatic decimal places"
-msgstr "_Automatic Decimal Point"
+msgstr "Number of automatic decimal places"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:32
-#, fuzzy
 msgid "Save window sizes and locations"
-msgstr "Save window sizes and locations."
+msgstr "Save window sizes and locations"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:33
-#, fuzzy
 msgid "Show close buttons on notebook tabs"
-msgstr "Show close button on notebook tabs."
+msgstr "Show close buttons on notebook tabs"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:34
-#, fuzzy
 msgid ""
 "Show horizontal borders between cells in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
-"Show horizontal borders between cells in a register. If TRUE the border "
-"between cells will be indicated with a heavy line. If FALSE, the border "
+"Show horizontal borders between cells in a register. If active the border "
+"between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
-#, fuzzy
 msgid "Show horizontal borders in a register"
-msgstr "Show horizontal borders in a register."
+msgstr "Show horizontal borders in a register"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:37
 msgid ""
@@ -8313,30 +8185,26 @@ msgstr ""
 "changed at any time via the \"View->Double Line\" menu item."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
-#, fuzzy
 msgid ""
 "Show vertical borders between cells in a register. If active the border "
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
-"Show vertical borders between cells in a register. If TRUE the border "
-"between cells will be indicated with a heavy line. If FALSE, the border "
+"Show vertical borders between cells in a register. If active the border "
+"between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
-#, fuzzy
 msgid "Show vertical borders in a register"
-msgstr "Show vertical borders in a register."
+msgstr "Show vertical borders in a register"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:40
-#, fuzzy
 msgid "Source of default account currency"
-msgstr "Set the default QIF account name"
+msgstr "Source of default account currency"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:41
-#, fuzzy
 msgid "Source of default report currency"
-msgstr "<b>Default Report Currency</b>"
+msgstr "Source of default report currency"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:43
 msgid ""
@@ -8349,7 +8217,6 @@ msgstr ""
 "to set the size of the window when first opened."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:44
-#, fuzzy
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The "
@@ -8358,19 +8225,20 @@ msgid ""
 "transaction to show all splits. The \"journal\" setting shows all "
 "transactions in expanded form."
 msgstr ""
-"This field specifies the type of ledger to use when first opening a register "
-"window. Legal values are \"ledger\", \"auto-ledger\" and \"journal\". The "
-"ledger setting says to show each transaction on one or two lines. The auto-"
-"ledger setting does the same, but also expands only the current transaction "
-"to show all splits. The journal setting shows all transactions in expanded "
-"form."
+"This field specifies the default view style when opening a new register "
+"window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The "
+"\"ledger\" setting says to show each transaction on one or two lines. The "
+"\"auto-ledger\" setting does the same, but also expands only the current "
+"transaction to show all splits. The \"journal\" setting shows all "
+"transactions in expanded form."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:45
-#, fuzzy
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "How many automatic decimal places will be filled in."
+msgstr ""
+"This field specifies the number of automatic decimal places that will be "
+"filled in."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid ""
@@ -8389,20 +8257,18 @@ msgstr ""
 "balances."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
-#, fuzzy
 msgid ""
 "This setting chooses the way dates are displayed in GnuCash. Possible values "
 "for this setting are \"locale\" to use the system locale setting, \"ce\" for "
 "Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" "
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
-"This setting controls the way dates are displayed in GnuCash. Legal values "
+"This setting chooses the way dates are displayed in GnuCash. Possible values "
 "for this setting are \"locale\" to use the system locale setting, \"ce\" for "
 "Continental Europe style dates, \"iso\" for ISO 8601 standard dates , \"uk\" "
 "for United Kingdom style dates, and \"us\" for United States style dates."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:48
-#, fuzzy
 msgid ""
 "This setting controls how the labels on toolbar buttons are shown. If set to "
 "\"system\" then GnuCash will use the desktop setting for how to draw toolbar "
@@ -8411,12 +8277,12 @@ msgid ""
 "\" then both icons and labels will be shown. If set to \"both-horiz\" then "
 "icons will be shown for all buttons with labels added on important buttons."
 msgstr ""
-"This setting controls how the toolbar is drawn. If set to \"system\" then "
-"GnuCash will use the desktop setting for how to draw toolbar buttons. If set "
-"to \"icon\" then only icons will be show on toolbar buttons.. If set to "
-"\"text\" only the labels will be shown. If set to \"both\" then both icons "
-"and labels will be shown. If set to \"both-horiz\" then icons will be shown "
-"for all buttons with labels added on important buttons."
+"This setting controls how the labels on toolbar buttons are shown. If set to "
+"\"system\" then GnuCash will use the desktop setting for how to draw toolbar "
+"buttons. If set to \"icon\" then only icons will be show on toolbar "
+"buttons.. If set to \"text\" only the labels will be shown. If set to \"both"
+"\" then both icons and labels will be shown. If set to \"both-horiz\" then "
+"icons will be shown for all buttons with labels added on important buttons."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:49
 msgid ""
@@ -8431,131 +8297,114 @@ msgstr ""
 "by the currency_other key."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:50
-#, fuzzy
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
 "the user's locale setting. If set to \"other\", Gnucash will use the setting "
 "specified by the currency_other key."
 msgstr ""
-"This setting controls the default currency used for new accounts. If set to "
-"\"locale\" then GnuCash will retrieve the default currency from the user's "
-"locale setting. If set to \"other\", Gnucash will use the setting specified "
-"by the currency_other key."
+"This setting controls the source of the default currency for new accounts. "
+"If set to \"locale\" then GnuCash will retrieve the default currency from "
+"the user's locale setting. If set to \"other\", Gnucash will use the setting "
+"specified by the currency_other key."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:51
-#, fuzzy
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible choices are \"colon\" \"slash\", \"backslash\", "
 "\"dash\" and \"period\"."
 msgstr ""
 "This setting determines the character that will be used between components "
-"of an account name. The legal settings are \"colon\" \"slash\", \"backslash"
-"\", \"dash\" and \"period\"."
+"of an account name. Possible choices are \"colon\" \"slash\", \"backslash\", "
+"\"dash\" and \"period\"."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
-#, fuzzy
 msgid ""
 "This setting specifies the default currency used for new accounts if the "
 "currency_choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
-"This setting controls the default currency used for new accounts if the "
-"currency_choice key is set to \"other\". This field should contain the three "
-"letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
+"This setting specifies the default currency used for new accounts if the "
+"currency_choice setting is set to \"other\". This field must contain the "
+"three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
-#, fuzzy
 msgid ""
 "This setting specifies the default currency used for reports if the "
 "currency_choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
-"This setting controls the default currency used for reports if the "
-"currency_choice key is set to \"other\". This field should contain the three "
-"letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
+"This setting specifies the default currency used for reports if the "
+"currency_choice setting is set to \"other\". This field must contain the "
+"three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
 msgstr ""
+"This setting specifies the number of days after which old log/backup files "
+"will be deleted (0 = never)."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
-#, fuzzy
 msgid "Use 24 hour time format"
-msgstr "Use a 24 hour (instead of a 12 hour) time format."
+msgstr "Use 24 hour time format"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:56
-#, fuzzy
 msgid "Use formal account labels"
-msgstr "Use formal accounting labels."
+msgstr "Use formal account labels"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:1
-#, fuzzy
 msgid "Change contents of reconciled split"
-msgstr "Change contents of reconciled split."
+msgstr "Change contents of reconciled split"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:2
-#, fuzzy
 msgid "Commit changes to a invoice_entry"
-msgstr "Commit changes to a invoice_entry."
+msgstr "Commit changes to a invoice_entry"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:3
-#, fuzzy
 msgid "Commit changes to a transaction"
-msgstr "Commit changes to a transaction."
+msgstr "Commit changes to a transaction"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:4
-#, fuzzy
 msgid "Delete a commodity"
-msgstr "Delete a commodity."
+msgstr "Delete a commodity"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:5
-#, fuzzy
 msgid "Delete a commodity and prices"
-msgstr "Delete a commodity and prices."
+msgstr "Delete a commodity and prices"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:6
-#, fuzzy
 msgid "Delete a transaction"
-msgstr "Delete a transaction."
+msgstr "Delete a transaction"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
-#, fuzzy
 msgid "Delete multiple price quotes"
-msgstr "Delete multiple price quotes."
+msgstr "Delete multiple price quotes"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
-#, fuzzy
 msgid "Duplicating a changed invoice_entry"
-msgstr "Duplicating a changed invoice_entry."
+msgstr "Duplicating a changed invoice_entry"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:9
-#, fuzzy
 msgid "Duplicating a changed transaction"
-msgstr "Duplicating a changed transaction."
+msgstr "Duplicating a changed transaction"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:10
-#, fuzzy
 msgid "Mark transaction split as unreconciled"
-msgstr "Mark transaction split as unreconciled."
+msgstr "Mark transaction split as unreconciled"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:11
-#, fuzzy
 msgid "Read only register"
-msgstr "Read only register."
+msgstr "Read only register"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:12
-#, fuzzy
 msgid "Remove a splits from a transaction"
-msgstr "Remove a split from a transaction."
+msgstr "Remove a splits from a transaction"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:13
-#, fuzzy
 msgid "Remove all the splits from a transaction"
-msgstr "Remove all the splits from a transaction."
+msgstr "Remove all the splits from a transaction"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:14
 msgid ""
@@ -8592,8 +8441,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr ""
-"This dialogue is presented before allowing you to delete a transaction."
+msgstr "This dialogue is presented before allowing you to delete a transaction."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:19
 msgid ""
@@ -8688,23 +8536,20 @@ msgstr ""
 "transaction. The changed data must be either saved or discarded."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
-#, fuzzy
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr "Ending date (in seconds from Jan 1, 1970)."
+msgstr "Ending date (in seconds from Jan 1, 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
-#, fuzzy
 msgid "Ending time period identifier"
-msgstr "Ending time period identifier."
+msgstr "Ending time period identifier"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:3
-#, fuzzy
 msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
 msgstr ""
-"If checked, non-currency commodities will be shown in the summary bar.  If "
-"clear, only currencies will be shown."
+"If active, non currency commodities (stocks) will be shown. Otherwise they "
+"will be hidden."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
 msgid "Profit/loss ending date type"
@@ -8715,68 +8560,60 @@ msgid "Profit/loss starting date type"
 msgstr "Profit/loss starting date type"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
-msgid ""
-"Show a grand total of all accounts converted to the default report currency"
-msgstr ""
-"Show a grand total of all accounts converted to the default report currency."
+msgid "Show a grand total of all accounts converted to the default report currency"
+msgstr "Show a grand total of all accounts converted to the default report currency."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
 msgstr "Show non currency commodities"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:8
-#, fuzzy
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr "Starting date (in seconds from Jan 1, 1970)."
+msgstr "Starting date (in seconds from Jan 1, 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:9
-#, fuzzy
 msgid "Starting time period identifier"
-msgstr "Starting time period identifier."
+msgstr "Starting time period identifier"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
-#, fuzzy
 msgid ""
 "This setting controls the ending date sed in profit/loss calculations if the "
 "end_choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
-"This setting controls the ending date sed in profit/loss calculations if the "
-"end_choice key is set to \"absolute\". This field should contain a date as "
-"represented in seconds from January 1st, 1970."
+"This setting controls the ending date set in profit/loss calculations if the "
+"end_choice setting is set to \"absolute\". This field should contain a date "
+"as represented in seconds from January 1st, 1970."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
-#, fuzzy
 msgid ""
 "This setting controls the ending date sed in profit/loss calculations if the "
 "end_choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
-"This setting controls the ending date sed in profit/loss calculations if the "
-"end_choice key is set to anything other than \"absolute\". This field should "
-"contain a value between 0 and 8."
+"This setting controls the ending date set in profit/loss calculations if the "
+"end_choice setting is set to anything other than \"absolute\". This field "
+"should contain a value between 0 and 8."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
-#, fuzzy
 msgid ""
 "This setting controls the starting date sed in profit/loss calculations if "
 "the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
-"This setting controls the starting date sed in profit/loss calculations if "
-"the start_choice key is set to \"absolute\". This field should contain a "
+"This setting controls the starting date set in profit/loss calculations if "
+"the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
-#, fuzzy
 msgid ""
 "This setting controls the starting date sed in profit/loss calculations if "
 "the start_choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
-"This setting controls the starting date sed in profit/loss calculations if "
-"the start_choice key is set to anything other than \"absolute\". This field "
-"should contain a value between 0 and 8."
+"This setting controls the starting date set in profit/loss calculations if "
+"the start_choice setting is set to anything other than \"absolute\". This "
+"field should contain a value between 0 and 8."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:14
 msgid ""
@@ -8803,15 +8640,14 @@ msgstr ""
 "retrieve the starting date specified by the start_period key."
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:1
-#, fuzzy
 msgid ""
 "This setting contains the width of the named column in the most recently "
 "closed register window. Changing these values will change the sizes of the "
 "columns in the next opened register"
 msgstr ""
-"This key contains the width of the named column in the most recently closed "
-"register window. Changing these values will change the sizes of the columns "
-"in the next opened register"
+"This setting contains the width of the named column in the most recently "
+"closed register window. Changing these values will change the sizes of the "
+"columns in the next opened register"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_register.schemas.in.h:2
 msgid "Width of a column in the dialog"
@@ -8959,10 +8795,8 @@ msgid "Add results to current search"
 msgstr "Add results to current search"
 
 #: ../src/gnome-search/search.glade.h:4
-msgid ""
-"Choose whether to search all your data or only that marked as \"active\""
-msgstr ""
-"Choose whether to search all your data or only that marked as \"active\""
+msgid "Choose whether to search all your data or only that marked as \"active\""
+msgstr "Choose whether to search all your data or only that marked as \"active\""
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
@@ -9479,10 +9313,8 @@ msgstr ""
 "which can only be traded in whole numbers, enter 1."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:8
-msgid ""
-"Enter the ticker symbol or currency code for the commodity. Example: USD"
-msgstr ""
-"Enter the ticker symbol or currency code for the commodity. Example: GBP"
+msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgstr "Enter the ticker symbol or currency code for the commodity. Example: GBP"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid ""
@@ -9511,9 +9343,8 @@ msgid "Select user information here..."
 msgstr "Select user information here..."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:14
-#, fuzzy
 msgid "Si_ngle:"
-msgstr "Sin_gle"
+msgstr "Si_ngle:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:15
 msgid ""
@@ -10014,9 +9845,8 @@ msgid "<b>Start Date</b>"
 msgstr "<b>Start Date</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:29
-#, fuzzy
 msgid "<b>Summarybar Content</b>"
-msgstr "<b>Content</b>"
+msgstr "<b>Summarybar Content</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:30
 msgid "<b>Time Format</b>"
@@ -10035,9 +9865,8 @@ msgid "Ab_solute:"
 msgstr "Ab_solute:"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:34
-#, fuzzy
 msgid "Accounting Period"
-msgstr "Setup Accounting Periods"
+msgstr "Accounting Period"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:36
 msgid ""
@@ -10314,10 +10143,8 @@ msgstr ""
 "'Close' menu item."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:97
-msgid ""
-"Show a grand total of all accounts converted to the default report currency."
-msgstr ""
-"Show a grand total of all accounts converted to the default report currency."
+msgid "Show a grand total of all accounts converted to the default report currency."
+msgstr "Show a grand total of all accounts converted to the default report currency."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:98
 msgid "Show all transactions on one line. (Two in double line mode.)"
@@ -10807,10 +10634,8 @@ msgstr "The file/URL %s does not contain GnuCash data or the data is corrupt."
 
 #: ../src/gnome-utils/gnc-file.c:307
 #, c-format
-msgid ""
-"The server at URL %s experienced an error or encountered bad or corrupt data."
-msgstr ""
-"The server at URL %s experienced an error or encountered bad or corrupt data."
+msgid "The server at URL %s experienced an error or encountered bad or corrupt data."
+msgstr "The server at URL %s experienced an error or encountered bad or corrupt data."
 
 #: ../src/gnome-utils/gnc-file.c:313
 #, c-format
@@ -10876,8 +10701,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:359
 #, c-format
 msgid "The selected QSF Object file %s requires a map but it was not provided."
-msgstr ""
-"The selected QSF Object file %s requires a map but it was not provided."
+msgstr "The selected QSF Object file %s requires a map but it was not provided."
 
 #: ../src/gnome-utils/gnc-file.c:365
 #, c-format
@@ -10893,8 +10717,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-file.c:373
 #, c-format
 msgid "The selected file %s is a QSF map and cannot be opened as a QSF object."
-msgstr ""
-"The selected file %s is a QSF map and cannot be opened as a QSF object."
+msgstr "The selected file %s is a QSF map and cannot be opened as a QSF object."
 
 #: ../src/gnome-utils/gnc-file.c:379
 #, c-format
@@ -10943,8 +10766,7 @@ msgstr "The file %s could not be found."
 
 #: ../src/gnome-utils/gnc-file.c:417
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr ""
-"This file is from an older version of GnuCash. Do you want to continue?"
+msgstr "This file is from an older version of GnuCash. Do you want to continue?"
 
 #: ../src/gnome-utils/gnc-file.c:423
 #, c-format
@@ -11220,18 +11042,16 @@ msgid "_Check & Repair"
 msgstr "_Check & Repair"
 
 #: ../src/gnome-utils/gnc-main-window.c:273
-#, fuzzy
 msgid "Reset _Warnings..."
-msgstr "_Reset Warnings..."
+msgstr "Reset _Warnings..."
 
 #: ../src/gnome-utils/gnc-main-window.c:274
 msgid "Reset the state of all warning message so they will be shown again."
 msgstr "Reset the state of all warning message so they will be shown again."
 
 #: ../src/gnome-utils/gnc-main-window.c:276
-#, fuzzy
 msgid "Re_name Page"
-msgstr "Rename Page"
+msgstr "Re_name Page"
 
 #: ../src/gnome-utils/gnc-main-window.c:277
 msgid "Rename this page."
@@ -11556,9 +11376,8 @@ msgid "Balance (Report)"
 msgstr "Balance (Report)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:490
-#, fuzzy
 msgid "Balance (Period)"
-msgstr "Balance (Report)"
+msgstr "Balance (Period)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:504
 msgid "Cleared (Report)"
@@ -11602,9 +11421,8 @@ msgid "Total (Report)"
 msgstr "Total (Report)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:548
-#, fuzzy
 msgid "Total (Period)"
-msgstr ". (_Period)"
+msgstr "Total (Period)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:562
 msgid "Tax Info"
@@ -11618,7 +11436,7 @@ msgstr "Placeholder"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-account.c:571
 msgid "Column letter for 'Placeholder'|P"
-msgstr ""
+msgstr "Column letter for 'Placeholder'|P"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:480
 msgid "Namespace"
@@ -11648,7 +11466,7 @@ msgstr "Get Quotes"
 #. must only contain the part after the | character.
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:519
 msgid "Column letter for 'Get Quotes'|Q"
-msgstr ""
+msgstr "Column letter for 'Get Quotes'|Q"
 
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:525
 #: ../src/gnome-utils/gnc-tree-view-price.c:436
@@ -11701,26 +11519,22 @@ msgid "Number of files in history"
 msgstr "Number of files in history"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:4
-#, fuzzy
 msgid "This field contains the full path of the most recently opened file."
-msgstr "This key contains the full path of the most recently opened file."
+msgstr "This field contains the full path of the most recently opened file."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:5
-#, fuzzy
-msgid ""
-"This field contains the full path of the next most recently opened file."
-msgstr "This key contains the full path of the next most recently opened file."
+msgid "This field contains the full path of the next most recently opened file."
+msgstr "This field contains the full path of the next most recently opened file."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
-#, fuzzy
 msgid ""
 "This setting contains the number of files to keep in the Recently Opened "
 "Files menu. This value may be set to zero to disable the file history. This "
 "number has a maximum value of 10."
 msgstr ""
-"This key contains the number of files to keep in the Recently Opened Files "
-"menu. This value may be set to zero to disable the file history. This number "
-"has a maximum value of 10."
+"This setting contains the number of files to keep in the Recently Opened "
+"Files menu. This value may be set to zero to disable the file history. This "
+"number has a maximum value of 10."
 
 #: ../src/gnome-utils/window-main-summarybar.c:316
 #, c-format
@@ -11796,10 +11610,8 @@ msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Are you sure you want to delete the selected transaction?"
 
 #: ../src/gnome/window-reconcile.c:1183
-msgid ""
-"Change the reconcile information including statement date and ending balance."
-msgstr ""
-"Change the reconcile information including statement date and ending balance."
+msgid "Change the reconcile information including statement date and ending balance."
+msgstr "Change the reconcile information including statement date and ending balance."
 
 #: ../src/gnome/window-reconcile.c:1193 ../src/gnome/window-reconcile.c:1436
 msgid "Finish the reconciliation of this account"
@@ -11958,8 +11770,7 @@ msgstr ""
 #: ../src/import-export/binary-import/druid-commodity.c:421
 #: ../src/import-export/qif-import/druid-qif-import.c:1396
 msgid "You must enter an existing national currency or enter a different type."
-msgstr ""
-"You must enter an existing national currency or enter a different type."
+msgstr "You must enter an existing national currency or enter a different type."
 
 #: ../src/import-export/generic-import.glade.h:1
 msgid "\"A\""
@@ -12192,8 +12003,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:57
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr ""
-"This transaction requires your intervention or it will NOT be imported."
+msgstr "This transaction requires your intervention or it will NOT be imported."
 
 #: ../src/import-export/generic-import.glade.h:58
 msgid ""
@@ -12212,10 +12022,8 @@ msgid "Use _bayesian matching"
 msgstr "Use _bayesian matching"
 
 #: ../src/import-export/generic-import.glade.h:61
-msgid ""
-"Use bayesian algorithms to match new transactions with existing accounts."
-msgstr ""
-"Use bayesian algorithms to match new transactions with existing accounts."
+msgid "Use bayesian algorithms to match new transactions with existing accounts."
+msgstr "Use bayesian algorithms to match new transactions with existing accounts."
 
 #: ../src/import-export/generic-import.glade.h:62
 msgid "Yellow"
@@ -12978,10 +12786,8 @@ msgstr "Issue a new direct debit note online through HBCI/AqBanking"
 
 #: ../src/import-export/hbci/hbci-interaction.c:347
 #, c-format
-msgid ""
-"The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"The PIN needs to be at least %d characters long. Do you want to try again?"
+msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
+msgstr "The PIN needs to be at least %d characters long. Do you want to try again?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:360
 #, c-format
@@ -12994,10 +12800,8 @@ msgstr ""
 
 #: ../src/import-export/hbci/hbci-interaction.c:428
 #, c-format
-msgid ""
-"This TAN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"This TAN needs to be at least %d characters long. Do you want to try again?"
+msgid "This TAN needs to be at least %d characters long. Do you want to try again?"
+msgstr "This TAN needs to be at least %d characters long. Do you want to try again?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:441
 #, c-format
@@ -13013,9 +12817,8 @@ msgid "Close dialog when finished"
 msgstr "Close dialogue when finished"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-#, fuzzy
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Activate verbose debug messages for HBCI Online Banking."
+msgstr "Enables verbose debug messages for HBCI/AqBanking Online Banking."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid ""
@@ -13023,22 +12826,25 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
+"If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
+"during a session. Otherwise it will have to be entered again each time "
+"during a session when it is needed."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
 msgstr ""
+"If active, the window will be closed automatically when you finish the HBCI/"
+"AqBanking import process. Otherwise it will stay open."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
-#, fuzzy
 msgid "Remember the PIN in memory"
-msgstr "Remember the PIN for HBCI in memory during a session."
+msgstr "Remember the PIN in memory"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
-#, fuzzy
 msgid "Verbose HBCI debug messages"
-msgstr "_Verbose debug messages"
+msgstr "Verbose HBCI debug messages"
 
 #: ../src/import-export/import-account-matcher.c:78
 msgid "Account ID"
@@ -13843,14 +13649,12 @@ msgid "The Date format is ambiguous.  Please choose the correct format."
 msgstr "The Date format is ambiguous.  Please choose the correct format."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:1
-#, fuzzy
 msgid "Add matching transactions below this score"
-msgstr "No matching transactions found"
+msgstr "Add matching transactions below this score"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:2
-#, fuzzy
 msgid "Clear matching transactions above this score"
-msgstr "No matching transactions found"
+msgstr "Clear matching transactions above this score"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:3
 msgid "Enable EDIT transaction action"
@@ -13865,7 +13669,6 @@ msgid "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
 msgstr "Enable the EDIT action in the transaction matcher. NOT YET SUPPORTED."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:6
-#, fuzzy
 msgid ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
@@ -13873,7 +13676,7 @@ msgid ""
 msgstr ""
 "Enable the SKIP action in the transaction matcher. If enabled, a transaction "
 "whose best match's score is in the yellow zone (above the Auto-ADD threshold "
-"but below the Auto-CLEAR threshold) will be SKIPed by default."
+"but below the Auto-CLEAR threshold) will be skipped by default."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:7
 msgid ""
@@ -13881,18 +13684,19 @@ msgid ""
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
+"Enables bayesian matching when matching imported transaction against "
+"existing transactions. Otherwise a less sophisticated rule-based matching "
+"mechanism will be used."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
-#, fuzzy
 msgid "Maximum ATM fee amount in your area"
-msgstr "Maximum cash machine fee in your area"
+msgstr "Maximum cash machine fee amount in your area"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:9
 msgid "Minimum score to be displayed"
-msgstr ""
+msgstr "Minimum score to be displayed"
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:12
-#, fuzzy
 msgid ""
 "This field specifies the extra fee that is taken into account when matching "
 "imported transactions. In some places commercial ATMs (not belonging to a "
@@ -13904,52 +13708,51 @@ msgid ""
 "whatever is the maximum such fee in your area (in units of your local "
 "currency), so the transaction will be recognised as a match."
 msgstr ""
-"In some places commercial cash machines (not belonging to a financial "
-"institution) are installed in places like convenience stores.  These "
-"machines add their fee directly to the amount instead of it showing up as a "
-"separate transaction or in your monthly bank charges. For example, you "
-"withdraw Â£100, and you are charged Â£101.50. If you manually entered that Â"
-"£100, the amounts won't match. You should set this to whatever is the "
-"maximum such fee in your area (in units of your local currency), so the "
-"transaction will be recognised as a match."
+"This field specifies the extra fee that is taken into account when matching "
+"imported transactions. In some places commercial cash machines (not belonging to a "
+"financial institution) are installed in places like convenience store. "
+"These cash machines add a fee directly to the amount instead of showing up as a "
+"separate transaction or in your monthly banking fees. For example, you "
+"withdraw £100, and you are charged £101.50 plus bank fees. If you "
+"manually entered that £100, the amounts won't match. You should set this to "
+"whatever is the maximum such fee in your area (in units of your local "
+"currency), so the transaction will be recognised as a match."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:13
-#, fuzzy
 msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
-"The minimum score a potential match must have to be displayed in the match "
-"list."
+"This field specifies the minimum matching score a potential matching "
+"transaction must have to be displayed in the match list."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
-#, fuzzy
 msgid ""
 "This field specifies the threshold above which a matching transaction will "
 "be cleared by default. A transaction whose best match's score is in the "
 "green zone (above or equal to this Clear threshold) will be cleared by "
 "default."
 msgstr ""
-"Enable the SKIP action in the transaction matcher. If enabled, a transaction "
-"whose best match's score is in the yellow zone (above the Auto-ADD threshold "
-"but below the Auto-CLEAR threshold) will be SKIPed by default."
+"This field specifies the threshold above which a matching transaction will "
+"be cleared by default. A transaction whose best match's score is in the "
+"green zone (above or equal to this Clear threshold) will be cleared by "
+"default."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
-#, fuzzy
 msgid ""
 "This field specifies the threshold below which a matching transaction will "
 "be added automatically. A transaction whose best match's score is in the red "
 "zone (above the display minimum score but below or equal to the Add match "
 "score) will be added to the gnucash file by default."
 msgstr ""
-"A transaction whose best match's score is in the red zone (above the display "
-"threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
-"default."
+"This field specifies the threshold below which a matching transaction will "
+"be added automatically. A transaction whose best match's score is in the red "
+"zone (above the display minimum score but below or equal to the Add match "
+"score) will be added to the gnucash file by default."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:16
-#, fuzzy
 msgid "Use bayesian matching"
-msgstr "Use bayesian matching."
+msgstr "Use bayesian matching"
 
 #: ../src/register/ledger-core/split-register.c:420
 msgid "Save transaction before duplicating?"
@@ -14162,10 +13965,8 @@ msgid "_Rebalance"
 msgstr "_Rebalance:"
 
 #: ../src/register/ledger-core/split-register-control.c:1083
-msgid ""
-"You need to expand the transaction in order to modify its exchange rates."
-msgstr ""
-"You need to expand the transaction in order to modify its exchange rates."
+msgid "You need to expand the transaction in order to modify its exchange rates."
+msgstr "You need to expand the transaction in order to modify its exchange rates."
 
 #: ../src/register/ledger-core/split-register-control.c:1481
 msgid "Save the changed transaction?"
@@ -14337,16 +14138,12 @@ msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Enter the account to transfer from, or choose one from the list"
 
 #: ../src/register/ledger-core/split-register-model.c:1368
-msgid ""
-"This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"This transaction has multiple splits; press the Split button to see them all"
+msgid "This transaction has multiple splits; press the Split button to see them all"
+msgstr "This transaction has multiple splits; press the Split button to see them all"
 
 #: ../src/register/ledger-core/split-register-model.c:1371
-msgid ""
-"This transaction is a stock split; press the Split button to see details"
-msgstr ""
-"This transaction is a stock split; press the Split button to see details"
+msgid "This transaction is a stock split; press the Split button to see details"
+msgstr "This transaction is a stock split; press the Split button to see details"
 
 #: ../src/register/ledger-core/split-register-model.c:1789
 #, c-format
@@ -15604,25 +15401,23 @@ msgstr "End of the Previous Year"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:504
-#, fuzzy
 msgid "Start of Financial Period"
-msgstr "Start of reporting period"
+msgstr "Start of Financial Period"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:506
 msgid "Start of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "Start of the accounting period, as set in the global preferences"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:508
-#, fuzzy
 msgid "End of Financial Period"
-msgstr "End Previous Financial Year"
+msgstr "End of Financial Period"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:510
 msgid "End of the accounting period, as set in the global preferences"
-msgstr ""
+msgstr "End of the accounting period, as set in the global preferences"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:514
@@ -16130,10 +15925,8 @@ msgstr "Show accounts to this depth, overriding any other option."
 
 #. ../src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1086
-msgid ""
-"Override account-selection and show sub-accounts of all selected accounts?"
-msgstr ""
-"Override account-selection and show sub-accounts of all selected accounts?"
+msgid "Override account-selection and show sub-accounts of all selected accounts?"
+msgstr "Override account-selection and show sub-accounts of all selected accounts?"
 
 #. ../src/report/report-system/options-utilities.scm
 #. ../src/report/standard-reports/income-statement.scm
@@ -17630,10 +17423,8 @@ msgstr "Adjusting Entries Pattern is regular expression"
 
 #. ../src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1744
-msgid ""
-"Causes the Adjusting Entries Pattern to be treated as a regular expression"
-msgstr ""
-"Causes the Adjusting Entries Pattern to be treated as a regular expression"
+msgid "Causes the Adjusting Entries Pattern to be treated as a regular expression"
+msgstr "Causes the Adjusting Entries Pattern to be treated as a regular expression"
 
 #. ../src/report/standard-reports/trial-balance.scm
 #. ../src/report/standard-reports/income-statement.scm
@@ -17680,10 +17471,8 @@ msgstr "Closing Entries Pattern is regular expression"
 #. ../src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:1756 ../intl-scm/guile-strings.c:1988
 #: ../intl-scm/guile-strings.c:2540
-msgid ""
-"Causes the Closing Entries Pattern to be treated as a regular expression"
-msgstr ""
-"Causes the Closing Entries Pattern to be treated as a regular expression"
+msgid "Causes the Closing Entries Pattern to be treated as a regular expression"
+msgstr "Causes the Closing Entries Pattern to be treated as a regular expression"
 
 #. ../src/report/standard-reports/trial-balance.scm
 #. ../src/report/standard-reports/income-statement.scm
@@ -18194,10 +17983,8 @@ msgstr "Text book style (experimental)"
 #. ../src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2012 ../intl-scm/guile-strings.c:2256
 #: ../intl-scm/guile-strings.c:2398
-msgid ""
-"Show parent account subtotals, indented per text book practice (experimental)"
-msgstr ""
-"Show parent account subtotals, indented per text book practice (experimental)"
+msgid "Show parent account subtotals, indented per text book practice (experimental)"
+msgstr "Show parent account subtotals, indented per text book practice (experimental)"
 
 #. ../src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:2022
@@ -18636,27 +18423,23 @@ msgstr "Include gains and losses"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2422
-#, fuzzy
 msgid "Show ticker symbols"
-msgstr "Show subtotals"
+msgstr "Show ticker symbols"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2424
-#, fuzzy
 msgid "Show listings"
-msgstr "Show plot"
+msgstr "Show listings"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2426
-#, fuzzy
 msgid "Show prices"
-msgstr "Share Price"
+msgstr "Show prices"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2428
-#, fuzzy
 msgid "Show number of shares"
-msgstr "Display the number of shares?"
+msgstr "Show number of shares"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2444
@@ -18665,32 +18448,28 @@ msgstr "Include splits with no shares for calculating money-in and money-out"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2446
-#, fuzzy
 msgid "Display the ticker symbols"
-msgstr "Display the totals?"
+msgstr "Display the ticker symbols"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2448
-#, fuzzy
 msgid "Display exchange listings"
-msgstr "Display N lines"
+msgstr "Display exchange listings"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2450
-#, fuzzy
 msgid "Display numbers of shares in accounts"
-msgstr "Display the number of shares?"
+msgstr "Display numbers of shares in accounts"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2454
-#, fuzzy
 msgid "Display share prices"
-msgstr "Display the share price?"
+msgstr "Display share prices"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2462 ../intl-scm/guile-strings.c:2486
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #. ../src/report/standard-reports/advanced-portfolio.scm
 #. ../src/report/standard-reports/average-balance.scm
@@ -18755,9 +18534,8 @@ msgstr "Table for Exporting"
 
 #. ../src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2594
-#, fuzzy
 msgid "Common Currency"
-msgstr "Choose Currency"
+msgstr "Common Currency"
 
 #. ../src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2600
@@ -18804,7 +18582,7 @@ msgstr "Display 1 line"
 #. ../src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2714
 msgid "Convert all transactions into a common currency"
-msgstr ""
+msgstr "Convert all transactions into a common currency"
 
 #. ../src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:2716
@@ -19759,33 +19537,28 @@ msgstr "The address of your business"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3572
-#, fuzzy
 msgid "The contact person to print on invoices"
-msgstr "The number of rows in an invoice."
+msgstr "The contact person to print on invoices"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3574
-#, fuzzy
 msgid "The phone number of your business"
-msgstr "The name of your business"
+msgstr "The phone number of your business"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3576
-#, fuzzy
 msgid "The fax number of your business"
-msgstr "The name of your business"
+msgstr "The fax number of your business"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3578
-#, fuzzy
 msgid "The email address of your business"
-msgstr "The address of your business"
+msgstr "The email address of your business"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3580
-#, fuzzy
 msgid "The URL address of your website"
-msgstr "The address of your business"
+msgstr "The URL address of your website"
 
 #. ../src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3582
@@ -19834,33 +19607,28 @@ msgstr "Company ID"
 
 #. ../src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3604
-#, fuzzy
 msgid "Company Phone Number"
-msgstr "Company Name"
+msgstr "Company Phone Number"
 
 #. ../src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3606
-#, fuzzy
 msgid "Company Fax Number"
-msgstr "Company name"
+msgstr "Company Fax Number"
 
 #. ../src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3608
-#, fuzzy
 msgid "Company Website URL"
-msgstr "Company Name "
+msgstr "Company Website URL"
 
 #. ../src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3610
-#, fuzzy
 msgid "Company Email Address"
-msgstr "Company Address"
+msgstr "Company Email Address"
 
 #. ../src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3612
-#, fuzzy
 msgid "Company Contact Person"
-msgstr "Company name"
+msgstr "Company Contact Person"
 
 #. ../src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:3614
@@ -20074,12 +19842,12 @@ msgstr "Display the payments applied to this invoice?"
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3742
 msgid "Minimum # of entries"
-msgstr ""
+msgstr "Minimum # of entries"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3744
 msgid "The minimum number of invoice entries to display. (-1)"
-msgstr ""
+msgstr "The minimum number of invoice entries to display. (-1)"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #. ../src/business/business-reports/easy-invoice.scm
@@ -20097,59 +19865,53 @@ msgstr "Extra notes to put on the invoice"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3754
-#, fuzzy
 msgid "Payable to"
-msgstr "A/Payable"
+msgstr "Payable to"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3756
-#, fuzzy
 msgid "Display the Payable to: information"
-msgstr "Display the action?"
+msgstr "Display the Payable to: information"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3760
-#, fuzzy
 msgid "Payable to string"
-msgstr "Payable Ageing"
+msgstr "Payable to string"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3762
 msgid "The phrase for specifying to whom payments should be made"
-msgstr ""
+msgstr "The phrase for specifying to whom payments should be made"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3764
 msgid "Make all cheques Payable to"
-msgstr ""
+msgstr "Make all cheques Payable to"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3768
-#, fuzzy
 msgid "Company contact"
-msgstr "Company name"
+msgstr "Company contact"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3770
-#, fuzzy
 msgid "Display the Company contact information"
-msgstr "Display the transaction description?"
+msgstr "Display the Company contact information"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3774
 msgid "Company contact string"
-msgstr ""
+msgstr "Company contact string"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3776
 msgid "The phrase used to introduce the company contact"
-msgstr ""
+msgstr "The phrase used to introduce the company contact"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3778
-#, fuzzy
 msgid "Direct all inquiries to"
-msgstr "Select all entries."
+msgstr "Direct all inquiries to"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #. ../src/business/business-reports/owner-report.scm
@@ -20179,24 +19941,22 @@ msgstr "REF"
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3790
 msgid "INVOICE"
-msgstr ""
+msgstr "INVOICE"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3792
-#, fuzzy
 msgid "Phone:"
-msgstr "Phone: "
+msgstr "Phone:"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3794
-#, fuzzy
 msgid "Fax:"
-msgstr "Fax: "
+msgstr "Fax:"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3796
 msgid "Web:"
-msgstr ""
+msgstr "Web:"
 
 #. ../src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3804
@@ -20314,9 +20074,8 @@ msgstr "Expense Report"
 
 #. ../src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3910 ../intl-scm/guile-strings.c:3912
-#, fuzzy
 msgid "Report:"
-msgstr "Report"
+msgstr "Report:"
 
 #. ../src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3918 ../intl-scm/guile-strings.c:3924
@@ -20721,154 +20480,3 @@ msgstr ""
 "already happened. Douglas Adams, \"The Restaurant at the End of the Universe"
 "\""
 
-#~ msgid "Employee Name "
-#~ msgstr "Employee Name "
-
-#~ msgid "Create a new window for each new invoice."
-#~ msgstr "Create a new window for each new invoice."
-
-#~ msgid ""
-#~ "Set this value to TRUE to have gnucash open each new invoice in its own "
-#~ "window. Set to FALSE to have gnucash open new invoices as tabs in the "
-#~ "front window."
-#~ msgstr ""
-#~ "Set this value to TRUE to have gnucash open each new invoice in its own "
-#~ "window. Set to FALSE to have gnucash open new invoices as tabs in the "
-#~ "front window."
-
-#~ msgid ""
-#~ "\n"
-#~ "%i conflicts need to be resolved.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "%i conflicts need to be resolved.\n"
-
-#~ msgid "Du_plicate Transaction"
-#~ msgstr "Du_plicate Transaction"
-
-#~ msgid "Delete Transaction"
-#~ msgstr "Delete Transaction"
-
-#~ msgid "_Cancel the current transaction"
-#~ msgstr "_Cancel the current transaction"
-
-#~ msgid "GnuCash"
-#~ msgstr "GnuCash"
-
-#~ msgid "Money Management"
-#~ msgstr "Money Management"
-
-#~ msgid "How is the key column sorted"
-#~ msgstr "How is the key column sorted"
-
-#~ msgid "The custom date format."
-#~ msgstr "The custom date format."
-
-#~ msgid "Where to place the check on the page."
-#~ msgstr "Where to place the cheque on the page."
-
-#~ msgid "Where to print the date."
-#~ msgstr "Where to print the date."
-
-#~ msgid "Where to print the memo line."
-#~ msgstr "Where to print the memo line."
-
-#~ msgid "Where to print the payee name."
-#~ msgstr "Where to print the payee name."
-
-#~ msgid ""
-#~ "Whether or not to show \"Tip Of The Day\" when GnuCash starts up. A value "
-#~ "of TRUE says to show the dialog; FALSE says not to show the dialog."
-#~ msgstr ""
-#~ "Whether or not to show \"Tip Of The Day\" when GnuCash starts up. A value "
-#~ "of TRUE says to show the dialogue; FALSE says not to show the dialogue."
-
-#~ msgid "How to draw the toolbar."
-#~ msgstr "How to draw the toolbar."
-
-#~ msgid ""
-#~ "If set to TRUE, pressing the enter key will move to the bottom of the "
-#~ "register."
-#~ msgstr ""
-#~ "If set to TRUE, pressing the enter key will move to the bottom of the "
-#~ "register."
-
-#~ msgid "Set the format used to display dates."
-#~ msgstr "Set the format used to display dates."
-
-#~ msgid ""
-#~ "Set this value to TRUE to have gnucash open each new register in its own "
-#~ "window. Set to FALSE to have gnucash open new registers as tabs in the "
-#~ "front window."
-#~ msgstr ""
-#~ "Set this value to TRUE to have gnucash open each new register in its own "
-#~ "window. Set to FALSE to have gnucash open new registers as tabs in the "
-#~ "front window."
-
-#~ msgid ""
-#~ "Set this value to TRUE to have gnucash open each new report in its own "
-#~ "window. Set to FALSE to have gnucash open new registers as tabs in the "
-#~ "front window."
-#~ msgstr ""
-#~ "Set this value to TRUE to have gnucash open each new report in its own "
-#~ "window. Set to FALSE to have gnucash open new registers as tabs in the "
-#~ "front window."
-
-#~ msgid "Show two lines of information for each transaction."
-#~ msgstr "Show two lines of information for each transaction."
-
-#~ msgid "Use system currency."
-#~ msgstr "Use system currency."
-
-#~ msgid "Use this style when opening a new register."
-#~ msgstr "Use this style when opening a new register."
-
-#~ msgid "Summarybar"
-#~ msgstr "Summarybar"
-
-#~ msgid ""
-#~ "Changes have been made since the last time it was saved.  If you continue "
-#~ "without saving these changes will be discarded."
-#~ msgstr ""
-#~ "Changes have been made since the last time it was saved.  If you continue "
-#~ "without saving these changes will be discarded."
-
-#~ msgid ""
-#~ "Set this key to TRUE to automatically close the window when you finish "
-#~ "the HBCI import process."
-#~ msgstr ""
-#~ "Set this key to TRUE to automatically close the window when you finish "
-#~ "the HBCI import process."
-
-#~ msgid "Score above this is automatically cleared."
-#~ msgstr "Score above this is automatically cleared."
-
-#~ msgid "Score below this is automatically added."
-#~ msgstr "Score below this is automatically added."
-
-#~ msgid " Report"
-#~ msgstr "Report"
-
-#~ msgid " Report: "
-#~ msgstr " Report: "
-
-#~ msgid "Current Financial Year Start"
-#~ msgstr "Current Financial Year Start"
-
-#~ msgid "Start of the current financial year/accounting period"
-#~ msgstr "Start of the current financial year/accounting period"
-
-#~ msgid "Previous Financial Year Start"
-#~ msgstr "Previous Financial Year Start"
-
-#~ msgid "The start of the previous financial year/accounting period"
-#~ msgstr "The start of the previous financial year/accounting period"
-
-#~ msgid "End of the previous Financial year/Accounting Period"
-#~ msgstr "End of the previous Financial year/Accounting Period"
-
-#~ msgid "End Current Financial Year"
-#~ msgstr "End Current Financial Year"
-
-#~ msgid "End of the current Financial year/Accounting Period"
-#~ msgstr "End of the current Financial year/Accounting Period"
