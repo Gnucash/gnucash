@@ -1,3 +1,9 @@
+2006-02-27  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/gnc-exp-parser.c (func_op): No longer crashes on
+	an invalid formula, though it's also not very clear what's going
+	on.  Basically fixes Bug#137885.
+
 2006-02-27  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-pricedb.[ch]:

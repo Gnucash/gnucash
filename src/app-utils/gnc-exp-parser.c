@@ -27,6 +27,7 @@
 #include <locale.h>
 #include <string.h>
 
+#include "gfec.h"
 #include "finproto.h"
 #include "fin_spl_protos.h"
 #include "gnc-filepath-utils.h"
@@ -36,6 +37,8 @@
 #include "guile-mappings.h"
 
 #define GROUP_NAME "Variables"
+
+static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Data Types *****************************************************/
 
@@ -319,10 +322,16 @@ update_variables (var_store_ptr vars)
   }
 }
 
+static char* _function_evaluation_error_msg = NULL;
+static void
+_exception_handler(const char *error_message)
+{
+  _function_evaluation_error_msg = (char*)error_message;
+}
+
 static
 void*
-func_op( const char *fname,
-         int argc, void **argv )
+func_op(const char *fname, int argc, void **argv)
 {
   SCM scmFn, scmArgs, scmTmp;
   int i;
@@ -335,7 +344,7 @@ func_op( const char *fname,
   g_string_printf( realFnName, "gnc:%s", fname );
   scmFn = gh_eval_str_with_standard_handler( realFnName->str );
   g_string_free( realFnName, TRUE );
-  if ( ! SCM_PROCEDUREP( scmFn ) ) {
+  if (!SCM_PROCEDUREP(scmFn)) {
     /* FIXME: handle errors correctly. */
     printf( "gnc:\"%s\" is not a scm procedure\n", fname );
     return NULL;
@@ -362,8 +371,16 @@ func_op( const char *fname,
     }
     scmArgs = scm_cons( scmTmp, scmArgs );
   }
-  scmTmp = scm_apply( scmFn, scmArgs , SCM_EOL);
-  
+
+  //scmTmp = scm_apply(scmFn, scmArgs , SCM_EOL);
+  scmTmp = gfec_apply(scmFn, scmArgs, _exception_handler);
+  if (_function_evaluation_error_msg != NULL)
+  {
+    PERR("function eval error: [%s]\n", _function_evaluation_error_msg);
+    _function_evaluation_error_msg = NULL;
+    return NULL;
+  }
+    
   result = g_new0( gnc_numeric, 1 );
   *result = double_to_gnc_numeric( scm_num2dbl(scmTmp, __FUNCTION__),
                                    GNC_DENOM_AUTO,
