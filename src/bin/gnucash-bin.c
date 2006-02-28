@@ -300,6 +300,7 @@ gnucash_command_line(int *argc, char **argv)
 	 /* Translators: Argument description for autohelp; see
 	    http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html */
          _("REGEXP")},
+        { NULL }
     };
     
     /* Pretend that argv[0] is "gnucash" */
