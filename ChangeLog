@@ -1,5 +1,8 @@
 2006-02-27  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/calculation/expression_parser.c (primary_exp): Fix infinite
+	loop in parsing malformed functions (e.g. "ipmt(1:2:)"). Bug#332804.
+
 	* src/app-utils/gnc-exp-parser.c (func_op): No longer crashes on
 	an invalid formula, though it's also not very clear what's going
 	on.  Basically fixes Bug#137885.

@@ -832,9 +832,9 @@ next_token (parser_env_ptr pe)
 
     *nstr = EOS;
     if ( funcFlag ) {
-      add_token( pe, FN_TOKEN );
+      add_token(pe, FN_TOKEN);
     } else {
-      add_token (pe, VAR_TOKEN);
+      add_token(pe, VAR_TOKEN);
     }
 
   }
@@ -1147,13 +1147,12 @@ primary_exp (parser_env_ptr pe)
         assignment_op(pe);
         if ( pe->error_code )
           return;
-
-        funcArgCount++;
-        if ( pe->Token == ')' ) {
+        if (!pe->Token || pe->Token == ')') {
           break;
         }
+        funcArgCount++;
         next_token(pe);
-      } while ( pe->Token != ARG_TOKEN );
+      } while (pe->Token != ARG_TOKEN);
 
       if ( pe->Token != ')' ) {
         add_token( pe, EOS );
