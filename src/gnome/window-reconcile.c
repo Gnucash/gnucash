@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998-2000 Linas Vepstas                            *
  * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (C) 2006 David Hampton                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -31,11 +32,10 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include "gtk-compat.h"
 #include <glib/gi18n.h>
-//#include <stdio.h>
-//#include <time.h>
-//
+
 #include "Scrub.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
@@ -44,6 +44,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
@@ -65,6 +66,8 @@ struct _RecnWindow
 
   GtkWidget *window;        /* The reconcile window                 */
 
+  GtkUIManager *ui_merge;
+  GtkActionGroup *action_group;
   GtkWidget *toolbar;       /* Toolbar widget                       */
   gint toolbar_change_cb_id;  /* id for toolbar preference change cb  */
   gint toolbar_change_cb_id2; /* id for toolbar preference change cb  */
@@ -82,16 +85,6 @@ struct _RecnWindow
 
   GtkWidget *debit_frame;   /* Frame around debit matrix            */
   GtkWidget *credit_frame;  /* Frame around credit matrix           */
-
-  GtkWidget *edit_item;     /* Edit transaction menu item           */
-  GtkWidget *delete_item;   /* Delete transaction menu item         */
-
-  GtkWidget *edit_popup;    /* Edit transaction popup menu item     */
-  GtkWidget *delete_popup;  /* Delete transaction popup menu item   */
-
-  GtkWidget *edit_button;   /* Edit transaction button              */
-  GtkWidget *delete_button; /* Delete transaction button            */
-  GtkWidget *finish_button; /* Finish reconciliation button         */
 
   gboolean delete_refresh;  /* do a refresh upon a window deletion  */
 };
@@ -141,9 +134,9 @@ typedef struct _startRecnWindowData
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
-static void   recnFinishCB (GtkWidget *w, gpointer data);
-static void   recnPostponeCB (GtkWidget *w, gpointer data);
-static void   recnCancelCB (GtkWidget *w, gpointer data);
+static void   recnFinishCB (GtkAction *action, RecnWindow *recnData);
+static void   recnPostponeCB (GtkAction *action, gpointer data);
+static void   recnCancelCB (GtkAction *action, gpointer data);
 
 void gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data);
 void gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data);
@@ -163,6 +156,13 @@ static time_t gnc_reconcile_last_statement_date = 0;
 
 /** IMPLEMENTATIONS *************************************************/
 
+/** An array of all of the actions provided by the main window code.
+ *  This includes some placeholder actions for the menus that are
+ *  visible in the menu bar but have no action associated with
+ *  them. */
+static GtkActionEntry recnWindow_actions [];
+/** The number of actions provided by the main window. */
+static guint recnWindow_n_actions;
 
 /********************************************************************\
  * recnRefresh                                                      *
@@ -220,6 +220,7 @@ recnRecalculateBalance (RecnWindow *recnData)
   gnc_numeric diff;
   GNCPrintAmountInfo print_info;
   gboolean reverse_balance, include_children;
+  GtkAction *action;
 
   account = recn_get_account (recnData);
   if (!account)
@@ -290,7 +291,9 @@ recnRecalculateBalance (RecnWindow *recnData)
   if (reverse_balance)
     diff = gnc_numeric_neg (diff);
 
-  gtk_widget_set_sensitive(recnData->finish_button, gnc_numeric_zero_p (diff));
+  action = gtk_action_group_get_action (recnData->action_group,
+					"RecnFinishAction");
+  gtk_action_set_sensitive(action, gnc_numeric_zero_p (diff));
 
   return diff;
 }
@@ -771,6 +774,7 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
 {
   gboolean sensitive = FALSE;
   GNCReconcileList *list;
+  GtkAction *action;
 
   list = GNC_RECONCILE_LIST(recnData->debit);
   if (gnc_reconcile_list_get_current_split(list) != NULL)
@@ -780,14 +784,12 @@ gnc_reconcile_window_set_sensitivity(RecnWindow *recnData)
   if (gnc_reconcile_list_get_current_split(list) != NULL)
     sensitive = TRUE;
 
-  gtk_widget_set_sensitive(recnData->edit_item, sensitive);
-  gtk_widget_set_sensitive(recnData->delete_item, sensitive);
-
-  gtk_widget_set_sensitive(recnData->edit_popup, sensitive);
-  gtk_widget_set_sensitive(recnData->delete_popup, sensitive);
-
-  gtk_widget_set_sensitive(recnData->edit_button, sensitive);
-  gtk_widget_set_sensitive(recnData->delete_button, sensitive);
+  action = gtk_action_group_get_action (recnData->action_group,
+					"TransEditAction");
+  gtk_action_set_sensitive(action, sensitive);
+  action = gtk_action_group_get_action (recnData->action_group,
+					"TransDeleteAction");
+  gtk_action_set_sensitive(action, sensitive);
 }
 
 static void
@@ -815,6 +817,7 @@ gnc_reconcile_window_open_register(RecnWindow *recnData)
   page = gnc_plugin_page_register_new (account, include_children);
   gnc_main_window_open_page (NULL, page);
   gsr = gnc_plugin_page_register_get_gsr(page);
+  gnc_split_reg_raise(gsr);
   return gsr;
 }
 
@@ -974,19 +977,6 @@ gnc_reconcile_window_create_list_box(Account *account,
 }
 
 
-static GtkWidget *
-gnc_recn_create_status_bar(RecnWindow *recnData)
-{
-  GtkWidget *statusbar;
-
-  statusbar = gnome_appbar_new(FALSE, /* no progress bar */
-			       TRUE,  /* has status area */
-			       GNOME_PREFERENCES_USER);
-
-  return statusbar;
-}
-
-
 static Split *
 gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 {
@@ -1011,7 +1001,7 @@ gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_ui_reconcile_window_change_cb(GtkButton *button, gpointer data)
+gnc_ui_reconcile_window_change_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account = recn_get_account (recnData);
@@ -1121,7 +1111,7 @@ gnc_recn_set_window_name(RecnWindow *recnData)
 }
 
 static void 
-gnc_recn_edit_account_cb(GtkWidget * w, gpointer data)
+gnc_recn_edit_account_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account = recn_get_account (recnData);
@@ -1133,7 +1123,7 @@ gnc_recn_edit_account_cb(GtkWidget * w, gpointer data)
 }
 
 static void 
-gnc_recn_xfer_cb(GtkWidget * w, gpointer data)
+gnc_recn_xfer_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account = recn_get_account (recnData);
@@ -1145,7 +1135,7 @@ gnc_recn_xfer_cb(GtkWidget * w, gpointer data)
 }
 
 static void
-gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
+gnc_recn_scrub_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account = recn_get_account (recnData);
@@ -1162,214 +1152,26 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
 }
 
 static void
-gnc_recn_open_cb(GtkWidget *widget, gpointer data)
+gnc_recn_open_cb(GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
 
   gnc_reconcile_window_open_register(recnData);
 }
 
-static GtkWidget *
-gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
-{
-  GtkWidget *menubar;
-  GtkAccelGroup *accel_group;
-
-  static GnomeUIInfo reconcile_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Reconcile Information..."),
-      N_("Change the reconcile information "
-         "including statement date and ending balance."),
-      gnc_ui_reconcile_window_change_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Finish"),
-      N_("Finish the reconciliation of this account"),
-      recnFinishCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'f', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Postpone"),
-      N_("Postpone the reconciliation of this account"),
-      recnPostponeCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'p', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Cancel"),
-      N_("Cancel the reconciliation of this account"),
-      recnCancelCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  static GnomeUIInfo account_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Open Account"), N_("Open the account"),
-      gnc_recn_open_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Edit Account"), N_("Edit the main account for this register"),
-      gnc_recn_edit_account_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Transfer..."), N_("Transfer funds from one account to another"),
-      gnc_recn_xfer_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Check & Repair"),
-      N_("Check for and repair unbalanced transactions and orphan splits "
-	 "in this account"),
-      gnc_recn_scrub_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  static GnomeUIInfo transaction_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_New"), N_("Add a new transaction to the account"),
-      gnc_ui_reconcile_window_new_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'n', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Edit"), N_("Edit the current transaction"),
-      gnc_ui_reconcile_window_edit_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'e', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Delete"), N_("Delete the selected transaction"),
-      gnc_ui_reconcile_window_delete_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      'd', GDK_CONTROL_MASK, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  static GnomeUIInfo help_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Help"), N_("Open the GnuCash help window"),
-      gnc_ui_reconcile_window_help_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  static GnomeUIInfo reconcile_window_menu[] =
-  {
-    GNOMEUIINFO_SUBTREE(N_("_Reconcile"), reconcile_menu),
-    GNOMEUIINFO_SUBTREE(N_("_Account"), account_menu),
-    GNOMEUIINFO_SUBTREE(N_("_Transaction"), transaction_menu),
-    GNOMEUIINFO_MENU_HELP_TREE(help_menu),
-    GNOMEUIINFO_END
-  };
-
-  gnc_fill_menu_with_data(reconcile_window_menu, recnData);
-
-  menubar = gtk_menu_bar_new();
-
-  accel_group = gtk_accel_group_new();
-  /* GNOME 2 Port (replace this accel_group stuff) */
-  /*gtk_accel_group_attach(accel_group, GTK_OBJECT(recnData->window));*/
-
-  gnome_app_fill_menu(GTK_MENU_SHELL(menubar), reconcile_window_menu,
-  		      accel_group, TRUE, 0);
-
-  gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
-                                      reconcile_window_menu);
-
-  recnData->edit_item = transaction_menu[1].widget;
-  recnData->delete_item = transaction_menu[2].widget;
-
-  return menubar;
-}
-
-
-static GtkWidget *
-gnc_recn_create_popup_menu(RecnWindow *recnData)
-{
-  GtkWidget *popup;
-
-  GnomeUIInfo transaction_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_New"), N_("Add a new transaction to the account"),
-      gnc_ui_reconcile_window_new_cb, recnData, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
-      'n', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Edit"), N_("Edit the current transaction"),
-      gnc_ui_reconcile_window_edit_cb, recnData, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PROPERTIES,
-      'e', GDK_CONTROL_MASK, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Delete"), N_("Delete the selected transaction"),
-      gnc_ui_reconcile_window_delete_cb, recnData, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
-      'd', GDK_CONTROL_MASK, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  popup = gnome_popup_menu_new(transaction_menu);
-
-  recnData->edit_popup = transaction_menu[1].widget;
-  recnData->delete_popup = transaction_menu[2].widget;
-
-  return popup;
-}
-
-
 static void
 gnc_recn_refresh_toolbar(RecnWindow *recnData)
 {
-  GtkToolbarStyle tbstyle;
+  GtkToolbarStyle style;
+  GSList *list;
 
   if ((recnData == NULL) || (recnData->toolbar == NULL))
     return;
 
-  tbstyle = gnc_get_toolbar_style();
-
-  gtk_toolbar_set_style(GTK_TOOLBAR(recnData->toolbar), tbstyle);
+  style = gnc_get_toolbar_style();
+  list = gtk_ui_manager_get_toplevels(recnData->ui_merge, GTK_UI_MANAGER_TOOLBAR);
+  g_slist_foreach(list, (GFunc)gtk_toolbar_set_style, GINT_TO_POINTER(style));
+  g_slist_free(list);
 }
 
 static void
@@ -1393,66 +1195,6 @@ gnc_toolbar_change_cb (GConfClient *client,
   if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {
     gnc_recn_refresh_toolbar(recnData);
   }
-}
-
-static GtkWidget *
-gnc_recn_create_tool_bar(RecnWindow *recnData)
-{
-  GtkWidget *toolbar;
-  GnomeUIInfo toolbar_info[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("New"), N_("Add a new transaction to the account"),
-      gnc_ui_reconcile_window_new_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Edit"), N_("Edit the current transaction"),
-      gnc_ui_reconcile_window_edit_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PROPERTIES,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Delete"), N_("Delete the selected transaction"),
-      gnc_ui_reconcile_window_delete_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Open"), N_("Open the account"),
-      gnc_recn_open_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("Finish"), N_("Finish the reconciliation of this account"),
-      recnFinishCB, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_DOWN,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
-
-  toolbar = gtk_toolbar_new ();
-
-  gnome_app_fill_toolbar_with_data(GTK_TOOLBAR(toolbar), toolbar_info,
-                                   NULL, recnData);
-
-  recnData->toolbar = toolbar;
-
-  recnData->edit_button = toolbar_info[1].widget;
-  recnData->delete_button = toolbar_info[2].widget;
-  recnData->finish_button = toolbar_info[6].widget;
-
-  return toolbar;
 }
 
 static void
@@ -1645,6 +1387,15 @@ recnWindow (GtkWidget *parent, Account *account)
   return recnWindowWithBalance (parent, account, new_ending, statement_date);
 }
 
+static void
+recnWindow_add_widget (GtkUIManager *merge,
+		       GtkWidget *widget,
+		       GtkVBox *dock)
+{
+  gtk_box_pack_start (GTK_BOX (dock), widget, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+}
+
 /********************************************************************\
  * recnWindowWithBalance                                            
  *
@@ -1698,50 +1449,50 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(recnData->window), vbox);
 
-  dock = bonobo_dock_new();
-  gtk_box_pack_start(GTK_BOX(vbox), dock, TRUE, TRUE, 0);
+  dock = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show(dock);
+  gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
 
-  statusbar = gnc_recn_create_status_bar(recnData);
-  gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
-
-  g_signal_connect (recnData->window, "destroy",
-                    G_CALLBACK(recn_destroy_cb), recnData);
-
-  /* The menu bar */
   {
-    BonoboDockItemBehavior behavior;
-    GtkWidget *dock_item;
-    GtkWidget *menubar;
+    gchar *filename;
+    gint merge_id;
+    GtkAction *action;
+    GtkActionGroup *action_group;
+    GError *error = NULL;
 
-    behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
-    if (!gnc_gconf_menubar_detachable())
-      behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
+    recnData->ui_merge = gtk_ui_manager_new ();
+    g_signal_connect (recnData->ui_merge, "add_widget",
+		      G_CALLBACK (recnWindow_add_widget), dock);
 
-    dock_item = bonobo_dock_item_new("menu", behavior);
+    action_group = gtk_action_group_new ("ReconcileWindowActions");
+    recnData->action_group = action_group;
+    gnc_gtk_action_group_set_translation_domain(action_group, GETTEXT_PACKAGE);
+    gtk_action_group_add_actions (action_group, recnWindow_actions,
+				  recnWindow_n_actions, recnData);
+    action =
+      gtk_action_group_get_action (action_group, "AccountOpenAccountAction");
+    g_object_set (G_OBJECT(action), "short_label", N_("Open"), NULL);
 
-    menubar = gnc_recn_create_menu_bar(recnData, statusbar);
-    gtk_container_set_border_width(GTK_CONTAINER(menubar), 2);
-    gtk_container_add(GTK_CONTAINER(dock_item), menubar);
+    gtk_ui_manager_insert_action_group (recnData->ui_merge, action_group, 0);
 
-    bonobo_dock_add_item (BONOBO_DOCK(dock), BONOBO_DOCK_ITEM(dock_item),
-                         BONOBO_DOCK_TOP, 0, 0, 0, TRUE);
-  }
+    filename = gnc_gnome_locate_ui_file("gnc-reconcile-window-ui.xml");
+    /* Can't do much without a ui. */
+    g_assert (filename);
 
-  /* The tool bar */
-  {
-    BonoboDockItemBehavior behavior;
-    GtkWidget *dock_item;
-    GtkWidget *toolbar;
-
-    behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
-    if (!gnc_gconf_toolbar_detachable())
-      behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
-
-    dock_item = bonobo_dock_item_new("toolbar", behavior);
-
-    toolbar = gnc_recn_create_tool_bar(recnData);
-    gtk_container_set_border_width(GTK_CONTAINER(toolbar), 2);
-    gtk_container_add(GTK_CONTAINER(dock_item), toolbar);
+    merge_id = gtk_ui_manager_add_ui_from_file (recnData->ui_merge,
+						filename, &error);
+    g_assert(merge_id || error);
+    if (merge_id) {
+      gtk_window_add_accel_group (GTK_WINDOW (recnData->window),
+				  gtk_ui_manager_get_accel_group(recnData->ui_merge));
+      gtk_ui_manager_ensure_update (recnData->ui_merge);
+    } else {
+      g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		 filename, error->message);
+      g_error_free(error);
+      g_assert(merge_id != 0);
+    }
+    g_free(filename);
 
     recnData->toolbar_change_cb_id =
       gnc_gconf_add_anon_notification(GCONF_GENERAL,
@@ -1749,10 +1500,15 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     recnData->toolbar_change_cb_id2 =
       gnc_gconf_add_anon_notification(DESKTOP_GNOME_INTERFACE,
 				      gnc_toolbar_change_cb, recnData);
-
-    bonobo_dock_add_item (BONOBO_DOCK(dock), BONOBO_DOCK_ITEM(dock_item),
-                          BONOBO_DOCK_TOP, 1, 0, 0, TRUE);
   }
+
+  statusbar = gtk_statusbar_new();
+  gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(statusbar), TRUE);
+  gtk_box_pack_end(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
+
+  g_signal_connect (recnData->window, "destroy",
+                    G_CALLBACK(recn_destroy_cb), recnData);
+
 
   /* The main area */
   {
@@ -1761,9 +1517,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     GtkWidget *debcred_area = gtk_hbox_new(FALSE, 15);
     GtkWidget *debits_box;
     GtkWidget *credits_box;
-    GtkWidget *popup;
 
-    bonobo_dock_set_client_area(BONOBO_DOCK(dock), frame);
+    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
     /* Force a reasonable starting size */
     gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
@@ -1781,10 +1536,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
     GNC_RECONCILE_LIST(recnData->debit)->sibling = GNC_RECONCILE_LIST(recnData->credit);
     GNC_RECONCILE_LIST(recnData->credit)->sibling = GNC_RECONCILE_LIST(recnData->debit);
-
-    popup = gnc_recn_create_popup_menu(recnData);
-    gnome_popup_menu_attach(popup, recnData->debit, recnData);
-    gnome_popup_menu_attach(popup, recnData->credit, recnData);
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(debcred_area), debits_box, TRUE, TRUE, 0);
@@ -2020,9 +1771,8 @@ find_payment_account(Account *account)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-recnFinishCB (GtkWidget *w, gpointer data)
+recnFinishCB (GtkAction *action, RecnWindow *recnData)
 {
-  RecnWindow *recnData = data;
   gboolean auto_payment;
   Account *account;
   time_t date;
@@ -2080,7 +1830,7 @@ recnFinishCB (GtkWidget *w, gpointer data)
  * Return: none                                                     *
 \********************************************************************/
 static void 
-recnPostponeCB (GtkWidget *w, gpointer data)
+recnPostponeCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   Account *account;
@@ -2108,7 +1858,7 @@ recnPostponeCB (GtkWidget *w, gpointer data)
 }
 
 static void 
-recnCancelCB (GtkWidget *w, gpointer data)
+recnCancelCB (GtkAction *action, gpointer data)
 {
   RecnWindow *recnData = data;
   gboolean changed = FALSE;
@@ -2128,3 +1878,70 @@ recnCancelCB (GtkWidget *w, gpointer data)
 
   gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 }
+
+/** An array of all of the actions provided by the main window code.
+ *  This includes some placeholder actions for the menus that are
+ *  visible in the menu bar but have no action associated with
+ *  them. */
+static GtkActionEntry recnWindow_actions [] =
+{
+	/* Toplevel */
+
+	{ "ReconcileMenuAction",   NULL, N_("_Reconcile"), NULL, NULL, NULL, },
+	{ "AccountMenuAction",     NULL, N_("_Account"), NULL, NULL, NULL, },
+	{ "TransactionMenuAction", NULL, N_("_Transaction"), NULL, NULL, NULL, },
+	{ "HelpMenuAction",        NULL, N_("_Help"), NULL, NULL, NULL, },
+
+	/* Reconcile menu */
+	
+	{ "RecnChangeInfoAction", NULL, N_("_Reconcile Information..."),  NULL,
+	  N_("Change the reconcile information "
+	     "including statement date and ending balance."),
+	  G_CALLBACK (gnc_ui_reconcile_window_change_cb) },
+	{ "RecnFinishAction", GTK_STOCK_GO_DOWN, N_("_Finish"), "<control>f",
+	  N_("Finish the reconciliation of this account"),
+	  G_CALLBACK(recnFinishCB)},
+	{ "RecnPostponeAction", NULL, N_("_Postpone"), "<control>p",
+	  N_("Postpone the reconciliation of this account"),
+	  G_CALLBACK(recnPostponeCB)},
+	{ "RecnCancelAction", NULL, N_("_Cancel"), NULL,
+	  N_("Cancel the reconciliation of this account"),
+	  G_CALLBACK(recnCancelCB)},
+
+	/* Account menu */
+
+	{ "AccountOpenAccountAction", GTK_STOCK_JUMP_TO, N_("_Open Account"), NULL,
+	  N_("Open the account"),
+	  G_CALLBACK(gnc_recn_open_cb)},
+	{ "AccountEditAccountAction", NULL, N_("_Edit Account"), NULL,
+	  N_("Edit the main account for this register"),
+	  G_CALLBACK(gnc_recn_edit_account_cb)},
+	{ "AccountTransferAction", NULL, N_("_Transfer..."), NULL,
+	  N_("Transfer funds from one account to another"),
+	  G_CALLBACK(gnc_recn_xfer_cb)},
+	{ "AccountCheckRepairAction", NULL, N_("_Check & Repair"), NULL,
+	  N_("Check for and repair unbalanced transactions and orphan splits "
+	     "in this account"),
+	  G_CALLBACK(gnc_recn_scrub_cb)},
+
+	/* Transaction menu */
+
+	{ "TransNewAction", GTK_STOCK_NEW, N_("_New"),  "<control>n",
+	  N_("Add a new transaction to the account"),
+	  G_CALLBACK(gnc_ui_reconcile_window_new_cb)},
+	{ "TransEditAction", GTK_STOCK_PROPERTIES, N_("_Edit"),  "<control>e",
+	  N_("Edit the current transaction"),
+	  G_CALLBACK(gnc_ui_reconcile_window_edit_cb)},
+	{ "TransDeleteAction", GTK_STOCK_DELETE, N_("_Delete"),  "<control>d",
+	  N_("Delete the selected transaction"),
+	  G_CALLBACK(gnc_ui_reconcile_window_delete_cb)},
+
+	/* Help menu */
+
+	{ "HelpHelpAction", NULL, N_("_Help"), NULL,
+	  N_("Open the GnuCash help window"),
+	  G_CALLBACK(gnc_ui_reconcile_window_help_cb)},
+};
+
+/** The number of actions provided by the main window. */
+static guint recnWindow_n_actions = G_N_ELEMENTS (recnWindow_actions);

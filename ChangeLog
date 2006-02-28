@@ -1,3 +1,11 @@
+2006-02-27  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c:
+	* src/gnome/ui/gnc-reconcile-window-ui.xml:
+	* src/gnome/ui/Makefile.am: Convert the reconcile window from the
+	old GnomeUIInfo menu/toolbar widgets to the newer GtkAction based
+	widgets.
+
 2006-02-27  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/gnc-backend-file.h (struct FileBackend_struct):
