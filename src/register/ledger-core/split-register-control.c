@@ -160,29 +160,6 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 }
 
 static gboolean
-gnc_trans_has_reconciled_splits (Transaction *trans)
-{
-  GList *node;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-
-    switch (xaccSplitGetReconcile (split))
-    {
-      case YREC:
-      case FREC:
-        return TRUE;
-
-      default:
-        break;
-    }
-  }
-
-  return FALSE;
-}
-
-static gboolean
 gnc_split_register_old_split_empty_p (SplitRegister *reg, Split *split)
 {
   BasicCell *cell;
@@ -344,7 +321,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   }
   else if (old_trans &&
            (old_trans != new_trans) &&
-           !gnc_trans_has_reconciled_splits (old_trans) &&
+           !xaccTransHasReconciledSplits(old_trans) &&
            !info->first_pass &&
            gnc_split_register_balance_trans (reg, old_trans))
   {
