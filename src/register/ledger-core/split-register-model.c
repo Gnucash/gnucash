@@ -341,46 +341,15 @@ get_trans_total_amount (SplitRegister *reg, Transaction *trans)
   return xaccTransGetAccountAmount(trans, account);
 }
 
-static Split *
-get_trans_last_split (SplitRegister *reg, Transaction *trans)
-{
-  GList *node;
-  Account *account;
-  Split *last_split = NULL;
-
-  account = gnc_split_register_get_default_account (reg);
-
-  if (!account)
-    return last_split;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-
-    if (xaccSplitGetAccount (split) != account)
-      continue;
-
-    if (!last_split)
-    {
-      last_split = split;
-      continue;
-    }
-
-    if (xaccSplitDateOrder (last_split, split) < 0)
-      last_split = split;
-  }
-
-  return last_split;
-}
-
 static gnc_numeric
 get_trans_total_balance (SplitRegister *reg, Transaction *trans)
 {
-  Split *last_split;
+  Account *account;
 
-  last_split = get_trans_last_split (reg, trans);
+  account = gnc_split_register_get_default_account (reg);
+  if (!trans || !account) return gnc_numeric_zero();
 
-  return xaccSplitGetBalance (last_split);
+  return xaccTransGetAccountBalance(trans, account);
 }
 
 static guint32
