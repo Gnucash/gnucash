@@ -337,29 +337,8 @@ gnc_split_register_get_fcredit_label (VirtualLocation virt_loc,
 static gnc_numeric
 get_trans_total_amount (SplitRegister *reg, Transaction *trans)
 {
-  GList *node;
-  Account *account;
-  gnc_numeric total = gnc_numeric_zero ();
-
-  account = gnc_split_register_get_default_account (reg);
-
-  if (!account)
-    return total;
-
-  total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (account),
-                               GNC_RND_ROUND);
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-
-    if (xaccSplitGetAccount (split) != account)
-      continue;
-
-    total = gnc_numeric_add_fixed (total, xaccSplitGetAmount (split));
-  }
-
-  return total;
+  Account *account = gnc_split_register_get_default_account (reg);
+  return xaccTransGetAccountAmount(trans, account);
 }
 
 static Split *
