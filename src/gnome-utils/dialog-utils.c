@@ -27,8 +27,10 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "glib-compat.h"
+#include <glib/gi18n.h>
 #include <glade/glade.h>
 #include <gmodule.h>
 #include <dlfcn.h>
@@ -165,7 +167,7 @@ gnc_get_toolbar_style(void)
     return GTK_TOOLBAR_BOTH;
   tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
 			       GTK_TOOLBAR_BOTH);
-  free(style_string);
+  g_free(style_string);
 
   return tbstyle;
 }
@@ -308,42 +310,6 @@ gnc_save_window_size(const char *section, GtkWindow *window)
   gnc_gconf_set_list(section, WINDOW_POSITION, GCONF_VALUE_INT,
 		     coord_list, NULL);
   g_slist_free(coord_list);
-}
-
-
-/********************************************************************\
- * gnc_fill_menu_with_data                                          *
- *   fill the user data values in the menu structure with the given *
- *   value. The filling is done recursively.                        *
- *                                                                  *
- * Args: info - the menu to fill                                    *
- *       data - the value to fill with                              *
- * Returns: nothing                                                 *
-\********************************************************************/
-void
-gnc_fill_menu_with_data(GnomeUIInfo *info, gpointer data)
-{
-  if (info == NULL)
-    return;
-
-  while (1)
-  {
-    switch (info->type)
-    {
-      case GNOME_APP_UI_RADIOITEMS:
-      case GNOME_APP_UI_SUBTREE:
-      case GNOME_APP_UI_SUBTREE_STOCK:
-        gnc_fill_menu_with_data((GnomeUIInfo *) info->moreinfo, data);
-        break;
-      case GNOME_APP_UI_ENDOFINFO:
-        return;
-      default:
-        info->user_data = data;
-        break;
-    }
-
-    info++;
-  }
 }
 
 

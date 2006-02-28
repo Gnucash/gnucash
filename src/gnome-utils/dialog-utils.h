@@ -83,18 +83,6 @@ void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 void gnc_save_window_size (const char *section, GtkWindow *window);
 
 
-/********************************************************************\
- * Fill the user data values in the menu structure with the given   *
- * value. The filling is done recursively.                          *
- *                                                                  *
- * Args: info - the menu to fill                                    *
- *       data - the value to fill with                              *
- * Returns: nothing                                                 *
-\********************************************************************/
-#ifdef LIBGNOME_H
-void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
-#endif
-
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
 				   GCallback f,

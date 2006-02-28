@@ -1,5 +1,8 @@
 2006-02-27  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-utils.[ch]: Remove a unused function that
+	calls deprecated gnome routines.
+
 	* src/gnome/window-reconcile.c:
 	* src/gnome/ui/gnc-reconcile-window-ui.xml:
 	* src/gnome/ui/Makefile.am: Convert the reconcile window from the
