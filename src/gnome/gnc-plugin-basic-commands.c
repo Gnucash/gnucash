@@ -109,11 +109,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
     G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
   { "FileExportAccountsAction", GTK_STOCK_CONVERT,
     N_("Export _Accounts"), NULL,
-    N_("Export the account hierarchy to a new file"),
+    N_("Export the account hierarchy to a new GnuCash datafile"),
     G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
   { "FileExportChartAction", GTK_STOCK_CONVERT,
-    N_("Export _Chart of Accounts"), NULL,
-    N_("Export the chart of accounts for a date with balances"),
+    N_("Export _Chart of Accounts to QSF"), NULL,
+    N_("Export the chart of accounts for a date with balances as QSF"),
     G_CALLBACK (gnc_main_window_cmd_file_chart_export) },
 
   /* Edit menu */

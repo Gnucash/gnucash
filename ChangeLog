@@ -1,5 +1,16 @@
 2006-02-27  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/backend/file/gnc-backend-file.h (struct FileBackend_struct):
+	Remove unused `pricedb_lookup` and `export` operations from
+	gnucash-specific file backend.
+
+	* src/backend/file/gnc-backend-file.c (gnc_backend_new): Use
+	correct 'export' function-slot, allowing File > Export > Export
+	Accounts to work again.  Bug#332802.
+
+	* src/gnome/gnc-plugin-basic-commands.c: Clarify "Export Accounts"
+	from "Export Chart of Accounts [to QSF].
+
 	* src/calculation/expression_parser.c (primary_exp): Fix infinite
 	loop in parsing malformed functions (e.g. "ipmt(1:2:)"). Bug#332804.
 

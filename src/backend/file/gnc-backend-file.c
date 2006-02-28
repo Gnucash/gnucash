@@ -898,7 +898,6 @@ libgncmod_backend_file_LTX_gnc_backend_new(void)
     fbe->fullpath = NULL;
     fbe->lockfile = NULL;
     fbe->linkfile = NULL;
-    fbe->price_lookup = NULL;
     fbe->lockfd = -1;
 
     fbe->primary_book = NULL;
@@ -960,7 +959,8 @@ gnc_backend_new(void)
 	be->load_config = NULL;
 	be->get_config = NULL;
 
-	gnc_be->export = gnc_file_be_write_accounts_to_file;
+        be->export = gnc_file_be_write_accounts_to_file;
+
 	gnc_be->dirname = NULL;
 	gnc_be->fullpath = NULL;
 	gnc_be->lockfile = NULL;
