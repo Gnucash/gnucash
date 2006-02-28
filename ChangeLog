@@ -1,3 +1,13 @@
+2006-02-28  David Hampton  <hampton@employees.org>
+
+	* configure.in: Set the GNOME_DISABLE_DEPRECATED flag for gnome
+	versions up to 2.13.7.
+
+	* src/gnome-utils/dialog-options.c: Allow this one file to use
+	deprecated gnome functions, but only when compiled with gtk 2.4.
+	Later versions of gtk include the needed replacement function and
+	deprecated gnome functions are not allowed.
+
 2006-02-27  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-utils.[ch]: Remove a unused function that

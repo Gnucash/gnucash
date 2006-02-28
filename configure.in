@@ -1006,7 +1006,15 @@ then
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
     AC_SUBST(GNOME_LIBS)
-    HAVE_UNTESTED_GNOME=yes
+
+    AC_MSG_CHECKING([for untested GNOME versions (libgnome > 2.13.7)])
+    if $PKG_CONFIG 'libgnome-2.0 > 2.13.7'
+    then
+      AC_MSG_RESULT(yes)
+      HAVE_UNTESTED_GNOME=yes
+    else
+      AC_MSG_RESULT(no)
+    fi
 
     PKG_CHECK_MODULES(GDK_PIXBUF, gdk-pixbuf-2.0)
     AS_SCRUB_INCLUDE(GDK_PIXBUF_CFLAGS)

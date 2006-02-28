@@ -26,6 +26,7 @@
 #ifdef HAVE_GTK26 
 #include <gtk/gtk.h>
 #else
+#undef GNOME_DISABLE_DEPRECATED
 #include <gnome.h>
 #endif
 #include <gdk/gdk.h>
