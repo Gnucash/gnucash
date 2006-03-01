@@ -1,5 +1,9 @@
 2006-02-28  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-account.c: Collapse the common parts of
+	the "new account" and "edit account" dialog validation code into a
+	single routine.  Fixes 117812.
+
 	* src/app-utils/options.scm: Andreas Köhler's patch to correctly
 	build a html color value. Fixes 328933.
 

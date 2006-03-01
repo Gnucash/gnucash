@@ -716,6 +716,84 @@ gnc_filter_parent_accounts (Account *account, gpointer data)
 }
 
 
+static gboolean
+gnc_common_ok (AccountWindow *aw)
+{
+  Account *account, *parent;
+  AccountGroup *group;
+  gnc_commodity * commodity;
+  gchar separator, sep_string[2];
+  gchar *fullname, *fullname_parent;
+  const gchar *name;
+
+  ENTER("aw %p", aw);
+  group = gnc_get_current_group ();
+
+  separator = gnc_get_account_separator();
+
+  /* check for valid name */
+  name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
+  if (safe_strcmp(name, "") == 0) {
+    const char *message = _("The account must be given a name.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("bad name");
+    return FALSE;
+  }
+
+  /* check for a duplicate name */
+  parent = gnc_tree_view_account_get_selected_account
+    (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  if (parent == NULL) {
+    account = xaccGetAccountFromFullName(group, name, separator);
+  } else {
+    sep_string[0] = separator;
+    sep_string[1] = '\0';
+
+    fullname_parent = xaccAccountGetFullName(parent, separator);
+    fullname = g_strconcat(fullname_parent, sep_string, name, NULL);
+
+    account = xaccGetAccountFromFullName(group, fullname, separator);
+
+    g_free(fullname_parent);
+    g_free(fullname);
+  }
+  if (account != NULL) {
+    const char *message = _("There is already an account with that name.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("duplicate name");
+    return FALSE;
+  }
+
+  /* Parent check, probably not needed, but be safe */
+  if (!gnc_filter_parent_accounts(parent, aw)) {
+    const char *message = _("You must choose a valid parent account.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("invalid parent");
+    return FALSE;
+  }
+
+  /* check for valid type */
+  if (aw->type == BAD_TYPE) {
+    const char *message = _("You must select an account type.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("invalid type");
+    return FALSE;
+  }
+
+  /* check for commodity */
+  commodity = (gnc_commodity *)
+    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
+  if (!commodity) {
+    const char *message = _("You must choose a commodity.");
+    gnc_error_dialog(aw->dialog, message);
+    LEAVE("invalid commodity");
+    return FALSE;
+  }
+
+  LEAVE("passed");
+  return TRUE;
+}
+
 static void
 gnc_edit_account_ok(AccountWindow *aw)
 {
@@ -731,53 +809,15 @@ gnc_edit_account_ok(AccountWindow *aw)
 
   GNCAccountType current_type;
 
-  const char *name;
-  gnc_commodity * commodity;
-
-  /* check for valid name */
   ENTER("aw %p", aw);
-  name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
-  if (safe_strcmp(name, "") == 0)
-  {
-    const char *message = _("The account must be given a name.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
-
-  /* check for valid type */
-  if (aw->type == BAD_TYPE)
-  {
-    const char *message = _("You must select an account type.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
-
-  new_parent = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-
-  /* Parent check, probably not needed, but be safe */
-  if (!gnc_filter_parent_accounts(new_parent, aw))
-  {
-    const char *message = _("You must choose a valid parent account.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
-
-  commodity = (gnc_commodity *)
-    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
-
-  if (!commodity)
-  {
-    const char *message = _("You must choose a commodity.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
 
   account = aw_get_account (aw);
   if (!account) {
+    LEAVE(" ");
+    return;
+  }
+
+  if (!gnc_common_ok(aw)) {
     LEAVE(" ");
     return;
   }
@@ -801,6 +841,7 @@ gnc_edit_account_ok(AccountWindow *aw)
 
   /* If the new parent's type is not compatible with the new type,
    * the whole sub-tree containing the account must be re-typed. */
+  new_parent = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (new_parent != aw->top_level_account)
   {
     int parent_type;
@@ -855,83 +896,11 @@ gnc_edit_account_ok(AccountWindow *aw)
 static void
 gnc_new_account_ok (AccountWindow *aw)
 {
-  const gnc_commodity * commodity;
-  Account *parent_account;
   gnc_numeric balance;
-  const gchar *name;
 
-  /* check for valid name */
   ENTER("aw %p", aw);
-  name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
-  if (safe_strcmp(name, "") == 0)
-  {
-    const char *message = _("The account must be given a name.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
 
-  parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
-
-  if (parent_account == aw->top_level_account)
-    parent_account = NULL;
-
-  /* check for a duplicate name */
-  {
-    Account *account;
-    AccountGroup *group;
-    char separator;
-
-    group = gnc_get_current_group ();
-
-    separator = gnc_get_account_separator();
-
-    if (parent_account == NULL)
-      account = xaccGetAccountFromFullName(group, name, separator);
-    else
-    {
-      char *fullname_parent;
-      char *fullname;
-      char sep_string[2];
-
-      sep_string[0] = separator;
-      sep_string[1] = '\0';
-
-      fullname_parent = xaccAccountGetFullName(parent_account, separator);
-      fullname = g_strconcat(fullname_parent, sep_string, name, NULL);
-
-      account = xaccGetAccountFromFullName(group, fullname, separator);
-
-      g_free(fullname_parent);
-      g_free(fullname);
-    }
-
-    if (account != NULL)
-    {
-      const char *message = _("There is already an account with that name.");
-      gnc_error_dialog(aw->dialog, message);
-      LEAVE(" ");
-      return;
-    }
-  }
-
-  /* check for valid type */
-  if (aw->type == BAD_TYPE)
-  {
-    const char *message = _("You must select an account type.");
-    gnc_error_dialog(aw->dialog, message);
-    LEAVE(" ");
-    return;
-  }
-
-  /* check for commodity */
-  commodity = (gnc_commodity *)
-    gnc_general_select_get_selected (GNC_GENERAL_SELECT (aw->commodity_edit));
-
-  if (!commodity)
-  {
-    const char *message = _("You must choose a commodity.");
-    gnc_error_dialog(aw->dialog, message);
+  if (!gnc_common_ok(aw)) {
     LEAVE(" ");
     return;
   }
