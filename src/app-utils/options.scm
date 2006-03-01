@@ -1159,13 +1159,17 @@
     (inexact->exact
      (min 255.0
           (truncate (* (/ 255.0 range) value)))))
+  (define (number->hex-string number)
+    (let ((ret (number->string number 16)))
+      (cond ((< (string-length ret) 2) (string-append "0" ret))
+            (else ret))))
   (let ((red (car color))
         (green (cadr color))
         (blue (caddr color)))
     (string-append
-     (number->string (html-value red) 16)
-     (number->string (html-value green) 16)
-     (number->string (html-value blue) 16))))
+     (number->hex-string (html-value red))
+     (number->hex-string (html-value green))
+     (number->hex-string (html-value blue)))))
 
 (define (gnc:color->html color range)
     (string-append "#"
