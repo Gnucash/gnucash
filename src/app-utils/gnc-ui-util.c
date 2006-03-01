@@ -1156,7 +1156,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
   struct lconv *lc = gnc_localeconv();
   int num_whole_digits;
-  char temp_buf[64];
+  char temp_buf[128];
   gnc_numeric whole, rounding;
   int min_dp, max_dp;
 
@@ -1218,19 +1218,20 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   else
   {
     int group_count;
-    char separator;
+    char *separator;
     char *temp_ptr;
     char *buf_ptr;
     char *group;
+    gchar *rev_buf;
 
     if (info->monetary)
     {
-      separator = lc->mon_thousands_sep[0];
+      separator = lc->mon_thousands_sep;
       group = lc->mon_grouping;
     }
     else
     {
-      separator = lc->thousands_sep[0];
+      separator = lc->thousands_sep;
       group = lc->grouping;
     }
 
@@ -1248,7 +1249,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 
         if (group_count == *group)
         {
-          *buf_ptr++ = separator;
+	  g_utf8_strncpy(buf_ptr, separator, 1);
+	  buf_ptr = g_utf8_find_next_char(buf_ptr, NULL);
           group_count = 0;
 
           /* Peek ahead at the next group code */
@@ -1272,7 +1274,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     /* We built the string backwards, now reverse */
     *buf_ptr++ = *temp_ptr;
     *buf_ptr = '\0';
-    g_strreverse(buf);
+    rev_buf = g_utf8_strreverse(buf, -1);
+    strcpy (buf, rev_buf);
+    g_free(rev_buf);
   } /* endif */
 
   /* at this point, buf contains the whole part of the number */
@@ -1296,11 +1300,14 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
   else
   {
+    char *decimal_point;
     guint8 num_decimal_places = 0;
     char *temp_ptr = temp_buf;
 
-    *temp_ptr++ = info->monetary ?
-      lc->mon_decimal_point[0] : lc->decimal_point[0];
+    decimal_point = info->monetary ?
+      lc->mon_decimal_point : lc->decimal_point;
+    g_utf8_strncpy(temp_ptr, decimal_point, 1);
+    temp_ptr = g_utf8_find_next_char(temp_ptr, NULL);
 
     while (!gnc_numeric_zero_p (val) && (val.denom != 1) &&
 	   (num_decimal_places < max_dp))

@@ -1,3 +1,9 @@
+2006-03-01  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/gnc-ui-util.c: Rework of Sylvain Defresne's patch
+	to support multi-byte unicode thousands separator and decimal
+	point characters when printing numbers.
+
 2006-03-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/transaction.scm:
