@@ -270,7 +270,7 @@ _gnc-svninfo.h: Makefile
 		if [ -r $(srcdir)/gnc-svninfo.h ] ; then \
 			cp $(srcdir)/gnc-svninfo.h _gnc-svninfo.h ; \
 		else \
-			echo "You're building from SVN...  But you're build system is broken" ; \
+			echo "You're building from SVN...  But your build system is broken" ; \
 			echo "Don't do that.   Complain to your build-system creator." ; \
 			exit 1 ; \
 		fi ; \
