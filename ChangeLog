@@ -1,3 +1,8 @@
+2006-03-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/transaction.scm:
+	  Andrew Sackville-West's patch to add transaction links.
+
 2006-02-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c: Collapse the common parts of

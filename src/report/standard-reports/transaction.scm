@@ -487,18 +487,18 @@
     (if (used-amount-single column-vector)
         (addto! row-contents
                 (gnc:make-html-table-cell/markup "number-cell"
-                                                 split-value)))
+                                                 (gnc:html-transaction-anchor parent split-value))))
     (if (used-amount-double-positive column-vector)
         (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (gnc:make-html-table-cell/markup "number-cell"
-                                                     split-value))
+                                                     (gnc:html-transaction-anchor parent split-value)))
             (addto! row-contents " ")))
     (if (used-amount-double-negative column-vector)
         (if (gnc:numeric-negative-p (gnc:gnc-monetary-amount split-value))
             (addto! row-contents
                     (gnc:make-html-table-cell/markup
-                     "number-cell" (gnc:monetary-neg split-value)))
+                     "number-cell" (gnc:html-transaction-anchor parent (gnc:monetary-neg split-value))))
             (addto! row-contents " ")))
     (if (used-running-balance column-vector)
 	(begin
