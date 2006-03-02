@@ -135,7 +135,6 @@ void gnc_file_mt940_import (void)
   char *selected_filename;
   char *default_dir;
   int mt940_fd;
-  GNCImportMainMatcher *gnc_mt940_importer_gui = NULL;
 
   /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
   DEBUG("gnc_file_mt940_import(): Begin...\n");
@@ -151,18 +150,19 @@ void gnc_file_mt940_import (void)
 
   if(selected_filename!=NULL) {
     /* Remember the directory as the default. */
-    gnc_extract_directory(&default_dir, selected_filename);
+    default_dir = g_path_get_dirname(selected_filename);
     gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
     g_free(default_dir);
 
     /*strncpy(file,selected_filename, 255);*/
     DEBUG("Filename found: %s",selected_filename);
 
-    /* Create the Generic transaction importer GUI. */
-    gnc_mt940_importer_gui = gnc_gen_trans_list_new(NULL, NULL, FALSE, 42);
-
     DEBUG("Opening selected file");
     mt940_fd = open(selected_filename, O_RDONLY);
+    if (mt940_fd == -1) {
+      DEBUG("Could not open file %s", selected_filename);
+      return;
+    }
 
     {
       int result;
@@ -173,13 +173,19 @@ void gnc_file_mt940_import (void)
       GWEN_DB_NODE *dbProfiles;
       GWEN_DB_NODE *dbProfile;
       const char *importerName = "swift"; /* possible values: csv, swift, dtaus, */
-      const char *profileName = "default";
+      const char *profileName = "swift-mt940";
+      /* Possible values for profile: "swiftmt942", but for other
+	 importers: "default" */
 
       ab = AB_Banking_new("gnucash", 0);
+      AB_Banking_Init(ab);
+
       /* get import module */
       importer=AB_Banking_GetImExporter(ab, importerName);
       if (!importer) {
-	DEBUG("Import module swift not found");
+	DEBUG("Import module %s not found", importerName);
+	gnc_error_dialog(NULL, "%s",("Import module for MT940 import not found."));
+	return;
       }
       g_assert(importer);
 
@@ -197,19 +203,22 @@ void gnc_file_mt940_import (void)
 	  break;
 	dbProfile=GWEN_DB_GetNextGroup(dbProfile);
       }
+      if (!dbProfile) {
+	DEBUG("Profile \"%s\" for importer \"%s\" not found",
+	      profileName, importerName);
+	printf("Profile \"%s\" for importer \"%s\" not found\n",
+	      profileName, importerName);
+	return;
+      }
       g_assert(dbProfile);
-      /*if (!dbProfile) {
-	DBG_ERROR(AQT_LOGDOMAIN,
-		  "Profile \"%s\" for importer \"%s\" not found",
-		  profileName, importerName);
-	return 3;
-	}*/
 
       /* import new context */
       ctx=AB_ImExporterContext_new();
+      g_assert(ctx);
 
       /* Wrap file in gwen_bufferedio */
       buffio = GWEN_BufferedIO_File_new(mt940_fd);
+      g_assert(buffio);
 
       result = AB_ImExporter_Import(importer,
 				  ctx,
