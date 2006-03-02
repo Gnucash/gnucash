@@ -1,76 +1,76 @@
-<?xml version="1.0" encoding="ISO-8859-7"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-      Δάνειο Αυτοκινήτου 
+      ΞΞ¬Ξ½Ξ΅ΞΉΞΏ ΞΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ 
     </gnc-act:title>
     <gnc-act:short-description>
-      Λογαριασμοί δανείου για την αγορά αυτοκινήτου
+      ΞΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΞΏΞ― Ξ΄Ξ±Ξ½Ξ΅Ξ―ΞΏΟ Ξ³ΞΉΞ± ΟΞ·Ξ½ Ξ±Ξ³ΞΏΟΞ¬ Ξ±ΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Επιλέξτε αυτούς τους λογαριασμούς αν έχετε πάρει δάνειο για αγορά αυτοκινήτου (δάνειο αυτοκινήτου, τόκοι δανείου).
+    ΞΟΞΉΞ»Ξ­ΞΎΟΞ΅ Ξ±ΟΟΞΏΟΟ ΟΞΏΟΟ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΞΏΟΟ Ξ±Ξ½ Ξ­ΟΞ΅ΟΞ΅ ΟΞ¬ΟΞ΅ΞΉ Ξ΄Ξ¬Ξ½Ξ΅ΞΉΞΏ Ξ³ΞΉΞ± Ξ±Ξ³ΞΏΟΞ¬ Ξ±ΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ (Ξ΄Ξ¬Ξ½Ξ΅ΞΉΞΏ Ξ±ΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ, ΟΟΞΊΞΏΞΉ Ξ΄Ξ±Ξ½Ξ΅Ξ―ΞΏΟ).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Παθητικό</act:name>
+  <act:name>Ξ Ξ±ΞΈΞ·ΟΞΉΞΊΟ</act:name>
   <act:id type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Παθητικό</act:description>
+  <act:description>Ξ Ξ±ΞΈΞ·ΟΞΉΞΊΟ</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δάνεια</act:name>
+  <act:name>ΞΞ¬Ξ½Ξ΅ΞΉΞ±</act:name>
   <act:id type="new">023e2343114b3d695feaeb96904e0da6</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δάνεια</act:description>
+  <act:description>ΞΞ¬Ξ½Ξ΅ΞΉΞ±</act:description>
   <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δάνειο Αυτοκινήτου</act:name>
+  <act:name>ΞΞ¬Ξ½Ξ΅ΞΉΞΏ ΞΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ</act:name>
   <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Δάνειο Οχήματος</act:description>
+  <act:description>ΞΞ¬Ξ½Ξ΅ΞΉΞΏ ΞΟΞ®ΞΌΞ±ΟΞΏΟ</act:description>
   <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έξοδα</act:name>
+  <act:name>ΞΞΎΞΏΞ΄Ξ±</act:name>
   <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έξοδα</act:description>
+  <act:description>ΞΞΎΞΏΞ΄Ξ±</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι</act:name>
+  <act:name>Ξ€ΟΞΊΞΏΞΉ</act:name>
   <act:id type="new">9e8495e80ebfb762089be917dff7ab72</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Tόκοι</act:description>
+  <act:description>TΟΞΊΞΏΞΉ</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Δανείου Αυτοκινήτου</act:name>
+  <act:name>Ξ€ΟΞΊΞΏΞΉ ΞΞ±Ξ½Ξ΅Ξ―ΞΏΟ ΞΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ</act:name>
   <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Δανείου Αυτοκινήτου</act:description>
+  <act:description>Ξ€ΟΞΊΞΏΞΉ ΞΞ±Ξ½Ξ΅Ξ―ΞΏΟ ΞΟΟΞΏΞΊΞΉΞ½Ξ®ΟΞΏΟ</act:description>
   <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
 </gnc:account>
 </gnc-account-example>

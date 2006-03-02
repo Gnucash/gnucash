@@ -1,152 +1,152 @@
-<?xml version="1.0" encoding="ISO-8859-7"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <gnc-account-example>
     <gnc-act:title>
-     Λογαριασμοί Επενδύσεων
+     ΞΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΞΏΞ― ΞΟΞ΅Ξ½Ξ΄ΟΟΞ΅ΟΞ½
     </gnc-act:title>
     <gnc-act:short-description>
-      Λογαριασμός Χρηματιστηριακής με τους κατάλληλους λογαριασμούς επενδύσεων (μετοχή, ομόλογο, αμοιβαίο κεφάλαιο, αμοιβαίο κεφάλαιο δείκτη, τόκοι, μέρισμα)
+      ΞΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΟΟ Ξ§ΟΞ·ΞΌΞ±ΟΞΉΟΟΞ·ΟΞΉΞ±ΞΊΞ®Ο ΞΌΞ΅ ΟΞΏΟΟ ΞΊΞ±ΟΞ¬Ξ»Ξ»Ξ·Ξ»ΞΏΟΟ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΞΏΟΟ Ξ΅ΟΞ΅Ξ½Ξ΄ΟΟΞ΅ΟΞ½ (ΞΌΞ΅ΟΞΏΟΞ®, ΞΏΞΌΟΞ»ΞΏΞ³ΞΏ, Ξ±ΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΊΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ, Ξ±ΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΊΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ Ξ΄Ξ΅Ξ―ΞΊΟΞ·, ΟΟΞΊΞΏΞΉ, ΞΌΞ­ΟΞΉΟΞΌΞ±)
     </gnc-act:short-description>
     <gnc-act:long-description>
-    Θα θέλατε να επιλέξετε αυτό το σύνολο λογαριασμών αν έχετε επενδύσεις (μετοχή, ομολογία, αμοιβαίο κεφάλαιο, αμοιβαίο κεφάλαιο δείκτη, τόκοι μέρισμα).
+    ΞΞ± ΞΈΞ­Ξ»Ξ±ΟΞ΅ Ξ½Ξ± Ξ΅ΟΞΉΞ»Ξ­ΞΎΞ΅ΟΞ΅ Ξ±ΟΟΟ ΟΞΏ ΟΟΞ½ΞΏΞ»ΞΏ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΟΞ½ Ξ±Ξ½ Ξ­ΟΞ΅ΟΞ΅ Ξ΅ΟΞ΅Ξ½Ξ΄ΟΟΞ΅ΞΉΟ (ΞΌΞ΅ΟΞΏΟΞ®, ΞΏΞΌΞΏΞ»ΞΏΞ³Ξ―Ξ±, Ξ±ΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΊΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ, Ξ±ΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΊΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ Ξ΄Ξ΅Ξ―ΞΊΟΞ·, ΟΟΞΊΞΏΞΉ ΞΌΞ­ΟΞΉΟΞΌΞ±).
   </gnc-act:long-description>    
 <gnc:account version="2.0.0">
-  <act:name>Ενεργητικό</act:name>
+  <act:name>ΞΞ½Ξ΅ΟΞ³Ξ·ΟΞΉΞΊΟ</act:name>
   <act:id type="new">52b5942b5beaec856eaca5a75ee71592</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ενεργητικό</act:description>
+  <act:description>ΞΞ½Ξ΅ΟΞ³Ξ·ΟΞΉΞΊΟ</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έπενδύσεις</act:name>
+  <act:name>ΞΟΞ΅Ξ½Ξ΄ΟΟΞ΅ΞΉΟ</act:name>
   <act:id type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Επενδύσεις</act:description>
+  <act:description>ΞΟΞ΅Ξ½Ξ΄ΟΟΞ΅ΞΉΟ</act:description>
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Λογαριασμός Χρηματιστή</act:name>
+  <act:name>ΞΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΟΟ Ξ§ΟΞ·ΞΌΞ±ΟΞΉΟΟΞ®</act:name>
   <act:id type="new">f15ec9568727f08a5ebd8f3e66483876</act:id>
   <act:type>BANK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Λογαριασμός Χρηματιστή</act:description>
+  <act:description>ΞΞΏΞ³Ξ±ΟΞΉΞ±ΟΞΌΟΟ Ξ§ΟΞ·ΞΌΞ±ΟΞΉΟΟΞ®</act:description>
   <act:parent type="new">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Ομόλογο</act:name>
+  <act:name>ΞΞΌΟΞ»ΞΏΞ³ΞΏ</act:name>
   <act:id type="new">8196bf0015c25f501338f07a87c512d8</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Ομόλογο</act:description>
+  <act:description>ΞΞΌΟΞ»ΞΏΞ³ΞΏ</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Μετοχή</act:name>
+  <act:name>ΞΞ΅ΟΞΏΟΞ®</act:name>
   <act:id type="new">7d7db9bed07f21fc0b1f50674702aff0</act:id>
   <act:type>STOCK</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Μετοχή</act:description>
+  <act:description>ΞΞ΅ΟΞΏΟΞ®</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αμοιβαίο Κεφάλαιο Δείκτη</act:name>
+  <act:name>ΞΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ ΞΞ΅Ξ―ΞΊΟΞ·</act:name>
   <act:id type="new">fe9db8a7eedf2990e9846f634a922143</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αμοιβαίο Κεφάλαιο Δείκτη</act:description>
+  <act:description>ΞΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ ΞΞ΅Ξ―ΞΊΟΞ·</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Αμοιβαίο Κεφάλαιο</act:name>
+  <act:name>ΞΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ</act:name>
   <act:id type="new">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
   <act:type>MUTUAL</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Αμοιβαίο Κεφάλαιο</act:description>
+  <act:description>ΞΞΌΞΏΞΉΞ²Ξ±Ξ―ΞΏ ΞΞ΅ΟΞ¬Ξ»Ξ±ΞΉΞΏ</act:description>
   <act:parent type="new">f15ec9568727f08a5ebd8f3e66483876</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έσοδα</act:name>
+  <act:name>ΞΟΞΏΞ΄Ξ±</act:name>
   <act:id type="new">9da3c880bd04b9db49eb7f5b06403bda</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έσοδα</act:description>
+  <act:description>ΞΟΞΏΞ΄Ξ±</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έσοδα από Τόκους</act:name>
+  <act:name>ΞΟΞΏΞ΄Ξ± Ξ±ΟΟ Ξ€ΟΞΊΞΏΟΟ</act:name>
   <act:id type="new">1af1f4894aeab96d840e66254d023b88</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έσοδα από Μέρισμα</act:description>
+  <act:description>ΞΟΞΏΞ΄Ξ± Ξ±ΟΟ ΞΞ­ΟΞΉΟΞΌΞ±</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έσοδα από Μέρισμα</act:name>
+  <act:name>ΞΟΞΏΞ΄Ξ± Ξ±ΟΟ ΞΞ­ΟΞΉΟΞΌΞ±</act:name>
   <act:id type="new">7943bc59ffbb9a7be4afcd2996147119</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έσοδα από Τόκους</act:description>
+  <act:description>ΞΟΞΏΞ΄Ξ± Ξ±ΟΟ Ξ€ΟΞΊΞΏΟΟ</act:description>
   <act:parent type="new">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Ομολόγου</act:name>
+  <act:name>Ξ€ΟΞΊΞΏΞΉ ΞΞΌΞΏΞ»ΟΞ³ΞΏΟ</act:name>
   <act:id type="new">8ceb4752a11e2d342b9009b343fdba38</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Ομολόγου</act:description>
+  <act:description>Ξ€ΟΞΊΞΏΞΉ ΞΞΌΞΏΞ»ΟΞ³ΞΏΟ</act:description>
   <act:parent type="new">7943bc59ffbb9a7be4afcd2996147119</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Έξοδα</act:name>
+  <act:name>ΞΞΎΞΏΞ΄Ξ±</act:name>
   <act:id type="new">6de23244232785031501171abcc1d4aa</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Έξοδα</act:description>
+  <act:description>ΞΞΎΞΏΞ΄Ξ±</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Προμήθειες</act:name>
+  <act:name>Ξ ΟΞΏΞΌΞ®ΞΈΞ΅ΞΉΞ΅Ο</act:name>
   <act:id type="new">77fdffddc79c662c93c482cefa5a4744</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
-  <act:description>Προμήθειες</act:description>
+  <act:description>Ξ ΟΞΏΞΌΞ®ΞΈΞ΅ΞΉΞ΅Ο</act:description>
   <act:parent type="new">6de23244232785031501171abcc1d4aa</act:parent>
 </gnc:account>
 </gnc-account-example>

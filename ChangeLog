@@ -1,3 +1,8 @@
+2006-03-02  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/el_GR/*-xea: Greek account templates converted to
+	UTF-8, by Nikos Charonitakis <nikosx@gmail.com>.
+
 2006-03-02  David Hampton  <hampton@employees.org>
 
 	* numerous: Move the storage for the account separator character
