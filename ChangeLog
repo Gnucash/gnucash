@@ -1,7 +1,7 @@
 2006-03-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/mt940/gnc-mt940-import.c: More work on mt940
-	import, #325170. Unfortunately not yet error-free.
+	import. Completed #325170.
 
 	* accounts/el_GR/*-xea: Greek account templates converted to
 	UTF-8, by Nikos Charonitakis <nikosx@gmail.com>.

@@ -219,6 +219,7 @@ void gnc_file_mt940_import (void)
       /* Wrap file in gwen_bufferedio */
       buffio = GWEN_BufferedIO_File_new(mt940_fd);
       g_assert(buffio);
+      GWEN_BufferedIO_SetReadBuffer(buffio, 0, 1024);
 
       result = AB_ImExporter_Import(importer,
 				  ctx,
