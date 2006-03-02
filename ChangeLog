@@ -1,3 +1,11 @@
+2006-03-02  David Hampton  <hampton@employees.org>
+
+	* numerous: Move the storage for the account separator character
+	into Account.c (default ':') and set it with an accessor function
+	at startup and when it is changed in the preferences/gconf.
+	Eliminate unnecessary passing around of the account separator
+	character.
+
 2006-03-01  David Hampton  <hampton@employees.org>
 
 	* src/register/register-core/pricecell.c:

@@ -396,7 +396,7 @@ int xaccSplitCompareOtherAccountCodes(const Split *sa, const Split *sb);
  * is silly. 
  */
 
-char * xaccSplitGetCorrAccountFullName(const Split *sa, char seperator);
+char * xaccSplitGetCorrAccountFullName(const Split *sa);
 /** document me */
 const char * xaccSplitGetCorrAccountName(const Split *sa);
 /** document me */

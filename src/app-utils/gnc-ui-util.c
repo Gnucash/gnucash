@@ -50,6 +50,7 @@
 
 #define KEY_CURRENCY_CHOICE "currency_choice"
 #define KEY_CURRENCY_OTHER  "currency_other"
+#define KEY_REVERSED_ACCOUNTS "reversed_accounts"
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -66,8 +67,8 @@ static gboolean reverse_type[NUM_ACCOUNT_TYPES];
  * Args: none                                                       *
  * Returns: account separator character                             *
  \*******************************************************************/
-char
-gnc_get_account_separator (void)
+static void
+gnc_configure_account_separator (void)
 {
   char separator = ':';
   char *string;
@@ -88,7 +89,7 @@ gnc_get_account_separator (void)
   if (string != NULL)
     free(string);
 
-  return separator;
+  gnc_set_account_separator(separator);
 }
 
 
@@ -101,7 +102,7 @@ gnc_configure_reverse_balance (void)
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     reverse_type[i] = FALSE;
 
-  choice = gnc_gconf_get_string(GCONF_GENERAL, "reversed_accounts", NULL);
+  choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_REVERSED_ACCOUNTS, NULL);
 
   if (safe_strcmp (choice, "none") == 0)
   {
@@ -706,7 +707,7 @@ gnc_account_get_full_name (const Account *account)
 {
   if (!account) return NULL;
 
-  return xaccAccountGetFullName (account, gnc_get_account_separator ());
+  return xaccAccountGetFullName (account);
 }
 
 static void
@@ -2042,7 +2043,11 @@ gnc_set_auto_decimal_places  (GConfEntry *entry, gpointer user_data)
 void
 gnc_ui_util_init (void)
 {
-  gnc_gconf_general_register_cb("reversed_accounts",
+  gnc_configure_account_separator ();
+  gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
+				(GncGconfGeneralCb)gnc_configure_account_separator,
+				NULL);
+  gnc_gconf_general_register_cb(KEY_REVERSED_ACCOUNTS,
 				(GncGconfGeneralCb)gnc_configure_reverse_balance,
 				NULL);
   gnc_gconf_general_register_cb("auto_decimal_point",

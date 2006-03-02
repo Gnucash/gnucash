@@ -573,7 +573,7 @@ load_xfer_cell_cb (Account *account, gpointer data)
 
   if (xaccAccountGetPlaceholder (account)) return NULL;
 
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  name = xaccAccountGetFullName (account);
   if (NULL == name) return NULL;
   gnc_combo_cell_add_account_menu_item (cell, name);
   g_free(name);

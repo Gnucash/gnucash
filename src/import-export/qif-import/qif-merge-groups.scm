@@ -35,7 +35,6 @@
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
   (let* ((new-xtns (gnc:group-get-transactions new-group))
-         (separator (string-ref (gnc:account-separator-char) 0))
 	 (progress-dialog #f)
 	 (work-to-do (length new-xtns))
 	 (work-done 0)
@@ -90,7 +89,7 @@
                  sq 
                  (gnc:get-account-from-full-name
                   old-group (gnc:account-get-full-name 
-                             (gnc:split-get-account split)) separator)
+                             (gnc:split-get-account split)))
                  'query-and)
                 
                 ;; we want the value for the split to match the value

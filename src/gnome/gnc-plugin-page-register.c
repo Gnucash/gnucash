@@ -847,8 +847,7 @@ gnc_plugin_page_register_save_page (GncPluginPage *plugin_page,
     leader = gnc_ledger_display_leader(priv->ledger);
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE, label);
     g_key_file_set_string(key_file, group_name, KEY_ACCOUNT_NAME,
-			  xaccAccountGetFullName(leader,
-						 gnc_get_account_separator()));
+			  xaccAccountGetFullName(leader));
   } else if (reg->type == GENERAL_LEDGER) {
     g_key_file_set_string(key_file, group_name, KEY_REGISTER_TYPE,
 			  LABEL_GL);
@@ -962,8 +961,7 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
 				      KEY_ACCOUNT_NAME, &error);
     book = qof_session_get_book(gnc_get_current_session());
     account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-					 acct_name,
-					 gnc_get_account_separator());
+					 acct_name);
     g_free(acct_name);
     if (account == NULL) {
       LEAVE("Bad account name");
@@ -1610,8 +1608,7 @@ gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
 
   if ((leader != NULL) && (ledger_type != LD_GL))
   {
-    account_name = xaccAccountGetFullName (leader,
-                                           gnc_get_account_separator ());
+    account_name = xaccAccountGetFullName (leader);
 
     if (ledger_type == LD_SINGLE)
     {

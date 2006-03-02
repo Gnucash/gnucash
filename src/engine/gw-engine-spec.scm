@@ -452,7 +452,7 @@ its account")
  'gnc:split-get-corr-account-full-name-internal
  '(<gw:gchars> caller-owned)
  "xaccSplitGetCorrAccountFullName"
- '((<gnc:Split*> sa) (<gw:char> separator))
+ '((<gnc:Split*> sa))
  "Find the split on the other side of the transaction, and return the 
 name of its account.  Don't use directly, use 
 gnc:split-get-corr-account-full-name in src/scm/report-utilities.scm")
@@ -1065,8 +1065,7 @@ group")
  '<gnc:Account*>
  "xaccGetAccountFromFullName"
  '((<gnc:AccountGroup*> g)
-   ((<gw:mchars> caller-owned const) name)
-   (<gw:char> separator))
+   ((<gw:mchars> caller-owned const) name))
  "Return account named name in group g.  full path with separators.")
 
 (gw:wrap-function

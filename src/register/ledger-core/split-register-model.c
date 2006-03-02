@@ -84,9 +84,7 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
     const char *name;
 
     name = gnc_table_layout_get_cell_value (reg->table->layout, XFRM_CELL);
-    account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          name,
-                                          gnc_get_account_separator ());
+    account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
   }
 
   if (!account)
@@ -1221,8 +1219,7 @@ gnc_split_register_get_xfrm_entry (VirtualLocation virt_loc,
 
   g_free (name);
 
-  name = xaccAccountGetFullName (xaccSplitGetAccount (split),
-                                 gnc_get_account_separator ());
+  name = xaccAccountGetFullName (xaccSplitGetAccount (split));
 
   return name;
 }
@@ -1263,8 +1260,7 @@ gnc_split_register_get_mxfrm_entry (VirtualLocation virt_loc,
   g_free (name);
 
   if (s)
-    name = xaccAccountGetFullName (xaccSplitGetAccount (s),
-                                   gnc_get_account_separator ());
+    name = xaccAccountGetFullName (xaccSplitGetAccount (s));
   else
   {
     /* For multi-split transactions and stock splits,
@@ -1808,7 +1804,7 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
 
     account = xaccAccountLookup (guid, gnc_get_current_book ());
 
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    name = xaccAccountGetFullName (account);
   }
   else
     name = NULL;

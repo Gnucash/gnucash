@@ -442,8 +442,7 @@ Account * xaccGetAccountByName (const Transaction *trans, const char *name);
 /** The xaccGetAccountByFullName routine is similar to xaccGetAccountByName, but uses
  *  full names using the given separator.*/
 Account * xaccGetAccountByFullName (const Transaction *trans,
-                                    const char *name,
-                                    const char separator);
+                                    const char *name);
 
 
 /** @name Transaction voiding

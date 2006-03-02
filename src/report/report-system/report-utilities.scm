@@ -155,8 +155,7 @@
    (gnc:group-get-account-list (gnc:get-current-group))))
 
 (define (gnc:split-get-corr-account-full-name split)
-  (let ((separator (string-ref (gnc:account-separator-char) 0)))
-    (gnc:split-get-corr-account-full-name-internal split separator)))
+  (gnc:split-get-corr-account-full-name-internal split))
 
 
 ;; get children that are the direct descendant of this acct

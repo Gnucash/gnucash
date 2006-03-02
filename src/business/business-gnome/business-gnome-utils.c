@@ -327,7 +327,7 @@ gnc_fill_account_select_combo (GtkWidget *combo, GNCBook *book,
 	== -1)
       continue;
 
-    name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    name = xaccAccountGetFullName (account);
     if (name != NULL) {
       names = g_list_append (names, name);
       if (!safe_strcmp (name, text))

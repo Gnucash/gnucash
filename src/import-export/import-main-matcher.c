@@ -667,8 +667,7 @@ refresh_clist_row (GNCImportMainMatcher *gui,
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 					&(gui->color_back_green));
 	      tmp = xaccAccountGetFullName 
-		(gnc_import_TransInfo_get_destacc (info),
-		 gnc_get_account_separator ());
+		(gnc_import_TransInfo_get_destacc (info));
 	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)
 		 == TRUE)
 		{

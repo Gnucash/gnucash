@@ -45,12 +45,6 @@
 typedef QofSession * (*QofSessionCB) (void);
 
 
-/** Returns the account separation character chosen by the user.
- *
- *  @return The character to use.
- */
-char gnc_get_account_separator (void);
-
 gboolean gnc_reverse_balance(const Account *account);
 gboolean gnc_reverse_balance_type(GNCAccountType type);
 

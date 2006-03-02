@@ -1722,14 +1722,13 @@ xaccGetAccountByName (const Transaction *trans, const char * name)
 \********************************************************************/
 
 Account *
-xaccGetAccountByFullName (const Transaction *trans, const char * name,
-                          const char separator)
+xaccGetAccountByFullName (const Transaction *trans, const char * name)
 {
    Account *acc;
    if (!trans || !name) return NULL;
 
    acc = get_any_account(trans);
-   return acc ? xaccGetPeerAccountFromFullName (acc, name, separator) : NULL;
+   return acc ? xaccGetPeerAccountFromFullName (acc, name) : NULL;
 }
 
 /********************************************************************\

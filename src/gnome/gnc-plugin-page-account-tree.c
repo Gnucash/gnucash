@@ -874,7 +874,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     return;
 
   window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
-  acct_name = xaccAccountGetFullName(account, gnc_get_account_separator ());
+  acct_name = xaccAccountGetFullName(account);
   if (!acct_name) {
     acct_name = g_strdup (_("(no name)"));
   }
@@ -999,7 +999,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     lines[0] = g_strdup_printf(format, acct_name);
     if (splits) {
       if (ta) {
-	name = xaccAccountGetFullName(ta, gnc_get_account_separator ());
+	name = xaccAccountGetFullName(ta);
 	format = _("All transactions in this account will be moved to "
 		   "the account %s.");
 	lines[++i] = g_strdup_printf(format, name);
@@ -1010,7 +1010,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     }
     if (children) {
       if (daa) {
-	name = xaccAccountGetFullName(daa, gnc_get_account_separator ());
+	name = xaccAccountGetFullName(daa);
 	format = _("All of its sub-accounts will be moved to "
 		   "the account %s.");
 	lines[++i] = g_strdup_printf(format, name);
@@ -1018,7 +1018,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 	format = _("All of its subaccounts will be deleted.");
 	lines[++i] = g_strdup_printf("%s", format);
 	if (dta) {
-	  name = xaccAccountGetFullName(ta, gnc_get_account_separator ());
+	  name = xaccAccountGetFullName(ta);
 	  format = _("All sub-account transactions will be moved to "
 		     "the account %s.");
 	  lines[++i] = g_strdup_printf(format, name);

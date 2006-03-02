@@ -88,8 +88,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
   Account *account;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (),
-					name, gnc_get_account_separator ());
+  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */
@@ -106,7 +105,7 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
     *new = TRUE;
 
     /* Now have a new account. Update the cell with the name as created. */
-    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    fullname = xaccAccountGetFullName (account);
     gnc_combo_cell_set_value (cell, fullname);
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
     g_free (fullname);

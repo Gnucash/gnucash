@@ -1118,7 +1118,7 @@ xaccSplitGetCorrAccountName(const Split *sa)
 }
 
 char *
-xaccSplitGetCorrAccountFullName(const Split *sa, char separator)
+xaccSplitGetCorrAccountFullName(const Split *sa)
 {
   static const char *split_const = NULL;
   const Split *other_split;
@@ -1130,7 +1130,7 @@ xaccSplitGetCorrAccountFullName(const Split *sa, char separator)
 
     return g_strdup(split_const);
   }
-  return xaccAccountGetFullName(other_split->acc, separator);
+  return xaccAccountGetFullName(other_split->acc);
 }
 
 const char *
@@ -1162,9 +1162,8 @@ xaccSplitCompareAccountFullNames(const Split *sa, const Split *sb)
 
   aa = sa->acc;
   ab = sb->acc;
-  full_a = xaccAccountGetFullName(aa, ':');
-  full_b = xaccAccountGetFullName(ab, ':');
-  /* for comparison purposes it doesn't matter what we use as a separator */
+  full_a = xaccAccountGetFullName(aa);
+  full_b = xaccAccountGetFullName(ab);
   retval = safe_strcmp(full_a, full_b);
   g_free(full_a);
   g_free(full_b);
@@ -1199,8 +1198,8 @@ xaccSplitCompareOtherAccountFullNames(const Split *sa, const Split *sb)
    * as long as they are the same 
    */
 
-  ca = xaccSplitGetCorrAccountFullName(sa, ':');
-  cb = xaccSplitGetCorrAccountFullName(sb, ':');
+  ca = xaccSplitGetCorrAccountFullName(sa);
+  cb = xaccSplitGetCorrAccountFullName(sb);
   retval = safe_strcmp(ca, cb);
   g_free(ca);
   g_free(cb);

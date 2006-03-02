@@ -831,8 +831,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         /* auto-complete the account name */
         cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
 
-        fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split),
-                                           gnc_get_account_separator ());
+        fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split));
         gnc_combo_cell_set_value ((ComboCell *) cell, fullname);
         g_free(fullname);
 

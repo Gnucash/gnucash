@@ -179,6 +179,13 @@ int xaccAccountOrder (const Account **account_1, const Account **account_2);
 /** @name Account lookup and GUID routines 
  @{ */
 
+/** Returns the account separation character chosen by the user.
+ *
+ *  @return The character to use.
+ */
+char gnc_get_account_separator (void);
+void gnc_set_account_separator (char separator);
+
 /** @deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
 #define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
@@ -236,7 +243,7 @@ const char * xaccAccountGetLastNum (const Account *account);
  * hack alert -- since it breaks the rule of string allocation, maybe this
  * routine should not be in this library, but some utility library?
  */
-char * xaccAccountGetFullName (const Account *account, const char separator);
+char * xaccAccountGetFullName (const Account *account);
 
 /** Set a string that identifies the Finance::Quote backend that
  *  should be used to retrieve online prices.  See price-quotes.scm

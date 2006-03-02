@@ -236,8 +236,7 @@ Account *xaccGetAccountFromName (const AccountGroup *group, const char *name);
  *    using the given separator.
  */
 Account *xaccGetAccountFromFullName (const AccountGroup *group,
-                                     const char *name,
-                                     const char separator);
+                                     const char *name);
 
 /** The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
@@ -251,8 +250,7 @@ Account *xaccGetPeerAccountFromName (const Account *account, const char *name);
  *     names using the given separator.
  */
 Account *xaccGetPeerAccountFromFullName (const Account *acc,
-                                         const char * name,
-                                         const char separator);
+                                         const char * name);
 
 /** @} */
 

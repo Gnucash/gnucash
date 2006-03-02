@@ -165,7 +165,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
 typedef struct {
         GNCAccountSel *gas;
         GList **outList;
-        char accountSep;
 } accounts_to_names_data;
 
 /**
@@ -203,7 +202,6 @@ gas_populate_list( GNCAccountSel *gas )
         nameList        = NULL;
         atnd.gas        = gas;
         atnd.outList    = &nameList;
-        atnd.accountSep = gnc_get_account_separator();
 
         g_list_foreach( accts, gas_accounts_to_names,
                         (gpointer)&atnd );
@@ -266,8 +264,7 @@ gas_accounts_to_names( gpointer data, gpointer user_data )
                 }
         }
         *atnd->outList =
-                g_list_append( *atnd->outList,
-                               xaccAccountGetFullName(a, atnd->accountSep) );
+                g_list_append( *atnd->outList, xaccAccountGetFullName(a) );
 }
 
 #if 0 /* completion not implemented  */
@@ -378,8 +375,7 @@ gnc_account_sel_set_account( GNCAccountSel *gas, Account *acct )
                 gtk_list_select_item( GTK_LIST(gas->combo->list), 0 );
                 return;
         }
-        acctStr = xaccAccountGetFullName( acct,
-                                          gnc_get_account_separator() );
+        acctStr = xaccAccountGetFullName( acct );
         gtk_entry_set_text( GTK_ENTRY(gas->combo->entry), acctStr );
         g_free( acctStr );
 }
@@ -398,7 +394,7 @@ gnc_account_sel_get_account( GNCAccountSel *gas )
                 goto cleanup;
         }
         ag = gnc_book_get_group( gnc_get_current_book() );
-        ret = xaccGetAccountFromFullName( ag, txt, gnc_get_account_separator() );
+        ret = xaccGetAccountFromFullName( ag, txt );
  cleanup:
         g_free( txt );
         return ret;

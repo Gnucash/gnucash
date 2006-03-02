@@ -663,9 +663,8 @@ int gncTaxTableEntryCompare (GncTaxTableEntry *a, GncTaxTableEntry *b)
   if (!a) return -1;
   if (!b) return 1;
     
-  name_a = xaccAccountGetFullName (a->account, ':');
-  name_b = xaccAccountGetFullName (b->account, ':');
-  /* for comparison purposes it doesn't matter what we use as a separator */
+  name_a = xaccAccountGetFullName (a->account);
+  name_b = xaccAccountGetFullName (b->account);
   retval = safe_strcmp(name_a, name_b);
   g_free(name_a);
   g_free(name_b);

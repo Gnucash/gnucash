@@ -1551,8 +1551,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     return NULL;
 
   /* Find the account */
-  account = xaccGetAccountFromFullName (gnc_get_current_group (),
-					name, gnc_get_account_separator ());
+  account = xaccGetAccountFromFullName (gnc_get_current_group (), name);
 
   if (!account) {
     /* Ask if they want to create a new one. */
@@ -1568,7 +1567,7 @@ gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * bcell,
     *refresh = TRUE;
 
     /* Now have a new account. Update the cell with the name as created. */
-    fullname = xaccAccountGetFullName (account, gnc_get_account_separator ());
+    fullname = xaccAccountGetFullName (account);
     gnc_combo_cell_set_value (cell, fullname);
     gnc_basic_cell_set_changed (&cell->cell, TRUE);
     g_free (fullname);

@@ -664,12 +664,11 @@ placeholder_cell_data_func (GtkTreeViewColumn *tree_column,
         {
         case GNC_ACCOUNT_MERGE_DISPOSITION_USE_EXISTING: {
                 /* find the existing account, do whatever it is. */
-                const char sep_char = '.';
                 gchar *full_name;
                 Account *existing_acct;
                 AccountGroup *root_group = gnc_book_get_group(gnc_get_current_book());
-                full_name = xaccAccountGetFullName(account, sep_char);
-                existing_acct = xaccGetAccountFromFullName(root_group, full_name, sep_char);
+                full_name = xaccAccountGetFullName(account);
+                existing_acct = xaccGetAccountFromFullName(root_group, full_name);
                 willbe_placeholder = xaccAccountGetPlaceholder(existing_acct);
                 g_free(full_name);
         } break;

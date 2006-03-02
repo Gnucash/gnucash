@@ -40,6 +40,9 @@
 
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
+/* The Canonical Account Separator.  Pre-Initialized. */
+static char account_separator = ':';
+
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend to!  These functions perform actions on the        *
@@ -48,6 +51,26 @@ static QofLogModule log_module = GNC_MOD_ACCOUNT;
 \********************************************************************/
 
 static void xaccAccountBringUpToDate (Account *acc);
+
+
+/********************************************************************\
+ * gnc_get_account_separator                                        *
+ *   returns the current account separator character                *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: account separator character                             *
+ \*******************************************************************/
+char
+gnc_get_account_separator (void)
+{
+  return account_separator;
+}
+
+void
+gnc_set_account_separator (char separator)
+{
+  account_separator = separator;
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -1408,7 +1431,7 @@ xaccAccountGetName (const Account *acc)
 }
 
 char *
-xaccAccountGetFullName(const Account *account, const char separator)
+xaccAccountGetFullName(const Account *account)
 {
   const Account *a;
   char *fullname;
@@ -1456,7 +1479,7 @@ xaccAccountGetFullName(const Account *account, const char separator)
 
     /* if we're not at the root, add another separator */
     if (a != NULL)
-      *p-- = separator;
+      *p-- = account_separator;
   }
 
   return fullname;

@@ -147,8 +147,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
     print_info = gnc_account_print_info (account, FALSE);
 
-    strings[0] = xaccAccountGetFullName (account,
-                                         gnc_get_account_separator ());
+    strings[0] = xaccAccountGetFullName (account);
     strings[1] = (char *) gnc_commodity_get_mnemonic (commodity);
     strings[2] = (char *) xaccPrintAmount (balance, print_info);
     strings[3] = NULL;

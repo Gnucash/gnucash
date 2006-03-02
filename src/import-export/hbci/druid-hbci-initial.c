@@ -177,8 +177,7 @@ update_accountlist_acc_cb (AB_ACCOUNT *hacc, gpointer user_data)
   if (gacc == NULL)
     row_text[1] = "";
   else 
-    row_text[1] = 
-      xaccAccountGetFullName (gacc, gnc_get_account_separator ());
+    row_text[1] = xaccAccountGetFullName (gacc);
 
   /* Add this row to the list */
   row = gtk_clist_append (GTK_CLIST (info->accountlist), row_text);

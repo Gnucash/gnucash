@@ -93,7 +93,7 @@ listen_for_account_events (GUID *guid, QofIdType type,
      if (skip) return;
   }
 
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  name = xaccAccountGetFullName (account);
   if (NULL == name) return;
 
   match = gnc_quickfill_get_string_match (qf, name);
@@ -125,7 +125,7 @@ load_shared_qf_cb (Account *account, gpointer data)
      if (skip) return NULL;
   }
 
-  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  name = xaccAccountGetFullName (account);
   if (NULL == name) return NULL;
   gnc_quickfill_insert (qfb->qf, name, QUICKFILL_ALPHA);
   g_free(name);

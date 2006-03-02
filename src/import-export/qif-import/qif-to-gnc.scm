@@ -19,7 +19,7 @@
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
-          (gnc:get-account-from-full-name old-group gnc-name separator))
+          (gnc:get-account-from-full-name old-group gnc-name))
          (allowed-types 
           (qif-map-entry:allowed-types acct-info))
          (make-new-acct #f)
@@ -38,13 +38,12 @@
 	     #t))))
     
     (define (make-unique-name-variant long-name short-name)
-      (if (gnc:get-account-from-full-name old-group long-name separator)
+      (if (gnc:get-account-from-full-name old-group long-name)
           (let loop ((count 2))
             (let* ((test-name 
                     (string-append long-name (sprintf #f " %a" count)))
                    (test-acct 
-                    (gnc:get-account-from-full-name old-group test-name 
-                                                    separator)))
+                    (gnc:get-account-from-full-name old-group test-name)))
               (if (and test-acct (not (compatible? test-acct)))
                   (loop (+ 1 count))
                   (string-append short-name (sprintf #f " %a" count)))))

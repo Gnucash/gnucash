@@ -500,18 +500,20 @@ xaccGetAccountFromName (const AccountGroup *grp, const char * name)
 
 Account *
 xaccGetAccountFromFullName (const AccountGroup *grp,
-                            const char *name,
-                            const char separator)
+                            const char *name)
 {
   GList *node;
   Account *found;
   char *p;
+  char separator;
 
   if (!grp) return NULL;
   if (!name) return NULL;
 
   p = (char *) name;
   found = NULL;
+
+  separator = gnc_get_account_separator();
 
   while (1)
   {
@@ -539,8 +541,7 @@ xaccGetAccountFromFullName (const AccountGroup *grp,
 
         /* There's stuff left to search for.
          * Search recursively after the separator. */
-        found = xaccGetAccountFromFullName(account->children,
-                                           p + 1, separator);
+        found = xaccGetAccountFromFullName(account->children, p + 1);
 
         /* If we found the account, break out. */
         if (found != NULL)
@@ -599,8 +600,7 @@ xaccGetPeerAccountFromName (const Account *acc, const char * name)
 \********************************************************************/
 
 Account *
-xaccGetPeerAccountFromFullName (const Account *acc, const char * name,
-                                const char separator)
+xaccGetPeerAccountFromFullName (const Account *acc, const char * name)
 {
   AccountGroup * root;
   Account *peer_acc;
@@ -612,7 +612,7 @@ xaccGetPeerAccountFromFullName (const Account *acc, const char * name,
   root = xaccAccountGetRoot (acc);
 
   /* now search all acounts hanging off the root */
-  peer_acc = xaccGetAccountFromFullName (root, name, separator);
+  peer_acc = xaccGetAccountFromFullName (root, name);
 
   return peer_acc;
 }

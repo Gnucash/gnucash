@@ -552,7 +552,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   if (fs == NULL) return;
   if (fs->account == account) return;
 
-  full_name = xaccAccountGetFullName(account, gnc_get_account_separator());
+  full_name = xaccAccountGetFullName(account);
   if(!full_name)
     full_name = g_strdup("");
 
@@ -744,15 +744,15 @@ gnc_common_ok (AccountWindow *aw)
   parent = gnc_tree_view_account_get_selected_account
     (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent == NULL) {
-    account = xaccGetAccountFromFullName(group, name, separator);
+    account = xaccGetAccountFromFullName(group, name);
   } else {
     sep_string[0] = separator;
     sep_string[1] = '\0';
 
-    fullname_parent = xaccAccountGetFullName(parent, separator);
+    fullname_parent = xaccAccountGetFullName(parent);
     fullname = g_strconcat(fullname_parent, sep_string, name, NULL);
 
-    account = xaccGetAccountFromFullName(group, fullname, separator);
+    account = xaccGetAccountFromFullName(group, fullname);
 
     g_free(fullname_parent);
     g_free(fullname);
@@ -1349,8 +1349,7 @@ get_ui_fullname (AccountWindow *aw)
     char *parent_name;
     char sep_string[2];
 
-    parent_name = xaccAccountGetFullName (parent_account,
-                                          gnc_get_account_separator());
+    parent_name = xaccAccountGetFullName (parent_account);
 
     sep_string[0] = gnc_get_account_separator ();
     sep_string[1] = '\0';
@@ -1561,7 +1560,7 @@ gnc_split_account_name (const char *in_name, Account **base_account)
     Account *account;
     char *p;
 
-    account = xaccGetAccountFromFullName (group, name, separator);
+    account = xaccGetAccountFromFullName (group, name);
     if (account)
     {
       *base_account = account;

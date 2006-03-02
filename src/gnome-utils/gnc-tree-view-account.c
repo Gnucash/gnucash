@@ -1746,8 +1746,7 @@ tree_save_expanded_row (GncTreeViewAccount *view,
     if (account == NULL)
         return;
     
-    account_name = xaccAccountGetFullName(account, 
-                                          gnc_get_account_separator());
+    account_name = xaccAccountGetFullName(account);
     if (account_name == NULL)
         return;
 
@@ -1780,8 +1779,7 @@ tree_save_selected_row (GncTreeViewAccount *view,
     if (account == NULL)
         return;
 
-    account_name = xaccAccountGetFullName (account, 
-                                           gnc_get_account_separator ());
+    account_name = xaccAccountGetFullName (account);
     if (account_name == NULL)
         return;
 
@@ -1836,8 +1834,7 @@ tree_restore_expanded_row (GncTreeViewAccount *view,
 
   book = qof_session_get_book(gnc_get_current_session());
   account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-				       account_name,
-				       gnc_get_account_separator());
+				       account_name);
   if (account)
     gnc_tree_view_account_expand_to_account(view, account);
 }
@@ -1859,8 +1856,7 @@ tree_restore_selected_row (GncTreeViewAccount *view,
 
   book = qof_session_get_book(gnc_get_current_session());
   account = xaccGetAccountFromFullName(xaccGetAccountGroup(book),
-				       account_name,
-				       gnc_get_account_separator());
+				       account_name);
   if (account)
       gnc_tree_view_account_set_selected_account(view, account);
 }

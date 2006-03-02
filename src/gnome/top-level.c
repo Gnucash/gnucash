@@ -119,8 +119,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
   if (strncmp("account=", location, 8) == 0)
   {
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
-                                          location + 8, 
-                                          gnc_get_account_separator ());
+                                          location + 8);
   }
 
   /* href="gnc-register:guid=12345678901234567890123456789012" */

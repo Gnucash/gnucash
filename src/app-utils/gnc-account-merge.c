@@ -18,12 +18,11 @@ determine_account_merge_disposition(Account *existing_acct, Account *new_acct)
 GncAccountMergeDisposition
 determine_merge_disposition(AccountGroup *existing_root, Account *new_acct)
 {
-  const char sep_char = '.';
   Account *existing_acct;
   gchar *full_name;
   
-  full_name = xaccAccountGetFullName(new_acct, sep_char);
-  existing_acct = xaccGetAccountFromFullName(existing_root, full_name, sep_char);
+  full_name = xaccAccountGetFullName(new_acct);
+  existing_acct = xaccGetAccountFromFullName(existing_root, full_name);
   g_free(full_name);
 
   return determine_account_merge_disposition(existing_acct, new_acct);
