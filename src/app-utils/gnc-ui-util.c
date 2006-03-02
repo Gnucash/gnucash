@@ -1573,22 +1573,22 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 {
   struct lconv *lc = gnc_localeconv();
 
-  char negative_sign;
-  char decimal_point;
-  char group_separator;
+  gunichar negative_sign;
+  gunichar decimal_point;
+  gunichar group_separator;
   char *group;
 
-  negative_sign = lc->negative_sign[0];
+  negative_sign = g_utf8_get_char(lc->negative_sign);
   if (monetary)
   {
-    group_separator = lc->mon_thousands_sep[0];
-    decimal_point = lc->mon_decimal_point[0];
+    group_separator = g_utf8_get_char(lc->mon_thousands_sep);
+    decimal_point = g_utf8_get_char(lc->mon_decimal_point);
     group = lc->mon_grouping;
   }
   else
   {
-    group_separator = lc->thousands_sep[0];
-    decimal_point = lc->decimal_point[0];
+    group_separator = g_utf8_get_char(lc->thousands_sep);
+    decimal_point = g_utf8_get_char(lc->decimal_point);
     group = lc->grouping;
   }
 
@@ -1598,8 +1598,8 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
-			 char negative_sign, unsigned char decimal_point,
-			 unsigned char group_separator, char *group, char *ignore_list,
+			 gunichar negative_sign, gunichar decimal_point,
+			 gunichar group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr)
 {
   gboolean is_negative;
@@ -1608,13 +1608,14 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   GList * group_data;
   long long int numer;
   long long int denom;
-  int group_count;
+  int count, group_count;
 
   ParseState state;
 
-  const unsigned char *in;
-  char *out_str;
-  char *out;
+  const gchar *in;
+  gunichar uc;
+  gchar *out_str;
+  gchar *out;
 
   /* Initialize *endstr to in_str */
   if (endstr != NULL)
@@ -1623,9 +1624,15 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   if (in_str == NULL)
     return FALSE;
 
+  if (!g_utf8_validate(in_str, -1, &in)) {
+    printf("Invalid utf8 string '%s'. Bad character at position %ld.\n",
+	   in_str, g_utf8_pointer_to_offset (in_str, in));
+    return FALSE;
+  }
+
   /* 'out_str' will be used to store digits for numeric conversion.
    * 'out' will be used to traverse out_str. */
-  out = out_str = g_new(char, strlen(in_str) + 1);
+  out = out_str = g_new(gchar, strlen(in_str) + 128);
 
   /* 'in' is used to traverse 'in_str'. */
   in = in_str;
@@ -1646,9 +1653,11 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
   {
     ParseState next_state = state;
 
+    uc = g_utf8_get_char(in);
+
     /* Ignore anything in the 'ignore list' */
-    if (ignore_list && *in != '\0' && strchr(ignore_list, *in) != NULL) {
-      in++;
+      if (ignore_list && uc && g_utf8_strchr(ignore_list, -1, uc) != NULL) {
+      in = g_utf8_next_char(in);
       continue;
     }
 
@@ -1658,25 +1667,26 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     {
       /* START_ST means we have parsed 0 or more whitespace characters */
       case START_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in; /* we record the digits themselves in out_str
+          count = g_unichar_to_utf8(uc, out);
+	  out += count; /* we record the digits themselves in out_str
                          * for later conversion by libc routines */
           next_state = PRE_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (isspace(*in))
+        else if (g_unichar_isspace(uc))
         {
         }
-        else if (*in == negative_sign)
+        else if (uc == negative_sign)
         {
           is_negative = TRUE;
           next_state = NEG_ST;
         }
-        else if (*in == '(')
+        else if (uc == '(')
         {
           is_negative = TRUE;
           need_paren = TRUE;
@@ -1692,16 +1702,17 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* NEG_ST means we have just parsed a negative sign. For now,
        * we only recognize formats where the negative sign comes first. */
       case NEG_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           next_state = PRE_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (isspace(*in))
+        else if (g_unichar_isspace(uc))
         {
         }
         else
@@ -1714,19 +1725,20 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* PRE_GROUP_ST means we have started parsing the number, but
        * have not encountered a decimal point or a grouping character. */
       case PRE_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           next_state = START_GROUP_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1744,27 +1756,29 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
        * try to interpret it in the fashion that will allow parsing
        * of the current number to continue. */
       case START_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           group_count++; /* We record the number of digits
                           * in the group for later checking. */
           next_state = IN_GROUP_ST;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           /* If we now get a decimal point, and both the decimal
            * and the group separator are also whitespace, assume
            * the last group separator was actually whitespace and
            * stop parsing. Otherwise, there's a problem. */
-          if (isspace(group_separator) && isspace(decimal_point))
+          if (g_unichar_isspace(group_separator) &&
+	      g_unichar_isspace(decimal_point))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
           {
             next_state = DONE_ST;
             need_paren = FALSE;
@@ -1777,7 +1791,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
           /* If the last group separator is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
@@ -1787,21 +1801,22 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       /* IN_GROUP_ST means we are in the middle of parsing
        * a group of digits. */
       case IN_GROUP_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
           group_count++; /* We record the number of digits
                           * in the group for later checking. */
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           next_state = FRAC_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           next_state = START_GROUP_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1815,31 +1830,32 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 
       /* FRAC_ST means we are now parsing fractional digits. */
       case FRAC_ST:
-        if (isdigit(*in))
+        if (g_unichar_isdigit(uc))
         {
-          *out++ = *in;
+          count = g_unichar_to_utf8(uc, out);
+	  out += count;
         }
-        else if (*in == decimal_point)
+        else if (uc == decimal_point)
         {
           /* If a subsequent decimal point is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(decimal_point))
+          if (g_unichar_isspace(decimal_point))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == group_separator)
+        else if (uc == group_separator)
         {
           /* If a subsequent group separator is also whitespace,
            * assume it was intended as such and stop parsing.
            * Otherwise, there is a problem. */
-          if (isspace(group_separator))
+          if (g_unichar_isspace(group_separator))
             next_state = DONE_ST;
           else
             next_state = NO_NUM_ST;
         }
-        else if (*in == ')' && need_paren)
+        else if (uc == ')' && need_paren)
         {
           next_state = DONE_ST;
           need_paren = FALSE;
@@ -1889,7 +1905,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     if (done_state (state))
       break;
 
-    in++;
+    in = g_utf8_next_char(in);
   }
 
   /* If there was an error, just quit */

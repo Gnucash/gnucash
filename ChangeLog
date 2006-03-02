@@ -1,5 +1,15 @@
 2006-03-01  David Hampton  <hampton@employees.org>
 
+	* src/register/register-core/pricecell.c:
+	* src/register/register-core/formulacell.c:
+	* src/calculation/fin_spl_protos.h:
+	* src/calculation/expression_parser.c:
+	* src/app-utils/gnc-ui-util.[ch]:
+	* src/app-utils/gnc-exp-parser.c: Convert all locations that parse
+	input using the locale thousands/decimal point characters to use
+	unicode functions.  This should allow multi-byte unicode
+	characters to work as these separators on input.
+
 	* src/app-utils/gnc-ui-util.c: Rework of Sylvain Defresne's patch
 	to support multi-byte unicode thousands separator and decimal
 	point characters when printing numbers.

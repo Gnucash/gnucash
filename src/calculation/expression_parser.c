@@ -276,11 +276,11 @@
  * *vp), "vp" is the pointer returned by the "init_parser" function.
  *
  * void *init_parser(var_store_ptr  predefined_vars,
- *                   char  radix_point,
- *                   char  group_char,
+ *                   gchar  *radix_point,
+ *                   gchar  *group_char,
  *                   void          *trans_numeric(char  *digit_str,
- *                                                char   radix_point,
- *                                                char   group_char,
+ *                                                gchar *radix_point,
+ *                                                gchar *group_char,
  *                                                char **rstr),
  *                   void          *numeric_ops(char  op_sym,
  *                                              void          *left_value,
@@ -406,8 +406,8 @@ typedef struct parser_env
   var_store_ptr unnamed_vars;
 
   const char *parse_str;
-  char radix_point;
-  char group_char;
+  gchar *radix_point;
+  gchar *group_char;
   char name[128];
 
   char Token;
@@ -421,7 +421,7 @@ typedef struct parser_env
   void *numeric_value;
 
   void *(*trans_numeric) (const char *digit_str,
-			  char radix_point, char group_char, char **rstr);
+			  gchar *radix_point, gchar *group_char, char **rstr);
   void *(*numeric_ops) (char op_sym, void *left_value, void *right_value);
   void *(*negate_numeric) (void *value);
   void (*free_numeric) (void *numeric_value);
@@ -449,11 +449,11 @@ static char allowed_operators[] = "+-*/()=:";
 
 parser_env_ptr
 init_parser (var_store_ptr predefined_vars,
-	     char radix_point,
-	     char group_char,
+	     gchar *radix_point,
+	     gchar *group_char,
 	     void *trans_numeric (const char *digit_str,
-				  char radix_point,
-				  char group_char,
+				  gchar *radix_point,
+				  gchar *group_char,
 				  char **rstr),
 	     void *numeric_ops (char op_sym,
 				void *left_value,

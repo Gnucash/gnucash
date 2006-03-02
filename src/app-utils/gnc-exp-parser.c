@@ -391,8 +391,8 @@ func_op(const char *fname, int argc, void **argv)
 
 static void *
 trans_numeric(const char *digit_str,
-              char        radix_point,
-              char        group_char,
+              gchar      *radix_point,
+              gchar      *group_char,
               char      **rstr)
 {
   ParserNum *pnum;
@@ -548,7 +548,7 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
 
   lc = gnc_localeconv ();
 
-  pe = init_parser (vars, *lc->mon_decimal_point, *lc->mon_thousands_sep,
+  pe = init_parser (vars, lc->mon_decimal_point, lc->mon_thousands_sep,
                     trans_numeric, numeric_ops, negate_numeric, g_free,
                     func_op);
 

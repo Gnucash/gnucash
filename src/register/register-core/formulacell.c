@@ -124,8 +124,8 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   FormulaCell *cell = (FormulaCell *)_cell;
   struct lconv *lc = gnc_localeconv ();
   const char *toks = "+-*/=()_:";
-  unsigned char decimal_point;
-  unsigned char thousands_sep;
+  gunichar decimal_point;
+  gunichar thousands_sep;
   const char *c;
   gunichar uc;
 
@@ -141,14 +141,14 @@ gnc_formula_cell_modify_verify( BasicCell *_cell,
   }
 
   if (cell->print_info.monetary)
-    decimal_point = lc->mon_decimal_point[0];
+    decimal_point = g_utf8_get_char(lc->mon_decimal_point);
   else
-    decimal_point = lc->decimal_point[0];
+    decimal_point = g_utf8_get_char(lc->decimal_point);
 
   if (cell->print_info.monetary)
-    thousands_sep = lc->mon_thousands_sep[0];
+    thousands_sep = g_utf8_get_char(lc->mon_thousands_sep);
   else
-    thousands_sep = lc->thousands_sep[0];
+    thousands_sep = g_utf8_get_char(lc->thousands_sep);
 
    c = change;
    while (*c)
