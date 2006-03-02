@@ -67,6 +67,12 @@ void gnc_init_default_directory (char **dirname);
  * Again watch out: The caller takes ownership of the char buffer
  * '*dirname', i.e. the caller has to do a g_free(*dirname) when that
  * buffer is no longer in use.
+ *
+ * NOTE: We strongly recommend to use g_path_get_dirname() from glib
+ * instead of this function. (There's one slight functional difference:
+ * If filename is NULL or does not contain a separator,
+ * g_path_get_dirname will return "." whereas this function here will
+ * return NULL. 2006-03-02, cstim)
 */
 void gnc_extract_directory (char **dirname, const char *filename);
 
