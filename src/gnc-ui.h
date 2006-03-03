@@ -52,7 +52,7 @@
 #define HL_GLOBPREFS         "set-prefs"
 #define HL_PRINTCHECK        "print-check"
 #define HL_RECNWIN           "acct-reconcile"
-#define HL_SXEDITOR          "tran-sched"
+#define HL_SXEDITOR          "tool-sched"
 #define HL_GCONF             "gconf"
 
 /* GTK Windows - Common Response Codes */
