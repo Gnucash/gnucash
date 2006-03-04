@@ -47,12 +47,110 @@
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
 
-/*
+
+/* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
+ *  xaccTransRollback():
+ *
+ * Why use it:
+ *
+ *   Data consistency: Wrapping your changes to financial data inside
+ *   a BeginEdit/CommitEdit block allows the engine to verify that
+ *   your changes still leave the financial objects in an internally
+ *   consistent state.  This is true even though you may make a series
+ *   of individual changes that are not consistent by themselves.  In
+ *   this way, it's like telling the engine, "Okay, I've finished my
+ *   edits.  Please check my work."
+ *
+ *   Data integrity: The other benefit of the BeginEdit/CommitEdit
+ *   block is that it allows the engine (and the backend) to remember
+ *   the last known correct state of your data.  This allows you to
+ *   undo any changes that you don't want to keep.  In this way, it's
+ *   like telling the engine telling the back end, "Yes, I really mean
+ *   it.  Remember this data." or "Nevermind, scratch that."  The
+ *   important feature here is that if things go bad, for whatever
+ *   reason (e.g. the application crashed, you lost the backend), your
+ *   data remains in the state it was in just after the previous
+ *   xaccTransCommitEdit().  [assuming no nesting, which probably
+ *   isn't useful outside the engine.]
+ *
+ *   Note that the backend doesn't care about data consistency -
+ *   that's the engine's job.
+ *
+ * Example Use:
+ *
+ *   xaccTransBeginEdit(trans);
+ *
+ *
+ *   split = xaccMallocSplit(book);
+ *   xaccSplitSetAccount(split, acc);
+ *   xaccSplitSetParent(split, trans);  // Adding a new split
+ *
+ *   xaccSplitSetValue(split, val);     // Changing a split
+ *
+ *   xaccSplitDestroy(split);           // Removing a split
+ *
+ *   xaccTransSetNum(trans, "501");     // Changing the trans
+ *
+ *   if (really_do_it)
+ *      xaccTransCommitEdit(trans);
+ *   else
+ *      xaccTransRollbackEdit(trans);
+ *
+ * How it works:
+ *
+ *   Calling xaccTransBeginEdit() starts a BeginEdit/CommitEdit block.
+ *   Inside the block any changes to the transaction or any splits in
+ *   the transaction are considered "pending".  What does that mean?
+ *
+ *   In general that means that if you set and then get the
+ *   transaction's or split's parameters inside the
+ *   BeginEdit/CommitEdit block, you'll get the values you just set.
+ *   However, if you change an object's many-to-one relationship with
+ *   another object, you won't see the change from the "many" side
+ *   until the CommitEdit.  For example, if you move a split from one
+ *   account into another, you can see the change with
+ *   xaccSplitGetAccount(), but both Accounts' split lists won't be
+ *   updated until the CommitEdit.  Correspondingly, no signals
+ *   (events) will be generated for those "foreign" objects, or the
+ *   Transaction, until the CommitEdit.
+ *
+ *   This behavior is important because, when we're finally ready to
+ *   commit to the backend, we can't be 100% sure that the backend
+ *   will still be available.  We have to offer the backend all of the
+ *   new state as if it were already "true", but we need to save all of
+ *   the old state in case the backend won't accept our commit.  If
+ *   the backend commit fails, we have to restore all the old state.
+ *   If the backend commit succeeds, and *only* after it succeeds, we
+ *   can advertise the new state to the rest of the engine (and gui).
+ *
+ *  Q: Who owns the ref of an added split if the Transaction is rolled
+ *  back?
+ *
+ *  A: This is a design decision.  If the answer is 'the user',
+ *  then the burden is on the api user to check the transaction after
+ *  every commit to see if the added split is really in the
+ *  transaction.  If they don't they risk leaking the split if the
+ *  commit was rolled back.  Another design is to answer 'the engine'.
+ *  In that case the burden is on the engine to free a newly added
+ *  split if the commit is rolled back.  Unfortunately the engine
+ *  objects aren't ref-counted, so this is tricky.
+ *
+ *  In the current implementation, the answer is 'the engine', but
+ *  that means that you must not add the split to two different
+ *  transactions during the begin/commit block, because if one rolls
+ *  back, they will both think they own the split.  This is one
+ *  specific example of the general problem that the outcome of two
+ *  parallel begin/commit edit blocks for two transactions where edits
+ *  for both transactions involve the same splits and one or more
+ *  edit-blocks is rolled-back, is poorly-defined.
+ *
+ *
+ *
  * Design notes on event-generation: transaction-modified-events 
- * should not be generated until transacation commit or rollback 
+ * should not be generated until transaction commit or rollback
  * time.  They should not be generated as each field is tweaked. 
  * This for two reasons:
- * 1) Most editing events make multiple changes to a trnasaction,
+ * 1) Most editing events make multiple changes to a transaction,
  *    which would generate a flurry of (needless) events, if they
  *    weren't saved up till the commit.
  * 2) Technically, its incorrect to use transaction data 
@@ -81,24 +179,36 @@ void check_open (const Transaction *trans)
   if (trans && 0 >= trans->inst.editlevel)
     PERR ("transaction %p not open for editing", trans);
 }
-
 /********************************************************************\
 \********************************************************************/
+gboolean
+xaccTransStillHasSplit(const Transaction *trans, const Split *s)
+{
+    return (s->parent == trans && !s->inst.do_free);
+}
+
+/* Executes 'cmd_block' for each split currently in the transaction,
+ * using the in-edit state.  Use the variable 's' for each split. */
+#define FOR_EACH_SPLIT(trans, cmd_block) do {                           \
+        GList *splits;                                                  \
+        for (splits = (trans)->splits; splits; splits = splits->next) { \
+            Split *s = splits->data;                                    \
+            if (xaccTransStillHasSplit(trans, s)) {                     \
+                cmd_block;                                              \
+            }                                                           \
+        }                                                               \
+    } while (0)
 
 G_INLINE_FUNC void mark_trans (Transaction *trans);
 void mark_trans (Transaction *trans)
 {
-  GList *node;
-
-  for (node = trans->splits; node; node = node->next)
-  {
-    mark_split (node->data);
-  }
+  FOR_EACH_SPLIT(trans, mark_split(s));
 }
 
 G_INLINE_FUNC void gen_event_trans (Transaction *trans);
 void gen_event_trans (Transaction *trans)
 {
+#if 0
   GList *node;
 
   for (node = trans->splits; node; node = node->next)
@@ -117,7 +227,7 @@ void gen_event_trans (Transaction *trans)
       gnc_engine_gen_event (&lot->inst.entity, GNC_EVENT_MODIFY);
     }
   }
-
+#endif
   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
 }
 
@@ -547,61 +657,45 @@ xaccTransLookup (const GUID *guid, QofBook *book)
 gnc_numeric
 xaccTransGetImbalance (const Transaction * trans)
 {
-  GList *node;
   gnc_numeric imbal = gnc_numeric_zero();
   if (!trans) return imbal;
 
   ENTER("(trans=%p)", trans);
   /* Could use xaccSplitsComputeValue, except that we want to use
      GNC_HOW_DENOM_EXACT */
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *s = node->data;
-    imbal = gnc_numeric_add(imbal, xaccSplitGetValue(s),
-                              GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
-  }
+  FOR_EACH_SPLIT(trans, imbal =
+                 gnc_numeric_add(imbal, xaccSplitGetValue(s),
+                                 GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT));
   LEAVE("(trans=%p) imbal=%s", trans, gnc_num_dbg_to_string(imbal));
   return imbal;
 }
 
 gnc_numeric
 xaccTransGetAccountValue (const Transaction *trans, 
-                          const Account *account)
+                          const Account *acc)
 {
   gnc_numeric total = gnc_numeric_zero ();
-  GList *splits;
+  if (!trans || !acc) return total;
 
-  if (!trans || !account) return total;
-
-  for (splits = trans->splits; splits; splits = splits->next)
-  {
-    Split *s = splits->data;
-    Account *a = xaccSplitGetAccount (s);
-    if (a == account)
-      total = gnc_numeric_add (total, xaccSplitGetValue (s),
-                               GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
-  }
+  FOR_EACH_SPLIT(trans, if (acc == xaccSplitGetAccount(s)) {
+                     total = gnc_numeric_add (total, xaccSplitGetValue (s),
+                                              GNC_DENOM_AUTO,
+                                              GNC_HOW_DENOM_EXACT);
+                 });
   return total;
 }
 
 gnc_numeric
-xaccTransGetAccountAmount (const Transaction *trans, const Account *account)
+xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
 {
   gnc_numeric total = gnc_numeric_zero ();
-  GList *splits;
+  if (!trans || !acc) return total;
 
-  if (!trans || !account)
-    return total;
-
-  total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (account),
+  total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (acc),
                                GNC_RND_ROUND);
-
-  for (splits = xaccTransGetSplitList (trans); splits; splits = splits->next) {
-      Split *s = splits->data;
-      Account *a = xaccSplitGetAccount (s);
-      if (a == account)
-          total = gnc_numeric_add_fixed (total, xaccSplitGetAmount (s));
-  }
+  FOR_EACH_SPLIT(trans, if (acc == xaccSplitGetAccount(s))
+                            total = gnc_numeric_add_fixed(
+                                total, xaccSplitGetAmount(s)));
   return total;
 }
 
@@ -626,6 +720,8 @@ xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
   for (; splits; splits = splits->next) {
     s = splits->data;
 
+    if (!xaccTransStillHasSplit(txn, s))
+      continue;
     if (xaccSplitGetAccount (s) != acc)
       continue;
 
@@ -670,6 +766,8 @@ xaccTransGetAccountBalance (const Transaction *trans,
   {
     Split *split = node->data;
 
+    if (!xaccTransStillHasSplit(trans, split))
+      continue;
     if (xaccSplitGetAccount(split) != account)
       continue;
 
@@ -701,7 +799,6 @@ xaccTransGetCurrency (const Transaction *trans)
 void
 xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
-  GList *splits;
   gint fraction, old_fraction;
 
   if (!trans || !curr || trans->common_currency == curr) return;
@@ -712,15 +809,8 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   fraction = gnc_commodity_get_fraction (curr);
 
   /* avoid needless crud if fraction didn't change */
-  if (fraction != old_fraction)
-  {
-    for (splits = trans->splits; splits; splits = splits->next)
-    {
-      Split *s = splits->data;
-      s->value = gnc_numeric_convert(xaccSplitGetValue(s), 
-                                     fraction, GNC_HOW_RND_ROUND);
-      SET_GAINS_VDIRTY(s);
-    }
+  if (fraction != old_fraction) {
+      FOR_EACH_SPLIT(trans, xaccSplitSetValue(s, xaccSplitGetValue(s)));
   }
 
   qof_instance_set_dirty(QOF_INSTANCE(trans));
@@ -770,6 +860,9 @@ destroy_gains (Transaction *trans)
   for (node = trans->splits; node; node = node->next)
   {
     Split *s = node->data;
+    if (!xaccTransStillHasSplit(trans, s))
+      continue;
+
     if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
     if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
     {
@@ -786,13 +879,11 @@ static void
 do_destroy (Transaction *trans)
 {
   SplitList *node;
-  gboolean shutting_down;
+  gboolean shutting_down = qof_book_shutting_down(trans->inst.book);
 
   /* If there are capital-gains transactions associated with this, 
    * they need to be destroyed too.  */
   destroy_gains (trans);
-
-  shutting_down = qof_book_shutting_down(trans->inst.book);
 
   /* Make a log in the journal before destruction.  */
   if (!shutting_down)
@@ -800,24 +891,18 @@ do_destroy (Transaction *trans)
 
   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_DESTROY);
 
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *split = node->data;
-
-    mark_split (split);
-    xaccAccountRemoveSplit (split->acc, split);
-    if (!shutting_down)
-      xaccAccountRecomputeBalance (split->acc);
-    gen_event (split);
-    xaccFreeSplit (split);
-
-    node->data = NULL;
+  /* We only own the splits that still think they belong to us. */
+  trans->splits = g_list_copy(trans->splits);
+  for (node = trans->splits; node; node = node->next) {
+      Split *s = node->data;
+      if (s->parent == trans) {
+          xaccSplitDestroy(s);
+          xaccSplitCommitEdit(s);
+      }
   }
-
   g_list_free (trans->splits);
   trans->splits = NULL;
-
-  /* The actual free is done with the commit call, else its rolled back */
+  xaccFreeTransaction (trans);
 }
 
 /********************************************************************\
@@ -828,12 +913,85 @@ static int scrub_data = 1;
 void xaccEnableDataScrubbing(void) { scrub_data = 1; }
 void xaccDisableDataScrubbing(void) { scrub_data = 0; }
 
+/* Check for an implicitly deleted transaction */
+static gboolean was_trans_emptied(Transaction *trans)
+{
+    FOR_EACH_SPLIT(trans, return FALSE);
+    return TRUE;
+}
+
+static void trans_on_error(Transaction *trans, QofBackendError errcode)
+{
+    /* If the backend puked, then we must roll-back
+     * at this point, and let the user know that we failed.
+     * The GUI should check for error conditions ...
+     */
+    if (ERR_BACKEND_MODIFIED == errcode) {
+        PWARN("Another user has modified this transaction\n"
+              "\tjust a moment ago. Please look at their changes,\n"
+              "\tand try again, if needed.\n");
+    }
+
+    xaccTransRollbackEdit(trans);
+}
+
+static void trans_cleanup_commit(Transaction *trans)
+{
+    GList *slist, *node;
+
+    /* ------------------------------------------------- */
+    /* Make sure all associated splits are in proper order
+     * in their accounts with the correct balances. */
+    gnc_engine_suspend_events();
+
+    /* Iterate over existing splits */
+    slist = g_list_copy(trans->splits);
+    for (node = slist; node; node = node->next) {
+        Split *s = node->data;
+        if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
+            continue;
+
+        if ((s->parent != trans) || s->inst.do_free) {
+            /* Existing split either moved to another transaction or
+               was destroyed, drop from list */
+            trans->splits = g_list_remove(trans->splits, s);
+            //gnc_engine_gen_event(&trans->inst, QOF_EVENT_REMOVE);
+        }
+
+        if (s->parent == trans) {
+            /* Split was either destroyed or just changed */
+            //if (s->inst.do_free)
+            //    gnc_engine_gen_event(&trans->inst, QOF_EVENT_REMOVE);
+            //else gnc_engine_gen_event(&trans->inst, QOF_EVENT_MODIFY);
+            xaccSplitCommitEdit(s);
+        }
+    }
+    g_list_free(slist);
+
+    gnc_engine_resume_events();
+
+    xaccTransWriteLog (trans, 'C');
+
+    /* Get rid of the copy we made. We won't be rolling back,
+     * so we don't need it any more.  */
+    PINFO ("get rid of rollback trans=%p", trans->orig);
+    xaccFreeTransaction (trans->orig);
+    trans->orig = NULL;
+
+    /* Sort the splits. Why do we need to do this ?? */
+    /* Good question.  Who knows?  */
+    xaccTransSortSplits(trans);
+
+    /* Put back to zero. */
+    trans->inst.editlevel--;
+    g_assert(trans->inst.editlevel == 0);
+
+    gen_event_trans (trans); //TODO: could be conditional
+}
 
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   QofBackend *be;
-
    if (!trans) return;
 
    QOF_COMMIT_EDIT_PART1 (&trans->inst);
@@ -842,6 +1000,9 @@ xaccTransCommitEdit (Transaction *trans)
     * so other functions don't result in a recursive
     * call to xaccTransCommitEdit. */
    trans->inst.editlevel++;
+
+   if (was_trans_emptied(trans)) trans->inst.do_free = TRUE;
+
    /* Before commiting the transaction, we're gonna enforce certain
     * constraints.  In particular, we want to enforce the cap-gains
     * and the balanced lot constraints.  These constraints might 
@@ -851,7 +1012,7 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (trans->splits && !(trans->inst.do_free) && scrub_data)
+   if (!(trans->inst.do_free) && scrub_data)
    {
      /* The total value of the transaction should sum to zero. 
       * Call the trans scrub routine to fix it.   Indirectly, this 
@@ -863,88 +1024,22 @@ xaccTransCommitEdit (Transaction *trans)
    }
 
    /* Record the time of last modification */
-   if (0 == trans->date_entered.tv_sec) 
-   {
+   if (0 == trans->date_entered.tv_sec) {
       struct timeval tv;
       gettimeofday (&tv, NULL);
       trans->date_entered.tv_sec = tv.tv_sec;
       trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
    }
 
-   /* Sort the splits. Why do we need to do this ?? */
-   /* Good question.  Who knows?  */
-   xaccTransSortSplits(trans);
-   if (!trans->splits) trans->inst.do_free = TRUE;
-
-   /* XXX the code below is almost identical to 
-    * QOF_COMMIT_EDIT_PART1 (&trans->inst);
-    * except for the rollback bits */
-   /* See if there's a backend.  If there is, invoke it. */
-   be = qof_book_get_backend (trans->inst.book);
-   if (be && be->commit) 
-   {
-      QofBackendError errcode;
-
-      /* clear errors */
-      do {
-        errcode = qof_backend_get_error (be);
-      } while (ERR_BACKEND_NO_ERR != errcode);
-
-      qof_backend_run_commit(be, &(trans->inst));
-
-      errcode = qof_backend_get_error (be);
-      if (ERR_BACKEND_NO_ERR != errcode)
-      {
-         /* If the backend puked, then we must roll-back 
-          * at this point, and let the user know that we failed.
-          * The GUI should check for error conditions ... 
-          */
-        if (ERR_BACKEND_MODIFIED == errcode)
-        {
-           PWARN("Another user has modified this transaction\n"
-                 "\tjust a moment ago. Please look at their changes,\n"
-                 "\tand try again, if needed.\n");
-        }
-
-        /* push error back onto the stack */
-        qof_backend_set_error (be, errcode);
-
-        xaccTransRollbackEdit (trans);
-        return;
-      }
-   }
-
-   if (trans->inst.do_free)
-   {
-      PINFO ("delete trans at addr=%p", trans);
-      do_destroy (trans);
-      xaccFreeTransaction (trans);
-      return;
-   }
-
-   /* ------------------------------------------------- */
-   /* Make sure all associated splits are in proper order
-    * in their accounts with the correct balances. */
-   /* FIXME: That's not exactly what this call does, and I think it
-      may be unneeded. Maybe all that's needed is to call
-      xaccAccountBringUpToDate for each account. OTOH, maybe that will
-      be taken care of when the Account is commited, if needed. */
-   xaccTransFixSplitDateOrder (trans);
-
-   xaccTransWriteLog (trans, 'C');
-
-   /* Get rid of the copy we made. We won't be rolling back, 
-    * so we don't need it any more.  */
-   PINFO ("get rid of rollback trans=%p", trans->orig);
-   xaccFreeTransaction (trans->orig);
-   trans->orig = NULL;
-
-   /* Put back to zero. */
-   trans->inst.editlevel--;
-
-   gen_event_trans (trans);
+   qof_commit_edit_part2(QOF_INSTANCE(trans),
+                         (void (*) (QofInstance *, QofBackendError))
+                         trans_on_error,
+                         (void (*) (QofInstance *)) trans_cleanup_commit,
+                         (void (*) (QofInstance *)) do_destroy);
    LEAVE ("(trans=%p)", trans);
 }
+
+#define SWAP(a, b) do { gpointer tmp = (a); (a) = (b); (b) = tmp; } while (0);
 
 /* Ughhh. The Rollback function is terribly complex, and, what's worse,
  * it only rolls back the basics.  The TransCommit functions did a bunch
@@ -1196,62 +1291,6 @@ xaccTransGetVersion (const Transaction *trans)
   return trans ? trans->version : 0;
 }
 
-/********************************************************************\
- * TransRemoveSplit is an engine private function and does not/should
- * not cause any rebalancing to occur.
-\********************************************************************/
-
-void
-xaccTransRemoveSplit (Transaction *trans, const Split *split) 
-{
-    if (trans) {
-        trans->splits = g_list_remove (trans->splits, split);
-        qof_instance_set_dirty(QOF_INSTANCE(trans));
-    }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccTransAppendSplit (Transaction *trans, Split *split) 
-{
-   if (!trans || !split) return;
-   g_return_if_fail (trans->inst.book == split->inst.book);
-
-   qof_begin_edit(QOF_INSTANCE(trans));
-
-   /* First, make sure that the split isn't already inserted 
-    * elsewhere. If so, then remove it. */
-   if (split->parent)
-      xaccTransRemoveSplit (split->parent, split);
-
-   /* Now, insert the split into the array */
-   split->parent = trans;
-   trans->splits = g_list_append (trans->splits, split);
-   qof_instance_set_dirty(QOF_INSTANCE(trans));
-
-   /* Convert the split to the new transaction's commodity denominator */
-   /* If the denominator can't be exactly converted, it's an error */
-   /* Actually, I _think_ the only error that can result with
-      RND_ROUND is overflow.  If we really want it exact we should use
-      something else. */
-   if (trans->common_currency)
-   {
-     int fraction = gnc_commodity_get_fraction (trans->common_currency);
-     gnc_numeric new_value;
-
-     new_value = gnc_numeric_convert(xaccSplitGetValue(split), 
-                        fraction, GNC_HOW_RND_ROUND);
-
-     if (gnc_numeric_check (new_value) == GNC_ERROR_OK)
-       split->value = new_value;
-     SET_GAINS_VDIRTY(split);  /* Is this right? Dirty gains even if error? */
-     mark_split(split);
-   }
-   qof_commit_edit(QOF_INSTANCE(trans));
-}
-
 int
 xaccTransOrder (const Transaction *ta, const Transaction *tb)
 {
@@ -1312,12 +1351,7 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 static inline void
 set_gains_date_dirty (Transaction *trans)
 {
-   SplitList *node;
-   for (node = trans->splits; node; node = node->next)
-   {
-      Split *s = node->data;
-      s->gains |= GAINS_STATUS_DATE_DIRTY;
-   }
+    FOR_EACH_SPLIT(trans, s->gains |= GAINS_STATUS_DATE_DIRTY);
 }
 
 void
@@ -1506,6 +1540,12 @@ xaccTransGetSplitList (const Transaction *trans)
   return trans ? trans->splits : NULL;
 }
 
+int
+xaccTransCountSplits (const Transaction *trans)
+{
+   return trans ? g_list_length (trans->splits) : 0;
+}
+
 const char *
 xaccTransGetNum (const Transaction *trans)
 {
@@ -1605,12 +1645,6 @@ xaccTransGetReadOnly (const Transaction *trans)
       trans->inst.kvp_data, TRANS_READ_ONLY_REASON) : NULL;
 }
 
-int
-xaccTransCountSplits (const Transaction *trans)
-{
-   return trans ? g_list_length (trans->splits) : 0;
-}
-
 gboolean
 xaccTransHasReconciledSplitsByAccount (const Transaction *trans, 
                                        const Account *account)
@@ -1621,6 +1655,8 @@ xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
   {
     Split *split = node->data;
 
+    if (!xaccTransStillHasSplit(trans, split))
+      continue;
     if (account && (xaccSplitGetAccount(split) != account))
       continue;
 
@@ -1656,7 +1692,9 @@ xaccTransHasSplitsInStateByAccount (const Transaction *trans,
   {
     Split *split = node->data;
 
-    if (account && (split->acc != account))
+    if (!xaccTransStillHasSplit(trans, split))
+      continue;
+    if (account && (xaccSplitGetAccount(split) != account))
       continue;
 
     if (split->reconciled == state)
@@ -1739,7 +1777,6 @@ xaccTransVoid(Transaction *trans, const char *reason)
 {
   KvpFrame *frame;
   KvpValue *val;
-  GList *split_list;
   Timespec now;
   char iso8601_str[ISO_DATELENGTH+1] = "";
 
@@ -1759,11 +1796,7 @@ xaccTransVoid(Transaction *trans, const char *reason)
   gnc_timespec_to_iso8601_buff(now, iso8601_str);
   kvp_frame_set_string(frame, void_time_str, iso8601_str);
 
-  for (split_list = trans->splits; split_list; split_list = split_list->next)
-  {
-      Split * split = split_list->data;
-      xaccSplitVoid(split);
-  }
+  FOR_EACH_SPLIT(trans, xaccSplitVoid(s));
 
   /* Dirtying taken care of by SetReadOnly */
   xaccTransSetReadOnly(trans, _("Transaction Voided"));
@@ -1801,7 +1834,6 @@ xaccTransUnvoid (Transaction *trans)
 {
   KvpFrame *frame;
   KvpValue *val;
-  GList *split_list;
 
   g_return_if_fail(trans);
 
@@ -1817,11 +1849,7 @@ xaccTransUnvoid (Transaction *trans)
   kvp_frame_set_slot_nc(frame, void_reason_str, NULL);
   kvp_frame_set_slot_nc(frame, void_time_str, NULL);
 
-  for (split_list = trans->splits; split_list; split_list = split_list->next)
-  {
-      Split *split = split_list->data;
-      xaccSplitUnvoid(split);
-  }
+  FOR_EACH_SPLIT(trans, xaccSplitUnvoid(s));
 
   /* Dirtying taken care of by ClearReadOnly */
   xaccTransClearReadOnly(trans);
@@ -1831,28 +1859,42 @@ xaccTransUnvoid (Transaction *trans)
 void
 xaccTransReverse (Transaction *trans)
 {
-  GList *split_list;
-  Split *split;
-
   g_return_if_fail(trans);
 
   xaccTransBeginEdit(trans);
 
   /* Reverse the values on each split. Clear per-split info. */
-  for (split_list = trans->splits; split_list; split_list = split_list->next)
-  {
-    split = split_list->data;
-    split->amount = gnc_numeric_neg(xaccSplitGetAmount(split));
-    split->value = gnc_numeric_neg(xaccSplitGetValue(split));
-    SET_GAINS_A_VDIRTY(split);
-    split->reconciled = NREC;
-    xaccSplitSetDateReconciledSecs (split, 0);
-    mark_split(split);
-  }
+  FOR_EACH_SPLIT(trans, {
+          xaccSplitSetAmount(s, gnc_numeric_neg(xaccSplitGetAmount(s)));
+          xaccSplitSetValue(s, gnc_numeric_neg(xaccSplitGetValue(s)));
+          xaccSplitSetReconcile(s, NREC);
+          qof_instance_set_dirty(QOF_INSTANCE(trans));
+      });
 
-  if (trans->splits)
-      qof_instance_set_dirty(QOF_INSTANCE(trans));
   xaccTransCommitEdit(trans);
+}
+
+void
+xaccTransScrubSplits (Transaction *trans)
+{
+    gnc_commodity *currency;
+
+    if (!trans) return;
+
+    /* The split scrub expects the transaction to have a currency! */
+    currency = xaccTransGetCurrency (trans);
+    if (!currency)
+        PERR ("Transaction doesn't have a currency!");
+
+    FOR_EACH_SPLIT(trans, xaccSplitScrub(s));
+}
+
+Split *
+xaccTransFindSplitByAccount(Transaction *trans, Account *acc)
+{
+    if (!trans || !acc) return NULL;
+    FOR_EACH_SPLIT(trans, if (xaccSplitGetAccount(s) == acc) return s);
+    return NULL;
 }
 
 /********************************************************************\

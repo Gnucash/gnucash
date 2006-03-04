@@ -191,6 +191,8 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 #define xaccTransLookupDirect(g,b) xaccTransLookup(&(g),b)
 
+Split * xaccTransFindSplitByAccount(Transaction *trans, Account *acc);
+
 /** \warning XXX FIXME 
  * gnc_book_count_transactions is a utility function, 
  * probably needs to be moved to a utility file somewhere.
@@ -249,7 +251,7 @@ const char *  xaccTransGetNotes (const Transaction *trans);
  @note If the split is already a part of another transaction,
  it will be removed from that transaction first.
 */
-void          xaccTransAppendSplit (Transaction *trans, Split *split);
+#define xaccTransAppendSplit(t, s) xaccSplitSetParent((s), (t))
 
 /** The xaccTransGetSplit() method returns a pointer to each of the 
     splits in this transaction.
@@ -265,6 +267,7 @@ Split *       xaccTransGetSplit (const Transaction *trans, int i);
     @return The list of splits. This list must NOT be modified.  Do *NOT* free
     this list when you are done with it. */
 SplitList *   xaccTransGetSplitList (const Transaction *trans);
+gboolean xaccTransStillHasSplit(const Transaction *trans, const Split *s);
 
 
 /** Set the transaction to be ReadOnly */
