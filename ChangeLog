@@ -1,3 +1,10 @@
+2006-03-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.c:
+	* lib/glib26/gkeyfile.c:
+	* lib/glib26/gutils26.[ch]: Make g_strv_length available outside
+	of the gkeyfile compatability library.
+
 2006-03-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Fix selection mode on
