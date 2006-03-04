@@ -263,28 +263,25 @@
                            trans date-posted)))
 
         ;; strip off the old splits
-        (let loop ((split (gnc:transaction-get-split trans 0)))
-          (if split
-              (begin
-                (gnc:split-destroy split)
-                (loop (gnc:transaction-get-split trans 0)))))
+        (for-each (lambda (split)
+                    (gnc:split-destroy split)) 
+                  (gnc:transaction-get-splits trans))
 
         ;; and put on the new ones! Please note they go in the *same*
         ;; order as in the original transaction. This is important.
-        (let loop ((split-scms (gnc:transaction-scm-get-split-scms trans-scm)))
-          (if (pair? split-scms)
-              (let* ((new-split (gnc:split-create book))
-                     (split-scm (car split-scms))
-                     (old-guid  (gnc:split-scm-get-account-guid split-scm))
-                     (new-guid  (assoc-ref guid-mapping old-guid)))
-                (if (not new-guid)
-                    (set! new-guid old-guid))
-                (gnc:split-scm-set-account-guid split-scm new-guid)
-                (gnc:split-scm-onto-split split-scm new-split book)
-                (gnc:split-scm-set-account-guid split-scm old-guid)
-                (gnc:transaction-append-split trans new-split)
-                (loop (cdr split-scms)))))
-
+        (for-each 
+         (lambda (split-scm) 
+           (let* ((new-split (gnc:split-create book))
+                  (old-guid  (gnc:split-scm-get-account-guid split-scm))
+                  (new-guid  (assoc-ref guid-mapping old-guid)))
+             (if (not new-guid)
+                 (set! new-guid old-guid))
+             (gnc:split-scm-set-account-guid split-scm new-guid)
+             (gnc:split-scm-onto-split split-scm new-split book)
+             (gnc:split-scm-set-account-guid split-scm old-guid)
+             (gnc:transaction-append-split trans new-split)))
+         (gnc:transaction-scm-get-split-scms trans-scm))
+        
         ;; close the transaction
         (if commit?
             (gnc:transaction-commit-edit trans)))))
