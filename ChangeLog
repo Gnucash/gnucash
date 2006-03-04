@@ -1,5 +1,17 @@
 2006-03-04  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/ui/icon-split.png: 
+	* src/gnome/ui/icon-transfer.png: 
+	Add split, transfer icons provided by Andrew Duggan
+	<cmkrnl@speakeasy.net>.
+	
+	* src/gnome-utils/gnc-dir.h.in: 
+	* src/gnome-utils/Makefile.am (gnc-dir.h):
+	* src/gnome/gnc-plugin-page-register.c
+	(gnc_plugin_page_register_actions)
+	(gnc_plugin_page_register_class_init): Add registration, use of
+	gnucash-provided (split, transactions) icons.  Bug#327647.
+
 	* src/gnome-utils/gnc-menu-extensions.c (gnc_extension_path):
 	Fixes to memory deallocation suggested by Phil Longstaff
 	<plongstaff@newearth.org>.

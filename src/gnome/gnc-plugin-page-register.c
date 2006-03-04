@@ -51,6 +51,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "druid-stock-split.h"
+#include "gnc-dir.h"
 #include "gnc-book.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
@@ -81,6 +82,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DEFAULT_LINES_OPTION_SECTION GCONF_GENERAL_REGISTER
 #define DEFAULT_LINES_OPTION_NAME    KEY_NUMBER_OF_ROWS
 #define DEFAULT_LINES_AMOUNT         20
+
+#define GNC_STOCK_SPLIT "gnc-stock-split"
+#define GNC_STOCK_TRANSFER "gnc-stock-transfer"
 
 static void gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass);
 static void gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page);
@@ -218,7 +222,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 
 	/* Actions menu */
 
-	{ "ActionsTransferAction", GTK_STOCK_MISSING_IMAGE, N_("_Transfer..."), "<control>t",
+	{ "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transfer) },
 	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
@@ -265,7 +269,7 @@ static GtkToggleActionEntry toggle_entries[] = {
 	  N_("Show two lines of information for each transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_style_double_line), FALSE },
 
-	{ "SplitTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("S_plit Transaction"), NULL,
+	{ "SplitTransactionAction", GNC_STOCK_SPLIT, N_("S_plit Transaction"), NULL,
 	  N_("Show all splits in the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_expand_transaction), FALSE },
 };
@@ -506,6 +510,35 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
+
+        // setup custom icons
+        {
+                // http://www.gtk.org/api/2.6/gtk/migrating-gnomeuiinfo.html
+                GtkIconFactory *icon_factory;
+                GtkIconSet *icon_set;
+                GtkIconSource *icon_source;
+
+                icon_factory = gtk_icon_factory_new();
+
+                icon_set = gtk_icon_set_new();
+                icon_source = gtk_icon_source_new();
+                gtk_icon_source_set_filename(icon_source, GNC_UI_DIR "/icon-split.png");
+                gtk_icon_set_add_source(icon_set, icon_source);
+                gtk_icon_source_free(icon_source);
+                gtk_icon_factory_add(icon_factory, GNC_STOCK_SPLIT, icon_set);
+                gtk_icon_set_unref(icon_set);
+
+                icon_set = gtk_icon_set_new();
+                icon_source = gtk_icon_source_new();
+                gtk_icon_source_set_filename(icon_source, GNC_UI_DIR "/icon-transfer.png");
+                gtk_icon_set_add_source(icon_set, icon_source);
+                gtk_icon_source_free(icon_source);
+                gtk_icon_factory_add(icon_factory, GNC_STOCK_TRANSFER, icon_set);
+                gtk_icon_set_unref(icon_set);
+
+                gtk_icon_factory_add_default(icon_factory);
+                g_object_unref(icon_factory);
+        }
 }
 
 static void
