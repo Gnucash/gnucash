@@ -5798,7 +5798,7 @@
 		      <property name="can_focus">True</property>
 		      <property name="n_columns">3</property>
 		      <property name="column_widths">153,121,80</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="selection_mode">GTK_SELECTION_MULTIPLE</property>
 		      <property name="show_titles">True</property>
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 
@@ -6356,7 +6356,7 @@
 		      <property name="can_focus">True</property>
 		      <property name="n_columns">3</property>
 		      <property name="column_widths">80,80,80</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="selection_mode">GTK_SELECTION_MULTIPLE</property>
 		      <property name="show_titles">True</property>
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 

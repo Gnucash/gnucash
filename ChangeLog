@@ -1,5 +1,8 @@
 2006-03-04  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/glade/sched-xact.glade: Fix selection mode on
+	transaction reminder and obsolete SX lists.
+
 	* src/gnome/ui/icon-split.png: 
 	* src/gnome/ui/icon-transfer.png: 
 	Add split, transfer icons provided by Andrew Duggan
