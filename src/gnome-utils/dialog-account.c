@@ -68,7 +68,8 @@ typedef struct _AccountWindow
   Account *top_level_account; /* owned by the model */
   Account *created_account;
 
-  GList *subaccount_names;
+  gchar **subaccount_names;
+  gchar **next_name;
 
   GNCAccountType type;
 
@@ -416,12 +417,11 @@ gnc_finish_ok (AccountWindow *aw,
   gnc_resume_gui_refresh ();
 
   /* do it all again, if needed */
-  if (aw->dialog_type == NEW_ACCOUNT && aw->subaccount_names)
+  if ((aw->dialog_type == NEW_ACCOUNT) && aw->next_name && *aw->next_name)
   {
     gnc_commodity *commodity;
     Account *parent;
     Account *account;
-    GList *node;
 
     gnc_suspend_gui_refresh ();
 
@@ -430,12 +430,8 @@ gnc_finish_ok (AccountWindow *aw,
     aw->account = *xaccAccountGetGUID (account);
     aw->type = xaccAccountGetType (parent);
 
-    xaccAccountSetName (account, aw->subaccount_names->data);
-
-    node = aw->subaccount_names;
-    aw->subaccount_names = g_list_remove_link (aw->subaccount_names, node);
-    g_free (node->data);
-    g_list_free_1 (node);
+    xaccAccountSetName (account, *aw->next_name);
+    aw->next_name++;
 
     gnc_account_to_ui (aw);
 
@@ -446,8 +442,8 @@ gnc_finish_ok (AccountWindow *aw,
                                       commodity);
     gnc_account_commodity_from_type (aw, FALSE);
 
-    /*gnc_account_tree_select_account (GNC_ACCOUNT_TREE(aw->parent_tree),
-                                     parent, TRUE);*/
+    gnc_tree_view_account_set_selected_account
+      (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
 
     gnc_resume_gui_refresh ();
     LEAVE("1");
@@ -722,14 +718,13 @@ gnc_common_ok (AccountWindow *aw)
   Account *account, *parent;
   AccountGroup *group;
   gnc_commodity * commodity;
-  gchar separator, sep_string[2];
   gchar *fullname, *fullname_parent;
-  const gchar *name;
+  const gchar *name, *separator;
 
   ENTER("aw %p", aw);
   group = gnc_get_current_group ();
 
-  separator = gnc_get_account_separator();
+  separator = gnc_get_account_separator_string();
 
   /* check for valid name */
   name = gtk_entry_get_text(GTK_ENTRY(aw->name_entry));
@@ -746,11 +741,8 @@ gnc_common_ok (AccountWindow *aw)
   if (parent == NULL) {
     account = xaccGetAccountFromFullName(group, name);
   } else {
-    sep_string[0] = separator;
-    sep_string[1] = '\0';
-
     fullname_parent = xaccAccountGetFullName(parent);
-    fullname = g_strconcat(fullname_parent, sep_string, name, NULL);
+    fullname = g_strconcat(fullname_parent, separator, name, NULL);
 
     account = xaccGetAccountFromFullName(group, fullname);
 
@@ -1032,13 +1024,10 @@ gnc_account_window_destroy_cb (GtkObject *object, gpointer data)
 
   gnc_resume_gui_refresh ();
 
-  if (aw->subaccount_names)
-  {
-    GList *node;
-    for (node = aw->subaccount_names; node; node = node->next)
-      g_free (node->data);
-    g_list_free (aw->subaccount_names);
+  if (aw->subaccount_names) {
+    g_strfreev(aw->subaccount_names);
     aw->subaccount_names = NULL;
+    aw->next_name = NULL;
   }
 
   g_list_free (aw->valid_types);
@@ -1347,14 +1336,12 @@ get_ui_fullname (AccountWindow *aw)
   if (parent_account)
   {
     char *parent_name;
-    char sep_string[2];
+    const gchar *separator;
 
     parent_name = xaccAccountGetFullName (parent_account);
 
-    sep_string[0] = gnc_get_account_separator ();
-    sep_string[1] = '\0';
-
-    fullname = g_strconcat (parent_name, sep_string, name, NULL);
+    separator = gnc_get_account_separator_string ();
+    fullname = g_strconcat (parent_name, separator, name, NULL);
 
     g_free (parent_name);
   }
@@ -1369,6 +1356,7 @@ gnc_account_window_set_name (AccountWindow *aw)
 {
   char *fullname;
   char *title;
+  gint length;
 
   if (!aw || !aw->parent_tree)
     return;
@@ -1377,13 +1365,12 @@ gnc_account_window_set_name (AccountWindow *aw)
 
   if (aw->dialog_type == EDIT_ACCOUNT)
     title = g_strconcat(_("Edit Account"), " - ", fullname, NULL);
-  else if (g_list_length (aw->subaccount_names) > 0)
+  else if ((length = g_strv_length (aw->next_name)) > 0)
   {
     const char *format = _("(%d) New Accounts");
     char *prefix;
 
-    prefix = g_strdup_printf (format,
-                              g_list_length (aw->subaccount_names) + 1);
+    prefix = g_strdup_printf (format, length + 1);
 
     title = g_strconcat (prefix, " - ", fullname, " ...", NULL);
 
@@ -1461,7 +1448,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 
 static AccountWindow *
 gnc_ui_new_account_window_internal (Account *base_account,
-                                    GList *subaccount_names,
+                                    gchar **subaccount_names,
 				    GList *valid_types,
 				    gnc_commodity * default_commodity,
 				    gboolean modal)
@@ -1486,15 +1473,11 @@ gnc_ui_new_account_window_internal (Account *base_account,
 
   gnc_suspend_gui_refresh ();
 
-  if (subaccount_names)
+  if (subaccount_names && *subaccount_names)
   {
-    GList *node;
-
-    xaccAccountSetName (account, subaccount_names->data);
-
-    aw->subaccount_names = g_list_copy (subaccount_names->next);
-    for (node = aw->subaccount_names; node; node = node->next)
-      node->data = g_strdup (node->data);
+    xaccAccountSetName (account, subaccount_names[0]);
+    aw->subaccount_names = subaccount_names;
+    aw->next_name = subaccount_names + 1;
   }
 
   gnc_account_window_create (aw);
@@ -1540,59 +1523,43 @@ gnc_ui_new_account_window_internal (Account *base_account,
 }
 
 
-static GList *
+static gchar **
 gnc_split_account_name (const char *in_name, Account **base_account)
 {
   AccountGroup *group;
-  GList *names;
-  char separator;
-  char *name;
+  Account *account;
+  gchar **names, **ptr, **out_names;
+  GList *list, *node;
 
-  names = NULL;
-  name = g_strdup (in_name);
-  *base_account = NULL;
   group = gnc_get_current_group ();
+  list = xaccGroupGetAccountList (group);
+  names = g_strsplit(in_name, gnc_get_account_separator_string(), -1);
 
-  separator = gnc_get_account_separator ();
+  for (ptr = names; *ptr; ptr++) {
+    /* Look for the first name in the children. */
+    for (node = list; node; node = g_list_next(node)) {
+      account = node->data;
 
-  while (name && *name != '\0')
-  {
-    Account *account;
-    char *p;
-
-    account = xaccGetAccountFromFullName (group, name);
-    if (account)
-    {
-      *base_account = account;
-      break;
-    }
-
-    p = strrchr (name, separator);
-    if (p)
-    {
-      *p++ = '\0';
-
-      if (*p == '\0')
-      {
-        GList *node;
-        for (node = names; node; node = node->next)
-          g_free (node->data);
-        g_list_free (names);
-        return NULL;
+      if (safe_strcmp(xaccAccountGetName (account), *ptr) == 0) {
+	/* We found an account. */
+	*base_account = account;
+	break;
       }
+    }
 
-      names = g_list_prepend (names, g_strdup (p));
-    }
-    else
-    {
-      names = g_list_prepend (names, g_strdup (name));
+    /* Was there a match?  If no, stop the traversal. */
+    if (node == NULL)
       break;
-    }
+
+    group = xaccAccountGetChildren (account);
+    if (group == NULL)
+      break;
+    list = xaccGroupGetAccountList (group);
   }
 
-  g_free (name);
-
-  return names;
+  out_names = g_strdupv(ptr);
+  g_strfreev(names);
+  return out_names;
 }
 
 
@@ -1619,11 +1586,11 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 						       Account * parent)
 {
   AccountWindow *aw;
-  Account *base_account;
+  Account *base_account = NULL;
   Account *created_account = NULL;
-  GList * subaccount_names;
-  GList * node;
+  gchar ** subaccount_names;
   gint response;
+  gboolean done = FALSE;
 
   ENTER("name %s, valid %p, commodity %p, account %p",
 	name, valid_types, default_commodity, parent);
@@ -1643,19 +1610,27 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 					   valid_types, default_commodity,
 					   TRUE);
 
-  for (node = subaccount_names; node; node = node->next)
-    g_free (node->data);
-  g_list_free (subaccount_names);
-
-  do {
+  while (!done) {
     response = gtk_dialog_run (GTK_DIALOG(aw->dialog));
 
     /* This can destroy the dialog */
     gnc_account_window_response_cb (GTK_DIALOG(aw->dialog), response, (gpointer)aw);
 
-    if (response == GTK_RESPONSE_OK)
-      created_account = aw->created_account;
-  } while ((response == GTK_RESPONSE_HELP) || (response == GNC_RESPONSE_NEW));
+    switch (response) {
+      case GTK_RESPONSE_OK:
+	created_account = aw->created_account;
+	done = (created_account != NULL);
+	break;
+
+      case GTK_RESPONSE_HELP:
+	done = FALSE;
+	break;
+
+      default:
+	done = TRUE;
+	break;
+    }
+  }
 
   close_handler(aw);
   LEAVE("created %s (%p)", xaccAccountGetName(created_account), created_account);

@@ -414,12 +414,4 @@ determines formatting details.")
    '<gw:int>
    "gnc_accounting_period_fiscal_end"
    '()
-   "Returns the end of the preferred accounting period")
-
-  (gw:wrap-function
-   ws
-   'gnc:account-separator-char
-   '(<gw:mchars> callee-owned const)
-   "gnc_get_account_separator_string"
-   '()
-   "Returns a string with the user-selected account separator"))
+   "Returns the end of the preferred accounting period"))

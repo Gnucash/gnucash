@@ -183,8 +183,9 @@ int xaccAccountOrder (const Account **account_1, const Account **account_2);
  *
  *  @return The character to use.
  */
-char gnc_get_account_separator (void);
-void gnc_set_account_separator (char separator);
+const gchar *gnc_get_account_separator_string (void);
+gunichar gnc_get_account_separator (void);
+void gnc_set_account_separator (const gchar *separator);
 
 /** @deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))

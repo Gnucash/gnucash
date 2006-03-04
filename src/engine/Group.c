@@ -498,79 +498,56 @@ xaccGetAccountFromName (const AccountGroup *grp, const char * name)
  * Fetch an account, given its full name                            *
 \********************************************************************/
 
+static Account *
+xaccGetAccountFromFullNameHelper (const AccountGroup *grp,
+				  gchar **names)
+{
+  Account *found;
+  GList *node;
+
+  g_return_val_if_fail(grp, NULL);
+  g_return_val_if_fail(names, NULL);
+
+  /* Look for the first name in the children. */
+  for (node = grp->accounts; node; node = node->next) {
+    Account *account = node->data;
+
+    if (safe_strcmp(xaccAccountGetName (account), names[0]) == 0) {
+      /* We found an account.  If the next entry is NULL, there is
+       * nothing left in the name, so just return the account. */
+      if (names[1] == NULL)
+	return account;
+
+      /* No children?  We're done. */
+      if (!account->children)
+	return NULL;
+
+      /* There's stuff left to search for.  Search recursively. */
+      found = xaccGetAccountFromFullNameHelper(account->children, &names[1]);
+      if (found != NULL) {
+	return found;
+      }
+    }
+  }
+
+  return NULL;
+}
+
+
 Account *
 xaccGetAccountFromFullName (const AccountGroup *grp,
-                            const char *name)
+			    const char *name)
 {
-  GList *node;
   Account *found;
-  char *p;
-  char separator;
+  gchar **names;
 
   if (!grp) return NULL;
   if (!name) return NULL;
 
-  p = (char *) name;
-  found = NULL;
-
-  separator = gnc_get_account_separator();
-
-  while (1)
-  {
-    /* Look for the first separator. */
-    p = strchr(p, separator);
-
-    /* If found, switch it to the null char. */
-    if (p != NULL)
-      *p = 0;
-
-    /* Now look for that name in the children. */
-    for (node = grp->accounts; node; node = node->next)
-    {
-      Account *account = node->data;
-
-      if (safe_strcmp(xaccAccountGetName (account), name) == 0)
-      {
-        /* We found an account.
-         * If p == NULL, there is nothing left
-         * in the name, so just return the account.
-         * We don't need to put back the separator,
-         * because it was never erased (p == NULL). */
-        if (p == NULL)
-          return account;
-
-        /* There's stuff left to search for.
-         * Search recursively after the separator. */
-        found = xaccGetAccountFromFullName(account->children, p + 1);
-
-        /* If we found the account, break out. */
-        if (found != NULL)
-          break;
-      }
-    }
-
-    /* If found != NULL, an account was found. */
-    /* If p == NULL, there are no more separators left. */
-
-    /* Put back the separator. */
-    if (p != NULL)
-      *p = separator;
-
-    /* If we found the account, return it. */
-    if (found != NULL)
-      return found;
-
-    /* We didn't find the account. If there
-     * are no more separators, return NULL. */
-    if (p == NULL)
-      return NULL;
-
-    /* If we are here, we didn't find anything and there
-     * must be more separators. So, continue looking with
-     * a longer name, in case there is a name with the
-     * separator character in it. */
-    p++;
-  }
+  names = g_strsplit(name, gnc_get_account_separator_string(), -1);
+  found = xaccGetAccountFromFullNameHelper(grp, names);
+  g_strfreev(names);
+  return found;
 }
 
 /********************************************************************\

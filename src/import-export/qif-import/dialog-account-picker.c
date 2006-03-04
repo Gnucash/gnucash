@@ -53,12 +53,10 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
 {
   char         * acctinfo[2];
   char         * acctname;
-  char         sep[2] = " ";
   GtkCTreeNode * node; 
   gboolean     leafnode;
   SCM          current;
   
-  sep[0] = gnc_get_account_separator();
   acctinfo[1] = "";
 
   while(!SCM_NULLP(accts)) {
@@ -92,7 +90,8 @@ acct_tree_add_accts(SCM accts, GtkCTree * tree, GtkCTreeNode * parent,
 
     /* set some row data */ 
     if(base_name && (strlen(base_name) > 0)) {
-      acctname =  g_strjoin(sep, base_name, acctinfo[0], (char *)NULL);
+      acctname =  g_strjoin(gnc_get_account_separator_string(),
+			    base_name, acctinfo[0], (char *)NULL);
     }
     else {
       acctname = g_strdup(acctinfo[0]);
@@ -154,7 +153,6 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
   QIFAccountPickerDialog * wind = user_data;
   SCM name_setter = scm_c_eval_string("qif-map-entry:set-gnc-name!");
   const char *name;
-  char sep[2] = " ";
   int  response;
   char * fullname;
   GtkWidget *dlg, *entry;
@@ -174,8 +172,8 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
   if (response == GTK_RESPONSE_OK) {
     name = gtk_entry_get_text(GTK_ENTRY(entry));
     if(wind->selected_name && (strlen(wind->selected_name) > 0)) {
-      sep[0] = gnc_get_account_separator();
-      fullname = g_strjoin(sep, wind->selected_name, name, (char *)NULL);
+      fullname = g_strjoin(gnc_get_account_separator_string(),
+			   wind->selected_name, name, (char *)NULL);
     }
     else {
       fullname = g_strdup(name);

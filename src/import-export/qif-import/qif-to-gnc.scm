@@ -15,7 +15,7 @@
 (define (qif-import:find-or-make-acct acct-info check-types? commodity
 				      check-commodity? default-currency
                                       gnc-acct-hash old-group new-group)
-  (let* ((separator (string-ref (gnc:account-separator-char) 0))
+  (let* ((separator (string-ref (gnc:account-separator-string) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
          (existing-account (hash-ref gnc-acct-hash gnc-name))
          (same-gnc-account 
@@ -180,7 +180,7 @@
      (let* ((old-group (gnc:get-current-group))
             (new-group (gnc:malloc-account-group (gnc:get-current-book)))
             (gnc-acct-hash (make-hash-table 20))
-            (separator (string-ref (gnc:account-separator-char) 0))
+            (separator (string-ref (gnc:account-separator-string) 0))
             (default-currency 
               (gnc:commodity-table-find-full 
                (gnc:book-get-commodity-table (gnc:get-current-book))

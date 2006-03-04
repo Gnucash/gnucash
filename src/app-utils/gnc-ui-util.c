@@ -61,35 +61,36 @@ static gboolean reverse_balance_inited = FALSE;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
 /********************************************************************\
- * gnc_get_account_separator                                        *
- *   returns the current account separator character                *
+ * gnc_configure_account_separator                                  *
+ *   updates the current account separator character                *
  *                                                                  *
  * Args: none                                                       *
- * Returns: account separator character                             *
  \*******************************************************************/
 static void
 gnc_configure_account_separator (void)
 {
-  char separator = ':';
+  const gchar *separator;
   char *string;
 
   string = gnc_gconf_get_string(GCONF_GENERAL, KEY_ACCOUNT_SEPARATOR, NULL);
 
   if (!string || safe_strcmp(string, "colon") == 0)
-    separator = ':';
+    separator = ":";
   else if (safe_strcmp(string, "slash") == 0)
-    separator = '/';
+    separator = "/";
   else if (safe_strcmp(string, "backslash") == 0)
-    separator = '\\';
+    separator = "\\";
   else if (safe_strcmp(string, "dash") == 0)
-    separator = '-';
+    separator = "-";
   else if (safe_strcmp(string, "period") == 0)
-    separator = '.';
+    separator = ".";
+  else
+    separator = string;
+
+  gnc_set_account_separator(separator);
 
   if (string != NULL)
     free(string);
-
-  gnc_set_account_separator(separator);
 }
 
 

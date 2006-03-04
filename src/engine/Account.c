@@ -41,7 +41,8 @@
 static QofLogModule log_module = GNC_MOD_ACCOUNT;
 
 /* The Canonical Account Separator.  Pre-Initialized. */
-static char account_separator = ':';
+static gchar account_separator[8] = ".";
+gunichar account_uc_separator = ':';
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -60,16 +61,33 @@ static void xaccAccountBringUpToDate (Account *acc);
  * Args: none                                                       *
  * Returns: account separator character                             *
  \*******************************************************************/
-char
-gnc_get_account_separator (void)
+const gchar *
+gnc_get_account_separator_string (void)
 {
   return account_separator;
 }
 
-void
-gnc_set_account_separator (char separator)
+gunichar
+gnc_get_account_separator (void)
 {
-  account_separator = separator;
+  return account_uc_separator;
+}
+
+void
+gnc_set_account_separator (const gchar *separator)
+{
+  gunichar uc;
+  gint count;
+
+  uc = g_utf8_get_char_validated(separator, -1);
+  if ((uc == (gunichar)-2) || (uc == (gunichar)-1)) {
+    strcpy(account_separator, ":");
+    return;
+  }
+
+  account_uc_separator = uc;
+  count = g_unichar_to_utf8(uc, account_separator);
+  account_separator[count] = '\0';
 }
 
 /********************************************************************\
@@ -1255,52 +1273,28 @@ xaccAccountGetFullName(const Account *account)
 {
   const Account *a;
   char *fullname;
-  const char *name;
-  char *p;
-  int length = 0;
+  gchar **names;
+  int level;
 
   if (account == NULL)
     return g_strdup("");
 
   /* Figure out how much space is needed */
-  a = account;
-  while (a != NULL)
-  {
-    name = a->accountName;
-
-    length += strlen(name) + 1; /* plus one for the separator */
-
-    a = xaccAccountGetParentAccount(a);
+  level = 0;
+  for (a = account; a; a = xaccAccountGetParentAccount(a)) {
+    level++;
   }
 
-  /* length has one extra separator in it, that's ok, because it will
-   * hold the null character at the end. */
-
-  /* allocate the memory */
-  fullname = g_new(char, length);
-
-  /* go to end of string */
-  p = fullname + length - 1;
-
-  /* put in the null character and move to the previous char */
-  *p-- = 0;
-
-  a = account;
-  while (a != NULL)
-  {
-    name = a->accountName;
-    length = strlen(name);
-
-    /* copy the characters going backwards */
-    while (length > 0)
-      *p-- = name[--length];
-
-    a = xaccAccountGetParentAccount(a);
-
-    /* if we're not at the root, add another separator */
-    if (a != NULL)
-      *p-- = account_separator;
+  /* Get all the pointers in the right order. */
+  names = g_malloc((level+1) * sizeof(gchar *));
+  names[level] = NULL;
+  for (a = account; a; a = xaccAccountGetParentAccount(a)) {
+    names[--level] = a->accountName;
   }
+
+  /* Build it */
+  fullname =  g_strjoinv(account_separator, names);
+  g_free(names);
 
   return fullname;
 }

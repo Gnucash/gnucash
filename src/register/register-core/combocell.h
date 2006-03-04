@@ -74,7 +74,7 @@ void         gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict);
 
 /** Sets a character used for special completion processing. */
 void         gnc_combo_cell_set_complete_char (ComboCell *cell,
-                                               char complete_char);
+                                               gunichar complete_char);
 
 /** Add a string to a list of strings which, if the cell has that value,
  * will cause the cell to be uneditable on 'enter'. */

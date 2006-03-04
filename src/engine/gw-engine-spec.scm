@@ -381,6 +381,15 @@
  '((<gnc:Split*> s))
  "Return split's value.")
 
+
+(gw:wrap-function
+ ws
+ 'gnc:account-separator-string
+ '(<gw:mchars> callee-owned const)
+ "gnc_get_account_separator_string"
+ '()
+ "Returns a string with the user-selected account separator")
+
 (gw:wrap-function
  ws
  'gnc:split-get-account

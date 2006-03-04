@@ -43,8 +43,6 @@ int  gnc_printinfo_p(SCM info_scm);
  */
 SCM  gnc_quoteinfo2scm(gnc_commodity *com);
 
-const char * gnc_get_account_separator_string (void);
-
 SCM gnc_parse_amount_helper (const char * string, gboolean monetary);
 
 #endif

@@ -38,7 +38,7 @@
                     (fullname 
                      (if (string? root-name)
                          (string-append root-name 
-                                        (gnc:account-separator-char)
+                                        (gnc:account-separator-string)
                                         name)
                          name)))
                (set! names 

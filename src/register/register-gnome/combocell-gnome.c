@@ -70,7 +70,7 @@ typedef struct _PopBox
 
         gboolean strict;
 
-        unsigned char complete_char; /* char to be used for auto-completion */
+        gunichar complete_char; /* char to be used for auto-completion */
 
         GList *ignore_strings;
 } PopBox;
@@ -628,6 +628,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         GdkEventKey *event = gui_data;
         gboolean keep_on_going = FALSE;
         gboolean extra_colon;
+	gunichar unicode_value;
         QuickFill *match;
         const char *match_str;
         int prefix_len;
@@ -637,11 +638,12 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         if (event->type != GDK_KEY_PRESS)
                 return FALSE;
 
+	unicode_value = gdk_keyval_to_unicode(event->keyval);
         switch (event->keyval) {
                 case GDK_slash:
                         if (!(event->state & GDK_MOD1_MASK))
                         {
-                                if (event->keyval == box->complete_char)
+                                if (unicode_value == box->complete_char)
                                         break;
 
                                 return FALSE;
@@ -690,7 +692,7 @@ gnc_combo_cell_direct_update (BasicCell *bcell,
         if (box->complete_char == 0)
                 return FALSE;
 
-        if (event->keyval != box->complete_char)
+        if (unicode_value != box->complete_char)
                 return FALSE;
 
         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
@@ -951,7 +953,7 @@ gnc_combo_cell_set_strict (ComboCell *cell, gboolean strict)
 }
 
 void
-gnc_combo_cell_set_complete_char (ComboCell *cell, char complete_char)
+gnc_combo_cell_set_complete_char (ComboCell *cell, gunichar complete_char)
 {
 	PopBox *box;
 

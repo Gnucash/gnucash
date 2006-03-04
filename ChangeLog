@@ -1,3 +1,12 @@
+2006-03-03  David Hampton  <hampton@employees.org>
+
+	* numerous: Convert the account separator from a single character
+	to a character string.  This allows multibyte unicode characters
+	to be the account separator character. Fixes 333061.  Reworked a
+	couple of routines that pull account names into their component
+	parts.  Also fixed a bug in the new account dialog when creating
+	multiple accounts at once.
+
 2006-03-03  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: error out on g-wrap-1.3, gcc4, and error-on-warning.

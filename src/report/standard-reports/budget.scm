@@ -242,8 +242,6 @@
          ;;                             optname-report-currency))
          (show-full-names? (get-option gnc:pagename-general
                                        optname-show-full-names))
-         (separator (gnc:account-separator-char))
-
          (doc (gnc:make-html-document))
          ;;(table (gnc:make-html-table))
          ;;(txt (gnc:make-html-text))

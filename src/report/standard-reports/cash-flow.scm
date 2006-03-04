@@ -144,8 +144,6 @@
          (exchange-fn (gnc:case-exchange-fn
                        price-source report-currency to-date-tp))
 
-         (separator (gnc:account-separator-char))
-
          (doc (gnc:make-html-document))
          (table (gnc:make-html-table))
          (txt (gnc:make-html-text)))
