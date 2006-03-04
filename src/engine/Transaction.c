@@ -208,7 +208,7 @@ void mark_trans (Transaction *trans)
 G_INLINE_FUNC void gen_event_trans (Transaction *trans);
 void gen_event_trans (Transaction *trans)
 {
-#if 0
+#ifndef REGISTER_STILL_DEPENDS_ON_ACCOUNT_EVENTS
   GList *node;
 
   for (node = trans->splits; node; node = node->next)
@@ -741,7 +741,7 @@ xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
   }
 
   if (acc) {
-    /* If we did find a matching account but it's amount was zero,
+    /* If we did find a matching account but its amount was zero,
      * then perhaps this is a "special" income/loss transaction
      */
     if (found_acc_match)
@@ -1052,170 +1052,76 @@ xaccTransCommitEdit (Transaction *trans)
 void
 xaccTransRollbackEdit (Transaction *trans)
 {
+   GList *node, *onode;
    QofBackend *be;
    Transaction *orig;
-   int force_it = 0, mismatch = 0;
-   int i;
+   GList *slist;
+   int num_preexist, i;
    ENTER ("trans addr=%p\n", trans);
 
-   QOF_COMMIT_EDIT_PART1(&trans->inst);
-
-   /* We increment this for the duration of the call
-    * so other functions don't result in a recursive
-    * call to xaccTransCommitEdit. */
-   trans->inst.editlevel++;
+   check_open(trans);
 
    /* copy the original values back in. */
    orig = trans->orig;
-
-   /* TODO: Perhaps this could be simplified to use do_destroy */
-   trans->common_currency = orig->common_currency;
-
-   gnc_string_cache_remove (trans->num);
-   trans->num = orig->num;
-   orig->num = gnc_string_cache_insert("");
-
-   gnc_string_cache_remove (trans->description);
-   trans->description = orig->description;
-   orig->description = gnc_string_cache_insert("");
-
-   kvp_frame_delete (trans->inst.kvp_data);
-   trans->inst.kvp_data = orig->inst.kvp_data;
-   if (!trans->inst.kvp_data)
-     trans->inst.kvp_data = kvp_frame_new ();
-   orig->inst.kvp_data = kvp_frame_new ();
-
+   SWAP(trans->num, orig->num);
+   SWAP(trans->description, orig->description);
    trans->date_entered = orig->date_entered;
    trans->date_posted = orig->date_posted;
+   SWAP(trans->common_currency, orig->common_currency);
+   SWAP(trans->inst.kvp_data, orig->inst.kvp_data);
 
-   /* OK, we also have to restore the state of the splits.  Of course,
-    * we could brute-force our way through this, and just clobber all of the
-    * old splits, and insert all of the new splits, but this kind of brute
-    * forcing will suck memory cycles.  So instead we'll try the gentle 
-    * approach first.  Note that even in the gentle approach, the 
-    * CheckDateOrder routine could be cpu-cycle brutal, so it maybe 
-    * it could use some tuning.
-    */
-   if (trans->inst.do_free)
-   {
-      force_it = 1;
-      mismatch = 0;
+   /* The splits at the front of trans->splits are exactly the same
+      splits as in the original, but some of them may have changed, so
+      we restore only those. */
+   num_preexist = g_list_length(orig->splits);
+   slist = g_list_copy(trans->splits);
+   for (i = 0, node = slist, onode = orig->splits; node;
+        i++, node = node->next, onode = onode ? onode->next : NULL) {
+       Split *s = node->data;
+
+       if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
+           continue;
+
+       if (i < num_preexist) {
+           Split *so = onode->data;
+
+           s->acc = so->acc;
+           s->parent = so->parent;
+           SWAP(s->action, so->action);
+           SWAP(s->memo, so->memo);
+           SWAP(s->inst.kvp_data, so->inst.kvp_data);
+           s->reconciled = so->reconciled;
+           s->amount = so->amount;
+           s->value = so->value;
+           s->lot = so->lot;
+           s->gains_split = s->gains_split;
+           //SET_GAINS_A_VDIRTY(s);
+           s->date_reconciled = so->date_reconciled;
+           qof_instance_mark_clean(QOF_INSTANCE(s));
+           xaccFreeSplit(so);
+       } else {
+           /* Potentially added splits */
+           trans->splits = g_list_remove(trans->splits, s);
+           if (trans != xaccSplitGetParent(s)) {
+               /* NOOP, New split added, but then moved to another
+                  transaction */
+               continue;
+           }
+           xaccSplitRollbackEdit(s);
+           g_assert(trans != xaccSplitGetParent(s));
+           /* NB: our memory management policy here is that a new split
+              added to the transaction which is then rolled-back still
+              belongs to the engine.  Specifically, it's freed by the
+              transaction to which it was added.  Don't add the Split to
+              more than one transaction during the begin/commit block! */
+           if (NULL == xaccSplitGetParent(s)) {
+               xaccFreeSplit(s);  // a newly malloc'd split
+           }
+       }
    }
-   else 
-   {
-      GList *node;
-      GList *node_orig;
-      Split *s, *so;
-
-      s = so = NULL;
-
-      for (i = 0, node = trans->splits, node_orig = orig->splits ;
-           node && node_orig ;
-           i++, node = node->next, node_orig = node_orig->next)
-      {
-         s = node->data;
-         so = node_orig->data;
-
-         if (so->acc != s->acc)
-         {
-           force_it = 1;
-           mismatch = i;
-           break;
-         }
-
-         gnc_string_cache_remove (s->action);
-         s->action = so->action;
-         so->action = gnc_string_cache_insert("");
-
-         gnc_string_cache_remove (s->memo);
-         s->memo = so->memo;
-         so->memo = gnc_string_cache_insert("");
-
-         kvp_frame_delete (s->inst.kvp_data);
-         s->inst.kvp_data = so->inst.kvp_data;
-         if (!s->inst.kvp_data)
-           s->inst.kvp_data = kvp_frame_new ();
-         so->inst.kvp_data = kvp_frame_new ();
-
-         s->reconciled  = so->reconciled;
-         s->amount      = so->amount;
-         s->value       = so->value;
-         SET_GAINS_A_VDIRTY(s);
-
-         s->date_reconciled = so->date_reconciled;
-
-         /* do NOT check date order until all of the other fields 
-          * have been properly restored */
-         mark_split (s);
-         xaccAccountFixSplitDateOrder (s->acc, s); 
-         xaccAccountRecomputeBalance (s->acc);
-         gen_event (s);
-      }
-
-      /* if the number of splits were not identical... then force */
-      if (node || node_orig)
-      {
-        force_it = 1;
-        mismatch = i;
-      }
-   }
-
-   /* OK, if force_it got set, we'll have to tough it out and brute-force
-    * the rest of the way.  Clobber all the edited splits, add all new splits.
-    * Unfortunately, this can suck up CPU cycles in the Remove/Insert routines.
-    */  
-   if (force_it)
-   {
-      GList *node;
-
-      /* In this loop, we tuck the fixed-up splits back into 
-       * orig array, for temp safekeeping. */
-      for (i = 0, node = trans->splits ;
-           node && i < mismatch ;
-           i++, node = node->next)
-      {
-         Split *s = node->data;
-         GList *node_orig;
-
-         node_orig = g_list_nth (orig->splits, i);
-         xaccFreeSplit (node_orig->data);
-         node_orig->data = s;
-      }
-
-      /* In this loop, we remove excess new splits that had been added */
-      for (node = g_list_nth (trans->splits, mismatch) ;
-           node ; node = node->next)
-      {
-         Split *s = node->data;
-         Account *acc = s->acc;
-
-         mark_split (s);
-         xaccAccountRemoveSplit (acc, s);
-         xaccAccountRecomputeBalance (acc);
-         gen_event (s);
-         xaccFreeSplit (s);
-      }
-
-      g_list_free (trans->splits);
-
-      trans->splits = orig->splits;
-      orig->splits = NULL;
-
-      /* In this loop, we fix up the remaining orig splits to be healthy */
-      for (node = g_list_nth (trans->splits, mismatch) ;
-           node ; node = node->next)
-      {
-         Split *s = node->data;
-         Account *account = s->acc;
-
-         s->parent = trans;
-         s->acc = NULL;
-         xaccAccountInsertSplit (account, s);
-         mark_split (s);
-         xaccAccountRecomputeBalance (account);
-         gen_event (s);
-      }
-   }
+   g_list_free(slist);
+   g_list_free(orig->splits);
+   orig->splits = NULL;
 
    /* Now that the engine copy is back to its original version,
     * get the backend to fix it in the database */
@@ -1243,7 +1149,6 @@ xaccTransRollbackEdit (Transaction *trans)
           */
          xaccTransDestroy (trans);
          do_destroy (trans);
-         xaccFreeTransaction (trans);
 
          /* push error back onto the stack */
          qof_backend_set_error (be, errcode);
@@ -1267,6 +1172,10 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* Put back to zero. */
    trans->inst.editlevel--;
+   /* FIXME: The register code seems to depend on the engine to
+      generate an event during rollback, even though the state is just
+      reverting to what it was. */
+   gen_event_trans (trans);
 
    LEAVE ("trans addr=%p\n", trans);
 }
