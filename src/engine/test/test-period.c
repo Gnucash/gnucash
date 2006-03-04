@@ -37,10 +37,11 @@
 #include "test-engine-stuff.h"
 #include "Transaction.h"
 
+static int num_trans = 0;
 static void
 run_test (void)
 {
-  QofSession *sess;
+  QofSession *sess1, *sess2;
   QofBook *openbook, *closedbook;
   AccountGroup *grp;
   AccountList *acclist, *anode;
@@ -50,10 +51,10 @@ run_test (void)
   Transaction *tfirst, *tlast;
   Timespec tsfirst, tslast, tsmiddle;
   
-  sess = get_random_session ();
-  openbook = qof_session_get_book (sess);
-  sess = get_random_session ();
-  closedbook = qof_session_get_book(sess);
+  sess1 = get_random_session ();
+  openbook = qof_session_get_book (sess1);
+  sess2 = get_random_session ();
+  closedbook = qof_session_get_book(sess2);
   acc = NULL;
   equity = get_random_account(openbook);
   if (!openbook)
@@ -62,7 +63,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  add_random_transactions_to_book (openbook, 120);
+  add_random_transactions_to_book (openbook, num_trans);
 
   grp = xaccGetAccountGroup (openbook);
 
@@ -118,7 +119,7 @@ run_test (void)
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
   gnc_set_logfile (stdout);
-  gnc_set_log_level_global (GNC_LOG_FATAL);
+  gnc_set_log_level_global (GNC_LOG_WARNING);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   equity, "this is opening balance dude");
 
@@ -134,11 +135,20 @@ run_test (void)
 int
 main (int argc, char **argv)
 {
-	qof_init();
-	if(cashobjects_register()) {
-		run_test ();
-		print_test_results();
-	}
-	qof_close();
-  return 0;
+    if (argc == 2)
+        num_trans = atoi(argv[1]);
+    else num_trans = 120;
+
+    qof_init();
+    gnc_log_default();
+    qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
+
+    g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
+    if(cashobjects_register()) {
+        srand(num_trans);
+        run_test ();
+        print_test_results();
+    }
+    qof_close();
+    return 0;
 }

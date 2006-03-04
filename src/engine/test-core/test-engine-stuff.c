@@ -930,9 +930,6 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     xaccTransBeginEdit(trn);
     s = get_random_split(book, acc, trn);
 
-    /* Occasionally leave a dangling split around */
-    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
-
     bcc = get_random_list_element (account_list);
     if ((bcc == acc) && (!do_bork()))
     { 
@@ -963,7 +960,6 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
         xaccSplitSetAmount(s, gnc_numeric_neg(num));
     }
 
-    if (do_bork()) xaccAccountRemoveSplit (s->acc, s);
     xaccTransCommitEdit(trn);
 }
 
@@ -1278,6 +1274,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     const gchar *str;
     gnc_commodity *com;
     int scu;
+    Timespec *ts;
 
     com = xaccTransGetCurrency (trn);
     scu = gnc_commodity_get_fraction(com);
@@ -1291,7 +1288,9 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
 
     xaccSplitSetReconcile(ret, possible_chars[get_random_int_in_range(0, 3)]);
 
-    xaccSplitSetDateReconciledTS(ret, get_random_timespec());
+    ts = get_random_timespec();
+    xaccSplitSetDateReconciledTS(ret, ts);
+    g_free(ts);
 
     /* Split must be in an account before we can set an amount */
     /* and in a transaction before it can be added to an account. */
@@ -1332,6 +1331,7 @@ void
 make_random_changes_to_split (Split *split)
 {
   Transaction *trans;
+  Timespec *ts;
 
   g_return_if_fail (split);
 
@@ -1344,7 +1344,9 @@ make_random_changes_to_split (Split *split)
 
   xaccSplitSetReconcile (split, possible_chars[get_random_int_in_range(0, 3)]);
 
-  xaccSplitSetDateReconciledTS (split, get_random_timespec());
+  ts = get_random_timespec();
+  xaccSplitSetDateReconciledTS (split, ts);
+  g_free(ts);
 
   xaccSplitSetSlots_nc (split, get_random_kvp_frame());
 
@@ -1401,7 +1403,7 @@ get_random_transaction_with_currency(QofBook *book,
     Transaction* trans;
     KvpFrame *f;
     gint num;
-    gchar *numstr;
+    gchar numstr[10];
 
     if (!account_list) 
     {
@@ -1424,7 +1426,7 @@ get_random_transaction_with_currency(QofBook *book,
                           get_random_commodity (book));
 
     num = get_random_int_in_range (1, max_trans_num);
-    numstr = g_strdup_printf("%d", num);
+    g_snprintf(numstr, 10, "%d", num);
     xaccTransSetNum(trans, numstr);
     set_tran_random_string_from_array(trans, xaccTransSetDescription,
                                       sane_descriptions);
