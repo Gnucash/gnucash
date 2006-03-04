@@ -1689,12 +1689,12 @@ sxsincelast_save_size( sxSinceLastData *sxsld )
 }
 
 static void
-generate_instances( SchedXaction *sx,
-                    GDate *end,
-                    GDate *reminderEnd,
-                    GList **instanceList,
-                    GList **reminderList,
-                    GList **deadList )
+generate_instances(SchedXaction *sx,
+                   GDate *end,
+                   GDate *reminderEnd,
+                   GList **instanceList,
+                   GList **reminderList,
+                   GList **deadList)
 {
         GDate gd;
         toCreateInstance *tci;
@@ -1705,7 +1705,7 @@ generate_instances( SchedXaction *sx,
         g_assert( g_date_valid(end) );
         g_assert( g_date_valid(reminderEnd) );
 
-        g_date_clear( &gd, 1 );
+        g_date_clear(&gd, 1);
 
         /* Process valid next instances. */
         seqStateData = gnc_sx_create_temporal_state( sx );
@@ -2143,8 +2143,8 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                 g_date_add_days( &end, daysInAdvance );
                 
                 endPlusReminders = end;
-                daysInAdvance = xaccSchedXactionGetAdvanceReminder( sx );
-                g_date_add_days( &endPlusReminders, daysInAdvance );
+                daysInAdvance = xaccSchedXactionGetAdvanceReminder(sx);
+                g_date_add_days(&endPlusReminders, daysInAdvance);
 
                 /* Handle postponed instances.
                  *
@@ -2179,18 +2179,17 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                         
                 }
 
-                generate_instances( sx, &end,
-                                    &endPlusReminders,
-                                    &instanceList,
-                                    &sxsld->reminderList,
-                                    &sxsld->toRemoveList );
+                generate_instances(sx,
+                                   &end,
+                                   &endPlusReminders,
+                                   &instanceList,
+                                   &sxsld->reminderList,
+                                   &sxsld->toRemoveList);
 
-                if ( instanceList == NULL ) {
+                if (instanceList == NULL)
                         continue;
-                }
 
-                xaccSchedXactionGetAutoCreate( sx, &autocreateState,
-                                               &notifyState );
+                xaccSchedXactionGetAutoCreate(sx, &autocreateState, &notifyState);
                 /* Figure out the appropriate list to place the new TCT on. */
                 containingList = ( autocreateState
                                    ? &sxsld->autoCreateList
