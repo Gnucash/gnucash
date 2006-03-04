@@ -32,6 +32,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
+#include "gnc-event.h"
 
 static QofLogModule log_module = GNC_MOD_ENGINE;
 
@@ -626,6 +627,8 @@ xaccAccountRemoveGroup (Account *acc)
 void
 xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 {
+  GncEventData ed;
+
   if (!acc) return;
 
   /* Note this routine might be called on accounts which 
@@ -642,7 +645,14 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
 
   acc->parent = NULL;
 
+  /* Gather event data */
+  ed.node = grp->parent; /* The parent account */
+  ed.idx = g_list_index(grp->accounts, acc);
+
   grp->accounts = g_list_remove (grp->accounts, acc);
+
+  /* Now send the event. */
+  qof_event_gen(&acc->inst.entity, QOF_EVENT_REMOVE, &ed);
 
   grp->saved = 0;
 
@@ -696,6 +706,8 @@ group_sort_helper (gconstpointer a, gconstpointer b)
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
+  GncEventData ed;
+
   if (!grp || !grp->book) return;
   if (!acc) return;
 
@@ -746,6 +758,11 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
     grp->accounts = g_list_insert_sorted (grp->accounts, acc,
                                           group_sort_helper);
+
+    /* Gather event data */
+    ed.node = acc;
+    ed.idx = 0;
+    qof_event_gen(&acc->inst.entity, QOF_EVENT_ADD, &ed);
     gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_ADD);
 
     acc->inst.dirty = TRUE;

@@ -33,6 +33,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "TransactionP.h"
+#include "gnc-event.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
@@ -330,6 +331,8 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
+  GncEventData ed;
+
   if(!qof_commit_edit(&acc->inst)) { return;}
 
   /* If marked for deletion, get rid of subaccounts first,
@@ -374,6 +377,10 @@ xaccAccountCommitEdit (Account *acc)
     /* force re-sort of parent group */
     xaccGroupInsertAccount(acc->parent, acc); 
   }
+
+  ed.node = acc;
+  ed.idx = 0;
+  qof_event_gen(&acc->inst.entity, QOF_EVENT_MODIFY, &ed);
 
   if (qof_commit_edit_part2(&acc->inst, on_err, noop, acc_free))
       gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
@@ -890,6 +897,7 @@ xaccAccountRecomputeBalance (Account * acc)
   gnc_numeric  reconciled_balance;
   Split *last_split = NULL;
   GList *lp;
+  GncEventData ed;
 
   if (NULL == acc) return;
   if (acc->inst.editlevel > 0) return;
@@ -934,6 +942,10 @@ xaccAccountRecomputeBalance (Account * acc)
   acc->reconciled_balance = reconciled_balance;
 
   acc->balance_dirty = FALSE;
+
+  ed.node = acc;
+  ed.idx = 0;
+  qof_event_gen(&acc->inst.entity, QOF_EVENT_MODIFY, &ed);
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 

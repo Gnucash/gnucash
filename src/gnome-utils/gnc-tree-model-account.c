@@ -36,6 +36,7 @@
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
 
@@ -87,9 +88,10 @@ static void gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 						 Account *toplevel);
 
 /** Component Manager Callback ******************************************/
-static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-						  GNCEngineEventType event_type,
-						  gpointer user_data);
+static void gnc_tree_model_account_event_handler (QofEntity *entity,
+						  QofEventId event_type,
+						  GncTreeModelAccount *model,
+						  GncEventData *ed);
 
 /** The instance private data for a account tree model. */
 typedef struct GncTreeModelAccountPrivate
@@ -253,7 +255,7 @@ gnc_tree_model_account_dispose (GObject *object)
 	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
 	if (priv->event_handler_id) {
-	  gnc_engine_unregister_event_handler (priv->event_handler_id);
+	  qof_event_unregister_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
@@ -304,8 +306,8 @@ gnc_tree_model_account_new (AccountGroup *group)
 	  gnc_tree_model_account_set_toplevel (model, account);
 	}
 
-	priv->event_handler_id =
-	  gnc_engine_register_event_handler (gnc_tree_model_account_event_handler, model);
+	priv->event_handler_id = qof_event_register_handler
+	  ((QofEventHandler)gnc_tree_model_account_event_handler, model);
 
 	LEAVE("model %p", model);
 	return GTK_TREE_MODEL (model);
@@ -1367,24 +1369,6 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 /*   Account Tree Model - Engine Event Handling Functions   */
 /************************************************************/
 
-/** This data structure maintains a record of a pending removal of an
- *  account from GnuCash.  There is a chicken/egg problem whereby the
- *  account cannot be removed from the model before it is removed from
- *  the account group (throws the indices off), but after the account
- *  has been removed from the account group a path to the account
- *  can't be generated.  This data structure holds a temporary copy of
- *  the account path to bridge this problem. */
-typedef struct _remove_data {
-  /** The guid of the account that was removed. */
-  GUID                 guid;
-  /** A pointer to the model containing the account. */
-  GncTreeModelAccount *model;
-  /** The path within the model to the account. */
-  GtkTreePath         *path;
-} remove_data;
-
-static GSList *pending_removals = NULL;
-
 /** This function performs common updating to the model after an
  *  account has been added or removed.  The parent entry needs to be
  *  tapped on the shoulder so that it can correctly update the
@@ -1406,82 +1390,17 @@ gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
 {
   GtkTreeIter iter;
 
-  if (gtk_tree_path_up (path)) {
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
-      gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-      gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
-    }
+  while (gtk_tree_path_get_depth(path) > 0) {
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
+      break;
+    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
+    gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+    gtk_tree_path_up(path);
   }
 
   do {
     model->stamp++;
   } while (model->stamp == 0);
-}
-
-
-/** This function is a one-shot helper routine for the following
- *  gnc_tree_model_account_event_handler() function.  It must be armed
- *  each time an item is removed from the model.  This function will
- *  be called as an idle function some time after the user requests
- *  the deletion.  This function will send the "row_deleted"
- *  signal to any/all parent models for each entry deleted.
- *
- *  @internal
- *
- *  @param unused
- *
- *  @return FALSE.  Tells the glib idle function to remove this
- *  handler, making it a one-shot that will be re-armed at the next
- *  item removal.
- */
-static gboolean
-gnc_tree_model_account_do_deletions (gpointer unused)
-{
-  GSList *iter, *next = NULL;
-  remove_data *data;
-
-  for (iter = pending_removals; iter != NULL; iter = next) {
-    next = g_slist_next(iter);
-    data = iter->data;
-    pending_removals = g_slist_delete_link (pending_removals, iter);
-
-    gtk_tree_model_row_deleted (GTK_TREE_MODEL(data->model), data->path);
-    gnc_tree_model_account_path_changed (data->model, data->path);
-    gtk_tree_path_free(data->path);
-    g_free(data);
-  }
-
-  /* Remove me */
-  return FALSE;
-}
-
-
-/** This function is a helper routine for the following
- *  gnc_tree_model_account_event_handler() function.  It is called to
- *  add an item to the pending removal list.
- *
- *  @param entity The guid value of the account that is being removed
- *  from the model.
- *
- *  @param model A pointer to the tree model.
- *
- *  @param path The path to the removed account.  This can't be
- *  generated once the account is removed.
- */
-static void
-pending_list_add (GUID *entity,
-		  GncTreeModelAccount *model,
-		  GtkTreePath *path)
-{
-  remove_data *data;
-
-  data = malloc(sizeof(*data));
-  data->guid = *entity;
-  data->model = model;
-  data->path = path;
-  pending_removals = g_slist_append (pending_removals, data);
-  g_idle_add_full(G_PRIORITY_HIGH_IDLE,
-		  gnc_tree_model_account_do_deletions, NULL, NULL);
 }
 
 
@@ -1514,88 +1433,80 @@ pending_list_add (GUID *entity,
  *  @param user_data A pointer to the account tree model.
  */
 static void
-gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
-				      GNCEngineEventType event_type,
-				      gpointer user_data)
+gnc_tree_model_account_event_handler (QofEntity *entity,
+				      QofEventId event_type,
+				      GncTreeModelAccount *model,
+				      GncEventData *ed)
 {
-  	GncTreeModelAccount *model;
-  	GncTreeModelAccountPrivate *priv;
-	GtkTreePath *path;
-	GtkTreeIter iter;
-	Account *account;
-	const gchar *account_name;
+  GncTreeModelAccountPrivate *priv;
+  const gchar *parent_name;
+  GtkTreePath *path = NULL;
+  GtkTreeIter iter;
+  Account *account, *parent;
 
-	/* hard failures */
-	g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
+  g_return_if_fail(model);	/* Required */
+  if (!ed) return;		/* Required for us. Not always sent. */
 
-	/* soft failures */
-	if (safe_strcmp(type, GNC_ID_ACCOUNT) != 0)
-	  return;
+  ENTER("entity %p of type %d, model %p, event_data %p",
+	entity, event_type, model, ed);
+  priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-	ENTER("entity %p of type %s, event %d, model %p",
-	      entity, type, event_type, user_data);
-	model = (GncTreeModelAccount *)user_data;
+  /* What to do, that to do. */
+  switch (event_type) {
+    case QOF_EVENT_ADD:
+      /* Tell the filters/views where the new account was added. */
+      account = GNC_ACCOUNT(ed->node);
+      DEBUG("add account %p (%s)", account, xaccAccountGetName(account));
+      path = gnc_tree_model_account_get_path_from_account(model, account);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      if (!gnc_tree_model_account_get_iter(GTK_TREE_MODEL(model), &iter, path)) {
+	DEBUG("can't generate iter");
+	break;
+      }
+      gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
+      if (gtk_tree_path_up (path))
+	gnc_tree_model_account_path_changed(model, path);
+      break;
 
-	/* Get the account.*/
-	priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-	account = xaccAccountLookup (entity, priv->book);
-	if (!account) {
-	  LEAVE("account not in this model's book");
-	  return;
-	}
-	account_name = xaccAccountGetName(account);
+    case QOF_EVENT_REMOVE:
+      parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->toplevel;
+      parent_name = ed->node ? xaccAccountGetName(parent) : "Root";
+      DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
+      path = gnc_tree_model_account_get_path_from_account(model, parent);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      gtk_tree_path_append_index (path, ed->idx);
+      gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
+      gnc_tree_model_account_path_changed(model, path);
+      break;
 
-	switch (event_type) {
-	 case GNC_EVENT_ADD:
-	  /* Tell the filters/views where the new account was added. */
-	  DEBUG("add account %p (%s)", account, account_name);
-	  if (gnc_tree_model_account_get_iter_from_account (
-                  model, account, &iter)) {
-	    path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
-	    gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-	    gnc_tree_model_account_path_changed (model, path);
-	    gtk_tree_path_free(path);
-	  }
-	  break;
+    case QOF_EVENT_MODIFY:
+      account = GNC_ACCOUNT(ed->node);
+      DEBUG("modify  account %p (%s)", account, xaccAccountGetName(account));
+      path = gnc_tree_model_account_get_path_from_account(model, account);
+      if (!path) {
+	DEBUG("can't generate path");
+	break;
+      }
+      if (!gnc_tree_model_account_get_iter(GTK_TREE_MODEL(model), &iter, path)) {
+	DEBUG("can't generate iter");
+	break;
+      }
+      gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+      break;
 
-	 case GNC_EVENT_REMOVE:
-	  /* Record the path of this account for later use in destruction */
-	  DEBUG("remove account %p (%s)", account, account_name);
-	  path = gnc_tree_model_account_get_path_from_account (model, account);
-	  if (path == NULL) {
-	    LEAVE("account not in model");
-	    return;
-	  }
+    default:
+      DEBUG("unknown event type");
+      return;
+  }
 
-	  pending_list_add(entity, model, path);
-	  LEAVE(" ");
-	  return;
-
-	 case GNC_EVENT_MODIFY:
-	  DEBUG("modify account %p (%s)", account, account_name);
-	  path = gnc_tree_model_account_get_path_from_account (model, account);
-	  if (path == NULL) {
-	    LEAVE("account not in model");
-	    return;
-	  }
-	  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
-	    gtk_tree_path_free(path);
-	    LEAVE("can't find iter for path");
-	    return;
-	  }
-	  gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
-	  gtk_tree_path_free(path);
-	  LEAVE(" ");
-	  return;
-
-	 case GNC_EVENT_DESTROY:
-	  /* Tell the filters/view the account has been deleted. */
-	  DEBUG("destroy account %p (%s)", account, account_name);
-	  break;
-
-	 default:
-	  LEAVE("ignored event for %p (%s)", account, account_name);
-	  return;
-	}
-	LEAVE(" new stamp %u", model->stamp);
+  if (path)
+    gtk_tree_path_free(path);
+  LEAVE(" ");
+  return;
 }
