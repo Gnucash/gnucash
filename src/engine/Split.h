@@ -103,10 +103,11 @@ QofBook *   xaccSplitGetBook (const Split *split);
 /** Returns the account of this split, which was set through
  * xaccAccountInsertSplit(). */
 Account *     xaccSplitGetAccount (const Split *split);
+void xaccSplitSetAccount (Split *s, Account *acc);
 
-/** Returns the parent transaction of the split, which was set through
- * xaccTransAppendSplit(). */
+/** Returns the parent transaction of the split. */
 Transaction * xaccSplitGetParent (const Split *split);
+void xaccSplitSetParent (Split *split, Transaction *trans);
 
 /** Returns the pointer to the debited/credited Lot where this split
  * belongs to, or NULL if it doesn't belong to any. */
@@ -161,7 +162,7 @@ char          xaccSplitGetReconcile (const Split *split);
  * time as time_t. */
 void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
 /** Set the date on which this split was reconciled by specifying the
- * time as Timespec. */
+ * time as Timespec.  Caller still owns *ts! */
 void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
 /** Get the date on which this split was reconciled by having it
  * written into the Timespec that 'ts' is pointing to. */

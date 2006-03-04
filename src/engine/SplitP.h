@@ -75,10 +75,11 @@ struct split_s
   QofInstance inst;
 
   Account *acc;              /* back-pointer to debited/credited account  */
-
+  Account *orig_acc;
   GNCLot *lot;               /* back-pointer to debited/credited lot */
 
   Transaction *parent;       /* parent of split                           */
+  Transaction *orig_parent;
 
   /* The memo field is an arbitrary user-assiged value. 
    * It is intended to hold a short (zero to forty character) string 
@@ -150,10 +151,11 @@ Split * xaccSplitClone (const Split *s);
 
 Split *xaccDupeSplit (const Split *s);
 G_INLINE_FUNC void mark_split (Split *s);
-G_INLINE_FUNC void gen_event (const Split *split);
 
 void xaccSplitVoid(Split *split);
 void xaccSplitUnvoid(Split *split);
+void xaccSplitCommitEdit(Split *s);
+void xaccSplitRollbackEdit(Split *s);
 
 /* Compute the value of a list of splits in the given currency,
  * excluding the skip_me split. */

@@ -65,6 +65,7 @@ xaccInitSplit(Split * split, QofBook *book)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
+  split->orig_acc    = NULL;
   split->parent      = NULL;
   split->lot         = NULL;
 
@@ -94,6 +95,7 @@ xaccSplitReinit(Split * split)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
+  split->orig_acc    = NULL;
   split->parent      = NULL;
   split->lot         = NULL;
 
@@ -148,17 +150,18 @@ xaccDupeSplit (const Split *s)
 {
   Split *split = g_new0 (Split, 1);
 
-  /* Trash the guid and entity table. We don't want to mistake 
-   * the cloned splits as something official.  If we ever use this
-   * split, we'll have to fix this up.
+  /* Trash the entity table. We don't want to mistake the cloned
+   * splits as something official.  If we ever use this split, we'll
+   * have to fix this up.
    */
   split->inst.entity.e_type = NULL;
-  split->inst.entity.guid = *guid_null();
   split->inst.entity.collection = NULL;
+  split->inst.entity.guid = s->inst.entity.guid;
   split->inst.book = s->inst.book;
 
   split->parent = s->parent;
   split->acc = s->acc;
+  split->orig_acc = s->orig_acc;
   split->lot = s->lot;
 
   split->memo = CACHE_INSERT(s->memo);
@@ -266,6 +269,7 @@ xaccFreeSplit (Split *split)
   split->parent      = NULL;
   split->lot         = NULL;
   split->acc         = NULL;
+  split->orig_acc    = NULL;
   
   split->date_reconciled.tv_sec = 0;
   split->date_reconciled.tv_nsec = 0;
@@ -274,6 +278,22 @@ xaccFreeSplit (Split *split)
   if (split->gains_split) split->gains_split->gains_split = NULL;
   qof_instance_release(&split->inst);
   g_free(split);
+}
+
+static void mark_acc(Account *acc)
+{
+    if (acc && !acc->inst.do_free) {
+        acc->balance_dirty = TRUE;
+        acc->sort_dirty = TRUE;
+    }
+}
+
+void mark_split (Split *s)
+{
+  mark_acc(s->acc);
+
+  /* set dirty flag on lot too. */
+  if (s->lot) s->lot->is_closed = -1;
 }
 
 /*
@@ -452,6 +472,112 @@ xaccSplitGetAccount (const Split *s)
   return s ? s->acc : NULL;
 }
 
+void
+xaccSplitSetAccount (Split *s, Account *acc)
+{
+    Transaction *trans;
+
+    g_return_if_fail(s && acc);
+    g_return_if_fail(acc->inst.book == s->inst.book);
+
+    trans = s->parent;
+    if (trans)
+        xaccTransBeginEdit(trans);
+
+    s->acc = acc;
+    qof_instance_set_dirty(QOF_INSTANCE(s));
+
+    if (trans)
+        xaccTransCommitEdit(trans);
+}
+
+/* An engine-private helper for completing xaccTransCommitEdit(). */
+void
+xaccSplitCommitEdit(Split *s)
+{
+    Account *acc, *orig_acc;
+
+    g_return_if_fail(s);
+    if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
+        return;
+
+    orig_acc = s->orig_acc;
+    acc = s->acc;
+
+    /* Possibly remove the split from the original account... */
+    if (orig_acc && (orig_acc != acc || s->inst.do_free)) {
+        GList *node = g_list_find (orig_acc->splits, s);
+        if (node) {
+            orig_acc->splits = g_list_delete_link (orig_acc->splits, node);
+            /* Remove from lot (but only if it hasn't been moved to
+               new lot already) */
+            if (s->lot && s->lot->account == orig_acc)
+                gnc_lot_remove_split (s->lot, s);
+            //FIXME: probably not needed.
+            xaccGroupMarkNotSaved (orig_acc->parent);
+            //FIXME: find better event type
+            gnc_engine_gen_event (&orig_acc->inst.entity, GNC_EVENT_MODIFY);
+        } else PERR("Account lost track of moved or deleted split.");
+        orig_acc->balance_dirty = TRUE;
+        xaccAccountRecomputeBalance(orig_acc);
+    }
+
+    /* ... and insert it into the new account if needed */
+    if (orig_acc != s->acc && !s->inst.do_free) {
+        if (!g_list_find(acc->splits, s)) {
+            if (acc->inst.editlevel == 0) {
+                acc->splits = g_list_insert_sorted(
+                    acc->splits, s, (GCompareFunc)xaccSplitDateOrder);
+            } else {
+                acc->splits = g_list_prepend(acc->splits, s);
+                acc->sort_dirty = TRUE;
+            }
+
+            /* If the split's lot belonged to some other account, we
+               leave it so. */
+            if (s->lot && (NULL == s->lot->account))
+                xaccAccountInsertLot (acc, s->lot);
+
+            xaccGroupMarkNotSaved (acc->parent); //FIXME: probably not needed.
+            //FIXME: find better event
+            gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+        } else PERR("Account grabbed split prematurely.");
+        acc->balance_dirty = TRUE;
+        xaccSplitSetAmount(s, xaccSplitGetAmount(s));
+    }
+
+    if (s->orig_parent && s->parent != s->orig_parent) {
+        //FIXME: find better event
+        gnc_engine_gen_event (&s->orig_parent->inst.entity, GNC_EVENT_MODIFY);
+    }
+    if (s->lot) {
+        /* A change of value/amnt affects gains display, etc. */
+        gnc_engine_gen_event (&s->lot->inst.entity, GNC_EVENT_MODIFY);
+    }
+
+    /* Important: we save off the original parent transaction and account
+       so that when we commit, we can generate signals for both the
+       original and new transactions, for the _next_ begin/commit cycle. */
+    s->orig_acc = s->acc;
+    s->orig_parent = s->parent;
+    qof_instance_mark_clean(QOF_INSTANCE(s));
+
+    mark_acc(acc);
+    //FIXME: should really be in xaccAccountCommitEdit
+    xaccAccountSortSplits (acc, TRUE);
+    xaccAccountRecomputeBalance(acc);
+    if (s->inst.do_free)
+        xaccFreeSplit(s);
+}
+
+/* An engine-private helper for completing xaccTransRollbackEdit(). */
+void
+xaccSplitRollbackEdit(Split *s)
+{
+    s->acc = s->orig_acc;  /* Don't use setters, we want to allow NULL */
+    s->parent = s->orig_parent;
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -508,44 +634,6 @@ xaccSplitDetermineGainStatus (Split *split)
    }
 }
 
-void mark_split (Split *s)
-{
-  Account *account = s->acc;
-
-  if (account && !account->inst.do_free)
-  {
-    account->balance_dirty = TRUE;
-    account->sort_dirty = TRUE;
-  }
-
-  /* set dirty flag on lot too. */
-  if (s->lot) s->lot->is_closed = -1;
-}
-
-void gen_event (const Split *split)
-{
-  Account *account = split->acc;
-  Transaction *trans = split->parent;
-  GNCLot *lot = split->lot;
-
-  if (account)
-  {
-    xaccGroupMarkNotSaved (account->parent);
-    gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
-  }
-
-  if (trans)
-  {
-    gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
-  }
-
-  if (lot)
-  {
-    /* A change of value/amnt affects gains displat, etc. */
-    gnc_engine_gen_event (&lot->inst.entity, GNC_EVENT_MODIFY);
-  }
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -597,9 +685,10 @@ void
 xaccSplitSetSlots_nc(Split *s, KvpFrame *frm)
 {
   if (!s || !frm) return;
-  check_open (s->parent);
-
+  xaccTransBeginEdit(s->parent);
   qof_instance_set_slots(QOF_INSTANCE(s), frm);
+  xaccTransCommitEdit(s->parent);
+
 }
 
 /********************************************************************\
@@ -610,7 +699,7 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
   if (!s) return;
   ENTER (" ");
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
 
   s->amount = double_to_gnc_numeric(amt, get_commodity_denom(s),
                                     GNC_HOW_RND_ROUND);
@@ -620,6 +709,8 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
+
 }
 
 void 
@@ -627,7 +718,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
 {
   if (!s) return;
   ENTER (" ");
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
 
   s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), 
                                   GNC_HOW_RND_ROUND);
@@ -637,6 +728,7 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price, gnc_numeric amt)
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
 }
 
 static void
@@ -653,7 +745,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
 {
   if (!s) return;
   ENTER (" ");
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
 
   s->value = gnc_numeric_mul(xaccSplitGetAmount(s), 
                              price, get_currency_denom(s),
@@ -662,6 +754,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
   SET_GAINS_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
 }
 
 void 
@@ -673,7 +766,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
                                           GNC_HOW_RND_ROUND); 
   if (!s) return;
   ENTER (" ");
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
   
   old_amt = xaccSplitGetAmount (s);
   if (!gnc_numeric_zero_p(old_amt)) 
@@ -694,6 +787,7 @@ DxaccSplitSetShareAmount (Split *s, double damt)
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
 }
 
 static void
@@ -718,7 +812,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
 	 " new amt=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
 	 s->amount.num, s->amount.denom, amt.num, amt.denom);
 
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
   if (s->acc)
     s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), 
 				    GNC_HOW_RND_ROUND);
@@ -728,6 +822,7 @@ xaccSplitSetAmount (Split *s, gnc_numeric amt)
   SET_GAINS_ADIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
   LEAVE("");
 }
 
@@ -743,6 +838,7 @@ qofSplitSetValue (Split *split, gnc_numeric amt)
 void 
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
+  gnc_numeric new_val;
   if (!s) return;
   
   g_return_if_fail(gnc_numeric_check(amt) == GNC_ERROR_OK);
@@ -750,13 +846,17 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 	 " new val=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, s,
 	 s->value.num, s->value.denom, amt.num, amt.denom);
 
-  check_open (s->parent);
-  s->value = gnc_numeric_convert(amt, get_currency_denom(s), 
-                                 GNC_HOW_RND_ROUND);
+  xaccTransBeginEdit (s->parent);
+  new_val = gnc_numeric_convert(amt, get_currency_denom(s),
+                                GNC_HOW_RND_ROUND);
+  if (gnc_numeric_check(new_val) == GNC_ERROR_OK)
+      s->value = new_val;
+  else PERR("numeric error in converting the split value's denominator");
 
   SET_GAINS_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
   LEAVE ("");
 }
 
@@ -789,7 +889,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   const gnc_commodity *commodity;
 
   if (!s) return;
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
 
   if (!s->acc) 
   {
@@ -829,6 +929,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   SET_GAINS_A_VDIRTY(s);
   mark_split (s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
 }
 
 gnc_numeric
@@ -980,35 +1081,11 @@ xaccSplitDestroy (Split *split)
    if (acc && !acc->inst.do_free && xaccTransGetReadOnly (trans))
        return FALSE;
 
-   check_open (trans);
+   xaccTransBeginEdit(trans);
+   qof_instance_set_dirty(QOF_INSTANCE(split));
+   split->inst.do_free = TRUE;
+   xaccTransCommitEdit(trans);
 
-   mark_split (split);
-
-   if (trans)
-   {
-     if (g_list_find(trans->splits, split))
-       xaccTransRemoveSplit (trans, split);
-     else
-       PERR ("split not in transaction");
-   }
-
-   /* Note: split is removed from lot when it's removed from account */
-   xaccAccountRemoveSplit (acc, split);
-
-   /* If we're shutting down then destroy the transaction, too, and
-    * don't recompute the balance.
-    */
-   if (qof_book_shutting_down (split->parent->inst.book))
-       /* This seems like an odd place to do this.  Transactions have
-          to be opened to destroy them.  */
-     xaccTransDestroy (trans);
-   else
-       /* This seems a bit eager. Isn't there a lazy way to do this? */
-     xaccAccountRecomputeBalance (acc);
-   
-
-   gen_event (split);
-   xaccFreeSplit (split);
    return TRUE;
 }
 
@@ -1230,10 +1307,12 @@ void
 xaccSplitSetMemo (Split *split, const char *memo)
 {
    if (!split || !memo) return;
-   check_open (split->parent);
+   xaccTransBeginEdit (split->parent);
 
    CACHE_REPLACE(split->memo, memo);
    qof_instance_set_dirty(QOF_INSTANCE(split));
+   xaccTransCommitEdit(split->parent);
+
 }
 
 static void
@@ -1247,10 +1326,12 @@ void
 xaccSplitSetAction (Split *split, const char *actn)
 {
    if (!split || !actn) return;
-   check_open (split->parent);
+   xaccTransBeginEdit (split->parent);
 
    CACHE_REPLACE(split->action, actn);
    qof_instance_set_dirty(QOF_INSTANCE(split));
+   xaccTransCommitEdit(split->parent);
+
 }
 
 static void
@@ -1277,7 +1358,7 @@ void
 xaccSplitSetReconcile (Split *split, char recn)
 {
    if (!split || split->reconciled == recn) return;
-   check_open (split->parent);
+   xaccTransBeginEdit (split->parent);
 
    switch (recn)
    {
@@ -1294,27 +1375,33 @@ xaccSplitSetReconcile (Split *split, char recn)
    default:
      PERR("Bad reconciled flag");
    }
+   xaccTransCommitEdit(split->parent);
+
 }
 
 void
 xaccSplitSetDateReconciledSecs (Split *split, time_t secs)
 {
    if (!split) return;
-   check_open (split->parent);
+   xaccTransBeginEdit (split->parent);
 
    split->date_reconciled.tv_sec = secs;
    split->date_reconciled.tv_nsec = 0;
    qof_instance_set_dirty(QOF_INSTANCE(split));
+   xaccTransCommitEdit(split->parent);
+
 }
 
 void
 xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 {
    if (!split || !ts) return;
-   check_open (split->parent);
+   xaccTransBeginEdit (split->parent);
 
    split->date_reconciled = *ts;
    qof_instance_set_dirty(QOF_INSTANCE(split));
+   xaccTransCommitEdit(split->parent);
+
 }
 
 void
@@ -1340,6 +1427,32 @@ xaccSplitGetParent (const Split *split)
 {
    return split ? split->parent : NULL;
 }
+
+void
+xaccSplitSetParent(Split *s, Transaction *t)
+{
+    Transaction *old_trans;
+    g_return_if_fail(s && t);
+    if (s->parent == t) return;
+
+    if (s->parent != s->orig_parent)
+        PERR("You may not add the split to more than one transaction"
+             " during the BeginEdit/CommitEdit block.");
+    xaccTransBeginEdit(t);
+    old_trans = s->parent;
+    xaccTransBeginEdit(old_trans);
+    s->parent = t;
+    qof_instance_set_dirty(QOF_INSTANCE(s));
+    /* Convert split to new transaction's commodity denominator */
+    xaccSplitSetValue(s, xaccSplitGetValue(s));
+
+    /* add ourselves to the new transaction's list of pending splits. */
+    if (NULL == g_list_find(t->splits, s))
+        t->splits = g_list_append(t->splits, s);
+    xaccTransCommitEdit(old_trans);
+    xaccTransCommitEdit(t);
+}
+
 
 GNCLot *
 xaccSplitGetLot (const Split *split)
@@ -1442,13 +1555,14 @@ xaccSplitGetType(const Split *s)
 void
 xaccSplitMakeStockSplit(Split *s)
 {
-  check_open (s->parent);
+  xaccTransBeginEdit (s->parent);
 
   s->value = gnc_numeric_zero();
   kvp_frame_set_str(s->inst.kvp_data, "split-type", "stock-split");
   SET_GAINS_VDIRTY(s);
   mark_split(s);
   qof_instance_set_dirty(QOF_INSTANCE(s));
+  xaccTransCommitEdit(s->parent);
 }
 
 
@@ -1601,19 +1715,19 @@ no_op (gpointer obj, const QofParam *p)
 static void
 qofSplitSetParentTrans(Split *s, QofEntity *ent)
 {
-	Transaction *trans = (Transaction*)ent;
+    Transaction *trans = (Transaction*)ent;
 
-	g_return_if_fail(trans);
-	xaccTransAppendSplit(trans, s);
+    g_return_if_fail(trans);
+    xaccSplitSetParent(s, trans);
 }
 
 static void
 qofSplitSetAccount(Split *s, QofEntity *ent)
 {
-	Account *acc = (Account*)ent;
+    Account *acc = (Account*)ent;
 
-	g_return_if_fail(acc);
-	xaccAccountInsertSplit(acc, s);
+    g_return_if_fail(acc);
+    xaccSplitSetAccount(s, acc);
 }
 
 gboolean xaccSplitRegister (void)
