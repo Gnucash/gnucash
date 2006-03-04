@@ -127,6 +127,7 @@ gnc_extension_path (SCM extension, char **fullpath)
   SCM path;
   gchar **strings;
   gint i;
+  gint num_strings;
 
   initialize_getters();
 
@@ -136,7 +137,8 @@ gnc_extension_path (SCM extension, char **fullpath)
     return;
   }
 
-  strings = g_new0(gchar *, scm_ilength(path) + 2);
+  num_strings = scm_ilength(path) + 2;
+  strings = g_new0(gchar *, num_strings);
   strings[0] = "/menubar";
 
   i = 1;
@@ -168,6 +170,14 @@ gnc_extension_path (SCM extension, char **fullpath)
   }
 
   *fullpath = g_strjoinv("/", strings);
+
+  for (i = 1; i < num_strings; i++)
+  {
+     if (strings[i] != NULL)
+     {
+        g_free(strings[i]);
+     }
+  }	
 
   g_free(strings);
 }

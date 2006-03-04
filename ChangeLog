@@ -1,3 +1,9 @@
+2006-03-04  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-menu-extensions.c (gnc_extension_path):
+	Fixes to memory deallocation suggested by Phil Longstaff
+	<plongstaff@newearth.org>.
+
 2006-03-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-preferences.c:
