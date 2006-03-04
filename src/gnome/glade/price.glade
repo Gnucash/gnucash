@@ -662,7 +662,6 @@ Ask
 Last
 Net Asset Value
 Unknown</property>
-	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
 	      <signal name="changed" handler="pedit_data_changed_cb" last_modification_time="Sun, 22 Jan 2006 20:04:30 GMT"/>
 	    </widget>

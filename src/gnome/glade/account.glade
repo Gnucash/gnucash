@@ -461,7 +461,7 @@
 			<widget class="GtkScrolledWindow" id="scrolledwindow9">
 			  <property name="visible">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-			  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+			  <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 			  <property name="shadow_type">GTK_SHADOW_IN</property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
@@ -728,6 +728,7 @@
 			  <property name="rules_hint">False</property>
 			  <property name="reorderable">False</property>
 			  <property name="enable_search">True</property>
+			  <property name="fixed_height_mode">False</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -744,7 +745,7 @@
 		    <widget class="GtkScrolledWindow" id="parent_scroll">
 		      <property name="visible">True</property>
 		      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 		      <property name="shadow_type">GTK_SHADOW_IN</property>
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
@@ -1349,6 +1350,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 				      <property name="rules_hint">True</property>
 				      <property name="reorderable">True</property>
 				      <property name="enable_search">True</property>
+				      <property name="fixed_height_mode">False</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -1928,6 +1930,7 @@ Click 'Cancel'  if you do not wish to create any new accounts now.</property>
 			      <property name="items">USD
 GBP
 EUR</property>
+			      <property name="focus_on_click">True</property>
 			    </widget>
 			  </child>
 			</widget>
@@ -2020,6 +2023,7 @@ EUR</property>
 					  <property name="rules_hint">False</property>
 					  <property name="reorderable">False</property>
 					  <property name="enable_search">True</property>
+					  <property name="fixed_height_mode">False</property>
 					</widget>
 				      </child>
 				    </widget>
@@ -2171,6 +2175,7 @@ EUR</property>
 				      <property name="rules_hint">False</property>
 				      <property name="reorderable">False</property>
 				      <property name="enable_search">True</property>
+				      <property name="fixed_height_mode">False</property>
 				    </widget>
 				  </child>
 				</widget>
@@ -2271,6 +2276,7 @@ EUR</property>
 		      <property name="rules_hint">False</property>
 		      <property name="reorderable">False</property>
 		      <property name="enable_search">True</property>
+		      <property name="fixed_height_mode">False</property>
 		    </widget>
 		  </child>
 		</widget>
@@ -2990,6 +2996,7 @@ EUR</property>
 		  <property name="rules_hint">True</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">True</property>
+		  <property name="fixed_height_mode">False</property>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>

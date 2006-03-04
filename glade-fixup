@@ -22,4 +22,5 @@ find ${SEARCHDIRS} -name \*.glade | xargs \
          -e '/name="urgency_hint"/d' \
          -e '/name="hover_expand"/d' \
          -e '/name="hover_selection"/d' \
+         -e '/name="add_tearoffs"/d' \
          -e '/name="angle"/d'

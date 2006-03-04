@@ -178,7 +178,6 @@
 Deluxe(tm) Personal Checks US-Letter
 Quicken(tm) Wallet Checks w/ side stub
 Custom</property>
-		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="changed" handler="gnc_print_check_combobox_changed" last_modification_time="Sat, 28 Jan 2006 04:19:16 GMT"/>
 		</widget>
@@ -198,7 +197,6 @@ Custom</property>
 Middle
 Bottom
 Custom</property>
-		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
 		  <signal name="changed" handler="gnc_print_check_combobox_changed" last_modification_time="Sat, 28 Jan 2006 04:19:41 GMT"/>
 		</widget>
@@ -646,7 +644,6 @@ Custom</property>
 Centimeters
 Millimeters
 Points</property>
-		  <property name="add_tearoffs">False</property>
 		  <property name="focus_on_click">True</property>
 		</widget>
 		<packing>

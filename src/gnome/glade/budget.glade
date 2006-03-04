@@ -551,7 +551,6 @@
 week(s)
 month(s)
 year(s)</property>
-	      <property name="add_tearoffs">False</property>
 	      <property name="focus_on_click">True</property>
 	    </widget>
 	    <packing>
@@ -735,7 +734,6 @@ year(s)</property>
       <child>
 	<widget class="GtkComboBoxEntry" id="SampleComboBoxEntry">
 	  <property name="visible">True</property>
-	  <property name="add_tearoffs">False</property>
 	  <property name="has_frame">True</property>
 	  <property name="focus_on_click">True</property>
 	</widget>
@@ -857,7 +855,6 @@ year(s)</property>
       <child>
 	<widget class="GtkComboBox" id="SampleComboBox">
 	  <property name="visible">True</property>
-	  <property name="add_tearoffs">False</property>
 	  <property name="focus_on_click">True</property>
 	</widget>
 	<packing>

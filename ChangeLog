@@ -1,3 +1,17 @@
+2006-03-04  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/glade/account.glade: set automatic policy on some
+	  scrolledwindows in the account dialog
+
+	* glade-fixup: 
+	* src/gnome/glade/account.glade: 
+	* src/gnome/glade/budget.glade: 
+	* src/gnome/glade/price.glade: 
+	* src/gnome/glade/print.glade: 
+	  remove add_tearoffs property from GtkComboBoxes
+
+	* Hello_ChangeLog
+
 2006-03-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c:
