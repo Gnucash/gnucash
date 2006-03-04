@@ -917,6 +917,7 @@ void xaccDisableDataScrubbing(void) { scrub_data = 0; }
 /* Check for an implicitly deleted transaction */
 static gboolean was_trans_emptied(Transaction *trans)
 {
+    if (qof_book_shutting_down(xaccTransGetBook(trans))) return TRUE;
     FOR_EACH_SPLIT(trans, return FALSE);
     return TRUE;
 }
