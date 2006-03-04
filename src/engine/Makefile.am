@@ -75,6 +75,7 @@ gncinclude_HEADERS = \
   gnc-budget.h \
   gnc-commodity.h \
   gnc-engine.h \
+  gnc-event.h \
   gnc-filepath-utils.h \
   gnc-hooks.h \
   gnc-pricedb.h \

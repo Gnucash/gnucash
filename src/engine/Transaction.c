@@ -46,6 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
+#include "gnc-event.h"
 
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
@@ -954,15 +955,18 @@ static void trans_cleanup_commit(Transaction *trans)
         if ((s->parent != trans) || s->inst.do_free) {
             /* Existing split either moved to another transaction or
                was destroyed, drop from list */
+            GncEventData ed;
+            ed.parent = trans;
+            ed.idx = g_list_index(trans->splits, s);
             trans->splits = g_list_remove(trans->splits, s);
-            //gnc_engine_gen_event(&trans->inst, QOF_EVENT_REMOVE);
+            qof_event_gen(&s->inst.entity, QOF_EVENT_REMOVE, &ed);
         }
 
         if (s->parent == trans) {
             /* Split was either destroyed or just changed */
-            //if (s->inst.do_free)
-            //    gnc_engine_gen_event(&trans->inst, QOF_EVENT_REMOVE);
-            //else gnc_engine_gen_event(&trans->inst, QOF_EVENT_MODIFY);
+            if (s->inst.do_free)
+                qof_event_gen(&s->inst.entity, QOF_EVENT_DESTROY, NULL);
+            else qof_event_gen(&s->inst.entity, QOF_EVENT_MODIFY, NULL);
             xaccSplitCommitEdit(s);
         }
     }
