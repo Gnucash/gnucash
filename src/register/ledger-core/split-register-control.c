@@ -48,11 +48,7 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static gboolean
 gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
 {
-  gnc_numeric imbalance;
-
-  imbalance = xaccTransGetImbalance (trans);
-  if (!gnc_numeric_zero_p (imbalance))
-  {
+    gnc_numeric imbalance;
     int choice;
     int default_value;
     Account *default_account;
@@ -64,6 +60,11 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     Split *other_split;
     gboolean two_accounts;
 
+
+    imbalance = xaccTransGetImbalance (trans);
+    if (gnc_numeric_zero_p (imbalance))
+        return FALSE;
+  
     split = xaccTransGetSplit (trans, 0);
     other_split = xaccSplitGetOtherSplit (split);
   
@@ -154,9 +155,6 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
     }
 
     return TRUE;
-  }
-
-  return FALSE;
 }
 
 static gboolean

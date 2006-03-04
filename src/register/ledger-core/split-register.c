@@ -885,9 +885,7 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
   account = xaccSplitGetAccount (split);
 
   xaccTransBeginEdit (trans);
-  xaccAccountBeginEdit (account);
   xaccSplitDestroy (split);
-  xaccAccountCommitEdit (account);
   xaccTransCommitEdit (trans);
 
   /* Check pending transaction */
