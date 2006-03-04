@@ -1,3 +1,8 @@
+2006-03-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.c: Fix duplicate account name
+	checking bug that prevented editing account info.
+
 2006-03-04  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/glade/account.glade: set automatic policy on some

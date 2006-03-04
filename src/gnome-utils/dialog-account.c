@@ -752,7 +752,8 @@ gnc_common_ok (AccountWindow *aw)
     g_free(fullname_parent);
     g_free(fullname);
   }
-  if (account != NULL) {
+  if ((account != NULL) &&
+      !guid_equal(&aw->account, xaccAccountGetGUID (account))) {
     const char *message = _("There is already an account with that name.");
     gnc_error_dialog(aw->dialog, message);
     LEAVE("duplicate name");
@@ -1359,7 +1360,6 @@ gnc_account_window_set_name (AccountWindow *aw)
 {
   char *fullname;
   char *title;
-  gint length;
 
   if (!aw || !aw->parent_tree)
     return;
@@ -1368,12 +1368,12 @@ gnc_account_window_set_name (AccountWindow *aw)
 
   if (aw->dialog_type == EDIT_ACCOUNT)
     title = g_strconcat(_("Edit Account"), " - ", fullname, NULL);
-  else if ((length = g_strv_length (aw->next_name)) > 0)
+  else if (aw->next_name && (g_strv_length(aw->next_name) > 0))
   {
     const char *format = _("(%d) New Accounts");
     char *prefix;
 
-    prefix = g_strdup_printf (format, length + 1);
+    prefix = g_strdup_printf (format, g_strv_length(aw->next_name) + 1);
 
     title = g_strconcat (prefix, " - ", fullname, " ...", NULL);
 
