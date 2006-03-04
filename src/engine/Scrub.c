@@ -407,13 +407,14 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
   ENTER ("()");
 
-  /* If the transaction is balanced, nothing more to do */
-  imbalance = xaccTransGetImbalance (trans);
-  if (gnc_numeric_zero_p (imbalance)) return;
-
+  /* Must look or orphan splits even if there is no imbalance. */
   xaccTransBeginEdit(trans);
   xaccTransScrubSplits (trans);
   xaccTransCommitEdit(trans);
+
+  /* If the transaction is balanced, nothing more to do */
+  imbalance = xaccTransGetImbalance (trans);
+  if (gnc_numeric_zero_p (imbalance)) return;
 
   if (!account)
   {
