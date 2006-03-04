@@ -105,6 +105,7 @@ gnc_split_register_add_transaction (SplitRegister *reg,
     {
       Split *secondary = node->data;
 
+      if (!xaccTransStillHasSplit(trans, secondary)) continue;
       if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
@@ -340,6 +341,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     for (splits = xaccTransGetSplitList(pending_trans); splits; splits = splits->next)
     {
       Split *pending_split = (Split*)splits->data;
+      if (!xaccTransStillHasSplit(pending_trans, pending_split)) continue;
       if (g_list_find(slist, pending_split) != NULL)
         continue;
 
