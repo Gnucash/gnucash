@@ -26,6 +26,13 @@
 
 2006-03-04  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/schemas/Makefile.am (install-data-local)
+	* src/gnome-utils/schemas/Makefile.am (install-data-local)
+	* src/business/business-gnome/schemas/Makefile.am (install-data-local)
+	* src/import-export/hbci/schemas/Makefile.am (install-data-local)
+	* src/import-export/schemas/Makefile.am (install-data-local):
+	Modify schema mkdirs by DESTDIR for packaging.
+
 	* src/gnome/glade/sched-xact.glade: Fix selection mode on
 	transaction reminder and obsolete SX lists.
 
