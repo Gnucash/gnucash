@@ -191,16 +191,6 @@
       (gnc:account-get-children a)))
    accountlist))
 
-
-(define (gnc:transaction-map-splits thunk transaction)
-  (let loop ((num-splits (gnc:transaction-get-split-count transaction))
-             (i 0))
-    (if (< i num-splits)
-        (cons
-         (thunk (gnc:transaction-get-split transaction i))
-         (loop num-splits (+ i 1)))
-        '())))
-
 ;;; Here's a statistics collector...  Collects max, min, total, and makes
 ;;; it easy to get at the mean.
 

@@ -45,7 +45,6 @@
 (export gnc:commodity-is-currency?)
 
 (export gnc:url->loaded-session)
-(export gnc:transaction-map-splits)
 (export gnc:group-map-all-accounts)
 (export gnc:group-map-accounts)
 

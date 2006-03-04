@@ -39,15 +39,6 @@
     (or result
         (begin (gnc:session-destroy session) #f))))
 
-(define (gnc:transaction-map-splits thunk transaction)
-  (let ((retval '()))
-    (let loop ((splits (or (gnc:transaction-get-splits transaction) '())))
-      (if (not (null? splits))
-          (begin 
-            (set! retval (cons (thunk (car splits)) retval))
-            (loop (cdr splits)))))
-    (reverse retval)))
-
 (define (gnc:group-map-all-accounts thunk group)
   (let ((accounts (or (gnc:group-get-subaccounts group) '())))
     (map thunk accounts)))

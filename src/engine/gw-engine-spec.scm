@@ -722,24 +722,6 @@ number of nanoseconds.")
  "Insert the split s into account a. If the split already belongs
 to another account, it will be removed from that account first.")
 
-(gw:wrap-function
- ws
- 'gnc:account-fix-split-date-order
- '<gw:void>
- "xaccAccountFixSplitDateOrder"
- '((<gnc:Account*> a) (<gnc:Split*> s))
- "Check to see if split s is in proper sorted date order with respect
-to the other splits in account a.")
-
-(gw:wrap-function
- ws
- 'gnc:trans-fix-split-date-order
- '<gw:void>
- "xaccTransFixSplitDateOrder"
- '((<gnc:Transaction*> t))
- "Check to see if all of the splits in transaction t are in proper
-date order.")
-
 ;; (gw:wrap-function
 ;;  ws
 ;;  'gnc:account-order
