@@ -80,7 +80,8 @@ gnc_set_account_separator (const gchar *separator)
   gint count;
 
   uc = g_utf8_get_char_validated(separator, -1);
-  if ((uc == (gunichar)-2) || (uc == (gunichar)-1)) {
+  if ((uc == (gunichar)-2) || (uc == (gunichar)-1) || g_unichar_isalnum(uc)) {
+    account_uc_separator = ':';
     strcpy(account_separator, ":");
     return;
   }

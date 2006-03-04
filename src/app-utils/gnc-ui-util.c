@@ -74,7 +74,7 @@ gnc_configure_account_separator (void)
 
   string = gnc_gconf_get_string(GCONF_GENERAL, KEY_ACCOUNT_SEPARATOR, NULL);
 
-  if (!string || safe_strcmp(string, "colon") == 0)
+  if (!string || !*string || safe_strcmp(string, "colon") == 0)
     separator = ":";
   else if (safe_strcmp(string, "slash") == 0)
     separator = "/";

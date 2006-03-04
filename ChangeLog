@@ -1,3 +1,12 @@
+2006-03-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/glade/preferences.glade:
+	* src/gnome/schemas/apps_gnucash_general.schemas.in:
+	* src/engine/Account.c:
+	* src/app-utils/gnc-ui-util.c: Update the preferences dialog to
+	allow any unicode character as the separator.
+
 2006-03-03  David Hampton  <hampton@employees.org>
 
 	* numerous: Convert the account separator from a single character

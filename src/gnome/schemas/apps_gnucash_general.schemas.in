@@ -27,11 +27,7 @@
       <default>colon</default>
       <locale name="C">
         <short>Character to use as separator between account names</short>
-        <long>
-	  This setting determines the character that will be used
-	  between components of an account name.  Possible choices are
-	  "colon" "slash", "backslash", "dash" and "period".
-	</long>
+        <long>This setting determines the character that will be used between components of an account name.  Possible values are any single non-alphanumeric unicode character, or any of the following strings: "colon" "slash", "backslash", "dash" and "period".</long>
       </locale>
     </schema>
 
