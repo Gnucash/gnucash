@@ -26,7 +26,7 @@
 #include <glib.h>
 
 typedef struct {
-    gpointer parent;
+    gpointer node;
     gint idx;
 } GncEventData;
 

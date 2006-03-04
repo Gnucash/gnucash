@@ -956,7 +956,7 @@ static void trans_cleanup_commit(Transaction *trans)
             /* Existing split either moved to another transaction or
                was destroyed, drop from list */
             GncEventData ed;
-            ed.parent = trans;
+            ed.node = trans;
             ed.idx = g_list_index(trans->splits, s);
             trans->splits = g_list_remove(trans->splits, s);
             qof_event_gen(&s->inst.entity, QOF_EVENT_REMOVE, &ed);
