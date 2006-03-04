@@ -166,6 +166,7 @@ xaccCloneAccountCommon(const Account *from, QofBook *book)
     ret->accountCode = CACHE_INSERT(from->accountCode);
     ret->description = CACHE_INSERT(from->description);
 
+    kvp_frame_delete(ret->inst.kvp_data);
     ret->inst.kvp_data = kvp_frame_copy(from->inst.kvp_data);
 
     /* The new book should contain a commodity that matches
@@ -184,6 +185,8 @@ xaccCloneAccount (const Account *from, QofBook *book)
 {
     Account *ret = xaccCloneAccountCommon(from, book);
     qof_instance_gemini (&ret->inst, (QofInstance *) &from->inst);
+    g_assert (ret ==
+              (Account*) qof_instance_lookup_twin (QOF_INSTANCE(from), book));
     return ret;
 }
 
@@ -201,7 +204,6 @@ xaccCloneAccountSimple (const Account *from, QofBook *book)
 void
 xaccFreeAccount (Account *acc)
 {
-  Transaction *t;
   GList *lp;
 
   if (!acc) return;
@@ -239,29 +241,20 @@ xaccFreeAccount (Account *acc)
    * check once we know the warning isn't occurring any more. */
   if (acc->splits) 
   {
+    GList *slist;
     PERR (" instead of calling xaccFreeAccount(), please call \n"
           " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
   
-    /* any split pointing at this account needs to be unmarked */
-    for(lp = acc->splits; lp; lp = lp->next) 
-    {
-      Split *s = lp->data;
-      s->acc = NULL;
-    }
-  
     acc->inst.editlevel = 0;
-  
-    for(lp = acc->splits; lp; lp = lp->next) {
+
+    slist = g_list_copy(acc->splits);
+    for (lp = slist; lp; lp = lp->next) {
       Split *s = (Split *) lp->data;
-      t = s->parent;
-      xaccTransBeginEdit (t);
+      g_assert(xaccSplitGetAccount(s) == acc);
       xaccSplitDestroy (s);
-      xaccTransCommitEdit (t);
     }
-  
-    /* free up array of split pointers */
-    g_list_free(acc->splits);
-    acc->splits = NULL;
+    g_list_free(slist);
+    g_assert(acc->splits == NULL);
   }
 
   CACHE_REPLACE(acc->accountName, NULL);
@@ -324,7 +317,7 @@ xaccAccountCommitEdit (Account *acc)
    * and then the splits ... */
   if (acc->inst.do_free)
   {
-    GList *lp;
+    GList *lp, *slist;
  
     acc->inst.editlevel++;
 
@@ -335,16 +328,14 @@ xaccAccountCommitEdit (Account *acc)
     PINFO ("freeing splits for account %p (%s)",
            acc, acc->accountName ? acc->accountName : "(null)");
 
-    while (acc->splits)
+    slist = g_list_copy(acc->splits);
+    for (lp = slist; lp; lp = lp->next)
     {
-      Split *s = acc->splits->data;
-      Transaction *t = s->parent;
-
-      xaccTransBeginEdit (t);
+      Split *s = lp->data;
       xaccSplitDestroy (s);
-      xaccTransCommitEdit (t);
     }
-
+    g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
+    g_list_free(slist);
     /* the lots should be empty by now */
     for (lp=acc->lots; lp; lp=lp->next)
     {
@@ -607,22 +598,12 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
 
 /********************************************************************\
 \********************************************************************/
-
-static gint
-split_sort_func(gconstpointer a, gconstpointer b) {
-  /* don't coerce xaccSplitDateOrder so we'll catch changes */
-  /* huh?  what changes? */
-  Split *sa = (Split *) a;
-  Split *sb = (Split *) b;
-  return(xaccSplitDateOrder(sa, sb));
-}
-
 void
 xaccAccountSortSplits (Account *acc, gboolean force)
 {
   if (!acc || !acc->sort_dirty || (!force && acc->inst.editlevel > 0)) return;
 
-  acc->splits = g_list_sort(acc->splits, split_sort_func);
+  acc->splits = g_list_sort(acc->splits, (GCompareFunc)xaccSplitDateOrder);
   acc->sort_dirty = FALSE;
   acc->balance_dirty = TRUE;
 }
@@ -795,105 +776,6 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
 
 /********************************************************************\
 \********************************************************************/
-
-void
-xaccAccountInsertSplit (Account *acc, Split *split)
-{
-  Transaction *trans;
-
-  if (!acc || !split || split->acc == acc) return;
-  /* check for book mix-up */
-  g_return_if_fail (acc->inst.book == split->inst.book);
-
-  trans = xaccSplitGetParent (split);
-  ENTER ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
-
-  if (trans)
-      xaccTransBeginEdit(trans);
-
-
-  /* If this split belongs to another account, remove it from there
-   * first.  We don't want to ever leave the system in an inconsistent
-   * state.  */
-  xaccAccountRemoveSplit(split->acc, split);
-
-  split->acc = acc;  /* BUG? Doesn't actually dirty split. */
-
-  /* If the split's lot belonged to some other account, we leave it so. */
-  if (split->lot && (NULL == split->lot->account))
-      xaccAccountInsertLot (acc, split->lot);
-
-  if (!g_list_find(acc->splits, split)) {
-      if (acc->inst.editlevel == 0)
-      {
-          acc->splits = g_list_insert_sorted(acc->splits, split,
-                                             split_sort_func);
-      }
-      else
-      {
-          acc->splits = g_list_prepend(acc->splits, split);
-          acc->sort_dirty = TRUE;
-      }
-
-      acc->balance_dirty = TRUE;
-      mark_account (acc);
-  }
-
-  /* Setting the amount causes a conversion to the new account's
-   * denominator AKA 'SCU Smallest Currency Unit'. */
-  xaccSplitSetAmount(split, xaccSplitGetAmount(split));
-
-  if (trans)
-      xaccTransCommitEdit(trans);
-
-  LEAVE ("(acc=%p, trans=%p, split=%p)", acc, trans, split);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccAccountRemoveSplit (Account *acc, Split *split)
-{
-  GList *node;
-  if (!acc || !split || split->acc != acc) return;
-
-  ENTER ("(acc=%p, split=%p)", acc, split);
-
-  
-  node = g_list_find (acc->splits, split);
-  if (node) {
-      Transaction *trans = xaccSplitGetParent (split);
-
-      acc->splits = g_list_delete_link (acc->splits, node);
-
-      acc->balance_dirty = TRUE;
-      mark_account (acc);
-
-      xaccTransBeginEdit (trans);
-      split->acc = NULL;
-
-      /* Remove from lot (but only if it hasn't been moved to new lot
-         already) */
-      if (split->lot && split->lot->account == acc)
-          gnc_lot_remove_split (split->lot, split);
-      
-      xaccTransCommitEdit (trans);
-
-      /* BUG? Umm... trans IS the split parent so didn't we just
-         generate the event when we called CommitEdit? I think this
-         gen_event can be removed. */
-      if (split->parent)
-        gnc_engine_gen_event (&split->parent->inst.entity, GNC_EVENT_MODIFY);
-
-  } else PERR ("split is not in account, but it thinks it is!");
-  
-  LEAVE ("(acc=%p, split=%p)", acc, split);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 static void
 xaccPreSplitMove (Split *split, gpointer dummy)
 {
@@ -905,15 +787,10 @@ xaccPostSplitMove (Split *split, Account *accto)
 {
   Transaction *trans;
 
-  split->acc = accto;
-  /* Better? xaccSplitSetAmount(split, split->ammount); */
-  split->amount = gnc_numeric_convert (split->amount,
-				       xaccAccountGetCommoditySCU(accto),
-				       GNC_HOW_RND_ROUND);
+  xaccSplitSetAccount(split, accto);
+  xaccSplitSetAmount(split, split->amount);
   trans = xaccSplitGetParent (split);
   xaccTransCommitEdit (trans);
-  /* BUG? again, extra events? */
-  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void
@@ -926,18 +803,20 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
   g_return_if_fail (accfrom->inst.book == accto->inst.book);
   ENTER ("(accfrom=%p, accto=%p)", accfrom, accto);
 
+  xaccAccountBeginEdit(accfrom);
+  xaccAccountBeginEdit(accto);
   /* Begin editing both accounts and all transactions in accfrom. */
   g_list_foreach(accfrom->splits, (GFunc)xaccPreSplitMove, NULL);
 
   /* Concatenate accfrom's lists of splits and lots to accto's lists. */
-  accto->splits = g_list_concat(accto->splits, accfrom->splits);
-  accto->lots = g_list_concat(accto->lots, accfrom->lots);
+  //accto->splits = g_list_concat(accto->splits, accfrom->splits);
+  //accto->lots = g_list_concat(accto->lots, accfrom->lots);
 
   /* Set appropriate flags. */
-  accfrom->balance_dirty = TRUE;
-  accfrom->sort_dirty = FALSE;
-  accto->balance_dirty = TRUE;
-  accto->sort_dirty = TRUE;
+  //accfrom->balance_dirty = TRUE;
+  //accfrom->sort_dirty = FALSE;
+  //accto->balance_dirty = TRUE;
+  //accto->sort_dirty = TRUE;
 
   /*
    * Change each split's account back pointer to accto.
@@ -947,18 +826,10 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
   g_list_foreach(accfrom->splits, (GFunc)xaccPostSplitMove, (gpointer)accto);
 
   /* Finally empty accfrom. */
-  accfrom->splits = NULL;
-  accfrom->lots = NULL;
-
-  /*
-   * DNJ - I don't really understand why this is necessary,
-   *       but xaccAccountInsertSplit does it.
-   */
-  if (accto->inst.editlevel == 0)
-  {
-    accto->splits = g_list_sort(accto->splits, split_sort_func);
-    accto->sort_dirty = FALSE;
-  }
+  g_assert(accfrom->splits == NULL);
+  g_assert(accfrom->lots == NULL);
+  xaccAccountCommitEdit(accfrom);
+  xaccAccountCommitEdit(accto);
 
   LEAVE ("(accfrom=%p, accto=%p)", accfrom, accto);
 }
@@ -1005,6 +876,7 @@ xaccAccountRecomputeBalance (Account * acc)
   if (acc->inst.editlevel > 0) return;
   if (!acc->balance_dirty) return;
   if (acc->inst.do_free) return;
+  if (qof_book_shutting_down(acc->inst.book)) return;
 
   balance            = acc->starting_balance;
   cleared_balance    = acc->starting_cleared_balance;
@@ -1062,58 +934,6 @@ xaccAccountSetStartingBalance(Account *acc,
   acc->starting_reconciled_balance = start_reconciled_baln;
 
   acc->balance_dirty = TRUE;
-}
-
-/********************************************************************\
- * xaccAccountFixSplitDateOrder                                     *
- *   check this split to see if the date is in correct order        *
- *   If it is not, reorder the transactions ...                     *
- *                                                                  *
- * Args:   acc   -- the account to check                            *
- *         split -- the split to check                              *
- *                                                                  *
- * Return: int -- non-zero if out of order                          *
-\********************************************************************/
-/* CAS: Umm, we say we're checking the split, but we're actually
-   resorting all the splits.  Why not just leave the split out of
-   it? FIXME. */
-void
-xaccAccountFixSplitDateOrder (Account * acc, Split *split) 
-{
-  if (!acc || !split || acc->inst.do_free) return;
-
-  /* FIXME: This looks wrong, too.  Why force it dirty if it's not? */
-  acc->sort_dirty = TRUE;
-  acc->balance_dirty = TRUE;
-
-  if (acc->inst.editlevel <= 0)
-      xaccAccountBringUpToDate (acc);
-}
-
-/********************************************************************\
- * xaccTransFixSplitDateOrder                                       *
- *   check this transaction to see if the date is in correct order  *
- *   If it is not, reorder the transactions.                        *
- *   This routine perfroms the check for both of the double-entry   *
- *   transaction entries.                                           *
- *                                                                  *
- * Args:   trans -- the transaction to check                        *
-\********************************************************************/
-
-void
-xaccTransFixSplitDateOrder (Transaction *trans)
-{
-  GList *node;
-
-  if (!trans) return;
-
-  gnc_engine_suspend_events();
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *s = node->data;
-    xaccAccountFixSplitDateOrder (s->acc, s);
-  }
-  gnc_engine_resume_events();
 }
 
 /********************************************************************\

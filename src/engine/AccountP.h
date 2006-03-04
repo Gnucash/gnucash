@@ -133,15 +133,6 @@ struct account_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
-/* The xaccAccountRemoveSplit() routine will remove the indicated split
- *    from the indicated account.  Note that this will leave the split
- *    "dangling", i.e. unassigned to any account, and therefore will put
- *    the engine into an inconsistent state.  After removing a split, 
- *    it should be immediately destroyed, or it should be inserted into  
- *    an account.
- */
-void xaccAccountRemoveSplit (Account *, Split *);
-
 /* The xaccAccountSortSplits() routine will resort the account's 
  * splits if the sort is dirty. If 'force' is true, the account 
  * is sorted even if the editlevel is not zero. 

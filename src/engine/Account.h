@@ -518,7 +518,7 @@ guint32 xaccAccountTypesValid(void);
  *    split into the indicated account.  If the split already 
  *    belongs to another account, it will be removed from that
  *    account first.*/
-void xaccAccountInsertSplit (Account *account, Split *split);
+#define xaccAccountInsertSplit(acc, s)  xaccSplitSetAccount((s), (acc))
 
 /** The xaccAccountGetSplitList() routine returns a pointer to a GList of
  *    the splits in the account.  
@@ -573,15 +573,6 @@ Transaction * xaccAccountFindTransByDesc(const Account *account,
 Split * xaccAccountFindSplitByDesc(const Account *account, 
                                    const char *description);
 
-/** The xaccAccountFixSplitDateOrder() subroutine checks to see if 
- *    a split is in proper sorted date order with respect 
- *    to the other splits in this account. */
-void xaccAccountFixSplitDateOrder (Account *account, Split *split);
-
-/** The xaccTransFixSplitDateOrder() checks to see if 
- *    all of the splits in this transaction are in
- *    proper date order. */
-void xaccTransFixSplitDateOrder (Transaction *trans);
 /*@}*/
 
 /* ------------------ */
