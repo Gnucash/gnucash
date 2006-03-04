@@ -917,7 +917,6 @@ void xaccDisableDataScrubbing(void) { scrub_data = 0; }
 /* Check for an implicitly deleted transaction */
 static gboolean was_trans_emptied(Transaction *trans)
 {
-    if (qof_book_shutting_down(xaccTransGetBook(trans))) return TRUE;
     FOR_EACH_SPLIT(trans, return FALSE);
     return TRUE;
 }
@@ -1017,8 +1016,8 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   if (!(trans->inst.do_free) && scrub_data)
-   {
+   if (!(trans->inst.do_free) && scrub_data && 
+       !qof_book_shutting_down(xaccTransGetBook(trans))) {
      /* The total value of the transaction should sum to zero. 
       * Call the trans scrub routine to fix it.   Indirectly, this 
       * routine also performs a number of other transaction fixes too.
