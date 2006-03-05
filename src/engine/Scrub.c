@@ -345,6 +345,8 @@ xaccTransScrubCurrencyFromSplits(Transaction *trans)
   
   for (node = xaccTransGetSplitList (trans); node; node = node->next) {
     Split *split = node->data;
+
+    if (!xaccTransStillHasSplit(trans, split)) continue;
     if (gnc_numeric_equal(xaccSplitGetAmount (split),
                           xaccSplitGetValue (split))) {
 

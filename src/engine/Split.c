@@ -1160,6 +1160,7 @@ get_corr_account_split(const Split *sa, const Split **retval)
     current_split = node->data;
     if (current_split == sa) continue;
 
+    if (!xaccTransStillHasSplit(sa->parent, current_split)) continue;
     current_value = xaccSplitGetValue (current_split);
     current_value_positive = gnc_numeric_positive_p(current_value);
     if ((sa_value_positive && !current_value_positive) || 
@@ -1581,9 +1582,9 @@ xaccSplitMakeStockSplit(Split *s)
 Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
-  SplitList *node;
+  int i;
   Transaction *trans;
-  int count;
+  int count, num_splits;
   Split *other = NULL;
   KvpValue *sva;
 
@@ -1602,16 +1603,17 @@ xaccSplitGetOtherSplit (const Split *split)
   return s1;
 #endif
 
-  count = g_list_length (trans->splits);
+  num_splits = xaccTransCountSplits(trans);
+  count = num_splits;
   sva = kvp_frame_get_slot (split->inst.kvp_data, "lot-split");
   if (!sva && (2 != count)) return NULL;
 
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *s = node->data;
-    if (s == split) { --count; continue; }
-    if (kvp_frame_get_slot (s->inst.kvp_data, "lot-split")) { --count; continue; }
-    other = s;
+  for (i = 0; i < num_splits; i++) {
+      Split *s = xaccTransGetSplit(trans, i);
+      if (s == split) { --count; continue; }
+      if (kvp_frame_get_slot (s->inst.kvp_data, "lot-split")) 
+          { --count; continue; }
+      other = s;
   }
   return (1 == count) ? other : NULL;
 }

@@ -77,19 +77,14 @@ static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
 static int
 gnc_trans_split_index (Transaction *trans, Split *split)
 {
-  GList *node;
-  int i;
+    Split *s;
+    int i = 0;
 
-  for (i = 0, node = xaccTransGetSplitList (trans); node;
-       i++, node = node->next)
-  {
-    Split *s = node->data;
-
-    if (s == split)
-      return i;
-  }
-
-  return -1;
+    while (s = xaccTransGetSplit(trans, i)) {
+        if (s == split) return i;
+        i++;
+    }
+    return -1;
 }
 
 /* Uses the scheme split copying routines */
@@ -1077,6 +1072,8 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *
   Transaction *trans;
   GList *splits;
   GList *node;
+  int i = 0;
+  Split *s;
 
   if ((reg == NULL)  || (split == NULL))
     return;
@@ -1084,12 +1081,12 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *
   gnc_suspend_gui_refresh ();
 
   trans = xaccSplitGetParent (split);
-  splits = g_list_copy (xaccTransGetSplitList (trans));
   xaccTransBeginEdit (trans);
-  for (node = splits; node; node = node->next)
-    if (node->data != split)
-      xaccSplitDestroy (node->data);
-  g_list_free (splits);
+  while (s = xaccTransGetSplit(trans, i)) {
+      if (s != split) 
+          xaccSplitDestroy(s);
+      i++;
+  }
 
   /* This is now the  pending transaction */
   info = gnc_split_register_get_info (reg);

@@ -395,7 +395,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
      * fill up the quickfill cells. */
     if (info->first_pass)
     {
-      GList *node;
+      Split *s;
+      int i;      
 
       gnc_quickfill_cell_add_completion
         ((QuickFillCell *)
@@ -413,14 +414,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
            gnc_table_layout_get_cell (reg->table->layout, NUM_CELL),
            xaccTransGetNum (trans));
 
-      for (node = xaccTransGetSplitList (trans); node; node = node->next)
-      {
-        Split *s = node->data;
-        QuickFillCell *cell;
+      i = 0;
+      while (s = xaccTransGetSplit(trans, i)) {
+          QuickFillCell *cell;
 
-        cell = (QuickFillCell *)
-          gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
-        gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
+          cell = (QuickFillCell *)
+              gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
+          gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
+          i++;
       }
     }
 

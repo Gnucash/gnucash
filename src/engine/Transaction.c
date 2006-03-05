@@ -717,8 +717,7 @@ xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
                           xaccTransGetCurrency(txn)))
       return gnc_numeric_create(1, 1);
 
-  splits = xaccTransGetSplitList(txn);
-  for (; splits; splits = splits->next) {
+  for (splits = txn->splits; splits; splits = splits->next) {
     s = splits->data;
 
     if (!xaccTransStillHasSplit(txn, s))
@@ -763,7 +762,7 @@ xaccTransGetAccountBalance (const Transaction *trans,
   // Not really the appropriate error value.
   g_return_val_if_fail(account && trans, gnc_numeric_error(GNC_ERROR_ARG));
 
-  for (node = xaccTransGetSplitList(trans); node; node = node->next)
+  for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
 
@@ -1442,9 +1441,11 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
 Split *
 xaccTransGetSplit (const Transaction *trans, int i) 
 {
-   if (!trans || i < 0) return NULL;
+    int j = 0;
+    if (!trans || i < 0) return NULL;
 
-   return g_list_nth_data (trans->splits, i);
+    FOR_EACH_SPLIT(trans, { if (i == j) return s; j++; });
+    return NULL;
 }
 
 SplitList *
@@ -1456,7 +1457,9 @@ xaccTransGetSplitList (const Transaction *trans)
 int
 xaccTransCountSplits (const Transaction *trans)
 {
-   return trans ? g_list_length (trans->splits) : 0;
+    gint i = 0;
+    FOR_EACH_SPLIT(trans, i++);
+    return i;
 }
 
 const char *
