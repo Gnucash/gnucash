@@ -2019,7 +2019,6 @@ then
 
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
-  gnc_error_on_warning=auto
   AC_ARG_ENABLE(error-on-warning,
     [  --disable-error-on-warning    disable treating compile warnings as errors],
     [case "${enableval}" in
@@ -2027,7 +2026,7 @@ then
        no)  gnc_error_on_warning=no ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
-       [  warnFLAGS="${warnFLAGS} -Werror" ])
+       [  warnFLAGS="${warnFLAGS} -Werror"; gnc_error_on_warning=auto ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
   # -Wdeclaration-after-statement in order to preserve source code
