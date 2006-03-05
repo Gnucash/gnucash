@@ -1,3 +1,14 @@
+2006-03-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/test/test-exp-parser.c (test_parser): Hack-fix
+	test errors due to missing function now required by
+	expression-parser.  In the future, we should have a better way to
+	setup the application/test state.
+
+	* src/calculation/expression_parser.c (primary_exp): Fix
+	function-parsing bug I introduced during the week with another bug
+	fix.
+
 2006-03-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register.c:

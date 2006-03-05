@@ -1067,7 +1067,7 @@ multiply_divide_op (parser_env_ptr pe)
  *  named variables
  *  numerics
  *  grouped expressions, "()"
- *  functions [ <name>( [exp, exp, ..., exp] ) ]
+ *  functions [ <name>( [exp : exp : ... : exp] ) ]
  *  strings
  */
 static void
@@ -1147,10 +1147,10 @@ primary_exp (parser_env_ptr pe)
         assignment_op(pe);
         if ( pe->error_code )
           return;
+        funcArgCount++;
         if (!pe->Token || pe->Token == ')') {
           break;
         }
-        funcArgCount++;
         next_token(pe);
       } while (pe->Token != ARG_TOKEN);
 
