@@ -2229,7 +2229,6 @@ gnc_split_register_init (SplitRegister *reg,
   TableControl *control;
 
   /* Register 'destroy' callback */
-  gnc_ui_register_account_destroy_callback (gnc_ledger_display_destroy_by_account);
   gnc_gconf_general_register_cb(KEY_ACCOUNTING_LABELS,
 				split_register_gconf_changed,
 				reg);

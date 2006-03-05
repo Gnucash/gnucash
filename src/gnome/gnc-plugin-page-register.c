@@ -149,6 +149,7 @@ static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegi
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
 
 static void gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page);
+static void gppr_account_destroy_cb (Account *account);
 
 /************************************************************/
 /*                          Actions                         */
@@ -506,6 +507,8 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
+
+	gnc_ui_register_account_destroy_callback (gppr_account_destroy_cb);
 }
 
 static void
@@ -2714,6 +2717,50 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
       /* forced updates */
       gnucash_register_refresh_from_gconf(priv->gsr->reg);
       gtk_widget_queue_draw(priv->widget);
+  }
+}
+
+/** This function is called when an account has been edited and an
+ *  "extreme" change has been made to it.  (E.G. Changing from a
+ *  credit card account to an expense account.  This rouine is
+ *  responsible for finding all open registers containing the account
+ *  and closing them.
+ *
+ *  @param accoung A pointer to the account that was changed.
+ */
+static void
+gppr_account_destroy_cb (Account *account)
+{
+  GncPluginPageRegister *page;
+  GncPluginPageRegisterPrivate *priv;
+  GNCLedgerDisplayType ledger_type;
+  const GUID *acct_guid;
+  const GList *citem;
+  GList *item, *kill = NULL;
+
+  acct_guid = xaccAccountGetGUID(account);
+
+  /* Find all windows that need to be killed.  Don't kill them yet, as
+   * that would affect the list being walked.*/
+  citem = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_REGISTER_NAME);
+  for ( ; citem; citem = g_list_next(citem)) {
+    page = (GncPluginPageRegister *)citem->data;
+    priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+    ledger_type = gnc_ledger_display_type (priv->ledger);
+    if (ledger_type == LD_GL) {
+      kill = g_list_append(kill, page);
+      /* kill it */
+    } else if ((ledger_type == LD_SINGLE) || (ledger_type == LD_SUBACCOUNT)) {
+      if (guid_compare(acct_guid, &priv->key) == 0) {
+	kill = g_list_append(kill, page);
+      }
+    }
+  }
+
+  /* Now kill them. */
+  for (item = kill; item; item = g_list_next(item)) {
+    page = (GncPluginPageRegister *)item->data;
+    gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
   }
 }
 
