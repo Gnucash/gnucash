@@ -22,6 +22,11 @@
 	  Fix a compiler warning so the code builds properly:
 	  - warning: suggest parentheses around assignment used as truth value
 
+	* configure.in: change the g-wrap 1.3 + GCC4 behavior.
+	  only warn the user (not blow out) if they explicitly request
+	  --enable-error-on-warning.   But still blow out if they
+	  didn't specifically request it and we turned it on by default.
+
 2006-03-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/register/ledger-core/split-register-control.c: Fix missing
