@@ -563,8 +563,6 @@ xaccSplitCommitEdit(Split *s)
     qof_instance_mark_clean(QOF_INSTANCE(s));
 
     mark_acc(acc);
-    //FIXME: should really be in xaccAccountCommitEdit
-    xaccAccountSortSplits (acc, TRUE);
     xaccAccountRecomputeBalance(acc);
     if (s->inst.do_free)
         xaccFreeSplit(s);
