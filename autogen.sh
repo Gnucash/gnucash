@@ -226,6 +226,6 @@ ${AUTOCONF} || \
 ############################################################
 # Done.
 
-conf_flags="--enable-error-on-warning --enable-compile-warnings" # --enable-iso-c
+conf_flags="--enable-compile-warnings" # --enable-iso-c --enable-error-on-warning
 
 echo You must now run $srcdir/configure $conf_flags "$@" ...
