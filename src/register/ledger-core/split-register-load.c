@@ -415,7 +415,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
            xaccTransGetNum (trans));
 
       i = 0;
-      while (s = xaccTransGetSplit(trans, i)) {
+      while ((s = xaccTransGetSplit(trans, i)) != NULL) {
           QuickFillCell *cell;
 
           cell = (QuickFillCell *)

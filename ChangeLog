@@ -1,3 +1,11 @@
+2006-03-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register.c:
+	* src/register/ledger-core/split-register-load.c:
+	* src/register/ledger-core/split-register-control.c:
+	  Fix a compiler warning so the code builds properly:
+	  - warning: suggest parentheses around assignment used as truth value
+
 2006-03-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/register/ledger-core/split-register-control.c: Fix missing

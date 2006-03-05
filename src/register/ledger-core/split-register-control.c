@@ -460,7 +460,7 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
   int i = 0;
   Split *split;
 
-  while (split = xaccTransGetSplit(trans, i)) {
+  while ((split = xaccTransGetSplit(trans, i)) != NULL) {
     if (unit_price)
     {
       gnc_numeric price = xaccSplitGetSharePrice (split);
@@ -700,7 +700,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           default_account = gnc_split_register_get_default_account (reg);
           blank_split = NULL;
 
-          while (s = xaccTransGetSplit(trans, i)) {
+          while ((s = xaccTransGetSplit(trans, i)) != NULL) {
             if (default_account == xaccSplitGetAccount(s))
             {
               blank_split = s;

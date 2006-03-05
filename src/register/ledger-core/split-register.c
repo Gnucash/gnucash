@@ -80,7 +80,7 @@ gnc_trans_split_index (Transaction *trans, Split *split)
     Split *s;
     int i = 0;
 
-    while (s = xaccTransGetSplit(trans, i)) {
+    while ((s = xaccTransGetSplit(trans, i)) != NULL) {
         if (s == split) return i;
         i++;
     }
@@ -1080,7 +1080,7 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *
 
   trans = xaccSplitGetParent (split);
   xaccTransBeginEdit (trans);
-  while (s = xaccTransGetSplit(trans, i)) {
+  while ((s = xaccTransGetSplit(trans, i)) != NULL) {
       if (s != split) 
           xaccSplitDestroy(s);
       i++;
