@@ -1,10 +1,9 @@
 2006-03-05  Joshua Sled  <jsled@asynchronous.org>
 
-	* packaging/gnucash-1.9.x.ebuild (DEPEND): Add checks for libgsf
-	and goffice being built_with_use gnome.  Add code to shutdown any
-	user-level gconfd's running.  Add
-	note about broken make_desktop_entry.   Expand range of README
-	installs.
+	* packaging/gnucash-1.9.x.ebuild: Add checks for libgsf and
+	goffice being built_with_use gnome.  Add code to shutdown any
+	user-level gconfd's running.  Add note about broken
+	make_desktop_entry.  Expand range of README installs.
 
 	* src/app-utils/test/test-exp-parser.c (test_parser): Hack-fix
 	test errors due to missing function now required by
