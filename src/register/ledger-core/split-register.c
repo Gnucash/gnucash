@@ -1070,8 +1070,6 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *
 {
   SRInfo *info;
   Transaction *trans;
-  GList *splits;
-  GList *node;
   int i = 0;
   Split *s;
 

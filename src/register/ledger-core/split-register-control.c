@@ -457,7 +457,7 @@ static Split *
 gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
                                  gboolean unit_price)
 {
-  int i;
+  int i = 0;
   Split *split;
 
   while (split = xaccTransGetSplit(trans, i)) {
@@ -695,7 +695,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         {
           Account *default_account;
           Split *s;
-          int i;
+          int i = 0;
 
           default_account = gnc_split_register_get_default_account (reg);
           blank_split = NULL;
