@@ -7,7 +7,7 @@
 # http://bugs.gentoo.org/show_bug.cgi?id=122337 for discussion and history
 # about this file.  -- jsled
 
-inherit gnome2 
+inherit eutils gnome2 
 
 DESCRIPTION="A personal finance manager (unstable version)."
 HOMEPAGE="http://www.gnucash.org/"
@@ -58,6 +58,11 @@ DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	nls? ( sys-devel/gettext )"
 
+pkg_setup() {
+	built_with_use libgsf gnome || die "libgsf must be built with gnome"
+	built_with_use goffice gnome || die "goffice must be built with gnome"
+}
+
 src_compile() {
 	EXTRA_ECONF="--enable-error-on-warning --enable-compile-warnings"
 
@@ -71,11 +76,11 @@ src_compile() {
 		--datadir=/opt/${P}/share \
 		--sysconfdir=/opt/${P}/etc \
 		--localstatedir=/opt/${P}/var/lib \
-		`use_enable debug` \
-		`use_enable postgres sql` \
-		`use_enable ofx` \
-		`use_enable doc doxygen` \
-		`use_enable hbci` \
+		$(use_enable debug) \
+		$(use_enable postgres sql) \
+		$(use_enable ofx) \
+		$(use_enable doc doxygen) \
+		$(use_enable hbci) \
 			|| die "econf failed"
 	emake || die "emake failed"
 }
@@ -89,9 +94,13 @@ gnome2_gconf_install() {
 		einfo "Installing GNOME 2 GConf schemas"
 		grep "obj /opt/${P}/etc/gconf/schemas" ${ROOT}/var/db/pkg/*/${PF}/CONTENTS | sed 's:obj \([^ ]*\) .*:\1:' | while read F; do
 			if [ -e "${F}" ]; then
-				#echo "DEBUG::gconf install  ${F}"
-				${ROOT}/usr/bin/gconftool-2  --makefile-install-rule ${F} 1>/dev/null
+				# echo "DEBUG::gconf install  ${F}"
+				${ROOT}/usr/bin/gconftool-2 --makefile-install-rule ${F} 1>/dev/null
 			fi
+		done
+		for user in `ps axuwwf | grep "gconfd-2" |grep -v "grep" | awk '{ print $1 }' | uniq`; do
+			einfo "shutting down gconfd-2 for user ${user} to sync gnucash schemas"
+			${ROOT}/bin/su - ${user} -c "${ROOT}usr/bin/gconftool-2 --shutdown"
 		done
 	fi
 }
@@ -105,18 +114,20 @@ gnome2_gconf_uninstall() {
 		einfo "Uninstalling GNOME 2 GConf schemas"
 		cat ${ROOT}/var/db/pkg/*/${PN}-${PVR}/CONTENTS | grep "obj /opt/${PN}-${PVR}/etc/gconf/schemas" | sed 's:obj \([^ ]*\) .*:\1:' |while read F; do
 			#echo "DEBUG::gconf install  ${F}"
-			${ROOT}/usr/bin/gconftool-2  --makefile-uninstall-rule ${F} 1>/dev/null
+			${ROOT}/usr/bin/gconftool-2 --makefile-uninstall-rule ${F} 1>/dev/null
 		done
 	fi
 }
 
 src_install() {
 	USE_DESTDIR=1
-
 	gnome2_src_install || die "gnome2_src_install failed"
 
-	dodoc AUTHORS ChangeLog DOCUMENTERS HACKING \
-		INSTALL LICENSE NEWS TODO doc/README*
+	dodoc AUTHORS ChangeLog* DOCUMENTERS HACKING \
+		INSTALL LICENSE NEWS TODO README* doc/README*
 
-	# @fixme -- add menu, icon, &c.
+	# This fails as follows because of the /opt/${P} install....
+	# make_desktop_entry /opt/${P}/bin/gnucash "GnuCash ${PV}" /opt/${P}/share/gnucash/pixmaps/appicon.png Office
+	# /usr/portage/eclass/eutils.eclass: line 903: /var/tmp/portage/gnucash-1.9.2/temp//opt/gnucash-1.9.2/bin/gnucash-gnucash-1.desktop: No such file or directory
+	# install: cannot stat `/var/tmp/portage/gnucash-1.9.2/temp//opt/gnucash-1.9.2/bin/gnucash-gnucash-1.desktop': No such file or directory
 }
