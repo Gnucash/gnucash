@@ -1108,14 +1108,18 @@ xaccSplitDateOrder (const Split *sa, const Split *sb)
   if (retval) return retval;
 
   /* otherwise, sort on memo strings */
-  da = sa->memo;
-  db = sb->memo;
-  SAFE_STRCMP (da, db);
+  da = sa->memo ? sa->memo : "";
+  db = sb->memo ? sb->memo : "";
+  retval = g_utf8_collate (da, db);
+  if (retval)
+    return retval;
 
   /* otherwise, sort on action strings */
-  da = sa->action;
-  db = sb->action;
-  SAFE_STRCMP (da, db);
+  da = sa->action ? sa->action : "";
+  db = sb->action ? sb->action : "";
+  retval = g_utf8_collate (da, db);
+  if (retval != 0)
+    return retval;
 
   /* the reconciled flag ... */
   if (sa->reconciled < sb->reconciled) return -1;
@@ -1242,7 +1246,7 @@ xaccSplitCompareAccountFullNames(const Split *sa, const Split *sb)
   ab = sb->acc;
   full_a = xaccAccountGetFullName(aa);
   full_b = xaccAccountGetFullName(ab);
-  retval = safe_strcmp(full_a, full_b);
+  retval = g_utf8_collate(full_a, full_b);
   g_free(full_a);
   g_free(full_b);
   return retval;

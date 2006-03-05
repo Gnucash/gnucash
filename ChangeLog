@@ -1,3 +1,11 @@
+2006-03-05  David Hampton  <hampton@employees.org>
+
+	* src/engine/Transaction.c:
+	* src/engine/Split.c: Use utf8 collation routines when sorting
+	splits in a register.  Also, only sort on the date of
+	transactions (not date and time) since gnucash doesn't allow times
+	to be input.  Fixes #127809.
+
 2006-03-05  Joshua Sled  <jsled@asynchronous.org>
 
 	* packaging/gnucash-1.9.x.ebuild: Add checks for libgsf and

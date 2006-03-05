@@ -1203,18 +1203,25 @@ xaccTransGetVersion (const Transaction *trans)
   return trans ? trans->version : 0;
 }
 
+#define SECS_PER_DAY 86400
+
 int
 xaccTransOrder (const Transaction *ta, const Transaction *tb)
 {
   char *da, *db;
-  int na, nb;
+  int na, nb, retval;
 
   if ( ta && !tb ) return -1;
   if ( !ta && tb ) return +1;
   if ( !ta && !tb ) return 0;
 
-  /* if dates differ, return */
-  DATE_CMP(ta,tb,date_posted);
+  /* Only sort on the date, since time info isn't displayed */
+  na = ta->date_posted.tv_sec / SECS_PER_DAY;
+  nb = tb->date_posted.tv_sec / SECS_PER_DAY;
+  if (na < nb)
+    return -1;
+  if (na > nb)
+    return 1;
 
   /* otherwise, sort on number string */
   na = atoi(ta->num);
@@ -1222,13 +1229,17 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
   if (na < nb) return -1;
   if (na > nb) return +1;
 
+#ifdef ANYONE_CARES_ABOUT_SORT_ON_DATE_ENTERED
   /* if dates differ, return */
   DATE_CMP(ta,tb,date_entered);
+#endif
 
   /* otherwise, sort on description string */
-  da = ta->description;
-  db = tb->description;
-  SAFE_STRCMP (da, db);
+  da = ta->description ? ta->description : "";
+  db = tb->description ? tb->description : "";
+  retval = g_utf8_collate (da, db);
+  if (retval)
+    return retval;
 
   /* else, sort on guid - keeps sort stable. */
   return guid_compare(&(ta->inst.entity.guid), &(tb->inst.entity.guid));
