@@ -14,6 +14,8 @@ G_BEGIN_DECLS
 #define GNC_STOCK_EDIT_ACCOUNT "gnc-edit-account"
 #define GNC_STOCK_NEW_ACCOUNT "gnc-new-account"
 #define GNC_STOCK_OPEN_ACCOUNT "gnc-open-account"
+#define GNC_STOCK_SPLIT_TRANS "gnc-split-transaction"
+#define GNC_STOCK_TRANSFER "gnc-transfer"
 
 //FIXME: use own budget icons?
 #define GNC_STOCK_BUDGET "gnc-budget"

@@ -16,6 +16,8 @@ static GtkStockItem items[] = {
   { GNC_STOCK_EDIT_ACCOUNT,   N_("_Edit Account"),   0, 0, NULL },
   { GNC_STOCK_NEW_ACCOUNT,    N_("_New Account"),    0, 0, NULL },
   { GNC_STOCK_OPEN_ACCOUNT,   N_("_Open Account"),   0, 0, NULL },
+  { GNC_STOCK_TRANSFER,       N_("_Transfer..."),    0, 0, NULL },
+  { GNC_STOCK_SPLIT_TRANS,    N_("S_plit Transaction"), 0, 0, NULL },
 };
 
 static void
@@ -86,5 +88,9 @@ gnc_load_stock_icons (void)
 				 "new-account.png", "new-account-16.png");
 	gnc_add_stock_icon_pair (factory, GNC_STOCK_OPEN_ACCOUNT,
 				 "open-account.png", "open-account-16.png");
+	gnc_add_stock_icon_pair (factory, GNC_STOCK_TRANSFER,
+				 "transfer.png", "transfer-16.png");
+	gnc_add_stock_icon_pair (factory, GNC_STOCK_SPLIT_TRANS,
+				 "split-transaction.png", "split-transaction-16.png");
 	gtk_icon_factory_add_default (factory);
 }

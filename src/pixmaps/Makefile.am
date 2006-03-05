@@ -14,6 +14,10 @@ gncpixmap_DATA = \
   new-account.png \
   open-account-16.png \
   open-account.png \
+  split-transaction-16.png \
+  split-transaction.png \
+  transfer-16.png \
+  transfer.png \
   stock_split_title.png \
   stock_split_watermark.png
 

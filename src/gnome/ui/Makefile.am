@@ -12,8 +12,6 @@ ui_DATA = \
 	gnc-sxed-to-create-window-ui.xml \
 	gnc-reconcile-window-ui.xml \
 	gnc-sxed-window-ui.xml \
-	gnc-sxed-window-ui-full.xml \
-	icon-split.png \
-	icon-transfer.png
+	gnc-sxed-window-ui-full.xml
 
 EXTRA_DIST = $(ui_DATA)
