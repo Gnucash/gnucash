@@ -890,11 +890,19 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	  xaccTransCommitEdit 
 	    (gnc_import_TransInfo_get_trans (trans_info));
 	  break;
-	case GNCImport_CLEAR:
+	case GNCImport_CLEAR: {
+	  GNCImportMatchInfo *selected_match =
+	    gnc_import_TransInfo_get_selected_match (trans_info);
+
+	  /* If there is no selection, ignore this transaction. */
+	  if (!selected_match) {
+	    PWARN("No matching translaction to be cleared was chosen. Imported transaction will be ignored.");
+	    break;
+	  }
+
 	  /* Transaction gets not imported but the matching one gets 
 	     reconciled. */
-	  if(gnc_import_MatchInfo_get_split 
-	     (gnc_import_TransInfo_get_selected_match (trans_info)) ==NULL)
+	  if(gnc_import_MatchInfo_get_split (selected_match) ==NULL)
 	    {
                 PERR("The split I am trying to reconcile is NULL, shouldn't happen!");
 	    }
@@ -902,15 +910,15 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	    {
 	      /* Reconcile the matching transaction */
 	      /*DEBUG("BeginEdit selected_match")*/
-	      xaccTransBeginEdit(trans_info->selected_match_info->trans);
+	      xaccTransBeginEdit(selected_match->trans);
 
 	      if (xaccSplitGetReconcile 
-		  (trans_info->selected_match_info->split) == NREC)
+		  (selected_match->split) == NREC)
 		xaccSplitSetReconcile
-		  (trans_info->selected_match_info->split, CREC);
+		  (selected_match->split, CREC);
 	      /* Set reconcile date to today */
 	      xaccSplitSetDateReconciledSecs
-		(trans_info->selected_match_info->split,time(NULL));
+		(selected_match->split,time(NULL));
 
 	      /* Copy the online id to the reconciled transaction, so
 		 the match will be remembered */ 
@@ -919,13 +927,13 @@ gnc_import_process_trans_clist (GtkCList *clist,
 		  (strlen (gnc_import_get_trans_online_id(trans_info->trans))
 		   > 0))
 		gnc_import_set_trans_online_id
-		  (trans_info->selected_match_info->trans, 
+		  (selected_match->trans, 
 		   gnc_import_get_trans_online_id(trans_info->trans));
 	      
 	      /* Done editing. */
 	      /*DEBUG("CommitEdit selected_match")*/
 	      xaccTransCommitEdit
-		(trans_info->selected_match_info->trans);
+		(selected_match->trans);
 	      
 	      /* Store the mapping to the other account in the MatchMap. */
 	      matchmap_store_destination (matchmap, trans_info, TRUE);
@@ -937,6 +945,7 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      /* Very important: Make sure the freed transaction is not freed again! */
 	      trans_info->trans = NULL;
 	    }
+	  }
 	  break;
 	case GNCImport_EDIT:
 	    PERR("EDIT action is UNSUPPORTED!");

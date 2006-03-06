@@ -1,3 +1,9 @@
+2006-03-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/import-backend.c: Fix crash when "clear" is
+	chosen but no matching transaction is selected. Now those imported
+	transactions will silently be ignored. #317917.
+
 2006-03-05  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
