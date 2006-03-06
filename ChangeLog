@@ -1,5 +1,8 @@
 2006-03-06  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/ofx/gnc-ofx-import.c: Fix OFX import problem
+	with some dividends transactions. Patch by David Reiser. #164645.
+
 	* src/import-export/import-backend.c: Fix crash when "clear" is
 	chosen but no matching transaction is selected. Now those imported
 	transactions will silently be ignored. #317917.

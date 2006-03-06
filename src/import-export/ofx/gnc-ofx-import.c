@@ -440,9 +440,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			  }
 		      }
 		    if(income_account!=NULL&&
-		       (data.invtransactiontype==OFX_REINVEST||
-			data.invtransactiontype==OFX_INCOME)
-		       )
+		       data.invtransactiontype==OFX_REINVEST)
 		      {
 			DEBUG("Adding investment split; Money flows from the income account"); 
 			split=xaccMallocSplit(book);
@@ -450,6 +448,27 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 			xaccAccountInsertSplit(income_account,split);
 
 			gnc_amount = double_to_gnc_numeric (data.amount,
+							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
+							    GNC_RND_ROUND);
+			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
+		    
+			/* Also put the ofx transaction name in the splits memo field, or ofx memo if name is unavailable */ 
+			if(data.name_valid==true){
+			  xaccSplitSetMemo(split, data.name);
+			}
+			else if(data.memo_valid==true){
+			  xaccSplitSetMemo(split, data.memo);
+			}    
+		      }
+		    if(income_account!=NULL&&
+			data.invtransactiontype==OFX_INCOME)
+		      {
+			DEBUG("Adding investment split; Money flows from the income account"); 
+			split=xaccMallocSplit(book);
+			xaccTransAppendSplit(transaction,split);
+			xaccAccountInsertSplit(income_account,split);
+
+			gnc_amount = double_to_gnc_numeric (-data.amount,/*OFX_INCOME amounts come in as positive numbers*/
 							    gnc_commodity_get_fraction(xaccTransGetCurrency(transaction)),
 							    GNC_RND_ROUND);
 			xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
