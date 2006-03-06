@@ -1,3 +1,8 @@
+2006-03-05  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 1.9.2
+
 2006-03-05  David Hampton  <hampton@employees.org>
 
 	* src/engine/Transaction.c:
