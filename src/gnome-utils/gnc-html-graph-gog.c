@@ -36,6 +36,7 @@
 #include <goffice/graph/gog-graph.h>
 #include <goffice/graph/gog-object.h>
 #include <goffice/graph/gog-renderer-pixbuf.h>
+#include <goffice/graph/gog-renderer-gnome-print.h>
 #include <goffice/graph/gog-style.h>
 #include <goffice/graph/gog-styled-object.h>
 #include <goffice/graph/gog-plot.h>
@@ -52,10 +53,9 @@
 /**
  * TODO:
  * - scatter-plot marker selection
- * - series-color, all plots (or drop feature)
+ * - series-color, piecharts (hard, not really supported by GOG)
+ *   and scatters (or drop feature)
  * - title-string freeing (fixmes)
- * - string rotation on y-axis-label and x-axis-element lables.
- *   (not supported by GOG?)
  * - general graph cleanup
  **/
 
@@ -64,6 +64,8 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static int handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
 static int handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d);
+
+static void draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer graph);
 
 static gboolean create_basic_plot_elements(const char *plot_type, GogObject **out_graph, GogObject **out_chart, GogPlot **out_plot);
 
@@ -155,18 +157,18 @@ read_strings(const char * string, int nvalues)
 }
 
 static void
-addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
+add_pixbuf_graph_widget( GtkHTMLEmbedded *eb, GogObject *graph )
 {
   GtkWidget *widget;
-  GogRenderer *pixbufRend;
+  GogRendererPixbuf *pixbuf_renderer;
   GdkPixbuf *buf;
-  gboolean updateStatus;
+  gboolean update_status;
 
   // Note that this shouldn't be necessary as per discussion with Jody...
   // ... but it is because we don't embed in a control which passes the
   // update requests back to the graph widget, a-la the foo-canvas that
   // gnumeric uses.  We probably _should_ do something like that, though.
-  gog_object_update( GOG_OBJECT(graph) );
+  gog_object_update (GOG_OBJECT (graph));
 
 #if 0
   // example SVG use.  Also, nice for debugging.
@@ -180,18 +182,23 @@ addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
   }
 #endif // 0
 
-  pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
-                             "model", graph,
-                             NULL );
-  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
-  buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
-  widget = gtk_image_new_from_pixbuf( buf );
-  gtk_widget_set_size_request( widget, eb->width, eb->height );
-  gtk_widget_show_all( widget );
-  gtk_container_add( GTK_CONTAINER(eb), widget );
+  pixbuf_renderer = GOG_RENDERER_PIXBUF (g_object_new (GOG_RENDERER_PIXBUF_TYPE,
+						       "model", graph,
+						       NULL));
+  update_status = gog_renderer_pixbuf_update (pixbuf_renderer,
+					      eb->width, eb->height, 1.0);
+  buf = gog_renderer_pixbuf_get (pixbuf_renderer);
+  widget = gtk_image_new_from_pixbuf (buf);
+  gtk_widget_set_size_request (widget, eb->width, eb->height);
+  gtk_widget_show_all (widget);
+  gtk_container_add (GTK_CONTAINER (eb), widget);
 
   // blindly copied from gnc-html-guppi.c..
-  gtk_widget_set_size_request(GTK_WIDGET(eb), eb->width, eb->height);
+  gtk_widget_set_size_request (GTK_WIDGET (eb), eb->width, eb->height);
+
+  g_object_set_data_full (G_OBJECT (eb), "graph", graph, g_object_unref);
+  g_signal_connect (G_OBJECT (eb), "draw_print",
+		    G_CALLBACK (draw_print_cb), NULL);
 }
 
 static gboolean
@@ -297,7 +304,7 @@ gtkhtml_3_3_2_bug_workaround(GtkHTMLEmbedded *eb)
  * slice_urls_[123]: ?
  * legend_urls_[123]: ?
  */
-static int
+static gboolean
 handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
   GogObject *graph, *chart;
@@ -348,7 +355,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   // fixme: colors
   set_chart_titles_from_hash(chart, eb);
 
-  addPixbufGraphWidget(eb, graph);
+  add_pixbuf_graph_widget (eb, graph);
 
   return TRUE;
 }
@@ -365,7 +372,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
  * rotate_row_labels:boolean
  * stacked:boolean
  **/
-static int
+static gboolean
 handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
   GogObject *graph, *chart;
@@ -482,13 +489,13 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   // we need to do this twice for the barchart... :p
   gog_object_update (GOG_OBJECT (graph));
 
-  addPixbufGraphWidget (eb, graph);
+  add_pixbuf_graph_widget (eb, graph);
 
   PINFO("barchart rendered.");
   return TRUE;
 }
 
-static int
+static gboolean
 handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
   GogObject *graph, *chart;
@@ -534,7 +541,19 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   // And twice for the scatter, too... :p
   gog_object_update(GOG_OBJECT(graph));
 
-  addPixbufGraphWidget(eb, graph);
+  add_pixbuf_graph_widget (eb, graph);
 
   return TRUE;
+}
+
+static void
+draw_print_cb (GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer d)
+{
+  GogGraph *graph = GOG_GRAPH (g_object_get_data (G_OBJECT (eb), "graph"));
+
+  /* assuming pixel size is 0.5, cf. gtkhtml/src/htmlprinter.c */
+  gnome_print_scale (context, 0.5, 0.5);
+
+  gnome_print_translate (context, 0, eb->height);
+  gog_graph_print_to_gnome_print (graph, context, eb->width, eb->height);
 }

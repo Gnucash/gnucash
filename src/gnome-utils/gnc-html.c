@@ -686,7 +686,7 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
  * loaded.  
  ********************************************************************/
 
-static int
+static gboolean
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
                              gpointer data)
 {

@@ -33,7 +33,6 @@
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-job.h>
-#include <libgnomeprint/gnome-print-paper.h>
 #include <libgnomeprintui/gnome-print-dialog.h>
 #include <libgnomeprintui/gnome-print-preview.h>
 
@@ -44,7 +43,6 @@ typedef struct {
   GnomePrintJob      * job;
   GnomePrintContext  * context;		/* Convenience only. Owned by the job */
   GnomeFont          * default_font;
-  GnomePrintPaper    * paper;
 } PrintSession;
 
 

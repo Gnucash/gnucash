@@ -28,9 +28,7 @@
 #include <glib/gi18n.h>
 #include <libgnomeprint/gnome-font.h>
 #include <libgnomeprintui/gnome-print-job-preview.h>
-#include <stdio.h>
 
-#include "gnc-ui.h"
 #include "print-session.h"
 
 
@@ -43,19 +41,21 @@ gnc_print_session_create(gboolean hand_built_pages)
   gint response;
 
   /* Ask the user what to do with the output */
+  config = gnome_print_config_default();
+  ps->job = gnome_print_job_new(config);
+  g_object_unref(config);
   dialog = gnome_print_dialog_new(ps->job, (guchar *) _("Print GnuCash Document"), 0);
   response = gtk_dialog_run(GTK_DIALOG(dialog));
   switch (response) {
     case GNOME_PRINT_DIALOG_RESPONSE_PRINT: 
     case GNOME_PRINT_DIALOG_RESPONSE_PREVIEW:
-      config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
       gtk_widget_destroy(dialog);
-      ps->job = gnome_print_job_new(config);
       ps->context = gnome_print_job_get_context(ps->job);
       break;
     
     default:
       gtk_widget_destroy(dialog);
+      g_object_unref(ps->job);
       g_free(ps);
       return NULL;
   }

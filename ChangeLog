@@ -1,3 +1,16 @@
+2006-03-06  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-html-graph-gog.c: Save the go graph in the
+	  GtkHTMLEmbedded object. Add printing support for the graphs
+	  (depends on #332884). A bit of formatting.
+
+	* src/gnome-utils/gnc-html.[ch]: Correct prototype of
+	  GncHTMLObjectCB to return gboolean.
+
+	* src/gnome-utils/print-session.[ch]: Create a new job with a
+	  default config for the print dialog. Remove GnomePrintPaper
+	  *paper from the PrintSession.
+
 2006-03-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/ofx/gnc-ofx-import.c: Fix OFX import problem
