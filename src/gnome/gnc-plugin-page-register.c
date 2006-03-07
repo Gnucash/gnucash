@@ -306,6 +306,15 @@ static const gchar *actions_requiring_account[] = {
 };
 
 
+/** View Style actions */
+static const gchar *view_style_actions[] = {
+	"ViewStyleBasicAction",
+	"ViewStyleAutoSplitAction",
+	"ViewStyleJournalAction",
+	NULL
+};
+
+
 /** Short labels for use on the toolbar buttons. */
 static action_toolbar_labels toolbar_labels[] = {
   { "ActionsTransferAction", 	  N_("Transfer") },
@@ -629,6 +638,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	GtkAction *action;
 	Account *account;
 	SplitRegister *reg;
+	GNCLedgerDisplayType ledger_type;
 	int i;
 
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
@@ -638,6 +648,10 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 				  "sensitive", account != NULL);
 
 	/* Set "style" radio button */
+	ledger_type = gnc_ledger_display_type(priv->ledger);
+	gnc_plugin_update_actions(action_group, view_style_actions,
+				  "sensitive", ledger_type == LD_SINGLE);
+
 	reg = gnc_ledger_display_get_split_register(priv->ledger);
 	for (i = n_radio_entries_2 - 1; i > 0; i--) {
 	  DEBUG(" index %d: comparing %x to %x", i, radio_entries_2[i].value, 
@@ -651,7 +665,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	/* Either a match was found, or fell out with i = 0 */
 	action = gtk_action_group_get_action(action_group, radio_entries_2[i].name);
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), TRUE);
+	gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_changed, page);
 
 	/* Set "double line" toggle button */
@@ -660,8 +674,6 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), reg->use_double_line);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
-
-	gnc_plugin_page_register_update_toolbar (reg, page);
 }
 
 
@@ -715,6 +727,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	gnc_ledger_display_refresh(priv->ledger);
 
 	gnc_plugin_page_register_update_menus (page);
+	gnc_plugin_page_register_update_toolbar (reg, page);
 
 	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
 	if (plugin_page->summarybar) {
