@@ -1600,7 +1600,6 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   gboolean recalc_shares = FALSE;
   gboolean recalc_price = FALSE;
   gboolean recalc_value = FALSE;
-  GNCAccountType account_type;
   gboolean price_changed;
   gboolean amount_changed;  /* please s/amount_changed/value_changed/ */
   gboolean shares_changed;
@@ -1624,12 +1623,8 @@ gnc_split_register_auto_calc (SplitRegister *reg, Split *split)
   if (!account)
     account = gnc_split_register_get_default_account (reg);
 
-  account_type = xaccAccountGetType (account);
-
-  if (account_type != STOCK  &&
-      account_type != MUTUAL &&
-      account_type != CURRENCY)
-    return TRUE;
+  if (!xaccAccountIsPriced(account))
+      return TRUE;
 
   price_changed = gnc_table_layout_get_cell_changed (reg->table->layout,
                                                      PRIC_CELL, TRUE);

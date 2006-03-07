@@ -206,12 +206,9 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices,
   {
     GNCPotentialQuote *q = (GNCPotentialQuote *) item->data;
     Account *split_acct = xaccSplitGetAccount(q->split);
-    GNCAccountType acct_type = xaccAccountGetType(split_acct);
 
     /* at this point, we already know it's a split with a zero amount */
-    if((acct_type == STOCK) ||
-       (acct_type == MUTUAL) ||
-       (acct_type == CURRENCY)) {
+    if (xaccAccountIsPriced(split_acct)) {
       /* this is a quote -- file it in the db and kill the split */
       Transaction *txn = xaccSplitGetParent(q->split);
       GNCPrice *price = gnc_price_create(book);
@@ -739,18 +736,11 @@ readAccount( QofBook *book, int fd, AccountGroup *grp, int token )
 
      if (!tmp || *tmp == '\0')
      {
-        GNCAccountType account_type;
+         if (xaccAccountIsPriced(acc)) {
+             if (tmp) g_free (tmp);
 
-        account_type = xaccAccountGetType (acc);
-
-        if (account_type == STOCK  ||
-            account_type == MUTUAL ||
-            account_type == CURRENCY)
-        {
-          if (tmp) g_free (tmp);
-
-          tmp = strdup (xaccAccountGetName (acc));
-          if (tmp == NULL) return NULL;
+             tmp = strdup (xaccAccountGetName (acc));
+             if (tmp == NULL) return NULL;
         }
      }
 

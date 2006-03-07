@@ -217,8 +217,10 @@ void xaccAccountSetDescription (Account *account, const char *desc);
 void xaccAccountSetNotes (Account *account, const char *notes);
 /** Set the last num field of an Account */
 void xaccAccountSetLastNum (Account *account, const char *num);
-/** Set the account's type */
+/** Get the account's type */
 GNCAccountType xaccAccountGetType (const Account *account);
+/** Is the account a stock, mutual fund or currency? */
+gboolean xaccAccountIsPriced(const Account *acc);
 
 /** Get the account's name */
 const char * xaccAccountGetName (const Account *account);

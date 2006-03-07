@@ -227,16 +227,7 @@ gnc_get_default_register_style (GNCAccountType type)
 static gpointer
 look_for_portfolio_cb (Account *account, gpointer data)
 {
-  GNCAccountType le_type;
-
-  le_type = xaccAccountGetType (account);
-  if ((STOCK    == le_type) ||
-      (MUTUAL   == le_type) ||
-      (CURRENCY == le_type))
-  {
-     return (gpointer) PORTFOLIO_LEDGER;
-  }
-  return NULL;
+    return xaccAccountIsPriced(account) ? (gpointer) PORTFOLIO_LEDGER : NULL;
 }
 
 static SplitRegisterType

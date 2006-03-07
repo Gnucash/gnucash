@@ -126,19 +126,16 @@ fill_account_list (StockSplitInfo *info, Account *account)
     Account *account = node->data;
     GNCPrintAmountInfo print_info;
     const gnc_commodity *commodity;
-    GNCAccountType account_type;
     gnc_numeric balance;
     char *strings[4];
     gint row;
 
-    account_type = xaccAccountGetType (account);
-    if (account_type != STOCK &&
-        account_type != MUTUAL)
-      continue;
+    if (!xaccAccountIsPriced(account))
+        continue;
 
     balance = xaccAccountGetBalance (account);
     if (gnc_numeric_zero_p (balance))
-      continue;
+        continue;
 
     if (xaccAccountGetPlaceholder (account))
 	continue;

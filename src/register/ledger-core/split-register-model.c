@@ -61,7 +61,6 @@ static gboolean
 gnc_split_register_use_security_cells (SplitRegister *reg,
                                        VirtualLocation virt_loc)
 {
-  GNCAccountType account_type;
   CursorClass cursor_class;
   Account *account;
   Split *split;
@@ -93,14 +92,7 @@ gnc_split_register_use_security_cells (SplitRegister *reg,
   if (!account)
     return TRUE;
 
-  account_type = xaccAccountGetType (account);
-
-  if (account_type == STOCK  ||
-      account_type == MUTUAL ||
-      account_type == CURRENCY)
-    return TRUE;
-
-  return FALSE;
+  return xaccAccountIsPriced(account);
 }
 
 static const char *

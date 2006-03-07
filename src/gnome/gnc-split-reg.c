@@ -1791,7 +1791,6 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
 GtkWidget *
 gsr_create_summary_bar( GNCSplitReg *gsr )
 {
-  gboolean has_shares;
   GtkWidget *summarybar;
 
   gsr->cleared_label    = NULL;
@@ -1807,30 +1806,9 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     return NULL;
   }
 
-  {
-    Account *account;
-    GNCAccountType atype;
-
-    account = gnc_ledger_display_leader( gsr->ledger );
-    atype = xaccAccountGetType (account);
-
-    switch (atype)
-    {
-      case STOCK:
-      case MUTUAL:
-      case CURRENCY:
-        has_shares = TRUE;
-        break;
-
-      default:
-        has_shares = FALSE;
-        break;
-    }
-  }
-
   summarybar = gtk_hbox_new (FALSE, 4);
 
-  if (!has_shares)
+  if (!xaccAccountIsPriced(gnc_ledger_display_leader(gsr->ledger)))
   {
     gsr->balance_label    = add_summary_label (summarybar, _("Present:"));
     gsr->future_label     = add_summary_label (summarybar, _("Future:"));

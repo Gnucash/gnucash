@@ -2162,7 +2162,14 @@ xaccAccountTypesValid(void)
     return mask;
 }
 
+gboolean
+xaccAccountIsPriced(const Account *acc)
+{
+    if (!acc) return FALSE;
 
+    return (acc->type == STOCK || acc->type == MUTUAL || 
+            acc->type == CURRENCY);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -2404,16 +2411,13 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
   if (!acc) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    GNCAccountType t = acc->type;
-
-    if ((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
+  if (xaccAccountIsPriced(acc)) {
       kvp_frame_set_slot_nc(acc->inst.kvp_data,
                             "old-price-source",
                             src ? kvp_value_new_string(src) : NULL);
       mark_account (acc);
-    }
   }
+  
   acc->inst.dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
@@ -2424,14 +2428,12 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
 const char*
 dxaccAccountGetPriceSrc(const Account *acc) 
 {
-  GNCAccountType t;
   if(!acc) return NULL;
 
-  t = acc->type;
-  if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) 
-  {
-    KvpValue *value = kvp_frame_get_slot(acc->inst.kvp_data, "old-price-source");
-    if(value) return (kvp_value_get_string(value));
+  if (xaccAccountIsPriced(acc)) {
+      KvpValue *value = kvp_frame_get_slot(acc->inst.kvp_data, 
+                                           "old-price-source");
+      if (value) return (kvp_value_get_string(value));
   }
   return NULL;
 }
@@ -2442,18 +2444,14 @@ dxaccAccountGetPriceSrc(const Account *acc)
 void
 dxaccAccountSetQuoteTZ(Account *acc, const char *tz) 
 {
-  if(!acc) return;
+  if (!acc) return;
 
   xaccAccountBeginEdit(acc);
-  {
-    GNCAccountType t = acc->type;
-
-    if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY)) {
+  if (xaccAccountIsPriced(acc)) {
       kvp_frame_set_slot_nc(acc->inst.kvp_data,
                             "old-quote-tz",
                             tz ? kvp_value_new_string(tz) : NULL);
       mark_account (acc);
-    }
   }
   acc->inst.dirty = TRUE;
   xaccAccountCommitEdit(acc);
@@ -2465,14 +2463,11 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
 const char*
 dxaccAccountGetQuoteTZ(const Account *acc) 
 {
-  GNCAccountType t;
-  if(!acc) return NULL;
+  if (!acc) return NULL;
 
-  t = acc->type;
-  if((t == STOCK) || (t == MUTUAL) || (t == CURRENCY))
-  {
-    KvpValue *value = kvp_frame_get_slot(acc->inst.kvp_data, "old-quote-tz");
-    if(value) return (kvp_value_get_string(value));
+  if (xaccAccountIsPriced(acc)) {
+      KvpValue *value = kvp_frame_get_slot(acc->inst.kvp_data, "old-quote-tz");
+      if(value) return (kvp_value_get_string(value));
   }
   return NULL;
 }
