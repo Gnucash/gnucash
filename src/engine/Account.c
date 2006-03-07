@@ -314,7 +314,19 @@ xaccAccountBeginEdit (Account *acc)
 	qof_begin_edit(&acc->inst);
 }
 
-static inline void noop(QofInstance *inst) {}
+static inline void on_done(QofInstance *inst) 
+{
+    GncEventData ed;
+
+    /* old event style */
+    gnc_engine_gen_event (&inst->entity, GNC_EVENT_MODIFY);
+
+    /* new event style */
+    ed.node = inst;
+    ed.idx = 0;
+    qof_event_gen(&inst->entity, QOF_EVENT_MODIFY, &ed);
+
+}
 
 static inline void on_err (QofInstance *inst, QofBackendError errcode)
 {
@@ -331,8 +343,6 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  GncEventData ed;
-
   if(!qof_commit_edit(&acc->inst)) { return;}
 
   /* If marked for deletion, get rid of subaccounts first,
@@ -378,12 +388,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  ed.node = acc;
-  ed.idx = 0;
-  qof_event_gen(&acc->inst.entity, QOF_EVENT_MODIFY, &ed);
-
-  if (qof_commit_edit_part2(&acc->inst, on_err, noop, acc_free))
-      gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  qof_commit_edit_part2(&acc->inst, on_err, on_done, acc_free);
 }
 
 void 
