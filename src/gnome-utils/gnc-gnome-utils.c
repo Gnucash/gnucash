@@ -303,9 +303,9 @@ gnc_ui_check_events (gpointer not_used)
   if (gtk_main_level() != 1)
     return TRUE;
 
-  session = gnc_get_current_session ();
-  if (!session)
+  if (!gnc_current_session_exist())
     return TRUE;
+  session = gnc_get_current_session ();
 
   if (gnc_gui_refresh_suspended ())
     return TRUE;
