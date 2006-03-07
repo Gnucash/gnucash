@@ -354,10 +354,7 @@ xaccTransScrubCurrencyFromSplits(Transaction *trans)
       gnc_commodity *s_commodity = xaccAccountGetCommodity (s_account);
       
       if (s_commodity) {
-        const char * namespace = gnc_commodity_get_namespace (s_commodity);
-        if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
-            !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY)) {
-
+        if (gnc_commodity_is_currency(s_commodity)) {
           /* Found a split where the amount is the same as the value and
              the commodity is a currency.  If all splits in the transaction
              that fit this description are in the same currency then the

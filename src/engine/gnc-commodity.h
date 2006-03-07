@@ -574,6 +574,15 @@ gboolean gnc_commodity_namespace_is_iso(const char *namespace);
  *
  *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
 gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
+
+/** Checks to see if the specified commodity is an ISO 4217 recognized
+ * currency or a legacy currency.
+ *
+ *  @param cm The commodity to check.
+ *
+ *  @return TRUE if the commodity represents a currency, FALSE otherwise. */
+gboolean gnc_commodity_is_currency(const gnc_commodity *cm);
+
 /** @} */
 
 

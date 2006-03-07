@@ -1334,6 +1334,17 @@ gnc_commodity_is_iso(const gnc_commodity * cm)
   return (safe_strcmp(ns_name, GNC_COMMODITY_NS_ISO) == 0);
 }
 
+gboolean
+gnc_commodity_is_currency(const gnc_commodity *cm)
+{
+    const char *ns_name;
+    if (!cm) return FALSE;
+
+    ns_name = gnc_commodity_namespace_get_name(cm->namespace);
+    return (!safe_strcmp(ns_name, GNC_COMMODITY_NS_LEGACY) ||
+            !safe_strcmp(ns_name, GNC_COMMODITY_NS_ISO));
+}
+
 /********************************************************************
  * gnc_commodity_table_get_commodities
  * list commodities in a give namespace 

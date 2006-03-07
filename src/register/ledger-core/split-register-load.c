@@ -194,12 +194,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
      */
     if (default_account != NULL) {
       gnc_commodity * commodity = xaccAccountGetCommodity (default_account);
-      if (commodity) {
-	const char * namespace = gnc_commodity_get_namespace (commodity);
-	if (!safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) ||
-	    !safe_strcmp (namespace, GNC_COMMODITY_NS_LEGACY))
-	  currency = commodity;
-      }
+      if (gnc_commodity_is_currency(commodity))
+          currency = commodity;
     }
 
     gnc_suspend_gui_refresh ();
