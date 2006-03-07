@@ -3490,7 +3490,7 @@ msgstr "Find Transaction"
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Are you sure you want to delete the selected price?"
+msgstr[0] "Are you sure you want to delete the %d selected price?"
 msgstr[1] "Are you sure you want to delete the %d selected prices?"
 
 #: ../src/gnome/dialog-price-edit-db.c:175
