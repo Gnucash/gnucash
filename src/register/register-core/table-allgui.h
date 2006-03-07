@@ -47,7 +47,7 @@
  * -- there is only one cursor for a given virt row.
  * -- there is no overlap; a phys row can only belong to one virt row.
  *
- * Lets say there are three cursors T(rans),S(plit), and B(lank).  
+ * Lets say there are three cursors T(rans), S(plit), and B(lank).  
  * Lets say that these are used to 'print' the following table layout:
  * 
  *       virt row 1   T
@@ -157,6 +157,7 @@ void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
 Table *     gnc_table_new (TableLayout *layout,
                            TableModel *model,
                            TableControl *control);
+void        gnc_virtual_location_init (VirtualLocation *vloc);
 
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);

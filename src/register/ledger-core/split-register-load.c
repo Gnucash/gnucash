@@ -100,9 +100,7 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                        TRUE, start_primary_color, *vcell_loc);
   vcell_loc->virt_row++;
 
-  {
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
-    {
+  for (node = xaccTransGetSplitList (trans); node; node = node->next) {
       Split *secondary = node->data;
 
       if (!xaccTransStillHasSplit(trans, secondary)) continue;
@@ -113,21 +111,20 @@ gnc_split_register_add_transaction (SplitRegister *reg,
                            xaccSplitGetGUID (secondary),
                            visible_splits, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
-    }
   }
 
-  if (!add_blank)
-    return;
-
-  if (find_trans == trans && find_split == NULL &&
-      find_class == CURSOR_CLASS_SPLIT)
-        *new_split_row = vcell_loc->virt_row;
-
-  /* Add blank transaction split */
-  gnc_table_set_vcell (reg->table, split_cursor,
-                       xaccSplitGetGUID (NULL), FALSE, TRUE, *vcell_loc);
-  vcell_loc->virt_row++;
-
+  if (add_blank) {
+      
+      if (find_trans == trans && find_split == NULL &&
+          find_class == CURSOR_CLASS_SPLIT) {
+          *new_split_row = vcell_loc->virt_row;
+      }
+      
+      /* Add blank transaction split */
+      gnc_table_set_vcell(reg->table, split_cursor, xaccSplitGetGUID(NULL), 
+                          FALSE, TRUE, *vcell_loc);
+      vcell_loc->virt_row++;
+  }
 }
 
 static gint
@@ -230,10 +227,11 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     new_trans = xaccMallocTransaction (gnc_get_current_book ());
 
     xaccTransBeginEdit (new_trans);
-    xaccTransSetCurrency (new_trans, currency ? currency : gnc_default_currency ());
+    xaccTransSetCurrency (new_trans, 
+                          currency ? currency : gnc_default_currency());
     xaccTransSetDateSecs (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
-    xaccTransAppendSplit (new_trans, blank_split);
+    xaccSplitSetParent(blank_split, new_trans);
     xaccTransCommitEdit (new_trans);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
@@ -262,15 +260,14 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     find_trans = xaccSplitGetParent (blank_split);
     find_split = NULL;
     find_trans_split = blank_split;
-    find_class = info->cursor_hint_cursor_class;
   }
   else
   {
     find_trans = info->cursor_hint_trans;
     find_split = info->cursor_hint_split;
     find_trans_split = info->cursor_hint_trans_split;
-    find_class = info->cursor_hint_cursor_class;
   }
+  find_class = info->cursor_hint_cursor_class;
 
   save_loc = table->current_cursor_loc;
 
@@ -293,11 +290,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   {
     VirtualLocation virt_loc;
 
-    virt_loc.vcell_loc.virt_row = -1;
-    virt_loc.vcell_loc.virt_col = -1;
-    virt_loc.phys_row_offset = -1;
-    virt_loc.phys_col_offset = -1;
-
+    gnc_virtual_location_init(&virt_loc);
     gnc_table_move_cursor_gui (table, virt_loc);
   }
 
@@ -360,19 +353,17 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   // list we're about to load.
   if (pending_trans != NULL)
   {
-    SplitList *splits;
-    for (splits = xaccTransGetSplitList(pending_trans); splits; splits = splits->next)
+    for (node = xaccTransGetSplitList(pending_trans); node; node = node->next)
     {
-      Split *pending_split = (Split*)splits->data;
+      Split *pending_split = (Split*)node->data;
       if (!xaccTransStillHasSplit(pending_trans, pending_split)) continue;
       if (g_list_find(slist, pending_split) != NULL)
         continue;
 
-      //printf("pending_split [%s] not found\n", guid_to_string(xaccSplitGetGUID(pending_split)));
-      if (g_list_find_custom(slist, pending_trans, _find_split_with_parent_txn) != NULL)
+      if (g_list_find_custom(slist, pending_trans, 
+                             _find_split_with_parent_txn) != NULL)
         continue;
 
-      //printf("transaction [%s] not found\n", guid_to_string(xaccTransGetGUID(pending_trans)));
       if (!we_own_slist)
       { // lazy-copy
         slist = g_list_copy(slist);
@@ -494,9 +485,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
     if (dynamic || multi_line || info->trans_expanded)
     {
-      gnc_table_set_virt_cell_cursor
-        (table, trans_split_loc.vcell_loc,
-         gnc_split_register_get_active_cursor (reg));
+      gnc_table_set_virt_cell_cursor(
+          table, trans_split_loc.vcell_loc,
+          gnc_split_register_get_active_cursor (reg));
       gnc_split_register_set_trans_visible (reg, trans_split_loc.vcell_loc,
                                             TRUE, multi_line);
 

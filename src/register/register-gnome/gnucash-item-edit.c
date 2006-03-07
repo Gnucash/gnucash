@@ -676,10 +676,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
         item_edit->reset_pos = TRUE;
         item_edit->x_offset = 0;
 
-        item_edit->virt_loc.vcell_loc.virt_row = -1;
-        item_edit->virt_loc.vcell_loc.virt_col = -1;
-        item_edit->virt_loc.phys_row_offset = -1;
-        item_edit->virt_loc.phys_col_offset = -1;
+        gnc_virtual_location_init(&item_edit->virt_loc);
 
 #ifdef USE_XIM
         item_edit->ic = NULL;
