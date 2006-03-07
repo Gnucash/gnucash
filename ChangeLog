@@ -1,5 +1,12 @@
 2006-03-07  Christian Stimming  <stimming@tuhh.de>
 
+	* lib/libqof/qof/guid.c: Make seed collection parts that depend on
+	particular functions #ifdef'd on that to enable easier
+	windows/mingw32 porting.
+
+	* lib/libc/setenv.h: Fix old libc substitution files, now needed
+	for windows/mingw32 porting.
+
 	* Makefile.am: Add po/gnucash.pot to EXTRA_DIST because the
 	translation template is needed in the tarball for translators.
 

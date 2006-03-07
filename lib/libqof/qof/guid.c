@@ -27,7 +27,9 @@
 # include <config.h>
 #endif
 
-#include <sys/types.h>
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
 #include <ctype.h>
 #include <dirent.h>
 #include <glib.h>
@@ -35,7 +37,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/times.h>
+#ifdef HAVE_TIMES
+# include <sys/times.h>
+#endif
 #include <time.h>
 #include <unistd.h>
 #include "qof.h"
@@ -285,7 +289,9 @@ init_from_time(void)
   size_t total;
   time_t t_time;
   clock_t clocks;
+#ifdef HAVE_TIMES
   struct tms tms_buf;
+#endif
 
   total = 0;
 
@@ -293,10 +299,12 @@ init_from_time(void)
   md5_process_bytes(&t_time, sizeof(t_time), &guid_context);
   total += sizeof(t_time);
 
+#ifdef HAVE_TIMES
   clocks = times(&tms_buf);
   md5_process_bytes(&clocks, sizeof(clocks), &guid_context);
   md5_process_bytes(&tms_buf, sizeof(tms_buf), &guid_context);
   total += sizeof(clocks) + sizeof(tms_buf);
+#endif
 
   return total;
 }
@@ -380,13 +388,16 @@ guid_init(void)
     md5_process_bytes(&pid, sizeof(pid), &guid_context);
     bytes += sizeof(pid);
 
+#ifdef HAVE_GETPPID
     pid = getppid();
     md5_process_bytes(&pid, sizeof(pid), &guid_context);
     bytes += sizeof(pid);
+#endif
   }
 
   /* user info */
   {
+#ifdef HAVE_GETUID
     uid_t uid;
     gid_t gid;
     char *s;
@@ -405,16 +416,19 @@ guid_init(void)
     gid = getgid();
     md5_process_bytes(&gid, sizeof(gid), &guid_context);
     bytes += sizeof(gid);
+#endif
   }
 
   /* host info */
   {
+#ifdef HAVE_GETHOSTNAME
     char string[1024];
 
     memset(string, 0, sizeof(string));
     gethostname(string, sizeof(string));
     md5_process_bytes(string, sizeof(string), &guid_context);
     bytes += sizeof(string);
+#endif
   }
 
   /* plain old random */

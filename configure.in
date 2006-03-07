@@ -114,6 +114,9 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel (or libtool-ltdl-devel) not installed?])
 fi
 
+# These are unavailable on windows/mingw32
+AC_CHECK_FUNCS(getppid getuid gethostname gmtime_r)
+
 ### --------------------------------------------------------------------------
 ### See if we have pkg-config
 
