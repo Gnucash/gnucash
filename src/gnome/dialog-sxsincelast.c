@@ -2449,7 +2449,7 @@ create_each_transaction_helper( Transaction *t, void *d )
         gboolean errFlag;
         createData *createUD;
         toCreateInstance *tci;
-        gnc_commodity *commonCommodity = NULL;
+        gnc_commodity *first_cmdty = NULL;
         GHashTable *actualVars;
         gnc_numeric *varIValue;
 
@@ -2506,6 +2506,7 @@ create_each_transaction_helper( Transaction *t, void *d )
         for ( ; sList && osList; sList = sList->next, osList = osList->next)
         {
                 Account *acct;
+                gnc_commodity *split_cmdty = NULL;
 
                 split = (Split*)sList->data;
 
@@ -2548,20 +2549,13 @@ create_each_transaction_helper( Transaction *t, void *d )
                                 break;
                         }
 
-                        if ( commonCommodity != NULL ) {
-                                if ( commonCommodity != xaccAccountGetCommodity( acct ) ) {
-                                        GString *err = g_string_new("");
-                                        g_string_printf(err, "Common-commodity difference for SX [%s]: old=[%s], new=[%s]\n",
-                                                        xaccSchedXactionGetName(createUD->tci->parentTCT->sx),
-                                                        gnc_commodity_get_mnemonic(commonCommodity),
-                                                        gnc_commodity_get_mnemonic(xaccAccountGetCommodity(acct)));
-                                        *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
-                                }
-                        }
-                        else
+                        split_cmdty = xaccAccountGetCommodity(acct);
+                        if (first_cmdty == NULL)
                         {
-                                commonCommodity = xaccAccountGetCommodity( acct );
+                                first_cmdty = split_cmdty;
+                                xaccTransSetCurrency(newT, first_cmdty);
                         }
+
                         xaccAccountBeginEdit(acct);
                         xaccAccountInsertSplit(acct, split);
                 }
@@ -2620,16 +2614,52 @@ create_each_transaction_helper( Transaction *t, void *d )
                         if (gncn_error != GNC_ERROR_OK) {
                                 GString *err = g_string_new("");
                                 g_string_printf(err, "Error %d in SX [%s] final gnc_numeric value, using 0 instead.", 
-                                                gncn_error,                                                
+                                                gncn_error,
                                                 xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
                                 *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
                                 final = gnc_numeric_create(0, 1);
                         }
 
-                        xaccSplitSetValue( split, final );
+                        xaccSplitSetValue(split, final);
+                        if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+                        {
+                                GNCPriceDB *price_db = gnc_pricedb_get_db(gnc_get_current_book());
+                                GNCPrice *price;
+                                gnc_numeric exchange, amt;
+
+                                price = gnc_pricedb_lookup_latest(price_db, first_cmdty, split_cmdty);
+                                if (price == NULL)
+                                {
+                                        price = gnc_pricedb_lookup_latest(price_db, split_cmdty, first_cmdty);
+                                        if (price == NULL)
+                                        {
+                                                GString *err = g_string_new("");
+                                                g_string_printf(err, "could not find pricedb entry for commodity-pair (%s, %s).",
+                                                                gnc_commodity_get_mnemonic(first_cmdty),
+                                                                gnc_commodity_get_mnemonic(split_cmdty));
+                                                exchange = gnc_numeric_create(1, 1);
+                                                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+                                        }
+                                        else
+                                        {
+                                                exchange = gnc_numeric_div(gnc_numeric_create(1,1),
+                                                                           gnc_price_get_value(price),
+                                                                           1000, GNC_HOW_RND_ROUND);
+                                        }
+                                }
+                                else
+                                {
+                                        exchange = gnc_price_get_value(price);
+                                }
+
+                                amt = gnc_numeric_mul(final,
+                                                      exchange,
+                                                      1000,
+                                                      GNC_HOW_RND_ROUND);
+                                xaccSplitSetAmount(split, amt);
+                        }
                         xaccSplitScrub( split );
                 }
-
                 xaccAccountCommitEdit( acct );
         }
 
@@ -2641,15 +2671,6 @@ create_each_transaction_helper( Transaction *t, void *d )
                 g_hash_table_destroy( actualVars );
                 actualVars = NULL;
         }
-
-        if (commonCommodity == NULL) {
-                GString *err = g_string_new("");
-                g_string_printf(err, "Unable to find common currency/commodity for SX [%s]; using default.",
-                                xaccSchedXactionGetName(createUD->tci->parentTCT->sx));
-                *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
-                commonCommodity = gnc_default_currency();
-        }
-        xaccTransSetCurrency(newT, commonCommodity);
 
         if (errFlag) {
                 PERR("Some error in new transaction creation...");
