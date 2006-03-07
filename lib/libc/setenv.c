@@ -21,8 +21,10 @@
 \********************************************************************/
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
+#include "setenv.h"
 
 /* This setenv() papers over the brokenness of of systems that only
  * have putenv() which takes ownership of the pointer you give it,

@@ -20,8 +20,8 @@
  *
 \********************************************************************/
 
-#ifndef GNC_CORE_UTILS_H
-#define GNC_CORE_UTILS_H
+#ifndef __SETENV_H
+#define __SETENV_H
 
 #include "config.h"
 
@@ -30,4 +30,5 @@
 int setenv(const char *name, const char *value, int overwrite);
 int unsetenv(const char *name);
 
+#endif
 #endif
