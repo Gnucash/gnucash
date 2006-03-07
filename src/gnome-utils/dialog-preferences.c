@@ -131,8 +131,15 @@ gnc_account_separator_prefs_cb (GConfEntry *unused, GtkWidget *dialog)
   gchar *sample;
 
   label = gnc_glade_lookup_widget(dialog, "sample_account");
-  sample = g_strjoin(gnc_get_account_separator_string(),
-		     _("Income"), _("Salary"), _("Taxable"), NULL);
+  /* Translators: Both %s will be the account separator character; the
+     resulting string is a demonstration how the account separator
+     character will look like. You can replace these three account
+     names with other account names that are more suitable for your
+     language - just keep in mind to have exactly two %s in your
+     translation. */
+  sample = g_strdup_printf(_("Income%sSalary%sTaxable"),
+			   gnc_get_account_separator_string(),
+			   gnc_get_account_separator_string());
   DEBUG(" Label set to '%s'", sample);
   gtk_label_set_text(GTK_LABEL(label), sample);
   g_free(sample);
