@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-06 21:13+0100\n"
-"PO-Revision-Date: 2006-03-06 22:00+0100\n"
+"POT-Creation-Date: 2006-03-07 21:31+0100\n"
+"PO-Revision-Date: 2006-03-07 21:40+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -103,8 +103,8 @@ msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:619 ../src/engine/Account.c:2068
-#: ../src/register/ledger-core/split-register.c:2096
+#: ../src/app-utils/gnc-ui-util.c:619 ../src/engine/Account.c:2073
+#: ../src/register/ledger-core/split-register.c:2091
 #: ../intl-scm/guile-strings.c:2252
 msgid "Equity"
 msgstr "Eigenkapital"
@@ -121,7 +121,7 @@ msgstr "Anfangsbestand"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1099
-#: ../src/register/ledger-core/split-register.c:1946
+#: ../src/register/ledger-core/split-register.c:1941
 #: ../intl-scm/guile-strings.c:1610 ../intl-scm/guile-strings.c:1802
 #: ../intl-scm/guile-strings.c:2678 ../intl-scm/guile-strings.c:2990
 msgid "Debit"
@@ -132,10 +132,10 @@ msgstr "Soll"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
 #: ../src/app-utils/guile-util.c:1137
-#: ../src/register/ledger-core/split-register.c:1969
-#: ../src/register/ledger-core/split-register.c:2044
-#: ../src/register/ledger-core/split-register.c:2060
-#: ../src/register/ledger-core/split-register.c:2078
+#: ../src/register/ledger-core/split-register.c:1964
+#: ../src/register/ledger-core/split-register.c:2039
+#: ../src/register/ledger-core/split-register.c:2055
+#: ../src/register/ledger-core/split-register.c:2073
 #: ../intl-scm/guile-strings.c:1612 ../intl-scm/guile-strings.c:1804
 #: ../intl-scm/guile-strings.c:2680 ../intl-scm/guile-strings.c:2992
 msgid "Credit"
@@ -152,7 +152,7 @@ msgstr ""
 
 #. Translators: Name of the account where all the missing accounts
 #. are put into. (FIXME: is this correct?)
-#: ../src/backend/file/io-gncbin-r.c:510
+#: ../src/backend/file/io-gncbin-r.c:507
 msgid "Lost Accounts"
 msgstr "Verlorene Konten"
 
@@ -332,7 +332,7 @@ msgstr "Daten laden..."
 #: ../src/business/business-gnome/dialog-invoice.c:2492
 #: ../src/business/business-gnome/glade/invoice.glade.h:13
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:316
-#: ../src/register/ledger-core/split-register.c:2075
+#: ../src/register/ledger-core/split-register.c:2070
 #: ../intl-scm/guile-strings.c:456 ../intl-scm/guile-strings.c:3072
 #: ../intl-scm/guile-strings.c:3784 ../intl-scm/guile-strings.c:3878
 #: ../intl-scm/guile-strings.c:4086 ../intl-scm/guile-strings.c:4300
@@ -355,7 +355,7 @@ msgstr "Rechnung"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2067
+#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2072
 #: ../intl-scm/guile-strings.c:452 ../intl-scm/guile-strings.c:1584
 msgid "Expense"
 msgstr "Aufwendungen"
@@ -386,9 +386,9 @@ msgstr "Automatische Buchung"
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:142
 #: ../src/gnome/druid-loan.c:1780 ../src/gnome/druid-loan.c:2280
 #: ../src/gnome/druid-loan.c:2343 ../src/gnome/druid-loan.c:2357
+#: ../src/register/ledger-core/split-register.c:2066
 #: ../src/register/ledger-core/split-register.c:2071
-#: ../src/register/ledger-core/split-register.c:2076
-#: ../src/register/ledger-core/split-register.c:2085
+#: ../src/register/ledger-core/split-register.c:2080
 #: ../intl-scm/guile-strings.c:438 ../intl-scm/guile-strings.c:454
 #: ../intl-scm/guile-strings.c:484
 msgid "Payment"
@@ -774,7 +774,7 @@ msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-gnome/dialog-invoice.c:631
-#: ../src/register/ledger-core/split-register-model.c:117
+#: ../src/register/ledger-core/split-register-model.c:109
 #: ../intl-scm/guile-strings.c:3816 ../intl-scm/guile-strings.c:4006
 #: ../intl-scm/guile-strings.c:4308
 msgid "Due Date"
@@ -963,13 +963,13 @@ msgstr "Nummer Auslagenerstattung"
 #: ../src/business/business-gnome/dialog-invoice.c:2316
 #: ../src/gnome-utils/gnc-tree-view-account.c:438
 #: ../src/gnome-utils/gnc-tree-view-price.c:441
-#: ../src/register/ledger-core/split-register-model.c:206
+#: ../src/register/ledger-core/split-register-model.c:198
 #: ../intl-scm/guile-strings.c:2388 ../intl-scm/guile-strings.c:3820
 msgid "Type"
 msgstr "Art"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2318
-#: ../src/register/ledger-core/split-register-model.c:160
+#: ../src/register/ledger-core/split-register-model.c:152
 msgid "Paid"
 msgstr "Bezahlt"
 
@@ -991,7 +991,7 @@ msgstr "Geöffnet"
 #: ../src/business/business-gnome/dialog-order.c:833
 #: ../src/business/business-gnome/glade/payment.glade.h:5
 #: ../src/gnome/glade/lots.glade.h:19 ../src/gnome/reconcile-list.c:222
-#: ../src/register/ledger-core/split-register-model.c:131
+#: ../src/register/ledger-core/split-register-model.c:123
 #: ../intl-scm/guile-strings.c:1620 ../intl-scm/guile-strings.c:1826
 #: ../intl-scm/guile-strings.c:2600 ../intl-scm/guile-strings.c:2662
 #: ../intl-scm/guile-strings.c:2854 ../intl-scm/guile-strings.c:2974
@@ -1558,7 +1558,7 @@ msgstr "Währung: "
 #: ../src/business/business-gnome/glade/customer.glade.h:9
 #: ../src/business/business-gnome/glade/invoice.glade.h:7
 #: ../src/business/business-gnome/search-owner.c:251
-#: ../src/register/ledger-core/split-register-model.c:143
+#: ../src/register/ledger-core/split-register-model.c:135
 #: ../intl-scm/guile-strings.c:3888
 msgid "Customer"
 msgstr "Kunde"
@@ -1602,7 +1602,7 @@ msgstr "Name: "
 #: ../src/business/business-gnome/glade/vendor.glade.h:11
 #: ../src/gnome/dialog-find-transactions.c:122
 #: ../src/gnome-utils/gnc-tree-view-account.c:558
-#: ../src/register/ledger-core/split-register-model.c:318
+#: ../src/register/ledger-core/split-register-model.c:310
 #: ../intl-scm/guile-strings.c:2396
 msgid "Notes"
 msgstr "Bemerkung"
@@ -1669,7 +1669,7 @@ msgstr "Welche Steuertabelle soll bei diesem Kunden angewandt werden?"
 #: ../src/gnome-utils/gnc-tree-view-account.c:454
 #: ../src/import-export/generic-import.glade.h:19
 #: ../src/import-export/qif-import/qif.glade.h:19
-#: ../src/register/ledger-core/split-register-model.c:147
+#: ../src/register/ledger-core/split-register-model.c:139
 #: ../intl-scm/guile-strings.c:1622 ../intl-scm/guile-strings.c:1828
 #: ../intl-scm/guile-strings.c:2390 ../intl-scm/guile-strings.c:2604
 #: ../intl-scm/guile-strings.c:2664 ../intl-scm/guile-strings.c:2782
@@ -1914,7 +1914,7 @@ msgstr ""
 #: ../src/gnome-utils/gnc-tree-view-price.c:431
 #: ../src/import-export/generic-import.glade.h:18
 #: ../src/import-export/qif-import/qif.glade.h:18
-#: ../src/register/ledger-core/split-register-model.c:110
+#: ../src/register/ledger-core/split-register-model.c:102
 #: ../intl-scm/guile-strings.c:1618 ../intl-scm/guile-strings.c:1822
 #: ../intl-scm/guile-strings.c:2096 ../intl-scm/guile-strings.c:2276
 #: ../intl-scm/guile-strings.c:2416 ../intl-scm/guile-strings.c:2592
@@ -1933,7 +1933,7 @@ msgstr "Datum"
 #: ../src/business/business-gnome/glade/payment.glade.h:4
 #: ../src/gnome/dialog-find-transactions.c:128
 #: ../src/import-export/generic-import.glade.h:40
-#: ../src/register/ledger-core/split-register-model.c:199
+#: ../src/register/ledger-core/split-register-model.c:191
 #: ../intl-scm/guile-strings.c:1830 ../intl-scm/guile-strings.c:2636
 #: ../intl-scm/guile-strings.c:2666 ../intl-scm/guile-strings.c:2790
 #: ../intl-scm/guile-strings.c:2862
@@ -1973,7 +1973,7 @@ msgstr ""
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
 #: ../src/business/business-gnome/search-owner.c:253
-#: ../src/register/ledger-core/split-register-model.c:145
+#: ../src/register/ledger-core/split-register-model.c:137
 #: ../intl-scm/guile-strings.c:3890
 msgid "Vendor"
 msgstr "Zulieferer"
@@ -2408,8 +2408,8 @@ msgid "_Quantity"
 msgstr "_Anzahl"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:163
-#: ../src/register/ledger-core/split-register.c:1760
-#: ../src/register/ledger-core/split-register.c:1762
+#: ../src/register/ledger-core/split-register.c:1755
+#: ../src/register/ledger-core/split-register.c:1757
 msgid "_Price"
 msgstr "_Preis"
 
@@ -2420,13 +2420,13 @@ msgstr "Be_schreibung"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:193
 #: ../src/gnome/glade/register.glade.h:25
-#: ../src/gnome/gnc-plugin-page-register.c:312
+#: ../src/gnome/gnc-plugin-page-register.c:321
 msgid "Enter"
 msgstr "Eingeben"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:194
 #: ../src/gnome/glade/register.glade.h:6
-#: ../src/gnome/gnc-plugin-page-register.c:313
+#: ../src/gnome/gnc-plugin-page-register.c:322
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -2434,19 +2434,19 @@ msgstr "Abbrechen"
 #: ../src/gnome/glade/register.glade.h:16
 #: ../src/gnome/gnc-plugin-page-account-tree.c:215
 #: ../src/gnome/gnc-plugin-page-budget.c:167
-#: ../src/gnome/gnc-plugin-page-register.c:314
+#: ../src/gnome/gnc-plugin-page-register.c:323
 msgid "Delete"
 msgstr "Löschen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
 #: ../src/gnome/glade/register.glade.h:20
-#: ../src/gnome/gnc-plugin-page-register.c:315
+#: ../src/gnome/gnc-plugin-page-register.c:324
 msgid "Duplicate"
 msgstr "Duplizieren"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:197
 #: ../src/gnome/glade/register.glade.h:3
-#: ../src/gnome/gnc-plugin-page-register.c:318
+#: ../src/gnome/gnc-plugin-page-register.c:327
 msgid "Blank"
 msgstr "Neu"
 
@@ -2758,7 +2758,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:121
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../src/engine/Account.c:2059 ../intl-scm/guile-strings.c:1196
+#: ../src/engine/Account.c:2064 ../intl-scm/guile-strings.c:1196
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -2785,7 +2785,7 @@ msgstr "Aufwandskonten"
 #. src/business/business-reports/invoice.scm
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:67
 #: ../src/gnome/dialog-find-transactions.c:124
-#: ../src/register/ledger-core/split-register-model.c:178
+#: ../src/register/ledger-core/split-register-model.c:170
 #: ../intl-scm/guile-strings.c:3646 ../intl-scm/guile-strings.c:3954
 #: ../intl-scm/guile-strings.c:4198
 msgid "Action"
@@ -3061,50 +3061,50 @@ msgid "_Value: "
 msgstr "_Wert: "
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2058 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2063 ../src/import-export/hbci/gnc-hbci-utils.c:591
 #: ../intl-scm/guile-strings.c:1194
 msgid "Bank"
 msgstr "Bank"
 
-#: ../src/engine/Account.c:2060
+#: ../src/engine/Account.c:2065
 msgid "Asset"
 msgstr "Aktiva"
 
-#: ../src/engine/Account.c:2061
+#: ../src/engine/Account.c:2066
 msgid "Credit Card"
 msgstr "Kreditkarte"
 
-#: ../src/engine/Account.c:2062
+#: ../src/engine/Account.c:2067
 msgid "Liability"
 msgstr "Passiva"
 
-#: ../src/engine/Account.c:2063
+#: ../src/engine/Account.c:2068
 msgid "Stock"
 msgstr "Aktienkonto"
 
-#: ../src/engine/Account.c:2064
+#: ../src/engine/Account.c:2069
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: ../src/engine/Account.c:2065 ../src/gnome-utils/gnc-tree-view-price.c:426
+#: ../src/engine/Account.c:2070 ../src/gnome-utils/gnc-tree-view-price.c:426
 msgid "Currency"
 msgstr "Währung"
 
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2066 ../src/gnome-utils/dialog-preferences.c:135
-#: ../src/register/ledger-core/split-register.c:2112
+#: ../src/engine/Account.c:2071
+#: ../src/register/ledger-core/split-register.c:2107
 #: ../intl-scm/guile-strings.c:478 ../intl-scm/guile-strings.c:1210
 #: ../intl-scm/guile-strings.c:1582
 msgid "Income"
 msgstr "Erträge"
 
-#: ../src/engine/Account.c:2069
+#: ../src/engine/Account.c:2074
 msgid "A/Receivable"
 msgstr "Forderungen"
 
-#: ../src/engine/Account.c:2070
+#: ../src/engine/Account.c:2075
 msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
@@ -3350,7 +3350,7 @@ msgstr ""
 msgid "Orphan"
 msgstr "Ausbuchungskonto"
 
-#: ../src/engine/Scrub.c:434 ../src/import-export/generic-import.glade.h:35
+#: ../src/engine/Scrub.c:431 ../src/import-export/generic-import.glade.h:35
 msgid "Imbalance"
 msgstr "Ausgleichskonto"
 
@@ -3358,17 +3358,17 @@ msgstr "Ausgleichskonto"
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
 #: ../src/engine/Split.c:1192 ../src/engine/Split.c:1209
-#: ../src/register/ledger-core/split-register.c:2131
+#: ../src/register/ledger-core/split-register.c:2126
 #: ../src/register/ledger-core/split-register-control.c:972
 #: ../intl-scm/guile-strings.c:2966 ../intl-scm/guile-strings.c:2988
 msgid "-- Split Transaction --"
 msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1225 ../src/gnome/druid-stock-split.c:450
+#: ../src/engine/Split.c:1225 ../src/gnome/druid-stock-split.c:447
 #: ../src/gnome/glade/register.glade.h:67
-#: ../src/gnome/gnc-plugin-page-register.c:316
-#: ../src/register/ledger-core/split-register.c:2115
+#: ../src/gnome/gnc-plugin-page-register.c:325
+#: ../src/register/ledger-core/split-register.c:2110
 #: ../intl-scm/guile-strings.c:2584
 msgid "Split"
 msgstr "Vollständig"
@@ -3456,7 +3456,7 @@ msgstr "Alle Konten"
 #: ../src/import-export/generic-import.glade.h:11
 #: ../src/import-export/hbci/gnc-hbci-utils.c:590
 #: ../src/import-export/qif-import/qif.glade.h:2
-#: ../src/register/ledger-core/split-register-model.c:185
+#: ../src/register/ledger-core/split-register-model.c:177
 #: ../intl-scm/guile-strings.c:1624 ../intl-scm/guile-strings.c:1646
 #: ../intl-scm/guile-strings.c:2108 ../intl-scm/guile-strings.c:2450
 #: ../intl-scm/guile-strings.c:2668 ../intl-scm/guile-strings.c:2978
@@ -3487,7 +3487,7 @@ msgstr "Aktien-/Anteilspreis"
 #. src/report/standard-reports/register.scm
 #: ../src/gnome/dialog-find-transactions.c:115
 #: ../src/gnome/glade/stocks.glade.h:13
-#: ../src/register/ledger-core/split-register-model.c:248
+#: ../src/register/ledger-core/split-register-model.c:240
 #: ../intl-scm/guile-strings.c:1626 ../intl-scm/guile-strings.c:1844
 #: ../intl-scm/guile-strings.c:2458 ../intl-scm/guile-strings.c:2616
 #: ../intl-scm/guile-strings.c:2672 ../intl-scm/guile-strings.c:2890
@@ -3760,7 +3760,7 @@ msgstr "Auf später verschoben"
 msgid "Obsolete"
 msgstr "Veraltet"
 
-#: ../src/gnome/dialog-sxsincelast.c:3938
+#: ../src/gnome/dialog-sxsincelast.c:3959
 msgid ""
 "The following errors were encountered while creating the Scheduled "
 "Transactions:\n"
@@ -3922,7 +3922,7 @@ msgid "via Escrow account?"
 msgstr "über Treuhandkonto?"
 
 #: ../src/gnome/druid-loan.c:820
-#: ../src/register/ledger-core/split-register.c:2069
+#: ../src/register/ledger-core/split-register.c:2064
 msgid "Loan"
 msgstr "Darlehen"
 
@@ -3964,7 +3964,7 @@ msgstr "Endbetrag Kapital"
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #: ../src/gnome/druid-loan.c:1782 ../src/gnome/druid-loan.c:2399
 #: ../src/import-export/qif/qif-defaults.c:130
-#: ../src/register/ledger-core/split-register.c:2077
+#: ../src/register/ledger-core/split-register.c:2072
 #: ../intl-scm/guile-strings.c:3488 ../intl-scm/guile-strings.c:3510
 msgid "Interest"
 msgstr "Zinsen"
@@ -4027,51 +4027,51 @@ msgstr "Importdaten : %s "
 msgid "Original data : %s\n"
 msgstr "Originaldaten : %s\n"
 
-#: ../src/gnome/druid-stock-split.c:270
+#: ../src/gnome/druid-stock-split.c:267
 #: ../src/gnome-utils/dialog-transfer.c:541 ../src/gnome-utils/gnc-html.c:113
 msgid "Error"
 msgstr "Fehler"
 
-#: ../src/gnome/druid-stock-split.c:295
+#: ../src/gnome/druid-stock-split.c:292
 msgid "You must enter a valid distribution amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
-#: ../src/gnome/druid-stock-split.c:304
+#: ../src/gnome/druid-stock-split.c:301
 msgid "You must enter a distribution amount."
 msgstr "Sie müssen einen Betrag angeben."
 
-#: ../src/gnome/druid-stock-split.c:312
+#: ../src/gnome/druid-stock-split.c:309
 msgid "You must either enter a valid price or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Preis angeben oder das Feld frei lassen."
 
-#: ../src/gnome/druid-stock-split.c:321
+#: ../src/gnome/druid-stock-split.c:318
 msgid "The price must be positive."
 msgstr "Der Preis muß eine positive Zahl sein."
 
-#: ../src/gnome/druid-stock-split.c:359
+#: ../src/gnome/druid-stock-split.c:356
 msgid "You must either enter a valid cash amount or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Betrag eingeben oder das Eingabefeld leer "
 "lassen."
 
-#: ../src/gnome/druid-stock-split.c:368
+#: ../src/gnome/druid-stock-split.c:365
 msgid "The cash distribution must be positive."
 msgstr "Der Ausgleichsbetrag muß positiv sein."
 
-#: ../src/gnome/druid-stock-split.c:380
+#: ../src/gnome/druid-stock-split.c:377
 msgid "You must select an income account for the cash distribution."
 msgstr "Sie müssen ein Ertragskonto für den Ausgleichsbetrag angeben."
 
-#: ../src/gnome/druid-stock-split.c:389
+#: ../src/gnome/druid-stock-split.c:386
 msgid "You must select an asset account for the cash distribution."
 msgstr "Sie müssen ein Aktiva-Konto für den Ausgleichsbetrag angeben."
 
-#: ../src/gnome/druid-stock-split.c:481
+#: ../src/gnome/druid-stock-split.c:478
 msgid "Error adding price."
 msgstr "Fehler beim Hinzufügen des Preises."
 
-#: ../src/gnome/druid-stock-split.c:756
+#: ../src/gnome/druid-stock-split.c:753
 msgid "You don't have any stock accounts with balances!"
 msgstr "Sie haben keine Aktienkonten mit mehr als Null Aktien."
 
@@ -4852,7 +4852,7 @@ msgstr "Den einen leeren Eintrag in den Feldern ausrechnen."
 
 #: ../src/gnome/glade/fincalc.glade.h:29
 #: ../src/gnome/glade/register.glade.h:41
-#: ../src/gnome/gnc-plugin-page-register.c:317
+#: ../src/gnome/gnc-plugin-page-register.c:326
 msgid "Schedule"
 msgstr "Terminiert"
 
@@ -4929,8 +4929,8 @@ msgstr "Eine Zusammenfassung aller Buchungen in dem gewählten Posten"
 #. src/business/business-reports/owner-report.scm
 #: ../src/gnome/glade/lots.glade.h:9
 #: ../src/gnome-utils/gnc-tree-view-account.c:476
-#: ../src/register/ledger-core/split-register-model.c:171
-#: ../src/register/ledger-core/split-register-model.c:311
+#: ../src/register/ledger-core/split-register-model.c:163
+#: ../src/register/ledger-core/split-register-model.c:303
 #: ../intl-scm/guile-strings.c:1236 ../intl-scm/guile-strings.c:2394
 #: ../intl-scm/guile-strings.c:2682 ../intl-scm/guile-strings.c:2986
 #: ../intl-scm/guile-strings.c:3838
@@ -6506,7 +6506,9 @@ msgstr "Buchungsvorlage (schreibgeschützt)"
 msgid ""
 "The following Scheduled Transactions reference the deleted account, and must "
 "now be corrected.  Press OK to edit them."
-msgstr "Die folgenden terminierten Buchungen gehören zu dem gelöschten Konto und müssen nun geändert werden. Klicken Sie Ok, um sie zu ändern."
+msgstr ""
+"Die folgenden terminierten Buchungen gehören zu dem gelöschten Konto und "
+"müssen nun geändert werden. Klicken Sie Ok, um sie zu ändern."
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid ""
@@ -7422,56 +7424,56 @@ msgid "Transaction _Journal"
 msgstr "_Vollständig"
 
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:311
-#: ../src/register/ledger-core/split-register.c:2046
+#: ../src/gnome/gnc-plugin-page-register.c:320
+#: ../src/register/ledger-core/split-register.c:2041
 #: ../src/register/ledger-core/split-register-layout.c:571
-#: ../src/register/ledger-core/split-register-model.c:192
+#: ../src/register/ledger-core/split-register-model.c:184
 #: ../intl-scm/guile-strings.c:2980
 msgid "Transfer"
 msgstr "Buchen"
 
 #. src/scm/help-topics-index.scm
 #. src/report/standard-reports/general-ledger.scm
-#: ../src/gnome/gnc-plugin-page-register.c:528
-#: ../src/gnome/gnc-plugin-page-register.c:1054
-#: ../src/gnome/gnc-plugin-page-register.c:1586
+#: ../src/gnome/gnc-plugin-page-register.c:537
+#: ../src/gnome/gnc-plugin-page-register.c:1067
+#: ../src/gnome/gnc-plugin-page-register.c:1599
 #: ../intl-scm/guile-strings.c:268 ../intl-scm/guile-strings.c:1814
 msgid "General Ledger"
 msgstr "Journal"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1035
-#: ../src/gnome/gnc-plugin-page-register.c:1067
+#: ../src/gnome/gnc-plugin-page-register.c:1048
+#: ../src/gnome/gnc-plugin-page-register.c:1080
 #: ../src/import-export/hbci/gnc-hbci-utils.c:578
 #: ../src/import-export/hbci/gnc-hbci-utils.c:580
 msgid "unknown"
 msgstr "unbekannt"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1056
-#: ../src/gnome/gnc-plugin-page-register.c:1592
+#: ../src/gnome/gnc-plugin-page-register.c:1069
+#: ../src/gnome/gnc-plugin-page-register.c:1605
 msgid "Portfolio"
 msgstr "Portfolio"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1058
-#: ../src/gnome/gnc-plugin-page-register.c:1598
+#: ../src/gnome/gnc-plugin-page-register.c:1071
+#: ../src/gnome/gnc-plugin-page-register.c:1611
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1588
+#: ../src/gnome/gnc-plugin-page-register.c:1601
 msgid "General Ledger Report"
 msgstr "Journal Bericht"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1594
+#: ../src/gnome/gnc-plugin-page-register.c:1607
 msgid "Portfolio Report"
 msgstr "Portfolio Bericht"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1600
+#: ../src/gnome/gnc-plugin-page-register.c:1613
 msgid "Search Results Report"
 msgstr "Suchergebnisse Bericht"
 
 #. src/scm/help-topics-index.scm
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1604
+#: ../src/gnome/gnc-plugin-page-register.c:1617
 #: ../src/gnome-utils/glade/preferences.glade.h:83
 #: ../intl-scm/guile-strings.c:102 ../intl-scm/guile-strings.c:390
 #: ../intl-scm/guile-strings.c:1608 ../intl-scm/guile-strings.c:3078
@@ -7479,42 +7481,42 @@ msgid "Register"
 msgstr "Kontobuch"
 
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1606
+#: ../src/gnome/gnc-plugin-page-register.c:1619
 #: ../intl-scm/guile-strings.c:3000
 msgid "Register Report"
 msgstr "Bericht zum Kontobuch"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1622
+#: ../src/gnome/gnc-plugin-page-register.c:1635
 msgid "and subaccounts"
 msgstr "und Unterkonten"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1886
+#: ../src/gnome/gnc-plugin-page-register.c:1899
 msgid "This transaction has already been voided."
 msgstr "Diese Buchung ist bereits ungültig."
 
-#: ../src/gnome/gnc-plugin-page-register.c:1890
+#: ../src/gnome/gnc-plugin-page-register.c:1903
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Sie können eine Buchung mit abgeglichenen oder bestätigten Buchungsteilen "
 "nicht ungültig machen."
 
-#: ../src/gnome/gnc-plugin-page-register.c:1928
+#: ../src/gnome/gnc-plugin-page-register.c:1941
 msgid "This transaction is not voided."
 msgstr "Diese Buchung ist nicht ungültig gemacht."
 
-#: ../src/gnome/gnc-plugin-page-register.c:1964
+#: ../src/gnome/gnc-plugin-page-register.c:1977
 #: ../src/gnome/gnc-split-reg.c:916
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
 #. Translations: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2021
+#: ../src/gnome/gnc-plugin-page-register.c:2034
 #, c-format
 msgid "Sort %s by..."
 msgstr "%s sortieren nach..."
 
 #. Translators: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2073
+#: ../src/gnome/gnc-plugin-page-register.c:2086
 #: ../src/gnome-utils/gnc-tree-view-account.c:1667
 #, c-format
 msgid "Filter %s by..."
@@ -7630,35 +7632,35 @@ msgstr ""
 "Beachten Sie, daß Sie einen Buchungssatz mit abgeglichenen Buchungen löschen "
 "würden. Dies bedeutet, daß ihr abgeglichener Saldo verändert wird."
 
-#: ../src/gnome/gnc-split-reg.c:1835
+#: ../src/gnome/gnc-split-reg.c:1813
 msgid "Present:"
 msgstr "Aktueller Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1836
+#: ../src/gnome/gnc-split-reg.c:1814
 msgid "Future:"
 msgstr "Zukünftiger Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1837
+#: ../src/gnome/gnc-split-reg.c:1815
 msgid "Cleared:"
 msgstr "Bestätigt:"
 
-#: ../src/gnome/gnc-split-reg.c:1838
+#: ../src/gnome/gnc-split-reg.c:1816
 msgid "Reconciled:"
 msgstr "Abgeglichen:"
 
-#: ../src/gnome/gnc-split-reg.c:1839
+#: ../src/gnome/gnc-split-reg.c:1817
 msgid "Projected Minimum:"
 msgstr "Voraussichtliches Minimum:"
 
-#: ../src/gnome/gnc-split-reg.c:1843
+#: ../src/gnome/gnc-split-reg.c:1821
 msgid "Shares:"
 msgstr "Anteile:"
 
-#: ../src/gnome/gnc-split-reg.c:1844
+#: ../src/gnome/gnc-split-reg.c:1822
 msgid "Current Value:"
 msgstr "Aktueller Wert:"
 
-#: ../src/gnome/gnc-split-reg.c:1950
+#: ../src/gnome/gnc-split-reg.c:1928
 msgid ""
 "This account may not be edited.  If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
@@ -7668,7 +7670,7 @@ msgstr ""
 "Konto bearbeiten möchten, öffnen Sie bitte das Dialogfenster \"Konto "
 "Eigenschaften\" und deaktivieren Sie die Option \"Platzhalter-Konto\"."
 
-#: ../src/gnome/gnc-split-reg.c:1957
+#: ../src/gnome/gnc-split-reg.c:1935
 msgid ""
 "One of the sub-accounts selected may not be edited.  If you want to edit "
 "transactions in this register, please open the sub-account options and turn "
@@ -7695,7 +7697,7 @@ msgstr "Posten im Konto %s"
 
 #: ../src/gnome/reconcile-list.c:210
 #: ../src/register/ledger-core/split-register-layout.c:555
-#: ../src/register/ledger-core/split-register-model.c:163
+#: ../src/register/ledger-core/split-register-model.c:155
 msgid "Reconciled:R"
 msgstr "Reconciled:J"
 
@@ -9121,19 +9123,16 @@ msgstr "Bilddatei auswählen."
 msgid "Select pixmap"
 msgstr "Bild auswählen"
 
-#: ../src/gnome-utils/dialog-preferences.c:135
-msgid "Salary"
-msgstr ""
-
-#. src/business/business-reports/fancy-invoice.scm
-#. src/business/business-reports/easy-invoice.scm
-#. src/business/business-reports/invoice.scm
-#: ../src/gnome-utils/dialog-preferences.c:135
-#: ../intl-scm/guile-strings.c:3622 ../intl-scm/guile-strings.c:3668
-#: ../intl-scm/guile-strings.c:3930 ../intl-scm/guile-strings.c:3976
-#: ../intl-scm/guile-strings.c:4174 ../intl-scm/guile-strings.c:4220
-msgid "Taxable"
-msgstr "Steuerwirksam"
+#. Translators: Both %s will be the account separator character; the
+#. resulting string is a demonstration how the account separator
+#. character will look like. You can replace these three account
+#. names with other account names that are more suitable for your
+#. language - just keep in mind to have exactly two %s in your
+#. translation.
+#: ../src/gnome-utils/dialog-preferences.c:140
+#, c-format
+msgid "Income%sSalary%sTaxable"
+msgstr "Erträge%sEinkommen%szu versteuern"
 
 #: ../src/gnome-utils/dialog-transfer.c:448
 msgid "Show the income and expense accounts"
@@ -11498,8 +11497,8 @@ msgstr "Zeitzone"
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/invoice.scm
 #: ../src/gnome-utils/gnc-tree-view-price.c:445
-#: ../src/register/ledger-core/split-register.c:2103
-#: ../src/register/ledger-core/split-register-model.c:236
+#: ../src/register/ledger-core/split-register.c:2098
+#: ../src/register/ledger-core/split-register-model.c:228
 #: ../intl-scm/guile-strings.c:1466 ../intl-scm/guile-strings.c:1540
 #: ../intl-scm/guile-strings.c:1628 ../intl-scm/guile-strings.c:1846
 #: ../intl-scm/guile-strings.c:2116 ../intl-scm/guile-strings.c:2460
@@ -11510,8 +11509,7 @@ msgstr "Zeitzone"
 msgid "Price"
 msgstr "Preis"
 
-#. Ask the user what to do with the output
-#: ../src/gnome-utils/print-session.c:46
+#: ../src/gnome-utils/print-session.c:47
 msgid "Print GnuCash Document"
 msgstr "GnuCash Drucken"
 
@@ -11530,19 +11528,25 @@ msgstr "Anzahl Dateien in der \"Zuletzt geöffnet\"-Chronik"
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:4
 msgid "This field contains the full path of the most recently opened file."
-msgstr "Dieses Feld enthält die Datei mit Pfadangabe, die zuletzt geöffnet war."
+msgstr ""
+"Dieses Feld enthält die Datei mit Pfadangabe, die zuletzt geöffnet war."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:5
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr "Dieses Feld enthält die Datei mit Pfadangabe, die als vorletztes geöffnet war."
+msgstr ""
+"Dieses Feld enthält die Datei mit Pfadangabe, die als vorletztes geöffnet "
+"war."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
 msgid ""
 "This setting contains the number of files to keep in the Recently Opened "
 "Files menu. This value may be set to zero to disable the file history. This "
 "number has a maximum value of 10."
-msgstr "Dieses Feld enthält die Anzahl Dateien, die für das Zuletzt-Geöffnet-Menü gespeichert werden sollen. Ein Wert von Null bedeutet, dieses Menü zu deaktivieren. Dieser Wert kann maximal 10 betragen."
+msgstr ""
+"Dieses Feld enthält die Anzahl Dateien, die für das Zuletzt-Geöffnet-Menü "
+"gespeichert werden sollen. Ein Wert von Null bedeutet, dieses Menü zu "
+"deaktivieren. Dieser Wert kann maximal 10 betragen."
 
 #: ../src/gnome-utils/window-main-summarybar.c:316
 #, c-format
@@ -12852,13 +12856,19 @@ msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
-msgstr "Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. Wenn nicht aktiviert, muß die PIN bei jeder einzelnen Aktion von HBCI/AqBanking eingegeben werden und wird nicht im Speicher gehalten."
+msgstr ""
+"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
+"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
+"Wenn nicht aktiviert, muß die PIN bei jeder einzelnen Aktion von HBCI/"
+"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
-msgstr "Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
+msgstr ""
+"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
+"AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
 msgid "Remember the PIN in memory"
@@ -13071,35 +13081,35 @@ msgstr "Aktienkonto für Aktie \"%s\""
 msgid "Income account for security \"%s\""
 msgstr "Einnahmenkonto für Aktie \"%s\""
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:551
+#: ../src/import-export/ofx/gnc-ofx-import.c:570
 msgid "Unknown OFX checking account"
 msgstr "Unbekanntes OFX Girokonto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:555
+#: ../src/import-export/ofx/gnc-ofx-import.c:574
 msgid "Unknown OFX savings account"
 msgstr "Unbekanntes OFX Sparkonto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:559
+#: ../src/import-export/ofx/gnc-ofx-import.c:578
 msgid "Unknown OFX money market account"
 msgstr "Unbekannter OFX Fondskonto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:563
+#: ../src/import-export/ofx/gnc-ofx-import.c:582
 msgid "Unknown OFX credit line account"
 msgstr "Unbekanntes OFX Kreditlinien-Konto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:567
+#: ../src/import-export/ofx/gnc-ofx-import.c:586
 msgid "Unknown OFX CMA account"
 msgstr "Unbekannter OFX CMA Konto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:571
+#: ../src/import-export/ofx/gnc-ofx-import.c:590
 msgid "Unknown OFX credit card account"
 msgstr "Unbekanntes OFX Kreditkartenkonto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:575
+#: ../src/import-export/ofx/gnc-ofx-import.c:594
 msgid "Unknown OFX investment account"
 msgstr "Unbekanntes OFX Investment-Konto"
 
-#: ../src/import-export/ofx/gnc-ofx-import.c:628
+#: ../src/import-export/ofx/gnc-ofx-import.c:647
 msgid "Select an OFX/QFX file to process"
 msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 
@@ -13752,7 +13762,10 @@ msgid ""
 "Enables bayesian matching when matching imported transaction against "
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
-msgstr "Aktiviert den Bayes-Algorithmus beim Zuordnen von importierten Buchungen. Andernfalls wird ein nicht so intelligenter regelbasierter Algorithmus verwendet."
+msgstr ""
+"Aktiviert den Bayes-Algorithmus beim Zuordnen von importierten Buchungen. "
+"Andernfalls wird ein nicht so intelligenter regelbasierter Algorithmus "
+"verwendet."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:8
 msgid "Maximum ATM fee amount in your area"
@@ -13794,7 +13807,12 @@ msgid ""
 "be cleared by default. A transaction whose best match's score is in the "
 "green zone (above or equal to this Clear threshold) will be cleared by "
 "default."
-msgstr "Minimal notwendige Bewertung, oberhalb derer eine importierte Buchung als Voreinstellung \"Abgleichen\" hat. Diese Zahl ist damit die Untergrenze für die \"grüne\" Bewertung. Eine importierte Buchung, die eine \"grüne\" Bewertung hat, wird als Voreinstellung abgeglichen, da sie offensichtlich sehr gut mit einer existierenden Buchung übereinstimmt."
+msgstr ""
+"Minimal notwendige Bewertung, oberhalb derer eine importierte Buchung als "
+"Voreinstellung \"Abgleichen\" hat. Diese Zahl ist damit die Untergrenze für "
+"die \"grüne\" Bewertung. Eine importierte Buchung, die eine \"grüne\" "
+"Bewertung hat, wird als Voreinstellung abgeglichen, da sie offensichtlich "
+"sehr gut mit einer existierenden Buchung übereinstimmt."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:15
 msgid ""
@@ -13839,11 +13857,11 @@ msgstr ""
 "Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. Möchten Sie "
 "das wirklich?"
 
-#: ../src/register/ledger-core/split-register.c:1745
+#: ../src/register/ledger-core/split-register.c:1740
 msgid "Recalculate Transaction"
 msgstr "Buchung neu berechnen"
 
-#: ../src/register/ledger-core/split-register.c:1746
+#: ../src/register/ledger-core/split-register.c:1741
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
@@ -13851,145 +13869,145 @@ msgstr ""
 "Die eingegebenen Werte für diese Buchung passen nicht zueinander. Welcher "
 "Wert soll neu berechnet werden?"
 
-#: ../src/register/ledger-core/split-register.c:1753
-#: ../src/register/ledger-core/split-register.c:1755
+#: ../src/register/ledger-core/split-register.c:1748
+#: ../src/register/ledger-core/split-register.c:1750
 msgid "_Shares"
 msgstr "_Anteile"
 
-#: ../src/register/ledger-core/split-register.c:1753
-#: ../src/register/ledger-core/split-register.c:1760
-#: ../src/register/ledger-core/split-register.c:1767
+#: ../src/register/ledger-core/split-register.c:1748
+#: ../src/register/ledger-core/split-register.c:1755
+#: ../src/register/ledger-core/split-register.c:1762
 msgid "Changed"
 msgstr "Geändert"
 
-#: ../src/register/ledger-core/split-register.c:1767
-#: ../src/register/ledger-core/split-register.c:1769
+#: ../src/register/ledger-core/split-register.c:1762
+#: ../src/register/ledger-core/split-register.c:1764
 msgid "_Value"
 msgstr "_Wert"
 
-#: ../src/register/ledger-core/split-register.c:1778
+#: ../src/register/ledger-core/split-register.c:1773
 msgid "_Recalculate"
 msgstr "_Berechnen"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2031
+#: ../src/register/ledger-core/split-register.c:2026
 #: ../intl-scm/guile-strings.c:434
 msgid "Deposit"
 msgstr "Einzahlung"
 
-#: ../src/register/ledger-core/split-register.c:2032
+#: ../src/register/ledger-core/split-register.c:2027
 msgid "Withdraw"
 msgstr "Belastung"
 
-#: ../src/register/ledger-core/split-register.c:2033
+#: ../src/register/ledger-core/split-register.c:2028
 msgid "Check"
 msgstr "Scheck"
 
-#: ../src/register/ledger-core/split-register.c:2034
-#: ../src/register/ledger-core/split-register.c:2062
-#: ../src/register/ledger-core/split-register.c:2070
-#: ../src/register/ledger-core/split-register.c:2084
-#: ../src/register/ledger-core/split-register.c:2107
+#: ../src/register/ledger-core/split-register.c:2029
+#: ../src/register/ledger-core/split-register.c:2057
+#: ../src/register/ledger-core/split-register.c:2065
+#: ../src/register/ledger-core/split-register.c:2079
+#: ../src/register/ledger-core/split-register.c:2102
 msgid "Int"
 msgstr "Zins"
 
-#: ../src/register/ledger-core/split-register.c:2035
-#: ../src/register/ledger-core/split-register.c:2058
+#: ../src/register/ledger-core/split-register.c:2030
+#: ../src/register/ledger-core/split-register.c:2053
 msgid "ATM"
 msgstr "Geldautomat"
 
-#: ../src/register/ledger-core/split-register.c:2036
+#: ../src/register/ledger-core/split-register.c:2031
 msgid "Teller"
 msgstr "Bankschalter"
 
 #. Action: Point Of Sale
-#: ../src/register/ledger-core/split-register.c:2038
+#: ../src/register/ledger-core/split-register.c:2033
 msgid "POS"
 msgstr "Karten-Terminal"
 
-#: ../src/register/ledger-core/split-register.c:2039
+#: ../src/register/ledger-core/split-register.c:2034
 msgid "Phone"
 msgstr "Telefon"
 
-#: ../src/register/ledger-core/split-register.c:2040
-#: ../src/register/ledger-core/split-register.c:2063
+#: ../src/register/ledger-core/split-register.c:2035
+#: ../src/register/ledger-core/split-register.c:2058
 msgid "Online"
 msgstr "Online"
 
 #. Action: Automatic Deposit ?!?
-#: ../src/register/ledger-core/split-register.c:2042
+#: ../src/register/ledger-core/split-register.c:2037
 msgid "AutoDep"
 msgstr "Gutschrift"
 
-#: ../src/register/ledger-core/split-register.c:2043
+#: ../src/register/ledger-core/split-register.c:2038
 msgid "Wire"
 msgstr "Überweisung"
 
-#: ../src/register/ledger-core/split-register.c:2045
+#: ../src/register/ledger-core/split-register.c:2040
 msgid "Direct Debit"
 msgstr "Lastschrift"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2049
-#: ../src/register/ledger-core/split-register.c:2053
-#: ../src/register/ledger-core/split-register.c:2059
-#: ../src/register/ledger-core/split-register.c:2067
-#: ../src/register/ledger-core/split-register.c:2082
+#: ../src/register/ledger-core/split-register.c:2044
+#: ../src/register/ledger-core/split-register.c:2048
+#: ../src/register/ledger-core/split-register.c:2054
+#: ../src/register/ledger-core/split-register.c:2062
+#: ../src/register/ledger-core/split-register.c:2077
+#: ../src/register/ledger-core/split-register.c:2084
 #: ../src/register/ledger-core/split-register.c:2089
-#: ../src/register/ledger-core/split-register.c:2094
-#: ../src/register/ledger-core/split-register.c:2119
+#: ../src/register/ledger-core/split-register.c:2114
 #: ../intl-scm/guile-strings.c:444 ../intl-scm/guile-strings.c:446
 #: ../intl-scm/guile-strings.c:448
 msgid "Buy"
 msgstr "Kauf"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2050
-#: ../src/register/ledger-core/split-register.c:2054
-#: ../src/register/ledger-core/split-register.c:2064
-#: ../src/register/ledger-core/split-register.c:2068
-#: ../src/register/ledger-core/split-register.c:2083
+#: ../src/register/ledger-core/split-register.c:2045
+#: ../src/register/ledger-core/split-register.c:2049
+#: ../src/register/ledger-core/split-register.c:2059
+#: ../src/register/ledger-core/split-register.c:2063
+#: ../src/register/ledger-core/split-register.c:2078
+#: ../src/register/ledger-core/split-register.c:2085
 #: ../src/register/ledger-core/split-register.c:2090
-#: ../src/register/ledger-core/split-register.c:2095
-#: ../src/register/ledger-core/split-register.c:2120
+#: ../src/register/ledger-core/split-register.c:2115
 #: ../intl-scm/guile-strings.c:472 ../intl-scm/guile-strings.c:474
 #: ../intl-scm/guile-strings.c:476
 msgid "Sell"
 msgstr "Verkauf"
 
-#: ../src/register/ledger-core/split-register.c:2055
-#: ../src/register/ledger-core/split-register.c:2061
-#: ../src/register/ledger-core/split-register.c:2104
+#: ../src/register/ledger-core/split-register.c:2050
+#: ../src/register/ledger-core/split-register.c:2056
+#: ../src/register/ledger-core/split-register.c:2099
 msgid "Fee"
 msgstr "Gebühr"
 
 #. src/app-utils/prefs.scm
-#: ../src/register/ledger-core/split-register.c:2086
+#: ../src/register/ledger-core/split-register.c:2081
 #: ../intl-scm/guile-strings.c:480
 msgid "Rebate"
 msgstr "Rabatt"
 
 #. Action: Dividend
-#: ../src/register/ledger-core/split-register.c:2106
+#: ../src/register/ledger-core/split-register.c:2101
 msgid "Div"
 msgstr "Dividende"
 
 #. Action: Long Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2109
+#: ../src/register/ledger-core/split-register.c:2104
 msgid "LTCG"
 msgstr "Zinsen aus langfristigen Kapitalanlagen"
 
 #. Action: Short Term Capital Gains
-#: ../src/register/ledger-core/split-register.c:2111
+#: ../src/register/ledger-core/split-register.c:2106
 msgid "STCG"
 msgstr "Zinsen aus kurzfristigen Anlagen"
 
 #. Action: Distribution
-#: ../src/register/ledger-core/split-register.c:2114
+#: ../src/register/ledger-core/split-register.c:2109
 msgid "Dist"
 msgstr "Ausschüttung"
 
-#: ../src/register/ledger-core/split-register.c:2136
+#: ../src/register/ledger-core/split-register.c:2131
 msgid "-- Stock Split --"
 msgstr "-- Aktienteilung --"
 
@@ -14112,108 +14130,108 @@ msgstr "sample:No Particular Reason"
 msgid "sample:(x + 0.33 * y + (x+y) )"
 msgstr "Beispiel: (x + 0,33 * y + (x+y) )"
 
-#: ../src/register/ledger-core/split-register-model.c:129
+#: ../src/register/ledger-core/split-register-model.c:121
 msgid "Ref"
 msgstr "Ref"
 
-#: ../src/register/ledger-core/split-register-model.c:265
-#: ../src/register/ledger-core/split-register-model.c:289
+#: ../src/register/ledger-core/split-register-model.c:257
+#: ../src/register/ledger-core/split-register-model.c:281
 #, c-format
 msgid "Tot %s"
 msgstr "Gesamt %s"
 
-#: ../src/register/ledger-core/split-register-model.c:271
+#: ../src/register/ledger-core/split-register-model.c:263
 msgid "Tot Credit"
 msgstr "Gesamt Haben"
 
-#: ../src/register/ledger-core/split-register-model.c:295
+#: ../src/register/ledger-core/split-register-model.c:287
 msgid "Tot Debit"
 msgstr "Gesamt Soll"
 
-#: ../src/register/ledger-core/split-register-model.c:304
+#: ../src/register/ledger-core/split-register-model.c:296
 msgid "Tot Shares"
 msgstr "Anzahl Aktien gesamt"
 
-#: ../src/register/ledger-core/split-register-model.c:325
+#: ../src/register/ledger-core/split-register-model.c:317
 msgid "Debit Formula"
 msgstr "Haben-Formel"
 
-#: ../src/register/ledger-core/split-register-model.c:332
+#: ../src/register/ledger-core/split-register-model.c:324
 msgid "Credit Formula"
 msgstr "Soll-Formel"
 
 #. This seems to be the one that initially gets used, the InactiveDateCell
 #. is set to, and subsequently displayed.
-#: ../src/register/ledger-core/split-register-model.c:818
+#: ../src/register/ledger-core/split-register-model.c:810
 msgid "Scheduled"
 msgstr "Terminiert"
 
-#: ../src/register/ledger-core/split-register-model.c:849
+#: ../src/register/ledger-core/split-register-model.c:841
 msgid "Enter the transaction reference, such as the invoice or check number"
 msgstr ""
 "Geben Sie die Buchungsreferenz ein, z.B. die Rechnungs- oder Scheck-Nummer"
 
-#: ../src/register/ledger-core/split-register-model.c:853
+#: ../src/register/ledger-core/split-register-model.c:845
 msgid "Enter the transaction number, such as the check number"
 msgstr "Geben Sie die Nummer des Buchungssatzes ein, z.B. die Scheck-Nummer."
 
-#: ../src/register/ledger-core/split-register-model.c:887
+#: ../src/register/ledger-core/split-register-model.c:879
 msgid "Enter the name of the Customer"
 msgstr "Bitte geben Sie einen Namen für den Kunden ein"
 
-#: ../src/register/ledger-core/split-register-model.c:890
+#: ../src/register/ledger-core/split-register-model.c:882
 msgid "Enter the name of the Vendor"
 msgstr "Geben Sie den Namen des Zulieferers ein"
 
-#: ../src/register/ledger-core/split-register-model.c:893
+#: ../src/register/ledger-core/split-register-model.c:885
 msgid "Enter a description of the transaction"
 msgstr "Geben Sie eine Beschreibung des Buchungssatzes ein"
 
-#: ../src/register/ledger-core/split-register-model.c:923
+#: ../src/register/ledger-core/split-register-model.c:915
 msgid "Enter notes for the transaction"
 msgstr "Geben Sie Bemerkungen zum Buchungssatz ein"
 
-#: ../src/register/ledger-core/split-register-model.c:953
+#: ../src/register/ledger-core/split-register-model.c:945
 msgid "Reason the transaction was voided"
 msgstr "Grund für Buchungsstornierung"
 
-#: ../src/register/ledger-core/split-register-model.c:1046
+#: ../src/register/ledger-core/split-register-model.c:1038
 msgid "Enter the type of transaction, or choose one from the list"
 msgstr "Geben Sie den Buchungstyp ein, oder wählen Sie einen aus der Liste"
 
 # FIXME: DON'T use the noun 'description' here.
-#: ../src/register/ledger-core/split-register-model.c:1074
+#: ../src/register/ledger-core/split-register-model.c:1066
 msgid "Enter a description of the split"
 msgstr "Geben Sie einen Buchungstext der Buchung ein"
 
-#: ../src/register/ledger-core/split-register-model.c:1149
+#: ../src/register/ledger-core/split-register-model.c:1141
 msgid "Enter the effective share price"
 msgstr "Geben Sie den effektiven Aktienpreis ein"
 
-#: ../src/register/ledger-core/split-register-model.c:1185
+#: ../src/register/ledger-core/split-register-model.c:1177
 msgid "Enter the number of shares bought or sold"
 msgstr "Geben Sie die verkaufte Anzahl von Aktien ein"
 
-#: ../src/register/ledger-core/split-register-model.c:1236
-#: ../src/register/ledger-core/split-register-model.c:1302
+#: ../src/register/ledger-core/split-register-model.c:1228
+#: ../src/register/ledger-core/split-register-model.c:1294
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Wählen Sie das Konto aus, von dem Sie buchen wollen"
 
-#: ../src/register/ledger-core/split-register-model.c:1312
+#: ../src/register/ledger-core/split-register-model.c:1304
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Dieser Buchungssatz hat mehrere Buchungsteile. Klicken Sie \"Vollständig\", "
 "um alle sehen zu können."
 
-#: ../src/register/ledger-core/split-register-model.c:1315
+#: ../src/register/ledger-core/split-register-model.c:1307
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Dieser Buchungssatz ist eine Aktienteilung. Klicken Sie \"Vollständig\", um "
 "Einzelheiten sehen zu können."
 
-#: ../src/register/ledger-core/split-register-model.c:1683
+#: ../src/register/ledger-core/split-register-model.c:1675
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -14226,11 +14244,11 @@ msgstr ""
 "\n"
 "\"%s\""
 
-#: ../src/register/ledger-core/split-register-model.c:1735
+#: ../src/register/ledger-core/split-register-model.c:1727
 msgid "Change reconciled split?"
 msgstr "Abgeglichenen Buchungsteil ändern?"
 
-#: ../src/register/ledger-core/split-register-model.c:1736
+#: ../src/register/ledger-core/split-register-model.c:1728
 msgid ""
 "You are about to change a reconciled split.  Doing so might make future "
 "reconciliation difficult!  Continue with this change?"
@@ -14238,16 +14256,16 @@ msgstr ""
 "Sie wollen einen abgeglichenen Buchungsteil verändern. Dies kann das nächste "
 "Abgleichen erschweren. Trotzdem fortsetzen?"
 
-#: ../src/register/ledger-core/split-register-model.c:1749
+#: ../src/register/ledger-core/split-register-model.c:1741
 msgid "Change _Split"
 msgstr "Buchungs_teil ändern"
 
-#: ../src/register/ledger-core/split-register-model.c:1844
+#: ../src/register/ledger-core/split-register-model.c:1836
 msgid "Enter debit formula for real transaction"
 msgstr ""
 "Geben Sie die Formel zur Haben-Berechnung der tatsächlichen Buchung ein"
 
-#: ../src/register/ledger-core/split-register-model.c:1878
+#: ../src/register/ledger-core/split-register-model.c:1870
 msgid "Enter credit formula for real transaction"
 msgstr "Geben Sie die Formel zur Soll-Berechnung der tatsächlichen Buchung ein"
 
@@ -19662,27 +19680,27 @@ msgstr "Die Anschrift Ihres Geschäfts"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3558
 msgid "The contact person to print on invoices"
-msgstr ""
+msgstr "Die/der Ansprechpartner/in, die auf Ihren Rechnungen angegeben werden soll"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3560
 msgid "The phone number of your business"
-msgstr ""
+msgstr "Die Telefonnummer Ihrer Firma"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3562
 msgid "The fax number of your business"
-msgstr ""
+msgstr "Die Faxnummer Ihrer Firma"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3564
 msgid "The email address of your business"
-msgstr ""
+msgstr "Die E-Mail-Adresse Ihrer Firma"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3566
 msgid "The URL address of your website"
-msgstr ""
+msgstr "Die Adresse (URL) Ihrer Webseite"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3568
@@ -19735,27 +19753,27 @@ msgstr "Firmennummer"
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3590
 msgid "Company Phone Number"
-msgstr ""
+msgstr "Firmentelefonnummer"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3592
 msgid "Company Fax Number"
-msgstr ""
+msgstr "Firmenfaxnummer"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3594
 msgid "Company Website URL"
-msgstr ""
+msgstr "Firmenwebseite URL"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3596
 msgid "Company Email Address"
-msgstr ""
+msgstr "Firmen-E-Mail-Adresse"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3598
 msgid "Company Contact Person"
-msgstr ""
+msgstr "Firmen Ansprechpartner"
 
 #. src/business/business-reports/payables.scm
 #: ../intl-scm/guile-strings.c:3600
@@ -19787,6 +19805,15 @@ msgstr "Rechnungsnummer"
 #: ../intl-scm/guile-strings.c:4166
 msgid "Charge Type"
 msgstr "Einheit"
+
+#. src/business/business-reports/fancy-invoice.scm
+#. src/business/business-reports/easy-invoice.scm
+#. src/business/business-reports/invoice.scm
+#: ../intl-scm/guile-strings.c:3622 ../intl-scm/guile-strings.c:3668
+#: ../intl-scm/guile-strings.c:3930 ../intl-scm/guile-strings.c:3976
+#: ../intl-scm/guile-strings.c:4174 ../intl-scm/guile-strings.c:4220
+msgid "Taxable"
+msgstr "Steuerwirksam"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -19960,12 +19987,12 @@ msgstr "Die Zahlungen in dieser Rechnung anzeigen?"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3728
 msgid "Minimum # of entries"
-msgstr ""
+msgstr "Mindestanzahl Einträge"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3730
 msgid "The minimum number of invoice entries to display. (-1)"
-msgstr ""
+msgstr "Die Mindestanzahl Einträge einer Rechnung, die angezeigt werden sollen. (-1)"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -19984,27 +20011,27 @@ msgstr "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3740
 msgid "Payable to"
-msgstr ""
+msgstr "Zahlungsempfänger"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3742
 msgid "Display the Payable to: information"
-msgstr ""
+msgstr "Die Zahlungsempfänger-Information anzeigen"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3746
 msgid "Payable to string"
-msgstr ""
+msgstr "Angabe Zahlungsempfänger"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3748
 msgid "The phrase for specifying to whom payments should be made"
-msgstr ""
+msgstr "Die Angabe des Zahlungsempfängers, wie sie auf die Rechnung gedruckt werden soll"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3750
 msgid "Make all cheques Payable to"
-msgstr ""
+msgstr "Alle Schecks sollen auf folgenden Zahlungsempfänger ausgestellt werden"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3754
