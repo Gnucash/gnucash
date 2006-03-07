@@ -1,3 +1,9 @@
+2006-03-08  Andreas Köhler  <andi5.py@gmx.net>
+
+	* configure.in: 
+	* lib/libqof/qof/guid.c: Add configure test for sys/times.h and
+	  corrected guid.c to check for that.
+
 2006-03-07  Christian Stimming  <stimming@tuhh.de>
 
 	* lib/libqof/qof/guid.c: Make seed collection parts that depend on

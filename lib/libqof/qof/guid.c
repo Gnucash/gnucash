@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#ifdef HAVE_TIMES
+#ifdef HAVE_SYS_TIMES_H
 # include <sys/times.h>
 #endif
 #include <time.h>
@@ -288,8 +288,8 @@ init_from_time(void)
 {
   size_t total;
   time_t t_time;
+#ifdef HAVE_SYS_TIMES_H
   clock_t clocks;
-#ifdef HAVE_TIMES
   struct tms tms_buf;
 #endif
 
@@ -299,7 +299,7 @@ init_from_time(void)
   md5_process_bytes(&t_time, sizeof(t_time), &guid_context);
   total += sizeof(t_time);
 
-#ifdef HAVE_TIMES
+#ifdef HAVE_SYS_TIMES_H
   clocks = times(&tms_buf);
   md5_process_bytes(&clocks, sizeof(clocks), &guid_context);
   md5_process_bytes(&tms_buf, sizeof(tms_buf), &guid_context);
