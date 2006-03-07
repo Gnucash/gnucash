@@ -50,6 +50,7 @@ EXTRA_DIST = \
   macros/g-wrap.m4 \
   macros/gnome-guile-checks.m4 \
   macros/legacy_macros.m4 \
+  po/gnucash.pot \
   po/POTFILES.in \
   po/POTFILES.skip \
   po/README \

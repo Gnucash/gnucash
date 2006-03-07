@@ -1,3 +1,8 @@
+2006-03-07  Christian Stimming  <stimming@tuhh.de>
+
+	* Makefile.am: Add po/gnucash.pot to EXTRA_DIST because the
+	translation template is needed in the tarball for translators.
+
 2006-03-07  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/gnc-plugin-page-register.c: Disable sensitivity of
