@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <glib.h>
-#include <dlfcn.h>
 #include "gnc-engine.h"
 #include "qof.h"
 #include "cashobjects.h"

@@ -27,6 +27,7 @@
 #define DIALOG_UTILS_H
 
 #include <glade/glade.h>
+#include <gtk/gtk.h>
 #include "qof.h"
 
 /* option button callback function */

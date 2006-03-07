@@ -30,7 +30,6 @@
 #include <regex.h>
 #include <glib.h>
 #include <gmodule.h>
-#include <dlfcn.h>
 #include <errno.h>
 #include "qof.h"
 #include "qofbackend-p.h"

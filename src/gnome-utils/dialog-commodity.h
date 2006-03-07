@@ -33,6 +33,7 @@
 #ifndef GNC_DIALOG_COMMODITY_H
 #define GNC_DIALOG_COMMODITY_H
 
+#include <gtk/gtk.h>
 #include "gnc-commodity.h"
 
 /** The dialog commodity types are used to determine what commodity
