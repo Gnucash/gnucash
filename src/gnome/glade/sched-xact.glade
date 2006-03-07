@@ -8526,6 +8526,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
       <child>
 	<widget class="GtkCheckButton" id="gconf/dialogs/scheduled_trans/transaction_editor/notify">
 	  <property name="visible">True</property>
+	  <property name="sensitive">False</property>
 	  <property name="tooltip" translatable="yes">Set the 'notify' flag on newly created scheduled transactions.</property>
 	  <property name="can_focus">True</property>
 	  <property name="label" translatable="yes">_Notify before transactions are created </property>
