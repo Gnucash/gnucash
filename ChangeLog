@@ -1,3 +1,8 @@
+2006-03-07  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/libgsf-1.12.3/tests/test-msole1.c:
+	  properly ignore the return value of fgets().  Fixes an FC4 error.
+
 2006-03-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Change initial sensitivity of
