@@ -138,6 +138,33 @@ _find_split_with_parent_txn(gconstpointer a, gconstpointer b)
   return xaccSplitGetParent(split) == txn ? 0 : 1;
 }
 
+static void add_quickfill_completions(TableLayout *layout, Transaction *trans, 
+                                      gboolean has_last_num)
+{
+    Split *s;
+    int i = 0;      
+
+    gnc_quickfill_cell_add_completion(
+        (QuickFillCell *) gnc_table_layout_get_cell(layout, DESC_CELL),
+         xaccTransGetDescription(trans));
+    
+    gnc_quickfill_cell_add_completion(
+        (QuickFillCell *) gnc_table_layout_get_cell(layout, NOTES_CELL),
+        xaccTransGetNotes(trans));
+
+    if (!has_last_num)
+        gnc_num_cell_set_last_num(
+            (NumCell *) gnc_table_layout_get_cell(layout, NUM_CELL),
+            xaccTransGetNum(trans));
+    
+    while ((s = xaccTransGetSplit(trans, i)) != NULL) {
+        gnc_quickfill_cell_add_completion(
+            (QuickFillCell *) gnc_table_layout_get_cell(layout, MEMO_CELL), 
+            xaccSplitGetMemo(s));
+        i++;
+    }
+}
+
 void
 gnc_split_register_load (SplitRegister *reg, GList * slist,
                          Account *default_account)
@@ -390,36 +417,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     /* If this is the first load of the register,
      * fill up the quickfill cells. */
     if (info->first_pass)
-    {
-      Split *s;
-      int i;      
-
-      gnc_quickfill_cell_add_completion
-        ((QuickFillCell *)
-         gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
-         xaccTransGetDescription (trans));
-
-      gnc_quickfill_cell_add_completion
-        ((QuickFillCell *)
-         gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
-         xaccTransGetNotes (trans));
-
-      if (!has_last_num)
-        gnc_num_cell_set_last_num
-          ((NumCell *)
-           gnc_table_layout_get_cell (reg->table->layout, NUM_CELL),
-           xaccTransGetNum (trans));
-
-      i = 0;
-      while ((s = xaccTransGetSplit(trans, i)) != NULL) {
-          QuickFillCell *cell;
-
-          cell = (QuickFillCell *)
-              gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL);
-          gnc_quickfill_cell_add_completion (cell, xaccSplitGetMemo (s));
-          i++;
-      }
-    }
+        add_quickfill_completions(reg->table->layout, trans, has_last_num);
 
     if (trans == find_trans)
       new_trans_row = vcell_loc.virt_row;
