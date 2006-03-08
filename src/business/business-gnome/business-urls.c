@@ -26,7 +26,6 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
-#include <strings.h>  /* index() on Solaris */
 
 #include "gnc-html.h"
 #include "gnc-ui-util.h"
@@ -183,7 +182,7 @@ ownerreportCB (const char *location, const char *label,
 
   /* href="...:owner=<owner-type>:guid=<guid>[&acct=<guid>]" */
   
-  acctptr = index (location, '&');
+  acctptr = strchr (location, '&');
   if (acctptr)
     acctptr++;
 

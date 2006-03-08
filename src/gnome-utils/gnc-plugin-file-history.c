@@ -380,7 +380,7 @@ gnc_plugin_history_list_changed (GConfClient *client,
 	window = GNC_MAIN_WINDOW(user_data);
 
 	fullkey = gconf_entry_get_key(entry);
-	key = rindex(fullkey, '/') + 1;
+	key = strrchr(fullkey, '/') + 1;
 	if (strcmp(key, HISTORY_STRING_MAXFILES) == 0) {
 	  gnc_history_update_menus (window);
 	  LEAVE("updated maxfiles");

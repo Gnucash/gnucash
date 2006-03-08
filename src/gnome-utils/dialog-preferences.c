@@ -603,7 +603,7 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
 
   /* Copy the widget name and split into gconf key and button value parts */
   key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = rindex(key, '/');
+  button_name = strrchr(key, '/');
   *button_name++ = '\0';
 
   DEBUG("Radio button group %s now set to %s", key, button_name);
@@ -655,7 +655,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 
   /* Copy the widget name and split into gconf key and button name parts */
   key = g_strdup(gtk_widget_get_name(GTK_WIDGET(button)) + PREFIX_LEN);
-  button_name = rindex(key, '/');
+  button_name = strrchr(key, '/');
   *button_name++ = '\0';
 
   /* Get the current value. */

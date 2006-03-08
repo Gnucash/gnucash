@@ -87,14 +87,14 @@ gnc_enum_from_nick(GType type,
 
   /* Flip '-' and '_' and try again */
   alt_name = g_strdup(name);
-  if ((ptr = index(alt_name, '-')) != NULL) {
+  if ((ptr = strchr(alt_name, '-')) != NULL) {
     do {
       *ptr++ = '_';
-    } while ((ptr = index(ptr, '-')) != NULL);
-  } else  if ((ptr = index(alt_name, '_')) != NULL) {
+    } while ((ptr = strchr(ptr, '-')) != NULL);
+  } else  if ((ptr = strchr(alt_name, '_')) != NULL) {
     do {
       *ptr++ = '-';
-    } while ((ptr = index(ptr, '_')) != NULL);
+    } while ((ptr = strchr(ptr, '_')) != NULL);
   } else {
     g_free(alt_name);
     return default_value;
@@ -144,7 +144,7 @@ gnc_gconf_general_changed (GConfClient *client,
   g_once(&gcb_init_once, gcb_init, NULL);
 
   key = gconf_entry_get_key(entry);
-  key_tail = rindex(key, '/');
+  key_tail = strrchr(key, '/');
   if (key_tail != NULL) {
     key_tail++;
   }

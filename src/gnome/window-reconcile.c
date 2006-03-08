@@ -1189,7 +1189,7 @@ gnc_toolbar_change_cb (GConfClient *client,
   if (!key || !value)
     return;
 
-  key_tail = rindex(key, '/');
+  key_tail = strrchr(key, '/');
   if (key_tail != NULL)
     key_tail++;
   if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {

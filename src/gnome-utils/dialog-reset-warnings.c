@@ -226,7 +226,7 @@ gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
   GConfSchema *schema = NULL;
 
   ENTER(" ");
-  name = rindex(entry->key, '/') + 1;
+  name = strrchr(entry->key, '/') + 1;
   schema_name = gconf_entry_get_schema_name(entry);
   if (schema_name)
     schema = gnc_gconf_get_schema(NULL, schema_name, NULL);

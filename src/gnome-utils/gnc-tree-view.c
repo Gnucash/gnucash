@@ -1062,7 +1062,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
   }
 
   DEBUG("Key %s, value %p", key, value);
-  local = rindex(key, '/')+1;
+  local = strrchr(key, '/')+1;
   if (strcmp(local, GCONF_KEY_SORT_COLUMN) == 0) {
     gnc_tree_view_set_sort_column(view, gconf_value_get_string(value));
   } else if (strcmp(local, GCONF_KEY_SORT_ORDER) == 0) {
@@ -1074,7 +1074,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
      * into column name and key type */
     known = FALSE;
     column_name = strdup(local);
-    type_name = rindex(column_name, '_');
+    type_name = strrchr(column_name, '_');
     *type_name++ = '\0';
 
     if (strcmp(type_name, GCONF_KEY_VISIBLE) == 0) {

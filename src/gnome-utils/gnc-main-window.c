@@ -869,7 +869,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   filename = qof_session_get_file_path(session);
   if (filename == NULL)
     filename = _("<unknown>");
-  if ((tmp = rindex(filename, '/')) != NULL)
+  if ((tmp = strrchr(filename, '/')) != NULL)
     filename = tmp + 1;
 
   /*
@@ -1059,7 +1059,7 @@ gnc_main_window_generate_title (GncMainWindow *window)
     filename = _("<no file>");
   else {
     /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-    ptr = rindex(filename, '/');
+    ptr = strrchr(filename, '/');
     if (ptr != NULL)
       filename = ptr+1;
   }
@@ -2359,7 +2359,7 @@ gnc_main_window_gconf_changed (GConfClient *client,
 	if (!key || !value)
 	  return;
 
-	key_tail = rindex(key, '/');
+	key_tail = strrchr(key, '/');
 	if (key_tail != NULL)
 	  key_tail++;
 	if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {

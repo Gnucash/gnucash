@@ -181,7 +181,7 @@ gnc_find_state_file (const gchar *url,
   gint i;
 
   ENTER("url %s, guid %s", url, guid);
-  tmp = index(url, ':');
+  tmp = strchr(url, ':');
   if (tmp)
     url = tmp + 1;
 

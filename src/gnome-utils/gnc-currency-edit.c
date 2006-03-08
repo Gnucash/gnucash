@@ -59,7 +59,6 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
-#include <strings.h>  /* for index() on Solaris */
 #include <ctype.h>
 #include <stdio.h>
 
@@ -294,7 +293,7 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 		mnemonic = g_strdup(fullname);
 		g_value_unset(&value);
 
-		name = index(mnemonic, ' ');
+		name = strchr(mnemonic, ' ');
 		if (name != NULL)
 			*name = '\0';
 		commodity = gnc_commodity_table_lookup (gnc_get_current_commodities (),

@@ -189,13 +189,13 @@ gnc_extract_directory (char **dirname, const char *filename)
     free(*dirname);
 
   /* Parse out the directory. */
-  if ((filename == NULL) || (rindex(filename, '/') == NULL)) {
+  if ((filename == NULL) || (strrchr(filename, '/') == NULL)) {
     *dirname = NULL;
     return;
   }
 
   *dirname = g_strdup(filename);
-  tmp = rindex(*dirname, '/');
+  tmp = strrchr(*dirname, '/');
   *(tmp+1) = '\0';
 }
 

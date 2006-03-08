@@ -1,3 +1,17 @@
+2006-03-08   Christian Stimming <stimming@tuhh.de>
+
+	* src/core-utils/gnc-gconf-utils.c,
+	src/business/business-gnome/business-urls.c
+	src/gnome-utils/dialog-preferences.c
+	src/gnome-utils/gnc-currency-edit.c
+	src/gnome-utils/gnc-plugin-file-history.c
+	src/gnome-utils/gnc-main-window.c
+	src/gnome-utils/dialog-reset-warnings.c
+	src/gnome-utils/gnc-tree-view.c src/gnome/window-reconcile.c
+	src/app-utils/file-utils.c src/app-utils/gnc-ui-util.c : Replace
+	index(3) by strchr(3) and rindex(3) by strrchr(3) because the
+	latter is more widely available.
+
 2006-03-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-splash.c: Use a font size of "smaller" when
