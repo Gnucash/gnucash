@@ -624,6 +624,7 @@ gnc_post_file_open (const char * filename)
   current_session = gnc_get_current_session();
   qof_session_call_close_hooks(current_session);
   gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
+  gnc_close_gui_component_by_session (current_session);
   gnc_clear_current_session();
 
   /* load the accounts from the users datafile */
@@ -1111,7 +1112,7 @@ gnc_file_quit (void)
 
   qof_session_call_close_hooks(session);
   gnc_hook_run(HOOK_BOOK_CLOSED, session);
-  
+  gnc_close_gui_component_by_session (session);
   gnc_clear_current_session();
 
   gnc_get_current_session ();
