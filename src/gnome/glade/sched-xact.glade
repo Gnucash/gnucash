@@ -5766,7 +5766,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label847862">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click &quot;Next&quot; to create them.</property>
+		  <property name="label" translatable="yes">The listed Scheduled Transactions are to-be created soon.  Select any which you would like to create now, and click &quot;Forward&quot; to create them.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
