@@ -561,29 +561,7 @@ gnc_price_list_equal(GList *prices1, GList *prices2)
    description of GNCPrice lists).  The top-level key is the commodity
    you want the prices for, and the second level key is the commodity
    that the value is expressed in terms of.
-
  */
-
-static guint
-commodity_hash (gconstpointer key)
-{
-  gnc_commodity * com = (gnc_commodity *) key;
-
-  g_return_val_if_fail (key, 0);
-
-  return g_str_hash (gnc_commodity_get_unique_name (com));
-}
-
-static gint
-commodity_equal (gconstpointer a, gconstpointer b)
-{
-  gnc_commodity * ca = (gnc_commodity *) a;
-  gnc_commodity * cb = (gnc_commodity *) b;
-
-  g_return_val_if_fail (a && b, FALSE);
-
-  return gnc_commodity_equiv (ca, cb);
-}
 
 static GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
@@ -612,7 +590,7 @@ gnc_pricedb_create(QofBook * book)
      provide one here. */
   qof_collection_set_data (col, result);
 
-  result->commodity_hash = g_hash_table_new(commodity_hash, commodity_equal);
+  result->commodity_hash = g_hash_table_new(NULL, NULL);
   g_return_val_if_fail (result->commodity_hash, NULL);
   return result;
 }
@@ -832,7 +810,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) {
-    currency_hash = g_hash_table_new(commodity_hash, commodity_equal);
+    currency_hash = g_hash_table_new(NULL, NULL);
     g_hash_table_insert(db->commodity_hash, commodity, currency_hash);
   }
 

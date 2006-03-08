@@ -1,3 +1,9 @@
+2006-03-07  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-pricedb.c: Use the pointer to the commodity as a
+	hash key instead of looking up the commodity string and then
+	hashing that.  Fixes 332678.
+
 2006-03-08  Andreas Köhler  <andi5.py@gmx.net>
 
 	* configure.in: 
