@@ -311,6 +311,8 @@ gnc_hooks_init(void)
   gnc_hook_create(HOOK_REPORT, 0,
 		  "Run just before the reports are pushed into the menus."
 		  "  Hook args: ()");
+  gnc_hook_create(HOOK_CURRENCY_CHANGED, 0,
+		  "Functions to run when the user changes currency settings.  Hook args: ()");
   gnc_hook_create(HOOK_SAVE_OPTIONS, 0,
 		  "Functions to run when saving options.  Hook args: ()");
   gnc_hook_create(HOOK_ADD_EXTENSION, 0,

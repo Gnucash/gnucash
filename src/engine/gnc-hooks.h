@@ -63,6 +63,7 @@ void gnc_hooks_init(void);
 #define HOOK_UI_SHUTDOWN	"hook_ui_shutdown"
 #define HOOK_NEW_BOOK		"hook_new_book"
 #define HOOK_REPORT		"hook_report"
+#define HOOK_CURRENCY_CHANGED	"hook_currency_changed"
 #define HOOK_SAVE_OPTIONS	"hook_save_options"
 #define HOOK_ADD_EXTENSION	"hook_add_extension"
 

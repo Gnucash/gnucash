@@ -41,6 +41,7 @@
 #include "gnc-engine.h"
 #include "gnc-euro.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
@@ -59,6 +60,12 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 
 static gboolean reverse_balance_inited = FALSE;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
+
+/* Cache currency ISO codes and only look them up in gconf when
+ * absolutely necessary. Can't cache a pointer to the data structure
+ * as that will change any time the book changes. */
+static gchar *user_default_currency = NULL;
+static gchar *user_report_currency = NULL;
 
 /********************************************************************\
  * gnc_configure_account_separator                                  *
@@ -817,8 +824,13 @@ gnc_locale_default_currency (void)
 gnc_commodity *
 gnc_default_currency (void)
 {
-  gnc_commodity *currency;
+  gnc_commodity *currency = NULL;
   gchar *choice, *mnemonic;
+
+  if (user_default_currency)
+    return gnc_commodity_table_lookup(gnc_get_current_commodities(),
+				      GNC_COMMODITY_NS_ISO,
+				      user_default_currency);
 
   choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
   if (choice && strcmp(choice, "other") == 0) {
@@ -828,20 +840,28 @@ gnc_default_currency (void)
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
     g_free(mnemonic);
     g_free(choice);
-
-    if (currency)
-      return currency;
   }
 
-  return gnc_locale_default_currency ();
+  if (!currency)
+    currency = gnc_locale_default_currency ();
+  if (currency) {
+    mnemonic = user_default_currency;
+    user_default_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+    g_free(mnemonic);
+  }
+  return currency;
 }
 
 gnc_commodity *
 gnc_default_report_currency (void)
 {
-  gnc_commodity *currency;
+  gnc_commodity *currency = NULL;
   gchar *choice, *mnemonic;
 
+  if (user_report_currency)
+    return gnc_commodity_table_lookup(gnc_get_current_commodities(),
+				      GNC_COMMODITY_NS_ISO,
+				      user_report_currency);
   choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				KEY_CURRENCY_CHOICE, NULL);
   if (choice && strcmp(choice, "other") == 0) {
@@ -850,14 +870,27 @@ gnc_default_report_currency (void)
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
 					  GNC_COMMODITY_NS_ISO, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
-    g_free(mnemonic);
     g_free(choice);
-
-    if (currency)
-      return currency;
+    g_free(mnemonic);
   }
 
-  return gnc_locale_default_currency ();
+  if (!currency)
+    currency = gnc_locale_default_currency (); 
+  if (currency) {
+    mnemonic = user_report_currency;
+    user_report_currency = g_strdup(gnc_commodity_get_mnemonic(currency));
+    g_free(mnemonic);
+  }
+  return currency;
+}
+
+
+static void
+gnc_currency_changed_cb (GConfEntry *entry, gpointer user_data)
+{
+  user_default_currency = NULL;
+  user_report_currency = NULL;
+  gnc_hook_run(HOOK_CURRENCY_CHANGED, NULL);
 }
 
 
@@ -2051,6 +2084,10 @@ gnc_ui_util_init (void)
   gnc_gconf_general_register_cb(KEY_REVERSED_ACCOUNTS,
 				(GncGconfGeneralCb)gnc_configure_reverse_balance,
 				NULL);
+  gnc_gconf_general_register_cb(KEY_CURRENCY_CHOICE,
+				gnc_currency_changed_cb, NULL);
+  gnc_gconf_general_register_cb(KEY_CURRENCY_OTHER,
+				gnc_currency_changed_cb, NULL);
   gnc_gconf_general_register_cb("auto_decimal_point",
 				gnc_set_auto_decimal_enabled,
 				NULL);
