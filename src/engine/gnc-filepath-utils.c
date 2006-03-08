@@ -35,7 +35,11 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
+#ifdef HAVE_GLIB26
 #include <glib/gstdio.h>
+#else
+#define g_mkdir(a,b) mkdir(a,b)
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
