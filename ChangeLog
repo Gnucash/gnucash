@@ -1,5 +1,9 @@
 2006-03-07  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-splash.c: Use a font size of "smaller" when
+	printing to the splash screen. Should solve 104436 except for
+	people running with huge system fonts.
+
 	* src/gnome-utils/gnc-tree-view-account.[ch]: Relabel column
 	titles from "XXX (Report)" to a label that includes the currency
 	mnemonic (e.g. "Total (EUR)"). Closes 118695.
