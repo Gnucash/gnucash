@@ -262,6 +262,9 @@ const char *  xaccTransGetNotes (const Transaction *trans);
     to start at zero, and keep incrementing until a null value is returned. */
 Split *       xaccTransGetSplit (const Transaction *trans, int i);
 
+/** Inverse of xaccTransGetSplit() */
+int xaccTransGetSplitIndex(const Transaction *trans, const Split *split);
+
 /** The xaccTransGetSplitList() method returns a GList of the splits
     in a transaction.  
     @return The list of splits. This list must NOT be modified.  Do *NOT* free

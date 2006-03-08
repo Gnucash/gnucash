@@ -74,19 +74,6 @@ static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
 
 /** implementations *******************************************************/
 
-static int
-gnc_trans_split_index (Transaction *trans, Split *split)
-{
-    Split *s;
-    int i = 0;
-
-    while ((s = xaccTransGetSplit(trans, i)) != NULL) {
-        if (s == split) return i;
-        i++;
-    }
-    return -1;
-}
-
 /* Uses the scheme split copying routines */
 static void
 gnc_copy_split_onto_split(Split *from, Split *to, gboolean use_cut_semantics)
@@ -162,6 +149,7 @@ void
 gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
+  VirtualLocation virt_loc;
 
   if (!reg)
     return;
@@ -176,8 +164,6 @@ gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
 
   if (!expand)
   {
-    VirtualLocation virt_loc;
-
     virt_loc = reg->table->current_cursor_loc;
     gnc_split_register_get_trans_split (reg, virt_loc.vcell_loc,
                                         &virt_loc.vcell_loc);
@@ -197,16 +183,12 @@ gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
                                   reg->table->current_cursor_loc.vcell_loc,
                                   gnc_split_register_get_active_cursor (reg));
 
-  gnc_split_register_set_trans_visible
-    (reg, reg->table->current_cursor_loc.vcell_loc, expand, FALSE);
+  gnc_split_register_set_trans_visible(
+      reg, reg->table->current_cursor_loc.vcell_loc, expand, FALSE);
 
+  virt_loc = reg->table->current_cursor_loc;
+  if (!expand || !gnc_table_virtual_loc_valid (reg->table, virt_loc, FALSE)) 
   {
-    VirtualLocation virt_loc;
-
-    virt_loc = reg->table->current_cursor_loc;
-
-    if (!expand || !gnc_table_virtual_loc_valid (reg->table, virt_loc, FALSE))
-    {
       if (gnc_table_find_close_valid_cell (reg->table, &virt_loc, FALSE))
         gnc_table_move_cursor_gui (reg->table, virt_loc);
       else
@@ -214,7 +196,6 @@ gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
         PERR ("Can't find place to go!");
         return;
       }
-    }
   }
 
   gnc_table_refresh_gui (reg->table, TRUE);
@@ -238,7 +219,8 @@ gnc_split_register_collapse_current_trans (SplitRegister *reg)
 }
 
 void
-gnc_split_register_set_trans_collapsed_cb (SplitRegister *reg, GFunc cb, gpointer cb_data)
+gnc_split_register_set_trans_collapsed_cb (SplitRegister *reg, GFunc cb, 
+                                           gpointer cb_data)
 {
   if (!reg)
     return;
@@ -292,8 +274,8 @@ gnc_split_register_get_current_split (SplitRegister *reg)
   if (reg == NULL)
     return NULL;
 
-  return gnc_split_register_get_split
-    (reg, reg->table->current_cursor_loc.vcell_loc);
+  return gnc_split_register_get_split(
+      reg, reg->table->current_cursor_loc.vcell_loc);
 }
 
 Split *
@@ -314,8 +296,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
   int v_row;
   int v_col;
 
-  if ((reg == NULL) || (split == NULL))
-    return FALSE;
+  if (!reg || !split) return FALSE;
 
   table = reg->table;
 
@@ -330,10 +311,7 @@ gnc_split_register_get_split_virt_loc (SplitRegister *reg, Split *split,
       Split *s;
 
       vcell = gnc_table_get_virtual_cell (table, vc_loc);
-      if (vcell == NULL)
-        continue;
-
-      if (!vcell->visible)
+      if (!vcell || !vcell->visible)
         continue;
 
       s = xaccSplitLookup (vcell->vcell_data, gnc_get_current_book ());
@@ -521,8 +499,8 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
       return NULL;
     }
 
-    split_index = gnc_trans_split_index (trans, split);
-    trans_split_index = gnc_trans_split_index (trans, trans_split);
+    split_index = xaccTransGetSplitIndex(trans, split);
+    trans_split_index = xaccTransGetSplitIndex(trans, trans_split);
 
     /* we should *always* find the split, but be paranoid */
     if (split_index < 0)
@@ -632,7 +610,7 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
         int split_index;
         SCM split_scm;
 
-        split_index = gnc_trans_split_index(trans, split);
+        split_index = xaccTransGetSplitIndex(trans, split);
         if (split_index >= 0)
           split_scm = gnc_trans_scm_get_split_scm(new_item, split_index);
         else
@@ -807,11 +785,12 @@ gnc_split_register_paste_current (SplitRegister *reg)
       blank_split = NULL;
     }
 
-    split_index = gnc_trans_split_index(trans, split);
-    trans_split_index = gnc_trans_split_index(trans, trans_split);
+    split_index = xaccTransGetSplitIndex(trans, split);
+    trans_split_index = xaccTransGetSplitIndex(trans, trans_split);
 
-    copied_leader = xaccAccountLookup (&copied_leader_guid, gnc_get_current_book ());
-    if (copied_leader && (gnc_split_register_get_default_account (reg) != NULL))
+    copied_leader = xaccAccountLookup(&copied_leader_guid,
+                                      gnc_get_current_book());
+    if (copied_leader && (gnc_split_register_get_default_account(reg) != NULL))
     {
       new_guid = &info->default_account;
       gnc_copy_trans_scm_onto_trans_swap_accounts(copied_item, trans,

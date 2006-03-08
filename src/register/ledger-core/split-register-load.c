@@ -317,29 +317,25 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
       {
         NumCell *cell;
 
-        cell = (NumCell *) gnc_table_layout_get_cell (reg->table->layout,
-                                                      NUM_CELL);
+        cell = (NumCell *) gnc_table_layout_get_cell(table->layout, NUM_CELL);
         gnc_num_cell_set_last_num (cell, last_num);
         has_last_num = TRUE;
       }
     }
 
     /* set the completion character for the xfer cells */
-    gnc_combo_cell_set_complete_char
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-       gnc_get_account_separator ());
+    gnc_combo_cell_set_complete_char(
+        (ComboCell *) gnc_table_layout_get_cell(table->layout, MXFRM_CELL),
+        gnc_get_account_separator());
   
-    gnc_combo_cell_set_complete_char
-      ((ComboCell *)
-       gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL),
-       gnc_get_account_separator ());
+    gnc_combo_cell_set_complete_char(
+        (ComboCell *) gnc_table_layout_get_cell(table->layout, XFRM_CELL),
+        gnc_get_account_separator());
   
     /* set the confirmation callback for the reconcile cell */
-    gnc_recn_cell_set_confirm_cb
-      ((RecnCell *)
-       gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
-       gnc_split_register_recn_cell_confirm, reg);
+    gnc_recn_cell_set_confirm_cb(
+        (RecnCell *) gnc_table_layout_get_cell(table->layout, RECN_CELL),
+        gnc_split_register_recn_cell_confirm, reg);
   
     /* load up account names into the transfer combobox menus */
     gnc_split_register_load_xfer_cells (reg, default_account);
@@ -539,8 +535,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   info->first_pass = FALSE;
   info->reg_loaded = TRUE;
 
-  gnc_split_register_set_cell_fractions
-    (reg, gnc_split_register_get_current_split (reg));
+  gnc_split_register_set_cell_fractions(
+      reg, gnc_split_register_get_current_split (reg));
 
   gnc_table_refresh_gui (table, TRUE);
 

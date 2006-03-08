@@ -1459,6 +1459,16 @@ xaccTransGetSplit (const Transaction *trans, int i)
     return NULL;
 }
 
+int
+xaccTransGetSplitIndex(const Transaction *trans, const Split *split) 
+{
+    int j = 0;
+    g_return_val_if_fail(trans && split, -1);
+
+    FOR_EACH_SPLIT(trans, { if (s == split) return j; j++; });
+    return -1;
+}
+
 SplitList *
 xaccTransGetSplitList (const Transaction *trans)
 {
