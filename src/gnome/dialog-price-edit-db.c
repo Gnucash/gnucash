@@ -39,6 +39,7 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
+#include "gnc-session.h"
 #include "gnc-tree-view-price.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
@@ -66,13 +67,14 @@ void gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data);
 typedef struct
 {
   GtkWidget * dialog;
+  QofSession *session;
+  QofBook *book;
+  GNCPriceDB *price_db;
 
   GncTreeViewPrice * price_tree;
 
   GtkWidget * edit_button;
   GtkWidget * remove_button;
-
-  GNCPriceDB *price_db;
 } PricesDialog;
 
 
@@ -131,7 +133,8 @@ gnc_prices_dialog_edit_clicked (GtkWidget *widget, gpointer data)
     return;
   }
 
-  gnc_price_edit_dialog (pdb_dialog->dialog, price_list->data, GNC_PRICE_EDIT);
+  gnc_price_edit_dialog (pdb_dialog->dialog, pdb_dialog->session,
+			 price_list->data, GNC_PRICE_EDIT);
   g_list_free(price_list);
   LEAVE(" ");
 }
@@ -188,10 +191,7 @@ gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data)
   }
 
   if (response == GTK_RESPONSE_YES) {
-    GNCBook *book = gnc_get_current_book ();
-    GNCPriceDB *pdb = gnc_book_get_pricedb (book);
-
-    g_list_foreach(price_list, (GFunc)remove_helper, pdb);
+    g_list_foreach(price_list, (GFunc)remove_helper, pdb_dialog->price_db);
   }
   g_list_free(price_list);
   LEAVE(" ");
@@ -218,8 +218,6 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
   result = gtk_dialog_run (GTK_DIALOG (dialog));
   if (result == GTK_RESPONSE_OK)
   {
-    GNCBook *book = gnc_get_current_book ();
-    GNCPriceDB *pdb = gnc_book_get_pricedb (book);
     Timespec ts;
 
     DEBUG("deleting prices");
@@ -231,7 +229,8 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     button = glade_xml_get_widget (xml, "delete_last");
     delete_last = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
 
-    gnc_pricedb_remove_old_prices(pdb, ts, delete_user, delete_last);
+    gnc_pricedb_remove_old_prices(pdb_dialog->price_db, ts,
+				  delete_user, delete_last);
   }
 
   gtk_widget_destroy(dialog);
@@ -251,14 +250,15 @@ gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data)
     price = price_list->data;
     g_list_free(price_list);
   }
-  gnc_price_edit_dialog (pdb_dialog->dialog, price, GNC_PRICE_NEW);
+  gnc_price_edit_dialog (pdb_dialog->dialog, pdb_dialog->session,
+			 price, GNC_PRICE_NEW);
   LEAVE(" ");
 }
 
 void
 gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
 {
-  GNCBook *book = gnc_get_current_book ();
+  PricesDialog *pdb_dialog = data;
   SCM quotes_func;
   SCM book_scm;
 
@@ -269,7 +269,7 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     return;
   }
 
-  book_scm = gnc_book_to_scm (book);
+  book_scm = gnc_book_to_scm (pdb_dialog->book);
   if (SCM_NFALSEP (scm_not (book_scm))) {
     LEAVE("no book");
     return;
@@ -353,7 +353,10 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
   dialog = glade_xml_get_widget (xml, "Prices Dialog");
   pdb_dialog->dialog = dialog;
-  pdb_dialog->price_db = gnc_pricedb_get_db(gnc_get_current_book());
+
+  pdb_dialog->session = gnc_get_current_session();
+  pdb_dialog->book = qof_session_get_book(pdb_dialog->session);
+  pdb_dialog->price_db = gnc_pricedb_get_db(pdb_dialog->book);
 
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pdb_dialog);
 
@@ -366,7 +369,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
   /* price tree */
   scrolled_window = glade_xml_get_widget (xml, "price_list_window");
-  view = gnc_tree_view_price_new(gnc_get_current_book(),
+  view = gnc_tree_view_price_new(pdb_dialog->book,
 				 "gconf-section", GCONF_SECTION,
 				 "show-column-menu", TRUE,
 				 NULL);
@@ -464,6 +467,7 @@ gnc_prices_dialog (GtkWidget * parent)
   component_id = gnc_register_gui_component (DIALOG_PRICE_DB_CM_CLASS,
                                              refresh_handler, close_handler,
                                              pdb_dialog);
+  gnc_gui_component_set_session (component_id, pdb_dialog->session);
 
   gtk_widget_grab_focus (GTK_WIDGET(pdb_dialog->price_tree));
 

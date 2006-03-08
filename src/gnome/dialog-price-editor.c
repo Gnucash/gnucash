@@ -52,6 +52,9 @@
 typedef struct
 {
   GtkWidget * dialog;
+  QofSession *session;
+  QofBook *book;
+  GNCPriceDB *price_db;
 
   GtkWidget * commodity_edit;
   GtkWidget * currency_edit;
@@ -221,8 +224,6 @@ void
 pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 {
   PriceEditDialog *pedit_dialog = data;
-  GNCBook *book = gnc_get_current_book ();
-  GNCPriceDB *pdb = gnc_book_get_pricedb (book);
   const char *error_str;
 
   if (response == GTK_RESPONSE_OK) {
@@ -234,7 +235,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     pedit_dialog->changed = FALSE;
     if (TRUE == pedit_dialog->new)
-      gnc_pricedb_add_price (pdb, pedit_dialog->price);
+      gnc_pricedb_add_price (pedit_dialog->price_db, pedit_dialog->price);
   
     gnc_gui_refresh_all ();
   }
@@ -247,8 +248,6 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
 static void
 commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 {
-  GNCBook *book;
-  GNCPriceDB *pdb;
   gnc_commodity *commodity = NULL;
   gnc_commodity *currency = NULL;
   GList *price_list;
@@ -261,10 +260,8 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
 
   if(commodity)
   {
-    book = gnc_price_get_book (pedit_dialog->price);
-    pdb = gnc_book_get_pricedb (book);
-
-    price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
+    price_list = gnc_pricedb_lookup_latest_any_currency
+      (pedit_dialog->price_db, commodity);
     if(price_list)
     {
       currency = gnc_price_get_currency((GNCPrice *)price_list->data);
@@ -292,7 +289,9 @@ pedit_data_changed_cb (GtkWidget *w, gpointer data)
 }
 
 static void
-gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog)
+gnc_price_pedit_dialog_create (GtkWidget *parent,
+			       PriceEditDialog *pedit_dialog,
+			       QofSession *session)
 {
   GladeXML *xml;
   GNCPrintAmountInfo print_info;
@@ -303,6 +302,10 @@ gnc_price_pedit_dialog_create (GtkWidget * parent, PriceEditDialog *pedit_dialog
   GtkWidget *label;
 
   xml = gnc_glade_xml_new ("price.glade", "Price Dialog");
+
+  pedit_dialog->session = session;
+  pedit_dialog->book = qof_session_get_book(pedit_dialog->session);
+  pedit_dialog->price_db = gnc_pricedb_get_db(pedit_dialog->book);
 
   dialog = glade_xml_get_widget (xml, "Price Dialog");
   pedit_dialog->dialog = dialog;
@@ -434,7 +437,10 @@ show_handler (const char *class, gint component_id,
  * Return: nothing                                                  *
 \********************************************************************/
 GNCPrice *
-gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType type)
+gnc_price_edit_dialog (GtkWidget * parent,
+		       QofSession *session,
+		       GNCPrice * price,
+		       GNCPriceEditType type)
 {
   PriceEditDialog *pedit_dialog;
   gint component_id;
@@ -445,15 +451,15 @@ gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType ty
       return(price);
 
   pedit_dialog = g_new0 (PriceEditDialog, 1);
-  gnc_price_pedit_dialog_create (parent, pedit_dialog);
+  gnc_price_pedit_dialog_create (parent, pedit_dialog, session);
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
 
   switch (type) {
    case GNC_PRICE_NEW:
     if (price) {
-      price = gnc_price_clone(price, gnc_get_current_book ());
+      price = gnc_price_clone(price, pedit_dialog->book);
     } else {
-      price = gnc_price_create (gnc_get_current_book ());
+      price = gnc_price_create (pedit_dialog->book);
     }
     gnc_price_new_price_init(price);
     pedit_dialog->new = TRUE;
@@ -471,28 +477,10 @@ gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType ty
   component_id = gnc_register_gui_component (DIALOG_PRICE_EDIT_CM_CLASS,
                                              refresh_handler, close_handler,
                                              pedit_dialog);
+  gnc_gui_component_set_session (component_id, pedit_dialog->session);
 
   gtk_widget_grab_focus (pedit_dialog->commodity_edit);
 
   gtk_widget_show (pedit_dialog->dialog);
   return(price);
-}
-
-/********************************************************************\
- * gnc_price_edit_by_guid                                           *
- *   opens up a window to edit price information                    *
- *                                                                  * 
- * Args:   parent  - the parent of the window to be created         *
- * Return: nothing                                                  *
-\********************************************************************/
-GNCPrice *
-gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid)
-{
-  GNCPrice *price;
-
-  price = gnc_price_lookup (guid, gnc_get_current_book ());
-  if (price == NULL)
-    return(NULL);
-
-  return(gnc_price_edit_dialog(parent, price, GNC_PRICE_EDIT));
 }

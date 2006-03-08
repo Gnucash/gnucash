@@ -1,5 +1,17 @@
 2006-03-07  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome/dialog-price-editor.c:
+	* src/gnome/top-level.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-edit-db.c:
+
+	* src/gnc-ui.h: Remove all usage of gnc_get_current_session / book
+	/ whatever except at the very top level when the dialog is
+	originally created. Tell the component manager to delete the
+	dialog when the session is destroyed. Remove support for an old
+	url-that-generates-a-price-edit-window trick.
+
 	* src/engine/gnc-pricedb.c: Use the pointer to the commodity as a
 	hash key instead of looking up the commodity string and then
 	hashing that.  Fixes 332678.

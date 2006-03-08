@@ -37,6 +37,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-session.h"
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
@@ -48,6 +49,7 @@
 typedef struct
 {
   GtkWidget * dialog;
+  QofSession *session;
   QofBook *book;
 
   GncTreeViewCommodity * commodity_tree;
@@ -104,7 +106,7 @@ remove_clicked (CommoditiesDialog *cd)
   if (commodity == NULL)
     return;
 
-  accounts = xaccGroupGetSubAccounts (gnc_get_current_group ());
+  accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup(cd->book));
   can_delete = TRUE;
   do_delete = FALSE;
 
@@ -165,7 +167,7 @@ remove_clicked (CommoditiesDialog *cd)
   {
     gnc_commodity_table *ct;
 
-    ct = gnc_get_current_commodities ();
+    ct = gnc_book_get_commodity_table (cd->book);
     for (node = prices; node; node = node->next)
       gnc_pricedb_remove_price(pdb, node->data);
 
@@ -287,7 +289,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   dialog = glade_xml_get_widget (xml, "Commodities Dialog");
 
   cd->dialog = dialog;
-  cd->book = gnc_get_current_book();
+  cd->session = gnc_get_current_session();
+  cd->book = qof_session_get_book(cd->session);
   cd->show_currencies = gnc_gconf_get_bool(GCONF_SECTION, "include_iso", NULL);
   
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, cd);
@@ -384,6 +387,7 @@ gnc_commodities_dialog (GtkWidget * parent)
   component_id = gnc_register_gui_component (DIALOG_COMMODITIES_CM_CLASS,
                                              refresh_handler, close_handler,
                                              cd);
+  gnc_gui_component_set_session (component_id, cd->session);
 
   gtk_widget_grab_focus (GTK_WIDGET(cd->commodity_tree));
 
