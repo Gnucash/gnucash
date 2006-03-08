@@ -800,9 +800,6 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld, GList *splits)
   if (!ld || ld->loading)
     return;
 
-    gnc_split_register_load_xfer_cells (ld->reg,
-                                        gnc_ledger_display_leader (ld));
-
   if (!gnc_split_register_full_refresh_ok (ld->reg))
     return;
 

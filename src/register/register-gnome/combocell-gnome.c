@@ -423,6 +423,14 @@ gnc_combo_cell_use_quickfill_cache (ComboCell * cell, QuickFill *shared_qf)
 	box->qf = shared_qf;
 }
 
+void
+gnc_combo_cell_use_list_store_cache (ComboCell * cell, gpointer data)
+{
+	if (cell == NULL) return;
+
+	cell->shared_store = data;
+}
+
 static void
 gnc_append_string_to_list (gpointer _string, gpointer _item_list)
 {
@@ -789,7 +797,7 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 	/* initialize gui-specific, private data */
 	box->sheet = sheet;
 	box->item_edit = item_edit;
-	box->item_list = gnc_item_edit_new_list(box->item_edit);
+	box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
 	g_object_ref (box->item_list);
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 

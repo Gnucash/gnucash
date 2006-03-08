@@ -1326,13 +1326,14 @@ gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *ent
 
 
 GncItemList *
-gnc_item_edit_new_list (GncItemEdit *item_edit)
+gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store)
 {
         GncItemList *item_list;
 
 	g_return_val_if_fail (GNC_IS_ITEM_EDIT(item_edit), NULL);
 
-        item_list = GNC_ITEM_LIST (gnc_item_list_new (item_edit->parent));
+        item_list = GNC_ITEM_LIST (gnc_item_list_new (item_edit->parent,
+						      shared_store));
 
 	return item_list;
 }

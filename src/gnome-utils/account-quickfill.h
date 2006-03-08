@@ -40,7 +40,7 @@
 #ifndef QUICKFILL_ACCOUNT_H
 #define QUICKFILL_ACCOUNT_H
 
-#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "Account.h"
 #include "Group.h"
@@ -73,6 +73,10 @@ QuickFill * gnc_get_shared_account_name_quickfill (AccountGroup *group,
                                                    const char * key,
                                                    AccountBoolCB skip_cb, 
                                                    gpointer cb_data);
+GtkListStore *
+gnc_get_shared_account_name_list_store (AccountGroup *group, 
+					const char * key, 
+					AccountBoolCB cb, gpointer cb_data);
 
 #endif
 

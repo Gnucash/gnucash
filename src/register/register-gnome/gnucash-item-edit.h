@@ -127,7 +127,7 @@ void gnc_item_edit_get_pixel_coords (GncItemEdit *item_edit,
 GnomeCanvasItem *gnc_item_edit_new (GnomeCanvasGroup *parent,
 				    GnucashSheet *sheet, GtkWidget *entry);
 
-GncItemList * gnc_item_edit_new_list (GncItemEdit *item_edit);
+GncItemList * gnc_item_edit_new_list (GncItemEdit *item_edit, GtkListStore *shared_store);
 GNCDatePicker * gnc_item_edit_new_date_picker (GncItemEdit *item_edit);
 
 void gnc_item_edit_set_popup (GncItemEdit     *item_edit,

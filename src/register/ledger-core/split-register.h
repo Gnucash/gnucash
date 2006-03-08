@@ -447,10 +447,6 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
 gboolean gnc_split_register_full_refresh_ok (SplitRegister *reg);
 
 /** Private function -- outsiders must not use this */
-void     gnc_split_register_load_xfer_cells (SplitRegister *reg,
-                                             Account *base_account);
-
-/** Private function -- outsiders must not use this */
 void gnc_copy_trans_onto_trans (Transaction *from, Transaction *to,
                                 gboolean use_cut_semantics,
                                 gboolean do_commit);

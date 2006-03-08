@@ -1,16 +1,33 @@
 2006-03-07  David Hampton  <hampton@employees.org>
 
-	* src/gnome-utils/gnc-file.c:
+	* src/register/register-gnome/combocell-gnome.c:
+	* src/register/register-gnome/gnucash-item-list.[ch]:
+	* src/register/register-gnome/gnucash-item-edit.[ch]:
+	* src/register/ledger-core/gnc-ledger-display.c:
+	* src/register/ledger-core/split-register.h:
+	* src/register/ledger-core/split-register-load.c:
+	* src/register/register-core/combocell.h:
+	* src/gnome-utils/account-quickfill.[ch]: The account quickfill
+	has multiple components to it, only one of which was shared. Build
+	and use a shared list store used by the gnucash_item_edit
+	widget (which is updated by signals sent when accounts are
+	added/deleted/modified.)  With this in place, its not necessary to
+	rebuild two account quickfills for each open register window when
+	a gnc_gui_resume_refresh is called which eliminates an O(2n)
+	slowdown.  This seems sufficient to close 120028.
+
 	* src/gnome/dialog-price-editor.c:
 	* src/gnome/top-level.c:
 	* src/gnome/dialog-commodities.c:
 	* src/gnome/dialog-price-edit-db.c:
-
 	* src/gnc-ui.h: Remove all usage of gnc_get_current_session / book
 	/ whatever except at the very top level when the dialog is
 	originally created. Tell the component manager to delete the
 	dialog when the session is destroyed. Remove support for an old
 	url-that-generates-a-price-edit-window trick.
+
+	* src/gnome-utils/gnc-file.c: Add a couple of calls to the
+	component manager when closing the current session.
 
 	* src/engine/gnc-pricedb.c: Use the pointer to the commodity as a
 	hash key instead of looking up the commodity string and then

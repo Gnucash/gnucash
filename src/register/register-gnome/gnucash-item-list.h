@@ -59,7 +59,7 @@ typedef struct
 
 GType gnc_item_list_get_type (void);
 
-GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent);
+GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent, GtkListStore *shared_store);
 
 void gnc_item_list_clear (GncItemList *item_list);
 

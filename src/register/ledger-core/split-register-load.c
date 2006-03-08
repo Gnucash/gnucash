@@ -40,6 +40,9 @@
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_LEDGER; */
 
+static void gnc_split_register_load_xfer_cells (SplitRegister *reg,
+						Account *base_account);
+
 static void
 gnc_split_register_load_recn_cells (SplitRegister *reg)
 {
@@ -551,25 +554,6 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 }
 
 /* ===================================================================== */
-/* Splat the account name into the transfer cell combobox menu */
-
-static gpointer
-load_xfer_cell_cb (Account *account, gpointer data)
-{
-  ComboCell *cell = data;
-  char *name;
-
-  if (xaccAccountGetPlaceholder (account)) return NULL;
-
-  name = xaccAccountGetFullName (account);
-  if (NULL == name) return NULL;
-  gnc_combo_cell_add_account_menu_item (cell, name);
-  g_free(name);
-
-  return NULL;
-}
-
-/* ===================================================================== */
 
 #define QKEY  "split_reg_shared_quickfill"
 
@@ -579,12 +563,13 @@ skip_cb (Account *account, gpointer x)
   return xaccAccountGetPlaceholder (account);
 }
 
-void
+static void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
   QuickFill *qf;
   ComboCell *cell;
+  GtkListStore *store;
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
@@ -594,22 +579,17 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
     return;
 
   qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
+  store = gnc_get_shared_account_name_list_store (group, QKEY, skip_cb, NULL);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
-  gnc_combo_cell_set_sort_enabled (cell, FALSE);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
-  gnc_combo_cell_set_sort_enabled (cell, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
-  gnc_combo_cell_set_sort_enabled (cell, FALSE);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-  xaccGroupForEachAccount (group, load_xfer_cell_cb, cell, TRUE);
-  gnc_combo_cell_set_sort_enabled (cell, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
 /* ====================== END OF FILE ================================== */

@@ -404,12 +404,11 @@ tree_view_selection_changed (GtkTreeSelection *selection,
 }
 
 GnomeCanvasItem *
-gnc_item_list_new(GnomeCanvasGroup *parent)
+gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
 {
         GtkWidget *frame;
 	GtkWidget *tree_view;
         GtkWidget *scrollwin;
-	GtkListStore *list_store;
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
         GnomeCanvasItem *item;
@@ -424,7 +423,8 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
 
-	list_store = gtk_list_store_new (1, G_TYPE_STRING);
+	if (NULL == list_store)
+		list_store = gtk_list_store_new (1, G_TYPE_STRING);
 	tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
 	/* Removed code to enable sorting. Enable it after the list is
 	 * fully populated by calling gnc_item_list_finished_loading(). */
