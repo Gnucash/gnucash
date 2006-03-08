@@ -695,8 +695,7 @@ gnc_split_register_get_type_value (SplitRegister *reg,
 {
   RecnCell *cell;
 
-  cell = (RecnCell *)
-    gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
+  cell = (RecnCell *)gnc_table_layout_get_cell (reg->table->layout, TYPE_CELL);
   if (!cell)
     return '\0';
 
@@ -783,10 +782,7 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
   time_t tt;
 
   cell = gnc_table_get_cell (reg->table, virt_loc);
-  if (!cell)
-    return NULL;
-
-  if (!cell->value || *cell->value == '\0')
+  if (!cell || !cell->value || *cell->value == '\0')
     return NULL;
 
   gnc_date_cell_get_date ((DateCell *) cell, &ts);
@@ -970,7 +966,8 @@ gnc_split_register_get_rate_entry (VirtualLocation virt_loc,
   txn = gnc_split_register_get_trans (reg, virt_loc.vcell_loc);
 
   if (!gnc_split_register_current_trans_expanded (reg) && osplit &&
-      !gnc_split_register_needs_conv_rate (reg, txn, xaccSplitGetAccount (split)))
+      !gnc_split_register_needs_conv_rate(reg, txn, 
+                                          xaccSplitGetAccount(split)))
   {
     split = osplit;
   }
@@ -1019,9 +1016,7 @@ gnc_split_register_get_action_entry (VirtualLocation virt_loc,
                                      gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  Split *split;
-
-  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
+  Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
 
   return xaccSplitGetAction (split);
 }
@@ -1401,58 +1396,6 @@ gnc_split_register_needs_conv_rate (SplitRegister *reg,
   return TRUE;
 }
 
-/* Convert the amount/value of the Split for viewing in the account --
- * in particular we want to convert the Split to be in to_commodity.
- * Returns the amount.
- */
-static gnc_numeric
-gnc_split_register_convert_amount (Split *split, Account * account,
-				   gnc_commodity * to_commodity)
-{
-  gnc_commodity *acc_com;
-  Transaction *txn;
-  gnc_numeric amount, value, convrate;
-  Account * split_acc;
-
-  amount = xaccSplitGetAmount (split);
-
-  /* If this split is attached to this account, just return the amount */
-  split_acc = xaccSplitGetAccount (split);
-  if (split_acc == account)
-    return amount;
-
-  /* If split->account->commodity == to_commodity, return the amount */
-  acc_com = xaccAccountGetCommodity (split_acc);
-  if (acc_com && gnc_commodity_equal (acc_com, to_commodity))
-    return amount;
-
-  /* Ok, this split is not for the viewed account, and the commodity
-   * does not match.  So we need to do some conversion.
-   *
-   * First, we can cheat.  If this transaction is balanced and has
-   * exactly two splits, then we can implicitly determine the exchange
-   * rate and just return the 'other' split amount.
-   */
-  txn = xaccSplitGetParent (split);
-  if (txn && gnc_numeric_zero_p (xaccTransGetImbalance (txn))) {
-    Split *osplit = xaccSplitGetOtherSplit (split);
-
-    if (osplit)
-      return gnc_numeric_neg (xaccSplitGetAmount (osplit));
-  }
-
-  /* ... otherwise, we need to compute the amount from the conversion
-   * rate into _this account_.  So, find the split into this account,
-   * compute the conversion rate (based on amount/value), and then multiply
-   * this times the split value.
-   */
-  convrate = xaccTransGetAccountConvRate(txn, account);
-  value = xaccSplitGetValue (split);
-  return gnc_numeric_mul (value, convrate,
-			  gnc_commodity_get_fraction (to_commodity),
-			  GNC_RND_ROUND);    
-}
-
 static const char *
 gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
                                       gboolean translate,
@@ -1517,8 +1460,9 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
   {
     gnc_numeric amount;
 
-    /* If this account is not a stock/mutual/currency account, and currency !=
-     * the account commodity, then use the SplitAmount instead of the SplitValue.
+    /* If this account is not a stock/mutual/currency account, and
+     * currency != the account commodity, then use the SplitAmount
+     * instead of the SplitValue.
      */
     switch (reg->type) {
     case STOCK_REGISTER:
@@ -1536,7 +1480,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
 	if (commodity && !gnc_commodity_equal (commodity, currency))
 	  /* Convert this to the "local" value */
-	  amount = gnc_split_register_convert_amount (split, account, commodity);
+	  amount = xaccSplitConvertAmount(split, account);
 	else
 	  amount = xaccSplitGetValue (split);
       }
@@ -1725,8 +1669,9 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
     GtkWidget *dialog, *window;
     gint response;
     const gchar *title = _("Change reconciled split?");
-    const gchar *message = _("You are about to change a reconciled split.  Doing so might make "
-			     "future reconciliation difficult!  Continue with this change?");
+    const gchar *message = 
+        _("You are about to change a reconciled split.  Doing so might make "
+          "future reconciliation difficult!  Continue with this change?");
   
     /* Does the user want to be warned? */
     window = gnc_split_register_get_parent(reg);
@@ -1738,7 +1683,8 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 					 "%s", title);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					     "%s", message);
-    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Change _Split"), GTK_RESPONSE_YES);
+    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Change _Split"), 
+                          GTK_RESPONSE_YES);
     response = gnc_dialog_run(GTK_DIALOG(dialog), "change_reconciled_split");
     gtk_widget_destroy(dialog);
     if (response != GTK_RESPONSE_YES)
@@ -1788,11 +1734,8 @@ gnc_template_register_get_xfrm_entry (VirtualLocation virt_loc,
     Account *account;
     GUID *guid;
 
-    guid = kvp_value_get_guid (kvp_frame_get_slot_path
-                               (kvpf,
-                                "sched-xaction",
-                                "account",
-                                NULL));
+    guid = kvp_value_get_guid(
+        kvp_frame_get_slot_path(kvpf, "sched-xaction", "account", NULL));
 
     account = xaccAccountLookup (guid, gnc_get_current_book ());
 
@@ -1811,17 +1754,11 @@ gnc_template_register_get_fdebt_entry (VirtualLocation virt_loc,
                                        gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  kvp_frame *kvpf;
-  Split *split;
+  Split *split = gnc_split_register_get_split(reg, virt_loc.vcell_loc);
+  kvp_frame *kvpf = xaccSplitGetSlots(split);
 
-  split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-  kvpf = xaccSplitGetSlots (split);
-
-  return kvp_value_get_string
-    (kvp_frame_get_slot_path (kvpf,
-                              "sched-xaction",
-                              "debit-formula",
-                              NULL));
+  return kvp_value_get_string(
+      kvp_frame_get_slot_path (kvpf, "sched-xaction", "debit-formula", NULL));
 }
 
 static char *
@@ -1851,11 +1788,8 @@ gnc_template_register_get_fcred_entry (VirtualLocation virt_loc,
   split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
   kvpf = xaccSplitGetSlots (split);
 
-  return kvp_value_get_string
-    (kvp_frame_get_slot_path (kvpf,
-                              "sched-xaction",
-                              "credit-formula",
-                              NULL));
+  return kvp_value_get_string(
+      kvp_frame_get_slot_path (kvpf, "sched-xaction", "credit-formula", NULL));
 }
 
 static char *
@@ -1863,9 +1797,8 @@ gnc_split_register_get_fcred_help (VirtualLocation virt_loc,
                                    gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  const char *help;
+  const char *help = gnc_table_get_entry (reg->table, virt_loc);
 
-  help = gnc_table_get_entry (reg->table, virt_loc);
   if (!help || *help == '\0')
     help = _("Enter credit formula for real transaction");
 
@@ -1877,9 +1810,7 @@ gnc_split_register_get_default_help (VirtualLocation virt_loc,
                                      gpointer user_data)
 {
   SplitRegister *reg = user_data;
-  const char *help;
-
-  help = gnc_table_get_entry (reg->table, virt_loc);
+  const char *help = gnc_table_get_entry(reg->table, virt_loc);
 
   return g_strdup (help);
 }
@@ -1911,11 +1842,8 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
     char *str;
 
     PWARN("This code is wrong.  Fix it immediately!!!!");
-    str = kvp_value_get_string (kvp_frame_get_slot_path
-                                (kvpf,
-                                 "sched-xaction",
-                                 "amnt",
-                                 NULL));
+    str = kvp_value_get_string(
+        kvp_frame_get_slot_path(kvpf, "sched-xaction", "amnt", NULL));
 
     amount = gnc_numeric_zero ();
     string_to_gnc_numeric (str, &amount);
@@ -1956,11 +1884,7 @@ gnc_split_register_guid_copy (gpointer p_to, gconstpointer p_from)
   const GUID *from = p_from;
 
   g_return_if_fail (to != NULL);
-
-  if (from == NULL)
-    *to = *guid_null ();
-  else
-    *to = *from;
+  *to = from ? *from : *guid_null();
 }
 
 
@@ -2172,8 +2096,8 @@ gnc_split_register_model_new (void)
                                      FCRED_CELL);
 
 
-  gnc_table_model_set_default_help_handler
-    (model, gnc_split_register_get_default_help);
+  gnc_table_model_set_default_help_handler(
+      model, gnc_split_register_get_default_help);
 
   gnc_table_model_set_help_handler (model,
                                     gnc_split_register_get_date_help,
@@ -2232,163 +2156,107 @@ gnc_split_register_model_new (void)
                                     FDEBT_CELL);
 
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  DATE_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, DATE_CELL);
 
   /* FIXME: We really only need a due date for 'invoices', not for
    * 'payments' or 'receipts'.  This implies we really only need the
    * due-date for transactions that credit the RECEIVABLE or debit
    * the PAYABLE account type.
    */
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_rate_io_flags,
-                                  RATE_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_rate_io_flags, RATE_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_ddue_io_flags,
-                                  DDUE_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_ddue_io_flags, DDUE_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  NUM_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, NUM_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  DESC_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, DESC_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  ACTN_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, ACTN_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  XFRM_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, XFRM_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  MEMO_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, MEMO_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  MXFRM_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, MXFRM_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  NOTES_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, NOTES_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-				  gnc_split_register_get_inactive_io_flags,
-                                  VNOTES_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_inactive_io_flags, VNOTES_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_debcred_io_flags,
-                                  CRED_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_debcred_io_flags, CRED_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_debcred_io_flags,
-                                  DEBT_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_debcred_io_flags, DEBT_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_recn_io_flags,
-                                  RECN_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_recn_io_flags, RECN_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_recn_io_flags,
-                                  TYPE_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_recn_io_flags, TYPE_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_security_io_flags,
-                                  PRIC_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_security_io_flags, PRIC_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_security_io_flags,
-                                  SHRS_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_security_io_flags, SHRS_CELL);
 
 
-  gnc_table_model_set_fg_color_handler (model,
-                                        gnc_split_register_get_shares_fg_color,
-                                        SHRS_CELL);
+  gnc_table_model_set_fg_color_handler(
+      model, gnc_split_register_get_shares_fg_color, SHRS_CELL);
 
-  gnc_table_model_set_fg_color_handler (model,
-                                        gnc_split_register_get_shares_fg_color,
-                                        TSHRS_CELL);
+  gnc_table_model_set_fg_color_handler(
+      model, gnc_split_register_get_shares_fg_color, TSHRS_CELL);
 
-  gnc_table_model_set_fg_color_handler
-                                   (model,
-                                    gnc_split_register_get_balance_fg_color,
-                                    BALN_CELL);
+  gnc_table_model_set_fg_color_handler(
+      model, gnc_split_register_get_balance_fg_color, BALN_CELL);
 
-  gnc_table_model_set_fg_color_handler
-                                   (model,
-                                    gnc_split_register_get_balance_fg_color,
-                                    TBALN_CELL);
+  gnc_table_model_set_fg_color_handler(
+      model, gnc_split_register_get_balance_fg_color, TBALN_CELL);
 
 
-  gnc_table_model_set_default_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_bg_color);
+  gnc_table_model_set_default_bg_color_handler(
+      model, gnc_split_register_get_bg_color);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_gtkrc_bg_color,
-                                    "gtkrc");
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_gtkrc_bg_color, "gtkrc");
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    DEBT_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, DEBT_CELL);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    CRED_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, CRED_CELL);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    TDEBT_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, TDEBT_CELL);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    TCRED_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, TCRED_CELL);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    FCRED_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, FCRED_CELL);
 
-  gnc_table_model_set_bg_color_handler
-                                   (model,
-                                    gnc_split_register_get_debcred_bg_color,
-                                    FDEBT_CELL);
+  gnc_table_model_set_bg_color_handler(
+      model, gnc_split_register_get_debcred_bg_color, FDEBT_CELL);
 
 
-  gnc_table_model_set_default_cell_border_handler
-                                   (model,
-                                    gnc_split_register_get_border);
+  gnc_table_model_set_default_cell_border_handler(
+      model, gnc_split_register_get_border);
 
 
-  gnc_table_model_set_default_confirm_handler (model,
-                                               gnc_split_register_confirm);
+  gnc_table_model_set_default_confirm_handler(
+      model, gnc_split_register_confirm);
 
   model->cell_data_allocator   = gnc_split_register_guid_malloc;
   model->cell_data_deallocator = gnc_split_register_guid_free;
@@ -2406,51 +2274,38 @@ gnc_template_register_model_new (void)
 
   model = gnc_split_register_model_new ();
 
-  gnc_table_model_set_entry_handler( model,
-                                     gnc_split_register_get_inactive_date_entry,
-                                     DATE_CELL );
+  gnc_table_model_set_entry_handler(
+      model, gnc_split_register_get_inactive_date_entry, DATE_CELL );
 
-  gnc_table_model_set_entry_handler( model,
-                                     gnc_split_register_get_inactive_date_entry,
-                                     DDUE_CELL );
+  gnc_table_model_set_entry_handler(
+      model, gnc_split_register_get_inactive_date_entry, DDUE_CELL );
 
-  gnc_table_model_set_io_flags_handler( model,
-                                        gnc_split_register_get_inactive_io_flags,
-                                        DATE_CELL );
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_inactive_io_flags, DATE_CELL );
 
-  gnc_table_model_set_io_flags_handler( model,
-                                        gnc_split_register_get_inactive_io_flags,
-                                        DDUE_CELL );
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_inactive_io_flags, DDUE_CELL );
 
-  gnc_table_model_set_entry_handler (model,
-                                     gnc_template_register_get_xfrm_entry,
-                                     XFRM_CELL);
+  gnc_table_model_set_entry_handler(
+      model, gnc_template_register_get_xfrm_entry, XFRM_CELL);
 
-  gnc_table_model_set_entry_handler (model,
-                                     gnc_template_register_get_fdebt_entry,
-                                     FDEBT_CELL);
+  gnc_table_model_set_entry_handler(
+      model, gnc_template_register_get_fdebt_entry, FDEBT_CELL);
 
-  gnc_table_model_set_entry_handler (model,
-                                     gnc_template_register_get_fcred_entry,
-                                     FCRED_CELL);
+  gnc_table_model_set_entry_handler(
+      model, gnc_template_register_get_fcred_entry, FCRED_CELL);
 
-  gnc_table_model_set_entry_handler (model,
-                                     gnc_template_register_get_debcred_entry,
-                                     DEBT_CELL);
+  gnc_table_model_set_entry_handler(
+      model, gnc_template_register_get_debcred_entry, DEBT_CELL);
 
-  gnc_table_model_set_entry_handler (model,
-                                     gnc_template_register_get_debcred_entry,
-                                     CRED_CELL);
+  gnc_table_model_set_entry_handler(
+      model, gnc_template_register_get_debcred_entry, CRED_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  FCRED_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, FCRED_CELL);
 
-  gnc_table_model_set_io_flags_handler
-                                 (model,
-                                  gnc_split_register_get_standard_io_flags,
-                                  FDEBT_CELL);
+  gnc_table_model_set_io_flags_handler(
+      model, gnc_split_register_get_standard_io_flags, FDEBT_CELL);
 
   gnc_template_register_model_add_save_handlers (model);
 

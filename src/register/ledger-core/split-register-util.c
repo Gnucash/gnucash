@@ -181,9 +181,8 @@ gnc_split_register_get_trans_split (SplitRegister *reg,
 }
 
 Split *
-gnc_split_register_get_current_trans_split
-                                     (SplitRegister *reg,
-                                      VirtualCellLocation *trans_split_loc)
+gnc_split_register_get_current_trans_split(
+    SplitRegister *reg, VirtualCellLocation *trans_split_loc)
 {
   VirtualCellLocation vcell_loc;
 
