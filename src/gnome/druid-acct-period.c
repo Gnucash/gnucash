@@ -241,7 +241,7 @@ prepare_remarks (AcctPeriodInfo *info)
   remarks_text = 
     _("The earliest transaction date found in this book is %s. "
       "Based on the selection made above, this book will be split "
-      "into %d books.  Click on 'Next' to start closing the "
+      "into %d books.  Click on 'Forward' to start closing the "
       "earliest book.");
   str = g_strdup_printf (remarks_text, info->earliest_str, nperiods);
   gtk_label_set_text (info->period_remarks, str);
@@ -287,7 +287,7 @@ show_book_details (AcctPeriodInfo *info)
     _("You have asked for a book to be created.  This book "
       "will contain all transactions up to midnight %s "
       "(for a total of %d transactions spread over %d accounts). "
-      "Click on 'Next' to create this book. "
+      "Click on 'Forward' to create this book. "
       "Click on 'Back' to adjust the dates.");
   str = g_strdup_printf (period_text, close_date_str, ntrans, nacc);
   gtk_label_set_text (info->book_details, str);
