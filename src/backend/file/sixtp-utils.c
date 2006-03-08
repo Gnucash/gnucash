@@ -39,9 +39,6 @@
 #include <errno.h>
 
 #ifdef GNUCASH_MAJOR_VERSION
-#ifndef HAVE_SETENV
-#include "setenv.h"
-#endif
 #ifndef HAVE_STRPTIME
 #include "strptime.h"
 #endif
@@ -394,19 +391,19 @@ gnc_timegm (struct tm *tm)
 
   old_tz = getenv ("TZ");
   /* FIXME: there's no way to report this error to the caller. */
-  if(setenv("TZ", "UTC", 1) != 0)
+  if(g_setenv("TZ", "UTC", 1) != 0)
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(setenv("TZ", old_tz, 1) != 0)
+    if(g_setenv("TZ", old_tz, 1) != 0)
       PERR ("couldn't switch the TZ back.");
   }
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    unsetenv("TZ");
+    g_unsetenv("TZ");
     if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }

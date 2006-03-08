@@ -1,5 +1,12 @@
 2006-03-08   Christian Stimming <stimming@tuhh.de>
 
+	* src/gnc-module/gnc-module.c, src/backend/file/sixtp-utils.c:
+	Replace setenv() by g_setenv for increased cross-platform
+	compatibility.
+
+	* src/engine/gnc-filepath-utils.c: Replace mkdir by g_mkdir for
+	increased cross-platform compatibility.
+
 	* src/core-utils/gnc-gconf-utils.c,
 	src/business/business-gnome/business-urls.c
 	src/gnome-utils/dialog-preferences.c

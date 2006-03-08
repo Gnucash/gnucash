@@ -14,9 +14,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-#ifndef HAVE_SETENV
-#include "setenv.h"
-#endif
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
@@ -143,7 +140,7 @@ gnc_module_system_setup_load_path(void)
     }
     g_list_free(dirs);
     
-    if(setenv("LD_LIBRARY_PATH", envt, 1) != 0)
+    if(g_setenv("LD_LIBRARY_PATH", envt, 1) != 0)
     {
       g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
     }
