@@ -1,5 +1,14 @@
 2006-03-07  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Relabel column
+	titles from "XXX (Report)" to a label that includes the currency
+	mnemonic (e.g. "Total (EUR)"). Closes 118695.
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/engine/gnc-hooks.[ch]: Cache the result of a gconf lookup
+	for a currency choice.  Add a new callback hook for when a user
+	changes a currency setting (default account or report).
+
 	* src/register/register-gnome/combocell-gnome.c:
 	* src/register/register-gnome/gnucash-item-list.[ch]:
 	* src/register/register-gnome/gnucash-item-edit.[ch]:

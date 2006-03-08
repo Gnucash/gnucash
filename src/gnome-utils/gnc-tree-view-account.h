@@ -51,6 +51,7 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_VIEW_ACCOUNT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT))
 #define GNC_IS_TREE_VIEW_ACCOUNT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_ACCOUNT))
 #define GNC_TREE_VIEW_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
+#define GNC_TREE_VIEW_ACCOUNT_NAME            "GncTreeViewAccount"
 
 /* typedefs & structures */
 typedef struct AccountViewInfo_s     AccountViewInfo;
