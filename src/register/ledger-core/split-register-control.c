@@ -368,8 +368,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
     new_trans = gnc_split_register_get_trans (reg, new_virt_loc.vcell_loc);
     new_split = gnc_split_register_get_split (reg, new_virt_loc.vcell_loc);
-    new_trans_split = gnc_split_register_get_trans_split
-      (reg, new_virt_loc.vcell_loc, NULL);
+    new_trans_split = gnc_split_register_get_trans_split(
+        reg, new_virt_loc.vcell_loc, NULL);
     new_class = gnc_split_register_get_cursor_class (reg,
                                                      new_virt_loc.vcell_loc);
   }
@@ -407,8 +407,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     VirtualCellLocation vc_loc;
 
     vc_loc = old_trans_split_loc;
-    gnc_table_set_virt_cell_cursor
-      (reg->table, vc_loc, gnc_split_register_get_passive_cursor (reg));
+    gnc_table_set_virt_cell_cursor(
+        reg->table, vc_loc, gnc_split_register_get_passive_cursor (reg));
     gnc_split_register_set_trans_visible (reg, vc_loc, FALSE,
                                           reg->style == REG_STYLE_JOURNAL);
 
@@ -493,7 +493,7 @@ gnc_find_split_in_account_by_memo (Account *account, const char *memo,
 
     split = gnc_find_split_in_trans_by_memo (trans, memo, unit_price);
 
-    if (split != NULL) return split;
+    if (split) return split;
   }
 
   return NULL;
@@ -507,10 +507,7 @@ gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
   int num_rows, num_cols;
   Transaction *last_trans;
 
-  if (reg == NULL)
-    return NULL;
-
-  if (reg->table == NULL)
+  if (!reg || !reg->table)
     return NULL;
 
   num_rows = reg->table->num_virt_rows;
@@ -548,10 +545,7 @@ gnc_find_trans_in_reg_by_desc (SplitRegister *reg, const char *description)
   int num_rows, num_cols;
   Transaction *last_trans;
 
-  if (reg == NULL)
-    return NULL;
-
-  if (reg->table == NULL)
+  if (!reg || !reg->table)
     return NULL;
 
   num_rows = reg->table->num_virt_rows;
@@ -734,10 +728,10 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         {
           SRSaveData *sd;
 
-          sd = gnc_split_register_save_data_new (trans, blank_split,
-                                         (info->trans_expanded ||
-                                          reg->style == REG_STYLE_AUTO_LEDGER ||
-                                          reg->style == REG_STYLE_JOURNAL));
+          sd = gnc_split_register_save_data_new(
+              trans, blank_split, (info->trans_expanded ||
+                                   reg->style == REG_STYLE_AUTO_LEDGER ||
+                                   reg->style == REG_STYLE_JOURNAL));
           gnc_table_save_cells (reg->table, sd);
           gnc_split_register_save_data_destroy (sd);
         }
@@ -878,7 +872,8 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 }
 
 static void
-gnc_split_register_traverse_check_stock_action (SplitRegister *reg, const char *cell_name)
+gnc_split_register_traverse_check_stock_action (SplitRegister *reg, 
+                                                const char *cell_name)
 {
   BasicCell *cell;
   gnc_numeric shares;
@@ -915,7 +910,8 @@ gnc_split_register_traverse_check_stock_action (SplitRegister *reg, const char *
 }
 
 static void
-gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *cell_name)
+gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, 
+                                                const char *cell_name)
 {
   BasicCell *cell;
   gnc_numeric shares;
@@ -940,24 +936,17 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *
     return;
   name = ((ComboCell *)cell)->cell.value;
 
-  if (buy) {
-    if ((safe_strcmp (name, "") == 0) ||
-	(safe_strcmp (name, ACTION_SELL_STR) == 0)) {
-      gnc_combo_cell_set_value((ComboCell *)cell, ACTION_BUY_STR);
+  if (!safe_strcmp(name, "") ||
+      !safe_strcmp(name, buy ? ACTION_SELL_STR : ACTION_BUY_STR)) {
+      gnc_combo_cell_set_value((ComboCell *)cell, 
+                               buy ? ACTION_BUY_STR : ACTION_SELL_STR);
       gnc_basic_cell_set_changed (cell, TRUE);
-    }
-  } else {
-    if ((safe_strcmp (name, "") == 0) || 
-	(safe_strcmp (name, ACTION_BUY_STR) == 0)) {
-      gnc_combo_cell_set_value((ComboCell *)cell, ACTION_SELL_STR);
-      gnc_basic_cell_set_changed (cell, TRUE);
-    }
   }
 }
 
 static Account *
-gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name)
-
+gnc_split_register_get_account_always (SplitRegister *reg, 
+                                       const char * cell_name)
 {
   BasicCell *cell;
   const char *name;
@@ -968,7 +957,8 @@ gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_nam
     return NULL;
   name = gnc_basic_cell_get_value (cell);
 
-  /* If 'name' is "-- Split Transaction --" then return NULL or the register acct */
+  /* If 'name' is "-- Split Transaction --" then return NULL or the
+     register acct */
   if (!safe_strcmp (name, _("-- Split Transaction --"))) {
     return NULL;
   }
@@ -1028,13 +1018,14 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (!gnc_split_reg_has_rate_cell (reg->type))
     return FALSE;
 
-  rate_cell = (PriceCell*) gnc_table_layout_get_cell (reg->table->layout, RATE_CELL);
+  rate_cell = (PriceCell*) gnc_table_layout_get_cell(
+      reg->table->layout, RATE_CELL);
   if (!rate_cell)
     return FALSE;
 
   /* See if we already have an exchange rate... */
   exch_rate = gnc_price_cell_get_value (rate_cell);
-  if (! gnc_numeric_zero_p (exch_rate) && !force_dialog)
+  if (!gnc_numeric_zero_p(exch_rate) && !force_dialog)
     return FALSE;
 
   /* Are we expanded? */
@@ -1046,10 +1037,8 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     return FALSE;
 
   /* Grab the xfer account */
-  if (expanded)
-    xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL);
-  else
-    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL);
+  xfer_acc = gnc_split_register_get_account_always(
+      reg, expanded ? XFRM_CELL : MXFRM_CELL);
 
   message =
     _("You need to expand the transaction in order to modify its exchange rates.");
@@ -1152,8 +1141,8 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
 
     /* XXX: should we tell the user we've done the conversion? */
-    amount = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
-                              GNC_DENOM_REDUCE);
+    amount = gnc_numeric_div(
+        amount, rate, gnc_commodity_get_fraction (txn_cur), GNC_DENOM_REDUCE);
 
     /* Strangely, if we're in a two-split, non-expanded txn, we need
      * to do something really special with the exchange rate!  In
@@ -1189,15 +1178,15 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
   /* fill in the dialog entries */
   gnc_xfer_dialog_set_amount (xfer, amount);
-  gnc_xfer_dialog_set_description (xfer,
-                                   gnc_split_register_get_cell_string (reg, DESC_CELL));
-  gnc_xfer_dialog_set_memo (xfer, 
-                            gnc_split_register_get_cell_string (reg, MEMO_CELL));
-  gnc_xfer_dialog_set_num (xfer, 
-                           gnc_split_register_get_cell_string (reg, NUM_CELL));
-  gnc_xfer_dialog_set_date (xfer,
-                            timespecToTime_t (
-                            gnc_split_register_get_cell_date (reg, DATE_CELL)));
+  gnc_xfer_dialog_set_description(
+      xfer, gnc_split_register_get_cell_string (reg, DESC_CELL));
+  gnc_xfer_dialog_set_memo(
+      xfer, gnc_split_register_get_cell_string (reg, MEMO_CELL));
+  gnc_xfer_dialog_set_num(
+      xfer, gnc_split_register_get_cell_string (reg, NUM_CELL));
+  gnc_xfer_dialog_set_date(
+      xfer, timespecToTime_t(
+          gnc_split_register_get_cell_date(reg, DATE_CELL)));
 
   /*
    * When we flip, we should tell the dialog so it can deal with the
@@ -1224,6 +1213,75 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   return FALSE;
 }
 
+/* Returns FALSE if dialog was canceled. */
+static gboolean 
+transaction_changed_confirm(VirtualLocation *p_new_virt_loc, 
+                            VirtualLocation *virt_loc,
+                            SplitRegister *reg, Transaction *new_trans, 
+                            gboolean exact_traversal)
+{
+    GtkWidget *dialog, *window;
+    gint response;
+    const char *title = _("Save the changed transaction?");
+    const char *message =
+      _("The current transaction has been changed.  Would you like to "
+	"record the changes before moving to a new transaction, discard the "
+	"changes, or return to the changed transaction?");
+
+    window = gnc_split_register_get_parent(reg);
+    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+				    GTK_DIALOG_DESTROY_WITH_PARENT,
+				    GTK_MESSAGE_QUESTION,
+				    GTK_BUTTONS_NONE,
+				    "%s", title);
+    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+					     "%s", message);
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   _("_Discard Changes"), GTK_RESPONSE_REJECT,
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   _("_Record Changes"), GTK_RESPONSE_ACCEPT,
+			   NULL);
+    response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
+    gtk_widget_destroy(dialog);
+
+    switch (response) {
+    case GTK_RESPONSE_ACCEPT:
+        break;
+
+    case GTK_RESPONSE_REJECT: {
+        VirtualCellLocation vcell_loc;
+        Split *new_split;
+        Split *trans_split;
+        CursorClass new_class;
+
+        new_split = gnc_split_register_get_split (reg, virt_loc->vcell_loc);
+        trans_split = gnc_split_register_get_trans_split (reg,
+                                                          virt_loc->vcell_loc,
+                                                          NULL);
+        new_class = gnc_split_register_get_cursor_class (reg,
+                                                         virt_loc->vcell_loc);
+
+        gnc_split_register_cancel_cursor_trans_changes (reg);
+
+        if (gnc_split_register_find_split (reg, new_trans, trans_split,
+                                           new_split, new_class, &vcell_loc))
+          virt_loc->vcell_loc = vcell_loc;
+
+        gnc_table_find_close_valid_cell (reg->table, virt_loc,
+                                         exact_traversal);
+
+        *p_new_virt_loc = *virt_loc;
+    }
+        break;
+
+    case GTK_RESPONSE_CANCEL:
+    default:
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 static gboolean
 gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
@@ -1233,7 +1291,6 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   Transaction *pending_trans;
   VirtualLocation virt_loc;
   Transaction *trans, *new_trans;
-  gint response;
   gboolean changed;
   SRInfo *info;
   Split *split;
@@ -1276,15 +1333,12 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   /* See if we are leaving an account field */
   do
   {
-    ComboCell *cell;
+    ComboCell *cell = NULL;
     char *name;
-
 
     if (!gnc_cell_name_equal (cell_name, XFRM_CELL) &&
         !gnc_cell_name_equal (cell_name, MXFRM_CELL))
       break;
-
-    cell = NULL;
 
     if (gnc_cell_name_equal (cell_name, XFRM_CELL))
     {
@@ -1323,8 +1377,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
       break;
 
     /* Create the account if necessary. Also checks for a placeholder */
-    (void) gnc_split_register_get_account_by_name (reg, (BasicCell *)cell, cell->cell.value,
-                                                   &info->full_refresh);
+    (void) gnc_split_register_get_account_by_name(
+        reg, (BasicCell *)cell, cell->cell.value, &info->full_refresh);
   } while (FALSE);
 
   /* See if we are leaving an action field */
@@ -1420,9 +1474,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   } while(FALSE);
 
   {
-    int old_virt_row;
-
-    old_virt_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
+    int old_virt_row = reg->table->current_cursor_loc.vcell_loc.virt_row;
     
     /* Check for going off the end */
     gnc_table_find_close_valid_cell (reg->table, &virt_loc,
@@ -1442,84 +1494,19 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   if (trans == new_trans)
   {
     *p_new_virt_loc = virt_loc;
-
     return FALSE;
   }
 
   /* Ok, we are changing transactions and the current transaction has
    * changed. See what the user wants to do. */
-  {
-    GtkWidget *dialog, *window;
-    const char *title = _("Save the changed transaction?");
-    const char *message =
-      _("The current transaction has been changed.  Would you like to "
-	"record the changes before moving to a new transaction, discard the "
-	"changes, or return to the changed transaction?");
-
-    window = gnc_split_register_get_parent(reg);
-    dialog = gtk_message_dialog_new(GTK_WINDOW(window),
-				    GTK_DIALOG_DESTROY_WITH_PARENT,
-				    GTK_MESSAGE_QUESTION,
-				    GTK_BUTTONS_NONE,
-				    "%s", title);
-    gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					     "%s", message);
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			   _("_Discard Changes"), GTK_RESPONSE_REJECT,
-			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			   _("_Record Changes"), GTK_RESPONSE_ACCEPT,
-			   NULL);
-    response = gnc_dialog_run(GTK_DIALOG(dialog), "transaction_changed");
-    gtk_widget_destroy(dialog);
-  }
-
-  switch (response)
-  {
-    case GTK_RESPONSE_ACCEPT:
-      break;
-
-    case GTK_RESPONSE_REJECT:
-      {
-        VirtualCellLocation vcell_loc;
-        Split *new_split;
-        Split *trans_split;
-        CursorClass new_class;
-
-        new_split = gnc_split_register_get_split (reg, virt_loc.vcell_loc);
-        trans_split = gnc_split_register_get_trans_split (reg,
-                                                          virt_loc.vcell_loc,
-                                                          NULL);
-        new_class = gnc_split_register_get_cursor_class (reg,
-                                                         virt_loc.vcell_loc);
-
-        gnc_split_register_cancel_cursor_trans_changes (reg);
-
-        if (gnc_split_register_find_split (reg, new_trans, trans_split,
-                                           new_split, new_class, &vcell_loc))
-          virt_loc.vcell_loc = vcell_loc;
-
-        gnc_table_find_close_valid_cell (reg->table, &virt_loc,
-                                         info->exact_traversal);
-
-        *p_new_virt_loc = virt_loc;
-      }
-
-      break;
-
-    case GTK_RESPONSE_CANCEL:
-    default:
-      return TRUE;
-  }
-
-  return FALSE;
+  return transaction_changed_confirm(p_new_virt_loc, &virt_loc, reg, 
+                                     new_trans, info->exact_traversal);
 }
 
 TableControl *
 gnc_split_register_control_new (void)
 {
-  TableControl *control;
-
-  control = gnc_table_control_new ();
+  TableControl *control = gnc_table_control_new();
 
   control->move_cursor = gnc_split_register_move_cursor;
   control->traverse = gnc_split_register_traverse;
@@ -1552,7 +1539,8 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 				       "%s", title);
   gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					   "%s", message);
-  gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Unreconcile"), GTK_RESPONSE_YES);
+  gtk_dialog_add_button(GTK_DIALOG(dialog), _("_Unreconcile"), 
+                        GTK_RESPONSE_YES);
   response = gnc_dialog_run(GTK_DIALOG(dialog), "mark_split_unreconciled");
   gtk_widget_destroy(dialog);
   return (response == GTK_RESPONSE_YES);
