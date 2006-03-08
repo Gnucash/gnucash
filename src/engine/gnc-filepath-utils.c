@@ -35,6 +35,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -77,13 +78,13 @@ MakeHomeDir (void)
      * and not because its read-protected or other error.
      * Go ahead and make it. Don't bother much with checking mkdir 
      * for errors; seems pointless. */
-    mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+    g_mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
   }
 
   data = g_strconcat (path, "/data", NULL);
   rc = stat (data, &statbuf);
   if (rc)
-    mkdir (data, S_IRWXU);
+    g_mkdir (data, S_IRWXU);
 
   g_free (path);
   g_free (data);
@@ -321,7 +322,7 @@ gnc_validate_directory (const gchar *dirname)
   if (rc) {
     switch (errno) {
     case ENOENT:
-      rc = mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
+      rc = g_mkdir (dirname, S_IRWXU);   /* perms = S_IRWXU = 0700 */
       if (rc) {
 	g_fprintf(stderr,
 		  _("An error occurred while creating the directory:\n"
