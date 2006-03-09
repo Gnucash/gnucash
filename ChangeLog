@@ -1,4 +1,21 @@
 2006-03-09  Neil Williams <linux@codehelp.co.uk>
+	* src/optional/xsl : New directory for optional XSL
+	* src/optional/xsl/vcard-gnccustomer.pl : Perl script
+	to create QSF from VCards
+	* src/optional/xsl/gnucash-gnccustomer-vcard2.xsl :
+	XSL to generate vcards from QSF (gncCustomer)
+	* src/optional/xsl/gnucash-std.xsl : Common routines
+	for gnucash XSL stylesheets
+	* src/optional/xsl/Makefile.am : Don't build, just install.
+	* src/optional/xsl/string.xsl : xsltsl standard library XSL
+	in place until available as a package.
+	* src/optional/xsl/README : Notes on using XSL and examples.
+	* src/optional/xsl/date-time.xsl : xsltsl standard library.
+	* src/optional/Makefile.am : install only.
+	* configure.in : Add instruction to build a Makefile in
+	src/optional/xsl
+
+2006-03-09  Neil Williams <linux@codehelp.co.uk>
 
 	* src/business/business-core/gncInvoice.c : Enable
 	QOF_TYPE_COLLECT to allow recursive copying of gncEntry

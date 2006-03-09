@@ -6,4 +6,4 @@
 # get this to work (automake 1.4p5).
 
 SUBDIRS = 
-DIST_SUBDIRS = swig
+DIST_SUBDIRS = swig xsl
