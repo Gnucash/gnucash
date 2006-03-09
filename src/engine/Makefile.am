@@ -106,21 +106,30 @@ noinst_HEADERS = \
 
 noinst_SCRIPTS = iso-currencies-to-c
 
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
- ${QOF_LIBS} \
- libgw-engine.la \
- libgw-kvp.la \
- ../gnc-module/libgncmodule.la \
- ${top_builddir}/src/core-utils/libcore-utils.la \
- ../../lib/libc/libc-missing.la
+libgncmod_engine_la_LIBADD = \
+  ../gnc-module/libgncmodule.la \
+  ../core-utils/libcore-utils.la \
+  ${G_WRAP_LINK_ARGS} \
+  ${QOF_LIBS} \
+  ${GNUCASH_ENGINE_BASE_LIBS} \
+  ${top_builddir}/lib/libc/libc-missing.la
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
-libgw_kvp_la_LDFLAGS = ${G_WRAP_LINK_ARGS} ${QOF_LIBS}
+libgw_kvp_la_LDFLAGS = \
+  ${G_WRAP_LINK_ARGS} \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
+libgw_kvp_la_LIBADD = \
+  libgncmod-engine.la \
+  libgw-engine.la
 
 libgw_engine_la_SOURCES = gw-engine.c engine-helpers.c glib-helpers.c
 libgw_engine_la_LDFLAGS = \
   ${G_WRAP_LINK_ARGS} \
-  ${QOF_LIBS}
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
+libgw_engine_la_LIBADD = \
+  libgncmod-engine.la
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = engine.scm 
