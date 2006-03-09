@@ -1,5 +1,11 @@
 2006-03-09  Christian Stimming <stimming@tuhh.de>
 
+	* configure.in, src/gnome-utils/gnc-druid-provider-file-gnome.h:
+	Check for <glob.h> and provide own typedef if header unavailable.
+
+	* configure.in, src/gnome-utils/gnc-gnome-utils.c: Check for
+	<X11/Xlib.h> and ignore code section if header unavailable.
+
 	* po/glossary/vi.po: Updated vietnamese glossary by Clytie Siddall
 	<clytie@riverland.net.au>
 
