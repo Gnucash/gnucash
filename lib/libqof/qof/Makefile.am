@@ -29,7 +29,7 @@ libqof_la_SOURCES =  \
    qofquerycore.c    \
    qofreference.c    \
    qofsession.c      \
-   qof_book_merge.c
+   qofbookmerge.c
 
 qofincludedir = ${pkgincludedir}
 
@@ -62,7 +62,7 @@ qofinclude_HEADERS = \
    qofreference.h    \
    qofsession.h      \
    qofsql.h          \
-   qof_book_merge.h
+   qofbookmerge.h
 
 nodist_qofinclude_HEADERS = \
    qofla-dir.h     

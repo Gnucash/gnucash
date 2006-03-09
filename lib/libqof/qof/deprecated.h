@@ -125,5 +125,25 @@ void gnc_engine_resume_events (void);
 /** \deprecated use qof_event_generate instead. */
 void gnc_engine_generate_event (const GUID *guid, QofIdType e_type, 
          GNCEngineEventType event_type);
+/** \deprecated use QofBookMergeResult instead. */
+#define qof_book_mergeResult QofBookMergeResult
+/** \deprecated use QofBookMergeRule instead. */
+#define qof_book_mergeRule QofBookMergeRule
+/** \deprecated use QofBookMergeData instead. */
+#define qof_book_mergeData QofBookMergeData
+/** \deprecated use qof_book_merge_init instead. */
+QofBookMergeData* qof_book_mergeInit( QofBook *importBook, QofBook *targetBook);
+/** \deprecated use QofBookMergeRuleForeachCB instead. */
+typedef void (* qof_book_mergeRuleForeachCB)(QofBookMergeData*, QofBookMergeRule*, guint);
+/** \deprecated use qof_book_merge_rule_foreach instead. */
+void qof_book_mergeRuleForeach(QofBookMergeData* mergeData,
+                               QofBookMergeRuleForeachCB callback , 
+                               QofBookMergeResult mergeResult);
+/** \deprecated use qof_book_merge_update_result instead. */
+QofBookMergeData*
+qof_book_mergeUpdateResult(QofBookMergeData *mergeData, QofBookMergeResult tag);
+/** \deprecated use qof_book_merge_commit instead. */
+gint
+qof_book_mergeCommit(QofBookMergeData *mergeData );
 
 #endif /* _DEPRECATED_H */

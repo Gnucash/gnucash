@@ -97,7 +97,7 @@
 #include "qofsession.h"
 #include "qofsql.h"
 #include "qofchoice.h"
-#include "qof_book_merge.h"
+#include "qofbookmerge.h"
 #include "qof-be-utils.h"
 #include "qofreference.h"
 #include "qofla-dir.h"
