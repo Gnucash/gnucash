@@ -46,6 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
+#include "gnc-event.h"
 
 const char *void_former_amt_str = "void-former-amount";
 const char *void_former_val_str = "void-former-value";
@@ -517,6 +518,8 @@ xaccSplitCommitEdit(Split *s)
             xaccGroupMarkNotSaved (orig_acc->parent);
             //FIXME: find better event type
             qof_event_gen (&orig_acc->inst.entity, QOF_EVENT_MODIFY, NULL);
+	    // And send the account-based event, too
+	    qof_event_gen(&orig_acc->inst.entity, GNC_EVENT_ITEM_REMOVED, s);
         } else PERR("Account lost track of moved or deleted split.");
         orig_acc->balance_dirty = TRUE;
         xaccAccountRecomputeBalance(orig_acc);
@@ -541,6 +544,9 @@ xaccSplitCommitEdit(Split *s)
             xaccGroupMarkNotSaved (acc->parent); //FIXME: probably not needed.
             //FIXME: find better event
             qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
+
+	    /* Also send an event based on the account */
+	    qof_event_gen(&acc->inst.entity, GNC_EVENT_ITEM_ADDED, s);
         } else PERR("Account grabbed split prematurely.");
         acc->balance_dirty = TRUE;
         xaccSplitSetAmount(s, xaccSplitGetAmount(s));

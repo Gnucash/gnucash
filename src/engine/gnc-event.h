@@ -24,11 +24,17 @@
 #define GNC_EVENT_H
 
 #include <glib.h>
+#include <qof.h>
 
 typedef struct {
     gpointer node;
     gint idx;
 } GncEventData;
 
+/* These events are used when a split is added to an account.
+ * The event subject is the Account, the Object is the Split.
+ */
+#define GNC_EVENT_ITEM_ADDED	QOF_MAKE_EVENT(QOF_EVENT_BASE+0)
+#define GNC_EVENT_ITEM_REMOVED	QOF_MAKE_EVENT(QOF_EVENT_BASE+1)
 
 #endif

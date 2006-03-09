@@ -20,6 +20,13 @@
 	* lib/libqof/qof/qofevent.[ch]:
 	  Fix the definition of QOF_EVENT_BASE; use QOF_EVENT__LAST for tests.
 
+	* src/engine/gnc-event.h:
+	  Add GNC_EVENT_ITEM_ADDED and GNC_EVENT_ITEM_REMOVED event definitions
+	* src/engine/Split.c:
+	  Emit GNC_EVENT_ITEM_ADDED and GNC_EVENT_ITEM_REMOVED events
+	  when a split is added or removed from an account.
+	* configure.in: depend on QOF 0.6.3 for proper event handling.
+
 2006-03-08   Christian Stimming <stimming@tuhh.de>
 
 	* src/gnc-module/gnc-module.c, src/backend/file/sixtp-utils.c:
