@@ -37,7 +37,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 
 #include "dialog-utils.h"
 #include "druid-gconf-setup.h"
