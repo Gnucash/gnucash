@@ -190,6 +190,13 @@ BUILT_SOURCES = po/POTFILES.in
 po/POTFILES.in: make-gnucash-potfiles .potfiles
 	./make-gnucash-potfiles > ./po/POTFILES.in
 
+# Creation rules so that po/gnucash.pot can always be created for
+# make dist.
+po/gnucash.pot: po/POTFILES.in intl-scm/guile-strings.c
+	${MAKE} -C po gnucash.pot
+intl-scm/guile-strings.c:
+	${MAKE} -C intl-scm guile-strings.c
+
 .potfiles:
 
 SVN = svn
