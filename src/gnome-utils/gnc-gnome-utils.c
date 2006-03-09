@@ -26,7 +26,9 @@
 #include <gnome.h>
 #include <libguile.h>
 #include <gconf/gconf.h>
-#include <X11/Xlib.h>
+#ifdef HAVE_X11_XLIB_H
+# include <X11/Xlib.h>
+#endif
 
 #include "gnc-html-graph-gog.h"
 
@@ -325,6 +327,7 @@ gnc_ui_check_events (gpointer not_used)
   return TRUE;
 }
 
+#ifdef HAVE_X11_XLIB_H
 static int
 gnc_x_error (Display *display, XErrorEvent *error)
 {
@@ -345,6 +348,7 @@ gnc_x_error (Display *display, XErrorEvent *error)
 
   return 0;
 }
+#endif
 
 int
 gnc_ui_start_event_loop (void)
@@ -356,7 +360,9 @@ gnc_ui_start_event_loop (void)
   id = g_timeout_add_full (G_PRIORITY_DEFAULT_IDLE, 10000, /* 10 secs */
                            gnc_ui_check_events, NULL, NULL);
 
+#ifdef HAVE_X11_XLIB_H
   XSetErrorHandler (gnc_x_error);
+#endif
 
   /* Enter gnome event loop */
   gtk_main ();

@@ -115,6 +115,7 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
 fi
 
 # These are unavailable on windows/mingw32
+AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(getppid getuid gethostname gmtime_r)
 
 ### --------------------------------------------------------------------------
