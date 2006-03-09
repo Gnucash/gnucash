@@ -37,6 +37,7 @@
 #include "gnc-date-edit.h"
 #include "qof.h"
 #include "gnc-pricedb.h"
+#include "gnc-session.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "guile-util.h"
@@ -483,4 +484,25 @@ gnc_price_edit_dialog (GtkWidget * parent,
 
   gtk_widget_show (pedit_dialog->dialog);
   return(price);
+}
+
+/********************************************************************\
+ * gnc_price_edit_by_guid                                           *
+ *   opens up a window to edit price information                    *
+ *                                                                  * 
+ * Args:   parent  - the parent of the window to be created         *
+ * Return: nothing                                                  *
+\********************************************************************/
+GNCPrice *
+gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid)
+{
+  GNCPrice *price;
+  QofSession *session;
+
+  session = gnc_get_current_session ();
+  price = gnc_price_lookup (guid, qof_session_get_book(session));
+  if (price == NULL)
+    return(NULL);
+
+  return(gnc_price_edit_dialog(parent, session, price, GNC_PRICE_EDIT));
 }

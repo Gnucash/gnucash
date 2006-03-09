@@ -1,3 +1,9 @@
+2006-03-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-price-editor.c:
+	* src/gnome/top-level.c:
+	* src/gnc-ui.h: Restore clickable links for price quotes.
+
 2006-03-09  Neil Williams <linux@codehelp.co.uk>
 
 	* src/optional/Makefile.am : Make xsl/ available

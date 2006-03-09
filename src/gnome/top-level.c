@@ -167,6 +167,35 @@ gnc_html_register_url_cb (const char *location, const char *label,
 
 /* ============================================================== */
 
+static gboolean
+gnc_html_price_url_cb (const char *location, const char *label,
+                       gboolean new_window, GNCURLResult *result)
+{
+  QofBook * book = gnc_get_current_book();
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  IF_TYPE ("price-guid=", GNC_ID_PRICE)
+    if (!gnc_price_edit_by_guid (NULL, &guid)) 
+    {
+        result->error_message = g_strdup_printf (_("No such price: %s"),
+                                                 location);
+        return FALSE;
+    }
+  }
+  else
+  {
+      result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+                                               location);
+      return FALSE;
+  }
+
+  return TRUE;
+}
+
 /** Restore all persistent program state.  This function finds the
  *  "new" state file associated with a specific book guid.  It then
  *  iterates through this state information, calling a helper function
@@ -359,6 +388,9 @@ gnc_main_gui_init (void)
 
     gnc_html_register_url_handler (URL_TYPE_REGISTER,
                                    gnc_html_register_url_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_PRICE,
+                                   gnc_html_price_url_cb);
 
     gnc_ui_sx_initialize();
 
