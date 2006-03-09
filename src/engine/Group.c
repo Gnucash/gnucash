@@ -641,8 +641,6 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     return;
   }
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_REMOVE);
-
   acc->parent = NULL;
 
   /* Gather event data */
@@ -706,8 +704,6 @@ group_sort_helper (gconstpointer a, gconstpointer b)
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
-  GncEventData ed;
-
   if (!grp || !grp->book) return;
   if (!acc) return;
 
@@ -760,9 +756,6 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
                                           group_sort_helper);
 
     /* Gather event data */
-    ed.node = acc;
-    ed.idx = 0;
-    qof_event_gen(&acc->inst.entity, QOF_EVENT_ADD, &ed);
     gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_ADD);
 
     acc->inst.dirty = TRUE;

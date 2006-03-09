@@ -1445,7 +1445,8 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
   Account *account, *parent;
 
   g_return_if_fail(model);	/* Required */
-  if (!ed) return;		/* Required for us. Not always sent. */
+  if (!GNC_IS_ACCOUNT(entity))
+    return;
 
   ENTER("entity %p of type %d, model %p, event_data %p",
 	entity, event_type, model, ed);
@@ -1455,7 +1456,7 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
   switch (event_type) {
     case QOF_EVENT_ADD:
       /* Tell the filters/views where the new account was added. */
-      account = GNC_ACCOUNT(ed->node);
+      account = GNC_ACCOUNT(entity);
       DEBUG("add account %p (%s)", account, xaccAccountGetName(account));
       path = gnc_tree_model_account_get_path_from_account(model, account);
       if (!path) {
@@ -1472,6 +1473,8 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
       break;
 
     case QOF_EVENT_REMOVE:
+      if (!ed) /* Required for a remove. */
+	break;
       parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->toplevel;
       parent_name = ed->node ? xaccAccountGetName(parent) : "Root";
       DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
@@ -1486,7 +1489,7 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
       break;
 
     case QOF_EVENT_MODIFY:
-      account = GNC_ACCOUNT(ed->node);
+      account = GNC_ACCOUNT(entity);
       DEBUG("modify  account %p (%s)", account, xaccAccountGetName(account));
       path = gnc_tree_model_account_get_path_from_account(model, account);
       if (!path) {

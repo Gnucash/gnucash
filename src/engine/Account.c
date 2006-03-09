@@ -316,16 +316,8 @@ xaccAccountBeginEdit (Account *acc)
 
 static inline void on_done(QofInstance *inst) 
 {
-    GncEventData ed;
-
     /* old event style */
     gnc_engine_gen_event (&inst->entity, GNC_EVENT_MODIFY);
-
-    /* new event style */
-    ed.node = inst;
-    ed.idx = 0;
-    qof_event_gen(&inst->entity, QOF_EVENT_MODIFY, &ed);
-
 }
 
 static inline void on_err (QofInstance *inst, QofBackendError errcode)
@@ -902,7 +894,6 @@ xaccAccountRecomputeBalance (Account * acc)
   gnc_numeric  reconciled_balance;
   Split *last_split = NULL;
   GList *lp;
-  GncEventData ed;
 
   if (NULL == acc) return;
   if (acc->inst.editlevel > 0) return;
@@ -948,9 +939,6 @@ xaccAccountRecomputeBalance (Account * acc)
 
   acc->balance_dirty = FALSE;
 
-  ed.node = acc;
-  ed.idx = 0;
-  qof_event_gen(&acc->inst.entity, QOF_EVENT_MODIFY, &ed);
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
