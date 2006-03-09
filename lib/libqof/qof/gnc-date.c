@@ -1425,7 +1425,11 @@ qof_date_add_days(Timespec *ts, gint days)
 
 	g_return_val_if_fail(ts, FALSE);
 	tt = timespecToTime_t(*ts);
+#ifdef HAVE_GMTIME_R
 	tm = *gmtime_r(&tt, &tm);
+#else
+	tm = *gmtime(&tt);
+#endif
 	tm.tm_mday += days;
 	/* let mktime normalise the months and year
 	because we aren't tracking last_day_of_month */
@@ -1445,7 +1449,11 @@ qof_date_add_months(Timespec *ts, gint months, gboolean track_last_day)
 
 	g_return_val_if_fail(ts, FALSE);
 	tt = timespecToTime_t(*ts);
+#ifdef HAVE_GMTIME_R
 	tm = *gmtime_r(&tt, &tm);
+#else
+	tm = *gmtime(&tt);
+#endif
 	was_last_day = date_is_last_mday(&tm);
 	tm.tm_mon += months;
 	while (tm.tm_mon > 11) {
