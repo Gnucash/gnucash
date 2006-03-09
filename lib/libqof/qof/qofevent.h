@@ -51,7 +51,11 @@ events added within QOF.
 #define APP_EVENT_B QOF_MAKE_EVENT(QOF_EVENT_BASE+1)
 /endverbatim
 */
-#define QOF_MAKE_EVENT(x)    (1<<x)
+#define QOF_MAKE_EVENT(x)    (1<<(x))
+
+/** Allow scope for more defaults in future. Additional
+event identifiers must be based on this when using QOF_MAKE_EVENT(). */
+#define QOF_EVENT_BASE 8
 
 /** \brief Default events for backwards compatibility.
 
@@ -64,12 +68,9 @@ any process can define their own events.
 #define QOF_EVENT_DESTROY  QOF_MAKE_EVENT(2)
 #define QOF_EVENT_ADD      QOF_MAKE_EVENT(3)
 #define QOF_EVENT_REMOVE   QOF_MAKE_EVENT(4)
-#define QOF_EVENT__LAST    QOF_EVENT_REMOVE 
+#define QOF_EVENT__LAST    QOF_MAKE_EVENT(QOF_EVENT_BASE-1)
 #define QOF_EVENT_ALL      (0xff)
-
-/** Allow scope for more defaults in future. Additional
-event identifiers must be larger than this. */
-#define QOF_EVENT_BASE  QOF_EVENT__LAST
+/* Note that events 5, 6, and 7 are "undefined" as of 2006-03-08 */
 
 /** \brief Handler invoked when an event is generated.
  *

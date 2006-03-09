@@ -13,6 +13,9 @@
 	* src/engine/gnc-filepath-utils.c:
 	  gstdio.h and g_mkdir are in glib-2.6 -- use old APIs with glib-2.4.
 
+	* lib/libqof/qof/qofevent.[ch]:
+	  Fix the definition of QOF_EVENT_BASE; use QOF_EVENT__LAST for tests.
+
 2006-03-08   Christian Stimming <stimming@tuhh.de>
 
 	* src/gnc-module/gnc-module.c, src/backend/file/sixtp-utils.c:
