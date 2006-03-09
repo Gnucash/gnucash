@@ -1,3 +1,8 @@
+2006-03-09  Christian Stimming <stimming@tuhh.de>
+
+	* po/glossary/vi.po: Updated vietnamese glossary by Clytie Siddall
+	<clytie@riverland.net.au>
+
 2006-03-09  David Hampton  <hampton@employees.org>
 
 	* src/engine/gw-engine-spec.scm:
