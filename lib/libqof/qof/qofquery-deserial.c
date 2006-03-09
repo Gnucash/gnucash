@@ -24,7 +24,7 @@
 #include "config.h"
 
 /* NOTE: Development of this idea has ceased and this file is
-no longer included in the QOF library. It remains in CVS for now.*/
+no longer built into the QOF library. It remains in CVS until libqof2.*/
 
 #include <stdlib.h>
 #include <glib.h>
