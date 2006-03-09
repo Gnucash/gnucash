@@ -356,7 +356,7 @@ gnc_employee_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &ew->employee_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (ew->component_id);
       return;
     }
@@ -556,7 +556,7 @@ gnc_employee_new_window (GNCBook *bookp,
 
   gnc_gui_component_watch_entity_type (ew->component_id,
 				       GNC_EMPLOYEE_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_widget_show_all (ew->dialog);
 

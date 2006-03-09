@@ -109,13 +109,13 @@
 
 (gw:wrap-as-wct ws '<gnc:Query*> "Query *" "const Query *")
 
-(let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "GNCEngineEventType")))
+(let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "QofEventId")))
 
-  (gw:enum-add-value! wt "GNC_EVENT_NONE" 'gnc-event-none)
-  (gw:enum-add-value! wt "GNC_EVENT_CREATE" 'gnc-event-create)
-  (gw:enum-add-value! wt "GNC_EVENT_MODIFY" 'gnc-event-modify)
-  (gw:enum-add-value! wt "GNC_EVENT_DESTROY" 'gnc-event-destroy)
-  (gw:enum-add-value! wt "GNC_EVENT_ALL" 'gnc-event-all))
+  (gw:enum-add-value! wt "QOF_EVENT_NONE" 'gnc-event-none)
+  (gw:enum-add-value! wt "QOF_EVENT_CREATE" 'gnc-event-create)
+  (gw:enum-add-value! wt "QOF_EVENT_MODIFY" 'gnc-event-modify)
+  (gw:enum-add-value! wt "QOF_EVENT_DESTROY" 'gnc-event-destroy)
+  (gw:enum-add-value! wt "QOF_EVENT_ALL" 'gnc-event-all))
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QofQueryOp")))
 
@@ -1491,7 +1491,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:set-log-level-global
  '<gw:void>
- "gnc_set_log_level_global"
+ "qof_log_set_level_registered"
  '((<gw:int> level))
  "Set the logging level for all modules to level.")
 
@@ -2465,7 +2465,7 @@ the timepair representing midday on that day")
  ws
  'gnc:engine-suspend-events
  '<gw:void>
- "gnc_engine_suspend_events"
+ "qof_event_suspend"
  '()
  "Suspend all engine events.") 
 
@@ -2473,7 +2473,7 @@ the timepair representing midday on that day")
  ws
  'gnc:engine-resume-events
  '<gw:void>
- "gnc_engine_resume_events"
+ "qof_event_resume"
  '()
  "Resume engine event generation.") 
 

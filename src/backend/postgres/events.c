@@ -131,7 +131,7 @@ pgendEventsPending (QofBackend *bend)
 
 typedef struct _event {
    Timespec stamp;
-   GNCEngineEventType type;
+   QofEventId type;
    GUID guid;
    QofIdType obj_type;
 } Event; 
@@ -145,7 +145,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    Event *ev = NULL;
    GUID guid;
    Timespec ts;
-   GNCEngineEventType type;
+   QofEventId type;
    char change = (DB_GET_VAL("change",j))[0];
    char objtype = (DB_GET_VAL("objtype",j))[0];
    QofIdType obj_type = GNC_ID_NONE;
@@ -156,9 +156,9 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    /* convert from SQL type to engine type */
    switch (change)
    {
-      case 'a': type = GNC_EVENT_CREATE; break;
-      case 'm': type = GNC_EVENT_MODIFY; break;
-      case 'd': type = GNC_EVENT_DESTROY; break;
+      case 'a': type = QOF_EVENT_CREATE; break;
+      case 'm': type = QOF_EVENT_MODIFY; break;
+      case 'd': type = QOF_EVENT_DESTROY; break;
       default:
          PERR ("unknown change type %c for guid=%s", change, guid_str);
          return data;
@@ -287,8 +287,8 @@ pgendProcessEvents (QofBackend *bend)
             default:
                PERR ("account: cant' happen !!!!!!!");
                break;
-            case GNC_EVENT_CREATE:
-            case GNC_EVENT_MODIFY: {
+            case QOF_EVENT_CREATE:
+            case QOF_EVENT_MODIFY: {
                Account *acc;
 
                /* if the remote user created an account, mirror it here */
@@ -297,7 +297,7 @@ pgendProcessEvents (QofBackend *bend)
                ent = (QofEntity*)acc;
                break;
             }
-            case GNC_EVENT_DESTROY: {
+            case QOF_EVENT_DESTROY: {
                Account * acc = pgendAccountLookup (be, &(ev->guid));
                AccountGroup *topgrp = xaccAccountGetRoot(acc);
                xaccAccountBeginEdit (acc);
@@ -320,7 +320,7 @@ pgendProcessEvents (QofBackend *bend)
             default:
                PERR ("transaction: cant' happen !!!!!!!");
                break;
-            case GNC_EVENT_CREATE: {
+            case QOF_EVENT_CREATE: {
                Transaction *trans;
                /* don't mirror transaction creations. If a register needs
                 * it, it will do a query. */
@@ -329,14 +329,14 @@ pgendProcessEvents (QofBackend *bend)
                PINFO ("create transaction");
                break;
 			}
-            case GNC_EVENT_MODIFY: {
+            case QOF_EVENT_MODIFY: {
                Transaction *trans;
                trans = pgendTransLookup (be, &(ev->guid));
                pgendCopyTransactionToEngine (be, &(ev->guid));
                ent = (QofEntity*)trans;
                break;
 			}
-            case GNC_EVENT_DESTROY: {
+            case QOF_EVENT_DESTROY: {
                Transaction *trans = pgendTransLookup (be, &(ev->guid));
                xaccTransBeginEdit (trans);
                /* mark trans for freeing */
@@ -375,7 +375,7 @@ pgendProcessEvents (QofBackend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-              gnc_engine_gen_event(ent, GNC_EVENT_CREATE);
+	       qof_event_gen(ent, QOF_EVENT_CREATE, NULL);
          }
       }
       else 
@@ -383,11 +383,11 @@ pgendProcessEvents (QofBackend *bend)
          local_obj_type = pgendGUIDType (be, &(ev->guid));
          if (GNC_ID_NONE != local_obj_type)
          {
-              gnc_engine_gen_event(ent, GNC_EVENT_MODIFY);
+	       qof_event_gen(ent, QOF_EVENT_MODIFY, NULL);
          }
          else
          {
-              gnc_engine_gen_event(ent, GNC_EVENT_DESTROY);
+	       qof_event_gen(ent, QOF_EVENT_DESTROY, NULL);
          }
       }
    

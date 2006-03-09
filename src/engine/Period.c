@@ -118,7 +118,7 @@ gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (newtrans);
-   gnc_engine_gen_event (&newtrans->inst.entity, GNC_EVENT_CREATE);
+   qof_event_gen (&newtrans->inst.entity, QOF_EVENT_CREATE, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 
@@ -186,7 +186,7 @@ gnc_book_insert_trans (QofBook *book, Transaction *trans)
    }
 
    xaccTransCommitEdit (trans);
-   gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
+   qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
    LEAVE ("trans=%p %s", trans, trans->description);
 }
 

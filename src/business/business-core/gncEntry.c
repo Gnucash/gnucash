@@ -170,7 +170,7 @@ void mark_entry (GncEntry *entry)
 {
   entry->inst.dirty = TRUE;
   qof_collection_mark_dirty (entry->inst.entity.collection);
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================ */
@@ -204,7 +204,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
   entry->values_dirty = TRUE;
 
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return entry;
 }
@@ -220,7 +220,7 @@ static void gncEntryFree (GncEntry *entry)
 {
   if (!entry) return;
 
-  gnc_engine_gen_event (&entry->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&entry->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
@@ -560,8 +560,8 @@ void gncEntrySetOrder (GncEntry *entry, GncOrder *order)
 
   /* Generate an event modifying the Order's end-owner */
 #if 0  
-  gnc_engine_gen_event (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
-			     GNC_EVENT_MODIFY);
+  qof_event_gen (gncOwnerGetEndGUID (gncOrderGetOwner (order)),
+		 QOF_EVENT_MODIFY, NULL);
 #endif
 }
 

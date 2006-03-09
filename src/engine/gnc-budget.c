@@ -65,7 +65,7 @@ gnc_budget_new(QofBook *book)
     gnc_budget_set_description(budget, "");
     gnc_budget_set_num_periods(budget, 12);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_CREATE );
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_CREATE , NULL);
 
     LEAVE(" ");
     return budget;
@@ -83,7 +83,7 @@ gnc_budget_free(GncBudget* budget)
     /* We first send the message that this object is about to be
      * destroyed so that any GUI elements can remove it before it is
      * actually gone. */
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_DESTROY);
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_DESTROY, NULL);
 
     CACHE_REMOVE(budget->name);
     CACHE_REMOVE(budget->description);
@@ -100,7 +100,7 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
     CACHE_REPLACE(budget->name, name);
     qof_collection_mark_dirty(budget->inst.entity.collection);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -119,7 +119,7 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     CACHE_REPLACE(budget->description, description);
     qof_collection_mark_dirty(budget->inst.entity.collection);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const gchar*
@@ -136,7 +136,7 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
     budget->recurrence = *r;
     qof_collection_mark_dirty(budget->inst.entity.collection);
 
-    gnc_engine_gen_event(&budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_event_gen(&budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 const Recurrence *
@@ -161,7 +161,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     budget->num_periods = num_periods;
     qof_collection_mark_dirty(budget->inst.entity.collection);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 guint
@@ -193,7 +193,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     kvp_frame_set_numeric(frame, path, val);
     qof_collection_mark_dirty(budget->inst.entity.collection);
 
-    gnc_engine_gen_event( &budget->inst.entity, GNC_EVENT_MODIFY);
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 
 }
 

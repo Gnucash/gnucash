@@ -544,7 +544,7 @@ billterms_window_refresh (BillTermsWindow *btw)
 
     gnc_gui_component_watch_entity (btw->component_id,
 				    gncBillTermGetGUID (term),
-				    GNC_EVENT_MODIFY);
+				    QOF_EVENT_MODIFY);
 
     row_text[0] = (char *)gncBillTermGetName (term);
     row_text[1] = NULL;
@@ -558,7 +558,7 @@ billterms_window_refresh (BillTermsWindow *btw)
 
   gnc_gui_component_watch_entity_type (btw->component_id,
 				       GNC_BILLTERM_MODULE_NAME,
-				       GNC_EVENT_CREATE | GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_DESTROY);
 
   if (vadjustment) {
     save_value = CLAMP (save_value, vadjustment->lower,

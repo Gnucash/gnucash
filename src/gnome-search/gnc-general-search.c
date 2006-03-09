@@ -196,7 +196,7 @@ refresh_handler (GHashTable *changes, gpointer data)
 	if (changes) {
 		info = gnc_gui_get_entity_events (changes, &priv->guid);
 		if (info) {
-			if (info->event_mask & GNC_EVENT_DESTROY)
+			if (info->event_mask & QOF_EVENT_DESTROY)
 				gsl->selected_item = NULL;
 			reset_selection_text (gsl);
 		}
@@ -341,7 +341,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 					      (gsl->selected_item, get_guid)));
 		gnc_gui_component_watch_entity
 			(priv->component_id, &(priv->guid),
-			 GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+			 QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 	} else
 		priv->guid = *xaccGUIDNULL ();
 }

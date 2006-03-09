@@ -489,7 +489,7 @@ gnc_main_window_summary_new (void)
                                                     NULL, retval);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   for ( i = 0; i < N_COLUMNS; i++ )
   {

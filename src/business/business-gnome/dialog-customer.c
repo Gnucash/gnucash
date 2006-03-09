@@ -405,7 +405,7 @@ gnc_customer_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &cw->customer_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (cw->component_id);
       return;
     }
@@ -620,7 +620,7 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   gnc_gui_component_watch_entity_type (cw->component_id,
 				       GNC_CUSTOMER_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_widget_show_all (cw->dialog);
 

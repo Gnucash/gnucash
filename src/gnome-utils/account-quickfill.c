@@ -71,7 +71,7 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
  */
 static void
 listen_for_account_events (GUID *guid, QofIdType type, 
-                           GNCEngineEventType event_type, 
+                           QofEventId event_type, 
                            gpointer user_data)
 {
   QFB *qfb = user_data;
@@ -83,7 +83,7 @@ listen_for_account_events (GUID *guid, QofIdType type,
   Account *account;
   GtkTreeIter iter;
 
-  if (! (event_type & GNC_EVENT_MODIFY)) return;
+  if (! (event_type & QOF_EVENT_MODIFY)) return;
   if (QSTRCMP (type, GNC_ID_ACCOUNT)) return;
 
   col = qof_book_get_collection (qfb->book, GNC_ID_ACCOUNT);

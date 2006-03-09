@@ -341,11 +341,11 @@ gnc_plugin_page_budget_refresh_cb(GHashTable *changes, gpointer user_data)
     if (changes) {
         ei = gnc_gui_get_entity_events(changes, &priv->key);
         if (ei) {
-            if (ei->event_mask & GNC_EVENT_DESTROY) {
+            if (ei->event_mask & QOF_EVENT_DESTROY) {
                 gnc_plugin_page_budget_close_cb(user_data);
                 return;
             }
-            if (ei->event_mask & GNC_EVENT_MODIFY) {
+            if (ei->event_mask & QOF_EVENT_MODIFY) {
                 DEBUG("refreshing budget view because budget was modified");
                 gnc_plugin_page_budget_view_refresh(page);
             }
@@ -425,7 +425,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
 
     gnc_gui_component_watch_entity (priv->component_id,
                                     gnc_budget_get_guid(priv->budget),
-                                    GNC_EVENT_DESTROY | GNC_EVENT_MODIFY);
+                                    QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
     gnc_plugin_page_budget_view_refresh(page);
 

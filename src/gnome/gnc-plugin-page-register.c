@@ -746,7 +746,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	if (acct)
 	    gnc_gui_component_watch_entity (
 		priv->component_manager_id, xaccAccountGetGUID(acct),
-		GNC_EVENT_DESTROY | GNC_EVENT_MODIFY);
+		QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
@@ -2716,11 +2716,11 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
       const EventInfo* ei;
       ei = gnc_gui_get_entity_events(changes, &priv->key);
       if (ei) {
-          if (ei->event_mask & GNC_EVENT_DESTROY) {
+          if (ei->event_mask & QOF_EVENT_DESTROY) {
               gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
               return;
           }
-          if (ei->event_mask & GNC_EVENT_MODIFY) {
+          if (ei->event_mask & QOF_EVENT_MODIFY) {
               /* CAS: We need to also handle account renames, but at
                  least we don't crash for those. */
           }

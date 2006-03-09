@@ -220,16 +220,16 @@ void gen_event_trans (Transaction *trans)
     if (account)
     {
       xaccGroupMarkNotSaved (account->parent);
-      gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
+      qof_event_gen (&account->inst.entity, QOF_EVENT_MODIFY, NULL);
     }
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
-      gnc_engine_gen_event (&lot->inst.entity, GNC_EVENT_MODIFY);
+      qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
     }
   }
 #endif
-  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -276,7 +276,7 @@ xaccMallocTransaction (QofBook *book)
 
   trans = g_new(Transaction, 1);
   xaccInitTransaction (trans, book);
-  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&trans->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return trans;
 }
@@ -889,7 +889,7 @@ do_destroy (Transaction *trans)
   if (!shutting_down)
     xaccTransWriteLog (trans, 'D');
 
-  gnc_engine_gen_event (&trans->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&trans->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   /* We only own the splits that still think they belong to us. */
   trans->splits = g_list_copy(trans->splits);

@@ -69,7 +69,7 @@ void mark_vendor (GncVendor *vendor)
 {
   vendor->inst.dirty = TRUE;
   qof_collection_mark_dirty (vendor->inst.entity.collection);
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -92,7 +92,7 @@ GncVendor *gncVendorCreate (QofBook *book)
   vendor->active = TRUE;
   vendor->jobs = NULL;
 
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -108,7 +108,7 @@ static void gncVendorFree (GncVendor *vendor)
 {
   if (!vendor) return;
 
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
@@ -162,7 +162,7 @@ gncCloneVendor (GncVendor *from, QofBook *book)
     vendor->jobs = g_list_prepend(vendor->jobs, job);
   }
 
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return vendor;
 }
@@ -397,7 +397,7 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
     vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
                                          (GCompareFunc)gncJobCompare);
 
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -415,7 +415,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
     g_list_free_1 (node);
   }
 
-  gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void gncVendorBeginEdit (GncVendor *vendor)

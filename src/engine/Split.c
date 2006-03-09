@@ -516,7 +516,7 @@ xaccSplitCommitEdit(Split *s)
             //FIXME: probably not needed.
             xaccGroupMarkNotSaved (orig_acc->parent);
             //FIXME: find better event type
-            gnc_engine_gen_event (&orig_acc->inst.entity, GNC_EVENT_MODIFY);
+            qof_event_gen (&orig_acc->inst.entity, QOF_EVENT_MODIFY, NULL);
         } else PERR("Account lost track of moved or deleted split.");
         orig_acc->balance_dirty = TRUE;
         xaccAccountRecomputeBalance(orig_acc);
@@ -540,7 +540,7 @@ xaccSplitCommitEdit(Split *s)
 
             xaccGroupMarkNotSaved (acc->parent); //FIXME: probably not needed.
             //FIXME: find better event
-            gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+            qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
         } else PERR("Account grabbed split prematurely.");
         acc->balance_dirty = TRUE;
         xaccSplitSetAmount(s, xaccSplitGetAmount(s));
@@ -548,11 +548,11 @@ xaccSplitCommitEdit(Split *s)
 
     if (s->orig_parent && s->parent != s->orig_parent) {
         //FIXME: find better event
-        gnc_engine_gen_event (&s->orig_parent->inst.entity, GNC_EVENT_MODIFY);
+        qof_event_gen (&s->orig_parent->inst.entity, QOF_EVENT_MODIFY, NULL);
     }
     if (s->lot) {
         /* A change of value/amnt affects gains display, etc. */
-        gnc_engine_gen_event (&s->lot->inst.entity, GNC_EVENT_MODIFY);
+        qof_event_gen (&s->lot->inst.entity, QOF_EVENT_MODIFY, NULL);
     }
 
     /* Important: we save off the original parent transaction and account

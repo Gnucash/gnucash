@@ -95,7 +95,7 @@ obj_create(QofBook *book)
 	g->active = TRUE;
 	g->version = 1;
 	g->minor = 1;
-	gnc_engine_gen_event(&g->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -286,7 +286,7 @@ test_merge (void)
 	do_test ((NULL != &import_obj->inst), "#4 instance init");
 	obj_setGUID(import_obj,qof_instance_get_guid(&import_obj->inst));
 	do_test ((NULL != &import_obj->obj_guid), "#5 guid set");
-	gnc_engine_gen_event(&import_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&import_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	do_test ((NULL != &import_obj->inst.entity), "#6 gnc event create");
 	obj_setName(import_obj, import_init);
 	do_test ((NULL != &import_obj->Name), "#7 string set");
@@ -314,7 +314,7 @@ test_merge (void)
 	new_obj = g_new(myobj, 1);
 	qof_instance_init (&new_obj->inst, TEST_MODULE_NAME, import);
 	obj_setGUID(new_obj,qof_instance_get_guid(&new_obj->inst));
-	gnc_engine_gen_event (&new_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen (&new_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	obj_setName(new_obj, import_init);
 	obj_setAmount(new_obj, obj_amount);
 	obj_setActive(new_obj, active);
@@ -334,7 +334,7 @@ test_merge (void)
 	target_obj = g_new(myobj, 1);
 	qof_instance_init (&target_obj->inst, TEST_MODULE_NAME, target);
 	obj_setGUID(target_obj,qof_instance_get_guid(&target_obj->inst));
-	gnc_engine_gen_event (&target_obj->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen (&target_obj->inst.entity, QOF_EVENT_CREATE, NULL);
 	obj_setName(target_obj, target_init);
 	obj_setAmount(target_obj, obj_amount);
 	obj_setActive(target_obj, active);

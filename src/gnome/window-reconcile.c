@@ -1276,7 +1276,7 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
         
         gnc_gui_component_watch_entity (recnData->component_id,
                                         xaccTransGetGUID (trans),
-                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
         break;
 
       default:
@@ -1296,7 +1296,7 @@ recn_set_watches (RecnWindow *recnData)
 
   gnc_gui_component_watch_entity (recnData->component_id,
                                   &recnData->account,
-                                  GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                  QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   account = recn_get_account (recnData);
 
@@ -1329,7 +1329,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   if (changes)
   {
     info = gnc_gui_get_entity_events (changes, &recnData->account);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    if (info && (info->event_mask & QOF_EVENT_DESTROY))
     {
       gnc_close_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
       return;

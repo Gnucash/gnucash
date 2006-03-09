@@ -396,7 +396,7 @@ gnc_order_window_refresh_handler (GHashTable *changes, gpointer user_data)
   /* Next, close if this is a destroy event */
   if (changes) {
     info = gnc_gui_get_entity_events (changes, &ow->order_guid);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY)) {
+    if (info && (info->event_mask & QOF_EVENT_DESTROY)) {
       gnc_close_gui_component (ow->component_id);
       return;
     }
@@ -480,7 +480,7 @@ gnc_order_update_window (OrderWindow *ow)
 
   gnc_gui_component_watch_entity_type (ow->component_id,
 				       GNC_ORDER_MODULE_NAME,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (ow->ledger), TRUE);
 

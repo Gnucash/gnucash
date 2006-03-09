@@ -92,7 +92,7 @@ mark_invoice (GncInvoice *invoice)
 {
   invoice->inst.dirty = TRUE;
   qof_collection_mark_dirty (invoice->inst.entity.collection);
-  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ================================================================== */
@@ -116,7 +116,7 @@ GncInvoice *gncInvoiceCreate (QofBook *book)
 
   invoice->to_charge_amount = gnc_numeric_zero();
 
-  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&invoice->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }
@@ -132,7 +132,7 @@ static void gncInvoiceFree (GncInvoice *invoice)
 {
   if (!invoice) return;
 
-  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&invoice->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
@@ -195,7 +195,7 @@ XXX not done */
   GNCLot *	posted_lot;
 #endif
 
-  gnc_engine_gen_event (&invoice->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&invoice->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return invoice;
 }
@@ -1381,7 +1381,7 @@ gncOwnerApplyPayment (GncOwner *owner, GncInvoice* invoice,
     /* Now send an event for the invoice so it gets updated as paid */
     this_invoice = gncInvoiceGetInvoiceFromLot(lot);
     if (this_invoice)
-      gnc_engine_gen_event (&this_invoice->inst.entity, GNC_EVENT_MODIFY);
+      qof_event_gen (&this_invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
 
     if (gnc_numeric_zero_p (amount))
       break;

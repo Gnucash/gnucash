@@ -618,7 +618,7 @@ xaccAccountRemoveGroup (Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -662,7 +662,7 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     xaccFreeAccountGroup (grp);
   }
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -685,7 +685,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 
   xaccGroupInsertAccount (adult->children, child);
 
-  gnc_engine_gen_event (&adult->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&adult->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -742,10 +742,10 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
           */
          PWARN ("reparenting accounts across books is not correctly supported\n");
 
-         gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
+         qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
          col = qof_book_get_collection (grp->book, GNC_ID_ACCOUNT);
          qof_collection_insert_entity (col, &acc->inst.entity);
-         gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_CREATE);
+         qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
       }
     }
 
@@ -764,7 +764,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 
   grp->saved = 0;
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
   LEAVE(" ");
 }
 
@@ -833,7 +833,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccGroupCopyGroup (to_acc->children, from_acc->children);
       }
       xaccAccountCommitEdit (to_acc);
-      gnc_engine_gen_event (&to_acc->inst.entity, GNC_EVENT_CREATE);
+      qof_event_gen (&to_acc->inst.entity, QOF_EVENT_CREATE, NULL);
 
       /* make sure that we have a symmetric, uniform number of 
        * begin-edits, so that subsequent GroupCommitEdit's 
@@ -893,14 +893,14 @@ xaccGroupMergeAccounts (AccountGroup *grp)
             gb->parent = acc_a;
             acc_b->children = NULL;
 
-            gnc_engine_gen_event (&acc_a->inst.entity, GNC_EVENT_MODIFY);
-            gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_MODIFY);
+            qof_event_gen (&acc_a->inst.entity, QOF_EVENT_MODIFY, NULL);
+            qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
           }
           else
           {
             xaccGroupConcatGroup (ga, gb);
             acc_b->children = NULL;
-            gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_MODIFY);
+            qof_event_gen (&acc_b->inst.entity, QOF_EVENT_MODIFY, NULL);
           }
         }
 
@@ -914,8 +914,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         {
           Split *split = lp->data;
 
-          gnc_engine_gen_event (&xaccSplitGetAccount(split)->inst.entity,
-				     GNC_EVENT_MODIFY);
+          qof_event_gen (&xaccSplitGetAccount(split)->inst.entity,
+			 QOF_EVENT_MODIFY, NULL);
           split->acc = NULL;
           xaccAccountInsertSplit (acc_a, split);
         }
@@ -927,7 +927,7 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         node_b = node_b->prev;
 
         /* remove from list -- node_a is ok, it's before node_b */
-	gnc_engine_gen_event (&acc_b->inst.entity, GNC_EVENT_REMOVE);
+	qof_event_gen (&acc_b->inst.entity, QOF_EVENT_REMOVE, NULL);
         grp->accounts = g_list_remove (grp->accounts, acc_b);
 
         xaccAccountBeginEdit (acc_b);

@@ -72,7 +72,7 @@ void mark_order (GncOrder *order)
 {
   order->inst.dirty = TRUE;
   qof_collection_mark_dirty (order->inst.entity.collection);
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* =============================================================== */
@@ -93,7 +93,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
   order->active = TRUE;
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return order;
 }
@@ -109,7 +109,7 @@ static void gncOrderFree (GncOrder *order)
 {
   if (!order) return;
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
@@ -153,7 +153,7 @@ gncCloneOrder (GncOrder *from, QofBook *book)
     order->entries = g_list_prepend (order->entries, entry);
   }
 
-  gnc_engine_gen_event (&order->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&order->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return order;
 }

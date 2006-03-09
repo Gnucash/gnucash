@@ -1438,7 +1438,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   if (changes)
   {
     info = gnc_gui_get_entity_events (changes, &aw->account);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    if (info && (info->event_mask & QOF_EVENT_DESTROY))
     {
       gnc_close_gui_component (aw->component_id);
       return;
@@ -1521,7 +1521,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
   gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
   gnc_gui_component_watch_entity_type (aw->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
   return aw;
 }
 
@@ -1712,7 +1712,7 @@ gnc_ui_edit_account_window(Account *account)
   gnc_gui_component_set_session (aw->component_id, gnc_get_current_session());
   gnc_gui_component_watch_entity_type (aw->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_window_present(GTK_WINDOW(aw->dialog));
 }

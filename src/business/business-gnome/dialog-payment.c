@@ -437,8 +437,8 @@ new_payment_window (GncOwner *owner, GNCBook *book, GncInvoice *invoice)
   /* Watch for any new or changed accounts */
   gnc_gui_component_watch_entity_type (pw->component_id,
 				       GNC_ID_ACCOUNT,
-				       GNC_EVENT_CREATE | GNC_EVENT_MODIFY | 
-				       GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_MODIFY | 
+				       QOF_EVENT_DESTROY);
 
   /* Fill in the post_combo and account_tree widgets */
   gnc_fill_account_select_combo (pw->post_combo, pw->book, pw->acct_types);

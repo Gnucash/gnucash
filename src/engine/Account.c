@@ -159,7 +159,7 @@ xaccMallocAccount (QofBook *book)
 
   acc = g_new (Account, 1);
   xaccInitAccount (acc, book);
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&acc->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return acc;
 }
@@ -228,7 +228,7 @@ xaccFreeAccount (Account *acc)
 
   if (!acc) return;
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&acc->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   if (acc->children) 
   {
@@ -317,7 +317,7 @@ xaccAccountBeginEdit (Account *acc)
 static inline void on_done(QofInstance *inst) 
 {
     /* old event style */
-    gnc_engine_gen_event (&inst->entity, GNC_EVENT_MODIFY);
+    qof_event_gen (&inst->entity, QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void on_err (QofInstance *inst, QofBackendError errcode)
@@ -939,7 +939,6 @@ xaccAccountRecomputeBalance (Account * acc)
 
   acc->balance_dirty = FALSE;
 
-  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\

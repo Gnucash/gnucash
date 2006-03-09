@@ -508,7 +508,7 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 
   gnc_gui_component_watch_entity_type (ld->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   for (node = splits; node; node = node->next)
   {
@@ -517,7 +517,7 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 
     gnc_gui_component_watch_entity (ld->component_id,
                                     xaccTransGetGUID (trans),
-                                    GNC_EVENT_MODIFY);
+                                    QOF_EVENT_MODIFY);
   }
 }
 
@@ -547,7 +547,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   if (changes && has_leader)
   {
     info = gnc_gui_get_entity_events (changes, &ld->leader);
-    if (info && (info->event_mask & GNC_EVENT_DESTROY))
+    if (info && (info->event_mask & QOF_EVENT_DESTROY))
     {
       gnc_close_gui_component (ld->component_id);
       return;

@@ -179,7 +179,7 @@ gint qof_log_module_count(void);
 
 /** Log a serious error */
 #define PERR(format, args...) do {                   \
-  if (qof_log_check (log_module, GNC_LOG_ERROR)) {   \
+  if (qof_log_check (log_module, QOF_LOG_ERROR)) {   \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
       "Error: %s(): " format, FUNK , ## args);     \
   }                                                \
@@ -187,7 +187,7 @@ gint qof_log_module_count(void);
 
 /** Log a warning */
 #define PWARN(format, args...) do {                    \
-  if (qof_log_check (log_module, GNC_LOG_WARNING)) {   \
+  if (qof_log_check (log_module, QOF_LOG_WARNING)) {   \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
       "Warning: %s(): " format, FUNK , ## args);   \
   }                                                \
@@ -195,7 +195,7 @@ gint qof_log_module_count(void);
 
 /** Print an informational note */
 #define PINFO(format, args...) do {                 \
-  if (qof_log_check (log_module, GNC_LOG_INFO)) {   \
+  if (qof_log_check (log_module, QOF_LOG_INFO)) {   \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
       "Info: %s(): " format,                       \
       FUNK , ## args);                             \
@@ -204,7 +204,7 @@ gint qof_log_module_count(void);
 
 /** Print a debugging message */
 #define DEBUG(format, args...) do {                 \
-  if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
+  if (qof_log_check (log_module, QOF_LOG_DEBUG)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Debug: %s(): " format,                      \
       FUNK , ## args);                             \
@@ -213,7 +213,7 @@ gint qof_log_module_count(void);
 
 /** Print a function entry debugging message */
 #define ENTER(format, args...) do {                 \
-  if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
+  if (qof_log_check (log_module, QOF_LOG_DEBUG)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Enter in %s: %s()" format, __FILE__,        \
       FUNK , ## args);                             \
@@ -223,7 +223,7 @@ gint qof_log_module_count(void);
 
 /** Print a function exit debugging message */
 #define LEAVE(format, args...) do {                 \
-  if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
+  if (qof_log_check (log_module, QOF_LOG_DEBUG)) {  \
     qof_log_drop_indent();                          \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Leave: %s()" format,                        \
@@ -233,14 +233,14 @@ gint qof_log_module_count(void);
 
 /** Print a function trace debugging message */
 #define TRACE(format, args...) do {                 \
-  if (qof_log_check (log_module, GNC_LOG_TRACE)) {  \
+  if (qof_log_check (log_module, QOF_LOG_TRACE)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
       "Trace: %s(): " format, FUNK , ## args);     \
   }                                                \
 } while (0)
 
 #define DEBUGCMD(x) do {                            \
-  if (qof_log_check (log_module, GNC_LOG_DEBUG)) {  \
+  if (qof_log_check (log_module, QOF_LOG_DEBUG)) {  \
 		(x);                                        \
 	}                                               \
 } while (0)
@@ -267,22 +267,22 @@ void qof_report_clock_total (int clockno,
 
 /** start a particular timer */
 #define START_CLOCK(clockno,format, args...) do {        \
-  if (qof_log_check (log_module, GNC_LOG_INFO))          \
-    qof_start_clock (clockno, log_module, GNC_LOG_INFO,  \
+  if (qof_log_check (log_module, QOF_LOG_INFO))          \
+    qof_start_clock (clockno, log_module, QOF_LOG_INFO,  \
              __FUNCTION__, format , ## args);               \
 } while (0)
 
 /** report elapsed time since last report on a particular timer */
 #define REPORT_CLOCK(clockno,format, args...) do {       \
-  if (qof_log_check (log_module, GNC_LOG_INFO))          \
-    qof_report_clock (clockno, log_module, GNC_LOG_INFO, \
+  if (qof_log_check (log_module, QOF_LOG_INFO))          \
+    qof_report_clock (clockno, log_module, QOF_LOG_INFO, \
              __FUNCTION__, format , ## args);               \
 } while (0)
 
 /** report total elapsed time since timer started */
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) do {       \
-  if (qof_log_check (log_module, GNC_LOG_INFO))                \
-    qof_report_clock_total (clockno, log_module, GNC_LOG_INFO, \
+  if (qof_log_check (log_module, QOF_LOG_INFO))                \
+    qof_report_clock_total (clockno, log_module, QOF_LOG_INFO, \
              __FUNCTION__, format , ## args);               \
 } while (0)
 

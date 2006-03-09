@@ -991,13 +991,13 @@ gnc_main_window_delete_event (GtkWidget *window,
  *                    function only cares about a type of GNC_ID_BOOK.
  *
  *  @param event_type The type of the event.  This function only cares
- *                    about an event type of GNC_EVENT_DESTROY.
+ *                    about an event type of QOF_EVENT_DESTROY.
  *
  *  @param user_data  A pointer to the window data structure.
  */
 static void
 gnc_main_window_event_handler (GUID *entity, QofIdType type,
-			       GNCEngineEventType event_type,
+			       QofEventId event_type,
 			       gpointer user_data)
 {
 	GncMainWindow *window;
@@ -1011,7 +1011,7 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	/* soft failures */
 	if (safe_strcmp(type, GNC_ID_BOOK) != 0)
 	  return;
-	if (event_type !=  GNC_EVENT_DESTROY)
+	if (event_type !=  QOF_EVENT_DESTROY)
 	  return;
 
 	ENTER("entity %p of type %s, event %d, window %p",

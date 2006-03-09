@@ -182,7 +182,7 @@ grand_create(QofBook *book)
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
 	g->descend = NULL;
-	gnc_engine_gen_event(&g->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -203,7 +203,7 @@ parent_create(QofBook *book)
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
 	g->child = NULL;
-	gnc_engine_gen_event(&g->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 
@@ -223,7 +223,7 @@ child_create(QofBook *book)
 	g->flag = get_random_character();
 	g->Name = get_random_string();
 	g->Amount = get_random_gnc_numeric();
-	gnc_engine_gen_event(&g->inst.entity, GNC_EVENT_CREATE);
+	qof_event_gen(&g->inst.entity, QOF_EVENT_CREATE, NULL);
 	return g;
 }
 

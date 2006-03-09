@@ -90,7 +90,7 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
     gnc_gui_component_watch_entity (ledger->component_id,
 				    gncOwnerGetGUID
 				    (gncInvoiceGetOwner (ledger->invoice)),
-				    GNC_EVENT_MODIFY);
+				    QOF_EVENT_MODIFY);
   case GNCENTRY_INVOICE_VIEWER:
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
@@ -106,17 +106,17 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
 
   gnc_gui_component_watch_entity_type (ledger->component_id,
                                        type,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   /* To make sure the xfer cell is up to date */
   gnc_gui_component_watch_entity_type (ledger->component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   /* To make sure the taxtable cell is up to date */
   gnc_gui_component_watch_entity_type (ledger->component_id,
                                        GNC_TAXTABLE_MODULE_NAME,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   /* For expense vouchers, watch the employee and refresh if it's changed */
   if (ledger->type == GNCENTRY_EXPVOUCHER_ENTRY) {
@@ -126,7 +126,7 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
     if (employee)
       gnc_gui_component_watch_entity (ledger->component_id,
 				      gncEmployeeGetGUID (employee),
-				      GNC_EVENT_MODIFY);
+				      QOF_EVENT_MODIFY);
   }
 
   for (node = entries; node; node = node->next)
@@ -134,7 +134,7 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
     GncEntry *entry = node->data;
     gnc_gui_component_watch_entity (ledger->component_id,
                                     gncEntryGetGUID (entry),
-                                    GNC_EVENT_MODIFY);
+                                    QOF_EVENT_MODIFY);
   }
 }
 

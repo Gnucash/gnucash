@@ -649,7 +649,7 @@ gnc_lot_viewer_dialog (Account *account)
 
    gnc_gui_component_watch_entity_type (component_id,
                GNC_ID_LOT,
-               GNC_EVENT_CREATE | GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+               QOF_EVENT_CREATE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
    gtk_widget_show_all (lv->window);
    gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));

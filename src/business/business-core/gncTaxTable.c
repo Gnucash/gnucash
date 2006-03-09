@@ -145,7 +145,7 @@ mark_table (GncTaxTable *table)
 {
   table->inst.dirty = TRUE;
   qof_collection_mark_dirty (table->inst.entity.collection);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 static inline void 
@@ -213,7 +213,7 @@ gncTaxTableCreate (QofBook *book)
   qof_instance_init (&table->inst, _GNC_MOD_NAME, book);
   table->name = CACHE_INSERT ("");
   addObj (table);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -265,7 +265,7 @@ gncCloneTaxTable (GncTaxTable *from, QofBook *book)
   }
 
   addObj (table);
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_CREATE, NULL);
   return table;
 }
 
@@ -301,7 +301,7 @@ gncTaxTableFree (GncTaxTable *table)
 
   if (!table) return;
 
-  gnc_engine_gen_event (&table->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&table->inst.entity, QOF_EVENT_DESTROY, NULL);
   CACHE_REMOVE (table->name);
   remObj (table);
 

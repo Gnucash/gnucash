@@ -746,7 +746,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
 
   gnc_gui_component_watch_entity_type (component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   if (fill_account_list (info, initial) == 0)
   {

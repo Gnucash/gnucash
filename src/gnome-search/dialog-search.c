@@ -497,7 +497,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 			  guid, op);
 
     /* Watch this entity so we'll refresh once it's actually changed */
-    gnc_gui_component_watch_entity (sw->component_id, guid, GNC_EVENT_MODIFY);
+    gnc_gui_component_watch_entity (sw->component_id, guid, QOF_EVENT_MODIFY);
   }
 }
 

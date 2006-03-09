@@ -453,7 +453,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
     gnc_gui_component_watch_entity (ttw->component_id,
 				    gncTaxTableGetGUID (table),
-				    GNC_EVENT_MODIFY);
+				    QOF_EVENT_MODIFY);
 
     row_text[0] = (char *)gncTaxTableGetName (table);
     row_text[1] = NULL;
@@ -467,7 +467,7 @@ tax_table_window_refresh (TaxTableWindow *ttw)
 
   gnc_gui_component_watch_entity_type (ttw->component_id,
 				       GNC_TAXTABLE_MODULE_NAME,
-				       GNC_EVENT_CREATE | GNC_EVENT_DESTROY);
+				       QOF_EVENT_CREATE | QOF_EVENT_DESTROY);
 
   if (vadjustment) {
     save_value = CLAMP (save_value, vadjustment->lower,

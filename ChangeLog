@@ -1,7 +1,11 @@
 2006-03-08  David Hampton  <hampton@employees.org>
 
+	* numerous: Remove more functions to be deprecated in
+	libqof2. (Pass Two - more trivial substitutions, some simple
+	translations.)
+
 	* numerous: Remove functions to be deprecated in libqof2. (Pass
-	One - trivial substitutions)
+	One - trivial substitutions.)
 
 	* src/gnome-utils/gnc-tree-model-account.c:
 	* src/engine/Account.c:

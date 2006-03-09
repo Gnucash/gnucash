@@ -63,7 +63,7 @@ void mark_employee (GncEmployee *employee)
 {
   employee->inst.dirty = TRUE;
   qof_collection_mark_dirty (employee->inst.entity.collection);
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_MODIFY);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /* ============================================================== */
@@ -87,7 +87,7 @@ GncEmployee *gncEmployeeCreate (QofBook *book)
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }
@@ -103,7 +103,7 @@ static void gncEmployeeFree (GncEmployee *employee)
 {
   if (!employee) return;
 
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   CACHE_REMOVE (employee->id);
   CACHE_REMOVE (employee->username);
@@ -137,7 +137,7 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->ccard_acc = 
      GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
   
-  gnc_engine_gen_event (&employee->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&employee->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return employee;
 }

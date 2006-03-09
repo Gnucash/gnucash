@@ -513,7 +513,7 @@ make_generic_optionmenu (GtkWidget *omenu, GNCBook *book,
     if (type_name)
       gnc_gui_component_watch_entity_type (omd->component_id,
 					   type_name,
-					   GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+					   QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
     
     g_signal_connect (G_OBJECT (omenu), "destroy",
 		      G_CALLBACK (generic_omenu_destroy_cb), omd);

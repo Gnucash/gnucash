@@ -159,7 +159,7 @@ gnc_dialog_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
     for (node = dql->books; node; node = node->next)
     {
       info = gnc_gui_get_entity_events (changes, (const GUID*)(node->data));
-      if (info && (info->event_mask & GNC_EVENT_DESTROY))
+      if (info && (info->event_mask & QOF_EVENT_DESTROY))
       {
 	gnc_close_gui_component (dql->component_id);
 	return;
@@ -229,7 +229,7 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
   /* and register the books */
   for (node = dql->books; node; node = node->next)
     gnc_gui_component_watch_entity (dql->component_id, (GUID*)node->data,
-				    GNC_EVENT_DESTROY);
+				    QOF_EVENT_DESTROY);
 
   return dql;
 }

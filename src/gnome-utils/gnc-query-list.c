@@ -846,7 +846,7 @@ gnc_query_list_fill(GNCQueryList *list)
     gup = priv->get_guid;
     guid = (const GUID*)((gup->param_getfcn)(item->data, gup));
     gnc_gui_component_watch_entity (priv->component_id, guid,
-				    GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+				    QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     list->num_entries++;
   }

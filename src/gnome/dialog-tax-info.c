@@ -843,7 +843,7 @@ gnc_tax_info_dialog (GtkWidget * parent)
 
   gnc_gui_component_watch_entity_type (component_id,
                                        GNC_ID_ACCOUNT,
-                                       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
   gtk_widget_grab_focus (ti_dialog->account_treeview);
 

@@ -56,7 +56,7 @@ gnc_price_create (QofBook *book)
   p->source = NULL;
 
   qof_instance_init (&p->inst, GNC_ID_PRICE, book);
-  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_CREATE);
+  qof_event_gen (&p->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return p;
 }
@@ -65,7 +65,7 @@ static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
-  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_DESTROY);
+  qof_event_gen (&p->inst.entity, QOF_EVENT_DESTROY, NULL);
 
   if(p->type) gnc_string_cache_remove(p->type);
   if(p->source) gnc_string_cache_remove(p->source);
@@ -827,7 +827,7 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   }
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
-  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_ADD);
+  qof_event_gen (&p->inst.entity, QOF_EVENT_ADD, NULL);
 
   LEAVE ("db=%p, pr=%p dirty=%d do-free=%d commodity=%s/%s currency_hash=%p",
          db, p, p->inst.dirty, p->inst.do_free,
@@ -892,7 +892,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) { LEAVE (" no currency hash"); return FALSE; }
 
-  gnc_engine_gen_event (&p->inst.entity, GNC_EVENT_REMOVE);
+  qof_event_gen (&p->inst.entity, QOF_EVENT_REMOVE, NULL);
   price_list = g_hash_table_lookup(currency_hash, currency);
   gnc_price_ref(p);
   if(!gnc_price_list_remove(&price_list, p)) {

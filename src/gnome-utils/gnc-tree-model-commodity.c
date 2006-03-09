@@ -83,7 +83,7 @@ static gboolean	gnc_tree_model_commodity_iter_parent (GtkTreeModel *tree_model,
 						      GtkTreeIter *iter,
     						      GtkTreeIter *child);
 static void gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
-						    GNCEngineEventType event_type,
+						    QofEventId event_type,
 						    gpointer user_data);
 
 /** The instance private data for a commodity database tree model. */
@@ -1197,7 +1197,7 @@ gnc_tree_model_commodity_do_deletions (gpointer unused)
  */
 static void
 gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
-					GNCEngineEventType event_type,
+					QofEventId event_type,
 					gpointer user_data)
 {
   	GncTreeModelCommodity *model;
@@ -1219,7 +1219,7 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 
 	  commodity = gnc_commodity_find_commodity_by_guid(entity, gnc_get_current_book ());
 	  name = gnc_commodity_get_mnemonic(commodity);
-	  if (event_type != GNC_EVENT_DESTROY) {
+	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_commodity_get_iter_from_commodity (model, commodity, &iter)) {
 	      LEAVE("no iter");
 	      return;
@@ -1230,7 +1230,7 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 
 	  namespace = gnc_commodity_find_namespace_by_guid(entity, gnc_get_current_book ());
 	  name = gnc_commodity_namespace_get_name(namespace);
-	  if (event_type != GNC_EVENT_DESTROY) {
+	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_commodity_get_iter_from_namespace (model, namespace, &iter)) {
 	      LEAVE("no iter");
 	      return;
@@ -1241,13 +1241,13 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 	}
 
 	switch (event_type) {
-	 case GNC_EVENT_ADD:
+	 case QOF_EVENT_ADD:
 	  /* Tell the filters/views where the new account was added. */
 	  DEBUG("add %s", name);
 	  gnc_tree_model_commodity_path_added (model, &iter);
 	  break;
 
-	 case GNC_EVENT_REMOVE:
+	 case QOF_EVENT_REMOVE:
 	  /* Record the path of this account for later use in destruction */
 	  DEBUG("remove %s", name);
 	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
@@ -1266,7 +1266,7 @@ gnc_tree_model_commodity_event_handler (GUID *entity, QofIdType type,
 	  LEAVE(" ");
 	  return;
 
-	 case GNC_EVENT_MODIFY:
+	 case QOF_EVENT_MODIFY:
 	  DEBUG("change %s", name);
 	  path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), &iter);
 	  if (path == NULL) {
