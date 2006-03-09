@@ -16,10 +16,10 @@ endif
 
 .scm-links: 
 	rm -f www
-	ln -sf . www
+	$(LN_S) -f . www
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

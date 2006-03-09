@@ -32,10 +32,10 @@ endif
 
 .scm-links: 
 	rm -f gnucash
-	ln -sf ${srcdir} gnucash
+	$(LN_S) -f ${srcdir} gnucash
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

@@ -289,11 +289,11 @@ endif
 
 .scm-links: 
 	rm -f gnucash g-wrapped
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links
@@ -318,7 +318,7 @@ DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
 # them in ${pkgdatadir}/gnome/help/${program}.
 #
 install-data-hook:
-	ln -sf ../gnome ${DESTDIR}/${pkgdatadir}
+	$(LN_S) -f ../gnome ${DESTDIR}/${pkgdatadir}
 
 uninstall-hook:
 	rm -f ${DESTDIR}/${pkgdatadir}/gnome

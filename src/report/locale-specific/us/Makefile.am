@@ -32,13 +32,13 @@ endif
 
 .scm-links:
 	rm -f gnucash report locale-specific us 
-	ln -sf . gnucash
-	ln -sf . report 
-	ln -sf ${srcdir} locale-specific 
-	ln -sf . us 
+	$(LN_S) -f . gnucash
+	$(LN_S) -f . report 
+	$(LN_S) -f ${srcdir} locale-specific 
+	$(LN_S) -f . us 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

@@ -1,5 +1,8 @@
 2006-03-09  Christian Stimming <stimming@tuhh.de>
 
+	* configure.in, Makefile.am: Replace "ln -sf" by "$(LN_S) -f" for
+	systems that don't have symbolic links available.
+
 	* configure.in, src/gnome-utils/gnc-druid-provider-file-gnome.h:
 	Check for <glob.h> and provide own typedef if header unavailable.
 

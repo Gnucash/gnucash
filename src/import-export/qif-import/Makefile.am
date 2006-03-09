@@ -87,13 +87,13 @@ noinst_DATA = .scm-links
 
 .scm-links: 
 	rm -f g-wrapped gnucash import-export qif-import
-	ln -sf . qif-import # to fix (load "qif-import/foo.scm")
-	ln -sf . import-export
-	ln -sf . gnucash 
-	ln -sf . g-wrapped 
+	$(LN_S) -f . qif-import # to fix (load "qif-import/foo.scm")
+	$(LN_S) -f . import-export
+	$(LN_S) -f . gnucash 
+	$(LN_S) -f . g-wrapped 
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

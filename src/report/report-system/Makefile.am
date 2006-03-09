@@ -58,12 +58,12 @@ endif
 
 .scm-links:
 	rm -f gnucash report g-wrapped
-	ln -sf . gnucash
-	ln -sf . report 
-	ln -sf . g-wrapped
+	$(LN_S) -f . gnucash
+	$(LN_S) -f . report 
+	$(LN_S) -f . g-wrapped
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
-	  ln -sf ${srcdir}/$$X . ; \
+	  $(LN_S) -f ${srcdir}/$$X . ; \
 	done
 endif
 	touch .scm-links

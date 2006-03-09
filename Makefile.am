@@ -102,10 +102,10 @@ make-gnucash-potfiles: make-gnucash-potfiles.in Makefile
 .links: 
 	rm -f goffice gsf
 if !HAVE_GOFFICE
-	ln -sf . goffice
+	$(LN_S) -f . goffice
 endif
 if !HAVE_LIBGSF
-	ln -sf $(srcdir)/lib/libgsf-1.12.3/gsf gsf
+	$(LN_S) -f $(srcdir)/lib/libgsf-1.12.3/gsf gsf
 endif
 	touch .links
 
