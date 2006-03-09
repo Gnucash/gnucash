@@ -1979,7 +1979,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
     }
   }
 
-  gnc_engine_suspend_events();
+  qof_event_suspend();
   new_trans = xaccTransClone(trans);
   xaccTransReverse(new_trans);
 
@@ -1994,7 +1994,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
   kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
   kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
   xaccTransCommitEdit(trans);
-  gnc_engine_resume_events();
+  qof_event_resume();
 
   /* Now jump to new trans */
   gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));

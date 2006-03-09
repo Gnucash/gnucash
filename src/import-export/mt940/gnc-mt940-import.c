@@ -136,7 +136,7 @@ void gnc_file_mt940_import (void)
   char *default_dir;
   int mt940_fd;
 
-  /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
+  /* qof_log_check(MOD_IMPORT, QOF_LOG_TRACE); */
   DEBUG("gnc_file_mt940_import(): Begin...\n");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

@@ -723,7 +723,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    if (!be || !q) { LEAVE("(null) args"); return; }
    be->version_check = (guint32) time(0);
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* first thing we do is convert the gnc-engine query into
@@ -761,7 +761,7 @@ pgendRunQuery (QofBackend *bend, gpointer q_p)
    xaccGroupMarkSaved (topgroup);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE (" ");
 }
@@ -800,7 +800,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
 {
    GList *node, *xaction_list = NULL;
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    SEND_QUERY (be, "SELECT transGuid FROM gncTransaction;", );
@@ -817,7 +817,7 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 #endif
 
@@ -901,7 +901,7 @@ pgendSync (QofBackend *bend, QofBook *book)
    pgendStoreAllTransactions (be, grp);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    pgendKVPInit(be);
@@ -926,7 +926,7 @@ pgendSync (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE(" ");
 }
@@ -1072,14 +1072,14 @@ pgendSyncPriceDB (QofBackend *bend, QofBook *book)
    pgendStorePriceDB (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    pgendGetAllPricesInBook (be, book);
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE(" ");
 }
@@ -1490,7 +1490,7 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
    if (!be) return;
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1518,7 +1518,7 @@ pgend_book_load_poll (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ============================================================= */
@@ -1538,7 +1538,7 @@ pgend_book_load_single (QofBackend *bend, QofBook *book)
 
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1560,7 +1560,7 @@ pgend_book_load_single (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ============================================================= */
@@ -1580,7 +1580,7 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
    pgend_set_book (be, book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
@@ -1588,7 +1588,7 @@ pgend_price_load_single (QofBackend *bend, QofBook *book)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
    LEAVE(" ");
 }
 

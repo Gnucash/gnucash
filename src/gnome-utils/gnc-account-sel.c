@@ -157,7 +157,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas_populate_list( gas );
 
         gas->eventHandlerId =
-                gnc_engine_register_event_handler( gnc_account_sel_event_cb, gas );
+                qof_event_register_old_handler( gnc_account_sel_event_cb, gas );
 
         gas->initDone = TRUE;
 }
@@ -446,7 +446,7 @@ gnc_account_sel_dispose (GObject *object)
 	gas = GNC_ACCOUNT_SEL (object);
 
         if (gas->eventHandlerId) {
-		gnc_engine_unregister_event_handler (gas->eventHandlerId);
+		qof_event_unregister_handler (gas->eventHandlerId);
 		gas->eventHandlerId = 0;
 	}
 

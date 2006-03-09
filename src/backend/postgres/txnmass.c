@@ -220,7 +220,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    GList *node, *xaction_list = NULL;
    AccountGroup *grp;
 
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* design note: someday, we might get a performance boost by adding
@@ -286,7 +286,7 @@ pgendGetMassTransactions (PGBackend *be, QofBook *book)
    xaccAccountGroupCommitEdit (grp);
 
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 }
 
 /* ======================== END OF FILE ======================== */

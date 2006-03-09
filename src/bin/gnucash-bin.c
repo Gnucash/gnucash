@@ -386,7 +386,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
 
     load_gnucash_modules();
 
-    gnc_engine_suspend_events();
+    qof_event_suspend();
     g_message("Beginning to install price-quote sources");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
@@ -403,7 +403,7 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
       g_print(_("No quotes retrieved. Finance::Quote isn't installed properly.\n"));
     }
 
-    gnc_engine_resume_events();
+    qof_event_resume();
     gnc_shutdown(0);
     return;
 }
@@ -440,7 +440,7 @@ inner_main (void *closure, int argc, char **argv)
 
     /* set a log level before trying to change it globally */
     gnc_log_default();
-    qof_log_set_level_global(loglevel);
+    qof_log_set_level_registered(loglevel);
 
     load_system_config();
     load_user_config();

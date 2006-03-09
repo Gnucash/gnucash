@@ -118,8 +118,8 @@ run_test (void)
 
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
-  gnc_set_logfile (stdout);
-  gnc_set_log_level_global (GNC_LOG_WARNING);
+  qof_log_set_file (stdout);
+  qof_log_set_level_registered (QOF_LOG_WARNING);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   equity, "this is opening balance dude");
 

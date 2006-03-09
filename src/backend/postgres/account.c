@@ -502,7 +502,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
    if (!be || !acct_guid) return 0;
 
    /* disable callbacks into the backend, and events to GUI */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* First, see if we already have such an account */
@@ -555,7 +555,7 @@ pgendCopyAccountToEngine (PGBackend *be, const GUID *acct_guid)
 
    /* re-enable events to the backend and GUI */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE (" ");
    return acc;

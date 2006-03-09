@@ -61,7 +61,7 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 			      qfb);
   gnc_quickfill_destroy (qfb->qf);
   g_object_unref(qfb->list_store);
-  gnc_engine_unregister_event_handler (qfb->listener);
+  qof_event_unregister_handler (qfb->listener);
   g_free (qfb);
 }
 
@@ -177,7 +177,7 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   xaccGroupForEachAccount (group, load_shared_qf_cb, qfb, TRUE);
 
   qfb->listener = 
-     gnc_engine_register_event_handler (listen_for_account_events, qfb);
+     qof_event_register_old_handler (listen_for_account_events, qfb);
 
   qof_book_set_data_fin (book, key, qfb, shared_quickfill_destroy);
 

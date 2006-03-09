@@ -512,7 +512,7 @@ void gnc_file_log_replay (void)
   if (!expected_header)
     expected_header = g_strdup_printf(expected_header_orig);
 
-  gnc_set_log_level(GNC_MOD_IMPORT, GNC_LOG_DEBUG);
+  qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
   ENTER(" ");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

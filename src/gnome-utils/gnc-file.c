@@ -506,14 +506,14 @@ gnc_file_new (void)
 
       /* close any ongoing file sessions, and free the accounts.
        * disable events so we don't get spammed by redraws. */
-      gnc_engine_suspend_events ();
+      qof_event_suspend ();
   
       qof_session_call_close_hooks(session);
       gnc_hook_run(HOOK_BOOK_CLOSED, session);
       
       gnc_close_gui_component_by_session (session);
       gnc_clear_current_session();
-      gnc_engine_resume_events ();
+      qof_event_resume ();
   }
 
   /* start a new book */
@@ -614,7 +614,7 @@ gnc_post_file_open (const char * filename)
   /* disable events while moving over to the new set of accounts; 
    * the mass deletetion of accounts and transactions during
    * switchover would otherwise cause excessive redraws. */
-  gnc_engine_suspend_events ();
+  qof_event_suspend ();
 
   /* Change the mouse to a busy cursor */
   gnc_set_busy_cursor (NULL, TRUE);
@@ -773,7 +773,7 @@ gnc_post_file_open (const char * filename)
 
     g_free (newfile);
 
-    gnc_engine_resume_events ();
+    qof_event_resume ();
     gnc_gui_refresh_all ();
 
     return FALSE;
@@ -790,7 +790,7 @@ gnc_post_file_open (const char * filename)
 
   g_free (newfile);
 
-  gnc_engine_resume_events ();
+  qof_event_resume ();
   gnc_gui_refresh_all ();
 
   /* Call this after re-enabling events. */
@@ -860,7 +860,7 @@ gnc_file_export_file(const char * newfile)
   gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
   g_free(default_dir);
   
-  gnc_engine_suspend_events();
+  qof_event_suspend();
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
@@ -907,7 +907,7 @@ gnc_file_export_file(const char * newfile)
   xaccLogDisable();
   qof_session_destroy (new_session);
   xaccLogEnable();
-  gnc_engine_resume_events();
+  qof_event_resume();
 
   if (!ok)
   {
@@ -1108,7 +1108,7 @@ gnc_file_quit (void)
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
-  gnc_engine_suspend_events ();
+  qof_event_suspend ();
 
   qof_session_call_close_hooks(session);
   gnc_hook_run(HOOK_BOOK_CLOSED, session);
@@ -1117,7 +1117,7 @@ gnc_file_quit (void)
 
   gnc_get_current_session ();
 
-  gnc_engine_resume_events ();
+  qof_event_resume ();
   gnc_unset_busy_cursor (NULL);
 }
 

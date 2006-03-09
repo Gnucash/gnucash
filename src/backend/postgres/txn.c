@@ -660,7 +660,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    if (!be || !trans_guid) return 0;
 
    /* disable callbacks into the backend, and events to GUI */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* first, see if we already have such a transaction */
@@ -679,7 +679,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       {
          PINFO ("fresh data, skip check");
          pgendEnable(be);
-         gnc_engine_resume_events();
+         qof_event_resume();
          return 0;
       }
    }
@@ -710,7 +710,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        PERR ("no such transaction in the database. This is unexpected ...\n");
        qof_backend_set_error (&be->be, ERR_SQL_MISSING_DATA);
        pgendEnable(be);
-       gnc_engine_resume_events();
+       qof_event_resume();
        return 0;
      }
 
@@ -723,7 +723,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
              guid_to_string (trans_guid));
        qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
        pgendEnable(be);
-       gnc_engine_resume_events();
+       qof_event_resume();
        return 0;
      }
 
@@ -791,7 +791,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    if (0 <= engine_data_is_newer) 
    {
       pgendEnable(be);
-      gnc_engine_resume_events();
+      qof_event_resume();
       return engine_data_is_newer;
    }
 
@@ -838,7 +838,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
 
    /* re-enable events to the backend and GUI */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE (" ");
    return -1;
@@ -875,7 +875,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    if (!be || !trans_guid) return;
 
    /* disable callbacks into the backend, and events to GUI */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    engine_data_is_newer = xxxpgendCopyTransactionToEngine (be, trans_guid);
@@ -897,13 +897,13 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
        * framework */
       pgendStoreTransaction (be, trans);
 
-      gnc_engine_resume_events();
+      qof_event_resume();
       return;
    }
 
    /* re-enable events to the backend and GUI */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
 
    LEAVE (" ");
 }

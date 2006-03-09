@@ -379,7 +379,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
    currency_str  = gnc_commodity_get_unique_name(look->currency);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
-   gnc_engine_suspend_events();
+   qof_event_suspend();
    pgendDisable(be);
 
    /* set up the common part of the query */
@@ -432,7 +432,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
          PERR ("unknown lookup type %d", look->type);
          /* re-enable events */
          pgendEnable(be);
-         gnc_engine_resume_events();
+         qof_event_resume();
          LEAVE(" ");
          return;
    }
@@ -442,7 +442,7 @@ pgendPriceFind (QofBackend *bend, gpointer olook)
 
    /* re-enable events */
    pgendEnable(be);
-   gnc_engine_resume_events();
+   qof_event_resume();
    LEAVE(" ");
 }
 

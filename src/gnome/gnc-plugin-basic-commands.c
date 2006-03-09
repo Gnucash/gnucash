@@ -341,7 +341,7 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
   QofBook *original;
 
   ENTER (" ");
-  gnc_engine_suspend_events();
+  qof_event_suspend();
   filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
   gtk_widget_destroy((GtkWidget*) fs);
   first_session = gnc_get_current_session();
@@ -349,7 +349,7 @@ qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
   qsf_session = qof_session_new();
   qof_session_begin(qsf_session, filename, TRUE, FALSE);
   qof_session_load(qsf_session, NULL);
-  gnc_engine_resume_events();
+  qof_event_resume();
   gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
   LEAVE (" ");
 }

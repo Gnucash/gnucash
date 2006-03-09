@@ -191,7 +191,7 @@ gnc_tree_model_commodity_dispose (GObject *object)
 	priv = GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(model);
 
 	if (priv->event_handler_id) {
-	  gnc_engine_unregister_event_handler (priv->event_handler_id);
+	  qof_event_unregister_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
@@ -224,7 +224,7 @@ gnc_tree_model_commodity_new (QofBook *book, gnc_commodity_table *ct)
 	priv->commodity_table = ct;
 
 	priv->event_handler_id =
-	  gnc_engine_register_event_handler (gnc_tree_model_commodity_event_handler, model);
+	  qof_event_register_old_handler (gnc_tree_model_commodity_event_handler, model);
 
 	return GTK_TREE_MODEL (model);
 }

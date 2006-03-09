@@ -374,7 +374,7 @@ void
 gnc_ui_qsf_import_merge_druid (QofSession *original, QofSession *import)
 {
 	if (qsf_import_merge_window) { return; }
-	gnc_engine_suspend_events ();
+	qof_event_suspend ();
 	qsf_import_merge_window = gnc_create_import_druid();
 	g_return_if_fail(qsf_import_merge_window != NULL);
 	previous_session = original;

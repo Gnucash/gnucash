@@ -1622,7 +1622,7 @@ gnc_main_window_init (GncMainWindow *window,
 	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
 	priv->event_handler_id =
-	  gnc_engine_register_event_handler(gnc_main_window_event_handler,
+	  qof_event_register_old_handler(gnc_main_window_event_handler,
 					    window);
 
 	gnc_main_window_setup_window (window);
@@ -1693,7 +1693,7 @@ gnc_main_window_destroy (GtkObject *object)
 	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
 	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL);
 
-	  gnc_engine_unregister_event_handler(priv->event_handler_id);
+	  qof_event_unregister_handler(priv->event_handler_id);
 	  priv->event_handler_id = 0;
 
 	  g_hash_table_destroy (priv->merged_actions_table);

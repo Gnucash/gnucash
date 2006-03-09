@@ -131,8 +131,8 @@ run_test (void)
   io_err = qof_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
-  gnc_set_logfile (stdout);
-  gnc_set_log_level_global (GNC_LOG_INFO);
+  qof_log_set_file (stdout);
+  qof_log_set_level_registered (QOF_LOG_INFO);
   closedbook = gnc_book_close_period (openbook, tsmiddle, 
                   NULL, "this is opening balance dude");
 

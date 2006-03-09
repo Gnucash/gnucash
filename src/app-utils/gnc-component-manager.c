@@ -302,7 +302,7 @@ gnc_component_manager_init (void)
   changes_backup.event_masks = g_hash_table_new (g_str_hash, g_str_equal);
   changes_backup.entity_events = guid_hash_table_new ();
 
-  handler_id = gnc_engine_register_event_handler (gnc_cm_event_handler, NULL);
+  handler_id = qof_event_register_old_handler (gnc_cm_event_handler, NULL);
 }
 
 void
@@ -326,7 +326,7 @@ gnc_component_manager_shutdown (void)
   destroy_event_hash (changes_backup.entity_events);
   changes_backup.entity_events = NULL;
 
-  gnc_engine_unregister_event_handler (handler_id);
+  qof_event_unregister_handler (handler_id);
 }
 
 static ComponentInfo *

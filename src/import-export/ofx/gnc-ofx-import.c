@@ -638,7 +638,7 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  gnc_should_log(GNC_MOD_IMPORT, GNC_LOG_TRACE);
+  qof_log_check(GNC_MOD_IMPORT, QOF_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);

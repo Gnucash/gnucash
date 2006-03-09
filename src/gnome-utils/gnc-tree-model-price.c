@@ -217,7 +217,7 @@ gnc_tree_model_price_dispose (GObject *object)
 	priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
 	if (priv->event_handler_id) {
-	  gnc_engine_unregister_event_handler (priv->event_handler_id);
+	  qof_event_unregister_handler (priv->event_handler_id);
 	  priv->event_handler_id = 0;
 	}
 
@@ -252,7 +252,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 	priv->price_db = price_db;
 
 	priv->event_handler_id =
-	  gnc_engine_register_event_handler (gnc_tree_model_price_event_handler, model);
+	  qof_event_register_old_handler (gnc_tree_model_price_event_handler, model);
 
 	return GTK_TREE_MODEL (model);
 }

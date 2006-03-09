@@ -400,7 +400,7 @@ xaccTransClone (const Transaction *t)
   Split *split;
   GList *node;
 
-  gnc_engine_suspend_events();
+  qof_event_suspend();
   trans = g_new0 (Transaction, 1);
 
   trans->date_entered    = t->date_entered;
@@ -427,7 +427,7 @@ xaccTransClone (const Transaction *t)
   }
   qof_instance_set_dirty(QOF_INSTANCE(trans));
   xaccTransCommitEdit(trans);
-  gnc_engine_resume_events();
+  qof_event_resume();
 
   return trans;
 }
@@ -942,7 +942,7 @@ static void trans_cleanup_commit(Transaction *trans)
     /* ------------------------------------------------- */
     /* Make sure all associated splits are in proper order
      * in their accounts with the correct balances. */
-    gnc_engine_suspend_events();
+    qof_event_suspend();
 
     /* Iterate over existing splits */
     slist = g_list_copy(trans->splits);
@@ -971,7 +971,7 @@ static void trans_cleanup_commit(Transaction *trans)
     }
     g_list_free(slist);
 
-    gnc_engine_resume_events();
+    qof_event_resume();
 
     xaccTransWriteLog (trans, 'C');
 

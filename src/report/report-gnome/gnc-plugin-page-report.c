@@ -73,7 +73,7 @@
 /* NW: you can add GNC_MOD_REPORT to gnc-engine.h
 or simply define it locally. Any unique string with
 a gnucash- prefix will do. Then just set a log level 
-with gnc_set_log_level().*/
+with qof_log_set_level().*/
 static QofLogModule log_module = GNC_MOD_GUI;
 
 static GObjectClass *parent_class = NULL;

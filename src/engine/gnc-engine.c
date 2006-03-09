@@ -85,10 +85,10 @@ gnc_engine_init(int argc, char ** argv)
   qof_log_init_filename("/tmp/gnucash.trace");
   /* Only set the core log_modules here
 	the rest can be set locally.  */
-  gnc_set_log_level(GNC_MOD_ENGINE, GNC_LOG_WARNING);
-  gnc_set_log_level(GNC_MOD_IO, GNC_LOG_WARNING);
-  gnc_set_log_level(GNC_MOD_GUI, GNC_LOG_WARNING);
-  qof_log_set_default(GNC_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_ENGINE, QOF_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_IO, QOF_LOG_WARNING);
+  qof_log_set_level(GNC_MOD_GUI, QOF_LOG_WARNING);
+  qof_log_set_default(QOF_LOG_WARNING);
   /* initialize QOF */
   qof_init();
 

@@ -136,7 +136,7 @@ lv_show_splits (GNCLotViewer *lv)
 
    if (NULL == lot) return;
 
-/* gnc_engine_suspend_events();  XXX remove when xaccSplitGetCapGains() fixed */
+/* qof_event_suspend();  XXX remove when xaccSplitGetCapGains() fixed */
    gtk_clist_freeze (lv->mini_clist);
    gtk_clist_clear (lv->mini_clist);
    split_list = gnc_lot_get_split_list (lot);
@@ -213,7 +213,7 @@ lv_show_splits (GNCLotViewer *lv)
       gtk_clist_set_selectable (lv->mini_clist, row, FALSE);
    }
    gtk_clist_thaw (lv->mini_clist);
-/* gnc_engine_resume_events();  XXX remove when xaccSplitGetCapGains() fixed */
+/* qof_event_resume();  XXX remove when xaccSplitGetCapGains() fixed */
 }
 
 /* ======================================================================== */

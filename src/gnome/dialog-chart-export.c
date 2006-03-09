@@ -234,7 +234,7 @@ on_dateok_clicked (chart_data  *data)
 	if (filename)
 	{
 		gnc_set_busy_cursor(NULL, TRUE);
-		gnc_engine_suspend_events();
+		qof_event_suspend();
 		qof_session_begin(chart_session, filename, TRUE, TRUE);
 		data->chart_session = chart_session;
 		data->equity_account = NULL;
@@ -259,7 +259,7 @@ on_dateok_clicked (chart_data  *data)
 		qof_session_save(chart_session, NULL);
 		show_session_error(qof_session_get_error(chart_session),
 				   filename, GNC_FILE_DIALOG_EXPORT);
-		gnc_engine_resume_events();
+		qof_event_resume();
 		gnc_unset_busy_cursor(NULL);
 	}
 	qof_session_end(chart_session);

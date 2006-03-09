@@ -151,8 +151,8 @@ main (int argc, char ** argv)
    qof_init();
    cashobjects_register();
    qof_log_init_filename("/tmp/gnctest.trace");
-   qof_log_set_default(GNC_LOG_DETAIL);
-   gnc_set_log_level(GNC_MOD_PRICE, GNC_LOG_DETAIL);
+   qof_log_set_default(QOF_LOG_DETAIL);
+   qof_log_set_level(GNC_MOD_PRICE, QOF_LOG_DETAIL);
   session = qof_session_new ();
   test_generation ();
   print_test_results ();
