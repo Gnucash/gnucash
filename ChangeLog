@@ -1,3 +1,8 @@
+2006-03-09  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-main-window.c: Move retrieval of private
+	  data of main window after the creation of the window.
+
 2006-03-09  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-model-commodity.c:

@@ -513,7 +513,6 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
   /* Setup */
   ENTER("window %p, data %p (key file %p, window %d)",
 	window, data, data->key_file, data->window_num);
-  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   window_group = g_strdup_printf(WINDOW_STRING, data->window_num + 1);
 
   /* Get this window's notebook info */
@@ -545,6 +544,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
       DEBUG("first window %p.", active_windows->data);
     window = gnc_main_window_new();
   }
+
+  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
   /* Get the window coordinates, etc. */
   pos = g_key_file_get_integer_list(data->key_file, window_group,
