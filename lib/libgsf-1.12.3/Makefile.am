@@ -1,6 +1,7 @@
 pkgconfigdir = $(libdir)/pkgconfig
 #pkgconfig_DATA = libgsf-1.pc
 
+AM_CFLAGS=$(GLIB_CFLAGS)
 if WITH_LIBGSF_GNOME
 #  pkgconfig_DATA += libgsf-gnome-1.pc
 endif

@@ -11,7 +11,7 @@ uninstall-libtool-import-lib:
 endif
 
 AM_CPPFLAGS = -I$(top_srcdir)/lib/libgsf-1.12.3 $(LIBGSF_CFLAGS) $(Z_CPPFLAGS) \
-	-DGNOMELOCALEDIR=\"$(datadir)/locale\"
+	-DGNOMELOCALEDIR=\"$(datadir)/locale\" $(GLIB_CFLAGS)
 
 pkglib_LTLIBRARIES = libgsf-1.la
 

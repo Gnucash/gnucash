@@ -14,7 +14,8 @@ AM_CFLAGS = \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLIB_CFLAGS} \
   ${QOF_CFLAGS} \
-  ${GNOME_CFLAGS}
+  ${GCONF_CFLAGS} \
+  ${GTK_CFLAGS}
 
 libgncmod_app_utils_la_SOURCES = \
   file-utils.c \
@@ -70,9 +71,18 @@ noinst_HEADERS = \
 libgncmod_app_utils_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
+  ${G_WRAP_LIBS} \
+  ${GUILE_LIBS} \
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
+
+libgw_app_utils_la_LIBADD = \
+  libgncmod-app-utils.la \
+  ${G_WRAP_LIBS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS}

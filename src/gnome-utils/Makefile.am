@@ -20,6 +20,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/lib/glib26 \
   ${GLIB_CFLAGS} \
   ${GLADE_CFLAGS} \
+  ${GTK_CFLAGS} \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \

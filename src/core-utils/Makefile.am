@@ -20,6 +20,7 @@ libgw_core_utils_la_SOURCES = \
 libgw_core_utils_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_core_utils_la_LIBADD = \
   libcore-utils.la \
+  ${GLIB_LIBS} \
   ${GUILE_LIBS}
 
 noinst_HEADERS = \
