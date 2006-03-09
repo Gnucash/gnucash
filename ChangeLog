@@ -1,3 +1,9 @@
+2006-03-09  Neil Williams <linux@codehelp.co.uk>
+
+	* src/business/business-core/gncInvoice.c : Enable
+	QOF_TYPE_COLLECT to allow recursive copying of gncEntry
+	within a gncInvoice for QSF export.
+
 2006-03-09  Christian Stimming <stimming@tuhh.de>
 
 	* lib/libqof/qof/qoflog.c, lib/libqof/qof/gnc-date.c,
