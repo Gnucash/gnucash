@@ -204,14 +204,11 @@ void
 qof_start_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
                  const gchar *function_name, const gchar *format, ...)
 {
-#ifdef HAVE_GETTIMEOFDAY
-  struct timezone tz;
-#endif
   va_list ap;
 
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
 #ifdef HAVE_GETTIMEOFDAY
-  gettimeofday (&qof_clock[clockno], &tz);
+  gettimeofday (&qof_clock[clockno], NULL);
 #else
   time (&(qof_clock[clockno].tv_sec));
   qof_clock[clockno].tv_usec = 0;
@@ -236,15 +233,12 @@ void
 qof_report_clock (gint clockno, QofLogModule log_module, QofLogLevel log_level,
                   const gchar *function_name, const gchar *format, ...)
 {
-#ifdef HAVE_GETTIMEOFDAY
-  struct timezone tz;
-#endif
   struct timeval now;
   va_list ap;
 
   if ((0>clockno) || (NUM_CLOCKS <= clockno)) return;
 #ifdef HAVE_GETTIMEOFDAY
-  gettimeofday (&now, &tz);
+  gettimeofday (&now, NULL);
 #else
   time (&(now.tv_sec));
   now.tv_usec = 0;
