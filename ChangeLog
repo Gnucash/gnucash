@@ -1,5 +1,12 @@
 2006-03-09  David Hampton  <hampton@employees.org>
 
+	* src/engine/gw-engine-spec.scm:
+	* src/engine/Group.c:
+	* lib/libqof/qof/qofquery.c:
+	* lib/libqof/qof/qofsession.c: Remove more functions to be
+	deprecated in libqof2. (Pass Three - more trivial substitutions
+	and simple translations.)
+
 	* numerous: Never include "config.h" from a header file. Doing so
 	makes it nigh impossible to override configuration settings.
 

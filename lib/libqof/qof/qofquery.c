@@ -703,7 +703,7 @@ GList * qof_query_run (QofQuery *q)
   }
 
   /* Maybe log this sucker */
-  if (gnc_should_log (log_module, GNC_LOG_DETAIL)) qof_query_print (q);
+  if (qof_log_check (log_module, QOF_LOG_DETAIL)) qof_query_print (q);
 
   /* Now run the query over all the objects and save the results */
   {

@@ -214,9 +214,9 @@ qof_session_get_current_session (void)
 {
   if (!current_session)
   {
-    gnc_engine_suspend_events ();
+    qof_event_suspend ();
     current_session = qof_session_new ();
-    gnc_engine_resume_events ();
+    qof_event_resume ();
   }
 
   return current_session;
@@ -634,7 +634,7 @@ qof_entity_copy_to_session(QofSession* new_session, QofEntity* original)
 	if(!new_session || !original) { return FALSE; }
 	if(qof_entity_guid_match(new_session, original)) { return FALSE; }
 	if(!qof_object_compliance(original->e_type, TRUE)) { return FALSE; }
-	gnc_engine_suspend_events();
+	qof_event_suspend();
 	qecd.param_list = NULL;
 	book = qof_session_get_book(new_session);
 	qecd.new_session = new_session;
@@ -649,7 +649,7 @@ qof_entity_copy_to_session(QofSession* new_session, QofEntity* original)
 	if(g_slist_length(qecd.param_list) == 0) { return FALSE; }
 	g_slist_foreach(qecd.param_list, qof_entity_foreach_copy, &qecd);
 	g_slist_free(qecd.param_list);
-	gnc_engine_resume_events();
+	qof_event_resume();
 	return TRUE;
 }
 
@@ -660,12 +660,12 @@ gboolean qof_entity_copy_list(QofSession *new_session, GList *entity_list)
 	if(!new_session || !entity_list) { return FALSE; }
 	ENTER (" list=%d", g_list_length(entity_list));
 	qecd = g_new0(QofEntityCopyData, 1);
-	gnc_engine_suspend_events();
+	qof_event_suspend();
 	qecd->param_list = NULL;
 	qecd->new_session = new_session;
 	qof_book_set_partial(qof_session_get_book(new_session));
 	g_list_foreach(entity_list, qof_entity_list_foreach, qecd);
-	gnc_engine_resume_events();
+	qof_event_resume();
 	if(qecd->error) 
 	{ 
 		PWARN (" some/all entities in the list could not be copied.");
@@ -682,7 +682,7 @@ qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll)
 
 	g_return_val_if_fail(new_session, FALSE);
 	if(!entity_coll) { return FALSE; }
-	gnc_engine_suspend_events();
+	qof_event_suspend();
 	qecd.param_list = NULL;
 	qecd.new_session = new_session;
 	qof_book_set_partial(qof_session_get_book(qecd.new_session));
@@ -691,7 +691,7 @@ qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll)
 		qof_entity_param_cb, &qecd);
 	qof_collection_foreach(entity_coll, qof_entity_coll_copy, &qecd);
 	if(qecd.param_list != NULL) { g_slist_free(qecd.param_list); }
-	gnc_engine_resume_events();
+	qof_event_resume();
 	return TRUE;
 }
 

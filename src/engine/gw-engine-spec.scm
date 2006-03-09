@@ -111,11 +111,11 @@
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:event-type> "QofEventId")))
 
-  (gw:enum-add-value! wt "QOF_EVENT_NONE" 'gnc-event-none)
-  (gw:enum-add-value! wt "QOF_EVENT_CREATE" 'gnc-event-create)
-  (gw:enum-add-value! wt "QOF_EVENT_MODIFY" 'gnc-event-modify)
-  (gw:enum-add-value! wt "QOF_EVENT_DESTROY" 'gnc-event-destroy)
-  (gw:enum-add-value! wt "QOF_EVENT_ALL" 'gnc-event-all))
+  (gw:enum-add-value! wt "QOF_EVENT_NONE" 'qof-event-none)
+  (gw:enum-add-value! wt "QOF_EVENT_CREATE" 'qof-event-create)
+  (gw:enum-add-value! wt "QOF_EVENT_MODIFY" 'qof-event-modify)
+  (gw:enum-add-value! wt "QOF_EVENT_DESTROY" 'qof-event-destroy)
+  (gw:enum-add-value! wt "QOF_EVENT_ALL" 'qof-event-all))
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:query-op> "QofQueryOp")))
 
@@ -2463,7 +2463,7 @@ the timepair representing midday on that day")
 
 (gw:wrap-function
  ws
- 'gnc:engine-suspend-events
+ 'qof:event-suspend
  '<gw:void>
  "qof_event_suspend"
  '()
@@ -2471,7 +2471,7 @@ the timepair representing midday on that day")
 
 (gw:wrap-function
  ws
- 'gnc:engine-resume-events
+ 'qof:event-resume
  '<gw:void>
  "qof_event_resume"
  '()

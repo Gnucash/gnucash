@@ -756,7 +756,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
                                           group_sort_helper);
 
     /* Gather event data */
-    gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_ADD);
+    qof_event_gen (&acc->inst.entity, QOF_EVENT_ADD, NULL);
 
     acc->inst.dirty = TRUE;
     xaccAccountCommitEdit (acc);
