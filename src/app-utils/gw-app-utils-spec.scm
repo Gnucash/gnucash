@@ -26,6 +26,7 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list 
+      "#include <config.h>\n"
       "#include <option-util.h>\n"
       "#include <gnc-euro.h>\n"
       "#include <gnc-exp-parser.h>\n"

@@ -5,6 +5,8 @@
  * Copyright (c) 2001 Linux Developers Group, Inc. 
  *********************************************************************/
 
+#include "config.h"
+
 #include <glib.h>
 
 #include "combocell.h"

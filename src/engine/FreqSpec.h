@@ -59,7 +59,6 @@
 #ifndef XACC_FREQSPEC_H
 #define XACC_FREQSPEC_H
 
-#include "config.h"
 #include "gnc-engine.h"
 #include <glib.h>
 #include "qof.h"

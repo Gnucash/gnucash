@@ -23,8 +23,6 @@
 #ifndef DIALOG_FINCALC_H
 #define DIALOG_FINCALC_H
 
-#include "config.h"
-
 typedef struct _FinCalcDialog FinCalcDialog;
 
 void gnc_ui_fincalc_dialog_create(void);

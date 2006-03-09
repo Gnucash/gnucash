@@ -35,7 +35,6 @@
 
 #include <glib.h>
 #include <stddef.h>
-#include "config.h"
 #include "qof.h"
 
 /* Macros *****************************************************/

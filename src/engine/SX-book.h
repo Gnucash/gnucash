@@ -38,8 +38,6 @@
 #ifndef GNC_SX_BOOK_H
 #define GNC_SX_BOOK_H
 
-#include "config.h"
-
 #include <glib.h>
 #include "qof.h"
 

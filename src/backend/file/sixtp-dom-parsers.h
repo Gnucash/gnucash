@@ -24,8 +24,6 @@
 #ifndef SIXTP_DOM_PARSERS_H
 #define SIXTP_DOM_PARSERS_H
 
-#include "config.h"
-
 #include <glib.h>
 
 #include "gnc-xml-helper.h"

@@ -34,8 +34,6 @@ Otherwise, only failures are printed out.
 #ifndef TEST_STUFF_H
 #define TEST_STUFF_H
 
-#include "config.h"
-
 #include <glib.h>
 #include <stdlib.h>
 

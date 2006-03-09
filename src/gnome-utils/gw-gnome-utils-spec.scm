@@ -29,6 +29,7 @@
    ws
    (lambda (wrapset client-wrapset) 
      (list
+      "#include <config.h>\n"
       "#include <dialog-options.h>\n"
       "#include <dialog-utils.h>\n"
       "#include <druid-utils.h>\n"

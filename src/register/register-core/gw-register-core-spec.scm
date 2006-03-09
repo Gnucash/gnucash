@@ -18,9 +18,9 @@
   (gw:wrapset-add-cs-declarations!
    ws
    (lambda (wrapset client-wrapset) 
-     (if (eq? wrapset client-wrapset)
-         '()
-         "#include <basiccell.h>\n")))
+     (list
+      "#include <config.h>\n"
+      "#include <basiccell.h>\n" )))
   
   (gw:wrap-as-wct ws '<gnc:basic-cell> "BasicCell*" "const BasicCell*")
 

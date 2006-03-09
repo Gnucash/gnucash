@@ -25,8 +25,6 @@
 #ifndef GNC_SX_TTINFO_H
 #define GNC_SX_TTINFO_H
 
-#include "config.h"
-
 #include <glib.h>
 #include "qof.h"
 #include "SchedXaction.h"

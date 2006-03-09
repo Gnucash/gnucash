@@ -23,6 +23,9 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+#undef G_DISABLE_DEPRECATED /* for g_strncasecmp */
+
 #include "qof.h"
 #include "qof-backend-qsf.h"
 #include "qsf-xml.h"

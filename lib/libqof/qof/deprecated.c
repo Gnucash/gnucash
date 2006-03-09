@@ -21,6 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
 #include "qof.h"
 
 /* Don't be fooled: gnc_trace_num_spaces has external linkage and

@@ -27,6 +27,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <gtk/gtk.h>\n"
       "#include <dialog-column-view.h>\n"
       "#include <gnc-plugin-page-report.h>\n"

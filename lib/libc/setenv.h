@@ -23,8 +23,6 @@
 #ifndef __SETENV_H
 #define __SETENV_H
 
-#include "config.h"
-
 #ifndef HAVE_SETENV
 
 int setenv(const char *name, const char *value, int overwrite);

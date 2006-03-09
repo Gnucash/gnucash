@@ -24,8 +24,6 @@
 #ifndef DIALOG_PRINT_CHECK_H
 #define DIALOG_PRINT_CHECK_H
 
-#include "config.h"
-
 #include <libguile.h>
 
 #include "print-session.h"

@@ -26,6 +26,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <glib.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <gnc-ui-util.h>\n"

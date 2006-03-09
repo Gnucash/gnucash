@@ -27,6 +27,7 @@
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
 
+#include "config.h"
 #include "qof.h"
 #include "kvp-util-p.h"
 #include "qofbook-p.h"

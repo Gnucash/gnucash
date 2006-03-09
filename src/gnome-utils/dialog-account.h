@@ -24,8 +24,6 @@
 #ifndef DIALOG_ACCOUNT_H
 #define DIALOG_ACCOUNT_H
 
-#include "config.h"
-
 #include "Account.h"
 #include "Group.h"
 

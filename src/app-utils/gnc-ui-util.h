@@ -32,8 +32,6 @@
 #ifndef GNC_UI_UTIL_H
 #define GNC_UI_UTIL_H
 
-#include "config.h"
-
 #include <glib.h>
 #include <locale.h>
 

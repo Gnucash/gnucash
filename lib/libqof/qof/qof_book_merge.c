@@ -21,6 +21,7 @@
  *                                                                   *
  ********************************************************************/
 
+#include "config.h"
 #include "qof.h"
 
 static QofLogModule log_module = QOF_MOD_MERGE;

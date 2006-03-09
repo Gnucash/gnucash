@@ -25,8 +25,6 @@
 #ifndef GNC_XML_HELPER_H
 #define GNC_XML_HELPER_H
 
-#include "config.h"
-
 #include <libxml/xmlversion.h>
 
 #  include <libxml/SAX.h>

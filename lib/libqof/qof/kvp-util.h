@@ -33,8 +33,6 @@
 #ifndef GNC_KVP_UTIL_H
 #define GNC_KVP_UTIL_H
 
-#include "config.h"
-
 typedef struct {
   gpointer key;
   gpointer value;

@@ -50,8 +50,6 @@
 #ifndef QUICKFILL_H
 #define QUICKFILL_H
 
-#include "config.h"
-
 #include <gdk/gdk.h>
 #include <glib.h>
 

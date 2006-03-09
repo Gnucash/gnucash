@@ -24,6 +24,8 @@
  *  02110-1301, USA.
  */
  
+#include "config.h"
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <time.h>

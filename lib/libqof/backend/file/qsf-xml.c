@@ -23,6 +23,8 @@
 
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <libxml/xmlversion.h>
 #include "qof.h"
 #include "qof-backend-qsf.h"

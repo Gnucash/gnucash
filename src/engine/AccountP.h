@@ -39,7 +39,6 @@
 #ifndef XACC_ACCOUNT_P_H
 #define XACC_ACCOUNT_P_H
 
-#include "config.h"
 #include "Account.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"

@@ -21,7 +21,7 @@
  *                                                                  *
 \********************************************************************/
 
-// #include "config.h"
+#include "config.h"
 
 /* NOTE: Development of this idea has ceased and this file is
 no longer included in the QOF library. It remains in CVS for now.*/

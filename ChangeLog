@@ -1,3 +1,8 @@
+2006-03-09  David Hampton  <hampton@employees.org>
+
+	* numerous: Never include "config.h" from a header file. Doing so
+	makes it nigh impossible to override configuration settings.
+
 2006-03-08  David Hampton  <hampton@employees.org>
 
 	* numerous: Remove more functions to be deprecated in

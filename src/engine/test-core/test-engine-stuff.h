@@ -5,8 +5,6 @@
 #ifndef TEST_ENGINE_STUFF_H
 #define TEST_ENGINE_STUFF_H
 
-#include "config.h"
-
 #include <glib.h>
 #include <stdlib.h>
 

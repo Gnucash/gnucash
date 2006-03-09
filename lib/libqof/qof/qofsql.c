@@ -28,10 +28,11 @@
 */
 #define _GNU_SOURCE
 
+#include "config.h"
+
 #include <stdlib.h>   /* for working atoll */
 #include <errno.h>
 #include "glib.h"
-#include "config.h"
 #ifdef HAVE_GDA
 #include <sql/sql_parser.h>
 #else

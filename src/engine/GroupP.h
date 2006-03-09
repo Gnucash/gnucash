@@ -36,7 +36,6 @@
 #ifndef XACC_GROUP_P_H
 #define XACC_GROUP_P_H
 
-#include "config.h"
 #include "Group.h"
 #include "Transaction.h"
 

@@ -32,6 +32,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <config.h>\n"
       "#include <gtk/gtk.h>\n"
       "#include <business-urls.h>\n"
       "#include <dialog-billterms.h>\n"

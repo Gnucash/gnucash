@@ -43,8 +43,6 @@
 #ifndef XACC_TRANS_LOG_H
 #define XACC_TRANS_LOG_H
 
-#include "config.h"
-
 #include "Account.h"
 #include "Transaction.h"
 

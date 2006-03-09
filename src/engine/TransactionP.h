@@ -45,8 +45,6 @@
 #ifndef XACC_TRANSACTION_P_H
 #define XACC_TRANSACTION_P_H
 
-#include "config.h"
-
 #include <time.h>
 #include <glib.h>
 
