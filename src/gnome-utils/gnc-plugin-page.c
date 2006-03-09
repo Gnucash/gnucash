@@ -533,7 +533,6 @@ gnc_plugin_page_finalize (GObject *object)
 {
   GncPluginPagePrivate *priv;
   GncPluginPage *page;
-  GList *item;
 
   page = GNC_PLUGIN_PAGE (object);
 
@@ -546,9 +545,6 @@ gnc_plugin_page_finalize (GObject *object)
 	g_free(priv->statusbar_text);
 
   if (priv->books) {
-    for (item = priv->books; item; item = g_list_next(item)) {
-      guid_free (item->data);
-    }
     g_list_free(priv->books);
     priv->books = NULL;
   }
@@ -700,17 +696,17 @@ gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
  *  function takes a guid instead of a QofBook because that's what the
  *  engine event mechanism provides. */
 gboolean
-gnc_plugin_page_has_book (GncPluginPage *page, GUID *entity)
+gnc_plugin_page_has_book (GncPluginPage *page, QofBook *book)
 {
   GncPluginPagePrivate *priv;
   GList *item;
 
   g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
-  g_return_val_if_fail (entity != NULL, FALSE);
+  g_return_val_if_fail (book != NULL, FALSE);
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
   for (item = priv->books; item; item = g_list_next(item)) {
-    if (guid_equal((GUID*)item->data, entity)) {
+    if (item->data == book) {
       return TRUE;
     }
   }

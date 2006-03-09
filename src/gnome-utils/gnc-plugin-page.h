@@ -302,7 +302,7 @@ void gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book);
  *  @return TRUE if the page refers to the specified book. FALSE
  *  otherwise.
  */
-gboolean gnc_plugin_page_has_book (GncPluginPage *page, GUID *book);
+gboolean gnc_plugin_page_has_book (GncPluginPage *page, QofBook *book);
 
 
 /** Query a page to see if it has a reference to any book.

@@ -70,24 +70,21 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
  * for account modification events, and add new accounts.
  */
 static void
-listen_for_account_events (GUID *guid, QofIdType type, 
-                           QofEventId event_type, 
-                           gpointer user_data)
+listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
+			    gpointer user_data, gpointer event_data)
 {
   QFB *qfb = user_data;
   QuickFill *qf = qfb->qf;
   QuickFill *match;
   char * name;
   const char *match_str;
-  QofCollection *col;
   Account *account;
   GtkTreeIter iter;
 
   if (! (event_type & QOF_EVENT_MODIFY)) return;
-  if (QSTRCMP (type, GNC_ID_ACCOUNT)) return;
+  if (!GNC_IS_ACCOUNT (entity)) return;
 
-  col = qof_book_get_collection (qfb->book, GNC_ID_ACCOUNT);
-  account = GNC_ACCOUNT (qof_collection_lookup_entity (col, guid));
+  account = GNC_ACCOUNT (entity);
 
   /* Not every new account is eligable for the menu */
   if (qfb->dont_add_cb)
@@ -177,7 +174,7 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   xaccGroupForEachAccount (group, load_shared_qf_cb, qfb, TRUE);
 
   qfb->listener = 
-     qof_event_register_old_handler (listen_for_account_events, qfb);
+     qof_event_register_handler (listen_for_account_events, qfb);
 
   qof_book_set_data_fin (book, key, qfb, shared_quickfill_destroy);
 

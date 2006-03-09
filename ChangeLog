@@ -1,5 +1,19 @@
 2006-03-09  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-model-commodity.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-tree-model-price.c:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome-utils/gnc-account-sel.c:
+	* src/gnome-utils/account-quickfill.c:
+	* src/engine/gnc-commodity.h:
+	* src/engine/gnc-engine.h:
+	* src/app-utils/gnc-component-manager.c:
+	* lib/libqof/qof/deprecated.[ch]:
+	* lib/libqof/qof/qofevent.c:
+	* lib/libqof/qof/qofevent-p.h:
+	* configure.in: Finish removing deprecated QOF functions.
+
 	* src/gnome/dialog-price-editor.c:
 	* src/gnome/top-level.c:
 	* src/gnc-ui.h: Restore clickable links for price quotes.

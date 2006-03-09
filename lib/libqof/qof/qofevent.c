@@ -68,6 +68,7 @@ find_next_handler_id(void)
 }
 
 /* support deprecated code with a private function*/
+#ifndef QOF_DISABLE_DEPRECATED
 gint
 qof_event_register_old_handler (GNCEngineEventHandler handler, gpointer user_data)
 {
@@ -98,6 +99,7 @@ qof_event_register_old_handler (GNCEngineEventHandler handler, gpointer user_dat
   return handler_id;
 
 }
+#endif /* QOF_DISABLE_DEPRECATED */
 
 gint
 qof_event_register_handler (QofEventHandler handler, gpointer user_data)
@@ -150,13 +152,17 @@ qof_event_unregister_handler (gint handler_id)
     if(hi->handler) 
     LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
 	   hi->handler, hi->user_data);
+#ifndef QOF_DISABLE_DEPRECATED
     if(hi->old_handler) 
 	LEAVE ("(handler_id=%d) handler=%p data=%p", handler_id,
 	   hi->old_handler, hi->user_data);
+#endif
 
     /* safety -- clear the handler in case we're running events now */
     hi->handler = NULL;
-	hi->old_handler = NULL;
+#ifndef QOF_DISABLE_DEPRECATED
+    hi->old_handler = NULL;
+#endif
 
     if (handler_run_level == 0) {
       handlers = g_list_remove_link (handlers, node);
@@ -224,6 +230,7 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
     HandlerInfo *hi = node->data;
 
     next_node = node->next;
+#ifndef QOF_DISABLE_DEPRECATED
     if ((hi->old_handler) && (use_old_handlers))
     {
       PINFO(" deprecated: id=%d hi=%p han=%p", hi->handler_id, hi, 
@@ -231,6 +238,7 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
       hi->old_handler ((GUID *)&entity->guid, entity->e_type,
                        event_id, hi->user_data);
     }
+#endif
     if (hi->handler)
     {
       PINFO("id=%d hi=%p han=%p data=%p", hi->handler_id, hi, 
@@ -249,7 +257,11 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
     {
       HandlerInfo *hi = node->data;
       next_node = node->next;
-      if ((hi->handler == NULL)&&(hi->old_handler == NULL))
+      if ((hi->handler == NULL)
+#ifndef QOF_DISABLE_DEPRECATED
+	  &&(hi->old_handler == NULL)
+#endif
+	  )
       {
         /* remove this node from the list, then free this node */
         handlers = g_list_remove_link (handlers, node);

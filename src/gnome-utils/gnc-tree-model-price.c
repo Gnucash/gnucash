@@ -101,9 +101,10 @@ static gboolean	gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 static gboolean	gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 						  GtkTreeIter *iter,
 						  GtkTreeIter *child);
-static void gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
+static void gnc_tree_model_price_event_handler (QofEntity *entity,
 						QofEventId event_type,
-						gpointer user_data);
+						gpointer user_data,
+						gpointer event_data);
 
 /** The instance private data for a price database tree model. */
 typedef struct GncTreeModelPricePrivate
@@ -252,7 +253,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 	priv->price_db = price_db;
 
 	priv->event_handler_id =
-	  qof_event_register_old_handler (gnc_tree_model_price_event_handler, model);
+	  qof_event_register_handler (gnc_tree_model_price_event_handler, model);
 
 	return GTK_TREE_MODEL (model);
 }
@@ -1299,7 +1300,6 @@ gnc_tree_model_price_get_path_from_namespace (GncTreeModelPrice *model,
 /************************************************************/
 
 typedef struct _remove_data {
-  GUID               guid;
   GncTreeModelPrice *model;
   GtkTreePath       *path;
 } remove_data;
@@ -1433,20 +1433,20 @@ gnc_tree_model_price_do_deletions (gpointer unused)
  *  have this model mirror the engine's price table instead of
  *  referencing it directly.
  *
- *  @param entity The guid of the affected item.
- *
- *  @param type The type of the affected item.  This function only
- *  cares about items of type "account" or "namespace".
+ *  @param entity The affected item.
  *
  *  @param event type The type of the event. This function only cares
  *  about items of type ADD, REMOVE, and DESTROY.
  *
  *  @param user_data A pointer to the account tree model.
+ *
+ *  @param event_data A pointer to additional data about this event.
  */
 static void
-gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
+gnc_tree_model_price_event_handler (QofEntity *entity,
 				    QofEventId event_type,
-				    gpointer user_data)
+				    gpointer user_data,
+				    gpointer event_data)
 {
   	GncTreeModelPrice *model;
 	GtkTreePath *path;
@@ -1454,18 +1454,18 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	remove_data *data;
 	const gchar *name;
 
-	ENTER("entity %p of type %s, event %d, model %p",
-	      entity, type, event_type, user_data);
+	ENTER("entity %p, event %d, model %p, event data %p",
+	      entity, event_type, user_data, event_data);
 	model = (GncTreeModelPrice *)user_data;
 
 	/* hard failures */
 	g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
 
 	/* get type specific data */
-	if (safe_strcmp(type, GNC_ID_COMMODITY) == 0) {
+	if (GNC_IS_COMMODITY(entity)) {
 	  gnc_commodity *commodity;
 
-	  commodity = gnc_commodity_find_commodity_by_guid(entity, gnc_get_current_book ());
+	  commodity = GNC_COMMODITY(entity);
 	  name = gnc_commodity_get_mnemonic(commodity);
 	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_commodity (model, commodity, &iter)) {
@@ -1473,10 +1473,10 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	      return;
 	    }
 	  }
-	} else if (safe_strcmp(type, GNC_ID_COMMODITY_NAMESPACE) == 0) {
+	} else if (GNC_IS_COMMODITY_NAMESPACE(entity)) {
 	  gnc_commodity_namespace *namespace;
 
-	  namespace = gnc_commodity_find_namespace_by_guid(entity, gnc_get_current_book ());
+	  namespace = GNC_COMMODITY_NAMESPACE(entity);
 	  name = gnc_commodity_namespace_get_name(namespace);
 	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_namespace (model, namespace, &iter)) {
@@ -1484,10 +1484,10 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	      return;
 	    }
 	  }
-	} else if (safe_strcmp(type, GNC_ID_PRICE) == 0) {
+	} else if (GNC_IS_PRICE(entity)) {
 	  GNCPrice *price;
 
-	  price = gnc_price_lookup(entity, gnc_get_current_book ());
+	  price = GNC_PRICE(entity);
 	  name = "price";
 	  if (event_type != QOF_EVENT_DESTROY) {
 	    if (!gnc_tree_model_price_get_iter_from_price (model, price, &iter)) {
@@ -1516,7 +1516,6 @@ gnc_tree_model_price_event_handler (GUID *entity, QofIdType type,
 	  }
 
 	  data = malloc(sizeof(*data));
-	  data->guid = *entity;
 	  data->model = model;
 	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);

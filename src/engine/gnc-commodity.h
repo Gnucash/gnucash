@@ -49,6 +49,11 @@
 #include <glib.h>
 #include "gnc-engine.h"
 
+#define GNC_IS_COMMODITY(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY))
+#define GNC_COMMODITY(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY, gnc_commodity))
+#define GNC_IS_COMMODITY_NAMESPACE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_COMMODITY_NAMESPACE))
+#define GNC_COMMODITY_NAMESPACE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_COMMODITY_NAMESPACE, gnc_commodity_namespace))
+
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 
 /** The commodity namespace definitions are used to tag a commodity by

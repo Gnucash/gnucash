@@ -54,9 +54,6 @@ static void gas_accounts_to_names (gpointer data, gpointer user_data);
 
 static void gas_populate_list (GNCAccountSel *gas);
 static void gas_strcmp_adapter (gpointer a, gpointer b);
-static void gnc_account_sel_event_cb (GUID *entity, QofIdType id_type,
-                                      QofEventId event_type,
-                                      gpointer user_data);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
 
@@ -97,14 +94,15 @@ gnc_account_sel_get_type (void)
 
 static
 void
-gnc_account_sel_event_cb( GUID *entity, QofIdType type,
+gnc_account_sel_event_cb( QofEntity *entity,
                           QofEventId event_type,
-                          gpointer user_data )
+                          gpointer user_data,
+			  gpointer event_data )
 {
         if ( ! ( event_type == QOF_EVENT_CREATE
                  || event_type == QOF_EVENT_MODIFY
                  || event_type == QOF_EVENT_DESTROY )
-             || strcmp( type, GNC_ID_ACCOUNT ) != 0 ) {
+             || !GNC_IS_ACCOUNT(entity) ) {
                 return;
         }
         gas_populate_list( (GNCAccountSel*)user_data );
@@ -157,7 +155,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gas_populate_list( gas );
 
         gas->eventHandlerId =
-                qof_event_register_old_handler( gnc_account_sel_event_cb, gas );
+                qof_event_register_handler( gnc_account_sel_event_cb, gas );
 
         gas->initDone = TRUE;
 }

@@ -996,9 +996,8 @@ gnc_main_window_delete_event (GtkWidget *window,
  *  @param user_data  A pointer to the window data structure.
  */
 static void
-gnc_main_window_event_handler (GUID *entity, QofIdType type,
-			       QofEventId event_type,
-			       gpointer user_data)
+gnc_main_window_event_handler (QofEntity *entity,  QofEventId event_type,
+                               gpointer user_data, gpointer event_data)
 {
 	GncMainWindow *window;
 	GncMainWindowPrivate *priv;
@@ -1009,13 +1008,13 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(user_data));
 
 	/* soft failures */
-	if (safe_strcmp(type, GNC_ID_BOOK) != 0)
+	if (!QOF_CHECK_TYPE(entity, QOF_ID_BOOK))
 	  return;
 	if (event_type !=  QOF_EVENT_DESTROY)
 	  return;
 
-	ENTER("entity %p of type %s, event %d, window %p",
-	      entity, type, event_type, user_data);
+	ENTER("entity %p, event %d, window %p, event data %p",
+	      entity, event_type, user_data, event_data);
 	window = GNC_MAIN_WINDOW(user_data);
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
@@ -1025,7 +1024,7 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	for (item = priv->installed_pages; item; item = next) {
 	  next = g_list_next(item);
 	  page = GNC_PLUGIN_PAGE(item->data);
-	  if (gnc_plugin_page_has_book (page, entity))
+	  if (gnc_plugin_page_has_book (page, (QofBook *)entity))
               gnc_main_window_close_page (page);
 	}
 	LEAVE(" ");
@@ -1622,8 +1621,7 @@ gnc_main_window_init (GncMainWindow *window,
 	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
 	priv->event_handler_id =
-	  qof_event_register_old_handler(gnc_main_window_event_handler,
-					    window);
+	  qof_event_register_handler(gnc_main_window_event_handler, window);
 
 	gnc_main_window_setup_window (window);
 	gnc_gobject_tracking_remember(G_OBJECT(window),

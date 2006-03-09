@@ -21,6 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02110-1301, USA.
  */
  
+#ifndef QOF_DISABLE_DEPRECATED
+
 #ifndef _DEPRECATED_H
 #define _DEPRECATED_H
 #include "qof.h"
@@ -147,3 +149,4 @@ gint
 qof_book_mergeCommit(QofBookMergeData *mergeData );
 
 #endif /* _DEPRECATED_H */
+#endif /* QOF_DISABLE_DEPRECATED */
