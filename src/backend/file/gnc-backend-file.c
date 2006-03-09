@@ -59,6 +59,10 @@
 #include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
 
+#ifndef HAVE_STRPTIME
+# include "strptime.h"
+#endif
+
 #define GNC_BE_DAYS "file_retention_days"
 #define GNC_BE_ZIP  "file_compression"
 
@@ -519,6 +523,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
                 return FALSE;
 #endif
             }
+#ifdef HAVE_CHOWN
 	    /* Don't try to change the owner. Only root can do
 	       that. */
             if(chown(tmp_name, -1, statbuf.st_gid) != 0)
@@ -534,6 +539,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
 		   return FALSE; */
 #endif
             }
+#endif
         }
         if(unlink(datafile) != 0 && errno != ENOENT)
         {
