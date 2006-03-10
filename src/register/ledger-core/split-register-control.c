@@ -1008,7 +1008,6 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   gnc_commodity *txn_cur, *xfer_com, *reg_com;
   gnc_numeric amount, exch_rate;
   XferDialog *xfer;
-  gboolean swap_amounts = FALSE;
   gboolean expanded = FALSE;
   PriceCell *rate_cell;
   const char *message;
@@ -1145,68 +1144,9 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       xfer, timespecToTime_t(
           gnc_split_register_get_cell_date(reg, DATE_CELL)));
 
-  /* We know that "amount" is always in the reg_com currency.
-   * Unfortunately it is possible that neither xfer_com or txn_cur are
-   * the same as reg_com, in which case we need to convert to the txn
-   * currency...  Or, if the register commodity is the xfer_com, then we
-   * need to flip-flop the commodities and the exchange rates.
-   */
-
-  if (gnc_commodity_equal (reg_com, txn_cur)) {
-    /* we're working in the txn currency.  Great.  Nothing to do! */
-    swap_amounts = FALSE;
-
-  } else if (gnc_commodity_equal (reg_com, xfer_com)) {
-    /* We're working in the xfer commodity.  Great.  Just swap the amounts. */
-    swap_amounts = TRUE;
-
-    /* XXX: Do we need to check for expanded v. non-expanded accounts here? */
-
-  } else {
-    /* UGGH -- we're not in either.  That means we need to convert 'amount'
-     * from the register commodity to the txn currency.
-     */
-    gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
-
-    /* XXX: should we tell the user we've done the conversion? */
-    amount = gnc_numeric_div(
-        amount, rate, gnc_commodity_get_fraction (txn_cur), GNC_DENOM_REDUCE);
-  }
-
-  /* enter the accounts */
-  if (swap_amounts) {
-    gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
-    gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
-    if (!gnc_numeric_zero_p (exch_rate))
-      exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
-                                   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-  } else {
-    gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
-    gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
-  }
-  gnc_xfer_dialog_hide_to_account_tree (xfer);
-  gnc_xfer_dialog_hide_from_account_tree (xfer);
-
-  gnc_xfer_dialog_set_amount (xfer, amount);
-
-  /*
-   * When we flip, we should tell the dialog so it can deal with the
-   * pricedb properly.
-   */
-
-  /* Set the exchange rate */
-  gnc_xfer_dialog_set_exchange_rate (xfer, exch_rate);
-
-  /* and run it... */
-  if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
-    return TRUE;
-
-  /* If we swapped the amounts for the dialog, then make sure we swap
-   * it back now...
-   */
-  if (swap_amounts)
-    exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
-                                 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  if (gnc_xfer_dialog_run_exchange_dialog(
+          xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
+      return TRUE;
 
   /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);
