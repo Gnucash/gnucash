@@ -1,3 +1,9 @@
+2006-03-10  Christian Stimming <stimming@tuhh.de>
+
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.h,
+	gnc-druid-provider-file-gnome.c: If <glob.h> unavailable, provide
+	own typedef and disable globbing.
+
 2006-03-09  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-main-window.c: Move retrieval of private

@@ -51,7 +51,9 @@ static void
 gnc_dpfg_end_glob(GNCDruidProviderFileGnome *prov)
 {
   if (prov->globbed) {
+#ifdef HAVE_GLOB_H
     globfree(&prov->glob);
+#endif
     prov->globbed = FALSE;
     prov->count = 0;
   }
@@ -139,7 +141,12 @@ gnc_dpfg_start_glob(GNCDruidProvider* prov, const char* filename)
   int err;
 
   g_assert(prov_f->globbed == FALSE);
+#ifdef HAVE_GLOB_H
   err = glob(filename, GLOB_NOCHECK, gnc_dpfg_file_err, &prov_f->glob);
+#else
+  /* glob(3) was not available. */
+  err = -1;
+#endif
   prov_f->count = 0;
 
   if (!err)
