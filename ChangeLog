@@ -1,3 +1,8 @@
+2006-03-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Show newly created windows
+	when restoring the second and subsequent windows.
+
 2006-03-10  Christian Stimming <stimming@tuhh.de>
 
 	* po/*.po: Recode all po files into UTF-8 character encoding,

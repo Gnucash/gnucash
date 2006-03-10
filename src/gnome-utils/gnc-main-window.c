@@ -543,6 +543,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     if (active_windows)
       DEBUG("first window %p.", active_windows->data);
     window = gnc_main_window_new();
+    gtk_widget_show(GTK_WIDGET(window));
   }
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
