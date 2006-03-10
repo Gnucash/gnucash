@@ -1,11 +1,13 @@
 lib_LTLIBRARIES = libqof.la
 
 libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
-libqof_la_LIBADD= ${GLIB_LIBS}
+libqof_la_LIBADD= \
+  $(GLIB_LIBS) \
+  $(top_builddir)/lib/libc/libc-missing.la
 
 AM_CFLAGS = \
-  -I. \
-  ${GLIB_CFLAGS}
+  $(GLIB_CFLAGS) \
+  -I$(top_srcdir)/lib/libc
 
 libqof_la_SOURCES =  \
    deprecated.c      \
