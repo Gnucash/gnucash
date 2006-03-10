@@ -117,7 +117,7 @@ fi
 
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
-AC_CHECK_FUNCS(getppid getuid gethostname gmtime_r)
+AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
 
 ### --------------------------------------------------------------------------
 ### See if we have pkg-config
@@ -1285,8 +1285,6 @@ then
   AC_CHECK_HEADERS(fcntl.h malloc.h unistd.h io.h)
   AC_FUNC_MMAP
   
-  AC_CHECK_FUNCS(chown)
-  
   SAVE_CFLAGS=$CFLAGS
   SAVE_LIBS=$LIBS
   CFLAGS="$CFLAGS $LIBGSF_CFLAGS"
@@ -1648,11 +1646,6 @@ then
   
   AC_ARG_VAR(GDK_PIXBUF_CSOURCE, [The gdk-pixbuf-csource executable.])
   AC_CHECK_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, gdk-pixbuf-csource)
-  
-  AC_CHECK_FUNC(gettimeofday,
-  	[AC_DEFINE(HAVE_GETTIMEOFDAY, 1,
-  		[Define if the gettimeofday function is available]
-  	)])
   
   dnl M_PI
   AC_MSG_CHECKING([whether M_PI is available])
