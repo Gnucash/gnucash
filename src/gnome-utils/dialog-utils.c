@@ -33,7 +33,9 @@
 #include <glib/gi18n.h>
 #include <glade/glade.h>
 #include <gmodule.h>
-#include <dlfcn.h>
+#ifdef HAVE_DLFCN_H
+# include <dlfcn.h>
+#endif
 
 #include "dialog-utils.h"
 #include "gnc-commodity.h"
@@ -869,8 +871,12 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
   }
 
   if (!g_module_symbol(allsymbols, handler_name, (gpointer *)p_func)) {
+#ifdef HAVE_DLSYM
     /* Fallback to dlsym -- necessary for *BSD linkers */
     func = dlsym(RTLD_DEFAULT, handler_name);
+#else
+    func = NULL;
+#endif
     if (func == NULL) {
       g_warning("ggaff: could not find signal handler '%s'.", handler_name);
       return;

@@ -1,5 +1,10 @@
 2006-03-10  Christian Stimming <stimming@tuhh.de>
 
+	* configure.in, src/gnome-utils/dialog-utils.c: Gnucash replaced
+	dlopen/dlsym by the g_module functions, so don't error out if they
+	are unavailable; dlsym is needed only optionally for BSD
+	linkers. Also removes quotation error in AC_MSG_ERROR macro.
+
 	* src/gnome-utils/gnc-druid-provider-multifile-gnome.h,
 	gnc-druid-provider-file-gnome.c: If <glob.h> unavailable, provide
 	own typedef and disable globbing.

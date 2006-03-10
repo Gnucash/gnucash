@@ -176,13 +176,13 @@ fi
 
 AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
+# Gnucash replaced dlopen/dlsym by the g_module functions; dlsym
+# is needed optionally in one place for BSD linkers, though.
 DL_LIB=
-AC_CHECK_FUNCS(dlopen,,[
-  AC_CHECK_LIB(dl, dlopen, DL_LIB="-ldl",[
+AC_CHECK_FUNCS(dlsym,,[
+  AC_CHECK_LIB(dl, dlsym, DL_LIB="-ldl",[
     AC_CHECK_LIB(dld, shl_load, DL_LIB="-ldld",[
-      AC_CHECK_FUNCS(dlopen, DL_LIB="",
-      AC_MSG_ERROR(Dynamic linking is not available on this platform.  Some apps,
-like panel, will not run properly.))
+      AC_CHECK_FUNCS(dlsym, DL_LIB="")
     ])
   ])
 ])
