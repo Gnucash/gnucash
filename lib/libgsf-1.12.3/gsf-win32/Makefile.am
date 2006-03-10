@@ -1,10 +1,10 @@
-AM_CPPFLAGS = -I$(top_srcdir) $(LIBGSF_CFLAGS)
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/.. $(LIBGSF_CFLAGS)
 
 if PLATFORM_WIN32
 
 lib_LTLIBRARIES = libgsf-win32-1.la
 
-libgsf_win32_1_la_LIBADD  = $(LIBGSF_LIBS) $(top_builddir)/gsf/libgsf-1.la
+libgsf_win32_1_la_LIBADD  = $(LIBGSF_LIBS) ../gsf/libgsf-1.la
 libgsf_win32_1_la_LDFLAGS = -version-info $(VERSION_INFO) -no-undefined
 libgsf_win32_1_la_SOURCES =	\
 	gsf-input-win32.c	\
