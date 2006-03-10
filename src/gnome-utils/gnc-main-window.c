@@ -928,6 +928,35 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 }
 
 
+static void
+gnc_main_window_add_plugin (gpointer plugin,
+			    gpointer window)
+{
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	ENTER(" ");
+	gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
+				  GNC_MAIN_WINDOW (window),
+				  window_type);
+	LEAVE(" ");
+}
+
+static void
+gnc_main_window_remove_plugin (gpointer plugin,
+			       gpointer window)
+{
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	ENTER(" ");
+	gnc_plugin_remove_from_window (GNC_PLUGIN (plugin),
+				       GNC_MAIN_WINDOW (window),
+				       window_type);
+	LEAVE(" ");
+}
+
+
 static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
 			      GdkEvent *event,
@@ -1668,6 +1697,8 @@ gnc_main_window_destroy (GtkObject *object)
 {
 	GncMainWindow *window;
 	GncMainWindowPrivate *priv;
+	GncPluginManager *manager;
+	GList *plugins;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
@@ -1698,6 +1729,12 @@ gnc_main_window_destroy (GtkObject *object)
 
 	  g_hash_table_destroy (priv->merged_actions_table);
 	  priv->merged_actions_table = NULL;
+
+	  /* GncPluginManager stuff */
+	  manager = gnc_plugin_manager_get ();
+	  plugins = gnc_plugin_manager_get_plugins (manager);
+	  g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
+	  g_list_free (plugins);
 	}
 	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -2125,6 +2162,8 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 	g_return_if_fail (group_name != NULL);
 
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->merged_actions_table == NULL)
+		return;
 	entry = g_hash_table_lookup (priv->merged_actions_table, group_name);
 
 	if (entry == NULL)
@@ -2193,6 +2232,8 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 	g_return_val_if_fail (group_name != NULL, NULL);
 
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	if (priv->merged_actions_table == NULL)
+		return NULL;
 	entry = g_hash_table_lookup (priv->merged_actions_table, group_name);
 
 	if (entry == NULL)
@@ -2201,20 +2242,6 @@ gnc_main_window_get_action_group (GncMainWindow *window,
 	return entry->action_group;
 }
 
-
-static void
-gnc_main_window_add_plugin (gpointer plugin,
-			    gpointer window)
-{
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-
-	ENTER(" ");
-	gnc_plugin_add_to_window (GNC_PLUGIN (plugin),
-				  GNC_MAIN_WINDOW (window),
-				  window_type);
-	LEAVE(" ");
-}
 
 static void
 gnc_main_window_update_toolbar (GncMainWindow *window)

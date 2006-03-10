@@ -1,3 +1,13 @@
+2006-03-10  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Walk through the list of
+	plugins installed in a window and uninstall them before the window
+	is destroyed. Fixes 333973.
+
+	* src/core-utils/gnc-gobject-utils.c: Change the output from this
+	file to use g_message instead of g_warning so the
+	--g-fatal-warnings argument doesn't trip over it.
+
 2006-03-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-dialog-utils.scm:
