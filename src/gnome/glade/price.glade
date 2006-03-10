@@ -782,7 +782,7 @@ Unknown</property>
 	  <child>
 	    <widget class="GtkCheckButton" id="delete_manual">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Delete manually entered stock prices dated earlier than the specified date. By default, only stock prices added by Finance::Quote will be deleted.</property>
+	      <property name="tooltip" translatable="yes">If activated, delete manually entered stock prices dated earlier than the specified date.  Otherwise only stock prices added by Finance::Quote will be deleted.</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Delete _manually entered prices</property>
 	      <property name="use_underline">True</property>
@@ -805,7 +805,7 @@ Unknown</property>
 	  <child>
 	    <widget class="GtkCheckButton" id="delete_last">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Delete all prices before the specified date.  By default, the last stock price dated before the date will be kept and all earlier quotes deleted.</property>
+	      <property name="tooltip" translatable="yes">If activated, delete all prices before the specified date.  Otherwise the last stock price dated before the date will be kept and all earlier quotes deleted.</property>
 	      <property name="can_focus">True</property>
 	      <property name="label" translatable="yes">Delete _last price for a stock</property>
 	      <property name="use_underline">True</property>

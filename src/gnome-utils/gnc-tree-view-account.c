@@ -1333,16 +1333,22 @@ gtva_update_column_names (GncTreeView *view)
   mnemonic = gnc_commodity_get_mnemonic(gnc_default_report_currency());
 
   gtva_update_column_name(priv->present_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Present (%s)"), mnemonic);
   gtva_update_column_name(priv->balance_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Balance (%s)"), mnemonic);
   gtva_update_column_name(priv->cleared_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Cleared (%s)"), mnemonic);
   gtva_update_column_name(priv->reconciled_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Reconciled (%s)"), mnemonic);
   gtva_update_column_name(priv->future_min_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Future Minimum (%s)"), mnemonic);
   gtva_update_column_name(priv->total_report_column,
+			  /* Translators: %s is a currency mnemonic.*/
 			  _("Total (%s)"), mnemonic);
 }
 
