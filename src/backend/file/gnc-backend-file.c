@@ -129,7 +129,11 @@ gnc_file_be_get_file_lock (FileBackend *be)
     if (rc)
     {
         /* If hard links aren't supported, just allow the lock. */
-        if (errno == EOPNOTSUPP || errno == EPERM)
+        if (errno == EPERM
+#ifdef EOPNOTSUPP
+	    || errno == EOPNOTSUPP
+#endif
+	    )
         {
             be->linkfile = NULL;
             return TRUE;
@@ -336,7 +340,11 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
     int err_ret = link(orig, bkup);
     if(err_ret != 0)
     {
-        if(errno == EPERM || errno == EOPNOTSUPP)
+        if(errno == EPERM
+#ifdef EOPNOTSUPP
+	   || errno == EOPNOTSUPP
+#endif
+	   )
         {
             err_ret = copy_file(orig, bkup);
         }
