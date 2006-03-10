@@ -72,7 +72,7 @@ static void
 gnc_gobject_dump_gobject (GObject *object, const gchar *name)
 {
   //printf("Enter %s: object %p, name %s\n", __FUNCTION__, object, name);
-  g_warning("    object %p, ref count %d", object, object->ref_count);
+  g_message("    object %p, ref count %d", object, object->ref_count);
   //printf("Leave %s:\n", __FUNCTION__);
 }
 
@@ -87,7 +87,7 @@ static gboolean
 gnc_gobject_dump_list (const gchar *name, GList *list, gpointer user_data)
 {
   //printf("Enter %s: name %s, list %p\n", __FUNCTION__, name, list);
-  g_warning("  %d %s", g_list_length(list), name);
+  g_message("  %d %s", g_list_length(list), name);
   g_list_foreach(list, (GFunc)gnc_gobject_dump_gobject, (gpointer)name);
   //printf("Leave %s:\n", __FUNCTION__);
   return TRUE;
@@ -109,7 +109,7 @@ gnc_gobject_tracking_dump (void)
   table = gnc_gobject_tracking_table();
 
   if (g_hash_table_size(table) > 0) {
-    g_warning("The following objects remain alive:");
+    g_message("The following objects remain alive:");
     g_hash_table_foreach_remove(table, (GHRFunc)gnc_gobject_dump_list, NULL);
   }
   //printf("Leave %s:\n", __FUNCTION__);
