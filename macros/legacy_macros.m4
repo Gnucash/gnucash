@@ -123,6 +123,36 @@ int main ()
   fi
 ])
 
+AC_DEFUN([SCANF_QD_CHECK],
+[
+  AC_CACHE_CHECK([if scanf supports %qd conversions],
+                 am_cv_scanf_qd,
+      AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  long long int e;
+
+  d = 0;
+  e =  100000;
+  e *= 100000;
+  if ((sscanf ("10000000000", "%qd", &d) != 1) || (d != e))
+    exit (1);
+
+  exit (0);
+}
+],
+        am_cv_scanf_qd=yes,
+        am_cv_scanf_qd=no))
+  if test $am_cv_scanf_qd = yes; then
+    AC_DEFINE(HAVE_SCANF_QD, 1,
+      [Define if scanf supports %qd conversions.])
+  fi
+])
+
 AC_DEFUN([LANGINFO_D_FMT_CHECK],
 [
   AC_CACHE_CHECK([for nl_langinfo and D_FMT], am_cv_langinfo_dfmt,
