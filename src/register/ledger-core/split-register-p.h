@@ -149,8 +149,8 @@ CellBlock * gnc_split_register_get_active_cursor (SplitRegister *reg);
 
 void gnc_split_register_set_last_num (SplitRegister *reg, const char *num);
 
-Account * gnc_split_register_get_account_by_name (SplitRegister *reg, BasicCell * cell,
-						  const char *name, gboolean *new);
+Account * gnc_split_register_get_account_by_name(
+    SplitRegister *reg, BasicCell * cell, const char *name, gboolean *new);
 Account * gnc_split_register_get_account (SplitRegister *reg,
                                           const char *cell_name);
 
@@ -164,7 +164,9 @@ gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
  * transaction, and if so, what conversion we need
  */
 gboolean gnc_split_reg_has_rate_cell (SplitRegisterType type);
-gboolean gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split);
-gboolean gnc_split_register_needs_conv_rate (SplitRegister *reg, Transaction *txn, Account *acc);
+gboolean gnc_split_register_split_needs_amount(
+    SplitRegister *reg, Split *split);
+gboolean gnc_split_register_needs_conv_rate(
+    SplitRegister *reg, Transaction *txn, Account *acc);
 
 #endif

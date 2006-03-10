@@ -959,7 +959,7 @@ gnc_split_register_get_account_always (SplitRegister *reg,
 
   /* If 'name' is "-- Split Transaction --" then return NULL or the
      register acct */
-  if (!safe_strcmp (name, _("-- Split Transaction --"))) {
+  if (!safe_strcmp (name, SPLIT_TRANS_STR)) {
     return NULL;
   }
 
@@ -1044,7 +1044,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     _("You need to expand the transaction in order to modify its exchange rates.");
 
   /* If this is an un-expanded, multi-split transaction, then warn the user */
-  if (force_dialog && !expanded && ! xfer_acc) {
+  if (force_dialog && !expanded && !xfer_acc) {
     gnc_error_dialog (gnc_split_register_get_parent (reg), message);
     return TRUE;
   }
@@ -1098,6 +1098,20 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     return TRUE;
   }
 
+  /* Strangely, if we're in a two-split, non-expanded txn, we need
+   * to do something really special with the exchange rate!  In
+   * particular, we have to pick it up from the _other_ split --
+   * right?
+   * XXX: perhaps I should pop up an error here?  Or maybe require the
+   * user to go into expanded-mode?
+   */
+  if (!expanded && osplit && !gnc_commodity_equal(reg_com, txn_cur) && 
+      !gnc_commodity_equal(reg_com, xfer_com)) {
+      gnc_numeric amt = xaccSplitGetAmount (osplit);
+      gnc_numeric val = xaccSplitGetValue (osplit);
+      exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  }
+
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
 
@@ -1116,11 +1130,25 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       split != gnc_split_register_get_blank_split (reg))
     return FALSE;
 
+  /* create the exchange-rate dialog */
+  xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
+  gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
+
+  /* fill in the dialog entries */
+  gnc_xfer_dialog_set_description(
+      xfer, gnc_split_register_get_cell_string (reg, DESC_CELL));
+  gnc_xfer_dialog_set_memo(
+      xfer, gnc_split_register_get_cell_string (reg, MEMO_CELL));
+  gnc_xfer_dialog_set_num(
+      xfer, gnc_split_register_get_cell_string (reg, NUM_CELL));
+  gnc_xfer_dialog_set_date(
+      xfer, timespecToTime_t(
+          gnc_split_register_get_cell_date(reg, DATE_CELL)));
 
   /* We know that "amount" is always in the reg_com currency.
    * Unfortunately it is possible that neither xfer_com or txn_cur are
    * the same as reg_com, in which case we need to convert to the txn
-   * currency...  Or, if the local currency is the xfer_com, then we
+   * currency...  Or, if the register commodity is the xfer_com, then we
    * need to flip-flop the commodities and the exchange rates.
    */
 
@@ -1143,24 +1171,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     /* XXX: should we tell the user we've done the conversion? */
     amount = gnc_numeric_div(
         amount, rate, gnc_commodity_get_fraction (txn_cur), GNC_DENOM_REDUCE);
-
-    /* Strangely, if we're in a two-split, non-expanded txn, we need
-     * to do something really special with the exchange rate!  In
-     * particular, we have to pick it up from the _other_ split --
-     * right?
-     * XXX: perhaps I should pop up an error here?  Or maybe require the
-     * user to go into expanded-mode?
-     */
-    if (osplit && !expanded) {
-      gnc_numeric amt = xaccSplitGetAmount (osplit);
-      gnc_numeric val = xaccSplitGetValue (osplit);
-      exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-    }
   }
-
-  /* create the exchange-rate dialog */
-  xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
-  gnc_xfer_dialog_is_exchange_dialog (xfer, &exch_rate);
 
   /* enter the accounts */
   if (swap_amounts) {
@@ -1176,17 +1187,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   gnc_xfer_dialog_hide_to_account_tree (xfer);
   gnc_xfer_dialog_hide_from_account_tree (xfer);
 
-  /* fill in the dialog entries */
   gnc_xfer_dialog_set_amount (xfer, amount);
-  gnc_xfer_dialog_set_description(
-      xfer, gnc_split_register_get_cell_string (reg, DESC_CELL));
-  gnc_xfer_dialog_set_memo(
-      xfer, gnc_split_register_get_cell_string (reg, MEMO_CELL));
-  gnc_xfer_dialog_set_num(
-      xfer, gnc_split_register_get_cell_string (reg, NUM_CELL));
-  gnc_xfer_dialog_set_date(
-      xfer, timespecToTime_t(
-          gnc_split_register_get_cell_date(reg, DATE_CELL)));
 
   /*
    * When we flip, we should tell the dialog so it can deal with the

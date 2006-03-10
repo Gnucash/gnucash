@@ -2102,12 +2102,12 @@ gnc_split_register_config_cells (SplitRegister *reg)
   gnc_combo_cell_add_ignore_string
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-     _("-- Split Transaction --"));
+     SPLIT_TRANS_STR);
 
   gnc_combo_cell_add_ignore_string
     ((ComboCell *)
      gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
-     _("-- Stock Split --"));
+     STOCK_SPLIT_STR);
 
   /* the action cell */
   gnc_combo_cell_set_autosize
