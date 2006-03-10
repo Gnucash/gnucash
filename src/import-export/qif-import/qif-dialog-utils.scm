@@ -608,8 +608,7 @@
                     (existing-gnc-acct 
                      (gnc:get-account-from-full-name 
                       (gnc:get-current-group)
-                      (qif-map-entry:gnc-name map-entry)
-                      separator))
+                      (qif-map-entry:gnc-name map-entry)))
 		    (book (gnc:group-get-book (gnc:get-current-group)))
                     (existing-type 
                      (gnc:account-get-type existing-gnc-acct)))

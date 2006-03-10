@@ -1,3 +1,8 @@
+2006-03-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-dialog-utils.scm:
+	  gnc:get-account-from-full-name requires two args, not three (#334170)
+
 2006-03-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Show newly created windows
