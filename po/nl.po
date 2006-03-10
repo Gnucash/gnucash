@@ -20,7 +20,7 @@ msgstr ""
 "Last-Translator: Jeroen ten Berge <twinbit@home.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -46,7 +46,7 @@ msgstr "Stack underflow"
 
 #: ../src/app-utils/gnc-exp-parser.c:634
 msgid "Undefined character"
-msgstr "Niet-gedefiniëerd karakter"
+msgstr "Niet-gedefiniÃ«erd karakter"
 
 #: ../src/app-utils/gnc-exp-parser.c:636
 msgid "Not a variable"
@@ -54,7 +54,7 @@ msgstr "Is geen variabele"
 
 #: ../src/app-utils/gnc-exp-parser.c:638
 msgid "Not a defined function"
-msgstr "Geen gedefiniëerde functie"
+msgstr "Geen gedefiniÃ«erde functie"
 
 #: ../src/app-utils/gnc-exp-parser.c:640
 msgid "Out of memory"
@@ -297,7 +297,7 @@ msgstr "Toon GnuCash versie"
 #: ../src/bin/gnucash-bin.c:323
 #, fuzzy, c-format
 msgid "GnuCash %s"
-msgstr "Beëindig GnuCash"
+msgstr "BeÃ«indig GnuCash"
 
 #. Translators: 1st %s is the build date; 2nd %s is the SVN
 #. revision number
@@ -309,7 +309,7 @@ msgstr ""
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:445
 msgid "Checking Finance::Quote..."
-msgstr "Financiën controleren:: Citaat..."
+msgstr "FinanciÃ«n controleren:: Citaat..."
 
 #: ../src/bin/gnucash-bin.c:452
 msgid "Loading data..."
@@ -548,7 +548,7 @@ msgid ""
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "U moet een bedrijfsnaam opgeven.\n"
-"Als deze klant een privé-persoon is (en geen bedrijf), dan kunt u het beste "
+"Als deze klant een privÃ©-persoon is (en geen bedrijf), dan kunt u het beste "
 "de \"bedrijfsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
@@ -742,7 +742,7 @@ msgstr ""
 
 #: ../src/business/business-gnome/dialog-invoice.c:609
 msgid "The Invoice must have at least one Entry."
-msgstr "De factuur moet tenminste één boeking bevatten."
+msgstr "De factuur moet tenminste Ã©Ã©n boeking bevatten."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
@@ -1107,7 +1107,7 @@ msgstr "De opdracht moet een ID hebben."
 
 #: ../src/business/business-gnome/dialog-order.c:268
 msgid "The Order must have at least one Entry."
-msgstr "De order moet tenminste één boeking bevatten."
+msgstr "De order moet tenminste Ã©Ã©n boeking bevatten."
 
 #. Damn; yes.  Well, ask the user to make sure they REALLY want to
 #. * close this order!
@@ -1199,7 +1199,7 @@ msgid ""
 "company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "U moet een bedrijfsnaam opgeven.\n"
-"Wanneer de verkoper een privé-persoon is (en geen bedrijf), dan kunt u het "
+"Wanneer de verkoper een privÃ©-persoon is (en geen bedrijf), dan kunt u het "
 "beste de \"bedrijsnaam\" en de \"contactpersoon\" naam hetzelfde opgeven."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
@@ -1876,7 +1876,7 @@ msgstr "Eigenaar informatie"
 msgid ""
 "The job ID number.  If left blank a reasonable number will be chosen for you"
 msgstr ""
-"Het opdracht ID nummer. Indien niet opgegeven, dan wordt een getal vóór u "
+"Het opdracht ID nummer. Indien niet opgegeven, dan wordt een getal vÃ³Ã³r u "
 "gekozen."
 
 #: ../src/business/business-gnome/glade/order.glade.h:5
@@ -1917,7 +1917,7 @@ msgid ""
 "The order ID number.  If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Het order ID nummer. Indien niet opgegeven, dan wordt een getal vóór u "
+"Het order ID nummer. Indien niet opgegeven, dan wordt een getal vÃ³Ã³r u "
 "gekozen."
 
 #. ../src/report/standard-reports/general-journal.scm
@@ -1991,7 +1991,7 @@ msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"Het leverancier ID nummer. Indien niet opgegeven, dan wordt een getal vóór u "
+"Het leverancier ID nummer. Indien niet opgegeven, dan wordt een getal vÃ³Ã³r u "
 "gekozen."
 
 #. ../src/business/business-reports/owner-report.scm
@@ -4202,7 +4202,7 @@ msgstr "Balans informatie"
 #: ../src/gnome/glade/account.glade.h:10
 #, fuzzy
 msgid "<b>Categories</b>"
-msgstr "TXF Categorieën"
+msgstr "TXF CategorieÃ«n"
 
 #: ../src/gnome/glade/account.glade.h:11
 #, fuzzy
@@ -4314,7 +4314,7 @@ msgstr "Filter op type"
 
 #: ../src/gnome/glade/account.glade.h:33
 msgid "Finish Account Setup"
-msgstr "Beëindig dagboek configuratie"
+msgstr "BeÃ«indig dagboek configuratie"
 
 #. ../src/scm/help-topics-index.scm
 #. ../src/report/stylesheets/stylesheet-fancy.scm
@@ -4406,7 +4406,7 @@ msgstr "Nieuw dagboek (nog niet ge-implementeerd)"
 #. ../src/scm/help-topics-index.scm
 #: ../src/gnome/glade/account.glade.h:45 ../intl-scm/guile-strings.c:232
 msgid "New Account Hierarchy Setup"
-msgstr "Nieuwe hiërarchische dagboek configuratie"
+msgstr "Nieuwe hiÃ«rarchische dagboek configuratie"
 
 #: ../src/gnome/glade/account.glade.h:46
 #, fuzzy
@@ -4450,7 +4450,7 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Kies 'Beëindig' om uw nieuwe dagboeken te maken.\n"
+"Kies 'BeÃ«indig' om uw nieuwe dagboeken te maken.\n"
 "\n"
 "Kies 'Terug' om uw keuzes te corrigeren.\n"
 "\n"
@@ -4470,10 +4470,10 @@ msgid ""
 "the categories that are relevant to you.  You can always create additional "
 "accounts by hand later."
 msgstr ""
-"Selecteer de categorieën die overeenkomen met wat u wilt gebruiken in "
+"Selecteer de categorieÃ«n die overeenkomen met wat u wilt gebruiken in "
 "GnuCash. \n"
 "Iedere categorie die u selecteert zal meerdere dagboeken laten maken. \n"
-"Selecteer de categorieën die u nodig heeft. U kunt later altijd \n"
+"Selecteer de categorieÃ«n die u nodig heeft. U kunt later altijd \n"
 "handmatig extra dagboeken aanmaken."
 
 #: ../src/gnome/glade/account.glade.h:59
@@ -4531,7 +4531,7 @@ msgid ""
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
-"Dit dagboek is alleen aanwezig als opvulling in de hiërarchie. Transacties "
+"Dit dagboek is alleen aanwezig als opvulling in de hiÃ«rarchie. Transacties "
 "mogen niet worden opgegeven voor dit dagboek, alleen voor sub-dagboeken "
 "hiervan."
 
@@ -4960,7 +4960,7 @@ msgstr "Einde "
 #. ../src/scm/help-topics-index.scm
 #: ../src/gnome/glade/fincalc.glade.h:18 ../intl-scm/guile-strings.c:286
 msgid "Financial Calculator"
-msgstr "Financiële Rekenmachine"
+msgstr "FinanciÃ«le Rekenmachine"
 
 #: ../src/gnome/glade/fincalc.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:80
@@ -5057,7 +5057,7 @@ msgstr "Effectieve datum:"
 #: ../src/gnome/glade/fincalc.glade.h:37
 #, fuzzy
 msgid "_Initial Payment:"
-msgstr "Initiële betaling:"
+msgstr "InitiÃ«le betaling:"
 
 #: ../src/gnome/glade/fincalc.glade.h:38
 #, fuzzy
@@ -5180,7 +5180,7 @@ msgstr ""
 #: ../src/gnome/glade/merge.glade.h:5
 #, fuzzy
 msgid "Commit QSF Import Data to data file"
-msgstr "Exporteer de dagboek hiërarchie naar een nieuw bestand"
+msgstr "Exporteer de dagboek hiÃ«rarchie naar een nieuw bestand"
 
 #: ../src/gnome/glade/merge.glade.h:6
 msgid "Please resolve any conflicts in the merge"
@@ -5199,7 +5199,7 @@ msgid ""
 "REMEMBER: There is no way to undo this final operation! Make sure you have a "
 "backup before clicking 'Apply'."
 msgstr ""
-"Kies 'Beëindig' om uw nieuwe dagboeken te maken.\n"
+"Kies 'BeÃ«indig' om uw nieuwe dagboeken te maken.\n"
 "\n"
 "Kies 'Terug' om uw keuzes te corrigeren.\n"
 "\n"
@@ -5522,7 +5522,7 @@ msgstr "Geef de rentebetaling op..."
 #: ../src/gnome/glade/reconcile.glade.h:12
 #: ../src/gnome/window-reconcile.c:1436
 msgid "Finish"
-msgstr "Beëindig"
+msgstr "BeÃ«indig"
 
 #. ../src/app-utils/prefs.scm
 #: ../src/gnome/glade/reconcile.glade.h:13 ../intl-scm/guile-strings.c:432
@@ -5596,7 +5596,7 @@ msgstr "Eindbalans:"
 #: ../src/gnome/glade/reconcile.glade.h:30
 #: ../src/gnome/window-reconcile.c:1192
 msgid "_Finish"
-msgstr "_Beëindig"
+msgstr "_BeÃ«indig"
 
 #. File menu
 #: ../src/gnome/glade/reconcile.glade.h:31
@@ -5663,11 +5663,11 @@ msgstr "Sluitingsdatum"
 
 #: ../src/gnome/glade/register.glade.h:9
 msgid "Copy Transaction"
-msgstr "Copiëer Transactie"
+msgstr "CopiÃ«er Transactie"
 
 #: ../src/gnome/glade/register.glade.h:10
 msgid "Copy the selected transaction"
-msgstr "Copiëer de geselecteerde transactie"
+msgstr "CopiÃ«er de geselecteerde transactie"
 
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:239
@@ -6294,7 +6294,7 @@ msgstr "Einddatum:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:70
 msgid "Ended On"
-msgstr "Beëindigd op"
+msgstr "BeÃ«indigd op"
 
 #: ../src/gnome/glade/sched-xact.glade.h:71
 msgid "Escrow Account:"
@@ -6980,7 +6980,7 @@ msgstr "Dagboek type"
 #: ../src/gnome/glade/tax.glade.h:5
 #, fuzzy
 msgid "<b>_TXF Categories</b>"
-msgstr "TXF Categorieën"
+msgstr "TXF CategorieÃ«n"
 
 #: ../src/gnome/glade/tax.glade.h:6
 msgid "Accounts Selected:"
@@ -7041,12 +7041,12 @@ msgstr "Gebruikersnaam:"
 #: ../src/gnome/gnc-plugin-account-tree.c:57
 #, fuzzy
 msgid "New Accounts _Page"
-msgstr "Nieuwe dagboek hiërarchie (_T)"
+msgstr "Nieuwe dagboek hiÃ«rarchie (_T)"
 
 #: ../src/gnome/gnc-plugin-account-tree.c:58
 #, fuzzy
 msgid "Open a new Account Tree page"
-msgstr "Open een nieuw dagboek hiërarchie venster"
+msgstr "Open een nieuw dagboek hiÃ«rarchie venster"
 
 #. File menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:93
@@ -7099,7 +7099,7 @@ msgstr "D_agboeken exporteren..."
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:111
 msgid "Export the account hierarchy to a new file"
-msgstr "Exporteer de dagboek hiërarchie naar een nieuw bestand"
+msgstr "Exporteer de dagboek hiÃ«rarchie naar een nieuw bestand"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:114
 #, fuzzy
@@ -7187,11 +7187,11 @@ msgstr "Bekijk en bewerk de handelsgoederen voor aandelen en beleggingsfondsen"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "_Financial Calculator"
-msgstr "_Financiële rekenmachine"
+msgstr "_FinanciÃ«le rekenmachine"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:152
 msgid "Use the financial calculator"
-msgstr "Gebruik de financiële rekenmachine"
+msgstr "Gebruik de financiÃ«le rekenmachine"
 
 #. Help menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:157
@@ -7242,7 +7242,7 @@ msgstr "Nieuwe debiteur maken"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:147
 #, fuzzy
 msgid "New Account _Hierarchy..."
-msgstr "Nieuwe hiërarchische dagboek configuratie"
+msgstr "Nieuwe hiÃ«rarchische dagboek configuratie"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:148
 msgid "Extend the current book by merging with new account type categories"
@@ -7547,12 +7547,12 @@ msgstr "Knip de geselecteerde transactie"
 #: ../src/gnome/gnc-plugin-page-register.c:180
 #, fuzzy
 msgid "_Copy Transaction"
-msgstr "Copiëer Transactie"
+msgstr "CopiÃ«er Transactie"
 
 #: ../src/gnome/gnc-plugin-page-register.c:181
 #, fuzzy
 msgid "Copy the selected transaction into clipboard"
-msgstr "Copiëer de geselecteerde transactie"
+msgstr "CopiÃ«er de geselecteerde transactie"
 
 #: ../src/gnome/gnc-plugin-page-register.c:183
 #, fuzzy
@@ -9671,7 +9671,7 @@ msgstr "Type zoekactie"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:20
 msgid "Warning: Finance::Quote not installed properly."
-msgstr "Waarschuwing: Financieel::Citaten zijn niet correct geïnstalleerd."
+msgstr "Waarschuwing: Financieel::Citaten zijn niet correct geÃ¯nstalleerd."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:21
 #, fuzzy
@@ -9751,7 +9751,7 @@ msgstr "Sorteer methode"
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:5
 #, fuzzy
 msgid "Finish changes"
-msgstr "Beëindigd"
+msgstr "BeÃ«indigd"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
 msgid "Gnucash will install the data for you."
@@ -11537,7 +11537,7 @@ msgstr "Bedr_ag"
 #: ../src/gnome-utils/gnc-main-window.c:298
 #, fuzzy
 msgid "About GnuCash"
-msgstr "Beëindig GnuCash"
+msgstr "BeÃ«indig GnuCash"
 
 #: ../src/gnome-utils/gnc-main-window.c:308
 msgid "Learn Accelerator Keys"
@@ -12093,7 +12093,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:1193 ../src/gnome/window-reconcile.c:1436
 msgid "Finish the reconciliation of this account"
-msgstr "Beëindig de correctie voor dit dagboek"
+msgstr "BeÃ«indig de correctie voor dit dagboek"
 
 #: ../src/gnome/window-reconcile.c:1201
 msgid "Postpone the reconciliation of this account"
@@ -12140,7 +12140,7 @@ msgstr "Gecorrigeerde balans:"
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Het dagboek is niet gebalanceerd.\n"
-"Weet u zeker dat u wilt beëindigen?"
+"Weet u zeker dat u wilt beÃ«indigen?"
 
 #: ../src/gnome/window-reconcile.c:2089
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -12165,10 +12165,10 @@ msgid ""
 "\n"
 "Click \"Back\" to review your currency selections."
 msgstr ""
-"Kies \"Beëindigen\" om uw dagboeken bij te werken en de nieuwe\n"
+"Kies \"BeÃ«indigen\" om uw dagboeken bij te werken en de nieuwe\n"
 "informatie die u heeft opgegeven te gebruiken.\n"
 "\n"
-"Kies \"Annuleren\" om het laden van het bestand te beëindigen.\n"
+"Kies \"Annuleren\" om het laden van het bestand te beÃ«indigen.\n"
 "\n"
 "Kies \"Terug\" om uw valuta keuzes opnieuw te bekijken."
 
@@ -12285,7 +12285,7 @@ msgstr "(geen)"
 #: ../src/import-export/generic-import.glade.h:6
 #, fuzzy
 msgid "<b>Colors</b>"
-msgstr "TXF Categorieën"
+msgstr "TXF CategorieÃ«n"
 
 #: ../src/import-export/generic-import.glade.h:7
 msgid "<b>Generic Importer</b>"
@@ -12332,7 +12332,7 @@ msgstr "Kies een export format"
 #: ../src/import-export/generic-import.glade.h:16
 #, fuzzy
 msgid "Commercial ATM _fees threshold"
-msgstr "Drempelwaarde voor commerciële PIN-automaat kosten"
+msgstr "Drempelwaarde voor commerciÃ«le PIN-automaat kosten"
 
 #: ../src/import-export/generic-import.glade.h:17
 msgid "Confidence"
@@ -12400,7 +12400,7 @@ msgstr "Huidig"
 
 #: ../src/import-export/generic-import.glade.h:36
 msgid "Imported transaction's first split:"
-msgstr "Eerste opsplitsing van geïmporteerde transacties:"
+msgstr "Eerste opsplitsing van geÃ¯mporteerde transacties:"
 
 #: ../src/import-export/generic-import.glade.h:37
 msgid ""
@@ -12413,8 +12413,8 @@ msgid ""
 "fee in your area (in units of your local currency), so the transaction will "
 "be recognised as a match."
 msgstr ""
-"Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een "
-"financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun "
+"Op sommige plaatsen staan commerciÃ«le PIN automaten (die niet zijn van een "
+"financiÃ«le instelling), zoals in warenhuizen. Deze pinautomaten tellen hun "
 "kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse "
 "transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 "
 "opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. "
@@ -12453,7 +12453,7 @@ msgstr "Selecteer of genereer het bijbehorende GnuCash dagboek voor:"
 #: ../src/import-export/generic-import.glade.h:45
 msgid "Potential splits matching the selected transaction: "
 msgstr ""
-"Potentiële opsplitsingen komen overeen met de geselecteerde transactie:"
+"PotentiÃ«le opsplitsingen komen overeen met de geselecteerde transactie:"
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "R"
@@ -12491,7 +12491,7 @@ msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
 msgstr ""
-"De minimum overeenkomst van een potentiëel overeenkomende waarde, die moet "
+"De minimum overeenkomst van een potentiÃ«el overeenkomende waarde, die moet "
 "worden getoond in de overeenkomsten lijst."
 
 #: ../src/import-export/generic-import.glade.h:56
@@ -12833,7 +12833,7 @@ msgstr "Nu uitvoeren"
 #: ../src/import-export/hbci/glade/hbci.glade.h:24
 #, fuzzy
 msgid "Execute later (unimpl.)"
-msgstr "Later uitvoeren (nog niet geïmplementeerd)"
+msgstr "Later uitvoeren (nog niet geÃ¯mplementeerd)"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:25
 #, fuzzy
@@ -12871,7 +12871,7 @@ msgstr "HBCI rekeningnaam"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:33
 msgid "Initial HBCI Setup"
-msgstr "Initiële HBCI configuratie"
+msgstr "InitiÃ«le HBCI configuratie"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:34
 msgid "Match HBCI accounts with GnuCash accounts"
@@ -12880,12 +12880,12 @@ msgstr "Koppel HBCI rekeningen met GnuCash dagboeken"
 #: ../src/import-export/hbci/glade/hbci.glade.h:35
 #, fuzzy
 msgid "Move the selected transaction template one row down"
-msgstr "Copiëer de geselecteerde transactie"
+msgstr "CopiÃ«er de geselecteerde transactie"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:36
 #, fuzzy
 msgid "Move the selected transaction template one row up"
-msgstr "Copiëer de geselecteerde transactie"
+msgstr "CopiÃ«er de geselecteerde transactie"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:37
 #, fuzzy
@@ -13015,7 +13015,7 @@ msgstr ""
 "Kies 'Volgende' als u door wilt gaan.\n"
 "\n"
 "Opmerking: WIJ GARANDEREN NIETS. Sommige banken gebruiken een\n"
-"slecht geïmplementeerde HBCI. U kunt niet vertrouwen op tijdkritische\n"
+"slecht geÃ¯mplementeerde HBCI. U kunt niet vertrouwen op tijdkritische\n"
 "overdracht via HBCI, dit komt doordat uw bank soms verkeerd terugkoppeld\n"
 "wanneer een opdracht geweigerd wordt.\n"
 "\n"
@@ -13766,7 +13766,7 @@ msgid ""
 msgstr ""
 "Kies \"Beeindigen\" om gegevens te importeren en uw GnuCash\n"
 "dagboeken bij te werken. Het dagboek en de informatie over\n"
-"overeenkomende categorieën die u ingegeven heeft, wordt bewaard\n"
+"overeenkomende categorieÃ«n die u ingegeven heeft, wordt bewaard\n"
 "en gebruikt als standaard de volgende keer dat u het QIF import\n"
 "systeem gebruikt.\n"
 "\n"
@@ -13779,7 +13779,7 @@ msgstr ""
 #: ../src/import-export/qif-import/qif.glade.h:12
 #, fuzzy
 msgid "Click \"Forward\" to check matchings for QIF categories. "
-msgstr "Kies \"Volgende\" om overeenkomsten met QIF categorieën te vinden."
+msgstr "Kies \"Volgende\" om overeenkomsten met QIF categorieÃ«n te vinden."
 
 #: ../src/import-export/qif-import/qif.glade.h:13
 #, fuzzy
@@ -13788,7 +13788,7 @@ msgid ""
 "imported data."
 msgstr ""
 "Kies \"Volgende\" om informatie over aandelen en\n"
-"beleggingsfondsen in de geïmporteerde gegevens, te geven."
+"beleggingsfondsen in de geÃ¯mporteerde gegevens, te geven."
 
 #: ../src/import-export/qif-import/qif.glade.h:14
 #, fuzzy
@@ -13837,7 +13837,7 @@ msgid ""
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
 msgstr ""
-"GnuCash kan financiële gegevens van QIF (Quicken Interchange \n"
+"GnuCash kan financiÃ«le gegevens van QIF (Quicken Interchange \n"
 "Format) bestanden die geschreven zijn met Quicken/Quickbooks, \n"
 "MS Money, Moneydance en vele andere programma's importeren.\n"
 "\n"
@@ -13863,10 +13863,10 @@ msgid ""
 msgstr ""
 "GnuCash maakt gebruik van gescheiden inkomsten en uitgaven dagboeken, en "
 "niet\n"
-"van categorieën om uw transacties te klassificeren. Iedere categorie in uw\n"
+"van categorieÃ«n om uw transacties te klassificeren. Iedere categorie in uw\n"
 "QIF bestanden wordt omgezet naar een GnuCash dagboek.\n"
 "\n"
-"Op de volgende pagina kunt u de voorgestelde overeenkomende QIF categorieën "
+"Op de volgende pagina kunt u de voorgestelde overeenkomende QIF categorieÃ«n "
 "en\n"
 "GnuCash dagboeken bekijken. U kunt de overeenkomsten die u wilt veranderen,\n"
 "aanpassen door de regel met de categorie naam te selecteren.\n"
@@ -13896,7 +13896,7 @@ msgid ""
 msgstr ""
 "Wanneer u QIF bestanden importeert die zijn opgehaald van een bank of "
 "andere\n"
-"financiële instelling, is een deel van de QIF gegevens misschien een "
+"financiÃ«le instelling, is een deel van de QIF gegevens misschien een "
 "duplicaat\n"
 "van gegevens die al in uw GnuCash dagboeken staat. GnuCash probeert "
 "duplicaten\n"
@@ -13904,13 +13904,13 @@ msgstr ""
 "\n"
 "Op de volgende pagina wordt u gevraagd te bevestigen dat een bestaande "
 "transactie\n"
-"overeenkomt met een geïmporteerde transactie. Geïmporteerde transacties "
+"overeenkomt met een geÃ¯mporteerde transactie. GeÃ¯mporteerde transacties "
 "worden\n"
 "getoond aan de linkerkant van de pagina, en mogelijke overeenkomende "
 "transacties\n"
 "worden aan de rechter kant getoond. Er kunnen enkele oudere transacties "
 "zijn\n"
-"die overeen komen met een geïmporteerde transactie; u kunt de juiste "
+"die overeen komen met een geÃ¯mporteerde transactie; u kunt de juiste "
 "transactie\n"
 "selecteren door te kiezen voor de \"Dup?\" kolom van de juiste transactie.\n"
 "\n"
@@ -13927,7 +13927,7 @@ msgstr "Importeer QIF bestanden"
 
 #: ../src/import-export/qif-import/qif.glade.h:41
 msgid "Imported transactions with duplicates"
-msgstr "Geïmporteerde transacties met duplicaten"
+msgstr "GeÃ¯mporteerde transacties met duplicaten"
 
 #: ../src/import-export/qif-import/qif.glade.h:42
 #, fuzzy
@@ -13967,7 +13967,7 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:47
 msgid "Income and Expense categories"
-msgstr "Inkomsten en uitgaven categorieën"
+msgstr "Inkomsten en uitgaven categorieÃ«n"
 
 #: ../src/import-export/qif-import/qif.glade.h:48
 msgid "Load another file"
@@ -13979,7 +13979,7 @@ msgstr "Koppel overeenkomstige QIF dagboeken aan GnuCash dagboeken"
 
 #: ../src/import-export/qif-import/qif.glade.h:50
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "Breng QIF categorieën in overeenstemming met GnuCash dagboeken"
+msgstr "Breng QIF categorieÃ«n in overeenstemming met GnuCash dagboeken"
 
 #: ../src/import-export/qif-import/qif.glade.h:51
 msgid "Match duplicate transactions"
@@ -14021,7 +14021,7 @@ msgstr ""
 "\n"
 "Merk op dat GnuCash veel dagboeken zal genereren die niet bestonden in uw "
 "andere\n"
-"financiële programma, inclusief een los dagboek voor ieder aandeel dat u "
+"financiÃ«le programma, inclusief een los dagboek voor ieder aandeel dat u "
 "bezit,\n"
 "speciale dagboeken voor de handels-commissies, speciale \"Actief vermogen"
 "\" \n"
@@ -14082,9 +14082,9 @@ msgid ""
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
 "you select a different account, it will be remembered for future QIF files. "
 msgstr ""
-"QIF bestanden die zijn opgehaald van banken of andere financiële "
+"QIF bestanden die zijn opgehaald van banken of andere financiÃ«le "
 "instellingen\n"
-"hebben waarschijnlijk geen gegevens over dagboeken en categorieën, waardoor "
+"hebben waarschijnlijk geen gegevens over dagboeken en categorieÃ«n, waardoor "
 "ze\n"
 "niet correct aan GnuCash dagboeken kunnen worden gekoppeld. \n"
 "\n"
@@ -14154,7 +14154,7 @@ msgstr ""
 "importeren moeten dezelfde valuta hebben. Deze beperking wordt binnenkort\n"
 "opgeheven.\n"
 "\n"
-"Selecteerde valuta die u wilt gebruiken voor uit QIF geïmporteerde "
+"Selecteerde valuta die u wilt gebruiken voor uit QIF geÃ¯mporteerde "
 "transacties:\n"
 
 #: ../src/import-export/qif-import/qif.glade.h:93
@@ -14351,8 +14351,8 @@ msgid ""
 "whatever is the maximum such fee in your area (in units of your local "
 "currency), so the transaction will be recognised as a match."
 msgstr ""
-"Op sommige plaatsen staan commerciële PIN automaten (die niet zijn van een "
-"financiële instelling), zoals in warenhuizen. Deze pinautomaten tellen hun "
+"Op sommige plaatsen staan commerciÃ«le PIN automaten (die niet zijn van een "
+"financiÃ«le instelling), zoals in warenhuizen. Deze pinautomaten tellen hun "
 "kosten op bij het te pinnen bedrag in plaats dat ze te zien zijn als losse "
 "transactie of bij uw maandelijkse bankkosten. Wanneer u bijvoorbeeld EUR 100 "
 "opneemt, wordt u EUR 101,50 in rekening gebracht wegens de automaatkosten. "
@@ -14367,7 +14367,7 @@ msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
-"De minimum overeenkomst van een potentiëel overeenkomende waarde, die moet "
+"De minimum overeenkomst van een potentiÃ«el overeenkomende waarde, die moet "
 "worden getoond in de overeenkomsten lijst."
 
 #: ../src/import-export/schemas/apps_gnucash_import_generic_matcher.schemas.in.h:14
@@ -14401,7 +14401,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register.c:420
 #, fuzzy
 msgid "Save transaction before duplicating?"
-msgstr "Geïmporteerde transacties met duplicaten"
+msgstr "GeÃ¯mporteerde transacties met duplicaten"
 
 #: ../src/register/ledger-core/split-register.c:422
 #, fuzzy
@@ -14641,7 +14641,7 @@ msgstr ""
 #: ../src/register/ledger-core/split-register-control.c:1496
 #, fuzzy
 msgid "_Discard Changes"
-msgstr "Beëindigd"
+msgstr "BeÃ«indigd"
 
 #: ../src/register/ledger-core/split-register-control.c:1498
 #, fuzzy
@@ -15201,7 +15201,7 @@ msgid ""
 "Run 'update-finance-quote' as root to install them."
 msgstr ""
 "U mist enkele noodzakelijke Perl bestanden. \n"
-"Start 'update-financiële-notering' als root om ze te installeren."
+"Start 'update-financiÃ«le-notering' als root om ze te installeren."
 
 #. ../src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:22 ../intl-scm/guile-strings.c:24
@@ -15316,7 +15316,7 @@ msgstr "Tip van de Dag"
 #. ../src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:244
 msgid "Account Tree Window"
-msgstr "Dagboek hiërarchie venster"
+msgstr "Dagboek hiÃ«rarchie venster"
 
 #. ../src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:80 ../intl-scm/guile-strings.c:256
@@ -15393,7 +15393,7 @@ msgstr "QIF bestanden importeren"
 #: ../intl-scm/guile-strings.c:120
 #, fuzzy
 msgid "Backing Up and Protecting Data"
-msgstr "Reservecopieën maken en gegevens terughalen"
+msgstr "ReservecopieÃ«n maken en gegevens terughalen"
 
 #. ../src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:122 ../intl-scm/guile-strings.c:138
@@ -15829,7 +15829,7 @@ msgstr "Om transactie opsplitsingen te verwijderen"
 #. ../src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:342
 msgid "To Copy a Transaction"
-msgstr "Om een transactie te kopiëren"
+msgstr "Om een transactie te kopiÃ«ren"
 
 #. ../src/scm/help-topics-index.scm
 #: ../intl-scm/guile-strings.c:344
@@ -16122,7 +16122,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:508
 #, fuzzy
 msgid "End of Financial Period"
-msgstr "Einde voorgaande financiële jaar"
+msgstr "Einde voorgaande financiÃ«le jaar"
 
 #. ../src/app-utils/date-utilities.scm
 #: ../intl-scm/guile-strings.c:510
@@ -16662,7 +16662,7 @@ msgstr "De sub-dagboek balansen bijsluiten in de afgedrukte balans?"
 #. ../src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1092
 msgid "Group the accounts in main categories?"
-msgstr "De dagboeken groeperen in hoofd categorieën?"
+msgstr "De dagboeken groeperen in hoofd categorieÃ«n?"
 
 #. ../src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:1094
@@ -21146,7 +21146,7 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"U kunt eenvoudig bestaande financiële gegevens uit Quicken, MS Money\n"
+"U kunt eenvoudig bestaande financiÃ«le gegevens uit Quicken, MS Money\n"
 "of andere programma's die exporteren in QIF (Quicken Interchange Format)\n"
 "importeren. Kies in het bestandsmenu het submenu importeren en kies QIF of "
 "OFX\n"
@@ -21160,9 +21160,9 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"Wanneer u bekend bent met andere financiële programma's, zoals Quicken,\n"
+"Wanneer u bekend bent met andere financiÃ«le programma's, zoals Quicken,\n"
 "zult u opmerken dat GnuCash gebruik makt van dagboeken in plaats van\n"
-"categorieën onm inkomsten en uitgaven terug te vinden. Voor meer informatie\n"
+"categorieÃ«n onm inkomsten en uitgaven terug te vinden. Voor meer informatie\n"
 "over ikomsten en uitgaven dagboeken, zie ook de GnuCash online handleiding."
 
 #: ../doc/tip_of_the_day.list.in:21
@@ -21309,7 +21309,7 @@ msgid ""
 "Custom -> \"Custom Multicolumn Report\" report."
 msgstr ""
 "U kunt meerdere rapporten weer laten geven in een enkel venster. \n"
-"hiermee ziet u al de financiële gegevens die u nodig heeft in een "
+"hiermee ziet u al de financiÃ«le gegevens die u nodig heeft in een "
 "oogopslag.\n"
 "Hiervoor gebruikt u het Voorbeeld & Aangepast -> \"Aangepaste meerkoloms-"
 "rapport\" rapport."
@@ -21385,7 +21385,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "GnuCash"
-#~ msgstr "Beëindig GnuCash"
+#~ msgstr "BeÃ«indig GnuCash"
 
 #, fuzzy
 #~ msgid "Money Management"
@@ -21436,16 +21436,16 @@ msgstr ""
 
 #~ msgid "The start of the previous financial year/accounting period"
 #~ msgstr ""
-#~ "Het begin van het voorgaande financiële jaar/boekhoudkundige periode"
+#~ "Het begin van het voorgaande financiÃ«le jaar/boekhoudkundige periode"
 
 #~ msgid "End of the previous Financial year/Accounting Period"
-#~ msgstr "Einde van het voorgaande financiële jaar/boekhoudkundige periode"
+#~ msgstr "Einde van het voorgaande financiÃ«le jaar/boekhoudkundige periode"
 
 #~ msgid "End Current Financial Year"
-#~ msgstr "Einde huidige financiële jaar"
+#~ msgstr "Einde huidige financiÃ«le jaar"
 
 #~ msgid "End of the current Financial year/Accounting Period"
-#~ msgstr "Einde van het huidige financiële jar/boekhoudkundige periode"
+#~ msgstr "Einde van het huidige financiÃ«le jar/boekhoudkundige periode"
 
 #, fuzzy
 #~ msgid "Number of days to retain old files"
@@ -21570,7 +21570,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Finish Budget"
-#~ msgstr "Beëindigd"
+#~ msgstr "BeÃ«indigd"
 
 #, fuzzy
 #~ msgid "In Flow"
@@ -21598,7 +21598,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Merge Account Hierarchy Setup"
-#~ msgstr "Nieuwe hiërarchische dagboek configuratie"
+#~ msgstr "Nieuwe hiÃ«rarchische dagboek configuratie"
 
 #, fuzzy
 #~ msgid "Last"
@@ -21713,7 +21713,7 @@ msgstr ""
 #~ msgstr "Aandelen verdeling:"
 
 #~ msgid "TXF Categories"
-#~ msgstr "TXF Categorieën"
+#~ msgstr "TXF CategorieÃ«n"
 
 #, fuzzy
 #~ msgid "Account Tree _Options"
@@ -21836,16 +21836,16 @@ msgstr ""
 #~ "required)."
 #~ msgstr ""
 #~ "- Rode transacties moeten door u worden bijgewerkt, of ze worden NIET "
-#~ "geïmporteerd.\n"
+#~ "geÃ¯mporteerd.\n"
 #~ "- Gele transacties moeten waarschijnlijk door u worden bijgewerkt of ze "
-#~ "worden niet gebalanceerd geïmporteerd.\n"
-#~ "- Groene transacties worden gebalanceerd geïmporteerd (maar misschien "
+#~ "worden niet gebalanceerd geÃ¯mporteerd.\n"
+#~ "- Groene transacties worden gebalanceerd geÃ¯mporteerd (maar misschien "
 #~ "wilt u ze nog controleren op doel dagboek).\n"
 #~ "\n"
 #~ "- Selecteer \"A\" om de transactie als een nieuwe toe te voegen\n"
 #~ "- Selecteer \"R\" om een overeenkomende transactie bij te werken\n"
 #~ "- Selecteer geen van beiden om over te slaan (de transactie wordt "
-#~ "helemaal niet geïmporteerd)\n"
+#~ "helemaal niet geÃ¯mporteerd)\n"
 #~ "- \"Selecteer importeer actie\" laat u de overeenkomende transactie "
 #~ "aanpassen, corrigeren, het doel dagboek of de automatische balans "
 #~ "opsplitsing (waar nodig), aanpassen."
@@ -21862,7 +21862,7 @@ msgstr ""
 #~ "Do you want to try again?"
 #~ msgstr ""
 #~ "Het door u opgegeven PIN was foutief.\n"
-#~ "U heeft nog één foutieve poging over.\n"
+#~ "U heeft nog Ã©Ã©n foutieve poging over.\n"
 #~ "Wilt u het nogmaals proberen?"
 
 #~ msgid ""
@@ -21890,10 +21890,10 @@ msgstr ""
 #~ "Er was is een fout opgetreden bij het landen van de plugin van uw "
 #~ "beveiligde medium \n"
 #~ "(zie het log venster). Waarschijnlijk kwamen de versies van uw "
-#~ "geïnstalleerde \n"
+#~ "geÃ¯nstalleerde \n"
 #~ "OpenHBCI bibliotheek en van de plugin niet overeen. In dat geval dient u "
 #~ "opnieuw \n"
-#~ "te compileren en de plugin opnieuw te installeren. Beëindigt nu."
+#~ "te compileren en de plugin opnieuw te installeren. BeÃ«indigt nu."
 
 #~ msgid ""
 #~ "Your security medium is not supported. No appropriate plugin \n"
@@ -21901,7 +21901,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Uw beveiligingsmedium wordt niet ondersteund. Er is geen bruikbare "
 #~ "plugin \n"
-#~ "gevonden voor het medium. Nu beëindigen."
+#~ "gevonden voor het medium. Nu beÃ«indigen."
 
 #~ msgid "Choose HBCI bank"
 #~ msgstr "Kies HBCI bank"
@@ -21911,7 +21911,7 @@ msgstr ""
 #~ "the requested operation. Please choose \n"
 #~ "the one that should be used."
 #~ msgstr ""
-#~ "Er is meer dan één HBCI bank beschikbaar voor \n"
+#~ "Er is meer dan Ã©Ã©n HBCI bank beschikbaar voor \n"
 #~ "de gevraagde operatie. Kies degene die u \n"
 #~ "wilt gebruiken."
 
@@ -21926,7 +21926,7 @@ msgstr ""
 #~ "the requested operation. Please choose \n"
 #~ "the one that should be used."
 #~ msgstr ""
-#~ "Er is meer dan één HBCI klant beschikbaar voor \n"
+#~ "Er is meer dan Ã©Ã©n HBCI klant beschikbaar voor \n"
 #~ "de gevraagde operatie. Kies degene die u \n"
 #~ "wilt gebruiken."
 
@@ -21938,7 +21938,7 @@ msgstr ""
 #~ "the requested operation. Please choose \n"
 #~ "the one that should be used."
 #~ msgstr ""
-#~ "Er is meer dan éé HBCI gebruiker beschikbaar voor \n"
+#~ "Er is meer dan Ã©Ã© HBCI gebruiker beschikbaar voor \n"
 #~ "de gevraagde operatie. Kies degene die u \n"
 #~ "wilt gebruiken."
 
@@ -22392,7 +22392,7 @@ msgstr ""
 #~ msgstr "Totaal winsten"
 
 #~ msgid "Select \"Exit\" to exit GnuCash."
-#~ msgstr "Kies \"Einde\" om GnuCash te beëindigen"
+#~ msgstr "Kies \"Einde\" om GnuCash te beÃ«indigen"
 
 #~ msgid "Open _Recent"
 #~ msgstr "Open _recentelijk gebruikt"
@@ -22401,7 +22401,7 @@ msgstr ""
 #~ msgstr "Artikelen b_ewerken"
 
 #~ msgid "Financial _Calculator"
-#~ msgstr "Financiële rekenmachine"
+#~ msgstr "FinanciÃ«le rekenmachine"
 
 #~ msgid "Save the file to disk"
 #~ msgstr "Sla het bestand op op schijf"
@@ -22473,7 +22473,7 @@ msgstr ""
 #~ "Click \"Next\" to start loading your OFX data, or \"Cancel\"\n"
 #~ "to abort the process. "
 #~ msgstr ""
-#~ "GnuCash kan financiële gegevens van OFX (Quicken \n"
+#~ "GnuCash kan financiÃ«le gegevens van OFX (Quicken \n"
 #~ "Interchange Format) bestanden gemaakt door Quicken/Quickbooks,\n"
 #~ "MS Money, Moneydance en vele andere programma's importeren.\n"
 #~ "\n"
@@ -22672,7 +22672,7 @@ msgstr ""
 #~ msgstr "Soorten investeringen"
 
 #~ msgid "Predefined Accounts"
-#~ msgstr "Voorgedefiniëerde dagboeken"
+#~ msgstr "VoorgedefiniÃ«erde dagboeken"
 
 #~ msgid "Interest Bearing Accounts"
 #~ msgstr "Rentedragende dagboeken"
@@ -22693,7 +22693,7 @@ msgstr ""
 #~ msgstr "Aandelenprijs instellen"
 
 #~ msgid "Initial Price Editor Setup"
-#~ msgstr "Configuratie initiële prijs editor"
+#~ msgstr "Configuratie initiÃ«le prijs editor"
 
 #~ msgid "Setting Stock Price Manually"
 #~ msgstr "Aandelenprijs handmatig instellen"
@@ -22744,7 +22744,7 @@ msgstr ""
 #~ msgstr "Overzicht van zakelijke mogelijkheden"
 
 #~ msgid "Initial Setup"
-#~ msgstr "Initiële configuratie"
+#~ msgstr "InitiÃ«le configuratie"
 
 #~ msgid "Register Your Company"
 #~ msgstr "Registreer uw bedrijf"
@@ -23262,7 +23262,7 @@ msgstr ""
 #~ "publieke cryptografische sleutels van uw bank ophalen. Hiervoor moet u "
 #~ "uw \n"
 #~ "PIN ingeven. Zodra de sleutels met succes zijn opgehaald, moet u dezen "
-#~ "verifiëren \n"
+#~ "verifiÃ«ren \n"
 #~ "tegen degenen in de Ini-brief die u van uw bank heeft gehad.\n"
 #~ "\n"
 #~ "Kies 'Volgende' om de sleutels nu op te halen van de bank. Wanneer u "
@@ -23272,10 +23272,10 @@ msgstr ""
 #~ "U kunt de voortgang van de HBCI verbinding volgen in het HBCI "
 #~ "verbindings \n"
 #~ "venster. Sluit het HBCI verbindingsvenster niet voordat de Hulp is "
-#~ "beëindigd."
+#~ "beÃ«indigd."
 
 #~ msgid "Verify Ini-Letter from Server"
-#~ msgstr "Verifiëer de Ini-brief van de server"
+#~ msgstr "VerifiÃ«er de Ini-brief van de server"
 
 #~ msgid "Ini-Letter Server"
 #~ msgstr "Ini-brief server"
@@ -23390,13 +23390,13 @@ msgstr ""
 #~ "and show it to your bank. Please abort the HBCI setup\n"
 #~ "druid now."
 #~ msgstr ""
-#~ "Aangezien de cryptografische sleutels van de bank niet geverifiëerd\n"
+#~ "Aangezien de cryptografische sleutels van de bank niet geverifiÃ«erd\n"
 #~ "kunnen worden, kunt u het beste geen contact meer opnemen met dit Server\n"
 #~ "internet adres, maar contact opnemen met uw bank. Om uw bank te helpen "
 #~ "bij\n"
 #~ "het oplossen van het probleem, kunt u deze foute ini-brief afdrukken en "
 #~ "aan\n"
-#~ "uw bank tonen. Beëindigt u de HBCI configuratiehulp a.u.b. nu."
+#~ "uw bank tonen. BeÃ«indigt u de HBCI configuratiehulp a.u.b. nu."
 
 #~ msgid ""
 #~ "Please enter and confirm new PIN for \n"
