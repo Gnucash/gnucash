@@ -3,6 +3,9 @@
 	* src/gnome-search/dialog-search.c:
 	  Make sure we translate the button label string.
 
+	* src/business/business-reports/invoice.scm:
+	  translate "Thank you.." string.
+
 2006-03-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-model-account.c:
