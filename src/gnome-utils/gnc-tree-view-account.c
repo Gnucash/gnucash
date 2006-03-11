@@ -70,6 +70,8 @@ static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
                                                      GtkTreeIter *iter,
                                                      gpointer data);
 
+static Account *gtva_get_top_level_from_model (GtkTreeModel *s_model);
+
 static void gtva_setup_column_renderer_edited_cb(GncTreeViewAccount *account_view,
                                                  GtkTreeViewColumn *column,
                                                  GtkCellRenderer *renderer,
@@ -370,6 +372,12 @@ cdf_period(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     g_return_if_fail(GTK_TREE_MODEL_SORT(s_model));
 
     acct = gnc_tree_view_account_get_account_from_iter(s_model, iter);
+
+    if (acct == gtva_get_top_level_from_model(s_model)) {
+      g_object_set(cell, "text", "", NULL);
+      return;
+    }
+
     t1 = gnc_accounting_period_fiscal_start();
     t2 = gnc_accounting_period_fiscal_end();
     
@@ -889,6 +897,19 @@ gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
 /*           Account Tree View Get/Set Functions            */
 /************************************************************/
 
+static Account *
+gtva_get_top_level_from_model (GtkTreeModel *s_model)
+{
+  GtkTreeModel *model, *f_model;
+
+  g_return_val_if_fail (GTK_TREE_MODEL_SORT (s_model), NULL);
+
+  f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
+  model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model));
+
+  return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT (model));
+}
+
 /*
  * Return the account associated with the top level pseudo-account for
  * the tree.
@@ -896,15 +917,12 @@ gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
 Account *
 gnc_tree_view_account_get_top_level (GncTreeViewAccount *view)
 {
-  GtkTreeModel *model, *f_model, *s_model;
+  GtkTreeModel *s_model;
 
-  g_return_val_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view), NULL);
+  g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
+  s_model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
-
-  return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT(model));
+  return gtva_get_top_level_from_model (s_model);
 }
 
 /*
