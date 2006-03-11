@@ -397,6 +397,7 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 
     lc = gnc_localeconv();
 
+    g_object_ref(summary->datamodel);
     gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo), NULL);
     gtk_list_store_clear(summary->datamodel);
     for (current = g_list_first(currency_list); current; current = g_list_next(current)) {
@@ -433,15 +434,15 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
     }
     gtk_combo_box_set_model(GTK_COMBO_BOX(summary->totals_combo),
 			    GTK_TREE_MODEL(summary->datamodel));
+    g_object_unref(summary->datamodel);
 
-    gtk_combo_box_set_active( GTK_COMBO_BOX(summary->totals_combo), 0 );
+    gtk_combo_box_set_active(GTK_COMBO_BOX(summary->totals_combo), 0);
   }
 }
 
 static void
-gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data)
+gnc_main_window_summary_destroy_cb(GNCMainSummary *summary, gpointer data)
 {
-  GNCMainSummary * summary = data;
   gnc_gconf_remove_anon_notification(GCONF_SECTION, summary->cnxn_id);
   gnc_unregister_gui_component(summary->component_id);
   g_free(summary);
@@ -483,10 +484,12 @@ gnc_main_window_summary_new (void)
                                           G_TYPE_STRING );
 
   retval->hbox         = gtk_hbox_new (FALSE, 5);
-  retval->totals_combo = gtk_combo_box_new_with_model( GTK_TREE_MODEL(retval->datamodel) );
-  retval->component_id = gnc_register_gui_component(WINDOW_SUMMARYBAR_CM_CLASS,
-                                                    summarybar_refresh_handler,
-                                                    NULL, retval);
+  retval->totals_combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (retval->datamodel));
+  g_object_unref (retval->datamodel);
+
+  retval->component_id = gnc_register_gui_component (WINDOW_SUMMARYBAR_CM_CLASS,
+                                                     summarybar_refresh_handler,
+                                                     NULL, retval);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
                                        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
@@ -503,8 +506,9 @@ gnc_main_window_summary_new (void)
   gtk_widget_show (retval->totals_combo);
   gtk_widget_show (retval->hbox);
 
-  g_signal_connect(G_OBJECT(retval->hbox), "destroy",
-                   G_CALLBACK(gnc_main_window_summary_destroy_cb), retval);
+  g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
+                            G_CALLBACK (gnc_main_window_summary_destroy_cb),
+                            retval);
 
   gnc_main_window_summary_refresh(retval);
 
