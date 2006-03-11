@@ -641,16 +641,17 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
     return;
   }
 
-  acc->parent = NULL;
-
   /* Gather event data */
-  ed.node = grp;
+  ed.node = grp->parent;
   ed.idx = g_list_index(grp->accounts, acc);
 
   grp->accounts = g_list_remove (grp->accounts, acc);
 
   /* Now send the event. */
   qof_event_gen(&acc->inst.entity, QOF_EVENT_REMOVE, &ed);
+
+  /* clear the account's group pointer after REMOVE event generation. */
+  acc->parent = NULL;
 
   grp->saved = 0;
 
