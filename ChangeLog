@@ -6,6 +6,9 @@
 	* src/business/business-reports/invoice.scm:
 	  translate "Thank you.." string.
 
+	* src/engine/Makefile.am:
+	  fix the build-order (and install order) of the engine libs.
+
 2006-03-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-model-account.c:

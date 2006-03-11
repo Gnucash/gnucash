@@ -1,7 +1,7 @@
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
+pkglib_LTLIBRARIES = libgncmod-engine.la libgw-engine.la libgw-kvp.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
