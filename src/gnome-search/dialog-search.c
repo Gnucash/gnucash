@@ -268,7 +268,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
       sw->select_button = button;
 			  
       for (i = 0; sw->buttons[i].label; i++) {
-	button = gtk_button_new_with_label (sw->buttons[i].label);
+	button = gtk_button_new_with_label (_(sw->buttons[i].label));
 	g_object_set_data (G_OBJECT (button), "data", &(sw->buttons[i]));
 	g_signal_connect (G_OBJECT (button), "clicked",
 			  G_CALLBACK (gnc_search_dialog_result_clicked), sw);
