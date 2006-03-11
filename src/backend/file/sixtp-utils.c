@@ -391,13 +391,13 @@ gnc_timegm (struct tm *tm)
 
   old_tz = getenv ("TZ");
   /* FIXME: there's no way to report this error to the caller. */
-  if(g_setenv("TZ", "UTC", 1) != 0)
+  if (!g_setenv("TZ", "UTC", 1))
     PERR ("couldn't switch the TZ.");
   result = mktime (tm);
   if(old_tz)
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(g_setenv("TZ", old_tz, 1) != 0)
+    if (!g_setenv("TZ", old_tz, 1))
       PERR ("couldn't switch the TZ back.");
   }
   else

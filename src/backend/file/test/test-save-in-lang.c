@@ -11,9 +11,6 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#ifndef HAVE_SETENV
-#include "setenv.h"
-#endif
 #include "gnc-engine.h"
 #include "TransLog.h"
 
@@ -94,7 +91,7 @@ test_file(const char *filename)
             return g_strdup_printf("qof_session_load errorid %d", err);
         }
 
-        if(setenv("LANG", possible_envs[i], 1) != 0)
+        if (!g_setenv("LANG", possible_envs[i], 1))
           return g_strdup_printf("setenv for LANG");
 
         new_session = qof_session_new();
@@ -166,7 +163,7 @@ main(int argc, char **argv)
                 break;
             }
 
-            if(setenv("LANG", base_env, 1) != 0)
+            if (!g_setenv("LANG", base_env, 1))
             {
               failure_args("setenv", __FILE__, __LINE__,
                            "setenv of LANG failed");
