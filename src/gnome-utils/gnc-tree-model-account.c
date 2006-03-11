@@ -1443,6 +1443,7 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
   Account *account, *parent;
+  AccountGroup *group;
 
   g_return_if_fail(model);	/* Required */
   if (!GNC_IS_ACCOUNT(entity))
@@ -1458,6 +1459,10 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
       /* Tell the filters/views where the new account was added. */
       account = GNC_ACCOUNT(entity);
       DEBUG("add account %p (%s)", account, xaccAccountGetName(account));
+      if (xaccAccountGetRoot(account) != priv->root) {
+	LEAVE("not in this model");
+	return;
+      }
       path = gnc_tree_model_account_get_path_from_account(model, account);
       if (!path) {
 	DEBUG("can't generate path");
@@ -1475,8 +1480,15 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
     case QOF_EVENT_REMOVE:
       if (!ed) /* Required for a remove. */
 	break;
-      parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->toplevel;
-      parent_name = ed->node ? xaccAccountGetName(parent) : "Root";
+      group = ed->node;
+      if (xaccGroupGetRoot(group) != priv->root) {
+	LEAVE("not in this model");
+	return;
+      }
+      parent = xaccGroupGetParentAccount(ed->node);
+      if (!parent)
+	parent = priv->toplevel;;
+      parent_name = parent ? xaccAccountGetName(parent) : "Root";
       DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
       path = gnc_tree_model_account_get_path_from_account(model, parent);
       if (!path) {
@@ -1491,6 +1503,10 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
     case QOF_EVENT_MODIFY:
       account = GNC_ACCOUNT(entity);
       DEBUG("modify  account %p (%s)", account, xaccAccountGetName(account));
+      if (xaccAccountGetRoot(account) != priv->root) {
+	LEAVE("not in this model");
+	return;
+      }
       path = gnc_tree_model_account_get_path_from_account(model, account);
       if (!path) {
 	DEBUG("can't generate path");

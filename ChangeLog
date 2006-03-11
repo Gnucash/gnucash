@@ -1,3 +1,12 @@
+2006-03-11  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/engine/Group.c: The account tree model event handler needs
+	to be more robust in the case of multiple account sets existing at
+	the same time. Pass the account group instead of the parent
+	account so that its possible to determine which model a "top
+	level" account belongs to.  Fixes 333866.
+
 2006-03-11  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/window-main-summarybar.c: Unref the summary bar

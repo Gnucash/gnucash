@@ -644,7 +644,7 @@ xaccGroupRemoveAccount (AccountGroup *grp, Account *acc)
   acc->parent = NULL;
 
   /* Gather event data */
-  ed.node = grp->parent; /* The parent account */
+  ed.node = grp;
   ed.idx = g_list_index(grp->accounts, acc);
 
   grp->accounts = g_list_remove (grp->accounts, acc);
@@ -926,10 +926,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         /* move back one before removal */
         node_b = node_b->prev;
 
-        /* remove from list -- node_a is ok, it's before node_b */
-	qof_event_gen (&acc_b->inst.entity, QOF_EVENT_REMOVE, NULL);
-        grp->accounts = g_list_remove (grp->accounts, acc_b);
-
+        /* The destroy function will remove from list -- node_a is ok,
+	 * it's before node_b */
         xaccAccountBeginEdit (acc_b);
         xaccAccountDestroy (acc_b);
         break;
