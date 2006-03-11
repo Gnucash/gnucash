@@ -1085,8 +1085,8 @@ gnc_ui_new_commodity_modal_full(const char * namespace,
   gnc_commodity *result;
 
   ENTER(" ");
-  result = gnc_ui_common_commodity_modal(NULL, parent, namespace, fullname,
-					 mnemonic, cusip, 10000);
+  result = gnc_ui_common_commodity_modal(NULL, parent, namespace, cusip,
+					 fullname, mnemonic, 10000);
   LEAVE(" ");
   return result;
 }

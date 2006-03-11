@@ -20,6 +20,9 @@
 
 2006-03-11  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome-utils/dialog-commodity.c: Fix order of parameters to
+	  gnc_ui_common_commodity_modal, and 334181.
+
 	* src/gnome-utils/window-main-summarybar.c: Unref the summary bar
 	  list store so that it gets deleted together with the combobox.
 
