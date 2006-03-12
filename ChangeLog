@@ -1,5 +1,11 @@
 2006-03-12  David Hampton  <hampton@employees.org>
 
+	* src/report/standard-reports/advanced-portfolio.scm: Andrew
+	Sackville-West's patch to tidy up the multi-currency handling
+	quite a bit. It also adds some functionality such as showing the
+	basis, realized and unrealized gains, and takes advantage of the
+	new gnc_pricedb_lookup-latest-before function.
+
 	* src/business/business-reports/aging.scm: Andrew Sackville-West's
 	patch to show zero balance entries in the payables and receivables
 	aging reports.
