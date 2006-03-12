@@ -1,5 +1,9 @@
 2006-03-12  David Hampton  <hampton@employees.org>
 
+	* src/business/business-reports/aging.scm: Andrew Sackville-West's
+	patch to show zero balance entries in the payables and receivables
+	aging reports.
+
 	* src/engine/gnc-pricedb.[ch]:
 	* src/engine/gw-engine-spec.scm: Andrew Sackville-West's changes
 	to add the ability to lookup the latest price before a specific

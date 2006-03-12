@@ -45,6 +45,7 @@
 (define optname-report-currency (N_ "Report's currency"))
 (define optname-price-source (N_ "Price Source"))
 (define optname-multicurrency-totals (N_ "Show Multi-currency Totals?"))
+(define optname-show-zeros (N_ "Show zero balance items?"))
 
 ;; The idea is:  have a hash with the key being the contact name
 ;; (In future this might be GUID'ed, but for now it's a string
@@ -175,7 +176,7 @@
 ;; a new company record in the hash
 
 (define (update-company-hash hash split bucket-intervals
-			     reverse?)
+			     reverse? show-zeros)
 
   (define (do-update value)
     (let* ((transaction (gnc:split-get-parent split))
@@ -234,7 +235,7 @@ more than one currency.  This report is not designed to cope with this possibili
     ;; XXX: we _could_ just set the value to 0 in order to list
     ;;      the company.  I'm not sure what to do.  Perhaps add an
     ;;      option?
-    (if (not is-paid?)
+    (if (or (not is-paid?) show-zeros)
 	(do-update value))))
 
 ;; get the total debt from the buckets
@@ -361,6 +362,14 @@ more than one currency.  This report is not designed to cope with this possibili
       "i"
       (N_ "Show multi-currency totals.  If not selected, convert all \
 totals to report currency")
+      #f))
+
+    (add-option
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general
+      optname-show-zeros
+      "j"
+      (N_ "Show all vendors/customers even if they have a zero balance.")
       #f))
 
     (gnc:options-set-default-section options "General")      
@@ -519,6 +528,7 @@ totals to report currency")
 	(report-currency (op-value gnc:pagename-general optname-report-currency))
 	(price-source (op-value gnc:pagename-general optname-price-source))
 	(multi-totals-p (op-value gnc:pagename-general optname-multicurrency-totals))
+	(show-zeros (op-value gnc:pagename-general optname-show-zeros))
 	(heading-list (make-heading-list))
 	(exchange-fn (gnc:case-exchange-fn price-source report-currency report-date))
 	(total-collector-list (make-collector-list))
@@ -564,7 +574,7 @@ totals to report currency")
 			(update-company-hash companys 
 					      split 
 					      interval-vec 
-					      reverse?))
+					      reverse? show-zeros))
 			splits)
 ;	    (gnc:debug "companys" companys)
 	    ;; turn the hash into a list
