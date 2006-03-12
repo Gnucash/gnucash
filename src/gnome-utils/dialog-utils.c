@@ -839,13 +839,18 @@ GtkWidget *
 gnc_glade_lookup_widget (GtkWidget *widget, const char *name)
 {
   GladeXML *xml;
+  GtkWidget *wid;
 
   if (!widget || !name) return NULL;
 
   xml = glade_get_widget_tree (widget);
   if (!xml) return NULL;
+  
+  wid = glade_xml_get_widget (xml, name);
+  if (!wid)
+      PWARN("I know nothing of this '%s' whom you seek.", name);
 
-  return glade_xml_get_widget (xml, name);
+  return wid;
 }
 
 /*
