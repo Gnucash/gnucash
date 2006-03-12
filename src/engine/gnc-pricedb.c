@@ -1575,6 +1575,59 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   return result;
 }
 
+GNCPrice *
+gnc_pricedb_lookup_latest_before (GNCPriceDB *db,
+                                   gnc_commodity *c,
+                                   gnc_commodity *currency,
+                                   Timespec t)
+{
+  GList *price_list;
+  GNCPrice *current_price = NULL;
+  /*  GNCPrice *next_price = NULL;
+      GNCPrice *result = NULL;*/
+  GList *item = NULL;
+  GHashTable *currency_hash;
+  QofBook *book;
+  QofBackend *be;
+  Timespec price_time;
+
+  if(!db || !c || !currency) return NULL;
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
+  book = qof_instance_get_book(&db->inst);
+  be = qof_book_get_backend(book);
+#ifdef GNUCASH_MAJOR_VERSION
+  if (be && be->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_LATEST_BEFORE;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.currency = currency;
+     pl.date = t;
+     (be->price_lookup) (be, &pl);
+  }
+#endif
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) { LEAVE ("no currency hash"); return NULL; }
+
+  price_list = g_hash_table_lookup(currency_hash, currency);
+  if(!price_list) { LEAVE ("no price list"); return NULL; }
+
+  item = price_list;
+  do
+    {
+      price_time = gnc_price_get_time (item->data);
+      if (timespec_cmp(&price_time, &t) <= 0)
+	current_price = item->data;
+      item = item->next;
+    }
+    while (timespec_cmp(&price_time, &t) > 0 && item);    
+  gnc_price_ref(current_price);
+  LEAVE (" ");
+  return current_price;
+}
+
+
 static void
 lookup_nearest(gpointer key, gpointer val, gpointer user_data)
 {
@@ -1628,6 +1681,38 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
   gnc_price_list_insert(return_list, result, FALSE);
 }
 
+
+static void
+lookup_latest_before(gpointer key, gpointer val, gpointer user_data)
+{
+  //gnc_commodity *currency = (gnc_commodity *)key;
+  GList *price_list = (GList *)val;
+  GNCPrice *current_price = NULL;
+  /*  GNCPrice *next_price = NULL;
+      GNCPrice *result = NULL;*/
+  GList *item = NULL;
+  GNCPriceLookupHelper *lookup_helper = (GNCPriceLookupHelper *)user_data;
+  GList **return_list = lookup_helper->return_list;
+  Timespec t = lookup_helper->time;
+  Timespec price_time;
+
+  if (price_list)
+    {
+      item = price_list;
+      do 
+	{
+	  price_time = gnc_price_get_time (item->data);
+	  if (timespec_cmp(&price_time, &t) <= 0)
+	    current_price = item->data;
+	  item = item->next;
+	}
+	while (timespec_cmp(&price_time, &t) > 0 && item);
+    }
+
+  gnc_price_list_insert(return_list, current_price, FALSE);
+}
+
+
 GList *
 gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
                                                 const gnc_commodity *c,
@@ -1661,6 +1746,49 @@ gnc_pricedb_lookup_nearest_in_time_any_currency(GNCPriceDB *db,
   lookup_helper.return_list = &result;
   lookup_helper.time = t;
   g_hash_table_foreach(currency_hash, lookup_nearest, &lookup_helper);
+
+  if(!result) { LEAVE (" "); return NULL; }
+
+  result = g_list_sort(result, compare_prices_by_date);
+
+  LEAVE (" ");
+  return result;
+}
+
+
+GList *
+gnc_pricedb_lookup_latest_before_any_currency(GNCPriceDB *db,
+					      gnc_commodity *c,
+					      Timespec t)
+{
+  GList *result = NULL;
+  GHashTable *currency_hash;
+  GNCPriceLookupHelper lookup_helper;
+  QofBook *book;
+  QofBackend *be;
+
+  if(!db || !c) return NULL;
+  ENTER ("db=%p commodity=%p", db, c);
+  book = qof_instance_get_book(&db->inst);
+  be = qof_book_get_backend(book);
+#ifdef GNUCASH_MAJOR_VERSION
+  if (be && be->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_LATEST_BEFORE;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.currency = NULL;  /* can the backend handle this??? */
+     pl.date = t;
+     (be->price_lookup) (be, &pl);
+  }
+#endif
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) { LEAVE (" no currency hash"); return NULL; }
+
+  lookup_helper.return_list = &result;
+  lookup_helper.time = t;
+  g_hash_table_foreach(currency_hash, lookup_latest_before, &lookup_helper);
 
   if(!result) { LEAVE (" "); return NULL; }
 
@@ -1817,6 +1945,7 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
                              GNC_HOW_RND_ROUND);
+
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                              gnc_commodity_get_fraction (new_currency),
                              GNC_HOW_RND_ROUND);
@@ -1824,6 +1953,85 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
   gnc_price_list_destroy(price_list);
   return balance;
 }
+
+
+gnc_numeric
+gnc_pricedb_convert_balance_latest_before(GNCPriceDB *pdb,
+                                          gnc_numeric balance,
+                                          gnc_commodity *balance_currency,
+                                          gnc_commodity *new_currency,
+                                          Timespec t)
+{
+  GNCPrice *price, *currency_price;
+  GList *price_list, *list_helper;
+  gnc_numeric currency_price_value;
+  gnc_commodity *intermediate_currency;
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (balance_currency, new_currency))
+    return balance;
+
+  /* Look for a direct price. */
+  price = gnc_pricedb_lookup_latest_before (pdb, balance_currency, new_currency, t);
+  
+  if (price) {
+    balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                               gnc_commodity_get_fraction (new_currency),
+                               GNC_HOW_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
+  /*
+   * no direct price found, try if we find a price in another currency
+   * and convert in two stages
+   */
+  price_list = gnc_pricedb_lookup_latest_before_any_currency(pdb, balance_currency, t);
+  if (!price_list) {
+    balance =  gnc_numeric_zero ();
+    return balance;
+  }
+
+  list_helper = price_list;
+  currency_price_value = gnc_numeric_zero();
+
+  do {
+    price = (GNCPrice *)(list_helper->data);
+
+    intermediate_currency = gnc_price_get_currency(price);
+    currency_price = gnc_pricedb_lookup_latest_before(pdb, intermediate_currency,
+						      new_currency, t);
+    if(currency_price) {
+      currency_price_value = gnc_price_get_value(currency_price);
+      gnc_price_unref(currency_price);
+    } else {
+      currency_price = gnc_pricedb_lookup_nearest_in_time(pdb, new_currency,
+                                                          intermediate_currency, t);
+      if (currency_price) {
+        /* here we need the reciprocal */
+        currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
+                                               gnc_price_get_value(currency_price),
+                                               gnc_commodity_get_fraction (new_currency),
+                                               GNC_HOW_RND_ROUND);
+        gnc_price_unref(currency_price);
+      }
+    }
+
+    list_helper = list_helper->next;
+  } while((list_helper != NULL) &&
+          (!gnc_numeric_zero_p(currency_price_value)));
+
+  balance = gnc_numeric_mul (balance, currency_price_value,
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);
+  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                             gnc_commodity_get_fraction (new_currency),
+                             GNC_HOW_RND_ROUND);
+
+  gnc_price_list_destroy(price_list);
+  return balance;
+}
+
 
 
 /* ==================================================================== */

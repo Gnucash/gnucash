@@ -1300,6 +1300,27 @@ when no longer needed.")
    (<gnc:commodity*> commodity) (<gnc:time-pair> t))
  "Returns the price(s) nearest to t in any currency available.")
 
+
+(gw:wrap-function
+ws
+'gnc:pricedb-lookup-latest-before
+'<gnc:Price*>
+"gnc_pricedb_lookup_latest_before"
+'((<gnc:PriceDB*> db)
+  (<gnc:commodity*> commodity) (<gnc:commodity*> currency)
+  (<gnc:time-pair> t))
+"Returns the latest price quote <= t. Unref price when finished with it.")
+
+(gw:wrap-function
+ws
+'gnc:pricedb-lookup-latest-before-any-currency
+'(gw:glist-of <gnc:Price*> caller-owned)
+"gnc_pricedb_lookup_latest_before_any_currency"
+'((<gnc:PriceDB*> db)
+  (<gnc:commodity*> commodity) (<gnc:time-pair> t))
+"Returns the latest price quote(s) <= t in any currency available.")
+
+
 (gw:wrap-function
  ws
  'gnc:pricedb-get-prices
@@ -1351,6 +1372,20 @@ when no longer needed.")
    (<gnc:time-pair> t))
  "convert balance in commodity balance_commodity to new_currency using nearest price
 to time t.")
+
+
+(gw:wrap-function
+ ws
+ 'gnc:pricedb-convert-balance-latest-before
+ '<gnc:numeric>
+ "gnc_pricedb_convert_balance_latest_before"
+ '((<gnc:PriceDB*> db)
+   (<gnc:numeric> balance)
+   (<gnc:commodity*> balance_commodity) (<gnc:commodity*> new_currency)
+   (<gnc:time-pair> t))
+ "convert balance in commodity balance_commodity to new_currency using latest price
+prior to time t.")
+
 
 ;;===========
 ;; QofSession

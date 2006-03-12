@@ -1,5 +1,10 @@
 2006-03-12  David Hampton  <hampton@employees.org>
 
+	* src/engine/gnc-pricedb.[ch]:
+	* src/engine/gw-engine-spec.scm: Andrew Sackville-West's changes
+	to add the ability to lookup the latest price before a specific
+	date.
+
 	* src/register/register-gnome/gnucash-sheet.[ch]:
 	* src/register/ledger-core/split-register.[ch]:
 	* src/register/ledger-core/split-register-control.c:
