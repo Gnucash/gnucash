@@ -67,6 +67,8 @@ void gnc_item_list_append (GncItemList *item_list, char *string);
 
 void gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled);
 
+gboolean gnc_item_in_list (GncItemList *item_list, const char *string);
+
 void gnc_item_list_select (GncItemList *item_list, const char *string);
 
 void gnc_item_list_show_selected (GncItemList *item_list);

@@ -123,6 +123,29 @@ _gnc_item_find_selection(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
         return FALSE;
 }
 
+gboolean
+gnc_item_in_list (GncItemList *item_list, const char *string)
+{
+        FindSelectionData *to_find_data;
+	gboolean result;
+
+        g_return_val_if_fail(item_list != NULL, FALSE);
+        g_return_val_if_fail(IS_GNC_ITEM_LIST(item_list), FALSE);
+
+        to_find_data = (FindSelectionData*)g_new0(FindSelectionData, 1);
+        to_find_data->item_list = item_list;
+        to_find_data->string_to_find = string;
+
+        gtk_tree_model_foreach(GTK_TREE_MODEL(item_list->list_store),
+                               _gnc_item_find_selection,
+                               to_find_data);
+
+        result = (to_find_data->found_path != NULL);
+        g_free(to_find_data);
+	return result;
+}
+
+
 void
 gnc_item_list_select (GncItemList *item_list, const char *string)
 {
@@ -432,6 +455,8 @@ gnc_item_list_new(GnomeCanvasGroup *parent, GtkListStore *list_store)
 	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
 				     GTK_SELECTION_BROWSE);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(list_store),
+					     0, GTK_SORT_ASCENDING);
 
 	renderer = gtk_cell_renderer_text_new ();
 	column = gtk_tree_view_column_new_with_attributes (_("List"),

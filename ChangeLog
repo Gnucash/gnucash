@@ -1,3 +1,16 @@
+2006-03-11  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/combocell-gnome.c:
+	* src/register/register-gnome/gnucash-item-list.[ch]: Finish
+	removing the redundant list of valid strings maintained by the
+	combocell and use the list in the item_edit widget.  Fixes the
+	problem where account cell contents disappear when focusing in/out
+	of an account cell.
+
+	* src/gnome-utils/account-quickfill.c: Update the quickfill to
+	watch for accounts being added/removed from the account
+	tree. Fixes 152101 and 302682.
+
 2006-03-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-search/dialog-search.c:
