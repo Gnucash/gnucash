@@ -1,5 +1,9 @@
 2006-03-12  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/glade/commodity.glade: Tweak a couple of
+	tooltips. Try and make it clear that the commodity mnemonic field
+	must exactly match that used by the quote source.
+
 	* src/report/standard-reports/advanced-portfolio.scm: Andrew
 	Sackville-West's patch to tidy up the multi-currency handling
 	quite a bit. It also adds some functionality such as showing the

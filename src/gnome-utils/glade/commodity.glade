@@ -434,7 +434,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="fullname_entry">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter the full name of the commodity. Example: US Dollars</property>
+	      <property name="tooltip" translatable="yes">Enter the full name of the commodity. Example: Cisco Sytems Inc, or Apple Computer, Inc.</property>
 	      <property name="can_focus">True</property>
 	      <property name="has_focus">True</property>
 	      <property name="editable">True</property>
@@ -458,7 +458,7 @@
 	  <child>
 	    <widget class="GtkEntry" id="mnemonic_entry">
 	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Enter the ticker symbol or currency code for the commodity. Example: USD</property>
+	      <property name="tooltip" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case). </property>
 	      <property name="can_focus">True</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
