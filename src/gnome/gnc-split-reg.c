@@ -2021,3 +2021,9 @@ gnc_split_reg_get_read_only( GNCSplitReg *gsr )
   g_assert( gsr );
   return gsr->read_only;
 }
+
+void
+gnc_split_reg_set_moved_cb( GNCSplitReg *gsr, GFunc cb, gpointer cb_data )
+{
+  gnucash_register_set_moved_cb (gsr->reg, cb, cb_data);
+}

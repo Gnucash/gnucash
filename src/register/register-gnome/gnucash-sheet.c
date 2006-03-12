@@ -309,6 +309,8 @@ gnucash_sheet_cursor_move (GnucashSheet *sheet, VirtualLocation virt_loc)
         /* Now turn on the editing controls. */
         gnucash_sheet_activate_cursor_cell (sheet, changed_cells);
 
+	if (sheet->moved_cb)
+		(sheet->moved_cb)(sheet, sheet->moved_cb_data);
         return changed_cells;
 }
 
@@ -2617,6 +2619,19 @@ gnucash_register_new (Table *table)
                           0, 0);
 
         return widget;
+}
+
+
+void gnucash_register_set_moved_cb (GnucashRegister *reg,
+				    GFunc cb, gpointer cb_data)
+{
+	GnucashSheet *sheet;
+
+	if (!reg || !reg->sheet)
+		return;
+	sheet = GNUCASH_SHEET(reg->sheet);
+	sheet->moved_cb = cb;
+	sheet->moved_cb_data = cb_data;
 }
 
 

@@ -205,30 +205,6 @@ gnc_split_register_expand_current_trans (SplitRegister *reg, gboolean expand)
                                    reg->table->current_cursor_loc.vcell_loc);
 }
 
-void
-gnc_split_register_collapse_current_trans (SplitRegister *reg)
-{
-  SRInfo *info = gnc_split_register_get_info (reg);
-
-  if (!reg)
-    return;
-
-  info->trans_expanded = FALSE;
-  if (reg->expand_changed_cb)
-    (reg->expand_changed_cb)(reg, reg->expand_changed_cb_data);
-}
-
-void
-gnc_split_register_set_trans_collapsed_cb (SplitRegister *reg, GFunc cb, 
-                                           gpointer cb_data)
-{
-  if (!reg)
-    return;
-
-  reg->expand_changed_cb = cb;
-  reg->expand_changed_cb_data = cb_data;
-}
-
 gboolean
 gnc_split_register_current_trans_expanded (SplitRegister *reg)
 {
@@ -536,7 +512,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     info->cursor_hint_trans_split = trans_split;
     info->cursor_hint_cursor_class = CURSOR_CLASS_TRANS;
 
-    gnc_split_register_collapse_current_trans(reg);
+    info->trans_expanded = FALSE;
   }
 
   /* Refresh the GUI. */
@@ -923,7 +899,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
     return;
   }
 
-  gnc_split_register_collapse_current_trans(reg);
+  info->trans_expanded = FALSE;
 
   gnc_suspend_gui_refresh ();
 
@@ -975,7 +951,7 @@ gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
   if (xaccSplitGetReconcile (split) == VREC)
     return;
 
-  gnc_split_register_collapse_current_trans(reg);
+  info->trans_expanded = FALSE;
 
   gnc_suspend_gui_refresh ();
 
@@ -1024,7 +1000,7 @@ gnc_split_register_unvoid_current_trans (SplitRegister *reg)
   if (xaccSplitGetReconcile (split) != VREC)
     return;
 
-  gnc_split_register_collapse_current_trans(reg);
+  info->trans_expanded = FALSE;
 
   gnc_suspend_gui_refresh ();
 

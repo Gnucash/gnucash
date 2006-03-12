@@ -92,6 +92,9 @@ Splits plus the value of all of its sub-Accounts.
 #include "gnc-engine.h"
 #include "Split.h"
 
+#define GNC_IS_TRANS(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_TRANS))
+#define GNC_TRANS(obj)     (QOF_CHECK_CAST((obj), GNC_ID_TRANS, Transaction))
+
 /** @name Transaction Type field values
 @{
 */

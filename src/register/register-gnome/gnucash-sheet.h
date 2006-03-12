@@ -123,6 +123,9 @@ typedef struct
         guint changed_signal;
 
         GtkAdjustment *hadj, *vadj;
+
+	GFunc moved_cb;
+	gpointer moved_cb_data;
 } GnucashSheet;
 
 
@@ -148,10 +151,6 @@ GType gnucash_register_get_type (void);
 
 /* this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);
-
-void gnucash_sheet_set_top_block (GnucashSheet *sheet, int new_top_block,
-                                  gint align);
-
 
 SheetBlock *gnucash_sheet_get_block (GnucashSheet *sheet,
                                      VirtualCellLocation vcell_loc);
@@ -214,6 +213,8 @@ void gnucash_register_cut_clipboard (GnucashRegister *reg);
 void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
 void gnucash_register_refresh_from_gconf (GnucashRegister *reg);
+void gnucash_register_set_moved_cb (GnucashRegister *reg,
+				    GFunc cb, gpointer cb_data);
 
 typedef struct
 {

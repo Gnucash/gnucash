@@ -2,7 +2,7 @@
  * gnc-plugin-page-register.c -- 
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -57,6 +57,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -148,8 +149,12 @@ static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
 
-static void gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page);
+static void gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page);
 static void gppr_account_destroy_cb (Account *account);
+static void gnc_plugin_page_register_event_handler (QofEntity *entity,
+						    QofEventId event_type,
+						    GncPluginPageRegister *page,
+						    GncEventData *ed);
 
 /************************************************************/
 /*                          Actions                         */
@@ -355,6 +360,7 @@ typedef struct GncPluginPageRegisterPrivate
 
 	GtkWidget *widget;
 
+	gint event_handler_id;
 	gint component_manager_id;
 	GUID key;  /* The guid of the Account we're watching */
 
@@ -456,8 +462,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	// Do not free the list. It is owned by the query.
 	
 	reg = gnc_ledger_display_get_split_register(priv->ledger);
-	gnc_split_register_set_trans_collapsed_cb
-	  (reg, (GFunc)gnc_plugin_page_register_update_split_button, register_page);
 
 	priv->component_manager_id = 0;
 	return plugin_page;
@@ -600,38 +604,41 @@ gnc_plugin_page_register_get_account (GncPluginPageRegister *page)
 
 
 static void
-gnc_plugin_page_register_update_split_button (SplitRegister *reg, GncPluginPageRegister *page)
+gnc_plugin_page_register_ui_update (gpointer various, GncPluginPageRegister *page)
 {
+	GncPluginPageRegisterPrivate *priv;
+	SplitRegister *reg;
 	GtkAction *action;
-	gboolean expanded;
+	gboolean expanded, voided;
+	Transaction *trans;
 
+	/* Set 'Split Transaction' */
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
 	expanded = gnc_split_register_current_trans_expanded(reg);
 	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
 					     "SplitTransactionAction");
-
+	gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
 	g_signal_handlers_block_by_func
 	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), expanded);
 	g_signal_handlers_unblock_by_func
 	  (action, gnc_plugin_page_register_cmd_expand_transaction, page);
-}
 
-static void
-gnc_plugin_page_register_update_toolbar (SplitRegister *reg, GncPluginPageRegister *page)
-{
-	GtkAction *action;
+	/* Set 'Void' and 'Unvoid' */
+	trans = gnc_split_register_get_current_trans(reg);
+	voided = xaccTransHasSplitsInState(trans, VREC);
+	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
+					     "VoidTransactionAction");
+	gtk_action_set_sensitive (GTK_ACTION(action), !voided);
 
 	action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page),
-					     "SplitTransactionAction");
-	/* set sensitivity of split button */
-	gtk_action_set_sensitive (action, reg->style == REG_STYLE_LEDGER);
-
-	/* set activity of split button */
-	gnc_plugin_page_register_update_split_button (reg, page);
+					     "UnvoidTransactionAction");
+	gtk_action_set_sensitive (GTK_ACTION(action), voided);
 }
 
 static void
-gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
+gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister *page)
 { 
 	GncPluginPageRegisterPrivate *priv ;
 	GtkActionGroup *action_group;
@@ -726,8 +733,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
                                   reg->use_double_line);
 	gnc_ledger_display_refresh(priv->ledger);
 
-	gnc_plugin_page_register_update_menus (page);
-	gnc_plugin_page_register_update_toolbar (reg, page);
+	gnc_plugin_page_register_ui_initial_state (page);
+	gnc_plugin_page_register_ui_update (NULL, page);
 
 	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
 	if (plugin_page->summarybar) {
@@ -736,6 +743,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 			   FALSE, FALSE, 0);
 	}
 
+	priv->event_handler_id = qof_event_register_handler
+	  ((QofEventHandler)gnc_plugin_page_register_event_handler, page);
 	priv->component_manager_id =
 	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
 				     gnc_plugin_page_register_refresh_cb,
@@ -748,6 +757,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 		priv->component_manager_id, xaccAccountGetGUID(acct),
 		QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
+	gnc_split_reg_set_moved_cb
+	  (priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	LEAVE(" ");
@@ -770,6 +781,11 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 	if (priv->component_manager_id) {
 	  gnc_unregister_gui_component(priv->component_manager_id);
 	  priv->component_manager_id = 0;
+	}
+
+	if (priv->event_handler_id) {
+	  qof_event_unregister_handler(priv->event_handler_id);
+	  priv->event_handler_id = 0;
 	}
 
 	if (priv->sd.dialog) {
@@ -1895,10 +1911,8 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
   trans = gnc_split_register_get_current_trans(reg);
   if (trans == NULL)
     return;
-  if (xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(NULL, _("This transaction has already been voided."));
+  if (xaccTransHasSplitsInState(trans, VREC))
     return;
-  }
   if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
     gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
     return;
@@ -1937,10 +1951,8 @@ gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction *action,
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(page);
   reg = gnc_ledger_display_get_split_register(priv->ledger);
   trans = gnc_split_register_get_current_trans(reg);
-  if (!xaccTransHasSplitsInState(trans, VREC)) {
-    gnc_error_dialog(NULL, _("This transaction is not voided."));
+  if (!xaccTransHasSplitsInState(trans, VREC))
     return;
-  }
   gnc_split_register_unvoid_current_trans(reg);
   LEAVE(" ");
 }
@@ -2174,7 +2186,6 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
 					    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
-  SplitRegister *reg;
   SplitRegisterStyle value;
 
   ENTER("(action %p, radio action %p, plugin_page %p)",
@@ -2188,8 +2199,7 @@ gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
   value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_change_style(priv->gsr, value);
 
-  reg = gnc_ledger_display_get_split_register(priv->ledger);
-  gnc_plugin_page_register_update_toolbar (reg, plugin_page);
+  gnc_plugin_page_register_ui_update (NULL, plugin_page);
   LEAVE(" ");
 }
 
@@ -2731,6 +2741,8 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
       gnucash_register_refresh_from_gconf(priv->gsr->reg);
       gtk_widget_queue_draw(priv->widget);
   }
+
+  gnc_plugin_page_register_ui_update(NULL, page);
 }
 
 /** This function is called when an account has been edited and an
@@ -2776,6 +2788,77 @@ gppr_account_destroy_cb (Account *account)
     gnc_main_window_close_page(GNC_PLUGIN_PAGE(page));
   }
 }
+
+/** This function is the handler for all event messages from the
+ *  engine.  Its purpose is to update the account tree model any time
+ *  an account is added to the engine or deleted from the engine.
+ *  This change to the model is then propagated to any/all overlying
+ *  filters and views.  This function listens to the ADD, REMOVE, and
+ *  DESTROY events.
+ *
+ *  @internal
+ *
+ *  @warning There is a "Catch 22" situation here.
+ *  gtk_tree_model_row_deleted() can't be called until after the item
+ *  has been deleted from the real model (which is the engine's
+ *  account tree for us), but once the account has been deleted from
+ *  the engine we have no way to determine the path to pass to
+ *  row_deleted().  This is a PITA, but the only other choice is to
+ *  have this model mirror the engine's accounts instead of
+ *  referencing them directly.
+ *
+ *  @param entity The guid of the affected item.
+ *
+ *  @param type The type of the affected item.  This function only
+ *  cares about items of type "account".
+ *
+ *  @param event type The type of the event. This function only cares
+ *  about items of type ADD, REMOVE, MODIFY, and DESTROY.
+ *
+ *  @param user_data A pointer to the account tree model.
+ */
+static void
+gnc_plugin_page_register_event_handler (QofEntity *entity,
+					QofEventId event_type,
+					GncPluginPageRegister *page,
+					GncEventData *ed)
+{
+  Transaction *trans;
+  QofBook *book;
+  GncPluginPage *visible_page;
+  GtkWidget *window;
+
+  g_return_if_fail(page);	/* Required */
+  if (!GNC_IS_TRANS(entity))
+    return;
+
+  ENTER("entity %p of type %d, page %p, event data %p",
+	entity, event_type, page, ed);
+
+  if (!(event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY))) {
+    LEAVE("not a modify");
+    return;
+  }
+  trans = GNC_TRANS(entity);
+  book = qof_instance_get_book(QOF_INSTANCE(trans));
+  if (!gnc_plugin_page_has_book(GNC_PLUGIN_PAGE(page), book)) {
+		
+      LEAVE("not in this book");
+      return;
+  }
+
+  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+  visible_page = gnc_main_window_get_current_page(GNC_MAIN_WINDOW(window));
+  if (GNC_PLUGIN_PAGE(page) != visible_page) {
+    LEAVE("page not visible");
+    return;
+  }
+
+  gnc_plugin_page_register_ui_update(NULL, page);
+  LEAVE(" ");
+  return;
+}
+
 
 /** @} */
 /** @} */

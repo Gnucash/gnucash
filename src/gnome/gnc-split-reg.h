@@ -238,4 +238,6 @@ void gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data );
 void gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data );
 void gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data );
 
+void gnc_split_reg_set_moved_cb( GNCSplitReg *gsr, GFunc cb, gpointer cb_data );
+
 #endif /* GNC_SPLIT_REG_H */
