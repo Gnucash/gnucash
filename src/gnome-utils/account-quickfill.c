@@ -31,6 +31,13 @@
 static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
+static void listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
+					gpointer user_data, gpointer event_data);
+
+/* Column indices for the list store */
+#define ACCOUNT_NAME        0
+#define ACCOUNT_POINTER     1
+#define NUM_ACCOUNT_COLUMNS 2
 
 /* ===================================================================== */
 /* In order to speed up register starts for registers htat have a huge
@@ -44,6 +51,7 @@ static void shared_quickfill_gconf_changed (GConfEntry *entry, gpointer qfb);
 
 typedef struct {
   QuickFill *qf;
+  gboolean load_list_store;
   GtkListStore *list_store;
   QofBook *book;
   AccountGroup *group;
@@ -65,54 +73,29 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
   g_free (qfb);
 }
 
-/* Since we are maintaining a 'global' quickfill list, we need to 
- * update it whenever the user creates a new account.  So listen
- * for account modification events, and add new accounts.
- */
-static void
-listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
-			    gpointer user_data, gpointer event_data)
-{
-  QFB *qfb = user_data;
-  QuickFill *qf = qfb->qf;
-  QuickFill *match;
-  char * name;
-  const char *match_str;
+
+typedef struct find_data {
   Account *account;
-  GtkTreeIter iter;
+  GtkTreePath *found;
+} find_data;
 
-  if (! (event_type & QOF_EVENT_MODIFY)) return;
-  if (!GNC_IS_ACCOUNT (entity)) return;
+static gboolean
+shared_quickfill_find_account (GtkTreeModel *model,
+			       GtkTreePath *path,
+			       GtkTreeIter *iter,
+			       gpointer user_data)
+{
+  Account *account = NULL;
+  find_data *data = user_data;
 
-  account = GNC_ACCOUNT (entity);
-
-  /* Not every new account is eligable for the menu */
-  if (qfb->dont_add_cb)
-  {
-     gboolean skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
-     if (skip) return;
+  gtk_tree_model_get(model, iter, ACCOUNT_POINTER, &account, -1);
+  if (data->account == account) {
+    data->found = gtk_tree_path_copy(path);
+    return TRUE;
   }
-
-  name = xaccAccountGetFullName (account);
-  if (NULL == name) return;
-
-  match = gnc_quickfill_get_string_match (qf, name);
-  if (!match) goto add_string;
-  match_str = gnc_quickfill_string (match);
-  if (!match_str) goto add_string;
-  if (safe_strcmp (match_str, name)) goto add_string;
-
-  PINFO ("got match for %s", name);
-  goto done;
-
-add_string:
-  PINFO ("insert new account %s into qf=%p\n", name, qf);
-  gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
-  gtk_list_store_append (qfb->list_store, &iter);
-  gtk_list_store_set (qfb->list_store, &iter, 0, name, -1);
-done:
-  g_free(name);
+  return FALSE;
 }
+
 
 /* Splat the account name into the shared quickfill object */
 static gpointer
@@ -131,8 +114,13 @@ load_shared_qf_cb (Account *account, gpointer data)
   name = xaccAccountGetFullName (account);
   if (NULL == name) return NULL;
   gnc_quickfill_insert (qfb->qf, name, QUICKFILL_ALPHA);
-  gtk_list_store_append (qfb->list_store, &iter);
-  gtk_list_store_set (qfb->list_store, &iter, 0, name, -1);
+  if (qfb->load_list_store) {
+    gtk_list_store_append (qfb->list_store, &iter);
+    gtk_list_store_set (qfb->list_store, &iter,
+			ACCOUNT_NAME, name,
+			ACCOUNT_POINTER, account,
+			-1);
+  }
   g_free(name);
 
   return NULL;
@@ -145,7 +133,10 @@ shared_quickfill_gconf_changed (GConfEntry *entry, gpointer user_data)
 
   /* Reload the quickfill */
   gnc_quickfill_purge(qfb->qf);
+  gtk_list_store_clear(qfb->list_store);
+  qfb->load_list_store = TRUE;
   xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+  qfb->load_list_store = FALSE;
 }
 
 
@@ -165,13 +156,16 @@ build_shared_quickfill (QofBook *book, AccountGroup *group, const char * key,
   qfb->listener = 0;
   qfb->dont_add_cb = cb;
   qfb->dont_add_data = data;
-  qfb->list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  qfb->load_list_store = TRUE;
+  qfb->list_store =
+    gtk_list_store_new (NUM_ACCOUNT_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
 
   gnc_gconf_general_register_cb(KEY_ACCOUNT_SEPARATOR,
 				shared_quickfill_gconf_changed,
 				qfb);
 
   xaccGroupForEachAccount (group, load_shared_qf_cb, qfb, TRUE);
+  qfb->load_list_store = FALSE;
 
   qfb->listener = 
      qof_event_register_handler (listen_for_account_events, qfb);
@@ -213,6 +207,127 @@ gnc_get_shared_account_name_list_store (AccountGroup *group,
 
   qfb = build_shared_quickfill (book, group, key, cb, cb_data);
   return qfb->list_store;
+}
+
+/* Since we are maintaining a 'global' quickfill list, we need to 
+ * update it whenever the user creates a new account.  So listen
+ * for account modification events, and add new accounts.
+ */
+static void
+listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
+			    gpointer user_data, gpointer event_data)
+{
+  QFB *qfb = user_data;
+  QuickFill *qf = qfb->qf;
+  QuickFill *match;
+  char * name;
+  const char *match_str;
+  Account *account;
+  GtkTreeIter iter;
+  find_data data;
+
+  if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_ADD | QOF_EVENT_REMOVE)))
+    return;
+
+  if (!GNC_IS_ACCOUNT (entity))
+    return;
+  account = GNC_ACCOUNT (entity);
+
+  ENTER("entity %p, event type %x, user data %p, ecent data %p",
+	entity, event_type, user_data, event_data);
+
+  /* Not every new account is eligable for the menu */
+  if (qfb->dont_add_cb)
+  {
+     gboolean skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
+     if (skip) {
+       LEAVE("skip function matched");
+       return;
+     }
+  }
+
+  if (xaccAccountGetRoot(account) != qfb->group) {
+       LEAVE("root group mismatch");
+    return;
+  }
+
+  name = xaccAccountGetFullName (account);
+  if (NULL == name) {
+    LEAVE("account has no name");
+    return;
+  }
+
+  data.account = account;
+  data.found = NULL;
+
+  switch (event_type) {
+    case QOF_EVENT_MODIFY:
+      DEBUG("modify %s", name);
+
+      /* Update qf */
+      gnc_quickfill_purge(qfb->qf);
+      xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+
+      /* Update list store */
+      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
+			     shared_quickfill_find_account, &data);
+      if (data.found) {
+	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
+				    &iter, data.found)) {
+	  gtk_list_store_set(qfb->list_store, &iter,
+			     ACCOUNT_NAME, name,
+			     ACCOUNT_POINTER, account,
+			     -1);
+	}
+      }
+      break;
+
+    case QOF_EVENT_REMOVE:
+      DEBUG("remove %s", name);
+
+      /* Remove from qf */
+      gnc_quickfill_purge(qfb->qf);
+      xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
+
+      /* Remove from list store */
+      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
+			     shared_quickfill_find_account, &data);
+      if (data.found) {
+	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
+				    &iter, data.found)) {
+	  gtk_list_store_remove(qfb->list_store, &iter);
+	}
+      }
+      break;
+
+    case QOF_EVENT_ADD:
+      DEBUG("add %s", name);
+      match = gnc_quickfill_get_string_match (qf, name);
+      if (match) {
+	match_str = gnc_quickfill_string (match);
+	if (match_str && (safe_strcmp(match_str, name) != 0)) {
+	  PINFO ("got match for %s", name);
+	  break;
+	}
+      }
+
+      PINFO ("insert new account %s into qf=%p", name, qf);
+      gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
+      gtk_list_store_append (qfb->list_store, &iter);
+      gtk_list_store_set (qfb->list_store, &iter,
+			  ACCOUNT_NAME, name,
+			  ACCOUNT_POINTER, account,
+			  -1);
+      break;
+
+    default:
+      DEBUG("other %s", name);
+      break;
+  }
+  if (data.found)
+    gtk_tree_path_free(data.found);
+  g_free(name);
+  LEAVE(" ");
 }
 
 /* ====================== END OF FILE ================================== */
