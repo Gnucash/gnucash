@@ -1079,11 +1079,15 @@ gnc_plugin_page_register_finish_pending (GncPluginPage *page)
 					GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_MESSAGE_WARNING,
 					GTK_BUTTONS_NONE,
-					"Save changes to %s?", name);
+					/* Translators: %s is the name
+					   of the tab page */
+					_("Save changes to %s?"), name);
 	gtk_message_dialog_format_secondary_text
 	  (GTK_MESSAGE_DIALOG(dialog),
-	   "This register has pending changes.  Would you like to save "
-	   "these changes, discard the changes, or cancel the operation?");
+	   "%s",
+	   _("This register has pending changes to a transaction.  "
+	     "Would you like to save the changes to this transaction, "
+	     "discard the transaction, or cancel the operation?"));
 	gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
 				  GTK_STOCK_DELETE, GTK_RESPONSE_REJECT);
 	gtk_dialog_add_button(GTK_DIALOG(dialog),
