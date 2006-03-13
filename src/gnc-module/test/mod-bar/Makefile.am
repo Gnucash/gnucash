@@ -17,7 +17,9 @@ noinst_HEADERS = \
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 
-libgncmodbar_la_LIBADD=libbar.la
+libgncmodbar_la_LIBADD=libbar.la \
+  $(G_WRAP_LINK_ARGS) \
+  $(GLIB_LIBS)
 
 EXTRA_DIST = \
   bar-gwrap.scm \
