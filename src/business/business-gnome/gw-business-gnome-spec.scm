@@ -5,7 +5,7 @@
 ;(read-enable 'positions)
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (define-module (g-wrapped gw-business-gnome-spec)
   :use-module (g-wrap))

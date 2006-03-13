@@ -80,7 +80,7 @@
 (read-enable 'positions)
 
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 ;;(use-modules (ice-9 statprof))
 

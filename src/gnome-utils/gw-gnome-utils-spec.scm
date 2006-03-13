@@ -1,5 +1,5 @@
 (debug-set! maxdepth 100000)
-(debug-set! stack    2000000)
+(debug-set! stack    200000)
 
 (define-module (g-wrapped gw-gnome-utils-spec))
 

@@ -1,6 +1,6 @@
 (define-module (g-wrapped gw-gnc-module-spec))
 (debug-set! maxdepth 100000)
-(debug-set! stack 2000000)
+(debug-set! stack 200000)
 
 (use-modules (g-wrap))
 
