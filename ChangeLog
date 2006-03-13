@@ -1,3 +1,26 @@
+2006-03-13  Neil Williams  <linux@codehelp.co.uk>
+
+	* : Synchronise with external QOF 0.6.3
+
+	* qof/deprecated.c : Tweak.
+	* qof/deprecated.h : Tweak.
+	* qof/gnc-date.c : Use the macro defined in
+	external QOF that avoids a legacy gnucash macro.
+
+	* backend/file/qsf-backend.c : Standardise on gint and gchar.
+	Skip unregistered objects when processing maps.
+	* backend/file/qsf-map.xsd.xml : allow for iteration of hierarchical
+	objects
+	* backend/file/qsf-xml-map.c : Standardise on gint and gchar.
+	Correct map handling to allow reverse operations and iteration
+	over hierarchical objects. Improving debug messages
+	and preventing a crash when loading a map directly.
+	* backend/file/pilot-qsf-gncCustomer.xml : add reverse mapping
+	* backend/file/qsf-xml.c : Standardise on gint and gchar.
+	* backend/file/qsf-xml.h : Standardise on gint and gchar.
+	Support iteration over incoming QSF objects inside map
+	operations. Remove gnucash-specific gettext defines.
+
 2006-03-13  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-plugin-page.c (gnc_plugin_page_add_book):

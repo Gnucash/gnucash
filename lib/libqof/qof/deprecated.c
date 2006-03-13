@@ -103,4 +103,6 @@ qof_book_mergeRuleForeach(QofBookMergeData *mergeData,
 {
     qof_book_merge_rule_foreach(mergeData, cb, mergeResult);
 }
+
+/* ==================================================================== */
 #endif /* QOF_DISABLE_DEPRECATED */

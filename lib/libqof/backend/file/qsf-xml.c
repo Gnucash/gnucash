@@ -2,7 +2,7 @@
  *            qsf-xml.c
  *
  *  Fri Nov 26 19:29:47 2004
- *  Copyright  2004-2005  Neil Williams  <linux@codehelp.co.uk>
+ *  Copyright  2004,2005,2006  Neil Williams  <linux@codehelp.co.uk>
  *
  ****************************************************************************/
 /*
@@ -33,21 +33,21 @@
 
 static QofLogModule log_module = QOF_MOD_QSF;
 
-int
-qsf_compare_tag_strings(const xmlChar *node_name, char *tag_name)
+gint
+qsf_compare_tag_strings(const xmlChar *node_name, gchar *tag_name)
 {
 	return xmlStrcmp(node_name, (const xmlChar *)tag_name);
 }
 
-int
-qsf_strings_equal(const xmlChar *node_name, char *tag_name)
+gint
+qsf_strings_equal(const xmlChar *node_name, gchar *tag_name)
 {
 	if(0 == qsf_compare_tag_strings(node_name, tag_name)) { return 1; }
 	return 0;
 }
 
-int
-qsf_is_element(xmlNodePtr a, xmlNsPtr ns, char *c)
+gint
+qsf_is_element(xmlNodePtr a, xmlNsPtr ns, gchar *c)
 {
 	g_return_val_if_fail(a != NULL, 0);
 	g_return_val_if_fail(ns != NULL, 0);
@@ -57,14 +57,14 @@ qsf_is_element(xmlNodePtr a, xmlNsPtr ns, char *c)
 	return 0;
 }
 
-int
-qsf_check_tag(qsf_param *params, char *qof_type)
+gint
+qsf_check_tag(qsf_param *params, gchar *qof_type)
 {
 	return qsf_is_element(params->child_node, params->qsf_ns, qof_type);
 }
 
 gboolean
-qsf_is_valid(const char *schema_dir, const char* schema_filename, xmlDocPtr doc)
+qsf_is_valid(const gchar *schema_dir, const gchar* schema_filename, xmlDocPtr doc)
 {
 	xmlSchemaParserCtxtPtr qsf_schema_file;
 	xmlSchemaPtr qsf_schema;
@@ -104,6 +104,7 @@ qsf_node_foreach(xmlNodePtr parent, qsf_nodeCB cb,
 {
 	xmlNodePtr cur_node;
 
+	g_return_if_fail(iter->ns);
 	iter->fcn = &cb;
 	for(cur_node = parent->children; cur_node != NULL; cur_node = cur_node->next)
 	{
@@ -138,7 +139,7 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 	}
 }
 
-gboolean is_our_qsf_object(const char *path)
+gboolean is_our_qsf_object(const gchar *path)
 {
 	xmlDocPtr doc;
 	struct qsf_node_iterate iter;
@@ -167,7 +168,7 @@ gboolean is_our_qsf_object(const char *path)
 	return FALSE;
 }
 
-gboolean is_qsf_object(const char *path)
+gboolean is_qsf_object(const gchar *path)
 {
 	xmlDocPtr doc;
 
@@ -188,7 +189,7 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	xmlNodePtr object_root;
 	qsf_validator valid;
 	gint table_count;
-	char *path;
+	gchar *path;
 
 	g_return_val_if_fail((params != NULL),FALSE);
 	path = g_strdup(params->filepath);
@@ -230,7 +231,7 @@ gboolean is_qsf_object_be(qsf_param *params)
 	gboolean result;
 	xmlDocPtr doc;
 	GList *maps;
-	char *path;
+	gchar *path;
 
 	g_return_val_if_fail((params != NULL),FALSE);
 	path = g_strdup(params->filepath);
@@ -257,8 +258,17 @@ gboolean is_qsf_object_be(qsf_param *params)
 	/* retrieve list of maps from config frame. */
 	for(maps = params->map_files; maps; maps=maps->next)
 	{
+        QofBackendError err;
 		result = is_qsf_object_with_map_be(maps->data, params);
-		if(result) { break;}
+        err = qof_backend_get_error(params->be);
+        if((err == ERR_BACKEND_NO_ERR) && result) 
+        {
+            params->map_path = maps->data;
+            PINFO ("map chosen = %s", params->map_path);
+            break;
+        }
+        /* pop the error back on the stack. */
+        else { qof_backend_set_error(params->be, err); }
 	}
 	return result;
 }
@@ -271,7 +281,7 @@ qsf_supported_data_types(gpointer type, gpointer user_data)
 	g_return_if_fail(user_data != NULL);
 	g_return_if_fail(type != NULL);
 	params = (qsf_param*) user_data;
-	if(qsf_is_element(params->param_node, params->qsf_ns, (char*)type))
+	if(qsf_is_element(params->param_node, params->qsf_ns, (gchar*)type))
 	{
 		g_hash_table_insert(params->qsf_parameter_hash,
 			xmlGetProp(params->param_node, BAD_CAST QSF_OBJECT_TYPE), params->param_node);
@@ -285,27 +295,30 @@ qsf_parameter_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 	g_slist_foreach(params->supported_types, qsf_supported_data_types, params);
 }
 
-/* Despite the name, this function handles the QSF object book tag
-AND the object tags. */
 void
 qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 {
 	struct qsf_node_iterate iter;
 	qsf_objects *object_set;
-	char *tail, *object_count_s;
-	int c;
+	gchar *tail, *object_count_s;
+	gint64 c;
 
 	g_return_if_fail(child != NULL);
 	g_return_if_fail(qsf_ns != NULL);
 	params->qsf_ns = qsf_ns;
 	if(qsf_is_element(child, qsf_ns, QSF_OBJECT_TAG)) {
 		params->qsf_parameter_hash = NULL;
+		c = 0;
 		object_set = g_new(qsf_objects, 1);
 		params->object_set = object_set;
+		object_set->object_count = 0;
 		object_set->parameters = g_hash_table_new(g_str_hash, g_str_equal);
-		object_set->object_type = g_strdup((char*)xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE));
-		object_count_s = g_strdup((char*)xmlGetProp(child, BAD_CAST QSF_OBJECT_COUNT));
-		c = (int)strtol(object_count_s, &tail, 0);
+		object_set->object_type = g_strdup((gchar*)xmlGetProp(child, 
+			BAD_CAST QSF_OBJECT_TYPE));
+		object_count_s = g_strdup((gchar*)xmlGetProp(child, 
+			BAD_CAST QSF_OBJECT_COUNT));
+		c = (gint64)strtol(object_count_s, &tail, 0);
+		object_set->object_count = (gint)c;
 		g_free(object_count_s);
 		params->qsf_object_list = g_list_prepend(params->qsf_object_list, object_set);
 		iter.ns = qsf_ns;
@@ -317,35 +330,35 @@ qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 void
 qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 {
-	char *book_count_s, *tail;
-	int book_count;
+	gchar *book_count_s, *tail;
+	gint book_count;
 	xmlNodePtr child_node;
 	struct qsf_node_iterate iter;
 	gchar *buffer;
 	GUID book_guid;
 
+	g_return_if_fail(child);
+	g_return_if_fail(params);
+	ENTER (" child=%s", child->name);
 	if(qsf_is_element(child, ns, QSF_BOOK_TAG)) {
-		book_count_s = (char*)xmlGetProp(child, BAD_CAST QSF_BOOK_COUNT);
+		book_count_s = (gchar*)xmlGetProp(child, BAD_CAST QSF_BOOK_COUNT);
 		if(book_count_s) {
-			book_count = (int)strtol(book_count_s, &tail, 0);
+			book_count = (gint)strtol(book_count_s, &tail, 0);
 			/* More than one book not currently supported. */
 			g_return_if_fail(book_count == 1);
 		}
 		iter.ns = ns;
-		qsf_node_foreach(child, qsf_object_node_handler, &iter, params);
-	}
-	for(child_node = child->children; child_node != NULL;
-		child_node = child_node->next)
-		{
+		child_node = child->children->next;
 		if(qsf_is_element(child_node, ns, QSF_BOOK_GUID)) {
-			buffer = g_strdup((char*)xmlNodeGetContent(child_node));
+			DEBUG (" trying to set book GUID");
+			buffer = g_strdup((gchar*)xmlNodeGetContent(child_node));
 			g_return_if_fail(TRUE == string_to_guid(buffer, &book_guid));
 			qof_entity_set_guid((QofEntity*)params->book, &book_guid);
+			xmlNewChild(params->output_node, params->qsf_ns, 
+			BAD_CAST QSF_BOOK_GUID, BAD_CAST buffer);
 			g_free(buffer);
 		}
-		if(qsf_is_element(child_node, ns, QSF_OBJECT_TAG)) {
-			iter.ns = ns;
-			qsf_node_foreach(child_node, qsf_object_node_handler, &iter, params);
-		}
+		qsf_node_foreach(child, qsf_object_node_handler, &iter, params);
 	}
+    LEAVE (" ");
 }

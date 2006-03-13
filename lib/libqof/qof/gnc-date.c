@@ -31,6 +31,10 @@
 /* to be renamed qofdate.c */
 #include <ctype.h>
 
+#ifdef HAVE_LANGINFO_H
+#define HAVE_LANGINFO_D_FMT 1
+#endif
+
 #ifdef HAVE_LANGINFO_D_FMT
 #include <langinfo.h>
 #endif
