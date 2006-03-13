@@ -810,6 +810,40 @@ gnc_main_window_save_all_windows(GKeyFile *keyfile)
     g_list_foreach(active_windows, (GFunc)gnc_main_window_save_window, &data);
 }
 
+
+gboolean
+gnc_main_window_finish_pending (GncMainWindow *window)
+{
+	GncMainWindowPrivate *priv;
+	GList *item;
+
+	g_return_val_if_fail(GNC_IS_MAIN_WINDOW(window), TRUE);
+
+	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	for (item = priv->installed_pages; item; item = g_list_next(item)) {
+	  if (!gnc_plugin_page_finish_pending(item->data)) {
+	    return FALSE;
+	  }
+	}
+	return TRUE;
+}
+
+
+gboolean
+gnc_main_window_all_finish_pending (void)
+{
+	const GList *windows, *item;
+
+	windows = gnc_gobject_tracking_get_list(GNC_MAIN_WINDOW_NAME);
+	for (item = windows; item; item = g_list_next(item)) {
+	  if (!gnc_main_window_finish_pending(item->data)) {
+	    return FALSE;
+	  }
+	}
+	return TRUE;
+}
+
+
 /** See if the page already exists.  For each open window, look
  *  through the list of pages installed in that window and see if the
  *  specified page is there.
@@ -970,6 +1004,11 @@ gnc_main_window_delete_event (GtkWidget *window,
 			  "Gnucash window.  Doing so will quit the "
 			  "application.  Are you sure that this is "
 			  "what you want to do?");
+
+  if (!gnc_main_window_finish_pending(GNC_MAIN_WINDOW(window))) {
+    /* Don't close the window. */
+    return TRUE;
+  }
 
   if (g_list_length(active_windows) > 1)
     return FALSE;
@@ -1551,7 +1590,7 @@ gnc_main_window_get_type (void)
 		};
 
 		gnc_main_window_type = g_type_register_static (GTK_TYPE_WINDOW,
-							       "GncMainWindow",
+							       GNC_MAIN_WINDOW_NAME,
 							       &our_info, 0);
 		g_type_add_interface_static (gnc_main_window_type,
 					     GNC_TYPE_WINDOW,
@@ -2771,13 +2810,15 @@ static void
 gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 {
 	GncMainWindowPrivate *priv;
+	GncPluginPage *page;
 
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
 
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	if (priv->current_page != NULL) {
-		gnc_main_window_close_page (priv->current_page);
-	}
+	page = priv->current_page;
+	if (!gnc_plugin_page_finish_pending(page))
+	  return;
+	gnc_main_window_close_page(page);
 }
 
 static gboolean
@@ -2799,6 +2840,9 @@ gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 	  g_timeout_add(250, gnc_main_window_timed_quit, NULL);
 	  return;
 	}
+
+	if (!gnc_main_window_all_finish_pending())
+	  return;
 
 	session = gnc_get_current_session();
 	if (qof_book_not_saved(qof_session_get_book(session))) {

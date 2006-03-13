@@ -929,5 +929,18 @@ gnc_plugin_page_create_action_group (GncPluginPage *page, const gchar *group_nam
   return group;
 }
 
+gboolean
+gnc_plugin_page_finish_pending (GncPluginPage *page)
+{
+  if (!page)
+    return TRUE;
+  if (!GNC_IS_PLUGIN_PAGE(page))
+    return TRUE;
+
+  if (!GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)
+    return TRUE;
+  return (GNC_PLUGIN_PAGE_GET_CLASS(page)->finish_pending)(page);
+}
+
 /** @} */
 /** @} */

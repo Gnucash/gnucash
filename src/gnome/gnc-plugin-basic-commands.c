@@ -50,6 +50,7 @@
 #include "gnc-engine.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
+#include "gnc-main-window.h"
 #include "gnc-ui.h"
 #include "gnc-window.h"
 #include "gnc-session.h"
@@ -316,6 +317,9 @@ gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
 {
   g_return_if_fail (data != NULL);
 
+  if (!gnc_main_window_all_finish_pending())
+    return;
+
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
   gnc_file_save ();
   gnc_window_set_progressbar_window (NULL);
@@ -326,6 +330,9 @@ static void
 gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data)
 {
   g_return_if_fail (data != NULL);
+
+  if (!gnc_main_window_all_finish_pending())
+    return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
   gnc_file_save_as ();

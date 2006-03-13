@@ -175,6 +175,17 @@ typedef struct {
 	 *  @param hide Whether the widgets should be shown or
 	 *  hidden. */
 	void (* update_edit_menu_actions) (GncPluginPage *plugin_page, gboolean hide);
+
+	/** This function vector is called to finish any outstanding
+	 *  activities.  It will be called for such things as closing a
+	 *  page, saving the data file, etc.
+	 *  
+	 *  @param page The page in a main window.
+	 *
+	 *  @return FALSE if the page could not or would not comply,
+	 *  which should cancel the pending operation.  TRUE
+	 *  otherwise */
+	gboolean (* finish_pending) (GncPluginPage *plugin_page);
 } GncPluginPageClass;
 
 
@@ -477,6 +488,13 @@ void gnc_plugin_page_removed (GncPluginPage *plugin_page);
 void gnc_plugin_page_selected (GncPluginPage *plugin_page);
 void gnc_plugin_page_unselected (GncPluginPage *plugin_page);
 
+/** Tell a page to finish any outstanding activities.
+ *  
+ *  @param page A page.
+ *
+ *  @return FALSE if the page could not or would not comply, which
+ *  should cancel the pending operation.  TRUE otherwise */
+gboolean gnc_plugin_page_finish_pending (GncPluginPage *plugin_page);
 
 G_END_DECLS
 

@@ -95,6 +95,7 @@ static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
 static void gnc_plugin_page_register_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_register_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide);
+static gboolean gnc_plugin_page_register_finish_pending (GncPluginPage *page);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 
@@ -518,6 +519,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->save_page       = gnc_plugin_page_register_save_page;
 	gnc_plugin_class->recreate_page   = gnc_plugin_page_register_recreate_page;
 	gnc_plugin_class->update_edit_menu_actions = gnc_plugin_page_register_update_edit_menu;
+	gnc_plugin_class->finish_pending  = gnc_plugin_page_register_finish_pending;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageRegisterPrivate));
 
@@ -1049,6 +1051,62 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage *page, gboolean hide)
 	action = gnc_plugin_page_get_action (page, "EditPasteAction");
 	gtk_action_set_sensitive (action, can_paste);
 	gtk_action_set_visible (action,  !hide || can_paste);
+}
+
+
+static gboolean
+gnc_plugin_page_register_finish_pending (GncPluginPage *page)
+{
+	GncPluginPageRegisterPrivate *priv;
+	GncPluginPageRegister *reg_page;
+	SplitRegister *reg;
+	GtkWidget *dialog, *window;
+	const gchar *name;
+	gint response;
+
+	reg_page = GNC_PLUGIN_PAGE_REGISTER(page);
+	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
+	reg = gnc_ledger_display_get_split_register(priv->ledger);
+
+	if (!reg)
+	  return TRUE;
+	if (!reg || !gnc_split_register_changed(reg))
+	  return TRUE;
+
+	name = gnc_plugin_page_register_get_tab_name(page);
+	window = gnc_plugin_page_get_window(page);
+	dialog = gtk_message_dialog_new(GTK_WINDOW(window),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_MESSAGE_WARNING,
+					GTK_BUTTONS_NONE,
+					"Save changes to %s?", name);
+	gtk_message_dialog_format_secondary_text
+	  (GTK_MESSAGE_DIALOG(dialog),
+	   "This register has pending changes.  Would you like to save "
+	   "these changes, discard the changes, or cancel the operation?");
+	gnc_gtk_dialog_add_button(dialog, _("_Discard Transaction"),
+				  GTK_STOCK_DELETE, GTK_RESPONSE_REJECT);
+	gtk_dialog_add_button(GTK_DIALOG(dialog),
+			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	gnc_gtk_dialog_add_button(dialog, _("_Save Transaction"),
+				  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT);
+
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+
+	switch (response) {
+	  case GTK_RESPONSE_ACCEPT:
+	    gnc_split_register_save(reg, TRUE);
+	    return TRUE;
+
+	  case GTK_RESPONSE_REJECT:
+	    gnc_split_register_cancel_cursor_trans_changes(reg);
+	    gnc_split_register_save (reg, TRUE);
+	    return TRUE;
+
+	  default:
+	    return FALSE;
+	}
 }
 
 

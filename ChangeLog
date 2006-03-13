@@ -1,5 +1,17 @@
 2006-03-12  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome/gnc-plugin-page-register.c: Add a new per-page
+	callback to tell the page to finish any pending activities.  The
+	page may return FALSE to abort whatever the caller's normal
+	function.  Add helper routines to iterate over all pages in a
+	window, or all pages in all windows.  Call these new functions
+	before Quit, Save, Close, and closing a window.  The register page
+	now implements this hook and uses it to save/discard any pending
+	transaction.  Closes 334090.
+
 	* src/gnome-utils/glade/commodity.glade: Tweak a couple of
 	tooltips. Try and make it clear that the commodity mnemonic field
 	must exactly match that used by the quote source.

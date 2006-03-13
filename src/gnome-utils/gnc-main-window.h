@@ -49,6 +49,8 @@ G_BEGIN_DECLS
 #define GNC_IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_MAIN_WINDOW))
 #define GNC_MAIN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_MAIN_WINDOW, GncMainWindowClass))
 
+#define GNC_MAIN_WINDOW_NAME "GncMainWindow"
+
 /* typedefs & structures */
 
 /** The instance data structure for a main window object. */
@@ -312,6 +314,31 @@ void gnc_main_window_restore_default_state(void);
 void 
 gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 					     const gchar    *domain);
+
+
+/** Tell a window to finish any outstanding activities.  This function
+ *  will call gnc_plugin_page_finish_pending for each installed page.
+ *  If any page returns a failure indication, then the function stops
+ *  walking pages and immediately returns a failure.
+ *
+ *  @param window Whe window whose pages should be checked.
+ *
+ *  @return FALSE if any page could not or would not comply, which
+ *  should cancel the pending operation.  TRUE otherwise */
+gboolean gnc_main_window_finish_pending (GncMainWindow *window);
+
+
+/** Tell all pages in all windows to finish any outstanding
+ *  activities.  This function will call
+ *  gnc_plugin_page_finish_pending for each installed page.  If any
+ *  page returns a failure indication, then the function stops walking
+ *  pages and immediately returns a failure.
+ *
+ *  @param window Whe window whose pages should be checked.
+ *
+ *  @return FALSE if any page could not or would not comply, which
+ *  should cancel the pending operation.  TRUE otherwise */
+gboolean gnc_main_window_all_finish_pending (void);
 
 G_END_DECLS
 
