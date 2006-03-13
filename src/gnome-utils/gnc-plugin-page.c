@@ -679,22 +679,16 @@ void
 gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
 {
   GncPluginPagePrivate *priv;
-  GUID *guid;
 
   g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
   g_return_if_fail (book != NULL);
 
   priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
-
-  guid = guid_malloc();
-  *guid = *qof_book_get_guid(book);
-  priv->books = g_list_append(priv->books, guid);
+  priv->books = g_list_append(priv->books, book);
 }
 
 
-/*  Query a page to see if it has a reference to a given book.  This
- *  function takes a guid instead of a QofBook because that's what the
- *  engine event mechanism provides. */
+/*  Query a page to see if it has a reference to a given book. */
 gboolean
 gnc_plugin_page_has_book (GncPluginPage *page, QofBook *book)
 {

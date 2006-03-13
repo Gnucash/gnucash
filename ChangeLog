@@ -1,3 +1,9 @@
+2006-03-13  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-plugin-page.c (gnc_plugin_page_add_book):
+	  Save a QofBook instead of its GUID in the list of books. This
+	  should renable the deletion of some plugin pages.
+
 2006-03-13  Christian Stimming <stimming@tuhh.de>
 
 	* */*.scm: Reduce debug stack size from 2,000,000 to 200,000
