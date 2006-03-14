@@ -118,6 +118,7 @@ fi
 # These are unavailable on windows/mingw32
 AC_CHECK_HEADERS(X11/Xlib.h glob.h)
 AC_CHECK_FUNCS(chown gethostname getppid getuid gettimeofday gmtime_r)
+AC_CHECK_FUNCS(gethostid link)
 
 ### --------------------------------------------------------------------------
 ### See if we have pkg-config
