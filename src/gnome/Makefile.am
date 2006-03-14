@@ -14,6 +14,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -141,6 +142,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/lib/glib26 \
+  -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GNOME_CFLAGS} \
