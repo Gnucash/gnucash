@@ -84,6 +84,9 @@ libgncmod_app_utils_la_LIBADD = \
 
 libgw_app_utils_la_LIBADD = \
   libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${QOF_LIBS} \
