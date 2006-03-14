@@ -351,17 +351,16 @@ gnc_ui_to_account(AccountWindow *aw)
   if (parent_account == aw->top_level_account)
     parent_account = NULL;
 
-  xaccAccountBeginEdit (parent_account);
-
   if (parent_account != NULL)
   {
+    xaccAccountBeginEdit (parent_account);
     if (parent_account != xaccAccountGetParentAccount (account))
       xaccAccountInsertSubAccount (parent_account, account);
+    xaccAccountCommitEdit (parent_account);
   }
   else
     xaccGroupInsertAccount (gnc_get_current_group (), account);
 
-  xaccAccountCommitEdit (parent_account);
   xaccAccountCommitEdit (account);
 
   balance = gnc_amount_edit_get_amount
