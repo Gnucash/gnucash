@@ -1,5 +1,10 @@
 2006-03-14  Christian Stimming <stimming@tuhh.de>
 
+	* src/backend/file/gnc-backend-file.c: Disable extra NFS lockfile
+	checking on windows due to missing link(2). This is not a problem
+	because on windows there also is no NFS, and the
+	open(O_CREAT|O_EXCL) is sufficiently atomic for our purposes.
+
 	* src/backend/file/io-gncxml-v2.c: Disable file compression on
 	windows due to missing pipe(2), conditioned on #ifdef
 	_WIN32. Insert code suggestion for windows, but is disabled for

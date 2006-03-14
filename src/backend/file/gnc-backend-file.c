@@ -74,8 +74,10 @@ static gboolean
 gnc_file_be_get_file_lock (FileBackend *be)
 {
     struct stat statbuf;
+#ifndef _WIN32
     char pathbuf[PATH_MAX];
     char *path = NULL;
+#endif
     int rc;
     QofBackendError be_err;
 
@@ -121,6 +123,7 @@ gnc_file_be_get_file_lock (FileBackend *be)
      * provides a better long-term solution.
      */
 
+#ifndef _WIN32
     strcpy (pathbuf, be->lockfile);
     path = strrchr (pathbuf, '.');
     sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
@@ -130,9 +133,9 @@ gnc_file_be_get_file_lock (FileBackend *be)
     {
         /* If hard links aren't supported, just allow the lock. */
         if (errno == EPERM
-#ifdef EOPNOTSUPP
+# ifdef EOPNOTSUPP
 	    || errno == EOPNOTSUPP
-#endif
+# endif
 	    )
         {
             be->linkfile = NULL;
@@ -170,6 +173,13 @@ gnc_file_be_get_file_lock (FileBackend *be)
     be->linkfile = g_strdup (pathbuf);
 
     return TRUE;
+
+#else /* ifndef _WIN32 */
+    /* On windows, there is no NFS and the open(,O_CREAT | O_EXCL)
+       is sufficient for locking. */
+    be->linkfile = NULL;
+    return TRUE;
+#endif /* ifndef _WIN32 */
 }
 
 /* ================================================================= */
@@ -337,14 +347,22 @@ copy_file(const char *orig, const char *bkup)
 static gboolean
 gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 {
-    int err_ret = link(orig, bkup);
+    int err_ret = 
+#ifdef HAVE_LINK
+      link (orig, bkup)
+#else
+      -1
+#endif
+      ;
     if(err_ret != 0)
     {
+#ifdef HAVE_LINK
         if(errno == EPERM
-#ifdef EOPNOTSUPP
+# ifdef EOPNOTSUPP
 	   || errno == EOPNOTSUPP
-#endif
+# endif
 	   )
+#endif
         {
             err_ret = copy_file(orig, bkup);
         }
