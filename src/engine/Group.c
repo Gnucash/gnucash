@@ -418,12 +418,65 @@ xaccGroupGetSubAccounts (const AccountGroup *grp)
   return g_list_reverse (accounts);
 }
 
+static int
+group_sort_helper (gconstpointer a, gconstpointer b)
+{
+  const Account *aa = (const Account *) a;
+  const Account *bb = (const Account *) b;
+
+  /* xaccAccountOrder returns > 1 if aa should come after bb.
+   * This funciton is building a reversed list. */
+  return xaccAccountOrder (&aa, &bb);
+}
+
+static void
+xaccPrependAccountsSorted (const AccountGroup *grp, GList **accounts_p)
+{
+  GList *node, *tmp_list;
+
+  if (!grp || !accounts_p) return;
+
+  tmp_list = g_list_copy(grp->accounts);
+  tmp_list = g_list_sort(tmp_list, group_sort_helper);
+
+  for (node = tmp_list; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    *accounts_p = g_list_prepend (*accounts_p, account);
+
+    xaccPrependAccountsSorted (account->children, accounts_p);
+  }
+  g_list_free(tmp_list);
+}
+
+AccountList *
+xaccGroupGetSubAccountsSorted (const AccountGroup *grp)
+{
+  GList *accounts = NULL;
+
+  if (!grp) return NULL;
+
+  xaccPrependAccountsSorted (grp, &accounts);
+
+  return g_list_reverse (accounts);
+}
+
 AccountList *
 xaccGroupGetAccountList (const AccountGroup *grp)
 {
   if (!grp) return NULL;
 
   return grp->accounts;
+}
+
+GList *
+xaccGroupGetAccountListSorted (const AccountGroup *grp)
+{
+  if (!grp) return NULL;
+
+  return g_list_sort(g_list_copy(grp->accounts), group_sort_helper);
+
 }
 
 /********************************************************************\
@@ -692,16 +745,6 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 /********************************************************************\
 \********************************************************************/
 
-static int
-group_sort_helper (gconstpointer a, gconstpointer b)
-{
-  const Account *aa = (const Account *) a;
-  const Account *bb = (const Account *) b;
-
-  /* return > 1 if aa should come after bb */
-  return xaccAccountOrder (&aa, &bb);
-}
-
 void
 xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 {
@@ -713,11 +756,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
    * the sort order to be checked. */
-  if (acc->parent == grp)
-  {
-    grp->accounts = g_list_sort (grp->accounts, group_sort_helper);
-  }
-  else
+  if (acc->parent != grp)
   {
     xaccAccountBeginEdit (acc);
 
@@ -753,8 +792,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
     /* set back-pointer to the account's parent */
     acc->parent = grp;
 
-    grp->accounts = g_list_insert_sorted (grp->accounts, acc,
-                                          group_sort_helper);
+    grp->accounts = g_list_append (grp->accounts, acc);
 
     /* Gather event data */
     qof_event_gen (&acc->inst.entity, QOF_EVENT_ADD, NULL);
@@ -820,8 +858,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
       to_acc = xaccCloneAccount (from_acc, to->book);
 
       xaccAccountBeginEdit (to_acc);
-      to->accounts = g_list_insert_sorted (to->accounts, to_acc,
-                                          group_sort_helper);
+      to->accounts = g_list_append (to->accounts, to_acc);
 
       to_acc->parent = to;
       to_acc->inst.dirty = TRUE;

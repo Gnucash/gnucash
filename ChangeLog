@@ -1,3 +1,18 @@
+2006-03-14  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/gnc-account-sel.c:
+	* src/gnome/druid-stock-split.c:
+	* src/engine/Account.c:
+	* src/engine/gw-engine-spec.scm:
+	* src/engine/Group.[ch]: Leave the accounts unordered in the
+	engine.  Switch the g-wrap functions that return account lists to
+	use new functions that return sorted lists so that they see no
+	change.  Fixes 331855.  Also change the default account sorting to
+	sort on utf8 strings.
+
+	* src/gnome-utils/dialog-account.c: Fix a warning message.
+
 2006-03-13  Neil Williams  <linux@codehelp.co.uk>
 
 	* : Synchronise with external QOF 0.6.3

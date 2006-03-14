@@ -120,7 +120,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
   gtk_clist_clear (clist);
 
-  accounts = xaccGroupGetSubAccounts (gnc_get_current_group ());
+  accounts = xaccGroupGetSubAccountsSorted (gnc_get_current_group ());
   for (node = accounts; node; node = node->next)
   {
     Account *account = node->data;
@@ -157,6 +157,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
 
     rows++;
   }
+  g_list_free(accounts);
 
   {
     gint row = 0;

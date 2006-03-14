@@ -195,7 +195,7 @@ gas_populate_list( GNCAccountSel *gas )
                 GTK_EDITABLE(gas->combo->entry), 0, -1 );
 
         ag = gnc_book_get_group( gnc_get_current_book() );
-        accts = (GList*)xaccGroupGetSubAccounts( ag );
+        accts = (GList*)xaccGroupGetSubAccountsSorted( ag );
 
         nameList        = NULL;
         atnd.gas        = gas;

@@ -335,6 +335,7 @@ static inline void acc_free (QofInstance *inst)
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
+  g_return_if_fail(acc);
   if(!qof_commit_edit(&acc->inst)) { return;}
 
   /* If marked for deletion, get rid of subaccounts first,
@@ -375,9 +376,6 @@ xaccAccountCommitEdit (Account *acc)
   else 
   {
     xaccAccountBringUpToDate(acc);
-
-    /* force re-sort of parent group */
-    xaccGroupInsertAccount(acc->parent, acc); 
   }
 
   qof_commit_edit_part2(&acc->inst, on_err, on_done, acc_free);
@@ -1022,7 +1020,15 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   /* otherwise, sort on accountName strings */
   da = (*aa)->accountName;
   db = (*ab)->accountName;
-  SAFE_STRCMP (da, db);
+  if (da && db) {
+    gint result = g_utf8_collate(da, db);
+    if (result)
+      return result;
+  } else if (da) {
+    return -1;
+  } else if (db) {
+    return 1;
+  }
 
   /* guarantee a stable sort */
   return guid_compare (&((*aa)->inst.entity.guid), &((*ab)->inst.entity.guid));

@@ -198,11 +198,24 @@ Account * xaccGroupGetAccount (const AccountGroup *group, int index);
  */
 AccountList * xaccGroupGetSubAccounts (const AccountGroup *grp);
 
+/** The xaccGroupGetSubAccounts() subroutine returns a sorted list of
+ *    the accounts, including subaccounts, in the account group. The
+ *    returned list should be freed with g_list_free() when no longer
+ *    needed.
+ */
+AccountList * xaccGroupGetSubAccountsSorted (const AccountGroup *grp);
+
 /** The xaccGroupGetAccountList() subroutines returns only the immediate
  *    children of the account group. The returned list should *not*
  *    be freed by the caller.
  */
 AccountList * xaccGroupGetAccountList (const AccountGroup *grp);
+
+/** The xaccGroupGetAccountList() subroutines returns only the
+ *    immediate children of the account group.  The returned list
+ *    should be freed with g_list_free() when no longer needed.
+ */
+GList * xaccGroupGetAccountListSorted (const AccountGroup *grp);
 
 /** The xaccGroupGetRoot() subroutine will find the topmost 
  *    (root) group to which this group belongs.

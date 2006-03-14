@@ -1087,7 +1087,7 @@ group")
  ws
  'gnc:group-get-subaccounts
  '(gw:glist-of <gnc:Account*> caller-owned)
- "xaccGroupGetSubAccounts"
+ "xaccGroupGetSubAccountsSorted"
  '((<gnc:AccountGroup*> g))
  "Return a list containing all of the accounts, including
 subaccounts, in the account group. The returned array should be freed
@@ -1096,8 +1096,8 @@ when no longer needed.")
 (gw:wrap-function
  ws
  'gnc:group-get-account-list
- '(gw:glist-of <gnc:Account*> callee-owned)
- "xaccGroupGetAccountList"
+ '(gw:glist-of <gnc:Account*> caller-owned)
+ "xaccGroupGetAccountListSorted"
  '((<gnc:AccountGroup*> g))
  "Return a list containing the immediate children of g.")
 

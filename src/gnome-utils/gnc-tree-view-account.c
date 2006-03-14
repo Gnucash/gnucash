@@ -615,6 +615,11 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 					  view,
 					  NULL);
 
+  /* Default the sorting to account name */
+  gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
+				       GNC_TREE_MODEL_ACCOUNT_COL_NAME,
+				       GTK_SORT_ASCENDING);
+
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE("%p", view);
   return GTK_TREE_VIEW(view);
