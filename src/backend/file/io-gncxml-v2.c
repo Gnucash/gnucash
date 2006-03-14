@@ -1206,46 +1206,85 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
 static FILE *
 try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
 {
-  char buffer[BUFLEN];
-  unsigned bytes;
-  int filedes[2];
-  gzFile *out;
-  pid_t pid;
-
   if (strstr(filename, ".gz.") != NULL) /* its got a temp extension */
       use_gzip = TRUE;
 
   if (!use_gzip)
     return fopen(filename, perms);
 
-  if (pipe(filedes) < 0) {
-    PWARN("Pipe call failed. Opening uncompressed file.");
-    return fopen(filename, perms);
-  }
+#ifdef _WIN32
+  PWARN("Compression not implemented on Windows. Opening uncompressed file.");
+  return fopen(filename, perms);
 
-  pid = fork();
-  switch (pid) {
-   case -1:
-    PWARN("Fork call failed. Opening uncompressed file.");
-    return fopen(filename, perms);
+  /* Potential implementation: Windows doesn't have pipe(); use
+     the g_spawn glib wrappers. */
+  {
+    /* Start gzip from a command line, not by fork(). */
+    gchar *argv[] = {"gzip", NULL};
+    GPid child_pid;
+    GError *error;
+    int child_stdin;
 
-   case 0: /* child */
-    close(filedes[1]);
-    out = gzopen(filename, perms);
-    if (out == NULL) {
-      PWARN("child gzopen failed\n");
-      exit(0);
+    g_assert_not_reached(); /* Not yet correctly implemented. */
+
+    if ( !g_spawn_async_with_pipes(NULL, argv,
+				   NULL, G_SPAWN_SEARCH_PATH,
+				   NULL, NULL, 
+				   &child_pid,
+				   &child_stdin, NULL, NULL,
+				   &error) ) {
+      PWARN("G_spawn call failed. Opening uncompressed file.");
+      return fopen(filename, perms);
     }
-    while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
-      gzwrite(out, buffer, bytes);
-    gzclose(out);
-    _exit(0);
+    /* FIXME: Now need to set up the child process to write to the
+       file. */
 
-   default: /* parent */
-    sleep(2);
-    close(filedes[0]);
-    return fdopen(filedes[1], "w");
+    return fdopen(child_stdin, "w");
+
+    /* Eventually the GPid must be cleanup up, but not here? */
+    /* g_spawn_close_pid(child_pid); */
   }
+#else
+  {
+    /* Normal Posix platform (non-windows) */
+    int filedes[2];
+    pid_t pid;
+
+    if (pipe(filedes) < 0) {
+      PWARN("Pipe call failed. Opening uncompressed file.");
+      return fopen(filename, perms);
+    }
+
+    pid = fork();
+    switch (pid) {
+    case -1:
+      PWARN("Fork call failed. Opening uncompressed file.");
+      return fopen(filename, perms);
+
+    case 0: /* child */ {
+      char buffer[BUFLEN];
+      unsigned bytes;
+      gzFile *out;
+
+      close(filedes[1]);
+      out = gzopen(filename, perms);
+      if (out == NULL) {
+	PWARN("child gzopen failed\n");
+	exit(0);
+      }
+      while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
+	gzwrite(out, buffer, bytes);
+      gzclose(out);
+      _exit(0);
+    }
+
+    default: /* parent */
+      sleep(2);
+      close(filedes[0]);
+      return fdopen(filedes[1], "w");
+    }
+  }
+#endif
 }
 
 gboolean

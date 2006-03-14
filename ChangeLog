@@ -1,5 +1,10 @@
 2006-03-14  Christian Stimming <stimming@tuhh.de>
 
+	* src/backend/file/io-gncxml-v2.c: Disable file compression on
+	windows due to missing pipe(2), conditioned on #ifdef
+	_WIN32. Insert code suggestion for windows, but is disabled for
+	now.
+
 	* src/gnome-utils/gnc-druid-provider-multifile-gnome.h: Improve
 	include order so that building without <glob.h> is possible.
 
