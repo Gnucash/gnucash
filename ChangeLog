@@ -1,3 +1,8 @@
+2006-03-14  Christian Stimming <stimming@tuhh.de>
+
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.h: Improve
+	include order so that building without <glob.h> is possible.
+
 2006-03-14  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.c:

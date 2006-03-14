@@ -10,6 +10,7 @@
 #ifdef HAVE_GLOB_H
 # include <glob.h>
 #else
+# include <stddef.h> /* for size_t */
 typedef struct
 {
   size_t gl_pathc;    /* Count of paths matched so far  */
