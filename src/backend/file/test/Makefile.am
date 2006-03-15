@@ -193,6 +193,8 @@ TESTS_ENVIRONMENT := \
 noinst_LTLIBRARIES = libgnc-test-file-stuff.la
 
 libgnc_test_file_stuff_la_SOURCES = test-file-stuff.c
+libgnc_test_file_stuff_la_LIBADD = \
+  ${top_builddir}/src/engine/libgncmod-engine.la
 
 noinst_PROGRAMS = \
   test-date-converting \
