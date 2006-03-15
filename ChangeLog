@@ -1,3 +1,9 @@
+2006-03-15  Christian Stimming <stimming@tuhh.de>
+
+	* src/gnc-module/gnc-module.h: Remove include <ltdl.h> that is
+	unnecessary for code using this header. Gets rid of some <ltdl.h>
+	weirdness that plagues other object code files on windows.
+
 2006-03-14  Christian Stimming <stimming@tuhh.de>
 
 	* src/backend/file/gnc-backend-file.c: Disable extra NFS lockfile

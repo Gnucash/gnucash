@@ -7,12 +7,6 @@
 #define GNC_MODULE_H
 
 #include <glib.h>
-#include <ltdl.h>
-#include <libguile.h>
-
-#ifndef lt_ptr
-#define lt_ptr lt_ptr_t
-#endif
 
 typedef void * GNCModule;
 

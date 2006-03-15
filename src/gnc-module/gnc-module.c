@@ -17,6 +17,10 @@
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
+#ifndef lt_ptr
+# define lt_ptr lt_ptr_t
+#endif
+
 static GHashTable * loaded_modules = NULL;
 static GList      * module_info = NULL;
 

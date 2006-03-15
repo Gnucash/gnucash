@@ -10,6 +10,10 @@
 
 #include "gnc-module.h"
 
+#ifndef lt_ptr
+# define lt_ptr lt_ptr_t
+#endif
+
 static void
 guile_main(void *closure, int argc, char ** argv)
 {
