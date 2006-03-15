@@ -43,5 +43,6 @@ noinst_HEADERS = \
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
 libgncmod_business_backend_file_la_LIBADD = \
-   ${GLIB_LIBS} ${LIBXML2_LIBS} ${QOF_LIBS} \
-   ${top_builddir}/src/business/business-core/libgncmod-business-core.la
+   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
+   ${top_builddir}/src/backend/file/libgnc-backend-file.la
+   ${GLIB_LIBS} ${LIBXML2_LIBS} ${QOF_LIBS}

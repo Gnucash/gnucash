@@ -57,7 +57,6 @@ noinst_HEADERS = \
 
 libgncmod_business_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${top_builddir}/src/backend/file/libgnc-backend-file.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \

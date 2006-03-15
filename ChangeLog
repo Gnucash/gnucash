@@ -10,7 +10,11 @@
 
 	* src/business/business-core/Makefile.am:
 	  Move sources to remove the libgw-engine dependency.
-	  
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	  move file-backend dependency from core to core/file.
+
 2006-03-15  Christian Stimming <stimming@tuhh.de>
 
 	* src/gnome-utils/Makefile.am: Add more linker flags for
