@@ -30,6 +30,7 @@
 #include "qsf-dir.h"
 #include <errno.h>
 #include <sys/stat.h>
+#include <locale.h> /* for setlocale() and LC_ALL */
 
 #define QSF_TYPE_BINARY "binary"
 #define QSF_TYPE_GLIST  "glist"
@@ -1248,6 +1249,9 @@ qsf_provider_init(void)
 {
 	QofBackendProvider *prov;
 
+	/* XXX: Do we REALLY want to do this???  Shouldn't the APP
+	 * have already done this?
+	 */
 	#ifdef ENABLE_NLS
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
