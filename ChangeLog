@@ -3,6 +3,9 @@
 	* lib/libqof/backend/file/qsf-backend.c:  add <locale.h>
 	  Note:  it think it's probably wrong to set the locale here.
 
+	* src/business/business-core/Makefile.am:
+	  Move sources to remove the libgw-engine dependency.
+	  
 2006-03-15  Christian Stimming <stimming@tuhh.de>
 
 	* src/gnome-utils/Makefile.am: Add more linker flags for

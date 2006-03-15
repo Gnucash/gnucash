@@ -17,7 +17,6 @@ libgncmod_business_core_la_SOURCES = \
   gncAddress.c \
   gncBillTerm.c \
   gncBusiness.c \
-  gncBusGuile.c \
   gncCustomer.c \
   gncEmployee.c \
   gncEntry.c \
@@ -60,7 +59,6 @@ libgncmod_business_core_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/backend/file/libgnc-backend-file.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/engine/libgw-engine.la \
   ${G_WRAP_LINK_ARGS} \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \
@@ -69,7 +67,9 @@ libgncmod_business_core_la_LIBADD = \
 
 # business-core-helpers.c
 
-libgw_business_core_la_SOURCES = gw-business-core.c 
+libgw_business_core_la_SOURCES = \
+  gncBusGuile.c \
+  gw-business-core.c
 
 libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
 libgw_business_core_la_LIBADD  = \
