@@ -1,3 +1,8 @@
+2006-03-15  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/window-reconcile.c: Add a call to gnc_tm_set_day_end
+	  to correct initial ending balance in reconcile windows.
+
 2006-03-15  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/backend/file/qsf-backend.c:  add <locale.h>

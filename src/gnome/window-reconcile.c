@@ -1225,6 +1225,7 @@ gnc_get_reconcile_info (Account *account,
       tm.tm_mday += days;
     }
     tm.tm_isdst = -1;
+    gnc_tm_set_day_end (&tm);
     *statement_date = mktime (&tm);
   }
 
