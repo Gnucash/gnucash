@@ -1,5 +1,10 @@
 2006-03-15  Christian Stimming <stimming@tuhh.de>
 
+	* src/gnome-utils/Makefile.am: Add more linker flags for
+	referenced libraries. Necessary when the required libraries are
+	not inferred from the dependencies by that particular libtool,
+	e. g. on windows/mingw32.
+
 	* src/gnc-module/gnc-module.h: Remove include <ltdl.h> that is
 	unnecessary for code using this header. Gets rid of some <ltdl.h>
 	weirdness that plagues other object code files on windows.

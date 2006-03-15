@@ -51,6 +51,8 @@ noinst_HEADERS = \
   search-string.h
 
 libgncmod_gnome_search_la_LIBADD = \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GUILE_LIBS} \

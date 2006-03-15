@@ -69,6 +69,10 @@ endif
 	touch .scm-links
 
 libgw_report_system_la_SOURCES = gw-report-system.c
+libgw_report_system_la_LIBADD = \
+  libgncmod-report-system.la \
+  ${G_WRAP_LINK_ARGS}
+
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-report-system.scm gw-report-system-spec.scm
 

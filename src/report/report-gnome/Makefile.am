@@ -41,10 +41,12 @@ gncinclude_HEADERS = \
 libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/lib/glib26/libgncglib.la \
   ${GLADE_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GNOME_PRINT_LIBS} \
   ${GNOME_LIBS} \
@@ -52,6 +54,9 @@ libgncmod_report_gnome_la_LIBADD = \
   ${GLIB_LIBS}
 
 libgw_report_gnome_la_SOURCES = gw-report-gnome.c
+libgw_report_gnome_la_LIBADD = \
+  libgncmod-report-gnome.la \
+  ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-report-gnome.scm gw-report-gnome-spec.scm

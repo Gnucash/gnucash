@@ -57,9 +57,14 @@ noinst_HEADERS = \
   gw-business-core.h
 
 libgncmod_business_core_la_LIBADD = \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-file.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${G_WRAP_LINK_ARGS} \
+  ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
-  ${QOF_LIBS} \
   ${EFENCE_LIBS}
 
 # business-core-helpers.c
@@ -67,7 +72,10 @@ libgncmod_business_core_la_LIBADD = \
 libgw_business_core_la_SOURCES = gw-business-core.c 
 
 libgw_business_core_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_core_la_LIBADD  = libgncmod-business-core.la
+libgw_business_core_la_LIBADD  = \
+  libgncmod-business-core.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${QOF_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm

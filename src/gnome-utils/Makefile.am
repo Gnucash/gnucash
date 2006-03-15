@@ -177,6 +177,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/network-utils/libgncmod-network-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -187,6 +188,7 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GDK_PIXBUF_LIBS} \
   ${GLADE_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${DB_LIBS} \
@@ -196,6 +198,14 @@ libgncmod_gnome_utils_la_LIBADD = \
   ${LIBXML2_LIBS}
 
 libgw_gnome_utils_la_SOURCES = gw-gnome-utils.c
+libgw_gnome_utils_la_LIBADD = \
+  libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${QOF_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
+  ${GLIB_LIBS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnome-utils.scm gw-gnome-utils-spec.scm

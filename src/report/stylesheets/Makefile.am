@@ -12,8 +12,13 @@ noinst_HEADERS = \
 libgncmod_stylesheets_la_LDFLAGS=-module
 
 libgncmod_stylesheets_la_LIBADD = \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${QOF_LIBS} \
-  ${top_builddir}/src/report/report-system/libgncmod-report-system.la
+  ${GUILE_LIBS} \
+  ${GLIB_LIBS}
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
