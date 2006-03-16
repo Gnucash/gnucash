@@ -6,6 +6,7 @@ libcore_utils_la_SOURCES = \
   gnc-gconf-utils.c \
   gnc-gdate-utils.c \
   gnc-gkeyfile-utils.c \
+  gnc-glib-utils.c \
   gnc-gobject-utils.c
 
 libcore_utils_la_LIBADD = \
@@ -28,6 +29,7 @@ noinst_HEADERS = \
   gnc-gconf-utils.h \
   gnc-gdate-utils.h \
   gnc-gkeyfile-utils.h \
+  gnc-glib-utils.h \
   gnc-gobject-utils.h \
   gw-core-utils.h
 

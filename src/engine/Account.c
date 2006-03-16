@@ -34,6 +34,7 @@
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-event.h"
+#include "gnc-glib-utils.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
@@ -976,7 +977,7 @@ xaccAccountOrder (const Account **aa, const Account **ab)
 {
   char *da, *db;
   char *endptr = NULL;
-  int ta, tb;
+  int ta, tb, result;
   long la, lb;
 
   if ( (*aa) && !(*ab) ) return -1;
@@ -1020,15 +1021,9 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   /* otherwise, sort on accountName strings */
   da = (*aa)->accountName;
   db = (*ab)->accountName;
-  if (da && db) {
-    gint result = g_utf8_collate(da, db);
-    if (result)
-      return result;
-  } else if (da) {
-    return -1;
-  } else if (db) {
-    return 1;
-  }
+  result = safe_utf8_collate(da, db);
+  if (result)
+    return result;
 
   /* guarantee a stable sort */
   return guid_compare (&((*aa)->inst.entity.guid), &((*ab)->inst.entity.guid));

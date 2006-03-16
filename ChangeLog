@@ -1,5 +1,12 @@
 2006-03-16  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-view-price.c:
+	* src/engine/Account.c:
+	* src/core-utils/gnc-glib-utils.[ch]: Add a wrapper function for
+	g_utf8_collate that handles checking for null pointers or null
+	strings.
+
 	* src/gnome-utils/gnc-tree-model-account.[ch]:
 	* src/gnome-utils/gnc-tree-view-account.c: Move the computation of
 	accounting period balances into the model and colorize it.

@@ -36,6 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
@@ -218,19 +219,23 @@ sort_namespace (GtkTreeModel *f_model,
 static gint
 default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
 {
-  gint fraction_a, fraction_b;
+  gint fraction_a, fraction_b, result;
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-               gnc_commodity_get_namespace (comm_b));
+  result = safe_utf8_collate (gnc_commodity_get_namespace (comm_a),
+			      gnc_commodity_get_namespace (comm_b));
+  if (result != 0) return result;
 
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-               gnc_commodity_get_mnemonic (comm_b));
+  result = safe_utf8_collate (gnc_commodity_get_mnemonic (comm_a),
+			      gnc_commodity_get_mnemonic (comm_b));
+  if (result != 0) return result;
 
-  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
-               gnc_commodity_get_fullname (comm_b));
+  result = safe_utf8_collate (gnc_commodity_get_fullname (comm_a),
+			      gnc_commodity_get_fullname (comm_b));
+  if (result != 0) return result;
 
-  SAFE_STRCMP (gnc_commodity_get_cusip (comm_a),
-               gnc_commodity_get_cusip (comm_b));
+  result = safe_utf8_collate (gnc_commodity_get_cusip (comm_a),
+			      gnc_commodity_get_cusip (comm_b));
+  if (result != 0) return result;
 
   fraction_a = gnc_commodity_get_fraction (comm_a);
   fraction_b = gnc_commodity_get_fraction (comm_b);

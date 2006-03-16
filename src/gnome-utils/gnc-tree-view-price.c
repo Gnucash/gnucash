@@ -36,6 +36,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
@@ -237,11 +238,13 @@ default_sort (GNCPrice *price_a, GNCPrice *price_b)
   curr_a = gnc_price_get_currency (price_a);
   curr_b = gnc_price_get_currency (price_b);
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (curr_a),
-	       gnc_commodity_get_namespace (curr_b));
+  result = safe_utf8_collate (gnc_commodity_get_namespace (curr_a),
+			      gnc_commodity_get_namespace (curr_b));
+  if (result != 0) return result;
 
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (curr_a),
-	       gnc_commodity_get_mnemonic (curr_b));
+  result = safe_utf8_collate (gnc_commodity_get_mnemonic (curr_a),
+			      gnc_commodity_get_mnemonic (curr_b));
+  if (result != 0) return result;
 
   /* tertiary sort: time */
   ts_a = gnc_price_get_time (price_a);
