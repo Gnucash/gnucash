@@ -1949,6 +1949,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	const gchar *icon;
 	GtkWidget *image;
 	gboolean immutable = FALSE;
+	GList *tmp;
 
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -1960,8 +1961,18 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  return;
 	}
 
+	/* Does the page want to be in a new window? */
 	if (gnc_plugin_page_get_use_new_window(page)) {
-	  window = gnc_main_window_new ();
+	  /* See if there's a blank window. If so, use that. */
+	  for (tmp = active_windows; tmp; tmp = g_list_next(tmp)) {
+	    window = GNC_MAIN_WINDOW(tmp->data);
+	    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+	    if (priv->installed_pages == NULL) {
+	      break;
+	    }
+	  }
+	  if (tmp == NULL)
+	    window = gnc_main_window_new ();
 	  gtk_widget_show(GTK_WIDGET(window));
 	} else if ((window == NULL) && active_windows) {
 	  window = active_windows->data;
