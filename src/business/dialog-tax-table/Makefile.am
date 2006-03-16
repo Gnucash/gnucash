@@ -29,9 +29,12 @@ noinst_HEADERS = \
   gw-dialog-tax-table.h
 
 libgncmod_dialog_tax_table_la_LIBADD = \
+  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${GLADE_LIBS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
@@ -41,7 +44,9 @@ libgncmod_dialog_tax_table_la_LIBADD = \
 
 libgw_dialog_tax_table_la_SOURCES = gw-dialog-tax-table.c
 
-libgw_dialog_tax_table_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
+libgw_dialog_tax_table_la_LIBADD = \
+  libgncmod-dialog-tax-table.la \
+  ${G_WRAP_LINK_ARGS}
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \

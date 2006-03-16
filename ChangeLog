@@ -1,3 +1,10 @@
+2006-03-16  Christian Stimming <stimming@tuhh.de>
+
+	* src/gnome/Makefile.am: Add more linker flags for referenced
+	libraries. Necessary when the required libraries are not inferred
+	from the dependencies by that particular libtool, e. g. on
+	windows/mingw32.
+
 2006-03-15  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Treat the file name as utf8

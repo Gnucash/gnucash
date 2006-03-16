@@ -7,14 +7,21 @@ gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 #nodist_gwmod_DATA = gw-gnc.scm
 
 libgncgnome_la_LIBADD = \
-  ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/lib/glib26/libgncglib.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgw-engine.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
+  ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GLADE_LIBS} \
+  ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -62,7 +69,9 @@ libgncgnome_la_SOURCES = \
   ${top_srcdir}/src/backend/file/sixtp-stack.c \
   ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
   ${top_srcdir}/src/backend/file/io-example-account.c \
+  ${top_srcdir}/src/backend/file/io-gncbin-r.c \
   ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
+  ${top_srcdir}/src/backend/file/io-gncxml-v1.c \
   ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
   ${top_srcdir}/src/backend/file/io-utils.c \
   ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
