@@ -1128,9 +1128,9 @@ gnc_main_window_generate_title (GncMainWindow *window)
     filename = _("<no file>");
   else {
     /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
-    ptr = strrchr(filename, '/');
+    ptr = g_utf8_strrchr(filename, -1, G_DIR_SEPARATOR);
     if (ptr != NULL)
-      filename = ptr+1;
+      filename = g_utf8_next_char(ptr);
   }
 
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);

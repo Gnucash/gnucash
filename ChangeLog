@@ -1,5 +1,8 @@
 2006-03-15  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Treat the file name as utf8
+	when finding the file name for the window title.
+
 	* src/gnome-utils/gnc-main-window.c: Don't create a new window for
 	a page if there's already an open blank window.  Fixes 334672.
 
