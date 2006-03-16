@@ -2910,10 +2910,12 @@ gnc_plugin_page_register_event_handler (QofEntity *entity,
   }
 
   window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
-  visible_page = gnc_main_window_get_current_page(GNC_MAIN_WINDOW(window));
-  if (GNC_PLUGIN_PAGE(page) != visible_page) {
-    LEAVE("page not visible");
-    return;
+  if (GNC_IS_MAIN_WINDOW(window)) {
+    visible_page = gnc_main_window_get_current_page(GNC_MAIN_WINDOW(window));
+    if (visible_page != GNC_PLUGIN_PAGE(page)) {
+      LEAVE("page not visible");
+      return;
+    }
   }
 
   gnc_plugin_page_register_ui_update(NULL, page);
