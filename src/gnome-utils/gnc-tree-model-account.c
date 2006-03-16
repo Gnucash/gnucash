@@ -33,6 +33,7 @@
 #include "gnc-component-manager.h"
 #include "Account.h"
 #include "Group.h"
+#include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-engine.h"
@@ -400,6 +401,7 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE:
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT:
+		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED:
@@ -408,16 +410,19 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT:
+		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_NOTES:
 		case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO:
 		case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE:
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN:
 		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL:
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD:
 			return G_TYPE_STRING;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
@@ -592,6 +597,43 @@ gnc_tree_model_account_set_color(GncTreeModelAccount *model,
 	  g_value_set_static_string (value, "black");
 }
 
+static gchar *
+gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
+					      Account *acct,
+					      gboolean recurse,
+					      gboolean *negative)
+{
+  GncTreeModelAccountPrivate *priv;
+  time_t t1, t2;
+  gnc_numeric b1, b2, b3;  
+
+  priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+  if (acct == priv->toplevel)
+    return g_strdup("");
+
+  t1 = gnc_accounting_period_fiscal_start();
+  t2 = gnc_accounting_period_fiscal_end();
+    
+  if (t1 > t2)
+    return g_strdup("");
+
+  if (recurse) {
+    b1 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t1, NULL, TRUE);
+    b2 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t2, NULL, TRUE);
+  } else {
+    b1 = xaccAccountGetBalanceAsOfDate(acct, t1);
+    b2 = xaccAccountGetBalanceAsOfDate(acct, t2);
+  }
+  b3 = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+  if (gnc_reverse_balance (acct))
+    b3 = gnc_numeric_neg (b3);
+
+  if (negative)
+    *negative = gnc_numeric_negative_p(b3);
+
+  return g_strdup(xaccPrintAmount(b3, gnc_account_print_info(acct, TRUE)));
+}
+
 static void
 gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 				  GtkTreeIter *iter,
@@ -680,6 +722,17 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, FALSE, &negative);
+			g_value_take_string (value, string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, FALSE, &negative);
+			gnc_tree_model_account_set_color(model, negative, value);
+			g_free (string);
+			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
 			g_value_init (value, G_TYPE_STRING);
@@ -757,6 +810,17 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, TRUE, &negative);
+			gnc_tree_model_account_set_color(model, negative, value);
+			g_free (string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, TRUE, &negative);
+			g_value_take_string (value, string);
+			break;
+		case GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD:
+			g_value_init (value, G_TYPE_STRING);
+			string = gnc_tree_model_account_compute_period_balance(model, account, TRUE, &negative);
 			gnc_tree_model_account_set_color(model, negative, value);
 			g_free (string);
 			break;

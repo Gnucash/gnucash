@@ -32,7 +32,6 @@
 #include "gkeyfile.h"
 #endif
 
-#include "gnc-accounting-period.h"
 #include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-model-account-types.h"
@@ -357,50 +356,6 @@ sort_by_placeholder (GtkTreeModel *f_model,
   return 1;
 }
 
-#define RECURSE GINT_TO_POINTER(1)
-
-static void
-cdf_period(GtkTreeViewColumn *col, GtkCellRenderer *cell, 
-           GtkTreeModel *s_model, GtkTreeIter *iter, gpointer data)
-{
-    Account *acct;
-    time_t t1, t2;
-    const char *str;
-
-    g_return_if_fail(GTK_TREE_VIEW_COLUMN(col));
-    g_return_if_fail(GTK_CELL_RENDERER(cell));
-    g_return_if_fail(GTK_TREE_MODEL_SORT(s_model));
-
-    acct = gnc_tree_view_account_get_account_from_iter(s_model, iter);
-
-    if (acct == gtva_get_top_level_from_model(s_model)) {
-      g_object_set(cell, "text", "", NULL);
-      return;
-    }
-
-    t1 = gnc_accounting_period_fiscal_start();
-    t2 = gnc_accounting_period_fiscal_end();
-    
-    if (t2 > t1) {
-        gnc_numeric b1, b2, b3;  
-
-        if (data == RECURSE) {
-            b1 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t1, NULL, TRUE);
-            b2 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t2, NULL, TRUE);
-        } else {
-            b1 = xaccAccountGetBalanceAsOfDate(acct, t1);
-            b2 = xaccAccountGetBalanceAsOfDate(acct, t2);
-        }
-        b3 = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
-        if (gnc_reverse_balance (acct))
-            b3 = gnc_numeric_neg (b3);
-        
-        str = xaccPrintAmount(b3, gnc_account_print_info(acct, TRUE));
-
-    } else str = "";    
-    g_object_set(cell, "text", str, NULL);
-}
-
 /************************************************************/
 /*                    New View Creation                     */
 /************************************************************/
@@ -511,16 +466,12 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				       GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				       sort_by_balance_value);
 
-  {
-      GtkTreeViewColumn *col = gnc_tree_view_add_numeric_column(
-          view, _("Balance (Period)"), "balance-period", SAMPLE_ACCOUNT_VALUE, 
-          GNC_TREE_VIEW_COLUMN_DATA_NONE, GNC_TREE_VIEW_COLUMN_COLOR_NONE, 
-          GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS, NULL);
-      GtkCellRenderer *cr = gnc_tree_view_column_get_renderer(col);
-      gtk_tree_view_column_set_cell_data_func(
-          col, cr, cdf_period, NULL, NULL);
-  }
-  
+  gnc_tree_view_add_numeric_column(view, _("Balance (Period)"), "balance-period",
+				   SAMPLE_ACCOUNT_VALUE, 
+				   GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   NULL);
   gnc_tree_view_add_numeric_column(view, _("Cleared"), "cleared",
 				   SAMPLE_ACCOUNT_VALUE,
 				   GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
@@ -573,16 +524,12 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				       GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
 				       GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				       sort_by_total_value);
-  {
-      GtkTreeViewColumn *col = gnc_tree_view_add_numeric_column(
-          view, _("Total (Period)"), "total-period", SAMPLE_ACCOUNT_VALUE, 
-          GNC_TREE_VIEW_COLUMN_DATA_NONE, GNC_TREE_VIEW_COLUMN_COLOR_NONE, 
-          GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS, NULL);
-      GtkCellRenderer *cr = gnc_tree_view_column_get_renderer(col);
-      gtk_tree_view_column_set_cell_data_func(
-          col, cr, cdf_period, RECURSE, NULL);
-  }
-  
+  gnc_tree_view_add_numeric_column(view, _("Total (Period)"), "total-period",
+				   SAMPLE_ACCOUNT_VALUE, 
+				   GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   NULL);
   priv->notes_column
     = gnc_tree_view_add_text_column(view, _("Notes"), "notes", NULL,
                                     "Sample account notes.",

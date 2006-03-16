@@ -1,3 +1,9 @@
+2006-03-16  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-model-account.[ch]:
+	* src/gnome-utils/gnc-tree-view-account.c: Move the computation of
+	accounting period balances into the model and colorize it.
+
 2006-03-16  Christian Stimming <stimming@tuhh.de>
 
 	* src/gnome/Makefile.am: Add more linker flags for referenced
