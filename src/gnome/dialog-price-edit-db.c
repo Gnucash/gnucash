@@ -341,6 +341,13 @@ gnc_price_dialog_filter_cm_func (gnc_commodity *commodity,
 }
 
 static void
+row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+		  GtkTreeViewColumn *column, gpointer data)
+{
+  gnc_prices_dialog_edit_clicked (GTK_WIDGET (view), data);
+}
+
+static void
 gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 {
   GtkWidget *dialog, *scrolled_window;
@@ -385,6 +392,9 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
   g_signal_connect (G_OBJECT (selection), "changed",
 		    G_CALLBACK (gnc_prices_dialog_selection_changed), pdb_dialog);
+
+  g_signal_connect (G_OBJECT (view), "row-activated",
+                    G_CALLBACK (row_activated_cb), pdb_dialog);
 
   /* buttons */
   {

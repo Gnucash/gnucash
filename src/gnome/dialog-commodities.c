@@ -78,14 +78,21 @@ gnc_commodities_window_destroy_cb (GtkObject *object,   CommoditiesDialog *cd)
 static void
 edit_clicked (CommoditiesDialog *cd)
 {
-	gnc_commodity *commodity;
+  gnc_commodity *commodity;
 
-	commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
-	if (commodity == NULL)
-		return;
+  commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
+  if (commodity == NULL || gnc_commodity_is_iso (commodity))
+    return;
 
-	if (gnc_ui_edit_commodity_modal (commodity, cd->dialog))
-		gnc_gui_refresh_all ();
+  if (gnc_ui_edit_commodity_modal (commodity, cd->dialog))
+    gnc_gui_refresh_all ();
+}
+
+static void
+row_activated_cb (GtkTreeView *view, GtkTreePath *path,
+                  GtkTreeViewColumn *column, CommoditiesDialog *cd)
+{
+  edit_clicked (cd);
 }
 
 static void
@@ -321,6 +328,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     g_signal_connect (G_OBJECT (selection), "changed",
 		      G_CALLBACK (gnc_commodities_dialog_selection_changed), cd);
 
+    g_signal_connect (G_OBJECT (cd->commodity_tree), "row-activated",
+		      G_CALLBACK (row_activated_cb), cd);
 
     /* Show currency button */
     button = glade_xml_get_widget (xml, "show_currencies_button");

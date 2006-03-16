@@ -1,5 +1,9 @@
 2006-03-16  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome/dialog-commodities.c: 
+	* src/gnome/dialog-price-edit-db.c: Add row_activated callback to
+	  commodity and price editor tree views. Fix 334661.
+
 	* src/gnome/gnc-plugin-page-register.c: Make register ui update
 	  unconditionally if in a GncEmbeddedWindow.
 
