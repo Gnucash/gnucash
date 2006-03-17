@@ -236,7 +236,7 @@ gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status Makefile
 	mv $@.tmp $@
 
 gnc-version.h: _gnc-version.h
-	-[ ! -f gnc-version.h ] && cp _gnc-version.h gnc-version.h
+	-if [ ! -f gnc-version.h ]; then cp _gnc-version.h gnc-version.h; fi
 	-cmp -s _gnc-version.h gnc-version.h || cp _gnc-version.h gnc-version.h
 	-rm -f _gnc-version.h
 
@@ -258,7 +258,7 @@ _gnc-version.h: gnc-svninfo.h Makefile
 	@echo "#endif"					>> _gnc-version.h
 
 gnc-svninfo.h: _gnc-svninfo.h
-	-[ ! -f gnc-svninfo.h ] && cp _gnc-svninfo.h gnc-svninfo.h
+	-if [ ! -f gnc-svninfo.h ]; then cp _gnc-svninfo.h gnc-svninfo.h; fi
 	-cmp -s _gnc-svninfo.h gnc-svninfo.h || cp _gnc-svninfo.h gnc-svninfo.h
 	-rm -f _gnc-svninfo.h
 
