@@ -605,7 +605,7 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
 {
   GncTreeModelAccountPrivate *priv;
   time_t t1, t2;
-  gnc_numeric b1, b2, b3;  
+  gnc_numeric b3;  
 
   priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
   if (acct == priv->toplevel)
@@ -617,14 +617,7 @@ gnc_tree_model_account_compute_period_balance(GncTreeModelAccount *model,
   if (t1 > t2)
     return g_strdup("");
 
-  if (recurse) {
-    b1 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t1, NULL, TRUE);
-    b2 = xaccAccountGetBalanceAsOfDateInCurrency(acct, t2, NULL, TRUE);
-  } else {
-    b1 = xaccAccountGetBalanceAsOfDate(acct, t1);
-    b2 = xaccAccountGetBalanceAsOfDate(acct, t2);
-  }
-  b3 = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+  b3 = xaccAccountGetBalanceChangeForPeriod(acct, t1, t2, recurse);
   if (gnc_reverse_balance (acct))
     b3 = gnc_numeric_neg (b3);
 

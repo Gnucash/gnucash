@@ -407,6 +407,10 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (
 gnc_numeric xaccAccountGetBalanceAsOfDateInCurrency(
     Account *account, time_t date, gnc_commodity *report_commodity,
     gboolean include_children);
+
+gnc_numeric xaccAccountGetBalanceChangeForPeriod (
+    Account *acc, time_t date1, time_t date2, gboolean recurse);
+
 /** @} */
 
 /** @name Account Children and Parents. 

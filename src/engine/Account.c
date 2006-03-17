@@ -1768,6 +1768,17 @@ xaccAccountGetBalanceAsOfDateInCurrency(
         include_children);
 }
 
+gnc_numeric
+xaccAccountGetBalanceChangeForPeriod (Account *acc, time_t t1, time_t t2, gboolean recurse)
+{
+  gnc_numeric b1, b2;  
+
+  b1 = xaccAccountGetBalanceAsOfDateInCurrency(acc, t1, NULL, recurse);
+  b2 = xaccAccountGetBalanceAsOfDateInCurrency(acc, t2, NULL, recurse);
+  return gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
