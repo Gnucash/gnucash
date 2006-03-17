@@ -39,9 +39,11 @@
 
 #include "Account.h"
 #include "Group.h"
+#include "gnc-accounting-period.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-hooks.h"
 #include "gnc-session.h"
@@ -230,6 +232,81 @@ gnc_tree_view_account_placeholder_toggled (GtkCellRendererToggle *cell,
 /*                      sort functions                      */
 /************************************************************/
 
+static GtkTreeModel *
+sort_cb_setup_w_iters (GtkTreeModel *f_model,
+		       GtkTreeIter *f_iter_a,
+		       GtkTreeIter *f_iter_b,
+		       GtkTreeIter *iter_a,
+		       GtkTreeIter *iter_b,
+		       const Account **account_a,
+		       const Account **account_b)
+{
+  GtkTreeModel *model;
+
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    iter_a,
+						    f_iter_a);
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    iter_b,
+						    f_iter_b);
+  *account_a = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter_a);
+  *account_b = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter_b);
+  return model;
+}
+
+static void
+sort_cb_setup (GtkTreeModel *f_model,
+	       GtkTreeIter *f_iter_a,
+	       GtkTreeIter *f_iter_b,
+	       const Account **account_a,
+	       const Account **account_b)
+{
+  GtkTreeIter iter_a, iter_b;
+
+  sort_cb_setup_w_iters (f_model, f_iter_a, f_iter_b,
+			 &iter_a, &iter_b, account_a, account_b);
+}
+
+static gint
+sort_by_string (GtkTreeModel *f_model,
+		GtkTreeIter *f_iter1,
+		GtkTreeIter *f_iter2,
+		gpointer user_data)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter1, iter2;
+  const Account *account1, *account2;
+  const gchar *str1, *str2;
+  gint column = GPOINTER_TO_INT(user_data);
+  gint result;
+
+  model = sort_cb_setup_w_iters(f_model, f_iter1, f_iter2, &iter1, &iter2, &account1, &account2);
+
+  /* Get the strings. */
+  gtk_tree_model_get(GTK_TREE_MODEL(model), &iter1,  column, &str1, -1);
+  gtk_tree_model_get(GTK_TREE_MODEL(model), &iter2,  column, &str2, -1);
+
+  result = safe_utf8_collate(str1, str2);
+  if (result != 0)
+    return result;
+  return xaccAccountOrder(&account1, &account2);
+}
+
+static gint
+sort_by_code (GtkTreeModel *f_model,
+	      GtkTreeIter *f_iter_a,
+	      GtkTreeIter *f_iter_b,
+	      gpointer user_data)
+{
+  const Account *account_a, *account_b;
+
+  sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
+
+  /* Default ordering uses this column first. */
+  return xaccAccountOrder(&account_a, &account_b);
+}
+
 static gint
 sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
 		   gboolean recurse,
@@ -238,28 +315,21 @@ sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
 		   GtkTreeIter *f_iter_b,
 		   gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  Account *account;
+  const Account *account_a, *account_b;
   gnc_numeric balance_a, balance_b;
+  gint result;
 
-  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  /* Find the accounts */
+  sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
 
-  /* Get balance 1 */
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter,
-						    f_iter_a);
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-  balance_a = gnc_ui_account_get_balance_full(fn, account, recurse, NULL, NULL);
+  /* Get balances */
+  balance_a = gnc_ui_account_get_balance_full(fn, account_a, recurse, NULL, NULL);
+  balance_b = gnc_ui_account_get_balance_full(fn, account_b, recurse, NULL, NULL);
 
-  /* Get balance 2 */
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter,
-						    f_iter_b);
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-  balance_b = gnc_ui_account_get_balance_full(fn, account, recurse, NULL, NULL);
-
-  return gnc_numeric_compare(balance_a, balance_b);
+  result = gnc_numeric_compare(balance_a, balance_b);
+  if (result != 0)
+    return result;
+  return xaccAccountOrder(&account_a, &account_b);
 }
 
 static gint
@@ -328,32 +398,65 @@ sort_by_placeholder (GtkTreeModel *f_model,
 		     GtkTreeIter *f_iter_b,
 		     gpointer user_data)
 {
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  Account *account;
+  const Account *account_a, *account_b;
   gboolean flag_a, flag_b;
 
-  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  /* Find the accounts */
+  sort_cb_setup (f_model, f_iter_a, f_iter_b, &account_a, &account_b);
 
-  /* Get balance 1 */
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter,
-						    f_iter_a);
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-  flag_a = xaccAccountGetPlaceholder(account);
-
-  /* Get balance 2 */
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter,
-						    f_iter_b);
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-  flag_b = xaccAccountGetPlaceholder(account);
+  /* Get the placeholder flags. */
+  flag_a = xaccAccountGetPlaceholder(account_a);
+  flag_b = xaccAccountGetPlaceholder(account_b);
 
   if (flag_a > flag_b)
     return -1;
-  else if (flag_a == flag_b)
-    return 0;
-  return 1;
+  else if (flag_a < flag_b)
+    return 1;
+  return xaccAccountOrder(&account_a, &account_b);
+}
+
+static gint
+sort_by_xxx_period_value (GtkTreeModel *f_model,
+			  GtkTreeIter *f_iter_a,
+			  GtkTreeIter *f_iter_b,
+			  gboolean recurse)
+{
+  Account *acct1, *acct2;
+  time_t t1, t2;
+  gnc_numeric b1, b2;
+  gint result;
+
+  sort_cb_setup (f_model, f_iter_a, f_iter_b,
+		 (const Account **)&acct1, (const Account **)&acct2);
+
+  t1 = gnc_accounting_period_fiscal_start();
+  t2 = gnc_accounting_period_fiscal_end();
+
+  b1 = xaccAccountGetBalanceChangeForPeriod(acct1, t1, t2, recurse);
+  b2 = xaccAccountGetBalanceChangeForPeriod(acct2, t1, t2, recurse);
+
+  result = gnc_numeric_compare(b1, b2);
+  if (result != 0)
+    return result;
+  return xaccAccountOrder((const Account **)&acct1, (const Account **)&acct2);
+}
+
+static gint
+sort_by_balance_period_value (GtkTreeModel *f_model,
+			     GtkTreeIter *f_iter_a,
+			     GtkTreeIter *f_iter_b,
+			     gpointer user_data)
+{
+  return sort_by_xxx_period_value (f_model, f_iter_a, f_iter_b, FALSE);
+}
+
+static gint
+sort_by_total_period_value (GtkTreeModel *f_model,
+			     GtkTreeIter *f_iter_a,
+			     GtkTreeIter *f_iter_b,
+			     gpointer user_data)
+{
+  return sort_by_xxx_period_value (f_model, f_iter_a, f_iter_b, TRUE);
 }
 
 /************************************************************/
@@ -412,33 +515,33 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
                                     GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
                                     GNC_TREE_MODEL_ACCOUNT_COL_NAME,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    NULL);
+                                    sort_by_string);
   gnc_tree_view_add_text_column(view, _("Type"), "type", NULL, sample_type,
 				GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+				sort_by_string);
   gnc_tree_view_add_text_column(view, _("Commodity"), "commodity", NULL,
 				sample_commodity,
 				GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+				sort_by_string);
   priv->code_column
     = gnc_tree_view_add_text_column(view, _("Account Code"), "account-code", NULL,
                                     "1-123-1234",
                                     GNC_TREE_MODEL_ACCOUNT_COL_CODE,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    NULL);
+                                    sort_by_code);
   priv->desc_column
     = gnc_tree_view_add_text_column(view, _("Description"), "description", NULL,
                                     "Sample account description.",
                                     GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    NULL);
+                                    sort_by_string);
   gnc_tree_view_add_numeric_column(view, _("Last Num"), "lastnum", "12345",
 				   GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
 				   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
 				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				   NULL);
+				   sort_by_string);
   gnc_tree_view_add_numeric_column(view, _("Present"), "present",
 				   SAMPLE_ACCOUNT_VALUE,
 				   GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
@@ -471,7 +574,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				   GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_PERIOD,
 				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE_PERIOD,
 				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				   NULL);
+				   sort_by_balance_period_value);
   gnc_tree_view_add_numeric_column(view, _("Cleared"), "cleared",
 				   SAMPLE_ACCOUNT_VALUE,
 				   GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
@@ -529,18 +632,18 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				   GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_PERIOD,
 				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL_PERIOD,
 				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				   NULL);
+				   sort_by_total_period_value);
   priv->notes_column
     = gnc_tree_view_add_text_column(view, _("Notes"), "notes", NULL,
                                     "Sample account notes.",
                                     GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
                                     GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-                                    NULL);
+                                    sort_by_string);
   gnc_tree_view_add_text_column(view, _("Tax Info"), "tax-info", NULL,
 				"Sample tax info.",
 				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				NULL);
+				sort_by_string);
   gnc_tree_view_add_toggle_column
     (view, _("Placeholder"),
      /* Translators: This string has a context prefix; the translation

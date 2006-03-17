@@ -1799,7 +1799,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
     if (column_sort_fn) {
       gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
 				       data_column, column_sort_fn,
-				       NULL /* user_data */,
+				       GINT_TO_POINTER(data_column),
 				       NULL /* destroy fn */);
     }
   }

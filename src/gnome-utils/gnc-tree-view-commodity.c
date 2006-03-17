@@ -159,34 +159,54 @@ gnc_tree_view_commodity_destroy (GtkObject *object)
 /************************************************************/
 
 static gboolean
-get_commodities (GtkTreeModel *f_model,
-		 GtkTreeIter *f_iter_a,
-		 GtkTreeIter *f_iter_b,
-		 gnc_commodity **comm_a,
-		 gnc_commodity **comm_b)
+get_commodities_w_iters (GtkTreeModel *f_model,
+			 GtkTreeIter *f_iter_a,
+			 GtkTreeIter *f_iter_b,
+			 GtkTreeModel **model_p,
+			 GtkTreeIter *iter_a,
+			 GtkTreeIter *iter_b,
+			 gnc_commodity **comm_a,
+			 gnc_commodity **comm_b)
 {
   GncTreeModelCommodity *model;
   GtkTreeModel *tree_model;
-  GtkTreeIter iter_a, iter_b;
 
   tree_model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   model = GNC_TREE_MODEL_COMMODITY(tree_model);
 
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter_a,
+						    iter_a,
 						    f_iter_a);
 
-  /* Both iters must point to commodities for this to be meaningful */
-  if (!gnc_tree_model_commodity_iter_is_commodity (model, &iter_a))
-    return FALSE;
-
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter_b,
+						    iter_b,
 						    f_iter_b);
 
-  *comm_a = gnc_tree_model_commodity_get_commodity (model, &iter_a);
-  *comm_b = gnc_tree_model_commodity_get_commodity (model, &iter_b);
+  /* Both iters must point to commodities for this to be meaningful */
+  if (!gnc_tree_model_commodity_iter_is_commodity (model, iter_a))
+    return FALSE;
+  if (!gnc_tree_model_commodity_iter_is_commodity (model, iter_b))
+    return FALSE;
+
+  *comm_a = gnc_tree_model_commodity_get_commodity (model, iter_a);
+  *comm_b = gnc_tree_model_commodity_get_commodity (model, iter_b);
+  if (model_p)
+    *model_p = tree_model;
   return TRUE;
+}
+
+static gboolean
+get_commodities (GtkTreeModel *f_model,
+		 GtkTreeIter *f_iter_a,
+		 GtkTreeIter *f_iter_b,
+		 GtkTreeModel **model_p,
+		 gnc_commodity **comm_a,
+		 gnc_commodity **comm_b)
+{
+  GtkTreeIter iter_a, iter_b;
+
+  return get_commodities_w_iters(f_model, f_iter_a, f_iter_b, model_p,
+				 &iter_a, &iter_b, comm_a, comm_b);
 }
 
 static gint
@@ -211,9 +231,8 @@ sort_namespace (GtkTreeModel *f_model,
 
   ns_a = gnc_tree_model_commodity_get_namespace (model, &iter_a);
   ns_b = gnc_tree_model_commodity_get_namespace (model, &iter_b);
-  SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
-	       gnc_commodity_namespace_get_name (ns_b));
-  return 0;
+  return safe_utf8_collate (gnc_commodity_namespace_get_name (ns_a),
+			    gnc_commodity_namespace_get_name (ns_b));
 }
 
 static gint
@@ -250,106 +269,32 @@ default_sort (gnc_commodity *comm_a, gnc_commodity *comm_b)
 }
 
 static gint
-sort_by_namespace (GtkTreeModel *f_model,
-		   GtkTreeIter *f_iter_a,
-		   GtkTreeIter *f_iter_b,
-		   gpointer user_data)
+sort_by_commodity_string (GtkTreeModel *f_model,
+			  GtkTreeIter *f_iter_a,
+			  GtkTreeIter *f_iter_b,
+			  gpointer user_data)
 {
+  GtkTreeModel *model;
+  GtkTreeIter iter_a, iter_b;
   gnc_commodity *comm_a, *comm_b;
+  const gchar *str1, *str2;
+  gint column = GPOINTER_TO_INT(user_data);
+  gint result;
 
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+  if (!get_commodities_w_iters(f_model, f_iter_a, f_iter_b,
+			       &model, &iter_a, &iter_b, &comm_a, &comm_b))
     return sort_namespace (f_model, f_iter_a, f_iter_b);
 
-  SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-               gnc_commodity_get_namespace (comm_b));
+  /* Get the strings. */
+  gtk_tree_model_get(GTK_TREE_MODEL(model), &iter_a,  column, &str1, -1);
+  gtk_tree_model_get(GTK_TREE_MODEL(model), &iter_b,  column, &str2, -1);
 
+  result = safe_utf8_collate(str1, str2);
+  if (result != 0)
+    return result;
   return default_sort(comm_a, comm_b);
 }
 
-static gint
-sort_by_mnemonic (GtkTreeModel *f_model,
-		   GtkTreeIter *f_iter_a,
-		   GtkTreeIter *f_iter_b,
-		   gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-               gnc_commodity_get_mnemonic (comm_b));
-
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_fullname (GtkTreeModel *f_model,
-		  GtkTreeIter *f_iter_a,
-		  GtkTreeIter *f_iter_b,
-		  gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_fullname (comm_a),
-               gnc_commodity_get_fullname (comm_b));
-
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_printname (GtkTreeModel *f_model,
-		   GtkTreeIter *f_iter_a,
-		   GtkTreeIter *f_iter_b,
-		   gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_printname (comm_a),
-               gnc_commodity_get_printname (comm_b));
-
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_unique_name (GtkTreeModel *f_model,
-		     GtkTreeIter *f_iter_a,
-		     GtkTreeIter *f_iter_b,
-		     gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_unique_name (comm_a),
-               gnc_commodity_get_unique_name (comm_b));
-
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_cusip_code (GtkTreeModel *f_model,
-		    GtkTreeIter *f_iter_a,
-		    GtkTreeIter *f_iter_b,
-		    gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_cusip (comm_a),
-               gnc_commodity_get_cusip (comm_b));
-
-  return default_sort(comm_a, comm_b);
-}
 
 static gint
 sort_by_fraction (GtkTreeModel *f_model,
@@ -360,7 +305,7 @@ sort_by_fraction (GtkTreeModel *f_model,
   gnc_commodity *comm_a, *comm_b;
   gint fraction_a, fraction_b;
 
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, NULL, &comm_a, &comm_b))
     return sort_namespace (f_model, f_iter_a, f_iter_b);
 
   fraction_a = gnc_commodity_get_fraction (comm_a);
@@ -384,7 +329,7 @@ sort_by_quote_flag (GtkTreeModel *f_model,
   gnc_commodity *comm_a, *comm_b;
   gboolean flag_a, flag_b;
 
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
+  if (!get_commodities (f_model, f_iter_a, f_iter_b, NULL, &comm_a, &comm_b))
     return sort_namespace (f_model, f_iter_a, f_iter_b);
 
   flag_a = gnc_commodity_get_quote_flag(comm_a);
@@ -394,44 +339,6 @@ sort_by_quote_flag (GtkTreeModel *f_model,
     return -1;
   else if (flag_a > flag_b)
     return 1;
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_quote_source (GtkTreeModel *f_model,
-		       GtkTreeIter *f_iter_a,
-		       GtkTreeIter *f_iter_b,
-		       gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-  gnc_quote_source *source_a, *source_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  source_a = gnc_commodity_get_quote_source (comm_a);
-  source_b = gnc_commodity_get_quote_source (comm_b);
-
-  SAFE_STRCMP(gnc_quote_source_get_user_name (source_a),
-	      gnc_quote_source_get_user_name (source_b));
-
-  return default_sort(comm_a, comm_b);
-}
-
-static gint
-sort_by_quote_tz (GtkTreeModel *f_model,
-		  GtkTreeIter *f_iter_a,
-		  GtkTreeIter *f_iter_b,
-		  gpointer user_data)
-{
-  gnc_commodity *comm_a, *comm_b;
-
-  if (!get_commodities (f_model, f_iter_a, f_iter_b, &comm_a, &comm_b))
-    return sort_namespace (f_model, f_iter_a, f_iter_b);
-
-  SAFE_STRCMP (gnc_commodity_get_quote_tz (comm_a),
-               gnc_commodity_get_quote_tz (comm_b));
-
   return default_sort(comm_a, comm_b);
 }
 
@@ -486,32 +393,32 @@ gnc_tree_view_commodity_new (QofBook *book,
 				 "NASDAQ",
 				 GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
 				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				 sort_by_namespace);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("Symbol"), "symbol", NULL,
 				 "ACMEACME",
 				 GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_mnemonic);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("Name"), "name", NULL,
 				 "Acme Corporation, Inc.",
 				 GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_fullname);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("Print Name"), "printname", NULL,
 				 "ACMEACME (Acme Corporation, Inc.)",
 				 GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_printname);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("Unique Name"), "uniquename", NULL,
 				 "NASDAQ::ACMEACME",
 				 GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_unique_name);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("CUSIP code"), "cusip_code", NULL,
 				 "QWERTYUIOP",
 				 GNC_TREE_MODEL_COMMODITY_COL_CUSIP,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_cusip_code);
+				 sort_by_commodity_string);
   gnc_tree_view_add_numeric_column (view, _("Fraction"), "fraction", "10000",
 				    GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
 				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
@@ -531,12 +438,12 @@ gnc_tree_view_commodity_new (QofBook *book,
 				 "yahoo",
 				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_quote_source);
+				 sort_by_commodity_string);
   gnc_tree_view_add_text_column (view, _("Timezone"), "quote_timezone", NULL,
 				 "America/New_York",
 				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
 				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_quote_tz);
+				 sort_by_commodity_string);
 
   gnc_tree_view_configure_columns(view, "symbol", "name", "cusip_code",
 				  "fraction", NULL);

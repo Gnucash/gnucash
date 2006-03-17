@@ -213,16 +213,14 @@ sort_ns_or_cm (GtkTreeModel *f_model,
   if (gnc_tree_model_price_iter_is_namespace (model, &iter_a)) {
     ns_a = gnc_tree_model_price_get_namespace (model, &iter_a);
     ns_b = gnc_tree_model_price_get_namespace (model, &iter_b);
-    SAFE_STRCMP (gnc_commodity_namespace_get_name (ns_a),
-		 gnc_commodity_namespace_get_name (ns_b));
-    return 0;
+    return safe_utf8_collate (gnc_commodity_namespace_get_name (ns_a),
+			      gnc_commodity_namespace_get_name (ns_b));
   }
 
   comm_a = gnc_tree_model_price_get_commodity (model, &iter_a);
   comm_b = gnc_tree_model_price_get_commodity (model, &iter_b);
-  SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-	       gnc_commodity_get_mnemonic (comm_b));
-  return 0;
+  return safe_utf8_collate (gnc_commodity_get_mnemonic (comm_a),
+			    gnc_commodity_get_mnemonic (comm_b));
 }
 
 static gint
@@ -251,7 +249,8 @@ default_sort (GNCPrice *price_a, GNCPrice *price_b)
   ts_b = gnc_price_get_time (price_b);
   result = timespec_cmp (&ts_a, &ts_b);
   if (result)
-    return result;
+    /* Reverse the result to present the most recent quote first. */
+    return -result;
 
   /* last sort: value */
   return gnc_numeric_compare (gnc_price_get_value (price_a),
@@ -290,7 +289,8 @@ sort_by_date (GtkTreeModel *f_model,
   ts_b = gnc_price_get_time (price_b);
   result = timespec_cmp (&ts_a, &ts_b);
   if (result)
-    return result;
+    /* Reverse the result to present the most recent quote first. */
+    return -result;
 
   return default_sort (price_a, price_b);
 }
@@ -302,13 +302,16 @@ sort_by_source (GtkTreeModel *f_model,
 		gpointer user_data)
 {
   GNCPrice *price_a, *price_b;
+  gint result;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  SAFE_STRCMP (gnc_price_get_source (price_a),
-               gnc_price_get_source (price_b));
+  result = safe_utf8_collate (gnc_price_get_source (price_a),
+			      gnc_price_get_source (price_b));
+  if (result != 0)
+    return result;
 
   return default_sort (price_a, price_b);
 }
@@ -320,13 +323,16 @@ sort_by_type (GtkTreeModel *f_model,
 	      gpointer user_data)
 {
   GNCPrice *price_a, *price_b;
+  gint result;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
 
   /* sort by source first */
-  SAFE_STRCMP (gnc_price_get_type (price_a),
-               gnc_price_get_type (price_b));
+  result = safe_utf8_collate (gnc_price_get_type (price_a),
+			      gnc_price_get_type (price_b));
+  if (result != 0)
+    return result;
 
   return default_sort (price_a, price_b);
 }
@@ -340,6 +346,7 @@ sort_by_value (GtkTreeModel *f_model,
   gnc_commodity *comm_a, *comm_b;
   GNCPrice *price_a, *price_b;
   gboolean result;
+  gint value;
 
   if (!get_prices (f_model, f_iter_a, f_iter_b, &price_a, &price_b))
     return sort_ns_or_cm (f_model, f_iter_a, f_iter_b);
@@ -352,11 +359,14 @@ sort_by_value (GtkTreeModel *f_model,
   comm_a = gnc_price_get_currency (price_a);
   comm_b = gnc_price_get_currency (price_b);
   if (comm_a && comm_b){
-    SAFE_STRCMP (gnc_commodity_get_namespace (comm_a),
-		 gnc_commodity_get_namespace (comm_b));
-
-    SAFE_STRCMP (gnc_commodity_get_mnemonic (comm_a),
-		 gnc_commodity_get_mnemonic (comm_b));
+    value = safe_utf8_collate (gnc_commodity_get_namespace (comm_a),
+			       gnc_commodity_get_namespace (comm_b));
+    if (value != 0)
+      return value;
+    value = safe_utf8_collate (gnc_commodity_get_mnemonic (comm_a),
+			       gnc_commodity_get_mnemonic (comm_b));
+    if (value != 0)
+      return value;
   }
 
   /*

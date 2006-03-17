@@ -1,3 +1,18 @@
+2006-03-16  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/gnc-tree-view-commodity.c:
+	* src/gnome-utils/gnc-tree-view-price.c:
+	* src/gnome-utils/gnc-tree-view.c: Use the stable sort function
+	from Account.c to back up the user selected primary sort
+	column. Fixes 334595.  Also collapse common code, pull strings via
+	the model, and use the utf8 collate function instead of strcmp.
+
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/engine/Account.[ch]:
+	* src/engine/Recurrence.c: Collapse duplicated code into a single
+	function.
+
 2006-03-16  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/dialog-commodities.c: 
