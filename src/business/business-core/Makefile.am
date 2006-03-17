@@ -75,7 +75,8 @@ libgw_business_core_la_LIBADD  = \
   libgncmod-business-core.la \
   ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${QOF_LIBS}
+  ${QOF_LIBS} \
+  ${GLIB_LIBS}
 
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-core.scm

@@ -69,11 +69,20 @@ noinst_HEADERS = \
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/business/dialog-tax-table/libgncmod-dialog-tax-table.la \
+  ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/register/register-gnome/libgncmod-register-gnome.la \
+  ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
+  ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
+  ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GUILE_LIBS} \
+  ${GLADE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
   ${top_builddir}/lib/glib26/libgncglib.la \
@@ -83,7 +92,10 @@ libgncmod_business_gnome_la_LIBADD = \
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
 
 libgw_business_gnome_la_LDFLAGS = ${G_WRAP_LINK_ARGS}
-libgw_business_gnome_la_LIBADD  = libgncmod-business-gnome.la
+libgw_business_gnome_la_LIBADD  = \
+  libgncmod-business-gnome.la \
+  ${G_WRAP_LINK_ARGS} \
+  ${GUILE_LIBS}
 
 # For Business Reports
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
