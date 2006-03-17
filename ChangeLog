@@ -1,3 +1,8 @@
+2006-03-17  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/engine/Split.c: Fix return value of get_corr_account_split
+	  and reverse the tests of its callers. Fix 334801.
+
 2006-03-16  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.c:

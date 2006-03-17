@@ -1155,10 +1155,10 @@ get_corr_account_split(const Split *sa, const Split **retval)
   const Split *current_split;
   GList *node;
   gnc_numeric sa_value, current_value;
-  gboolean sa_value_positive, current_value_positive, seen_different = FALSE;
+  gboolean sa_value_positive, current_value_positive, seen_one = FALSE;
 
   *retval = NULL;
-  g_return_val_if_fail(sa, TRUE);
+  g_return_val_if_fail(sa, FALSE);
   
   sa_value = xaccSplitGetValue (sa);
   sa_value_positive = gnc_numeric_positive_p(sa_value);
@@ -1173,16 +1173,16 @@ get_corr_account_split(const Split *sa, const Split **retval)
     current_value_positive = gnc_numeric_positive_p(current_value);
     if ((sa_value_positive && !current_value_positive) || 
         (!sa_value_positive && current_value_positive)) {
-        if (seen_different) {
+        if (seen_one) {
             *retval = NULL;
-            return TRUE;
+            return FALSE;
         } else {
             *retval = current_split;
-            seen_different = TRUE;
+            seen_one = TRUE;
         }
     }
   }
-  return FALSE;
+  return seen_one;
 }
 
 /* TODO: these static consts can be shared. */
@@ -1192,7 +1192,7 @@ xaccSplitGetCorrAccountName(const Split *sa)
   static const char *split_const = NULL;
   const Split *other_split;
 
-  if (get_corr_account_split(sa, &other_split))
+  if (!get_corr_account_split(sa, &other_split))
   {
     if (!split_const)
       split_const = _("-- Split Transaction --");
@@ -1209,7 +1209,7 @@ xaccSplitGetCorrAccountFullName(const Split *sa)
   static const char *split_const = NULL;
   const Split *other_split;
 
-  if (get_corr_account_split(sa, &other_split))
+  if (!get_corr_account_split(sa, &other_split))
   {
     if (!split_const)
       split_const = _("-- Split Transaction --");
@@ -1225,7 +1225,7 @@ xaccSplitGetCorrAccountCode(const Split *sa)
   static const char *split_const = NULL;
   const Split *other_split;
 
-  if (get_corr_account_split(sa, &other_split))
+  if (!get_corr_account_split(sa, &other_split))
   {
     if (!split_const)
       split_const = _("Split");
