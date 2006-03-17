@@ -1,5 +1,9 @@
 2006-03-17  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/account-quickfill.c: Enhance the quickfill event
+	handler to detect changes in whether an account should appear in
+	the quickfill.  Fixes 334787.
+
 	* src/gnome-utils/gnc-file.c:
 	* src/gnome-utils/gnc-main-window.c:
 	* src/engine/gnc-hooks.[ch]: Add a "book saved" hook.  Use this to

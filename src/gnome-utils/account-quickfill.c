@@ -225,6 +225,7 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
   Account *account;
   GtkTreeIter iter;
   find_data data;
+  gboolean skip;
 
   if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_ADD | QOF_EVENT_REMOVE)))
     return;
@@ -235,16 +236,6 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
 
   ENTER("entity %p, event type %x, user data %p, ecent data %p",
 	entity, event_type, user_data, event_data);
-
-  /* Not every new account is eligable for the menu */
-  if (qfb->dont_add_cb)
-  {
-     gboolean skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
-     if (skip) {
-       LEAVE("skip function matched");
-       return;
-     }
-  }
 
   if (xaccAccountGetRoot(account) != qfb->group) {
        LEAVE("root group mismatch");
@@ -257,8 +248,30 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
     return;
   }
 
+  /* Does the account exist in the model? */
   data.account = account;
   data.found = NULL;
+  gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
+			 shared_quickfill_find_account, &data);
+
+  /* Should the account exist in the model? */
+  if (qfb->dont_add_cb) {
+    skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
+  } else {
+    skip = FALSE;
+  }
+
+  /* Synthesize new events to make the following case statement
+   * simpler. */
+  if (event_type == QOF_EVENT_MODIFY) {
+    if (skip && data.found) {
+      DEBUG("existing account now filtered");
+      event_type = QOF_EVENT_REMOVE;
+    } else if (!skip && !data.found) {
+      DEBUG("existing account no longer filtered");
+      event_type = QOF_EVENT_ADD;
+    }
+  }
 
   switch (event_type) {
     case QOF_EVENT_MODIFY:
@@ -269,8 +282,6 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
       xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
 
       /* Update list store */
-      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
-			     shared_quickfill_find_account, &data);
       if (data.found) {
 	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
 				    &iter, data.found)) {
@@ -290,8 +301,6 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
       xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
 
       /* Remove from list store */
-      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
-			     shared_quickfill_find_account, &data);
       if (data.found) {
 	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
 				    &iter, data.found)) {
