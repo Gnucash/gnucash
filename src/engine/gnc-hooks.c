@@ -323,6 +323,8 @@ gnc_hooks_init(void)
 		  "Run after book open.  Hook args: <gnc:Session*>.");
   gnc_hook_create(HOOK_BOOK_CLOSED, 1,
 		  "Run before file close.  Hook args: <gnc:Session*>");
+  gnc_hook_create(HOOK_BOOK_SAVED, 1,
+		  "Run after file saved.  Hook args: <gnc:Session*>");
 
   LEAVE("");
 }

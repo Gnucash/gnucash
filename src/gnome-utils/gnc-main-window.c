@@ -1166,6 +1166,14 @@ gnc_main_window_update_title (GncMainWindow *window)
   g_free(title);
 }
 
+static void
+gnc_main_window_update_all_titles (void)
+{
+  g_list_foreach(active_windows,
+		 (GFunc)gnc_main_window_update_title,
+		 NULL);
+}
+
 
 /** This data structure is used to describe the requested state of a
  *  GtkRadioAction, and us used to pass data among several
@@ -1669,6 +1677,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 	gnc_gconf_general_register_cb (KEY_SHOW_CLOSE_BUTTON,
 				       gnc_main_window_update_tabs,
 				       NULL);
+	gnc_hook_add_dangler(HOOK_BOOK_SAVED,
+			     (GFunc)gnc_main_window_update_all_titles, NULL);
 }
 
 

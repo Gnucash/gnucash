@@ -70,5 +70,6 @@ void gnc_hooks_init(void);
 /* Common session hook names */
 #define HOOK_BOOK_OPENED	"hook_book_opened"
 #define HOOK_BOOK_CLOSED	"hook_book_closed"
+#define HOOK_BOOK_SAVED		"hook_book_saved"
 
 #endif /* GNC_HOOKS_H */

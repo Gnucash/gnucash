@@ -1,3 +1,10 @@
+2006-03-17  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/engine/gnc-hooks.[ch]: Add a "book saved" hook.  Use this to
+	update the window titles after a file is saved.  Fixes 334789.
+
 2006-03-17  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/engine/Split.c: Fix return value of get_corr_account_split
