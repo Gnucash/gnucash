@@ -329,7 +329,7 @@ DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnome-utils.html
 # them in ${pkgdatadir}/gnome/help/${program}.
 #
 install-data-hook:
-	$(LN_S) -f ../gnome ${DESTDIR}/${pkgdatadir}
+	$(LN_S) -f ../gnome ${DESTDIR}${pkgdatadir}
 
 uninstall-hook:
-	rm -f ${DESTDIR}/${pkgdatadir}/gnome
+	rm -f ${DESTDIR}${pkgdatadir}/gnome
