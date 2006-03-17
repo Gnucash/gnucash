@@ -615,7 +615,7 @@
 	      (begin (append! headercols (list (_ "Price")))
 		     (append! totalscols (list " "))))
 
-	  (append! headercols (list (_ " ")
+	  (append! headercols (list " "
 				    (_ "Basis")
 				    (_ "Value")
 				    (_ "Money In")

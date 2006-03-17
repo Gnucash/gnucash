@@ -585,9 +585,7 @@
 	      (set!
 	       table
 	       (gnc:make-html-text
-		(string-append 
-		 "No Valid Account Selected.  "
-		 "Click on the Options button and select the account to use."))))
+		(_ "No valid account selected.  Click on the Options button and select the account to use."))))
 
 	  (gnc:html-document-add-object!
 	   document
@@ -617,9 +615,9 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (string-append
-	   "No Valid " type-str	" Selected.  "
-	   "Click on the Options button to select a company."))))
+	  (sprintf #f 
+		   (_ "No valid %s selected.  Click on the Options button to select a company.")
+		   type-str))))
 
     (gnc:free-query query)
     document))
