@@ -757,12 +757,12 @@ gnc_dense_cal_expose( GtkWidget *widget,
 
         dcal = GNC_DENSE_CAL (widget);
         gc = widget->style->fg_gc[ GTK_WIDGET_STATE(widget) ];
-        gdk_draw_pixmap( widget->window,
-                         gc,
-                         dcal->drawbuf,
-                         0, 0, 0, 0,
-                         widget->allocation.width,
-                         widget->allocation.height );
+        gdk_draw_drawable(GDK_DRAWABLE(widget->window),
+                          gc,
+                          GDK_DRAWABLE(dcal->drawbuf),
+                          0, 0, 0, 0,
+                          widget->allocation.width,
+                          widget->allocation.height);
 
         return FALSE;
 }
@@ -977,14 +977,14 @@ gnc_dense_cal_draw_to_buffer( GncDenseCal *dcal )
                                 break;
                         }
                         idx = (dcal->month - 1 + i) % 12;
-                        gdk_draw_pixmap( dcal->drawbuf,
-                                         widget->style->fg_gc[widget->state],
-                                         dcal->monthLabels[idx],
-                                         0, 0,
-                                         dcal->leftPadding
-                                         + dcal->monthPositions[i].x,
-                                         dcal->monthPositions[i].y,
-                                         dcal->label_width, dcal->label_height );
+                        gdk_draw_drawable(GDK_DRAWABLE(dcal->drawbuf),
+                                          widget->style->fg_gc[widget->state],
+                                          GDK_DRAWABLE(dcal->monthLabels[idx]),
+                                          0, 0,
+                                          dcal->leftPadding
+                                          + dcal->monthPositions[i].x,
+                                          dcal->monthPositions[i].y,
+                                          dcal->label_width, dcal->label_height);
                 }
         }
 

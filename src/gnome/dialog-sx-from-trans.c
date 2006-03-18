@@ -713,26 +713,27 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   gchar *name;
   GString *info;
 
-  i = 0;
   fs = xaccFreqSpecMalloc( gnc_get_current_book() );
   get = sxftd_get_end_info( sxfti );
 
   tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
   tmpTm = g_new0( struct tm, 1 );
   *tmpTm = *localtime( &tmp_tt );
+  g_date_clear(&date, 1);
   g_date_set_day( &date, tmpTm->tm_mday );
   g_date_set_month( &date, tmpTm->tm_mon+1 );
   g_date_set_year( &date, tmpTm->tm_year+1900 );
   g_free( tmpTm );
 
+  sxftd_update_fs( sxfti, &date, fs );
+
   /* go one day before what's in the box so we can get the correct start
    * date. */
   g_date_subtract_days(&date, 1);
-
-  sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &date );
   startDate = date;
 
+  i = 0;
   while ( (i < (SXFTD_EXCAL_NUM_MONTHS * 31))
           && g_date_valid( &date )
           /* Do checking against end restriction. */

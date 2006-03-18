@@ -1,7 +1,12 @@
 2006-03-18  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome-utils/gnc-dense-cal.c: Replace gdk_draw_pixmap with
+	  gdk_draw_drawable.
+
 	* src/gnome/dialog-sx-from-trans.c: Let glib subtract days from a
-	  GDate, because G_DATE_BAD_DAY (0) is a bad day.
+	  GDate, because G_DATE_BAD_DAY (0) is a bad day. Clear the date
+	  before setting day and update frequency specification before
+	  moving one day back.
 
 	* src/gnome-utils/gnc-embedded-window.c:
 	* src/gnome/dialog-sxsincelast.c:
