@@ -1,5 +1,8 @@
 2006-03-18  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome/dialog-sx-from-trans.c: Let glib subtract days from a
+	  GDate, because G_DATE_BAD_DAY (0) is a bad day.
+
 	* src/gnome-utils/gnc-embedded-window.c:
 	* src/gnome/dialog-sxsincelast.c:
 	* src/gnome/dialog-scheduledxaction.c: Correct SX editor and Since

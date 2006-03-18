@@ -720,12 +720,14 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
   tmp_tt = gnc_date_edit_get_date( sxfti->startDateGDE );
   tmpTm = g_new0( struct tm, 1 );
   *tmpTm = *localtime( &tmp_tt );
-  /* go one day before what's in the box so we can get the correct start
-   * date. */
-  g_date_set_day( &date, tmpTm->tm_mday-1 );
+  g_date_set_day( &date, tmpTm->tm_mday );
   g_date_set_month( &date, tmpTm->tm_mon+1 );
   g_date_set_year( &date, tmpTm->tm_year+1900 );
   g_free( tmpTm );
+
+  /* go one day before what's in the box so we can get the correct start
+   * date. */
+  g_date_subtract_days(&date, 1);
 
   sxftd_update_fs( sxfti, &date, fs );
   xaccFreqSpecGetNextInstance( fs, &date, &date );
