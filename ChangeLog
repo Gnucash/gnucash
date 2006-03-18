@@ -1,5 +1,10 @@
 2006-03-17  David Hampton  <hampton@employees.org>
 
+	* src/scm/price-quotes.scm:
+	* src/gnome/dialog-price-edit-db.c: Pass a dialog pointer through
+	the scm code and back to the C error display functions.  This will
+	parent the error dialog properly.  Fixes 334929.
+
 	* src/gnome-utils/account-quickfill.c: Enhance the quickfill event
 	handler to detect changes in whether an account should appear in
 	the quickfill.  Fixes 334787.

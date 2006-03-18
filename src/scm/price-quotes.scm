@@ -377,7 +377,7 @@
         get-quotes
         kill-quoter)))
 
-(define (gnc:book-add-quotes book)
+(define (gnc:book-add-quotes window book)
 
   (define (book->commodity->fq-call-data book)
     ;; Call helper that walks all of the defined commodities to see if
@@ -634,17 +634,17 @@
      ((eq? fq-call-data #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f (_ "No commodities marked for quote retrieval."))
+          (gnc:error-dialog window (_ "No commodities marked for quote retrieval."))
 	  (gnc:warn (_ "No commodities marked for quote retrieval."))))
      ((eq? fq-results #f)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f (_ "Unable to get quotes or diagnose the problem."))
+          (gnc:error-dialog window (_ "Unable to get quotes or diagnose the problem."))
 	  (gnc:warn (_ "Unable to get quotes or diagnose the problem."))))
      ((member 'missing-lib fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "You are missing some needed Perl libraries.
 Run 'gnc-fq-update' as root to install them."))
           (gnc:warn (_ "You are missing some needed Perl libraries.
@@ -652,17 +652,17 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
      ((member 'system-error fq-results)
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "There was a system error while retrieving the price quotes."))
           (gnc:warn (_ "There was a system error while retrieving the price quotes.") "\n")))
      ((not (list? (car fq-results)))
       (set! keep-going? #f)
       (if (gnc:ui-is-running?)
-          (gnc:error-dialog #f
+          (gnc:error-dialog window
            (_ "There was an unknown error while retrieving the price quotes."))
           (gnc:warn (_ "There was an unknown error while retrieving the price quotes.") "\n")))
      ((and (not commod-tz-quote-triples) (gnc:ui-is-running?))
-      (gnc:error-dialog #f
+      (gnc:error-dialog window
        (_ "Unable to get quotes or diagnose the problem."))
        (set! keep-going? #f))
      ((not commod-tz-quote-triples)
@@ -673,7 +673,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
           (if (and ok-syms (not (null? ok-syms)))
               (set!
                keep-going?
-               (gnc:verify-dialog #f #t
+               (gnc:verify-dialog window #t
                 (call-with-output-string
                  (lambda (p)
                    (display (_ "Unable to retrieve quotes for these items:") p)
@@ -683,7 +683,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                    (newline p)
                    (display (_ "Continue using only the good quotes?") p)))))
               (begin
-                (gnc:error-dialog #f
+                (gnc:error-dialog window
                  (call-with-output-string
                   (lambda (p)
                     (display
@@ -712,7 +712,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
            (if (gnc:ui-is-running?)
                (set!
                 keep-going?
-                (gnc:verify-dialog #f #t
+                (gnc:verify-dialog window #t
                  (call-with-output-string
                   (lambda (p)
                     (display (_ "Unable to create prices for these items:") p)
@@ -744,7 +744,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
     (if session
 	(begin
           (gnc:debug "about to call gnc:book-add-quotes")
-	  (set! quote-ok? (and (gnc:book-add-quotes
+	  (set! quote-ok? (and (gnc:book-add-quotes #f
 				(gnc:session-get-book session))))
 
           (gnc:debug "done gnc:book-add-quotes:" quote-ok?)

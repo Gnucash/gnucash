@@ -45,6 +45,7 @@
 #include "gnc-ui-util.h"
 #include "guile-util.h"
 #include "engine-helpers.h"
+#include <g-wrap-wct.h>
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
@@ -261,6 +262,7 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
   PricesDialog *pdb_dialog = data;
   SCM quotes_func;
   SCM book_scm;
+  SCM scm_window, window_type;
 
   ENTER(" ");
   quotes_func = scm_c_eval_string ("gnc:book-add-quotes");
@@ -275,8 +277,11 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     return;
   }
 
+  window_type = scm_c_eval_string("<gtk:Widget*>");
+  scm_window = gw_wcp_assimilate_ptr(pdb_dialog->dialog, window_type);
+
   gnc_set_busy_cursor (NULL, TRUE);
-  scm_call_1 (quotes_func, book_scm);
+  scm_call_2 (quotes_func, scm_window, book_scm);
   gnc_unset_busy_cursor (NULL);
   LEAVE(" ");
 }
