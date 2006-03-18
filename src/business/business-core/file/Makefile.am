@@ -42,8 +42,15 @@ noinst_HEADERS = \
   xml-helpers.h
 
 libgncmod_business_backend_file_la_LDFLAGS = -module
+
+# When building on windows, the following variable must also contain
+# ${top_builddir}/src/backend/file/libgnc-backend-file.la, which won't
+# build on MacOSX because libgnc-backend-file.so is a module and not a
+# library. This problem has to be solved on an architectural basis by
+# probably moving the relevant portion of libgnc-backend-file.so into
+# a new shared library which will be used by both the gnc-backend-file
+# module and this module here (and libgncgnome.so, too)
 libgncmod_business_backend_file_la_LIBADD = \
-  ${top_builddir}/src/backend/file/libgnc-backend-file.la \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
