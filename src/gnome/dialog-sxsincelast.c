@@ -2383,13 +2383,24 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
         /* appropriate place to destroy data structures */
         clean_sincelast_data( sxsld );
 
-        gnc_ledger_display_close( sxsld->ac_ledger );
+        gnc_embedded_window_close_page(sxsld->ac_window, sxsld->ac_register);
+        gtk_widget_destroy(GTK_WIDGET(sxsld->ac_window));
+        sxsld->ac_window = NULL;
+        sxsld->ac_register = NULL;
         sxsld->ac_ledger = NULL;
 
-        gnc_ledger_display_close( sxsld->created_ledger );
+        gnc_embedded_window_close_page(sxsld->created_window,
+                                       sxsld->created_register);
+        gtk_widget_destroy(GTK_WIDGET(sxsld->created_window));
+        sxsld->created_window = NULL;
+        sxsld->created_register = NULL;
         sxsld->created_ledger = NULL;
 
-        gnc_ledger_display_close( sxsld->to_create_ledger );
+        gnc_embedded_window_close_page(sxsld->to_create_window,
+                                       sxsld->to_create_register);
+        gtk_widget_destroy(GTK_WIDGET(sxsld->to_create_window));
+        sxsld->to_create_window = NULL;
+        sxsld->to_create_register = NULL;
         sxsld->to_create_ledger = NULL;
 
         gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,

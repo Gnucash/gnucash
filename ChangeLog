@@ -1,3 +1,11 @@
+2006-03-18  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-embedded-window.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/dialog-scheduledxaction.c: Correct SX editor and Since
+	  Last Run dialog to close their register plugin pages instead of
+	  only the ledgers. Fix 334627.
+
 2006-03-18  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/doc.scm, src/scm/main.scm: Comment out

@@ -1169,9 +1169,10 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         }
         sxed->sx = NULL;
 
-        /* We don't need to deal with the ledger, as the gncRegWidget will do
-         * so for us. [Is this still true?? -- jsled] */
-        gnc_ledger_display_close( sxed->ledger );
+        gnc_embedded_window_close_page(sxed->embed_window, sxed->plugin_page);
+        gtk_widget_destroy(GTK_WIDGET(sxed->embed_window));
+        sxed->embed_window = NULL;
+        sxed->plugin_page = NULL;
         sxed->ledger = NULL;
 
         g_free (sxed->sxGUIDstr);
