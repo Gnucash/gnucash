@@ -1,3 +1,13 @@
+2006-03-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/doc.scm, src/scm/main.scm: Comment out
+	gnc:load-help-topics function because it isn't used anymore, and
+	with the last change it also won't be translated anymore.
+	
+	* src/scm/help-topics-index.scm: Remove translation macros so that
+	this unused file isn't included in the translation template any
+	more. Avoids useless translation work.
+
 2006-03-17  David Hampton  <hampton@employees.org>
 
 	* src/scm/price-quotes.scm:
