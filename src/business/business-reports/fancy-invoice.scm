@@ -276,7 +276,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Price")
-    "hb" "Display the price per item?" #t))
+    "hb" (N_ "Display the price per item?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -779,8 +779,8 @@
 	       (set! title (_ "Bill")))
 	      ((gnc-owner-employee)
 	       (set! title (_ "Expense Voucher")))))
-	  (set! title (string-append title " #"
-				     (gnc:invoice-get-id invoice)))))
+	  (set! title (sprintf #f (_"%s #%d") title
+			       (gnc:invoice-get-id invoice)))))
     ;; oli-custom - title redundant, "Invoice" moved to myname-table,
     ;; invoice number moved below
     ;;(gnc:html-document-set-title! document title)
@@ -843,8 +843,8 @@
 		  (set! date-table (make-date-table))
 		  ;; oli-custom - moved invoice number here
 		  (gnc:html-table-append-row!
-		   date-table (list "Invoice&nbsp;#&nbsp;"
-				    (gnc:invoice-get-id invoice)))
+		   date-table (sprintf #f (_ "Invoice&nbsp;#&nbsp;%d")
+				       (gnc:invoice-get-id invoice)))
 		  (make-date-row! date-table (_ "Invoice&nbsp;Date") post-date)
 		  (make-date-row! date-table (_ "Due&nbsp;Date") due-date)
 		  date-table)
@@ -953,7 +953,7 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (N_ "No Valid Invoice Selected"))))
+	  (_ "No Valid Invoice Selected"))))
 
     document))
 

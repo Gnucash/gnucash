@@ -215,6 +215,7 @@
 			     (gnc:entry-get-inv-tax-table entry))
 			(and (gnc:entry-get-bill-taxable entry)
 			     (gnc:entry-get-bill-tax-table entry)))
+		    ;; This "T" is supposed to be an abbrev. for Tax?
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)
@@ -268,7 +269,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Price")
-    "hb" "Display the price per item?" #t))
+    "hb" (N_ "Display the price per item?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -355,7 +356,7 @@
    (gnc:make-text-option
     (N_ "Text") (N_ "Extra Notes")
      "v" (N_ "Extra notes to put on the invoice (simple HTML is accepted)")
-     "Thank you for your patronage"))
+     (_ "Thank you for your patronage")))
 
   (gnc:register-inv-option
    (gnc:make-string-option
@@ -595,6 +596,7 @@
 	     (gnc:html-table-append-row!
 	      table
 	      (list
+	       ;; This string is supposed to be an abbrev. for "Reference"?
 	       (string-append (_ "REF") ":&nbsp;" reference))))))
      orders)
     (set-last-row-style!
@@ -694,8 +696,8 @@
 	       (set! title (_ "Bill")))
 	      ((gnc-owner-employee)
 	       (set! title (_ "Expense Voucher")))))
-	  (set! title (string-append title " #"
-				     (gnc:invoice-get-id invoice)))))
+	  (set! title (sprintf #f (_"%s #%d") title
+			       (gnc:invoice-get-id invoice)))))
 
 ;    (gnc:html-document-set-title! document title)
 
@@ -711,8 +713,9 @@
         ; invoice number and ID String table
         (add-html! document "<table width='100%'><tr>")
         (add-html! document "<td align='left'>")
-        (add-html! document "<b><u>Invoice #")
-        (add-html! document (gnc:invoice-get-id invoice))
+        (add-html! document "<b><u>")
+	(add-html! document (sprintf #f (_ "Invoice #%d")
+				     (gnc:invoice-get-id invoice)))
         (add-html! document "</u></b></td>")
         (add-html! document "<td align='right'>")
 
@@ -778,7 +781,10 @@
                   (add-html! document (gnc:print-date due-date))
                   (add-html! document "</td>")))
               (add-html! document "</tr></table>"))
-            (add-html! document "<font color='red'>INVOICE NOT POSTED</font>")))
+            (add-html! document 
+		       (string-append "<font color='red'>"
+				      (_ "INVOICE NOT POSTED")
+				      "</font>"))))
             ;(add-html! document (strftime (opt-val "Text" "Today Date Format")
             ;             (localtime (car (gnc:get-today))))))
 
@@ -844,7 +850,7 @@
     (gnc:html-document-add-object!
       document
       (gnc:make-html-text
-      (N_ "No Valid Invoice Selected"))))
+      (_ "No Valid Invoice Selected"))))
 
     document))
 

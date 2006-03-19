@@ -213,7 +213,7 @@
 
 <widget class="GtkWindow" id="register_toolbar_win">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">[rtw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="title">[rtw] THIS WINDOW SHOULD NOT BE CREATED</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -409,7 +409,7 @@
 
 <widget class="GtkWindow" id="register_menubar_win">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">[rmw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="title">[rmw] THIS WINDOW SHOULD NOT BE CREATED</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -855,7 +855,7 @@
 
 <widget class="GtkWindow" id="win_register_toolbar_win">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">[wrtw] THIS WINDOW SHOULD NOT BE CREATED</property>
+  <property name="title">[wrtw] THIS WINDOW SHOULD NOT BE CREATED</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>

@@ -262,7 +262,7 @@
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Price")
-    "hb" "Display the price per item?" #t))
+    "hb" (N_ "Display the price per item?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -649,8 +649,8 @@
 	       (set! title (_ "Bill")))
 	      ((gnc-owner-employee)
 	       (set! title (_ "Expense Voucher")))))
-	  (set! title (string-append title " #"
-				     (gnc:invoice-get-id invoice)))))
+	  (set! title (sprintf #f (_"%s #%d") title
+			       (gnc:invoice-get-id invoice)))))
 
     (gnc:html-document-set-title! document title)
 
@@ -745,7 +745,7 @@
 	(gnc:html-document-add-object!
 	 document
 	 (gnc:make-html-text
-	  (N_ "No Valid Invoice Selected"))))
+	  (_ "No Valid Invoice Selected"))))
 
     document))
 
