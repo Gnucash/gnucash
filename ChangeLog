@@ -1,3 +1,10 @@
+2006-03-19  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/dialog-options.c: Treat the date option widget
+	  as container if it shows absolute and relative dates, in
+	  multichoice_cb. Fix 335106. Replace deprecated
+	  g_object_{set,get}_data calls.
+
 2006-03-18  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-dense-cal.c: Replace gdk_draw_pixmap with

@@ -413,24 +413,40 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
   GtkWidget *omenu;
   gpointer _current;
   gint current;
+  char *type;
 
   widget = gnc_option_get_widget (option);
 
-  _current = gtk_object_get_data(GTK_OBJECT(widget), "gnc_multichoice_index");
+  /* the option menu may be part of a date option widget, so we need to
+     decomposit the enclosing hbox then */
+  type = gnc_option_type (option);
+  if (safe_strcmp (type, "date") == 0) {
+    char *date_type = gnc_option_date_option_get_subtype(option);
+    GList *children;
+
+    if (safe_strcmp (date_type, "both") == 0) {
+      children = gtk_container_get_children (GTK_CONTAINER (widget));
+      widget = g_list_nth_data (children, GNC_RD_WID_REL_WIDGET_POS);
+    }
+    free (date_type);
+  }
+  free (type);
+
+  _current = g_object_get_data(G_OBJECT(widget), "gnc_multichoice_index");
   current = GPOINTER_TO_INT(_current);
 
   if (current == index)
     return;
 
   gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
-  gtk_object_set_data(GTK_OBJECT(widget), "gnc_multichoice_index",
-                      GINT_TO_POINTER(index));
+  g_object_set_data(G_OBJECT(widget), "gnc_multichoice_index",
+                    GINT_TO_POINTER(index));
 
   gnc_option_set_changed (option, TRUE);
 
   gnc_option_call_option_widget_changed_proc(option);
 
-  omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
+  omenu = g_object_get_data(G_OBJECT(w), "gnc_option_menu");
   gnc_options_dialog_changed_internal (omenu, TRUE);
 }
 #endif
@@ -2236,8 +2252,8 @@ gnc_option_set_ui_value_multichoice (GNCOption *option, gboolean use_default,
     gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
 #else
     gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
-    gtk_object_set_data(GTK_OBJECT(widget), "gnc_multichoice_index",
-			GINT_TO_POINTER(index));
+    g_object_set_data(G_OBJECT(widget), "gnc_multichoice_index",
+                      GINT_TO_POINTER(index));
 #endif 	 
     return FALSE;
   }
@@ -2269,9 +2285,9 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(widget), index);
 #else
-	  gtk_object_set_data(GTK_OBJECT(widget),
-			      "gnc_multichoice_index",
-			      GINT_TO_POINTER(index));
+	  g_object_set_data(G_OBJECT(widget),
+			    "gnc_multichoice_index",
+			    GINT_TO_POINTER(index));
 	  gtk_option_menu_set_history(GTK_OPTION_MENU(widget), index);
 #endif
 	}
@@ -2287,9 +2303,9 @@ gnc_option_set_ui_value_date (GNCOption *option, gboolean use_default,
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
 	  gtk_combo_box_set_active(GTK_COMBO_BOX(rel_date_widget), index);
 #else
-          gtk_object_set_data(GTK_OBJECT(rel_date_widget),
-			      "gnc_multichoice_index",
-			      GINT_TO_POINTER(index));
+          g_object_set_data(G_OBJECT(rel_date_widget),
+			    "gnc_multichoice_index",
+			    GINT_TO_POINTER(index));
 	  gtk_option_menu_set_history(GTK_OPTION_MENU(rel_date_widget),
 				      index);
 #endif
@@ -2676,7 +2692,7 @@ gnc_option_get_ui_value_multichoice (GNCOption *option, GtkWidget *widget)
   index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 #else
   {
-    gpointer _index = gtk_object_get_data(GTK_OBJECT(widget), "gnc_multichoice_index");
+    gpointer _index = g_object_get_data(G_OBJECT(widget), "gnc_multichoice_index");
     index = GPOINTER_TO_INT(_index);
   }
 #endif 	 
@@ -2695,8 +2711,8 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
     index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 #else
-    index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(widget),
-						"gnc_multichoice_index"));
+    index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget),
+                                              "gnc_multichoice_index"));
 #endif
     type = scm_str2symbol("relative");
     val = gnc_option_permissible_value(option, index);
@@ -2736,8 +2752,8 @@ gnc_option_get_ui_value_date (GNCOption *option, GtkWidget *widget)
 #ifdef GTKCOMBOBOX_TOOLTIPS_WORK
       index = gtk_combo_box_get_active(GTK_COMBO_BOX(rel_widget));
 #else
-      index = GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(rel_widget),
-						  "gnc_multichoice_index"));
+      index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(rel_widget),
+                                                "gnc_multichoice_index"));
 #endif
       val = gnc_option_permissible_value(option, index);
       result = scm_cons(scm_str2symbol("relative"), val);
