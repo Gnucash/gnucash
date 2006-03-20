@@ -1,3 +1,8 @@
+2006-03-19  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 1.9.3
+
 2006-03-19  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/dialog-options.c: Treat the date option widget
