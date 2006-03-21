@@ -871,16 +871,18 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 time_t
 gnc_date_edit_get_date (GNCDateEdit *gde)
 {
- 	struct tm tm;
+        struct tm tm;
+        time_t retval;
 
         g_return_val_if_fail (gde != NULL, 0);
         g_return_val_if_fail (GNC_IS_DATE_EDIT (gde), 0);
 
         tm = gnc_date_edit_get_date_internal (gde);
 
-        if (mktime (&tm) == -1)
-		return gnc_timet_get_today_start();
-	return mktime (&tm);
+        retval = mktime (&tm);
+        if (retval == -1)
+                return gnc_timet_get_today_start ();
+        return retval;
 }
 
 void

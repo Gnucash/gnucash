@@ -1,3 +1,12 @@
+2006-03-21  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/gnc-plugin-page-register.c: Fill the filter by dialog
+	  with given start/end time instead of calculating earliest/latest
+	  date found. Fix 335237.
+
+	* src/gnome-utils/gnc-date-edit.c (gnc_date_edit_get_date): Avoid
+	  needless second call to mktime.
+
 2006-03-19  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

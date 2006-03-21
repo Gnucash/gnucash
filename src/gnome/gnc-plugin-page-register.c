@@ -2188,8 +2188,10 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* Start date info */
     if (start_time == 0) {
       button = glade_xml_get_widget(xml, "start_date_earliest");
+      time_val = xaccQueryGetEarliestDateFound (query); 
       sensitive = FALSE;
     } else {
+      time_val = start_time;
       if ((start_time >= gnc_timet_get_today_start()) &&
 	  (start_time <= gnc_timet_get_today_end())) {
 	button = glade_xml_get_widget(xml, "start_date_today");
@@ -2202,7 +2204,6 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     start_date = glade_xml_get_widget(xml, "start_date");
     gtk_widget_set_sensitive(GTK_WIDGET(start_date), sensitive);
-    time_val = xaccQueryGetEarliestDateFound (query); 
     gnc_date_edit_set_time(GNC_DATE_EDIT(start_date), time_val);
     g_signal_connect (G_OBJECT (start_date), "date-changed",
 		      G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
@@ -2213,8 +2214,10 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     /* End date info */
     if (end_time == 0) {
       button = glade_xml_get_widget(xml, "end_date_latest");
+      time_val = xaccQueryGetLatestDateFound (query); 
       sensitive = FALSE;
     } else {
+      time_val = end_time;
       if ((end_time >= gnc_timet_get_today_start()) &&
 	  (end_time <= gnc_timet_get_today_end())) {
 	button = glade_xml_get_widget(xml, "end_date_today");
@@ -2227,7 +2230,6 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     end_date = glade_xml_get_widget(xml, "end_date");
     gtk_widget_set_sensitive(GTK_WIDGET(end_date), sensitive);
-    time_val = xaccQueryGetLatestDateFound (query); 
     gnc_date_edit_set_time(GNC_DATE_EDIT(end_date), time_val);
     g_signal_connect (G_OBJECT (end_date), "date-changed",
 		      G_CALLBACK (gnc_plugin_page_register_filter_gde_changed_cb),
