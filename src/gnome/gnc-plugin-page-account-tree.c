@@ -123,6 +123,7 @@ static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, Gn
 static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_view_filter_by (GtkAction *action, GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
@@ -161,6 +162,9 @@ static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account..."), NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
+	{ "EditRenumberSubaccountsAction", NULL, N_("_Renumber Subaccounts..."), NULL,
+	  N_("Renumber the children of the selected account"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_renumber_accounts) },
 
 	/* View menu */
 	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
@@ -623,20 +627,24 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 						   GncPluginPageAccountTree *page)
 {
 	GtkActionGroup *action_group;
+	GtkAction *action;
 	GtkTreeView *view;
 	Account *account = NULL;
 	gboolean sensitive;
+	gboolean subaccounts;
 
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
 	if (!selection) {
 		sensitive = FALSE;
+		subaccounts = FALSE;
 	} else {
 		g_return_if_fail(GTK_IS_TREE_SELECTION(selection));
 		view = gtk_tree_selection_get_tree_view (selection);
 		account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(view));
 		sensitive = (account != NULL);
 
+		subaccounts = (xaccAccountGetChildren(account) != NULL);
 		/* Check here for placeholder accounts, etc. */
 	}
 
@@ -644,6 +652,13 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 	gnc_plugin_update_actions (action_group, actions_requiring_account,
 				   "sensitive", sensitive);
 	g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
+
+	action = gtk_action_group_get_action (action_group, "EditRenumberSubaccountsAction");
+	g_object_set (G_OBJECT(action), "sensitive",
+		      sensitive && subaccounts, NULL);
+
+	gnc_plugin_update_actions (action_group, actions_requiring_account,
+				   "sensitive", sensitive);
 }
 	
 
@@ -1082,6 +1097,21 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
     }
   }
   g_free(acct_name);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_renumber_accounts (GtkAction *action,
+						    GncPluginPageAccountTree *page)
+{
+  Account *account;
+  GtkWidget *window;
+
+  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
+  account = gnc_plugin_page_account_tree_get_current_account(page);
+  if (!window || !account)
+    return;
+
+  gnc_account_renumber_create_dialog(window, account);
 }
 
 /*********************/

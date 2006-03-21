@@ -146,6 +146,9 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
  */
 void gnc_ui_register_account_destroy_callback (void (*cb)(Account *));
 /** @} */
+
+void gnc_account_renumber_create_dialog (GtkWidget *window, Account *account);
+
 /** @} */
 /** @} */
 

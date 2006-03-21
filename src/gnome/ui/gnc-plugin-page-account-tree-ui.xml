@@ -18,6 +18,7 @@
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
 	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
+	<menuitem name="EditRenumberSubaccounts" action="EditRenumberSubaccountsAction"/>
       </placeholder>
     </menu>
     <menu name="Actions" action="ActionsAction">

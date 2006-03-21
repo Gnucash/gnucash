@@ -2,7 +2,7 @@
  * dialog-account.c -- window for creating and editing accounts for *
  *                     GnuCash                                      *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
- * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
+ * Copyright (C) 2003,2005,2006 David Hampton <hampton@employees.org> *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -105,6 +105,17 @@ typedef struct _AccountWindow
   gint component_id;
 } AccountWindow;
 
+typedef struct _RenumberDialog
+{
+  GtkWidget *dialog;
+  GtkWidget *prefix;
+  GtkWidget *interval;
+  GtkWidget *example1;
+  GtkWidget *example2;
+
+  Account *parent;
+  gint num_children;
+} RenumberDialog;
 
 /** Static Globals *******************************************************/
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -117,6 +128,9 @@ static GList *ac_destroy_cb_list = NULL;
 static void gnc_account_window_set_name (AccountWindow *aw);
 static void make_account_changes(GHashTable *change_type);
 
+void gnc_account_renumber_prefix_changed_cb (GtkEditable *editable, RenumberDialog *data);
+void gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton, RenumberDialog *data);
+void gnc_account_renumber_response_cb (GtkDialog *dialog, gint response, RenumberDialog *data);
 
 /** Implementation *******************************************************/
 
@@ -1778,4 +1792,117 @@ gnc_ui_register_account_destroy_callback (void (*cb)(Account *))
     ac_destroy_cb_list = g_list_append (ac_destroy_cb_list, cb);
 
   return;
+}
+
+/**************************************************/
+
+static void
+gnc_account_renumber_update_examples (RenumberDialog *data)
+{
+  gchar *str;
+  gchar *prefix;
+  gint interval, num_digits;
+
+  prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
+  interval = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
+  num_digits = log10(data->num_children * interval) + 1;
+
+  str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval);
+  gtk_label_set_text(GTK_LABEL(data->example1), str);
+  g_free(str);
+
+  str = g_strdup_printf("%s-%0*d", prefix, num_digits,
+			interval * data->num_children);
+  gtk_label_set_text(GTK_LABEL(data->example2), str);
+  g_free(str);
+
+  g_free(prefix);
+}
+
+void
+gnc_account_renumber_prefix_changed_cb (GtkEditable *editable,
+				  RenumberDialog *data)
+{
+  gnc_account_renumber_update_examples(data);
+}
+
+void
+gnc_account_renumber_interval_changed_cb (GtkSpinButton *spinbutton,
+				    RenumberDialog *data)
+{
+  gnc_account_renumber_update_examples(data);
+}
+
+void
+gnc_account_renumber_response_cb (GtkDialog *dialog,
+			       gint response,
+			       RenumberDialog *data)
+{
+  AccountGroup *group;
+  GList *children, *tmp;
+  gchar *str;
+  gchar *prefix;
+  gint interval, num_digits, i;
+
+  if (response == GTK_RESPONSE_OK) {
+    gtk_widget_hide(data->dialog);
+    group = xaccAccountGetChildren(data->parent);
+    children = xaccGroupGetAccountListSorted(group);
+    prefix = gtk_editable_get_chars(GTK_EDITABLE(data->prefix), 0, -1);
+    interval =
+      gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(data->interval));
+    num_digits = log10(data->num_children * interval) + 1;
+
+    gnc_set_busy_cursor (NULL, TRUE);
+    for (tmp = children, i = 1; tmp; tmp = g_list_next(tmp), i += 1) {
+      str = g_strdup_printf("%s-%0*d", prefix, num_digits, interval * i);
+      xaccAccountSetCode(tmp->data, str);
+      g_free(str);
+    }
+    gnc_unset_busy_cursor (NULL);
+  }
+
+  gtk_widget_destroy(data->dialog);
+  g_free(data);
+}
+
+void
+gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
+{
+  RenumberDialog *data;
+  GladeXML *xml;
+  AccountGroup *children;
+  GtkWidget *widget;
+  gchar *string;
+
+  data = g_new(RenumberDialog, 1);
+  data->parent = account;
+  children = xaccAccountGetChildren(account);
+  data->num_children = xaccGroupGetNumAccounts(children);
+
+  xml = gnc_glade_xml_new ("account.glade", "Renumber Accounts");
+  data->dialog = glade_xml_get_widget (xml, "Renumber Accounts");
+  gtk_window_set_transient_for(GTK_WINDOW(data->dialog), GTK_WINDOW(window));
+  g_object_set_data_full(G_OBJECT(data->dialog), "xml", xml, g_object_unref);
+
+  widget = glade_xml_get_widget (xml, "header_label");
+  string = g_strdup_printf(_( "Renumber the immediate sub-accounts of %s?  "
+			      "This will replace the account code field of "
+			      "each child account with a newly generated code."),
+			   xaccAccountGetFullName(account));
+  gtk_label_set_text(GTK_LABEL(widget), string);
+  g_free(string);
+
+  data->prefix = glade_xml_get_widget (xml, "prefix_entry");
+  data->interval = glade_xml_get_widget (xml, "interval_spin");
+  data->example1 = glade_xml_get_widget (xml, "example1_label");
+  data->example2 = glade_xml_get_widget (xml, "example2_label");
+
+  gtk_entry_set_text(GTK_ENTRY(data->prefix), xaccAccountGetCode(account));
+  gnc_account_renumber_update_examples(data);
+
+  glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+				    data);
+  
+  gtk_widget_show_all(data->dialog);
 }

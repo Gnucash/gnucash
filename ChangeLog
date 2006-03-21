@@ -1,3 +1,12 @@
+2006-03-21  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.[ch]:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml: Add support
+	for renumbering the account codes for all the children of a given
+	account.  Implements 334594.
+
 2006-03-21  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome/gnc-plugin-page-register.c: Fill the filter by dialog
