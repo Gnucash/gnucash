@@ -506,7 +506,7 @@
 	      <child>
 		<widget class="GtkLabel" id="label847687">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Next'.</property>
+		  <property name="label" translatable="yes">If you received a cash disbursement as a result of the stock split, enter the details of that payment here. Otherwise, just click `Forward'.</property>
 		  <property name="use_underline">False</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -773,7 +773,7 @@
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes"></property>
-	  <property name="text" translatable="yes">If you are finished creating the stock split or merger, press `Finish'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes.</property>
+	  <property name="text" translatable="yes">If you are finished creating the stock split or merger, press `Apply'. You may also press `Back' to review your choices, or `Cancel' to quit without making any changes.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#666666669999</property>
