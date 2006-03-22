@@ -75,7 +75,7 @@ static void set_chart_titles_from_hash(GogObject *chart, GtkHTMLEmbedded * eb);
 static void set_chart_titles(GogObject *chart, const char *title, const char* sub_title);
 static void set_chart_axis_labels_from_hash(GogObject *chart, GtkHTMLEmbedded * eb);
 static void set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_axis_label);
-static void gtkhtml_3_3_2_bug_workaround(GtkHTMLEmbedded *eb);
+static void gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb);
 
 void
 gnc_html_graph_gog_init(void)
@@ -284,9 +284,11 @@ set_chart_axis_labels(GogObject *chart, const char *x_axis_label, const char* y_
 }
 
 static void
-gtkhtml_3_3_2_bug_workaround(GtkHTMLEmbedded *eb)
+gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb)
 {
-  /* HACK ALERT! Compensate for bug in gtkhtml-3.3.2 */
+  /* HACK ALERT! Compensate for bug in gtkhtml < 3.10.1
+     Gtkhtml set the width parameter twice (=width, =height), so both,
+     width (==height) and height (<1) were incorrect. */
   if (eb->height < 1)
   {
       eb->height = eb->width;  /* only squares here :( */
@@ -315,7 +317,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   double *data = NULL;
   char **labels = NULL, **colors = NULL;
 
-  gtkhtml_3_3_2_bug_workaround(eb);
+  gtkhtml_pre_3_10_1_bug_workaround(eb);
 
   // parse data from the text-ized params.
   {
@@ -388,7 +390,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   char *bar_type = "normal";
   int bar_overlap = 0 /*percent*/; // seperate bars; no overlap.
 
-  gtkhtml_3_3_2_bug_workaround (eb);
+  gtkhtml_pre_3_10_1_bug_workaround (eb);
 
   // parse data from the text-ized params
   // series => bars [gnc:cols]
@@ -505,7 +507,7 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   int datasize;
   double *xData, *yData;
 
-  gtkhtml_3_3_2_bug_workaround(eb);
+  gtkhtml_pre_3_10_1_bug_workaround(eb);
 
   {
     char *datasizeStr, *xDataStr, *yDataStr;
