@@ -158,7 +158,7 @@ something_changed( GtkWidget *wid, gpointer d )
     }
     g_object_set(G_OBJECT(gr->gcb_eom), "visible", show_last, NULL);
 
-    g_signal_emit_by_name(d, "changed", NULL);  // not sure if NULL is needed
+    g_signal_emit_by_name(d, "changed");
 }
 
 static void
@@ -382,7 +382,7 @@ typedef enum {
 
 static void grc_changed(GtkWidget *w, gpointer data)
 {
-    g_signal_emit_by_name(data, "changed", NULL);
+    g_signal_emit_by_name(data, "changed");
 }
 static void addRecurrence(GncRecurrenceComp *grc, GncRecurrence *gr)
 {
@@ -394,7 +394,7 @@ static void addRecurrence(GncRecurrenceComp *grc, GncRecurrence *gr)
     grc->num_rec++;
 
     gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));
-    g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
+    g_signal_emit_by_name(G_OBJECT(grc), "changed");
 
 
 }
@@ -408,7 +408,7 @@ static void removeRecurrence(GncRecurrenceComp *grc)
     last = g_list_last(children);
     gtk_widget_destroy(GTK_WIDGET(last->data));
     g_list_free(children);
-    g_signal_emit_by_name(G_OBJECT(grc), "changed", NULL);
+    g_signal_emit_by_name(G_OBJECT(grc), "changed");
 
 
     gtk_widget_set_sensitive(GTK_WIDGET(grc->buttRemove), (grc->num_rec > 1));

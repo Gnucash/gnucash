@@ -260,7 +260,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 gnc_date_edit_set_time( gf->startDate, *secs);
                 if (NULL == fs) 
                 {
-                        g_signal_emit_by_name( gf, "changed", NULL );
+                        g_signal_emit_by_name( gf, "changed" );
                 }
         }
  
@@ -555,7 +555,7 @@ do_frequency_setup( GNCFrequency *gf, FreqSpec *fs, time_t *secs)
                 break;
         }
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -832,7 +832,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outDate )
 static void
 spin_changed_helper( GtkAdjustment *adj, gpointer d )
 {
-        g_signal_emit_by_name( GNC_FREQUENCY(d), "changed", NULL );
+        g_signal_emit_by_name( GNC_FREQUENCY(d), "changed" );
 }
 
 static void
@@ -841,7 +841,7 @@ weekly_days_changed( GtkButton *b, gpointer d )
         GNCFrequency *gf;
 
         gf = GNC_FREQUENCY(d);
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -870,7 +870,7 @@ monthly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( d, "changed", NULL );
+        g_signal_emit_by_name( d, "changed" );
 }
 
 static void
@@ -903,7 +903,7 @@ semimonthly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -958,7 +958,7 @@ year_range_sels_changed( GNCFrequency *gf,
         tmpTT = mktime( tmpTm );
         gnc_date_edit_set_time( gf->startDate, tmpTT );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -991,7 +991,7 @@ yearly_sel_changed( GtkButton *b, gpointer d )
         tmptt = mktime( tmptm );
         gnc_date_edit_set_time( gf->startDate, tmptt );
 
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static inline guint32 min( guint32 a, guint32 b )
@@ -1077,7 +1077,7 @@ freq_option_value_changed( GtkMenuShell *b, gpointer d )
                 /* nuttin can be done, for whatever reason. */
                 break;
         }
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 static void
@@ -1178,7 +1178,7 @@ start_date_changed( GNCDateEdit *gde, gpointer d )
                 PERR( "unknown uift value %d\n", uift );
                 break;
         }
-        g_signal_emit_by_name( gf, "changed", NULL );
+        g_signal_emit_by_name( gf, "changed" );
 }
 
 /* ================================================================= */
