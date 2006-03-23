@@ -17,7 +17,7 @@
     <gnc-act:long-description>
     Questo insieme di conti è selezionato dalla maggior parte degli utenti. L'insieme comprende i conti usati più comunemente (conto corrente, di risparmio, contanti, carta di credito, entrate, uscite comuni).
   </gnc-act:long-description>
-  <gnc-act:start-selected>0</gnc-act:start-selected>
+  <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
   <act:name>Attività</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>

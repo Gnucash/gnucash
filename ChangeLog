@@ -1,3 +1,23 @@
+2006-03-22  David Hampton  <hampton@employees.org>
+
+	* accounts/*/acctchrt_common.gnucash-xea: Mark all common account
+	sets to be initially selected when creating a new file.
+	
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/druid-hierarchy.[ch]: Differentiate between calling
+	the hierarchy druid from the new user code and from the window
+	menus.  In the former case, account sets that are marked to be
+	initially selected will be pre-selected in the "account sets"
+	tree.  In the latter case (e.g. adding a new account set to
+	existing accounts) these markings will be ignored.  Don't allow
+	the user to move off the account set selection page until at least
+	one account set is selected.  Relabel a window to make it clear
+	that the account tree only reflects the accounts in one particular
+	set, not the aggregate set of accounts that will be created.
+	Fixes 334778, 334780 and 334783.
+
 2006-03-22  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-dense-cal.c:

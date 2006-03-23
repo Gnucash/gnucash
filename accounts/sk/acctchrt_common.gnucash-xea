@@ -9,6 +9,7 @@
     <gnc-act:long-description>
 	Väè¹ina u¾ívateµov si zvolí túto sadu, lebo obsahuje be¾ne pou¾ívané úèty (¹eky, úspory, hotovos», platobné karty, príjmy, be¾né výdaje).
   </gnc-act:long-description>    
+  <gnc-act:start-selected>1</gnc-act:start-selected>
 <gnc:account version="2.0.0">
     <act:name>Aktíva</act:name>
   <act:id type="new">98f262dfab9a2b99ac42919dcf58d304</act:id>
