@@ -77,6 +77,9 @@ struct _inter_data
 
   /* Flag whether the last dialog showed any error */
   gboolean msgBoxError;
+  /* Cache the lowest loglevel, corresponding to the most serious
+     warning. */
+  AB_BANKING_LOGLEVEL min_loglevel;
 };
 
 void delete_GNCInteractor (GNCInteractor *data);

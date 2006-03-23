@@ -453,7 +453,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   }
 
   GNCInteractor_set_cache_valid (inter, TRUE);
-  if (resultcode <= 20) {
+  if (resultcode <= 20 && (! GNCInteractor_hadErrors(inter)) ) {
     return TRUE;
   }
   else {

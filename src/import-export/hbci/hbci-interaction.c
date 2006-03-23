@@ -67,6 +67,7 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
     gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
+  data->min_loglevel = AB_Banking_LogLevelVerbous;
 
   /* set HBCI_Interactor */
   gnc_hbci_add_callbacks(api, data);
@@ -215,7 +216,8 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 gboolean GNCInteractor_hadErrors (const GNCInteractor *i)
 {
   g_assert (i);
-  return i->msgBoxError != 0;
+  return (i->msgBoxError != 0) ||
+    (i->min_loglevel < AB_Banking_LogLevelNotice);
 }
 
 /* ************************************************************ 
@@ -652,6 +654,9 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
   /* Show the dialog */
   GNCInteractor_show(data);
 
+  /* Initialize loglevel caching */
+  data->min_loglevel = AB_Banking_LogLevelVerbous;
+
   g_free(title);
   g_free(text);
   return progress_id;
@@ -700,6 +705,10 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 
   /* printf("progressLogCB: Logging msg: %s\n", text); */
   GNCInteractor_add_log_text (data, text);
+
+  /* Cache loglevel */
+  if (level < data->min_loglevel)
+    data->min_loglevel = level;
 
   g_free(text);
   return !keepAlive(data);

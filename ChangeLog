@@ -1,3 +1,9 @@
+2006-03-23  Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Store the log level
+	of all printed messages and use this as yet another check whether
+	aqbanking had any errors.
+
 2006-03-22  David Hampton  <hampton@employees.org>
 
 	* accounts/*/acctchrt_common.gnucash-xea: Mark all common account
