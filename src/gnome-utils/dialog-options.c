@@ -1706,7 +1706,7 @@ gnc_option_set_ui_widget_multichoice (GNCOption *option, GtkBox *page_box,
   gchar *colon_name;
 
   colon_name = g_strconcat(name, ":", NULL);
-  label= gtk_label_new(colon_name);
+  label = gtk_label_new(colon_name);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   g_free(colon_name);
 
@@ -1735,7 +1735,7 @@ gnc_option_set_ui_widget_date (GNCOption *option, GtkBox *page_box,
   GtkWidget *eventbox;
 
   colon_name = g_strconcat(name, ":", NULL);
-  label= gtk_label_new(colon_name);
+  label = gtk_label_new(colon_name);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   g_free(colon_name);
 
@@ -2126,6 +2126,13 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
                                  GtkWidget **enclosing, gboolean *packed)
 {
   GtkWidget *value;
+  GtkWidget *label;
+  gchar *colon_name;
+
+  colon_name = g_strconcat(name, ":", NULL);
+  label = gtk_label_new(colon_name);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  g_free(colon_name);
 
   *enclosing = gtk_hbox_new(FALSE, 5);
 
@@ -2138,6 +2145,7 @@ gnc_option_set_ui_widget_budget (GNCOption *option, GtkBox *page_box,
   g_signal_connect(G_OBJECT(value), "changed",
 		   G_CALLBACK(gnc_option_changed_widget_cb), option);
 
+  gtk_box_pack_start(GTK_BOX(*enclosing), label, FALSE, FALSE, 0);
   gtk_box_pack_start(GTK_BOX(*enclosing), value, FALSE, FALSE, 0);
   gtk_widget_show_all(*enclosing);
   return value;
