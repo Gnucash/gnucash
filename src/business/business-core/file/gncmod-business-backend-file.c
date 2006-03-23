@@ -70,7 +70,7 @@ libgncmod_business_backend_file_LTX_gnc_module_path(void)
 char * 
 libgncmod_business_backend_file_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The XML (v2) parsers for Gnucash business objects");
+  return g_strdup("The XML (v2) parsers for GnuCash business objects");
 }
 
 int

@@ -1194,7 +1194,7 @@
 	      <child>
 		<widget class="GtkRadioButton" id="unknown_source_button">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">These are quote sources that were recently added to F::Q.  Gnucash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+		  <property name="tooltip" translatable="yes">These are quote sources that were recently added to F::Q.  GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Unknown:</property>
 		  <property name="use_underline">True</property>

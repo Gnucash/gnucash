@@ -53,7 +53,7 @@ libgncmod_business_utils_LTX_gnc_module_path(void)
 char * 
 libgncmod_business_utils_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash business utilities module");
+  return g_strdup("The GnuCash business utilities module");
 }
 
 int

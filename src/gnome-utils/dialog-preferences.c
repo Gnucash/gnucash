@@ -1373,8 +1373,8 @@ gnc_preferences_dialog_create(void)
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
-  xml = gnc_glade_xml_new(GLADE_FILENAME, "Gnucash Preferences");
-  dialog = glade_xml_get_widget(xml, "Gnucash Preferences");
+  xml = gnc_glade_xml_new(GLADE_FILENAME, "GnuCash Preferences");
+  dialog = glade_xml_get_widget(xml, "GnuCash Preferences");
   DEBUG("autoconnect");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);

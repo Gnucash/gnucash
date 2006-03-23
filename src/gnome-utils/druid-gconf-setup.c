@@ -148,11 +148,11 @@ druid_gconf_update_path (GError **error)
     return FALSE;
   }
 
-  fprintf(output, "\n######## The following lines were added by Gnucash. ########\n");
+  fprintf(output, "\n######## The following lines were added by GnuCash. ########\n");
   if (!found_user_dir)
     fprintf(output, PATH_STRING1);
   fprintf(output, PATH_STRING2, GNC_GCONF_DIR);
-  fprintf(output,   "############## End of lines added by Gnucash. ##############\n");
+  fprintf(output,   "############## End of lines added by GnuCash. ##############\n");
   if (fclose(output) != 0)  {
     *error = g_error_new (G_FILE_ERROR,
 			  g_file_error_from_errno(errno),
@@ -400,26 +400,26 @@ druid_gconf_finish_page_prepare (GnomeDruidPage *druidpage,
   gint who, how;
   gchar *text;
   const gchar *pgm_path =
-    _("When you click Apply, Gnucash will modify your ~/.gconf.path file "
+    _("When you click Apply, GnuCash will modify your ~/.gconf.path file "
       "and restart the gconf backend.");
   const gchar *pgm_install =
-    _("When you click Apply, Gnucash will install the gconf data into your "
+    _("When you click Apply, GnuCash will install the gconf data into your "
       "local ~/.gconf file and restart the gconf backend.  The %s script "
       "must be found in your search path for this to work correctly.");
   const gchar *user_path =
     _("You have chosen to correct the problem by yourself.  When you click "
-      "Apply, Gnucash will exit.  Please correct the problem and restart "
+      "Apply, GnuCash will exit.  Please correct the problem and restart "
       "the gconf backend with the command 'gconftool-2 --shutdown' before "
-      "restarting Gnucash.  If you have not already done so, you can click "
+      "restarting GnuCash.  If you have not already done so, you can click "
       "the Back button and copy the necessary text from the dialog.");
   const gchar *user_install =
     _("You have chosen to correct the problem by yourself.  When you "
-      "click Apply, Gnucash will exit.  Please run the %s script which "
+      "click Apply, GnuCash will exit.  Please run the %s script which "
       "will install the configuration data and restart the gconf backend.");
   const gchar *user_did =
     _("You have already corrected the problem and restarted the gconf "
       "backend with the command 'gconftool-2 --shutdown'.  When you click "
-      "Apply, Gnucash will continue loading.");
+      "Apply, GnuCash will continue loading.");
 
   who = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(druid), WHO_DOES));
   switch (who) {

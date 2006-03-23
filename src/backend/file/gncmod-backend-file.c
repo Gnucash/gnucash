@@ -38,7 +38,7 @@ libgncmod_backend_file_LTX_gnc_module_path(void)
 char * 
 libgncmod_backend_file_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The binary and XML (v1 and v2) backends for Gnucash");
+  return g_strdup("The binary and XML (v1 and v2) backends for GnuCash");
 }
 
 int

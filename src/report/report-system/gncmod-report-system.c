@@ -35,7 +35,7 @@ libgncmod_report_system_LTX_gnc_module_path(void) {
 
 char * 
 libgncmod_report_system_LTX_gnc_module_description(void) {
-  return g_strdup("Core components of Gnucash report generation system");
+  return g_strdup("Core components of GnuCash report generation system");
 }
 
 static void

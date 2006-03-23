@@ -331,7 +331,7 @@ gnc_validate_directory (const gchar *dirname)
 	g_fprintf(stderr,
 		  _("An error occurred while creating the directory:\n"
 		    "  %s\n"
-		    "Please correct the problem and restart gnucash.\n"
+		    "Please correct the problem and restart GnuCash.\n"
 		    "The reported error was '%s' (errno %d).\n"),
 		  dirname, strerror(errno), errno);
 	exit(1);
@@ -354,7 +354,7 @@ gnc_validate_directory (const gchar *dirname)
 		_("The path\n"
 		  "  %s\n"
 		  "exists but it is not a directory. Please delete\n"
-		  "the file and start gnucash again.\n"),
+		  "the file and start GnuCash again.\n"),
 		dirname);
       exit(1);
       
@@ -363,7 +363,7 @@ gnc_validate_directory (const gchar *dirname)
 		_("An unknown error occurred when validating that the\n"
 		  "  %s\n"
 		  "directory exists and is usable. Please correct the\n"
-		  "problem and restart gnucash.  The reported error \n"
+		  "problem and restart GnuCash.  The reported error \n"
 		  "was '%s' (errno %d)."),
 		dirname, strerror(errno), errno);
       exit(1);
@@ -375,7 +375,7 @@ gnc_validate_directory (const gchar *dirname)
 	      _("The path\n"
 		"  %s\n"
 		"exists but it is not a directory. Please delete\n"
-		"the file and start gnucash again.\n"),
+		"the file and start GnuCash again.\n"),
 	      dirname);
     exit(1);
   }

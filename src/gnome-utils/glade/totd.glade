@@ -7,7 +7,7 @@
 <widget class="GtkDialog" id="totd_dialog">
   <property name="border_width">6</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Gnucash Tip Of The Day</property>
+  <property name="title" translatable="yes">GnuCash Tip Of The Day</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>

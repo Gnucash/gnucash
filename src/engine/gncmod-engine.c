@@ -38,7 +38,7 @@ libgncmod_engine_LTX_gnc_module_path(void)
 char * 
 libgncmod_engine_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash accounting engine");
+  return g_strdup("The GnuCash accounting engine");
 }
 
 int

@@ -287,13 +287,13 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  g_free(tmp);
 	}
 	
-	PERR("WRITEME: Gnucash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
+	PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADRESS here once supported by libofx!\n");
 	
 	/* Ideally, gnucash should process the corrected transactions */
 	if(data.fi_id_corrected_valid==true){
-	  PERR("WRITEME: Gnucash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
+	  PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
 	  tmp=notes;
-	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but Gnucash didn't process the correction!");
+	  notes=g_strdup_printf("%s%s%s%s",tmp,"|This corrects transaction #",data.fi_id_corrected,"but GnuCash didn't process the correction!");
 	  g_free(tmp);
 	}
 	xaccTransSetNotes(transaction, notes);

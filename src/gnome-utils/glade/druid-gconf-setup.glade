@@ -238,7 +238,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">&lt;b&gt;Cannot find default values&lt;/b&gt;
 
-The configuration data used to specify default values for Gnucash cannot be found in the default system locations.  Without this data Gnucash will still operate properly but it may require some extra time to setup.  Do you wish to setup the configuration data?</property>
+The configuration data used to specify default values for GnuCash cannot be found in the default system locations.  Without this data GnuCash will still operate properly but it may require some extra time to setup.  Do you wish to setup the configuration data?</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -268,7 +268,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 
 <widget class="GtkWindow" id="GConf Install Druid">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Update gconf settings - Gnucash</property>
+  <property name="title" translatable="yes">Update gconf settings - GnuCash</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -292,8 +292,8 @@ The configuration data used to specify default values for Gnucash cannot be foun
 	<widget class="GnomeDruidPageEdge" id="start_page">
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_START</property>
-	  <property name="title" translatable="yes">Update gnucash configuration data</property>
-	  <property name="text" translatable="yes">The configuration data used by Gnucash to specify its default values cannot be found in the default system locations.  Without this data Gnucash will still operate properly, but it may require some extra time to set up.</property>
+	  <property name="title" translatable="yes">Update GnuCash configuration data</property>
+	  <property name="text" translatable="yes">The configuration data used by GnuCash to specify its default values cannot be found in the default system locations.  Without this data GnuCash will still operate properly, but it may require some extra time to set up.</property>
 	</widget>
       </child>
 
@@ -430,7 +430,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 			  <property name="left_margin">0</property>
 			  <property name="right_margin">0</property>
 			  <property name="indent">0</property>
-			  <property name="text" translatable="yes">This method will modify the file .gconf.path in your home directory.  It will add the Gnucash install directory to this path so that Gnucash can find its default settings and their descriptions.</property>
+			  <property name="text" translatable="yes">This method will modify the file .gconf.path in your home directory.  It will add the GnuCash install directory to this path so that GnuCash can find its default settings and their descriptions.</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -469,7 +469,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 			  <property name="left_margin">0</property>
 			  <property name="right_margin">0</property>
 			  <property name="indent">0</property>
-			  <property name="text" translatable="yes">This method will install the Gnucash default settings and descriptions into the .gconf directory within your home directory.  The disadvantage to this method is that future updates to GnuCash will not update your local settings to add in new keys.</property>
+			  <property name="text" translatable="yes">This method will install the GnuCash default settings and descriptions into the .gconf directory within your home directory.  The disadvantage to this method is that future updates to GnuCash will not update your local settings to add in new keys.</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -677,7 +677,7 @@ The configuration data used to specify default values for Gnucash cannot be foun
 			      <property name="left_margin">0</property>
 			      <property name="right_margin">0</property>
 			      <property name="indent">0</property>
-			      <property name="text">Gnucash will add the appropriate text here.
+			      <property name="text">GnuCash will add the appropriate text here.
 </property>
 			    </widget>
 			  </child>
@@ -739,7 +739,7 @@ command 'gconftool-2 --shutdown'.</property>
 		  <child>
 		    <widget class="GtkLabel" id="label4">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Gnucash will update the system path for you.</property>
+		      <property name="label" translatable="yes">GnuCash will update the system path for you.</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -822,7 +822,7 @@ command 'gconftool-2 --shutdown'.</property>
 			  <property name="left_margin">0</property>
 			  <property name="right_margin">0</property>
 			  <property name="indent">0</property>
-			  <property name="text" translatable="yes">You have chosen to install the configuration data used by Gnucash into the ~/.gconf directory.  GnuCash can do this for you, or tell you how to do it yourself.</property>
+			  <property name="text" translatable="yes">You have chosen to install the configuration data used by GnuCash into the ~/.gconf directory.  GnuCash can do this for you, or tell you how to do it yourself.</property>
 			</widget>
 		      </child>
 		    </widget>
@@ -981,7 +981,7 @@ command 'gconftool-2 --shutdown'.</property>
 		  <child>
 		    <widget class="GtkLabel" id="label6">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Gnucash will install the data for you.</property>
+		      <property name="label" translatable="yes">GnuCash will install the data for you.</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1019,7 +1019,7 @@ command 'gconftool-2 --shutdown'.</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">Finish changes</property>
-	  <property name="text">Gnucash will fill this text in based upon the previous choices.</property>
+	  <property name="text">GnuCash will fill this text in based upon the previous choices.</property>
 	  <signal name="prepare" handler="druid_gconf_finish_page_prepare" last_modification_time="Thu, 14 Jul 2005 04:54:49 GMT"/>
 	  <signal name="back" handler="druid_gconf_finish_page_back" last_modification_time="Thu, 14 Jul 2005 04:54:55 GMT"/>
 	  <signal name="finish" handler="druid_gconf_finish_page_finish" last_modification_time="Thu, 14 Jul 2005 04:55:11 GMT"/>

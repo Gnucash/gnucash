@@ -77,8 +77,8 @@
       <locale name="C">
         <short>Automatically insert a decimal point</short>
         <long>
-	  If active, Gnucash will automatically insert a decimal point
-	  into values that are entered without one.  Otherwise Gnucash
+	  If active, GnuCash will automatically insert a decimal point
+	  into values that are entered without one.  Otherwise GnuCash
 	  will not modify entered numbers.
 	</long>
       </locale>
@@ -196,7 +196,7 @@
 	  This setting controls the source of the default currency for
 	  new accounts.  If set to "locale" then GnuCash will retrieve
 	  the default currency from the user's locale setting.  If set
-	  to "other", Gnucash will use the setting specified by the
+	  to "other", GnuCash will use the setting specified by the
 	  currency_other key.
 	</long>
       </locale>
@@ -440,7 +440,7 @@
 	  This setting controls the default currency used for
 	  reports. If set to "locale" then GnuCash will retrieve the
 	  default currency from the user's locale setting.  If set to
-	  "other", Gnucash will use the setting specified by the
+	  "other", GnuCash will use the setting specified by the
 	  currency_other key.
 	</long>
       </locale>

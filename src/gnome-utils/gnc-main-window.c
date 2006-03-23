@@ -999,9 +999,9 @@ gnc_main_window_delete_event (GtkWidget *window,
   QofSession *session;
   GtkWidget *dialog;
   gint response;
-  const gchar *title = _("Quit Gnucash?");
+  const gchar *title = _("Quit GnuCash?");
   const gchar *message =_("You are attempting to close the last "
-			  "Gnucash window.  Doing so will quit the "
+			  "GnuCash window.  Doing so will quit the "
 			  "application.  Are you sure that this is "
 			  "what you want to do?");
 

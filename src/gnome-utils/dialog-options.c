@@ -1407,8 +1407,8 @@ gnc_options_dialog_new(gchar *title)
   GtkWidget * hbox;
 
   retval = g_new0(GNCOptionWin, 1);
-  xml = gnc_glade_xml_new ("preferences.glade", "Gnucash Options");
-  retval->dialog = glade_xml_get_widget (xml, "Gnucash Options");
+  xml = gnc_glade_xml_new ("preferences.glade", "GnuCash Options");
+  retval->dialog = glade_xml_get_widget (xml, "GnuCash Options");
   retval->page_list = glade_xml_get_widget (xml, "page_list");
 
   glade_xml_signal_autoconnect_full( xml,

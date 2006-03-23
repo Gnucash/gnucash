@@ -1,10 +1,15 @@
+2006-03-23  David Hampton  <hampton@employees.org>
+
+	* numerous: Regularize capitalization of the word 'GnuCash' where
+	its user visible.
+
 2006-03-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-gnome/businessmod-gnome.c:
 	  open the bills due reminder at BOOK_OPENED instead of UI_START.
 	  This gets us the bills-due reminder on File->Open as well.
 
-2006-03-23  David Hampton  <david@hampton-pc.rainbolthampton.net>
+2006-03-23  David Hampton  <hampton@employees.org>
 
 	* src/backend/postgres/checkpoint.c: Update to compile on FC5.
 

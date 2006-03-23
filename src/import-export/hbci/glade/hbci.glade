@@ -388,7 +388,7 @@ Setup</property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">HBCI Setup Finished</property>
-	  <property name="text" translatable="yes">Now the setup for all HBCI accounts that are matching to a Gnucash account is finished. You can now invoke HBCI actions on those accounts.
+	  <property name="text" translatable="yes">Now the setup for all HBCI accounts that are matching to a GnuCash account is finished. You can now invoke HBCI actions on those accounts.
 
 If you want to add another HBCI bank, user, or account, you can start this druid again anytime.
 

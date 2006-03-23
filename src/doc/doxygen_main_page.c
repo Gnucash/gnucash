@@ -204,8 +204,8 @@ the last highlighted line to refresh the highlighting. Some editors have a speci
 refresh option.
 
 [cstim 2003-03-25] The "Data Structures" page of doxygen doesn't show
-anything useful for gnucash. Obviously doxygen only accepts "real" C
-struct definitions for inclusion on that page. However, all gnucash
+anything useful for GnuCash. Obviously doxygen only accepts "real" C
+struct definitions for inclusion on that page. However, all GnuCash
 data structures are defined somewhere in private headers, and only the
 typedefs are publically visible. Isn't there a way to have doxygen
 show the documentation for the <i>typedefs</i> on the "Data

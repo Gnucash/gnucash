@@ -40,7 +40,7 @@ libgncmod_report_gnome_LTX_gnc_module_path(void) {
 
 char * 
 libgncmod_report_gnome_LTX_gnc_module_description(void) {
-  return g_strdup("Gnome component of Gnucash report generation system");
+  return g_strdup("Gnome component of GnuCash report generation system");
 }
 
 static void

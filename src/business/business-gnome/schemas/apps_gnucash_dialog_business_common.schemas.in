@@ -123,7 +123,7 @@
       <locale name="C">
         <short>Show bills due reminder at startup</short>
         <long>
-	  If active, at startup Gnucash will check to see whether any
+	  If active, at startup GnuCash will check to see whether any
 	  bills will become due soon.  If so, it will present the user
 	  with a reminder dialog.  The definition of "soon" is
 	  controlled by the "Days in Advance" setting.  Otherwise
@@ -142,7 +142,7 @@
         <short>Show bills due within this many days</short>
         <long>
 	  This field defines the number of days in advance that
-	  Gnucash will check for due bills.  Its value is only used if
+	  GnuCash will check for due bills.  Its value is only used if
 	  the "Notify when due" setting is active.
 	</long>
       </locale>

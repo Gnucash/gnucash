@@ -39,7 +39,7 @@
 	  This setting controls the type of starting date used in
 	  profit/loss calculations.  If set to "absolute" then GnuCash
 	  will retrieve the starting date specified by the start_date
-	  key.  If set to anything else, Gnucash will retrieve the
+	  key.  If set to anything else, GnuCash will retrieve the
 	  starting date specified by the start_period key.
 	</long>
       </locale>
@@ -91,7 +91,7 @@
 	  This setting controls the type of ending date used in
 	  profit/loss calculations.  If set to "absolute" then GnuCash
 	  will retrieve the ending date specified by the end_date
-	  key.  If set to anything else, Gnucash will retrieve the
+	  key.  If set to anything else, GnuCash will retrieve the
 	  ending date specified by the end_period key.
 	</long>
       </locale>

@@ -59,7 +59,7 @@ libgncmod_gnome_search_LTX_gnc_module_path(void)
 char * 
 libgncmod_gnome_search_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash Gnome Search UI");
+  return g_strdup("The GnuCash Gnome Search UI");
 }
 
 int

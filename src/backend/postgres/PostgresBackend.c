@@ -2550,7 +2550,7 @@ void pgend_provider_init(void)
 	QofBackendProvider *prov;
 
 	prov = g_new0(QofBackendProvider, 1);
-	prov->provider_name = "The Postgres backend for Gnucash";
+	prov->provider_name = "The Postgres backend for GnuCash";
 	prov->access_method = "postgres";
 	prov->partial_book_supported = FALSE;
 	prov->backend_new = pgendNew;

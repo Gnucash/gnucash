@@ -314,7 +314,7 @@ can_calc_value(FinCalcDialog *fcd, FinCalcValue value, int *error_item)
 {
   const char *missing = _("This program can only calculate one value at a time. "
 			  "You must enter values for all but one quantity.");
-  const char *bad_exp = _("Gnucash cannot determine the value in one of the fields. "
+  const char *bad_exp = _("GnuCash cannot determine the value in one of the fields. "
 			  "You must enter a valid expression.");
   const char *string;
   gnc_numeric nvalue;

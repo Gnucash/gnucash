@@ -74,7 +74,7 @@ libgncmod_business_gnome_LTX_gnc_module_path(void)
 char * 
 libgncmod_business_gnome_LTX_gnc_module_description(void) 
 {
-  return g_strdup("The Gnucash business module GNOME UI");
+  return g_strdup("The GnuCash business module GNOME UI");
 }
 
 int

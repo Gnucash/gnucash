@@ -4,8 +4,8 @@
 <glade-interface>
 <requires lib="gnome"/>
 
-<widget class="GtkDialog" id="Gnucash Options">
-  <property name="title" translatable="yes">Gnucash Options</property>
+<widget class="GtkDialog" id="GnuCash Options">
+  <property name="title" translatable="yes">GnuCash Options</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -137,8 +137,8 @@
   </child>
 </widget>
 
-<widget class="GtkDialog" id="Gnucash Preferences">
-  <property name="title" translatable="yes">Gnucash Preferences</property>
+<widget class="GtkDialog" id="GnuCash Preferences">
+  <property name="title" translatable="yes">GnuCash Preferences</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -1999,7 +1999,7 @@
 	      <child>
 		<widget class="GtkCheckButton" id="gconf/general/register/use_theme_colors">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">If checked, the system color theme will be applied to register windows.  If clear, the original gnucash register colors will be used.</property>
+		  <property name="tooltip" translatable="yes">If checked, the system color theme will be applied to register windows.  If clear, the original GnuCash register colors will be used.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Use system theme colors</property>
 		  <property name="use_underline">True</property>

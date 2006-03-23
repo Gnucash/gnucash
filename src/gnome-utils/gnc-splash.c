@@ -85,11 +85,11 @@ gnc_show_splash_screen (void)
   vbox = gtk_vbox_new (FALSE, 3);
 #ifdef GNUCASH_SVN
   /* Development version */
-  ver_string = g_strdup_printf(_("Version: Gnucash-%s svn (r%s built %s)"),
+  ver_string = g_strdup_printf(_("Version: GnuCash-%s svn (r%s built %s)"),
 			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #else
   /* Dist Tarball */
-  ver_string = g_strdup_printf(_("Version: Gnucash-%s (r%s built %s)"),
+  ver_string = g_strdup_printf(_("Version: GnuCash-%s (r%s built %s)"),
 			       VERSION, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
 #endif
 
