@@ -1,3 +1,7 @@
+2006-03-23  David Hampton  <david@hampton-pc.rainbolthampton.net>
+
+	* src/backend/postgres/checkpoint.c: Update to compile on FC5.
+
 2006-03-23  Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c: Store the log level
