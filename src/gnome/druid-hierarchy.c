@@ -69,10 +69,13 @@ typedef enum {
 
 typedef struct {
   GtkWidget *dialog;
+  GtkWidget *druid;
+  gboolean next_ok;
 
   GtkWidget *currency_selector;
 
   GtkTreeView *categories_tree;
+  GtkTreeRowReference *initial_category;
   GtkTextView *category_description;
   GtkWidget *category_accounts_container;
   GtkTreeView *category_accounts_tree;
@@ -88,6 +91,7 @@ typedef struct {
   QofBook *temporary;
 
   gboolean account_list_added;
+  gboolean use_defaults;
 
   GncHierarchyDruidFinishedCallback when_completed;
 
@@ -213,6 +217,80 @@ gnc_get_ea_locale_dir(const char *top_dir)
 /************************************************************
  *                  Choose Categories Page                  *
  ************************************************************/
+
+/** This is a helper function to get around a gtk issue (probably and
+ *  ordering issue) where you cannot set this button as sensitive
+ *  during the initial creation of the druid page.  Using a delayed
+ *  idle function works correctly for both the initial page creation
+ *  and the subsequent changes when account sets are
+ *  selected/deselected.
+ *
+ *  @param data A pointer to the data structure describing the
+ *  hierarchy druid.
+ *
+ *  @return Always returns FALSE to remove this function from the idle
+ *  loop. */
+static gboolean
+delayed_enable_next_button (hierarchy_data *data)
+{
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(data->druid),
+				    TRUE, data->next_ok, TRUE, TRUE);
+  return FALSE;
+}
+
+/** This is a helper function called on each item in the GtkTreeStore
+ *  by categories_page_enable_next.  The purpose is to determine is an
+ *  account set has been selected.
+ *
+ *  @param store The GtkListStore containing one line per account set.
+ *
+ *  @param path A GtkTreePath for the entry in question.
+ *
+ *  @param iter A GtkTreeIter for the entry in question.
+ *
+ *  @param result A pointer to the result value passed to/from the
+ *  caller.  This function sets the result value to TRUE if the entry
+ *  in question is checked.
+ *
+ *  @return TRUE if the entry in question is checked to cancel the
+ *  tree walk.  FALSE if unchecked to that the rest of the tree will
+ *  be tested. */
+static gboolean
+account_set_checked_helper (GtkListStore *store,
+			    GtkTreePath  *path,
+			    GtkTreeIter  *iter,
+			    gboolean     *result)
+{
+  gboolean checked;
+
+  g_return_val_if_fail(GTK_IS_LIST_STORE(store), FALSE);
+
+  gtk_tree_model_get (GTK_TREE_MODEL(store), iter, COL_CHECKED, &checked, -1);
+  if (checked) {
+    *result = TRUE;
+    return TRUE; /* Stop tree walk. */
+  }
+
+  return FALSE;
+}
+
+/** This function determines if the "Next" button on the account set
+ *  selection page should be sensitive.  The button should only be
+ *  sensitive if one or more account sets has been selected.
+ *
+ *  @param data A pointer to the data structure describing the
+ *  hierarchy druid. */
+static void
+categories_page_enable_next (hierarchy_data *data)
+{
+  data->next_ok = FALSE;
+  gtk_tree_model_foreach (gtk_tree_view_get_model (data->categories_tree),
+			  (GtkTreeModelForeachFunc)account_set_checked_helper,
+			  &data->next_ok);
+  g_idle_add((GSourceFunc)delayed_enable_next_button, data);
+}
+
+
 static void
 categories_selection_changed (GtkTreeModel *treemodel,
 			      GtkTreePath *arg1,
@@ -220,6 +298,7 @@ categories_selection_changed (GtkTreeModel *treemodel,
 			      hierarchy_data *data)
 {
 	data->category_set_changed = TRUE;
+	categories_page_enable_next(data);
 }
 
 
@@ -230,24 +309,31 @@ add_one_category (GncExampleAccount *acc,
 	GtkTreeView *view;
 	GtkListStore *store;
 	GtkTreeIter iter;
+	GtkTreePath* path;
+	gboolean use_defaults;
 
 	g_return_if_fail(acc != NULL);
 	g_return_if_fail(data != NULL);
 
 	view = data->categories_tree;
 	store = GTK_LIST_STORE(gtk_tree_view_get_model(view));
+	use_defaults = data->use_defaults && acc->start_selected;
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter,
-			   COL_CHECKED, acc->start_selected,
+			   COL_CHECKED, use_defaults,
 			   COL_TITLE, acc->title,
 			   COL_SHORT_DESCRIPTION, acc->short_description,
 			   COL_LONG_DESCRIPTION, acc->long_description,
 			   COL_ACCOUNT, acc,
 			   -1);
 
-	if (acc->start_selected)
+	if (use_defaults) {
 	  data->category_set_changed = TRUE;
+	  path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+	  data->initial_category = gtk_tree_row_reference_new(GTK_TREE_MODEL(store), path);
+	  gtk_tree_path_free(path);
+	}
 }
 
 static void
@@ -276,6 +362,8 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	GtkListStore *model;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer *renderer;
+	GtkTreeSelection *selection;
+	GtkTreePath *path;
 
 	locale_dir = gnc_get_ea_locale_dir (GNC_ACCOUNTS_DIR);
  	list = gnc_load_example_account_list (data->temporary,
@@ -328,6 +416,14 @@ account_categories_tree_view_prepare (hierarchy_data  *data)
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(model),
 					      COL_TITLE,
 					      GTK_SORT_ASCENDING);
+
+	if (data->initial_category) {
+	  path = gtk_tree_row_reference_get_path(data->initial_category);
+	  selection = gtk_tree_view_get_selection(tree_view);
+	  gtk_tree_view_scroll_to_cell(tree_view, path, NULL, TRUE, 0.5, 0.5);
+	  gtk_tree_selection_select_path(selection, path);
+	  gtk_tree_path_free(path);
+	}
 }
 
 void
@@ -336,14 +432,9 @@ on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
 				      hierarchy_data  *data)
 {
   GtkTextBuffer* buffer;
+
   if (!data->account_list_added)
   {
-    /* Build the categories tree if necessary */
-    gnc_suspend_gui_refresh ();
-    data->temporary = qof_book_new();
-    account_categories_tree_view_prepare (data);
-    gnc_resume_gui_refresh ();
-
     /* clear out the description/tree */
     if (data->category_accounts_tree)
       gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
@@ -352,7 +443,14 @@ on_choose_account_categories_prepare (GnomeDruidPage  *gnomedruidpage,
     gtk_text_buffer_set_text(buffer, "", -1);
 
     data->account_list_added = TRUE;
+
+    /* Build the categories tree if necessary */
+    gnc_suspend_gui_refresh ();
+    data->temporary = qof_book_new();
+    account_categories_tree_view_prepare (data);
+    gnc_resume_gui_refresh ();
   }
+  categories_page_enable_next(data);
 }
 
 static void
@@ -876,6 +974,8 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 
         // delete before we suspend GUI events, and then muck with the model,
         // because the model doesn't seem to handle this correctly.
+	if (data->initial_category)
+	  gtk_tree_row_reference_free(data->initial_category);
 	delete_hierarchy_dialog (data);
 
 	gnc_suspend_gui_refresh ();
@@ -897,11 +997,10 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
 }
 
 static GtkWidget *
-gnc_create_hierarchy_druid (GncHierarchyDruidFinishedCallback when_completed)
+gnc_create_hierarchy_druid (gboolean use_defaults, GncHierarchyDruidFinishedCallback when_completed)
 {
 	hierarchy_data *data;
 	GtkWidget *dialog;
-	GtkWidget *druid;
 	GtkTreeView *tree_view;
 	GtkWidget *box, *start_page;
 	GladeXML *xml;
@@ -913,8 +1012,8 @@ gnc_create_hierarchy_druid (GncHierarchyDruidFinishedCallback when_completed)
 	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
 	data->dialog = dialog;
 	
-	druid = glade_xml_get_widget (xml, "hierarchy_druid");
-	gnc_druid_set_colors (GNOME_DRUID (druid));
+	data->druid = glade_xml_get_widget (xml, "hierarchy_druid");
+	gnc_druid_set_colors (GNOME_DRUID (data->druid));
 	
 	start_page = glade_xml_get_widget (xml, "start_page");
 	gtk_widget_show (start_page);
@@ -951,20 +1050,21 @@ gnc_create_hierarchy_druid (GncHierarchyDruidFinishedCallback when_completed)
 	glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, data);
 
         data->when_completed = when_completed;
-	
+	data->use_defaults = use_defaults;
 	return dialog;
 }
 
 GtkWidget*
-gnc_ui_hierarchy_druid(void)
+gnc_ui_hierarchy_druid(gboolean use_defaults)
 {
-  return gnc_create_hierarchy_druid(NULL);
+  return gnc_create_hierarchy_druid(use_defaults, NULL);
 }
 
 GtkWidget*
-gnc_ui_hierarchy_druid_with_callback(GncHierarchyDruidFinishedCallback when_finished)
+gnc_ui_hierarchy_druid_with_callback(gboolean use_defaults,
+				     GncHierarchyDruidFinishedCallback when_finished)
 {
-  return gnc_create_hierarchy_druid(when_finished);
+  return gnc_create_hierarchy_druid(use_defaults, when_finished);
 }
 
 static void
@@ -979,7 +1079,7 @@ static void
 gnc_ui_hierarchy_druid_hook (void)
 {
   if (gnc_gconf_get_bool(GCONF_SECTION, "show_on_new_file", NULL)) {
-    gnc_ui_hierarchy_druid_with_callback(create_account_page);
+    gnc_ui_hierarchy_druid_with_callback(TRUE, create_account_page);
   }
 }
 

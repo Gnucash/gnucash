@@ -103,7 +103,7 @@ gnc_ui_new_user_dialog (void)
 		break;
 	  case GTK_RESPONSE_OK:
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (new_accounts_button))) {
-			gnc_ui_hierarchy_druid_with_callback(after_hierarchy_druid);
+			gnc_ui_hierarchy_druid_with_callback(TRUE, after_hierarchy_druid);
 			break;
 		} else if ((qifImportDruidFcn != NULL)
                            && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (import_qif_button))) {

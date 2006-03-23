@@ -674,7 +674,7 @@ gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAc
 static void
 gnc_plugin_page_account_tree_cmd_file_new_hierarchy (GtkAction *action, GncPluginPageAccountTree *page)
 {
-        gnc_ui_hierarchy_druid();
+        gnc_ui_hierarchy_druid(FALSE);
 }
 
 static void

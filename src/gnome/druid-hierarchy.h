@@ -31,8 +31,8 @@
 
 typedef void (*GncHierarchyDruidFinishedCallback)(void);
 
-GtkWidget* gnc_ui_hierarchy_druid (void);
-GtkWidget* gnc_ui_hierarchy_druid_with_callback(GncHierarchyDruidFinishedCallback when_finished);
+GtkWidget* gnc_ui_hierarchy_druid (gboolean use_defaults);
+GtkWidget* gnc_ui_hierarchy_druid_with_callback(gboolean use_defaults, GncHierarchyDruidFinishedCallback when_finished);
 
 void gnc_ui_hierarchy_druid_initialize (void);
 
