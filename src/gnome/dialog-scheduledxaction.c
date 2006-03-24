@@ -1890,6 +1890,8 @@ delete_button_clicked( GtkButton *b, gpointer d )
 
                         sx = (SchedXaction*)gtk_clist_get_row_data( cl, GPOINTER_TO_INT(sel->data));
                         sxList = g_list_remove( sxList, (gpointer)sx );
+                        gnc_book_set_schedxactions( book, sxList );
+
                         foundP = g_hash_table_lookup_extended( sxd->sxData, sx,
                                                                &unused,
                                                                (gpointer*)p_sxri );
@@ -1900,7 +1902,6 @@ delete_button_clicked( GtkButton *b, gpointer d )
                         g_hash_table_remove( sxd->sxData, sx );
                         xaccSchedXactionFree( sx );
                 }
-                gnc_book_set_schedxactions( book, sxList );
 
                 gtk_clist_freeze( cl );
                 /* Remove the selected and deleted rows from the clist in

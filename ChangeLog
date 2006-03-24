@@ -1,3 +1,10 @@
+2006-03-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):
+	Bug#335564: ensure the book's SX List is as consistent as
+	possible; specifically, before we free the SX (which now generates
+	an event which walks the book's SX List).
+
 2006-03-24  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/register/register-gnome/gnucash-grid.c:
