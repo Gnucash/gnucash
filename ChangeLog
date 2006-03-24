@@ -1,3 +1,13 @@
+2006-03-24  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/register/register-gnome/gnucash-sheet.h:
+	* src/register/register-gnome/gnucash-style.c: Add vertical
+	  padding in register cells and align text, editable text and the
+	  text cursor vertically. This makes the cells taller and centers
+	  the text. Add one pixel to the horizontal padding.
+
 2006-03-23  David Hampton  <hampton@employees.org>
 
 	* numerous: Regularize capitalization of the word 'GnuCash' where

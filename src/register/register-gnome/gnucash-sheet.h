@@ -28,7 +28,7 @@
 #include "table-allgui.h"
 
 #define CELL_VPADDING 3
-#define CELL_HPADDING 4
+#define CELL_HPADDING 5
 
 
 #define GNUCASH_TYPE_REGISTER     (gnucash_register_get_type ())

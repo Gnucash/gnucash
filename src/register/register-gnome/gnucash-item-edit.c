@@ -263,7 +263,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         // pango_layout_set_ellipsize(...) as of pango 1.6 may be useful for
         // strings longer than the field width.
 
-	pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
+        pango_layout_get_cursor_pos (info->layout, cursor_byte_pos, &strong_pos, NULL);
 
         info->cursor_rect.x = dx + PANGO_PIXELS (strong_pos.x);
         info->cursor_rect.y = dy + PANGO_PIXELS (strong_pos.y);
@@ -323,19 +323,18 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
         gdk_gc_set_foreground (item_edit->gc, info.fg_color);
 
-	gdk_draw_layout (drawable,
-			 item_edit->gc,
-			 info.text_rect.x + CELL_HPADDING + 
-			 item_edit->x_offset,
-			 info.text_rect.y + 1,
-			 info.layout);
+        gdk_draw_layout (drawable,
+                         item_edit->gc,
+                         info.text_rect.x + CELL_HPADDING + item_edit->x_offset,
+                         info.text_rect.y + CELL_VPADDING,
+                         info.layout);
 
         gdk_draw_line (drawable,
                        item_edit->gc,
                        info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
-                       info.cursor_rect.y,
+                       info.cursor_rect.y + CELL_VPADDING,
                        info.cursor_rect.x + CELL_HPADDING + item_edit->x_offset,
-                       info.cursor_rect.y + info.cursor_rect.height);
+                       info.cursor_rect.y + CELL_VPADDING + info.cursor_rect.height);
 
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 

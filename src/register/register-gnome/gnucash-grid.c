@@ -527,7 +527,7 @@ draw_cell (GnucashGrid *grid,
         gdk_draw_layout (drawable,
                          grid->gc,
                          x + CELL_HPADDING + x_offset,
-                         y + 1,
+                         y + CELL_VPADDING + 1,
                          layout);
 
         gdk_gc_set_clip_rectangle (grid->gc, NULL);

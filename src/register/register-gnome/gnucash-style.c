@@ -152,8 +152,8 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
         /* GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font; */
         CellDimensions *cd;
         int row, col;
-	gint default_height = 0, max_height = -1;
-	PangoLayout *layout;
+        gint max_height = -1;
+        PangoLayout *layout;
 
         /* g_return_if_fail (font != NULL); */
 
@@ -168,11 +168,6 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
 
-                        /*cd->pixel_height = (font->ascent + font->descent +
-                                            (2 * CELL_VPADDING));*/
-			/* cd->pixel_height = (2 * CELL_VPADDING); */
-
-
                         cell = gnc_cellblock_get_cell (cursor, row, col);
                         if (!cell)
                                 continue;
@@ -183,25 +178,19 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 
                         if (text)
                         {
-				layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
-                                /* width = gdk_string_width (font, text); */
-				cd->pixel_height = 0;
-				pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
-				g_object_unref (layout);
+                                layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
+                                pango_layout_get_pixel_size (layout, &width, &cd->pixel_height);
+                                g_object_unref (layout);
                                 width += 2 * CELL_HPADDING;
+                                cd->pixel_height += 2 * CELL_VPADDING;
                         }
                         else
-			{
+                        {
                                 width = 0;
-				cd->pixel_height = (2 * CELL_VPADDING);
-			}
+                                cd->pixel_height = (2 * CELL_VPADDING);
+                        }
 
-			if (default_height == 0)
-				default_height = cd->pixel_height;
-			if (max_height < 0)
-				max_height = cd->pixel_height;
-			else
-				max_height = MAX(max_height, cd->pixel_height);
+                        max_height = MAX(max_height, cd->pixel_height);
 
                         if (cd->pixel_width > 0)
                                 continue;
@@ -223,9 +212,9 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 {
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
-			cd->pixel_height = max_height;
-		}
-	}
+                        cd->pixel_height = max_height;
+                }
+        }
 }
 
 
