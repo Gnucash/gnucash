@@ -2282,11 +2282,26 @@ AC_OUTPUT
 output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
 output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
 output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`
+
+if test x${SQL_DIR} != x; then
+components="$components sql"
+fi
+if test x${OFX_DIR} != x; then
+components="$components ofx"
+fi
+if test x${HBCI_DIR} != x; then
+components="$components hbci"
+fi
+if test x${MT940_DIR} != x; then
+components="$components mt940"
+fi
+
 AC_MSG_RESULT([
   Options detected/selected
   -------------------------
   gnucash version ...... : $VERSION
   Build for host ....... : $host
+  Optional components....:$components
   Extra Warnings ....... : $warnFLAGS
   CPPFLAGS ............. : $CPPFLAGS
   CFLAGS ............... : $CFLAGS
