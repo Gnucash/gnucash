@@ -1,3 +1,12 @@
+2006-03-24  David Hampton  <david@hampton-pc.rainbolthampton.net>
+
+	* src/gnome/ui/gnc-reconcile-window-ui.xml:
+	* src/gnome/window-reconcile.c: Add toolbar icons for Postpone and
+	Cancel.  Fixes 114267.
+
+	* configure.in: List the optional components that will be compiled
+	in the summary at the end of the configure run.
+
 2006-03-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):

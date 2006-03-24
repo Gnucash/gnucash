@@ -1899,13 +1899,13 @@ static GtkActionEntry recnWindow_actions [] =
 	  N_("Change the reconcile information "
 	     "including statement date and ending balance."),
 	  G_CALLBACK (gnc_ui_reconcile_window_change_cb) },
-	{ "RecnFinishAction", GTK_STOCK_GO_DOWN, N_("_Finish"), "<control>f",
+	{ "RecnFinishAction", GTK_STOCK_YES, N_("_Finish"), "<control>f",
 	  N_("Finish the reconciliation of this account"),
 	  G_CALLBACK(recnFinishCB)},
-	{ "RecnPostponeAction", NULL, N_("_Postpone"), "<control>p",
+	{ "RecnPostponeAction", GTK_STOCK_GO_BACK, N_("_Postpone"), "<control>p",
 	  N_("Postpone the reconciliation of this account"),
 	  G_CALLBACK(recnPostponeCB)},
-	{ "RecnCancelAction", NULL, N_("_Cancel"), NULL,
+	{ "RecnCancelAction", GTK_STOCK_CANCEL, N_("_Cancel"), NULL,
 	  N_("Cancel the reconciliation of this account"),
 	  G_CALLBACK(recnCancelCB)},
 

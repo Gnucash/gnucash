@@ -42,5 +42,7 @@
     <toolitem name="AccountOpenAccount" action="AccountOpenAccountAction"/>
     <separator name="ToolbarSep3"/>
     <toolitem name="RecnFinish"  action="RecnFinishAction"/>
+    <toolitem name="RecnPostpone"   action="RecnPostponeAction"/>
+    <toolitem name="RecnCancel"     action="RecnCancelAction"/>
   </toolbar>
 </ui>
