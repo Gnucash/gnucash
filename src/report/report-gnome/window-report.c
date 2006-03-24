@@ -333,6 +333,24 @@ remove_invalid_report(gpointer key, gpointer val, gpointer data)
     return FALSE;
 }
 
+static gboolean
+remove_old_report(gpointer key, gpointer val, gpointer data)
+{
+    SCM report = val;
+    GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG(data);
+    gchar *name = NULL;
+    gchar *msg, *str = _("Do you want to display '%s'?");
+    gint response;
+    
+    name = gnc_report_name(report);
+    msg = g_strdup_printf(str, name);
+    gtk_message_dialog_set_markup(dialog, msg);
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    g_free(msg);
+    g_free(name);
+    return (response == GTK_RESPONSE_NO);
+}    
+
 static void
 show_report(gpointer key, gpointer val, gpointer data)
 {
@@ -345,7 +363,36 @@ gnc_reports_show_all(void)
     GHashTable *reports = gnc_reports_get_global();
     
     if (reports) {
+        GtkWidget *dialog;
+        guint num_reports;
+        gint response;
+        gchar *msg, *str = 
+            _("GnuCash has found %d reports from an earlier version of "
+              "GnuCash but can't tell which ones you had open.  You will now "
+              "have the option to open each report or not.  From now on, "
+              "GnuCash will remember which reports you leave open, so you "
+              "won't see this message again.");
+        
         g_hash_table_foreach_remove(reports, remove_invalid_report, NULL);
-        g_hash_table_foreach(reports, show_report, NULL);
+        num_reports = g_hash_table_size(reports);
+        if (num_reports > 3) {
+            msg = g_strdup_printf(str, num_reports);
+            dialog = gtk_message_dialog_new(
+                NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, 
+                GTK_BUTTONS_OK_CANCEL, msg);
+            response = gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+            g_free(msg);
+            if (response == GTK_RESPONSE_OK) {
+                GtkWidget *dialog = gtk_message_dialog_new(
+                    NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, 
+                    GTK_BUTTONS_YES_NO, NULL);
+                g_hash_table_foreach_remove(reports, remove_old_report, 
+                                            dialog);
+                gtk_widget_destroy(dialog);
+                g_hash_table_foreach(reports, show_report, NULL);
+            }
+        } else
+            g_hash_table_foreach(reports, show_report, NULL);
     }
 }
