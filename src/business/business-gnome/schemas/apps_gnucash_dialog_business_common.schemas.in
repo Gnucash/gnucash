@@ -127,7 +127,7 @@
 	  bills will become due soon.  If so, it will present the user
 	  with a reminder dialog.  The definition of "soon" is
 	  controlled by the "Days in Advance" setting.  Otherwise
-	  gnucash does not check for due bills.
+	  GnuCash does not check for due bills.
 	</long>
       </locale>
     </schema>

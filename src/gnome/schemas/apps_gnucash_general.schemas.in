@@ -14,7 +14,7 @@
 	  If active, the size and location of each dialog window will
 	  be saved when it is closed.  The sizes and locations of
 	  content windows will be remembered when you quit
-	  gnucash. Otherwise the sizes will not be saved.
+	  GnuCash. Otherwise the sizes will not be saved.
 	</long>
       </locale>
     </schema>

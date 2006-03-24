@@ -109,7 +109,7 @@
           transaction will be added automatically. A transaction whose
           best match's score is in the red zone (above the display
           minimum score but below or equal to the Add match score)
-          will be added to the gnucash file by default.
+          will be added to the GnuCash file by default.
         </long>
       </locale>
     </schema>
