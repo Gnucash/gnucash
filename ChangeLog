@@ -1,3 +1,8 @@
+2006-03-25  David Hampton  <david@hampton-pc.rainbolthampton.net>
+
+	* src/gnome/window-reconcile.c: Add a context menu to the
+	reconcile window.  Fixes 120830.
+
 2006-03-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/test/Makefile.am:

@@ -802,6 +802,86 @@ gnc_reconcile_window_list_cb(GNCReconcileList *list, Split *split,
   recnRecalculateBalance(recnData);
 }
 
+/** Popup a contextual menu.  This function ends up being called when
+ *  the user right-clicks in the context of a window, or uses the
+ *  keyboard context-menu request key combination (Shift-F10 by
+ *  default).
+ *
+ *  @param recnData This is a data structure describing the
+ *  Reconciliation Window.
+ *
+ *  @param event The event parameter passed to the "button-press"
+ *  callback.  May be null if there was no event (aka keyboard
+ *  request).
+ */
+static void
+do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
+{
+  GtkWidget *menu;
+  int button, event_time;
+
+  menu = gtk_ui_manager_get_widget(recnData->ui_merge, "/MainPopup");
+  if (!menu) {
+    return;
+  }
+
+  if (event) {
+    button = event->button;
+    event_time = event->time;
+  } else {
+    button = 0;
+    event_time = gtk_get_current_event_time ();
+  }
+
+  gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, button, event_time);
+}
+
+
+/** Callback function invoked when the user requests that Gnucash
+ *  popup the contextual menu via the keyboard context-menu request
+ *  key combination (Shift-F10 by default).
+ *
+ *  @param recnData This is a data structure describing the
+ *  Reconciliation Window.
+ *
+ *  @param widget Whatever widget had focus when the user issued the
+ *  keyboard context-menu request.
+ *
+ *  @return Always returns TRUE to indicate that the menu request was
+ *  handled.
+ */
+static gboolean
+gnc_reconcile_window_popup_menu_cb (GtkWidget *widget,
+				    RecnWindow *recnData)
+{
+  do_popup_menu(recnData, NULL);
+  return TRUE;
+}
+
+
+/*  Callback function invoked when the user clicks in the content of
+ *  any Gnucash window.  If this was a "right-click" then Gnucash will
+ *  popup the contextual menu.
+ */
+static gboolean
+gnc_reconcile_window_button_press_cb (GtkWidget *widget,
+				      GdkEventButton *event,
+				      RecnWindow *recnData)
+{
+  GtkCList *this_list;
+  gint row, column;
+
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
+    this_list = GTK_CLIST(widget);
+    gtk_clist_get_selection_info(this_list, event->x, event->y, &row, &column);
+    gtk_clist_select_row(this_list, row, column);
+    do_popup_menu(recnData, event);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
 static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
 {
@@ -941,6 +1021,9 @@ gnc_reconcile_window_create_list_box(Account *account,
 
   g_signal_connect(list, "toggle_reconciled",
                    G_CALLBACK(gnc_reconcile_window_list_cb),
+                   recnData);
+  g_signal_connect(list, "button_press_event",
+                   G_CALLBACK(gnc_reconcile_window_button_press_cb),
                    recnData);
   g_signal_connect(list, "double_click_split",
                    G_CALLBACK(gnc_reconcile_window_double_click_cb),
@@ -1502,6 +1585,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
       gnc_gconf_add_anon_notification(DESKTOP_GNOME_INTERFACE,
 				      gnc_toolbar_change_cb, recnData);
   }
+
+  g_signal_connect(recnData->window, "popup-menu",
+		   G_CALLBACK(gnc_reconcile_window_popup_menu_cb), recnData);
 
   statusbar = gtk_statusbar_new();
   gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(statusbar), TRUE);
