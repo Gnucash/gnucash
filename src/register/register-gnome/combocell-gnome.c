@@ -53,6 +53,7 @@ typedef struct _PopBox
 	GnucashSheet *sheet;
 	GncItemEdit  *item_edit;
 	GncItemList  *item_list;
+	GtkListStore *tmp_store;
 
 	gboolean signals_connected; /* list signals connected? */
 
@@ -142,6 +143,7 @@ gnc_combo_cell_init (ComboCell *cell)
 	box->sheet = NULL;
 	box->item_edit = NULL;
 	box->item_list = NULL;
+	box->tmp_store = gtk_list_store_new (1, G_TYPE_STRING);
 	box->signals_connected = FALSE;
         box->list_popped = FALSE;
         box->autosize = FALSE;
@@ -430,7 +432,12 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
                         gnc_item_list_select (box->item_list, menustr);
 
                 unblock_list_signals (cell);
-        }
+        } else {
+		GtkTreeIter iter;
+
+		gtk_list_store_append(box->tmp_store, &iter);
+		gtk_list_store_set(box->tmp_store, &iter, 0, menustr, -1);
+	}
 
         /* If we're going to be using a pre-fab quickfill, 
          * then don't fill it in here */
@@ -742,7 +749,10 @@ gnc_combo_cell_gui_realize (BasicCell *bcell, gpointer data)
 	/* initialize gui-specific, private data */
 	box->sheet = sheet;
 	box->item_edit = item_edit;
-	box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
+	if (cell->shared_store)
+		box->item_list = gnc_item_edit_new_list(box->item_edit, cell->shared_store);
+	else
+		box->item_list = gnc_item_edit_new_list(box->item_edit, box->tmp_store);
 	g_object_ref (box->item_list);
 	gtk_object_sink (GTK_OBJECT(box->item_list));
 
