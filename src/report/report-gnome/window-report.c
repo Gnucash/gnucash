@@ -339,11 +339,11 @@ remove_old_report(gpointer key, gpointer val, gpointer data)
     SCM report = val;
     GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG(data);
     gchar *name = NULL;
-    gchar *msg, *str = _("Do you want to display '%s'?");
+    gchar *msg;
     gint response;
     
     name = gnc_report_name(report);
-    msg = g_strdup_printf(str, name);
+    msg = g_strdup_printf(_("Do you want to display '%s'?"), name);
     gtk_message_dialog_set_markup(dialog, msg);
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     g_free(msg);
@@ -366,17 +366,17 @@ gnc_reports_show_all(void)
         GtkWidget *dialog;
         guint num_reports;
         gint response;
-        gchar *msg, *str = 
-            _("GnuCash has found %d reports from an earlier version of "
-              "GnuCash but can't tell which ones you had open.  You will now "
-              "have the option to open each report or not.  From now on, "
-              "GnuCash will remember which reports you leave open, so you "
-              "won't see this message again.");
-        
+        gchar *msg;
+ 
         g_hash_table_foreach_remove(reports, remove_invalid_report, NULL);
         num_reports = g_hash_table_size(reports);
         if (num_reports > 3) {
-            msg = g_strdup_printf(str, num_reports);
+            msg = g_strdup_printf(
+                _("GnuCash has found %d reports from an earlier version of "
+                  "GnuCash but can't tell which ones you had open.  You will "
+                  "now have the option to open each report or not.  From now "
+                  "on, GnuCash will remember which reports you leave open, so "
+                  "you won't see this message again."), num_reports);
             dialog = gtk_message_dialog_new(
                 NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, 
                 GTK_BUTTONS_OK_CANCEL, msg);
