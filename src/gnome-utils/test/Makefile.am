@@ -56,7 +56,8 @@ test_gnc_dialog_LDADD = ${GNOME_LIBS} \
 
 test_link_module_SOURCES=test-link-module.c
 test_link_module_LDADD= \
-../../gnc-module/libgncmodule.la 
+  ${GUILE_LIBS} \
+  ${top_builddir}/src/gnc-module/libgncmodule.la 
 
 EXTRA_DIST = \
   test-load-module
