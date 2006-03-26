@@ -75,6 +75,7 @@
       <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
+      <toolitem name="ActionsReconcile"            action="ActionsReconcileAction"/>
     </placeholder>
   </toolbar>
 

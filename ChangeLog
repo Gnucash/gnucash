@@ -1,5 +1,9 @@
 2006-03-25  David Hampton  <david@hampton-pc.rainbolthampton.net>
 
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Add a reconcile
+	button to the toolbar of a register page.  Fixes 136522.
+
 	* src/gnome/window-reconcile.c: Add a context menu to the
 	reconcile window.  Fixes 120830.
 

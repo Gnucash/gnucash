@@ -228,7 +228,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsTransferAction", GNC_STOCK_TRANSFER, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transfer) },
-	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), NULL,
+	{ "ActionsReconcileAction", GTK_STOCK_INDEX, N_("_Reconcile..."), NULL,
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reconcile) },
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
@@ -331,6 +331,7 @@ static action_toolbar_labels toolbar_labels[] = {
   { "SplitTransactionAction",     N_("Split") },
   { "ScheduleTransactionAction",  N_("Schedule") },
   { "BlankTransactionAction",     N_("Blank") },
+  { "ActionsReconcileAction",     N_("Reconcile") },
   { NULL, NULL },
 };
 
