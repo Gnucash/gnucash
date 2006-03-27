@@ -27,7 +27,7 @@
 
 #include "table-allgui.h"
 
-#define CELL_VPADDING 3
+#define CELL_VPADDING 2
 #define CELL_HPADDING 5
 
 
