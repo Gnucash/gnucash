@@ -1,9 +1,16 @@
+2006-03-27  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/account.glade:
+	* src/gnome/druid-hierarchy.c: Change the title of the category
+	view to track changes in the highlighted group name. Fixes
+	reopened 334783.
+
 2006-03-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/register/register-gnome/gnucash-sheet.h: Stick with vertical
 	padding of 2 as discussed in bug#334920. 
 
-2006-03-25  David Hampton  <david@hampton-pc.rainbolthampton.net>
+2006-03-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c:
 	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Add a reconcile
@@ -17,7 +24,7 @@
 	* src/gnome-utils/test/Makefile.am:
 	  link against GUILE_LIBS when building the test-link test app (#336007)
 
-2006-03-25  David Hampton  <david@hampton-pc.rainbolthampton.net>
+2006-03-25  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/combocell-gnome.c: Fix the lack of
 	action strings in the popup menu.  The problem occurs because the
@@ -26,7 +33,7 @@
 	did) which is then passed off to the item_edit widget when that is
 	created.  Fixes 334592.
 
-2006-03-24  David Hampton  <david@hampton-pc.rainbolthampton.net>
+2006-03-24  David Hampton  <hampton@employees.org>
 
 	* src/gnome/ui/gnc-reconcile-window-ui.xml:
 	* src/gnome/window-reconcile.c: Add toolbar icons for Postpone and

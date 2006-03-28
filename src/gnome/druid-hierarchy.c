@@ -78,6 +78,7 @@ typedef struct {
   GtkTreeRowReference *initial_category;
   GtkTextView *category_description;
   GtkWidget *category_accounts_container;
+  GtkLabel *category_accounts_label;
   GtkTreeView *category_accounts_tree;
   gboolean category_set_changed;
 
@@ -463,17 +464,19 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 	GtkTreeIter iter;
 	GncExampleAccount *gea;
 	GtkTextBuffer* buffer;
+	gchar *text;
 
 	/* Remove the old account tree */
 	if (data->category_accounts_tree)
 	  gtk_widget_destroy(GTK_WIDGET(data->category_accounts_tree));
 	data->category_accounts_tree = NULL;
-	buffer = gtk_text_view_get_buffer(data->category_description);
-	gtk_text_buffer_set_text(buffer, "", -1);
 
 	/* Add a new one if something selected */
 	if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
 		gtk_tree_model_get (model, &iter, COL_ACCOUNT, &gea, -1);
+		text = g_strdup_printf(_("<b>Accounts in '%s'</b>"), gea->title);
+		gtk_label_set_markup(data->category_accounts_label, text);
+		g_free(text);
 		buffer = gtk_text_view_get_buffer(data->category_description);
 		gtk_text_buffer_set_text(buffer, gea->long_description, -1);
 
@@ -486,6 +489,11 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		gtk_tree_view_expand_all (tree_view);
 		gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
 		gtk_widget_show(GTK_WIDGET(tree_view));
+	} else {
+		gtk_label_set_markup(data->category_accounts_label,
+				     _("<b>Accounts in Category</b>"));
+		buffer = gtk_text_view_get_buffer(data->category_description);
+		gtk_text_buffer_set_text(buffer, "", -1);
 	}
 }
 
@@ -1032,7 +1040,8 @@ gnc_create_hierarchy_druid (gboolean use_defaults, GncHierarchyDruidFinishedCall
 			  G_CALLBACK (categories_tree_selection_changed), data);
 	gtk_tree_selection_set_mode (gtk_tree_view_get_selection (tree_view), GTK_SELECTION_SINGLE);
 	data->categories_tree = tree_view;
-	
+
+	data->category_accounts_label = GTK_LABEL(glade_xml_get_widget (xml, "accounts_in_category_label"));
 	data->category_accounts_container = glade_xml_get_widget (xml, "accounts_in_category");
 	data->category_description = GTK_TEXT_VIEW(glade_xml_get_widget (xml, "account_types_description"));
 	color = &GNOME_DRUID_PAGE_EDGE(start_page)->textbox_color;
