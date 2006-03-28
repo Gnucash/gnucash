@@ -1,5 +1,11 @@
 2006-03-28  Christian Stimming  <stimming@tuhh.de>
 
+	* src/report/report-system/options-utilities.scm: Move
+	gnc:options-add-subtotal-view! options from income-statement,
+	account-summary, and balance-sheet to here. Try to clarify the
+	wording of the option -- any native english speaker please feel
+	free to correct the wording even more.
+
 	* src/report/standard-reports/trial-balance.scm,
 	income-statement.scm, equity-statement.scm: Remove unused strings.
 

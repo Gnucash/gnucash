@@ -73,11 +73,7 @@
   (N_ "Displays accounts which exceed the depth limit at the depth limit"))
 
 (define optname-parent-balance-mode (N_ "Parent account balances"))
-(define opthelp-parent-balance-mode
-  (N_ "How to show any balance in parent accounts"))
 (define optname-parent-total-mode (N_ "Parent account subtotals"))
-(define opthelp-parent-total-mode
-  (N_ "How to show account subtotals for selected accounts having children"))
 
 (define optname-show-zb-accts (N_ "Include accounts with zero total balances"))
 (define opthelp-show-zb-accts
@@ -201,36 +197,11 @@
       gnc:pagename-display optname-omit-zb-bals
       "b" opthelp-omit-zb-bals #f))
     ;; what to show for non-leaf accounts
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-balance-mode
-      "c" opthelp-parent-balance-mode
-      'immediate-bal
-      (list (vector 'immediate-bal
-		    (N_ "Show Immediate Balance")
-		    (N_ "Show only the balance in the parent account, excluding any subaccounts"))
-	    (vector 'recursive-bal
-		    (N_ "Recursive Balance")
-		    (N_ "Include subaccounts in balance"))
-	    (vector 'omit-bal
-		    (N_ "Omit Balance")
-		    (N_ "Do not show parent account balances")))))
-    (add-option
-     (gnc:make-multichoice-option
-      gnc:pagename-display optname-parent-total-mode
-      "d" opthelp-parent-total-mode
-      'f
-      (list (vector 't
-		    (N_ "Show subtotals")
-		    (N_ "Show subtotals for selected accounts which have subaccounts"))
-	    (vector 'f
-		    (N_ "Do not show subtotals")
-		    (N_ "Do not subtotal selected parent accounts"))
-	    (vector 'canonically-tabbed
-		    ;;(N_ "Subtotals indented text book style")
-		    (N_ "Text book style (experimental)")
-		    (N_ "Show parent account subtotals, indented per text book practice (experimental)")))))
-    
+    (gnc:options-add-subtotal-view!
+     options gnc:pagename-display
+     optname-parent-balance-mode optname-parent-total-mode
+     "c")
+
     ;; some detailed formatting options
     (add-option 
      (gnc:make-simple-boolean-option
