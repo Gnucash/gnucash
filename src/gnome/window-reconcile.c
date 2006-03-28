@@ -1555,7 +1555,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 				  recnWindow_n_actions, recnData);
     action =
       gtk_action_group_get_action (action_group, "AccountOpenAccountAction");
-    g_object_set (G_OBJECT(action), "short_label", N_("Open"), NULL);
+    g_object_set (G_OBJECT(action), "short_label", _("Open"), NULL);
 
     gtk_ui_manager_insert_action_group (recnData->ui_merge, action_group, 0);
 
