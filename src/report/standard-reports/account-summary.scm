@@ -69,7 +69,6 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-date (N_ "Date"))
-(define opthelp-date (N_ "Account summary as-of date"))
 ;; FIXME this needs an indent option
 
 (define optname-accounts (N_ "Accounts to include"))
@@ -147,12 +146,8 @@
     ;; does anyone know the function to get the company name??
 
     ;; date at which to report balance
-    (add-option
-     (gnc:make-date-option
-      gnc:pagename-general optname-date
-      "c" opthelp-date
-      (lambda () (cons 'absolute (cons (current-time) 0)))
-      #f 'both '(start-cal-year start-prev-year end-prev-year) ))
+    (gnc:options-add-report-date!
+     options gnc:pagename-general optname-date "c")
 
     ;; accounts to work on
     (add-option

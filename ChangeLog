@@ -1,3 +1,13 @@
+2006-03-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/standard-reports/trial-balance.scm,
+	income-statement.scm, equity-statement.scm: Remove unused strings.
+
+	* src/report/standard-reports/account-summary.scm,
+	balance-sheet.scm: Revert report date option to the 1.8 state
+	where the stock gnc:options-add-report-date! was used and allowed
+	many potential relative dates.
+
 2006-03-27  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/account.glade:

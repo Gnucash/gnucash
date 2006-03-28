@@ -82,7 +82,6 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-date (N_ "Balance Sheet Date"))
-(define opthelp-date (N_ "Balance sheet as-of date"))
 (define optname-report-form (N_ "Single column Balance Sheet"))
 (define opthelp-report-form
   (N_ "Print liability/equity section in the same column under the assets section as opposed to a second column right of the assets section"))
@@ -157,23 +156,19 @@
     
     (add-option
       (gnc:make-string-option
-      (N_ "General") optname-report-title
+      gnc:pagename-general optname-report-title
       "a" opthelp-report-title reportname))
     (add-option
       (gnc:make-string-option
-      (N_ "General") optname-party-name
+      gnc:pagename-general optname-party-name
       "b" opthelp-party-name ""))
     ;; this should default to company name in (gnc:get-current-book)
     ;; does anyone know the function to get the company name??
     ;; (GnuCash is *so* well documented... sigh)
     
     ;; date at which to report balance
-    (add-option
-     (gnc:make-date-option
-      (N_ "General") optname-date
-      "c" opthelp-date
-      (lambda () (cons 'absolute (cons (current-time) 0)))
-      #f 'both '(start-cal-year start-prev-year end-prev-year) ))
+    (gnc:options-add-report-date!
+     options gnc:pagename-general optname-date "c")
     
     (add-option
      (gnc:make-simple-boolean-option
