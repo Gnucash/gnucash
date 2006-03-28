@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-19 21:46+0100\n"
-"PO-Revision-Date: 2006-03-19 22:11+0100\n"
+"POT-Creation-Date: 2006-03-28 20:42+0200\n"
+"PO-Revision-Date: 2006-03-28 20:36+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -108,8 +108,8 @@ msgid "Equity"
 msgstr "Eigenkapital"
 
 #: ../src/app-utils/gnc-ui-util.c:686 ../src/gnome/dialog-chart-export.c:45
-#: ../src/gnome/druid-hierarchy.c:800 ../src/gnome/glade/account.glade.h:49
-#: ../src/gnome-utils/dialog-account.c:248
+#: ../src/gnome/druid-hierarchy.c:906 ../src/gnome/glade/account.glade.h:50
+#: ../src/gnome-utils/dialog-account.c:262
 msgid "Opening Balance"
 msgstr "Anfangsbestand"
 
@@ -574,7 +574,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1331
+#: ../src/gnome-utils/dialog-account.c:1345
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -710,7 +710,7 @@ msgstr "Benutzername"
 
 #. src/business/business-reports/aging.scm
 #: ../src/business/business-gnome/dialog-employee.c:706
-#: ../src/gnome/dialog-scheduledxaction.c:2541
+#: ../src/gnome/dialog-scheduledxaction.c:2542
 #: ../src/gnome/glade/sched-xact.glade.h:118
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:10
 #: ../src/gnome-utils/gnc-dense-cal.c:280
@@ -788,7 +788,8 @@ msgid "Accumulate Splits?"
 msgstr "Buchungen kumulieren?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:928
-#: ../src/gnome/glade/reconcile.glade.h:23 ../src/gnome/window-reconcile.c:968
+#: ../src/gnome/glade/reconcile.glade.h:23
+#: ../src/gnome/window-reconcile.c:1051
 msgid "Total:"
 msgstr "Betrag:"
 
@@ -2261,7 +2262,7 @@ msgstr "Eine neue Rechnung anlegen"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:101
-#: ../src/gnome/gnc-plugin-page-account-tree.c:144
+#: ../src/gnome/gnc-plugin-page-account-tree.c:145
 msgid "New _Account..."
 msgstr "Neues _Konto..."
 
@@ -2330,7 +2331,7 @@ msgstr "Aktuellen Posten speichern"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:132
 #: ../src/gnome/glade/reconcile.glade.h:25
-#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:1908
+#: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:1994
 msgid "_Cancel"
 msgstr "_Abbrechen"
 
@@ -2340,7 +2341,7 @@ msgstr "Aktuellen Posten abbrechen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:135
 #: ../src/gnome/glade/reconcile.glade.h:27
-#: ../src/gnome/glade/register.glade.h:82 ../src/gnome/window-reconcile.c:1936
+#: ../src/gnome/glade/register.glade.h:82 ../src/gnome/window-reconcile.c:2022
 msgid "_Delete"
 msgstr "_Löschen"
 
@@ -2427,7 +2428,7 @@ msgstr "Abbrechen"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:195
 #: ../src/gnome/glade/register.glade.h:16
-#: ../src/gnome/gnc-plugin-page-account-tree.c:215
+#: ../src/gnome/gnc-plugin-page-account-tree.c:219
 #: ../src/gnome/gnc-plugin-page-budget.c:167
 #: ../src/gnome/gnc-plugin-page-register.c:329
 msgid "Delete"
@@ -2460,10 +2461,10 @@ msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:2
 msgid ""
-"If active, at startup Gnucash will check to see whether any bills will "
+"If active, at startup GnuCash will check to see whether any bills will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
-"Otherwise gnucash does not check for due bills."
+"Otherwise GnuCash does not check for due bills."
 msgstr ""
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
@@ -2528,7 +2529,7 @@ msgstr "Standardanzahl von Zeilen, die in Rechnungen angezeigt werden sollen"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:13
 msgid ""
-"This field defines the number of days in advance that Gnucash will check for "
+"This field defines the number of days in advance that GnuCash will check for "
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
@@ -3275,7 +3276,7 @@ msgstr "Unbenanntes Budget"
 msgid ""
 "An error occurred while creating the directory:\n"
 "  %s\n"
-"Please correct the problem and restart gnucash.\n"
+"Please correct the problem and restart GnuCash.\n"
 "The reported error was '%s' (errno %d).\n"
 msgstr ""
 "Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
@@ -3306,7 +3307,7 @@ msgid ""
 "The path\n"
 "  %s\n"
 "exists but it is not a directory. Please delete\n"
-"the file and start gnucash again.\n"
+"the file and start GnuCash again.\n"
 msgstr ""
 "Der Pfad\n"
 "  %s\n"
@@ -3319,7 +3320,7 @@ msgid ""
 "An unknown error occurred when validating that the\n"
 "  %s\n"
 "directory exists and is usable. Please correct the\n"
-"problem and restart gnucash.  The reported error \n"
+"problem and restart GnuCash.  The reported error \n"
 "was '%s' (errno %d)."
 msgstr ""
 "Ein unbekannter Fehler ist aufgetreten, als nach dem Verzeichnis\n"
@@ -3412,7 +3413,7 @@ msgstr ""
 
 #: ../src/gnome/dialog-fincalc.c:317
 msgid ""
-"Gnucash cannot determine the value in one of the fields. You must enter a "
+"GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr ""
 "Die eingegebenen Werte können nicht ausgewertet werden. Sie müssen einen "
@@ -3443,7 +3444,7 @@ msgstr "Alle Konten"
 #. src/report/standard-reports/budget.scm
 #. src/business/business-reports/owner-report.scm
 #: ../src/gnome/dialog-find-transactions.c:105
-#: ../src/gnome/glade/stocks.glade.h:3 ../src/gnome-utils/dialog-account.c:624
+#: ../src/gnome/glade/stocks.glade.h:3 ../src/gnome-utils/dialog-account.c:638
 #: ../src/gnome-utils/gnc-icons.c:14
 #: ../src/import-export/generic-import.glade.h:11
 #: ../src/import-export/hbci/gnc-hbci-utils.c:590
@@ -3462,7 +3463,8 @@ msgid "Balanced"
 msgstr "Ausgeglichene Buchungen"
 
 #: ../src/gnome/dialog-find-transactions.c:111
-#: ../src/gnome/window-reconcile.c:1094
+#: ../src/gnome/gnc-plugin-page-register.c:334
+#: ../src/gnome/window-reconcile.c:1177
 msgid "Reconcile"
 msgstr "Abgleichen"
 
@@ -3543,7 +3545,7 @@ msgstr "Komplett"
 #: ../src/gnome/glade/register.glade.h:85
 #: ../src/gnome/glade/sched-xact.glade.h:203
 #: ../src/gnome-utils/gnc-main-window.c:218
-#: ../src/gnome/window-reconcile.c:1933
+#: ../src/gnome/window-reconcile.c:2019
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
 msgstr "_Bearbeiten"
@@ -3552,7 +3554,7 @@ msgstr "_Bearbeiten"
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/glade/reconcile.glade.h:36
 #: ../src/gnome-utils/gnc-main-window.c:221
-#: ../src/gnome/window-reconcile.c:1893
+#: ../src/gnome/window-reconcile.c:1979
 msgid "_Transaction"
 msgstr "_Buchung"
 
@@ -3666,19 +3668,19 @@ msgstr ""
 msgid "Delete the selected Scheduled Transactions?"
 msgstr "Ausgewählte terminierte Buchung löschen?"
 
-#: ../src/gnome/dialog-scheduledxaction.c:2057
+#: ../src/gnome/dialog-scheduledxaction.c:2058
 #: ../src/gnome/glade/sched-xact.glade.h:123
 msgid "Not scheduled"
 msgstr "Nicht vorgemerkt"
 
-#: ../src/gnome/dialog-scheduledxaction.c:2151
+#: ../src/gnome/dialog-scheduledxaction.c:2152
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
 "Die aktuelle Buchungsvorlage wurde verändert. Soll sie gespeichert werden?"
 
-#: ../src/gnome/dialog-scheduledxaction.c:2562
+#: ../src/gnome/dialog-scheduledxaction.c:2563
 #: ../src/gnome/glade/sched-xact.glade.h:157
 msgid "Scheduled Transactions"
 msgstr "Terminierte Buchungen"
@@ -3827,29 +3829,38 @@ msgstr "Periode:"
 msgid "Closing Date:"
 msgstr "Abschlußdatum:"
 
-#: ../src/gnome/druid-hierarchy.c:300
+#: ../src/gnome/druid-hierarchy.c:389
 msgid "Selected"
 msgstr "Ausgewähltes"
 
-#: ../src/gnome/druid-hierarchy.c:312
+#: ../src/gnome/druid-hierarchy.c:401
 #: ../src/gnome-utils/gnc-tree-view-account.c:1852
 msgid "Account Types"
 msgstr "Kontoarten"
 
-#: ../src/gnome/druid-hierarchy.c:600
+#: ../src/gnome/druid-hierarchy.c:477
+#, c-format
+msgid "<b>Accounts in '%s'</b>"
+msgstr "<b>Konten in »%s«</b>"
+
+#: ../src/gnome/druid-hierarchy.c:494
+msgid "<b>Accounts in Category</b>"
+msgstr "<b>Konten in Kategorie</b>"
+
+#: ../src/gnome/druid-hierarchy.c:706
 msgid "zero"
 msgstr "Null"
 
-#: ../src/gnome/druid-hierarchy.c:611
+#: ../src/gnome/druid-hierarchy.c:717
 msgid "existing account"
 msgstr "Existierendes Konto"
 
-#: ../src/gnome/druid-hierarchy.c:783
+#: ../src/gnome/druid-hierarchy.c:889
 #: ../src/gnome-utils/gnc-tree-view-account.c:648
 msgid "Placeholder"
 msgstr "Platzhalter"
 
-#: ../src/gnome/druid-hierarchy.c:814
+#: ../src/gnome/druid-hierarchy.c:920
 msgid "Use Existing"
 msgstr "Existierendes verwenden"
 
@@ -4120,74 +4131,74 @@ msgid "<b>Identification</b>"
 msgstr "<b>Identifizierung</b>"
 
 #: ../src/gnome/glade/account.glade.h:15
-msgid "<b>Included Accounts</b>"
-msgstr "<b>Enthaltene Konten</b>"
-
-#: ../src/gnome/glade/account.glade.h:16
 msgid "<b>Initial Balance Transfer</b>"
 msgstr "<b>Buchung Anfangssaldo</b>"
 
-#: ../src/gnome/glade/account.glade.h:17
+#: ../src/gnome/glade/account.glade.h:16
 msgid "<b>New Account Currency</b>"
 msgstr "<b>Standardwährung für neue Konten</b>"
 
-#: ../src/gnome/glade/account.glade.h:18
+#: ../src/gnome/glade/account.glade.h:17
 msgid "<b>Sub-account Transactions</b>"
 msgstr "<b>Buchungen in Unterkonten"
 
-#: ../src/gnome/glade/account.glade.h:19
+#: ../src/gnome/glade/account.glade.h:18
 msgid "<b>Sub-accounts</b>"
 msgstr "<b>Unterkonten</b>"
 
-#: ../src/gnome/glade/account.glade.h:20
+#: ../src/gnome/glade/account.glade.h:19
 #: ../src/gnome/glade/sched-xact.glade.h:40
 msgid "<b>Transactions</b>"
 msgstr "<b>Buchungen</b>"
 
-#: ../src/gnome/glade/account.glade.h:21
+#: ../src/gnome/glade/account.glade.h:20
 msgid "<b>_Parent Account</b>"
 msgstr "<b>_Hauptkonto</b>"
 
 #. src/report/standard-reports/account-summary.scm
-#: ../src/gnome/glade/account.glade.h:22 ../intl-scm/guile-strings.c:1950
+#: ../src/gnome/glade/account.glade.h:21 ../intl-scm/guile-strings.c:1950
 msgid "Account Type"
 msgstr "Kontoart"
 
-#: ../src/gnome/glade/account.glade.h:23
+#: ../src/gnome/glade/account.glade.h:22
 msgid "Account _name:"
 msgstr "Konto_bezeichnung:"
 
-#: ../src/gnome/glade/account.glade.h:24
+#: ../src/gnome/glade/account.glade.h:23
 msgid "Balances"
 msgstr "Salden"
 
-#: ../src/gnome/glade/account.glade.h:25
+#: ../src/gnome/glade/account.glade.h:24
 msgid "C_lear All"
 msgstr "_Keine auswählen"
 
-#: ../src/gnome/glade/account.glade.h:26
+#: ../src/gnome/glade/account.glade.h:25
 msgid "Choose Currency"
 msgstr "Währung wählen"
 
-#: ../src/gnome/glade/account.glade.h:27
+#: ../src/gnome/glade/account.glade.h:26
 msgid "Choose accounts to create"
 msgstr "Zu erstellende Konten wählen"
 
-#: ../src/gnome/glade/account.glade.h:28 ../src/gnome/glade/price.glade.h:7
+#: ../src/gnome/glade/account.glade.h:27 ../src/gnome/glade/price.glade.h:7
 msgid "Co_mmodity:"
 msgstr "_Währung/Aktie:"
 
-#: ../src/gnome/glade/account.glade.h:29
+#: ../src/gnome/glade/account.glade.h:28
 msgid "Delete Account"
 msgstr "Konto löschen"
 
-#: ../src/gnome/glade/account.glade.h:30
+#: ../src/gnome/glade/account.glade.h:29
 msgid "Delete all _subaccounts"
 msgstr "Alle _Unterkonten löschen"
 
-#: ../src/gnome/glade/account.glade.h:31
+#: ../src/gnome/glade/account.glade.h:30
 msgid "Delete all _transactions"
 msgstr "Alle _Buchungen löschen"
+
+#: ../src/gnome/glade/account.glade.h:31
+msgid "Examples:"
+msgstr "Beispiele:"
 
 #: ../src/gnome/glade/account.glade.h:32
 msgid "Filter By..."
@@ -4264,27 +4275,31 @@ msgstr ""
 "entsprechende Häkchen in der Kontozeile.\n"
 
 #: ../src/gnome/glade/account.glade.h:42
+msgid "Interval:"
+msgstr "Intervall:"
+
+#: ../src/gnome/glade/account.glade.h:43
 msgid "M_ove to:"
 msgstr "_Verschieben nach:"
 
-#: ../src/gnome/glade/account.glade.h:43
-#: ../src/gnome-utils/dialog-account.c:1382
+#: ../src/gnome/glade/account.glade.h:44
+#: ../src/gnome-utils/dialog-account.c:1396
 msgid "New Account"
 msgstr "_Neues Konto"
 
-#: ../src/gnome/glade/account.glade.h:44
+#: ../src/gnome/glade/account.glade.h:45
 msgid "New Account (not implemented)"
 msgstr "Neues Konto (unfertig)"
 
-#: ../src/gnome/glade/account.glade.h:45
+#: ../src/gnome/glade/account.glade.h:46
 msgid "New Account Hierarchy Setup"
 msgstr "Neuen Kontenrahmen erstellen"
 
-#: ../src/gnome/glade/account.glade.h:46
+#: ../src/gnome/glade/account.glade.h:47
 msgid "No_tes:"
 msgstr "Be_merkung:"
 
-#: ../src/gnome/glade/account.glade.h:47
+#: ../src/gnome/glade/account.glade.h:48
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
@@ -4292,7 +4307,7 @@ msgstr ""
 "Ein Unterkonto (oder mehrere) dieses Kontos enthalten schreibgeschützte "
 "Buchungen. Sie können diese nicht löschen. "
 
-#: ../src/gnome/glade/account.glade.h:48
+#: ../src/gnome/glade/account.glade.h:49
 msgid ""
 "One or more sub-accounts contain transactions. What would you like to do "
 "with these transactions?"
@@ -4300,15 +4315,19 @@ msgstr ""
 "Ein Unterkonto (oder mehrere) dieses Kontos enthalten Buchungen. Was wollen "
 "Sie mit diesen Buchungen machen?"
 
-#: ../src/gnome/glade/account.glade.h:50
+#: ../src/gnome/glade/account.glade.h:51
 msgid "Placeholde_r"
 msgstr "_Platzhalter"
 
-#: ../src/gnome/glade/account.glade.h:51
+#: ../src/gnome/glade/account.glade.h:52
 msgid "Please choose the currency to use for new accounts."
 msgstr "Wählen Sie eine Währung für neue Konten."
 
-#: ../src/gnome/glade/account.glade.h:52
+#: ../src/gnome/glade/account.glade.h:53
+msgid "Prefix:"
+msgstr "Prefix:"
+
+#: ../src/gnome/glade/account.glade.h:54
 msgid ""
 "Press `Apply' to create your new accounts.\n"
 "\n"
@@ -4323,13 +4342,17 @@ msgstr ""
 "Drücken Sie 'Abbrechen', um den Assistenten zu schließen, ohne neue Konten "
 "zu erstellen."
 
-#: ../src/gnome/glade/account.glade.h:57
+#: ../src/gnome/glade/account.glade.h:59
+msgid "Renumber sub-accounts"
+msgstr "Unterkonten neu nummerieren"
+
+#: ../src/gnome/glade/account.glade.h:60
 #: ../src/import-export/generic-import.glade.h:51
 #: ../src/import-export/qif-import/qif.glade.h:73
 msgid "Select Account"
 msgstr "Konto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:58
+#: ../src/gnome/glade/account.glade.h:61
 msgid ""
 "Select categories that correspond to the ways that you will use GnuCash.  "
 "Each category you select will cause several accounts to be created.  Select "
@@ -4340,46 +4363,46 @@ msgstr ""
 "gewählte Kategorie wird einige Konten erzeugen. Sie können jederzeit auch "
 "später Konten anlegen. "
 
-#: ../src/gnome/glade/account.glade.h:59
+#: ../src/gnome/glade/account.glade.h:62
 #: ../src/import-export/qif-import/qif.glade.h:75
 msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
-#: ../src/gnome/glade/account.glade.h:60
+#: ../src/gnome/glade/account.glade.h:63
 msgid "Setup new accounts"
 msgstr "Neue Konten einrichten"
 
-#: ../src/gnome/glade/account.glade.h:61
+#: ../src/gnome/glade/account.glade.h:64
 msgid "Smallest _fraction:"
 msgstr "Kleinste _Stückelung:"
 
-#: ../src/gnome/glade/account.glade.h:62
+#: ../src/gnome/glade/account.glade.h:65
 msgid "Smallest fraction of this commodity that can be referenced."
 msgstr "Kleinste Stückelung, in der diese Währung/Aktie gehandelt werden kann."
 
-#: ../src/gnome/glade/account.glade.h:63
+#: ../src/gnome/glade/account.glade.h:66
 msgid "Ta_x related"
 msgstr "Steuer_relevant"
 
-#: ../src/gnome/glade/account.glade.h:64
+#: ../src/gnome/glade/account.glade.h:67
 msgid "This account contains read-only transactions which may not be deleted."
 msgstr ""
 "Dieses Konto enthält schreibgeschützte Buchungen.  Sie können diese nicht "
 "löschen."
 
-#: ../src/gnome/glade/account.glade.h:65
+#: ../src/gnome/glade/account.glade.h:68
 msgid ""
 "This account contains sub-accounts.  What would you like to do with these "
 "sub-accounts?"
 msgstr "Dieses Konto enthält Unterkonten. Was möchten Sie mit diesen machen?"
 
-#: ../src/gnome/glade/account.glade.h:66
+#: ../src/gnome/glade/account.glade.h:69
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
 msgstr "Dieses Konto enthält Buchungen. Was möchten Sie mit diesen machen?"
 
-#: ../src/gnome/glade/account.glade.h:67
+#: ../src/gnome/glade/account.glade.h:70
 msgid ""
 "This account is present solely as a placeholder in the hierarchy.  "
 "Transactions may not be posted to this account, only to sub-accounts of this "
@@ -4388,7 +4411,7 @@ msgstr ""
 "Dieses Konto dient als Platzhalter in der Kontenhierarchie. Buchungen können "
 "nicht auf dieses Konto gebucht werden, sondern nur auf Unterkonten davon."
 
-#: ../src/gnome/glade/account.glade.h:68
+#: ../src/gnome/glade/account.glade.h:71
 msgid ""
 "This druid will help you create a set of GnuCash accounts for your assets "
 "(such as investments, checking or savings accounts), liabilities (such as "
@@ -4402,47 +4425,47 @@ msgstr ""
 "\n"
 "Drücken Sie 'Abbrechen', wenn Sie keine neuen Konten erstellen möchten."
 
-#: ../src/gnome/glade/account.glade.h:71
+#: ../src/gnome/glade/account.glade.h:74
 msgid "Use Commodity Value"
 msgstr "Währungseinstellung benutzen"
 
-#: ../src/gnome/glade/account.glade.h:72
+#: ../src/gnome/glade/account.glade.h:75
 msgid "_Account code:"
 msgstr "_Kontonummer:"
 
-#: ../src/gnome/glade/account.glade.h:73
+#: ../src/gnome/glade/account.glade.h:76
 msgid "_Balance:"
 msgstr "_Saldo:"
 
-#: ../src/gnome/glade/account.glade.h:74 ../src/gnome/glade/price.glade.h:21
+#: ../src/gnome/glade/account.glade.h:77 ../src/gnome/glade/price.glade.h:21
 #: ../src/gnome/glade/print.glade.h:22 ../src/gnome/glade/register.glade.h:81
 #: ../src/gnome/glade/stocks.glade.h:20
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:5
 msgid "_Date:"
 msgstr "_Datum:"
 
-#: ../src/gnome/glade/account.glade.h:75
+#: ../src/gnome/glade/account.glade.h:78
 msgid "_Default"
 msgstr "_Voreinstellung"
 
-#: ../src/gnome/glade/account.glade.h:76
+#: ../src/gnome/glade/account.glade.h:79
 msgid "_Description:"
 msgstr "_Beschreibung:"
 
-#: ../src/gnome/glade/account.glade.h:77
+#: ../src/gnome/glade/account.glade.h:80
 msgid "_Move to:"
 msgstr "_Verschieben nach:"
 
-#: ../src/gnome/glade/account.glade.h:78
+#: ../src/gnome/glade/account.glade.h:81
 #: ../src/gnome-utils/glade/dialog-reset-warnings.glade.h:6
 msgid "_Select All"
 msgstr "_Alle auswählen"
 
-#: ../src/gnome/glade/account.glade.h:79
+#: ../src/gnome/glade/account.glade.h:82
 msgid "_Select transfer account"
 msgstr "_Herkunftskonto auswählen"
 
-#: ../src/gnome/glade/account.glade.h:80
+#: ../src/gnome/glade/account.glade.h:83
 msgid "_Use equity 'Opening Balances' account"
 msgstr "Benutze _Ausgleichskonto für Anfangsbestand"
 
@@ -4702,7 +4725,7 @@ msgstr "Währungen/Aktien"
 
 #: ../src/gnome/glade/commodities.glade.h:4
 #: ../src/gnome/glade/reconcile.glade.h:9
-#: ../src/gnome/gnc-plugin-page-account-tree.c:213
+#: ../src/gnome/gnc-plugin-page-account-tree.c:217
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -5351,13 +5374,13 @@ msgid "<b>Reconcile Information</b>"
 msgstr "<b>Informationen zum Kontenabgleich</b>"
 
 #. difference title/value
-#: ../src/gnome/glade/reconcile.glade.h:8 ../src/gnome/window-reconcile.c:1601
+#: ../src/gnome/glade/reconcile.glade.h:8 ../src/gnome/window-reconcile.c:1687
 msgid "Difference:"
 msgstr "Differenz:"
 
 #. ending balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:10
-#: ../src/gnome/window-reconcile.c:1581
+#: ../src/gnome/window-reconcile.c:1667
 msgid "Ending Balance:"
 msgstr "Schlußsaldo:"
 
@@ -5388,10 +5411,10 @@ msgid "New File"
 msgstr "Neue Datei"
 
 #: ../src/gnome/glade/reconcile.glade.h:17
-#: ../src/gnome/gnc-plugin-page-account-tree.c:212
+#: ../src/gnome/gnc-plugin-page-account-tree.c:216
 #: ../src/gnome/gnc-plugin-page-budget.c:166 ../src/gnome/lot-viewer.c:429
 #: ../src/gnome-utils/gnc-file.c:95 ../src/gnome-utils/gnc-file.c:813
-#: ../src/gnome/window-reconcile.c:1475
+#: ../src/gnome/window-reconcile.c:1558
 msgid "Open"
 msgstr "Öffnen"
 
@@ -5409,7 +5432,7 @@ msgstr "Datei speichern"
 
 #. starting balance title/value
 #: ../src/gnome/glade/reconcile.glade.h:21
-#: ../src/gnome/window-reconcile.c:1571
+#: ../src/gnome/window-reconcile.c:1657
 msgid "Starting Balance:"
 msgstr "Anfangssaldo:"
 
@@ -5418,7 +5441,7 @@ msgid "Statement _Date:"
 msgstr "_Datum des Kontoauszugs:"
 
 #: ../src/gnome/glade/reconcile.glade.h:24
-#: ../src/gnome/window-reconcile.c:1892
+#: ../src/gnome/window-reconcile.c:1978
 msgid "_Account"
 msgstr "_Konto"
 
@@ -5431,7 +5454,7 @@ msgid "_Ending Balance:"
 msgstr "_Schlußsaldo:"
 
 #: ../src/gnome/glade/reconcile.glade.h:30
-#: ../src/gnome/window-reconcile.c:1902
+#: ../src/gnome/window-reconcile.c:1988
 msgid "_Finish"
 msgstr "_Fertig"
 
@@ -5439,7 +5462,7 @@ msgstr "_Fertig"
 #. Transaction menu
 #: ../src/gnome/glade/reconcile.glade.h:31
 #: ../src/gnome-utils/gnc-main-window.c:230
-#: ../src/gnome/window-reconcile.c:1930
+#: ../src/gnome/window-reconcile.c:2016
 msgid "_New"
 msgstr "_Neu"
 
@@ -5449,19 +5472,19 @@ msgid "_Open"
 msgstr "Ö_ffnen"
 
 #: ../src/gnome/glade/reconcile.glade.h:33
-#: ../src/gnome/window-reconcile.c:1905
+#: ../src/gnome/window-reconcile.c:1991
 msgid "_Postpone"
 msgstr "_Unterbrechen"
 
 #. Toplevel
 #: ../src/gnome/glade/reconcile.glade.h:34
-#: ../src/gnome/window-reconcile.c:1891
+#: ../src/gnome/window-reconcile.c:1977
 msgid "_Reconcile"
 msgstr "Ab_gleichen"
 
 #. Reconcile menu
 #: ../src/gnome/glade/reconcile.glade.h:35
-#: ../src/gnome/window-reconcile.c:1898
+#: ../src/gnome/window-reconcile.c:1984
 msgid "_Reconcile Information..."
 msgstr "_Informationen zum Abgleich..."
 
@@ -6695,7 +6718,7 @@ msgstr ""
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid ""
-"If you are finished creating the stock split or merger, press `Finish'. You "
+"If you are finished creating the stock split or merger, press `Apply'. You "
 "may also press `Back' to review your choices, or `Cancel' to quit without "
 "making any changes."
 msgstr ""
@@ -6707,11 +6730,11 @@ msgstr ""
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
-"the details of that payment here. Otherwise, just click `Next'."
+"the details of that payment here. Otherwise, just click `Forward'."
 msgstr ""
 "Wenn Sie einen Ausgleichsbetrag in Zusammenhang mit der Aktienteilung "
 "erhalten haben, geben Sie diese Zahlung hier ein. Wenn Sie keinen "
-"Ausgleichsbetrag erhalten haben, klicken Sie \"Weiter\"."
+"Ausgleichsbetrag erhalten haben, klicken Sie \"Vor\"."
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid ""
@@ -7013,60 +7036,68 @@ msgstr "Existierendes Budget öffnen"
 msgid "Select a Budget"
 msgstr "Budget auswählen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:145
+#: ../src/gnome/gnc-plugin-page-account-tree.c:146
 msgid "Create a new Account"
 msgstr "Ein neues Konto eröffnen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:147
+#: ../src/gnome/gnc-plugin-page-account-tree.c:148
 msgid "New Account _Hierarchy..."
 msgstr "Neue Konten_hierarchie..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:148
+#: ../src/gnome/gnc-plugin-page-account-tree.c:149
 msgid "Extend the current book by merging with new account type categories"
 msgstr "Im aktuellen Kontobuch neue Kontenhierarchien hinzufügen."
 
 #. File menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:150
+#: ../src/gnome/gnc-plugin-page-account-tree.c:151
 #: ../src/gnome/gnc-plugin-page-budget.c:129
 msgid "Open _Account"
 msgstr "_Konto öffnen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:151
+#: ../src/gnome/gnc-plugin-page-account-tree.c:152
 #: ../src/gnome/gnc-plugin-page-budget.c:130
 msgid "Open the selected account"
 msgstr "Gewähltes Konto öffnen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:153
+#: ../src/gnome/gnc-plugin-page-account-tree.c:154
 #: ../src/gnome/gnc-plugin-page-budget.c:133
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:154
+#: ../src/gnome/gnc-plugin-page-account-tree.c:155
 #: ../src/gnome/gnc-plugin-page-budget.c:134
 msgid "Open the selected account and all its subaccounts"
 msgstr "Öffne das gewählte Konto und alle Unterkonten"
 
 #. Edit menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:158
-#: ../src/gnome-utils/gnc-icons.c:16 ../src/gnome/window-reconcile.c:1917
+#: ../src/gnome/gnc-plugin-page-account-tree.c:159
+#: ../src/gnome-utils/gnc-icons.c:16 ../src/gnome/window-reconcile.c:2003
 msgid "_Edit Account"
 msgstr "Konto _bearbeiten"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:159
+#: ../src/gnome/gnc-plugin-page-account-tree.c:160
 #: ../src/gnome/gnc-plugin-page-register.c:183
 msgid "Edit the selected account"
 msgstr "Ausgewähltes Konto bearbeiten"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:161
+#: ../src/gnome/gnc-plugin-page-account-tree.c:162
 msgid "_Delete Account..."
 msgstr "_Konto löschen..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:162
+#: ../src/gnome/gnc-plugin-page-account-tree.c:163
 msgid "Delete selected account"
 msgstr "Ausgewähltes Konto löschen"
 
-#. View menu
+#: ../src/gnome/gnc-plugin-page-account-tree.c:165
+msgid "_Renumber Subaccounts..."
+msgstr "_Unterkonten neu nummerieren..."
+
 #: ../src/gnome/gnc-plugin-page-account-tree.c:166
+msgid "Renumber the children of the selected account"
+msgstr "Die Unterkonten des gewählten Kontos neu nummerieren"
+
+#. View menu
+#: ../src/gnome/gnc-plugin-page-account-tree.c:170
 #: ../src/gnome/gnc-plugin-page-budget.c:150
 #: ../src/gnome/gnc-plugin-page-register.c:223
 #: ../src/gnome-utils/gnc-main-window.c:265
@@ -7074,65 +7105,65 @@ msgid "_Filter By..."
 msgstr "_Filtern nach..."
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:170
+#: ../src/gnome/gnc-plugin-page-account-tree.c:174
 #: ../src/gnome/gnc-plugin-page-register.c:231
 msgid "_Reconcile..."
 msgstr "Ab_gleichen..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:171
+#: ../src/gnome/gnc-plugin-page-account-tree.c:175
 #: ../src/gnome/gnc-plugin-page-register.c:232
 msgid "Reconcile the selected account"
 msgstr "Gewähltes Konto abgleichen"
 
 #. Actions menu
-#: ../src/gnome/gnc-plugin-page-account-tree.c:173
+#: ../src/gnome/gnc-plugin-page-account-tree.c:177
 #: ../src/gnome/gnc-plugin-page-register.c:228
-#: ../src/gnome-utils/gnc-icons.c:19 ../src/gnome/window-reconcile.c:1920
+#: ../src/gnome-utils/gnc-icons.c:19 ../src/gnome/window-reconcile.c:2006
 msgid "_Transfer..."
 msgstr "_Buchen..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:174
+#: ../src/gnome/gnc-plugin-page-account-tree.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:229
-#: ../src/gnome/window-reconcile.c:1921
+#: ../src/gnome/window-reconcile.c:2007
 msgid "Transfer funds from one account to another"
 msgstr "Beträge von einem Konto zu einem anderen umbuchen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:176
+#: ../src/gnome/gnc-plugin-page-account-tree.c:180
 #: ../src/gnome/gnc-plugin-page-register.c:234
 msgid "Stoc_k Split..."
 msgstr "A_ktienteilung..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:177
+#: ../src/gnome/gnc-plugin-page-account-tree.c:181
 #: ../src/gnome/gnc-plugin-page-register.c:235
 msgid "Record a stock split or a stock merger"
 msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:179
+#: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "View _Lots..."
 msgstr "_Posten anzeigen..."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:180
+#: ../src/gnome/gnc-plugin-page-account-tree.c:184
 #: ../src/gnome/gnc-plugin-page-register.c:238
 msgid "Bring up the lot viewer/editor window"
 msgstr "Den Editor für die Posten dieses Kontos öffnen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:182
+#: ../src/gnome/gnc-plugin-page-account-tree.c:186
 msgid "Check & Repair A_ccount"
 msgstr "_Konto überprüfen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:183
-#: ../src/gnome/window-reconcile.c:1924
+#: ../src/gnome/gnc-plugin-page-account-tree.c:187
+#: ../src/gnome/window-reconcile.c:2010
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
 "Überprüfen und Reparieren von unvollständigen Buchungssätzen in diesem Konto"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:185
+#: ../src/gnome/gnc-plugin-page-account-tree.c:189
 msgid "Check & Repair Su_baccount"
 msgstr "_Unterkonten überprüfen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:186
+#: ../src/gnome/gnc-plugin-page-account-tree.c:190
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -7140,11 +7171,11 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Buchungssätzen in diesem Konto "
 "und seinen Unterkonten"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:189
+#: ../src/gnome/gnc-plugin-page-account-tree.c:193
 msgid "Check & Repair A_ll"
 msgstr "_Alle überprüfen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:190
+#: ../src/gnome/gnc-plugin-page-account-tree.c:194
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -7152,7 +7183,7 @@ msgstr ""
 "Überprüfen und Reparieren von unvollständigen Buchungssätzen in allen Konten"
 
 #. src/business/business-gnome/business-gnome.scm
-#: ../src/gnome/gnc-plugin-page-account-tree.c:214
+#: ../src/gnome/gnc-plugin-page-account-tree.c:218
 #: ../intl-scm/guile-strings.c:3206
 msgid "New"
 msgstr "Neu"
@@ -7165,7 +7196,7 @@ msgstr "Neu"
 #. src/report/standard-reports/average-balance.scm
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
-#: ../src/gnome/gnc-plugin-page-account-tree.c:302
+#: ../src/gnome/gnc-plugin-page-account-tree.c:306
 #: ../src/gnome-utils/glade/preferences.glade.h:31
 #: ../intl-scm/guile-strings.c:794 ../intl-scm/guile-strings.c:1182
 #: ../intl-scm/guile-strings.c:1680 ../intl-scm/guile-strings.c:1728
@@ -7175,48 +7206,48 @@ msgstr "Neu"
 msgid "Accounts"
 msgstr "Konten"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:879
+#: ../src/gnome/gnc-plugin-page-account-tree.c:894
 msgid "(no name)"
 msgstr "(unbenannt)"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:901
+#: ../src/gnome/gnc-plugin-page-account-tree.c:916
 #, c-format
 msgid "Deleting account %s"
 msgstr "Konto %s löschen"
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:993
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1008
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Das Konto %s wird gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1003
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1018
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Alle Buchungen in diesem Konto werden in das Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1007
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1022
 msgid "All transactions in this account will be deleted."
 msgstr "Alle Buchungen in diesem Konto werden gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1014
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1029
 #, c-format
 msgid "All of its sub-accounts will be moved to the account %s."
 msgstr "Alle Unterkonten werden zum Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1018
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1033
 msgid "All of its subaccounts will be deleted."
 msgstr "Alle Unterkonten werden ebenfalls gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1022
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1037
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Alle Buchungen in Unterkonten werden in das Konto %s verschoben."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1026
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1041
 msgid "All sub-account transactions will be deleted."
 msgstr "Alle Buchungen in Unterkonten werden ebenfalls gelöscht."
 
-#: ../src/gnome/gnc-plugin-page-account-tree.c:1031
+#: ../src/gnome/gnc-plugin-page-account-tree.c:1046
 msgid "Are you sure you want to do this?"
 msgstr "Soll diese Aktion durchgeführt werden?"
 
@@ -7284,7 +7315,7 @@ msgid "_Copy"
 msgstr "_Kopieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1369
+#: ../src/gnome-utils/dialog-account.c:1383
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
@@ -7409,21 +7440,21 @@ msgid "Transfer"
 msgstr "Buchen"
 
 #. src/report/standard-reports/general-ledger.scm
-#: ../src/gnome/gnc-plugin-page-register.c:543
-#: ../src/gnome/gnc-plugin-page-register.c:1145
-#: ../src/gnome/gnc-plugin-page-register.c:1677
+#: ../src/gnome/gnc-plugin-page-register.c:544
+#: ../src/gnome/gnc-plugin-page-register.c:1146
+#: ../src/gnome/gnc-plugin-page-register.c:1678
 #: ../intl-scm/guile-strings.c:1440
 msgid "General Ledger"
 msgstr "Journal"
 
 #. Translators: %s is the name
 #. of the tab page
-#: ../src/gnome/gnc-plugin-page-register.c:1084
+#: ../src/gnome/gnc-plugin-page-register.c:1085
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Änderungen in %s speichern?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1088
+#: ../src/gnome/gnc-plugin-page-register.c:1089
 msgid ""
 "This register has pending changes to a transaction.  Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -7433,80 +7464,80 @@ msgstr ""
 "Schließen der Seite die Änderungen in der Buchung speichern oder verwerfen "
 "oder möchten Sie abbrechen?"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1091
+#: ../src/gnome/gnc-plugin-page-register.c:1092
 msgid "_Discard Transaction"
 msgstr "Buchungsänderungen ver_werfen"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1095
+#: ../src/gnome/gnc-plugin-page-register.c:1096
 msgid "_Save Transaction"
 msgstr "Buchung _speichern"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1126
-#: ../src/gnome/gnc-plugin-page-register.c:1158
+#: ../src/gnome/gnc-plugin-page-register.c:1127
+#: ../src/gnome/gnc-plugin-page-register.c:1159
 #: ../src/import-export/hbci/gnc-hbci-utils.c:578
 #: ../src/import-export/hbci/gnc-hbci-utils.c:580
 msgid "unknown"
 msgstr "unbekannt"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1147
-#: ../src/gnome/gnc-plugin-page-register.c:1683
+#: ../src/gnome/gnc-plugin-page-register.c:1148
+#: ../src/gnome/gnc-plugin-page-register.c:1684
 msgid "Portfolio"
 msgstr "Portfolio"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1149
-#: ../src/gnome/gnc-plugin-page-register.c:1689
+#: ../src/gnome/gnc-plugin-page-register.c:1150
+#: ../src/gnome/gnc-plugin-page-register.c:1690
 msgid "Search Results"
 msgstr "Suchergebnisse"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1679
+#: ../src/gnome/gnc-plugin-page-register.c:1680
 msgid "General Ledger Report"
 msgstr "Journal Bericht"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1685
+#: ../src/gnome/gnc-plugin-page-register.c:1686
 msgid "Portfolio Report"
 msgstr "Portfolio Bericht"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1691
+#: ../src/gnome/gnc-plugin-page-register.c:1692
 msgid "Search Results Report"
 msgstr "Suchergebnisse Bericht"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1695
+#: ../src/gnome/gnc-plugin-page-register.c:1696
 #: ../src/gnome-utils/glade/preferences.glade.h:83
 #: ../intl-scm/guile-strings.c:1234 ../intl-scm/guile-strings.c:2734
 msgid "Register"
 msgstr "Kontobuch"
 
 #. src/report/standard-reports/register.scm
-#: ../src/gnome/gnc-plugin-page-register.c:1697
+#: ../src/gnome/gnc-plugin-page-register.c:1698
 #: ../intl-scm/guile-strings.c:2656
 msgid "Register Report"
 msgstr "Bericht zum Kontobuch"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1713
+#: ../src/gnome/gnc-plugin-page-register.c:1714
 msgid "and subaccounts"
 msgstr "und Unterkonten"
 
-#: ../src/gnome/gnc-plugin-page-register.c:1979
+#: ../src/gnome/gnc-plugin-page-register.c:1980
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Sie können eine Buchung mit abgeglichenen oder bestätigten Buchungsteilen "
 "nicht ungültig machen."
 
-#: ../src/gnome/gnc-plugin-page-register.c:2051
+#: ../src/gnome/gnc-plugin-page-register.c:2052
 #: ../src/gnome/gnc-split-reg.c:916
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Zu dieser Buchung wurde bereits eine Stornierungsbuchung hinzugefügt."
 
 #. Translations: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2108
+#: ../src/gnome/gnc-plugin-page-register.c:2109
 #, c-format
 msgid "Sort %s by..."
 msgstr "%s sortieren nach..."
 
 #. Translators: The %s is the name of the plugin page
-#: ../src/gnome/gnc-plugin-page-register.c:2160
+#: ../src/gnome/gnc-plugin-page-register.c:2161
 #: ../src/gnome-utils/gnc-tree-view-account.c:1819
 #, c-format
 msgid "Filter %s by..."
@@ -7898,7 +7929,8 @@ msgstr "Diese Einstellung kontrolliert, ob die Art-Spalte angezeigt wird."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:12
 msgid "This setting enables the commodity column."
-msgstr "Diese Einstellung kontrolliert, ob die Aktie/Währung-Spalte angezeigt wird."
+msgstr ""
+"Diese Einstellung kontrolliert, ob die Aktie/Währung-Spalte angezeigt wird."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_prices.schemas.in.h:13
 msgid "This setting enables the currency column."
@@ -8157,8 +8189,8 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
 msgid ""
-"If active, Gnucash will automatically insert a decimal point into values "
-"that are entered without one. Otherwise Gnucash will not modify entered "
+"If active, GnuCash will automatically insert a decimal point into values "
+"that are entered without one. Otherwise GnuCash will not modify entered "
 "numbers."
 msgstr ""
 "Wenn aktiviert, wird ein Komma automatisch eingefügt, sobald Werte ohne "
@@ -8216,7 +8248,7 @@ msgstr ""
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
-"when you quit gnucash. Otherwise the sizes will not be saved."
+"when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
@@ -8332,7 +8364,7 @@ msgstr ""
 msgid ""
 "This setting controls the default currency used for reports. If set to "
 "\"locale\" then GnuCash will retrieve the default currency from the user's "
-"locale setting. If set to \"other\", Gnucash will use the setting specified "
+"locale setting. If set to \"other\", GnuCash will use the setting specified "
 "by the currency_other key."
 msgstr ""
 
@@ -8340,7 +8372,7 @@ msgstr ""
 msgid ""
 "This setting controls the source of the default currency for new accounts. "
 "If set to \"locale\" then GnuCash will retrieve the default currency from "
-"the user's locale setting. If set to \"other\", Gnucash will use the setting "
+"the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency_other key."
 msgstr ""
 
@@ -8603,7 +8635,7 @@ msgstr ""
 msgid ""
 "This setting controls the type of ending date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the ending "
-"date specified by the end_date key. If set to anything else, Gnucash will "
+"date specified by the end_date key. If set to anything else, GnuCash will "
 "retrieve the ending date specified by the end_period key."
 msgstr ""
 
@@ -8611,7 +8643,7 @@ msgstr ""
 msgid ""
 "This setting controls the type of starting date used in profit/loss "
 "calculations. If set to \"absolute\" then GnuCash will retrieve the starting "
-"date specified by the start_date key. If set to anything else, Gnucash will "
+"date specified by the start_date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start_period key."
 msgstr ""
 
@@ -8929,57 +8961,57 @@ msgstr ""
 "Fehler beim Speichern des Status-file.\n"
 "  %s"
 
-#: ../src/gnome-utils/dialog-account.c:388
+#: ../src/gnome-utils/dialog-account.c:402
 msgid "Could not create opening balance."
 msgstr "Anfangsbestand kann nicht erstellt werden."
 
-#: ../src/gnome-utils/dialog-account.c:625
+#: ../src/gnome-utils/dialog-account.c:639
 msgid "Field"
 msgstr "Feld"
 
-#: ../src/gnome-utils/dialog-account.c:626
+#: ../src/gnome-utils/dialog-account.c:640
 msgid "Old Value"
 msgstr "Alter Wert"
 
-#: ../src/gnome-utils/dialog-account.c:627
+#: ../src/gnome-utils/dialog-account.c:641
 msgid "New Value"
 msgstr "Neuer Wert"
 
-#: ../src/gnome-utils/dialog-account.c:653
+#: ../src/gnome-utils/dialog-account.c:667
 msgid "Verify Changes"
 msgstr "Änderungen überprüfen"
 
-#: ../src/gnome-utils/dialog-account.c:666
+#: ../src/gnome-utils/dialog-account.c:680
 msgid "The following changes must be made. Continue?"
 msgstr "Die folgenden Änderungen müssen gemacht werden. Fortsetzen?"
 
-#: ../src/gnome-utils/dialog-account.c:734
+#: ../src/gnome-utils/dialog-account.c:748
 msgid "The account must be given a name."
 msgstr "Das Konto muß einen Namen erhalten."
 
-#: ../src/gnome-utils/dialog-account.c:756
+#: ../src/gnome-utils/dialog-account.c:770
 msgid "There is already an account with that name."
 msgstr "Es gibt bereits ein Konto mit diesem Namen."
 
-#: ../src/gnome-utils/dialog-account.c:764
+#: ../src/gnome-utils/dialog-account.c:778
 msgid "You must choose a valid parent account."
 msgstr "Wählen Sie ein gültiges Hauptkonto"
 
-#: ../src/gnome-utils/dialog-account.c:772
+#: ../src/gnome-utils/dialog-account.c:786
 msgid "You must select an account type."
 msgstr "Wählen Sie eine Kontoart"
 
-#: ../src/gnome-utils/dialog-account.c:782
+#: ../src/gnome-utils/dialog-account.c:796
 msgid "You must choose a commodity."
 msgstr "Sie müssen eine Währung/Aktie auswählen."
 
-#: ../src/gnome-utils/dialog-account.c:905
+#: ../src/gnome-utils/dialog-account.c:919
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
 "Sie müssen entweder einen gültigen Anfangsbestand angeben \n"
 "oder das Feld freilassen."
 
-#: ../src/gnome-utils/dialog-account.c:929
+#: ../src/gnome-utils/dialog-account.c:943
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -8987,10 +9019,17 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
-#: ../src/gnome-utils/dialog-account.c:1372
+#: ../src/gnome-utils/dialog-account.c:1386
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
+
+#: ../src/gnome-utils/dialog-account.c:1889
+#, c-format
+msgid ""
+"Renumber the immediate sub-accounts of %s?  This will replace the account "
+"code field of each child account with a newly generated code."
+msgstr ""
 
 #: ../src/gnome-utils/dialog-commodity.c:161
 msgid ""
@@ -9213,7 +9252,7 @@ msgstr "In dieser _Sitzung nicht wieder anzeigen."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:403
 msgid ""
-"When you click Apply, Gnucash will modify your ~/.gconf.path file and "
+"When you click Apply, GnuCash will modify your ~/.gconf.path file and "
 "restart the gconf backend."
 msgstr ""
 "Wenn Sie \"Anwenden\" klicken, wird GnuCash Ihre ~/.gconf.path Datei "
@@ -9222,7 +9261,7 @@ msgstr ""
 #: ../src/gnome-utils/druid-gconf-setup.c:406
 #, c-format
 msgid ""
-"When you click Apply, Gnucash will install the gconf data into your local ~/."
+"When you click Apply, GnuCash will install the gconf data into your local ~/."
 "gconf file and restart the gconf backend.  The %s script must be found in "
 "your search path for this to work correctly."
 msgstr ""
@@ -9233,8 +9272,8 @@ msgstr ""
 #: ../src/gnome-utils/druid-gconf-setup.c:410
 msgid ""
 "You have chosen to correct the problem by yourself.  When you click Apply, "
-"Gnucash will exit.  Please correct the problem and restart the gconf backend "
-"with the command 'gconftool-2 --shutdown' before restarting Gnucash.  If you "
+"GnuCash will exit.  Please correct the problem and restart the gconf backend "
+"with the command 'gconftool-2 --shutdown' before restarting GnuCash.  If you "
 "have not already done so, you can click the Back button and copy the "
 "necessary text from the dialog."
 msgstr ""
@@ -9248,7 +9287,7 @@ msgstr ""
 #, c-format
 msgid ""
 "You have chosen to correct the problem by yourself.  When you click Apply, "
-"Gnucash will exit.  Please run the %s script which will install the "
+"GnuCash will exit.  Please run the %s script which will install the "
 "configuration data and restart the gconf backend."
 msgstr ""
 "Sie haben ausgewählt, dieses Problem selber zu beheben. Wenn Sie \"Anwenden"
@@ -9258,7 +9297,7 @@ msgstr ""
 #: ../src/gnome-utils/druid-gconf-setup.c:420
 msgid ""
 "You have already corrected the problem and restarted the gconf backend with "
-"the command 'gconftool-2 --shutdown'.  When you click Apply, Gnucash will "
+"the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will "
 "continue loading."
 msgstr ""
 "Sie haben das Problem bereits selber korrigiert und den gconf-Server mit dem "
@@ -9365,7 +9404,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid ""
-"These are quote sources that were recently added to F::Q.  Gnucash does not "
+"These are quote sources that were recently added to F::Q.  GnuCash does not "
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
@@ -9443,8 +9482,8 @@ msgstr "_Keine auswählen"
 msgid ""
 "<b>Cannot find default values</b>\n"
 "\n"
-"The configuration data used to specify default values for Gnucash cannot be "
-"found in the default system locations.  Without this data Gnucash will still "
+"The configuration data used to specify default values for GnuCash cannot be "
+"found in the default system locations.  Without this data GnuCash will still "
 "operate properly but it may require some extra time to setup.  Do you wish "
 "to setup the configuration data?"
 msgstr ""
@@ -9464,11 +9503,11 @@ msgid "Finish changes"
 msgstr "Änderungen durchführen"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:6
-msgid "Gnucash will install the data for you."
+msgid "GnuCash will install the data for you."
 msgstr "GnuCash installiert die benötigten Daten für Sie."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:7
-msgid "Gnucash will update the system path for you."
+msgid "GnuCash will update the system path for you."
 msgstr "GnuCash aktualisiert den Systempfad für Sie."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:8
@@ -9504,8 +9543,8 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:13
 msgid ""
-"The configuration data used by Gnucash to specify its default values cannot "
-"be found in the default system locations.  Without this data Gnucash will "
+"The configuration data used by GnuCash to specify its default values cannot "
+"be found in the default system locations.  Without this data GnuCash will "
 "still operate properly, but it may require some extra time to set up."
 msgstr ""
 "Die Konfigurationsdaten für die Voreinstellungen in GnuCash konnten nicht an "
@@ -9523,7 +9562,7 @@ msgstr "Der Suchpfad wurde _bereits in einem anderen Fenster aktualisiert"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:16
 msgid ""
-"This method will install the Gnucash default settings and descriptions into "
+"This method will install the GnuCash default settings and descriptions into "
 "the .gconf directory within your home directory.  The disadvantage to this "
 "method is that future updates to GnuCash will not update your local settings "
 "to add in new keys."
@@ -9536,7 +9575,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:17
 msgid ""
 "This method will modify the file .gconf.path in your home directory.  It "
-"will add the Gnucash install directory to this path so that Gnucash can find "
+"will add the GnuCash install directory to this path so that GnuCash can find "
 "its default settings and their descriptions."
 msgstr ""
 "Diese Methode wird den Suchpfad ~/.gconf.path in Ihrem persönlichen "
@@ -9545,12 +9584,12 @@ msgstr ""
 "Beschreibung finden kann."
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:18
-msgid "Update gconf settings - Gnucash"
-msgstr "Gconf Einstellungen aktualisieren für GnuCash"
+msgid "Update GnuCash configuration data"
+msgstr "GnuCash Konfigurationsdaten aktualisieren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:19
-msgid "Update gnucash configuration data"
-msgstr "GnuCash Konfigurationsdaten aktualisieren"
+msgid "Update gconf settings - GnuCash"
+msgstr "Gconf Einstellungen aktualisieren für GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:20
 msgid "Update search path"
@@ -9558,7 +9597,7 @@ msgstr "Suchpfad aktualisieren"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:21
 msgid ""
-"You have chosen to install the configuration data used by Gnucash into the "
+"You have chosen to install the configuration data used by GnuCash into the "
 "~/.gconf directory.  GnuCash can do this for you, or tell you how to do it "
 "yourself."
 msgstr ""
@@ -10001,11 +10040,11 @@ msgid "Enables support for the European Union EURO currency."
 msgstr "Aktiviert die Unterstützung der Währung EURO"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:64
-msgid "Gnucash Options"
+msgid "GnuCash Options"
 msgstr "GnuCash Optionen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:65
-msgid "Gnucash Preferences"
+msgid "GnuCash Preferences"
 msgstr "GnuCash Einstellungen"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:66
@@ -10049,7 +10088,7 @@ msgstr ""
 #: ../src/gnome-utils/glade/preferences.glade.h:71
 msgid ""
 "If checked, the system color theme will be applied to register windows.  If "
-"clear, the original gnucash register colors will be used."
+"clear, the original GnuCash register colors will be used."
 msgstr ""
 "Wenn aktiviert, werden die systemweiten Farbeinstellungen in den "
 "Kontofenstern verwendet. Wenn nicht aktiviert, werden GnuCash-spezifische "
@@ -10366,7 +10405,7 @@ msgid "<b>Tip of the Day:</b>"
 msgstr "<b>Tipp des Tages:</b>"
 
 #: ../src/gnome-utils/glade/totd.glade.h:2
-msgid "Gnucash Tip Of The Day"
+msgid "GnuCash Tip Of The Day"
 msgstr "Gnucash Tipp des Tages"
 
 #: ../src/gnome-utils/glade/totd.glade.h:3
@@ -10968,7 +11007,7 @@ msgid "_New Account"
 msgstr "_Neues Konto"
 
 #. Account menu
-#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:1914
+#: ../src/gnome-utils/gnc-icons.c:18 ../src/gnome/window-reconcile.c:2000
 msgid "_Open Account"
 msgstr "_Konto öffnen"
 
@@ -10995,7 +11034,7 @@ msgstr "_Fenster"
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:226
-#: ../src/gnome/window-reconcile.c:1894 ../src/gnome/window-reconcile.c:1942
+#: ../src/gnome/window-reconcile.c:1980 ../src/gnome/window-reconcile.c:2028
 msgid "_Help"
 msgstr "_Hilfe"
 
@@ -11069,7 +11108,7 @@ msgstr "Dieses Fenster aktualisieren"
 
 #. Actions menu
 #: ../src/gnome-utils/gnc-main-window.c:273
-#: ../src/gnome/window-reconcile.c:1923
+#: ../src/gnome/window-reconcile.c:2009
 msgid "_Check & Repair"
 msgstr "Überprüfen"
 
@@ -11218,15 +11257,15 @@ msgid "Close _Without Saving"
 msgstr "Schließen _ohne zu speichern"
 
 #: ../src/gnome-utils/gnc-main-window.c:1002
-msgid "Quit Gnucash?"
+msgid "Quit GnuCash?"
 msgstr "GnuCash beenden?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1003
 msgid ""
-"You are attempting to close the last Gnucash window.  Doing so will quit the "
+"You are attempting to close the last GnuCash window.  Doing so will quit the "
 "application.  Are you sure that this is what you want to do?"
 msgstr ""
-"Sie sind im Begriff, das letzte geöffnete Gnucash-Fenster zu schließen. Dies "
+"Sie sind im Begriff, das letzte geöffnete GnuCash-Fenster zu schließen. Dies "
 "wird Gnucash beenden. Sind Sie sich sicher, dass Sie das wollen?"
 
 #: ../src/gnome-utils/gnc-main-window.c:1128
@@ -11341,14 +11380,14 @@ msgstr "Ende des vorherigen Haushaltsjahres"
 #. Development version
 #: ../src/gnome-utils/gnc-splash.c:88
 #, c-format
-msgid "Version: Gnucash-%s svn (r%s built %s)"
-msgstr "Version: Gnucash-%s svn (Revision %s, erstellt am %s)"
+msgid "Version: GnuCash-%s svn (r%s built %s)"
+msgstr "Version: GnuCash-%s svn (Revision %s, erstellt am %s)"
 
 #. Dist Tarball
 #: ../src/gnome-utils/gnc-splash.c:92
 #, c-format
-msgid "Version: Gnucash-%s (r%s built %s)"
-msgstr "Version: Gnucash-%s svn (Revision %s, erstellt am %s)"
+msgid "Version: GnuCash-%s (r%s built %s)"
+msgstr "Version: GnuCash-%s svn (Revision %s, erstellt am %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:104
 msgid "Loading..."
@@ -11659,37 +11698,37 @@ msgstr "Keine automatischen Sollzins-Zahlungen für dieses Konto"
 msgid "Enter _Interest Charge..."
 msgstr "Zahlung _Sollzins eingeben..."
 
-#: ../src/gnome/window-reconcile.c:901
+#: ../src/gnome/window-reconcile.c:981
 msgid "Debits"
 msgstr "Soll"
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/gnome/window-reconcile.c:911 ../intl-scm/guile-strings.c:824
+#: ../src/gnome/window-reconcile.c:991 ../intl-scm/guile-strings.c:824
 msgid "Credits"
 msgstr "Haben"
 
-#: ../src/gnome/window-reconcile.c:1047
+#: ../src/gnome/window-reconcile.c:1130
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
 
 #. reconciled balance title/value
-#: ../src/gnome/window-reconcile.c:1591
+#: ../src/gnome/window-reconcile.c:1677
 msgid "Reconciled Balance:"
 msgstr "Abgeglichener Saldo:"
 
-#: ../src/gnome/window-reconcile.c:1783
+#: ../src/gnome/window-reconcile.c:1869
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr ""
 "Das Konto ist nicht ausgeglichen. Sind Sie sicher, daß Sie das Abgleichen "
 "beenden wollen?"
 
-#: ../src/gnome/window-reconcile.c:1840
+#: ../src/gnome/window-reconcile.c:1926
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr ""
 "Möchten Sie dieses Abgleichen jetzt unterbrechen und später fertigstellen?"
 
-#: ../src/gnome/window-reconcile.c:1874
+#: ../src/gnome/window-reconcile.c:1960
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
@@ -11697,46 +11736,46 @@ msgstr ""
 "Sie haben Veränderungen vorgenommen. Sind Sie sicher, daß Sie abbrechen "
 "wollen?"
 
-#: ../src/gnome/window-reconcile.c:1899
+#: ../src/gnome/window-reconcile.c:1985
 msgid ""
 "Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Informationen zum Abgleich ändern, zum Beispiel das Datum und der "
 "Schlußsaldo des Kontoauszugs."
 
-#: ../src/gnome/window-reconcile.c:1903
+#: ../src/gnome/window-reconcile.c:1989
 msgid "Finish the reconciliation of this account"
 msgstr "Kontoabstimmung beenden"
 
-#: ../src/gnome/window-reconcile.c:1906
+#: ../src/gnome/window-reconcile.c:1992
 msgid "Postpone the reconciliation of this account"
 msgstr "Das Abgleichen des Kontos unterbrechen"
 
-#: ../src/gnome/window-reconcile.c:1909
+#: ../src/gnome/window-reconcile.c:1995
 msgid "Cancel the reconciliation of this account"
 msgstr "Die Abstimmung dieses Kontos abbrechen"
 
-#: ../src/gnome/window-reconcile.c:1915
+#: ../src/gnome/window-reconcile.c:2001
 msgid "Open the account"
 msgstr "Konto öffnen"
 
-#: ../src/gnome/window-reconcile.c:1918
+#: ../src/gnome/window-reconcile.c:2004
 msgid "Edit the main account for this register"
 msgstr "Bearbeiten des Hauptkonto für dieses Kontobuch"
 
-#: ../src/gnome/window-reconcile.c:1931
+#: ../src/gnome/window-reconcile.c:2017
 msgid "Add a new transaction to the account"
 msgstr "Dem Konto einen neuen Buchungssatz hinzufügen"
 
-#: ../src/gnome/window-reconcile.c:1934
+#: ../src/gnome/window-reconcile.c:2020
 msgid "Edit the current transaction"
 msgstr "Aktuellen Buchungssatz bearbeiten"
 
-#: ../src/gnome/window-reconcile.c:1937
+#: ../src/gnome/window-reconcile.c:2023
 msgid "Delete the selected transaction"
 msgstr "Ausgewählten Buchungssatz löschen"
 
-#: ../src/gnome/window-reconcile.c:1943
+#: ../src/gnome/window-reconcile.c:2029
 msgid "Open the GnuCash help window"
 msgstr "Das GnuCash-Hilfe-Fenster öffnen"
 
@@ -12010,7 +12049,7 @@ msgid "Other Account"
 msgstr "Anderes Konto"
 
 #: ../src/import-export/generic-import.glade.h:44
-msgid "Please select or create an appropriate Gnucash account for:"
+msgid "Please select or create an appropriate GnuCash account for:"
 msgstr "Auswählen oder Hinzufügen des passenden GnuCash Kontos:"
 
 #: ../src/import-export/generic-import.glade.h:45
@@ -12444,7 +12483,7 @@ msgstr "Namen für neue Überweisungsvorlage"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:39
 msgid ""
-"Now the setup for all HBCI accounts that are matching to a Gnucash account "
+"Now the setup for all HBCI accounts that are matching to a GnuCash account "
 "is finished. You can now invoke HBCI actions on those accounts.\n"
 "\n"
 "If you want to add another HBCI bank, user, or account, you can start this "
@@ -12860,13 +12899,13 @@ msgstr "Einzel_lastschrift..."
 msgid "Issue a new direct debit note online through HBCI/AqBanking"
 msgstr "Neue Einzellastschrift online mit HBCI/AqBanking absenden"
 
-#: ../src/import-export/hbci/hbci-interaction.c:347
+#: ../src/import-export/hbci/hbci-interaction.c:349
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters long. Do you want to try again?"
 msgstr "Die PIN muß mindestens %d Zeichen lang sein.  Erneut versuchen?"
 
-#: ../src/import-export/hbci/hbci-interaction.c:360
+#: ../src/import-export/hbci/hbci-interaction.c:362
 #, c-format
 msgid ""
 "You entered %ld characters, but the PIN must be no longer than %d "
@@ -12875,13 +12914,13 @@ msgstr ""
 "Sie haben %ld Zeichen eingegeben, aber die PIN darf nicht länger als %d "
 "Zeichen sein.  Erneut versuchen?"
 
-#: ../src/import-export/hbci/hbci-interaction.c:428
+#: ../src/import-export/hbci/hbci-interaction.c:430
 #, c-format
 msgid ""
 "This TAN needs to be at least %d characters long. Do you want to try again?"
 msgstr "Diese TAN muß mindestens %d Zeichen lang sein.  Erneut versuchen?"
 
-#: ../src/import-export/hbci/hbci-interaction.c:441
+#: ../src/import-export/hbci/hbci-interaction.c:443
 #, c-format
 msgid ""
 "You entered %ld characters, but the TAN must be no longer than %d "
@@ -13093,7 +13132,7 @@ msgid "_Replay GnuCash .log file..."
 msgstr "Einträge aus Logdatei abspielen..."
 
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
-msgid "Replay a gnucash log file after a crash.  This cannot be undone."
+msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
 msgstr ""
 "Einträge aus Logdatei nach einem Programmabsturz abspielen. Dies kann nicht "
 "rückgängig gemacht werden."
@@ -13866,7 +13905,7 @@ msgid ""
 "This field specifies the threshold below which a matching transaction will "
 "be added automatically. A transaction whose best match's score is in the red "
 "zone (above the display minimum score but below or equal to the Add match "
-"score) will be added to the gnucash file by default."
+"score) will be added to the GnuCash file by default."
 msgstr ""
 "Eine importierte Buchung, deren am besten bewertete existierende Buchung im "
 "roten Bereich liegt (größer als Anzeige-Schwelle, aber kleiner oder gleich "
@@ -14350,7 +14389,7 @@ msgstr "_Bericht hinzufügen..."
 msgid ""
 "Add the current report to the `Custom' menu for later use. The report will "
 "be saved in the file ~/.gnucash/saved-reports-2.0. It will be accessible as "
-"menu entry in the report menu at the next startup of gnucash."
+"menu entry in the report menu at the next startup of GnuCash."
 msgstr ""
 "Bericht zum Menü \"Benutzerdefiniert\" hinzufügen. Der Bericht wird in der "
 "Datei ~/.gnucash/saved-reports-2.0 gespeichert. Der Bericht wird beim "
@@ -14570,6 +14609,26 @@ msgstr "Fehlerhafte Optionen-URL: %s"
 #, c-format
 msgid "Badly report id: %s"
 msgstr "Fehlerhafte Berichts ID: %s"
+
+#: ../src/report/report-gnome/window-report.c:346
+#, c-format
+msgid "Do you want to display '%s'?"
+msgstr "Soll »%s« angezeigt werden?"
+
+#: ../src/report/report-gnome/window-report.c:375
+#, c-format
+msgid ""
+"GnuCash has found %d reports from an earlier version of GnuCash but can't "
+"tell which ones you had open.  You will now have the option to open each "
+"report or not.  From now on, GnuCash will remember which reports you leave "
+"open, so you won't see this message again."
+msgstr ""
+"GnuCash hat festgestellt, dass in einer früheren GnuCash-Version %d Berichte "
+"geöffnet waren, aber GnuCash kann nicht mehr feststellen, welche Sie von "
+"diesen tatsächlich benutzen möchte.  Sie können nun für jeden einzelnen "
+"dieser Berichte wählen, ob er jetzt geöffnet werden soll.  Von nun an wird "
+"die neue Version von GnuCash wieder speichern, welche Berichte Sie geöffnet "
+"lassen.  Sie werden diese Rückfrage daher nicht erneut sehen."
 
 #. Menu Items
 #: ../src/report/stylesheets/gnc-plugin-stylesheets.c:49
@@ -19677,13 +19736,17 @@ msgstr "Bericht:"
 msgid ""
 "No valid account selected.  Click on the Options button and select the "
 "account to use."
-msgstr "Kein gültiges Konto gewählt.  Klicken Sie auf \"Optionen\", um ein Konto zu wählen."
+msgstr ""
+"Kein gültiges Konto gewählt.  Klicken Sie auf \"Optionen\", um ein Konto zu "
+"wählen."
 
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3568
 #, c-format
 msgid "No valid %s selected.  Click on the Options button to select a company."
-msgstr "Keine gültige %s gewählt.  Klicken Sie auf \"Optionen\", um eine Firma zu wählen."
+msgstr ""
+"Keine gültige %s gewählt.  Klicken Sie auf \"Optionen\", um eine Firma zu "
+"wählen."
 
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3570 ../intl-scm/guile-strings.c:3576
@@ -19874,7 +19937,7 @@ msgstr ""
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3822
 msgid "Show all vendors/customers even if they have a zero balance."
-msgstr ""
+msgstr "Alle Kunden/Lieferanten anzeigen, auch wenn sie den Saldo Null haben."
 
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:3992
