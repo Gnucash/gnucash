@@ -68,10 +68,7 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-start-date (N_ "Start of Adjusting/Closing"))
-(define opthelp-start-date
-  (N_ "The earliest date Adjusting/Closing entries were made for this period"))
 (define optname-end-date (N_ "Date of Report"))
-(define opthelp-end-date (N_ "Trial Balance/Work Sheet as-of date"))
 (define optname-report-variant (N_ "Report variation"))
 (define opthelp-report-variant (N_ "Kind of trial balance to generate"))
 ;; FIXME this needs an indent option

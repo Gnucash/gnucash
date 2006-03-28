@@ -65,11 +65,7 @@
 (define opthelp-party-name (N_ "Name of company/individual"))
 
 (define optname-start-date (N_ "Start Date"))
-(define opthelp-start-date
-  (N_ "Start of the period this equity statement will cover"))
 (define optname-end-date (N_ "End Date"))
-(define opthelp-end-date
-  (N_ "End of the period this equity statement will cover"))
 
 (define optname-accounts (N_ "Accounts to include"))
 (define opthelp-accounts
