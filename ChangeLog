@@ -1,3 +1,11 @@
+2006-03-30  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/io-gncxml-v2.c:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-window.c: Work around the fact that a
+	validating XML parser barfs on gnucash's use of an attribute in an
+	undefined namespace.
+
 2006-03-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* accounts/C/acctchrt_checkbook.gnucash-xea: Revoke placeholder

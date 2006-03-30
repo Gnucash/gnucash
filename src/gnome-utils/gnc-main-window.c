@@ -2591,6 +2591,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_widget_show (priv->progressbar);
 	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);
+	gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(priv->progressbar),
+					0.01);
 
 	window->ui_merge = gtk_ui_manager_new ();
 

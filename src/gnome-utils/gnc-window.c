@@ -179,7 +179,11 @@ gnc_window_show_progress (const char *message, double percentage)
   } else {
     if (message)
       gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progressbar), message);
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), percentage/100);
+    if (percentage <= 100) {
+      gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressbar), percentage/100);
+    } else {
+      gtk_progress_bar_pulse(GTK_PROGRESS_BAR(progressbar));
+    }
   }
 
   /* make sure new text is up */

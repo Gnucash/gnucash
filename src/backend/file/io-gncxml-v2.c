@@ -347,6 +347,10 @@ gnc_counter_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
+    /* Note: BADXML.
+     *
+     * This is invalid xml because the namespace isn't declared in the
+     * tag itself. This should be changed to 'type' at some point. */
     type = (char*)xmlGetProp(tree, BAD_CAST "cd:type");
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
@@ -396,7 +400,13 @@ gnc_counter_end_handler(gpointer data_for_children,
       {
         PERR("Unknown type: %s", type ? type : "(null)");
         xmlFree (type);
-        return FALSE;
+	/* Do *NOT* flag this as an error. Gnucash 1.8 writes invalid
+	 * xml by writing the 'cd:type' attribute without providing
+	 * the namespace in the gnc:count-data tag.  The parser is
+	 * entirely within its rights to refuse to read this bad
+	 * attribute. Gnucash will function correctly without the data
+	 * in this tag, so just let the error pass. */
+        return TRUE;
       }
     }
 
@@ -446,25 +456,26 @@ file_rw_feedback (sixtp_gdv2 *gd, const char *type)
     total = counter->transactions_total + counter->accounts_total +
       counter->books_total + counter->commodities_total +
       counter->schedXactions_total + counter->budgets_total;
+    if (total == 0)
+      total = 1;
 
     percentage = (loaded * 100)/total;
     if (percentage > 100) {
       /* FIXME: Perhaps the below should be replaced by:
 	 print_counter_data(counter); */
-      printf("Transactions: Total: %d, Loaded: %d\n",
-             counter->transactions_total, counter->transactions_loaded);
-      printf("Accounts: Total: %d, Loaded: %d\n",
-             counter->accounts_total, counter->accounts_loaded);
-      printf("Books: Total: %d, Loaded: %d\n",
-             counter->books_total, counter->books_loaded);
-      printf("Commodities: Total: %d, Loaded: %d\n",
-             counter->commodities_total, counter->commodities_loaded);
-      printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
-             counter->schedXactions_total, counter->schedXactions_loaded);
-      printf("Budgets: Total: %d, Loaded: %d\n",
-	     counter->budgets_total, counter->budgets_loaded);
+//      printf("Transactions: Total: %d, Loaded: %d\n",
+//             counter->transactions_total, counter->transactions_loaded);
+//      printf("Accounts: Total: %d, Loaded: %d\n",
+//             counter->accounts_total, counter->accounts_loaded);
+//      printf("Books: Total: %d, Loaded: %d\n",
+//             counter->books_total, counter->books_loaded);
+//      printf("Commodities: Total: %d, Loaded: %d\n",
+//             counter->commodities_total, counter->commodities_loaded);
+//      printf("Scheduled Tansactions: Total: %d, Loaded: %d\n",
+//             counter->schedXactions_total, counter->schedXactions_loaded);
+//      printf("Budgets: Total: %d, Loaded: %d\n",
+//	     counter->budgets_total, counter->budgets_loaded);
     }
-    percentage = MIN(percentage, 100);
     gd->gui_display_fn(NULL, percentage);
 }
 
@@ -777,6 +788,11 @@ write_counts(FILE* out, ...)
             val = g_strdup_printf("%d", amount);
 
             node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
+	    /* Note: BADXML.
+	     *
+	     * This is invalid xml because the namespace isn't
+	     * declared in the tag itself. This should be changed to
+	     * 'type' at some point. */
             xmlSetProp(node, BAD_CAST "cd:type", BAD_CAST type);
             xmlNodeAddContent(node, BAD_CAST val);
 
