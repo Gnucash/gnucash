@@ -77,16 +77,6 @@
   </act:commodity>
   <act:commodity-scu>100</act:commodity-scu>
   <act:description>Expenses</act:description>
-  <act:slots>
-    <slot>
-      <slot:key>placeholder</slot:key>
-      <slot:value type="string">true</slot:value>
-    </slot>
-    <slot>
-      <slot:key>notes</slot:key>
-      <slot:value type="string"></slot:value>
-    </slot>
-  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Equity</act:name>
