@@ -1136,6 +1136,16 @@ primary_exp (parser_env_ptr pe)
       if (pe->error_code)
         return;
 
+      // Bug#334811, 308554: apply some basic grammar constraints.
+      if (pe->Token == VAR_TOKEN
+          || pe->Token == STR_TOKEN
+          || pe->Token == NUM_TOKEN)
+      {
+        add_token(pe, EOS);
+        pe->error_code = EXPRESSION_ERROR;
+        return;
+      }
+
       rslt->value = pe->numeric_value;
       pe->numeric_value = NULL;
       break;

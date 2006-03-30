@@ -13,6 +13,11 @@
 
 2006-03-30  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/calculation/expression_parser.c (primary_exp): 
+	* src/app-utils/test/test-exp-parser.c (test_parser): Add basic
+	validation and test-cases for invalid expressions.  Bugs#308554,
+	334811.
+	
 	* accounts/C/acctchrt_checkbook.gnucash-xea: Revoke placeholder
 	status from leaf Expense account in Simple Checkbook account
 	tree.  Bug#334777.

@@ -14,18 +14,18 @@ static GList *tests = NULL;
 typedef struct
 {
   const char * test_name;
-
   const char * exp;
-
   gboolean should_succeed;
-
   gnc_numeric expected_result;
-
   int expected_error_offset;
+  const char * file;
+  int line;
 } TestNode;
 
+#define add_pass_test(n, e, r) _add_pass_test((n), (e), (r), __FILE__, __LINE__)
+
 static void
-add_pass_test (const char *test_name, const char *exp, gnc_numeric result)
+_add_pass_test (const char *test_name, const char *exp, gnc_numeric result, char *file, int line)
 {
   TestNode *node = g_new0 (TestNode, 1);
 
@@ -33,13 +33,16 @@ add_pass_test (const char *test_name, const char *exp, gnc_numeric result)
   node->exp = exp ? exp : test_name;
   node->should_succeed = TRUE;
   node->expected_result = result;
+  node->file = file;
+  node->line = line;
 
   tests = g_list_append (tests, node);
 }
 
+#define add_fail_test(n,e,o) _add_fail_test((n), (e), (o), __FILE__, __LINE__)
+
 static void
-add_fail_test (const char *test_name, const char *exp,
-               int expected_error_offset)
+_add_fail_test (const char *test_name, const char *exp, int expected_error_offset, char *file, int line)
 {
   TestNode *node = g_new0 (TestNode, 1);
 
@@ -47,6 +50,8 @@ add_fail_test (const char *test_name, const char *exp,
   node->exp = exp;
   node->should_succeed = FALSE;
   node->expected_error_offset = expected_error_offset;
+  node->file = file;
+  node->line = line;
 
   tests = g_list_append (tests, node);
 }
@@ -59,7 +64,7 @@ run_parser_test (TestNode *node)
   char *error_loc;
 
   result = gnc_numeric_error( -1 );
-  printf( "Running test \"%s\" =  ", node->test_name );
+  printf("Running test \"%s\" [%s] = ", node->test_name, node->exp);
   succeeded = gnc_exp_parser_parse (node->exp, &result, &error_loc);
   {
     int pass;
@@ -74,7 +79,7 @@ run_parser_test (TestNode *node)
 
   if (succeeded != node->should_succeed)
   {
-    failure_args (node->test_name, __FILE__, __LINE__,
+    failure_args (node->test_name, node->file, node->line,
                   "parser %s on \"%s\"", 
                   succeeded ? "succeeded" : "failed",
                   node->exp);
@@ -85,7 +90,7 @@ run_parser_test (TestNode *node)
   {
     if (!gnc_numeric_equal (result, node->expected_result))
     {
-      failure_args (node->test_name, __FILE__, __LINE__, "wrong result");
+      failure_args (node->test_name, node->file, node->line, "wrong result");
       return;
     }
   }
@@ -93,7 +98,8 @@ run_parser_test (TestNode *node)
   {
     if (error_loc != node->exp + node->expected_error_offset)
     {
-      failure_args (node->test_name, __FILE__, __LINE__, "wrong offset");
+      failure_args (node->test_name, node->file, node->line, "wrong offset; expected %d, got %d",
+                    node->expected_error_offset, (error_loc - node->exp));
       return;
     }
   }
@@ -121,8 +127,11 @@ test_parser (void)
   add_fail_test ("whitespace", "  \t\n", 4);
   add_fail_test ("bad expression", "\\", 0);
   add_fail_test ("bad expression", "1 +", 3);
-  /* FIXME: This should be a failure test... */
-  //add_fail_test ("bad expression", "1 2", 2);
+  /* Bug#334811 - http://bugzilla.gnome.org/show_bug.cgi?id=334811 */
+  add_fail_test ("bad expression", "1 2", 3);
+  /* Bug#308554 - http://bugzilla.gnome.org/show_bug.cgi?id=308554 */
+  add_fail_test ("bad expression", "1 ç", 2);
+  add_fail_test ("bad expression", "1 asdf", 6);
   add_fail_test ("bad expression", "  (5 + 23)/   ", 14);
   add_fail_test ("bad expression", "  ((((5 + 23)/   ", 17);
   add_fail_test ("divide by zero", "  4 / (1 - 1)", -1);
@@ -150,6 +159,7 @@ test_parser (void)
                  "- 42.72 + 13.32 + 15.48 + 23.4 + 115.4",
                  gnc_numeric_create(35897, 100) );
 
+  // This must be defined for the function-parsing to work.
   scm_c_eval_string("(define (gnc:error->string tag args)   (define (write-error port)     (if (and (list? args) (not (null? args)))         (let ((func (car args)))           (if func               (begin                 (display \"Function: \" port)                 (display func port)                 (display \", \" port)                 (display tag port)                 (display \"\n\n\" port)))))     (false-if-exception      (apply display-error (fluid-ref the-last-stack) port args))     (display-backtrace (fluid-ref the-last-stack) port)     (force-output port))   (false-if-exception    (call-with-output-string write-error)))");
 
   scm_c_eval_string( "(define (gnc:plus a b) (+ a b))" );
