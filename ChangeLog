@@ -1,3 +1,8 @@
+2006-03-30  Christian Stimming  <stimming@tuhh.de>
+
+	* po/es.po: Updated Spanish translation by Eneko Lacunza
+	<listas@enlar.net>
+
 2006-03-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-system/options-utilities.scm: Move
