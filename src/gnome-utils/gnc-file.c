@@ -152,7 +152,7 @@ gnc_file_dialog (const char * title,
     gtk_file_filter_add_pattern (g_filter, filter);
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), g_filter);
 
-    gtk_file_filter_set_name (all_filter, "All files");
+    gtk_file_filter_set_name (all_filter, _("All files"));
     gtk_file_filter_add_pattern (all_filter, "*");
     gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), all_filter);
 
