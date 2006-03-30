@@ -47,7 +47,7 @@ _add_fail_test (const char *test_name, const char *exp, int expected_error_offse
   TestNode *node = g_new0 (TestNode, 1);
 
   node->test_name = test_name;
-  node->exp = exp;
+  node->exp = exp ? exp : test_name;
   node->should_succeed = FALSE;
   node->expected_error_offset = expected_error_offset;
   node->file = file;
@@ -131,7 +131,9 @@ test_parser (void)
   add_fail_test ("bad expression", "1 2", 3);
   /* Bug#308554 - http://bugzilla.gnome.org/show_bug.cgi?id=308554 */
   add_fail_test ("bad expression", "1 ç", 2);
+  add_fail_test ("bad expression", "ç 1", 0);
   add_fail_test ("bad expression", "1 asdf", 6);
+  add_fail_test ("bad expression", "asdf 1", 6);
   add_fail_test ("bad expression", "  (5 + 23)/   ", 14);
   add_fail_test ("bad expression", "  ((((5 + 23)/   ", 17);
   add_fail_test ("divide by zero", "  4 / (1 - 1)", -1);
@@ -144,16 +146,15 @@ test_parser (void)
   add_pass_test (" 34 / (22) ", NULL, gnc_numeric_create (34, 22));
   add_pass_test (" (4 + 5 * 2) - 7 / 3", NULL, gnc_numeric_create (35, 3));
   add_pass_test( "(a = 42) + (b = 12) - a", NULL, gnc_numeric_create( 12, 1 ) );
-  add_fail_test( "AUD $1.23", NULL, 0 );
-  add_fail_test( "AUD $0.0", NULL, 0 );
-  add_fail_test( "AUD 1.23", NULL, 0 );
-  add_fail_test( "AUD 0.0", NULL, 0 );
-  add_fail_test( "AUD 1.2 + CAN 2.3", NULL, 0 );
-  add_fail_test( "AUD $1.2 + CAN $2.3", NULL, 0 );
+  add_fail_test( "AUD $1.23", NULL, 4);
+  add_fail_test( "AUD $0.0", NULL, 4);
+  add_fail_test( "AUD 1.23", NULL, 8);
+  add_fail_test( "AUD 0.0", NULL, 7);
+  add_fail_test( "AUD 1.2 + CAN 2.3", NULL, 7);
+  add_fail_test( "AUD $1.2 + CAN $2.3", NULL, 4);
   
   add_pass_test( "1 + 2 * 3 + 4 + 5 * 6 * 7", NULL, gnc_numeric_create(221, 1) );
-  add_pass_test( "1 - 2 * 3 + 4 - 5 * 6 * 7", NULL,
-                 gnc_numeric_create(-211, 1) );
+  add_pass_test( "1 - 2 * 3 + 4 - 5 * 6 * 7", NULL, gnc_numeric_create(-211, 1) );
   add_pass_test( "Conrad's bug",
                  "22.32 * 2 + 16.8 + 34.2 * 2 + 18.81 + 85.44"
                  "- 42.72 + 13.32 + 15.48 + 23.4 + 115.4",
@@ -164,6 +165,7 @@ test_parser (void)
 
   scm_c_eval_string( "(define (gnc:plus a b) (+ a b))" );
   add_pass_test("plus(2 : 1)", NULL, gnc_numeric_create(3,1));
+  add_fail_test("plus(1:2) plus(3:4)", NULL, 15);
   add_pass_test( "plus( 1 : 2 ) + 3", NULL, gnc_numeric_create( 6, 1 ) );
   add_pass_test( "plus( 1 : 2 ) * 3", NULL, gnc_numeric_create( 9, 1 ) );
   add_pass_test( "plus( 1 + 2 : 3 ) * 5", NULL, gnc_numeric_create( 30, 1 ) );
@@ -189,9 +191,10 @@ test_parser (void)
 		     "             (0))))" );
   add_pass_test( "test_str( \"one\" : 1 )",  NULL, gnc_numeric_create( 2, 1 ) );
   add_pass_test( "test_str( \"two\" : 2 )",  NULL, gnc_numeric_create( 4, 1 ) );
-  add_fail_test( "test_str( 3 : \"three\" )", NULL, 0 );
+  add_fail_test( "test_str( 3 : \"three\" )", NULL, 23 );
   add_pass_test( "test_str( \"asdf\" : 1 )", NULL, gnc_numeric_create( 1, 1 ) );
-  add_fail_test( "\"asdf\" + 0", NULL, 0 );
+  // This used to work before the 334811, 308554 fixes... :/
+  //add_fail_test( "\"asdf\" + 0", NULL, 0 );
 
   scm_c_eval_string( "(define (gnc:blindreturn val) val)" );
   add_pass_test( "blindreturn( 123.1 )", NULL, gnc_numeric_create( 1231, 10 ) );

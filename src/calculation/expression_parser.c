@@ -1062,6 +1062,26 @@ multiply_divide_op (parser_env_ptr pe)
   }				/* endwhile */
 }				/* multiply_divide_op */
 
+/**
+ * Bug#334811, 308554: apply some basic grammar constraints.
+ * @return true if the expression is in error; pe->error_code will already
+ * contain the error.
+ **/
+static int
+check_expression_grammar_error(parser_env_ptr pe)
+{
+  if (pe->Token == VAR_TOKEN
+      || pe->Token == STR_TOKEN
+      || pe->Token == NUM_TOKEN
+      || pe->Token == FN_TOKEN)
+  {
+    add_token(pe, EOS);
+    pe->error_code = EXPRESSION_ERROR;
+    return TRUE;
+  }
+  return FALSE;
+}
+
 /* evaluate:
  *  unary '+' and '-'
  *  named variables
@@ -1136,15 +1156,8 @@ primary_exp (parser_env_ptr pe)
       if (pe->error_code)
         return;
 
-      // Bug#334811, 308554: apply some basic grammar constraints.
-      if (pe->Token == VAR_TOKEN
-          || pe->Token == STR_TOKEN
-          || pe->Token == NUM_TOKEN)
-      {
-        add_token(pe, EOS);
-        pe->error_code = EXPRESSION_ERROR;
+      if (check_expression_grammar_error(pe))
         return;
-      }
 
       rslt->value = pe->numeric_value;
       pe->numeric_value = NULL;
@@ -1197,16 +1210,26 @@ primary_exp (parser_env_ptr pe)
           add_token( pe, EOS );
           return;
         }
-
       }
 
       next_token(pe);
+
+      if (check_expression_grammar_error(pe))
+        return;
+
       break;
 
     case VAR_TOKEN:
+      if (check_expression_grammar_error(pe))
+        return;
+
       rslt = get_named_var (pe);
       break;
     case STR_TOKEN:
+
+      if (check_expression_grammar_error(pe))
+        return;
+
       rslt = get_unnamed_var( pe );
       rslt->type = VST_STRING;
       rslt->value = ident;
