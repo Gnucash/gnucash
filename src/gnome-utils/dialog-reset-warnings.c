@@ -37,6 +37,7 @@ static QofLogModule log_module = GNC_MOD_PREFS;
 
 #define GCONF_SECTION			"dialogs/reset_warnings"
 #define DIALOG_RESET_WARNINGS_CM_CLASS	"reset-warnings"
+#define GCONF_ENTRY_LIST		"gconf_entries"
 
 void gnc_reset_warnings_select_all_cb (GtkButton *button, gpointer user_data);
 void gnc_reset_warnings_unselect_all_cb (GtkButton *button, gpointer user_data);
@@ -48,7 +49,7 @@ static void
 gnc_reset_warnings_update_widgets (GtkWidget *dialog_widget)
 {
   GtkWidget *box1, *box2, *nada, *buttons;
-  GtkWidget *ok, *apply;
+  GtkWidget *apply;
   GList *list, *tmp;
   gboolean any = FALSE, checked = FALSE;
 
@@ -89,17 +90,14 @@ gnc_reset_warnings_update_widgets (GtkWidget *dialog_widget)
 
   nada = gnc_glade_lookup_widget(dialog_widget, "no_warnings");
   buttons = gnc_glade_lookup_widget(dialog_widget, "hbuttonbox");
-  ok = gnc_glade_lookup_widget(dialog_widget, "okbutton");
   apply = gnc_glade_lookup_widget(dialog_widget, "applybutton");
   if (any) {
     gtk_widget_show(buttons);
     gtk_widget_hide(nada);
-    gtk_widget_set_sensitive(ok, checked);
     gtk_widget_set_sensitive(apply, checked);
   } else {
     gtk_widget_hide(buttons);
     gtk_widget_show(nada);
-    gtk_widget_set_sensitive(ok, FALSE);
     gtk_widget_set_sensitive(apply, FALSE);
   }
   LEAVE(" ");
@@ -193,6 +191,24 @@ gnc_reset_warnings_apply_changes (GtkDialog *dialog)
 }
 
 
+static void
+gnc_reset_warnings_revert_changes (GtkDialog *dialog)
+{
+  GSList *entries, *tmp;
+  GConfEntry *entry;
+
+  ENTER("dialog %p", dialog);
+
+  entries = g_object_get_data(G_OBJECT(dialog), GCONF_ENTRY_LIST);
+  for (tmp = entries; tmp; tmp = g_slist_next(tmp)) {
+    entry = tmp->data;
+    gnc_gconf_set_int (NULL, entry->key,
+		       gconf_value_get_int(entry->value), NULL);
+  }
+  LEAVE(" ");
+}
+
+
 void
 gnc_reset_warnings_response_cb (GtkDialog *dialog,
 				gint response,
@@ -204,21 +220,24 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
       break;
 
     case GTK_RESPONSE_OK:
-      gnc_reset_warnings_apply_changes(dialog);
-      /* fall through */
-
-    default:
       gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_reset_warnings_apply_changes(dialog);
       gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
       gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
 					   dialog);
       gtk_widget_destroy(GTK_WIDGET(dialog));
       break;
+
+    default:
+      gnc_gconf_remove_notification(G_OBJECT(dialog), GCONF_WARNINGS);
+      gnc_reset_warnings_revert_changes(dialog);
+      gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
+					   dialog);
+      gtk_widget_destroy(GTK_WIDGET(dialog));
   }
 }
 
-void gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box);
-void
+static void
 gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
 {
   const gchar *name, *schema_name, *desc = NULL;
@@ -250,7 +269,7 @@ gnc_reset_warnings_add_one (GConfEntry *entry, GtkWidget *box)
 }
 
 
-static void
+static GSList *
 gnc_reset_warnings_add_section (const gchar *section, GtkWidget *box)
 {
   GSList *entries, *tmp;
@@ -262,14 +281,26 @@ gnc_reset_warnings_add_section (const gchar *section, GtkWidget *box)
     entry = tmp->data;
     if (gconf_value_get_int(entry->value) != 0) {
       gnc_reset_warnings_add_one(entry, box);
-      gconf_entry_free(entry);
     }
   }
-  g_slist_free(entries);
 
   LEAVE(" ");
+  return entries;
 }
 
+
+static void
+gnc_reset_warnings_release_entries (GSList *entries)
+{
+  GSList *tmp;
+
+  ENTER(" ");
+  for (tmp = entries; tmp; tmp = g_slist_next(tmp)) {
+    gconf_entry_free(tmp->data);
+  }
+  g_slist_free(entries);
+  LEAVE(" ");
+}
 
 static void
 gnc_reset_warnings_gconf_changed (GConfClient *client,
@@ -297,10 +328,11 @@ gnc_reset_warnings_gconf_changed (GConfClient *client,
     gnc_reset_warnings_add_one (entry, box);
     DEBUG("added checkbox for %s", entry->key);
   } else {
-    /* Don't know is we were invoked by this dialog removing the
-     * warning, or if it happened somewhere else like gconf-editor.
-     * Can't hurt to run the widgets and try to remove it.  Worst case
-     * we can't find it because its already been deleted. */
+    /* Don't know if we were invoked by the dialog removing the
+     * warning, or if the remove happened somewhere else like
+     * gconf-editor.  Can't hurt to run the widgets and try to remove
+     * it.  Worst case we can't find it because its already been
+     * deleted. */
     list = gtk_container_get_children(GTK_CONTAINER(box));
     g_list_foreach(list, (GFunc)gnc_reset_warnings_find_remove, entry->key);
     g_list_free(list);
@@ -342,6 +374,7 @@ gnc_reset_warnings_dialog (GtkWidget *main_window)
 {
   GtkWidget *dialog, *box;
   GladeXML *xml;
+  GSList *perm_list, *temp_list;
 
   ENTER("");
   if (gnc_forall_gui_components(DIALOG_RESET_WARNINGS_CM_CLASS,
@@ -358,11 +391,15 @@ gnc_reset_warnings_dialog (GtkWidget *main_window)
 
   DEBUG("permanent");
   box = glade_xml_get_widget(xml, "perm_vbox");
-  gnc_reset_warnings_add_section(GCONF_WARNINGS_PERM, box);
+  perm_list = gnc_reset_warnings_add_section(GCONF_WARNINGS_PERM, box);
 
   DEBUG("temporary");
   box = glade_xml_get_widget(xml, "temp_vbox");
-  gnc_reset_warnings_add_section(GCONF_WARNINGS_TEMP, box);
+  temp_list = gnc_reset_warnings_add_section(GCONF_WARNINGS_TEMP, box);
+
+  g_object_set_data_full(G_OBJECT(dialog), GCONF_ENTRY_LIST,
+			 g_slist_concat (perm_list, temp_list),
+			 (GDestroyNotify)gnc_reset_warnings_release_entries);
 
   gnc_reset_warnings_update_widgets(dialog);
 

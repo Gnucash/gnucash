@@ -1,5 +1,10 @@
 2006-03-30  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-reset-warnings.c: Fix the dialog so that
+	the 'Cancel' button cancels all changes made since the dialog was
+	opened. (c.f. The HIG section on explicit apply windows.)  The
+	'OK' button is now always sensitive.  Fixes #336629 and #336630.
+
 	* src/backend/file/io-gncxml-v2.c:
 	* src/gnome-utils/gnc-main-window.c:
 	* src/gnome-utils/gnc-window.c: Work around the fact that a
