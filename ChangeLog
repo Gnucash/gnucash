@@ -13,6 +13,10 @@
 
 2006-03-30  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/calculation/expression_parser.c (primary_exp):
+	* src/app-utils/test/test-exp-parser.c (test_parser): Tighten the
+	grammar around quoted strings. Test-case fixes.
+	
 	* src/calculation/expression_parser.c (primary_exp): 
 	* src/app-utils/test/test-exp-parser.c (test_parser): Add basic
 	validation and test-cases for invalid expressions.  Bugs#308554,

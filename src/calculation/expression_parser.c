@@ -262,7 +262,7 @@
  * After parsing the above expressions the variables nni, jk, tyh and
  * tgh would all be defined.
  *
- * Functiosn are invoked with expressions of the format
+ * Functions are invoked with expressions of the format
  *
  *   [_a-zA-Z]( <argument_0> : <argument_1> : ... : <argument_n> )
  *
@@ -1226,9 +1226,13 @@ primary_exp (parser_env_ptr pe)
       rslt = get_named_var (pe);
       break;
     case STR_TOKEN:
-
-      if (check_expression_grammar_error(pe))
+      if (!(pe->Token == ')'
+            || pe->Token == ARG_TOKEN))
+      {
+        add_token(pe, EOS);
+        pe->error_code = EXPRESSION_ERROR;
         return;
+      }
 
       rslt = get_unnamed_var( pe );
       rslt->type = VST_STRING;

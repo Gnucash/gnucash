@@ -39,6 +39,7 @@ _add_pass_test (const char *test_name, const char *exp, gnc_numeric result, char
   tests = g_list_append (tests, node);
 }
 
+
 #define add_fail_test(n,e,o) _add_fail_test((n), (e), (o), __FILE__, __LINE__)
 
 static void
@@ -134,6 +135,7 @@ test_parser (void)
   add_fail_test ("bad expression", "ç 1", 0);
   add_fail_test ("bad expression", "1 asdf", 6);
   add_fail_test ("bad expression", "asdf 1", 6);
+  add_fail_test ("bad expression", "asdf jkl", 8);
   add_fail_test ("bad expression", "  (5 + 23)/   ", 14);
   add_fail_test ("bad expression", "  ((((5 + 23)/   ", 17);
   add_fail_test ("divide by zero", "  4 / (1 - 1)", -1);
@@ -160,7 +162,7 @@ test_parser (void)
                  "- 42.72 + 13.32 + 15.48 + 23.4 + 115.4",
                  gnc_numeric_create(35897, 100) );
 
-  // This must be defined for the function-parsing to work.
+  /* This must be defined for the function-parsing to work. */
   scm_c_eval_string("(define (gnc:error->string tag args)   (define (write-error port)     (if (and (list? args) (not (null? args)))         (let ((func (car args)))           (if func               (begin                 (display \"Function: \" port)                 (display func port)                 (display \", \" port)                 (display tag port)                 (display \"\n\n\" port)))))     (false-if-exception      (apply display-error (fluid-ref the-last-stack) port args))     (display-backtrace (fluid-ref the-last-stack) port)     (force-output port))   (false-if-exception    (call-with-output-string write-error)))");
 
   scm_c_eval_string( "(define (gnc:plus a b) (+ a b))" );
@@ -193,8 +195,7 @@ test_parser (void)
   add_pass_test( "test_str( \"two\" : 2 )",  NULL, gnc_numeric_create( 4, 1 ) );
   add_fail_test( "test_str( 3 : \"three\" )", NULL, 23 );
   add_pass_test( "test_str( \"asdf\" : 1 )", NULL, gnc_numeric_create( 1, 1 ) );
-  // This used to work before the 334811, 308554 fixes... :/
-  //add_fail_test( "\"asdf\" + 0", NULL, 0 );
+  add_fail_test("\"asdf\" + 0", NULL, 8);
 
   scm_c_eval_string( "(define (gnc:blindreturn val) val)" );
   add_pass_test( "blindreturn( 123.1 )", NULL, gnc_numeric_create( 1231, 10 ) );
