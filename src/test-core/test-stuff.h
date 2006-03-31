@@ -15,8 +15,8 @@ int main( int argc, char* argv[] )
 	int a, b;
 	g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 	a = b = 1;
-	do_test( a == b, 'integer equality" );
-	do_test( a != b, 'integer inequality? (should fail)" );
+	do_test( a == b, "integer equality" );
+	do_test( a != b, "integer inequality? (should fail)" );
 
 	do_test_args( a == b, "fancy info", __FILE__, __LINE__, "a = %d, b = %b", a, b );
 
