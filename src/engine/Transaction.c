@@ -1234,10 +1234,8 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
   if (na < nb) return -1;
   if (na > nb) return +1;
 
-#ifdef ANYONE_CARES_ABOUT_SORT_ON_DATE_ENTERED
   /* if dates differ, return */
   DATE_CMP(ta,tb,date_entered);
-#endif
 
   /* otherwise, sort on description string */
   da = ta->description ? ta->description : "";

@@ -1,3 +1,8 @@
+2006-03-31  David Hampton  <hampton@employees.org>
+
+	* src/engine/Transaction.c: Restore sorting transactions by date
+	posted.  Fixes 335190.
+
 2006-03-30  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-reset-warnings.c: Fix the dialog so that
