@@ -525,7 +525,7 @@ get_random_commodity (QofBook *book)
     gchar *name;
     const gchar *space;
     gchar *mn;
-    gchar *xcode;
+    gchar *cusip;
     int ran_int;
     gnc_commodity_table *table;
 
@@ -538,7 +538,7 @@ get_random_commodity (QofBook *book)
       return get_random_commodity_from_table (table);
 #endif
 
-    mn = get_random_string();
+    mn = get_random_string_length_in_range(1, 3);
     space = get_random_commodity_namespace();
 
     if (table)
@@ -553,15 +553,15 @@ get_random_commodity (QofBook *book)
     }
 
     name = get_random_string();
-    xcode = get_random_string();
+    cusip = get_random_string();
 
     ran_int = get_random_int_in_range(min_scu, max_scu);
 
-    ret = gnc_commodity_new (book, name, space, mn, xcode, ran_int);
+    ret = gnc_commodity_new(book, name, space, mn, cusip, ran_int);
 
     g_free(mn);
     g_free(name);
-    g_free(xcode);
+    g_free(cusip);
 
     if (table)
       ret = gnc_commodity_table_insert (table, ret);
@@ -921,7 +921,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 {
     Account *acc, *bcc;
     Split *s;
-    gnc_numeric num;
+    gnc_numeric val, amt;
 
     /* Gotta have at least two different accounts */
     if (1 >= g_list_length (account_list)) return;
@@ -943,23 +943,33 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
     }
 
     /* Set up two splits whose values really are opposites. */
-    num = xaccSplitGetValue(s);
+    val = xaccSplitGetValue(s);
     s = get_random_split(book, bcc, trn);
 
     /* Other split should have equal and opposite value */
     if (do_bork()) 
     {
-       num = get_random_gnc_numeric();
-    } 
-    xaccSplitSetValue(s, gnc_numeric_neg(num));
+       val = get_random_gnc_numeric();
+    }
+    val = gnc_numeric_neg(val);
+    xaccSplitSetValue(s, val);
 
     if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
                              xaccAccountGetCommodity(bcc)) && 
         (!do_bork()))
     {
-        xaccSplitSetAmount(s, gnc_numeric_neg(num));
-    }
+        amt = val;
+    } else {
+        gnc_numeric amt2 = xaccSplitGetAmount(s);
+        int i = gnc_numeric_positive_p(amt2) + gnc_numeric_positive_p(amt);
+        if (i % 2)
+            amt = gnc_numeric_neg(amt2);
+    }   
+    
+    if (gnc_numeric_zero_p(val))
+        amt = val;
 
+    xaccSplitSetAmount(s, val);
     xaccTransCommitEdit(trn);
 }
 
@@ -1270,10 +1280,10 @@ Split*
 get_random_split(QofBook *book, Account *acct, Transaction *trn)
 {
     Split *ret;
-    gnc_numeric amt, val;
+    gnc_numeric amt, val, rate;
     const gchar *str;
     gnc_commodity *com;
-    int scu;
+    int scu, denom;
     Timespec *ts;
 
     com = xaccTransGetCurrency (trn);
@@ -1295,8 +1305,8 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
     /* Split must be in an account before we can set an amount */
     /* and in a transaction before it can be added to an account. */
     xaccTransBeginEdit(trn);
-    xaccTransAppendSplit(trn, ret);
-    xaccAccountInsertSplit (acct, ret);
+    xaccSplitSetParent(ret, trn);
+    xaccSplitSetAccount(ret, acct);
 
     do {
         val = get_random_gnc_numeric ();
@@ -1304,7 +1314,7 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
             fprintf(stderr, "get_random_split: Created split with zero value: %p\n", ret);
 
         if (!do_bork()) 
-            val = gnc_numeric_convert (val, scu, GNC_HOW_RND_ROUND);
+            val.denom = scu;
     } while (gnc_numeric_check(val) != GNC_ERROR_OK);
     xaccSplitSetValue(ret, val);
 
@@ -1315,11 +1325,18 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
         (!do_bork())) {
         amt = val;
     } else {
-        amt = get_random_gnc_numeric ();
-        if (gnc_numeric_negative_p(val) && !gnc_numeric_negative_p(amt))
-            amt = gnc_numeric_neg(amt);
+        denom = gnc_commodity_get_fraction(xaccAccountGetCommodity(
+                                               xaccSplitGetAccount(ret)));
+        do {
+            rate = gnc_numeric_abs(get_random_gnc_numeric());
+            amt = gnc_numeric_mul(val, rate, 
+                                  GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+            amt = gnc_numeric_convert(amt, denom, GNC_HOW_RND_ROUND);
+        } while (gnc_numeric_check(amt) != GNC_ERROR_OK);
     }
     xaccSplitSetAmount(ret, amt);
+    if (gnc_numeric_positive_p(val))
+        g_assert(gnc_numeric_positive_p(amt));
     
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
     xaccTransCommitEdit(trn);

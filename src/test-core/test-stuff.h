@@ -121,6 +121,7 @@ gint get_random_int_in_range(int start, int end);
 void random_character_include_funky_chars (gboolean use_funky_chars);
 gchar get_random_character(void);
 gchar* get_random_string(void);
+gchar * get_random_string_length_in_range(int minlen, int maxlen);
 gchar* get_random_string_without(const char *exclude_chars);
 gint64 get_random_gint64(void);
 double get_random_double(void);
