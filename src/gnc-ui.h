@@ -77,13 +77,13 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
 
 extern void
 gnc_warning_dialog(gncUIWidget parent,
-		   const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+		   const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 
 extern void
 gnc_error_dialog(GtkWidget *parent,
-		 const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
+		 const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 
 extern void
