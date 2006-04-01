@@ -1135,6 +1135,7 @@ gnc_account_type_view_create (AccountWindow *aw)
     view, -1, NULL, renderer,
     "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME,
     NULL);
+  gtk_tree_view_set_search_column (view, GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME);
 
   selection = gtk_tree_view_get_selection (view);
   g_signal_connect (G_OBJECT (selection), "changed",
