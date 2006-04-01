@@ -387,7 +387,6 @@ inner_main_add_price_quotes(void *closure, int argc, char **argv)
     load_gnucash_modules();
 
     qof_event_suspend();
-    g_message("Beginning to install price-quote sources");
     scm_c_eval_string("(gnc:price-quotes-install-sources)");
 
     if (gnc_quote_source_fq_installed()) {
