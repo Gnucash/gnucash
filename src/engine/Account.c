@@ -1140,6 +1140,8 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
     /* compatability hack - Gnucash 1.8 gets currency quotes when a
        non-default currency is assigned to an account.  */
     gnc_commodity_set_quote_flag(com, TRUE);
+    gnc_commodity_set_quote_source(com, 
+        gnc_commodity_get_default_quote_source(com));
   }
   xaccAccountCommitEdit(acc);
 }

@@ -108,7 +108,7 @@ struct gnc_quote_source_s {
 };
 
 static gnc_quote_source currency_quote_source =
-  { TRUE, 0, 0, "CURRENCY", "currency", "currency" };
+  { TRUE, 0, 0, "Currency", "CURRENCY", "currency" };
 
 static gnc_quote_source single_quote_sources[] = {
   { FALSE, 0, 0, "AEX", "AEX", "aex" },

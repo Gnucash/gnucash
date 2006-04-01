@@ -738,7 +738,7 @@ Run 'gnc-fq-update' as root to install them.") "\n")))
                                    prices)))))))
 
 (define (gnc:add-quotes-to-book-at-url url)
-  (let* ((session (gnc:url->loaded-session url #f #f))
+  (let* ((session (gnc:url->loaded-session (gnc:get-current-session) url #f #f))
          (quote-ok? #f))
     (gnc:debug "in add-quotes-to-book-at-url")
     (if session
