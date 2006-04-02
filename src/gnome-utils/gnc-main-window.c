@@ -218,7 +218,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
-	{ "TransactionAction", NULL, N_("_Transaction"), NULL, NULL, NULL },
+	{ "TransactionAction", NULL, N_("Tra_nsaction"), NULL, NULL, NULL },
 	{ "ReportsAction", NULL, N_("_Reports"), NULL, NULL, NULL },
 	{ "ToolsAction", NULL, N_("_Tools"), NULL, NULL, NULL },
 	{ "ExtensionsAction", NULL, N_("E_xtensions"), NULL, NULL, NULL },
