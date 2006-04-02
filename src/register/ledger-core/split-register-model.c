@@ -1683,7 +1683,7 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 					 "%s", title);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					     "%s", message);
-    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Change _Split"), 
+    gtk_dialog_add_button(GTK_DIALOG(dialog), _("Chan_ge Split"), 
                           GTK_RESPONSE_YES);
     response = gnc_dialog_run(GTK_DIALOG(dialog), "change_reconciled_split");
     gtk_widget_destroy(dialog);

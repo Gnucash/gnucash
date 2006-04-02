@@ -1,5 +1,8 @@
 2006-04-02  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register-model.c: Change the
+	access key on the "Change Split" button.  Fixes 336836.
+
 	* src/gnome-utils/gnc-main-window.c: Change the access key on the
 	Transaction menu to not conflict with the Tools menu.  Fixes
 	336829.
