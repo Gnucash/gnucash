@@ -65,32 +65,38 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     gnc_quote_source *source;
     const char *string;
     xmlNodePtr ret;
+    gboolean currency = gnc_commodity_is_iso(com);
+
+    if (currency && !gnc_commodity_get_quote_flag(com))
+      return NULL;
 
     ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
 
     xmlSetProp(ret, BAD_CAST "version", BAD_CAST commodity_version_string);
     
     xmlAddChild(ret, text_to_dom_tree(cmdty_namespace,
-                                      gnc_commodity_get_namespace(com)));
+                                      gnc_commodity_get_namespace_compat(com)));
     xmlAddChild(ret, text_to_dom_tree(cmdty_id,
                                       gnc_commodity_get_mnemonic(com)));
 
-    if(gnc_commodity_get_fullname(com))
-    {
-        xmlAddChild(ret, text_to_dom_tree(cmdty_name,
-                                          gnc_commodity_get_fullname(com)));
+    if (!currency) {
+      if(gnc_commodity_get_fullname(com))
+      {
+      	  xmlAddChild(ret, text_to_dom_tree(cmdty_name,
+                                            gnc_commodity_get_fullname(com)));
+      }
+      
+      if(gnc_commodity_get_cusip(com) &&
+         strlen(gnc_commodity_get_cusip(com)) > 0)
+      {
+          xmlAddChild(ret, text_to_dom_tree(
+                          cmdty_xcode,
+                          gnc_commodity_get_cusip(com)));
+      }
+      
+      xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
+                                       gnc_commodity_get_fraction(com)));
     }
-
-    if(gnc_commodity_get_cusip(com) &&
-       strlen(gnc_commodity_get_cusip(com)) > 0)
-    {
-        xmlAddChild(ret, text_to_dom_tree(
-                        cmdty_xcode,
-                        gnc_commodity_get_cusip(com)));
-    }
-
-    xmlAddChild(ret, int_to_dom_tree(cmdty_fraction,
-                                     gnc_commodity_get_fraction(com)));
 
     if (gnc_commodity_get_quote_flag(com)) {
       xmlNewChild(ret, NULL, BAD_CAST cmdty_get_quotes, NULL);
@@ -192,6 +198,31 @@ valid_commodity(gnc_commodity *com)
     return TRUE;
 }
 
+static gnc_commodity *
+gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
+{
+    gnc_commodity_table * table;
+    gchar *exchange = NULL, *mnemonic = NULL;
+    xmlNodePtr node;
+
+    for(node = tree->xmlChildrenNode; node; node = node->next)
+    {
+      if (safe_strcmp((char*) node->name, cmdty_namespace) == 0)
+	exchange = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+      if (safe_strcmp((char*) node->name, cmdty_id) == 0)
+	mnemonic = (gchar*) xmlNodeGetContent (node->xmlChildrenNode);
+    }
+
+    if (!exchange || !mnemonic)
+      return NULL;
+
+    if (!gnc_commodity_namespace_is_iso(exchange))
+      return NULL;
+
+    table = gnc_commodity_table_get_table(book);
+    return gnc_commodity_table_lookup(table, exchange, mnemonic);
+}
+
 static gboolean
 gnc_commodity_end_handler(gpointer data_for_children,
                           GSList* data_from_children, GSList* sibling_data,
@@ -217,8 +248,10 @@ gnc_commodity_end_handler(gpointer data_for_children,
     }
     
     g_return_val_if_fail(tree, FALSE);
-    
-    com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
+
+    com = gnc_commodity_find_currency(book, tree);
+    if (!com)
+      com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
 
     for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {

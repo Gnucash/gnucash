@@ -110,7 +110,7 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
         return NULL;
     }
     
-    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", BAD_CAST gnc_commodity_get_namespace(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", BAD_CAST gnc_commodity_get_namespace_compat(c));
     xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", BAD_CAST gnc_commodity_get_mnemonic(c));
 
     return ret;

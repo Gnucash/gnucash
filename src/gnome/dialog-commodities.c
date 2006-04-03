@@ -81,7 +81,7 @@ edit_clicked (CommoditiesDialog *cd)
   gnc_commodity *commodity;
 
   commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
-  if (commodity == NULL || gnc_commodity_is_iso (commodity))
+  if (commodity == NULL || gnc_commodity_is_currency (commodity))
     return;
 
   if (gnc_ui_edit_commodity_modal (commodity, cd->dialog))
@@ -231,13 +231,13 @@ static void
 gnc_commodities_dialog_selection_changed (GtkTreeSelection *selection,
 					  CommoditiesDialog *cd)
 {
-	gboolean sensitive = FALSE;
+	gboolean remove_ok;
 	gnc_commodity *commodity;
 
 	commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
-	sensitive = commodity && !gnc_commodity_is_iso(commodity);
-	gtk_widget_set_sensitive (cd->edit_button, sensitive);
-	gtk_widget_set_sensitive (cd->remove_button, sensitive);
+	remove_ok = commodity && !gnc_commodity_is_iso(commodity);
+	gtk_widget_set_sensitive (cd->edit_button, commodity != NULL);
+	gtk_widget_set_sensitive (cd->remove_button, remove_ok);
 }
 
 void

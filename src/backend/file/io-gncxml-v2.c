@@ -953,36 +953,26 @@ write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     for(lp = namespaces; lp; lp = lp->next) 
     {
-        gchar *space;
+        GList *comms, *lp2;
+	xmlNodePtr comnode;
 
-        if(!lp->data) {
-            g_list_free (namespaces);
-            return;
-        }
+	comms = gnc_commodity_table_get_commodities(tbl, lp->data);
+	comms = g_list_sort(comms, compare_commodity_ids);
 
-        space = (gchar *) lp->data;
-        if(!gnc_commodity_namespace_is_iso(space)) 
-        {
-            GList *comms = gnc_commodity_table_get_commodities(tbl, space);
-            GList *lp2;
+	for(lp2 = comms; lp2; lp2 = lp2->next) {
+	    comnode = gnc_commodity_dom_tree_create(lp2->data);
+	    if (comnode == NULL)
+	      continue;
 
-            comms = g_list_sort(comms, compare_commodity_ids);
+	    xmlElemDump(out, NULL, comnode);
+	    fprintf(out, "\n");
 
-            for(lp2 = comms; lp2; lp2 = lp2->next) 
-            {
-                xmlNodePtr comnode = gnc_commodity_dom_tree_create(
-                    (gnc_commodity *) lp2->data);
+	    xmlFreeNode(comnode);
+	    gd->counter.commodities_loaded++;
+	    run_callback(gd, "commodities");
+	  }
 
-                xmlElemDump(out, NULL, comnode);
-                fprintf(out, "\n");
-
-                xmlFreeNode(comnode);
-                gd->counter.commodities_loaded++;
-                run_callback(gd, "commodities");
-            }
-
-            g_list_free (comms);
-        }
+	g_list_free (comms);
     }
 
     if (namespaces) g_list_free (namespaces);

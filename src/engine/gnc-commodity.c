@@ -69,7 +69,8 @@ struct gnc_commodity_namespace_s
 {
   QofInstance inst;
 
-  char       * name;
+  gchar      * name;
+  gboolean     iso4217;
   GHashTable * cm_table;
   GList      * cm_list;
 };
@@ -528,6 +529,8 @@ gnc_commodity_new(QofBook *book, const char * fullname,
 
   reset_printname(retval);
   reset_unique_name(retval);
+  if (gnc_commodity_namespace_is_iso(namespace))
+    retval->quote_source = gnc_quote_source_lookup_by_internal("currency");
   qof_event_gen (&retval->inst.entity, QOF_EVENT_CREATE, NULL);
 
   return retval;
@@ -635,6 +638,15 @@ const char *
 gnc_commodity_get_namespace(const gnc_commodity * cm) 
 {
   if(!cm) return NULL;
+  return gnc_commodity_namespace_get_name(cm->namespace);
+}
+
+const char *
+gnc_commodity_get_namespace_compat(const gnc_commodity * cm) 
+{
+  if (!cm || !cm->namespace) return NULL;
+  if (cm->namespace->iso4217)
+    return GNC_COMMODITY_NS_ISO;
   return gnc_commodity_namespace_get_name(cm->namespace);
 }
 
@@ -783,6 +795,8 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
     return;
 
   cm->namespace = nsp;
+  if (nsp->iso4217)
+    cm->quote_source = gnc_quote_source_lookup_by_internal("currency");
   mark_commodity_dirty(cm);
   reset_printname(cm);
   reset_unique_name(cm);
@@ -981,7 +995,16 @@ gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *namesp
 gboolean
 gnc_commodity_namespace_is_iso(const char *namespace)
 {
-  return (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0);
+  return ((safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0) ||
+	  (safe_strcmp(namespace, GNC_COMMODITY_NS_CURRENCY) == 0));
+}
+
+static const gchar *
+gnc_commodity_table_map_namespace(const char * namespace)
+{
+  if (safe_strcmp(namespace, GNC_COMMODITY_NS_ISO) == 0)
+    return GNC_COMMODITY_NS_CURRENCY;
+  return namespace;
 }
 
 /********************************************************************
@@ -1327,11 +1350,8 @@ gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table)
 gboolean
 gnc_commodity_is_iso(const gnc_commodity * cm)
 {
-  const gchar *ns_name;
-
-  if (!cm) return FALSE;
-  ns_name = gnc_commodity_namespace_get_name(cm->namespace);
-  return (safe_strcmp(ns_name, GNC_COMMODITY_NS_ISO) == 0);
+  if (!cm || !cm->namespace) return FALSE;
+  return cm->namespace->iso4217;
 }
 
 gboolean
@@ -1450,12 +1470,14 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   
   if (!table) return NULL;
   
+  namespace = gnc_commodity_table_map_namespace(namespace);
   ns = gnc_commodity_table_find_namespace(table, namespace);
   if(!ns) 
   {
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
     ns->name = gnc_string_cache_insert((gpointer)namespace);
+    ns->iso4217 = gnc_commodity_namespace_is_iso(namespace);
     qof_instance_init (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
     qof_event_gen (&ns->inst.entity, QOF_EVENT_CREATE, NULL);
     
@@ -1476,6 +1498,7 @@ gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
   if (!table || !namespace)
     return NULL;
 
+  namespace = gnc_commodity_table_map_namespace(namespace);
   return g_hash_table_lookup(table->ns_table, (gpointer)namespace);
 }
 

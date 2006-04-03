@@ -581,20 +581,12 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
     case DIAG_COMM_ALL:
       namespaces =
 	gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-
-      /* Replace the string "ISO4217" with "CURRENCY". */
-      node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
-      if (node) {
-	namespaces = g_list_remove_link (namespaces, node);
-	g_list_free_1 (node);
-      }
-      namespaces = g_list_prepend (namespaces, "CURRENCY");
       break;
 
    case DIAG_COMM_NON_CURRENCY:
      namespaces =
        gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-     node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_ISO, g_strcmp);
+     node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_CURRENCY, g_strcmp);
      if (node) {
        namespaces = g_list_remove_link (namespaces, node);
        g_list_free_1 (node);
@@ -606,7 +598,7 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
 
    case DIAG_COMM_CURRENCY:
    default:
-    namespaces = g_list_prepend (NULL, "CURRENCY");
+    namespaces = g_list_prepend (NULL, GNC_COMMODITY_NS_CURRENCY);
     break;     
   }
 
@@ -629,8 +621,7 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
   else
     active = "";
 
-  if (safe_strcmp (active, GNC_COMMODITY_NS_ISO) == 0 ||
-      safe_strcmp (active, "CURRENCY") == 0 ||
+  if (safe_strcmp (active, "CURRENCY") == 0 ||
       safe_strcmp (init_string, "CURRENCY") == 0)
   {
     active = "CURRENCY";
@@ -650,8 +641,8 @@ gnc_ui_namespace_picker_ns (GtkWidget *combobox)
 
   namespace = gtk_entry_get_text (GTK_ENTRY(GTK_COMBO (combobox)->entry));
 
-  if (safe_strcmp (namespace, "CURRENCY") == 0)
-    return GNC_COMMODITY_NS_ISO;
+  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+    return GNC_COMMODITY_NS_CURRENCY;
   else
     return namespace;
 }
@@ -730,16 +721,21 @@ gnc_ui_source_menu_create(QuoteSourceType type)
   menu = GTK_MENU(gtk_menu_new());
   gtk_widget_show(GTK_WIDGET(menu));
 
-  max = gnc_quote_source_num_entries(type);
-  for (i = 0; i < max; i++)
-  {
-    source = gnc_quote_source_lookup_by_ti(type, i);
-    if (source == NULL)
-      break;
-    item = gtk_menu_item_new_with_label(gnc_quote_source_get_user_name(source));
-    gtk_widget_set_sensitive(item, gnc_quote_source_get_supported(source));
+  if (type == SOURCE_CURRENCY) {
+    item = gtk_menu_item_new_with_label(_("Currency"));
     gtk_widget_show(item);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+  } else {
+    max = gnc_quote_source_num_entries(type);
+    for (i = 0; i < max; i++) {
+	source = gnc_quote_source_lookup_by_ti(type, i);
+	if (source == NULL)
+	  break;
+	item = gtk_menu_item_new_with_label(gnc_quote_source_get_user_name(source));
+	gtk_widget_set_sensitive(item, gnc_quote_source_get_supported(source));
+	gtk_widget_show(item);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+      }
   }
 
   omenu = gtk_option_menu_new();
@@ -885,7 +881,11 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
 
   /* Build custom widgets */
   box = glade_xml_get_widget (xml, "single_source_box");
-  menu = gnc_ui_source_menu_create(SOURCE_SINGLE);
+  if (gnc_commodity_namespace_is_iso(selected_namespace)) {
+    menu = gnc_ui_source_menu_create(SOURCE_CURRENCY);
+  } else {
+    menu = gnc_ui_source_menu_create(SOURCE_SINGLE);
+  }
   retval->source_menu[SOURCE_SINGLE] = menu;
   gtk_box_pack_start(GTK_BOX(box), menu, TRUE, TRUE, 0);
 
