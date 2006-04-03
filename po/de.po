@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 11:02+0200\n"
-"PO-Revision-Date: 2006-04-01 11:39+0200\n"
+"POT-Creation-Date: 2006-04-03 20:00+0200\n"
+"PO-Revision-Date: 2006-04-03 20:34+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -574,7 +574,7 @@ msgstr "Haben muss ein positiver Betrag sein oder Sie müssen es frei lassen."
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1345
+#: ../src/gnome-utils/dialog-account.c:1346
 msgid "<No name>"
 msgstr "<Kein Name>"
 
@@ -3555,7 +3555,6 @@ msgstr "_Bearbeiten"
 #: ../src/gnome/dialog-scheduledxaction.c:243
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/glade/reconcile.glade.h:36
-#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1979
 msgid "_Transaction"
 msgstr "_Buchung"
@@ -4283,7 +4282,7 @@ msgid "M_ove to:"
 msgstr "_Verschieben nach:"
 
 #: ../src/gnome/glade/account.glade.h:44
-#: ../src/gnome-utils/dialog-account.c:1396
+#: ../src/gnome-utils/dialog-account.c:1397
 msgid "New Account"
 msgstr "_Neues Konto"
 
@@ -7315,7 +7314,7 @@ msgid "_Copy"
 msgstr "_Kopieren"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1383
+#: ../src/gnome-utils/dialog-account.c:1384
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
@@ -8578,11 +8577,11 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:4
 msgid "Profit/loss ending date type"
-msgstr ""
+msgstr "Einnahmen/Ausgabenrechnung Enddatum-Typ"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:5
 msgid "Profit/loss starting date type"
-msgstr ""
+msgstr "Einnahmen/Ausgabenrechnung Startdatum-Typ"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
 msgid ""
@@ -9019,17 +9018,19 @@ msgstr ""
 "Sie müssen ein Herkunftskonto wählen oder das Ausgleichskonto für den "
 "Anfangsbestand benutzen."
 
-#: ../src/gnome-utils/dialog-account.c:1386
+#: ../src/gnome-utils/dialog-account.c:1387
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Neue Konten"
 
-#: ../src/gnome-utils/dialog-account.c:1889
+#: ../src/gnome-utils/dialog-account.c:1890
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
 "code field of each child account with a newly generated code."
-msgstr "Das Unterkonto von %s neu nummerieren?  Dies wird das Kontonummer-Feld von jedem Unterkonto mit dem entsprechenden neuen Wert überschreiben."
+msgstr ""
+"Das Unterkonto von %s neu nummerieren?  Dies wird das Kontonummer-Feld von "
+"jedem Unterkonto mit dem entsprechenden neuen Wert überschreiben."
 
 #: ../src/gnome-utils/dialog-commodity.c:161
 msgid ""
@@ -9350,7 +9351,7 @@ msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
-msgstr ""
+msgstr "Geben Sie das Ticker-Symbol der Aktie ein (z. B. CSCO oder AAPL).  Wenn Sie Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der Webseite entsprechen, inklusive Groß/Kleinschreibung."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid ""
@@ -10223,7 +10224,10 @@ msgid ""
 "Legal values are any single non-alphanumeric unicode character, or any of "
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
-msgstr "Das Zeichen zwischen den Konten eines vollen Kontennamens.  Sie können jedes Zeichen wählen, das kein Buchstabe oder Zahl ist, zum Beispiel »:«, »/« oder »-«."
+msgstr ""
+"Das Zeichen zwischen den Konten eines vollen Kontennamens.  Sie können jedes "
+"Zeichen wählen, das kein Buchstabe oder Zahl ist, zum Beispiel »:«, »/« oder "
+"»-«."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Transaction _journal"
@@ -11019,6 +11023,10 @@ msgstr "_Konto öffnen"
 #: ../src/gnome-utils/gnc-main-window.c:217
 msgid "_File"
 msgstr "_Datei"
+
+#: ../src/gnome-utils/gnc-main-window.c:221
+msgid "Tra_nsaction"
+msgstr "_Buchung"
 
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_Reports"
@@ -14343,7 +14351,7 @@ msgstr ""
 "Abgleichen erschweren. Trotzdem fortsetzen?"
 
 #: ../src/register/ledger-core/split-register-model.c:1686
-msgid "Change _Split"
+msgid "Chan_ge Split"
 msgstr "Buchungs_teil ändern"
 
 #: ../src/register/ledger-core/split-register-model.c:1773
@@ -15615,7 +15623,9 @@ msgstr ""
 msgid ""
 "Calculate the subtotal for this parent account and all of its subaccounts, "
 "and show this as the parent account balance"
-msgstr "Zwischensummen für Hauptkonto-Saldo und Salden aller Unterkonten berechnen und als Hauptkonto-Saldo anzeigen"
+msgstr ""
+"Zwischensummen für Hauptkonto-Saldo und Salden aller Unterkonten berechnen "
+"und als Hauptkonto-Saldo anzeigen"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:792 ../intl-scm/guile-strings.c:802
@@ -15657,7 +15667,9 @@ msgstr "Rechnungswesen-Stil (experimentell)"
 msgid ""
 "Show parent account subtotals, indented per accounting text book practice "
 "(experimental)"
-msgstr "Zwischensummen für Hauptkonten eingerückt anzeigen, gemäß Rechnungswesen-Stil (experimentell)"
+msgstr ""
+"Zwischensummen für Hauptkonten eingerückt anzeigen, gemäß Rechnungswesen-"
+"Stil (experimentell)"
 
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:810
@@ -17892,7 +17904,7 @@ msgstr "Berechnung der Basis"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1970
 msgid "Set preference for price list data"
-msgstr ""
+msgstr "Auswahl für Kurslisten treffen"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1986
@@ -17914,17 +17926,17 @@ msgstr "Durchschnitt"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1994
 msgid "Use average cost of all shares for basis"
-msgstr ""
+msgstr "Durchschnittliche Aktienkurse als Basis verwenden"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1996
 msgid "FIFO"
-msgstr ""
+msgstr "FIFO"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1998
 msgid "Use first-in first-out method for basis"
-msgstr ""
+msgstr "Methode First-In First-Out (zuerst erworbene werden zuerst verkauft)"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2000
@@ -17934,7 +17946,7 @@ msgstr "FILO"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2002
 msgid "Use first-in last-out method for basis"
-msgstr ""
+msgstr "Methode First-In Last-Out (zuerst erworbene werden zuletzt verkauft)"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2004
@@ -19437,17 +19449,17 @@ msgstr "Alle Schecks sollen auf folgenden Zahlungsempfänger ausgestellt werden"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3334
 msgid "Company contact"
-msgstr ""
+msgstr "Name Ansprechpartner"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3336
 msgid "Display the Company contact information"
-msgstr ""
+msgstr "Den Ansprechpartner einer Firma anzeigen"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3340
 msgid "Company contact string"
-msgstr "Ansprechpartner Vorstellung"
+msgstr "Erklärung Ansprechpartner"
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3342
