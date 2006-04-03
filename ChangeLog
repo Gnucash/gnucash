@@ -1,5 +1,9 @@
 2006-04-03  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome/gnc-plugin-basic-commands.c: Serialize access to the
+	"Save" and "Save As" commands.  Fixes 148905.
+
 	* src/backend/file/sixtp-dom-generators.c:
 	* src/backend/file/gnc-commodity-xml-v2.c:
 	* src/gnome-utils/dialog-commodity.c:

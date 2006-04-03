@@ -296,6 +296,13 @@ gnc_plugin_basic_commands_finalize (GObject *object)
  ************************************************************/
 
 static void
+save_allowed (gboolean allowed)
+{
+  gnc_main_window_all_action_set_sensitive("FileSaveAction", allowed);
+  gnc_main_window_all_action_set_sensitive("FileSaveAsAction", allowed);
+}
+
+static void
 gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
 {
   gnc_file_new ();
@@ -321,7 +328,9 @@ gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data)
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+  save_allowed(FALSE);
   gnc_file_save ();
+  save_allowed(TRUE);
   gnc_window_set_progressbar_window (NULL);
   /* FIXME GNOME 2 Port (update the title etc.) */
 }
@@ -335,7 +344,9 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
     return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
+  save_allowed(FALSE);
   gnc_file_save_as ();
+  save_allowed(TRUE);
   gnc_window_set_progressbar_window (NULL);
   /* FIXME GNOME 2 Port (update the title etc.) */
 }

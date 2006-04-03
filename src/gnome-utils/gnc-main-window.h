@@ -340,6 +340,16 @@ gboolean gnc_main_window_finish_pending (GncMainWindow *window);
  *  should cancel the pending operation.  TRUE otherwise */
 gboolean gnc_main_window_all_finish_pending (void);
 
+/** Change the sensitivity of a command in all windows.  This can be
+ *  used to serialize access to a command so that in cannot be
+ *  reinvoked until the current invocation is finished.
+ *
+ *  @param action_name The name of the command to modity.
+ *
+ *  @param sensitive Whether or not the user should be able to invoke
+ *  this action. */
+void gnc_main_window_all_action_set_sensitive (const gchar *action_name, gboolean sensitive);
+
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

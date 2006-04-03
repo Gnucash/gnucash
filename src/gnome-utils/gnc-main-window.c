@@ -3509,5 +3509,18 @@ gnc_gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
 } 
 /* CS: End of code copied from gtk/gtkactiongroup.c */
 
+void
+gnc_main_window_all_action_set_sensitive (const gchar *action_name,
+					  gboolean sensitive)
+{
+	GList *tmp;
+	GtkAction *action;
+
+	for (tmp = active_windows; tmp; tmp = g_list_next(tmp)) {
+	  action = gnc_main_window_find_action (tmp->data, action_name);
+	  gtk_action_set_sensitive (action, sensitive);
+	}
+}
+
 /** @} */
 /** @} */
