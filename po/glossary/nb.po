@@ -3,8 +3,8 @@
 # Kjartan Maraas <kmaraas@gnome.org>, 2001.
 # Tor Harald Thorland <tortho@strigen.com>, 2005.
 # Kjartan Maraas <kmaraas@gnome.org>, 2005.
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-glossary 0.1\n"
@@ -47,7 +47,7 @@ msgstr ""
 
 #. "-"
 msgid "account type: currency"
-msgstr ""
+msgstr "Account type: valuta"
 
 #. "see: Equity"
 msgid "account type: Equity"
@@ -219,7 +219,7 @@ msgstr "næring (adjektiv)"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr ""
+msgstr "Næring"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -247,7 +247,7 @@ msgstr ""
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr ""
+msgstr "vare"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
@@ -359,7 +359,7 @@ msgstr ""
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr ""
+msgstr "fortjeneste"
 
 #. "Name of an automaticly created account to get imbalanced transactions back in balance"
 msgid "imbalance"
@@ -451,7 +451,7 @@ msgstr "notater (register)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr ""
+msgstr "No, (kolonne i registeret)="
 
 #. "to make accessible"
 msgid "open, to"
@@ -467,7 +467,7 @@ msgstr "valg"
 
 #. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
 msgid "order"
-msgstr ""
+msgstr "ordre"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -507,7 +507,7 @@ msgstr "instillinger"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr ""
+msgstr "beløp (i en splitt)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
@@ -519,7 +519,7 @@ msgstr "price type: bud"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr ""
+msgstr "Noteringer"
 
 #. "Money gained in business, esp. the difference between the amount earned and the amount spent"
 msgid "profit"
@@ -539,11 +539,11 @@ msgstr ""
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr ""
+msgstr "avstemme, til"
 
 #. "-"
 msgid "record keeping"
-msgstr ""
+msgstr "bokføring"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
@@ -551,11 +551,11 @@ msgstr "registrer"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr ""
+msgstr "register entry: splitt transaksjon"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "register entry: aksje splitt"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -615,7 +615,7 @@ msgstr "kilde"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr ""
+msgstr "splitt"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -659,7 +659,7 @@ msgstr "transaction state: sperret"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr ""
+msgstr "transaction state: avstemt"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
@@ -691,7 +691,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "beløp"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
@@ -699,5 +699,5 @@ msgstr "leverandør"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "uttak"
 
