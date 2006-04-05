@@ -209,7 +209,7 @@
 	  <property name="title" translatable="yes">Import QIF files</property>
 	  <property name="text" translatable="yes">GnuCash can import financial data from QIF (Quicken Interchange Format) files written by Quicken/QuickBooks, MS Money, Moneydance, and many other programs. 
 
-The import process has several steps. Your GnuCash accounts will not be changed until you click &quot;Finish&quot; at the end of the process. 
+The import process has several steps. Your GnuCash accounts will not be changed until you click &quot;Apply&quot; at the end of the process. 
 
 Click &quot;Forward&quot; to start loading your QIF data, or &quot;Cancel&quot; to abort the process. </property>
 	  <signal name="next" handler="gnc_ui_qif_import_generic_next_cb"/>
@@ -1594,7 +1594,7 @@ Click &quot;Forward&quot; to find duplicate transactions. </property>
 	  <property name="visible">True</property>
 	  <property name="position">GNOME_EDGE_FINISH</property>
 	  <property name="title" translatable="yes">Update your GnuCash accounts</property>
-	  <property name="text" translatable="yes">Click &quot;Finish&quot; to import data from the staging area and update your GnuCash accounts. The account and category matching information you have entered will be saved and used for defaults the next time you use the QIF import  facility. 
+	  <property name="text" translatable="yes">Click &quot;Apply&quot; to import data from the staging area and update your GnuCash accounts. The account and category matching information you have entered will be saved and used for defaults the next time you use the QIF import  facility. 
 
 Click &quot;Back&quot; to review your account and category matchings, to change currency and security settings for new accounts, or to add more files to the staging area.
 
