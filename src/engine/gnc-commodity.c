@@ -544,7 +544,13 @@ gnc_commodity_new(QofBook *book, const char * fullname,
 void
 gnc_commodity_destroy(gnc_commodity * cm)
 {
+  QofBook *book;
+  gnc_commodity_table *table;
   if(!cm) return;
+
+  book = qof_instance_get_book(&cm->inst);
+  table = gnc_commodity_table_get_table(book);
+  gnc_commodity_table_remove(table, cm);
 
   qof_event_gen (&cm->inst.entity, QOF_EVENT_DESTROY, NULL);
 
