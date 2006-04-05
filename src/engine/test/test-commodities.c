@@ -128,8 +128,7 @@ test_commodity(void)
     }
     
     {
-        int i;
-        int j;
+        int i, j, num_total = 0;
         gnc_commodity_table *tbl;
         gnc_commodity *coms[20];
         QofBook *book;
@@ -144,14 +143,18 @@ test_commodity(void)
         {
             coms[i] = get_random_commodity(book);
 
+            if (!gnc_commodity_table_lookup(
+                tbl, gnc_commodity_get_namespace(coms[i]),
+                gnc_commodity_get_mnemonic(coms[i])))
+                num_total++;
             do_test(
                 gnc_commodity_table_insert(tbl, coms[i]) != NULL,
                 "insert test");
 
             do_test_args(
-                (int)gnc_commodity_table_get_size(tbl) == i + 1,
+                (int)gnc_commodity_table_get_size(tbl) == num_total,
                 "test next size table", __FILE__, __LINE__,
-                "should be %d and is %d", i + 1,
+                "should be %d and is %d", num_total,
                 gnc_commodity_table_get_size(tbl));
 
             for(j = 0; j <= i; j++)
@@ -190,5 +193,5 @@ main (int argc, char **argv)
     qof_query_shutdown();
     guid_shutdown();
     qof_object_shutdown ();
-    return 0;
+    return get_rv();
 }
