@@ -62,6 +62,7 @@ typedef struct {
 	GtkWindow * (* get_gtk_window) (GncWindow *window);
 	GtkWidget * (* get_statusbar) (GncWindow *window);
 	GtkWidget * (* get_progressbar) (GncWindow *window);
+	void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
 } GncWindowIface;
 
 /* function prototypes */

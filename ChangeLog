@@ -1,3 +1,14 @@
+2006-04-05  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-window.[ch]:
+	* src/gnome/gnc-plugin-basic-commands.c: Make the entire UI (menus
+	and toolbar) insensitive when the progress bar is showing.
+	Replaces the code to make the Save/Save As menus insensitive while
+	saving.  Should prevent a whole class of bugs caused by gtk
+	commands sneaking in and causing non-recursive code to be entered
+	recursively.
+
 2006-04-05  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

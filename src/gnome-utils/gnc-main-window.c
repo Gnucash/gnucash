@@ -3356,6 +3356,27 @@ gnc_main_window_get_progressbar (GncWindow *window_in)
 }
 
 
+static void
+gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
+{
+	GncMainWindow *window;
+	GList *winp;
+	GSList *widgetp, *toplevels;
+
+	for (winp = active_windows; winp; winp = g_list_next(winp)) {
+	  window = winp->data;
+	  toplevels = gtk_ui_manager_get_toplevels(window->ui_merge,
+						   GTK_UI_MANAGER_MENUBAR |
+						   GTK_UI_MANAGER_TOOLBAR |
+						   GTK_UI_MANAGER_POPUP);
+	  for (widgetp = toplevels; widgetp; widgetp = g_slist_next(widgetp)) {
+	    gtk_widget_set_sensitive (widgetp->data, sensitive);
+	  }
+	  g_slist_free(toplevels);
+	}
+}
+
+
 /** Initialize the generic window interface for a main window.
  *
  *  @param iface A pointer to the interface data structure to
@@ -3366,6 +3387,7 @@ gnc_window_main_window_init (GncWindowIface *iface)
 	iface->get_gtk_window  = gnc_main_window_get_gtk_window;
 	iface->get_statusbar   = gnc_main_window_get_statusbar;
 	iface->get_progressbar = gnc_main_window_get_progressbar;
+	iface->ui_set_sensitive = gnc_main_window_all_ui_set_sensitive;
 }
 
 
