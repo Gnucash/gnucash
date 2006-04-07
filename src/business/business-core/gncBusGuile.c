@@ -22,7 +22,7 @@
  */
 
 #include "config.h"
-
+#include <glib.h>
 #include "gncBusGuile.h"
 #include "engine-helpers.h"
 #include <g-wrap-wct.h>

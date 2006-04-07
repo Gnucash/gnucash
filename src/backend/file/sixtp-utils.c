@@ -220,7 +220,7 @@ string_to_gint64(const gchar *str, gint64 *v)
   g_return_val_if_fail(str, FALSE);
   
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " " GNC_SCANF_LLD "%n", &v_in, &num_read) < 1) {
+  if(sscanf(str, " %" G_GINT64_FORMAT "%n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
 

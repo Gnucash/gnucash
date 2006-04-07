@@ -1,5 +1,5 @@
 #include "config.h"
-
+#include <glib.h>
 #include <kvp_frame.h>
 #include <g-wrap-wct.h>
 #include <libguile.h>

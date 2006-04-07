@@ -27,7 +27,7 @@
 \********************************************************************/
 
 #include "config.h"
-
+#include <glib.h>
 #include "AccountP.h"
 #include "gnc-associate-account.h"
 #include "gnc-engine.h"

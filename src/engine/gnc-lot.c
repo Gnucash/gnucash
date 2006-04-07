@@ -39,6 +39,7 @@
  * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
+#include <glib.h>
 #include "Account.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"

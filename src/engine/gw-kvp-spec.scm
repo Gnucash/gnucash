@@ -26,6 +26,7 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
+      "#include <glib.h>\n"
       "#include <qof.h>\n"
       "#include <kvp-scm.h>\n"
       "#include <Transaction.h>\n")))
