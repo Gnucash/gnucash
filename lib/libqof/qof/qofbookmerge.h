@@ -79,8 +79,7 @@ make sure this is non-NULL to know that the Init has been successful.
     @author Copyright (c) 2004-2005 Neil Williams <linux@codehelp.co.uk>
 */
 
-#include <glib.h>
-#include "gnc-engine-util.h"
+#include "qofutil.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofobject.h"

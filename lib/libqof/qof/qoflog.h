@@ -34,10 +34,9 @@
 #ifndef _QOF_LOG_H
 #define _QOF_LOG_H
 
-#include <glib.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include "gnc-engine-util.h"
+#include "qofutil.h"
 
 #define QOF_MOD_ENGINE "qof-engine"
 
@@ -138,7 +137,7 @@ void qof_log_shutdown (void);
 /** qof_log_prettify() cleans up subroutine names. AIX/xlC has the habit
  * of printing signatures not names; clean this up. On other operating
  * systems, truncate name to QOF_LOG_MAX_CHARS chars.  */
-const char * qof_log_prettify (const char *name);
+const gchar * qof_log_prettify (const gchar *name);
 
 /** Do not log log_modules that have not been enabled. */
 gboolean qof_log_check(QofLogModule log_module, QofLogLevel log_level);
@@ -250,20 +249,20 @@ gint qof_log_module_count(void);
  * of code. Used for only for performance tuning & debugging. 
  */
 
-void qof_start_clock (int clockno, QofLogModule log_module, QofLogLevel log_level,
-                      const char *function_name, const char *format, ...);
+void qof_start_clock (gint clockno, QofLogModule log_module, QofLogLevel log_level,
+                      const gchar *function_name, const gchar *format, ...);
 
-void qof_report_clock (int clockno,
+void qof_report_clock (gint clockno,
                        QofLogModule log_module,
                        QofLogLevel log_level,
-                       const char *function_name,
-                       const char *format, ...);
+                       const gchar *function_name,
+                       const gchar *format, ...);
 
-void qof_report_clock_total (int clockno,
+void qof_report_clock_total (gint clockno,
                              QofLogModule log_module,
                              QofLogLevel log_level,
-                             const char *function_name,
-                             const char *format, ...);
+                             const gchar *function_name,
+                             const gchar *format, ...);
 
 /** start a particular timer */
 #define START_CLOCK(clockno,format, args...) do {        \

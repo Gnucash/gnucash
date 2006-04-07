@@ -178,7 +178,7 @@ struct _QofParam
 };
 
 /** This function is the default sort function for a particular object type */
-typedef int (*QofSortFunc)(gpointer, gpointer);
+typedef int (*QofSortFunc)(gconstpointer, gconstpointer);
 
 /** This function registers a new object class with the Qof subsystem.
  *  In particular, it registers the set of setters and getters for

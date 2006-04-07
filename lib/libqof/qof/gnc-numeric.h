@@ -36,51 +36,7 @@
     addition and multiplication, but 64-bit rationals do not have 
     the dynamic range of floating point numbers.  
 
-EXAMPLE\n
--------\n
-The following program finds the best ::gnc_numeric approximation to
-the \a math.h constant \a M_PI given a maximum denominator. For
-large denominators, the ::gnc_numeric approximation is accurate to
-more decimal places than will generally be needed, but in some cases
-this may not be good enough. For example,
-
-@verbatim
-    M_PI                   = 3.14159265358979323846
-    245850922 / 78256779   = 3.14159265358979311599  (16 sig figs)
-    3126535 / 995207       = 3.14159265358865047446  (12 sig figs)
-    355 / 113              = 3.14159292035398252096  (7 sig figs)
-@endverbatim
-
-@verbatim
-#include <glib.h>
-#include <qof.h>
-#include <math.h>
-
-int
-main(int argc, char ** argv)
-{
-  gnc_numeric approx, best;
-  double err, best_err=1.0;
-  double m_pi = M_PI;
-  gint64 denom;
-  gint64 max;
-
-  sscanf(argv[1], "%Ld", &max);
-  
-  for (denom = 1; denom < max; denom++)
-  {
-    approx = double_to_gnc_numeric (m_pi, denom, GNC_RND_ROUND);
-    err    = m_pi - gnc_numeric_to_double (approx);
-    if (fabs (err) < fabs (best_err))
-    {
-      best = approx;
-      best_err = err;
-      printf ("%Ld / %Ld = %.30f\n", gnc_numeric_num (best),
-              gnc_numeric_denom (best), gnc_numeric_to_double (best));
-    }
-  }
-}
-@endverbatim
+See \ref gncnumericexample
 
 @{ */
 /** @file gnc-numeric.h
@@ -93,8 +49,6 @@ main(int argc, char ** argv)
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
-
-#include <glib.h>
 
 struct _gnc_numeric 
 {
@@ -325,7 +279,7 @@ static inline
 gint64 gnc_numeric_denom(gnc_numeric a) { return a.denom; }
 
 /** Convert numeric to floating-point value. */
-double      gnc_numeric_to_double(gnc_numeric in);
+gdouble      gnc_numeric_to_double(gnc_numeric in);
 
 /** Convert to string. The returned buffer is to be g_free'd by the
  *  caller (it was allocated through g_strdup) */
@@ -346,7 +300,7 @@ gchar * gnc_num_dbg_to_string(gnc_numeric n);
 GNCNumericErrorCode  gnc_numeric_check(gnc_numeric a);
 
 /** Returns 1 if a>b, -1 if b>a, 0 if a == b  */
-int gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
+gint gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
 
 /** Returns 1 if the given gnc_numeric is 0 (zero), else returns 0. */
 gboolean gnc_numeric_zero_p(gnc_numeric a);
@@ -380,7 +334,7 @@ gboolean gnc_numeric_equal(gnc_numeric a, gnc_numeric b);
   because 7/16 rounds to 1/2 under unbiased rounding but 3/4 rounds
   to 2/2.
  */ 
-int gnc_numeric_same(gnc_numeric a, gnc_numeric b,   
+gint gnc_numeric_same(gnc_numeric a, gnc_numeric b,   
                      gint64 denom, gint how);
 /** @} */
 

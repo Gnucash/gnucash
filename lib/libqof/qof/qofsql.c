@@ -882,18 +882,18 @@ qof_sql_query_run (QofSqlQuery *query, const char *str)
 	if (!query) return NULL;
 
 	qof_sql_query_parse (query, str);
-	if (NULL == query->qof_query) return NULL;
+	if (NULL == query->qof_query) { PINFO (" Null query"); return NULL; }
 
 	qof_query_set_book (query->qof_query, query->book);
-	if(SQL_insert == query->parse_result->type){
-		results = NULL;
-		results = g_list_append(results, qof_query_insert(query));
-		return results;
-	}
     /* Maybe log this sucker */
     if (gnc_should_log (log_module, GNC_LOG_DETAIL)) 
 	{
 		qof_query_print (query->qof_query);
+	}
+	if(SQL_insert == query->parse_result->type){
+		results = NULL;
+		results = g_list_append(results, qof_query_insert(query));
+		return results;
 	}
 
 	results = qof_query_run (query->qof_query);

@@ -63,7 +63,7 @@ qof_book_init (QofBook *book)
 
   book->hash_of_collections = g_hash_table_new_full(
       g_str_hash, g_str_equal,
-      (GDestroyNotify)gnc_string_cache_remove,  /* key_destroy_func   */
+      (GDestroyNotify)qof_util_string_cache_remove,  /* key_destroy_func   */
       coll_destroy);                            /* value_destroy_func */
 
   qof_instance_init (&book->inst, QOF_ID_BOOK, book);
@@ -239,7 +239,7 @@ qof_book_get_collection (QofBook *book, QofIdType entity_type)
       col = qof_collection_new (entity_type);
       g_hash_table_insert(
           book->hash_of_collections,
-          gnc_string_cache_insert((gpointer) entity_type), col);
+          qof_util_string_cache_insert((gpointer) entity_type), col);
   }
   return col;
 }

@@ -24,7 +24,6 @@
 #ifndef GUID_H
 #define GUID_H 
 
-#include <glib.h>
 #include <stddef.h>
 
 /** @addtogroup Entity
@@ -53,9 +52,9 @@
 #define GUID_DATA_SIZE	16
 typedef union _GUID
 {
-  unsigned char data[GUID_DATA_SIZE];
+  guchar data[GUID_DATA_SIZE];
 
-  int __align_me; /* this just ensures that GUIDs are 32-bit
+  gint __align_me; /* this just ensures that GUIDs are 32-bit
                    * aligned on systems that need them to be. */
 } GUID;
 
@@ -160,7 +159,7 @@ void   guid_free (GUID *guid);
  *  returned memory is owned by this routine and may not be freed by
  *  the caller.
  */
-const char * guid_to_string (const GUID * guid);
+const gchar * guid_to_string (const GUID * guid);
 
 /** The guid_to_string_buff() routine puts a null-terminated string
  *  encoding of the id into the memory pointed at by buff.  The
@@ -175,7 +174,7 @@ const char * guid_to_string (const GUID * guid);
  *
  *  @return A pointer to the terminating null character of the string.
  */
-char * guid_to_string_buff (const GUID * guid, char *buff);
+gchar * guid_to_string_buff (const GUID * guid, gchar *buff);
 
 
 /** Given a string, decode the id into the guid if guid is non-NULL.
@@ -183,7 +182,7 @@ char * guid_to_string_buff (const GUID * guid, char *buff);
  * hexadecimal number. This function accepts both upper and lower case
  * hex digits. If the return value is FALSE, the effect on guid is
  * undefined. */
-gboolean string_to_guid(const char * string, GUID * guid);
+gboolean string_to_guid(const gchar * string, GUID * guid);
 
 
 /** Given two GUIDs, return TRUE if they are non-NULL and equal.

@@ -99,9 +99,6 @@ struct _QofBook
  */
 void qof_book_set_backend (QofBook *book, QofBackend *be);
 
-/** \deprecated */
-void qof_book_set_schedxactions( QofBook *book, GList *newList );
-
 /* Register books with the engine */
 gboolean qof_book_register (void);
 

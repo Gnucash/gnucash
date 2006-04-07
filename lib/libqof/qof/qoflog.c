@@ -334,6 +334,7 @@ void qof_log_set_default(QofLogLevel log_level)
 	qof_log_set_level(QOF_MOD_QUERY,   log_level);
 	qof_log_set_level(QOF_MOD_SESSION, log_level);
 	qof_log_set_level(QOF_MOD_CHOICE,  log_level);
+	qof_log_set_level(QOF_MOD_UTIL,    log_level);
 }
 
 struct hash_s

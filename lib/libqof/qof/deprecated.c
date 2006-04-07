@@ -23,6 +23,7 @@
 
 #include "config.h"
 #ifndef QOF_DISABLE_DEPRECATED
+#include <glib.h>
 #include "qof.h"
 
 /* Don't be fooled: gnc_trace_num_spaces has external linkage and
@@ -102,6 +103,26 @@ qof_book_mergeRuleForeach(QofBookMergeData *mergeData,
 						  QofBookMergeResult mergeResult )
 {
     qof_book_merge_rule_foreach(mergeData, cb, mergeResult);
+}
+gpointer gnc_string_cache_insert(gconstpointer key)
+{
+    return (gpointer)qof_util_string_cache_insert(key);
+}
+gchar * gnc_stpcpy (gchar *dest, const gchar *src)
+{
+    return g_stpcpy(dest, src);
+}
+GCache* gnc_engine_get_string_cache(void)
+{
+    return qof_util_get_string_cache();
+}
+void gnc_engine_string_cache_destroy (void)
+{
+    qof_util_string_cache_destroy();
+}
+void gnc_string_cache_remove(gconstpointer key)
+{
+    qof_util_string_cache_remove(key);
 }
 
 /* ==================================================================== */

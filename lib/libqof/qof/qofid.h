@@ -77,9 +77,9 @@
 #include "guid.h"
 
 /** QofIdType declaration */
-typedef const char * QofIdType;
+typedef const gchar * QofIdType;
 /** QofIdTypeConst declaration */
-typedef const char * QofIdTypeConst;
+typedef const gchar * QofIdTypeConst;
 /** QofLogModule declaration */
 typedef const gchar* QofLogModule;
 
@@ -94,7 +94,7 @@ typedef const gchar* QofLogModule;
 
 /** Inline string comparision; compiler will optimize away most of this */
 #define QSTRCMP(da,db) ({                \
-  int val = 0;                           \
+  gint val = 0;                          \
   if ((da) && (db)) {                    \
     if ((da) != (db)) {                  \
       val = strcmp ((da), (db));         \

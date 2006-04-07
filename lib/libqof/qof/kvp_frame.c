@@ -34,7 +34,7 @@
 #include "qof.h"
 
  /* Note that we keep the keys for this hash table in a GCache
-  * (gnc_string_cache), as it is very likely we will see the 
+  * (qof_util_string_cache), as it is very likely we will see the 
   * same keys over and over again  */
 
 struct _KvpFrame 
@@ -107,7 +107,7 @@ kvp_frame_new(void)
 static void
 kvp_frame_delete_worker(gpointer key, gpointer value, gpointer user_data) 
 {
-  gnc_string_cache_remove(key);
+  qof_util_string_cache_remove(key);
   kvp_value_delete((KvpValue *)value);  
 }
 
@@ -142,7 +142,7 @@ kvp_frame_copy_worker(gpointer key, gpointer value, gpointer user_data)
 {
   KvpFrame * dest = (KvpFrame *)user_data;
   g_hash_table_insert(dest->hash,
-                      gnc_string_cache_insert(key),
+                      qof_util_string_cache_insert(key),
                       (gpointer)kvp_value_copy(value));
 }
 
@@ -183,7 +183,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(key_exists) 
   {
     g_hash_table_remove(frame->hash, slot);
-    gnc_string_cache_remove(orig_key);
+    qof_util_string_cache_remove(orig_key);
   }
   else
   {
@@ -193,7 +193,7 @@ kvp_frame_replace_slot_nc (KvpFrame * frame, const char * slot,
   if(new_value) 
   {
     g_hash_table_insert(frame->hash,
-                        gnc_string_cache_insert((gpointer) slot),
+                        qof_util_string_cache_insert((gpointer) slot),
                         new_value);
   }
 

@@ -209,7 +209,7 @@ QofBook * qof_session_get_book (QofSession *session);
  *    filepath is derived from the url by substituting commas for
  *    slashes).
  *
- * The qof_session_get_url() routine returns the url that was opened.
+ *    The qof_session_get_url() routine returns the url that was opened.
  *    URL's for local files take the form of 
  *    file:/some/where/some/file.gml
  */

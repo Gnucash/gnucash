@@ -88,7 +88,7 @@ struct _QofQuery
   QofSortFunc       defaultSort;        /* <- Computed from search_for */
 
   /* The maximum number of results to return */
-  int               max_results;
+  gint              max_results;
 
   /* list of books that will be participating in the query */
   GList *           books;
@@ -98,7 +98,7 @@ struct _QofQuery
 
   /* cache the results so we don't have to run the whole search 
    * again until it's really necessary */
-  int               changed;
+  gint              changed;
 
   GList *           results;
 };
@@ -107,7 +107,7 @@ typedef struct _QofQueryCB
 {
   QofQuery *        query;
   GList *           list;
-  int               count;
+  gint              count;
 } QofQueryCB;
 
 /* initial_term will be owned by the new Query */
@@ -282,7 +282,7 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   /* See if this is a default sort */
   if (sort->use_default) 
   {
-    if (default_sort) return default_sort ((gpointer)a, (gpointer)b);
+    if (default_sort) return default_sort (a, b);
     return 0;
   }
 

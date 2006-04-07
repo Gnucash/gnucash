@@ -34,7 +34,6 @@
 #ifndef QOF_EVENT_H
 #define QOF_EVENT_H
 
-#include <glib.h>
 #include "qof.h"
 
 /** Define the type of events allowed. */

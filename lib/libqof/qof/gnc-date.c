@@ -28,6 +28,7 @@
 #define __EXTENSIONS__
 
 #include "config.h"
+#include <glib.h>
 /* to be renamed qofdate.c */
 #include <ctype.h>
 

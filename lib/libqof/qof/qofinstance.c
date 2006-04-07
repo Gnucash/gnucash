@@ -28,6 +28,7 @@
  */
 
 #include "config.h"
+#include <glib.h>
 #include "qof.h"
 #include "kvp-util-p.h"
 #include "qofbook-p.h"

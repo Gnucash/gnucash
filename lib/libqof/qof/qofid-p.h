@@ -30,8 +30,6 @@
 #ifndef QOF_ID_P_H
 #define QOF_ID_P_H 
 
-#include <glib.h>
-
 #include "qofid.h"
 
 /* This file defines an engine-only API for using QOF entity

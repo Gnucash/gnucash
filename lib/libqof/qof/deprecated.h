@@ -24,6 +24,7 @@
  
 #ifndef _DEPRECATED_H
 #define _DEPRECATED_H
+#include <glib.h> /* deprecated */
 #include "qof.h"
 
 /** @file deprecated.h
@@ -141,11 +142,49 @@ void qof_book_mergeRuleForeach(QofBookMergeData* mergeData,
                                QofBookMergeRuleForeachCB callback , 
                                QofBookMergeResult mergeResult);
 /** \deprecated use qof_book_merge_update_result instead. */
-QofBookMergeData*
-qof_book_mergeUpdateResult(QofBookMergeData *mergeData, QofBookMergeResult tag);
+QofBookMergeData* qof_book_mergeUpdateResult(QofBookMergeData *mergeData,
+                                QofBookMergeResult tag);
 /** \deprecated use qof_book_merge_commit instead. */
-gint
-qof_book_mergeCommit(QofBookMergeData *mergeData );
-
+gint qof_book_mergeCommit(QofBookMergeData *mergeData );
+/** \deprecated Use the function versions, safe_strcmp() and
+safe_strcasecmp() instead. */
+#define SAFE_STRCMP_REAL(fcn,da,db) {    \
+  if ((da) && (db)) {                    \
+    if ((da) != (db)) {                  \
+      gint retval = fcn ((da), (db));    \
+      /* if strings differ, return */    \
+      if (retval) return retval;         \
+    }                                    \
+  } else                                 \
+  if ((!(da)) && (db)) {                 \
+    return -1;                           \
+  } else                                 \
+  if ((da) && (!(db))) {                 \
+    return +1;                           \
+  }                                      \
+}
+/** \deprecated use safe_strcmp() */
+#define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
+/** \deprecated use safe_strcasecmp() */
+#define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
+/** \deprecated use qof_util_string_cache_insert instead. */
+gpointer gnc_string_cache_insert(gconstpointer key);
+#if HAVE_SCANF_LLD
+# define GNC_SCANF_LLD "%lld" /**< \deprecated use G_GINT64_FORMAT instead. */
+#else
+# define GNC_SCANF_LLD "%qd"  /**< \deprecated use G_GINT64_FORMAT instead. */
+#endif
+/** \deprecated use qof_util_stpcpy instead. */
+gchar * gnc_stpcpy (gchar *dest, const gchar *src);
+/** \deprecated use qof_init instead. */
+GCache* gnc_engine_get_string_cache(void);
+/** \deprecated use qof_init instead. */
+GCache* qof_util_get_string_cache(void);
+/** \deprecated use qof_close instead. */
+void gnc_engine_string_cache_destroy (void);
+/** \deprecated use qof_util_string_cache_remove instead. */
+void gnc_string_cache_remove(gconstpointer key);
+/** \deprecated no replacement. */
+void qof_book_set_schedxactions( QofBook *book, GList *newList );
 #endif /* _DEPRECATED_H */
 #endif /* QOF_DISABLE_DEPRECATED */

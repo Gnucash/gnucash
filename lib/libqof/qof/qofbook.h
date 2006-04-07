@@ -40,7 +40,6 @@
 #ifndef QOF_BOOK_H
 #define QOF_BOOK_H
 
-#include <glib.h>
 #include "qofid.h"
 #include "kvp_frame.h"
 
@@ -124,17 +123,17 @@ void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
  *    of the book KVP are persistent (are saved and restored to file
  *    or database), whereas the data pointers exist only at runtime.
  */
-void qof_book_set_data (QofBook *book, const char *key, gpointer data);
+void qof_book_set_data (QofBook *book, const gchar *key, gpointer data);
 
 /** Same as qof_book_set_data(), except that the callback will be called
  *  when the book is destroyed.  The argument to the callback will be
  *  the book followed by the data pointer.
  */
-void qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, 
+void qof_book_set_data_fin (QofBook *book, const gchar *key, gpointer data, 
                             QofBookFinalCB);
 
 /** Retrieves arbitrary pointers to structs stored by qof_book_set_data. */
-gpointer qof_book_get_data (QofBook *book, const char *key);
+gpointer qof_book_get_data (QofBook *book, const gchar *key);
 
 /** Is the book shutting down? */
 gboolean qof_book_shutting_down (QofBook *book);

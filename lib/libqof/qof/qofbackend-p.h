@@ -41,7 +41,6 @@
 #ifndef QOF_BACKEND_P_H
 #define QOF_BACKEND_P_H
 
-#include "qof-be-utils.h"
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofinstance-p.h"

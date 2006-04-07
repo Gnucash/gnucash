@@ -23,6 +23,7 @@
  ********************************************************************/
 
 #include "config.h"
+#include <glib.h>
 #include "qof.h"
 #include "qofevent-p.h"
 
@@ -259,9 +260,9 @@ qof_event_generate_internal (QofEntity *entity, QofEventId event_id,
       next_node = node->next;
       if ((hi->handler == NULL)
 #ifndef QOF_DISABLE_DEPRECATED
-	  &&(hi->old_handler == NULL)
+         &&(hi->old_handler == NULL)
 #endif
-	  )
+         )
       {
         /* remove this node from the list, then free this node */
         handlers = g_list_remove_link (handlers, node);

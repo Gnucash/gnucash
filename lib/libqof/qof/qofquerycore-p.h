@@ -26,7 +26,6 @@
 
 #include <sys/types.h>
 #include <time.h>
-#include <glib.h>
 #include <regex.h>
 #include <string.h>
 
@@ -42,7 +41,7 @@ void qof_query_core_shutdown (void);
  * the Query internals), compare the object's parameter to the
  * predicate data.
  */
-typedef int (*QofQueryPredicateFunc) (gpointer object,
+typedef gint (*QofQueryPredicateFunc) (gpointer object,
 			       QofParam *getter,
 			       QofQueryPredData *pdata);
 
@@ -50,13 +49,13 @@ typedef int (*QofQueryPredicateFunc) (gpointer object,
  * common getter (parameter member), using the provided comparison
  * options (which are the type-specific options).
  */
-typedef int (*QofCompareFunc) (gpointer a, gpointer b,
+typedef gint (*QofCompareFunc) (gpointer a, gpointer b,
                               gint compare_options,
                               QofParam *getter);
 
 /* Lookup functions */
-QofQueryPredicateFunc qof_query_core_get_predicate (char const *type);
-QofCompareFunc qof_query_core_get_compare (char const *type);
+QofQueryPredicateFunc qof_query_core_get_predicate (gchar const *type);
+QofCompareFunc qof_query_core_get_compare (gchar const *type);
 
 /* Compare two predicates */
 gboolean qof_query_core_predicate_equal (QofQueryPredData *p1, QofQueryPredData *p2);
@@ -75,7 +74,7 @@ typedef struct {
   QofQueryPredData	pd;
   QofStringMatch	options;
   gboolean		is_regex;
-  char *		matchstring;
+  gchar *		matchstring;
   regex_t		compiled;
 } query_string_def, *query_string_t;
 
@@ -120,7 +119,7 @@ typedef struct {
 typedef struct {
   QofQueryPredData	pd;
   QofCharMatch	options;
-  char *	char_list;
+  gchar *	char_list;
 } query_char_def, *query_char_t;
 
 typedef struct {

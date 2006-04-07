@@ -32,8 +32,6 @@
 #ifndef QOF_QUERYCORE_H
 #define QOF_QUERYCORE_H
 
-#include <glib.h>
-
 #include "gnc-numeric.h"
 #include "gnc-date.h"
 #include "kvp_frame.h"
@@ -139,7 +137,7 @@ struct _QofQueryPredData {
 /** @name Core Data Type Predicates
     @{ */
 QofQueryPredData *qof_query_string_predicate (QofQueryCompare how,
-                                              const char *str,
+                                              const gchar *str,
                                               QofStringMatch options,
                                               gboolean is_regex);
 
@@ -157,7 +155,7 @@ QofQueryPredData *qof_query_int64_predicate (QofQueryCompare how, gint64 val);
 QofQueryPredData *qof_query_double_predicate (QofQueryCompare how, double val);
 QofQueryPredData *qof_query_boolean_predicate (QofQueryCompare how, gboolean val);
 QofQueryPredData *qof_query_char_predicate (QofCharMatch options,
-                                            const char *chars);
+                                            const gchar *chars);
 QofQueryPredData *qof_query_collect_predicate (QofGuidMatch options,
                                             QofCollection *coll);
 QofQueryPredData *qof_query_choice_predicate  (QofGuidMatch options, GList *guids);
@@ -173,7 +171,7 @@ QofQueryPredData *qof_query_kvp_predicate (QofQueryCompare how,
 /** Same predicate as above, except that 'path' is assumed to be
  * a string containing slash-separated pathname. */
 QofQueryPredData *qof_query_kvp_predicate_path (QofQueryCompare how,
-                                                const char *path,
+                                                const gchar *path,
                                                 const KvpValue *value);
 
 /** Copy a predicate. */
