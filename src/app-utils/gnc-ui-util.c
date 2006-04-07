@@ -61,6 +61,15 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
+/* FIXME: xaccParseAmountExtended causes test-print-parse-amount 
+to fail if GNC_SCANF_LLD is simply replaced by G_GINT64_FORMAT. Why?
+*/
+#if HAVE_SCANF_LLD
+# define GNC_SCANF_LLD "%lld" /**< \deprecated use G_GINT64_FORMAT instead. */
+#else
+# define GNC_SCANF_LLD "%qd"  /**< \deprecated use G_GINT64_FORMAT instead. */
+#endif
+
 /* Cache currency ISO codes and only look them up in gconf when
  * absolutely necessary. Can't cache a pointer to the data structure
  * as that will change any time the book changes. */
@@ -1245,7 +1254,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* print the integer part without separators */
-  sprintf(temp_buf, "%" G_GINT64_FORMAT, whole.num);
+  sprintf(temp_buf, GNC_SCANF_LLD, whole.num);
   num_whole_digits = strlen (temp_buf);
 
   if (!info->use_separators)
@@ -1470,60 +1479,60 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 1))
-     bufp = gnc_stpcpy(bufp, sign);
+     bufp = g_stpcpy(bufp, sign);
 
    /* Now see if we print currency */
    if (cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
 
      if (info.use_symbol)
      {
-       bufp = gnc_stpcpy(bufp, currency_symbol);
+       bufp = g_stpcpy(bufp, currency_symbol);
        if (sep_by_space)
-         bufp = gnc_stpcpy(bufp, " ");
+         bufp = g_stpcpy(bufp, " ");
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
    }
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = gnc_stpcpy(bufp, "(");
+     bufp = g_stpcpy(bufp, "(");
 
    /* Now print the value */
    bufp += PrintAmountInternal(bufp, val, &info);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
-     bufp = gnc_stpcpy(bufp, ")");
+     bufp = g_stpcpy(bufp, ")");
 
    /* Now see if we print currency */
    if (!cs_precedes)
    {
      /* See if we print sign now */
      if (print_sign && (sign_posn == 3))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
 
      if (info.use_symbol)
      {
        if (sep_by_space)
-         bufp = gnc_stpcpy(bufp, " ");
-       bufp = gnc_stpcpy(bufp, currency_symbol);
+         bufp = g_stpcpy(bufp, " ");
+       bufp = g_stpcpy(bufp, currency_symbol);
      }
 
      /* See if we print sign now */
      if (print_sign && (sign_posn == 4))
-       bufp = gnc_stpcpy(bufp, sign);
+       bufp = g_stpcpy(bufp, sign);
    }
 
    /* See if we print sign now */
    if (print_sign && (sign_posn == 2))
-     bufp = gnc_stpcpy(bufp, sign);
+     bufp = g_stpcpy(bufp, sign);
 
    /* return length of printed string */
    return (bufp - orig_bufp);

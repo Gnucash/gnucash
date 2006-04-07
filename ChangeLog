@@ -1,3 +1,101 @@
+2006-04-07  Neil Williams  <linux@codehelp.co.uk>
+
+	* libqof/qof/qof-be-utils.h : Removed. Content
+	moved into qofutil.c alongside the function versions.
+
+	* libqof/qof/qofutil.c : Replaces gnc-engine-util.c
+	* libqof/qof/gnc-engine-util.c : Removed.
+	* libqof/qof/qofutil.h : Replaces gnc-engine-util.h
+	* libqof/qof/gnc-engine-util.h : Removed.
+
+	Standardise on gint and gchar. libqof 0.6.4 release.
+	* libqof/qof/qofbackend-p.h :
+	* libqof/qof/qofbook.c :
+	* libqof/qof/qofbackend.h : Replace Doxygen fix.
+	* libqof/qof/qofbook.h :
+	* libqof/qof/kvp_frame.c :
+	* libqof/qof/qofquery.c :
+	* libqof/qof/kvp_frame.h :
+	* libqof/qof/qoflog.c : Add Utilities to the default
+	log_module list.
+	* libqof/qof/qofquerycore.h :
+	* libqof/qof/qoflog.h :
+	* libqof/qof/qofsession.h :
+	* libqof/qof/qofid-p.h :
+	* libqof/qof/qofreference.c :
+	* libqof/qof/qofsql.c : Allow INSERT queries 
+	to be logged.
+	* libqof/qof/qofsql.h :
+	* libqof/qof/gnc-numeric.h :
+	* libqof/qof/qofclass.h :
+	* libqof/qof/qofla-dir.h.in : Licence typo.
+	* libqof/qof/qof.h : New files.
+	* libqof/qof/guid.h :
+	* libqof/qof/deprecated.c : Replace gnc_strpcpy.
+	* libqof/qof/qofbook-p.h :
+	* libqof/qof/deprecated.h : Deprecate 
+	qof_book_set_schedxactions which has no
+	declaration. Deprecate the expression of
+	glib.h in the QOF API. libqof2 applications
+	will have to include glib.h directly. Prevents
+	a redundant dependency in qof packages.
+	* libqof/qof/qofinstance.c :
+	* libqof/qof/gnc-date.c :
+	* libqof/qof/qofquerycore-p.h :
+	* libqof/qof/gnc-date.h :
+	* libqof/qof/qofevent.c :
+	* libqof/qof/qofevent.h :
+	* libqof/qof/qofid.h :
+	* libqof/qof/qofbookmerge.c :
+	* libqof/qof/qofbookmerge.h :
+	* libqof/qof/qofgobj.c :
+	* libqof/qof/Makefile.am : New files.
+	* libqof/qof/qofbackend.c : Move the function 
+	versions of the begin_edit and commit_edit
+	routines to the Utilities file alongside
+	the macro versions from qof-be-utils.h
+
+	* libqof/backend/file/qsf-backend.c : using gint64 so don't use the
+	32bit glib macros, GINT_TO_POINTER and GPOINTER_TO_INT.
+	* libqof/backend/file/qsf-xml-map.c :
+	* libqof/backend/file/qof-backend-qsf.h :
+	* libqof/backend/file/qsf-xml.c :
+	* libqof/backend/file/qsf-xml.h : add encoding backend 
+	option. Set the option using the default KvpValue,
+	then manipulate the option and store the value back into the
+	KvpValue and backend configuration KvpFrame.
+
+	Explicitly including glib.h instead of relying
+	on libqof to reduce dependency problems.
+	* register/ledger-core/gnc-ledger-display.c :
+	* backend/file/test/test-load-backend.c :
+	* backend/file/sixtp-utils.c :
+	* business/business-core/gncBusGuile.c :
+	* business/business-core/gw-business-core-spec.scm :
+	* business/dialog-tax-table/gw-dialog-tax-table-spec.scm :
+	* gnome-utils/QuickFill.c :
+	* engine/gw-kvp-spec.scm :
+	* engine/gnc-pricedb.c :
+	* engine/Account.c :
+	* engine/engine-helpers.c :
+	* engine/gnc-lot.c :
+	* engine/kvp-scm.c :
+	* engine/Period.c :
+	* engine/Transaction.c :
+	* engine/test/test-load-engine.c :
+	* engine/gnc-commodity.c :
+	* engine/gnc-associate-account.c :
+	* engine/gnc-engine.c :
+	* engine/SchedXaction.c :
+	* engine/gnc-session.c :
+	* app-utils/gnc-component-manager.c :
+	* app-utils/gnc-account-merge.c :
+
+	* app-utils/gnc-ui-util.c : Replacing deprecated code.
+
+	* src/doc/gnc-numeric-example.txt : Move example from
+	gnc_numeric.h to a separate Doxygen file.
+
 2006-04-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Patch from chpe@gnome.org to

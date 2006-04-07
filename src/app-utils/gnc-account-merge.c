@@ -1,5 +1,5 @@
 /* Copyright (C) 2006 Joshua Sled <jsled@asynchronous.org> */
-
+#include <glib.h>
 #include "gnc-account-merge.h"
 #include "Account.h"
 #include "Group.h"
