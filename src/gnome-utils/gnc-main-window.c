@@ -3211,10 +3211,10 @@ get_file_strsplit (const gchar *partial)
 static void
 gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 {
-	const gchar *message = _("The GnuCash personal finance manager.\n"
-				 "The GNU way to manage your money!\n");
+	const gchar *fixed_message = _("The GnuCash personal finance manager. "
+				       "The GNU way to manage your money!");
 	const gchar *copyright = "© 1998-2005 Linas Vepstas";
-	gchar **authors, **documenters, *license;
+	gchar **authors, **documenters, *license, *message;
 	GdkPixbuf *logo;
 
 	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
@@ -3222,7 +3222,14 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	authors = get_file_strsplit("doc/AUTHORS");
 	documenters = get_file_strsplit("doc/DOCUMENTERS");
 	license = get_file("doc/LICENSE");
-
+#ifdef GNUCASH_SVN
+	/* Development version */
+	message = g_strdup_printf(_("%s  This copy was built from svn r%s on %s."),
+				  fixed_message, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+#else
+	message = g_strdup_printf(_("%s  This copy was built from r%s on %s."),
+				  fixed_message, GNUCASH_SVN_REV, GNUCASH_BUILD_DATE);
+#endif
 	gtk_show_about_dialog
 		     (GTK_WINDOW (window),
 		      "authors", authors,
@@ -3237,6 +3244,7 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 		      "website", "http://www.gnucash.org",
 		      (gchar *)NULL);
 
+	g_free(message);
 	if (license)     g_free(license);
 	if (documenters) g_strfreev(documenters);
 	if (authors)     g_strfreev(authors);
