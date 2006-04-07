@@ -779,12 +779,14 @@ write_counts(FILE* out, ...)
 
     while(type)
     {
-        xmlNodePtr node;
-        char *val;
         int amount = va_arg(ap, int);
 
         if(amount != 0)
         {
+#if GNUCASH_REALLY_BUILD_AN_XML_TREE_ON_OUTPUT
+	    char *val;
+	    xmlNodePtr node;
+
             val = g_strdup_printf("%d", amount);
 
             node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
@@ -801,6 +803,11 @@ write_counts(FILE* out, ...)
         
             g_free(val);
             xmlFreeNode(node);
+#else
+            fprintf(out, "<%s %s=\"%s\">%d</%s>\n",
+		    COUNT_DATA_TAG, "cd:type", type, amount, COUNT_DATA_TAG);
+#endif
+        
         }
         
         type = va_arg(ap, char *);
