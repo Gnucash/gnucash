@@ -422,7 +422,7 @@ LIBS="$oLIBS"
 
 dnl XXX: FIXME: RELEASE HACK
 dnl This makes sure that we default to using internal QOF for SVN.
-dnl Make sure to enable this be default for stable releases!
+dnl Make sure to enable this to be the default for stable releases!
 dnl
 AC_ARG_ENABLE(qof,
   [  --enable-qof     enable the search for an external QOF library (disabled)],
@@ -436,8 +436,8 @@ AC_ARG_ENABLE(qof,
 AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework - QOF (auto)],
 	[gnc_with_qof=$withval], [gnc_with_qof=yes])
 
-# bug fixes in QOF mean gnucash runs best with 0.6.3
-QOF_REQUIRED=0.6.3
+# GnuCash builds without deprecated QOF code so needs latest version.
+QOF_REQUIRED=0.6.4
 if test "$gnc_enable_qof" = true ; then
   AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
   if test "$gnc_with_qof" != "yes"; then
