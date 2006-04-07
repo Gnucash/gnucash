@@ -79,7 +79,13 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     xmlAddChild(ret, text_to_dom_tree(cmdty_id,
                                       gnc_commodity_get_mnemonic(com)));
 
-    if (!currency) {
+    /* Enforce backward compatability with 1.8 for the 1.9/2.0 release
+     * series. */
+    if (
+#if (GNUCASH_MAJOR_VERSION < 2) || ((GNUCASH_MAJOR_VERSION == 2) && (GNUCASH_MINOR_VERSION == 0))
+	TRUE ||
+#endif
+	!currency) {
       if(gnc_commodity_get_fullname(com))
       {
       	  xmlAddChild(ret, text_to_dom_tree(cmdty_name,
