@@ -1,5 +1,9 @@
 2006-04-07  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Patch from chpe@gnome.org to
+	use the gtk_show_about_dialog to avoid an inconsistency in the
+	GtkAboutDialog code. Fixes 337634.
+
 	* src/backend/file/io-gncxml-v2.c: The cvs version of libxml2
 	refuses to write attribute tags that don't have valid namespaces.
 	Since gnucash writes the root node of the XML data file by hand,

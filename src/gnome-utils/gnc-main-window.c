@@ -3216,7 +3216,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	const gchar *copyright = "© 1998-2005 Linas Vepstas";
 	gchar **authors, **documenters, *license;
 	GdkPixbuf *logo;
-	GtkWidget *dialog;
 
 	logo = gnc_gnome_get_gdkpixbuf ("appicon.png");
 
@@ -3224,8 +3223,8 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	documenters = get_file_strsplit("doc/DOCUMENTERS");
 	license = get_file("doc/LICENSE");
 
-	dialog = gtk_about_dialog_new();
-	g_object_set (G_OBJECT(dialog),
+	gtk_show_about_dialog
+		     (GTK_WINDOW (window),
 		      "authors", authors,
 		      "documenters", documenters,
 		      "comments", message,
@@ -3242,8 +3241,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	if (documenters) g_strfreev(documenters);
 	if (authors)     g_strfreev(authors);
 	g_object_unref (logo);
-
-	gtk_widget_show(dialog);
 }
 #else
 static void
