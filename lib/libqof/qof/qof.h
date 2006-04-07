@@ -76,6 +76,7 @@
 */
 /** @} */
 
+#include <glib.h>
 #include "qofid.h"
 #include "qoflog.h"
 #include "gnc-date.h"

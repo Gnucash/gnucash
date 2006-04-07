@@ -1,3 +1,7 @@
+2006-04-07  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/libqof/qof/qof.h:  QOF requires <glib.h>
+
 2006-04-07  Neil Williams  <linux@codehelp.co.uk>
 
 	* libqof/qof/qof-be-utils.h : Removed. Content
