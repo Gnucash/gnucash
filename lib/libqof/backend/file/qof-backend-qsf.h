@@ -141,7 +141,6 @@ Check the QofBackendError - don't assume the file is OK.
 
 #include "qoflog.h"
 #include "qofbackend.h"
-#include "qof-be-utils.h"
 
 /** \brief Describe this backend to the application. 
 
@@ -193,6 +192,11 @@ to offer multiple map selections to the user.
 
 */
 #define QSF_MAP_FILES   "selected_map_files"
+
+/** \brief Encoding string.
+ *
+ * Defaults of UTF-8. */
+#define QSF_ENCODING    "encoding_string"
 
 /** @} */
 

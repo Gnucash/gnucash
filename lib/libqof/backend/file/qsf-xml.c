@@ -24,8 +24,12 @@
 #define _GNU_SOURCE
 
 #include "config.h"
-
+#include <glib.h>
 #include <libxml/xmlversion.h>
+#include <libxml/xmlmemory.h>
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <libxml/xmlschemas.h>
 #include "qof.h"
 #include "qof-backend-qsf.h"
 #include "qsf-dir.h"

@@ -24,7 +24,7 @@
 #define _GNU_SOURCE
 
 #include "config.h"
-
+#include <glib.h>
 #include <libxml/xmlversion.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/tree.h>

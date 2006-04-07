@@ -31,17 +31,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <glib.h>
 #include <regex.h>
 #include <time.h>
-#include <libxml/xmlmemory.h>
-#include <libxml/tree.h>
-#include <libxml/parser.h>
-#include <libxml/xmlschemas.h>
 #include "qof.h"
 
 #include <libintl.h>
-#define _(String) gettext (String)
+#define _(String) dgettext (GETTEXT_PACKAGE, String)
 
 typedef enum  {
 	QSF_UNDEF = 0, /**< Initial undefined value. */
@@ -379,11 +374,12 @@ typedef struct qsf_metadata
 	gchar *filepath;              /**< Path to the QSF file. */
 	gchar *map_path;              /**< Path to best match map, if any. */
 	gchar* full_kvp_path;         /**< Full path for each KvpValue written out. */
-	gint use_gz_level;            /**< Default compression level. */
+	gint64 use_gz_level;          /**< Default compression level. */
 	GList *map_files;             /**< List of selected map files for this session.
 
 	Defaults to the pre-installed QSF maps, currently: pilot-qsf-GnuCashInvoice.xml
 	*/
+	const gchar *encoding;        /**< Backend encoding option - defaults to UTF-8. */ 
 }qsf_param;
 
 /** \brief Validation metadata

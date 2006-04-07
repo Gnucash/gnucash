@@ -24,13 +24,17 @@
 #define _GNU_SOURCE
 
 #include "config.h"
+#include <glib.h>
 #include "qof.h"
 #include "qof-backend-qsf.h"
+#include <libxml/xmlmemory.h>
+#include <libxml/tree.h>
+#include <libxml/parser.h>
+#include <libxml/xmlschemas.h>
 #include "qsf-xml.h"
 #include "qsf-dir.h"
 #include <errno.h>
 #include <sys/stat.h>
-#include <locale.h> /* for setlocale() and LC_ALL */
 
 #define QSF_TYPE_BINARY "binary"
 #define QSF_TYPE_GLIST  "glist"
@@ -55,10 +59,15 @@ static void option_cb (QofBackendOption *option, gpointer data)
 	params = (qsf_param*)data;
 	g_return_if_fail(params);
 	if(0 == safe_strcmp(QSF_COMPRESS, option->option_name)) {
-		params->use_gz_level = GPOINTER_TO_INT(option->value);
+		params->use_gz_level = (*(gint64*)option->value);
+	        DEBUG (" gz=%" G_GINT64_FORMAT,params->use_gz_level);
 	}
 	if (0 == safe_strcmp(QSF_MAP_FILES, option->option_name)) {
-		params->map_files = g_list_copy(option->value);
+		params->map_files = g_list_copy((GList*)option->value);
+	}
+	if (0 == safe_strcmp(QSF_ENCODING, option->option_name)) {
+		params->encoding = g_strdup(option->value);
+		DEBUG (" encoding=%s", params->encoding);
 	}
 }
 
@@ -68,10 +77,12 @@ qsf_load_config(QofBackend *be, KvpFrame *config)
 	QSFBackend *qsf_be;
 	qsf_param  *params;
 
+	ENTER (" ");
 	qsf_be = (QSFBackend*)be;
 	g_return_if_fail(qsf_be->params);
 	params = qsf_be->params;
 	qof_backend_option_foreach(config, option_cb, params);
+	LEAVE (" ");
 }
 
 static KvpFrame*
@@ -82,6 +93,7 @@ qsf_get_config(QofBackend *be)
 	qsf_param *params;
 
 	if(!be) { return NULL; }
+	ENTER (" ");
 	qsf_be = (QSFBackend*)be;
 	g_return_val_if_fail(qsf_be->params, NULL);
 	params = qsf_be->params;
@@ -92,7 +104,7 @@ qsf_get_config(QofBackend *be)
 	option->tooltip = _("QOF can compress QSF XML files using gzip. "
 		"Note that compression is not used when outputting to STDOUT.");
 	option->type = KVP_TYPE_GINT64;
-	option->value = GINT_TO_POINTER(params->use_gz_level);
+	option->value = (gpointer)&params->use_gz_level;
 	qof_backend_prepare_option(be, option);
 	g_free(option);
 	option = g_new0(QofBackendOption, 1);
@@ -101,9 +113,19 @@ qsf_get_config(QofBackend *be)
 	option->tooltip = _("QOF can convert objects within QSF XML files "
 		"using a map of the changes required.");
 	option->type = KVP_TYPE_GLIST;
-	option->value = params->map_files;
+	option->value = (gpointer)params->map_files;
 	qof_backend_prepare_option(be, option);
 	g_free(option);
+	option = g_new0(QofBackendOption, 1);
+	option->option_name = QSF_ENCODING;
+	option->description = _("Encoding string to use when writing the XML file.");
+	option->tooltip = _("QSF defaults to UTF-8. Other encodings are supported by "
+			"passing the encoding string in this option.");
+	option->type = KVP_TYPE_STRING;
+	option->value = (gpointer)params->encoding;
+	qof_backend_prepare_option(be, option);
+	g_free(option);
+	LEAVE (" ");
 	return qof_backend_complete_frame(be);
 }
 
@@ -139,6 +161,7 @@ qsf_param_init(qsf_param *params)
 	params->map_ns = NULL;
 	params->map_files = NULL;
 	params->map_path = NULL;
+	params->encoding = "UTF-8";
 	params->qsf_object_list = NULL;
 	params->qsf_parameter_hash = g_hash_table_new(g_str_hash, g_str_equal);
 	params->qsf_default_hash = g_hash_table_new(g_str_hash, g_str_equal);
@@ -909,12 +932,14 @@ write_qsf_from_book(const char *path, QofBook *book, qsf_param *params)
 	be = qof_book_get_backend(book);
 	qsf_doc = qofbook_to_qsf(book, params);
 	write_result = 0;
+	DEBUG (" use_gz_level=%" G_GINT64_FORMAT " encoding=%s", 
+		params->use_gz_level, params->encoding);
 	if((params->use_gz_level > 0) && (params->use_gz_level <= 9)) 
 	{
 		xmlSetDocCompressMode(qsf_doc, params->use_gz_level); 
 	}
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
-	write_result = xmlSaveFormatFileEnc(path, qsf_doc, "UTF-8", 1);
+	write_result = xmlSaveFormatFileEnc(path, qsf_doc, params->encoding, 1);
 	if(write_result < 0) 
 	{
 		qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
@@ -930,7 +955,9 @@ write_qsf_to_stdout(QofBook *book, qsf_param *params)
 
 	qsf_doc = qofbook_to_qsf(book, params);
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
-	xmlSaveFormatFileEnc("-", qsf_doc, "UTF-8", 1);
+	DEBUG (" use_gz_level=%" G_GINT64_FORMAT " encoding=%s", 
+		params->use_gz_level, params->encoding);
+	xmlSaveFormatFileEnc("-", qsf_doc, params->encoding, 1);
 	fprintf(stdout, "\n");
 	xmlFreeDoc(qsf_doc);
 }
@@ -1249,15 +1276,12 @@ qsf_provider_init(void)
 {
 	QofBackendProvider *prov;
 
-	/* XXX: Do we REALLY want to do this???  Shouldn't the APP
-	 * have already done this?
-	 */
-	#ifdef ENABLE_NLS
+/*	#ifdef ENABLE_NLS
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-	#endif
+	#endif*/
 	prov = g_new0 (QofBackendProvider, 1);
 	prov->provider_name = "QSF Backend Version 0.2";
 	prov->access_method = "file";
