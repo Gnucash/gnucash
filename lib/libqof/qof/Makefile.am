@@ -12,7 +12,6 @@ AM_CFLAGS = \
 libqof_la_SOURCES =  \
    deprecated.c      \
    gnc-date.c        \
-   gnc-engine-util.c \
    gnc-numeric.c     \
    guid.c            \
    kvp_frame.c       \
@@ -30,6 +29,7 @@ libqof_la_SOURCES =  \
    qofobject.c       \
    qofquerycore.c    \
    qofreference.c    \
+   qofutil.c         \
    qofsession.c      \
    qofbookmerge.c
 
@@ -38,14 +38,12 @@ qofincludedir = ${pkgincludedir}
 qofinclude_HEADERS = \
    deprecated.h      \
    gnc-date.h        \
-   gnc-engine-util.h \
    gnc-numeric.h     \
    guid.h            \
    kvp_frame.h       \
    kvp-util.h        \
    kvp-util-p.h      \
    qof.h             \
-   qof-be-utils.h    \
    qofbackend.h      \
    qofbackend-p.h    \
    qofclass.h        \
@@ -64,6 +62,7 @@ qofinclude_HEADERS = \
    qofreference.h    \
    qofsession.h      \
    qofsql.h          \
+   qofutil.h         \
    qofbookmerge.h
 
 nodist_qofinclude_HEADERS = \
