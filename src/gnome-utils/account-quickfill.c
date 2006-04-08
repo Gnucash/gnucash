@@ -277,6 +277,25 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
     case QOF_EVENT_MODIFY:
       DEBUG("modify %s", name);
 
+      /* Did the account name change? */
+      if (data.found) {
+	gchar *old_name;
+	gint result;
+	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
+				    &iter, data.found)) {
+	  gtk_tree_model_get(GTK_TREE_MODEL(qfb->list_store), &iter,
+			     ACCOUNT_NAME, &old_name,
+			     -1);
+	  result = g_utf8_collate(name, old_name);
+	  g_free(old_name);
+	  if (result == 0) {
+	    /* The account name is unchanged. This routine doesn't
+	     * care what else might have changed, so bail now. */
+	    break;
+	  }
+	}
+      }
+
       /* Update qf */
       gnc_quickfill_purge(qfb->qf);
       xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);

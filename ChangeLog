@@ -1,3 +1,11 @@
+2006-04-08  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/account-quickfill.c: Eliminate some unnecessary
+	work by comparing the account name in the quickfill with the
+	actual account name, and only rebuilding the quickfill if they
+	differ.  This improves GnuCash's response somewhat, but still
+	needs more improvement.
+
 2006-04-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Include the svn revision
