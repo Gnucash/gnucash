@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-03 20:00+0200\n"
-"PO-Revision-Date: 2006-04-03 20:34+0200\n"
+"POT-Creation-Date: 2006-04-08 11:49+0200\n"
+"PO-Revision-Date: 2006-04-08 12:05+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -62,38 +62,38 @@ msgstr "Numerischer Fehler"
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
 #. colon. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:501
+#: ../src/app-utils/gnc-ui-util.c:510
 msgid "not cleared:n"
 msgstr "not cleared:n"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:503
+#: ../src/app-utils/gnc-ui-util.c:512
 msgid "cleared:c"
 msgstr "cleared:b"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:505
+#: ../src/app-utils/gnc-ui-util.c:514
 msgid "reconciled:y"
 msgstr "reconciled:j"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:507
+#: ../src/app-utils/gnc-ui-util.c:516
 msgid "frozen:f"
 msgstr "frozen:f"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:509
+#: ../src/app-utils/gnc-ui-util.c:518
 msgid "void:v"
 msgstr "void:u"
 
-#: ../src/app-utils/gnc-ui-util.c:550 ../src/gnome/dialog-chart-export.c:44
+#: ../src/app-utils/gnc-ui-util.c:559 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
 msgstr "Anfangsbestand"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/app-utils/gnc-ui-util.c:553
+#: ../src/app-utils/gnc-ui-util.c:562
 #: ../src/import-export/qif/qif-defaults.c:60 ../intl-scm/guile-strings.c:1836
 #: ../intl-scm/guile-strings.c:3076 ../intl-scm/guile-strings.c:3078
 #: ../intl-scm/guile-strings.c:3098 ../intl-scm/guile-strings.c:3100
@@ -101,13 +101,13 @@ msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:626 ../src/engine/Account.c:2074
+#: ../src/app-utils/gnc-ui-util.c:635 ../src/engine/Account.c:2075
 #: ../src/register/ledger-core/split-register.c:2046
 #: ../intl-scm/guile-strings.c:1834
 msgid "Equity"
 msgstr "Eigenkapital"
 
-#: ../src/app-utils/gnc-ui-util.c:686 ../src/gnome/dialog-chart-export.c:45
+#: ../src/app-utils/gnc-ui-util.c:695 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:906 ../src/gnome/glade/account.glade.h:50
 #: ../src/gnome-utils/dialog-account.c:262
 msgid "Opening Balance"
@@ -352,7 +352,7 @@ msgstr "Rechnung"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2073
+#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2074
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1238
 msgid "Expense"
 msgstr "Aufwendungen"
@@ -2754,7 +2754,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:121
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../src/engine/Account.c:2065 ../intl-scm/guile-strings.c:850
+#: ../src/engine/Account.c:2066 ../intl-scm/guile-strings.c:850
 msgid "Cash"
 msgstr "Bargeld"
 
@@ -3059,50 +3059,51 @@ msgid "_Value: "
 msgstr "_Wert: "
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2064 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2065 ../src/import-export/hbci/gnc-hbci-utils.c:592
 #: ../intl-scm/guile-strings.c:848
 msgid "Bank"
 msgstr "Bank"
 
-#: ../src/engine/Account.c:2066
+#: ../src/engine/Account.c:2067
 msgid "Asset"
 msgstr "Aktiva"
 
-#: ../src/engine/Account.c:2067
+#: ../src/engine/Account.c:2068
 msgid "Credit Card"
 msgstr "Kreditkarte"
 
-#: ../src/engine/Account.c:2068
+#: ../src/engine/Account.c:2069
 msgid "Liability"
 msgstr "Passiva"
 
-#: ../src/engine/Account.c:2069
+#: ../src/engine/Account.c:2070
 msgid "Stock"
 msgstr "Aktienkonto"
 
-#: ../src/engine/Account.c:2070
+#: ../src/engine/Account.c:2071
 msgid "Mutual Fund"
 msgstr "Investmentfonds"
 
-#: ../src/engine/Account.c:2071 ../src/gnome-utils/gnc-tree-view-price.c:439
+#: ../src/engine/Account.c:2072 ../src/gnome-utils/dialog-commodity.c:725
+#: ../src/gnome-utils/gnc-tree-view-price.c:439
 msgid "Currency"
 msgstr "Währung"
 
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2072
+#: ../src/engine/Account.c:2073
 #: ../src/register/ledger-core/split-register.c:2062
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:864
 #: ../intl-scm/guile-strings.c:1236
 msgid "Income"
 msgstr "Erträge"
 
-#: ../src/engine/Account.c:2075
+#: ../src/engine/Account.c:2076
 msgid "A/Receivable"
 msgstr "Forderungen"
 
-#: ../src/engine/Account.c:2076
+#: ../src/engine/Account.c:2077
 msgid "A/Payable"
 msgstr "Verbindlichkeit"
 
@@ -3449,7 +3450,7 @@ msgstr "Alle Konten"
 #: ../src/gnome/glade/stocks.glade.h:3 ../src/gnome-utils/dialog-account.c:638
 #: ../src/gnome-utils/gnc-icons.c:14
 #: ../src/import-export/generic-import.glade.h:11
-#: ../src/import-export/hbci/gnc-hbci-utils.c:590
+#: ../src/import-export/hbci/gnc-hbci-utils.c:591
 #: ../src/import-export/qif-import/qif.glade.h:2
 #: ../src/register/ledger-core/split-register-model.c:177
 #: ../intl-scm/guile-strings.c:1278 ../intl-scm/guile-strings.c:1300
@@ -7473,8 +7474,8 @@ msgstr "Buchung _speichern"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1127
 #: ../src/gnome/gnc-plugin-page-register.c:1159
-#: ../src/import-export/hbci/gnc-hbci-utils.c:578
-#: ../src/import-export/hbci/gnc-hbci-utils.c:580
+#: ../src/import-export/hbci/gnc-hbci-utils.c:579
+#: ../src/import-export/hbci/gnc-hbci-utils.c:581
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -7999,46 +8000,46 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
+msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Datumszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr ""
+msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Bemerkungszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:15
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
+msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Zahlen auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr ""
+msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Empfängerzeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr ""
+msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Worten auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:18
 msgid ""
 "This value contains the Y coordinate for the bottom edge of the check. This "
 "coordinate is from the bottom edge of the sheet of paper."
-msgstr ""
+msgstr "Dieser Wert enthält die Y-Koordinate für das untere Ende des Schecks. Diese Koordinate wird von der Unterkante des Papiers aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:19
 msgid ""
 "This value specifies the predefined check format to use. The number is the 0-"
 "based index into the list of known check formats."
-msgstr ""
+msgstr "Dieser Wert wählt eines der voreingestellten Scheckformate. Die Zahl ist der Index des gewünschten Formats, mit 0 anfangend."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:20
 msgid "Which check position to print"
@@ -9082,7 +9083,7 @@ msgstr ""
 "Sie müssen eine Währung/Aktie auswählen. Wenn Sie eine neue anlegen möchten, "
 "klicken Sie auf \"Neu\"."
 
-#: ../src/gnome-utils/dialog-commodity.c:810
+#: ../src/gnome-utils/dialog-commodity.c:806
 msgid "Use local time"
 msgstr "Lokale Zeit benutzen"
 
@@ -9351,7 +9352,10 @@ msgid ""
 "Enter the ticker symbol for the commodity (e.g. CSCO or AAPL).  If you are "
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case). "
-msgstr "Geben Sie das Ticker-Symbol der Aktie ein (z. B. CSCO oder AAPL).  Wenn Sie Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der Webseite entsprechen, inklusive Groß/Kleinschreibung."
+msgstr ""
+"Geben Sie das Ticker-Symbol der Aktie ein (z. B. CSCO oder AAPL).  Wenn Sie "
+"Kurse online abrufen, muss dieses Feld exakt dem Tickersymbol der Webseite "
+"entsprechen, inklusive Groß/Kleinschreibung."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:9
 msgid ""
@@ -9673,11 +9677,6 @@ msgstr "Eine _weitere Datei öffnen"
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 msgid "_Unload selected file"
 msgstr "Gewählte Datei wieder _schließen"
-
-#: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:7
-#: ../src/import-export/qif-import/qif.glade.h:98
-msgid "labe82l7"
-msgstr "labe82l7"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:1
 msgid "<b>Exchange/Price Information</b>"
@@ -11285,22 +11284,29 @@ msgid "<no file>"
 msgstr "<Keine Datei>"
 
 #: ../src/gnome-utils/gnc-main-window.c:3214
-msgid ""
-"The GnuCash personal finance manager.\n"
-"The GNU way to manage your money!\n"
-msgstr ""
-"GnuCash: Ihr privater Finanzmanager.\n"
-"Die freie Lösung zur Finanzverwaltung.\n"
+msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+msgstr "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
+
+#. Development version
+#: ../src/gnome-utils/gnc-main-window.c:3227
+#, c-format
+msgid "%s  This copy was built from svn r%s on %s."
+msgstr "%s  Dieses Programm wurde aus SVN r%s am %s erstellt."
+
+#: ../src/gnome-utils/gnc-main-window.c:3230
+#, c-format
+msgid "%s  This copy was built from r%s on %s."
+msgstr "%s  Dieses Programm wurde aus r%s am %s erstellt."
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3236
-#: ../src/gnome-utils/gnc-main-window.c:3276
+#: ../src/gnome-utils/gnc-main-window.c:3242
+#: ../src/gnome-utils/gnc-main-window.c:3281
 msgid "translator_credits"
 msgstr "Christian Stimming <stimming@tuhh.de>"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3254
+#: ../src/gnome-utils/gnc-main-window.c:3259
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -12756,7 +12762,7 @@ msgstr ""
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 
-#: ../src/import-export/hbci/gnc-hbci-gettrans.c:207
+#: ../src/import-export/hbci/gnc-hbci-gettrans.c:208
 msgid "The HBCI import returned no transactions for the selected time period."
 msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
@@ -12801,7 +12807,7 @@ msgstr "Online-Auftrag Einzelumbuchung"
 msgid "Online HBCI Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:290
+#: ../src/import-export/hbci/gnc-hbci-utils.c:291
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -12809,7 +12815,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:296
+#: ../src/import-export/hbci/gnc-hbci-utils.c:297
 msgid ""
 "The PIN you entered was wrong.\n"
 "ATTENTION: You have zero further wrong retries left!\n"
@@ -12819,7 +12825,7 @@ msgstr ""
 "VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
 "Möchten Sie erneut versuchen?"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:303
+#: ../src/import-export/hbci/gnc-hbci-utils.c:304
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times. Your chip card is "
 "therefore destroyed. Aborting."
@@ -12827,14 +12833,14 @@ msgstr ""
 "Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist damit "
 "leider unbrauchbar geworden. Aktion wird abgebrochen."
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:312
+#: ../src/import-export/hbci/gnc-hbci-utils.c:313
 msgid ""
 "No chip card has been found in the chip card reader. Do you want to try "
 "again?"
 msgstr ""
 "Im Kartenleser wurde keine Chipkarte erkannt. Möchten Sie erneut versuchen?"
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:318
+#: ../src/import-export/hbci/gnc-hbci-utils.c:319
 msgid ""
 "Unfortunately this HBCI job is not supported by your bank or for your "
 "account. Aborting."
@@ -12842,7 +12848,7 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht unterstützt "
 "oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: ../src/import-export/hbci/gnc-hbci-utils.c:326
+#: ../src/import-export/hbci/gnc-hbci-utils.c:327
 msgid ""
 "The server of your bank refused the HBCI connection. Please try again later. "
 "Aborting."
@@ -12852,7 +12858,7 @@ msgstr ""
 
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/import-export/hbci/gnc-hbci-utils.c:534
+#: ../src/import-export/hbci/gnc-hbci-utils.c:535
 #: ../intl-scm/guile-strings.c:3084 ../intl-scm/guile-strings.c:3106
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
@@ -13076,7 +13082,7 @@ msgid "(no)"
 msgstr "(kein(e))"
 
 #: ../src/import-export/import-provider-format.glade.h:2
-#: ../src/import-export/qif-import/qif.glade.h:6
+#: ../src/import-export/qif-import/qif.glade.h:11
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
 "Drücken Sie \"Zurück\", um nicht diese Datei zu laden, sondern eine andere "
@@ -13340,12 +13346,12 @@ msgstr "Kontobezeichnung:"
 msgid "Accounts and stock holdings"
 msgstr "Konten und Aktienanteile"
 
-#: ../src/import-export/qif-import/qif.glade.h:7
+#: ../src/import-export/qif-import/qif.glade.h:6
 msgid ""
-"Click \"Finish\" to import data from the staging area and update your "
-"GnuCash accounts. The account and category matching information you have "
-"entered will be saved and used for defaults the next time you use the QIF "
-"import  facility. \n"
+"Click \"Apply\" to import data from the staging area and update your GnuCash "
+"accounts. The account and category matching information you have entered "
+"will be saved and used for defaults the next time you use the QIF import  "
+"facility. \n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -13353,16 +13359,11 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Klicken Sie nun auf \"Beenden\", um die Daten vom Importieren zu übernehmen "
-"und Ihre Gnucash Konten auf den neuesten Stand zu bringen. Die Konten und "
-"Kategorien, die Sie angegeben haben, werden gespeichert und beim nächsten "
-"QIF-Import als Voreinstellung benutzt.\n"
+"Klicken Sie nun auf »Anwenden«, um die Daten vom Importieren zu übernehmen und Ihre Gnucash Konten auf den neuesten Stand zu bringen. Die Konten und Kategorien, die Sie angegeben haben, werden gespeichert und beim nächsten QIF-Import als Voreinstellung benutzt.\n"
 "\n"
-"Klicken Sie auf \"Zurück\", wenn Sie die Konten- und Kategorien-Auswahl oder "
-"die Währungsangaben noch einmal überprüfen möchten oder wenn Sie noch mehr "
-"Dateien laden möchten.\n"
+"Klicken Sie auf »Zurück«, wenn Sie die Konten- und Kategorien-Auswahl oder die Währungsangaben noch einmal überprüfen möchten oder wenn Sie noch mehr Dateien laden möchten.\n"
 "\n"
-"Klicken Sie auf \"Abbrechen\", um den QIF-Import-Prozess abzubrechen."
+"Klicken Sie auf »Abbrechen«, um den QIF-Import-Prozess abzubrechen."
 
 #: ../src/import-export/qif-import/qif.glade.h:12
 msgid "Click \"Forward\" to check matchings for QIF categories. "
@@ -13416,7 +13417,7 @@ msgid ""
 "programs. \n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Finish\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process. \n"
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -14651,11 +14652,11 @@ msgstr "_Stilvorlagen"
 msgid "Edit report style sheets."
 msgstr "Stilvorlagen für Berichte bearbeiten."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:91
+#: ../lib/libqof/backend/file/qsf-backend.c:103
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr "Kompressionsaufwand: 0 für gar keinen, 9 für höchsten."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:92
+#: ../lib/libqof/backend/file/qsf-backend.c:104
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
@@ -14663,19 +14664,29 @@ msgstr ""
 "QOF kann die QSF XML-Dateien mit gzip komprimieren. Dies wird aber nicht "
 "gemacht, wenn die Ausgabe nach STDOUT geleitet ist."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:100
+#: ../lib/libqof/backend/file/qsf-backend.c:112
 msgid "List of QSF map files to use for this session."
 msgstr ""
 "Liste der QSF-Zuordnungs-Dateien (Map), die in dieser Sietzung verwendet "
 "werden."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:101
+#: ../lib/libqof/backend/file/qsf-backend.c:113
 msgid ""
 "QOF can convert objects within QSF XML files using a map of the changes "
 "required."
 msgstr ""
 "QOF kann Objekte aus QSF XML-Dateien konvertieren, wenn eine Liste von "
 "Zuordnungen (Maps) für die notwendigen Änderungen existieren."
+
+#: ../lib/libqof/backend/file/qsf-backend.c:121
+msgid "Encoding string to use when writing the XML file."
+msgstr "Wählen Sie die Zeichencodierung (Encoding), die in die XML-Datei geschrieben werden soll."
+
+#: ../lib/libqof/backend/file/qsf-backend.c:122
+msgid ""
+"QSF defaults to UTF-8. Other encodings are supported by passing the encoding "
+"string in this option."
+msgstr "Die voreingestellte Zeichenkodierung in QSF ist UTF-8. Andere Kodierungen können verwendet werden, indem Sie den Namen der Zeichencodierung in dieser Einstellung angeben."
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:2
@@ -17951,7 +17962,7 @@ msgstr "Methode First-In Last-Out (zuerst erworbene werden zuletzt verkauft)"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2004
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr ""
+msgstr "Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls möglich."
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2006
