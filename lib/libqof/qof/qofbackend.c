@@ -193,7 +193,7 @@ void qof_backend_prepare_option(QofBackend *be, QofBackendOption *option)
 	switch (option->type)
 	{
 		case KVP_TYPE_GINT64   : {
-			value = kvp_value_new_gint64(*(gint64*)&option->value);
+			value = kvp_value_new_gint64(*(gint64*)option->value);
 			break; 
 		}
 		case KVP_TYPE_DOUBLE   : { 
