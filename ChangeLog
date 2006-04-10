@@ -6,6 +6,12 @@
 	  because qof.h includes it for us.  Besides, it doesn't fix
 	  the whole problem.
 
+	* lots of files:
+	  Revert r13749.  Wedon't need to explicitly #include glib.h
+	  because qof.h includes it for us.  Also, this changeset contains
+	  lots of other stuff that has nothing to do with glib.h.  Note
+	  that this revision wont build, but I'll fix that shortly.
+
 2006-04-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/account-quickfill.c: Eliminate some unnecessary

@@ -31,6 +31,7 @@
 
 #include "FreqSpec.h"
 #include "Account.h"
+#include "gnc-book.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "SX-book.h"

@@ -126,9 +126,9 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->type = NO_TYPE;
 
-  acc->accountName = QOF_CACHE_NEW();
-  acc->accountCode = QOF_CACHE_NEW();
-  acc->description = QOF_CACHE_NEW();
+  acc->accountName = CACHE_INSERT("");
+  acc->accountCode = CACHE_INSERT("");
+  acc->description = CACHE_INSERT("");
 
   acc->idata = 0;
 
@@ -999,8 +999,7 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   }
 
   /* Otherwise do a string sort */
-  safe_strcmp (da, db);
-/*  SAFE_STRCMP (da, db);*/
+  SAFE_STRCMP (da, db);
 
   /* if acccount-type-order array not initialized, initialize it */
   /* this will happen at most once during program invocation */

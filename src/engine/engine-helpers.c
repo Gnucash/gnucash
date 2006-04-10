@@ -27,7 +27,7 @@
 #include <g-wrap-wct.h>
 #include <libguile.h>
 #include <string.h>
-#include <glib.h>
+
 #include "Account.h"
 #include "Group.h"
 #include "engine-helpers.h"

@@ -22,7 +22,6 @@
  */
 
 #include "config.h"
-#include <glib.h>
 #include "qof.h"
 #include "gnc-session.h"
 #include "gnc-engine.h"

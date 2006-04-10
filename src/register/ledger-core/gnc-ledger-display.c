@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <time.h>
-#include <glib.h>
+
 #include "Account.h"
 #include "Group.h"
 #include "Query.h"

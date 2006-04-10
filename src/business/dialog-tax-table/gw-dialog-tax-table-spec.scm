@@ -33,7 +33,6 @@
    (lambda (wrapset client-wrapset)
      (list
       "#include <config.h>\n"
-      "#include <glib.h>\n"
       "#include <dialog-tax-table.h>\n"
       )))
 

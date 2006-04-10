@@ -119,8 +119,11 @@ gnc_engine_init(int argc, char ** argv)
 void
 gnc_engine_shutdown (void)
 {
+  qof_query_shutdown ();
+  qof_object_shutdown ();
+  guid_shutdown();
+  gnc_engine_string_cache_destroy ();
   qof_log_shutdown();
-  qof_close();
   engine_is_initialized = 0;
 }
 
