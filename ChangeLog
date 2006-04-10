@@ -1,3 +1,11 @@
+2006-04-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/gnc-hbci-gettrans.c:
+	* src/import-export/hbci/gnc-hbci-utils.c:
+	  Back out r13752.  We don't need to explicitly #include glib.h
+	  because qof.h includes it for us.  Besides, it doesn't fix
+	  the whole problem.
+
 2006-04-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/account-quickfill.c: Eliminate some unnecessary

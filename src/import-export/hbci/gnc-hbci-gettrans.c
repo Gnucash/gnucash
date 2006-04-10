@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include <glib.h>
 #include <glib/gi18n.h>
 
 #define AQBANKING_NOWARN_DEPRECATED
