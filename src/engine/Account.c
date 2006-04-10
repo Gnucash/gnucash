@@ -999,7 +999,9 @@ xaccAccountOrder (const Account **aa, const Account **ab)
   }
 
   /* Otherwise do a string sort */
-  SAFE_STRCMP (da, db);
+  result = safe_strcmp (da, db);
+  if (result)
+    return result;
 
   /* if acccount-type-order array not initialized, initialize it */
   /* this will happen at most once during program invocation */

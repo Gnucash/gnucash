@@ -1239,7 +1239,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic,
          nsp->cm_table, nsp->name);
   g_hash_table_insert(nsp->cm_table, 
-                      gnc_string_cache_insert(comm->mnemonic),
+                      CACHE_INSERT(comm->mnemonic),
                       (gpointer)comm);
   nsp->cm_list = g_list_append(nsp->cm_list, comm);
 
@@ -1482,7 +1482,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   {
     ns = g_new0(gnc_commodity_namespace, 1);
     ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
-    ns->name = gnc_string_cache_insert((gpointer)namespace);
+    ns->name = CACHE_INSERT((gpointer)namespace);
     ns->iso4217 = gnc_commodity_namespace_is_iso(namespace);
     qof_instance_init (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
     qof_event_gen (&ns->inst.entity, QOF_EVENT_CREATE, NULL);
@@ -1539,7 +1539,7 @@ ns_helper(gpointer key, gpointer value, gpointer user_data)
 {
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
-  gnc_string_cache_remove(key);  /* key is commodity mnemonic */
+  CACHE_REMOVE(key);  /* key is commodity mnemonic */
   return TRUE;
 }
 
@@ -1564,7 +1564,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
 
   g_hash_table_foreach_remove(ns->cm_table, ns_helper, NULL);
   g_hash_table_destroy(ns->cm_table);
-  gnc_string_cache_remove(ns->name);
+  CACHE_REMOVE(ns->name);
 
   qof_event_gen (&ns->inst.entity, QOF_EVENT_DESTROY, NULL);
   qof_instance_release(&ns->inst);

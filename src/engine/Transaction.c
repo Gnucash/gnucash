@@ -242,8 +242,8 @@ xaccInitTransaction (Transaction * trans, QofBook *book)
 {
   ENTER ("trans=%p", trans);
   /* Fill in some sane defaults */
-  trans->num         = gnc_string_cache_insert("");
-  trans->description = gnc_string_cache_insert("");
+  trans->num         = CACHE_INSERT("");
+  trans->description = CACHE_INSERT("");
 
   trans->common_currency = NULL;
   trans->splits = NULL;
@@ -358,8 +358,8 @@ xaccDupeTransaction (const Transaction *t)
 
   trans = g_new0 (Transaction, 1);
 
-  trans->num         = gnc_string_cache_insert (t->num);
-  trans->description = gnc_string_cache_insert (t->description);
+  trans->num         = CACHE_INSERT (t->num);
+  trans->description = CACHE_INSERT (t->description);
 
   trans->splits = g_list_copy (t->splits);
   for (node = trans->splits; node; node = node->next)
@@ -405,8 +405,8 @@ xaccTransClone (const Transaction *t)
 
   trans->date_entered    = t->date_entered;
   trans->date_posted     = t->date_posted;
-  trans->num             = gnc_string_cache_insert (t->num);
-  trans->description     = gnc_string_cache_insert (t->description);
+  trans->num             = CACHE_INSERT (t->num);
+  trans->description     = CACHE_INSERT (t->description);
   trans->common_currency = t->common_currency;
   trans->version         = t->version;
   trans->version_check   = t->version_check;
@@ -458,8 +458,8 @@ xaccFreeTransaction (Transaction *trans)
   trans->splits = NULL;
 
   /* free up transaction strings */
-  gnc_string_cache_remove(trans->num);
-  gnc_string_cache_remove(trans->description);
+  CACHE_REMOVE(trans->num);
+  CACHE_REMOVE(trans->description);
 
   /* Just in case someone looks up freed memory ... */
   trans->num         = (char *) 1;

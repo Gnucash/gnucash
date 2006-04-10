@@ -18,6 +18,20 @@
 	  Keep the deprecated GNC_SCANF_LLD defined in terms of the new
 	  QOF_SCANF_LLD.
 
+	* src/backend/file/sixtp-utils.c:
+	  use QOF_SCANF_LLD to read 64-bit numbers.
+	* src/gnome-utils/QuickFill.c:
+	* src/engine/gnc-pricedb.c:
+	* src/engine/Transaction.c:
+	* src/engine/gnc-commodity.c:
+	  convert gnc_string_cache* APIs to CACHE_* APIs.
+	* src/engine/Account.c:
+	  Properly convert usage of SAFE_STRCMP() to safe_strcmp()
+	* src/engine/kvp-scm.c:
+	  #include <qof.h> instead of <kvp_frame.h>
+	* src/engine/gnc-engine.c:
+	  Update the method used to shutdown QOF.
+
 2006-04-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/account-quickfill.c: Eliminate some unnecessary

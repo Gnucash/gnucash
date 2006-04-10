@@ -1,6 +1,6 @@
 #include "config.h"
 
-#include <kvp_frame.h>
+#include <qof.h>
 #include <g-wrap-wct.h>
 #include <libguile.h>
 #include <engine-helpers.h>
