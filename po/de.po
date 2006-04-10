@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-08 11:49+0200\n"
-"PO-Revision-Date: 2006-04-08 12:05+0200\n"
+"POT-Creation-Date: 2006-04-10 22:48+0200\n"
+"PO-Revision-Date: 2006-04-10 22:54+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2465,7 +2465,7 @@ msgid ""
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
-msgstr ""
+msgstr "Wenn aktiviert wird GnuCash beim Programmstart prüfen, ob Rechnungen demnächst fällig werden. Wenn dies der Fall ist, wird eine Erinnerung angezeigt. Die Anzahl Tage im Voraus wird mit der Einstellung »Tage im Voraus« festgelegt. Andernfalls wird GnuCash nicht nach fälligen Rechnungen suchen."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid ""
@@ -2481,6 +2481,8 @@ msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
+"Wenn aktiviert werden nur die »aktiven« Einträge in der aktuellen Kategorie "
+"durchsucht. Andernfalls werden alle Einträge durchsucht."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid ""
@@ -2533,6 +2535,9 @@ msgid ""
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
+"Mit dieser Einstellung geben Sie an, wie viele Tage im voraus GnuCash für "
+"fällige Rechnungen prüfen soll.  Dieser Wert wird nur benutzt, wenn »Bei "
+"Erstellung benachrichtigen« aktiviert ist."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid ""
@@ -2540,6 +2545,10 @@ msgid ""
 "actually affect the display of the contents of the window. It is only used "
 "to set the size of the window when first opened."
 msgstr ""
+"Mit dieser Einstellung geben Sie die Anzahl Zeilen in der Anzeige einer "
+"Rechnung an. Die tatsächliche Fenstergröße kann dann beliebig variiert "
+"werden. Diese Einstellung wird nur beim allerersten Öffnen eines Fensters "
+"verwendet."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid ""
@@ -2547,6 +2556,9 @@ msgid ""
 "window. The numbers are the X and Y coordinates of the top left corner of "
 "the window, and the width and height of the window."
 msgstr ""
+"Diese Einstellung enthält die Bildschirmkoordinaten des Fensters vom letzten "
+"Öffnen. Die X/Y-Koordinaten sind für die linke obere Ecke des Fensters "
+"gespeichert, zusammen mit der Breite und Höhe des Fensters."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
@@ -7865,19 +7877,23 @@ msgid ""
 "This setting indicates how the key column is sorted. Possible values for "
 "this setting are 'ascending' and 'descending'."
 msgstr ""
+"Diese Einstellung kontrolliert die Sortierung. Mögliche Werte sind "
+"»ascending«, aufsteigend, und »descending«, absteigend."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:15
 msgid ""
 "This setting indicates whether to search in all items in the current class, "
 "or only in 'active' items in the current class."
 msgstr ""
+"Wenn aktiviert werden alle Einträge in der aktuellen Kategorie durchsucht. "
+"Andernfalls werden nur die »aktiven« Einträge durchsucht."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:16
 msgid ""
 "This setting indicates which column in the tree is used for sorting. "
 "Possible values for this setting are the name of any column in this dialog "
 "(see the column_order key) or the keyword 'none'."
-msgstr ""
+msgstr "Diese Einstellung legt die Spalte fest, nach der in der Kontohierarchie sortiert wird. Mögliche Werte sind die Namen der Spalten oder »none« (keine)."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:17
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:9
@@ -7954,7 +7970,7 @@ msgid ""
 "used as an argument to strftime to produce the date to be printed. It may be "
 "any valid strftime string; for more information about this format, read the "
 "manual page of strftime by \"man 3 strftime\"."
-msgstr ""
+msgstr "Wenn das Datumsformat auf Benutzerdefiniert gesetzt ist, kann in dieser Einstellung das strftime-Format angegeben werden. Für mehr Informationen lesen Sie die Ausgabe von »man 3 strftime«."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid "Index of predefined check format to use"
@@ -7965,7 +7981,7 @@ msgid ""
 "On preprinted checks containing multiple checks per page, this setting "
 "specifies which check position to print. The possible values are 0, 1 and 2, "
 "corresponding to the top, middle and bottom checks on the page."
-msgstr ""
+msgstr "Auf Scheckvordrucken mit mehreren Schecks pro Seite wird hier festgelegt, welche Scheckposition gedruckt werden soll. Mögliche Werte sind 0, 1 und 2, was Oben, Mitte und Unten entspricht."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:6
 msgid "Position of check amount in numbers"
@@ -8000,46 +8016,60 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the date line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Datumszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr ""
+"Dieser Wert enthält die X/Y-Koordinaten für die Datumszeile auf dem Scheck. "
+"Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:14
 msgid ""
 "This value contains the X,Y coordinates for the start of the memo line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Bemerkungszeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr ""
+"Dieser Wert enthält die X/Y-Koordinaten für die Bemerkungszeile auf dem "
+"Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:15
 msgid ""
 "This value contains the X,Y coordinates for the start of the numerical "
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Zahlen auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr ""
+"Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Zahlen "
+"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:16
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Empfängerzeile auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr ""
+"Dieser Wert enthält die X/Y-Koordinaten für die Empfängerzeile auf dem "
+"Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:17
 msgid ""
 "This value contains the X,Y coordinates for the start of the written amount "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
-msgstr "Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Worten auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
+msgstr ""
+"Dieser Wert enthält die X/Y-Koordinaten für die Zeile des Betrags in Worten "
+"auf dem Scheck. Koordinaten werden von der linken unteren Ecke aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:18
 msgid ""
 "This value contains the Y coordinate for the bottom edge of the check. This "
 "coordinate is from the bottom edge of the sheet of paper."
-msgstr "Dieser Wert enthält die Y-Koordinate für das untere Ende des Schecks. Diese Koordinate wird von der Unterkante des Papiers aus gemessen."
+msgstr ""
+"Dieser Wert enthält die Y-Koordinate für das untere Ende des Schecks. Diese "
+"Koordinate wird von der Unterkante des Papiers aus gemessen."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:19
 msgid ""
 "This value specifies the predefined check format to use. The number is the 0-"
 "based index into the list of known check formats."
-msgstr "Dieser Wert wählt eines der voreingestellten Scheckformate. Die Zahl ist der Index des gewünschten Formats, mit 0 anfangend."
+msgstr ""
+"Dieser Wert wählt eines der voreingestellten Scheckformate. Die Zahl ist der "
+"Index des gewünschten Formats, mit 0 anfangend."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:20
 msgid "Which check position to print"
@@ -8059,6 +8089,9 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
+"Wenn aktiviert werden »bestätigte« Buchungen beim Abgleichen automatisch als "
+"»abgeglichen« markiert. Andernfalls werden keine Buchungen automatisch "
+"markiert."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:3
 msgid "Pre-select cleared transactions"
@@ -8186,6 +8219,9 @@ msgid ""
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
+"Wenn aktiviert werden alle Buchungszeilen einer Buchung mit identischer "
+"Hintergrundfarbe angezeigt. Andernfalls werden für jede Zeile abwechselnde "
+"Farben verwendet."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:21
 msgid ""
@@ -8203,6 +8239,10 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
+"Wenn aktiviert wird ein »Schließen«-Knopf auf jedem Karteikarten-Reiter "
+"angezeigt. Andernfalls wird kein solcher Knopf angezeigt. Eine Karteikarte "
+"kann aber immer geschlossen werden, indem der entsprechende Knopf der "
+"Werkzeugleiste verwendet wird oder der Menüpunkt im Menü »Datei«."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:23
 msgid ""
@@ -8226,7 +8266,7 @@ msgid ""
 "If active, formal accounting labels \"Credit\" and \"Debit\" will be used "
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
-msgstr ""
+msgstr "Wenn aktiviert werden die standarisierten Beschriftungen aus dem Rechnungswesen, »Kredit« und »Debit«, verwendet. Andernfalls werden umgangssprachliche Beschriftungen gewählt."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:26
 msgid ""
@@ -8278,6 +8318,9 @@ msgid ""
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
+"Wenn aktiviert wird die horizontale Begrenzung zwischen Zeilen mit einer "
+"deutlichen Linie gezeichnet. Andernfalls wird die Begrenzung zwischen Zeilen "
+"nicht mit einer Linie markiert."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:35
 msgid "Show horizontal borders in a register"
@@ -8289,6 +8332,10 @@ msgid ""
 "the default setting for when a register is first opened. The setting can be "
 "changed at any time via the \"View->Double Line\" menu item."
 msgstr ""
+"Zwei Zeilen für jede Buchung im Kontofenster anzeigen. Dies ist die "
+"Voreinstellung, wenn ein Kontofenster das erste Mal geöffnet wird. Für jedes "
+"Kontofenster kann diese Einstellung jederzeit über das Menü »Anzeige/Zwei "
+"Zeilen« geändert werden."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:38
 msgid ""
@@ -8296,6 +8343,9 @@ msgid ""
 "between cells will be indicated with a heavy line. Otherwise the border "
 "between cells will not be marked."
 msgstr ""
+"Wenn aktiviert wird die vertikale Begrenzung zwischen Spalten mit einer "
+"deutlichen Linie gezeichnet. Andernfalls wird die Begrenzung zwischen "
+"Spalten nicht mit einer Linie markiert."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:39
 msgid "Show vertical borders in a register"
@@ -8330,7 +8380,7 @@ msgstr ""
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr ""
+msgstr "Diese Einstellung gibt die Anzahl der automatischen Dezimalstellen an."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid ""
@@ -8390,6 +8440,10 @@ msgid ""
 "currency_choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
+"Dies ist die voreingestellte Währung für neue Konten, wenn die Einstellung "
+"»Auswahl Standardwährung Konten« auf »other« gesetzt ist. Diese Einstellung "
+"muss den Drei-Buchstaben-Code aus ISO 4217 für die Währung enthalten, z. B. "
+"EUR, USD oder RUB."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:53
 msgid ""
@@ -8397,12 +8451,18 @@ msgid ""
 "currency_choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
+"Dies ist die voreingestellte Währung für neue Berichte, wenn die Einstellung "
+"»Auswahl Standardwährung Berichte« auf »other« gesetzt ist. Diese "
+"Einstellung muss den Drei-Buchstaben-Code aus ISO 4217 für die Währung "
+"enthalten, z. B. EUR, USD oder RUB."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:54
 msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
 msgstr ""
+"Diese Einstellung gibt die Anzahl Tage an, nach denen alte Log/Backup-"
+"Dateien gelöscht werden. 0 entspricht niemals Löschen."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:55
 msgid "Use 24 hour time format"
@@ -8470,16 +8530,22 @@ msgid ""
 "reconciled split. Allowing these changes can make it hard to perform future "
 "reconciliations."
 msgstr ""
+"Diese Rückfrage kommt vor dem Speichern von Änderungen in einer "
+"abgeglichenen Buchung. Wenn Sie die Änderungen speichern, kann zukünftiges "
+"Abgleichen erschwert werden."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:15
 msgid ""
 "This dialog is presented before allowing you to delete a commodity that has "
 "price quotes attached. Deleting the commodity will delete the quotes as well."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen einer Währung/Aktie, wenn diese noch "
+"Kursinformationen gespeichert hat. Löschen der Aktie wird die "
+"Kursinformationen ebenfalls löschen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:16
 msgid "This dialog is presented before allowing you to delete a commodity."
-msgstr ""
+msgstr "Diese Rückfrage kommt vor dem Löschen einer Währung/Aktie."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:17
 msgid ""
@@ -8487,16 +8553,21 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen einer Buchung, die abgeglichene "
+"Buchungszeilen enthält. Löschen jener Buchung und Buchungszeilen wird den "
+"abgeglichenen Wert im Konto verändern und kann daher zukünftiges Abgleichen "
+"erschweren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:18
 msgid "This dialog is presented before allowing you to delete a transaction."
-msgstr ""
+msgstr "Diese Rückfrage kommt vor dem Löschen einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:19
 msgid ""
 "This dialog is presented before allowing you to delete multiple price quotes "
 "at one time."
 msgstr ""
+"Diese Rückfrage kommt vor dem gleichzeitigen Löschen von mehreren Kursen."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:20
 msgid ""
@@ -8504,6 +8575,9 @@ msgid ""
 "unreconciled. Doing so will throw off the reconciled value of the register "
 "and can make it hard to perform future reconciliations."
 msgstr ""
+"Diese Rückfrage kommt vor dem Markieren einer abgeglichenen Buchung wieder "
+"als nicht abgeglichen. Die Markierung ändern wird den abgeglichenen Saldo "
+"des Kontos verändern."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:21
 msgid ""
@@ -8511,12 +8585,16 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen einer abgeglichenen Buchungszeile aus "
+"einer Buchung. Löschen jener Buchungszeile wird den abgeglichenen Wert im "
+"Konto verändern und kann daher zukünftiges Abgleichen erschweren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:22
 msgid ""
 "This dialog is presented before allowing you to remove a splits from a "
 "transaction."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen von Buchungszeilen einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:23
 msgid ""
@@ -8525,16 +8603,23 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen aller Buchungszeilen einer Buchung, "
+"die abgeglichene Buchungszeilen enthält. Löschen jener Buchung und "
+"Buchungszeilen wird den abgeglichenen Wert im Konto verändern und kann daher "
+"zukünftiges Abgleichen erschweren."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:24
 msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
+"Diese Rückfrage kommt vor dem Löschen aller Buchungszeilen aus einer Buchung."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:25
 msgid "This dialog is presented when a read-only register is opened."
 msgstr ""
+"Diese Rückfrage wird beim Öffnen eines schreibgeschützten Kontofensters "
+"angezeigt."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:26
 msgid ""
@@ -8553,12 +8638,18 @@ msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
 msgstr ""
+"Diese Rückfrage kommt, wenn Sie die Tastatur oder Maus aus einer geänderten "
+"Rechnungszeile heraus bewegen. Die geänderte Zeile muss dann entweder "
+"gespeichert werden oder die Änderung verworfen werden."
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:29
 msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
+"Diese Rückfrage kommt, wenn Sie die Tastatur oder Maus aus einer geänderten "
+"Buchung heraus bewegen. Die geänderte Buchung muss dann entweder gespeichert "
+"werden oder die Änderung verworfen werden.<"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:1
 msgid "Ending date (in seconds from Jan 1, 1970)"
@@ -8566,7 +8657,7 @@ msgstr "Endzeitpunkt (in Sekunden seit 1. Januar 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:2
 msgid "Ending time period identifier"
-msgstr ""
+msgstr "Index für relativen Endzeitpunkt"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:3
 msgid ""
@@ -8601,32 +8692,32 @@ msgstr "Anfangszeitpunkt (in Sekunden seit 1. Januar 1970)"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:9
 msgid "Starting time period identifier"
-msgstr ""
+msgstr "Index für relativen Anfangszeitpunkt"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
@@ -11285,7 +11376,8 @@ msgstr "<Keine Datei>"
 
 #: ../src/gnome-utils/gnc-main-window.c:3214
 msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
-msgstr "GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
+msgstr ""
+"GnuCash: Ihr privater Finanzmanager. Die freie Lösung zur Finanzverwaltung."
 
 #. Development version
 #: ../src/gnome-utils/gnc-main-window.c:3227
@@ -13359,9 +13451,14 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Klicken Sie nun auf »Anwenden«, um die Daten vom Importieren zu übernehmen und Ihre Gnucash Konten auf den neuesten Stand zu bringen. Die Konten und Kategorien, die Sie angegeben haben, werden gespeichert und beim nächsten QIF-Import als Voreinstellung benutzt.\n"
+"Klicken Sie nun auf »Anwenden«, um die Daten vom Importieren zu übernehmen "
+"und Ihre Gnucash Konten auf den neuesten Stand zu bringen. Die Konten und "
+"Kategorien, die Sie angegeben haben, werden gespeichert und beim nächsten "
+"QIF-Import als Voreinstellung benutzt.\n"
 "\n"
-"Klicken Sie auf »Zurück«, wenn Sie die Konten- und Kategorien-Auswahl oder die Währungsangaben noch einmal überprüfen möchten oder wenn Sie noch mehr Dateien laden möchten.\n"
+"Klicken Sie auf »Zurück«, wenn Sie die Konten- und Kategorien-Auswahl oder "
+"die Währungsangaben noch einmal überprüfen möchten oder wenn Sie noch mehr "
+"Dateien laden möchten.\n"
 "\n"
 "Klicken Sie auf »Abbrechen«, um den QIF-Import-Prozess abzubrechen."
 
@@ -14680,13 +14777,18 @@ msgstr ""
 
 #: ../lib/libqof/backend/file/qsf-backend.c:121
 msgid "Encoding string to use when writing the XML file."
-msgstr "Wählen Sie die Zeichencodierung (Encoding), die in die XML-Datei geschrieben werden soll."
+msgstr ""
+"Wählen Sie die Zeichencodierung (Encoding), die in die XML-Datei geschrieben "
+"werden soll."
 
 #: ../lib/libqof/backend/file/qsf-backend.c:122
 msgid ""
 "QSF defaults to UTF-8. Other encodings are supported by passing the encoding "
 "string in this option."
-msgstr "Die voreingestellte Zeichenkodierung in QSF ist UTF-8. Andere Kodierungen können verwendet werden, indem Sie den Namen der Zeichencodierung in dieser Einstellung angeben."
+msgstr ""
+"Die voreingestellte Zeichenkodierung in QSF ist UTF-8. Andere Kodierungen "
+"können verwendet werden, indem Sie den Namen der Zeichencodierung in dieser "
+"Einstellung angeben."
 
 #. src/scm/main-window.scm
 #: ../intl-scm/guile-strings.c:2
@@ -17962,7 +18064,9 @@ msgstr "Methode First-In Last-Out (zuerst erworbene werden zuletzt verkauft)"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2004
 msgid "Prefer use of price editor pricing over transactions, where applicable."
-msgstr "Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls möglich."
+msgstr ""
+"Kurse aus dem Preiseditor gegenüber Kursen aus Buchungen bevorzugen, falls "
+"möglich."
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2006
@@ -18022,12 +18126,16 @@ msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
+"* Diese Kurse wurden aus Buchungen berechnet statt aus gespeicherten "
+"Kursinformationen"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2054
 msgid ""
 "If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr ""
+"Bei vielen unterschiedlichen Währungen können diese Kurs unter Umständen "
+"nicht korrekt sein."
 
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:2056
