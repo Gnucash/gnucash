@@ -54,7 +54,7 @@
       <locale name="C">
         <short>Starting date (in seconds from Jan 1, 1970)</short>
         <long>
-	  This setting controls the starting date sed in profit/loss
+	  This setting controls the starting date set in profit/loss
 	  calculations if the start_choice setting is set to "absolute".
 	  This field should contain a date as represented in seconds
 	  from January 1st, 1970.
@@ -71,7 +71,7 @@
       <locale name="C">
         <short>Starting time period identifier</short>
         <long>
-	  This setting controls the starting date sed in profit/loss
+	  This setting controls the starting date set in profit/loss
 	  calculations if the start_choice setting is set to anything
 	  other than "absolute".  This field should contain a value
 	  between 0 and 8.
@@ -106,7 +106,7 @@
       <locale name="C">
         <short>Ending date (in seconds from Jan 1, 1970)</short>
         <long>
-	  This setting controls the ending date sed in profit/loss
+	  This setting controls the ending date set in profit/loss
 	  calculations if the end_choice setting is set to "absolute".
 	  This field should contain a date as represented in seconds
 	  from January 1st, 1970.
@@ -123,7 +123,7 @@
       <locale name="C">
         <short>Ending time period identifier</short>
         <long>
-	  This setting controls the ending date sed in profit/loss
+	  This setting controls the ending date set in profit/loss
 	  calculations if the end_choice setting is set to anything
 	  other than "absolute".  This field should contain a value
 	  between 0 and 8.
