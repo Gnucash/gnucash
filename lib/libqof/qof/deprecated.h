@@ -169,11 +169,7 @@ safe_strcasecmp() instead. */
 #define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 /** \deprecated use qof_util_string_cache_insert instead. */
 gpointer gnc_string_cache_insert(gconstpointer key);
-#if HAVE_SCANF_LLD
-# define GNC_SCANF_LLD "%lld" /**< \deprecated use G_GINT64_FORMAT instead. */
-#else
-# define GNC_SCANF_LLD "%qd"  /**< \deprecated use G_GINT64_FORMAT instead. */
-#endif
+#define GNC_SCANF_LLD QOF_SCANF_LLD /**< \deprecated use QOF_SCANF_LLD instead. */
 /** \deprecated use qof_util_stpcpy instead. */
 gchar * gnc_stpcpy (gchar *dest, const gchar *src);
 /** \deprecated use qof_init instead. */

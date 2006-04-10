@@ -40,6 +40,13 @@
 #include "qofbook.h"
 #include "qofinstance.h"
 
+/** Do not use these for printf, only scanf */
+#if HAVE_SCANF_LLD
+# define QOF_SCANF_LLD "%lld"
+#else
+# define QOF_SCANF_LLD "%qd"
+#endif
+
 #define QOF_MOD_UTIL "qof-utilities"
 
 /** \name typedef enum as string macros

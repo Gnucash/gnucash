@@ -12,6 +12,12 @@
 	  lots of other stuff that has nothing to do with glib.h.  Note
 	  that this revision wont build, but I'll fix that shortly.
 
+	* lib/libqof/qof/deprecated.h:
+	* lib/libqof/qof/qofutil.h:
+	  Create a QOF_SCANF_LLD (because we cannot use the printf version).
+	  Keep the deprecated GNC_SCANF_LLD defined in terms of the new
+	  QOF_SCANF_LLD.
+
 2006-04-08  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/account-quickfill.c: Eliminate some unnecessary
