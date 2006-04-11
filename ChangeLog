@@ -1,3 +1,7 @@
+2006-04-11  Derek Atkins  <derek@ihtfp.com>
+
+	* lib/libqof/qof/qofbookmerge.c: fix a few memory leaks.
+
 2006-04-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.c:
