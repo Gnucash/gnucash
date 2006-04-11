@@ -1130,8 +1130,8 @@ qof_session_load (QofSession *session,
 		qof_book_set_backend (ob, NULL);
 		qof_book_destroy (ob);
 	}
-        /* Um, I think we're leaking the oldbooks list. */
-	
+	g_list_free (oldbooks);
+
 	LEAVE ("sess = %p, book_id=%s", session, session->book_id
          ? session->book_id : "(null)");
 }

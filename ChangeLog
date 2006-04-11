@@ -1,3 +1,7 @@
+2006-04-11  Andreas Köhler  <andi5.py@gmx.net>
+
+	* qofsession.c (qof_session_load): Fix leakage of old books.
+
 2006-04-11  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/qof/qofbookmerge.c: fix a few memory leaks.
