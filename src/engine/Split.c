@@ -552,9 +552,11 @@ xaccSplitCommitEdit(Split *s)
         xaccSplitSetAmount(s, xaccSplitGetAmount(s));
     }
 
-    if (s->orig_parent && s->parent != s->orig_parent) {
+    if (s->parent != s->orig_parent) {
         //FIXME: find better event
-        qof_event_gen (&s->orig_parent->inst.entity, QOF_EVENT_MODIFY, NULL);
+        if (s->orig_parent)
+            qof_event_gen(&s->orig_parent->inst.entity, QOF_EVENT_MODIFY, 
+                          NULL);
     }
     if (s->lot) {
         /* A change of value/amnt affects gains display, etc. */
@@ -578,8 +580,25 @@ xaccSplitCommitEdit(Split *s)
 void
 xaccSplitRollbackEdit(Split *s)
 {
-    s->acc = s->orig_acc;  /* Don't use setters, we want to allow NULL */
-    s->parent = s->orig_parent;
+
+    /* Don't use setters because we want to allow NULL.  This is legit
+       only because we don't emit events for changing accounts until
+       the final commit. */
+    if (s->acc != s->orig_acc)
+        s->acc = s->orig_acc;  
+
+    /* Undestroy if needed */
+    if (s->inst.do_free && s->parent) {
+        GncEventData ed;
+        s->inst.do_free = FALSE;
+        ed.node = s;
+        ed.idx = -1; /* unused */
+        qof_event_gen(&s->parent->inst.entity, GNC_EVENT_ITEM_ADDED, &ed);
+    }
+
+    /* But for the parent trans, we want the intermediate events, so
+       we use the setter. */
+    xaccSplitSetParent(s, s->orig_parent);
 }
 
 /********************************************************************\
@@ -1054,6 +1073,10 @@ xaccSplitConvertAmount (const Split *split, Account * account)
     const Split *osplit = xaccSplitGetOtherSplit (split);
 
     if (osplit)
+        g_assert(gnc_commodity_equal(
+                     to_commodity, 
+                     xaccAccountGetCommodity(xaccSplitGetAccount(osplit))));
+    if (osplit)
       return gnc_numeric_neg (xaccSplitGetAmount (osplit));
   }
 
@@ -1077,6 +1100,7 @@ xaccSplitDestroy (Split *split)
 {
    Account *acc;
    Transaction *trans;
+   GncEventData ed;
 
    if (!split) return TRUE;
 
@@ -1086,8 +1110,11 @@ xaccSplitDestroy (Split *split)
        return FALSE;
 
    xaccTransBeginEdit(trans);
+   ed.node = split;
+   ed.idx = xaccTransGetSplitIndex(trans, split);
    qof_instance_set_dirty(QOF_INSTANCE(split));
    split->inst.do_free = TRUE;
+   qof_event_gen(&trans->inst.entity, GNC_EVENT_ITEM_REMOVED, &ed);
    xaccTransCommitEdit(trans);
 
    return TRUE;
@@ -1441,24 +1468,40 @@ void
 xaccSplitSetParent(Split *s, Transaction *t)
 {
     Transaction *old_trans;
-    g_return_if_fail(s && t);
+    GncEventData ed;
+
+    g_return_if_fail(s);
     if (s->parent == t) return;
 
-    if (s->parent != s->orig_parent)
+    if (s->parent != s->orig_parent && s->orig_parent != t)
         PERR("You may not add the split to more than one transaction"
              " during the BeginEdit/CommitEdit block.");
     xaccTransBeginEdit(t);
     old_trans = s->parent;
-    xaccTransBeginEdit(old_trans);
-    s->parent = t;
-    qof_instance_set_dirty(QOF_INSTANCE(s));
-    /* Convert split to new transaction's commodity denominator */
-    xaccSplitSetValue(s, xaccSplitGetValue(s));
 
-    /* add ourselves to the new transaction's list of pending splits. */
-    if (NULL == g_list_find(t->splits, s))
-        t->splits = g_list_append(t->splits, s);
+    xaccTransBeginEdit(old_trans);
+
+    ed.node = s;
+    if (old_trans) {
+        ed.idx = xaccTransGetSplitIndex(old_trans, s);
+        qof_event_gen(&old_trans->inst.entity, GNC_EVENT_ITEM_REMOVED, &ed);
+    }
+    s->parent = t;
+
     xaccTransCommitEdit(old_trans);
+    qof_instance_set_dirty(QOF_INSTANCE(s));
+
+    if (t) {
+        /* Convert split to new transaction's commodity denominator */
+        xaccSplitSetValue(s, xaccSplitGetValue(s));
+        
+        /* add ourselves to the new transaction's list of pending splits. */
+        if (NULL == g_list_find(t->splits, s))
+            t->splits = g_list_append(t->splits, s);
+        
+        ed.idx = -1; /* unused */
+        qof_event_gen(&t->inst.entity, GNC_EVENT_ITEM_ADDED, &ed);
+    }
     xaccTransCommitEdit(t);
 }
 
