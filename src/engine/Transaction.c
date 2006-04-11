@@ -229,7 +229,6 @@ void gen_event_trans (Transaction *trans)
     }
   }
 #endif
-  qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 /********************************************************************\
@@ -942,7 +941,6 @@ static void trans_cleanup_commit(Transaction *trans)
     /* ------------------------------------------------- */
     /* Make sure all associated splits are in proper order
      * in their accounts with the correct balances. */
-    qof_event_suspend();
 
     /* Iterate over existing splits */
     slist = g_list_copy(trans->splits);
@@ -962,7 +960,7 @@ static void trans_cleanup_commit(Transaction *trans)
         }
 
         if (s->parent == trans) {
-            /* Split was either destroyed or just changed */
+            /* Split was either added, destroyed or just changed */
             if (s->inst.do_free)
                 qof_event_gen(&s->inst.entity, QOF_EVENT_DESTROY, NULL);
             else qof_event_gen(&s->inst.entity, QOF_EVENT_MODIFY, NULL);
@@ -970,8 +968,6 @@ static void trans_cleanup_commit(Transaction *trans)
         }
     }
     g_list_free(slist);
-
-    qof_event_resume();
 
     xaccTransWriteLog (trans, 'C');
 
@@ -990,6 +986,7 @@ static void trans_cleanup_commit(Transaction *trans)
     g_assert(trans->inst.editlevel == 0);
 
     gen_event_trans (trans); //TODO: could be conditional
+    qof_event_gen (&trans->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
 void
@@ -1093,8 +1090,7 @@ xaccTransRollbackEdit (Transaction *trans)
        if (i < num_preexist) {
            Split *so = onode->data;
 
-           s->acc = so->acc;
-           s->parent = so->parent;
+           xaccSplitRollbackEdit(s);
            SWAP(s->action, so->action);
            SWAP(s->memo, so->memo);
            SWAP(s->inst.kvp_data, so->inst.kvp_data);
@@ -1109,13 +1105,14 @@ xaccTransRollbackEdit (Transaction *trans)
            xaccFreeSplit(so);
        } else {
            /* Potentially added splits */
-           trans->splits = g_list_remove(trans->splits, s);
            if (trans != xaccSplitGetParent(s)) {
-               /* NOOP, New split added, but then moved to another
+               trans->splits = g_list_remove(trans->splits, s);
+               /* New split added, but then moved to another
                   transaction */
                continue;
            }
            xaccSplitRollbackEdit(s);
+           trans->splits = g_list_remove(trans->splits, s);
            g_assert(trans != xaccSplitGetParent(s));
            /* NB: our memory management policy here is that a new split
               added to the transaction which is then rolled-back still
