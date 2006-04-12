@@ -1794,7 +1794,7 @@ gnc_tree_view_column_properties (GncTreeView *view,
 	       NULL);
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-  if (GTK_IS_TREE_MODEL_SORT(s_model)) {
+  if (GTK_IS_TREE_SORTABLE(s_model)) {
     gtk_tree_view_column_set_sort_column_id (column, data_column);
     if (column_sort_fn) {
       gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(s_model),
