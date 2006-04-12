@@ -1368,7 +1368,7 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
 
     ns_name = gnc_commodity_namespace_get_name(cm->namespace);
     return (!safe_strcmp(ns_name, GNC_COMMODITY_NS_LEGACY) ||
-            !safe_strcmp(ns_name, GNC_COMMODITY_NS_ISO));
+            !safe_strcmp(ns_name, GNC_COMMODITY_NS_CURRENCY));
 }
 
 /********************************************************************

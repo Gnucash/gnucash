@@ -1,3 +1,8 @@
+2006-04-12  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Update the determination of what's a
+	currency and what isn't.  Fixes 337804.
+
 2006-04-11  Andreas Köhler  <andi5.py@gmx.net>
 
 	* qofsession.c (qof_session_load): Fix leakage of old books.
