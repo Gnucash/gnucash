@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 11:02+0200\n"
+"POT-Creation-Date: 2006-04-13 10:56+0200\n"
 "PO-Revision-Date: 2006-03-21 22:40+0100\n"
 "Last-Translator: Didier Vidal <didier-devel@9online.fr>\n"
 "Language-Team: \n"
@@ -71,45 +71,45 @@ msgstr "Erreur numérique"
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
 #. colon. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:501
+#: ../src/app-utils/gnc-ui-util.c:510
 msgid "not cleared:n"
 msgstr "not cleared:n"
 
 # messages-i18n.c:260
 # cleared-> pointé
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:503
+#: ../src/app-utils/gnc-ui-util.c:512
 msgid "cleared:c"
 msgstr "cleared:p"
 
 # messages-i18n.c:322
 # reconciled->réconcilié
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:505
+#: ../src/app-utils/gnc-ui-util.c:514
 msgid "reconciled:y"
 msgstr "reconciled:o"
 
 # frozen -> bloqué
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:507
+#: ../src/app-utils/gnc-ui-util.c:516
 msgid "frozen:f"
 msgstr "frozen:b"
 
 # void->invalidé
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:509
+#: ../src/app-utils/gnc-ui-util.c:518
 msgid "void:v"
 msgstr "void:i"
 
 # messages-i18n.c:195
-#: ../src/app-utils/gnc-ui-util.c:550 ../src/gnome/dialog-chart-export.c:44
+#: ../src/app-utils/gnc-ui-util.c:559 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
 msgstr "Soldes initiaux"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/app-utils/gnc-ui-util.c:553
+#: ../src/app-utils/gnc-ui-util.c:562
 #: ../src/import-export/qif/qif-defaults.c:60 ../intl-scm/guile-strings.c:1836
 #: ../intl-scm/guile-strings.c:3076 ../intl-scm/guile-strings.c:3078
 #: ../intl-scm/guile-strings.c:3098 ../intl-scm/guile-strings.c:3100
@@ -119,14 +119,14 @@ msgstr "Gains enregistrés"
 # messages-i18n.c:282 po/guile_strings.txt:8
 # src/gnome/glade-gnc-dialogs.c:650
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:626 ../src/engine/Account.c:2074
+#: ../src/app-utils/gnc-ui-util.c:635 ../src/engine/Account.c:2076
 #: ../src/register/ledger-core/split-register.c:2046
 #: ../intl-scm/guile-strings.c:1834
 msgid "Equity"
 msgstr "Capitaux propres"
 
 # messages-i18n.c:195
-#: ../src/app-utils/gnc-ui-util.c:686 ../src/gnome/dialog-chart-export.c:45
+#: ../src/app-utils/gnc-ui-util.c:695 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:906 ../src/gnome/glade/account.glade.h:50
 #: ../src/gnome-utils/dialog-account.c:262
 msgid "Opening Balance"
@@ -383,7 +383,7 @@ msgstr "Facture"
 # src/gnome/glade-gnc-dialogs.c:647
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2073
+#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2075
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1238
 msgid "Expense"
 msgstr "Dépenses"
@@ -619,7 +619,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1345
+#: ../src/gnome-utils/dialog-account.c:1346
 msgid "<No name>"
 msgstr "<Pas de nom>"
 
@@ -3075,7 +3075,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:121
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../src/engine/Account.c:2065 ../intl-scm/guile-strings.c:850
+#: ../src/engine/Account.c:2067 ../intl-scm/guile-strings.c:850
 msgid "Cash"
 msgstr "Espèces"
 
@@ -3415,42 +3415,43 @@ msgstr "_Valeur :"
 # messages-i18n.c:250 po/guile_strings.txt:94
 # src/gnome/glade-gnc-dialogs.c:620
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2064 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2066 ../src/import-export/hbci/gnc-hbci-utils.c:591
 #: ../intl-scm/guile-strings.c:848
 msgid "Bank"
 msgstr "Banque"
 
 # messages-i18n.c:245 po/guile_strings.txt:146
 # src/gnome/glade-gnc-dialogs.c:626
-#: ../src/engine/Account.c:2066
+#: ../src/engine/Account.c:2068
 msgid "Asset"
 msgstr "Actif (Avoirs)"
 
 # messages-i18n.c:172
-#: ../src/engine/Account.c:2067
+#: ../src/engine/Account.c:2069
 msgid "Credit Card"
 msgstr "Carte de crédit"
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
-#: ../src/engine/Account.c:2068
+#: ../src/engine/Account.c:2070
 msgid "Liability"
 msgstr "Passif (Dettes)"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
-#: ../src/engine/Account.c:2069
+#: ../src/engine/Account.c:2071
 msgid "Stock"
 msgstr "Actions"
 
 # messages-i18n.c:189 po/guile_strings.txt:4
-#: ../src/engine/Account.c:2070
+#: ../src/engine/Account.c:2072
 msgid "Mutual Fund"
 msgstr "Fonds de placements"
 
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641
-#: ../src/engine/Account.c:2071 ../src/gnome-utils/gnc-tree-view-price.c:439
+#: ../src/engine/Account.c:2073 ../src/gnome-utils/dialog-commodity.c:725
+#: ../src/gnome-utils/gnc-tree-view-price.c:439
 msgid "Currency"
 msgstr "Devise"
 
@@ -3459,7 +3460,7 @@ msgstr "Devise"
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2072
+#: ../src/engine/Account.c:2074
 #: ../src/register/ledger-core/split-register.c:2062
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:864
 #: ../intl-scm/guile-strings.c:1236
@@ -3467,11 +3468,11 @@ msgid "Income"
 msgstr "Revenus"
 
 # messages-i18n.c:321
-#: ../src/engine/Account.c:2075
+#: ../src/engine/Account.c:2077
 msgid "A/Receivable"
 msgstr "Compte à recevoir"
 
-#: ../src/engine/Account.c:2076
+#: ../src/engine/Account.c:2078
 msgid "A/Payable"
 msgstr "Compte à payer"
 
@@ -3724,14 +3725,14 @@ msgstr "Non soldé"
 # messages-i18n.c:346
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1198 ../src/engine/Split.c:1215
+#: ../src/engine/Split.c:1225 ../src/engine/Split.c:1242
 #: ../intl-scm/guile-strings.c:2544 ../intl-scm/guile-strings.c:2566
 msgid "-- Split Transaction --"
 msgstr "-- Transaction répartie --"
 
 # messages-i18n.c:336
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1231 ../src/gnome/druid-stock-split.c:448
+#: ../src/engine/Split.c:1258 ../src/gnome/druid-stock-split.c:448
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/register/ledger-core/split-register.c:2065
@@ -3740,13 +3741,13 @@ msgid "Split"
 msgstr "Répartition"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: ../src/engine/Transaction.c:1731
+#: ../src/engine/Transaction.c:1728
 msgid "Voided transaction"
 msgstr "Invalidée"
 
 # messages-i18n.c:346
 #. Dirtying taken care of by SetReadOnly
-#: ../src/engine/Transaction.c:1742
+#: ../src/engine/Transaction.c:1739
 msgid "Transaction Voided"
 msgstr "Transaction invalidée"
 
@@ -3944,7 +3945,6 @@ msgstr "_Éditer"
 #: ../src/gnome/dialog-scheduledxaction.c:243
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/glade/reconcile.glade.h:36
-#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1979
 msgid "_Transaction"
 msgstr "_Transaction"
@@ -4747,7 +4747,7 @@ msgstr "Les déplacer vers :"
 
 # messages-i18n.c:190
 #: ../src/gnome/glade/account.glade.h:44
-#: ../src/gnome-utils/dialog-account.c:1396
+#: ../src/gnome-utils/dialog-account.c:1397
 msgid "New Account"
 msgstr "Nouveau compte"
 
@@ -8154,7 +8154,7 @@ msgstr "_Copier"
 
 # messages-i18n.c:178
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1383
+#: ../src/gnome-utils/dialog-account.c:1384
 msgid "Edit Account"
 msgstr "Editer le compte"
 
@@ -9529,28 +9529,28 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
@@ -9979,12 +9979,12 @@ msgstr ""
 "du compte de capitaux propres."
 
 # messages-i18n.c:190
-#: ../src/gnome-utils/dialog-account.c:1386
+#: ../src/gnome-utils/dialog-account.c:1387
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Nouveaux comptes"
 
-#: ../src/gnome-utils/dialog-account.c:1889
+#: ../src/gnome-utils/dialog-account.c:1890
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
@@ -10043,7 +10043,7 @@ msgstr ""
 "Vous devez sélectionner une devise. Pour en créer une nouvelle, cliquez sur "
 "« Nouveau »."
 
-#: ../src/gnome-utils/dialog-commodity.c:810
+#: ../src/gnome-utils/dialog-commodity.c:806
 msgid "Use local time"
 msgstr "Utiliser l'heure locale"
 
@@ -10637,12 +10637,6 @@ msgstr "_Charger un autre fichier"
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 msgid "_Unload selected file"
 msgstr "_Décharger le fichier sélectionné"
-
-#: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:7
-#: ../src/import-export/qif-import/qif.glade.h:98
-#, fuzzy
-msgid "labe82l7"
-msgstr "étiquette1"
 
 # messages-i18n.c:231
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:1
@@ -12062,6 +12056,12 @@ msgstr "_Ouvrir compte"
 msgid "_File"
 msgstr "_Fichier"
 
+# messages-i18n.c:346
+#: ../src/gnome-utils/gnc-main-window.c:221
+#, fuzzy
+msgid "Tra_nsaction"
+msgstr "Transactions"
+
 # messages-i18n.c:326
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_Reports"
@@ -12360,18 +12360,28 @@ msgstr "<Pas de fichier>"
 
 # messages-i18n.c:11
 #: ../src/gnome-utils/gnc-main-window.c:3214
-msgid ""
-"The GnuCash personal finance manager.\n"
-"The GNU way to manage your money!\n"
+#, fuzzy
+msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "Le gestionnaire de finances personnelles GnuCash.\n"
 "La voie GNU pour gérer votre argent !\n"
 
+#. Development version
+#: ../src/gnome-utils/gnc-main-window.c:3227
+#, c-format
+msgid "%s  This copy was built from svn r%s on %s."
+msgstr ""
+
+#: ../src/gnome-utils/gnc-main-window.c:3230
+#, c-format
+msgid "%s  This copy was built from r%s on %s."
+msgstr ""
+
 # messages-i18n.c:265
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3236
-#: ../src/gnome-utils/gnc-main-window.c:3276
+#: ../src/gnome-utils/gnc-main-window.c:3242
+#: ../src/gnome-utils/gnc-main-window.c:3281
 msgid "translator_credits"
 msgstr ""
 "Traduction française :\n"
@@ -12383,7 +12393,7 @@ msgstr ""
 
 # messages-i18n.c:11
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3254
+#: ../src/gnome-utils/gnc-main-window.c:3259
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -14234,7 +14244,7 @@ msgid "(no)"
 msgstr "(aucun)"
 
 #: ../src/import-export/import-provider-format.glade.h:2
-#: ../src/import-export/qif-import/qif.glade.h:6
+#: ../src/import-export/qif-import/qif.glade.h:11
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
 "Cliquez sur « Précédent » pour annuler le chargement de ce fichier et en "
@@ -14525,12 +14535,13 @@ msgstr "Nom du compte :"
 msgid "Accounts and stock holdings"
 msgstr "Comptes et actions possédés"
 
-#: ../src/import-export/qif-import/qif.glade.h:7
+#: ../src/import-export/qif-import/qif.glade.h:6
+#, fuzzy
 msgid ""
-"Click \"Finish\" to import data from the staging area and update your "
-"GnuCash accounts. The account and category matching information you have "
-"entered will be saved and used for defaults the next time you use the QIF "
-"import  facility. \n"
+"Click \"Apply\" to import data from the staging area and update your GnuCash "
+"accounts. The account and category matching information you have entered "
+"will be saved and used for defaults the next time you use the QIF import  "
+"facility. \n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -14595,13 +14606,14 @@ msgid "Enter the currency used for new accounts"
 msgstr "Saisir la devise utilisée pour les nouveaux comptes"
 
 #: ../src/import-export/qif-import/qif.glade.h:23
+#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
 "programs. \n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Finish\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process. \n"
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -15636,7 +15648,8 @@ msgstr ""
 
 # messages-i18n.c:256
 #: ../src/register/ledger-core/split-register-model.c:1686
-msgid "Change _Split"
+#, fuzzy
+msgid "Chan_ge Split"
 msgstr "_Modifier la répartition"
 
 # messages-i18n.c:123
@@ -15988,24 +16001,34 @@ msgstr "Feuilles de st_yle..."
 msgid "Edit report style sheets."
 msgstr "Éditer les feuille de style du rapport"
 
-#: ../lib/libqof/backend/file/qsf-backend.c:91
+#: ../lib/libqof/backend/file/qsf-backend.c:103
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:92
+#: ../lib/libqof/backend/file/qsf-backend.c:104
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:100
+#: ../lib/libqof/backend/file/qsf-backend.c:112
 msgid "List of QSF map files to use for this session."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:101
+#: ../lib/libqof/backend/file/qsf-backend.c:113
 msgid ""
 "QOF can convert objects within QSF XML files using a map of the changes "
 "required."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:121
+msgid "Encoding string to use when writing the XML file."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:122
+msgid ""
+"QSF defaults to UTF-8. Other encodings are supported by passing the encoding "
+"string in this option."
 msgstr ""
 
 # po/guile_strings.txt:43
@@ -21982,6 +22005,10 @@ msgstr ""
 "\n"
 "Douglas Adams, « Le Dernier Restaurant avant la Fin du Monde »"
 
+#, fuzzy
+#~ msgid "labe82l7"
+#~ msgstr "étiquette1"
+
 # messages-i18n.c:186
 #~ msgid "<b>Included Accounts</b>"
 #~ msgstr "<b>Comptes de la catégorie</b>"
@@ -22161,10 +22188,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Balance sheet accounts"
 #~ msgstr "Comptes de bilan"
-
-# messages-i18n.c:346
-#~ msgid "Transactions"
-#~ msgstr "Transactions"
 
 # messages-i18n.c:176
 #, fuzzy

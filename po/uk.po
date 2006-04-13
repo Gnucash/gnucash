@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 11:02+0200\n"
+"POT-Creation-Date: 2006-04-13 10:56+0200\n"
 "PO-Revision-Date: 2002-12-05 18:12+0200\n"
 "Last-Translator: Volodymyr M. Lisivka <lvm@mystery.lviv.net>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -58,31 +58,31 @@ msgstr ""
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
 #. colon. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:501
+#: ../src/app-utils/gnc-ui-util.c:510
 msgid "not cleared:n"
 msgstr ""
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:503
+#: ../src/app-utils/gnc-ui-util.c:512
 msgid "cleared:c"
 msgstr ""
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:505
+#: ../src/app-utils/gnc-ui-util.c:514
 msgid "reconciled:y"
 msgstr ""
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:507
+#: ../src/app-utils/gnc-ui-util.c:516
 msgid "frozen:f"
 msgstr ""
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:509
+#: ../src/app-utils/gnc-ui-util.c:518
 msgid "void:v"
 msgstr ""
 
-#: ../src/app-utils/gnc-ui-util.c:550 ../src/gnome/dialog-chart-export.c:44
+#: ../src/app-utils/gnc-ui-util.c:559 ../src/gnome/dialog-chart-export.c:44
 #, fuzzy
 msgid "Opening Balances"
 msgstr "В╕дкрити баланс"
@@ -90,7 +90,7 @@ msgstr "В╕дкрити баланс"
 #. src/report/standard-reports/balance-sheet.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/app-utils/gnc-ui-util.c:553
+#: ../src/app-utils/gnc-ui-util.c:562
 #: ../src/import-export/qif/qif-defaults.c:60 ../intl-scm/guile-strings.c:1836
 #: ../intl-scm/guile-strings.c:3076 ../intl-scm/guile-strings.c:3078
 #: ../intl-scm/guile-strings.c:3098 ../intl-scm/guile-strings.c:3100
@@ -99,13 +99,13 @@ msgid "Retained Earnings"
 msgstr "Завершення пер╕оду"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:626 ../src/engine/Account.c:2074
+#: ../src/app-utils/gnc-ui-util.c:635 ../src/engine/Account.c:2076
 #: ../src/register/ledger-core/split-register.c:2046
 #: ../intl-scm/guile-strings.c:1834
 msgid "Equity"
 msgstr "Неупереджен╕сь"
 
-#: ../src/app-utils/gnc-ui-util.c:686 ../src/gnome/dialog-chart-export.c:45
+#: ../src/app-utils/gnc-ui-util.c:695 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:906 ../src/gnome/glade/account.glade.h:50
 #: ../src/gnome-utils/dialog-account.c:262
 msgid "Opening Balance"
@@ -341,7 +341,7 @@ msgstr ""
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2073
+#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2075
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1238
 msgid "Expense"
 msgstr "Витрати"
@@ -558,7 +558,7 @@ msgstr ""
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1345
+#: ../src/gnome-utils/dialog-account.c:1346
 msgid "<No name>"
 msgstr "<Без назви>"
 
@@ -2825,7 +2825,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:121
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../src/engine/Account.c:2065 ../intl-scm/guile-strings.c:850
+#: ../src/engine/Account.c:2067 ../intl-scm/guile-strings.c:850
 msgid "Cash"
 msgstr "Гот╕вка"
 
@@ -3142,51 +3142,52 @@ msgid "_Value: "
 msgstr "Значення: "
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2064 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2066 ../src/import-export/hbci/gnc-hbci-utils.c:591
 #: ../intl-scm/guile-strings.c:848
 msgid "Bank"
 msgstr "Банк"
 
-#: ../src/engine/Account.c:2066
+#: ../src/engine/Account.c:2068
 msgid "Asset"
 msgstr "Актив"
 
-#: ../src/engine/Account.c:2067
+#: ../src/engine/Account.c:2069
 #, fuzzy
 msgid "Credit Card"
 msgstr "Кредит"
 
-#: ../src/engine/Account.c:2068
+#: ../src/engine/Account.c:2070
 msgid "Liability"
 msgstr "Борги"
 
-#: ../src/engine/Account.c:2069
+#: ../src/engine/Account.c:2071
 msgid "Stock"
 msgstr "Основний кап╕тал"
 
-#: ../src/engine/Account.c:2070
+#: ../src/engine/Account.c:2072
 msgid "Mutual Fund"
 msgstr "Заощаджувальний фонд"
 
-#: ../src/engine/Account.c:2071 ../src/gnome-utils/gnc-tree-view-price.c:439
+#: ../src/engine/Account.c:2073 ../src/gnome-utils/dialog-commodity.c:725
+#: ../src/gnome-utils/gnc-tree-view-price.c:439
 msgid "Currency"
 msgstr "Валюта"
 
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2072
+#: ../src/engine/Account.c:2074
 #: ../src/register/ledger-core/split-register.c:2062
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:864
 #: ../intl-scm/guile-strings.c:1236
 msgid "Income"
 msgstr "Надходження"
 
-#: ../src/engine/Account.c:2075
+#: ../src/engine/Account.c:2077
 msgid "A/Receivable"
 msgstr ""
 
-#: ../src/engine/Account.c:2076
+#: ../src/engine/Account.c:2078
 msgid "A/Payable"
 msgstr ""
 
@@ -3416,13 +3417,13 @@ msgstr "Баланс"
 
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1198 ../src/engine/Split.c:1215
+#: ../src/engine/Split.c:1225 ../src/engine/Split.c:1242
 #: ../intl-scm/guile-strings.c:2544 ../intl-scm/guile-strings.c:2566
 msgid "-- Split Transaction --"
 msgstr "-- Розбити транзакц╕ю --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1231 ../src/gnome/druid-stock-split.c:448
+#: ../src/engine/Split.c:1258 ../src/gnome/druid-stock-split.c:448
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/register/ledger-core/split-register.c:2065
@@ -3430,13 +3431,13 @@ msgstr "-- Розбити транзакц╕ю --"
 msgid "Split"
 msgstr "Розд╕лити"
 
-#: ../src/engine/Transaction.c:1731
+#: ../src/engine/Transaction.c:1728
 #, fuzzy
 msgid "Voided transaction"
 msgstr "Знайти транзакц╕╖"
 
 #. Dirtying taken care of by SetReadOnly
-#: ../src/engine/Transaction.c:1742
+#: ../src/engine/Transaction.c:1739
 #, fuzzy
 msgid "Transaction Voided"
 msgstr "Зв╕т про транзакц╕╖"
@@ -3630,7 +3631,6 @@ msgstr "Виправити"
 #: ../src/gnome/dialog-scheduledxaction.c:243
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/glade/reconcile.glade.h:36
-#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1979
 #, fuzzy
 msgid "_Transaction"
@@ -4351,7 +4351,7 @@ msgid "M_ove to:"
 msgstr "Перенести вниз"
 
 #: ../src/gnome/glade/account.glade.h:44
-#: ../src/gnome-utils/dialog-account.c:1396
+#: ../src/gnome-utils/dialog-account.c:1397
 msgid "New Account"
 msgstr "Новий рахунок"
 
@@ -7512,7 +7512,7 @@ msgid "_Copy"
 msgstr "Компан╕я"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1383
+#: ../src/gnome-utils/dialog-account.c:1384
 #, fuzzy
 msgid "Edit Account"
 msgstr "Кредитн╕ рахунки"
@@ -8828,28 +8828,28 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
@@ -9260,12 +9260,12 @@ msgid ""
 "account."
 msgstr "Спершу потр╕бно вибрати принтер."
 
-#: ../src/gnome-utils/dialog-account.c:1386
+#: ../src/gnome-utils/dialog-account.c:1387
 #, fuzzy, c-format
 msgid "(%d) New Accounts"
 msgstr "Рахунки"
 
-#: ../src/gnome-utils/dialog-account.c:1889
+#: ../src/gnome-utils/dialog-account.c:1890
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
@@ -9316,7 +9316,7 @@ msgstr "Вибрати рахунок"
 msgid "You must select a commodity. To create a new one, click \"New\""
 msgstr "Спершу потр╕бно вибрати принтер."
 
-#: ../src/gnome-utils/dialog-commodity.c:810
+#: ../src/gnome-utils/dialog-commodity.c:806
 msgid "Use local time"
 msgstr ""
 
@@ -9863,12 +9863,6 @@ msgstr "Завантажити файл"
 #, fuzzy
 msgid "_Unload selected file"
 msgstr "Зняти виб╕р всього"
-
-#: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:7
-#: ../src/import-export/qif-import/qif.glade.h:98
-#, fuzzy
-msgid "labe82l7"
-msgstr "label773"
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:1
 #, fuzzy
@@ -11145,6 +11139,11 @@ msgstr "╤нший рахунок"
 msgid "_File"
 msgstr "_Новий файл"
 
+#: ../src/gnome-utils/gnc-main-window.c:221
+#, fuzzy
+msgid "Tra_nsaction"
+msgstr "Транзакц╕╖"
+
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_Reports"
 msgstr "Зв╕т"
@@ -11426,20 +11425,29 @@ msgid "<no file>"
 msgstr "<без файла>"
 
 #: ../src/gnome-utils/gnc-main-window.c:3214
-msgid ""
-"The GnuCash personal finance manager.\n"
-"The GNU way to manage your money!\n"
+msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
+msgstr ""
+
+#. Development version
+#: ../src/gnome-utils/gnc-main-window.c:3227
+#, c-format
+msgid "%s  This copy was built from svn r%s on %s."
+msgstr ""
+
+#: ../src/gnome-utils/gnc-main-window.c:3230
+#, c-format
+msgid "%s  This copy was built from r%s on %s."
 msgstr ""
 
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3236
-#: ../src/gnome-utils/gnc-main-window.c:3276
+#: ../src/gnome-utils/gnc-main-window.c:3242
+#: ../src/gnome-utils/gnc-main-window.c:3281
 msgid "translator_credits"
 msgstr ""
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3254
+#: ../src/gnome-utils/gnc-main-window.c:3259
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -13123,7 +13131,7 @@ msgid "(no)"
 msgstr "(нема╓)"
 
 #: ../src/import-export/import-provider-format.glade.h:2
-#: ../src/import-export/qif-import/qif.glade.h:6
+#: ../src/import-export/qif-import/qif.glade.h:11
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr ""
 
@@ -13377,12 +13385,12 @@ msgstr "Обл╕кова назва:"
 msgid "Accounts and stock holdings"
 msgstr "В╕дображення поля зв╕ту"
 
-#: ../src/import-export/qif-import/qif.glade.h:7
+#: ../src/import-export/qif-import/qif.glade.h:6
 msgid ""
-"Click \"Finish\" to import data from the staging area and update your "
-"GnuCash accounts. The account and category matching information you have "
-"entered will be saved and used for defaults the next time you use the QIF "
-"import  facility. \n"
+"Click \"Apply\" to import data from the staging area and update your GnuCash "
+"accounts. The account and category matching information you have entered "
+"will be saved and used for defaults the next time you use the QIF import  "
+"facility. \n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -13432,7 +13440,7 @@ msgid ""
 "programs. \n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Finish\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process. \n"
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -14280,7 +14288,7 @@ msgstr ""
 
 #: ../src/register/ledger-core/split-register-model.c:1686
 #, fuzzy
-msgid "Change _Split"
+msgid "Chan_ge Split"
 msgstr "Зм╕нений"
 
 #: ../src/register/ledger-core/split-register-model.c:1773
@@ -14593,24 +14601,34 @@ msgstr "Баланс"
 msgid "Edit report style sheets."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:91
+#: ../lib/libqof/backend/file/qsf-backend.c:103
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:92
+#: ../lib/libqof/backend/file/qsf-backend.c:104
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:100
+#: ../lib/libqof/backend/file/qsf-backend.c:112
 msgid "List of QSF map files to use for this session."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:101
+#: ../lib/libqof/backend/file/qsf-backend.c:113
 msgid ""
 "QOF can convert objects within QSF XML files using a map of the changes "
 "required."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:121
+msgid "Encoding string to use when writing the XML file."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:122
+msgid ""
+"QSF defaults to UTF-8. Other encodings are supported by passing the encoding "
+"string in this option."
 msgstr ""
 
 #. src/scm/main-window.scm
@@ -20142,6 +20160,10 @@ msgid ""
 "\""
 msgstr ""
 
+#, fuzzy
+#~ msgid "labe82l7"
+#~ msgstr "label773"
+
 #~ msgid "(type)"
 #~ msgstr "(тип)"
 
@@ -20288,10 +20310,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Balance sheet accounts"
 #~ msgstr "Вибрати рахунок"
-
-#, fuzzy
-#~ msgid "Transactions"
-#~ msgstr "Транзакц╕╖"
 
 #, fuzzy
 #~ msgid "Concepts of Transactions"

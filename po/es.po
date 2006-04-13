@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash-1.9.4.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-01 11:02+0200\n"
+"POT-Creation-Date: 2006-04-13 10:56+0200\n"
 "PO-Revision-Date: 2006-04-04 23:27+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -76,38 +76,38 @@ msgstr "Error numérico"
 #. Translators: For the following strings, the single letters
 #. after the colon are abbreviations of the word before the
 #. colon. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:501
+#: ../src/app-utils/gnc-ui-util.c:510
 msgid "not cleared:n"
 msgstr "no punteado:n"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:503
+#: ../src/app-utils/gnc-ui-util.c:512
 msgid "cleared:c"
 msgstr "punteado:p"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:505
+#: ../src/app-utils/gnc-ui-util.c:514
 msgid "reconciled:y"
 msgstr "conciliado:y"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:507
+#: ../src/app-utils/gnc-ui-util.c:516
 msgid "frozen:f"
 msgstr "frozen:f"
 
 #. Please only translate the letter *after* the colon.
-#: ../src/app-utils/gnc-ui-util.c:509
+#: ../src/app-utils/gnc-ui-util.c:518
 msgid "void:v"
 msgstr ""
 
-#: ../src/app-utils/gnc-ui-util.c:550 ../src/gnome/dialog-chart-export.c:44
+#: ../src/app-utils/gnc-ui-util.c:559 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
 msgstr "Saldos de apertura"
 
 #. src/report/standard-reports/balance-sheet.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
 #. src/import-export/qif-import/qif-dialog-utils.scm
-#: ../src/app-utils/gnc-ui-util.c:553
+#: ../src/app-utils/gnc-ui-util.c:562
 #: ../src/import-export/qif/qif-defaults.c:60 ../intl-scm/guile-strings.c:1836
 #: ../intl-scm/guile-strings.c:3076 ../intl-scm/guile-strings.c:3078
 #: ../intl-scm/guile-strings.c:3098 ../intl-scm/guile-strings.c:3100
@@ -115,13 +115,13 @@ msgid "Retained Earnings"
 msgstr "Ganancias Retenidas"
 
 #. src/report/standard-reports/balance-sheet.scm
-#: ../src/app-utils/gnc-ui-util.c:626 ../src/engine/Account.c:2074
+#: ../src/app-utils/gnc-ui-util.c:635 ../src/engine/Account.c:2076
 #: ../src/register/ledger-core/split-register.c:2046
 #: ../intl-scm/guile-strings.c:1834
 msgid "Equity"
 msgstr "Patrimonio"
 
-#: ../src/app-utils/gnc-ui-util.c:686 ../src/gnome/dialog-chart-export.c:45
+#: ../src/app-utils/gnc-ui-util.c:695 ../src/gnome/dialog-chart-export.c:45
 #: ../src/gnome/druid-hierarchy.c:906 ../src/gnome/glade/account.glade.h:50
 #: ../src/gnome-utils/dialog-account.c:262
 msgid "Opening Balance"
@@ -191,7 +191,8 @@ msgstr "La query no se ha podido ejecutar"
 
 #: ../src/bin/gnucash-bin.c:73
 msgid "This is a development version. It may or may not work.\n"
-msgstr "Esta es una versión de desarrollo. Puede que funcione, o puede que no.\n"
+msgstr ""
+"Esta es una versión de desarrollo. Puede que funcione, o puede que no.\n"
 
 #: ../src/bin/gnucash-bin.c:74
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org.\n"
@@ -283,7 +284,8 @@ msgid "FILE"
 msgstr "ARCHIVO"
 
 #: ../src/bin/gnucash-bin.c:246 ../src/bin/gnucash-bin.c:299
-msgid "Regular expression determining which namespace commodities will be retrieved"
+msgid ""
+"Regular expression determining which namespace commodities will be retrieved"
 msgstr "Expresión regular que determina qué valores se obtendrán"
 
 #. Translators: Argument description for autohelp; see popt(3)
@@ -314,7 +316,9 @@ msgstr "Compilado el %s de r%s"
 
 #: ../src/bin/gnucash-bin.c:402
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
-msgstr "No se han obtenido cotizaciones. Finance::Quote no está correctamente instalado.\n"
+msgstr ""
+"No se han obtenido cotizaciones. Finance::Quote no está correctamente "
+"instalado.\n"
 
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:451
@@ -360,7 +364,7 @@ msgstr "Factura"
 
 #. src/app-utils/prefs.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2073
+#: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2075
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1238
 msgid "Expense"
 msgstr "Gasto"
@@ -568,17 +572,19 @@ msgstr "Debe introducir una dirección de facturación."
 
 #: ../src/business/business-gnome/dialog-customer.c:289
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
-msgstr "El porcentaje de descuento debe estar entre 0-100 o sino debe dejarlo vacío."
+msgstr ""
+"El porcentaje de descuento debe estar entre 0-100 o sino debe dejarlo vacío."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
 msgid "Credit must be a positive amount or you must leave it blank."
-msgstr "El debe tiene que ser una cantidad positiva o sino debe dejarlo en blanco."
+msgstr ""
+"El debe tiene que ser una cantidad positiva o sino debe dejarlo en blanco."
 
 #: ../src/business/business-gnome/dialog-customer.c:365
 #: ../src/business/business-gnome/dialog-employee.c:301
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
-#: ../src/gnome-utils/dialog-account.c:1345
+#: ../src/gnome-utils/dialog-account.c:1346
 msgid "<No name>"
 msgstr "<Sin nombre>"
 
@@ -743,8 +749,10 @@ msgid "Are you sure you want to delete the selected entry?"
 msgstr "¿Está seguro de que desea borrar el elemento seleccionado?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:501
-msgid "This entry is attached to an order and will be deleted from that as well!"
-msgstr "¡Este elemento está adjuntado a un pedido y se borrará del mismo también!"
+msgid ""
+"This entry is attached to an order and will be deleted from that as well!"
+msgstr ""
+"¡Este elemento está adjuntado a un pedido y se borrará del mismo también!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:609
 msgid "The Invoice must have at least one Entry."
@@ -756,7 +764,8 @@ msgstr "No puede contabilizar una factura con un valor total negativo."
 
 #: ../src/business/business-gnome/dialog-invoice.c:623
 msgid "You may not post an expense voucher with a negative total cash value."
-msgstr "No puede contabilizar una hoja de gasto con un valor metálico total negativo."
+msgstr ""
+"No puede contabilizar una hoja de gasto con un valor metálico total negativo."
 
 #. Ok, we can post this invoice.  Ask for verification, set the due date,
 #. * post date, and posted account
@@ -1168,7 +1177,8 @@ msgstr "Buscar orden"
 msgid ""
 "You must enter the amount of the payment.  The payment amount must be "
 "greater than zero."
-msgstr "Debe introducir la cantidad del pago. La cantidad debe ser mayor que cero."
+msgstr ""
+"Debe introducir la cantidad del pago. La cantidad debe ser mayor que cero."
 
 #: ../src/business/business-gnome/dialog-payment.c:235
 msgid "You must select a company for payment processing."
@@ -1176,7 +1186,8 @@ msgstr "Debe seleccionar una empresa para el procesado de pagos."
 
 #: ../src/business/business-gnome/dialog-payment.c:243
 msgid "You must select a transfer account from the account tree."
-msgstr "Debe seleccionar una cuenta de transferencia desde el listado de cuentas."
+msgstr ""
+"Debe seleccionar una cuenta de transferencia desde el listado de cuentas."
 
 #: ../src/business/business-gnome/dialog-payment.c:251
 msgid "You must enter an account name for posting."
@@ -1742,7 +1753,8 @@ msgstr "Dirección de pago"
 msgid ""
 "The employee ID number.  If left blank a reasonable number will be chosen "
 "for you"
-msgstr "El código de empleado. Si se deja en blanco, se elegirá un número razonable"
+msgstr ""
+"El código de empleado. Si se deja en blanco, se elegirá un número razonable"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:23
 msgid "Username: "
@@ -1802,7 +1814,8 @@ msgstr "¿Restablecer tablas de impuestos a los valores presentes?"
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you."
-msgstr "El código de factura. Si se deja en blanco se elegirá un número razonable."
+msgstr ""
+"El código de factura. Si se deja en blanco se elegirá un número razonable."
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:26
 msgid ""
@@ -1833,8 +1846,10 @@ msgid "Owner Information"
 msgstr "Información de dueño"
 
 #: ../src/business/business-gnome/glade/job.glade.h:10
-msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
-msgstr "El código de trabajo. Si se deja en blanco se elegirá un número razonable"
+msgid ""
+"The job ID number.  If left blank a reasonable number will be chosen for you"
+msgstr ""
+"El código de trabajo. Si se deja en blanco se elegirá un número razonable"
 
 #: ../src/business/business-gnome/glade/order.glade.h:5
 msgid "Close Order"
@@ -1873,7 +1888,8 @@ msgstr "Referencia"
 msgid ""
 "The order ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr "El código de pedido. Si se deja en blanco se elegirá un número razonable"
+msgstr ""
+"El código de pedido. Si se deja en blanco se elegirá un número razonable"
 
 #. src/report/standard-reports/general-journal.scm
 #. src/report/standard-reports/general-ledger.scm
@@ -1945,7 +1961,8 @@ msgstr "Tabla de impuestos:"
 msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
-msgstr "El código de proveedor. Si se deja en blanco se elegirá un número razonable"
+msgstr ""
+"El código de proveedor. Si se deja en blanco se elegirá un número razonable"
 
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/glade/vendor.glade.h:20
@@ -2746,7 +2763,7 @@ msgstr ">"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:121
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:512
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:1038
-#: ../src/engine/Account.c:2065 ../intl-scm/guile-strings.c:850
+#: ../src/engine/Account.c:2067 ../intl-scm/guile-strings.c:850
 msgid "Cash"
 msgstr "Caja"
 
@@ -2858,7 +2875,8 @@ msgid "Billable?"
 msgstr "Facturable?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:530
-msgid "Enter the income/expense account for the Entry, or choose one from the list"
+msgid ""
+"Enter the income/expense account for the Entry, or choose one from the list"
 msgstr ""
 "Introduzca la cuenta de ingreso/gasto para el elemento, o elija una de la "
 "lista"
@@ -3048,50 +3066,51 @@ msgid "_Value: "
 msgstr "_Valor:"
 
 #. src/report/report-system/report-utilities.scm
-#: ../src/engine/Account.c:2064 ../src/import-export/hbci/gnc-hbci-utils.c:591
+#: ../src/engine/Account.c:2066 ../src/import-export/hbci/gnc-hbci-utils.c:591
 #: ../intl-scm/guile-strings.c:848
 msgid "Bank"
 msgstr "Banco"
 
-#: ../src/engine/Account.c:2066
+#: ../src/engine/Account.c:2068
 msgid "Asset"
 msgstr "Activo"
 
-#: ../src/engine/Account.c:2067
+#: ../src/engine/Account.c:2069
 msgid "Credit Card"
 msgstr "Tarjeta de Crédito"
 
-#: ../src/engine/Account.c:2068
+#: ../src/engine/Account.c:2070
 msgid "Liability"
 msgstr "Pasivo"
 
-#: ../src/engine/Account.c:2069
+#: ../src/engine/Account.c:2071
 msgid "Stock"
 msgstr "Valores"
 
-#: ../src/engine/Account.c:2070
+#: ../src/engine/Account.c:2072
 msgid "Mutual Fund"
 msgstr "Fondos de Inversión"
 
-#: ../src/engine/Account.c:2071 ../src/gnome-utils/gnc-tree-view-price.c:439
+#: ../src/engine/Account.c:2073 ../src/gnome-utils/dialog-commodity.c:725
+#: ../src/gnome-utils/gnc-tree-view-price.c:439
 msgid "Currency"
 msgstr "Moneda"
 
 #. src/app-utils/prefs.scm
 #. src/report/report-system/report-utilities.scm
 #. src/report/standard-reports/net-barchart.scm
-#: ../src/engine/Account.c:2072
+#: ../src/engine/Account.c:2074
 #: ../src/register/ledger-core/split-register.c:2062
 #: ../intl-scm/guile-strings.c:104 ../intl-scm/guile-strings.c:864
 #: ../intl-scm/guile-strings.c:1236
 msgid "Income"
 msgstr "Ingreso"
 
-#: ../src/engine/Account.c:2075
+#: ../src/engine/Account.c:2077
 msgid "A/Receivable"
 msgstr "C/Cobros pendientes"
 
-#: ../src/engine/Account.c:2076
+#: ../src/engine/Account.c:2078
 msgid "A/Payable"
 msgstr "C/Pagos pendientes"
 
@@ -3338,13 +3357,13 @@ msgstr "Descuadre"
 
 #. src/report/standard-reports/transaction.scm
 #. src/report/standard-reports/register.scm
-#: ../src/engine/Split.c:1198 ../src/engine/Split.c:1215
+#: ../src/engine/Split.c:1225 ../src/engine/Split.c:1242
 #: ../intl-scm/guile-strings.c:2544 ../intl-scm/guile-strings.c:2566
 msgid "-- Split Transaction --"
 msgstr "-- anotaciones múltiples --"
 
 #. src/report/standard-reports/transaction.scm
-#: ../src/engine/Split.c:1231 ../src/gnome/druid-stock-split.c:448
+#: ../src/engine/Split.c:1258 ../src/gnome/druid-stock-split.c:448
 #: ../src/gnome/glade/register.glade.h:67
 #: ../src/gnome/gnc-plugin-page-register.c:331
 #: ../src/register/ledger-core/split-register.c:2065
@@ -3352,12 +3371,12 @@ msgstr "-- anotaciones múltiples --"
 msgid "Split"
 msgstr "Desglosar"
 
-#: ../src/engine/Transaction.c:1731
+#: ../src/engine/Transaction.c:1728
 msgid "Voided transaction"
 msgstr "Asiento invalidado"
 
 #. Dirtying taken care of by SetReadOnly
-#: ../src/engine/Transaction.c:1742
+#: ../src/engine/Transaction.c:1739
 msgid "Transaction Voided"
 msgstr "Asiento invalidado"
 
@@ -3537,7 +3556,6 @@ msgstr "_Editar"
 #: ../src/gnome/dialog-scheduledxaction.c:243
 #: ../src/gnome/dialog-sxsincelast.c:401
 #: ../src/gnome/glade/reconcile.glade.h:36
-#: ../src/gnome-utils/gnc-main-window.c:221
 #: ../src/gnome/window-reconcile.c:1979
 msgid "_Transaction"
 msgstr "_Asiento"
@@ -3558,7 +3576,8 @@ msgstr "A_cciones"
 
 #: ../src/gnome/dialog-scheduledxaction.c:328
 msgid "This SX has changed; are you sure you want to cancel?"
-msgstr "Este asiento programado ha cambiado, ¿está seguro de que quiere cancelar?"
+msgstr ""
+"Este asiento programado ha cambiado, ¿está seguro de que quiere cancelar?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:775
 #, c-format
@@ -3575,7 +3594,9 @@ msgstr "No se pudo analizar la fórmula de débito para el asiento «%s»."
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
-msgstr "El editor de asientos programados no puede cuadrar este asiento automáticamente. ¿Debe introducirse de todos modos?"
+msgstr ""
+"El editor de asientos programados no puede cuadrar este asiento "
+"automáticamente. ¿Debe introducirse de todos modos?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:858
 msgid "Please name the Scheduled Transaction."
@@ -3586,7 +3607,9 @@ msgstr "Introduzca nombre para Asiento Programado"
 msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
-msgstr "Ya existe un asiento programado con el nombre «%s». ¿Está seguro de que quiere ponerle a este el mismo nombre?"
+msgstr ""
+"Ya existe un asiento programado con el nombre «%s». ¿Está seguro de que "
+"quiere ponerle a este el mismo nombre?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:912
 msgid "Scheduled Transactions with variables cannot be automatically created."
@@ -3596,7 +3619,9 @@ msgstr "No se pueden crear automáticamente asientos programados con variables."
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
-msgstr "No se pueden crear automáticamente asientos programados sin un asiento de plantilla."
+msgstr ""
+"No se pueden crear automáticamente asientos programados sin un asiento de "
+"plantilla."
 
 #: ../src/gnome/dialog-scheduledxaction.c:935
 msgid "Please provide a valid end selection."
@@ -3619,7 +3644,9 @@ msgstr ""
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
-msgstr "Ha intentado crear un asiento programado que no se ejecutará nunca. ¿Quiere hacer esto realmente?"
+msgstr ""
+"Ha intentado crear un asiento programado que no se ejecutará nunca. ¿Quiere "
+"hacer esto realmente?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:1646
 msgid "(never)"
@@ -3629,7 +3656,9 @@ msgstr "(nunca)"
 msgid ""
 "The following transactions are presently being edited; are you sure you want "
 "to delete them?"
-msgstr "Los asientos siguientes están siendo editados, ¿está seguro de que quiere borrarlos?"
+msgstr ""
+"Los asientos siguientes están siendo editados, ¿está seguro de que quiere "
+"borrarlos?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:1810
 msgid "Delete the selected Scheduled Transactions?"
@@ -3644,7 +3673,8 @@ msgstr "No programada"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr "La plantilla de asiento actual ha cambiado. ¿Quiere guardar los cambios?"
+msgstr ""
+"La plantilla de asiento actual ha cambiado. ¿Quiere guardar los cambios?"
 
 #: ../src/gnome/dialog-scheduledxaction.c:2563
 #: ../src/gnome/glade/sched-xact.glade.h:157
@@ -3655,13 +3685,17 @@ msgstr "Asientos programados"
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
-msgstr "El asiento programado no cuadra. Es muy recomendable que corrija esta situación."
+msgstr ""
+"El asiento programado no cuadra. Es muy recomendable que corrija esta "
+"situación."
 
 #: ../src/gnome/dialog-sx-from-trans.c:811
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
-msgstr "No es posible crear un asiento programado a partir de un asiento que se está editando. Introduzca el asiento antes de programarlo."
+msgstr ""
+"No es posible crear un asiento programado a partir de un asiento que se está "
+"editando. Introduzca el asiento antes de programarlo."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -3674,8 +3708,12 @@ msgid ""
 msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
-msgstr[0] "No hay asientos programados que introducir en este momento. (%d asiento creado automáticamente)"
-msgstr[1] "No hay asientos programados que introducir en este momento. (%d asientos creados automáticamente)"
+msgstr[0] ""
+"No hay asientos programados que introducir en este momento. (%d asiento "
+"creado automáticamente)"
+msgstr[1] ""
+"No hay asientos programados que introducir en este momento. (%d asientos "
+"creados automáticamente)"
 
 #: ../src/gnome/dialog-sxsincelast.c:1437
 msgid ""
@@ -3711,7 +3749,8 @@ msgstr "Obsoleto"
 msgid ""
 "The following errors were encountered while creating the Scheduled "
 "Transactions:\n"
-msgstr "Se han encontrado los errores siguientes al crear asientos programados:\n"
+msgstr ""
+"Se han encontrado los errores siguientes al crear asientos programados:\n"
 
 #: ../src/gnome/dialog-tax-info.c:723
 msgid "Form"
@@ -3754,7 +3793,9 @@ msgstr "Periodo %s - %s"
 msgid ""
 "You must select closing date that is greater than the closing date of the "
 "previous book."
-msgstr "Debe seleccionar una fecha de cierre que sea posterior a la fecha de cierre del libro anterior."
+msgstr ""
+"Debe seleccionar una fecha de cierre que sea posterior a la fecha de cierre "
+"del libro anterior."
 
 #: ../src/gnome/druid-acct-period.c:367
 msgid "You must select closing date that is not in the future."
@@ -3934,7 +3975,8 @@ msgstr "No hay conflictos que resolver."
 
 #: ../src/gnome/druid-merge.c:171
 #, c-format
-msgid "Error: Please resolve all %d conflicts before trying to commit the data."
+msgid ""
+"Error: Please resolve all %d conflicts before trying to commit the data."
 msgstr ""
 "Error: por favor resuelva los %d conflictos antes de intentar confirmar los "
 "datos."
@@ -4215,11 +4257,14 @@ msgid ""
 "If you would like an account to be a placeholder account, just click the "
 "checkbox for that account.\n"
 msgstr ""
-"Si quiere que una cuenta tenga un saldo de apertura, haga click en la "
-"fila que contiene la cuenta, haga click de nuevo en la columna de saldo de apertura e introduzca el saldo de comienzo en la caja de la derecha. Todas las "
-"cuentas excepto las cuentas de patrimonio y las cuentas contenedor pueden tener un saldo de apertura.\n"
+"Si quiere que una cuenta tenga un saldo de apertura, haga click en la fila "
+"que contiene la cuenta, haga click de nuevo en la columna de saldo de "
+"apertura e introduzca el saldo de comienzo en la caja de la derecha. Todas "
+"las cuentas excepto las cuentas de patrimonio y las cuentas contenedor "
+"pueden tener un saldo de apertura.\n"
 "\n"
-"Si quiere que una cuenta sea una cuenta contenedor, simplemente haga click en checkbox de esa cuenta.\n"
+"Si quiere que una cuenta sea una cuenta contenedor, simplemente haga click "
+"en checkbox de esa cuenta.\n"
 
 #: ../src/gnome/glade/account.glade.h:42
 msgid "Interval:"
@@ -4230,7 +4275,7 @@ msgid "M_ove to:"
 msgstr "M_over a:"
 
 #: ../src/gnome/glade/account.glade.h:44
-#: ../src/gnome-utils/dialog-account.c:1396
+#: ../src/gnome-utils/dialog-account.c:1397
 msgid "New Account"
 msgstr "Cuenta nueva"
 
@@ -4250,13 +4295,16 @@ msgstr "No_tas:"
 msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
-msgstr "Una o más subcuentas de esta cuenta contienen asientos de sólo lectura que no se pueden borrar."
+msgstr ""
+"Una o más subcuentas de esta cuenta contienen asientos de sólo lectura que "
+"no se pueden borrar."
 
 #: ../src/gnome/glade/account.glade.h:49
 msgid ""
 "One or more sub-accounts contain transactions. What would you like to do "
 "with these transactions?"
-msgstr "Una o más subcuentas contienen asientos. ¿Qué quiere hacer con esos asientos?"
+msgstr ""
+"Una o más subcuentas contienen asientos. ¿Qué quiere hacer con esos asientos?"
 
 #: ../src/gnome/glade/account.glade.h:51
 msgid "Placeholde_r"
@@ -4335,7 +4383,8 @@ msgstr "Esta cuenta contiene asientos de sólo lectura que no se pueden borrar."
 msgid ""
 "This account contains sub-accounts.  What would you like to do with these "
 "sub-accounts?"
-msgstr "Esta cuenta contiene subcuentas.  ¿Qué quiere hacer con esas subcuentas?"
+msgstr ""
+"Esta cuenta contiene subcuentas.  ¿Qué quiere hacer con esas subcuentas?"
 
 #: ../src/gnome/glade/account.glade.h:69
 msgid ""
@@ -4516,7 +4565,9 @@ msgstr "Cada "
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
-msgstr "GnuCash estimará los valores a presupuestar para las cuentas seleccionadas a partir de asientos anteriores."
+msgstr ""
+"GnuCash estimará los valores a presupuestar para las cuentas seleccionadas a "
+"partir de asientos anteriores."
 
 #: ../src/gnome/glade/budget.glade.h:12
 msgid ""
@@ -4619,8 +4670,11 @@ msgid "Future dates are not supported"
 msgstr "No están soportadas las fechas en el futuro"
 
 #: ../src/gnome/glade/chart-export.glade.h:4
-msgid "Select the date to use and click Export to choose the filename and location."
-msgstr "Seleccione la fecha a usar y pulse Exportar para elegir el nombre del archivo y su ubicación."
+msgid ""
+"Select the date to use and click Export to choose the filename and location."
+msgstr ""
+"Seleccione la fecha a usar y pulse Exportar para elegir el nombre del "
+"archivo y su ubicación."
 
 #: ../src/gnome/glade/chart-export.glade.h:5
 msgid ""
@@ -5024,7 +5078,8 @@ msgid "<span size=\"larger\" weight=\"bold\">Welcome to GnuCash!</span>"
 msgstr "<span size=\"larger\" weight=\"bold\">¡Bienvenido a GnuCash!</span>"
 
 #: ../src/gnome/glade/newuser.glade.h:2
-msgid "<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
+msgid ""
+"<span weight=\"bold\" size=\"larger\">Display Welcome Dialog Again?</span>"
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">¿Mostrar la ventana de Bienvenida otra "
 "vez?</span>"
@@ -5128,7 +5183,8 @@ msgstr "Eliminar antigu_os"
 
 #: ../src/gnome/glade/price.glade.h:19
 msgid "Remove prices older than a user-entered date"
-msgstr "Borrar cotizaciones más viejas que una fecha introducida por el usuario"
+msgstr ""
+"Borrar cotizaciones más viejas que una fecha introducida por el usuario"
 
 #: ../src/gnome/glade/price.glade.h:20
 msgid "Remove the current price"
@@ -5420,7 +5476,8 @@ msgstr "Copiar el asiento seleccionado"
 
 #: ../src/gnome/glade/register.glade.h:11
 #: ../src/gnome/gnc-plugin-page-register.c:250
-msgid "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template"
 msgstr "Crear un asiento programado usando el asiento actual como plantilla"
 
 #: ../src/gnome/glade/register.glade.h:12
@@ -5557,7 +5614,8 @@ msgstr "Mostrar asientos en una o dos líneas"
 
 #: ../src/gnome/glade/register.glade.h:49
 #: ../src/gnome/gnc-plugin-page-register.c:288
-msgid "Show transactions on one or two lines and expand the current transaction"
+msgid ""
+"Show transactions on one or two lines and expand the current transaction"
 msgstr "Mostrar los asientos en una o dos líneas y desglosar el asiento actual"
 
 #: ../src/gnome/glade/register.glade.h:50
@@ -6354,7 +6412,8 @@ msgstr "Activar el valor«notificar» en los asientos programados nuevos."
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
 msgid "Show the \"since last run\" window when a file is opened."
-msgstr "Mostrar la ventana «Desde la última ejecución» cuando se abre un archivo."
+msgstr ""
+"Mostrar la ventana «Desde la última ejecución» cuando se abre un archivo."
 
 #: ../src/gnome/glade/sched-xact.glade.h:167
 msgid "Since Last Run"
@@ -6385,19 +6444,25 @@ msgstr "Asiento plantilla (sólo lectura)"
 msgid ""
 "The following Scheduled Transactions reference the deleted account, and must "
 "now be corrected.  Press OK to edit them."
-msgstr "Los asientos programados siguientes hacen referencia al asiento borrado y deben ser corregidos.  Pulse Aceptar para editarlos."
+msgstr ""
+"Los asientos programados siguientes hacen referencia al asiento borrado y "
+"deben ser corregidos.  Pulse Aceptar para editarlos."
 
 #: ../src/gnome/glade/sched-xact.glade.h:175
 msgid ""
 "The following scheduled transactions have expired.  Select those you wish to "
 "delete."
-msgstr "Los asientos programados siguientes han expirado.  Seleccione los que quiera borrar."
+msgstr ""
+"Los asientos programados siguientes han expirado.  Seleccione los que quiera "
+"borrar."
 
 #: ../src/gnome/glade/sched-xact.glade.h:176
 msgid ""
 "The listed Scheduled Transactions are to-be created soon.  Select any which "
 "you would like to create now, and click \"Forward\" to create them."
-msgstr "Los asientos programados listados se van a crear pronto. Seleccione los que quiera crear ahora, y pulse «Siguiente» para crearlos."
+msgstr ""
+"Los asientos programados listados se van a crear pronto. Seleccione los que "
+"quiera crear ahora, y pulse «Siguiente» para crearlos."
 
 #: ../src/gnome/glade/sched-xact.glade.h:177
 msgid ""
@@ -6415,9 +6480,13 @@ msgid ""
 "If you make a mistake or want to make changes later, you can edit the "
 "created Scheduled Transactions directly."
 msgstr ""
-"Este es un método paso-a-paso para crear un pago de préstamo con GnuCash. Con este asistente, puede introducir los parámetros de su préstamo y los pagos. Usando esa información, se crearán los asientos programados adecuados.\n"
+"Este es un método paso-a-paso para crear un pago de préstamo con GnuCash. "
+"Con este asistente, puede introducir los parámetros de su préstamo y los "
+"pagos. Usando esa información, se crearán los asientos programados "
+"adecuados.\n"
 "\n"
-"Si comete un error o quiere hacer cambios más tarde, puede editar los asientos programados creados directamente."
+"Si comete un error o quiere hacer cambios más tarde, puede editar los "
+"asientos programados creados directamente."
 
 #. src/report/standard-reports/daily-reports.scm
 #: ../src/gnome/glade/sched-xact.glade.h:181 ../intl-scm/guile-strings.c:2810
@@ -6577,33 +6646,43 @@ msgid ""
 "transaction, or accept the default one."
 msgstr ""
 "Introduzca la fecha y el número de acciones que ha ganado o perdido por el "
-"canje de valores. Para fusiones, use un valor negativo para la cantidad de acciones recibidas. También puede introducir una descripción del asiento o aceptar el valor por omisión."
+"canje de valores. Para fusiones, use un valor negativo para la cantidad de "
+"acciones recibidas. También puede introducir una descripción del asiento o "
+"aceptar el valor por omisión."
 
 #: ../src/gnome/glade/stocks.glade.h:8
 msgid ""
 "If you are finished creating the stock split or merger, press `Apply'. You "
 "may also press `Back' to review your choices, or `Cancel' to quit without "
 "making any changes."
-msgstr "Si ha terminado de crear el canje de valores, pulse «Aplicar». También puede pulsar «Atrás» para revisar los datos o «Cancelar» para salir sin hacer ningún cambio."
+msgstr ""
+"Si ha terminado de crear el canje de valores, pulse «Aplicar». También puede "
+"pulsar «Atrás» para revisar los datos o «Cancelar» para salir sin hacer "
+"ningún cambio."
 
 #: ../src/gnome/glade/stocks.glade.h:9
 msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click `Forward'."
-msgstr "Si ha recibido un desembolso de efectivo por el canje de valores, introduzca los detalles de ese pago aquí. Sino, pulse «Adelante»."
+msgstr ""
+"Si ha recibido un desembolso de efectivo por el canje de valores, introduzca "
+"los detalles de ese pago aquí. Sino, pulse «Adelante»."
 
 #: ../src/gnome/glade/stocks.glade.h:10
 msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
-msgstr "Si quiere guardar un precio de las acciones para el canje, introdúzcalo debajo. Puede dejarlo en blanco con seguridad."
+msgstr ""
+"Si quiere guardar un precio de las acciones para el canje, introdúzcalo "
+"debajo. Puede dejarlo en blanco con seguridad."
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid "New _Price:"
 msgstr "_Precio nuevo:"
 
 #: ../src/gnome/glade/stocks.glade.h:12
-msgid "Select the account for which you want to record a stock split or merger."
+msgid ""
+"Select the account for which you want to record a stock split or merger."
 msgstr "Elija la cuenta para la que quiere anotar el canje de valores."
 
 #: ../src/gnome/glade/stocks.glade.h:14
@@ -6786,7 +6865,8 @@ msgstr "Opciones de _impuestos"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:126
 msgid "Setup tax information for all income and expense accounts"
-msgstr "Crear información de impuestos para todas las cuentas de ingresos y gastos."
+msgstr ""
+"Crear información de impuestos para todas las cuentas de ingresos y gastos."
 
 #. Actions menu
 #: ../src/gnome/gnc-plugin-basic-commands.c:131
@@ -7007,7 +7087,8 @@ msgstr "Comprobar y reparar _cuenta"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr "Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta cuenta"
+msgstr ""
+"Buscar y reparar asientos descuadrados y anotaciones huérfanas en esta cuenta"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:189
 msgid "Check & Repair Su_baccount"
@@ -7120,8 +7201,11 @@ msgid "Estimate Budget"
 msgstr "Estimar presupuesto"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:146
-msgid "Estimate a budget value for the selected accounts from past transactions"
-msgstr "Estimar la cantidad a presupuestar para las cuentas seleccionadas en base a asientos anteriores"
+msgid ""
+"Estimate a budget value for the selected accounts from past transactions"
+msgstr ""
+"Estimar la cantidad a presupuestar para las cuentas seleccionadas en base a "
+"asientos anteriores"
 
 #: ../src/gnome/gnc-plugin-page-budget.c:169
 msgid "Estimate"
@@ -7163,7 +7247,7 @@ msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../src/gnome/gnc-plugin-page-register.c:182
-#: ../src/gnome-utils/dialog-account.c:1383
+#: ../src/gnome-utils/dialog-account.c:1384
 msgid "Edit Account"
 msgstr "Editar cuenta"
 
@@ -7308,7 +7392,9 @@ msgid ""
 "This register has pending changes to a transaction.  Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
-msgstr "Este registro tiene cambios pendientes en un asiento.  ¿Quiere guardar los cambios al asiento, cancelar el asiento, o cancelar la operación?"
+msgstr ""
+"Este registro tiene cambios pendientes en un asiento.  ¿Quiere guardar los "
+"cambios al asiento, cancelar el asiento, o cancelar la operación?"
 
 #: ../src/gnome/gnc-plugin-page-register.c:1092
 msgid "_Discard Transaction"
@@ -7408,7 +7494,10 @@ msgid ""
 "The current transaction has been changed.  Would you like to record the "
 "changes before closing this page, close the page without recording the "
 "changes, or cancel the close?"
-msgstr "El asiento actual ha cambiado.  ¿Quiere guardar los cambios antes de cerrar esta pestaña, cerrar la pestaña sin guardar los cambios, o cancelar el cierre?"
+msgstr ""
+"El asiento actual ha cambiado.  ¿Quiere guardar los cambios antes de cerrar "
+"esta pestaña, cerrar la pestaña sin guardar los cambios, o cancelar el "
+"cierre?"
 
 #: ../src/gnome/gnc-split-reg.c:953
 msgid "Cannot modify or delete this transaction."
@@ -7427,7 +7516,9 @@ msgstr "¿Eliminar las anotaciones de este asiento?"
 msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
-msgstr "Este asiento contiene anotaciones conciliadas. Modificarlo no es una buena idea, puesto que haría que su balance conciliado se perdiera."
+msgstr ""
+"Este asiento contiene anotaciones conciliadas. Modificarlo no es una buena "
+"idea, puesto que haría que su balance conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1012
 msgid "_Remove Splits"
@@ -7442,7 +7533,9 @@ msgstr "¿Borrar la anotación «%s» del asiento «%s»?"
 msgid ""
 "You would be deleting a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
-msgstr "¡Estaría borrando una anotación conciliada! No es una buena idea puesto que causaría que su balance conciliado se perdiera."
+msgstr ""
+"¡Estaría borrando una anotación conciliada! No es una buena idea puesto que "
+"causaría que su balance conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1091
 msgid "You cannot delete this split."
@@ -7480,7 +7573,9 @@ msgstr "¿Borrar el asiento actual?"
 msgid ""
 "You would be deleting a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
-msgstr "¡Estaría borrando un asiento con anotaciones conciliadas! Esto no es una buena idea, puesto que haría que su balance conciliado se perdiera."
+msgstr ""
+"¡Estaría borrando un asiento con anotaciones conciliadas! Esto no es una "
+"buena idea, puesto que haría que su balance conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1813
 msgid "Present:"
@@ -7515,7 +7610,9 @@ msgid ""
 "This account may not be edited.  If you want to edit transactions in this "
 "register, please open the account options and turn off the placeholder "
 "checkbox."
-msgstr "Esta cuenta no se puede editar. Si quiere editar asientos en esta cuenta, abra las opciones de cuenta y desmarque la casilla de selección «Contenedor»."
+msgstr ""
+"Esta cuenta no se puede editar. Si quiere editar asientos en esta cuenta, "
+"abra las opciones de cuenta y desmarque la casilla de selección «Contenedor»."
 
 #: ../src/gnome/gnc-split-reg.c:1935
 msgid ""
@@ -7620,8 +7717,7 @@ msgstr "Columnas usadas para ordenar"
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:2
 msgid "Default to 'new search' if fewer than this number of items is returned"
 msgstr ""
-"Si se devuelven menos elementos que esta cantidad, cambiar a «nueva "
-"búsqueda»"
+"Si se devuelven menos elementos que esta cantidad, cambiar a «nueva búsqueda»"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:3
 #: ../src/gnome-utils/glade/preferences.glade.h:47
@@ -7639,7 +7735,8 @@ msgstr ""
 "que se elija «Nuevo archivo» del menú. Sino, no se mostrará."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:5
-msgid "If active, the new user dialog will be shown. Otherwise it will not be shown."
+msgid ""
+"If active, the new user dialog will be shown. Otherwise it will not be shown."
 msgstr ""
 "Si está activo, se mostrará la ventana de nuevo usuario. Sino, no se "
 "mostrará."
@@ -7831,7 +7928,8 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:12
 msgid "This is the numerical identifier of the predefined date format to use."
-msgstr "Este es el identificador numérico del formato de fecha predefinido a usar."
+msgstr ""
+"Este es el identificador numérico del formato de fecha predefinido a usar."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:13
 msgid ""
@@ -7903,7 +8001,10 @@ msgstr "Imprimir en qué posición de cheque"
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
-msgstr "Si activo, después de conciliar una liquidación de tarjeta de crédito, pedir al usuario la introducción de un pago de tarjeta de crédito. Sino no pedir esto al usuario."
+msgstr ""
+"Si activo, después de conciliar una liquidación de tarjeta de crédito, pedir "
+"al usuario la introducción de un pago de tarjeta de crédito. Sino no pedir "
+"esto al usuario."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:2
 msgid ""
@@ -7925,7 +8026,9 @@ msgid ""
 "Liability accounts."
 msgstr ""
 "Antes de conciliar una cuenta que cobra o paga intereses, pedir al usuario "
-"que introduzca un asiento para el cobro o pago del interés. Actualmente solo activado para cuentas de banco, crédito, fondo, activo, cobros pendientes, pagos pendientes y pasivo."
+"que introduzca un asiento para el cobro o pago del interés. Actualmente solo "
+"activado para cuentas de banco, crédito, fondo, activo, cobros pendientes, "
+"pagos pendientes y pasivo."
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_reconcile.schemas.in.h:5
 msgid "Prompt for credit card payment"
@@ -7965,7 +8068,8 @@ msgstr "Introducir una coma decimal automáticamente"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:4
 msgid "Automatically raise the list of accounts or actions during input"
-msgstr "Automáticamente alzar la lista de cuentas o acciones durante la entrada"
+msgstr ""
+"Automáticamente alzar la lista de cuentas o acciones durante la entrada"
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:5
 msgid "Character to use as separator between account names"
@@ -8044,7 +8148,10 @@ msgid ""
 "If active, GnuCash will automatically insert a decimal point into values "
 "that are entered without one. Otherwise GnuCash will not modify entered "
 "numbers."
-msgstr "Si activado, GnuCash insertará automáticamente el separador decimal en cantidades que se introduzcan sin uno. Sino GnuCash no modificará los números introducidos."
+msgstr ""
+"Si activado, GnuCash insertará automáticamente el separador decimal en "
+"cantidades que se introduzcan sin uno. Sino GnuCash no modificará los "
+"números introducidos."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:22
 msgid ""
@@ -8085,7 +8192,9 @@ msgstr ""
 msgid ""
 "If active, pressing the enter key will move to the bottom of the register. "
 "Otherwise pressing the enter key will move to the next transaction line."
-msgstr "Si está activo, pulsar la tecla Enter mueve al final del registro. Sino, pulsar la tecla Enter mueve a la siguiente línea de asiento."
+msgstr ""
+"Si está activo, pulsar la tecla Enter mueve al final del registro. Sino, "
+"pulsar la tecla Enter mueve a la siguiente línea de asiento."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:27
 msgid ""
@@ -8110,8 +8219,11 @@ msgstr ""
 "recordados cuando salga de GnuCash. Sino los tamaños no ser guardarán."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:29
-msgid "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Si está activo, usar formato de 24 horas para la hora. Sino, usar formato hora de 12 horas."
+msgid ""
+"If active, use a 24 hour time format. Otherwise use a 12 hour time format."
+msgstr ""
+"Si está activo, usar formato de 24 horas para la hora. Sino, usar formato "
+"hora de 12 horas."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:30
 msgid "Labels on toolbar buttons"
@@ -8200,7 +8312,8 @@ msgstr ""
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "Este campo especifica cuantos dígitos decimales automáticos se rellenarán."
+msgstr ""
+"Este campo especifica cuantos dígitos decimales automáticos se rellenarán."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:46
 msgid ""
@@ -8453,8 +8566,11 @@ msgid "Profit/loss starting date type"
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:6
-msgid "Show a grand total of all accounts converted to the default report currency"
-msgstr "Mostrar el importe total de todas las cuentas convertida a la moneda predeterminada del informe"
+msgid ""
+"Show a grand total of all accounts converted to the default report currency"
+msgstr ""
+"Mostrar el importe total de todas las cuentas convertida a la moneda "
+"predeterminada del informe"
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:7
 msgid "Show non currency commodities"
@@ -8470,28 +8586,28 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:10
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:11
 msgid ""
-"This setting controls the ending date sed in profit/loss calculations if the "
+"This setting controls the ending date set in profit/loss calculations if the "
 "end_choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:12
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_window_pages_account_tree.schemas.in.h:13
 msgid ""
-"This setting controls the starting date sed in profit/loss calculations if "
+"This setting controls the starting date set in profit/loss calculations if "
 "the start_choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
@@ -8665,8 +8781,10 @@ msgid "Add results to current search"
 msgstr "Añadir resultados a la búsqueda actual"
 
 #: ../src/gnome-search/search.glade.h:4
-msgid "Choose whether to search all your data or only that marked as \"active\""
-msgstr "Elija si se debe buscar en todos sus datos o solo en el marcado como «activo»"
+msgid ""
+"Choose whether to search all your data or only that marked as \"active\""
+msgstr ""
+"Elija si se debe buscar en todos sus datos o solo en el marcado como «activo»"
 
 #: ../src/gnome-search/search.glade.h:5
 msgid "Delete results from current search"
@@ -8875,14 +8993,16 @@ msgstr "Debe introducir un saldo de apertura válido o dejarlo en blanco."
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
-msgstr "Debe seleccionar una cuenta a la que transferir o elegir la cuenta de patrimonio de saldos de apertura."
+msgstr ""
+"Debe seleccionar una cuenta a la que transferir o elegir la cuenta de "
+"patrimonio de saldos de apertura."
 
-#: ../src/gnome-utils/dialog-account.c:1386
+#: ../src/gnome-utils/dialog-account.c:1387
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Cuentas Nuevas"
 
-#: ../src/gnome-utils/dialog-account.c:1889
+#: ../src/gnome-utils/dialog-account.c:1890
 #, c-format
 msgid ""
 "Renumber the immediate sub-accounts of %s?  This will replace the account "
@@ -8937,7 +9057,7 @@ msgstr "Seleccionar moneda"
 msgid "You must select a commodity. To create a new one, click \"New\""
 msgstr "Debe seleccionar un valor. Para crear uno nuevo, pulse «Nuevo»"
 
-#: ../src/gnome-utils/dialog-commodity.c:810
+#: ../src/gnome-utils/dialog-commodity.c:806
 msgid "Use local time"
 msgstr "Usar hora local"
 
@@ -8953,7 +9073,9 @@ msgstr "Ese valor ya existe."
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
-msgstr "Debe introducir valores no vacíos para «Nombre completo», «Símbolo/abreviatura» y «Tipo» para el  valor."
+msgstr ""
+"Debe introducir valores no vacíos para «Nombre completo», «Símbolo/"
+"abreviatura» y «Tipo» para el  valor."
 
 #: ../src/gnome-utils/dialog-options.c:885
 msgid "Select all accounts."
@@ -9038,7 +9160,9 @@ msgstr "Mostrar las cuentas de ingresos y gastos"
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
-msgstr "Debe especificar una cuenta desde la que transferir, a la que transferir, o ambas, para este asiento. De otro modo, no será guardado."
+msgstr ""
+"Debe especificar una cuenta desde la que transferir, a la que transferir, o "
+"ambas, para este asiento. De otro modo, no será guardado."
 
 #: ../src/gnome-utils/dialog-transfer.c:1375
 msgid "You can't transfer from and to the same account!"
@@ -9328,7 +9452,8 @@ msgstr ""
 "\n"
 "Los datos de configuración usados para especificar los valores por omisión "
 "de GnuCash no se han encontrado en las ubicaciones por omisión del sistema.  "
-"Sin estos datos GnuCash puede funcionar correctamente aunque puede que sea necesario algo más de tiempo para configurarlo.  ¿Quiere establecer los "
+"Sin estos datos GnuCash puede funcionar correctamente aunque puede que sea "
+"necesario algo más de tiempo para configurarlo.  ¿Quiere establecer los "
 "datos de configuración?"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:4
@@ -9353,7 +9478,8 @@ msgstr "Instalar en el directorio personal"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:9
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
-msgstr "Por favor, añada las siguientes líneas al final de su archivo ~/.gconf.path:"
+msgstr ""
+"Por favor, añada las siguientes líneas al final de su archivo ~/.gconf.path:"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
@@ -9495,7 +9621,8 @@ msgid ""
 msgstr ""
 "Pulse «Cargar otro archivo» si tiene más datos que importar ahora.\n"
 "\n"
-"Pulse «Siguiente» para terminar la carga de archivos y continuar al paso siguiente."
+"Pulse «Siguiente» para terminar la carga de archivos y continuar al paso "
+"siguiente."
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:5
 msgid "_Load another file"
@@ -9504,11 +9631,6 @@ msgstr "_Cargar otro archivo"
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:6
 msgid "_Unload selected file"
 msgstr "_Descargar archivo seleccionado"
-
-#: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:7
-#: ../src/import-export/qif-import/qif.glade.h:98
-msgid "labe82l7"
-msgstr ""
 
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:1
 msgid "<b>Exchange/Price Information</b>"
@@ -9776,7 +9898,8 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:39
 msgid "Automatically raise the list of accounts or actions during input."
-msgstr "Automáticamente alzar la lista de cuentas o acciones durante la entrada."
+msgstr ""
+"Automáticamente alzar la lista de cuentas o acciones durante la entrada."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:40
 #, fuzzy
@@ -10017,7 +10140,8 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:90
 #, fuzzy
-msgid "Show a grand total of all accounts converted to the default report currency."
+msgid ""
+"Show a grand total of all accounts converted to the default report currency."
 msgstr ""
 "Mostrar el importe total de todas las cuentas convertidas a la moneda "
 "predeterminada del informe"
@@ -10606,7 +10730,8 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-file.c:308
 #, fuzzy, c-format
-msgid "The server at URL %s experienced an error or encountered bad or corrupt data."
+msgid ""
+"The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr ""
 "El servidor en URL \n"
 "    %s\n"
@@ -10951,6 +11076,11 @@ msgstr "Abrir _Cuenta"
 msgid "_File"
 msgstr "_Archivo"
 
+#: ../src/gnome-utils/gnc-main-window.c:221
+#, fuzzy
+msgid "Tra_nsaction"
+msgstr "_Asiento"
+
 #: ../src/gnome-utils/gnc-main-window.c:222
 msgid "_Reports"
 msgstr "_Informes"
@@ -11196,7 +11326,8 @@ msgstr "¿Guardar cambios en el archivo %s antes de cerrar?"
 #: ../src/gnome-utils/gnc-main-window.c:896
 #, c-format
 msgid "If you don't save, changes from the past %d minutes will be discarded."
-msgstr "Si no guarda los cambios, los cambios de los últimos %d minutos se perderán."
+msgstr ""
+"Si no guarda los cambios, los cambios de los últimos %d minutos se perderán."
 
 #: ../src/gnome-utils/gnc-main-window.c:907
 #, fuzzy
@@ -11226,23 +11357,33 @@ msgid "<no file>"
 msgstr "<sin archivo>"
 
 #: ../src/gnome-utils/gnc-main-window.c:3214
-msgid ""
-"The GnuCash personal finance manager.\n"
-"The GNU way to manage your money!\n"
+#, fuzzy
+msgid "The GnuCash personal finance manager. The GNU way to manage your money!"
 msgstr ""
 "El gestor de finanzas personales GnuCash.\n"
 "¡La manera GNU de gestionar su dinero!\n"
 
+#. Development version
+#: ../src/gnome-utils/gnc-main-window.c:3227
+#, c-format
+msgid "%s  This copy was built from svn r%s on %s."
+msgstr ""
+
+#: ../src/gnome-utils/gnc-main-window.c:3230
+#, c-format
+msgid "%s  This copy was built from r%s on %s."
+msgstr ""
+
 #. Translators: Insert your translator's credits here so that
 #. they will be shown in the "About" dialog.
-#: ../src/gnome-utils/gnc-main-window.c:3236
-#: ../src/gnome-utils/gnc-main-window.c:3276
+#: ../src/gnome-utils/gnc-main-window.c:3242
+#: ../src/gnome-utils/gnc-main-window.c:3281
 #, fuzzy
 msgid "translator_credits"
 msgstr "tiene abonos"
 
 #. Translators: This is the "About" message.
-#: ../src/gnome-utils/gnc-main-window.c:3254
+#: ../src/gnome-utils/gnc-main-window.c:3259
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!\n"
@@ -11594,7 +11735,8 @@ msgid "This field contains the full path of the most recently opened file."
 msgstr "Este campo contiene la ruta completa al último archivo abierto."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:5
-msgid "This field contains the full path of the next most recently opened file."
+msgid ""
+"This field contains the full path of the next most recently opened file."
 msgstr "Este campo contiene la ruta completa al penúltimo archivo abierto."
 
 #: ../src/gnome-utils/schemas/apps_gnucash_history.schemas.in.h:6
@@ -11709,7 +11851,8 @@ msgstr ""
 "¿Está seguro de que desea cancelar?"
 
 #: ../src/gnome/window-reconcile.c:1985
-msgid "Change the reconcile information including statement date and ending balance."
+msgid ""
+"Change the reconcile information including statement date and ending balance."
 msgstr ""
 "Cambiar la información del cuadre incluyendo fecha de ejecución y acabando "
 "balance."
@@ -12107,7 +12250,8 @@ msgid "Use _bayesian matching"
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:61
-msgid "Use bayesian algorithms to match new transactions with existing accounts."
+msgid ""
+"Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:62
@@ -12741,7 +12885,8 @@ msgstr "¿Conciliar cuenta ahora?"
 
 #: ../src/import-export/hbci/gnc-hbci-gettrans.c:207
 msgid "The HBCI import returned no transactions for the selected time period."
-msgstr "La importación de HBCI no ha devuelto asientos para el periodo indicado."
+msgstr ""
+"La importación de HBCI no ha devuelto asientos para el periodo indicado."
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:133
 msgid ""
@@ -12905,7 +13050,8 @@ msgstr "Efectuar una nueva nota de cargo directo online mediante HBCI"
 
 #: ../src/import-export/hbci/hbci-interaction.c:349
 #, fuzzy, c-format
-msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
+msgid ""
+"The PIN needs to be at least %d characters long. Do you want to try again?"
 msgstr ""
 "El PIN debe tener al menos %d caracteres.\n"
 "¿Quiere intentarlo de nuevo?"
@@ -12921,7 +13067,8 @@ msgstr ""
 
 #: ../src/import-export/hbci/hbci-interaction.c:430
 #, fuzzy, c-format
-msgid "This TAN needs to be at least %d characters long. Do you want to try again?"
+msgid ""
+"This TAN needs to be at least %d characters long. Do you want to try again?"
 msgstr ""
 "Este PIN debe tener al menos %d caracteres.\n"
 "¿Quiere intentarlo de nuevo?"
@@ -13066,7 +13213,7 @@ msgid "(no)"
 msgstr "(no)"
 
 #: ../src/import-export/import-provider-format.glade.h:2
-#: ../src/import-export/qif-import/qif.glade.h:6
+#: ../src/import-export/qif-import/qif.glade.h:11
 msgid "Click \"Back\" to cancel the loading of this file and choose another."
 msgstr "Pulse «Atrás» para cancelar la carga de este archivo y elegir otro."
 
@@ -13145,7 +13292,8 @@ msgstr "_Reproducir un fichero .log GnuCash"
 #: ../src/import-export/log-replay/gnc-plugin-log-replay.c:46
 #, fuzzy
 msgid "Replay a GnuCash log file after a crash.  This cannot be undone."
-msgstr "Reproducir un log de gnucash despues de una caída. Esto no se puede deshacer."
+msgstr ""
+"Reproducir un log de gnucash despues de una caída. Esto no se puede deshacer."
 
 #: ../src/import-export/mt940/gnc-mt940-import.c:145
 msgid "Select an MT940 file to process"
@@ -13232,7 +13380,8 @@ msgstr "Por favor, elija el archivo a cargar"
 
 #: ../src/import-export/qif-import/druid-qif-import.c:456
 msgid "File not found or read permission denied. Please select another file."
-msgstr "Archivo no encontrado o permiso de lectura denegado. Elija otro archivo."
+msgstr ""
+"Archivo no encontrado o permiso de lectura denegado. Elija otro archivo."
 
 #: ../src/import-export/qif-import/druid-qif-import.c:468
 msgid "That QIF file is already loaded. Please select another file."
@@ -13335,12 +13484,13 @@ msgstr "Nombre de cuenta:"
 msgid "Accounts and stock holdings"
 msgstr "Cuentas y fondos"
 
-#: ../src/import-export/qif-import/qif.glade.h:7
+#: ../src/import-export/qif-import/qif.glade.h:6
+#, fuzzy
 msgid ""
-"Click \"Finish\" to import data from the staging area and update your "
-"GnuCash accounts. The account and category matching information you have "
-"entered will be saved and used for defaults the next time you use the QIF "
-"import  facility. \n"
+"Click \"Apply\" to import data from the staging area and update your GnuCash "
+"accounts. The account and category matching information you have entered "
+"will be saved and used for defaults the next time you use the QIF import  "
+"facility. \n"
 "\n"
 "Click \"Back\" to review your account and category matchings, to change "
 "currency and security settings for new accounts, or to add more files to the "
@@ -13361,7 +13511,8 @@ msgstr ""
 
 #: ../src/import-export/qif-import/qif.glade.h:12
 msgid "Click \"Forward\" to check matchings for QIF categories. "
-msgstr "Pulse «Siguiente» para comprobar emparejamientos para las categorías QIF"
+msgstr ""
+"Pulse «Siguiente» para comprobar emparejamientos para las categorías QIF"
 
 #: ../src/import-export/qif-import/qif.glade.h:13
 msgid ""
@@ -13402,13 +13553,14 @@ msgid "Enter the currency used for new accounts"
 msgstr "Introduzca la moneda usada para cuentas nuevas"
 
 #: ../src/import-export/qif-import/qif.glade.h:23
+#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
 "programs. \n"
 "\n"
 "The import process has several steps. Your GnuCash accounts will not be "
-"changed until you click \"Finish\" at the end of the process. \n"
+"changed until you click \"Apply\" at the end of the process. \n"
 "\n"
 "Click \"Forward\" to start loading your QIF data, or \"Cancel\" to abort the "
 "process. "
@@ -14121,7 +14273,8 @@ msgid "_Rebalance"
 msgstr ""
 
 #: ../src/register/ledger-core/split-register-control.c:1043
-msgid "You need to expand the transaction in order to modify its exchange rates."
+msgid ""
+"You need to expand the transaction in order to modify its exchange rates."
 msgstr "Debe desglosar el asiento para poder cambiar sus tipos de cambio."
 
 #: ../src/register/ledger-core/split-register-control.c:1166
@@ -14245,7 +14398,8 @@ msgstr "Programado"
 
 #: ../src/register/ledger-core/split-register-model.c:837
 msgid "Enter the transaction reference, such as the invoice or check number"
-msgstr "Introducir el número de asiento, por ejemplo el número de cheque o factura"
+msgstr ""
+"Introducir el número de asiento, por ejemplo el número de cheque o factura"
 
 #: ../src/register/ledger-core/split-register-model.c:841
 msgid "Enter the transaction number, such as the check number"
@@ -14290,16 +14444,19 @@ msgstr "Introduzca el número de acciones compradas o vendidas"
 #: ../src/register/ledger-core/split-register-model.c:1223
 #: ../src/register/ledger-core/split-register-model.c:1289
 msgid "Enter the account to transfer from, or choose one from the list"
-msgstr "Introduzca la cuenta desde la que transferir, o seleccione una de la lista"
+msgstr ""
+"Introduzca la cuenta desde la que transferir, o seleccione una de la lista"
 
 #: ../src/register/ledger-core/split-register-model.c:1299
-msgid "This transaction has multiple splits; press the Split button to see them all"
+msgid ""
+"This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
 "Este asiento tiene múltiples anotaciones; pulse el boton «Desglosar» para "
 "ver todas"
 
 #: ../src/register/ledger-core/split-register-model.c:1302
-msgid "This transaction is a stock split; press the Split button to see details"
+msgid ""
+"This transaction is a stock split; press the Split button to see details"
 msgstr ""
 "Este asiento es un canje de acciones; pulse el botón «Desglosar» para ver "
 "detalles"
@@ -14326,7 +14483,8 @@ msgstr ""
 "reconciliaciones futuras! ¿Continuar con este cambio?"
 
 #: ../src/register/ledger-core/split-register-model.c:1686
-msgid "Change _Split"
+#, fuzzy
+msgid "Chan_ge Split"
 msgstr "Cambiar _anotación"
 
 #: ../src/register/ledger-core/split-register-model.c:1773
@@ -14620,11 +14778,11 @@ msgstr "_Hojas de estilo"
 msgid "Edit report style sheets."
 msgstr "Editar hojas de estilo de informes."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:91
+#: ../lib/libqof/backend/file/qsf-backend.c:103
 msgid "Level of compression to use: 0 for none, 9 for highest."
 msgstr "Nivel de compresión a usar: 0 para nada, 9 para el máximo."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:92
+#: ../lib/libqof/backend/file/qsf-backend.c:104
 msgid ""
 "QOF can compress QSF XML files using gzip. Note that compression is not used "
 "when outputting to STDOUT."
@@ -14632,14 +14790,25 @@ msgstr ""
 "QOF puede comprimir los archivos QSF XML usando gzip. Tenga en cuenta que la "
 "compresión no se usa al escribir a STDOUT."
 
-#: ../lib/libqof/backend/file/qsf-backend.c:100
+#: ../lib/libqof/backend/file/qsf-backend.c:112
 msgid "List of QSF map files to use for this session."
 msgstr ""
 
-#: ../lib/libqof/backend/file/qsf-backend.c:101
+#: ../lib/libqof/backend/file/qsf-backend.c:113
 msgid ""
 "QOF can convert objects within QSF XML files using a map of the changes "
 "required."
+msgstr ""
+
+#: ../lib/libqof/backend/file/qsf-backend.c:121
+#, fuzzy
+msgid "Encoding string to use when writing the XML file."
+msgstr "Activa la compresión cuando se escribe el archivo de datos."
+
+#: ../lib/libqof/backend/file/qsf-backend.c:122
+msgid ""
+"QSF defaults to UTF-8. Other encodings are supported by passing the encoding "
+"string in this option."
 msgstr ""
 
 #. src/scm/main-window.scm
@@ -15400,11 +15569,13 @@ msgstr "Sexto-nivel"
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:710
 msgid "Show accounts to this depth, overriding any other option."
-msgstr "Mostrar cuentas hasta esta profundidad, ignorando cualquier otra opción."
+msgstr ""
+"Mostrar cuentas hasta esta profundidad, ignorando cualquier otra opción."
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:712
-msgid "Override account-selection and show sub-accounts of all selected accounts?"
+msgid ""
+"Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
 "¿Ignorar la selección de cuenta y mostrar subcuentas de todas las cuentas "
 "seleccionadas?"
@@ -15482,7 +15653,8 @@ msgstr "El más cercano en el tiempo"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:736 ../intl-scm/guile-strings.c:1984
 msgid "The price recorded nearest in time to the report date"
-msgstr "La cotización almacenada más cercana en el tiempo a la fecha del informe"
+msgstr ""
+"La cotización almacenada más cercana en el tiempo a la fecha del informe"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:738
@@ -16291,7 +16463,8 @@ msgstr "¡Bienvenido a GnuCash 1.8!"
 #. src/report/utility-reports/welcome-to-gnucash.scm
 #: ../intl-scm/guile-strings.c:1110
 msgid "GnuCash 1.8 has lots of nice features. Here are a few."
-msgstr "GnuCash 1.8 tiene muchas características interesantes. Aquí tiene algunas."
+msgstr ""
+"GnuCash 1.8 tiene muchas características interesantes. Aquí tiene algunas."
 
 #. src/report/standard-reports/price-scatter.scm
 #. src/report/standard-reports/net-barchart.scm
@@ -16590,7 +16763,8 @@ msgstr "Diagrama de Ingresos/Gastos"
 #: ../intl-scm/guile-strings.c:1224 ../intl-scm/guile-strings.c:1688
 #: ../intl-scm/guile-strings.c:2796 ../intl-scm/guile-strings.c:2866
 msgid "Report on these accounts, if chosen account level allows."
-msgstr "Hacer informe de estas cuentas, si el nivel de cuenta elegido lo permite."
+msgstr ""
+"Hacer informe de estas cuentas, si el nivel de cuenta elegido lo permite."
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:1226
@@ -16965,7 +17139,8 @@ msgstr ""
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:1380
-msgid "Causes the Adjusting Entries Pattern to be treated as a regular expression"
+msgid ""
+"Causes the Adjusting Entries Pattern to be treated as a regular expression"
 msgstr ""
 
 #. src/report/standard-reports/trial-balance.scm
@@ -17013,7 +17188,8 @@ msgstr ""
 #. src/report/standard-reports/equity-statement.scm
 #: ../intl-scm/guile-strings.c:1392 ../intl-scm/guile-strings.c:1616
 #: ../intl-scm/guile-strings.c:2104
-msgid "Causes the Closing Entries Pattern to be treated as a regular expression"
+msgid ""
+"Causes the Closing Entries Pattern to be treated as a regular expression"
 msgstr ""
 
 #. src/report/standard-reports/trial-balance.scm
@@ -17481,22 +17657,26 @@ msgstr "Diagrama de barras de pasivo"
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1646
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr "Muestra un gráfico de barras con el Ingreso por intervalos durante el tiempo"
+msgstr ""
+"Muestra un gráfico de barras con el Ingreso por intervalos durante el tiempo"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1648
 msgid "Shows a barchart with the Expenses per interval developing over time"
-msgstr "Muestra un gráfico de barras con los Gastos por intervalos durante el tiempo"
+msgstr ""
+"Muestra un gráfico de barras con los Gastos por intervalos durante el tiempo"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1650
 msgid "Shows a barchart with the Assets developing over time"
-msgstr "Muestra un gráfico de barras con el Activo por intervalos durante el tiempo"
+msgstr ""
+"Muestra un gráfico de barras con el Activo por intervalos durante el tiempo"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1652
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr "Muestra un gráfico de barras con el Pasivo por intervalos durante el tiempo"
+msgstr ""
+"Muestra un gráfico de barras con el Pasivo por intervalos durante el tiempo"
 
 #. src/report/standard-reports/category-barchart.scm
 #: ../intl-scm/guile-strings.c:1654
@@ -17840,7 +18020,8 @@ msgstr "Cuenta de filtro"
 #: ../intl-scm/guile-strings.c:1932
 #, fuzzy
 msgid "Shows accounts deeper than the depth limit at the depth limit"
-msgstr "Mostrar cuentas hasta esta profundidad, ignorando cualquier otra opción."
+msgstr ""
+"Mostrar cuentas hasta esta profundidad, ignorando cualquier otra opción."
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1934
@@ -17960,7 +18141,8 @@ msgstr ""
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2006
 msgid "Include splits with no shares for calculating money-in and money-out"
-msgstr "Incluir anotaciones sin acciones para calcular el dinero entrante y saliente"
+msgstr ""
+"Incluir anotaciones sin acciones para calcular el dinero entrante y saliente"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2008
@@ -18024,7 +18206,8 @@ msgstr ""
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:2054
-msgid "If you are in a multi-currency situation, the exchanges may not be correct."
+msgid ""
+"If you are in a multi-currency situation, the exchanges may not be correct."
 msgstr ""
 
 #. src/report/standard-reports/equity-statement.scm
@@ -18694,7 +18877,8 @@ msgstr ""
 #. src/report/standard-reports/daily-reports.scm
 #: ../intl-scm/guile-strings.c:2762
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Muestra un gráfico sectorial con los gastos totales por cada día de la semana"
+msgstr ""
+"Muestra un gráfico sectorial con los gastos totales por cada día de la semana"
 
 #. src/report/standard-reports/daily-reports.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -19008,7 +19192,8 @@ msgstr "Ingresos imponibles/gastos deducibles"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:2966 ../intl-scm/guile-strings.c:3056
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr "Este informe le muestrar sus ingresos imponibles y los gastos deducibles."
+msgstr ""
+"Este informe le muestrar sus ingresos imponibles y los gastos deducibles."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:2968
@@ -20147,4 +20332,3 @@ msgstr ""
 "algo aún más raro e inexplicable.\n"
 "Hay otra teoría que dice que esto ya ha ocurrido.\n"
 "Douglas Adams, «El restaurante al final del Universo»"
-
