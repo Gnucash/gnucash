@@ -1,3 +1,9 @@
+2006-04-13  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/engine/Group.c: Fix loop of split account reassignments in
+	  xaccGroupMergeAccounts, because the commit of one split will
+	  change the list itself. Potentially fix 337048.
+
 2006-04-12  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-commodity.c: Update the determination of what's a

@@ -917,7 +917,6 @@ xaccGroupMergeAccounts (AccountGroup *grp)
           (xaccAccountGetType(acc_a) == xaccAccountGetType(acc_b)))
       {
         AccountGroup *ga, *gb;
-        GList *lp;
 
         /* consolidate children */
         ga = (AccountGroup *) acc_a->children;
@@ -946,20 +945,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         xaccGroupMergeAccounts (ga);
 
         /* consolidate transactions */
-        lp = acc_b->splits;
-        
-        for (lp = acc_b->splits; lp; lp = lp->next)
-        {
-          Split *split = lp->data;
-
-          qof_event_gen (&xaccSplitGetAccount(split)->inst.entity,
-			 QOF_EVENT_MODIFY, NULL);
-          split->acc = NULL;
-          xaccAccountInsertSplit (acc_a, split);
-        }
-
-        g_list_free(acc_b->splits);
-        acc_b->splits = NULL;
+        while (acc_b->splits)
+          xaccSplitSetAccount (acc_b->splits->data, acc_a);
 
         /* move back one before removal */
         node_b = node_b->prev;
