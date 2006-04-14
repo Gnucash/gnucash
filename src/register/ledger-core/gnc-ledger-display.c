@@ -36,6 +36,7 @@
 #include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
+#include "gnc-event.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
@@ -508,7 +509,8 @@ gnc_ledger_display_set_watches (GNCLedgerDisplay *ld, GList *splits)
 
   gnc_gui_component_watch_entity_type (ld->component_id,
                                        GNC_ID_ACCOUNT,
-                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY
+				       | GNC_EVENT_ITEM_CHANGED);
 
   for (node = splits; node; node = node->next)
   {

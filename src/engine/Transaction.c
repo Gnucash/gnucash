@@ -220,7 +220,7 @@ void gen_event_trans (Transaction *trans)
     if (account)
     {
       xaccGroupMarkNotSaved (account->parent);
-      qof_event_gen (&account->inst.entity, QOF_EVENT_MODIFY, NULL);
+      qof_event_gen (&account->inst.entity, GNC_EVENT_ITEM_CHANGED, s);
     }
     if (lot)
     {

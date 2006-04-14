@@ -33,6 +33,7 @@
 #include "gnc-accounting-period.h"
 #include "gnc-component-manager.h"
 #include "gnc-euro.h"
+#include "gnc-event.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "window-main-summarybar.h"
@@ -491,7 +492,8 @@ gnc_main_window_summary_new (void)
                                                      NULL, retval);
   gnc_gui_component_watch_entity_type (retval->component_id,
                                        GNC_ID_ACCOUNT,
-                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+                                       QOF_EVENT_DESTROY
+				       | GNC_EVENT_ITEM_CHANGED);
 
   for ( i = 0; i < N_COLUMNS; i++ )
   {

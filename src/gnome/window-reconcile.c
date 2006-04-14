@@ -43,6 +43,7 @@
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
+#include "gnc-event.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-main-window.h"
@@ -1360,7 +1361,9 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
         
         gnc_gui_component_watch_entity (recnData->component_id,
                                         xaccTransGetGUID (trans),
-                                        QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+                                        QOF_EVENT_MODIFY
+					| QOF_EVENT_DESTROY
+					| GNC_EVENT_ITEM_CHANGED);
         break;
 
       default:

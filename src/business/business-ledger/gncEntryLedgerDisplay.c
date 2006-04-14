@@ -29,6 +29,7 @@
 
 #include "gnc-ui-util.h"
 #include "gnc-component-manager.h"
+#include "gnc-event.h"
 
 #include "gncEntry.h"
 #include "gncEntryLedger.h"
@@ -111,7 +112,8 @@ gnc_entry_ledger_set_watches (GncEntryLedger *ledger, GList *entries)
   /* To make sure the xfer cell is up to date */
   gnc_gui_component_watch_entity_type (ledger->component_id,
                                        GNC_ID_ACCOUNT,
-                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+                                       QOF_EVENT_MODIFY | QOF_EVENT_DESTROY
+				       | GNC_EVENT_ITEM_CHANGED);
 
   /* To make sure the taxtable cell is up to date */
   gnc_gui_component_watch_entity_type (ledger->component_id,

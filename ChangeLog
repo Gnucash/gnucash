@@ -1,5 +1,13 @@
 2006-04-13  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/gnc-ledger-display.c:
+	* src/business/business-ledger/gncEntryLedgerDisplay.c:
+	* src/gnome-utils/window-main-summarybar.c:
+	* src/engine/Transaction.c:
+	* src/engine/gnc-event.h:
+	* src/gnome/window-reconcile.c: Add a new event for when a split
+	associated with account is changed.
+
 	* src/gnome-utils/account-quickfill.c: Improve the performance of
 	the listen_for_accounts function.  Never rebuild the list_store
 	from scratch as the time required to sort each account insertion
