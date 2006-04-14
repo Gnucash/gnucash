@@ -1929,7 +1929,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Show vertical borders on the cells.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Draw _vertical lines between cells</property>
+		  <property name="label" translatable="yes">Draw _vertical lines between columns</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1953,7 +1953,7 @@
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Show horizontal borders on the cells.</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Draw hori_zontal lines between cells</property>
+		  <property name="label" translatable="yes">Draw hori_zontal lines between rows</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>

@@ -1,5 +1,8 @@
 2006-04-14  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/glade/preferences.glade: Clarify text regarding
+	the lines in the register.  Fixes 338479.
+
 	* src/backend/file/io-gncxml-v2.c:
 	* src/gnome-utils/druid-gnc-xml-import.c: Fixes to compile with
 	gcc4.
