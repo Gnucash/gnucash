@@ -61,15 +61,6 @@ static int auto_decimal_places = 2;    /* default, can be changed */
 static gboolean reverse_balance_inited = FALSE;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-/* FIXME: xaccParseAmountExtended causes test-print-parse-amount 
-to fail if GNC_SCANF_LLD is simply replaced by G_GINT64_FORMAT. Why?
-*/
-#if HAVE_SCANF_LLD
-# define GNC_SCANF_LLD "%lld" /**< \deprecated use G_GINT64_FORMAT instead. */
-#else
-# define GNC_SCANF_LLD "%qd"  /**< \deprecated use G_GINT64_FORMAT instead. */
-#endif
-
 /* Cache currency ISO codes and only look them up in gconf when
  * absolutely necessary. Can't cache a pointer to the data structure
  * as that will change any time the book changes. */
@@ -1254,7 +1245,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* print the integer part without separators */
-  sprintf(temp_buf, GNC_SCANF_LLD, whole.num);
+  sprintf(temp_buf, "%" G_GINT64_FORMAT, whole.num);
   num_whole_digits = strlen (temp_buf);
 
   if (!info->use_separators)
@@ -1640,6 +1631,10 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
 				 group_separator, group, NULL, result, endstr);
 }
 
+/* Note: xaccParseAmountExtended causes test-print-parse-amount 
+to fail if QOF_SCANF_LLD is simply replaced by G_GINT64_FORMAT. Why?
+A: Because scanf and printf use different symbols for 64-bit numbers.
+*/
 gboolean
 xaccParseAmountExtended (const char * in_str, gboolean monetary,
 			 gunichar negative_sign, gunichar decimal_point,
@@ -1931,7 +1926,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
     {
       *out = '\0';
 
-      if (*out_str != '\0' && sscanf(out_str, GNC_SCANF_LLD, &numer) < 1)
+      if (*out_str != '\0' && sscanf(out_str, QOF_SCANF_LLD, &numer) < 1)
       {
         next_state = NO_NUM_ST;
       }
@@ -2024,7 +2019,7 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
       len = 8;
     }
 
-    if (sscanf (out_str, GNC_SCANF_LLD, &fraction) < 1)
+    if (sscanf (out_str, QOF_SCANF_LLD, &fraction) < 1)
     {
       g_free(out_str);
       return FALSE;

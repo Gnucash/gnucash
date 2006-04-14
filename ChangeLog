@@ -1,3 +1,16 @@
+2006-04-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c:
+	* src/engine/test/test-date.c:
+	* src/backend/file/test/test-dom-converters1.c:
+	  Fix 64-bit compile: Use G_GUINT64_FORMAT instead of %llu or lld
+	  for Timespec seconds.
+	* src/app-utils/gnc-ui-util.c:
+	  Fix 64-bit compile issues:
+	  - Use QOF_SCANF_LLD instead of GNC_SCANF_LLD.
+	  - Use QOF_SCANF_LLD and G_GINT64_FORMAT properly.
+	  - replace %lld with G_GINT64_FORMAT
+
 2006-04-13  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/gnc-ledger-display.c:

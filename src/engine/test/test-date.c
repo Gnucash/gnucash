@@ -69,8 +69,8 @@ check_conversion (const char * str, Timespec expected_ts)
   if ((expected_ts.tv_sec != ts.tv_sec) || (expected_ts.tv_nsec != ts.tv_nsec)) 
   {
     fprintf (stderr, 
-             "\nmis-converted \"%s\" to %lld.%09ld seconds\n"
-             "\twas expecting %lld.%09ld seconds\n", 
+             "\nmis-converted \"%s\" to %" G_GUINT64_FORMAT ".%09ld seconds\n"
+             "\twas expecting %" G_GUINT64_FORMAT ".%09ld seconds\n", 
              str, ts.tv_sec, ts.tv_nsec, 
              expected_ts.tv_sec, expected_ts.tv_nsec); 
     failure ("misconverted timespec");
