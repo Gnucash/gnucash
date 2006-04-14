@@ -1519,7 +1519,7 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
     while (1) {
         gchar *line, *word, *utf8;
         gchar **word_array, **word_cursor;
-        conv_type *conv;
+        conv_type *conv = NULL;
 
         status = g_io_channel_read_line(channel, &line, NULL, NULL, error);
         if (status == G_IO_STATUS_EOF) {

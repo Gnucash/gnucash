@@ -248,14 +248,18 @@ static GModule *allsymbols = NULL;
 static gboolean
 gxi_find_backend_symbols ()
 {
+  gpointer symbol;
+
   if (!allsymbols)
     allsymbols = g_module_open (NULL, 0);
 
-  if (!g_module_symbol (allsymbols, "gnc_xml2_find_ambiguous",
-                        (gpointer*) &find_ambiguous) ||
-      !g_module_symbol (allsymbols, "gnc_xml2_parse_with_subst",
-                        (gpointer*) &parse_with_subst))
+  if (!g_module_symbol (allsymbols, "gnc_xml2_find_ambiguous", &symbol))
     return FALSE;
+  find_ambiguous = symbol;
+
+  if (!g_module_symbol (allsymbols, "gnc_xml2_parse_with_subst", &symbol))
+    return FALSE;
+  parse_with_subst = symbol;
 
   return TRUE;
 }
