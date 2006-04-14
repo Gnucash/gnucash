@@ -1,5 +1,10 @@
 2006-04-13  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/account-quickfill.c: Improve the performance of
+	the listen_for_accounts function.  Never rebuild the list_store
+	from scratch as the time required to sort each account insertion
+	takes forever with a large number of accounts.
+
 	* src/gnome-utils/window-main-summarybar.c:
 	* src/gnome/dialog-commodities.c:
 	* src/engine/engine.scm:

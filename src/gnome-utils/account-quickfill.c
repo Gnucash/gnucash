@@ -75,24 +75,31 @@ shared_quickfill_destroy (QofBook *book, gpointer key, gpointer user_data)
 
 
 typedef struct find_data {
-  Account *account;
-  GtkTreePath *found;
+  GList *accounts;
+  GList *refs;
 } find_data;
 
 static gboolean
-shared_quickfill_find_account (GtkTreeModel *model,
-			       GtkTreePath *path,
-			       GtkTreeIter *iter,
-			       gpointer user_data)
+shared_quickfill_find_accounts (GtkTreeModel *model,
+				GtkTreePath *path,
+				GtkTreeIter *iter,
+				gpointer user_data)
 {
   Account *account = NULL;
   find_data *data = user_data;
+  GtkTreeRowReference* ref;
+  GList *tmp;
 
   gtk_tree_model_get(model, iter, ACCOUNT_POINTER, &account, -1);
-  if (data->account == account) {
-    data->found = gtk_tree_path_copy(path);
-    return TRUE;
+  for (tmp = data->accounts; tmp; tmp = g_list_next(tmp)) {
+    if (tmp->data == account) {
+      ref = gtk_tree_row_reference_new(model, path);
+      data->refs = g_list_append(data->refs, ref);
+      data->accounts = g_list_remove_link(data->accounts, tmp);
+      return (data->accounts == NULL);
+    }
   }
+
   return FALSE;
 }
 
@@ -224,8 +231,9 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
   const char *match_str;
   Account *account;
   GtkTreeIter iter;
-  find_data data;
-  gboolean skip;
+  find_data data = { 0 };
+  GtkTreePath *path;
+  GList *tmp;
 
   if (0 == (event_type & (QOF_EVENT_MODIFY | QOF_EVENT_ADD | QOF_EVENT_REMOVE)))
     return;
@@ -248,67 +256,55 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
     return;
   }
 
-  /* Does the account exist in the model? */
-  data.account = account;
-  data.found = NULL;
-  gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
-			 shared_quickfill_find_account, &data);
-
-  /* Should the account exist in the model? */
-  if (qfb->dont_add_cb) {
-    skip = (qfb->dont_add_cb) (account, qfb->dont_add_data);
-  } else {
-    skip = FALSE;
-  }
-
-  /* Synthesize new events to make the following case statement
-   * simpler. */
-  if (event_type == QOF_EVENT_MODIFY) {
-    if (skip && data.found) {
-      DEBUG("existing account now filtered");
-      event_type = QOF_EVENT_REMOVE;
-    } else if (!skip && !data.found) {
-      DEBUG("existing account no longer filtered");
-      event_type = QOF_EVENT_ADD;
-    }
-  }
-
   switch (event_type) {
     case QOF_EVENT_MODIFY:
       DEBUG("modify %s", name);
 
-      /* Did the account name change? */
-      if (data.found) {
-	gchar *old_name;
-	gint result;
-	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
-				    &iter, data.found)) {
-	  gtk_tree_model_get(GTK_TREE_MODEL(qfb->list_store), &iter,
-			     ACCOUNT_NAME, &old_name,
+      /* Find the account (and all its descendants) in the model.  The
+       * full name of all these accounts has changed. */
+      data.accounts = xaccAccountGetDescendants(account);
+      data.accounts = g_list_prepend(data.accounts, account);
+      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
+			     shared_quickfill_find_accounts, &data);
+
+      /* Update the existing items in the list store.  Its possible
+       * that the change has caused an existing item to now become
+       * hidden, in which case it needs to be removed from the list
+       * store.  Otherwise its a simple update of the name string. */
+      for (tmp = data.refs; tmp; tmp = g_list_next(tmp)) {
+	path = gtk_tree_row_reference_get_path(tmp->data);
+	gtk_tree_row_reference_free(tmp->data);
+	if (!gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
+				    &iter, path))
+	  continue;
+	gtk_tree_model_get(GTK_TREE_MODEL(qfb->list_store), &iter,
+			   ACCOUNT_POINTER, &account,
+			   -1);
+	if (qfb->dont_add_cb &&
+	    qfb->dont_add_cb(account, qfb->dont_add_data)) {
+	  gtk_list_store_remove(qfb->list_store, &iter);
+	} else {
+	  gtk_list_store_set(qfb->list_store, &iter,
+			     ACCOUNT_NAME, xaccAccountGetFullName(account),
 			     -1);
-	  result = g_utf8_collate(name, old_name);
-	  g_free(old_name);
-	  if (result == 0) {
-	    /* The account name is unchanged. This routine doesn't
-	     * care what else might have changed, so bail now. */
-	    break;
-	  }
 	}
       }
 
-      /* Update qf */
-      gnc_quickfill_purge(qfb->qf);
-      xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
-
-      /* Update list store */
-      if (data.found) {
-	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
-				    &iter, data.found)) {
-	  gtk_list_store_set(qfb->list_store, &iter,
-			     ACCOUNT_NAME, name,
-			     ACCOUNT_POINTER, account,
-			     -1);
+      /* Any accounts that weren't found in the tree are accounts that
+       * were hidden but have now become visible. Add them to the list
+       * store. */
+      for (tmp = data.accounts; tmp; tmp = g_list_next(tmp)) {
+	account = tmp->data;
+	if (qfb->dont_add_cb) {
+	  if (qfb->dont_add_cb(account, qfb->dont_add_data)) {
+	    continue;
+	  }
 	}
+	gtk_list_store_append (qfb->list_store, &iter);
+	gtk_list_store_set (qfb->list_store, &iter,
+			    ACCOUNT_NAME, name,
+			    ACCOUNT_POINTER, account,
+			    -1);
       }
       break;
 
@@ -319,10 +315,17 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
       gnc_quickfill_purge(qfb->qf);
       xaccGroupForEachAccount (qfb->group, load_shared_qf_cb, qfb, TRUE);
 
+      /* Does the account exist in the model? */
+      data.accounts = g_list_append(NULL, account);
+      gtk_tree_model_foreach(GTK_TREE_MODEL(qfb->list_store),
+			     shared_quickfill_find_accounts, &data);
+
       /* Remove from list store */
-      if (data.found) {
+      for (tmp = data.refs; tmp; tmp = g_list_next(tmp)) {
+	path = gtk_tree_row_reference_get_path (tmp->data);
+	gtk_tree_row_reference_free (tmp->data);
 	if (gtk_tree_model_get_iter(GTK_TREE_MODEL(qfb->list_store),
-				    &iter, data.found)) {
+				    &iter, path)) {
 	  gtk_list_store_remove(qfb->list_store, &iter);
 	}
       }
@@ -330,6 +333,10 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
 
     case QOF_EVENT_ADD:
       DEBUG("add %s", name);
+      if (qfb->dont_add_cb &&
+	  qfb->dont_add_cb(account, qfb->dont_add_data))
+	break;
+
       match = gnc_quickfill_get_string_match (qf, name);
       if (match) {
 	match_str = gnc_quickfill_string (match);
@@ -352,8 +359,11 @@ listen_for_account_events  (QofEntity *entity,  QofEventId event_type,
       DEBUG("other %s", name);
       break;
   }
-  if (data.found)
-    gtk_tree_path_free(data.found);
+
+  if (data.accounts)
+    g_list_free(data.accounts);
+  if (data.refs)
+    g_list_free(data.refs);
   g_free(name);
   LEAVE(" ");
 }
