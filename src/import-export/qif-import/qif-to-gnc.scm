@@ -184,7 +184,7 @@
             (default-currency 
               (gnc:commodity-table-find-full 
                (gnc:book-get-commodity-table (gnc:get-current-book))
-               GNC_COMMODITY_NS_ISO default-currency-name))
+               GNC_COMMODITY_NS_COMMODITY default-currency-name))
             (sorted-accounts-list '())
             (markable-xtns '())
             (sorted-qif-files-list 

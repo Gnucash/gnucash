@@ -282,7 +282,7 @@
     (if (string? currency)
         (gnc:commodity-table-lookup
          (gnc:book-get-commodity-table (gnc:get-current-book))
-         GNC_COMMODITY_NS_ISO currency)
+         GNC_COMMODITY_NS_CURRENCY currency)
         currency))
 
    (let* ((value (currency->scm default-value))

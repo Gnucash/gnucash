@@ -955,7 +955,7 @@ gnc_prefs_currency_edit_gconf_cb (GNCCurrencyEdit *gce,
   mnemonic = gconf_value_get_string(entry->value);
   DEBUG("gce %p, mnemonic %s", gce, mnemonic);
   currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_ISO, mnemonic);
+					GNC_COMMODITY_NS_CURRENCY, mnemonic);
 
   /* If there isn't any such commodity, get the default */
   if (!currency) {
@@ -994,7 +994,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce)
   name = gtk_widget_get_name(GTK_WIDGET(gce)) + PREFIX_LEN;
   mnemonic = gnc_gconf_get_string(name, NULL, NULL);
   currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					GNC_COMMODITY_NS_ISO, mnemonic);
+					GNC_COMMODITY_NS_CURRENCY, mnemonic);
   if (mnemonic)
     g_free(mnemonic);
 

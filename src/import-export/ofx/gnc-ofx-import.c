@@ -302,7 +302,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data, void * transaction_u
 	  {
 	    DEBUG("Currency from libofx: %s",data.account_ptr->currency);
 	    currency = gnc_commodity_table_lookup( gnc_get_current_commodities (),
-						   GNC_COMMODITY_NS_ISO,
+						   GNC_COMMODITY_NS_CURRENCY,
 						   data.account_ptr->currency);
 	  }
 	else
@@ -555,7 +555,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
       {
 	DEBUG("Currency from libofx: %s",data.currency);
 	default_commodity = gnc_commodity_table_lookup(commodity_table,
-						       GNC_COMMODITY_NS_ISO,
+						       GNC_COMMODITY_NS_CURRENCY,
 						       data.currency);
       }
     else

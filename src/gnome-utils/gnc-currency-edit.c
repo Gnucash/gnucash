@@ -186,7 +186,7 @@ fill_currencies(GNCCurrencyEdit *gce)
         GList *currencies;
 
         currencies = gnc_commodity_table_get_commodities
-                (gnc_get_current_commodities (), GNC_COMMODITY_NS_ISO);
+                (gnc_get_current_commodities (), GNC_COMMODITY_NS_CURRENCY);
         currencies = g_list_sort(currencies, currency_compare);
 	g_list_foreach(currencies, (GFunc)add_item, gce);
         g_list_free(currencies);
@@ -297,7 +297,7 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
 		if (name != NULL)
 			*name = '\0';
 		commodity = gnc_commodity_table_lookup (gnc_get_current_commodities (),
-							GNC_COMMODITY_NS_ISO,
+							GNC_COMMODITY_NS_CURRENCY,
 							mnemonic);
 		g_free(mnemonic);
 	} else {

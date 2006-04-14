@@ -395,7 +395,7 @@ on_accountlist_select_row (GtkCList *clist, gint row,
 	(strlen(AB_Account_GetCurrency (hbci_acc)) > 0)) {
       currency = gnc_commodity_table_lookup 
 	(gnc_book_get_commodity_table (gnc_get_current_book ()), 
-	 GNC_COMMODITY_NS_ISO, AB_Account_GetCurrency (hbci_acc));
+	 GNC_COMMODITY_NS_CURRENCY, AB_Account_GetCurrency (hbci_acc));
     }
 
     gnc_acc = gnc_import_select_account(info->window,

@@ -814,7 +814,7 @@ gnc_locale_default_currency_nodefault (void)
   table = gnc_get_current_commodities ();
   code = gnc_locale_default_iso_currency_code ();
 
-  currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_ISO, code);
+  currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
 
   return (currency ? currency : NULL);
 }
@@ -826,7 +826,7 @@ gnc_locale_default_currency (void)
 
   return (currency ? currency :
 	  gnc_commodity_table_lookup (gnc_get_current_commodities (), 
-				      GNC_COMMODITY_NS_ISO, "USD"));
+				      GNC_COMMODITY_NS_CURRENCY, "USD"));
 }
 
 
@@ -838,14 +838,14 @@ gnc_default_currency (void)
 
   if (user_default_currency)
     return gnc_commodity_table_lookup(gnc_get_current_commodities(),
-				      GNC_COMMODITY_NS_ISO,
+				      GNC_COMMODITY_NS_CURRENCY,
 				      user_default_currency);
 
   choice = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_CHOICE, NULL);
   if (choice && strcmp(choice, "other") == 0) {
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL, KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
+					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
     g_free(mnemonic);
     g_free(choice);
@@ -869,7 +869,7 @@ gnc_default_report_currency (void)
 
   if (user_report_currency)
     return gnc_commodity_table_lookup(gnc_get_current_commodities(),
-				      GNC_COMMODITY_NS_ISO,
+				      GNC_COMMODITY_NS_CURRENCY,
 				      user_report_currency);
   choice = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				KEY_CURRENCY_CHOICE, NULL);
@@ -877,7 +877,7 @@ gnc_default_report_currency (void)
     mnemonic = gnc_gconf_get_string(GCONF_GENERAL_REPORT,
 				    KEY_CURRENCY_OTHER, NULL);
     currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-					  GNC_COMMODITY_NS_ISO, mnemonic);
+					  GNC_COMMODITY_NS_CURRENCY, mnemonic);
     DEBUG("mnemonic %s, result %p", mnemonic, currency);
     g_free(choice);
     g_free(mnemonic);

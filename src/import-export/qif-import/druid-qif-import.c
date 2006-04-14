@@ -2001,7 +2001,7 @@ gnc_ui_qif_import_druid_make(void)
   
   /* set a default currency for new accounts */
   gnc_ui_update_commodity_picker(retval->currency_picker,
-                                 GNC_COMMODITY_NS_ISO, 
+                                 GNC_COMMODITY_NS_CURRENCY, 
                                  gnc_commodity_get_printname
                                  (gnc_default_currency()));
   

@@ -176,7 +176,7 @@ gnc_ui_commodity_druid_create(const char * filename)
     /* if the mnemonic is an ISO-4217 currency, use that as 
      * the default */
     found = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                       GNC_COMMODITY_NS_ISO,
+                                       GNC_COMMODITY_NS_CURRENCY,
                                        gnc_commodity_get_mnemonic(lost));
 
     /* otherwise, guess that it's a NASDAQ security. */

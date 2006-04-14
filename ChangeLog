@@ -1,3 +1,21 @@
+2006-04-13  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/binary-import/druid-commodity.c:
+	* src/import-export/ofx/gnc-ofx-import.c:
+	* src/import-export/hbci/druid-hbci-initial.c:
+	* src/gnome-utils/dialog-preferences.c:
+	* src/gnome-utils/gnc-currency-edit.c:
+	* src/app-utils/gnc-euro.c:
+	* src/app-utils/options.scm:
+	* src/app-utils/gnc-ui-util.c: Replace NS_ISO with NS_CURRENCY.
+	This substitution was already performed by the called functions,
+	so there this change is purely cosmetic.
+
+	* src/gnome-utils/dialog-commodity.c:
+	* src/engine/gnc-commodity.[ch]: Added a couple of comments
+	related to the change from NS_ISO to NS_CURRENCY.
+	
 2006-04-13  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/engine/Group.c: Fix loop of split account reassignments in
