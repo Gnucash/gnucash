@@ -51,8 +51,6 @@ GncExampleAccount *gnc_read_example_account(QofBook *book,
                                             const gchar *filename);
 
 
-gboolean gnc_is_xml_data_file_v2(const gchar *filename);
-
 void gnc_free_example_account_list(GSList *list);
 GSList* gnc_load_example_account_list(QofBook *book,
                                       const char *dirname);

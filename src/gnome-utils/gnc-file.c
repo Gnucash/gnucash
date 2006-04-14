@@ -29,6 +29,7 @@
 #include <g-wrap-wct.h>
 
 #include "dialog-utils.h"
+#include "druid-gnc-xml-import.h"
 #include "gnc-commodity.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
@@ -740,6 +741,22 @@ gnc_post_file_open (const char * filename)
 
     /* check for i/o error, put up appropriate error dialog */
     io_err = qof_session_get_error (new_session);
+
+    if (io_err == ERR_FILEIO_NO_ENCODING) {
+      qof_session_pop_error (new_session);
+      if (gnc_xml_convert_single_file (newfile)) {
+        /* try to load once again */
+        gnc_window_show_progress(_("Reading file..."), 0.0);
+        qof_session_load (new_session, gnc_window_show_progress);
+        gnc_window_show_progress(NULL, -1.0);
+        xaccLogEnable();
+        io_err = qof_session_get_error (new_session);
+      }
+      else {
+        io_err = ERR_FILEIO_PARSE_ERROR;
+      }
+    }
+
     uh_oh = show_session_error (io_err, newfile, GNC_FILE_DIALOG_OPEN);
 
     new_group = gnc_book_get_group (qof_session_get_book (new_session));

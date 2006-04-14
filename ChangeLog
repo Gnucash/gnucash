@@ -1,3 +1,28 @@
+2006-04-14  Andreas Köhler  <andi5.py@gmx.net>
+
+	* lib/libqof/qof/qofbackend.h:
+	* lib/libqof/qof/qofsession.c:
+	* src/backend/file/gnc-backend-file.[ch]:
+	* src/backend/file/io-example-account.[ch]:
+	* src/backend/file/io-gncxml-v1.c:
+	* src/backend/file/test/test-xml2-is-file.c: Add
+	  ERR_FILEIO_NO_ENCODING and test whether xml data file declares
+	  encoding.
+
+	* src/backend/file/sixtp.[ch]: Add parsing in push mode.
+
+	* src/backend/file/io-gncxml-v2.[ch]: Add analysis of data file to
+	  find ambiguous words because of missing encoding, and parsing of
+	  it with string substitutions.
+
+	* src/gnome-utils/druid-gnc-xml-import.[ch]:
+	* src/gnome-utils/glade/druid-gnc-xml-import.glade: Add Code and
+	  GUI for a druid that enables the user to select from different
+	  encodings for each ambiguous word.
+
+	* src/gnome-utils/gnc-file.c: Hook the druid into the file loading
+	  process and reload the file if it was successful.
+
 2006-04-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Transaction.c:

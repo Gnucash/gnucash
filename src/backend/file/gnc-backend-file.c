@@ -408,8 +408,13 @@ is_gzipped_file(const gchar *name)
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
-  if (gnc_is_xml_data_file_v2(path)) {
-    return GNC_BOOK_XML2_FILE;
+  gboolean with_encoding;
+  if (gnc_is_xml_data_file_v2(path, &with_encoding)) {
+    if (with_encoding) {
+      return GNC_BOOK_XML2_FILE;
+    } else {
+      return GNC_BOOK_XML2_FILE_NO_ENCODING;
+    }
   } else if (gnc_is_xml_data_file(path)) {
     return GNC_BOOK_XML1_FILE;
   } else if (is_gzipped_file(path)) {
@@ -435,10 +440,10 @@ gnc_determine_file_type (const char *path)
 	rc = stat(path, &sbuf);
 	if(rc < 0) { return FALSE; }
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
-	if(gnc_is_xml_data_file_v2(path))   { return TRUE; } 
-	else if(gnc_is_xml_data_file(path)) { return TRUE; } 
-	else if(is_gzipped_file(path))      { return TRUE; }
-	else if(gnc_is_bin_file(path))      { return TRUE; }
+	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
+	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
+	else if(is_gzipped_file(path))          { return TRUE; }
+	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
@@ -873,6 +878,9 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
 
+    case GNC_BOOK_XML2_FILE_NO_ENCODING:
+        error = ERR_FILEIO_NO_ENCODING;
+        break;
     case GNC_BOOK_XML1_FILE:
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;

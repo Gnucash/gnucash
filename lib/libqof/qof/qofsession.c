@@ -1113,6 +1113,7 @@ qof_session_load (QofSession *session,
 	err = qof_session_get_error(session);
 	if ((err != ERR_BACKEND_NO_ERR) &&
 		(err != ERR_FILEIO_FILE_TOO_OLD) &&
+		(err != ERR_FILEIO_NO_ENCODING) &&
 		(err != ERR_SQL_DB_TOO_OLD))
 	{
 		/* Something broke, put back the old stuff */

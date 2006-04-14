@@ -116,6 +116,7 @@ typedef enum {
   ERR_FILEIO_BACKUP_ERROR,   /**< couldn't make a backup of the file */
   ERR_FILEIO_WRITE_ERROR,    /**< couldn't write to the file */
   ERR_FILEIO_READ_ERROR,     /**< Could not open the file for reading. */
+  ERR_FILEIO_NO_ENCODING,    /**< file does not specify encoding */
 
   /* network errors */
   ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */

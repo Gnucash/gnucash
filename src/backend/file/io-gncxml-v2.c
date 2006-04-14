@@ -26,6 +26,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <zlib.h>
+#include <errno.h>
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
@@ -646,16 +647,19 @@ gnc_sixtp_gdv2_new (
     return gd;
 }
 
-gboolean
-qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
+static gboolean
+qof_session_load_from_xml_file_v2_full(
+    FileBackend *fbe, QofBook *book,
+    sixtp_push_handler push_handler, gpointer push_user_data)
 {
-         AccountGroup *grp;
+    AccountGroup *grp;
     QofBackend *be = &fbe->be;
     sixtp_gdv2 *gd;
     sixtp *top_parser;
     sixtp *main_parser;
     sixtp *book_parser;
     struct file_backend be_data;
+    gboolean retval;
 
     gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
@@ -717,9 +721,22 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
     xaccLogDisable ();
     xaccDisableDataScrubbing();
 
-    if(!gnc_xml_parse_file(top_parser, fbe->fullpath,
-                           generic_callback, gd, book))
-    {
+    if (push_handler) {
+        gpointer parse_result = NULL;
+        gxpf_data gpdata;
+
+        gpdata.cb = generic_callback;
+        gpdata.parsedata = gd;
+        gpdata.bookdata = book;
+
+        retval = sixtp_parse_push(top_parser, push_handler, push_user_data,
+                                  NULL, &gpdata, &parse_result);
+    } else {
+        retval = gnc_xml_parse_file(top_parser, fbe->fullpath,
+                                    generic_callback, gd, book);
+    }
+
+    if (!retval) {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
         xaccEnableDataScrubbing();
@@ -764,6 +781,12 @@ qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
  bail:
     g_free(gd);
     return FALSE;
+}
+
+gboolean
+qof_session_load_from_xml_file_v2(FileBackend *fbe, QofBook *book)
+{
+    return qof_session_load_from_xml_file_v2_full(fbe, book, NULL, NULL);
 }
 
 /***********************************************************************/
@@ -1359,7 +1382,391 @@ gnc_book_write_accounts_to_xml_file_v2(
 
 /***********************************************************************/
 gboolean
-gnc_is_xml_data_file_v2(const gchar *name)
+gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 {
-    return gnc_is_our_xml_file(name, GNC_V2_STRING);
+    return gnc_is_our_xml_file(name, GNC_V2_STRING, with_encoding);
+}
+
+
+static void
+replace_character_references(gchar *string)
+{
+    gchar *cursor, *semicolon, *tail;
+    glong number;
+
+    for (cursor = strstr(string, "&#");
+         cursor && *cursor;
+         cursor = strstr(cursor, "&#")) {
+        semicolon = strchr(cursor, ';');
+        if (semicolon && *semicolon) {
+
+            /* parse number */
+            errno = 0;
+            if (*(cursor+2) == 'x') {
+                number = strtol(cursor+3, &tail, 16);
+            } else {
+                number = strtol(cursor+2, &tail, 10);
+            }
+            if (errno || tail != semicolon || number < 0 || number > 255) {
+                PWARN("Illegal character reference");
+                return;
+            }
+
+            /* overwrite '&' with the specified character */
+            *cursor = (gchar) number;
+            cursor++;
+            if (*(semicolon+1)) {
+                /* move text after semicolon the the left */
+                tail = g_strdup(semicolon+1);
+                strcpy(cursor, tail);
+                g_free(tail);
+            } else {
+                /* cut here */
+                *cursor = '\0';
+            }
+
+        } else {
+            PWARN("Unclosed character reference");
+            return;
+        }
+    }
+}
+
+static void
+conv_free(conv_type *conv) {
+    if (conv) {
+        g_free(conv->utf8_string);
+        g_free(conv);
+    }
+}
+
+static void
+conv_list_free(GList *conv_list) {
+    g_list_foreach(conv_list, (GFunc) conv_free, NULL);
+    g_list_free(conv_list);
+}
+
+typedef struct  {
+    GQuark encoding;
+    GIConv iconv;
+} iconv_item_type;
+
+gint
+gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
+                        GHashTable **unique, GHashTable **ambiguous,
+                        GList **impossible, GError **error)
+{
+    GIOChannel *channel=NULL;
+    GIOStatus status;
+    GList *iconv_list=NULL, *conv_list=NULL, *iter;
+    iconv_item_type *iconv_item=NULL, *ascii=NULL;
+    const gchar *enc;
+    GHashTable *processed=NULL;
+    gint n_impossible = 0;
+    gboolean clean_return = FALSE;
+
+    channel = g_io_channel_new_file(filename, "r", error);
+    if (*error) {
+        PWARN("Unable to open file %s", filename);
+        goto cleanup_find_ambs;
+    }
+
+    status = g_io_channel_set_encoding(channel, NULL, error);
+    if (status != G_IO_STATUS_NORMAL) {
+        PWARN("Error on unsetting encoding on IOChannel");
+        goto cleanup_find_ambs;
+    }
+
+    /* we need ascii */
+    ascii = g_new(iconv_item_type, 1);
+    ascii->encoding = g_quark_from_string("ASCII");
+    ascii->iconv = g_iconv_open("UTF-8", "ASCII");
+    if (ascii->iconv == (GIConv) -1) {
+        PWARN("Unable to open ASCII ICONV conversion descriptor");
+        goto cleanup_find_ambs;
+    }
+
+    /* call iconv_open on encodings */
+    for (iter = encodings; iter; iter = iter->next) {
+        iconv_item = g_new(iconv_item_type, 1);
+        iconv_item->encoding = GPOINTER_TO_UINT (iter->data);
+        if (iconv_item->encoding == ascii->encoding) {
+            continue;
+        }
+
+        enc = g_quark_to_string(iconv_item->encoding);
+        iconv_item->iconv = g_iconv_open("UTF-8", enc);
+        if (iconv_item->iconv == (GIConv) -1) {
+            PWARN("Unable to open IConv conversion descriptor for '%s'", enc);
+            goto cleanup_find_ambs;
+        } else {
+            iconv_list = g_list_prepend(iconv_list, iconv_item);
+        }
+    }
+
+    /* prepare data containers */
+    if (unique)
+      *unique = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
+                                      (GDestroyNotify) conv_free);
+    if (ambiguous)
+      *ambiguous = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
+                                         (GDestroyNotify) conv_list_free);
+    if (impossible)
+      *impossible = NULL;
+    processed = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
+
+    /* loop through lines */
+    while (1) {
+        gchar *line, *word, *utf8;
+        gchar **word_array, **word_cursor;
+        conv_type *conv;
+
+        status = g_io_channel_read_line(channel, &line, NULL, NULL, error);
+        if (status == G_IO_STATUS_EOF) {
+            break;
+        }
+        if (status == G_IO_STATUS_AGAIN) {
+            continue;
+        }
+        if (status != G_IO_STATUS_NORMAL) {
+            goto cleanup_find_ambs;
+        }
+
+        g_strchomp(line);
+        replace_character_references(line);
+        word_array = g_strsplit_set(line, "> <", 0);
+        g_free(line);
+
+        /* loop through words */
+        for (word_cursor = word_array; *word_cursor; word_cursor++) {
+            word = *word_cursor;
+            if (!word)
+              continue;
+
+            utf8 = g_convert_with_iconv(word, -1, ascii->iconv,
+                                        NULL, NULL, error);
+            if (utf8) {
+                /* pure ascii */
+                g_free(utf8);
+                continue;
+            }
+            g_error_free(*error);
+            *error = NULL;
+
+            if (g_hash_table_lookup_extended(processed, word, NULL, NULL)) {
+                /* already processed */
+                continue;
+            }
+
+            /* loop through encodings */
+            conv_list = NULL;
+            for (iter = iconv_list; iter; iter = iter->next) {
+                iconv_item = iter->data;
+                utf8 = g_convert_with_iconv(word, -1, iconv_item->iconv,
+                                            NULL, NULL, error);
+                if (utf8) {
+                    conv = g_new(conv_type, 1);
+                    conv->encoding = iconv_item->encoding;
+                    conv->utf8_string = utf8;
+                    conv_list = g_list_prepend(conv_list, conv);
+                } else {
+                    g_error_free(*error);
+                    *error = NULL;
+                }
+            }
+
+            /* no successful conversion */
+            if (!conv_list) {
+                if (impossible)
+                    *impossible = g_list_append(*impossible, g_strdup(word));
+                n_impossible++;
+            }
+
+            /* more than one successful conversion */
+            else if (conv_list->next) {
+                if (ambiguous) {
+                    g_hash_table_insert(*ambiguous, g_strdup(word), conv_list);
+                } else {
+                    conv_list_free(conv_list);
+                }
+            }
+
+            /* only one successful conversion */
+            else {
+                if (unique) {
+                    g_hash_table_insert(*unique, g_strdup(word), conv);
+                } else {
+                    conv_free(conv);
+                }
+                g_list_free(conv_list);
+            }
+
+            g_hash_table_insert(processed, g_strdup(word), NULL);
+        }
+        g_strfreev(word_array);
+    }
+
+    clean_return = TRUE;
+
+ cleanup_find_ambs:
+
+    if (iconv_list) {
+        for (iter = iconv_list; iter; iter = iter->next) {
+            if (iter->data) {
+                g_iconv_close(((iconv_item_type*) iter->data)->iconv);
+                g_free(iter->data);
+            }
+        }
+        g_list_free(iconv_list);
+    }
+    if (processed)
+        g_hash_table_destroy(processed);
+    if (ascii)
+        g_free(ascii);
+    if (channel)
+        g_io_channel_unref(channel);
+
+    return (clean_return) ? n_impossible : -1;
+}
+
+typedef struct {
+    gchar *filename;
+    GHashTable *subst;
+} push_data_type;
+
+static void
+parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
+                               push_data_type *push_data)
+{
+    GIOChannel *channel=NULL;
+    GIOStatus status;
+    GIConv ascii=(GIConv)-1;
+    GString *output=NULL;
+    GError *error=NULL;
+
+    channel = g_io_channel_new_file(push_data->filename, "r", &error);
+    if (error) {
+        PWARN("Unable to open file %s", push_data->filename);
+        goto cleanup_push_handler;
+    }
+
+    status = g_io_channel_set_encoding(channel, NULL, &error);
+    if (status != G_IO_STATUS_NORMAL) {
+        PWARN("Error on unsetting encoding on IOChannel");
+        goto cleanup_push_handler;
+    }
+
+    ascii = g_iconv_open("UTF-8", "ASCII");
+    if (ascii == (GIConv) -1) {
+        PWARN("Unable to open ASCII ICONV conversion descriptor");
+        goto cleanup_push_handler;
+    }
+
+    /* loop through lines */
+    while (1) {
+        gchar *line, *word, *repl, *utf8;
+        gint pos, len;
+        gchar *start, *cursor;
+
+        status = g_io_channel_read_line(channel, &line, NULL, NULL, &error);
+        if (status == G_IO_STATUS_EOF) {
+            break;
+        }
+        if (status == G_IO_STATUS_AGAIN) {
+            continue;
+        }
+        if (status != G_IO_STATUS_NORMAL) {
+            goto cleanup_push_handler;
+        }
+
+        replace_character_references(line);
+        output = g_string_new(line);
+        g_free(line);
+
+        /* loop through words */
+        cursor = output->str;
+        pos = 0;
+        while (1) {
+            /* ignore delimiters */
+            while (*cursor=='>' || *cursor==' ' || *cursor=='<' ||
+                   *cursor=='\n') {
+                cursor++;
+                pos += 1;
+            }
+
+            if (!*cursor)
+                /* welcome to EOL */
+                break;
+
+            /* search for a delimiter */
+            start = cursor;
+            len = 0;
+            while (*cursor && *cursor!='>' && *cursor!=' ' && *cursor!='<' &&
+                   *cursor!='\n') {
+                cursor++;
+                len++;
+            }
+
+            utf8 = g_convert_with_iconv(start, len, ascii, NULL, NULL, &error);
+
+            if (utf8) {
+                /* pure ascii */
+                g_free(utf8);
+                pos += len;
+            } else {
+                g_error_free(error);
+                error = NULL;
+
+                word = g_strndup(start, len);
+                repl = g_hash_table_lookup(push_data->subst, word);
+                g_free(word);
+                if (repl) {
+                    /* there is a replacement */
+                    output = g_string_insert(g_string_erase(output, pos, len),
+                                             pos, repl);
+                    pos += strlen(repl);
+                    cursor = output->str + pos;
+                } else {
+                    /* there is no replacement, return immediately */
+                    goto cleanup_push_handler;
+                }
+            }
+        }
+
+        if (xmlParseChunk(xml_context, output->str, output->len, 0) != 0) {
+            goto cleanup_push_handler;
+        }
+    }
+
+    /* last chunk */
+    xmlParseChunk(xml_context, "", 0, 1);
+
+ cleanup_push_handler:
+
+    if (output)
+        g_string_free(output, TRUE);
+    if (ascii != (GIConv) -1)
+        g_iconv_close(ascii);
+    if (channel)
+        g_io_channel_unref(channel);
+}
+
+gboolean
+gnc_xml2_parse_with_subst (FileBackend *fbe, QofBook *book, GHashTable *subst)
+{
+    push_data_type *push_data;
+    gboolean success;
+
+    push_data = g_new(push_data_type, 1);
+    push_data->filename = fbe->fullpath;
+    push_data->subst = subst;
+
+    success = qof_session_load_from_xml_file_v2_full(
+        fbe, book, (sixtp_push_handler) parse_with_subst_push_handler,
+        push_data);
+
+    if (success)
+        qof_book_kvp_changed(book);
+
+    return success;
 }

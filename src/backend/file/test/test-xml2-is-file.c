@@ -22,7 +22,7 @@ main(int argc, char **argv)
 
     filename = malloc(strlen(directory) + 1 + strlen(FILENAME) + 1);
     sprintf(filename, "%s/%s", directory, FILENAME);
-    do_test(gnc_is_xml_data_file_v2(filename), "gnc_is_xml_data_file_v2");
+    do_test(gnc_is_xml_data_file_v2(filename, NULL), "gnc_is_xml_data_file_v2");
 
     print_test_results();
     exit(get_rv());
