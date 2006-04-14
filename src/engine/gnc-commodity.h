@@ -68,6 +68,7 @@
  *  window.
  */
 #define GNC_COMMODITY_NS_LEGACY "GNC_LEGACY_CURRENCIES"
+/* The ISO define is deprecated in favor of CURRENCY */
 #define GNC_COMMODITY_NS_ISO    "ISO4217"
 #define GNC_COMMODITY_NS_CURRENCY "CURRENCY"
 #define GNC_COMMODITY_NS_NASDAQ "NASDAQ"

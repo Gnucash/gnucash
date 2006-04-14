@@ -651,8 +651,10 @@ const char *
 gnc_commodity_get_namespace_compat(const gnc_commodity * cm) 
 {
   if (!cm || !cm->namespace) return NULL;
-  if (cm->namespace->iso4217)
+  if (cm->namespace->iso4217) {
+    /* Data files are still written with ISO4217. */
     return GNC_COMMODITY_NS_ISO;
+  }
   return gnc_commodity_namespace_get_name(cm->namespace);
 }
 
