@@ -641,9 +641,10 @@ gnc_ui_namespace_picker_ns (GtkWidget *combobox)
 
   namespace = gtk_entry_get_text (GTK_ENTRY(GTK_COMBO (combobox)->entry));
 
-  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
+  if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0) {
+    /* In case the user types in ISO4217, map it to CURRENCY. */
     return GNC_COMMODITY_NS_CURRENCY;
-  else
+  } else
     return namespace;
 }
 
