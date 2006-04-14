@@ -81,7 +81,7 @@ edit_clicked (CommoditiesDialog *cd)
   gnc_commodity *commodity;
 
   commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
-  if (commodity == NULL || gnc_commodity_is_currency (commodity))
+  if (commodity == NULL)
     return;
 
   if (gnc_ui_edit_commodity_modal (commodity, cd->dialog))

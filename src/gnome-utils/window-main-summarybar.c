@@ -165,8 +165,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
     else
       euro_commodity = NULL;
 
-    if(safe_strcmp(gnc_commodity_get_namespace(account_currency),
-		   GNC_COMMODITY_NS_ISO) != 0) {
+    if(!gnc_commodity_is_currency(account_currency)) {
       non_currency = TRUE;
       non_curr_accum = gnc_ui_get_currency_accumulator(currency_list,
 						       options.default_currency,

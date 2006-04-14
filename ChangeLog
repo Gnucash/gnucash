@@ -1,5 +1,14 @@
 2006-04-13  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/window-main-summarybar.c:
+	* src/gnome/dialog-commodities.c:
+	* src/engine/engine.scm:
+	* src/engine/commodity-table.scm:
+	* src/engine/gnc-commodity.c:
+	* src/app-utils/options.scm: Finish cleaning up old uses of
+	NS_ISO. Use the C is_currency function for both C and Scheme
+	calls.
+
 	* src/import-export/qif-import/druid-qif-import.c:
 	* src/import-export/binary-import/druid-commodity.c:
 	* src/import-export/ofx/gnc-ofx-import.c:

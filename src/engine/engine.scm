@@ -36,13 +36,12 @@
 (export gnc:gnc-monetary-amount)
 (export gnc:monetary-neg)
 
-(export GNC_COMMODITY_NS_ISO)
+(export GNC_COMMODITY_NS_CURRENCY)
 (export GNC_COMMODITY_NS_NASDAQ)
 (export GNC_COMMODITY_NS_NYSE)
 (export GNC_COMMODITY_NS_AMEX)
 (export GNC_COMMODITY_NS_EUREX)
 (export GNC_COMMODITY_NS_MUTUAL)
-(export gnc:commodity-is-currency?)
 
 (export gnc:url->loaded-session)
 (export gnc:group-map-all-accounts)

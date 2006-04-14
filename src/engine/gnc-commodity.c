@@ -1080,7 +1080,7 @@ count_coms(gpointer key, gpointer value, gpointer user_data)
     GHashTable *tbl = ((gnc_commodity_namespace*)value)->cm_table;
     guint *count = (guint*)user_data;
 
-    if(safe_strcmp((char*)key, GNC_COMMODITY_NS_ISO) == 0)
+    if(safe_strcmp((char*)key, GNC_COMMODITY_NS_CURRENCY) == 0)
     {
         /* don't count default commodities */
         return;

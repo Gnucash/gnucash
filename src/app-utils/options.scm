@@ -362,7 +362,7 @@
   (define (commodity->scm commodity)
     (if (string? commodity)
         (list 'commodity-scm
-              GNC_COMMODITY_NS_ISO
+              GNC_COMMODITY_NS_CURRENCY
               commodity)
         (list 'commodity-scm
               (gnc:commodity-get-namespace commodity)

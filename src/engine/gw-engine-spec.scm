@@ -2104,6 +2104,14 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
+ 'gnc:commodity-is-currency?
+ '<gw:bool>
+ "gnc_commodity_is_currency"
+ '((<gnc:commodity*> comm))
+ "return true if the commodity is an ISO4217 currency")
+
+(gw:wrap-function
+ ws
  'gnc:commodity-equiv?
  '<gw:bool>
  "gnc_commodity_equiv"
