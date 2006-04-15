@@ -645,6 +645,15 @@
               accountlist)
     collector))
 
+(define (gnc:accountlist-get-comm-balance-at-date accountlist date)
+   (let ((collector (gnc:make-commodity-collector)))
+    (for-each (lambda (account)
+                (gnc:commodity-collector-merge 
+                 collector (gnc:account-get-comm-balance-at-date 
+                            account date #f)))
+              accountlist)
+    collector))
+
 ;; utility function - ensure that a query matches only non-voids.  Destructive.
 (define (gnc:query-set-match-non-voids-only! query book)
   (let ((temp-query (gnc:malloc-query)))

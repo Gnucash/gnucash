@@ -277,7 +277,6 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  (define forever-ago (cons 0 0))
   
   (gnc:report-starting reportname)
   
@@ -481,9 +480,8 @@
 	  (gnc:report-percent-done 12)
 	  ;; sum any retained earnings
 	  (set! neg-retained-earnings
-		(gnc:accountlist-get-comm-balance-interval
-		 income-expense-accounts
-		 forever-ago date-tp))
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts date-tp))
 	  (set! retained-earnings (gnc:make-commodity-collector))
 	  (retained-earnings 'minusmerge
 			  neg-retained-earnings

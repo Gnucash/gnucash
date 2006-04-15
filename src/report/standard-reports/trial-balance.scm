@@ -287,7 +287,6 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  (define forever-ago (cons 0 0))
   
   (gnc:report-starting reportname)
   

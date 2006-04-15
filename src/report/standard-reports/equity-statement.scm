@@ -193,7 +193,6 @@
     (gnc:option-value
      (gnc:lookup-option 
       (gnc:report-options report-obj) pagename optname)))
-  (define forever-ago (cons 0 0))
   
   (gnc:report-starting reportname)
   
@@ -440,13 +439,11 @@
 	  
 	  ;; start and end retained earnings (income - expenses)
 	  (set! neg-pre-start-retained-earnings
-		(gnc:accountlist-get-comm-balance-interval
-		 income-expense-accounts
-		 forever-ago start-date-tp)) ; OK
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts start-date-tp)) ; OK
 	  (set! neg-pre-end-retained-earnings
-		(gnc:accountlist-get-comm-balance-interval
-		 income-expense-accounts
-		 forever-ago end-date-tp)) ; OK
+		(gnc:accountlist-get-comm-balance-at-date
+		 income-expense-accounts end-date-tp)) ; OK
 	  ;; neg-pre-end-retained-earnings is not used to calculate
 	  ;; profit but is used to calculate unrealized gains
 	  
