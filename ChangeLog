@@ -1,5 +1,16 @@
 2006-04-14  David Hampton  <hampton@employees.org>
 
+	* src/register/ledger-core/split-register-load.c:
+	* src/gnome-utils/gnc-tree-view-account.[ch]:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/gnc-plugin-page-budget.c:
+	* src/engine/Account.[ch]: Add a per-account "hidden" flag, and
+	update the accounts page and the account quickfill to respect this
+	flag.  Also flip the "hide zero balance" flag to a "show zero
+	balance" flag for symmetry.  Implements 87077.
+
 	* src/gnome/gnc-plugin-page-account-tree.c: Allow the account tree
 	view callback to run in addition the the page callback.  Fixes
 	303995.

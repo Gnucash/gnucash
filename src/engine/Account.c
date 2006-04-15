@@ -1961,6 +1961,45 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 \********************************************************************/
 
 gboolean
+xaccAccountGetHidden (const Account *acc)
+{
+  char *str;
+  if (!acc) return FALSE;
+  
+  str = kvp_frame_get_string(acc->inst.kvp_data, "hidden");
+  return (str && !strcmp(str, "true"));
+}
+
+void
+xaccAccountSetHidden (Account *acc, gboolean val)
+{
+  if (!acc) return;
+  
+  kvp_frame_set_string (acc->inst.kvp_data, "hidden",
+			val ? "true" : NULL);
+  mark_account (acc);
+  xaccAccountCommitEdit (acc);
+}
+
+gboolean
+xaccAccountIsHidden (const Account *acc)
+{
+  if (!acc)
+    return FALSE;
+  if (xaccAccountGetHidden(acc))
+    return TRUE;
+
+  while ((acc = xaccAccountGetParentAccount(acc)) != NULL) {
+    if (xaccAccountGetHidden(acc))
+      return TRUE;
+  }
+  return FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+gboolean
 xaccAccountHasAncestor (const Account *acc, const Account * ancestor)
 {
   const Account *parent = acc;

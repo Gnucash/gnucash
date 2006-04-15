@@ -323,7 +323,8 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* Visisble types */
 	priv->fd.visible_types = -1; /* Start with all types */
-	priv->fd.hide_zero_total = FALSE;
+	priv->fd.show_hidden = FALSE;
+	priv->fd.show_zero_total = TRUE;
 	
 	LEAVE("page %p, priv %p, action group %p",
 	      plugin_page, priv, action_group);

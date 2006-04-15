@@ -556,6 +556,8 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 static gboolean 
 skip_cb (Account *account, gpointer x)
 {
+  if (xaccAccountIsHidden(account))
+    return TRUE;
   return xaccAccountGetPlaceholder (account);
 }
 

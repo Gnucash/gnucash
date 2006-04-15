@@ -101,6 +101,7 @@ typedef struct _AccountWindow
 
   GtkWidget * tax_related_button;
   GtkWidget * placeholder_button;
+  GtkWidget * hidden_button;
 
   gint component_id;
 } AccountWindow;
@@ -180,7 +181,7 @@ gnc_account_to_ui(AccountWindow *aw)
   Account *account;
   gnc_commodity * commodity;
   const char *string;
-  gboolean tax_related, placeholder, nonstd_scu;
+  gboolean flag, nonstd_scu;
   gint index;
 
   ENTER("%p", aw);
@@ -221,13 +222,17 @@ gnc_account_to_ui(AccountWindow *aw)
 
   gtk_text_buffer_set_text (aw->notes_text_buffer, string, strlen(string));
 
-  tax_related = xaccAccountGetTaxRelated (account);
+  flag = xaccAccountGetTaxRelated (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
-                                tax_related);
+                                flag);
 
-  placeholder = xaccAccountGetPlaceholder (account);
+  flag = xaccAccountGetPlaceholder (account);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->placeholder_button),
-                                placeholder);
+                                flag);
+
+  flag = xaccAccountGetHidden (account);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->hidden_button),
+                                flag);
 
   gtk_tree_view_collapse_all (aw->parent_tree);
   gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), account);
@@ -295,7 +300,7 @@ gnc_ui_to_account(AccountWindow *aw)
   Account *parent_account;
   const char *old_string;
   const char *string;
-  gboolean tax_related, placeholder;
+  gboolean flag;
   gnc_numeric balance;
   gboolean use_equity, nonstd;
   time_t date;
@@ -353,13 +358,17 @@ gnc_ui_to_account(AccountWindow *aw)
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetNotes (account, string);
 
-  tax_related =
+  flag =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
-  xaccAccountSetTaxRelated (account, tax_related);
+  xaccAccountSetTaxRelated (account, flag);
 
-  placeholder =
+  flag =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->placeholder_button));
-  xaccAccountSetPlaceholder (account, placeholder);
+  xaccAccountSetPlaceholder (account, flag);
+
+  flag =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->hidden_button));
+  xaccAccountSetHidden (account, flag);
 
   parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent_account == aw->top_level_account)
@@ -1288,6 +1297,7 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");
   aw->placeholder_button = glade_xml_get_widget (xml, "placeholder_button");
+  aw->hidden_button = glade_xml_get_widget (xml, "hidden_button");
 
   box = glade_xml_get_widget (xml, "opening_balance_box");
   amount = gnc_amount_edit_new ();

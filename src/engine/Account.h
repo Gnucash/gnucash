@@ -673,9 +673,21 @@ typedef enum
 /** @name Account Placeholder flag 
  @{
 */
-/** DOCUMENT ME! */
+
+/** Get the "placeholder" flag for an account.  If this flag is set
+ *  then the account may not be modified by the user.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @return The current state of the account's "placeholder" flag. */
 gboolean xaccAccountGetPlaceholder (const Account *account);
-/** DOCUMENT ME! */
+
+/** Set the "placeholder" flag for an account.  If this flag is set
+ *  then the account may not be modified by the user.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @param val The new state for the account's "placeholder" flag. */
 void xaccAccountSetPlaceholder (Account *account, gboolean option);
 
 /** Returns PLACEHOLDER_NONE if account is NULL or neither account nor
@@ -686,6 +698,39 @@ void xaccAccountSetPlaceholder (Account *account, gboolean option);
 GNCPlaceholderType xaccAccountGetDescendantPlaceholder(const Account *account);
 /** @} */
 
+/** @name Account Hidden flag 
+ @{
+*/
+
+/** Get the "hidden" flag for an account.  If this flag is set then
+ *  the account (and any children) will be hidden from the user unless
+ *  they explicitly ask to see them.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @return The current state of the account's "hidden" flag. */
+gboolean xaccAccountGetHidden (const Account *acc);
+
+/** Set the "hidden" flag for an account.  If this flag is set then
+ *  the account (and any children) will be hidden from the user unless
+ *  they explicitly ask to see them.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @param val The new state for the account's "hidden" flag. */
+void xaccAccountSetHidden (Account *acc, gboolean val);
+
+/** Should this account be "hidden".  If this flag is set for this
+ *  account (or any parent account) then the account should be hidden
+ *  from the user unless they explicitly ask to see it.  This function
+ *  is different from the xaccAccountGetHidden() function because it
+ *  checks the flag in parent accounts in addition to this account.
+ *
+ *  @param acc The account whose flag should be retrieved.
+ *
+ *  @return Whether or not this account should be "hidden". */
+gboolean xaccAccountIsHidden (const Account *acc);
+/** @} */
 
 /** @name Account Tax related getters/setters
  @{

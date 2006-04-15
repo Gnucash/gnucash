@@ -1613,7 +1613,12 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
 
   ENTER("account %p:%s", account, xaccAccountGetName(account));
 
-  if (fd->hide_zero_total) {
+  if (!fd->show_hidden && xaccAccountIsHidden (account)) {
+    LEAVE(" hide: hidden");
+    return FALSE;
+  }
+  
+  if (!fd->show_zero_total) {
     total = xaccAccountGetBalanceInCurrency (account, NULL, TRUE);
     if (gnc_numeric_zero_p(total)) {
       LEAVE(" hide: zero balance");
@@ -1627,22 +1632,40 @@ gnc_plugin_page_account_tree_filter_accounts (Account *account,
   return result;
 }
 
-/** The "hide zero totals" button in the Filter dialog changed state.
+/** The "show hidden" button in the Filter dialog changed state.
  *  Update the page to reflect these changes.
  *
  *  @param button The GtkCheckButton that was toggled.
  *
  *  @param fd A pointer to the account filter dialog struct. */
 void
-gppat_filter_hide_zero_toggled_cb (GtkToggleButton *button,
+gppat_filter_show_hidden_toggled_cb (GtkToggleButton *button,
+				     AccountFilterDialog *fd)
+{
+  g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
+
+  ENTER("button %p", button);
+  fd->show_hidden = gtk_toggle_button_get_active(button);
+  gnc_tree_view_account_refilter(fd->tree_view);
+  LEAVE("show_hidden %d", fd->show_hidden);
+}
+
+/** The "show zero totals" button in the Filter dialog changed state.
+ *  Update the page to reflect these changes.
+ *
+ *  @param button The GtkCheckButton that was toggled.
+ *
+ *  @param fd A pointer to the account filter dialog struct. */
+void
+gppat_filter_show_zero_toggled_cb (GtkToggleButton *button,
 				   AccountFilterDialog *fd)
 {
   g_return_if_fail(GTK_IS_TOGGLE_BUTTON(button));
 
   ENTER("button %p", button);
-  fd->hide_zero_total = gtk_toggle_button_get_active(button);
+  fd->show_zero_total = gtk_toggle_button_get_active(button);
   gnc_tree_view_account_refilter(fd->tree_view);
-  LEAVE("hide_zero %d", fd->hide_zero_total);
+  LEAVE("show_zero %d", fd->show_zero_total);
 }
 
 /** The "clear all account types" button in the Filter dialog was
@@ -1779,7 +1802,8 @@ gppat_filter_response_cb (GtkWidget *dialog,
 
   if (response != GTK_RESPONSE_OK) {
     fd->visible_types = fd->original_visible_types;
-    fd->hide_zero_total = fd->original_hide_zero_total;
+    fd->show_hidden = fd->original_show_hidden;
+    fd->show_zero_total = fd->original_show_zero_total;
     gnc_tree_view_account_refilter(fd->tree_view);
   }
 
@@ -1823,12 +1847,16 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 
   /* Remember current state */
   fd->original_visible_types = fd->visible_types;
-  fd->original_hide_zero_total = fd->hide_zero_total;
+  fd->original_show_hidden = fd->show_hidden;
+  fd->original_show_zero_total = fd->show_zero_total;
 
   /* Update the dialog widgets for the current state */
-  button = glade_xml_get_widget (xml, "hide_zero");
+  button = glade_xml_get_widget (xml, "show_hidden");
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
-			       fd->hide_zero_total);
+			       fd->show_hidden);
+  button = glade_xml_get_widget (xml, "show_zero");
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),
+			       fd->show_zero_total);
 
   /* Set up the tree view and model */
   view = GTK_TREE_VIEW(glade_xml_get_widget (xml, FILTER_TREE_VIEW));
@@ -1864,7 +1892,8 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 #define ACCT_COUNT    "Number of Open Accounts"
 #define ACCT_OPEN     "Open Account %d"
 #define ACCT_SELECTED "Selected Account"
-#define HIDE_ZERO     "Hide Zero Total"
+#define SHOW_HIDDEN   "Show Hidden"
+#define SHOW_ZERO     "Show Zero Total"
 #define ACCT_TYPES    "Account Types"
 
 typedef struct foo {
@@ -1955,8 +1984,10 @@ gnc_tree_view_account_save(GncTreeViewAccount *view,
     
     g_key_file_set_integer(key_file, group_name, ACCT_TYPES, 
                            fd->visible_types);
-    g_key_file_set_boolean(key_file, group_name, HIDE_ZERO, 
-                           fd->hide_zero_total);
+    g_key_file_set_boolean(key_file, group_name, SHOW_HIDDEN, 
+                           fd->show_hidden);
+    g_key_file_set_boolean(key_file, group_name, SHOW_ZERO, 
+                           fd->show_zero_total);
 	
     bar.key_file = key_file;
     bar.group_name = group_name;
@@ -2021,18 +2052,28 @@ gnc_tree_view_account_restore(GncTreeViewAccount *view,
     GError *error = NULL;
     gchar *key, *value;
     gint i, count;
-    gboolean hide;	
+    gboolean show;	
 
     /* Filter information. Ignore missing keys. */
-    hide = g_key_file_get_boolean(key_file, group_name, HIDE_ZERO, &error);
+    show = g_key_file_get_boolean(key_file, group_name, SHOW_HIDDEN, &error);
     if (error) {
         g_warning("error reading group %s key %s: %s",
-                  group_name, HIDE_ZERO, error->message);
+                  group_name, SHOW_HIDDEN, error->message);
         g_error_free(error);
         error = NULL;
-        hide = FALSE;
+        show = TRUE;
     }
-    fd->hide_zero_total = hide;
+    fd->show_hidden = show;
+    
+    show = g_key_file_get_boolean(key_file, group_name, SHOW_ZERO, &error);
+    if (error) {
+        g_warning("error reading group %s key %s: %s",
+                  group_name, SHOW_ZERO, error->message);
+        g_error_free(error);
+        error = NULL;
+        show = TRUE;
+    }
+    fd->show_zero_total = show;
     
     i = g_key_file_get_integer(key_file, group_name, ACCT_TYPES, &error);
     if (error) {

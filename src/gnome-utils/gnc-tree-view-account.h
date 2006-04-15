@@ -78,8 +78,10 @@ typedef	struct {
     GncTreeViewAccount  *tree_view;
     guint32      visible_types;
     guint32      original_visible_types;
-    gboolean     hide_zero_total;
-    gboolean     original_hide_zero_total;
+    gboolean     show_hidden;
+    gboolean     original_show_hidden;
+    gboolean     show_zero_total;
+    gboolean     original_show_zero_total;
 } AccountFilterDialog;
 
 void account_filter_dialog_create(AccountFilterDialog *fd, 
@@ -89,7 +91,9 @@ gboolean gnc_plugin_page_account_tree_filter_accounts (Account *account,
                                                        gpointer user_data);
 
 /* "Filter By" dialog callbacks */
-void gppat_filter_hide_zero_toggled_cb (GtkToggleButton *togglebutton, 
+void gppat_filter_show_hidden_toggled_cb (GtkToggleButton *togglebutton, 
+					  AccountFilterDialog *fd);
+void gppat_filter_show_zero_toggled_cb (GtkToggleButton *togglebutton, 
                                         AccountFilterDialog *fd);
 void gppat_filter_clear_all_cb (GtkWidget *button, AccountFilterDialog *fd);
 void gppat_filter_select_all_cb (GtkWidget *button, AccountFilterDialog *fd);
