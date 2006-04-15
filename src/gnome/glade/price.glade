@@ -412,7 +412,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="commodity_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Co_mmodity:</property>
+	      <property name="label" translatable="yes">_Security:</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -483,7 +483,7 @@
 
 	  <child>
 	    <widget class="GtkLabel" id="source_label">
-	      <property name="label" translatable="yes">_Source:</property>
+	      <property name="label" translatable="yes">S_ource:</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_CENTER</property>

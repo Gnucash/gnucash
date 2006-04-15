@@ -292,8 +292,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   GtkTreeView *view;
   GtkTreeSelection *selection;
  
-  xml = gnc_glade_xml_new ("commodities.glade", "Commodities Dialog");
-  dialog = glade_xml_get_widget (xml, "Commodities Dialog");
+  xml = gnc_glade_xml_new ("commodities.glade", "Securities Dialog");
+  dialog = glade_xml_get_widget (xml, "Securities Dialog");
 
   cd->dialog = dialog;
   cd->session = gnc_get_current_session();

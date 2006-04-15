@@ -1277,7 +1277,7 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_box_pack_start(GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
   gtk_widget_show (aw->commodity_edit);
 
-  label = glade_xml_get_widget (xml, "commodity_label");
+  label = glade_xml_get_widget (xml, "security_label");
   gnc_general_select_make_mnemonic_target (GNC_GENERAL_SELECT(aw->commodity_edit), label);
 
   g_signal_connect (G_OBJECT (aw->commodity_edit), "changed",

@@ -229,20 +229,21 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
 {
   SelectCommodityWindow * retval = g_new0(SelectCommodityWindow, 1);
   GladeXML *xml;
-  const char * namespace, *title;
-  GtkWidget *button;
+  const char * namespace, *title, *text;
+  GtkWidget *button, *label;
 
-  xml = gnc_glade_xml_new ("commodity.glade", "Commodity Selector Dialog");
+  xml = gnc_glade_xml_new ("commodity.glade", "Security Selector Dialog");
   glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
                                      retval );
 
-  retval->dialog = glade_xml_get_widget (xml, "Commodity Selector Dialog");
+  retval->dialog = glade_xml_get_widget (xml, "Security Selector Dialog");
   retval->namespace_combo = glade_xml_get_widget (xml, "namespace_combo");
   retval->commodity_combo = glade_xml_get_widget (xml, "commodity_combo");
   retval->commodity_entry = glade_xml_get_widget (xml, "commodity_entry");
   retval->select_user_prompt = glade_xml_get_widget (xml, "select_user_prompt");
   retval->ok_button = glade_xml_get_widget (xml, "ok_button");
+  label = glade_xml_get_widget (xml, "item_label");
 
   gtk_label_set_text (GTK_LABEL (retval->select_user_prompt), "");
 
@@ -255,19 +256,23 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
 
   switch (mode) {
     case DIAG_COMM_ALL:
-      title = _("Select currency/security");
+      title = _("Select security/currency");
+      text = _("_Security/currency:");
       break;
     case DIAG_COMM_NON_CURRENCY:
       title = _("Select security");
+      text = _("_Security:");
       break;
     case DIAG_COMM_CURRENCY:
     default:
       title = _("Select currency");
+      text = _("Cu_rrency:");
       button = glade_xml_get_widget (xml, "new_button");
       gtk_widget_destroy(button);
       break;
   }
   gtk_window_set_title (GTK_WINDOW(retval->dialog), title);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL(label), text);
 
   /* build the menus of namespaces and commodities */
   gnc_ui_update_namespace_picker(retval->namespace_combo, 
@@ -825,29 +830,32 @@ gnc_ui_quote_tz_menu_create(void)
 /** Build the new/edit commodity dialog box
  */
 static CommodityWindow *
-gnc_ui_new_commodity_dialog(const char * selected_namespace,
+gnc_ui_build_commodity_dialog(const char * selected_namespace,
 			    GtkWidget  *parent,
 			    const char * fullname,
 			    const char * mnemonic,
 			    const char * cusip,
-			    int          fraction)
+			    int          fraction,
+			    gboolean     edit)
 {
   CommodityWindow * retval = g_new0(CommodityWindow, 1);
   GtkWidget *help_button;
   GtkWidget *box;
   GtkWidget *menu;
-  GtkWidget *widget;
+  GtkWidget *widget, *sec_label;
   GladeXML *xml;
   gboolean include_iso;
+  const gchar *title;
+  gchar *text;
 
   ENTER(" ");
-  xml = gnc_glade_xml_new ("commodity.glade", "Commodity Dialog");
+  xml = gnc_glade_xml_new ("commodity.glade", "Security Dialog");
 
   glade_xml_signal_autoconnect_full( xml,
                                      gnc_glade_autoconnect_full_func,
                                      retval );
 
-  retval->dialog = glade_xml_get_widget (xml, "Commodity Dialog");
+  retval->dialog = glade_xml_get_widget (xml, "Security Dialog");
   if (parent != NULL)
     gtk_window_set_transient_for (GTK_WINDOW (retval->dialog), GTK_WINDOW (parent));
   retval->edit_commodity = NULL;
@@ -858,8 +866,8 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
 
   /* Determine the commodity section of the dialog */
   retval->table = glade_xml_get_widget (xml, "edit_table");
-  widget = glade_xml_get_widget (xml, "commodity_label");
-  gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+  sec_label = glade_xml_get_widget (xml, "security_label");
+  gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
 			  "bottom-attach", &retval->comm_section_top, NULL);
   widget = glade_xml_get_widget (xml, "quote_label");
   gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
@@ -924,9 +932,16 @@ gnc_ui_new_commodity_dialog(const char * selected_namespace,
     retval->is_currency = TRUE;
     gnc_ui_update_commodity_info (retval);
     include_iso = TRUE;
+    title = _("Edit currency");
+    text = g_strdup_printf("<b>%s</b>", _("Currency Information"));
   } else {
     include_iso = FALSE;
+    title = edit ? _("Edit security") : _("New security");
+    text = g_strdup_printf("<b>%s</b>", _("Security Information"));
   }
+  gtk_window_set_title(GTK_WINDOW(retval->dialog), title);
+  gtk_label_set_markup(GTK_LABEL(sec_label), text);
+  g_free(text);
 
   /* Are price quotes supported */
   if (gnc_quote_source_fq_installed()) {
@@ -1032,8 +1047,9 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     }
   }
 
-  win = gnc_ui_new_commodity_dialog(namespace, parent, fullname,
-				    mnemonic, cusip, fraction);
+  win = gnc_ui_build_commodity_dialog(namespace, parent, fullname,
+				    mnemonic, cusip, fraction,
+				    (commodity != NULL));
 
   /* Update stock quote info based on existing commodity */
   gnc_ui_commodity_update_quote_info(win, commodity);
@@ -1112,7 +1128,7 @@ gnc_ui_new_commodity_modal(const char * default_namespace,
  ********************************************************************/
 
 /** Given an existing commodity, uses the
- *  gnc_ui_new_commodity_dialog() routine to build a basic edit
+ *  gnc_ui_build_commodity_dialog() routine to build a basic edit
  *  dialog, then fills in the price quote information at the bottom of
  *  the dialog.
  */

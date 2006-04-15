@@ -4,9 +4,9 @@
 <glade-interface>
 <requires lib="gnome"/>
 
-<widget class="GtkDialog" id="Commodity Selector Dialog">
+<widget class="GtkDialog" id="Security Selector Dialog">
   <property name="border_width">6</property>
-  <property name="title" translatable="yes">Select currency/security </property>
+  <property name="title" translatable="yes">Select security/currency </property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -287,9 +287,9 @@
 	      <property name="right_padding">0</property>
 
 	      <child>
-		<widget class="GtkLabel" id="label808">
+		<widget class="GtkLabel" id="item_label">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">_Currency/security:</property>
+		  <property name="label">_Security/currency:</property>
 		  <property name="use_underline">True</property>
 		  <property name="use_markup">False</property>
 		  <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -323,9 +323,9 @@
   </child>
 </widget>
 
-<widget class="GtkDialog" id="Commodity Dialog">
+<widget class="GtkDialog" id="Security Dialog">
   <property name="border_width">6</property>
-  <property name="title" translatable="yes">New Commodity</property>
+  <property name="title">New Security</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">True</property>
@@ -645,9 +645,9 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="commodity_label">
+	    <widget class="GtkLabel" id="security_label">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;b&gt;Commodity Information&lt;/b&gt;</property>
+	      <property name="label">&lt;b&gt;Security Information&lt;/b&gt;</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

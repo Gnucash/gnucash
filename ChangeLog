@@ -1,5 +1,18 @@
 2006-04-15  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-price.c:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome/glade/commodities.glade:
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/price.glade:
+	* src/gnome/dialog-commodities.c: Replace "commodity" with
+	"security" where it is user visible.  If its possible to determine
+	that the user is operating on a currency instead of a commodity,
+	update titles/labels to specify "security". Fixes 338382.
+
 	* src/backend/file/io-gncxml-v2.c:
 	* src/import-export/hbci/gnc-hbci-kvp.[ch]:
 	* src/engine/Account.c:

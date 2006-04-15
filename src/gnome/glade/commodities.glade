@@ -3,8 +3,8 @@
 
 <glade-interface>
 
-<widget class="GtkDialog" id="Commodities Dialog">
-  <property name="title" translatable="yes">Commodities</property>
+<widget class="GtkDialog" id="Securities Dialog">
+  <property name="title" translatable="yes">Securities</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -165,7 +165,7 @@
 	  <child>
 	    <widget class="GtkLabel" id="label1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">&lt;b&gt;Commodities&lt;/b&gt;</property>
+	      <property name="label" translatable="yes">&lt;b&gt;Securities&lt;/b&gt;</property>
 	      <property name="use_underline">True</property>
 	      <property name="use_markup">True</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>

@@ -430,7 +430,7 @@ gnc_tree_view_price_new (QofBook *book,
 
   sample_text = gnc_commodity_get_printname(gnc_default_currency());
   sample_text2 = g_strdup_printf("%s%s", sample_text, sample_text);
-  gnc_tree_view_add_text_column (view, _("Commodity"), "commodity", NULL,
+  gnc_tree_view_add_text_column (view, _("Security"), "security", NULL,
 				 sample_text2,
 				 GNC_TREE_MODEL_PRICE_COL_COMMODITY,
 				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,

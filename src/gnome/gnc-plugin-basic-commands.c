@@ -147,7 +147,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
     N_("View and edit the prices for stocks and mutual funds"),
     G_CALLBACK (gnc_main_window_cmd_tools_price_editor) },
-  { "ToolsCommodityEditorAction", NULL, N_("_Commodity Editor"), NULL,
+  { "ToolsCommodityEditorAction", NULL, N_("_Security Editor"), NULL,
     N_("View and edit the commodities for stocks and mutual funds"),
     G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor) },
   { "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
