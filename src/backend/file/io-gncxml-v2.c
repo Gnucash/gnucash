@@ -172,6 +172,7 @@ add_account_local(sixtp_gdv2 *data, Account *act)
                                xaccAccountSetCommoditySCU);
 
     xaccAccountScrubCommodity (act);
+    xaccAccountScrubKvp (act);
 
     if(!xaccAccountGetParent(act))
     {

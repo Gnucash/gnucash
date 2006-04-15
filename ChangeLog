@@ -1,3 +1,11 @@
+2006-04-15  David Hampton  <hampton@employees.org>
+
+	* src/backend/file/io-gncxml-v2.c:
+	* src/import-export/hbci/gnc-hbci-kvp.[ch]:
+	* src/engine/Account.c:
+	* src/engine/Scrub.[ch]: Clean up the xml file some by dropping
+	empty kvp strings/frames and 'false' placeholder values.
+
 2006-04-15  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/druid-gnc-xml-import.c: Fix to compile on

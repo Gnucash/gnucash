@@ -33,6 +33,7 @@
  * Created by Linas Vepstas December 1998
  * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
  * Copyright (c) 2002 Christian Stimming
+ * Copyright (c) 2006 David Hampton
  */
 
 #include "config.h"
@@ -841,6 +842,35 @@ xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table)
                            GINT_TO_POINTER(new_style), TRUE);
   xaccAccountGroupCommitEdit (group);
   LEAVE("Migration done");
+}
+
+/* ================================================================ */
+
+void
+xaccAccountScrubKvp (Account *account)
+{
+  const gchar *str;
+  gchar *str2;
+  kvp_frame *frame;
+
+  if (!account) return;
+
+  str = kvp_frame_get_string(account->inst.kvp_data, "notes");
+  if (str) {
+    str2 = g_strstrip(g_strdup(str));
+    if (strlen(str2) == 0)
+      kvp_frame_set_slot_nc (account->inst.kvp_data, "notes", NULL);
+    g_free(str2);
+  }
+
+  str = kvp_frame_get_string(account->inst.kvp_data, "placeholder");
+  if (str && strcmp(str, "false") == 0)
+    kvp_frame_set_slot_nc (account->inst.kvp_data, "placeholder", NULL);
+
+  frame = kvp_frame_get_frame(account->inst.kvp_data, "hbci");
+  if (frame && kvp_frame_is_empty(frame)) {
+    kvp_frame_set_frame_nc(account->inst.kvp_data, "hbci", NULL);
+  }
 }
 
 /* ================================================================ */

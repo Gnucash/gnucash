@@ -156,6 +156,8 @@ void xaccGroupScrubCommodities (AccountGroup *group);
  */
 void xaccGroupScrubQuoteSources (AccountGroup *group, gnc_commodity_table *table);
 
+void xaccAccountScrubKvp (Account *account);
+
 #endif /* XACC_SCRUB_H */
 /** @} */
 /** @} */

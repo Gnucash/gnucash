@@ -1102,11 +1102,17 @@ qofAccountSetParent (Account *acc, QofEntity *parent)
 void
 xaccAccountSetNotes (Account *acc, const char *str) 
 {
-  if (!acc || !str) return;
+  if (!acc) return;
 
   xaccAccountBeginEdit(acc);
-  kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", 
-                        kvp_value_new_string(str));
+  if (str) {
+    gchar *tmp = g_strstrip(g_strdup(str));
+    kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", 
+			  strlen(tmp) ? kvp_value_new_string(tmp) : NULL);
+    g_free(tmp);
+  } else {
+    kvp_frame_set_slot_nc(acc->inst.kvp_data, "notes", NULL);
+  }
   mark_account(acc);
   xaccAccountCommitEdit(acc);
 }
@@ -1932,7 +1938,7 @@ xaccAccountSetPlaceholder (Account *acc, gboolean val)
   
   xaccAccountBeginEdit (acc);
   kvp_frame_set_string (acc->inst.kvp_data, 
-                        "placeholder", val ? "true" : "false");
+                        "placeholder", val ? "true" : NULL);
   mark_account (acc);
   xaccAccountCommitEdit (acc);
 }
