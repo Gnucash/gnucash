@@ -512,8 +512,7 @@ ambiguous_list_insert (gchar *byte_sequence, GList *conv_list,
   for (iter = g_list_last (conv_list); iter; iter = iter->prev)
     amb->conv_list = g_list_prepend (amb->conv_list, conv_copy (iter->data));
 
-  data->ambiguous_list = g_list_insert_sorted_with_data (
-    data->ambiguous_list, amb, (GCompareDataFunc) ambiguous_cmp, data);
+  data->ambiguous_list = g_list_prepend (data->ambiguous_list, amb);
 }
 
 static void
@@ -625,6 +624,8 @@ gxi_check_file (GncXmlImportData *data)
     /* sort ambiguous words */
     g_hash_table_foreach (data->ambiguous_ht, (GHFunc)ambiguous_list_insert,
                           data);
+    data->ambiguous_list = g_list_sort_with_data (
+      data->ambiguous_list, (GCompareDataFunc) ambiguous_cmp, data);
   }
 }
 
