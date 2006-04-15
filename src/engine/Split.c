@@ -1595,7 +1595,7 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-  char *split_type;
+  const char *split_type;
 
   if (!s) return NULL;
   split_type = kvp_frame_get_string(s->inst.kvp_data, "split-type");

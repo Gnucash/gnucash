@@ -566,7 +566,7 @@ value.  It is meant to be a short descriptive phrase.")
 (gw:wrap-function
  ws
  'gnc:transaction-get-void-reason
- '(<gw:mchars> callee-owned)
+ '(<gw:mchars> callee-owned const)
  "xaccTransGetVoidReason"
  '((<gnc:Transaction*> transaction))
  "return a string indicating reason for voiding")

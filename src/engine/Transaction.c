@@ -1747,7 +1747,7 @@ xaccTransGetVoidStatus(const Transaction *trans)
   return (kvp_frame_get_slot(trans->inst.kvp_data, void_reason_str) != NULL);
 }
 
-char *
+const char *
 xaccTransGetVoidReason(const Transaction *trans)
 {
   g_return_val_if_fail(trans, NULL);
@@ -1757,7 +1757,7 @@ xaccTransGetVoidReason(const Transaction *trans)
 Timespec
 xaccTransGetVoidTime(const Transaction *tr)
 {
-  char *val;
+  const char *val;
   Timespec void_time = {0,0};
 
   g_return_val_if_fail(tr, void_time);

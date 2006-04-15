@@ -1918,7 +1918,7 @@ xaccAccountSetTaxUSPayerNameSource (Account *acc, const char *source)
 gboolean
 xaccAccountGetPlaceholder (const Account *acc)
 {
-  char *str;
+  const char *str;
   if (!acc) return FALSE;
   
   str = kvp_frame_get_string(acc->inst.kvp_data, "placeholder");
@@ -1963,7 +1963,7 @@ xaccAccountGetDescendantPlaceholder (const Account *acc)
 gboolean
 xaccAccountGetHidden (const Account *acc)
 {
-  char *str;
+  const char *str;
   if (!acc) return FALSE;
   
   str = kvp_frame_get_string(acc->inst.kvp_data, "hidden");
@@ -2396,7 +2396,7 @@ xaccAccountClearReconcilePostpone (Account *acc)
 gboolean
 xaccAccountGetAutoInterestXfer (const Account *acc, gboolean default_value)
 {
-  char *str = NULL;
+  const char *str = NULL;
   if (!acc) return default_value;
 
   str = kvp_frame_get_string(acc->inst.kvp_data, 

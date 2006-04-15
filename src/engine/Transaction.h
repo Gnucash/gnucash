@@ -505,7 +505,7 @@ gboolean xaccTransGetVoidStatus(const Transaction *transaction);
  *
  *  @return A pointer to the user supplied reason for voiding.
  */
-char *xaccTransGetVoidReason(const Transaction *transaction);
+const char *xaccTransGetVoidReason(const Transaction *transaction);
 
 /** Returns the time that a transaction was voided.
  *

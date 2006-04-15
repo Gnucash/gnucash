@@ -1,3 +1,14 @@
+2006-04-15  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c:
+	* src/engine/gw-engine-spec.scm:
+	* src/engine/Transaction.c:
+	* src/engine/Transaction.h:
+	* src/engine/Split.c:
+	* lib/libqof/qof/kvp_frame.[ch]: The kvp_frame_get_string()
+	function returns a pointer to an internal string.  Mark it 'const'
+	to prevent callers from trying to free it.
+
 2006-04-14  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-load.c:
