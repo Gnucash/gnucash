@@ -24,6 +24,7 @@
 
 #include <gnome.h>
 #include <glib/gi18n.h>
+#include <gmodule.h>
 
 #include "TransLog.h"
 #include "druid-gnc-xml-import.h"
