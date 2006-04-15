@@ -588,7 +588,12 @@ gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
   ENTER("widget %p, event %p, page %p", widget, event, page);
   result = gnc_main_window_button_press_cb(widget, event, page);
   LEAVE(" ");
-  return result;
+
+  /* Always return FALSE.  This will let the tree view callback run as
+   * well which will select the item under the cursor.  By the time
+   * the user sees the menu both callbacks will have run and the menu
+   * actions will operate on the just-selected account. */
+  return FALSE;
 }
 
 static void

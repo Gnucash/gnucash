@@ -1,5 +1,9 @@
 2006-04-14  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-account-tree.c: Allow the account tree
+	view callback to run in addition the the page callback.  Fixes
+	303995.
+
 	* src/gnome-utils/glade/preferences.glade: Clarify text regarding
 	the lines in the register.  Fixes 338479.
 
