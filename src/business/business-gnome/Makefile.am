@@ -36,6 +36,7 @@ libgncmod_business_gnome_la_SOURCES = \
   business-urls.c \
   business-gnome-utils.c \
   dialog-billterms.c \
+  dialog-choose-owner.c \
   dialog-customer.c \
   dialog-date-close.c \
   dialog-employee.c \
@@ -53,6 +54,7 @@ noinst_HEADERS = \
   business-urls.h \
   business-gnome-utils.h \
   dialog-billterms.h \
+  dialog-choose-owner.h \
   dialog-customer.h \
   dialog-date-close.h \
   dialog-employee.h \
