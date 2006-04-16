@@ -201,6 +201,12 @@ static const gchar *encodings_doc_string = N_(
 
 static const gchar *encodings_doc_page_title = N_("Missing file encoding");
 
+static const gchar *finish_convert_string = N_(
+  "The file has been loaded successfully. If you click 'Apply' it will be saved "
+  "and reloaded into the main application. That way you will have a working "
+  "file as backup in the same directory.\n\n"
+  "You can also go back and verify your selections by clicking on 'Back'.");
+
 /* The debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -320,7 +326,12 @@ gnc_xml_convert_single_file (const gchar *filename)
     gtk_widget_hide (glade_xml_get_widget (xml, "load_file_page"));
     gtk_widget_hide (glade_xml_get_widget (xml, "loaded_files_page"));
     gtk_widget_hide (glade_xml_get_widget (xml, "merge_page"));
-    gtk_widget_show (glade_xml_get_widget (xml, "end_page"));
+
+    /* finish page */
+    widget = glade_xml_get_widget (xml, "end_page");
+    gnome_druid_page_edge_set_text (GNOME_DRUID_PAGE_EDGE (widget),
+                                    gettext (finish_convert_string));
+    gtk_widget_show (widget);
 
     gxi_update_default_enc_combo (data);
     gxi_update_string_box (data);
