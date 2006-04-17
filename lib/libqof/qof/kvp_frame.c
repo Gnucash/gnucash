@@ -868,7 +868,7 @@ kvp_frame_get_numeric(const KvpFrame *frame, const char *path)
   return kvp_value_get_numeric(kvp_frame_get_slot (frame, key));
 }
 
-const char * 
+char * 
 kvp_frame_get_string(const KvpFrame *frame, const char *path)
 {
   char *key = NULL;

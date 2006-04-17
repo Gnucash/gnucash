@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
@@ -122,22 +122,28 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 	xmlNodePtr cur_node;
 	xmlChar *object_declaration;
 	guint count;
+	QsfStatus type;
+	gboolean is_registered;
 
 	count = 0;
+	type = QSF_NO_OBJECT;
+	is_registered = FALSE;
 	for(cur_node = child->children; cur_node != NULL;
 		cur_node = cur_node->next)
 	{
 		if(qsf_is_element(cur_node, ns, QSF_OBJECT_TAG)) {
 			object_declaration = xmlGetProp(cur_node, BAD_CAST QSF_OBJECT_TYPE);
-			count = g_hash_table_size(valid->validation_table);
-			g_hash_table_insert(valid->validation_table, object_declaration, xmlNodeGetContent(cur_node));
-			if(g_hash_table_size(valid->validation_table) > count)
+			is_registered = qof_class_is_registered(object_declaration);
+			if(is_registered) { type = QSF_REGISTERED_OBJECT; }
+			else { type = QSF_DEFINED_OBJECT; }
+			count = g_hash_table_size(valid->object_table);
+			g_hash_table_insert(valid->object_table, object_declaration,
+				GINT_TO_POINTER(type));
+			/* if insert was successful - i.e. object is unique so far */
+			if(g_hash_table_size(valid->object_table) > count)
 			{
 				valid->valid_object_count++;
-				if(TRUE == qof_class_is_registered((QofIdTypeConst) object_declaration))
-				{
-					valid->qof_registered_count++;
-				}
+				if(is_registered) { valid->qof_registered_count++; }
 			}
 		}
 	}
@@ -161,13 +167,13 @@ gboolean is_our_qsf_object(const gchar *path)
 	}
 	object_root = xmlDocGetRootElement(doc);
 	/* check that all objects in the file are already registered in QOF */
-	valid.validation_table = g_hash_table_new(g_str_hash, g_str_equal);
+	valid.object_table = g_hash_table_new(g_str_hash, g_str_equal);
 	valid.qof_registered_count = 0;
 	valid.valid_object_count = 0;
 	iter.ns = object_root->ns;
 	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
-	table_count = g_hash_table_size(valid.validation_table);
-	g_hash_table_destroy(valid.validation_table);
+	table_count = g_hash_table_size(valid.object_table);
+	g_hash_table_destroy(valid.object_table);
 	if(table_count == valid.qof_registered_count) { return TRUE; }
 	return FALSE;
 }
@@ -214,18 +220,18 @@ gboolean is_our_qsf_object_be(qsf_param *params)
 	}
 	params->file_type = IS_QSF_OBJ;
 	object_root = xmlDocGetRootElement(doc);
-	valid.validation_table = g_hash_table_new(g_str_hash, g_str_equal);
+	valid.object_table = g_hash_table_new(g_str_hash, g_str_equal);
 	valid.qof_registered_count = 0;
 	iter.ns = object_root->ns;
 	qsf_valid_foreach(object_root, qsf_object_validation_handler, &iter, &valid);
-	table_count = g_hash_table_size(valid.validation_table);
+	table_count = g_hash_table_size(valid.object_table);
 	if(table_count == valid.qof_registered_count)
 	{
-		g_hash_table_destroy(valid.validation_table);
+		g_hash_table_destroy(valid.object_table);
 		qof_backend_set_error(params->be, ERR_BACKEND_NO_ERR);
 		return TRUE;
 	}
-	g_hash_table_destroy(valid.validation_table);
+	g_hash_table_destroy(valid.object_table);
 	qof_backend_set_error(params->be, ERR_QSF_NO_MAP);
 	return FALSE;
 }
@@ -262,17 +268,17 @@ gboolean is_qsf_object_be(qsf_param *params)
 	/* retrieve list of maps from config frame. */
 	for(maps = params->map_files; maps; maps=maps->next)
 	{
-        QofBackendError err;
+		QofBackendError err;
 		result = is_qsf_object_with_map_be(maps->data, params);
-        err = qof_backend_get_error(params->be);
-        if((err == ERR_BACKEND_NO_ERR) && result) 
-        {
-            params->map_path = maps->data;
-            PINFO ("map chosen = %s", params->map_path);
-            break;
-        }
-        /* pop the error back on the stack. */
-        else { qof_backend_set_error(params->be, err); }
+		err = qof_backend_get_error(params->be);
+		if((err == ERR_BACKEND_NO_ERR) && result)
+		{
+			params->map_path = maps->data;
+			PINFO ("map chosen = %s", params->map_path);
+			break;
+		}
+		/* pop the error back on the stack. */
+		else { qof_backend_set_error(params->be, err); }
 	}
 	return result;
 }
@@ -364,5 +370,5 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 		}
 		qsf_node_foreach(child, qsf_object_node_handler, &iter, params);
 	}
-    LEAVE (" ");
+	LEAVE (" ");
 }

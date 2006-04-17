@@ -14,7 +14,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
@@ -331,6 +331,35 @@ Both defaults use UTC.
 
 #define QSF_OBJECT_SCHEMA "qsf-object.xsd.xml" /**< Name of the QSF Object Schema. */
 #define QSF_MAP_SCHEMA "qsf-map.xsd.xml" /**< Name of the QSF Map Schema. */
+
+/** \brief Status of various object during mapping.
+
+When handling a map, the incoming QSF objects are not registered with this
+instance of QOF - they originate from another QOF user. Each object in a map
+needs to be defined. If the object is registered, the map is checked to locate
+a calculation that can be used to generate this object. If the object is not
+registered, the incoming QSF is checked to ensure it provides the object data
+for the calculation. If anything goes wrong, QSF_INVALID_OBJECT is used.
+
+Maps can be unidirectional or bidirectional so QOF registration is used to
+determine which calculations should be used and which should be ignored.
+
+All QSF_REGISTERED_OBJECT types need a calculation - if any types remain tagged
+as QSF_REGISTERED_OBJECT when the map validation is complete, the validation
+must fail. The only acceptable end values for QsfStatus are QSF_DEFINED_OBJECT,
+QSF_CALCULATED_OBJECT or QSF_INVALID_OBJECT.
+*/
+typedef enum {
+	QSF_NO_OBJECT = 0,     /**< Init value only. */
+	QSF_DEFINED_OBJECT,    /**< The object is unregistered but defined.
+Objects of this type must exist in the incoming QSF and must
+provide data for the calculation of registered objects. */
+	QSF_REGISTERED_OBJECT, /**< Temporary value. The object is registered
+and defined - a calculation is needed but has not been found, yet. */
+	QSF_CALCULATED_OBJECT, /**< The object is registered, defined and can be calculated. */
+	QSF_INVALID_OBJECT     /**< Oops value. */
+}QsfStatus;
+
 /** \brief QSF Parameters
 
 This struct is a catch-all for all parameters required
@@ -347,26 +376,27 @@ typedef struct qsf_metadata
 	GList *referenceList;        /**< Table of references, ::QofEntityReference. */
 	GHashTable *qsf_parameter_hash; /**< Hashtable of parameters for each object */
 	GHashTable *qsf_calculate_hash, *qsf_default_hash, *qsf_define_hash;
-	GSList *supported_types;     /**< The list of QOF types currently supported, in QSF order. */
-	xmlDocPtr input_doc;         /**< Pointer to the input xml document(s). */
-	xmlDocPtr output_doc;        /**< Pointer to the output xml document(s). */
-	xmlNodePtr child_node;       /**< The current child_node. */
-	xmlNodePtr convert_node;     /**< Node in the converted object */
-	xmlNodePtr param_node;       /**< Node for parameter data. */
-	xmlNodePtr output_node;      /**< Node in the output document. */
-	xmlNodePtr output_root;      /**< Root node of the output document. */
-	xmlNodePtr book_node;        /**< Node for the book. */
-	xmlNodePtr lister;           /**< Comparison node for map defaults. */
-	xmlNsPtr qsf_ns, map_ns;     /**< Separate namespaces for QSF objects and QSF maps. */
-	const gchar *qof_type;       /**< Holds details of the QOF_TYPE */
-	QofIdType qof_obj_type;	     /**< current QofObject type (e_type) for the parameters. */
-	QofIdType qof_foreach;       /**< How to iterate over hierarchical entities. */
-	gint foreach_limit;          /**< How many iterations are found in the QSF */
-	QofEntity *qsf_ent;          /**< Current entity in the book. */
-	QofBackend *be;              /**< the current QofBackend for this operation. */
-	gboolean knowntype;          /**< detect references by comparing with known QOF types. */
-	QofParam *qof_param;         /**< used by kvp to handle the frame hash table */
-	QofBook *book;	             /**< the current QofBook.
+	GSList *supported_types;     /**< The list of QOF types currently supported,
+								in QSF order. */
+	xmlDocPtr input_doc;     /**< Pointer to the input xml document(s). */
+	xmlDocPtr output_doc;    /**< Pointer to the output xml document(s). */
+	xmlNodePtr child_node;   /**< The current child_node. */
+	xmlNodePtr convert_node; /**< Node in the converted object */
+	xmlNodePtr param_node;   /**< Node for parameter data. */
+	xmlNodePtr output_node;  /**< Node in the output document. */
+	xmlNodePtr output_root;  /**< Root node of the output document. */
+	xmlNodePtr book_node;    /**< Node for the book. */
+	xmlNodePtr lister;       /**< Comparison node for map defaults. */
+	xmlNsPtr qsf_ns, map_ns; /**< Separate namespaces for QSF objects and QSF maps. */
+	const gchar *qof_type;   /**< Holds details of the QOF_TYPE */
+	QofIdType qof_obj_type;  /**< current QofObject type (e_type) for the parameters. */
+	QofIdType qof_foreach;   /**< How to iterate over hierarchical entities. */
+	gint foreach_limit;      /**< How many iterations are found in the QSF */
+	QofEntity *qsf_ent;      /**< Current entity in the book. */
+	QofBackend *be;          /**< the current QofBackend for this operation. */
+	gboolean knowntype;      /**< detect references by comparing with known QOF types. */
+	QofParam *qof_param;     /**< used by kvp to handle the frame hash table */
+	QofBook *book;           /**< the current QofBook.
 
 		Theoretically, QSF can handle multiple QofBooks - currently limited to 1.
 	*/
@@ -392,10 +422,19 @@ typedef struct qsf_validates
 	QofBackendError error_state;
 	const gchar *object_path;
 	const gchar *map_path;
-	GHashTable *validation_table;
-	gint valid_object_count;
-	gint map_calculated_count;
-	gint qof_registered_count;
+	GHashTable *object_table;  /**< Names of all incoming objects (from the
+								object_type) and status (QOF registration). */
+	GHashTable *map_table;     /**< Names of all defined objects (from the
+								define tag) and status (presence of a calculation.)*/
+	/* Need to match object names, not just counts. */
+	gint valid_object_count;   /**< Number of unique incoming objects as 
+								defined in ::QSF_OBJECT_TAG tags in the QSF.*/
+	gint map_calculated_count; /**< Number of objects that can be calculated
+								by this map. ::MAP_OBJECT_TAG. */
+	gint qof_registered_count; /**< Number of objects (in either the QSF 
+								or the map) that are registered with QofObject. */
+	gint incoming_count;       /**< Number of unique objects in the incoming
+								QSF file. Used to ensure all incoming objects are used.*/
 }qsf_validator;
 
 /** \brief shorthand function
