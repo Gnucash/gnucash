@@ -838,8 +838,8 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
 static void
 gxi_update_summary_label (GncXmlImportData *data)
 {
-  gchar *string;
-  gboolean show;
+  gchar *string=NULL;
+  gboolean show=FALSE;
 
   if (data->n_unassigned) {
     if (data->n_impossible) {
@@ -1149,7 +1149,7 @@ gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
   GList *found, *default_conv;
   gboolean is_active;
   ambiguous_type *amb;
-  conv_type *prev_conv, *curr_conv;
+  conv_type *prev_conv, *curr_conv=NULL;
   gpointer ptr;
   GQuark prev_enc, curr_enc;
 
