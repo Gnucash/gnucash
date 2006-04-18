@@ -1,3 +1,10 @@
+2006-04-18  Derek Atkins  <derek@ihtfp.com>
+
+	* doc/tip_of_the_day.list.in:
+	  Fix a 1.8 -> 2.0 string.
+	* src/report/standard-reports/register.scm:
+	  Fix a string that wasn't marked for translation.
+
 2006-04-17  Neil Williams <linux@codehelp.co.uk>
 
 	* configure.in : Bump versions of QOF libraries.

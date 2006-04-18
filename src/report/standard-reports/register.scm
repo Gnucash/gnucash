@@ -290,7 +290,7 @@
   (gnc:register-reg-option
    (gnc:make-simple-boolean-option
     (N_ "Display") (N_ "Price")
-    "hb" "Display the shares price?" #f))
+    "hb" (N_ "Display the shares price?") #f))
 
   (gnc:register-reg-option
    (gnc:make-multichoice-option
