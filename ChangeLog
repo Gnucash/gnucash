@@ -1,3 +1,8 @@
+2006-04-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/fr.po: Added French glossary by Jonathan Ernst
+	<jonathan@ernstfamily.ch>.
+
 2006-04-18  Derek Atkins  <derek@ihtfp.com>
 
 	* doc/tip_of_the_day.list.in:
