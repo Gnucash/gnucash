@@ -1,3 +1,11 @@
+2006-04-19  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-main-window.c: Don't call shutdown directly
+	from the delete_event handler, but use a periodic idle function
+	that checks to insure that gnucash isn't saving the data file
+	before calling shutdown.  Fixes 338952.  Also ignore repeated
+	delete events if a shutdown is queued.
+
 2006-04-19  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/fr_CH/acctchrt_*.gnucash-xea: New French Swiss account

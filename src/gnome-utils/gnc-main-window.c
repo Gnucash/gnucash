@@ -992,10 +992,21 @@ gnc_main_window_remove_plugin (gpointer plugin,
 
 
 static gboolean
+gnc_main_window_timed_quit (gpointer dummy)
+{
+  if (gnc_file_save_in_progress())
+    return TRUE;
+
+  gnc_shutdown (0);
+  return FALSE;
+}
+
+static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
 			      GdkEvent *event,
 			      gpointer user_data)
 {
+  static gboolean already_dead = FALSE;
   QofSession *session;
   GtkWidget *dialog;
   gint response;
@@ -1004,6 +1015,9 @@ gnc_main_window_delete_event (GtkWidget *window,
 			  "GnuCash window.  Doing so will quit the "
 			  "application.  Are you sure that this is "
 			  "what you want to do?");
+
+  if (already_dead)
+    return TRUE;
 
   if (!gnc_main_window_finish_pending(GNC_MAIN_WINDOW(window))) {
     /* Don't close the window. */
@@ -1017,7 +1031,8 @@ gnc_main_window_delete_event (GtkWidget *window,
   if (qof_book_not_saved(qof_session_get_book(session))) {
     if (!gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
       /* Tell gnucash to shutdown cleanly */
-      g_idle_add((GSourceFunc)gnc_shutdown, 0);
+      g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+      already_dead = TRUE;
     }
     /* Cancel the window deletion. It'll happen on the just queued shutdown. */
     return TRUE;
@@ -1040,7 +1055,8 @@ gnc_main_window_delete_event (GtkWidget *window,
 
   if (response == GTK_RESPONSE_OK) {
     /* Tell gnucash to shutdown cleanly */
-    g_idle_add((GSourceFunc)gnc_shutdown, 0);
+    g_timeout_add(250, gnc_main_window_timed_quit, NULL);
+    already_dead = TRUE;
   }
   return TRUE;
 }
@@ -2842,16 +2858,6 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 	if (!gnc_plugin_page_finish_pending(page))
 	  return;
 	gnc_main_window_close_page(page);
-}
-
-static gboolean
-gnc_main_window_timed_quit (gpointer dummy)
-{
-	if (gnc_file_save_in_progress())
-	  return TRUE;
-
-	gnc_shutdown (0);
-	return FALSE;
 }
 
 static void
