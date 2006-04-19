@@ -26,6 +26,7 @@
 #include <libguile.h>
 
 #include "gnc-html.h"
+#include "qof.h"
   
 typedef struct gnc_report_window_s gnc_report_window;
 
@@ -45,5 +46,5 @@ void       gnc_report_raise_editor(SCM report);
 // module[/plugin]-init
 void       gnc_report_init (void);
 
-void gnc_reports_show_all(void);
+void       gnc_reports_show_all (QofSession *session);
 #endif

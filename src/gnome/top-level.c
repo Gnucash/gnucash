@@ -252,7 +252,7 @@ gnc_restore_all_state (gpointer session, gpointer unused)
                     SCM_BOOL_F));
         /* At this point the reports have only been loaded into
            memory.  Now we create their ui component. */
-        gnc_reports_show_all();
+        gnc_reports_show_all(session);
 #endif
         
         LEAVE("old");

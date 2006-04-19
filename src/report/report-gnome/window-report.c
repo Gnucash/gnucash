@@ -37,6 +37,7 @@
 
 #include "dialog-options.h"
 #include "file-utils.h"
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-report.h"
 #include "gnc-ui.h"
 #include "option-util.h"
@@ -47,7 +48,7 @@
 #include "gnc-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
-
+#define MDI_CHILD_CONFIG "mdi_child_config"
 
 /********************************************************************
  *
@@ -320,79 +321,52 @@ gnc_report_init (void)
 }
 
 
-static gboolean
-remove_invalid_report(gpointer key, gpointer val, gpointer data)
-{
-    SCM report = val;
-    gchar *name = NULL;
-
-    if (NULL == (name = gnc_report_name(report)))
-        return TRUE;
-
-    g_free(name);
-    return FALSE;
-}
-
-static gboolean
-remove_old_report(gpointer key, gpointer val, gpointer data)
-{
-    SCM report = val;
-    GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG(data);
-    gchar *name = NULL;
-    gchar *msg;
-    gint response;
-    
-    name = gnc_report_name(report);
-    msg = g_strdup_printf(_("Do you want to display '%s'?"), name);
-    gtk_message_dialog_set_markup(dialog, msg);
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    g_free(msg);
-    g_free(name);
-    return (response == GTK_RESPONSE_NO);
-}    
-
-static void
-show_report(gpointer key, gpointer val, gpointer data)
-{
-    gnc_main_window_open_report(*(gint *)key, NULL);
-}
-
 void
-gnc_reports_show_all(void)
+gnc_reports_show_all(QofSession *session)
 {
-    GHashTable *reports = gnc_reports_get_global();
-    
-    if (reports) {
-        GtkWidget *dialog;
-        guint num_reports;
-        gint response;
-        gchar *msg;
- 
-        g_hash_table_foreach_remove(reports, remove_invalid_report, NULL);
-        num_reports = g_hash_table_size(reports);
-        if (num_reports > 3) {
-            msg = g_strdup_printf(
-                _("GnuCash has found %d reports from an earlier version of "
-                  "GnuCash but can't tell which ones you had open.  You will "
-                  "now have the option to open each report or not.  From now "
-                  "on, GnuCash will remember which reports you leave open, so "
-                  "you won't see this message again."), num_reports);
-            dialog = gtk_message_dialog_new(
-                NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, 
-                GTK_BUTTONS_OK_CANCEL, msg);
-            response = gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
-            g_free(msg);
-            if (response == GTK_RESPONSE_OK) {
-                GtkWidget *dialog = gtk_message_dialog_new(
-                    NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, 
-                    GTK_BUTTONS_YES_NO, NULL);
-                g_hash_table_foreach_remove(reports, remove_old_report, 
-                                            dialog);
-                gtk_widget_destroy(dialog);
-                g_hash_table_foreach(reports, show_report, NULL);
-            }
-        } else
-            g_hash_table_foreach(reports, show_report, NULL);
+  GKeyFile *keyfile;
+  const gchar *home, *url;
+  gchar *encoded_url, *mdi_file, *mdi_group, *value;
+  gchar **keys, **key;
+  gint report_id;
+
+  url = qof_session_get_url(session);
+  if (!url)
+    return;
+  encoded_url = gnc_html_encode_string(url);
+  if (!encoded_url)
+    return;
+
+  home = g_get_home_dir();
+  if (!home) {
+    g_free(encoded_url);
+    return;
+  }
+
+  mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
+  mdi_group = g_strdup_printf("MDI : %s", encoded_url);
+
+  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE);
+  if (keyfile) {
+    keys = g_key_file_get_keys(keyfile, mdi_group, NULL, NULL);
+    if (keys) {
+      for (key = keys; *key; key++) {
+	if (!strncmp(*key, MDI_CHILD_CONFIG, sizeof(MDI_CHILD_CONFIG)))
+	  continue;
+	value = g_key_file_get_string(keyfile, mdi_group, *key, NULL);
+	if (!value)
+	  continue;
+	if (sscanf(value, "gnc-report:id=%d", &report_id) == 1) {
+	  gnc_main_window_open_report(report_id, NULL);
+	}
+	g_free(value);
+      }
+      g_strfreev(keys);
     }
+    g_key_file_free(keyfile);
+  }
+
+  g_free(mdi_file);
+  g_free(mdi_group);
+  g_free(encoded_url);
 }

@@ -1,3 +1,10 @@
+2006-04-18  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/window-report.[ch]:
+	* src/gnome/top-level.c: Parse the old ~/.gnome/GnuCash MDI
+	document file to see which 1.8 reports should be opened the first
+	time gnucash2 starts.
+
 2006-04-18  Christian Stimming  <stimming@tuhh.de>
 
 	* po/fr.po: Updated French translation by Jonathan Ernst.
