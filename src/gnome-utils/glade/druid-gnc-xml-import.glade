@@ -49,7 +49,7 @@
 	    <widget class="GnomeDruidPageEdge" id="start_page">
 	      <property name="visible">True</property>
 	      <property name="position">GNOME_EDGE_START</property>
-	      <property name="title" translatable="yes">Title placeholder</property>
+	      <property name="title">Title placeholder</property>
 	      <property name="text">Introduction placeholder</property>
 	    </widget>
 	  </child>
@@ -90,7 +90,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="encodings_doc_label">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">placeholder</property>
+		      <property name="label">placeholder</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -680,7 +680,7 @@ Click &quot;Forward&quot; to finish loading files and move to the next step of t
 	      <property name="visible">True</property>
 	      <property name="position">GNOME_EDGE_FINISH</property>
 	      <property name="title" translatable="yes">Finish GnuCash XML Import</property>
-	      <property name="text">FIXME: explain what we do or what we have done (+translatable)</property>
+	      <property name="text">finish placeholder</property>
 	      <signal name="finish" handler="gxi_end_finish_cb" last_modification_time="Thu, 30 Mar 2006 05:00:17 GMT"/>
 	    </widget>
 	  </child>
