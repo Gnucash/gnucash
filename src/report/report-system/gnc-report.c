@@ -69,13 +69,41 @@ SCM gnc_report_find(gint id)
 
 int gnc_report_add(SCM report)
 {
-    gint *key;
+    SCM get_id = scm_c_eval_string("gnc:report-id");
+    SCM value;
+    gint id, *key;
+
     gnc_report_init_table();
-    key = g_new(gint, 1);
-    *key = report_next_serial_id++;
-    g_hash_table_insert(reports, key, (gpointer)report);
-    scm_gc_protect_object(report);
-    return *key;
+
+    value = scm_call_1(get_id, report);
+    if (SCM_NUMBERP(value)) {
+      id = scm_num2int(value, SCM_ARG1, __FUNCTION__);
+      if (!g_hash_table_lookup(reports, &id)) {
+	key = g_new(gint, 1);
+	*key = id;
+	g_hash_table_insert(reports, key, (gpointer)report);
+	scm_gc_protect_object(report);
+	return id;
+      }
+      g_warning("Report specified id of %d is already is use. "
+		"Using generated id.", id);
+    }
+
+    id = report_next_serial_id++;
+    while (id < G_MAXINT) {
+      if (!g_hash_table_lookup(reports, &id)) {
+	key = g_new(gint, 1);
+	*key = id;
+	g_hash_table_insert(reports, key, (gpointer)report);
+	scm_gc_protect_object(report);
+	return id;
+      }
+      id = report_next_serial_id++;
+    }
+
+    g_warning("Unable to add report to table. %d reports in use.", G_MAXINT);
+    report_next_serial_id = G_MAXINT;
+    return G_MAXINT;
 }
 
 static gboolean 
