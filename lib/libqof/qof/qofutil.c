@@ -54,7 +54,6 @@ strncasestr(const guchar *str1, const guchar *str2, size_t len)
   return NULL;
 }
 
-#ifndef HAVE_STRCASESTR
 /* Search for str2 in str1, ignore case.  Return pointer to first
  * match, or null.  */
 gchar *
@@ -64,7 +63,6 @@ strcasestr(const gchar *str1, const gchar *str2)
    gchar * retval = strncasestr (str1, str2, len);
    return retval;
 }
-#endif
 
 gint 
 safe_strcmp (const gchar * da, const gchar * db)

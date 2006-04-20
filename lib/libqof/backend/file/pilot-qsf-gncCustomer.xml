@@ -1,57 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <qsf-map xmlns="http://qof.sourceforge.net/">
   <definition qof_version="3">
-    <define e_type="pilot_address" foreach="true"/>
+    <define e_type="pilot_address"/>
+    <define e_type="gncBillTerm"/>
     <define e_type="gncCustomer"/>
     <define e_type="gncAddress" foreach="true"/>
   </definition>
   <object type="gncCustomer">
       <calculate type="string" value="id"/>
       <calculate type="string" value="notes">
-        <set object="pilot_address">entryNote</set>
+        <set>entryNote</set>
       </calculate>
       <calculate type="string" value="name">
-        <set object="pilot_address">entryCompany</set>
+        <set>entryCompany</set>
       </calculate>
       <calculate type="guid" value="guid"/>
       <calculate type="guid" value="addr">
-        <set object="pilot_address">guid</set>
+        <set>guid</set>
       </calculate>
       <calculate type="guid" value="customer_terms"/>
       <calculate type="guid" value="shipaddr"/>
-      <calculate type="boolean" value="active"/>
+      <calculate type="boolean" value="active">
+	<set>true</set>
+      </calculate>
       <calculate type="boolean" value="tax table override"/>
       <calculate type="numeric" value="amount of discount"/>
       <calculate type="numeric" value="amount of credit"/>
   </object>
   <object type="gncAddress">
       <calculate type="string" value="city">
-        <set object="pilot_address">entryCity</set>
+        <set>entryZip</set>
       </calculate>
       <calculate type="string" value="street">
-        <set object="pilot_address">entryAddress</set>
+        <set>entryAddress</set>
       </calculate>
       <calculate type="string" value="fax">
-        <set object="pilot_address">entryPhone2</set>
+        <set>entryPhone2</set>
       </calculate>
       <calculate type="string" value="number"/>
       <calculate type="string" value="name">
-        <set object="pilot_address">entryFirstname</set>
-        <set object="pilot_address">entryLastname</set>
+        <set>entryFirstname</set>
+        <set>entryLastname</set>
       </calculate>
       <calculate type="string" value="email">
-        <set object="pilot_address">entryPhone5</set>
+        <set>entryPhone5</set>
       </calculate>
       <calculate type="string" value="locality">
-        <set object="pilot_address">entryState</set>
+        <set>entryState</set>
       </calculate>
       <calculate type="string" value="phone">
-        <set object="pilot_address">entryPhone1</set>
+        <set>entryPhone1</set>
       </calculate>
       <calculate type="guid" value="guid"/>
       <calculate type="guid" value="owner">
-        <set object="pilot_address">guid</set>
+        <set>guid</set>
       </calculate>
+  </object>
+  <object type="gncBillTerm">
+      <calculate type="string" value="description"/>
+      <calculate type="string" value="name"/>
+      <calculate type="string" value="bill type"/>
+      <calculate type="guid" value="guid"/>
+      <calculate type="numeric" value="amount of discount"/>
+      <calculate type="gint32" value="cut off"/>
+      <calculate type="gint32" value="number of days due"/>
+      <calculate type="gint32" value="number of discounted days"/>
   </object>
   <object type="pilot_address">
       <calculate type="string" value="entryCity">

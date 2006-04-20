@@ -24,6 +24,7 @@
  
 #ifndef _DEPRECATED_H
 #define _DEPRECATED_H
+#include <glib.h> /* deprecated */
 #include "qof.h"
 
 /** @file deprecated.h

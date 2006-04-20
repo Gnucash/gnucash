@@ -37,26 +37,6 @@
 	* src/report/standard-reports/register.scm:
 	  Fix a string that wasn't marked for translation.
 
-2006-04-17  Neil Williams <linux@codehelp.co.uk>
-
-	* configure.in : Bump versions of QOF libraries.
-
-	* lib/libqof/backend/file/qsf-xml-map.c : Refactoring common 
-	code and fixing QOF_VERSION check.
-
-	* lib/libqof/backend/file/pilot-qsf-gncCustomer.xml :
-	remove gncBillTerm - isn't possible to create from 
-	pilot data.
-	* lib/libqof/backend/file/qsf-backend.c :
-	* lib/libqof/backend/file/qsf-xml-map.c :
-	* lib/libqof/backend/file/qsf-xml.c :
-	* lib/libqof/backend/file/qsf-xml.h : Add control over status of 
-	various objects during mapping.
-	
-	* lib/libqof/qof/test/Makefile.am : Remove unwanted include.
-	* lib/libqof/qof/deprecated.h : Retain glib.h in QOF, not
-	deprecated.
-
 2006-04-16  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

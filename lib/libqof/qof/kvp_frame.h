@@ -183,7 +183,7 @@ Use kvp_frame_set_string instead of kvp_frame_set_str
  * The kvp_frame_set_frame_nc() routine works as above, but does 
  *    *NOT* copy the frame. 
  */
-void kvp_frame_set_string(KvpFrame * frame, const gchar * path, const char* str);
+void kvp_frame_set_string(KvpFrame * frame, const gchar * path, const gchar* str);
 void kvp_frame_set_guid(KvpFrame * frame, const gchar * path, const GUID *guid);
 
 void kvp_frame_set_frame(KvpFrame *frame, const gchar *path, KvpFrame *chld);
@@ -348,7 +348,7 @@ KvpFrame * kvp_frame_add_value_nc(KvpFrame * frame, const gchar * path, KvpValue
 gint64      kvp_frame_get_gint64(const KvpFrame *frame, const gchar *path);
 double      kvp_frame_get_double(const KvpFrame *frame, const gchar *path);
 gnc_numeric kvp_frame_get_numeric(const KvpFrame *frame, const gchar *path);
-gchar     * kvp_frame_get_string(const KvpFrame *frame, const gchar *path);
+const gchar * kvp_frame_get_string(const KvpFrame *frame, const gchar *path);
 GUID      * kvp_frame_get_guid(const KvpFrame *frame, const gchar *path);
 void      * kvp_frame_get_binary(const KvpFrame *frame, const gchar *path,
                                    guint64 * size_return); 
@@ -677,7 +677,7 @@ gboolean kvp_value_binary_append(KvpValue *v, void *data, guint64 size);
    slot values.  You must handle that in proc, with a suitable
    recursive call if desired. */
 void kvp_frame_for_each_slot(KvpFrame *f,
-                             void (*proc)(const char *key,
+                             void (*proc)(const gchar *key,
                                           KvpValue *value,
                                           gpointer data),
                              gpointer data);

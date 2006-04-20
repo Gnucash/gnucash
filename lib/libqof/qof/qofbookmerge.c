@@ -297,11 +297,9 @@ qof_book_merge_commit_foreach (
 	iter.fcn = cb;
 	subList = NULL;
 	iter.ruleList = NULL;
-	for (node = mergeData->mergeList; node != NULL; node = node->next)
-	{
+	for (node = mergeData->mergeList; node != NULL; node = node->next) {
 		currentRule = node->data;
-		if(currentRule->mergeResult == mergeResult) 
-		{
+		if(currentRule->mergeResult == mergeResult) {
 			subList = g_list_prepend(subList, currentRule);
 		}
 	}
@@ -748,7 +746,7 @@ qof_book_merge_init( QofBook *importBook, QofBook *targetBook)
 {
 	QofBookMergeData *mergeData;
 	QofBookMergeRule *currentRule;
-	GList *check;
+	GList *node;
 
 	g_return_val_if_fail((importBook != NULL)&&(targetBook != NULL), NULL);
 	mergeData = g_new(QofBookMergeData, 1);
@@ -764,13 +762,12 @@ qof_book_merge_init( QofBook *importBook, QofBook *targetBook)
 	mergeData->currentRule = currentRule;
 	qof_object_foreach_type(qof_book_merge_foreach_type, mergeData);
 	g_return_val_if_fail(mergeData->mergeObjectParams, NULL);
-	if(mergeData->orphan_list != NULL)
-	{
+	if(mergeData->orphan_list != NULL) {
 		qof_book_merge_match_orphans(mergeData);
 	}
-	for (check = mergeData->mergeList; check != NULL; check = check->next)
-	{
-		currentRule = check->data;
+	
+	for (node = mergeData->mergeList; node != NULL; node = node->next) {
+		currentRule = node->data;
 		if(currentRule->mergeResult == MERGE_INVALID) {
 			mergeData->abort = TRUE;
 			return(NULL);
@@ -951,8 +948,7 @@ qof_book_merge_commit(QofBookMergeData *mergeData )
 	if(mergeData->abort == TRUE) return -1;
 	check = g_list_copy(mergeData->mergeList);
 	g_return_val_if_fail(check != NULL, -1);
-	for (node = check; node != NULL; node = node->next)
-	{
+	for (node = check; node != NULL; node = node->next) {
 		currentRule = node->data;
 		if(currentRule->mergeResult == MERGE_INVALID) {
 			qof_book_merge_abort(mergeData);
@@ -966,9 +962,9 @@ qof_book_merge_commit(QofBookMergeData *mergeData )
 	}
 	g_list_free(check);
 	qof_book_merge_commit_foreach(qof_book_merge_commit_rule_loop, 
-        MERGE_NEW, mergeData);
+				      MERGE_NEW, mergeData);
 	qof_book_merge_commit_foreach(qof_book_merge_commit_rule_loop, 
-        MERGE_UPDATE, mergeData);
+				      MERGE_UPDATE, mergeData);
 	/* Placeholder for QofObject merge_helper_cb - all objects
         and all parameters set */
 	while(mergeData->mergeList != NULL) {
@@ -1004,8 +1000,8 @@ qof_book_merge_rule_foreach(QofBookMergeData *mergeData,
 	iter.fcn = cb;
 	iter.data = mergeData;
 	matching_rules = NULL;
-	for (node = mergeData->mergeList; node != NULL; node = node->next)
-	{
+	iter.ruleList = NULL;
+	for (node = mergeData->mergeList; node != NULL; node = node->next) {
 		currentRule = node->data;
 		if(currentRule->mergeResult == mergeResult) {
 			matching_rules = g_list_prepend(matching_rules, currentRule);
