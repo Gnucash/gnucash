@@ -1,5 +1,10 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/reconcile.glade: Remove translatable flag from a
+	label. Remove unused "Reconcile" dialog. This was an old abandoned
+	attempt to replace the hardcoded C reconcile dialog with one from
+	a glade file.
+
 	* src/gnome/glade/account.glade: Add a tooltip for the "hidden"
 	option in the Edit Account dialog.
 
