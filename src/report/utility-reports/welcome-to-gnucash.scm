@@ -87,6 +87,7 @@
 (gnc:define-report 
  'name (N_ "Welcome to GnuCash")
  'version 1
+ 'in-menu? #f
  'menu-path (list gnc:menuname-utility)
  'options-generator options
  'renderer renderer)

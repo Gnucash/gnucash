@@ -1,5 +1,10 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/report/utility-reports/welcome-to-gnucash.scm:
+	* src/report/report-gnome/report-gnome.scm: Make the "Welcome to
+	GnuCash" report menu item build the entire report, instead of just
+	the first sub-report.
+
 	* src/report/report-system/report.scm:
 	* src/report/report-system/report-system.scm:
 	* src/report/report-gnome/gnc-plugin-page-report.c: Correctly save
