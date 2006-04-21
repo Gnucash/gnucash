@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-17 09:56+0100\n"
-"PO-Revision-Date: 2006-04-17 10:03+0100\n"
+"PO-Revision-Date: 2006-04-21 10:03+0200\n"
 "Last-Translator: Neil Williams <linux@codehelp.co.uk>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16367,7 +16367,7 @@ msgstr "Income & Expense Chart"
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:842
 msgid "Budget Report"
-msgstr "Single Report"
+msgstr ""
 
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
