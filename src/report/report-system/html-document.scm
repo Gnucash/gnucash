@@ -137,8 +137,7 @@
                                         (gnc:html-document-style-stack doc))
           ;; push it 
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
-          (if (string-null? title)
-              (gnc:error "Null document title")
+          (if (not (string-null? title))
               (gnc:report-render-starting (gnc:html-document-title doc)))
           (if (not (null? headers?))
               (begin 
