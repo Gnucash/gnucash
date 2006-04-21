@@ -154,6 +154,7 @@
 (export gnc:report-render-html)
 (export gnc:report-run)
 (export gnc:report-templates-for-each)
+(export gnc:report-embedded-list)
 
 ;; html-barchart.scm
 

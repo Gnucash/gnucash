@@ -444,3 +444,12 @@
 (define (gnc:report-templates-for-each thunk)
   (hash-for-each (lambda (name template) (thunk name template))
                  *gnc:_report-templates_*))
+
+;; return the list of reports embedded in the specified report
+(define (gnc:report-embedded-list report)
+  (let* ((options (gnc:report-options report))
+	 (option (gnc:lookup-option options "__general" "report-list")))
+    (if option
+	(let ((opt-value (gnc:option-value option)))
+	  (map (lambda (x) (car x)) opt-value))
+	#f)))

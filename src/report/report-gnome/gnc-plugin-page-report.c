@@ -631,7 +631,8 @@ gnc_plugin_page_report_destroy_widget(GncPluginPage *plugin_page)
 
 /** The key name used it the state file for storing the report
  *  options. */
-#define SCHEME_OPTIONS "Scheme Options"
+#define SCHEME_OPTIONS   "Scheme Options"
+#define SCHEME_OPTIONS_N "Scheme Options %d"
 
 
 /** Save enough information about this report page that it can be
@@ -651,7 +652,9 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
 	GncPluginPageReport *report;
 	GncPluginPageReportPrivate *priv;
 	SCM gen_save_text, scm_text;
-	gchar *text;
+	SCM get_embedded_list, embedded, item, tmp_report;
+	gint count, id;
+	gchar *text, *key_name;
 	
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT(plugin_page));
 	g_return_if_fail (key_file != NULL);
@@ -668,9 +671,32 @@ gnc_plugin_page_report_save_page (GncPluginPage *plugin_page,
             LEAVE("not saving invalid report");
             return;
         }
-        gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
-        scm_text = scm_call_1(gen_save_text, priv->cur_report);
 
+	gen_save_text = scm_c_eval_string("gnc:report-generate-restore-forms");
+	get_embedded_list = scm_c_eval_string("gnc:report-embedded-list");
+	embedded = scm_call_1(get_embedded_list, priv->cur_report);
+	count = scm_ilength(embedded);
+	while (count-- > 0) {
+	  item = SCM_CAR(embedded);
+	  embedded = SCM_CDR(embedded);
+	  if (!SCM_NUMBERP(item))
+	    continue;
+	  id = SCM_INUM(item);
+	  tmp_report = gnc_report_find(id);
+	  scm_text = scm_call_1(gen_save_text, tmp_report);
+	  if (!SCM_STRINGP (scm_text)) {
+	    DEBUG("child report %d: nothing to save", id);
+	    continue;
+	  }
+
+	  key_name = g_strdup_printf(SCHEME_OPTIONS_N, id);
+	  text = gnc_guile_strip_comments(SCM_STRING_CHARS(scm_text));
+	  g_key_file_set_string(key_file, group_name, key_name, text);
+	  g_free(text);
+	  g_free(key_name);
+	}
+
+        scm_text = scm_call_1(gen_save_text, priv->cur_report);
 	if (!SCM_STRINGP (scm_text)) {
 	  LEAVE("nothing to save");
 	  return;
@@ -698,33 +724,61 @@ gnc_plugin_page_report_recreate_page (GtkWidget *window,
 				      const gchar *group_name)
 {
 	GncPluginPage *page;
+	gchar **keys;
+	gsize i, num_keys;
 	GError *error = NULL;
 	gchar *option_string;
 	gint report_id;
-	SCM scm_id;
+	SCM scm_id, final_id = SCM_BOOL_F;
 	SCM report;
 	
 	g_return_val_if_fail(key_file, NULL);
 	g_return_val_if_fail(group_name, NULL);
 	ENTER("key_file %p, group_name %s", key_file, group_name);
 
-	option_string = g_key_file_get_string(key_file, group_name,
-					      SCHEME_OPTIONS, &error);
+	keys = g_key_file_get_keys(key_file, group_name, &num_keys, &error);
 	if (error) {
-	  g_warning("error reading group %s key %s: %s",
-		    group_name, SCHEME_OPTIONS, error->message);
+	  g_warning("error reading group %s key list: %s",
+		    group_name, error->message);
 	  g_error_free(error);
-	  LEAVE("bad value");
-	  return NULL;
-	}
-	scm_id = scm_c_eval_string(option_string);
-	g_free(option_string);
-	if (!scm_integer_p(scm_id)) {
-	  LEAVE("report id not an integer");
+	  LEAVE("no keys");
 	  return NULL;
 	}
 
-	report_id = scm_num2int(scm_id, SCM_ARG1, __FUNCTION__);
+	for (i = 0; i < num_keys; i++) {
+	  if (strncmp(keys[i], SCHEME_OPTIONS, strlen(SCHEME_OPTIONS)) != 0)
+	    continue;
+	  option_string = g_key_file_get_string(key_file, group_name,
+						keys[i], &error);
+	  if (error) {
+	    g_warning("error reading group %s key %s: %s",
+		      group_name, keys[i], error->message);
+	    g_error_free(error);
+	    LEAVE("bad value");
+	    return NULL;
+	  }
+
+	  scm_id = scm_c_eval_string(option_string);
+	  g_free(option_string);
+
+	  if (!scm_integer_p(scm_id)) {
+	    DEBUG("report id not an integer for key %s", keys[i]);
+	    return NULL;
+	  }
+
+	  if (final_id == SCM_BOOL_F) {
+	    if (strcmp(keys[i], SCHEME_OPTIONS) == 0) {
+	      final_id = scm_id;
+	    }
+	  }
+	}
+
+	if (final_id == SCM_BOOL_F) {
+	  LEAVE("report not specified");
+	  return NULL;
+	}
+
+	report_id = scm_num2int(final_id, SCM_ARG1, __FUNCTION__);
 	report = gnc_report_find(report_id);
 	if (!report) {
 	  LEAVE("report doesn't exist");

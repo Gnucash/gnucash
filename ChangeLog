@@ -1,5 +1,14 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/report.scm:
+	* src/report/report-system/report-system.scm:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Correctly save
+	and restore multicolumn reports. Fixes 327627.
+
+	* src/report/report-system/html-document.scm: Don't complain about
+	reports without html titles.  This occurs for every embedded
+	report.
+
 	* src/gnome/glade/reconcile.glade: Remove translatable flag from a
 	label. Remove unused "Reconcile" dialog. This was an old abandoned
 	attempt to replace the hardcoded C reconcile dialog with one from
