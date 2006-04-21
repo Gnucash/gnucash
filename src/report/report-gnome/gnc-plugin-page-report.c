@@ -109,6 +109,9 @@ typedef struct GncPluginPageReportPrivate
         /* This is set to mark the fact that we need to reload the html */
         gboolean	need_reload;
 
+        /* The page is in the process of reloading the html */
+        gboolean	reloading;
+
         /// the gnc_html abstraction this PluginPage contains
         gnc_html *html;
 
@@ -132,6 +135,7 @@ static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
+static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
 static void gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
@@ -258,6 +262,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 	gnc_plugin_page_class->save_page       = gnc_plugin_page_report_save_page;
 	gnc_plugin_page_class->recreate_page   = gnc_plugin_page_report_recreate_page;
 	gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
+	gnc_plugin_page_class->finish_pending   = gnc_plugin_page_report_finish_pending;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageReportPrivate));
 
@@ -832,6 +837,19 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 }
 
 
+static gboolean
+gnc_plugin_page_report_finish_pending (GncPluginPage *page)
+{
+	GncPluginPageReportPrivate *priv;
+	GncPluginPageReport *report;
+
+	report = GNC_PLUGIN_PAGE_REPORT(page);
+	priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+	printf("%s: reloading is %d\n", __FUNCTION__, priv->reloading);
+	return !priv->reloading;
+}
+
+
 /********************************************************************
  * gnc_report_window_destroy 
  * free and destroy a window 
@@ -1121,7 +1139,9 @@ gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report
         gtk_widget_queue_draw( GTK_WIDGET(priv->container) );
 
         // this does...
+	priv->reloading = TRUE;
         gnc_html_reload( priv->html );
+	priv->reloading = FALSE;
 }
 
 static void

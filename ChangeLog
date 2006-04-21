@@ -1,5 +1,11 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/gnome-utils/gnc-main-window.c: Don't allow a report page to
+	be closed of it is in the process of reloading.  Make the close
+	buttons on the notebook tabs insensitive when the rest of the UI
+	is insensitive. Fixes 339327.
+
 	* src/report/utility-reports/welcome-to-gnucash.scm:
 	* src/report/report-gnome/report-gnome.scm: Make the "Welcome to
 	GnuCash" report menu item build the entire report, instead of just

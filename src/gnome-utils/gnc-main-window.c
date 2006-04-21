@@ -2102,6 +2102,9 @@ gnc_main_window_close_page (GncPluginPage *page)
 	if (!page->notebook_page)
 		return;
 
+	if (!gnc_plugin_page_finish_pending(page))
+	  return;
+
 	window = GNC_MAIN_WINDOW (page->window);
 	if (!window) {
 	  g_warning("Page is not in a window.");
@@ -2855,8 +2858,6 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 
 	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	page = priv->current_page;
-	if (!gnc_plugin_page_finish_pending(page))
-	  return;
 	gnc_main_window_close_page(page);
 }
 
@@ -3371,11 +3372,14 @@ static void
 gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 {
 	GncMainWindow *window;
-	GList *winp;
+	GncMainWindowPrivate *priv;
+	GList *winp, *tmp;
 	GSList *widgetp, *toplevels;
+	GtkWidget *close_button;
 
 	for (winp = active_windows; winp; winp = g_list_next(winp)) {
 	  window = winp->data;
+	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	  toplevels = gtk_ui_manager_get_toplevels(window->ui_merge,
 						   GTK_UI_MANAGER_MENUBAR |
 						   GTK_UI_MANAGER_TOOLBAR |
@@ -3384,6 +3388,13 @@ gnc_main_window_all_ui_set_sensitive (GncWindow *unused, gboolean sensitive)
 	    gtk_widget_set_sensitive (widgetp->data, sensitive);
 	  }
 	  g_slist_free(toplevels);
+
+	  for (tmp = priv->installed_pages; tmp; tmp = g_list_next(tmp)) {
+	    close_button = g_object_get_data(tmp->data, PLUGIN_PAGE_CLOSE_BUTTON);
+	    if (!close_button)
+	      continue;
+	    gtk_widget_set_sensitive (close_button, sensitive);
+	  }
 	}
 }
 
