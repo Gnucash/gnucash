@@ -378,6 +378,7 @@
 		      <child>
 			<widget class="GtkCheckButton" id="hidden_button">
 			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">This account (and any sub-accounts) will be hidden in the account tree and will not appear in the popup account list in the register.  To reset this option, you will first need to open the &quot;Filter By...&quot; dialog for the account tree and check the &quot;show hidden accounts&quot; option.  Doing so will allow you to select the account and reopen this dialog.</property>
 			  <property name="can_focus">True</property>
 			  <property name="label" translatable="yes">H_idden</property>
 			  <property name="use_underline">True</property>
