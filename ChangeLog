@@ -1,5 +1,9 @@
 2006-04-22  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: Fix a null pointer
+	dereference.  Don't make the Close button sensitive until a page
+	has been added. Fixes #339372.
+
 	* src/pixmaps/Makefile.am:
 	* src/gnome-utils/gnc-icons.c: Rename some icon files.
 

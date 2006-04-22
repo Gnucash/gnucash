@@ -360,6 +360,15 @@ static const gchar *always_insensitive_actions[] = {
 };
 
 
+/** The following items in the main window should be made insensitive
+ *  at startup time.  The sensitivity will be changed by some later
+ *  event. */
+static const gchar *initially_insensitive_actions[] = {
+	"FileCloseAction",
+	NULL
+};
+
+
 /** The following are in the main window so they will always be
  *  present in the menu structure, but they are always hidden.
  *  These actions should be overridden in child windows where they
@@ -2099,8 +2108,8 @@ gnc_main_window_close_page (GncPluginPage *page)
 	GncMainWindow *window;
 	GncMainWindowPrivate *priv;
 
-	if (!page->notebook_page)
-		return;
+	if (!page || !page->notebook_page)
+	  return;
 
 	if (!gnc_plugin_page_finish_pending(page))
 	  return;
@@ -2628,6 +2637,9 @@ gnc_main_window_setup_window (GncMainWindow *window)
 					    0,
 					    G_CALLBACK(gnc_main_window_cmd_window_raise),
 					    window);
+	gnc_plugin_update_actions(priv->action_group,
+				  initially_insensitive_actions,
+				  "sensitive", FALSE);
 	gnc_plugin_update_actions(priv->action_group,
 				  always_insensitive_actions,
 				  "sensitive", FALSE);
