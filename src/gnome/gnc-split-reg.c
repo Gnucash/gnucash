@@ -1891,7 +1891,7 @@ gboolean
 gtk_callback_bug_workaround (gpointer argp)
 {
   dialog_args *args = argp;
-  const gchar *read_only = "This account register is read-only.";
+  const gchar *read_only = _("This account register is read-only.");
   GtkWidget *dialog;
 
   dialog = gtk_message_dialog_new(GTK_WINDOW(args->gsr->window),
