@@ -1,5 +1,12 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/pixmaps/Makefile.am:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/gnome-utils/gnc-icons.[ch]:
+	* src/gnome/gnc-plugin-page-register.c: Add new icons for
+	invoices, adding a scheduled transaction, and the jump action.
+	Fixes #339112.
+
 	* src/import-export/log-replay/gnc-log-replay.c:
 	* src/engine/TransLog.[ch]: Don't allow the user to open the
 	current log file.  This only produces a debug message because of

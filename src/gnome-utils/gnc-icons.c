@@ -18,6 +18,30 @@ static GtkStockItem items[] = {
   { GNC_STOCK_OPEN_ACCOUNT,   N_("_Open Account"),   0, 0, NULL },
   { GNC_STOCK_TRANSFER,       N_("_Transfer..."),    0, 0, NULL },
   { GNC_STOCK_SPLIT_TRANS,    N_("S_plit Transaction"), 0, 0, NULL },
+  { GNC_STOCK_JUMP_TO,        N_("_Jump"),              0, 0, NULL },
+};
+
+typedef struct _item_file {
+  const gchar *stock_name;
+  const gchar *filename_lg;
+  const gchar *filename_sm;
+} item_file;
+
+static item_file item_files[] = {
+  { GNC_STOCK_ACCOUNT, "account.png", "account-16.png"},
+  { GNC_STOCK_DELETE_ACCOUNT, "delete-account.png", "delete-account-16.png"},
+  { GNC_STOCK_EDIT_ACCOUNT, "edit-account.png", "edit-account-16.png"},
+  { GNC_STOCK_NEW_ACCOUNT, "new-account.png", "new-account-16.png"},
+  { GNC_STOCK_OPEN_ACCOUNT, "open-account.png", "open-account-16.png"},
+  { GNC_STOCK_TRANSFER, "transfer.png", "transfer-16.png"},
+  { GNC_STOCK_SCHEDULE,   "gnc-sx-new.png",         "gnc-sx-new-16.png"},
+  { GNC_STOCK_SPLIT_TRANS, "split-transaction.png", "split-transaction-16.png"},
+  { GNC_STOCK_JUMP_TO,    "gnc-jumpto.png",         "gnc-jumpto-16.png"},
+  { GNC_STOCK_INVOICE,        "gnc-invoice.png",        "gnc-invoice-16.png"},
+  { GNC_STOCK_INVOICE_POST,   "gnc-invoice-post.png",   "gnc-invoice-post-16.png"},
+  { GNC_STOCK_INVOICE_UNPOST, "gnc-invoice-unpost.png", "gnc-invoice-unpost-16.png"},
+  { GNC_STOCK_INVOICE_EDIT,   "gnc-invoice-edit.png",   "gnc-invoice-edit-16.png"},
+  { 0 },
 };
 
 static void
@@ -72,25 +96,17 @@ void
 gnc_load_stock_icons (void)
 {
 	GtkIconFactory *factory;
+	item_file *file;
 
 	/* Register our stock items */
 	gtk_stock_add (items, G_N_ELEMENTS (items));
       
 	/* Add our custom icon factory to the list of defaults */
 	factory = gtk_icon_factory_new ();
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_ACCOUNT,
-				 "account.png", "account-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_DELETE_ACCOUNT,
-				 "delete-account.png", "delete-account-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_EDIT_ACCOUNT,
-				 "edit-account.png", "edit-account-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_NEW_ACCOUNT,
-				 "new-account.png", "new-account-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_OPEN_ACCOUNT,
-				 "open-account.png", "open-account-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_TRANSFER,
-				 "transfer.png", "transfer-16.png");
-	gnc_add_stock_icon_pair (factory, GNC_STOCK_SPLIT_TRANS,
-				 "split-transaction.png", "split-transaction-16.png");
+	for (file = item_files; file->stock_name; file++) {
+	  gnc_add_stock_icon_pair (factory, file->stock_name,
+				   file->filename_lg, file->filename_sm);
+	}
+
 	gtk_icon_factory_add_default (factory);
 }
