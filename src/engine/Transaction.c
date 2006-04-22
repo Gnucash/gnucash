@@ -801,7 +801,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
   gint fraction, old_fraction;
 
   if (!trans || !curr || trans->common_currency == curr) return;
-  qof_begin_edit(QOF_INSTANCE(trans));
+  xaccTransBeginEdit(trans);
 
   old_fraction = gnc_commodity_get_fraction (trans->common_currency);
   trans->common_currency = curr;
@@ -814,7 +814,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 
   qof_instance_set_dirty(QOF_INSTANCE(trans));
   mark_trans(trans);  /* Dirty balance of every account in trans */
-  qof_commit_edit(QOF_INSTANCE(trans));
+  xaccTransCommitEdit(trans);
 }
 
 /********************************************************************\
@@ -1251,7 +1251,7 @@ xaccTransOrder (const Transaction *ta, const Transaction *tb)
 static inline void
 xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
 {
-    qof_begin_edit(QOF_INSTANCE(trans));
+    xaccTransBeginEdit(trans);
 
     PINFO ("addr=%p set date to %" G_GUINT64_FORMAT ".%09ld %s",
            trans, val.tv_sec, val.tv_nsec, 
@@ -1260,7 +1260,7 @@ xaccTransSetDateInternal(Transaction *trans, Timespec *dadate, Timespec val)
     *dadate = val;
     qof_instance_set_dirty(QOF_INSTANCE(trans));
     mark_trans(trans);
-    qof_commit_edit(QOF_INSTANCE(trans));
+    xaccTransCommitEdit(trans);
 
    /* Because the date has changed, we need to make sure that each of
     * the splits is properly ordered in each of their accounts. We
@@ -1344,10 +1344,10 @@ void
 xaccTransSetDateDueTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
-   qof_begin_edit(QOF_INSTANCE(trans));
+   xaccTransBeginEdit(trans);
    kvp_frame_set_timespec (trans->inst.kvp_data, TRANS_DATE_DUE_KVP, *ts);
    qof_instance_set_dirty(QOF_INSTANCE(trans));
-   qof_commit_edit(QOF_INSTANCE(trans));
+   xaccTransCommitEdit(trans);
 }
 
 void
@@ -1355,20 +1355,20 @@ xaccTransSetTxnType (Transaction *trans, char type)
 {
   char s[2] = {type, '\0'};
   g_return_if_fail(trans);
-  qof_begin_edit(&trans->inst);
+  xaccTransBeginEdit(trans);
   kvp_frame_set_str (trans->inst.kvp_data, TRANS_TXN_TYPE_KVP, s);
   qof_instance_set_dirty(QOF_INSTANCE(trans));
-  qof_commit_edit(&trans->inst);
+  xaccTransCommitEdit(trans);
 }
 
 void xaccTransClearReadOnly (Transaction *trans)
 {
     if (trans) {
-        qof_begin_edit(QOF_INSTANCE(trans));
+        xaccTransBeginEdit(trans);
         kvp_frame_set_slot_path (trans->inst.kvp_data, NULL, 
                                  TRANS_READ_ONLY_REASON, NULL);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
-        qof_commit_edit(QOF_INSTANCE(trans));
+        xaccTransCommitEdit(trans);
     }
 }
 
@@ -1376,11 +1376,11 @@ void
 xaccTransSetReadOnly (Transaction *trans, const char *reason)
 {
     if (trans && reason) {
-        qof_begin_edit(QOF_INSTANCE(trans));
+        xaccTransBeginEdit(trans);
         kvp_frame_set_str (trans->inst.kvp_data, 
                            TRANS_READ_ONLY_REASON, reason);
         qof_instance_set_dirty(QOF_INSTANCE(trans));
-        qof_commit_edit(QOF_INSTANCE(trans));
+        xaccTransCommitEdit(trans);
     }
 }
 
@@ -1401,11 +1401,11 @@ void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    if (!trans || !xnum) return;
-   qof_begin_edit(QOF_INSTANCE(trans));
+   xaccTransBeginEdit(trans);
 
    CACHE_REPLACE(trans->num, xnum);
    qof_instance_set_dirty(QOF_INSTANCE(trans));
-   qof_commit_edit(QOF_INSTANCE(trans));
+   xaccTransCommitEdit(trans);
 }
 
 static void
@@ -1420,11 +1420,11 @@ void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    if (!trans || !desc) return;
-   qof_begin_edit(QOF_INSTANCE(trans));
+   xaccTransBeginEdit(trans);
 
    CACHE_REPLACE(trans->description, desc);
    qof_instance_set_dirty(QOF_INSTANCE(trans));
-   qof_commit_edit(QOF_INSTANCE(trans));
+   xaccTransCommitEdit(trans);
 }
 
 static void
@@ -1439,11 +1439,11 @@ void
 xaccTransSetNotes (Transaction *trans, const char *notes)
 {
   if (!trans || !notes) return;
-  qof_begin_edit(QOF_INSTANCE(trans));
+  xaccTransBeginEdit(trans);
 
   kvp_frame_set_str (trans->inst.kvp_data, trans_notes_str, notes);
   qof_instance_set_dirty(QOF_INSTANCE(trans));
-  qof_commit_edit(QOF_INSTANCE(trans));
+  xaccTransCommitEdit(trans);
 }
 
 /********************************************************************\
