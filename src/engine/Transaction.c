@@ -994,7 +994,7 @@ xaccTransCommitEdit (Transaction *trans)
 {
    if (!trans) return;
 
-   QOF_COMMIT_EDIT_PART1 (&trans->inst);
+   if (!qof_commit_edit (QOF_INSTANCE(trans))) return;
 
    /* We increment this for the duration of the call
     * so other functions don't result in a recursive

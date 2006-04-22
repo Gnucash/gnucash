@@ -365,7 +365,7 @@ static inline void emp_free (QofInstance *inst)
 
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
-  QOF_COMMIT_EDIT_PART1 (&employee->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(employee))) return;
   qof_commit_edit_part2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }

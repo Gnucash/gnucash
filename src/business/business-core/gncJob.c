@@ -278,7 +278,7 @@ static inline void gncJobOnDone (QofInstance *qof) { }
 
 void gncJobCommitEdit (GncJob *job)
 {
-  QOF_COMMIT_EDIT_PART1 (&job->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(job))) return;
   qof_commit_edit_part2 (&job->inst, gncJobOnError,
                          gncJobOnDone, job_free);
 }

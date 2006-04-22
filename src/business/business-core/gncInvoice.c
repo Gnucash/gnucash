@@ -1456,7 +1456,7 @@ static inline void invoice_free (QofInstance *inst)
 
 void gncInvoiceCommitEdit (GncInvoice *invoice)
 {
-  QOF_COMMIT_EDIT_PART1 (&invoice->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(invoice))) return;
   qof_commit_edit_part2 (&invoice->inst, gncInvoiceOnError,
 			 gncInvoiceOnDone, invoice_free);
 }

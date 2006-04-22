@@ -151,7 +151,7 @@ static inline void noop (QofInstance *inst) {}
 void
 gnc_price_commit_edit (GNCPrice *p)
 {
-  QOF_COMMIT_EDIT_PART1 (&p->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(p))) return;
   qof_commit_edit_part2 (&p->inst, commit_err, noop, noop);
 }
 
@@ -166,7 +166,7 @@ gnc_pricedb_begin_edit (GNCPriceDB *pdb)
 void
 gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 {
-  QOF_COMMIT_EDIT_PART1 (&pdb->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(pdb))) return;
   qof_commit_edit_part2 (&pdb->inst, commit_err, noop, noop);
 }
 

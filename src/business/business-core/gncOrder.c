@@ -352,7 +352,7 @@ static inline void order_free (QofInstance *inst)
 
 void gncOrderCommitEdit (GncOrder *order)
 {
-  QOF_COMMIT_EDIT_PART1 (&order->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(order))) return;
   qof_commit_edit_part2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }

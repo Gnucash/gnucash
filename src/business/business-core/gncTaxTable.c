@@ -524,7 +524,7 @@ static inline void table_free (QofInstance *inst)
 
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
-  QOF_COMMIT_EDIT_PART1 (&table->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(table))) return;
   qof_commit_edit_part2 (&table->inst, gncTaxTableOnError,
                          gncTaxTableOnDone, table_free);
 }

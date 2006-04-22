@@ -386,7 +386,7 @@ static inline void cust_free (QofInstance *inst)
 
 void gncCustomerCommitEdit (GncCustomer *cust)
 {
-  QOF_COMMIT_EDIT_PART1 (&cust->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(cust))) return;
   qof_commit_edit_part2 (&cust->inst, gncCustomerOnError,
                          gncCustomerOnDone, cust_free);
 }

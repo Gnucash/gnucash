@@ -1173,7 +1173,7 @@ static inline void entry_free (QofInstance *inst)
 
 void gncEntryCommitEdit (GncEntry *entry)
 {
-  QOF_COMMIT_EDIT_PART1 (&entry->inst);
+  if (!qof_commit_edit (QOF_INSTANCE(entry))) return;
   qof_commit_edit_part2 (&entry->inst, gncEntryOnError,
 			 gncEntryOnDone, entry_free);
 }
