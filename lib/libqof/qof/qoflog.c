@@ -182,7 +182,7 @@ qof_log_prettify (const char *name)
     *(p+1) = ')';
     *(p+2) = 0x0;
   }
-  else { strcpy (&buffer[QOF_LOG_MAX_CHARS - 4], "...()"); }
+  else { strcpy (&buffer[QOF_LOG_MAX_CHARS - 6], "...()"); }
   function_buffer = g_strdup(buffer);
   g_free(buffer);
   return function_buffer;
