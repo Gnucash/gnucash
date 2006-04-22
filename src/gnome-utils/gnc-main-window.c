@@ -108,8 +108,6 @@ static void gnc_main_window_destroy (GtkObject *object);
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
 
-static void main_window_update_page_name (GncMainWindow *window, GncPluginPage *page, const gchar *name_in);
-
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
@@ -484,7 +482,7 @@ gnc_main_window_restore_page (GncMainWindow *window, GncMainWindowSaveData *data
 	/* Fall through and still show the page. */
       } else {
 	DEBUG("updating page name for %p to %s.", page, name);
-	main_window_update_page_name(window, page, name);
+	main_window_update_page_name(page, name);
 	g_free(name);
       }
     }
@@ -1505,11 +1503,11 @@ main_window_find_tab_items (GncMainWindow *window,
   return (*label_p && *entry_p);
 }
 
-static void
-main_window_update_page_name (GncMainWindow *window,
-			      GncPluginPage *page,
+void
+main_window_update_page_name (GncPluginPage *page,
 			      const gchar *name_in)
 {
+  GncMainWindow *window;
   GncMainWindowPrivate *priv;
   GtkWidget *label, *entry;
   gchar *name;
@@ -1528,6 +1526,7 @@ main_window_update_page_name (GncMainWindow *window,
   }
 
   /* Update the plugin */
+  window = GNC_MAIN_WINDOW(page->window);
   priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
   gnc_plugin_page_set_page_name(page, name);
 
@@ -1562,8 +1561,7 @@ gnc_main_window_tab_entry_activate (GtkWidget *entry,
     return;
   }
 
-  main_window_update_page_name(GNC_MAIN_WINDOW(page->window), page,
-			       gtk_entry_get_text(GTK_ENTRY(entry)));
+  main_window_update_page_name(page, gtk_entry_get_text(GTK_ENTRY(entry)));
 
   gtk_widget_hide(entry);
   gtk_widget_show(label);

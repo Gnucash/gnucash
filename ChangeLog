@@ -1,3 +1,12 @@
+2006-04-22  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c:
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome/gnc-plugin-page-register.c: Update a report's tab name
+	in the main window when the name in the report options is
+	changed. Fixes #334199.  Also update a register's tab name if the
+	account name is changed.
+
 2006-04-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-split-reg.c: Mark string for translation as

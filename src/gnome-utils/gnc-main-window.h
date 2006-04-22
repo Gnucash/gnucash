@@ -146,6 +146,10 @@ void gnc_main_window_close_page (GncPluginPage *page);
 GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
 
 
+void
+main_window_update_page_name (GncPluginPage *page,
+			      const gchar *name_in);
+
 /** Manually add a set of actions to the specified window.  Plugins
  *  whose user interface is not hard coded (e.g. the menu-additions *
  *  plugin) must create their actions at run time, then use this *

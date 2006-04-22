@@ -546,7 +546,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
 	new_name = gnc_option_db_lookup_string_option(priv->cur_odb, "General",
 						      "Report name", NULL);
 	if (strcmp(old_name, new_name) != 0) {
-	  gnc_plugin_page_set_page_name(GNC_PLUGIN_PAGE(report), new_name);
+	  main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
 	}
 	g_free(new_name);
 
@@ -845,7 +845,6 @@ gnc_plugin_page_report_finish_pending (GncPluginPage *page)
 
 	report = GNC_PLUGIN_PAGE_REPORT(page);
 	priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
-	printf("%s: reloading is %d\n", __FUNCTION__, priv->reloading);
 	return !priv->reloading;
 }
 

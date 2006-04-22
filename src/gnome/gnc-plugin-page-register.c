@@ -2796,8 +2796,6 @@ gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
               return;
           }
           if (ei->event_mask & QOF_EVENT_MODIFY) {
-              /* CAS: We need to also handle account renames, but at
-                 least we don't crash for those. */
           }
       }
   }
@@ -2855,32 +2853,18 @@ gppr_account_destroy_cb (Account *account)
 }
 
 /** This function is the handler for all event messages from the
- *  engine.  Its purpose is to update the account tree model any time
- *  an account is added to the engine or deleted from the engine.
- *  This change to the model is then propagated to any/all overlying
- *  filters and views.  This function listens to the ADD, REMOVE, and
- *  DESTROY events.
+ *  engine.  Its purpose is to update the register page any time
+ *  an account or transaction is changed.
  *
  *  @internal
  *
- *  @warning There is a "Catch 22" situation here.
- *  gtk_tree_model_row_deleted() can't be called until after the item
- *  has been deleted from the real model (which is the engine's
- *  account tree for us), but once the account has been deleted from
- *  the engine we have no way to determine the path to pass to
- *  row_deleted().  This is a PITA, but the only other choice is to
- *  have this model mirror the engine's accounts instead of
- *  referencing them directly.
+ *  @param entity A pointer to the affected item.
  *
- *  @param entity The guid of the affected item.
+ *  @param event_type The type of the affected item.
  *
- *  @param type The type of the affected item.  This function only
- *  cares about items of type "account".
+ *  @param page A pointer to the register page.
  *
- *  @param event type The type of the event. This function only cares
- *  about items of type ADD, REMOVE, MODIFY, and DESTROY.
- *
- *  @param user_data A pointer to the account tree model.
+ *  @param ed
  */
 static void
 gnc_plugin_page_register_event_handler (QofEntity *entity,
@@ -2894,11 +2878,21 @@ gnc_plugin_page_register_event_handler (QofEntity *entity,
   GtkWidget *window;
 
   g_return_if_fail(page);	/* Required */
-  if (!GNC_IS_TRANS(entity))
+  if (!GNC_IS_TRANS(entity) && !GNC_IS_ACCOUNT(entity))
     return;
 
   ENTER("entity %p of type %d, page %p, event data %p",
 	entity, event_type, page, ed);
+
+  if (GNC_IS_ACCOUNT(entity)) {
+    gchar *label;
+
+    label = gnc_plugin_page_register_get_tab_name(GNC_PLUGIN_PAGE(page));
+    main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
+    g_free(label);
+    LEAVE("tab name updated");
+    return;
+  }
 
   if (!(event_type & (QOF_EVENT_MODIFY | QOF_EVENT_DESTROY))) {
     LEAVE("not a modify");
