@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "TransLog.h"
 #include "Scrub.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
@@ -519,7 +520,7 @@ void gnc_file_log_replay (void)
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
-				      NULL,
+				      "*.log",
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
 
@@ -531,11 +532,17 @@ void gnc_file_log_replay (void)
 
       /*strncpy(file,selected_filename, 255);*/
       DEBUG("Filename found: %s",selected_filename);
-
-      DEBUG("Opening selected file");
-      log_file = fopen(selected_filename, "r");
-      if(!log_file || ferror(log_file)!=0)
-	{
+      if (xaccFileIsCurrentLog(selected_filename)) {
+	g_warning("Cannot open the current log file: %s", selected_filename);
+#ifdef STRING_FREEZE_ENDS
+	gnc_error_dialog(NULL,
+			 _("Cannot open the current log file: %s"),
+			 selected_filename);
+#endif
+      } else {
+	DEBUG("Opening selected file");
+	log_file = fopen(selected_filename, "r");
+	if(!log_file || ferror(log_file)!=0) {
 	  int err = errno;
 	  perror("File open failed");
 	  gnc_error_dialog(NULL,
@@ -546,40 +553,31 @@ void gnc_file_log_replay (void)
 			   _("Failed to open log file: %s: %s"),
 			   selected_filename,
 			   strerror(err));
-	}
-      else
-	{
-	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL)
-	    {
+	} else {
+	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL) {
 	      DEBUG("Read error or EOF");
 	      gnc_info_dialog(NULL, "%s",
 			      _("The log file you selected was empty."));
-	    }
-	  else
-	    {
-	      if(strncmp(expected_header,read_buf,strlen(expected_header))!=0)
-		{
-		  PERR("File header not recognised:\n%s",read_buf);
-		  PERR("Expected:\n%s",expected_header);
-		  gnc_error_dialog(NULL, "%s",
-		   _("The log file you selected cannot be read.  "
-		     "The file header was not recognized."));
+	  } else {
+	    if(strncmp(expected_header,read_buf,strlen(expected_header))!=0) {
+		PERR("File header not recognised:\n%s",read_buf);
+		PERR("Expected:\n%s",expected_header);
+		gnc_error_dialog(NULL, "%s",
+				 _("The log file you selected cannot be read.  "
+				   "The file header was not recognized."));
+	    } else {
+	      do {
+		read_retval = fgets(read_buf,sizeof(read_buf),log_file);
+		/*DEBUG("Chunk read: %s",read_retval);*/
+		if(strncmp(record_start_str,read_buf,strlen(record_start_str))==0) {/* If a record started */
+		  process_trans_record(log_file);
 		}
-	      else
-		{
-		  do
-		    {
-		      read_retval = fgets(read_buf,sizeof(read_buf),log_file);
-		      /*DEBUG("Chunk read: %s",read_retval);*/
-		      if(strncmp(record_start_str,read_buf,strlen(record_start_str))==0)/* If a record started */
-			{
-			  process_trans_record(log_file);
-			}
-		    }while(feof(log_file)==0);
-		}
+	      }while(feof(log_file)==0);
 	    }
+	  }
 	  fclose(log_file);
 	}
+      }
       g_free(selected_filename);
     }
   g_free(default_dir);

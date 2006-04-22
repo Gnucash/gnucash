@@ -80,7 +80,8 @@
 
 
 static int gen_logs = 1;
-static FILE * trans_log = NULL;
+static FILE * trans_log = NULL; /**< current log file handle */
+static char * trans_log_name = NULL; /**< current log file name */
 static char * log_base_name = NULL;
 
 /********************************************************************\
@@ -104,6 +105,28 @@ xaccLogSetBaseName (const char *basepath)
       xaccCloseLog();
       xaccOpenLog();
    }
+}
+
+
+/*
+ * See if the provided file name is that of the current log file.
+ * Since the filename is generated with a time-stamp we can ignore the
+ * directory path and avoid problems with worrying about any ".."
+ * components in the path.
+ */
+gboolean
+xaccFileIsCurrentLog (const gchar *name)
+{
+  gchar *base;
+  gint result;
+
+  if (!name || !trans_log_name)
+    return FALSE;
+
+  base = g_path_get_basename(name);
+  result = (strcmp(base, trans_log_name) == 0);
+  g_free(base);
+  return result;
 }
 
 /********************************************************************\
@@ -135,6 +158,11 @@ xaccOpenLog (void)
       g_free (timestamp);
       return;
    }
+
+   /* Save the log file name */
+   if (trans_log_name)
+     g_free (trans_log_name);
+   trans_log_name = g_path_get_basename(filename);
 
    g_free (filename);
    g_free (timestamp);

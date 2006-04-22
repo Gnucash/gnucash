@@ -1,5 +1,11 @@
 2006-04-21  David Hampton  <hampton@employees.org>
 
+	* src/import-export/log-replay/gnc-log-replay.c:
+	* src/engine/TransLog.[ch]: Don't allow the user to open the
+	current log file.  This only produces a debug message because of
+	the string freeze.  Fixes #337211.  Also add a filter for '*.log'
+	to the file selection dialog.
+
 	* src/report/report-gnome/gnc-plugin-page-report.c:
 	* src/gnome-utils/gnc-main-window.c: Don't allow a report page to
 	be closed of it is in the process of reloading.  Make the close
