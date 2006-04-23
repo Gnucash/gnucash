@@ -1008,7 +1008,8 @@ gnc_split_register_unvoid_current_trans (SplitRegister *reg)
 }
 
 void
-gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *split)
+gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, 
+                                                     Split *split)
 {
   SRInfo *info;
   Transaction *trans;
@@ -1028,7 +1029,9 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg, Split *
       i++;
   }
 
-  /* This is now the  pending transaction */
+  /* This is now the pending transaction */
+  g_assert(xaccTransLookup(&info->pending_trans_guid, 
+                           gnc_get_current_book()) == NULL);
   info = gnc_split_register_get_info (reg);
   info->pending_trans_guid = *xaccTransGetGUID(trans);
 
@@ -1338,13 +1341,24 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
          blank_split = NULL;
        }
        else
-         return FALSE;
+           return FALSE; /* nothing to do */
      }
      else if (!xaccTransIsOpen (trans))
        return FALSE;
 
-     if (xaccTransIsOpen (trans))
-       xaccTransCommitEdit (trans);
+     /* CAS: The code here used to unconditionally commit any open
+        transaction.  But, even if it's open, what if it was opened by
+        someone else?  I've made it so we only commit if we began the
+        edit. */
+     if (xaccTransIsOpen (trans)) {
+         if (trans == pending_trans) { 
+             info->pending_trans_guid = *guid_null ();
+             PINFO("commiting trans (%p)", trans);
+             xaccTransCommitEdit (trans);
+         } else {
+             DEBUG("trans (%p) != pending (%p)", trans, pending_trans);
+         }
+     }
 
      if (pending_trans == trans)
      {
@@ -1373,9 +1387,16 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    /* determine whether we should commit the pending transaction */
    if (pending_trans != trans)
    {
-     if (xaccTransIsOpen (pending_trans))
-       xaccTransCommitEdit (pending_trans);
+       // FIXME: How could the pending transaction not be open?
+       // FIXME: For that matter, how could an open pending
+       // transaction ever not be the current trans?
+       if (xaccTransIsOpen (pending_trans)) {
+           g_message("Impossible? commiting pending %p", pending_trans);
+           xaccTransCommitEdit (pending_trans);
+       } else if (pending_trans) 
+           g_assert_not_reached();
 
+     PINFO("beginning edit of trans %p", trans);
      xaccTransBeginEdit (trans);
      pending_trans = trans;
      info->pending_trans_guid = *xaccTransGetGUID(trans);
@@ -1421,10 +1442,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    {
      SRSaveData *sd;
 
-     sd = gnc_split_register_save_data_new (trans, split,
-					    (info->trans_expanded ||
-					     reg->style == REG_STYLE_AUTO_LEDGER ||
-					     reg->style == REG_STYLE_JOURNAL));
+     sd = gnc_split_register_save_data_new (
+         trans, split, (info->trans_expanded ||
+                        reg->style == REG_STYLE_AUTO_LEDGER ||
+                        reg->style == REG_STYLE_JOURNAL));
      gnc_table_save_cells (reg->table, sd);
      gnc_split_register_save_data_destroy (sd);
    }
@@ -2371,6 +2392,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
    {
       if (xaccTransIsOpen (pending_trans))
         xaccTransCommitEdit (pending_trans);
+      else g_assert_not_reached();
 
       info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;

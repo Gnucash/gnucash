@@ -235,7 +235,17 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     xaccTransSetDateSecs (new_trans, info->last_date_entered);
     blank_split = xaccMallocSplit (gnc_get_current_book ());
     xaccSplitSetParent(blank_split, new_trans);
-    xaccTransCommitEdit (new_trans);
+    /* We don't want to commit this transaction yet, because the split
+       doesn't even belong to an account yet.  But, we don't want to
+       set this transaction as the pending transaction either, because
+       we want to pretend that it hasn't been changed.  We depend on
+       some other code (somewhere) to commit this transaction if we
+       really edit it, even though it's not marked as the pending
+       transaction. */
+
+    /* Wouldn't it be a bug to open this transaction if there was already a
+       pending transaction? */
+    g_assert(pending_trans == NULL);
 
     info->blank_split_guid = *xaccSplitGetGUID (blank_split);
     info->blank_split_edited = FALSE;
@@ -515,11 +525,13 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
    * from the account. */
   if (!found_pending)
   {
-    if (xaccTransIsOpen (pending_trans))
-      xaccTransCommitEdit (pending_trans);
+      if (xaccTransIsOpen (pending_trans))
+          xaccTransCommitEdit (pending_trans);
+      else if (pending_trans) 
+          g_assert_not_reached();
 
-    info->pending_trans_guid = *guid_null ();
-    pending_trans = NULL;
+      info->pending_trans_guid = *guid_null ();
+      pending_trans = NULL;
   }
 
   /* Set up the hint transaction, split, transaction split, and column. */

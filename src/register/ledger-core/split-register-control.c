@@ -712,10 +712,11 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           info->blank_split_guid = *xaccSplitGetGUID(blank_split);
         }
 
-        if ((pending_trans != NULL) && (pending_trans != trans))
-          if (xaccTransIsOpen (pending_trans))
-            xaccTransCommitEdit (pending_trans);
-
+        if ((pending_trans != NULL) && (pending_trans != trans)) {
+            if (xaccTransIsOpen (pending_trans))
+                xaccTransCommitEdit (pending_trans);
+            else g_assert_not_reached();
+        }
         pending_trans = trans;
         info->pending_trans_guid = *xaccTransGetGUID (pending_trans);
 
