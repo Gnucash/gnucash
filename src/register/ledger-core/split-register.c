@@ -436,7 +436,7 @@ gnc_split_register_duplicate_current (SplitRegister *reg)
     new_split = xaccMallocSplit (gnc_get_current_book ());
 
     xaccTransBeginEdit (trans);
-    xaccTransAppendSplit (trans, new_split);
+    xaccSplitSetParent (new_split, trans);
     gnc_copy_split_onto_split (split, new_split, FALSE);
     xaccTransCommitEdit (trans);
 
@@ -716,16 +716,14 @@ gnc_split_register_paste_current (SplitRegister *reg)
 
     gnc_suspend_gui_refresh ();
 
-    xaccTransBeginEdit(trans);
     if (split == NULL)
     { /* We are on a null split in an expanded transaction. */
       split = xaccMallocSplit(gnc_get_current_book ());
-      xaccTransAppendSplit(trans, split);
+      xaccSplitSetParent(split, trans);
     }
 
     gnc_copy_split_scm_onto_split(copied_item, split,
                                   gnc_get_current_book ());
-    xaccTransCommitEdit(trans);
   }
   else
   {
@@ -834,9 +832,7 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
 
   account = xaccSplitGetAccount (split);
 
-  xaccTransBeginEdit (trans);
   xaccSplitDestroy (split);
-  xaccTransCommitEdit (trans);
 
   /* Check pending transaction */
   if (trans == pending_trans)
@@ -887,9 +883,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 
     gnc_suspend_gui_refresh ();
 
-    xaccTransBeginEdit (trans);
     xaccTransDestroy (trans);
-    xaccTransCommitEdit (trans);
 
     info->blank_split_guid = *guid_null();
     blank_split = NULL;
@@ -908,9 +902,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
    * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
 
-  xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
-  xaccTransCommitEdit(trans);
 
   /* Check pending transaction */
   if (trans == pending_trans)
@@ -956,10 +948,7 @@ gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
   gnc_suspend_gui_refresh ();
 
   trans = xaccSplitGetParent(split);
-
-  xaccTransBeginEdit(trans);
   xaccTransVoid(trans, reason);
-  xaccTransCommitEdit(trans);
 
   /* Check pending transaction */
   if (trans == pending_trans)
@@ -1006,9 +995,7 @@ gnc_split_register_unvoid_current_trans (SplitRegister *reg)
 
   trans = xaccSplitGetParent(split);
 
-  xaccTransBeginEdit(trans);
   xaccTransUnvoid(trans);
-  xaccTransCommitEdit(trans);
 
   /* Check pending transaction */
   if (trans == pending_trans)
@@ -1335,7 +1322,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 
    /* use the changed flag to avoid heavy-weight updates
     * of the split & transaction fields. This will help
-    * cut down on uneccessary register redraws. */
+    * cut down on unnecessary register redraws. */
    if (!gnc_table_current_cursor_changed (reg->table, FALSE))
    {
      if (!do_commit)
@@ -1397,8 +1384,8 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    /* If we are committing the blank split, add it to the account now */
    if (trans == blank_trans)
    {
-     xaccAccountInsertSplit (gnc_split_register_get_default_account (reg),
-                             blank_split);
+     xaccSplitSetAccount(blank_split, 
+                         gnc_split_register_get_default_account (reg));
      xaccTransSetDateEnteredSecs(trans, time(NULL));
    }
 
@@ -1927,14 +1914,14 @@ gnc_split_register_changed (SplitRegister *reg)
   SRInfo *info = gnc_split_register_get_info (reg);
   Transaction *pending_trans;
 
-  pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_book ());
-
   if (reg == NULL)
     return FALSE;
 
   if (gnc_table_current_cursor_changed (reg->table, FALSE))
     return TRUE;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
 
   return xaccTransIsOpen (pending_trans);
 }
@@ -2373,9 +2360,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
         pending_trans = NULL;
       }
 
-      xaccTransBeginEdit (trans);
       xaccTransDestroy (trans);
-      xaccTransCommitEdit (trans);
 
       info->blank_split_guid = *guid_null ();
       blank_split = NULL;

@@ -101,7 +101,7 @@ struct sr_info
   /* flag indicating a template register */
   gboolean template;
 
-  /* The template account which template transaction should below to */
+  /* The template account which template transaction should belong to */
   GUID template_account;
 
   /* configured strings for debit/credit headers */

@@ -276,13 +276,9 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
       (old_split != new_split) &&
       gnc_split_register_old_split_empty_p(reg, old_split)) 
   {
-    Transaction *t;
     int current_row;
 
-    t = xaccSplitGetParent(old_split);
-    xaccTransBeginEdit (t);
     xaccSplitDestroy(old_split);
-    xaccTransCommitEdit (t);
     old_split = NULL;
 
     /*
