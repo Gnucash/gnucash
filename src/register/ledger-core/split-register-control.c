@@ -293,7 +293,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
            (pending_trans == old_trans) &&
            (old_trans != new_trans))
   {
-    if (gnc_split_register_balance_trans (reg, old_trans))
+    if (gnc_split_register_balance_trans (reg, pending_trans))
     {
       /* Trans was unbalanced. */
       new_trans = old_trans;
@@ -305,8 +305,9 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     else
     {
       /* Trans was balanced. Let it go. */
-      if (xaccTransIsOpen (old_trans))
-        xaccTransCommitEdit (old_trans);
+      if (xaccTransIsOpen (pending_trans))
+        xaccTransCommitEdit (pending_trans);
+      else g_assert_not_reached();
 
       info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
