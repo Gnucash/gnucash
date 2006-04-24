@@ -1,3 +1,52 @@
+r13834 | chris | 2006-04-23 19:01:46 -0400 (Sun, 23 Apr 2006) | 9 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-load.c
+   M /gnucash/trunk/src/register/ledger-core/split-register.c
+
+   Don't immediately commit the blank transaction after creating it.
+   When saving the register state, don't commit an open transaction unless
+   we think it was opened from this register.
+
+   These changes are intended to fix bug #327780.  I've also added several 
+   related assertions.  If any of these assertions fail, it may indicate that
+   I don't really understand what's going on, and that this may not be the 
+   correct fix for #327780.
+
+r13833 | chris | 2006-04-23 17:07:55 -0400 (Sun, 23 Apr 2006) | 4 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-p.h
+   M /gnucash/trunk/src/register/ledger-core/split-register.c
+
+   Remove some unnecessary Begin/Commit blocks around code that is already
+   transactional.  
+   Convert some Split function calls to the xaccSplit... form.
+
+r13830 | chris | 2006-04-22 01:14:48 -0400 (Sat, 22 Apr 2006) | 4 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Internalize the transactional semantics for all Transaction setters.
+   This is what I actually intended in r13130, but we want the stuff that
+   xaccTransCommitEdit provides over-and-above what qof_commit_edit provides.
+
+r13827 | chris | 2006-04-22 00:42:29 -0400 (Sat, 22 Apr 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/business/business-core/gncBillTerm.c
+   M /gnucash/trunk/src/business/business-core/gncCustomer.c
+   M /gnucash/trunk/src/business/business-core/gncEmployee.c
+   M /gnucash/trunk/src/business/business-core/gncEntry.c
+   M /gnucash/trunk/src/business/business-core/gncInvoice.c
+   M /gnucash/trunk/src/business/business-core/gncJob.c
+   M /gnucash/trunk/src/business/business-core/gncOrder.c
+   M /gnucash/trunk/src/business/business-core/gncTaxTable.c
+   M /gnucash/trunk/src/business/business-core/gncVendor.c
+   M /gnucash/trunk/src/engine/Transaction.c
+   M /gnucash/trunk/src/engine/gnc-pricedb.c
+
+   Replace calls to QOF_COMMIT_EDIT_PART1 macro with calls to qof_commit_edit()
+
 2006-04-22  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c:
@@ -20,6 +69,12 @@
 
 	* src/pixmaps/Makefile.am:
 	* src/gnome-utils/gnc-icons.c: Rename some icon files.
+
+r13825 | chris | 2006-04-21 21:25:35 -0400 (Fri, 21 Apr 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/lib/libqof/qof/qoflog.c
+
+   Avoid buffer overrun in qoflog.
 
 2006-04-21  David Hampton  <hampton@employees.org>
 
@@ -63,6 +118,26 @@
 
 	* src/gnome/glade/account.glade: Add a tooltip for the "hidden"
 	option in the Edit Account dialog.
+
+r13811 | chris | 2006-04-19 21:37:50 -0400 (Wed, 19 Apr 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/ChangeLog
+   M /gnucash/trunk/configure.in
+   M /gnucash/trunk/lib/libqof/backend/file/pilot-qsf-gncCustomer.xml
+   M /gnucash/trunk/lib/libqof/backend/file/qof-backend-qsf.h
+   M /gnucash/trunk/lib/libqof/backend/file/qsf-backend.c
+   M /gnucash/trunk/lib/libqof/backend/file/qsf-xml-map.c
+   M /gnucash/trunk/lib/libqof/backend/file/qsf-xml.c
+   M /gnucash/trunk/lib/libqof/backend/file/qsf-xml.h
+   M /gnucash/trunk/lib/libqof/qof/deprecated.h
+   M /gnucash/trunk/lib/libqof/qof/kvp_frame.c
+   M /gnucash/trunk/lib/libqof/qof/kvp_frame.h
+   M /gnucash/trunk/lib/libqof/qof/qofbookmerge.c
+   M /gnucash/trunk/lib/libqof/qof/qofchoice.c
+   M /gnucash/trunk/lib/libqof/qof/qofutil.c
+   M /gnucash/trunk/lib/libqof/qof/qofutil.h
+
+   Revert r13797 so that it can be recommited as logical, documented changes.
 
 2006-04-19  David Hampton  <hampton@employees.org>
 
@@ -118,6 +193,19 @@
 	  users to enter a transaction directly and assigning it to a
 	  customer/vendor by hand (rather than going through the business
 	  interfaces).
+
+r13790 | chris | 2006-04-15 17:37:00 -0400 (Sat, 15 Apr 2006) | 5 lines
+Changed paths:
+   M /gnucash/trunk/src/report/report-system/report-system.scm
+   M /gnucash/trunk/src/report/report-system/report-utilities.scm
+   M /gnucash/trunk/src/report/standard-reports/balance-sheet.scm
+   M /gnucash/trunk/src/report/standard-reports/equity-statement.scm
+   M /gnucash/trunk/src/report/standard-reports/trial-balance.scm
+
+   Avoid trying to represent "forever-ago" with a timepair.
+   Instead, call gnc:accountlist-get-comm-balance-at-date when we really just
+   want the balance at one date.
+   This fixes the retained-earnings calculation on the balance sheet report.
 
 2006-04-15  Derek Atkins  <derek@ihtfp.com>
 
@@ -281,6 +369,36 @@
 2006-04-11  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/qof/qofbookmerge.c: fix a few memory leaks.
+
+r13770 | chris | 2006-04-11 22:31:23 -0400 (Tue, 11 Apr 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+
+   Test for support of the tree-model-sort interface instead of one particular
+   implementation.
+
+r13767 | chris | 2006-04-10 23:12:09 -0400 (Mon, 10 Apr 2006) | 9 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Split.c
+
+   Implement Split events for Split destruction, Split rollback, (including
+   Split un-destruction) and Split re-parenting.
+   All these actions now generate ITEM-REMOVED or ITEM-ADDED events for
+   related Transactions (as appropriate).
+
+   Minor: allow xaccSplitSetParent() to accept a NULL argument in order to use
+   it in the rollback-newly-created-split case.
+
+r13766 | chris | 2006-04-10 22:55:57 -0400 (Mon, 10 Apr 2006) | 7 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Transaction.c
+
+   Avoid generating Transaction modified events for Transaction roll-back.
+   Enable emission of some new Split events.
+   Use xaccSplitRollbackEdit() in implementation of xaccTransRollbackEdit().
+   Avoid rollback of Splits not owned by the Transaction.  This was actually
+   impossible to encounter, but the algorithm is now correct even for some
+   cases that aren't permitted by other code. 
 
 2006-04-10  Derek Atkins  <derek@ihtfp.com>
 
@@ -449,6 +567,20 @@
 	compatibility with 1.8, instead of just writing the quote source
 	information.
 
+r13738 | chris | 2006-04-05 18:30:00 -0400 (Wed, 05 Apr 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/test/test-commodities.c
+
+   Make the tests for growing commodity tables more accurate - 
+   silences incorrect failures.
+
+r13737 | chris | 2006-04-05 13:59:14 -0400 (Wed, 05 Apr 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/gnc-commodity.c
+
+   When destroying a commodity, remove it from the commodity table.
+   Fixes random crashes demonstrated by test-xml-commodities.
+
 2006-04-05  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c:
@@ -507,6 +639,18 @@
 
 	* src/engine/Transaction.c: Restore sorting transactions by date
 	posted.  Fixes 335190.
+
+r13718 | chris | 2006-03-30 20:43:16 -0500 (Thu, 30 Mar 2006) | 5 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/test/test-freq-spec.c
+   M /gnucash/trunk/src/engine/test-core/test-engine-stuff.c
+   M /gnucash/trunk/src/test-core/test-stuff.c
+   M /gnucash/trunk/src/test-core/test-stuff.h
+
+   Return the actual number of test failures with get_rv().
+   Use shorter strings for commodity mnemonics.
+   Ensure that test splits amount and value have the same sign.
+   Avoid numerical overflow in rate calculation when generating test splits.
 
 2006-03-30  David Hampton  <hampton@employees.org>
 
@@ -601,6 +745,31 @@
 	* configure.in: List the optional components that will be compiled
 	in the summary at the end of the configure run.
 
+r13698 | chris | 2006-03-24 21:53:51 -0500 (Fri, 24 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/report/report-gnome/window-report.c
+
+   More translator-friendly string placement.
+
+r13694 | chris | 2006-03-23 21:01:18 -0500 (Thu, 23 Mar 2006) | 9 lines
+Changed paths:
+   M /gnucash/trunk/src/report/report-gnome/window-report.c
+
+   When opening GnuCash for the first time since 1.8.x, allow the user to 
+   choose which reports (if any) to open.  If the user cancels the dialog,
+   no reports are opened, otherwise, for each report, they are asked whether
+   or not they want to open it.  However, if there are less than 4 reports
+   the dialog is skipped and the reports are just opened.  Closes bug#335188.
+
+   Note: if someone implements a solution that opened only precisely the
+   reports that were left open in 1.8.x, it's fine to remove this extra code.
+
+r13686 | chris | 2006-03-23 00:41:29 -0500 (Thu, 23 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/gnome-utils/dialog-options.c
+
+   Add a label to the budget selection combobox.  Bug#334501
+
 2006-03-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):
@@ -638,6 +807,13 @@
 	* src/import-export/hbci/hbci-interaction.c: Store the log level
 	of all printed messages and use this as yet another check whether
 	aqbanking had any errors.
+
+r13683 | chris | 2006-03-22 19:33:11 -0500 (Wed, 22 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+
+   Avoid infinite loop in gnc_find_split_in_trans_by_memo(). Bug #335465
+   Reported by Mike Alexander.
 
 2006-03-22  David Hampton  <hampton@employees.org>
 
@@ -978,6 +1154,36 @@
 	* src/gnome-utils/gnc-tree-view-account.c: Avoid calculation of
 	  account period total for the top level account.
 
+r13607 | chris | 2006-03-11 22:38:27 -0500 (Sat, 11 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/gnome-utils/dialog-utils.c
+   M /gnucash/trunk/src/gnome-utils/glade/transfer.glade
+
+   Restore some widget names that were lost in r9938 but still used by 
+   dialog-transfer.c.   Added a warning to find more bugs like this one.
+
+r13601 | chris | 2006-03-11 14:39:16 -0500 (Sat, 11 Mar 2006) | 7 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Group.c
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account.c
+
+   Change the account removal event back to using the parent account instead of
+   the group, but delay the nulling of the account's group pointer until after
+   the generation of the remove event.  That way, the tree model can verify
+   that the removed account's root is the same as the root for the model.
+   Also, in the model's event handler, check that accounts are in the same book
+   as the model is for.
+
+r13594 | chris | 2006-03-10 20:23:43 -0500 (Fri, 10 Mar 2006) | 4 lines
+Changed paths:
+   M /gnucash/trunk/src/backend/file/sixtp-utils.c
+   M /gnucash/trunk/src/backend/file/test/test-save-in-lang.c
+   M /gnucash/trunk/src/gnc-module/gnc-module.c
+
+   Invert sense of conditions involving g_setenv() since its return value
+   is different than that of setenv().  Also, convert last remaining uses of 
+   setenv() to g_setenv().
+
 2006-03-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: Walk through the list of
@@ -1129,6 +1335,33 @@
 	* numerous: Never include "config.h" from a header file. Doing so
 	makes it nigh impossible to override configuration settings.
 
+r13576 | chris | 2006-03-09 23:23:48 -0500 (Thu, 09 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/gnome-utils/dialog-transfer.c
+   M /gnucash/trunk/src/gnome-utils/dialog-transfer.h
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+
+   Factor out and create new function: gnc_xfer_dialog_run_exchange_dialog()
+   This isolates the amount-to-value conversion algorithm from the register.
+
+r13575 | chris | 2006-03-09 21:28:28 -0500 (Thu, 09 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-p.h
+   M /gnucash/trunk/src/register/ledger-core/split-register.c
+
+   More register line wraps, clean-ups, etc., plus some minor re-ordering
+   to prepare for some factoring.
+
+r13538 | chris | 2006-03-08 00:47:36 -0500 (Wed, 08 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Transaction.c
+   M /gnucash/trunk/src/engine/Transaction.h
+   M /gnucash/trunk/src/register/ledger-core/split-register-load.c
+   M /gnucash/trunk/src/register/ledger-core/split-register.c
+
+   More line-wraps, cleanups, factoring new function: xaccTransGetSplitIndex().
+
 2006-03-08  David Hampton  <hampton@employees.org>
 
 	* numerous: Remove more functions to be deprecated in
@@ -1255,6 +1488,75 @@
 	* lib/libgsf-1.12.3/tests/test-msole1.c:
 	  properly ignore the return value of fgets().  Fixes an FC4 error.
 
+r13535 | chris | 2006-03-07 23:48:32 -0500 (Tue, 07 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-model-save.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-model.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-util.c
+
+   More line-wraps, cleanups and factoring.
+
+r13529 | chris | 2006-03-07 21:20:57 -0500 (Tue, 07 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-control.c
+
+   Minor line wraps and factoring.
+
+r13513 | chris | 2006-03-07 00:31:54 -0500 (Tue, 07 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/backend/file/io-gncbin-r.c
+   M /gnucash/trunk/src/engine/Account.c
+   M /gnucash/trunk/src/engine/Account.h
+   M /gnucash/trunk/src/engine/gnc-associate-account.c
+   M /gnucash/trunk/src/gnome/druid-stock-split.c
+   M /gnucash/trunk/src/gnome/gnc-split-reg.c
+   M /gnucash/trunk/src/register/ledger-core/gnc-ledger-display.c
+   M /gnucash/trunk/src/register/ledger-core/split-register-model.c
+   M /gnucash/trunk/src/register/ledger-core/split-register.c
+
+   Factor out and create new function: xaccAccountIsPriced() that does the 
+   common STOCK, MUTUAL or CURRENCY check.
+
+r13512 | chris | 2006-03-06 23:45:46 -0500 (Mon, 06 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/gnome-utils/gnc-gnome-utils.c
+
+   When periodically checking for ui events, avoid creating a QofSession 
+   if we don't already have one.
+
+r13510 | chris | 2006-03-06 22:41:39 -0500 (Mon, 06 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-load.c
+   M /gnucash/trunk/src/register/register-core/table-allgui.c
+   M /gnucash/trunk/src/register/register-core/table-allgui.h
+   M /gnucash/trunk/src/register/register-gnome/gnucash-item-edit.c
+
+   Minor code factoring, line-wraps, control-flow simplifications, etc. 
+   centered around split-register-load.c.
+
+r13508 | chris | 2006-03-06 22:07:41 -0500 (Mon, 06 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/register/ledger-core/split-register-load.c
+
+   Factor out one small piece of the huge gnc_split_register_load() into 
+   new static function add_quickfill_completions().
+
+r13507 | chris | 2006-03-06 21:42:12 -0500 (Mon, 06 Mar 2006) | 2 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Scrub.c
+   M /gnucash/trunk/src/engine/gnc-commodity.c
+   M /gnucash/trunk/src/engine/gnc-commodity.h
+   M /gnucash/trunk/src/register/ledger-core/split-register-load.c
+
+   Factor out and create new function: gnc_commodity_is_currency().
+
+r13505 | chris | 2006-03-06 19:27:38 -0500 (Mon, 06 Mar 2006) | 3 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Account.c
+
+   Move both old an new-style Account MODIFY events into the "on_done" case
+   of qof_commit_edit_part2().
+
 2006-03-06  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Change initial sensitivity of
@@ -1287,6 +1589,14 @@
 	* src/import-export/import-backend.c: Fix crash when "clear" is
 	chosen but no matching transaction is selected. Now those imported
 	transactions will silently be ignored. #317917.
+
+r13498 | chris | 2006-03-05 18:46:39 -0500 (Sun, 05 Mar 2006) | 4 lines
+Changed paths:
+   M /gnucash/trunk/src/engine/Split.c
+
+   Don't force a resort of Account's split lists during xaccTransCommitEdit().
+   This happens already in xaccAccountCommitEdit() and if the Account isn't
+   being edited, then we inserted the Split in sorted order anyway.
 
 2006-03-05  Chris Lyttle  <chris@wilddev.net>
 
