@@ -851,7 +851,6 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   Transaction *pending_trans;
   Transaction *trans;
   Split *blank_split;
-  Account *account;
   Split *split;
 
   if (!reg) return;
@@ -872,7 +871,6 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   if (split == blank_split)
   {
     trans = xaccSplitGetParent (blank_split);
-    account = xaccSplitGetAccount(split);
 
     /* Make sure we don't commit this later on */
     if (trans == pending_trans)
@@ -1099,6 +1097,7 @@ gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
   info->pending_trans_guid = *guid_null ();
 
   gnc_resume_gui_refresh ();
+  gnc_split_register_redraw(reg);
 }
 
 void
@@ -1306,6 +1305,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    const char *memo;
    const char *desc;
    Split *split;
+   gboolean blank_edited = FALSE;
 
    if (!reg) return FALSE;
 
@@ -1331,41 +1331,24 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
      if (!do_commit)
        return FALSE;
 
-     if (trans == blank_trans)
-     {
-       if (xaccTransIsOpen(trans) || (info->blank_split_edited))
-       {
+     if (!xaccTransIsOpen(trans))
+         return FALSE;
+
+     if (trans == blank_trans) {
+         blank_edited = info->blank_split_edited;
          info->last_date_entered = xaccTransGetDate (trans);
          info->blank_split_guid = *guid_null ();
          info->blank_split_edited = FALSE;
-         blank_split = NULL;
-       }
-       else
-           return FALSE; /* nothing to do */
      }
-     else if (!xaccTransIsOpen (trans))
-       return FALSE;
-
-     /* CAS: The code here used to unconditionally commit any open
-        transaction.  But, even if it's open, what if it was opened by
-        someone else?  I've made it so we only commit if we began the
-        edit. */
-     if (xaccTransIsOpen (trans)) {
-         if (trans == pending_trans) { 
-             info->pending_trans_guid = *guid_null ();
-             PINFO("commiting trans (%p)", trans);
-             xaccTransCommitEdit (trans);
-         } else {
-             DEBUG("trans (%p) != pending (%p)", trans, pending_trans);
-         }
+     
+     if (trans == pending_trans) { 
+         info->pending_trans_guid = *guid_null ();
      }
-
-     if (pending_trans == trans)
-     {
-       pending_trans = NULL;
-       info->pending_trans_guid = *guid_null ();
+     
+     if (trans == pending_trans || blank_edited) {
+         PINFO("commiting trans (%p)", trans);
+         xaccTransCommitEdit(trans);
      }
-
      return TRUE;
    }
 
@@ -1396,10 +1379,15 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        } else if (pending_trans) 
            g_assert_not_reached();
 
-     PINFO("beginning edit of trans %p", trans);
-     xaccTransBeginEdit (trans);
-     pending_trans = trans;
-     info->pending_trans_guid = *xaccTransGetGUID(trans);
+       if (trans == blank_trans) {
+           /* Don't begin editing the blank trans, because it's already open */
+           g_assert(xaccTransIsOpen(blank_trans));
+       } else {
+           PINFO("beginning edit of trans %p", trans);
+           xaccTransBeginEdit (trans);
+       }
+       pending_trans = trans;
+       info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
 
    /* If we are committing the blank split, add it to the account now */
@@ -1457,9 +1445,9 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    PINFO ("finished saving split %s of trans %s \n", memo, desc);
 
    /* If the modified split is the "blank split", then it is now an
-    * official part of the account. Set the blank split to NULL, so
-    * we can be sure of getting a new split. Also, save the date for
-    * the new blank split. */
+    * official part of the account. Set the blank split to NULL, so we
+    * can be sure of getting a new blank split. Also, save the date
+    * for the new blank split. */
    if (trans == blank_trans)
    {
      if (do_commit)
@@ -1476,6 +1464,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
     * transaction to NULL. */
    if (do_commit)
    {
+     g_assert(trans == blank_trans || trans == pending_trans); 
      xaccTransCommitEdit (trans);
      if (pending_trans == trans)
      {
@@ -2390,8 +2379,12 @@ gnc_split_register_cleanup (SplitRegister *reg)
    /* be sure to take care of any open transactions */
    if (pending_trans != NULL)
    {
+      g_assert_not_reached();
+      /* CAS: It's not clear to me that we'd really want to commit
+         here, rather than rollback. But, maybe this is just dead
+         code. */
       if (xaccTransIsOpen (pending_trans))
-        xaccTransCommitEdit (pending_trans);
+          xaccTransCommitEdit (pending_trans);
       else g_assert_not_reached();
 
       info->pending_trans_guid = *guid_null ();
