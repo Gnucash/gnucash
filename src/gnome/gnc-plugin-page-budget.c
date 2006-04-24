@@ -294,7 +294,7 @@ gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page)
 
     /* Visisble types */
     priv->fd.visible_types = -1; /* Start with all types */
-    priv->fd.show_hidden = TRUE;
+    priv->fd.show_hidden = FALSE;
     priv->fd.show_zero_total = TRUE;
 
     priv->sigFigs = 1;
