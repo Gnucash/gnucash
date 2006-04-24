@@ -534,11 +534,10 @@ void gnc_file_log_replay (void)
       DEBUG("Filename found: %s",selected_filename);
       if (xaccFileIsCurrentLog(selected_filename)) {
 	g_warning("Cannot open the current log file: %s", selected_filename);
-#ifdef STRING_FREEZE_ENDS
 	gnc_error_dialog(NULL,
+			 /* Translators: %s is the file name. */
 			 _("Cannot open the current log file: %s"),
 			 selected_filename);
-#endif
       } else {
 	DEBUG("Opening selected file");
 	log_file = fopen(selected_filename, "r");

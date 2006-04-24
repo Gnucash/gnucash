@@ -1,3 +1,9 @@
+2006-04-24   Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/log-replay/gnc-log-replay.c: Activate newly
+	added string as string freeze exception. That bug was grave enough
+	to justify this.
+
 r13834 | chris | 2006-04-23 19:01:46 -0400 (Sun, 23 Apr 2006) | 9 lines
 Changed paths:
    M /gnucash/trunk/src/register/ledger-core/split-register-control.c
