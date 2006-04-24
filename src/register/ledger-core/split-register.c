@@ -1030,9 +1030,9 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg,
   }
 
   /* This is now the pending transaction */
+  info = gnc_split_register_get_info (reg);
   g_assert(xaccTransLookup(&info->pending_trans_guid, 
                            gnc_get_current_book()) == NULL);
-  info = gnc_split_register_get_info (reg);
   info->pending_trans_guid = *xaccTransGetGUID(trans);
 
   gnc_resume_gui_refresh ();
