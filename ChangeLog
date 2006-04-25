@@ -1,3 +1,8 @@
+2006-04-25  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-tree-view.c: Initialize depth variable in
+	  tree view keynav before using it.
+
 2006-04-25  David Hampton  <hampton@employees.org>
 
 	* src/scm/process.scm: Handle the failure to fork a child process

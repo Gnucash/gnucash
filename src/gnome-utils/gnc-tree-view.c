@@ -2166,6 +2166,7 @@ gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col,
         if (gtk_tree_view_row_expanded(tv, path)) {
             gtk_tree_path_down(path);
         } else {
+            depth = gtk_tree_path_get_depth(path);
             gtk_tree_path_next(path);
             if (!gnc_tree_view_path_is_valid(view, path) && depth > 1) {
                 gtk_tree_path_prev(path);
