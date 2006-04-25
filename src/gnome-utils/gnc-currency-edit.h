@@ -66,11 +66,11 @@
 #define GNC_IS_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_CURRENCY_EDIT))
 
 typedef struct {
-        GtkComboBox combobox;
+        GtkComboBoxEntry combobox;
 } GNCCurrencyEdit;
 
 typedef struct {
-        GtkComboBoxClass combobox;
+        GtkComboBoxEntryClass combobox;
 } GNCCurrencyEditClass;
 
 /** Return the GType for the GNCCurrencyEdit currency selection widget.

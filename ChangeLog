@@ -1,3 +1,11 @@
+2006-04-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-currency-edit.[ch]: Add completion support to
+	the currency edit widget.  Fixes #339412.
+
+	* src/gnome/glade/account.glade: Don't use the full width of the
+	dialog, only as much as is necessary for the content.
+
 2006-04-24   Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/log-replay/gnc-log-replay.c: Activate newly

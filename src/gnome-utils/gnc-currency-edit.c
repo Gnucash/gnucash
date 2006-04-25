@@ -71,6 +71,16 @@ static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);
 
 static GtkComboBoxClass *parent_class;
 
+/** The instance private data for a content plugin. */
+typedef struct _GNCCurrencyEditPrivate
+{
+	gint last_index;	/**< Last valid GtkListStore index  */
+	gulong changed_id;	/**< Signal handler id */
+} GNCCurrencyEditPrivate;
+
+#define GET_PRIVATE(o)  \
+   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditPrivate))
+
 /** @name Basic Object Implementation */
 /** @{ */
 
@@ -95,7 +105,7 @@ gnc_currency_edit_get_type (void)
 			NULL
 		};
 
-		currency_edit_type = g_type_register_static (GTK_TYPE_COMBO_BOX, 
+		currency_edit_type = g_type_register_static (GTK_TYPE_COMBO_BOX_ENTRY, 
 							     "GNCCurrencyEdit",
 							     &currency_edit_info, 0);
 	}
@@ -114,6 +124,8 @@ static void
 gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 {
 	parent_class = g_type_class_peek_parent (klass);
+
+	g_type_class_add_private(klass, sizeof(GNCCurrencyEditPrivate));
 }
 
 
@@ -127,6 +139,132 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
 {
+	GNCCurrencyEditPrivate *priv;
+
+	priv = GET_PRIVATE(gce);
+	priv->last_index = -1;
+	priv->changed_id = 0;
+}
+
+
+/** Find an entry in the GtkComboBoxEntry by its text value, and set
+ *  the widget to that value.  This function also records the index of
+ *  that text value for use when the user leaves the widget.
+ *
+ *  @param gce A pointer to a currency entry widget.
+ *
+ *  @param text The entry text to find in the model of the combo box
+ *  entry. */
+static void
+gce_set_by_string(GNCCurrencyEdit *gce,
+		  const gchar *text)
+{
+	GNCCurrencyEditPrivate *priv;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GValue value = { 0 };
+	const gchar *tree_string;
+	gint result = 1;
+
+	priv = GET_PRIVATE(gce);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
+	if (!gtk_tree_model_get_iter_first(model, &iter)) {
+		/* empty tree */
+		return;
+	}
+
+	do {
+		gtk_tree_model_get_value(model, &iter, 0, &value);
+		tree_string = g_value_get_string(&value);
+		result = strcmp(text, tree_string);
+		g_value_unset(&value);
+		if (result != 0)
+			continue;
+
+		/* Found a matching string */
+		g_signal_handler_block(gce, priv->changed_id);
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(gce), &iter);
+		g_signal_handler_unblock(gce, priv->changed_id);
+		priv->last_index = gtk_combo_box_get_active(GTK_COMBO_BOX(gce));
+		return;
+	} while (gtk_tree_model_iter_next(model, &iter));
+}
+
+
+/**  The currency edit widget has changed its value.  If the widget
+ *   now points to another valid currency name then record the index
+ *   of that currency name for use when the user leaves the widget.
+ *
+ *   @param widget Unused.
+ *
+ *   @param gce A pointer to a currency entry widget. */
+static void
+gnc_changed_cb (GtkComboBox *widget,
+		GNCCurrencyEdit *gce)
+{
+	GNCCurrencyEditPrivate *priv;
+	gint current;
+
+	priv = GET_PRIVATE(gce);
+	current = gtk_combo_box_get_active(widget);
+	if (current == -1)
+		return;
+	priv->last_index = current;
+}
+
+
+/**  The completion attached to currency edit widget has selected a
+ *   match.  This function extracts the completed string from the
+ *   completion code's temporary model, and uses that to set the index
+ *   of that currency name for use when the user leaves the widget.
+ *   This should always point to a valid currency name since the user
+ *   made the selection from a list of currency names.
+ *
+ *   @param completion Unused.
+ *
+ *   @param comp_model A temporary model used by completion code that
+ *   contains only the current matches.
+ *
+ *   @param comp_iter The iter in the completion's temporary model
+ *   that represents the user selected match.
+ *
+ *   @param gce A pointer to a currency entry widget. */
+static gboolean
+gnc_match_selected_cb (GtkEntryCompletion *completion,
+		       GtkTreeModel       *comp_model,
+		       GtkTreeIter        *comp_iter,
+		       GNCCurrencyEdit    *gce)
+{
+	gchar *text;
+
+	gtk_tree_model_get(comp_model, comp_iter, 0, &text, -1);
+	gce_set_by_string(gce, text);
+	return FALSE;
+}
+
+
+/**  The focus left the currency edit widget, so reset the widget to
+ *   its last known good value.  If the widget value contained a valid
+ *   currency then this is a noop.  Otherwise the widget will be reset
+ *   to the last user selected currency.  This latter state will occur
+ *   if the user has typed characters directly into the widget but not
+ *   selected a completion.
+ *
+ *   @param entry Unused.
+ *
+ *   @param event Unused.
+ *
+ *   @param gce A pointer to a currency entry widget. */
+static gboolean
+gce_focus_out_cb (GtkEntry *entry,
+		  GdkEventFocus *event,
+		  GNCCurrencyEdit *gce)
+{
+	GNCCurrencyEditPrivate *priv;
+
+	priv = GET_PRIVATE(gce);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(gce), priv->last_index);
+	return FALSE;
 }
 
 
@@ -150,28 +288,6 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
 }
 
 
-/** This auxiliary function adds a single currency name to the combo
- *  box.  It is called as an iterator function when running a list of
- *  currencies.
- *
- *  @internal
- *
- *  @param a A pointer to the first currency to compare.
- *
- *  @param b A pointer to the second currency to compare.
- *
- *  @return This function returns -1 if the first currency should be
- *  ordered before the second, 0 if the currencies have the same name,
- *  and +1 if the second currency should be ordered before the first.
- */
-static int
-currency_compare(gconstpointer a, gconstpointer b)
-{
-        return strcmp (gnc_commodity_get_printname (a),
-                       gnc_commodity_get_printname (b));
-}
-
-
 /** This auxiliary function adds all the currency names to a combo
  *  box.
  *
@@ -187,7 +303,6 @@ fill_currencies(GNCCurrencyEdit *gce)
 
         currencies = gnc_commodity_table_get_commodities
                 (gnc_get_current_commodities (), GNC_COMMODITY_NS_CURRENCY);
-        currencies = g_list_sort(currencies, currency_compare);
 	g_list_foreach(currencies, (GFunc)add_item, gce);
         g_list_free(currencies);
 }
@@ -201,21 +316,42 @@ fill_currencies(GNCCurrencyEdit *gce)
 GtkWidget *
 gnc_currency_edit_new (void)
 {
+	GNCCurrencyEditPrivate *priv;
 	GNCCurrencyEdit *gce;
 	GtkListStore *store;
-	GtkCellRenderer *cell;
+	GtkEntry *entry;
+	GtkEntryCompletion* completion;
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
-	gce = g_object_new (GNC_TYPE_CURRENCY_EDIT, "model", store, NULL);
+	gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
+			    "model", store,
+			    "text-column", 0,
+			    NULL);
 	g_object_unref (store);
 
-	cell = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (gce), cell, TRUE);
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (gce), cell,
-					"text", 0,
-					NULL);
+	/* Set up completion on the entry */
+	entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gce)));
+	completion = gtk_entry_completion_new();
+	gtk_entry_completion_set_model(completion,
+				       GTK_TREE_MODEL(store));
+	gtk_entry_completion_set_text_column(completion, 0);
+	gtk_entry_set_completion(entry, completion);
 
+	/* Now the signals to make sure the user can't leave the
+	   widget without a valid currency. */
+	priv = GET_PRIVATE(gce);
+	priv->changed_id =
+		g_signal_connect(gce, "changed",
+				 G_CALLBACK(gnc_changed_cb), gce);
+	g_signal_connect(completion, "match_selected",
+			 G_CALLBACK(gnc_match_selected_cb), gce);
+	g_signal_connect(entry, "focus-out-event",
+			 G_CALLBACK(gce_focus_out_cb), gce);
+
+	/* Fill in all the data. */
 	fill_currencies (gce);
+	gtk_tree_sortable_set_sort_column_id
+		(GTK_TREE_SORTABLE(store), 0, GTK_SORT_ASCENDING);
 
 	return GTK_WIDGET (gce);
 }
@@ -235,34 +371,14 @@ void
 gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
                                 const gnc_commodity *currency)
 {
-	GtkTreeModel *model;
-	GtkTreeIter iter;
-	const gchar *printname, *tree_string;
-	GValue value = { 0 };
-	gint result = 1;
+	const gchar *printname;
 
         g_return_if_fail(gce != NULL);
         g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
         g_return_if_fail(currency != NULL);
 	
-	model = gtk_combo_box_get_model(GTK_COMBO_BOX(gce));
-	if (!gtk_tree_model_get_iter_first(model, &iter)) {
-		/* empty tree */
-		return;
-	}
-
 	printname = gnc_commodity_get_printname(currency);
-	do {
-		gtk_tree_model_get_value(model, &iter, 0, &value);
-		tree_string = g_value_get_string(&value);
-		result = strcmp(printname, tree_string);
-		g_value_unset(&value);
-
-		if (result == 0) {
-		  gtk_combo_box_set_active_iter(GTK_COMBO_BOX(gce), &iter);
-		  return;
-		}
-	} while (gtk_tree_model_iter_next(model, &iter));
+	gce_set_by_string(gce, printname);
 }
 
 
