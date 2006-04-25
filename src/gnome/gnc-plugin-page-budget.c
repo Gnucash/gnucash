@@ -95,12 +95,14 @@ static GncPluginPage *gnc_plugin_page_budget_recreate_page (
     GtkWidget *window, GKeyFile *file, const gchar *group);
 
 
-static gboolean gnc_plugin_page_budget_button_press_cb(
+static gboolean gppb_button_press_cb(
     GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
-static void gnc_plugin_page_budget_double_click_cb(
+static gboolean gppb_key_press_cb(
+    GtkWidget *treeview, GdkEventKey *event, gpointer userdata);
+static void gppb_double_click_cb(
     GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *col,
     GncPluginPageBudget *page);
-static void gnc_plugin_page_budget_selection_changed_cb(
+static void gppb_selection_changed_cb(
     GtkTreeSelection *selection, GncPluginPageBudget *page);
 
 static void gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page);
@@ -394,17 +396,16 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
-    g_signal_connect (G_OBJECT (selection), "changed",
-		      G_CALLBACK (gnc_plugin_page_budget_selection_changed_cb),
-		      plugin_page);
-    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-                      G_CALLBACK (gnc_plugin_page_budget_button_press_cb),
-                      plugin_page);
-    g_signal_connect (G_OBJECT (tree_view), "row-activated",
-                      G_CALLBACK (gnc_plugin_page_budget_double_click_cb),
-                      page);
+    g_signal_connect(G_OBJECT(selection), "changed",
+                     G_CALLBACK(gppb_selection_changed_cb), plugin_page);
+    g_signal_connect(G_OBJECT(tree_view), "button-press-event",
+                     G_CALLBACK(gppb_button_press_cb), plugin_page);
+    g_signal_connect(G_OBJECT(tree_view), "row-activated",
+                     G_CALLBACK(gppb_double_click_cb), page);
+    g_signal_connect_after(G_OBJECT(tree_view), "key-press-event",
+                           G_CALLBACK(gppb_key_press_cb), NULL);
 
-    gnc_plugin_page_budget_selection_changed_cb (NULL, page);
+    gppb_selection_changed_cb (NULL, page);
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gtk_widget_show (GTK_WIDGET (tree_view));
     gtk_container_add (GTK_CONTAINER (scrolled_window),
@@ -564,9 +565,8 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
  *  Button presses on all other pages are caught by the signal
  *  registered in gnc-main-window.c. */
 static gboolean
-gnc_plugin_page_budget_button_press_cb (GtkWidget *widget,
-					GdkEventButton *event,
-					GncPluginPage *page)
+gppb_button_press_cb(GtkWidget *widget, GdkEventButton *event,
+                     GncPluginPage *page)
 {
   gboolean result;
 
@@ -578,11 +578,36 @@ gnc_plugin_page_budget_button_press_cb (GtkWidget *widget,
   return result;
 }
 
+static gboolean
+gppb_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
+{
+    GtkTreeView *tv = GTK_TREE_VIEW(treeview);
+    GtkTreeViewColumn *col;
+    GtkTreePath *path = NULL;
+
+    if (event->type != GDK_KEY_PRESS) return TRUE;
+
+    switch (event->keyval) {
+    case GDK_Tab:
+    case GDK_ISO_Left_Tab:
+    case GDK_KP_Tab:
+    case GDK_Return:
+    case GDK_KP_Enter:
+        gtk_tree_view_get_cursor(tv, &path, &col);
+        if (!path) return TRUE;
+        //finish_edit(col);
+        break;
+    }
+    gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
+    
+    if (path && gnc_tree_view_path_is_valid(GNC_TREE_VIEW(tv), path))
+        gtk_tree_view_set_cursor(tv, path, col, TRUE);
+    return TRUE;
+}
+
 static void
-gnc_plugin_page_budget_double_click_cb (GtkTreeView        *treeview,
-					GtkTreePath        *path,
-					GtkTreeViewColumn  *col,
-					GncPluginPageBudget *page)
+gppb_double_click_cb(GtkTreeView *treeview, GtkTreePath *path,
+                     GtkTreeViewColumn *col, GncPluginPageBudget *page)
 {
     GtkWidget *window;
     GncPluginPage *new_page;
@@ -600,8 +625,8 @@ gnc_plugin_page_budget_double_click_cb (GtkTreeView        *treeview,
 }
 
 static void
-gnc_plugin_page_budget_selection_changed_cb (GtkTreeSelection *selection,
-					     GncPluginPageBudget *page)
+gppb_selection_changed_cb(GtkTreeSelection *selection,
+                          GncPluginPageBudget *page)
 {
     GtkActionGroup *action_group;
     GtkTreeView *view;
@@ -627,7 +652,6 @@ gnc_plugin_page_budget_selection_changed_cb (GtkTreeSelection *selection,
     gnc_plugin_update_actions (action_group, actions_requiring_account,
 				   "sensitive", sensitive);
 }
-	
 
 /* Command callbacks */
 

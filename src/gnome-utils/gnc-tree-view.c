@@ -35,6 +35,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 #include <string.h>
 
 #include "gnc-tree-view.h"
@@ -2083,5 +2084,99 @@ gnc_tree_view_append_column (GncTreeView *view,
     n -= 2;
   return gtk_tree_view_insert_column (GTK_TREE_VIEW(view), column, n);
 }
+
+static gboolean
+get_column_next_to(GtkTreeView *tv, GtkTreeViewColumn **col, gboolean backward)
+{
+    GList *cols, *node;
+    GtkTreeViewColumn *c = NULL;
+    gint seen = 0;
+    gboolean wrapped = FALSE;
+    
+    cols = gtk_tree_view_get_columns(tv);
+    g_return_val_if_fail(g_list_length(cols) > 0, FALSE);
+    
+    node = g_list_find(cols, *col);
+    g_return_val_if_fail(node, FALSE);
+    do {
+        node = backward ? node->prev : node->next;
+        if (!node) {
+            wrapped = TRUE;
+            node = backward ? g_list_last(cols) : cols;
+        }
+        c = GTK_TREE_VIEW_COLUMN(node->data);
+        if (c && gtk_tree_view_column_get_visible(c))
+            seen++;
+        if (c == *col) break;
+    } while (!seen);
+    
+    g_list_free(cols);
+    *col = c;
+    return wrapped;
+}
+
+gboolean
+gnc_tree_view_path_is_valid(GncTreeView *view, GtkTreePath *path)
+{
+    GtkTreeView *tv = GTK_TREE_VIEW(view);
+    GtkTreeModel *s_model;
+    GtkTreeIter iter;
+
+    s_model = gtk_tree_view_get_model(tv);
+    return gtk_tree_model_get_iter(s_model, &iter, path);
+}
+
+void
+gnc_tree_view_keynav(GncTreeView *view, GtkTreeViewColumn **col, 
+                     GtkTreePath *path, GdkEventKey *event)
+{
+    GtkTreeView *tv = GTK_TREE_VIEW(view);
+    gint depth;
+    gboolean shifted;
+
+    if (event->type != GDK_KEY_PRESS) return;
+
+    switch (event->keyval) {
+    case GDK_Tab:
+    case GDK_ISO_Left_Tab:
+    case GDK_KP_Tab:
+        shifted = event->state & GDK_SHIFT_MASK;
+        if (get_column_next_to(tv, col, shifted)) {
+            /* This is the end (or beginning) of the line, buddy. */
+            depth = gtk_tree_path_get_depth(path);
+            if (shifted) {
+                if (!gtk_tree_path_prev(path) && depth > 1) {
+                    gtk_tree_path_up(path);
+                }
+            } else if (gtk_tree_view_row_expanded(tv, path)) {
+                gtk_tree_path_down(path);
+            } else {
+                gtk_tree_path_next(path);
+                if (!gnc_tree_view_path_is_valid(view, path) && depth > 1) {
+                    gtk_tree_path_prev(path);
+                    gtk_tree_path_up(path);
+                    gtk_tree_path_next(path);
+                }
+            }
+        }
+        break;
+
+    case GDK_Return:
+    case GDK_KP_Enter:
+        if (gtk_tree_view_row_expanded(tv, path)) {
+            gtk_tree_path_down(path);
+        } else {
+            gtk_tree_path_next(path);
+            if (!gnc_tree_view_path_is_valid(view, path) && depth > 1) {
+                gtk_tree_path_prev(path);
+                gtk_tree_path_up(path);
+                gtk_tree_path_next(path);
+            }
+        }
+        break;
+    }
+    return;
+}
+
 
 /** @} */
