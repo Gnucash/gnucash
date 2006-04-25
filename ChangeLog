@@ -1,5 +1,9 @@
 2006-04-25  David Hampton  <hampton@employees.org>
 
+	* src/scm/process.scm: Handle the failure to fork a child process
+	and print an error message, instead of just ignoring the
+	error. Fixes #127241.
+
 	* src/gnome-utils/gnc-currency-edit.[ch]: Add completion support to
 	the currency edit widget.  Fixes #339412.
 
