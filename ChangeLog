@@ -1,3 +1,8 @@
+2006-04-25  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation. 3666 out of 3666
+	translated.
+
 2006-04-25  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-tree-view.c: Initialize depth variable in
