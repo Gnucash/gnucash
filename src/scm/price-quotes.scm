@@ -412,7 +412,7 @@
                              (lambda (a b) (set! commodity-list a) b))))
 	   (quote-hash (make-hash-table 31)))
 
-      (if (null? big-list)
+      (if (and (null? commodity-list) (null? currency-list))
 	  #f
 	  (begin
 
