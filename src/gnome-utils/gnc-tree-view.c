@@ -51,9 +51,6 @@
  * visible column has no association with the underlying model.*/
 #define MODEL_COLUMN "model_column"
 
-/* A column with this attribute cannot be hidden from view. */
-#define ALWAYS_VISIBLE  "always-visible"
-
 /* For checkbox columns, this contains the real title for the column. */
 #define REAL_TITLE  "real_title"
 
@@ -775,13 +772,13 @@ gtk_tree_view_size_allocate_cb (GtkWidget *widget,
 
 /** Determine the visibility of a column.  This function first looks
  *  for columns specially marked to be always visible, or columns
- *  without a preference name.  These are always show.  Next this
+ *  without a preference name.  These are always shown.  Next, this
  *  function checks to see if gconf is responsible for this view *and*
  *  that gconf visibility keys have been seen.  (This handles the
  *  'first run' case where gconf should manage a view but no keys yet
  *  exist in gconf.)  If so, the gconf visibility key is returned.
  *  Otherwise the "'default visible column' list is checked and a
- *  value of TRUE returned if the pref name is found.
+ *  value of TRUE returned if the pref name is found, otherwise FALSE.
  *
  *  @param view A GncTreeView.
  *
@@ -845,7 +842,7 @@ gnc_tree_view_column_visible (GncTreeView *view,
 
 /** This function updates the visibility of a single column.  It
  *  checks if the column should be visible, and if so tells the view
- *  to show the column and (f needed) updates the gconf database.
+ *  to show the column and (if needed) updates the gconf database.
  *
  *  @param column The column whose visibility should be updated.
  *

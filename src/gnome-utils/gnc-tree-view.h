@@ -60,8 +60,15 @@ typedef struct {
 GType gnc_tree_view_get_type (void);
 
 
+/* The columns managed by gnc-tree-view can use the following column
+   attributes.  Set them with:
 
+   g_object_set_data(col, ATTRIBUTE_NAME, value);
+*/
 
+/* A column with this attribute set cannot be hidden from view. Valid
+   values: GINT_TO_POINTER(0) and GINT_TO_POINTER(1) */
+#define ALWAYS_VISIBLE  "always-visible"
 
 #define GNC_TREE_VIEW_COLUMN_DATA_NONE -1
 #define GNC_TREE_VIEW_COLUMN_COLOR_NONE -1
