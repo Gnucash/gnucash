@@ -1,3 +1,18 @@
+2006-04-25  Joshua Sled  <jsled@asynchronous.org>
+	Bug#119078: promote register parse errors to the user.
+
+	* src/register/register-core/pricecell.c (gnc_price_cell_parse):
+	Return error if cell text isn't parseable via expression parser.
+
+	* src/register/register-core/pricecell.c (gnc_price_cell_leave):
+	* src/register/register-core/formulacell.c (gnc_formula_cell_leave): 
+	Promote error to UI if cell text isn't parseable.
+
+	* src/register/register-core/table-allgui.c (gnc_table_save_cells): 
+	* src/register/ledger-core/split-register-load.c
+	(gnc_split_register_load): Don't -- seemingly unnecessarily --
+	call [...]leave_update here.
+
 2006-04-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c: Don't try to update the

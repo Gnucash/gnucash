@@ -21,8 +21,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include "gnc-exp-parser.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 #include "basiccell.h"
 #include "formulacell.h"
@@ -36,9 +40,7 @@ static gboolean gnc_formula_cell_enter( BasicCell *_cell,
                                         int *start_selection,
                                         int *end_selection );
 
-#if 0
 static void gnc_formula_cell_leave( BasicCell *_cell );
-#endif
 
 static void gnc_formula_cell_modify_verify( BasicCell *_cell, 
                                             const char *change,
@@ -73,6 +75,7 @@ gnc_formula_cell_init( FormulaCell *fc )
   fc->cell.enter_cell    = gnc_formula_cell_enter;
   fc->cell.modify_verify = gnc_formula_cell_modify_verify;
   fc->cell.set_value     = gnc_formula_cell_set_value_internal;
+  fc->cell.leave_cell    = gnc_formula_cell_leave;
 }
 
 void
@@ -97,18 +100,26 @@ gnc_formula_cell_enter( BasicCell *_cell,
   return TRUE;
 }
 
-#if 0
-static
-void
-gnc_formula_cell_leave( BasicCell *_cell )
+static void
+gnc_formula_cell_leave(BasicCell *_cell)
 {
   char *str;
   FormulaCell *fc = (FormulaCell*)_cell;
-  DEBUG( "leaving.." );
   str = fc->cell.value;
+  {
+    char *error_location = NULL;
+    gnc_numeric amount;
+    if (str != NULL
+        && strlen(str) != 0
+        && !gnc_exp_parser_parse(str, &amount, &error_location))
+    {
+      gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
+                         str);//, (error_location - str));
+    }
+  }
+
   gnc_basic_cell_set_value_internal( &fc->cell, str );
 }
-#endif
 
 static
 void

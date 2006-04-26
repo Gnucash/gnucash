@@ -259,7 +259,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 
   table = reg->table;
 
-  gnc_table_leave_update (table, table->current_cursor_loc);
+  // gnc_table_leave_update (table, table->current_cursor_loc);
 
   multi_line = (reg->style == REG_STYLE_JOURNAL);
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);

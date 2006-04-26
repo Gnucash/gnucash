@@ -564,7 +564,7 @@ gnc_table_save_cells (Table *table, gpointer save_data)
   if (gnc_table_model_read_only (table->model))
     return;
 
-  gnc_table_leave_update (table, table->current_cursor_loc);
+  // gnc_table_leave_update (table, table->current_cursor_loc);
 
   save_handler = gnc_table_model_get_pre_save_handler (table->model);
   if (save_handler)

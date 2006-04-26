@@ -35,12 +35,14 @@
 #include "config.h"
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <locale.h>
 #include <string.h>
 
 #include "gnc-exp-parser.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
 #include "basiccell.h"
 #include "pricecell.h"
@@ -119,7 +121,7 @@ gnc_price_cell_modify_verify (BasicCell *_cell,
   cell->need_to_parse = TRUE;
 }
 
-static void
+static gint
 gnc_price_cell_parse (PriceCell *cell, gboolean update_value)
 {
   const char *newval;
@@ -127,41 +129,58 @@ gnc_price_cell_parse (PriceCell *cell, gboolean update_value)
   gnc_numeric amount;
 
   if (!cell->need_to_parse)
-    return;
+    return -1;
 
   oldval = cell->cell.value;
   if (oldval == NULL)
     oldval = "";
 
-  if (gnc_exp_parser_parse (cell->cell.value, &amount, NULL))
   {
-    if (cell->fraction > 0)
-      amount = gnc_numeric_convert (amount, cell->fraction, GNC_RND_ROUND);
+    char *err_location = NULL;
+    if (strlen(g_strstrip(cell->cell.value)) == 0)
+    {
+      cell->amount = gnc_numeric_zero ();
+    }
+    else if (gnc_exp_parser_parse (cell->cell.value, &amount, &err_location))
+    {
+      if (cell->fraction > 0)
+        amount = gnc_numeric_convert (amount, cell->fraction, GNC_RND_ROUND);
 
-    cell->amount = amount;
+      cell->amount = amount;
+    }
+    else
+    {
+      return (err_location - cell->cell.value);
+    }
   }
-  else
-    cell->amount = gnc_numeric_zero ();
 
   if (!update_value)
-    return;
+    return -1;
 
   newval = gnc_price_cell_print_value (cell);
 
   /* If they are identical do nothing */
   if (strcmp(newval, oldval) == 0)
-    return;
+    return -1;
 
   /* Otherwise, change it */
   gnc_basic_cell_set_value_internal (&cell->cell, newval);
+  return -1;
 }
 
 static void
 gnc_price_cell_leave (BasicCell *_cell) 
 {
+  gint error_position = -1;
   PriceCell *cell = (PriceCell *) _cell;
 
-  gnc_price_cell_parse (cell, TRUE);
+  error_position = gnc_price_cell_parse (cell, TRUE);
+  if (error_position != -1)
+  {
+    gnc_warning_dialog(NULL, _("An error occurred while processing %s."),
+                       cell->cell.value);
+  }
+
 }
 
 BasicCell *
