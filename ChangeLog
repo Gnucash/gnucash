@@ -1,3 +1,9 @@
+2006-04-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-page-register.c: Don't try to update the
+	main window page name when invoked with an embedded window.  Fixes
+	#339763.
+
 2006-04-25  Christian Stimming  <stimming@tuhh.de>
 
 	* po/de.po: Updated German translation. 3666 out of 3666

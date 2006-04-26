@@ -2876,6 +2876,7 @@ gnc_plugin_page_register_event_handler (QofEntity *entity,
   QofBook *book;
   GncPluginPage *visible_page;
   GtkWidget *window;
+  gchar *label;
 
   g_return_if_fail(page);	/* Required */
   if (!GNC_IS_TRANS(entity) && !GNC_IS_ACCOUNT(entity))
@@ -2884,12 +2885,14 @@ gnc_plugin_page_register_event_handler (QofEntity *entity,
   ENTER("entity %p of type %d, page %p, event data %p",
 	entity, event_type, page, ed);
 
-  if (GNC_IS_ACCOUNT(entity)) {
-    gchar *label;
+  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
 
-    label = gnc_plugin_page_register_get_tab_name(GNC_PLUGIN_PAGE(page));
-    main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
-    g_free(label);
+  if (GNC_IS_ACCOUNT(entity)) {
+    if (GNC_IS_MAIN_WINDOW(window)) {
+      label = gnc_plugin_page_register_get_tab_name(GNC_PLUGIN_PAGE(page));
+      main_window_update_page_name(GNC_PLUGIN_PAGE(page), label);
+      g_free(label);
+    }
     LEAVE("tab name updated");
     return;
   }
@@ -2901,12 +2904,10 @@ gnc_plugin_page_register_event_handler (QofEntity *entity,
   trans = GNC_TRANS(entity);
   book = qof_instance_get_book(QOF_INSTANCE(trans));
   if (!gnc_plugin_page_has_book(GNC_PLUGIN_PAGE(page), book)) {
-		
       LEAVE("not in this book");
       return;
   }
 
-  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
   if (GNC_IS_MAIN_WINDOW(window)) {
     visible_page = gnc_main_window_get_current_page(GNC_MAIN_WINDOW(window));
     if (visible_page != GNC_PLUGIN_PAGE(page)) {
