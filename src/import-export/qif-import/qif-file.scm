@@ -23,7 +23,7 @@
   (let ((match (regexp-exec qif-bad-numeric-rexp input)))
     (if match #f #t)))
 
-(define (qif-file:read-file self path ticker-map)
+(define (qif-file:read-file self path ticker-map window)
   (false-if-exception
    (let* ((qstate-type #f)
           (current-xtn #f)
@@ -51,7 +51,7 @@
 
      (if (> file-size 10000)
          (begin
-           (set! progress-dialog (gnc:progress-dialog-new #f #f))
+           (set! progress-dialog (gnc:progress-dialog-new window #f))
            (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
            (gnc:progress-dialog-set-heading progress-dialog
                                             (_ "Loading QIF file..."))))

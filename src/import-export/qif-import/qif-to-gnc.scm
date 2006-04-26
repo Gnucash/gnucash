@@ -174,7 +174,7 @@
 (define (qif-import:qif-to-gnc qif-files-list 
                                qif-acct-map qif-cat-map 
                                qif-memo-map stock-map 
-                               default-currency-name)
+                               default-currency-name window)
   (gnc:backtrace-if-exception 
    (lambda ()
      (let* ((old-group (gnc:get-current-group))
@@ -296,7 +296,7 @@
        
        (if (> work-to-do 100)
            (begin 
-             (set! progress-dialog (gnc:progress-dialog-new #f #f))
+             (set! progress-dialog (gnc:progress-dialog-new window #f))
              (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
              (gnc:progress-dialog-set-heading progress-dialog
                                               (_ "Importing transactions..."))))

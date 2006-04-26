@@ -30,7 +30,7 @@
 ;;  them in a list. 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:group-find-duplicates old-group new-group)
+(define (gnc:group-find-duplicates old-group new-group window)
   ;; get all the transactions in the new group, then iterate over them
   ;; trying to find matches in the new group.  If there are matches, 
   ;; push the matches onto a list. 
@@ -42,7 +42,7 @@
     
     (if (> work-to-do 100)
 	(begin 
-	  (set! progress-dialog (gnc:progress-dialog-new #f #f))
+	  (set! progress-dialog (gnc:progress-dialog-new window #f))
 	  (gnc:progress-dialog-set-title progress-dialog (_ "Progress"))
 	  (gnc:progress-dialog-set-heading progress-dialog
 					   (_ "Finding duplicate transactions..."))))

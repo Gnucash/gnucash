@@ -433,16 +433,18 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   SCM check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
   SCM default_acct    = scm_c_eval_string("qif-file:path-to-accountname");
   SCM qif_file_parse_results  = scm_c_eval_string("qif-file:parse-fields-results");
+  SCM window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM date_formats;
   SCM scm_filename;
   SCM scm_qiffile;
   SCM imported_files = SCM_EOL;
   SCM load_return, parse_return;
-
+  SCM window;
   int ask_date_format = FALSE;
 
   /* get the file name */ 
   path_to_load = gtk_entry_get_text(GTK_ENTRY(wind->filename_entry));
+  window = gw_wcp_assimilate_ptr(wind->window, window_type);
 
   /* check a few error conditions before we get started */
   if(strlen(path_to_load) == 0) {
@@ -482,8 +484,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     scm_gc_protect_object(wind->selected_file);      
     
     /* load the file */
-    load_return = scm_call_3(qif_file_load, SCM_CAR(imported_files),
-			     scm_filename, wind->ticker_map);
+    load_return = scm_call_4(qif_file_load, SCM_CAR(imported_files),
+			     scm_filename, wind->ticker_map, window);
     
     /* a list returned is (#f error-message) for an error, 
      * (#t error-message) for a warning, or just #f for an 
@@ -1104,8 +1106,10 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   SCM   qif_to_gnc      = scm_c_eval_string("qif-import:qif-to-gnc");
   SCM   find_duplicates = scm_c_eval_string("gnc:group-find-duplicates");
+  SCM   window_type     = scm_c_eval_string ("<gnc:UIWidget>");
   SCM   retval;
   SCM   current_xtn;
+  SCM   window;
 
   GnomeDruidPage * gtkpage;
   QIFDruidPage * page;
@@ -1150,13 +1154,15 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
   /* call a scheme function to do the work.  The return value is an
    * account group containing all the new accounts and transactions */
+  window = gw_wcp_assimilate_ptr(wind->window, window_type);
   retval = scm_apply(qif_to_gnc, 
-		     SCM_LIST6(wind->imported_files,
+		     SCM_LIST7(wind->imported_files,
 			       wind->acct_map_info, 
 			       wind->cat_map_info,
 			       wind->memo_map_info,
 			       wind->stock_hash,
-			       scm_makfrom0str(currname)),
+			       scm_makfrom0str(currname),
+			       window),
 		     SCM_EOL);
 
   gnc_unset_busy_cursor(NULL);
@@ -1177,9 +1183,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
-    retval = scm_call_2(find_duplicates, 
+    retval = scm_call_3(find_duplicates, 
 			scm_c_eval_string("(gnc:get-current-group)"),
-			wind->imported_account_group);
+			wind->imported_account_group, window);
     gnc_unset_busy_cursor(NULL);
     
     scm_gc_unprotect_object(wind->match_transactions);
