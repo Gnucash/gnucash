@@ -1,3 +1,7 @@
+2006-04-26  Christian Stimming <stimming@tuhh.de>
+
+	* doc/gnucash.1.in: Properly quote marks. Bug #339731.
+
 2006-04-25  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif-to-gnc.scm:
