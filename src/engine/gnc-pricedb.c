@@ -584,6 +584,7 @@ gnc_pricedb_create(QofBook * book)
 
   result = g_new0(GNCPriceDB, 1);
   qof_instance_init (&result->inst, GNC_ID_PRICEDB, book);
+  qof_collection_mark_clean(col);
 
   /** \todo This leaks result when the collection is destroyed.  When
      qofcollection is fixed to allow a destroy notifier, we'll need to

@@ -1,5 +1,9 @@
 2006-04-25  David Hampton  <hampton@employees.org>
 
+	* src/engine/gnc-pricedb.c:
+	* src/engine/gnc-commodity.c: Mark the collections as clean after
+	the default items have been created.  Fixes #337185.
+
 	* src/scm/price-quotes.scm: Fix the crash in #339764.
 
 2006-04-25  Joshua Sled  <jsled@asynchronous.org>

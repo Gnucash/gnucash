@@ -1712,6 +1712,8 @@ gnc_commodity_table_copy(gnc_commodity_table *dest,
 gboolean
 gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
 {
+  QofCollection *col;
+
   ENTER ("table=%p", table);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_AMEX, book);
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_NYSE, book);
@@ -1720,6 +1722,14 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
   gnc_commodity_table_add_namespace(table, GNC_COMMODITY_NS_MUTUAL, book);
 
   #include "iso-4217-currencies.c"
+
+  /* We've just created the default namespaces and currencies.  Mark
+   * these collections as clean because there is no USER entered data
+   * in these collections as of yet. */
+  col = qof_book_get_collection(book, GNC_ID_COMMODITY);
+  qof_collection_mark_clean(col);
+  col = qof_book_get_collection(book, GNC_ID_COMMODITY_NAMESPACE);
+  qof_collection_mark_clean(col);
 
   LEAVE ("table=%p", table);
   return TRUE;
