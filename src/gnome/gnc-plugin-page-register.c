@@ -1069,8 +1069,6 @@ gnc_plugin_page_register_finish_pending (GncPluginPage *page)
 	priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(reg_page);
 	reg = gnc_ledger_display_get_split_register(priv->ledger);
 
-	if (!reg)
-	  return TRUE;
 	if (!reg || !gnc_split_register_changed(reg))
 	  return TRUE;
 
@@ -2059,16 +2057,12 @@ gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
   xaccTransReverse(new_trans);
 
   /* Clear transaction level info */
-  xaccTransBeginEdit(new_trans);
   xaccTransSetDatePostedSecs(new_trans, time(NULL));
   xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-  xaccTransCommitEdit(new_trans);
 
   /* Now update the original with a pointer to the new one */
-  xaccTransBeginEdit(trans);
   kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
   kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
-  xaccTransCommitEdit(trans);
   qof_event_resume();
 
   /* Now jump to new trans */

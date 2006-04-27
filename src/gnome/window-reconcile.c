@@ -1141,10 +1141,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
   gnc_suspend_gui_refresh ();
 
   trans = xaccSplitGetParent(split);
-
-  xaccTransBeginEdit(trans);
   xaccTransDestroy(trans);
-  xaccTransCommitEdit(trans);
 
   gnc_resume_gui_refresh ();
 }

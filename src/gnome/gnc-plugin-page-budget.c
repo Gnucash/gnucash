@@ -597,6 +597,7 @@ gppb_key_press_cb(GtkWidget *treeview, GdkEventKey *event, gpointer userdata)
         if (!path) return TRUE;
         //finish_edit(col);
         break;
+    default: return TRUE;
     }
     gnc_tree_view_keynav(GNC_TREE_VIEW(tv), &col, path, event);
     

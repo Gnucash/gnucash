@@ -528,13 +528,9 @@ grl_commit_hash_helper (gpointer key, gpointer value, gpointer user_data)
 {
   Split *split = key;
   time_t *date = user_data;
-  Transaction *trans;
 
-  trans = xaccSplitGetParent(split);
-  xaccTransBeginEdit(trans);
   xaccSplitSetReconcile (split, YREC);
   xaccSplitSetDateReconciledSecs (split, *date);
-  xaccTransCommitEdit(trans);
 }
 
 void
@@ -563,7 +559,6 @@ gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 void
 gnc_reconcile_list_postpone (GNCReconcileList *list)
 {
-  Transaction *trans;
   GtkCList *clist = GTK_CLIST(list); /* This is cheating! */
   Split *split;
   int num_splits;
@@ -585,10 +580,7 @@ gnc_reconcile_list_postpone (GNCReconcileList *list)
 
     recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
 
-    trans = xaccSplitGetParent(split);
-    xaccTransBeginEdit(trans);
     xaccSplitSetReconcile (split, recn);
-    xaccTransCommitEdit(trans);
   }
   gnc_resume_gui_refresh();
 }

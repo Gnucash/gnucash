@@ -922,16 +922,12 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
   xaccTransReverse(new_trans);
 
   /* Clear transaction level info */
-  xaccTransBeginEdit(new_trans);
   xaccTransSetDatePostedSecs(new_trans, time(NULL));
   xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-  xaccTransCommitEdit(new_trans);
 
   /* Now update the original with a pointer to the new one */
-  xaccTransBeginEdit(trans);
   kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
   kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
-  xaccTransCommitEdit(trans);
 
   /* Now jump to new trans */
   gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
