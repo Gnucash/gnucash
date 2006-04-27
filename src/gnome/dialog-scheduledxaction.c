@@ -395,8 +395,6 @@ editor_ok_button_clicked( GtkButton *b, SchedXactionEditorDialog *sxed )
                 gnc_book_set_schedxactions( book, sxList );
                 sxed->newsxP = FALSE;
         }
-        // regardless, do this so the close handler won't complain.
-        sxed->sx = NULL;
 
         /* update lists */
         /* We now do this by getting the list of SX Lists and updating them
@@ -1494,8 +1492,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
                                     NULL, /* no refresh handler */
-                                    sxed_close_handler, /* file-static
-                                                           close handler */
+                                    sxed_close_handler,
                                     sxed );
 
         g_signal_connect( sxed->dialog, "close",
