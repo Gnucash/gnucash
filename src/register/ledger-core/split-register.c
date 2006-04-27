@@ -798,7 +798,6 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
   Transaction *pending_trans;
   Transaction *trans;
   Split *blank_split;
-  Account *account;
   Split *split;
 
   if (!reg) return;
@@ -825,23 +824,21 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
 
   gnc_suspend_gui_refresh ();
 
-  /* make a copy of all of the accounts that will be  
-   * affected by this deletion, so that we can update
-   * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
 
-  account = xaccSplitGetAccount (split);
-
+  /* Check pending transaction */
+  if (trans == pending_trans) {
+      g_assert(xaccTransIsOpen(trans));
+  } else {
+      g_assert(!pending_trans);
+      g_assert(!xaccTransIsOpen(trans));
+      xaccTransBeginEdit(trans);
+      info->pending_trans_guid = *xaccTransGetGUID(trans);
+  }
   xaccSplitDestroy (split);
 
-  /* Check pending transaction */
-  if (trans == pending_trans)
-  {
-    info->pending_trans_guid = *guid_null ();
-    pending_trans = NULL;
-  }
-
   gnc_resume_gui_refresh ();
+  gnc_split_register_redraw(reg);
 }
 
 void
