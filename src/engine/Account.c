@@ -360,8 +360,15 @@ xaccAccountCommitEdit (Account *acc)
       Split *s = lp->data;
       xaccSplitDestroy (s);
     }
-    g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
-    g_list_free(slist);
+    /* It turns out there's a case where this assertion does not hold:
+       When the user tries to delete an Imbalance account, while also
+       deleting all the splits in it.  The splits will just get
+       recreated and put right back into the same account!
+
+       g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
+    */
+
+    g_list_free(slist); 
     /* the lots should be empty by now */
     for (lp=acc->lots; lp; lp=lp->next)
     {
