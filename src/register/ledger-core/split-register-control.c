@@ -214,9 +214,6 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     return;
 
   info = gnc_split_register_get_info (reg);
-  pending_trans = xaccTransLookup (&info->pending_trans_guid,
-                                   gnc_get_current_book ());
-
   PINFO ("start callback %d %d \n",
          new_virt_loc.vcell_loc.virt_row,
          new_virt_loc.vcell_loc.virt_col);
@@ -271,6 +268,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 
   /* commit the contents of the cursor into the database */
   saved = gnc_split_register_save (reg, old_trans != new_trans);
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_book ());
   if ((old_class == CURSOR_CLASS_SPLIT) &&
       old_split &&
       (old_split != new_split) &&
@@ -305,11 +304,11 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     else
     {
       /* Trans was balanced. Let it go. */
+      info->pending_trans_guid = *guid_null ();
       if (xaccTransIsOpen (pending_trans))
         xaccTransCommitEdit (pending_trans);
       else g_assert_not_reached();
 
-      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
       saved = TRUE;
     }
@@ -679,8 +678,19 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         gnc_suspend_gui_refresh ();
 
-        xaccTransBeginEdit (trans);
+        info->pending_trans_guid = *xaccTransGetGUID(trans);
+        if ((pending_trans != NULL) && (pending_trans != trans)) {
+            if (xaccTransIsOpen (pending_trans))
+                xaccTransCommitEdit (pending_trans);
+            else g_assert_not_reached();
+            g_assert(!xaccTransIsOpen(trans));
+            xaccTransBeginEdit(trans);
+        }
+        g_assert(xaccTransIsOpen(trans));
+        pending_trans = trans;
+
         gnc_copy_trans_onto_trans (auto_trans, trans, FALSE, FALSE);
+        blank_split = NULL;
 
         if (gnc_split_register_get_default_account (reg) != NULL)
         {
@@ -689,7 +699,6 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           int i = 0;
 
           default_account = gnc_split_register_get_default_account (reg);
-          blank_split = NULL;
 
           while ((s = xaccTransGetSplit(trans, i)) != NULL) {
             if (default_account == xaccSplitGetAccount(s))
@@ -700,26 +709,12 @@ gnc_split_register_auto_completion (SplitRegister *reg,
             }
             i++;
           }
+        }
 
-          if (blank_split == NULL)
-          {
+        if (blank_split == NULL) {
             blank_split = xaccTransGetSplit(trans, 0);
             info->blank_split_guid = *xaccSplitGetGUID(blank_split);
-          }
         }
-        else
-        {
-          blank_split = xaccTransGetSplit(trans, 0);
-          info->blank_split_guid = *xaccSplitGetGUID(blank_split);
-        }
-
-        if ((pending_trans != NULL) && (pending_trans != trans)) {
-            if (xaccTransIsOpen (pending_trans))
-                xaccTransCommitEdit (pending_trans);
-            else g_assert_not_reached();
-        }
-        pending_trans = trans;
-        info->pending_trans_guid = *xaccTransGetGUID (pending_trans);
 
         info->blank_split_edited = TRUE;
 

@@ -1011,6 +1011,7 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg,
 {
   SRInfo *info;
   Transaction *trans;
+  Transaction *pending;
   int i = 0;
   Split *s;
 
@@ -1018,22 +1019,27 @@ gnc_split_register_empty_current_trans_except_split (SplitRegister *reg,
     return;
 
   gnc_suspend_gui_refresh ();
+  info = gnc_split_register_get_info(reg);
+  pending = xaccTransLookup(&info->pending_trans_guid, gnc_get_current_book());
 
-  trans = xaccSplitGetParent (split);
-  xaccTransBeginEdit (trans);
+  trans = xaccSplitGetParent(split);
+  if (!pending) {
+      g_assert(!xaccTransIsOpen(trans));
+      xaccTransBeginEdit(trans);
+      /* This is now the pending transaction */
+      info->pending_trans_guid = *xaccTransGetGUID(trans);
+  } else if (pending == trans) {
+      g_assert(xaccTransIsOpen(trans));
+  } else g_assert_not_reached();
+
   while ((s = xaccTransGetSplit(trans, i)) != NULL) {
       if (s != split) 
           xaccSplitDestroy(s);
-      i++;
+      else i++;
   }
 
-  /* This is now the pending transaction */
-  info = gnc_split_register_get_info (reg);
-  g_assert(xaccTransLookup(&info->pending_trans_guid, 
-                           gnc_get_current_book()) == NULL);
-  info->pending_trans_guid = *xaccTransGetGUID(trans);
-
   gnc_resume_gui_refresh ();
+  gnc_split_register_redraw(reg);
 }
 
 void
@@ -1340,7 +1346,9 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
          info->blank_split_guid = *guid_null ();
          info->blank_split_edited = FALSE;
      }
-     
+
+     /* We have to clear the pending guid *before* commiting the
+        trans, because the event handler will find it otherwise. */
      if (trans == pending_trans) { 
          info->pending_trans_guid = *guid_null ();
      }
@@ -1349,6 +1357,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
          PINFO("commiting trans (%p)", trans);
          xaccTransCommitEdit(trans);
      }
+
      return TRUE;
    }
 
@@ -1373,6 +1382,7 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
        // FIXME: How could the pending transaction not be open?
        // FIXME: For that matter, how could an open pending
        // transaction ever not be the current trans?
+       info->pending_trans_guid = *xaccTransGetGUID(trans);
        if (xaccTransIsOpen (pending_trans)) {
            g_message("Impossible? commiting pending %p", pending_trans);
            xaccTransCommitEdit (pending_trans);
@@ -1387,7 +1397,6 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
            xaccTransBeginEdit (trans);
        }
        pending_trans = trans;
-       info->pending_trans_guid = *xaccTransGetGUID(trans);
    }
 
    /* If we are committing the blank split, add it to the account now */
@@ -1465,12 +1474,12 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    if (do_commit)
    {
      g_assert(trans == blank_trans || trans == pending_trans); 
-     xaccTransCommitEdit (trans);
      if (pending_trans == trans)
      {
        pending_trans = NULL;
        info->pending_trans_guid = *guid_null ();
      }
+     xaccTransCommitEdit (trans);
    }
 
    gnc_table_clear_current_cursor_changes (reg->table);
@@ -2380,6 +2389,7 @@ gnc_split_register_cleanup (SplitRegister *reg)
    if (pending_trans != NULL)
    {
       g_assert_not_reached();
+      info->pending_trans_guid = *guid_null ();
       /* CAS: It's not clear to me that we'd really want to commit
          here, rather than rollback. But, maybe this is just dead
          code. */
@@ -2387,7 +2397,6 @@ gnc_split_register_cleanup (SplitRegister *reg)
           xaccTransCommitEdit (pending_trans);
       else g_assert_not_reached();
 
-      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
    }
 

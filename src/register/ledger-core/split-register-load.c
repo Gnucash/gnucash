@@ -525,12 +525,12 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
    * from the account. */
   if (!found_pending)
   {
+      info->pending_trans_guid = *guid_null ();
       if (xaccTransIsOpen (pending_trans))
           xaccTransCommitEdit (pending_trans);
       else if (pending_trans) 
           g_assert_not_reached();
 
-      info->pending_trans_guid = *guid_null ();
       pending_trans = NULL;
   }
 
