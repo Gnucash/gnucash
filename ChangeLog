@@ -1,5 +1,8 @@
 2006-04-27  Christian Stimming  <stimming@tuhh.de>
 
+	* po/fr.po: Updated French translation by Fabrice Kurz
+	<kurzf@voila.fr>.
+
 	* src/import-export/hbci/hbci-interaction.c: Fix
 	GNCInteractor_hadErrors() that reported too many errors. Fixes
 	#339504.
