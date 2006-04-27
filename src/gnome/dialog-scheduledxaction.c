@@ -1163,12 +1163,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         gnc_unregister_gui_component_by_data
                 (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
-        if ( sxed->newsxP ) {
-                /* FIXME: WTF??? */
-                xaccSchedXactionFree( sxed->sx );
-        }
-        sxed->sx = NULL;
-
         gnc_embedded_window_close_page(sxed->embed_window, sxed->plugin_page);
         gtk_widget_destroy(GTK_WIDGET(sxed->embed_window));
         sxed->embed_window = NULL;
@@ -1182,6 +1176,19 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
                 g_free( sxed->cal_marks[i] );
         }
         g_free( sxed->cal_marks );
+
+        if ( sxed->newsxP ) {
+                /* FIXME: WTF???
+                 *
+                 * "WTF" explaination: in the "new" click from the caller, we
+                 * set this flag.  When "ok" is pressed on the dialog, we set
+                 * this flag to false, and thus leave the SX live.  If
+                 * "Cancel" is clicked, the flag will still be true, and this
+                 * SX will be cleaned, here. -- jsled
+                 */
+                xaccSchedXactionFree( sxed->sx );
+        }
+        sxed->sx = NULL;
 
         g_free (sxed);
 }

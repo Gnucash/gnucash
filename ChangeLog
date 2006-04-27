@@ -1,3 +1,9 @@
+2006-04-26  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c
+	(scheduledxaction_editor_dialog_destroy): re-order SX disolution
+	vs. ui teardown.  Add comment info-request response.
+
 2006-04-26  Christian Stimming <stimming@tuhh.de>
 
 	* doc/gnucash.1.in: Properly quote marks. Bug #339731.
