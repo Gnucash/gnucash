@@ -216,8 +216,17 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 gboolean GNCInteractor_hadErrors (const GNCInteractor *i)
 {
   g_assert (i);
-  return (i->msgBoxError != 0) ||
-    (i->min_loglevel < AB_Banking_LogLevelNotice);
+  return (i->msgBoxError != 0);
+}
+
+gboolean GNCInteractor_errorsLogged (const GNCInteractor *i)
+{
+  g_assert (i);
+  /* Note: Unfortunately this does not mean at all that there actually
+     has been any error. Old aqbanking versions had some debugging
+     messages set at "error" level, and there can also be errors when
+     closing connection that don't affect the job result at all. */
+  return (i->min_loglevel < AB_Banking_LogLevelNotice);
 }
 
 /* ************************************************************ 

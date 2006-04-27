@@ -1,3 +1,9 @@
+2006-04-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Fix
+	GNCInteractor_hadErrors() that reported too many errors. Fixes
+	#339504.
+
 2006-04-26  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-scheduledxaction.c

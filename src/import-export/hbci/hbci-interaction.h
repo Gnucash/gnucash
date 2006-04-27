@@ -46,7 +46,15 @@ gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i);
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value);
 GtkWidget *GNCInteractor_parent(GNCInteractor *i);
 void GNCInteractor_add_log_text (GNCInteractor *i, const char *msg);
+/** Returns true if aqbanking requested to show a msgBox of type
+    error. (Note: This happens very seldomly.) */
 gboolean GNCInteractor_hadErrors (const GNCInteractor *i);
+/** Returns true if any error messages have been logged. Note:
+    Unfortunately this does not mean at all that there actually has
+    been any error. Old aqbanking versions had some debugging messages
+    set at "error" level, and there can also be errors when closing
+    connection that don't affect the job result at all. */
+gboolean GNCInteractor_errorsLogged (const GNCInteractor *i);
 
 
 #endif
