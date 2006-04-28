@@ -981,9 +981,10 @@ budget_col_edited(Account *account, GtkTreeViewColumn *col,
 {
     GncBudget *budget;
     guint period_num;
-    gnc_numeric numeric;
+    gnc_numeric numeric = gnc_numeric_zero();
 
-    if (!(xaccParseAmount (new_text, TRUE, &numeric, NULL)))
+    if (!xaccParseAmount (new_text, TRUE, &numeric, NULL) &&
+        !(new_text && *new_text == '\0'))
         return;
 
     period_num = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(col),
