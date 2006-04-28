@@ -226,6 +226,40 @@ gnc_lot_get_balance (GNCLot *lot)
 /* ============================================================= */
 
 void
+gnc_lot_get_balance_before (GNCLot *lot, Split *split,
+                            gnc_numeric *amount, gnc_numeric *value)
+{
+   GList *node;
+   gnc_numeric zero = gnc_numeric_zero();
+   gnc_numeric amt = zero;
+   gnc_numeric val = zero;
+   
+   if (lot && lot->splits)
+   {
+      for (node = lot->splits; node; node = node->next)
+      {
+         Split *s = node->data;
+         Transaction *ta, *tb;
+         ta = xaccSplitGetParent (s);
+         tb = xaccSplitGetParent (split);
+         if ((ta == tb && s != split) ||
+             xaccTransOrder (ta, tb) < 0)
+         {
+            gnc_numeric tmpval = xaccSplitGetAmount (s);
+            amt = gnc_numeric_add_fixed (amt, tmpval);
+            tmpval = xaccSplitGetValue (s);
+            val = gnc_numeric_add_fixed (val, tmpval);
+         }
+      }
+   }
+
+   *amount = amt;
+   *value = val;
+}
+               
+/* ============================================================= */
+
+void
 gnc_lot_add_split (GNCLot *lot, Split *split)
 {
    Account * acc;
@@ -294,7 +328,7 @@ gnc_lot_get_earliest_split (GNCLot *lot)
    Timespec ts;
    Split *earliest = NULL;
 
-   ts.tv_sec = ((long long) LONG_MAX);
+   ts.tv_sec = ((long long) ULONG_MAX);
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 
@@ -323,7 +357,7 @@ gnc_lot_get_latest_split (GNCLot *lot)
    Timespec ts;
    Split *latest = NULL;
 
-   ts.tv_sec = -((long long) LONG_MAX);
+   ts.tv_sec = 0;
    ts.tv_nsec = 0;
    if (!lot) return NULL;
 

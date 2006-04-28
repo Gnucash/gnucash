@@ -1,5 +1,15 @@
 2006-04-28  David Hampton  <hampton@employees.org>
 
+	* src/gnome/window-reconcile.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/engine/gnc-lot.[ch]:
+	* src/engine/Transaction.c:
+	* src/engine/Scrub2.c:
+	* src/engine/cap-gains.c: Mike Alexander's patch to fix lot date
+	calculation, and to include all splits when computing capital
+	gain's instead of just the opening lot.  Scrub lots when scrubbing
+	everything else.  Some MacOs X fixes.
+
 	* src/gnome/gnc-plugin-basic-commands.c: Finishing all pending
 	transactions before new and open commands, not just save commands.
 	Fixes #334090.

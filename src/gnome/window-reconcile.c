@@ -37,6 +37,7 @@
 #include <glib/gi18n.h>
 
 #include "Scrub.h"
+#include "Scrub3.h"
 #include "dialog-account.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -1228,6 +1229,8 @@ gnc_recn_scrub_cb(GtkAction *action, gpointer data)
 
   xaccAccountTreeScrubOrphans (account);
   xaccAccountTreeScrubImbalance (account);
+
+  xaccAccountTreeScrubLots (account);
 
   gnc_resume_gui_refresh ();
 }

@@ -1014,6 +1014,8 @@ xaccTransCommitEdit (Transaction *trans)
     */
    if (!(trans->inst.do_free) && scrub_data && 
        !qof_book_shutting_down(xaccTransGetBook(trans))) {
+     /* If scrubbing gains recurses through here, don't call it again. */
+     scrub_data = 0; 
      /* The total value of the transaction should sum to zero. 
       * Call the trans scrub routine to fix it.   Indirectly, this 
       * routine also performs a number of other transaction fixes too.
@@ -1021,6 +1023,8 @@ xaccTransCommitEdit (Transaction *trans)
      xaccTransScrubImbalance (trans, NULL, NULL);
      /* Get the cap gains into a consistent state as well. */
      xaccTransScrubGains (trans, NULL);
+     /* Allow scrubbing in transaction commit again */
+     scrub_data = 1;
    }
 
    /* Record the time of last modification */

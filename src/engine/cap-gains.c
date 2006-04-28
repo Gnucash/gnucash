@@ -86,6 +86,9 @@ xaccAccountHasTrades (Account *acc)
 
    if (!acc) return FALSE;
 
+   if (xaccAccountIsPriced (acc))
+      return TRUE;
+      
    acc_comm = acc->commodity;
 
    for (node=acc->splits; node; node=node->next)
@@ -158,7 +161,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
    gnc_commodity *currency,
-   gint64 guess,
+   guint64 guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
    struct find_lot_s es;
@@ -184,7 +187,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
    ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   G_GINT64_CONSTANT(2^31) * G_GINT64_CONSTANT(2^31), earliest_pred);
+                   G_MAXUINT64, earliest_pred);
    LEAVE ("found lot=%p %s baln=%s", lot, gnc_lot_get_title (lot),
                gnc_num_dbg_to_string(gnc_lot_get_balance(lot)));
    return lot;
@@ -199,8 +202,7 @@ xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
 	  sign.num, sign.denom);
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
-                   G_GINT64_CONSTANT(-2^31) * G_GINT64_CONSTANT(2^31),
-		   latest_pred);
+                   0, latest_pred);
    LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
    return lot;
 }
@@ -588,12 +590,17 @@ xaccSplitAssign (Split *split)
    GNCPolicy *pcy;
 
    if (!split) return FALSE;
+   
+   /* If this split already belongs to a lot or the account doesn't 
+    * have lots, we are done. 
+    */
+   if (split->lot) return FALSE;
+   acc = split->acc;
+   if (!xaccAccountHasTrades (acc))
+     return FALSE;
 
    ENTER ("(split=%p)", split);
 
-   /* If this split already belongs to a lot, we are done. */
-   if (split->lot) return FALSE;
-   acc = split->acc;
    pcy = acc->policy;
    xaccAccountBeginEdit (acc);
 
@@ -657,6 +664,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    gnc_numeric value = zero;
    gnc_numeric frac;
    gnc_numeric opening_amount, opening_value;
+   gnc_numeric lot_amount, lot_value;
    gnc_commodity *opening_currency;
 
    if (!split) return;
@@ -705,9 +713,15 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       return;
    }
 
+   if (safe_strcmp ("stock-split", xaccSplitGetType (split)) == 0)
+   {
+      LEAVE ("Stock split split, returning.");
+      return;
+   }
+   
    if (GAINS_STATUS_GAINS & split->gains)
    {
-		Split *s;
+      Split *s;
       PINFO ("split is a gains recording split, switch over");
       /* If this is the split that records the gains, then work with 
        * the split that generates the gains. 
@@ -730,7 +744,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          xaccTransDestroy (trans);
 #endif
       }
-		split = s;
+      split = s;
    }
 
    /* Note: if the value of the 'opening' split(s) has changed,
@@ -826,19 +840,23 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       return;
    }
 
-   /* The cap gains is the difference between the value of the
-    * opening split, and the current split, pro-rated for an equal
+   /* The cap gains is the difference between the basis prior to the
+    * current split, and the current split, pro-rated for an equal
     * amount of shares. 
-    * i.e. purchase_price = opening_value / opening_amount 
-    * cost_basis = purchase_price * current_amount
-    * cap_gain = current_value - cost_basis 
+    * i.e. purchase_price = lot_value / lot_amount 
+    * cost_basis = purchase_price * current_split_amount
+    * cap_gain = current_split_value - cost_basis 
     */
-   frac = gnc_numeric_div (split->amount, opening_amount, 
+   gnc_lot_get_balance_before (lot, split, &lot_amount, &lot_value);
+   /* Fraction of the lot that this split represents: */
+   frac = gnc_numeric_div (split->amount, lot_amount, 
                             GNC_DENOM_AUTO, 
                             GNC_HOW_DENOM_REDUCE);
-   value = gnc_numeric_mul (frac, opening_value, 
+   /* Basis for this split: */
+   value = gnc_numeric_mul (frac, lot_value, 
                             gnc_numeric_denom(opening_value), 
                             GNC_HOW_DENOM_EXACT|GNC_HOW_RND_ROUND);
+   /* Capital gain for this split: */
    value = gnc_numeric_sub (value, split->value,
                             GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
@@ -1124,7 +1142,10 @@ restart:
       {
          gboolean altered = FALSE;
          split->gains |= ~GAINS_STATUS_ADIRTY;
-         if (split->lot) altered = xaccScrubLot (split->lot);
+         if (split->lot) 
+           altered = xaccScrubLot (split->lot);
+         else
+           altered = xaccSplitAssign (split);
          if (altered) goto restart;
       }
    }

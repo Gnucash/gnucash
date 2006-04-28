@@ -413,6 +413,7 @@ restart:
       Split *s = node->data;
       if (xaccSplitGetLot (s) != lot) continue;
       if (s == split) continue;
+      if (s->inst.do_free) continue;
 
       /* OK, this split is in the same lot (and thus same account)
        * as the indicated split.  It must be a subsplit (although

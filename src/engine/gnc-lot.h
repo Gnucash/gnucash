@@ -97,6 +97,13 @@ Account * gnc_lot_get_account (GNCLot *);
  *    of the account. */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
+/** The gnc_lot_get_balance_before routines computes both the balance and
+ *  value in the lot considering only splits in transactions prior to the
+ *  one containing the given split or other splits in the same transaction.
+ *  The first return value is the amount and the second is the value. */
+void gnc_lot_get_balance_before (GNCLot *, Split *,
+                                 gnc_numeric *, gnc_numeric *);
+
 /** The gnc_lot_is_closed() routine returns a boolean flag: is this 
  *    lot closed?  A lot is closed if its balance is zero.  This 
  *    routine is faster than using gnc_lot_get_balance() because
