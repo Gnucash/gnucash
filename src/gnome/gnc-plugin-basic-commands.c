@@ -298,6 +298,9 @@ gnc_plugin_basic_commands_finalize (GObject *object)
 static void
 gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowActionData *data)
 {
+  if (!gnc_main_window_all_finish_pending())
+    return;
+
   gnc_file_new ();
   /* FIXME GNOME 2 Port (update the title etc.) */
 }
@@ -306,6 +309,9 @@ static void
 gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
 {
   g_return_if_fail (data != NULL);
+
+  if (!gnc_main_window_all_finish_pending())
+    return;
 
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
   gnc_file_open ();

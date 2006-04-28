@@ -1,3 +1,9 @@
+2006-04-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-basic-commands.c: Finishing all pending
+	transactions before new and open commands, not just save commands.
+	Fixes #334090.
+
 2006-04-27  Christian Stimming  <stimming@tuhh.de>
 
 	* po/fr.po: Updated French translation by Fabrice Kurz
