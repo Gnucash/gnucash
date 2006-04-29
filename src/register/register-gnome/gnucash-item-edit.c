@@ -339,27 +339,6 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         gdk_gc_set_clip_rectangle (item_edit->gc, NULL);
 
         gnc_item_edit_free_draw_info_members (&info);
-
-#ifdef USE_XIM
-        if (gdk_im_ready() && item_edit->ic && 
-            (gdk_ic_get_style (item_edit->ic) & GDK_IM_PREEDIT_POSITION))
-	{
-                GnomeCanvasItem *item;
-                double winx, winy;
-
-                item = GNOME_CANVAS_ITEM (item_edit);
-
-                gnome_canvas_world_to_window (GNOME_CANVAS (item_edit->sheet),
-                                              item->x1, item->y2,
-                                              &winx, &winy);
-
-                item_edit->ic_attr->spot_location.x = winx;
-                item_edit->ic_attr->spot_location.y = winy;
-
-                gdk_ic_set_attr (item_edit->ic,
-                                 item_edit->ic_attr, GDK_IC_SPOT_LOCATION);
-	}
-#endif 
 }
 
 
@@ -441,98 +420,6 @@ gnc_item_edit_realize (GnomeCanvasItem *item)
         window = GTK_WIDGET (canvas)->window;
 
         item_edit->gc = gdk_gc_new (window);
-
-#ifdef USE_XIM
-        if (gdk_im_ready () &&
-            (item_edit->ic_attr = gdk_ic_attr_new ()) != NULL)
-        {
-                gint width, height;
-                GdkEventMask mask;
-                GdkColormap *colormap;
-                GdkICAttr *attr = item_edit->ic_attr;
-                GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
-                GdkIMStyle style;
-                GdkIMStyle supported_style =
-                        GDK_IM_PREEDIT_NONE |
-                        GDK_IM_PREEDIT_NOTHING |
-                        GDK_IM_PREEDIT_POSITION |
-                        GDK_IM_STATUS_NONE |
-                        GDK_IM_STATUS_NOTHING;
-                GtkWidget *sheet_widget;
-
-                sheet_widget = GTK_WIDGET (item_edit->sheet);
-
-                if (sheet_widget->style &&
-                    gdk_font_from_description (sheet_widget->style->font_desc)
-			->type != GDK_FONT_FONTSET)
-                        supported_style &= ~GDK_IM_PREEDIT_POSITION;
-
-                attr->style = style = gdk_im_decide_style (supported_style);
-                attr->client_window = sheet_widget->window;
-
-                if ((colormap = gtk_widget_get_colormap (sheet_widget)) !=
-                    gtk_widget_get_default_colormap ())
-                {
-                        attrmask |= GDK_IC_PREEDIT_COLORMAP;
-                        attr->preedit_colormap = colormap;
-                }
-
-                attrmask |= GDK_IC_PREEDIT_FOREGROUND;
-                attrmask |= GDK_IC_PREEDIT_BACKGROUND;
-
-                attr->preedit_foreground =
-                        sheet_widget->style->fg[GTK_STATE_NORMAL];
-                attr->preedit_background =
-                        sheet_widget->style->base[GTK_STATE_NORMAL];
-
-                switch (style & GDK_IM_PREEDIT_MASK)
-                {
-                        case GDK_IM_PREEDIT_POSITION:
-                                if (sheet_widget->style &&
-                                    gdk_font_from_description (
-					sheet_widget->style->font_desc)
-					->type != GDK_FONT_FONTSET)
-                                {
-                                        g_warning ("over-the-spot style "
-                                                   "requires fontset");
-                                        break;
-                                }
-
-                                gdk_window_get_size (attr->client_window,
-                                                     &width, &height);
-
-                                attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
-
-                                attr->spot_location.x = 0;
-                                attr->spot_location.y = height;
-                                attr->preedit_area.x = 0;
-                                attr->preedit_area.y = 0;
-                                attr->preedit_area.width = width;
-                                attr->preedit_area.height = height;
-                                attr->preedit_fontset =
-                                        gdk_font_from_description (
-					sheet_widget->style->font_desc);
-
-                                break;
-                }
-
-                item_edit->ic = gdk_ic_new (attr, attrmask);
-
-                if (item_edit->ic == NULL)
-                        g_warning ("Can't create input context.");
-                else
-                {
-                        mask = gdk_window_get_events (attr->client_window);
-                        mask |= gdk_ic_get_events (item_edit->ic);
-
-                        gdk_window_set_events (attr->client_window, mask);
-
-                        if (GTK_WIDGET_HAS_FOCUS (sheet_widget))
-                                gdk_im_begin (item_edit->ic,
-                                              attr->client_window);
-                }
-        }
-#endif
 }
 
 
@@ -543,47 +430,37 @@ gnc_item_edit_unrealize (GnomeCanvasItem *item)
 
         item_edit = GNC_ITEM_EDIT (item);
 
-#ifdef USE_XIM
-        if (item_edit->ic)
-        {
-                gdk_ic_destroy (item_edit->ic);
-                item_edit->ic = NULL;
-        }
-
-        if (item_edit->ic_attr)
-        {
-                gdk_ic_attr_destroy (item_edit->ic_attr);
-                item_edit->ic_attr = NULL;
-        }
-#endif
-
         if (GNOME_CANVAS_ITEM_CLASS (gnc_item_edit_parent_class)->unrealize)
                 (*GNOME_CANVAS_ITEM_CLASS
-		 (gnc_item_edit_parent_class)->unrealize) (item);
+                 (gnc_item_edit_parent_class)->unrealize) (item);
 }
 
 void
 gnc_item_edit_focus_in (GncItemEdit *item_edit)
 {
+        GdkEventFocus ev;
+
         g_return_if_fail (item_edit != NULL);
         g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-#ifdef USE_XIM
-        if (item_edit->ic)
-                gdk_im_begin (item_edit->ic,
-                              GTK_WIDGET (item_edit->sheet)->window);
-#endif
+        ev.type = GDK_FOCUS_CHANGE;
+        ev.window = GTK_WIDGET (item_edit->sheet)->window;
+        ev.in = TRUE;
+        gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
 }
 
 void
 gnc_item_edit_focus_out (GncItemEdit *item_edit)
 {
+        GdkEventFocus ev;
+
         g_return_if_fail (item_edit != NULL);
         g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-#ifdef USE_XIM
-        gdk_im_end ();
-#endif
+        ev.type = GDK_FOCUS_CHANGE;
+        ev.window = GTK_WIDGET (item_edit->sheet)->window;
+        ev.in = FALSE;
+        gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
 }
 
 void
@@ -676,11 +553,6 @@ gnc_item_edit_init (GncItemEdit *item_edit)
         item_edit->x_offset = 0;
 
         gnc_virtual_location_init(&item_edit->virt_loc);
-
-#ifdef USE_XIM
-        item_edit->ic = NULL;
-        item_edit->ic_attr = NULL;
-#endif
 }
 
 
@@ -895,24 +767,6 @@ gnc_item_edit_configure (GncItemEdit *item_edit)
                                      NULL, NULL, NULL, NULL);
 
         gnc_item_edit_update (GNOME_CANVAS_ITEM(item_edit), NULL, NULL, 0);
-
-#ifdef USE_XIM
-        if (item_edit->ic &&
-            (gdk_ic_get_style (item_edit->ic) & GDK_IM_PREEDIT_POSITION))
-	{
-                GnomeCanvasItem *item;
-
-                item = GNOME_CANVAS_ITEM (item_edit);
-
-                item_edit->ic_attr->preedit_area.x = item->x1;
-                item_edit->ic_attr->preedit_area.y = item->y1;
-                item_edit->ic_attr->preedit_area.width = item->x2 - item->x1;
-                item_edit->ic_attr->preedit_area.height = item->y2 - item->y1;
-
-                gdk_ic_set_attr (item_edit->ic, item_edit->ic_attr,
-                                 GDK_IC_PREEDIT_AREA);
-	}
-#endif
 }
 
 

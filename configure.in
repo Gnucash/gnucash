@@ -1081,18 +1081,6 @@ esac
       EFENCE_LIBS="")
     AC_SUBST(EFENCE_LIBS)
     
-    ### ----------------------------------------------------------------------
-    ### XIM
-    AC_ARG_ENABLE(xim,
-      [  --enable-xim                  support XIM [default=yes]],
-      , enable_xim="yes")
-    
-    if test "x$enable_xim" = "xyes"; then
-      GTK_XIM_FLAGS="-DUSE_XIM"
-    fi
-    
-    AC_SUBST(GTK_XIM_FLAGS)
-    
     
     ### ----------------------------------------------------------------------
     ## For now, we just presume you're using the GNOME version.  The other

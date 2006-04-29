@@ -1,3 +1,11 @@
+2006-04-30  Andreas Köhler  <andi5.py@gmx.net>
+
+	* configure.in:
+	* src/register/register-gnome/gnucash-item-edit.[ch]: Remove all
+	  XIM code, as it has been commented out unconditionally already
+	  for a while. Send focus in/out events to register GtkEntry.
+	  Address #337020.
+
 2006-04-29  Joshua Sled  <jsled@asynchronous.org>
 
 	Bug#157179: make multi-commodity SX handling a bit better.

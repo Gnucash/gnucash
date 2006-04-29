@@ -26,9 +26,6 @@
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
 
-/* GNOME 2 port (XIM need to be replaced by a GNOME 2 port) */
-#undef USE_XIM
-
 #define GNC_TYPE_ITEM_EDIT        (gnc_item_edit_get_type ())
 #define GNC_ITEM_EDIT(o)          (G_TYPE_CHECK_INSTANCE_CAST((o), GNC_TYPE_ITEM_EDIT, GncItemEdit))
 #define GNC_ITEM_EDIT_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ITEM_EDIT, GncItemEditClass))
@@ -95,11 +92,6 @@ typedef struct {
         gpointer         popup_user_data;
 
         GdkGC *gc;
-
-#ifdef USE_XIM
-        GdkIC     *ic;
-        GdkICAttr *ic_attr;
-#endif
 
         gboolean reset_pos;
         gint x_offset;
