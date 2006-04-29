@@ -1,3 +1,8 @@
+2006-04-29  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/gnc-glossary.txt: Clarify definitions of and
+	relations between bill, invoice, job, and order.
+
 2006-04-29  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/gnc-plugin-page-report.c: Don't allow
