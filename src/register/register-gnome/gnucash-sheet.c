@@ -42,7 +42,7 @@
 #include "gnucash-item-edit.h"
 
 #define DEFAULT_REGISTER_HEIGHT 400
-#define DEFAULT_REGISTER_WIDTH  630
+#define DEFAULT_REGISTER_WIDTH  400
 
 
 /* FIXME: at least broken on gtk 2.4.14 */

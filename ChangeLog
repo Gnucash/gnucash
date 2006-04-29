@@ -1,3 +1,9 @@
+2006-04-29  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-sheet.c: Lower the minimum
+	required width of the register.  This does affect the size
+	constraint imposed by the register summary bar.
+
 2006-04-28  David Hampton  <hampton@employees.org>
 
 	* configure.in: Default to --enable-error-on-warning only in svn
