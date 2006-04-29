@@ -333,6 +333,17 @@ static inline void acc_free (QofInstance *inst)
   xaccFreeAccount(acc);
 }
 
+static void
+destroy_pending_splits_for_account(QofEntity *ent, gpointer acc)
+{
+    Transaction *trans = (Transaction *) ent;
+    Split *split;
+
+    if (xaccTransIsOpen(trans))
+        while ((split = xaccTransFindSplitByAccount(trans, acc)))
+            xaccSplitDestroy(split);
+}
+
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
@@ -344,6 +355,7 @@ xaccAccountCommitEdit (Account *acc)
   if (acc->inst.do_free)
   {
     GList *lp, *slist;
+    QofCollection *col;
  
     acc->inst.editlevel++;
 
@@ -360,6 +372,7 @@ xaccAccountCommitEdit (Account *acc)
       Split *s = lp->data;
       xaccSplitDestroy (s);
     }
+    g_list_free(slist); 
     /* It turns out there's a case where this assertion does not hold:
        When the user tries to delete an Imbalance account, while also
        deleting all the splits in it.  The splits will just get
@@ -368,7 +381,9 @@ xaccAccountCommitEdit (Account *acc)
        g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
     */
 
-    g_list_free(slist); 
+    col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
+    qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
+
     /* the lots should be empty by now */
     for (lp=acc->lots; lp; lp=lp->next)
     {

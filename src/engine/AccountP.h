@@ -67,7 +67,7 @@ struct account_s
    * It is intended to be reporting code that is a synonym for the 
    * accountName. Typically, it will be a numeric value that follows 
    * the numbering assignments commonly used by accountants, such 
-   * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
+   * as 100, 200 or 600 for top-level accounts, and 101, 102..  etc.
    * for detail accounts.
    */
   char     *accountCode;
