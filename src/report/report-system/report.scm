@@ -92,14 +92,23 @@
   (let ((report-rec (args-to-defn #f args)))
     (if (and report-rec
              (gnc:report-template-name report-rec))
-        (hash-set! *gnc:_report-templates_*
-                   (gnc:report-template-name report-rec) report-rec)
+	(let* ((name (gnc:report-template-name report-rec))
+	       (tmpl (hash-ref *gnc:_report-templates_* name)))
+	  (if (not tmpl)
+	      (hash-set! *gnc:_report-templates_*
+			 (gnc:report-template-name report-rec) report-rec)
+	      (begin
+		(gnc:error (_ "Refusing to add custom report with the same name as an existing report."))
+		(gnc:error (_ "Please edit your saved-reports file and delete the section for: ") name)
+		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
 (define gnc:report-template-version
   (record-accessor <report-template> 'version))
 (define gnc:report-template-name
   (record-accessor <report-template> 'name))
+(define gnc:report-template-set-name
+  (record-modifier <report-template> 'name))
 (define gnc:report-template-options-generator
   (record-accessor <report-template> 'options-generator))
 (define gnc:report-template-options-cleanup-cb

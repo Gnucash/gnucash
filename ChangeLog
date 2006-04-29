@@ -1,5 +1,8 @@
 2006-04-29  David Hampton  <hampton@employees.org>
 
+	* src/report/report-system/report.scm: Don't load a custom report
+	that has the same name as a standard report.  Fixes #168250.
+
 	* src/bin/gnucash-bin.c: Load the user config earlier in startup.
 	Fixes the missing custom report problem #338668.
 
