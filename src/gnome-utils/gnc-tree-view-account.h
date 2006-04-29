@@ -212,9 +212,10 @@ void gnc_tree_view_account_notes_edited_cb(Account *account, GtkTreeViewColumn *
  *  account KVP structures. The value associated with this key is what
  *  will be displayed in the column.
  */
-void gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
-					   const gchar *column_title,
-					   const gchar *kvp_key);
+GtkTreeViewColumn * 
+gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
+                                      const gchar *column_title,
+                                      const gchar *kvp_key);
 
 /** @} */
 
