@@ -519,7 +519,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
  *  @note This function currently also calls the main window code to
  *  update it if the name of the report has changed.  This code should
  *  eventually go away, and the only way to change the name should be
- *  via the main window.  gnucash.
+ *  via the main window.
  *
  *  @param data A pointer to the GncPluginPageReport data structure
  *  that describes a report. */
@@ -528,6 +528,8 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
 {
         GncPluginPageReport *report;
         GncPluginPageReportPrivate *priv;
+        GtkActionGroup *action_group;
+        GtkAction *action;
         SCM dirty_report = scm_c_eval_string("gnc:report-set-dirty?!");
 	const gchar *old_name;
 	gchar *new_name;
@@ -547,6 +549,9 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
 						      "Report name", NULL);
 	if (strcmp(old_name, new_name) != 0) {
 	  main_window_update_page_name(GNC_PLUGIN_PAGE(report), new_name);
+	  action_group = gnc_plugin_page_get_action_group(GNC_PLUGIN_PAGE(report));
+	  action = gtk_action_group_get_action (action_group, "ReportSaveAction");
+	  gtk_action_set_sensitive(action, TRUE);
 	}
 	g_free(new_name);
 
@@ -811,6 +816,8 @@ static void
 gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
 {
   GncPluginPageReportPrivate *priv;
+  GtkActionGroup *action_group;
+  GtkAction *action;
   static gint count = 1, max_count = 10;
   const gchar *old_name;
 
@@ -830,9 +837,20 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
     return;
   }
 
+  /* Store the new name for the report. */
   gnc_option_db_set_string_option(priv->cur_odb, "General",
 				  "Report name", name);
+
+  /* Have to manually call the option change hook. */
   gnc_plugin_page_report_option_change_cb(page);
+
+  /* Careful. This is called at report construction time. */
+  action_group = gnc_plugin_page_get_action_group(page);
+  if (action_group) {
+    /* Allow the user to save the report now. */
+    action = gtk_action_group_get_action (action_group, "ReportSaveAction");
+    gtk_action_set_sensitive(action, TRUE);
+  }
   LEAVE(" ");
 }
 
@@ -896,7 +914,7 @@ static GtkActionEntry report_actions[] =
         { "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p",
 	  N_("Print the current report"),
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
-        { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), NULL, 
+        { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "", 
 	  N_("Add the current report to the `Custom' menu for later use. "
 	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
 	     "It will be accessible as menu entry in the report menu at the "
@@ -932,6 +950,10 @@ static action_toolbar_labels toolbar_labels[] = {
   { NULL, NULL },
 };
 
+static const gchar *initially_insensitive_actions[] = {
+  "ReportSaveAction",
+  NULL
+};
 
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
@@ -1000,11 +1022,13 @@ gnc_plugin_page_report_constr_init(GncPluginPageReport *plugin_page, gint report
 	action_group =
 	  gnc_plugin_page_create_action_group(parent,
 					      "GncPluginPageReportActions");
-	action_group = gnc_plugin_page_get_action_group(parent);
         gtk_action_group_add_actions( action_group,
                                       report_actions,
                                       num_report_actions,
                                       plugin_page );
+	gnc_plugin_update_actions(action_group,
+				  initially_insensitive_actions,
+				  "sensitive", FALSE);
         gnc_plugin_init_short_names (action_group, toolbar_labels);
 }
 

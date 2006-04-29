@@ -1,5 +1,9 @@
 2006-04-29  David Hampton  <hampton@employees.org>
 
+	* src/report/report-gnome/gnc-plugin-page-report.c: Don't allow
+	the user to save a report until they have changed the report
+	name. Remove the duplicate shortcut on the Add Report menu item.
+
 	* src/report/report-system/report.scm: Don't load a custom report
 	that has the same name as a standard report.  Fixes #168250.
 
