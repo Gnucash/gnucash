@@ -1,5 +1,8 @@
 2006-04-28  David Hampton  <hampton@employees.org>
 
+	* configure.in: Default to --enable-error-on-warning only in svn
+	based source trees. Fixes #330687.
+
 	* src/gnome/window-reconcile.c:
 	* src/gnome/gnc-plugin-page-account-tree.c:
 	* src/engine/gnc-lot.[ch]:

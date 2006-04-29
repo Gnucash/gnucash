@@ -2007,15 +2007,22 @@ then
   #warnFLAGS="${warnFLAGS} -Wmissing-declarations"
   #warnFLAGS="${warnFLAGS} -Werror-implicit-function-declaration" # In -Wall
 
-
-  ## Disable error-on-warning by default again because this seriously
-  ## breaks quite a number of configure tests (due to, like, 'warning:
-  ## unused variable some_variable') -- cstim, 02/02/2003
-  #
-  # Re-enabled and moved to later in the build process.  This should allow
-  # us to keep it turned on, but also not break configure proceses.
-  # -- warlord, 02/02/2003
-
+  # error-on-warning should not be active in (stable) release tarballs
+  if test -h ${srcdir}/Makefile.am
+  then 
+    tmp_srcdir=`readlink ${srcdir}/Makefile.am`
+    real_srcdir="${srcdir}/`dirname ${tmp_srcdir}`"
+  else
+    real_srcdir=${srcdir}
+  fi
+  if test -d ${real_srcdir}/.svn
+  then
+    # This code is from SVN, so enable error-on-warning
+    error_on_warning_as_default="yes"
+  else
+    # This is from a tarball, so disable error-on-warning
+    error_on_warning_as_default="no"
+  fi
 
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
@@ -2026,7 +2033,11 @@ then
        no)  gnc_error_on_warning=no ;;
        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
      esac],
-       [  warnFLAGS="${warnFLAGS} -Werror"; gnc_error_on_warning=auto ])
+    [   if test "${error_on_warning_as_default}" = "yes"; then
+	  warnFLAGS="${warnFLAGS} -Werror"; 
+	fi
+	gnc_error_on_warning=auto
+    ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
   # -Wdeclaration-after-statement in order to preserve source code
