@@ -428,6 +428,12 @@ inner_main (void *closure, int argc, char **argv)
 
     load_gnucash_modules();
 
+    /* Load the config before starting up the gui. This insures that
+     * custom reports have been read into memory before the Reports
+     * menu is created. */
+    load_system_config();
+    load_user_config();
+
     /* Setting-up the report menu must come after the module
        loading but before the gui initialization. */
     scm_c_use_module("gnucash report report-gnome");
@@ -441,8 +447,6 @@ inner_main (void *closure, int argc, char **argv)
     gnc_log_default();
     qof_log_set_level_registered(loglevel);
 
-    load_system_config();
-    load_user_config();
     gnc_hook_add_dangler(HOOK_UI_SHUTDOWN, (GFunc)gnc_file_quit, NULL);
 
     scm_c_eval_string("(gnc:main)");

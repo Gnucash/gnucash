@@ -1,5 +1,8 @@
 2006-04-29  David Hampton  <hampton@employees.org>
 
+	* src/bin/gnucash-bin.c: Load the user config earlier in startup.
+	Fixes the missing custom report problem #338668.
+
 	* src/register/register-gnome/gnucash-sheet.c: Lower the minimum
 	required width of the register.  This does affect the size
 	constraint imposed by the register summary bar.
