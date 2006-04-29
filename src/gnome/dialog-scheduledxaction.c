@@ -658,6 +658,8 @@ static
 gboolean
 gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 {
+        gboolean multi_commodity = FALSE;
+        gnc_commodity *base_cmdty = NULL;
         gint ttVarCount, splitCount;
         FreqSpec *fs;
 
@@ -743,7 +745,11 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                         for ( ; splitList; splitList = splitList->next )
                         {
+                                GUID *acct_guid;
+                                Account *acct;
+                                gnc_commodity *split_cmdty;
                                 txnCreditDebitSums *tcds;
+
                                 s = (Split*)splitList->data;
                                 t = xaccSplitGetParent( s );
 
@@ -758,6 +764,21 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                 }
 
                                 f = xaccSplitGetSlots( s );
+
+                                /* contains the guid of the split's actual account. */
+                                v = kvp_frame_get_slot_path(f,
+                                                            GNC_SX_ID,
+                                                            GNC_SX_ACCOUNT,
+                                                            NULL);
+                                acct_guid = kvp_value_get_guid( v );
+                                acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+                                split_cmdty = xaccAccountGetCommodity(acct);
+                                if (base_cmdty == NULL)
+                                {
+                                        base_cmdty = split_cmdty;
+                                }
+                                multi_commodity |= !gnc_commodity_equal(split_cmdty, base_cmdty);
+                                        
                                 v = kvp_frame_get_slot_path( f,
                                                              GNC_SX_ID,
                                                              GNC_SX_CREDIT_FORMULA,
@@ -895,6 +916,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 g_free( name );
         }
 
+        // @@fixme: similar to below, check the commodities involved, and disallow autocreation
         {
                 gboolean autocreateState, notifyState;
 
@@ -905,10 +927,10 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                         gtk_toggle_button_get_active(
                                 GTK_TOGGLE_BUTTON(sxed->notifyOpt) );
 
-                if ( (ttVarCount > 0) && autocreateState ) {
-                        gnc_warning_dialog( sxed->dialog,
-					    _("Scheduled Transactions with variables "
-					      "cannot be automatically created.") );
+                if (((ttVarCount > 0) || multi_commodity) && autocreateState) {
+                        gnc_warning_dialog(sxed->dialog,
+                                           _("Scheduled Transactions with variables "
+                                             "cannot be automatically created."));
                         return FALSE;
                 }
 

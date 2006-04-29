@@ -1,3 +1,19 @@
+2006-04-29  Joshua Sled  <jsled@asynchronous.org>
+
+	Bug#157179: make multi-commodity SX handling a bit better.
+
+	* src/gnome/dialog-sxsincelast.c (sxsl_get_sx_vars): refactor to
+	process SX splits in the same order as the transaction creation
+	routine.  Return needed commodity exchange rates as variables.
+	(create_each_transaction_helper): Use the user-provided exchange
+	rates to create the splits, not the pricedb.
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Ensure that auto-create SX template txns aren't in multiple commodities.
+
+	* src/app-utils/gnc-exp-parser.c (gnc_ep_tmpvarhash_check_vals):
+	remove printf.
+
 2006-04-29  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/gnc-glossary.txt: Clarify definitions of and

@@ -469,8 +469,6 @@ gnc_ep_tmpvarhash_check_vals( gpointer key, gpointer value, gpointer user_data )
 {
   gboolean *allVarsHaveValues = (gboolean*)user_data;
   gnc_numeric *num = (gnc_numeric*)value;
-  printf( "var %s with value %s\n",
-          (char*)key, num ? gnc_numeric_to_string( *num ) : "(null)" );
   *allVarsHaveValues &= ( num && gnc_numeric_check( *num ) != GNC_ERROR_ARG );
 }
 

@@ -50,6 +50,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <glib.h>
 #include <glib/gi18n.h>
 #include "glib-compat.h"
 #include <limits.h>
@@ -2634,9 +2635,12 @@ create_each_transaction_helper( Transaction *t, void *d )
                         xaccSplitSetValue(split, final);
                         if (! gnc_commodity_equal(split_cmdty, first_cmdty))
                         {
+                                GString *exchange_rate_var_name = g_string_sized_new(16);
+                                gnc_numeric *exchange, amt;
+
+                                /*
                                 GNCPriceDB *price_db = gnc_pricedb_get_db(gnc_get_current_book());
                                 GNCPrice *price;
-                                gnc_numeric exchange, amt;
 
                                 price = gnc_pricedb_lookup_latest(price_db, first_cmdty, split_cmdty);
                                 if (price == NULL)
@@ -2650,6 +2654,7 @@ create_each_transaction_helper( Transaction *t, void *d )
                                                                 gnc_commodity_get_mnemonic(split_cmdty));
                                                 exchange = gnc_numeric_create(1, 1);
                                                 *createUD->creation_errors = g_list_append(*createUD->creation_errors, err);
+
                                         }
                                         else
                                         {
@@ -2662,11 +2667,20 @@ create_each_transaction_helper( Transaction *t, void *d )
                                 {
                                         exchange = gnc_price_get_value(price);
                                 }
+                                */
 
-                                amt = gnc_numeric_mul(final,
-                                                      exchange,
-                                                      1000,
-                                                      GNC_HOW_RND_ROUND);
+                                g_string_printf(exchange_rate_var_name, "%s -> %s",
+                                                gnc_commodity_get_mnemonic(split_cmdty),
+                                                gnc_commodity_get_mnemonic(first_cmdty));
+                                exchange = (gnc_numeric*)g_hash_table_lookup(actualVars, exchange_rate_var_name->str);
+                                if (exchange == NULL)
+                                {
+                                        exchange = g_new0(gnc_numeric, 1);
+                                        *exchange = gnc_numeric_create(0, 1);
+                                }
+                                g_string_free(exchange_rate_var_name, TRUE);
+
+                                amt = gnc_numeric_mul(final, *exchange, 1000, GNC_HOW_RND_ROUND);
                                 xaccSplitSetAmount(split, amt);
                         }
                         xaccSplitScrub( split );
@@ -2770,38 +2784,57 @@ clear_variable_numerics( gpointer key, gpointer value, gpointer data )
         g_hash_table_insert( (GHashTable*)data, key, NULL );
 }
 
-void
-sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
+static gint
+_get_vars_helper(Transaction *txn, void *var_hash_data)
 {
-        GList *splitList;
+        GHashTable *var_hash = (GHashTable*)var_hash_data;
+        GList *split_list;
         kvp_frame *kvpf;
         kvp_value *kvp_val;
         Split *s;
         char *str;
+        gnc_commodity *first_cmdty = NULL;
 
-        {
-                AccountGroup *ag;
+        split_list = xaccTransGetSplitList(txn);
+
+        if ( split_list == NULL ) {
+                return 1;
+        }
+
+        for ( ; split_list ; split_list = split_list->next ) {
+                gnc_commodity *split_cmdty = NULL;
+                GUID *acct_guid;
                 Account *acct;
-                const char *id;
 
-                ag = gnc_book_get_template_group( gnc_get_current_book () );
-                id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-                /* Get account named after guid string. */
-                acct = xaccGetAccountFromName( ag, id );
-                splitList = xaccAccountGetSplitList( acct );
-        }
-
-        if ( splitList == NULL ) {
-                PINFO( "SchedXaction %s has no splits",
-                       xaccSchedXactionGetName( sx ) );
-                return;
-        }
-
-        for ( ; splitList ; splitList = splitList->next ) {
-                s = (Split*)splitList->data;
-
+                s = (Split*)split_list->data;
                 kvpf = xaccSplitGetSlots(s);
+                kvp_val = kvp_frame_get_slot_path(kvpf,
+                                                  GNC_SX_ID,
+                                                  GNC_SX_ACCOUNT,
+                                                  NULL);
+                acct_guid = kvp_value_get_guid( kvp_val );
+                acct = xaccAccountLookup( acct_guid, gnc_get_current_book ());
+                split_cmdty = xaccAccountGetCommodity(acct);
+                if (first_cmdty == NULL)
+                {
+                        first_cmdty = split_cmdty;
+                }
+                
+                if (! gnc_commodity_equal(split_cmdty, first_cmdty))
+                {
+                        gnc_numeric *tmp_num;
+                        GString *var_name = g_string_sized_new(16);
+                        g_string_printf(var_name, "%s -> %s",
+                                        gnc_commodity_get_mnemonic(split_cmdty),
+                                        gnc_commodity_get_mnemonic(first_cmdty));
+                        tmp_num = g_new0(gnc_numeric, 1);
+                        *tmp_num = gnc_numeric_create(0, 1);
+                        g_hash_table_insert(var_hash, g_strdup(var_name->str), tmp_num);
+                        g_string_free(var_name, TRUE);
+                }
 
+                // existing... ------------------------------------------
+                
                 kvp_val = kvp_frame_get_slot_path( kvpf,
                                                    GNC_SX_ID,
                                                    GNC_SX_CREDIT_FORMULA,
@@ -2809,7 +2842,7 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {
-                                parse_vars_from_formula( str, varHash, NULL );
+                                parse_vars_from_formula( str, var_hash, NULL );
                         }
                 }
 
@@ -2820,14 +2853,32 @@ sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash )
                 if ( kvp_val != NULL ) {
                         str = kvp_value_get_string( kvp_val );
                         if ( str && strlen(str) != 0 ) {
-                                parse_vars_from_formula( str, varHash, NULL );
+                                parse_vars_from_formula( str, var_hash, NULL );
                         }
                 }
         }
 
-        g_hash_table_foreach( varHash,
+        return 0;
+}
+
+void
+sxsl_get_sx_vars( SchedXaction *sx, GHashTable *var_hash )
+{
+        AccountGroup *ag;
+        Account *acct;
+        const char *id;
+
+        ag = gnc_book_get_template_group( gnc_get_current_book () );
+        id = guid_to_string( xaccSchedXactionGetGUID(sx) );
+        /* Get account named after guid string. */
+        acct = xaccGetAccountFromName( ag, id );
+        xaccAccountForEachTransaction(acct,
+                                      _get_vars_helper,
+                                      var_hash);
+
+        g_hash_table_foreach( var_hash,
                               clear_variable_numerics,
-                              (gpointer)varHash );
+                              (gpointer)var_hash );
 }
 
 static gboolean
