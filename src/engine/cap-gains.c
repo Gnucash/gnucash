@@ -141,6 +141,8 @@ finder_helper (GNCLot *lot,  gpointer user_data)
    if (0 == (els->numeric_pred) (bal)) return NULL;
    
    s = gnc_lot_get_earliest_split (lot);
+   if (s == NULL) return NULL;
+   
    trans = s->parent;
    if (els->currency && 
        (FALSE == gnc_commodity_equiv (els->currency,
@@ -653,6 +655,29 @@ xaccSplitGetCapGainsSplit (const Split *split)
 
 /* ============================================================== */
 
+Split *
+xaccSplitGetGainsSourceSplit (const Split *split)
+{
+   KvpValue *val;
+   GUID *source_guid;
+   Split *source_split;
+   
+   if (!split) return NULL;
+
+   val = kvp_frame_get_slot (split->inst.kvp_data, "gains-source");
+   if (!val) return NULL;
+   source_guid = kvp_value_get_guid (val);
+   if (!source_guid) return NULL;
+
+   /* Both splits will be in the same collection, so search there. */
+   source_split = (Split*) qof_collection_lookup_entity (split->inst.entity.collection, 
+                                                         source_guid);
+   PINFO ("split=%p has source-split=%p", split, source_split);
+   return source_split;
+}
+
+/* ============================================================== */
+
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 {
@@ -783,6 +808,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * 'dirty' and the gains really do need to be recomputed. 
     * So start working things. */
 
+   /* Get the amount and value in this lot at the time of this transaction. */
+   gnc_lot_get_balance_before (lot, split, &lot_amount, &lot_value);
+
    pcy->PolicyGetLotOpening (pcy, lot, &opening_amount, &opening_value,
        &opening_currency);
 
@@ -803,7 +831,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * XXX This should really be a part of a scrub routine that
     * cleans up the lot, before we get at it!
     */
-   if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
+   if (0 > gnc_numeric_compare (gnc_numeric_abs(lot_amount),
                                 gnc_numeric_abs(split->amount)))
    {
       GList *n;
@@ -815,14 +843,14 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       PERR ("Malformed Lot \"%s\"! (too thin!) " 
             "opening amt=%s split amt=%s baln=%s",
              gnc_lot_get_title (lot),
-             gnc_num_dbg_to_string (opening_amount),
+             gnc_num_dbg_to_string (lot_amount),
              gnc_num_dbg_to_string (split->amount),
              gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
       return;
    }
-   if ( (gnc_numeric_negative_p(opening_amount) ||
+   if ( (gnc_numeric_negative_p(lot_amount) ||
          gnc_numeric_positive_p(split->amount)) &&
-        (gnc_numeric_positive_p(opening_amount) ||
+        (gnc_numeric_positive_p(lot_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
       GList *n;
@@ -834,7 +862,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       PERR ("Malformed Lot \"%s\"! (too fat!) "
             "opening amt=%s split amt=%s baln=%s",
              gnc_lot_get_title (lot),
-             gnc_num_dbg_to_string (opening_amount),
+             gnc_num_dbg_to_string (lot_amount),
              gnc_num_dbg_to_string (split->amount),
              gnc_num_dbg_to_string (gnc_lot_get_balance(lot)));
       return;
@@ -847,7 +875,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * cost_basis = purchase_price * current_split_amount
     * cap_gain = current_split_value - cost_basis 
     */
-   gnc_lot_get_balance_before (lot, split, &lot_amount, &lot_value);
    /* Fraction of the lot that this split represents: */
    frac = gnc_numeric_div (split->amount, lot_amount, 
                             GNC_DENOM_AUTO, 
@@ -860,8 +887,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    value = gnc_numeric_sub (value, split->value,
                             GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
-          gnc_num_dbg_to_string (opening_amount),
-          gnc_num_dbg_to_string (opening_value),
+          gnc_num_dbg_to_string (lot_amount),
+          gnc_num_dbg_to_string (lot_value),
           gnc_num_dbg_to_string (split->amount),
           gnc_num_dbg_to_string (split->value),
           gnc_num_dbg_to_string (value));
@@ -872,8 +899,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
             "\tOpen amt=%s val=%s\n\tsplit amt=%s val=%s\n\tgains=%s\n",
              xaccAccountGetName(split->acc),
              xaccTransGetDescription(split->parent),
-             gnc_num_dbg_to_string (opening_amount),
-             gnc_num_dbg_to_string (opening_value),
+             gnc_num_dbg_to_string (lot_amount),
+             gnc_num_dbg_to_string (lot_value),
              gnc_num_dbg_to_string (split->amount),
              gnc_num_dbg_to_string (split->value),
              gnc_num_dbg_to_string (value));
@@ -967,7 +994,6 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
       xaccSplitSetAmount (lot_split, zero);
       xaccSplitSetValue (lot_split, value);
-      gnc_lot_add_split (lot, lot_split);
 
       value = gnc_numeric_neg (value);
       xaccSplitSetAmount (gain_split, value);
@@ -980,6 +1006,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       lot_split->gains_split = split;
       gain_split->gains = GAINS_STATUS_GAINS;
       gain_split->gains_split = split;
+      
+      /* Do this last since it may generate an event that will call us
+         recursively. */
+      gnc_lot_add_split (lot, lot_split);
 
       xaccTransCommitEdit (trans);
    }

@@ -42,6 +42,7 @@
 #include "Account.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "cap-gains.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 
@@ -236,13 +237,23 @@ gnc_lot_get_balance_before (GNCLot *lot, Split *split,
    
    if (lot && lot->splits)
    {
+      Transaction *ta, *tb;
+      Split *target;
+      /* If this is a gains split, find the source of the gains and use
+         its transaction for the comparison.  Gains splits are in separate
+         transactions that may sort after non-gains transactions.  */
+      target = xaccSplitGetGainsSourceSplit (split);
+      if (target == NULL)
+         target = split;
+      tb = xaccSplitGetParent (target);
       for (node = lot->splits; node; node = node->next)
       {
          Split *s = node->data;
-         Transaction *ta, *tb;
-         ta = xaccSplitGetParent (s);
-         tb = xaccSplitGetParent (split);
-         if ((ta == tb && s != split) ||
+         Split *source = xaccSplitGetGainsSourceSplit (s);
+         if (source == NULL)
+            source = s;
+         ta = xaccSplitGetParent (source);
+         if ((ta == tb && source != target) ||
              xaccTransOrder (ta, tb) < 0)
          {
             gnc_numeric tmpval = xaccSplitGetAmount (s);

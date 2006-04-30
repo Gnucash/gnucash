@@ -1,5 +1,14 @@
 2006-04-29  David Hampton  <hampton@employees.org>
 
+	* src/engine/gnc-lot.c:
+	* src/engine/cap-gains.[ch]: Patch from Mike Alexander's to handle
+	multiple lot dispositions on the same day.  Needed since the
+	transaction sorting code may sort gains splits after other splits
+	on the same day. Add a new function to find the source split
+	associated with a capital gains split.  Also use lot_amount and
+	lot_value consistently instead of opening_amount and
+	opening_value.
+
 	* src/business/business-gnome/dialog-billterms.c:
 	* src/business/business-gnome/glade/billterms.glade: Eliminate
 	some gtk warning messages. Stop the contents of the Bill Terms

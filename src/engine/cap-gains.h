@@ -150,6 +150,13 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
  */                                       
 Split * xaccSplitGetCapGainsSplit (const Split *);
 
+/** The xaccSplitGetGainsSourceSplit() routine returns the split
+ *  that is the source of the cap gains in this split.  It returns
+ *  NULL if not found.  This routine does nothing more than search 
+ *  for the split recorded in the KVP key "/gains-source"
+ */                                       
+Split * xaccSplitGetGainsSourceSplit (const Split *);
+
 /** The`xaccSplitAssign() routine will take the indicated
  *  split and, if it doesn't already belong to a lot, it will attempt 
  *  to assign it to an appropriate lot.
