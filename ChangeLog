@@ -1,3 +1,11 @@
+2006-04-29  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/dialog-billterms.c:
+	* src/business/business-gnome/glade/billterms.glade: Eliminate
+	some gtk warning messages. Stop the contents of the Bill Terms
+	dialog from shifting around when the first/last term is
+	created/destroyed.
+
 2006-04-30  Andreas Köhler  <andi5.py@gmx.net>
 
 	* configure.in:

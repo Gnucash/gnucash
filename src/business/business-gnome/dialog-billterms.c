@@ -396,9 +396,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   GncBillTerm *created_term = NULL;
   NewBillTerm *nbt;
   GladeXML *xml;
-  GtkWidget *box, *widget;
+  GtkWidget *box;
   gint response;
   gboolean done;
+  const gchar *dialog_name;
 
   if (!btw) return NULL;
 
@@ -407,8 +408,9 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   nbt->this_term = term;
 
   /* Open and read the XML */
-  xml = gnc_glade_xml_new ("billterms.glade", "New Term Dialog");
-  nbt->dialog = glade_xml_get_widget (xml, "New Term Dialog");
+  dialog_name = term ? "Edit Term Dialog" : "New Term Dialog";
+  xml = gnc_glade_xml_new ("billterms.glade", dialog_name);
+  nbt->dialog = glade_xml_get_widget (xml, dialog_name);
   nbt->name_entry = glade_xml_get_widget (xml, "name_entry");
   nbt->desc_entry = glade_xml_get_widget (xml, "desc_entry");
   if (name)
@@ -446,8 +448,6 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   /* Show what we should */
   gtk_widget_show_all (nbt->dialog);
   if (term) {
-    widget = glade_xml_get_widget (xml, "term_frame");
-    gtk_widget_hide_all (widget);
     gtk_widget_grab_focus (nbt->desc_entry);
   } else
     gtk_widget_grab_focus (nbt->name_entry);
