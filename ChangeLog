@@ -1,3 +1,9 @@
+2006-05-01  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-html-graph-gog.c: Add legend only to
+	  barchart and piechart plots, not to scatter plots, as there is
+	  currently no usage for it. Fix #337769.
+
 2006-04-30  Joshua Sled  <jsled@asynchronous.org>
 
 	Bug#340197: reverse account opening balances when desired.

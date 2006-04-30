@@ -217,7 +217,6 @@ create_basic_plot_elements(const char *plot_type_name,
     return FALSE;
   }
   gog_object_add_by_name(*out_chart, "Plot", GOG_OBJECT(*out_plot) );
-  gog_object_add_by_name(*out_chart, "Legend", NULL);
   return TRUE;
 }
 
@@ -341,6 +340,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   {
     return FALSE;
   }
+  gog_object_add_by_name(chart, "Legend", NULL);
 
   GOG_STYLED_OBJECT(graph)->style->outline.width = 5;
   GOG_STYLED_OBJECT(graph)->style->outline.color = RGBA_BLACK;
@@ -430,6 +430,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   if (!create_basic_plot_elements("GogBarColPlot", &graph, &chart, &plot)) {
     return FALSE;
   }
+  gog_object_add_by_name(chart, "Legend", NULL);
 
   if ( stacked ) {
     // when stacked, we want the bars on _top_ of eachother.
