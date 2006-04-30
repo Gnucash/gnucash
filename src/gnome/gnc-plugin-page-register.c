@@ -1979,6 +1979,9 @@ gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
     return;
   }
 
+  if (!gnc_plugin_page_register_finish_pending(GNC_PLUGIN_PAGE(page)))
+      return;
+
   xml = gnc_glade_xml_new("register.glade", "Void Transaction");
   dialog = glade_xml_get_widget(xml, "Void Transaction");
   entry = glade_xml_get_widget(xml, "reason");

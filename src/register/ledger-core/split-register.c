@@ -930,7 +930,10 @@ gnc_split_register_void_current_trans (SplitRegister *reg, const char *reason)
     info->pending_trans_guid = *guid_null();
     pending_trans = NULL;
   }
-
+  if (xaccTransIsOpen(trans)) {
+      PERR("We should not be voiding an open transaction.");
+      xaccTransCommitEdit(trans);
+  }
   gnc_resume_gui_refresh ();
 }
 
