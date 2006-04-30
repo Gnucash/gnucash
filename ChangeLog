@@ -1,3 +1,9 @@
+2006-04-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/app-utils/gnc-ui-util.c: Fix retrieval of reconcile
+	abbreviation if the translators erroneously did not use the same
+	string length as the english string. Bug #339722.
+
 2006-04-29  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-lot.c:

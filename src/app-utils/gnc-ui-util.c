@@ -483,6 +483,20 @@ gnc_ui_account_get_tax_info_string (const Account *account)
 }
 
 
+static const char *
+string_after_colon (const char *msgstr)
+{
+  const char *string_at_colon;
+  g_assert(msgstr);
+  string_at_colon = strchr(msgstr, ':');
+  if (string_at_colon)
+    return string_at_colon + 1;
+  else
+    /* No colon found; we assume the translation contains only the
+       part after the colon, similar to the disambiguation prefixes */
+    return msgstr;
+}
+
 /********************************************************************\
  * gnc_get_reconcile_str                                            *
  *   return the i18n'd string for the given reconciled flag         *
@@ -497,16 +511,16 @@ gnc_get_reconcile_str (char reconciled_flag)
   {
     /* Translators: For the following strings, the single letters
        after the colon are abbreviations of the word before the
-       colon. Please only translate the letter *after* the colon. */
-    case NREC: return _("not cleared:n") + 12;
-      /* Please only translate the letter *after* the colon. */
-    case CREC: return _("cleared:c") + 8;
-      /* Please only translate the letter *after* the colon. */
-    case YREC: return _("reconciled:y") + 11;
-      /* Please only translate the letter *after* the colon. */
-    case FREC: return _("frozen:f") + 7;
-      /* Please only translate the letter *after* the colon. */
-    case VREC: return _("void:v") + 5;
+       colon. You should only translate the letter *after* the colon. */
+    case NREC: return string_after_colon(_("not cleared:n"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case CREC: return string_after_colon(_("cleared:c"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case YREC: return string_after_colon(_("reconciled:y"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case FREC: return string_after_colon(_("frozen:f"));
+      /* Translators: Please only translate the letter *after* the colon. */
+    case VREC: return string_after_colon(_("void:v"));
     default:
       PERR("Bad reconciled flag\n");
       return NULL;
