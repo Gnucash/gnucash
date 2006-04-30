@@ -98,8 +98,8 @@
 	      (hash-set! *gnc:_report-templates_*
 			 (gnc:report-template-name report-rec) report-rec)
 	      (begin
-		(gnc:error (_ "Refusing to add custom report with the same name as an existing report."))
-		(gnc:error (_ "Please edit your saved-reports file and delete the section for: ") name)
+		(gnc:error "Refusing to add custom report with the same name as an existing report.")
+		(gnc:error "Please edit your saved-reports file and delete the section for: " name)
 		)))
         (gnc:warn "gnc:define-report: bad report"))))
 
