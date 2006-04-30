@@ -34,12 +34,14 @@ int libgncmod_report_gnome_LTX_gnc_module_end(int refcount);
 
 
 char *
-libgncmod_report_gnome_LTX_gnc_module_path(void) {
+libgncmod_report_gnome_LTX_gnc_module_path(void)
+{
   return g_strdup("gnucash/report/report-gnome");
 }
 
 char * 
-libgncmod_report_gnome_LTX_gnc_module_description(void) {
+libgncmod_report_gnome_LTX_gnc_module_description(void)
+{
   return g_strdup("Gnome component of GnuCash report generation system");
 }
 
@@ -52,7 +54,8 @@ lmod(char * mn)
 }
 
 int
-libgncmod_report_gnome_LTX_gnc_module_init(int refcount) {
+libgncmod_report_gnome_LTX_gnc_module_init(int refcount)
+{
   if(!gnc_module_load("gnucash/app-utils", 0)) {
     return FALSE;
   }
@@ -75,6 +78,7 @@ libgncmod_report_gnome_LTX_gnc_module_init(int refcount) {
 }
 
 int
-libgncmod_report_gnome_LTX_gnc_module_end(int refcount) {
+libgncmod_report_gnome_LTX_gnc_module_end(int refcount)
+{
   return TRUE;
 }
