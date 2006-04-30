@@ -1,3 +1,11 @@
+2006-04-30  Joshua Sled  <jsled@asynchronous.org>
+
+	Bug#340197: reverse account opening balances when desired.
+	* src/gnome/druid-hierarchy.c (balance_cell_data_func): Don't
+	invert balances here.  Leads to strange behavior.
+	* src/gnome/druid-hierarchy.c (starting_balance_helper): Reverse
+	balance if needed by the account.
+
 2006-04-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/app-utils/gnc-ui-util.c: Fix retrieval of reconcile

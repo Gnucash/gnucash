@@ -691,9 +691,6 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 	account = gnc_tree_view_account_get_account_from_iter (model, iter);
 
 	balance = get_final_balance (data->balance_hash, account);
-	if (gnc_reverse_balance (account))
-		balance = gnc_numeric_neg (balance);
-
 	if (gnc_numeric_zero_p (balance)) {
 		string = "";
 	} else {
@@ -958,6 +955,8 @@ starting_balance_helper (Account *account, hierarchy_data *data)
   gnc_numeric balance;
 
   balance = get_final_balance (data->balance_hash, account);
+  if (gnc_reverse_balance(account))
+    balance = gnc_numeric_neg(balance);
   if (!gnc_numeric_zero_p (balance))
     gnc_account_create_opening_balance (account, balance, time (NULL),
                                         gnc_get_current_book ());
