@@ -849,6 +849,7 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   Transaction *trans;
   Split *blank_split;
   Split *split;
+  gboolean was_open;
 
   if (!reg) return;
 
@@ -862,50 +863,28 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
   if (split == NULL)
     return;
 
+  gnc_suspend_gui_refresh ();
+  trans = xaccSplitGetParent(split);
+
   /* If we just deleted the blank split, clean up. The user is
    * allowed to delete the blank split as a method for discarding
    * any edits they may have made to it. */
-  if (split == blank_split)
-  {
-    trans = xaccSplitGetParent (blank_split);
-
-    /* Make sure we don't commit this later on */
-    if (trans == pending_trans)
-    {
+  if (split == blank_split) {
+      info->blank_split_guid = *guid_null();
+  } else {
+      info->trans_expanded = FALSE;      
+  }
+  
+  /* Check pending transaction */
+  if (trans == pending_trans) {
       info->pending_trans_guid = *guid_null();
       pending_trans = NULL;
-    }
-
-    gnc_suspend_gui_refresh ();
-
-    xaccTransDestroy (trans);
-
-    info->blank_split_guid = *guid_null();
-    blank_split = NULL;
-
-    gnc_resume_gui_refresh ();
-
-    return;
   }
 
-  info->trans_expanded = FALSE;
-
-  gnc_suspend_gui_refresh ();
-
-  /* make a copy of all of the accounts that will be  
-   * affected by this deletion, so that we can update
-   * their register windows after the deletion. */
-  trans = xaccSplitGetParent(split);
-
+  was_open = xaccTransIsOpen(trans);
   xaccTransDestroy(trans);
-
-  /* Check pending transaction */
-  if (trans == pending_trans)
-  {
-    info->pending_trans_guid = *guid_null();
-    pending_trans = NULL;
-  }
-
+  if (was_open)
+      xaccTransCommitEdit(trans);
   gnc_resume_gui_refresh ();
 }
 
