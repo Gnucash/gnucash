@@ -183,7 +183,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type,
       g_assert (recn == NREC || recn == CREC);
 
       if (recn == CREC &&
-          difftime(trans_date, statement_date) >= 0)
+          difftime(trans_date, statement_date) <= 0)
 	g_hash_table_insert (list->reconciled, split, split);
     }
   }

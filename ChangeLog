@@ -1,3 +1,9 @@
+2006-04-30  David Hampton  <hampton@employees.org>
+
+	* src/gnome/reconcile-list.c: Patch from Mike Alexander to fix the
+	cleared split date threshold in the reconcile window. Fixes
+	#340235.
+
 2006-05-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-html-graph-gog.c: Add legend only to
