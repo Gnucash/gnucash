@@ -5,17 +5,16 @@
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.9.5\n"
+"Project-Id-Version: gnucash 1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-17 09:56+0100\n"
-"PO-Revision-Date: 2006-04-21 10:03+0200\n"
-"Last-Translator: Neil Williams <linux@codehelp.co.uk>\n"
+"PO-Revision-Date: 2006-04-30 22:21+0100\n"
+"Last-Translator: Nigel Titley <nigel@titley.com>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.2\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:139
 msgid " Variables are in the form 'name=value'"
@@ -16367,7 +16366,7 @@ msgstr "Income & Expense Chart"
 #. src/report/standard-reports/budget.scm
 #: ../intl-scm/guile-strings.c:842
 msgid "Budget Report"
-msgstr ""
+msgstr "Budget Report"
 
 #. src/report/standard-reports/budget.scm
 #. src/report/standard-reports/cash-flow.scm
