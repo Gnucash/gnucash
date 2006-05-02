@@ -127,7 +127,8 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     end = MAX(*start_selection, *end_selection);
 
     /* length in bytes, not chars. do not use g_utf8_strlen. */
-    buf = malloc(strlen(bcell->value));
+    buf = malloc(strlen(bcell->value)+1);
+    memset(buf, 0, strlen(bcell->value)+1);
     g_utf8_strncpy(buf, bcell->value, start);
     g_string_append(newval_gs, buf);
     g_free(buf);
