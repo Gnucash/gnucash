@@ -1,5 +1,9 @@
 2006-05-01  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-account.c: Use the parent commodity and
+	account type when creating new accounts.  Fixes #337189 and
+	#340242.
+
 	* src/gnome-utils/gnc-file.c:
 	* src/engine/TransLog.[ch]: Start a new log file after a save.
 	Fixes #173056.

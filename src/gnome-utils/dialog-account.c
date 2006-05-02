@@ -1098,9 +1098,8 @@ gnc_account_type_changed_cb (GtkTreeSelection *selection, gpointer data)
 static GNCAccountType
 gnc_account_choose_new_acct_type (AccountWindow *aw)
 {
-  
-  if (aw->valid_types == NULL)
-    return last_used_account_type;
+  if (g_list_index (aw->valid_types, GINT_TO_POINTER(aw->type)) != -1)
+    return aw->type;
 
   if (g_list_index (aw->valid_types, GINT_TO_POINTER(last_used_account_type)) != -1)
     return last_used_account_type;
@@ -1118,14 +1117,8 @@ gnc_account_type_view_create (AccountWindow *aw)
   GList *list;
   guint32 types = 0;
 
-  switch (aw->dialog_type) {
-    case NEW_ACCOUNT:
-      aw->type = gnc_account_choose_new_acct_type (aw);
-      break;
-    case EDIT_ACCOUNT:
-      aw->type = xaccAccountGetType (aw_get_account (aw));
-      break;
-  }
+  if ((aw->dialog_type == NEW_ACCOUNT) && aw->valid_types)
+    aw->type = gnc_account_choose_new_acct_type (aw);
 
   if (aw->valid_types == NULL)
       types = xaccAccountTypesValid () | (1 << aw->type);
@@ -1480,7 +1473,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
 				    gnc_commodity * default_commodity,
 				    gboolean modal)
 {
-  gnc_commodity *commodity;
+  gnc_commodity *commodity, *parent_commodity;
   AccountWindow *aw;
   Account *account;
 
@@ -1493,10 +1486,13 @@ gnc_ui_new_account_window_internal (Account *base_account,
   account = xaccMallocAccount (gnc_get_current_book ());
   aw->account = *xaccAccountGetGUID (account);
 
-  if (base_account)
+  if (base_account) {
     aw->type = xaccAccountGetType (base_account);
-  else
+    parent_commodity = xaccAccountGetCommodity (base_account);
+  } else {
     aw->type = last_used_account_type;
+    parent_commodity = gnc_default_currency ();
+  }
 
   gnc_suspend_gui_refresh ();
 
@@ -1515,7 +1511,7 @@ gnc_ui_new_account_window_internal (Account *base_account,
   if (default_commodity != NULL) {
     commodity = default_commodity;
   } else if ((aw->type != STOCK) && (aw->type != MUTUAL)) {
-    commodity = gnc_default_currency ();
+    commodity = parent_commodity;
   } else {
     commodity = NULL;
   }
@@ -1708,6 +1704,7 @@ gnc_ui_edit_account_window(Account *account)
   aw->dialog_type = EDIT_ACCOUNT;
   aw->account = *xaccAccountGetGUID (account);
   aw->subaccount_names = NULL;
+  aw->type = xaccAccountGetType (account);
 
   gnc_suspend_gui_refresh ();
 
