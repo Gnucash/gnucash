@@ -94,6 +94,16 @@ void xaccLogEnable  (void) { gen_logs = 1; }
 \********************************************************************/
 
 void 
+xaccReopenLog (void)
+{
+   if (trans_log) {
+      xaccCloseLog();
+      xaccOpenLog();
+   }
+}
+
+
+void 
 xaccLogSetBaseName (const char *basepath)
 {
    if (!basepath) return;

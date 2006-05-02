@@ -1,3 +1,9 @@
+2006-05-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-file.c:
+	* src/engine/TransLog.[ch]: Start a new log file after a save.
+	Fixes #173056.
+
 2006-05-01  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/pricecell-gnome.c

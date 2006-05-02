@@ -981,6 +981,7 @@ gnc_file_save (void)
     return;
   }
 
+  xaccReopenLog();
   gnc_add_history (session);
   gnc_hook_run(HOOK_BOOK_SAVED, session);
   LEAVE (" ");
@@ -1035,6 +1036,7 @@ gnc_file_save_as (void)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
+  xaccLogSetBaseName(newfile);
   save_in_progress++;
   new_session = qof_session_new ();
   qof_session_begin (new_session, newfile, FALSE, FALSE);

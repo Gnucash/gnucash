@@ -48,6 +48,8 @@
 
 void    xaccOpenLog (void);
 void    xaccCloseLog (void);
+void    xaccReopenLog (void);
+
 /**
  * @param trans The transaction to write out to the log
  * @param flag The engine currently uses the log mechanism with flag char set as
