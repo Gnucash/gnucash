@@ -2023,8 +2023,10 @@ then
      esac],
     [   if test "${error_on_warning_as_default}" = "yes"; then
 	  warnFLAGS="${warnFLAGS} -Werror"; 
+	  gnc_error_on_warning=auto
+	else
+	  gnc_error_on_warning=no
 	fi
-	gnc_error_on_warning=auto
     ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
