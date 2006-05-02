@@ -131,7 +131,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     memset(buf, 0, strlen(bcell->value)+1);
     g_utf8_strncpy(buf, bcell->value, start);
     g_string_append(newval_gs, buf);
-    g_free(buf);
+    free(buf);
 
     g_string_append_unichar(newval_gs, decimal_point);
 
