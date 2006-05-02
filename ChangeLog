@@ -1,3 +1,8 @@
+2006-05-02  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome/glade/sched-xact.glade: Correct option strings in sx
+	  editor for tri-annual transactions. Fix #339724.
+
 2006-05-01  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c: Use the parent commodity and

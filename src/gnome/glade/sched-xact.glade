@@ -3479,7 +3479,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="convertwidget148">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Feb, Apr, Oct</property>
+			      <property name="label" translatable="yes">Feb, Jun, Oct</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -3487,7 +3487,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="convertwidget149">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Mar, Jun, Nov</property>
+			      <property name="label" translatable="yes">Mar, Jul, Nov</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
@@ -3495,7 +3495,7 @@
 			  <child>
 			    <widget class="GtkMenuItem" id="convertwidget150">
 			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Apr, Jul, Dec</property>
+			      <property name="label" translatable="yes">Apr, Aug, Dec</property>
 			      <property name="use_underline">True</property>
 			    </widget>
 			  </child>
