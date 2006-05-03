@@ -474,8 +474,7 @@ gnc_quote_source_set_fq_installed (GList *sources_list)
 static void
 mark_commodity_dirty (gnc_commodity *cm)
 {
-  cm->inst.dirty = TRUE;	/* No-one uses or clears this flag. */
-  qof_collection_mark_dirty (cm->inst.entity.collection);
+  qof_instance_set_dirty(&cm->inst);
   qof_event_gen (&cm->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

@@ -90,8 +90,7 @@ static void mark_invoice (GncInvoice *invoice);
 static void
 mark_invoice (GncInvoice *invoice)
 {
-  invoice->inst.dirty = TRUE;
-  qof_collection_mark_dirty (invoice->inst.entity.collection);
+  qof_instance_set_dirty(&invoice->inst);
   qof_event_gen (&invoice->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

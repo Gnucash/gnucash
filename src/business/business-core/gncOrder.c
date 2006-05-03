@@ -70,8 +70,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_order (GncOrder *order);
 void mark_order (GncOrder *order)
 {
-  order->inst.dirty = TRUE;
-  qof_collection_mark_dirty (order->inst.entity.collection);
+  qof_instance_set_dirty(&order->inst);
   qof_event_gen (&order->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

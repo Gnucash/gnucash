@@ -194,7 +194,7 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 
    xaccFreqSpecFree( sx->freq );
    sx->freq = fs;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
 }
 
 gchar *
@@ -211,8 +211,8 @@ xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
            g_free( sx->name );
            sx->name = NULL;
    }
-   sx->inst.dirty = TRUE;
    sx->name = g_strdup( newName );
+   qof_instance_set_dirty(&sx->inst);
 }
 
 GDate*
@@ -225,7 +225,7 @@ void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
    sx->start_date = *newStart;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
 }
 
 gboolean
@@ -255,7 +255,7 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
   }
 
   sx->end_date = *newEnd;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 GDate*
@@ -268,7 +268,7 @@ void
 xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 {
   sx->last_date = *newLastOccur;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 gboolean
@@ -287,7 +287,7 @@ void
 xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 {
   sx->num_occurances_remain = sx->num_occurances_total = newNum;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 gint
@@ -308,7 +308,7 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
   else
   {
     sx->num_occurances_remain = numRemain;
-    sx->inst.dirty = TRUE;
+    qof_instance_set_dirty(&sx->inst);
   }
 }
 
@@ -329,7 +329,7 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
   if (!sx) return;
 
   kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 void
@@ -350,7 +350,7 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
  
   sx->autoCreateOption = newAutoCreate;
   sx->autoCreateNotify = newNotify; 
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
   return;
 }
 
@@ -364,7 +364,7 @@ void
 xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 {
   sx->advanceCreateDays = createDays;
-  sx->inst.dirty = TRUE;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 gint
@@ -376,8 +376,8 @@ xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 {
-  sx->inst.dirty = TRUE;
   sx->advanceRemindDays = reminderDays;
+  qof_instance_set_dirty(&sx->inst);
 }
 
 
@@ -660,7 +660,7 @@ gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
    sx->last_date        = tsd->last_date;
    sx->num_occurances_remain = tsd->num_occur_rem;
    sx->instance_num     = tsd->num_inst;
-   sx->inst.dirty = TRUE;
+   qof_instance_set_dirty(&sx->inst);
 }
 
 void

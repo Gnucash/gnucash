@@ -520,7 +520,8 @@ pgend_price_commit_edit (QofBackend * bend, GNCPrice *pr)
    SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
-   if (pr->db) pr->db->inst.dirty = FALSE;
+   if (pr->db)
+     qof_instance_mark_clean(&pr->db->inst);
 
    LEAVE ("commited");
    return;

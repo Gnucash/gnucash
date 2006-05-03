@@ -84,8 +84,7 @@ FROM_STRING_DEC(GncBillTermType, ENUM_TERMS_TYPE)
 static inline void
 mark_term (GncBillTerm *term)
 {
-  term->inst.dirty = TRUE;
-  qof_collection_mark_dirty (term->inst.entity.collection);
+  qof_instance_set_dirty(&term->inst);
   qof_event_gen (&term->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
@@ -151,7 +150,7 @@ void gncBillTermDestroy (GncBillTerm *term)
   DEBUG("destroying bill term %s (%p)",
 	    guid_to_string(qof_instance_get_guid(&term->inst)), term);
   term->inst.do_free = TRUE;
-  qof_collection_mark_dirty (term->inst.entity.collection);
+  qof_instance_set_dirty (&term->inst);
   gncBillTermCommitEdit (term);
 }
 

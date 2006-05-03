@@ -79,7 +79,7 @@ gnc_budget_free(GncBudget* budget)
 
     g_return_if_fail(GNC_IS_BUDGET(budget));
 
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
     /* We first send the message that this object is about to be
      * destroyed so that any GUI elements can remove it before it is
      * actually gone. */
@@ -98,7 +98,7 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
     g_return_if_fail(GNC_IS_BUDGET(budget) && name);
 
     CACHE_REPLACE(budget->name, name);
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -117,7 +117,7 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     g_return_if_fail(description);
 
     CACHE_REPLACE(budget->description, description);
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -134,7 +134,7 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 {
     g_return_if_fail(budget && r);
     budget->recurrence = *r;
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
 
     qof_event_gen(&budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -159,7 +159,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
     g_return_if_fail(GNC_IS_BUDGET(budget));
     budget->num_periods = num_periods;
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -191,7 +191,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     g_sprintf(bufend, "/%d", period_num);
 
     kvp_frame_set_numeric(frame, path, val);
-    qof_collection_mark_dirty(budget->inst.entity.collection);
+    qof_instance_set_dirty(&budget->inst);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 

@@ -143,8 +143,7 @@ gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
 static inline void
 mark_table (GncTaxTable *table)
 {
-  table->inst.dirty = TRUE;
-  qof_collection_mark_dirty (table->inst.entity.collection);
+  qof_instance_set_dirty(&table->inst);
   qof_event_gen (&table->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
@@ -289,7 +288,7 @@ gncTaxTableDestroy (GncTaxTable *table)
 {
   if (!table) return;
   table->inst.do_free = TRUE;
-  qof_collection_mark_dirty (table->inst.entity.collection);
+  qof_instance_set_dirty (&table->inst);
   gncTaxTableCommitEdit (table);
 }
 

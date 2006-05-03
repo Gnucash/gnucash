@@ -61,8 +61,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_employee (GncEmployee *employee);
 void mark_employee (GncEmployee *employee)
 {
-  employee->inst.dirty = TRUE;
-  qof_collection_mark_dirty (employee->inst.entity.collection);
+  qof_instance_set_dirty(&employee->inst);
   qof_event_gen (&employee->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

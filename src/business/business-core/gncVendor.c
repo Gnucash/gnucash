@@ -67,8 +67,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_vendor (GncVendor *vendor);
 void mark_vendor (GncVendor *vendor)
 {
-  vendor->inst.dirty = TRUE;
-  qof_collection_mark_dirty (vendor->inst.entity.collection);
+  qof_instance_set_dirty(&vendor->inst);
   qof_event_gen (&vendor->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

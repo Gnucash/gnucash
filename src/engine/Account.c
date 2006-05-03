@@ -101,7 +101,7 @@ void
 mark_account (Account *acc)
 {
   if (acc->parent) acc->parent->saved = FALSE;
-  acc->inst.dirty = TRUE;
+  qof_instance_set_dirty(&acc->inst);
 }
 
 /********************************************************************\
@@ -215,7 +215,7 @@ Account *
 xaccCloneAccountSimple (const Account *from, QofBook *book)
 {
     Account *ret = xaccCloneAccountCommon(from, book);    
-    ret->inst.dirty = TRUE;
+    qof_instance_set_dirty(&ret->inst);
     return ret;
 }
 
@@ -393,7 +393,7 @@ xaccAccountCommitEdit (Account *acc)
     g_list_free (acc->lots);
     acc->lots = NULL;
 
-    acc->inst.dirty = TRUE;
+    qof_instance_set_dirty(&acc->inst);
     acc->inst.editlevel--;
   }
   else 
@@ -675,7 +675,7 @@ xaccAccountSetGUID (Account *acc, const GUID *guid)
   PINFO("acct=%p", acc);
   xaccAccountBeginEdit (acc);
   qof_entity_set_guid (&acc->inst.entity, guid);
-  acc->inst.dirty = TRUE;
+  qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit (acc);
 }
 
@@ -1245,7 +1245,7 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   kvp_frame_set_slot_nc(acc->inst.kvp_data, "old-currency",
                         kvp_value_new_string(string));
   mark_account (acc);
-  acc->inst.dirty = TRUE;
+  qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit(acc);
 
   commodity = DxaccAccountGetCurrency (acc);
@@ -2488,7 +2488,7 @@ dxaccAccountSetPriceSrc(Account *acc, const char *src)
       mark_account (acc);
   }
   
-  acc->inst.dirty = TRUE;
+  qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit(acc);
 }
 
@@ -2523,7 +2523,7 @@ dxaccAccountSetQuoteTZ(Account *acc, const char *tz)
                             tz ? kvp_value_new_string(tz) : NULL);
       mark_account (acc);
   }
-  acc->inst.dirty = TRUE;
+  qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit(acc);
 }
 

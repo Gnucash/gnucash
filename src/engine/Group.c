@@ -797,7 +797,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
     /* Gather event data */
     qof_event_gen (&acc->inst.entity, QOF_EVENT_ADD, NULL);
 
-    acc->inst.dirty = TRUE;
+    qof_instance_set_dirty(&acc->inst);
     xaccAccountCommitEdit (acc);
   }
 
@@ -861,7 +861,7 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
       to->accounts = g_list_append (to->accounts, to_acc);
 
       to_acc->parent = to;
-      to_acc->inst.dirty = TRUE;
+      qof_instance_set_dirty(&to_acc->inst);
 
       /* Copy child accounts too. */
       if (from_acc->children)

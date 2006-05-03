@@ -78,8 +78,7 @@ static QofLogModule log_module = GNC_MOD_BUSINESS;
 G_INLINE_FUNC void mark_customer (GncCustomer *customer);
 void mark_customer (GncCustomer *customer)
 {
-  customer->inst.dirty = TRUE;
-  qof_collection_mark_dirty (customer->inst.entity.collection);
+  qof_instance_set_dirty(&customer->inst);
   qof_event_gen (&customer->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 
@@ -160,7 +159,7 @@ void gncCustomerDestroy (GncCustomer *cust)
 {
   if (!cust) return;
   cust->inst.do_free = TRUE;
-  qof_collection_mark_dirty (cust->inst.entity.collection);
+  qof_instance_set_dirty (&cust->inst);
   gncCustomerCommitEdit (cust);
 }
 
