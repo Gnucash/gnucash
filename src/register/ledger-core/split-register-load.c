@@ -388,6 +388,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
     split = node->data;
     trans = xaccSplitGetParent (split);
 
+    if (!xaccTransStillHasSplit(trans, split))
+        continue;
+
     if (pending_trans == trans)
       found_pending = TRUE;
 
