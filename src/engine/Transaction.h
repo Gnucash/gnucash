@@ -478,16 +478,27 @@ void xaccTransVoid(Transaction *transaction,
  */
 void xaccTransUnvoid(Transaction *transaction);
 
-/** xaccTransReverse inverts all the numerical values on the given
- *  transaction.  This function can be used after xaccTransClone
- *  to create a transaction that cancels out the effect of an
- *  earlier transaction.  This will be needed by write only accounts
- *  as a way to void a previous transaction (since you can't alter
- *  the existing transaction).
+/** xaccTransReverse creates a Transaction that reverses the given
+ *  tranaction by inverting all the numerical values in the given
+ *  transaction.  This function cancels out the effect of an earlier
+ *  transaction.  This will be needed by write only accounts as a way
+ *  to void a previous transaction (since you can't alter the existing
+ *  transaction).
  *
- *  @param transaction The transaction to reverse.
+ *  @param transaction The transaction to create a reverse of.
+ *
+ *  @return a new transaction which reverses the given transaction
  */
-void xaccTransReverse(Transaction *transaction);
+Transaction * xaccTransReverse(Transaction *transaction);
+
+/** Returns the transaction that reversed the given transaction.
+ *
+ *  @param trans a Transaction that has been reversed
+ *
+ *  @param the transaction that reversed the given transaction, or
+ *  NULL if the given transaction has not been reversed.
+ */
+Transaction * xaccTransGetReversedBy(const Transaction *trans);
 
 /** Retrieve information on whether or not a transaction has been voided.
  *

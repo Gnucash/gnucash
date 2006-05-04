@@ -169,6 +169,7 @@ const char *void_former_notes_str = "void-former-notes";
 #define TRANS_DATE_DUE_KVP       "trans-date-due"
 #define TRANS_TXN_TYPE_KVP       "trans-txn-type"
 #define TRANS_READ_ONLY_REASON   "trans-read-only"
+#define TRANS_REVERSED_BY        "reversed-by"
 
 #define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
@@ -1797,11 +1798,14 @@ xaccTransUnvoid (Transaction *trans)
   xaccTransCommitEdit(trans);
 }
 
-void
-xaccTransReverse (Transaction *trans)
+Transaction *
+xaccTransReverse (Transaction *orig)
 {
-  g_return_if_fail(trans);
+  Transaction *trans;
+  kvp_value *kvp_val;
+  g_return_val_if_fail(orig, NULL);
 
+  trans = xaccTransClone(orig);
   xaccTransBeginEdit(trans);
 
   /* Reverse the values on each split. Clear per-split info. */
@@ -1812,7 +1816,22 @@ xaccTransReverse (Transaction *trans)
           qof_instance_set_dirty(QOF_INSTANCE(trans));
       });
 
+  /* Now update the original with a pointer to the new one */
+  kvp_val = kvp_value_new_guid(xaccTransGetGUID(trans));
+  kvp_frame_set_slot_nc(orig->inst.kvp_data, TRANS_REVERSED_BY, kvp_val);
+
   xaccTransCommitEdit(trans);
+  return trans;
+}
+
+Transaction *
+xaccTransGetReversedBy(const Transaction *trans)
+{
+    GUID *guid;
+
+    g_return_val_if_fail(trans, NULL);
+    guid = kvp_frame_get_guid(trans->inst.kvp_data, TRANS_REVERSED_BY);
+    return xaccTransLookup(guid, trans->inst.book);
 }
 
 void

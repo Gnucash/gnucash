@@ -899,35 +899,23 @@ gsr_default_reverse_txn_handler (GNCSplitReg *gsr, gpointer data)
 {
   SplitRegister *reg;
   Transaction *trans, *new_trans;
-  kvp_frame *txn_frame;
-  kvp_value *kvp_val;
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
   trans = gnc_split_register_get_current_trans (reg);
   if (trans == NULL)
     return;
 
-  txn_frame = xaccTransGetSlots( trans );
-  if ( txn_frame != NULL ) {
-    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
-    if ( kvp_val ) {
-      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
+  if (xaccTransGetReversedBy(trans)) {
       gnc_error_dialog(gsr->window,
-		       _("A reversing entry has already been created for this transaction."));
+        _("A reversing entry has already been created for this transaction."));
       return;
-    }
   }
-
-  new_trans = xaccTransClone(trans);
-  xaccTransReverse(new_trans);
+  
+  new_trans = xaccTransReverse(trans);
 
   /* Clear transaction level info */
   xaccTransSetDatePostedSecs(new_trans, time(NULL));
   xaccTransSetDateEnteredSecs(new_trans, time(NULL));
-
-  /* Now update the original with a pointer to the new one */
-  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
-  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
 
   /* Now jump to new trans */
   gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
