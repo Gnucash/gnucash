@@ -210,11 +210,9 @@ xaccSplitClone (const Split *s)
   split->inst.kvp_data = kvp_frame_copy(s->inst.kvp_data);
 
   xaccAccountInsertSplit(s->acc, split);
-  if (s->lot) 
-  {
-      /* FIXME: Doesn't look right.  */
-    s->lot->splits = g_list_append (s->lot->splits, split);
-    s->lot->is_closed = -1;
+  if (s->lot) {
+      /* CHECKME: Is this right? */
+      gnc_lot_add_split(s->lot, split);
   }
   return split;
 }
@@ -504,16 +502,16 @@ xaccSplitCommitEdit(Split *s)
 
     orig_acc = s->orig_acc;
     acc = s->acc;
+    /* Remove from lot (but only if it hasn't been moved to
+       new lot already) */
+    if (s->lot && (s->lot->account != acc || s->inst.do_free))
+        gnc_lot_remove_split (s->lot, s);
 
     /* Possibly remove the split from the original account... */
     if (orig_acc && (orig_acc != acc || s->inst.do_free)) {
         GList *node = g_list_find (orig_acc->splits, s);
         if (node) {
             orig_acc->splits = g_list_delete_link (orig_acc->splits, node);
-            /* Remove from lot (but only if it hasn't been moved to
-               new lot already) */
-            if (s->lot && s->lot->account == orig_acc)
-                gnc_lot_remove_split (s->lot, s);
             //FIXME: probably not needed.
             xaccGroupMarkNotSaved (orig_acc->parent);
             //FIXME: find better event type
@@ -642,10 +640,7 @@ xaccSplitDetermineGainStatus (Split *split)
    val = kvp_frame_get_slot (split->inst.kvp_data, "gains-source");
    if (!val)
    {  
-       // FIXME: This looks bogus.  
-      other = xaccSplitGetOtherSplit (split);
-      if (other) 
-          val = kvp_frame_get_slot (other->inst.kvp_data, "gains-source");
+       // CHECKME: We leave split->gains_split alone.  Is that correct?
       split->gains = GAINS_STATUS_A_VDIRTY | GAINS_STATUS_DATE_DIRTY;
    } else {
       QofCollection *col;
