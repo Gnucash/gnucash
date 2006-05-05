@@ -86,13 +86,7 @@ run_test (void)
   transaction_set_splits_to_accounts(transaction, acc1, acc2);
   xaccTransSortSplits(transaction);
 
-  new_trans = xaccTransClone(transaction);
-  if (!xaccTransEqual(transaction, new_trans, FALSE, TRUE, FALSE, TRUE))
-  {
-    failure("xaccTransClone failed.");
-  }
-
-  xaccTransReverse(new_trans);
+  new_trans = xaccTransReverse(transaction);
   for (i = 0; i < 2; i++) 
   {
     old = xaccSplitGetAmount(xaccTransGetSplit(transaction, i));
