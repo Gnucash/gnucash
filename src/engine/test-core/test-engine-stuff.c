@@ -961,8 +961,7 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
         amt = val;
     } else {
         gnc_numeric amt2 = xaccSplitGetAmount(s);
-        int i = gnc_numeric_positive_p(amt2) + gnc_numeric_positive_p(amt);
-        if (i % 2)
+        if (gnc_numeric_positive_p(amt2) ^ gnc_numeric_positive_p(val))
             amt = gnc_numeric_neg(amt2);
     }   
     
