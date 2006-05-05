@@ -1841,16 +1841,102 @@ xaccTransScrubSplits (Transaction *trans)
 
     if (!trans) return;
 
+    xaccTransBeginEdit(trans);
     /* The split scrub expects the transaction to have a currency! */
     currency = xaccTransGetCurrency (trans);
     if (!currency)
         PERR ("Transaction doesn't have a currency!");
 
     FOR_EACH_SPLIT(trans, xaccSplitScrub(s));
+    xaccTransCommitEdit(trans);
+}
+
+/* ============================================================== */
+/** The xaccTransScrubGainsDate() routine is used to keep the posted date
+ *    of gains splits in sync with the posted date of the transaction
+ *    that caused the gains.
+ *  
+ *    The posted date is kept in sync using a lazy-evaluation scheme.
+ *    If xaccTransactionSetDatePosted() is called, the date change is
+ *    accepted, and the split is marked date-dirty.  If the posted date
+ *    is queried for (using GetDatePosted()), then the transaction is
+ *    evaluated. If it's a gains-transaction, then its date is copied 
+ *    from the source transaction that created the gains.
+ */
+
+static void
+xaccTransScrubGainsDate (Transaction *trans)
+{
+   SplitList *node;
+   Timespec ts = {0,0};
+//restart_search:
+   for (node = trans->splits; node; node=node->next) {
+      Split *s = node->data;
+
+      if (!xaccTransStillHasSplit(trans, s)) continue;
+      xaccSplitDetermineGainStatus(s);
+
+      if ((GAINS_STATUS_GAINS & s->gains) && 
+          s->gains_split &&
+          ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
+           (s->gains & GAINS_STATUS_DATE_DIRTY)))
+      {
+         Transaction *source_trans = s->gains_split->parent;
+         ts = source_trans->date_posted;
+         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
+         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
+
+         xaccTransSetDatePostedTS(trans, &ts);
+         FOR_EACH_SPLIT(trans, s->gains &= ~GAINS_STATUS_DATE_DIRTY);
+         //goto restart_search;
+      }
+   }
+}
+
+/* ============================================================== */
+
+void
+xaccTransScrubGains (Transaction *trans, Account *gain_acc)
+{
+   SplitList *node;
+
+   ENTER("(trans=%p)", trans);
+   /* Lock down posted date, its to be synced to the posted date 
+    * for the source of the cap gains. */
+   xaccTransScrubGainsDate(trans);
+
+   /* Fix up the split amount */
+restart:
+   for (node = trans->splits; node; node = node->next) {
+      Split *s = node->data;
+
+      if (!xaccTransStillHasSplit(trans, s)) continue;
+
+      xaccSplitDetermineGainStatus(s);
+      if (s->gains & GAINS_STATUS_ADIRTY) {
+          gboolean altered = FALSE;
+          s->gains &= ~GAINS_STATUS_ADIRTY;
+          if (s->lot) 
+              altered = xaccScrubLot(s->lot);
+          else
+              altered = xaccSplitAssign(s);
+          if (altered) goto restart;
+      }
+   }
+
+   /* Fix up gains split value */
+   FOR_EACH_SPLIT(trans, 
+                  if ((s->gains & GAINS_STATUS_VDIRTY) ||
+                      (s->gains_split &&
+                       (s->gains_split->gains & GAINS_STATUS_VDIRTY)))
+                      xaccSplitComputeCapGains(s, gain_acc);
+                  );
+                      
+   LEAVE("(trans=%p)", trans);
 }
 
 Split *
-xaccTransFindSplitByAccount(Transaction *trans, Account *acc)
+xaccTransFindSplitByAccount(const Transaction *trans, const Account *acc)
 {
     if (!trans || !acc) return NULL;
     FOR_EACH_SPLIT(trans, if (xaccSplitGetAccount(s) == acc) return s);

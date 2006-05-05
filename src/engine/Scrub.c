@@ -407,10 +407,8 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 
   ENTER ("()");
 
-  /* Must look or orphan splits even if there is no imbalance. */
-  xaccTransBeginEdit(trans);
+  /* Must look for orphan splits even if there is no imbalance. */
   xaccTransScrubSplits (trans);
-  xaccTransCommitEdit(trans);
 
   /* If the transaction is balanced, nothing more to do */
   imbalance = xaccTransGetImbalance (trans);

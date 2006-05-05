@@ -647,8 +647,9 @@ xaccSplitGetCapGainsSplit (const Split *split)
    gains_guid = kvp_value_get_guid (val);
    if (!gains_guid) return NULL;
 
-   /* Both splits will be in the same collection, so seearch there. */
-   gains_split = (Split*) qof_collection_lookup_entity (split->inst.entity.collection, gains_guid);
+   /* Both splits will be in the same collection, so search there. */
+   gains_split = (Split*) qof_collection_lookup_entity (
+       split->inst.entity.collection, gains_guid);
    PINFO ("split=%p has gains-split=%p", split, gains_split);
    return gains_split;
 }
@@ -703,7 +704,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
        kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
    /* Make sure the status flags and pointers are initialized */
-   if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+   xaccSplitDetermineGainStatus(split);
 
    /* Not possible to have gains if the transaction currency and 
     * account commodity are identical. */
@@ -1090,108 +1091,6 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
       xaccSplitComputeCapGains (s, gain_acc);
    }
    LEAVE("(lot=%p)", lot);
-}
-
-/* ============================================================== */
-/** The xaccScrubGainsDate() routine is used to keep the posted date
- *    of gains splis in sync with the posted date of the transaction
- *    that caused the gains.
- *  
- *    The posted date is kept in sync using a lazy-evaluation scheme.
- *    If xaccTransactionSetDatePosted() is called, the date change is
- *    accepted, and the split is marked date-dirty.  If the posted date
- *    is queried for (using GetDatePosted()), then the transaction is
- *    evaluated. If its a gains-transaction, then it's date is copied 
- *    from the source transaction that created the gains.
- */
-
-static void
-xaccScrubGainsDate (Transaction *trans)
-{
-   SplitList *node;
-   Timespec ts = {0,0};
-   gboolean do_set;
-restart_search:
-   do_set = FALSE;
-   for (node = trans->splits; node; node=node->next)
-   {
-      Split *s = node->data;
-      if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus(s);
-
-      if ((GAINS_STATUS_GAINS & s->gains) && 
-          s->gains_split &&
-          ((s->gains_split->gains & GAINS_STATUS_DATE_DIRTY) ||
-           (s->gains & GAINS_STATUS_DATE_DIRTY)))
-      {
-         Transaction *source_trans = s->gains_split->parent;
-         ts = source_trans->date_posted;
-         do_set = TRUE;
-         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
-         s->gains_split->gains &= ~GAINS_STATUS_DATE_DIRTY;
-         break;
-      }
-   }
-
-   if (do_set)
-   {
-      xaccTransBeginEdit (trans);
-      xaccTransSetDatePostedTS(trans, &ts);
-      xaccTransCommitEdit (trans);
-      for (node = trans->splits; node; node=node->next)
-      {
-         Split *s = node->data;
-         s->gains &= ~GAINS_STATUS_DATE_DIRTY;
-      }
-      goto restart_search;
-   }
-}
-
-/* ============================================================== */
-
-void
-xaccTransScrubGains (Transaction *trans, Account *gain_acc)
-{
-   SplitList *node;
-
-   ENTER("(trans=%p)", trans);
-   /* Lock down posted date, its to be synced to the posted date 
-    * for the source of the cap gains. */
-   xaccScrubGainsDate(trans);
-
-   /* Fix up the split amount */
-restart:
-   for (node=trans->splits; node; node=node->next)
-   {
-      Split *split = node->data;
-
-      if (GAINS_STATUS_UNKNOWN == split->gains) 
-      {
-         xaccSplitDetermineGainStatus(split);
-      }
-      if (split->gains & GAINS_STATUS_ADIRTY)
-      {
-         gboolean altered = FALSE;
-         split->gains |= ~GAINS_STATUS_ADIRTY;
-         if (split->lot) 
-           altered = xaccScrubLot (split->lot);
-         else
-           altered = xaccSplitAssign (split);
-         if (altered) goto restart;
-      }
-   }
-
-   /* Fix up gains split value */
-   for (node=trans->splits; node; node=node->next)
-   {
-      Split *split = node->data;
-      if ((split->gains & GAINS_STATUS_VDIRTY) ||
-          (split->gains_split &&
-          (split->gains_split->gains & GAINS_STATUS_VDIRTY)))
-      {
-         xaccSplitComputeCapGains (split, gain_acc);
-      }
-   }
-   LEAVE("(trans=%p)", trans);
 }
 
 /* =========================== END OF FILE ======================= */
