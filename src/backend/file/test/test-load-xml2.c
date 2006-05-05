@@ -95,10 +95,10 @@ test_load_file(const char *filename)
     do_test (xaccGroupGetBook (grp) == book,
              "book and group don't match");
 
-    do_test_args(
-        qof_session_get_error(session) == ERR_BACKEND_NO_ERR,
-        "session load xml2 [%s:%d], qof error=%d for file %s",
-        __FILE__, __LINE__, qof_session_get_error(session), filename);
+    do_test_args(qof_session_get_error(session) == ERR_BACKEND_NO_ERR,
+                 "session load xml2", __FILE__, __LINE__, 
+                 "qof error=%d for file [%s]",
+                 qof_session_get_error(session), filename);
 
     qof_session_end(session);
 }
