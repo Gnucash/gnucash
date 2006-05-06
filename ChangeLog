@@ -1,5 +1,11 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-file.c:
+	* src/gnome-utils/gnc-main-window.c: Use the new qof functions to
+	provide a dirty indication in the title bar, fixing #339026.  Also
+	provide an indication of how long the book has been dirty in the
+	"save changes to file" dialog.
+
 	* lib/libqof/qof/qofbook.[ch]:
 	* lib/libqof/qof/qofbook-p.h:
 	* lib/libqof/qof/qofutil.c: Add support for directly marking the

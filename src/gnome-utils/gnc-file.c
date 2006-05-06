@@ -546,17 +546,21 @@ gnc_file_query_save (gboolean can_cancel)
     GtkWidget *dialog;
     gint response;
     const char *title = _("Save changes to the file?");
-    const char *message =
-      _("Changes have been made since the last time it was saved. If "
-	"you continue without saving these changes will be discarded.");
+    /* This should be the same message as in gnc-main-window.c */
+    const gchar *message =
+      _("If you don't save, changes from the past %d minutes will be discarded.");
+    time_t oldest_change;
+    gint minutes;
 
     dialog = gtk_message_dialog_new(GTK_WINDOW(parent),
 				    GTK_DIALOG_DESTROY_WITH_PARENT,
 				    GTK_MESSAGE_QUESTION,
 				    GTK_BUTTONS_NONE,
 				    "%s", title);
+    oldest_change = qof_book_get_dirty_time(qof_session_get_book (gnc_get_current_session ()));
+    minutes = (time(NULL) - oldest_change) / 60 + 1;
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					     "%s", message);
+					     message, minutes);
     gtk_dialog_add_button(GTK_DIALOG(dialog),
 			  _("Continue _Without Saving"), GTK_RESPONSE_OK);
 

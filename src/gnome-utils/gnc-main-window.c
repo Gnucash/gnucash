@@ -64,6 +64,7 @@
 #include "gnc-hooks.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
+#include "gnc-ui-util.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
 #include "gnc-main.h"
@@ -897,15 +898,11 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   gint response;
   const gchar *filename, *tmp;
   const gchar *title = _("Save changes to file %s before closing?");
-#ifdef HIG_COMPLIANT
-  gint oldest_change, minutes;
+  /* This should be the same message as in gnc-file.c */
   const gchar *message =
     _("If you don't save, changes from the past %d minutes will be discarded.");
-#else
-  const gchar *message =
-    _("Changes have been made since the last time it was saved. If you "
-      "continue without saving these changes will be discarded.");
-#endif
+  time_t oldest_change;
+  gint minutes;
 
   session = gnc_get_current_session();
   book = qof_session_get_book(session);
@@ -915,35 +912,16 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
   if ((tmp = strrchr(filename, '/')) != NULL)
     filename = tmp + 1;
 
-  /*
-   * *** THIS DIALOG IS NOT HIG COMPLIANT. ***
-   *
-   * According to the HIG, the secondary context should include
-   * context about the number of changes that will be lost (either in
-   * time or a count).  While it is possible to simply provide the
-   * time since the last save, that doesn't appear too useful.  If
-   * the user has had Gnucash open for hours in the background, but
-   * only made a change in the last few minutes, then telling them
-   * they will lose hours work of work is wring.  The QOF code needs
-   * to be modified to provide better timing information.  The best
-   * case scenario would be if QOF could provide a timestamp of the
-   * oldest unsaved change.
-   */
   dialog = gtk_message_dialog_new(GTK_WINDOW(window),
 				  GTK_DIALOG_MODAL,
 				  GTK_MESSAGE_WARNING,
 				  GTK_BUTTONS_NONE,
 				  title,
 				  filename);
-#ifdef HIG_COMPLIANT
-  oldest_change = qof_book_time_changed(book);
-  minutes = (time() - oldest_change) / 60 + 1;
+  oldest_change = qof_book_get_dirty_time(book);
+  minutes = (time(NULL) - oldest_change) / 60 + 1;
   gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
 					   message, minutes);
-#else
-  gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
-					   message);
-#endif
 
   gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 			 _("Close _Without Saving"), GTK_RESPONSE_CLOSE,
@@ -1141,11 +1119,16 @@ gnc_main_window_generate_title (GncMainWindow *window)
 {
   GncMainWindowPrivate *priv;
   GncPluginPage *page;
-  const gchar *filename = NULL;
+  QofBook *book;
+  const gchar *filename = NULL, *dirty = "";
   gchar *title, *ptr;
 
-  if (gnc_current_session_exist())
+  if (gnc_current_session_exist()) {
       filename = gnc_session_get_url (gnc_get_current_session ());
+      book = gnc_get_current_book();
+      if (qof_instance_is_dirty(QOF_INSTANCE(book)))
+	dirty = "*";
+ }
 
   if (!filename)
     filename = _("<no file>");
@@ -1160,10 +1143,10 @@ gnc_main_window_generate_title (GncMainWindow *window)
   page = priv->current_page;
   if (page) {
     /* The Gnome HIG 2.0 recommends the application name not be used. (p16) */
-    title = g_strdup_printf("%s - %s", filename,
+    title = g_strdup_printf("%s%s - %s", dirty, filename,
 			    gnc_plugin_page_get_page_name(page));
   } else {
-    title = g_strdup_printf("%s", filename);
+    title = g_strdup_printf("%s%s", dirty, filename);
   }
   
   return title;
@@ -1195,6 +1178,25 @@ gnc_main_window_update_all_titles (void)
   g_list_foreach(active_windows,
 		 (GFunc)gnc_main_window_update_title,
 		 NULL);
+}
+
+static void
+gnc_main_window_book_dirty_cb (QofBook *book,
+			       gboolean dirty,
+			       gpointer user_data)
+{
+  gnc_main_window_update_all_titles();
+}
+
+static void
+gnc_main_window_attach_to_book (QofSession *session)
+{
+  QofBook *book;
+
+  g_return_if_fail(session);
+
+  book = qof_session_get_book(session);
+  qof_book_set_dirty_cb(book, gnc_main_window_book_dirty_cb, NULL);
 }
 
 
@@ -1702,6 +1704,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 				       NULL);
 	gnc_hook_add_dangler(HOOK_BOOK_SAVED,
 			     (GFunc)gnc_main_window_update_all_titles, NULL);
+	gnc_hook_add_dangler(HOOK_BOOK_OPENED,
+			     (GFunc)gnc_main_window_attach_to_book, NULL);
 }
 
 
