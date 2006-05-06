@@ -155,10 +155,33 @@ qof_book_not_saved (QofBook *book)
 void
 qof_book_mark_saved (QofBook *book)
 {
+  gboolean was_dirty;
+
   if (!book) return;
 
+  was_dirty = book->inst.dirty;
   book->inst.dirty = FALSE;
+  book->dirty_time = 0;
   qof_object_mark_clean (book);
+  if (was_dirty) {
+    if (book->dirty_cb)
+      book->dirty_cb(book, FALSE, book->dirty_data);
+  }
+}
+
+void qof_book_mark_dirty (QofBook *book)
+{
+  gboolean was_dirty;
+
+  if (!book) return;
+
+  was_dirty = book->inst.dirty;
+  book->inst.dirty = TRUE;
+  if (!was_dirty) {
+    book->dirty_time = time(NULL);
+    if (book->dirty_cb)
+      book->dirty_cb(book, TRUE, book->dirty_data);
+  }
 }
 
 void
@@ -167,6 +190,19 @@ qof_book_print_dirty (QofBook *book)
   if (book->inst.dirty)
     printf("book is dirty.\n");
   qof_book_foreach_collection(book, qof_collection_print_dirty, NULL);
+}
+
+time_t
+qof_book_get_dirty_time (QofBook *book)
+{
+  return book->dirty_time;
+}
+
+void
+qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
+{
+  book->dirty_data = user_data;
+  book->dirty_cb = cb;
 }
 
 /* ====================================================================== */
@@ -200,8 +236,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 
 void qof_book_kvp_changed (QofBook *book)
 {
-  if (!book) return;
-  book->inst.dirty = TRUE;
+  qof_book_mark_dirty(book);
 }
 
 /* ====================================================================== */

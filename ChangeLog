@@ -1,5 +1,12 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* lib/libqof/qof/qofbook.[ch]:
+	* lib/libqof/qof/qofbook-p.h:
+	* lib/libqof/qof/qofutil.c: Add support for directly marking the
+	book dirty, for recording the time that the book transitioned from
+	clean to dirty, and for calling back a registered function when
+	the book transitions from clean to dirty.
+
 	* configure.in: Can't use external qof until it supports
 	"alternate dirty mode".
 

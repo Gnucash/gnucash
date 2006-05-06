@@ -48,6 +48,19 @@ struct _QofBook
 {
   QofInstance   inst;     /* Unique guid for this book. */
 
+  /* The time when the book was first dirtied.  This is a secondary
+   * indicator. It should only be used when inst.dirty is TRUE. */
+  time_t dirty_time;
+
+  /* This callback function is called any time the book dirty flag
+   * changes state. Both clean->dirty and dirty->clean transitions
+   * trigger a callback. */
+  QofBookDirtyCB dirty_cb;
+
+  /* This is the user supplied data that is returned in the dirty
+   * callback function.*/
+  gpointer dirty_data;
+
   /* The entity table associates the GUIDs of all the objects
    * belonging to this book, with their pointers to the respective
    * objects.  This allows a lookup of objects based on thier guid.

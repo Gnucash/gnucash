@@ -66,6 +66,7 @@ typedef struct _QofBook       QofBook;
 typedef GList                 QofBookList;
 
 typedef void (*QofBookFinalCB) (QofBook *, gpointer key, gpointer user_data);
+typedef void (*QofBookDirtyCB) (QofBook *, gboolean dirty, gpointer user_data);
 
 /** Register the book object with the QOF object system. */
 gboolean qof_book_register (void);
@@ -154,7 +155,26 @@ gboolean qof_book_not_saved (QofBook *book);
  *    by the frontend when the used has said to abandon any changes.
  */
 void qof_book_mark_saved(QofBook *book);
+
+/** The qof_book_mark_dirty() routine marks the book as having been
+ *    modified. It can be used by frontend when the used has made a
+ *    change at the book level.
+ */
+void qof_book_mark_dirty(QofBook *book);
+
+/** This debugging function can be used to traverse the book structure
+ *    and all subsidiary structures, printing out which structures
+ *    have been marked dirty.
+ */
 void qof_book_print_dirty (QofBook *book);
+
+/** Retrieve the earliest modification time on the book. */
+time_t qof_book_get_dirty_time(QofBook *book);
+
+/** Set the function to call when a book transitions from clean to
+ *    dirty, or vice versa.
+ */
+void qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data);
 
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */
