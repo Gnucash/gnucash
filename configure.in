@@ -438,6 +438,8 @@ AC_ARG_WITH(qof, [  --with-qof=path           prefix for Query Object Framework 
 
 # GnuCash builds without deprecated QOF code so needs latest version.
 QOF_REQUIRED=0.6.4
+# Can't use external qof until it supports "alternate dirty mode"
+QOF_REQUIRED=99.99.99
 if test "$gnc_enable_qof" = true ; then
   AC_MSG_CHECKING([for QOF, version >= $QOF_REQUIRED])
   if test "$gnc_with_qof" != "yes"; then
