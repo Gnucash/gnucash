@@ -728,9 +728,6 @@ gnc_xfer_description_insert_cb(GtkEntry *entry,
 
     /* This doesn't seem to fix the selection problems, why? */
     gtk_editable_select_region (GTK_EDITABLE(entry), 0, 0);
-#if DRH_NEEDS_INVESTIGATION
-    gtk_old_editable_claim_selection (GTK_OLD_EDITABLE (entry), FALSE, GDK_CURRENT_TIME);
-#endif
 
     /* Store off data for the key_press_cb or
      * the button_release_cb to make use of. */
@@ -766,7 +763,8 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
 				     &current_end);
   if( current_pos != xferData->desc_cursor_position )
   {
-    gtk_entry_set_position( entry, xferData->desc_cursor_position );
+    gtk_editable_set_position( GTK_EDITABLE(entry),
+			       xferData->desc_cursor_position );
     did_something = TRUE;
   }
 
@@ -778,9 +776,6 @@ common_post_quickfill_handler(guint32 time, XferDialog *xferData )
     gtk_editable_select_region( GTK_EDITABLE(entry),
 				xferData->desc_start_selection,
 				xferData->desc_end_selection );
-#if DRH_NEEDS_INVESTIGATION
-    gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(entry), TRUE, time );
-#endif
     did_something = TRUE;
   }
 
@@ -844,10 +839,6 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
          */
         gtk_editable_select_region( GTK_EDITABLE(xferData->description_entry),
 				    0, 0 );
-#if DRH_NEEDS_INVESTIGATION
-        gtk_old_editable_claim_selection( GTK_OLD_EDITABLE(xferData->description_entry),
-                                          FALSE, event->time );
-#endif
       }
       break;
   }

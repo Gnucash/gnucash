@@ -1,5 +1,9 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-header.c:
+	* src/gnome-utils/dialog-transfer.c: Trivial replacements for
+	deprecated functions.
+
 	* src/gnome-utils/gnc-file.c:
 	* src/gnome-utils/gnc-main-window.c: Use the new qof functions to
 	provide a dirty indication in the title bar, fixing #339026.  Also
