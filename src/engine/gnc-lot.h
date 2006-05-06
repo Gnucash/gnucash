@@ -68,6 +68,9 @@ void gnc_lot_destroy (GNCLot *);
 GNCLot * gnc_lot_lookup (const GUID *guid, QofBook *book);
 QofBook * gnc_lot_get_book (GNCLot *);		  
 
+void gnc_lot_begin_edit (GNCLot *lot);
+void gnc_lot_commit_edit (GNCLot *lot);
+
 /** The gnc_lot_add_split() routine adds a split to this lot.  Note
  *    that *all* splits in a lot must also be in the same account.
  *    Note that this routine adds the split unconditionally, with

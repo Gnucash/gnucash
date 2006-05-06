@@ -101,6 +101,28 @@ gnc_lot_destroy (GNCLot *lot)
 
 /* ============================================================= */
 
+void
+gnc_lot_begin_edit (GNCLot *lot)
+{
+  qof_begin_edit(&lot->inst);
+}
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+void
+gnc_lot_commit_edit (GNCLot *lot)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(lot))) return;
+  qof_commit_edit_part2 (&lot->inst, commit_err, noop, noop);
+}
+
+/* ============================================================= */
+
 GNCLot *
 gnc_lot_lookup (const GUID *guid, QofBook *book)
 {
@@ -173,16 +195,20 @@ void
 gnc_lot_set_title (GNCLot *lot, const char *str)
 {
    if (!lot) return;
+   qof_begin_edit(QOF_INSTANCE(lot));
    qof_instance_set_dirty(QOF_INSTANCE(lot));
-   return kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
+   kvp_frame_set_str (lot->inst.kvp_data, "/title", str);
+   gnc_lot_commit_edit(lot);
 }
 
 void
 gnc_lot_set_notes (GNCLot *lot, const char *str)
 {
    if (!lot) return;
+   gnc_lot_begin_edit(lot);
    qof_instance_set_dirty(QOF_INSTANCE(lot));
-   return kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
+   kvp_frame_set_str (lot->inst.kvp_data, "/notes", str);
+   gnc_lot_commit_edit(lot);
 }
 
 /* ============================================================= */
@@ -280,6 +306,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
         gnc_lot_get_title (lot), 
         gnc_num_dbg_to_string (split->amount),
         gnc_num_dbg_to_string (split->value));
+   gnc_lot_begin_edit(lot);
    acc = xaccSplitGetAccount (split);
    qof_instance_set_dirty(QOF_INSTANCE(lot));
    if (NULL == lot->account)
@@ -292,10 +319,14 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
             "be added to this lot!\n"
             "\tlot account=\'%s\', split account=\'%s\'\n",
             xaccAccountGetName(lot->account), xaccAccountGetName (acc));
+      gnc_lot_commit_edit(lot);
       return;
    }
 
-   if (lot == split->lot) return; /* handle not-uncommon no-op */
+   if (lot == split->lot) {
+        gnc_lot_commit_edit(lot);
+	return; /* handle not-uncommon no-op */
+   }
    if (split->lot)
    {
       gnc_lot_remove_split (split->lot, split);
@@ -306,6 +337,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
 
     /* for recomputation of is-closed */
    lot->is_closed = -1;
+   gnc_lot_commit_edit(lot);
 
    qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -316,6 +348,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
    if (!lot || !split) return;
 
    ENTER ("(lot=%p, split=%p)", lot, split);
+   gnc_lot_begin_edit(lot);
    qof_instance_set_dirty(QOF_INSTANCE(lot));
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
@@ -326,6 +359,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
+   gnc_lot_commit_edit(lot);
    qof_event_gen (&lot->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
 

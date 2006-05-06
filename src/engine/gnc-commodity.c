@@ -468,6 +468,30 @@ gnc_quote_source_set_fq_installed (GList *sources_list)
 }
 
 /********************************************************************
+ * QoF Helpers
+ ********************************************************************/
+
+void
+gnc_commodity_begin_edit (gnc_commodity *cm)
+{
+  qof_begin_edit(&cm->inst);
+}
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+void
+gnc_commodity_commit_edit (gnc_commodity *cm)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(cm))) return;
+  qof_commit_edit_part2 (&cm->inst, commit_err, noop, noop);
+}
+
+/********************************************************************
  * gnc_commodity_new
  ********************************************************************/
 
@@ -775,12 +799,14 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
   if(!cm) return;
   if(cm->mnemonic == mnemonic) return;
 
+  gnc_commodity_begin_edit(cm);
   CACHE_REMOVE (cm->mnemonic);
   cm->mnemonic = CACHE_INSERT(mnemonic);
 
   mark_commodity_dirty (cm);
   reset_printname(cm);
   reset_unique_name(cm);
+  gnc_commodity_commit_edit(cm);
 }
 
 /********************************************************************
@@ -801,12 +827,14 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
   if (cm->namespace == nsp)
     return;
 
+  gnc_commodity_begin_edit(cm);
   cm->namespace = nsp;
   if (nsp->iso4217)
     cm->quote_source = gnc_quote_source_lookup_by_internal("currency");
   mark_commodity_dirty(cm);
   reset_printname(cm);
   reset_unique_name(cm);
+  gnc_commodity_commit_edit(cm);
 }
 
 /********************************************************************
@@ -822,8 +850,10 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
   CACHE_REMOVE (cm->fullname);
   cm->fullname = CACHE_INSERT (fullname);
 
+  gnc_commodity_begin_edit(cm);
   mark_commodity_dirty(cm);
   reset_printname(cm);
+  gnc_commodity_commit_edit(cm);
 }
 
 /********************************************************************
@@ -837,9 +867,11 @@ gnc_commodity_set_cusip(gnc_commodity * cm,
   if(!cm) return;
   if(cm->cusip == cusip) return;
 
+  gnc_commodity_begin_edit(cm);
   CACHE_REMOVE (cm->cusip);
   cm->cusip = CACHE_INSERT (cusip);
   mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
 }
 
 /********************************************************************
@@ -850,8 +882,10 @@ void
 gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) 
 {
   if(!cm) return;
+  gnc_commodity_begin_edit(cm);
   cm->fraction = fraction;
   mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
 }
 
 /********************************************************************
@@ -875,8 +909,10 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
   ENTER ("(cm=%p, flag=%d)", cm, flag);
 
   if(!cm) return;
+  gnc_commodity_begin_edit(cm);
   cm->quote_flag = flag;
   mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
   LEAVE(" ");
 }
 
@@ -890,8 +926,10 @@ gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
   ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
 
   if(!cm) return;
+  gnc_commodity_begin_edit(cm);
   cm->quote_source = src;
   mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
   LEAVE(" ");
 }
 
@@ -906,10 +944,11 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
 
   if(!cm || tz == cm->quote_tz) return;
 
+  gnc_commodity_begin_edit(cm);
   CACHE_REMOVE (cm->quote_tz);
   cm->quote_tz = CACHE_INSERT (tz);
-
   mark_commodity_dirty(cm);
+  gnc_commodity_commit_edit(cm);
   LEAVE(" ");
 }
 
@@ -1802,8 +1841,8 @@ static QofObject commodity_table_object_def =
   create:            NULL,
   book_begin:        commodity_table_book_begin,
   book_end:          commodity_table_book_end,
-  is_dirty:          NULL,
-  mark_clean:        NULL,
+  is_dirty:          qof_collection_is_dirty,
+  mark_clean:        qof_collection_mark_clean,
   foreach:           NULL,
   printable:         NULL,
   version_cmp:       NULL,

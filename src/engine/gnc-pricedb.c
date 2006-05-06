@@ -176,16 +176,7 @@ gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 static void
 gnc_price_set_dirty (GNCPrice *p)
 {
-  if (p->db) {
-    qof_instance_set_dirty(&p->inst);
-    return;
-  }
-
-  /* This is a transient price structure, probably for the add new
-   * price dialog.  The user may end up cancelling it instead of
-   * saving it, so don't mark the collection dirty. We'll mark it
-   * dirty later if the price is ever saved to the db. */
-  p->inst.dirty = TRUE;
+  qof_instance_set_dirty(&p->inst);
 }
 
 void

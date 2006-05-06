@@ -181,6 +181,28 @@ xaccSchedXactionFree( SchedXaction *sx )
 
 /* ============================================================ */
 
+void
+gnc_sx_begin_edit (SchedXaction *sx)
+{
+  qof_begin_edit (&sx->inst);
+}
+
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+void
+gnc_sx_commit_edit (SchedXaction *sx)
+{
+  if (!qof_commit_edit (QOF_INSTANCE(sx))) return;
+  qof_commit_edit_part2 (&sx->inst, commit_err, noop, noop);
+}
+
+/* ============================================================ */
+
 FreqSpec *
 xaccSchedXactionGetFreqSpec( SchedXaction *sx )
 {
@@ -192,9 +214,11 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 {
    g_return_if_fail( fs );
 
+   gnc_sx_begin_edit(sx);
    xaccFreqSpecFree( sx->freq );
    sx->freq = fs;
    qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 gchar *
@@ -207,12 +231,14 @@ void
 xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
 {
    g_return_if_fail( newName != NULL );
+   gnc_sx_begin_edit(sx);
    if ( sx->name != NULL ) {
            g_free( sx->name );
            sx->name = NULL;
    }
    sx->name = g_strdup( newName );
    qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 GDate*
@@ -224,8 +250,10 @@ xaccSchedXactionGetStartDate( SchedXaction *sx )
 void
 xaccSchedXactionSetStartDate( SchedXaction *sx, GDate* newStart )
 {
+   gnc_sx_begin_edit(sx);
    sx->start_date = *newStart;
    qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 gboolean
@@ -254,8 +282,10 @@ xaccSchedXactionSetEndDate( SchedXaction *sx, GDate *newEnd )
     return;
   }
 
+  gnc_sx_begin_edit(sx);
   sx->end_date = *newEnd;
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 GDate*
@@ -267,8 +297,10 @@ xaccSchedXactionGetLastOccurDate( SchedXaction *sx )
 void
 xaccSchedXactionSetLastOccurDate( SchedXaction *sx, GDate* newLastOccur )
 {
+  gnc_sx_begin_edit(sx);
   sx->last_date = *newLastOccur;
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gboolean
@@ -286,8 +318,10 @@ xaccSchedXactionGetNumOccur( SchedXaction *sx )
 void
 xaccSchedXactionSetNumOccur( SchedXaction *sx, gint newNum )
 {
+  gnc_sx_begin_edit(sx);
   sx->num_occurances_remain = sx->num_occurances_total = newNum;
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gint
@@ -307,8 +341,10 @@ xaccSchedXactionSetRemOccur( SchedXaction *sx,
   }
   else
   {
+    gnc_sx_begin_edit(sx);
     sx->num_occurances_remain = numRemain;
     qof_instance_set_dirty(&sx->inst);
+    gnc_sx_commit_edit(sx);
   }
 }
 
@@ -328,8 +364,10 @@ xaccSchedXactionSetSlot( SchedXaction *sx,
 {
   if (!sx) return;
 
+  gnc_sx_begin_edit(sx);
   kvp_frame_set_slot( sx->inst.kvp_data, slot, value );
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 void
@@ -348,9 +386,11 @@ xaccSchedXactionSetAutoCreate( SchedXaction *sx,
                                gboolean newNotify )
 {
  
+  gnc_sx_begin_edit(sx);
   sx->autoCreateOption = newAutoCreate;
   sx->autoCreateNotify = newNotify; 
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
   return;
 }
 
@@ -363,8 +403,10 @@ xaccSchedXactionGetAdvanceCreation( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays )
 {
+  gnc_sx_begin_edit(sx);
   sx->advanceCreateDays = createDays;
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 gint
@@ -376,8 +418,10 @@ xaccSchedXactionGetAdvanceReminder( SchedXaction *sx )
 void
 xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 {
+  gnc_sx_begin_edit(sx);
   sx->advanceRemindDays = reminderDays;
   qof_instance_set_dirty(&sx->inst);
+  gnc_sx_commit_edit(sx);
 }
 
 
@@ -657,10 +701,12 @@ void
 gnc_sx_revert_to_temporal_state( SchedXaction *sx, void *stateData )
 {
    temporalStateData *tsd = (temporalStateData*)stateData;
+   gnc_sx_begin_edit(sx);
    sx->last_date        = tsd->last_date;
    sx->num_occurances_remain = tsd->num_occur_rem;
    sx->instance_num     = tsd->num_inst;
    qof_instance_set_dirty(&sx->inst);
+   gnc_sx_commit_edit(sx);
 }
 
 void
@@ -738,8 +784,8 @@ static QofObject SXDesc =
 	create            : (gpointer)xaccSchedXactionMalloc,
 	book_begin        : NULL,
 	book_end          : NULL,
-	is_dirty          : NULL,
-	mark_clean        : NULL,
+	is_dirty          : qof_collection_is_dirty,
+	mark_clean        : qof_collection_mark_clean,
 	foreach           : qof_collection_foreach,
 	printable         : NULL,
 	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,

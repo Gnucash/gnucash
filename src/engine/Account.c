@@ -1245,7 +1245,6 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
   kvp_frame_set_slot_nc(acc->inst.kvp_data, "old-currency",
                         kvp_value_new_string(string));
   mark_account (acc);
-  qof_instance_set_dirty(&acc->inst);
   xaccAccountCommitEdit(acc);
 
   commodity = DxaccAccountGetCurrency (acc);
@@ -2657,8 +2656,8 @@ static QofObject account_object_def = {
   create:                (gpointer)xaccMallocAccount,
   book_begin:            NULL,
   book_end:              NULL,
-  is_dirty:              NULL,
-  mark_clean:            NULL,
+  is_dirty:              qof_collection_is_dirty,
+  mark_clean:            qof_collection_mark_clean,
   foreach:               qof_collection_foreach,
   printable:             (const char* (*)(gpointer)) xaccAccountGetName,
   version_cmp:           (int (*)(gpointer,gpointer)) qof_instance_version_cmp,

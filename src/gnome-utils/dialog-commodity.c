@@ -1171,11 +1171,13 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
   if (gnc_commodity_namespace_is_iso (namespace)) {
     if (w->edit_commodity) {
       c = w->edit_commodity;
+      gnc_commodity_begin_edit(c);
       gnc_commodity_set_quote_flag (c, gtk_toggle_button_get_active
 				    (GTK_TOGGLE_BUTTON (w->get_quote_check)));
       selection = gnc_option_menu_get_active (w->quote_tz_menu);
       string = gnc_timezone_menu_position_to_string(selection);
       gnc_commodity_set_quote_tz(c, string);
+      gnc_commodity_commit_edit(c);
       return TRUE;
     }
     gnc_warning_dialog(w->dialog,
@@ -1198,9 +1200,10 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     if (!w->edit_commodity) {
       c = gnc_commodity_new(book, fullname, namespace, mnemonic, code, fraction);
       w->edit_commodity = c;
-    }
-    else {
+      gnc_commodity_begin_edit(c);
+    } else {
       c = w->edit_commodity;
+      gnc_commodity_begin_edit(c);
 
       gnc_commodity_table_remove (gnc_get_current_commodities(), c);
 
@@ -1225,6 +1228,7 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     selection = gnc_option_menu_get_active (w->quote_tz_menu);
     string = gnc_timezone_menu_position_to_string(selection);
     gnc_commodity_set_quote_tz(c, string);
+    gnc_commodity_commit_edit(c);
 
     /* remember the commodity */
     c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);

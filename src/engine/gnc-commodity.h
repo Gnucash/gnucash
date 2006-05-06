@@ -881,6 +881,9 @@ gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
  * commodity table.
  */
 gboolean gnc_commodity_table_register (void);
+
+void gnc_commodity_begin_edit (gnc_commodity *cm);
+void gnc_commodity_commit_edit (gnc_commodity *cm);
 		  
 /** @} */
 

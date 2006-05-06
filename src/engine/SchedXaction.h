@@ -57,6 +57,9 @@ SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 */
 void xaccSchedXactionFree( SchedXaction *sx );
 
+void gnc_sx_begin_edit (SchedXaction *sx);
+void gnc_sx_commit_edit (SchedXaction *sx);
+
 FreqSpec *xaccSchedXactionGetFreqSpec( SchedXaction *sx );
 /**
  * The FreqSpec is given to the SchedXaction for mem mgmt; it should

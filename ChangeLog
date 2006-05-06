@@ -1,5 +1,21 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/dialog-commodity.c:
+	* src/engine/gnc-lot.[ch]:
+	* src/engine/gnc-commodity.[ch]:
+	* src/engine/SchedXaction.[ch]: Add begin_edit/commit_edit
+	brackets around object modifications.  Bug #339943 should be fixed
+	as of this change.
+
+	* src/engine/gnc-pricedb.c: No longer need special handling when
+	marking prices as dirty.
+
+	* src/engine/Account.c: Remove redundant setting an account dirty.
+	Set collection clean/dirty functions.
+
+	* src/engine/gnc-engine.c: Unconditionally enable qof alternate
+	dirty mode.
+
 	* lib/libqof/qof/qofbook.[ch]:
 	* lib/libqof/qof/qofid-p.h:
 	* lib/libqof/qof/qofinstance.[ch]:
