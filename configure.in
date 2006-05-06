@@ -1015,8 +1015,8 @@ then
     AC_SUBST(GNOME_CFLAGS)
     AC_SUBST(GNOME_LIBS)
 
-    AC_MSG_CHECKING([for untested GNOME versions (libgnome > 2.13.7)])
-    if $PKG_CONFIG 'libgnome-2.0 > 2.13.7'
+    AC_MSG_CHECKING([for untested GNOME versions (libgnome > 2.14)])
+    if $PKG_CONFIG 'libgnome-2.0 > 2.14'
     then
       AC_MSG_RESULT(yes)
       HAVE_UNTESTED_GNOME=yes

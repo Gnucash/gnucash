@@ -1,3 +1,8 @@
+2006-05-05  David Hampton  <hampton@employees.org>
+
+	* configure.in: Bump the version number for setting the
+	GNOME_DISABLE_DEPRECATED flag.
+
 2006-05-02  David Hampton  <hampton@employees.org>
 
 	* src/backend/postgres/price.c:
