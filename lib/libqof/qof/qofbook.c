@@ -145,7 +145,7 @@ qof_book_equal (QofBook *book_1, QofBook *book_2)
 /* ====================================================================== */
 
 gboolean
-qof_book_not_saved(QofBook *book)
+qof_book_not_saved (QofBook *book)
 {
   if (!book) return FALSE;
 
@@ -153,12 +153,20 @@ qof_book_not_saved(QofBook *book)
 }
 
 void
-qof_book_mark_saved(QofBook *book)
+qof_book_mark_saved (QofBook *book)
 {
   if (!book) return;
 
   book->inst.dirty = FALSE;
   qof_object_mark_clean (book);
+}
+
+void
+qof_book_print_dirty (QofBook *book)
+{
+  if (book->inst.dirty)
+    printf("book is dirty.\n");
+  qof_book_foreach_collection(book, qof_collection_print_dirty, NULL);
 }
 
 /* ====================================================================== */

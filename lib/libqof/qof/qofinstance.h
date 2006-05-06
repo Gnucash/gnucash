@@ -81,6 +81,8 @@ Timespec qof_instance_get_last_update (QofInstance *inst);
  */
 int qof_instance_version_cmp (QofInstance *left, QofInstance *right);
 
+void qof_instance_print_dirty (QofEntity *entity, gpointer dummy);
+
 /** Return value of is_dirty flag */
 gboolean qof_instance_is_dirty (QofInstance *);
 

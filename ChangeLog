@@ -1,3 +1,16 @@
+2006-05-06  David Hampton  <hampton@employees.org>
+
+	* lib/libqof/qof/qofbook.[ch]:
+	* lib/libqof/qof/qofid-p.h:
+	* lib/libqof/qof/qofinstance.[ch]:
+	* lib/libqof/qof/qofid.[ch]:
+	* lib/libqof/qof/qofutil.c: Add an alternate mode for handling the
+	dirty state of instances and collections.  In this mode, marking
+	an instance as dirty does not immediately mark the collection as
+	dirty.  The collection is only dirtied when a dirty instance is
+	actually committed to the collection.  Also add some debugging
+	functions.
+
 2006-05-05  David Hampton  <hampton@employees.org>
 
 	* configure.in: Bump the version number for setting the

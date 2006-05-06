@@ -160,6 +160,23 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
 void qof_entity_release (QofEntity *);
 /** @} */
 
+/** Is QOF operating in "alternate" dirty mode.  In normal mode,
+ *  whenever an instance is dirtied, the collection (and therefore the
+ *  book) is immediately marked as dirty.  In alternate mode, the
+ *  collection is only marked dirty when a dirty instance is
+ *  committed.  If a dirty instance is freed instead of committed, the
+ *  dirty state of collection (and therefore the book) is never
+ *  changed. */
+gboolean qof_get_alt_dirty_mode (void);
+
+/** Set QOF into "alternate" dirty mode.  In normal mode, whenever an
+ *  instance is dirtied, the collection (and therefore the book) is
+ *  immediately marked as dirty.  In alternate mode, the collection is
+ *  only marked dirty when a dirty instance is committed.  If a dirty
+ *  instance is freed instead of committed, the dirty state of
+ *  collection (and therefore the book) is never changed. */
+void qof_set_alt_dirty_mode (gboolean enabled);
+
 /** Return the GUID of this entity */
 const GUID * qof_entity_get_guid (QofEntity *);
 

@@ -49,6 +49,7 @@ void qof_collection_insert_entity (QofCollection *, QofEntity *);
 /** reset value of dirty flag */
 void qof_collection_mark_clean (QofCollection *);
 void qof_collection_mark_dirty (QofCollection *);
+void qof_collection_print_dirty (QofCollection *col, gpointer dummy);
 
 /* @} */
 /* @} */

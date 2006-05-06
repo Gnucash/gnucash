@@ -121,12 +121,24 @@ qof_instance_version_cmp (QofInstance *left, QofInstance *right)
 	return 0;
 }
 
+void
+qof_instance_print_dirty (QofEntity *entity, gpointer dummy)
+{
+  QofInstance *inst = QOF_INSTANCE(entity);
+
+  if (inst->dirty)
+    printf("%s instance %s is dirty.\n", inst->entity.e_type,
+	   guid_to_string(&inst->entity.guid));
+}
+
 gboolean
 qof_instance_is_dirty (QofInstance *inst)
 {
 	QofCollection *coll;
 
 	if (!inst) { return FALSE; }
+	if (qof_get_alt_dirty_mode())
+	  return inst->dirty;
 	coll = inst->entity.collection;
 	if(qof_collection_is_dirty(coll)) { return inst->dirty; }
 	inst->dirty = FALSE;
@@ -139,8 +151,10 @@ qof_instance_set_dirty(QofInstance* inst)
 	QofCollection *coll;
 
 	inst->dirty = TRUE;
-	coll = inst->entity.collection;
-	qof_collection_mark_dirty(coll);
+	if (!qof_get_alt_dirty_mode()) {
+	  coll = inst->entity.collection;
+	  qof_collection_mark_dirty(coll);
+	}
 }
 
 gboolean

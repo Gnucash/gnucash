@@ -154,6 +154,7 @@ gboolean qof_book_not_saved (QofBook *book);
  *    by the frontend when the used has said to abandon any changes.
  */
 void qof_book_mark_saved(QofBook *book);
+void qof_book_print_dirty (QofBook *book);
 
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */

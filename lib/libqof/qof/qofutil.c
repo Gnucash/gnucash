@@ -269,6 +269,7 @@ qof_commit_edit_part2(QofInstance *inst,
                       void (*on_free)(QofInstance *)) 
 {
     QofBackend * be;
+    gboolean dirty = inst->dirty;
 
     /* See if there's a backend.  If there is, invoke it. */
     be = qof_book_get_backend(inst->book);
@@ -300,6 +301,9 @@ qof_commit_edit_part2(QofInstance *inst,
             on_free(inst);
         return TRUE;
     }
+
+    if (dirty && qof_get_alt_dirty_mode())
+      qof_collection_mark_dirty(inst->entity.collection);
     if (on_done)
         on_done(inst);
     return TRUE;
