@@ -91,6 +91,7 @@ gnc_engine_init(int argc, char ** argv)
   qof_log_set_default(QOF_LOG_WARNING);
   /* initialize QOF */
   qof_init();
+  qof_set_alt_dirty_mode(TRUE);
 
   /* Now register our core types */
   cashobjects_register();
