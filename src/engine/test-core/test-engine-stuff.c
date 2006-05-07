@@ -1419,8 +1419,9 @@ get_random_transaction_with_currency(QofBook *book,
     Transaction* trans;
     KvpFrame *f;
     gint num;
-    gchar numstr[10];
+    gchar *numstr;
 
+    numstr = g_new0(gchar, 10);
     if (!account_list) 
     {
       account_list = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
@@ -2022,14 +2023,23 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
   {
     xaccQueryAddSingleAccountMatch (q, xaccSplitGetAccount (s), QOF_QUERY_AND);
 
-    xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
-                                  TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccTransGetDescription(trans) && *xaccTransGetDescription(trans) != '\0')
+    {
+      xaccQueryAddDescriptionMatch (q, xaccTransGetDescription (trans),
+                                    TRUE, FALSE, QOF_QUERY_AND);
+    }
 
-    xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
-                             TRUE, FALSE, QOF_QUERY_AND);
-
-    xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
-                             TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccTransGetNum(trans) && *xaccTransGetNum(trans) != '\0')
+    {
+      xaccQueryAddNumberMatch (q, xaccTransGetNum (trans),
+                               TRUE, FALSE, QOF_QUERY_AND);
+    }
+     
+    if (xaccSplitGetAction(s) && *xaccSplitGetAction(s) != '\0')
+    {
+      xaccQueryAddActionMatch (q, xaccSplitGetAction (s),
+                               TRUE, FALSE, QOF_QUERY_AND);
+    }
 
     n = xaccSplitGetValue (s);
     xaccQueryAddValueMatch (q, n, QOF_NUMERIC_MATCH_ANY,
@@ -2051,7 +2061,10 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
       xaccQueryAddDateMatchTS (q, TRUE, ts, TRUE, ts, QOF_QUERY_AND);
     }
 
-    xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
+    if (xaccSplitGetMemo(s) && *xaccSplitGetMemo(s) != '\0')
+    {
+      xaccQueryAddMemoMatch (q, xaccSplitGetMemo (s), TRUE, FALSE, QOF_QUERY_AND);
+    }
 
     {
       cleared_match_t how;

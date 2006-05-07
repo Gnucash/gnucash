@@ -1,10 +1,13 @@
 2006-05-07  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/engine/test-core/test-engine-stuff.c (make_trans_query):
+	Don't construct queries involving empty strings, as the query
+	processor asserts that string match terms are not empty. Fixes
+	`test-query` failure.
+
 	* src/gnome/dialog-scheduledxaction.c (sxd_close_handler):
 	Actually close the dialog when we are button-requested to Close
 	the dialog, thus cleaning up properly.  Bug#340936.
-
-2006-05-07  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/formulacell-gnome.c
 	(gnc_formula_cell_direct_update): Call new factored-out logic.
