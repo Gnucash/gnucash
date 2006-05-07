@@ -2,6 +2,7 @@
  * druid-loan.c : A Gnome Druid for setting up loan-repayment       *
  *     scheduled transactions.                                      *
  * Copyright (C) 2002 Joshua Sled <jsled@asynchronous.org>          *
+ * Copyright (C) 2006 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -97,6 +98,11 @@
 #define PG_COMMIT "commit_pg"
 
 #define OPT_VBOX_SPACING 2
+
+#define COLUMN_DATE      0
+#define COLUMN_PAYMENT   1
+#define COLUMN_PRINCIPAL 2
+#define COLUMN_INTEREST  3
 
 typedef enum {
         CURRENT_YEAR,
@@ -300,7 +306,7 @@ typedef struct LoanDruidData_ {
         GNCDateEdit       *revStartDate;
         GNCDateEdit       *revEndDate;
         GtkScrolledWindow *revScrollWin;
-        GtkCList          *revCL;
+        GtkTreeView       *revView;
 } LoanDruidData;
 
 /**
@@ -354,12 +360,9 @@ static void ld_rev_range_changed( GNCDateEdit *gde, gpointer ud );
 static void ld_rev_get_dates( LoanDruidData *ldd,
                               GDate *start,
                               GDate *end );
-static void ld_rev_update_clist( LoanDruidData *ldd,
+static void ld_rev_update_view( LoanDruidData *ldd,
                                  GDate *start,
                                  GDate *end );
-static void ld_rev_clist_allocate_col_widths( GtkWidget *w,
-                                              GtkAllocation *alloc,
-                                              gpointer user_data );
 static void ld_rev_sched_list_free( gpointer data, gpointer user_data );
 static void ld_rev_hash_to_list( gpointer key,
                                  gpointer val,
@@ -1749,16 +1752,18 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         /* 3, here, does not include the Date column. */
         const static int BASE_COLS = 3;
         LoanDruidData *ldd;
-        gchar **titles;
+	GtkListStore *store;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+	GType *types;
         int i;
 
         ldd = (LoanDruidData*)ud;
 
-        /* Cleanup old clist */
-        if ( ldd->revCL != NULL ) {
-                gtk_container_remove( GTK_CONTAINER(ldd->revScrollWin),
-                                      GTK_WIDGET(ldd->revCL) );
-                ldd->revCL = NULL;
+        /* Cleanup old view */
+        if ( ldd->revView != NULL ) {
+		gtk_widget_destroy( GTK_WIDGET(ldd->revView) );
+                ldd->revView = NULL;
         }
 
         ldd->ld.revNumPmts = BASE_COLS;
@@ -1775,40 +1780,58 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         }
 
         /* '+1' for leading date col */
-        titles = g_new0( gchar*, ldd->ld.revNumPmts + 1 );
-        titles[0] = _( "Date" );
-        titles[1] = _( "Payment" );
-        titles[2] = _( "Principal" );
-        titles[3] = _( "Interest" );
+	types = g_new( GType, ldd->ld.revNumPmts + 1 );
+	for ( i=0; i < ldd->ld.revNumPmts + 1; i++ )
+	  types[i] = G_TYPE_STRING;
+	store = gtk_list_store_newv(ldd->ld.revNumPmts + 1, types);
+	g_free(types);
+
+        ldd->revView = GTK_TREE_VIEW(
+		gtk_tree_view_new_with_model( GTK_TREE_MODEL(store) ));
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Date"), renderer,
+							  "text", COLUMN_DATE,
+							  NULL);
+	gtk_tree_view_append_column(ldd->revView, column);
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Payment"), renderer,
+							  "text", COLUMN_PAYMENT,
+							  NULL);
+	gtk_tree_view_append_column(ldd->revView, column);
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Principal"), renderer,
+							  "text", COLUMN_PRINCIPAL,
+							  NULL);
+	gtk_tree_view_append_column(ldd->revView, column);
+
+	renderer = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(_("Interest"), renderer,
+							  "text", COLUMN_INTEREST,
+							  NULL);
+	gtk_tree_view_append_column(ldd->revView, column);
+
         /* move the appropriate names over into the title array */
         {
                 for ( i=0; i < ldd->ld.repayOptCount; i++ ) {
                         if ( ldd->ld.revRepayOptToColMap[i] == -1 ) {
                                 continue;
                         }
-                        /* '+1' offset for the "Date" title */
-                        titles[ ldd->ld.revRepayOptToColMap[i] + 1 ] =
-                                ldd->ld.repayOpts[i]->name;
+
+			renderer = gtk_cell_renderer_text_new();
+			column = gtk_tree_view_column_new_with_attributes
+			  (ldd->ld.repayOpts[i]->name, renderer,
+			   "text", COLUMN_INTEREST + i,
+			   NULL);
+			gtk_tree_view_append_column(ldd->revView, column);
                 }
         }
 
-        ldd->revCL = GTK_CLIST(
-                gtk_clist_new_with_titles( ldd->ld.revNumPmts+1,
-                                           titles ) );
-        g_free( titles );
-
-        for( i=0; i < ldd->ld.revNumPmts+1; i++ ) {
-                gtk_clist_set_column_resizeable( ldd->revCL, i, TRUE );
-                
-        }
-
-        g_signal_connect( ldd->revCL, "size-allocate",
-                          G_CALLBACK(ld_rev_clist_allocate_col_widths),
-                          ldd );
-
         gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
-                           GTK_WIDGET(ldd->revCL) );
-        gtk_widget_show_all( GTK_WIDGET(ldd->revCL) );
+                           GTK_WIDGET(ldd->revView) );
+        gtk_widget_show( GTK_WIDGET(ldd->revView) );
 
         ld_rev_recalc_schedule( ldd );
 
@@ -1817,7 +1840,7 @@ ld_rev_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
                 g_date_clear( &start, 1 );
                 g_date_clear( &end, 1 );
                 ld_rev_get_dates( ldd, &start, &end );
-                ld_rev_update_clist( ldd, &start, &end );
+                ld_rev_update_view( ldd, &start, &end );
         }
 }
 
@@ -2522,7 +2545,7 @@ ld_rev_range_opt_changed( GtkButton *b, gpointer ud )
                 g_date_clear( &start, 1 );
                 g_date_clear( &end, 1 );
                 ld_rev_get_dates( ldd, &start, &end );
-                ld_rev_update_clist( ldd, &start, &end );
+                ld_rev_update_view( ldd, &start, &end );
         }
 }
 
@@ -2536,7 +2559,7 @@ ld_rev_range_changed( GNCDateEdit *gde, gpointer ud )
                 g_date_clear( &start, 1 );
                 g_date_clear( &end, 1 );
                 ld_rev_get_dates( ldd, &start, &end );
-                ld_rev_update_clist( ldd, &start, &end );
+                ld_rev_update_view( ldd, &start, &end );
         }
 }
 
@@ -2801,19 +2824,20 @@ ld_rev_recalc_schedule( LoanDruidData *ldd )
 
 static
 void
-ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
+ld_rev_update_view( LoanDruidData *ldd, GDate *start, GDate *end )
 {
         static gchar *NO_AMT_CELL_TEXT = " ";
         GList *l;
         GNCPrintAmountInfo pai;
-        /* '+1' for the date cell */
-        gchar *rowText[ ldd->ld.revNumPmts + 1 ];
+	GtkListStore *store;
+	GtkTreeIter iter;
 
         pai = gnc_default_price_print_info();
         pai.min_decimal_places = 2;
 
-        gtk_clist_clear( ldd->revCL );
-        gtk_clist_freeze( ldd->revCL );
+	store = GTK_LIST_STORE(gtk_tree_view_get_model( ldd->revView ));
+
+        gtk_list_store_clear( store );
 
         for ( l = ldd->ld.revSchedule; l != NULL; l = l->next )
         {
@@ -2826,8 +2850,10 @@ ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
                 if ( g_date_compare( &rrr->date, end ) > 0 )
                         continue; /* though we can probably return, too. */
 
-                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, &rrr->date );
-                rowText[0] = g_strdup( tmpBuf );
+		gtk_list_store_append(store, &iter);
+
+		qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, &rrr->date );
+		gtk_list_store_set( store, &iter, COLUMN_DATE, tmpBuf, -1 );
 
                 for ( i=0; i<ldd->ld.revNumPmts; i++ )
                 {
@@ -2835,45 +2861,20 @@ ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
                         if ( gnc_numeric_check( rrr->numCells[i] )
                              == GNC_ERROR_ARG )
                         {
-                                rowText[i+1] = NO_AMT_CELL_TEXT;
+				/* '+1' for the date cell */
+				gtk_list_store_set( store, &iter,
+						    i+1, NO_AMT_CELL_TEXT,
+						    -1);
                                 continue;
                         }
 
                         numPrinted = xaccSPrintAmount( tmpBuf, rrr->numCells[i], pai );
                         g_assert( numPrinted < 50 );
-                        rowText[i+1] = g_strdup( tmpBuf );
+			/* '+1' for the date cell */
+			gtk_list_store_set( store, &iter,
+					    i+1, tmpBuf,
+					    -1);
                 }
 
-                gtk_clist_append( ldd->revCL, rowText );
-
-                for ( i=ldd->ld.revNumPmts-1; i>=0; i-- )
-                {
-                        if ( strcmp( rowText[i], NO_AMT_CELL_TEXT ) == 0 )
-                                continue;
-                        g_free( rowText[i] );
-                }
         }
-        gtk_clist_thaw( ldd->revCL );
-}
-
-static
-void
-ld_rev_clist_allocate_col_widths( GtkWidget *w,
-                                  GtkAllocation *alloc,
-                                  gpointer user_data )
-{
-        LoanDruidData *ldd = (LoanDruidData*)user_data;
-        gint i, evenWidth, width;
-
-        width = alloc->width;
-        /* The '-10' is to account for misc widget noise not accounted for by
-         * the simple division. */
-        evenWidth = (gint)(width / (ldd->ld.revNumPmts+1) ) - 10;
-        gtk_clist_freeze( ldd->revCL );
-        for ( i=0; i<ldd->ld.revNumPmts+1; i++ )
-        {
-                gtk_clist_set_column_width( ldd->revCL,
-                                            i, evenWidth );
-        }
-        gtk_clist_thaw( ldd->revCL );
 }

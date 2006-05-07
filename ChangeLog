@@ -1,5 +1,34 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/dialog-account-picker.c:
+	* src/import-export/qif-import/qif.glade:
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/hbci/druid-hbci-initial.c:
+	* src/import-export/hbci/glade/hbci.glade:
+	* src/report/report-gnome/dialog-column-view.c:
+	* src/report/report-gnome/report.glade:
+	* src/business/business-gnome/dialog-billterms.c:
+	* src/business/business-gnome/glade/billterms.glade:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/business/dialog-tax-table/tax-tables.glade:
+	* src/gnome-utils/gnc-druid-provider-multifile-gnome.[ch]:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/dialog-account.c:
+	* src/gnome-utils/glade/druid-provider-multifile.glade:
+	* src/gnome-utils/dialog-utils.h:
+	* src/gnome/druid-loan.c:
+	* src/gnome/glade/stocks.glade:
+	* src/gnome/glade/account.glade:
+	* src/gnome/druid-stock-split.c: First cleanup pass. Mostly
+	conversions from GtkCList to GtkTreeView/GtkTreeStore.
+
+********************
+* Above this line is the deprecated-cleanup branch ChangeLog.
+* Below this line is the Trunk ChangeLog
+********************
+
+2006-05-06  David Hampton  <hampton@employees.org>
+
 	* src/register/register-gnome/gnucash-header.c:
 	* src/gnome-utils/dialog-transfer.c: Trivial replacements for
 	deprecated functions.

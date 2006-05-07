@@ -41,7 +41,7 @@ struct _GNCDruidProviderMultifileGnome
   GNCDruidProvider parent;
 
   GnomeDruidPage*	page;
-  GtkWidget*		list;
+  GtkWidget*		file_view;
 
   GNCDruidCB*		cb;
   gpointer		selected_file;
