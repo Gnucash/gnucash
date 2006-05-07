@@ -1,3 +1,14 @@
+2006-05-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/formulacell-gnome.c
+	(gnc_formula_cell_direct_update): Call new factored-out logic.
+	Fix Bug#340875 regarding same.
+
+	* src/register/register-gnome/pricecell-gnome.c
+	(gnc_basic_cell_insert_decimal): Factor utf8-safe string copying +
+	decimal-point insertion out.
+	(gnc_price_cell_direct_update): Call new factored-out logic.
+
 2006-05-06  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.c: Rebuild the column

@@ -38,8 +38,9 @@
 
 #include "formulacell.h"
 #include "formulacell-gnome.h"
+#include "pricecell-gnome.h"
 
-static QofLogModule log_module = GNC_MOD_REGISTER;
+//static QofLogModule log_module = GNC_MOD_REGISTER;
 
 static
 gboolean
@@ -51,13 +52,8 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 {
     FormulaCell *cell = (FormulaCell *)bcell;
     GdkEventKey *event = gui_data;
-    char decimal_point;
     struct lconv *lc;
-    GString *newval_gs;
     gboolean is_return;
-    int i;
-    const gchar *c;
-    gunichar uc;
 
     if (event->type != GDK_KEY_PRESS)
         return FALSE;
@@ -66,7 +62,11 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
 
     is_return = FALSE;
 
-    DEBUG( "direct update" );
+    /* FIXME!! This code is almost identical (except for GDK_KP_Enter
+     * handling) to pricecell-gnome.c:gnc_price_cell_direct_update.  I write
+     * this after fixing a bug where one copy was kept up to date, and the
+     * other not.  So, fix this.
+     */
     switch (event->keyval)
     {
         case GDK_Return:
@@ -93,43 +93,13 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
             return FALSE;
     }
 
-    if (cell->print_info.monetary)
-        decimal_point = lc->mon_decimal_point[0];
-    else
-        decimal_point = lc->decimal_point[0];
-
-    newval_gs = g_string_new ("");
-    c = bcell->value;
-    i = 0;
-    
-    /* copy original value up to cursor position */
-    while (*c && (i < *cursor_position))
-    {
-        uc = g_utf8_get_char (c);
-        g_string_append_unichar (newval_gs, uc);
-        c = g_utf8_next_char (c);
-        i++;
-    }
-    
-    /* insert the decimal_point at cursor position */
-    g_string_append_c (newval_gs, decimal_point);
-	i++;
-    c = g_utf8_next_char (c);
-    
-    /* copy rest of original value */
-    while (*c)
-    {
-        uc = g_utf8_get_char (c);
-        g_string_append_unichar (newval_gs, uc);
-        c = g_utf8_next_char (c);
-    }
-
-    /* update the cursor position */
-    (*cursor_position)++;
-
-    gnc_basic_cell_set_value_internal( bcell, newval_gs->str );
-
-    g_string_free (newval_gs, TRUE);
+    gnc_basic_cell_insert_decimal(bcell,
+                                  cell->print_info.monetary
+                                  ? lc->mon_decimal_point[0]
+                                  : lc->decimal_point[0],
+                                  cursor_position,
+                                  start_selection,
+                                  end_selection);
 
     return TRUE;
 }

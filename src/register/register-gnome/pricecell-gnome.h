@@ -28,4 +28,11 @@
 
 BasicCell * gnc_price_cell_gnome_new (void);
 
+/* fixme: find a better home for this. */
+void gnc_basic_cell_insert_decimal(BasicCell *cell,
+                                   char decimal_point,
+                                   int *cursor_position,
+                                   int *start_selection,
+                                   int *end_selection);
+
 #endif
