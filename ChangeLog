@@ -1,5 +1,11 @@
 2006-05-07  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-scheduledxaction.c (sxd_close_handler):
+	Actually close the dialog when we are button-requested to Close
+	the dialog, thus cleaning up properly.  Bug#340936.
+
+2006-05-07  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/register/register-gnome/formulacell-gnome.c
 	(gnc_formula_cell_direct_update): Call new factored-out logic.
 	Fix Bug#340875 regarding same.

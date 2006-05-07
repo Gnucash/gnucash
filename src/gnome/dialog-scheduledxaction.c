@@ -250,12 +250,12 @@ static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
 
 static
 void
-sxd_close_handler ( gpointer user_data )
+sxd_close_handler (gpointer user_data)
 {
         SchedXactionDialog        *sxd = user_data;
-        
-        gnc_sxl_record_size( sxd );
-        gtk_widget_hide( sxd->dialog );
+        gnc_sxl_record_size(sxd);
+        gtk_widget_hide(sxd->dialog);
+        gtk_widget_destroy(sxd->dialog);
 }
 
 static
@@ -1165,7 +1165,12 @@ scheduledxaction_dialog_destroy(GtkObject *object, gpointer data)
         gnc_unregister_gui_component_by_data
                 (DIALOG_SCHEDXACTION_CM_CLASS, sxd);
 
-        // FIXME: um.  We should free memory and stuff, here.
+        // FIXME: um.  We should free memory and stuff, here...
+        /*
+        GladeXML    *gxml;
+        GncDenseCal *gdcal;
+        GHashTable  *sxData;
+        */
 
         g_free( sxd );
 }
