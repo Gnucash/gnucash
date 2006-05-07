@@ -95,14 +95,19 @@ main (int argc, char **argv)
 
   /* Always start from the same random seed so we fail consistently */
   srand(0);
-  if(cashobjects_register()) {
-    /* Loop the test. */
-    for (i=0; i < 10; i++)
-    {
-      run_test ();
-    }
+  if(!cashobjects_register()) {
+    failure("can't register cashbojects");
+    goto cleanup;
+  }
+
+  /* Loop the test. */
+  for (i=0; i < 10; i++)
+  {
+    run_test ();
   }
   success("queries seem to work");
+
+ cleanup:
   qof_close();
   return 0;
 }
