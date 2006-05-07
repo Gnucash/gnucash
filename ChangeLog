@@ -1,5 +1,8 @@
 2006-05-07  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/engine/Group.c (xaccAccountStagedTransactionTraversal):
+	Simplify.
+
 	* src/engine/test-core/test-engine-stuff.c (make_trans_query):
 	Don't construct queries involving empty strings, as the query
 	processor asserts that string match terms are not empty. Fixes

@@ -1092,33 +1092,22 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
                                                        void *cb_data),
                                        void *cb_data)
 {
+  GList *lp;
   if (!acc) return 0;
 
-  if (callback)
+  for(lp = acc->splits; lp; lp = lp->next)
   {
-    GList *lp;
-    for(lp = acc->splits; lp; lp = lp->next)
+    Split *s = (Split *) lp->data;
+    Transaction *trans = s->parent;   
+    if (trans && (trans->marker < stage))
     {
-      Split *s = (Split *) lp->data;
-      Transaction *trans = s->parent;   
-      if (trans && (trans->marker < stage))
+      trans->marker = stage;
+      if (callback)
       {
         int retval;
-        trans->marker = stage;
         retval = callback(trans, cb_data);
         if (retval) return retval;
       }
-    }
-  }
-  else
-  {
-    GList *lp;
-    for(lp = acc->splits; lp; lp = lp->next)
-    {
-      Split *s = (Split *) lp->data;
-      Transaction *trans = s->parent;      
-      if (trans && (trans->marker < stage))
-        trans->marker = stage;
     }
   }
 
