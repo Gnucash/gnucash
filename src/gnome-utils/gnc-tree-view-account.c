@@ -1423,6 +1423,8 @@ gtva_update_column_names (GncTreeView *view)
   gtva_update_column_name(priv->total_report_column,
 			  /* Translators: %s is a currency mnemonic.*/
 			  _("Total (%s)"), mnemonic);
+  gnc_tree_view_set_show_column_menu(view, FALSE);
+  gnc_tree_view_set_show_column_menu(view, TRUE);
 }
 
 

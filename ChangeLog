@@ -1,5 +1,9 @@
 2006-05-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-tree-view-account.c: Rebuild the column
+	selection menu when the report currency is changed.  Fixes
+	#340243.
+
 	* src/register/register-gnome/gnucash-header.c:
 	* src/gnome-utils/dialog-transfer.c: Trivial replacements for
 	deprecated functions.
