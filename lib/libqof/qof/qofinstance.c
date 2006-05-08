@@ -61,6 +61,7 @@ qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
+	inst->infant = TRUE;
 
 	col = qof_book_get_collection (book, type);
 	qof_entity_init (&inst->entity, type, col);
@@ -70,6 +71,7 @@ void
 qof_instance_release (QofInstance *inst)
 {
 	kvp_frame_delete (inst->kvp_data);
+	inst->kvp_data = NULL;
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
