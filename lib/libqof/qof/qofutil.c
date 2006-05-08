@@ -231,14 +231,18 @@ qof_begin_edit(QofInstance *inst)
 {
   QofBackend * be;
 
-  if (!inst) { return FALSE; }
-  (inst->editlevel)++;
-  if (1 < inst->editlevel) { return FALSE; }
-  if (0 >= inst->editlevel) { inst->editlevel = 1; }
+  if (!inst) return FALSE;
+  inst->editlevel++;
+  if (1 < inst->editlevel) return FALSE;
+  if (0 >= inst->editlevel) 
+      inst->editlevel = 1;
+
   be = qof_book_get_backend (inst->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
-  } else { inst->dirty = TRUE; }
+  if (be && qof_backend_begin_exists(be))
+      qof_backend_run_begin(be, inst);
+  else
+      inst->dirty = TRUE; 
+  
   return TRUE;
 }
 
@@ -246,18 +250,21 @@ gboolean qof_commit_edit(QofInstance *inst)
 {
   QofBackend * be;
 
-  if (!inst) { return FALSE; }
-  (inst->editlevel)--;
-  if (0 < inst->editlevel) { return FALSE; }
+  if (!inst) return FALSE;
+  inst->editlevel--;
+  if (0 < inst->editlevel) return FALSE;
+
   if ((-1 == inst->editlevel) && inst->dirty)
   {
-    be = qof_book_get_backend ((inst)->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
+    be = qof_book_get_backend (inst->book);
+    if (be && qof_backend_commit_exists(be)) {
+        qof_backend_run_commit(be, inst);
     }
-    inst->editlevel = 0;
   }
-  if (0 > inst->editlevel) { inst->editlevel = 0; }
+  if (0 > inst->editlevel) { 
+      PERR ("unbalanced call - resetting (was %d)", inst->editlevel);
+      inst->editlevel = 0;
+  }
   return TRUE;
 }
 

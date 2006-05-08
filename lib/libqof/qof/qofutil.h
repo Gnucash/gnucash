@@ -354,12 +354,12 @@ gboolean qof_begin_edit(QofInstance *inst);
   /* The pricedb suffers from delayed update...     */          \
   /* This may be setting a bad precedent for other types, I fear. */ \
   /* Other types probably really should handle begin like this. */ \
-  if ((-1 == (inst)->editlevel) && (inst)->dirty)                \
+  if ((-1 == (inst)->editlevel) && (inst)->dirty)                   \
   {                                                              \
     QofBackend * be;                                             \
     be = qof_book_get_backend ((inst)->book);                    \
-    if (be && qof_backend_begin_exists(be)) {                    \
-      qof_backend_run_begin(be, (inst));                         \
+    if (be && qof_backend_commit_exists(be)) {                   \
+        qof_backend_run_commit(be, (inst));                      \
     }                                                            \
     (inst)->editlevel = 0;                                       \
   }                                                              \
