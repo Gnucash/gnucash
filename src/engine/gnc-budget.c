@@ -46,6 +46,48 @@ struct gnc_budget_private{
     guint  num_periods;
 };
 
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR ("Failed to commit: %d", errcode);
+}
+
+static void
+gnc_budget_free(QofInstance *inst)
+{
+    GncBudget *budget = GNC_BUDGET(inst);
+    if (budget == NULL)
+        return;
+
+    g_return_if_fail(GNC_IS_BUDGET(budget));
+
+    /* We first send the message that this object is about to be
+     * destroyed so that any GUI elements can remove it before it is
+     * actually gone. */
+    qof_event_gen( &budget->inst.entity, QOF_EVENT_DESTROY, NULL);
+
+    CACHE_REMOVE(budget->name);
+    CACHE_REMOVE(budget->description);
+
+    qof_instance_release (&budget->inst);
+    g_free(budget);
+}
+
+static inline void noop (QofInstance *inst) {}
+
+static void
+gnc_budget_begin_edit(GncBudget *bgt)
+{
+    qof_begin_edit(QOF_INSTANCE(bgt));
+}
+
+static void
+gnc_budget_commit_edit(GncBudget *bgt)
+{
+    if (!qof_commit_edit(QOF_INSTANCE(bgt))) return;
+    qof_commit_edit_part2(QOF_INSTANCE(bgt), commit_err, 
+                          noop, gnc_budget_free);
+}
+
 GncBudget*
 gnc_budget_new(QofBook *book)
 {
@@ -72,24 +114,13 @@ gnc_budget_new(QofBook *book)
 }
 
 void
-gnc_budget_free(GncBudget* budget)
+gnc_budget_destroy(GncBudget *budget)
 {
-    if (budget == NULL)
-        return;
-
     g_return_if_fail(GNC_IS_BUDGET(budget));
-
+    gnc_budget_begin_edit(budget);
     qof_instance_set_dirty(&budget->inst);
-    /* We first send the message that this object is about to be
-     * destroyed so that any GUI elements can remove it before it is
-     * actually gone. */
-    qof_event_gen( &budget->inst.entity, QOF_EVENT_DESTROY, NULL);
-
-    CACHE_REMOVE(budget->name);
-    CACHE_REMOVE(budget->description);
-
-    qof_instance_release (&budget->inst);
-    g_free(budget);
+    budget->inst.do_free = TRUE;
+    gnc_budget_commit_edit(budget);
 }
 
 void
@@ -97,8 +128,10 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
 {
     g_return_if_fail(GNC_IS_BUDGET(budget) && name);
 
+    gnc_budget_begin_edit(budget);
     CACHE_REPLACE(budget->name, name);
     qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -116,8 +149,10 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     g_return_if_fail(GNC_IS_BUDGET(budget));
     g_return_if_fail(description);
 
+    gnc_budget_begin_edit(budget);
     CACHE_REPLACE(budget->description, description);
     qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -133,8 +168,10 @@ void
 gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
 {
     g_return_if_fail(budget && r);
+    gnc_budget_begin_edit(budget);
     budget->recurrence = *r;
     qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen(&budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -158,8 +195,11 @@ void
 gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 {
     g_return_if_fail(GNC_IS_BUDGET(budget));
+
+    gnc_budget_begin_edit(budget);
     budget->num_periods = num_periods;
     qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 }
@@ -185,6 +225,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
     gchar path[BUF_SIZE];
     gchar *bufend;
 
+    gnc_budget_begin_edit(budget);
     frame = qof_instance_get_slots(QOF_INSTANCE(budget));
     guid = xaccAccountGetGUID(account);
     bufend = guid_to_string_buff(guid, path);
@@ -192,6 +233,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, Account *account,
 
     kvp_frame_set_numeric(frame, path, val);
     qof_instance_set_dirty(&budget->inst);
+    gnc_budget_commit_edit(budget);
 
     qof_event_gen( &budget->inst.entity, QOF_EVENT_MODIFY, NULL);
 

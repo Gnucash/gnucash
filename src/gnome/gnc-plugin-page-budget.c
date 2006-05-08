@@ -391,7 +391,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     tree_view = gnc_tree_view_account_new(FALSE);
     g_object_set(G_OBJECT(tree_view), "gconf-section", GCONF_SECTION, NULL);
 
-    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view), "Name", NULL);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view), NULL);
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
@@ -852,7 +852,7 @@ gnc_budget_gui_delete_budget(GncBudget *budget)
 
     if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name)) {
         gnc_suspend_gui_refresh ();
-        gnc_budget_free(budget);
+        gnc_budget_destroy(budget);
         // Views should close themselves because the CM will notify them.
         gnc_resume_gui_refresh ();
     }

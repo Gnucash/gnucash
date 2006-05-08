@@ -212,7 +212,7 @@ dom_tree_to_budget (xmlNodePtr node, QofBook *book)
     bgt = gnc_budget_new(book);
     if (!dom_tree_generic_parse (node, budget_handlers, bgt)) {
         PERR ("failed to parse budget tree");
-        gnc_budget_free(bgt);
+        gnc_budget_destroy(bgt);
         bgt = NULL;
     }
     return bgt;
