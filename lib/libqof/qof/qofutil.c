@@ -254,7 +254,7 @@ gboolean qof_commit_edit(QofInstance *inst)
   inst->editlevel--;
   if (0 < inst->editlevel) return FALSE;
 
-  if ((-1 == inst->editlevel) && inst->dirty)
+  if ((0 == inst->editlevel) && inst->dirty)
   {
     be = qof_book_get_backend (inst->book);
     if (be && qof_backend_commit_exists(be)) {
