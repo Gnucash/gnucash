@@ -512,8 +512,6 @@ xaccSplitCommitEdit(Split *s)
         GList *node = g_list_find (orig_acc->splits, s);
         if (node) {
             orig_acc->splits = g_list_delete_link (orig_acc->splits, node);
-            //FIXME: probably not needed.
-            xaccGroupMarkNotSaved (orig_acc->parent);
             //FIXME: find better event type
             qof_event_gen (&orig_acc->inst.entity, QOF_EVENT_MODIFY, NULL);
 	    // And send the account-based event, too
@@ -539,7 +537,6 @@ xaccSplitCommitEdit(Split *s)
             if (s->lot && (NULL == s->lot->account))
                 xaccAccountInsertLot (acc, s->lot);
 
-            xaccGroupMarkNotSaved (acc->parent); //FIXME: probably not needed.
             //FIXME: find better event
             qof_event_gen (&acc->inst.entity, QOF_EVENT_MODIFY, NULL);
 
@@ -567,6 +564,9 @@ xaccSplitCommitEdit(Split *s)
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
     qof_instance_mark_clean(QOF_INSTANCE(s));
+
+    /* This is because Splits don't call qof_commit_edit(). */
+    qof_instance_set_dirty(QOF_INSTANCE(s->parent));
 
     mark_acc(acc);
     xaccAccountRecomputeBalance(acc);

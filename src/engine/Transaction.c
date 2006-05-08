@@ -219,10 +219,8 @@ void gen_event_trans (Transaction *trans)
     Account *account = s->acc;
     GNCLot *lot = s->lot;
     if (account)
-    {
-      xaccGroupMarkNotSaved (account->parent);
       qof_event_gen (&account->inst.entity, GNC_EVENT_ITEM_CHANGED, s);
-    }
+
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
@@ -867,9 +865,7 @@ destroy_gains (Transaction *trans)
     if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
     {
       Transaction *t = s->gains_split->parent;
-      xaccTransBeginEdit (t);
       xaccTransDestroy (t);
-      xaccTransCommitEdit (t);
       s->gains_split = NULL;
     }
   }
