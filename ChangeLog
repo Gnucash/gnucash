@@ -1,3 +1,8 @@
+2006-05-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/qif-parse.scm:
+	  Bill Nottingham's patch to fix a guile parser problem during build.
+
 2006-05-07  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/Group.c (xaccAccountStagedTransactionTraversal):
