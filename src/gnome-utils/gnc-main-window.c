@@ -3052,24 +3052,22 @@ static void
 gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window)
 {
 #ifdef HAVE_VALGRIND_CALLGRIND_H
-	GncMainWindowPrivate *priv;
-	static struct timeval start, end;
+	static GTimeVal start, end;
 
-	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-	  printf("Start timing.\n");
-	  gettimeofday(&start, NULL);
+	  g_print("Start timing.\n");
+	  g_get_current_time(&start);
 	  CALLGRIND_START_INSTRUMENTATION();
 	  CALLGRIND_TOGGLE_COLLECT();
 	} else {
 	  CALLGRIND_TOGGLE_COLLECT();
 	  CALLGRIND_STOP_INSTRUMENTATION();
-	  gettimeofday(&end, NULL);
+	  g_get_current_time(&end);
 	  if (start.tv_usec > end.tv_usec) {
 	    end.tv_usec += 1000000;
 	    end.tv_sec  -= 1;
 	  }
-	  printf("Callgrind enabled for %d.%6d seconds.\n",
+	  g_print("Callgrind enabled for %d.%6d seconds.\n",
 		 (int)(end.tv_sec - start.tv_sec),
 		 (int)(end.tv_usec - start.tv_usec));
 	}
