@@ -1,3 +1,8 @@
+2006-05-10  Christian Stimming <stimming@tuhh.de>
+
+	* accounts/de_AT/*: Added new Austrian German account templates by
+	Roman Bertle <bertle@smoerz.org>.
+
 2006-05-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-parse.scm:
