@@ -1,3 +1,8 @@
+2006-05-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-io-core/qif-parse.scm:
+	  Same patch as qif-import/qif-parse.scm for guile-1.8.
+
 2006-05-10  Christian Stimming <stimming@tuhh.de>
 
 	* accounts/de_AT/*: Added new Austrian German account templates by
