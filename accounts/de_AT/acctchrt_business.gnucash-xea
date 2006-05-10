@@ -4,11 +4,12 @@
       Kleinunternehmen
     </gnc-act:title>
     <gnc-act:short-description>
-      
+      Grundlegende Konten für Kleinunternehmen
     </gnc-act:short-description>
     <gnc-act:long-description>
       Kleinunternehmer können diesen Kontorahmen anstelle der anderen Kontorahmen verwenden. Sie finden hier die grundlegenden Konten für ein Kleinunternehmen wie Forderungen, Verbindlichkeiten, Steuer, Aufwendungen und Erträge.
   </gnc-act:long-description>    
+  <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
   <act:name>Aktiva</act:name>
   <act:id type="new">8b3e42f98f52f948584d9548c018561e</act:id>
