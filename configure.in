@@ -304,19 +304,29 @@ AC_SUBST(G_WRAP_LIB_DIR)
 
 AS_SCRUB_INCLUDE(CFLAGS)
 
-AC_MSG_CHECKING([for (g-wrap runtime) guile module])
-if GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
-        ${GUILE} -c "(use-modules (g-wrap runtime))" > /dev/null 2>&1
+AC_MSG_CHECKING([for (g-wrap gw-standard) guile module])
+if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
+  GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+        ${GUILE} -c "(use-modules (g-wrap gw-standard))" > /dev/null 2>&1
 then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_MSG_WARN([
+  AC_MSG_CHECKING([for (g-wrap gw standard) guile module])
+  if LD_LIBRARY_PATH=$G_WRAP_LIB_DIR:$LD_LIBRARY_PATH \
+    GUILE_LOAD_PATH=$G_WRAP_MODULE_DIR \
+        ${GUILE} -c "(use-modules (g-wrap gw standard))" > /dev/null 2>&1
+  then
+    AC_MSG_RESULT(yes)
+  else
+    AC_MSG_RESULT(no)
+    AC_MSG_WARN([
 
-    Unable to find the g-wrap runtime module, a.k.a. guile-g-wrap. 
+    Unable to find the g-wrap standard module, a.k.a. guile-g-wrap. 
     You won't be able to run GnuCash without it!
 
-  ])
+    ])
+  fi
 fi
 
 ### Check size of long_long - some guile's are broken.
