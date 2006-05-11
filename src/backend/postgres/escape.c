@@ -29,8 +29,6 @@
  */
 
 #include "config.h"
-
-#define _GNU_SOURCE
 #include <glib.h>
 #include <string.h>
 

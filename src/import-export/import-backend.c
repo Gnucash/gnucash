@@ -25,8 +25,6 @@
     @author Christian Stimming
 */
  
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>

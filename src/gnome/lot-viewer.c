@@ -35,8 +35,6 @@
  * XXX clist should be probably be removed and replaced by the gnc_query_list
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>

@@ -28,8 +28,6 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>

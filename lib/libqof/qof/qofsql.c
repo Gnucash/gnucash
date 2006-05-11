@@ -26,8 +26,6 @@
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 
 */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <stdlib.h>   /* for working atoll */

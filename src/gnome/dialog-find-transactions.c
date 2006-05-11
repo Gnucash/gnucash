@@ -20,8 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>

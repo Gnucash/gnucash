@@ -24,9 +24,6 @@
 #ifndef QOFBOOKMERGE_H
 #define QOFBOOKMERGE_H
 
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
 #define QOF_MOD_MERGE "qof-merge"
 
 /** @addtogroup BookMerge

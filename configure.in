@@ -38,6 +38,7 @@ GNUCASH_MICRO_VERSION=`echo $GNUCASH_VERSION_STRING | [ sed -e 's/^\([^\.]*\)\.\
 # Check for gcc and intltool (somehow breaks the suggested content
 # order, doesn't it? Whatever.)
 AC_PROG_CC
+AC_GNU_SOURCE
 AC_PROG_INTLTOOL
 
 AM_GCONF_SOURCE_2

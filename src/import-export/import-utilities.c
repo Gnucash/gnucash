@@ -23,8 +23,6 @@
     @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
 */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 

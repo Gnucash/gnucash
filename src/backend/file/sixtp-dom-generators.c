@@ -23,7 +23,6 @@
 
 #include "config.h"
 
-#define _GNU_SOURCE
 #define __EXTENSIONS__
 
 #include <glib.h>

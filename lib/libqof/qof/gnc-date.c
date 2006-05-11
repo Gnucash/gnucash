@@ -24,7 +24,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE
 #define __EXTENSIONS__
 
 #include "config.h"

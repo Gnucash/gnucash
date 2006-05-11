@@ -21,10 +21,9 @@
  *                                                                   *
  ********************************************************************/
  /* Test the qof_book_merge infrastructure. */
- 
-#include <glib.h>
 
-#define _GNU_SOURCE
+#include "config.h" 
+#include <glib.h>
 
 #include "qof.h"
 #include "test-stuff.h"

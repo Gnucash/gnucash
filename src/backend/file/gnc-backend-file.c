@@ -28,8 +28,6 @@
  * restoring data to/from an ordinary Unix filesystem file.
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
