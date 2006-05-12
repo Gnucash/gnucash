@@ -1,3 +1,8 @@
+2006-05-12  Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-plugin-hbci.c: Add the Tools->HBCI
+	Setup menu item to the register tabs as well. Bug#341510.
+
 2006-05-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-io-core/qif-parse.scm:
