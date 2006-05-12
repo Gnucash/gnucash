@@ -1,7 +1,7 @@
-lib_LTLIBRARIES = libqof.la
+lib_LTLIBRARIES = libgncqof.la
 
-libqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
-libqof_la_LIBADD= \
+libgncqof_la_LDFLAGS= -version-info $(LIBQOF_LIBRARY_VERSION)
+libgncqof_la_LIBADD= \
   $(GLIB_LIBS) \
   $(top_builddir)/lib/libc/libc-missing.la
 
@@ -9,7 +9,7 @@ AM_CFLAGS = \
   $(GLIB_CFLAGS) \
   -I$(top_srcdir)/lib/libc
 
-libqof_la_SOURCES =  \
+libgncqof_la_SOURCES =  \
    deprecated.c      \
    gnc-date.c        \
    gnc-numeric.c     \

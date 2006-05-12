@@ -104,9 +104,9 @@
 #include "deprecated.h"
 
 /** allow easy logging of QSF debug messages */
-#define QOF_MOD_QSF "qof-backend-qsf"
+#define QOF_MOD_QSF "gncqof-backend-qsf"
 /** allow easy loading of the QSF backend */
-#define QSF_BACKEND_LIB "libqof-backend-qsf"
+#define QSF_BACKEND_LIB "libgncqof-backend-qsf"
 /** allow easy loading of the QSF backend */
 #define QSF_MODULE_INIT "qsf_provider_init"
 

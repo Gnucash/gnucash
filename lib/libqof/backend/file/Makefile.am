@@ -1,6 +1,6 @@
 SUBDIRS = . 
 
-lib_LTLIBRARIES = libqof-backend-qsf.la
+lib_LTLIBRARIES = libgncqof-backend-qsf.la
 
 AM_CFLAGS = \
   -I.. -I../.. \
@@ -9,12 +9,12 @@ AM_CFLAGS = \
   ${LIBXML2_CFLAGS} \
   ${GLIB_CFLAGS}
 
-libqof_backend_qsf_la_SOURCES = \
+libgncqof_backend_qsf_la_SOURCES = \
   qsf-backend.c \
   qsf-xml-map.c \
   qsf-xml.c
 
-libqof_backend_qsf_la_LIBADD = \
+libgncqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \
  ${LIBXML2_LIBS}

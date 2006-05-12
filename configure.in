@@ -442,10 +442,11 @@ LIBS="$oLIBS"
 dnl XXX: FIXME: RELEASE HACK
 dnl This makes sure that we default to using internal QOF for SVN.
 dnl Make sure to enable this to be the default for stable releases!
-dnl
+
 AC_ARG_ENABLE(qof,
   [  --enable-qof     enable the search for an external QOF library (disabled)],
-  [case "${enableval}" in
+  [AC_MSG_ERROR([GnuCash has disabled use of external QOF.])
+   case "${enableval}" in
      yes) gnc_enable_qof=true ;;
      no)  gnc_enable_qof=false ;;
      *) AC_MSG_ERROR(bad value ${enableval} for --enable-qof) ;;
@@ -489,10 +490,10 @@ fi
 if test x$QOF_XML_DIR = x; then
 	QOF_LIB_DIR='${libdir}'
 	QOF_CFLAGS='-I${top_builddir}/lib/libqof/qof -I${top_srcdir}/lib/libqof/qof'
-	QOF_LIBS='${top_builddir}/lib/libqof/qof/libqof.la'
+	QOF_LIBS='${top_builddir}/lib/libqof/qof/libgncqof.la'
 	QOF_VERSION="internal"
 	QOF_PREFIX="internal"
-	QOF_XML_DIR='${datadir}/xml/qsf'
+	QOF_XML_DIR='${pkgdatadir}/xml/qsf'
 	LIBQOF_LIBRARY_VERSION=1:4:0
 	LIBQOF_BACKEND_QSF_LIBRARY_VERSION=0:3:0
 	AC_SUBST(LIBQOF_LIBRARY_VERSION)
@@ -2303,6 +2304,7 @@ AC_CONFIG_FILES(po/Makefile.in
 )
 AC_OUTPUT
 
+pkgdatadir=${prefix}/${PACKAGE}
 output_qof_prefix=`eval eval eval echo $QOF_PREFIX`
 output_qof_lib_dir=`eval eval eval echo $QOF_LIB_DIR`
 output_qof_xml_dir=`eval eval eval echo $QOF_XML_DIR`

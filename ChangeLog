@@ -8,6 +8,17 @@
 	* src/engine/gnc-engine.c:
 	  Use QSF #defines instead of hard-coding the library name and init-fcn
 
+	* lib/libqof/qof/Makefile.am:
+	  change the name of our qof library
+	* lib/libqof/backend/file/Makefile.am:
+	  change the name of our qsf library
+	* lib/libqof/qof/qof.h:
+	  point to the newly named qsf library
+	* configure.in:
+	  Error out if the user calls --enable-qof
+	  Change the name of the internal qof library and directories
+	  so that our qof can co-exist with a "native" qof
+
 2006-05-12  Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-plugin-hbci.c: Add the Tools->HBCI
