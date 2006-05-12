@@ -334,18 +334,15 @@ gnc_counter_end_handler(gpointer data_for_children,
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
     sixtp_gdv2 *sixdata = (sixtp_gdv2*)gdata->parsedata;
+    gboolean ret = TRUE;
     
-    if(parent_data)
-    {
+    if (parent_data)
         return TRUE;
-    }
 
     /* OK.  For some messed up reason this is getting called again with a
        NULL tag.  So we ignore those cases */
-    if(!tag)
-    {
+    if (!tag)
         return TRUE;
-    }
     
     g_return_val_if_fail(tree, FALSE);
 
@@ -355,37 +352,33 @@ gnc_counter_end_handler(gpointer data_for_children,
      * tag itself. This should be changed to 'type' at some point. */
     type = (char*)xmlGetProp(tree, BAD_CAST "cd:type");
     strval = dom_tree_to_text(tree);
-    if(!string_to_gint64(strval, &val))
+    if (!string_to_gint64(strval, &val))
     {
         PERR ("string_to_gint64 failed with input: %s",
                   strval ? strval : "(null)");
-        g_free (strval);
-        xmlFree (type);
-        return FALSE;
+        ret = FALSE;
     }
-    g_free (strval);
-
-    if(safe_strcmp(type, "transaction") == 0)
+    else if (safe_strcmp(type, "transaction") == 0)
     {
         sixdata->counter.transactions_total = val;
     }
-    else if(safe_strcmp(type, "account") == 0)
+    else if (safe_strcmp(type, "account") == 0)
     {
         sixdata->counter.accounts_total = val;
     }
-    else if(safe_strcmp(type, "book") == 0)
+    else if (safe_strcmp(type, "book") == 0)
     {
         sixdata->counter.books_total = val;
     }
-    else if(safe_strcmp(type, "commodity") == 0)
+    else if (safe_strcmp(type, "commodity") == 0)
     {
         sixdata->counter.commodities_total = val;
     }
-    else if(safe_strcmp(type, "schedxaction") == 0)
+    else if (safe_strcmp(type, "schedxaction") == 0)
     {
         sixdata->counter.schedXactions_total = val;
     }
-    else if(safe_strcmp(type, "budget") == 0)
+    else if (safe_strcmp(type, "budget") == 0)
     {
         sixdata->counter.budgets_total = val;
     }
@@ -401,21 +394,20 @@ gnc_counter_end_handler(gpointer data_for_children,
       if (be_data.ok == FALSE)
       {
         PERR("Unknown type: %s", type ? type : "(null)");
-        xmlFree (type);
 	/* Do *NOT* flag this as an error. Gnucash 1.8 writes invalid
 	 * xml by writing the 'cd:type' attribute without providing
 	 * the namespace in the gnc:count-data tag.  The parser is
 	 * entirely within its rights to refuse to read this bad
 	 * attribute. Gnucash will function correctly without the data
 	 * in this tag, so just let the error pass. */
-        return TRUE;
+        ret = FALSE;
       }
     }
 
+    g_free (strval);
     xmlFree (type);
     xmlFreeNode(tree);
-
-    return TRUE;
+    return ret;
 }
 
 static sixtp*
