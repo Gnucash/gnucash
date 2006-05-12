@@ -97,7 +97,7 @@ gnc_engine_init(int argc, char ** argv)
   cashobjects_register();
 
   g_return_if_fail((qof_load_backend_library 
-		(QOF_LIB_DIR, "libqof-backend-qsf", "qsf_provider_init")));
+		(QOF_LIB_DIR, QSF_BACKEND_LIB, QSF_MODULE_INIT)));
   g_return_if_fail((qof_load_backend_library
 		(GNC_LIBDIR, GNC_LIB_NAME, GNC_LIB_INIT)));
 

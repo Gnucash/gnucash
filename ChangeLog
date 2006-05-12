@@ -5,6 +5,9 @@
 	  Make sure to properly define _GNU_SOURCE in sub-config files.
 	  The build was broken without this.
 
+	* src/engine/gnc-engine.c:
+	  Use QSF #defines instead of hard-coding the library name and init-fcn
+
 2006-05-12  Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-plugin-hbci.c: Add the Tools->HBCI
