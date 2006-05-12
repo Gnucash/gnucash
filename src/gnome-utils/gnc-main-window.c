@@ -1587,7 +1587,7 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
 					   GncPluginPage *page)
 {
   ENTER("");
-  gnc_main_window_tab_entry_activate(entry, page);
+  gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(entry));
   LEAVE("");
   return FALSE;
 }
