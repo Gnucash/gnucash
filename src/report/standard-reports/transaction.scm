@@ -1293,9 +1293,9 @@ Credit Card, and Income accounts")))))
                                          #t)
 
 	  (case void-status
-	   (('non-void-only) 
+	   ((non-void-only) 
 	    (gnc:query-set-match-non-voids-only! query (gnc:get-current-book)))
-	   (('void-only)
+	   ((void-only)
 	    (gnc:query-set-match-voids-only! query (gnc:get-current-book)))
 	   (else #f))
 

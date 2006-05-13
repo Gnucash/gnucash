@@ -204,44 +204,58 @@
   (define (basis-builder b-list b-units b-value b-method)
     (if (gnc:numeric-positive-p b-units)
 	(case b-method
-	  ('average-basis (if (not (eqv? b-list '()))
-			      (list (cons (gnc:numeric-add b-units (caar b-list) 10000 GNC-RND-ROUND) 
-					  (gnc:numeric-div (gnc:numeric-add b-value
-									    (gnc:numeric-mul (caar b-list)
-											     (cdar b-list) 
-											     10000 GNC-RND-ROUND)
-									    10000 GNC-RND-ROUND)
-							   (gnc:numeric-add b-units (caar b-list) 10000 GNC-RND-ROUND)
-							   10000 GNC-RND-ROUND)))
-			      (append b-list (list (cons b-units (gnc:numeric-div b-value b-units 10000 GNC-RND-ROUND))))
-			      )
-			  )
-	  (else (append b-list (list (cons b-units (gnc:numeric-div b-value b-units 10000 GNC-RND-ROUND)))))
-	  )
+	  ((average-basis) 
+           (if (not (eqv? b-list '()))
+               (list (cons (gnc:numeric-add b-units 
+                                            (caar b-list) 10000 GNC-RND-ROUND) 
+                           (gnc:numeric-div 
+                            (gnc:numeric-add b-value
+                                             (gnc:numeric-mul (caar b-list)
+                                                              (cdar b-list) 
+                                                              10000 GNC-RND-ROUND)
+                                             10000 GNC-RND-ROUND)
+                            (gnc:numeric-add b-units 
+                                             (caar b-list) 10000 GNC-RND-ROUND)
+                            10000 GNC-RND-ROUND)))
+               (append b-list 
+                       (list (cons b-units (gnc:numeric-div 
+                                            b-value b-units 10000 
+                                            GNC-RND-ROUND))))))
+	  (else (append b-list 
+                        (list (cons b-units (gnc:numeric-div 
+                                             b-value b-units 10000 
+                                             GNC-RND-ROUND))))))
 	(if (not (eqv? b-list '()))
 	    (case b-method
-	      ('fifo-basis (if (not (= -1 (gnc:numeric-compare (gnc:numeric-abs b-units) (caar b-list))))
-			       (basis-builder (cdr b-list) (gnc:numeric-add 
-							    b-units 
-							    (caar b-list) 10000 GNC-RND-ROUND) 
-					      b-value b-method)
-			       (append (list (cons (gnc:numeric-add 
-						    b-units 
-						    (caar b-list) 10000 GNC-RND-ROUND) 
-						   (cdar b-list))) (cdr b-list))))
-	      ('filo-basis (if (not (= -1 (gnc:numeric-compare (gnc:numeric-abs b-units) (caar (reverse b-list)))))
-			       (basis-builder (reverse (cdr (reverse b-list))) (gnc:numeric-add 
-										b-units 
-										(caar (reverse b-list)) 
-										10000 GNC-RND-ROUND) 
-					      b-value b-method)
-			       (append (cdr (reverse b-list)) (list (cons (gnc:numeric-add 
-									   b-units 
-									   (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
-									  (cdar (reverse b-list)))))))
-	      ('average-basis (list (cons (gnc:numeric-add (caar b-list) b-units 10000 GNC-RND-ROUND) 
-					  (cdar b-list))))
-	      )
+	      ((fifo-basis) 
+               (if (not (= -1 (gnc:numeric-compare 
+                               (gnc:numeric-abs b-units) (caar b-list))))
+                   (basis-builder (cdr b-list) (gnc:numeric-add 
+                                                b-units 
+                                                (caar b-list) 10000 GNC-RND-ROUND) 
+                                  b-value b-method)
+                   (append (list (cons (gnc:numeric-add 
+                                        b-units 
+                                        (caar b-list) 10000 GNC-RND-ROUND) 
+                                       (cdar b-list))) (cdr b-list))))
+	      ((filo-basis) 
+               (if (not (= -1 (gnc:numeric-compare 
+                               (gnc:numeric-abs b-units) (caar (reverse b-list)))))
+                   (basis-builder (reverse (cdr (reverse b-list))) 
+                                  (gnc:numeric-add 
+                                   b-units 
+                                   (caar (reverse b-list)) 
+                                   10000 GNC-RND-ROUND) 
+                                  b-value b-method)
+                   (append (cdr (reverse b-list)) 
+                           (list (cons (gnc:numeric-add 
+                                        b-units 
+                                        (caar (reverse b-list)) 10000 GNC-RND-ROUND) 
+                                       (cdar (reverse b-list)))))))
+	      ((average-basis) 
+               (list (cons (gnc:numeric-add 
+                            (caar b-list) b-units 10000 GNC-RND-ROUND) 
+                           (cdar b-list)))))
 	    '()
 	    )
 	)
@@ -581,14 +595,14 @@
                (pricedb (gnc:book-get-pricedb (gnc:get-current-book)))
                (price-fn
                 (case price-source
-                  ('pricedb-latest 
+                  ((pricedb-latest) 
                    (lambda (foreign date) 
                     (gnc:pricedb-lookup-latest-any-currency pricedb foreign)))
-                  ('pricedb-nearest 
+                  ((pricedb-nearest) 
                    (lambda (foreign date) 
                     (gnc:pricedb-lookup-nearest-in-time-any-currency
 		     pricedb foreign (gnc:timepair-canonical-day-time date))))
-		  ('pricedb-latest-before
+		  ((pricedb-latest-before)
 		   (lambda (foreign date)
 		     (gnc:pricedb-lookup-latest-before-any-currency
 		      pricedb foreign (gnc:timepair-canonical-day-time date))))))
