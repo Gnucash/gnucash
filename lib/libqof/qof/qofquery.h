@@ -276,8 +276,11 @@ QofQuery * qof_query_invert(QofQuery *q);
  *  search for the set type.  If neither query has the search-type set,
  *  the result will be unset as well.
  *
- *  This will return a newly allocated QofQuery object, or NULL
- *  on error. Free it with qof_query_destroy() when no longer needed.
+ *  This will return a newly allocated QofQuery object, or NULL on
+ *  error. Free it with qof_query_destroy() when no longer needed.
+ *  Note that if either input query is NULL then the returned query is
+ *  NOT newly allocated -- it will return the non-NULL query.  You
+ *  only need to call this function when both q1 and q2 are non-NULL.
  */
 QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op);
 

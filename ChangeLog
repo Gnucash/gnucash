@@ -1,3 +1,8 @@
+2006-05-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/lib/libqof/qof/qofquery.h:
+	  Fix the documentation of qof_query_merge for degenerate cases.
+
 2006-05-12  Derek Atkins <derek@ihtfp.com>
 
 	* goffice-config.h.in:
