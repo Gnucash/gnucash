@@ -400,7 +400,7 @@ gnc_counter_end_handler(gpointer data_for_children,
 	 * entirely within its rights to refuse to read this bad
 	 * attribute. Gnucash will function correctly without the data
 	 * in this tag, so just let the error pass. */
-        ret = FALSE;
+        ret = TRUE;
       }
     }
 
