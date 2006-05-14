@@ -1,5 +1,9 @@
 2006-05-14  Joshua Sled  <jsled@asynchronous.org>
 
+	* packaging/gnucash-1.9.x.ebuild (DEPEND): Cleanups from Ed Catmur
+	<ed@catmur.co.uk> for better Gentoo-iness, doc install,
+	/usr/bin/gnucash-${version} symlink, .desktop install.
+
 	* src/engine/gw-engine-spec.scm: expose gnc:book-get-template-group
 
 	* src/report/standard-reports/general-journal.scm
