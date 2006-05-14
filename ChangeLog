@@ -3,6 +3,9 @@
 	* src/lib/libqof/qof/qofquery.h:
 	  Fix the documentation of qof_query_merge for degenerate cases.
 
+	* po/el.po: Updated Greek translation by Nikos Charonitakis
+	  <nikosx@gmail.com>
+
 2006-05-12  Derek Atkins <derek@ihtfp.com>
 
 	* goffice-config.h.in:
