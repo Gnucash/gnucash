@@ -36,6 +36,7 @@ TESTS = \
   test-create-account \
   test-group-vs-book \
   test-lots \
+  test-period \
   test-querynew \
   test-query \
   test-recursive \
@@ -47,7 +48,6 @@ TESTS = \
   test-recurrence \
   test-scm-query \
   test-book-merge 
-# test-period
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -71,6 +71,7 @@ noinst_PROGRAMS = \
   test-guid \
   test-group-vs-book \
   test-load-engine \
+  test-period \
   test-lots \
   test-numeric \
   test-book-merge \
@@ -83,7 +84,6 @@ noinst_PROGRAMS = \
   test-split-vs-account \
   test-transaction-reversal \
   test-transaction-voiding
-#  test-period
 
 
 test_link_SOURCES = test-link.c
