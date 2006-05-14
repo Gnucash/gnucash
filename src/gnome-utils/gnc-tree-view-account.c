@@ -644,8 +644,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
 				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
 				sort_by_string);
-  gnc_tree_view_add_toggle_column
-    (view, _("Placeholder"),
+  gnc_tree_view_add_toggle_column(view, _("Placeholder"),
      /* Translators: This string has a context prefix; the translation
 	must only contain the part after the | character. */
      Q_("Column letter for 'Placeholder'|P"),
@@ -659,7 +658,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   gtva_update_column_names(view);
 
   /* By default only the first column is visible. */
-  gnc_tree_view_configure_columns(view, NULL);
+  gnc_tree_view_configure_columns(view);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
 					  gnc_tree_view_account_filter_helper,
 					  view,

@@ -403,6 +403,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	GtkTreeSelection *selection;
 	GtkTreeView *tree_view;
 	GtkWidget *scrolled_window;
+	GtkTreeViewColumn *col;
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
@@ -423,8 +424,13 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 			    TRUE, TRUE, 0);
 
 	tree_view = gnc_tree_view_account_new(FALSE);
-	gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view),
-					"description", "total", NULL);
+	col = gnc_tree_view_find_column_by_name(
+	    GNC_TREE_VIEW(tree_view), "description");
+	g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+	col = gnc_tree_view_find_column_by_name(
+	    GNC_TREE_VIEW(tree_view), "total");
+	g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+	gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
 	g_object_set(G_OBJECT(tree_view),
 		     "gconf-section", GCONF_SECTION,
 		     "show-column-menu", TRUE,

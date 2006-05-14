@@ -117,7 +117,6 @@ static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
 typedef struct GncTreeViewPrivate
 {
   GtkTooltips       *title_tips;
-  GSList            *default_visible;
 
   /*  Spacer column */
   GtkTreeViewColumn *spacer_column;
@@ -248,7 +247,6 @@ gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
   gnc_gobject_tracking_remember(G_OBJECT(view), G_OBJECT_CLASS(klass));
 
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-  priv->default_visible = NULL;
   priv->column_menu = NULL;
   priv->show_column_menu = FALSE;
   priv->gconf_section = NULL;
@@ -342,7 +340,6 @@ gnc_tree_view_destroy (GtkObject *object)
 {
   GncTreeView *view;
   GncTreeViewPrivate *priv;
-  GSList *slist;
 
   ENTER("view %p", object);
   g_return_if_fail (object != NULL);
@@ -353,12 +350,6 @@ gnc_tree_view_destroy (GtkObject *object)
   gnc_tree_view_remove_gconf(view);
 
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-  if (priv->default_visible) {
-    slist = priv->default_visible;
-    priv->default_visible = NULL;
-    g_slist_foreach(slist, (GFunc)g_free, NULL);
-    g_slist_free(slist);
-  }
 
   if (priv->column_menu) {
     DEBUG("removing column selection menu");
@@ -499,11 +490,10 @@ view_column_find_by_model_id (GncTreeView *view,
  *
  *  @param id The "pref name" to find.
  *
- *  @internal
  */
-static GtkTreeViewColumn *
-view_column_find_by_name (GncTreeView *view,
-			  const gchar *wanted)
+GtkTreeViewColumn *
+gnc_tree_view_find_column_by_name (GncTreeView *view,
+                                   const gchar *wanted)
 {
   GtkTreeViewColumn *column, *found = NULL;
   GList *column_list, *tmp;
@@ -827,15 +817,15 @@ gnc_tree_view_column_visible (GncTreeView *view,
       return visible;
     }
 
-    visible =  (g_slist_find_custom(priv->default_visible, pref_name,
-				    (GCompareFunc)strcmp) != NULL);
+    visible = column ? 
+        (g_object_get_data(G_OBJECT(column), DEFAULT_VISIBLE) != NULL) : FALSE;
     LEAVE("%d, gconf but using defaults", visible);
     return visible;
   }
 
   /* Check the default columns list */
-  visible = (g_slist_find_custom(priv->default_visible, pref_name,
-				 (GCompareFunc)strcmp) != NULL);
+  visible = column ? 
+      (g_object_get_data(G_OBJECT(column), DEFAULT_VISIBLE) != NULL) : FALSE;
   LEAVE("defaults says %d", visible);
   return visible;
 }
@@ -943,7 +933,7 @@ gnc_tree_view_set_sort_column (GncTreeView *view,
   gint model_column, current;
 
   priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-  column = view_column_find_by_name(view, name);
+  column = gnc_tree_view_find_column_by_name(view, name);
   if (!column)
     return;
 
@@ -992,7 +982,7 @@ gnc_tree_view_set_column_order (GncTreeView *view,
   columns = NULL;
   for (tmp = column_names; tmp; tmp = g_slist_next(tmp)) {
     name = gconf_value_get_string(tmp->data);
-    column = view_column_find_by_name(view, name);
+    column = gnc_tree_view_find_column_by_name(view, name);
     if (!column)
       continue;
     columns = g_slist_append(columns, column);
@@ -1077,7 +1067,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
 
     if (strcmp(type_name, GCONF_KEY_VISIBLE) == 0) {
       priv->seen_gconf_visibility = TRUE;
-      column = view_column_find_by_name(view, column_name);
+      column = gnc_tree_view_find_column_by_name(view, column_name);
       if (column) {
 	known = TRUE;
 	if (!g_object_get_data(G_OBJECT(column), ALWAYS_VISIBLE)) {
@@ -1086,7 +1076,7 @@ gnc_tree_view_gconf_changed (GConfClient *client,
       }
     } else if (strcmp(type_name, GCONF_KEY_WIDTH) == 0) {
       width = gconf_value_get_int(value);
-      column = view_column_find_by_name(view, column_name);
+      column = gnc_tree_view_find_column_by_name(view, column_name);
       if (column) {
 	known = TRUE;
 	if (width && (width != gtk_tree_view_column_get_width(column))) {
@@ -1553,7 +1543,7 @@ void gnc_tree_view_expand_columns (GncTreeView *view,
 
   /* Now enable it on the requested columns. */
   while (name != NULL) {
-    column = view_column_find_by_name (view, name);
+    column = gnc_tree_view_find_column_by_name(view, name);
     if (column != NULL) {
       gtk_tree_view_column_set_expand(column, TRUE);
       hide_spacer = TRUE;
@@ -1645,62 +1635,46 @@ gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model)
   }
 }
 
-/** Configure (by name) the default set of visible columns in an gnc
- *  tree view.  This is the list of columns that will be shown if the
- *  view isn't using gconf to manage column visibility.  If gconf is
- *  used, this list will be used the very first time the view is
- *  presented to the user, then gconf will be used after that.  The
- *  available list of columns can be found in the file
- *  gnc-tree-view-xxx.c.
- *
- *  Parameters are defined in gnc-tree-view.h
- */
+static gint 
+gnc_tree_view_count_visible_columns(GncTreeView *view)
+{
+    GList *columns, *node;
+    gint count = 0;
+
+    columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
+    for (node = columns; node; node = node->next) {
+        GtkTreeViewColumn *col = GTK_TREE_VIEW_COLUMN(node->data);
+        if (gnc_tree_view_column_visible (view, col, NULL))
+            count++;
+    }
+    g_list_free(columns);
+    return count;
+}
+
 void
-gnc_tree_view_configure_columns (GncTreeView *view,
-				 gchar *first_column_name,
-				 ...)
+gnc_tree_view_configure_columns (GncTreeView *view)
 {
   GncTreeViewPrivate *priv;
   GtkTreeViewColumn *column;
-  GSList *slist;
   GList *columns;
-  gchar *name;
   gboolean hide_spacer;
-  va_list args;
 
   g_return_if_fail(GNC_IS_TREE_VIEW(view));
 
   ENTER(" ");
-  /* Delete any old list of column names */
-  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-  if (priv->default_visible) {
-    slist = priv->default_visible;
-    priv->default_visible = NULL;
-    g_slist_foreach(slist, (GFunc)g_free, NULL);
-    g_slist_free(slist);
-  }
-
-  /* Build a new list */
-  va_start (args, first_column_name);
-  name = first_column_name;
-  while (name != NULL) {
-    priv->default_visible =
-      g_slist_append(priv->default_visible, g_strdup(name));
-    name = va_arg(args, gchar*);
-  }
-  va_end (args);
 
   /* Update the view and gconf */
   columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
   g_list_foreach(columns, (GFunc)gnc_tree_view_update_visibility, view);
   g_list_free(columns);
 
+  priv = GNC_TREE_VIEW_GET_PRIVATE(view);
   if (priv->gconf_section)
     priv->seen_gconf_visibility = TRUE;
 
   /* If only the first column is visible, hide the spacer and make that
    * column expand. */
-  hide_spacer = (first_column_name == NULL);
+  hide_spacer = (gnc_tree_view_count_visible_columns(view) == 1);
   column = gtk_tree_view_get_column(GTK_TREE_VIEW(view), 0);
   gtk_tree_view_column_set_expand(column, hide_spacer);
   gtk_tree_view_column_set_visible(priv->spacer_column, !hide_spacer);

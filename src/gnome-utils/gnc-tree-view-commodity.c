@@ -359,6 +359,7 @@ gnc_tree_view_commodity_new (QofBook *book,
 {
   GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
+  GtkTreeViewColumn *col;
   gnc_commodity_table *ct;
   va_list var_args;
 
@@ -389,64 +390,69 @@ gnc_tree_view_commodity_new (QofBook *book,
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-  gnc_tree_view_add_text_column (view, _("Namespace"), "namespace", NULL,
-				 "NASDAQ",
-				 GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
-				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("Symbol"), "symbol", NULL,
-				 "ACMEACME",
-				 GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("Name"), "name", NULL,
-				 "Acme Corporation, Inc.",
-				 GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("Print Name"), "printname", NULL,
-				 "ACMEACME (Acme Corporation, Inc.)",
-				 GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("Unique Name"), "uniquename", NULL,
-				 "NASDAQ::ACMEACME",
-				 GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("CUSIP code"), "cusip_code", NULL,
-				 "QWERTYUIOP",
-				 GNC_TREE_MODEL_COMMODITY_COL_CUSIP,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_numeric_column (view, _("Fraction"), "fraction", "10000",
-				    GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
-				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-				    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				    sort_by_fraction);
-  gnc_tree_view_add_toggle_column
-    (view, _("Get Quotes"),
-     /* Translators: This string has a context prefix; the translation
-	must only contain the part after the | character. */
-     Q_("Column letter for 'Get Quotes'|Q"),
-     "quote_flag",
-     GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
-     GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-     sort_by_quote_flag,
-     NULL);
-  gnc_tree_view_add_text_column (view, _("Source"), "quote_source", NULL,
-				 "yahoo",
-				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-  gnc_tree_view_add_text_column (view, _("Timezone"), "quote_timezone", NULL,
-				 "America/New_York",
-				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
-				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-				 sort_by_commodity_string);
-
-  gnc_tree_view_configure_columns(view, "symbol", "name", "cusip_code",
-				  "fraction", NULL);
+  col = gnc_tree_view_add_text_column (
+      view, _("Namespace"), "namespace", NULL, "NASDAQ",
+      GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
+      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+      sort_by_commodity_string);
+  col = gnc_tree_view_add_text_column (
+      view, _("Symbol"), "symbol", NULL, "ACMEACME",
+      GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_text_column (
+      view, _("Name"), "name", NULL, "Acme Corporation, Inc.",
+      GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_text_column (
+      view, _("Print Name"), "printname", NULL,
+      "ACMEACME (Acme Corporation, Inc.)",
+      GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  col = gnc_tree_view_add_text_column (
+      view, _("Unique Name"), "uniquename", NULL,
+      "NASDAQ::ACMEACME", GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY, 
+      sort_by_commodity_string);
+  col = gnc_tree_view_add_text_column (
+      view, _("CUSIP code"), "cusip_code", NULL, "QWERTYUIOP",
+      GNC_TREE_MODEL_COMMODITY_COL_CUSIP,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_numeric_column (
+      view, _("Fraction"), "fraction", "10000",
+      GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
+      GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_fraction);
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  col = gnc_tree_view_add_toggle_column(
+      view, _("Get Quotes"),
+      /* Translators: This string has a context prefix; the translation
+         must only contain the part after the | character. */
+      Q_("Column letter for 'Get Quotes'|Q"), "quote_flag",
+      GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_quote_flag,
+      NULL);
+  col = gnc_tree_view_add_text_column (
+      view, _("Source"), "quote_source", NULL, "yahoo",
+      GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  col = gnc_tree_view_add_text_column (
+      view, _("Timezone"), "quote_timezone", NULL, "America/New_York",
+      GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
+      GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+      sort_by_commodity_string);
+  
+  g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  gnc_tree_view_configure_columns(view);
 
   gtk_widget_show(GTK_WIDGET(view));
   LEAVE(" %p", view);

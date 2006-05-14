@@ -70,6 +70,11 @@ GType gnc_tree_view_get_type (void);
    values: GINT_TO_POINTER(0) and GINT_TO_POINTER(1) */
 #define ALWAYS_VISIBLE  "always-visible"
 
+/* This attribute controls visibility of a non-gconf column or a gconf
+   column before a visibility preference has been recorded. Valid values:
+   GINT_TO_POINTER(0) and GINT_TO_POINTER(1)  */
+#define DEFAULT_VISIBLE  "default-visible"
+
 #define GNC_TREE_VIEW_COLUMN_DATA_NONE -1
 #define GNC_TREE_VIEW_COLUMN_COLOR_NONE -1
 #define GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS -1
@@ -289,21 +294,27 @@ gint gnc_tree_view_append_column (GncTreeView *view,
  */
 void gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model);
 
-/** Configure (by name) the default set of visible columns in an gnc
- *  tree view.  This is the list of columns that will be shown if the
- *  view isn't using gconf to manage column visibility.  If gconf is
- *  used, this list will be used the very first time the view is
- *  presented to the user, then gconf will be used after that.  The
- *  available list of columns can be found in the file
- *  gnc-tree-view-xxx.c.
+/** Make all the correct columns visible, respecting their default
+ *  visibility setting, their "always" visibility setting, and their
+ *  gconf visibility settings, if managed by gconf.
  *
  *  @param view A pointer to an gnc tree view.
- *
- *  @param column_names A list of column names to make visible.
  */
-void gnc_tree_view_configure_columns (GncTreeView *view,
-				      gchar *first_column_name,
-				      ...);
+void gnc_tree_view_configure_columns (GncTreeView *view);
+
+/** Find a tree column given the "pref name" used with gconf.  This
+ *  function simply runs the list of all (visible and invisible)
+ *  columns looking for a match.  Column names were attached to each
+ *  column at the time the column was created.
+ *
+ *  @param view The visible tree widget.
+ *
+ *  @param id The "pref name" to find.
+ *
+ */
+GtkTreeViewColumn *
+gnc_tree_view_find_column_by_name (GncTreeView *view,
+                                   const gchar *wanted);
 
 /** This function is called to set up or remove an association between
  *  a gconf section and the display of a view.  It will first remove
