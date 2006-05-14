@@ -1019,7 +1019,10 @@ xaccTransCommitEdit (Transaction *trans)
       */
      xaccTransScrubImbalance (trans, NULL, NULL);
      /* Get the cap gains into a consistent state as well. */
-     xaccTransScrubGains (trans, NULL);
+     
+     /* Lot Scrubbing is temporarily disabled. */
+     //xaccTransScrubGains (trans, NULL);
+
      /* Allow scrubbing in transaction commit again */
      scrub_data = 1;
    }
