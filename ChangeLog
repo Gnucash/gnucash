@@ -1,3 +1,11 @@
+2006-05-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/engine/gw-engine-spec.scm: expose gnc:book-get-template-group
+
+	* src/report/standard-reports/general-journal.scm
+	(general-journal-options-generator): Filter template
+	transactions out of query; Bug#341609.
+
 2006-05-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/lib/libqof/qof/qofquery.h:

@@ -34,7 +34,8 @@
     "#include <gnc-lot.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-hooks-scm.h>\n"
-    "#include <engine-helpers.h>\n")))
+    "#include <engine-helpers.h>\n"
+    "#include <SX-book.h>\n")))
 
 (gw:wrapset-add-cs-initializers!
  ws
@@ -1473,6 +1474,14 @@ argument between 0 and 100 (inclusive).")
  "xaccGetAccountGroup"
  '((<gnc:Book*> book))
  "Get the book's account group.")
+
+(gw:wrap-function
+ ws
+ 'gnc:book-get-template-group
+ '<gnc:AccountGroup*>
+ "gnc_book_get_template_group"
+ '((<gnc:Book*> book))
+ "Get the book's template account group.")
 
 (gw:wrap-function
  ws
