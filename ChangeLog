@@ -1,3 +1,10 @@
+2006-05-15   Christian Stimming <stimming@tuhh.de>
+
+	* doc/README.german: Updated German README which was horribly
+	outdated.
+
+	* doc/README.HBCI: Updated explanation of HBCI features.
+
 2006-05-14  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.

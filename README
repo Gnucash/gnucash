@@ -182,12 +182,12 @@ the following;
     GnuCash-1.8.10 and newer needs at least the version libofx-0.7.0
     or newer. Sources can be found at
     http://sourceforge.net/projects/libofx/
-  aqbanking/aqhbci: This library provide support for HBCI file imports. 
-    GnuCash has mostly been tested against the 0.9.7 version, though
+  aqbanking: This library provide support for HBCI online actions.
+    GnuCash has mostly been tested against the 1.3.0 version, though
     any newer version should also work. Sources can be found at
-    http://sourceforge.net/projects/aqbanking and
-    http://sourceforge.net/projects/aqhbci/. More info in
-    doc/README.HBCI.
+    http://sourceforge.net/projects/aqbanking . Requires
+    gwenhywfar, http://sourceforge.net/projects/gwenhywfar . More
+    info in doc/README.HBCI.
 
 #######
 Running
@@ -270,7 +270,7 @@ of these pieces properly installed for your particular operating
 system flavor will vary, but here's at least a partial list of what
 you'll need for the systems we know about:
 
-  Debian/GNU/Linux:
+  Debian/GNU/Linux: see README.dependencies and 
     current:
       libgnome-dev
       libgtkhtml-dev
@@ -280,25 +280,11 @@ you'll need for the systems we know about:
 
 
   SuSE:
-    see doc/build-suse.txt
+    see README.dependencies and doc/build-suse.txt
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the
-supported options, but here are some more detailed descriptions of
-some of them:
-
-  --enable-opt-style-install
-
-    GnuCash supports two types of install, the first is the normal
-    /usr or /usr/local/ style, where the files are installed into
-    /usr/bin /usr/lib, etc.  This is the default.
-
-    The second style is the FSSTND, opt-style install.  In this style,
-    all of the files are installed under a common subdirectory, often
-    in /usr/local/opt, with the binaries going to
-    /usr/local/opt/'packagename'/bin, the libs going to
-    /usr/local/opt/'packagename'/lib, etc.  To request this style of 
-    install, just use the --enable-opt-style-install option to ./configure.
+supported options.
 
 If you only want a particular language installed, you can set the
 LINGUAS environment variable before you run configure. For example,
@@ -436,7 +422,8 @@ Developing GnuCash
 Before you start developing GnuCash, you should do the following:
 
 1. Read the file src/doc/coding-style.txt to learn about the coding-styles
-   used in the GnuCash source code.
+   used in the GnuCash source code. Also read
+   http://wiki.gnucash.org/wiki/Development
 
 2. Several of the directories under src contain files called design.txt
    which explain many aspects of GnuCash's design. Read those.
