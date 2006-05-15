@@ -1,3 +1,8 @@
+2006-05-14  Chris Lyttle  <chris@wilddev.net>
+
+	* NEWS: Added some text about the release.
+	* configure.in: Change to version 1.9.6
+
 r14050 | chris | 2006-05-14 17:30:22 -0400 (Sun, 14 May 2006) | 2 lines
 
    M /gnucash/trunk/src/engine/Transaction.c
