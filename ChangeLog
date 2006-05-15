@@ -1,3 +1,10 @@
+2006-05-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* lib/libqof/qof/gnc-date.c (timespecCanonicalDayTime)
+	(qof_print_date_buff, dateSeparator, gnc_timespec_last_mday) 
+	(gnc_timespec2dmy): convert `localtime` to `localtime_r`, after
+	seeing localtime fail (strange as it is...).
+
 2006-05-15   Christian Stimming <stimming@tuhh.de>
 
 	* doc/README.german: Updated German README which was horribly
