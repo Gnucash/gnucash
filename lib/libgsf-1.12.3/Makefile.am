@@ -21,9 +21,7 @@ endif
 EXTRA_DIST = BUGS HACKING	\
 	intltool-extract.in	\
 	intltool-merge.in	\
-	intltool-update.in	\
-	libgsf-1.spec		\
-	libgsf-gnome-1.spec
+	intltool-update.in
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update
 

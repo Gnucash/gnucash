@@ -3,6 +3,11 @@
 	* lib/libqof/qof/gnc-date.c:
 	  revert r14081 because we always have localtime_r.
 
+	* lib/libgsl/Makefile.am:
+	  don't distribute the gsl specfiles
+	* packaging/gnucash.spec.in:
+	  fix for change of location of files.
+
 2006-05-16  Christian Stimming <stimming@tuhh.de>
 
 	* lib/libqof/qof/gnc-date.c (timespecCanonicalDayTime)
