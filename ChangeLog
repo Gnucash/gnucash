@@ -1,3 +1,9 @@
+2006-05-17  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/druid-gnc-xml-import.c: Scott Oonk's patch to
+	  activate forward button in XML import druid after having decided
+	  on each ambiguous string. Fix #342050.
+
 2006-05-16  Derek Atkins  <derek@ihtfp.com>
 
 	* lib/libqof/qof/gnc-date.c:

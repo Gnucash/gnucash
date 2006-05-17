@@ -1194,6 +1194,7 @@ gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
            encoding, for the first time. previous selection is invalid now */
         data->n_unassigned--;
         gxi_update_summary_label (data);
+        gxi_update_conversion_forward (data);
       }
     }
     else {
@@ -1206,6 +1207,7 @@ gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
            encoding, for the first time. no previous selection */
         data->n_unassigned--;
         gxi_update_summary_label (data);
+        gxi_update_conversion_forward (data);
       }
     }
   }
@@ -1219,6 +1221,7 @@ gxi_string_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
            default encoding */
         data->n_unassigned++;
         gxi_update_summary_label (data);
+        gxi_update_conversion_forward (data);
       }
     }
     /* the missing else clause means pure ignorance of this dialog ;-) */
