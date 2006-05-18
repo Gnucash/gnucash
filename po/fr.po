@@ -8,6 +8,8 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2006
 # Fabrice Kurz <kurzf@voila.fr>, 2006
 #
+# Please follow the guidelines you'll find here: http://live.gnome.org/GnomeFr/Traduire
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
@@ -160,7 +162,7 @@ msgid ""
 "There is a problem with option %s:%s.\n"
 "%s"
 msgstr ""
-"Problème avec l'option %s:%s :\n"
+"Problème avec l'option %s:%s :\n"
 "%s"
 
 # messages-i18n.c:186
@@ -182,7 +184,7 @@ msgstr ""
 #: ../src/backend/postgres/putil.c:146
 #, c-format
 msgid "From the Postgresql Server: %s"
-msgstr "Message du serveur Postgresql : %s"
+msgstr "Message du serveur Postgresql : %s"
 
 #: ../src/backend/postgres/putil.c:56 ../src/backend/postgres/upgrade.c:401
 msgid "Backend connection is not available"
@@ -520,7 +522,7 @@ msgstr "Mauvaise URL %s"
 #: ../src/business/business-gnome/business-urls.c:276
 #, c-format
 msgid "No such Account entity: %s"
-msgstr "Aucune entité de compte de ce type : %s"
+msgstr "Aucune entité de compte de ce type : %s"
 
 # messages-i18n.c:96
 #: ../src/business/business-gnome/dialog-billterms.c:256
@@ -1336,7 +1338,7 @@ msgid ""
 "an Invoice or Bill first?"
 msgstr ""
 "Vous n'avez pas de compte valide pour la publication. Créez un compte de "
-"type « %s » avant de continuer à traiter ce paiement.Peut-être voudrez vous "
+"type « %s » avant de continuer à traiter ce paiement.Peut-être voudrez vous "
 "créer une facture au préalable?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
@@ -1588,7 +1590,7 @@ msgstr ""
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:76
 msgid "Number of _rows:"
-msgstr "Nombre de _lignes :"
+msgstr "Nombre de _lignes :"
 
 # messages-i18n.c:315
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:7
@@ -1776,7 +1778,7 @@ msgstr "Remise : "
 #: ../src/business/business-gnome/glade/employee.glade.h:11
 #: ../src/business/business-gnome/glade/vendor.glade.h:6
 msgid "Email: "
-msgstr "Mel : "
+msgstr "Adresse électroniqe : "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:13
 #: ../src/business/business-gnome/glade/employee.glade.h:14
@@ -1843,7 +1845,7 @@ msgstr "Table d'imposition : "
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 #: ../src/business/business-gnome/glade/vendor.glade.h:18
 msgid "Terms: "
-msgstr "Conditions : "
+msgstr "Conditions : "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
 msgid ""
@@ -3400,7 +3402,7 @@ msgstr "Valeur ($)"
 # messages-i18n.c:130
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
-msgstr "_Compte :"
+msgstr "_Compte :"
 
 # po/guile_strings.txt:188
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:10
@@ -3955,7 +3957,7 @@ msgstr "Terminé"
 #: ../src/gnome/window-reconcile.c:2022
 #: ../src/report/report-gnome/report.glade.h:20
 msgid "_Edit"
-msgstr "_Éditer"
+msgstr "É_dition"
 
 # messages-i18n.c:162
 #: ../src/gnome/dialog-scheduledxaction.c:243
@@ -4033,7 +4035,7 @@ msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr ""
-"Transaction récurrente sans modèle : la transaction ne peut être crée "
+"Transaction récurrente sans modèle : la transaction ne peut être crée "
 "automatiquement."
 
 #: ../src/gnome/dialog-scheduledxaction.c:935
@@ -4244,7 +4246,7 @@ msgstr ""
 #. Change the text so that its more mainingful for this druid
 #: ../src/gnome/druid-acct-period.c:547
 msgid "Period:"
-msgstr "Périodicité :"
+msgstr "Périodicité :"
 
 # messages-i18n.c:261
 #: ../src/gnome/druid-acct-period.c:548
@@ -4425,12 +4427,12 @@ msgstr "Pas de conflit à résoudre"
 msgid ""
 "Error: Please resolve all %d conflicts before trying to commit the data."
 msgstr ""
-"Erreur : essayer de résoudre tous les %d conflits avant de fusionner des "
+"Erreur : essayer de résoudre tous les %d conflits avant de fusionner des "
 "données."
 
 #: ../src/gnome/druid-merge.c:223
 msgid "Error: the Commit operation failed."
-msgstr "Erreur : la fusion a échoué."
+msgstr "Erreur : la fusion a échoué."
 
 #. Translators: %i is the number of conflicts. This is a
 #. ngettext(3) message.
@@ -4457,17 +4459,17 @@ msgstr[1] "%i valeurs de paramètres pour l'objet « %s »."
 #: ../src/gnome/druid-merge.c:353
 #, c-format
 msgid "%i:Parameter name: %s "
-msgstr "%i : Paramètre : %s "
+msgstr "%i : Paramètre : %s "
 
 #: ../src/gnome/druid-merge.c:357
 #, c-format
 msgid "Import data : %s "
-msgstr "Valeur importée : %s "
+msgstr "Valeur importée : %s "
 
 #: ../src/gnome/druid-merge.c:360
 #, c-format
 msgid "Original data : %s\n"
-msgstr "Valeur originale : %s\n"
+msgstr "Valeur originale : %s\n"
 
 #: ../src/gnome/druid-stock-split.c:268
 #: ../src/gnome-utils/dialog-transfer.c:541 ../src/gnome-utils/gnc-html.c:113
@@ -4663,7 +4665,7 @@ msgstr "Supprimer toutes les _transaction"
 # po/guile_strings.txt:188
 #: ../src/gnome/glade/account.glade.h:29
 msgid "Examples:"
-msgstr "Exemples : "
+msgstr "Exemples : "
 
 # po/guile_strings.txt:227
 #: ../src/gnome/glade/account.glade.h:30
@@ -4743,11 +4745,11 @@ msgstr ""
 # messages-i18n.c:227
 #: ../src/gnome/glade/account.glade.h:40
 msgid "Interval:"
-msgstr " Interval : "
+msgstr " Interval : "
 
 #: ../src/gnome/glade/account.glade.h:41
 msgid "M_ove to:"
-msgstr "Les déplacer vers :"
+msgstr "Les déplacer vers :"
 
 # messages-i18n.c:190
 #: ../src/gnome/glade/account.glade.h:42
@@ -4767,7 +4769,7 @@ msgstr "Nouvelle hiérarchie de comptes"
 # messages-i18n.c:306 po/guile_strings.txt:176
 #: ../src/gnome/glade/account.glade.h:45
 msgid "No_tes:"
-msgstr "No_tes :"
+msgstr "No_tes :"
 
 #: ../src/gnome/glade/account.glade.h:46
 msgid ""
@@ -4805,7 +4807,7 @@ msgstr "Choisissez la devise utilisée pour les nouveaux comptes."
 # messages-i18n.c:318
 #: ../src/gnome/glade/account.glade.h:52
 msgid "Prefix:"
-msgstr "Prefixe :"
+msgstr "Prefixe :"
 
 #: ../src/gnome/glade/account.glade.h:53
 msgid ""
@@ -4868,7 +4870,7 @@ msgstr "Ne pas afficher les comptes dont le solde est nul"
 # messages-i18n.c:176
 #: ../src/gnome/glade/account.glade.h:65
 msgid "Smallest _fraction:"
-msgstr "Plus petite _fraction :"
+msgstr "Plus petite _fraction :"
 
 #: ../src/gnome/glade/account.glade.h:66
 msgid "Smallest fraction of this commodity that can be referenced."
@@ -4958,16 +4960,16 @@ msgstr "Par _défaut"
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: ../src/gnome/glade/account.glade.h:80
 msgid "_Description:"
-msgstr "De_scription :"
+msgstr "De_scription :"
 
 #: ../src/gnome/glade/account.glade.h:81
 msgid "_Move to:"
-msgstr "Les déplacer vers :"
+msgstr "Les déplacer vers :"
 
 #: ../src/gnome/glade/account.glade.h:82
 #: ../src/gnome-utils/dialog-commodity.c:260
 msgid "_Security/currency:"
-msgstr "_Titre/devise :"
+msgstr "_Titre/devise :"
 
 # messages-i18n.c:209
 #: ../src/gnome/glade/account.glade.h:83
@@ -5013,7 +5015,7 @@ msgstr "Fin de la clôture"
 #: ../src/gnome/glade/acctperiod.glade.h:7
 #: ../src/gnome/glade/budget.glade.h:13
 msgid "Notes:"
-msgstr "Notes :"
+msgstr "Notes :"
 
 #: ../src/gnome/glade/acctperiod.glade.h:8
 msgid ""
@@ -5045,7 +5047,7 @@ msgstr ""
 # po/guile_strings.txt:25
 #: ../src/gnome/glade/acctperiod.glade.h:13
 msgid "Title:"
-msgstr "Titre :"
+msgstr "Titre :"
 
 #: ../src/gnome/glade/acctperiod.glade.h:14
 msgid "xxx"
@@ -5062,7 +5064,7 @@ msgstr "Liste du budget"
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: ../src/gnome/glade/budget.glade.h:3
 msgid "Budget Name:"
-msgstr "Nom du budget :"
+msgstr "Nom du budget :"
 
 # po/guile_strings.txt:221
 #: ../src/gnome/glade/budget.glade.h:4
@@ -5074,7 +5076,7 @@ msgstr "Options Budget"
 # po/guile_strings.txt:186
 #: ../src/gnome/glade/budget.glade.h:5
 msgid "Budget Period:"
-msgstr "Fréquence du budget :"
+msgstr "Fréquence du budget :"
 
 # messages-i18n.c:77
 #: ../src/gnome/glade/budget.glade.h:6
@@ -5120,7 +5122,7 @@ msgstr ""
 # po/guile_strings.txt:144
 #: ../src/gnome/glade/budget.glade.h:14
 msgid "Number of Periods:"
-msgstr "Nombre de périodes :"
+msgstr "Nombre de périodes :"
 
 #: ../src/gnome/glade/budget.glade.h:15
 msgid ""
@@ -5143,7 +5145,7 @@ msgstr "Options"
 
 #: ../src/gnome/glade/budget.glade.h:18
 msgid "Significant Digits:"
-msgstr "Chiffres significatifs :"
+msgstr "Chiffres significatifs :"
 
 # messages-i18n.c:227
 #: ../src/gnome/glade/budget.glade.h:19
@@ -5162,7 +5164,7 @@ msgstr "Ceci est l'exemple 2"
 
 #: ../src/gnome/glade/budget.glade.h:22
 msgid "beginning on: "
-msgstr "À partir de :"
+msgstr "À partir de :"
 
 #: ../src/gnome/glade/budget.glade.h:23
 msgid "button1"
@@ -5286,7 +5288,7 @@ msgstr "<b>Options de remboursement</b>"
 # messages-i18n.c:275 po/guile_strings.txt:129
 #: ../src/gnome/glade/fincalc.glade.h:4
 msgid "<b>Period:</b>"
-msgstr "<b>Période des remboursements :</b>"
+msgstr "<b>Période des remboursements :</b>"
 
 # messages-i18n.c:238
 #: ../src/gnome/glade/fincalc.glade.h:5
@@ -5438,7 +5440,7 @@ msgstr "Hebdomadaire"
 
 #: ../src/gnome/glade/fincalc.glade.h:35
 msgid "When paid:"
-msgstr "Dates de paiement :"
+msgstr "Dates de paiement :"
 
 # messages-i18n.c:210
 #: ../src/gnome/glade/fincalc.glade.h:36
@@ -5659,7 +5661,7 @@ msgid ""
 "of an object in the existing book. \n"
 "3. The import object can be created as a new object in the existing book."
 msgstr ""
-"Vous avez trois choix pour chaque collision :\n"
+"Vous avez trois choix pour chaque collision :\n"
 "1. L'objet en conflit écrase les données existantes\n"
 "2. L'objet en conflit est ignoré\n"
 "3. L'objet en conflit est importé sous un autre nom"
@@ -5754,7 +5756,7 @@ msgstr "Supprimer les prix saisis _manuellement"
 
 #: ../src/gnome/glade/price.glade.h:10
 msgid "Delete all stock prices based upon the critera below:"
-msgstr "Supprimer toutes les prix des actions selon le critère suivant :"
+msgstr "Supprimer toutes les prix des actions selon le critère suivant :"
 
 # messages-i18n.c:105
 #: ../src/gnome/glade/price.glade.h:11
@@ -5809,12 +5811,12 @@ msgstr "_Source : "
 # messages-i18n.c:316
 #: ../src/gnome/glade/price.glade.h:23
 msgid "_Price:"
-msgstr "_Prix :"
+msgstr "_Prix :"
 
 #: ../src/gnome/glade/price.glade.h:24
 #: ../src/gnome-utils/dialog-commodity.c:264
 msgid "_Security:"
-msgstr "_Titre :"
+msgstr "_Titre :"
 
 # src/gnome/glade-gnc-dialogs.c:1340
 #: ../src/gnome/glade/print.glade.h:1
@@ -5897,7 +5899,7 @@ msgstr "Format de _date :"
 # messages-i18n.c:302 po/guile_strings.txt:26
 #: ../src/gnome/glade/print.glade.h:23 ../src/gnome/glade/stocks.glade.h:21
 msgid "_Memo:"
-msgstr "Mém_o :"
+msgstr "Mém_o :"
 
 # po/guile_strings.txt:138
 #: ../src/gnome/glade/print.glade.h:24
@@ -5907,7 +5909,7 @@ msgstr "_Rotation"
 # messages-i18n.c:162
 #: ../src/gnome/glade/print.glade.h:25
 msgid "_Translation:"
-msgstr "_Translation :"
+msgstr "_Translation :"
 
 # src/gnome/glade-gnc-dialogs.c:1372
 #: ../src/gnome/glade/print.glade.h:26
@@ -6112,7 +6114,7 @@ msgstr "_Montant"
 # messages-i18n.c:261
 #: ../src/gnome/glade/register.glade.h:4
 msgid "C_hoose Date:"
-msgstr "_Choisir une date :"
+msgstr "_Choisir une date :"
 
 # messages-i18n.c:260
 #: ../src/gnome/glade/register.glade.h:5
@@ -6128,7 +6130,7 @@ msgstr "Annuler la transaction en cours"
 # messages-i18n.c:261
 #: ../src/gnome/glade/register.glade.h:8
 msgid "Choo_se Date:"
-msgstr "Choi_sir une date :"
+msgstr "Choi_sir une date :"
 
 # messages-i18n.c:346
 #: ../src/gnome/glade/register.glade.h:9
@@ -6187,7 +6189,7 @@ msgstr "Éditer le taux de change pour la répartition courante"
 # po/guile_strings.txt:122
 #: ../src/gnome/glade/register.glade.h:24
 msgid "End:"
-msgstr "Fin :"
+msgstr "Fin :"
 
 #: ../src/gnome/glade/register.glade.h:26
 msgid "Erase all splits except the one for this account."
@@ -6246,7 +6248,7 @@ msgstr "Coller la transaction à partir du presse-papiers"
 # po/guile_strings.txt:267
 #: ../src/gnome/glade/register.glade.h:36
 msgid "Reason for voiding transaction:"
-msgstr "Raison de l'invalidation :"
+msgstr "Raison de l'invalidation :"
 
 # messages-i18n.c:105
 #: ../src/gnome/glade/register.glade.h:37
@@ -6407,7 +6409,7 @@ msgstr "St_yle"
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/gnome/glade/register.glade.h:69
 msgid "Start:"
-msgstr "Début :"
+msgstr "Début :"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/gnome/glade/register.glade.h:70
@@ -6491,7 +6493,7 @@ msgstr "_Numéro"
 # po/guile_strings.txt:173
 #: ../src/gnome/glade/register.glade.h:93
 msgid "_Number:"
-msgstr "_Numéro :"
+msgstr "_Numéro :"
 
 # messages-i18n.c:322
 #: ../src/gnome/glade/register.glade.h:94
@@ -6737,7 +6739,7 @@ msgstr "Conditionnel à ce que les répartitions ne contiennent pas de variables
 
 #: ../src/gnome/glade/sched-xact.glade.h:53
 msgid "Crea_te in advance, days:"
-msgstr "_Créer d'avance :"
+msgstr "_Créer d'avance :"
 
 # messages-i18n.c:320
 #: ../src/gnome/glade/sched-xact.glade.h:54
@@ -6754,7 +6756,7 @@ msgstr "Créer automatiquement"
 
 #: ../src/gnome/glade/sched-xact.glade.h:57
 msgid "Create in advance:"
-msgstr "Créer d'avance :"
+msgstr "Créer d'avance :"
 
 #: ../src/gnome/glade/sched-xact.glade.h:58
 msgid "Create the transaction this many days before its effective date."
@@ -6873,7 +6875,7 @@ msgstr "Première occurrence le :"
 # messages-i18n.c:290 po/guile_strings.txt:106
 #: ../src/gnome/glade/sched-xact.glade.h:85
 msgid "For:"
-msgstr "Nombre :"
+msgstr "Nombre :"
 
 #: ../src/gnome/glade/sched-xact.glade.h:86
 msgid "Forever"
@@ -6941,7 +6943,7 @@ msgstr "Juin"
 
 #: ../src/gnome/glade/sched-xact.glade.h:101
 msgid "Last Occurred: "
-msgstr "Dernière occurrence :"
+msgstr "Dernière occurrence :"
 
 #: ../src/gnome/glade/sched-xact.glade.h:102
 msgid "Length:"
@@ -7104,7 +7106,7 @@ msgstr "Reporter"
 # messages-i18n.c:176
 #: ../src/gnome/glade/sched-xact.glade.h:143
 msgid "Press Apply to create these transactions."
-msgstr "Appuyez sur « Appliquer » pour créer ces transactions"
+msgstr "Appuyez sur « Appliquer » pour créer ces transactions"
 
 #: ../src/gnome/glade/sched-xact.glade.h:144
 msgid "Press apply to commit these changes."
@@ -7118,7 +7120,7 @@ msgstr "Principal à :"
 
 #: ../src/gnome/glade/sched-xact.glade.h:147
 msgid "R_emind in advance, days:"
-msgstr "_Prévenir d'avance :"
+msgstr "_Prévenir d'avance :"
 
 # po/guile_strings.txt:188
 #: ../src/gnome/glade/sched-xact.glade.h:148
@@ -7127,7 +7129,7 @@ msgstr "Plage : "
 
 #: ../src/gnome/glade/sched-xact.glade.h:149
 msgid "Remind in advance:"
-msgstr "Prévenir d'avance :"
+msgstr "Prévenir d'avance :"
 
 # messages-i18n.c:312
 #: ../src/gnome/glade/sched-xact.glade.h:150
@@ -7145,7 +7147,7 @@ msgstr "Type de remboursement"
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: ../src/gnome/glade/sched-xact.glade.h:153
 msgid "Repeats:"
-msgstr "Répéter :"
+msgstr "Répéter :"
 
 # src/gnome/glade-gnc-dialogs.c:979
 #: ../src/gnome/glade/sched-xact.glade.h:154
@@ -7544,7 +7546,7 @@ msgstr ""
 #: ../src/gnome/glade/stocks.glade.h:19
 #: ../src/gnome-utils/glade/exchange-dialog.glade.h:4
 msgid "_Amount:"
-msgstr "_Montant :"
+msgstr "_Montant :"
 
 # po/guile_strings.txt:266
 #: ../src/gnome/glade/stocks.glade.h:22
@@ -8469,7 +8471,7 @@ msgstr "Impossible de modifier ou effacer cette transaction"
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
-"Cette transaction est protégée en écriture pour la raison suivante : '%s'"
+"Cette transaction est protégée en écriture pour la raison suivante : '%s'"
 
 # messages-i18n.c:82
 #: ../src/gnome/gnc-split-reg.c:987
@@ -9367,7 +9369,7 @@ msgid ""
 msgstr ""
 "Ce réglage détermine les caractères qui seront utilisés entre les composants "
 "d'un nom de compte. Les valeurs possibles sont n'importe quel caractère alphanumérique "
-"de l'unicode, ou les châines de caractères suivantes : « colon », « slash », « backslash », « dash » et "
+"de l'unicode, ou les châines de caractères suivantes : « colon », « slash », « backslash », « dash » et "
 "« period »."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:52
@@ -9992,7 +9994,7 @@ msgstr "Pas de prix pour : %s"
 msgid ""
 "Error: Failure saving state file.\n"
 "  %s"
-msgstr "Erreur à l'enregistrement du fichier d'état :\n"
+msgstr "Erreur à l'enregistrement du fichier d'état :\n"
 "  %s"
 
 # messages-i18n.c:67
@@ -10349,7 +10351,7 @@ msgid ""
 "restart the gconf backend."
 msgstr ""
 "Si vous cliquez sur « Appliquer », GnuCash modifiera votre fichier ~/.gconf.path "
-"et redémarrera le démon gconf"
+"et redémarrera le démon GConf"
 
 #: ../src/gnome-utils/druid-gconf-setup.c:406
 #, c-format
@@ -10359,7 +10361,7 @@ msgid ""
 "your search path for this to work correctly."
 msgstr ""
 "Quand vous cliquerez sur « Appliquer », GnuCash installera les données de gconf dans le "
-"répertoire local ~/.gconf  et redémarrera le démon gconf. Le script %s doit être trouvé dans votre "
+"répertoire local ~/.gconf  et redémarrera le démon GConf. Le script %s doit être trouvé dans votre "
 "chemin système pour fonctionner correctement."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:410
@@ -10371,7 +10373,7 @@ msgid ""
 "necessary text from the dialog."
 msgstr ""
 "Vous avez choisi de corriger le problème vous même. GnuCash se fermera quand vous cliquerez "
-"sur « Appliquer ». Corrigez le problème et redémarrez le démon gconf par la commande "
+"sur « Appliquer ». Corrigez le problème et redémarrez le démon GConf par la commande "
 "'gconftool-2 --shutdown' avant de redémarrer GnuCash. Si vous ne l'avez déjà fait, vous pouvez "
 "cliquer sur le bouton « Retour » et copier le texte nécessaire à partir de la fenêtre."
 
@@ -10384,7 +10386,7 @@ msgid ""
 msgstr ""
 "Vous avez choisi de corriger le problème vous même. GnuCash se fermera quand vous cliquerez "
 "sur « Appliquer ». Lancez le script %s qui installera les données de configuration et redémarrera "
-"le démon gconf."
+"le démon GConf."
 
 #: ../src/gnome-utils/druid-gconf-setup.c:420
 msgid ""
@@ -10392,7 +10394,7 @@ msgid ""
 "the command 'gconftool-2 --shutdown'.  When you click Apply, GnuCash will "
 "continue loading."
 msgstr ""
-"Vous avez déjà corrigé le problème et redémarré le démon gconf par la commande "
+"Vous avez déjà corrigé le problème et redémarré le démon GConf par la commande "
 "'gconftool-2 --shutdown'. Le démarrage de GnuCash se poursuivra  quand vous cliquerez "
 "sur « Appliquer »."
 
@@ -10456,7 +10458,7 @@ msgstr "Unicode"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:229
 msgid "European"
-msgstr "Européen :"
+msgstr "Européen :"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:230
 msgid "ISO-8859-1 (West European)"
@@ -10686,7 +10688,7 @@ msgid ""
 "quotes."
 msgstr ""
 "Ce sont des sources de cours qui chargent des informations depuis un seul site "
-"sur internet. Si ce site est inaccessible, vous ne pourrez par charger les cours."
+"sur Internet. Si ce site est inaccessible, vous ne pourrez par charger les cours."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:14
 msgid ""
@@ -10695,17 +10697,17 @@ msgid ""
 "retrieve the information from another site."
 msgstr ""
 "Ce sont des sources de cours de F::Q qui chargent des informations depuis de "
-" nombreux sites sur internet. Si un de ces sites est inaccessible, F::Q essaiera de "
+" nombreux sites sur Internet. Si un de ces sites est inaccessible, F::Q essaiera de "
 "charger les informations depuis un autre site."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:15
 msgid ""
 "These are quote sources that were recently added to F::Q.  GnuCash does not "
 "know if these sources retrieve information from a single site or from "
-"multiple sites on the internet."
+"multiple sites on the Internet."
 msgstr ""
 "Ce sont des sources de cours récemment ajoutés à F::Q. GnuCash ne sait pas si "
-"elles chargent des informations depuis un seul ou plusieurs sites sur internet."
+"elles chargent des informations depuis un seul ou plusieurs sites sur Internet."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:16
 msgid "Time_zone:"
@@ -10713,7 +10715,7 @@ msgstr "Fuseau _horaire:"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:17
 msgid "Type of quote source:"
-msgstr "Type de source de cours :"
+msgstr "Type de source de cours :"
 
 #: ../src/gnome-utils/glade/commodity.glade.h:18
 msgid "Warning: Finance::Quote not installed properly."
@@ -10811,11 +10813,11 @@ msgstr "Installer dans le répertoire utilisateur"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:9
 msgid "Please add the following lines at the end of your ~/.gconf.path file:"
-msgstr "Veuillez ajouter les lignes suivantes à votre fichier ~/.gconf.path :"
+msgstr "Veuillez ajouter les lignes suivantes à votre fichier ~/.gconf.path :"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:10
 msgid "Please run the following commands:"
-msgstr "Veuillez exécuter les commandes suivantes :"
+msgstr "Veuillez exécuter les commandes suivantes :"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:11
 msgid "S_kip"
@@ -10880,7 +10882,7 @@ msgstr "Mettre à jour les préférences de GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:19
 msgid "Update gconf settings - GnuCash"
-msgstr "Mettre à jour les réglages de gconf - GnuCash"
+msgstr "Mettre à jour les réglages de GConf - GnuCash"
 
 #: ../src/gnome-utils/glade/druid-gconf-setup.glade.h:20
 msgid "Update search path"
@@ -10980,7 +10982,7 @@ msgstr "Convertir le fichier"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:9
 msgid "Default encoding:"
-msgstr "Encodage par défaut :"
+msgstr "Encodage par défaut :"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:10
 msgid "Do not merge"
@@ -11106,7 +11108,7 @@ msgstr "31 Décembre 2000"
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:7
 #: ../src/import-export/generic-import.glade.h:32
 msgid "Format:"
-msgstr "Format :"
+msgstr "Format :"
 
 # po/guile_strings.txt:295
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:8
@@ -11116,7 +11118,7 @@ msgstr "Ajouter le siècle"
 # po/guile_strings.txt:184
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:9
 msgid "Months:"
-msgstr "Mois :"
+msgstr "Mois :"
 
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:12
 #: ../src/gnome-utils/glade/preferences.glade.h:88
@@ -11144,7 +11146,7 @@ msgstr ""
 # po/guile_strings.txt:182
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:21
 msgid "Years:"
-msgstr "Années :"
+msgstr "Années :"
 
 #: ../src/gnome-utils/glade/gnc-gui-query.glade.h:1
 msgid "Don't tell me again this session."
@@ -11294,7 +11296,7 @@ msgstr "<b>Taille de fenêtre</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:29
 msgid "Ab_solute:"
-msgstr "Ab_solue :"
+msgstr "Ab_solue :"
 
 # messages-i18n.c:214
 #: ../src/gnome-utils/glade/preferences.glade.h:30
@@ -11362,12 +11364,12 @@ msgstr "Comptes de _crédit"
 # messages-i18n.c:261
 #: ../src/gnome-utils/glade/preferences.glade.h:41
 msgid "Ch_oose:"
-msgstr "Ch_oisir :"
+msgstr "Ch_oisir :"
 
 # messages-i18n.c:257
 #: ../src/gnome-utils/glade/preferences.glade.h:42
 msgid "Character:"
-msgstr "Caractère :"
+msgstr "Caractère :"
 
 # messages-i18n.c:80
 #: ../src/gnome-utils/glade/preferences.glade.h:43
@@ -11522,7 +11524,7 @@ msgstr "Inclure les totaux sans devises"
 # src/gnome/glade-gnc-dialogs.c:300
 #: ../src/gnome-utils/glade/preferences.glade.h:74
 msgid "Loc_ale:"
-msgstr "Loc_ale :"
+msgstr "Loc_ale :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:75
 msgid "New search _limit:"
@@ -11531,7 +11533,7 @@ msgstr "_Limite pour nouvelle recherche"
 # po/guile_strings.txt:144
 #: ../src/gnome-utils/glade/preferences.glade.h:77
 msgid "Number of _transactions:"
-msgstr "Nombre de _transactions :"
+msgstr "Nombre de _transactions :"
 
 # po/guile_strings.txt:275
 #: ../src/gnome-utils/glade/preferences.glade.h:78
@@ -11553,7 +11555,7 @@ msgstr ""
 # messages-i18n.c:320
 #: ../src/gnome-utils/glade/preferences.glade.h:82
 msgid "Re_lative:"
-msgstr "Re_lative :"
+msgstr "Re_lative :"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: ../src/gnome-utils/glade/preferences.glade.h:84
@@ -11660,7 +11662,7 @@ msgstr "Dollars US (USD)"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:104
 msgid "U_K:"
-msgstr "G_B :"
+msgstr "G_B :"
 
 # po/guile_strings.txt:147
 #: ../src/gnome-utils/glade/preferences.glade.h:105
@@ -11763,7 +11765,7 @@ msgstr "Fenêtres"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:125
 msgid "_Absolute:"
-msgstr "_Absolue :"
+msgstr "_Absolue :"
 
 # po/guile_strings.txt:11
 #: ../src/gnome-utils/glade/preferences.glade.h:126
@@ -11786,7 +11788,7 @@ msgstr "_Grand livre de base"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:130
 msgid "_Decimal places:"
-msgstr "Nombre de _décimales :"
+msgstr "Nombre de _décimales :"
 
 # messages-i18n.c:177 po/guile_strings.txt:19
 #: ../src/gnome-utils/glade/preferences.glade.h:131
@@ -11799,11 +11801,11 @@ msgstr "_Activer le support de l'euro"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:133
 msgid "_Europe:"
-msgstr "_Europe :"
+msgstr "_Europe :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:134
 msgid "_ISO:"
-msgstr "_ISO :"
+msgstr "_ISO :"
 
 # po/guile_strings.txt:256
 #: ../src/gnome-utils/glade/preferences.glade.h:135
@@ -11823,11 +11825,11 @@ msgstr "_Aucun"
 # messages-i18n.c:320
 #: ../src/gnome-utils/glade/preferences.glade.h:138
 msgid "_Relative:"
-msgstr "_Relative :"
+msgstr "_Relative :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "_Retain log files:"
-msgstr "Garder les fichiers journaux durant :"
+msgstr "Garder les fichiers journaux durant :"
 
 # po/guile_strings.txt:93
 #: ../src/gnome-utils/glade/preferences.glade.h:140
@@ -11841,7 +11843,7 @@ msgstr "_Texte uniquement"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:142
 msgid "_US:"
-msgstr "_US :"
+msgstr "_US :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:143
 msgid "_Use system theme colors"
@@ -11915,7 +11917,7 @@ msgstr "Taux de change :"
 # src/gnome/glade-gnc-dialogs.c:1348
 #: ../src/gnome-utils/glade/transfer.glade.h:11
 msgid "Memo:"
-msgstr "Mémo :"
+msgstr "Mémo :"
 
 # messages-i18n.c:307 po/guile_strings.txt:148
 #: ../src/gnome-utils/glade/transfer.glade.h:12
@@ -11992,13 +11994,13 @@ msgstr "(sans nom)"
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:99
 #, c-format
 msgid "Failed to process file: %s"
-msgstr "Echec dans le traitement du fichier : %s"
+msgstr "Echec dans le traitement du fichier : %s"
 
 # messages-i18n.c:35
 #: ../src/gnome-utils/gnc-druid-provider-file-gnome.c:131
 #, c-format
 msgid "Failed to open file: %s: %s"
-msgstr "Impossible d'ouvrir le fichier : %s : %s"
+msgstr "Impossible d'ouvrir le fichier : %s : %s"
 
 # messages-i18n.c:293
 #: ../src/gnome-utils/gnc-file.c:100 ../src/gnome-utils/gnc-main-window.c:232
@@ -12493,7 +12495,7 @@ msgstr "_Fenêtres"
 #: ../src/gnome-utils/gnc-main-window.c:226
 #: ../src/gnome/window-reconcile.c:1983 ../src/gnome/window-reconcile.c:2031
 msgid "_Help"
-msgstr "Ai_de"
+msgstr "Aid_e"
 
 # messages-i18n.c:317 src/gnome/glade-gnc-dialogs.c:971
 #: ../src/gnome-utils/gnc-main-window.c:234
@@ -12786,7 +12788,7 @@ msgstr "%s Cette version a été compilée à partir de r%s sur %s."
 #: ../src/gnome-utils/gnc-main-window.c:3281
 msgid "translator_credits"
 msgstr ""
-"Traduction française :\n"
+"Traduction française :\n"
 "Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Jérôme Sautret <jerome@sautret.org>\n"
 "Benoit Grégoire <bock@step.polymtl.ca>\n"
@@ -12899,13 +12901,13 @@ msgstr "Fin de l'année fiscale précédente"
 #: ../src/gnome-utils/gnc-splash.c:88
 #, c-format
 msgid "Version: GnuCash-%s svn (r%s built %s)"
-msgstr "Version : GnuCash-%s svn (r%s compilé le %s)"
+msgstr "Version : GnuCash-%s svn (r%s compilé le %s)"
 
 #. Dist Tarball
 #: ../src/gnome-utils/gnc-splash.c:92
 #, c-format
 msgid "Version: GnuCash-%s (r%s built %s)"
-msgstr "Version : GnuCash-%s (r%s compilé le %s)"
+msgstr "Version : GnuCash-%s (r%s compilé le %s)"
 
 #: ../src/gnome-utils/gnc-splash.c:104
 msgid "Loading..."
@@ -13181,17 +13183,17 @@ msgstr ""
 #: ../src/gnome-utils/window-main-summarybar.c:316
 #, c-format
 msgid "%s, total:"
-msgstr "%s, total :"
+msgstr "%s, total :"
 
 #: ../src/gnome-utils/window-main-summarybar.c:319
 #, c-format
 msgid "%s, non currency commodities total:"
-msgstr "%s, total des valeurs non monétaires :"
+msgstr "%s, total des valeurs non monétaires :"
 
 #: ../src/gnome-utils/window-main-summarybar.c:322
 #, c-format
 msgid "%s, grand total:"
-msgstr "%s, Grand total :"
+msgstr "%s, Grand total :"
 
 #: ../src/gnome-utils/window-main-summarybar.c:326
 #, c-format
@@ -13202,12 +13204,12 @@ msgstr "%s :"
 # src/gnome/glade-gnc-dialogs.c:626
 #: ../src/gnome-utils/window-main-summarybar.c:429
 msgid "Assets:"
-msgstr "Actifs nets :"
+msgstr "Actifs nets :"
 
 # messages-i18n.c:318
 #: ../src/gnome-utils/window-main-summarybar.c:431
 msgid "Profits:"
-msgstr "Profits :"
+msgstr "Profits :"
 
 # messages-i18n.c:227
 #: ../src/gnome/window-reconcile.c:433
@@ -13599,7 +13601,7 @@ msgstr ""
 
 #: ../src/import-export/generic-import.glade.h:38
 msgid "List of downloaded transactions (source split shown):"
-msgstr "Liste des transactions téléchargées (répartition de source affichée) :"
+msgstr "Liste des transactions téléchargées (répartition de source affichée) :"
 
 #: ../src/import-export/generic-import.glade.h:39
 msgid "Match _display threshold"
@@ -14365,7 +14367,7 @@ msgid ""
 "Do you want to try again?"
 msgstr ""
 "Le mot de passe que vous avez entré est faux.\n"
-"ATTENTION : vous n'avez plus qu'un essai possible!\n"
+"ATTENTION : vous n'avez plus qu'un essai possible!\n"
 "Voulez vous ré-essayer?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:303
@@ -14552,11 +14554,11 @@ msgstr ""
 
 #: ../src/import-export/import-format-dialog.c:59
 msgid "Period: 123,456.78"
-msgstr "Point : 123,456.78"
+msgstr "Point : 123,456.78"
 
 #: ../src/import-export/import-format-dialog.c:67
 msgid "Comma: 123.456,78"
-msgstr "Virgule : 123.456,78"
+msgstr "Virgule : 123.456,78"
 
 #: ../src/import-export/import-format-dialog.c:75
 msgid "m/d/y"
@@ -14637,7 +14639,7 @@ msgstr ""
 # messages-i18n.c:227
 #: ../src/import-export/import-provider-format.glade.h:3
 msgid "Sample data:"
-msgstr "Données d'exemple :"
+msgstr "Données d'exemple :"
 
 # messages-i18n.c:75
 #: ../src/import-export/import-provider-format.glade.h:4
@@ -14683,7 +14685,7 @@ msgstr "Sélectionner un fichier .log à exécuter"
 #: ../src/import-export/log-replay/gnc-log-replay.c:546
 #, c-format
 msgid "Failed to open log file: %s: %s"
-msgstr "Impossible d'ouvrir le fichier de log: %s : %s"
+msgstr "Impossible d'ouvrir le fichier de log: %s : %s"
 
 # messages-i18n.c:38
 #: ../src/import-export/log-replay/gnc-log-replay.c:556
@@ -15389,7 +15391,7 @@ msgstr "Type : cat"
 # messages-i18n.c:330 po/guile_strings.txt:161
 #: ../src/import-export/qif/qif-parse.c:111
 msgid "type:security"
-msgstr "type : titre"
+msgstr "type : titre"
 
 # messages-i18n.c:236 po/guile_strings.txt:56
 #: ../src/import-export/qif/qif-parse.c:112
@@ -16179,7 +16181,7 @@ msgstr "Impossible d'enregistrer dans ce fichier"
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1275
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
-msgstr "Impossible d'ouvrir le fichier %s.L'erreur est : %s"
+msgstr "Impossible d'ouvrir le fichier %s.L'erreur est : %s"
 
 # messages-i18n.c:124
 #: ../src/report/report-gnome/gnc-plugin-page-report.c:1306
@@ -16312,7 +16314,7 @@ msgstr "Options : URL mal formée : %s"
 #: ../src/report/report-gnome/window-report.c:252
 #, c-format
 msgid "Badly report id: %s"
-msgstr "Mauvais Id de rapport : %s"
+msgstr "Mauvais Id de rapport : %s"
 
 #: ../src/report/report-gnome/window-report.c:346
 #, c-format
@@ -19038,7 +19040,7 @@ msgid ""
 msgstr ""
 "Tous les cours trouvés sont égaux. Cela entraînerait l'affichage d'une ligne "
 "droite.\n"
-"Hélas, l'outil de dessin ne le permet pas :,-("
+"Hélas, l'outil de dessin ne le permet pas :,-("
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1458
@@ -19053,7 +19055,7 @@ msgid ""
 msgstr ""
 "Tous les cours sont à la même date. Cela entraînerait l'affichage d'une "
 "ligne droite.\n"
-"Hélas, l'outil ne le permet pas :,-("
+"Hélas, l'outil ne le permet pas :,-("
 
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:1462
@@ -21255,7 +21257,7 @@ msgstr "L'adresse courriel de votre société"
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3116
 msgid "The URL address of your website"
-msgstr "L'URL du site web de votre société"
+msgstr "L'URL du site Web de votre société"
 
 #. src/business/business-utils/business-prefs.scm
 #: ../intl-scm/guile-strings.c:3118
@@ -21318,7 +21320,7 @@ msgstr "N° de fax de la Société"
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3144
 msgid "Company Website URL"
-msgstr "Site web de la société"
+msgstr "Site Web de la société"
 
 #. src/business/business-utils/business-utils.scm
 #: ../intl-scm/guile-strings.c:3146
@@ -21869,7 +21871,7 @@ msgstr "Payable à"
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3552
 msgid "Display the Payable to: information"
-msgstr "Afficher l'information Payable à : "
+msgstr "Afficher l'information Payable à : "
 
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3556
@@ -21932,7 +21934,7 @@ msgstr "Télécopieur : "
 #. src/business/business-reports/fancy-invoice.scm
 #: ../intl-scm/guile-strings.c:3592
 msgid "Web:"
-msgstr "Web :"
+msgstr "Web :"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -22079,7 +22081,7 @@ msgstr "Rapport des dépenses"
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3894 ../intl-scm/guile-strings.c:3896
 msgid "Report:"
-msgstr "Rapport :"
+msgstr "Rapport :"
 
 #. src/business/business-reports/owner-report.scm
 #: ../intl-scm/guile-strings.c:3898
