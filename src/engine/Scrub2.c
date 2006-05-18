@@ -416,9 +416,17 @@ restart:
       if (s->inst.do_free) continue;
 
       /* OK, this split is in the same lot (and thus same account)
-       * as the indicated split.  It must be a subsplit (although
-       * we should double-check the kvp's to be sure).  Merge the
-       * two back together again. */
+       * as the indicated split.  Make sure it is really a subsplit
+       * of the split we started with.  It's possible to have two 
+       * splits in the same lot and transaction that are not subsplits
+       * of each other, the test-period test suite does this, for
+       * example.  Only worry about adjacent sub-splits.  By 
+       * repeatedly merging adjacent subsplits, we'll get the non-
+       * adjacent ones too. */
+      if (gnc_kvp_bag_find_by_guid (split->inst.kvp_data, "lot-split",
+                                    "peer_guid", &s->inst.entity.guid) == NULL)
+         continue;
+         
       merge_splits (split, s);
       rc = TRUE;
       goto restart;

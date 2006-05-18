@@ -792,7 +792,6 @@ xaccAccountRemoveLot (Account *acc, GNCLot *lot)
 void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
-   GList *sl;
    Account * old_acc = NULL;
 
    if (!acc || !lot || lot->account == acc) return;
@@ -808,13 +807,11 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
    acc->lots = g_list_prepend (acc->lots, lot);
    lot->account = acc;
 
-   /* Move all splits over to the new account.  At worst,
-    * this is a no-op. */
-   for (sl = lot->splits; sl; sl=sl->next) {
-       Split *s = sl->data;
-       if (s->acc != acc)
-            xaccAccountInsertSplit (acc, s);
-   }
+   /* Don't move the splits to the new account.  The caller will do this
+    * if appropriate, and doing it here will not work if we are being 
+    * called from gnc_book_close_period since xaccAccountInsertSplit
+    * will try to balance capital gains and things aren't ready for that. */
+
    LEAVE ("(acc=%p, lot=%p)", acc, lot);
 }
 

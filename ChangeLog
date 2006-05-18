@@ -1,3 +1,26 @@
+2006-05-17  Mike Alexander  <mta@arbortext.com>
+
+	* From bugzilla #342153.
+        * src/engine/cap-gains.c (finder_helper): Don't add a split with
+        the wrong sign to a lot and don't add any split to a lot that is
+        fat.
+        * src/engine/cap-gains.c (xaccSplitAssignToLot): Set the value and
+        amount in the new split after it is in the transaction so the
+        correct denominator can be found.
+        * src/engine/cap-gains.c (xaccSplitAssign): Ignore splits with
+        zero amounts.
+        * src/engine/cap-gains.c (xaccSplitComputeCapGains): If the gain
+        is already recorded correctly do nothing.  This happens when
+        called from gnc_book_partition_txn at which time things are
+        inconsistent.
+        * src/engine/policy.c (DirectionPolicyGetSplit): Don't add a split
+        to a lot unless it will be the new last split.
+        * src/engine/Scrub2.c (xaccScrubMergeSubSplits): Make sure the
+        splits are really related before merging them.
+        * src/engine/Account.c (xaccAccountInsertLot): Don't move the
+        splits in the lot into the new account.  The caller does this if
+        necessary and this fails when called from gnc_book_close_period.
+
 2006-05-17  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/druid-gnc-xml-import.c: Scott Oonk's patch to
