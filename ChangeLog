@@ -1,4 +1,9 @@
-2006-05-17  Mike Alexander  <mta@arbortext.com>
+2006-05-19  David Hampton  <hampton@employees.org>
+
+	* src/engine/engine-helpers.c: More of the patch from Bill
+	Nottingham for compiling with guile 1.8.
+
+2006-05-17  Mike Alexander  <mta@umich.edu>
 
 	* From bugzilla #342153.
         * src/engine/cap-gains.c (finder_helper): Don't add a split with
