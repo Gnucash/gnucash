@@ -1,3 +1,23 @@
+2006-05-20  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/gnc-account-sel.[ch]:
+	* src/gnome-utils/gnc-date-delta.[ch]:
+	* src/gnome-utils/gnc-frequency.[ch]:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/glade/sched-xact.glade: Second cleanup pass.
+	Conversions from GtkOptionMenu to GtkComboBoxEntry.
+
+	* src/register/register-gnome/gnucash-color.c:
+	* src/gnome/dialog-tax-info.c: Simple cleanups.
+
+	* src/gnome-utils/gnc-currency-edit.c:
+	* src/core-utils/gnc-gtk-utils.[ch]:
+	* src/core-utils/Makefile.am: Extract functions that can be
+	applied to a GtkComboBoxEntry to require that all user typed
+	entries exist in the embedded GtkTreeModel or else they are
+	rejected.
+
 2006-05-06  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/dialog-account-picker.c:
