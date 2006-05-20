@@ -1,5 +1,9 @@
 2006-05-19  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-grid.c: Make the blue
+	past/future dividing line thicker so that it is obvious.  Fixes
+	#342051.
+
 	* src/engine/engine-helpers.c:
 	* macros/legacy_macros.m4:
 	* configure.in: Make the removal of scm_block_gc conditional on
