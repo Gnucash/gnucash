@@ -1,5 +1,10 @@
 2006-05-19  David Hampton  <hampton@employees.org>
 
+	* src/engine/engine-helpers.c:
+	* macros/legacy_macros.m4:
+	* configure.in: Make the removal of scm_block_gc conditional on
+	having guile 1.8 installed.
+
 	* src/engine/engine-helpers.c: More of the patch from Bill
 	Nottingham for compiling with guile 1.8.
 
