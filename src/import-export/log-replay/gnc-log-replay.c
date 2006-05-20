@@ -499,6 +499,7 @@ void gnc_file_log_replay (void)
   char *default_dir;
   char read_buf[256];
   char *read_retval;
+  GtkFileFilter *filter;
   FILE *log_file;
   char * record_start_str = "===== START";
   /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
@@ -517,8 +518,12 @@ void gnc_file_log_replay (void)
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
+
+  filter = gtk_file_filter_new();
+  gtk_file_filter_set_name(filter, "*.log");
+  gtk_file_filter_add_pattern(filter, "*.[Ll][Oo][Gg]");
   selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
-				      "*.log",
+				      g_list_prepend(NULL, filter),
 				      default_dir,
 				      GNC_FILE_DIALOG_OPEN);
 

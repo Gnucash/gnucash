@@ -1,3 +1,12 @@
+2006-05-20  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-file.[ch]:
+	* src/import-export/log-replay/gnc-log-replay.c:
+	* src/import-export/qif-import/druid-qif-import.c: Extend
+	  gnc_file_dialog to take a GList of GtkFileFilters instead of a
+	  filter string. Allows patterns like *.[Qq][Ii][Ff] without
+	  messing up the dialog, fixes #336124.
+
 2006-05-19  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-grid.c: Make the blue

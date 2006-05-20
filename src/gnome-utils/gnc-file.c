@@ -65,7 +65,8 @@ static gint save_in_progress = 0;
  *   or presses "Cancel" or the window manager destroy button)      * 
  *                                                                  * 
  * Args:   title        - the title of the window                   *
- *         filter       - the file filter to use                    * 
+ *         filters      - list of GtkFileFilters to use, will be    *
+                          freed automatically                       *
  *         default_dir  - start the chooser in this directory       *
  *         type         - what type of dialog (open, save, etc.)    *
  * Return: containing the name of the file the user selected        *
@@ -73,7 +74,7 @@ static gint save_in_progress = 0;
 
 char *
 gnc_file_dialog (const char * title,
-                 const char * filter,
+                 GList * filters,
                  const char * starting_dir,
 		 GNCFileDialogType type
 		 )
@@ -144,14 +145,16 @@ gnc_file_dialog (const char * title,
 			       GTK_WINDOW(gnc_ui_get_toplevel()));
   */
 
-  if (filter != NULL)
+  if (filters != NULL)
   {
-    GtkFileFilter* g_filter = gtk_file_filter_new();
+    GList* filter;
     GtkFileFilter* all_filter = gtk_file_filter_new();
 
-    gtk_file_filter_set_name (g_filter, filter);
-    gtk_file_filter_add_pattern (g_filter, filter);
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+    for (filter=filters; filter; filter=filter->next) {
+      g_return_val_if_fail(GTK_IS_FILE_FILTER(filter->data), NULL);
+      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box),
+				   GTK_FILE_FILTER (filter->data));
+    }
 
     gtk_file_filter_set_name (all_filter, _("All files"));
     gtk_file_filter_add_pattern (all_filter, "*");
@@ -161,7 +164,9 @@ gnc_file_dialog (const char * title,
      * The latter wins, and the filter ends up diabled.  Since we are
      * only settin the starting directory for the chooser dialog,
      * everything works as expected. */
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box),
+				 GTK_FILE_FILTER (filters->data));
+    g_list_free (filters);
   }
 
   response = gtk_dialog_run(GTK_DIALOG(file_box));
