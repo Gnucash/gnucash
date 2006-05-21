@@ -1,5 +1,10 @@
 2006-05-21  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/gnc-plugin-basic-commands.c,
+	src/gnome/ui/gnc-plugin-basic-commands-ui.xml: Hide the "QSF
+	Import" for the 2.0.0 release because it is not yet finished. Can
+	be activated again in the next developing HEAD branch.
+
 	* po/ro.po: Initial Romanian translation by Danny Fischer
 	<dan.pescaru@gmail.com>
 
