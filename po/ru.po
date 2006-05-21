@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.8.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-13 10:56+0200\n"
-"PO-Revision-Date: 2004-04-28 15:11MSK\n"
+"PO-Revision-Date: 2006-05-15 18:00MSK\n"
 "Last-Translator: Vladimir Turbaevsky <tur@oriontv.net>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -139,7 +139,6 @@ msgid "Credit"
 msgstr "Кредит"
 
 #: ../src/app-utils/option-util.c:1734
-
 msgid ""
 "There is a problem with option %s:%s.\n"
 "%s"
@@ -154,25 +153,22 @@ msgid "Lost Accounts"
 msgstr "Потерянные счета"
 
 #: ../src/backend/postgres/PostgresBackend.c:1873
-
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-msgstr "Неизвестный режим доступа '%s' к базе данных. Будет использоваться режим по умолчанию: multi-user."
+msgstr "Неизвестный режим доступа '%s' к базе данных. Будет использоваться многопользовательский режим."
 
 #: ../src/backend/postgres/PostgresBackend.c:1991
 #: ../src/backend/postgres/putil.c:78 ../src/backend/postgres/putil.c:104
 #: ../src/backend/postgres/putil.c:146
-
 msgid "From the Postgresql Server: %s"
 msgstr "Сообщение от сервера Postgresql: %s"
 
 #: ../src/backend/postgres/putil.c:56 ../src/backend/postgres/upgrade.c:401
-
 msgid "Backend connection is not available"
-msgstr ""
+msgstr "Соединение невозможно"
 
 #: ../src/backend/postgres/putil.c:65
 msgid "Query could not be executed"
-msgstr ""
+msgstr "Запрос не может быть выполнен"
 
 #: ../src/bin/gnucash-bin.c:73
 msgid "This is a development version. It may or may not work.\n"
@@ -206,16 +202,14 @@ msgstr "Включить режим отладки"
 #. text; see popt(3)
 #: ../src/bin/gnucash-bin.c:224 ../src/bin/gnucash-bin.c:272
 msgid "Set the logging level from 0 (least) to 6 (most)"
-msgstr ""
-"Установить уровень записи отладочных сообщений от 0 (наименьший) до 6 "
-"(наибольший)"
+msgstr "Установить уровень записи отладочных сообщений от 0 (наименьший) до 6(наибольший)"
 
 #. Translators: Argument description for autohelp; see popt(3)
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:226 ../src/bin/gnucash-bin.c:275
 msgid "LOGLEVEL"
-msgstr "Уровень логирования"
+msgstr "Уровень отладки"
 
 #: ../src/bin/gnucash-bin.c:228 ../src/bin/gnucash-bin.c:277
 msgid "Do not load the last file opened"
@@ -230,7 +224,7 @@ msgstr "Указать каталог с конфигурацией"
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:232 ../src/bin/gnucash-bin.c:282
 msgid "CONFIGPATH"
-msgstr ""
+msgstr "Путь к конфигурационным файлам"
 
 #: ../src/bin/gnucash-bin.c:234 ../src/bin/gnucash-bin.c:284
 msgid "Set shared data file search path"
@@ -241,7 +235,7 @@ msgstr "Указать общий каталог данных"
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:236 ../src/bin/gnucash-bin.c:287
 msgid "SHAREPATH"
-msgstr ""
+msgstr "Путь к общим ресурсам"
 
 #. src/scm/command-line.scm
 #: ../src/bin/gnucash-bin.c:238 ../src/bin/gnucash-bin.c:289
@@ -254,10 +248,9 @@ msgstr "Указать путь поиска файлов документаци
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:240 ../src/bin/gnucash-bin.c:292
 msgid "DOCPATH"
-msgstr ""
+msgstr "Путь к документации"
 
 #: ../src/bin/gnucash-bin.c:242 ../src/bin/gnucash-bin.c:294
-#, fuzzy
 msgid "Add price quotes to given GnuCash datafile"
 msgstr "Добавить курсы валют в данный файл."
 
@@ -272,46 +265,41 @@ msgstr "Файл"
 msgid ""
 "Regular expression determining which namespace commodities will be retrieved"
 msgstr ""
+"Название продукта представляет регулярное выражение"
 
 #. Translators: Argument description for autohelp; see popt(3)
 #. Translators: Argument description for autohelp; see
 #. http://developer.gnome.org/doc/API/2.0/glib/glib-Commandline-option-parser.html
 #: ../src/bin/gnucash-bin.c:248 ../src/bin/gnucash-bin.c:302
 msgid "REGEXP"
-msgstr ""
+msgstr "Регулярное выражение"
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:322
-
 msgid "GnuCash %s development version"
 msgstr "Разрабатываемая версия: GnuCash %s"
 
 #. Translators: %s is the version number
 #: ../src/bin/gnucash-bin.c:325
-
 msgid "GnuCash %s"
-msgstr ""
+msgstr "GnuCash %s"
 
 #. Translators: 1st %s is the build date; 2nd %s is the SVN
 #. revision number
 #: ../src/bin/gnucash-bin.c:329
-
 msgid "Built %s from r%s"
 msgstr "Сборка %s от %s"
 
 #: ../src/bin/gnucash-bin.c:402
-#, fuzzy
 msgid "No quotes retrieved. Finance::Quote isn't installed properly.\n"
-msgstr "Внимание: Fincance::Quote не установлено должным образом."
+msgstr "Внимание: Fincance::Quote не установлено должным образом.\n"
 
 #. Install Price Quote Sources
 #: ../src/bin/gnucash-bin.c:451
-
 msgid "Checking Finance::Quote..."
 msgstr "Проверка Finance::Quote..."
 
 #: ../src/bin/gnucash-bin.c:458
-
 msgid "Loading data..."
 msgstr "Загружаются данные..."
 
@@ -331,7 +319,6 @@ msgstr "Загружаются данные..."
 #: ../intl-scm/guile-strings.c:82 ../intl-scm/guile-strings.c:2650
 #: ../intl-scm/guile-strings.c:3364 ../intl-scm/guile-strings.c:3462
 #: ../intl-scm/guile-strings.c:3678 ../intl-scm/guile-strings.c:3906
-
 msgid "Invoice"
 msgstr "Счет-фактура"
 
@@ -346,7 +333,6 @@ msgstr "Счет-фактура"
 #: ../intl-scm/guile-strings.c:108 ../intl-scm/guile-strings.c:3366
 #: ../intl-scm/guile-strings.c:3464 ../intl-scm/guile-strings.c:3680
 #: ../intl-scm/guile-strings.c:3908
-
 msgid "Bill"
 msgstr "Платеж"
 
@@ -354,29 +340,24 @@ msgstr "Платеж"
 #. src/report/standard-reports/net-barchart.scm
 #: ../src/business/business-core/gncInvoice.c:594 ../src/engine/Account.c:2075
 #: ../intl-scm/guile-strings.c:78 ../intl-scm/guile-strings.c:1238
-
 msgid "Expense"
 msgstr "Расход"
 
 #. Set memo.  action?
 #: ../src/business/business-core/gncInvoice.c:1029
-
 msgid "Extra to Charge Card"
 msgstr "Дополнительно к карте оплаты"
 
 #: ../src/business/business-core/gncInvoice.c:1068
-
 msgid "Generated from an invoice.  Try unposting the invoice."
 msgstr "Сгенерировано из счета. Сначала отмените отправку счета."
 
 #. Translators: This is the memo of an auto-created split
 #: ../src/business/business-core/gncInvoice.c:1086
-
 msgid "Automatic Payment Forward"
 msgstr "Автоматически проводить платежи"
 
 #: ../src/business/business-core/gncInvoice.c:1087
-
 msgid "Auto Split"
 msgstr "Автоматическое разделение"
 
@@ -391,22 +372,18 @@ msgstr "Автоматическое разделение"
 #: ../src/register/ledger-core/split-register.c:2035
 #: ../intl-scm/guile-strings.c:64 ../intl-scm/guile-strings.c:80
 #: ../intl-scm/guile-strings.c:110
-
 msgid "Payment"
 msgstr "Платеж"
 
 #: ../src/business/business-core/gncInvoice.c:1401
-
 msgid "Pre-Payment"
-msgstr "Авансовый платеж"
+msgstr "предоплата"
 
 #: ../src/business/business-core/gncInvoice.c:1498
-
 msgid " (posted)"
 msgstr " (отослано)"
 
 #: ../src/business/business-core/gncOrder.c:395
-
 msgid " (closed)"
 msgstr " (закрыто)"
 
@@ -416,20 +393,17 @@ msgstr " (закрыто)"
 #: ../src/business/business-gnome/dialog-invoice.c:1085
 #: ../src/gnome-utils/gnc-general-select.c:217
 #: ../src/import-export/qif-import/qif.glade.h:77
-
 msgid "Select..."
 msgstr "Выбрать..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:70
 #: ../src/gnome-utils/gnc-general-select.c:219
-
 msgid "Edit..."
 msgstr "Изменить..."
 
 #: ../src/business/business-gnome/business-gnome-utils.c:216
-#, fuzzy
 msgid "Voucher"
-msgstr "Идентификатор поставщика"
+msgstr "Ваучер"
 
 #. src/report/standard-reports/transaction.scm
 #: ../src/business/business-gnome/business-gnome-utils.c:459
@@ -437,95 +411,78 @@ msgstr "Идентификатор поставщика"
 #: ../intl-scm/guile-strings.c:2294 ../intl-scm/guile-strings.c:2320
 #: ../intl-scm/guile-strings.c:2380 ../intl-scm/guile-strings.c:2382
 #: ../intl-scm/guile-strings.c:2488 ../intl-scm/guile-strings.c:2504
-
 msgid "None"
 msgstr "Нет"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:635
-
 msgid "Yes"
 msgstr "Да"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:640
-
 msgid "No"
 msgstr "Нет"
 
 #: ../src/business/business-gnome/business-gnome-utils.c:645
-
 msgid "Use Global"
 msgstr "Использовать всегда"
 
 #. src/business/business-utils/business-utils.scm
 #: ../src/business/business-gnome/businessmod-gnome.c:122
 #: ../intl-scm/guile-strings.c:3160
-
 msgid "Business"
 msgstr "Фирма"
 
 #: ../src/business/business-gnome/business-urls.c:58
 #: ../src/business/business-gnome/business-urls.c:190
 #: ../src/gnome/top-level.c:191
-
 msgid "Badly formed URL %s"
-msgstr "Неверно записанный URL %s"
+msgstr "Неверно записан URL %s"
 
 #. ==============================================================
 #. HTML Handler for reports.
 #: ../src/business/business-gnome/business-urls.c:63
 #: ../src/business/business-gnome/business-urls.c:209
 #: ../src/business/business-gnome/business-urls.c:214
-#: ../src/business/business-gnome/business-urls.c:269
-#: ../src/gnome/top-level.c:89
-
+#: ../src/business/business-gnome/business-urls.c:269#: ../src/gnome/top-level.c:89
 msgid "Bad URL: %s"
-msgstr "Неверный URL: %s"
+msgstr "Неверен URL: %s"
 
 #: ../src/business/business-gnome/business-urls.c:72
-
 msgid "No such entity: %s"
 msgstr "Нет такого: %s"
 
 #. =================================================================
 #: ../src/business/business-gnome/business-urls.c:162
-#, c-format
 msgid "No such owner entity: %s"
-msgstr "Нет такого владельца сущности: %s"
+msgstr "Нет такого владельца: %s"
 
 #: ../src/business/business-gnome/business-urls.c:254
-#, c-format
 msgid "Entity type does not match %s: %s"
-msgstr "Тип сущности не совпадает с '%s': %s"
+msgstr "Тип не совпадает с %s: %s"
 
 #: ../src/business/business-gnome/business-urls.c:264
-
 msgid "Bad URL %s"
-msgstr "Неверный URL %s"
+msgstr "Неверен URL %s"
 
 #: ../src/business/business-gnome/business-urls.c:276
-#, c-format
 msgid "No such Account entity: %s"
 msgstr "Нет такой сущности для счета: %s"
 
 #: ../src/business/business-gnome/dialog-billterms.c:256
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:119
-
 msgid "Negative amounts are not allowed."
 msgstr "Отрицательные суммы не разрешены."
 
 #: ../src/business/business-gnome/dialog-billterms.c:261
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:126
-
 msgid "Percentage amount must be between 0 and 100."
 msgstr "Величина процентов должна быть между 0 и 100."
 
 #: ../src/business/business-gnome/dialog-billterms.c:284
-
 msgid "You must provide a name for this Billing Term."
 msgstr "Укажите название для сроков платежа."
 
 #: ../src/business/business-gnome/dialog-billterms.c:290
-
 msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
@@ -538,36 +495,30 @@ msgstr ""
 #: ../src/business/business-gnome/glade/billterms.glade.h:11
 #: ../src/gnome/glade/sched-xact.glade.h:68
 #: ../src/gnome-utils/gnc-date-delta.c:217 ../intl-scm/guile-strings.c:1164
-
 msgid "Days"
 msgstr "Дней"
 
 #: ../src/business/business-gnome/dialog-billterms.c:498
 #: ../src/business/business-gnome/glade/billterms.glade.h:22
-
 msgid "Proximo"
 msgstr " Cледующего месяца"
 
 #. src/business/business-reports/owner-report.scm
 #: ../src/business/business-gnome/dialog-billterms.c:501
 #: ../src/engine/FreqSpec.c:983 ../intl-scm/guile-strings.c:3420
-
 msgid "Unknown"
 msgstr "Неизвестно"
 
 #: ../src/business/business-gnome/dialog-billterms.c:625
-
 msgid "Term \"%s\" is in use.  You cannot delete it."
 msgstr "Срок \"%s\" используется. Вы не можете удалить его."
 
 #: ../src/business/business-gnome/dialog-billterms.c:631
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:556
-
 msgid "Are you sure you want to delete \"%s\"?"
 msgstr "Вы уверены, что хотите удалить \"%s\"?"
 
 #: ../src/business/business-gnome/dialog-customer.c:268
-
 msgid ""
 "You must enter a company name. If this customer is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
@@ -577,17 +528,14 @@ msgstr ""
 "\"название фирмы\" и \"контактное лицо\" одинаково."
 
 #: ../src/business/business-gnome/dialog-customer.c:279
-
 msgid "You must enter a billing address."
 msgstr "Вы должны ввести адрес плательщика."
 
 #: ../src/business/business-gnome/dialog-customer.c:289
-
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
 msgstr "Процент скидки должен быть от 0 до 100, или оставьте поле пустым."
 
 #: ../src/business/business-gnome/dialog-customer.c:294
-
 msgid "Credit must be a positive amount or you must leave it blank."
 msgstr "Кредит должен быть положительным числом, или вы должны оставить это поле пустым."
 
@@ -596,34 +544,28 @@ msgstr "Кредит должен быть положительным число
 #: ../src/business/business-gnome/dialog-job.c:230
 #: ../src/business/business-gnome/dialog-vendor.c:287
 #: ../src/gnome-utils/dialog-account.c:1346
-
 msgid "<No name>"
 msgstr "<Нет имени>"
 
 #: ../src/business/business-gnome/dialog-customer.c:372
-
 msgid "Edit Customer"
 msgstr "Редактировать клиента"
 
 #: ../src/business/business-gnome/dialog-customer.c:374
 #: ../src/business/business-gnome/glade/customer.glade.h:16
-
 msgid "New Customer"
 msgstr "Ввести нового клиента"
 
 #: ../src/business/business-gnome/dialog-customer.c:781
-
 msgid "View/Edit Customer"
 msgstr "Редактировать клиента"
 
 #: ../src/business/business-gnome/dialog-customer.c:782
-
 msgid "Customer's Jobs"
 msgstr "Задачи клиента"
 
 #. { N_("Customer's Orders"), order_customer_cb},
 #: ../src/business/business-gnome/dialog-customer.c:784
-
 msgid "Customer's Invoices"
 msgstr "Счета-фактуры клиента"
 
@@ -634,23 +576,19 @@ msgstr "Счета-фактуры клиента"
 #: ../src/business/business-gnome/dialog-invoice.c:2214
 #: ../src/business/business-gnome/dialog-invoice.c:2460
 #: ../src/business/business-gnome/dialog-job.c:516
-
 msgid "Process Payment"
 msgstr "Обработать платеж"
 
 #: ../src/business/business-gnome/dialog-customer.c:794
-
 msgid "Shipping Contact"
 msgstr "Торговый контракт"
 
 #: ../src/business/business-gnome/dialog-customer.c:796
 #: ../src/business/business-gnome/dialog-vendor.c:659
-
 msgid "Billing Contact"
 msgstr "Контракт на оплату"
 
 #: ../src/business/business-gnome/dialog-customer.c:798
-
 msgid "Customer ID"
 msgstr "Идентификатор клиента"
 
@@ -658,13 +596,11 @@ msgstr "Идентификатор клиента"
 #: ../src/business/business-gnome/dialog-customer.c:800
 #: ../src/business/business-gnome/dialog-vendor.c:663
 #: ../intl-scm/guile-strings.c:3162
-
 msgid "Company Name"
 msgstr "Название фирмы"
 
 #: ../src/business/business-gnome/dialog-customer.c:806
 #: ../src/business/business-gnome/dialog-vendor.c:669
-
 msgid "Contact"
 msgstr "Персона"
 
@@ -677,7 +613,6 @@ msgstr "Персона"
 #: ../src/business/business-gnome/dialog-order.c:826
 #: ../src/business/business-gnome/dialog-vendor.c:671
 #: ../intl-scm/guile-strings.c:3396 ../intl-scm/guile-strings.c:3746
-
 msgid "Company"
 msgstr "Фирма"
 
@@ -685,74 +620,60 @@ msgstr "Фирма"
 #: ../src/business/business-gnome/dialog-employee.c:704
 #: ../src/business/business-gnome/dialog-job.c:544
 #: ../src/business/business-gnome/dialog-vendor.c:673
-
 msgid "ID #"
 msgstr "ID #"
 
 #: ../src/business/business-gnome/dialog-customer.c:832
-
 msgid "Find Customer"
 msgstr "Найти клиента"
 
 #: ../src/business/business-gnome/dialog-date-close.c:72
-
 msgid "No Account selected.  Please try again."
 msgstr "Нет выбранных счетов. Попробуйте еще раз."
 
 #: ../src/business/business-gnome/dialog-employee.c:216
-
 msgid "You must enter a username."
 msgstr "Вы должны ввести имя пользователя."
 
 #: ../src/business/business-gnome/dialog-employee.c:221
-
 msgid "You must enter the employee's name."
 msgstr "Вы должны ввести имя сотрудника."
 
 #: ../src/business/business-gnome/dialog-employee.c:229
-
 msgid "You must enter an address."
 msgstr "Вы должны ввести адрес."
 
 #: ../src/business/business-gnome/dialog-employee.c:308
-
 msgid "Edit Employee"
 msgstr "Редактировать информацию о работнике"
 
 #: ../src/business/business-gnome/dialog-employee.c:310
 #: ../src/business/business-gnome/glade/employee.glade.h:19
-
 msgid "New Employee"
 msgstr "Новый работник"
 
 #: ../src/business/business-gnome/dialog-employee.c:682
-
 msgid "View/Edit Employee"
 msgstr "Редактировать информацию о работнике"
 
 #: ../src/business/business-gnome/dialog-employee.c:683
-#, fuzzy
 msgid "Expense Vouchers"
 msgstr "Диаграмма Расходов"
 
 #: ../src/business/business-gnome/dialog-employee.c:692
-
 msgid "Employee ID"
 msgstr "Идентификатор работника"
 
 #: ../src/business/business-gnome/dialog-employee.c:694
-
 msgid "Employee Username"
-msgstr "Имя работодателя для работника"
+msgstr "Имя работодателя"
 
 #: ../src/business/business-gnome/dialog-employee.c:696
 #: ../src/business/business-gnome/dialog-invoice.c:2304
-
 msgid "Employee Name"
 msgstr "Имя работника"
 
 #: ../src/business/business-gnome/dialog-employee.c:702
-
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -765,12 +686,10 @@ msgstr "Имя пользователя"
 #: ../src/gnome-utils/gnc-tree-model-budget.c:96
 #: ../src/gnome-utils/gnc-tree-view-commodity.c:402
 #: ../intl-scm/guile-strings.c:3720
-
 msgid "Name"
 msgstr "Название"
 
 #: ../src/business/business-gnome/dialog-employee.c:727
-
 msgid "Find Employee"
 msgstr "Найти работника"
 
@@ -781,34 +700,28 @@ msgstr "Найти работника"
 #. * invoiced.
 #: ../src/business/business-gnome/dialog-invoice.c:344
 #: ../src/business/business-gnome/dialog-order.c:174
-
 msgid "You need to supply Billing Information."
 msgstr "Требуется указать информацию о плательщике."
 
 #: ../src/business/business-gnome/dialog-invoice.c:499
-
 msgid "Are you sure you want to delete the selected entry?"
 msgstr "Вы уверены, что хотите удалить выбранную запись?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:501
-
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
 "Данная запись прикреплена к заказу и будет удалена вместе с ним!"
 
 #: ../src/business/business-gnome/dialog-invoice.c:609
-
 msgid "The Invoice must have at least one Entry."
 msgstr "В счет-фактуре должена быть по крайней мере одна позиция."
 
 #: ../src/business/business-gnome/dialog-invoice.c:616
-
 msgid "You may not post an invoice with a negative total value."
 msgstr "Нельзя отослать счет-фактуру с отрицательной суммой."
 
 #: ../src/business/business-gnome/dialog-invoice.c:623
-
 msgid "You may not post an expense voucher with a negative total cash value."
 msgstr ""
 
@@ -816,7 +729,6 @@ msgstr ""
 #. * post date, and posted account
 #.
 #: ../src/business/business-gnome/dialog-invoice.c:630
-
 msgid "Do you really want to post the invoice?"
 msgstr "Вы действительно хотите отправить счет-фактуру?"
 
@@ -827,118 +739,97 @@ msgstr "Вы действительно хотите отправить счет
 #: ../src/register/ledger-core/split-register-model.c:109
 #: ../intl-scm/guile-strings.c:3400 ../intl-scm/guile-strings.c:3596
 #: ../intl-scm/guile-strings.c:3916
-
 msgid "Due Date"
 msgstr "Дата оплаты"
 
 #: ../src/business/business-gnome/dialog-invoice.c:632
-
 msgid "Post Date"
 msgstr "Дата отправки"
 
 #: ../src/business/business-gnome/dialog-invoice.c:633
-
 msgid "Post to Account"
 msgstr "Перевести на счет"
 
 #: ../src/business/business-gnome/dialog-invoice.c:634
-
 msgid "Accumulate Splits?"
 msgstr "Накапливать сумму?"
 
 #: ../src/business/business-gnome/dialog-invoice.c:928
 #: ../src/gnome/glade/reconcile.glade.h:23
 #: ../src/gnome/window-reconcile.c:1051
-
 msgid "Total:"
 msgstr "Всего:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:933
-
 msgid "Subtotal:"
 msgstr "Предварительный итог:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:934
-
 msgid "Tax:"
 msgstr "Налоги:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:938
-
 msgid "Total Cash:"
 msgstr "Наличные:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:939
-
 msgid "Total Charge:"
 msgstr "Итого отгружено:"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1555
 #: ../src/business/business-gnome/glade/invoice.glade.h:19
-
 msgid "New Invoice"
 msgstr "Создать счет-фактуру"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1559
-
 msgid "Edit Invoice"
 msgstr "Редактировать счет-фактуру"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1562
-
 msgid "View Invoice"
 msgstr "Просмотреть счет-фактуру"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1570
-
 msgid "New Bill"
 msgstr "Создать платеж"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1574
-
 msgid "Edit Bill"
 msgstr "Редактировать платеж"
-
 
 #: ../src/business/business-gnome/dialog-invoice.c:1577
 msgid "View Bill"
 msgstr "Просмотреть платеж"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1585
-#, fuzzy
 msgid "New Expense Voucher"
-msgstr "Создать"
+msgstr "Создать новый ваучер"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1589
-#, fuzzy
+
 msgid "Edit Expense Voucher"
-msgstr "Редактировать"
+msgstr "Редактировать ваучер"
 
 #: ../src/business/business-gnome/dialog-invoice.c:1592
-#, fuzzy
 msgid "View Expense Voucher"
-msgstr "Вид"
+msgstr "Показать ваучер"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2201
-
 msgid "View/Edit Invoice"
 msgstr "Просмотреть/Редактировать счет-фактуру"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2206
 #: ../src/business/business-gnome/dialog-invoice.c:2459
-
 msgid "View/Edit Bill"
 msgstr "Просмотреть/Редактировать платеж"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: ../src/business/business-gnome/dialog-invoice.c:2213
-
 msgid "View/Edit Voucher"
 msgstr "Просмотреть/Редактировать поставщика"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2223
-
 msgid "Invoice Owner"
 msgstr "Владелец счета-фактуры"
 
@@ -948,7 +839,6 @@ msgstr "Владелец счета-фактуры"
 #: ../src/business/business-gnome/dialog-invoice.c:2226
 #: ../intl-scm/guile-strings.c:3296 ../intl-scm/guile-strings.c:3638
 #: ../intl-scm/guile-strings.c:3872
-
 msgid "Invoice Notes"
 msgstr "Примечание к счету-фактуре"
 
@@ -966,14 +856,12 @@ msgstr "Примечание к счету-фактуре"
 #: ../src/business/business-gnome/glade/job.glade.h:3
 #: ../intl-scm/guile-strings.c:3290 ../intl-scm/guile-strings.c:3632
 #: ../intl-scm/guile-strings.c:3690 ../intl-scm/guile-strings.c:3866
-
 msgid "Billing ID"
 msgstr "Идентификатор плательщика"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2232
 #: ../src/business/business-gnome/dialog-invoice.c:2262
 #: ../src/business/business-gnome/dialog-invoice.c:2292
-
 msgid "Is Paid?"
 msgstr "Оплачено?"
 
@@ -982,14 +870,12 @@ msgstr "Оплачено?"
 #: ../src/business/business-gnome/dialog-invoice.c:2295
 #: ../src/business/business-gnome/glade/invoice.glade.h:10
 #: ../src/gnome/dialog-find-transactions.c:119
-
 msgid "Date Posted"
 msgstr "Дата отправки"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2238
 #: ../src/business/business-gnome/dialog-invoice.c:2268
 #: ../src/business/business-gnome/dialog-invoice.c:2298
-
 msgid "Is Posted?"
 msgstr "Отослано?"
 
@@ -999,51 +885,42 @@ msgstr "Отослано?"
 #: ../src/business/business-gnome/dialog-order.c:814
 #: ../src/business/business-gnome/glade/invoice.glade.h:9
 #: ../src/business/business-gnome/glade/order.glade.h:7
-
 msgid "Date Opened"
 msgstr "Дата открытия"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2244
 #: ../src/business/business-gnome/dialog-invoice.c:2274
-
 msgid "Company Name "
 msgstr "Название компании "
 
 #: ../src/business/business-gnome/dialog-invoice.c:2248
 #: ../src/business/business-gnome/glade/invoice.glade.h:15
-
 msgid "Invoice ID"
 msgstr "Идентификатор счета-фактуры"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2253
-
 msgid "Bill Owner"
 msgstr "Владелец платежа"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2256
-
 msgid "Bill Notes"
 msgstr "Замечания к платежу"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2278
-
 msgid "Bill ID"
 msgstr "Идентификатор платежа"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2283
-#, fuzzy
 msgid "Voucher Owner"
-msgstr "Владелец счета-фактуры"
+msgstr "Владелец ваучера"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2286
-#, fuzzy
 msgid "Voucher Notes"
-msgstr "Примечание к счету-фактуре"
+msgstr "Примечание к ваучеру"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2308
-#, fuzzy
 msgid "Voucher ID"
-msgstr "Идентификатор поставщика"
+msgstr "Идентификатор ваучера"
 
 #. src/report/standard-reports/account-summary.scm
 #. src/business/business-reports/owner-report.scm
@@ -1052,25 +929,21 @@ msgstr "Идентификатор поставщика"
 #: ../src/gnome-utils/gnc-tree-view-price.c:454
 #: ../src/register/ledger-core/split-register-model.c:198
 #: ../intl-scm/guile-strings.c:1940 ../intl-scm/guile-strings.c:3404
-
 msgid "Type"
 msgstr "Тип"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2318
 #: ../src/register/ledger-core/split-register-model.c:152
-
 msgid "Paid"
 msgstr "Оплачено"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2321
-
 msgid "Posted"
 msgstr "Отправлено"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2326
 #: ../src/business/business-gnome/dialog-order.c:831
 #: ../src/gnome/glade/lots.glade.h:21
-
 msgid "Opened"
 msgstr "Открыто"
 
@@ -1087,19 +960,17 @@ msgstr "Открыто"
 #: ../intl-scm/guile-strings.c:2178 ../intl-scm/guile-strings.c:2240
 #: ../intl-scm/guile-strings.c:2432 ../intl-scm/guile-strings.c:2552
 #: ../intl-scm/guile-strings.c:2588
-
 msgid "Num"
 msgstr "Номер"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2397
-
 msgid "Find Bill"
 msgstr "Найти платеж"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2403
-#, fuzzy
+
 msgid "Find Expense Voucher"
-msgstr "Найти"
+msgstr "Найти ваучер"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -1107,12 +978,11 @@ msgstr "Найти"
 #: ../src/business/business-gnome/dialog-invoice.c:2404
 #: ../intl-scm/guile-strings.c:3368 ../intl-scm/guile-strings.c:3682
 #: ../intl-scm/guile-strings.c:3910
-#, fuzzy
+
 msgid "Expense Voucher"
-msgstr "Диаграмма Расходов"
+msgstr "Ваучер"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2409
-
 msgid "Find Invoice"
 msgstr "Найти счет-фактуру"
 
@@ -1133,12 +1003,10 @@ msgstr "Найти счет-фактуру"
 #: ../intl-scm/guile-strings.c:2254 ../intl-scm/guile-strings.c:2356
 #: ../intl-scm/guile-strings.c:2484 ../intl-scm/guile-strings.c:2616
 #: ../intl-scm/guile-strings.c:2654 ../intl-scm/guile-strings.c:3408
-
 msgid "Amount"
 msgstr "Сумма"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2470
-
 msgid "Due"
 msgstr "Платеж от"
 
@@ -1147,80 +1015,65 @@ msgid "Due Bills Reminder"
 msgstr "Напоминание о долгах"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2514
-
 msgid "The following bills are due"
 msgstr "Следующие счета должны быть оплачены"
 
 #: ../src/business/business-gnome/dialog-invoice.c:2515
-
 msgid "The following bill is due"
 msgstr "Следующий счет должен быть оплачен"
 
 #: ../src/business/business-gnome/dialog-job.c:130
-
 msgid "The Job must be given a name."
 msgstr "Задаче должно быть присвоено название."
 
 #: ../src/business/business-gnome/dialog-job.c:139
-
 msgid "You must choose an owner for this job."
 msgstr "Вы должны выбрать владельца данной задачи."
 
 #: ../src/business/business-gnome/dialog-job.c:237
-
 msgid "Edit Job"
 msgstr "Редактировать задачу"
 
 #: ../src/business/business-gnome/dialog-job.c:239
-
 msgid "New Job"
 msgstr "Создать задачу"
 
 #: ../src/business/business-gnome/dialog-job.c:514
-
 msgid "View/Edit Job"
 msgstr "Просмотреть или исправить задачу"
 
 #: ../src/business/business-gnome/dialog-job.c:515
-
 msgid "View Invoices"
 msgstr "Просмотреть счета-фактуры"
 
 #: ../src/business/business-gnome/dialog-job.c:524
-
 msgid "Owner's Name"
 msgstr "Имя владельца"
 
 #: ../src/business/business-gnome/dialog-job.c:526
-
 msgid "Only Active?"
 msgstr "Только действующий?"
 
 #: ../src/business/business-gnome/dialog-job.c:530
 #: ../src/business/business-gnome/glade/job.glade.h:8
-
 msgid "Job Number"
 msgstr "Номер задачи"
 
 #: ../src/business/business-gnome/dialog-job.c:532
 #: ../src/business/business-gnome/dialog-job.c:542
 #: ../src/business/business-gnome/glade/job.glade.h:7
-
 msgid "Job Name"
 msgstr "Название задачи"
 
 #: ../src/business/business-gnome/dialog-job.c:590
-
 msgid "Find Job"
 msgstr "Искать задачу"
 
 #: ../src/business/business-gnome/dialog-order.c:165
-
 msgid "The Order must be given an ID."
 msgstr "Заказ должен иметь идентификатор."
 
 #: ../src/business/business-gnome/dialog-order.c:268
-
 msgid "The Order must have at least one Entry."
 msgstr "Заказ должен содержать по крайней мере одну запись."
 
@@ -1228,68 +1081,57 @@ msgstr "Заказ должен содержать по крайней мере 
 #. * close this order!
 #.
 #: ../src/business/business-gnome/dialog-order.c:287
-#, fuzzy
 msgid ""
 "This order contains entries that have not been invoiced. Are you sure you "
 "want to close it out before you invoice all the entries?"
-msgstr "содержит до  close прочие?"
+msgstr "Заказ содержит записи, не имеющие счетов-фактур. Желаете закрыть их"
+"перед передачей в счета?"
 
 #. Ok, we can close this.  Ask for verification and set the closed date
 #: ../src/business/business-gnome/dialog-order.c:296
-
 msgid "Do you really want to close the order?"
 msgstr "Вы действительно хотите закрыть заказ?"
 
 #: ../src/business/business-gnome/dialog-order.c:297
-
 msgid "Close Date"
 msgstr "Дата закрытия"
 
 #: ../src/business/business-gnome/dialog-order.c:800
-
 msgid "View/Edit Order"
 msgstr "Просмотреть  или исправить заказ"
 
 #: ../src/business/business-gnome/dialog-order.c:808
-
 msgid "Order Notes"
 msgstr "Примечание к заказу"
 
 #: ../src/business/business-gnome/dialog-order.c:810
 #: ../src/business/business-gnome/glade/order.glade.h:6
-
 msgid "Date Closed"
 msgstr "Дата закрытия"
 
 #: ../src/business/business-gnome/dialog-order.c:812
-
 msgid "Is Closed?"
 msgstr "Закрыт?"
 
 #: ../src/business/business-gnome/dialog-order.c:816
-
 msgid "Owner Name "
 msgstr "Имя владельца "
 
 #: ../src/business/business-gnome/dialog-order.c:818
 #: ../src/business/business-gnome/glade/order.glade.h:13
-
 msgid "Order ID"
 msgstr "Идентификатор заказа"
 
 #: ../src/business/business-gnome/dialog-order.c:829
 #: ../src/gnome/glade/lots.glade.h:10
-
 msgid "Closed"
 msgstr "Закрыто"
 
 #: ../src/business/business-gnome/dialog-order.c:884
-
 msgid "Find Order"
 msgstr "Найти заказ"
 
 #: ../src/business/business-gnome/dialog-payment.c:226
-
 msgid ""
 "You must enter the amount of the payment.  The payment amount must be "
 "greater than zero."
@@ -1297,35 +1139,31 @@ msgstr ""
 "Вы должны ввести сумму платежа. Сумма платежа должна быть больше нуля."
 
 #: ../src/business/business-gnome/dialog-payment.c:235
-
 msgid "You must select a company for payment processing."
 msgstr "Вы должны выбрать фирму для осуществления платежа."
 
 #: ../src/business/business-gnome/dialog-payment.c:243
-
 msgid "You must select a transfer account from the account tree."
-msgstr "Вы должны выбрать счет для передачи из дерева счетов."
+msgstr "Вы должны выбрать счет для передачи из древа счетов."
 
 #: ../src/business/business-gnome/dialog-payment.c:251
-
 msgid "You must enter an account name for posting."
 msgstr "Введите счет для платежа."
 
 #: ../src/business/business-gnome/dialog-payment.c:260
-
 msgid "Your selected post account, %s, does not exist"
 msgstr "Выбранный счет %s не существует"
 
 #: ../src/business/business-gnome/dialog-payment.c:460
-#, c-format
 msgid ""
 "You have no valid \"Post To\" accounts.  Please create an account of type \"%"
 "s\" before you continue to process this payment.  Perhaps you want to create "
 "an Invoice or Bill first?"
 msgstr ""
+"Не существует счет, на который передаются средства. Создайте счет типа \"%"
+"s\" перед продолжением оплаты. Вероятно, сначала Вы хотите создать счет или платеж?"
 
 #: ../src/business/business-gnome/dialog-vendor.c:205
-
 msgid ""
 "You must enter a company name. If this vendor is an individual (and not a "
 "company) you should set the \"company name\" and \"contact name\" the same."
@@ -1335,150 +1173,120 @@ msgstr ""
 "\"название фирмы\" и \"контактное лицо\" одинаково."
 
 #: ../src/business/business-gnome/dialog-vendor.c:216
-
 msgid "You must enter a payment address."
 msgstr "Вы должны указать назначение платежа."
 
 #: ../src/business/business-gnome/dialog-vendor.c:294
-
 msgid "Edit Vendor"
 msgstr "Изменить поставщика"
 
 #: ../src/business/business-gnome/dialog-vendor.c:296
 #: ../src/business/business-gnome/glade/vendor.glade.h:10
-
 msgid "New Vendor"
 msgstr "Создать поставщика"
 
 #: ../src/business/business-gnome/dialog-vendor.c:646
-
 msgid "View/Edit Vendor"
 msgstr "Просмотреть/Изменить поставщика"
 
 #: ../src/business/business-gnome/dialog-vendor.c:647
-
 msgid "Vendor's Jobs"
 msgstr "Задачи поставщика"
 
 #. { N_("Vendor Orders"), order_vendor_cb},
 #: ../src/business/business-gnome/dialog-vendor.c:649
-
 msgid "Vendor's Bills"
 msgstr "Счета поставщика"
 
 #: ../src/business/business-gnome/dialog-vendor.c:650
-
 msgid "Pay Bill"
 msgstr "Отплатить счета"
 
 #: ../src/business/business-gnome/dialog-vendor.c:661
-
 msgid "Vendor ID"
 msgstr "Идентификатор поставщика"
 
 #: ../src/business/business-gnome/dialog-vendor.c:694
-
 msgid "Find Vendor"
 msgstr "Найти поставщика"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:1
-
 msgid "<b>New Billing Term</b>"
 msgstr "<b>Создать новые сроки оплаты</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:2
-
 msgid "<b>Term Definition</b>"
 msgstr "<b>Определение срока</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:3
-
 msgid "<b>Terms</b>"
 msgstr "<b>Срок</b>"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:4
-
 msgid "Absolute Day-of-the-month"
 msgstr "Абсолютный день месяца"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:5
-
 msgid "Cancel your changes"
 msgstr "Отменить изменения"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:6
-
 msgid "Choose the type of Billing Term"
 msgstr "Выбрать тип срока платежей"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:7
-
 msgid "Close this window"
 msgstr "Закрыть окно"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:8
-
 msgid "Commit this Billing Term"
-msgstr "Подтвердить данные условия платежа"
+msgstr "Подтвердить данные сроки платежа"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:9
-
 msgid "Create a new Billing Term"
 msgstr "Создать новые условия платежа"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:10
-
 msgid "Cutoff Day: "
 msgstr "Последний срок: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:12
-
-#, fuzzy
 msgid "De_scription:"
 msgstr "Описание:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:13
-
 msgid "Delete the current Billing Term"
 msgstr "Удалить текущие условия платежа"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:15
-
 msgid "Discount %: "
 msgstr "Скидка %: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:16
-
 msgid "Discount Day: "
 msgstr "Скидочный день: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:17
-
 msgid "Discount Days: "
 msgstr "Скидочные дни: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:18
-
 msgid "Due Day: "
 msgstr "Облагаемый день: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:19
-
 msgid "Due Days: "
 msgstr "Облагаемые дни: "
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:20
-
 msgid "Edit the current Billing Term"
 msgstr "Изменить текущие условия платежа"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:21
-
 msgid "Number of days from now"
 msgstr "Количество дней, начиная с сегодняшнего"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:23
-
 msgid "Table"
 msgstr "Таблица"
 
@@ -1489,110 +1297,94 @@ msgstr "Таблица"
 #: ../src/business/business-gnome/glade/invoice.glade.h:24
 #: ../intl-scm/guile-strings.c:3382 ../intl-scm/guile-strings.c:3692
 #: ../intl-scm/guile-strings.c:3922
-
 msgid "Terms"
 msgstr "Сроки"
 
-#: ../src/business/business-gnome/glade/billterms.glade.h:25
-#, fuzzy
+#: ../src/busine#, fuzzyss/business-gnome/glade/billterms.glade.h:25
 msgid ""
 "The cutoff day for applying bills to the next month.  After the cutoff, "
 "bills are applied to the following month.  Negative values count backwards "
 "from the end of the month."
-msgstr "день до  месяц до  месяц Негатив месяц."
+msgstr "Последний день для платежей месяца. После этого"
+"платежи переносятся на следующий месяц. Отрицательные значения возвращаются"
+"с окончания месяца."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:26
-
 msgid "The day of the month bills are due"
 msgstr "День, в который счета за месяц должны быть оплачены"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:27
-
 msgid "The description of the Billing Term, printed on invoices"
 msgstr "Описание условий платежа для помещения на счет-фактуру"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:28
-
 msgid "The discount percentage applied if paid early."
 msgstr "Процент скидки, применяемый при предоплате."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:29
-
 msgid "The internal name of the Billing Term."
 msgstr "Внутреннее имя Срока Оплаты"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:30
-
 msgid "The last day of the month for the early payment discount."
-msgstr "Послдней день месяца для скидки раннего платежа."
+msgstr "Последний день месяца скидки для предоплаты."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:31
-
 msgid ""
 "The number of days after the post date during which a discount will be "
 "applied for early payment."
 msgstr ""
-"Количество дней после даты отправки в течение которого скидка будет "
-"применена для раннего платежа."
+"Количество дней после даты отправки, в течение которого скидка будет "
+"применена для предоплаты."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:32
-
 msgid "The number of days to pay the bill after the post date."
 msgstr "Количество дней для оплаты счета после даты отправки."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:33
-
 msgid "The percentage discount applied for early payment."
 msgstr "Процент скидки, применяемый для предоплаты."
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:34
-
 msgid "Type Menu"
 msgstr "Тип меню"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:35
 #: ../src/report/report-gnome/report.glade.h:21
-
 msgid "_Name:"
 msgstr "Название:"
 
 #: ../src/business/business-gnome/glade/billterms.glade.h:36
 #: ../src/gnome/glade/price.glade.h:25
 #: ../src/gnome-utils/glade/commodity.glade.h:26
-
 msgid "_Type:"
 msgstr "Тип:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:1
-
 msgid "<b>Bills</b>"
 msgstr "<b>Платежи</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:2
-
 msgid "<b>Invoices</b>"
 msgstr "<b>Счета-фактуры</b>"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:3
-
 msgid "Default number of register rows to display in Invoices."
-msgstr ""
-"Количество столбцов журнала, по умолчанию показываемых в счетах-фактурах."
+msgstr "Количество столбцов журнала, по умолчанию показываемых в счетах-фактурах."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:4
-#, fuzzy
 msgid "How many days in the future to warn about Bills coming due."
-msgstr "дней дюйм до  about."
+msgstr "За сколько дней предупреждать о необходимости оплаты платежей."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:5
 msgid ""
 "If checked, each invoice will be opened in its own top level window.  If "
 "clear, the invoice will be opened in the current window."
-msgstr ""
+msgstr "Если выбрано, каждый счет-фактура будет открыт в отдельном окне. Если"
+"нет - счета будут открыты в текущем окне"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:6
 #: ../src/gnome-utils/glade/preferences.glade.h:76
-
 msgid "Number of _rows:"
 msgstr "Число строк"
 
@@ -1601,64 +1393,59 @@ msgstr "Число строк"
 #: ../src/import-export/generic-import.glade.h:46
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:3
 #: ../src/import-export/qif-import/qif.glade.h:64
-
 msgid "Preferences"
 msgstr "Настройки"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
-
 msgid "Ta_x included"
 msgstr "Налоги включены?"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
-
 msgid ""
 "Whether multiple entries in an invoice which transfer to the same account "
 "should be accumulated into a single split by default. This setting can be "
 "changed in the Post dialog."
 msgstr ""
+"Какая из нескольких записей счета должна передаваться на счет при накоплении"
+"в единственном счете по умолчанию. Это изменяется в диалоге отправки"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:10
-
 msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
+"Налоги, включенные в платеж по умолчанию. Эта установка наследуется при вводе новых"
+"клиентов и поставщиков"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:11
-
 msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
+"Налоги, включенные в платеж по умолчанию. Это изменяется при вводе новых"
+"клиентов и поставщиков"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:12
-#, fuzzy
 msgid "Whether to display the list of Bills Due at startup."
-msgstr "Выберите валюту, в которой показывать значения в отчете."
+msgstr "Какие из платежей к оплате должны быть показаны при запуске."
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:13
-
 msgid "_Accumulate splits on post"
-msgstr "Автоматически разделять платеж"
+msgstr "Накапливать разделенные счета при отправке"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:14
-#, fuzzy
 msgid "_Days in advance:"
-msgstr " днями ранее"
+msgstr "На протяжении, дней:"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:15
-#, fuzzy
 msgid "_Notify when due"
-msgstr "Извещать при создании"
+msgstr "Извещать о долгах к оплате"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
-
 msgid "_Open in new window"
 msgstr "Открыть в новом окне"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
-
 msgid "_Tax included"
 msgstr "Налоги включены?"
 
@@ -1673,7 +1460,6 @@ msgstr "Налоги включены?"
 #: ../src/gnome/glade/acctperiod.glade.h:1 ../src/gnome/glade/lots.glade.h:1
 #: ../src/gnome-utils/glade/gnc-date-format.glade.h:3
 #: ../src/gnome-utils/glade/transfer.glade.h:1
-
 msgid "*"
 msgstr ""
 
@@ -1683,44 +1469,37 @@ msgstr ""
 #: ../src/business/business-gnome/glade/job.glade.h:2
 #: ../src/business/business-gnome/glade/order.glade.h:3
 #: ../src/business/business-gnome/glade/vendor.glade.h:2
-
 msgid "Active"
 msgstr "Действующий"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:3
 #: ../src/business/business-gnome/glade/employee.glade.h:5
 #: ../src/business/business-gnome/glade/vendor.glade.h:3
-
 msgid "Address: "
 msgstr "Адрес: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:4
-
 msgid "Billing Address"
 msgstr "Адрес плательщика"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:5
 #: ../src/business/business-gnome/glade/invoice.glade.h:6
 #: ../src/business/business-gnome/glade/order.glade.h:4
-
 msgid "Billing Information"
 msgstr "Информация о плательщике"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:6
 #: ../src/business/business-gnome/glade/vendor.glade.h:4
-
 msgid "Company Name: "
 msgstr "Название фирмы: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:7
-
 msgid "Credit Limit: "
 msgstr "Предел кредита:"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:8
 #: ../src/business/business-gnome/glade/employee.glade.h:8
 #: ../src/business/business-gnome/glade/vendor.glade.h:5
-
 msgid "Currency: "
 msgstr "Валюта: "
 
@@ -1730,45 +1509,38 @@ msgstr "Валюта: "
 #: ../src/business/business-gnome/search-owner.c:251
 #: ../src/register/ledger-core/split-register-model.c:135
 #: ../intl-scm/guile-strings.c:3472
-
 msgid "Customer"
 msgstr "Клиент"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:10
-
 msgid "Customer Number: "
 msgstr "Номер клиента: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:11
-
 msgid "Discount: "
 msgstr "Скидка: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:12
 #: ../src/business/business-gnome/glade/employee.glade.h:11
 #: ../src/business/business-gnome/glade/vendor.glade.h:6
-
 msgid "Email: "
 msgstr "Электронный адрес: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:13
 #: ../src/business/business-gnome/glade/employee.glade.h:14
 #: ../src/business/business-gnome/glade/vendor.glade.h:7
-
 msgid "Fax: "
 msgstr "Факс: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:14
 #: ../src/business/business-gnome/glade/employee.glade.h:15
 #: ../src/business/business-gnome/glade/vendor.glade.h:8
-
 msgid "Identification"
 msgstr "Идентификация"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:15
 #: ../src/business/business-gnome/glade/employee.glade.h:18
 #: ../src/business/business-gnome/glade/vendor.glade.h:9
-
 msgid "Name: "
 msgstr "Название: "
 
@@ -1781,51 +1553,42 @@ msgstr "Название: "
 #: ../src/gnome-utils/gnc-tree-view-account.c:637
 #: ../src/register/ledger-core/split-register-model.c:310
 #: ../intl-scm/guile-strings.c:1948
-
 msgid "Notes"
 msgstr "Заметки"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:18
 #: ../src/business/business-gnome/glade/vendor.glade.h:12
-
 msgid "Override the global Tax Table?"
-msgstr "приметить общую таблицу налогов?"
+msgstr "Приметить общую таблицу налогов?"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:19
 #: ../src/business/business-gnome/glade/employee.glade.h:21
 #: ../src/business/business-gnome/glade/vendor.glade.h:15
-
 msgid "Phone: "
 msgstr "Телефон: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:20
-
 msgid "Shipping Address"
 msgstr "Адрес получателя"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:21
-
 msgid "Shipping Information"
 msgstr "Информация о получателе"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:22
-
 msgid "Tax Included: "
 msgstr "Налог учтен: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:23
-
 msgid "Tax Table: "
 msgstr "Таблица налогов: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:24
 #: ../src/business/business-gnome/glade/vendor.glade.h:18
-
 msgid "Terms: "
 msgstr "Сроки: "
 
 #: ../src/business/business-gnome/glade/customer.glade.h:25
-
 msgid ""
 "The customer ID number.  If left blank a reasonable number will be chosen "
 "for you"
@@ -1834,7 +1597,6 @@ msgstr ""
 "выбран автоматически"
 
 #: ../src/business/business-gnome/glade/customer.glade.h:26
-
 msgid "What Tax Table should be applied to this customer?"
 msgstr "Какая таблица налогов применяется для этого клиента?"
 
@@ -1865,63 +1627,52 @@ msgstr "Какая таблица налогов применяется для �
 #: ../intl-scm/guile-strings.c:3218 ../intl-scm/guile-strings.c:3406
 #: ../intl-scm/guile-strings.c:3508 ../intl-scm/guile-strings.c:3536
 #: ../intl-scm/guile-strings.c:3766 ../intl-scm/guile-strings.c:3794
-
 msgid "Description"
 msgstr "Описание"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:3
-
 msgid "Question"
 msgstr "Вопрос"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:4
-
 msgid "acct"
 msgstr ""
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:5
-#, fuzzy
+
 msgid "duedate"
-msgstr "Конечная дата:"
+msgstr "Конечная дата оплаты"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:6
-#, fuzzy
 msgid "postd"
 msgstr "Депозит"
 
 #: ../src/business/business-gnome/glade/date-close.glade.h:7
-
 msgid "question"
 msgstr "вопрос"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:2
-
 msgid "Access Control"
 msgstr "Контроль доступа"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:3
-
 msgid "Access Control List"
 msgstr "Список контроля доступа"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:6
-
 msgid "Billing"
 msgstr "Платежи"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:7
 #: ../src/gnome-utils/dialog-transfer.c:1743
-
 msgid "Credit Account"
 msgstr "Кредитные счета"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:9
-
 msgid "Default Hours per Day: "
 msgstr "По умолчанию часов в дне: "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:10
-
 msgid "Default Rate: "
 msgstr "Коэффициент по умолчанию: "
 
@@ -1929,33 +1680,27 @@ msgstr "Коэффициент по умолчанию: "
 #: ../src/business/business-gnome/glade/employee.glade.h:12
 #: ../src/business/business-gnome/search-owner.c:254
 #: ../intl-scm/guile-strings.c:3476
-
 msgid "Employee"
 msgstr "Работник"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:13
-
 msgid "Employee Number: "
 msgstr "Номер работника: "
 
 #: ../src/business/business-gnome/glade/employee.glade.h:16
-
 msgid "Interface"
 msgstr "Интерфейс"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:17
-
 msgid "Language: "
 msgstr "Язык:"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:20
 #: ../src/business/business-gnome/glade/vendor.glade.h:13
-
 msgid "Payment Address"
 msgstr "Адрес платежа"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:22
-
 msgid ""
 "The employee ID number.  If left blank a reasonable number will be chosen "
 "for you"
@@ -1964,73 +1709,60 @@ msgstr ""
 "выбран автоматически"
 
 #: ../src/business/business-gnome/glade/employee.glade.h:23
-
 msgid "Username: "
 msgstr "Имя пользователя: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:1
 #: ../src/business/business-gnome/glade/order.glade.h:1
-
 msgid "(owner)"
 msgstr "(владелец)"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:4
-
 msgid "Additional to Card:"
 msgstr "Дополнительно к карте:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
-
 msgid "Customer: "
 msgstr "Клиент: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:11
-#, fuzzy
 msgid "Default Chargeback Project"
-msgstr "По умолчанию"
+msgstr "Возврат по умолчанию"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:12
-
 msgid "Extra Payments"
 msgstr "Дополнительные платежи"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:14
-
 msgid "Invoice Entries"
 msgstr "Записи счета-фактуры"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:16
-
 msgid "Invoice Information"
 msgstr "Информация о счете-фактуре"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:17
 #: ../src/business/business-gnome/search-owner.c:255
-
 msgid "Job"
 msgstr "Задача"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:18
-
 msgid "Job: "
 msgstr "Задача: "
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:20
 msgid "No, keep them as they are"
-msgstr ""
+msgstr "Нет, сохранить как есть"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:22
-
 msgid "Posted Account"
 msgstr "Отправленные счета"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:23
-
 msgid "Reset Tax Tables to present Values?"
 msgstr "Сбросить таблицу налогов к текущей?"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:25
-
 msgid ""
 "The invoice ID number.  If left blank a reasonable number will be chosen for "
 "you."
@@ -2039,7 +1771,6 @@ msgstr ""
 "проставлено автоматически"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:26
-
 msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
@@ -2047,32 +1778,26 @@ msgstr "При отмене отправки счета соответствую
 "Вы уверены, что хотите этого?"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:28
-
 msgid "Yes, reset the Tax Tables"
 msgstr "Да, сбросить таблицу налогов"
 
 #: ../src/business/business-gnome/glade/job.glade.h:4
-
 msgid "Job Active"
 msgstr "Активная задача"
 
 #: ../src/business/business-gnome/glade/job.glade.h:5
-
 msgid "Job Dialog"
 msgstr "Диалог задач"
 
 #: ../src/business/business-gnome/glade/job.glade.h:6
-
 msgid "Job Information"
 msgstr "Информация о задаче"
 
 #: ../src/business/business-gnome/glade/job.glade.h:9
-
 msgid "Owner Information"
 msgstr "Информация о владельце"
 
 #: ../src/business/business-gnome/glade/job.glade.h:10
-
 msgid ""
 "The job ID number.  If left blank a reasonable number will be chosen for you"
 msgstr ""
@@ -2080,12 +1805,10 @@ msgstr ""
 "прописано за Вас"
 
 #: ../src/business/business-gnome/glade/order.glade.h:5
-
 msgid "Close Order"
 msgstr "Закрыть заказ"
 
 #: ../src/business/business-gnome/glade/order.glade.h:8
-
 msgid "Invoices"
 msgstr "Счета-фактуры"
 
@@ -2094,17 +1817,14 @@ msgid "New Order"
 msgstr "Создать заказ"
 
 #: ../src/business/business-gnome/glade/order.glade.h:11
-
 msgid "Order Entries"
 msgstr "Записи заказа"
 
 #: ../src/business/business-gnome/glade/order.glade.h:12
-
 msgid "Order Entry"
 msgstr "Запись заказа"
 
 #: ../src/business/business-gnome/glade/order.glade.h:14
-
 msgid "Order Information"
 msgstr "Информация о заказе"
 
@@ -2114,12 +1834,10 @@ msgstr "Информация о заказе"
 #: ../src/business/business-gnome/glade/order.glade.h:15
 #: ../intl-scm/guile-strings.c:3380 ../intl-scm/guile-strings.c:3402
 #: ../intl-scm/guile-strings.c:3920
-
 msgid "Reference"
 msgstr "Ссылка"
 
 #: ../src/business/business-gnome/glade/order.glade.h:16
-
 msgid ""
 "The order ID number.  If left blank a reasonable number will be chosen for "
 "you"
@@ -2156,7 +1874,6 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:3398 ../intl-scm/guile-strings.c:3506
 #: ../intl-scm/guile-strings.c:3530 ../intl-scm/guile-strings.c:3764
 #: ../intl-scm/guile-strings.c:3788
-
 msgid "Date"
 msgstr "Дата"
 
@@ -2169,39 +1886,32 @@ msgstr "Дата"
 #: ../intl-scm/guile-strings.c:1480 ../intl-scm/guile-strings.c:2214
 #: ../intl-scm/guile-strings.c:2244 ../intl-scm/guile-strings.c:2368
 #: ../intl-scm/guile-strings.c:2440
-
 msgid "Memo"
 msgstr "Памятка"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:6
 #: ../src/business/business-gnome/glade/vendor.glade.h:14
 #: ../src/gnome/window-reconcile.c:443
-
 msgid "Payment Information"
 msgstr "Информация о платеже"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:7
-
 msgid "Post To"
 msgstr "Отправить в"
 
 #: ../src/business/business-gnome/glade/payment.glade.h:8
-
 msgid "Transfer Account"
 msgstr "Счет для оплаты"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:16
-
 msgid "Tax Included:"
 msgstr "Налоги включены:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:17
-
 msgid "Tax Table:"
 msgstr "Таблица налогов:"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:19
-
 msgid ""
 "The vendor ID number.  If left blank a reasonable number will be chosen for "
 "you"
@@ -2214,17 +1924,14 @@ msgstr ""
 #: ../src/business/business-gnome/search-owner.c:253
 #: ../src/register/ledger-core/split-register-model.c:137
 #: ../intl-scm/guile-strings.c:3474
-
 msgid "Vendor"
 msgstr "Поставщик"
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:21
-
 msgid "Vendor Number: "
 msgstr "Номер поставщика: "
 
 #: ../src/business/business-gnome/glade/vendor.glade.h:22
-
 msgid "What Tax Table should be applied to this vendor?"
 msgstr "Какая таблица налогов испольуется для этого поставщика?"
 
@@ -2235,538 +1942,440 @@ msgstr "Какая таблица налогов испольуется для �
 #: ../src/business/business-gnome/gnc-plugin-business.c:148
 #: ../src/business/business-gnome/gnc-plugin-business.c:241
 #: ../intl-scm/guile-strings.c:3126 ../intl-scm/guile-strings.c:3392
-
 msgid "_Business"
 msgstr "_Фирма"
 
 #. Customer submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:151
-
 msgid "_Customer"
 msgstr "_Клиент"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:152
-
 msgid "_New Customer..."
 msgstr "_Ввести нового клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:153
-
 msgid "Open the New Customer dialog"
 msgstr "Создать нового клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:155
-
 msgid "_Find Customer..."
 msgstr "_Найти клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:156
-
 msgid "Open the Find Customer dialog"
 msgstr "Найти клиента"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:158
-
 msgid "New _Invoice..."
 msgstr "Создать счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:159
-
 msgid "Open the New Invoice dialog"
 msgstr "Создать новый счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:161
-
 msgid "Find In_voice..."
 msgstr "Найти счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:162
-
 msgid "Open the Find Invoice dialog"
 msgstr "Найти счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:164
 #: ../src/business/business-gnome/gnc-plugin-business.c:188
-
 msgid "New _Job..."
 msgstr "Создать задачу"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:165
 #: ../src/business/business-gnome/gnc-plugin-business.c:189
-
 msgid "Open the New Job dialog"
 msgstr "Создать задачу"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:167
 #: ../src/business/business-gnome/gnc-plugin-business.c:191
-
 msgid "Find Jo_b..."
 msgstr "Искать задачу"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:168
 #: ../src/business/business-gnome/gnc-plugin-business.c:192
-
 msgid "Open the Find Job dialog"
 msgstr "Поиск задачи"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:170
 #: ../src/business/business-gnome/gnc-plugin-business.c:194
 #: ../src/business/business-gnome/gnc-plugin-business.c:212
-
 msgid "_Process Payment..."
 msgstr "_Обработать платеж"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:171
 #: ../src/business/business-gnome/gnc-plugin-business.c:195
 #: ../src/business/business-gnome/gnc-plugin-business.c:213
-
 msgid "Open the Process Payment dialog"
 msgstr "Обработать платеж"
 
 #. Vendor submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:175
-
 msgid "_Vendor"
 msgstr "_Поставщик"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:176
-
 msgid "_New Vendor..."
-msgstr "_Создать поставщика"
+msgstr "Новый поставщик..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:177
-
 msgid "Open the New Vendor dialog"
 msgstr "Ввести нового поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:179
 
 msgid "_Find Vendor..."
-msgstr "_Найти поставщика"
+msgstr "_Найти поставщика..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:180
-
 msgid "Open the Find Vendor dialog"
 msgstr "Найти поставщика"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:182
-
 msgid "New _Bill..."
 msgstr "Создать _платеж"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:183
-
 msgid "Open the New Bill dialog"
-msgstr "Создать новый платеж"
+msgstr "Новый платеж"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
-
 msgid "Find Bi_ll..."
 msgstr "Найти _платеж"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
-
 msgid "Open the Find Bill dialog"
 msgstr "Найти платеж"
 
 #. Employee submenu
 #: ../src/business/business-gnome/gnc-plugin-business.c:199
-
 msgid "_Employee"
 msgstr "_Работник"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:200
-
 msgid "_New Employee..."
 msgstr "_Ввести нового работника"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:201
-
 msgid "Open the New Employee dialog"
 msgstr "Ввести нового работника"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:203
-
 msgid "_Find Employee..."
 msgstr "_Найти работника"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:204
-
 msgid "Open the Find Employee dialog"
 msgstr "Найти работника"
 
-#: ../src/business/business-gnome/gnc-plugin-business.c:206
-#, fuzzy
+#: ../src/business/business-gnome/gnc-plugin-business.c:206#
 msgid "New _Expense Voucher..."
-msgstr "Создать"
+msgstr "Новый ваучер"
 
-#: ../src/business/business-gnome/gnc-plugin-business.c:207
-#, fuzzy
+#: ../src/business/business-gnome/gnc-plugin-business.c:207#
 msgid "Open the New Expense Voucher dialog"
-msgstr "Создать"
+msgstr "Новый ваучер"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:209
-#, fuzzy
 msgid "Find Expense _Voucher..."
-msgstr "Найти"
+msgstr "Найти ваучер"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:210
-#, fuzzy
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Найти"
+msgstr "Найти ваучер"
 
 #. Other menu items
 #: ../src/business/business-gnome/gnc-plugin-business.c:217
-
 msgid "_Tax Table Editor"
 msgstr "Редактор _таблицы налогов"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:218
-
 msgid "View and edit the list of Tax Tables"
 msgstr "Просмотреть и исправить список таблиц налогов"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:220
-
 msgid "_Billing Terms Editor"
 msgstr "_Редактор даты платежей"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:221
-
 msgid "View and edit the list of Billing Terms"
-msgstr "Просмотреть и изменить список условий платежа"
+msgstr "Просмотреть и изменить список сроков платежей"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:223
-
 msgid "Bills _Due Reminder"
 msgstr "Напоминание о платежах "
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:224
-
 msgid "Open the Bills Due Reminder dialog"
 msgstr "Открыть напоминание о платежах"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:226
-
 msgid "E_xport"
 msgstr "_Экспортировать"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:227
-#, fuzzy
 msgid "QSF _Invoice..."
-msgstr "Найти счет-фактуру"
+msgstr "QSF счет-фактура..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:228
-
 msgid "Export one or more invoices to QSF"
 msgstr "Экспорт счетов в QSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:230
-
 msgid "QSF _Customer..."
 msgstr "QSF клиент..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:231
-
 msgid "Export one or more customers to QSF"
 msgstr "Экспортировать клиентов в QSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:233
-
 msgid "QSF _Vendor..."
 msgstr "QSF поставщик..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:234
-
 msgid "Export one or more vendors to QSF"
 msgstr "Экспортировать поставщиков в QSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:236
-
 msgid "QSF _Employee..."
 msgstr "QSF работник..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:237
-
 msgid "Export one or more employees to QSF"
 msgstr "Экспортировать работников в QSF"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:242
 #: ../src/business/business-gnome/gnc-plugin-business.c:243
-
 msgid "Test Search Dialog"
 msgstr "Проверка диалога поиска"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:245
-
 msgid "Reload invoice report"
 msgstr "Перезагрузить отчет по счету-фактуре"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:246
-
 msgid "Reload invoice report scheme file"
-msgstr "Перезагрузить файл scheme отчета по счету-фактуре"
+msgstr "Перезагрузить схему отчета по счету-фактуре"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:248
-
 msgid "Reload owner report"
 msgstr "Перезагрузить отчет владельца"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:249
-
 msgid "Reload owner report scheme file"
 msgstr "Перезагрузить схему для отчета"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:251
-
 msgid "Reload receivable report"
 msgstr "Перезагрузить отчет по суммам, подлежащим получению"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:252
-
 msgid "Reload receivable report scheme file"
 msgstr "Перезагрузить схему отчета по суммам, подлежащим получению"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:254
 #: ../src/business/business-gnome/gnc-plugin-business.c:255
-
 msgid "Initialize Test Data"
 msgstr "Инициализировать тестовые данные"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:724
-
 msgid "Export Invoices to XML"
 msgstr "Экспортировать счет-фактуру в XML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:759
-
 msgid "Export Customers to XML"
-msgstr "Редактировать клиентов в XML"
+msgstr "Экспортировать клиентов в XML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:791
-
 msgid "Export Vendors to XML"
 msgstr "Экспортировать поставщиков в XML"
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:823
-
 msgid "Export Employees to XML"
 msgstr "Экспортировать работников в XML"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:95
 #: ../src/gnome/glade/register.glade.h:51
-
 msgid "Sort _Order"
 msgstr "_Порядок сортировки"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:98
-
 msgid "New _Invoice"
 msgstr "Создать счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:99
-
 msgid "Create a new invoice"
-msgstr "Создать новый счет-фактуру"
+msgstr "Новый счет-фактура"
 
 #. File menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:101
 #: ../src/gnome/gnc-plugin-page-account-tree.c:145
-
 msgid "New _Account..."
 msgstr "_Создать счет..."
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:102
-
 msgid "Create a new account"
-msgstr "Создать новый счет"
+msgstr "Создать счет"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:104
-
 msgid "Print Invoice"
-msgstr "Счета-фактуры, которые могут быть распечатаны"
+msgstr "Счета-фактуры к печати"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:105
-
 msgid "Make a printable invoice"
 msgstr "Сделать печатаемый счет-фактуру"
 
 #. Edit menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:109
-
 msgid "_Cut"
 msgstr "_Вырезать"
 
 # for incorrect translations in gtk library
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:112
-
 msgid "Copy"
 msgstr "Копировать"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:115
 #: ../src/gnome/gnc-plugin-page-register.c:179
 #: ../src/gnome-utils/gnc-main-window.c:254
-
 msgid "_Paste"
 msgstr "_Вставить"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:118
-
 msgid "_Edit Invoice"
 msgstr "_Редактировать счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:119
-
 msgid "Edit this invoice"
 msgstr "Редактировать этот счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:121
-
 msgid "_Post Invoice"
 msgstr "_Отправить счет-фактуру"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:122
-
 msgid "Post this Invoice to your Chart of Accounts"
 msgstr "Добавить этот счет в график счетов"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:124
-
 msgid "_Unpost Invoice"
 msgstr "Отменить отправку счета-фактуры"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:125
-
 msgid "Unpost this Invoice and make it editable"
 msgstr "Отменить отправку данного счета-фактуры и сделать его редактируемым"
 
 #. Actions menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:129
 #: ../src/gnome/glade/register.glade.h:86
-
 msgid "_Enter"
 msgstr "_Ввести"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:130
-
 msgid "Record the current entry"
 msgstr "Записать текущую запись"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:132
 #: ../src/gnome/glade/reconcile.glade.h:25
 #: ../src/gnome/glade/register.glade.h:79 ../src/gnome/window-reconcile.c:1994
-
 msgid "_Cancel"
 msgstr "_Отменить"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:133
-
 msgid "Cancel the current entry"
 msgstr "Отменить текущую запись"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:135
 #: ../src/gnome/glade/reconcile.glade.h:27
 #: ../src/gnome/glade/register.glade.h:82 ../src/gnome/window-reconcile.c:2022
-
 msgid "_Delete"
 msgstr "_Удалить"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:136
-
 msgid "Delete the current entry"
 msgstr "Удалить текущую запись"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:138
 #: ../src/gnome/glade/register.glade.h:78
-
 msgid "_Blank"
 msgstr "Пустой"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:139
-
 msgid "Move to the blank entry at the bottom of the Invoice"
 msgstr "Переместиться на чистую запись внизу счета-фактуры "
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:141
-
 msgid "Dup_licate Entry"
-msgstr "Сделать _копию"
+msgstr "Сделать _копию записи"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:142
-
 msgid "Make a copy of the current entry"
 msgstr "Сделать копию текущей записи"
 
 #. Business menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:146
-
 msgid "_Pay Invoice"
 msgstr "Оплаченные счета"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:147
-
 msgid "Enter a payment for the owner of this Invoice"
 msgstr "Введите платеж для владельца данного счета-фактуры"
 
 #. Reports menu
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:151
-
 msgid "_Company Report"
 msgstr "Отчет по _фирме"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:152
-
 msgid "Open a company report window for the owner of this Invoice"
 msgstr "Открыть окно отчета по фирме для владельца данного счета-фактуры"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:159
 #: ../src/gnome/glade/register.glade.h:95
-
 msgid "_Standard"
 msgstr "_Обычный порядок"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:160
 #: ../src/gnome/glade/register.glade.h:80
-
 msgid "_Date"
 msgstr "_Дата"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:161
 #: ../src/gnome/glade/register.glade.h:15
-
 msgid "Date of _Entry"
 msgstr "Дата _записи"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:162
-
 msgid "_Quantity"
 msgstr "_Количество"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:163
 #: ../src/register/ledger-core/split-register.c:1710
 #: ../src/register/ledger-core/split-register.c:1712
-
 msgid "_Price"
 msgstr "_Цена"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:164
 #: ../src/gnome/glade/register.glade.h:18
-
 msgid "Descri_ption"
 msgstr "Опис_ание"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:193
 #: ../src/gnome/glade/register.glade.h:25
 #: ../src/gnome/gnc-plugin-page-register.c:327
-
 msgid "Enter"
 msgstr "Ввести"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:194
 #: ../src/gnome/glade/register.glade.h:6
 #: ../src/gnome/gnc-plugin-page-register.c:328
-
 msgid "Cancel"
 msgstr "Отменить"
 
@@ -2775,14 +2384,12 @@ msgstr "Отменить"
 #: ../src/gnome/gnc-plugin-page-account-tree.c:219
 #: ../src/gnome/gnc-plugin-page-budget.c:167
 #: ../src/gnome/gnc-plugin-page-register.c:329
-
 msgid "Delete"
 msgstr "Удалить"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:196
 #: ../src/gnome/glade/register.glade.h:20
 #: ../src/gnome/gnc-plugin-page-register.c:330
-
 msgid "Duplicate"
 msgstr "Сделать копию"
 
@@ -2790,7 +2397,7 @@ msgstr "Сделать копию"
 #: ../src/gnome/glade/register.glade.h:3
 #: ../src/gnome/gnc-plugin-page-register.c:333
 msgid "Blank"
-msgstr "Создать"
+msgstr "Очистить"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:198
 msgid "Post"
@@ -2801,7 +2408,6 @@ msgid "Unpost"
 msgstr "Отменить отправку"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:1
-
 msgid "Accumulate multiple splits into one"
 msgstr "Накапливать части транзакций в одну"
 
@@ -2812,24 +2418,33 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
+"Если включено, при старте проверяются платежи, которые скоро должны быть оплачены."
+"Определение \"скоро\" проверяется в \"За сколько дней\" установке."
+"Иначе проверка не выполняется"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:3
 msgid ""
 "If active, each new invoice will be opened in a new window. Otherwise a new "
 "invoice will be opened as a tab in the main window."
 msgstr ""
+"Если включено, каждый новый счет открывается в новом окне. Иначе все счета"
+"открываются в главном окне"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:4
 msgid ""
 "If active, only the 'active' items in the current class will be searched. "
 "Otherwise all items in the current class will be searched."
 msgstr ""
+"Если включены, только 'активные' элементы будут найдены"
+"Иначе будут найдены все элементы"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:5
 msgid ""
 "If set to active then tax is included by default in entries of this type. "
 "This setting is inherited by new customers and vendors."
 msgstr ""
+"При включении налоги будут включены по умолчанию во все записи данного типа."
+"Эта установка наследуется для новых клиентов и поставщиков."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:6
 msgid ""
@@ -2837,20 +2452,19 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
+"Если это поле активно, множественные записи в счете будут преобразованы в счет"
+"с накопленными разделениями. Это поле может быть изменено в диалоге отправки."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:7
-
 msgid "Is tax included in this type of business entry?"
 msgstr "Налог включен в цену?"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:8
-
 msgid "Open new invoice in new window"
 msgstr "Открыть новый счет-фактуру в новом окне"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:9
 #: ../src/gnome/schemas/apps_gnucash_dialog_common.schemas.in.h:8
-
 msgid "Search only in active items"
 msgstr "Искать только действующие элементы"
 
@@ -2864,7 +2478,6 @@ msgstr "Показывать платежи к оплате включитель
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:12
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:42
-
 msgid "The number of rows in an invoice"
 msgstr "Количество строк в счетах-фактурах."
 
@@ -2874,6 +2487,8 @@ msgid ""
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
+"Это поле определяет, за сколько дней до срока платежа будет производиться проверка."
+"Это поле используется, если \"Напоминание о долгах\" активно."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:14
 msgid ""
@@ -2881,6 +2496,9 @@ msgid ""
 "actually affect the display of the contents of the window. It is only used "
 "to set the size of the window when first opened."
 msgstr ""
+"Это поле определяет число строк при показе счета-фактуры. Это не актуально при"
+"показе содержимого в окне. Используется только при установке размера окна при"
+"первом запуске."
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:15
 msgid ""
@@ -2888,6 +2506,8 @@ msgid ""
 "window. The numbers are the X and Y coordinates of the top left corner of "
 "the window, and the width and height of the window."
 msgstr ""
+"Эта установка содержит координаты окна последнего запуска. Числа X и Y соответствуют"
+"левому верхнему углу окна, и ширине и высоте окна"
 
 #: ../src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas.in.h:16
 msgid "Window position and size"
@@ -2913,13 +2533,11 @@ msgstr "не является"
 #: ../src/business/business-ledger/gncEntryLedger.c:83
 #: ../src/gnome-utils/dialog-transfer.c:1386
 #: ../src/register/ledger-core/split-register.c:1491
-
 msgid "The account %s does not allow transactions."
 msgstr "Счет %s не поддерживает транзакции."
 
 #: ../src/business/business-ledger/gncEntryLedger.c:84
 #: ../src/register/ledger-core/split-register.c:1492
-
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "Счет %s не существует. Вы хотите создать его?"
 
@@ -2938,12 +2556,10 @@ msgstr "Материал"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:804
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:487
-
 msgid "Save the current entry?"
 msgstr "Сохранить текущую запись"
 
 #: ../src/business/business-ledger/gncEntryLedger.c:806
-
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating this entry, or cancel the duplication?"
@@ -2955,13 +2571,11 @@ msgstr ""
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:506
 #: ../src/gnome/gnc-split-reg.c:729
 #: ../src/register/ledger-core/split-register.c:407
-
 msgid "_Record"
 msgstr "Записать"
 
 #. Translators: %s is the string "an Account" i.e. its translation.
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:142
-#, c-format
 msgid "Invalid Entry:  You need to supply %s."
 msgstr "Неверная позиция: вы должны применить %s."
 
@@ -2971,12 +2585,10 @@ msgid "an Account"
 msgstr "Счет"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:376
-
 msgid "The tax table %s does not exist. Would you like to create it?"
 msgstr "Таблица налогов %s не существует. Создать ее?"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:489
-
 msgid ""
 "The current entry has been changed.  However, this entry is part of an "
 "existing order. Would you like to record the change and effectively change "
@@ -2988,12 +2600,10 @@ msgstr ""
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:504
 #: ../src/gnome/gnc-split-reg.c:727
-
 msgid "_Don't Record"
 msgstr "Не записывать"
 
 #: ../src/business/business-ledger/gncEntryLedgerControl.c:591
-
 msgid "The current entry has been changed. Would you like to save it?"
 msgstr "Текущия позиция была изменена. Сохранить изменения?"
 
@@ -3080,7 +2690,6 @@ msgstr "$"
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:52
 #: ../src/gnome/glade/sched-xact.glade.h:3 ../intl-scm/guile-strings.c:3206
 #: ../intl-scm/guile-strings.c:3524 ../intl-scm/guile-strings.c:3782
-#, no-c-format
 msgid "%"
 msgstr "%"
 
@@ -3183,7 +2792,6 @@ msgid "Tax Included?"
 msgstr "Налог учтен?"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:122
-
 msgid "Invoiced?"
 msgstr "Есть счет?"
 
@@ -3209,7 +2817,6 @@ msgid "Tax"
 msgstr "Налоги"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:137
-
 msgid "Billable?"
 msgstr "Оплачиваемо?"
 
@@ -20216,7 +19823,7 @@ msgstr "Выбрать счет"
 #: ../intl-scm/guile-strings.c:3346 ../intl-scm/guile-strings.c:3418
 #: ../intl-scm/guile-strings.c:3668 ../intl-scm/guile-strings.c:3896
 msgid "Payment, thank you"
-msgstr "Оплачено, спасибо"
+msgstr "Оплачено"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -20858,2782 +20465,3 @@ msgstr ""
 "и необъяснимым.\n"
 "Другая теория состоит в том, что это уже произошло.\n"
 "Дуглас Адамс, \"Ресторан в конце Вселенной\""
-
-#, fuzzy
-#~ msgid "labe82l7"
-#~ msgstr "label827"
-
-#~ msgid "(type)"
-#~ msgstr "(тип)"
-
-#, fuzzy
-#~ msgid "(taxincluded)"
-#~ msgstr "Налог учтен?"
-
-#, fuzzy
-#~ msgid "(taxtables)"
-#~ msgstr "Налогооблагаемо?"
-
-#, fuzzy
-#~ msgid "(terms)"
-#~ msgstr "Сроки"
-
-#, fuzzy
-#~ msgid "<b>Included Accounts</b>"
-#~ msgstr "Отправленные счета"
-
-#~ msgid "[rmw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[rmw] ЭТО ОКНО НЕ ДОЛЖНО БЫТЬ СОЗДАНО"
-
-#~ msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[rtw] ЭТО ОКНО НЕ ДОЛЖНО БЫТЬ ОТКРЫТО"
-
-#~ msgid "[wrtw] THIS WINDOW SHOULD NOT BE CREATED"
-#~ msgstr "[wrtw] ЭТО ОКНО НЕ ДОЛЖНО БЫТЬ СОЗДАНО"
-
-#~ msgid "End Date: "
-#~ msgstr "Дата окончания: "
-
-#~ msgid "No End"
-#~ msgstr "Не конец"
-
-#~ msgid "Remaining Occurrences:"
-#~ msgstr "Оставшиеся случаи:"
-
-#~ msgid "Upcoming"
-#~ msgstr "Входящее"
-
-#, fuzzy
-#~ msgid "Export _Chart of Accounts"
-#~ msgstr "Создание диаграммы счетов"
-
-#, fuzzy
-#~ msgid "This transaction has already been voided."
-#~ msgstr "Некоторые транзакции могут быть отвергнуты"
-
-#, fuzzy
-#~ msgid "This transaction is not voided."
-#~ msgstr "Текущая транзакция не сбалансирована"
-
-#~ msgid ""
-#~ "Enter the ticker symbol or currency code for the commodity. Example: USD"
-#~ msgstr "Укажите символ тикера или код валюты для товара. Нанапример: USD"
-
-#, fuzzy
-#~ msgid "- (_Dash)"
-#~ msgstr "- (Дефис)"
-
-#, fuzzy
-#~ msgid ". (_Period)"
-#~ msgstr ". (Точка)"
-
-#, fuzzy
-#~ msgid "/ (_Slash)"
-#~ msgstr "/ (косая)"
-
-#, fuzzy
-#~ msgid ": (Co_lon)"
-#~ msgstr ": (Двоеточие)"
-
-#~ msgid "Income.Salary.Taxable"
-#~ msgstr "Приход.Зарплата.Облагаемая налогом"
-
-#~ msgid "Income/Salary/Taxable"
-#~ msgstr "Приход/Зарплата/Облагаемая налогом"
-
-#~ msgid "Income:Salary:Taxable"
-#~ msgstr "Приход:Зарплата:Облагаемая налогом"
-
-#~ msgid "Income\\Salary\\Taxable"
-#~ msgstr "Приход\\Зарплата\\Облагаемая налогом"
-
-#, fuzzy
-#~ msgid "\\ (_Backslash)"
-#~ msgstr "\\ (обратная косая)"
-
-#~ msgid "Import currency and stock information "
-#~ msgstr "Импортировать информацию о валютах и ценных бумагах"
-
-#~ msgid "-- Stock Split --"
-#~ msgstr "-- Часть бумаг --"
-
-#~ msgid "GnuCash Tutorial and Concepts Guide"
-#~ msgstr "Самоучитель и основные положения GnuCash"
-
-#, fuzzy
-#~ msgid "Overview of GnuCash"
-#~ msgstr "Добро пожаловать в GnuCash"
-
-#~ msgid "Introduction to GnuCash"
-#~ msgstr "Введение в GnuCash"
-
-#~ msgid "About this Book"
-#~ msgstr "Об этой книге"
-
-#~ msgid "Top Ten Reasons to Use GnuCash"
-#~ msgstr "Десять причин использовать GnuCash"
-
-#, fuzzy
-#~ msgid "Installation"
-#~ msgstr "Интернационализация"
-
-#~ msgid "Data Entry Concepts"
-#~ msgstr "Концепция записей"
-
-#, fuzzy
-#~ msgid "File, Accounts and Transactions"
-#~ msgstr "Файл и"
-
-#, fuzzy
-#~ msgid "Double Entry"
-#~ msgstr "Двойной Вхождение"
-
-#, fuzzy
-#~ msgid "The GnuCash Interface"
-#~ msgstr "Интерфейс"
-
-#~ msgid "Create a new set of accounts"
-#~ msgstr "Создать новый набор счетов"
-
-#~ msgid "Tip of the Day"
-#~ msgstr "Совет дня"
-
-#~ msgid "Account Tree Window"
-#~ msgstr "Окно с деревом счетов"
-
-#~ msgid "Account Register Window"
-#~ msgstr "Окно журнала счетов"
-
-#~ msgid "Tool Bar Buttons"
-#~ msgstr "Кнопки панели инструментов"
-
-#, fuzzy
-#~ msgid "Menu Items"
-#~ msgstr "Меню"
-
-#~ msgid "Menu Shortcuts"
-#~ msgstr "Горячие клавиши для меню"
-
-#, fuzzy
-#~ msgid "Setting Preferences"
-#~ msgstr "Параметры"
-
-#~ msgid "International"
-#~ msgstr "Интернационализация"
-
-#, fuzzy
-#~ msgid "Online Banking"
-#~ msgstr "Онлайн"
-
-#~ msgid "Register Colors"
-#~ msgstr "Цвета журнала"
-
-#, fuzzy
-#~ msgid "Getting Help"
-#~ msgstr "Помощь"
-
-#~ msgid "Help Manual"
-#~ msgstr "Справочное руководство"
-
-#~ msgid "Web Access"
-#~ msgstr "Доступ в Интернет"
-
-#, fuzzy
-#~ msgid "Topic Search"
-#~ msgstr "Тема обсуждения Искать"
-
-#, fuzzy
-#~ msgid "Creating and Saving Files"
-#~ msgstr "и Файлы"
-
-#, fuzzy
-#~ msgid "Importing QIF Files"
-#~ msgstr "Импортирование Файлы"
-
-#, fuzzy
-#~ msgid "Backing Up and Protecting Data"
-#~ msgstr "Сохранение и восстановление данных"
-
-#~ msgid "Putting It All Together"
-#~ msgstr "Поместить все вместе"
-
-#, fuzzy
-#~ msgid "Organizing Your Accounts"
-#~ msgstr "Счет согласования"
-
-#, fuzzy
-#~ msgid "Basic Accounting Concepts"
-#~ msgstr "Использовать метки счетов"
-
-#, fuzzy
-#~ msgid "Balance Sheet Accounts"
-#~ msgstr "Категория"
-
-#, fuzzy
-#~ msgid "Income and Expense Accounts"
-#~ msgstr "и"
-
-#, fuzzy
-#~ msgid "GnuCash Accounts"
-#~ msgstr "Типы счетов GnuCash"
-
-#, fuzzy
-#~ msgid "Balance sheet accounts"
-#~ msgstr "Категория"
-
-#, fuzzy
-#~ msgid "Concepts of Transactions"
-#~ msgstr "Перечень транзакций"
-
-#, fuzzy
-#~ msgid "The Account Register"
-#~ msgstr "Регистрация"
-
-#, fuzzy
-#~ msgid "Simple Two Account Transaction"
-#~ msgstr "Простой Транзакция"
-
-#, fuzzy
-#~ msgid "Multi Account Transaction"
-#~ msgstr "Транзакция"
-
-#, fuzzy
-#~ msgid "Account Register Features"
-#~ msgstr "Регистрация"
-
-#~ msgid "Choosing a Register Style"
-#~ msgstr "Выбоп стиля оформления журнала"
-
-#, fuzzy
-#~ msgid "Using Entry Shortcuts"
-#~ msgstr "Вхождение"
-
-#, fuzzy
-#~ msgid "Additional Transaction Examples"
-#~ msgstr "Транзакция"
-
-#, fuzzy
-#~ msgid "Setting up Accounts"
-#~ msgstr "Настройка и редактирование счетов"
-
-#, fuzzy
-#~ msgid "Entering Withdrawals"
-#~ msgstr "Изъято"
-
-#, fuzzy
-#~ msgid "ATM/Cash Withdrawals"
-#~ msgstr "ATM Наличные"
-
-#, fuzzy
-#~ msgid "Reconciling your Accounts"
-#~ msgstr "Счет согласования"
-
-#, fuzzy
-#~ msgid "Managing Credit Cards"
-#~ msgstr "Кредитная карта"
-
-#, fuzzy
-#~ msgid "Setting Up Accounts"
-#~ msgstr "Вверх"
-
-#, fuzzy
-#~ msgid "Entering Charges"
-#~ msgstr "Процентная ставка"
-
-#, fuzzy
-#~ msgid "Entering Payments"
-#~ msgstr "Платежи:"
-
-#, fuzzy
-#~ msgid "Custom Accounts Example"
-#~ msgstr "Пользовательский например"
-
-#, fuzzy
-#~ msgid "Buying New Investments"
-#~ msgstr "Создать"
-
-#, fuzzy
-#~ msgid "Selling Investments"
-#~ msgstr "Платеж по процентам"
-
-#, fuzzy
-#~ msgid "Recording Dividends and Interest (How-To)"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "Recording Stock Splits and Mergers (How-To)"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "Portfolio View"
-#~ msgstr "Портфель"
-
-#, fuzzy
-#~ msgid "Updating Prices (How-To)"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "Reconciling with the Brokerage Statement (How-To)"
-#~ msgstr "Согласование счетов в иностранной валюте (Как сделать)"
-
-#~ msgid "GnuCash Help"
-#~ msgstr "Руководство по GnuCash"
-
-#~ msgid "What is GnuCash?"
-#~ msgstr "Что такое GnuCash?"
-
-#~ msgid "Getting Started"
-#~ msgstr "Приступая"
-
-#~ msgid "Running GnuCash for the First Time"
-#~ msgstr "Запуск GnuCash первый раз"
-
-#~ msgid "Import QIF Files"
-#~ msgstr "Импорт файлов QIF"
-
-#~ msgid "Usage"
-#~ msgstr "Использование"
-
-#~ msgid "GnuCash Windows"
-#~ msgstr "Окна GnuCash"
-
-#~ msgid "Menus"
-#~ msgstr "Меню"
-
-#~ msgid "Summary Bar"
-#~ msgstr "Полоса суммы"
-
-#~ msgid "Account Tree"
-#~ msgstr "Дерево счетов"
-
-#~ msgid "Status Bar"
-#~ msgstr "Строка состояния"
-
-#~ msgid "List of Transactions"
-#~ msgstr "Перечень транзакций"
-
-#~ msgid "Report Window"
-#~ msgstr "Окно отчета"
-
-#~ msgid "Tool Windows"
-#~ msgstr "Окна инструментов"
-
-#~ msgid "Scheduled Transactions Window"
-#~ msgstr "Окно запланированных транзакций"
-
-#~ msgid "Reconcile Window"
-#~ msgstr "Окно согласования"
-
-#~ msgid "Commodity Editor"
-#~ msgstr "Редактор товаров"
-
-#~ msgid "Find Transactions"
-#~ msgstr "Поиск транзакций"
-
-#~ msgid "Help Window"
-#~ msgstr "Окно помощи"
-
-#~ msgid "Setting Up and Editing Accounts"
-#~ msgstr "Настройка и редактирование счетов"
-
-#~ msgid "Types of GnuCash Accounts"
-#~ msgstr "Типы счетов GnuCash"
-
-#~ msgid "To Create a Chart of Accounts"
-#~ msgstr "Создание диаграммы счетов"
-
-#~ msgid "To Create a New Account"
-#~ msgstr "Создание нового счета"
-
-#~ msgid "General Information"
-#~ msgstr "Общая информация"
-
-#~ msgid "To Edit an Account"
-#~ msgstr "Редактирование счета"
-
-#~ msgid "To Edit a Chart of Accounts"
-#~ msgstr "Редактирование диаграммы счетов"
-
-#~ msgid "To Delete an Account"
-#~ msgstr "Удаление счета"
-
-#~ msgid "To Jump to Another Account"
-#~ msgstr "Переход к другому счету"
-
-#, fuzzy
-#~ msgid "To Reconcile an Account to a Statement"
-#~ msgstr "По до "
-
-#~ msgid "Reconcile Information"
-#~ msgstr "Сведения о согласовании"
-
-#, fuzzy
-#~ msgid "To Perform a Stock Split"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "Stock Split Druid"
-#~ msgstr "Части бумаг"
-
-#~ msgid "Using the Register to Record Transactions"
-#~ msgstr "Использование журнала для записи транзакций"
-
-#~ msgid "Changing the Register View"
-#~ msgstr "Изменить вид журнала"
-
-#~ msgid "To Enter a Transaction"
-#~ msgstr "Ввод транзакции"
-
-#~ msgid "Enter Directly in the Register Window"
-#~ msgstr "Ввод прямо в окне журнала"
-
-#~ msgid "Enter in the Transfer Funds Window"
-#~ msgstr "Ввод в окне передачи фондов"
-
-#, fuzzy
-#~ msgid "To Enter Multiple Split Transactions"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "To Enter Multiple Currency Transactions"
-#~ msgstr "По"
-
-#~ msgid "To Edit a Transaction"
-#~ msgstr "Редактирование транзакции"
-
-#~ msgid "To Delete a Transaction"
-#~ msgstr "Удаление транзакции"
-
-#, fuzzy
-#~ msgid "To Remove Transaction Splits"
-#~ msgstr "По Удалить Транзакция"
-
-#, fuzzy
-#~ msgid "To Copy a Transaction"
-#~ msgstr "По Запомнить"
-
-#, fuzzy
-#~ msgid "To Schedule Transactions"
-#~ msgstr "По"
-
-#~ msgid "Scheduled Transaction Editor"
-#~ msgstr "Редактор запланированных транзакций"
-
-#~ msgid "Since Last Run Druid"
-#~ msgstr "С момент последнего запуска мастера"
-
-#, fuzzy
-#~ msgid "Mortgage & Loan Repayment Druid"
-#~ msgstr "Заем Выплата"
-
-#~ msgid "To Print Checks"
-#~ msgstr "Напечатать чеки"
-
-#~ msgid "Using GnuCash Reports and Charts"
-#~ msgstr "Использование отчетов и диаграмм GnuCash"
-
-#~ msgid "Types of Reports and Graphs"
-#~ msgstr "Типы отчетов и графиков"
-
-#~ msgid "General Reports"
-#~ msgstr "Общие отчеты"
-
-#, fuzzy
-#~ msgid "Assets & Liabilities"
-#~ msgstr "_Прибыли и Убытки"
-
-#~ msgid "Income & Expense"
-#~ msgstr "Приход и Расход"
-
-#~ msgid "Business Reports"
-#~ msgstr "Отчет по фирме"
-
-#~ msgid "To Create Reports and Graphs"
-#~ msgstr "Создать отчеты и графики"
-
-#~ msgid "To Customize Reports and Graphs"
-#~ msgstr "Настроить отчеты и графики"
-
-#~ msgid "To Print or Export Reports and Graphs"
-#~ msgstr "Напечатать или экспортировать отчеты и графики"
-
-#~ msgid "Customizing GnuCash"
-#~ msgstr "Настройка GnuCash"
-
-#~ msgid "Account Options"
-#~ msgstr "Параметры счета"
-
-#~ msgid "Setting Your Preferences"
-#~ msgstr "Настройка предпочтений"
-
-#, fuzzy
-#~ msgid "Online Banking & Importing"
-#~ msgstr "Онлайн"
-
-#~ msgid "User Info"
-#~ msgstr "Информация о пользователе"
-
-#~ msgid "Advanced"
-#~ msgstr "Дополнительно"
-
-#~ msgid "Changing Style Sheets"
-#~ msgstr "Изменение таблицы стилей"
-
-#~ msgid "Setting Tax Options"
-#~ msgstr "Настройка налоговых параметров"
-
-#, fuzzy
-#~ msgid "TXF Export - Known Anomalies and Limitations"
-#~ msgstr "Экспортировать"
-
-#, fuzzy
-#~ msgid "Detailed TXF Category Descriptions"
-#~ msgstr "Подробное описание"
-
-#~ msgid "Report a bug"
-#~ msgstr "Отчет об ошибке"
-
-#~ msgid "URL to frame"
-#~ msgstr "URL во фрейм"
-
-#~ msgid "URL to display in report"
-#~ msgstr "Показать счет?"
-
-#~ msgid "Frame URL"
-#~ msgstr "URL во фрейме"
-
-#~ msgid "Custom Web Report"
-#~ msgstr "Веб-отчет"
-
-#, fuzzy
-#~ msgid "Show Immediate Balance"
-#~ msgstr "Задание: Получить остаток"
-
-#, fuzzy
-#~ msgid "Include subaccounts in balance"
-#~ msgstr "Включать сальдо по субсчетам в распечатываемое сальдо?"
-
-#, fuzzy
-#~ msgid "Omit Balance"
-#~ msgstr "Начальное сальдо"
-
-#, fuzzy
-#~ msgid "Do not show parent account balances"
-#~ msgstr "У вас нет ни одного счета с акциями!"
-
-#, fuzzy
-#~ msgid "Do not show subtotals"
-#~ msgstr "Показывать подитоги"
-
-#, fuzzy
-#~ msgid "Do not subtotal selected parent accounts"
-#~ msgstr "Показывать подитоги для родительских счетов"
-
-#, fuzzy
-#~ msgid "Balance sheet as-of date"
-#~ msgstr "Категория"
-
-#, fuzzy
-#~ msgid "Account summary as-of date"
-#~ msgstr "Итоги по счетам"
-
-#, fuzzy
-#~ msgid ""
-#~ "GnuCash can act as a simple web browser!  To display a web page as a "
-#~ "report, use the Sample & Custom -> \"Custom Web Report\" report."
-#~ msgstr ""
-#~ "GnuCash может действовать как простой веб-браузер! \n"
-#~ "Чтобы показать веб-страницу как отчет, используйте меню\n"
-#~ "Отчеты->напримеры отчетов->Веб-отчет."
-
-#, fuzzy
-#~ msgid "Employee Name "
-#~ msgstr "Имя работника"
-
-#, fuzzy
-#~ msgid "Create a new window for each new invoice."
-#~ msgstr ""
-#~ "Создавать новое окно верхнего уровня для каждого отчета или дерева счетов"
-
-#, fuzzy
-#~ msgid "Du_plicate Transaction"
-#~ msgstr "Сделать копию транзакции"
-
-#~ msgid "Delete Transaction"
-#~ msgstr "Удалить транзакцию"
-
-#, fuzzy
-#~ msgid "_Cancel the current transaction"
-#~ msgstr "Отменить текущую транзакцию"
-
-#, fuzzy
-#~ msgid "GnuCash"
-#~ msgstr "Выйти из GnuCash"
-
-#, fuzzy
-#~ msgid "Money Management"
-#~ msgstr "Управление файлами"
-
-#, fuzzy
-#~ msgid "The custom date format."
-#~ msgstr "Пользовательский формат"
-
-#, fuzzy
-#~ msgid "Where to print the payee name."
-#~ msgstr "Вы должны ввести имя сотрудника."
-
-#, fuzzy
-#~ msgid "Default currency."
-#~ msgstr "Выберите валюту/соотносящуюся валюту"
-
-#, fuzzy
-#~ msgid "How to draw the toolbar."
-#~ msgstr "Показать панель инструментов"
-
-#, fuzzy
-#~ msgid "Show two lines of information for each transaction."
-#~ msgstr "Показывать двухстрочную информацию по каждой транзакции"
-
-#, fuzzy
-#~ msgid "Use system currency."
-#~ msgstr "Выберите валюту/соотносящуюся валюту"
-
-#, fuzzy
-#~ msgid "Summarybar"
-#~ msgstr "Полоса суммы"
-
-#, fuzzy
-#~ msgid " Report"
-#~ msgstr "Отчет"
-
-#~ msgid " Report: "
-#~ msgstr " Отчет: "
-
-#~ msgid "Current Financial Year Start"
-#~ msgstr "Начало текущего финансового года"
-
-#~ msgid "Start of the current financial year/accounting period"
-#~ msgstr "Начало текущего финансового года/отчетного периода"
-
-#~ msgid "Previous Financial Year Start"
-#~ msgstr "Начало предыдущего финансового года"
-
-#~ msgid "The start of the previous financial year/accounting period"
-#~ msgstr "Начало предыдущего финансового года/отчетного периода"
-
-#~ msgid "End of the previous Financial year/Accounting Period"
-#~ msgstr "Конец предыдущего финансового года/отчетного периода"
-
-#~ msgid "End Current Financial Year"
-#~ msgstr "Конец текущего финансового года"
-
-#~ msgid "End of the current Financial year/Accounting Period"
-#~ msgstr "Конец текущего финансового года/отчетного периода"
-
-#, fuzzy
-#~ msgid "Number of days to retain old files"
-#~ msgstr "до "
-
-#, fuzzy
-#~ msgid "Compress output files?"
-#~ msgstr "Сжимать файл данных."
-
-#~ msgid ""
-#~ "The current transaction has been changed.\n"
-#~ "Would you like to record it?"
-#~ msgstr ""
-#~ "Текущая транзакция была изменена.\n"
-#~ "Вы хотите записать ее?"
-
-#~ msgid "View"
-#~ msgstr "Просмотреть"
-
-#, fuzzy
-#~ msgid "How many days in advance to notify the user."
-#~ msgstr "дней дюйм до  about."
-
-#, fuzzy
-#~ msgid "How many days in advance to remind the user."
-#~ msgstr "По умолчанию дюйм до "
-
-#~ msgid "Search for..."
-#~ msgstr "Искать..."
-
-#~ msgid ""
-#~ "The account %s\n"
-#~ "does not allow transactions.\n"
-#~ msgstr ""
-#~ "Счет %s \n"
-#~ "не поддерживает транзакции.\n"
-
-#~ msgid "Changes have been made since the last Save. Save the data to file?"
-#~ msgstr ""
-#~ "С момента последнего сохранения были сделаны изменения.\n"
-#~ "Сохранить данные в файл?"
-
-#~ msgid "Welcome Sample Report"
-#~ msgstr "Добро пожаловать в например отчета"
-
-#~ msgid "Welcome-to-GnuCash report screen"
-#~ msgstr "Окно отчета \"Добро пожаловать в GnuCash\""
-
-#~ msgid "Description: "
-#~ msgstr "Описание: "
-
-#~ msgid "Tax Account"
-#~ msgstr "Счет налогов"
-
-# standart lines
-#~ msgid "You must enter values for the other quantities."
-#~ msgstr "Вы должны указать значения для других величин."
-
-#~ msgid "You must enter a valid expression."
-#~ msgstr "Вы должны ввести допустимое выражение."
-
-#~ msgid "Remove old prices"
-#~ msgstr "Удаление старых цен"
-
-#, fuzzy
-#~ msgid "You must resolve all collisions."
-#~ msgstr "Вы должны ввести допустимое выражение."
-
-#~ msgid "Balance Information"
-#~ msgstr "Информация о сальдо"
-
-#~ msgid "Detailed Description"
-#~ msgstr "Подробное описание"
-
-#~ msgid "Enter opening balances"
-#~ msgstr "Введите начальное сальдо"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you would like an account to have an opening balance, click on the\n"
-#~ "account and enter the starting balance in the box on the right. All\n"
-#~ "accounts except Equity and placeholder accounts may have an\n"
-#~ "opening balance."
-#~ msgstr "до  дюйм Выделить все."
-
-#~ msgid "Transfer Type"
-#~ msgstr "Тип передачи"
-
-#, fuzzy
-#~ msgid "Account Types to Show"
-#~ msgstr "Типы счетов"
-
-#, fuzzy
-#~ msgid "Balance Budget"
-#~ msgstr "Баланс"
-
-#, fuzzy
-#~ msgid "Budget Setup"
-#~ msgstr "Настройки"
-
-#, fuzzy
-#~ msgid "Category Information"
-#~ msgstr "Информация о владельце"
-
-#, fuzzy
-#~ msgid "Category Setup"
-#~ msgstr "Полная Настройки"
-
-#, fuzzy
-#~ msgid "Category Type"
-#~ msgstr "Удержание"
-
-#, fuzzy
-#~ msgid "Create new Budget"
-#~ msgstr "Создать новый документ"
-
-#, fuzzy
-#~ msgid "Finish Budget"
-#~ msgstr "Завершено"
-
-#, fuzzy
-#~ msgid "In Flow"
-#~ msgstr "Наличные"
-
-#, fuzzy
-#~ msgid "Related Accounts:"
-#~ msgstr "Выбранные счета"
-
-#~ msgid "Beginning of Period Payments"
-#~ msgstr "Начало периода платежей"
-
-#~ msgid "Continuous Compounding"
-#~ msgstr "Продолжающееся составление"
-
-#~ msgid "Discrete Compounding"
-#~ msgstr "Прерывистое составление"
-
-#~ msgid "End of Period Payments"
-#~ msgstr "Конец периода платежей"
-
-#, fuzzy
-#~ msgid "_Schedule"
-#~ msgstr "Запланировать"
-
-#, fuzzy
-#~ msgid "Merge Account Hierarchy Setup"
-#~ msgstr "Создание новой иерархии счетов"
-
-#, fuzzy
-#~ msgid "Last"
-#~ msgstr "Заем"
-
-#, fuzzy
-#~ msgid "Net Asset Value"
-#~ msgstr "всего"
-
-#~ msgid "Price:"
-#~ msgstr "Цена:"
-
-#~ msgid "Prices"
-#~ msgstr "Цены"
-
-#~ msgid "                    "
-#~ msgstr "                    "
-
-#~ msgid "                                  "
-#~ msgstr "                                  "
-
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "Обе"
-
-#, fuzzy
-#~ msgid "Centimeters"
-#~ msgstr "Содержание"
-
-#~ msgid "Custom check format"
-#~ msgstr "Пользовательский формат чека"
-
-#, fuzzy
-#~ msgid "Inches"
-#~ msgstr "Счета-фактуры"
-
-#, fuzzy
-#~ msgid "Points"
-#~ msgstr "Прибыль"
-
-#, fuzzy
-#~ msgid "Top"
-#~ msgstr "По"
-
-#~ msgid "A_ction"
-#~ msgstr "Дей_ствие"
-
-#, fuzzy
-#~ msgid "Ch_oose Date:"
-#~ msgstr "Дата закрытия"
-
-#~ msgid "Check Register"
-#~ msgstr "Проверить журнал"
-
-#~ msgid "Close"
-#~ msgstr "Закрыть"
-
-#, fuzzy
-#~ msgid "NOTUSED: Defined in src/gnome/window-register.c"
-#~ msgstr "дюйм"
-
-#~ msgid "N_otes"
-#~ msgstr "З_аметки"
-
-#~ msgid "Reconcile the main account for this register"
-#~ msgstr "Согласовать главный счет этого журнала"
-
-#~ msgid "_Stock Split..."
-#~ msgstr "_Разделение бумаг..."
-
-#~ msgid " days in advance"
-#~ msgstr " днями ранее"
-
-#~ msgid "Create "
-#~ msgstr "Создать "
-
-#~ msgid "Creation Options"
-#~ msgstr "Параметры создания"
-
-#, fuzzy
-#~ msgid "Number of Occurences:"
-#~ msgstr "Количество событий:"
-
-#, fuzzy
-#~ msgid "REPLACEME with the Register control box"
-#~ msgstr "Регистрация"
-
-#, fuzzy
-#~ msgid "Register _lines"
-#~ msgstr "Цвета журнала"
-
-#~ msgid "Remind me "
-#~ msgstr "Напомнить мне"
-
-#~ msgid "Template Transactions"
-#~ msgstr "Шаблон транзакций"
-
-#~ msgid "This window should never be realized."
-#~ msgstr "Это окно никогда не должно быть реализовано."
-
-#~ msgid "YYYY-MM-DD"
-#~ msgstr "ГГГГ-ММ-ДД"
-
-#, fuzzy
-#~ msgid "lines"
-#~ msgstr "Онлайн"
-
-#~ msgid "Asset Account"
-#~ msgstr "Активный счет"
-
-#~ msgid "Cash Amount:"
-#~ msgstr "Сумма денег:"
-
-#~ msgid "Share Distribution:"
-#~ msgstr "Распределение акций:"
-
-#~ msgid "TXF Categories"
-#~ msgstr "TXF Категории"
-
-#, fuzzy
-#~ msgid "Account Tree _Options"
-#~ msgstr "Параметры счета"
-
-#~ msgid "Edit the account view options"
-#~ msgstr "Настроить параметры просмотра счетов"
-
-#, fuzzy
-#~ msgid "_Options"
-#~ msgstr "Настроить"
-
-#~ msgid "Are you sure you want to delete the %s account?"
-#~ msgstr "Вы уверены, что хотите удалить счет %s?"
-
-#~ msgid ""
-#~ "Are you sure you want to delete the %s\n"
-#~ "account and all its children?"
-#~ msgstr ""
-#~ "Вы действительно хотите удалить счет %s\n"
-#~ " и все вложенные счета?"
-
-#, fuzzy
-#~ msgid "Account Tree Options"
-#~ msgstr "Параметры счета"
-
-#, fuzzy
-#~ msgid "Edit scheduled transactions"
-#~ msgstr "Изменить запланированную транзакцию"
-
-#~ msgid "Are you sure you want to remove the Splits of this transaction?"
-#~ msgstr "Вы уверены, что хотите удалить части данной транзакции?"
-
-#, fuzzy
-#~ msgid ""
-#~ "You would be modifying a transaction with reconciled splits!\n"
-#~ "This is not a good idea as it will cause your reconciled balance to be "
-#~ "off."
-#~ msgstr "транзакция является до ."
-
-#~ msgid ""
-#~ "Are you sure you want to delete\n"
-#~ "   %s\n"
-#~ "from the transaction\n"
-#~ "   %s ?"
-#~ msgstr ""
-#~ "Вы уверены, что хотите удалить\n"
-#~ "   %s\n"
-#~ "из транзакции\n"
-#~ "   %s ?"
-
-#, fuzzy
-#~ msgid ""
-#~ "This is the split anchoring this transaction to the register. You may not "
-#~ "delete it from this register window."
-#~ msgstr "является транзакция до  delete."
-
-#~ msgid "Are you sure you want to delete the current transaction?"
-#~ msgstr "Вы уверены, в том что хотите удалить текущую транзакцию?"
-
-#~ msgid "The source for price quotes:"
-#~ msgstr "Источник для расценок:"
-
-#~ msgid "Timezone for these quotes:"
-#~ msgstr "Временная зона для расценок:"
-
-#, fuzzy
-#~ msgid "multiple sources"
-#~ msgstr "Валюта"
-
-#, fuzzy
-#~ msgid "single source"
-#~ msgstr "-- Один источник --"
-
-#, fuzzy
-#~ msgid "unknown sources"
-#~ msgstr "(неизвестно)"
-
-#, fuzzy
-#~ msgid "Split Information"
-#~ msgstr "Информация о получателе"
-
-#, fuzzy
-#~ msgid "name"
-#~ msgstr "Название"
-
-#, fuzzy
-#~ msgid "number"
-#~ msgstr "Номер"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Неизвестный тип файла"
-
-#, fuzzy
-#~ msgid "_Misc"
-#~ msgstr "Другие"
-
-#, fuzzy
-#~ msgid "Testing stuff"
-#~ msgstr "Тестирование"
-
-#~ msgid "Version: Gnucash-%s"
-#~ msgstr "Версия: Gnucash%s"
-
-#, fuzzy
-#~ msgid ""
-#~ "-Red transactions require your intervention or they will NOT be "
-#~ "imported.\n"
-#~ "-Yellow transactions probably require your intervention or they will be "
-#~ "imported unbalanced.\n"
-#~ "-Green transactions will be imported balanced (you may still want to "
-#~ "double check the match or destination account).\n"
-#~ "\n"
-#~ "-Select \"A\" to Add the transaction as new\n"
-#~ "-Select \"R\" to Reconcile a matching transaction\n"
-#~ "-Select neither to Skip (The transaction won't be imported at all)\n"
-#~ "-\"Select Import Action\" allows you to change the matching transaction "
-#~ "to reconcile, or the destination account of the auto-balance split (if "
-#~ "required)."
-#~ msgstr ""
-#~ "Красный транзакции Желтый транзакции Зеленый транзакции до  Выбрать А до  "
-#~ "Добавить транзакция Выбрать до  транзакция Выбрать до  Пропустить "
-#~ "транзакция прочие Выбрать Импортировать Действие до  транзакция до   "
-#~ "автоматически ."
-
-#, fuzzy
-#~ msgid "Do you really want to sort the list of templates?"
-#~ msgstr "до  список?"
-
-#, fuzzy
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "You have one further wrong retry left.\n"
-#~ "Do you want to try again?"
-#~ msgstr "до ?"
-
-#, fuzzy
-#~ msgid ""
-#~ "The PIN you entered was wrong.\n"
-#~ "You have two further wrong retries left.\n"
-#~ "Do you want to try again?"
-#~ msgstr "до ?"
-
-#, fuzzy
-#~ msgid ""
-#~ "The PIN you entered was too short.\n"
-#~ "Do you want to try again?"
-#~ msgstr "до ?"
-
-#, fuzzy
-#~ msgid ""
-#~ "There was an error when loading the plugin for your security medium \n"
-#~ "(see log window). Probably the versions of your currently installed \n"
-#~ "OpenHBCI library and of the plugin do not match. In that case you need \n"
-#~ "to recompile and reinstall the plugin again. Aborting now."
-#~ msgstr "ошибка и В и."
-
-#~ msgid ""
-#~ "Your security medium is not supported. No appropriate plugin \n"
-#~ "has been found for that medium. Aborting."
-#~ msgstr ""
-#~ "Ваш защищенный носитель не поддерживается. Для него не найдено "
-#~ "подходящего дополнения. Завершаем."
-
-#, fuzzy
-#~ msgid ""
-#~ "More than one HBCI bank is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr "Больше является."
-
-#, fuzzy
-#~ msgid "%s (%s) at bank %s (%s)"
-#~ msgstr "с с с с"
-
-#, fuzzy
-#~ msgid "Choose HBCI customer"
-#~ msgstr "Ввести нового клиента"
-
-#, fuzzy
-#~ msgid ""
-#~ "More than one HBCI customer is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr "Больше является."
-
-#, fuzzy
-#~ msgid "Choose HBCI user"
-#~ msgstr "владелец"
-
-#, fuzzy
-#~ msgid ""
-#~ "More than one HBCI user is available for \n"
-#~ "the requested operation. Please choose \n"
-#~ "the one that should be used."
-#~ msgstr "Больше владелец является."
-
-#, fuzzy
-#~ msgid "Gather initial HBCI information"
-#~ msgstr "Общая информация"
-
-#, fuzzy
-#~ msgid "HBCI Issue Internal Transaction"
-#~ msgstr "Вырезать транзакцию"
-
-#, fuzzy
-#~ msgid "HBCI Issue _Direct Debit"
-#~ msgstr "Направлять"
-
-#~ msgid "QIF Filename:"
-#~ msgstr "Название файла QIF:"
-
-#~ msgid "QIF Files"
-#~ msgstr "Файлы QIF"
-
-#~ msgid "                       "
-#~ msgstr "                       "
-
-#~ msgid "Style sheet template:"
-#~ msgstr "Шаблон стиля оформления:"
-
-#~ msgid "Style sheets"
-#~ msgstr "Стили оформления"
-
-#~ msgid "Double click expands parent accounts"
-#~ msgstr "Двойной щелчок раскрывает родительские счета"
-
-#~ msgid ""
-#~ "Double clicking on an account with children expands the account instead "
-#~ "of opening a register."
-#~ msgstr ""
-#~ "Двойной щелчок на счете с субсчетами раскроет счет вместо открытия "
-#~ "журнала."
-
-#~ msgid "Account types to display"
-#~ msgstr "Типы счетов для отображения"
-
-#~ msgid "Can't save window state"
-#~ msgstr "Не сохранить состояние окна"
-
-#~ msgid "Loading modules... "
-#~ msgstr "Загружаются модули... "
-
-#~ msgid "Loading configs..."
-#~ msgstr "Загружаются конфигурационные файлы..."
-
-#~ msgid "Show version."
-#~ msgstr "Показать версию."
-
-#~ msgid "Generate an argument summary."
-#~ msgstr "Генерировать обобщенное содержание"
-
-#~ msgid "Don't load any file, including autoloading the last file."
-#~ msgstr "Не загружать никакие файлы, включая автозагрузку последнего файла"
-
-#~ msgid "Enable debugging code."
-#~ msgstr "Включить отладочный код."
-
-#~ msgid "Enable developers mode."
-#~ msgstr "Включить режим для разработчиков."
-
-#~ msgid "Logging level from 0 (least logging) to 5 (most logging)."
-#~ msgstr ""
-#~ "Уровень вывода отладочных сообщений от 0 (меньше всего сообщений) до 6 "
-#~ "(больше всего сообщений)"
-
-#, fuzzy
-#~ msgid ""
-#~ "List of directories to search when looking for config files. Each element "
-#~ "must be a string representing a directory or a symbol where 'default "
-#~ "expands to the default path, and 'current expands to the current value of "
-#~ "the path."
-#~ msgstr "Список до  умолчание до  умолчание до ."
-
-#, fuzzy
-#~ msgid ""
-#~ "List of directories to search when looking for shared data files. Each "
-#~ "element must be a string representing a directory or a symbol where "
-#~ "'default expands to the default path, and 'current expands to the current "
-#~ "value of the path."
-#~ msgstr "Список до  умолчание до  умолчание до ."
-
-#~ msgid "Show GnuCash usage information"
-#~ msgstr "Показать информацию по использованию GnuCash"
-
-#~ msgid "Show this help message"
-#~ msgstr "Показать это справочное сообщение"
-
-#~ msgid "Enable developers mode"
-#~ msgstr "Включить режим для разработчиков"
-
-#~ msgid "Evaluate the guile command"
-#~ msgstr "Вычислить указанную команду"
-
-#~ msgid "Load the given .scm file"
-#~ msgstr "Загрузить данный .scm файл"
-
-#~ msgid "Load the user configuration"
-#~ msgstr "Загрузить конфигурацию пользователя"
-
-#~ msgid "Load the system configuration"
-#~ msgstr "Загрузить системную конфигурацию"
-
-#, fuzzy
-#~ msgid "Run the RPC Server if GnuCash was configured with --enable-rpc"
-#~ msgstr "Сервер"
-
-#, fuzzy
-#~ msgid "Done."
-#~ msgstr "Готово"
-
-#, fuzzy
-#~ msgid "Test Graphing"
-#~ msgstr "Тестирование"
-
-#, fuzzy
-#~ msgid "query"
-#~ msgstr "Каждый"
-
-#, fuzzy
-#~ msgid "double"
-#~ msgstr "Двойное"
-
-#, fuzzy
-#~ msgid "debit-string"
-#~ msgstr "Перечень"
-
-#, fuzzy
-#~ msgid "credit-string"
-#~ msgstr "По увеличению"
-
-#, fuzzy
-#~ msgid "to"
-#~ msgstr "Остановить"
-
-#, fuzzy
-#~ msgid "DEBIT"
-#~ msgstr "ПРАВИТЬ"
-
-#, fuzzy
-#~ msgid "CREDIT"
-#~ msgstr "ПРАВИТЬ"
-
-#, fuzzy
-#~ msgid "Account Title"
-#~ msgstr "Тип счета"
-
-#, fuzzy
-#~ msgid "Income Statement Start Date"
-#~ msgstr "Дата согласования:"
-
-#, fuzzy
-#~ msgid "Income Statement End Date"
-#~ msgstr "Дата согласования:"
-
-#, fuzzy
-#~ msgid "Recursive balance"
-#~ msgstr "Согласованное"
-
-#, fuzzy
-#~ msgid "Equity Statement Start Date"
-#~ msgstr "Дата согласования:"
-
-#, fuzzy
-#~ msgid "Equity Statement End Date"
-#~ msgstr "Дата согласования:"
-
-#, fuzzy
-#~ msgid "Unrealized gains"
-#~ msgstr "Неслучившиеся Доходы (Убытки)"
-
-#, fuzzy
-#~ msgid "Unrealized losses"
-#~ msgstr "Неслучившиеся Доходы (Убытки)"
-
-#, fuzzy
-#~ msgid "Captial"
-#~ msgstr "Материал"
-
-#, fuzzy
-#~ msgid "Extensions"
-#~ msgstr "Расходы"
-
-#~ msgid "-- Multiple Sources --"
-#~ msgstr "-- Множественные источники --"
-
-#~ msgid "label1"
-#~ msgstr "label1"
-
-#~ msgid "Credit Account:"
-#~ msgstr "Кредитный счет:"
-
-#~ msgid "_New Invoice"
-#~ msgstr "_Создать инвойс"
-
-#~ msgid "Display the Summary Bar"
-#~ msgstr "Показать панель итогов"
-
-#~ msgid "S_ummary Bar"
-#~ msgstr "_Панель итогов"
-
-#~ msgid "Display the Status Bar"
-#~ msgstr "Показать строку состояния"
-
-#~ msgid "_Status Bar"
-#~ msgstr "_Строка состояния"
-
-#~ msgid "Keep normal invoice order"
-#~ msgstr "Сохранить обычный порядок счетов-фактур"
-
-#~ msgid "Sort by quantity"
-#~ msgstr "Упорядочить по количеству"
-
-#~ msgid "Process Pa_yment"
-#~ msgstr "Обработать _Платеж"
-
-#~ msgid "_Gnucash Users Manual"
-#~ msgstr "Руководство по _GnuCash"
-
-#~ msgid "Entity type does not match Customer: %s"
-#~ msgstr "Тип сущности не совпадает с 'Заказчик': %s"
-
-#~ msgid "Entity type does not match Vendor: %s"
-#~ msgstr "Тип сущности не совпадает с 'Поставщик': %s"
-
-#, fuzzy
-#~ msgid "Entity type does not match Employee: %s"
-#~ msgstr "Сущность тип Работник с"
-
-#~ msgid "Entity type does not match Invoice: %s"
-#~ msgstr "Тип сущности не совпадает с 'Счет-фактура': %s"
-
-#~ msgid "label8"
-#~ msgstr "label8"
-
-#~ msgid "label9"
-#~ msgstr "label9"
-
-#~ msgid "Error message not available"
-#~ msgstr "Сообщение об ошибке отсутствует"
-
-#~ msgid ""
-#~ "Error occurred while saving Account:\n"
-#~ "%d: %s"
-#~ msgstr ""
-#~ "Произошла ошибка при сохранении счета: \n"
-#~ "%d: %s"
-
-#~ msgid ""
-#~ "Another user has modified this transaction\n"
-#~ "\tjust a moment ago. Please look at their changes,\n"
-#~ "\tand try again, if needed.\n"
-#~ msgstr ""
-#~ "Другой пользователь только что изменил эту транзакцию.\n"
-#~ "Посмотрите на его изменения, и попробуйте еще раз,\n"
-#~ "если необходимо.\n"
-
-#~ msgid "Print a check using a standard format"
-#~ msgstr "Напечатать чек, используя стандартный формат"
-
-#~ msgid "Print _Check"
-#~ msgstr "Напечатать _чек"
-
-#~ msgid "S_elect Transactions"
-#~ msgstr "_Выбрать транзакции"
-
-#~ msgid "Date _Range"
-#~ msgstr "_Диапазон дат"
-
-#~ msgid "_All"
-#~ msgstr "_Все"
-
-#~ msgid "_Cleared"
-#~ msgstr "_Очищено"
-
-#~ msgid "Chec_k & Repair"
-#~ msgstr "_Проверить и восстановить"
-
-#~ msgid "_Transaction Report"
-#~ msgstr "Отчет о _транзакции"
-
-#~ msgid "Register date ranges"
-#~ msgstr "Интервал дат в журнале"
-
-#~ msgid "Set Date Range"
-#~ msgstr "Установить диапазон дат"
-
-#~ msgid "End date:"
-#~ msgstr "Конечная дата:"
-
-#~ msgid "Account Name:"
-#~ msgstr "Название счета:"
-
-#~ msgid "label812"
-#~ msgstr "label812"
-
-#~ msgid "Add"
-#~ msgstr "Добавить"
-
-#~ msgid "Remove"
-#~ msgstr "Удалить"
-
-#~ msgid "Help Topics"
-#~ msgstr "Темы справки"
-
-#~ msgid "Topics"
-#~ msgstr "Темы"
-
-#~ msgid "Search GnuCash Help"
-#~ msgstr "Поиск по справке GnuCash"
-
-#~ msgid "Search Term:"
-#~ msgstr "Поиск термина:"
-
-#~ msgid ""
-#~ "Type a single term into the box and hit 'search'. At the moment, this "
-#~ "search engine does not support complex searches, just single words."
-#~ msgstr ""
-#~ "Напишите один термин в поле и нажмите 'Поиск''. В настоящий момент "
-#~ "подпрограмма поиска не поддерживает сложный поиск, только одиночные слова."
-
-#~ msgid "Help"
-#~ msgstr "_Справка"
-
-#~ msgid "Search results"
-#~ msgstr "Результаты поиска"
-
-#~ msgid "Welcome to GnuCash!"
-#~ msgstr "Добро пожаловать в GnuCash!"
-
-#~ msgid "Canceling"
-#~ msgstr "Отмена"
-
-#~ msgid ""
-#~ "Uncheck if you do not want this dialog to run if you start GnuCash up "
-#~ "again. "
-#~ msgstr ""
-#~ "Уберите галочку, если вы не хотите, чтобы этот диалог появился когда вы "
-#~ "запустите GnuCash в следующий раз."
-
-#~ msgid "Run dialog for new user again?"
-#~ msgstr "Запускать диалог для нового пользователя опять?"
-
-#~ msgid "%P %%"
-#~ msgstr "%P %%"
-
-#~ msgid "Number of Occurrences"
-#~ msgstr "Количество событий"
-
-#~ msgid "Remaining Number of Occurrences"
-#~ msgstr "Количество оставшихся случаев:"
-
-#~ msgid "%v/%u (%p%%)"
-#~ msgstr "%v/%u (%p%%)"
-
-#~ msgid "old-file-import"
-#~ msgstr "импорт-старого-файла"
-
-#~ msgid "user:price-editor"
-#~ msgstr "пользователь:редактор-цен"
-
-#, fuzzy
-#~ msgid "user:stock-split"
-#~ msgstr "владелец"
-
-#, fuzzy
-#~ msgid "user:xfer-dialog"
-#~ msgstr "владелец"
-
-#~ msgid "Display this dialog next time"
-#~ msgstr "Показывать этот диалог в следующий раз"
-
-#~ msgid "-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-#~ msgstr "-rfx-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"
-
-#~ msgid "You must enter a valid balance."
-#~ msgstr "Вы должны ввести правильный остаток."
-
-#~ msgid "Enter GnuCash Network passphrase:"
-#~ msgstr "Введите сетевой пароль GnuCash:"
-
-#~ msgid "GnuCash Network authorization failed."
-#~ msgstr "Авторизация сетевого GnuCash не удалась."
-
-#~ msgid "Enter passphrase:"
-#~ msgstr "Введите пароль:"
-
-#~ msgid "Verify passphrase:"
-#~ msgstr "Повторите пароль еще раз:"
-
-#~ msgid "Passphrases did not match."
-#~ msgstr "Пароли не совпадают."
-
-#~ msgid "Name of account view"
-#~ msgstr "Название вида счетов"
-
-#~ msgid ""
-#~ "To open an account, you must first\n"
-#~ "choose an account to open."
-#~ msgstr ""
-#~ "Чтобы раскрыть счет, вы должны сначала\n"
-#~ "его выбрать."
-
-#~ msgid ""
-#~ "To edit an account, you must first\n"
-#~ "choose an account to edit.\n"
-#~ msgstr ""
-#~ "Чтобы изменить информацию о счете, вы должны сначала\n"
-#~ "его выбрать.\n"
-
-#~ msgid ""
-#~ "To delete an account, you must first\n"
-#~ "choose an account to delete.\n"
-#~ msgstr ""
-#~ "Для удаления счета вы должны сначала\n"
-#~ "выбрать счет.\n"
-
-#~ msgid ""
-#~ "To reconcile an account, you must first\n"
-#~ "choose an account to reconcile."
-#~ msgstr ""
-#~ "Для согласования счета вы должны сначала\n"
-#~ "выбрать счет."
-
-#~ msgid "You must select an account to check and repair."
-#~ msgstr "Вы должны выбрать счет для проверки и восстановления."
-
-#~ msgid "Stock S_plit..."
-#~ msgstr "Показать части _бумаг..."
-
-#~ msgid "Open S_ubaccounts"
-#~ msgstr "Раскрыть с с_убсчетами"
-
-#, fuzzy
-#~ msgid "Net Assets non currency commodities total"
-#~ msgstr "всего"
-
-#, fuzzy
-#~ msgid "Net Assets grand total"
-#~ msgstr "всего"
-
-#~ msgid "Profits total"
-#~ msgstr "Итого прибыль"
-
-#, fuzzy
-#~ msgid "Profits grand total"
-#~ msgstr "всего"
-
-#~ msgid "Select \"Exit\" to exit GnuCash."
-#~ msgstr "Выберите \"Выйти\" для выхода из GnuCash."
-
-#~ msgid "Open _Recent"
-#~ msgstr "Открыть _недавние"
-
-#~ msgid "Commodity _Editor"
-#~ msgstr "Справочник _товаров"
-
-#~ msgid "Financial _Calculator"
-#~ msgstr "Финансовый _калькулятор"
-
-#~ msgid "Save the file to disk"
-#~ msgstr "Сохранить документ на диске"
-
-#~ msgid "Exit"
-#~ msgstr "Выйти"
-
-#~ msgid "%s [Read-Only]"
-#~ msgstr "%s [Только для чтения]"
-
-#~ msgid "Add criterion"
-#~ msgstr "Добавить критерий"
-
-#~ msgid "No options!"
-#~ msgstr "Нет параметров!"
-
-#~ msgid ""
-#~ "GnuCash Network is disabled and the link you have clicked requires it.\n"
-#~ "You can enable it in the Network section\n"
-#~ "of the Preferences dialog."
-#~ msgstr ""
-#~ "GnuCash сеть выключена, а ссылка, к который вы обращаетесь, требует "
-#~ "сети.\n"
-#~ "Вы можете включить сеть в разделе \"Сеть\" меню \"Настройки\"."
-
-#~ msgid "Print Preview"
-#~ msgstr "Предварительный просмотр"
-
-#~ msgid "Enter URI to load:"
-#~ msgstr "Введите URI подлежащий загрузке:"
-
-#~ msgid "Reload the current document"
-#~ msgstr "Перезагрузить текущий документ"
-
-#~ msgid "Open a new document"
-#~ msgstr "Открыть новый документ"
-
-#~ msgid "Print Help window"
-#~ msgstr "Распечатать окно помощи"
-
-#~ msgid "Close this Help window"
-#~ msgstr "Закрыть это окно помощи"
-
-#~ msgid "Transfer Information"
-#~ msgstr "Информация о передаче"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid "New Account (child of selected) ..."
-#~ msgstr "Новый счет (потомок выбранного) ..."
-
-#~ msgid "OFX Import"
-#~ msgstr "Импорт OFX"
-
-#~ msgid "Import OFX files"
-#~ msgstr "Импортировать файлы OFX"
-
-#, fuzzy
-#~ msgid ""
-#~ "GnuCash can import financial data from OFX (Quicken \n"
-#~ "Interchange Format) files written by Quicken/QuickBooks,\n"
-#~ "MS Money, Moneydance, and many other programs. \n"
-#~ "\n"
-#~ "The import process has several steps. Your GnuCash\n"
-#~ "accounts will not be changed until you click \"Finish\"\n"
-#~ "at the end of the process. \n"
-#~ "\n"
-#~ "Click \"Next\" to start loading your OFX data, or \"Cancel\"\n"
-#~ "to abort the process. "
-#~ msgstr "  Завершить Следующий до  Отменить "
-
-#~ msgid "Select a OFX file to load"
-#~ msgstr "Выбрать файл OFX для загрузки"
-
-#~ msgid "OFX Filename:"
-#~ msgstr "Название файла OFX:"
-
-#~ msgid "OFX files you have loaded"
-#~ msgstr "Файлы OFX, которые были загружены"
-
-#~ msgid "OFX import complete"
-#~ msgstr "Импорт OFX завершен"
-
-#~ msgid ""
-#~ "You are about to change a reconciled split.\n"
-#~ "Are you sure you want to do that?"
-#~ msgstr "Вы уверены что хотит изменить сверенные части? "
-
-#~ msgid ""
-#~ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-default-font:-rfx-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid ""
-#~ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-#~ msgstr ""
-#~ "register-hint-font:-rfx-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
-
-#~ msgid "label847668"
-#~ msgstr "метка773"
-
-#~ msgid "(Report not found)"
-#~ msgstr "(отчет не найден)"
-
-#~ msgid "Print report window"
-#~ msgstr "Распечатать окно отчета"
-
-#, fuzzy
-#~ msgid "Save report"
-#~ msgstr "Одиночный отчет"
-
-#~ msgid ""
-#~ "If you keep multiple account views open, it may be helpful to give each "
-#~ "one a descriptive name"
-#~ msgstr ""
-#~ "Если вы держите открытыми одновременно несколько видов счетов, может быть "
-#~ "полезно давать каждому описательное название."
-
-#~ msgid "Account fields to display"
-#~ msgstr "Отображаемые поля счета"
-
-#~ msgid "Balance in Report Currency"
-#~ msgstr "Баланс в валюте отчетов"
-
-#~ msgid "Present Balance in Report Currency"
-#~ msgstr "Текущий баланс в валюте отчета"
-
-#, fuzzy
-#~ msgid "Cleared Balance"
-#~ msgstr "Среднее сальдо"
-
-#, fuzzy
-#~ msgid "Cleared Balance in Report Currency"
-#~ msgstr "дюйм"
-
-#, fuzzy
-#~ msgid "Reconciled Balance in Report Currency"
-#~ msgstr "Согласованное дюйм"
-
-#, fuzzy
-#~ msgid "Future Minimum Balance"
-#~ msgstr "Сальдо на начало:"
-
-#, fuzzy
-#~ msgid "Future Minimum Balance in Report Currency"
-#~ msgstr "дюйм"
-
-#, fuzzy
-#~ msgid "Total in Report Currency"
-#~ msgstr "Валюта отчета"
-
-#~ msgid "Loading tip-of-the-day..."
-#~ msgstr "Загружаются советы дня..."
-
-#~ msgid "_Style Sheets..."
-#~ msgstr "_Стиль оформления..."
-
-#, fuzzy
-#~ msgid "Overview"
-#~ msgstr "Просмотреть"
-
-#, fuzzy
-#~ msgid "Introduction"
-#~ msgstr "Введение в GnuCash"
-
-#, fuzzy
-#~ msgid "Features"
-#~ msgstr "Будущее:"
-
-#, fuzzy
-#~ msgid "Easy to Use"
-#~ msgstr "до "
-
-#, fuzzy
-#~ msgid "International Support"
-#~ msgstr "Поддерживать"
-
-#, fuzzy
-#~ msgid "Business Support"
-#~ msgstr "Поддерживать"
-
-#, fuzzy
-#~ msgid "Accounting"
-#~ msgstr "Счет"
-
-#~ msgid "What's New in v1.8"
-#~ msgstr "Что нового в версии 1.8"
-
-#, fuzzy
-#~ msgid "Accounting Concepts"
-#~ msgstr "Код счета"
-
-#, fuzzy
-#~ msgid "The 5 Basic Accounts"
-#~ msgstr "Типы счетов GnuCash"
-
-#, fuzzy
-#~ msgid "The Principal Accounting Equation"
-#~ msgstr "Проценты начисляются на:"
-
-#~ msgid "Backup file (.xac)"
-#~ msgstr "Файл для резервного копирования (.xac)"
-
-#~ msgid "Log file (.log)"
-#~ msgstr "Файл журнала (.log)"
-
-#~ msgid "Lock files (.LNK and .LCK)"
-#~ msgstr "Файлы блокировки (.LNK и .LCK)"
-
-#, fuzzy
-#~ msgid "Principle of Balance"
-#~ msgstr "Согласованное сальдо:"
-
-#, fuzzy
-#~ msgid "Simple Example"
-#~ msgstr "Простой например"
-
-#, fuzzy
-#~ msgid "The Basic Top Level Accounts"
-#~ msgstr "Вверх"
-
-#, fuzzy
-#~ msgid "Making Sub-Accounts"
-#~ msgstr "Включать субсчета"
-
-#~ msgid "Basic Concepts"
-#~ msgstr "Основные положения"
-
-#, fuzzy
-#~ msgid "Features of the Account Register"
-#~ msgstr "Регистрация"
-
-#, fuzzy
-#~ msgid "Creating from the Editor"
-#~ msgstr "Редактор"
-
-#, fuzzy
-#~ msgid "Checkbook"
-#~ msgstr "Проверка"
-
-#, fuzzy
-#~ msgid "Concepts"
-#~ msgstr "Содержание"
-
-#, fuzzy
-#~ msgid "Simple Setup"
-#~ msgstr "Простой Настройки"
-
-#, fuzzy
-#~ msgid "Purchases"
-#~ msgstr "Цены"
-
-#~ msgid "Terminology"
-#~ msgstr "Терминология"
-
-#, fuzzy
-#~ msgid "Mortgage (How-To)"
-#~ msgstr "По"
-
-#, fuzzy
-#~ msgid "Calculations"
-#~ msgstr "Рассчитать"
-
-#, fuzzy
-#~ msgid "Example: Monthly Payments"
-#~ msgstr "например Каждый месяц Платежи:"
-
-#, fuzzy
-#~ msgid "Example: Length of Loan"
-#~ msgstr "например Продолжительность Заем"
-
-#, fuzzy
-#~ msgid "Advanced: Calculation Details"
-#~ msgstr "Дополнительно"
-
-#, fuzzy
-#~ msgid "Types of Investments"
-#~ msgstr "Типы счетов GnuCash"
-
-#, fuzzy
-#~ msgid "Predefined Accounts"
-#~ msgstr "Кредитные счета"
-
-#, fuzzy
-#~ msgid "Interest Bearing Accounts"
-#~ msgstr "Проценты"
-
-#, fuzzy
-#~ msgid "Setup Your Stock Portfolio"
-#~ msgstr "Настройки Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Setup Your Preexisting Stocks"
-#~ msgstr "Настройки"
-
-#, fuzzy
-#~ msgid "Example Stock Account"
-#~ msgstr "например Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Setting Stock Price"
-#~ msgstr "Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Initial Price Editor Setup"
-#~ msgstr "Редактор Настройки"
-
-#, fuzzy
-#~ msgid "Setting Stock Price Manually"
-#~ msgstr "Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Setting Stock Price Automatically"
-#~ msgstr "Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Display Stock Value"
-#~ msgstr "Показывать Ценные бумаги Значение"
-
-#, fuzzy
-#~ msgid "Selling Stocks"
-#~ msgstr "Ценные бумаги"
-
-#, fuzzy
-#~ msgid "Todo Investment Docs"
-#~ msgstr "Портфель ценных бумаг"
-
-#, fuzzy
-#~ msgid "Selling"
-#~ msgstr "Продажа"
-
-#, fuzzy
-#~ msgid "Caution about Valuation"
-#~ msgstr "about"
-
-#, fuzzy
-#~ msgid "Taxation"
-#~ msgstr "_Транзакция"
-
-#, fuzzy
-#~ msgid "GnuCash Currency Support"
-#~ msgstr "Поддерживать"
-
-#, fuzzy
-#~ msgid "Setting International Preferences"
-#~ msgstr "Параметры"
-
-#~ msgid "Recording Purchases in a Foreign Currency (How-To)"
-#~ msgstr "Записываем покупки в иностранной валюте (Как сделать)"
-
-#, fuzzy
-#~ msgid "Tracking Currency Investments (How-To)"
-#~ msgstr "По"
-
-#~ msgid "Putting It All Together (Examples)"
-#~ msgstr "Помещаем это все вместе (напримеры)"
-
-#, fuzzy
-#~ msgid "Depreciation"
-#~ msgstr "Описание"
-
-#~ msgid "Overview of Business Features"
-#~ msgstr "Обзор возможностей, нужных для делового применения"
-
-#, fuzzy
-#~ msgid "Initial Setup"
-#~ msgstr "Настройки"
-
-#, fuzzy
-#~ msgid "Register Your Company"
-#~ msgstr "Регистрация Фирма"
-
-#~ msgid "System Components"
-#~ msgstr "Компоненты системы"
-
-#~ msgid "Customers"
-#~ msgstr "Клиенты"
-
-#~ msgid "Find and Edit"
-#~ msgstr "Поиск и исправление"
-
-#, fuzzy
-#~ msgid "Assign Starting Invoice Number"
-#~ msgstr "Счет Номер"
-
-#, fuzzy
-#~ msgid "Customer Jobs"
-#~ msgstr "Заказчик"
-
-#, fuzzy
-#~ msgid "Changing the Invoice Appearance"
-#~ msgstr "Счет"
-
-#~ msgid "Vendors"
-#~ msgstr "Поставщики"
-
-#, fuzzy
-#~ msgid "Vendor Jobs"
-#~ msgstr "Поставщик"
-
-#, fuzzy
-#~ msgid "Payroll"
-#~ msgstr "Отплатить счета"
-
-#~ msgid "Protocol"
-#~ msgstr "Протокол"
-
-#, fuzzy
-#~ msgid "Step 1: Deductions List"
-#~ msgstr "Шаг Список"
-
-#, fuzzy
-#~ msgid "Step 3: Pay the Employee"
-#~ msgstr "Шаг Работник"
-
-#, fuzzy
-#~ msgid "Step 4: Pay the Government"
-#~ msgstr "Шаг"
-
-#~ msgid "Build Protocol"
-#~ msgstr "Протокол сборки"
-
-#~ msgid "Pay an Employee"
-#~ msgstr "Оплата работнику"
-
-#~ msgid "Pay the Government"
-#~ msgstr "Оплата правительству"
-
-#~ msgid "Appendix A: Migration Guide"
-#~ msgstr "Приложение А. Руководство по переходу"
-
-#~ msgid "Appendix B: Frequently Asked Questions"
-#~ msgstr "Приложение Б. Часто задаваемые вопросы"
-
-#, fuzzy
-#~ msgid "Appendix C: Contributed Account Trees"
-#~ msgstr "Приложение"
-
-#, fuzzy
-#~ msgid "Appendix D: GNU Free Documentation License"
-#~ msgstr "Приложение Д"
-
-#~ msgid "Date Format Display"
-#~ msgstr "Показываемый Формат даты:"
-
-#~ msgid "US (12/31/2001)"
-#~ msgstr "US (12/31/2001)"
-
-#~ msgid "US-style: mm/dd/yyyy"
-#~ msgstr "Американский стиль: мм/дд/гггг"
-
-#~ msgid "UK (31/12/2001)"
-#~ msgstr "UK (31/12/2001)"
-
-#~ msgid "UK-style dd/mm/yyyy"
-#~ msgstr "Европейский стиль дд/мм/гггг"
-
-#~ msgid "Europe (31.12.2001)"
-#~ msgstr "Европа (31.12.2001)"
-
-#~ msgid "Continental Europe: dd.mm.yyyy"
-#~ msgstr "Континентальная Европа: дд.мм.гггг"
-
-#~ msgid "ISO (2001-12-31)"
-#~ msgstr "ИСО (2001-12-31)"
-
-#~ msgid "ISO Standard: yyyy-mm-dd"
-#~ msgstr "Стандарт ISO: гггг-мм-дд"
-
-#~ msgid "Default system locale format"
-#~ msgstr "Формат по умолчанию системной локали"
-
-#~ msgid "Basic Ledger"
-#~ msgstr "Основная книга"
-
-#~ msgid "Auto-Split Ledger"
-#~ msgstr "Автоматически разбивать журнал"
-
-#~ msgid "Confirm before changing reconciled"
-#~ msgstr "Подтверждать перед изменением согласования"
-
-#~ msgid ""
-#~ "If selected, use a dialog to confirm a change to a reconciled transaction."
-#~ msgstr ""
-#~ "Если выбрано, использовать диалог для подтверждения транзакции "
-#~ "согласования."
-
-#~ msgid "The font to use in the register"
-#~ msgstr "Шрифт, используемый в журнале транзакций"
-
-#~ msgid "Register hint font"
-#~ msgstr "Шрифт подсказок в журнале"
-
-#~ msgid "The font used to show hints in the register"
-#~ msgstr "Шрифт, используемый для вывода подсказок в журнале транзакций"
-
-#~ msgid "Header color"
-#~ msgstr "Цвет заголовка"
-
-#~ msgid "The header background color"
-#~ msgstr "Цвет фона заголовка"
-
-#~ msgid "Primary color"
-#~ msgstr "Первичный цвет"
-
-#~ msgid "The default background color for register rows"
-#~ msgstr "Цвет фона по умолчанию для строк журнала"
-
-#~ msgid "Secondary color"
-#~ msgstr "Вторичный цвет"
-
-#~ msgid "The default secondary background color for register rows"
-#~ msgstr "Вторичный цвет фона для строк журнала"
-
-#~ msgid "Primary active color"
-#~ msgstr "Первичный цвет активной строки"
-
-#~ msgid "The background color for the current register row"
-#~ msgstr "Цвет фона для текущей строки журнала транзакций"
-
-#~ msgid "Secondary active color"
-#~ msgstr "Вторичный цвет активной строки"
-
-#~ msgid "The secondary background color for the current register row"
-#~ msgstr "Вторичный цвет фона для текущей строку журнала транзакций"
-
-#~ msgid "Split color"
-#~ msgstr "Цвет части"
-
-#~ msgid "The default background color for split rows in the register"
-#~ msgstr "Цвет по умолчанию для строк с частями в журнале"
-
-#~ msgid "Split active color"
-#~ msgstr "Цвет активной строки части"
-
-#~ msgid "The background color for the current split row in the register"
-#~ msgstr "Цвет фона для текущей строки части в журнале"
-
-#, fuzzy
-#~ msgid "Start date"
-#~ msgstr "Начало дата"
-
-#, fuzzy
-#~ msgid "End date"
-#~ msgstr "Конец дата"
-
-#~ msgid "Show Advanced Settings"
-#~ msgstr "Показать дополнительные настройки"
-
-#~ msgid "Allow modification of less commonly used settings."
-#~ msgstr "Разрешать изменение менее общеиспользуемых настроек."
-
-#~ msgid "Choose whether to display icons, text, or both for toolbar buttons"
-#~ msgstr ""
-#~ "Выбрать, будут ли кнопки на панели инструментов показываться как текст, "
-#~ "пиктограммы или и то и другое"
-
-#~ msgid "Icons and Text"
-#~ msgstr "Пиктограммы и текст"
-
-#~ msgid "Show both icons and text"
-#~ msgstr "Показать пиктограммы и текст"
-
-#~ msgid "Show icons only"
-#~ msgstr "Показать только пиктограммы"
-
-#~ msgid "Account Separator"
-#~ msgstr "Разделитель счетов"
-
-#~ msgid "The types of accounts for which balances are sign-reversed"
-#~ msgstr "Типы счетов, для которых сальдо с перевернутым знаком"
-
-#~ msgid "Use file compression"
-#~ msgstr "Использовать сжатие файла"
-
-#~ msgid "Run on GnuCash start"
-#~ msgstr "Выполнять при запуске GnuCash"
-
-#~ msgid "Should the Since-Last-Run window appear on GnuCash startup?"
-#~ msgstr ""
-#~ "Должно ли появляется окно с последними выполненными задачами при запуске "
-#~ "GnuCash"
-
-#~ msgid "Auto-Create new Scheduled Transactions by default"
-#~ msgstr ""
-#~ "Автоматически создавать новый запланированные транзакции по умолчанию"
-
-#, fuzzy
-#~ msgid ""
-#~ "Should new Scheduled Transactions have the 'Auto Create' flag set by "
-#~ "default?"
-#~ msgstr "Расписание Автоматически Создать set   умолчание?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Should new Scheduled Transactions with the 'AutoCreate' flag set also be "
-#~ "set to notify?"
-#~ msgstr "Расписание set set до ?"
-
-#, fuzzy
-#~ msgid "Default number of days in advance to create"
-#~ msgstr "По умолчанию дюйм до "
-
-#, fuzzy
-#~ msgid ""
-#~ "Default number of days in advance to create new Scheduled Transactions."
-#~ msgstr "По умолчанию номер дней дюйм до  Расписание."
-
-#, fuzzy
-#~ msgid ""
-#~ "Default number of days in advance to remind on new Scheduled Transactions."
-#~ msgstr "По умолчанию номер дней дюйм до  Расписание."
-
-#~ msgid "Template Register Lines"
-#~ msgstr "Строки шаблона журнала"
-
-#~ msgid "How many lines in the template register?"
-#~ msgstr "Сколько строк в шаблоне журнала?"
-
-#~ msgid "_+Advanced"
-#~ msgstr "_+Допольнительный"
-
-#~ msgid "Application MDI mode"
-#~ msgstr "Режим использования окон"
-
-#~ msgid "Choose how new windows are created for reports and account trees."
-#~ msgstr ""
-#~ "Выберите, как будут создаваться новые окна для отчетов и деревьев счетов."
-
-#~ msgid "Notebook"
-#~ msgstr "Блокнот"
-
-#~ msgid ""
-#~ "New windows are created as notebook tabs in the current top-level window"
-#~ msgstr "Новые окна создаются как закладки в текущем окне верхнего уровня"
-
-#~ msgid "Single window"
-#~ msgstr "Одиночное окно"
-
-#~ msgid ""
-#~ "One window is used for all displays (select contents through Window menu)"
-#~ msgstr ""
-#~ "Одно окно используется для показа всего (показываемое содержание можно "
-#~ "выбрать через меню Окна)"
-
-#~ msgid "Default MDI mode can be set in the GNOME Control Center"
-#~ msgstr "Режим по умолчанию, установленный в Центре управления GNOME"
-
-#~ msgid "Show Vertical Borders"
-#~ msgstr "Показать вертикальные рамки"
-
-#~ msgid "Show Horizontal Borders"
-#~ msgstr "Показать горизонтальные рамки"
-
-#~ msgid "By default, show every transaction in an account."
-#~ msgstr "По умолчанию показывать каждую транзакцию счета."
-
-#, fuzzy
-#~ msgid "Show accounts with a 0.0 total"
-#~ msgstr "Показывать счета до этого уровня и не дальше"
-
-#~ msgid "Show Foreign Currencies/Shares of Stock"
-#~ msgstr "Показывать иностранные валюты/паи ценных бумаг"
-
-#~ msgid "Profit And Loss"
-#~ msgstr "Прибыль и Убытки"
-
-#~ msgid "%s - %s to %s"
-#~ msgstr "%s - %s к %s"
-
-#~ msgid "Profit & Loss"
-#~ msgstr "Прибыли и Убытки"
-
-#, fuzzy
-#~ msgid "Auto-CLEAR threshold"
-#~ msgstr "Автоматически"
-
-#~ msgid "Employees"
-#~ msgstr "Работники"
-
-#, fuzzy
-#~ msgid "View the quick report of bills coming due soon."
-#~ msgstr "Вид."
-
-#~ msgid "View and Edit the available Billing Terms"
-#~ msgstr "Просмотр и редактирование сроков платежей"
-
-#~ msgid "View and Edit the available Tax Tables"
-#~ msgstr "Просмотр и редактирование доступных таблицы налогов"
-
-#~ msgid "Invoice Tax Included?"
-#~ msgstr "Счет-фактура включает налог?"
-
-#, fuzzy
-#~ msgid "Bill Tax Included?"
-#~ msgstr "_Налоги?"
-
-#~ msgid "Enter OpenHBCI Configuration File"
-#~ msgstr "Введите конфигурационный файл OpenHBCI"
-
-#~ msgid "OpenHBCI Configuration File"
-#~ msgstr "Файл конфигурации OpenHBCI"
-
-#~ msgid "Choose OpenHBCI Configuration File"
-#~ msgstr "Выбрать конфигурационный файл OpenHBCI"
-
-#~ msgid ""
-#~ "If you already have an OpenHBCI configuration file (e.g. from "
-#~ "'aqmoney'), \n"
-#~ "please select it here. GnuCash will continue to use your existing "
-#~ "configuration.\n"
-#~ "\n"
-#~ "If you do not yet have an OpenHBCI configuration file, please specify a "
-#~ "file name here. \n"
-#~ "A new OpenHBCI configuration file with that name will be created when "
-#~ "this HBCI \n"
-#~ "Setup finishes."
-#~ msgstr ""
-#~ "Если у вас уже есть конфигурационный файл OpenHBCI (нанапример, от "
-#~ "`aqmoney`), \n"
-#~ "пожалуйста, выберите его здесь. GnuCash продолжит использование вашей "
-#~ "существующей конфигурации.\n"
-#~ "\n"
-#~ "Если у вас еще не конфигурационного файла OpenHBCI, пожалуйста, \n"
-#~ "укажите здесь название файла. \n"
-#~ "Новый конфигурационный файл OpenHBCI с указанным названием будет "
-#~ "создан, \n"
-#~ "когда настройка HBCI будет завершена."
-
-#~ msgid "Enter Bank Information"
-#~ msgstr "Введите информацию о банке"
-
-#~ msgid "Bank Identification"
-#~ msgstr "Идентификация банка"
-
-#~ msgid "Country Code (Germany: 280)"
-#~ msgstr "Код страны (Германия - 280)"
-
-#~ msgid "280"
-#~ msgstr "280"
-
-#~ msgid "Server Address"
-#~ msgstr "Адрес сервера"
-
-#~ msgid "Internet Address"
-#~ msgstr "Интернет-адрес"
-
-#~ msgid "www.hbci-kernel.de"
-#~ msgstr "www.hbci-kernel.d"
-
-#~ msgid "Enter User Information"
-#~ msgstr "Введите информацию о пользователе"
-
-#~ msgid "Bank Code:"
-#~ msgstr "Код банка:"
-
-#~ msgid "User Identification"
-#~ msgstr "Идентификация пользователя"
-
-#, fuzzy
-#~ msgid "User ID (\"Benutzerkennung\")"
-#~ msgstr "Пользователь"
-
-#~ msgid "Name (optional)"
-#~ msgstr "Название (необязательно)"
-
-#, fuzzy
-#~ msgid "Customer ID (\"Kundennummer\")"
-#~ msgstr "Заказчик"
-
-#~ msgid "If your bank did not specify a Customer ID, enter the User ID here."
-#~ msgstr ""
-#~ "Если ваш банк не указывает идентификатор клиента, введите здесь "
-#~ "идентификатор пользователя."
-
-#~ msgid ""
-#~ "Enter the IDs given from your bank here. Please make sure the spelling is "
-#~ "correct. "
-#~ msgstr ""
-#~ "Введите сюда идентификаторы, данные вам банком. Пожалуйста, "
-#~ "удостоверьтесь, что вы не ошиблись при вводе."
-
-#, fuzzy
-#~ msgid "Security Medium"
-#~ msgstr "Соотносящаяся валюта"
-
-#, fuzzy
-#~ msgid "RDH Medium (Key File)"
-#~ msgstr "Нормальный Файл"
-
-#, fuzzy
-#~ msgid "Path to Key File"
-#~ msgstr "до "
-
-#~ msgid "Choose file for secret key"
-#~ msgstr "Выберите файл с закрытым ключом"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you already have a key file, please choose it here and make sure the "
-#~ "User ID and\n"
-#~ "Customer ID match the ones when you created that key file earlier. \n"
-#~ "If you do not have one yet, choose a filename, and a key file will be "
-#~ "created there. Make\n"
-#~ "sure to remember the exact User ID and Customer ID specified now."
-#~ msgstr ""
-#~ "Если у вас уже есть ключевой файл, пожалуйста, выберите его здесь. \n"
-#~ "Если у вас его нет, выберите название и ключевой файл будет создан. "
-
-#, fuzzy
-#~ msgid "DDV Medium (Chip Card)"
-#~ msgstr "Нормальный"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you have a Chip Card but are not sure about the exact User ID and "
-#~ "Customer ID, you can \n"
-#~ "use the tool 'hbcicard' from the libchipcard package to read these "
-#~ "numbers from the Chip Card."
-#~ msgstr "about Пользователь и Заказчик пакет до  чтение."
-
-#, fuzzy
-#~ msgid ""
-#~ "In order to update your list of HBCI-enabled accounts, your bank\n"
-#~ "server will be contacted and will be queried for the \n"
-#~ "HBCI-accessible accounts.\n"
-#~ "\n"
-#~ "Press 'Next' now to contact the bank server. You can then see the \n"
-#~ "progress of the HBCI connection in the HBCI connection window."
-#~ msgstr "В до  список Следующий до  дюйм."
-
-#~ msgid ""
-#~ "HBCI\n"
-#~ "Version"
-#~ msgstr "Версия HBCI"
-
-#, fuzzy
-#~ msgid ""
-#~ "Manually add\n"
-#~ "Account"
-#~ msgstr "добавить"
-
-#~ msgid ""
-#~ "Add \n"
-#~ "Bank"
-#~ msgstr ""
-#~ "Добавить \n"
-#~ "банк"
-
-#~ msgid ""
-#~ "Add \n"
-#~ "User"
-#~ msgstr ""
-#~ "Добавить \n"
-#~ "пользователя"
-
-#~ msgid "Public Keys will be retrieved"
-#~ msgstr "Публичные ключи будут запрошены"
-
-#, fuzzy
-#~ msgid ""
-#~ "In order to setup HBCI access to your bank, OpenHBCI first has to \n"
-#~ "retrieve the cryptographic public keys of your bank. You will need \n"
-#~ "to enter your PIN for this to happen. After the successful key \n"
-#~ "retrieval, you need to verify those against the Ini-Letter that \n"
-#~ "your bank gave to you on paper.\n"
-#~ "\n"
-#~ "Press 'Next' now to retrieve the keys from the bank. If you have just\n"
-#~ "created a new key file, you have to enter its PIN again. \n"
-#~ "\n"
-#~ "You can then see the progress of the HBCI connection in the HBCI\n"
-#~ "connection window. Please do not close the HBCI connection window\n"
-#~ "before this whole druid has finished."
-#~ msgstr ""
-#~ "В до  установки до  до  до  до  Letter до  Следующий до  до  дюйм close."
-
-#, fuzzy
-#~ msgid "Verify Ini-Letter from Server"
-#~ msgstr "Проверять Letter"
-
-#, fuzzy
-#~ msgid "Ini-Letter Server"
-#~ msgstr "Letter"
-
-#, fuzzy
-#~ msgid "Do these values match the values on your paper Ini-Letter?"
-#~ msgstr "Letter?"
-
-#~ msgid "User Keys will be sent"
-#~ msgstr "Пользовательские ключи были отправлены"
-
-#, fuzzy
-#~ msgid ""
-#~ "Now you need to send your cryptographic public keys to the bank\n"
-#~ "server. Once you press 'Next', you public keys are sent to the \n"
-#~ "bank. ATTENTION: This step cannot be undone. Once you have sent \n"
-#~ "your keys to the bank, you cannot generate new ones but instead \n"
-#~ "have to use these for months to come (unless you personally ask \n"
-#~ "your bank to reset them).\n"
-#~ "\n"
-#~ "AGAIN ATTENTION: If you happen to encounter a bug in this unstable\n"
-#~ "Gnucash version and/or OpenHBCI, these keys might get broken and you\n"
-#~ "might actually have ask your bank to reset them and generate new ones.\n"
-#~ "\n"
-#~ "If you are really sure to proceed, then press 'Next' now to send \n"
-#~ "the keys to the bank. You can then see the progress of the HBCI \n"
-#~ "connection in the HBCI connection window."
-#~ msgstr ""
-#~ "Создать до  до  Однажды Следующий до  Однажды до  до  месяцы до  до  до  "
-#~ "дюйм get до  до  Следующий до  до  дюйм."
-
-#, fuzzy
-#~ msgid "Print Ini-Letter of User"
-#~ msgstr "Напечатать Letter"
-
-#, fuzzy
-#~ msgid "Ini-Letter User"
-#~ msgstr "Letter"
-
-#, fuzzy
-#~ msgid ""
-#~ "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
-#~ "by pressing 'Print'. Then press 'Next'."
-#~ msgstr "является Letter владелец Напечатать Следующий."
-
-#, fuzzy
-#~ msgid ""
-#~ "Now you need to sign your (the User's) Ini-Letter and send it to your "
-#~ "bank. \n"
-#~ "\n"
-#~ "The initial HBCI setup is now finished.\n"
-#~ "\n"
-#~ "Once your bank has received and processed your Ini-Letter, you\n"
-#~ "have to execute this \"HBCI Setup\" druid again in order \n"
-#~ "to use the HBCI functionality in your accounts.\n"
-#~ "\n"
-#~ "Press 'Finish' now."
-#~ msgstr ""
-#~ "Создать до  Пользователь с Letter до  установки является Letter до  "
-#~ "выполнение Настройки дюйм дюйм Завершить."
-
-#, fuzzy
-#~ msgid ""
-#~ "You have changed the HBCI version. GnuCash will now need to \n"
-#~ "update various system parameters, including the account list.\n"
-#~ "Press 'Ok' now to proceed to updating the system and the account list."
-#~ msgstr "до  список Да до  до  список."
-
-#~ msgid ""
-#~ "Enter account id for new account \n"
-#~ "at bank %s (bank code %s):"
-#~ msgstr ""
-#~ "Введите идентификатор счета для нового счета\n"
-#~ "в банке %s (код банка %s):"
-
-#~ msgid "Default Customer"
-#~ msgstr "Клиент по умолчанию"
-
-#, fuzzy
-#~ msgid ""
-#~ "Since the cryptographic keys of the bank cannot be verified,\n"
-#~ "you should stop contacting this Server Internet Address\n"
-#~ "and contact your bank. To help your bank figure out the\n"
-#~ "problem, you should print out this erroneous Ini-Letter\n"
-#~ "and show it to your bank. Please abort the HBCI setup\n"
-#~ "druid now."
-#~ msgstr "Сервер Адрес По help Letter до  установки."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter and confirm new PIN for \n"
-#~ "user '%s' at bank '%s',\n"
-#~ "with at least %d characters."
-#~ msgstr "с с d."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter and confirm a new PIN for \n"
-#~ "user '%s',\n"
-#~ "with at least %d characters."
-#~ msgstr "и с d."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter and confirm a new PIN\n"
-#~ "with at least %d characters."
-#~ msgstr "d."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr "с с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at unknown bank."
-#~ msgstr "с неизвестно."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter the PIN for \n"
-#~ "the newly created user."
-#~ msgstr "владелец."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please make sure the key file for user '%s' at bank '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
-#~ "sure the floppy disk or medium is correctly mounted."
-#~ msgstr "владелец с с является Да является является."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please make sure the key file for user '%s' can be \n"
-#~ "accessed. If the key file is on your harddisk, simply press 'Ok'. If \n"
-#~ "the key file is on a floppy disk or other removable media, please make \n"
-#~ "sure the floppy disk or medium is correctly mounted."
-#~ msgstr "владелец с является Да является является."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please insert chip card for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr "с с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please insert chip card for \n"
-#~ "user '%s'."
-#~ msgstr "с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please make sure the key file for the newly created user can be \n"
-#~ "accessed. If you want to create the key file on your harddisk, simply \n"
-#~ "press 'Ok'. If you want to create the key on a floppy disk or other \n"
-#~ "removable media, please make sure the floppy disk or medium is \n"
-#~ "correctly mounted."
-#~ msgstr "владелец до  Да до  является."
-
-#, fuzzy
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s' at bank '%s'. Please make \n"
-#~ "sure the correct key file can be accessed."
-#~ msgstr "до  владелец с с."
-
-#, fuzzy
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for user '%s'. Please make sure the \n"
-#~ "correct key file can be accessed."
-#~ msgstr "до  владелец с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "user '%s' at bank '%s'."
-#~ msgstr "с с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "user '%s'."
-#~ msgstr "с."
-
-#, fuzzy
-#~ msgid ""
-#~ "The key file does not seem to be the correct \n"
-#~ "file for the newly created user. Please make \n"
-#~ "sure the correct key file can be accessed."
-#~ msgstr "до  владелец."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please insert the correct chip card for \n"
-#~ "the newly created user."
-#~ msgstr "владелец."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s' at bank '%s'\n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr "с с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "user '%s'\n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr "с."
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter PIN for \n"
-#~ "the newly created user \n"
-#~ "at the keypad of your chip card reader."
-#~ msgstr "владелец."
-
-#~ msgid "Closing Dialog"
-#~ msgstr "Закрываем диалог"
-
-#~ msgid "Opening Network Connection"
-#~ msgstr "Открываем сетевое соединение"
-
-#~ msgid "Closing Network Connection"
-#~ msgstr "Закрываем сетевое соединение"
-
-#~ msgid "Job: Get Transactions"
-#~ msgstr "Задание: Получить транзакции"
-
-#~ msgid "Job: New Transfer"
-#~ msgstr "Задание: Создать транзакцию"
-
-#, fuzzy
-#~ msgid "Job: Debit Note"
-#~ msgstr "Дело"
-
-#, fuzzy
-#~ msgid "Job: Get Standing Orders"
-#~ msgstr "Дело"
-
-#, fuzzy
-#~ msgid "Job: New Standing Order"
-#~ msgstr "Создать"
-
-#, fuzzy
-#~ msgid "Job: Delete Standing Order"
-#~ msgstr "Удалить"
-
-#, fuzzy
-#~ msgid "Job: Retrieve Account List"
-#~ msgstr "Дело"
-
-#, fuzzy
-#~ msgid "Job: Get System ID"
-#~ msgstr "Дело"
-
-#, fuzzy
-#~ msgid "Job: Get Keys"
-#~ msgstr "Дело"
-
-#, fuzzy
-#~ msgid "Job: Send Keys"
-#~ msgstr "Послать"
-
-#, fuzzy
-#~ msgid "Job: Disable Keys"
-#~ msgstr "Дело Отключать"
-
-#, fuzzy
-#~ msgid "Job: Change Keys"
-#~ msgstr "Дело Изменять"
-
-#, fuzzy
-#~ msgid "Job: Get Status Reports"
-#~ msgstr "Дело Состояние"
-
-#~ msgid "Sending message"
-#~ msgstr "Отправка сообщения"
-
-#~ msgid "Waiting for response"
-#~ msgstr "Ожидание ответа"
-
-#~ msgid "Creating HBCI Job"
-#~ msgstr "Создание задания HBCI"
-
-#~ msgid "Contacting Server"
-#~ msgstr "Подсоединение к серверу"
-
-#, fuzzy
-#~ msgid "Checking Job result"
-#~ msgstr "Дело"
-
-#~ msgid "Updating local system"
-#~ msgstr "Обновление локальной системы"
-
-#~ msgid "_Exit"
-#~ msgstr "_Выйти"
