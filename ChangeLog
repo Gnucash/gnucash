@@ -5,6 +5,10 @@
 
 2006-05-22  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/gnc-plugin-page-account-tree.c,
+	gnc-plugin-page-register.c: Deactivate the "View Lots" menu item
+	because the lot viewer is unfinished as well.
+
 	* src/gnome/gnc-plugin-basic-commands.c: Deactivate the "Close
 	Books" menu item because that feature is unfinished as well.
 
