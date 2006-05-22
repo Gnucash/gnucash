@@ -1,3 +1,8 @@
+2006-05-22  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif-import/*:
+	  remove hook to test druid for 2.0 release.
+
 2006-05-22  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-plugin-basic-commands.c: Deactivate the "Close
