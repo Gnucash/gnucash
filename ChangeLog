@@ -1,3 +1,8 @@
+2006-05-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/gnc-plugin-basic-commands.c: Hide the "Export account
+	chart as QSF" as well. Not ready for 2.0.0 due to e.g. bug#341559.
+
 2006-05-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-plugin-basic-commands.c,

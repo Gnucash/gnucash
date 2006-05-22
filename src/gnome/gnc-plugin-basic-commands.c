@@ -73,7 +73,9 @@ static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowAc
 static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data);
 #endif
 static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data);
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
 static void gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data);
+#endif
 static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
@@ -118,10 +120,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
     N_("Export _Accounts"), NULL,
     N_("Export the account hierarchy to a new GnuCash datafile"),
     G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
   { "FileExportChartAction", GTK_STOCK_CONVERT,
     N_("Export _Chart of Accounts to QSF"), NULL,
     N_("Export the chart of accounts for a date with balances as QSF"),
     G_CALLBACK (gnc_main_window_cmd_file_chart_export) },
+#endif
 
   /* Edit menu */
 
@@ -402,6 +406,7 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
   /* gnc_refresh_main_window_info (); */
 }
 
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
 static void
 gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data)
 {
@@ -413,6 +418,7 @@ gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionDat
   /* FIXME GNOME 2 Port (update the title etc.) */
   /* gnc_refresh_main_window_info (); */
 }
+#endif
 
 static void
 gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data)
