@@ -4,6 +4,7 @@
       <menu name="FileImport" action="FileImportAction">
       	<placeholder name="FileImportPlaceholder">
       	   <menuitem name="FileQIFImport" action="QIFImportAction"/>
+      	   <!-- menuitem name="FileQIFTestDruid" action="QIFTestDruid"/ -->
       	</placeholder>
       </menu>
     </menu>
