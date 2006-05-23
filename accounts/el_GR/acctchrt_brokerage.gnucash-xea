@@ -18,6 +18,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Ενεργητικό</act:description>
+ <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Έπενδύσεις</act:name>
@@ -29,6 +35,12 @@
   </act:commodity>
   <act:description>Επενδύσεις</act:description>
   <act:parent type="new">52b5942b5beaec856eaca5a75ee71592</act:parent>
+ <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Λογαριασμός Χρηματιστή</act:name>
@@ -94,6 +106,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Έσοδα</act:description>
+ <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Έσοδα από Τόκους</act:name>
@@ -137,6 +155,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Έξοδα</act:description>
+ <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Προμήθειες</act:name>
