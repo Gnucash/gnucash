@@ -1,3 +1,10 @@
+2006-05-24  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/ledger-core/split-register-load.c (skip_cb):
+	Disable skipping hidden accounts for the purposes of quickfill
+	completion population.  Less-than-ideal-but-simple fix for
+	Bug#340885.
+
 2006-05-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/report-gnome/window-report.c:
