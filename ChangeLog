@@ -15,6 +15,32 @@
 	* configure.in: Deactivate --enable-sql because PostgreSQL backend
 	is still broken and we can't fix it before 2.0.0; bug#332251.
 
+r14180 | chris | 2006-05-24 18:54:03 -0400 (Wed, 24 May 2006) | 2 lines
+
+   M /gnucash/trunk/lib/libqof/qof/gnc-date.c
+
+   Consistently pad date formats with zeros instead of spaces.
+
+r14159 | chris | 2006-05-23 21:25:30 -0400 (Tue, 23 May 2006) | 4 lines
+
+   M /gnucash/trunk/lib/guile-www/cgi.scm
+   M /gnucash/trunk/lib/guile-www/http.scm
+   M /gnucash/trunk/src/import-export/qif-import/qif-file.scm
+   M /gnucash/trunk/src/import-export/qif-io-core/qif-file.scm
+   M /gnucash/trunk/src/scm/command-line.scm
+
+   Fix Bug#342736 by replacing "make-shared-substring" with "substring".
+   Guile 1.8 automatically shares strings as copy-on-write and no longer
+   provides the "make-shared-substring" procedure.
+
+r14158 | chris | 2006-05-23 20:49:10 -0400 (Tue, 23 May 2006) | 3 lines
+
+   M /gnucash/trunk/lib/libqof/qof/gnc-date.c
+   M /gnucash/trunk/src/gnome/gnc-plugin-page-budget.c
+
+   Fix Bug#342546 by using the pref date format instead of locale.
+   Also prefix-pad fixed-width date formats with '0'.
+
 2006-05-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-sheet.c
