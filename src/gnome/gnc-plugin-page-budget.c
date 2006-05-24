@@ -1019,7 +1019,7 @@ gnc_plugin_page_budget_refresh_col_titles(GncPluginPageBudget *page)
     date = r->start;
     for (i = 0; i < num_periods_visible; i++) {
         col = GTK_TREE_VIEW_COLUMN(g_list_nth_data(col_list, i));
-        titlelen = g_date_strftime(title, MAX_DATE_LENGTH, "%x", &date);
+        titlelen = qof_print_gdate(title, MAX_DATE_LENGTH, &date);
         if (titlelen > 0)
             gtk_tree_view_column_set_title(col, title);
         recurrenceNextInstance(r, &date, &nextdate);

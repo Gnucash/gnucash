@@ -456,10 +456,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
   switch(dateFormat)
   {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d", day, month, year);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
       break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%2d.%2d.%-4d", day, month, year);
+      flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
       break;
    case QOF_DATE_FORMAT_LOCALE:
       {
@@ -485,7 +485,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
       break;
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d", month, day, year);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
       break;
   }
 
@@ -1108,6 +1108,15 @@ gnc_iso8601_to_timespec_gmt(const char *str)
         tmp_tm.tm_hour -= 2;
         secs = mktime (&tmp_tm);
       }
+    /* CAS: Even correct implementations of mktime can return
+       (time_t)(-1): From the libc info page: "If the specified
+       broken-down time cannot be represented as a simple time,
+       `mktime' returns a value of `(time_t)(-1)' and does not modify
+       the contents of BROKENTIME."  This happens for dates after 2038
+       when time_t is 32 bits.  In those cases, this code above is
+       just noisy and has a slight risk of returning the incorrect
+       time.
+     */
       if (secs < 0) 
       {
         /* Seriously buggy mktime - give up.  */
@@ -1122,7 +1131,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
      * value of 'gnc_timezone' includes daylight savings corrections
      * for that date. */
 
-    tm = *localtime_r (&secs, &tm);
+    localtime_r (&secs, &tm);
 
     tz = gnc_timezone (&tmp_tm);
 
