@@ -106,8 +106,6 @@
 /** allow easy logging of QSF debug messages */
 #define QOF_MOD_QSF "gncqof-backend-qsf"
 /** allow easy loading of the QSF backend */
-#define QSF_BACKEND_LIB "libgncqof-backend-qsf"
-/** allow easy loading of the QSF backend */
-#define QSF_MODULE_INIT "qsf_provider_init"
+#define QSF_BACKEND_LIB "gncqof-backend-qsf"
 
 #endif /* QOF_H_ */
