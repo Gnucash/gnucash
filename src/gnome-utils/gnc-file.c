@@ -1124,7 +1124,6 @@ gnc_file_save_as (void)
   save_in_progress--;
 
   g_free (newfile);
-  gnc_hook_run(HOOK_BOOK_SAVED, new_session);
   LEAVE (" ");
 }
 
