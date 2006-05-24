@@ -1,3 +1,8 @@
+2006-05-24  Christian Stimming <stimming@tuhh.de>
+
+	* configure.in: Deactivate --enable-sql because PostgreSQL backend
+	is still broken and we can't fix it before 2.0.0; bug#332251.
+
 2006-05-23  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-sheet.c
