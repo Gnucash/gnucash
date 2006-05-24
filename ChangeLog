@@ -1,3 +1,10 @@
+2006-05-23  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/gnucash-sheet.c
+	(GTK_ALLOWED_SELECTION_WITHIN_INSERT_SIGNAL): Change test to be
+	open-ended on the top, as we expect future GTKs will not allow
+	this either, as experience has shown.  Should fix Bug#342182.
+
 2006-05-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/*:
