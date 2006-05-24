@@ -1,3 +1,8 @@
+2006-05-24  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-gnome/window-report.c:
+	  Re-enable window sensitivity if the report fails.  Fixes #341610
+
 2006-05-24  Christian Stimming <stimming@tuhh.de>
 
 	* configure.in: Deactivate --enable-sql because PostgreSQL backend
