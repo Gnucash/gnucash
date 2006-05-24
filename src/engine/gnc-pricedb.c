@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <string.h>
 #include "gnc-pricedb-p.h"
+#include "qofbackend-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_PRICE;

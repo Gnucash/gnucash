@@ -103,7 +103,7 @@
 #define GNC_ID_SXTG           "SXTGroup"
 #define GNC_ID_SXTT           "SXTTrans"
 #define GNC_ID_TRANS          "Trans"
-                                                                                
+
 /* TYPES **********************************************************/
 
 /* CAS: ISTM, it would make more sense to put the typedefs in their
@@ -249,12 +249,6 @@ void gnc_log_default(void);
 /** Pass a function pointer to gnc_engine_add_init_hook and 
  * it will be called during the evaluation of gnc_engine_init */
 void gnc_engine_add_init_hook(gnc_engine_init_hook_t hook);
-
-gboolean
-qof_session_export (QofSession *tmp_session,
-                    QofSession *real_session,
-                    QofPercentageFunc percentage_func);
-
 
 #endif
 /** @} */

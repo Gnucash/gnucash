@@ -29,8 +29,7 @@
 #include "cashobjects.h"
 #include "test-stuff.h"
 
-#define PG_LIB_NAME "libgnc-backend-postgres.la"
-#define PG_LIB_INIT "pgend_provider_init"
+#define PG_LIB_NAME "gnc-backend-postgres"
 
 int main (int argc, char ** argv)
 {
@@ -38,8 +37,7 @@ int main (int argc, char ** argv)
 	cashobjects_register();
 	/* the test needs to run locally in case make install
 	 * has not yet been run. Use GNC_LIBDIR usually. */
-	do_test(
-		qof_load_backend_library ("../", PG_LIB_NAME, PG_LIB_INIT),
+	do_test(qof_load_backend_library ("../", PG_LIB_NAME),
 		" loading gnc-backend-postgres GModule failed");
 	print_test_results();
 	qof_close();

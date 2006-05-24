@@ -47,8 +47,7 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
-#define GNC_LIB_NAME "libgnc-backend-file.la"
-#define GNC_LIB_INIT "gnc_provider_init"
+#define GNC_LIB_NAME "gnc-backend-file"
 
 static void
 remove_files_pattern(const char *begining, const char *ending)
@@ -112,8 +111,7 @@ main (int argc, char ** argv)
     g_type_init();
     qof_init();
     cashobjects_register();
-    do_test(
-            qof_load_backend_library ("../", GNC_LIB_NAME, GNC_LIB_INIT),
+    do_test(qof_load_backend_library ("../", GNC_LIB_NAME),
             " loading gnc-backend-file GModule failed");
 
     if (!location)

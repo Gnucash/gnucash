@@ -24,6 +24,7 @@
 #include "config.h"
 #include <glib.h>
 #include "qof.h"
+#include "qofbackend-p.h"
 #include "qof-backend-qsf.h"
 #include <libxml/xmlmemory.h>
 #include <libxml/tree.h>

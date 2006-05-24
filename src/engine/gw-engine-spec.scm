@@ -1443,14 +1443,6 @@ prior to time t.")
 
 (gw:wrap-function
  ws
- 'gnc:session-export
- '<gw:bool>
- "gnc_session_scm_export"
- '((<gnc:Session*> tmp_session) (<gnc:Session*> real_session))
- "Export the accounts in the session.")
-
-(gw:wrap-function
- ws
  'gnc:session-set-callback
  '<gw:void>
  "gnc_session_scm_set_callback"

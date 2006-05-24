@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
+#include "qofbackend-p.h"
 
 static QofLogModule log_module = QOF_MOD_UTIL;
 
