@@ -139,7 +139,7 @@ qof_book_equal (QofBook *book_1, QofBook *book_2)
 {
   if (book_1 == book_2) return TRUE;
   if (!book_1 || !book_2) return FALSE;
-  return TRUE;
+  return FALSE;
 }
 
 /* ====================================================================== */
