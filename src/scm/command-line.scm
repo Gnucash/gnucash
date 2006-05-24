@@ -197,8 +197,8 @@ the current value of the path.")
       (gnc:debug "handling arg " item)
       
       (if (not (string=? "--"
-			 (make-shared-substring item 0
-						(min (string-length item) 2))))
+			 (substring item 0
+                                    (min (string-length item) 2))))
           (begin
             (gnc:debug "non-option " item ", assuming file")
             (set! rest (cdr rest))
@@ -208,7 +208,7 @@ the current value of the path.")
               ;; ignore --
               (set! rest (cdr rest))
               ;; Got something that looks like an option...
-              (let* ((arg-string (make-shared-substring item 2))
+              (let* ((arg-string (substring item 2))
                      (arg-def (assoc-ref gnc:*arg-defs* arg-string)))
 
                 (if (not arg-def)
