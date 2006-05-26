@@ -1,3 +1,9 @@
+2006-05-26   Christian Stimming <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Simplify calling
+	the aqhbci setup wizard for aqbanking>=1.9.1 because we don't need
+	to select an aqbanking backend beforehand.
+
 2006-05-25  Chris Shoemaker <chris.shoemaker@cox.net>
 
 	* configure.in: REactivate --enable-sql by reverting part of r14175 
