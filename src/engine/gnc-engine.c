@@ -80,7 +80,6 @@ gnc_engine_init(int argc, char ** argv)
     const gchar* lib;
     gboolean required;
   } libs[] = {
-    { QOF_LIB_DIR, QSF_BACKEND_LIB, FALSE },
     { GNC_LIBDIR, GNC_LIB_NAME, TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
     { GNC_LIBDIR, "gnc-backend-postgres", FALSE },

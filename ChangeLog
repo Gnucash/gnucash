@@ -5,6 +5,13 @@
 	* src/engine/gnc-engine.c:
 	  force-exit gnucash if a required library can't be loaded.
 
+	* src/engine/gnc-engine.c:
+	* lib/libqof/qof/qofsession.c:
+	  QOF should load its own backend libraries.
+	  It shouldn't depend on apps to load QOF libraries.
+	  Make sure app-defined backends are used first.
+	  Fix a memory leak in qofsession.
+
 2006-05-26   Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Simplify calling
