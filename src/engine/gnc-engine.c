@@ -76,7 +76,7 @@ void
 gnc_engine_init(int argc, char ** argv)
 {
   static gchar *names[] = {
-      GNC_LIB_NAME, QSF_BACKEND_LIB, "gnc-backend-postgres", 
+      QSF_BACKEND_LIB, GNC_LIB_NAME, "gnc-backend-postgres", 
       NULL};
   gchar **np;
   gnc_engine_init_hook_t hook;
