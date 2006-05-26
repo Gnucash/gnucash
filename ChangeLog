@@ -2,6 +2,9 @@
 
 	* src/engine/gnc-engine.c: load the qsf backend from the right place.
 
+	* src/engine/gnc-engine.c:
+	  force-exit gnucash if a required library can't be loaded.
+
 2006-05-26   Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Simplify calling

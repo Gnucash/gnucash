@@ -78,12 +78,13 @@ gnc_engine_init(int argc, char ** argv)
   static struct {
     const gchar* dir;
     const gchar* lib;
+    gboolean required;
   } libs[] = {
-    { QOF_LIB_DIR, QSF_BACKEND_LIB },
-    { GNC_LIBDIR, GNC_LIB_NAME },
+    { QOF_LIB_DIR, QSF_BACKEND_LIB, FALSE },
+    { GNC_LIBDIR, GNC_LIB_NAME, TRUE },
     /* shouldn't the PG gnc-module do this instead of US doing it? */
-    { GNC_LIBDIR, "gnc-backend-postgres" },
-    { NULL, NULL } }, *lib;
+    { GNC_LIBDIR, "gnc-backend-postgres", FALSE },
+    { NULL, NULL, FALSE } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
 
@@ -103,11 +104,23 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  for (lib = libs; lib->dir && lib->lib ; lib++) {
+  for (lib = libs; lib->dir && lib->lib ; lib++)
+  {
       if (qof_load_backend_library(lib->dir, lib->lib))
+      {
           engine_is_initialized = 1;
+      }
       else
-          g_message("failed to load %s from %s", lib->lib, lib->dir);
+      {
+          g_message("failed to load %s from %s\n", lib->lib, lib->dir);
+	  /* If this is a required library, stop now! */
+	  if (lib->required)
+	  {
+	      g_message("required library %s not found.  Exiting.\n",
+			lib->lib);  
+	      g_assert(FALSE);
+	  }
+      }
   }
 
   /* call any engine hooks */
