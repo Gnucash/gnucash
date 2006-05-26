@@ -75,10 +75,15 @@ gnucash_micro_version (void)
 void 
 gnc_engine_init(int argc, char ** argv)
 {
-  static gchar *names[] = {
-      QSF_BACKEND_LIB, GNC_LIB_NAME, "gnc-backend-postgres", 
-      NULL};
-  gchar **np;
+  static struct {
+    const gchar* dir;
+    const gchar* lib;
+  } libs[] = {
+    { QOF_LIB_DIR, QSF_BACKEND_LIB },
+    { GNC_LIBDIR, GNC_LIB_NAME },
+    /* shouldn't the PG gnc-module do this instead of US doing it? */
+    { GNC_LIBDIR, "gnc-backend-postgres" },
+    { NULL, NULL } }, *lib;
   gnc_engine_init_hook_t hook;
   GList * cur;
 
@@ -98,9 +103,11 @@ gnc_engine_init(int argc, char ** argv)
   /* Now register our core types */
   cashobjects_register();
 
-  for (np = names; *np; np++) {
-      if (qof_load_backend_library(GNC_LIBDIR, *np))
+  for (lib = libs; lib->dir && lib->lib ; lib++) {
+      if (qof_load_backend_library(lib->dir, lib->lib))
           engine_is_initialized = 1;
+      else
+          g_message("failed to load %s from %s", lib->lib, lib->dir);
   }
 
   /* call any engine hooks */

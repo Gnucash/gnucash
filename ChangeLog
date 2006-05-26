@@ -1,3 +1,7 @@
+2006-05-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-engine.c: load the qsf backend from the right place.
+
 2006-05-26   Christian Stimming <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Simplify calling
