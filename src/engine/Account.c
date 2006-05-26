@@ -348,7 +348,7 @@ void
 xaccAccountCommitEdit (Account *acc) 
 {
   g_return_if_fail(acc);
-  if(!qof_commit_edit(&acc->inst)) { return;}
+  if (!qof_commit_edit(&acc->inst)) return;
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -385,7 +385,7 @@ xaccAccountCommitEdit (Account *acc)
     qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
 
     /* the lots should be empty by now */
-    for (lp=acc->lots; lp; lp=lp->next)
+    for (lp = acc->lots; lp; lp = lp->next)
     {
       GNCLot *lot = lp->data;
       gnc_lot_destroy (lot);

@@ -24,6 +24,7 @@
 #include "config.h"
 #include <glib.h>
 #include "qof.h"
+#include "qofbackend-p.h"
 #include "qof-backend-qsf.h"
 #include <libxml/xmlmemory.h>
 #include <libxml/tree.h>
@@ -1269,17 +1270,11 @@ qsf_provider_free (QofBackendProvider *prov)
 	g_free (prov);
 }
 
-void
-qsf_provider_init(void)
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 
-/*	#ifdef ENABLE_NLS
-	setlocale (LC_ALL, "");
-	bindtextdomain (GETTEXT_PACKAGE, LOCALE_DIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-	#endif*/
 	prov = g_new0 (QofBackendProvider, 1);
 	prov->provider_name = "QSF Backend Version 0.2";
 	prov->access_method = "file";
@@ -1288,4 +1283,5 @@ qsf_provider_init(void)
 	prov->check_data_type = qsf_determine_file_type;
 	prov->provider_free = qsf_provider_free;
 	qof_backend_register_provider (prov);
+	return NULL;
 }

@@ -15,11 +15,124 @@
 	* configure.in: Deactivate --enable-sql because PostgreSQL backend
 	is still broken and we can't fix it before 2.0.0; bug#332251.
 
+r14181 | chris | 2006-05-24 18:57:43 -0400 (Wed, 24 May 2006) | 3 lines
+
+   M /gnucash/branches/misc-backend/lib/libqof/qof/guid.c
+
+   The postgres backend depends on the value of the null guid, so revert it
+   to its 1.8 value.
+
 r14180 | chris | 2006-05-24 18:54:03 -0400 (Wed, 24 May 2006) | 2 lines
 
    M /gnucash/trunk/lib/libqof/qof/gnc-date.c
 
    Consistently pad date formats with zeros instead of spaces.
+
+r14170 | chris | 2006-05-23 23:55:35 -0400 (Tue, 23 May 2006) | 2 lines
+
+   M /gnucash/branches/misc-backend/src/backend/postgres/Makefile.am
+   M /gnucash/branches/misc-backend/src/backend/postgres/PostgresBackend.c
+   M /gnucash/branches/misc-backend/src/engine/Account.c
+   M /gnucash/branches/misc-backend/src/engine/gnc-commodity.h
+
+   Trivial comments/cleanups.
+
+r14169 | chris | 2006-05-23 23:53:52 -0400 (Tue, 23 May 2006) | 2 lines
+
+   M /gnucash/branches/misc-backend/src/gnome-utils/gnc-html-graph-gog.c
+
+   Clarify unused parameters.
+
+r14168 | chris | 2006-05-23 23:48:00 -0400 (Tue, 23 May 2006) | 3 lines
+
+   M /gnucash/branches/misc-backend/src/gnome-utils/gnc-file.c
+
+   There's no need to rerun the book-saved callbacks in gnc_file_save_as()
+   because they've already been run in gnc_file_save()
+
+r14167 | chris | 2006-05-23 23:44:50 -0400 (Tue, 23 May 2006) | 6 lines
+
+   M /gnucash/branches/misc-backend/src/gnome-utils/gnc-file.c
+   M /gnucash/branches/misc-backend/src/gnome-utils/gnc-main-window.c
+
+   Use the session URL instead of file path for 
+     1) determining if we have something open
+     2) determining if we're saving exactly what we have open
+     3) updating the title bar
+
+r14166 | chris | 2006-05-23 23:34:18 -0400 (Tue, 23 May 2006) | 2 lines
+
+   M /gnucash/branches/misc-backend/lib/libqof/backend/file/Makefile.am
+   M /gnucash/branches/misc-backend/lib/libqof/backend/file/qof-backend-qsf.h
+   M /gnucash/branches/misc-backend/lib/libqof/backend/file/qsf-backend.c
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qof.h
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofsession.c
+
+   Move the QSF backend from custom init to GModule init.
+
+r14165 | chris | 2006-05-23 23:21:09 -0400 (Tue, 23 May 2006) | 18 lines
+
+   M /gnucash/branches/misc-backend/lib/libqof/backend/file/qsf-backend.c
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofbackend-p.h
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofbackend.c
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofbackend.h
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofsession-p.h
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofsession.c
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofsession.h
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofutil.c
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofutil.h
+   M /gnucash/branches/misc-backend/src/backend/file/gnc-backend-file.c
+   M /gnucash/branches/misc-backend/src/backend/file/gnc-backend-file.h
+   M /gnucash/branches/misc-backend/src/backend/file/test/test-load-backend.c
+   M /gnucash/branches/misc-backend/src/backend/file/test/test-load-xml2.c
+   M /gnucash/branches/misc-backend/src/backend/postgres/PostgresBackend.c
+   M /gnucash/branches/misc-backend/src/backend/postgres/PostgresBackend.h
+   M /gnucash/branches/misc-backend/src/backend/postgres/test/test-db.c
+   M /gnucash/branches/misc-backend/src/backend/postgres/test/test-load-backend.c
+   M /gnucash/branches/misc-backend/src/backend/postgres/test/test-period.c
+   M /gnucash/branches/misc-backend/src/engine/Period.c
+   M /gnucash/branches/misc-backend/src/engine/Transaction.c
+   M /gnucash/branches/misc-backend/src/engine/gnc-engine.c
+   M /gnucash/branches/misc-backend/src/engine/gnc-engine.h
+   M /gnucash/branches/misc-backend/src/engine/gnc-pricedb.c
+   M /gnucash/branches/misc-backend/src/engine/gnc-session-scm.c
+   M /gnucash/branches/misc-backend/src/engine/gnc-session-scm.h
+   M /gnucash/branches/misc-backend/src/engine/gw-engine-spec.scm
+
+   Decrease coupling between backends and engine:
+   - do not include the (supposedly) private qofbackend-p.h in qofutil.h,
+       instead, include it explictly in only the places that need it.
+   - since backends are GModules, use the GModule module init hook, instead 
+       of rolling our own and using a different function for each backend
+   - loop over a list of backends for the engine to try to load 
+   - include the postgres backend in that list of backends
+   - move qof_session_export() from gnc-engine.c to qofsession.c
+   - publicize qof_backend_set_error() and qof_backend_get_error()
+   - privatize QofBookFileType to gnc-backend-file.c
+
+   Incidental:
+   - Plug a string leak in qofsession.c
+   - drop the unused gnc_session_scm_export code
+   - Drop unimplemented prototype gncBackendInit_file()
+   - Formatting cleanups.
+
+r14164 | chris | 2006-05-23 23:18:14 -0400 (Tue, 23 May 2006) | 2 lines
+
+   M /gnucash/branches/misc-backend/lib/libqof/qof/qofbook.c
+
+   Recognize unequal books as unequal.
+
+r14163 | chris | 2006-05-23 23:16:19 -0400 (Tue, 23 May 2006) | 2 lines
+
+   M /gnucash/branches/misc-backend/src/engine/Makefile.am
+
+   Make sure GNC_LIBDIR is updated when the installation dir changes.
+
+r14161 | chris | 2006-05-23 21:40:39 -0400 (Tue, 23 May 2006) | 2 lines
+
+   A /gnucash/branches/misc-backend (from /gnucash/trunk:14160)
+
+   Branched from trunk at r14160, hoping postgres will work again someday... 
 
 r14159 | chris | 2006-05-23 21:25:30 -0400 (Tue, 23 May 2006) | 4 lines
 

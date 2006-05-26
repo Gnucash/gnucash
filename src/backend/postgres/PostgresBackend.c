@@ -253,7 +253,7 @@ pgend_set_book (PGBackend *be, QofBook *book)
 /* This routine finds the commodity by parsing a string
  * of the form NAMESPACE::MNEMONIC
  */
-
+/* FIXME: replace w/ gnc_commodity_table_lookup_unique */
 gnc_commodity *
 gnc_string_to_commodity (const char *str, QofBook *book)
 {
@@ -264,7 +264,7 @@ gnc_string_to_commodity (const char *str, QofBook *book)
    comtab = gnc_book_get_commodity_table (book);
 
    space = g_strdup(str);
-   name = strchr (space, ':');
+   name = strchr (space, ':'); /* BUG */
 
    if (!name)
    {
@@ -2542,7 +2542,8 @@ pg_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-void pgend_provider_init(void)
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 
@@ -2554,6 +2555,7 @@ void pgend_provider_init(void)
 	prov->provider_free = pg_provider_free;
 	prov->check_data_type = NULL;
 	qof_backend_register_provider (prov);
+	return NULL;
 }
 
 /* ======================== END OF FILE ======================== */

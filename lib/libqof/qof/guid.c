@@ -122,16 +122,13 @@ guid_null(void)
   static int null_inited = 0;
   static GUID null_guid;
 
-  if (!null_inited)
-  {
-    int i;
-    char *tmp = "NULLGUID.EMPTY.";
+  if (!null_inited) {
+      int i;
 
-      /* 16th space for '\O' */
-	  for (i = 0; i < GUID_DATA_SIZE; i++)
-      null_guid.data[i] = tmp[i];
+      for (i = 0; i < GUID_DATA_SIZE; i++)
+          null_guid.data[i] = '\0';
 
-    null_inited = 1;
+      null_inited = 1;
   }
 
   return &null_guid;

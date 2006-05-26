@@ -139,6 +139,7 @@ Check the QofBackendError - don't assume the file is OK.
 #ifndef _QOF_BACKEND_QSF_H
 #define _QOF_BACKEND_QSF_H
 
+#include <gmodule.h>
 #include "qoflog.h"
 #include "qofbackend.h"
 
@@ -162,7 +163,8 @@ default values for the QofBackendOption KvpFrame.
 Calls gettext because QofBackendOption
 strings are translatable.
 */
-void qsf_provider_init(void);
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module);
 
 /** \name Supported backend configurations
 @{

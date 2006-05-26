@@ -128,7 +128,7 @@ qof_backend_init(QofBackend *be)
     be->run_query = NULL;
 
     be->sync = NULL;
-	be->load_config = NULL;
+    be->load_config = NULL;
 
     be->events_pending = NULL;
     be->process_events = NULL;
@@ -137,11 +137,11 @@ qof_backend_init(QofBackend *be)
     if (be->error_msg) g_free (be->error_msg);
     be->error_msg = NULL;
     be->percentage = NULL;
-	be->backend_configuration = kvp_frame_new();
-	
-	/* to be removed */
-	be->price_lookup = NULL;
-	be->export = NULL;
+    be->backend_configuration = kvp_frame_new();
+
+    /* to be removed */
+    be->price_lookup = NULL;
+    be->export = NULL;
 }
 
 void
@@ -384,30 +384,19 @@ qof_backend_commit_exists(QofBackend *be)
 }
 
 gboolean
-qof_load_backend_library (const char *directory, 
-				const char* filename, const char* init_fcn)
+qof_load_backend_library (const char *directory, const char* module_name)
 {
 	gchar *fullpath;
-	typedef void (* backend_init) (void);
 	GModule *backend;
-	backend_init gmod_init;
-	gpointer g;
 
 	g_return_val_if_fail(g_module_supported(), FALSE);
-	fullpath = g_module_build_path(directory, filename);
+	fullpath = g_module_build_path(directory, module_name);
 	backend = g_module_open(fullpath, G_MODULE_BIND_LAZY);
-	if(!backend) { 
-		g_message ("%s: %s\n", PACKAGE, g_module_error ());
-		return FALSE;
-	}
-	g = &gmod_init;
-	if (!g_module_symbol (backend, init_fcn, g))
-	{
+	if (!backend) { 
 		g_message ("%s: %s\n", PACKAGE, g_module_error ());
 		return FALSE;
 	}
 	g_module_make_resident(backend);
-	gmod_init();
 	return TRUE;
 }
 

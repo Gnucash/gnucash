@@ -431,5 +431,9 @@ void qof_session_add_close_hook (GFunc fn, gpointer data);
  *  @param session A pointer to the session being closed. */
 void qof_session_call_close_hooks (QofSession *session);
 
+gboolean qof_session_export (QofSession *tmp_session,
+                             QofSession *real_session,
+                             QofPercentageFunc percentage_func);
+
 #endif /* QOF_SESSION_H */
 /** @} */
