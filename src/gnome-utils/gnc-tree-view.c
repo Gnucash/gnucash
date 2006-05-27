@@ -617,15 +617,16 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
   /* Set defaults, then extract data from the model */
   if (!gtk_tree_sortable_get_sort_column_id(treesortable, &id, &order)) {
     order = GTK_SORT_ASCENDING;
-    id = 0;
+    id = GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID;
   }
   column = view_column_find_by_model_id (view, id);
   column_pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
 
   /* Store the values in gconf */
   gconf_section = priv->gconf_section;
-  gnc_gconf_set_string(gconf_section, "sort_column", column_pref_name, NULL);
-  gnc_gconf_set_string(gconf_section, "sort_order",
+  gnc_gconf_set_string(gconf_section, GCONF_KEY_SORT_COLUMN, 
+                       column_pref_name, NULL);
+  gnc_gconf_set_string(gconf_section, GCONF_KEY_SORT_ORDER,
 		       gnc_enum_to_nick(GTK_TYPE_SORT_TYPE, order), NULL);
   LEAVE(" ");
 }
@@ -900,7 +901,7 @@ gnc_tree_view_set_sort_order (GncTreeView *view,
   order = gnc_enum_from_nick(GTK_TYPE_SORT_TYPE, name, GTK_SORT_ASCENDING);
   if (!gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(s_model),
 					    &current, &order))
-    current = 0;
+      current = GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID;
   g_signal_handler_block(s_model, priv->sort_column_changed_cb_id);
   gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(s_model),
 				       current, order);
@@ -1644,7 +1645,9 @@ gnc_tree_view_count_visible_columns(GncTreeView *view)
     columns = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
     for (node = columns; node; node = node->next) {
         GtkTreeViewColumn *col = GTK_TREE_VIEW_COLUMN(node->data);
-        if (gnc_tree_view_column_visible (view, col, NULL))
+        
+        if (g_object_get_data(G_OBJECT(col), DEFAULT_VISIBLE) || 
+            g_object_get_data(G_OBJECT(col), ALWAYS_VISIBLE))
             count++;
     }
     g_list_free(columns);
@@ -1733,9 +1736,8 @@ gnc_tree_view_column_properties (GncTreeView *view,
     g_object_set_data(G_OBJECT(column), PREF_NAME, (gpointer)pref_name);
   if (data_column == 0)
     g_object_set_data(G_OBJECT(column), ALWAYS_VISIBLE, GINT_TO_POINTER(1));
-  if (data_column != GNC_TREE_VIEW_COLUMN_DATA_NONE)
-    g_object_set_data(G_OBJECT(column), MODEL_COLUMN,
-		      GINT_TO_POINTER(data_column));
+  g_object_set_data(G_OBJECT(column), MODEL_COLUMN, 
+                    GINT_TO_POINTER(data_column));
 
   /* Get visibility */
   visible = gnc_tree_view_column_visible(view, NULL, pref_name);
