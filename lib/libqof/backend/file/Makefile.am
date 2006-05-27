@@ -14,7 +14,7 @@ libgncqof_backend_qsf_la_SOURCES = \
   qsf-xml-map.c \
   qsf-xml.c
 
-libgncqof_backend_qsf_la_LDFLAGS = -module
+libgncqof_backend_qsf_la_LDFLAGS = -module -avoid-version
 libgncqof_backend_qsf_la_LIBADD = \
  ${QOF_LIBS} \
  ${GLIB_LIBS} \

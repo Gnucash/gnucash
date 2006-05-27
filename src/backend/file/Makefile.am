@@ -57,7 +57,7 @@ noinst_HEADERS = \
   sixtp-stack.h \
   sixtp-utils.h
 
-libgnc_backend_file_la_LDFLAGS = -module
+libgnc_backend_file_la_LDFLAGS = -module -avoid-version
 libgnc_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GCONF_LIBS} ${LIBXML2_LIBS} \
    ${top_builddir}/src/engine/libgncmod-engine.la \
