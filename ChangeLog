@@ -1,3 +1,9 @@
+2006-05-27  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/druid-gnc-xml-import.c: When the user chooses
+	  another default encoding, do not recheck the file for ambiguous
+	  words, but rather just resort what has been found before.
+
 2006-05-26  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-engine.c: load the qsf backend from the right place.

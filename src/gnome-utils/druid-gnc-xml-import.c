@@ -141,6 +141,7 @@ static void gxi_data_destroy (GncXmlImportData *data);
 static void gxi_ambiguous_info_destroy (GncXmlImportData *data);
 static void gxi_session_destroy (GncXmlImportData *data);
 static void gxi_check_file (GncXmlImportData *data);
+static void gxi_sort_ambiguous_list (GncXmlImportData *data);
 static gboolean gxi_parse_file (GncXmlImportData *data);
 static gboolean gxi_save_file (GncXmlImportData *data);
 static void gxi_update_progress_bar (const gchar *message, double percentage);
@@ -499,7 +500,7 @@ ambiguous_cmp (const ambiguous_type *a, const ambiguous_type *b,
     }
   } else {
     if (string_b) {
-      /* b looks good, a not. pub a to the top */
+      /* b looks good, a not. put a to the top */
       return -1;
     } else {
       /* both look suboptimal, see whether one has a decision attached to it */
@@ -636,9 +637,16 @@ gxi_check_file (GncXmlImportData *data)
     /* sort ambiguous words */
     g_hash_table_foreach (data->ambiguous_ht, (GHFunc)ambiguous_list_insert,
                           data);
-    data->ambiguous_list = g_list_sort_with_data (
-      data->ambiguous_list, (GCompareDataFunc) ambiguous_cmp, data);
+    gxi_sort_ambiguous_list (data);
   }
+}
+
+static void
+gxi_sort_ambiguous_list (GncXmlImportData *data)
+{
+  data->ambiguous_list = g_list_sort_with_data (
+    data->ambiguous_list, (GCompareDataFunc) ambiguous_cmp, data);
+
 }
 
 static void
@@ -1137,7 +1145,7 @@ gxi_default_enc_combo_changed_cb (GtkComboBox *combo, GncXmlImportData *data)
   }
 
   data->default_encoding = curr_enc;
-  gxi_check_file (data);
+  gxi_sort_ambiguous_list (data);
   gxi_update_string_box (data);
   gxi_update_conversion_forward (data);
 }
