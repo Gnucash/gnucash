@@ -15,17 +15,20 @@
 
 inherit eutils gnome2 
 
+DOC_VER="1.8.5"
+
 DESCRIPTION="A personal finance manager (unstable version)."
 HOMEPAGE="http://www.gnucash.org/"
 SRC_URI=""
 if [[ "${PN}" != *-svn ]]; then
-	SRC_URI="mirror://sourceforge/gnucash/${P}.tar.gz"
+	SRC_URI="mirror://sourceforge/gnucash/${P}.tar.gz
+	mirror://sourceforge/gnucash/gnucash-docs-${DOC_VER}.tar.gz"
 fi
 LICENSE="GPL-2"
-SLOT="1"
+SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="postgres ofx hbci chipcard doc debug quotes"
-# mt940 qof
+# mt940
 
 RDEPEND=">=dev-libs/glib-2.4.0
 	>=dev-util/guile-1.6
@@ -52,16 +55,9 @@ RDEPEND=">=dev-libs/glib-2.4.0
 	quotes? ( dev-perl/DateManip
 		dev-perl/Finance-Quote
 		dev-perl/HTML-TableExtract )
-	postgres? ( dev-db/postgresql )"
-
-# See http://bugs.gentoo.org/show_bug.cgi?id=118517
-#	qof? ( >=qof-0.6.1 )
-# or... same pattern as above?
-
-# I [jsled-gentoo@asynchronous.org] don't think these are used by gnucash;
-# maybe -docs...
-#	app-text/docbook-xsl-stylesheets
-#	=app-text/docbook-xml-dtd-4.1.2
+	postgres? ( dev-db/postgresql )
+	app-text/docbook-xsl-stylesheets
+	=app-text/docbook-xml-dtd-4.1.2*"
 
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
@@ -75,6 +71,7 @@ pkg_setup() {
 src_unpack() {
 	if [[ "${PN}" == *-svn ]]; then
 		svn co http://svn.gnucash.org/repo/gnucash/trunk ${P}
+        svn co http://svn.gnucash.org/repo/gnucash-docs/tags/${DOC_VER} gnucash-docs-${DOC_VER}
 		cd ${S}
 		./autogen.sh || die "Cannot autogen."
 	else
@@ -85,17 +82,7 @@ src_unpack() {
 
 src_compile() {
 	local myconf_warnings="--enable-error-on-warning --enable-compile-warnings"
-
-	# We'd like to only define --prefix, but the econf definition seems
-	# to check, but then promptly forget, that we've redefined it. :p
-	# Thus, set {man,info,data,sysconf,localstate}dir too.
 	econf \
-		--prefix /opt/${P} \
-		--mandir=/opt/${P}/man \
-		--infodir=/opt/${P}/info \
-		--datadir=/opt/${P}/share \
-		--sysconfdir=/opt/${P}/etc \
-		--localstatedir=/opt/${P}/var/lib \
 		$(use_enable debug) \
 		$(use_enable postgres sql) \
 		$(use_enable ofx) \
@@ -104,56 +91,25 @@ src_compile() {
 		${myconf_warnings} \
 			|| die "econf failed"
 	emake -j1 || die "emake failed"
+
+    cd ${WORKDIR}/gnucash-docs-${DOC_VER}
+    econf || die "doc econf failed"
+    emake || die "doc emake failed"
 }
 
-# copied+mods from gnome2.eclass:
-gnome2_gconf_install() {
-	if [[ -x ${GCONFTOOL_BIN} ]]; then
-		# We are ready to install the GCONF Scheme now
-		unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
-		export GCONF_CONFIG_SOURCE=$(${GCONFTOOL_BIN} --get-default-source)
-
-		einfo "Installing GNOME 2 GConf schemas"
-
-		local contents="${ROOT}/var/db/pkg/*/${PN}-${PVR}/CONTENTS"
-
-		for F in $(grep "obj /opt/${P}/etc/gconf/schemas" ${contents} | sed 's:obj \([^ ]*\) .*:\1:' ); do
-			if [[ -e "${F}" ]]; then
-				# echo "DEBUG::gconf install  ${F}"
-				${GCONFTOOL_BIN} --makefile-install-rule ${F} 1>/dev/null
-			fi
-		done
-
-		for user in `ps axuwwf | grep "gconfd-2" |grep -v "grep" | awk '{ print $1 }' | uniq`; do
-			einfo "shutting down gconfd-2 for user ${user} to sync gnucash schemas"
-			echo su ${user} -c "${GCONFTOOL_BIN} --shutdown"
-			${ROOT}/bin/su - ${user} -c "${GCONFTOOL_BIN} --shutdown"
-		done
-	fi
-}
-
-# copied+mods from gnome2.eclass:
-gnome2_gconf_uninstall() {
-	if [[ -x ${GCONFTOOL_BIN} ]]; then
-		unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
-		export GCONF_CONFIG_SOURCE=$(${GCONFTOOL_BIN} --get-default-source)
-
-		einfo "Uninstalling GNOME 2 GConf schemas"
-
-		local contents="${ROOT}/var/db/pkg/*/${PN}-${PVR}/CONTENTS"
-
-		for F in $(grep "obj /opt/${P}/etc/gconf/schemas" ${contents} | sed 's:obj \([^ ]*\) .*:\1:' ); do
-			# echo "DEBUG::gconf install  ${F}"
-			${GCONFTOOL_BIN} --makefile-uninstall-rule ${F} 1>/dev/null
-		done
-	fi
-}
+# See http://bugs.gentoo.org/show_bug.cgi?id=132862 regarding gconf schema install
 
 src_install() {
 	gnome2_src_install || die "gnome2_src_install failed"
 	dodoc AUTHORS ChangeLog* DOCUMENTERS HACKING INSTALL LICENSE NEWS TODO README* doc/README*
 	dodir /usr/bin
-	dosym /opt/${P}/bin/gnucash /usr/bin/${P}
 	make_desktop_entry ${P} "GnuCash ${PV}" \
-		/opt/${P}/share/gnucash/pixmaps/appicon.png "Office;Finance"
+		/usr/share/${PN}/pixmaps/appicon.png "Office;Finance"
+
+	cd ${WORKDIR}/${PN}-docs-${DOC_VER}
+	make DESTDIR=${D} \
+		scrollkeeper_localstate_dir=${D}/var/lib/scrollkeeper \
+		install || die "doc install failed"
+	rm -rf ${D}/var/lib/scrollkeeper
+
 }
