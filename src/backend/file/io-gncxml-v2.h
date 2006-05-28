@@ -180,10 +180,10 @@ typedef struct {
  */
 gint gnc_xml2_find_ambiguous(
     const gchar *filename, GList *encodings, GHashTable **unique,
-    GHashTable **ambiguous, GList **impossible, GError **error);
+    GHashTable **ambiguous, GList **impossible);
 typedef gint (*find_ambiguous_handler)(
     const gchar *filename, GList *encodings, GHashTable **unique,
-    GHashTable **ambiguous, GList **impossible, GError **error);
+    GHashTable **ambiguous, GList **impossible);
 
 /** Parse a file in push mode, but replace byte sequences in the file given a
  * hash table of substitutions

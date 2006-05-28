@@ -391,30 +391,6 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 
 /* ================================================================= */
 
-static gboolean
-is_gzipped_file(const gchar *name)
-{
-    unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
-
-    if(fd == 0)
-    {
-        return FALSE;
-    }
-
-    if(read(fd, buf, 2) != 2)
-    {
-        return FALSE;
-    }
-
-    if(buf[0] == 037 && buf[1] == 0213)
-    {
-        return TRUE;
-    }
-    
-    return FALSE;
-}
-    
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
@@ -427,8 +403,6 @@ gnc_file_be_determine_file_type(const char *path)
     }
   } else if (gnc_is_xml_data_file(path)) {
     return GNC_BOOK_XML1_FILE;
-  } else if (is_gzipped_file(path)) {
-    return GNC_BOOK_XML2_FILE;
   } else if (gnc_is_bin_file(path)) {
     return GNC_BOOK_BIN_FILE;
   }
@@ -452,7 +426,6 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	else if(is_gzipped_file(path))          { return TRUE; }
 	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;

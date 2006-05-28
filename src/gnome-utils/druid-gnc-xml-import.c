@@ -570,8 +570,6 @@ gxi_session_destroy (GncXmlImportData *data)
 static void
 gxi_check_file (GncXmlImportData *data)
 {
-  GError *error=NULL;
-
   if (!data->encodings) {
     gboolean is_utf8;
     const gchar *locale_enc;
@@ -630,8 +628,7 @@ gxi_check_file (GncXmlImportData *data)
 
   /* analyze file */
   data->n_impossible = (*find_ambiguous) (
-    data->filename, data->encodings, &data->unique, &data->ambiguous_ht,
-    NULL, &error);
+    data->filename, data->encodings, &data->unique, &data->ambiguous_ht, NULL);
 
   if (data->n_impossible != -1) {
     /* sort ambiguous words */

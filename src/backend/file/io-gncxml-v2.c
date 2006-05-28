@@ -23,6 +23,7 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 #include <zlib.h>
@@ -1233,7 +1234,8 @@ gnc_book_write_accounts_to_xml_filehandle_v2(QofBackend *be, QofBook *book, FILE
 #define BUFLEN 4096
 
 static FILE *
-try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
+try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
+             gboolean compress)
 {
   if (strstr(filename, ".gz.") != NULL) /* its got a temp extension */
       use_gzip = TRUE;
@@ -1249,7 +1251,8 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
      the g_spawn glib wrappers. */
   {
     /* Start gzip from a command line, not by fork(). */
-    gchar *argv[] = {"gzip", NULL};
+    gchar *argv[] = {compress ? "gzip" : "gunzip",
+                     NULL};
     GPid child_pid;
     GError *error;
     int child_stdin;
@@ -1268,7 +1271,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
     /* FIXME: Now need to set up the child process to write to the
        file. */
 
-    return fdopen(child_stdin, "w");
+    return fdopen(child_stdin, compress ? "w" : "r");
 
     /* Eventually the GPid must be cleanup up, but not here? */
     /* g_spawn_close_pid(child_pid); */
@@ -1293,24 +1296,39 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip)
     case 0: /* child */ {
       char buffer[BUFLEN];
       unsigned bytes;
-      gzFile *out;
+      gzFile *file;
 
-      close(filedes[1]);
-      out = gzopen(filename, perms);
-      if (out == NULL) {
-	PWARN("child gzopen failed\n");
-	exit(0);
+      file = gzopen(filename, perms);
+      if (file == NULL) {
+        PWARN("child gzopen failed\n");
+        exit(0);
       }
-      while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
-	gzwrite(out, buffer, bytes);
-      gzclose(out);
+      if (compress) {
+        close(filedes[1]);
+        while ((bytes = read(filedes[0], buffer, BUFLEN)) > 0)
+          gzwrite(file, buffer, bytes);
+      }
+      else
+      {
+        close(filedes[0]);
+        while ((bytes = gzread(file, buffer, BUFLEN)) > 0)
+          write(filedes[1], buffer, bytes);
+      }
+      gzclose(file);
       _exit(0);
     }
 
     default: /* parent */
       sleep(2);
-      close(filedes[0]);
-      return fdopen(filedes[1], "w");
+      if (compress) {
+        close(filedes[0]);
+        return fdopen(filedes[1], "w");
+      }
+      else
+      {
+        close(filedes[1]);
+        return fdopen(filedes[0], "r");
+      }
     }
   }
 #endif
@@ -1324,7 +1342,7 @@ gnc_book_write_to_xml_file_v2(
 {
     FILE *out;
 
-    out = try_gz_open(filename, "w", compress);
+    out = try_gz_open(filename, "w", compress, TRUE);
     if (out == NULL)
     {
         return FALSE;
@@ -1374,10 +1392,55 @@ gnc_book_write_accounts_to_xml_file_v2(
 }
 
 /***********************************************************************/
+static gboolean
+is_gzipped_file(const gchar *name)
+{
+    unsigned char buf[2];
+    int fd = open(name, O_RDONLY);
+
+    if (fd == -1) {
+        return FALSE;
+    }
+
+    if (read(fd, buf, 2) != 2) {
+        close(fd);
+        return FALSE;
+    }
+    close(fd);
+
+    if (buf[0] == 037 && buf[1] == 0213) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 gboolean
 gnc_is_xml_data_file_v2(const gchar *name, gboolean *with_encoding)
 {
-    return gnc_is_our_xml_file(name, GNC_V2_STRING, with_encoding);
+    if (gnc_is_our_xml_file(name, GNC_V2_STRING, with_encoding))
+        return TRUE;
+
+    if (is_gzipped_file(name)) {
+        gzFile *file;
+        char first_chunk[256];
+        int num_read;
+
+        file = gzopen(name, "r");
+        if (file == NULL)
+            return FALSE;
+
+        num_read = gzread(file, first_chunk, sizeof(first_chunk) - 1);
+        gzclose(file);
+
+        if (num_read < 1)
+            return FALSE;
+
+        return gnc_is_our_first_xml_chunk(first_chunk, GNC_V2_STRING,
+                                          with_encoding);
+    }
+
+    return FALSE;
 }
 
 
@@ -1447,26 +1510,22 @@ typedef struct  {
 gint
 gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
                         GHashTable **unique, GHashTable **ambiguous,
-                        GList **impossible, GError **error)
+                        GList **impossible)
 {
-    GIOChannel *channel=NULL;
-    GIOStatus status;
+    FILE *file=NULL;
     GList *iconv_list=NULL, *conv_list=NULL, *iter;
     iconv_item_type *iconv_item=NULL, *ascii=NULL;
     const gchar *enc;
     GHashTable *processed=NULL;
     gint n_impossible = 0;
-    gboolean clean_return = FALSE;
+    GError *error=NULL;
+    gboolean is_compressed;
+    gboolean clean_return=FALSE;
 
-    channel = g_io_channel_new_file(filename, "r", error);
-    if (*error) {
+    is_compressed = is_gzipped_file(filename);
+    file = try_gz_open(filename, "r", is_compressed, FALSE);
+    if (file == NULL) {
         PWARN("Unable to open file %s", filename);
-        goto cleanup_find_ambs;
-    }
-
-    status = g_io_channel_set_encoding(channel, NULL, error);
-    if (status != G_IO_STATUS_NORMAL) {
-        PWARN("Error on unsetting encoding on IOChannel");
         goto cleanup_find_ambs;
     }
 
@@ -1510,25 +1569,21 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
 
     /* loop through lines */
     while (1) {
-        gchar *line, *word, *utf8;
+        gchar line[256], *word, *utf8;
         gchar **word_array, **word_cursor;
         conv_type *conv = NULL;
 
-        status = g_io_channel_read_line(channel, &line, NULL, NULL, error);
-        if (status == G_IO_STATUS_EOF) {
-            break;
-        }
-        if (status == G_IO_STATUS_AGAIN) {
-            continue;
-        }
-        if (status != G_IO_STATUS_NORMAL) {
-            goto cleanup_find_ambs;
+        if (!fgets(line, sizeof(line)-1, file)) {
+            if (feof(file)) {
+                break;
+            } else {
+                goto cleanup_find_ambs;
+            }
         }
 
         g_strchomp(line);
         replace_character_references(line);
         word_array = g_strsplit_set(line, "> <", 0);
-        g_free(line);
 
         /* loop through words */
         for (word_cursor = word_array; *word_cursor; word_cursor++) {
@@ -1537,14 +1592,14 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
               continue;
 
             utf8 = g_convert_with_iconv(word, -1, ascii->iconv,
-                                        NULL, NULL, error);
+                                        NULL, NULL, &error);
             if (utf8) {
                 /* pure ascii */
                 g_free(utf8);
                 continue;
             }
-            g_error_free(*error);
-            *error = NULL;
+            g_error_free(error);
+            error = NULL;
 
             if (g_hash_table_lookup_extended(processed, word, NULL, NULL)) {
                 /* already processed */
@@ -1556,15 +1611,15 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
             for (iter = iconv_list; iter; iter = iter->next) {
                 iconv_item = iter->data;
                 utf8 = g_convert_with_iconv(word, -1, iconv_item->iconv,
-                                            NULL, NULL, error);
+                                            NULL, NULL, &error);
                 if (utf8) {
                     conv = g_new(conv_type, 1);
                     conv->encoding = iconv_item->encoding;
                     conv->utf8_string = utf8;
                     conv_list = g_list_prepend(conv_list, conv);
                 } else {
-                    g_error_free(*error);
-                    *error = NULL;
+                    g_error_free(error);
+                    error = NULL;
                 }
             }
 
@@ -1616,8 +1671,8 @@ gnc_xml2_find_ambiguous(const gchar *filename, GList *encodings,
         g_hash_table_destroy(processed);
     if (ascii)
         g_free(ascii);
-    if (channel)
-        g_io_channel_unref(channel);
+    if (file)
+        fclose(file);
 
     return (clean_return) ? n_impossible : -1;
 }
@@ -1631,21 +1686,18 @@ static void
 parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
                                push_data_type *push_data)
 {
-    GIOChannel *channel=NULL;
-    GIOStatus status;
+    const gchar *filename;
+    FILE *file = NULL;
     GIConv ascii=(GIConv)-1;
     GString *output=NULL;
     GError *error=NULL;
+    gboolean is_compressed;
 
-    channel = g_io_channel_new_file(push_data->filename, "r", &error);
-    if (error) {
-        PWARN("Unable to open file %s", push_data->filename);
-        goto cleanup_push_handler;
-    }
-
-    status = g_io_channel_set_encoding(channel, NULL, &error);
-    if (status != G_IO_STATUS_NORMAL) {
-        PWARN("Error on unsetting encoding on IOChannel");
+    filename = push_data->filename;
+    is_compressed = is_gzipped_file(filename);
+    file = try_gz_open(filename, "r", is_compressed, FALSE);
+    if (file == NULL) {
+        PWARN("Unable to open file %s", filename);
         goto cleanup_push_handler;
     }
 
@@ -1657,24 +1709,20 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
 
     /* loop through lines */
     while (1) {
-        gchar *line, *word, *repl, *utf8;
+        gchar line[256], *word, *repl, *utf8;
         gint pos, len;
         gchar *start, *cursor;
 
-        status = g_io_channel_read_line(channel, &line, NULL, NULL, &error);
-        if (status == G_IO_STATUS_EOF) {
-            break;
-        }
-        if (status == G_IO_STATUS_AGAIN) {
-            continue;
-        }
-        if (status != G_IO_STATUS_NORMAL) {
-            goto cleanup_push_handler;
+        if (!fgets(line, sizeof(line)-1, file)) {
+            if (feof(file)) {
+                break;
+            } else {
+                goto cleanup_push_handler;
+            }
         }
 
         replace_character_references(line);
         output = g_string_new(line);
-        g_free(line);
 
         /* loop through words */
         cursor = output->str;
@@ -1740,8 +1788,8 @@ parse_with_subst_push_handler (xmlParserCtxtPtr xml_context,
         g_string_free(output, TRUE);
     if (ascii != (GIConv) -1)
         g_iconv_close(ascii);
-    if (channel)
-        g_io_channel_unref(channel);
+    if (file)
+        fclose(file);
 }
 
 gboolean

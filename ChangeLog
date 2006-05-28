@@ -1,3 +1,18 @@
+2006-05-28  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/backend/file/gnc-backend-file.c:
+	* src/backend/file/io-gncxml-v2.c: Move is_gzipped_file to
+	  io-gncxml-v2.c. Extend try_gz_open to read from gzipped files.
+	  Let gnc_xml2_find_ambiguous and parse_with_subst_push_handler
+	  read gzipped files.
+
+	* src/backend/file/sixtp.c:
+	* src/backend/file/sixtp.h: Add gnc_is_our_first_xml_chunk.
+
+	* src/backend/file/io-gncxml-v2.h:
+	* src/gnome-utils/druid-gnc-xml-import.c: Remove "error" from
+	  argument list of gnc_xml2_find_ambiguous.
+
 2006-05-27  Joshua Sled  <jsled@asynchronous.org>
 
 	* packaging/gnucash-1.9.x.ebuild: Add docs extraction, un-slot,
