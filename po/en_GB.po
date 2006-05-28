@@ -1,20 +1,22 @@
+# translation of en_GB.po to English (British)
 # Messages for Gnucash in British English
 # Copyright (C) 2002, 2003, 2004, 2006 Free Software Foundation, Inc.
-#
 # Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.9.5\n"
+"Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-16 17:51-0600\n"
-"PO-Revision-Date: 2006-05-05 00:06+0100\n"
+"PO-Revision-Date: 2006-05-28 20:45+0100\n"
 "Last-Translator: Nigel Titley <nigel@titley.com>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.10.2\n"
 
 #: ../src/app-utils/gnc-exp-parser.c:139
 msgid " Variables are in the form 'name=value'"
@@ -530,11 +532,11 @@ msgstr "Are you sure you want to delete \"%s\"?"
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:72
 msgid "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
-msgstr ""
+msgstr "This transaction needs to be assigned to a Customer.  Please choose the Customer below."
 
 #: ../src/business/business-gnome/dialog-choose-owner.c:77
 msgid "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
-msgstr ""
+msgstr "This transaction needs to be assigned to a Vendor.  Please choose the Vendor below."
 
 #: ../src/business/business-gnome/dialog-customer.c:268
 msgid "You must enter a company name. If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
@@ -1419,9 +1421,8 @@ msgid "_Tax included"
 msgstr "_Tax Included"
 
 #: ../src/business/business-gnome/glade/choose-owner.glade.h:1
-#, fuzzy
 msgid "Choose Owner Dialog"
-msgstr "Show the new user dialogue"
+msgstr "Choose Owner Dialogue"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -3876,10 +3877,17 @@ msgid ""
 "\n"
 "The page is not overly complicated, just take the time until you feel comfortable with it. You can always come back and read this message again."
 msgstr ""
+"The file you tried to load does not specify an encoding, so GnuCash is unable to unambiguously interpret it. This is typical for files created with GnuCash prior to 2.0.\n"
+"\n"
+"On the next page you will be asked to select the best looking decoded string for every ambiguous word GnuCash found while trying to open your file. Therefore GnuCash has guessed what encodings you might have used. So probably everything will look just fine and you can simply click 'Forward'.\n"
+"\n"
+"If it does not work for you, try to change the default encoding at the top. Maybe you even have to edit the list of encodings by clicking on the button in the top right corner.\n"
+"\n"
+"The page is not overly complicated, just take the time until you feel comfortable with it. You can always come back and read this message again."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:202
 msgid "Missing file encoding"
-msgstr ""
+msgstr "Missing file encoding"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:205
 msgid ""
@@ -3887,102 +3895,102 @@ msgid ""
 "\n"
 "You can also go back and verify your selections by clicking on 'Back'."
 msgstr ""
+"The file has been loaded successfully. If you click 'Apply' it will be saved and reloaded into the main application. That way you will have a working file as backup in the same directory.\n"
+"\n"
+"You can also go back and verify your selections by clicking on 'Back'."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:227
-#, fuzzy
 msgid "Unicode"
-msgstr "Income"
+msgstr "Unicode"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:229
-#, fuzzy
 msgid "European"
-msgstr "_Europe:"
+msgstr "European"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:230
 msgid "ISO-8859-1 (West European)"
-msgstr ""
+msgstr "ISO-8859-1 (West European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:231
 msgid "ISO-8859-2 (East European)"
-msgstr ""
+msgstr "ISO-8859-2 (East European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:232
 msgid "ISO-8859-3 (South European)"
-msgstr ""
+msgstr "ISO-8859-3 (South European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:233
 msgid "ISO-8859-4 (North European)"
-msgstr ""
+msgstr "ISO-8859-4 (North European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:234
 msgid "ISO-8859-5 (Cyrillic)"
-msgstr ""
+msgstr "ISO-8859-5 (Cyrillic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:235
 msgid "ISO-8859-6 (Arabic)"
-msgstr ""
+msgstr "ISO-8859-6 (Arabic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:236
 msgid "ISO-8859-7 (Greek)"
-msgstr ""
+msgstr "ISO-8859-7 (Greek)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:237
 msgid "ISO-8859-8 (Hebrew)"
-msgstr ""
+msgstr "ISO-8859-8 (Hebrew)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:238
 msgid "ISO-8859-9 (Turkish)"
-msgstr ""
+msgstr "ISO-8859-9 (Turkish)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:239
 msgid "ISO-8859-10 (Nordic)"
-msgstr ""
+msgstr "ISO-8859-10 (Nordic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:240
 msgid "ISO-8859-11 (Thai)"
-msgstr ""
+msgstr "ISO-8859-11 (Thai)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:241
 msgid "ISO-8859-13 (Baltic)"
-msgstr ""
+msgstr "ISO-8859-13 (Baltic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:242
 msgid "ISO-8859-14 (Celtic)"
-msgstr ""
+msgstr "ISO-8859-14 (Celtic)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:243
 msgid "ISO-8859-15 (West European, Euro sign)"
-msgstr ""
+msgstr "ISO-8859-15 (West European, Euro sign)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:244
 msgid "ISO-8859-16 (South-East European)"
-msgstr ""
+msgstr "ISO-8859-16 (South-East European)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:245
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cyrillic"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:246
 msgid "KOI8-R (Russian)"
-msgstr ""
+msgstr "KOI8-R (Russian)"
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:247
 msgid "KOI8-U (Ukrainian)"
-msgstr ""
+msgstr "KOI8-U (Ukrainian)"
 
 #. Translators: Please insert encodings here that are typically used in your
 #. * locale, separated by spaces. No need for ASCII or UTF-8, check `locale -m`
 #. * for assistance with spelling.
 #: ../src/gnome-utils/druid-gnc-xml-import.c:597
 msgid "ISO-8859-1 KOI8-U"
-msgstr ""
+msgstr "ISO-8859-1 KOI8-U"
 
 #. another error, cannot handle this here
 #: ../src/gnome-utils/druid-gnc-xml-import.c:712
 #: ../src/gnome-utils/druid-gnc-xml-import.c:731
-#, fuzzy
 msgid "The file could not be reopen."
-msgstr "The file %s could not be found."
+msgstr "The file could not be reopened."
 
 #. try to load once again
 #: ../src/gnome-utils/druid-gnc-xml-import.c:719
@@ -3991,14 +3999,12 @@ msgid "Reading file..."
 msgstr "Reading file..."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:739
-#, fuzzy
 msgid "Parsing file..."
-msgstr "Reading file..."
+msgstr "Parsing file..."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:746
-#, fuzzy
 msgid "There was an error parsing the file."
-msgstr "There was an error parsing the file %s."
+msgstr "There was an error parsing the file."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:769
 #: ../src/gnome-utils/gnc-file.c:963
@@ -4008,35 +4014,33 @@ msgstr "Writing file..."
 #: ../src/gnome-utils/druid-gnc-xml-import.c:847
 #, c-format
 msgid "There are %d unassigned and %d undecodable words. Please add encodings."
-msgstr ""
+msgstr "There are %d unassigned and %d undecodable words. Please add encodings."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:853
 #, c-format
 msgid "There are %d unassigned words. Please decide on them or add encodings."
-msgstr ""
+msgstr "There are %d unassigned words. Please decide on them or add encodings."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:861
 #, c-format
 msgid "There are %d undecodable words. Please add encodings."
-msgstr ""
+msgstr "There are %d undecodable words. Please add encodings."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1049
-#, fuzzy
 msgid "That GnuCash XML file is already loaded. Please select another file."
-msgstr "That QIF file is already loaded. Please select another file."
+msgstr "That GnuCash XML file is already loaded. Please select another file."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1347
 msgid "This encoding has been added to the list already."
-msgstr ""
+msgstr "This encoding has been added to the list already."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1357
-#, fuzzy
 msgid "This is an invalid encoding."
-msgstr "This is a list option"
+msgstr "This is an invalid encoding."
 
 #: ../src/gnome-utils/druid-gnc-xml-import.c:1492
 msgid "No files to merge. Please add ones by clicking on 'Load another file'."
-msgstr ""
+msgstr "No files to merge. Please add ones by clicking on 'Load another file'."
 
 #: ../src/gnome-utils/glade/commodity.glade.h:1
 msgid "1 /"
@@ -4282,68 +4286,58 @@ msgid "_You update the search path yourself"
 msgstr "_You update the search path yourself"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:1
-#, fuzzy
 msgid "<b>S_ystem input encodings</b>"
-msgstr "<b>Compounding:</b>"
+msgstr "<b>S_ystem input encodings</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:2
-#, fuzzy
 msgid "<b>_Custom encoding</b>"
-msgstr "<b>Compounding:</b>"
+msgstr "<b>_Custom encoding</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:3
-#, fuzzy
 msgid "<b>_Selected encodings</b>"
-msgstr "<b>_Selected Reports</b>"
+msgstr "<b>_Selected encodings</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:4
-#, fuzzy
 msgid "Choose a file to import"
-msgstr "Choose a format"
+msgstr "Choose a file to import"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:5
-#, fuzzy
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do this if you have saved your accounts to separate GnuCash files.\n"
 "\n"
 "Click \"Forward\" to finish loading files and move to the next step of the GnuCash XML import process."
 msgstr ""
-"Click \"Load another file\" if you have more data to import at this time. Do this if you have saved your accounts to separate QIF files.\n"
+"Click \"Load another file\" if you have more data to import at this time. Do this if you have saved your accounts to separate GnuCash files.\n"
 "\n"
-"Click \"Forward\" to finish loading files and move to the next step of the QIF import process. "
+"Click \"Forward\" to finish loading files and move to the next step of the GnuCash XML import process."
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:8
-#, fuzzy
 msgid "Convert the file"
-msgstr "Compress the data file"
+msgstr "Convert the file"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:9
-#, fuzzy
 msgid "Default encoding:"
-msgstr "Default Rate: "
+msgstr "Default encoding:"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:10
-#, fuzzy
 msgid "Do not merge"
-msgstr "Do not sort"
+msgstr "Do not merge"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:11
-#, fuzzy
 msgid "Edit the list of encodings"
-msgstr "View and edit the list of Billing Terms"
+msgstr "Edit the list of encodings"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:12
 msgid "Finish GnuCash XML Import"
-msgstr ""
+msgstr "Finish GnuCash XML Import"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:13
 msgid "GnuCash XML Import Druid"
-msgstr ""
+msgstr "GnuCash XML Import Druid"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:14
-#, fuzzy
 msgid "GnuCash XML files you have loaded"
-msgstr "QIF files you have loaded"
+msgstr "GnuCash XML files you have loaded"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:15
 #: ../src/import-export/qif-import/qif.glade.h:48
@@ -4351,9 +4345,8 @@ msgid "Load another file"
 msgstr "Load another file"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:16
-#, fuzzy
 msgid "Title placeholder"
-msgstr "Placeholder"
+msgstr "Title placeholder"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:17
 #: ../src/import-export/qif-import/qif.glade.h:94
@@ -4362,12 +4355,11 @@ msgstr "Unload selected file"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:18
 msgid "_Edit list of encodings"
-msgstr ""
+msgstr "_Edit list of encodings"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:19
-#, fuzzy
 msgid "placeholder"
-msgstr "Placeholder"
+msgstr "placeholder"
 
 #: ../src/gnome-utils/glade/druid-provider-multifile.glade.h:1
 msgid "<b>Current File List</b>"
@@ -18341,3 +18333,4 @@ msgstr "The GnuCash developers are easy to contact.  As well as several mailing 
 #: ../doc/tip_of_the_day.list.in:82
 msgid "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr "There is a theory that if ever anyone discovers what the Universe is for and why it is here, it will instantly disappear and be replaced with something even more bizarre and inexplicable. There is another theory that this has already happened. Douglas Adams, \"The Restaurant at the End of the Universe\""
+
