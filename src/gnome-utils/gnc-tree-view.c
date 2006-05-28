@@ -622,6 +622,9 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
   column = view_column_find_by_model_id (view, id);
   column_pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
 
+  if (!column_pref_name)
+      column_pref_name = "none";
+
   /* Store the values in gconf */
   gconf_section = priv->gconf_section;
   gnc_gconf_set_string(gconf_section, GCONF_KEY_SORT_COLUMN, 
