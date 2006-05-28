@@ -1296,6 +1296,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     case 0: /* child */ {
       char buffer[BUFLEN];
       unsigned bytes;
+      ssize_t written;
       gzFile *file;
 
       file = gzopen(filename, perms);
@@ -1312,7 +1313,7 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
       {
         close(filedes[0]);
         while ((bytes = gzread(file, buffer, BUFLEN)) > 0)
-          write(filedes[1], buffer, bytes);
+          written = write(filedes[1], buffer, bytes);
       }
       gzclose(file);
       _exit(0);
