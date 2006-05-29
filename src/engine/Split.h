@@ -58,7 +58,8 @@
  * in particular we want to convert the Split to be in to_commodity.
  * Returns the amount.
  */
-gnc_numeric xaccSplitConvertAmount (const Split *split, Account * account);
+gnc_numeric xaccSplitConvertAmount (const Split *split,
+                                    const gnc_commodity *to_commodity);
 
 /*-----------------------------------------------------------------------
  * Splits

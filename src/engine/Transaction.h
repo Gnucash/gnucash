@@ -271,7 +271,7 @@ const char *  xaccTransGetNotes (const Transaction *trans);
     splits in this transaction.
     @param trans The transaction  
     @param i The split number.  Valid values for i are zero to 
-    (number_of__splits-1).  An invalid value of i will cause NULL to
+    (number_of_splits-1).  An invalid value of i will cause NULL to
     be returned.  A convenient way of cycling through all splits is
     to start at zero, and keep incrementing until a null value is returned. */
 Split *       xaccTransGetSplit (const Transaction *trans, int i);
@@ -344,6 +344,19 @@ gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
 /** Same as xaccTransGetAccountValue, but uses the Account's commodity. */
 gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
                                        const Account *account);
+
+/* Gets the amt/val rate, i.e. rate from the transaction currency to
+   the 'split_com' */
+gboolean
+xaccTransGetRateForCommodity(const Transaction *trans,
+                             const gnc_commodity *split_com,
+                             const Split *split_to_exclude, gnc_numeric *rate);
+void
+xaccTransSetRateForCommodity(Transaction *trans, gnc_commodity *from_com,
+                             gnc_commodity *to_com, gnc_numeric rate);
+void
+xaccTransAdjustRateForCommodity(Transaction *trans, gnc_commodity *comm,
+                                gnc_numeric factor);
 
 /* Compute the conversion rate for the transaction to this account.
  * Any "split value" (which is in the transaction currency),

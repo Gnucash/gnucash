@@ -570,6 +570,7 @@ xaccSplitCommitEdit(Split *s)
 
     mark_acc(acc);
     xaccAccountRecomputeBalance(acc);
+    //qof_event_gen (&acc->inst.entity, GNC_EVENT_ITEM_CHANGED, ed);
     if (s->inst.do_free)
         xaccFreeSplit(s);
 }
@@ -1036,9 +1037,9 @@ xaccSplitsComputeValue (GList *splits, const Split * skip_me,
 }
 
 gnc_numeric
-xaccSplitConvertAmount (const Split *split, Account * account)
+xaccSplitConvertAmount (const Split *split, const gnc_commodity *to_commodity)
 {
-  gnc_commodity *acc_com, *to_commodity;
+  gnc_commodity *acc_com;
   Transaction *txn;
   gnc_numeric amount, value, convrate;
   Account * split_acc;
@@ -1047,12 +1048,9 @@ xaccSplitConvertAmount (const Split *split, Account * account)
 
   /* If this split is attached to this account, OR */
   split_acc = xaccSplitGetAccount (split);
-  if (split_acc == account)
-    return amount;
 
   /* If split->account->commodity == to_commodity, return the amount */
   acc_com = xaccAccountGetCommodity (split_acc);
-  to_commodity = xaccAccountGetCommodity (account);
   if (acc_com && gnc_commodity_equal (acc_com, to_commodity))
     return amount;
 
@@ -1080,7 +1078,8 @@ xaccSplitConvertAmount (const Split *split, Account * account)
    * compute the conversion rate (based on amount/value), and then multiply
    * this times the split value.
    */
-  convrate = xaccTransGetAccountConvRate(txn, account);
+  if (!xaccTransGetRateForCommodity(txn, to_commodity, NULL, &convrate))
+      return gnc_numeric_zero();
   value = xaccSplitGetValue (split);
   return gnc_numeric_mul (value, convrate,
 			  gnc_commodity_get_fraction (to_commodity),

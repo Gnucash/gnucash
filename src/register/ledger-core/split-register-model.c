@@ -1480,7 +1480,7 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
 	if (commodity && !gnc_commodity_equal (commodity, currency))
 	  /* Convert this to the "local" value */
-	  amount = xaccSplitConvertAmount(split, account);
+	  amount = xaccSplitConvertAmount(split, commodity);
 	else
 	  amount = xaccSplitGetValue (split);
       }

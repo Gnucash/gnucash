@@ -699,6 +699,112 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
   return total;
 }
 
+/* 'rate' is 'to_com'-per-'from-com' */
+void
+xaccTransSetRateForCommodity(Transaction *trans, gnc_commodity *from_com,
+                             gnc_commodity *to_com, gnc_numeric rate)
+{
+    GList *splits;
+    gnc_commodity *trans_curr = xaccTransGetCurrency(trans);
+    gnc_numeric amt, val;
+
+    for (splits = trans->splits; splits; splits = splits->next) {
+        Split *s = splits->data;
+        gnc_commodity *split_com;
+
+        if (!xaccTransStillHasSplit(trans, s)) continue;
+        split_com = xaccAccountGetCommodity(xaccSplitGetAccount(s));
+
+        if (gnc_commodity_equiv(from_com, trans_curr) &&
+            gnc_commodity_equiv(to_com, split_com)) {
+            if (1) {
+                val = xaccSplitGetValue(s);
+                amt = gnc_numeric_mul(val, rate, GNC_DENOM_AUTO,
+                                      GNC_HOW_RND_ROUND);
+                xaccSplitSetAmount(s, amt);
+            }
+        }
+
+        if (gnc_commodity_equiv(to_com, trans_curr) &&
+            gnc_commodity_equiv(from_com, split_com)) {
+            if (1) {
+                val = xaccSplitGetValue(s);
+                amt = gnc_numeric_div(val, rate, GNC_DENOM_AUTO,
+                                      GNC_HOW_RND_ROUND);
+                xaccSplitSetAmount(s, amt);
+            }
+        }
+
+    }
+}
+
+void
+xaccTransAdjustRateForCommodity(Transaction *trans, gnc_commodity *comm,
+                                gnc_numeric factor)
+{
+    gnc_commodity *trans_curr = xaccTransGetCurrency(trans);
+    gnc_commodity *split_com;
+    gnc_numeric num;
+
+    g_return_if_fail(trans && trans_curr);
+    g_return_if_fail(gnc_numeric_check(factor) == GNC_ERROR_OK);
+
+    FOR_EACH_SPLIT(trans, {
+            if (gnc_commodity_equiv(comm, trans_curr)) {
+                num = xaccSplitGetValue(s);
+                num = gnc_numeric_mul(num, factor,
+                                      gnc_commodity_get_fraction(trans_curr),
+                                      GNC_HOW_RND_ROUND);
+                xaccSplitSetValue(s, num);
+            }
+
+            split_com = xaccAccountGetCommodity(xaccSplitGetAccount(s));
+            if (gnc_commodity_equiv(comm, split_com)) {
+                num = xaccSplitGetAmount(s);
+                num = gnc_numeric_mul(num, factor, GNC_DENOM_AUTO,
+                                      GNC_HOW_RND_ROUND);
+                xaccSplitSetAmount(s, num);
+            }
+        });
+}
+
+gboolean
+xaccTransGetRateForCommodity(const Transaction *trans,
+                             const gnc_commodity *split_com,
+                             const Split *split_to_exclude, gnc_numeric *rate)
+{
+    GList *splits;
+    gnc_commodity *trans_curr;
+
+    trans_curr = xaccTransGetCurrency(trans);
+    if (gnc_commodity_equal(trans_curr, split_com)) {
+        *rate = gnc_numeric_create(1, 1);
+        return TRUE;
+    }
+
+    for (splits = trans->splits; splits; splits = splits->next) {
+        Split *s = splits->data;
+        gnc_commodity *comm;
+
+        if (s == split_to_exclude) continue;
+        if (!xaccTransStillHasSplit(trans, s)) continue;
+
+        comm = xaccAccountGetCommodity(xaccSplitGetAccount(s));
+        if (gnc_commodity_equal(split_com, comm)) {
+            gnc_numeric amt = xaccSplitGetAmount(s);
+            gnc_numeric val = xaccSplitGetValue(s);
+
+            if (!gnc_numeric_zero_p(xaccSplitGetValue(s)) &&
+                !gnc_numeric_zero_p(xaccSplitGetValue(s))) {
+                *rate = gnc_numeric_div(amt, val, GNC_DENOM_AUTO,
+                                        GNC_DENOM_REDUCE);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
 gnc_numeric
 xaccTransGetAccountConvRate(Transaction *txn, Account *acc)
 {
