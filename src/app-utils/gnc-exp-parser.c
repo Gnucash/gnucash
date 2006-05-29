@@ -541,7 +541,8 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
   vars = make_predefined_variables ();
 
   if ( varHash != NULL ) {
-    g_hash_table_foreach( varHash, make_predefined_vars_from_external_helper, &vars);
+    g_hash_table_foreach(varHash, make_predefined_vars_from_external_helper, 
+                         &vars);
   }
 
   lc = gnc_localeconv ();

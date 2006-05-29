@@ -181,7 +181,8 @@ xaccAccountFindOpenLot (Account *acc, gnc_numeric sign,
    es.ts.tv_nsec = 0;
    es.date_pred = date_pred;
 
-   if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_negative_p;
+   if (gnc_numeric_positive_p(sign)) 
+       es.numeric_pred = gnc_numeric_negative_p;
    else es.numeric_pred = gnc_numeric_positive_p;
       
    xaccAccountForEachLot (acc, finder_helper, &es);

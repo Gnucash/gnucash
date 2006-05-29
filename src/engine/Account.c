@@ -339,6 +339,7 @@ destroy_pending_splits_for_account(QofEntity *ent, gpointer acc)
     Transaction *trans = (Transaction *) ent;
     Split *split;
 
+    /* This loop is safe only because the acc->inst.do_free == TRUE */
     if (xaccTransIsOpen(trans))
         while ((split = xaccTransFindSplitByAccount(trans, acc)))
             xaccSplitDestroy(split);
@@ -408,6 +409,7 @@ void
 xaccAccountDestroy (Account *acc) 
 {
   if (!acc) return;
+  /* Why no begin_edit? */
   acc->inst.do_free = TRUE;
 
   xaccAccountCommitEdit (acc);
