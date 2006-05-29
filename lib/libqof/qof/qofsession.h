@@ -123,7 +123,7 @@ void qof_session_swap_data (QofSession *session_1, QofSession *session_2);
  *    It takes as an argument the book id. The book id must be a string
  *    in the form of a URI/URL. The access method specified depends
  *    on the loaded backends. In the absence of a customised backend,
- *    only QSF XML would be accepted). Paths may be relative or absolute.
+ *    only QSF XML would be accepted. Paths may be relative or absolute.
  *    If the path is relative; that is, if the argument is "file:somefile.xml"
  *    then the current working directory is assumed. Customised backends can
  *    choose to search other, application-specific, directories as well.

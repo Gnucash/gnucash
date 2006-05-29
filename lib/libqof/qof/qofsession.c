@@ -213,6 +213,7 @@ their \b own session context. */
 QofSession *
 qof_session_get_current_session (void)
 {
+  PWARN("Use of deprecated qof_session_get_current_session()");
   if (!current_session)
   {
     qof_event_suspend ();
@@ -228,6 +229,7 @@ their \b own session context. */
 void
 qof_session_set_current_session (QofSession *session)
 {
+  PWARN("Use of deprecated qof_session_set_current_session()");
   current_session = session;
 }
 
@@ -859,6 +861,21 @@ struct backend_providers backend_list[] = {
 };
 
 static void
+load_stock_backend_libraries(void)
+{
+    gint num;
+
+    for (num = 0; backend_list[num].filename != NULL; num++) {
+        if (!qof_load_backend_library(backend_list[num].libdir,
+                                      backend_list[num].filename)) {
+            PERR (" failed to load %s from %s",
+                  backend_list[num].filename, backend_list[num].libdir);
+        }
+    }
+}
+
+
+static void
 qof_session_load_backend(QofSession * session, char * access_method)
 {
 	GSList *p;
@@ -866,25 +883,18 @@ qof_session_load_backend(QofSession * session, char * access_method)
 	QofBackendProvider *prov;
 	QofBook *book;
 	char *msg;
-	gint num;
 	gboolean prov_type;
 	gboolean (*type_check) (const char*);
 	
 	ENTER (" list=%d, initted=%s", g_slist_length(provider_list),
 	       qof_providers_initialized ? "true" : "false");
 	prov_type = FALSE;
-	if (!qof_providers_initialized)
-	{
-		for (num = 0; backend_list[num].filename != NULL; num++) {
-			if(!qof_load_backend_library(backend_list[num].libdir,
-				backend_list[num].filename))
-			{
-				PWARN (" failed to load %s from %s",
-				backend_list[num].filename, backend_list[num].libdir);
-			}
-		}
-		qof_providers_initialized = TRUE;
-	}
+
+        if (!qof_providers_initialized) {
+            load_stock_backend_libraries();
+            qof_providers_initialized = TRUE;
+        }
+
 	p = provider_list;
 	while(p != NULL)
 	{
@@ -910,7 +920,7 @@ qof_session_load_backend(QofSession * session, char * access_method)
 				continue;
 			}
 			/* Use the providers creation callback */
-      	    session->backend = (*(prov->backend_new))();
+			session->backend = (*(prov->backend_new))();
 			session->backend->provider = prov;
 			/* Tell the books about the backend that they'll be using. */
 			for (node=session->books; node; node=node->next)
