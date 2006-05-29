@@ -1,3 +1,8 @@
+2006-05-29  Joshua Sled  <jsled@asynchronous.org>
+
+	* packaging/gnucash-1.9.x.ebuild: Remove support for being a
+	dual-nature -release and -svn ebuild.  Misc cleanups.
+
 2006-05-29  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/backend/file/io-gncxml-v2.c: Add wait_for_gzip to avoid

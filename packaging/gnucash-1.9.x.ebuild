@@ -1,15 +1,11 @@
-# Copyright 1999-2005 Gentoo Foundation
+# Copyright 1999-2006 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header$
 
 # This script should work fine for the whole 1.9.x (and hopefully 2.0.x)
 # releases with a simple rename. See
 # http://bugs.gentoo.org/show_bug.cgi?id=122337 for discussion and history
 # about this file.  
-
-# As well, it'll work for as an SVN ebuild; drop it into
-# ${PORTAGE_OVERLAY}/app-office/gnucash-svn/gnucash-svn-20060306.ebuild.
-# It'll install into /opt/gnucash-svn-20060306/.
 
 # -- jsled-gentoo@asynchronous.org
 
@@ -19,11 +15,8 @@ DOC_VER="1.8.5"
 
 DESCRIPTION="A personal finance manager (unstable version)."
 HOMEPAGE="http://www.gnucash.org/"
-SRC_URI=""
-if [[ "${PN}" != *-svn ]]; then
-	SRC_URI="mirror://sourceforge/gnucash/${P}.tar.gz
-	mirror://sourceforge/gnucash/gnucash-docs-${DOC_VER}.tar.gz"
-fi
+SRC_URI="mirror://sourceforge/gnucash/${P}.tar.gz
+         mirror://sourceforge/gnucash/gnucash-docs-${DOC_VER}.tar.gz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -68,18 +61,6 @@ pkg_setup() {
 	built_with_use goffice gnome || die "goffice must be built with gnome"
 }
 
-src_unpack() {
-	if [[ "${PN}" == *-svn ]]; then
-		svn co http://svn.gnucash.org/repo/gnucash/trunk ${P}
-        svn co http://svn.gnucash.org/repo/gnucash-docs/tags/${DOC_VER} gnucash-docs-${DOC_VER}
-		cd ${S}
-		./autogen.sh || die "Cannot autogen."
-	else
-		unpack ${A}
-		cd ${S}
-	fi
-}
-
 src_compile() {
 	local myconf_warnings="--enable-error-on-warning --enable-compile-warnings"
 	econf \
@@ -102,7 +83,6 @@ src_compile() {
 src_install() {
 	gnome2_src_install || die "gnome2_src_install failed"
 	dodoc AUTHORS ChangeLog* DOCUMENTERS HACKING INSTALL LICENSE NEWS TODO README* doc/README*
-	dodir /usr/bin
 	make_desktop_entry ${P} "GnuCash ${PV}" \
 		/usr/share/${PN}/pixmaps/appicon.png "Office;Finance"
 
@@ -111,5 +91,4 @@ src_install() {
 		scrollkeeper_localstate_dir=${D}/var/lib/scrollkeeper \
 		install || die "doc install failed"
 	rm -rf ${D}/var/lib/scrollkeeper
-
 }
