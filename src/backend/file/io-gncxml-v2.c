@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <zlib.h>
 #include <errno.h>
+#include <sys/wait.h>
 
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
@@ -50,6 +51,8 @@
 #include "io-utils.h"
 
 static QofLogModule log_module = GNC_MOD_IO;
+
+static pid_t gzip_child_pid = 0;
 
 /* Callback structure */
 struct file_backend {
@@ -1282,6 +1285,10 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     int filedes[2];
     pid_t pid;
 
+    /* avoid reading from file that is still being written to
+       by a child process */
+    g_assert(gzip_child_pid == 0);
+
     if (pipe(filedes) < 0) {
       PWARN("Pipe call failed. Opening uncompressed file.");
       return fopen(filename, perms);
@@ -1320,6 +1327,10 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     }
 
     default: /* parent */
+      if (compress) {
+        /* the calling code must wait_for_gzip() */
+        gzip_child_pid = pid;
+      }
       sleep(2);
       if (compress) {
         close(filedes[0]);
@@ -1333,6 +1344,20 @@ try_gz_open (const char *filename, const char *perms, gboolean use_gzip,
     }
   }
 #endif
+}
+
+static gboolean
+wait_for_gzip()
+{
+    pid_t retval;
+
+    if (gzip_child_pid == 0)
+        return TRUE;
+
+    retval = waitpid(gzip_child_pid, NULL, WUNTRACED);
+    gzip_child_pid = 0;
+
+    return retval != -1;
 }
 
 gboolean
@@ -1357,6 +1382,9 @@ gnc_book_write_to_xml_file_v2(
     {
         return FALSE;
     }
+
+    if (compress)
+        return wait_for_gzip();
 
     return TRUE;
 }

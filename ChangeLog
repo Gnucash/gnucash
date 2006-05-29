@@ -1,3 +1,9 @@
+2006-05-29  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/backend/file/io-gncxml-v2.c: Add wait_for_gzip to avoid
+	  reading from a file that is still being written to by a child
+	  process, a race condition at the end of the xml import druid.
+
 2006-05-28  David Hampton  <hampton@employees.org>
 
 	* src/pixmaps/gnucash_splash.png: New splash screen from Joshua
