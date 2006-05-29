@@ -199,18 +199,44 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 				gpointer user_data);
 
 /* Uses the XferDialog to obtain from the user an explicit exchange
-   rate.  This exchange rate will then be uses to converting 'amount',
-   which is given in the commodity of the register Account, reg_acc,
-   into a split value for a split whose Account is the commodity
-   specified by xfer_com.
+   rate.
 
-   The 'exch_rate' argument is used to set the initial value of the
-   rate.  If the dialog completes sucessfully 'FALSE' is returned and
-   'exch_rate' is also used to store the converted value.  Otherwise,
-   TRUE is returned and the 'exch_rate' argument is undefined.
+   @param xfer Dialog data structure
+
+   @param exch_rate A pointer to the rate used to set the initial
+   value of the rate; also used to return the rate from the
+   transaction currency to the split commodity.
+
+   @param amount A pointer to the amount used to initialize the
+   dialog; also used to return the value of 'amount' in the 'xfer_com'
+
+   @param reg_com The commodity in which 'amount' in in, when passed
+   to this function.
+
+   @param txn The transaction whose currency will be used in the transfer
+
+   @param xfer_com The commodirt in which 'amount' is in, when returned
+   from this function.
+
+   Notes: The final exchange rate will be used to convert 'amount',
+   which is given in the commodity, 'reg_com', into a split amount for
+   a split whose Account is the commodity specified by xfer_com.
+
+   If the dialog completes sucessfully, 'FALSE' is returned and
+   'exch_rate' is also used to store the updated rate and 'amount'
+   is used to store the corresponding amount in the 'xfer_com'
+   commodity.  Otherwise, TRUE is returned and the 'exch_rate' and
+   'amount' arguments are undefined.
+
+   Note that 'exch_rate' isn't necessarily the rate from reg_com into
+   xfer_com.  If the transaction currency is different from reg_com
+   then it will be the rate from the transaction currency into
+   xfer_com, instead.
+
 */
 gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount, 
-    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com);
+    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric *amount,
+    gnc_commodity *reg_com, Transaction *txn,
+    gnc_commodity *xfer_com);
 
 #endif

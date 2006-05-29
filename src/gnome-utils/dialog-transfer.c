@@ -1986,7 +1986,8 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
     GtkWidget *box    = gnc_glade_lookup_widget (xferData->dialog,
                                                  "transfermain-vbox" );
     gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
-    g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback), user_data);
+    g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback),
+                      user_data);
     gtk_widget_show( button );
   }
 }
@@ -2157,12 +2158,12 @@ void gnc_xfer_dialog_set_txn_cb(XferDialog *xferData,
 
 
 gboolean gnc_xfer_dialog_run_exchange_dialog(
-    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric amount, 
-    Account *reg_acc, Transaction *txn, gnc_commodity *xfer_com)
+    XferDialog *xfer, gnc_numeric *exch_rate, gnc_numeric *amount,
+    gnc_commodity *reg_com, Transaction *txn,
+    gnc_commodity *xfer_com)
 {
     gboolean swap_amounts = FALSE;
     gnc_commodity *txn_cur = xaccTransGetCurrency(txn);
-    gnc_commodity *reg_com = xaccAccountGetCommodity(reg_acc);
 
     /* We know that "amount" is always in the reg_com currency.
      * Unfortunately it is possible that neither xfer_com or txn_cur are
@@ -2187,11 +2188,13 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
         /* UGGH -- we're not in either.  That means we need to convert
          * 'amount' from the register commodity to the txn currency.
          */
-        gnc_numeric rate = xaccTransGetAccountConvRate(txn, reg_acc);
-        
+        gnc_numeric rate;
+        if (!xaccTransGetRateForCommodity(txn, reg_com, NULL, &rate))
+            return TRUE;
+
         /* XXX: should we tell the user we've done the conversion? */
-        amount = gnc_numeric_div(
-            amount, rate, 
+        *amount = gnc_numeric_div(
+            *amount, rate,
             gnc_commodity_get_fraction(txn_cur), GNC_DENOM_REDUCE);
     }
     
@@ -2209,7 +2212,7 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     gnc_xfer_dialog_hide_to_account_tree(xfer);
     gnc_xfer_dialog_hide_from_account_tree(xfer);
     
-    gnc_xfer_dialog_set_amount(xfer, amount);
+    gnc_xfer_dialog_set_amount(xfer, *amount);
     
     /*
      * When we flip, we should tell the dialog so it can deal with the
@@ -2226,8 +2229,12 @@ gboolean gnc_xfer_dialog_run_exchange_dialog(
     /* If we swapped the amounts for the dialog, then make sure we swap
      * it back now...
      */
-    if (swap_amounts)
+    if (swap_amounts) {
+        *amount = gnc_numeric_mul(*amount, *exch_rate,
+                                  gnc_commodity_get_fraction(txn_cur),
+                                  GNC_DENOM_REDUCE);
         *exch_rate = gnc_numeric_div(gnc_numeric_create(1, 1), *exch_rate,
                                      GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    }
     return FALSE;
 }

@@ -1138,7 +1138,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
           gnc_split_register_get_cell_date(reg, DATE_CELL)));
 
   if (gnc_xfer_dialog_run_exchange_dialog(
-          xfer, &exch_rate, amount, reg_acc, txn, xfer_com))
+          xfer, &exch_rate, &amount, reg_com, txn, xfer_com))
       return TRUE;
 
   /* Set the RATE_CELL on this cursor and mark it changed */
