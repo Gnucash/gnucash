@@ -115,9 +115,7 @@ gnc_engine_init(int argc, char ** argv)
 	  /* If this is a required library, stop now! */
 	  if (lib->required)
 	  {
-	      g_message("required library %s not found.  Exiting.\n",
-			lib->lib);  
-	      g_assert(FALSE);
+	      g_message("required library %s not found.\n", lib->lib);
 	  }
       }
   }
