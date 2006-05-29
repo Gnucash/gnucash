@@ -435,7 +435,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GncPluginPageRegisterPrivate *priv;
 	GncPluginPage *plugin_page;
 	GNCSplitReg *gsr;
-	SplitRegister *reg;
 	const GList *item;
 	GList *book_list;
 	gchar *label;
@@ -469,8 +468,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
-	reg = gnc_ledger_display_get_split_register(priv->ledger);
-
 	priv->component_manager_id = 0;
 	return plugin_page;
 }
@@ -992,7 +989,7 @@ gnc_plugin_page_register_recreate_page (GtkWidget *window,
 
   /* Create the new page. */
   reg_type = g_key_file_get_string(key_file, group_name,
-					 KEY_REGISTER_TYPE, &error);
+                                   KEY_REGISTER_TYPE, &error);
   DEBUG("Page type: %s", reg_type);
   if ((g_ascii_strcasecmp(reg_type, LABEL_ACCOUNT) == 0) ||
       (g_ascii_strcasecmp(reg_type, LABEL_SUBACCOUNT) == 0)) {
