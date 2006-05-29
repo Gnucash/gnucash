@@ -838,16 +838,11 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag,
 {
   FILE *f = NULL;
   char first_chunk[256];
-  unsigned char* cursor = NULL;
   ssize_t num_read;
-  
+
   g_return_val_if_fail(filename, FALSE);
   g_return_val_if_fail(first_tag, FALSE);
 
-  if (with_encoding) {
-    *with_encoding = FALSE;
-  }
-  
   f = fopen(filename, "r");
   if (f == NULL) {
     return FALSE;
@@ -856,21 +851,34 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag,
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   fclose(f);
 
-  if(num_read == 0) 
+  if(num_read == 0)
   {
       return FALSE;
   }
-  
+
   first_chunk[num_read] = '\0';
-  
-  cursor = first_chunk;
+
+  return gnc_is_our_first_xml_chunk(first_chunk, first_tag, with_encoding);
+}
+
+gboolean
+gnc_is_our_first_xml_chunk(char *chunk, const char *first_tag,
+                           gboolean *with_encoding)
+{
+  unsigned char* cursor = NULL;
+
+  if (with_encoding) {
+    *with_encoding = FALSE;
+  }
+
+  cursor = chunk;
 
   if(!eat_whitespace(&cursor))
   {
       return FALSE;
   }
-  
-  if(strncmp(cursor, "<?xml", 5) == 0) 
+
+  if(strncmp(cursor, "<?xml", 5) == 0)
   {
       char *tag_compare;
       gboolean result;
@@ -892,7 +900,7 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag,
 
       if (result && with_encoding) {
         *cursor = '\0';
-        cursor = first_chunk;
+        cursor = chunk;
         while (search_for('e', &cursor)) {
           if (strncmp(cursor, "ncoding=", 8) == 0) {
             *with_encoding = TRUE;

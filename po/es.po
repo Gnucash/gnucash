@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash-1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-16 17:51-0600\n"
-"PO-Revision-Date: 2006-05-23 23:51+0200\n"
+"PO-Revision-Date: 2006-05-25 23:01+0200\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1759,7 +1759,7 @@ msgstr "(dueño)"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:4
 msgid "Additional to Card:"
-msgstr ""
+msgstr "Adicional a la tarjeta:"
 
 #: ../src/business/business-gnome/glade/invoice.glade.h:8
 msgid "Customer: "
@@ -3277,18 +3277,18 @@ msgstr "Asiento invalidado"
 
 #: ../src/engine/cap-gains.c:226
 msgid "Orphaned Gains"
-msgstr ""
+msgstr "Ganancias huérfanas"
 
 #: ../src/engine/cap-gains.c:240 ../src/engine/cap-gains.c:912
 #: ../src/engine/cap-gains.c:917 ../src/engine/cap-gains.c:918
 msgid "Realized Gain/Loss"
-msgstr ""
+msgstr "Ganancias/pérdidas ocurridas"
 
 #: ../src/engine/cap-gains.c:242
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
-msgstr ""
+msgstr "Ganancias o pérdidas ocurridas por cuentas de valores o comercio que no se han anotado en ninguna otra parte."
 
 #: ../src/engine/cap-gains.c:570
 msgid "Lot"
@@ -4891,7 +4891,7 @@ msgstr "<b>Conciliación</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:21
 msgid "<b>Reverse Balanced Accounts</b>"
-msgstr "<b>Tipos de cuenta de balanceo inverso</b>"
+msgstr "<b>Tipos de cuenta de saldo inverso</b>"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:22
 msgid "<b>Search Dialog</b>"
@@ -5309,14 +5309,14 @@ msgstr "Mostrar bordes verticales en las celdas."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:97
 msgid "Sign reverse balances on income and expense accounts."
-msgstr "Invertir el signo del balance en cuentas de ingresos y gastos."
+msgstr "Invertir el signo del saldo en cuentas de ingresos y gastos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:98
 msgid ""
 "Sign reverse balances on the following: Credit Card, Payable, Liability, "
 "Equity, and Income."
 msgstr ""
-"Invertir el signo del balance de las siguientes: Tarjeta de Crédito, Pagos "
+"Invertir el signo del saldo de las siguientes: Tarjeta de Crédito, Pagos "
 "ptes., Pasivo, Patrimonio e Ingresos."
 
 #: ../src/gnome-utils/glade/preferences.glade.h:99
@@ -6651,7 +6651,7 @@ msgstr "Saldo"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:565
 msgid "Balance (Report)"
-msgstr "Balance (informe)"
+msgstr "Saldos (informe)"
 
 #: ../src/gnome-utils/gnc-tree-view-account.c:572
 msgid "Balance (Period)"
@@ -7784,7 +7784,7 @@ msgstr "La fracción mínima del valor que puede referenciarse."
 
 #: ../src/gnome/glade/account.glade.h:67
 msgid "Ta_x related"
-msgstr ""
+msgstr "Relacionado con _impuestos"
 
 #: ../src/gnome/glade/account.glade.h:68
 msgid "This account contains read-only transactions which may not be deleted."
@@ -8284,7 +8284,7 @@ msgstr "total"
 
 #: ../src/gnome/glade/lots.glade.h:2
 msgid "<b>_Lots in This Account</b>"
-msgstr ""
+msgstr "<b>_Paquetes en esta cuenta</b>"
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Mini-Viewer</b>"
@@ -8300,23 +8300,23 @@ msgstr "<b>_Título</b>"
 
 #: ../src/gnome/glade/lots.glade.h:6
 msgid "A list of all of the lots in this account."
-msgstr ""
+msgstr "La lista de todos los paquetes en esta cuenta."
 
 #: ../src/gnome/glade/lots.glade.h:7
 msgid "A summary of all of the transactions in the selected lot"
-msgstr ""
+msgstr "Resumen de todos los asientos en el paquete seleccionado"
 
 #: ../src/gnome/glade/lots.glade.h:12
 msgid "Delete the highlighted lot"
-msgstr ""
+msgstr "Borrar el paquete seleccionado"
 
 #: ../src/gnome/glade/lots.glade.h:14
 msgid "Enter a name for the highlighted lot."
-msgstr ""
+msgstr "Introduzca un nombre para el paquete seleccionado."
 
 #: ../src/gnome/glade/lots.glade.h:15
 msgid "Enter any notes you want to make about this lot."
-msgstr ""
+msgstr "Introduzca notas sobre este paquete."
 
 #. src/report/standard-reports/average-balance.scm
 #: ../src/gnome/glade/lots.glade.h:16 ../intl-scm/guile-strings.c:2168
@@ -8329,11 +8329,11 @@ msgstr "Ganancias"
 
 #: ../src/gnome/glade/lots.glade.h:18
 msgid "Lot Viewer"
-msgstr ""
+msgstr "Visor de paquetes"
 
 #: ../src/gnome/glade/lots.glade.h:20
 msgid "Open a register showing the transactions in this lot"
-msgstr ""
+msgstr "Abrir una ventana de registro mostrando los asientos en este paquete"
 
 #: ../src/gnome/glade/lots.glade.h:22
 msgid "Scrub _Account"
@@ -8341,7 +8341,7 @@ msgstr "Cuadrar _cuenta"
 
 #: ../src/gnome/glade/lots.glade.h:23
 msgid "Scrub the highlighted lot"
-msgstr ""
+msgstr "Cuadrar el paquete seleccionado"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/general-journal.scm
@@ -8528,6 +8528,11 @@ msgid ""
 "Net Asset Value\n"
 "Unknown"
 msgstr ""
+"Comprador\n"
+"Vendedor\n"
+"Última\n"
+"Valor neto del activo\n"
+"Desconocido"
 
 #: ../src/gnome/glade/price.glade.h:8
 msgid "Delete _last price for a stock"
@@ -9707,7 +9712,7 @@ msgstr "Frecuencia del plazo"
 
 #: ../src/gnome/glade/sched-xact.glade.h:152
 msgid "Repayment Type"
-msgstr ""
+msgstr "Tipo de amortización"
 
 #: ../src/gnome/glade/sched-xact.glade.h:153
 msgid "Repeats:"
@@ -10077,9 +10082,8 @@ msgid "Tax Information"
 msgstr "Información de Impuestos"
 
 #: ../src/gnome/glade/tax.glade.h:9
-#, fuzzy
 msgid "Tax _Related"
-msgstr "Imponible"
+msgstr "_Relacionado con impuestos"
 
 #: ../src/gnome/glade/tax.glade.h:10
 msgid "_Expense"
@@ -10373,12 +10377,12 @@ msgstr "Anotar una división o una fusión de valores"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:183
 msgid "View _Lots..."
-msgstr ""
+msgstr "Ver _paquetes..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:184
 #: ../src/gnome/gnc-plugin-page-register.c:238
 msgid "Bring up the lot viewer/editor window"
-msgstr ""
+msgstr "Mostrar el visor/editor de paquetes"
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:186
 msgid "Check & Repair A_ccount"
@@ -10577,7 +10581,7 @@ msgstr "Añadir asiento de _reversión"
 
 #: ../src/gnome/gnc-plugin-page-register.c:237
 msgid "_Lot Viewer..."
-msgstr ""
+msgstr "Visor de _paquetes..."
 
 #: ../src/gnome/gnc-plugin-page-register.c:240
 msgid "_Blank Transaction"
@@ -10606,16 +10610,16 @@ msgstr "_Este asiento"
 #. Reports menu
 #: ../src/gnome/gnc-plugin-page-register.c:261
 msgid "Account Report"
-msgstr "Informe de cuentas"
+msgstr "Informe de la cuenta"
 
 #: ../src/gnome/gnc-plugin-page-register.c:262
 #: ../src/gnome/gnc-plugin-page-register.c:265
 msgid "Open a register report window for this transaction"
-msgstr ""
+msgstr "Abrir una ventana de informe de registro para este asiento"
 
 #: ../src/gnome/gnc-plugin-page-register.c:264
 msgid "Account Transaction Report"
-msgstr ""
+msgstr "Informe de asiento en cuenta"
 
 #. Translators: This is a menu item in the View menu
 #: ../src/gnome/gnc-plugin-page-register.c:290
@@ -10881,7 +10885,7 @@ msgstr "Gestione sus finanzas, cuentas e inversiones"
 #: ../src/gnome/lot-viewer.c:589
 #, c-format
 msgid "Lots in Account %s"
-msgstr ""
+msgstr "Paquetes en la cuenta %s"
 
 #: ../src/gnome/reconcile-list.c:210
 #: ../src/register/ledger-core/split-register-layout.c:555
@@ -11124,7 +11128,7 @@ msgstr ""
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:4
 msgid "Index of predefined check format to use"
-msgstr ""
+msgstr "Índice del formato de cheque predefinido a usar"
 
 #: ../src/gnome/schemas/apps_gnucash_dialog_print_checks.schemas.in.h:5
 msgid ""
@@ -12174,7 +12178,7 @@ msgid ""
 "\"Select Import Action\" allows you to change the matching transaction to "
 "reconcile, or the destination account of the auto-balance split (if "
 "required)."
-msgstr ""
+msgstr "«Seleccionar acción de importación» le permite cambiar el asiento coincidente para conciliarlo, o establecer la cuenta de destino de la anotación para auto-saldarlo (en caso necesario)."
 
 #: ../src/import-export/generic-import.glade.h:4
 msgid "(none)"
@@ -12228,7 +12232,7 @@ msgstr "Umbral de _comisión de cajeros automáticos"
 
 #: ../src/import-export/generic-import.glade.h:17
 msgid "Confidence"
-msgstr ""
+msgstr "Confianza"
 
 #: ../src/import-export/generic-import.glade.h:21
 msgid "EDIT"
@@ -12421,12 +12425,12 @@ msgstr "Amarillo"
 
 #: ../src/import-export/generic-import.glade.h:63
 msgid "do not translate"
-msgstr ""
+msgstr "do not translate"
 
 #: ../src/import-export/generic-import.glade.h:64
 #: ../src/import-export/qif-import/qif.glade.h:97
 msgid "gnc-new-account"
-msgstr ""
+msgstr "gnc-new-account"
 
 #. Numeric formats
 #: ../src/import-export/gnc-import-format-gnome.c:91
@@ -12759,7 +12763,6 @@ msgid "Name for new template"
 msgstr "Nombre para la plantilla nueva"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:39
-#, fuzzy
 msgid ""
 "Now the setup for all HBCI accounts that are matching to a GnuCash account "
 "is finished. You can now invoke HBCI actions on those accounts.\n"
@@ -12769,14 +12772,11 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"La configuración de todas las cuentas HBCI que corresponden a cuentas\n"
-"GnuCash ha sido completada. Ahora puede invocar acciones HBCI sobre\n"
-"esas cuentas.\n"
+"La configuración de todas las cuentas HBCI que corresponden a cuentas GnuCash ha sido completada. Ahora puede invocar acciones HBCI sobre esas cuentas.\n"
 "\n"
-"Si quiere añadir otro banco, usuario o cuenta HBCI, puede ejecutar este\n"
-"asistente en cualquier momento.\n"
+"Si quiere añadir otro banco, usuario o cuenta HBCI, puede ejecutar este asistente en cualquier momento.\n"
 "\n"
-"Pulse «Finalizar»"
+"Pulse «Aplicar»."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:44
 msgid "Online Transaction"
@@ -12825,7 +12825,7 @@ msgstr "Ordenar"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:54
 msgid "Sort the list of transaction templates alphabetically"
-msgstr ""
+msgstr "Ordenar alfabéticamente la lista de plantillas de asientos"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:55
 msgid "Start AqHBCI Setup Wizard"
@@ -12846,7 +12846,6 @@ msgstr ""
 "botón inferior para iniciar este programa."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:58
-#, fuzzy
 msgid ""
 "This druid helps you setting up your HBCI connection with your bank.\n"
 "\n"
@@ -12870,7 +12869,7 @@ msgid ""
 msgstr ""
 "Este asistente le ayuda a configurar la conexión HBCI con su banco.\n"
 "\n"
-"Lo primero que necesita es pedir acceso HBCI en su banco. Si su banco\n"
+"Lo primero que necesita es pedir acceso HBCI en su banco. Si su banco "
 "decide darle acceso HBCI, le enviará una carta, conteniendo:\n"
 "\n"
 "* El código de banco de su banco\n"
@@ -12881,13 +12880,9 @@ msgstr ""
 "\n"
 "Está información será necesaria para lo siguiente. Pulse «Siguiente» ahora.\n"
 "\n"
-"NOTA: NO HAY GARANTÍAS DE NINGÚN TIPO. Algunos banco están \n"
-"ejecutando un HBCI pobremente implementado. No debería depender de\n"
-"transferencias críticas en el tiempo a través de HBCI, porque a veces el \n"
-"banco no le da la respuesta correcta cuando una transferencia se rechaza.\n"
+"NOTA: NO HAY GARANTÍAS DE NINGÚN TIPO. Algunos banco están ejecutando un HBCI pobremente implementado. No debería depender de transferencias críticas en el tiempo a través de HBCI, porque a veces el banco no le da la respuesta correcta cuando una transferencia se rechaza.\n"
 "\n"
-"Pulse «Cancelar» si no quiere configurar ninguna conexión\n"
-"HBCI ahora."
+"Pulse «Cancelar» si no quiere configurar ninguna conexión HBCI ahora."
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:72
 msgid ""
@@ -12906,19 +12901,16 @@ msgid "Version"
 msgstr "Versión"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:76
-#, fuzzy
 msgid "_Earliest possible date"
-msgstr "Fecha más temprana posible"
+msgstr "Fecha más _temprana posible"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:77
-#, fuzzy
 msgid "_Last retrieval date"
-msgstr "Última fecha de obtención"
+msgstr "_Última fecha de obtención"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:78
-#, fuzzy
 msgid "_Now"
-msgstr "Ahora"
+msgstr "_Ahora"
 
 #: ../src/import-export/hbci/glade/hbci.glade.h:79
 msgid "at Bank"
@@ -12954,26 +12946,23 @@ msgstr "Clave:"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:1
 msgid "<b>HBCI</b>"
-msgstr ""
+msgstr "<b>HBCI</b>"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:2
 msgid "Activate verbose debug messages for HBCI Online Banking."
 msgstr "Activar mensajes de diagnóstico ampliados para la banca online HBCI."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:4
-#, fuzzy
 msgid "Remember _PIN"
-msgstr "HBCI: Recordar PIN en memoria"
+msgstr "Recordar _PIN"
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:5
-#, fuzzy
 msgid "Remember the PIN for HBCI in memory during a session."
-msgstr "Recordad el PIN para HBCI en la memoria durante una sesión"
+msgstr "Recordar el PIN para HBCI en la memoria durante una sesión."
 
 #: ../src/import-export/hbci/glade/hbciprefs.glade.h:6
-#, fuzzy
 msgid "_Verbose debug messages"
-msgstr "Mensajes de diagnóstico ampliados HBCI"
+msgstr "Mensajes de diagnóstico _ampliados"
 
 #. Translators: Strings from this file are really only
 #. * needed inside Germany (HBCI is not supported anywhere
@@ -12981,7 +12970,6 @@ msgstr "Mensajes de diagnóstico ampliados HBCI"
 #. * import-export/hbci subdirectory in other countries.
 #.
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:265
-#, fuzzy
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "\n"
@@ -12991,10 +12979,8 @@ msgid ""
 "HBCI Balance."
 msgstr ""
 "El saldo HBCI descargado ha sido cero.\n"
-"O este es el saldo correcto, o su banco no soporta la descarga \n"
-"del saldo en esta versión HBCI. Debería elegir una versión \n"
-"HBCI superior en la configuración HBCI. Después intente de \n"
-"nuevo descargar el saldo HBCI.\n"
+"\n"
+"O este es el saldo correcto, o su banco no soporta la descarga del saldo en esta versión HBCI. Debería elegir una versión HBCI superior en la configuración HBCI. Después intente de nuevo descargar el saldo HBCI."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:281
 #, c-format
@@ -13006,17 +12992,15 @@ msgstr ""
 "El saldo anotado de la cuenta es %s"
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
-msgstr ""
-"Para su información: esta cuenta también tiene\n"
-"un balance anotado de %s\n"
+msgstr "Para su información: esta cuenta también tiene un balance anotado de %s\n"
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:293
 msgid ""
 "The booked balance is identical to the current reconciled balance of the "
 "account."
-msgstr ""
+msgstr "El saldo anotado es igual a su saldo conciliado actual en la cuenta."
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:307
 msgid "Reconcile account now?"
@@ -13037,16 +13021,17 @@ msgid ""
 "\n"
 "Do you want to enter the job again?"
 msgstr ""
+"El backend ha producido un error al preparar el trabajo. No es posible ejecutar este trabajo.\n"
+"\n"
+"Lo más probable es que su banco no soporte el trabajo que ha elegido o que su cuenta HBCI no tenga permisos para ejecutar el trabajo. Puede que pueda consultar más mensajes de error en su log de consola.\n"
+"\n"
+"¿Quiere introducir el trabajo otra vez?"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:216
-#, fuzzy
 msgid ""
 "You have changed the list of online transfer templates, but you cancelled "
 "the transfer dialog. Do you nevertheless want to store the changes?"
-msgstr ""
-"Ha cambiado la lista de plantillas de transferencias online,\n"
-"pero ha cancelado la ventana de transferencia.\n"
-"¿Quiere almacenar los cambios a pesar de todo?"
+msgstr "Ha cambiado la lista de plantillas de transferencias online, pero ha cancelado la ventana de transferencia. ¿Quiere almacenar los cambios a pesar de todo?"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:247
 msgid "Online HBCI Direct Debit Note"
@@ -13054,7 +13039,7 @@ msgstr "Nota de cargo directo online HBCI"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:249
 msgid "Online HBCI Bank-Internal Transfer"
-msgstr ""
+msgstr "Transferencia bancaria interna online HBCI"
 
 #: ../src/import-export/hbci/gnc-hbci-transfer.c:252
 msgid "Online HBCI Transaction"
@@ -13079,40 +13064,28 @@ msgstr ""
 "¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:303
-#, fuzzy
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times. Your chip card is "
 "therefore destroyed. Aborting."
-msgstr ""
-"Desafortunadamente ha introducir un PIN incorrecto demasiadas\n"
-"veces. Por lo tanto su tarjeta chip se ha destruido. Abortando."
+msgstr "Desafortunadamente ha introducir un PIN incorrecto demasiadas veces. Por lo tanto su tarjeta chip se ha destruido. Abortando."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:312
-#, fuzzy
 msgid ""
 "No chip card has been found in the chip card reader. Do you want to try "
 "again?"
-msgstr ""
-"No se ha encontrado tarjeta chip en el lector de tarjetas.\n"
-"¿Quiere intentarlo de nuevo?"
+msgstr "No se ha encontrado tarjeta chip en el lector de tarjetas. ¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:318
-#, fuzzy
 msgid ""
 "Unfortunately this HBCI job is not supported by your bank or for your "
 "account. Aborting."
-msgstr ""
-"Desafortunadamente, esta tarea HBCI no está soportada\n"
-"por su banco o para su cuenta. Abortando."
+msgstr "Desafortunadamente, esta tarea HBCI no está soportada por su banco o para su cuenta. Abortando."
 
 #: ../src/import-export/hbci/gnc-hbci-utils.c:326
-#, fuzzy
 msgid ""
 "The server of your bank refused the HBCI connection. Please try again later. "
 "Aborting."
-msgstr ""
-"El servidor de su banco ha rechazado la conexión HBCI.\n"
-"Inténtelo más tarde. Abortando."
+msgstr "El servidor de su banco ha rechazado la conexión HBCI. Inténtelo más tarde. Abortando."
 
 #. src/import-export/qif-import/qif-dialog-utils.scm
 #. src/import-export/qif-io-core/qif-invst-xtn-import.scm
@@ -13168,77 +13141,63 @@ msgid "Issue a new bank-internal transaction online through HBCI/AqBanking"
 msgstr "Realizar una nueva transacción interna al banco online usando HBCI/AqBanking"
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:110
-#, fuzzy
 msgid "_Direct Debit..."
-msgstr "Cargo Directo"
+msgstr "Cargo _directo..."
 
 #: ../src/import-export/hbci/gnc-plugin-hbci.c:111
-#, fuzzy
 msgid "Issue a new direct debit note online through HBCI/AqBanking"
-msgstr "Efectuar una nueva nota de cargo directo online mediante HBCI"
+msgstr "Efectuar una nueva nota de cargo directo online mediante HBCI/AqBanking"
 
 #: ../src/import-export/hbci/hbci-interaction.c:349
-#, fuzzy, c-format
+#, c-format
 msgid "The PIN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"El PIN debe tener al menos %d caracteres.\n"
-"¿Quiere intentarlo de nuevo?"
+msgstr "El PIN debe tener al menos %d caracteres. ¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You entered %ld characters, but the PIN must be no longer than %d "
 "characters. Do you want to try again?"
-msgstr ""
-"El PIN debe tener al menos %d caracteres.\n"
-"¿Quiere intentarlo de nuevo?"
+msgstr "Ha introducido %ld caracteres, pero el PIN no debe tener más de %d caracteres. ¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:430
-#, fuzzy, c-format
+#, c-format
 msgid "This TAN needs to be at least %d characters long. Do you want to try again?"
-msgstr ""
-"Este PIN debe tener al menos %d caracteres.\n"
-"¿Quiere intentarlo de nuevo?"
+msgstr "Este TAN debe tener al menos %d caracteres. ¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/hbci-interaction.c:443
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You entered %ld characters, but the TAN must be no longer than %d "
 "characters. Do you want to try again?"
-msgstr ""
-"Este PIN debe tener al menos %d caracteres.\n"
-"¿Quiere intentarlo de nuevo?"
+msgstr "Ha introducido %ld caracteres, pero el TAN no debe tener más de %d caracteres. ¿Quiere intentarlo de nuevo?"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:1
-#, fuzzy
 msgid "Close dialog when finished"
-msgstr "Cerrar al finalizar"
+msgstr "Cerrar ventana al finalizar"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:2
-#, fuzzy
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Activar mensajes de diagnóstico ampliados para la banca online HBCI."
+msgstr "Activar mensajes de diagnóstico ampliados para la banca online HBCI/AqBanking."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:3
 msgid ""
 "If active, the PIN for HBCI/AqBanking actions will be remembered in memory "
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
-msgstr ""
+msgstr "Si está activo, el PIN para acciones HBCI/AqBanking será guardado en memoria durante una sesión. Sino se tendrá que introducir cada vez que sea necesario durante la sesión."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:4
 msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
-msgstr ""
+msgstr "Si está activo, la ventana se cerrará automáticamente cuando termine el proceso de importación HBCI/AqBanking. Sino permanecerá abierta."
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:5
-#, fuzzy
 msgid "Remember the PIN in memory"
-msgstr "Recordad el PIN para HBCI en la memoria durante una sesión"
+msgstr "Recordar el PIN en memoria"
 
 #: ../src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas.in.h:8
-#, fuzzy
 msgid "Verbose HBCI debug messages"
 msgstr "Mensajes de diagnóstico ampliados HBCI"
 
@@ -15978,7 +15937,7 @@ msgstr "¿Mostrar el saldo total en la leyenda?"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:564 ../intl-scm/guile-strings.c:674
 msgid "Trial Balance"
-msgstr ""
+msgstr "Saldo de prueba"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16037,12 +15996,12 @@ msgstr "Fecha del informe"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:578
 msgid "Report variation"
-msgstr ""
+msgstr "Variante de informe"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:580
 msgid "Kind of trial balance to generate"
-msgstr ""
+msgstr "Tipo de saldo de prueba a generar"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16087,14 +16046,14 @@ msgstr "Merchandising"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:592
 msgid "Gross adjustment accounts"
-msgstr ""
+msgstr "Cuentas de ajuste"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:594
 msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
-msgstr ""
+msgstr "No mostrar neto, pero mostrar ajustes de cargo/abono de esas cuentas. Las empresas de merchandising generalmente seleccionarán aquí sus cuentas de inventario."
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:596
@@ -16107,7 +16066,7 @@ msgid ""
 "Adjustments made to these accounts are gross adjusted (see above) in the "
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
-msgstr ""
+msgstr "Los ajustes realizados sobre estas cuentas se ajustan (ver arriba) en las columnas Ajustes, Saldo de prueba ajustado y Informe de ingresos. Útil para empresas de merchandising."
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16120,32 +16079,32 @@ msgstr "Elementos"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:602
 msgid "Adjusting Entries pattern"
-msgstr ""
+msgstr "Patrón de ajuste de elementos"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:604
 msgid "Any text in the Description column which identifies adjusting entries"
-msgstr ""
+msgstr "Cualquier texto en el campo Descripción que identifique elementos de ajuste"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:606
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr ""
+msgstr "El patrón de elementos de ajuste distingue mayúsculas y minúsculas"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:608
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive"
-msgstr ""
+msgstr "Provoca que el emparejamiento del patrón de elementos de ajuste distinga mayúsculas y minúsculas"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:610
 msgid "Adjusting Entries Pattern is regular expression"
-msgstr ""
+msgstr "El patrón de elementos de ajuste es una expresión regular"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:612
 msgid "Causes the Adjusting Entries Pattern to be treated as a regular expression"
-msgstr ""
+msgstr "Provoca que el patrón de elementos de ajuste se trate como una expresión regular"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16153,7 +16112,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:614 ../intl-scm/guile-strings.c:942
 #: ../intl-scm/guile-strings.c:1282
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "Patrón de elementos de cierre"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16161,7 +16120,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:616 ../intl-scm/guile-strings.c:944
 #: ../intl-scm/guile-strings.c:1284
 msgid "Any text in the Description column which identifies closing entries"
-msgstr ""
+msgstr "Cualquier texto en el campo Descripción que identifique elementos de cierre"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16169,7 +16128,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:618 ../intl-scm/guile-strings.c:946
 #: ../intl-scm/guile-strings.c:1286
 msgid "Closing Entries pattern is case-sensitive"
-msgstr ""
+msgstr "El patrón de elementos de cierre distingue mayúsculas y minúsculas"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16177,7 +16136,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:620 ../intl-scm/guile-strings.c:948
 #: ../intl-scm/guile-strings.c:1288
 msgid "Causes the Closing Entries Pattern match to be case-sensitive"
-msgstr ""
+msgstr "Provoca que el emparejamiento del patrón de elementos de cierre distinga mayúsculas y minúsculas"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16185,7 +16144,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:622 ../intl-scm/guile-strings.c:950
 #: ../intl-scm/guile-strings.c:1290
 msgid "Closing Entries Pattern is regular expression"
-msgstr ""
+msgstr "El patrón de elementos de cierre es una expresión regular"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16193,7 +16152,7 @@ msgstr ""
 #: ../intl-scm/guile-strings.c:624 ../intl-scm/guile-strings.c:952
 #: ../intl-scm/guile-strings.c:1292
 msgid "Causes the Closing Entries Pattern to be treated as a regular expression"
-msgstr ""
+msgstr "Provoca que el patrón de elementos de cierre se trate como una expresión regular"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16293,7 +16252,7 @@ msgstr "Mostrar los tipos de cambio usados"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:652
 msgid "Current Trial Balance"
-msgstr ""
+msgstr "Saldo de prueba actual"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:654
@@ -16303,7 +16262,7 @@ msgstr "Usa los saldos exactos en el libro diario"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:656
 msgid "Pre-adjustment Trial Balance"
-msgstr ""
+msgstr "Saldo de prueba anterior al ajuste"
 
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:658
@@ -16360,7 +16319,7 @@ msgstr "Ajustes"
 #. src/report/standard-reports/trial-balance.scm
 #: ../intl-scm/guile-strings.c:678
 msgid "Adjusted Trial Balance"
-msgstr ""
+msgstr "Saldo de prueba ajustado"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/income-statement.scm
@@ -16752,7 +16711,7 @@ msgstr "Mostrar espacios en blanco en lugar de cualquier saldo a cero que se deb
 #: ../intl-scm/guile-strings.c:902 ../intl-scm/guile-strings.c:1262
 #: ../intl-scm/guile-strings.c:1954 ../intl-scm/guile-strings.c:2060
 msgid "Show accounting-style rules"
-msgstr "Mostrar las reglas del estilo contable"
+msgstr "Mostrar líneas al estilo contable"
 
 #. src/report/standard-reports/income-statement.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -16761,7 +16720,7 @@ msgstr "Mostrar las reglas del estilo contable"
 #: ../intl-scm/guile-strings.c:904 ../intl-scm/guile-strings.c:1264
 #: ../intl-scm/guile-strings.c:1956 ../intl-scm/guile-strings.c:2062
 msgid "Use rules beneath columns of added numbers like accountants do"
-msgstr ""
+msgstr "Usar líneas bajo columnas de cantidades sumadas como hacen los contables"
 
 #. src/report/standard-reports/income-statement.scm
 #: ../intl-scm/guile-strings.c:910
@@ -17128,7 +17087,7 @@ msgstr "Mostrar símbolos abreviados"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1150
 msgid "Show listings"
-msgstr ""
+msgstr "Mostrar índices"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1152
@@ -17143,7 +17102,7 @@ msgstr "Mostrar número de acciones"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1156 ../intl-scm/guile-strings.c:1178
 msgid "Basis calculation method"
-msgstr ""
+msgstr "Método de cálculo de la base"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1158
@@ -17234,7 +17193,7 @@ msgstr "Mostrar los símbolos abreviados"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1198
 msgid "Display exchange listings"
-msgstr ""
+msgstr "Mostrar índices de intercambio"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1200
@@ -17943,7 +17902,7 @@ msgstr ""
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1918
 msgid "Account Summary"
-msgstr "Resumen de cuenta"
+msgstr "Resumen de cuentas"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:1938
@@ -18011,7 +17970,7 @@ msgstr "Mostrar el saldo total, incluyendo el saldo de las subcuentas, o cualqui
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2000
 msgid "Raise Accounts"
-msgstr ""
+msgstr "Alzar cuentas"
 
 #. src/report/standard-reports/account-summary.scm
 #: ../intl-scm/guile-strings.c:2002
@@ -19615,7 +19574,7 @@ msgstr "Notas adicionales a poner en la factura (se acepta HTML simple)"
 #. src/business/business-reports/invoice.scm
 #: ../intl-scm/guile-strings.c:3328 ../intl-scm/guile-strings.c:3702
 msgid "Thank you for your patronage"
-msgstr ""
+msgstr "Gracias por confiar en nosotros"
 
 #. src/business/business-reports/easy-invoice.scm
 #. src/business/business-reports/fancy-invoice.scm

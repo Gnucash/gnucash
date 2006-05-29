@@ -423,12 +423,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   do {
     if (inter) {
       GNCInteractor_show_nodelete (inter);
-#if (AQBANKING_VERSION_MAJOR > 0) || (AQBANKING_VERSION_MINOR > 9) || \
-  ((AQBANKING_VERSION_MINOR == 9) && \
-   ((AQBANKING_VERSION_PATCHLEVEL > 7) || \
-    ((AQBANKING_VERSION_PATCHLEVEL == 7) && (AQBANKING_VERSION_BUILD > 1))))
       AB_Banking_SetPinCacheEnabled (api, GNCInteractor_get_cache_valid(inter));
-#endif
     }
 
     err = AB_Banking_ExecuteQueue (api);

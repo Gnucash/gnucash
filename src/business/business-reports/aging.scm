@@ -203,8 +203,8 @@
 			 this-currency
 			 (company-get-currency company-info)))
 		   (cons #f (sprintf
-			     (_ "Transactions relating to company  %d contain \
-more than one currency.  This report is not designed to cope with this possibility.")))
+			     (_ "Transactions relating to '%s' contain \
+more than one currency.  This report is not designed to cope with this possibility.")  (gnc:owner-get-name owner)))
 		   (begin
 		     (gnc:debug "it's an old company")
 		     (if (gnc:numeric-negative-p value)

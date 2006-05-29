@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-05-20 16:47+0200\n"
-"PO-Revision-Date: 2006-05-22 22:33+0200\n"
+"PO-Revision-Date: 2006-05-26 19:00+0200\n"
 "Last-Translator: Fabrice Kurz <kurzf@voila.fr>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1606,7 +1606,7 @@ msgstr "Préférences"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:8
 msgid "Ta_x included"
-msgstr "Taxes incluses"
+msgstr "Ta_xes incluses"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:9
 msgid ""
@@ -1657,7 +1657,7 @@ msgstr "_M'avertir lorsque due"
 # messages-i18n.c:171
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:16
 msgid "_Open in new window"
-msgstr "Ouvrir dans une nouvelle fenêtre"
+msgstr "_Ouvrir dans une nouvelle fenêtre"
 
 #: ../src/business/business-gnome/glade/businessprefs.glade.h:17
 msgid "_Tax included"
@@ -2329,7 +2329,7 @@ msgstr "Ouvrir le dialogue de définition de facture fournisseur."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:185
 msgid "Find Bi_ll..."
-msgstr "Cherche une facture fournisseur..."
+msgstr "Cherche une _facture fournisseur..."
 
 #: ../src/business/business-gnome/gnc-plugin-business.c:186
 msgid "Open the Find Bill dialog"
@@ -2673,7 +2673,7 @@ msgstr ""
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:159
 #: ../src/gnome/glade/register.glade.h:95
 msgid "_Standard"
-msgstr "Ordre standard"
+msgstr "Ordre _standard"
 
 # messages-i18n.c:267 po/guile_strings.txt:6
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:160
@@ -4747,7 +4747,7 @@ msgstr " Interval : "
 
 #: ../src/gnome/glade/account.glade.h:41
 msgid "M_ove to:"
-msgstr "Les déplacer vers :"
+msgstr "Les _déplacer vers :"
 
 # messages-i18n.c:190
 #: ../src/gnome/glade/account.glade.h:42
@@ -4863,7 +4863,7 @@ msgstr "Montrer les comptes _cachés"
 
 #: ../src/gnome/glade/account.glade.h:64
 msgid "Show _zero total accounts"
-msgstr "Ne pas afficher les comptes dont le solde est nul"
+msgstr "Ne pas afficher les comptes dont le solde est _nul"
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/account.glade.h:65
@@ -4976,7 +4976,7 @@ msgstr "De_scription :"
 
 #: ../src/gnome/glade/account.glade.h:82
 msgid "_Move to:"
-msgstr "Les déplacer vers :"
+msgstr "Les _déplacer vers :"
 
 #: ../src/gnome/glade/account.glade.h:83
 #: ../src/gnome-utils/dialog-commodity.c:260
@@ -5477,7 +5477,7 @@ msgstr "total"
 
 #: ../src/gnome/glade/lots.glade.h:2
 msgid "<b>_Lots in This Account</b>"
-msgstr "<b> lots dans ce compte</b>"
+msgstr "<b>_lots dans ce compte</b>"
 
 #: ../src/gnome/glade/lots.glade.h:3
 msgid "<b>_Mini-Viewer</b>"
@@ -5842,12 +5842,12 @@ msgstr "_Titre :"
 # src/gnome/glade-gnc-dialogs.c:1340
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
-msgstr "Montant (en chiffres) :"
+msgstr "Montant (en _chiffres) :"
 
 # src/gnome/glade-gnc-dialogs.c:1332
 #: ../src/gnome/glade/print.glade.h:2
 msgid "Amount (_words):"
-msgstr "Montant (en lettres) :"
+msgstr "Montant (en _lettres) :"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/gnome/glade/print.glade.h:3
@@ -5979,7 +5979,7 @@ msgstr "Solde du début :"
 # messages-i18n.c:210
 #: ../src/gnome/glade/reconcile.glade.h:5
 msgid "Statement _Date:"
-msgstr "Date du relevé :"
+msgstr "_Date du relevé :"
 
 # messages-i18n.c:179
 #: ../src/gnome/glade/reconcile.glade.h:6
@@ -6053,7 +6053,7 @@ msgstr "Supprimer la transaction en cours"
 # messages-i18n.c:176
 #: ../src/gnome/glade/register.glade.h:19
 msgid "Dup_licate Transaction..."
-msgstr "Dupliquer la transaction..."
+msgstr "Dup_liquer la transaction..."
 
 # messages-i18n.c:176
 #: ../src/gnome/glade/register.glade.h:21
@@ -6394,7 +6394,7 @@ msgstr "Ordre _standard"
 # messages-i18n.c:210
 #: ../src/gnome/glade/register.glade.h:97
 msgid "_Statement Date"
-msgstr "Date du relevé"
+msgstr "Date du _relevé"
 
 # messages-i18n.c:343
 #: ../src/gnome/glade/register.glade.h:98
@@ -7330,12 +7330,12 @@ msgstr "années"
 # messages-i18n.c:199
 #: ../src/gnome/glade/stocks.glade.h:1
 msgid "<b>A_sset Account</b>"
-msgstr "<b>Compte d'actif</b>"
+msgstr "<b>Compte d'a_ctif</b>"
 
 # messages-i18n.c:190
 #: ../src/gnome/glade/stocks.glade.h:2
 msgid "<b>_Income Account</b>"
-msgstr "<b>Compte de Revenus</b>"
+msgstr "<b>Compte de _Revenus</b>"
 
 #: ../src/gnome/glade/stocks.glade.h:4
 msgid "Cash In Lieu"
@@ -7439,7 +7439,7 @@ msgstr "_Montant :"
 # po/guile_strings.txt:266
 #: ../src/gnome/glade/stocks.glade.h:22
 msgid "_Shares:"
-msgstr "Titres :"
+msgstr "_Titres :"
 
 #: ../src/gnome/glade/tax.glade.h:1
 msgid "0"
@@ -7671,7 +7671,7 @@ msgstr ""
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:150
 msgid "_Security Editor"
-msgstr "Éditeur de titre"
+msgstr "Éditeur de _titre"
 
 #: ../src/gnome/gnc-plugin-basic-commands.c:151
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -7737,7 +7737,7 @@ msgstr "Créer un nouveau compte"
 # messages-i18n.c:190
 #: ../src/gnome/gnc-plugin-page-account-tree.c:149
 msgid "New Account _Hierarchy..."
-msgstr "Nouvelle hiérarchie de comptes..."
+msgstr "Nouvelle _hiérarchie de comptes..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:150
 msgid "Extend the current book by merging with new account type categories"
@@ -7852,7 +7852,7 @@ msgstr "Enregistrer un éclatement ou une fusion d'actions"
 # messages-i18n.c:303
 #: ../src/gnome/gnc-plugin-page-account-tree.c:184
 msgid "View _Lots..."
-msgstr "Afficher les lots..."
+msgstr "Afficher les _lots..."
 
 #: ../src/gnome/gnc-plugin-page-account-tree.c:185
 #: ../src/gnome/gnc-plugin-page-register.c:238
@@ -8168,7 +8168,7 @@ msgstr "Éditer le taux de change pour la répartition courante"
 
 #: ../src/gnome/gnc-plugin-page-register.c:249
 msgid "Sche_dule..."
-msgstr "Récurrence..."
+msgstr "Réc_urrence..."
 
 # po/guile_strings.txt:267
 #: ../src/gnome/gnc-plugin-page-register.c:252
@@ -10357,7 +10357,7 @@ msgstr "Retenir le _choix et ne plus poser la question."
 
 #: ../src/gnome-utils/dialog-utils.c:961
 msgid "Don't _tell me again."
-msgstr "Ne plus me demander."
+msgstr "Ne plus me _demander."
 
 #: ../src/gnome-utils/dialog-utils.c:964
 msgid "Remember and don't ask me again this _session."
@@ -10977,7 +10977,7 @@ msgstr "_Vous mettez  à jour le chemin de recherchevous-même"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:1
 msgid "<b>S_ystem input encodings</b>"
-msgstr "<b>Encodages d'entrée Système</b>"
+msgstr "<b>Encodages d'entrée S_ystème</b>"
 
 #: ../src/gnome-utils/glade/druid-gnc-xml-import.glade.h:2
 msgid "<b>_Custom encoding</b>"
@@ -11423,7 +11423,7 @@ msgstr ""
 
 #: ../src/gnome-utils/glade/preferences.glade.h:49
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Afficher le « Conseil du jour »"
+msgstr "Afficher le « _Conseil du jour »"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:50
 msgid "Display hints for using GnuCash at startup"
@@ -11546,7 +11546,7 @@ msgstr "Afficher les _grands-totaux"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:73
 msgid "Include _non-currency totals"
-msgstr "Inclure les totaux sans devises"
+msgstr "Inclure les totaux sans _devises"
 
 # src/gnome/glade-gnc-dialogs.c:300
 #: ../src/gnome-utils/glade/preferences.glade.h:74
@@ -11592,12 +11592,12 @@ msgstr "Registre "
 # messages-i18n.c:171
 #: ../src/gnome-utils/glade/preferences.glade.h:85
 msgid "Register opens in a new _window"
-msgstr "Ouvrir dans une nouvelle fenêtre"
+msgstr "Ouvrir dans une nouvelle _fenêtre"
 
 # messages-i18n.c:171
 #: ../src/gnome-utils/glade/preferences.glade.h:86
 msgid "Report opens in a new _window"
-msgstr "Ouvrir les rapports dans une nouvelle fenêtre"
+msgstr "Ouvrir les rapports dans une nouvelle _fenêtre"
 
 # messages-i18n.c:326
 #: ../src/gnome-utils/glade/preferences.glade.h:87
@@ -11687,7 +11687,7 @@ msgstr ""
 # messages-i18n.c:346
 #: ../src/gnome-utils/glade/preferences.glade.h:102
 msgid "Transaction _journal"
-msgstr "Journal de transaction"
+msgstr "_Journal de transaction"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:103
 msgid "US Dollars (USD)"
@@ -11862,7 +11862,7 @@ msgstr "_Relative :"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:139
 msgid "_Retain log files:"
-msgstr "Garder les fichiers journaux durant :"
+msgstr "_Garder les fichiers journaux durant :"
 
 # po/guile_strings.txt:93
 #: ../src/gnome-utils/glade/preferences.glade.h:140
@@ -12070,7 +12070,7 @@ msgstr "Aucun programme adapté n'a été trouvé pour %s."
 #: ../src/gnome-utils/gnc-file.c:210
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
-msgstr "L'adresse %s n'est pas supportée dans cette version de GnuCash."
+msgstr "L'adresse URL %s n'est pas supportée dans cette version de GnuCash."
 
 # messages-i18n.c:35
 #: ../src/gnome-utils/gnc-file.c:215
@@ -12460,12 +12460,12 @@ msgstr "Pas trouvé"
 # messages-i18n.c:37
 #: ../src/gnome-utils/gnc-html.c:109
 msgid "The specified URL could not be loaded."
-msgstr "L'URL spécifié n'a pu être chargé."
+msgstr "L'URL spécifiée n'a pu être chargée."
 
 # messages-i18n.c:34
 #: ../src/gnome-utils/gnc-html.c:115
 msgid "There was an error loading the specified URL."
-msgstr "Une erreur s'est produite en essayant de charger l'URL spécifié."
+msgstr "Une erreur s'est produite en essayant de charger l'URL spécifiée."
 
 #: ../src/gnome-utils/gnc-html.c:116
 msgid "Error message"
@@ -13391,7 +13391,7 @@ msgstr ""
 # messages-i18n.c:142
 #: ../src/gnome/window-reconcile.c:1989
 msgid "_Finish"
-msgstr "Terminer"
+msgstr "_Terminer"
 
 # messages-i18n.c:103
 #: ../src/gnome/window-reconcile.c:1990
@@ -13580,8 +13580,8 @@ msgid ""
 "to the Auto-CLEAR threshold) will be CLEARed by default."
 msgstr ""
 "Une transaction pour laquelle le score du meilleur duplicata potentiel est "
-"dans la zone VERTE (au-dessus ou égal au seuil de RÉCONCILIATION "
-"automatique) sera RÉCONCILIÉE par défaut"
+"dans la zone VERTE (au-dessus ou égal au seuil de POINTAGE "
+"automatique) sera POINTÉE par défaut"
 
 #: ../src/import-export/generic-import.glade.h:10
 msgid ""
@@ -13599,7 +13599,7 @@ msgstr "Seuil d'_ajout automatique"
 
 #: ../src/import-export/generic-import.glade.h:14
 msgid "Auto-c_lear threshold"
-msgstr "Seuil d'effacement automatique"
+msgstr "Seuil de _pointage automatique"
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: ../src/import-export/generic-import.glade.h:15
@@ -13608,7 +13608,7 @@ msgstr "Choisir un format"
 
 #: ../src/import-export/generic-import.glade.h:16
 msgid "Commercial ATM _fees threshold"
-msgstr "Seuil de frais de distributeur de billets"
+msgstr "Seuil de _frais de distributeur de billets"
 
 #: ../src/import-export/generic-import.glade.h:17
 msgid "Confidence"
@@ -13738,7 +13738,7 @@ msgstr "Duplicata potentiels pour la transaction sélectionnée :"
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "R"
-msgstr "Abgl"
+msgstr "R"
 
 #: ../src/import-export/generic-import.glade.h:48
 msgid "Red"
@@ -13748,13 +13748,13 @@ msgstr "Rouge"
 #: ../src/import-export/generic-import.glade.h:49
 msgid "Select \"A\" to add the transaction as new."
 msgstr ""
-"Selectionner \"A\" pour ajouter la transaction en tant que nouvelle "
+"Selectionner « A » pour ajouter la transaction en tant que nouvelle "
 "transaction"
 
 # messages-i18n.c:77
 #: ../src/import-export/generic-import.glade.h:50
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Selectionner \"R\" pour rapprocher une transaction homologue"
+msgstr "Selectionner « R » pour rapprocher une transaction homologue"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: ../src/import-export/generic-import.glade.h:52
@@ -13807,7 +13807,7 @@ msgstr "Aide des listes de transactions"
 
 #: ../src/import-export/generic-import.glade.h:60
 msgid "Use _bayesian matching"
-msgstr "Utiliser la comparaison Bayésienne."
+msgstr "Utiliser la comparaison _Bayésienne."
 
 #: ../src/import-export/generic-import.glade.h:61
 msgid ""
@@ -15927,16 +15927,16 @@ msgstr "La transaction courante n'est pas équilibrée."
 
 #: ../src/register/ledger-core/split-register-control.c:106
 msgid "Balance it _manually"
-msgstr "Équilibrer manuellement"
+msgstr "Équilibrer _manuellement"
 
 #: ../src/register/ledger-core/split-register-control.c:108
 msgid "Let GnuCash _add an adjusting split"
-msgstr "Laisser GnuCash ajouter une répartition d'équilibre"
+msgstr "Laisser GnuCash _ajouter une répartition d'équilibre"
 
 # po/guile_strings.txt:275
 #: ../src/register/ledger-core/split-register-control.c:113
 msgid "Adjust current account _split total"
-msgstr "Ajuster le total réparti du compte courant"
+msgstr "Ajuster le total _réparti du compte courant"
 
 #: ../src/register/ledger-core/split-register-control.c:119
 msgid "Adjust _other account split total"
@@ -16461,16 +16461,16 @@ msgstr "_Taille..."
 
 #: ../src/report/report-gnome/report.glade.h:19
 msgid "_Column span:"
-msgstr "Extension sur plusieurs colonnes"
+msgstr "Extension sur plusieurs _colonnes"
 
 #: ../src/report/report-gnome/report.glade.h:22
 msgid "_Row span:"
-msgstr "Fusion de rangée :"
+msgstr "Extension sur plusieurs _lignes:"
 
 # messages-i18n.c:320
 #: ../src/report/report-gnome/report.glade.h:23
 msgid "_Template:"
-msgstr "_Modèle:"
+msgstr "_Modèle :"
 
 #: ../src/report/report-gnome/window-report.c:122
 msgid "Set the report options you want using this dialog."
@@ -16493,7 +16493,7 @@ msgstr "Une erreur est survenue lors de l'exécution du rapport."
 #: ../src/report/report-gnome/window-report.c:265
 #, c-format
 msgid "Badly formed options URL: %s"
-msgstr "Options : URL mal formée : %s"
+msgstr "Options mal formées URL : %s"
 
 #: ../src/report/report-gnome/window-report.c:253
 #, c-format
@@ -17391,7 +17391,7 @@ msgstr "_Impôts"
 #. src/report/report-system/report.scm
 #: ../intl-scm/guile-strings.c:428
 msgid "_Sample & Custom"
-msgstr "Exemples & Rapports personnalisés"
+msgstr "Exemples & Rapports _personnalisés"
 
 # src/gnome/glade-gnc-dialogs.c:1219 src/gnome/glade-gnc-dialogs.c:1240
 # src/gnome/glade-gnc-dialogs.c:1276
@@ -22389,8 +22389,8 @@ msgstr ""
 "chèque de paie avec de multiples déductions, cliquez sur le bouton "
 "Répartition dans la barre d'outils.\n"
 "\n"
-"Vous pouvez également choisir le grand livre avec répartitions automatiques "
-"ou le journal des transactions depuis l'option du menu Grand Livre|Style."
+"Vous pouvez également choisir le Grand livre avec répartitions automatiques "
+"ou le Journal de transactions depuis le menu Affichage."
 
 #: ../doc/tip_of_the_day.list.in:36
 msgid ""
@@ -22438,8 +22438,8 @@ msgid ""
 "from the menu."
 msgstr ""
 "Voulez-vous voir toutes vos transactions de sous-comptes dans un seul "
-"registre ? À partir du menu principal, mettez en vidéo inverse le compte "
-"parent et sélectionnez Comptes|Ouvrir sous-comptes à partir du menu."
+"registre ? Mettez en vidéo inverse le compte "
+"parent et sélectionnez Ouvrir avec les sous-comptes à partir du menu contextuel."
 
 #: ../doc/tip_of_the_day.list.in:56
 msgid ""
@@ -22495,7 +22495,7 @@ msgid ""
 msgstr ""
 "Les feuilles de style définissent comment les rapports sont affichés. "
 "Choisissez une feuille de style dans les options à la création de votre "
-"rapport et utilisez le menu « Feuille de Style » pour personnaliser les "
+"rapport et utilisez le menu « Éditer/Feuilles de Style » pour personnaliser les "
 "feuilles de style existantes."
 
 #: ../doc/tip_of_the_day.list.in:78

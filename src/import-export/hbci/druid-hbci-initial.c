@@ -45,6 +45,7 @@
 #include "gnc-component-manager.h"
 
 #include <aqbanking/banking.h>
+#include <aqbanking/version.h>
 #include <gwenhywfar/stringlist.h>
 #include <gwenhywfar/version.h>
 
@@ -443,6 +444,17 @@ on_button_clicked (GtkButton *button,
   }
 }
 
+#if (AQBANKING_VERSION_MAJOR > 1) || \
+  ((AQBANKING_VERSION_MAJOR == 1) && \
+    (AQBANKING_VERSION_MINOR == 9) && \
+     (AQBANKING_VERSION_PATCHLEVEL > 0))
+/* The wizard choice has changed with aqbanking >= 1.9.1; we don't
+   need to specify a "backend" for the wizard anymore but instead
+   there is only one wizard for all backends now. */
+# define AQBANKING_WIZARD_ALLBACKENDS
+#else
+# undef AQBANKING_WIZARD_ALLBACKENDS
+#endif
 
 static void
 on_aqhbci_button (GtkButton *button,
@@ -451,8 +463,6 @@ on_aqhbci_button (GtkButton *button,
   HBCIInitialInfo *info = user_data;
   GWEN_BUFFER *buf;
   int res;
-  GWEN_PLUGIN_DESCRIPTION_LIST2 *pluginlist;
-  const char *backend_name_nc;
   char *backend_name;
 
   /* This is the point where we look for and start an external
@@ -468,6 +478,12 @@ on_aqhbci_button (GtkButton *button,
   const char *wizard_path;
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
+
+  /* See note above about wizard choice. */
+#ifndef AQBANKING_WIZARD_ALLBACKENDS
+  {
+  GWEN_PLUGIN_DESCRIPTION_LIST2 *pluginlist;
+  const char *backend_name_nc;
 
   /* Get list of all backends, active or inactive */
   pluginlist = AB_Banking_GetProviderDescrs (banking);
@@ -545,6 +561,11 @@ on_aqhbci_button (GtkButton *button,
      gwenhywfar>=1.98.x */
   GWEN_PluginDescription_List2_free (pluginlist);
 #endif
+  }
+
+#else /* AQBANKING_WIZARD_ALLBACKENDS */
+  backend_name = g_strdup("");
+#endif /* AQBANKING_WIZARD_ALLBACKENDS */
 
   /* ***** */
 
@@ -603,7 +624,9 @@ on_aqhbci_button (GtkButton *button,
     }
 
     if (res == 0) {
+#ifndef AQBANKING_WIZARD_ALLBACKENDS
       res = AB_Banking_ActivateProvider(banking, backend_name);
+#endif
       if ((res == 0) || (res == AB_ERROR_FOUND))
 	druid_enable_next_button(info);
       else {
