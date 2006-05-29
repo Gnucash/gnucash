@@ -485,7 +485,9 @@ get_random_commodity_namespace(void)
     return get_random_string_in_array(types);
 }
 
-static gnc_commodity *
+gnc_commodity *
+get_random_commodity_from_table (gnc_commodity_table *table);
+gnc_commodity *
 get_random_commodity_from_table (gnc_commodity_table *table)
 {
   GList *namespaces;
@@ -538,7 +540,7 @@ get_random_commodity (QofBook *book)
       return get_random_commodity_from_table (table);
 #endif
 
-    mn = get_random_string_length_in_range(1, 3);
+    mn = get_random_string_length_in_range(2, 4);
     space = get_random_commodity_namespace();
 
     if (table)
@@ -928,6 +930,8 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
 
     acc = get_random_list_element (account_list);
     xaccTransBeginEdit(trn);
+    if (!xaccTransGetCurrency(trn))
+        xaccTransSetCurrency(trn, xaccAccountGetCommodity(acc));
     s = get_random_split(book, acc, trn);
 
     bcc = get_random_list_element (account_list);
@@ -961,14 +965,14 @@ add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
         amt = val;
     } else {
         gnc_numeric amt2 = xaccSplitGetAmount(s);
-        if (gnc_numeric_positive_p(amt2) ^ gnc_numeric_positive_p(val))
+        if (gnc_numeric_positive_p(amt2) != gnc_numeric_positive_p(val))
             amt = gnc_numeric_neg(amt2);
     }   
     
     if (gnc_numeric_zero_p(val))
         amt = val;
 
-    xaccSplitSetAmount(s, val);
+    xaccSplitSetAmount(s, amt);
     xaccTransCommitEdit(trn);
 }
 
@@ -1438,10 +1442,6 @@ get_random_transaction_with_currency(QofBook *book,
 
     xaccTransBeginEdit(trans);
 
-    xaccTransSetCurrency (trans,
-                          currency ? currency :
-                          get_random_commodity (book));
-
     num = get_random_int_in_range (1, max_trans_num);
     g_snprintf(numstr, 10, "%d", num);
     xaccTransSetNum(trans, numstr);
@@ -1898,26 +1898,19 @@ void
 add_random_transactions_to_book (QofBook *book, gint num_transactions)
 {
   gnc_commodity_table *table;
-  GList *accounts;
 
   if (num_transactions <= 0) return;
 
   g_return_if_fail (book);
 
-  accounts = xaccGroupGetSubAccounts (xaccGetAccountGroup (book));
-  g_return_if_fail (accounts);
-
   table = gnc_commodity_table_get_table (book);
 
   while (num_transactions--)
   {
-    gnc_commodity *com;
     Transaction *trans;
 
-    com = get_random_commodity_from_table (table);
-    trans = get_random_transaction_with_currency (book, com, accounts);
+    trans = get_random_transaction(book);
   }
-  g_list_free (accounts);
 }
 
 void
