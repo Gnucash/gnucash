@@ -106,7 +106,7 @@ static gboolean gnc_tree_view_drop_ok_cb (GtkTreeView *view,
 					  GtkTreeViewColumn *prev_column,
 					  GtkTreeViewColumn *next_column,
 					  gpointer data);
-static void gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
+static void gnc_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
 						  GncTreeView *view);
 static void gnc_tree_view_build_column_menu (GncTreeView *view);
 static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
@@ -594,7 +594,7 @@ gnc_tree_view_drop_ok_cb (GtkTreeView *view,
  *  @internal
  */
 static void
-gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
+gnc_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
 				      GncTreeView *view)
 {
   GncTreeViewPrivate *priv;
@@ -619,6 +619,7 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
     order = GTK_SORT_ASCENDING;
     id = GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID;
   }
+
   column = view_column_find_by_model_id (view, id);
   column_pref_name = g_object_get_data(G_OBJECT(column), PREF_NAME);
 
@@ -648,7 +649,7 @@ gtk_tree_view_sort_column_changed_cb (GtkTreeSortable *treesortable,
  *  @internal
  */
 static void
-gtk_tree_view_columns_changed_cb (GncTreeView *view,
+gnc_tree_view_columns_changed_cb (GncTreeView *view,
 				  gpointer data)
 {
   GncTreeViewPrivate *priv;
@@ -674,7 +675,7 @@ gtk_tree_view_columns_changed_cb (GncTreeView *view,
   //LEAVE(" ");
 }
 
-/** This is the helper function for gtk_tree_view_size_allocate_cb().
+/** This is the helper function for gnc_tree_view_size_allocate_cb().
  *  It compares the actual column width to the width as stored in
  *  gconf.  If the two are different, it the updates gconf with the
  *  actual width.  This will trigger a notification from gconf that
@@ -689,7 +690,7 @@ gtk_tree_view_columns_changed_cb (GncTreeView *view,
  *  @internal
  */
 static void
-gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
+gnc_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
 				    GncTreeView *view)
 {
   GncTreeViewPrivate *priv;
@@ -727,7 +728,7 @@ gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
  *  resizing.
  *
  *  This function simply runs the list of all tree columns, calling the
- *  gtk_tree_view_size_allocate_helper() function on each column.
+ *  gnc_tree_view_size_allocate_helper() function on each column.
  *  There is no callback that can be used for notification of an
  *  individual column change.  Its this or nothing.
  *
@@ -740,7 +741,7 @@ gtk_tree_view_size_allocate_helper (GtkTreeViewColumn *column,
  *  @internal
  */
 static void
-gtk_tree_view_size_allocate_cb (GtkWidget *widget,
+gnc_tree_view_size_allocate_cb (GtkWidget *widget,
 				GtkAllocation *allocation,
 				gpointer data)
 {
@@ -751,7 +752,7 @@ gtk_tree_view_size_allocate_cb (GtkWidget *widget,
 
   view = GNC_TREE_VIEW(widget);
   column_list = gtk_tree_view_get_columns(GTK_TREE_VIEW(view));
-  g_list_foreach(column_list, (GFunc)gtk_tree_view_size_allocate_helper, view);
+  g_list_foreach(column_list, (GFunc)gnc_tree_view_size_allocate_helper, view);
   g_list_free(column_list);
 }
 
@@ -1236,16 +1237,16 @@ gnc_tree_view_set_gconf_section (GncTreeView *view,
   if (model)
     priv->sort_column_changed_cb_id =
       g_signal_connect(GTK_TREE_SORTABLE(model), "sort-column-changed",
-		       (GCallback)gtk_tree_view_sort_column_changed_cb, view);
+		       (GCallback)gnc_tree_view_sort_column_changed_cb, view);
 
   /* Catch changes to the column order. Propagate to gconf */
   id = g_signal_connect(view, "columns-changed",
-			(GCallback)gtk_tree_view_columns_changed_cb, NULL);
+			(GCallback)gnc_tree_view_columns_changed_cb, NULL);
   priv->columns_changed_cb_id = id;
 
   /* Catch changes to the column width. Propagate to gconf */
   id = g_signal_connect(view, "size-allocate",
-			(GCallback)gtk_tree_view_size_allocate_cb, NULL);
+			(GCallback)gnc_tree_view_size_allocate_cb, NULL);
   priv->size_allocate_cb_id = id;
 
   /* Force an update of the view with all items from gconf. */
@@ -1635,7 +1636,7 @@ gnc_tree_view_set_model(GncTreeView *view, GtkTreeModel *model)
   if (model && priv->gconf_section) {
     priv->sort_column_changed_cb_id =
       g_signal_connect(GTK_TREE_SORTABLE(model), "sort-column-changed",
-		       (GCallback)gtk_tree_view_sort_column_changed_cb, view);
+		       (GCallback)gnc_tree_view_sort_column_changed_cb, view);
   }
 }
 
