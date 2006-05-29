@@ -235,7 +235,8 @@ gnc_account_to_ui(AccountWindow *aw)
                                 flag);
 
   gtk_tree_view_collapse_all (aw->parent_tree);
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), account);
+  gnc_tree_view_account_set_selected_account (
+      GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), account);
   LEAVE(" ");
 }
 
@@ -370,7 +371,8 @@ gnc_ui_to_account(AccountWindow *aw)
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->hidden_button));
   xaccAccountSetHidden (account, flag);
 
-  parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  parent_account = gnc_tree_view_account_get_selected_account (
+      GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent_account == aw->top_level_account)
     parent_account = NULL;
 
@@ -416,7 +418,8 @@ gnc_ui_to_account(AccountWindow *aw)
   {
     Account *transfer = NULL;
 
-    transfer = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
+    transfer = gnc_tree_view_account_get_selected_account (
+        GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
     if (!transfer) {
       LEAVE("no transfer account");
       return;
@@ -467,8 +470,8 @@ gnc_finish_ok (AccountWindow *aw,
                                       commodity);
     gnc_account_commodity_from_type (aw, FALSE);
 
-    gnc_tree_view_account_set_selected_account
-      (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
+    gnc_tree_view_account_set_selected_account(
+        GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), parent);
 
     gnc_resume_gui_refresh ();
     LEAVE("1");
@@ -761,8 +764,8 @@ gnc_common_ok (AccountWindow *aw)
   }
 
   /* check for a duplicate name */
-  parent = gnc_tree_view_account_get_selected_account
-    (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  parent = gnc_tree_view_account_get_selected_account(
+      GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent == NULL) {
     account = xaccGetAccountFromFullName(group, name);
   } else {
@@ -859,7 +862,8 @@ gnc_edit_account_ok(AccountWindow *aw)
 
   /* If the new parent's type is not compatible with the new type,
    * the whole sub-tree containing the account must be re-typed. */
-  new_parent = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  new_parent = gnc_tree_view_account_get_selected_account (
+      GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (new_parent != aw->top_level_account)
   {
     int parent_type;
@@ -946,7 +950,8 @@ gnc_new_account_ok (AccountWindow *aw)
     {
       Account *transfer = NULL;
 
-      transfer = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
+      transfer = gnc_tree_view_account_get_selected_account (
+          GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree));
       if (!transfer)
       {
         const char *message = _("You must select a transfer account or choose"
@@ -1194,7 +1199,8 @@ account_commodity_filter (GtkTreeSelection *selection,
     return TRUE;
   }
 
-  account = gnc_tree_view_account_get_account_from_path (GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree), s_path);
+  account = gnc_tree_view_account_get_account_from_path (
+      GNC_TREE_VIEW_ACCOUNT (aw->transfer_tree), s_path);
   if (!account) {
     return FALSE;
   }
@@ -1271,7 +1277,8 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_widget_show (aw->commodity_edit);
 
   label = glade_xml_get_widget (xml, "security_label");
-  gnc_general_select_make_mnemonic_target (GNC_GENERAL_SELECT(aw->commodity_edit), label);
+  gnc_general_select_make_mnemonic_target (
+      GNC_GENERAL_SELECT(aw->commodity_edit), label);
 
   g_signal_connect (G_OBJECT (aw->commodity_edit), "changed",
                     G_CALLBACK (commodity_changed_cb), aw);
@@ -1350,7 +1357,8 @@ get_ui_fullname (AccountWindow *aw)
 
   parent_account = NULL;
 
-  parent_account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
+  parent_account = gnc_tree_view_account_get_selected_account (
+      GNC_TREE_VIEW_ACCOUNT (aw->parent_tree));
   if (parent_account == aw->top_level_account)
     parent_account = NULL;
 
@@ -1526,8 +1534,8 @@ gnc_ui_new_account_window_internal (Account *base_account,
   }
 
   gtk_tree_view_collapse_all (aw->parent_tree);
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT (aw->parent_tree),
-					      base_account);
+  gnc_tree_view_account_set_selected_account (
+      GNC_TREE_VIEW_ACCOUNT (aw->parent_tree), base_account);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
@@ -1720,7 +1728,8 @@ gnc_ui_edit_account_window(Account *account)
   if (parent == NULL)
     parent = aw->top_level_account;
 
-  gnc_tree_view_account_set_selected_account (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent);
+  gnc_tree_view_account_set_selected_account (
+      GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), parent);
 
   gnc_account_window_set_name (aw);
 
