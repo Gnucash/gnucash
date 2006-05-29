@@ -47,20 +47,22 @@
 	 ;;; free-form storage depending on type.
          option-data 
 	 ;; If this is a "multiple choice" type of option,
-	 ;; this should be a vector of the following five functions
-	 ;; one taking no arguments giving the number of choices
-         ;; one taking one argument, a non-negative integer, that
-         ;; returns the scheme value (usually a symbol) matching the
-         ;; nth choice
+	 ;; this should be a vector of the following five functions:
          ;;
-	 ;; one taking one argument, a non-negative integer,
-	 ;; that returns the string matching the nth choice
+	 ;;   the first taking no arguments giving the number of choices
+         ;; 
+         ;;   the second taking one argument, a non-negative integer,
+         ;;   that returns the scheme value (usually a symbol) matching
+         ;;   the nth choice
          ;;
-	 ;; the third takes one argument and returns the description
-	 ;; containing the nth choice
+	 ;;   the third taking one argument, a non-negative integer,
+	 ;;   that returns the string matching the nth choice
+         ;;
+	 ;;   the fourth takes one argument and returns the description
+	 ;;   containing the nth choice
 	 ;;
-	 ;; the fourth giving a possible value and returning the index
-	 ;; if an option doesn't use these,  this should just be a #f
+	 ;;   the fifth giving a possible value and returning the index
+	 ;;   if an option doesn't use these,  this should just be a #f
 	 option-data-fns
          ;; This function should return a list of all the strings
          ;; in the option other than the section, name, (define
@@ -509,14 +511,14 @@
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
-     (lambda () value)
-     (lambda (date)
+     (lambda () value) ;; getter
+     (lambda (date)    ;; setter
        (if (date-legal date)
            (set! value date)
            (gnc:error "Illegal date value set:" date)))
      default-getter
-     (gnc:restore-form-generator value->string)
-     (lambda (f p)
+     (gnc:restore-form-generator value->string) ;; generate-restore-form
+     (lambda (f p)     ;; scm->kvp
        (gnc:kvp-frame-set-slot-path f (symbol->string (car value))
 				    (append p '("type")))
        (gnc:kvp-frame-set-slot-path f
@@ -524,18 +526,18 @@
 					(symbol->string (cdr value))
 					(cdr value))
 				    (append p '("value"))))
-     (lambda (f p)
+     (lambda (f p)     ;; kvp->scm
        (let ((t (gnc:kvp-frame-get-slot-path f (append p '("type"))))
 	     (v (gnc:kvp-frame-get-slot-path f (append p '("value")))))
 	 (if (and t v (string? t))
 	     (set! value (cons (string->symbol t)
 			       (if (string? v) (string->symbol v) v))))))
-     (lambda (date)
+     (lambda (date)    ;; value-validator
        (if (date-legal date)
            (list #t date)
            (list #f "date-option: illegal date")))
-     (vector subtype show-time relative-date-list) 
-     (vector (lambda () (length relative-date-list))
+     (vector subtype show-time relative-date-list)        ;; option-data 
+     (vector (lambda () (length relative-date-list))      ;; option-data-fns
              (lambda (x) (list-ref relative-date-list x))
              (lambda (x) (gnc:get-relative-date-string
                           (list-ref relative-date-list x)))
