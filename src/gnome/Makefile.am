@@ -94,9 +94,6 @@ gnomeapp_DATA = $(gnomeapp_in_files:.desktop.in=.desktop)
 
 appicondir = $(datadir)/pixmaps
 
-mimedir = $(datadir)/mime-info
-mime_DATA = gnucash.keys gnucash.mime
-
 noinst_HEADERS = \
   dialog-chart-export.h \
   dialog-fincalc.h \
@@ -129,8 +126,6 @@ noinst_HEADERS = \
 
 EXTRA_DIST = \
   gnucash.desktop.in \
-  gnucash.keys.in \
-  gnucash.mime \
   ${gwmod_DATA}
 
 
@@ -166,17 +161,6 @@ AM_CFLAGS = \
 # The line below breaks automake 1.5.  
 ##OMIT_DEPENDENCIES = gnc-dir.h
 
-## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
-## from substituting the values directly into the left-hand sides of
-## the sed substitutions.
-gnucash.keys: gnucash.keys.in ${top_builddir}/config.status Makefile
-	rm -f $@.tmp
-	sed < $< > $@.tmp \
-            -e 's:@-icondir-@:${appicondir}:g'
-	chmod +x $@.tmp
-	mv $@.tmp $@
-
 noinst_DATA = .scm-links
 
 if GNUCASH_SEPARATE_BUILDDIR
@@ -206,5 +190,5 @@ gw-gnc.scm gw-gnc.h gw-gnc.c gw-gnc.html: \
            (primitive-load \"./gw-gnc-spec.scm\") \
            (gw:generate-wrapset \"gw-gnc\")"
 BUILT_SOURCES = gw-gnc.scm gw-gnc.h gw-gnc.c
-CLEANFILES = gnucash.keys gnucash.desktop gnucash g-wrapped .scm-links
+CLEANFILES = gnucash.desktop gnucash g-wrapped .scm-links
 DISTCLEANFILES = ${SCM_FILE_LINKS} gw-gnc.html
