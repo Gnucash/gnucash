@@ -2,6 +2,8 @@
 
 	* po/es.po:  Updated Spanish Translation from Eneko Lacunza
 
+	* src/business/business-core/gncAddress.c: remove some duplicated code.
+
 2006-05-30  David Hampton  <hampton@employees.org>
 
 	* various: Update the help file names now that the docs are xml
