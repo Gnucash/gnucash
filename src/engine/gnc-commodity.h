@@ -884,6 +884,8 @@ gboolean gnc_commodity_table_register (void);
 
 void gnc_commodity_begin_edit (gnc_commodity *cm);
 void gnc_commodity_commit_edit (gnc_commodity *cm);
+
+void gnc_commodity_apply_hack_for_1_8(gnc_commodity *cm);
 		  
 /** @} */
 

@@ -1771,6 +1771,24 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBook *book)
   return TRUE;
 }
 
+/* This hack deals with the movement of the "get_quote" flag from
+   Account to gnc_commodity.  It only needs to be applied to
+   commodities used for accounts in 1.8 data files.
+
+   References: http://svn.gnucash.org/trac/changeset/8292
+   http://bugzilla.gnome.org/show_bug.cgi?id=333572 */
+void 
+gnc_commodity_apply_hack_for_1_8(gnc_commodity *com)
+{
+  if (gnc_commodity_is_iso(com)) {
+    /* compatability hack - Gnucash 1.8 gets currency quotes when a
+       non-default currency is assigned to an account.  */
+    gnc_commodity_set_quote_flag(com, TRUE);
+    gnc_commodity_set_quote_source(com, 
+        gnc_commodity_get_default_quote_source(com));
+  }
+}
+
 /********************************************************************
  ********************************************************************/
 /* QofObject function implementation and registration */

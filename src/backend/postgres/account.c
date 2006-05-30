@@ -307,8 +307,10 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccAccountSetDescription(acc, DB_GET_VAL("description",j));
    xaccAccountSetCode(acc, DB_GET_VAL("accountCode",j));
    xaccAccountSetType(acc, xaccAccountStringToEnum(DB_GET_VAL("type",j)));
-   if (commodity)
+   if (commodity) {
      xaccAccountSetCommodity(acc, commodity);
+     gnc_commodity_apply_hack_for_1_8(commodity);
+   }
    xaccAccountSetVersion(acc, atoi(DB_GET_VAL("version",j)));
    acc->idata = atoi(DB_GET_VAL("iguid",j));
 
@@ -380,6 +382,7 @@ pgendGetAccounts (PGBackend *be, QofBook *book)
       if (commodity)
       {
         xaccAccountSetCommodity (ri->account, commodity);
+        gnc_commodity_apply_hack_for_1_8(commodity);
       }
       else
       {

@@ -249,6 +249,7 @@ account_commodity_handler (xmlNodePtr node, gpointer act_pdata)
 
     ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
     xaccAccountSetCommodity(pdata->account, ref);
+    gnc_commodity_apply_hack_for_1_8(ref);
 
     return TRUE;
 }
@@ -309,6 +310,7 @@ deprecated_account_security_handler (xmlNodePtr node, gpointer act_pdata)
     if (!xaccAccountGetCommodity(pdata->account)) {
         ref = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
         xaccAccountSetCommodity(pdata->account, ref);
+        gnc_commodity_apply_hack_for_1_8(ref);
     }
 
     return TRUE;
