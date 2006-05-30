@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash-1.9.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-04-16 17:51-0600\n"
-"PO-Revision-Date: 2006-05-25 23:01+0200\n"
+"PO-Revision-Date: 2006-05-30 21:48+0200\n"
 "Last-Translator: Eneko Lacunza <enlar@enlar.net>\n"
 "Language-Team: spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -64,27 +64,27 @@ msgstr "Error numérico"
 #. colon. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:501
 msgid "not cleared:n"
-msgstr "no punteado:n"
+msgstr "n"
 
 #. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:503
 msgid "cleared:c"
-msgstr "punteado:p"
+msgstr "p"
 
 #. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:505
 msgid "reconciled:y"
-msgstr "conciliado:y"
+msgstr "s"
 
 #. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:507
 msgid "frozen:f"
-msgstr "frozen:f"
+msgstr "b"
 
 #. Please only translate the letter *after* the colon.
 #: ../src/app-utils/gnc-ui-util.c:509
 msgid "void:v"
-msgstr "void:i"
+msgstr "i"
 
 #: ../src/app-utils/gnc-ui-util.c:550 ../src/gnome/dialog-chart-export.c:44
 msgid "Opening Balances"
@@ -2390,7 +2390,7 @@ msgstr "_Cantidad"
 #: ../src/register/ledger-core/split-register.c:1710
 #: ../src/register/ledger-core/split-register.c:1712
 msgid "_Price"
-msgstr "_Cotización"
+msgstr "_Precio"
 
 #: ../src/business/business-gnome/gnc-plugin-page-invoice.c:164
 #: ../src/gnome/glade/register.glade.h:18
@@ -2917,7 +2917,7 @@ msgstr "Selecciones como calcular el Descuento y los Impuestos."
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:661
 msgid "Enter the unit-Price for this Entry"
-msgstr "Introduzca la cotización unitaria de este elemento"
+msgstr "Introduzca el precio unitario de este elemento"
 
 #: ../src/business/business-ledger/gncEntryLedgerModel.c:673
 msgid "Enter the Quantity of units for this Entry"
@@ -5092,7 +5092,7 @@ msgstr "Colores del _modo doble alternan con asientos"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:60
 msgid "Draw _vertical lines between columns"
-msgstr "Dibujar líneas_verticales entre columnas"
+msgstr "Dibujar líneas _verticales entre columnas"
 
 #: ../src/gnome-utils/glade/preferences.glade.h:61
 msgid "Draw hori_zontal lines between rows"
@@ -6225,7 +6225,7 @@ msgstr "_Cerrar"
 
 #: ../src/gnome-utils/gnc-main-window.c:240
 msgid "Close the currently active page"
-msgstr "Cerrar la página actual"
+msgstr "Cerrar la pestaña actual"
 
 #: ../src/gnome-utils/gnc-main-window.c:242
 msgid "_Quit"
@@ -6274,7 +6274,7 @@ msgstr "_Ordenar por..."
 
 #: ../src/gnome-utils/gnc-main-window.c:264
 msgid "Select sorting criteria for this page view"
-msgstr "Seleccionar el criterio de ordenación para esta vista de página"
+msgstr "Seleccionar el criterio de ordenación para esta vista"
 
 #. View menu
 #: ../src/gnome-utils/gnc-main-window.c:265
@@ -6314,11 +6314,11 @@ msgstr ""
 
 #: ../src/gnome-utils/gnc-main-window.c:277
 msgid "Re_name Page"
-msgstr "Re_nombrar página"
+msgstr "Re_nombrar pestaña"
 
 #: ../src/gnome-utils/gnc-main-window.c:278
 msgid "Rename this page."
-msgstr "Cambiar el nombre a esta página"
+msgstr "Cambiar el nombre a esta pestaña"
 
 #. Windows menu
 #: ../src/gnome-utils/gnc-main-window.c:283
@@ -6331,11 +6331,11 @@ msgstr "Abrir una nueva ventana GnuCash de nivel superior."
 
 #: ../src/gnome-utils/gnc-main-window.c:286
 msgid "New Window with _Page"
-msgstr "Nueva ventana con _página"
+msgstr "Nueva ventana con _pestaña"
 
 #: ../src/gnome-utils/gnc-main-window.c:287
 msgid "Move the current page to a new top-level GnuCash window."
-msgstr "Mover la página actual a una ventana nueva de GnuCash."
+msgstr "Mover la pestaña actual a una ventana nueva de GnuCash."
 
 #. Help menu
 #: ../src/gnome-utils/gnc-main-window.c:292
@@ -6961,7 +6961,7 @@ msgstr "Todas las cuentas"
 
 #: ../src/gnome/dialog-find-transactions.c:108
 msgid "Balanced"
-msgstr "Saldado"
+msgstr "Cuadrado"
 
 #: ../src/gnome/dialog-find-transactions.c:111
 #: ../src/gnome/gnc-plugin-page-register.c:334
@@ -7003,12 +7003,12 @@ msgstr "Valor"
 #, c-format
 msgid "Are you sure you want to delete the %d selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "¿Está seguro de que quiere borrar el precio seleccionado?"
-msgstr[1] "¿Está seguro de que quiere borrar los %d precios seleccionados?"
+msgstr[0] "¿Está seguro de que quiere borrar la cotización seleccionada?"
+msgstr[1] "¿Está seguro de que quiere borrar las %d cotizaciones seleccionadas?"
 
 #: ../src/gnome/dialog-price-edit-db.c:179
 msgid "Delete prices?"
-msgstr "¿Borrar precios?"
+msgstr "¿Borrar cotizaciones?"
 
 #: ../src/gnome/dialog-price-editor.c:176
 msgid "You must select a commodity."
@@ -7473,7 +7473,7 @@ msgstr "Debe introducir una cantidad a distribuir."
 
 #: ../src/gnome/druid-stock-split.c:310
 msgid "You must either enter a valid price or leave it blank."
-msgstr "Debe introducir un precio válido o dejarlo en blanco."
+msgstr "Debe introducir una cotización válida o dejarlo en blanco."
 
 #: ../src/gnome/druid-stock-split.c:319
 msgid "The price must be positive."
@@ -7497,7 +7497,7 @@ msgstr "Debe seleccionar una cuenta de activo para el efectivo recibido."
 
 #: ../src/gnome/druid-stock-split.c:479
 msgid "Error adding price."
-msgstr "Error al añadir precio."
+msgstr "Error al añadir cotización."
 
 #: ../src/gnome/druid-stock-split.c:754
 msgid "You don't have any stock accounts with balances!"
@@ -7561,7 +7561,7 @@ msgstr "<b>Identificación</b>"
 
 #: ../src/gnome/glade/account.glade.h:15
 msgid "<b>Initial Balance Transfer</b>"
-msgstr "<b>Transferencia inicial de saldos</b>"
+msgstr "<b>Asiento de saldo inicial</b>"
 
 #: ../src/gnome/glade/account.glade.h:16
 msgid "<b>New Account Currency</b>"
@@ -7645,7 +7645,7 @@ msgid ""
 msgstr ""
 "Si quiere que una cuenta tenga una saldo de apertura, haga click en la "
 "cuenta e introduzca el saldo de comienzo en la caja de la derecha. Todas las "
-"cuentas excepto las cuentas Capitalización y contenedor pueden tener un "
+"cuentas excepto las cuentas de Patrimonio y contenedor pueden tener un "
 "valor de apertura."
 
 #: ../src/gnome/glade/account.glade.h:36
@@ -7661,7 +7661,7 @@ msgstr ""
 "Si quiere que una cuenta tenga un saldo de apertura, haga click en la fila "
 "que contiene la cuenta, haga click de nuevo en la columna de saldo de "
 "apertura e introduzca el saldo de comienzo en la caja de la derecha. Todas "
-"las cuentas excepto las cuentas de patrimonio y las cuentas contenedor "
+"las cuentas excepto las cuentas de Patrimonio y las cuentas contenedor "
 "pueden tener un saldo de apertura.\n"
 "\n"
 "Si quiere que una cuenta sea una cuenta contenedor, simplemente haga click "
@@ -8518,7 +8518,7 @@ msgstr "_Abrir el tutorial para nuevos usuarios"
 
 #: ../src/gnome/glade/price.glade.h:1
 msgid "Add a new price."
-msgstr "Añadir un precio nuevo."
+msgstr "Añadir una cotización nueva."
 
 #: ../src/gnome/glade/price.glade.h:2
 msgid ""
@@ -8540,7 +8540,7 @@ msgstr "Borrar ú_ltima cotización para un valor"
 
 #: ../src/gnome/glade/price.glade.h:9
 msgid "Delete _manually entered prices"
-msgstr "Borrar precios introducidos a _mano"
+msgstr "Borrar cotizaciones introducidas a _mano"
 
 #: ../src/gnome/glade/price.glade.h:10
 msgid "Delete all stock prices based upon the critera below:"
@@ -8548,7 +8548,7 @@ msgstr "Borrar todas las cotizaciones de los valores basándose en el criterio si
 
 #: ../src/gnome/glade/price.glade.h:11
 msgid "Edit the current price."
-msgstr "Editar el precio actual."
+msgstr "Editar la cotización actual."
 
 #: ../src/gnome/glade/price.glade.h:12
 msgid "Get _Quotes"
@@ -8586,7 +8586,7 @@ msgstr "Borrar cotizaciones más viejas que una fecha introducida por el usuario"
 
 #: ../src/gnome/glade/price.glade.h:19
 msgid "Remove the current price"
-msgstr "Eliminar el precio actual"
+msgstr "Eliminar la cotización actual"
 
 #: ../src/gnome/glade/price.glade.h:20
 msgid "S_ource:"
@@ -8594,7 +8594,7 @@ msgstr "_Origen:"
 
 #: ../src/gnome/glade/price.glade.h:23
 msgid "_Price:"
-msgstr "_Precio:"
+msgstr "_Cotización:"
 
 #: ../src/gnome/glade/print.glade.h:1
 msgid "Amount (_numbers):"
@@ -8733,7 +8733,7 @@ msgstr "Diferencia:"
 #: ../src/gnome/glade/reconcile.glade.h:10
 #: ../src/gnome/window-reconcile.c:1670
 msgid "Ending Balance:"
-msgstr "Saldo Final:"
+msgstr "Saldo final:"
 
 #: ../src/gnome/glade/reconcile.glade.h:11 ../src/gnome/window-reconcile.c:722
 msgid "Enter _Interest Payment..."
@@ -10016,12 +10016,12 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
-"Si quiere guardar un precio de las acciones para el canje, introdúzcalo "
+"Si quiere guardar una cotización de las acciones para el canje, introdúzcalo "
 "debajo. Puede dejarlo en blanco con seguridad."
 
 #: ../src/gnome/glade/stocks.glade.h:11
 msgid "New _Price:"
-msgstr "_Precio nuevo:"
+msgstr "_Cotización nueva:"
 
 #: ../src/gnome/glade/stocks.glade.h:12
 msgid "Select the account for which you want to record a stock split or merger."
@@ -10766,7 +10766,7 @@ msgid ""
 "because that will cause your reconciled balance to be off."
 msgstr ""
 "Este asiento contiene anotaciones conciliadas. Modificarlo no es una buena "
-"idea, puesto que haría que su balance conciliado se perdiera."
+"idea, puesto que haría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1012
 msgid "_Remove Splits"
@@ -10783,7 +10783,7 @@ msgid ""
 "cause your reconciled balance to be off."
 msgstr ""
 "¡Estaría borrando una anotación conciliada! No es una buena idea puesto que "
-"causaría que su balance conciliado se perdiera."
+"causaría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1091
 msgid "You cannot delete this split."
@@ -10823,7 +10823,7 @@ msgid ""
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
 "¡Estaría borrando un asiento con anotaciones conciliadas! Esto no es una "
-"buena idea, puesto que haría que su balance conciliado se perdiera."
+"buena idea, puesto que haría que su saldo conciliado se perdiera."
 
 #: ../src/gnome/gnc-split-reg.c:1813
 msgid "Present:"
@@ -11555,8 +11555,8 @@ msgstr ""
 "Esta opción permite invertir el signo algunas cuentas de positivo a "
 "negativo, o viceversa. El valor «ingreso_gasto» es para usuarios que quieren "
 "ver gastos negativos e ingresos positivos. El valor «abono» es para usuarios "
-"que quieren balances que reflejen el estado de débito/abono de la cuenta. El "
-"valor «ninguno» no invierte el signo de ningún balance."
+"que quieren saldos que reflejen el estado de débito/abono de la cuenta. El "
+"valor «ninguno» no invierte el signo de ningún saldo."
 
 #: ../src/gnome/schemas/apps_gnucash_general.schemas.in.h:47
 msgid ""
@@ -11686,7 +11686,7 @@ msgstr "Borrar un asiento"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:7
 msgid "Delete multiple price quotes"
-msgstr "Borrar múltiples precios de cotización"
+msgstr "Borrar múltiples cotizaciones"
 
 #: ../src/gnome/schemas/apps_gnucash_warnings.schemas.in.h:8
 msgid "Duplicating a changed invoice_entry"
@@ -11954,7 +11954,7 @@ msgstr "Tipo de entidad no soportado: %s"
 #: ../src/gnome/top-level.c:184
 #, c-format
 msgid "No such price: %s"
-msgstr "No existe el precio: %s"
+msgstr "No existe la cotización: %s"
 
 #: ../src/gnome/top-level.c:369
 #, c-format
@@ -12013,11 +12013,11 @@ msgstr "¿Está seguro de que quiere borrar el asiento actual?"
 #. reconciled balance title/value
 #: ../src/gnome/window-reconcile.c:1680
 msgid "Reconciled Balance:"
-msgstr "Saldo Conciliado:"
+msgstr "Saldo conciliado:"
 
 #: ../src/gnome/window-reconcile.c:1872
 msgid "The account is not balanced. Are you sure you want to finish?"
-msgstr "Esta cuenta no está balanceada. ¿Está seguro de que desea terminar?"
+msgstr "Esta cuenta no está cuadrada. ¿Está seguro de que desea terminar?"
 
 #: ../src/gnome/window-reconcile.c:1929
 msgid "Do you want to postpone this reconciliation and finish it later?"
@@ -12033,9 +12033,7 @@ msgstr ""
 
 #: ../src/gnome/window-reconcile.c:1988
 msgid "Change the reconcile information including statement date and ending balance."
-msgstr ""
-"Cambiar la información del cuadre incluyendo fecha de ejecución y acabando "
-"balance."
+msgstr "Cambiar la información de la conciliación incluyendo fecha de ejecución y saldo final."
 
 #: ../src/gnome/window-reconcile.c:1992
 msgid "Finish the reconciliation of this account"
@@ -12351,7 +12349,7 @@ msgstr "Anotaciones que podrían concordar con el asiento seleccionado:"
 
 #: ../src/import-export/generic-import.glade.h:47
 msgid "R"
-msgstr "R"
+msgstr "C"
 
 #: ../src/import-export/generic-import.glade.h:48
 msgid "Red"
@@ -12363,7 +12361,7 @@ msgstr "Seleccione «A» para añadir el asiento como nuevo."
 
 #: ../src/import-export/generic-import.glade.h:50
 msgid "Select \"R\" to reconcile a matching transaction."
-msgstr "Seleccione «R» para reconciliar el asiento coincidente."
+msgstr "Seleccione «C» para conciliar el asiento coincidente."
 
 #: ../src/import-export/generic-import.glade.h:52
 msgid "Select Import Action"
@@ -12994,7 +12992,7 @@ msgstr ""
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:288
 #, c-format
 msgid "For your information: This account also has a noted balance of %s\n"
-msgstr "Para su información: esta cuenta también tiene un balance anotado de %s\n"
+msgstr "Para su información: esta cuenta también tiene un saldo anotado de %s\n"
 
 #: ../src/import-export/hbci/gnc-hbci-getbalance.c:293
 msgid ""
@@ -13795,7 +13793,7 @@ msgstr ""
 "programa de finanzas personales, incluyendo una cuenta separada para cada "
 "valor que tenga, cuentas separadas para comisiones por intermediación, "
 "cuentas de «Patrimonio» especiales (subcuentas de Ingresos Retenidos, por "
-"omisión) que son la fuente de sus balances de apertura, etc. Todas esas "
+"omisión) que son la fuente de sus saldos de apertura, etc. Todas esas "
 "cuentas aparecerán en la siguiente página así que puede cambiarlos si así lo "
 "quiere, pero es seguro dejarlos tal como están.\n"
 
@@ -13977,43 +13975,43 @@ msgstr "Retorno de Capital"
 #. really be translated, and if yes, into which translation.
 #: ../src/import-export/qif/qif-parse.c:102
 msgid "type:bank"
-msgstr "tipo:banco"
+msgstr "type:bank"
 
 #: ../src/import-export/qif/qif-parse.c:103
 msgid "type:cash"
-msgstr "tipo:metálico"
+msgstr "type:cash"
 
 #: ../src/import-export/qif/qif-parse.c:104
 msgid "type:ccard"
-msgstr "tipo:t.crédito"
+msgstr "type:ccard"
 
 #: ../src/import-export/qif/qif-parse.c:105
 msgid "type:invst"
-msgstr "tipo:invers."
+msgstr "type:invst"
 
 #: ../src/import-export/qif/qif-parse.c:106
 msgid "type:port"
-msgstr ""
+msgstr "type:port"
 
 #: ../src/import-export/qif/qif-parse.c:107
 msgid "type:oth a"
-msgstr ""
+msgstr "type:oth a"
 
 #: ../src/import-export/qif/qif-parse.c:108
 msgid "type:oth l"
-msgstr ""
+msgstr "type:oth l"
 
 #: ../src/import-export/qif/qif-parse.c:109
 msgid "type:class"
-msgstr "tipo:clase"
+msgstr "type:class"
 
 #: ../src/import-export/qif/qif-parse.c:110
 msgid "type:cat"
-msgstr ""
+msgstr "type:cat"
 
 #: ../src/import-export/qif/qif-parse.c:111
 msgid "type:security"
-msgstr "tipo:valor"
+msgstr "type:security"
 
 #: ../src/import-export/qif/qif-parse.c:112
 msgid "account"
@@ -14021,11 +14019,11 @@ msgstr "cuenta"
 
 #: ../src/import-export/qif/qif-parse.c:113
 msgid "option:autoswitch"
-msgstr ""
+msgstr "option:autoswitch"
 
 #: ../src/import-export/qif/qif-parse.c:114
 msgid "clear:autoswitch"
-msgstr ""
+msgstr "clear:autoswitch"
 
 #: ../src/import-export/qif/qif-parse.c:660
 msgid "The Date format is ambiguous.  Please choose the correct format."
@@ -14376,7 +14374,7 @@ msgid ""
 "reconciliation difficult!  Continue with this change?"
 msgstr ""
 "Va a cambiar una anotación conciliada.  ¡Hacerlo puede dificultar "
-"reconciliaciones futuras! ¿Continuar con este cambio?"
+"conciliaciones futuras! ¿Continuar con este cambio?"
 
 #: ../src/register/ledger-core/split-register-model.c:1686
 msgid "Chan_ge Split"
@@ -15620,7 +15618,7 @@ msgstr "XML"
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:342 ../intl-scm/guile-strings.c:432
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr "Esta página muestra sus ingresos imponibles y gastos deducibles."
+msgstr "Esta pestaña muestra sus ingresos imponibles y gastos deducibles."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #: ../intl-scm/guile-strings.c:416
@@ -15874,7 +15872,7 @@ msgstr "%s a %s"
 #: ../intl-scm/guile-strings.c:496
 #, c-format
 msgid "Balances %s to %s"
-msgstr "Saldos de %s a %s"
+msgstr "Saldos de %s al %s"
 
 #. src/report/standard-reports/category-barchart.scm
 #. src/report/standard-reports/account-piecharts.scm
@@ -16331,7 +16329,7 @@ msgstr "Informe de ingresos"
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:682 ../intl-scm/guile-strings.c:2020
 msgid "Balance Sheet"
-msgstr "Hoja de Balance"
+msgstr "Hoja de saldos"
 
 #. src/report/standard-reports/trial-balance.scm
 #. src/report/standard-reports/equity-statement.scm
@@ -16517,7 +16515,7 @@ msgstr ""
 #. src/report/standard-reports/price-scatter.scm
 #: ../intl-scm/guile-strings.c:778
 msgid "Price Scatterplot"
-msgstr "Diagrama de dispersión de precios"
+msgstr "Diagrama de dispersión de cotizaciones"
 
 #. src/report/standard-reports/net-barchart.scm
 #: ../intl-scm/guile-strings.c:780
@@ -16858,7 +16856,7 @@ msgstr "Número máximo de porciones en diagrama de tarta"
 #: ../intl-scm/guile-strings.c:1036
 #, c-format
 msgid "Balance at %s"
-msgstr "Saldo en %s"
+msgstr "Saldo el %s"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/transaction.scm
@@ -16923,7 +16921,7 @@ msgstr "Código de otra cuenta"
 #: ../intl-scm/guile-strings.c:1502 ../intl-scm/guile-strings.c:1574
 #: ../intl-scm/guile-strings.c:1844
 msgid "Running Balance"
-msgstr "Balance actual"
+msgstr "Saldo actual"
 
 #. src/report/standard-reports/general-ledger.scm
 #. src/report/standard-reports/register.scm
@@ -17056,7 +17054,7 @@ msgstr "Cuentas de acciones para el informe"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: ../intl-scm/guile-strings.c:1122 ../intl-scm/guile-strings.c:1210
 msgid "Include accounts that have a zero share balances."
-msgstr "Incluir las cuentas que tengan balances de cero acciones."
+msgstr "Incluir las cuentas que tengan saldos de cero acciones."
 
 #. src/report/standard-reports/portfolio.scm
 #. src/report/standard-reports/advanced-portfolio.scm
@@ -17451,7 +17449,7 @@ msgstr "Mostrar Dos Columnas"
 #. src/report/standard-reports/transaction.scm
 #: ../intl-scm/guile-strings.c:1450 ../intl-scm/guile-strings.c:1846
 msgid "Display a running balance"
-msgstr "Mostrar el balance actual"
+msgstr "Mostrar el saldo actual"
 
 #. src/report/standard-reports/register.scm
 #. src/report/standard-reports/transaction.scm
@@ -18092,7 +18090,7 @@ msgstr "Pérdidas retenidas"
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2124
 msgid "Total Equity"
-msgstr "Total Equity"
+msgstr "Total patrimonio"
 
 #. src/report/standard-reports/balance-sheet.scm
 #: ../intl-scm/guile-strings.c:2126
@@ -18639,7 +18637,7 @@ msgstr ""
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2732
 msgid "Include sub-account balances in printed balance?"
-msgstr "¿Incluir los balances de las subcuentas en el balance impreso?"
+msgstr "¿Incluir los saldos de las subcuentas en el saldo mostrado?"
 
 #. src/report/report-system/options-utilities.scm
 #: ../intl-scm/guile-strings.c:2734
@@ -19003,20 +19001,12 @@ msgstr ""
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:2952 ../intl-scm/guile-strings.c:2954
 msgid "There was a system error while retrieving the price quotes."
-msgstr ""
-"Hubo un error al escribir el archivo\n"
-"     %s\n"
-"\n"
-"%s"
+msgstr "Error del sistema al obtener las cotizaciones."
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:2956 ../intl-scm/guile-strings.c:2958
 msgid "There was an unknown error while retrieving the price quotes."
-msgstr ""
-"Hubo un error al escribir el archivo\n"
-"     %s\n"
-"\n"
-"%s"
+msgstr "Error desconocido al obtener las cotizaciones."
 
 #. src/scm/price-quotes.scm
 #: ../intl-scm/guile-strings.c:2964 ../intl-scm/guile-strings.c:2968
@@ -19288,12 +19278,12 @@ msgstr "Cantidad total debida a/por Empresa"
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3138
 msgid "Bracket Total Owed"
-msgstr ""
+msgstr "Deuda total del periodo"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3140
 msgid "Amount owed in oldest bracket - if same go to next oldest"
-msgstr ""
+msgstr "Cantidad debida en el periodo más antiguo; si es la misma ir al siguiente más antiguo."
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3142
