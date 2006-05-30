@@ -1,3 +1,10 @@
+2006-05-30  David Hampton  <hampton@employees.org>
+
+	* various: Update the help file names now that the docs are xml
+	instead of html.  Fixes #343255.
+
+	* src/scm: Remove old help-topics-index files.
+
 2006-05-29  Joshua Sled  <jsled@asynchronous.org>
 
 	* packaging/gnucash-1.9.x.ebuild: Remove support for being a

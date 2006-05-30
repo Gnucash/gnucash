@@ -1282,7 +1282,7 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 {
   switch (response) {
    case GTK_RESPONSE_HELP:
-     gnc_gnome_help(HF_CUSTOM, HL_GLOBPREFS);
+     gnc_gnome_help(HF_HELP, HL_GLOBPREFS);
      break;
 
    default:

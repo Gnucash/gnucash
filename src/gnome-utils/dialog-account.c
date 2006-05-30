@@ -990,11 +990,11 @@ gnc_account_window_response_cb (GtkDialog *dialog,
 			switch (aw->dialog_type) {
 				case NEW_ACCOUNT:
 					DEBUG("new acct dialog, HELP");
-					gnc_gnome_help(HF_USAGE, HL_ACC);
+					gnc_gnome_help(HF_HELP, HL_ACC);
 					break;
 				case EDIT_ACCOUNT:
 					DEBUG("edit acct dialog, HELP");
-					gnc_gnome_help(HF_USAGE, HL_ACCEDIT);
+					gnc_gnome_help(HF_HELP, HL_ACCEDIT);
 					break;
 				default:
 					g_assert_not_reached ();
