@@ -391,9 +391,9 @@ qof_util_string_cache_remove(gconstpointer key)
 gpointer
 qof_util_string_cache_insert(gconstpointer key)
 {
-    if (key)
-        return g_cache_insert(qof_util_get_string_cache(), (gpointer)key);
-    return NULL;
+    static gchar* blank = "";
+    return g_cache_insert(qof_util_get_string_cache(), 
+                          (gpointer) (key ? key : blank));
 }
 
 gchar*
