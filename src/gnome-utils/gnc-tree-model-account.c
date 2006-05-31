@@ -1426,41 +1426,6 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 /*   Account Tree Model - Engine Event Handling Functions   */
 /************************************************************/
 
-/** This function performs common updating to the model after an
- *  account has been added or removed.  The parent entry needs to be
- *  tapped on the shoulder so that it can correctly update the
- *  disclosure triangle (first added child/last removed child) or
- *  possibly rebuild its child list of that level of accounts is
- *  visible.
- *
- *  @internal
- *
- *  @param model The account tree model containing the account that
- *  has been added or deleted.
- *
- *  @param path The path to the newly added item, or the just removed
- *  item.
- */
-static void
-gnc_tree_model_account_path_changed (GncTreeModelAccount *model,
-				     GtkTreePath *path)
-{
-  GtkTreeIter iter;
-
-  while (gtk_tree_path_get_depth(path) > 0) {
-    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path))
-      break;
-    gtk_tree_model_row_changed (GTK_TREE_MODEL(model), path, &iter);
-    gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
-    gtk_tree_path_up(path);
-  }
-
-  do {
-    model->stamp++;
-  } while (model->stamp == 0);
-}
-
-
 /** This function is the handler for all event messages from the
  *  engine.  Its purpose is to update the account tree model any time
  *  an account is added to the engine or deleted from the engine.
@@ -1533,8 +1498,10 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
 	break;
       }
       gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-      if (gtk_tree_path_up (path))
-	gnc_tree_model_account_path_changed(model, path);
+      if (gtk_tree_path_up (path) &&
+	  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path) &&
+	  gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter) == 1)
+	gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
       break;
 
     case QOF_EVENT_REMOVE:
@@ -1550,7 +1517,10 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
       }
       gtk_tree_path_append_index (path, ed->idx);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
-      gnc_tree_model_account_path_changed(model, path);
+      if (gtk_tree_path_up (path) &&
+	  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path) &&
+	  gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter) == 0)
+	gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
       break;
 
     case QOF_EVENT_MODIFY:

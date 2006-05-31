@@ -1,3 +1,12 @@
+2006-05-31  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-tree-model-account.c: Replace
+	  gnc_tree_model_account_path_changed with manual checks whether
+	  the inserted (resp. deleted) account is the first (resp. last)
+	  account in its level and call gtm_row_has_child_toggled only in
+	  these cases. Might fix #343405, as GtkTreeModelFilter seems to
+	  make (false) assumptions when being woken up too often.
+
 2006-05-31  Derek Atkins  <derek@ihtfp.com>
 
 	* po/es.po:  Updated Spanish Translation from Eneko Lacunza
