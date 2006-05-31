@@ -73,8 +73,8 @@ xaccSchedXactionInit(SchedXaction *sx, QofBook *book)
    /* THREAD-UNSAFE */
    xaccAccountSetName( sx->template_acct,
                        guid_to_string( &sx->inst.entity.guid ));
-   xaccAccountSetCommodity
-     (sx->template_acct,
+   xaccAccountSetCommodity(
+      sx->template_acct,
       gnc_commodity_new( book,
 			 "template", "template",
                          "template", "template", 1 ) );
