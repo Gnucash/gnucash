@@ -565,9 +565,6 @@ get_random_commodity (QofBook *book)
     g_free(name);
     g_free(cusip);
 
-    if (table)
-      ret = gnc_commodity_table_insert (table, ret);
-
     return ret;
 }
 
@@ -622,9 +619,7 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
     {
       gnc_commodity *com = com_node->data;
 
-      gnc_commodity_table_remove (table, com);
       make_random_changes_to_commodity (com);
-      gnc_commodity_table_insert (table, com);
     }
 
     g_list_free (commodities);

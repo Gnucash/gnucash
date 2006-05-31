@@ -325,8 +325,7 @@ remove_unneeded_commodities(QofSession * session)
                                           add_commodity_to_delete, &cdi);
 
     for (node = cdi.to_delete; node; node = node->next)
-        gnc_commodity_table_remove(gnc_book_get_commodity_table(book),
-                                   node->data);
+        gnc_commodity_destroy(node->data);
 
     g_list_free(cdi.to_delete);
     g_hash_table_destroy(cdi.hash);

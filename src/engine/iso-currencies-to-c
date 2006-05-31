@@ -46,10 +46,6 @@ exec guile -s $0 "$@"
                                          ~S);\n
     if(!c) {
       PWARN(\"failed to create commodity for currency %s\", fullname);
-    } else {
-      if(!gnc_commodity_table_insert(table, c)) {
-        PWARN(\"failed to insert %s into commodity table\", fullname);
-      }
     }
   }\n"
          fullname

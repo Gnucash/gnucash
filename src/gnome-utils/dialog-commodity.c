@@ -1204,9 +1204,6 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     } else {
       c = w->edit_commodity;
       gnc_commodity_begin_edit(c);
-
-      gnc_commodity_table_remove (gnc_get_current_commodities(), c);
-
       gnc_commodity_set_fullname (c, fullname);
       gnc_commodity_set_mnemonic (c, mnemonic);
       gnc_commodity_set_namespace (c, namespace);
@@ -1229,9 +1226,6 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     string = gnc_timezone_menu_position_to_string(selection);
     gnc_commodity_set_quote_tz(c, string);
     gnc_commodity_commit_edit(c);
-
-    /* remember the commodity */
-    c = gnc_commodity_table_insert(gnc_get_current_commodities(), c);
   }
   else {
     gnc_warning_dialog(w->dialog,

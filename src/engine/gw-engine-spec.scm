@@ -2149,15 +2149,6 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
- 'gnc:commodity-table-insert
- '<gnc:commodity*>
- "gnc_commodity_table_insert"
- '((<gnc:commodity-table*> table)
-   (<gnc:commodity*> commodity))
- "Add a commodity to the table.")
-
-(gw:wrap-function
- ws
  'gnc:commodity-table-has-namespace
  '<gw:bool>
  "gnc_commodity_table_has_namespace"

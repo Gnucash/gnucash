@@ -110,7 +110,6 @@ clear_up_account_commodity(
     {
         PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
     }
     else
     {
@@ -146,7 +145,6 @@ clear_up_transaction_commodity(
     {
         PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
     }
     else
     {
@@ -200,12 +198,6 @@ add_book_local(sixtp_gdv2 *data, QofBook *book)
 static gboolean
 add_commodity_local(sixtp_gdv2 *data, gnc_commodity *com)
 {
-    gnc_commodity_table *table;
-
-    table = gnc_book_get_commodity_table (data->book);
-
-    gnc_commodity_table_insert(table, com);
-
     data->counter.commodities_loaded++;
     run_callback(data, "commodities");
 

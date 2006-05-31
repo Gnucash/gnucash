@@ -1228,7 +1228,6 @@ void
 DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 {
   const char *string;
-  gnc_commodity *commodity;
 
   if ((!acc) || (!currency)) return;
 
@@ -1238,12 +1237,6 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
                         kvp_value_new_string(string));
   mark_account (acc);
   xaccAccountCommitEdit(acc);
-
-  commodity = DxaccAccountGetCurrency (acc);
-  if (!commodity)
-  {
-    gnc_commodity_table_insert (gnc_commodity_table_get_table (acc->inst.book), currency);
-  }
 }
 
 /********************************************************************\

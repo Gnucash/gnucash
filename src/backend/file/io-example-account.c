@@ -116,7 +116,6 @@ clear_up_account_commodity(
     {
         PWARN("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
-        gnc_commodity_table_insert(tbl, com);
     }
     else
     {

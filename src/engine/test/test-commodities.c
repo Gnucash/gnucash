@@ -128,13 +128,13 @@ test_commodity(void)
     }
     
     {
-        int i, j, num_total = 0;
+        int i, j;
         gnc_commodity_table *tbl;
         gnc_commodity *coms[20];
         QofBook *book;
 
         book = qof_book_new ();
-        tbl = gnc_commodity_table_new ();
+        tbl = gnc_commodity_table_get_table (book);
 
         do_test(gnc_commodity_table_get_size(tbl) == 0,
                 "test size for 0 table");
@@ -143,18 +143,16 @@ test_commodity(void)
         {
             coms[i] = get_random_commodity(book);
 
-            if (!gnc_commodity_table_lookup(
-                tbl, gnc_commodity_get_namespace(coms[i]),
-                gnc_commodity_get_mnemonic(coms[i])))
-                num_total++;
-            do_test(
-                gnc_commodity_table_insert(tbl, coms[i]) != NULL,
-                "insert test");
+            do_test(coms[i] == gnc_commodity_table_lookup(
+                        tbl, gnc_commodity_get_namespace(coms[i]),
+                        gnc_commodity_get_mnemonic(coms[i])), "lookup test");
 
             do_test_args(
-                (int)gnc_commodity_table_get_size(tbl) == num_total,
+                (int)gnc_commodity_table_get_size(tbl) == (i+1),
+                "Dumb test warning: count will fail incorrectly if random\n"
+                "commodity generator generates the same commodity twice.\n"
                 "test next size table", __FILE__, __LINE__,
-                "should be %d and is %d", num_total,
+                "should be %d and is %d", i+1,
                 gnc_commodity_table_get_size(tbl));
 
             for(j = 0; j <= i; j++)

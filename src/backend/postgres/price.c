@@ -78,8 +78,6 @@ get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
                                DB_GET_VAL("mnemonic",j),
                                DB_GET_VAL("code",j),
                                atoi(DB_GET_VAL("fraction",j)));
-   
-      gnc_commodity_table_insert (comtab, com);
    }
    return NULL;
 }

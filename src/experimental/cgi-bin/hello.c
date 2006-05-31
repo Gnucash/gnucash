@@ -32,9 +32,7 @@ main (int argc, char *argv[])
 
    /* dirty little hack to work around commodity borkeness */
    {
-      gnc_commodity_table *t = gnc_engine_commodities ();
       gnc_commodity *cm = gnc_commodity_new ("US Dollar", "ISO4217", "USD",  "840", 100);
-      gnc_commodity_table_insert (t, cm);
    }
 
    /* contact the database, which is a flat file for this demo */

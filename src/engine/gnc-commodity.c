@@ -174,6 +174,10 @@ static const int num_multiple_quote_sources =
 	sizeof(multiple_quote_sources) / sizeof(gnc_quote_source);
 static GList *new_quote_sources = NULL;
 
+static gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table, 
+                                                  gnc_commodity * comm); 
+static void gnc_commodity_table_remove(gnc_commodity_table * table,
+                                       gnc_commodity * comm);
 
 /********************************************************************
  * gnc_quote_source_fq_installed
@@ -531,14 +535,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
 
   qof_instance_init (&retval->inst, GNC_ID_COMMODITY, book);
   table = gnc_commodity_table_get_table(book);
-  if (namespace) {
-    retval->namespace = gnc_commodity_table_find_namespace(table, namespace);
-    if (!retval->namespace)
-      retval->namespace = gnc_commodity_table_add_namespace(table, namespace, book);
-  } else {
-    retval->namespace = NULL;
-  }
-  
+  retval->namespace = gnc_commodity_table_add_namespace(table, namespace, book);
   retval->fullname = CACHE_INSERT(fullname);
   retval->mnemonic = CACHE_INSERT(mnemonic);
   retval->cusip = CACHE_INSERT(cusip);
@@ -554,6 +551,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
     retval->quote_source = gnc_quote_source_lookup_by_internal("currency");
   qof_event_gen (&retval->inst.entity, QOF_EVENT_CREATE, NULL);
 
+  retval = gnc_commodity_table_insert(table, retval);
   return retval;
 }
 
@@ -598,7 +596,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
   g_free(cm);
 }
 
-void
+static void
 gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
 {
   gnc_commodity_set_fullname (dest, src->fullname);
@@ -610,7 +608,7 @@ gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
   gnc_commodity_set_quote_tz (dest, src->quote_tz);
 }
 
-gnc_commodity *
+static gnc_commodity *
 gnc_commodity_clone(gnc_commodity *src)
 {
   gnc_commodity * dest = g_new0(gnc_commodity, 1);
@@ -618,13 +616,13 @@ gnc_commodity_clone(gnc_commodity *src)
   dest->fullname = CACHE_INSERT(src->fullname);
   dest->mnemonic = CACHE_INSERT(src->mnemonic);
   dest->cusip = CACHE_INSERT(src->cusip);
+  dest->fraction = src->fraction;
+  dest->mark = 0;
+
+  dest->quote_flag = src->quote_flag;
   dest->quote_tz = CACHE_INSERT(src->quote_tz);
 
   dest->namespace = src->namespace;
-
-  dest->mark = 0;
-  dest->fraction = src->fraction;
-  dest->quote_flag = src->quote_flag;
 
   gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
 
@@ -783,15 +781,22 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
 void
 gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) 
 {
+  gnc_commodity_table *table;
   if (!cm) return;
   if (cm->mnemonic == mnemonic) return;
 
   gnc_commodity_begin_edit(cm);
+  table = gnc_commodity_table_get_table(qof_instance_get_book(&cm->inst));
+  gnc_commodity_table_remove(table, cm);
   CACHE_REPLACE(cm->mnemonic, mnemonic);
 
   mark_commodity_dirty (cm);
   reset_printname(cm);
   reset_unique_name(cm);
+  {
+      gnc_commodity *same = gnc_commodity_table_insert(table, cm);
+      g_assert(same == cm);
+  }
   gnc_commodity_commit_edit(cm);
 }
 
@@ -809,6 +814,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
   if (!cm) return;
   book = qof_instance_get_book (&cm->inst);
   table = gnc_commodity_table_get_table(book);
+  gnc_commodity_table_remove(table, cm);
   nsp = gnc_commodity_table_add_namespace(table, namespace, book);
   if (cm->namespace == nsp)
     return;
@@ -820,6 +826,10 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace)
   mark_commodity_dirty(cm);
   reset_printname(cm);
   reset_unique_name(cm);
+  { 
+      gnc_commodity *same = gnc_commodity_table_insert(table, cm);
+      g_assert(same == cm);
+  }
   gnc_commodity_commit_edit(cm);
 }
 
@@ -1218,12 +1228,21 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
 }
 
 
-/********************************************************************
- * gnc_commodity_table_insert
- * add a commodity to the table. 
- ********************************************************************/
-
-gnc_commodity *
+/** Add a new commodity to the commodity table.  This routine handles
+ *  the cases where the commodity already exists in the database (does
+ *  nothing), or another entries has the same namespace and mnemonic
+ *  (updates the existing entry).
+ *
+ *  @param table A pointer to the commodity table 
+ *
+ *  @param comm A pointer to the commodity to add.
+ *
+ *  @return The added commodity. Null on error.
+ *
+ *  @note The commodity pointer passed to this function should not be
+ *  used after its return, as it may have been destroyed.  Use the
+ *  return value which is guaranteed to be valid. */
+static gnc_commodity *
 gnc_commodity_table_insert(gnc_commodity_table * table, 
                            gnc_commodity * comm) 
 {
@@ -1265,12 +1284,13 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   return comm;
 }
 
-/********************************************************************
- * gnc_commodity_table_remove
- * remove a commodity from the table. 
- ********************************************************************/
-
-void
+/** Remove a commodity from the commodity table. If the commodity to
+ *  remove doesn't exist, nothing happens.
+ *
+ *  @param table A pointer to the commodity table 
+ *
+ *  @param comm A pointer to the commodity to remove. */
+static void
 gnc_commodity_table_remove(gnc_commodity_table * table,
                            gnc_commodity * comm)
 {

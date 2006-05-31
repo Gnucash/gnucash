@@ -1943,7 +1943,6 @@ commodity_restore_end_handler(gpointer data_for_children,
 
       if(ctab)
       {
-        gnc_commodity_table_insert(ctab, comm);
         ok = TRUE;
       }
     }

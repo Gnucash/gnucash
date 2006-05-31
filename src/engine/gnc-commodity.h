@@ -280,11 +280,6 @@ gnc_commodity * gnc_commodity_new(QofBook *book,
  */
 void  gnc_commodity_destroy(gnc_commodity * cm);
 
-/** Copy src into dest */
-void  gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src);
-
-/** allocate and copy */
-gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
 /** @} */
 
 
@@ -650,32 +645,6 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
 /** @name Commodity Table Maintenance functions
  @{
 */
-
-/** Add a new commodity to the commodity table.  This routine handles
- *  the cases where the commodity already exists in the database (does
- *  nothing), or another entries has the same namespace and mnemonic
- *  (updates the existing entry).
- *
- *  @param table A pointer to the commodity table 
- *
- *  @param comm A pointer to the commodity to add.
- *
- *  @return The added commodity. Null on error.
- *
- *  @note The commodity pointer passed to this function should not be
- *  used after its return, as it may have been destroyed.  Use the
- *  return value which is guaranteed to be valid. */
-gnc_commodity * gnc_commodity_table_insert(gnc_commodity_table * table,
-                                           gnc_commodity * comm);
-
-/** Remove a commodity from the commodity table. If the commodity to
- *  remove doesn't exist, nothing happens.
- *
- *  @param table A pointer to the commodity table 
- *
- *  @param comm A pointer to the commodity to remove. */
-void gnc_commodity_table_remove(gnc_commodity_table * table,
-				gnc_commodity * comm);
 
 /** Add all the standard namespaces and currencies to the commodity
  *  table.  This routine creates the namespaces for the NYSE, NASDAQ,

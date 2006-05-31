@@ -152,13 +152,13 @@ gnc_ui_commodity_druid_create(const char * filename)
 
   d->is_modal = FALSE;
 
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_commodity_druid_cancel_cb",
-     G_CALLBACK (gnc_ui_commodity_druid_cancel_cb), d);
+  glade_xml_signal_connect_data(
+      xml, "gnc_ui_commodity_druid_cancel_cb",
+      G_CALLBACK (gnc_ui_commodity_druid_cancel_cb), d);
 
-  glade_xml_signal_connect_data
-    (xml, "gnc_ui_commodity_druid_finish_cb",
-     G_CALLBACK (gnc_ui_commodity_druid_finish_cb), d);
+  glade_xml_signal_connect_data(
+      xml, "gnc_ui_commodity_druid_finish_cb",
+      G_CALLBACK (gnc_ui_commodity_druid_finish_cb), d);
 
   d->new_map = g_hash_table_new(g_str_hash, g_str_equal);
   d->old_map = g_hash_table_new(g_str_hash, g_str_equal);
@@ -168,7 +168,7 @@ gnc_ui_commodity_druid_create(const char * filename)
 
   /* make a new list with the (saved) old mnemonic and the 
    * new currency. */
-  for(l=orphans; l; l=l->next) {
+  for (l = orphans; l; l = l->next) {
     lost = (gnc_commodity *)l->data;
     
     /* if the mnemonic is an ISO-4217 currency, use that as 
@@ -178,7 +178,7 @@ gnc_ui_commodity_druid_create(const char * filename)
                                        gnc_commodity_get_mnemonic(lost));
 
     /* otherwise, guess that it's a NASDAQ security. */
-    if(!found) {
+    if (!found) {
       found = gnc_commodity_new(book, gnc_commodity_get_mnemonic(lost),
                                 GNC_COMMODITY_NS_NASDAQ,
                                 gnc_commodity_get_mnemonic(lost),
@@ -447,10 +447,6 @@ finish_helper(gpointer key, gpointer value, gpointer data)
     PERR("finish_helper - no current book.");
     return;
   }
-
-  /* key is the old mnemonic, value is a pointer to the gnc_commodity 
-   * structure. */
-  comm = gnc_commodity_table_insert(gnc_get_current_commodities(), comm);
 
   /* s/old commodity/new commodity/g  in the pricedb */
   gnc_pricedb_substitute_commodity(gnc_book_get_pricedb(book),

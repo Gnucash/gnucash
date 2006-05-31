@@ -1121,7 +1121,6 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   GList        * pageptr;
   Transaction  * gnc_xtn;
   Split        * gnc_split;
-  gnc_commodity * old_commodity;
 
   const char * mnemonic = NULL; 
   const char * namespace = NULL;
@@ -1148,13 +1147,6 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     gnc_commodity_set_namespace(page->commodity, namespace);
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
-
-    old_commodity = page->commodity;
-    page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
-                                                 page->commodity);
-    if (old_commodity != page->commodity) {
-	scm_hash_remove_x(wind->stock_hash, scm_makfrom0str(fullname));
-    }
   }
 
   /* call a scheme function to do the work.  The return value is an

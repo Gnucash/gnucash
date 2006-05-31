@@ -178,7 +178,6 @@ remove_clicked (CommoditiesDialog *cd)
     for (node = prices; node; node = node->next)
       gnc_pricedb_remove_price(pdb, node->data);
 
-    gnc_commodity_table_remove (ct, commodity);
     gnc_commodity_destroy (commodity);
     commodity = NULL;
   }
