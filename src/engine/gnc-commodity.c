@@ -798,8 +798,7 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic)
   if(cm->mnemonic == mnemonic) return;
 
   gnc_commodity_begin_edit(cm);
-  CACHE_REMOVE (cm->mnemonic);
-  cm->mnemonic = CACHE_INSERT(mnemonic);
+  CACHE_REPLACE(cm->mnemonic, mnemonic);
 
   mark_commodity_dirty (cm);
   reset_printname(cm);
@@ -845,8 +844,7 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname)
   if(!cm) return;
   if(cm->fullname == fullname) return;
 
-  CACHE_REMOVE (cm->fullname);
-  cm->fullname = CACHE_INSERT (fullname);
+  CACHE_REPLACE(cm->fullname, fullname);
 
   gnc_commodity_begin_edit(cm);
   mark_commodity_dirty(cm);
@@ -866,8 +864,7 @@ gnc_commodity_set_cusip(gnc_commodity * cm,
   if(cm->cusip == cusip) return;
 
   gnc_commodity_begin_edit(cm);
-  CACHE_REMOVE (cm->cusip);
-  cm->cusip = CACHE_INSERT (cusip);
+  CACHE_REPLACE(cm->cusip, cusip);
   mark_commodity_dirty(cm);
   gnc_commodity_commit_edit(cm);
 }
@@ -943,8 +940,7 @@ gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz)
   if(!cm || tz == cm->quote_tz) return;
 
   gnc_commodity_begin_edit(cm);
-  CACHE_REMOVE (cm->quote_tz);
-  cm->quote_tz = CACHE_INSERT (tz);
+  CACHE_REPLACE(cm->quote_tz, tz);
   mark_commodity_dirty(cm);
   gnc_commodity_commit_edit(cm);
   LEAVE(" ");
