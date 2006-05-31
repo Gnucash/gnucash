@@ -724,10 +724,10 @@ guint gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl);
  *
  *  @param namespace The new namespace to check.
  *
- *  @return 1 if the namespace exists. 0 if it doesn't exist, or the
+ *  @return TRUE if the namespace exists. FALSE if it doesn't exist, or the
  *  routine was passed a bad argument. */
-int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
-				      const char * namespace);
+gboolean gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
+                                           const char * namespace);
 
 /** Return a list of all namespaces in the commodity table.  This
  *  returns both system and user defined namespaces.

@@ -1300,7 +1300,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
  * see if the commodities namespace exists. May have zero commodities.
  ********************************************************************/
 
-int
+gboolean
 gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
                                   const char * namespace) 
 {
@@ -1309,7 +1309,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
   if (!table || !namespace) return 0;
 
   nsp = gnc_commodity_table_find_namespace(table, namespace);
-  return nsp ? 1 : 0;
+  return (nsp != NULL);
 }
 
 static void 
