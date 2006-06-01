@@ -1,5 +1,13 @@
 2006-06-01  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome-utils/dialog-preferences.c: Do not try to find
+	  positions for alphabetic insertions of add_on pages, but rather
+	  append and then sort pages in the end. Solves appearance of pref
+	  dialog in non-C locales.
+
+	* src/gnome-utils/glade/preferences.glade: Move "Accounting
+	  Period" to the top, regardless of above.
+
 	* src/gnome-utils/gnc-main-window.c: Cancel renaming of a page
 	  when GDK_Escape is pressed. Fixes #343226.
 

@@ -161,7 +161,7 @@ static gint
 gnc_prefs_compare_addins (addition *a,
 			  addition *b)
 {
-  return strcmp(a->tabname, b->tabname);
+  return g_utf8_collate(a->tabname, b->tabname);
 }
 
 
@@ -316,26 +316,6 @@ gnc_prefs_build_widget_table (GladeXML *xml,
   g_list_free(interesting);
 }
 
-
-/** This data structure is used while building the preferences dialog
- *  to perform lookups in the dialog under construction.  It maintains
- *  state information between invocations of the function
- *  gnc_prefs_find_page which is called via a foreach loop over each
- *  addition. */
-struct find_data {
-  /** The notebook being searched. */
-  GtkNotebook *notebook;
-  /** The name of the tab being searched for. */
-  const gchar *tabname;
-  /** The notebook index where the tab was found. */
-  gint index;
-  /** If TRUE, the code will search for an exact match of tab name. If
-   *  FALSE, the code will search for where this tab falls
-   *  alphabetically. */
-  gboolean exact;
-};
-
-
 /** This data structure is used while building the preferences dialog
  *  to copy a table from a glade file to the dialog under
  *  construction.  It maintains state information between invocations
@@ -352,58 +332,35 @@ struct copy_data {
 };
 
 
-/** This function is used while building the preferences dialog.  It
- *  searches through the existing pages in the dialog to determine
- *  where a new page should go alphabetically.  If a matching page
- *  name is found, a pointer to that page will be returned.  This
- *  function can also be called and asked to perform an exact match
- *  instead of just determining where a page would go.
- *
- *  @internal
- *
- *  @param child A pointer to one page from the GtkNotebook contained
- *  in the preferences dialog.
- *  
- *  @param data A pointer to a data structure passed in by the caller.
- */
-static void
-gnc_prefs_find_page (GtkWidget *child,
-		     gpointer data)
+static GtkWidget *
+gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
 {
-  struct find_data *location;
-  const gchar *child_tabname;
-  gint index;
+  int n_pages;
+  GtkWidget *child;
+  const gchar *child_name;
 
-  g_return_if_fail(child != NULL);
-  g_return_if_fail(data != NULL);
+  g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (name, NULL);
 
   ENTER("");
-  location = data;
-  if (location->index >= 0) {
-    LEAVE("already found");
-    return;
-  }
-  child_tabname = gtk_notebook_get_tab_label_text(location->notebook, child);
-  index = gtk_notebook_page_num(location->notebook, child);
-  DEBUG("Checking index %d, name %s", index, child_tabname);
 
-  if (location->exact) {
-    if (strcmp(location->tabname, child_tabname) == 0) {
-      location->index = index;
-      LEAVE("index is %d", index);
-      return;
+  n_pages = gtk_notebook_get_n_pages (notebook);
+
+  for (int i=0; i<n_pages; i++) {
+    child = gtk_notebook_get_nth_page (notebook, i);
+    g_return_val_if_fail (child, NULL);
+
+    child_name = gtk_notebook_get_tab_label_text (notebook, child);
+    g_return_val_if_fail (child_name, NULL);
+
+    if (g_utf8_collate (name, child_name) == 0) {
+      LEAVE("found at index: %d", i);
+      return child;
     }
-    LEAVE("not page %d", index);
-    return;
   }
 
-  if (strcmp(location->tabname, child_tabname) > 0) {
-    LEAVE("after page %d", index);
-    return;
-  }
-
-  location->index = index;
-  LEAVE("insert at offset %d", index);
+  LEAVE("not found");
+  return NULL;
 }
 
 
@@ -468,7 +425,6 @@ gnc_preferences_build_page (gpointer data,
   GtkWidget *dialog, *existing_content, *new_content, *label;
   GtkNotebook *notebook;
   addition *add_in;
-  struct find_data location;
   struct copy_data copydata;
   gint rows, cols;
 
@@ -498,18 +454,12 @@ gnc_preferences_build_page (gpointer data,
 
   /* Prepare for recursion */
   notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
-  location.notebook = notebook;
-  location.index = -1;
-  location.tabname = add_in->tabname;
-  location.exact = FALSE;
 
   if (add_in->full_page) {
-    gtk_container_foreach(GTK_CONTAINER(notebook), gnc_prefs_find_page,
-			  &location);
     label = gtk_label_new(add_in->tabname);
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_notebook_insert_page(notebook, new_content, label, location.index);
-    LEAVE("added page at index %d", location.index);
+    gtk_notebook_append_page(notebook, new_content, label);
+    LEAVE("appended page");
     return;
   }
 
@@ -529,26 +479,21 @@ gnc_preferences_build_page (gpointer data,
   }
 
   /* Does the page exist or must we create it */
-  location.exact = TRUE;
-  gtk_container_foreach(GTK_CONTAINER(notebook), gnc_prefs_find_page,
-			&location);
-  if (location.index == -1) {
+  existing_content = gnc_prefs_find_page(notebook, add_in->tabname);
+
+  if (!existing_content) {
     /* No existing content with this name.  Create a blank page */
-    location.exact = FALSE;
     rows = 0;
     existing_content = gtk_table_new(0, 4, FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(existing_content), 6);
-    gtk_container_foreach(GTK_CONTAINER(notebook), gnc_prefs_find_page,
-			  &location);
     label = gtk_label_new(add_in->tabname);
     gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-    gtk_notebook_insert_page(notebook, existing_content, label, location.index);
+    gtk_notebook_append_page(notebook, existing_content, label);
     gtk_widget_show_all(existing_content);
-    DEBUG("created new page %s at index %d", add_in->tabname, location.index);
+    DEBUG("created new page %s, appended it", add_in->tabname);
   } else {
-    existing_content = gtk_notebook_get_nth_page(notebook, location.index);
     g_object_get(G_OBJECT(existing_content), "n-rows", &rows, NULL);
-    DEBUG("found existing page %s at index %d", add_in->tabname, location.index);
+    DEBUG("found existing page %s", add_in->tabname);
   }
 
   /* Maybe add a spacer row */
@@ -569,7 +514,37 @@ gnc_preferences_build_page (gpointer data,
 			&copydata);
 
   gtk_object_sink(GTK_OBJECT(new_content));
-  LEAVE("added to page at index %d", location.index);
+  LEAVE("added content to page");
+}
+
+static gint
+tab_cmp (GtkWidget *page_a, GtkWidget *page_b, GtkNotebook *notebook)
+{
+  return g_utf8_collate (gtk_notebook_get_tab_label_text (notebook, page_a),
+			 gtk_notebook_get_tab_label_text (notebook, page_b));
+}
+
+static void
+gnc_prefs_sort_pages (GtkNotebook *notebook)
+{
+  gint n_pages, i;
+  GList *tabs=NULL, *iter=NULL;
+
+  g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
+
+  /* gather tabs */
+  n_pages = gtk_notebook_get_n_pages (notebook);
+  for (i=n_pages-1; i>=0; i--)
+    tabs = g_list_prepend (tabs, gtk_notebook_get_nth_page (notebook, i));
+
+  /* sort in local copy */
+  tabs = g_list_sort_with_data (tabs, (GCompareDataFunc) tab_cmp, notebook);
+
+  /* reorder tabs */
+  for (i=0, iter=tabs; iter; i++, iter=iter->next)
+    gtk_notebook_reorder_child (notebook, GTK_WIDGET (iter->data), i);
+
+  g_list_free (tabs);
 }
 
 
@@ -661,7 +636,7 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
   /* Get the current value. */
   value = gnc_gconf_get_string(key, NULL, NULL);
   if (value) {
-    active = (strcmp(value, button_name) == 0);
+    active = (g_utf8_collate(value, button_name) == 0);
   } else {
     /* Sigh. There's no gconf default for this key. Use the first
      * button in the dialog, which is the last button in the list. */
@@ -1394,6 +1369,10 @@ gnc_preferences_dialog_create(void)
   gnc_prefs_build_widget_table(xml, dialog);
 
   g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
+
+  /* Sort tabs alphabetically */
+  gnc_prefs_sort_pages(GTK_NOTEBOOK(notebook));
+  gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 
   DEBUG("We have the following interesting widgets:");
   g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
