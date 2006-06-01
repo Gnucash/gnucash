@@ -335,7 +335,7 @@ struct copy_data {
 static GtkWidget *
 gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
 {
-  int n_pages;
+  int n_pages, i;
   GtkWidget *child;
   const gchar *child_name;
 
@@ -346,7 +346,7 @@ gnc_prefs_find_page (GtkNotebook *notebook, const gchar *name)
 
   n_pages = gtk_notebook_get_n_pages (notebook);
 
-  for (int i=0; i<n_pages; i++) {
+  for (i=0; i<n_pages; i++) {
     child = gtk_notebook_get_nth_page (notebook, i);
     g_return_val_if_fail (child, NULL);
 

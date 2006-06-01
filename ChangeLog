@@ -1,3 +1,10 @@
+2006-06-01  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: Don't need to patch libtool for darwin anymore.
+	  Patch by David Reiser.
+	* src/gnome-utils/dialog-preferences.c: fix non-C99 construct so
+	  the file builds again.
+
 2006-06-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/dialog-preferences.c: Do not try to find

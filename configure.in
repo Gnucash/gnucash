@@ -213,14 +213,15 @@ case $host_os in
 update to latest  darwin])
 		;;
 	darwin*)
-                AC_CHECK_HEADERS(popt.h)
-		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
-		mv libtool libtool.old
-		${SED} -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
-			-e 's|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$versuffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
-			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
-			< libtool.old > libtool
-		rm libtool.old
+		AC_MSG_RESULT([yes, moving on...])
+#		AC_CHECK_HEADERS(popt.h)
+#		AC_MSG_RESULT([yes, patching libtool to always build dylibs])
+#		mv libtool libtool.old
+#		${SED} -e 's/^deplibs_check_method.*/deplibs_check_method=pass_all/g' \
+#			-e 's|^library_names_spec.*|library_names_spec="\\$libname\\$release\\$versuffix.dylib \\$libname\\$release\\${major}.dylib \\$libname.dylib"|g' \
+#			-e 's|^soname_spec.*|soname_spec="\\$libname\\$release\\$major.dylib"|g' \
+#			< libtool.old > libtool
+#		rm libtool.old
 		;;
 	*)
 		AC_MSG_RESULT(no)
