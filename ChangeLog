@@ -5,6 +5,8 @@
 	* src/gnome-utils/dialog-preferences.c: fix non-C99 construct so
 	  the file builds again.
 
+	* po/nb.po: updated Norwegian Bokmål translation by Sigve Indregard
+
 2006-06-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/dialog-preferences.c: Do not try to find
