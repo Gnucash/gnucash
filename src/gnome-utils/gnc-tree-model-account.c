@@ -1426,6 +1426,33 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 /*   Account Tree Model - Engine Event Handling Functions   */
 /************************************************************/
 
+static void
+increment_stamp(GncTreeModelAccount *model)
+{
+    do model->stamp++; 
+    while (!model->stamp);
+}
+
+static void
+propagate_change(GtkTreeModel *model, GtkTreePath *path, gint toggle_if_num)
+{
+    GtkTreeIter iter;
+
+    /* Immediate parent */
+    if (gtk_tree_path_up(path) && 
+        gtk_tree_model_get_iter(model, &iter, path)) {
+        gtk_tree_model_row_changed(model, path, &iter);
+        if (gtk_tree_model_iter_n_children(model, &iter) == toggle_if_num)
+            gtk_tree_model_row_has_child_toggled(model, path, &iter);
+    }
+
+    /* All other ancestors */
+    while (gtk_tree_path_up(path) && gtk_tree_path_get_depth(path) > 0 &&
+           gtk_tree_model_get_iter(model, &iter, path)) {
+        gtk_tree_model_row_changed(model, path, &iter);
+    }
+}
+
 /** This function is the handler for all event messages from the
  *  engine.  Its purpose is to update the account tree model any time
  *  an account is added to the engine or deleted from the engine.
@@ -1493,15 +1520,13 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
 	DEBUG("can't generate path");
 	break;
       }
+      increment_stamp(model);
       if (!gnc_tree_model_account_get_iter(GTK_TREE_MODEL(model), &iter, path)) {
 	DEBUG("can't generate iter");
 	break;
       }
       gtk_tree_model_row_inserted (GTK_TREE_MODEL(model), path, &iter);
-      if (gtk_tree_path_up (path) &&
-	  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path) &&
-	  gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter) == 1)
-	gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+      propagate_change(GTK_TREE_MODEL(model), path, 1);
       break;
 
     case QOF_EVENT_REMOVE:
@@ -1515,12 +1540,10 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
 	DEBUG("can't generate path");
 	break;
       }
+      increment_stamp(model);
       gtk_tree_path_append_index (path, ed->idx);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL(model), path);
-      if (gtk_tree_path_up (path) &&
-	  gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path) &&
-	  gtk_tree_model_iter_n_children (GTK_TREE_MODEL(model), &iter) == 0)
-	gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL(model), path, &iter);
+      propagate_change(GTK_TREE_MODEL(model), path, 0);
       break;
 
     case QOF_EVENT_MODIFY:
@@ -1535,6 +1558,7 @@ gnc_tree_model_account_event_handler (QofEntity *entity,
 	break;
       }
       gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+      propagate_change(GTK_TREE_MODEL(model), path, -1);
       break;
 
     default:
