@@ -1592,6 +1592,32 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
   return FALSE;
 }
 
+static gboolean
+gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
+					   GdkEventKey *event,
+					   GncPluginPage *page)
+{
+  if (event->keyval == GDK_Escape) {
+    GtkWidget *label, *entry2;
+
+    g_return_val_if_fail(GTK_IS_ENTRY(entry), FALSE);
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+
+    ENTER("");
+    if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
+				    page, &label, &entry2)) {
+      LEAVE("can't find required widgets");
+      return FALSE;
+    }
+
+    gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+    gtk_widget_hide(entry);
+    gtk_widget_show(label);
+    LEAVE("");
+  }
+  return FALSE;
+}
+
 /************************************************************
  *                   Widget Implementation                  *
  ************************************************************/
@@ -2055,6 +2081,9 @@ gnc_main_window_open_page (GncMainWindow *window,
 			 G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 	g_signal_connect(G_OBJECT(entry), "focus-out-event",
 			 G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
+			 page);
+	g_signal_connect(G_OBJECT(entry), "key-press-event",
+			 G_CALLBACK(gnc_main_window_tab_entry_key_press_event),
 			 page);
 	g_signal_connect(G_OBJECT(entry), "editing-done",
 			 G_CALLBACK(gnc_main_window_tab_entry_editing_done),
