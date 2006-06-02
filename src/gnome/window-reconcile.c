@@ -1284,6 +1284,7 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  time_t today;
   struct tm tm;
 
   if (xaccAccountGetReconcileLastDate (account, statement_date))
@@ -1309,6 +1310,10 @@ gnc_get_reconcile_info (Account *account,
     tm.tm_isdst = -1;
     gnc_tm_set_day_end (&tm);
     *statement_date = mktime (&tm);
+
+    today = gnc_timet_get_day_end(time(NULL));
+    if (*statement_date > today)
+      *statement_date = today;
   }
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);

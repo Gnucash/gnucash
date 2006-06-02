@@ -1,3 +1,8 @@
+2006-06-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c: Limit the reconciliation date to
+	the past or today, never the future.  Fixes #343527.
+
 2006-06-01  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: Don't need to patch libtool for darwin anymore.
