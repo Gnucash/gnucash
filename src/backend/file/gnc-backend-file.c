@@ -45,6 +45,7 @@
 #include <dirent.h>
 #include <time.h>
 
+#include "qof.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 
@@ -53,7 +54,6 @@
 #include "io-gncxml.h"
 #include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-#include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
 
@@ -945,7 +945,7 @@ compression_changed_cb(GConfEntry *entry, gpointer user_data)
         be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
 }
 
-QofBackend*
+static QofBackend*
 gnc_backend_new(void)
 {
 	FileBackend *gnc_be;

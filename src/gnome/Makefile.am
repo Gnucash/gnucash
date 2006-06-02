@@ -14,6 +14,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
+  ${top_builddir}/src/backend/file/libgnc-backend-file-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/engine/libgw-engine.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
@@ -61,30 +62,7 @@ libgncgnome_la_SOURCES = \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
-  window-reconcile.c \
-  ${top_srcdir}/src/backend/file/sixtp-dom-parsers.c \
-  ${top_srcdir}/src/backend/file/sixtp-dom-generators.c \
-  ${top_srcdir}/src/backend/file/sixtp-utils.c \
-  ${top_srcdir}/src/backend/file/sixtp.c \
-  ${top_srcdir}/src/backend/file/sixtp-stack.c \
-  ${top_srcdir}/src/backend/file/sixtp-to-dom-parser.c \
-  ${top_srcdir}/src/backend/file/io-example-account.c \
-  ${top_srcdir}/src/backend/file/io-gncbin-r.c \
-  ${top_srcdir}/src/backend/file/io-gncxml-gen.c \
-  ${top_srcdir}/src/backend/file/io-gncxml-v1.c \
-  ${top_srcdir}/src/backend/file/io-gncxml-v2.c \
-  ${top_srcdir}/src/backend/file/io-utils.c \
-  ${top_srcdir}/src/backend/file/gnc-account-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-budget-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-lot-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-recurrence-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-schedxaction-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-freqspec-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-transaction-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-commodity-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-book-xml-v2.c \
-  ${top_srcdir}/src/backend/file/gnc-pricedb-xml-v2.c
-
+  window-reconcile.c
 
 gnomeappdir = ${datadir}/applications
 

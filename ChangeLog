@@ -7,6 +7,20 @@
 
 	* po/nb.po: updated Norwegian Bokmål translation by Sigve Indregard
 
+	* src/backend/Makefile.am:
+	* src/backend/gnc-backend-api.h:
+	  deleted gnc-backend-api.h, which isn't needed by anything
+	* src/backend/file/gnc-backend-file.[ch]:
+	  make "gnc_new_backend()" into a private function.  It's
+	  never called from anywhere, so it's not needed in the API.
+	* src/backend/file/Makefile.am:
+	  Build a shared library (libgnc-backend-file-utils) and a
+	  loadable module (libgnc-backend-file).  This should let us
+	  build on MacOS AND windows.
+	* src/business/business-core/file/Makefile.am:
+	* src/gnome/Makefile.am:
+	  link against libgnc-backend-file-utils
+
 2006-06-01  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/dialog-preferences.c: Do not try to find
