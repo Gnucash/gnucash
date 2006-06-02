@@ -2647,6 +2647,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
         gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
 
 	priv->progressbar = gtk_progress_bar_new ();
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
 	gtk_widget_show (priv->progressbar);
 	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);

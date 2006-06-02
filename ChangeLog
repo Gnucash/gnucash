@@ -1,5 +1,11 @@
 2006-06-02  David Hampton  <hampton@employees.org>
 
+	* src/gnome-utils/gnc-main-window.c: 
+	* src/gnome-utils/gnc-window.c: The progress bar changes size when
+	text is added/removed.  Prevent these changes by setting the text
+	to a single space when there is no text to display.  Fixes
+	#343455.
+
 	* src/gnome/window-reconcile.c: Limit the reconciliation date to
 	the past or today, never the future.  Fixes #343527.
 
