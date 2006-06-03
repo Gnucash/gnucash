@@ -1,3 +1,11 @@
+2006-06-03  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-sheet.c: The register code
+	shouldn't process any keystrokes that have a "modifier" (e.g. Alt,
+	Meta, etc.) key pressed.  This allows Alt-Ctl-Pgup/Down in a
+	register to change the notebook page, just like from the accounts
+	page. Also remove some dead code.
+
 2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/Makefile.am:
