@@ -1,5 +1,10 @@
 2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
 
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/druid-gnc-xml-import.c:
+	* src/backend/file/io-gncxml-v2.h: Link gnome-utils against
+	  backend/file and remove symbol lookup in druid-gnc-xml-import.c.
+
 	* src/register/register-gnome/gnucash-sheet.c: Add GDK_Menu as
 	  shortcut for showing register popups. Fixes 343244.
 

@@ -249,29 +249,6 @@ static system_encoding_type system_encodings [] =
 };
 static guint n_system_encodings = G_N_ELEMENTS (system_encodings);
 
-static find_ambiguous_handler find_ambiguous = NULL;
-static parse_with_subst_handler parse_with_subst = NULL;
-static GModule *allsymbols = NULL;
-
-static gboolean
-gxi_find_backend_symbols ()
-{
-  gpointer symbol;
-
-  if (!allsymbols)
-    allsymbols = g_module_open (NULL, 0);
-
-  if (!g_module_symbol (allsymbols, "gnc_xml2_find_ambiguous", &symbol))
-    return FALSE;
-  find_ambiguous = symbol;
-
-  if (!g_module_symbol (allsymbols, "gnc_xml2_parse_with_subst", &symbol))
-    return FALSE;
-  parse_with_subst = symbol;
-
-  return TRUE;
-}
-
 gboolean
 gnc_xml_convert_single_file (const gchar *filename)
 {
@@ -279,8 +256,6 @@ gnc_xml_convert_single_file (const gchar *filename)
   GtkWidget *dialog, *widget;
   GladeXML *xml;
   gboolean success;
-
-  g_return_val_if_fail (gxi_find_backend_symbols (), FALSE);
 
   data = g_new0 (GncXmlImportData, 1);
   data->import_type = XML_CONVERT_SINGLE_FILE;
@@ -627,7 +602,7 @@ gxi_check_file (GncXmlImportData *data)
   gxi_ambiguous_info_destroy (data);
 
   /* analyze file */
-  data->n_impossible = (*find_ambiguous) (
+  data->n_impossible = gnc_xml2_find_ambiguous (
     data->filename, data->encodings, &data->unique, &data->ambiguous_ht, NULL);
 
   if (data->n_impossible != -1) {
@@ -742,7 +717,7 @@ gxi_parse_file (GncXmlImportData *data)
   backend = (FileBackend*) qof_book_get_backend (book);
 
   gxi_update_progress_bar (_("Parsing file..."), 0.0);
-  success = (*parse_with_subst) (backend, book, data->subst);
+  success = gnc_xml2_parse_with_subst (backend, book, data->subst);
   gxi_update_progress_bar (NULL, -1.0);
 
   if (success)
