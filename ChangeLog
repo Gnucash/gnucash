@@ -1,5 +1,10 @@
 2006-06-03  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/combocell-gnome.c:
+	* src/register/register-gnome/gnucash-item-list.[ch]: Only use the
+	amount of space required to show all the entries in the popup, not
+	all the available space. Fixes #343242.
+
 	* src/register/register-gnome/gnucash-sheet.c: The register code
 	shouldn't process any keystrokes that have a "modifier" (e.g. Alt,
 	Meta, etc.) key pressed.  This allows Alt-Ctl-Pgup/Down in a

@@ -785,7 +785,11 @@ get_popup_height (GnomeCanvasItem *item,
                   int row_height,
                   gpointer user_data)
 {
-        return space_available;
+        PopBox *box = user_data;
+        int count, pad = 4;
+
+        count = gnc_item_list_num_entries(box->item_list);
+        return MIN(space_available, (count * (row_height + pad)) + pad);
 }
 
 static int

@@ -61,6 +61,8 @@ GType gnc_item_list_get_type (void);
 
 GnomeCanvasItem *gnc_item_list_new (GnomeCanvasGroup *parent, GtkListStore *shared_store);
 
+gint gnc_item_list_num_entries (GncItemList *item_list);
+
 void gnc_item_list_clear (GncItemList *item_list);
 
 void gnc_item_list_append (GncItemList *item_list, char *string);
