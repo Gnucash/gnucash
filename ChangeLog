@@ -1,3 +1,8 @@
+2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/register/register-gnome/gnucash-sheet.c: Add GDK_Menu as
+	  shortcut for showing register popups. Fixes 343244.
+
 2006-06-02  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-main-window.c: 

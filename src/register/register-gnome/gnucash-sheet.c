@@ -1663,8 +1663,10 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                                           &new_virt_loc, -1);
 			break;
                 case GDK_KP_Down:
-		case GDK_Down:
-                        if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+                case GDK_Down:
+                case GDK_Menu:
+                        if (event->keyval == GDK_Menu ||
+                            event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
                         {
                                 GncItemEdit *item_edit;
 
