@@ -27,7 +27,6 @@ libgnc_backend_file_utils_la_SOURCES = \
   gnc-schedxaction-xml-v2.c \
   gnc-transaction-xml-v2.c \
   io-example-account.c \
-  io-gncbin-r.c \
   io-gncxml-gen.c \
   io-gncxml-v1.c \
   io-gncxml-v2.c \
@@ -47,7 +46,6 @@ noinst_HEADERS = \
   gnc-xml.h \
   gnc-xml-helper.h \
   io-example-account.h \
-  io-gncbin.h \
   io-gncxml-gen.h \
   io-gncxml.h \
   io-gncxml-v2.h \

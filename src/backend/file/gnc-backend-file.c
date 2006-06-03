@@ -52,7 +52,6 @@
 #include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
-#include "io-gncbin.h"
 #include "io-gncxml-v2.h"
 #include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
@@ -403,8 +402,6 @@ gnc_file_be_determine_file_type(const char *path)
     }
   } else if (gnc_is_xml_data_file(path)) {
     return GNC_BOOK_XML1_FILE;
-  } else if (gnc_is_bin_file(path)) {
-    return GNC_BOOK_BIN_FILE;
   }
   return GNC_BOOK_NOT_OURS;
 }
@@ -426,7 +423,6 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
@@ -867,10 +863,6 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
     case GNC_BOOK_XML1_FILE:
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
-        break;
-    case GNC_BOOK_BIN_FILE:
-        qof_session_load_from_binfile(book, be->fullpath);
-        error = gnc_get_binfile_io_error();
         break;
     default:
         PWARN("File not any known type");
