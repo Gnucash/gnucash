@@ -54,6 +54,7 @@ enum {
 
 /* values for selection info */
 enum {
+        TARGET_UTF8_STRING,
         TARGET_STRING,
         TARGET_TEXT,
         TARGET_COMPOUND_TEXT
@@ -61,7 +62,6 @@ enum {
 
 static GnomeCanvasItemClass *gnc_item_edit_parent_class;
 static GdkAtom clipboard_atom = GDK_NONE;
-static GdkAtom ctext_atom = GDK_NONE;
 
 
 typedef struct _TextDrawInfo TextDrawInfo;
@@ -810,7 +810,6 @@ gnc_item_edit_cut_clipboard (GncItemEdit *item_edit, guint32 time)
         gnc_item_edit_cut_copy_clipboard(item_edit, time, TRUE);
 }
 
-
 void
 gnc_item_edit_copy_clipboard (GncItemEdit *item_edit, guint32 time)
 {
@@ -824,11 +823,10 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit, guint32 time)
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-        if (ctext_atom == GDK_NONE)
-                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
         gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
-                              clipboard_atom, ctext_atom, time);
+                              clipboard_atom,
+                              gdk_atom_intern("UTF8_STRING", FALSE),
+                              time);
 }
 
 
@@ -838,11 +836,10 @@ gnc_item_edit_paste_primary (GncItemEdit *item_edit, guint32 time)
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
-        if (ctext_atom == GDK_NONE)
-                ctext_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-
         gtk_selection_convert(GTK_WIDGET(item_edit->sheet), 
-                              GDK_SELECTION_PRIMARY, ctext_atom, time);
+                              GDK_SELECTION_PRIMARY,
+                              gdk_atom_intern("UTF8_STRING", FALSE),
+                              time);
 }
 
 
@@ -1142,9 +1139,10 @@ GnomeCanvasItem *
 gnc_item_edit_new (GnomeCanvasGroup *parent, GnucashSheet *sheet, GtkWidget *entry)
 {
         static const GtkTargetEntry targets[] = {
-                { "STRING", 0, TARGET_STRING },
+                { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+                { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
                 { "TEXT",   0, TARGET_TEXT }, 
-                { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT }
+                { "STRING", 0, TARGET_STRING },
         };
         static const gint n_targets = sizeof(targets) / sizeof(targets[0]);
 
@@ -1461,43 +1459,15 @@ gnc_item_edit_selection_get (GncItemEdit      *item_edit,
                 str = gtk_editable_get_chars(editable, start_pos, end_pos);
         }
         else /* CLIPBOARD */
+        {
                 str = item_edit->clipboard;
+        }
 
         if (str == NULL)
                 return;
 
         length = strlen(str);
-  
-        if (info == TARGET_STRING)
-        {
-                gtk_selection_data_set (selection_data,
-                                        GDK_SELECTION_TYPE_STRING,
-                                        8 * sizeof(gchar), (guchar *) str,
-                                        length);
-        }
-        else if ((info == TARGET_TEXT) || (info == TARGET_COMPOUND_TEXT))
-        {
-                guchar *text;
-                gchar c;
-                GdkAtom encoding;
-                gint format;
-                gint new_length;
-
-                c = str[length];
-                str[length] = '\0';
-
-                gdk_utf8_to_compound_text(str, &encoding, &format,
-                                          &text, &new_length);
-                // for some reason, format is set to '0', which makes GTK
-                // complain. -- jsled
-                format = 8;
-                gtk_selection_data_set(selection_data, encoding,
-                                       format, text, new_length);
-
-                gdk_free_compound_text(text);
-
-                str[length] = c;
-        }
+        gtk_selection_data_set_text(selection_data, str, length);
 
         if (str != item_edit->clipboard)
                 g_free(str);
@@ -1514,19 +1484,21 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
         gint old_pos;
         gint tmp_pos;
 	gint start_sel, end_sel;
-        enum {INVALID, STRING, CTEXT} type;
+        enum {INVALID, CTEXT} type;
 
         g_return_if_fail(item_edit != NULL);
         g_return_if_fail(GNC_IS_ITEM_EDIT(item_edit));
 
         editable = GTK_EDITABLE(item_edit->editor);
 
-        if (selection_data->type == GDK_TARGET_STRING)
-        {
-                type = STRING;
-        }
-        else if (selection_data->type == gdk_atom_intern("COMPOUND_TEXT", FALSE)
-                 || selection_data->type == gdk_atom_intern("TEXT", FALSE))
+        /* @fixme: this should implement the fallback logic from
+         * gtkclipboard.c:request_text_received_func.  It'd be nice to have a
+         * good way to test the various request types. :( --jsled **/
+
+        if (selection_data->type == GDK_TARGET_STRING
+            || selection_data->type == gdk_atom_intern("UTF8_STRING", FALSE)
+            || selection_data->type == gdk_atom_intern("COMPOUND_TEXT", FALSE)
+            || selection_data->type == gdk_atom_intern("TEXT", FALSE))
         {
                 type = CTEXT;
         }
@@ -1559,45 +1531,19 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
 
         tmp_pos = old_pos = gtk_editable_get_position (editable);
 
-        switch (type)
         {
-                case STRING:
-                        selection_data->data[selection_data->length] = 0;
-
-                        gtk_editable_insert_text
-                                (editable, (gchar *) selection_data->data,
-                                 strlen((gchar *)selection_data->data),
-                                 &tmp_pos);
-
+                guchar *sel = gtk_selection_data_get_text(selection_data);
+        
+                if (sel)
+                {
+                        gtk_editable_insert_text(editable,
+                                                 sel, strlen(sel),
+                                                 &tmp_pos);
                         gtk_editable_set_position(editable, tmp_pos);
-                        break;
-                case CTEXT: {
-                        gchar **list;
-                        gint count;
-                        gint i;
-
-                        count = gdk_text_property_to_utf8_list
-                                (selection_data->type, selection_data->format, 
-                                 selection_data->data, selection_data->length,
-                                 &list);
-
-                        for (i = 0; i < count; i++) 
-                        {
-                                gtk_editable_insert_text(editable,
-                                                         list[i],
-                                                         strlen(list[i]),
-                                                         &tmp_pos);
-                                gtk_editable_set_position(editable, tmp_pos);
-                        }
-
-                        if (count > 0)
-                                gdk_free_text_list(list);
+                        g_free(sel);
                 }
-                break;
-                case INVALID: /* quiet compiler */
-                        break;
         }
-
+        
         if (!reselect)
                 return;
 

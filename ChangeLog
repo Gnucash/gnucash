@@ -6,6 +6,13 @@
 
 2006-06-04  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/register-gnome/gnucash-item-edit.c (gnc_item_edit_selection_received) 
+	(gnc_item_edit_selection_get, gnc_item_edit_paste_clipboard) 
+	(gnc_item_edit_paste_primary, gnc_item_edit_new): Use the
+	selection type UTF8_STRING for copy/paste rather than the combination
+	of COMPOUND_TEXT, TEXT and STRING, as the LCD STRING is inadequate
+	for interesting characters, and it is what the rest of GTK does.
+
 	* src/register/register-gnome/gnucash-item-edit.c
 	(gnc_item_edit_selection_get),
 	(gnc_item_edit_selection_received): Handle selections more
