@@ -1,3 +1,13 @@
+2006-06-04  Andreas Köhler  <andi5.py@gmx.net>
+
+	* src/gnome-utils/gnc-html.[ch]:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Add
+	  gnc_html_copy and enable report pages to copy to clipboard.
+	  Fixes #343645.
+
+	* src/gnome/gnc-plugin-page-register.c: Readd descriptions for
+	  Cut/Copy/Paste actions in register pages.
+
 2006-06-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Split.c:

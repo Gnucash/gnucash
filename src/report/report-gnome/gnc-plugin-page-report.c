@@ -135,6 +135,7 @@ static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_save_page (GncPluginPage *plugin_page, GKeyFile *file, const gchar *group);
 static GncPluginPage *gnc_plugin_page_report_recreate_page (GtkWidget *window, GKeyFile *file, const gchar *group);
 static void gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name);
+static void gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide);
 static gboolean gnc_plugin_page_report_finish_pending (GncPluginPage *page);
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
@@ -162,6 +163,7 @@ static void gnc_plugin_page_report_save_cb(GtkAction *action, GncPluginPageRepor
 static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
 static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *rep);
 
 GType
 gnc_plugin_page_report_get_type (void)
@@ -262,6 +264,7 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 	gnc_plugin_page_class->save_page       = gnc_plugin_page_report_save_page;
 	gnc_plugin_page_class->recreate_page   = gnc_plugin_page_report_recreate_page;
 	gnc_plugin_page_class->page_name_changed = gnc_plugin_page_report_name_changed;
+	gnc_plugin_page_class->update_edit_menu_actions = gnc_plugin_page_report_update_edit_menu;
 	gnc_plugin_page_class->finish_pending   = gnc_plugin_page_report_finish_pending;
 
 	g_type_class_add_private(klass, sizeof(GncPluginPageReportPrivate));
@@ -854,6 +857,21 @@ gnc_plugin_page_report_name_changed (GncPluginPage *page, const gchar *name)
   LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_report_update_edit_menu (GncPluginPage *page, gboolean hide)
+{
+  GtkAction *action;
+
+  action = gnc_plugin_page_get_action (page, "EditCopyAction");
+  gtk_action_set_sensitive (action, TRUE);
+  gtk_action_set_visible (action, TRUE);
+  action = gnc_plugin_page_get_action (page, "EditCutAction");
+  gtk_action_set_sensitive (action, FALSE);
+  gtk_action_set_visible (action, !hide);
+  action = gnc_plugin_page_get_action (page, "EditPasteAction");
+  gtk_action_set_sensitive (action, FALSE);
+  gtk_action_set_visible (action, !hide);
+}
 
 static gboolean
 gnc_plugin_page_report_finish_pending (GncPluginPage *page)
@@ -914,6 +932,15 @@ static GtkActionEntry report_actions[] =
         { "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Report..."), "<control>p",
 	  N_("Print the current report"),
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
+        { "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+          N_("Cut the current selection and copy it to clipboard"),
+          NULL },
+        { "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+          N_("Copy the current selection to clipboard"),
+          G_CALLBACK(gnc_plugin_page_report_copy_cb) },
+        { "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+          N_("Paste the clipboard content at the cursor position"),
+          NULL },
         { "ReportSaveAction", GTK_STOCK_SAVE, N_("Add _Report"), "", 
 	  N_("Add the current report to the `Custom' menu for later use. "
 	     "The report will be saved in the file ~/.gnucash/saved-reports-2.0. "
@@ -1414,6 +1441,15 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 
         priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
         gnc_html_print(priv->html);
+}
+
+static void
+gnc_plugin_page_report_copy_cb(GtkAction *action, GncPluginPageReport *report)
+{
+        GncPluginPageReportPrivate *priv;
+
+        priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
+        gnc_html_copy(priv->html);
 }
 
 /********************************************************************
