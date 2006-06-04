@@ -1,5 +1,11 @@
 2006-06-04  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/register/register-gnome/gnucash-item-edit.c
+	(gnc_item_edit_selection_get),
+	(gnc_item_edit_selection_received): Handle selections more
+	correctly in a utf8 world, within GnuCash at least. Fixes
+	Bug#333299.
+
 	* src/gnome/druid-loan.c (ld_get_pmt_formula)
 	(ld_get_ppmt_formula, ld_get_ipmt_formula): Treat all numbers in a
 	auto-decimal-point-safe way.  Bug#343795.

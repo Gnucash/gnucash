@@ -1436,7 +1436,7 @@ gnc_item_edit_selection_clear (GncItemEdit          *item_edit,
 
 
 void
-gnc_item_edit_selection_get (GncItemEdit         *item_edit,
+gnc_item_edit_selection_get (GncItemEdit      *item_edit,
 			     GtkSelectionData *selection_data,
 			     guint             info,
 			     guint             time)
@@ -1486,9 +1486,11 @@ gnc_item_edit_selection_get (GncItemEdit         *item_edit,
                 c = str[length];
                 str[length] = '\0';
 
-                gdk_string_to_compound_text(str, &encoding, &format,
-                                            &text, &new_length);
-
+                gdk_utf8_to_compound_text(str, &encoding, &format,
+                                          &text, &new_length);
+                // for some reason, format is set to '0', which makes GTK
+                // complain. -- jsled
+                format = 8;
                 gtk_selection_data_set(selection_data, encoding,
                                        format, text, new_length);
 
@@ -1520,32 +1522,38 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
         editable = GTK_EDITABLE(item_edit->editor);
 
         if (selection_data->type == GDK_TARGET_STRING)
+        {
                 type = STRING;
-        else if ((selection_data->type ==
-                  gdk_atom_intern("COMPOUND_TEXT", FALSE)) ||
-                 (selection_data->type == gdk_atom_intern("TEXT", FALSE)))
+        }
+        else if (selection_data->type == gdk_atom_intern("COMPOUND_TEXT", FALSE)
+                 || selection_data->type == gdk_atom_intern("TEXT", FALSE))
+        {
                 type = CTEXT;
+        }
         else
+        {
                 type = INVALID;
+        }
 
         if (type == INVALID || selection_data->length < 0)
         {
                 /* avoid infinite loop */
                 if (selection_data->target != GDK_TARGET_STRING)
+                {
                         gtk_selection_convert(GTK_WIDGET(item_edit->sheet),
                                               selection_data->selection,
                                               GDK_TARGET_STRING, time);
+                }
                 return;
         }
 
         reselect = FALSE;
 
-        if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel) && 
-            (!item_edit->has_selection || 
-             (selection_data->selection == clipboard_atom)))
+        if (gtk_editable_get_selection_bounds(editable, &start_sel, &end_sel)
+            && (!item_edit->has_selection
+                || selection_data->selection == clipboard_atom))
         {
                 reselect = TRUE;
-
                 gtk_editable_delete_text(editable, start_sel, end_sel);
         }
 
@@ -1568,7 +1576,7 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
                         gint count;
                         gint i;
 
-                        count = gdk_text_property_to_text_list
+                        count = gdk_text_property_to_utf8_list
                                 (selection_data->type, selection_data->format, 
                                  selection_data->data, selection_data->length,
                                  &list);
@@ -1579,7 +1587,6 @@ gnc_item_edit_selection_received (GncItemEdit       *item_edit,
                                                          list[i],
                                                          strlen(list[i]),
                                                          &tmp_pos);
-
                                 gtk_editable_set_position(editable, tmp_pos);
                         }
 
