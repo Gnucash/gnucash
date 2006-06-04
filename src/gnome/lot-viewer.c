@@ -76,7 +76,9 @@
 struct _GNCLotViewer 
 {
    GtkWidget     * window;
+#ifdef LOTS_READY_FOR_SHOWTIME
    GtkButton     * regview_button;
+#endif
    GtkButton     * delete_button;
    GtkButton     * scrub_lot_button;
    GtkPaned      * lot_hpaned;
@@ -255,7 +257,9 @@ lv_select_row_cb (GtkCList       *clist,
 
    lv_show_splits (lv);
 
+#ifdef LOTS_READY_FOR_SHOWTIME
    gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), TRUE);
+#endif
    gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), TRUE);
    gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), TRUE);
 }
@@ -280,7 +284,9 @@ lv_unset_lot (GNCLotViewer *lv)
    /* Erase the mini-view area */
    lv_clear_splits (lv);
 
+#ifdef LOTS_READY_FOR_SHOWTIME
    gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), FALSE);
+#endif
    gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), FALSE);
    gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), FALSE);
 }
@@ -299,6 +305,9 @@ lv_unselect_row_cb (GtkCList       *clist,
    GNCLot *lot = lv->selected_lot;
    const char * str;
    char * notes;
+
+   if (lv->selected_row < 0)
+     return;
 
    /* Get the title, plunk it into ctree */
    str = gtk_entry_get_text (lv->title_entry);
@@ -588,7 +597,9 @@ lv_create (GNCLotViewer *lv)
                   xaccAccountGetName(lv->account));
    gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
 
+#ifdef LOTS_READY_FOR_SHOWTIME
    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (xml, "regview button"));
+#endif
    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
    lv->scrub_lot_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub lot button"));
 

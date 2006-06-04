@@ -1,3 +1,13 @@
+2006-06-03  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+	* src/gnome/glade/lots.glade:
+	* src/gnome/gnc-plugin-page-account-tree.c: 
+	* src/gnome/gnc-plugin-page-register.c: 
+	* src/gnome/lot-viewer.c: Re-enable View Lots; disable 'View' button.  Fix
+	clist/lot-title handling bug.  Bug#343772.
+
 2006-06-03  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/combocell-gnome.c:

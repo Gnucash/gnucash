@@ -131,9 +131,7 @@ static void gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *act
 static void gnc_plugin_page_register_cmd_reconcile (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_transfer (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_stock_split (GtkAction *action, GncPluginPageRegister *plugin_page);
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void gnc_plugin_page_register_cmd_lots (GtkAction *action, GncPluginPageRegister *plugin_page);
-#endif
 static void gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
@@ -236,11 +234,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsStockSplitAction", NULL, N_("Stoc_k Split..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
-#ifdef LOTS_READY_FOR_SHOWTIME
 	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-#endif
 	{ "BlankTransactionAction", GTK_STOCK_GOTO_BOTTOM, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
@@ -311,9 +307,7 @@ static const gchar *important_actions[] = {
 static const gchar *actions_requiring_account[] = {
 	"EditEditAccountAction",
 	"ActionsReconcileAction",
-#ifdef LOTS_READY_FOR_SHOWTIME
 	"ActionsLotsAction",
-#endif
 	NULL
 };
 
@@ -2337,7 +2331,6 @@ gnc_plugin_page_register_cmd_stock_split (GtkAction *action,
   LEAVE(" ");
 }
 
-#ifdef LOTS_READY_FOR_SHOWTIME
 static void
 gnc_plugin_page_register_cmd_lots (GtkAction *action,
 				   GncPluginPageRegister *page)
@@ -2352,7 +2345,6 @@ gnc_plugin_page_register_cmd_lots (GtkAction *action,
   gnc_lot_viewer_dialog (account);
   LEAVE(" ");
 }
-#endif
 
 static void
 gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action,
