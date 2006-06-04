@@ -1,3 +1,12 @@
+2006-06-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Split.c:
+	  Properly round values when setting the Base Value.  Fixes #337505.
+	* src/business/dialog-tax-table/tax-tables.glade:
+	  fix a string.  It should be "Edit" not "gtk-edit".  This string
+	  is already translated, so shouldn't be an issue for the string
+	  freeze.
+
 2006-06-03  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
@@ -21,6 +30,7 @@
 	register to change the notebook page, just like from the accounts
 	page. Also remove some dead code.
 
+>>>>>>> .r14316
 2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/Makefile.am:
