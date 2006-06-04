@@ -1,3 +1,9 @@
+2006-06-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-plugin-file-history.c: If the g2 file
+	history list is empty, then copy the file history list over from
+	Gnucash 1.x gnome settings file.  #342724.
+
 2006-06-04  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/register-gnome/gnucash-item-edit.c
@@ -52,7 +58,6 @@
 	register to change the notebook page, just like from the accounts
 	page. Also remove some dead code.
 
->>>>>>> .r14316
 2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/Makefile.am:

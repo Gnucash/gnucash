@@ -43,6 +43,7 @@
 #include "gnc-window.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gkeyfile-utils.h"
 
 static GObjectClass *parent_class = NULL;
 
@@ -68,6 +69,8 @@ static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWin
 /** The name of the UI description file for this plugin. */
 #define PLUGIN_UI_FILENAME  "gnc-plugin-file-history-ui.xml"
 
+#define GNOME1_HISTORY "History"
+#define GNOME1_MAXFILES "MaxFiles"
 
 /** A placeholder set of actions that are filled in by this plugin.
  *  As the user opens files, the names and visibility of these actions
@@ -405,6 +408,68 @@ gnc_plugin_history_list_changed (GConfClient *client,
 }
 
 
+/* This routine copies the gnucash 1.x file history list over to
+ * gnucash 2.0. */
+static void
+gnc_plugin_history_list_from_gnucash1 (void)
+{
+  GKeyFile *keyfile;
+  const gchar *home;
+  gchar *mdi_file, *value;
+  gchar **keys, **key, *new_key;
+  gint file_id, max;
+
+  /* First test if there are already files in the gconf file history.
+   * If so, then bail out now. */
+  value = gnc_gconf_get_string(HISTORY_STRING_SECTION, "file0", NULL);
+  if (value) {
+    g_free(value);
+    return;
+  }
+
+  home = g_get_home_dir();
+  if (!home)
+    return;
+
+  /* Copy the old values from the gnucash 1.x/gnome1 settings file to
+   * the gnucash 2.x/gconf settings area.  */
+  mdi_file = g_build_filename(home, ".gnome", "GnuCash", (gchar *)NULL);
+  keyfile = gnc_key_file_load_from_file (mdi_file, FALSE, FALSE);
+  if (keyfile) {
+    keys = g_key_file_get_keys(keyfile, GNOME1_HISTORY, NULL, NULL);
+    if (keys) {
+      for (key = keys; *key; key++) {
+	if (!strcmp(*key, GNOME1_MAXFILES)) {
+	  max = g_key_file_get_integer(keyfile, GNOME1_HISTORY,
+				       GNOME1_MAXFILES, NULL);
+	  printf("Found old maxfiles: %d\n", max);
+	  if ((max > 0) && (max < MAX_HISTORY_FILES))
+	    printf("Setting maxfiles: %d\n\n", max);
+	    gnc_gconf_set_int(HISTORY_STRING_SECTION, HISTORY_STRING_MAXFILES,
+			      max, NULL);
+	  continue;
+	}
+
+	if (sscanf(*key, "File%d", &file_id) == 1) {
+	  value = g_key_file_get_string(keyfile, GNOME1_HISTORY, *key, NULL);
+	  if (!value)
+	    continue;
+	  printf("Found old file %d: %s\n", file_id, value);
+	  new_key = g_strdup_printf(HISTORY_STRING_FILE_N, file_id);
+	  gnc_gconf_set_string (HISTORY_STRING_SECTION, new_key, value, NULL);
+	  printf("Setting %s: %s\n\n", new_key, value);
+	  g_free(new_key);
+	  g_free(value);
+	}
+      }
+      g_strfreev(keys);
+    }
+    g_key_file_free(keyfile);
+  }
+
+  g_free(mdi_file);
+}
+
 /************************************************************
  *                  Object Implementation                   *
  ************************************************************/
@@ -467,6 +532,8 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 	plugin_class->gconf_notifications = gnc_plugin_history_list_changed;
 
 	g_type_class_add_private(klass, sizeof(GncPluginFileHistoryPrivate));
+
+	gnc_plugin_history_list_from_gnucash1();
 }
 
 
