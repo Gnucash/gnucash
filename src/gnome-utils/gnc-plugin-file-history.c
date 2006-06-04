@@ -37,13 +37,13 @@
 #include "gtk-compat.h"
 #include <string.h>
 
+#include "gnc-gkeyfile-utils.h"
 #include "gnc-file.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-window.h"
 #include "gnc-engine.h"
 #include "gnc-gconf-utils.h"
-#include "gnc-gkeyfile-utils.h"
 
 static GObjectClass *parent_class = NULL;
 

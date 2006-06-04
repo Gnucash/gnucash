@@ -1,3 +1,8 @@
+2006-05-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-plugin-file-history.c:
+	  swap the #includes so it builds on FC3 w/ glib-2.4
+
 2006-06-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-plugin-file-history.c: If the g2 file
