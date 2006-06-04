@@ -68,7 +68,7 @@
 	shouldn't process any keystrokes that have a "modifier" (e.g. Alt,
 	Meta, etc.) key pressed.  This allows Alt-Ctl-Pgup/Down in a
 	register to change the notebook page, just like from the accounts
-	page. Also remove some dead code.
+	page. Also remove some dead code.  Fixes #343228.
 
 2006-06-03  Andreas Köhler  <andi5.py@gmx.net>
 
