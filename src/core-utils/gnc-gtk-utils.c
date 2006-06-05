@@ -49,6 +49,7 @@ gnc_cbe_set_by_string(GtkComboBoxEntry *cbe,
   model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
   if (!gtk_tree_model_get_iter_first(model, &iter)) {
     /* empty tree */
+    gtk_combo_box_set_active(GTK_COMBO_BOX(cbe), -1);
     return;
   }
 

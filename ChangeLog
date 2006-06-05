@@ -1,5 +1,18 @@
 2006-06-04  David Hampton  <hampton@employees.org>
 
+	* src/business/business-gnome/search-owner.c:
+	* src/core-utils/gnc-gtk-utils.[ch]:
+	* src/gnome-search/search-account.c:
+	* src/gnome-search/search-boolean.c:
+	* src/gnome-search/search-core-utils.[ch]:
+	* src/gnome-search/search-date.c:
+	* src/gnome-search/search-double.c:
+	* src/gnome-search/search-int64.c:
+	* src/gnome-search/search-numeric.c:
+	* src/gnome-search/search-reconciled.c:
+	* src/gnome-search/search-string.c: Convert the search selection
+	widgets over from the deprecated GtkOptionMenu to a GtkComboBox.
+
 	* src/core-utils/gnc-gtk-utils.c:
 	* src/gnome-utils/gnc-currency-edit.c:
 	* src/gnome-utils/gnc-account-sel.c: Set up the list store
