@@ -51,9 +51,7 @@ G_BEGIN_DECLS
 
 /* typedefs & structures */
 #ifndef HAVE_GLIB26
-#ifndef __G_KEY_FILE_H__
-typedef struct _GKeyFile GKeyFile;
-#endif
+#include "gkeyfile.h"
 #endif
 
 
