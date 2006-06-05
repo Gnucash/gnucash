@@ -45,6 +45,7 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
@@ -56,6 +57,7 @@ glade_DATA = \
   import-provider-format.glade
 
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/glib26 \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

@@ -23,6 +23,7 @@ libgncmod_qif_import_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
@@ -51,6 +52,7 @@ gladedir = ${GNC_GLADE_DIR}
 glade_DATA = qif.glade
 
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/glib26 \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

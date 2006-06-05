@@ -16,11 +16,13 @@ libgncmod_stylesheets_la_LIBADD = \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${QOF_LIBS} \
   ${GUILE_LIBS} \
   ${GLIB_LIBS}
 
 AM_CFLAGS = \
+  -I${top_srcdir}/lib/glib26 \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \

@@ -10,6 +10,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/business/business-core \
+  -I${top_srcdir}/lib/glib26 \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
@@ -55,6 +56,7 @@ libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
+  ${top_builddir}/lib/glib26/libgncglib.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GTKHTML_LIBS} \

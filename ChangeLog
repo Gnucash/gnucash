@@ -1,3 +1,12 @@
+2006-05-04  David Hampton  <hampton@employees.org>
+
+	* various Makefile.am files: Add lib/glib26 to the include and
+	library paths.
+
+	* src/gnome-utils/gnc-plugin-page.h: Include gkeyfile.h instead of
+	explicitly declaring a data type. This prevents include file
+	ordering problems.
+
 2006-05-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-plugin-file-history.c:

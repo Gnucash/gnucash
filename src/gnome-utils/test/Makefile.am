@@ -41,6 +41,7 @@ INCLUDES= \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
+  -I${top_srcdir}/lib/glib26 \
   ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS} ${QOF_CFLAGS}
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c

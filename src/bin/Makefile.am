@@ -8,6 +8,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GTK_CFLAGS} \
   -DDATADIR=\"${GNC_SHAREDIR}\" \
   -DLIBDIR=\"${GNC_LIBDIR}\" \
   -DGNC_HELPDIR=\"${GNC_HELPDIR}\" \
+  -I${top_srcdir}/lib/glib26 \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/app-utils \
@@ -21,6 +22,7 @@ bin_PROGRAMS = gnucash-bin
 gnucash_bin_SOURCES = gnucash-bin.c
 gnucash_bin_LDADD = ${GUILE_LIBS} ${GLIB_LIBS} ${GNOME_LIBS} ${GTK_LIBS} \
 ${QOF_LIBS} \
+${top_builddir}/lib/glib26/libgncglib.la \
 ${top_builddir}/src/engine/libgncmod-engine.la \
 ${top_builddir}/src/gnome/libgncgnome.la \
 ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
