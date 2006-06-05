@@ -16,18 +16,7 @@
 
 (export gnc:reload-module)
 
-(define top-level (N_ "_Business"))
-(define new-label (N_ "New"))
-(define find-label (N_ "Find"))
-
 (define (gnc:reload-module name)
   (let ((m (current-module)))
     (load-from-path name)
     (set-current-module m)))
-
-(define (business-report-function)
-  (gnc:add-extension
-   (gnc:make-menu gnc:menuname-business-reports
-		  (list gnc:menuname-reports))))
-
-(gnc:hook-add-dangler gnc:*report-hook* business-report-function)
