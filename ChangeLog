@@ -1,3 +1,8 @@
+2006-06-05  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-menu-extensions.c: Fix "missing icon" menu
+	icons on FC6.
+
 2006-06-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-icons.c:
