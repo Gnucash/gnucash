@@ -192,8 +192,6 @@ gnc_currency_edit_new (void)
 {
 	GNCCurrencyEdit *gce;
 	GtkListStore *store;
-	GtkEntry *entry;
-	GtkEntryCompletion* completion;
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 	gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
@@ -201,14 +199,6 @@ gnc_currency_edit_new (void)
 			    "text-column", 0,
 			    NULL);
 	g_object_unref (store);
-
-	/* Set up completion on the entry */
-	entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(gce)));
-	completion = gtk_entry_completion_new();
-	gtk_entry_completion_set_model(completion,
-				       GTK_TREE_MODEL(store));
-	gtk_entry_completion_set_text_column(completion, 0);
-	gtk_entry_set_completion(entry, completion);
 
 	/* Now the signals to make sure the user can't leave the
 	   widget without a valid currency. */

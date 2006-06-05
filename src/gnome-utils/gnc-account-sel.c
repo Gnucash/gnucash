@@ -132,8 +132,6 @@ static void
 gnc_account_sel_init (GNCAccountSel *gas)
 {
 	GtkWidget *widget;
-	GtkEntry *entry;
-	GtkEntryCompletion *completion;
 
         gas->initDone = FALSE;
         gas->acctTypeFilters = FALSE;
@@ -148,12 +146,6 @@ gnc_account_sel_init (GNCAccountSel *gas)
         gtk_container_add( GTK_CONTAINER(gas), widget );
 
         /* Add completion. */
-	entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
-	completion = gtk_entry_completion_new();
-        gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(gas->store));
-	gtk_entry_completion_set_text_column(completion, COLUMN_ACCT_NAME);
-	//	gtk_entry_completion_set_inline_completion(completion, TRUE);
-	gtk_entry_set_completion(entry, completion);
 	gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(widget));
 
         /* Get the accounts, place into combo list */

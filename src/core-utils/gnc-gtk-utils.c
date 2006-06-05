@@ -165,6 +165,15 @@ gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
   entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
   completion = gtk_entry_get_completion(entry);
 
+  /* No completion yet? Set one up. */
+  if (!completion) {
+    completion = gtk_entry_completion_new();
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+    gtk_entry_completion_set_model(completion, model);
+    gtk_entry_completion_set_text_column(completion, 0);
+    gtk_entry_set_completion(entry, completion);
+  }
+
   /* If an item in the combo box isn't already selected, then force
    * select the first item. Take care, the combo box may not have been
    * filled yet.  */
