@@ -1,5 +1,8 @@
 2006-05-04  David Hampton  <hampton@employees.org>
 
+	* various Makefile.am files: Don't ever reference lib/glib26 if
+	the host system has glib 2.6 or better installed.
+
 	* various Makefile.am files: Add lib/glib26 to the include and
 	library paths.
 

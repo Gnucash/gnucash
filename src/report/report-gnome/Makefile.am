@@ -1,3 +1,8 @@
+if !HAVE_GLIB26
+  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
+  GLIB26_INC = -I${top_srcdir}/lib/glib26
+endif
+
 SUBDIRS = .
 # test -- removed 'test' from SUBDIRS by jsled 2004.05.02 .. I don't know how
 # to get the test-link-mumble to link correctly; plz assist.
@@ -14,7 +19,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/report/report-system \
-  -I${top_srcdir}/lib/glib26 \
+  ${GLIB26_INC} \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
@@ -44,7 +49,7 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
-  ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GLIB26_LIBS} \
   ${GLADE_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \

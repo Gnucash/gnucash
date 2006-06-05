@@ -1,3 +1,8 @@
+if !HAVE_GLIB26
+  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
+  GLIB26_INC = -I${top_srcdir}/lib/glib26
+endif
+
 TESTS =  \
   test-link-module test-load-module
 
@@ -7,8 +12,6 @@ TESTS =  \
 TESTS_GUI = test-gnc-recurrence test-gnc-dialog
 
 ##lib_LTLIBRARIES = libgncgnome.la
-
-
 
 GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/core-utils \
@@ -41,7 +44,7 @@ INCLUDES= \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/lib/glib26 \
+  ${GLIB26_INC} \
   ${GLIB_CFLAGS} ${GUILE_INCS} ${GNOME_CFLAGS} ${GLADE_CFLAGS} ${QOF_CFLAGS}
 
 test_gnc_recurrence_SOURCES=test-gnc-recurrence.c

@@ -1,3 +1,8 @@
+if !HAVE_GLIB26
+  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
+  GLIB26_INC = -I${top_srcdir}/lib/glib26
+endif
+
 SUBDIRS = glade schemas ui
 
 lib_LTLIBRARIES = libgncgnome.la libgw-gnc.la 
@@ -20,7 +25,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
-  ${top_builddir}/lib/glib26/libgncglib.la \
+  ${GLIB26_LIBS} \
   ${GLADE_LIBS} \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS} ${QOF_LIBS}
@@ -123,7 +128,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/register/register-gnome \
   -I${top_srcdir}/src/report/report-system \
   -I${top_srcdir}/src/report/report-gnome \
-  -I${top_srcdir}/lib/glib26 \
+  ${GLIB26_INC} \
   -I${top_srcdir}/lib/libc \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
