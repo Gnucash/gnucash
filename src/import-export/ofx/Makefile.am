@@ -1,8 +1,3 @@
-if !HAVE_GLIB26
-  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
-  GLIB26_INC = -I${top_srcdir}/lib/glib26
-endif
-
 SUBDIRS = . test
 
 pkglib_LTLIBRARIES=libgncmod-ofx.la
@@ -23,13 +18,11 @@ libgncmod_ofx_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GLIB26_LIBS} \
   ${QOF_LIBS} \
   ${GLIB_LIBS} \
   ${LIBOFX_LIBS}
 
 AM_CFLAGS = \
-  ${GLIB26_INC} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

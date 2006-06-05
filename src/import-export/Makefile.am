@@ -1,8 +1,3 @@
-if !HAVE_GLIB26
-  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
-  GLIB26_INC = -I${top_srcdir}/lib/glib26
-endif
-
 SUBDIRS = . schemas qif qif-import \
 	${OFX_DIR} ${HBCI_DIR} ${MT940_DIR} log-replay test
 DIST_SUBDIRS = schemas qif qif-import qif-io-core \
@@ -50,7 +45,6 @@ libgncmod_generic_import_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GLIB26_LIBS} \
   ${GNOME_LIBS} \
   ${GLADE_LIBS} \
   ${QOF_LIBS} \
@@ -62,7 +56,6 @@ glade_DATA = \
   import-provider-format.glade
 
 AM_CFLAGS = \
-  ${GLIB26_INC} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

@@ -1,4 +1,12 @@
-2006-05-04  David Hampton  <hampton@employees.org>
+2006-06-04  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in:
+	* various Makefile.am files:
+	  Move the GLIB26 compatibility checks to configure.in.
+	  Just modify GLIB_LIBS and GLIB_CFLAGS so everyone properly
+	  links against the glib26 compatibility library when necessary.
+
+2006-06-04  David Hampton  <hampton@employees.org>
 
 	* various Makefile.am files: Don't ever reference lib/glib26 if
 	the host system has glib 2.6 or better installed.
@@ -10,7 +18,7 @@
 	explicitly declaring a data type. This prevents include file
 	ordering problems.
 
-2006-05-04  Derek Atkins  <derek@ihtfp.com>
+2006-06-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-plugin-file-history.c:
 	  swap the #includes so it builds on FC3 w/ glib-2.4

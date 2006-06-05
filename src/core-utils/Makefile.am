@@ -1,8 +1,3 @@
-if !HAVE_GLIB26
-  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
-  GLIB26_INC = -I${top_srcdir}/lib/glib26
-endif
-
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
 libcore_utils_la_SOURCES = \
@@ -14,7 +9,6 @@ libcore_utils_la_SOURCES = \
   gnc-gobject-utils.c
 
 libcore_utils_la_LIBADD = \
-  ${GLIB26_LIBS} \
   ${GLIB_LIBS} \
   ${GCONF_LIBS} \
   ${GTK_LIBS}
@@ -40,7 +34,6 @@ noinst_HEADERS = \
 EXTRA_DIST = ${gwmod_DATA}
 
 AM_CFLAGS = \
-  ${GLIB26_INC} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \

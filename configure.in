@@ -154,7 +154,11 @@ then
   AC_DEFINE(HAVE_GLIB26,1,[System has glib 2.6.0 or better])
   HAVE_GLIB26=yes
 else
+  GLIB24_LIBS="$GLIB_LIBS"
+  GLIB_LIBS="\${top_builddir}/lib/glib26/libgncglib.la $GLIB_LIBS"
+  GLIB_CFLAGS="-I\${top_srcdir}/lib/glib26 $GLIB_CFLAGS"
   AC_MSG_RESULT(no)
+  AC_SUBST(GLIB24_LIBS)
 fi
 AM_CONDITIONAL(HAVE_GLIB26, test "x$HAVE_GLIB26" = "xyes" )
 

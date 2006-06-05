@@ -1,8 +1,3 @@
-if !HAVE_GLIB26
-  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
-  GLIB26_INC = -I${top_srcdir}/lib/glib26
-endif
-
 SUBDIRS = .
 
 pkglib_LTLIBRARIES=libgncmod-log-replay.la
@@ -22,11 +17,9 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
-  ${GLIB26_LIBS} \
   ${GLIB_LIBS} ${QOF_LIBS}
 
 AM_CFLAGS = \
-  ${GLIB26_INC} \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \

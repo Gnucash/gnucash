@@ -1,8 +1,3 @@
-if !HAVE_GLIB26
-  GLIB26_LIB = ${top_builddir}/lib/glib26/libgncglib.la
-  GLIB26_INC = -I${top_srcdir}/lib/glib26
-endif
-
 SUBDIRS = . glade schemas ui
 PWD := $(shell pwd)
 
@@ -32,8 +27,7 @@ AM_CFLAGS = \
   ${QOF_CFLAGS} \
   -I${top_srcdir}/src/register/register-core \
   -I${top_srcdir}/src/register/register-gnome \
-  -I${top_srcdir}/src/register/ledger-core \
-  ${GLIB26_INC}
+  -I${top_srcdir}/src/register/ledger-core
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
@@ -92,7 +86,6 @@ libgncmod_business_gnome_la_LIBADD = \
   ${GUILE_LIBS} \
   ${GLIB_LIBS} \
   ${QOF_LIBS} \
-  ${GLIB26_LIBS} \
   ${EFENCE_LIBS}
 
 
