@@ -11,7 +11,7 @@
 
 inherit eutils gnome2 
 
-DOC_VER="1.8.5"
+DOC_VER="1.9.0"
 
 DESCRIPTION="A personal finance manager (unstable version)."
 HOMEPAGE="http://www.gnucash.org/"
