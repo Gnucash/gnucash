@@ -32,6 +32,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h"
 #include "gnc-amount-edit.h"
@@ -178,43 +179,15 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
 }
 
 static void
-optionmenu_changed (GtkWidget *widget, NewTaxTable *ntt)
+combo_changed (GtkWidget *widget, NewTaxTable *ntt)
 {
-  g_return_if_fail (ntt);
-  ntt->type = GPOINTER_TO_INT (g_object_get_data (G_OBJECT(widget), "option"));
-}
+  gint index;
 
-static GtkWidget *
-add_menu_item (GtkWidget *menu, NewTaxTable *ntt, char *label, gint type)
-	       
-{
-  GtkWidget *item;
+  g_return_if_fail(GTK_IS_COMBO_BOX(widget));
+  g_return_if_fail(ntt);
 
-  item = gtk_menu_item_new_with_label (label);
-  g_object_set_data (G_OBJECT (item), "option", GINT_TO_POINTER (type));
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (optionmenu_changed), ntt);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-  return item;
-}
-
-static GtkWidget *
-make_menu (GtkWidget *omenu, NewTaxTable *ntt)
-{
-  GtkWidget *menu, *value, *percent;
-  int current = ntt->type - 1;
-
-  menu = gtk_menu_new ();
-  value = add_menu_item (menu, ntt, _("Value $"), GNC_AMT_TYPE_VALUE);
-  /* xgettext:no-c-format */
-  percent = add_menu_item (menu, ntt, _("Percent %"), GNC_AMT_TYPE_PERCENT);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-
-  g_signal_emit_by_name (G_OBJECT ((current == GNC_AMT_TYPE_VALUE-1 ?
-					value : percent)), "activate", ntt);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
-  return menu;
+  index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+  ntt->type = index + 1;
 }
 
 static GncTaxTable *
@@ -224,9 +197,9 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
   GncTaxTable *created_table = NULL;
   NewTaxTable *ntt;
   GladeXML *xml;
-  GtkWidget *box, *widget;
+  GtkWidget *box, *widget, *combo;
   gboolean done;
-  gint response;
+  gint response, index;
 
   if (!ttw) return NULL;
   if (new_table && entry) return NULL;
@@ -249,7 +222,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gtk_entry_set_text (GTK_ENTRY (ntt->name_entry), name);
 
   /* Create the menu */
-  make_menu (glade_xml_get_widget (xml, "type_menu"), ntt);
+  combo = glade_xml_get_widget (xml, "type_combobox");
+  index = ntt->type ? ntt->type : GNC_AMT_TYPE_VALUE;
+  gtk_combo_box_set_active(GTK_COMBO_BOX(combo), index - 1);
+  g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), ntt);
 
   /* Attach our own widgets */
   box = glade_xml_get_widget (xml, "amount_box");

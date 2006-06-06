@@ -48,6 +48,7 @@ void billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_edit_term_cb (GtkButton *button, BillTermsWindow *btw);
 void billterms_window_close (GtkWidget *widget, gpointer data);
 void billterms_window_destroy_cb (GtkWidget *widget, gpointer data);
+void billterms_type_combobox_changed (GtkComboBox *cb, gpointer data);
 
 typedef struct _billterm_notebook {
   GtkTooltips *		tooltips;
@@ -344,51 +345,14 @@ maybe_set_type (NewBillTerm *nbt, GncBillTermType type)
   show_notebook (&nbt->notebook);
 }
 
-static void
-on_days1_activate (GtkWidget *w, gpointer data)
+void
+billterms_type_combobox_changed (GtkComboBox *cb, gpointer data)
 {
   NewBillTerm *nbt = data;
+  gint value;
 
-  maybe_set_type (nbt, GNC_TERM_TYPE_DAYS);
-}
-
-static void
-on_proximo1_activate (GtkWidget *w, gpointer data)
-{
-  NewBillTerm *nbt = data;
-
-  maybe_set_type (nbt, GNC_TERM_TYPE_PROXIMO);
-}
-
-static void
-make_menu (GtkWidget *omenu, NewBillTerm *nbt)
-{
-  GladeXML *xml;
-  GtkWidget *popup;
-
-  /* Open and read the Popup XML */
-  xml = gnc_glade_xml_new ("billterms.glade", "Term Type Popup");
-  popup = glade_xml_get_widget (xml, "Term Type Popup");
-
-  /* Glade insists on making this a tearoff menu. */
-  if (gnc_gconf_menus_have_tearoff()) {
-    GtkMenuShell *ms = GTK_MENU_SHELL (popup);
-    GtkWidget *tearoff;
-
-    tearoff = g_list_nth_data (ms->children, 0);
-    ms->children = g_list_remove (ms->children, tearoff);
-    gtk_widget_destroy (tearoff);
-  }
-
-  /* attach the signal handlers */
-  glade_xml_signal_connect_data (xml, "on_days1_activate",
-				 G_CALLBACK (on_days1_activate), nbt);
-  glade_xml_signal_connect_data (xml, "on_proximo1_activate",
-				 G_CALLBACK (on_proximo1_activate), nbt);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), popup);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu),
-			       nbt->notebook.type - 1);
+  value = gtk_combo_box_get_active(cb);
+  maybe_set_type (nbt, value + 1);
 }
 
 static GncBillTerm *
@@ -398,7 +362,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
   GncBillTerm *created_term = NULL;
   NewBillTerm *nbt;
   GladeXML *xml;
-  GtkWidget *box;
+  GtkWidget *box, *combo_box;
   gint response;
   gboolean done;
   const gchar *dialog_name;
@@ -434,7 +398,8 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     nbt->notebook.type = GNC_TERM_TYPE_DAYS;
 
   /* Create the menu */
-  make_menu (glade_xml_get_widget (xml, "type_menu"), nbt);
+  combo_box = glade_xml_get_widget (xml, "type_combobox");
+  gtk_combo_box_set_active(GTK_COMBO_BOX(combo_box), nbt->notebook.type - 1);
 
   /* Show the right notebook page */
   show_notebook (&nbt->notebook);

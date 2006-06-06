@@ -545,37 +545,6 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkOptionMenu" id="type_menu">
-	      <property name="visible">True</property>
-	      <property name="tooltip" translatable="yes">Choose the type of Billing Term</property>
-	      <property name="can_focus">True</property>
-	      <property name="history">0</property>
-
-	      <child internal-child="menu">
-		<widget class="GtkMenu" id="convertwidget3">
-		  <property name="visible">True</property>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="convertwidget4">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Type Menu</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="left_attach">1</property>
-	      <property name="right_attach">2</property>
-	      <property name="top_attach">5</property>
-	      <property name="bottom_attach">6</property>
-	      <property name="x_options">fill</property>
-	      <property name="y_options"></property>
-	    </packing>
-	  </child>
-
-	  <child>
 	    <widget class="GtkHBox" id="notebook_box">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
@@ -769,13 +738,30 @@
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
-		  <property name="mnemonic_widget">type_menu</property>
 		</widget>
 	      </child>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">0</property>
 	      <property name="right_attach">1</property>
+	      <property name="top_attach">5</property>
+	      <property name="bottom_attach">6</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options">fill</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkComboBox" id="type_combobox">
+	      <property name="visible">True</property>
+	      <property name="items" translatable="yes">Days
+Proximo</property>
+	      <property name="focus_on_click">True</property>
+	      <signal name="changed" handler="billterms_type_combobox_changed" last_modification_time="Tue, 06 Jun 2006 01:17:37 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">1</property>
+	      <property name="right_attach">2</property>
 	      <property name="top_attach">5</property>
 	      <property name="bottom_attach">6</property>
 	      <property name="x_options">fill</property>
@@ -1045,30 +1031,6 @@
 	  <property name="fill">True</property>
 	</packing>
       </child>
-    </widget>
-  </child>
-</widget>
-
-<widget class="GtkMenu" id="Term Type Popup">
-  <property name="visible">True</property>
-
-  <child>
-    <widget class="GtkMenuItem" id="days1">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Number of days from now</property>
-      <property name="label" translatable="yes">Days</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_days1_activate"/>
-    </widget>
-  </child>
-
-  <child>
-    <widget class="GtkMenuItem" id="proximo1">
-      <property name="visible">True</property>
-      <property name="tooltip" translatable="yes">Absolute Day-of-the-month</property>
-      <property name="label" translatable="yes">Proximo</property>
-      <property name="use_underline">True</property>
-      <signal name="activate" handler="on_proximo1_activate"/>
     </widget>
   </child>
 </widget>
