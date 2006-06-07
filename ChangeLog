@@ -1,3 +1,8 @@
+2006-06-06  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/glade/billterms.glade: Hide notebook
+	tabs on programmatically changed notebook.
+
 2006-06-05  Chris Lyttle  <chris@wilddev.net>
 
 	* packaging/gnucash-1.9.x.ebuild: Update to use -docs-1.9.0
