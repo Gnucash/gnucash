@@ -20,3 +20,10 @@
   (let ((m (current-module)))
     (load-from-path name)
     (set-current-module m)))
+
+(define (business-report-function)
+  (gnc:add-extension
+   (gnc:make-menu gnc:menuname-business-reports
+		  (list gnc:menuname-reports))))
+
+(gnc:hook-add-dangler gnc:*report-hook* business-report-function)

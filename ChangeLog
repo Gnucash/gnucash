@@ -1,3 +1,8 @@
+2006-06-07  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/business-gnome.scm: Restore the
+	business reports menu.
+
 2006-06-06  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/glade/billterms.glade: Hide notebook
