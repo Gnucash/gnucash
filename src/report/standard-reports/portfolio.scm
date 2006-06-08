@@ -196,14 +196,14 @@
 	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source
-                  ('weighted-average 
+                  ((weighted-average) 
                    (let ((pricealist 
                           (gnc:get-commoditylist-totalavg-prices
                            commodity-list currency to-date 0 0)))
                      (lambda (foreign date) 
                        (cons #f (gnc:pricealist-lookup-nearest-in-time
 				 pricealist foreign date)))))
-                  ('pricedb-latest 
+                  ((pricedb-latest) 
                    (lambda (foreign date) 
                      (let ((price
                             (gnc:pricedb-lookup-latest-any-currency
@@ -212,7 +212,7 @@
                            (let ((v (gnc:price-get-value (car price))))
                              (cons (car price) v))
                            (cons #f (gnc:numeric-zero))))))
-                  ('pricedb-nearest 
+                  ((pricedb-nearest) 
                    (lambda (foreign date) 
                      (let ((price
                             (gnc:pricedb-lookup-nearest-in-time-any-currency 

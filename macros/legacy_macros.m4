@@ -65,7 +65,7 @@ fi
 
 if test -n "$version_ok"; then
 	AC_MSG_RESULT(yes: $guile_vers_string)
-	ifelse([$3], , true, [$4])
+	ifelse([$3], , true, [$3])
 
 else
 	AC_MSG_RESULT(no: $guile_vers_string)

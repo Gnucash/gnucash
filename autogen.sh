@@ -228,4 +228,9 @@ ${AUTOCONF} || \
 
 conf_flags="--enable-compile-warnings" # --enable-iso-c --enable-error-on-warning
 
+echo ""
+echo "NOTE: Just run configure.  Even if something told you to run"
+echo "      aclocal, automake, or anything else above, IGNORE IT."
+echo "      Everything has been run properly.  Just run configure..."
+echo ""
 echo You must now run $srcdir/configure $conf_flags "$@" ...

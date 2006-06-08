@@ -88,21 +88,26 @@ main (int argc, char **argv)
 {
   int i;
 
-	qof_init();
+  qof_init();
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
   xaccLogDisable ();
 
   /* Always start from the same random seed so we fail consistently */
   srand(0);
-	if(cashobjects_register()) {
+  if(!cashobjects_register()) {
+    failure("can't register cashbojects");
+    goto cleanup;
+  }
+
   /* Loop the test. */
   for (i=0; i < 10; i++)
-		{
+  {
     run_test ();
-		}
-	}
+  }
   success("queries seem to work");
-	qof_close();
+
+ cleanup:
+  qof_close();
   return 0;
 }

@@ -28,8 +28,6 @@
  * restoring data to/from an ordinary Unix filesystem file.
  */
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>
@@ -47,15 +45,14 @@
 #include <dirent.h>
 #include <time.h>
 
+#include "qof.h"
 #include "TransLog.h"
 #include "gnc-engine.h"
 
 #include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
-#include "io-gncbin.h"
 #include "io-gncxml-v2.h"
-#include "gnc-backend-api.h"
 #include "gnc-backend-file.h"
 #include "gnc-gconf-utils.h"
 
@@ -67,6 +64,18 @@
 #define GNC_BE_ZIP  "file_compression"
 
 static QofLogModule log_module = GNC_MOD_BACKEND;
+
+typedef enum 
+{
+    GNC_BOOK_NOT_OURS,
+    GNC_BOOK_BIN_FILE,
+    GNC_BOOK_XML1_FILE,
+    GNC_BOOK_XML2_FILE,
+    GNC_BOOK_XML2_FILE_NO_ENCODING,
+    QSF_GNC_OBJECT,
+    QSF_OBJECT,
+    QSF_MAP,
+} QofBookFileType;
 
 /* ================================================================= */
 
@@ -381,30 +390,6 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 
 /* ================================================================= */
 
-static gboolean
-is_gzipped_file(const gchar *name)
-{
-    unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
-
-    if(fd == 0)
-    {
-        return FALSE;
-    }
-
-    if(read(fd, buf, 2) != 2)
-    {
-        return FALSE;
-    }
-
-    if(buf[0] == 037 && buf[1] == 0213)
-    {
-        return TRUE;
-    }
-    
-    return FALSE;
-}
-    
 static QofBookFileType
 gnc_file_be_determine_file_type(const char *path)
 {
@@ -417,10 +402,6 @@ gnc_file_be_determine_file_type(const char *path)
     }
   } else if (gnc_is_xml_data_file(path)) {
     return GNC_BOOK_XML1_FILE;
-  } else if (is_gzipped_file(path)) {
-    return GNC_BOOK_XML2_FILE;
-  } else if (gnc_is_bin_file(path)) {
-    return GNC_BOOK_BIN_FILE;
   }
   return GNC_BOOK_NOT_OURS;
 }
@@ -442,8 +423,6 @@ gnc_determine_file_type (const char *path)
 	if (sbuf.st_size == 0)    { PINFO (" empty file"); return TRUE; }
 	if(gnc_is_xml_data_file_v2(path, NULL)) { return TRUE; } 
 	else if(gnc_is_xml_data_file(path))     { return TRUE; } 
-	else if(is_gzipped_file(path))          { return TRUE; }
-	else if(gnc_is_bin_file(path))          { return TRUE; }
 	PINFO (" %s is not a gnc file", path);
 	return FALSE;
 }	
@@ -885,10 +864,6 @@ gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
         rc = qof_session_load_from_xml_file (book, be->fullpath);
         if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
         break;
-    case GNC_BOOK_BIN_FILE:
-        qof_session_load_from_binfile(book, be->fullpath);
-        error = gnc_get_binfile_io_error();
-        break;
     default:
         PWARN("File not any known type");
         error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
@@ -962,7 +937,7 @@ compression_changed_cb(GConfEntry *entry, gpointer user_data)
         be->file_compression = gnc_gconf_get_bool("general", "file_compression", NULL);
 }
 
-QofBackend*
+static QofBackend*
 gnc_backend_new(void)
 {
 	FileBackend *gnc_be;
@@ -1026,8 +1001,8 @@ gnc_provider_free (QofBackendProvider *prov)
         g_free (prov);
 }
 
-void
-gnc_provider_init(void)
+G_MODULE_EXPORT const gchar *
+g_module_check_init(GModule *module)
 {
 	QofBackendProvider *prov;
 #ifdef ENABLE_NLS
@@ -1044,6 +1019,7 @@ gnc_provider_init(void)
         prov->provider_free = gnc_provider_free;
 	prov->check_data_type = gnc_determine_file_type;
         qof_backend_register_provider (prov);
+        return NULL;
 }
 
 /* ========================== END OF FILE ===================== */

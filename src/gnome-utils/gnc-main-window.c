@@ -906,7 +906,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
 
   session = gnc_get_current_session();
   book = qof_session_get_book(session);
-  filename = qof_session_get_file_path(session);
+  filename = qof_session_get_url(session);
   if (filename == NULL)
     filename = _("<unknown>");
   if ((tmp = strrchr(filename, '/')) != NULL)
@@ -1587,8 +1587,34 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
 					   GncPluginPage *page)
 {
   ENTER("");
-  gnc_main_window_tab_entry_activate(entry, page);
+  gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(entry));
   LEAVE("");
+  return FALSE;
+}
+
+static gboolean
+gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
+					   GdkEventKey *event,
+					   GncPluginPage *page)
+{
+  if (event->keyval == GDK_Escape) {
+    GtkWidget *label, *entry2;
+
+    g_return_val_if_fail(GTK_IS_ENTRY(entry), FALSE);
+    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+
+    ENTER("");
+    if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
+				    page, &label, &entry2)) {
+      LEAVE("can't find required widgets");
+      return FALSE;
+    }
+
+    gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+    gtk_widget_hide(entry);
+    gtk_widget_show(label);
+    LEAVE("");
+  }
   return FALSE;
 }
 
@@ -2055,6 +2081,9 @@ gnc_main_window_open_page (GncMainWindow *window,
 			 G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 	g_signal_connect(G_OBJECT(entry), "focus-out-event",
 			 G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
+			 page);
+	g_signal_connect(G_OBJECT(entry), "key-press-event",
+			 G_CALLBACK(gnc_main_window_tab_entry_key_press_event),
 			 page);
 	g_signal_connect(G_OBJECT(entry), "editing-done",
 			 G_CALLBACK(gnc_main_window_tab_entry_editing_done),
@@ -2618,6 +2647,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
         gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
 
 	priv->progressbar = gtk_progress_bar_new ();
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
 	gtk_widget_show (priv->progressbar);
 	gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
 			    FALSE, TRUE, 0);
@@ -3052,24 +3082,22 @@ static void
 gnc_main_window_cmd_extensions_callgrind (GtkAction *action, GncMainWindow *window)
 {
 #ifdef HAVE_VALGRIND_CALLGRIND_H
-	GncMainWindowPrivate *priv;
-	static struct timeval start, end;
+	static GTimeVal start, end;
 
-	priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
-	  printf("Start timing.\n");
-	  gettimeofday(&start, NULL);
+	  g_print("Start timing.\n");
+	  g_get_current_time(&start);
 	  CALLGRIND_START_INSTRUMENTATION();
 	  CALLGRIND_TOGGLE_COLLECT();
 	} else {
 	  CALLGRIND_TOGGLE_COLLECT();
 	  CALLGRIND_STOP_INSTRUMENTATION();
-	  gettimeofday(&end, NULL);
+	  g_get_current_time(&end);
 	  if (start.tv_usec > end.tv_usec) {
 	    end.tv_usec += 1000000;
 	    end.tv_sec  -= 1;
 	  }
-	  printf("Callgrind enabled for %d.%6d seconds.\n",
+	  g_print("Callgrind enabled for %d.%6d seconds.\n",
 		 (int)(end.tv_sec - start.tv_sec),
 		 (int)(end.tv_usec - start.tv_usec));
 	}

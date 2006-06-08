@@ -28,7 +28,7 @@
       (if (and (string? line)
                (not (string=? line "")))
           (let ((tag (string-ref line 0))
-                (value (make-shared-substring line 1)))
+                (value (substring line 1)))
             (set! byte-count (+ (string-length line) byte-count))
             (case tag
               ((#\^) #t) 

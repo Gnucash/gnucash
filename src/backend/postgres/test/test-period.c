@@ -34,8 +34,7 @@
 #include "test-engine-stuff.h"
 #include "Transaction.h"
 
-#define PG_LIB_NAME "libgnc-backend-postgres.la"
-#define PG_LIB_INIT "pgend_provider_init"
+#define PG_LIB_NAME "gnc-backend-postgres"
 
 static void
 run_test (void)
@@ -52,9 +51,8 @@ run_test (void)
   Timespec tsfirst, tslast, tsmiddle;
   char * test_url;
   
-  do_test( qof_load_backend_library (QOF_LIB_DIR, 
-			PG_LIB_NAME, PG_LIB_INIT),
-			" loading gnc-backend-postgres GModule failed");
+  do_test(qof_load_backend_library ("../.libs/", PG_LIB_NAME),
+          " loading gnc-backend-postgres GModule failed");
 
   session = get_random_session ();
 

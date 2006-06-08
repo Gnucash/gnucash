@@ -248,7 +248,7 @@ gnc_create_extension_info (SCM extension)
   ext_info->ae.label = g_strdup(gettext(name));
   ext_info->ae.name = gnc_ext_gen_action_name(name);
   ext_info->ae.tooltip = gnc_extension_documentation(extension);
-  ext_info->ae.stock_id = "";
+  ext_info->ae.stock_id = NULL;
   ext_info->ae.accelerator = NULL;
   ext_info->ae.callback = NULL;
 

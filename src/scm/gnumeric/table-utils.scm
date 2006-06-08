@@ -17,11 +17,11 @@
 		     (set! count 0))))
       (lambda (action value . rowdata)
 	(case action
-	  ('add (adder value rowdata))
-	  ('total (gettotal))
-	  ('getcount (getcount))
-	  ('getrows (getrows))
-	  ('reset (resetall)))))))
+	  ((add) (adder value rowdata))
+	  ((total) (gettotal))
+	  ((getcount) (getcount))
+	  ((getrows) (getrows))
+	  ((reset) (resetall)))))))
 
 ;;; Here's how it looks:
 ; > (define a (make-table-collector))

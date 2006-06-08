@@ -12,7 +12,7 @@
     <gnc-act:exclude-from-select-all>1</gnc-act:exclude-from-select-all>
 <gnc:account version="2.0.0">
   <act:name>20. Jahresüberschuss/Jahresfehlbetrag</act:name>
-  <act:id type="guid">00363fa6340f307005ba0d755a738cd6</act:id>
+  <act:id type="new">00363fa6340f307005ba0d755a738cd6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -37,7 +37,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aktiva</act:name>
-  <act:id type="guid">79b68c22ad98b86434e831c8d4403e06</act:id>
+  <act:id type="new">79b68c22ad98b86434e831c8d4403e06</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -54,7 +54,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A. Anlagevermögen:</act:name>
-  <act:id type="guid">ad96a16869bd19ee1b46debd87bec7e3</act:id>
+  <act:id type="new">ad96a16869bd19ee1b46debd87bec7e3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -83,7 +83,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>I. Immaterielle Vermögensgegenstände:</act:name>
-  <act:id type="guid">44366f8ba9a603f070c4cb233ba3fec2</act:id>
+  <act:id type="new">44366f8ba9a603f070c4cb233ba3fec2</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -108,7 +108,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Konzessionen, gewerbliche Schutzrechte und ähnliche Rechte und Werte sowie Lizenzen an solchen Rechten und Werten;</act:name>
-  <act:id type="guid">a71a0c99a50f8b05134ca224bade9c5a</act:id>
+  <act:id type="new">a71a0c99a50f8b05134ca224bade9c5a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -133,7 +133,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>EDV-Software</act:name>
-  <act:id type="guid">86bc920f63491212ae0f09cc889287fa</act:id>
+  <act:id type="new">86bc920f63491212ae0f09cc889287fa</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -159,7 +159,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Geschäfts- oder Firmenwert</act:name>
-  <act:id type="guid">da90e84e1a3258907057adbe8f2b0c7e</act:id>
+  <act:id type="new">da90e84e1a3258907057adbe8f2b0c7e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -184,7 +184,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geschäfts- oder Firmenwert</act:name>
-  <act:id type="guid">bac5921adbeff57928fcf857a75c3d04</act:id>
+  <act:id type="new">bac5921adbeff57928fcf857a75c3d04</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -206,7 +206,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. Geleistete Anzahlungen</act:name>
-  <act:id type="guid">a2e1cc6b2718e77e3b373c72ef4fe1f1</act:id>
+  <act:id type="new">a2e1cc6b2718e77e3b373c72ef4fe1f1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -231,7 +231,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>II. Sachanlagen:</act:name>
-  <act:id type="guid">b0da9482b394285e067d3993934f3d20</act:id>
+  <act:id type="new">b0da9482b394285e067d3993934f3d20</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -256,7 +256,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Grundstücke, grundstücksgleiche Rechte und Bauten einschließlich der Bauten auf fremden Grundstücken</act:name>
-  <act:id type="guid">cdaa8a79b2ff9c43cf544704888a48f5</act:id>
+  <act:id type="new">cdaa8a79b2ff9c43cf544704888a48f5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -281,7 +281,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Unbebaute Grundstücke</act:name>
-  <act:id type="guid">6a50ccd356ca750eed029b193265c3ea</act:id>
+  <act:id type="new">6a50ccd356ca750eed029b193265c3ea</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -307,7 +307,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geschäftsbauten</act:name>
-  <act:id type="guid">ee7ca67d4fe96710e7d43a19358e2d98</act:id>
+  <act:id type="new">ee7ca67d4fe96710e7d43a19358e2d98</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -333,7 +333,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Andere Bauten</act:name>
-  <act:id type="guid">ebe3b56ea67e9de041d3d963c4008a1b</act:id>
+  <act:id type="new">ebe3b56ea67e9de041d3d963c4008a1b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -359,7 +359,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Außenanlagen</act:name>
-  <act:id type="guid">ccaf12cd97c730da492c9cd906a06cf7</act:id>
+  <act:id type="new">ccaf12cd97c730da492c9cd906a06cf7</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -385,7 +385,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. technische Anlagen und Maschinen</act:name>
-  <act:id type="guid">7b61da627f39d9ad93b0c07a94185870</act:id>
+  <act:id type="new">7b61da627f39d9ad93b0c07a94185870</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -410,7 +410,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Technische Anlagen und Maschinen</act:name>
-  <act:id type="guid">79c31e768a671b1e58dd3fb465943e46</act:id>
+  <act:id type="new">79c31e768a671b1e58dd3fb465943e46</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -436,7 +436,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. andere Anlagen, Betriebs- und Geschäftsausstattung</act:name>
-  <act:id type="guid">1f8f468ceb606f4191a04c11ac24f397</act:id>
+  <act:id type="new">1f8f468ceb606f4191a04c11ac24f397</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -461,7 +461,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>PKW</act:name>
-  <act:id type="guid">fe02517547121214e223e4a0df9407ff</act:id>
+  <act:id type="new">fe02517547121214e223e4a0df9407ff</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -487,7 +487,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>LKW</act:name>
-  <act:id type="guid">c83b194bfba8f416cd85c38a1e48bdf1</act:id>
+  <act:id type="new">c83b194bfba8f416cd85c38a1e48bdf1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -513,7 +513,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Werkzeuge</act:name>
-  <act:id type="guid">31822822d1a464b634c1368c99f66a0f</act:id>
+  <act:id type="new">31822822d1a464b634c1368c99f66a0f</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -539,7 +539,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Büroeinrichtung</act:name>
-  <act:id type="guid">72775e68a49ad04040ef1e9e7dc2269b</act:id>
+  <act:id type="new">72775e68a49ad04040ef1e9e7dc2269b</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -565,7 +565,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geringwertige Wirtschaftsgüter bis 410 ¤</act:name>
-  <act:id type="guid">c15e061344f077bc0079a2bfaef71e27</act:id>
+  <act:id type="new">c15e061344f077bc0079a2bfaef71e27</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -591,7 +591,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Betriebs- und Geschäftsausstattung</act:name>
-  <act:id type="guid">7240e49c6d8cd4f81d23fae932623602</act:id>
+  <act:id type="new">7240e49c6d8cd4f81d23fae932623602</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -617,7 +617,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. geleistete Anzahlungen und Anlagen im Bau</act:name>
-  <act:id type="guid">5c47e0dc2064faf12e158d68259dd6b8</act:id>
+  <act:id type="new">5c47e0dc2064faf12e158d68259dd6b8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -642,7 +642,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>III. Finanzanlagen:</act:name>
-  <act:id type="guid">4e9a105ac4c1e29657dcb0dbe1b88b4a</act:id>
+  <act:id type="new">4e9a105ac4c1e29657dcb0dbe1b88b4a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -667,7 +667,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Anteile an verbundenen Unternehmen</act:name>
-  <act:id type="guid">df8bf70f7f5d23ec45589969c0116855</act:id>
+  <act:id type="new">df8bf70f7f5d23ec45589969c0116855</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -692,7 +692,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Ausleihungen an verbundene Unternehmen</act:name>
-  <act:id type="guid">923f60793d7a6e78e527ecd7380f805d</act:id>
+  <act:id type="new">923f60793d7a6e78e527ecd7380f805d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -717,7 +717,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. Beteiligungen</act:name>
-  <act:id type="guid">f6f14b8adcfd975f759562fd130eaaa9</act:id>
+  <act:id type="new">f6f14b8adcfd975f759562fd130eaaa9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -742,7 +742,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. Ausleihungen an Unternehmen, mit denen ein Beteiligungsverhältnis besteht </act:name>
-  <act:id type="guid">7c268f7112a229e4782b388fa561d875</act:id>
+  <act:id type="new">7c268f7112a229e4782b388fa561d875</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -767,7 +767,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5. Wertpapiere des Anlagevermögens</act:name>
-  <act:id type="guid">f2325a526199be108d12d151fce75a11</act:id>
+  <act:id type="new">f2325a526199be108d12d151fce75a11</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -792,7 +792,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>6. sonstige Ausleihungen</act:name>
-  <act:id type="guid">3c1f808daecd9c620f222b06720a7a3e</act:id>
+  <act:id type="new">3c1f808daecd9c620f222b06720a7a3e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -817,7 +817,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Beteiligungen</act:name>
-  <act:id type="guid">ff82155e950944f588c4034dc74cfa41</act:id>
+  <act:id type="new">ff82155e950944f588c4034dc74cfa41</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -839,7 +839,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wertpapiere des Anlagevermögens</act:name>
-  <act:id type="guid">c8e11a1d8ef7624a75d5436c938537b3</act:id>
+  <act:id type="new">c8e11a1d8ef7624a75d5436c938537b3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -861,7 +861,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>B. Umlaufvermögen</act:name>
-  <act:id type="guid">b2a3c59a0f2421c0533c49f81f3f25b7</act:id>
+  <act:id type="new">b2a3c59a0f2421c0533c49f81f3f25b7</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -887,7 +887,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>I. Vorräte:</act:name>
-  <act:id type="guid">f0e89ba0e75b5b730bf0ba1995a8a713</act:id>
+  <act:id type="new">f0e89ba0e75b5b730bf0ba1995a8a713</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -912,7 +912,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Roh-, Hilfs- und Betriebsstoffe</act:name>
-  <act:id type="guid">ca74dbbf834416ff58d14c3f0ecc346e</act:id>
+  <act:id type="new">ca74dbbf834416ff58d14c3f0ecc346e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -937,7 +937,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Roh-, Hilfs- und Betriebsstoffe (Bestand)</act:name>
-  <act:id type="guid">3c621c62cb0780fc4fcf834416517e12</act:id>
+  <act:id type="new">3c621c62cb0780fc4fcf834416517e12</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -959,7 +959,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. unfertige Erzeugnisse, unfertige Leistungen</act:name>
-  <act:id type="guid">57744cbda135dce6166095fefd147e42</act:id>
+  <act:id type="new">57744cbda135dce6166095fefd147e42</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -984,7 +984,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Unfertige Erzeugnisse</act:name>
-  <act:id type="guid">511d2aa1cbe4cad49dc2670027c6f2a6</act:id>
+  <act:id type="new">511d2aa1cbe4cad49dc2670027c6f2a6</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1006,7 +1006,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Unfertige Leistungen</act:name>
-  <act:id type="guid">f58e5e8112851dddbb893332a4df1d65</act:id>
+  <act:id type="new">f58e5e8112851dddbb893332a4df1d65</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1028,7 +1028,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>In Arbeit befindliche Aufträge</act:name>
-  <act:id type="guid">12f33cc965093cfe016c93d3a316f472</act:id>
+  <act:id type="new">12f33cc965093cfe016c93d3a316f472</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1050,7 +1050,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. fertige Erzeugnisse und Waren</act:name>
-  <act:id type="guid">0f9017a1b010d5d3bcad15670906c3bf</act:id>
+  <act:id type="new">0f9017a1b010d5d3bcad15670906c3bf</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1075,7 +1075,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fertige Erzeugnisse (Bestand)</act:name>
-  <act:id type="guid">2946ff5735526be68fbd040028975307</act:id>
+  <act:id type="new">2946ff5735526be68fbd040028975307</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1097,7 +1097,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Waren (Bestand)</act:name>
-  <act:id type="guid">e88b482319b9657d116f95b240dab3c5</act:id>
+  <act:id type="new">e88b482319b9657d116f95b240dab3c5</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1119,7 +1119,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. geleistete Anzahlungen</act:name>
-  <act:id type="guid">f82147634ae9c897fbb811d689b09057</act:id>
+  <act:id type="new">f82147634ae9c897fbb811d689b09057</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1144,7 +1144,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>II. Forderungen und sonstige Vermögensgegenstände:</act:name>
-  <act:id type="guid">d55816be5c7d1e7fa03c28efb9417f95</act:id>
+  <act:id type="new">d55816be5c7d1e7fa03c28efb9417f95</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1169,7 +1169,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Forderungen aus Lieferungen und Leistungen</act:name>
-  <act:id type="guid">861dd4286ab9b10d94c55341c7aa26a8</act:id>
+  <act:id type="new">861dd4286ab9b10d94c55341c7aa26a8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1194,7 +1194,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungen aus Lieferungen und Leistungen </act:name>
-  <act:id type="guid">4f4a924c4bde84d1f28a2bddb2527327</act:id>
+  <act:id type="new">4f4a924c4bde84d1f28a2bddb2527327</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1217,7 +1217,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungen aus Lieferungen und Leistungen</act:name>
-  <act:id type="guid">c58b1cd06245a7f51d91e4fa61319902</act:id>
+  <act:id type="new">c58b1cd06245a7f51d91e4fa61319902</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1240,7 +1240,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zweifelhafte Forderungen</act:name>
-  <act:id type="guid">1ce0ab10192f8d9d2f386cdcee67ecc1</act:id>
+  <act:id type="new">1ce0ab10192f8d9d2f386cdcee67ecc1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1262,7 +1262,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Einzelwertberichtigungen zu Forderungen</act:name>
-  <act:id type="guid">12a681aa8c69edb9daa33e3d1bf8519a</act:id>
+  <act:id type="new">12a681aa8c69edb9daa33e3d1bf8519a</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1284,7 +1284,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pauschalwertberichtigungen zu Forderungen</act:name>
-  <act:id type="guid">2d09e5101750beceafd86dde3c1d365e</act:id>
+  <act:id type="new">2d09e5101750beceafd86dde3c1d365e</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1306,7 +1306,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Forderungen gegen verbundene Unternhmen</act:name>
-  <act:id type="guid">4e169f2e371e1ff6c253e897659c40ac</act:id>
+  <act:id type="new">4e169f2e371e1ff6c253e897659c40ac</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1331,7 +1331,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. Forderungen gegen Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:name>
-  <act:id type="guid">055fd27cb7a14553bb1d70bce679ee7c</act:id>
+  <act:id type="new">055fd27cb7a14553bb1d70bce679ee7c</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1356,7 +1356,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. sonstige Vermögensgegenstände</act:name>
-  <act:id type="guid">c480534042a768be83ee446aa2158ea7</act:id>
+  <act:id type="new">c480534042a768be83ee446aa2158ea7</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1381,7 +1381,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kautionen</act:name>
-  <act:id type="guid">6f9c49a993f676ec1b00d440196b4a05</act:id>
+  <act:id type="new">6f9c49a993f676ec1b00d440196b4a05</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1404,7 +1404,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Darlehen</act:name>
-  <act:id type="guid">f116c989948dc775f089ae6079d84231</act:id>
+  <act:id type="new">f116c989948dc775f089ae6079d84231</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1427,7 +1427,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Durchlaufende Posten</act:name>
-  <act:id type="guid">05af437283315229ed4d0af1c5bf9757</act:id>
+  <act:id type="new">05af437283315229ed4d0af1c5bf9757</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1449,7 +1449,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abziehbare Vorsteuer</act:name>
-  <act:id type="guid">dfab52a0f828184ed6fb6daeb4b0b7ec</act:id>
+  <act:id type="new">dfab52a0f828184ed6fb6daeb4b0b7ec</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1471,7 +1471,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abziehbare Vorsteuer 7%</act:name>
-  <act:id type="guid">7ff59a903ff7ef2d138a73011ba7b505</act:id>
+  <act:id type="new">7ff59a903ff7ef2d138a73011ba7b505</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1493,7 +1493,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abziehbare Vorsteuer aus innergemeinschaftlichem Erwerb</act:name>
-  <act:id type="guid">7a839f71283586e39709c0b643d28238</act:id>
+  <act:id type="new">7a839f71283586e39709c0b643d28238</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1515,7 +1515,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abziehbare Vorsteuer 16%</act:name>
-  <act:id type="guid">3e816ca867fc07d80fb8b5be29a064a9</act:id>
+  <act:id type="new">3e816ca867fc07d80fb8b5be29a064a9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1537,7 +1537,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuerforderungen</act:name>
-  <act:id type="guid">7c253cc3b5635c018ca4ef7529f1f4c3</act:id>
+  <act:id type="new">7c253cc3b5635c018ca4ef7529f1f4c3</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1560,7 +1560,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bezahlte Einfuhrumsatzsteuer</act:name>
-  <act:id type="guid">2445d9761a77692a758795a1f9ce5921</act:id>
+  <act:id type="new">2445d9761a77692a758795a1f9ce5921</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1582,7 +1582,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vorsteuer im Folgejahr abziehbar</act:name>
-  <act:id type="guid">065f250f50041ac7d807b06d7f9deea0</act:id>
+  <act:id type="new">065f250f50041ac7d807b06d7f9deea0</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1604,7 +1604,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Steuerüberzahlungen</act:name>
-  <act:id type="guid">f17b63323e0ab04af5682fd893746fc2</act:id>
+  <act:id type="new">f17b63323e0ab04af5682fd893746fc2</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1626,7 +1626,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Körperschaftsteuerrückforderungen</act:name>
-  <act:id type="guid">757bf4df0e2f5104c5b6c80dd465c414</act:id>
+  <act:id type="new">757bf4df0e2f5104c5b6c80dd465c414</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1648,7 +1648,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geldtransit</act:name>
-  <act:id type="guid">5c2f2e077db3af02f863edf4e07f3595</act:id>
+  <act:id type="new">5c2f2e077db3af02f863edf4e07f3595</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1670,7 +1670,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verrechnungskonto Gewinnermittlung §4/3 EStG</act:name>
-  <act:id type="guid">120a408dfdc3684b03612314d332a895</act:id>
+  <act:id type="new">120a408dfdc3684b03612314d332a895</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1693,7 +1693,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verrechnungskonto Ist-Versteuerung</act:name>
-  <act:id type="guid">692fdf864c85705f0685418d53742c10</act:id>
+  <act:id type="new">692fdf864c85705f0685418d53742c10</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1715,7 +1715,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>III. Wertpapiere</act:name>
-  <act:id type="guid">594a60a330157a993a30a2039e124ad9</act:id>
+  <act:id type="new">594a60a330157a993a30a2039e124ad9</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1740,7 +1740,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Anteile an verbundenen Unternehmen</act:name>
-  <act:id type="guid">3b9912e7c82ce7e58666730f71424eb1</act:id>
+  <act:id type="new">3b9912e7c82ce7e58666730f71424eb1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1765,7 +1765,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. eigene Anteile</act:name>
-  <act:id type="guid">52d844ce728d10f0a690ba48808d8d0d</act:id>
+  <act:id type="new">52d844ce728d10f0a690ba48808d8d0d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1790,7 +1790,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. sonstige Wertpapiere</act:name>
-  <act:id type="guid">a1f8b584bfde70302b4593a4a28304c1</act:id>
+  <act:id type="new">a1f8b584bfde70302b4593a4a28304c1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1815,7 +1815,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Wertpapiere</act:name>
-  <act:id type="guid">8e227837f4a2bd6e6fc2bbfd828ba1e1</act:id>
+  <act:id type="new">8e227837f4a2bd6e6fc2bbfd828ba1e1</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1837,7 +1837,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>IV. Kassenbestand, Bundesbankguthaben, Guthaben bei Kreditinstituten und Schecks:</act:name>
-  <act:id type="guid">3fb2ca42e072676a8659a1ad14bcc433</act:id>
+  <act:id type="new">3fb2ca42e072676a8659a1ad14bcc433</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1866,7 +1866,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Schecks</act:name>
-  <act:id type="guid">eb60e443c6a808725cf827ae50456a28</act:id>
+  <act:id type="new">eb60e443c6a808725cf827ae50456a28</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1888,7 +1888,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kassenbestand</act:name>
-  <act:id type="guid">b8912fb5fffcaf399a8abd3eced5492d</act:id>
+  <act:id type="new">b8912fb5fffcaf399a8abd3eced5492d</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1918,7 +1918,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kasse</act:name>
-  <act:id type="guid">adc3ca940b534be4ef82b9ea86de00bd</act:id>
+  <act:id type="new">adc3ca940b534be4ef82b9ea86de00bd</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1940,7 +1940,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bank</act:name>
-  <act:id type="guid">1e5f356bd4bc5e19b3b02b031bf6b534</act:id>
+  <act:id type="new">1e5f356bd4bc5e19b3b02b031bf6b534</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -1984,7 +1984,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>C. Rechnungsabgrenzungsposten</act:name>
-  <act:id type="guid">7da2436cb2fe5da3a10669b0974a0f39</act:id>
+  <act:id type="new">7da2436cb2fe5da3a10669b0974a0f39</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2010,7 +2010,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aktive Rechnungsabgrenzung</act:name>
-  <act:id type="guid">ec099a3ffd9c4ef2a5f15d93fa67f3a8</act:id>
+  <act:id type="new">ec099a3ffd9c4ef2a5f15d93fa67f3a8</act:id>
   <act:type>ASSET</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2032,7 +2032,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Passiva</act:name>
-  <act:id type="guid">1eba210813818eb0c231f467c8c8a0a7</act:id>
+  <act:id type="new">1eba210813818eb0c231f467c8c8a0a7</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2049,7 +2049,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>A. Eigenkapital</act:name>
-  <act:id type="guid">75b98ca0602954dc7fb8ac783595f25d</act:id>
+  <act:id type="new">75b98ca0602954dc7fb8ac783595f25d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2074,7 +2074,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>I. Gezeichnetes Kapital</act:name>
-  <act:id type="guid">9853a5414257917884641fd0ccaa409d</act:id>
+  <act:id type="new">9853a5414257917884641fd0ccaa409d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2099,7 +2099,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>II. Kapitalrücklage</act:name>
-  <act:id type="guid">edd8db71a331478af3dac6ebfb6858da</act:id>
+  <act:id type="new">edd8db71a331478af3dac6ebfb6858da</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2124,7 +2124,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>III. Gewinnrücklagen</act:name>
-  <act:id type="guid">c832f55badf1e7829b395d340cf4b936</act:id>
+  <act:id type="new">c832f55badf1e7829b395d340cf4b936</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2149,7 +2149,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. gesetzliche Rücklage</act:name>
-  <act:id type="guid">8b54644abbed051911f08f59abec37ef</act:id>
+  <act:id type="new">8b54644abbed051911f08f59abec37ef</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2174,7 +2174,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Rücklage für eigene Anteile</act:name>
-  <act:id type="guid">bbf0ca1b03f0c9c99f71957bd5efbe19</act:id>
+  <act:id type="new">bbf0ca1b03f0c9c99f71957bd5efbe19</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2199,7 +2199,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. satzungsmäßige Rücklagen</act:name>
-  <act:id type="guid">4e5ab836f1f6d7195eea6e788865723f</act:id>
+  <act:id type="new">4e5ab836f1f6d7195eea6e788865723f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2224,7 +2224,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. andere Gewinnrücklagen</act:name>
-  <act:id type="guid">55310a9e9bcb4cc21c07ebb7feccee0d</act:id>
+  <act:id type="new">55310a9e9bcb4cc21c07ebb7feccee0d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2249,7 +2249,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>IV. Gewinnvortrag/Verlustvortrag</act:name>
-  <act:id type="guid">1d16ba3b2c0c2f320d3219b98cb7ba4f</act:id>
+  <act:id type="new">1d16ba3b2c0c2f320d3219b98cb7ba4f</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2274,7 +2274,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>V. Jahresüberschuss/Jahresfehlbetrag</act:name>
-  <act:id type="guid">71afe29fa3a42ccd90318a7ca27b9893</act:id>
+  <act:id type="new">71afe29fa3a42ccd90318a7ca27b9893</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2299,7 +2299,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>B. Rückstellungen</act:name>
-  <act:id type="guid">8970f62618b4e80075c82aaffbf513d2</act:id>
+  <act:id type="new">8970f62618b4e80075c82aaffbf513d2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2324,7 +2324,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Rückstellungen für Pensionen und ähnliche Verpflichtungen</act:name>
-  <act:id type="guid">77d044e599f41f9110bd91aa765cafa8</act:id>
+  <act:id type="new">77d044e599f41f9110bd91aa765cafa8</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2349,7 +2349,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Steuerrückstellungen</act:name>
-  <act:id type="guid">0b1ddfca43d9220faacf8a46fd851692</act:id>
+  <act:id type="new">0b1ddfca43d9220faacf8a46fd851692</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2374,7 +2374,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gewerbesteuerrückstellung</act:name>
-  <act:id type="guid">96073741a442782851e35bf300f3e7a7</act:id>
+  <act:id type="new">96073741a442782851e35bf300f3e7a7</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2396,7 +2396,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Körperschaftsteuerrückstellung</act:name>
-  <act:id type="guid">b07cf64820066ba570384336f53fb244</act:id>
+  <act:id type="new">b07cf64820066ba570384336f53fb244</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2418,7 +2418,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. sonstige Rückstellungen</act:name>
-  <act:id type="guid">a35582f0bc0937ad3f8dc6264290fa7a</act:id>
+  <act:id type="new">a35582f0bc0937ad3f8dc6264290fa7a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2443,7 +2443,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Rückstellungen</act:name>
-  <act:id type="guid">faad2bc94027c79429c32e08b37b4f79</act:id>
+  <act:id type="new">faad2bc94027c79429c32e08b37b4f79</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2464,7 +2464,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rückstellungen für Gewährleistung</act:name>
-  <act:id type="guid">6b71d711065100945ba2fdd0644394fb</act:id>
+  <act:id type="new">6b71d711065100945ba2fdd0644394fb</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2487,7 +2487,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rückstellungen für Abschluss- und Prüfungskosten</act:name>
-  <act:id type="guid">f9ede3f0ee14020e32bc72a7e3232ea3</act:id>
+  <act:id type="new">f9ede3f0ee14020e32bc72a7e3232ea3</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2509,7 +2509,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>C. Verbindlichkeiten</act:name>
-  <act:id type="guid">31c9b79800b4042140fa152850a19b58</act:id>
+  <act:id type="new">31c9b79800b4042140fa152850a19b58</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2534,7 +2534,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Anleihen, davon konvertibel</act:name>
-  <act:id type="guid">dcd0ac20ce2d6f1bc7226992adf7b165</act:id>
+  <act:id type="new">dcd0ac20ce2d6f1bc7226992adf7b165</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2559,7 +2559,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Verbindlichkeiten gegenüber Kreditinstituten</act:name>
-  <act:id type="guid">7ea91a28d50d1573ee3082065ddfcc69</act:id>
+  <act:id type="new">7ea91a28d50d1573ee3082065ddfcc69</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2584,7 +2584,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten gegenüber Kreditinstituten</act:name>
-  <act:id type="guid">e3ce6e0ce81fadc3bcc1f6bf791e0f5e</act:id>
+  <act:id type="new">e3ce6e0ce81fadc3bcc1f6bf791e0f5e</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2606,7 +2606,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. erhaltene Anzahlungen auf Bestellungen</act:name>
-  <act:id type="guid">05de6f2e5eab13a8174ef30a96b04906</act:id>
+  <act:id type="new">05de6f2e5eab13a8174ef30a96b04906</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2631,7 +2631,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erhaltene Anzahlungen</act:name>
-  <act:id type="guid">0984c64148a8a6cf1d3c077656a22bf9</act:id>
+  <act:id type="new">0984c64148a8a6cf1d3c077656a22bf9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2653,7 +2653,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. Verbindlichkeiten aus Lieferungen und Leistungen</act:name>
-  <act:id type="guid">8774c68c9a16480e07c30d9458438de5</act:id>
+  <act:id type="new">8774c68c9a16480e07c30d9458438de5</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2678,7 +2678,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Lieferungen und Leistungen (Kreditoren)</act:name>
-  <act:id type="guid">d2e7e33fd14a3f718388c17b5c1e3fda</act:id>
+  <act:id type="new">d2e7e33fd14a3f718388c17b5c1e3fda</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2701,7 +2701,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Lieferungen und Leistungen</act:name>
-  <act:id type="guid">cdd3759910bc8b71725e61db133d87c2</act:id>
+  <act:id type="new">cdd3759910bc8b71725e61db133d87c2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2723,7 +2723,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5. Verbindlichkeiten aus der Annahme gezogener Wechsel und der Ausstellung eigener Wechsel</act:name>
-  <act:id type="guid">02016671ce9e20146a68b88029a2deb7</act:id>
+  <act:id type="new">02016671ce9e20146a68b88029a2deb7</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2748,7 +2748,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>6. Verbindlichkeiten gegenüber verbundenen Untenehmen</act:name>
-  <act:id type="guid">451700f31e05c9561a13a913c5560564</act:id>
+  <act:id type="new">451700f31e05c9561a13a913c5560564</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2773,7 +2773,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>7. Verbindlichkeiten gegenüber Unternehmen, mit denen ein Beteiligungsverhältnis besteht</act:name>
-  <act:id type="guid">261c63f9ae9b07b50cd3651b8637c2f2</act:id>
+  <act:id type="new">261c63f9ae9b07b50cd3651b8637c2f2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2798,7 +2798,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>8. sonstige Verbindlichkeiten</act:name>
-  <act:id type="guid">612a62a486e19fe87d7fdfb0409ede10</act:id>
+  <act:id type="new">612a62a486e19fe87d7fdfb0409ede10</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2823,7 +2823,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) davon aus Steuern</act:name>
-  <act:id type="guid">a08184aa7a8fcdcabd9e11e099a44fac</act:id>
+  <act:id type="new">a08184aa7a8fcdcabd9e11e099a44fac</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2848,7 +2848,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Betriebssteuern</act:name>
-  <act:id type="guid">dedb67615b619ee617a5413f2ecec4b9</act:id>
+  <act:id type="new">dedb67615b619ee617a5413f2ecec4b9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2870,7 +2870,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Lohn- und Kirchensteuer</act:name>
-  <act:id type="guid">bf73ea8fc711d1b0431a88cda62eb4b9</act:id>
+  <act:id type="new">bf73ea8fc711d1b0431a88cda62eb4b9</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2892,7 +2892,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>b) davon im Rahmen der sozialen Sicherheit</act:name>
-  <act:id type="guid">c347043a8d8a01224261e43a9f091425</act:id>
+  <act:id type="new">c347043a8d8a01224261e43a9f091425</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2917,7 +2917,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten im Rahmen der sozialen Sicherheit</act:name>
-  <act:id type="guid">726ffc733270386c2f89ece8af1494d2</act:id>
+  <act:id type="new">726ffc733270386c2f89ece8af1494d2</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2940,7 +2940,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Verbindlichkeiten</act:name>
-  <act:id type="guid">5015d0d9e8fa785aacf0cc663f0c9977</act:id>
+  <act:id type="new">5015d0d9e8fa785aacf0cc663f0c9977</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2962,7 +2962,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erhalten Kautionen</act:name>
-  <act:id type="guid">89e97fb2d06df457976d7dc4f4d48f33</act:id>
+  <act:id type="new">89e97fb2d06df457976d7dc4f4d48f33</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -2984,7 +2984,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Darlehen</act:name>
-  <act:id type="guid">48788af8550b7173194339b83d451293</act:id>
+  <act:id type="new">48788af8550b7173194339b83d451293</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3006,7 +3006,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kreditkartenabrechnung</act:name>
-  <act:id type="guid">48d9a76ae3f6f6cfc7c91a2037f2ee21</act:id>
+  <act:id type="new">48d9a76ae3f6f6cfc7c91a2037f2ee21</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3028,7 +3028,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Verrechnungskonten</act:name>
-  <act:id type="guid">c8462b1c95b12f00259d49a9045158a4</act:id>
+  <act:id type="new">c8462b1c95b12f00259d49a9045158a4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3051,7 +3051,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Lohn und Gehalt</act:name>
-  <act:id type="guid">1a115f09a81d183f5703eed3fd7bf777</act:id>
+  <act:id type="new">1a115f09a81d183f5703eed3fd7bf777</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3073,7 +3073,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verbindlichkeiten aus Vermögensbildung</act:name>
-  <act:id type="guid">d65805558f8a38e6a5957db2d0bca91e</act:id>
+  <act:id type="new">d65805558f8a38e6a5957db2d0bca91e</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3096,7 +3096,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Lohn- und Gehaltverrechnungskonto</act:name>
-  <act:id type="guid">3efffa7ec8f954439a623016c4e2200d</act:id>
+  <act:id type="new">3efffa7ec8f954439a623016c4e2200d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3118,7 +3118,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer 7%</act:name>
-  <act:id type="guid">d45e050f1fff66e409c4535c98ba6e38</act:id>
+  <act:id type="new">d45e050f1fff66e409c4535c98ba6e38</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3145,7 +3145,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer 16%</act:name>
-  <act:id type="guid">e02c2630fd54b806138b99054fb195ce</act:id>
+  <act:id type="new">e02c2630fd54b806138b99054fb195ce</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3172,7 +3172,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuervorauszahlungen</act:name>
-  <act:id type="guid">6d22b2f2522d6cab27fbb23bcab6fa50</act:id>
+  <act:id type="new">6d22b2f2522d6cab27fbb23bcab6fa50</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3195,7 +3195,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer laufendes Jahr</act:name>
-  <act:id type="guid">9c1eb0cd624d27a459ce3360543abb9a</act:id>
+  <act:id type="new">9c1eb0cd624d27a459ce3360543abb9a</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3217,7 +3217,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer Vorjahr</act:name>
-  <act:id type="guid">2a305205fe24a2523cf960f38dd05b06</act:id>
+  <act:id type="new">2a305205fe24a2523cf960f38dd05b06</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3239,7 +3239,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzsteuer frühere Jahre</act:name>
-  <act:id type="guid">dd3bd27b137d437b670ab770710c5f9d</act:id>
+  <act:id type="new">dd3bd27b137d437b670ab770710c5f9d</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3261,7 +3261,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>D. Rechnungsabgrenzungsposten</act:name>
-  <act:id type="guid">c3b043bfd0403b4d13efe0658d461b64</act:id>
+  <act:id type="new">c3b043bfd0403b4d13efe0658d461b64</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3286,7 +3286,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Passive Rechnungsabgrenzung</act:name>
-  <act:id type="guid">c36f8138e6fdfc74a01de276c44afbc4</act:id>
+  <act:id type="new">c36f8138e6fdfc74a01de276c44afbc4</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3308,7 +3308,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>1. Umsatzerlöse</act:name>
-  <act:id type="guid">6fb8fd50c684151b5beefc2ed8cf3ee5</act:id>
+  <act:id type="new">6fb8fd50c684151b5beefc2ed8cf3ee5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3336,7 +3336,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzerlöse</act:name>
-  <act:id type="guid">60d63566d4cce3bd97e23cf0498182ee</act:id>
+  <act:id type="new">60d63566d4cce3bd97e23cf0498182ee</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3359,7 +3359,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzerlöse 7% USt</act:name>
-  <act:id type="guid">aaed39d6b8aff6f21ec5984031b4f7aa</act:id>
+  <act:id type="new">aaed39d6b8aff6f21ec5984031b4f7aa</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3385,7 +3385,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nicht steuerbare Umsätze</act:name>
-  <act:id type="guid">c8e27b117a1ba3de621cc02f59f8b957</act:id>
+  <act:id type="new">c8e27b117a1ba3de621cc02f59f8b957</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3407,7 +3407,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Umsatzerlöse 16% USt</act:name>
-  <act:id type="guid">8910c2085a0b0ca8e408ee0aaa3766c1</act:id>
+  <act:id type="new">8910c2085a0b0ca8e408ee0aaa3766c1</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3438,7 +3438,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Provisionserlöse</act:name>
-  <act:id type="guid">7c9e90d6207b535efb493c07b33b7b35</act:id>
+  <act:id type="new">7c9e90d6207b535efb493c07b33b7b35</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3461,7 +3461,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Provisionserlöse 7% USt</act:name>
-  <act:id type="guid">fbe16fd163639611fc5db520f69e14a5</act:id>
+  <act:id type="new">fbe16fd163639611fc5db520f69e14a5</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3487,7 +3487,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Provisionserlöse 16% USt</act:name>
-  <act:id type="guid">355c408fdb61a1219285353d94283480</act:id>
+  <act:id type="new">355c408fdb61a1219285353d94283480</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3513,7 +3513,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>10. Erträge aus anderen Wertpapieren und Ausleihungen des Finanzanlagevermögens</act:name>
-  <act:id type="guid">709bb3ce1fa7230f35038b93edcc202e</act:id>
+  <act:id type="new">709bb3ce1fa7230f35038b93edcc202e</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3537,7 +3537,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
-  <act:id type="guid">7a36f956d8571443095c91e4a7f4eb15</act:id>
+  <act:id type="new">7a36f956d8571443095c91e4a7f4eb15</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3562,7 +3562,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>11. sonstige Zinsen und ähnliche Erträge</act:name>
-  <act:id type="guid">3a1adb13388e09b93de9908fa4abded3</act:id>
+  <act:id type="new">3a1adb13388e09b93de9908fa4abded3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3586,7 +3586,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
-  <act:id type="guid">83e4a0f10a7af0a381e356e43d128694</act:id>
+  <act:id type="new">83e4a0f10a7af0a381e356e43d128694</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3611,7 +3611,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Zinsen und ähnliche Erträge</act:name>
-  <act:id type="guid">e15f7231182d77142e9bfd639bd43818</act:id>
+  <act:id type="new">e15f7231182d77142e9bfd639bd43818</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3633,7 +3633,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>15. außerordentliche Erträge</act:name>
-  <act:id type="guid">b4d5f67affd1dcbd032b038e57b8bae4</act:id>
+  <act:id type="new">b4d5f67affd1dcbd032b038e57b8bae4</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3657,7 +3657,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Außerordentliche Erträge</act:name>
-  <act:id type="guid">08c2f93665c41b5d371a96070a412f99</act:id>
+  <act:id type="new">08c2f93665c41b5d371a96070a412f99</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3683,7 +3683,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>2. Erhöhung oder Verminderung des Bestandes an fertigen und unfertigen Erzeugnissen</act:name>
-  <act:id type="guid">e62facd0bbc6d68f9b2c49232b267878</act:id>
+  <act:id type="new">e62facd0bbc6d68f9b2c49232b267878</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3707,7 +3707,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bestandsveränderungen</act:name>
-  <act:id type="guid">3b1d8ac651a1dc743f91a2600d0c22d3</act:id>
+  <act:id type="new">3b1d8ac651a1dc743f91a2600d0c22d3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3729,7 +3729,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>3. andere aktivierte Eigenleistungen</act:name>
-  <act:id type="guid">f87a63d0b49b3802e1147df04896412a</act:id>
+  <act:id type="new">f87a63d0b49b3802e1147df04896412a</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3753,7 +3753,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>4. sonstige betriebliche Erträge</act:name>
-  <act:id type="guid">d80de8a6b208d833074b1392af4846dc</act:id>
+  <act:id type="new">d80de8a6b208d833074b1392af4846dc</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3777,7 +3777,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige betriebliche Erträge</act:name>
-  <act:id type="guid">53c47a361da634f9ec44ddfa59f366fc</act:id>
+  <act:id type="new">53c47a361da634f9ec44ddfa59f366fc</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3799,7 +3799,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erträge aus Kursdifferenzen</act:name>
-  <act:id type="guid">e201f37082ccc5a8b95ceaed4c5fdfa4</act:id>
+  <act:id type="new">e201f37082ccc5a8b95ceaed4c5fdfa4</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3821,7 +3821,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erlöse aus Verkäufen des Anlagevermögens 16% USt</act:name>
-  <act:id type="guid">2d442a5fd4638362f816a66bbfb751fd</act:id>
+  <act:id type="new">2d442a5fd4638362f816a66bbfb751fd</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3848,7 +3848,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Anlagenabgänge Sachanlagen</act:name>
-  <act:id type="guid">7f10923d3f9e558986c26e90660016d3</act:id>
+  <act:id type="new">7f10923d3f9e558986c26e90660016d3</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3871,7 +3871,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Grundstückserträge</act:name>
-  <act:id type="guid">8f83179a6a19694a318d8b4a59c97e66</act:id>
+  <act:id type="new">8f83179a6a19694a318d8b4a59c97e66</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3893,7 +3893,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachbezüge 7% USt</act:name>
-  <act:id type="guid">e6eae229141608c126281a08a1c5a36b</act:id>
+  <act:id type="new">e6eae229141608c126281a08a1c5a36b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3919,7 +3919,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachbezüge 16% USt</act:name>
-  <act:id type="guid">9d4f0c385ed8abb016c3f0eefbbe58ee</act:id>
+  <act:id type="new">9d4f0c385ed8abb016c3f0eefbbe58ee</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3945,7 +3945,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Versicherungsentschädigungen</act:name>
-  <act:id type="guid">092475b72f63a304e6d035a89304bf4b</act:id>
+  <act:id type="new">092475b72f63a304e6d035a89304bf4b</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3967,7 +3967,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investitionszuschüsse</act:name>
-  <act:id type="guid">34efbdd4bc3edd88e562b222f7c82ac8</act:id>
+  <act:id type="new">34efbdd4bc3edd88e562b222f7c82ac8</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -3990,7 +3990,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Investitionszulagen</act:name>
-  <act:id type="guid">2f29e0b7ebd13f4317c24a40be53db94</act:id>
+  <act:id type="new">2f29e0b7ebd13f4317c24a40be53db94</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4013,7 +4013,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>9. Erträge aus Beteiligungen</act:name>
-  <act:id type="guid">cc41d0e983f2567761440d1bbb338d4d</act:id>
+  <act:id type="new">cc41d0e983f2567761440d1bbb338d4d</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4037,7 +4037,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon aus verbundenen Unternehmen</act:name>
-  <act:id type="guid">37c1d906489c97e2ce5818f1c0eec9f7</act:id>
+  <act:id type="new">37c1d906489c97e2ce5818f1c0eec9f7</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4062,7 +4062,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Erträge aus Beteiligungen</act:name>
-  <act:id type="guid">fd4c5a92695c1e085a15279334296b52</act:id>
+  <act:id type="new">fd4c5a92695c1e085a15279334296b52</act:id>
   <act:type>INCOME</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4084,7 +4084,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>12. Abschreibungen auf Finanzanlagen und auf Wertpapiere des Umlaufvermögens</act:name>
-  <act:id type="guid">9a1befef778bec82fd3b937f36dab60b</act:id>
+  <act:id type="new">9a1befef778bec82fd3b937f36dab60b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4108,7 +4108,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>13. Zinsen und ähnliche Aufwendungen</act:name>
-  <act:id type="guid">520d4fe4b9623c8ada6422c4642bb320</act:id>
+  <act:id type="new">520d4fe4b9623c8ada6422c4642bb320</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4132,7 +4132,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon an verbundene Unternehmen</act:name>
-  <act:id type="guid">7c9d3e59c588e9d99b807edb939c036b</act:id>
+  <act:id type="new">7c9d3e59c588e9d99b807edb939c036b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4157,7 +4157,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zinsen und ähnliche Aufwendungen</act:name>
-  <act:id type="guid">1d672a0373208a45bfa8dc2d0e108eaa</act:id>
+  <act:id type="new">1d672a0373208a45bfa8dc2d0e108eaa</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4179,7 +4179,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zinsaufwendungen für kurzfristige Verbindlichkeiten</act:name>
-  <act:id type="guid">e96752ddcffd9da9b9ce96a1129debba</act:id>
+  <act:id type="new">e96752ddcffd9da9b9ce96a1129debba</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4201,7 +4201,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zinsaufwendungen für langfristige Verbindlichkeiten</act:name>
-  <act:id type="guid">22ddb13e3d96d82a55b9400d6c9e908b</act:id>
+  <act:id type="new">22ddb13e3d96d82a55b9400d6c9e908b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4224,7 +4224,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>14. Ergebnis der gewöhnlichen Geschäftstätigkeit</act:name>
-  <act:id type="guid">a101fbcc0da3d3bf35a9aea74bd5f4d1</act:id>
+  <act:id type="new">a101fbcc0da3d3bf35a9aea74bd5f4d1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4249,7 +4249,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>16. außerordentliche Aufwendungen</act:name>
-  <act:id type="guid">ce3abd25c0ae03429d0c752e20fa4100</act:id>
+  <act:id type="new">ce3abd25c0ae03429d0c752e20fa4100</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4273,7 +4273,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Außerordentliche Aufwendungen</act:name>
-  <act:id type="guid">330c6fd85eac1366ffd1a048565f145f</act:id>
+  <act:id type="new">330c6fd85eac1366ffd1a048565f145f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4299,7 +4299,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>17. außerordentliches Ergebnis</act:name>
-  <act:id type="guid">a6c0198868fe59032c45a2bbf5b0e450</act:id>
+  <act:id type="new">a6c0198868fe59032c45a2bbf5b0e450</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4324,7 +4324,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>18. Steuern vom Einkommen und vom Ertrag</act:name>
-  <act:id type="guid">e21495299b1086c8dc31c2bc35097abb</act:id>
+  <act:id type="new">e21495299b1086c8dc31c2bc35097abb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4348,7 +4348,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Körperschaftsteuer</act:name>
-  <act:id type="guid">c1af2797333ccc28ffc1d72503907e6a</act:id>
+  <act:id type="new">c1af2797333ccc28ffc1d72503907e6a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4370,7 +4370,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Solidaritätszuschlag</act:name>
-  <act:id type="guid">b7a71f394bca842ba60294113be4dd79</act:id>
+  <act:id type="new">b7a71f394bca842ba60294113be4dd79</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4392,7 +4392,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gewerbesteuer</act:name>
-  <act:id type="guid">a716d9e7a39c1642e0c982d4e198b4f8</act:id>
+  <act:id type="new">a716d9e7a39c1642e0c982d4e198b4f8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4414,7 +4414,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kapitalertragsteuer 25%</act:name>
-  <act:id type="guid">6076967c99ae55f557bb5f389aec9afb</act:id>
+  <act:id type="new">6076967c99ae55f557bb5f389aec9afb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4436,7 +4436,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kapitalertragsteuer 20%</act:name>
-  <act:id type="guid">a613e8c41bc1dcaf47122f6fd1182f8a</act:id>
+  <act:id type="new">a613e8c41bc1dcaf47122f6fd1182f8a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4458,7 +4458,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zinsabschlagsteuer</act:name>
-  <act:id type="guid">8c5073c1b3eaa6b7fbe093743a883978</act:id>
+  <act:id type="new">8c5073c1b3eaa6b7fbe093743a883978</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4480,7 +4480,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>19. sonstige Steuern</act:name>
-  <act:id type="guid">f9231cc7c135ecb8cd26e1bfdbfa945f</act:id>
+  <act:id type="new">f9231cc7c135ecb8cd26e1bfdbfa945f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4504,7 +4504,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Steuern</act:name>
-  <act:id type="guid">83c48056443495fc96a177d5513598ec</act:id>
+  <act:id type="new">83c48056443495fc96a177d5513598ec</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4526,7 +4526,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Grundsteuer</act:name>
-  <act:id type="guid">99fa7f6839501878a2e992c88f8a2c54</act:id>
+  <act:id type="new">99fa7f6839501878a2e992c88f8a2c54</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4548,7 +4548,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kfz-Steuer</act:name>
-  <act:id type="guid">2e1f0ef22d5dc9d69a80abb6dcb6ca58</act:id>
+  <act:id type="new">2e1f0ef22d5dc9d69a80abb6dcb6ca58</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4570,7 +4570,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>5. Materialaufwand</act:name>
-  <act:id type="guid">dde83a097fa39d01adbaf2d69b16a838</act:id>
+  <act:id type="new">dde83a097fa39d01adbaf2d69b16a838</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4594,7 +4594,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) Aufwendungen für Roh-, Hilfs- und Betriebsstoffe und für bezogene Waren</act:name>
-  <act:id type="guid">6f878213f027dcb1c833c4e2f8f31851</act:id>
+  <act:id type="new">6f878213f027dcb1c833c4e2f8f31851</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4619,7 +4619,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Einkauf von Roh-,Hilfs- und Betriebsstoffen</act:name>
-  <act:id type="guid">bd457154d1f7700a027e562062b16004</act:id>
+  <act:id type="new">bd457154d1f7700a027e562062b16004</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4641,7 +4641,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wareneingang 7% Vorsteuer</act:name>
-  <act:id type="guid">c4472c4b08c7c8496eba89f38cf69f7f</act:id>
+  <act:id type="new">c4472c4b08c7c8496eba89f38cf69f7f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4667,7 +4667,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wareneingang 16% Vorsteuer</act:name>
-  <act:id type="guid">8070e5c7a657ce882769bbb53ac5b5e6</act:id>
+  <act:id type="new">8070e5c7a657ce882769bbb53ac5b5e6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4693,7 +4693,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bestandsveränderungen</act:name>
-  <act:id type="guid">a3cb197067c1be0470039404965d9485</act:id>
+  <act:id type="new">a3cb197067c1be0470039404965d9485</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4715,7 +4715,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>b) Aufwendungen für bezogene Leistungen</act:name>
-  <act:id type="guid">9307a9b7ab3259c1f654381d89708328</act:id>
+  <act:id type="new">9307a9b7ab3259c1f654381d89708328</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4740,7 +4740,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fremdleistungen</act:name>
-  <act:id type="guid">5d468af0376e5686ba37bfa9f0f690a8</act:id>
+  <act:id type="new">5d468af0376e5686ba37bfa9f0f690a8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4766,7 +4766,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>6. Personalaufwand</act:name>
-  <act:id type="guid">0f8c473ff13bbc988812102a58bd46a6</act:id>
+  <act:id type="new">0f8c473ff13bbc988812102a58bd46a6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4790,7 +4790,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) Löhne und Gehälter</act:name>
-  <act:id type="guid">0cc823e399fb08d5327640879396e484</act:id>
+  <act:id type="new">0cc823e399fb08d5327640879396e484</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4815,7 +4815,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Löhne</act:name>
-  <act:id type="guid">56c30e9a99886bac63eebdf7b808988b</act:id>
+  <act:id type="new">56c30e9a99886bac63eebdf7b808988b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4837,7 +4837,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gehälter</act:name>
-  <act:id type="guid">f23e809f8245700a6c3e161576b8aca6</act:id>
+  <act:id type="new">f23e809f8245700a6c3e161576b8aca6</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4859,7 +4859,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pauschale Steuer für Aushilfen</act:name>
-  <act:id type="guid">f66f9e8f82972abd7594dc33b9606cfb</act:id>
+  <act:id type="new">f66f9e8f82972abd7594dc33b9606cfb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4881,7 +4881,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pauschale Steuer auf sonstige Bezüge</act:name>
-  <act:id type="guid">eca9ccbd3767def663bab09e9fac8597</act:id>
+  <act:id type="new">eca9ccbd3767def663bab09e9fac8597</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4904,7 +4904,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Vermögenswirksame Leistungen</act:name>
-  <act:id type="guid">4ee3233b090a166ce56ddb174c9af7fb</act:id>
+  <act:id type="new">4ee3233b090a166ce56ddb174c9af7fb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4926,7 +4926,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>b) soziale Abgaben und Aufw. für Altersversorgung und Unterstützung</act:name>
-  <act:id type="guid">d286a930ba9eed7bc364b35425aad0a7</act:id>
+  <act:id type="new">d286a930ba9eed7bc364b35425aad0a7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4951,7 +4951,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>- davon für Altersversorgung</act:name>
-  <act:id type="guid">6267dc63542469e97aab08a0302ceb71</act:id>
+  <act:id type="new">6267dc63542469e97aab08a0302ceb71</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4976,7 +4976,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aufwendungen für Altersversorgung</act:name>
-  <act:id type="guid">7fd3314e990c4552a8283c8ee5b4a403</act:id>
+  <act:id type="new">7fd3314e990c4552a8283c8ee5b4a403</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -4998,7 +4998,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gesetzlich soziale Aufwendungen</act:name>
-  <act:id type="guid">82511a7cec3a4387888238e5d73bfa19</act:id>
+  <act:id type="new">82511a7cec3a4387888238e5d73bfa19</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5020,7 +5020,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Beiträge zur Berufsgenossenschaft</act:name>
-  <act:id type="guid">2590b77eb6d595e453fc16bb11fe3983</act:id>
+  <act:id type="new">2590b77eb6d595e453fc16bb11fe3983</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5042,7 +5042,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Freiwillige soziale Aufwendungen lohnsteuerfrei</act:name>
-  <act:id type="guid">de30d8ca1ad85304f98783312c9ab978</act:id>
+  <act:id type="new">de30d8ca1ad85304f98783312c9ab978</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5064,7 +5064,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Pauschale Steuer auf sonstige Bezüge</act:name>
-  <act:id type="guid">552b7122491533b4cfb02246faeb924a</act:id>
+  <act:id type="new">552b7122491533b4cfb02246faeb924a</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5087,7 +5087,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige soziale Abgaben</act:name>
-  <act:id type="guid">678de71ff135a6ca0c7b5ec174903384</act:id>
+  <act:id type="new">678de71ff135a6ca0c7b5ec174903384</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5109,7 +5109,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>7. Abschreibungen</act:name>
-  <act:id type="guid">5d2bd5168e0327df99ddeb7956edb945</act:id>
+  <act:id type="new">5d2bd5168e0327df99ddeb7956edb945</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5133,7 +5133,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>a) auf immaterielle Vermögensgegenstände des Anlagevermögens und Sachanlagen</act:name>
-  <act:id type="guid">a825e4a603340bc9021b2ac15847a3d2</act:id>
+  <act:id type="new">a825e4a603340bc9021b2ac15847a3d2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5158,7 +5158,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abschreibungen auf immaterielle Vermögensgegenstände</act:name>
-  <act:id type="guid">c70037d9ce65dfff5f11dc42c3057d5f</act:id>
+  <act:id type="new">c70037d9ce65dfff5f11dc42c3057d5f</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5180,7 +5180,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abschreibungen auf Sachanlagen</act:name>
-  <act:id type="guid">e4f7f3d35377fdd8b92df6f1a80f65ce</act:id>
+  <act:id type="new">e4f7f3d35377fdd8b92df6f1a80f65ce</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5202,7 +5202,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sofortabschreibungen geringwertiger Wirtschaftsgüter</act:name>
-  <act:id type="guid">57217abc1c8a95c066e8f561656276e4</act:id>
+  <act:id type="new">57217abc1c8a95c066e8f561656276e4</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5224,7 +5224,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>b) auf Vermögensgegenstände des Umlaufvermögens</act:name>
-  <act:id type="guid">6b6eb77755eae219c7f55b3999006be9</act:id>
+  <act:id type="new">6b6eb77755eae219c7f55b3999006be9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5249,7 +5249,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungsverluste</act:name>
-  <act:id type="guid">9dab9d8dbb9496b9c40af2de2116fd37</act:id>
+  <act:id type="new">9dab9d8dbb9496b9c40af2de2116fd37</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5272,7 +5272,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungsverluste 7% USt</act:name>
-  <act:id type="guid">6a591839fe449d7eba99adc0041eb5f2</act:id>
+  <act:id type="new">6a591839fe449d7eba99adc0041eb5f2</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5298,7 +5298,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Forderungsverluste 16% USt</act:name>
-  <act:id type="guid">42e790226695dd2d2fc1fc1998f17be7</act:id>
+  <act:id type="new">42e790226695dd2d2fc1fc1998f17be7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5324,7 +5324,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>8. sonstige betriebliche Aufwendungen</act:name>
-  <act:id type="guid">d8a0f0bff3389f2ed8e00191d5e5c9b9</act:id>
+  <act:id type="new">d8a0f0bff3389f2ed8e00191d5e5c9b9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5348,7 +5348,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige betriebliche Aufwendungen</act:name>
-  <act:id type="guid">fb0fd8cc48b6eccd57bfaaea87b76403</act:id>
+  <act:id type="new">fb0fd8cc48b6eccd57bfaaea87b76403</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5374,7 +5374,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Raumkosten</act:name>
-  <act:id type="guid">492db23254fc8e99164fa2cdee54389e</act:id>
+  <act:id type="new">492db23254fc8e99164fa2cdee54389e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5400,7 +5400,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Miete</act:name>
-  <act:id type="guid">82f0bc7848e3a6b90ca3d782723c946d</act:id>
+  <act:id type="new">82f0bc7848e3a6b90ca3d782723c946d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5426,7 +5426,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Heizung</act:name>
-  <act:id type="guid">ab0dba69526b0ecf9e7c56ed4d63ffef</act:id>
+  <act:id type="new">ab0dba69526b0ecf9e7c56ed4d63ffef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5452,7 +5452,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Gas, Strom, Wasser</act:name>
-  <act:id type="guid">7840eb6863221e08f3e961488348c106</act:id>
+  <act:id type="new">7840eb6863221e08f3e961488348c106</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5478,7 +5478,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reinigung</act:name>
-  <act:id type="guid">9b153f456d132b3b3018d7dc066b00e7</act:id>
+  <act:id type="new">9b153f456d132b3b3018d7dc066b00e7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5504,7 +5504,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Instandhaltung betrieblicher Räume</act:name>
-  <act:id type="guid">58bd0aa5af76b41653f0c5d64e00fdd0</act:id>
+  <act:id type="new">58bd0aa5af76b41653f0c5d64e00fdd0</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5530,7 +5530,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abgaben für betrieblich genutzen Grundbesitz</act:name>
-  <act:id type="guid">a98bc52f0ade50b09318d8da7856a0de</act:id>
+  <act:id type="new">a98bc52f0ade50b09318d8da7856a0de</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5556,7 +5556,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Raumkosten</act:name>
-  <act:id type="guid">b9427f235bbc3f67d10c8126757d52da</act:id>
+  <act:id type="new">b9427f235bbc3f67d10c8126757d52da</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5582,7 +5582,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Grundstücksaufwendungen</act:name>
-  <act:id type="guid">322e730f71055609581220920b7b2709</act:id>
+  <act:id type="new">322e730f71055609581220920b7b2709</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5608,7 +5608,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zuwendungen, Spenden</act:name>
-  <act:id type="guid">5a0e542a5b77f8aa024a3aa7b07a6252</act:id>
+  <act:id type="new">5a0e542a5b77f8aa024a3aa7b07a6252</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5630,7 +5630,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Versicherungen</act:name>
-  <act:id type="guid">18d4873612c50d73765d586d202551e1</act:id>
+  <act:id type="new">18d4873612c50d73765d586d202551e1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5652,7 +5652,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Beiträge</act:name>
-  <act:id type="guid">b3704a6b80b881369fb86f02809ad8ff</act:id>
+  <act:id type="new">b3704a6b80b881369fb86f02809ad8ff</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5674,7 +5674,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Abgaben</act:name>
-  <act:id type="guid">d8cdd34a8f882990ee0a7f9270119ab1</act:id>
+  <act:id type="new">d8cdd34a8f882990ee0a7f9270119ab1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5696,7 +5696,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reparaturen und Instandhaltung von Bauten</act:name>
-  <act:id type="guid">7ccf8d312d3937a7000919cb358f7350</act:id>
+  <act:id type="new">7ccf8d312d3937a7000919cb358f7350</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5722,7 +5722,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reparaturen und Instandhaltung von Betriebs- und Geschäftsausstattung</act:name>
-  <act:id type="guid">bd4278ac3a9eb67d3f9c2499ff7947e9</act:id>
+  <act:id type="new">bd4278ac3a9eb67d3f9c2499ff7947e9</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5748,7 +5748,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Wartungskosten für Hard- und Software</act:name>
-  <act:id type="guid">c536f5b56d17978ae4db13e1f24e9172</act:id>
+  <act:id type="new">c536f5b56d17978ae4db13e1f24e9172</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5774,7 +5774,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mietleasing</act:name>
-  <act:id type="guid">731fe7c1399b4396b1dd279bdf7e66f8</act:id>
+  <act:id type="new">731fe7c1399b4396b1dd279bdf7e66f8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5800,7 +5800,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fahrzeugkosten</act:name>
-  <act:id type="guid">31e9c81107f5a1790e5eb997531995fd</act:id>
+  <act:id type="new">31e9c81107f5a1790e5eb997531995fd</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5826,7 +5826,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kfz-Versicherungen</act:name>
-  <act:id type="guid">127f0ebbea57e343982b6b5cc141b04b</act:id>
+  <act:id type="new">127f0ebbea57e343982b6b5cc141b04b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5848,7 +5848,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Laufende Kfz-Betriebskosten</act:name>
-  <act:id type="guid">d94190cafcd927b354a79a1b8225e33d</act:id>
+  <act:id type="new">d94190cafcd927b354a79a1b8225e33d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5874,7 +5874,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kfz-Reparaturen</act:name>
-  <act:id type="guid">70d15293305c79571e8156978d0e85fc</act:id>
+  <act:id type="new">70d15293305c79571e8156978d0e85fc</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5900,7 +5900,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Garagenmiete</act:name>
-  <act:id type="guid">0f1a3589cc1b1158e8c119cc0aa693ef</act:id>
+  <act:id type="new">0f1a3589cc1b1158e8c119cc0aa693ef</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5926,7 +5926,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fremdfahrzeuge</act:name>
-  <act:id type="guid">0b6fb6bc79bb69db0f10b0db8e1f0345</act:id>
+  <act:id type="new">0b6fb6bc79bb69db0f10b0db8e1f0345</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5952,7 +5952,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstige Kfz-Kosten</act:name>
-  <act:id type="guid">06f0f8d605d1d535b9d80c90b37030bb</act:id>
+  <act:id type="new">06f0f8d605d1d535b9d80c90b37030bb</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -5978,7 +5978,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Werbekosten</act:name>
-  <act:id type="guid">3a5f202afde9af4d2eda5277d0ff702b</act:id>
+  <act:id type="new">3a5f202afde9af4d2eda5277d0ff702b</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6004,7 +6004,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geschenke bis 40 ¤</act:name>
-  <act:id type="guid">e0520857490ea1c53eac734007c2ad42</act:id>
+  <act:id type="new">e0520857490ea1c53eac734007c2ad42</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6031,7 +6031,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Geschenke über 40 ¤</act:name>
-  <act:id type="guid">c183f3db8643a4dd19e5f9efb1e1dd20</act:id>
+  <act:id type="new">c183f3db8643a4dd19e5f9efb1e1dd20</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6058,7 +6058,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Repräsentationskosten</act:name>
-  <act:id type="guid">ab95e9157a539e2c6b66924f5aef9dfe</act:id>
+  <act:id type="new">ab95e9157a539e2c6b66924f5aef9dfe</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6084,7 +6084,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bewirtungskosten</act:name>
-  <act:id type="guid">76c5a277df00b03970c9a534e1c5b99d</act:id>
+  <act:id type="new">76c5a277df00b03970c9a534e1c5b99d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6110,7 +6110,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aufmerksamkeiten</act:name>
-  <act:id type="guid">0d1f581190372e9b401a9f769cb479bf</act:id>
+  <act:id type="new">0d1f581190372e9b401a9f769cb479bf</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6136,7 +6136,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nicht abzugsfähige Bewirtungskosten</act:name>
-  <act:id type="guid">2847a1847c1d585a60dc745429f377df</act:id>
+  <act:id type="new">2847a1847c1d585a60dc745429f377df</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6163,7 +6163,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nicht abzugsfähige Betriebsausgaben</act:name>
-  <act:id type="guid">d111556f8e173a44eaa2e5deab9ac4d1</act:id>
+  <act:id type="new">d111556f8e173a44eaa2e5deab9ac4d1</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6189,7 +6189,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reisekosten Arbeitnehmer</act:name>
-  <act:id type="guid">181b3376531d8296f297c2ab9d9e7db7</act:id>
+  <act:id type="new">181b3376531d8296f297c2ab9d9e7db7</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6215,7 +6215,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Reisekosten Unternehmer</act:name>
-  <act:id type="guid">a85dc755661ce182c3757672f2250846</act:id>
+  <act:id type="new">a85dc755661ce182c3757672f2250846</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6241,7 +6241,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Verkaufsprovisionen</act:name>
-  <act:id type="guid">5867f8151df62c029d70faefc7e53c4e</act:id>
+  <act:id type="new">5867f8151df62c029d70faefc7e53c4e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6267,7 +6267,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Fremdarbeiten</act:name>
-  <act:id type="guid">315e525b102852a089ab413a6396f054</act:id>
+  <act:id type="new">315e525b102852a089ab413a6396f054</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6293,7 +6293,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Aufwand für Gewährleistung</act:name>
-  <act:id type="guid">d646ae9b13da5222d138886f4e3bb0fe</act:id>
+  <act:id type="new">d646ae9b13da5222d138886f4e3bb0fe</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6319,7 +6319,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Porto</act:name>
-  <act:id type="guid">1395a374425089d52eebc85f3091caf8</act:id>
+  <act:id type="new">1395a374425089d52eebc85f3091caf8</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6341,7 +6341,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telefon</act:name>
-  <act:id type="guid">39bbdcf5418107f4c94af8c7bfe65f50</act:id>
+  <act:id type="new">39bbdcf5418107f4c94af8c7bfe65f50</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6367,7 +6367,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Telefax</act:name>
-  <act:id type="guid">97bc1542af5a115c89f5dc303e5ed084</act:id>
+  <act:id type="new">97bc1542af5a115c89f5dc303e5ed084</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6393,7 +6393,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Bürobedarf</act:name>
-  <act:id type="guid">8bee3f57168d9465b63551a324c9358e</act:id>
+  <act:id type="new">8bee3f57168d9465b63551a324c9358e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6419,7 +6419,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Zeitschriften, Bücher</act:name>
-  <act:id type="guid">325f95eddfab6d1637e43352892063ec</act:id>
+  <act:id type="new">325f95eddfab6d1637e43352892063ec</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6445,7 +6445,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Rechts- und Beratungskosten</act:name>
-  <act:id type="guid">107924961c319b7fd5224c4febdfb638</act:id>
+  <act:id type="new">107924961c319b7fd5224c4febdfb638</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6471,7 +6471,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Abschluss- und Prüfungskosten</act:name>
-  <act:id type="guid">b7def6cc94f1eb289aa9ac9aef57589e</act:id>
+  <act:id type="new">b7def6cc94f1eb289aa9ac9aef57589e</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6497,7 +6497,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Buchführungskosten</act:name>
-  <act:id type="guid">259012de784e94a8608212b78630dd0d</act:id>
+  <act:id type="new">259012de784e94a8608212b78630dd0d</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6523,7 +6523,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Mieten für Einrichtungen</act:name>
-  <act:id type="guid">9309c92b5824423aaaeb2620fe1d52db</act:id>
+  <act:id type="new">9309c92b5824423aaaeb2620fe1d52db</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6549,7 +6549,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Werkzeuge und Kleingeräte</act:name>
-  <act:id type="guid">d3362072d7b0fc2d50785af9d2f48094</act:id>
+  <act:id type="new">d3362072d7b0fc2d50785af9d2f48094</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6575,7 +6575,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sonstiger Betriebsbedarf</act:name>
-  <act:id type="guid">1a14c055da867df5da08d71f36b1a91c</act:id>
+  <act:id type="new">1a14c055da867df5da08d71f36b1a91c</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6601,7 +6601,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nebenkosten des Geldverkehrs</act:name>
-  <act:id type="guid">b0ab2bbd01cab1d4b369eb0dd4270101</act:id>
+  <act:id type="new">b0ab2bbd01cab1d4b369eb0dd4270101</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6623,7 +6623,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Nicht abziehbare Vorsteuer</act:name>
-  <act:id type="guid">71f1b527182b9ef4c3fd6904e8dc9193</act:id>
+  <act:id type="new">71f1b527182b9ef4c3fd6904e8dc9193</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6645,7 +6645,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Anfangsbestand</act:name>
-  <act:id type="guid">5e9d2148169732e6e6b683afdfd62dca</act:id>
+  <act:id type="new">5e9d2148169732e6e6b683afdfd62dca</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6662,7 +6662,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Saldenvorträge Sachkonten</act:name>
-  <act:id type="guid">8504f182e6d430e8c5425c1b36991e3a</act:id>
+  <act:id type="new">8504f182e6d430e8c5425c1b36991e3a</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6684,7 +6684,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Saldenvorträge Debitoren</act:name>
-  <act:id type="guid">60b8ced4cfd00eebde5212398ee3d84a</act:id>
+  <act:id type="new">60b8ced4cfd00eebde5212398ee3d84a</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
@@ -6706,7 +6706,7 @@
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Saldenvorträge Kreditoren</act:name>
-  <act:id type="guid">ff9df4a3af144d00e5b614ea1d3e61a8</act:id>
+  <act:id type="new">ff9df4a3af144d00e5b614ea1d3e61a8</act:id>
   <act:type>EQUITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>

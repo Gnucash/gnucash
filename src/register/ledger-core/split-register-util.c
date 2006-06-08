@@ -225,7 +225,7 @@ gnc_split_register_find_split (SplitRegister *reg,
       if ((cursor_class == CURSOR_CLASS_TRANS) && (s == trans_split))
         found_trans_split = TRUE;
 
-      if (found_trans && (s == split))
+      if (found_trans && (s == split) && s)
       {
         if (vcell_loc != NULL)
           *vcell_loc = vc_loc;

@@ -206,10 +206,10 @@ BUILT_SOURCES = \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h gncla-dir.h
 
-CLEANFILES = gnucash g-wrapped .scm-links 
-DISTCLEANFILES = ${SCM_FILE_LINKS} gw-engine.html gw-kvp.html gncla-dir.h
+CLEANFILES = gnucash g-wrapped .scm-links gncla-dir.h
+DISTCLEANFILES = ${SCM_FILE_LINKS} gw-engine.html gw-kvp.html
 
-gncla-dir.h: gncla-dir.h.in
+gncla-dir.h: gncla-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
                 -e 's:@-libdir-@:${libdir}:g'

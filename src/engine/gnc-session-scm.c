@@ -69,13 +69,6 @@ gnc_session_scm_save (QofSession *session)
   qof_session_save (session, gnc_session_scm_gui_cb_helper);
 }
 
-gboolean
-gnc_session_scm_export (QofSession *tmp_session, QofSession *real_session)
-{
-  return qof_session_export(tmp_session, real_session,
-			    gnc_session_scm_gui_cb_helper);
-}
-
 /*
  * Set the callback that will be used for any calls to the session
  * load/save functions from the scheme side of the code.

@@ -48,6 +48,7 @@
 #include "gnc-lot.h"
 #include "gnc-event.h"
 
+#include "qofbackend-p.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
@@ -219,10 +220,8 @@ void gen_event_trans (Transaction *trans)
     Account *account = s->acc;
     GNCLot *lot = s->lot;
     if (account)
-    {
-      xaccGroupMarkNotSaved (account->parent);
       qof_event_gen (&account->inst.entity, GNC_EVENT_ITEM_CHANGED, s);
-    }
+
     if (lot)
     {
       /* A change of transaction date might affect opening date of lot */
@@ -867,9 +866,7 @@ destroy_gains (Transaction *trans)
     if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
     {
       Transaction *t = s->gains_split->parent;
-      xaccTransBeginEdit (t);
       xaccTransDestroy (t);
-      xaccTransCommitEdit (t);
       s->gains_split = NULL;
     }
   }
@@ -1023,7 +1020,10 @@ xaccTransCommitEdit (Transaction *trans)
       */
      xaccTransScrubImbalance (trans, NULL, NULL);
      /* Get the cap gains into a consistent state as well. */
-     xaccTransScrubGains (trans, NULL);
+     
+     /* Lot Scrubbing is temporarily disabled. */
+     //xaccTransScrubGains (trans, NULL);
+
      /* Allow scrubbing in transaction commit again */
      scrub_data = 1;
    }

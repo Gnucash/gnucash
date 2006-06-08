@@ -69,6 +69,9 @@ struct QofInstance_s
     *  but has not yet been written out to storage (file/database)
     */
    gboolean  dirty;
+
+   /* True iff this instance has never been committed. */
+   gboolean infant;
 };
 
 /* reset the dirty flag */

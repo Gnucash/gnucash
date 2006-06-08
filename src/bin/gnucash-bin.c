@@ -350,7 +350,6 @@ load_gnucash_modules()
         { "gnucash/register/ledger-core", 0, FALSE },
         { "gnucash/register/register-core", 0, FALSE },
         { "gnucash/register/register-gnome", 0, FALSE },
-        { "gnucash/import-export/binary-import", 0, FALSE },
         { "gnucash/import-export/qif-import", 0, FALSE },
         { "gnucash/import-export/ofx", 0, TRUE },
         { "gnucash/import-export/mt940", 0, TRUE },
@@ -373,7 +372,11 @@ load_gnucash_modules()
             gnc_module_load_optional(modules[i].name, modules[i].version);
         else
             gnc_module_load(modules[i].name, modules[i].version);
-    } 
+    }
+    if (!gnc_engine_is_initialized()) {
+        g_error("GnuCash engine failed to initialize.  Exiting.\n");
+        exit(0);
+    }
 }
 
 static void

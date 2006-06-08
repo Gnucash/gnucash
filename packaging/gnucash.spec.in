@@ -184,7 +184,7 @@ fi
 %{_datadir}/gnucash
 %{_datadir}/applications/*
 %{_datadir}/mime-info/gnucash.*
-%{_datadir}/xml/qsf/*
+%{_datadir}/xml/gnucash/xsl/*
 %{_sysconfdir}/gconf/schemas/apps_gnucash*
 %if %{_with_ofx}
 %exclude %{_libdir}/gnucash/libgncmod-ofx*

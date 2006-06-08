@@ -206,6 +206,23 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - pango-1.8.1
     - libgtkhtml-3.1.11
 - SUSE
+  -  10.1 = 2006-05-11
+    - aqbanking-1.2.0 (but package is broken; needs to be replaced by >=1.3.0)
+    - cairo-1.0.2
+    - gconf2-2.12.1
+    - glib2-2.8.5
+    - gtk2-2.8.10
+    - gtkhtml2-3.10.0
+    - guile-1.6.7
+    - g-wrap: not included
+    - libart_lgpl-2.3.17
+    - libglade2-2.5.1
+    - libgnomeprint-2.12.1
+    - libgnomeui-2.12.0
+    - libgsf-1.13.99
+    - libofx-0.8.0
+    - libxml2-2.6.23
+    - pango-1.10.2
   -  10.0 = 2005-10-06
     - aqbanking: not included; binary aqbanking-1.6.0 available at ftp://ftp.gwdg.de/linux/misc/suser-crauch/10.0/
     - cairo-1.0.0
@@ -228,6 +245,7 @@ The major distributions, as defined by http://distrowatch.com/dwres.php?resource
     - gconf2-2.10.0
     - glib2-2.6.3
     - gtk2-2.6.4
+    - gtkhtml2-3.6.1
     - guile-1.6.7
     - gwrap: not included
     - libart_lgpl-2.3.17

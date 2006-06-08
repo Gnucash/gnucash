@@ -25,8 +25,6 @@
    @author Copyright (C) 2002 Benoit Grégoire
 */
  
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>

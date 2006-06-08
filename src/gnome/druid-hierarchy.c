@@ -866,8 +866,10 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
                                          gnc_tree_view_account_notes_edited_cb);
 
   gtk_tree_view_set_headers_visible (tree_view, TRUE);
-  gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree),
-				   "type", /*"placeholder", */ NULL);
+  column = gnc_tree_view_find_column_by_name (
+      GNC_TREE_VIEW(data->final_account_tree), "type");
+  g_object_set_data(G_OBJECT(column), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree));
   gnc_tree_view_set_show_column_menu (GNC_TREE_VIEW(data->final_account_tree),
 				      FALSE);
 

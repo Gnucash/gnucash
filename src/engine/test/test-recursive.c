@@ -22,9 +22,9 @@
  *  Boston, MA  02110-1301,  USA 
  */
 
+#include "config.h"
 #include <glib.h>
 #include <glib/gprintf.h>
-#define _GNU_SOURCE
 
 #include "qof.h"
 #include "test-engine-stuff.h"

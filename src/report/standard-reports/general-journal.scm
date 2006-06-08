@@ -67,6 +67,13 @@
 			      (list gnc:query-default-sort)
 			      '())
     (gnc:query-set-sort-increasing query #t #t #t)
+
+    (gnc:query-add-account-match
+     query
+     (gnc:group-get-subaccounts (gnc:book-get-template-group (gnc:get-current-book)))
+     'guid-match-none
+     'query-and)
+
     ;; set the "__reg" options required by the Register Report...
     (for-each
      (lambda (l)

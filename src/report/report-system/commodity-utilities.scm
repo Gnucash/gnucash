@@ -821,14 +821,15 @@
 (define (gnc:case-exchange-fn 
 	 source-option report-currency to-date-tp)
   (case source-option
-    ('weighted-average (gnc:make-exchange-function 
+    ((weighted-average) (gnc:make-exchange-function 
 			(gnc:make-exchange-alist 
 			 report-currency to-date-tp)))
-    ('pricedb-latest gnc:exchange-by-pricedb-latest)
-    ('pricedb-nearest (lambda (foreign domestic)
+    ((pricedb-latest) gnc:exchange-by-pricedb-latest)
+    ((pricedb-nearest) (lambda (foreign domestic)
 			(gnc:exchange-by-pricedb-nearest
 			 foreign domestic to-date-tp)))
-    (else (gnc:warn "gnc:case-exchange-fn: bad price-source value"))))
+    (else (gnc:warn "gnc:case-exchange-fn: bad price-source value: " 
+                    source-option))))
 
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
@@ -841,23 +842,24 @@
 	 source-option report-currency commodity-list to-date-tp
 	 start-percent delta-percent)
   (case source-option
-    ('weighted-average (let ((pricealist
+    ((weighted-average) (let ((pricealist
 			      (gnc:get-commoditylist-totalavg-prices
 			       commodity-list report-currency to-date-tp
 			       start-percent delta-percent)))
 			 (lambda (foreign domestic date)
 			   (gnc:exchange-by-pricealist-nearest
 			    pricealist foreign domestic date))))
-    ('actual-transactions (let ((pricealist
+    ((actual-transactions) (let ((pricealist
 				 (gnc:get-commoditylist-inst-prices
 				  commodity-list report-currency to-date-tp)))
 			    (lambda (foreign domestic date)
 			      (gnc:exchange-by-pricealist-nearest
 			       pricealist foreign domestic date))))
-    ('pricedb-latest (lambda (foreign domestic date)
+    ((pricedb-latest) (lambda (foreign domestic date)
 		       (gnc:exchange-by-pricedb-latest foreign domestic)))
-    ('pricedb-nearest gnc:exchange-by-pricedb-nearest)
-    (else (gnc:warn "gnc:case-exchange-time-fn: bad price-source value"))))
+    ((pricedb-nearest) gnc:exchange-by-pricedb-nearest)
+    (else (gnc:warn "gnc:case-exchange-time-fn: bad price-source value: " 
+                    source-option))))
 
 
 

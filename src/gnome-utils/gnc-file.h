@@ -137,7 +137,7 @@ gboolean show_session_error (QofBackendError io_error,
 			     GNCFileDialogType type);
 
 char * gnc_file_dialog (const char * title,
-			const char * filter,
+			GList * filters,
 			const char * starting_dir,
 			GNCFileDialogType type);
 

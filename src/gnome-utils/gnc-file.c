@@ -65,7 +65,8 @@ static gint save_in_progress = 0;
  *   or presses "Cancel" or the window manager destroy button)      * 
  *                                                                  * 
  * Args:   title        - the title of the window                   *
- *         filter       - the file filter to use                    * 
+ *         filters      - list of GtkFileFilters to use, will be    *
+                          freed automatically                       *
  *         default_dir  - start the chooser in this directory       *
  *         type         - what type of dialog (open, save, etc.)    *
  * Return: containing the name of the file the user selected        *
@@ -73,7 +74,7 @@ static gint save_in_progress = 0;
 
 char *
 gnc_file_dialog (const char * title,
-                 const char * filter,
+                 GList * filters,
                  const char * starting_dir,
 		 GNCFileDialogType type
 		 )
@@ -144,14 +145,16 @@ gnc_file_dialog (const char * title,
 			       GTK_WINDOW(gnc_ui_get_toplevel()));
   */
 
-  if (filter != NULL)
+  if (filters != NULL)
   {
-    GtkFileFilter* g_filter = gtk_file_filter_new();
+    GList* filter;
     GtkFileFilter* all_filter = gtk_file_filter_new();
 
-    gtk_file_filter_set_name (g_filter, filter);
-    gtk_file_filter_add_pattern (g_filter, filter);
-    gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+    for (filter=filters; filter; filter=filter->next) {
+      g_return_val_if_fail(GTK_IS_FILE_FILTER(filter->data), NULL);
+      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (file_box),
+				   GTK_FILE_FILTER (filter->data));
+    }
 
     gtk_file_filter_set_name (all_filter, _("All files"));
     gtk_file_filter_add_pattern (all_filter, "*");
@@ -161,7 +164,9 @@ gnc_file_dialog (const char * title,
      * The latter wins, and the filter ends up diabled.  Since we are
      * only settin the starting directory for the chooser dialog,
      * everything works as expected. */
-    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box), g_filter);
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (file_box),
+				 GTK_FILE_FILTER (filters->data));
+    g_list_free (filters);
   }
 
   response = gtk_dialog_run(GTK_DIALOG(file_box));
@@ -955,7 +960,7 @@ gnc_file_save (void)
   /* If we don't have a filename/path to save to get one. */
   session = gnc_get_current_session ();
 
-  if (!qof_session_get_file_path (session))
+  if (!qof_session_get_url(session))
   {
     gnc_file_save_as ();
     return;
@@ -972,10 +977,10 @@ gnc_file_save (void)
 
   /* Make sure everything's OK - disk could be full, file could have
      become read-only etc. */
-  newfile = qof_session_get_file_path (session);
   io_err = qof_session_get_error (session);
   if (ERR_BACKEND_NO_ERR != io_err)
   {
+    newfile = qof_session_get_url(session);
     show_session_error (io_err, newfile, GNC_FILE_DIALOG_SAVE);
 
     if (been_here_before) return;
@@ -1030,7 +1035,7 @@ gnc_file_save_as (void)
   }
 
   session = gnc_get_current_session ();
-  oldfile = qof_session_get_file_path (session);
+  oldfile = qof_session_get_url(session);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
     g_free (newfile);
@@ -1040,7 +1045,7 @@ gnc_file_save_as (void)
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
 
-  xaccLogSetBaseName(newfile);
+  xaccLogSetBaseName(newfile); //FIXME: This is premature.
   save_in_progress++;
   new_session = qof_session_new ();
   qof_session_begin (new_session, newfile, FALSE, FALSE);
@@ -1119,7 +1124,6 @@ gnc_file_save_as (void)
   save_in_progress--;
 
   g_free (newfile);
-  gnc_hook_run(HOOK_BOOK_SAVED, new_session);
   LEAVE (" ");
 }
 
@@ -1131,7 +1135,7 @@ gnc_file_quit (void)
   gnc_set_busy_cursor (NULL, TRUE);
   session = gnc_get_current_session ();
 
-  /* disable events; otherwise the mass deletetion of accounts and
+  /* disable events; otherwise the mass deletion of accounts and
    * transactions during shutdown would cause massive redraws */
   qof_event_suspend ();
 

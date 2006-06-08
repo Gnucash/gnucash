@@ -28,8 +28,6 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -1082,7 +1080,7 @@ gnc_reconcile_window_get_current_split(RecnWindow *recnData)
 static void
 gnc_ui_reconcile_window_help_cb(GtkWidget *widget, gpointer data)
 {
-  gnc_gnome_help(HF_USAGE, HL_RECNWIN);
+  gnc_gnome_help(HF_HELP, HL_RECNWIN);
 }
 
 static void
@@ -1286,6 +1284,7 @@ gnc_get_reconcile_info (Account *account,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
+  time_t today;
   struct tm tm;
 
   if (xaccAccountGetReconcileLastDate (account, statement_date))
@@ -1311,6 +1310,10 @@ gnc_get_reconcile_info (Account *account,
     tm.tm_isdst = -1;
     gnc_tm_set_day_end (&tm);
     *statement_date = mktime (&tm);
+
+    today = gnc_timet_get_day_end(time(NULL));
+    if (*statement_date > today)
+      *statement_date = today;
   }
 
   xaccAccountGetReconcilePostponeDate (account, statement_date);

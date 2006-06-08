@@ -24,7 +24,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE
 #define __EXTENSIONS__
 
 #include "config.h"
@@ -249,11 +248,10 @@ timespec_abs(const Timespec *t)
 Timespec
 timespecCanonicalDayTime(Timespec t)
 {
-  struct tm tm, *result;
+  struct tm tm;
   Timespec retval;
   time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  result = localtime(&t_secs);
-  tm = *result;
+  localtime_r(&t_secs, &tm);
   gnc_tm_set_day_middle(&tm);
   retval.tv_sec = mktime(&tm);
   retval.tv_nsec = 0;
@@ -458,10 +456,10 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
   switch(dateFormat)
   {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d", day, month, year);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", day, month, year);
       break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%2d.%2d.%-4d", day, month, year);
+      flen = g_snprintf (buff, len, "%02d.%02d.%-4d", day, month, year);
       break;
    case QOF_DATE_FORMAT_LOCALE:
       {
@@ -487,7 +485,7 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
       break;
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d", month, day, year);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d", month, day, year);
       break;
   }
 
@@ -497,16 +495,16 @@ qof_print_date_dmy_buff (char * buff, size_t len, int day, int month, int year)
 size_t
 qof_print_date_buff (char * buff, size_t len, time_t t)
 {
-  struct tm *theTime;
+  struct tm theTime;
 
   if (!buff) return 0 ;
 
-  theTime = localtime (&t);
+  localtime_r(&t, &theTime);
 
   return qof_print_date_dmy_buff (buff, len,
-                   theTime->tm_mday, 
-                   theTime->tm_mon + 1,
-                   theTime->tm_year + 1900);
+                   theTime.tm_mday, 
+                   theTime.tm_mon + 1,
+                   theTime.tm_year + 1900);
 }
 
 size_t
@@ -644,10 +642,10 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
   switch(dateFormat)
   {
     case QOF_DATE_FORMAT_UK:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", day, month, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", day, month, year, hour, min);
       break;
     case QOF_DATE_FORMAT_CE:
-      flen = g_snprintf (buff, len, "%2d.%2d.%-4d %2d:%02d", day, month, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d.%02d.%-4d %2d:%02d", day, month, year, hour, min);
       break;
     case QOF_DATE_FORMAT_ISO:
       flen = g_snprintf (buff, len, "%04d-%02d-%02d %02d:%02d", year, month, day, hour, min);
@@ -666,7 +664,7 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 
     case QOF_DATE_FORMAT_US:
     default:
-      flen = g_snprintf (buff, len, "%2d/%2d/%-4d %2d:%02d", month, day, year, hour, min);
+      flen = g_snprintf (buff, len, "%02d/%02d/%-4d %2d:%02d", month, day, year, hour, min);
       break;
   }
   return flen;
@@ -940,13 +938,13 @@ char dateSeparator (void)
       else
       { /* Make a guess */
         unsigned char string[256];
-        struct tm *tm;
+        struct tm tm;
         time_t secs;
         unsigned char *s;
 
         secs = time(NULL);
-        tm = localtime(&secs);
-        strftime(string, sizeof(string), GNC_D_FMT, tm);
+        localtime_r(&secs, &tm);
+        strftime(string, sizeof(string), GNC_D_FMT, &tm);
 
         for (s = string; s != '\0'; s++)
           if (!isdigit(*s))
@@ -1110,6 +1108,15 @@ gnc_iso8601_to_timespec_gmt(const char *str)
         tmp_tm.tm_hour -= 2;
         secs = mktime (&tmp_tm);
       }
+    /* CAS: Even correct implementations of mktime can return
+       (time_t)(-1): From the libc info page: "If the specified
+       broken-down time cannot be represented as a simple time,
+       `mktime' returns a value of `(time_t)(-1)' and does not modify
+       the contents of BROKENTIME."  This happens for dates after 2038
+       when time_t is 32 bits.  In those cases, this code above is
+       just noisy and has a slight risk of returning the incorrect
+       time.
+     */
       if (secs < 0) 
       {
         /* Seriously buggy mktime - give up.  */
@@ -1124,7 +1131,7 @@ gnc_iso8601_to_timespec_gmt(const char *str)
      * value of 'gnc_timezone' includes daylight savings corrections
      * for that date. */
 
-    tm = *localtime_r (&secs, &tm);
+    localtime_r (&secs, &tm);
 
     tz = gnc_timezone (&tmp_tm);
 
@@ -1192,22 +1199,22 @@ gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
 int
 gnc_timespec_last_mday (Timespec t)
 {
-  struct tm *result;
+  struct tm result;
   time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  result = localtime(&t_secs);
-  return date_get_last_mday (result);
+  localtime_r(&t_secs, &result);
+  return date_get_last_mday (&result);
 }
 
 void
 gnc_timespec2dmy (Timespec t, int *day, int *month, int *year)
 {
-  struct tm *result;
+  struct tm result;
   time_t t_secs = t.tv_sec + (t.tv_nsec / NANOS_PER_SECOND);
-  result = localtime(&t_secs);
+  localtime_r(&t_secs, &result);
 
-  if (day) *day = result->tm_mday;
-  if (month) *month = result->tm_mon+1;
-  if (year) *year = result->tm_year+1900;
+  if (day) *day = result.tm_mday;
+  if (month) *month = result.tm_mon+1;
+  if (year) *year = result.tm_year+1900;
 }
 
 /********************************************************************\

@@ -182,7 +182,7 @@
  *    pointer to the second book, where the results of the query
  *    should go.
  *
- *    Cann the book commit() to complete the book partitioning.
+ *    Call the book commit() to complete the book partitioning.
  *
  *    After the begin(), there will be a call to run_query(), followed
  *    probably by a string of object calls, and completed by commit().  
@@ -366,15 +366,6 @@ struct QofBackend_s
  *  capable of handling more than one URL access method.
  */
 void qof_backend_register_provider (QofBackendProvider *);
-
-/** The qof_backend_set_error() routine pushes an error code onto the error
- *  stack. (FIXME: the stack is 1 deep in current implementation).
- */
-void qof_backend_set_error (QofBackend *be, QofBackendError err);
-
-/** The qof_backend_get_error() routine pops an error code off the error stack.
- */
-QofBackendError qof_backend_get_error (QofBackend *be);
 
 /** The qof_backend_set_message() assigns a string to the backend error message.
  */

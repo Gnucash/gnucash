@@ -133,15 +133,22 @@ finder_helper (GNCLot *lot,  gpointer user_data)
    Split *s;
    Transaction *trans;
    gnc_numeric bal;
+   gboolean opening_is_positive, bal_is_positive;
 
    if (gnc_lot_is_closed (lot)) return NULL;
 
-   /* We want a lot whose balance is of the correct sign */
-   bal = gnc_lot_get_balance (lot);
-   if (0 == (els->numeric_pred) (bal)) return NULL;
-   
    s = gnc_lot_get_earliest_split (lot);
    if (s == NULL) return NULL;
+   
+   /* We want a lot whose balance is of the correct sign.  All splits
+      in a lot must be the opposite sign of the opening split.  We also
+      want to ignore lots that are overfull, i.e., where the balance in
+      the lot is of opposite sign to the opening split in the lot. */
+   if (0 == (els->numeric_pred) (s->amount)) return NULL;
+   bal = gnc_lot_get_balance (lot);
+   opening_is_positive = gnc_numeric_positive_p (s->amount);
+   bal_is_positive = gnc_numeric_positive_p (bal);
+   if (opening_is_positive != bal_is_positive) return NULL;
    
    trans = s->parent;
    if (els->currency && 
@@ -546,12 +553,15 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       gnc_kvp_bag_add (new_split->inst.kvp_data, "lot-split", now, 
                        "peer_guid", xaccSplitGetGUID (split), 
                        NULL);
-
-      xaccSplitSetAmount (new_split, amt_b);
-      xaccSplitSetValue (new_split, val_b);
       
       xaccAccountInsertSplit (acc, new_split);
       xaccTransAppendSplit (trans, new_split);
+      /* Set the amount and value after the split is in the transaction
+         so it can find the correct denominator to use.  Otherwise it 
+         uses 100000 which may cause an overflow in some of the tests
+         in test-period */
+      xaccSplitSetAmount (new_split, amt_b);
+      xaccSplitSetValue (new_split, val_b);
       xaccTransCommitEdit (trans);
       xaccAccountCommitEdit (acc);
       return new_split;
@@ -599,6 +609,8 @@ xaccSplitAssign (Split *split)
    if (split->lot) return FALSE;
    acc = split->acc;
    if (!xaccAccountHasTrades (acc))
+     return FALSE;
+   if (gnc_numeric_zero_p (split->amount))
      return FALSE;
 
    ENTER ("(split=%p)", split);
@@ -919,6 +931,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       Transaction *trans;
       Split *lot_split, *gain_split;
       Timespec ts;
+      gboolean new_gain_split;
+      gnc_numeric negvalue = gnc_numeric_neg (value);
 
       /* See if there already is an associated gains transaction.
        * If there is, adjust its value as appropriate. Else, create 
@@ -932,6 +946,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          Account *lot_acc = lot->account;
          QofBook *book = lot_acc->inst.book;
 
+         new_gain_split = TRUE;
+         
          lot_split = xaccMallocSplit (book);
          gain_split = xaccMallocSplit (book);
 
@@ -977,42 +993,62 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       {
          trans = lot_split->parent;
          gain_split = xaccSplitGetOtherSplit (lot_split);
-         xaccTransBeginEdit (trans);
-
-         /* Make sure the existing gains trans has the correct currency,
-          * just in case someone screwed with it! */
-         if (FALSE == gnc_commodity_equiv(currency,trans->common_currency))
+         /* If the gain is already recorded corectly do nothing.  This is
+          * more than just an optimization since this may be called during
+          * gnc_book_partition_txn and depending on the order in which things
+          * happen some splits may be in the wrong book at that time. */
+         if (split->gains_split == lot_split &&
+             lot_split->gains_split == split &&
+             gain_split->gains_split == split &&
+             gnc_numeric_equal (xaccSplitGetValue (lot_split), value) &&
+             gnc_numeric_zero_p (xaccSplitGetAmount (lot_split)) &&
+             gnc_numeric_equal (xaccSplitGetValue (gain_split), negvalue) &&
+             gnc_numeric_equal (xaccSplitGetAmount (gain_split), negvalue))
          {
-            PWARN ("Resetting the transaction currency!");
-            xaccTransSetCurrency (trans, currency);
+            new_gain_split = FALSE;
+         }
+         else
+         {
+            new_gain_split = TRUE;
+            xaccTransBeginEdit (trans);
+
+            /* Make sure the existing gains trans has the correct currency,
+             * just in case someone screwed with it! */
+            if (FALSE == gnc_commodity_equiv(currency,trans->common_currency))
+            {
+               PWARN ("Resetting the transaction currency!");
+               xaccTransSetCurrency (trans, currency);
+            }
          }
       }
 
-      /* Common to both */
-      ts = xaccTransRetDatePostedTS (split->parent);
-      xaccTransSetDatePostedTS (trans, &ts);
-      xaccTransSetDateEnteredSecs (trans, time(0));
-
-      xaccSplitSetAmount (lot_split, zero);
-      xaccSplitSetValue (lot_split, value);
-
-      value = gnc_numeric_neg (value);
-      xaccSplitSetAmount (gain_split, value);
-      xaccSplitSetValue (gain_split, value);
-
-      /* Some short-cuts to help avoid the above kvp lookup. */
-      split->gains = GAINS_STATUS_CLEAN;
-      split->gains_split = lot_split;
-      lot_split->gains = GAINS_STATUS_GAINS;
-      lot_split->gains_split = split;
-      gain_split->gains = GAINS_STATUS_GAINS;
-      gain_split->gains_split = split;
-      
-      /* Do this last since it may generate an event that will call us
-         recursively. */
-      gnc_lot_add_split (lot, lot_split);
-
-      xaccTransCommitEdit (trans);
+      if (new_gain_split)
+      {
+         /* Common to both */
+         ts = xaccTransRetDatePostedTS (split->parent);
+         xaccTransSetDatePostedTS (trans, &ts);
+         xaccTransSetDateEnteredSecs (trans, time(0));
+   
+         xaccSplitSetAmount (lot_split, zero);
+         xaccSplitSetValue (lot_split, value);
+   
+         xaccSplitSetAmount (gain_split, negvalue);
+         xaccSplitSetValue (gain_split, negvalue);
+   
+         /* Some short-cuts to help avoid the above kvp lookup. */
+         split->gains = GAINS_STATUS_CLEAN;
+         split->gains_split = lot_split;
+         lot_split->gains = GAINS_STATUS_GAINS;
+         lot_split->gains_split = split;
+         gain_split->gains = GAINS_STATUS_GAINS;
+         gain_split->gains_split = split;
+         
+         /* Do this last since it may generate an event that will call us
+            recursively. */
+         gnc_lot_add_split (lot, lot_split);
+   
+         xaccTransCommitEdit (trans);
+      }
    }
    LEAVE ("(lot=%s)", gnc_lot_get_title(lot));
 }

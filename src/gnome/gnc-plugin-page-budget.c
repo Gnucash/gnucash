@@ -391,7 +391,7 @@ gnc_plugin_page_budget_create_widget (GncPluginPage *plugin_page)
     tree_view = gnc_tree_view_account_new(FALSE);
     g_object_set(G_OBJECT(tree_view), "gconf-section", GCONF_SECTION, NULL);
 
-    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view), "Name", NULL);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(tree_view));
     priv->tree_view = tree_view;
     selection = gtk_tree_view_get_selection(tree_view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
@@ -852,7 +852,7 @@ gnc_budget_gui_delete_budget(GncBudget *budget)
 
     if (gnc_verify_dialog (NULL, FALSE, _("Delete %s?"), name)) {
         gnc_suspend_gui_refresh ();
-        gnc_budget_free(budget);
+        gnc_budget_destroy(budget);
         // Views should close themselves because the CM will notify them.
         gnc_resume_gui_refresh ();
     }
@@ -1019,7 +1019,7 @@ gnc_plugin_page_budget_refresh_col_titles(GncPluginPageBudget *page)
     date = r->start;
     for (i = 0; i < num_periods_visible; i++) {
         col = GTK_TREE_VIEW_COLUMN(g_list_nth_data(col_list, i));
-        titlelen = g_date_strftime(title, MAX_DATE_LENGTH, "%x", &date);
+        titlelen = qof_print_gdate(title, MAX_DATE_LENGTH, &date);
         if (titlelen > 0)
             gtk_tree_view_column_set_title(col, title);
         recurrenceNextInstance(r, &date, &nextdate);
@@ -1051,8 +1051,7 @@ gnc_plugin_page_budget_view_refresh (GncPluginPageBudget *page)
         num_periods_visible = g_list_length(col_list);
     }
 
-    gnc_tree_view_configure_columns(
-        GNC_TREE_VIEW(priv->tree_view), NULL);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(priv->tree_view));
 
     /* Create any needed columns */
     while (num_periods_visible < num_periods) {

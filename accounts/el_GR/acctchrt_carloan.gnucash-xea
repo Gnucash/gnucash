@@ -15,9 +15,15 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Παθητικό</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Δάνεια</act:name>
@@ -25,20 +31,26 @@
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Δάνεια</act:description>
   <act:parent type="new">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+<act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Δάνειο Αυτοκινήτου</act:name>
+  <act:name>Δάνειο αυτοκινήτου</act:name>
   <act:id type="new">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
   <act:type>LIABILITY</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Δάνειο Οχήματος</act:description>
+  <act:description>Δάνειο οχήματος</act:description>
   <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -47,9 +59,15 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Έξοδα</act:description>
+<act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Τόκοι</act:name>
@@ -57,20 +75,20 @@
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
   <act:description>Tόκοι</act:description>
   <act:parent type="new">acacdcb998e45fb741766622e8542f0b</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Τόκοι Δανείου Αυτοκινήτου</act:name>
+  <act:name>Τόκοι δανείου αυτοκινήτου</act:name>
   <act:id type="new">e9bd8477e27361238d2f53c4fe7594ab</act:id>
   <act:type>EXPENSE</act:type>
   <act:commodity>
     <cmdty:space>ISO4217</cmdty:space>
-    <cmdty:id>USD</cmdty:id>
+    <cmdty:id>EUR</cmdty:id>
   </act:commodity>
-  <act:description>Τόκοι Δανείου Αυτοκινήτου</act:description>
+  <act:description>Τόκοι δανείου αυτοκινήτου</act:description>
   <act:parent type="new">9e8495e80ebfb762089be917dff7ab72</act:parent>
 </gnc:account>
 </gnc-account-example>

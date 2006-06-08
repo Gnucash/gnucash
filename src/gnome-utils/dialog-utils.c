@@ -23,8 +23,6 @@
  *                                                                  *
 \********************************************************************/
 
-#define _GNU_SOURCE 1  /* necessary to get RTLD_DEFAULT on linux */
-
 #include "config.h"
 
 #include <gtk/gtk.h>

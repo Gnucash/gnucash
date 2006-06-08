@@ -21,8 +21,6 @@
  *                                                                  *
  *******************************************************************/
 
-#define _GNU_SOURCE
-
 #include "config.h"
 #include "qofmath128.h"
 

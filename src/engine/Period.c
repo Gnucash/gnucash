@@ -801,23 +801,27 @@ add_closing_balances (AccountGroup *closed_grp,
 static void 
 period_begin_edit (QofBook *src_book, QofBook *dest_book)
 {
+    /*
    QofBackend *be;
    be = qof_book_get_backend(src_book);
    if (be && be->begin)
    {
       // (*be->begin)(be, GNC_ID_PERIOD, dest_book);
    }
+    */
 }
    
 static void 
 period_commit_edit (QofBook *src_book, QofBook *dest_book)
 {
+    /*
    QofBackend *be;
    be = qof_book_get_backend(src_book);
    if (be && be->commit)
    {
       // (*be->commit)(be, GNC_ID_PERIOD, dest_book);
    }
+    */
 }
 
 /* ================================================================ */

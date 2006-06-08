@@ -192,6 +192,7 @@
 	    </widget>
 	  </child>
 
+<!-- The View button is not implemented, remove it
 	  <child>
 	    <widget class="GtkButton" id="regview button">
 	      <property name="visible">True</property>
@@ -264,6 +265,7 @@
 	      </child>
 	    </widget>
 	  </child>
+ -->
 
 	  <child>
 	    <widget class="GtkButton" id="button5">

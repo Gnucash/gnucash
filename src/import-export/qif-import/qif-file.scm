@@ -71,7 +71,7 @@
 
                  ;; pick the 1-char tag off from the remainder of the line 
                  (set! tag (string-ref line 0))
-                 (set! value (make-shared-substring line 1))
+                 (set! value (substring line 1))
                  
                  ;; now do something with the line 
                  (if

@@ -306,7 +306,7 @@ gtkhtml_pre_3_10_1_bug_workaround(GtkHTMLEmbedded *eb)
  * legend_urls_[123]: ?
  */
 static gboolean
-handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
+handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -375,7 +375,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
  * stacked:boolean
  **/
 static gboolean
-handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
+handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -499,7 +499,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 }
 
 static gboolean
-handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
+handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer unused)
 {
   GogObject *graph, *chart;
   GogPlot *plot;
@@ -550,7 +550,7 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 }
 
 static void
-draw_print_cb (GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer d)
+draw_print_cb(GtkHTMLEmbedded *eb, GnomePrintContext *context, gpointer unused)
 {
   GogGraph *graph = GOG_GRAPH (g_object_get_data (G_OBJECT (eb), "graph"));
 

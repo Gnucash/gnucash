@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "qof.h"
+#include "qofbackend-p.h"
 
 static QofLogModule log_module = QOF_MOD_UTIL;
 
@@ -231,14 +232,18 @@ qof_begin_edit(QofInstance *inst)
 {
   QofBackend * be;
 
-  if (!inst) { return FALSE; }
-  (inst->editlevel)++;
-  if (1 < inst->editlevel) { return FALSE; }
-  if (0 >= inst->editlevel) { inst->editlevel = 1; }
+  if (!inst) return FALSE;
+  inst->editlevel++;
+  if (1 < inst->editlevel) return FALSE;
+  if (0 >= inst->editlevel) 
+      inst->editlevel = 1;
+
   be = qof_book_get_backend (inst->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
-  } else { inst->dirty = TRUE; }
+  if (be && qof_backend_begin_exists(be))
+      qof_backend_run_begin(be, inst);
+  else
+      inst->dirty = TRUE; 
+  
   return TRUE;
 }
 
@@ -246,18 +251,21 @@ gboolean qof_commit_edit(QofInstance *inst)
 {
   QofBackend * be;
 
-  if (!inst) { return FALSE; }
-  (inst->editlevel)--;
-  if (0 < inst->editlevel) { return FALSE; }
-  if ((-1 == inst->editlevel) && inst->dirty)
+  if (!inst) return FALSE;
+  inst->editlevel--;
+  if (0 < inst->editlevel) return FALSE;
+
+  if ((0 == inst->editlevel) && inst->dirty)
   {
-    be = qof_book_get_backend ((inst)->book);
-    if (be && qof_backend_begin_exists(be)) {
-     qof_backend_run_begin(be, inst);
+    be = qof_book_get_backend (inst->book);
+    if (be && qof_backend_commit_exists(be)) {
+        qof_backend_run_commit(be, inst);
     }
-    inst->editlevel = 0;
   }
-  if (0 > inst->editlevel) { inst->editlevel = 0; }
+  if (0 > inst->editlevel) { 
+      PERR ("unbalanced call - resetting (was %d)", inst->editlevel);
+      inst->editlevel = 0;
+  }
   return TRUE;
 }
 
@@ -296,16 +304,19 @@ qof_commit_edit_part2(QofInstance *inst,
         /* XXX the backend commit code should clear dirty!! */
         inst->dirty = FALSE;
     }
+    if (dirty && qof_get_alt_dirty_mode() && 
+        !(inst->infant && inst->do_free)) {
+      qof_collection_mark_dirty(inst->entity.collection);
+      qof_book_mark_dirty(inst->book);
+    }
+    inst->infant = FALSE;
+
     if (inst->do_free) {
         if (on_free)
             on_free(inst);
         return TRUE;
     }
 
-    if (dirty && qof_get_alt_dirty_mode()) {
-      qof_collection_mark_dirty(inst->entity.collection);
-      qof_book_mark_dirty(inst->book);
-    }
     if (on_done)
         on_done(inst);
     return TRUE;

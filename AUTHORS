@@ -96,6 +96,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 A. Alper Atici <alper_atici@yahoo.com> Turkish translation
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
+Roman Bertle <bertle@smoerz.org> Austrian German account templates
 Jan-Pascal van Best <j.p.vanbest@tbm.tudelft.nl> MT940 importer
 Dennis Björklund <dennisb@cs.chalmers.se> Swedish translation
 Andreas Bogk <andreas@andreas.org> Postgres backend patch
@@ -129,11 +130,13 @@ Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Volker Englisch <Volker@englisch.us> QA and testing
 Jonathan Ernst <jonathan@ernstfamily.ch> Translations
 Stephen Evanchik <evanchsa@clarkson.edu> Logging improvements; gtk2 conversions
+Joshua Facemyer / Impressus Art <faceman@impressusart.com>: New artwork.
 Paul Fenwick <pjf@schools.net.au> ASX support, Finance::Quote
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
 Valek Filippov <frob@df.ru> messages Russian translation
 Jan-Uwe Finck <jufi@nerdnet.de> for messages German translation
 Kevin Finn <kevinfinn@mediaone.net> auto-decimal point, options, auto interest xfer patches
+Danny Fischer <dan.pescaru@gmail.com> Romanian translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Todd T. Fries <todd@flare.fries.net> OpenBSD fix

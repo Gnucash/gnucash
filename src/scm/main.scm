@@ -17,6 +17,10 @@
 
 (define-module (gnucash main))
 
+;; This is to silence warnings with guile-1.8:
+(if (and (>= (string->number (major-version)) 1) 
+         (>= (string->number (minor-version)) 8))
+    (default-duplicate-binding-handler 'last))
 (use-modules (ice-9 slib))
 
 (use-modules (g-wrap gw-wct))
@@ -61,7 +65,6 @@
 
 ;; from doc.scm
 (export gnc:find-doc-file)
-;(export gnc:load-help-topics)
 
 ;; from main-window.scm
 (export gnc:main-window-properties-cb)

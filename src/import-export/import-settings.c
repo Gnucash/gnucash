@@ -24,8 +24,6 @@
    transaction matching (for both the gui and the backend)
    @author Copyright (C) 2002 Benoit Grégoire
 */
-#define _GNU_SOURCE
-
 #include "config.h"
 
 #include <glib.h>

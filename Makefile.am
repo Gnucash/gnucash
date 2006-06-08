@@ -117,7 +117,7 @@ DISTCLEANFILES = \
   goffice gsf lib/.links po/POTFILES.in
 
 cscope.files:
-	find . -name '*.[ch]' > cscope.files
+	find src lib -name '*.[ch]' > cscope.files
 
 cscope.out: cscope.files
 	cscope -b

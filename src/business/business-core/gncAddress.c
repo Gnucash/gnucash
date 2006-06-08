@@ -90,26 +90,8 @@ gncAddressCreate (QofBook *book, QofEntity *prnt)
 static GncAddress * 
 qofAddressCreate (QofBook *book)
 {
-  GncAddress *addr;
-
-  if (!book) return NULL;
-
-  addr = g_new0 (GncAddress, 1);
-  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
-  addr->book = book;
-  addr->dirty = FALSE;
-  addr->parent = NULL; /* set using an independent function. */
-
-  addr->name = CACHE_INSERT ("");
-  addr->addr1 = CACHE_INSERT ("");
-  addr->addr2 = CACHE_INSERT ("");
-  addr->addr3 = CACHE_INSERT ("");
-  addr->addr4 = CACHE_INSERT ("");
-  addr->phone = CACHE_INSERT ("");
-  addr->fax = CACHE_INSERT ("");
-  addr->email = CACHE_INSERT ("");
-
-  return addr;
+  /* The address will get set later by another function */
+  return gncAddressCreate(book, NULL);
 }
 
 static void

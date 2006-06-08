@@ -9,7 +9,7 @@ else
 libgncglib_la_SOURCES = $(REALSRCS)
 endif
 
-libgncglib_la_LIBADD = ${GLIB_LIBS}
+libgncglib_la_LIBADD = ${GLIB24_LIBS}
 
 AM_CFLAGS = ${GLIB_CFLAGS}
 

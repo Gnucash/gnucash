@@ -218,3 +218,8 @@
 
 /* Don't include goffice-features.h, it's a subset of goffice-config.h. */
 #define GOFFICE_FEATURES_H
+
+/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# undef _GNU_SOURCE
+#endif

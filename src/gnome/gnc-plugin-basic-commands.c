@@ -56,7 +56,9 @@
 #include "gnc-session.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
+#ifdef QSF_IMPORT_NO_LONGER_BROKEN
 static QofLogModule log_module = GNC_MOD_GUI;
+#endif
 
 static void gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass);
 static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);
@@ -67,14 +69,20 @@ static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindowAction
 static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *data);
+#ifdef QSF_IMPORT_NO_LONGER_BROKEN
 static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData *data);
+#endif
 static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data);
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
 static void gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data);
+#endif
 static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindowActionData *data);
+#ifdef BOOK_CLOSING_WORKS
 static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data);
+#endif
 static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindowActionData *data);
 static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data);
@@ -104,18 +112,22 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
     NULL,
     G_CALLBACK (gnc_main_window_cmd_file_save_as) },
+#ifdef QSF_IMPORT_NO_LONGER_BROKEN
   { "FileImportQSFAction", GTK_STOCK_CONVERT,
     N_("_QSF Import"), NULL,
     N_("Import a QSF object file"),
     G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
+#endif
   { "FileExportAccountsAction", GTK_STOCK_CONVERT,
     N_("Export _Accounts"), NULL,
     N_("Export the account hierarchy to a new GnuCash datafile"),
     G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
   { "FileExportChartAction", GTK_STOCK_CONVERT,
     N_("Export _Chart of Accounts to QSF"), NULL,
     N_("Export the chart of accounts for a date with balances as QSF"),
     G_CALLBACK (gnc_main_window_cmd_file_chart_export) },
+#endif
 
   /* Edit menu */
 
@@ -138,9 +150,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
+#ifdef BOOK_CLOSING_WORKS
   { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
+#endif
 
   /* Tools menu */
 
@@ -345,7 +359,7 @@ gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindowActionData *da
   gnc_window_set_progressbar_window (NULL);
   /* FIXME GNOME 2 Port (update the title etc.) */
 }
-
+#ifdef QSF_IMPORT_NO_LONGER_BROKEN
 static void
 qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
 {
@@ -383,7 +397,7 @@ gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindowActionData 
   gtk_widget_show (file_select);
   gnc_window_set_progressbar_window(NULL);
 }
-
+#endif
 static void
 gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowActionData *data)
 {
@@ -396,6 +410,7 @@ gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindowAction
   /* gnc_refresh_main_window_info (); */
 }
 
+#ifdef QSF_EXPORT_NO_LONGER_BROKEN
 static void
 gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionData *data)
 {
@@ -407,6 +422,7 @@ gnc_main_window_cmd_file_chart_export (GtkAction *action, GncMainWindowActionDat
   /* FIXME GNOME 2 Port (update the title etc.) */
   /* gnc_refresh_main_window_info (); */
 }
+#endif
 
 static void
 gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindowActionData *data)
@@ -456,11 +472,13 @@ gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindowActio
   gnc_ui_sx_loan_druid_create ();
 }
 
+#ifdef BOOK_CLOSING_WORKS
 static void
 gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindowActionData *data)
 {
   gnc_acct_period_dialog();
 }
+#endif
 
 static void
 gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindowActionData *data)
