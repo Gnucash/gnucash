@@ -64,8 +64,8 @@ struct _FinCalcDialog
 
   GtkWidget *calc_button;
 
-  GtkWidget *compounding_menu;
-  GtkWidget *payment_menu;
+  GtkWidget *compounding_combo;
+  GtkWidget *payment_combo;
 
   GtkWidget *end_of_period_radio;
   GtkWidget *discrete_compounding_radio;
@@ -162,10 +162,10 @@ fi_to_gui(FinCalcDialog *fcd)
   gtk_label_set_text (GTK_LABEL(fcd->payment_total_label), string);
 
   i = normalize_period(&fcd->financial_info.CF);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(fcd->compounding_menu), i);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(fcd->compounding_combo), i);
 
   i = normalize_period(&fcd->financial_info.PF);
-  gtk_option_menu_set_history(GTK_OPTION_MENU(fcd->payment_menu), i);
+  gtk_combo_box_set_active(GTK_COMBO_BOX(fcd->payment_combo), i);
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fcd->end_of_period_radio),
                                !fcd->financial_info.bep);
@@ -203,10 +203,10 @@ gui_to_fi(FinCalcDialog *fcd)
     gnc_amount_edit_get_damount(GNC_AMOUNT_EDIT(fcd->amounts[FUTURE_VALUE]));
   fcd->financial_info.fv = -fcd->financial_info.fv;
 
-  i = gnc_option_menu_get_active(fcd->compounding_menu);
+  i = gtk_combo_box_get_active(GTK_COMBO_BOX(fcd->compounding_combo));
   fcd->financial_info.CF = periods[i];
 
-  i = gnc_option_menu_get_active(fcd->payment_menu);
+  i = gtk_combo_box_get_active(GTK_COMBO_BOX(fcd->payment_combo));
   fcd->financial_info.PF = periods[i];
 
   toggle = GTK_TOGGLE_BUTTON(fcd->end_of_period_radio);
@@ -254,13 +254,6 @@ fincalc_dialog_destroy(GtkObject *object, gpointer data)
   g_free(fcd);
 }
 
-static void
-connect_fincalc_menu_item(GtkWidget *item, gpointer data)
-{
-  g_signal_connect (G_OBJECT (item), "activate",
-                    G_CALLBACK (fincalc_update_calc_button_cb), data);
-}
-
 void
 fincalc_compounding_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 {
@@ -274,7 +267,7 @@ fincalc_compounding_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 
   sensitive = gtk_toggle_button_get_active (togglebutton);
 
-  gtk_widget_set_sensitive (fcd->compounding_menu, sensitive);
+  gtk_widget_set_sensitive (fcd->compounding_combo, sensitive);
 }
 
 void
@@ -554,7 +547,7 @@ gnc_ui_fincalc_dialog_create(void)
 {
   FinCalcDialog *fcd;
   GtkWidget *button;
-  GtkWidget *menu;
+  GtkWidget *combo;
   GtkWidget *edit;
   GladeXML  *xml;
 
@@ -601,17 +594,15 @@ gnc_ui_fincalc_dialog_create(void)
   fcd->calc_button = glade_xml_get_widget (xml, "calc_button");
 
 
-  menu = glade_xml_get_widget (xml, "compounding_menu");
-  fcd->compounding_menu = menu;
-  gnc_option_menu_init(menu);
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
-  gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
+  combo = glade_xml_get_widget (xml, "compounding_combo");
+  fcd->compounding_combo = combo;
+  g_signal_connect(fcd->compounding_combo, "changed",
+		   G_CALLBACK (fincalc_update_calc_button_cb), fcd);
 
-  menu = glade_xml_get_widget (xml, "payment_menu");
-  fcd->payment_menu = menu;
-  gnc_option_menu_init(menu);
-  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(menu));
-  gtk_container_forall(GTK_CONTAINER(menu), connect_fincalc_menu_item, fcd);
+  combo = glade_xml_get_widget (xml, "payment_combo");
+  fcd->payment_combo = combo;
+  g_signal_connect(fcd->compounding_combo, "changed",
+		   G_CALLBACK (fincalc_update_calc_button_cb), fcd);
 
   button = glade_xml_get_widget (xml, "period_payment_radio");
   fcd->end_of_period_radio = button;

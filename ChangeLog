@@ -1,3 +1,15 @@
+2006-06-07  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-fincalc.c:
+	* src/gnome/dialog-sx-from-trans.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/glade/fincalc.glade:
+	* src/gnome/glade/lots.glade:
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/lot-viewer.c:
+	* src/gnome-search/dialog-search.c: More GtkOptionMenu -> GtkCombo
+	and CtkCList -> CtkTreeView conversions.
+
 2006-06-05  David Hampton  <hampton@employees.org>
 
 	* src/report/report-gnome/dialog-style-sheet.c:

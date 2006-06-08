@@ -3504,76 +3504,6 @@ December</property>
 		  </child>
 
 		  <child>
-		    <widget class="GtkOptionMenu" id="freq_option_menu">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="history">0</property>
-
-		      <child internal-child="menu">
-			<widget class="GtkMenu" id="convertwidget269">
-			  <property name="visible">True</property>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget270">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Daily</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget271">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Weekly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget272">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Bi-Weekly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget273">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Monthly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget274">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Quarterly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-
-			  <child>
-			    <widget class="GtkMenuItem" id="convertwidget275">
-			      <property name="visible">True</property>
-			      <property name="label" translatable="yes">Yearly</property>
-			      <property name="use_underline">True</property>
-			    </widget>
-			  </child>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">1</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">1</property>
-		      <property name="bottom_attach">2</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-
-		  <child>
 		    <widget class="GtkEntry" id="name_entry">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
@@ -3591,6 +3521,27 @@ December</property>
 		      <property name="top_attach">0</property>
 		      <property name="bottom_attach">1</property>
 		      <property name="y_options"></property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="freq_combo_box">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Daily
+Weekly
+Bi-Weekly
+Monthly
+Quarterly
+Yearly</property>
+		      <property name="focus_on_click">True</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">1</property>
+		      <property name="right_attach">2</property>
+		      <property name="top_attach">1</property>
+		      <property name="bottom_attach">2</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -4834,32 +4785,11 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 		      </child>
 
 		      <child>
-			<widget class="GtkOptionMenu" id="len_opt">
+			<widget class="GtkComboBox" id="len_opt">
 			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="history">0</property>
-
-			  <child internal-child="menu">
-			    <widget class="GtkMenu" id="convertwidget288">
-			      <property name="visible">True</property>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget289">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">months</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-
-			      <child>
-				<widget class="GtkMenuItem" id="convertwidget290">
-				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">years</property>
-				  <property name="use_underline">True</property>
-				</widget>
-			      </child>
-			    </widget>
-			  </child>
+			  <property name="items" translatable="yes">months
+years</property>
+			  <property name="focus_on_click">True</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -6035,48 +5965,13 @@ If you make a mistake or want to make changes later, you can edit the created Sc
 			      <property name="spacing">0</property>
 
 			      <child>
-				<widget class="GtkOptionMenu" id="rev_range_opt">
+				<widget class="GtkComboBox" id="rev_range_opt">
 				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="history">0</property>
-
-				  <child internal-child="menu">
-				    <widget class="GtkMenu" id="convertwidget291">
-				      <property name="visible">True</property>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget292">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Current Year</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget293">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Now + 1 Year</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget294">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Whole Loan</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-
-				      <child>
-					<widget class="GtkMenuItem" id="convertwidget295">
-					  <property name="visible">True</property>
-					  <property name="label" translatable="yes">Custom</property>
-					  <property name="use_underline">True</property>
-					</widget>
-				      </child>
-				    </widget>
-				  </child>
+				  <property name="items" translatable="yes">Current Year
+Now + 1 Year
+Whole Loan
+Custom</property>
+				  <property name="focus_on_click">True</property>
 				</widget>
 				<packing>
 				  <property name="padding">0</property>

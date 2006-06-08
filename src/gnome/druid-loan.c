@@ -262,7 +262,7 @@ typedef struct LoanDruidData_ {
         GNCFrequency  *prmVarGncFreq;
         GNCDateEdit   *prmStartDateGDE;
         GtkSpinButton *prmLengthSpin;
-        GtkOptionMenu *prmLengthType;
+        GtkComboBox   *prmLengthType;
         GtkSpinButton *prmRemainSpin;
 
         /* opt = options */
@@ -300,7 +300,7 @@ typedef struct LoanDruidData_ {
         GNCFrequency     *payGncFreq;
 
         /* rev = review */
-        GtkOptionMenu     *revRangeOpt;
+        GtkComboBox       *revRangeOpt;
         GtkFrame          *revDateFrame;
         GtkTable          *revTable;
         GNCDateEdit       *revStartDate;
@@ -355,7 +355,7 @@ static void ld_get_loan_range( LoanDruidData *ldd,
                                GDate *end );
 
 static void ld_rev_recalc_schedule( LoanDruidData *ldd );
-static void ld_rev_range_opt_changed( GtkButton *b, gpointer ud );
+static void ld_rev_range_opt_changed( GtkComboBox *combo, gpointer ud );
 static void ld_rev_range_changed( GNCDateEdit *gde, gpointer ud );
 static void ld_rev_get_dates( LoanDruidData *ldd,
                               GDate *start,
@@ -597,8 +597,7 @@ gnc_ui_sx_loan_druid_create(void)
                         g_signal_connect( ldd->prmLengthSpin, "changed",
                                           G_CALLBACK( ld_calc_upd_rem_payments ),
                                           ldd );
-                        g_signal_connect( gtk_option_menu_get_menu(ldd->prmLengthType),
-                                          "selection-done",
+                        g_signal_connect( ldd->prmLengthType, "changed",
                                           G_CALLBACK( ld_calc_upd_rem_payments ),
                                           ldd );
 
@@ -609,8 +608,6 @@ gnc_ui_sx_loan_druid_create(void)
                 }
                
                 gnc_option_menu_init( GTK_WIDGET(ldd->prmType) );
-                gnc_option_menu_init( GTK_WIDGET(ldd->prmLengthType) );
-                gnc_option_menu_init( GTK_WIDGET(ldd->revRangeOpt) );
 
                 g_signal_connect( ldd->optEscrowCb, "toggled",
                                   G_CALLBACK(ld_escrow_toggle), ldd );
@@ -716,8 +713,8 @@ gnc_ui_sx_loan_druid_create(void)
 
         /* Review page widget setup. */
         {
-                g_signal_connect( gtk_option_menu_get_menu(ldd->revRangeOpt),
-                                  "selection-done",
+		gtk_combo_box_set_active( ldd->revRangeOpt, 0 );
+                g_signal_connect( ldd->revRangeOpt, "changed",
                                   G_CALLBACK( ld_rev_range_opt_changed ),
                                   ldd );
                 g_signal_connect( ldd->revStartDate, "date-changed",
@@ -871,7 +868,7 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         ldd->prmLengthSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    LENGTH_SPIN );
         ldd->prmLengthType =
-                GET_CASTED_WIDGET( GTK_OPTION_MENU,    LENGTH_OPT );
+                GET_CASTED_WIDGET( GTK_COMBO_BOX,      LENGTH_OPT );
         ldd->prmRemainSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    REMAIN_SPIN );
         
@@ -919,7 +916,7 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
 
         /* rev = review */
         ldd->revRangeOpt =
-                GET_CASTED_WIDGET( GTK_OPTION_MENU,    REV_RANGE_OPT );
+                GET_CASTED_WIDGET( GTK_COMBO_BOX,      REV_RANGE_OPT );
         ldd->revDateFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          REV_DATE_FRAME );
         ldd->revTable =
@@ -1196,7 +1193,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         /* len / periods */
         {
                 ldd->ld.perSize =
-                        (gnc_option_menu_get_active( GTK_WIDGET(ldd->prmLengthType) )
+                        (gtk_combo_box_get_active( ldd->prmLengthType )
                          == MONTHS) ? MONTHS : YEARS;
                 ldd->ld.numPer =
                         gtk_spin_button_get_value_as_int( ldd->prmLengthSpin );
@@ -1237,7 +1234,7 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         /* length: total and remaining */
         {
                 gtk_spin_button_set_value( ldd->prmLengthSpin, ldd->ld.numPer );
-                gtk_option_menu_set_history( ldd->prmLengthType, ldd->ld.perSize );
+                gtk_combo_box_set_active( ldd->prmLengthType, ldd->ld.perSize );
                 gtk_spin_button_set_value( ldd->prmRemainSpin, ldd->ld.numMonRemain );
         }
 }
@@ -2522,8 +2519,7 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
                 g_free( valueStr );
         }
         total = totalVal
-                * ( gnc_option_menu_get_active(
-                            GTK_WIDGET(ldd->prmLengthType) )
+                * ( gtk_combo_box_get_active( ldd->prmLengthType )
                     == 1 ? 12 : 1 );
         remain = total - i;
         gtk_spin_button_set_value( ldd->prmRemainSpin, remain );
@@ -2532,12 +2528,12 @@ ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud )
 
 static
 void
-ld_rev_range_opt_changed( GtkButton *b, gpointer ud )
+ld_rev_range_opt_changed( GtkComboBox *combo, gpointer ud )
 {
         LoanDruidData *ldd = (LoanDruidData*)ud;
         int opt;
 
-        opt = gnc_option_menu_get_active( GTK_WIDGET(ldd->revRangeOpt) );
+        opt = gtk_combo_box_get_active( ldd->revRangeOpt );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->revDateFrame),
                                   (opt == CUSTOM) );
         {
@@ -2585,7 +2581,7 @@ static
 void
 ld_rev_get_dates( LoanDruidData *ldd, GDate *start, GDate *end )
 {
-        int range = gnc_option_menu_get_active( GTK_WIDGET(ldd->revRangeOpt) );
+        int range = gtk_combo_box_get_active( ldd->revRangeOpt );
         switch ( range ) {
         case CURRENT_YEAR:
                 g_date_set_time_t( start, time(NULL) );

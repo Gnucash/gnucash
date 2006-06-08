@@ -52,6 +52,10 @@ typedef enum {
   GNC_SEARCH_MATCH_ANY = 1
 } GNCSearchType;
 
+#define COL_NAME    0
+#define COL_POINTER 1
+#define NUM_COLS    2
+
 struct _GNCSearchWindow {
   GtkWidget *	dialog;
   GtkWidget *	criteria_table;
@@ -298,15 +302,9 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 }
 
 static void
-match_all (GtkWidget *widget, GNCSearchWindow *sw)
+match_combo_changed (GtkComboBox *combo_box, GNCSearchWindow *sw)
 {
-  sw->grouping = GNC_SEARCH_MATCH_ALL;
-}
-
-static void
-match_any (GtkWidget *widget, GNCSearchWindow *sw)
-{
-  sw->grouping = GNC_SEARCH_MATCH_ANY;
+  sw->grouping = gtk_combo_box_get_active(combo_box);
 }
 
 static void
@@ -557,10 +555,17 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
 }
 
 static void
-option_activate (GtkMenuItem *item, struct _crit_data *data)
+combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
 {
-  GNCSearchParam *param = g_object_get_data (G_OBJECT (item), "param");
+  GNCSearchParam *param;
   GNCSearchCoreType *newelem;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  if (!gtk_combo_box_get_active_iter(combo_box, &iter))
+    return;
+  model = gtk_combo_box_get_model(combo_box);
+  gtk_tree_model_get(model, &iter, COL_POINTER, &param, -1);
 
   if (gnc_search_param_type_match (param, data->param)) {
     /* The param type is the same, just save the new param */
@@ -614,7 +619,10 @@ search_clear_criteria (GNCSearchWindow *sw)
 static GtkWidget *
 get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
 {
-  GtkWidget *menu, *item, *omenu, *hbox, *p;
+  GtkWidget *combo_box, *hbox, *p;
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GtkCellRenderer *cell;
   GList *l;
   struct _crit_data *data;
   int index = 0, current = 0;
@@ -632,14 +640,23 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
   data->container = hbox;
   data->param = sw->last_param;
 
-  menu = gtk_menu_new ();
+  store = gtk_list_store_new(NUM_COLS, G_TYPE_STRING, G_TYPE_POINTER);
+  combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+
+  cell = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start(GTK_CELL_LAYOUT (combo_box), cell, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
+                                  "text", COL_NAME,
+                                  NULL);
+
   for (l = sw->params_list; l; l = l->next) {
     GNCSearchParam *param = l->data;
-    item = gtk_menu_item_new_with_label (_(param->title));
-    g_object_set_data (G_OBJECT (item), "param", param);
-    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_activate), data);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-    gtk_widget_show (item);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+		       COL_NAME, _(param->title),
+		       COL_POINTER, param,
+		       -1);
 
     if (param == sw->last_param) /* is this the right parameter to start? */
       current = index;
@@ -647,12 +664,10 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     index++;
   }
 
-  omenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), current);
-  gtk_widget_show (omenu);
+  gtk_combo_box_set_active (GTK_COMBO_BOX(combo_box), current);
+  g_signal_connect (combo_box, "changed", G_CALLBACK (combo_box_changed), data);
 
-  gtk_box_pack_start (GTK_BOX (hbox), omenu, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, FALSE, 0);
   if (p)
     gtk_box_pack_start (GTK_BOX (hbox), p, FALSE, FALSE, 0);
   gtk_widget_show_all (hbox);
@@ -748,7 +763,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 {
   GladeXML *xml;
   GtkWidget *label, *add, *box;
-  GtkWidget *menu, *item, *omenu;
+  GtkComboBox *combo_box;
   GtkWidget *new_item_button;
   const char * type_label;
   gboolean active;
@@ -782,25 +797,14 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
   gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
   
   /* Set the match-type menu */
-  menu = gtk_menu_new ();
+  combo_box = GTK_COMBO_BOX(gtk_combo_box_new_text());
+  gtk_combo_box_append_text(combo_box, _("all criteria are met"));
+  gtk_combo_box_append_text(combo_box, _("any criteria are met"));
+  gtk_combo_box_set_active(combo_box, sw->grouping);
+  g_signal_connect(combo_box, "changed", G_CALLBACK (match_combo_changed), sw);
 
-  item = gtk_menu_item_new_with_label (_("all criteria are met"));
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_all), sw);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-	
-  item = gtk_menu_item_new_with_label (_("any criteria are met"));
-  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (match_any), sw);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-  gtk_widget_show (item);
-	
-  omenu = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), sw->grouping);
-
-  gtk_widget_show (omenu);
   box = glade_xml_get_widget (xml, "type_menu_box");
-  gtk_box_pack_start (GTK_BOX (box), omenu, FALSE, FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
 
   /* if there's no original query, make the narrow, add, delete 
    * buttons inaccessible */
