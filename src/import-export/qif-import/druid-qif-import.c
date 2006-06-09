@@ -44,6 +44,7 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gtk-utils.h"
 #include "gnc-ui.h"
 #include "guile-mappings.h"
 
@@ -74,7 +75,6 @@ struct _qifimportwindow {
   GtkWidget * filename_entry;
   GtkWidget * acct_entry;
   GtkWidget * date_format_combo;
-  GtkWidget * date_format_entry;
   GtkWidget * selected_file_view;
   GtkWidget * acct_view;
   GtkWidget * cat_view;
@@ -444,9 +444,6 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
   const char * path_to_load;
   const gchar * default_acctname = NULL;
 
-  GList * format_strings;
-  GList * listit;
-
   SCM make_qif_file   = scm_c_eval_string("make-qif-file");
   SCM qif_file_load   = scm_c_eval_string("qif-file:read-file");
   SCM qif_file_parse  = scm_c_eval_string("qif-file:parse-fields");
@@ -559,24 +556,16 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       if(SCM_LISTP(parse_return) && 
          (SCM_CAR(parse_return) == SCM_BOOL_T)) {
 
+	gtk_combo_box_remove_text(GTK_COMBO_BOX(wind->date_format_combo), 0);
 	if ((date_formats = scm_call_2(qif_file_parse_results,
 				       SCM_CDR(parse_return),
 				       scm_str2symbol("date"))) != SCM_BOOL_F) {
-	  format_strings = NULL;
 	  while(SCM_LISTP(date_formats) && !SCM_NULLP(date_formats)) {
-	    format_strings = 
-	      g_list_append(format_strings, 
-			    g_strdup(SCM_SYMBOL_CHARS(SCM_CAR(date_formats))));
+	    gtk_combo_box_append_text(GTK_COMBO_BOX(wind->date_format_combo),
+				      SCM_SYMBOL_CHARS(SCM_CAR(date_formats)));
 	    date_formats = SCM_CDR(date_formats);
 	  }
-	  gtk_combo_set_popdown_strings(GTK_COMBO(wind->date_format_combo),
-					format_strings);
-
-	  for(listit = format_strings; listit; listit=listit->next) {
-	    free(listit->data);
-	    listit->data = NULL;
-	  }
-	  g_list_free(format_strings);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(wind->date_format_combo), 0);
         
 	  ask_date_format = TRUE;
 
@@ -650,9 +639,12 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
 
   SCM  reparse_dates   = scm_c_eval_string("qif-file:reparse-dates");
   SCM  check_from_acct = scm_c_eval_string("qif-file:check-from-acct");
-  SCM  format_sym = 
-    scm_str2symbol(gtk_entry_get_text(GTK_ENTRY(wind->date_format_entry)));
+  SCM  format_sym;
+  gchar *text;
   
+  text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(wind->date_format_combo));
+  format_sym = scm_str2symbol(text);
+  g_free(text);
   scm_call_2(reparse_dates, wind->selected_file, format_sym);
   
   if(scm_call_1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
@@ -1213,7 +1205,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   GtkTreeSelection* selection;
 
   const char * mnemonic = NULL; 
-  const char * namespace = NULL;
+  gchar * namespace = NULL;
   const char * fullname = NULL;
   const gchar * amount_str;
   int  rownum = 0;
@@ -1231,13 +1223,14 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
+    namespace = gnc_ui_namespace_picker_ns(page->new_type_combo);
     fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
     
     gnc_commodity_set_namespace(page->commodity, namespace);
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
+    g_free(namespace);
     old_commodity = page->commodity;
     page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
@@ -1469,7 +1462,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = user_data;
   QIFDruidPage    * qpage = g_object_get_data(G_OBJECT(page), "page_struct");
   
-  const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
+  gchar *namespace       = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   const char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
   const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
   int  show_matches;
@@ -1477,6 +1470,8 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   if(!namespace || (namespace[0] == 0)) {
     gnc_warning_dialog(wind->window,
 		       _("You must enter a Type for the commodity."));
+    if (namespace)
+      g_free(namespace);
     return TRUE;
   }
   else if(!name || (name[0] == 0)) {
@@ -1498,8 +1493,10 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
 		       _("You must enter an existing national "
 			 "currency or enter a different type."));
 
+    g_free(namespace);
     return TRUE;
   }
+  g_free(namespace);
 
   if(page == (g_list_last(wind->commodity_pages))->data) {
     /* it's time to import the accounts. */
@@ -1653,9 +1650,9 @@ make_qif_druid_page(gnc_commodity * comm)
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
-  retval->new_type_combo = gtk_combo_new(); 
-  gtk_box_pack_start(GTK_BOX(temp),
-                     retval->new_type_combo, TRUE, TRUE, 0);
+  retval->new_type_combo = gtk_combo_box_entry_new_text();
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->new_type_combo));
+  gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
 
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
@@ -2042,10 +2039,9 @@ gnc_ui_qif_import_druid_make(void)
   retval->druid          = glade_xml_get_widget (xml, "qif_import_druid");
   retval->filename_entry = glade_xml_get_widget (xml, "qif_filename_entry");
   retval->acct_entry     = glade_xml_get_widget (xml, "qif_account_entry");
-  retval->date_format_combo = glade_xml_get_widget (xml, "date_format_combo");
-  retval->date_format_entry = glade_xml_get_widget (xml, "date_format_entry");
+  retval->date_format_combo = glade_xml_get_widget (xml, "date_format_combobox");
   retval->selected_file_view = glade_xml_get_widget(xml, "selected_file_view");
-  retval->currency_picker = glade_xml_get_widget (xml, "currency_combo");
+  retval->currency_picker = glade_xml_get_widget (xml, "currency_comboboxentry");
   retval->currency_entry = glade_xml_get_widget (xml, "currency_entry");
   retval->acct_view      = glade_xml_get_widget (xml, "account_page_view");
   retval->cat_view       = glade_xml_get_widget (xml, "category_page_view");
@@ -2204,6 +2200,7 @@ gnc_ui_qif_import_druid_make(void)
   scm_gc_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */
+  gnc_cbe_require_list_item(GTK_COMBO_BOX_ENTRY(retval->currency_picker));
   gnc_ui_update_commodity_picker(retval->currency_picker,
                                  GNC_COMMODITY_NS_CURRENCY, 
                                  gnc_commodity_get_printname

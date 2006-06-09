@@ -1,3 +1,16 @@
+2006-06-08  David Hampton  <hampton@employees.org>
+
+	* src/import-export/qif-import/qif.glade:
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/binary-import/druid-commodity.c:
+	* src/gnome-utils/glade/commodity.glade:
+	* src/gnome-utils/dialog-commodity.[ch]: Convert more deprecated
+	GtkCombo widgets into GtkComboBoxEntries.
+
+	* src/core-utils/gnc-gtk-utils.[ch]: Allow completion without
+	requiring that the entered text be present in the model.  Used for
+	new entry of new namespaces.
+
 2006-06-07  David Hampton  <hampton@employees.org>
 
 	* various: Pull trunk changes r13935:14346 into branch.
@@ -9,8 +22,8 @@
 	* src/gnome/glade/lots.glade:
 	* src/gnome/glade/sched-xact.glade:
 	* src/gnome/lot-viewer.c:
-	* src/gnome-search/dialog-search.c: More GtkOptionMenu -> GtkCombo
-	and CtkCList -> CtkTreeView conversions.
+	* src/gnome-search/dialog-search.c: More GtkOptionMenu -> GtkComboBox
+	and GtkCList -> GtkTreeView conversions.
 
 2006-06-05  David Hampton  <hampton@employees.org>
 
