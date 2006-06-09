@@ -26,6 +26,7 @@ EXTRA_DIST = \
   netlogin.txt \
   guid.txt \
   qif.txt \
+  valgrind.txt \
   generic-druid-framework.txt \
   user-prefs-howto.txt
 

@@ -1,3 +1,13 @@
+2006-06-09  David Hampton  <hampton@employees.org>
+
+	* src/doc/valgrind.txt:
+	* src/doc/Makefile.am:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* configure.in: Move the valgrind reference code from a compiled
+	file to a documentation file.  The start/stop valgrind command
+	didn't work as well as I'd hoped. Fixes #344353.
+
 2006-06-07  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/business-gnome.scm: Restore the
