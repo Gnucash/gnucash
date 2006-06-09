@@ -1,5 +1,7 @@
 2006-06-09  David Hampton  <hampton@employees.org>
 
+	* doc/examples/*.qif: Tell subversion these files are text.
+
 	* src/doc/valgrind.txt:
 	* src/doc/Makefile.am:
 	* src/gnome-utils/ui/gnc-main-window-ui.xml:
