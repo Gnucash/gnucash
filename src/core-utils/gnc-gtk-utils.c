@@ -155,6 +155,27 @@ gnc_cbe_focus_out_cb (GtkEntry *entry,
 }
 
 void
+gnc_cbe_add_completion (GtkComboBoxEntry *cbe)
+{
+  GtkEntry *entry;
+  GtkEntryCompletion *completion;
+  GtkTreeModel *model;
+
+  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+  completion = gtk_entry_get_completion(entry);
+  if (completion)
+    return;
+
+  /* No completion yet? Set one up. */
+  completion = gtk_entry_completion_new();
+  model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
+  gtk_entry_completion_set_model(completion, model);
+  gtk_entry_completion_set_text_column(completion, 0);
+  gtk_entry_completion_set_inline_completion(completion, TRUE);
+  gtk_entry_set_completion(entry, completion);
+}
+
+void
 gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
 {
   GtkEntry *entry;
@@ -163,21 +184,14 @@ gnc_cbe_require_list_item (GtkComboBoxEntry *cbe)
   GtkTreeIter iter;
   gint index, id;
 
-  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
-  completion = gtk_entry_get_completion(entry);
-
-  /* No completion yet? Set one up. */
-  if (!completion) {
-    completion = gtk_entry_completion_new();
-    model = gtk_combo_box_get_model(GTK_COMBO_BOX(cbe));
-    gtk_entry_completion_set_model(completion, model);
-    gtk_entry_completion_set_text_column(completion, 0);
-    gtk_entry_set_completion(entry, completion);
-  }
+  /* Ensure completion is set up. */
+  gnc_cbe_add_completion(cbe);
 
   /* If an item in the combo box isn't already selected, then force
    * select the first item. Take care, the combo box may not have been
    * filled yet.  */
+  entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbe)));
+  completion = gtk_entry_get_completion(entry);
   index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbe));
   if (index == -1) {
     model = gtk_entry_completion_get_model(completion);

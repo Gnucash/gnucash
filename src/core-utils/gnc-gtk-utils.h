@@ -44,6 +44,7 @@
 */
 
 void gnc_cbe_set_by_string(GtkComboBoxEntry *cbe, const gchar *text);
+void gnc_cbe_add_completion (GtkComboBoxEntry *cbe);
 void gnc_cbe_require_list_item (GtkComboBoxEntry *cbe);
 
 
