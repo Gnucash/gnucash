@@ -381,8 +381,10 @@ xaccAccountCommitEdit (Account *acc)
        g_assert(acc->splits == NULL || qof_book_shutting_down(acc->inst.book));
     */
 
-    col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
-    qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
+    if (!qof_book_shutting_down(acc->inst.book)) {
+      col = qof_book_get_collection(acc->inst.book, GNC_ID_TRANS);
+      qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
+    }
 
     /* the lots should be empty by now */
     for (lp = acc->lots; lp; lp = lp->next)

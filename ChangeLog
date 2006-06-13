@@ -1,5 +1,11 @@
 2006-06-12  David Hampton  <hampton@employees.org>
 
+	* src/engine/Account.c: When committing an account during the
+	closing of a book, don't search the engine for splits that are in
+	the process of being assigned to the account but aren't yet linked
+	into the account.  This eliminates an O(n*m) operation that will
+	never find any work to perform.  Fixes #344473.
+
 	* src/quotes/gnc-fq-check.in: Quote the F::Q version number so
 	that it will be correctly parsed as a string.
 
