@@ -1,3 +1,8 @@
+2006-06-12  David Hampton  <hampton@employees.org>
+
+	* src/quotes/gnc-fq-check.in: Quote the F::Q version number so
+	that it will be correctly parsed as a string.
+
 2006-06-09  David Hampton  <hampton@employees.org>
 
 	* doc/examples/*.qif: Tell subversion these files are text.
