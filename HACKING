@@ -80,7 +80,7 @@ Note that piping stdout from gnucash to a file causes gnucash to crash.
 Don't know why, this is a bug that needs to be fixed.  Here's another
 way to get trace messages into a file:
 
--- edit src/engine/gnc-engine.c and find the call to qif_log_set_level
+-- edit src/engine/gnc-engine.c and find the call to qof_log_set_level
    for the module you are intersted in.  Adjust the log level
    appropriately.
 -- edit the call to qof_log_file_init() in this same file to change
