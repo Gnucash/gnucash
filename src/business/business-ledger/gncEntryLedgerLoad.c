@@ -172,69 +172,16 @@ skip_income_acct_cb (Account *account, gpointer user_data)
 /* ===================================================================== */
 /* Splat the account name into the transfer cell combobox menu */
 
-typedef struct {
-  ComboCell *cell;
-  GncEntryLedgerType ledger_type;
-} BCE;
-
-static gpointer
-load_entry_xfer_cell_cb (Account *account, gpointer data)
-{
-  BCE *bce = data;
-  GNCAccountType type;
-  char *name;
-
-  /* Don't add A/R, A/P, Bank, Cash, or Equity accounts */
-  type = xaccAccountGetType (account);
-  if (type == PAYABLE || type == RECEIVABLE ||
-      type == CASH || type == BANK || type == EQUITY)
-  {
-    return NULL;
-  }
-
-  /* If this is an ORDER or INVOICE, then leave out the expenses.
-   * if it's a BILL, then leave out the incomes
-   */
-  switch (bce->ledger_type) 
-  {
-    case GNCENTRY_ORDER_ENTRY:
-    case GNCENTRY_ORDER_VIEWER:
-    case GNCENTRY_INVOICE_ENTRY:
-    case GNCENTRY_INVOICE_VIEWER:
-      if (type == EXPENSE) return NULL;
-      break;
-
-    case GNCENTRY_BILL_ENTRY:
-    case GNCENTRY_BILL_VIEWER:
-    case GNCENTRY_EXPVOUCHER_ENTRY:
-    case GNCENTRY_EXPVOUCHER_VIEWER:
-    case GNCENTRY_NUM_REGISTER_TYPES:
-      if (type == INCOME) return NULL;
-      break;
-  }
-
-  /* Don't add placeholder accounts */
-  if (xaccAccountGetPlaceholder (account)) return NULL;
-
-
-  name = xaccAccountGetFullName (account);
-  if (NULL == name) return NULL;
-  gnc_combo_cell_add_menu_item (bce->cell, name);
-  g_free(name);
-
-  return NULL;
-}
-
 #define EKEY "Expense Business entry quickfill"
 #define IKEY "Income Business entry quickfill"
 
 static void 
 load_xfer_type_cells (GncEntryLedger *ledger)
 {
-  BCE bce;
   AccountGroup *group;
   ComboCell *cell;
   QuickFill *qf=NULL;
+  GtkListStore *store = NULL;
 
   group = gnc_book_get_group (ledger->book);
   if (group == NULL) return;
@@ -251,6 +198,8 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_INVOICE_VIEWER:
       qf = gnc_get_shared_account_name_quickfill (group, IKEY, 
                                       skip_expense_acct_cb, NULL);
+      store = gnc_get_shared_account_name_list_store (group, IKEY,
+						      skip_expense_acct_cb, NULL);
       break;
 
     case GNCENTRY_BILL_ENTRY:
@@ -260,26 +209,20 @@ load_xfer_type_cells (GncEntryLedger *ledger)
     case GNCENTRY_NUM_REGISTER_TYPES:
       qf = gnc_get_shared_account_name_quickfill (group, EKEY, 
                                       skip_income_acct_cb, NULL);
+      store = gnc_get_shared_account_name_list_store (group, EKEY,
+						      skip_income_acct_cb, NULL);
       break;
   }
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_IACCT_CELL);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-
-  bce.cell = cell;
-  bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (ledger->table->layout, ENTRY_BACCT_CELL);
-  gnc_combo_cell_clear_menu (cell);
   gnc_combo_cell_use_quickfill_cache (cell, qf);
-
-  bce.cell = cell;
-  bce.ledger_type = ledger->type;
-  xaccGroupForEachAccount (group, load_entry_xfer_cell_cb, &bce, TRUE);
+  gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
 /* ===================================================================== */

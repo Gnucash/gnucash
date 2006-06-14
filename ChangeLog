@@ -1,5 +1,8 @@
 2006-06-14  David Hampton  <hampton@employees.org>
 
+	* src/business/business-ledger/gncEntryLedgerLoad.c: Use the new
+	mechanism for the account list popups.  Fixes #342058.
+
 	* src/import-export/hbci/gnc-hbci-utils.c: HBCI data is already in
 	utf8. Don't recode into the local charset (which may not be utf8).
 
