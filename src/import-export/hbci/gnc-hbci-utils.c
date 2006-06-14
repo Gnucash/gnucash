@@ -636,12 +636,7 @@ gchar *gnc_call_iconv(GIConv handler, const gchar* input)
 
 const char *gnc_hbci_book_encoding()
 {
-#if HAVE_LANGINFO_CODESET
-  char* encoding = nl_langinfo(CODESET);
-#else
-  char* encoding = "UTF-8";
-#endif
-  return encoding;
+  return "UTF-8";
 }
 
 const char *gnc_hbci_AQBANKING_encoding()
