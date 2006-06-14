@@ -785,7 +785,8 @@ AC_SUBST(OFX_DIR)
 AC_ARG_ENABLE( mt940,
   [  --enable-mt940               compile with MT940 support (needs --enable-hbci)],
   if test "x$enableval" != "xno" ; then
-    MT940_DIR=mt940
+    MT940_DIR=mt940 ;
+    HBCI_DIR=hbci ;
   fi)
 if test x${MT940_DIR} = xmt940 ;
 then

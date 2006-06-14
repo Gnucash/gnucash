@@ -1,3 +1,7 @@
+2006-06-13  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: force-enable hbci if the user enables mt940
+
 2006-06-13  David Hampton  <hampton@employees.org>
 
 	* src/quotes/gnc-fq-helper.in: Tell gnucash that a currency quote
