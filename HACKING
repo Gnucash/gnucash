@@ -74,53 +74,42 @@ TIPS AND HINTS
 Starting Gnucash from the build tree:
 -------------------------------------
 
-To run gnucash from your build tree:
--- edit ./src/bin/overrides/gnucash and replace gnucash-env with
-   ./src/bin/overrides/gnucash-build-env
--- then start gnucash by saying ./src/bin/overrides/gnucash
--- Make sure you undo this change before installing gnucash
-
-
 Getting Trace Messages From GnuCash:
 ------------------------------------
 Note that piping stdout from gnucash to a file causes gnucash to crash.
 Don't know why, this is a bug that needs to be fixed.  Here's another
 way to get trace messages into a file:
 
--- edit src/engine/gnc-trace.c, adjust values in the array
-   gnc_log_modules[] to what you want to have for a given module.
--- edit gnc_log_init() to fopen() the log file where you want 
-   messages to go to.
+-- edit src/engine/gnc-engine.c and find the call to qif_log_set_level
+   for the module you are intersted in.  Adjust the log level
+   appropriately.
+-- edit the call to qof_log_file_init() in this same file to change
+   where you want messages to go to.
 
 
 Starting GnuCash in GDB
 -----------------------
 To run gdb on an installed version of gnucash (installed in /opt/gnc/unstable:)
 
-    % /opt/gnc/unstable/bin/gnucash-env gdb /opt/gnc/unstable/bin/gnucash-bin
+    % /opt/gnc/unstable/bin/gnucash &
+    [ pid number output here ]
+    % gdb /opt/gnc/unstable/bin/gnucash-bin
     [gdb output]
-    % gdb> run [--g-fatal-warnings]
+    gdb> attach <pid>
     
-To run gdb on the version in your build tree:
-
-    % ./src/bin/overrides/gnucash-build-env gdb /usr/bin/guile
-    [gdb output]
-    % gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
-
 You'll also probably want to know about these:
 
-    % gdb> catch fork
-    % gdb> set follow-fork-mode child
+    gdb> catch fork
+    gdb> set follow-fork-mode child
 
 -----
 It may be the case that running GDB from within emacs doesn't work for you,
 with the following error:
 
-[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-env gdb /opt/gnucash-cvs/bin/gnucash-bin
+[C-u M-x gdb /opt/gnucash-cvs/bin/gnucash-bin
  ...in buffer *gud-gdb*:]
 
-/opt/gnucash-cvs/libexec/gnucash/overrides/gnucash-env: line 28: exec: -d: invalid option
-exec: usage: exec [-cl] [-a name] file [redirection ...]
+    (gdb) attach <pid>
 
 jsled needed to re-define a gud.el function as such:
 
