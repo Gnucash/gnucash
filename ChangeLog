@@ -1,5 +1,9 @@
 2006-06-14  David Hampton  <hampton@employees.org>
 
+	* src/business/business-gnome/glade/invoice.glade: The Chargeback
+	and Extra Payments sections of the bill should not expand to fill
+	extra space.
+
 	* src/business/business-ledger/gncEntryLedgerLoad.c: Use the new
 	mechanism for the account list popups.  Fixes #342058.
 
