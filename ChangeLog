@@ -1,3 +1,9 @@
+2006-06-14  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Similarly ensure for
+	aqbanking/mt940 import that all retrieved strings will be valid
+	utf8.
+
 2006-06-13  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/druid-qif-import.c: Do a better job

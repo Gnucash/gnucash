@@ -35,6 +35,7 @@
 #include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "qof.h" 
+#include "gnc-glib-utils.h"
 
 #define AQBANKING_NOWARN_DEPRECATED
 #include "gnc-hbci-utils.h"
@@ -477,6 +478,9 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
 
   g_strstrip (tmp1);
   if (strlen (tmp1) > 0) {
+    /* Ensure string is in utf8 */
+    gnc_utf8_strip_invalid (tmp1);
+
     if (*res != NULL) {
       /* The " " is the separating string in between each two strings. */
       tmp2 = g_strjoin (" ", *res, tmp1, NULL);
@@ -578,6 +582,9 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans)
   /*   g_strstrip (h_transactionText); */
   g_strstrip (h_otherAccountId);
   g_strstrip (h_otherBankCode);
+  /* Ensure string is in utf8 */
+  gnc_utf8_strip_invalid (h_otherAccountId);
+  gnc_utf8_strip_invalid (h_otherBankCode);
 
   g_memo = 
     (h_otherAccountId && (strlen (h_otherAccountId) > 0) ?
@@ -585,6 +592,7 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans)
 		      _("Account"), h_otherAccountId,
 		      _("Bank"), h_otherBankCode) :
      g_strdup (""));
+  gnc_utf8_strip_invalid (g_memo);
     
   g_free (h_otherAccountId);
   g_free (h_otherBankCode);
