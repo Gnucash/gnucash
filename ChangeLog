@@ -1,3 +1,14 @@
+2006-06-13  David Hampton  <hampton@employees.org>
+
+	* src/core-utils/gnc-glib-utils.[ch]:
+	* src/core-utils/gw-core-utils-spec.scm:
+	* src/import-export/qif-import/qif-file.scm:
+	* src/import-export/ofx/gnc-ofx-import.c: Strip all invalid utf8
+	characters from imported QIF and OFX/QFX strings.  This fixes bugs
+	#106203 #338296 #344170 and #344219.  Long term gnucash should be
+	enhanced to learn/remember the input encoding and automatically
+	convert to utf8.
+
 2006-06-13  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: force-enable hbci if the user enables mt940

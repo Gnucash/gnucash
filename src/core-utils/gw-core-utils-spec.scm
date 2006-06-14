@@ -25,6 +25,7 @@
    (lambda (wrapset client-wrapset)
      (list
       "#include <gnc-gconf-utils.h>\n"
+      "#include <gnc-glib-utils.h>\n"
       "#include <gnc-main.h>\n")))
 
   (gw:wrap-function
@@ -51,5 +52,21 @@
    "g_find_program_in_path"
    '(((<gw:mchars> caller-owned) program))
    "Get a boolean value from gconf.")
+
+  (gw:wrap-function
+   ws
+   'gnc:utf8-validate
+   '<gw:bool>
+   "gnc_utf8_validate"
+   '(((<gw:mchars> caller-owned) program))
+   "Validate UTF8 encoded text.")
+
+  (gw:wrap-function
+   ws
+   'gnc:utf8-strip-invalid
+   '<gw:void>
+   "gnc_utf8_strip_invalid"
+   '(((<gw:mchars> caller-owned) program))
+   "Strip string of non-utf8 characters.")
 
 )
