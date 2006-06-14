@@ -1,5 +1,9 @@
 2006-06-13  David Hampton  <hampton@employees.org>
 
+	* src/import-export/qif-import/druid-qif-import.c: Do a better job
+	of turning the busy cursor on/off.  Now works correctly if there's
+	a failure in the input file.
+
 	* src/core-utils/gnc-glib-utils.[ch]:
 	* src/core-utils/gw-core-utils-spec.scm:
 	* src/import-export/qif-import/qif-file.scm:
