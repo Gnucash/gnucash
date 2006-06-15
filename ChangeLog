@@ -1,5 +1,8 @@
 2006-06-14  David Hampton  <hampton@employees.org>
 
+	* src/app-utils/gnc-ui-util.c: Restore the auto decimal places
+	settings from gconf at startup.  Fixes #344938.
+
 	* src/business/business-gnome/glade/invoice.glade: The Chargeback
 	and Extra Payments sections of the bill should not expand to fill
 	extra space.
