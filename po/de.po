@@ -20139,7 +20139,9 @@ msgstr "Nullsalden anzeigen?"
 msgid ""
 "Transactions relating to '%s' contain more than one currency.  This report "
 "is not designed to cope with this possibility."
-msgstr "Die Buchungen mit Firma \"%s\" enthält mehr als eine Währung. Dieser Bericht ist für diese Möglichkeit nicht ausgelegt."
+msgstr ""
+"Die Buchungen mit Firma \"%s\" enthält mehr als eine Währung. Dieser Bericht "
+"ist für diese Möglichkeit nicht ausgelegt."
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3718
