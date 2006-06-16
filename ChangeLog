@@ -1,3 +1,9 @@
+2006-06-16  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-header.c: Remove five year
+	old workaround for a resizing bug.  Fixes #344764.  Also
+	explicitly initialize a couple of variables.
+
 2006-06-14  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.c: Restore the auto decimal places
