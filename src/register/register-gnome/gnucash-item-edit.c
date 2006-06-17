@@ -84,6 +84,7 @@ struct _TextDrawInfo
 };
 
 
+static void queue_sync (GncItemEdit *item_edit);
 static void gnc_item_edit_show_popup_toggle (GncItemEdit *item_edit,
 					 gint x, gint y,
 					 gint width, gint height,
@@ -218,7 +219,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
 	/* Selection */
         if (start_pos != end_pos)
         {
-                gint start_byte_pos, end_byte_pos;
+                gint start_byte_pos, end_byte_pos, color;
 
                 start_byte_pos = g_utf8_offset_to_pointer (text, start_pos) - text;
                 end_byte_pos = g_utf8_offset_to_pointer (text, end_pos) - text;
@@ -230,7 +231,8 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
                 attr->end_index = end_byte_pos;
                 pango_attr_list_insert (attr_list, attr);
 
-                attr = pango_attr_background_new (0x0, 0x0, 0x0);
+                color = GTK_WIDGET_HAS_FOCUS(item_edit->sheet) ? 0x0 : 0x7fff;
+                attr = pango_attr_background_new (color, color, color);
                 attr->start_index = start_byte_pos;
                 attr->end_index = end_byte_pos;
                 pango_attr_list_insert (attr_list, attr);
@@ -447,6 +449,7 @@ gnc_item_edit_focus_in (GncItemEdit *item_edit)
         ev.window = GTK_WIDGET (item_edit->sheet)->window;
         ev.in = TRUE;
         gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+        queue_sync(item_edit);
 }
 
 void
@@ -461,6 +464,7 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
         ev.window = GTK_WIDGET (item_edit->sheet)->window;
         ev.in = FALSE;
         gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+        queue_sync(item_edit);
 }
 
 void

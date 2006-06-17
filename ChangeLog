@@ -1,5 +1,8 @@
 2006-06-16  David Hampton  <hampton@employees.org>
 
+	* src/register/register-gnome/gnucash-item-edit.c: Correctly
+	indicate the focus state of the register.  Fixes #342055.
+
 	* src/gnome-utils/gnc-main-window.[ch]:
 	* src/gnome/gnc-plugin-page-account-tree.c: Instead of marking the
 	first page so that it can't be closed, mark the first *accounts*
