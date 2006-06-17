@@ -113,10 +113,9 @@ Please select a date format for the file.  QIF files created by European softwar
 	  </child>
 
 	  <child>
-	    <widget class="GtkOptionMenu" id="import_format_menu">
+	    <widget class="GtkComboBox" id="import_format_combo">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="history">-1</property>
+	      <property name="focus_on_click">True</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
