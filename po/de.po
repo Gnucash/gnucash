@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnucash-2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-15 12:04+0200\n"
-"PO-Revision-Date: 2006-06-15 13:21+0200\n"
+"PO-Revision-Date: 2006-06-17 23:12+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -5995,7 +5995,7 @@ msgstr "Erstellen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:55
 msgid "Create as scheduled"
-msgstr "Als terminiert erstellen"
+msgstr "Erstellen wie terminiert"
 
 #: ../src/gnome/glade/sched-xact.glade.h:56
 msgid "Create automatically"
@@ -6309,7 +6309,7 @@ msgstr "Zahlung an:"
 
 #: ../src/gnome/glade/sched-xact.glade.h:141
 msgid "Postpone"
-msgstr "Verschieben"
+msgstr "Zurückstellen"
 
 #: ../src/gnome/glade/sched-xact.glade.h:143
 msgid "Press Apply to create these transactions."
@@ -6403,8 +6403,7 @@ msgstr ""
 
 #: ../src/gnome/glade/sched-xact.glade.h:166
 msgid "Show the \"since last run\" window when a file is opened."
-msgstr ""
-"Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird."
+msgstr "Das Fenster »Seit letztem Aufruf« anzeigen, wenn eine Datei geöffnet wird oder beim Programmstart von GnuCash."
 
 #: ../src/gnome/glade/sched-xact.glade.h:167
 msgid "Since Last Run"
@@ -6569,7 +6568,7 @@ msgstr "Be_nachrichtigen, bevor neue Buchungen erstellt werden"
 
 #: ../src/gnome/glade/sched-xact.glade.h:205
 msgid "_Run when data file opened"
-msgstr "Anzeigen, wenn eine _Datei geöffnet wird"
+msgstr "Seit-Letztem-Aufruf Fenster starten, wenn eine _Datei geöffnet wird"
 
 #: ../src/gnome/glade/sched-xact.glade.h:206
 #: ../src/gnome-utils/glade/preferences.glade.h:144
