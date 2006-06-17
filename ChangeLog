@@ -1,3 +1,24 @@
+r14377 | chris | 2006-06-16 21:00:18 -0400 (Fri, 16 Jun 2006) | 2 lines
+
+   M /gnucash/trunk/src/engine/gnc-commodity.c
+   M /gnucash/trunk/src/engine/iso-4217-currencies.scm
+
+   Update mnemonic for Mexican Peso.  Fixes Bug #345048.
+
+r14375 | chris | 2006-06-16 20:38:08 -0400 (Fri, 16 Jun 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome-utils/dialog-utils.c
+
+   Make the keypad 'minus' key enter a dash in the date entry for ISO dates.
+   Fixes Bug #345096.
+
+r14373 | chris | 2006-06-16 19:14:13 -0400 (Fri, 16 Jun 2006) | 3 lines
+
+   M /gnucash/trunk/src/register/register-gnome/gnucash-sheet.c
+
+   Restore non-editing state when cancelled editing is complete.
+   Fixes Bug #344870, which was a regression caused by r11892.
+
 2006-06-16  David Hampton  <hampton@employees.org>
 
 	* src/register/register-gnome/gnucash-item-edit.c: Correctly
@@ -57,6 +78,12 @@
 	* src/quotes/gnc-fq-helper.in: Tell gnucash that a currency quote
 	failed instead of just abandoning the request.  Fixes #344546.
 
+r14354 | chris | 2006-06-12 20:35:47 -0400 (Mon, 12 Jun 2006) | 2 lines
+
+   M /gnucash/trunk/src/import-export/qif-import/qif-parse.scm
+
+   Don't crash when parsing empty string as date.  Fixes #344466.
+
 2006-06-12  David Hampton  <hampton@employees.org>
 
 	* src/engine/Account.c: When committing an account during the
@@ -84,6 +111,14 @@
 
 	* src/business/business-gnome/business-gnome.scm: Restore the
 	business reports menu.
+
+r14345 | chris | 2006-06-06 21:34:54 -0400 (Tue, 06 Jun 2006) | 4 lines
+
+   M /gnucash/trunk/src/register/ledger-core/split-register-util.c
+
+   Um, uhh, important code change.  Might fix #343798.*
+
+   (*) Might also do strange things to the register, esp. cursor motion.
 
 2006-06-06  David Hampton  <hampton@employees.org>
 
@@ -168,6 +203,28 @@
 
 	* src/gnome/gnc-plugin-page-register.c: Readd descriptions for
 	  Cut/Copy/Paste actions in register pages.
+
+r14302 | chris | 2006-06-03 10:51:10 -0400 (Sat, 03 Jun 2006) | 3 lines
+
+   M /gnucash/trunk/src/backend/file/test/test-load-backend.c
+   M /gnucash/trunk/src/backend/file/test/test-load-xml2.c
+   M /gnucash/trunk/src/backend/postgres/test/test-db.c
+   M /gnucash/trunk/src/backend/postgres/test/test-load-backend.c
+   M /gnucash/trunk/src/backend/postgres/test/test-period.c
+
+   When loading the gmodule backends from the test suite, look in ../.libs
+   for the real module.
+
+r14301 | chris | 2006-06-03 09:42:53 -0400 (Sat, 03 Jun 2006) | 2 lines
+
+   M /gnucash/trunk/configure.in
+   M /gnucash/trunk/po/POTFILES.skip
+   M /gnucash/trunk/src/backend/file/Makefile.am
+   M /gnucash/trunk/src/backend/file/gnc-backend-file.c
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/import-export/Makefile.am
+
+   Disable support for the old binary file format.
 
 2006-06-03  Derek Atkins  <derek@ihtfp.com>
 
@@ -258,6 +315,15 @@
 	* src/gnome-utils/gnc-main-window.c: Cancel renaming of a page
 	  when GDK_Escape is pressed. Fixes #343226.
 
+r14285 | chris | 2006-05-31 21:44:53 -0400 (Wed, 31 May 2006) | 6 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-model-account.c
+
+   Restore two behaviors removed by r14283, and add a third.
+   1) Invalidate outstanding iterators when a row is inserted or deleted.
+   2) Emit row_changed for ancestors of inserted or deleted row.
+   New) Emit row_changed for ancestors of a changed account, too.
+
 2006-05-31  Andreas Köhler  <andi5.py@gmx.net>
 
 	* src/gnome-utils/gnc-tree-model-account.c: Replace
@@ -279,6 +345,47 @@
 	instead of html.  Fixes #343255.
 
 	* src/scm: Remove old help-topics-index files.
+
+r14276 | chris | 2006-05-30 20:56:10 -0400 (Tue, 30 May 2006) | 3 lines
+
+   M /gnucash/trunk/src/gnome/gnucash.desktop.in
+   M /gnucash/trunk/src/pixmaps/Makefile.am
+
+   GNOME integration, part 2.  Bug #342936.
+   Use the same icon for the window manager as for the desktop.
+
+r14251 | chris | 2006-05-29 18:07:10 -0400 (Mon, 29 May 2006) | 4 lines
+
+   M /gnucash/trunk/src/gnome/Makefile.am
+   M /gnucash/trunk/src/gnome/gnucash.desktop.in
+   D /gnucash/trunk/src/gnome/gnucash.keys.in
+   D /gnucash/trunk/src/gnome/gnucash.mime
+   M /gnucash/trunk/src/pixmaps/Makefile.am
+
+   Improve GNOME desktop integration.  Bug #342936
+   Patch supplied by Stanislav Brabec <sbrabec@suse.cz>. 
+
+r14237 | chris | 2006-05-29 15:24:38 -0400 (Mon, 29 May 2006) | 3 lines
+
+   M /gnucash/trunk/src/business/business-reports/aging.scm
+
+   Fix a crash in the aging report.  Breaks a string, but seeing English is
+   better than seeing a guile stack trace.
+
+r14233 | chris | 2006-05-29 00:53:40 -0400 (Mon, 29 May 2006) | 2 lines
+
+   M /gnucash/trunk/Makefile.am
+
+   revert r14177 because it fails make dist.
+
+r14232 | chris | 2006-05-29 00:52:23 -0400 (Mon, 29 May 2006) | 4 lines
+
+   M /gnucash/trunk/src/bin/gnucash-bin.c
+   M /gnucash/trunk/src/engine/gnc-engine.c
+
+   Move the error-handling of failure to initialize the engine from
+   gnc-engine.c to gnucash-bin.c.  This allows tests that call 
+   gnc_engine_init() but fail to find a backend to still pass.
 
 2006-05-29  Joshua Sled  <jsled@asynchronous.org>
 
@@ -316,6 +423,42 @@
 	* src/gnome-utils/druid-gnc-xml-import.c: Remove "error" from
 	  argument list of gnc_xml2_find_ambiguous.
 
+r14213 | chris | 2006-05-27 22:23:37 -0400 (Sat, 27 May 2006) | 7 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+
+   The description for the "sort_column" gconf key of the tree_views says, 
+   "Possible values for this setting are the name of any column in this 
+   dialog (see the column_order key) or the keyword 'none'."
+
+   The third click on a column header removes the sorting by that column.  
+   This patch will now store 'none' for the sort_column in that case.
+
+r14212 | chris | 2006-05-27 15:05:41 -0400 (Sat, 27 May 2006) | 12 lines
+
+   M /gnucash/trunk/src/gnome-utils/gnc-tree-view.c
+
+   Use GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID instead of '0' as the 
+   fallback sort column, since column 0 may not be sortable with the 
+   default sort function.
+
+   Set the MODEL_COLUMN column property, even when it is -1, since 
+   gnc_tree_view_set_sort_column() looks for this condition.
+
+   Make the gnc_tree_view_count_visible_columns() function only count regular
+   columns, so that the special columns don't count, but count any 
+   DEFAULT_VISIBLE columns, even if they've been hidden by gconf.  That way, 
+   the special columns will still show and allow the user to unhide columns.
+
+r14210 | chris | 2006-05-27 10:19:48 -0400 (Sat, 27 May 2006) | 3 lines
+
+   M /gnucash/trunk/lib/libqof/backend/file/Makefile.am
+   M /gnucash/trunk/src/backend/file/Makefile.am
+   M /gnucash/trunk/src/backend/postgres/Makefile.am
+
+   Add -avoid-version to LDFLAGS of gmodule backends.
+   Hopefully this will solve the problem Macs are having dlopen'ing them.
+
 2006-05-27  Joshua Sled  <jsled@asynchronous.org>
 
 	* packaging/gnucash-1.9.x.ebuild: Add docs extraction, un-slot,
@@ -351,6 +494,66 @@
 
 	* configure.in: REactivate --enable-sql by reverting part of r14175 
 	see bug#332251.
+
+r14200 | chris | 2006-05-25 20:23:34 -0400 (Thu, 25 May 2006) | 2 lines
+
+   M /gnucash/trunk/ChangeLog
+   M /gnucash/trunk/configure.in
+
+   REactivate --enable-sql by reverting part of r14175; see bug#332251
+
+r14199 | chris | 2006-05-25 20:14:28 -0400 (Thu, 25 May 2006) | 4 lines
+
+   M /gnucash/trunk/src/engine/gnc-engine.c
+
+   Load the file backend _after_ the qsf backend, so that it gets tried 
+   _before_ the qsf backend, because the qsf backend prints some noisy error
+   messages while figuring out that the gnucash file isn't a qsf file.
+
+r14198 | chris | 2006-05-25 20:10:35 -0400 (Thu, 25 May 2006) | 3 lines
+
+   M /gnucash/trunk/ChangeLog
+   M /gnucash/trunk/lib/libqof/backend/file/Makefile.am
+   M /gnucash/trunk/lib/libqof/backend/file/qof-backend-qsf.h
+   M /gnucash/trunk/lib/libqof/backend/file/qsf-backend.c
+   M /gnucash/trunk/lib/libqof/qof/guid.c
+   M /gnucash/trunk/lib/libqof/qof/qof.h
+   M /gnucash/trunk/lib/libqof/qof/qofbackend-p.h
+   M /gnucash/trunk/lib/libqof/qof/qofbackend.c
+   M /gnucash/trunk/lib/libqof/qof/qofbackend.h
+   M /gnucash/trunk/lib/libqof/qof/qofbook.c
+   M /gnucash/trunk/lib/libqof/qof/qofsession-p.h
+   M /gnucash/trunk/lib/libqof/qof/qofsession.c
+   M /gnucash/trunk/lib/libqof/qof/qofsession.h
+   M /gnucash/trunk/lib/libqof/qof/qofutil.c
+   M /gnucash/trunk/lib/libqof/qof/qofutil.h
+   M /gnucash/trunk/src/backend/file/gnc-backend-file.c
+   M /gnucash/trunk/src/backend/file/gnc-backend-file.h
+   M /gnucash/trunk/src/backend/file/test/test-load-backend.c
+   M /gnucash/trunk/src/backend/file/test/test-load-xml2.c
+   M /gnucash/trunk/src/backend/postgres/Makefile.am
+   M /gnucash/trunk/src/backend/postgres/PostgresBackend.c
+   M /gnucash/trunk/src/backend/postgres/PostgresBackend.h
+   M /gnucash/trunk/src/backend/postgres/test/test-db.c
+   M /gnucash/trunk/src/backend/postgres/test/test-load-backend.c
+   M /gnucash/trunk/src/backend/postgres/test/test-period.c
+   M /gnucash/trunk/src/engine/Account.c
+   M /gnucash/trunk/src/engine/Makefile.am
+   M /gnucash/trunk/src/engine/Period.c
+   M /gnucash/trunk/src/engine/Transaction.c
+   M /gnucash/trunk/src/engine/gnc-commodity.h
+   M /gnucash/trunk/src/engine/gnc-engine.c
+   M /gnucash/trunk/src/engine/gnc-engine.h
+   M /gnucash/trunk/src/engine/gnc-pricedb.c
+   M /gnucash/trunk/src/engine/gnc-session-scm.c
+   M /gnucash/trunk/src/engine/gnc-session-scm.h
+   M /gnucash/trunk/src/engine/gw-engine-spec.scm
+   M /gnucash/trunk/src/gnome-utils/gnc-file.c
+   M /gnucash/trunk/src/gnome-utils/gnc-html-graph-gog.c
+   M /gnucash/trunk/src/gnome-utils/gnc-main-window.c
+
+   Merge 'misc-backend' -r 14160:14184 into trunk.
+   This includes the now semi-functional postgres backend.
 
 2006-05-24  Joshua Sled  <jsled@asynchronous.org>
 
