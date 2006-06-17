@@ -1,3 +1,15 @@
+2006-06-17  David Hampton  <hampton@employees.org>
+
+	* src/import-export/import-main-matcher.c:
+	* src/import-export/import-backend.[ch]:
+	* src/import-export/generic-import.glade:
+	* src/import-export/import-match-picker.c: More and GtkCList ->
+	GtkTreeView/GtkListStore conversions.
+
+	* src/import-export/import-provider-format.glade:
+	* src/import-export/gnc-import-format-gnome.[ch]: Convert a
+	GtkOptionMenu into a GtkComboBox.
+
 2006-06-08  David Hampton  <hampton@employees.org>
 
 	* src/import-export/qif-import/qif.glade:
