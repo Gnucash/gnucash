@@ -80,7 +80,6 @@ enum {
  *  back to the corresponding GncPluginPage object. */
 #define PLUGIN_PAGE_LABEL "plugin-page"
 
-#define PLUGIN_PAGE_IMMUTABLE    "page-immutable"
 #define PLUGIN_PAGE_CLOSE_BUTTON "close-button"
 
 #define KEY_SHOW_CLOSE_BUTTON	"tab_close_buttons"
@@ -2001,7 +2000,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label, *entry;
 	const gchar *icon;
 	GtkWidget *image;
-	gboolean immutable = FALSE;
 	GList *tmp;
 
 	if (window)
@@ -2029,16 +2027,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  gtk_widget_show(GTK_WIDGET(window));
 	} else if ((window == NULL) && active_windows) {
 	  window = active_windows->data;
-	}
-
-	/* Is this the first page in the first window? */
-	if (window == active_windows->data) {
-	  priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-	  if (priv->installed_pages == NULL) {
-	    immutable = TRUE;
-	    g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
-			       GINT_TO_POINTER(1));
-	  }
 	}
 
 	page->window = GTK_WIDGET(window);
@@ -2080,7 +2068,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 			 page);
 
 	/* Add close button - Not for immutable pages */
-	if (!immutable) {
+	if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE)) {
 	  GtkWidget *close_image, *close_button;
 	  GtkRequisition requisition;
 	  

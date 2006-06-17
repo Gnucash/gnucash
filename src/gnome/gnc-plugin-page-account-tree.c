@@ -53,6 +53,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-html.h"
 #include "gnc-icons.h"
 #include "gnc-plugin-account-tree.h"
@@ -297,6 +298,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	GtkActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
 	GncPluginPage *parent;
+	const GList *page_list;
 
 	ENTER("page %p", plugin_page);
 	priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(plugin_page);
@@ -311,6 +313,14 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
+
+	/* Is this the first accounts page? */
+	page_list =
+	  gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME);
+	if (plugin_page == page_list->data) {
+	  g_object_set_data(G_OBJECT(plugin_page), PLUGIN_PAGE_IMMUTABLE,
+			    GINT_TO_POINTER(1));
+	}
 
 	/* Create menu and toolbar information */
 	action_group =
