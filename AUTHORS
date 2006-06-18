@@ -243,6 +243,7 @@ Diane Trout <detrout@earthlink.net> scheme QIF import patch
 Richard -Gilligan- Uschold <uschold@cs.ucf.edu> tax report & txf export
 Matthew Vanecek <mevanecek@yahoo.com> lots of postgres backend work
 Didier Vidal <didier-devel@9online.fr> various G2 fixes.
+Oliver Vollmer <ovo@mx.lihas.de> German account templates SKR03
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 Darin Willits <darin@blueyonder.co.uk> initial budgeting prototype

@@ -1,3 +1,9 @@
+2006-06-18  Christian Stimming  <stimming@tuhh.de>
+
+	* accounts/de_DE/acctchrt_skr03.gnucash-xea: Add new SKR03 account
+	template (in addition to the existing SKR04) by Oliver Vollmer
+	<ovo@mx.lihas.de>.
+
 r14377 | chris | 2006-06-16 21:00:18 -0400 (Fri, 16 Jun 2006) | 2 lines
 
    M /gnucash/trunk/src/engine/gnc-commodity.c
