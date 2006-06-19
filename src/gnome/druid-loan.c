@@ -65,6 +65,7 @@
 #  define PARAM_TABLE      "param_table"
 #  define ORIG_PRINC_ENTRY "orig_princ_ent"
 #  define IRATE_SPIN       "irate_spin"
+#  define TYPE_COMBOBOX    "type_combobox"
 #  define VAR_CONTAINER    "type_freq_frame"
 #  define LENGTH_SPIN      "len_spin"
 #  define LENGTH_OPT       "len_opt"
@@ -257,7 +258,7 @@ typedef struct LoanDruidData_ {
         GNCAccountSel *prmAccountGAS;
         GNCAmountEdit *prmOrigPrincGAE;
         GtkSpinButton *prmIrateSpin;
-        GtkOptionMenu *prmType;
+        GtkComboBox   *prmType;
         GtkFrame      *prmVarFrame;
         GNCFrequency  *prmVarGncFreq;
         GNCDateEdit   *prmStartDateGDE;
@@ -335,7 +336,7 @@ static void ld_close_handler( LoanDruidData *ldd );
 static void ld_destroy( GtkObject *o, gpointer ud );
 
 static void ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd );
-static void ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud );
+static void ld_prm_type_changed( GtkWidget *w, gpointer ud );
 static void ld_calc_upd_rem_payments( GtkWidget *w, gpointer ud );
 
 static void ld_escrow_toggle( GtkToggleButton *tb, gpointer ud );
@@ -550,26 +551,9 @@ gnc_ui_sx_loan_druid_create(void)
 
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame), FALSE );
                 {
-                        GtkAlignment *a;
-                        GNCOptionInfo typeOptInfo[] = {
-			        { _("Fixed"), _("A Fixed-Rate loan"), ld_prm_type_changed, ldd },
-                                { _("3/1 Year"),
-                        /* Translators: ARM = Adjustable Rate Mortgage; that is a
-			   loan where the rate is constant for the period before
-			   the '/', e.g. 5 years, and then may change. See also
-			   http://www.fanniemae.com/tools/glossary.jhtml */
-				  _("A 3/1 Year ARM"),         ld_prm_type_changed, ldd },
-                                { _("5/1 Year"),   _("A 5/1 Year ARM"),         ld_prm_type_changed, ldd },
-                                { _("7/1 Year"),   _("A 7/1 Year ARM"),         ld_prm_type_changed, ldd },
-                                { _("10/1 Year"),  _("A 10/1 Year ARM"),        ld_prm_type_changed, ldd },
-                        };
-                        ldd->prmType =
-                                GTK_OPTION_MENU( gnc_build_option_menu( typeOptInfo, 5 ) );
-                        a = GTK_ALIGNMENT( gtk_alignment_new( 0.0, 0.5, 0.25, 1.0 ) );
-                        gtk_container_add( GTK_CONTAINER(a), GTK_WIDGET(ldd->prmType) );
-                        gtk_table_attach( ldd->prmTable, GTK_WIDGET(a),
-                                          3, 4, 2, 3,
-                                          0, 0, 2, 2 );
+                        g_signal_connect( ldd->prmType, "changed",
+                                          G_CALLBACK( ld_prm_type_changed ),
+                                          ldd );
                 }
 
                 {
@@ -607,8 +591,6 @@ gnc_ui_sx_loan_druid_create(void)
                         gtk_spin_button_set_adjustment( ldd->prmRemainSpin, a );
                 }
                
-                gnc_option_menu_init( GTK_WIDGET(ldd->prmType) );
-
                 g_signal_connect( ldd->optEscrowCb, "toggled",
                                   G_CALLBACK(ld_escrow_toggle), ldd );
                 gtk_widget_set_sensitive( GTK_WIDGET(ldd->optEscrowHBox), FALSE );
@@ -862,6 +844,8 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
                 GET_CASTED_WIDGET( GTK_TABLE,          PARAM_TABLE );
         ldd->prmIrateSpin =
                 GET_CASTED_WIDGET( GTK_SPIN_BUTTON,    IRATE_SPIN );
+        ldd->prmType =
+                GET_CASTED_WIDGET( GTK_COMBO_BOX,      TYPE_COMBOBOX );
         ldd->prmVarFrame =
                 GET_CASTED_WIDGET( GTK_FRAME,          VAR_CONTAINER );
         /* ldd->prmStartDateGDE */
@@ -1055,11 +1039,13 @@ ld_cancel_check( GnomeDruid *gd, LoanDruidData *ldd )
 
 static
 void
-ld_prm_type_changed( GtkWidget *w, gint index, gpointer ud )
+ld_prm_type_changed( GtkWidget *w, gpointer ud )
 {
         LoanDruidData *ldd;
+	gint index;
 
         ldd = (LoanDruidData*)ud;
+        index = gtk_combo_box_get_active( ldd->prmType );
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->prmVarFrame),
                                   index != FIXED );
 }
@@ -1170,7 +1156,7 @@ ld_info_save( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         }
         ldd->ld.principal = gnc_amount_edit_get_amount( ldd->prmOrigPrincGAE );
         ldd->ld.interestRate = gtk_spin_button_get_value( ldd->prmIrateSpin );
-        ldd->ld.type = gnc_option_menu_get_active( GTK_WIDGET(ldd->prmType) );
+        ldd->ld.type = gtk_combo_box_get_active( ldd->prmType );
         if ( ldd->ld.type != FIXED ) {
                 gnc_frequency_save_state( ldd->prmVarGncFreq,
                                           ldd->ld.loanFreq,
@@ -1212,7 +1198,7 @@ ld_info_prep( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
         ldd = (LoanDruidData*)ud;
         gnc_amount_edit_set_amount( ldd->prmOrigPrincGAE, ldd->ld.principal );
         gtk_spin_button_set_value( ldd->prmIrateSpin, ldd->ld.interestRate );
-        gtk_option_menu_set_history( ldd->prmType, ldd->ld.type );
+        gtk_combo_box_set_active( ldd->prmType, ldd->ld.type );
         if ( ldd->ld.type != FIXED ) {
                 gnc_frequency_setup( ldd->prmVarGncFreq,
                                      ldd->ld.loanFreq,

@@ -1,3 +1,12 @@
+2006-06-18  David Hampton  <hampton@employees.org>
+
+	* src/gnome/druid-loan.c:
+	* src/gnome/glade/sched-xact.glade: Another GtkOptionMenu to
+	GtkComboBox conversion.
+
+	* src/gnome-utils/dialog-options.c: Another GtkCList ->
+	GtkTreeView/GtkListStore conversion.
+
 2006-06-17  David Hampton  <hampton@employees.org>
 
 	* src/import-export/import-main-matcher.c:

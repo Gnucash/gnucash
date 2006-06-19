@@ -5001,6 +5001,26 @@ years</property>
 		      <property name="y_options">expand|shrink|fill</property>
 		    </packing>
 		  </child>
+
+		  <child>
+		    <widget class="GtkComboBox" id="type_combobox">
+		      <property name="visible">True</property>
+		      <property name="items" translatable="yes">Fixed Rate
+3/1 Year ARM
+5/1 Year ARM
+7/1 Year ARM
+10/1 Year ARM</property>
+		      <property name="focus_on_click">True</property>
+		    </widget>
+		    <packing>
+		      <property name="left_attach">3</property>
+		      <property name="right_attach">4</property>
+		      <property name="top_attach">2</property>
+		      <property name="bottom_attach">3</property>
+		      <property name="x_options">fill</property>
+		      <property name="y_options">fill</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
