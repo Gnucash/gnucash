@@ -164,7 +164,8 @@
 ( "St. Helena Pound" "pound" "pence"  "ISO4217" "SHP"  "654" 100 100 )
 ( "Sudanese Dinar" "dinar" "piastre"  "ISO4217" "SDD" "736" 100 100 ) ;; 1992 on
 ( "Sudanese Pound" "pound" "piastre"  "ISO4217" "SDP" "736" 100 100 ) ;; into 1992
-( "Suriname Guilder" "guilder" "cent"  "ISO4217" "SRG" "740" 100 100 )
+( "Suriname Guilder" "guilder" "cent"  "ISO4217" "SRG" "740" 100 100 ) ;; only until 2003-12-31
+( "Suriname Dollar" "dollar" "cent"  "ISO4217" "SRD" "968" 100 100) ;; Since 2004-01-01
 ( "Swaziland Lilangeni" "lilangeni" "cent"  "ISO4217" "SZL" "748" 100 100 )
 ( "Swedish Krona" "krona" "ore"  "ISO4217" "SEK" "752" 100 100 )
 ( "Swiss Franc" "franc" "centime" "ISO4217" "CHF" "756" 100 100 )

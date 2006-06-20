@@ -1,5 +1,9 @@
 2006-06-20  Christian Stimming <stimming@tuhh.de>
 
+	* src/engine/iso-4217-currencies.scm: Add Suriname Dollar
+	currency; replaces SRG, but due to a non-unity exchange rate we
+	cannot have it replaced automatically. #319084
+
 	* src/backend/file/io-gncxml-v2.c: Use waitpid() only if
 	<sys/wait.h> is available. Unavailable on win32.
 
