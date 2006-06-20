@@ -1,3 +1,8 @@
+2006-06-20  Christian Stimming <stimming@tuhh.de>
+
+	* src/backend/file/io-gncxml-v2.c: Use waitpid() only if
+	<sys/wait.h> is available. Unavailable on win32.
+
 2006-06-18  Chris Lyttle  <chris@wilddev.net>
 
 	* NEWS: Added some text about the release.
