@@ -81,7 +81,6 @@ static QofLogModule log_module = GNC_MOD_LOT;
 gboolean 
 xaccAccountHasTrades (Account *acc)
 {
-   gnc_commodity *acc_comm;
    SplitList *node;
 
    if (!acc) return FALSE;
@@ -89,13 +88,11 @@ xaccAccountHasTrades (Account *acc)
    if (xaccAccountIsPriced (acc))
       return TRUE;
       
-   acc_comm = acc->commodity;
-
    for (node=acc->splits; node; node=node->next)
    {
       Split *s = node->data;
       Transaction *t = s->parent;
-      if (acc_comm != t->common_currency) return TRUE;
+      if (acc->commodity != t->common_currency) return TRUE;
    }
 
    return FALSE;
@@ -106,7 +103,7 @@ xaccAccountHasTrades (Account *acc)
 struct find_lot_s
 {
    GNCLot *lot;
-   gnc_commodity *currency;
+   const gnc_commodity *currency;
    Timespec ts;
    int (*numeric_pred)(gnc_numeric);
    gboolean (*date_pred)(Timespec e, Timespec tr);
@@ -169,7 +166,7 @@ finder_helper (GNCLot *lot,  gpointer user_data)
 
 static inline GNCLot *
 xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
-   gnc_commodity *currency,
+   const gnc_commodity *currency,
    guint64 guess,
    gboolean (*date_pred)(Timespec, Timespec))
 {
@@ -191,7 +188,7 @@ xaccAccountFindOpenLot (Account *acc, gnc_numeric sign,
 
 GNCLot *
 xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign, 
-                                gnc_commodity *currency)
+                                const gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT, sign.num, sign.denom);
@@ -205,7 +202,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
 
 GNCLot *
 xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign,
-                              gnc_commodity *currency)
+                              const gnc_commodity *currency)
 {
    GNCLot *lot;
    ENTER (" sign=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,

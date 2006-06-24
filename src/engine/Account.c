@@ -1695,7 +1695,7 @@ xaccAccountGetXxxBalanceInCurrencyRecursive (const Account *acc,
 static gnc_numeric
 xaccAccountGetXxxBalanceAsOfDateInCurrencyRecursive (
     Account *acc, time_t date, xaccGetBalanceAsOfDateFn fn,
-    gnc_commodity *report_commodity, gboolean include_children)
+    const gnc_commodity *report_commodity, gboolean include_children)
 {
   gnc_numeric balance;
 

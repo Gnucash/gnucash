@@ -701,8 +701,8 @@ xaccTransGetAccountAmount (const Transaction *trans, const Account *acc)
 
 /* 'rate' is 'to_com'-per-'from-com' */
 void
-xaccTransSetRateForCommodity(Transaction *trans, gnc_commodity *from_com,
-                             gnc_commodity *to_com, gnc_numeric rate)
+xaccTransSetRateForCommodity(Transaction *trans, const gnc_commodity *from_com,
+                             const gnc_commodity *to_com, gnc_numeric rate)
 {
     GList *splits;
     gnc_commodity *trans_curr = xaccTransGetCurrency(trans);
@@ -739,7 +739,7 @@ xaccTransSetRateForCommodity(Transaction *trans, gnc_commodity *from_com,
 }
 
 void
-xaccTransAdjustRateForCommodity(Transaction *trans, gnc_commodity *comm,
+xaccTransAdjustRateForCommodity(Transaction *trans, const gnc_commodity *comm,
                                 gnc_numeric factor)
 {
     gnc_commodity *trans_curr = xaccTransGetCurrency(trans);
@@ -1943,14 +1943,11 @@ xaccTransGetReversedBy(const Transaction *trans)
 void
 xaccTransScrubSplits (Transaction *trans)
 {
-    gnc_commodity *currency;
-
     if (!trans) return;
 
     xaccTransBeginEdit(trans);
     /* The split scrub expects the transaction to have a currency! */
-    currency = xaccTransGetCurrency (trans);
-    if (!currency)
+    if (!trans->common_currency)
         PERR ("Transaction doesn't have a currency!");
 
     FOR_EACH_SPLIT(trans, xaccSplitScrub(s));

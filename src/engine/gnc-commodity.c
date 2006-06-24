@@ -600,7 +600,7 @@ gnc_commodity_destroy(gnc_commodity * cm)
 }
 
 static gnc_commodity *
-gnc_commodity_clone(gnc_commodity *src)
+gnc_commodity_clone(const gnc_commodity *src)
 {
   gnc_commodity * dest = g_new0(gnc_commodity, 1);
 
@@ -1032,7 +1032,7 @@ gnc_commodity_table_get_table(QofBook *book)
 }
 
 gnc_commodity *
-gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book)
+gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
 {
   gnc_commodity *twin;
   const char * ucom;

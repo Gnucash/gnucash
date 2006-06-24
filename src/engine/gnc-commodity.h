@@ -826,7 +826,8 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
  *   the indicated book.  This routine is primarily useful for setting
  *   up clones of things across multiple books.
  */
-gnc_commodity * gnc_commodity_obtain_twin (gnc_commodity *from, QofBook *book);
+gnc_commodity * gnc_commodity_obtain_twin (const gnc_commodity *from, 
+                                           QofBook *book);
 
 /** You should probably not be using gnc_commodity_table_register()
  * It is an internal routine for registering the gncObject for the

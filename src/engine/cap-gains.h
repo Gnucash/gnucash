@@ -119,10 +119,10 @@ gboolean xaccAccountHasTrades (Account *);
  */
 GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, 
                                          gnc_numeric sign,
-                                         gnc_commodity *currency);
+                                         const gnc_commodity *currency);
 GNCLot * xaccAccountFindLatestOpenLot (Account *acc, 
                                        gnc_numeric sign,
-                                       gnc_commodity *currency);
+                                       const gnc_commodity *currency);
 
 /** The xaccAccountGetDefaultGainAccount() routine will return
  *   the account to which realized gains/losses may be posted.  

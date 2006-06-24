@@ -352,10 +352,10 @@ xaccTransGetRateForCommodity(const Transaction *trans,
                              const gnc_commodity *split_com,
                              const Split *split_to_exclude, gnc_numeric *rate);
 void
-xaccTransSetRateForCommodity(Transaction *trans, gnc_commodity *from_com,
-                             gnc_commodity *to_com, gnc_numeric rate);
+xaccTransSetRateForCommodity(Transaction *trans, const gnc_commodity *from_com,
+                             const gnc_commodity *to_com, gnc_numeric rate);
 void
-xaccTransAdjustRateForCommodity(Transaction *trans, gnc_commodity *comm,
+xaccTransAdjustRateForCommodity(Transaction *trans, const gnc_commodity *comm,
                                 gnc_numeric factor);
 
 /* Compute the conversion rate for the transaction to this account.
