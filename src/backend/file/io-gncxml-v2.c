@@ -120,41 +120,6 @@ clear_up_account_commodity(
     }
 }
 
-static void
-clear_up_transaction_commodity(
-    gnc_commodity_table *tbl, Transaction *trans,
-    gnc_commodity * (*getter) (const Transaction *trans),
-    void (*setter) (Transaction *trans, gnc_commodity *comm))
-{
-    gnc_commodity *gcom;
-    gnc_commodity *com = getter(trans);
-
-    if(!com)
-    {
-        return;
-    }
-    
-    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
-
-    if(gcom == com)
-    {
-        return;
-    }
-    else if(!gcom)
-    {
-        PWARN("unable to find global commodity for %s adding new",
-                  gnc_commodity_get_unique_name(com));
-    }
-    else
-    {
-        xaccTransBeginEdit(trans);
-        setter(trans, gcom);
-        xaccTransCommitEdit(trans);
-        gnc_commodity_destroy(com);
-    }
-}
-
 static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
@@ -214,10 +179,6 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     table = gnc_book_get_commodity_table (data->book);
 
     xaccTransBeginEdit (trn);
-    clear_up_transaction_commodity(table, trn,
-                                   xaccTransGetCurrency,
-                                   xaccTransSetCurrency);
-
     xaccTransScrubCurrency (trn);
 
     for(i = 0, spl = xaccTransGetSplit(trn, i);
