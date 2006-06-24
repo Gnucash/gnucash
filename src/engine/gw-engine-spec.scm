@@ -2040,11 +2040,8 @@ of having a parent transaction with which one is working...")
  '<gnc:commodity*>
  "gnc_commodity_new"
  '((<gnc:Book*> book)
-   ((<gw:mchars> caller-owned const) fullname)
    ((<gw:mchars> caller-owned const) namespace)
-   ((<gw:mchars> caller-owned const) mnemonic)
-   ((<gw:mchars> caller-owned const) exchange-code)
-   (<gw:int> smallest-fraction) )
+   ((<gw:mchars> caller-owned const) mnemonic))
  "Create a new gnc_commodity object.")
 
 (gw:wrap-function
@@ -2089,6 +2086,14 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
+ 'gnc:commodity-set-fullname
+ '<gw:void>
+ "gnc_commodity_set_fullname"
+ '((<gnc:commodity*> comm) ((<gw:mchars> caller-owned const) fullname))
+ "Set the currency's full name (US Dollars).")
+
+(gw:wrap-function
+ ws
  'gnc:commodity-get-exchange-code
  '(<gw:mchars> callee-owned const)
  "gnc_commodity_get_cusip"
@@ -2097,11 +2102,27 @@ of having a parent transaction with which one is working...")
 
 (gw:wrap-function
  ws
+ 'gnc:commodity-set-cusip
+ '<gw:void>
+ "gnc_commodity_set_cusip"
+ '((<gnc:commodity*> comm) ((<gw:mchars> caller-owned const) cusip))
+ "Set the cusip (exchange specific data, not the stock ticker)")
+
+(gw:wrap-function
+ ws
  'gnc:commodity-get-fraction
  '<gw:int>
  "gnc_commodity_get_fraction"
  '((<gnc:commodity*> comm))
  "Get the number of smallest transactional units per unit of the currency")
+
+(gw:wrap-function
+ ws
+ 'gnc:commodity-set-fraction
+ '<gw:void>
+ "gnc_commodity_set_fraction"
+ '((<gnc:commodity*> comm) (<gw:int> frac))
+ "Set the number of smallest transactional units per unit of the currency")
 
 (gw:wrap-function
  ws

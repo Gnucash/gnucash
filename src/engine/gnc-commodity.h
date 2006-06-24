@@ -238,13 +238,10 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *  data structure, populates it with the data provided, and then
  *  generates the dynamic names that exist as part of a commodity.
  *
- *  @note This function does not check to see if the commodity exists
- *  before adding a new commodity.
+ *  @note If the commodity already exists, this function will return
+ *  the existing commodity.
  *
  *  @param book The book that the new commodity will belong to.
- *
- *  @param fullname The complete name of this commodity. E.G. "Acme
- *  Systems, Inc."
  *
  *  @param namespace An aggregation of commodities. E.G. ISO4217,
  *  Nasdaq, Downbelow, etc.
@@ -255,23 +252,11 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
  *  match the stock ticker symbol used by the exchange where you want
  *  to get automatic stock quote updates.  E.G. ACME, ACME.US, etc.
  *
- *  @param cusip A string containing the CUSIP code or similar
- *  UNIQUE code for this commodity. The stock ticker is NOT
- *  appropriate as that goes in the mnemonic field.
- *
- *  @param fraction The smallest division of this commodity
- *  allowed. I.E. If this is 1, then the commodity must be traded in
- *  whole units; if 100 then the commodity may be traded in 0.01
- *  units, etc.
- *
- *  @return A pointer to the new commodity.
+ *  @return A pointer to the new (or existing) commodity.
  */
 gnc_commodity * gnc_commodity_new(QofBook *book,
-				  const char * fullname, 
                                   const char * namespace,
-                                  const char * mnemonic,
-                                  const char * cusip,
-                                  int fraction);
+                                  const char * mnemonic);
 
 /** Destroy a commodity.  Release all memory attached to this data structure.
  *  @note This function does not (can not) check to see if the
@@ -450,29 +435,27 @@ const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
 @{
 */
 
-/** Set the mnemonic for the specified commodity.  This should be a
- *  pointer to a null terminated string of the form "ACME", "QWER",
- *  etc.
- *
- *  @param cm A pointer to a commodity data structure.
- *
- *  @param mnemonic A pointer to the mnemonic for this commodity.
- *  This string belongs to the caller and will be duplicated by the
- *  engine.
- */
-void  gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic);
-
-/** Set the namespace for the specified commodity.  This should be a
- *  pointer to a null terminated string of the form "AMEX", "NASDAQ",
- *  etc.
+/** Set both the namespace and mnemonic for the specified commodity.
+ *  The namespace should be a pointer to a null terminated string of
+ *  the form "AMEX", "NASDAQ", etc.  The mnemonic should be a pointer
+ *  to a null terminated string of the form "ACME", "QWER", etc.
  *
  *  @param cm A pointer to a commodity data structure.
  *
  *  @param namespace A pointer to the namespace for this commodity.
  *  This string belongs to the caller and will be duplicated by the
  *  engine.
+ *
+ *  @param mnemonic A pointer to the mnemonic for this commodity.
+ *  This string belongs to the caller and will be duplicated by the
+ *  engine.
+ *
+ *  Note: Caller should check for a mnemonic/namespace collision with
+ *  an existing commodity before calling this function.  If a collision
+ *  occurs, this commodity will replace the previous one.
  */
-void  gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace);
+void  gnc_commodity_set_namespace_and_mnemonic(
+    gnc_commodity * cm, const gchar * namespace, const gchar *mnemonic);
 
 /** Set the full name for the specified commodity.  This should be
  *  a pointer to a null terminated string of the form "Acme Systems,

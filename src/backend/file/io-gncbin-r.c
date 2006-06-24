@@ -382,9 +382,7 @@ gnc_commodity_import_legacy(QofBook *book, const char * currency_name)
                                      currency_name);
     
     if(!old) {
-      old = gnc_commodity_new(book, currency_name,
-                              GNC_COMMODITY_NS_LEGACY, currency_name,
-                              0, 100000);
+      old = gnc_commodity_new(book, GNC_COMMODITY_NS_LEGACY, currency_name);
     }
     return old;
   }

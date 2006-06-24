@@ -179,10 +179,10 @@ gnc_ui_commodity_druid_create(const char * filename)
 
     /* otherwise, guess that it's a NASDAQ security. */
     if (!found) {
-      found = gnc_commodity_new(book, gnc_commodity_get_mnemonic(lost),
-                                GNC_COMMODITY_NS_NASDAQ,
-                                gnc_commodity_get_mnemonic(lost),
-                                NULL, 100000);
+      found = gnc_commodity_new(book, GNC_COMMODITY_NS_NASDAQ,
+                                gnc_commodity_get_mnemonic(lost));
+      gnc_commodity_set_fullname(found, gnc_commodity_get_mnemonic(lost));
+      gnc_commodity_set_fraction(found, 100000);
     }
 
     g_hash_table_insert(d->new_map, (gpointer)gnc_commodity_get_mnemonic(lost),
@@ -426,8 +426,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
 
   /* fill in the commodity structure info */
   gnc_commodity_set_fullname(new_comm, new_name);
-  gnc_commodity_set_namespace(new_comm, new_type);
-  gnc_commodity_set_mnemonic(new_comm, new_mnemonic);
+  gnc_commodity_set_namespace_and_mnemonic(new_comm, new_type, new_mnemonic);
 
   return FALSE;
 }

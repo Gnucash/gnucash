@@ -1198,18 +1198,17 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
     }
 
     if (!w->edit_commodity) {
-      c = gnc_commodity_new(book, fullname, namespace, mnemonic, code, fraction);
+      c = gnc_commodity_new(book, namespace, mnemonic);
       w->edit_commodity = c;
       gnc_commodity_begin_edit(c);
     } else {
       c = w->edit_commodity;
       gnc_commodity_begin_edit(c);
-      gnc_commodity_set_fullname (c, fullname);
-      gnc_commodity_set_mnemonic (c, mnemonic);
-      gnc_commodity_set_namespace (c, namespace);
-      gnc_commodity_set_cusip (c, code);
-      gnc_commodity_set_fraction (c, fraction);
+      gnc_commodity_set_namespace_and_mnemonic(c, namespace, mnemonic);
     }
+    gnc_commodity_set_fullname (c, fullname);
+    gnc_commodity_set_cusip (c, code);
+    gnc_commodity_set_fraction (c, fraction);
 
     gnc_commodity_set_quote_flag (c, gtk_toggle_button_get_active
 				  (GTK_TOGGLE_BUTTON (w->get_quote_check)));

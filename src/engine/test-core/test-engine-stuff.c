@@ -559,7 +559,10 @@ get_random_commodity (QofBook *book)
 
     ran_int = get_random_int_in_range(min_scu, max_scu);
 
-    ret = gnc_commodity_new(book, name, space, mn, cusip, ran_int);
+    ret = gnc_commodity_new(book, space, mn);
+    gnc_commodity_set_fullname(ret, name);
+    gnc_commodity_set_cusip(ret, cusip);
+    gnc_commodity_set_fraction(ret, ran_int);
 
     g_free(mn);
     g_free(name);
@@ -571,17 +574,15 @@ get_random_commodity (QofBook *book)
 void
 make_random_changes_to_commodity (gnc_commodity *com)
 {
-  char *str;
+  char *str, *str2;
 
   g_return_if_fail (com);
 
   str = get_random_string ();
-  gnc_commodity_set_namespace (com, str);
+  str2 = get_random_string ();
+  gnc_commodity_set_namespace_and_mnemonic(com, str, str2);
   g_free (str);
-
-  str = get_random_string ();
-  gnc_commodity_set_mnemonic (com, str);
-  g_free (str);
+  g_free (str2);
 
   str = get_random_string ();
   gnc_commodity_set_fullname (com, str);

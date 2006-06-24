@@ -73,11 +73,11 @@ get_commodities_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    
       /* no we don't ... restore it */
       com = gnc_commodity_new (book,
-			       DB_GET_VAL("fullname",j),
                                DB_GET_VAL("namespace",j),
-                               DB_GET_VAL("mnemonic",j),
-                               DB_GET_VAL("code",j),
-                               atoi(DB_GET_VAL("fraction",j)));
+                               DB_GET_VAL("mnemonic",j));
+      gnc_commodity_set_fullname(com, DB_GET_VAL("fullname",j));
+      gnc_commodity_set_cusip(com, DB_GET_VAL("code",j));
+      gnc_commodity_set_fraction(com, atoi(DB_GET_VAL("fraction",j)));
    }
    return NULL;
 }

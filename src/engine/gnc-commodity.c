@@ -526,9 +526,8 @@ reset_unique_name(gnc_commodity *com)
 }
 
 gnc_commodity *
-gnc_commodity_new(QofBook *book, const char * fullname, 
-                  const char * namespace, const char * mnemonic, 
-                  const char * cusip, int fraction)
+gnc_commodity_new(QofBook *book, const char * namespace, 
+                  const char * mnemonic)
 {
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
   gnc_commodity_table *table;
@@ -536,10 +535,10 @@ gnc_commodity_new(QofBook *book, const char * fullname,
   qof_instance_init (&retval->inst, GNC_ID_COMMODITY, book);
   table = gnc_commodity_table_get_table(book);
   retval->namespace = gnc_commodity_table_add_namespace(table, namespace, book);
-  retval->fullname = CACHE_INSERT(fullname);
+  retval->fullname = CACHE_INSERT("");
   retval->mnemonic = CACHE_INSERT(mnemonic);
-  retval->cusip = CACHE_INSERT(cusip);
-  retval->fraction = fraction;
+  retval->cusip = CACHE_INSERT("");
+  retval->fraction = 0;
   retval->mark = 0;
   retval->quote_flag = 0;
   retval->quote_source = NULL;
@@ -565,11 +564,15 @@ gnc_commodity_destroy(gnc_commodity * cm)
 {
   QofBook *book;
   gnc_commodity_table *table;
+  const char *ns_name;
   if(!cm) return;
 
   book = qof_instance_get_book(&cm->inst);
   table = gnc_commodity_table_get_table(book);
-  gnc_commodity_table_remove(table, cm);
+  /* only remove from the table if this exact commodity is there */
+  ns_name =  gnc_commodity_namespace_get_name(cm->namespace);
+  if (gnc_commodity_table_lookup (table, ns_name, cm->mnemonic) == cm)
+      gnc_commodity_table_remove(table, cm);
 
   qof_event_gen (&cm->inst.entity, QOF_EVENT_DESTROY, NULL);
 
@@ -594,18 +597,6 @@ gnc_commodity_destroy(gnc_commodity * cm)
 
   qof_instance_release (&cm->inst);
   g_free(cm);
-}
-
-static void
-gnc_commodity_copy(gnc_commodity * dest, gnc_commodity *src)
-{
-  gnc_commodity_set_fullname (dest, src->fullname);
-  dest->namespace = src->namespace;
-  gnc_commodity_set_fraction (dest, src->fraction);
-  gnc_commodity_set_cusip (dest, src->cusip);
-  gnc_commodity_set_quote_flag (dest, src->quote_flag);
-  gnc_commodity_set_quote_source (dest, gnc_commodity_get_quote_source (src));
-  gnc_commodity_set_quote_tz (dest, src->quote_tz);
 }
 
 static gnc_commodity *
@@ -774,58 +765,33 @@ gnc_commodity_get_quote_tz(const gnc_commodity *cm)
   return cm ? cm->quote_tz : NULL;
 }
 
-/********************************************************************
- * gnc_commodity_set_mnemonic
- ********************************************************************/
-
 void
-gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) 
-{
-  gnc_commodity_table *table;
-  if (!cm) return;
-  if (cm->mnemonic == mnemonic) return;
-
-  gnc_commodity_begin_edit(cm);
-  table = gnc_commodity_table_get_table(qof_instance_get_book(&cm->inst));
-  gnc_commodity_table_remove(table, cm);
-  CACHE_REPLACE(cm->mnemonic, mnemonic);
-
-  mark_commodity_dirty (cm);
-  reset_printname(cm);
-  reset_unique_name(cm);
-  {
-      gnc_commodity *same = gnc_commodity_table_insert(table, cm);
-      g_assert(same == cm);
-  }
-  gnc_commodity_commit_edit(cm);
-}
-
-/********************************************************************
- * gnc_commodity_set_namespace
- ********************************************************************/
-
-void
-gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) 
+gnc_commodity_set_namespace_and_mnemonic(
+    gnc_commodity *cm, const gchar *namespace, const gchar *mnemonic)
 {
   QofBook *book;
+  gnc_commodity *found;
   gnc_commodity_table *table;
   gnc_commodity_namespace *nsp;
 
   if (!cm) return;
   book = qof_instance_get_book (&cm->inst);
   table = gnc_commodity_table_get_table(book);
+  found = gnc_commodity_table_lookup(table, namespace, mnemonic);
+
+  if (found == cm) return;
   gnc_commodity_table_remove(table, cm);
   nsp = gnc_commodity_table_add_namespace(table, namespace, book);
-  if (cm->namespace == nsp)
-    return;
 
   gnc_commodity_begin_edit(cm);
+  CACHE_REPLACE(cm->mnemonic, mnemonic);
   cm->namespace = nsp;
   if (nsp->iso4217)
     cm->quote_source = gnc_quote_source_lookup_by_internal("currency");
   mark_commodity_dirty(cm);
   reset_printname(cm);
   reset_unique_name(cm);
+  gnc_commodity_table_remove(table, cm);
   { 
       gnc_commodity *same = gnc_commodity_table_insert(table, cm);
       g_assert(same == cm);
@@ -1260,12 +1226,8 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
 
   if (c) 
   {
-    if (c == comm)
-    {
-      return c;
-    }
-    gnc_commodity_copy (c, comm);
-    gnc_commodity_destroy (comm);
+    if (c != comm)
+        gnc_commodity_destroy (comm);
     return c;
   }
 
@@ -1303,7 +1265,8 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
   ns_name = gnc_commodity_namespace_get_name(comm->namespace);
   c = gnc_commodity_table_lookup (table, ns_name, comm->mnemonic);
-  if (c != comm) return;
+  if (c) 
+      comm = c;
 
   qof_event_gen (&comm->inst.entity, QOF_EVENT_REMOVE, NULL);
 

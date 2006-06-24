@@ -126,8 +126,6 @@ struct com_char_handler
 };
 
 struct com_char_handler com_handlers[] = {
-    { cmdty_namespace,    gnc_commodity_set_namespace },
-    { cmdty_id,           gnc_commodity_set_mnemonic },
     { cmdty_name,         gnc_commodity_set_fullname },
     { cmdty_xcode,        gnc_commodity_set_cusip },
     { cmdty_quote_tz,     gnc_commodity_set_quote_tz },
@@ -186,17 +184,21 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 static gboolean
 valid_commodity(gnc_commodity *com)
 {
-    if(gnc_commodity_get_namespace(com) == NULL)
+    const char *str;
+
+    str = gnc_commodity_get_namespace(com);
+    if (!str || *str == '\0')
     {
         PWARN("Invalid commodity: no namespace");
         return FALSE;
     }
-    if(gnc_commodity_get_mnemonic(com) == NULL)
+    str = gnc_commodity_get_mnemonic(com);
+    if (!str || *str == '\0')
     {
         PWARN("Invalid commodity: no mnemonic");
         return FALSE;
     }
-    if(gnc_commodity_get_fraction(com) == 0)
+    if (gnc_commodity_get_fraction(com) == 0)
     {
         PWARN("Invalid commodity: 0 fraction");
         return FALSE;
@@ -205,9 +207,8 @@ valid_commodity(gnc_commodity *com)
 }
 
 static gnc_commodity *
-gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
+gnc_commodity_find_or_make_currency (QofBook *book, xmlNodePtr tree)
 {
-    gnc_commodity_table * table;
     gchar *namespace = NULL, *mnemonic = NULL;
     xmlNodePtr node;
 
@@ -222,11 +223,7 @@ gnc_commodity_find_currency (QofBook *book, xmlNodePtr tree)
     if (!namespace || !mnemonic)
       return NULL;
 
-    if (!gnc_commodity_namespace_is_iso(namespace))
-      return NULL;
-
-    table = gnc_commodity_table_get_table(book);
-    return gnc_commodity_table_lookup(table, namespace, mnemonic);
+    return gnc_commodity_new(book, namespace, mnemonic);
 }
 
 static gboolean
@@ -255,9 +252,11 @@ gnc_commodity_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
-    com = gnc_commodity_find_currency(book, tree);
-    if (!com)
-      com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0); 
+    com = gnc_commodity_find_or_make_currency(book, tree);
+    if (!com) {
+        PWARN("Invalid commodity");
+        return FALSE;
+    }
 
     for(achild = tree->xmlChildrenNode; achild; achild = achild->next)
     {

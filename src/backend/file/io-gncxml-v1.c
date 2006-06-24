@@ -1929,12 +1929,10 @@ commodity_restore_end_handler(gpointer data_for_children,
     if(!cpi->name) cpi->name = g_strdup("");
     if(!cpi->xcode) cpi->xcode = g_strdup("");
 
-    comm = gnc_commodity_new(pstatus->book,
-			     cpi->name,
-                             cpi->space,
-                             cpi->id,
-                             cpi->xcode,
-                             cpi->fraction);
+    comm = gnc_commodity_new(pstatus->book, cpi->space, cpi->id);
+    gnc_commodity_set_fullname(comm, cpi->name);
+    gnc_commodity_set_cusip(comm, cpi->xcode);
+    gnc_commodity_set_fraction(comm, cpi->fraction);
     if(comm)
     {
       gnc_commodity_table *ctab;

@@ -39,7 +39,7 @@ test_commodity(void)
         QofBook *book;
 
         book = qof_book_new ();
-        com = gnc_commodity_new(book, NULL, NULL, NULL, NULL, 0);
+        com = gnc_commodity_new(book, NULL, NULL);
 
         gnc_commodity_destroy(com);
 	qof_book_destroy (book);
@@ -63,12 +63,12 @@ test_commodity(void)
         cusip = get_random_string();
         fraction = get_random_int_in_range(0, 10000);
 
-        com = gnc_commodity_new(book, fullname, namespace, mnemonic,
-                                cusip, fraction);
+        com = gnc_commodity_new(book, namespace, mnemonic);
 
         do_test(
             com != NULL, "commodity with data new and destroy");
 
+        gnc_commodity_set_fullname(com, fullname);
         do_test(
             safe_strcmp(fullname, gnc_commodity_get_fullname(com)) == 0,
             "fullnames equal test");
@@ -81,10 +81,12 @@ test_commodity(void)
             safe_strcmp(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "mnemonic equal test");
 
+        gnc_commodity_set_cusip(com, cusip);
         do_test(
             safe_strcmp(cusip, gnc_commodity_get_cusip(com)) == 0,
             "cusip equal test");
 
+        gnc_commodity_set_fraction(com, fraction);
         do_test(
             gnc_commodity_get_fraction(com) == fraction,
             "fraction code equal test");
@@ -96,13 +98,12 @@ test_commodity(void)
             "reset fullnames equal test");
 
         namespace = get_random_commodity_namespace();
-        gnc_commodity_set_namespace(com, namespace);
+        mnemonic = get_random_string();
+        gnc_commodity_set_namespace_and_mnemonic(com, namespace, mnemonic);
         do_test(
             safe_strcmp(namespace, gnc_commodity_get_namespace(com)) == 0,
             "reset namespace equal test");
 
-        mnemonic = get_random_string();
-        gnc_commodity_set_mnemonic(com, mnemonic);
         do_test(
             safe_strcmp(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "reset mnemonic equal test");
@@ -119,8 +120,7 @@ test_commodity(void)
             gnc_commodity_get_fraction(com) == fraction,
             "reset fraction code equal test");
 
-        com2 = gnc_commodity_new(book, fullname, namespace, mnemonic,
-                                 cusip, fraction);
+        com2 = gnc_commodity_new(book, namespace, mnemonic);
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 

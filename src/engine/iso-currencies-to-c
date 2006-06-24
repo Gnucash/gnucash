@@ -38,12 +38,12 @@ exec guile -s $0 "$@"
          output-port "
   {
     const char *fullname = ~S;
-    gnc_commodity *c = gnc_commodity_new(book,
-					 _(fullname),
-                                         ~S,
-                                         ~S,
-                                         ~S,
+    gnc_commodity *c = gnc_commodity_new(book, 
+                                         ~S, 
                                          ~S);\n
+    gnc_commodity_set_fullname(c, _(fullname));\n
+    gnc_commodity_set_cusip(c, ~S);\n
+    gnc_commodity_set_fraction(c, ~S);\n
     if(!c) {
       PWARN(\"failed to create commodity for currency %s\", fullname);
     }

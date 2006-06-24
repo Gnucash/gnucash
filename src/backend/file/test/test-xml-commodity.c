@@ -131,10 +131,8 @@ test_add_commodity(const char *tag, gpointer globaldata, gpointer data)
     do_test_args(gnc_commodity_equiv((gnc_commodity*)data, gdata->com),
             "gnc_commodity_sixtp_parser_create",
             __FILE__, __LINE__, "%d", gdata->value );
-    gnc_commodity_destroy((gnc_commodity*)data);
     
     return TRUE;
-    
 }
 
 static void

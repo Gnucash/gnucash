@@ -623,18 +623,18 @@
                    
                    ;; we know nothing about this security.. we need to 
                    ;; ask about it
-                   (let ((ticker-symbol (qif-ticker-map:lookup-ticker ticker-map stock-name)))
+                   (let ((ticker-symbol (qif-ticker-map:lookup-ticker ticker-map stock-name))
+                         (c #f))
                      (if (not ticker-symbol)
 			 (set! ticker-symbol stock-name))
                      (set! names (cons stock-name names))
-                     (hash-set! 
-                      stock-hash stock-name 
-                      (gnc:commodity-create book
-					    stock-name
+                     (set! c (gnc:commodity-create book
                                             GNC_COMMODITY_NS_NYSE
-                                            ticker-symbol
-                                            ""
-                                            100000))))))
+                                            ticker-symbol))
+                     (gnc:commodity-set-fullname c stock-name)
+                     (gnc:commodity-set-cusip c "")
+                     (gnc:commodity-set-fraction c 100000)
+                     (hash-set! stock-hash stock-name c)))))
          #f))
      #f acct-hash)
     

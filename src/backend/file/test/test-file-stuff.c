@@ -215,16 +215,11 @@ equals_node_val_vs_commodity(xmlNodePtr node, const gnc_commodity *com, QofBook 
 
     g_return_val_if_fail(cmpcom, FALSE);
 
-    if(gnc_commodity_equiv(com, cmpcom))
-    {
-        gnc_commodity_destroy(cmpcom);
-        return TRUE;
-    }
-    else
-    {
-        gnc_commodity_destroy(cmpcom);
-        return TRUE;
-    }
+    /* It's incorrect to always free cmpcom, since it may have been a
+       valid, in-use commodity, even if it's not equal to com.
+       Instead, we allow the potential leak of cmpcom.  In practice,
+       this only happens when there is a test failure. */
+    return gnc_commodity_equiv(com, cmpcom);
 }
 
 gboolean

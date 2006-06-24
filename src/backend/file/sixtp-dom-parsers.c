@@ -733,7 +733,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
   } else {
     g_strstrip(space_str);
     g_strstrip(id_str);
-    c = gnc_commodity_new(book, NULL, space_str, id_str, NULL, 0);
+    c = gnc_commodity_new(book, space_str, id_str);
   }
 
   g_free(space_str);
@@ -758,8 +758,6 @@ dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book)
     ret =  gnc_commodity_table_lookup (table,
                                        gnc_commodity_get_namespace(daref),
                                        gnc_commodity_get_mnemonic(daref));
-
-    gnc_commodity_destroy(daref);
 
     g_return_val_if_fail (ret != NULL, NULL);
 

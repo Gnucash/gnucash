@@ -1136,7 +1136,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
   gnc_set_busy_cursor(NULL, TRUE);
 
   /* get any changes to the imported stocks */
-  for(pageptr = wind->commodity_pages; pageptr; pageptr=pageptr->next) {
+  for(pageptr = wind->commodity_pages; pageptr; pageptr = pageptr->next) {
     gtkpage   = GNOME_DRUID_PAGE(pageptr->data); 
     page      = g_object_get_data(G_OBJECT(gtkpage), "page_struct");
     
@@ -1144,9 +1144,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
     namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
     fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
     
-    gnc_commodity_set_namespace(page->commodity, namespace);
+    gnc_commodity_set_namespace_and_mnemonic(page->commodity, 
+                                             namespace, mnemonic);
     gnc_commodity_set_fullname(page->commodity, fullname);
-    gnc_commodity_set_mnemonic(page->commodity, mnemonic);
   }
 
   /* call a scheme function to do the work.  The return value is an
