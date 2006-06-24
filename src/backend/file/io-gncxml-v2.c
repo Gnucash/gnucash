@@ -77,66 +77,12 @@ run_callback(sixtp_gdv2 *data, const char *type)
     }
 }
 
-static void
-clear_up_account_commodity(
-    gnc_commodity_table *tbl, Account *act,
-    gnc_commodity * (*getter) (const Account *account),
-    void (*setter) (Account *account, gnc_commodity *comm),
-    int (*scu_getter) (const Account *account),
-    void (*scu_setter) (Account *account, int scu))
-{
-    gnc_commodity *gcom;
-    gnc_commodity *com = getter(act);
-    int old_scu;
-
-    if (scu_getter)
-      old_scu = scu_getter(act);
-    else
-      old_scu = 0;
-
-    if(!com)
-    {
-        return;
-    }
-    
-    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
-                                      gnc_commodity_get_mnemonic(com));
-
-    if (gcom == com)
-    {
-        return;
-    }
-    else if(!gcom)
-    {
-        PWARN("unable to find global commodity for %s adding new",
-                  gnc_commodity_get_unique_name(com));
-    }
-    else
-    {
-        setter(act, gcom);
-        if (old_scu != 0 && scu_setter)
-          scu_setter(act, old_scu);
-        gnc_commodity_destroy(com);
-    }
-}
-
 static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     gnc_commodity_table *table;
 
     table = gnc_book_get_commodity_table (data->book);
-
-    clear_up_account_commodity(table, act,
-                                       DxaccAccountGetCurrency,
-                                       DxaccAccountSetCurrency,
-                                       NULL, NULL);
-
-    clear_up_account_commodity(table, act,
-                               xaccAccountGetCommodity,
-                               xaccAccountSetCommodity,
-                               xaccAccountGetCommoditySCUi,
-                               xaccAccountSetCommoditySCU);
 
     xaccAccountScrubCommodity (act);
     xaccAccountScrubKvp (act);
