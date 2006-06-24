@@ -264,15 +264,10 @@ gnc-svninfo.h: _gnc-svninfo.h
 	-rm -f _gnc-svninfo.h
 
 _gnc-svninfo.h: Makefile
-	@s=${srcdir} ; \
-	if [ -h ${srcdir}/Makefile.am ] ; then \
-		d=`readlink $(srcdir)/Makefile.am` ; \
-		s="${srcdir}/`dirname $$d`" ; \
-	fi ; \
-	if [ -d $$s/.svn ] ; then \
-		svninfo=`svnversion $$s` ; \
+	@svninfo=`${top_srcdir}/util/gnc-svnversion ${srcdir}` ; \
+	if [ $$? = 0 ] ; then \
 		if [ -z "$$svninfo" ] ; then \
-			echo "svnversion failed.  figure out why." ; \
+			echo "gnc-svnversion failed.  figure out why." ; \
 			echo "can't determine svn revision from $$s." ; \
 			exit 1 ; \
 		fi ; \

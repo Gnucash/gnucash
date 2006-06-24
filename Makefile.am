@@ -75,7 +75,8 @@ EXTRA_DIST = \
   po/glossary/zh_TW.po \
   intltool-extract.in \
   intltool-merge.in \
-  intltool-update.in
+  intltool-update.in \
+  util/gnc-svnversion
 
 bin_SCRIPTS = gnucash-config
 
