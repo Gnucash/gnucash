@@ -2028,11 +2028,9 @@ then
   if test $? = 0
   then
     # This code is from SVN/SVK, so enable error-on-warning
-    AC_MSG_WARN([SVN Build: error-on-warning defaults to yes])
     error_on_warning_as_default="yes"
   else
     # This is from a tarball, so disable error-on-warning
-    AC_MSG_WARN([Tarball Build: error-on-warning defaults to no])
     error_on_warning_as_default="no"
   fi
 

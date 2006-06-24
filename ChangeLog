@@ -1,3 +1,14 @@
+2006-06-24  Derek Atkins  <derek@ihtfp.com>
+
+	Allow building from either SVN or SVK
+	* util/gnc-svnversion: obtain revision info from SVN or SVK.
+	  Deals with lndir tree and both svn and svk checkouts.
+	* configure.in:
+	* src/gnome-utils/Makefile.am:
+	  use new gnc-svnversion script instead of calling out to svn
+	  directly.
+	* moved glade-fixup to util subdir
+
 2006-06-20  Christian Stimming <stimming@tuhh.de>
 
 	* src/engine/iso-4217-currencies.scm: Add Suriname Dollar
