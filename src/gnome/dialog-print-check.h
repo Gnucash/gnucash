@@ -27,10 +27,11 @@
 #include <libguile.h>
 
 #include "print-session.h"
+#include "gnc-plugin-page.h"
 
 typedef struct _print_check_dialog PrintCheckDialog;
 
-void gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
+void gnc_ui_print_check_dialog_create(GncPluginPage *plugin_page,
 				      const char    *payee,
 				      gnc_numeric    amount,
 				      time_t         date,

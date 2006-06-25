@@ -269,6 +269,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  N_("Open a register report window for this transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
+
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
 static GtkToggleActionEntry toggle_entries[] = {
@@ -554,17 +555,17 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	action_group =
 	  gnc_plugin_page_create_action_group(parent,
 					      "GncPluginPageRegisterActions");
-	gtk_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
-				      gnc_plugin_page_register_n_actions, plugin_page);
-	gtk_action_group_add_toggle_actions (action_group,
-					     toggle_entries, n_toggle_entries,
-					     plugin_page);
-	gtk_action_group_add_radio_actions (action_group,
-					    radio_entries_2, n_radio_entries_2,
-					    REG_STYLE_LEDGER,
-					    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
-					    plugin_page);
-
+	
+	gtk_action_group_add_actions(
+	    action_group, gnc_plugin_page_register_actions,
+	    gnc_plugin_page_register_n_actions, plugin_page);
+	gtk_action_group_add_toggle_actions(
+	    action_group, toggle_entries, n_toggle_entries, plugin_page);
+	gtk_action_group_add_radio_actions(
+	    action_group, radio_entries_2, n_radio_entries_2, REG_STYLE_LEDGER,
+	    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
+	    plugin_page);
+	
 	gnc_plugin_init_short_names (action_group, toolbar_labels);
 	gnc_plugin_set_important_actions (action_group, important_actions);
 
@@ -763,8 +764,8 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 		priv->component_manager_id, xaccAccountGetGUID(acct),
 		QOF_EVENT_DESTROY | QOF_EVENT_MODIFY);
 
-	gnc_split_reg_set_moved_cb
-	  (priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
+	gnc_split_reg_set_moved_cb(
+            priv->gsr, (GFunc)gnc_plugin_page_register_ui_update, page);
 
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	LEAVE(" ");
@@ -1836,7 +1837,8 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
     amount = gnc_numeric_abs (amount);
     date   = xaccTransGetDate(trans);
 
-    gnc_ui_print_check_dialog_create(plugin_page, payee, amount, date, memo);
+    gnc_ui_print_check_dialog_create(GNC_PLUGIN_PAGE(plugin_page), 
+                                     payee, amount, date, memo);
   }
   LEAVE(" ");
 }
@@ -2377,8 +2379,8 @@ gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action,
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-  gnc_split_register_cancel_cursor_trans_changes
-    (gnc_ledger_display_get_split_register(priv->ledger));
+  gnc_split_register_cancel_cursor_trans_changes(
+      gnc_ledger_display_get_split_register(priv->ledger));
   LEAVE(" ");
 }
 
@@ -2429,8 +2431,8 @@ gnc_plugin_page_register_cmd_duplicate_transaction (GtkAction *action,
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
   priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(plugin_page);
-  gnc_split_register_duplicate_current
-    (gnc_ledger_display_get_split_register(priv->ledger));
+  gnc_split_register_duplicate_current(
+      gnc_ledger_display_get_split_register(priv->ledger));
   LEAVE(" ");
 }
 

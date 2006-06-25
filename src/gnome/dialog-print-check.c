@@ -67,7 +67,7 @@ struct _print_check_dialog {
   GladeXML * xml;
   GtkWidget * dialog;
 
-  GncPluginPageRegister *plugin_page;
+  GncPluginPage *plugin_page;
   const char    *payee;
   gnc_numeric    amount;
   time_t         date;
@@ -223,7 +223,7 @@ gnc_ui_print_restore_dialog(PrintCheckDialog * pcd)
 \********************************************************************/
 
 void
-gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
+gnc_ui_print_check_dialog_create(GncPluginPage *plugin_page,
 				 const char    *payee,
 				 gnc_numeric    amount,
 				 time_t         date,
@@ -273,7 +273,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
     GTK_SPIN_BUTTON(glade_xml_get_widget (xml, "check_rotation_entry"));
   pcd->units_combobox = glade_xml_get_widget (xml, "units_combobox");
 
-  window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+  window = GTK_WINDOW(plugin_page->window);
   gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
 
   /* Create and attach the date-format chooser */
