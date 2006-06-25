@@ -1,5 +1,7 @@
 # translation of en_GB.po to English (British)
 # translation of en_GB.po to English (British)
+# translation of en_GB.po to English (British)
+# translation of en_GB.po to English (British)
 # Messages for Gnucash in British English
 # Copyright (C) 2002, 2003, 2004, 2006 Free Software Foundation, Inc.
 # Nigel Titley <nigel@titley.com>, 2002, 2003, 2004, 2006.
@@ -10,7 +12,7 @@ msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-06-15 12:04+0200\n"
-"PO-Revision-Date: 2006-06-17 23:12+0100\n"
+"PO-Revision-Date: 2006-06-23 20:57+0100\n"
 "Last-Translator: Nigel Titley <nigel@titley.com>\n"
 "Language-Team: English (British) <en_gb@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2716,7 +2718,7 @@ msgstr "sample:Payment"
 
 #: ../src/business/business-ledger/gncEntryLedgerLoad.c:49
 msgid "$"
-msgstr "ÃÂ£"
+msgstr "£"
 
 #. src/business/business-reports/fancy-invoice.scm
 #. src/business/business-reports/easy-invoice.scm
@@ -2974,7 +2976,7 @@ msgstr "You must choose a Tax Account."
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:205
 msgid "Value $"
-msgstr "Value Â£"
+msgstr "Value £"
 
 #: ../src/business/dialog-tax-table/dialog-tax-table.c:207
 #, no-c-format
@@ -3025,7 +3027,7 @@ msgstr "Tax Tables"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:8
 msgid "Value ($)"
-msgstr "Value (ÃÂ£)"
+msgstr "Value (£)"
 
 #: ../src/business/dialog-tax-table/tax-tables.glade.h:9
 msgid "_Account:"
@@ -12146,8 +12148,8 @@ msgstr ""
 "institution) are installed in places like convenience stores.  These "
 "machines add their fee directly to the amount instead of it showing up as a "
 "separate transaction or in your monthly bank charges.  For example, you "
-"withdraw ÃÂ£100, and you are charged ÃÂ£101.50.  If you manually entered "
-"that ÃÂ£100, the amounts won't match.  You should set this to whatever is "
+"withdraw £100, and you are charged £101.50.  If you manually entered "
+"that £100, the amounts won't match.  You should set this to whatever is "
 "the maximum such fee in your area (in units of your local currency), so the "
 "transaction will be recognised as a match."
 
@@ -18947,13 +18949,13 @@ msgstr "Select accounts"
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:2944 ../intl-scm/guile-strings.c:3034
 msgid "Suppress $0.00 values"
-msgstr "Suppress ÃÂ£0.00 values"
+msgstr "Suppress £0.00 values"
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
 #: ../intl-scm/guile-strings.c:2946 ../intl-scm/guile-strings.c:3036
 msgid "$0.00 valued Accounts won't be printed."
-msgstr "ÃÂ£0.00 valued Accounts won't be printed."
+msgstr "£0.00 valued Accounts won't be printed."
 
 #. src/report/locale-specific/us/taxtxf.scm
 #. src/report/locale-specific/us/taxtxf-de_DE.scm
@@ -19845,7 +19847,7 @@ msgstr "Increasing"
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3736
 msgid "0 -> $999,999.99, A->Z"
-msgstr "ÃÂ£0 -> ÃÂ£999,999.99, A->Z"
+msgstr "£0 -> £999,999.99, A->Z"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3738
@@ -19855,7 +19857,7 @@ msgstr "Decreasing"
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3740
 msgid "$999,999.99 -> $0, Z->A"
-msgstr "ÃÂ£999,999.99 -> ÃÂ£0, Z->A"
+msgstr "£999,999.99 -> £0, Z->A"
 
 #. src/business/business-reports/aging.scm
 #: ../intl-scm/guile-strings.c:3742
